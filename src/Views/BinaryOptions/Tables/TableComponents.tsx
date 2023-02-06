@@ -114,7 +114,6 @@ export const getExpireNotification = async (
     const closeTimeStamp = +currentRow.expirationTime;
     toastify({
       type: 'loss',
-      // id: currentRow.optionID + currentRow.expirationTime,
       // inf: true,
       msg: (
         <div className="flex-col">
