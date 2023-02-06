@@ -1,10 +1,9 @@
 <p  style="display:flex;align-items:center">
 <a href="https://buffer.finance" target="blank"><img align="center" src="https://cdn.buffer.finance/Buffer-Media/main/bfr.png" alt="harshalmaniya2" height="30" width="30" /></a> 
 </p>
-Buffer Finance
-<br/>
-Decentralized Trading Platform
-<br/>
+
+# Buffer Finance
+## Decentralized Trading Platform
 To run this project locally
 
 - Install Dependencies
