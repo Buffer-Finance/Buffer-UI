@@ -62,29 +62,7 @@ export const getExpireNotification = async (
 
   if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
     return null;
-    return toastify({
-      msg: (
-        <div className="text-[14px]">
-          <div className="">
-            {' '}
-            Failed to fetch prices from Binance, Please try again!
-          </div>
-          <div>
-            If the error persists please report it in the{' '}
-            <a
-              href="https://discord.com/channels/842093373082959952/1021466946639777903"
-              target={'_blank'}
-              className="text-buffer-blue"
-            >
-              {' '}
-              #bug-reporting
-            </a>
-            &nbsp;channel on Discord
-          </div>
-        </div>
-      ),
-      type: 'error',
-    });
+   
   }
 
   const expiryPrice = response.data[0].price.toString();
