@@ -1,0 +1,5 @@
+.box-asset {
+  --dim: 2.8rem;
+  width: var(--dim);
+  height: var(--dim);
+}

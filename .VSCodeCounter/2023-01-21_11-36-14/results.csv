@@ -1,0 +1,823 @@
+"filename", "language", "JavaScript", "TypeScript", "JSON", "CSS", "TypeScript React", "JavaScript React", "HTML", "JSON with Comments", "XML", "Markdown", "comment", "blank", "total"
+"/home/amit/buffer-ui/.eslintrc.js", "JavaScript", 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 65
+"/home/amit/buffer-ui/.prettierrc", "JSON", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 1, 11
+"/home/amit/buffer-ui/config/axios.tsx", "TypeScript React", 0, 0, 0, 0, 43, 0, 0, 0, 0, 0, 0, 6, 49
+"/home/amit/buffer-ui/config/connectors.ts", "TypeScript", 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 18
+"/home/amit/buffer-ui/config/index.ts", "TypeScript", 0, 460, 0, 0, 0, 0, 0, 0, 0, 0, 128, 26, 614
+"/home/amit/buffer-ui/fonts.css", "CSS", 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 86, 4, 118
+"/home/amit/buffer-ui/index.css", "CSS", 0, 0, 0, 2297, 0, 0, 0, 0, 0, 0, 132, 431, 2860
+"/home/amit/buffer-ui/index.html", "HTML", 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 1, 16
+"/home/amit/buffer-ui/package-lock.json", "JSON", 0, 0, 15318, 0, 0, 0, 0, 0, 0, 0, 0, 1, 15319
+"/home/amit/buffer-ui/package.json", "JSON", 0, 0, 89, 0, 0, 0, 0, 0, 0, 0, 0, 1, 90
+"/home/amit/buffer-ui/postcss.config.cjs", "JavaScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"/home/amit/buffer-ui/public/ComponentSVGS/CoinsUp.tsx", "TypeScript React", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 2, 27
+"/home/amit/buffer-ui/public/ComponentSVGS/DownTriangle.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/public/ComponentSVGS/Edit.tsx", "TypeScript React", 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 3, 29
+"/home/amit/buffer-ui/public/ComponentSVGS/Quick.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/public/ComponentSVGS/Star.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 2, 20
+"/home/amit/buffer-ui/public/ComponentSVGS/UpTriangle.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/public/ComponentSVGS/bufferLogo.tsx", "TypeScript React", 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 3, 24
+"/home/amit/buffer-ui/public/ComponentSVGS/wallet.tsx", "TypeScript React", 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 3, 31
+"/home/amit/buffer-ui/public/LeaderBoard/Daily.tsx", "TypeScript React", 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 4, 13
+"/home/amit/buffer-ui/public/LeaderBoard/PNL.tsx", "TypeScript React", 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 3, 29
+"/home/amit/buffer-ui/public/LeaderBoard/Trophy.tsx", "TypeScript React", 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 1, 3, 39
+"/home/amit/buffer-ui/public/Social/Blue/Discord.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 1, 30
+"/home/amit/buffer-ui/public/Social/Blue/Telegram.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 4
+"/home/amit/buffer-ui/public/Social/Blue/Twitter.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 4
+"/home/amit/buffer-ui/public/Social/DD/discord.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/public/Social/DD/gitbook.tsx", "TypeScript React", 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 3, 15
+"/home/amit/buffer-ui/public/Social/DD/github.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/public/Social/DD/medium.tsx", "TypeScript React", 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 4, 11
+"/home/amit/buffer-ui/public/Social/DD/telegram.tsx", "TypeScript React", 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 3, 20
+"/home/amit/buffer-ui/public/Social/DD/twitter.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/public/Social/Discord.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 1, 30
+"/home/amit/buffer-ui/public/Social/Telegram.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 4
+"/home/amit/buffer-ui/public/Social/Twitter.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 4
+"/home/amit/buffer-ui/public/Social/discord.tsx", "TypeScript React", 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 3, 13
+"/home/amit/buffer-ui/public/Social/github.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/public/Social/medium.tsx", "TypeScript React", 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 3, 13
+"/home/amit/buffer-ui/public/Social/telegram.tsx", "TypeScript React", 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 3, 14
+"/home/amit/buffer-ui/public/Social/twitter.tsx", "TypeScript React", 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 3, 10
+"/home/amit/buffer-ui/public/Triangle_Down.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 4
+"/home/amit/buffer-ui/public/Triangle_Up.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 4
+"/home/amit/buffer-ui/public/shareModal/ShareIcon.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/public/site.webmanifest", "JSON", 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 1, 20
+"/home/amit/buffer-ui/public/static/charting_library/ar-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1403.5c193407bf9023ec51df.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1403.5c193407bf9023ec51df.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1413.0beb5c102530e80c962f.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1413.0beb5c102530e80c962f.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1529.30943dc0c4f6a9ddaaa6.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/167.4a7b6d5ac49e0365fb9f.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/167.4a7b6d5ac49e0365fb9f.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1778.3dcfedd5fc468612cdc9.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1778.3dcfedd5fc468612cdc9.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1829.1d41207f53b42b7a2cba.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1941.ae71d13122bc90f281f2.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/1941.ae71d13122bc90f281f2.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2091.b5cd26b120d8f015a5f6.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2091.b5cd26b120d8f015a5f6.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2162.da7cb9d498f064a9ef84.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2162.da7cb9d498f064a9ef84.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2269.e35db23226edaf77f36d.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2269.e35db23226edaf77f36d.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2273.c8e768dcdd52b58e948e.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2273.c8e768dcdd52b58e948e.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2321.4f5fec7d39b99277caa5.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2321.4f5fec7d39b99277caa5.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2359.18a49f656f3259463f4f.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2359.18a49f656f3259463f4f.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2391.07217bcacc2a0c3b5526.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2402.4ce4e3425dce9bceed85.js", "JavaScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2444.89916595bdde00535f06.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2614.9b290389192f690dd33c.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2614.9b290389192f690dd33c.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2778.22f147dbe677a02ae3db.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2778.22f147dbe677a02ae3db.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2850.8a920beb86b4e0f023f2.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/2850.8a920beb86b4e0f023f2.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/306.547d2bcc2b4af2c3a922.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3223.783979b0683ba0a325de.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3223.783979b0683ba0a325de.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/339.79f004acba5fa5c1b85f.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/339.79f004acba5fa5c1b85f.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3463.65423ae1c1f3301a6bc0.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3537.273ebe86a4260eff8e80.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3537.273ebe86a4260eff8e80.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3590.9ba8c934cf8289ea708f.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3708.b21be6dee862262304cf.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3708.b21be6dee862262304cf.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3876.fbb750fd312778403036.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3876.fbb750fd312778403036.rtl.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3894.6c50d72ee9e079af3dab.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3894.6c50d72ee9e079af3dab.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3996.3cdbd2dcf744b8239723.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/3996.3cdbd2dcf744b8239723.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/40566afd832a155e5e370a8bd423de4b.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4078.43552fd4fee41d29f435.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4078.43552fd4fee41d29f435.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4093.8b84af355871cc700cb8.js", "JavaScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4336.1228643b9325cd73ea59.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4336.1228643b9325cd73ea59.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/439.cf0a8c77353b34e465e2.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/439.cf0a8c77353b34e465e2.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4595.6423e4f6860a7dd905ff.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4595.6423e4f6860a7dd905ff.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4652.c4c887154b57ce62bd2d.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4652.c4c887154b57ce62bd2d.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4736.2eccdb294faa8c6685ac.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4736.2eccdb294faa8c6685ac.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4834.07c319579bda11b57fc3.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4834.07c319579bda11b57fc3.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4882.acb0c10fdfd40a912b89.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4882.acb0c10fdfd40a912b89.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4940.6aeb4a6f298568a71905.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4985.6abfd9453389325f7436.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/4985.6abfd9453389325f7436.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5019.5e7f23f81809b4af9b28.js", "JavaScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5030.3f535fc5b94422bc913a.js", "JavaScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5254.776db7a6898f96fdd81f.js", "JavaScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5383.22c502e2ba80f4b4fc32.js", "JavaScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5410.21bcd4914bfb1cf880be.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5410.21bcd4914bfb1cf880be.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5453.142c8996edfadb5669ae.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5453.142c8996edfadb5669ae.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5527.b19a3c2c68b0d873fe2b.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5527.b19a3c2c68b0d873fe2b.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5551.407668886ab3145df3b5.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5551.407668886ab3145df3b5.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5637.a1b98549b1c9f19a01cf.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5637.a1b98549b1c9f19a01cf.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5698.9f7ef23e439b8f550541.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5698.9f7ef23e439b8f550541.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/587.144039f5c693ee079edb.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/587.144039f5c693ee079edb.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5984.fce1e6b0306b3072be07.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/5984.fce1e6b0306b3072be07.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6062.56b57d0c5c641ee6c503.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6062.56b57d0c5c641ee6c503.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6143.1f43f1c13a5153841646.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6143.1f43f1c13a5153841646.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6253.8ddff4c976b3edf9f34c.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6253.8ddff4c976b3edf9f34c.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6333.75d8cc7be7c14f60fb3b.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6333.75d8cc7be7c14f60fb3b.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6473.e5bfe6a8cd8097cebb56.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6473.e5bfe6a8cd8097cebb56.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6548.bda2305976fecdd6ca1a.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6548.bda2305976fecdd6ca1a.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6612.6ea4b89e354fef333be4.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6612.6ea4b89e354fef333be4.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6637.b9569ad7b9c1ffb59c7c.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/6637.b9569ad7b9c1ffb59c7c.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7039.873153a7278857ebfcd1.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7039.873153a7278857ebfcd1.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/706.af12d57a740fb6b1ba5b.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/706.af12d57a740fb6b1ba5b.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/708.7f4b99c8dfd3f4cda1d1.js", "JavaScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7353.9bb4f9381a2ee34bec3c.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7353.9bb4f9381a2ee34bec3c.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7365.fb40181a46db7cf2d8b0.js", "JavaScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7371.81bb2bc38b8ec23308e1.js", "JavaScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/home/amit/buffer-ui/public/static/charting_library/bundles/739.ac9682232ee125adb331.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7400.30502d5397989951046f.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7400.30502d5397989951046f.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7591.cea4aee1089cbf340ee7.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7607.99350c6a482907066b03.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7607.99350c6a482907066b03.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7610.9e79032a52ca259701ef.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7610.9e79032a52ca259701ef.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7703.be823882173b57ef030c.js", "JavaScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7757.6d2b490c3cc2ed78d4dd.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7757.6d2b490c3cc2ed78d4dd.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7799.681df0cf83dba8ef3cc5.js", "JavaScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7936.1e4e780ffda134d965f5.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7936.1e4e780ffda134d965f5.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/7962.eed46026b7fd77b57cb3.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8193.01090d4d9384825040ad.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8193.01090d4d9384825040ad.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/83.46ce2798763a3d5c2748.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/83.46ce2798763a3d5c2748.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8434.99d7135551ebc9e84366.js", "JavaScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8445.e3ed5f183ca7539d37f0.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8445.e3ed5f183ca7539d37f0.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/847.0e2ec220427667ac4afb.js", "JavaScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8604.9200d240b82687bc2a27.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8604.9200d240b82687bc2a27.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8625.2718a9cf5d44ca766c9d.js", "JavaScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8680.a98f949c3d71bf32d2c7.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8856.15adfc3af04a9cdeadc5.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8856.15adfc3af04a9cdeadc5.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8858.535457f61e1b51d9add2.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8858.535457f61e1b51d9add2.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8933.9d36818107c1f276f948.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8933.9d36818107c1f276f948.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8969.d72c3357aff6000fd03e.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/8969.d72c3357aff6000fd03e.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9256.c6fbca120598828685f3.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9256.c6fbca120598828685f3.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9305.009b7d4c21c45de9ca48.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9305.009b7d4c21c45de9ca48.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9354.a21ae4055d6f7729f892.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9354.a21ae4055d6f7729f892.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9423.0ad3a6d06b6bac488bb0.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9423.0ad3a6d06b6bac488bb0.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9448.cd38beceb14c87b723f6.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9448.cd38beceb14c87b723f6.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9602.a0fc3bf3e40760a87f74.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9602.a0fc3bf3e40760a87f74.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9628.8f8514eafeb1da3bbdee.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9772.0967c8fb7beae0056cf7.js", "JavaScript", 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9843.9822f0a3a15262042b3e.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9843.9822f0a3a15262042b3e.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9917.f67e7443dbbc7357fda3.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/9917.f67e7443dbbc7357fda3.rtl.css", "CSS", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/a6506134daec7169f68f563f084a9d41.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/add-compare-dialog.0e0f4b81cf8178378c14.js", "JavaScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/home/amit/buffer-ui/public/static/charting_library/bundles/change-interval-dialog.15fea722d205fbdde7d1.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/chart-bottom-toolbar.05a57b6389d7ddc2a351.js", "JavaScript", 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16
+"/home/amit/buffer-ui/public/static/charting_library/bundles/chart-event-hint.cb517ed06ee9725b8a76.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/chart-screenshot-hint.6d0f2e7ac3cebd7b650c.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/chart-widget-gui.9891573a47b469e91df5.js", "JavaScript", 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 55
+"/home/amit/buffer-ui/public/static/charting_library/bundles/compare-model.08356f64fbfcdcdc3776.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
+"/home/amit/buffer-ui/public/static/charting_library/bundles/context-menu-renderer.9a0385060e4241baf12d.js", "JavaScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/home/amit/buffer-ui/public/static/charting_library/bundles/currency-label-menu.6dde8a17826b1fb3712c.js", "JavaScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7
+"/home/amit/buffer-ui/public/static/charting_library/bundles/custom-intervals-add-dialog.3506afd973a0a43dc42a.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/drawing-toolbar.8399395e7103ba30e756.js", "JavaScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13
+"/home/amit/buffer-ui/public/static/charting_library/bundles/export-data.429732b8c4ae52bcac7d.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/floating-toolbars.913e12fe2b73959f49ca.js", "JavaScript", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23
+"/home/amit/buffer-ui/public/static/charting_library/bundles/full-tooltips-popup.c97f4f88ba2959dd66bb.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/general-chart-properties-dialog.742b577b84c6f9fdb26f.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
+"/home/amit/buffer-ui/public/static/charting_library/bundles/general-property-page.86f95ff011c77a44071d.js", "JavaScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"/home/amit/buffer-ui/public/static/charting_library/bundles/get-error-card.dfe1662b6e974e519b68.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/go-to-date-dialog-impl.dadfac644efdcd254d91.js", "JavaScript", 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11
+"/home/amit/buffer-ui/public/static/charting_library/bundles/hammerjs.c69dac2431e462e3fc71.js", "JavaScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7
+"/home/amit/buffer-ui/public/static/charting_library/bundles/header-toolbar.d302e948bcd970bc1897.js", "JavaScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"/home/amit/buffer-ui/public/static/charting_library/bundles/library.1fbbf36d35f97ccfbd00.js", "JavaScript", 157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 613, 0, 770
+"/home/amit/buffer-ui/public/static/charting_library/bundles/line-tools-icons.2ebfde56d4ef0139cc64.js", "JavaScript", 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28
+"/home/amit/buffer-ui/public/static/charting_library/bundles/load-chart-dialog.418fa6c99a7803f5cc10.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
+"/home/amit/buffer-ui/public/static/charting_library/bundles/lollipop-tooltip-renderer.76349a508c9e9d8b8af2.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
+"/home/amit/buffer-ui/public/static/charting_library/bundles/lt-pane-views.a54c6c59d86ab4d390bf.js", "JavaScript", 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101
+"/home/amit/buffer-ui/public/static/charting_library/bundles/lt-property-pages-with-definitions.ced0df22c184338b3396.js", "JavaScript", 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39
+"/home/amit/buffer-ui/public/static/charting_library/bundles/manage-drawings-dialog.ce43d4b42ea019cc5518.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/new-confirm-inputs-dialog.88813711209cf273d882.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/new-edit-object-dialog.e069889125138e0cf97a.js", "JavaScript", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19
+"/home/amit/buffer-ui/public/static/charting_library/bundles/object-tree-dialog.ec325666665d14d13dd5.js", "JavaScript", 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57
+"/home/amit/buffer-ui/public/static/charting_library/bundles/react.13567dea1b1173009d35.js", "JavaScript", 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45
+"/home/amit/buffer-ui/public/static/charting_library/bundles/redux.e48a9c831cd697f8a38d.js", "JavaScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8
+"/home/amit/buffer-ui/public/static/charting_library/bundles/restricted-toolset.8f58ab2a275c8e1f72b1.js", "JavaScript", 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30
+"/home/amit/buffer-ui/public/static/charting_library/bundles/runtime.f1210af3518e525e94d7.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
+"/home/amit/buffer-ui/public/static/charting_library/bundles/series-icons-map.9d92dfe755e0c94c0c8d.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"/home/amit/buffer-ui/public/static/charting_library/bundles/series-pane-views.d49b8ec162ba0c43260c.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/share-chart-to-social-utils.830f7e41690ac8285de5.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/show-theme-save-dialog.b99932982e0d8e47d562.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/simple-dialog.4965864a1f87b628af01.js", "JavaScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6
+"/home/amit/buffer-ui/public/static/charting_library/bundles/source-properties-editor.6854af2788acfa4ef4d4.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/study-inputs-pane-views.1763111669ad2eaa2f52.js", "JavaScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"/home/amit/buffer-ui/public/static/charting_library/bundles/study-market.aaf59e23fa593dd538bc.js", "JavaScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"/home/amit/buffer-ui/public/static/charting_library/bundles/study-pane-views.d9686c973fa1f1a93ff4.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5
+"/home/amit/buffer-ui/public/static/charting_library/bundles/study-property-pages-with-definitions.72083d0a0868166ca2b7.js", "JavaScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7
+"/home/amit/buffer-ui/public/static/charting_library/bundles/study-template-dialog.fd30d0463b77c8858d31.js", "JavaScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7
+"/home/amit/buffer-ui/public/static/charting_library/bundles/symbol-info-dialog-impl.6aa56a0ae77115394b2f.js", "JavaScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"/home/amit/buffer-ui/public/static/charting_library/bundles/symbol-search-dialog.4e741ef8a94e2a1cdf8c.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/take-chart-image-impl.013638618dfc6d4c1eaa.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/bundles/vendors.3197279804dd7477f3fb.js", "JavaScript", 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33
+"/home/amit/buffer-ui/public/static/charting_library/charting_library.cjs.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/amit/buffer-ui/public/static/charting_library/charting_library.d.ts", "TypeScript", 0, 2258, 0, 0, 0, 0, 0, 0, 0, 0, 267, 4, 2529
+"/home/amit/buffer-ui/public/static/charting_library/charting_library.esm.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/amit/buffer-ui/public/static/charting_library/charting_library.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/amit/buffer-ui/public/static/charting_library/charting_library.standalone.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/amit/buffer-ui/public/static/charting_library/cs-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/da_DK-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/datafeed-api.d.ts", "TypeScript", 0, 205, 0, 0, 0, 0, 0, 0, 0, 0, 81, 4, 290
+"/home/amit/buffer-ui/public/static/charting_library/de-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/el-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/en-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/es-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/et_EE-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/fa-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/fr-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/he_IL-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/hu_HU-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/id_ID-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/it-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/ja-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/ko-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/ms_MY-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/nl_NL-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/no-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/package.json", "JSON", 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9
+"/home/amit/buffer-ui/public/static/charting_library/pl-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/pt-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/ro-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/ru-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/sk_SK-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/sv-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/th-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/tr-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/vi-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/zh-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/charting_library/zh_TW-tv-chart.e2a841ff.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/public/static/datafeeds/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 4
+"/home/amit/buffer-ui/public/static/datafeeds/udf/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 19, 47
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/data-pulse-provider.js", "JavaScript", 99, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 1, 105
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/helpers.js", "JavaScript", 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 21
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/history-provider.js", "JavaScript", 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 74
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/iquotes-provider.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/quotes-provider.js", "JavaScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 26
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/quotes-pulse-provider.js", "JavaScript", 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 45
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/requester.js", "JavaScript", 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 29
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/symbols-storage.js", "JavaScript", 177, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 182
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/udf-compatible-datafeed-base.js", "JavaScript", 248, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 253
+"/home/amit/buffer-ui/public/static/datafeeds/udf/lib/udf-compatible-datafeed.js", "JavaScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 11
+"/home/amit/buffer-ui/public/static/datafeeds/udf/package.json", "JSON", 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 1, 18
+"/home/amit/buffer-ui/public/static/datafeeds/udf/rollup.config.js", "JavaScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 26
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/data-pulse-provider.ts", "TypeScript", 0, 120, 0, 0, 0, 0, 0, 0, 0, 0, 5, 28, 153
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/helpers.ts", "TypeScript", 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 39
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/history-provider.ts", "TypeScript", 0, 112, 0, 0, 0, 0, 0, 0, 0, 0, 3, 20, 135
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/iquotes-provider.ts", "TypeScript", 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 15
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/quotes-provider.ts", "TypeScript", 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 38
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/quotes-pulse-provider.ts", "TypeScript", 0, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 86
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/requester.ts", "TypeScript", 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9, 40
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/symbols-storage.ts", "TypeScript", 0, 244, 0, 0, 0, 0, 0, 0, 0, 0, 6, 52, 302
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/udf-compatible-datafeed-base.ts", "TypeScript", 0, 306, 0, 0, 0, 0, 0, 0, 0, 0, 7, 57, 370
+"/home/amit/buffer-ui/public/static/datafeeds/udf/src/udf-compatible-datafeed.ts", "TypeScript", 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12
+"/home/amit/buffer-ui/public/static/datafeeds/udf/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 1, 26
+"/home/amit/buffer-ui/public/wallets/coin98.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 1, 10
+"/home/amit/buffer-ui/public/wallets/coinbase.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 1, 10
+"/home/amit/buffer-ui/public/wallets/metamask.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 1, 10
+"/home/amit/buffer-ui/public/wallets/tally_ho.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 1, 10
+"/home/amit/buffer-ui/public/wallets/trust_wallet.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 4
+"/home/amit/buffer-ui/public/wallets/wallet_connect.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"/home/amit/buffer-ui/src/ABIs/BFR.json", "JSON", 0, 0, 686, 0, 0, 0, 0, 0, 0, 0, 0, 0, 686
+"/home/amit/buffer-ui/src/ABIs/BLP.json", "JSON", 0, 0, 1154, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1154
+"/home/amit/buffer-ui/src/ABIs/BufferBinaryIBFRPoolBinaryV2.json", "JSON", 0, 0, 1193, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1193
+"/home/amit/buffer-ui/src/ABIs/EsBFR.json", "JSON", 0, 0, 686, 0, 0, 0, 0, 0, 0, 0, 0, 0, 686
+"/home/amit/buffer-ui/src/ABIs/Multicall.json", "JSON", 0, 0, 165, 0, 0, 0, 0, 0, 0, 0, 0, 1, 166
+"/home/amit/buffer-ui/src/ABIs/Multicallv1.json", "JSON", 0, 0, 141, 0, 0, 0, 0, 0, 0, 0, 0, 1, 142
+"/home/amit/buffer-ui/src/ABIs/Multicallv2.json", "JSON", 0, 0, 141, 0, 0, 0, 0, 0, 0, 0, 0, 0, 141
+"/home/amit/buffer-ui/src/ABIs/PriceProvider.json", "JSON", 0, 0, 528, 0, 0, 0, 0, 0, 0, 0, 0, 19, 547
+"/home/amit/buffer-ui/src/ABIs/RewardRouterV2.json", "JSON", 0, 0, 661, 0, 0, 0, 0, 0, 0, 0, 0, 0, 661
+"/home/amit/buffer-ui/src/ABIs/RewardTracker.json", "JSON", 0, 0, 911, 0, 0, 0, 0, 0, 0, 0, 0, 0, 911
+"/home/amit/buffer-ui/src/ABIs/Token.json", "JSON", 0, 0, 338, 0, 0, 0, 0, 0, 0, 0, 0, 0, 338
+"/home/amit/buffer-ui/src/ABIs/Vester.json", "JSON", 0, 0, 1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1024
+"/home/amit/buffer-ui/src/App.tsx", "TypeScript React", 0, 0, 0, 0, 92, 0, 0, 0, 0, 0, 0, 4, 96
+"/home/amit/buffer-ui/src/AppStyles.ts", "TypeScript", 0, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 51
+"/home/amit/buffer-ui/src/Config/axios.ts", "TypeScript", 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 49
+"/home/amit/buffer-ui/src/Config/getTabs.ts", "TypeScript", 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 12, 3, 85
+"/home/amit/buffer-ui/src/Config/globalAtoms.ts", "TypeScript", 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6
+"/home/amit/buffer-ui/src/Config/index.ts", "TypeScript", 0, 162, 0, 0, 0, 0, 0, 0, 0, 0, 10, 9, 181
+"/home/amit/buffer-ui/src/Config/wagmiClient.ts", "TypeScript", 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 56
+"/home/amit/buffer-ui/src/Hooks/Contracts/useLiquidityContract.tsx", "TypeScript React", 0, 0, 0, 0, 73, 0, 0, 0, 0, 0, 9, 6, 88
+"/home/amit/buffer-ui/src/Hooks/Contracts/useNFTContract.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 17, 5, 40
+"/home/amit/buffer-ui/src/Hooks/Utilities/useClickAway.tsx", "TypeScript React", 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 1, 2, 18
+"/home/amit/buffer-ui/src/Hooks/Utilities/useDateFormatter.ts", "TypeScript", 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 3, 7, 44
+"/home/amit/buffer-ui/src/Hooks/Utilities/useDeboncedEffect.tsx", "TypeScript React", 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 2, 9
+"/home/amit/buffer-ui/src/Hooks/Utilities/useOpenConnectionDrawer.ts", "TypeScript", 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 36
+"/home/amit/buffer-ui/src/Hooks/Utilities/useStopWatch.ts", "TypeScript", 0, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 110
+"/home/amit/buffer-ui/src/Hooks/Utilities/useTImer.ts", "TypeScript", 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9
+"/home/amit/buffer-ui/src/Hooks/Utilities/useTimeout.tsx", "TypeScript React", 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 8, 31
+"/home/amit/buffer-ui/src/Hooks/Utilities/useToggle.ts", "TypeScript", 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 8
+"/home/amit/buffer-ui/src/Hooks/Utilities/useWriteCallValidations.tsx", "TypeScript React", 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 4, 34
+"/home/amit/buffer-ui/src/Hooks/useActiveChain.ts", "TypeScript", 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 16
+"/home/amit/buffer-ui/src/Hooks/useAheadTrades.ts", "TypeScript", 0, 287, 0, 0, 0, 0, 0, 0, 0, 0, 21, 18, 326
+"/home/amit/buffer-ui/src/Hooks/useClickAway.ts", "TypeScript", 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 19
+"/home/amit/buffer-ui/src/Hooks/useGenericHook.tsx", "TypeScript React", 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 3, 8, 73
+"/home/amit/buffer-ui/src/Hooks/useNFTGraph.ts", "TypeScript", 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 65
+"/home/amit/buffer-ui/src/Hooks/useOpenConnectionDrawer.ts", "TypeScript", 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 36
+"/home/amit/buffer-ui/src/Hooks/useQuery.ts", "TypeScript", 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9
+"/home/amit/buffer-ui/src/Hooks/useUserAccount.ts", "TypeScript", 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12
+"/home/amit/buffer-ui/src/Hooks/useWalletConnect.ts", "TypeScript", 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 11, 6, 61
+"/home/amit/buffer-ui/src/Hooks/useWriteCall.ts", "TypeScript", 0, 177, 0, 0, 0, 0, 0, 0, 0, 0, 13, 17, 207
+"/home/amit/buffer-ui/src/Interfaces/interfaces.ts", "TypeScript", 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 22
+"/home/amit/buffer-ui/src/Providers/configuredChains.ts", "TypeScript", 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 40
+"/home/amit/buffer-ui/src/Providers/index.tsx", "TypeScript React", 0, 0, 0, 0, 103, 0, 0, 0, 0, 0, 2, 5, 110
+"/home/amit/buffer-ui/src/Providers/styles.ts", "TypeScript", 0, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 51
+"/home/amit/buffer-ui/src/Providers/wagmiClient.tsx", "TypeScript React", 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 5, 6, 73
+"/home/amit/buffer-ui/src/SVG/Elements/BackButtonHalf.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/src/SVG/Elements/BufferLogo.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/SVG/Elements/Chart.tsx", "TypeScript React", 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 3, 35
+"/home/amit/buffer-ui/src/SVG/Elements/Closelogo.tsx", "TypeScript React", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 3, 28
+"/home/amit/buffer-ui/src/SVG/Elements/CopyIcon.tsx", "TypeScript React", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 2, 22
+"/home/amit/buffer-ui/src/SVG/Elements/DDIcon.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/SVG/Elements/Disconnect.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/src/SVG/Elements/DownIcon.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/src/SVG/Elements/DropDownArrow.tsx", "TypeScript React", 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 1, 14
+"/home/amit/buffer-ui/src/SVG/Elements/EarnIcon.tsx", "TypeScript React", 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 1, 46
+"/home/amit/buffer-ui/src/SVG/Elements/EditIcon.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/SVG/Elements/ErrorIcon.tsx", "TypeScript React", 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 3, 31
+"/home/amit/buffer-ui/src/SVG/Elements/ErrorIconSmall.tsx", "TypeScript React", 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 3, 14
+"/home/amit/buffer-ui/src/SVG/Elements/FailedSuccess.tsx", "TypeScript React", 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 3, 30
+"/home/amit/buffer-ui/src/SVG/Elements/FailureIcon.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/src/SVG/Elements/GlobeIcon.tsx", "TypeScript React", 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 3, 14
+"/home/amit/buffer-ui/src/SVG/Elements/GridViewIcon.tsx", "TypeScript React", 0, 0, 0, 0, 46, 0, 0, 0, 0, 0, 0, 3, 49
+"/home/amit/buffer-ui/src/SVG/Elements/InfoIcon.tsx", "TypeScript React", 0, 0, 0, 0, 78, 0, 0, 0, 0, 0, 0, 5, 83
+"/home/amit/buffer-ui/src/SVG/Elements/LinkTargetIcon.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/SVG/Elements/ListViewIcon.tsx", "TypeScript React", 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 3, 38
+"/home/amit/buffer-ui/src/SVG/Elements/MenuLogo.tsx", "TypeScript React", 0, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0, 3, 34
+"/home/amit/buffer-ui/src/SVG/Elements/Moneybag.tsx", "TypeScript React", 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 3, 31
+"/home/amit/buffer-ui/src/SVG/Elements/NoMatchFound.tsx", "TypeScript React", 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 3, 18
+"/home/amit/buffer-ui/src/SVG/Elements/NotificationCount.tsx", "TypeScript React", 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 3, 10
+"/home/amit/buffer-ui/src/SVG/Elements/PNLL.tsx", "TypeScript React", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 3, 28
+"/home/amit/buffer-ui/src/SVG/Elements/Payout.jsx", "JavaScript React", 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/SVG/Elements/PeckSheildLogo.tsx", "TypeScript React", 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 3, 29
+"/home/amit/buffer-ui/src/SVG/Elements/RetryIcon.tsx", "TypeScript React", 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 3, 27
+"/home/amit/buffer-ui/src/SVG/Elements/Search.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/SVG/Elements/ShareIconComp.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/SVG/Elements/ShieldIcon.tsx", "TypeScript React", 0, 0, 0, 0, 78, 0, 0, 0, 0, 0, 0, 1, 79
+"/home/amit/buffer-ui/src/SVG/Elements/SuccessIcon.tsx", "TypeScript React", 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 3, 30
+"/home/amit/buffer-ui/src/SVG/Elements/SwapIcon.tsx", "TypeScript React", 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 3, 20
+"/home/amit/buffer-ui/src/SVG/Elements/TimerIcon.tsx", "TypeScript React", 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 3, 27
+"/home/amit/buffer-ui/src/SVG/Elements/ToastCrossIcon.tsx", "TypeScript React", 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 3, 14
+"/home/amit/buffer-ui/src/SVG/Elements/TofuNFT.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/src/SVG/Elements/Unseen.tsx", "TypeScript React", 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 3, 11
+"/home/amit/buffer-ui/src/SVG/Elements/UpIcon.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/src/SVG/Elements/YellowWarning.tsx", "TypeScript React", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 3, 23
+"/home/amit/buffer-ui/src/SVG/Elements/sidebarCollpaseIcon.tsx", "TypeScript React", 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 1, 3, 27
+"/home/amit/buffer-ui/src/SVG/Elements/usdc.tsx", "TypeScript React", 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 2, 4, 39
+"/home/amit/buffer-ui/src/SVG/PeckShield.tsx", "TypeScript React", 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 3, 32
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/CallBoosters.tsx", "TypeScript React", 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 4, 37
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/Doccumentation.tsx", "TypeScript React", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 3, 23
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/Home.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 4, 23
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/Leaderboard.tsx", "TypeScript React", 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 3, 26
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/Liquidity.tsx", "TypeScript React", 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 4, 104
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/Options.tsx", "TypeScript React", 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 3, 54
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/PG.tsx", "TypeScript React", 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 3, 17
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/PGCard.tsx", "TypeScript React", 0, 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 3, 39
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/Referralcon.tsx", "TypeScript React", 0, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 3, 52
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/RevenueSharing.tsx", "TypeScript React", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 2, 27
+"/home/amit/buffer-ui/src/SVG/SidebarIcons/Staking.tsx", "TypeScript React", 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 3, 31
+"/home/amit/buffer-ui/src/SVG/buttons/Chart.tsx", "TypeScript React", 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 3, 15
+"/home/amit/buffer-ui/src/SVG/buttons/back.tsx", "TypeScript React", 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 3, 14
+"/home/amit/buffer-ui/src/SVG/buttons/cross.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/src/SVG/buttons/enter.tsx", "TypeScript React", 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 3, 15
+"/home/amit/buffer-ui/src/SVG/buttons/enterDisabled.tsx", "TypeScript React", 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 3, 15
+"/home/amit/buffer-ui/src/SVG/buttons/exit.tsx", "TypeScript React", 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 3, 15
+"/home/amit/buffer-ui/src/SVG/frontArrow.tsx", "TypeScript React", 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 3, 17
+"/home/amit/buffer-ui/src/TradingView/ChartTypeSelectionDD.tsx", "TypeScript React", 0, 0, 0, 0, 149, 0, 0, 0, 0, 0, 30, 4, 183
+"/home/amit/buffer-ui/src/TradingView/TV.tsx", "TypeScript React", 0, 0, 0, 0, 473, 0, 0, 0, 0, 0, 47, 37, 557
+"/home/amit/buffer-ui/src/TradingView/TZ.json", "JSON", 0, 0, 2390, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2390
+"/home/amit/buffer-ui/src/TradingView/useDataFeed.tsx", "TypeScript React", 0, 0, 0, 0, 366, 0, 0, 0, 0, 0, 469, 23, 858
+"/home/amit/buffer-ui/src/Utils/Contract/getContract.tsx", "TypeScript React", 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 2, 8
+"/home/amit/buffer-ui/src/Utils/Contract/getError.tsx", "TypeScript React", 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 1, 3, 49
+"/home/amit/buffer-ui/src/Utils/Contract/getNodeUrl.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 13
+"/home/amit/buffer-ui/src/Utils/Contract/getProvider.tsx", "TypeScript React", 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 3, 3, 13
+"/home/amit/buffer-ui/src/Utils/Contract/multiContract.ts", "TypeScript", 0, 286, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 294
+"/home/amit/buffer-ui/src/Utils/DOMutils.ts", "TypeScript", 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 31
+"/home/amit/buffer-ui/src/Utils/Dates/displayDateTime.ts", "TypeScript", 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 81
+"/home/amit/buffer-ui/src/Utils/DisplayDate.tsx", "TypeScript React", 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 2, 35
+"/home/amit/buffer-ui/src/Utils/Formulas/blackscholes.js", "JavaScript", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 4, 42
+"/home/amit/buffer-ui/src/Utils/JSUtils/createArray.ts", "TypeScript", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4
+"/home/amit/buffer-ui/src/Utils/JSUtils/isCharPresent.tsx", "TypeScript React", 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 1, 9
+"/home/amit/buffer-ui/src/Utils/NumString/eToWide.tsx", "TypeScript React", 0, 0, 0, 0, 88, 0, 0, 0, 0, 0, 9, 7, 104
+"/home/amit/buffer-ui/src/Utils/NumString/formatNumStr.tsx", "TypeScript React", 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 7, 3, 39
+"/home/amit/buffer-ui/src/Utils/NumString/getSignificantNum.tsx", "TypeScript React", 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 6, 3, 73
+"/home/amit/buffer-ui/src/Utils/NumString/index.tsx", "TypeScript React", 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 1, 8
+"/home/amit/buffer-ui/src/Utils/NumString/kpiChartPoints.ts", "TypeScript", 0, 61, 0, 0, 0, 0, 0, 0, 0, 0, 22, 6, 89
+"/home/amit/buffer-ui/src/Utils/NumString/numtostr.tsx", "TypeScript React", 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 1, 13
+"/home/amit/buffer-ui/src/Utils/NumString/putChartPoints.ts", "TypeScript", 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 42
+"/home/amit/buffer-ui/src/Utils/NumString/stringArithmatics.tsx", "TypeScript React", 0, 0, 0, 0, 89, 0, 0, 0, 0, 0, 1, 2, 92
+"/home/amit/buffer-ui/src/Utils/NumString/toFixed.tsx", "TypeScript React", 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 3, 5, 20
+"/home/amit/buffer-ui/src/Utils/PosthogCaptureAccount.tsx", "TypeScript React", 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 2, 6
+"/home/amit/buffer-ui/src/Utils/Staking/utils.ts", "TypeScript", 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 8, 6, 76
+"/home/amit/buffer-ui/src/Utils/StringToBytes32.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"/home/amit/buffer-ui/src/Utils/Time.ts", "TypeScript", 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 8, 6, 76
+"/home/amit/buffer-ui/src/Utils/apis/api.ts", "TypeScript", 0, 121, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 127
+"/home/amit/buffer-ui/src/Utils/apis/contextInitializers.ts", "TypeScript", 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 43
+"/home/amit/buffer-ui/src/Utils/apis/getAbi.ts", "TypeScript", 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"/home/amit/buffer-ui/src/Utils/apis/getMetaData.ts", "TypeScript", 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 34
+"/home/amit/buffer-ui/src/Utils/appControls/changeRoute.ts", "TypeScript", 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13
+"/home/amit/buffer-ui/src/Utils/appControls/convertibleChartPoints.ts", "TypeScript", 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 54
+"/home/amit/buffer-ui/src/Utils/appControls/getBrowserName.ts", "TypeScript", 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 20
+"/home/amit/buffer-ui/src/Utils/appControls/getSupportedPages.ts", "TypeScript", 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 17
+"/home/amit/buffer-ui/src/Utils/appControls/mobileDrawerHandlers.ts", "TypeScript", 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 20, 12, 76
+"/home/amit/buffer-ui/src/Utils/appControls/pageSupported.ts", "TypeScript", 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 20
+"/home/amit/buffer-ui/src/Utils/appControls/redirectChain.ts", "TypeScript", 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 7
+"/home/amit/buffer-ui/src/Utils/appControls/redirectRoute.ts", "TypeScript", 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 7
+"/home/amit/buffer-ui/src/Utils/appControls/removeMargin.ts", "TypeScript", 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 35
+"/home/amit/buffer-ui/src/Utils/appControls/replaceAsset.ts", "TypeScript", 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"/home/amit/buffer-ui/src/Utils/bigNumber.ts", "TypeScript", 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 20
+"/home/amit/buffer-ui/src/Utils/captureScreenShot.ts", "TypeScript", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"/home/amit/buffer-ui/src/Utils/chartDataPoints.ts", "TypeScript", 0, 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 74
+"/home/amit/buffer-ui/src/Utils/copyToClipBoard.ts", "TypeScript", 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 33
+"/home/amit/buffer-ui/src/Utils/copyToClipboard.ts", "TypeScript", 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 33
+"/home/amit/buffer-ui/src/Utils/display.tsx", "TypeScript React", 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 5, 33
+"/home/amit/buffer-ui/src/Utils/getDeepCopy.ts", "TypeScript", 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 14
+"/home/amit/buffer-ui/src/Utils/getErrorFromCode.ts", "TypeScript", 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 58
+"/home/amit/buffer-ui/src/Utils/getLogs.ts", "TypeScript", 0, 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 70
+"/home/amit/buffer-ui/src/Utils/isUserPaused.ts", "TypeScript", 0, 52, 0, 0, 0, 0, 0, 0, 0, 0, 18, 11, 81
+"/home/amit/buffer-ui/src/Utils/kpiChartPoints.ts", "TypeScript", 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 10, 3, 60
+"/home/amit/buffer-ui/src/Utils/logger.tsx", "TypeScript React", 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
+"/home/amit/buffer-ui/src/Utils/memoize.tsx", "TypeScript React", 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 1, 11
+"/home/amit/buffer-ui/src/Utils/putChartPoints.ts", "TypeScript", 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 27, 5, 81
+"/home/amit/buffer-ui/src/Utils/speedtest.js", "JavaScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 25
+"/home/amit/buffer-ui/src/Utils/successChartPoints.ts", "TypeScript", 0, 77, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 85
+"/home/amit/buffer-ui/src/Utils/useIbfrBalance.ts", "TypeScript", 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 34
+"/home/amit/buffer-ui/src/Utils/useMultiCallSWR.tsx", "TypeScript React", 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 4, 30
+"/home/amit/buffer-ui/src/Utils/useMulticall.ts", "TypeScript", 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 30
+"/home/amit/buffer-ui/src/Utils/useReadCall.ts", "TypeScript", 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 57
+"/home/amit/buffer-ui/src/Utils/web3react/wallet.ts", "TypeScript", 0, 78, 0, 0, 0, 0, 0, 0, 0, 0, 13, 6, 97
+"/home/amit/buffer-ui/src/Views/BinaryOptions/ABI/ConfigAbi.json", "JSON", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/src/Views/BinaryOptions/ABI/MaxTrade.json", "JSON", 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 1, 81
+"/home/amit/buffer-ui/src/Views/BinaryOptions/ABI/OptionMeta.json", "JSON", 0, 0, 779, 0, 0, 0, 0, 0, 0, 0, 0, 0, 779
+"/home/amit/buffer-ui/src/Views/BinaryOptions/ABI/configABI.json", "JSON", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/amit/buffer-ui/src/Views/BinaryOptions/ABI/optionsABI.json", "JSON", 0, 0, 865, 0, 0, 0, 0, 0, 0, 0, 0, 1, 866
+"/home/amit/buffer-ui/src/Views/BinaryOptions/ABI/poolABI.json", "JSON", 0, 0, 654, 0, 0, 0, 0, 0, 0, 0, 0, 1, 655
+"/home/amit/buffer-ui/src/Views/BinaryOptions/ABI/routerABI.json", "JSON", 0, 0, 501, 0, 0, 0, 0, 0, 0, 0, 0, 1, 502
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Address.ts", "TypeScript", 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/src/Views/BinaryOptions/ComingSoonModal.tsx", "TypeScript React", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 5, 4, 29
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/BinaryInfo.tsx", "TypeScript React", 0, 0, 0, 0, 109, 0, 0, 0, 0, 0, 0, 7, 116
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/Mobile/Navbar.tsx", "TypeScript React", 0, 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 3, 39
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/Mobile/Screens.tsx", "TypeScript React", 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 1, 1, 52
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/Mobile/buyOptionsTab.tsx", "TypeScript React", 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 1, 3, 44
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/Mobile/historyTab.tsx", "TypeScript React", 0, 0, 0, 0, 310, 0, 0, 0, 0, 0, 4, 18, 332
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/SlippageModal.tsx", "TypeScript React", 0, 0, 0, 0, 170, 0, 0, 0, 0, 0, 8, 6, 184
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/approveModal.tsx", "TypeScript React", 0, 0, 0, 0, 150, 0, 0, 0, 0, 0, 22, 5, 177
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/shareModal.tsx", "TypeScript React", 0, 0, 0, 0, 315, 0, 0, 0, 0, 0, 19, 20, 354
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Components/stats.tsx", "TypeScript React", 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 4, 5, 53
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/AssetTable.tsx", "TypeScript React", 0, 0, 0, 0, 150, 0, 0, 0, 0, 0, 1, 10, 161
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/AssetTypeSelector.tsx", "TypeScript React", 0, 0, 0, 0, 47, 0, 0, 0, 0, 0, 7, 3, 57
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/FavouriteAssetDD.tsx", "TypeScript React", 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 1, 4, 92
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/Favourites.tsx", "TypeScript React", 0, 0, 0, 0, 204, 0, 0, 0, 0, 0, 8, 11, 223
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/LastDayChange.tsx", "TypeScript React", 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 2, 23
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/Utils/getAssetTypes.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 11
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/Utils/getFavouriteKey.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 11
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/Utils/getFilteredAssets.ts", "TypeScript", 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 44
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Favourites/style.ts", "TypeScript", 0, 162, 0, 0, 0, 0, 0, 0, 0, 0, 9, 5, 176
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/BinaryOptionsABI.json", "JSON", 0, 0, 1680, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1680
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useActiveAssetState.ts", "TypeScript", 0, 238, 0, 0, 0, 0, 0, 0, 0, 0, 41, 20, 299
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useBinaryActions.tsx", "TypeScript React", 0, 0, 0, 0, 216, 0, 0, 0, 0, 0, 7, 13, 236
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useBinaryActiveChainId.ts", "TypeScript", 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useBinaryHistory.ts", "TypeScript", 0, 83, 0, 0, 0, 0, 0, 0, 0, 0, 20, 7, 110
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useFavouritesFns.ts", "TypeScript", 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 91
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useGetDataFromConfig.ts", "TypeScript", 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 13
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useHostName.ts", "TypeScript", 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useIsMerketOpen.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 2, 21
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useLatest24hrChange.ts", "TypeScript", 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 47
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/usePastTradeQuery.ts", "TypeScript", 0, 234, 0, 0, 0, 0, 0, 0, 0, 0, 35, 21, 290
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/usePastTradeQueryByFetch.ts", "TypeScript", 0, 185, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 196
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Hooks/useTradeHistory.ts", "TypeScript", 0, 222, 0, 0, 0, 0, 0, 0, 0, 0, 3, 8, 233
+"/home/amit/buffer-ui/src/Views/BinaryOptions/MarketTimingWarning.tsx", "TypeScript React", 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 5, 40
+"/home/amit/buffer-ui/src/Views/BinaryOptions/MarketTimingsInfo.tsx", "TypeScript React", 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 5, 29
+"/home/amit/buffer-ui/src/Views/BinaryOptions/MarketTimingsModal.tsx", "TypeScript React", 0, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 6, 107
+"/home/amit/buffer-ui/src/Views/BinaryOptions/OrderBookComponents/BuyModal/index.tsx", "TypeScript React", 0, 0, 0, 0, 386, 0, 0, 0, 0, 0, 11, 31, 428
+"/home/amit/buffer-ui/src/Views/BinaryOptions/OrderBookComponents/BuyModal/style.ts", "TypeScript", 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 138
+"/home/amit/buffer-ui/src/Views/BinaryOptions/OrderBookComponents/GraphModal/index.tsx", "TypeScript React", 0, 0, 0, 0, 39, 0, 0, 0, 0, 0, 2, 3, 44
+"/home/amit/buffer-ui/src/Views/BinaryOptions/OrderBookComponents/GraphModal/style.ts", "TypeScript", 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 49
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/ActiveAsset.tsx", "TypeScript React", 0, 0, 0, 0, 111, 0, 0, 0, 0, 0, 0, 4, 115
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/BuyUsdcLink.tsx", "TypeScript React", 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 2, 2, 39
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/CustomOption.tsx", "TypeScript React", 0, 0, 0, 0, 310, 0, 0, 0, 0, 0, 3, 7, 320
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/DateDropdown.tsx", "TypeScript React", 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 1, 4, 50
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/DrawerChild.tsx", "TypeScript React", 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 2, 4, 50
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/DurationPicker.tsx", "TypeScript React", 0, 0, 0, 0, 119, 0, 0, 0, 0, 0, 7, 6, 132
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/PoolDropDown.tsx", "TypeScript React", 0, 0, 0, 0, 95, 0, 0, 0, 0, 0, 0, 8, 103
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/SettingsIcon.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 1, 17
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/TimeSelector.tsx", "TypeScript React", 0, 0, 0, 0, 328, 0, 0, 0, 0, 0, 36, 19, 383
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/index.tsx", "TypeScript React", 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 4, 46
+"/home/amit/buffer-ui/src/Views/BinaryOptions/PGDrawer/style.ts", "TypeScript", 0, 204, 0, 0, 0, 0, 0, 0, 0, 0, 37, 18, 259
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Tables/Desktop.tsx", "TypeScript React", 0, 0, 0, 0, 327, 0, 0, 0, 0, 0, 15, 23, 365
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Tables/Mobile.tsx", "TypeScript React", 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 4, 12
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Tables/OrderBookTable/index.tsx", "TypeScript React", 0, 0, 0, 0, 237, 0, 0, 0, 0, 0, 44, 19, 300
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Tables/OrderBookTable/style.ts", "TypeScript", 0, 81, 0, 0, 0, 0, 0, 0, 0, 0, 10, 3, 94
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Tables/TableComponents.tsx", "TypeScript React", 0, 0, 0, 0, 679, 0, 0, 0, 0, 0, 27, 35, 741
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Tables/index.tsx", "TypeScript React", 0, 0, 0, 0, 37, 0, 0, 0, 0, 0, 5, 4, 46
+"/home/amit/buffer-ui/src/Views/BinaryOptions/Tables/style.ts", "TypeScript", 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 15
+"/home/amit/buffer-ui/src/Views/BinaryOptions/config.json", "JSON", 0, 0, 578, 0, 0, 0, 0, 0, 0, 0, 0, 11, 589
+"/home/amit/buffer-ui/src/Views/BinaryOptions/discarded.json", "JSON", 0, 0, 343, 0, 0, 0, 0, 0, 0, 0, 0, 4, 347
+"/home/amit/buffer-ui/src/Views/BinaryOptions/index.tsx", "TypeScript React", 0, 0, 0, 0, 353, 0, 0, 0, 0, 0, 11, 15, 379
+"/home/amit/buffer-ui/src/Views/BinaryOptions/store.ts", "TypeScript", 0, 91, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 99
+"/home/amit/buffer-ui/src/Views/BinaryOptions/style.ts", "TypeScript", 0, 195, 0, 0, 0, 0, 0, 0, 0, 0, 13, 12, 220
+"/home/amit/buffer-ui/src/Views/Common/AccountInfo/index.tsx", "TypeScript React", 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 1, 7, 59
+"/home/amit/buffer-ui/src/Views/Common/AccountInfo/style.ts", "TypeScript", 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 49
+"/home/amit/buffer-ui/src/Views/Common/Aligner/index.tsx", "TypeScript React", 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 4, 68
+"/home/amit/buffer-ui/src/Views/Common/Aligner/style.ts", "TypeScript", 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 38
+"/home/amit/buffer-ui/src/Views/Common/AreaChart/index.tsx", "TypeScript React", 0, 0, 0, 0, 304, 0, 0, 0, 0, 0, 22, 7, 333
+"/home/amit/buffer-ui/src/Views/Common/AreaChart/style.ts", "TypeScript", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5
+"/home/amit/buffer-ui/src/Views/Common/AssetInfo/index.tsx", "TypeScript React", 0, 0, 0, 0, 167, 0, 0, 0, 0, 0, 5, 7, 179
+"/home/amit/buffer-ui/src/Views/Common/AssetInfo/styles.ts", "TypeScript", 0, 112, 0, 0, 0, 0, 0, 0, 0, 0, 22, 4, 138
+"/home/amit/buffer-ui/src/Views/Common/Banner/index.tsx", "TypeScript React", 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 3, 48
+"/home/amit/buffer-ui/src/Views/Common/Banner/style.ts", "TypeScript", 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 71
+"/home/amit/buffer-ui/src/Views/Common/Buffer-Dropdown/index.tsx", "TypeScript React", 0, 0, 0, 0, 81, 0, 0, 0, 0, 0, 4, 4, 89
+"/home/amit/buffer-ui/src/Views/Common/Buffer-Dropdown/style.tsx", "TypeScript React", 0, 0, 0, 0, 118, 0, 0, 0, 0, 0, 0, 2, 120
+"/home/amit/buffer-ui/src/Views/Common/BufferAnimatableTab.tsx", "TypeScript React", 0, 0, 0, 0, 76, 0, 0, 0, 0, 0, 0, 3, 79
+"/home/amit/buffer-ui/src/Views/Common/BufferCheckbox/index.tsx", "TypeScript React", 0, 0, 0, 0, 59, 0, 0, 0, 0, 0, 10, 4, 73
+"/home/amit/buffer-ui/src/Views/Common/BufferCheckbox/style.ts", "TypeScript", 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 37
+"/home/amit/buffer-ui/src/Views/Common/BufferDisclaimer/index.tsx", "TypeScript React", 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 1, 4, 38
+"/home/amit/buffer-ui/src/Views/Common/BufferDisclaimer/style.ts", "TypeScript", 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 31
+"/home/amit/buffer-ui/src/Views/Common/BufferDropdown/index.tsx", "TypeScript React", 0, 0, 0, 0, 94, 0, 0, 0, 0, 0, 4, 7, 105
+"/home/amit/buffer-ui/src/Views/Common/BufferDropdown/style.ts", "TypeScript", 0, 112, 0, 0, 0, 0, 0, 0, 0, 0, 5, 8, 125
+"/home/amit/buffer-ui/src/Views/Common/BufferInput/index.tsx", "TypeScript React", 0, 0, 0, 0, 155, 0, 0, 0, 0, 0, 1, 8, 164
+"/home/amit/buffer-ui/src/Views/Common/BufferProgressBar.tsx/index.tsx", "TypeScript React", 0, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0, 4, 35
+"/home/amit/buffer-ui/src/Views/Common/BufferSlider/index.tsx", "TypeScript React", 0, 0, 0, 0, 53, 0, 0, 0, 0, 0, 1, 6, 60
+"/home/amit/buffer-ui/src/Views/Common/BufferSlider/style.ts", "TypeScript", 0, 78, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 83
+"/home/amit/buffer-ui/src/Views/Common/BufferSwitch/index.tsx", "TypeScript React", 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 6, 50
+"/home/amit/buffer-ui/src/Views/Common/BufferSwitch/style.ts", "TypeScript", 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 85
+"/home/amit/buffer-ui/src/Views/Common/BufferSwitchLabelled/index.tsx", "TypeScript React", 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 1, 4, 35
+"/home/amit/buffer-ui/src/Views/Common/BufferTab/index.tsx", "TypeScript React", 0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 41, 6, 103
+"/home/amit/buffer-ui/src/Views/Common/BufferTab/style.tsx", "TypeScript React", 0, 0, 0, 0, 54, 0, 0, 0, 0, 0, 0, 3, 57
+"/home/amit/buffer-ui/src/Views/Common/BufferTable/CellInfo.tsx", "TypeScript React", 0, 0, 0, 0, 135, 0, 0, 0, 0, 0, 1, 9, 145
+"/home/amit/buffer-ui/src/Views/Common/BufferTable/ErrorMsg/index.tsx", "TypeScript React", 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 4, 48
+"/home/amit/buffer-ui/src/Views/Common/BufferTable/ErrorMsg/style.ts", "TypeScript", 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 25
+"/home/amit/buffer-ui/src/Views/Common/BufferTable/TableAssetCell/index.tsx", "TypeScript React", 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 4, 30
+"/home/amit/buffer-ui/src/Views/Common/BufferTable/TableAssetCell/style.ts", "TypeScript", 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 34
+"/home/amit/buffer-ui/src/Views/Common/BufferTable/index.tsx", "TypeScript React", 0, 0, 0, 0, 201, 0, 0, 0, 0, 0, 0, 5, 206
+"/home/amit/buffer-ui/src/Views/Common/BufferTable/style.ts", "TypeScript", 0, 159, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 169
+"/home/amit/buffer-ui/src/Views/Common/BufferTableCard/index.tsx", "TypeScript React", 0, 0, 0, 0, 67, 0, 0, 0, 0, 0, 14, 8, 89
+"/home/amit/buffer-ui/src/Views/Common/BufferTableCard/style.ts", "TypeScript", 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 37
+"/home/amit/buffer-ui/src/Views/Common/BufferTextInputRoot/index.tsx", "TypeScript React", 0, 0, 0, 0, 107, 0, 0, 0, 0, 0, 4, 6, 117
+"/home/amit/buffer-ui/src/Views/Common/BufferTextInputRoot/style.tsx", "TypeScript React", 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 2, 53
+"/home/amit/buffer-ui/src/Views/Common/BufferThemeSwitcher/index.tsx", "TypeScript React", 0, 0, 0, 0, 109, 0, 0, 0, 0, 0, 2, 6, 117
+"/home/amit/buffer-ui/src/Views/Common/BufferThemeSwitcher/styles.tsx", "TypeScript React", 0, 0, 0, 0, 55, 0, 0, 0, 0, 0, 0, 2, 57
+"/home/amit/buffer-ui/src/Views/Common/BufferToggleButton/index.tsx", "TypeScript React", 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 1, 1, 32
+"/home/amit/buffer-ui/src/Views/Common/BufferToggleButton/style.ts", "TypeScript", 0, 53, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 59
+"/home/amit/buffer-ui/src/Views/Common/BufferTransitionedTab.tsx", "TypeScript React", 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 3, 65
+"/home/amit/buffer-ui/src/Views/Common/ButtonLoader/ButtonLoader.tsx", "TypeScript React", 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 3, 16
+"/home/amit/buffer-ui/src/Views/Common/Buttons/index.tsx", "TypeScript React", 0, 0, 0, 0, 92, 0, 0, 0, 0, 0, 11, 8, 111
+"/home/amit/buffer-ui/src/Views/Common/Buttons/style.tsx", "TypeScript React", 0, 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 3, 39
+"/home/amit/buffer-ui/src/Views/Common/Card/index.tsx", "TypeScript React", 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 4, 18
+"/home/amit/buffer-ui/src/Views/Common/Card/style.ts", "TypeScript", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5
+"/home/amit/buffer-ui/src/Views/Common/ChainAccountDropdowns/index.tsx", "TypeScript React", 0, 0, 0, 0, 120, 0, 0, 0, 0, 0, 5, 9, 134
+"/home/amit/buffer-ui/src/Views/Common/ChainAccountDropdowns/style.ts", "TypeScript", 0, 88, 0, 0, 0, 0, 0, 0, 0, 0, 37, 6, 131
+"/home/amit/buffer-ui/src/Views/Common/Chips/index.tsx", "TypeScript React", 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 4, 14
+"/home/amit/buffer-ui/src/Views/Common/Chips/style.ts", "TypeScript", 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 14
+"/home/amit/buffer-ui/src/Views/Common/ClientOnlyPortal/index.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 1, 5, 24
+"/home/amit/buffer-ui/src/Views/Common/ClientOnlyPortal/styles.ts", "TypeScript", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5
+"/home/amit/buffer-ui/src/Views/Common/ConfirmationModal/index.tsx", "TypeScript React", 0, 0, 0, 0, 151, 0, 0, 0, 0, 0, 10, 3, 164
+"/home/amit/buffer-ui/src/Views/Common/ConfirmationModal/style.ts", "TypeScript", 0, 116, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 128
+"/home/amit/buffer-ui/src/Views/Common/ConnectionDrawer/index.tsx", "TypeScript React", 0, 0, 0, 0, 113, 0, 0, 0, 0, 0, 1, 10, 124
+"/home/amit/buffer-ui/src/Views/Common/ConnectionDrawer/style.ts", "TypeScript", 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 7, 4, 67
+"/home/amit/buffer-ui/src/Views/Common/Dialog/index.tsx", "TypeScript React", 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 4, 11, 90
+"/home/amit/buffer-ui/src/Views/Common/Disclaimer/index.tsx", "TypeScript React", 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 4, 17
+"/home/amit/buffer-ui/src/Views/Common/Disclaimer/style.ts", "TypeScript", 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 14
+"/home/amit/buffer-ui/src/Views/Common/DraggableModal/index.tsx", "TypeScript React", 0, 0, 0, 0, 38, 0, 0, 0, 0, 0, 0, 7, 45
+"/home/amit/buffer-ui/src/Views/Common/DraggableModal/style.ts", "TypeScript", 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 38
+"/home/amit/buffer-ui/src/Views/Common/Dropdown/index.tsx", "TypeScript React", 0, 0, 0, 0, 91, 0, 0, 0, 0, 0, 2, 6, 99
+"/home/amit/buffer-ui/src/Views/Common/Dropdown/styles.ts", "TypeScript", 0, 294, 0, 0, 0, 0, 0, 0, 0, 0, 41, 11, 346
+"/home/amit/buffer-ui/src/Views/Common/GraphView/AreaData.ts", "TypeScript", 0, 152, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 153
+"/home/amit/buffer-ui/src/Views/Common/GraphView/PriceData.ts", "TypeScript", 0, 152, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 153
+"/home/amit/buffer-ui/src/Views/Common/GraphView/PriceData2.ts", "TypeScript", 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 59
+"/home/amit/buffer-ui/src/Views/Common/GraphView/index.tsx", "TypeScript React", 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 3, 11
+"/home/amit/buffer-ui/src/Views/Common/GraphView/style.ts", "TypeScript", 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 31
+"/home/amit/buffer-ui/src/Views/Common/Header.tsx", "TypeScript React", 0, 0, 0, 0, 71, 0, 0, 0, 0, 0, 0, 3, 74
+"/home/amit/buffer-ui/src/Views/Common/HeroCard/index.tsx", "TypeScript React", 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 4, 31
+"/home/amit/buffer-ui/src/Views/Common/HeroCard/style.ts", "TypeScript", 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 21, 4, 60
+"/home/amit/buffer-ui/src/Views/Common/InfoCard/index.tsx", "TypeScript React", 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 4, 21
+"/home/amit/buffer-ui/src/Views/Common/InfoCard/style.ts", "TypeScript", 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 18
+"/home/amit/buffer-ui/src/Views/Common/InfoTooltip/index.tsx", "TypeScript React", 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 3, 15
+"/home/amit/buffer-ui/src/Views/Common/LeftBorderedDiv.tsx", "TypeScript React", 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 1, 6, 37
+"/home/amit/buffer-ui/src/Views/Common/Missing/index.tsx", "TypeScript React", 0, 0, 0, 0, 46, 0, 0, 0, 0, 0, 4, 5, 55
+"/home/amit/buffer-ui/src/Views/Common/Missing/style.ts", "TypeScript", 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 24
+"/home/amit/buffer-ui/src/Views/Common/Mobile/AlignerMobile/index.tsx", "TypeScript React", 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 1, 5, 71
+"/home/amit/buffer-ui/src/Views/Common/Mobile/AlignerMobile/style.ts", "TypeScript", 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"/home/amit/buffer-ui/src/Views/Common/Mobile/AssetCellMobile/index.tsx", "TypeScript React", 0, 0, 0, 0, 68, 0, 0, 0, 0, 0, 0, 5, 73
+"/home/amit/buffer-ui/src/Views/Common/Mobile/AssetCellMobile/style.ts", "TypeScript", 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 41
+"/home/amit/buffer-ui/src/Views/Common/NFTtier.tsx", "TypeScript React", 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 2, 19
+"/home/amit/buffer-ui/src/Views/Common/Navbar/AccountDropdown.tsx", "TypeScript React", 0, 0, 0, 0, 86, 0, 0, 0, 0, 0, 3, 8, 97
+"/home/amit/buffer-ui/src/Views/Common/Navbar/BufferLogo.tsx", "TypeScript React", 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 2, 23
+"/home/amit/buffer-ui/src/Views/Common/Navbar/Tab.tsx", "TypeScript React", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 2, 22
+"/home/amit/buffer-ui/src/Views/Common/Navbar/TabsDropDown.tsx", "TypeScript React", 0, 0, 0, 0, 85, 0, 0, 0, 0, 0, 0, 4, 89
+"/home/amit/buffer-ui/src/Views/Common/Navbar/chainDropdown.tsx", "TypeScript React", 0, 0, 0, 0, 125, 0, 0, 0, 0, 0, 0, 7, 132
+"/home/amit/buffer-ui/src/Views/Common/Navbar/index.tsx", "TypeScript React", 0, 0, 0, 0, 67, 0, 0, 0, 0, 0, 17, 8, 92
+"/home/amit/buffer-ui/src/Views/Common/Navbar/socialLinks.ts", "TypeScript", 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 44
+"/home/amit/buffer-ui/src/Views/Common/Notification/index.tsx", "TypeScript React", 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 4, 33
+"/home/amit/buffer-ui/src/Views/Common/Notification/notifications.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 2, 20
+"/home/amit/buffer-ui/src/Views/Common/Notification/warning.tsx", "TypeScript React", 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 2, 32
+"/home/amit/buffer-ui/src/Views/Common/RowStrip/index.tsx", "TypeScript React", 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 4, 19
+"/home/amit/buffer-ui/src/Views/Common/RowStrip/style.ts", "TypeScript", 0, 59, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 63
+"/home/amit/buffer-ui/src/Views/Common/SocialMedia/MobileFooter/index.tsx", "TypeScript React", 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 5, 28
+"/home/amit/buffer-ui/src/Views/Common/SocialMedia/MobileFooter/style.tsx", "TypeScript React", 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 2, 23
+"/home/amit/buffer-ui/src/Views/Common/SocialMedia/TimerStyle.tsx", "TypeScript React", 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 3, 26
+"/home/amit/buffer-ui/src/Views/Common/SocialMedia/index.tsx", "TypeScript React", 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 4, 67
+"/home/amit/buffer-ui/src/Views/Common/SocialMedia/style.tsx", "TypeScript React", 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 3, 44
+"/home/amit/buffer-ui/src/Views/Common/TabList/index.tsx", "TypeScript React", 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 5, 46
+"/home/amit/buffer-ui/src/Views/Common/TabList/style.ts", "TypeScript", 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 29
+"/home/amit/buffer-ui/src/Views/Common/TabSwitch/index.tsx", "TypeScript React", 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 3, 30
+"/home/amit/buffer-ui/src/Views/Common/TabSwitch/style.ts", "TypeScript", 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 22
+"/home/amit/buffer-ui/src/Views/Common/TableComponents/TableComponents.tsx", "TypeScript React", 0, 0, 0, 0, 103, 0, 0, 0, 0, 0, 0, 9, 112
+"/home/amit/buffer-ui/src/Views/Common/TableComponents/style.ts", "TypeScript", 0, 75, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 82
+"/home/amit/buffer-ui/src/Views/Common/TableMobile/index.tsx", "TypeScript React", 0, 0, 0, 0, 150, 0, 0, 0, 0, 0, 0, 11, 161
+"/home/amit/buffer-ui/src/Views/Common/TableMobile/style.ts", "TypeScript", 0, 97, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 106
+"/home/amit/buffer-ui/src/Views/Common/TitleHead.tsx", "TypeScript React", 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 2, 9
+"/home/amit/buffer-ui/src/Views/Common/TnCModal.tsx", "TypeScript React", 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 3, 5, 59
+"/home/amit/buffer-ui/src/Views/Common/Toast/index.tsx", "TypeScript React", 0, 0, 0, 0, 147, 0, 0, 0, 0, 0, 23, 11, 181
+"/home/amit/buffer-ui/src/Views/Common/Toast/style.ts", "TypeScript", 0, 138, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 150
+"/home/amit/buffer-ui/src/Views/Common/Toggler/index.tsx", "TypeScript React", 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 3, 32
+"/home/amit/buffer-ui/src/Views/Common/Toggler/style.ts", "TypeScript", 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 34
+"/home/amit/buffer-ui/src/Views/Common/Tooltip/index.tsx", "TypeScript React", 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 2, 32
+"/home/amit/buffer-ui/src/Views/Common/Tooltip/style.ts", "TypeScript", 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 115
+"/home/amit/buffer-ui/src/Views/Common/Tooltips/Display/index.tsx", "TypeScript React", 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 19, 8, 141
+"/home/amit/buffer-ui/src/Views/Common/Tooltips/index.tsx", "TypeScript React", 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 1, 5, 41
+"/home/amit/buffer-ui/src/Views/Common/TopBanner/index.tsx", "TypeScript React", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 1, 4, 25
+"/home/amit/buffer-ui/src/Views/Common/TopBanner/style.ts", "TypeScript", 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 32
+"/home/amit/buffer-ui/src/Views/Common/Transition/index.tsx", "TypeScript React", 0, 0, 0, 0, 53, 0, 0, 0, 0, 0, 3, 6, 62
+"/home/amit/buffer-ui/src/Views/Common/Transitions/Horizontal/index.tsx", "TypeScript React", 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 3, 27
+"/home/amit/buffer-ui/src/Views/Common/Transitions/Horizontal/style.ts", "TypeScript", 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 30
+"/home/amit/buffer-ui/src/Views/Common/Transitions/Vertical/index.tsx", "TypeScript React", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 3, 23
+"/home/amit/buffer-ui/src/Views/Common/Transitions/Vertical/style.ts", "TypeScript", 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 13
+"/home/amit/buffer-ui/src/Views/Common/TryTestnet/index.tsx", "TypeScript React", 0, 0, 0, 0, 38, 0, 0, 0, 0, 0, 0, 4, 42
+"/home/amit/buffer-ui/src/Views/Common/TryTestnet/style.ts", "TypeScript", 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 7, 5, 57
+"/home/amit/buffer-ui/src/Views/Common/TypeChip/index.tsx", "TypeScript React", 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 3, 11
+"/home/amit/buffer-ui/src/Views/Common/UnorderedList/index.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 4, 23
+"/home/amit/buffer-ui/src/Views/Common/UnorderedList/style.ts", "TypeScript", 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 37
+"/home/amit/buffer-ui/src/Views/Common/V2-Button/ButtonLoader.tsx", "TypeScript React", 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 3, 16
+"/home/amit/buffer-ui/src/Views/Common/V2-Button/index.tsx", "TypeScript React", 0, 0, 0, 0, 99, 0, 0, 0, 0, 0, 0, 3, 102
+"/home/amit/buffer-ui/src/Views/Common/V2-Drawer/connectionDrawer.tsx", "TypeScript React", 0, 0, 0, 0, 118, 0, 0, 0, 0, 0, 1, 5, 124
+"/home/amit/buffer-ui/src/Views/Common/V2-Drawer/index.tsx", "TypeScript React", 0, 0, 0, 0, 38, 0, 0, 0, 0, 0, 0, 4, 42
+"/home/amit/buffer-ui/src/Views/Common/VersionChip/index.tsx", "TypeScript React", 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 3, 20
+"/home/amit/buffer-ui/src/Views/Common/VersionChip/style.ts", "TypeScript", 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 15
+"/home/amit/buffer-ui/src/Views/Common/VerticalTabs/index.tsx", "TypeScript React", 0, 0, 0, 0, 85, 0, 0, 0, 0, 0, 3, 5, 93
+"/home/amit/buffer-ui/src/Views/Common/VerticalTabs/style.ts", "TypeScript", 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 46
+"/home/amit/buffer-ui/src/Views/Common/pagination.tsx", "TypeScript React", 0, 0, 0, 0, 43, 0, 0, 0, 0, 0, 0, 4, 47
+"/home/amit/buffer-ui/src/Views/Common/v2-AssetDropDown/index.tsx", "TypeScript React", 0, 0, 0, 0, 166, 0, 0, 0, 0, 0, 4, 8, 178
+"/home/amit/buffer-ui/src/Views/Common/v2-AssetDropDown/style.ts", "TypeScript", 0, 86, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 94
+"/home/amit/buffer-ui/src/Views/Common/v2-BufferInput/index.tsx", "TypeScript React", 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 5, 3, 108
+"/home/amit/buffer-ui/src/Views/Common/v2-BufferInput/style.ts", "TypeScript", 0, 39, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 46
+"/home/amit/buffer-ui/src/Views/Common/v2-OptionsDropdown/index.tsx", "TypeScript React", 0, 0, 0, 0, 89, 0, 0, 0, 0, 0, 11, 4, 104
+"/home/amit/buffer-ui/src/Views/Common/v2-OptionsDropdown/style.ts", "TypeScript", 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 53
+"/home/amit/buffer-ui/src/Views/Earn/Components/Card.tsx", "TypeScript React", 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 4, 39
+"/home/amit/buffer-ui/src/Views/Earn/Components/Divider.tsx", "TypeScript React", 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 4
+"/home/amit/buffer-ui/src/Views/Earn/Components/EarnButtons.tsx", "TypeScript React", 0, 0, 0, 0, 185, 0, 0, 0, 0, 0, 27, 6, 218
+"/home/amit/buffer-ui/src/Views/Earn/Components/EarnCards.tsx", "TypeScript React", 0, 0, 0, 0, 594, 0, 0, 0, 0, 0, 22, 10, 626
+"/home/amit/buffer-ui/src/Views/Earn/Components/ExchangeIcon.tsx", "TypeScript React", 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 2, 8
+"/home/amit/buffer-ui/src/Views/Earn/Components/Section.tsx", "TypeScript React", 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 1, 28
+"/home/amit/buffer-ui/src/Views/Earn/Components/VestCards.tsx", "TypeScript React", 0, 0, 0, 0, 138, 0, 0, 0, 0, 0, 2, 4, 144
+"/home/amit/buffer-ui/src/Views/Earn/Config/Abis/BFR.json", "JSON", 0, 0, 686, 0, 0, 0, 0, 0, 0, 0, 0, 0, 686
+"/home/amit/buffer-ui/src/Views/Earn/Config/Abis/BLP.json", "JSON", 0, 0, 1154, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1154
+"/home/amit/buffer-ui/src/Views/Earn/Config/Abis/BufferBinaryIBFRPoolBinaryV2.json", "JSON", 0, 0, 1193, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1193
+"/home/amit/buffer-ui/src/Views/Earn/Config/Abis/EsBFR.json", "JSON", 0, 0, 686, 0, 0, 0, 0, 0, 0, 0, 0, 0, 686
+"/home/amit/buffer-ui/src/Views/Earn/Config/Abis/RewardRouterV2.json", "JSON", 0, 0, 661, 0, 0, 0, 0, 0, 0, 0, 0, 0, 661
+"/home/amit/buffer-ui/src/Views/Earn/Config/Abis/RewardTracker.json", "JSON", 0, 0, 911, 0, 0, 0, 0, 0, 0, 0, 0, 0, 911
+"/home/amit/buffer-ui/src/Views/Earn/Config/Abis/Token.json", "JSON", 0, 0, 338, 0, 0, 0, 0, 0, 0, 0, 0, 0, 338
+"/home/amit/buffer-ui/src/Views/Earn/Config/Abis/Vester.json", "JSON", 0, 0, 1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1024
+"/home/amit/buffer-ui/src/Views/Earn/Config/Address.tsx", "TypeScript React", 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 2, 47
+"/home/amit/buffer-ui/src/Views/Earn/Hooks/useEarnWriteCalls.tsx", "TypeScript React", 0, 0, 0, 0, 131, 0, 0, 0, 0, 0, 27, 13, 171
+"/home/amit/buffer-ui/src/Views/Earn/Hooks/useTokenomicsMulticall.tsx", "TypeScript React", 0, 0, 0, 0, 990, 0, 0, 0, 0, 0, 32, 30, 1052
+"/home/amit/buffer-ui/src/Views/Earn/Modals/buy.tsx", "TypeScript React", 0, 0, 0, 0, 177, 0, 0, 0, 0, 0, 0, 5, 182
+"/home/amit/buffer-ui/src/Views/Earn/Modals/claim.tsx", "TypeScript React", 0, 0, 0, 0, 92, 0, 0, 0, 0, 0, 17, 2, 111
+"/home/amit/buffer-ui/src/Views/Earn/Modals/compound.tsx", "TypeScript React", 0, 0, 0, 0, 162, 0, 0, 0, 0, 0, 19, 3, 184
+"/home/amit/buffer-ui/src/Views/Earn/Modals/deposit.tsx", "TypeScript React", 0, 0, 0, 0, 241, 0, 0, 0, 0, 0, 2, 9, 252
+"/home/amit/buffer-ui/src/Views/Earn/Modals/index.tsx", "TypeScript React", 0, 0, 0, 0, 103, 0, 0, 0, 0, 0, 0, 14, 117
+"/home/amit/buffer-ui/src/Views/Earn/Modals/sell.tsx", "TypeScript React", 0, 0, 0, 0, 138, 0, 0, 0, 0, 0, 13, 5, 156
+"/home/amit/buffer-ui/src/Views/Earn/Modals/stake.tsx", "TypeScript React", 0, 0, 0, 0, 197, 0, 0, 0, 0, 0, 0, 10, 207
+"/home/amit/buffer-ui/src/Views/Earn/earnAtom.ts", "TypeScript", 0, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 160
+"/home/amit/buffer-ui/src/Views/Earn/index.tsx", "TypeScript React", 0, 0, 0, 0, 117, 0, 0, 0, 0, 0, 3, 8, 128
+"/home/amit/buffer-ui/src/Views/Faucet/Faucet.json", "JSON", 0, 0, 213, 0, 0, 0, 0, 0, 0, 0, 0, 1, 214
+"/home/amit/buffer-ui/src/Views/Faucet/index.tsx", "TypeScript React", 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 10, 7, 177
+"/home/amit/buffer-ui/src/Views/Faucet/style.ts", "TypeScript", 0, 81, 0, 0, 0, 0, 0, 0, 0, 0, 10, 5, 96
+"/home/amit/buffer-ui/src/Views/Pro/Common/TableHead.tsx", "TypeScript React", 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 23
+"/home/amit/buffer-ui/src/Views/Referral/Components/PlainCard.tsx", "TypeScript React", 0, 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 3, 39
+"/home/amit/buffer-ui/src/Views/Referral/Components/ReferralModal.tsx", "TypeScript React", 0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 1, 4, 61
+"/home/amit/buffer-ui/src/Views/Referral/Components/ReferralTable.tsx", "TypeScript React", 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 6, 70
+"/home/amit/buffer-ui/src/Views/Referral/Components/ReferralTableBody.tsx", "TypeScript React", 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 3, 13
+"/home/amit/buffer-ui/src/Views/Referral/Config/Address.ts", "TypeScript", 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 17
+"/home/amit/buffer-ui/src/Views/Referral/Config/ReferralABI.json", "JSON", 0, 0, 287, 0, 0, 0, 0, 0, 0, 0, 0, 1, 288
+"/home/amit/buffer-ui/src/Views/Referral/Hooks/useAppliedReferral.ts", "TypeScript", 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 24
+"/home/amit/buffer-ui/src/Views/Referral/Hooks/useCodeOwner.ts", "TypeScript", 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 39
+"/home/amit/buffer-ui/src/Views/Referral/Hooks/useReferralWriteCalls.ts", "TypeScript", 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 24
+"/home/amit/buffer-ui/src/Views/Referral/Hooks/useUserCode.ts", "TypeScript", 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 39
+"/home/amit/buffer-ui/src/Views/Referral/Hooks/useUserReferralData.ts", "TypeScript", 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 68
+"/home/amit/buffer-ui/src/Views/Referral/Utils/isNullAds.ts", "TypeScript", 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12
+"/home/amit/buffer-ui/src/Views/Referral/Utils/useReferralCode.tsx", "TypeScript React", 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 1, 2, 16
+"/home/amit/buffer-ui/src/Views/Referral/index.tsx", "TypeScript React", 0, 0, 0, 0, 463, 0, 0, 0, 0, 0, 17, 24, 504
+"/home/amit/buffer-ui/src/Views/Referral/referralAtom.ts", "TypeScript", 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 12
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Components/ContestFilterDD/index.tsx", "TypeScript React", 0, 0, 0, 0, 74, 0, 0, 0, 0, 0, 0, 8, 82
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Components/Rank.tsx", "TypeScript React", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 3, 28
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Components/TableAligner/index.tsx", "TypeScript React", 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 3, 54
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Components/TableAligner/style.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 16
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Components/TopData/index.tsx", "TypeScript React", 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 1, 25
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Components/Trophy.tsx", "TypeScript React", 0, 0, 0, 0, 52, 0, 0, 0, 0, 0, 0, 2, 54
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Daily/DailyMobileTable.tsx", "TypeScript React", 0, 0, 0, 0, 186, 0, 0, 0, 0, 0, 6, 9, 201
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Daily/DailyWebTable.tsx", "TypeScript React", 0, 0, 0, 0, 243, 0, 0, 0, 0, 0, 10, 12, 265
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Daily/index.tsx", "TypeScript React", 0, 0, 0, 0, 94, 0, 0, 0, 0, 0, 0, 8, 102
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Daily/stlye.ts", "TypeScript", 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 63
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Hooks/useDayOfTournament.ts", "TypeScript", 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 23
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Hooks/useLeaderboardQuery.ts", "TypeScript", 0, 132, 0, 0, 0, 0, 0, 0, 0, 0, 10, 12, 154
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Incentivised/index.tsx", "TypeScript React", 0, 0, 0, 0, 161, 0, 0, 0, 0, 0, 91, 11, 263
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/PNL/index.tsx", "TypeScript React", 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 12, 7, 119
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/PNL/style.ts", "TypeScript", 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/PNL/tabFilter.tsx", "TypeScript React", 0, 0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 6, 76
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Sidebar/index.tsx", "TypeScript React", 0, 0, 0, 0, 199, 0, 0, 0, 0, 0, 178, 20, 397
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Sidebar/style.ts", "TypeScript", 0, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 68
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Weekly/index.tsx", "TypeScript React", 0, 0, 0, 0, 289, 0, 0, 0, 0, 0, 99, 14, 402
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/Weekly/style.ts", "TypeScript", 0, 117, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 126
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/atom.ts", "TypeScript", 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 41
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/drawers.tsx", "TypeScript React", 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 2, 11
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/index.tsx", "TypeScript React", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 1, 3, 29
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/interfaces.ts", "TypeScript", 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 24
+"/home/amit/buffer-ui/src/Views/V2-Leaderboard/style.ts", "TypeScript", 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 45
+"/home/amit/buffer-ui/src/assets/Elements/BackIcon.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/src/assets/Elements/BufferLogo.tsx", "TypeScript React", 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 3, 24
+"/home/amit/buffer-ui/src/assets/Elements/Closelogo.tsx", "TypeScript React", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 3, 28
+"/home/amit/buffer-ui/src/assets/Elements/Disconnect.tsx", "TypeScript React", 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 22
+"/home/amit/buffer-ui/src/assets/Elements/ErrorIcon.tsx", "TypeScript React", 0, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0, 2, 33
+"/home/amit/buffer-ui/src/assets/Elements/FailedSuccess.tsx", "TypeScript React", 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 3, 29
+"/home/amit/buffer-ui/src/assets/Elements/MenuLogo.tsx", "TypeScript React", 0, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0, 3, 34
+"/home/amit/buffer-ui/src/assets/Elements/SuccessIcon.tsx", "TypeScript React", 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 3, 29
+"/home/amit/buffer-ui/src/assets/Elements/ToastCrossIcon.tsx", "TypeScript React", 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 3, 18
+"/home/amit/buffer-ui/src/assets/Elements/wallet.tsx", "TypeScript React", 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 3, 31
+"/home/amit/buffer-ui/src/assets/Social/DD/discord.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/src/assets/Social/DD/gitbook.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/assets/Social/DD/github.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"/home/amit/buffer-ui/src/assets/Social/DD/medium.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/src/assets/Social/DD/telegram.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/src/assets/Social/DD/twitter.tsx", "TypeScript React", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 3, 19
+"/home/amit/buffer-ui/src/atoms/generic.ts", "TypeScript", 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 17
+"/home/amit/buffer-ui/src/contexts/Global/index.tsx", "TypeScript React", 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 2, 8, 39
+"/home/amit/buffer-ui/src/contexts/Global/interfaces.tsx", "TypeScript React", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 1, 26
+"/home/amit/buffer-ui/src/contexts/Global/reducer.ts", "TypeScript", 0, 358, 0, 0, 0, 0, 0, 0, 0, 0, 7, 10, 375
+"/home/amit/buffer-ui/src/contexts/Refresher/index.tsx", "TypeScript React", 0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 2, 11, 69
+"/home/amit/buffer-ui/src/contexts/Toast/index.tsx", "TypeScript React", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 4, 22
+"/home/amit/buffer-ui/src/contexts/Toast/reducer.ts", "TypeScript", 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 52
+"/home/amit/buffer-ui/src/contexts/index.tsx", "TypeScript React", 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 2, 13
+"/home/amit/buffer-ui/src/globalStore.ts", "TypeScript", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5
+"/home/amit/buffer-ui/src/main.tsx", "TypeScript React", 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 3, 33
+"/home/amit/buffer-ui/src/redux/consents/reducer.ts", "TypeScript", 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 31
+"/home/amit/buffer-ui/src/redux/index.ts", "TypeScript", 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 58
+"/home/amit/buffer-ui/src/redux/persisted/reducer.ts", "TypeScript", 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 45
+"/home/amit/buffer-ui/src/redux/rootReducer.ts", "TypeScript", 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"/home/amit/buffer-ui/src/vite-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"/home/amit/buffer-ui/tailwind.config.cjs", "JavaScript", 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 130
+"/home/amit/buffer-ui/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 34, 0, 38
+"/home/amit/buffer-ui/tsconfig.node.json", "JSON", 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"/home/amit/buffer-ui/vite.config.ts", "TypeScript", 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 20
+"Total", "-", 1878, 13474, 38123, 2463, 21464, 18, 45, 29, 118, 30, 3788, 3115, 84545
