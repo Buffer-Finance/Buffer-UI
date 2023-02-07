@@ -18,7 +18,7 @@ import {
 } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { eToWide, toFixed } from '@Utils/NumString';
-import { useContractReads } from 'wagmi';
+import { Chain, useContractReads } from 'wagmi';
 import { EarnContext } from '..';
 import { useContext } from 'react';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -69,9 +69,13 @@ export const fromWei = (value: string, decimals: number = 18) => {
 
 export const useGetTokenomics = () => {
   const { address: account } = useUserAccount();
-  const { activeChain } = useContext(EarnContext);
+  let activeChain: Chain | null = null;
+  const earnContextValue = useContext(EarnContext);
+  if (earnContextValue) {
+    activeChain = earnContextValue.activeChain;
+  }
   // const { state } = useGlobal();
-  const contracts = CONTRACTS[activeChain?.id];
+  const contracts: (typeof CONTRACTS)[42161] = CONTRACTS[activeChain?.id];
   const bfrPrice = useIbfrPrice();
   const usd_decimals = 6;
 
@@ -528,7 +532,6 @@ export const useGetTokenomics = () => {
     ] = account
       ? data.flat()
       : data.concat(new Array(getUserSpecificCalls().length).fill('0')).flat();
-
 
     const blpPrice =
       blpSupply > 0
@@ -994,7 +997,6 @@ export const useGetTokenomics = () => {
       },
     };
   }
-
 
   return bfrPrice && response ? response : { earn: null, vest: null };
 };

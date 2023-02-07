@@ -1,12 +1,12 @@
 import { Skeleton } from '@mui/material';
 import FrontArrow from 'src/SVG/frontArrow';
 import { getDHMSFromSeconds } from '@Utils/Dates/displayDateTime';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, gte, multiply } from '@Utils/NumString/stringArithmatics';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
-import { IBLP, IEarn, IiBFR, ITotalRewards } from '../earnAtom';
+import { IBLP, IEarn, IesBfr, IiBFR, ITotalRewards } from '../earnAtom';
 import { Card } from './Card';
 import { Divider } from './Divider';
 import { EarnButtons } from './EarnButtons';
@@ -90,9 +90,14 @@ export const getEarnCards = (data: IEarn) => {
               progressPercent={Number(
                 multiply(
                   divide(
-                    data.earn.blp.currentLiquidity,
+                    gte(
+                      data.earn.blp.currentLiquidity,
+                      data.earn.blp.maxLiquidity
+                    )
+                      ? data.earn.blp.maxLiquidity
+                      : data.earn.blp.currentLiquidity,
                     data.earn.blp.maxLiquidity
-                  ),
+                  ) ?? '0',
                   2
                 )
               )}
@@ -402,7 +407,7 @@ const TotalRewards = ({ data }: { data: ITotalRewards }) => {
   );
 };
 
-const BLP = ({ data, unit }: { data: IBLP; unit: string }) => {
+const BLP = ({ data, unit }: { data: IBLP | IesBfr; unit: string }) => {
   const isBLPCard = unit === 'BLP';
   return (
     <>

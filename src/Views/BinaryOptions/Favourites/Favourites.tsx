@@ -14,6 +14,7 @@ import { useFavouritesFns } from '../Hooks/useFavouritesFns';
 import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
+import { Link } from 'react-router-dom';
 
 export default function Favourites({ className }: { className?: string }) {
   const [toggle, setToggle] = useState(false);
@@ -151,7 +152,7 @@ function FavouriteCard({
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
   const isActive = data.tv_id === activeAsset.tv_id;
-  const { deleteCardHandler, replaceAssetHandler } = useFavouritesFns();
+  const { deleteCardHandler } = useFavouritesFns();
   const [marketPrice] = useAtom(marketPriceAtom);
   const marketPriceObj = marketPrice?.[data.tv_id];
   const price = marketPrice?.[data.tv_id]?.length
@@ -163,7 +164,8 @@ function FavouriteCard({
     routerPermission[data.pools[0].options_contracts.current];
 
   return (
-    <button
+    <Link
+      to={`/binary/${data.pair}`}
       className={`group mt-1 relative group pl-4 pr-3 py-3 text-2 flex flex-row items-center justify-between b1200:flex-col a1200:!min-w-[100px]  b1200:!px-3 b1200:rounded-md  b1200:mr-3 b1200:mt-[10px] b1200:items-start ${
         isActive
           ? 'text-1 bg-[#131722] rounded-t-[10px] cursor-default  left-border-needed '
@@ -172,15 +174,13 @@ function FavouriteCard({
             } ${!isAssetActive ? 'brightness-50' : ''} 
  `
       }`}
-      onClick={() => replaceAssetHandler(data.pair, isActive)}
     >
-      <div
-        role={'button'}
+      <button
         className="!absolute z-[10] text-1 !-right-3 -top-1 !bg-cross-bg rounded-full w-[17px] h-[17px] group-hover:visible invisible"
         onClick={(e) => deleteCardHandler(e, data, isActive)}
       >
         <CloseOutlined className="!w-4" />
-      </div>
+      </button>
 
       <div className="flex items-center">
         {/* <img
@@ -211,6 +211,6 @@ function FavouriteCard({
           )}
         </div>
       </div>
-    </button>
+    </Link>
   );
 }
