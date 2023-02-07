@@ -6,6 +6,7 @@ import { IMarket, useQTinfo } from '@Views/BinaryOptions';
 import { w3cwebsocket as W3CWebsocket } from 'websocket';
 
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { UserActivityAtom } from '@Utils/isUserPaused';
 const FIRST_TIMESTAMP = 1673239587;
 export function getBlockFromBar(bar) {
   if (bar.time) return bar;
@@ -18,8 +19,8 @@ export function getBlockFromBar(bar) {
     volume: +bar[5],
   };
 }
-const VISIBLE_TOLERATION_SEC = 10 * 60;
-const INVISIBLE_TOLERATION_SEC = 1 * 60;
+const VISIBLE_TOLERATION_SEC = 30 * 1000;
+const INVISIBLE_TOLERATION_SEC = 30 * 1000;
 const getKlineFromPrice = (chunk) => {
   const priceObj = {};
   const res = chunk.toString();
@@ -84,12 +85,17 @@ const parsewsmsg = (res) => {
             orSplitted.split('\r').forEach((assetString, idx) => {
               if (assetString) {
                 if (assetString.includes('[')) return;
-                const [assetName, decimalTs, numPrice,volume] = assetString.split(':');
+                const [assetName, decimalTs, numPrice, volume] =
+                  assetString.split(':');
                 if (!assetName || !decimalTs || !numPrice) return;
                 const [s, ms] = (decimalTs as string).split('.');
                 const ts = +s * 1000 + +ms;
                 const absolutePrice = numPrice;
-                const priceUpdate = { time: +ts, price: absolutePrice,volume:volume?+volume:0 };
+                const priceUpdate = {
+                  time: +ts,
+                  price: absolutePrice,
+                  volume: volume ? +volume : 0,
+                };
                 if (!priceObj[assetName]) {
                   priceObj[assetName] = [priceUpdate];
                 } else {
@@ -165,7 +171,7 @@ export function getDecimalBlockFromBar(bar) {
   };
   return updatedBar;
 }
-const client = new W3CWebsocket('wss://oracle-v2.buffer.finance')
+const client = new W3CWebsocket('wss://oracle-v2.buffer.finance');
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   '1S',
@@ -288,34 +294,35 @@ const getMergedBars = (storedBars, newBars, time) => {
   return mergedBars;
 };
 export default function useDataFeed(chartReady) {
- 
-
   const qtInfo = useQTinfo();
   const storedUpdates = useRef({});
 
   const [marketPrices, setMarketPrices] = useAtom(marketPriceAtom);
   const setLastDayChange = useSetAtom(market2dayChangeAtom);
-  const [reader, setReader] = useState(null);
+  const [showPauseModal, setShowPasuseModal] = useState(false);
   const activeAsset = qtInfo.activePair;
-  // const streamInit = async () => {
-  //   setReader(null);
-
-  //   const res = await fetch('https://oracle-stream.buffer.finance/stream');
-  //   setReader(res.body.getReader());
-  // };
-  const [breakingCnt,setBreakingCnt] = useAtom(streamBreakedAtom);
-  // useEffect(() => {
-  //   if (state.type == 'active') streamInit();
-  // }, [state, chartReady]);
   const [sync, setSync] = useState<ITVSyncing>({
     state: TVSyncingStates.SyncNeeded,
   });
-  const fn = async (res) => {
-    if (!chartReady) return;
-    console.time('fn-start')
-    const priceUpdates = parsewsmsg(res);
 
-    // const resp = await reader?.closed?.();
+  const fn = (async (res) => {
+    if (!chartReady) return;
+    if (showPauseModal) return;
+    const priceUpdates = parsewsmsg(res);
+    // const currTimestamp = Date.now();
+    // if (val.ts) {
+    //   let diff = currTimestamp - val.ts;
+    //   let showPauseModal = false;
+    //   let toleranceDuration = VISIBLE_TOLERATION_SEC;
+    //   if (document.hidden) {
+    //     toleranceDuration = INVISIBLE_TOLERATION_SEC;
+    //   }
+    //   console.log(`diff: `, diff / 1e3, toleranceDuration / 1e3);
+    //   if (diff >= toleranceDuration) {
+    //     showPauseModal = true;
+    //   }
+    //   showPauseModal && setShowPasuseModal(true);
+    // }
     const activeResolution = realTimeUpdate.current?.resolution || '1m';
     let prevBar =
       lastSyncedKline?.current?.[
@@ -323,7 +330,7 @@ export default function useDataFeed(chartReady) {
       ];
     const activeAssetStream = priceUpdates[activeAsset.tv_id];
     const latestKline = getKlineFromPrice(res);
-    
+
     if (activeAssetStream?.length && prevBar) {
       let aggregatedBar;
       const storedBars = storedUpdates.current[activeAsset.tv_id];
@@ -331,8 +338,8 @@ export default function useDataFeed(chartReady) {
         storedBars,
         activeAssetStream,
         prevBar.time
-        );
-        
+      );
+
       for (let currBar of completeBars) {
         aggregatedBar = getAggregatedBarv2(
           prevBar,
@@ -364,8 +371,8 @@ export default function useDataFeed(chartReady) {
       storedUpdates.current = bar;
       console.log('not-prev bar', storedUpdates.current, priceUpdates);
     }
-    console.timeEnd('fn-start')
-    
+    console.timeEnd('fn-start');
+
     setMarketPrices((mp) => {
       return { ...mp, ...latestKline };
     });
@@ -373,18 +380,25 @@ export default function useDataFeed(chartReady) {
     //   setBreakingCount({state:'break'});
     //   streamInit();
     // }
-  };
+  });
   useEffect(() => {
     if (!chartReady) return;
     console.log(`client: `, client);
     client.onmessage = (e) => {
       fn(e.data);
     };
-    client.onerror = (e)=>{
-      // restart the tv.
-      breakConnection()    }
-  }, [client, chartReady]);
-  const breakConnection = ()=>setBreakingCnt({state:'break'});
+    client.onerror = (e) => {
+      console.log(`wse: `, e);
+      breakConnection();
+    };
+    client.onclose = (e) => {
+      console.log(`wse: `, e);
+      breakConnection();
+    };
+  }, [chartReady]);
+  const breakConnection = () => {
+    setShowPasuseModal(true);
+  };
 
   // useEffect(() => {
   //   if (!reader) return;

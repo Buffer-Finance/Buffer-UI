@@ -211,29 +211,7 @@ function QTrade() {
       if (ref !== referralCode) setRef(referralCode);
     }
   }, [params]);
-  const [marketPrices] = useAtom(marketPriceAtom);
-  isUserPaused();
-  const [ reader, setReader ] = useState(null)
-  const streamInit = async () => {
-    setReader(null);
 
-    const res = await fetch('https://oracle-stream.buffer.finance/stream');
-    setReader(res.body.getReader());
-  };
-  const [ err, setErr ] = useState(false)
-  const checkStream = async ()=>{
-    try{
-      const {value,done} = await reader?.read();
-      console.log(`streamdata: `,value);
-      checkStream();
-    }catch(err){
-      setReader(true);
-    }
-  }
-
-  useEffect(()=>{
-    checkStream();
-  },[reader])
   return (
     <>
       <div className="tabDispay:hidden  tab:mx-auto ">
