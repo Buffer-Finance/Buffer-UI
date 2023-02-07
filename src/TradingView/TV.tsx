@@ -417,6 +417,11 @@ const TVIntegrated = ({ assetInfo }) => {
 
   return (
     <>
+    {/* <button onClick={()=>{
+      setBreakingCnt({
+        state:'break'
+      })
+    }}>Break</button> */}
       <Dialog open={showPauseModal} onClose={() => setShowPasuseModal(true)}>
         <div className="bg-1 text-3 flex items-center flex-col p-6 gap-4">
           <div className="text-f20 mb-4">Are you still there?</div>

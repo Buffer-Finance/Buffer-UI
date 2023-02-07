@@ -303,8 +303,7 @@ export default function useDataFeed(chartReady) {
   //   const res = await fetch('https://oracle-stream.buffer.finance/stream');
   //   setReader(res.body.getReader());
   // };
-  const [state, setState] = useAtom(TVStateAtom);
-
+  const [breakingCnt,setBreakingCnt] = useAtom(streamBreakedAtom);
   // useEffect(() => {
   //   if (state.type == 'active') streamInit();
   // }, [state, chartReady]);
@@ -381,7 +380,11 @@ export default function useDataFeed(chartReady) {
     client.onmessage = (e) => {
       fn(e.data);
     };
+    client.onerror = (e)=>{
+      // restart the tv.
+      breakConnection()    }
   }, [client, chartReady]);
+  const breakConnection = ()=>setBreakingCnt({state:'break'});
 
   // useEffect(() => {
   //   if (!reader) return;
