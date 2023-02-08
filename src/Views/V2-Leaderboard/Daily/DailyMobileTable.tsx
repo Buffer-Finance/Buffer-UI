@@ -188,7 +188,7 @@ const MobileRow = ({
               '-'
             ) : (
               <Display
-                data={divide(currentStanding.netPnL, usdcDecimals)}
+                data={divide(currentStanding.volume, usdcDecimals)}
                 unit={'USDC'}
               />
             )}
