@@ -8,17 +8,20 @@ import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
 import Trophy from '../Components/Trophy';
+import BasicPagination from '@Views/Common/pagination';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
   skip: number;
   userData: ILeague[] | undefined;
-}> = ({ options, skip, userData }) => {
+  onpageChange?: (e, page: number) => void;
+  count: number;
+}> = ({ options, skip, userData, count, onpageChange }) => {
   const { address: account } = useUserAccount();
-  if (!options)
-    return (
-      <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
-    );
+  // if (!options)
+  //   return (
+  //     <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
+  //   );
   let user = getUserIndex(options, skip, account);
   const UserRow =
     userData?.length && options?.length ? (
@@ -36,25 +39,40 @@ export const DailyMobileTable: React.FC<{
 
   return (
     <div className=" mt-4 flex flex-col gap-4">
-      {UserRow}
-      {options.map((currentStanding, index) => {
-        const isUser =
-          currentStanding?.user &&
-          currentStanding?.user.toLowerCase() === account?.toLowerCase();
+      {!options ? (
+        <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
+      ) : (
+        <>
+          {' '}
+          {UserRow}
+          {options.map((currentStanding, index) => {
+            const isUser =
+              currentStanding?.user &&
+              currentStanding?.user.toLowerCase() === account?.toLowerCase();
 
-        return (
-          <MobileRow
-            {...{
-              index,
-              currentStanding,
-              user: false,
-              skip,
-              userData,
-              account,
-            }}
-          />
-        );
-      })}
+            return (
+              <MobileRow
+                {...{
+                  index,
+                  currentStanding,
+                  user: false,
+                  skip,
+                  userData,
+                  account,
+                }}
+              />
+            );
+          })}
+        </>
+      )}
+
+      {count && count > 1 ? (
+        <BasicPagination
+          onChange={onpageChange}
+          count={count}
+          shouldShowTroply={false}
+        />
+      ) : null}
     </div>
   );
 };
