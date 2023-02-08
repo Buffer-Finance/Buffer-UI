@@ -5,11 +5,9 @@ import Config from 'public/config.json';
 const typeofConfig = Config[421613];
 export const useActiveChain = () => {
   const { chain } = useNetwork();
+  console.log(`chain: `,chain);
   const chains = getChains();
-  const activeChain = useMemo(() => {
-    if (chain && chains.includes(chain)) return chain;
-    else return chains[0];
-  }, [chain, chains]);
+  const activeChain = chain
 
   const isWrongChain = useMemo(() => {
     return chain && chain.id !== activeChain.id;

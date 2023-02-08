@@ -7,7 +7,7 @@ import getDeepCopy from './getDeepCopy';
 export const useReadCall = ({ contracts }) => {
   const calls = contracts;
   const { data: signer } = useSigner();
-  const {isWrongChain} = useActiveChain();
+  const {isWrongChain,configContracts} = useActiveChain();
   const {address} = useAccount();
   const p = useProvider();
   let signerOrProvider = p;
@@ -17,7 +17,7 @@ export const useReadCall = ({ contracts }) => {
   return useSWR(calls && [calls], {
     fetcher: async (calls) => {
       if (!calls) return null;
-      let returnData = await multicallv2(calls,signerOrProvider );
+      let returnData = await multicallv2(calls,signerOrProvider ,configContracts.multicall);
       if (returnData) {
         let copy = getDeepCopy(returnData);
         convertBNtoString(copy);
