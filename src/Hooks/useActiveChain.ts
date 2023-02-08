@@ -7,9 +7,7 @@ const typeofConfig = Config[421613];
 
 export const useActiveChain = () => {
   const {chain} = useNetwork();
-  console.log(`chain: `,chain);
   const [activeChain, isWrongChain, configContracts] = useMemo<[Chain,boolean,typeof typeofConfig]>(() => {
-    console.log(`activeChain,memoruns `,);
     return [
       chain,
       false,
