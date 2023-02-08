@@ -36,8 +36,9 @@ export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
 import Config from 'public/config.json';
 import { useSearchParam } from 'react-use';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { getChains } from 'src/Config/wagmiClient';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -105,9 +106,9 @@ export const ENV =
 
 export const useQTinfo = () => {
   const params = useParams();
-  const {activeChain} = useActiveChain();
+  const { activeChain,configContracts } = useActiveChain();
   const data = useMemo(() => {
-    let activeMarket = Config[ENV].pairs.find((m) => {
+    let activeMarket = Config[activeChain.id].pairs.find((m) => {
       let market = params?.market || 'GBP-USD';
       // GBP
       market = market.toUpperCase();
@@ -120,18 +121,18 @@ export const useQTinfo = () => {
       return false;
     });
     if (!activeMarket) {
-      activeMarket = Config[ENV].pairs[0];
+      activeMarket = Config[activeChain.id].pairs[0];
     }
     return {
       chain: 'ARBITRUM',
       asset: activeMarket.pair,
-      pairs: Config[ENV].pairs.map((singlePair) => {
+      pairs: Config[activeChain.id].pairs.map((singlePair) => {
         return {
           ...singlePair,
           pools: singlePair.pools.map((singlePool) => {
             return {
               ...singlePool,
-              token: Config[ENV].tokens[singlePool.token],
+              token: Config[activeChain.id].tokens[singlePool.token],
             };
           }),
         };
@@ -141,16 +142,13 @@ export const useQTinfo = () => {
         pools: activeMarket.pools.map((singlePool) => {
           return {
             ...singlePool,
-            token: Config[ENV].tokens[singlePool.token],
+            token: Config[activeChain.id].tokens[singlePool.token],
           };
         }),
       },
-      optionMeta: '0x3D81B239F5D58e5086cC58d9012c326F34B3BC36',
-      routerContract: Config[ENV].router,
-      activeChain: {
-       ...(import.meta.env.VITE_ENV.toLowerCase() === 'mainnet' ? arbitrum:arbitrumGoerli),
-        testnet: false,
-      },
+      optionMeta: configContracts.meta,
+      routerContract: Config[activeChain.id].router,
+      activeChain
     };
   }, [params?.market,activeChain]);
   return data;
@@ -161,6 +159,7 @@ function QTrade() {
   const [ref, setRef] = useAtom(referralCodeAtom);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
+  console.log('chainsss',arbitrumGoerli,arbitrum,polygon,polygonMumbai)
   // const [assets, setAssets] = useAtom(DisplayAssetsAtom);
   usePastTradeQuery();
   useGenericHooks();

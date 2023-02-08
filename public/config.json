@@ -1,5 +1,5 @@
 {
-  "arbitrum-test": {
+  "421613": {
     "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
     "meta": "0xddc2Fbc6761eabf131E51101Dd3b43A295e121F1",
     "router": "0x76c52E83d7dcCc70107a66BAd44D042D22D06be7",
@@ -102,7 +102,110 @@
       }
     ]
   },
-  "arbitrum-main": {
+  "42161": {
+    "referral_storage": "0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29",
+    "meta": "0xd43eBDeA4efEDFa14024F9894169fad8896728A4",
+    "router": "0x0e0A1241C9cE6649d5D30134a194BA3E24130305",
+    "tokens": {
+      "USDC": {
+        "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+        "decimals": 6,
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "name": "USDC",
+        "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e"
+      },
+      "BFR": {
+        "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+        "decimals": 18,
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "name": "BFR",
+        "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e"
+      }
+    },
+    "pairs": [
+      {
+        "max_duration": "04:00",
+        "category": "Crypto",
+        "tv_id": "BTCUSD",
+        "pair": "BTC-USD",
+        "price_precision": 100,
+        "token1": "BTC",
+        "token2": "USD",
+        "full_name": "Bitcoin",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg",
+        "pools": [
+          {
+            "token": "USDC",
+            "options_contracts": {
+              "config": "0x08d5E019fB16f92822befaC9986E7b7402DAE610",
+              "current": "0x532321e6a2D8A54cf87E34850A7d55466B1ec197"
+            }
+          }
+        ]
+      },
+      {
+        "max_duration": "04:00",
+        "category": "Crypto",
+        "tv_id": "ETHUSD",
+        "pair": "ETH-USD",
+        "price_precision": 100,
+        "token1": "ETH",
+        "token2": "USD",
+        "full_name": "Ethereum",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
+        "pools": [
+          {
+            "token": "USDC",
+            "options_contracts": {
+              "config": "0xbC7DBEB9a7b158711b4B5fb0177F3E0bE024125a",
+              "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"
+            }
+          }
+        ]
+      },
+      {
+        "max_duration": "04:00",
+        "category": "Forex",
+        "tv_id": "EURUSD",
+        "pair": "EUR-USD",
+        "price_precision": 1000000,
+        "token1": "EUR",
+        "token2": "USD",
+        "full_name": "Euro",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png",
+        "pools": [
+          {
+            "token": "USDC",
+            "options_contracts": {
+              "config": "0x8DaC2Eb302DD9CcB3a9A23263BC021f6f1E8Cd9C",
+              "current": "0xbCD52d37F41dA2277aF92617D70931A787f66Fd5"
+            }
+          }
+        ]
+      },
+      {
+        "max_duration": "04:00",
+        "category": "Forex",
+        "tv_id": "GBPUSD",
+        "pair": "GBP-USD",
+        "price_precision": 1000000,
+        "token1": "GBP",
+        "token2": "USD",
+        "full_name": "Pound",
+        "img": "https://cdn.buffer.finance/Buffer-Media/main/GBP.png",
+        "pools": [
+          {
+            "token": "USDC",
+            "options_contracts": {
+              "config": "0xc1925460Fe5669878D5963c29aC51677866dE67F",
+              "current": "0x5d61FE708c9D41acf59009013f14496d559aad09"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "80001": {
     "referral_storage": "0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29",
     "meta": "0xd43eBDeA4efEDFa14024F9894169fad8896728A4",
     "router": "0x0e0A1241C9cE6649d5D30134a194BA3E24130305",
