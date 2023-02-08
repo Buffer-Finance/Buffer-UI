@@ -1,5 +1,4 @@
 import { Skeleton } from '@mui/material';
-import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { ReactNode, useEffect, useState } from 'react';
 import DownIcon from 'src/SVG/Elements/DownIcon';
@@ -29,7 +28,7 @@ import { MarketTimingWarning } from '../MarketTimingWarning';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getChains } from 'src/Config/wagmiClient';
-import {  useConnectModal} from '@rainbow-me/rainbowkit'
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
@@ -191,66 +190,63 @@ export function CustomOption() {
           />
         )}
         <ConnectionRequired>
-
-        <span>
-
-        {allowance == null || !activeAssetPrice ? (
-          <Skeleton className="h4 full-width sr lc mb3" />
-          ) : lt(allowance, amount.toString() || '0') ? (
-            <BlueBtn
-            onClick={() => {
-              account ? setIsApproveModalOpen(true) : openConnectModal?.();
-            }}
-            >
-            Approve
-          </BlueBtn>
-        ) : (
-          <>
-            <div className="btn-wrapper">
-              <GreenBtn
-                onClick={UpHandler}
-                isDisabled={isForex && !isMarketOpen}
-                isLoading={
-                  loading &&
-                  typeof loading !== 'number' &&
-                  loading?.is_up === true
-                }
-                className="bg-cross-bg text-green hover:bg-green hover:text-1"
-                >
-                <>
-                  <UpIcon className="mr-[6px] scale-150" />
-                  Up
-                </>
-              </GreenBtn>
-              <RedBtn
-                isDisabled={isForex && !isMarketOpen}
-                isLoading={
-                  loading &&
-                  typeof loading !== 'number' &&
-                  loading?.is_up === false
-                }
-                onClick={DownHandler}
-                >
-                <>
-                  <DownIcon className="mr-[6px] scale-150" />
-                  Down
-                </>
-              </RedBtn>
-            </div>
-            <div
-              className="approve-btn-styles text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto"
-              role={'button'}
-              onClick={() =>
-                !account ? openConnectModal?.() : handleApproveClick('0')
-              }
+          <span>
+            {allowance == null || !activeAssetPrice ? (
+              <Skeleton className="h4 full-width sr lc mb3" />
+            ) : lt(allowance, amount.toString() || '0') ? (
+              <BlueBtn
+                onClick={() => {
+                  account ? setIsApproveModalOpen(true) : openConnectModal?.();
+                }}
               >
-              Revoke Approval
-            </div>
-          </>
-        )}
-        </span>
+                Approve
+              </BlueBtn>
+            ) : (
+              <>
+                <div className="btn-wrapper">
+                  <GreenBtn
+                    onClick={UpHandler}
+                    isDisabled={isForex && !isMarketOpen}
+                    isLoading={
+                      loading &&
+                      typeof loading !== 'number' &&
+                      loading?.is_up === true
+                    }
+                    className="bg-cross-bg text-green hover:bg-green hover:text-1"
+                  >
+                    <>
+                      <UpIcon className="mr-[6px] scale-150" />
+                      Up
+                    </>
+                  </GreenBtn>
+                  <RedBtn
+                    isDisabled={isForex && !isMarketOpen}
+                    isLoading={
+                      loading &&
+                      typeof loading !== 'number' &&
+                      loading?.is_up === false
+                    }
+                    onClick={DownHandler}
+                  >
+                    <>
+                      <DownIcon className="mr-[6px] scale-150" />
+                      Down
+                    </>
+                  </RedBtn>
+                </div>
+                <div
+                  className="approve-btn-styles text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto"
+                  role={'button'}
+                  onClick={() =>
+                    !account ? openConnectModal?.() : handleApproveClick('0')
+                  }
+                >
+                  Revoke Approval
+                </div>
+              </>
+            )}
+          </span>
         </ConnectionRequired>
-
         {MarketOpenWarning}
       </div>
     </>
