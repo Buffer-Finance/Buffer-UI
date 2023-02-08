@@ -98,10 +98,6 @@ export const setActiveAssetStateAtom = atom(null, (get, set, payload) => {
   set(activeAssetStateAtom, payload);
 });
 
-export const ENV =
-  import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
-    ? 'arbitrum-main'
-    : 'arbitrum-test';
 
 
 export const useQTinfo = () => {

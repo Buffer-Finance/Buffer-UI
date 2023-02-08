@@ -11,28 +11,28 @@ import Drawer from '@Views/Common/V2-Drawer';
 import useOpenConnectionDrawer from '@Hooks/useOpenConnectionDrawer';
 import { CHAIN_CONFIG } from 'src/Config';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import {  useConnectModal} from '@rainbow-me/rainbowkit'
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 
 const IbfrFaucet: React.FC = () => {
   const props = { chain: 'ARBITRUM' } as { chain: 'ARBITRUM' };
   const { state } = useGlobal();
   const toastify = useToast();
+  const { configContracts } = useActiveChain();
   const [btnLoading, setBtnLoading] = useState(0);
-  const { openConnectModal } = useConnectModal();
-  useEffect(()=>{
-    document.title = "Buffer | Faucet"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Faucet';
+  }, []);
   const { writeCall: USDCwriteCall } = useWriteCall(
-    '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+    configContracts.tokens.USDC.faucet,
     FaucetABI
   );
   const { writeCall: BFRWriteCall } = useWriteCall(
-    '0x8F4db9A46809782b67180F0f8f3d9843a5268137',
+    configContracts.tokens.BFR.faucet,
     FaucetABI
   );
-  const { openWalletDrawer, shouldConnectWallet } = useOpenConnectionDrawer();
-  const activeChainData = CHAIN_CONFIG[props.chain];
-
+const {activeChain} = useActiveChain();
   const claim = (shouldCLaimUSDC = true) => {
     if (state.txnLoading > 1) {
       return toastify({
@@ -49,22 +49,23 @@ const IbfrFaucet: React.FC = () => {
     const methodName = 'claim';
     if (shouldCLaimUSDC) {
       setBtnLoading(1);
+      console.log(overRides.value.toString())
       return USDCwriteCall(cb, methodName, [], overRides);
     }
     setBtnLoading(2);
     BFRWriteCall(cb, methodName, [], overRides);
   };
 
-  const content = activeChainData && [
+  const content = activeChain && [
     {
       top: `Claim ${import.meta.env.VITE_ENV} ${
-        activeChainData?.nativeAsset.name
+        activeChain.nativeCurrency.symbol
       }`,
       middle: (
         <>
           You will have to claim{' '}
           <span className="text-1 w500">
-            {import.meta.env.VITE_ENV} {activeChainData?.nativeAsset.name}
+            {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
           </span>{' '}
           for gas fee.
         </>
@@ -77,12 +78,8 @@ const IbfrFaucet: React.FC = () => {
     },
     {
       top: `Claim TESTNET Tokens`,
-      bottom: shouldConnectWallet ? (
-        <BlueBtn onClick={openConnectModal} className="btn">
-          Connect Wallet
-        </BlueBtn>
-      ) : (
-        <div className="flex items-center flex-col-m">
+      bottom: (
+        <ConnectionRequired>
           <BlueBtn
             isLoading={state.txnLoading === 1 && btnLoading === 1}
             isDisabled={btnLoading === 2}
@@ -91,14 +88,7 @@ const IbfrFaucet: React.FC = () => {
           >
             Claim 500 USDC
           </BlueBtn>
-          {/* <BlueBtn
-            className="btn ml20 nowrap"
-            isDisabled={btnLoading === 1}
-            isLoading={state.txnLoading === 1 && btnLoading === 2}
-          >
-            Claim 500 BFR
-          </BlueBtn> */}
-        </div>
+        </ConnectionRequired>
       ),
     },
   ];
@@ -108,7 +98,7 @@ const IbfrFaucet: React.FC = () => {
       {/* <HeadTitle title={'Buffer | Faucet'} /> */}
       <Background>
         <div className="wrapper">
-          {activeChainData && content ? (
+          {activeChain && content ? (
             content.map((s) => (
               <div className="faucet-card bg-1">
                 <div className="card-head">{s.top}</div>

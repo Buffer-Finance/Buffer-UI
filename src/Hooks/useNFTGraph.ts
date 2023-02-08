@@ -2,13 +2,14 @@ import axios from 'axios';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { baseGraphqlLiteUrl } from 'config';
+import { useActiveChain } from './useActiveChain';
 
 export const useNFTGraph = () => {
   const { address: account } = useUserAccount();
+  const {configContracts} = useActiveChain();
   const { data } = useSWR(`nfts-the-graph-account-${account}`, {
     fetcher: async () => {
-      const response = await axios.post(baseGraphqlLiteUrl.sandbox, {
+      const response = await axios.post(configContracts.graph.LITE, {
         query: `{ 
 nfts(orderBy: tokenId, orderDirection: desc,where: {owner: "${account}"}) {
     batchId

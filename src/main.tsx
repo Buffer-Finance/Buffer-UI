@@ -20,7 +20,6 @@ const options = {
 import { inject } from '@vercel/analytics';
 inject();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={darkTheme()}>
         <HashRouter>
@@ -34,5 +33,4 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </HashRouter>
       </RainbowKitProvider>
     </WagmiConfig>
-  </React.StrictMode>
 );

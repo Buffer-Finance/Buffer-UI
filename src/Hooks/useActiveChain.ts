@@ -1,16 +1,21 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { getChains } from 'src/Config/wagmiClient';
-import { useNetwork } from 'wagmi';
+import { Chain, useNetwork } from 'wagmi';
 import Config from 'public/config.json';
 const typeofConfig = Config[421613];
-export const useActiveChain = () => {
-  const { chain } = useNetwork();
-  console.log(`chain: `,chain);
-  const chains = getChains();
-  const activeChain = chain
 
-  const isWrongChain = useMemo(() => {
-    return chain && chain.id !== activeChain.id;
-  }, [chain, chains]);
-  return { activeChain, isWrongChain,configContracts:Config[activeChain.id] as typeof typeofConfig };
+
+export const useActiveChain = () => {
+  const {chain} = useNetwork();
+  console.log(`chain: `,chain);
+  const [activeChain, isWrongChain, configContracts] = useMemo<[Chain,boolean,typeof typeofConfig]>(() => {
+    console.log(`activeChain,memoruns `,);
+    return [
+      chain,
+      false,
+      Config[chain.id || '421613'] as typeof typeofConfig,
+    ];
+  }, [chain]);
+ 
+  return { activeChain, isWrongChain, configContracts };
 };

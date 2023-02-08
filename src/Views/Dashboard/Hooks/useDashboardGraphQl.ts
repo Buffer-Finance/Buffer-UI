@@ -3,15 +3,17 @@ import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add } from '@Utils/NumString/stringArithmatics';
+import { useActiveChain } from '@Hooks/useActiveChain';
 const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
 console.log(`prevDayEpoch: `,prevDayEpoch);
 
 export const useDashboardGraphQl = () => {
+  const {configContracts} = useActiveChain();
   const { data } = useSWR('history-thegraph', {
     fetcher: async () => {
 const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
 
-      const response = await axios.post(baseGraphqlUrl, {
+      const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
             USDCstats:dashboardStat (id : "USDC") {
               totalSettlementFees

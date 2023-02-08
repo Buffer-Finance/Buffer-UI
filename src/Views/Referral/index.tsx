@@ -477,9 +477,10 @@ const Affilate = ({
 
 const useUserReferralStats = () => {
   const { address } = useUserAccount();
+  const {configContracts} = useActiveChain();
   return useSWR(`${address}-stats`, {
     fetcher: async () => {
-      const response = await axios.post(baseGraphqlUrl, {
+      const response = await axios.post(configContracts.graph.MAIN, {
         query: `{
             referralDatas (where: { id: "${address}"} ) {
               totalTradesReferred

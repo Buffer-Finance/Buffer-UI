@@ -9,6 +9,7 @@ import { updateLeaderboardTotalPageAtom } from '../atom';
 import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { useDayOffset } from '../Components/ContestFilterDD';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -33,7 +34,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
   const timestamp = getDayId(Number(offset));
-
+  const {configContracts} = useActiveChain();
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-skip-${skip}-offset-${offset}-account-${account}`,
     {
@@ -79,7 +80,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(baseGraphqlUrl, {
+        const response = await axios.post(configContracts.graph.MAIN, {
           query,
         });
 
@@ -103,7 +104,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
               user
             }
           }`;
-        const response = await axios.post(baseGraphqlUrl, {
+        const response = await axios.post(configContracts.graph.MAIN, {
           query,
         });
 

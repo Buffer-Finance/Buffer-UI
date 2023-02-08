@@ -5,7 +5,6 @@ import { DashboardContext } from '../dashboardAtom';
 import bfrAbi from '@Views/Earn/Config/Abis/BFR.json';
 import MarketConfig from 'public/config.json';
 import poolABI from '@Views/BinaryOptions/ABI/poolABI.json';
-import { ENV } from '@Views/BinaryOptions';
 import { erc20ABI, useContractReads } from 'wagmi';
 import * as chain from '@wagmi/core/chains';
 
@@ -29,6 +28,7 @@ import useSWR from 'swr';
 import { multicallv2 } from '@Utils/Contract/multiContract';
 import { ethers } from 'ethers';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
+import { useActiveChain } from '@Hooks/useActiveChain';
 export const HolderContracts = [
   '0x01fdd6777d10dD72b8dD716AEE05cE67DD2b7D85',
   '0x58b0F2445DfA2808eCB209B7f96EfBc584736b7D',
@@ -206,11 +206,12 @@ export const useDashboardReadCalls = () => {
 
 const useDashboardCalls = () => {
   const { activeChain } = useContext(DashboardContext);
+  const {configContracts} = useActiveChain();
   const earnContracts = CONTRACTS[activeChain?.id];
   const earnMainnetContracts = CONTRACTS[chain.arbitrum.id];
   const dashboardContracts: (typeof DASHBOARDCONTRACTS)[42161] =
     DASHBOARDCONTRACTS[activeChain?.id];
-  const binaryContracts = MarketConfig[ENV];
+  const binaryContracts = configContracts;
 
   const getCalls = () => {
     const calls = {

@@ -620,6 +620,4 @@ export const getTabs = (chain: string, isLeaderboard = false) => {
   ];
 };
 
-export enum ENV {
-  ArbitrumGoerli = 'arbitrum-test',
-}
+

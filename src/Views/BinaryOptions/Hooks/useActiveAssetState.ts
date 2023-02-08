@@ -22,7 +22,6 @@ export function useActiveAssetState(amount = null, referralData) {
   const { address: account } = useUserAccount();
   const qtInfo = useQTinfo();
   const { activeChain } = useActiveChain();
-  console.log(`activeChain: `,activeChain);
   const activeChainId = activeChain?.id;
 
   const { activePoolObj } = useActivePoolObj();
@@ -69,7 +68,7 @@ export function useActiveAssetState(amount = null, referralData) {
           });
         })
         .flat(1),
-    []
+    [activePoolObj]
   );
 
   const assetCalls = useMemo(
