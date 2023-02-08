@@ -1,10 +1,9 @@
-import React, { ReactChildren } from 'react';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { LeaderBoardDrawers } from './drawers';
 import { LeaderBoardSidebar } from './Sidebar';
 import { LeaderBoardStyles } from './style';
 
-export const LeaderBoard = (props: { children: ReactChildren }) => {
+export const LeaderBoard = (props: { children: JSX.Element }) => {
   return (
     <main className="content-drawer">
       <HeadTitle title={'Buffer | Competitions'} />

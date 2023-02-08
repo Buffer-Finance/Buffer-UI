@@ -1,9 +1,10 @@
-import styled from "styled-components";
+import styled from '@emotion/styled';
 
 const TImerStyle = styled.div`
   transition: ease-in;
   transition-duration: var(--drawer-transition-duration);
   display: flex;
+  gap: 8px;
   @media screen and (max-width: 600px) {
     padding: 1.3rem 1rem;
   }

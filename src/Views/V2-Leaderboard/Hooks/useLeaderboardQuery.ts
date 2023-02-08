@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseGraphqlUrl } from 'config';
+import { baseGraphqlUrl, isTestnet } from 'config';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
@@ -33,6 +33,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
   const timestamp = getDayId(Number(offset));
+  const minumumtrades = isTestnet ? 5 : 3;
 
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-skip-${skip}-offset-${offset}-account-${account}`,
@@ -44,7 +45,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
             orderDirection: desc
             first: ${pageNumber}
             skip: ${skip}
-            where: {timestamp: "${timestamp}", totalTrades_gte: 5}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minumumtrades}}
           ) {
             user
             totalTrades
@@ -62,7 +63,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
           totalPaginationData: leaderboards(
             orderBy: netPnL
             orderDirection: desc
-            where: {timestamp: "${timestamp}", totalTrades_gte: 5}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minumumtrades}}
           ) {
             user
           }
@@ -98,7 +99,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
           usersAboveMe: leaderboards(
             orderBy: netPnL
             orderDirection: desc
-            where: {timestamp: ${timestamp}, totalTrades_gte: 5, netPnL_gt: ${netPnL}}
+            where: {timestamp: ${timestamp}, totalTrades_gte: ${minumumtrades}, netPnL_gt: ${netPnL}}
             ) {
               user
             }

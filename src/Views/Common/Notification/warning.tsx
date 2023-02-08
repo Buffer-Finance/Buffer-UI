@@ -1,5 +1,5 @@
-import { CloseOutlined } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { CloseOutlined } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 
 export const Warning: React.FC<{
   body: JSX.Element;
@@ -12,7 +12,7 @@ export const Warning: React.FC<{
   state = true,
   closeWarning,
   shouldAllowClose = true,
-  className = "",
+  className = '',
 }) => {
   if (state)
     return (

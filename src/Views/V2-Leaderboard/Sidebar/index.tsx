@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import { LeaderBoardSidebarStyles } from './style';
 import Daily from '@Public/LeaderBoard/Daily';
 import SmPnl from 'src/SVG/Elements/PNLL';
-import { CHAIN_CONFIGS, getTabs } from 'config';
+import { CHAIN_CONFIGS, getTabs, isTestnet } from 'config';
 import { useGlobal } from '@Contexts/Global';
 import BufferDropdown from '@Views/Common/BufferDropdown';
 import { ArrowDropDownRounded } from '@mui/icons-material';
 import { Link, Location, useLocation } from 'react-router-dom';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const DropdownArrow: React.FC<{ open: boolean; className?: string }> = ({
   open,
@@ -201,12 +202,13 @@ function LeaderBoardMobileNavbar({ tabs }) {
   );
 }
 export const LeaderBoardSidebar = () => {
-  const tabs = getTabs('ARBITRUM', true);
+  const { activeChain } = useActiveChain();
+  const tabs = getTabs(activeChain.name, true);
   const location = useLocation();
   return (
     <LeaderBoardSidebarStyles className="border-r-2 border-1">
       <div className="mt-[10px] full-width">
-        <Head name="INCENTIVISD TESTNET" />
+        <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
 
         {tabs.slice(0, 1).map((tab) => {
           const isActive = doesLocationMatch(location, tab.slug);
