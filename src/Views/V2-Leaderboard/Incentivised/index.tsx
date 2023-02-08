@@ -67,7 +67,6 @@ export const Incentivised = () => {
           </span>
         }
       />
-      // <></>
     );
   } else {
     content = (
