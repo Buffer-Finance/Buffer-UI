@@ -4,7 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { getDistance } from '@Utils/Staking/utils';
 import { LeaderBoard } from '..';
@@ -40,7 +40,7 @@ export const Incentivised = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useLeaderboardQuery(ROWINAPAGE, skip);
+  const { data, totalTournamentData } = useLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -105,10 +105,22 @@ export const Incentivised = () => {
                 desc={
                   endDay[activeChain.id] &&
                   day - offset >= endDay[activeChain.id]
-                    ? '0 BFR'
-                    : isTestnet
-                    ? '500 BFR'
-                    : '1000 BFR'
+                    ? '0 USDC'
+                    : data &&
+                      data.reward &&
+                      data.reward[0] &&
+                      data.reward[0].settlementFee
+                    ? toFixed(
+                        divide(
+                          multiply(
+                            '5',
+                            divide(data.reward[0].settlementFee, usdcDecimals)
+                          ),
+                          '100'
+                        ),
+                        0
+                      ) + ' USDC'
+                    : 'fetching...'
                 }
                 descClass="text-f16 tab:text-f14 font-medium light-blue-text "
                 headClass="text-f14 tab:text-f12 fw5 text-6"

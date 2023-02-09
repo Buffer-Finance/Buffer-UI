@@ -17,8 +17,9 @@ interface ILeaderboardQuery {
     totalTrades: number;
     volume: string;
   }[];
-  totalPaginationData: { user: string }[];
+  // totalPaginationData: { user: string }[];
   userData: ILeague;
+  reward: { settlementFee: string }[];
 }
 
 export function getDayId(offset: number): number {
@@ -30,7 +31,7 @@ export function getDayId(offset: number): number {
   return dayTimestamp;
 }
 
-export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
+export const useLeaderboardQuery = () => {
   const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
@@ -38,7 +39,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
   const minimumTrades = isTestnet ? 5 : 3;
 
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-skip-${skip}-offset-${offset}-account-${account}`,
+    `leaderboard-arbi-offset-${offset}-account-${account}`,
     {
       fetcher: async () => {
         const leaderboardQuery = `
@@ -72,6 +73,9 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
             totalTrades
             volume
           }
+          reward:dailyRevenueAndFees(where: {id: "${timestamp}"}) {
+            settlementFee
+          }
           
         `;
         const userQuery = account
@@ -98,7 +102,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
 
   useEffect(() => {
     //sets total number of pages in arbiturm testnet page
-    if (data?.userStats.length > 0) {
+    if (data && data.userStats && data.userStats.length > 0) {
       setTablePages({
         arbitrum: Math.ceil(data.userStats.length / ROWINAPAGE),
       });
@@ -106,17 +110,17 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
   }, [data?.userStats]);
 
   const totalTournamentData = useMemo(() => {
-    if (!data?.totalPaginationData || !data.totalData) return null;
+    if (!data || !data.totalData) return null;
     let allTradesCount = 0;
     let totalFee = '0'; //totalFee is the Volume, variable already used everywhere so not changing it.
     let totalUsers = data?.totalData.length;
-    let totalRows = data.totalPaginationData.length;
+    let totalRows = data?.totalData.length;
     for (let singleUserTrades of data?.totalData) {
       allTradesCount += singleUserTrades.totalTrades;
       totalFee = add(totalFee, singleUserTrades.volume);
     }
     return { allTradesCount, totalFee, totalRows, totalUsers };
-  }, [data?.totalPaginationData, data?.totalData, account]);
+  }, [data?.totalData, account]);
 
   return { data, totalTournamentData };
 };
