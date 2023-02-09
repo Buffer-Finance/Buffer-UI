@@ -31,7 +31,7 @@ export function getDayId(offset: number): number {
   return dayTimestamp;
 }
 
-export const useLeaderboardQuery = (skip: number) => {
+export const useLeaderboardQuery = () => {
   const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
@@ -39,7 +39,7 @@ export const useLeaderboardQuery = (skip: number) => {
   const minimumTrades = isTestnet ? 5 : 3;
 
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-skip-${skip}-offset-${offset}-account-${account}`,
+    `leaderboard-arbi-offset-${offset}-account-${account}`,
     {
       fetcher: async () => {
         const leaderboardQuery = `

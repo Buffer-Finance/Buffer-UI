@@ -40,17 +40,17 @@ export const Incentivised = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useLeaderboardQuery(skip);
+  const { data, totalTournamentData } = useLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
     } else return [];
-  }, [data]);
+  }, [data, skip]);
   const looserStats = useMemo(() => {
     if (data && data.looserStats) {
       return data.looserStats.slice(skip, skip + ROWINAPAGE);
     } else return [];
-  }, [data]);
+  }, [data, skip]);
   const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
 
   const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
