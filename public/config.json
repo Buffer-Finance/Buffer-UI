@@ -124,85 +124,285 @@
     },
     "pairs": [
       {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "BTCUSD",
-        "pair": "BTC-USD",
-        "price_precision": 100,
-        "token1": "BTC",
-        "token2": "USD",
-        "full_name": "Bitcoin",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x08d5E019fB16f92822befaC9986E7b7402DAE610",
-              "current": "0x532321e6a2D8A54cf87E34850A7d55466B1ec197"
-            }
-          }
-        ]
+          "max_duration": "04:00",
+          "category": "Crypto",
+          "tv_id": "SOLUSD",
+          "pair": "SOL-USD",
+          "price_precision": 1000000,
+          "token1": "SOL",
+          "token2": "USD",
+          "full_name": "Solana",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/sol.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0xf2E6Fd172f706ee12b3F9Fb1750086b0a72E1230",
+                      "current": "0xFE9FAEAA880A6109F2ADF0E4257dC535c7a5Ba20"
+                  }
+              }
+          ]
       },
       {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "ETHUSD",
-        "pair": "ETH-USD",
-        "price_precision": 100,
-        "token1": "ETH",
-        "token2": "USD",
-        "full_name": "Ethereum",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xbC7DBEB9a7b158711b4B5fb0177F3E0bE024125a",
-              "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"
-            }
-          }
-        ]
+          "max_duration": "04:00",
+          "category": "Crypto",
+          "tv_id": "ETHBTC",
+          "pair": "ETH-BTC",
+          "price_precision": 1000000,
+          "token1": "ETH",
+          "token2": "BTC",
+          "full_name": "Ethereum",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0x98ff74B8A3804ceb7B1cFaEb67d7d2C50Cf6bd10",
+                      "current": "0x5D6f1D376e5EA088532Ae03dBE8F46177c42b814"
+                  }
+              }
+          ]
       },
       {
-        "max_duration": "04:00",
-        "category": "Forex",
-        "tv_id": "EURUSD",
-        "pair": "EUR-USD",
-        "price_precision": 1000000,
-        "token1": "EUR",
-        "token2": "USD",
-        "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x8DaC2Eb302DD9CcB3a9A23263BC021f6f1E8Cd9C",
-              "current": "0xbCD52d37F41dA2277aF92617D70931A787f66Fd5"
-            }
-          }
-        ]
+          "max_duration": "04:00",
+          "category": "Crypto",
+          "tv_id": "LINKUSD",
+          "pair": "LINK-USD",
+          "price_precision": 1000000,
+          "token1": "LINK",
+          "token2": "USD",
+          "full_name": "Chainlink",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/link.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0x5C95BDA32cDE3A8D73FB5237C973Cce4f1d60bC8",
+                      "current": "0xD384131B8697F28E8505cC24e1e405962b88b21F"
+                  }
+              }
+          ]
       },
       {
-        "max_duration": "04:00",
-        "category": "Forex",
-        "tv_id": "GBPUSD",
-        "pair": "GBP-USD",
-        "price_precision": 1000000,
-        "token1": "GBP",
-        "token2": "USD",
-        "full_name": "Pound",
-        "img": "https://cdn.buffer.finance/Buffer-Media/main/GBP.png",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xc1925460Fe5669878D5963c29aC51677866dE67F",
-              "current": "0x5d61FE708c9D41acf59009013f14496d559aad09"
-            }
-          }
-        ]
+          "max_duration": "04:00",
+          "category": "Commodity",
+          "tv_id": "XAUUSD",
+          "pair": "XAU-USD",
+          "price_precision": 1000000,
+          "token1": "XAU",
+          "token2": "USD",
+          "full_name": "Gold",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xau.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0x13610AA5c469118878AdB32cE548F2BbD9aa0180",
+                      "current": "0x5c61a87C2E3cf9e2bf996e0cF93a7b084557E468"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Commodity",
+          "tv_id": "XAGUSD",
+          "pair": "XAG-USD",
+          "price_precision": 1000000,
+          "token1": "XAG",
+          "token2": "USD",
+          "full_name": "Silver",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xag.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0xeE78F7aD81cB79d7c6f1c3dfC27002882403DA47",
+                      "current": "0xAd6b3a99Fe957A9E29D5AA6Cf2b3aC1b8794EFd9"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "AUDUSD",
+          "pair": "AUD-USD",
+          "price_precision": 1000000,
+          "token1": "AUD",
+          "token2": "USD",
+          "full_name": "Australian Dollar",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/AUD.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0x486Bd19965067Fe4A77d897B1b976941cf9aD803",
+                      "current": "0x63E0af4Ec5Af8D103C1Fb2ab606BD938D3dD27dA"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "USDJPY",
+          "pair": "USD-JPY",
+          "price_precision": 1000000,
+          "token1": "USD",
+          "token2": "JPY",
+          "full_name": "United States Dollar",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0x243FF9E6a14b0491f196CC6B942c1a15Ed7777f1",
+                      "current": "0xA51696a6B909314ce0fb66d180d3f05c21804234"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "EURGBP",
+          "pair": "EUR-GBP",
+          "price_precision": 1000000,
+          "token1": "EUR",
+          "token2": "GBP",
+          "full_name": "Euro",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0xD27100A2993A2D4f9d8016F6EC0375Bd7899491f",
+                      "current": "0x7b5E6B8Ae5840F5e78f79689B29C441B90803Cb0"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "EURJPY",
+          "pair": "EUR-JPY",
+          "price_precision": 1000000,
+          "token1": "EUR",
+          "token2": "JPY",
+          "full_name": "Euro",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0xEaDEC1d07f88773e370615FdB44a875871d1DfEb",
+                      "current": "0x6C42CE8098EF47A9E2171d931E89F0fb9fF0465d"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "GBPJPY",
+          "pair": "GBP-JPY",
+          "price_precision": 1000000,
+          "token1": "GBP",
+          "token2": "JPY",
+          "full_name": "British Pound",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0xe8a40Bd544eceBDcFFb6688442f0726c47C1bCc8",
+                      "current": "0xC17BA7E19c383e3710E27b7aDd64E62379EDA0a3"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "NZDUSD",
+          "pair": "NZD-USD",
+          "price_precision": 1000000,
+          "token1": "NZD",
+          "token2": "USD",
+          "full_name": "New Zealand Dollar",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/NZ.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0x27535bde6cFa621D7dC1B0B0736d4809Af3303AE",
+                      "current": "0x8D7A09DEb687D0F77f47c8B0B3a44015d8cD31Fa"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "USDCHF",
+          "pair": "USD-CHF",
+          "price_precision": 1000000,
+          "token1": "USD",
+          "token2": "CHF",
+          "full_name": "United States Dollar",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0x48d165EE66CF399F2708718eb53c4ae438aea24f",
+                      "current": "0xAE10C1434Fe50B9C6c65D25A752B43ff43d266aD"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "GBPCHF",
+          "pair": "GBP-CHF",
+          "price_precision": 1000000,
+          "token1": "GBP",
+          "token2": "CHF",
+          "full_name": "British Pound",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0x131EE30DfaBA8D5622B4c9BDa155284b8eB43b18",
+                      "current": "0x13779aEB682f922770f1971313F2543E5D5f44e8"
+                  }
+              }
+          ]
+      },
+      {
+          "max_duration": "04:00",
+          "category": "Forex",
+          "tv_id": "USDCAD",
+          "pair": "USD-CAD",
+          "price_precision": 1000000,
+          "token1": "USD",
+          "token2": "CAD",
+          "full_name": "United States Dollar",
+          "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+          "pools": [
+              {
+                  "token": "USDC",
+                  "options_contracts": {
+                      "config": "0xBCbbf5630CFE5FFBF048ca56614ca04AFA1437c7",
+                      "current": "0xCBA232eB6B0d3c81d209c921941Ec35f15A9e612"
+                  }
+              }
+          ]
       }
-    ]
+  ]
   }
 }
