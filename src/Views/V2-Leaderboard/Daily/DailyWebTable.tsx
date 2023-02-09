@@ -23,10 +23,10 @@ export const DailyWebTable: React.FC<{
   onpageChange?: (page: number) => void;
   totalRows: number;
   userData?: ILeague[];
-}> = ({ res, skip, count, onpageChange, userData }) => {
+  nftWinners?: number;
+}> = ({ res, skip, count, onpageChange, userData, nftWinners }) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
-
   //Memos - to avoid re-rendering
   const firstColPadding = useMemo(() => {
     return {
@@ -74,6 +74,7 @@ export const DailyWebTable: React.FC<{
             skip={skip}
             userRank={currentStanding.rank}
             firstColPadding={firstColPadding.body}
+            nftWinners={nftWinners}
           />
         );
       case 1:
@@ -169,8 +170,6 @@ export const DailyWebTable: React.FC<{
             />
           );
         } catch (err) {
-       
-
           return <div>Bug</div>;
         }
 
@@ -226,7 +225,19 @@ export const DailyWebTable: React.FC<{
   return (
     <LeaderBoardTableStyles>
       {isMobile && (
-        <DailyMobileTable options={standings} skip={skip} userData={userData} />
+        <DailyMobileTable
+          options={standings}
+          skip={skip}
+          userData={userData}
+          count={count}
+          onpageChange={(e, p) => {
+            // router.push({
+            //   pathname: router.pathname,
+            //   query: { ...router.query, page: p },
+            // });
+            onpageChange(p);
+          }}
+        />
       )}
 
       <BufferTable
