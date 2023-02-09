@@ -33,10 +33,10 @@ export default function Trophy({
     if (currentRank <= TOTALWINNERS)
       return (
         <>
-          {currentRank <= nftWinners && (
-            <img src="/LeaderBoard/crown-optopus.png" width={20} height={20} />
-          )}
           <LeaderboardTropy />
+          {currentRank <= nftWinners && (
+            <img src="/LeaderBoard/crown-optopus.png" width={23} height={23} />
+          )}
         </>
       );
     if (isUser) {
