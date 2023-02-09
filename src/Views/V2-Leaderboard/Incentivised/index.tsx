@@ -80,7 +80,7 @@ export const Incentivised = () => {
         className="mt-[5vh] m-auto"
         head={
           <span className="text-5  mb-[25px] text-f16">
-            Testnet Tournament will start in
+            Tournament will start in
           </span>
         }
       />
