@@ -8,13 +8,10 @@ const Background = styled.div`
   cursor: pointer;
 
   .checkboxborder {
-    width: 18px;
-    height: 18px;
     border-radius: 4px;
     border: 2px solid var(--primary);
     display: grid;
     place-items: center;
-    margin-top: 0.2rem;
     &.active__background {
       background-color: var(--primary);
     }
