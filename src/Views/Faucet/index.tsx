@@ -29,7 +29,7 @@ const IbfrFaucet: React.FC = () => {
     configContracts.tokens.BFR.faucet,
     FaucetABI
   );
-const {activeChain} = useActiveChain();
+  const { activeChain } = useActiveChain();
   const claim = (shouldCLaimUSDC = true) => {
     if (state.txnLoading > 1) {
       return toastify({
@@ -46,7 +46,7 @@ const {activeChain} = useActiveChain();
     const methodName = 'claim';
     if (shouldCLaimUSDC) {
       setBtnLoading(1);
-      console.log(overRides.value.toString())
+      console.log(overRides.value.toString());
       return USDCwriteCall(cb, methodName, [], overRides);
     }
     setBtnLoading(2);
@@ -69,7 +69,7 @@ const {activeChain} = useActiveChain();
       ),
       bottom: (
         <div className="flex flex-col">
-          <TestnetLinks  />
+          <TestnetLinks />
         </div>
       ),
     },
@@ -115,19 +115,63 @@ const {activeChain} = useActiveChain();
   );
 };
 
+const faucetClaimingSteps = {
+  421613: {
+    name: 'AETH',
+    symbol: 'AETH',
+    faucet: [
+      {
+        step: 'Claim goerliETH from goerli faucet',
+        url: 'https://goerlifaucet.com/',
+        options: [
+          {
+            step: 'Using the Goerli faucet',
+            url: 'https://goerlifaucet.com/',
+          },
+          {
+            step: 'Using the Goerli Mudit faucet',
+            url: 'https://goerli-faucet.mudit.blog/',
+          },
+          {
+            step: 'Using the Paradigm Multifaucet',
+            url: 'https://faucet.paradigm.xyz/',
+          },
+        ],
+      },
+      {
+        step: 'Bridge GoerliETH to AETH',
+        url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
+      },
+    ],
+    img: '/Chains/ARBITRIUM.png',
+    decimals: 18,
+    category: 'Crypto',
+  },
+  80001: {
+    name: 'MATIC',
+    symbol: 'MATIC',
+    faucet: [
+      {
+        step: 'Claim testnet MATIC',
+        url: 'https://mumbaifaucet.com/',
+      },
+    ],
+  },
+};
+
 const TestnetLinks = () => {
-  const {activeChain}  = useActiveChain();
-  console.log(`activeChain: `,activeChain);
+  const { activeChain } = useActiveChain();
+  console.log(`activeChain: `, activeChain);
   return (
     <div>
-      {activeChain.nativeAsset.faucet.map((s, idx) => {
+      {faucetClaimingSteps[activeChain.id].faucet.map((s, idx) => {
         if (s.options)
           return (
             <div
               key={s.url}
               className="whitespace-nowrap sm:max-w-[250px] text-ellipsis overflow-hidden"
             >
-              {activeChain.nativeAsset.faucet.length === 1 ? '' : idx + 1 + '.'}
+              {faucetClaimingSteps[activeChain.id].faucet.length === 1 ? '' : idx + 1 + '.'}
               <span className="w-full">
                 {s.step}
                 {s.options && (
@@ -151,7 +195,7 @@ const TestnetLinks = () => {
               key={s.url}
               className="whitespace-nowrap sm:max-w-[250px] text-ellipsis overflow-hidden"
             >
-              {activeChain.nativeAsset.faucet.length === 1 ? '' : idx + 1 + '.'}
+              {faucetClaimingSteps[activeChain.id].faucet.length === 1 ? '' : idx + 1 + '.'}
               <span className="w-full">
                 <a href={s.url || s} target="_blank">
                   {s.step || s}

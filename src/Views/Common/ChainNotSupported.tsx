@@ -1,4 +1,5 @@
 import { useActiveChain } from "@Hooks/useActiveChain";
+import Missing from "./Missing";
 
 export const ChainNotSupported = ({
   supportedChainIds,
@@ -14,8 +15,13 @@ export const ChainNotSupported = ({
   if(hide) return <></>
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center text-f20">
-      Sorry this page is not available on {activeChain.name}
-    </div>
+        <Missing
+        onClick={
+          (e) => {}
+          // idx === 5 ? redirectChain("AURORA") : redirectChain("BSC")
+        }
+        paddingTop="7%"
+      ></Missing>    </div>
   );
 };
 
