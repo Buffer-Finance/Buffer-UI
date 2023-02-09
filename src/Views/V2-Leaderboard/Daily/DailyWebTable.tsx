@@ -23,7 +23,8 @@ export const DailyWebTable: React.FC<{
   onpageChange?: (page: number) => void;
   totalRows: number;
   userData?: ILeague[];
-}> = ({ res, skip, count, onpageChange, userData }) => {
+  nftWinners?: number;
+}> = ({ res, skip, count, onpageChange, userData, nftWinners }) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
   //Memos - to avoid re-rendering
@@ -73,6 +74,7 @@ export const DailyWebTable: React.FC<{
             skip={skip}
             userRank={currentStanding.rank}
             firstColPadding={firstColPadding.body}
+            nftWinners={nftWinners}
           />
         );
       case 1:

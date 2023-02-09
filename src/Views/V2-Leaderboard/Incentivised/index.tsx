@@ -1,4 +1,4 @@
-import { CHAIN_CONFIGS, isTestnet } from 'config';
+import { CHAIN_CONFIGS } from 'config';
 import useStopWatch, { useTimer } from '@Hooks/Utilities/useStopWatch';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
@@ -198,6 +198,7 @@ export const Incentivised = () => {
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
+              nftWinners={3}
             />,
             <DailyWebTable
               res={looserStats}
@@ -205,6 +206,7 @@ export const Incentivised = () => {
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
+              nftWinners={1}
             />,
           ]}
         />

@@ -7,7 +7,6 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
-import Trophy from '../Components/Trophy';
 import BasicPagination from '@Views/Common/pagination';
 
 export const DailyMobileTable: React.FC<{
@@ -16,7 +15,8 @@ export const DailyMobileTable: React.FC<{
   userData: ILeague[] | undefined;
   onpageChange?: (e, page: number) => void;
   count: number;
-}> = ({ options, skip, userData, count, onpageChange }) => {
+  nftWinners?: number;
+}> = ({ options, skip, userData, count, onpageChange, nftWinners }) => {
   const { address: account } = useUserAccount();
   // if (!options)
   //   return (
@@ -59,6 +59,7 @@ export const DailyMobileTable: React.FC<{
                   skip,
                   userData,
                   account,
+                  nftWinners,
                 }}
               />
             );
@@ -96,6 +97,7 @@ const MobileRow = ({
   skip,
   userData,
   account,
+  nftWinners,
 }) => {
   const isUser = user ? true : false;
   const perc = multiply(
@@ -123,6 +125,7 @@ const MobileRow = ({
               skip={skip}
               userData={userData}
               userRank={currentStanding.rank}
+              nftWinners={nftWinners}
             />
           </div>
           <div className="text-f13 ml-1">

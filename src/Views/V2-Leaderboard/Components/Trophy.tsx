@@ -1,14 +1,16 @@
-import LeaderboardTropy from "public/LeaderBoard/Trophy";
-import { TOTALWINNERS } from "../Incentivised";
+import LeaderboardTropy from 'public/LeaderBoard/Trophy';
+import { TOTALWINNERS } from '../Incentivised';
 
 export default function Trophy({
   row,
   isUser,
   currentRank,
+  nftWinners = 0,
 }: {
   row: number;
   isUser: boolean;
   currentRank: number;
+  nftWinners?: number;
 }) {
   if (currentRank <= TOTALWINNERS || row === 0) {
     if (isUser && row === 0 && currentRank > TOTALWINNERS)
@@ -28,7 +30,15 @@ export default function Trophy({
           />
         </svg>
       );
-    if (currentRank <= TOTALWINNERS) return <LeaderboardTropy />;
+    if (currentRank <= TOTALWINNERS)
+      return (
+        <>
+          {currentRank <= nftWinners && (
+            <img src="/LeaderBoard/crown-optopus.png" width={20} height={20} />
+          )}
+          <LeaderboardTropy />
+        </>
+      );
     if (isUser) {
       return (
         <svg
