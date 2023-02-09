@@ -35,7 +35,7 @@ export default function Trophy({
         <>
           <LeaderboardTropy />
           {currentRank <= nftWinners && (
-            <img src="/LeaderBoard/crown-optopus.png" width={23} height={23} />
+            <img src="/LeaderBoard/optopus.png" width={23} height={23} />
           )}
         </>
       );
