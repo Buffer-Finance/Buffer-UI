@@ -4,13 +4,14 @@ import { BlueBtn } from '../V2-Button';
 import { getTabs } from 'src/Config/getTabs';
 import { TabsDropdown } from './TabsDropDown';
 import { Tab } from './Tab';
-import { ChainDropdown } from './chainDropdown';
 import { AccountDropdown } from './AccountDropdown';
 import { social } from './socialLinks';
 import { useGlobal } from '@Contexts/Global';
 import MenuLogo from '@Assets/Elements/MenuLogo';
 import CloseLogo from '@SVG/Elements/Closelogo';
 import NFTtier from '../NFTtier';
+import LeaderboardTropy from '@Public/LeaderBoard/Trophy';
+import { Link } from 'react-router-dom';
 
 interface INavbar {}
 
@@ -75,6 +76,18 @@ export const Navbar: React.FC<INavbar> = () => {
           </BlueBtn>
         )} */}
 
+        <BlueBtn
+          onClick={() => {}}
+          className="!h-[30px] rounded-[6px] w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] pl-4 pr-5 sm:pl-1 sm:pr-2"
+        >
+          <Link
+            to="/leaderboard/incentivised"
+            className="flex items-center gap-1"
+          >
+            <LeaderboardTropy height={23} />
+            Contest
+          </Link>
+        </BlueBtn>
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
           {/* <ChainDropdown /> */}
           <AccountDropdown />

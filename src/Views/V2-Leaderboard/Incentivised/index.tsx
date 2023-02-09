@@ -24,9 +24,9 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { endDay, startTimestamp } from './config';
 import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import { social } from '@Views/Common/SocialMedia';
-import { Link } from 'react-router-dom';
 import TabSwitch from '@Views/Common/TabSwitch';
 import BufferTab from '@Views/Common/BufferTab';
+import FrontArrow from '@SVG/frontArrow';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -96,7 +96,18 @@ export const Incentivised = () => {
               className="w-[35px]"
             />
           }
-          heading={activeChain.name}
+          heading={
+            <div className="flex flex-col items-start gap-2">
+              {activeChain.name}
+              <a
+                className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
+                href="#"
+                target={'blank'}
+              >
+                Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
+              </a>
+            </div>
+          }
           DataCom={
             <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
               <Col
@@ -198,7 +209,7 @@ export const Incentivised = () => {
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
-              nftWinners={3}
+              nftWinners={0}
             />,
             <DailyWebTable
               res={looserStats}

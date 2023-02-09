@@ -50,12 +50,12 @@ export const getTabs = () => {
         isExternalLink: true,
       },
 
-      {
-        to: `/leaderboard/incentivised`,
-        name: 'Competitions',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/leaderboard/incentivised`,
+      //   name: 'Competitions',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       // {
       //   to: `https://app-v0.buffer.finance/vesting`,
       //   name: 'Vesting',
