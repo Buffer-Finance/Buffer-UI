@@ -40,7 +40,7 @@ export const Incentivised = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useLeaderboardQuery();
+  const { data, totalTournamentData } = useLeaderboardQuery(skip);
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
