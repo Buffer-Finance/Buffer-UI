@@ -13,7 +13,7 @@ import { useDayOfTournament } from './useDayOfTournament';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
-  looserStats: ILeague[];
+  loserStats: ILeague[];
   totalData: {
     totalTrades: number;
     volume: string;
@@ -56,7 +56,7 @@ export const useLeaderboardQuery = () => {
             netPnL
             volume
           }
-          looserStats: leaderboards(
+          loserStats: leaderboards(
             orderBy: netPnL
             orderDirection: asc
             first: 100

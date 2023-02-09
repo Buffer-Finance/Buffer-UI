@@ -47,9 +47,9 @@ export const Incentivised = () => {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
     } else return [];
   }, [data, skip]);
-  const looserStats = useMemo(() => {
-    if (data && data.looserStats) {
-      return data.looserStats.slice(skip, skip + ROWINAPAGE);
+  const loserStats = useMemo(() => {
+    if (data && data.loserStats) {
+      return data.loserStats.slice(skip, skip + ROWINAPAGE);
     } else return [];
   }, [data, skip]);
   const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
@@ -210,7 +210,7 @@ export const Incentivised = () => {
             setActiveTab(t);
           }}
           distance={5}
-          tablist={[{ name: 'Winners' }, { name: 'Loosers' }]}
+          tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
         />
         <TabSwitch
           value={activeTab}
@@ -224,7 +224,7 @@ export const Incentivised = () => {
               nftWinners={0}
             />,
             <DailyWebTable
-              res={looserStats}
+              res={loserStats}
               count={totalPages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
