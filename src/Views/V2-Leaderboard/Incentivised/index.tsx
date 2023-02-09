@@ -93,11 +93,11 @@ export const Incentivised = () => {
             <img
               src={CHAIN_CONFIGS['TESTNET']['ARBITRUM'].img}
               alt=""
-              className="w-[35px]"
+              className="w-[45px]"
             />
           }
           heading={
-            <div className="flex flex-col items-start gap-2">
+            <div className="flex flex-col items-start">
               {activeChain.name}
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
