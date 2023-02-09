@@ -9,6 +9,7 @@ import { updateLeaderboardTotalPageAtom } from '../atom';
 import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { useDayOffset } from '../Components/ContestFilterDD';
+import { useDayOfTournament } from './useDayOfTournament';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -35,7 +36,8 @@ export const useLeaderboardQuery = () => {
   const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
-  const timestamp = getDayId(Number(offset));
+  const { day } = useDayOfTournament();
+  const timestamp = getDayId(Number(day - Number(offset)));
   const minimumTrades = isTestnet ? 5 : 3;
 
   const { data } = useSWR<ILeaderboardQuery>(
