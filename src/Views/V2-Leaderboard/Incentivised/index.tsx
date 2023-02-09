@@ -307,18 +307,18 @@ export function TimerBox({
       <TImerStyle>
         {social.map((social_link) => {
           return (
-            <Link to={social_link.link} key={social_link.name}>
-              <a
-                className="social_link pointer flex items-center"
-                target={'_blank'}
-              >
-                <img
-                  key={social_link.name}
-                  src={`/Social/Blue/${social_link.image}`}
-                  className="social_link_icon"
-                />
-              </a>
-            </Link>
+            <a
+              className="social_link pointer flex items-center"
+              target={'_blank'}
+              href={social_link.link}
+              key={social_link.name}
+            >
+              <img
+                key={social_link.name}
+                src={`/Social/Blue/${social_link.image}`}
+                className="social_link_icon"
+              />
+            </a>
           );
         })}
       </TImerStyle>
