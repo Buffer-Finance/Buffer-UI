@@ -8,10 +8,7 @@ import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import Drawer from '@Views/Common/V2-Drawer';
-import useOpenConnectionDrawer from '@Hooks/useOpenConnectionDrawer';
-import { CHAIN_CONFIG } from 'src/Config';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 
@@ -120,6 +117,7 @@ const {activeChain} = useActiveChain();
 
 const TestnetLinks = () => {
   const {activeChain}  = useActiveChain();
+  console.log(`activeChain: `,activeChain);
   return (
     <div>
       {activeChain.nativeAsset.faucet.map((s, idx) => {
