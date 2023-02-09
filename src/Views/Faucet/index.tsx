@@ -72,7 +72,7 @@ const {activeChain} = useActiveChain();
       ),
       bottom: (
         <div className="flex flex-col">
-          <TestnetLinks chainName={props.chain} />
+          <TestnetLinks  />
         </div>
       ),
     },
@@ -118,9 +118,8 @@ const {activeChain} = useActiveChain();
   );
 };
 
-const TestnetLinks = ({ chainName }: { chainName: 'ARBITRUM' }) => {
-  const activeChain = CHAIN_CONFIG[chainName];
-
+const TestnetLinks = () => {
+  const {activeChain}  = useActiveChain();
   return (
     <div>
       {activeChain.nativeAsset.faucet.map((s, idx) => {
