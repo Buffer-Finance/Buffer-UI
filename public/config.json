@@ -312,7 +312,7 @@
         "token1": "AUD",
         "token2": "USD",
         "full_name": "Australian Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/AUD.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/aud1.svg",
         "pools": [
           {
             "token": "USDC",
@@ -412,7 +412,7 @@
         "token1": "NZD",
         "token2": "USD",
         "full_name": "New Zealand Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/NZ.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/nzd.svg",
         "pools": [
           {
             "token": "USDC",
