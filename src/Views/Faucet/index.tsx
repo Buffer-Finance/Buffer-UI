@@ -11,7 +11,7 @@ import Drawer from '@Views/Common/V2-Drawer';
 import useOpenConnectionDrawer from '@Hooks/useOpenConnectionDrawer';
 import { CHAIN_CONFIG } from 'src/Config';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import {  useConnectModal} from '@rainbow-me/rainbowkit'
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 const IbfrFaucet: React.FC = () => {
   const props = { chain: 'ARBITRUM' } as { chain: 'ARBITRUM' };
@@ -19,11 +19,11 @@ const IbfrFaucet: React.FC = () => {
   const toastify = useToast();
   const [btnLoading, setBtnLoading] = useState(0);
   const { openConnectModal } = useConnectModal();
-  useEffect(()=>{
-    document.title = "Buffer | Faucet"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Faucet';
+  }, []);
   const { writeCall: USDCwriteCall } = useWriteCall(
-    '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+    '0x1fe5b5c9159dEf950a0483d0B33C978B55d3fbe2',
     FaucetABI
   );
   const { writeCall: BFRWriteCall } = useWriteCall(
