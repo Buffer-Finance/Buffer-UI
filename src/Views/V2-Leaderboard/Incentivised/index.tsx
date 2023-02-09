@@ -1,7 +1,7 @@
 import { CHAIN_CONFIGS, isTestnet } from 'config';
 import useStopWatch, { useTimer } from '@Hooks/Utilities/useStopWatch';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
@@ -25,9 +25,11 @@ import { endDay, startTimestamp } from './config';
 import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import { social } from '@Views/Common/SocialMedia';
 import { Link } from 'react-router-dom';
+import TabSwitch from '@Views/Common/TabSwitch';
+import BufferTab from '@Views/Common/BufferTab';
 
 export const ROWINAPAGE = 10;
-export const TOTALWINNERS = 5;
+export const TOTALWINNERS = 10;
 export const usdcDecimals = 6;
 
 export const Incentivised = () => {
@@ -39,6 +41,16 @@ export const Incentivised = () => {
     [activePages.arbitrum]
   );
   const { data, totalTournamentData } = useLeaderboardQuery(ROWINAPAGE, skip);
+  const tableData = useMemo(() => {
+    if (data && data.userStats) {
+      return data.userStats.slice(skip, skip + ROWINAPAGE);
+    } else return [];
+  }, [data]);
+  const looserStats = useMemo(() => {
+    if (data && data.looserStats) {
+      return data.looserStats.slice(skip, skip + ROWINAPAGE);
+    } else return [];
+  }, [data]);
   const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
 
   const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
@@ -54,6 +66,11 @@ export const Incentivised = () => {
   const isTimerEnded = distance <= 0;
   const stopwatch = useStopWatch(midnightTimeStamp);
   const { offset } = useDayOffset();
+  const [activeTab, setActiveTab] = useState(0);
+
+  useEffect(() => {
+    setActivePageNumber(1);
+  }, [activeTab]);
 
   let content;
   if (!isTimerEnded) {
@@ -152,12 +169,32 @@ export const Incentivised = () => {
             </div>
           }
         />
-        <DailyWebTable
-          res={data?.userStats}
-          count={totalPages.arbitrum}
-          onpageChange={setActivePageNumber}
-          userData={data?.userData}
-          skip={skip}
+        <BufferTab
+          value={activeTab}
+          handleChange={(e, t) => {
+            setActiveTab(t);
+          }}
+          distance={5}
+          tablist={[{ name: 'Winners' }, { name: 'Loosers' }]}
+        />
+        <TabSwitch
+          value={activeTab}
+          childComponents={[
+            <DailyWebTable
+              res={tableData}
+              count={totalPages.arbitrum}
+              onpageChange={setActivePageNumber}
+              userData={data?.userData}
+              skip={skip}
+            />,
+            <DailyWebTable
+              res={looserStats}
+              count={totalPages.arbitrum}
+              onpageChange={setActivePageNumber}
+              userData={data?.userData}
+              skip={skip}
+            />,
+          ]}
         />
       </div>
     );

@@ -12,6 +12,7 @@ import { useDayOffset } from '../Components/ContestFilterDD';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
+  looserStats: ILeague[];
   totalData: {
     totalTrades: number;
     volume: string;
@@ -19,12 +20,13 @@ interface ILeaderboardQuery {
   totalPaginationData: { user: string }[];
   userData: ILeague;
 }
+
 export function getDayId(offset: number): number {
   let timestamp = new Date().getTime() / 1000;
   if (offset > 0) {
     timestamp = timestamp - offset * 86400;
   }
-  let dayTimestamp = Math.floor((timestamp - 16 * 3600) / 86400);
+  let dayTimestamp = Math.floor((timestamp - 13 * 3600) / 86400);
   return dayTimestamp;
 }
 
@@ -33,7 +35,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
   const timestamp = getDayId(Number(offset));
-  const minumumtrades = isTestnet ? 5 : 3;
+  const minimumTrades = isTestnet ? 5 : 3;
 
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-skip-${skip}-offset-${offset}-account-${account}`,
@@ -43,9 +45,19 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
           userStats: leaderboards(
             orderBy: netPnL
             orderDirection: desc
-            first: ${pageNumber}
-            skip: ${skip}
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minumumtrades}}
+            first: 100
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}}
+          ) {
+            user
+            totalTrades
+            netPnL
+            volume
+          }
+          looserStats: leaderboards(
+            orderBy: netPnL
+            orderDirection: asc
+            first: 100
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}}
           ) {
             user
             totalTrades
@@ -60,13 +72,7 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
             totalTrades
             volume
           }
-          totalPaginationData: leaderboards(
-            orderBy: netPnL
-            orderDirection: desc
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minumumtrades}}
-          ) {
-            user
-          }
+          
         `;
         const userQuery = account
           ? `userData: leaderboards(
@@ -90,38 +96,14 @@ export const useLeaderboardQuery = (pageNumber: number, skip: number) => {
     }
   );
 
-  const { data: userAboveMe } = useSWR<ILeaderboardQuery>(
-    `leaderboard-${data?.userData?.[0]?.netPnL}-${account}`,
-    {
-      fetcher: async () => {
-        const netPnL = data?.userData?.[0]?.netPnL;
-        const query = `{
-          usersAboveMe: leaderboards(
-            orderBy: netPnL
-            orderDirection: desc
-            where: {timestamp: ${timestamp}, totalTrades_gte: ${minumumtrades}, netPnL_gt: ${netPnL}}
-            ) {
-              user
-            }
-          }`;
-        const response = await axios.post(baseGraphqlUrl, {
-          query,
-        });
-
-        return response.data?.data as {};
-      },
-      refreshInterval: 300,
-    }
-  );
-
   useEffect(() => {
     //sets total number of pages in arbiturm testnet page
-    if (data?.totalPaginationData.length > 0) {
+    if (data?.userStats.length > 0) {
       setTablePages({
-        arbitrum: Math.ceil(data.totalPaginationData.length / ROWINAPAGE),
+        arbitrum: Math.ceil(data.userStats.length / ROWINAPAGE),
       });
     }
-  }, [data?.totalPaginationData]);
+  }, [data?.userStats]);
 
   const totalTournamentData = useMemo(() => {
     if (!data?.totalPaginationData || !data.totalData) return null;
@@ -148,3 +130,36 @@ totalRows: accumulator.totalRows + 1,
 
 
 */
+
+// const { data: userAboveMe } = useSWR<ILeaderboardQuery>(
+//   `leaderboard-${data?.userData?.[0]?.netPnL}-${account}`,
+//   {
+//     fetcher: async () => {
+//       const netPnL = data?.userData?.[0]?.netPnL;
+//       const query = `{
+//         usersAboveMe: leaderboards(
+//           orderBy: netPnL
+//           orderDirection: desc
+//           where: {timestamp: ${timestamp}, totalTrades_gte: ${minimumTrades}, netPnL_gt: ${netPnL}}
+//           ) {
+//             user
+//           }
+//         }`;
+//       const response = await axios.post(baseGraphqlUrl, {
+//         query,
+//       });
+
+//       return response.data?.data as {};
+//     },
+//     refreshInterval: 300,
+//   }
+// );
+
+//not used query
+// totalPaginationData: leaderboards(
+//           orderBy: netPnL
+//           orderDirection: desc
+//           where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}}
+//         ) {
+//           user
+//         }
