@@ -27,6 +27,7 @@ import { social } from '@Views/Common/SocialMedia';
 import TabSwitch from '@Views/Common/TabSwitch';
 import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
+import NumberTooltip from '@Views/Common/Tooltips';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -115,23 +116,34 @@ export const Incentivised = () => {
                 // desc={<Display data={500} unit={"USDC"}  precisionj/>}
                 desc={
                   endDay[activeChain.id] &&
-                  day - offset >= endDay[activeChain.id]
-                    ? '0 USDC'
-                    : data &&
-                      data.reward &&
-                      data.reward[0] &&
-                      data.reward[0].settlementFee
-                    ? toFixed(
-                        divide(
-                          multiply(
-                            '5',
-                            divide(data.reward[0].settlementFee, usdcDecimals)
-                          ),
-                          '100'
-                        ),
-                        0
-                      ) + ' USDC'
-                    : 'fetching...'
+                  day - offset >= endDay[activeChain.id] ? (
+                    '0 USDC'
+                  ) : data &&
+                    data.reward &&
+                    data.reward[0] &&
+                    data.reward[0].settlementFee ? (
+                    <NumberTooltip
+                      content={'5% of the fees collected for the day.'}
+                    >
+                      <div>
+                        {toFixed(
+                          divide(
+                            multiply(
+                              '5',
+                              divide(
+                                data.reward[0].settlementFee,
+                                usdcDecimals
+                              ) ?? '0'
+                            ),
+                            '100'
+                          ) ?? '0',
+                          0
+                        ) + ' USDC'}
+                      </div>
+                    </NumberTooltip>
+                  ) : (
+                    'fetching...'
+                  )
                 }
                 descClass="text-f16 tab:text-f14 font-medium light-blue-text "
                 headClass="text-f14 tab:text-f12 fw5 text-6"
