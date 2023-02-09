@@ -28,7 +28,7 @@ export function getDayId(offset: number): number {
   if (offset > 0) {
     timestamp = timestamp - offset * 86400;
   }
-  let dayTimestamp = Math.floor((timestamp - 14 * 3600) / 86400);
+  let dayTimestamp = Math.floor((timestamp - 16 * 3600) / 86400);
   return dayTimestamp;
 }
 
