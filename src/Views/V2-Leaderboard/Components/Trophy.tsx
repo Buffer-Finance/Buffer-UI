@@ -35,7 +35,11 @@ export default function Trophy({
         <>
           <LeaderboardTropy />
           {currentRank <= nftWinners && (
-            <img src="/LeaderBoard/optopus.png" width={23} height={23} />
+            <img
+              src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-medium/1f419@2x.png"
+              width={23}
+              height={23}
+            />
           )}
         </>
       );
