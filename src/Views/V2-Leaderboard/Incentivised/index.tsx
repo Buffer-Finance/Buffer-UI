@@ -100,13 +100,13 @@ export const Incentivised = () => {
           heading={
             <div className="flex flex-col items-start">
               {activeChain.name}
-              <a
+              {/* <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
                 href="#"
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
-              </a>
+              </a> */}
             </div>
           }
           DataCom={
