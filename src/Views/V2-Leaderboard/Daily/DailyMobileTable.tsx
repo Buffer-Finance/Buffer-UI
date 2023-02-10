@@ -68,11 +68,13 @@ export const DailyMobileTable: React.FC<{
       )}
 
       {count && count > 1 ? (
-        <BasicPagination
-          onChange={onpageChange}
-          count={count}
-          shouldShowTroply={false}
-        />
+        <div className="mb-5">
+          <BasicPagination
+            onChange={onpageChange}
+            count={count}
+            shouldShowTroply={false}
+          />
+        </div>
       ) : null}
     </div>
   );
