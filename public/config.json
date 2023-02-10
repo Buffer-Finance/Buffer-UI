@@ -228,7 +228,7 @@
         "category": "Crypto",
         "tv_id": "ETHBTC",
         "pair": "ETH-BTC",
-        "price_precision": 100,
+        "price_precision": 1000000,
         "token1": "ETH",
         "token2": "BTC",
         "full_name": "Ethereum",
