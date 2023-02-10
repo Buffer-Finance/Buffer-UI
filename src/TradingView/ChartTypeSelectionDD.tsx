@@ -103,26 +103,26 @@ const chartTypes = {
       </svg>
     ),
   },
-  'Heikin-Ashi': {
-    type: 8,
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 25 25"
-        fill="none"
-        className="ele"
-      >
-        <path
-          d="M8.12659 6.63989H11.1266V15.6239H2.12659V6.63989H5.12659V2.63989H8.12659V6.63989Z"
-          fill="currentColor"
-        ></path>
-        <path
-          d="M19.1266 3.62817H16.1266L16.1266 7.62817H13.1266V21.6282H22.1266V7.62817H19.1266V3.62817Z"
-          fill="currentColor"
-        ></path>
-      </svg>
-    ),
-  },
+  // 'Heikin-Ashi': {
+  //   type: 8,
+  //   icon: (
+  //     <svg
+  //       xmlns="http://www.w3.org/2000/svg"
+  //       viewBox="0 0 25 25"
+  //       fill="none"
+  //       className="ele"
+  //     >
+  //       <path
+  //         d="M8.12659 6.63989H11.1266V15.6239H2.12659V6.63989H5.12659V2.63989H8.12659V6.63989Z"
+  //         fill="currentColor"
+  //       ></path>
+  //       <path
+  //         d="M19.1266 3.62817H16.1266L16.1266 7.62817H13.1266V21.6282H22.1266V7.62817H19.1266V3.62817Z"
+  //         fill="currentColor"
+  //       ></path>
+  //     </svg>
+  //   ),
+  // },
   'Hollow Candles': {
     type: 9,
     icon: (
