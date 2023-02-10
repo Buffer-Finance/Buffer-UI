@@ -100,13 +100,13 @@ export const Incentivised = () => {
           heading={
             <div className="flex flex-col items-start">
               {activeChain.name}
-              {/* <a
+              <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="#"
+                href="https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9"
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
-              </a> */}
+              </a>
             </div>
           }
           DataCom={
@@ -170,10 +170,10 @@ export const Incentivised = () => {
               <Col
                 head={'Volume'}
                 desc={
-                  totalTournamentData?.totalFee
+                  data && data.reward
                     ? numberWithCommas(
                         toFixed(
-                          divide(totalTournamentData?.totalFee, usdcDecimals),
+                          divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
                           0
                         )
                       ) + ' USDC'

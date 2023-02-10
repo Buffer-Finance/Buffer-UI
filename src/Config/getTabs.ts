@@ -49,6 +49,12 @@ export const getTabs = () => {
         subTabs: [],
         isExternalLink: true,
       },
+      {
+        to: `https://stats.buffer.finance/`,
+        name: 'Stats',
+        subTabs: [],
+        isExternalLink: true,
+      },
 
       // {
       //   to: `/leaderboard/incentivised`,
