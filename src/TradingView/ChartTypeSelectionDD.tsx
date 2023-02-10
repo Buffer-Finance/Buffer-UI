@@ -1,4 +1,4 @@
-import BufferDropdown from "@Views/Common/BufferDropdown";
+import BufferDropdown from '@Views/Common/BufferDropdown';
 
 const chartTypes = {
   Bar: {
@@ -103,34 +103,99 @@ const chartTypes = {
       </svg>
     ),
   },
-  //   Hollow_Candles: {
-  //     type: 9,
-  //     icon: (
-  //       <svg
-  //         xmlns="http://www.w3.org/2000/svg"
-  //         viewBox="0 0 25 25"
-  //         fill="none"
-  //         className="ele"
-  //       >
-  //         <path
-  //           fill-rule="evenodd"
-  //           clip-rule="evenodd"
-  //           d="M16.1266 3.70508H19.1266V7.70508H22.1266V17.7041H19.1266V21.7041H16.1266L16.1266 17.7041H13.1266V7.70508H16.1266L16.1266 3.70508ZM19.1266 10.7051H16.1266V14.7041H19.1266V10.7051Z"
-  //           fill="currentColor"
-  //         ></path>
-  //         <path
-  //           d="M8.12659 11.7051H11.1266V17.7051H8.12659V21.7051H5.12659V17.7051H2.12659V11.7051H5.12659V7.70508H8.12659V11.7051Z"
-  //           fill="currentColor"
-  //         ></path>
-  //       </svg>
-  //     ),
-  //   },
+  'Heikin-Ashi': {
+    type: 8,
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 25 25"
+        fill="none"
+        className="ele"
+      >
+        <path
+          d="M8.12659 6.63989H11.1266V15.6239H2.12659V6.63989H5.12659V2.63989H8.12659V6.63989Z"
+          fill="currentColor"
+        ></path>
+        <path
+          d="M19.1266 3.62817H16.1266L16.1266 7.62817H13.1266V21.6282H22.1266V7.62817H19.1266V3.62817Z"
+          fill="currentColor"
+        ></path>
+      </svg>
+    ),
+  },
+  'Hollow Candles': {
+    type: 9,
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 25 25"
+        fill="none"
+        className="ele"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M16.1266 3.70508H19.1266V7.70508H22.1266V17.7041H19.1266V21.7041H16.1266L16.1266 17.7041H13.1266V7.70508H16.1266L16.1266 3.70508ZM19.1266 10.7051H16.1266V14.7041H19.1266V10.7051Z"
+          fill="currentColor"
+        ></path>
+        <path
+          d="M8.12659 11.7051H11.1266V17.7051H8.12659V21.7051H5.12659V17.7051H2.12659V11.7051H5.12659V7.70508H8.12659V11.7051Z"
+          fill="currentColor"
+        ></path>
+      </svg>
+    ),
+  },
+  // 'Hi-Lo': {
+  //   type: 12,
+  //   icon: (
+  //     <svg
+  //       xmlns="http://www.w3.org/2000/svg"
+  //       viewBox="0 0 25 25"
+  //       fill="none"
+  //       className="ele"
+  //     >
+  //       <path
+  //         fill-rule="evenodd"
+  //         clip-rule="evenodd"
+  //         d="M16.1266 3.70508H19.1266V7.70508H22.1266V17.7041H19.1266V21.7041H16.1266L16.1266 17.7041H13.1266V7.70508H16.1266L16.1266 3.70508ZM19.1266 10.7051H16.1266V14.7041H19.1266V10.7051Z"
+  //         fill="currentColor"
+  //       ></path>
+  //       <path
+  //         d="M8.12659 11.7051H11.1266V17.7051H8.12659V21.7051H5.12659V17.7051H2.12659V11.7051H5.12659V7.70508H8.12659V11.7051Z"
+  //         fill="currentColor"
+  //       ></path>
+  //     </svg>
+  //   ),
+  // },
+  Column: {
+    type: 12,
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 25 25"
+        fill="none"
+        className="ele"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M16.1266 3.70508H19.1266V7.70508H22.1266V17.7041H19.1266V21.7041H16.1266L16.1266 17.7041H13.1266V7.70508H16.1266L16.1266 3.70508ZM19.1266 10.7051H16.1266V14.7041H19.1266V10.7051Z"
+          fill="currentColor"
+        ></path>
+        <path
+          d="M8.12659 11.7051H11.1266V17.7051H8.12659V21.7051H5.12659V17.7051H2.12659V11.7051H5.12659V7.70508H8.12659V11.7051Z"
+          fill="currentColor"
+        ></path>
+      </svg>
+    ),
+  },
 };
 
 const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
   const find = Object.keys(chartTypes).find(
     (c) => chartTypes[c].type == active
   );
+  console.log(`Object.keys(chartTypes): `,Object.keys(chartTypes)); 
   return (
     <div>
       <>
@@ -139,7 +204,7 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
             name: s,
             value: chartTypes[s],
           }))}
-          className={"chart-type-dd "}
+          className={'chart-type-dd '}
           initialActive={0}
           dropdownBox={() => (
             <div className="flex whitespace-nowrap chart-type items-center mr-5 text-f11 ele">
@@ -147,20 +212,21 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
               Chart Type
             </div>
           )}
-          rootClass={"!w-[fit-content]"}
+          rootClass={'!w-[fit-content]'}
           item={(item) => {
+            console.log(`item: `,item);
             return (
               <div
                 onClick={(e) => {
                   setActive(item.value.type);
                 }}
                 className={`chart-type my-2 ${
-                  active == item.value.type ? "active-chart" : ""
+                  active == item.value.type ? 'active-chart' : ''
                 }`}
               >
                 {item.value.icon}
                 <span className="ele whitespace-nowrap">
-                  {item.name.replace("_", " ")}
+                  {item.name.replace('_', ' ')}
                 </span>
               </div>
             );
