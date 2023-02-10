@@ -1,13 +1,14 @@
 import { Display } from '@Views/Common/Tooltips/Display';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { Stats } from '@Views/BinaryOptions/Components/BinaryInfo';
 import { OpenUpDownIndicator } from './OpenUpDownIndicator';
 import BufferSortTable from './BufferSortTable';
 import { UpTriangle } from 'public/ComponentSVGS/UpTriangle';
 import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
+import { useNavigate } from 'react-router-dom';
 
 export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
+  const navigate = useNavigate();
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
     { id: 'currentPrice', label: 'Current Price' },
@@ -116,7 +117,9 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       rows={dashboardData?.length}
       bodyJSX={bodyJSX}
       loading={!dashboardData}
-      onRowClick={(idx) => console.log(`idx: `, idx)}
+      onRowClick={(idx) => {
+        navigate(`/binary/${dashboardData[idx].pair}`);
+      }}
       widths={['14%', '14%', '14%', '14%', '20%', '14%', '10%']}
     />
   );
