@@ -20,7 +20,7 @@ interface ILeaderboardQuery {
   }[];
   // totalPaginationData: { user: string }[];
   userData: ILeague;
-  reward: { settlementFee: string }[];
+  reward: { settlementFee: string; totalFee: string }[];
 }
 
 export function getDayId(offset: number): number {
@@ -77,6 +77,7 @@ export const useLeaderboardQuery = () => {
           }
           reward:dailyRevenueAndFees(where: {id: "${timestamp}"}) {
             settlementFee
+            totalFee
           }
           
         `;
