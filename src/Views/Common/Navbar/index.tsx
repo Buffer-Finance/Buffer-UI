@@ -78,14 +78,14 @@ export const Navbar: React.FC<INavbar> = () => {
 
         <BlueBtn
           onClick={() => {}}
-          className="!h-[30px] rounded-[6px] w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] pl-4 pr-5 sm:pl-1 sm:pr-2"
+          className="!h-[30px] rounded-[6px] w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] pl-4 pr-5 sm:pl-1 sm:pr-1"
         >
           <Link
             to="/leaderboard/incentivised"
             className="flex items-center gap-1"
           >
             <LeaderboardTropy height={23} />
-            Contest
+            <span className="sm:hidden">Contest</span>
           </Link>
         </BlueBtn>
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
