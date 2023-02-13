@@ -241,7 +241,7 @@ function QTrade() {
         body={
           <>
      <WarningOutlined className='text-[#EEAA00] mt-[4px]' />    &nbsp;  
-      Trading on Forex & Commodity is currently halted. It will be resumed shortly.
+      Trading on Forex & Commodities is currently halted. It will be resumed shortly.
           </>
         }
         closeWarning={() => {}}
