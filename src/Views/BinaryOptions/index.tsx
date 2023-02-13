@@ -111,7 +111,7 @@ export const useQTinfo = () => {
   const {activeChain} = useActiveChain();
   const data = useMemo(() => {
     let activeMarket = Config[ENV].pairs.find((m) => {
-      let market = params?.market || 'GBP-USD';
+      let market = params?.market || 'ETH-USD';
       // GBP
       market = market.toUpperCase();
       let currM = m.pair.toUpperCase();
