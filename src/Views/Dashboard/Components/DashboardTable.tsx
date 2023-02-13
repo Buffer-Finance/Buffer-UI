@@ -118,7 +118,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       bodyJSX={bodyJSX}
       loading={!dashboardData}
       onRowClick={(idx) => {
-        navigate(`/binary/${dashboardData[idx].pair}`);
+        // navigate(`/binary/${dashboardData[idx].pair}`);
       }}
       widths={['14%', '14%', '14%', '14%', '20%', '14%', '10%']}
     />
