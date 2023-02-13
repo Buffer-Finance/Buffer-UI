@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { atom, useAtom } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
@@ -9,15 +9,11 @@ import { Skeleton } from '@mui/material';
 import Favourites from './Favourites/Favourites';
 import BufferTab from '@Views/Common/BufferTab';
 import { Navbar } from './Components/Mobile/Navbar';
-import YellowWarning from '@SVG/Elements/YellowWarning';
-
 import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
-import { tradesCount } from './Tables/Desktop';
 import {
-  tardesPageAtom,
   updateActivePageNumber,
   updateCancelledPageNumber,
   updateHistoryPageNumber,
@@ -25,8 +21,6 @@ import {
 } from './Hooks/usePastTradeQuery';
 import { MarketTimingsModal } from './MarketTimingsModal';
 import MobileTable from './Components/Mobile/historyTab';
-import { marketPriceAtom } from '../../TradingView/useDataFeed';
-import isUserPaused from '@Utils/isUserPaused';
 import { binaryTabs } from 'config';
 import TVIntegrated from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
@@ -36,7 +30,6 @@ export const IV = 12000;
 export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
 import Config from 'public/config.json';
-import { useSearchParam } from 'react-use';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
@@ -165,15 +158,12 @@ function QTrade() {
   const [ref, setRef] = useAtom(referralCodeAtom);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
-  // const [assets, setAssets] = useAtom(DisplayAssetsAtom);
   usePastTradeQuery();
   useGenericHooks();
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
-  const [
-    { active: activePage, history: historyPage, cancelled: cancelledPage },
-  ] = useAtom(tardesPageAtom);
+
   useEffect(() => {
     document.title = 'Buffer | Trade';
   }, []);
@@ -186,13 +176,6 @@ function QTrade() {
     subTabs: [],
     isExternalLink: false,
   };
-  const mapToPair = (market: IMarket) => market.pair;
-  // if (assets.length === 0 || assets.length > 5)
-  //   setAssets(
-  //     props.pairs.length > 5
-  //       ? props.pairs.slice(0, 5).map(mapToPair)
-  //       : props.pairs.map(mapToPair)
-  //   );
 
   useEffect(() => {
     dispatch({
@@ -227,9 +210,6 @@ function QTrade() {
           />
         </div>
       </div>
-      {/* <div> TV Status&nbsp;
-      {err ?'Error!!!':'Working'}
-      </div> */}
 
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
