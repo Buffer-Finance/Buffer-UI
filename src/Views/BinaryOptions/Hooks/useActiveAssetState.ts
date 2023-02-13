@@ -290,7 +290,7 @@ export function useActiveAssetState(amount = null, referralData) {
       routerPermission,
     });
     //update response
-    response = [balance, allowance, maxTrade, stats];
+    response = [balance, allowance, maxTrade, stats, routerPermission];
   }
 
   return response;

@@ -46,7 +46,9 @@ export function CustomOption() {
     activeAssetState,
   } = useBinaryActions(amount, true, true);
 
-  const [balance, allowanceWei, maxTrade] = activeAssetState;
+  const [balance, allowanceWei, maxTrade, _, routerPermission] =
+    activeAssetState;
+
   const UpHandler = () => {
     if (!account) return openConnectModal?.();
     if (lt(allowance || '0', amount.toString() || '0'))
@@ -80,6 +82,9 @@ export function CustomOption() {
   // useIsMarketOpen();
   const isMarketOpen = knowTill.open && isForex;
   const allowance = divide(allowanceWei, activePoolObj.token.decimals);
+  const isAssetActive =
+    routerPermission &&
+    routerPermission[activeAsset.pools[0].options_contracts.current];
   // const [rpcState] = useRPCchecker();
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
@@ -189,65 +194,77 @@ export function CustomOption() {
             variant="rectangular"
           />
         )}
-        <ConnectionRequired>
-          <span>
-            {allowance == null || !activeAssetPrice ? (
-              <Skeleton className="h4 full-width sr lc mb3" />
-            ) : lt(allowance, amount.toString() || '0') ? (
-              <BlueBtn
-                onClick={() => {
-                  account ? setIsApproveModalOpen(true) : openConnectModal?.();
-                }}
-              >
-                Approve
-              </BlueBtn>
-            ) : (
-              <>
-                <div className="btn-wrapper">
-                  <GreenBtn
-                    onClick={UpHandler}
-                    isDisabled={isForex && !isMarketOpen}
-                    isLoading={
-                      loading &&
-                      typeof loading !== 'number' &&
-                      loading?.is_up === true
-                    }
-                    className="bg-cross-bg text-green hover:bg-green hover:text-1"
-                  >
-                    <>
-                      <UpIcon className="mr-[6px] scale-150" />
-                      Up
-                    </>
-                  </GreenBtn>
-                  <RedBtn
-                    isDisabled={isForex && !isMarketOpen}
-                    isLoading={
-                      loading &&
-                      typeof loading !== 'number' &&
-                      loading?.is_up === false
-                    }
-                    onClick={DownHandler}
-                  >
-                    <>
-                      <DownIcon className="mr-[6px] scale-150" />
-                      Down
-                    </>
-                  </RedBtn>
-                </div>
-                <div
-                  className="approve-btn-styles text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto"
-                  role={'button'}
-                  onClick={() =>
-                    !account ? openConnectModal?.() : handleApproveClick('0')
-                  }
+        {
+          <ConnectionRequired>
+            <span>
+              {allowance == null || !activeAssetPrice ? (
+                <Skeleton className="h4 full-width sr lc mb3" />
+              ) : lt(allowance, amount.toString() || '0') ? (
+                <BlueBtn
+                  onClick={() => {
+                    account
+                      ? setIsApproveModalOpen(true)
+                      : openConnectModal?.();
+                  }}
                 >
-                  Revoke Approval
-                </div>
-              </>
-            )}
-          </span>
-        </ConnectionRequired>
-        {MarketOpenWarning}
+                  Approve
+                </BlueBtn>
+              ) : !isAssetActive ? (
+                <BlueBtn
+                  className="text-f13 text-1 text-center"
+                  isDisabled={true}
+                  onClick={() => {}}
+                >
+                  Trading is halted for this asset
+                </BlueBtn>
+              ) : (
+                <>
+                  <div className="btn-wrapper">
+                    <GreenBtn
+                      onClick={UpHandler}
+                      isDisabled={isForex && !isMarketOpen}
+                      isLoading={
+                        loading &&
+                        typeof loading !== 'number' &&
+                        loading?.is_up === true
+                      }
+                      className="bg-cross-bg text-green hover:bg-green hover:text-1"
+                    >
+                      <>
+                        <UpIcon className="mr-[6px] scale-150" />
+                        Up
+                      </>
+                    </GreenBtn>
+                    <RedBtn
+                      isDisabled={isForex && !isMarketOpen}
+                      isLoading={
+                        loading &&
+                        typeof loading !== 'number' &&
+                        loading?.is_up === false
+                      }
+                      onClick={DownHandler}
+                    >
+                      <>
+                        <DownIcon className="mr-[6px] scale-150" />
+                        Down
+                      </>
+                    </RedBtn>
+                  </div>
+                  <div
+                    className="approve-btn-styles text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto"
+                    role={'button'}
+                    onClick={() =>
+                      !account ? openConnectModal?.() : handleApproveClick('0')
+                    }
+                  >
+                    Revoke Approval
+                  </div>
+                </>
+              )}
+            </span>
+          </ConnectionRequired>
+        }
+        {/* {MarketOpenWarning} */}
       </div>
     </>
   );
