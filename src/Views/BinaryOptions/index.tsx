@@ -280,8 +280,6 @@ function QTrade() {
                     <>
                       <PGTables
                         configData={props}
-                        currentPage={activePage}
-                        count={tradesCount}
                         onPageChange={(e, pageNumber) =>
                           setActivePage(pageNumber)
                         }
@@ -299,10 +297,7 @@ function QTrade() {
                   {activeTab === binaryTabs[3] && (
                     <>
                       <PGTables
-                        isHistoryTable={true}
                         configData={props}
-                        currentPage={historyPage}
-                        count={tradesCount}
                         onPageChange={(e, pageNumber) =>
                           setHistoryPage(pageNumber)
                         }
@@ -321,10 +316,7 @@ function QTrade() {
                   {activeTab === binaryTabs[4] && (
                     <>
                       <PGTables
-                        isHistoryTable={true}
                         configData={props}
-                        currentPage={cancelledPage}
-                        count={tradesCount}
                         onPageChange={(e, pageNumber) =>
                           setCancelledPage(pageNumber)
                         }

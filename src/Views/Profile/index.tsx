@@ -56,6 +56,10 @@ const HistoryTables = () => {
     });
 
   useEffect(() => {
+    changeActiveTab(null, 0);
+  }, []);
+
+  useEffect(() => {
     setActivePage(1);
     setCancelledPage(1);
     setHistoryPage(1);
@@ -80,20 +84,14 @@ const HistoryTables = () => {
         childComponents={[
           <PGTables
             configData={qtInfo}
-            currentPage={activePage}
-            count={tradesCount}
             onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
           />,
           <PGTables
             configData={qtInfo}
-            currentPage={historyPage}
-            count={tradesCount}
             onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
           />,
           <PGTables
             configData={qtInfo}
-            currentPage={cancelledPage}
-            count={tradesCount}
             onPageChange={(e, pageNumber) => setCancelledPage(pageNumber)}
           />,
         ]}

@@ -4,32 +4,13 @@ import PGDesktopTables from './Desktop';
 
 interface IPGTables {
   configData: IQTrade;
-  count?: number;
-  currentPage?: number;
   onPageChange?: (e: ChangeEvent, p: number) => void;
-  isHistoryTable?: boolean;
-  shouldFetchOldData?: boolean;
 }
 
-const PGTables: React.FC<IPGTables> = ({
-  configData,
-  count,
-  onPageChange,
-  currentPage,
-  shouldFetchOldData,
-  isHistoryTable = false,
-}) => {
+const PGTables: React.FC<IPGTables> = ({ configData, onPageChange }) => {
   return (
     <>
-      <PGDesktopTables
-        className=""
-        isHistoryTable={isHistoryTable}
-        configData={configData}
-        count={count}
-        onPageChange={onPageChange}
-        currentPage={currentPage}
-        shouldFetchOldData={shouldFetchOldData}
-      />
+      <PGDesktopTables configData={configData} onPageChange={onPageChange} />
     </>
   );
 };

@@ -14,7 +14,7 @@ import { Variables } from '@Utils/Time';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { IQTrade, IToken } from '..';
+import { IQTrade } from '..';
 import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import {
   AssetCell,
@@ -44,14 +44,11 @@ export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
 interface IPGDesktopTables {
   configData: IQTrade;
-  className?: string;
-
   onPageChange?: (e: ChangeEvent, p: number) => void;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   configData,
-  className,
   onPageChange,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
@@ -290,7 +287,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   };
 
   return (
-    <Background className={className}>
+    <Background>
       <BufferTable
         count={onPageChange ? totalPages : null}
         onPageChange={(e, pageNumber) => {
