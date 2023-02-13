@@ -13,9 +13,7 @@ import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
-import { tradesCount } from './Tables/Desktop';
 import {
-  tardesPageAtom,
   updateActivePageNumber,
   updateCancelledPageNumber,
   updateHistoryPageNumber,
@@ -160,15 +158,12 @@ function QTrade() {
   const [ref, setRef] = useAtom(referralCodeAtom);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
-  // const [assets, setAssets] = useAtom(DisplayAssetsAtom);
   usePastTradeQuery();
   useGenericHooks();
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
-  const [
-    { active: activePage, history: historyPage, cancelled: cancelledPage },
-  ] = useAtom(tardesPageAtom);
+
   useEffect(() => {
     document.title = 'Buffer | Trade';
   }, []);
@@ -181,13 +176,6 @@ function QTrade() {
     subTabs: [],
     isExternalLink: false,
   };
-  const mapToPair = (market: IMarket) => market.pair;
-  // if (assets.length === 0 || assets.length > 5)
-  //   setAssets(
-  //     props.pairs.length > 5
-  //       ? props.pairs.slice(0, 5).map(mapToPair)
-  //       : props.pairs.map(mapToPair)
-  //   );
 
   useEffect(() => {
     dispatch({
@@ -222,9 +210,6 @@ function QTrade() {
           />
         </div>
       </div>
-      {/* <div> TV Status&nbsp;
-      {err ?'Error!!!':'Working'}
-      </div> */}
 
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
