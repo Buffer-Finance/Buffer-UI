@@ -23,6 +23,7 @@ export default function Favourites({ className }: { className?: string }) {
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
   const { activePoolObj } = useActivePoolObj();
+  const { routerPermission } = useAtomValue(activeAssetStateAtom);
 
   const getFavourtiesObjs = () => {
     return assets
@@ -31,6 +32,10 @@ export default function Favourites({ className }: { className?: string }) {
           (pair) => pair.pair === singleMarket
         );
         if (foundMarket) {
+          const isAssetActive =
+            routerPermission &&
+            routerPermission[foundMarket.pools[0].options_contracts.current];
+          if (!isAssetActive) return null;
           return foundMarket;
         } else return null;
       })
