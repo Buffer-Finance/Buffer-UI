@@ -9,6 +9,7 @@ import { Skeleton } from '@mui/material';
 import Favourites from './Favourites/Favourites';
 import BufferTab from '@Views/Common/BufferTab';
 import { Navbar } from './Components/Mobile/Navbar';
+import YellowWarning from '@SVG/Elements/YellowWarning';
 
 import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
@@ -38,6 +39,8 @@ import Config from 'public/config.json';
 import { useSearchParam } from 'react-use';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { Warning } from '@Views/Common/Notification/warning';
+import { WarningOutlined } from '@mui/icons-material';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -226,7 +229,7 @@ function QTrade() {
       {/* <div> TV Status&nbsp;
       {err ?'Error!!!':'Working'}
       </div> */}
-
+     
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
       {/* <ComingSoonModal /> */}
@@ -234,6 +237,18 @@ function QTrade() {
         <Background>
           {props.pairs ? (
             <>
+             <Warning
+        body={
+          <>
+     <WarningOutlined className='text-[#EEAA00] mt-[4px]' />    &nbsp;  
+      Trading on Forex & Commodity is currently halted. It will be resumed shortly.
+          </>
+        }
+        closeWarning={() => {}}
+        state={true}
+        shouldAllowClose={false}
+        className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
+      />
               {typeof window !== 'undefined' &&
                 window.innerWidth < mobileUpperBound && <MobileScreens />}
 
