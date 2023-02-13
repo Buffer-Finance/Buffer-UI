@@ -20,6 +20,7 @@ import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
+import { ProfilePage } from '@Views/Profile';
 
 if (import.meta.env.VITE_MODE === 'production') {
   console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -60,6 +61,7 @@ const AppRoutes = () => {
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/referral" element={<ReferralPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/*" element={<BinryMarkets />} />
       </Routes>
     </div>
