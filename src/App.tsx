@@ -18,17 +18,17 @@ import SideBar from '@Views/Common/Sidebar';
 import { Test } from './Test';
 import ConnectionDrawer from '@Views/Common/V2-Drawer/connectionDrawer';
 import { useGraphStatus } from '@Utils/useGraphStatus';
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
+import { ProfilePage } from '@Views/Profile';
 
-if (import.meta.env.VITE_MODE === "production") {
-  console.log(`import.meta.env.SENTRY_DSN: `,import.meta.env.VITE_SENTRY_DSN);
+if (import.meta.env.VITE_MODE === 'production') {
+  console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 0.5,
   });
-
 }
 function AppComponent() {
   return (
@@ -58,6 +58,7 @@ const AppRoutes = () => {
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/referral" element={<ReferralPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/*" element={<BinryMarkets />} />
       </Routes>
     </div>
@@ -76,13 +77,20 @@ function App() {
   const graphStatus = useGraphStatus();
   return (
     <Background>
-      {graphStatus && <Warning
-        body={<>We are facing some issues with the theGraph API. Trading experience on the platform may be hindered temporarily.</>}
-        closeWarning={() => {}}
-        shouldAllowClose={false}
-        state={graphStatus.error}
-        className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
-      />}
+      {graphStatus && (
+        <Warning
+          body={
+            <>
+              We are facing some issues with the theGraph API. Trading
+              experience on the platform may be hindered temporarily.
+            </>
+          }
+          closeWarning={() => {}}
+          shouldAllowClose={false}
+          state={graphStatus.error}
+          className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+        />
+      )}
       <Navbar />
       <AppRoutes />
       <Snackbar
