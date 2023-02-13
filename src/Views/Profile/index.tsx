@@ -1,14 +1,12 @@
 import { useGlobal } from '@Contexts/Global';
 import { useQTinfo } from '@Views/BinaryOptions';
 import {
-  tardesPageAtom,
   updateActivePageNumber,
   updateCancelledPageNumber,
   updateHistoryPageNumber,
   usePastTradeQuery,
 } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import PGTables from '@Views/BinaryOptions/Tables';
-import { tradesCount } from '@Views/BinaryOptions/Tables/Desktop';
 import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
 import { ClaimedNFT } from '@Views/NFTView/Claimed';
@@ -40,9 +38,6 @@ const HistoryTables = () => {
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
-  const [
-    { active: activePage, history: historyPage, cancelled: cancelledPage },
-  ] = useAtom(tardesPageAtom);
   const activeTabIdx = useMemo(
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
