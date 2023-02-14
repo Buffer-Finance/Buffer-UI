@@ -25,8 +25,10 @@ export const ProfilePage = () => {
 const Profile = () => {
   return (
     <div>
-      <HistoryTables />
       <ClaimedNFT />
+      <div className="px-7 my-5">
+        <HistoryTables />
+      </div>
     </div>
   );
 };
@@ -68,6 +70,7 @@ const HistoryTables = () => {
           changeActiveTab(e, t);
         }}
         distance={5}
+        className="mb-5"
         tablist={[
           { name: 'Active' },
           { name: 'History' },
