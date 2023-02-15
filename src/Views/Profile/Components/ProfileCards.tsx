@@ -46,7 +46,7 @@ const Trading = ({ data }: { data: ItradingMetricsData | null }) => {
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={(data.tradeWon * 100) / data.totalTrades}
+                data={(data.tradeWon * 100) / data.totalTrades || '0'}
                 unit={'%'}
                 content={
                   <>{`Won ${data.tradeWon}/${data.totalTrades} trades.`}</>
