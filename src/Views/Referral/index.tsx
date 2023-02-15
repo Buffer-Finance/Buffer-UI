@@ -11,7 +11,7 @@ import Drawer from '@Views/Common/V2-Drawer';
 import PlainCard from '@Views/Referral/Components/PlainCard';
 import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
 import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
-import {  useConnectModal} from '@rainbow-me/rainbowkit'
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 import {
   ReferralContext,
@@ -49,7 +49,7 @@ interface IReferral {}
 // status 1 - go ahead
 // status 2 - NA
 // status 3 - loading
-interface IReferralStat {
+export interface IReferralStat {
   totalTradesReferred: string;
   totalVolumeOfReferredTrades: string;
   totalRebateEarned: string;
@@ -273,9 +273,9 @@ const Referral: React.FC<IReferral> = ({}) => {
         : btnText}
     </BlueBtn>
   );
-  useEffect(()=>{
-    document.title = "Buffer | Referrals"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Referrals';
+  }, []);
 
   return (
     <>
@@ -296,8 +296,14 @@ const Referral: React.FC<IReferral> = ({}) => {
           Referral
         </>
         <Header.Description>
-       <span className='mb-2 block'>   Get fee discounts and earn rebates.</span> 
-          <span className='italic  block'> Note: Referral codes are case sensitive</span>
+          <span className="mb-2 block">
+            {' '}
+            Get fee discounts and earn rebates.
+          </span>
+          <span className="italic  block">
+            {' '}
+            Note: Referral codes are case sensitive
+          </span>
           <br className="sm:hidden" />
           {/* For more information, please read the
           <Header.Link
@@ -475,7 +481,7 @@ const Affilate = ({
   );
 };
 
-const useUserReferralStats = () => {
+export const useUserReferralStats = () => {
   const { address } = useUserAccount();
   return useSWR(`${address}-stats`, {
     fetcher: async () => {
