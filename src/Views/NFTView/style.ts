@@ -28,36 +28,43 @@ const Background = styled.div`
   }
   .wrapper {
     display: flex;
-    gap: 40px;
+    /* gap: 40px; */
     justify-content: flex-start;
     width: 100%;
     flex-wrap: wrap;
   }
   .center {
-    display: grid;
-    column-gap: 6rem;
-    row-gap: 5rem;
-    justify-content: center;
+    display: flex;
+    column-gap: 30px;
+    flex-wrap: wrap;
+    row-gap: 20px;
+    justify-content: flex-start;
     font-size: 1.3rem;
 
-    @media screen and (min-width: 30em) {
-      grid-template-columns: repeat(2, minmax(0px, 1fr));
+    &::-webkit-scrollbar {
+      background: transparent;
+      height: 7px;
+      width: 4px;
+    }
+
+    /* @media screen and (min-width: 30em) {
+      grid-template-columns: repeat(5, minmax(0px, 1fr));
     }
     @media screen and (min-width: 48em) {
-      grid-template-columns: repeat(3, minmax(0px, 1fr));
+      grid-template-columns: repeat(6, minmax(0px, 1fr));
     }
     @media screen and (min-width: 62em) {
-      grid-template-columns: repeat(4, minmax(0px, 1fr));
+      grid-template-columns: repeat(7, minmax(0px, 1fr));
     }
     @media screen and (min-width: 80em) {
-      grid-template-columns: repeat(5, minmax(0px, 1fr));
+      grid-template-columns: repeat(8, minmax(0px, 1fr));
     }
     @media screen and (min-width: 100em) {
       grid-template-columns: repeat(6, minmax(0px, 1fr));
     }
     @media screen and (min-width: 120em) {
       grid-template-columns: repeat(6, minmax(0px, 1fr));
-    }
+    } */
   }
   .image {
     position: relative;
@@ -82,41 +89,10 @@ const Background = styled.div`
     right: 11px;
     bottom: 16px;
   }
-  .foreground {
-    transition: all 0.3s ease-in-out;
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin-right: auto;
-    margin-left: auto;
-    top: 39px;
-  }
-  .diamond {
-    /* top: 5px; */
-    /* right: 0px; */
-    width: auto;
-    height: 150px;
-  }
-  .gold {
-    top: 35px;
-    right: 25px;
-    width: 145px;
-    height: 145px;
-  }
-  .silver {
-    top: 50px;
-    right: 10px;
-    width: 120px;
-    height: 120px;
-  }
-  .platinum {
-    /* top: 40px; */
-    width: auto;
-    height: 135px;
-  }
+
   .background {
-    width: 220px;
-    height: 220px;
+    width: 122px;
+    height: 122px;
   }
   .nftcard {
     all: unset;

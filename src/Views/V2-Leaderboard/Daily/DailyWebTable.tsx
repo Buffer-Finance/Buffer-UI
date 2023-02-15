@@ -15,18 +15,21 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
+import { useNavigate } from 'react-router-dom';
 
 export const DailyWebTable: React.FC<{
   res: ILeague[] | undefined;
   count: number;
   skip: number;
   onpageChange?: (page: number) => void;
-  totalRows: number;
-  userData?: ILeague[];
+  userData?: ILeague[] | undefined;
   nftWinners?: number;
-}> = ({ res, skip, count, onpageChange, userData, nftWinners }) => {
+  userRank: string;
+}> = ({ res, skip, count, onpageChange, userData, nftWinners, userRank }) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
+  const navigate = useNavigate();
+
   //Memos - to avoid re-rendering
   const firstColPadding = useMemo(() => {
     return {
@@ -199,15 +202,15 @@ export const DailyWebTable: React.FC<{
         return <div>Unhandled Cell.</div>;
     }
   };
-  let userInTop10 = -1;
-  if (res?.length && !skip && account) {
-    const foundIndex = res.findIndex(
-      (r) => r.user.toLowerCase() == account.toLowerCase()
-    );
-    if (foundIndex !== -1) {
-      userInTop10 = foundIndex + 1;
-    }
-  }
+  // let userInTop10 = -1;
+  // if (res?.length && !skip && account) {
+  //   const foundIndex = res.findIndex(
+  //     (r) => r.user.toLowerCase() == account.toLowerCase()
+  //   );
+  //   if (foundIndex !== -1) {
+  //     userInTop10 = foundIndex + 1;
+  //   }
+  // }
   const topDecorator =
     standings?.length && userData?.length ? (
       // const topDecorator = false ? (
@@ -216,7 +219,7 @@ export const DailyWebTable: React.FC<{
           <BufferTableCell onClick={console.log}>
             {BodyFormatter(0, i, {
               ...userData[0],
-              rank: userInTop10 == -1 ? '-' : userInTop10,
+              rank: userRank,
             })}
           </BufferTableCell>
         ))}
@@ -235,6 +238,7 @@ export const DailyWebTable: React.FC<{
             //   pathname: router.pathname,
             //   query: { ...router.query, page: p },
             // });
+
             onpageChange(p);
           }}
           nftWinners={nftWinners}
@@ -250,7 +254,9 @@ export const DailyWebTable: React.FC<{
         headerJSX={HeaderFormatter}
         topDecorator={topDecorator}
         // highlightIndexs={userRank && userData && userRank !== 0 ? [0] : []}
-        onRowClick={(idx) => {}}
+        onRowClick={(idx) => {
+          navigate(`/profile?user_address=${standings[idx].user}`);
+        }}
         count={count}
         onPageChange={(a, p) => {
           // router.push({
