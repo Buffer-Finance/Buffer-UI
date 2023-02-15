@@ -17,9 +17,10 @@ interface ILeaderboardQuery {
   totalData: {
     totalTrades: number;
     volume: string;
+    user: string;
   }[];
   // totalPaginationData: { user: string }[];
-  userData: ILeague;
+  userData: ILeague[];
   reward: { settlementFee: string; totalFee: string }[];
 }
 
@@ -74,6 +75,7 @@ export const useLeaderboardQuery = () => {
           ) {
             totalTrades
             volume
+            user
           }
           reward:dailyRevenueAndFees(where: {id: "${timestamp}"}) {
             settlementFee
@@ -112,6 +114,25 @@ export const useLeaderboardQuery = () => {
     }
   }, [data?.userStats]);
 
+  const winnerUserRank = useMemo(() => {
+    if (!data || !data.userStats || !account) return '-';
+    const rank = data.userStats.findIndex(
+      (data) => data.user.toLowerCase() == account.toLowerCase()
+    );
+
+    if (rank === -1) return '-';
+    else return (rank + 1).toString();
+  }, [data?.userData]);
+
+  const loserUserRank = useMemo(() => {
+    if (!data || !data.loserStats || !account) return '-';
+    const rank = data.loserStats.findIndex(
+      (data) => data.user.toLowerCase() == account.toLowerCase()
+    );
+    if (rank === -1) return '-';
+    else return (rank + 1).toString();
+  }, [data?.loserStats]);
+
   const totalTournamentData = useMemo(() => {
     if (!data || !data.totalData) return null;
     let allTradesCount = 0;
@@ -125,7 +146,7 @@ export const useLeaderboardQuery = () => {
     return { allTradesCount, totalFee, totalRows, totalUsers };
   }, [data?.totalData, account]);
 
-  return { data, totalTournamentData };
+  return { data, totalTournamentData, winnerUserRank, loserUserRank };
 };
 
 /*

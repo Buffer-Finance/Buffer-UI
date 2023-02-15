@@ -7,14 +7,14 @@ export const ClaimedNFT = () => {
   console.log(`nfts: `, nfts);
 
   return (
-    <Background className="flexc-center full-width">
-      <div className="header xxxmmt m-auto">Claimed NFTs</div>
+    <Background className="flex flex-col items-baseline full-width">
+      <div className="text-f22">NFT Holding Section</div>
       {!nfts || nfts.length === 0 ? (
         <div className="flex justify-center py-8 w-full text-f22">
           No NFTs claimed so far.
         </div>
       ) : (
-        <div className="px-7 mt-8 center">
+        <div className="mt-7 center max-h-[130px] overflow-y-scroll">
           {nfts.map((nft) => (
             <NFTCard
               tier={nft.tier}
@@ -25,6 +25,7 @@ export const ClaimedNFT = () => {
           ))}
         </div>
       )}
+      <div className="text-f15 text-1 mt-5">Total Claimed : {nfts?.length}</div>
     </Background>
   );
 };
@@ -50,9 +51,9 @@ function NFTCard({
           className={`background`}
         />
       </div>
-      <div className="flex justify-between text-f14 mt-2 font-medium">
+      {/* <div className="flex justify-between text-f14 mt-2 font-medium">
         {tier || 'Buffer NFT'} <span className="text-3">#{number}</span>
-      </div>
+      </div> */}
     </a>
   );
 }

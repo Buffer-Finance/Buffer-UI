@@ -41,7 +41,8 @@ export const Incentivised = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useLeaderboardQuery();
+  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
+    useLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -222,6 +223,7 @@ export const Incentivised = () => {
               userData={data?.userData}
               skip={skip}
               nftWinners={0}
+              userRank={winnerUserRank}
             />,
             <DailyWebTable
               res={loserStats}
@@ -230,6 +232,7 @@ export const Incentivised = () => {
               userData={data?.userData}
               skip={skip}
               nftWinners={1}
+              userRank={loserUserRank}
             />,
           ]}
         />
