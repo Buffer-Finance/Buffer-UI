@@ -29,10 +29,12 @@ export const useProfileGraphQl = () => {
     fetcher: async () => {
       const response = await axios.post(baseGraphqlUrl, {
         query: `{ 
-            userOptionDatas(where: {user: "${account}"}) {
-              payout
-              totalFee
-            }
+            userOptionDatas(  
+              first: 1000 
+              where: {user: "${account}"}) {
+                payout
+                totalFee
+              }
             activeData:userOptionDatas(
               where: {user: "${account}", state: 1}
             ) {
