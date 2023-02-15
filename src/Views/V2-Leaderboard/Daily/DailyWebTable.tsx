@@ -211,12 +211,16 @@ export const DailyWebTable: React.FC<{
   //     userInTop10 = foundIndex + 1;
   //   }
   // }
+
+  const navigateToProfile = (address: string) => {
+    navigate(`/profile?user_address=${address}`);
+  };
   const topDecorator =
     standings?.length && userData?.length ? (
       // const topDecorator = false ? (
       <BufferTableRow onClick={console.log} className="highlight">
         {new Array(DailyCols.length).fill(9).map((_, i) => (
-          <BufferTableCell onClick={console.log}>
+          <BufferTableCell onClick={() => navigateToProfile(account)}>
             {BodyFormatter(0, i, {
               ...userData[0],
               rank: userRank,
@@ -255,7 +259,7 @@ export const DailyWebTable: React.FC<{
         topDecorator={topDecorator}
         // highlightIndexs={userRank && userData && userRank !== 0 ? [0] : []}
         onRowClick={(idx) => {
-          navigate(`/profile?user_address=${standings[idx].user}`);
+          navigateToProfile(standings[idx].user);
         }}
         count={count}
         onPageChange={(a, p) => {

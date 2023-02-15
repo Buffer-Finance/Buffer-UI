@@ -5,6 +5,7 @@ import { useNFTGraph } from './useNFTGraph';
 export const ClaimedNFT = () => {
   const { nfts } = useNFTGraph();
   console.log(`nfts: `, nfts);
+  const totalNfts = nfts?.length;
 
   return (
     <Background className="flex flex-col items-baseline full-width">
@@ -25,7 +26,9 @@ export const ClaimedNFT = () => {
           ))}
         </div>
       )}
-      <div className="text-f15 text-1 mt-5">Total Claimed : {nfts?.length}</div>
+      {!!totalNfts && (
+        <div className="text-f15 text-1 mt-5">Total Claimed : {totalNfts}</div>
+      )}
     </Background>
   );
 };
