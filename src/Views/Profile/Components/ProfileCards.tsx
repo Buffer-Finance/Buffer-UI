@@ -54,7 +54,10 @@ const Trading = ({ data }: { data: ItradingMetricsData | null }) => {
               />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={data.openInterest} unit={'USDC'} />
+              <Display
+                data={divide(data.openInterest, usdcDecimals)}
+                unit={'USDC'}
+              />
             </div>,
             <div className={wrapperClasses}>
               <Display data={divide(data.volume, usdcDecimals)} unit={'USDC'} />
