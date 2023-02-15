@@ -25,6 +25,7 @@ interface ILeaderboardQuery {
 }
 
 export function getDayId(offset: number): number {
+  console.log(offset, 'offset');
   let timestamp = new Date().getTime() / 1000;
   if (offset > 0) {
     timestamp = timestamp - offset * 86400;
@@ -38,7 +39,7 @@ export const useLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
   const { day } = useDayOfTournament();
-  const timestamp = getDayId(Number(day - Number(offset)));
+  const timestamp = getDayId(Number(day - Number(offset ?? day)));
   const minimumTrades = isTestnet ? 5 : 3;
 
   const { data } = useSWR<ILeaderboardQuery>(
