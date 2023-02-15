@@ -50,7 +50,7 @@ export const useProfileGraphQl = () => {
   });
 
   const tradingMetricsData: ItradingMetricsData | null = useMemo(() => {
-    if (!data || !data.userOptionDatas) return null;
+    if (!data || !data.userOptionDatas || !data.activeData) return null;
 
     //counts totalPayout,tradesWon, volume
     const computedData = data.userOptionDatas.reduce(
