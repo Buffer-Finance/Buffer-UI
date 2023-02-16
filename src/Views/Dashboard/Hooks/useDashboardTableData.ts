@@ -100,7 +100,9 @@ export const useDashboardTableData = () => {
         );
         return !!pool;
       });
+
       if (!configPair) return;
+      if(configPair.category == 'Forex' || configPair.category == 'Comodity') return;
       const currData = {
         ...item,
         pair: configPair?.pair,
