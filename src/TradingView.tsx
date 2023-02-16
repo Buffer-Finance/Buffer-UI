@@ -118,6 +118,8 @@ function getText(expiration: number) {
         )}`
   }`;
 }
+const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage', null);
+
 function drawPosition(
   option: IGQLHistory,
   visualized: any,
@@ -159,7 +161,6 @@ function drawPosition(
   // positions.current.push({ line, expiration: option.expirationTime });
 }
 
-const drawingAtom = atomWithLocalStorage('TVL_V2_CONFIG', null);
 
 export const TradingChart = ({ market }: { market: Markets }) => {
   const qtInfo = useQTinfo();
@@ -401,7 +402,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
           title: '15Min',
         },
       ],
-      saved_data: drawing,
+      saved_data: drawing?.[market],
       disabled_features:
         window.innerWidth < 600
           ? ['left_toolbar', ...defaults.basicDisabled]
@@ -488,6 +489,17 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     };
   }, [visualized, activeTrades, chartReady]);
   const updatePositionTimeLeft = useCallback(() => {
+    widgetRef.current?.save((d) => {
+      setDrawing(drawing=>{
+        return {
+          ...drawing,
+          [market]:d
+        }
+      });
+    });
+
+
+
     for (const trade in trade2visualisation.current) {
       if (trade2visualisation.current[+trade]?.visited) {
         const inv = trade2visualisation.current[+trade]?.lineRef
@@ -510,7 +522,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     };
   }, [address]);
   return (
-    <div className="w-[60vw] h-[60vh]">
+    <div className="w-[60vw] h-[35vh]">
       <div
         ref={containerDivRef}
         id="chart-element"

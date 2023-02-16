@@ -25,8 +25,6 @@ import {
 } from './Hooks/usePastTradeQuery';
 import { MarketTimingsModal } from './MarketTimingsModal';
 import MobileTable from './Components/Mobile/historyTab';
-import { marketPriceAtom } from '../../TradingView/useDataFeed';
-import isUserPaused from '@Utils/isUserPaused';
 import { binaryTabs } from 'config';
 import TVIntegrated  from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
@@ -36,7 +34,6 @@ export const IV = 12000;
 export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
 import Config from 'public/config.json';
-import { useSearchParam } from 'react-use';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
@@ -257,8 +254,9 @@ function QTrade() {
                 window.innerWidth < mobileUpperBound && <MobileScreens />}
 
               <div className="tab:hidden mb-3">
-                <Favourites />
+                {/* <Favourites /> */}
                 <TradingChart  market="BTCUSD"/>
+                <TradingChart  market="ETHUSD"/>
               </div>
               <div className="custom-view b1200:w-[80%] mx-auto">
                 <div className="tab:hidden ">
