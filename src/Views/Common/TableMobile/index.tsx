@@ -1,10 +1,10 @@
-import { Avatar, Button, Skeleton } from "@mui/material";
-import { ChangeEvent, ReactChild, ReactNode, useState } from "react";
-import Background from "./style";
-import { createArray } from "@Utils/JSUtils/createArray";
-import { European, American } from "config";
-import TypeChip from "../TypeChip";
-import BasicPagination from "../pagination";
+import { Skeleton } from '@mui/material';
+import { ChangeEvent, ReactChild, ReactNode, useState } from 'react';
+import Background from './style';
+import { createArray } from '@Utils/JSUtils/createArray';
+import { European, American } from 'config';
+import TypeChip from '../TypeChip';
+import BasicPagination from '../pagination';
 
 interface TableMobileProps {
   rows: number;
@@ -16,8 +16,8 @@ interface TableMobileProps {
   error?: ReactNode;
   loading?: boolean;
   count?: number;
-  shouldShowTroply?: boolean;
-  onPageChange?: (e: ChangeEvent, p: number) => void;
+  onPageChange?: (event: ChangeEvent<unknown>, p: number) => void;
+  activePage: number;
 }
 
 const TableMobile: React.FC<TableMobileProps> = ({
@@ -27,7 +27,7 @@ const TableMobile: React.FC<TableMobileProps> = ({
   loading,
   count,
   onPageChange,
-  shouldShowTroply = true,
+  activePage,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const handleClick = (idx: number) => setSelectedIndex(idx);
@@ -51,7 +51,7 @@ const TableMobile: React.FC<TableMobileProps> = ({
         <BasicPagination
           onChange={onPageChange}
           count={count}
-          shouldShowTroply={shouldShowTroply}
+          page={activePage}
         />
       ) : null}
     </Background>
@@ -85,13 +85,13 @@ export const AssetCellMobile: React.FC<AssetProps> = ({
       />
       <div className="flex-col items-start">
         <div className="flex items-center">
-          <span className="highlight" style={{ fontSize: "15px" }}>
+          <span className="highlight" style={{ fontSize: '15px' }}>
             {name}
           </span>
           {icon && (
             <div
               className="version-chip font3 sxml"
-              style={{ fontSize: "10px" }}
+              style={{ fontSize: '10px' }}
             >
               {icon}
             </div>
@@ -103,7 +103,7 @@ export const AssetCellMobile: React.FC<AssetProps> = ({
             />
           )}
         </div>
-        <span className="desc-text" style={{ fontSize: "13px" }}>
+        <span className="desc-text" style={{ fontSize: '13px' }}>
           {type}
         </span>
       </div>
@@ -114,7 +114,7 @@ export const AssetCellMobile: React.FC<AssetProps> = ({
 interface InfoProps {
   title: string;
   text: string | ReactChild;
-  align?: "right" | "left";
+  align?: 'right' | 'left';
   className?: string;
 }
 
@@ -127,10 +127,10 @@ export const InfoCell: React.FC<InfoProps> = ({
   return (
     <div
       className={`flex-col items-start ${
-        align === "right" ? "right-text" : ""
+        align === 'right' ? 'right-text' : ''
       }`}
     >
-      <span className={`desc-text full-width ${className || ""}`}>{title}</span>
+      <span className={`desc-text full-width ${className || ''}`}>{title}</span>
       <span className="highlight full-width">{text}</span>
     </div>
   );
@@ -150,9 +150,9 @@ export const RowCell: React.FC<RowProps> = ({
   className,
 }) => {
   return (
-    <div className={`flex items-center content-sbw ${className || ""}`}>
+    <div className={`flex items-center content-sbw ${className || ''}`}>
       <span className="desc-text">{title} </span>
-      <span className={`${desc ? "desc-text" : "highlight"}`}>{text}</span>
+      <span className={`${desc ? 'desc-text' : 'highlight'}`}>{text}</span>
     </div>
   );
 };

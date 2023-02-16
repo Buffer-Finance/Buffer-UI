@@ -70,18 +70,20 @@ const CancelButton = ({ option }) => {
   );
 };
 
-const MobileTable: React.FC<any> = ({
-  configData,
-  isHistoryTab = false,
-  isCancelledTab,
-  onPageChange,
-}: {
+const MobileTable: React.FC<{
   configData: IQTrade;
   isHistoryTab?: boolean;
   isCancelledTab?: boolean;
   count?: number;
   currentPage?: number;
   onPageChange?: (e: ChangeEvent, p: number) => void;
+  activePage: number;
+}> = ({
+  configData,
+  isHistoryTab = false,
+  isCancelledTab,
+  onPageChange,
+  activePage,
 }) => {
   const activeMarket = configData.activePair;
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -306,8 +308,8 @@ const MobileTable: React.FC<any> = ({
         rows={filteredData?.length}
         bodyJSX={BodyFormatterMobile}
         count={totalPages}
+        activePage={activePage}
         onPageChange={onPageChange}
-        shouldShowTroply={false}
         error={<ErrorMsg isHistoryTable={isHistoryTab} />}
         loading={!shouldConnectWallet && !filteredData}
       />

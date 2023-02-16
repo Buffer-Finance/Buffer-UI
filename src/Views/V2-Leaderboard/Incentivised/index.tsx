@@ -72,7 +72,7 @@ export const Incentivised = () => {
 
   useEffect(() => {
     setActivePageNumber(1);
-  }, [activeTab]);
+  }, [activeTab, offset]);
 
   let content;
   if (!isTimerEnded) {
@@ -219,6 +219,7 @@ export const Incentivised = () => {
             <DailyWebTable
               res={tableData}
               count={totalPages.arbitrum}
+              activePage={activePages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
@@ -228,6 +229,7 @@ export const Incentivised = () => {
             <DailyWebTable
               res={loserStats}
               count={totalPages.arbitrum}
+              activePage={activePages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}

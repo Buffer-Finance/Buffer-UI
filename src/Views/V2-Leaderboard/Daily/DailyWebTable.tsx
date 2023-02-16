@@ -21,11 +21,21 @@ export const DailyWebTable: React.FC<{
   res: ILeague[] | undefined;
   count: number;
   skip: number;
-  onpageChange?: (page: number) => void;
+  onpageChange: (page: number) => void;
   userData?: ILeague[] | undefined;
   nftWinners?: number;
   userRank: string;
-}> = ({ res, skip, count, onpageChange, userData, nftWinners, userRank }) => {
+  activePage: number;
+}> = ({
+  res,
+  skip,
+  count,
+  onpageChange,
+  userData,
+  nftWinners,
+  userRank,
+  activePage,
+}) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
   const navigate = useNavigate();
@@ -212,7 +222,8 @@ export const DailyWebTable: React.FC<{
   //   }
   // }
 
-  const navigateToProfile = (address: string) => {
+  const navigateToProfile = (address: string | undefined) => {
+    if (address === undefined) return;
     navigate(`/profile?user_address=${address}`);
   };
   const topDecorator =
@@ -237,6 +248,7 @@ export const DailyWebTable: React.FC<{
           skip={skip}
           userData={userData}
           count={count}
+          activePage={activePage}
           onpageChange={(e, p) => {
             // router.push({
             //   pathname: router.pathname,
@@ -254,14 +266,15 @@ export const DailyWebTable: React.FC<{
         className="mt-4 tab:mt-[0] tab:mb-6"
         bodyJSX={BodyFormatter}
         cols={DailyCols.length}
-        rows={standings?.length}
+        rows={standings?.length ?? 0}
         headerJSX={HeaderFormatter}
         topDecorator={topDecorator}
         // highlightIndexs={userRank && userData && userRank !== 0 ? [0] : []}
         onRowClick={(idx) => {
-          navigateToProfile(standings[idx].user);
+          navigateToProfile(standings?.[idx].user);
         }}
         count={count}
+        activePage={activePage}
         onPageChange={(a, p) => {
           // router.push({
           //   pathname: router.pathname,
