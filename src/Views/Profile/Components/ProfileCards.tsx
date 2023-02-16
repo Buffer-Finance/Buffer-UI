@@ -14,6 +14,8 @@ import {
   useProfileGraphQl,
 } from '../Hooks/useProfileGraphQl';
 
+const profileCardClass = 'rounded-lg px-7';
+
 export const ProfileCards = () => {
   const { tradingMetricsData } = useProfileGraphQl();
   const { data }: { data?: IReferralStat } = useUserReferralStats();
@@ -39,15 +41,18 @@ const Trading = ({
 }) => {
   const { address: account } = useUserAccount();
   if (account === undefined)
-    return <Card top={heading} middle={<div>Wallet not connected.</div>} />;
+    return <WalletNotConnectedCard heading={heading} />;
 
   if (data === null)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
     <Card
+      className={profileCardClass}
+      shouldShowDivider={false}
       top={heading}
       middle={
         <TableAligner
+          className="mt-3"
           keyStyle={keyClasses}
           valueStyle={valueClasses}
           keysName={['Total Payout', 'Win Rate', 'Open Interest', 'Volume']}
@@ -92,14 +97,17 @@ const Referral = ({
 }) => {
   const { address: account } = useUserAccount();
   if (account === undefined)
-    return <Card top={heading} middle={<div>Wallet not connected.</div>} />;
+    return <WalletNotConnectedCard heading={heading} />;
   if (data === undefined)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
     <Card
+      className={profileCardClass}
+      shouldShowDivider={false}
       top={heading}
       middle={
         <TableAligner
+          className="mt-3"
           keyStyle={keyClasses}
           valueStyle={valueClasses}
           keysName={[
@@ -131,3 +139,12 @@ const Referral = ({
     />
   );
 };
+
+export const WalletNotConnectedCard = ({ heading }: { heading: string }) => (
+  <Card
+    top={heading}
+    middle={<div className="mt-3">Wallet not connected.</div>}
+    className={profileCardClass}
+    shouldShowDivider={false}
+  />
+);
