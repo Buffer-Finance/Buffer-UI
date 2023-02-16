@@ -36,12 +36,12 @@ export const HistoryTables = () => {
     });
 
   useEffect(() => {
-    changeActiveTab(null, 0);
+    changeActiveTab(null, 1);
   }, []);
 
   return (
     <>
-      <BufferTab
+      {/* <BufferTab
         value={activeTabIdx}
         handleChange={(e, t) => {
           changeActiveTab(e, t);
@@ -49,9 +49,9 @@ export const HistoryTables = () => {
         distance={5}
         className="mb-5"
         tablist={[
-          { name: 'Active' },
+          // { name: 'Active' },
           { name: 'History' },
-          { name: 'Cancelled' },
+          // { name: 'Cancelled' },
         ]}
       />
       <TabSwitch
@@ -73,6 +73,11 @@ export const HistoryTables = () => {
             onPageChange={(e, pageNumber) => setCancelledPage(pageNumber)}
           />,
         ]}
+      /> */}
+      <PGTables
+        activePage={history}
+        configData={qtInfo}
+        onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
       />
     </>
   );
