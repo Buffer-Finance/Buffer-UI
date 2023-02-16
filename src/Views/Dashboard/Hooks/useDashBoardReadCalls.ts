@@ -44,7 +44,6 @@ export const HolderContracts = [
   '0x691FA1d4dc25f39a22Dc45Ca98080CF21Ca7eC64',
   '0x97dcc5574B76b91008b684C58DfdF95fE39FA772',
   '0x3A3DA6464bEe25a1d98526402a12241B0787b84C',
-  //   "0x173817F33f1C09bCb0df436c2f327B9504d6e067",
 ];
 export const useDashboardReadCalls = () => {
   const bfrPrice = useIbfrPrice();
