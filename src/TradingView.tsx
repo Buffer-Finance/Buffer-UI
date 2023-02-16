@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   LatestPriceApiRes,
   Market2Kline,
@@ -17,6 +17,7 @@ import {
   ThemeName,
   LibrarySymbolInfo,
   IChartWidgetApi,
+  IPositionLineAdapter,
   SeriesFormat,
 } from '../public/static/charting_library';
 const FIRST_TIMESTAMP = 1673239587;
@@ -50,6 +51,7 @@ import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
+import { useUserAccount } from '@Hooks/useUserAccount';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   '1S' as ResolutionString,
@@ -106,7 +108,7 @@ const defaults = {
   green: 'rgb(108, 211, 173)',
   red: 'rgb(255, 104, 104)',
 };
-function getText(expiration:number) {
+function getText(expiration: number) {
   const curr = Math.round(Date.now() / 1000);
   return `${
     expiration <= curr
@@ -121,47 +123,47 @@ function drawPosition(
   visualized: any,
   chart: IChartWidgetApi
 ) {
+  console.log(`chart: `, chart);
   let vizIdentifiers = getVizIdentifier(option);
   const idx = visualized.indexOf(vizIdentifiers);
   const openTimeStamp = option.creationTime;
   const optionPrice = +option.strike / PRICE_DECIMALS;
 
-  if (idx === -1 && option.state === BetState.active && optionPrice) {
-    let color = !option.isAbove ? defaults.red : defaults.green;
-    const text =
-      `${toFixed(
-        divide(option.totalFee?.toString(), option.depositToken.decimals),
-        2
-      )} ${option.depositToken?.name} | ` + getText(option.expirationTime);
-    const tooltip = `${getDisplayDate(openTimeStamp)}, ${getDisplayTime(
-      openTimeStamp
-    )} - ${getDisplayDate(option.expirationTime)}, ${getDisplayTime(
-      option.expirationTime
-    )}`;
-    console.log(`color: `, color, text, tooltip);
-    let line = chart
-      ?.createPositionLine()
-      .setText(text)
-      .setTooltip(tooltip)
-      .setBodyBackgroundColor(defaults.BG)
-      .setBodyBorderColor(defaults.BG)
-      .setBodyFont('normal 17pt Relative Pro')
-      .setQuantityFont('bold 17pt Relative Pro')
-      .setQuantityBackgroundColor(color)
-      .setQuantityBorderColor(color)
-      .setLineColor(color)
-      .setBodyTextColor('rgb(255,255,255)')
-      .setQuantity(option.isAbove ? defaults.upIcon : defaults.downIcon)
-      .setPrice(optionPrice);
-    return line;
-    // positions.current.push({ line, expiration: option.expirationTime });
-  }
+  let color = !option.isAbove ? defaults.red : defaults.green;
+  const text =
+    `${toFixed(
+      divide(option.totalFee?.toString(), option.depositToken.decimals!)!,
+      2
+    )} ${option.depositToken?.name} | ` + getText(option.expirationTime);
+  const tooltip = `${getDisplayDate(openTimeStamp)}, ${getDisplayTime(
+    openTimeStamp
+  )} - ${getDisplayDate(option.expirationTime)}, ${getDisplayTime(
+    option.expirationTime
+  )}`;
+  console.log(`color: `, color, text, tooltip);
+  // console.log(`chart: `,chart.createPositionLine);
+  return chart
+    ?.createPositionLine()
+    .setText(text)
+    .setTooltip(tooltip)
+    .setBodyBackgroundColor(defaults.BG)
+    .setBodyBorderColor(defaults.BG)
+    .setBodyFont('normal 17pt Relative Pro')
+    .setQuantityFont('bold 17pt Relative Pro')
+    .setQuantityBackgroundColor(color)
+    .setQuantityBorderColor(color)
+    .setLineColor(color)
+    .setBodyTextColor('rgb(255,255,255)')
+    .setQuantity(option.isAbove ? defaults.upIcon : defaults.downIcon)
+    .setPrice(optionPrice);
+  // positions.current.push({ line, expiration: option.expirationTime });
 }
 
 const drawingAtom = atomWithLocalStorage('TVL_V2_CONFIG', null);
 
 export const TradingChart = ({ market }: { market: Markets }) => {
   const qtInfo = useQTinfo();
+  const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
   let trade2visualisation = useRef<
@@ -169,12 +171,12 @@ export const TradingChart = ({ market }: { market: Markets }) => {
       [key: number]: {
         option: IGQLHistory;
         visited: boolean;
-        lineRef: any;
+        lineRef: IPositionLineAdapter;
       };
     }>
   >({});
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
-  let widgetRef = useRef<IChartingLibraryWidget>(null);
+  let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
   const [drawing, setDrawing] = useAtom(drawingAtom);
   async function getAllSymbols() {
@@ -408,11 +410,11 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     chart.onChartReady(() => {
       setChartReady(true);
     });
-    widgetRef = { current: chart };
+    widgetRef.current = chart;
 
     return () => {
       widgetRef.current?.remove();
-      widgetRef = { current: null };
+      widgetRef.current = null;
       setChartReady(false);
     };
   }, []);
@@ -454,25 +456,9 @@ export const TradingChart = ({ market }: { market: Markets }) => {
 
   // draw positions.
   useEffect(() => {
-    let timers: ReturnType<typeof setTimeout>[] = [];
-
     if (chartReady && activeTrades) {
-      console.log(
-        `chartReady && activeTrades: `,
-        chartReady && activeTrades,
-        chartReady
-      );
-      // console.log(`pos?.optionID: `, activeTrades);
-      // map through activeTrades
-      // if id present in trade2visualisation than, ignore it.
-      // else add it to trade2id, and draw its position.
       activeTrades.forEach((pos) => {
         if (!pos?.optionID) return;
-        console.log(`pos?.optionID: `, pos?.optionID);
-
-        // if not present, add it with visited :true
-
-        // if present visited set visited to true
         if (trade2visualisation.current[+pos.optionID]) {
           trade2visualisation.current[+pos.optionID]!.visited = true;
         } else {
@@ -481,38 +467,48 @@ export const TradingChart = ({ market }: { market: Markets }) => {
             lineRef: drawPosition(
               pos,
               visualized,
-              widgetRef.current?.activeChart()
+              widgetRef.current?.activeChart()!
             ),
+            option: pos,
           };
         }
-        // if present but not visited do nothing.
+        for (const trade in trade2visualisation.current) {
+          if (!trade2visualisation.current[+trade]?.visited) {
+            trade2visualisation.current[+trade]!.lineRef.remove();
+            delete trade2visualisation.current[+trade];
+          }
+        }
       });
-
-      // positions.current = [];
-
-      // data.map((option) => {
-
-      //   if (
-      //     option?.configPair?.pair.toLowerCase() !==
-      //     activeMarket.pair.toLowerCase()
-      //   )
-      //     return;
-      //   timers.push(
-      //     setTimeout(() => {
-      //       drawPosition(
-      //         option,
-      //         visualized,
-      //         widgetRef.current?.activeChart?.(),
-      //         getPriceFromKlines(marketPrices, activeMarket),
-      //         positions
-      //       );
-      //     })
-      //   );
-      // });
     }
-    return () => {};
+    return () => {
+      for (const trade in trade2visualisation.current) {
+        console.log(`trade[mark]: `, trade, trade2visualisation);
+        trade2visualisation.current[+trade]!.visited = false;
+      }
+    };
   }, [visualized, activeTrades, chartReady]);
-
+  const updatePositionTimeLeft = useCallback(() => {
+    for (const trade in trade2visualisation.current) {
+      if (trade2visualisation.current[+trade]?.visited) {
+        const inv = trade2visualisation.current[+trade]?.lineRef
+          ?.getText()
+          ?.split('|')[0];
+        const strikePrice =
+          trade2visualisation.current[+trade]?.lineRef?.getPrice();
+        const text =
+          inv +
+          '| ' +
+          getText(trade2visualisation.current[+trade]?.option.expirationTime);
+        trade2visualisation.current[+trade]?.lineRef.setText(text);
+      }
+    }
+  },[]);
+  useEffect(() => {
+    const interval = setInterval(updatePositionTimeLeft, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [address]);
   return (
     <div className="w-[60vw] h-[60vh]">
       <div
