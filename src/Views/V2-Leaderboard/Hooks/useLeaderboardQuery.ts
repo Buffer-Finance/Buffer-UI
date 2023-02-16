@@ -37,7 +37,7 @@ export const useLeaderboardQuery = () => {
   const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
-  // const {configContracts} = useActiveChain();
+  const {configContracts} = useActiveChain();
   const { day } = useDayOfTournament();
   const timestamp = getDayId(Number(day - Number(offset)));
   const minimumTrades = isTestnet ? 5 : 3;
