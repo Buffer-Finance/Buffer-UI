@@ -15,7 +15,7 @@ export const ClaimedNFT = () => {
           No NFTs claimed so far.
         </div>
       ) : (
-        <div className="mt-7 center max-h-[130px] overflow-y-scroll">
+        <div className="mt-7 center max-h-[130px] overflow-y-auto">
           {nfts.map((nft) => (
             <NFTCard
               tier={nft.tier}
