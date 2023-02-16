@@ -104,6 +104,7 @@ module.exports = {
       f20: "20px",
       f18: "18px",
       f22: "22px",
+      f24: "24px",
     },
     spacing: {
       1: "2px",

@@ -1,6 +1,6 @@
-import { Tooltip } from "@mui/material";
-import React from "react";
-import Background from "./style";
+import { Tooltip } from '@mui/material';
+import React from 'react';
+import Background from './style';
 
 interface IBufferCheckbox {
   checked: boolean;
@@ -26,37 +26,25 @@ const BufferCheckbox: React.FC<IBufferCheckbox> = ({
   //     Open = false
   //   }
   return (
-    <Background onClick={onCheckChange} className={className + " !bg-2"}>
+    <Background onClick={onCheckChange} className={className + ' !bg-2'}>
       {/* <Tooltip title={validation} id="tooltip" placement="top" arrow classes={tooltipStyles} open={Open}> */}
       <div
-        className={`checkboxborder ${checked && "active__background"} ${
-          isDisabled ? "disabled" : ""
+        className={`checkboxborder ${checked && 'active__background'} ${
+          isDisabled ? 'disabled' : ''
         }`}
       >
         <svg
-          width="16"
-          height="16"
-          viewBox="0 0 27 27"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="mt-[1px] ml-[1px]"
         >
-          <line
-            y1="-1.5"
-            x2="15.4341"
-            y2="-1.5"
-            transform="matrix(0.549897 -0.835232 0.147219 0.989104 7.41302 17.5615)"
-            strokeWidth="4"
-            className={`checkbox__filled ${checked && "active"} ${
-              isDisabled && "disabled"
-            }`}
-          />
-          <line
-            y1="-1.5"
-            x2="10.5069"
-            y2="-1.5"
-            transform="matrix(0.678411 0.734682 -0.487676 0.873025 0 10.2808)"
-            strokeWidth="3"
+       
+          <path
+            d="M3.93555 11.5748L7.69501 13.7231L15.2139 6.74121"
+            stroke="white"
+            stroke-width="2"
             className={`checkbox__filled ${checked && "active"} ${
               isDisabled && "disabled"
             }`}

@@ -7,18 +7,21 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
-import Trophy from '../Components/Trophy';
+import BasicPagination from '@Views/Common/pagination';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
   skip: number;
   userData: ILeague[] | undefined;
-}> = ({ options, skip, userData }) => {
+  onpageChange?: (e, page: number) => void;
+  count: number;
+  nftWinners?: number;
+}> = ({ options, skip, userData, count, onpageChange, nftWinners }) => {
   const { address: account } = useUserAccount();
-  if (!options)
-    return (
-      <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
-    );
+  // if (!options)
+  //   return (
+  //     <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
+  //   );
   let user = getUserIndex(options, skip, account);
   const UserRow =
     userData?.length && options?.length ? (
@@ -36,25 +39,43 @@ export const DailyMobileTable: React.FC<{
 
   return (
     <div className=" mt-4 flex flex-col gap-4">
-      {UserRow}
-      {options.map((currentStanding, index) => {
-        const isUser =
-          currentStanding?.user &&
-          currentStanding?.user.toLowerCase() === account?.toLowerCase();
+      {!options ? (
+        <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
+      ) : (
+        <>
+          {' '}
+          {UserRow}
+          {options.map((currentStanding, index) => {
+            const isUser =
+              currentStanding?.user &&
+              currentStanding?.user.toLowerCase() === account?.toLowerCase();
 
-        return (
-          <MobileRow
-            {...{
-              index,
-              currentStanding,
-              user: false,
-              skip,
-              userData,
-              account,
-            }}
+            return (
+              <MobileRow
+                {...{
+                  index,
+                  currentStanding,
+                  user: false,
+                  skip,
+                  userData,
+                  account,
+                  nftWinners,
+                }}
+              />
+            );
+          })}
+        </>
+      )}
+
+      {count && count > 1 ? (
+        <div className="mb-5">
+          <BasicPagination
+            onChange={onpageChange}
+            count={count}
+            shouldShowTroply={false}
           />
-        );
-      })}
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -78,6 +99,7 @@ const MobileRow = ({
   skip,
   userData,
   account,
+  nftWinners,
 }) => {
   const isUser = user ? true : false;
   const perc = multiply(
@@ -105,6 +127,7 @@ const MobileRow = ({
               skip={skip}
               userData={userData}
               userRank={currentStanding.rank}
+              nftWinners={nftWinners}
             />
           </div>
           <div className="text-f13 ml-1">
@@ -188,7 +211,7 @@ const MobileRow = ({
               '-'
             ) : (
               <Display
-                data={divide(currentStanding.netPnL, usdcDecimals)}
+                data={divide(currentStanding.volume, usdcDecimals)}
                 unit={'USDC'}
               />
             )}

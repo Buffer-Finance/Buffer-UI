@@ -62,7 +62,6 @@ export const getExpireNotification = async (
 
   if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
     return null;
-   
   }
 
   const expiryPrice = response.data[0].price.toString();
@@ -189,7 +188,7 @@ export const Cancel: React.FC<{
   return (
     <BlackBtn
       onClick={() => {
-        console.log(`queue_id: `,queue_id);
+        console.log(`queue_id: `, queue_id);
         cancelHandler(queue_id, setIsLoading);
       }}
       className="!h-fit !px-4 !py-2 !rounded-md !text-f14 !font-medium !w-fit "
@@ -439,7 +438,7 @@ export const StrikePriceComponent = ({
             data={divide(trade.slippage, 2)}
             unit="%"
             className="mr-[3px]"
-            precision={decimals}
+            precision={2}
           />
         </div>
       ) : null}

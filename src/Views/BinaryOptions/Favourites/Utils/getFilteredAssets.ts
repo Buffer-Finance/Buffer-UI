@@ -1,7 +1,12 @@
-import { useAtom } from "jotai";
-import { FavouriteAtom, IMarket, useQTinfo } from "@Views/BinaryOptions";
-import { useActivePoolObj } from "@Views/BinaryOptions/PGDrawer/PoolDropDown";
-import { getAssetTypes } from "./getAssetTypes";
+import { useAtom, useAtomValue } from 'jotai';
+import {
+  activeAssetStateAtom,
+  FavouriteAtom,
+  IMarket,
+  useQTinfo,
+} from '@Views/BinaryOptions';
+import { useActivePoolObj } from '@Views/BinaryOptions/PGDrawer/PoolDropDown';
+import { getAssetTypes } from './getAssetTypes';
 
 export function getFilteredAssets(
   assets: IMarket[],
@@ -13,14 +18,20 @@ export function getFilteredAssets(
   const AssetTypes = getAssetTypes(qtInfo.pairs);
   const [favourites] = useAtom(FavouriteAtom);
   const { activePoolObj } = useActivePoolObj();
+  const { routerPermission } = useAtomValue(activeAssetStateAtom);
 
   let filteredAssets: IMarket[] = [];
-  if (!!searchText && searchText !== "")
-    filteredAssets = assets.filter((asset) =>
-      asset.pair.toLowerCase().includes(searchText.toLowerCase())
+  if (!!searchText && searchText !== '')
+    filteredAssets = assets.filter(
+      (asset) =>
+        asset.pair.toLowerCase().includes(searchText.toLowerCase()) &&
+        routerPermission &&
+        routerPermission[asset.pools[0].options_contracts.current]
     );
   else {
-    filteredAssets = assets;
+    filteredAssets = assets.filter(
+      (asset) => routerPermission[asset.pools[0].options_contracts.current]
+    );
   }
   switch (category) {
     case AssetTypes[0]:

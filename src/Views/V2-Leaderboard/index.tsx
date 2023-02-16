@@ -1,11 +1,10 @@
-import React, { ReactChildren } from 'react';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { LeaderBoardDrawers } from './drawers';
 import { LeaderBoardSidebar } from './Sidebar';
 import { LeaderBoardStyles } from './style';
 import { ArbitrumOnly, ChainNotSupported } from '@Views/Common/ChainNotSupported';
 
-export const LeaderBoard = (props: { children: ReactChildren }) => {
+export const LeaderBoard = (props: { children: JSX.Element }) => {
   return (
     <ArbitrumOnly>
       <main className="content-drawer">

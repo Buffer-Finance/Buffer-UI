@@ -1,11 +1,23 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { useActiveAssetState } from '@Views/BinaryOptions/Hooks/useActiveAssetState';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
+import { useMemo } from 'react';
 import { useDashboardTableData } from '../Hooks/useDashboardTableData';
 import { DashboardTable } from './DashboardTable';
 
 export const Markets = () => {
   const { dashboardData, totalData } = useDashboardTableData();
+  const { activeChain } = useActiveChain();
+  const referralcode = useReferralCode(activeChain);
+  const [balance, allowance, maxTrade, stats, routerPermission] =
+    useActiveAssetState(null, referralcode);
+  const filteredDashboardData = useMemo(() => {
+    if (!dashboardData || !routerPermission) return [];
+    return dashboardData.filter((data) => routerPermission[data.address]);
+  }, [dashboardData, routerPermission]);
 
   const totalDataArr = [
     {
@@ -44,7 +56,7 @@ export const Markets = () => {
           </div>
         ))}
       </div>
-      <DashboardTable dashboardData={dashboardData} />
+      <DashboardTable dashboardData={filteredDashboardData} />
     </div>
   );
 };

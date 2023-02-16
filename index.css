@@ -205,9 +205,10 @@ onUpEnd(c-(idx)
   cursor: pointer;
 }
 div.chart-type-dd {
-  width: fit-content;
+  width: fit-content !important;
   background-color: #131722;
   padding: 8px;
+  max-height:fit-content !important;
 }
 .chart-type svg {
   width: 20px;

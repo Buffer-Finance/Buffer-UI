@@ -10,13 +10,17 @@ import { BlueBtn } from '@Views/Common/V2-Button';
 import { useQTinfo } from '..';
 
 const ApproveModalStyles = styled.div`
-  background-color: var(--dropdown-hover);
-  gap: 1.4rem;
-  padding: 3rem;
+  background-color:#232334;
+  display:flex;
+  flex-direction:column;
+  gap: 1.8rem;
+  padding: 3rem 4rem;
+  margin:auto;
+  width:min(650px,95%);
+
   padding-bottom: 2rem;
   position: relative;
   /* border-radius: 2rem; */
-  width: 100%;
   /* position: fixed; */
   /* z-index: 2500; */
   /* top: 35rem; */
@@ -60,24 +64,24 @@ export const ApproveModal: React.FC<IApproveModal> = ({
   if (!isOpen) return <></>;
   return (
     <Dialog open={isOpen} onClose={closeModal}>
-      <ApproveModalStyles className="flexc-center">
+      <ApproveModalStyles >
         <IconButton className="close" onClick={closeModal}>
           <CloseOutlined />
         </IconButton>
-        <div className="text-f16 fw5 text-1">Approve {token}</div>
-        <div className="text-f14 fw5 text-2 flex-center text-center">
-          Allow Buffer to spend your {token} on{' '}
-          {qtInfo.activeChain.name.split(' ')[0].toUpperCase()}
+        <div className="text-f24 fw5 text-1">Approve {token}</div>
+        <div className="text-f20 fw5 text-2 ">
+          Allow Buffer to spend your <span className='text-1'>{token}</span> on{' '}
+          <span className='text-1'>   {qtInfo.activeChain.name.split(' ')[0].toUpperCase()}</span>
         </div>
-        <div className='w-full text-f13 text-2 text-center'>
-          <span className='text-1 font-semibold'>Trading UX Disclaimer : </span>
-          Please note that there may be a delay between trade placement and <br className='sm:hidden' /> 
-          order execution, but the timestamp and price are taken at the time<br className='sm:hidden' />
-          when the transaction is signed from your wallet for a fair and <br className='sm:hidden' />
+        <div className='w-full text-f16 text-2 '>
+          <span className='text-1 '>Trading UX Disclaimer : </span>
+          Please note that there may be a delay between trade placement and  
+          order execution, but the timestamp and price are taken at the time
+          when the transaction is signed from your wallet for a fair and 
           accurate trading experience.
         </div>
         <div
-          className="flex text-1 pointer"
+          className="flex text-1 pointer mx-auto"
           onClick={() => setIsChecked((prvState) => !prvState)}
         >
           <BufferCheckbox checked={isChecked} onCheckChange={console.log} />

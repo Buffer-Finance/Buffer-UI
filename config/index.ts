@@ -26,6 +26,8 @@ interface IChainConfig {
   gasKey?: string;
 }
 
+export const isTestnet = import.meta.env.VITE_ENV.toUpperCase() === 'TESTNET';
+
 export const baseGraphqlUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
     ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-mainnet'
@@ -325,7 +327,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     {
       pathname: '/[chain]/leaderboard/[offset]/incentivised',
       as: `/ARBITRUM/leaderboard/0/incentivised`,
-      name: 'Arbitrum Testnet',
+      name: chain,
       slug: 'leaderboard',
       id: 0,
 
@@ -379,7 +381,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     },
     // {
     //   pathname: "/[chain]/leaderboard/[offset]/daily",
-    //   as: `/${chain}leaderboard/0/daily`,
+    //   as: `/leaderboard/0/daily`,
     //   name: "Daily",
     //   slug: "daily",
     //   id: 1,
@@ -388,7 +390,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     // },
     // {
     //   pathname: "/[chain]/leaderboard/weekly",
-    //   as: `/${chain}leaderboard/weekly`,
+    //   as: `/leaderboard/weekly`,
     //   name: "Weekly",
     //   slug: "weekly",
     //   id: 1,
@@ -396,7 +398,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     // },
     {
       pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/${chain}leaderboard/0/weekly/diamond`,
+      as: `/leaderboard/0/weekly/diamond`,
       name: 'diamond',
       slug: 'diamond',
       id: 2,
@@ -405,7 +407,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     },
     {
       pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/${chain}leaderboard/0/weekly/platinum`,
+      as: `/leaderboard/0/weekly/platinum`,
       name: 'platinum',
       slug: 'platinum',
       id: 3,
@@ -414,7 +416,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     },
     {
       pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/${chain}leaderboard/0/weekly/gold`,
+      as: `/leaderboard/0/weekly/gold`,
       name: 'gold',
       slug: 'gold',
       id: 4,
@@ -423,7 +425,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     },
     {
       pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/${chain}leaderboard/0/weekly/silver`,
+      as: `/leaderboard/0/weekly/silver`,
       name: 'silver',
       slug: 'silver',
       id: 5,
@@ -432,7 +434,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     },
     {
       pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/${chain}leaderboard/0/weekly/bronze`,
+      as: `/leaderboard/0/weekly/bronze`,
       name: 'bronze',
       slug: 'bronze',
       id: 6,
@@ -441,7 +443,7 @@ export const getLeaderBoardTabs = (chain: string) => {
     },
     {
       pathname: '/[chain]/leaderboard/[offset]/pnl',
-      as: `/${chain}leaderboard/0/pnl`,
+      as: `/leaderboard/0/pnl`,
       name: 'Profit & Loss',
       slug: 'pnl',
       id: 7,
@@ -453,7 +455,7 @@ export const getProTabs = (chain: string, asset: string) => {
   return [
     {
       pathname: '/[chain]/markets/[product]',
-      as: `/${chain}markets/all`,
+      as: `/markets/all`,
       name: 'Markets',
       slug: 'markets',
       id: 2,
@@ -461,7 +463,7 @@ export const getProTabs = (chain: string, asset: string) => {
     },
     {
       pathname: '/[chain]/partners',
-      as: `/${chain}partners`,
+      as: `/partners`,
       name: 'Partners',
       slug: 'partners',
       id: 0,
@@ -469,7 +471,7 @@ export const getProTabs = (chain: string, asset: string) => {
     },
     {
       pathname: '/[chain]/positions',
-      as: `/${chain}positions`,
+      as: `/positions`,
       name: 'Positions',
       defaultName: 'Positions',
       slug: 'positions',
@@ -478,7 +480,7 @@ export const getProTabs = (chain: string, asset: string) => {
     },
     {
       pathname: '/[chain]/faucet',
-      as: `/${chain}faucet`,
+      as: `/faucet`,
       name: 'Faucet',
       slug: 'faucet',
       id: 5,
@@ -611,7 +613,7 @@ export const getTabs = (chain: string, isLeaderboard = false) => {
 
     {
       pathname: '/[chain]/leaderboard/[offset]/incentivised',
-      as: `/${chain}leaderboard/0/incentivised`,
+      as: `/leaderboard/0/incentivised`,
       name: 'Competitions',
       slug: 'leaderboard',
       id: 6,

@@ -100,8 +100,8 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
   const isCodeSet = !!affiliateCode;
   const { hostname } = useHostName();
   const baseURL = `https://${hostname}/#/`;
-const sharableLink =  isCodeSet ? `${baseURL}?ref=${affiliateCode}` : baseURL
-console.log(`sharableLink: `,sharableLink);
+  const sharableLink = isCodeSet ? `${baseURL}?ref=${affiliateCode}` : baseURL;
+  console.log(`sharableLink: `, sharableLink);
 
   const uploadToServer = async () => {
     setLoading(true);
@@ -112,7 +112,9 @@ console.log(`sharableLink: `,sharableLink);
       type: 'success',
       msg: "Copied! Your trade's image will be ready in ~10s",
     });
-    copyToClipboard(`${apiBaseUrl}/api/position?id=${imageInfo.public_id}`);
+    let url = `${apiBaseUrl}/api/position?id=${imageInfo.public_id}`;
+    if (isCodeSet) url = `${url}&ref=${affiliateCode}`;
+    copyToClipboard(url);
   };
 
   const downloadImage = async () => {
@@ -133,7 +135,6 @@ console.log(`sharableLink: `,sharableLink);
   const { pnl, payout } = getPayout(trade, tradeExpiry);
   if (!pnl || !payout || !tradeExpiry)
     return <div className="text-f20 text-1">Could not fetch data...</div>;
-
 
   const priceArr = [
     {
@@ -174,9 +175,9 @@ console.log(`sharableLink: `,sharableLink);
           <CloseOutlined />
         </button>
       </div>
-      <div  className="text-3  w-[380px] h-[199px]">
+      <div className="text-3  w-[380px] h-[199px]">
         <BGImage ref={ref}>
-          <div  className="flex justify-between items-center">
+          <div className="flex justify-between items-center">
             <div className="flex flex-col justify-center">
               <BufferLogoComponent
                 fontSize="text-[18px]"
@@ -221,10 +222,7 @@ console.log(`sharableLink: `,sharableLink);
                 </div>
               )}
               <div className="p-2 bg-[#FFFFFF]">
-                <QRCodeSVG
-                  value={sharableLink                  }
-                  size={60}
-                />
+                <QRCodeSVG value={sharableLink} size={60} />
               </div>
               {isCodeSet ? (
                 <div className="text-[12px] font-bold mt-2 text-3">
