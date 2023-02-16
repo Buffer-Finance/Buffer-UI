@@ -14,7 +14,7 @@ export const ProfilePage = () => {
 // const profileHeadingClass=
 const Profile = () => {
   return (
-    <div className="px-7 my-8">
+    <div className="px-7 my-8 sm:px-3">
       <UserData />
       <ReferralLink />
       <div className="my-8 flex flex-col ">
