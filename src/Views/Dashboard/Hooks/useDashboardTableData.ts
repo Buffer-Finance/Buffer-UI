@@ -72,6 +72,7 @@ export const useDashboardTableData = () => {
     refreshInterval: 300,
   });
 
+
   const oneDayVolume = useMemo(() => {
     if (!data || !data.volumePerContracts) return [];
 
@@ -91,7 +92,7 @@ export const useDashboardTableData = () => {
     const upatedData = [];
     let pool = null;
     data.optionContracts.forEach((item) => {
-      const configPair = MarketConfig[ENV].pairs.find((pair) => {
+      const configPair = configContracts.pairs.find((pair) => {
         pool = null;
         pool = pair.pools.find(
           (pool) =>

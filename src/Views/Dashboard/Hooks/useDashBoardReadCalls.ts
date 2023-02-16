@@ -3,11 +3,10 @@ import { CONTRACTS } from '@Views/Earn/Config/Address';
 import { CONTRACTS as DASHBOARDCONTRACTS } from '@Views/Dashboard/config/Addresses';
 import { DashboardContext } from '../dashboardAtom';
 import bfrAbi from '@Views/Earn/Config/Abis/BFR.json';
-import MarketConfig from 'public/config.json';
 import poolABI from '@Views/BinaryOptions/ABI/poolABI.json';
 import { erc20ABI, useContractReads } from 'wagmi';
 import * as chain from '@wagmi/core/chains';
-
+import Config from 'public/config.json'
 import { convertBNtoString, useReadCall } from '@Utils/useReadCall';
 import {
   BASIS_POINTS_DIVISOR,
@@ -360,7 +359,8 @@ const useDashboardCalls = () => {
 
       const multicallRes = await multicallv2(
         contracts,
-        new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc')
+        new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc'),
+        Config[42161].multicall
       );
       const lpTokensCallLength = lpTokensCalls.length;
       const formattedRes = multicallRes.slice(0, -lpTokensCallLength);
