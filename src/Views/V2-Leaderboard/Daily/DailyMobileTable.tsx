@@ -16,7 +16,16 @@ export const DailyMobileTable: React.FC<{
   onpageChange?: (e, page: number) => void;
   count: number;
   nftWinners?: number;
-}> = ({ options, skip, userData, count, onpageChange, nftWinners }) => {
+  activePage: number;
+}> = ({
+  options,
+  skip,
+  userData,
+  count,
+  onpageChange,
+  nftWinners,
+  activePage,
+}) => {
   const { address: account } = useUserAccount();
   // if (!options)
   //   return (
@@ -72,7 +81,7 @@ export const DailyMobileTable: React.FC<{
           <BasicPagination
             onChange={onpageChange}
             count={count}
-            shouldShowTroply={false}
+            page={activePage}
           />
         </div>
       ) : null}

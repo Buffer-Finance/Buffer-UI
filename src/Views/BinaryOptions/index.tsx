@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
 import PGTables from './Tables';
@@ -14,6 +14,7 @@ import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
 import {
+  tardesPageAtom,
   updateActivePageNumber,
   updateCancelledPageNumber,
   updateHistoryPageNumber,
@@ -163,6 +164,7 @@ function QTrade() {
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
+  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
 
   useEffect(() => {
     document.title = 'Buffer | Trade';
@@ -265,12 +267,14 @@ function QTrade() {
                     <>
                       <PGTables
                         configData={props}
+                        activePage={active}
                         onPageChange={(e, pageNumber) =>
                           setActivePage(pageNumber)
                         }
                       />
                       <MobileOnly>
                         <MobileTable
+                          activePage={active}
                           configData={props}
                           onPageChange={(e, pageNumber) =>
                             setActivePage(pageNumber)
@@ -283,12 +287,14 @@ function QTrade() {
                     <>
                       <PGTables
                         configData={props}
+                        activePage={history}
                         onPageChange={(e, pageNumber) =>
                           setHistoryPage(pageNumber)
                         }
                       />
                       <MobileOnly>
                         <MobileTable
+                          activePage={history}
                           configData={props}
                           isHistoryTab
                           onPageChange={(e, pageNumber) =>
@@ -302,6 +308,7 @@ function QTrade() {
                     <>
                       <PGTables
                         configData={props}
+                        activePage={cancelled}
                         onPageChange={(e, pageNumber) =>
                           setCancelledPage(pageNumber)
                         }
@@ -309,6 +316,7 @@ function QTrade() {
                       <MobileOnly>
                         <MobileTable
                           isCancelledTab
+                          activePage={cancelled}
                           configData={props}
                           onPageChange={(e, pageNumber) =>
                             setCancelledPage(pageNumber)

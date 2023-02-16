@@ -45,11 +45,13 @@ export const visualizeddAtom = atom([]);
 interface IPGDesktopTables {
   configData: IQTrade;
   onPageChange?: (e: ChangeEvent, p: number) => void;
+  activePage: number;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   configData,
   onPageChange,
+  activePage,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -114,7 +116,13 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   }, [isHistoryTable]);
 
   const HeaderFomatter = (col: number) => {
-    return <TableHeader col={col} headsArr={headNameArray} />;
+    return (
+      <TableHeader
+        col={col}
+        headsArr={headNameArray}
+        firstColClassName="ml-4"
+      />
+    );
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
@@ -289,11 +297,11 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   return (
     <Background>
       <BufferTable
-        count={onPageChange ? totalPages : null}
+        count={onPageChange ? totalPages : undefined}
+        activePage={activePage}
         onPageChange={(e, pageNumber) => {
           onPageChange ? onPageChange(e, pageNumber) : null;
         }}
-        shouldShowTroply={false}
         doubleHeight
         // shouldShowMobile
         headerJSX={HeaderFomatter}

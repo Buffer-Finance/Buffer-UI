@@ -1,6 +1,7 @@
 import { useGlobal } from '@Contexts/Global';
 import { useQTinfo } from '@Views/BinaryOptions';
 import {
+  tardesPageAtom,
   updateActivePageNumber,
   updateCancelledPageNumber,
   updateHistoryPageNumber,
@@ -10,7 +11,7 @@ import PGTables from '@Views/BinaryOptions/Tables';
 import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
 import { binaryTabs } from 'config';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo } from 'react';
 
 export const HistoryTables = () => {
@@ -20,6 +21,8 @@ export const HistoryTables = () => {
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
+  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
+
   const activeTabIdx = useMemo(
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
@@ -35,12 +38,6 @@ export const HistoryTables = () => {
   useEffect(() => {
     changeActiveTab(null, 0);
   }, []);
-
-  useEffect(() => {
-    setActivePage(1);
-    setCancelledPage(1);
-    setHistoryPage(1);
-  }, [activeTabIdx]);
 
   return (
     <>
@@ -62,13 +59,16 @@ export const HistoryTables = () => {
         childComponents={[
           <PGTables
             configData={qtInfo}
+            activePage={active}
             onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
           />,
           <PGTables
+            activePage={history}
             configData={qtInfo}
             onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
           />,
           <PGTables
+            activePage={cancelled}
             configData={qtInfo}
             onPageChange={(e, pageNumber) => setCancelledPage(pageNumber)}
           />,
