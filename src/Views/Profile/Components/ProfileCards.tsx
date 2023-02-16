@@ -1,3 +1,4 @@
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { Skeleton } from '@mui/material';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -21,17 +22,30 @@ export const ProfileCards = () => {
     <Section
       Heading={<div className="text-f22">Metrics</div>}
       subHeading={<></>}
-      Cards={[<Trading data={tradingMetricsData} />, <Referral data={data} />]}
+      Cards={[
+        <Trading data={tradingMetricsData} heading={'Trading Metrics'} />,
+        <Referral data={data} heading={'Referral Metrics'} />,
+      ]}
     />
   );
 };
 
-const Trading = ({ data }: { data: ItradingMetricsData | null }) => {
+const Trading = ({
+  data,
+  heading,
+}: {
+  data: ItradingMetricsData | null;
+  heading: string;
+}) => {
+  const { address: account } = useUserAccount();
+  if (account === undefined)
+    return <Card top={heading} middle={<div>Wallet not connected.</div>} />;
+
   if (data === null)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
     <Card
-      top={'Trading Metrics'}
+      top={heading}
       middle={
         <TableAligner
           keyStyle={keyClasses}
@@ -69,12 +83,21 @@ const Trading = ({ data }: { data: ItradingMetricsData | null }) => {
   );
 };
 
-const Referral = ({ data }: { data: IReferralStat | undefined }) => {
+const Referral = ({
+  data,
+  heading,
+}: {
+  data: IReferralStat | undefined;
+  heading: string;
+}) => {
+  const { address: account } = useUserAccount();
+  if (account === undefined)
+    return <Card top={heading} middle={<div>Wallet not connected.</div>} />;
   if (data === undefined)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
     <Card
-      top={'Referral Metrics'}
+      top={heading}
       middle={
         <TableAligner
           keyStyle={keyClasses}
