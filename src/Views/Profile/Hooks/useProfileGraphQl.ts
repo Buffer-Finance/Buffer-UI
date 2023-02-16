@@ -31,7 +31,7 @@ export const useProfileGraphQl = () => {
         query: `{ 
             userOptionDatas(  
               first: 1000 
-              where: {user: "${account}"}) {
+              where: {user: "${account}"}, state_not: 1) {
                 payout
                 totalFee
               }
