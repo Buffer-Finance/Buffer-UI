@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   LatestPriceApiRes,
   Market2Kline,
@@ -21,11 +16,16 @@ import {
   Timezone,
   ThemeName,
   LibrarySymbolInfo,
+  IChartWidgetApi,
   SeriesFormat,
 } from '../public/static/charting_library';
 const FIRST_TIMESTAMP = 1673239587;
 
-import { getOslonTimezone } from '@Utils/Dates/displayDateTime';
+import {
+  getDisplayDate,
+  getDisplayTime,
+  getOslonTimezone,
+} from '@Utils/Dates/displayDateTime';
 import { useAtom, useAtomValue } from 'jotai';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 import { useQTinfo } from '@Views/BinaryOptions';
@@ -33,13 +33,23 @@ import {
   getAggregatedBarv2,
   getBlockFromBar,
   getOHLCfromPrice,
+  getVizIdentifier,
   timeDeltaMapping,
 } from '@TV/utils';
 import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
 import { sleep } from '@Utils/JSUtils/sleep';
-import { tardesAtom } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
+import {
+  IGQLHistory,
+  tardesAtom,
+} from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
+import { BetState } from '@Hooks/useAheadTrades';
+import { PRICE_DECIMALS } from '@Views/BinaryOptions/Tables/TableComponents';
+import { toFixed } from '@Utils/NumString';
+import { divide } from '@Utils/NumString/stringArithmatics';
+import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import { Variables } from '@Utils/Time';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   '1S' as ResolutionString,
@@ -90,14 +100,79 @@ const defaults = {
       // ...
     ],
   },
+  BG: 'rgb(48, 48, 68)',
+  upIcon: '▲',
+  downIcon: '▼',
+  green: 'rgb(108, 211, 173)',
+  red: 'rgb(255, 104, 104)',
 };
+function getText(expiration:number) {
+  const curr = Math.round(Date.now() / 1000);
+  return `${
+    expiration <= curr
+      ? 'Processing...'
+      : `${formatDistanceExpanded(
+          Variables(expiration - Math.round(Date.now() / 1000))
+        )}`
+  }`;
+}
+function drawPosition(
+  option: IGQLHistory,
+  visualized: any,
+  chart: IChartWidgetApi
+) {
+  let vizIdentifiers = getVizIdentifier(option);
+  const idx = visualized.indexOf(vizIdentifiers);
+  const openTimeStamp = option.creationTime;
+  const optionPrice = +option.strike / PRICE_DECIMALS;
+
+  if (idx === -1 && option.state === BetState.active && optionPrice) {
+    let color = !option.isAbove ? defaults.red : defaults.green;
+    const text =
+      `${toFixed(
+        divide(option.totalFee?.toString(), option.depositToken.decimals),
+        2
+      )} ${option.depositToken?.name} | ` + getText(option.expirationTime);
+    const tooltip = `${getDisplayDate(openTimeStamp)}, ${getDisplayTime(
+      openTimeStamp
+    )} - ${getDisplayDate(option.expirationTime)}, ${getDisplayTime(
+      option.expirationTime
+    )}`;
+    console.log(`color: `, color, text, tooltip);
+    let line = chart
+      ?.createPositionLine()
+      .setText(text)
+      .setTooltip(tooltip)
+      .setBodyBackgroundColor(defaults.BG)
+      .setBodyBorderColor(defaults.BG)
+      .setBodyFont('normal 17pt Relative Pro')
+      .setQuantityFont('bold 17pt Relative Pro')
+      .setQuantityBackgroundColor(color)
+      .setQuantityBorderColor(color)
+      .setLineColor(color)
+      .setBodyTextColor('rgb(255,255,255)')
+      .setQuantity(option.isAbove ? defaults.upIcon : defaults.downIcon)
+      .setPrice(optionPrice);
+    return line;
+    // positions.current.push({ line, expiration: option.expirationTime });
+  }
+}
 
 const drawingAtom = atomWithLocalStorage('TVL_V2_CONFIG', null);
 
 export const TradingChart = ({ market }: { market: Markets }) => {
   const qtInfo = useQTinfo();
+  const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
-
+  let trade2visualisation = useRef<
+    Partial<{
+      [key: number]: {
+        option: IGQLHistory;
+        visited: boolean;
+        lineRef: any;
+      };
+    }>
+  >({});
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
@@ -330,15 +405,19 @@ export const TradingChart = ({ market }: { market: Markets }) => {
           ? ['left_toolbar', ...defaults.basicDisabled]
           : [...defaults.basicDisabled],
     });
+    chart.onChartReady(() => {
+      setChartReady(true);
+    });
     widgetRef = { current: chart };
 
     return () => {
       widgetRef.current?.remove();
       widgetRef = { current: null };
+      setChartReady(false);
     };
   }, []);
   const syncTVwithWS = async () => {
-    console.log(`syncTVwithWScalled: `,syncTVwithWS);
+    console.log(`syncTVwithWScalled: `, syncTVwithWS);
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
     const activeResolution = realTimeUpdateRef.current?.resolution || '1m';
@@ -354,7 +433,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
         prevBar,
         currBar,
         realTimeUpdateRef.current?.resolution
-        );
+      );
       if (
         aggregatedBar &&
         realTimeUpdateRef.current.symbolInfo &&
@@ -364,7 +443,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
         realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
         await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
-      } 
+      }
     }
   };
 
@@ -372,50 +451,67 @@ export const TradingChart = ({ market }: { market: Markets }) => {
   useEffect(() => {
     syncTVwithWS();
   }, [price]);
-  
 
   // draw positions.
-  // useEffect(() => {
-  //   let timers:ReturnType<typeof setTimeout> [] = [];
+  useEffect(() => {
+    let timers: ReturnType<typeof setTimeout>[] = [];
 
-  //   if (
-  //     activeTrades &&
-  //     widgetRef.current &&
-  //     typeof widgetRef.current?.activeChart === 'function'
-  //   ) {
-  //     positions.current.map((pos) => {
-  //       pos?.line?.remove();
-  //     });
+    if (chartReady && activeTrades) {
+      console.log(
+        `chartReady && activeTrades: `,
+        chartReady && activeTrades,
+        chartReady
+      );
+      // console.log(`pos?.optionID: `, activeTrades);
+      // map through activeTrades
+      // if id present in trade2visualisation than, ignore it.
+      // else add it to trade2id, and draw its position.
+      activeTrades.forEach((pos) => {
+        if (!pos?.optionID) return;
+        console.log(`pos?.optionID: `, pos?.optionID);
 
-  //     positions.current = [];
+        // if not present, add it with visited :true
 
-  //     data.map((option) => {
+        // if present visited set visited to true
+        if (trade2visualisation.current[+pos.optionID]) {
+          trade2visualisation.current[+pos.optionID]!.visited = true;
+        } else {
+          trade2visualisation.current[+pos.optionID] = {
+            visited: true,
+            lineRef: drawPosition(
+              pos,
+              visualized,
+              widgetRef.current?.activeChart()
+            ),
+          };
+        }
+        // if present but not visited do nothing.
+      });
 
-  //       if (
-  //         option?.configPair?.pair.toLowerCase() !==
-  //         activeMarket.pair.toLowerCase()
-  //       )
-  //         return;
-  //       timers.push(
-  //         setTimeout(() => {
-  //           drawPosition(
-  //             option,
-  //             visualized,
-  //             widgetRef.current?.activeChart?.(),
-  //             getPriceFromKlines(marketPrices, activeMarket),
-  //             positions
-  //           );
-  //         })
-  //       );
-  //     });
-  //   }
-  //   return () => {
-  //     for (let timer of timers) {
-  //       clearTimeout(timer);
-  //     }
-  //   };
-  // }, [visualized, activeTrades, chartReady, activeMarket]);
+      // positions.current = [];
 
+      // data.map((option) => {
+
+      //   if (
+      //     option?.configPair?.pair.toLowerCase() !==
+      //     activeMarket.pair.toLowerCase()
+      //   )
+      //     return;
+      //   timers.push(
+      //     setTimeout(() => {
+      //       drawPosition(
+      //         option,
+      //         visualized,
+      //         widgetRef.current?.activeChart?.(),
+      //         getPriceFromKlines(marketPrices, activeMarket),
+      //         positions
+      //       );
+      //     })
+      //   );
+      // });
+    }
+    return () => {};
+  }, [visualized, activeTrades, chartReady]);
 
   return (
     <div className="w-[60vw] h-[60vh]">
@@ -427,4 +523,3 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     </div>
   );
 };
-

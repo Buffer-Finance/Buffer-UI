@@ -2,6 +2,7 @@ import { LatestPriceApi, Market2Kline, Market2Prices, Markets, OHLCBlock, WSUpda
 import {
   ResolutionString,
 } from 'public/static/charting_library';
+import { IGQLHistory } from "@Views/BinaryOptions/Hooks/usePastTradeQuery";
 export const timeDeltaMapping = (t:string | number) => {
     if (typeof t == 'string') {
       if (
@@ -172,4 +173,9 @@ export const timeDeltaMapping = (t:string | number) => {
     });
   
     return priceObj;
+  };
+
+
+  export const  getVizIdentifier = (a: IGQLHistory) => {
+    return +a.optionID! + "-" + a.configPair!.pair;
   };
