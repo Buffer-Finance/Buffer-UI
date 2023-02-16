@@ -1,5 +1,6 @@
 import { useGlobal } from '@Contexts/Global';
 import { useQTinfo } from '@Views/BinaryOptions';
+import MobileTable from '@Views/BinaryOptions/Components/Mobile/historyTab';
 import {
   tardesPageAtom,
   updateActivePageNumber,
@@ -79,6 +80,20 @@ export const HistoryTables = () => {
         configData={qtInfo}
         onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
       />
+      <MobileOnly>
+        <MobileTable
+          activePage={history}
+          configData={qtInfo}
+          isHistoryTab
+          onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
+        />
+      </MobileOnly>
     </>
   );
 };
+
+function MobileOnly({ children }) {
+  if (typeof window === 'undefined') return null;
+  if (window.innerWidth > 1200) return null;
+  return <>{children}</>;
+}

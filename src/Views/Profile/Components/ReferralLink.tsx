@@ -34,16 +34,18 @@ export const ReferralLink = () => {
   }, [open]);
 
   return (
-    <div className="rounded-lg px-[30px] py-8 bg-2 flex items-center justify-between my-6">
+    <div className="rounded-lg px-[30px] py-8 bg-2 flex items-center justify-between my-6 sm:flex-col sm:gap-6 sm:px-6 sm:py-6">
       {/* left side */}
       <div className="flex items-start gap-5">
         <BufferLogo height={60} width={60} />{' '}
         <div className="flex flex-col items-start justify-center ">
-          <div className="text-f20 mt-2">Invite your friends to use Buffer</div>
-          <div className="text-f14">
-            Get fee discounts and rebates!
+          <div className="text-f20 mt-2 sm:text-f16">
+            Invite your friends to use Buffer
+          </div>
+          <div className="text-f14 sm:text-f12">
+            Get fee discounts and rebates!&nbsp;
             <span
-              className="light-blue-text  whitespace-nowrap ml6  hover:underline  cursor-pointer"
+              className="light-blue-text  whitespace-nowrap hover:underline  cursor-pointer"
               onClick={() => {
                 window.open('#', '_blank');
               }}
@@ -56,7 +58,7 @@ export const ReferralLink = () => {
       </div>
 
       {/* right side */}
-      <div className="flex flex-col items-end gap-2">
+      <div className="flex flex-col items-end gap-2 sm:items-center">
         <Tooltip
           open={open}
           onClose={() => {

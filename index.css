@@ -1227,13 +1227,6 @@ html .flex-end {
   align-items: center;
 } */
 
-html .items-start {
-  align-items: flex-start;
-}
-
-html .items-end {
-  align-items: flex-end;
-}
 html .items-stretch {
   align-items: stretch;
 }
