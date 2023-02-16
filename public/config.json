@@ -11,7 +11,7 @@
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
         "name": "USDC",
         "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
-        "faucet":"0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5"
+        "faucet":"0x1fe5b5c9159dEf950a0483d0B33C978B55d3fbe2"
       },
       "BFR": {
         "address": "0x89fEF05446aEA764C53a2f09bB763876FB57ea8E",
