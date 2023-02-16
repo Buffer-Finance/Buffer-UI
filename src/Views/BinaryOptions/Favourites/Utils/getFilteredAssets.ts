@@ -30,7 +30,7 @@ export function getFilteredAssets(
     );
   else {
     filteredAssets = assets.filter(
-      (asset) => routerPermission[asset.pools[0].options_contracts.current]
+      (asset) => routerPermission?.[asset.pools[0].options_contracts.current]
     );
   }
   switch (category) {
