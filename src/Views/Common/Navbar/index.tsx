@@ -40,7 +40,7 @@ export const Navbar: React.FC<INavbar> = () => {
               return (
                 <button
                   key={tab.name}
-                  className={`font-normal text-4 text-f15  px-4 py-[4px] rounded-md hover:text-1 transition-colors 
+                  className={`font-normal text-4 text-f15  px-4 py-[4px] rounded-md hover:bg-1 hover:text-1 hover:brightness-125 transition-colors 
                  
                       : "hover:bg-1 hover:brightness-125"
                   `}
