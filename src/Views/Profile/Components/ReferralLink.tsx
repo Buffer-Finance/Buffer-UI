@@ -41,7 +41,7 @@ export const ReferralLink = () => {
         <div className="flex flex-col items-start justify-center ">
           <div className="text-f20 mt-2">Invite your friends to use Buffer</div>
           <div className="text-f14">
-            Earn upto a 40% commission on trading fee.
+            Get fee discounts and rebates!
             <span
               className="light-blue-text  whitespace-nowrap ml6  hover:underline  cursor-pointer"
               onClick={() => {
