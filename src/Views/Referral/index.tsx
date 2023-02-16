@@ -1,7 +1,7 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useAtom } from 'jotai';
-import { useState, useEffect, ReactNode, useContext } from 'react';
+import { useState, useEffect, ReactNode, useContext, useMemo } from 'react';
 import { useCodeOwner } from './Hooks/useCodeOwner';
 import BufferInput from '@Views/Common/BufferInput';
 import BufferTransitionedTab from '@Views/Common/BufferTransitionedTab';
@@ -43,6 +43,7 @@ import { baseGraphqlUrl } from 'config';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { snackAtom } from 'src/App';
+import { useSearchParams } from 'react-router-dom';
 
 interface IReferral {}
 
@@ -100,10 +101,21 @@ const useUserAffilateCode = (activeChain: Chain) => {
   return data;
 };
 
+export const useRefferalTab = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = useMemo(() => searchParams.get('tab'), [searchParams]);
+
+  function setTab(tab: string) {
+    setSearchParams({ tab });
+  }
+
+  return { tab, setTab };
+};
+
+export const tabs = ['Use a Referral', 'Create your Referral'];
 const Referral: React.FC<IReferral> = ({}) => {
   const { activeChain } = useContext(ReferralContext);
   const [showCodeModal, setShowCodeModal] = useAtom(showCodeModalAtom);
-  const tabs = ['Use a Referral', 'Create your Referral'];
   const { writeTXN } = useReferralWriteCall();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [ip, setip] = useState('');
@@ -114,6 +126,7 @@ const Referral: React.FC<IReferral> = ({}) => {
   const { address: account } = useUserAccount();
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   const { openConnectModal } = useConnectModal();
+  const { setTab, tab } = useRefferalTab();
 
   const shouldConnectWallet = !account;
   useEffect(() => {
@@ -129,6 +142,15 @@ const Referral: React.FC<IReferral> = ({}) => {
     )
       setip(referralCodes[1]);
   }, [activeTab, account]);
+
+  useEffect(() => {
+    if (tab === null) {
+      setTab(tabs[0]);
+    }
+    if (tab != activeTab && tab !== null) {
+      setActiveTab(tab);
+    }
+  }, [tab, activeTab]);
 
   const closeModal = () => {
     setShowCodeModal(false);
@@ -321,6 +343,7 @@ const Referral: React.FC<IReferral> = ({}) => {
             key={s}
             onClick={() => {
               setActiveTab(s);
+              setTab(s);
             }}
             active={activeTab === s}
           >
