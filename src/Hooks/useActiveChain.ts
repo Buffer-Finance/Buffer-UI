@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from 'react';
-import { getChains } from 'src/Config/wagmiClient';
+import {  useMemo } from 'react';
 import { Chain, useNetwork } from 'wagmi';
 import Config from 'public/config.json';
 import { arbitrumGoerli } from 'wagmi/chains';
