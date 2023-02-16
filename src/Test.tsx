@@ -6,14 +6,16 @@ const Decd = ['800123.31', '22313.2311', '312312.10', '32131123.230'];
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import useWebSocket from 'react-use-websocket';
 import {  Market2Prices, Markets } from './Types/Market';
-
+import { TradingChart } from './TradingView';
 
 const Test: React.FC<any> = ({}) => {
   usePrice();
   const price = useAtomValue(priceAtom);
 
   const obj = Config;
-  return <div className="flex ">{JSON.stringify(price)}</div>;
+  return <div className="flex ">
+    
+    <TradingChart market='BTCUSD' /></div>;
 };
 
 const parsewsmsg = (res:string) => {
@@ -72,5 +74,5 @@ function usePrice() {
 }
 
 
-const priceAtom = atom<Partial<Market2Prices>>({});
+export const priceAtom = atom<Partial<Market2Prices>>({});
 export { Test };

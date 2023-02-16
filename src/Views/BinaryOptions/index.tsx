@@ -28,7 +28,7 @@ import MobileTable from './Components/Mobile/historyTab';
 import { marketPriceAtom } from '../../TradingView/useDataFeed';
 import isUserPaused from '@Utils/isUserPaused';
 import { binaryTabs } from 'config';
-import TVIntegrated from '../../TradingView/TV';
+import TVIntegrated  from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { useParams, useSearchParams } from 'react-router-dom';
 export const mobileUpperBound = 800;
@@ -41,6 +41,8 @@ import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
 import { WarningOutlined } from '@mui/icons-material';
+import { TradingChart } from 'src/TradingView';
+import { usePrice } from '@Hooks/usePrice';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -161,6 +163,8 @@ export const useQTinfo = () => {
 
 function QTrade() {
   const props = useQTinfo();
+  usePrice();
+
   const [ref, setRef] = useAtom(referralCodeAtom);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
@@ -254,11 +258,7 @@ function QTrade() {
 
               <div className="tab:hidden mb-3">
                 <Favourites />
-                {window.innerWidth > mobileUpperBound+1 && (
-                  <GraphView className="tab:hidden">
-                    <TVIntegrated assetInfo={props.activePair} />
-                  </GraphView>
-                )}
+                <TradingChart  market="BTCUSD"/>
               </div>
               <div className="custom-view b1200:w-[80%] mx-auto">
                 <div className="tab:hidden ">
@@ -350,6 +350,7 @@ function QTrade() {
             <Skeleton variant="rectangular" className="stat-skel lc" />
           )}
         </Background>
+        <TVIntegrated assetInfo={props.activePair} />
       </main>
         <BinaryDrawer />
     </>

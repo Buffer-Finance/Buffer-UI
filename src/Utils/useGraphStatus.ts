@@ -21,7 +21,6 @@ const useGraphStatus = () => {
       });
       const response = await Promise.all([liteQuery, mainQuery]);
       const isError = response.reduce((acc, r) => {
-        console.log(`r.data?.errors: `, r.data.errors);
         return (acc || r.data?.errors ? true:false);
       }, false);
       return {error:isError};

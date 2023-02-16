@@ -1,6 +1,6 @@
 {
   "markets":{
-    "BTC_USD":{
+    "BTCUSD":{
       "category": "Crypto",
       "tv_id": "BTCUSD",
       "pair": "BTC-USD",
@@ -10,7 +10,7 @@
       "full_name": "Bitcoin",
       "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg" 
     },
-    "ETH_USD":{
+    "ETHUSD":{
       "category": "Crypto",
       "tv_id": "ETHUSD",
       "pair": "ETH-USD",
@@ -20,7 +20,7 @@
       "full_name": "Ethereum",
       "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg" 
     },
-    "GBP_USD":{
+    "GBPUSD":{
       "category": "Crypto",
       "tv_id": "GBPUSD",
       "pair": "GBP-USD",

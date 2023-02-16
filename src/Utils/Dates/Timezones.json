@@ -1,0 +1,2390 @@
+[
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Abidjan",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Accra",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Addis_Ababa",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Africa/Algiers",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Asmara",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Africa/Asmera",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Africa/Bamako",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Bangui",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/Banjul",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Bissau",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Blantyre",
+    "OSLON": "Africa/Maputo"
+  },
+  {
+    "IANA": "Africa/Brazzaville",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/Bujumbura",
+    "OSLON": "Africa/Maputo"
+  },
+  {
+    "IANA": "Africa/Cairo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Casablanca",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Ceuta",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Conakry",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Dakar",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Dar_es_Salaam",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Africa/Djibouti",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Africa/Douala",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/El_Aaiun",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Freetown",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Gaborone",
+    "OSLON": "Africa/Maputo"
+  },
+  {
+    "IANA": "Africa/Harare",
+    "OSLON": "Africa/Maputo"
+  },
+  {
+    "IANA": "Africa/Johannesburg",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Juba",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Kampala",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Africa/Khartoum",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Kigali",
+    "OSLON": "Africa/Maputo"
+  },
+  {
+    "IANA": "Africa/Kinshasa",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/Lagos",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Libreville",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/Lome",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Luanda",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/Lubumbashi",
+    "OSLON": "Africa/Maputo"
+  },
+  {
+    "IANA": "Africa/Lusaka",
+    "OSLON": "Africa/Maputo"
+  },
+  {
+    "IANA": "Africa/Malabo",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/Maputo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Maseru",
+    "OSLON": "Africa/Johannesburg"
+  },
+  {
+    "IANA": "Africa/Mbabane",
+    "OSLON": "Africa/Johannesburg"
+  },
+  {
+    "IANA": "Africa/Mogadishu",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Africa/Monrovia",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Nairobi",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Ndjamena",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Niamey",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/Nouakchott",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Ouagadougou",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Porto-Novo",
+    "OSLON": "Africa/Lagos"
+  },
+  {
+    "IANA": "Africa/Sao_Tome",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Timbuktu",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Africa/Tripoli",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Tunis",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Africa/Windhoek",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Adak",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Anchorage",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Anguilla",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Antigua",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Araguaina",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/Buenos_Aires",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/Catamarca",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/ComodRivadavia",
+    "OSLON": "America/Argentina/Catamarca"
+  },
+  {
+    "IANA": "America/Argentina/Cordoba",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/Jujuy",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/La_Rioja",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/Mendoza",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/Rio_Gallegos",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/Salta",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/San_Juan",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/San_Luis",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/Tucuman",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Argentina/Ushuaia",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Aruba",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Asuncion",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Atikokan",
+    "OSLON": "America/Panama"
+  },
+  {
+    "IANA": "America/Atka",
+    "OSLON": "America/Adak"
+  },
+  {
+    "IANA": "America/Bahia",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Bahia_Banderas",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Barbados",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Belem",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Belize",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Blanc-Sablon",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Boa_Vista",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Bogota",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Boise",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Buenos_Aires",
+    "OSLON": "America/Argentina/Buenos_Aires"
+  },
+  {
+    "IANA": "America/Cambridge_Bay",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Campo_Grande",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Cancun",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Caracas",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Catamarca",
+    "OSLON": "America/Argentina/Catamarca"
+  },
+  {
+    "IANA": "America/Cayenne",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Cayman",
+    "OSLON": "America/Panama"
+  },
+  {
+    "IANA": "America/Chicago",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Chihuahua",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Coral_Harbour",
+    "OSLON": "America/Panama"
+  },
+  {
+    "IANA": "America/Cordoba",
+    "OSLON": "America/Argentina/Cordoba"
+  },
+  {
+    "IANA": "America/Costa_Rica",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Creston",
+    "OSLON": "America/Phoenix"
+  },
+  {
+    "IANA": "America/Cuiaba",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Curacao",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Danmarkshavn",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Dawson",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Dawson_Creek",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Denver",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Detroit",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Dominica",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Edmonton",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Eirunepe",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/El_Salvador",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Ensenada",
+    "OSLON": "America/Tijuana"
+  },
+  {
+    "IANA": "America/Fort_Nelson",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Fort_Wayne",
+    "OSLON": "America/Indiana/Indianapolis"
+  },
+  {
+    "IANA": "America/Fortaleza",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Glace_Bay",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Godthab",
+    "OSLON": "America/Nuuk"
+  },
+  {
+    "IANA": "America/Goose_Bay",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Grand_Turk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Grenada",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Guadeloupe",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Guatemala",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Guayaquil",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Guyana",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Halifax",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Havana",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Hermosillo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indiana/Indianapolis",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indiana/Knox",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indiana/Marengo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indiana/Petersburg",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indiana/Tell_City",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indiana/Vevay",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indiana/Vincennes",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indiana/Winamac",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Indianapolis",
+    "OSLON": "America/Indiana/Indianapolis"
+  },
+  {
+    "IANA": "America/Inuvik",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Iqaluit",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Jamaica",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Jujuy",
+    "OSLON": "America/Argentina/Jujuy"
+  },
+  {
+    "IANA": "America/Juneau",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Kentucky/Louisville",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Kentucky/Monticello",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Knox_IN",
+    "OSLON": "America/Indiana/Knox"
+  },
+  {
+    "IANA": "America/Kralendijk",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/La_Paz",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Lima",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Los_Angeles",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Louisville",
+    "OSLON": "America/Kentucky/Louisville"
+  },
+  {
+    "IANA": "America/Lower_Princes",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Maceio",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Managua",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Manaus",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Marigot",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Martinique",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Matamoros",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Mazatlan",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Mendoza",
+    "OSLON": "America/Argentina/Mendoza"
+  },
+  {
+    "IANA": "America/Menominee",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Merida",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Metlakatla",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Mexico_City",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Miquelon",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Moncton",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Monterrey",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Montevideo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Montreal",
+    "OSLON": "America/Toronto"
+  },
+  {
+    "IANA": "America/Montserrat",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Nassau",
+    "OSLON": "America/Toronto"
+  },
+  {
+    "IANA": "America/New_York",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Nipigon",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Nome",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Noronha",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/North_Dakota/Beulah",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/North_Dakota/Center",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/North_Dakota/New_Salem",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Nuuk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Ojinaga",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Panama",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Pangnirtung",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Paramaribo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Phoenix",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Port-au-Prince",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Port_of_Spain",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Porto_Acre",
+    "OSLON": "America/Rio_Branco"
+  },
+  {
+    "IANA": "America/Porto_Velho",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Puerto_Rico",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Punta_Arenas",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Rainy_River",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Rankin_Inlet",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Recife",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Regina",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Resolute",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Rio_Branco",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Rosario",
+    "OSLON": "America/Argentina/Cordoba"
+  },
+  {
+    "IANA": "America/Santa_Isabel",
+    "OSLON": "America/Tijuana"
+  },
+  {
+    "IANA": "America/Santarem",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Santiago",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Santo_Domingo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Sao_Paulo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Scoresbysund",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Shiprock",
+    "OSLON": "America/Denver"
+  },
+  {
+    "IANA": "America/Sitka",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/St_Barthelemy",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/St_Johns",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/St_Kitts",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/St_Lucia",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/St_Thomas",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/St_Vincent",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Swift_Current",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Tegucigalpa",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Thule",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Thunder_Bay",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Tijuana",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Toronto",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Tortola",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Vancouver",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Virgin",
+    "OSLON": "America/Puerto_Rico"
+  },
+  {
+    "IANA": "America/Whitehorse",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Winnipeg",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Yakutat",
+    "OSLON": ""
+  },
+  {
+    "IANA": "America/Yellowknife",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Antarctica/Casey",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Antarctica/Davis",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Antarctica/DumontDUrville",
+    "OSLON": "Pacific/Port_Moresby"
+  },
+  {
+    "IANA": "Antarctica/Macquarie",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Antarctica/Mawson",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Antarctica/McMurdo",
+    "OSLON": "Pacific/Auckland"
+  },
+  {
+    "IANA": "Antarctica/Palmer",
+    "OSLON": "Region"
+  },
+  {
+    "IANA": "Antarctica/Rothera",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Antarctica/South_Pole",
+    "OSLON": "Pacific/Auckland"
+  },
+  {
+    "IANA": "Antarctica/Syowa",
+    "OSLON": "Asia/Riyadh"
+  },
+  {
+    "IANA": "Antarctica/Troll",
+    "OSLON": "+01:00"
+  },
+  {
+    "IANA": "Antarctica/Vostok",
+    "OSLON": "Asia/Urumqi"
+  },
+  {
+    "IANA": "Arctic/Longyearbyen",
+    "OSLON": "Europe/Berlin"
+  },
+  {
+    "IANA": "Asia/Aden",
+    "OSLON": "Asia/Riyadh"
+  },
+  {
+    "IANA": "Asia/Almaty",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Amman",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Anadyr",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Aqtau",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Aqtobe",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Ashgabat",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Ashkhabad",
+    "OSLON": "Asia/Ashgabat"
+  },
+  {
+    "IANA": "Asia/Atyrau",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Baghdad",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Bahrain",
+    "OSLON": "Asia/Qatar"
+  },
+  {
+    "IANA": "Asia/Baku",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Bangkok",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Barnaul",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Beirut",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Bishkek",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Brunei",
+    "OSLON": "Asia/Kuching"
+  },
+  {
+    "IANA": "Asia/Calcutta",
+    "OSLON": "Asia/Kolkata"
+  },
+  {
+    "IANA": "Asia/Chita",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Choibalsan",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Chongqing",
+    "OSLON": "Asia/Shanghai"
+  },
+  {
+    "IANA": "Asia/Chungking",
+    "OSLON": "Asia/Shanghai"
+  },
+  {
+    "IANA": "Asia/Colombo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Dacca",
+    "OSLON": "Asia/Dhaka"
+  },
+  {
+    "IANA": "Asia/Damascus",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Dhaka",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Dili",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Dubai",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Dushanbe",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Famagusta",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Gaza",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Harbin",
+    "OSLON": "Asia/Shanghai"
+  },
+  {
+    "IANA": "Asia/Hebron",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Ho_Chi_Minh",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Hong_Kong",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Hovd",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Irkutsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Istanbul",
+    "OSLON": "Europe/Istanbul"
+  },
+  {
+    "IANA": "Asia/Jakarta",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Jayapura",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Jerusalem",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Kabul",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Kamchatka",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Karachi",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Kashgar",
+    "OSLON": "Asia/Urumqi[note"
+  },
+  {
+    "IANA": "Asia/Kathmandu",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Katmandu",
+    "OSLON": "Asia/Kathmandu"
+  },
+  {
+    "IANA": "Asia/Khandyga",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Kolkata",
+    "OSLON": "zones"
+  },
+  {
+    "IANA": "Asia/Krasnoyarsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Kuala_Lumpur",
+    "OSLON": "Asia/Singapore"
+  },
+  {
+    "IANA": "Asia/Kuching",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Kuwait",
+    "OSLON": "Asia/Riyadh"
+  },
+  {
+    "IANA": "Asia/Macao",
+    "OSLON": "Asia/Macau"
+  },
+  {
+    "IANA": "Asia/Macau",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Magadan",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Makassar",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Manila",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Muscat",
+    "OSLON": "Asia/Dubai"
+  },
+  {
+    "IANA": "Asia/Nicosia",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Novokuznetsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Novosibirsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Omsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Oral",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Phnom_Penh",
+    "OSLON": "Asia/Bangkok"
+  },
+  {
+    "IANA": "Asia/Pontianak",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Pyongyang",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Qatar",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Qostanay",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Qyzylorda",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Rangoon",
+    "OSLON": "Asia/Yangon"
+  },
+  {
+    "IANA": "Asia/Riyadh",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Saigon",
+    "OSLON": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "IANA": "Asia/Sakhalin",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Samarkand",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Seoul",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Shanghai",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Singapore",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Srednekolymsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Taipei",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Tashkent",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Tbilisi",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Tehran",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Tel_Aviv",
+    "OSLON": "Asia/Jerusalem"
+  },
+  {
+    "IANA": "Asia/Thimbu",
+    "OSLON": "Asia/Thimphu"
+  },
+  {
+    "IANA": "Asia/Thimphu",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Tokyo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Tomsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Ujung_Pandang",
+    "OSLON": "Asia/Makassar"
+  },
+  {
+    "IANA": "Asia/Ulaanbaatar",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Ulan_Bator",
+    "OSLON": "Asia/Ulaanbaatar"
+  },
+  {
+    "IANA": "Asia/Urumqi",
+    "OSLON": "entry"
+  },
+  {
+    "IANA": "Asia/Ust-Nera",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Vientiane",
+    "OSLON": "Asia/Bangkok"
+  },
+  {
+    "IANA": "Asia/Vladivostok",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Yakutsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Yangon",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Yekaterinburg",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Asia/Yerevan",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Atlantic/Azores",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Atlantic/Bermuda",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Atlantic/Canary",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Atlantic/Cape_Verde",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Atlantic/Faeroe",
+    "OSLON": "Atlantic/Faroe"
+  },
+  {
+    "IANA": "Atlantic/Faroe",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Atlantic/Jan_Mayen",
+    "OSLON": "Europe/Berlin"
+  },
+  {
+    "IANA": "Atlantic/Madeira",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Atlantic/Reykjavik",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Atlantic/South_Georgia",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Atlantic/St_Helena",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Atlantic/Stanley",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/ACT",
+    "OSLON": "Australia/Sydney"
+  },
+  {
+    "IANA": "Australia/Adelaide",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/Brisbane",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/Broken_Hill",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/Canberra",
+    "OSLON": "Australia/Sydney"
+  },
+  {
+    "IANA": "Australia/Currie",
+    "OSLON": "Australia/Hobart"
+  },
+  {
+    "IANA": "Australia/Darwin",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/Eucla",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/Hobart",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/LHI",
+    "OSLON": "Australia/Lord_Howe"
+  },
+  {
+    "IANA": "Australia/Lindeman",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/Lord_Howe",
+    "OSLON": "the"
+  },
+  {
+    "IANA": "Australia/Melbourne",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/North",
+    "OSLON": "Australia/Darwin"
+  },
+  {
+    "IANA": "Australia/NSW",
+    "OSLON": "Australia/Sydney"
+  },
+  {
+    "IANA": "Australia/Perth",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/Queensland",
+    "OSLON": "Australia/Brisbane"
+  },
+  {
+    "IANA": "Australia/South",
+    "OSLON": "Australia/Adelaide"
+  },
+  {
+    "IANA": "Australia/Sydney",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Australia/Tasmania",
+    "OSLON": "Australia/Hobart"
+  },
+  {
+    "IANA": "Australia/Victoria",
+    "OSLON": "Australia/Melbourne"
+  },
+  {
+    "IANA": "Australia/West",
+    "OSLON": "Australia/Perth"
+  },
+  {
+    "IANA": "Australia/Yancowinna",
+    "OSLON": "Australia/Broken_Hill"
+  },
+  {
+    "IANA": "Brazil/Acre",
+    "OSLON": "America/Rio_Branco"
+  },
+  {
+    "IANA": "Brazil/DeNoronha",
+    "OSLON": "America/Noronha"
+  },
+  {
+    "IANA": "Brazil/East",
+    "OSLON": "America/Sao_Paulo"
+  },
+  {
+    "IANA": "Brazil/West",
+    "OSLON": "America/Manaus"
+  },
+  {
+    "IANA": "Canada/Atlantic",
+    "OSLON": "America/Halifax"
+  },
+  {
+    "IANA": "Canada/Central",
+    "OSLON": "America/Winnipeg"
+  },
+  {
+    "IANA": "Canada/Eastern",
+    "OSLON": "America/Toronto"
+  },
+  {
+    "IANA": "Canada/Mountain",
+    "OSLON": "America/Edmonton"
+  },
+  {
+    "IANA": "Canada/Newfoundland",
+    "OSLON": "America/St_Johns"
+  },
+  {
+    "IANA": "Canada/Pacific",
+    "OSLON": "America/Vancouver"
+  },
+  {
+    "IANA": "Canada/Saskatchewan",
+    "OSLON": "America/Regina"
+  },
+  {
+    "IANA": "Canada/Yukon",
+    "OSLON": "America/Whitehorse"
+  },
+  {
+    "IANA": "CET",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "Chile/Continental",
+    "OSLON": "America/Santiago"
+  },
+  {
+    "IANA": "Chile/EasterIsland",
+    "OSLON": "Pacific/Easter"
+  },
+  {
+    "IANA": "CST6CDT",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "Cuba",
+    "OSLON": "America/Havana"
+  },
+  {
+    "IANA": "EET",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "Egypt",
+    "OSLON": "Africa/Cairo"
+  },
+  {
+    "IANA": "Eire",
+    "OSLON": "Europe/Dublin"
+  },
+  {
+    "IANA": "EST",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "EST5EDT",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "Etc/GMT",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Etc/GMT+0",
+    "OSLON": "Etc/GMT"
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Etc/GMT0",
+    "OSLON": "Etc/GMT"
+  },
+  {
+    "IANA": "Etc/Greenwich",
+    "OSLON": "Etc/GMT"
+  },
+  {
+    "IANA": "Etc/UCT",
+    "OSLON": "Etc/UTC"
+  },
+  {
+    "IANA": "Etc/Universal",
+    "OSLON": "Etc/UTC"
+  },
+  {
+    "IANA": "Etc/UTC",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Etc/Zulu",
+    "OSLON": "Etc/UTC"
+  },
+  {
+    "IANA": "Europe/Amsterdam",
+    "OSLON": "Europe/Brussels"
+  },
+  {
+    "IANA": "Europe/Andorra",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Astrakhan",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Athens",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Belfast",
+    "OSLON": "Europe/London"
+  },
+  {
+    "IANA": "Europe/Belgrade",
+    "OSLON": ""
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Bratislava",
+    "OSLON": "Europe/Prague"
+  },
+  {
+    "IANA": "Europe/Brussels",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Bucharest",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Budapest",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Busingen",
+    "OSLON": "Europe/Zurich"
+  },
+  {
+    "IANA": "Europe/Chisinau",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Copenhagen",
+    "OSLON": "Europe/Berlin"
+  },
+  {
+    "IANA": "Europe/Dublin",
+    "OSLON": "legislation,"
+  },
+  {
+    "IANA": "Europe/Gibraltar",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Guernsey",
+    "OSLON": "Europe/London"
+  },
+  {
+    "IANA": "Europe/Helsinki",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Isle_of_Man",
+    "OSLON": "Europe/London"
+  },
+  {
+    "IANA": "Europe/Istanbul",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Jersey",
+    "OSLON": "Europe/London"
+  },
+  {
+    "IANA": "Europe/Kaliningrad",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Kiev",
+    "OSLON": "Europe/Kyiv"
+  },
+  {
+    "IANA": "Europe/Kirov",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Kyiv",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Lisbon",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Ljubljana",
+    "OSLON": "Europe/Belgrade"
+  },
+  {
+    "IANA": "Europe/London",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Luxembourg",
+    "OSLON": "Europe/Brussels"
+  },
+  {
+    "IANA": "Europe/Madrid",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Malta",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Mariehamn",
+    "OSLON": "Europe/Helsinki"
+  },
+  {
+    "IANA": "Europe/Minsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Monaco",
+    "OSLON": "Europe/Paris"
+  },
+  {
+    "IANA": "Europe/Moscow",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Nicosia",
+    "OSLON": "Asia/Nicosia"
+  },
+  {
+    "IANA": "Europe/Oslo",
+    "OSLON": "Europe/Berlin"
+  },
+  {
+    "IANA": "Europe/Paris",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Podgorica",
+    "OSLON": "Europe/Belgrade"
+  },
+  {
+    "IANA": "Europe/Prague",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Riga",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Rome",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Samara",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/San_Marino",
+    "OSLON": "Europe/Rome"
+  },
+  {
+    "IANA": "Europe/Sarajevo",
+    "OSLON": "Europe/Belgrade"
+  },
+  {
+    "IANA": "Europe/Saratov",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Simferopol",
+    "OSLON": "Reflects"
+  },
+  {
+    "IANA": "Europe/Skopje",
+    "OSLON": "Europe/Belgrade"
+  },
+  {
+    "IANA": "Europe/Sofia",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Stockholm",
+    "OSLON": "Europe/Berlin"
+  },
+  {
+    "IANA": "Europe/Tallinn",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Tirane",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Tiraspol",
+    "OSLON": "Europe/Chisinau"
+  },
+  {
+    "IANA": "Europe/Ulyanovsk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Uzhgorod",
+    "OSLON": "Europe/Kyiv"
+  },
+  {
+    "IANA": "Europe/Vaduz",
+    "OSLON": "Europe/Zurich"
+  },
+  {
+    "IANA": "Europe/Vatican",
+    "OSLON": "Europe/Rome"
+  },
+  {
+    "IANA": "Europe/Vienna",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Vilnius",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Volgograd",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Warsaw",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Europe/Zagreb",
+    "OSLON": "Europe/Belgrade"
+  },
+  {
+    "IANA": "Europe/Zaporozhye",
+    "OSLON": "Europe/Kyiv"
+  },
+  {
+    "IANA": "Europe/Zurich",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Factory",
+    "OSLON": ""
+  },
+  {
+    "IANA": "GB",
+    "OSLON": "Europe/London"
+  },
+  {
+    "IANA": "GB-Eire",
+    "OSLON": "Europe/London"
+  },
+  {
+    "IANA": "GMT",
+    "OSLON": "Etc/GMT"
+  },
+  {
+    "IANA": "GMT+0",
+    "OSLON": "Etc/GMT"
+  },
+  {
+    "IANA": "GMT-0",
+    "OSLON": "Etc/GMT"
+  },
+  {
+    "IANA": "GMT0",
+    "OSLON": "Etc/GMT"
+  },
+  {
+    "IANA": "Greenwich",
+    "OSLON": "Etc/GMT"
+  },
+  {
+    "IANA": "Hongkong",
+    "OSLON": "Asia/Hong_Kong"
+  },
+  {
+    "IANA": "HST",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "Iceland",
+    "OSLON": "Africa/Abidjan"
+  },
+  {
+    "IANA": "Indian/Antananarivo",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Indian/Chagos",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Indian/Christmas",
+    "OSLON": "Asia/Bangkok"
+  },
+  {
+    "IANA": "Indian/Cocos",
+    "OSLON": "Asia/Yangon"
+  },
+  {
+    "IANA": "Indian/Comoro",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Indian/Kerguelen",
+    "OSLON": "Indian/Maldives"
+  },
+  {
+    "IANA": "Indian/Mahe",
+    "OSLON": "Asia/Dubai"
+  },
+  {
+    "IANA": "Indian/Maldives",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Indian/Mauritius",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Indian/Mayotte",
+    "OSLON": "Africa/Nairobi"
+  },
+  {
+    "IANA": "Indian/Reunion",
+    "OSLON": "Asia/Dubai"
+  },
+  {
+    "IANA": "Iran",
+    "OSLON": "Asia/Tehran"
+  },
+  {
+    "IANA": "Israel",
+    "OSLON": "Asia/Jerusalem"
+  },
+  {
+    "IANA": "Jamaica",
+    "OSLON": "America/Jamaica"
+  },
+  {
+    "IANA": "Japan",
+    "OSLON": "Asia/Tokyo"
+  },
+  {
+    "IANA": "Kwajalein",
+    "OSLON": "Pacific/Kwajalein"
+  },
+  {
+    "IANA": "Libya",
+    "OSLON": "Africa/Tripoli"
+  },
+  {
+    "IANA": "MET",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "Mexico/BajaNorte",
+    "OSLON": "America/Tijuana"
+  },
+  {
+    "IANA": "Mexico/BajaSur",
+    "OSLON": "America/Mazatlan"
+  },
+  {
+    "IANA": "Mexico/General",
+    "OSLON": "America/Mexico_City"
+  },
+  {
+    "IANA": "MST",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "MST7MDT",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "Navajo",
+    "OSLON": "America/Denver"
+  },
+  {
+    "IANA": "NZ",
+    "OSLON": "Pacific/Auckland"
+  },
+  {
+    "IANA": "NZ-CHAT",
+    "OSLON": "Pacific/Chatham"
+  },
+  {
+    "IANA": "Pacific/Apia",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Auckland",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Bougainville",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Chatham",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Chuuk",
+    "OSLON": "Pacific/Port_Moresby"
+  },
+  {
+    "IANA": "Pacific/Easter",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Efate",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Enderbury",
+    "OSLON": "Pacific/Kanton"
+  },
+  {
+    "IANA": "Pacific/Fakaofo",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Fiji",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Funafuti",
+    "OSLON": "Pacific/Tarawa"
+  },
+  {
+    "IANA": "Pacific/Galapagos",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Gambier",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Guadalcanal",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Guam",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Honolulu",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Johnston",
+    "OSLON": "Pacific/Honolulu"
+  },
+  {
+    "IANA": "Pacific/Kanton",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Kiritimati",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Kosrae",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Kwajalein",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Majuro",
+    "OSLON": "Pacific/Tarawa"
+  },
+  {
+    "IANA": "Pacific/Marquesas",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Midway",
+    "OSLON": "Pacific/Pago_Pago"
+  },
+  {
+    "IANA": "Pacific/Nauru",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Niue",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Norfolk",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Noumea",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Pago_Pago",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Palau",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Pitcairn",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Pohnpei",
+    "OSLON": "Pacific/Guadalcanal"
+  },
+  {
+    "IANA": "Pacific/Ponape",
+    "OSLON": "Pacific/Guadalcanal"
+  },
+  {
+    "IANA": "Pacific/Port_Moresby",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Rarotonga",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Saipan",
+    "OSLON": "Pacific/Guam"
+  },
+  {
+    "IANA": "Pacific/Samoa",
+    "OSLON": "Pacific/Pago_Pago"
+  },
+  {
+    "IANA": "Pacific/Tahiti",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Tarawa",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Tongatapu",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Pacific/Truk",
+    "OSLON": "Pacific/Port_Moresby"
+  },
+  {
+    "IANA": "Pacific/Wake",
+    "OSLON": "Pacific/Tarawa"
+  },
+  {
+    "IANA": "Pacific/Wallis",
+    "OSLON": "Pacific/Tarawa"
+  },
+  {
+    "IANA": "Pacific/Yap",
+    "OSLON": "Pacific/Port_Moresby"
+  },
+  {
+    "IANA": "Poland",
+    "OSLON": "Europe/Warsaw"
+  },
+  {
+    "IANA": "Portugal",
+    "OSLON": "Europe/Lisbon"
+  },
+  {
+    "IANA": "PRC",
+    "OSLON": "Asia/Shanghai"
+  },
+  {
+    "IANA": "PST8PDT",
+    "OSLON": "zone"
+  },
+  {
+    "IANA": "ROC",
+    "OSLON": "Asia/Taipei"
+  },
+  {
+    "IANA": "ROK",
+    "OSLON": "Asia/Seoul"
+  },
+  {
+    "IANA": "Singapore",
+    "OSLON": "Asia/Singapore"
+  },
+  {
+    "IANA": "Turkey",
+    "OSLON": "Europe/Istanbul"
+  },
+  {
+    "IANA": "UCT",
+    "OSLON": "Etc/UTC"
+  },
+  {
+    "IANA": "Universal",
+    "OSLON": "Etc/UTC"
+  },
+  {
+    "IANA": "US/Alaska",
+    "OSLON": "America/Anchorage"
+  },
+  {
+    "IANA": "US/Aleutian",
+    "OSLON": "America/Adak"
+  },
+  {
+    "IANA": "US/Arizona",
+    "OSLON": "America/Phoenix"
+  },
+  {
+    "IANA": "US/Central",
+    "OSLON": "America/Chicago"
+  },
+  {
+    "IANA": "US/East-Indiana",
+    "OSLON": "America/Indiana/Indianapolis"
+  },
+  {
+    "IANA": "US/Eastern",
+    "OSLON": "America/New_York"
+  },
+  {
+    "IANA": "US/Hawaii",
+    "OSLON": "Pacific/Honolulu"
+  },
+  {
+    "IANA": "US/Indiana-Starke",
+    "OSLON": "America/Indiana/Knox"
+  },
+  {
+    "IANA": "US/Michigan",
+    "OSLON": "America/Detroit"
+  },
+  {
+    "IANA": "US/Mountain",
+    "OSLON": "America/Denver"
+  },
+  {
+    "IANA": "US/Pacific",
+    "OSLON": "America/Los_Angeles"
+  },
+  {
+    "IANA": "US/Samoa",
+    "OSLON": "Pacific/Pago_Pago"
+  },
+  {
+    "IANA": "UTC",
+    "OSLON": "Etc/UTC"
+  },
+  {
+    "IANA": "W-SU",
+    "OSLON": "Europe/Moscow"
+  },
+  {
+    "IANA": "",
+    "OSLON": ""
+  },
+  {
+    "IANA": "Zulu",
+    "OSLON": "Etc/UTC"
+  }
+]
