@@ -7,14 +7,16 @@ export const Tab = ({ tab }: { tab: ITab }) => {
     <NavLink
       key={tab.name}
       to={tab.to}
-      className={({ isActive }) =>{
+      className={({ isActive }) => {
         return `transition-all duration-300 text-4 text-f15  px-4 py-[4px] rounded-[8px] ${
-          isActive || location.pathname.includes('binary') && tab.name.toLowerCase() == 'trade'
-            ? 'bg-3 text-1'
+          isActive ||
+          (location.pathname.includes('binary') &&
+            tab.name.toLowerCase() == 'trade')
+            ? 'text-1 bg-3'
             : 'hover:bg-1 hover:text-1 hover:brightness-125'
         } 
-          `}
-      }
+          `;
+      }}
     >
       {tab.name}
     </NavLink>
