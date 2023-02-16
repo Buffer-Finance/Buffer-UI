@@ -301,10 +301,10 @@ const Referral: React.FC<IReferral> = ({}) => {
             {' '}
             Get fee discounts and earn rebates.
           </span>
-          <span className="italic  block">
+          <span className=" block text-[#c0b8b8]">
             {' '}
             Note that referral codes are case sensitive and that your code must
-            be created on both Arbitrum as well as Polygon to earn rebates on
+            be <br className='sm:hidden'/> created on both Arbitrum as well as Polygon to earn rebates on
             both networks.{' '}
           </span>
           <br className="sm:hidden" />
