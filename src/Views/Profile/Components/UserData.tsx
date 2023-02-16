@@ -6,8 +6,10 @@ export const UserData = () => {
   const { address } = useUserAccount();
   const { winnerUserRank } = useLeaderboardQuery();
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-7">
+    <div className="flex items-center justify-between sm:flex-col sm:items-stretch sm:gap-4">
+      {/* left side */}
+
+      <div className="flex items-center gap-7 sm:gap-5">
         <svg
           width="113"
           height="113"
@@ -208,10 +210,12 @@ export const UserData = () => {
             />
           </g>
         </svg>
-        <div className="text-[25px] text-buffer-blue">
+        <div className="text-[25px] text-buffer-blue sm:text-f18">
           {address ? address.slice(0, 7) + '...' + address.slice(-7) : '-'}
         </div>
       </div>
+
+      {/* right side */}
       <div className="bg-2 px-7 py-[20px] rounded-lg">
         <Col
           head={'Daily Rank'}
