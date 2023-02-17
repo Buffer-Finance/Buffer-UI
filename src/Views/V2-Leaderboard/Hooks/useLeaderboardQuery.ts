@@ -19,7 +19,6 @@ interface ILeaderboardQuery {
     totalTrades: number;
     volume: string;
   }[];
-  // totalPaginationData: { user: string }[];
   userData: ILeague;
   reward: { settlementFee: string; totalFee: string }[];
 }
