@@ -91,8 +91,6 @@ export const useDashboardTableData = () => {
     const upatedData = [];
     let pool = null;
     data.optionContracts.forEach((item) => {
-      const configPair = MarketConfig[ENV].pairs.find((pair) => {
-        pool = null;
       const configPair = configContracts.pairs.find((pair) => {
         let pool;
         pool = pair.pools.find(
@@ -104,7 +102,6 @@ export const useDashboardTableData = () => {
       });
 
       if (!configPair) return;
-      // FIXME 
       // if(configPair.category == 'Forex' || configPair.category == 'Comodity') return;
       const currData = {
         ...item,
