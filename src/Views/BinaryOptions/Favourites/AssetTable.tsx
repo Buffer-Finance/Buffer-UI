@@ -9,6 +9,7 @@ import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { activeAssetStateAtom, FavouriteAtom, IMarket, useQTinfo } from '..';
 import { getFilteredAssets } from './Utils/getFilteredAssets';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
+import { PairTokenImage } from '../Components/PairTokenImage';
 
 export const AssetTable: React.FC<{
   assetsArray: IMarket[];
@@ -48,11 +49,7 @@ export const AssetTable: React.FC<{
           <CellContent
             content={[
               <div className="flex">
-                <img
-                  src={currentAsset.img}
-                  alt="AssetLogo"
-                  className="width20 height20 mr-3"
-                />
+                <PairTokenImage pair={currentAsset.pair} />
                 <div className="text-1">{currentAsset.pair}</div>
               </div>,
             ]}
