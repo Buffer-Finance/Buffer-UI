@@ -52,7 +52,7 @@ export interface IPool {
   payout: number;
   token: IToken;
   options_contracts: {
-    current: string | null;
+    current: string;
     past: string[];
     config: string;
   };
@@ -85,8 +85,8 @@ export const activeAssetStateAtom = atom<{
   allowance: string;
   maxTrade: string;
   stats: string;
-  payouts: any[];
-  routerPermission: any[];
+  payouts: { [key: string]: string } | null;
+  routerPermission: { [key: string]: string } | null;
 }>({
   balance: null,
   allowance: null,
@@ -105,10 +105,9 @@ export const ENV =
     ? 'arbitrum-main'
     : 'arbitrum-test';
 
-
 export const useQTinfo = () => {
   const params = useParams();
-  const {activeChain} = useActiveChain();
+  const { activeChain } = useActiveChain();
   const data = useMemo(() => {
     let activeMarket = Config[ENV].pairs.find((m) => {
       let market = params?.market || 'ETH-USD';
@@ -151,11 +150,13 @@ export const useQTinfo = () => {
       optionMeta: '0x3D81B239F5D58e5086cC58d9012c326F34B3BC36',
       routerContract: Config[ENV].router,
       activeChain: {
-       ...(import.meta.env.VITE_ENV.toLowerCase() === 'mainnet' ? arbitrum:arbitrumGoerli),
+        ...(import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
+          ? arbitrum
+          : arbitrumGoerli),
         testnet: false,
       },
     };
-  }, [params?.market,activeChain]);
+  }, [params?.market, activeChain]);
   return data;
 };
 
@@ -173,9 +174,9 @@ function QTrade() {
   const [
     { active: activePage, history: historyPage, cancelled: cancelledPage },
   ] = useAtom(tardesPageAtom);
-  useEffect(()=>{
-    document.title = "Buffer | Trade"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Trade';
+  }, []);
   const AllTradeTab = {
     pathname: '/[chain]/all-trades/[asset]',
     as: `/ARBITRUM/all-trades/${defaultPair}`,
@@ -192,7 +193,7 @@ function QTrade() {
   //       ? props.pairs.slice(0, 5).map(mapToPair)
   //       : props.pairs.map(mapToPair)
   //   );
-  
+
   useEffect(() => {
     dispatch({
       type: 'SET_ACIVE_TAB',
@@ -229,7 +230,7 @@ function QTrade() {
       {/* <div> TV Status&nbsp;
       {err ?'Error!!!':'Working'}
       </div> */}
-     
+
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
       {/* <ComingSoonModal /> */}
@@ -237,24 +238,25 @@ function QTrade() {
         <Background>
           {props.pairs ? (
             <>
-             <Warning
-        body={
-          <>
-     <WarningOutlined className='text-[#EEAA00] mt-[4px]' />    &nbsp;  
-      Trading on Forex & Commodities is currently halted. It will be resumed shortly.
-          </>
-        }
-        closeWarning={() => {}}
-        state={true}
-        shouldAllowClose={false}
-        className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
-      />
+              <Warning
+                body={
+                  <>
+                    <WarningOutlined className="text-[#EEAA00] mt-[4px]" />{' '}
+                    &nbsp; Trading on Forex & Commodities is currently halted.
+                    It will be resumed shortly.
+                  </>
+                }
+                closeWarning={() => {}}
+                state={true}
+                shouldAllowClose={false}
+                className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
+              />
               {typeof window !== 'undefined' &&
                 window.innerWidth < mobileUpperBound && <MobileScreens />}
 
               <div className="tab:hidden mb-3">
                 <Favourites />
-                {window.innerWidth > mobileUpperBound+1 && (
+                {window.innerWidth > mobileUpperBound + 1 && (
                   <GraphView className="tab:hidden">
                     <TVIntegrated assetInfo={props.activePair} />
                   </GraphView>
@@ -351,7 +353,7 @@ function QTrade() {
           )}
         </Background>
       </main>
-        <BinaryDrawer />
+      <BinaryDrawer />
     </>
   );
 }

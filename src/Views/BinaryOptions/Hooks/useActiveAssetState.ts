@@ -183,11 +183,11 @@ export function useActiveAssetState(amount = null, referralData) {
       assetCalls.length + payoutCalls.length
     );
 
-    const payouts = {};
+    const payouts: { [key: string]: string | undefined | null } = {};
     qtInfo.pairs.forEach((pair) => {
       pair.pools.forEach((pool) => {
         payouts[pool.options_contracts.current] = divide(
-          payoutRes.shift()[0],
+          payoutRes.shift()?.[0] ?? '0',
           2
         );
       });
@@ -197,11 +197,11 @@ export function useActiveAssetState(amount = null, referralData) {
       assetCalls.length + payoutCalls.length,
       assetCalls.length + payoutCalls.length + routerPermissionCalls.length
     );
-    const routerPermission = {};
+    const routerPermission: { [key: string]: string | undefined } = {};
     qtInfo.pairs.forEach((pair) => {
       pair.pools.forEach((pool) => {
         routerPermission[pool.options_contracts.current] =
-          routerPermissionRes.shift()[0];
+          routerPermissionRes.shift()?.[0];
       });
     });
     const marketStatusCalls = copy.slice(

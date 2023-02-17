@@ -5,7 +5,6 @@ import {
   IMarket,
   useQTinfo,
 } from '@Views/BinaryOptions';
-import { useActivePoolObj } from '@Views/BinaryOptions/PGDrawer/PoolDropDown';
 import { getAssetTypes } from './getAssetTypes';
 
 export function getFilteredAssets(
@@ -17,9 +16,8 @@ export function getFilteredAssets(
   const qtInfo = useQTinfo();
   const AssetTypes = getAssetTypes(qtInfo.pairs);
   const [favourites] = useAtom(FavouriteAtom);
-  const { activePoolObj } = useActivePoolObj();
   const { routerPermission } = useAtomValue(activeAssetStateAtom);
-
+  if (!routerPermission) return null;
   let filteredAssets: IMarket[] = [];
   if (!!searchText && searchText !== '')
     filteredAssets = assets.filter(
@@ -30,7 +28,9 @@ export function getFilteredAssets(
     );
   else {
     filteredAssets = assets.filter(
-      (asset) => routerPermission[asset.pools[0].options_contracts.current]
+      (asset) =>
+        routerPermission &&
+        routerPermission[asset.pools[0].options_contracts.current]
     );
   }
   switch (category) {

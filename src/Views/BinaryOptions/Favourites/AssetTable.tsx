@@ -48,6 +48,7 @@ export const AssetTable: React.FC<{
   let BodyArr = updatedArr;
 
   const BodyFormatter = (row: number, col: number) => {
+    if (!BodyArr) return <></>;
     const currentAsset: IMarket = BodyArr[row];
 
     if (isMobile) {
@@ -135,7 +136,7 @@ export const AssetTable: React.FC<{
       headerJSX={HeadFormatter}
       cols={headers.length}
       shouldShowMobile
-      rows={BodyArr.length}
+      rows={BodyArr?.length ?? 0}
       tableClass={'!w-full'}
       bodyJSX={BodyFormatter}
       error={
@@ -145,12 +146,16 @@ export const AssetTable: React.FC<{
           shouldShowWalletMsg={false}
         />
       }
+      loading={!BodyArr}
       v1
       isBodyTransparent
-      selectedIndex={BodyArr.findIndex(
-        (asset) => qtInfo.activePair.pair === asset.pair
-      )}
+      selectedIndex={
+        BodyArr
+          ? BodyArr.findIndex((asset) => qtInfo.activePair.pair === asset.pair)
+          : undefined
+      }
       onRowClick={(rowNumber) => {
+        if (!BodyArr) return;
         const selectedAsset = BodyArr[rowNumber];
         addCardHandler(selectedAsset);
         replaceAssetHandler(selectedAsset.pair, false);
