@@ -44,7 +44,7 @@ export const getTabs = () => {
         isExternalLink: false,
       },
       {
-        to: `https://optopi.buffer.finance/ARBITRUM`,
+        to: `https://optopi.buffer.finance/`,
         name: 'NFT',
         subTabs: [],
         isExternalLink: true,
@@ -96,7 +96,7 @@ export const getTabs = () => {
         isExternalLink: false,
       },
       {
-        to: `https://optopi.buffer.finance/ARBITRUM`,
+        to: `https://optopi.buffer.finance/`,
         name: 'NFT',
         subTabs: [],
         isExternalLink: true,
