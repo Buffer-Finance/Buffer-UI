@@ -30,7 +30,7 @@ const chainImageMappipng = {
   ['BSC']: '/Chains/BSC.png',
 };
 
-export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => { 
+export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   return (
     <ConnectButton.Custom>
       {({
@@ -72,9 +72,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                   >
                     <Wallet className="mr-[6px] ml-1" />
 
-                    <span>
-                      {'Connect Wallet'}
-                    </span>
+                    <span>{'Connect Wallet'}</span>
                     <ArrowDropDownRounded
                       className={`dropdown-arrow transition-all duration-300 w-6 h-6 ease-out `}
                     />
@@ -91,9 +89,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                   >
                     <Wallet className="mr-[6px] ml-1" />
 
-                    <span>
-                      {'Switch Network'}
-                    </span>
+                    <span>{'Switch Network'}</span>
                     <ArrowDropDownRounded
                       className={`dropdown-arrow transition-all duration-300 w-6 h-6 ease-out `}
                     />
@@ -152,10 +148,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   );
 };
 
-
-
-export const ConnectionRequired = ({ children }:{children:ReactNode}) => { 
-
+export const ConnectionRequired = ({ children }: { children: ReactNode }) => {
   return (
     <ConnectButton.Custom>
       {({
@@ -192,9 +185,9 @@ export const ConnectionRequired = ({ children }:{children:ReactNode}) => {
                 return (
                   <BlueBtn
                     onClick={openConnectModal}
+                    className="px-5 py-[5px] !h-fit"
                   >
-                   Connect Wallet
-                    
+                    Connect Wallet
                   </BlueBtn>
                 );
               }
@@ -203,15 +196,14 @@ export const ConnectionRequired = ({ children }:{children:ReactNode}) => {
                 return (
                   <BlueBtn
                     onClick={openChainModal}
+                    className="px-5 py-[5px] !h-fit"
                   >
-                    <Wallet className="mr-[6px] ml-1" />
-
+                    {/* <Wallet className="" /> */}
                     Switch Network
                   </BlueBtn>
                 );
               }
-              return children
-
+              return children;
             })()}
           </div>
         );
@@ -219,5 +211,3 @@ export const ConnectionRequired = ({ children }:{children:ReactNode}) => {
     </ConnectButton.Custom>
   );
 };
-
-
