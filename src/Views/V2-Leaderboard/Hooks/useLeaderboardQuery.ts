@@ -93,7 +93,7 @@ export const useLeaderboardQuery = () => {
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(baseGraphqlUrl, {
+        const response = await axios.post(configContracts.graph.MAIN, {
           query,
         });
 

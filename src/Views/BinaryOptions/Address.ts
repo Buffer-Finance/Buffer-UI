@@ -6,6 +6,9 @@ export const CONTRACTS = {
   42161: {
     'USDC-reader': '0x5254C2894FaC60FF66ba008A4362D828d8a087E2',
   },
+  80001:{
+    'USDC-reader': '0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4',
+  }
 };
 
 type contractNameType = 'USDC-reader' | 'BFR-reader';

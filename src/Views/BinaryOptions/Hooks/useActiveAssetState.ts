@@ -68,7 +68,7 @@ export function useActiveAssetState(amount = null, referralData) {
           });
         })
         .flat(1),
-    []
+    [activePoolObj]
   );
 
   const assetCalls = useMemo(
