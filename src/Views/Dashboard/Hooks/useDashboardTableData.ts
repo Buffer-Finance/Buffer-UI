@@ -25,7 +25,7 @@ export const useDashboardTableData = () => {
     },
     // refreshInterval: 300,
   });
-  const {configContracts} = useActiveChain();
+  const { configContracts } = useActiveChain();
   const { data } = useSWR('dashboard-table-data', {
     fetcher: async () => {
       const response = await axios.post(configContracts.graph.MAIN, {
@@ -92,7 +92,7 @@ export const useDashboardTableData = () => {
     let pool = null;
     data.optionContracts.forEach((item) => {
       const configPair = configContracts.pairs.find((pair) => {
-        let pool;
+        pool = null;
         pool = pair.pools.find(
           (pool) =>
             pool.options_contracts.current.toLowerCase() ===
