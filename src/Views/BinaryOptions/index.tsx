@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { atom, useAtom } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
@@ -9,8 +9,6 @@ import { Skeleton } from '@mui/material';
 import Favourites from './Favourites/Favourites';
 import BufferTab from '@Views/Common/BufferTab';
 import { Navbar } from './Components/Mobile/Navbar';
-import YellowWarning from '@SVG/Elements/YellowWarning';
-
 import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
@@ -25,8 +23,6 @@ import {
 } from './Hooks/usePastTradeQuery';
 import { MarketTimingsModal } from './MarketTimingsModal';
 import MobileTable from './Components/Mobile/historyTab';
-import { marketPriceAtom } from '../../TradingView/useDataFeed';
-import isUserPaused from '@Utils/isUserPaused';
 import { binaryTabs } from 'config';
 import TVIntegrated from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
@@ -36,7 +32,6 @@ export const IV = 12000;
 export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
 import Config from 'public/config.json';
-import { useSearchParam } from 'react-use';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
