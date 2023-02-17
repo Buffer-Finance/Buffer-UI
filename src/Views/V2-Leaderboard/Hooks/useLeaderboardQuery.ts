@@ -10,6 +10,7 @@ import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { useDayOffset } from '../Components/ContestFilterDD';
 import { useDayOfTournament } from './useDayOfTournament';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -39,7 +40,7 @@ export const useLeaderboardQuery = () => {
   const { day } = useDayOfTournament();
   const timestamp = getDayId(Number(day - Number(offset)));
   const minimumTrades = isTestnet ? 5 : 3;
-
+const {configContracts} = useActiveChain();
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-offset-${offset}-account-${account}`,
     {
