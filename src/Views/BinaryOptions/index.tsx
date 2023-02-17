@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { atom, useAtom } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
@@ -9,8 +9,6 @@ import { Skeleton } from '@mui/material';
 import Favourites from './Favourites/Favourites';
 import BufferTab from '@Views/Common/BufferTab';
 import { Navbar } from './Components/Mobile/Navbar';
-import YellowWarning from '@SVG/Elements/YellowWarning';
-
 import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
@@ -25,8 +23,6 @@ import {
 } from './Hooks/usePastTradeQuery';
 import { MarketTimingsModal } from './MarketTimingsModal';
 import MobileTable from './Components/Mobile/historyTab';
-import { marketPriceAtom } from '../../TradingView/useDataFeed';
-import isUserPaused from '@Utils/isUserPaused';
 import { binaryTabs } from 'config';
 import TVIntegrated from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
@@ -36,7 +32,6 @@ export const IV = 12000;
 export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
 import Config from 'public/config.json';
-import { useSearchParam } from 'react-use';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
@@ -81,12 +76,12 @@ export const FavouriteAtom = atomWithLocalStorage('favourites3', []);
 export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV7', []);
 
 export const activeAssetStateAtom = atom<{
-  balance: string;
-  allowance: string;
-  maxTrade: string;
-  stats: string;
-  payouts: any[];
-  routerPermission: any[];
+  balance: string | null;
+  allowance: string | null;
+  maxTrade: string | null;
+  stats: string | null;
+  payouts: any[] | null;
+  routerPermission: any[] | null;
 }>({
   balance: null,
   allowance: null,
@@ -105,10 +100,9 @@ export const ENV =
     ? 'arbitrum-main'
     : 'arbitrum-test';
 
-
 export const useQTinfo = () => {
   const params = useParams();
-  const {activeChain} = useActiveChain();
+  const { activeChain } = useActiveChain();
   const data = useMemo(() => {
     let activeMarket = Config[ENV].pairs.find((m) => {
       let market = params?.market || 'ETH-USD';
@@ -151,11 +145,13 @@ export const useQTinfo = () => {
       optionMeta: '0x3D81B239F5D58e5086cC58d9012c326F34B3BC36',
       routerContract: Config[ENV].router,
       activeChain: {
-       ...(import.meta.env.VITE_ENV.toLowerCase() === 'mainnet' ? arbitrum:arbitrumGoerli),
+        ...(import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
+          ? arbitrum
+          : arbitrumGoerli),
         testnet: false,
       },
     };
-  }, [params?.market,activeChain]);
+  }, [params?.market, activeChain]);
   return data;
 };
 
@@ -173,9 +169,9 @@ function QTrade() {
   const [
     { active: activePage, history: historyPage, cancelled: cancelledPage },
   ] = useAtom(tardesPageAtom);
-  useEffect(()=>{
-    document.title = "Buffer | Trade"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Trade';
+  }, []);
   const AllTradeTab = {
     pathname: '/[chain]/all-trades/[asset]',
     as: `/ARBITRUM/all-trades/${defaultPair}`,
@@ -192,7 +188,7 @@ function QTrade() {
   //       ? props.pairs.slice(0, 5).map(mapToPair)
   //       : props.pairs.map(mapToPair)
   //   );
-  
+
   useEffect(() => {
     dispatch({
       type: 'SET_ACIVE_TAB',
@@ -229,7 +225,7 @@ function QTrade() {
       {/* <div> TV Status&nbsp;
       {err ?'Error!!!':'Working'}
       </div> */}
-     
+
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
       {/* <ComingSoonModal /> */}
@@ -237,24 +233,25 @@ function QTrade() {
         <Background>
           {props.pairs ? (
             <>
-             <Warning
-        body={
-          <>
-     <WarningOutlined className='text-[#EEAA00] mt-[4px]' />    &nbsp;  
-      Trading on Forex & Commodities is currently halted. It will be resumed shortly.
-          </>
-        }
-        closeWarning={() => {}}
-        state={true}
-        shouldAllowClose={false}
-        className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
-      />
+              <Warning
+                body={
+                  <>
+                    <WarningOutlined className="text-[#EEAA00] mt-[4px]" />{' '}
+                    &nbsp; Trading on Forex & Commodities is currently halted.
+                    It will be resumed shortly.
+                  </>
+                }
+                closeWarning={() => {}}
+                state={true}
+                shouldAllowClose={false}
+                className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
+              />
               {typeof window !== 'undefined' &&
                 window.innerWidth < mobileUpperBound && <MobileScreens />}
 
               <div className="tab:hidden mb-3">
                 <Favourites />
-                {window.innerWidth > mobileUpperBound+1 && (
+                {window.innerWidth > mobileUpperBound + 1 && (
                   <GraphView className="tab:hidden">
                     <TVIntegrated assetInfo={props.activePair} />
                   </GraphView>
@@ -351,7 +348,7 @@ function QTrade() {
           )}
         </Background>
       </main>
-        <BinaryDrawer />
+      <BinaryDrawer />
     </>
   );
 }
