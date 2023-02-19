@@ -11,7 +11,7 @@ export const PairTokenImage = ({
   const shouldShowSecondImage = token2.toLowerCase() !== 'usd';
   const imageSrc =
     // 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/';
-    'https://res.cloudinary.com/dtuuhbeqt/image/upload/w_100,h_100,c_fill,r_max/Assets/';
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/';
   return (
     <div
       className={`flex items-center ${className} ${
