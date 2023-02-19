@@ -238,7 +238,7 @@ function QTrade() {
         <Background>
           {props.pairs ? (
             <>
-              <Warning
+              {/* <Warning
                 body={
                   <>
                     <WarningOutlined className="text-[#EEAA00] mt-[4px]" />{' '}
@@ -250,7 +250,7 @@ function QTrade() {
                 state={true}
                 shouldAllowClose={false}
                 className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
-              />
+              /> */}
               {typeof window !== 'undefined' &&
                 window.innerWidth < mobileUpperBound && <MobileScreens />}
 
