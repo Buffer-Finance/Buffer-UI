@@ -11,7 +11,9 @@ export const PairTokenImage = ({
     'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/';
   return (
     <div
-      className={`flex items-center ${!shouldShowSecondImage ? 'mr-3' : ''}`}
+      className={`flex items-center ${
+        !shouldShowSecondImage ? 'mr-[6px]' : ''
+      }`}
     >
       <img
         src={imageSrc + token1.toLowerCase() + '.svg'}
