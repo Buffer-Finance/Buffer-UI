@@ -1,9 +1,11 @@
 export const PairTokenImage = ({
   pair,
   size = 20,
+  className = '',
 }: {
   pair: string;
   size?: number;
+  className?: string;
 }) => {
   const [token1, token2] = pair.split('-');
   const shouldShowSecondImage = token2.toLowerCase() !== 'usd';
@@ -12,8 +14,8 @@ export const PairTokenImage = ({
     'https://res.cloudinary.com/dtuuhbeqt/image/upload/w_100,h_100,c_fill,r_max/Assets/';
   return (
     <div
-      className={`flex items-center ${
-        !shouldShowSecondImage ? `mr-[6px] w-[${size}px]` : `w-[${2 * size}px]`
+      className={`flex items-center ${className} ${
+        !shouldShowSecondImage ? `mr-[6px]` : ``
       }`}
     >
       <img
