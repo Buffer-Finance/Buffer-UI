@@ -8,22 +8,23 @@ export const PairTokenImage = ({
   const [token1, token2] = pair.split('-');
   const shouldShowSecondImage = token2.toLowerCase() !== 'usd';
   const imageSrc =
-    'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/';
+    // 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/';
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/w_100,h_100,c_fill,r_max/Assets/';
   return (
     <div
       className={`flex items-center ${
-        !shouldShowSecondImage ? 'mr-[6px]' : ''
+        !shouldShowSecondImage ? `mr-[6px] w-[${size}px]` : `w-[${2 * size}px]`
       }`}
     >
       <img
-        src={imageSrc + token1.toLowerCase() + '.svg'}
+        src={imageSrc + token1.toLowerCase() + '.png'}
         className="relative z-10"
         width={size}
         height={size}
       />
       {shouldShowSecondImage && (
         <img
-          src={imageSrc + token2.toLowerCase() + '.svg'}
+          src={imageSrc + token2.toLowerCase() + '.png'}
           className="relative z-0 -left-[15%]"
           width={size}
           height={size}

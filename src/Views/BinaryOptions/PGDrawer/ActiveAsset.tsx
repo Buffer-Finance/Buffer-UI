@@ -84,7 +84,13 @@ export const ActiveAsset = () => {
         <div className={`flex items-center content-between assets w-full`}>
           {/* <img className="assetImage mr-3 w-7" src={singleAsset.img} alt="" />
            */}
-          <PairTokenImage pair={singleAsset.pair} size={40} />
+          <div
+            className={`${
+              singleAsset.token2 === 'USD' ? 'w-[40px]' : 'w-[60px]'
+            }`}
+          >
+            <PairTokenImage pair={singleAsset.pair} size={30} />
+          </div>
           <div className="flex-col w-full items-stretch">
             <div className="w-full flex justify-between items-center text-1">
               <button
