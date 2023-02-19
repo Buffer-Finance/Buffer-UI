@@ -12,7 +12,7 @@ export const getTabs = () => {
   if (import.meta.env.VITE_ENV === 'MAINNET') {
     return [
       {
-        to: `/binary/ETH-USD`,
+        to: `/binary/BTC-USD`,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -78,7 +78,7 @@ export const getTabs = () => {
   } else
     return [
       {
-        to: `/binary/ETH-USD`,
+        to: `/binary/BTC-USD`,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
