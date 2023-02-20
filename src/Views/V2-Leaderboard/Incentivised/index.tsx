@@ -13,7 +13,7 @@ import {
   readLeaderboardPageTotalPageAtom,
   updateLeaderboardActivePageAtom,
 } from '../atom';
-import { ContestFilterDD, useDayOffset } from '../Components/ContestFilterDD';
+import { ContestFilterDD } from '../Components/ContestFilterDD';
 import { TopData } from '../Components/TopData';
 import { DailyWebTable } from '../Daily/DailyWebTable';
 import { DailyStyles } from '../Daily/stlye';
@@ -28,6 +28,7 @@ import TabSwitch from '@Views/Common/TabSwitch';
 import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
+import { useDayOffset } from '../Hooks/useDayOffset';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -66,7 +67,7 @@ export const Incentivised = () => {
   const distance = getDistance(launchTimeStamp);
   const isTimerEnded = distance <= 0;
   const stopwatch = useStopWatch(midnightTimeStamp);
-  const { offset } = useDayOffset();
+  const { offset, setOffset } = useDayOffset();
   const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
@@ -196,7 +197,13 @@ export const Incentivised = () => {
               />
               <Col
                 head={'Day'}
-                desc={<ContestFilterDD count={day} />}
+                desc={
+                  <ContestFilterDD
+                    count={day}
+                    offset={offset}
+                    setOffset={setOffset}
+                  />
+                }
                 descClass="text-f16 tab:text-f14 fw4 text-5 "
                 headClass="text-f14 tab:text-f12 fw5 text-6"
                 className="winner-card"

@@ -15,21 +15,17 @@ const Background = styled.div`
   }
 `;
 
-export const useDayOffset = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const day = useMemo(() => searchParams.get('day'), [searchParams]);
-
-  function setOffset(day: string) {
-    setSearchParams({ day });
-  }
-
-  return { offset: day, setOffset };
-};
-
-export function ContestFilterDD({ count }: { count: number }) {
+export function ContestFilterDD({
+  count,
+  offset,
+  setOffset,
+}: {
+  count: number;
+  offset: string | null;
+  setOffset: (day: string) => void;
+}) {
   const isDD = count > 1;
   const itemsArray = isDD ? createArray(count) : [];
-  const { offset, setOffset } = useDayOffset();
 
   useEffect(() => {
     if (offset === null) {
