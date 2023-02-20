@@ -126,26 +126,26 @@ function Head({ name }: { name: string }) {
 
 const LinkButton = ({ tab, active, isDisabled = false, chip = <></> }) => {
   return (
-    <div
-      className={`flex relative items-center ${active && 'activeLink'} pr-3`}
-    >
+    <div className={`relative`} key={tab.id}>
       <Link
         key={tab.name}
         to={tab.as}
-        className={`${isDisabled ? 'pointer-events-none ' : ''}`}
+        className={`flex items-center justify-start item ${
+          isDisabled ? 'pointer-events-none ' : ''
+        } ${active && 'activeLink'}`}
       >
-        <Button key={tab.id} className={`flex-center item `} onClick={() => {}}>
-          <SidebarIcon
-            id={tab.id}
-            active={active}
-            name={tab.slug.split('/')[0]}
-          />
-          <div className={`ml-3 ${active && 'text-1 font-semibold'}`}>
-            {tab.name}
-          </div>
-        </Button>
+        <SidebarIcon
+          id={tab.id}
+          active={active}
+          name={tab.slug.split('/')[0]}
+        />
+
+        <div className={`ml-3 ${active && 'text-1 font-semibold'} w-fit`}>
+          {tab.name}
+        </div>
+
+        <div className="pr-3 ml-3">{chip}</div>
       </Link>
-      {chip}
     </div>
   );
 };

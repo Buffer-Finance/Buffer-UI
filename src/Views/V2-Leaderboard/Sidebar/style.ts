@@ -39,7 +39,7 @@ export const LeaderBoardSidebarStyles = styled.div`
     width: 100%;
     border-radius: 0;
     justify-content: flex-start;
-    margin: 4px 0;
+    margin: 8px 0;
     :hover {
       color: var(--text-1);
     }
@@ -54,7 +54,7 @@ export const LeaderBoardSidebarStyles = styled.div`
       content: '';
       position: absolute;
       width: 2px;
-      height: 75%;
+      height: 100%;
       background-color: var(--primary);
       right: -2px;
     }
