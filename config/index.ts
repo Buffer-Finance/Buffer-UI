@@ -345,7 +345,7 @@ export const getLeaderBoardTabs = (chain: string) => {
       as: `/leaderboard/weekly`,
       name: 'Weekly',
       slug: 'weekly',
-      id: 1,
+      id: 7,
       subTabs: [],
     },
     {

@@ -20,6 +20,7 @@ export const MobileLeaderboardDropdwon = () => {
   return (
     <div className="web:hidden my-4">
       <BufferTab
+        className="flex justify-center !text-f16"
         value={activeTab}
         handleChange={(e, t) => {
           navigate(tabs[t].as);
@@ -74,7 +75,7 @@ export const LeaderBoardSidebar = () => {
                   index === 1 ? (
                     <CSChip
                       text="Ongoing"
-                      className="text-[#00C4FF] bg-[#00c4ff26] border-[#00C4FF]  box-border"
+                      className="text-[#2BD67B] bg-[#2bd67b26] border-[#00C4FF]  box-border"
                     />
                   ) : (
                     <CSChip text="Ended" className="text-3 bg-2 " />
@@ -177,7 +178,7 @@ const SidebarIcon: React.FC<IProp> = ({ id, ...props }) => {
         />
       );
     case 1:
-      return <Daily {...props} width={20} height={20} />;
+      return <Daily {...props} width={20} height={20} color={'#8B67C7'} />;
     case 2:
       return (
         <img src="/LeaderBoard/Diamond.png" alt="Icon" className="w2 h2" />
@@ -192,6 +193,8 @@ const SidebarIcon: React.FC<IProp> = ({ id, ...props }) => {
       return <img src="/LeaderBoard/Silver.png" alt="Icon" className="w2 h2" />;
     case 6:
       return <img src="/LeaderBoard/Bronze.png" alt="Icon" className="w2 h2" />;
+    case 7:
+      return <Daily {...props} width={20} height={20} color={'#6966FF'} />;
 
     default:
       return <SmPnl {...props} width={20} height={20} />;
