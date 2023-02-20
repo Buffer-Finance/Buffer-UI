@@ -264,7 +264,7 @@ export function CustomOption() {
             </span>
           </ConnectionRequired>
         }
-        {/* {MarketOpenWarning} */}
+        {MarketOpenWarning}
       </div>
     </>
   );
