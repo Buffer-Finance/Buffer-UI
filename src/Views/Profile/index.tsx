@@ -11,7 +11,7 @@ export const ProfilePage = () => {
     </main>
   );
 };
-// const profileHeadingClass=
+
 const Profile = () => {
   return (
     <div className="px-7 my-8 sm:px-3">
