@@ -1,6 +1,5 @@
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { useAtom } from 'jotai';
 import { useContext } from 'react';
 import { gt } from '@Utils/NumString/stringArithmatics';
@@ -10,18 +9,16 @@ import { EarnContext } from '..';
 import { CONTRACTS } from '../Config/Address';
 import { earnAtom, readEarnData } from '../earnAtom';
 import { useEarnWriteCalls } from '../Hooks/useEarnWriteCalls';
+import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+
 export const btnClasses = '!w-fit px-4 rounded-sm !h-7';
 
-import {  useConnectModal} from '@rainbow-me/rainbowkit'
-export function EarnButtons({ cardNum }) {
+export function EarnButtons({ cardNum }: { cardNum: number }) {
   const { address: account } = useUserAccount();
   const [state, setPageState] = useAtom(earnAtom);
   const { activeChain } = useContext(EarnContext);
   const [pageState] = useAtom(readEarnData);
-  const { openConnectModal } = useConnectModal();
-
   const { chain } = useNetwork();
-  const { openWalletDrawer } = useOpenConnectionDrawer();
   const { withdraw } = useEarnWriteCalls(
     'Vester',
     cardNum === 4 ? 'BFR' : 'BLP'
@@ -34,9 +31,11 @@ export function EarnButtons({ cardNum }) {
 
   if (!account || activeChain.id !== chain?.id)
     return (
-      <BlueBtn onClick={openConnectModal} className={btnClasses}>
-        Connect Wallet
-      </BlueBtn>
+      <div className={btnClasses}>
+        <ConnectionRequired>
+          <></>
+        </ConnectionRequired>
+      </div>
     );
   switch (cardNum) {
     case 0:
@@ -211,9 +210,11 @@ export function EarnButtons({ cardNum }) {
       );
     default:
       return (
-        <BlueBtn onClick={openConnectModal} className={btnClasses}>
-          Connect Wallet
-        </BlueBtn>
+        <div className={btnClasses}>
+          <ConnectionRequired>
+            <></>
+          </ConnectionRequired>
+        </div>
       );
   }
 }

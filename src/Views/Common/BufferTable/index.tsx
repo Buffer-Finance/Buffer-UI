@@ -111,7 +111,11 @@ const BufferTable: React.FC<IBufferTable> = ({
           >
             <TableRow className={`table-row-head`}>
               {createArray(cols).map((idx) => {
-                return <TableCell key={idx}>{headerJSX(idx)}</TableCell>;
+                return (
+                  <TableCell key={idx} className="!z-20">
+                    {headerJSX(idx)}
+                  </TableCell>
+                );
               })}
             </TableRow>
           </TableHead>

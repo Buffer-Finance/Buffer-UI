@@ -86,16 +86,16 @@ export const useDashboardTableData = () => {
     }, {});
   }, [data]);
 
-
   const dashboardData = useMemo(() => {
     if (!data || !data.optionContracts) return [];
     const upatedData = [];
+    let pool = null;
     data.optionContracts.forEach((item) => {
       const configPair = MarketConfig[ENV].pairs.find((pair) => {
-        let pool;
+        pool = null;
         pool = pair.pools.find(
           (pool) =>
-            pool.options_contracts.current.toLocaleLowerCase() ===
+            pool.options_contracts.current.toLowerCase() ===
             item.address.toLowerCase()
         );
         return !!pool;
@@ -103,6 +103,7 @@ export const useDashboardTableData = () => {
       if (!configPair) return;
       const currData = {
         ...item,
+        address: pool.options_contracts.current,
         pair: configPair?.pair,
         img: configPair?.img,
         currentPrice: currentPrices?.[configPair.tv_id]?.p,
@@ -143,7 +144,6 @@ export const useDashboardTableData = () => {
       ),
     };
   }, [dashboardData]);
-
 
   return { dashboardData, totalData };
 };

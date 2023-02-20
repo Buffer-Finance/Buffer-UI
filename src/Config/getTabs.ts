@@ -12,7 +12,7 @@ export const getTabs = () => {
   if (import.meta.env.VITE_ENV === 'MAINNET') {
     return [
       {
-        to: `/binary/ETH-USD`,
+        to: `/binary/BTC-USD`,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -29,7 +29,12 @@ export const getTabs = () => {
         subTabs: [],
         isExternalLink: false,
       },
-
+      {
+        to: `/referral`,
+        name: 'Referral',
+        subTabs: [],
+        isExternalLink: false,
+      },
       {
         to: `https://testnet.buffer.finance/`,
         name: 'Practice Trading',
@@ -38,13 +43,7 @@ export const getTabs = () => {
       },
 
       {
-        to: `/referral`,
-        name: 'Referral',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
-        to: `https://optopi.buffer.finance/ARBITRUM`,
+        to: `https://optopi.buffer.finance/`,
         name: 'NFT',
         subTabs: [],
         isExternalLink: true,
@@ -84,7 +83,7 @@ export const getTabs = () => {
   } else
     return [
       {
-        to: `/binary/ETH-USD`,
+        to: `/binary/BTC-USD`,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -102,7 +101,7 @@ export const getTabs = () => {
         isExternalLink: false,
       },
       {
-        to: `https://optopi.buffer.finance/ARBITRUM`,
+        to: `https://optopi.buffer.finance/`,
         name: 'NFT',
         subTabs: [],
         isExternalLink: true,

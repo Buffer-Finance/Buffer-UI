@@ -87,7 +87,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
               }
 
               return (
-                <div style={{ display: 'flex', gap: 12 }}>
+                <div style={{ display: 'flex', gap: 7 }}>
                   <div
                     onClick={openChainModal}
                     role="button"
@@ -172,16 +172,23 @@ export const ConnectionRequired = ({ children }: { children: ReactNode }) => {
             {(() => {
               if (!connected) {
                 return (
-                  <BlueBtn onClick={openConnectModal} className="px-5">
-                    Connect Wallet
+
+                  <BlueBtn
+                    onClick={openConnectModal}
+                    className="px-5 py-[5px] !h-fit"
+                  >
+   Connect Wallet
                   </BlueBtn>
                 );
               }
 
               if (chain.unsupported) {
                 return (
-                  <BlueBtn onClick={openChainModal} className="px-5">
-                    <Wallet className="mr-[6px] ml-1" />
+                  <BlueBtn
+                    onClick={openChainModal}
+                    className="px-5 py-[5px] !h-fit"
+                  >
+                    {/* <Wallet className="" /> */}
                     Switch Network
                   </BlueBtn>
                 );

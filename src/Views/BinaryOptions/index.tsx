@@ -46,7 +46,7 @@ export interface IPool {
   payout: number;
   token: IToken;
   options_contracts: {
-    current: string | null;
+    current: string;
     past: string[];
     config: string;
   };
@@ -79,8 +79,8 @@ export const activeAssetStateAtom = atom<{
   allowance: string;
   maxTrade: string;
   stats: string;
-  payouts: any[];
-  routerPermission: any[];
+  payouts: { [key: string]: string } | null;
+  routerPermission: { [key: string]: string } | null;
 }>({
   balance: null,
   allowance: null,
@@ -104,7 +104,7 @@ export const useQTinfo = () => {
   const { activeChain } = useActiveChain();
   const data = useMemo(() => {
     let activeMarket = Config[ENV].pairs.find((m) => {
-      let market = params?.market || 'ETH-USD';
+      let market = params?.market || 'BTC-USD';
       // GBP
       market = market.toUpperCase();
       let currM = m.pair.toUpperCase();
@@ -164,6 +164,7 @@ function QTrade() {
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
+
   const { active, history, cancelled } = useAtomValue(tardesPageAtom);
 
   useEffect(() => {
@@ -178,6 +179,7 @@ function QTrade() {
     subTabs: [],
     isExternalLink: false,
   };
+
 
   useEffect(() => {
     dispatch({
@@ -213,6 +215,7 @@ function QTrade() {
         </div>
       </div>
 
+
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
       {/* <ComingSoonModal /> */}
@@ -220,7 +223,9 @@ function QTrade() {
         <Background>
           {props.pairs ? (
             <>
-              <Warning
+
+              {/* <Warning
+
                 body={
                   <>
                     <WarningOutlined className="text-[#EEAA00] mt-[4px]" />{' '}
@@ -232,7 +237,9 @@ function QTrade() {
                 state={true}
                 shouldAllowClose={false}
                 className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
-              />
+
+              /> */}
+
               {typeof window !== 'undefined' &&
                 window.innerWidth < mobileUpperBound && <MobileScreens />}
 

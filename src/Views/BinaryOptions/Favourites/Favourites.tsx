@@ -15,6 +15,7 @@ import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { Link } from 'react-router-dom';
+import { PairTokenImage } from '../Components/PairTokenImage';
 
 export default function Favourites({ className }: { className?: string }) {
   const [toggle, setToggle] = useState(false);
@@ -195,11 +196,7 @@ function FavouriteCard({
         /> */}
         <div className="text-f13 group-hover:text-3 whitespace-nowrap flex justify-start items-start text-3 mr-[0.4vw] b1200:flex-col">
           <span className="a1200:mr-3 flex b1200:mb-1 ">
-            <img
-              src={data.img}
-              alt={data.full_name}
-              className="h-[18px] mr-2"
-            />
+            <PairTokenImage pair={data.pair} size={18} />
             {data.pair}
           </span>
           {price ? (

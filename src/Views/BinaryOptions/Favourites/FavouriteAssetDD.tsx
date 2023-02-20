@@ -23,7 +23,7 @@ const FavouriteAssetDDStyles = styled.div`
 `;
 export const FavouriteAssetDD: React.FC<{
   className: string;
-  setToggle: (state) => void;
+  setToggle: (state: boolean) => void;
 }> = ({ className, setToggle }) => {
   const qtInfo = useQTinfo();
   const [searchText, setSearchText] = useState('');
@@ -36,12 +36,7 @@ export const FavouriteAssetDD: React.FC<{
         routerPermission[pair.pools[0].options_contracts.current]
     )
   );
-  const [activeAsset, setActiveAsset] = useState(assetTypes[1]);
-
-  const handleClickOutside = (e) => {
-    e.stopPropagation();
-    setToggle(false);
-  };
+  const [activeAsset, setActiveAsset] = useState(assetTypes[0]);
 
   return (
     <>

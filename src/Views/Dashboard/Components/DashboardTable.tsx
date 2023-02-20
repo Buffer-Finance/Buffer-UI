@@ -6,6 +6,7 @@ import { UpTriangle } from 'public/ComponentSVGS/UpTriangle';
 import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
+import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 
 export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       case 0:
         return (
           <div className="flex items-center gap-2">
-            <img src={currentRow.img} className="max-w-[20px] max-h-[20px]" />
-            <>{currentRow.pair}</>
+            <PairTokenImage pair={currentRow.pair} size={20} />
+            <div className="-ml-[6px]">{currentRow.pair}</div>
           </div>
         );
       case 1:
@@ -118,7 +119,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       bodyJSX={bodyJSX}
       loading={!dashboardData}
       onRowClick={(idx) => {
-        // navigate(`/binary/${dashboardData[idx].pair}`);
+        navigate(`/binary/${dashboardData[idx].pair}`);
       }}
       widths={['14%', '14%', '14%', '14%', '20%', '14%', '10%']}
     />

@@ -18,7 +18,7 @@ interface INavbar {}
 export const Navbar: React.FC<INavbar> = () => {
   const { state, dispatch } = useGlobal();
   const tabs = useMemo(() => getTabs(), []);
-  const VISIBLETABS = 8;
+  const VISIBLETABS = 4;
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',
