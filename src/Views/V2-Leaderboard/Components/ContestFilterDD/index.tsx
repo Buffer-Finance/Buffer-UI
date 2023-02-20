@@ -28,7 +28,7 @@ export function ContestFilterDD({
   const itemsArray = isDD ? createArray(count) : [];
 
   useEffect(() => {
-    console.log(offset, 'offset in dd');
+    console.log(offset, offset, 'offset in dd');
     if (offset === null) {
       setOffset(count.toString());
     }
