@@ -185,7 +185,10 @@ export const Weekly = () => {
               <Col
                 head={'Volume'}
                 desc={
-                  data && data.reward
+                  data &&
+                  data.reward &&
+                  data.reward[0] &&
+                  data.reward[0].totalFee
                     ? numberWithCommas(
                         toFixed(
                           divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
