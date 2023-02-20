@@ -41,7 +41,7 @@ export const useLeaderboardQuery = () => {
   const minimumTrades = isTestnet ? 5 : 3;
 
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-offset-${offset}-account-${account}`,
+    `leaderboard-arbi-offset-${offset}-account-${account}-daily`,
     {
       fetcher: async () => {
         const leaderboardQuery = `
