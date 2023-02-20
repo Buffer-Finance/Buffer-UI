@@ -19,7 +19,7 @@ interface ILeaderboardQuery {
     volume: string;
   }[];
   // totalPaginationData: { user: string }[];
-  userData: ILeague;
+  userData: ILeague[];
   reward: { settlementFee: string; totalFee: string }[];
 }
 
@@ -29,7 +29,9 @@ export function getWeekId(offset: number): number {
   if (offset > 0) {
     timestamp = timestamp - offset * (86400 * 7);
   }
-  let dayTimestamp = Math.floor((timestamp - 16 * 3600) / (86400 * 7));
+  let dayTimestamp = Math.floor(
+    (timestamp - 3 * 86400 - 16 * 3600) / (86400 * 7)
+  );
   return dayTimestamp;
 }
 
