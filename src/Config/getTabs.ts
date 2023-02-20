@@ -29,7 +29,12 @@ export const getTabs = () => {
         subTabs: [],
         isExternalLink: false,
       },
-
+      {
+        to: `/referral`,
+        name: 'Referral',
+        subTabs: [],
+        isExternalLink: false,
+      },
       {
         to: `https://testnet.buffer.finance/`,
         name: 'Practice Trading',
@@ -37,12 +42,6 @@ export const getTabs = () => {
         isExternalLink: true,
       },
 
-      {
-        to: `/referral`,
-        name: 'Referral',
-        subTabs: [],
-        isExternalLink: false,
-      },
       {
         to: `https://optopi.buffer.finance/`,
         name: 'NFT',
