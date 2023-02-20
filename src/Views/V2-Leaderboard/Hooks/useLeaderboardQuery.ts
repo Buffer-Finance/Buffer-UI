@@ -109,6 +109,10 @@ export const useLeaderboardQuery = () => {
       setTablePages({
         arbitrum: Math.ceil(data.userStats.length / ROWINAPAGE),
       });
+    } else {
+      setTablePages({
+        arbitrum: 0,
+      });
     }
   }, [data?.userStats]);
 
