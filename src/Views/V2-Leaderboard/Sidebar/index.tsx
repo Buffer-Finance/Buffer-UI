@@ -25,7 +25,7 @@ export const MobileLeaderboardDropdwon = () => {
           navigate(tabs[t].as);
         }}
         distance={5}
-        tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
+        tablist={[{ name: 'Daily' }, { name: 'Weekly' }]}
       />
     </div>
   );
