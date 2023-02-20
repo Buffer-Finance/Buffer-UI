@@ -80,7 +80,7 @@ export const Navbar: React.FC<INavbar> = () => {
           onClick={() => {}}
           className="!h-[30px] rounded-[6px] w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] pl-4 pr-5 sm:pl-1 sm:pr-1"
         >
-          <Link to="/leaderboard/daily" className="flex items-center gap-1">
+          <Link to="/leaderboard/weekly" className="flex items-center gap-1">
             <LeaderboardTropy height={23} />
             <span className="sm:hidden">Contest</span>
           </Link>
