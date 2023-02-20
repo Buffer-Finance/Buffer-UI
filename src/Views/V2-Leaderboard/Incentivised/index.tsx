@@ -75,6 +75,12 @@ export const Incentivised = () => {
     setActivePageNumber(1);
   }, [activeTab]);
 
+  useEffect(() => {
+    if (offset === null) {
+      setOffset(day.toString());
+    }
+  }, [day]);
+
   let content;
   if (!isTimerEnded) {
     content = (

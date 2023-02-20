@@ -75,6 +75,12 @@ export const Weekly = () => {
     setActivePageNumber(1);
   }, [activeTab]);
 
+  useEffect(() => {
+    if (offset === null && week !== null) {
+      setOffset(week.toString());
+    }
+  }, [week]);
+
   let content;
   if (!isTimerEnded) {
     content = (

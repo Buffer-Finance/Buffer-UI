@@ -27,12 +27,7 @@ export function ContestFilterDD({
   const isDD = count > 1;
   const itemsArray = isDD ? createArray(count) : [];
 
-  useEffect(() => {
-    console.log(offset, offset, 'offset in dd');
-    if (offset === null) {
-      setOffset(count.toString());
-    }
-  }, [count]);
+  console.log(offset, count, 'offset in dd');
 
   if (!isDD) return <div className="text-buffer-blue">#1</div>;
   return (
