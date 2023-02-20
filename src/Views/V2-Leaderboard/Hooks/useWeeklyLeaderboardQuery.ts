@@ -30,7 +30,7 @@ export function getWeekId(offset: number): number {
     timestamp = timestamp - offset * (86400 * 7);
   }
   let dayTimestamp = Math.floor(
-    (timestamp - 3 * 86400 - 16 * 3600) / (86400 * 7)
+    (timestamp - 4 * 86400 - 16 * 3600) / (86400 * 7)
   );
   return dayTimestamp;
 }
