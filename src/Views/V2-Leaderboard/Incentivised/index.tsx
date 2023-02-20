@@ -37,6 +37,7 @@ export const usdcDecimals = 6;
 export const Incentivised = () => {
   const { activeChain } = useActiveChain();
   const { day, nextTimeStamp } = useDayOfTournament();
+  console.log(day, 'day in incentivised');
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
   const skip = useMemo(
     () => ROWINAPAGE * (activePages.arbitrum - 1),
