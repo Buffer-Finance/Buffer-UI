@@ -89,7 +89,7 @@ export const getTabs = () => {
         isExternalLink: false,
       },
       {
-        to: `/leaderboard/incentivised`,
+        to: `/leaderboard/weekly`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,

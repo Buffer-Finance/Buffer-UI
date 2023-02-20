@@ -1,13 +1,13 @@
-import Background from "./style";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import Background from './style';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
-import VersionChip from "../VersionChip";
-import NotificationCount from "src/SVG/Elements/NotificationCount";
+import VersionChip from '../VersionChip';
+import NotificationCount from 'src/SVG/Elements/NotificationCount';
 
 export interface ITab {
   name: string;
-  icon?: number | "v2";
+  icon?: number | 'v2';
 }
 
 interface IBufferTab {
@@ -38,7 +38,7 @@ const BufferTab: React.FC<IBufferTab> = ({
     }
   });
   return (
-    <Background className={className}>
+    <Background className={className + ' text-f15'}>
       <div className="tabs-root flex cursor-pointer">
         {tablist.map((singleTab: ITab, idx) => {
           return (
@@ -47,7 +47,7 @@ const BufferTab: React.FC<IBufferTab> = ({
               onClick={(e) => {
                 handleChange(e, idx);
               }}
-              className={`root-button ${value == idx && "selected-button"}`}
+              className={`root-button  ${value == idx && 'selected-button'}`}
               // disableRipple
               // icon={
               //   singleTab.icon === "v2" ? (
