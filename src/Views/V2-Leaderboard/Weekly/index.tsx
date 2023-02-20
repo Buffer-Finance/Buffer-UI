@@ -76,10 +76,13 @@ export const Weekly = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    if (offset === null && week !== null) {
+    if (
+      (week !== null && offset === null) ||
+      (offset !== null && week !== null && offset.toString() != week.toFixed())
+    ) {
       setOffset(week.toString());
     }
-  }, [week]);
+  }, [week, offset]);
 
   let content;
   if (!isTimerEnded) {
