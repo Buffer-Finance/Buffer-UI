@@ -32,7 +32,7 @@ export function ContestFilterDD({
     if (offset === null) {
       setOffset(count.toString());
     }
-  }, [offset]);
+  }, [count]);
 
   if (!isDD) return <div className="text-buffer-blue">#1</div>;
   return (
