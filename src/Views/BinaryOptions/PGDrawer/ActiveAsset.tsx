@@ -81,7 +81,7 @@ export const ActiveAsset = () => {
         <span className="text-f14 mb-2 ">Selected Pair</span>
       </div>
       <div className="px-5 py-3 rounded-[10px] y-auto bg-1  whitespace-nowrap">
-        <div className={`flex items-center content-between assets w-max h-max`}>
+        <div className={`flex items-center content-between assets w-full h-max`}>
           <div className="min-w-[30px] w-[30px] h-[30px] mr-3">
             <PairTokenImage pair={singleAsset.pair} />
           </div>
