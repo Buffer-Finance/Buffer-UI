@@ -75,7 +75,7 @@ export interface IQTrade {
   routerContract?: string;
 }
 export const FavouriteAtom = atomWithLocalStorage('favourites3', []);
-export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV7', []);
+export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV8', []);
 
 export const activeAssetStateAtom = atom<{
   balance: string;
