@@ -20,7 +20,7 @@ import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 export const getChains = () =>
   import.meta.env.VITE_ENV.toLowerCase() == 'testnet'
     ? [arbitrumGoerli,polygonMumbai]
-    : [arbitrum,polygon];
+    : [arbitrum];
 
 const getWallets = (chains: Chain[]) => {
   const bothSupported = [
