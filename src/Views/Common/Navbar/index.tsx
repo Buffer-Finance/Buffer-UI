@@ -12,12 +12,15 @@ import CloseLogo from '@SVG/Elements/Closelogo';
 import NFTtier from '../NFTtier';
 import LeaderboardTropy from '@Public/LeaderBoard/Trophy';
 import { Link } from 'react-router-dom';
+import { useAtom, useAtomValue } from 'jotai';
+import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
 
 interface INavbar {}
 
 export const Navbar: React.FC<INavbar> = () => {
   const { state, dispatch } = useGlobal();
-  const tabs = useMemo(() => getTabs(), []);
+  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom)
+  const tabs = useMemo(() => getTabs(activeMarketFromStorage),[activeMarketFromStorage]);
   const VISIBLETABS = 4;
   const handleClose = () => {
     dispatch({
@@ -25,7 +28,7 @@ export const Navbar: React.FC<INavbar> = () => {
     });
   };
   return (
-    <header className="bg-primary flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1 z-[1500]">
+    <header className="bg-primary flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1 z-[15]">
       <div className=" flex items-center gap-[24px]">
         <div
           role={'button'}

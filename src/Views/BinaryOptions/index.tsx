@@ -1,7 +1,9 @@
 import { useEffect, useMemo } from 'react';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useSetAtom } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
+import { useNavigate } from 'react-router-dom';
+
 import PGTables from './Tables';
 import BinaryDrawer from './PGDrawer';
 import { useGlobal } from '@Contexts/Global';
@@ -94,20 +96,21 @@ export const activeAssetStateAtom = atom<{
 export const setActiveAssetStateAtom = atom(null, (get, set, payload) => {
   set(activeAssetStateAtom, payload);
 });
-
+export const defaultMarket = 'BTC-USD';
 export const ENV =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
     ? 'arbitrum-main'
     : 'arbitrum-test';
 
+export const activeMarketFromStorageAtom = atomWithLocalStorage('user-active-market','');
 export const useQTinfo = () => {
   const params = useParams();
   const { activeChain } = useActiveChain();
   const data = useMemo(() => {
     let activeMarket = Config[ENV].pairs.find((m) => {
-      let market = params?.market || 'BTC-USD';
+      let market = params?.market;
       // GBP
-      market = market.toUpperCase();
+      market = market?.toUpperCase();
       let currM = m.pair.toUpperCase();
       if (market == currM) {
         return true;
@@ -157,6 +160,16 @@ export const useQTinfo = () => {
 
 function QTrade() {
   const props = useQTinfo();
+  const params = useParams();
+  const navigate = useNavigate();
+  const setActiveMarketFromStorage = useSetAtom(
+    activeMarketFromStorageAtom
+  );
+  useEffect(() => {
+    console.log(`params?.market: `,params?.market);
+    if (params?.market && params.market != 'undefined'){ setActiveMarketFromStorage(params.market);}
+    else {navigate('/#/binary/'+defaultMarket) ; console.log('marketnotfound')}
+  }, [params?.market]);
   const [ref, setRef] = useAtom(referralCodeAtom);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
@@ -202,9 +215,9 @@ function QTrade() {
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
   );
-  const [params] = useSearchParams();
+  const [searchParam] = useSearchParams();
   useEffect(() => {
-    const referralCode = params.get('ref');
+    const referralCode = searchParam.get('ref');
     if (referralCode) {
       if (ref !== referralCode) setRef(referralCode);
     }

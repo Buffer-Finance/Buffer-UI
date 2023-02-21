@@ -1,13 +1,13 @@
 import { Navbar } from './Views/Common/Navbar';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import Drawer from '@Views/Common/V2-Drawer';
 import IbfrFaucet from '@Views/Faucet';
 import Background from './AppStyles';
 import { Alert, Snackbar } from '@mui/material';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
-import BinryMarkets from '@Views/BinaryOptions';
+import BinryMarkets, { activeMarketFromStorageAtom, defaultMarket } from '@Views/BinaryOptions';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Earn } from '@Views/Earn';
 import { Dashboard } from '@Views/Dashboard';
@@ -46,6 +46,8 @@ function AppComponent() {
 }
 
 const AppRoutes = () => {
+  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom)
+
   return (
     <div className="root w-[100vw]">
       <Routes>
@@ -60,7 +62,8 @@ const AppRoutes = () => {
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/*" element={<BinryMarkets />} />
+        <Route path="/binary/:market" element={<BinryMarkets />} />
+        <Route path="/*" element={<Navigate to={"/binary/" + activeMarketFromStorage || defaultMarket} />} />
       </Routes>
     </div>
   );
