@@ -23,7 +23,7 @@ import { Integrations } from '@sentry/tracing';
 import { ProfilePage } from '@Views/Profile';
 
 if (import.meta.env.VITE_MODE === 'production') {
-  console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
+  // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
