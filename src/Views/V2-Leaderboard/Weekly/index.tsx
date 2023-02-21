@@ -43,7 +43,8 @@ export const Weekly = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useWeeklyLeaderboardQuery();
+  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
+  useWeeklyLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -246,8 +247,13 @@ export const Weekly = () => {
               userData={data?.userData}
               skip={skip}
               nftWinners={3}
+              userRank={winnerUserRank}
+              activePage={activePages.arbitrum}
+
             />,
             <DailyWebTable
+            activePage={activePages.arbitrum}
+            userRank={loserUserRank}
               res={loserStats}
               count={totalPages.arbitrum}
               onpageChange={setActivePageNumber}
