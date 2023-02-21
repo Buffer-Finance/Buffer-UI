@@ -196,7 +196,9 @@ function FavouriteCard({
         /> */}
         <div className="text-f13 group-hover:text-3 whitespace-nowrap flex justify-start items-start text-3 mr-[0.4vw] b1200:flex-col">
           <span className="a1200:mr-3 flex b1200:mb-1 ">
-            <PairTokenImage pair={data.pair} size={18} />
+            <div className="w-[18px] h-[18px] mr-[6px]">
+              <PairTokenImage pair={data.pair} />
+            </div>
             {data.pair}
           </span>
           {price ? (

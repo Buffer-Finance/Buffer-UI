@@ -49,8 +49,10 @@ export const AssetTable: React.FC<{
           <CellContent
             content={[
               <div className="flex">
-                <PairTokenImage pair={currentAsset.pair} />
-                <div className="text-1">{currentAsset.pair}</div>
+                <div className="w-[20px] h-[20px]">
+                  <PairTokenImage pair={currentAsset.pair} />
+                </div>
+                <div className="text-1 ml-3">{currentAsset.pair}</div>
               </div>,
             ]}
           />
