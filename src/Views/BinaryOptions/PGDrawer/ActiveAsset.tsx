@@ -56,7 +56,7 @@ export const ActiveAsset = () => {
   }
 
   const title = currentPrice
-    ? toFixed(currentPrice, singleAsset.price_precision.toString().length) +
+    ? toFixed(currentPrice, singleAsset.price_precision.toString().length-1) +
       ' | ' +
       singleAsset.tv_id
     : '';
