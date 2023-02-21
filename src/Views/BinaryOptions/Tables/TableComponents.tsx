@@ -331,7 +331,11 @@ export const AssetCell: React.FC<{
 
   return (
     <TableAssetCell
-      img={<PairTokenImage pair={currentRow.configPair?.pair} size={20} />}
+      img={
+        <div className="w-[20px] h-[20px] mr-[6px]">
+          <PairTokenImage pair={currentRow.configPair?.pair} />
+        </div>
+      }
       head={
         <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
           <span className={`weight-400 text-f15 `}>
