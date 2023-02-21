@@ -10,6 +10,7 @@ import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { useDayOfTournament } from './useDayOfTournament';
 import { useDayOffset } from './useDayOffset';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -18,7 +19,6 @@ interface ILeaderboardQuery {
     totalTrades: number;
     volume: string;
   }[];
-  // totalPaginationData: { user: string }[];
   userData: ILeague;
   reward: { settlementFee: string; totalFee: string }[];
 }
@@ -39,7 +39,7 @@ export const useLeaderboardQuery = () => {
   const { day } = useDayOfTournament();
   const timestamp = getDayId(Number(day - Number(offset)));
   const minimumTrades = isTestnet ? 5 : 3;
-
+const {configContracts} = useActiveChain();
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-offset-${offset}-account-${account}-daily`,
     {
@@ -93,7 +93,7 @@ export const useLeaderboardQuery = () => {
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(baseGraphqlUrl, {
+        const response = await axios.post(configContracts.graph.MAIN, {
           query,
         });
 

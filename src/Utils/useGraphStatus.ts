@@ -1,18 +1,20 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import { baseGraphqlLiteUrl, baseGraphqlUrl } from 'config';
 import useSWR from 'swr';
 
 const useGraphStatus = () => {
+  const {configContracts} = useActiveChain();
   const { data } = useSWR('graph-status', {
     fetcher: async () => {
-      const liteQuery = axios.post(baseGraphqlLiteUrl.sandbox, {
+      const liteQuery = axios.post(configContracts.graph.LITE, {
         query: `{
             _meta {
                 hasIndexingErrors
                 }            
         }`,
       });
-      const mainQuery = axios.post(baseGraphqlUrl, {
+      const mainQuery = axios.post(configContracts.graph.MAIN, {
         query: `{
             _meta {
                 hasIndexingErrors
