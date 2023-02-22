@@ -1,15 +1,47 @@
 import axios from 'axios';
 import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { add } from '@Utils/NumString/stringArithmatics';
-const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
-console.log(`prevDayEpoch: `,prevDayEpoch);
+
+// const prevDayEpoch = Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
+// console.log(`prevDayEpoch: `, prevDayEpoch);
+
+type IDashboardGraphQl = {
+  USDCstats: {
+    totalSettlementFees: string;
+    totalVolume: string;
+    totalTrades: number;
+  };
+  BFRstats: {
+    totalSettlementFees: string;
+    totalVolume: string;
+    totalTrades: number;
+  };
+  totalTraders: [{ uniqueCountCumulative: number }];
+  USDC24stats: {
+    amount: string;
+    settlementFee: string;
+  }[];
+  BFR24stats: {
+    amount: string;
+    settlementFee: string;
+  }[];
+  _meta: {
+    block: {
+      number: number;
+    };
+  };
+};
 
 export const useDashboardGraphQl = () => {
-  const { data } = useSWR('history-thegraph', {
+  const { cache } = useSWRConfig();
+  const swrKey = 'history-thegraph';
+  const { data } = useSWR(swrKey, {
     fetcher: async () => {
-const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
+      const prevDayEpoch = Math.floor(
+        (Date.now() - 24 * 60 * 60 * 1000) / 1000
+      );
 
       const response = await axios.post(baseGraphqlUrl, {
         query: `{ 
@@ -42,29 +74,17 @@ const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
                 amount
                 settlementFee
             }
+            _meta {
+              block {
+                number
+              }
+            }
           }`,
       });
-      return response.data?.data as {
-        USDCstats: {
-          totalSettlementFees: string;
-          totalVolume: string;
-          totalTrades: number;
-        };
-        BFRstats: {
-          totalSettlementFees: string;
-          totalVolume: string;
-          totalTrades: number;
-        };
-        totalTraders: [{ uniqueCountCumulative: number }];
-        USDC24stats: {
-          amount: string;
-          settlementFee: string;
-        }[];
-        BFR24stats: {
-          amount: string;
-          settlementFee: string;
-        }[];
-      };
+      const lastData: IDashboardGraphQl = cache.get(swrKey);
+      const currentData = response.data?.data as IDashboardGraphQl;
+      if (currentData === undefined) return lastData;
+      else return currentData;
     },
     refreshInterval: 300,
   });
@@ -109,6 +129,7 @@ const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
     totalTraders: data?.totalTraders,
     USDC24stats: USDC24hrsStats,
     BFR24stats: BFR24hrsStats,
+    lastBLock: data?._meta.block.number,
     isGqlDataAvailable: data ? true : false,
   };
 };

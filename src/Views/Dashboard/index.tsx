@@ -7,6 +7,7 @@ import { useDashboardReadCalls } from './Hooks/useDashBoardReadCalls';
 import styled from '@emotion/styled';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useEffect } from 'react';
+import { useDashboardGraphQl } from './Hooks/useDashboardGraphQl';
 
 const DashboardStyles = styled.div`
   width: min(1200px, 100%);
@@ -38,9 +39,9 @@ const descStyles = 'mx-3';
 
 export const Dashboard = () => {
   const { activeChain } = useActiveChain();
-  useEffect(()=>{
-    document.title = "Buffer | Dashboard"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Dashboard';
+  }, []);
   return (
     <DashboardContextProvider value={{ activeChain }}>
       <main className="content-drawer">
@@ -56,11 +57,23 @@ export const Dashboard = () => {
 
 const DashboardPage = () => {
   const { BFR, BLP, overView, total } = useDashboardReadCalls();
+  const { lastBLock } = useDashboardGraphQl();
   return (
     <DashboardStyles>
       <Section
         Heading={<div className={topStyles}>Stats</div>}
-        subHeading={<div className={descStyles}>Arbitrum Total Stats (since 30th Jan, 2023)</div>}
+        subHeading={
+          <div className="flex justify-between">
+            <div className={descStyles}>
+              Arbitrum Total Stats (since 30th Jan, 2023)
+            </div>
+            {lastBLock && (
+              <div className="mr-3">
+                Last synced block <u>{lastBLock}</u>
+              </div>
+            )}
+          </div>
+        }
         Cards={[
           <StatsOverView data={overView} />,
           <StatsTotalStats data={total} />,
