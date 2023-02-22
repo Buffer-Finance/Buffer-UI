@@ -1,10 +1,10 @@
+import { useNFTGraph } from '@Hooks/useNFTGraph';
 import { NFTContract } from './config';
 import { Background } from './style';
-import { useNFTGraph } from './useNFTGraph';
 
 export const ClaimedNFT = () => {
   const { nfts } = useNFTGraph();
-  console.log(`nfts: `, nfts);
+  // console.log(`nfts: `, nfts);
   const totalNfts = nfts?.length;
 
   return (
