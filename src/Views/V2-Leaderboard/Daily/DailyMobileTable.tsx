@@ -17,6 +17,7 @@ export const DailyMobileTable: React.FC<{
   count: number;
   nftWinners?: number;
   activePage: number;
+  userRank: string;
 }> = ({
   options,
   skip,
@@ -25,23 +26,25 @@ export const DailyMobileTable: React.FC<{
   onpageChange,
   nftWinners,
   activePage,
+  userRank,
 }) => {
   const { address: account } = useUserAccount();
-  // if (!options)
-  //   return (
-  //     <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
-  //   );
-  let user = getUserIndex(options, skip, account);
+  if (!options)
+    return (
+      <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
+    );
+  let user = Number(userRank);
   const UserRow =
     userData?.length && options?.length ? (
       <MobileRow
         {...{
           index: 0,
-          currentStanding: { ...userData[0], rank: user == -1 ? '-' : '' },
+          currentStanding: { ...userData[0], rank: user },
           user,
           skip,
           userData,
           account,
+          nftWinners,
         }}
       />
     ) : null;
@@ -88,18 +91,6 @@ export const DailyMobileTable: React.FC<{
     </div>
   );
 };
-export function getUserIndex(res, skip, account) {
-  let userInTop10 = -1;
-  if (res?.length && !skip && account) {
-    const foundIndex = res.findIndex(
-      (r) => r.user.toLowerCase() == account.toLowerCase()
-    );
-    if (foundIndex !== -1) {
-      userInTop10 = foundIndex + 1;
-    }
-  }
-  return userInTop10;
-}
 
 const MobileRow = ({
   index,
@@ -140,7 +131,7 @@ const MobileRow = ({
             />
           </div>
           <div className="text-f13 ml-1">
-            {currentStanding?.user === account ? (
+            {currentStanding?.user.toLowerCase() === account.toLowerCase() ? (
               <span className="text-1">Your Account</span>
             ) : (
               <div className="flex">

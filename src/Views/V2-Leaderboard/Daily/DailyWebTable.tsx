@@ -250,6 +250,7 @@ export const DailyWebTable: React.FC<{
           userData={userData}
           count={count}
           activePage={activePage}
+          userRank={userRank}
           onpageChange={(e, p) => {
             // router.push({
             //   pathname: router.pathname,
