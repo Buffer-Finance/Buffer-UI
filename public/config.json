@@ -671,6 +671,10 @@
           }
         ]
       }
-    ]
+    ],
+    "graph": {
+      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-mainnet",
+      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-mainnet-lite"
+    }
   }
 }
