@@ -131,7 +131,7 @@ const MobileRow = ({
             />
           </div>
           <div className="text-f13 ml-1">
-            {currentStanding?.user.toLowerCase() === account.toLowerCase() ? (
+            {currentStanding?.user.toLowerCase() === account?.toLowerCase() ? (
               <span className="text-1">Your Account</span>
             ) : (
               <div className="flex">
