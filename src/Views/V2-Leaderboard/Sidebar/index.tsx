@@ -102,7 +102,7 @@ export const LeaderBoardSidebar = () => {
         })}
       </div>
 
-      <div className="mt-[10px] full-width">
+      {/* <div className="mt-[10px] full-width">
         <div className="flex items-center mb-2">
           <Head name="METRICS" />
           <CSChip />
@@ -115,7 +115,7 @@ export const LeaderBoardSidebar = () => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </LeaderBoardSidebarStyles>
   );
 };
