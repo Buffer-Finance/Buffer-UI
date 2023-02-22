@@ -170,7 +170,6 @@ function QTrade() {
     if (params?.market && params.market != 'undefined'){ setActiveMarketFromStorage(params.market);}
     else {navigate('/#/binary/'+defaultMarket) ; console.log('marketnotfound')}
   }, [params?.market]);
-  const [ref, setRef] = useAtom(referralCodeAtom);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
   // const [assets, setAssets] = useAtom(DisplayAssetsAtom);
@@ -215,13 +214,6 @@ function QTrade() {
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
   );
-  const [searchParam] = useSearchParams();
-  useEffect(() => {
-    const referralCode = searchParam.get('ref');
-    if (referralCode) {
-      if (ref !== referralCode) setRef(referralCode);
-    }
-  }, [params]);
 
   return (
     <>
