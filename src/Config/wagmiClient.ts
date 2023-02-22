@@ -1,5 +1,5 @@
 import { configureChains, createClient, Chain } from 'wagmi';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import {
   trustWallet,
@@ -12,13 +12,14 @@ import {
   imTokenWallet,
   ledgerWallet,
   omniWallet,
-  argentWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 
+
+
 export const getChains = () =>
   import.meta.env.VITE_ENV.toLowerCase() == 'testnet'
-    ? [arbitrumGoerli]
+    ? [arbitrumGoerli,polygonMumbai]
     : [arbitrum];
 
 const getWallets = (chains: Chain[]) => {

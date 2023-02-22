@@ -21,7 +21,7 @@ export const Navbar: React.FC<INavbar> = () => {
   const { state, dispatch } = useGlobal();
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom)
   const tabs = useMemo(() => getTabs(activeMarketFromStorage),[activeMarketFromStorage]);
-  const VISIBLETABS = 4;
+  const VISIBLETABS = 8;
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',

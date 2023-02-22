@@ -11,7 +11,7 @@ import Drawer from '@Views/Common/V2-Drawer';
 import PlainCard from '@Views/Referral/Components/PlainCard';
 import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
 import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
-import {  useConnectModal} from '@rainbow-me/rainbowkit'
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 import {
   ReferralContext,
@@ -111,6 +111,7 @@ const Referral: React.FC<IReferral> = ({}) => {
   const owner = useCodeOwner(ip);
   const { state } = useGlobal();
   const referralCodes = useReferralCode(activeChain);
+  console.log(`referralCodes: `,referralCodes);
   const { address: account } = useUserAccount();
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   const { openConnectModal } = useConnectModal();
@@ -273,9 +274,9 @@ const Referral: React.FC<IReferral> = ({}) => {
         : btnText}
     </BlueBtn>
   );
-  useEffect(()=>{
-    document.title = "Buffer | Referrals"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Referrals';
+  }, []);
 
   return (
     <>
@@ -296,8 +297,16 @@ const Referral: React.FC<IReferral> = ({}) => {
           Referral
         </>
         <Header.Description>
-       <span className='mb-2 block'>   Get fee discounts and earn rebates.</span> 
-          <span className='italic  block'> Note: Referral codes are case sensitive</span>
+          <span className="mb-2 block">
+            {' '}
+            Get fee discounts and earn rebates.
+          </span>
+          <span className=" block text-[#c0b8b8]">
+            {' '}
+            Note that referral codes are case sensitive and that your code must
+            be <br className='sm:hidden'/> created on both Arbitrum as well as Polygon to earn rebates on
+            both networks.{' '}
+          </span>
           <br className="sm:hidden" />
           {/* For more information, please read the
           <Header.Link
@@ -477,9 +486,10 @@ const Affilate = ({
 
 const useUserReferralStats = () => {
   const { address } = useUserAccount();
+  const { configContracts } = useActiveChain();
   return useSWR(`${address}-stats`, {
     fetcher: async () => {
-      const response = await axios.post(baseGraphqlUrl, {
+      const response = await axios.post(configContracts.graph.MAIN, {
         query: `{
             referralDatas (where: { id: "${address}"} ) {
               totalTradesReferred
