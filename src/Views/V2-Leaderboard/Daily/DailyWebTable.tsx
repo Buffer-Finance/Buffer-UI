@@ -95,7 +95,8 @@ export const DailyWebTable: React.FC<{
           <CellContent
             content={[
               <>
-                {currentStanding.user === account ? (
+                {currentStanding.user.toLowerCase() ===
+                account?.toLowerCase() ? (
                   <span className="text-1">Your Account</span>
                 ) : (
                   <div className="flex">
