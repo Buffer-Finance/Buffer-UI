@@ -20,6 +20,7 @@ import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
+import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 
 if (import.meta.env.VITE_MODE === 'production') {
   console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -125,7 +126,7 @@ function App() {
         className="disclaimer"
       />
       <ConnectionDrawer className="open" />
-
+      <MobileBottomTabs />
       <TnCModal />
       <SideBar />
     </Background>

@@ -29,6 +29,8 @@ export interface IBufferInput extends IBufferInputBase {
   type?: boolean;
   addsValidations?: boolean;
   hideSearchBar?: boolean;
+  label?:ReactNode;
+  id?:string;
   remark?: ReactNode;
   isDisabled?: boolean;
 }
@@ -42,7 +44,9 @@ const BufferInput: React.FC<IBufferInput> = ({
   onChange,
   className,
   inputType,
+  id,
   onError,
+  label,
   bgClass,
   isGrey,
   ipClass,
@@ -58,6 +62,7 @@ const BufferInput: React.FC<IBufferInput> = ({
           unit,
           header,
           bgClass,
+          label,
           inputType,
           value,
           onChange,
@@ -68,6 +73,7 @@ const BufferInput: React.FC<IBufferInput> = ({
           validations: [],
           isGrey,
           type,
+          id,
           isDisabled,
           title,
         }}
@@ -141,6 +147,8 @@ const BufferInput: React.FC<IBufferInput> = ({
         placeholder,
         unit,
         onError,
+        label,
+        id,
         header,
         value,
         bgClass,

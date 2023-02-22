@@ -21,6 +21,8 @@ interface IBufferTextInputRoot extends IBufferInputBase {
   validations: ((val: string) => (ReactNode | boolean)[])[];
   numeric: boolean;
   isGrey?: boolean;
+  id?:string;
+  label?:ReactNode;
   type?: boolean;
   isDisabled?: boolean;
 }
@@ -36,6 +38,8 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
   ipClass,
   bgClass,
   validations,
+  id,
+  label,
   numeric,
   isGrey,
   type,
@@ -86,7 +90,9 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
       >
         <div className="upper-part ">{header}</div>
         <div className="lower-part">
+          {label ?label:null }
           <input
+          
             className={`${ipClass} inputStyle font3 weight-400`}
             placeholder={placeholder}
             type={
@@ -95,6 +101,7 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
             onChange={textChangeHandler}
             value={value}
             step="1"
+            id={id}
             pattern="^\d*(\.\d{0,2})?$"
             disabled={isDisabled}
             title={title}

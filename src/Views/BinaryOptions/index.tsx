@@ -38,6 +38,7 @@ import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
 import { WarningOutlined } from '@mui/icons-material';
+import { BuyTrade } from './BuyTrade';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -102,7 +103,10 @@ export const ENV =
     ? 'arbitrum-main'
     : 'arbitrum-test';
 
-export const activeMarketFromStorageAtom = atomWithLocalStorage('user-active-market','');
+export const activeMarketFromStorageAtom = atomWithLocalStorage(
+  'user-active-market',
+  ''
+);
 export const useQTinfo = () => {
   const params = useParams();
   const { activeChain } = useActiveChain();
@@ -162,13 +166,15 @@ function QTrade() {
   const props = useQTinfo();
   const params = useParams();
   const navigate = useNavigate();
-  const setActiveMarketFromStorage = useSetAtom(
-    activeMarketFromStorageAtom
-  );
+  const setActiveMarketFromStorage = useSetAtom(activeMarketFromStorageAtom);
   useEffect(() => {
-    console.log(`params?.market: `,params?.market);
-    if (params?.market && params.market != 'undefined'){ setActiveMarketFromStorage(params.market);}
-    else {navigate('/#/binary/'+defaultMarket) ; console.log('marketnotfound')}
+    console.log(`params?.market: `, params?.market);
+    if (params?.market && params.market != 'undefined') {
+      setActiveMarketFromStorage(params.market);
+    } else {
+      navigate('/#/binary/' + defaultMarket);
+      console.log('marketnotfound');
+    }
   }, [params?.market]);
   const [ref, setRef] = useAtom(referralCodeAtom);
   const { state, dispatch } = useGlobal();
@@ -225,51 +231,30 @@ function QTrade() {
 
   return (
     <>
-      <div className="tabDispay:hidden  tab:mx-auto ">
-        <div className="flex flex-col items-start max-w-[100vw] overflow-hidden">
-          {props.pairs && <Favourites className="web:hidden mb-4" />}
-          <Navbar
-            className={
-              'web:hidden mx-auto z-50 whitespace-nowrap mt-3 mb-3 b800:w-full '
-            }
-          />
-        </div>
-      </div>
-      {/* <div> TV Status&nbsp;
-      {err ?'Error!!!':'Working'}
-      </div> */}
-
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
-      {/* <ComingSoonModal /> */}
+      <WebOnly>
+        <div className="tabDispay:hidden  tab:mx-auto ">
+          <div className="flex flex-col items-start max-w-[100vw] overflow-hidden">
+            {props.pairs && <Favourites className="web:hidden mb-4" />}
+          </div>
+        </div>
+      </WebOnly>
       <main className="content-drawer" id="buffer-tv-wrapper">
         <Background>
           {props.pairs ? (
             <>
-              {/* <Warning
-                body={
-                  <>
-                    <WarningOutlined className="text-[#EEAA00] mt-[4px]" />{' '}
-                    &nbsp; Trading on Forex & Commodities is currently halted.
-                    It will be resumed shortly.
-                  </>
-                }
-                closeWarning={() => {}}
-                state={true}
-                shouldAllowClose={false}
-                className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
-              /> */}
-              {typeof window !== 'undefined' &&
-                window.innerWidth < mobileUpperBound && <MobileScreens />}
-
-              <div className="tab:hidden mb-3">
-                <Favourites />
-                {window.innerWidth > mobileUpperBound + 1 && (
+              <Favourites />
+              <MobileOnly>
+                <TVIntegrated assetInfo={props.activePair} />
+              </MobileOnly>
+              <WebOnly>
+                <div className="tab:hidden mb-3">
                   <GraphView className="tab:hidden">
                     <TVIntegrated assetInfo={props.activePair} />
                   </GraphView>
-                )}
-              </div>
+                </div>
+              </WebOnly>
               <div className="custom-view b1200:w-[80%] mx-auto">
                 <div className="tab:hidden ">
                   <div className="flex b1200:justify-center items-center nsm:ml-4">
@@ -287,6 +272,7 @@ function QTrade() {
                       }))}
                     />
                   </div>
+                  MarketTimingsModal
                 </div>
                 <div className="my-3">
                   {activeTab === binaryTabs[2] && (
@@ -359,6 +345,7 @@ function QTrade() {
           ) : (
             <Skeleton variant="rectangular" className="stat-skel lc" />
           )}
+          <BuyTrade />
         </Background>
       </main>
       <BinaryDrawer />
@@ -367,8 +354,12 @@ function QTrade() {
 }
 export default QTrade;
 
-function MobileOnly({ children }) {
-  if (typeof window === 'undefined') return null;
-  if (window.innerWidth > 1200 || window.innerWidth < 600) return null;
+function MobileOnly({ children }: { children: JSX.Element }) {
+  if (window.innerWidth > mobileUpperBound) return null;
+  return <>{children}</>;
+}
+
+function WebOnly({ children }: { children: JSX.Element }) {
+  if (window.innerWidth < mobileUpperBound) return null;
   return <>{children}</>;
 }
