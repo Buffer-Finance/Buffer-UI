@@ -78,12 +78,14 @@ const MobileTable: React.FC<{
   currentPage?: number;
   onPageChange?: (e: ChangeEvent, p: number) => void;
   activePage: number;
+  shouldNotDisplayShareVisulise?: boolean;
 }> = ({
   configData,
   isHistoryTab = false,
   isCancelledTab,
   onPageChange,
   activePage,
+  shouldNotDisplayShareVisulise = false,
 }) => {
   const activeMarket = configData.activePair;
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -279,7 +281,9 @@ const MobileTable: React.FC<{
                 <CancelButton option={option} />
               )}
               <div className="flex items-center gap-3">
-                {normal_option && isHistoryTab && <Share data={option} />}
+                {normal_option &&
+                  isHistoryTab &&
+                  !shouldNotDisplayShareVisulise && <Share data={option} />}
                 <Gradientbtn
                   className={`details-btn`}
                   onClick={() => {

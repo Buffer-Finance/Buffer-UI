@@ -1,4 +1,5 @@
 import { useGlobal } from '@Contexts/Global';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { useQTinfo } from '@Views/BinaryOptions';
 import MobileTable from '@Views/BinaryOptions/Components/Mobile/historyTab';
 import {
@@ -23,6 +24,7 @@ export const HistoryTables = () => {
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
   const { active, history, cancelled } = useAtomValue(tardesPageAtom);
+  const { viewOnlyMode } = useUserAccount();
 
   const activeTabIdx = useMemo(
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
@@ -79,6 +81,7 @@ export const HistoryTables = () => {
         activePage={history}
         configData={qtInfo}
         onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
+        shouldNotDisplayShareVisulise={viewOnlyMode}
       />
       <MobileOnly>
         <MobileTable
@@ -86,6 +89,7 @@ export const HistoryTables = () => {
           configData={qtInfo}
           isHistoryTab
           onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
+          shouldNotDisplayShareVisulise={viewOnlyMode}
         />
       </MobileOnly>
     </>

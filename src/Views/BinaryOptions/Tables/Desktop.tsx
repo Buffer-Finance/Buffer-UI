@@ -46,12 +46,14 @@ interface IPGDesktopTables {
   configData: IQTrade;
   onPageChange?: (e: ChangeEvent, p: number) => void;
   activePage: number;
+  shouldNotDisplayShareVisulise: boolean;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   configData,
   onPageChange,
   activePage,
+  shouldNotDisplayShareVisulise,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -96,9 +98,9 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Trade Size',
         'Payout',
         'Status',
-        '',
+        !shouldNotDisplayShareVisulise && '',
         // "Visualize",
-      ];
+      ].filter((name) => name !== null && name !== undefined && name !== false);
     else if (isCancelledTable)
       return ['Asset', 'Strike Price', 'Trade Size', 'Status', 'Reason'];
     else
@@ -111,8 +113,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Close Time',
         'Trade Size',
         'Probability',
-        'Visualize',
-      ];
+        !shouldNotDisplayShareVisulise && 'Visualize',
+      ].filter((name) => name !== null && name !== undefined && name !== false);
   }, [isHistoryTable]);
 
   const HeaderFomatter = (col: number) => {
