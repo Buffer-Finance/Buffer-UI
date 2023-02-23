@@ -162,7 +162,7 @@ const BufferTable: React.FC<IBufferTable> = ({
                 return (
                   <TableRow
                     key={row}
-                    className={`table-row ${rowClass} ${
+                    className={`group table-row ${rowClass} ${
                       isBodyTransparent ? 'transparent transparent-hover' : ''
                     }`}
                     onClick={() => onRowClick(row)}

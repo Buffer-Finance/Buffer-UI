@@ -16,6 +16,7 @@ import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
 import { useNavigate } from 'react-router-dom';
+import { Launch } from '@mui/icons-material';
 
 export const DailyWebTable: React.FC<{
   res: ILeague[] | undefined;
@@ -94,7 +95,7 @@ export const DailyWebTable: React.FC<{
         return (
           <CellContent
             content={[
-              <>
+              <div className="flex items-center gap-2">
                 {currentStanding.user.toLowerCase() ===
                 account?.toLowerCase() ? (
                   <span className="text-1">Your Account</span>
@@ -116,7 +117,8 @@ export const DailyWebTable: React.FC<{
                     </NumberTooltip>
                   </div>
                 )}
-              </>,
+                <Launch className="invisible group-hover:visible" />
+              </div>,
             ]}
           />
         );
@@ -230,7 +232,7 @@ export const DailyWebTable: React.FC<{
   const topDecorator =
     standings?.length && userData?.length ? (
       // const topDecorator = false ? (
-      <BufferTableRow onClick={console.log} className="highlight">
+      <BufferTableRow onClick={console.log} className="highlight group ">
         {new Array(DailyCols.length).fill(9).map((_, i) => (
           <BufferTableCell onClick={() => navigateToProfile(account)}>
             {BodyFormatter(0, i, {
