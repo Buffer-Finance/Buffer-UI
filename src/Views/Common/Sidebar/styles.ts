@@ -119,7 +119,7 @@ const SidebarCSS = styled.div`
       color: var(--text-6);
       justify-content: center;
       margin: auto;
-      width: 100%;
+      width: auto;
       padding: 1em 2rem;
       text-transform: capitalize;
       border-radius: 1.2rem;
@@ -129,7 +129,8 @@ const SidebarCSS = styled.div`
       font-weight: 400;
       font-size: 16px;
       transition: 80ms ease;
-      margin-bottom: 0.3rem;
+      /* margin-bottom: 0.3rem; */
+      margin: 0 8px 3px 8px;
       &:hover {
         color: var(--text-blue);
       }
