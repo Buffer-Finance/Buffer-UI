@@ -8,6 +8,7 @@ import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
+import { Launch } from '@mui/icons-material';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
@@ -18,6 +19,7 @@ export const DailyMobileTable: React.FC<{
   nftWinners?: number;
   activePage: number;
   userRank: string;
+  onClick: (address: string | undefined) => void;
 }> = ({
   options,
   skip,
@@ -27,6 +29,7 @@ export const DailyMobileTable: React.FC<{
   nftWinners,
   activePage,
   userRank,
+  onClick,
 }) => {
   const { address: account } = useUserAccount();
   if (!options)
@@ -45,6 +48,7 @@ export const DailyMobileTable: React.FC<{
           userData,
           account,
           nftWinners,
+          onClick,
         }}
       />
     ) : null;
@@ -72,6 +76,7 @@ export const DailyMobileTable: React.FC<{
                   userData,
                   account,
                   nftWinners,
+                  onClick,
                 }}
               />
             );
@@ -100,6 +105,7 @@ const MobileRow = ({
   userData,
   account,
   nftWinners,
+  onClick,
 }) => {
   const isUser = user ? true : false;
   const perc = multiply(
@@ -111,10 +117,12 @@ const MobileRow = ({
 
   return (
     <div
+      role="button"
       key={index}
       className={`text-f12 bg-1 rounded-lg p-5 table-width margin-auto ${
         user && 'highlight'
       }`}
+      onClick={() => onClick(currentStanding?.user)}
     >
       {/* FIrst Row */}
       <div className="flex justify-between items-center mb-3">
@@ -130,7 +138,7 @@ const MobileRow = ({
               nftWinners={nftWinners}
             />
           </div>
-          <div className="text-f13 ml-1">
+          <div className="text-f13 ml-1 flex items-center gap-2">
             {currentStanding?.user.toLowerCase() === account?.toLowerCase() ? (
               <span className="text-1">Your Account</span>
             ) : (
@@ -151,6 +159,7 @@ const MobileRow = ({
                 </NumberTooltip>
               </div>
             )}
+            <Launch className="" />
           </div>
         </div>
 

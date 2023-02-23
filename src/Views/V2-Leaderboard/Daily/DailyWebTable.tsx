@@ -262,6 +262,7 @@ export const DailyWebTable: React.FC<{
             onpageChange(p);
           }}
           nftWinners={nftWinners}
+          onClick={navigateToProfile}
         />
       )}
 
