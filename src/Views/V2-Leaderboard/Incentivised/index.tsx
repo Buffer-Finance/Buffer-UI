@@ -43,7 +43,8 @@ export const Incentivised = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useLeaderboardQuery();
+  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
+    useLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -73,7 +74,7 @@ export const Incentivised = () => {
 
   useEffect(() => {
     setActivePageNumber(1);
-  }, [activeTab]);
+  }, [activeTab, offset]);
 
   useEffect(() => {
     if (offset === null) {
@@ -234,18 +235,22 @@ export const Incentivised = () => {
             <DailyWebTable
               res={tableData}
               count={totalPages.arbitrum}
+              activePage={activePages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
               nftWinners={0}
+              userRank={winnerUserRank}
             />,
             <DailyWebTable
               res={loserStats}
               count={totalPages.arbitrum}
+              activePage={activePages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
               nftWinners={1}
+              userRank={loserUserRank}
             />,
           ]}
         />

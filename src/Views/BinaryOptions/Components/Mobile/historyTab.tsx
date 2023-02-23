@@ -70,18 +70,22 @@ const CancelButton = ({ option }) => {
   );
 };
 
-const MobileTable: React.FC<any> = ({
-  configData,
-  isHistoryTab = false,
-  isCancelledTab,
-  onPageChange,
-}: {
+const MobileTable: React.FC<{
   configData: IQTrade;
   isHistoryTab?: boolean;
   isCancelledTab?: boolean;
   count?: number;
   currentPage?: number;
   onPageChange?: (e: ChangeEvent, p: number) => void;
+  activePage: number;
+  shouldNotDisplayShareVisulise?: boolean;
+}> = ({
+  configData,
+  isHistoryTab = false,
+  isCancelledTab,
+  onPageChange,
+  activePage,
+  shouldNotDisplayShareVisulise = false,
 }) => {
   const activeMarket = configData.activePair;
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -277,7 +281,9 @@ const MobileTable: React.FC<any> = ({
                 <CancelButton option={option} />
               )}
               <div className="flex items-center gap-3">
-                {normal_option && isHistoryTab && <Share data={option} />}
+                {normal_option &&
+                  isHistoryTab &&
+                  !shouldNotDisplayShareVisulise && <Share data={option} />}
                 <Gradientbtn
                   className={`details-btn`}
                   onClick={() => {
@@ -306,8 +312,8 @@ const MobileTable: React.FC<any> = ({
         rows={filteredData?.length}
         bodyJSX={BodyFormatterMobile}
         count={totalPages}
+        activePage={activePage}
         onPageChange={onPageChange}
-        shouldShowTroply={false}
         error={<ErrorMsg isHistoryTable={isHistoryTab} />}
         loading={!shouldConnectWallet && !filteredData}
       />

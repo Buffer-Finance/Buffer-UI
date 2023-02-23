@@ -1,7 +1,7 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useAtom } from 'jotai';
-import { useState, useEffect, ReactNode, useContext } from 'react';
+import { useState, useEffect, ReactNode, useContext, useMemo } from 'react';
 import { useCodeOwner } from './Hooks/useCodeOwner';
 import BufferInput from '@Views/Common/BufferInput';
 import BufferTransitionedTab from '@Views/Common/BufferTransitionedTab';
@@ -11,7 +11,7 @@ import Drawer from '@Views/Common/V2-Drawer';
 import PlainCard from '@Views/Referral/Components/PlainCard';
 import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
 import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
-import {  useConnectModal} from '@rainbow-me/rainbowkit'
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 import {
   ReferralContext,
@@ -43,13 +43,14 @@ import { baseGraphqlUrl } from 'config';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { snackAtom } from 'src/App';
+import { useSearchParams } from 'react-router-dom';
 
 interface IReferral {}
 
 // status 1 - go ahead
 // status 2 - NA
 // status 3 - loading
-interface IReferralStat {
+export interface IReferralStat {
   totalTradesReferred: string;
   totalVolumeOfReferredTrades: string;
   totalRebateEarned: string;
@@ -100,10 +101,21 @@ const useUserAffilateCode = (activeChain: Chain) => {
   return data;
 };
 
+export const useRefferalTab = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = useMemo(() => searchParams.get('tab'), [searchParams]);
+
+  function setTab(tab: string) {
+    setSearchParams({ tab });
+  }
+
+  return { tab, setTab };
+};
+
+export const tabs = ['Use a Referral', 'Create your Referral'];
 const Referral: React.FC<IReferral> = ({}) => {
   const { activeChain } = useContext(ReferralContext);
   const [showCodeModal, setShowCodeModal] = useAtom(showCodeModalAtom);
-  const tabs = ['Use a Referral', 'Create your Referral'];
   const { writeTXN } = useReferralWriteCall();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [ip, setip] = useState('');
@@ -114,6 +126,7 @@ const Referral: React.FC<IReferral> = ({}) => {
   const { address: account } = useUserAccount();
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   const { openConnectModal } = useConnectModal();
+  const { setTab, tab } = useRefferalTab();
 
   const shouldConnectWallet = !account;
   useEffect(() => {
@@ -129,6 +142,15 @@ const Referral: React.FC<IReferral> = ({}) => {
     )
       setip(referralCodes[1]);
   }, [activeTab, account]);
+
+  useEffect(() => {
+    if (tab === null) {
+      setTab(tabs[0]);
+    }
+    if (tab != activeTab && tab !== null) {
+      setActiveTab(tab);
+    }
+  }, [tab, activeTab]);
 
   const closeModal = () => {
     setShowCodeModal(false);
@@ -273,9 +295,9 @@ const Referral: React.FC<IReferral> = ({}) => {
         : btnText}
     </BlueBtn>
   );
-  useEffect(()=>{
-    document.title = "Buffer | Referrals"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Referrals';
+  }, []);
 
   return (
     <>
@@ -296,8 +318,14 @@ const Referral: React.FC<IReferral> = ({}) => {
           Referral
         </>
         <Header.Description>
-       <span className='mb-2 block'>   Get fee discounts and earn rebates.</span> 
-          <span className='italic  block'> Note: Referral codes are case sensitive</span>
+          <span className="mb-2 block">
+            {' '}
+            Get fee discounts and earn rebates.
+          </span>
+          <span className="italic  block">
+            {' '}
+            Note: Referral codes are case sensitive
+          </span>
           <br className="sm:hidden" />
           {/* For more information, please read the
           <Header.Link
@@ -315,6 +343,7 @@ const Referral: React.FC<IReferral> = ({}) => {
             key={s}
             onClick={() => {
               setActiveTab(s);
+              setTab(s);
             }}
             active={activeTab === s}
           >
@@ -475,7 +504,7 @@ const Affilate = ({
   );
 };
 
-const useUserReferralStats = () => {
+export const useUserReferralStats = () => {
   const { address } = useUserAccount();
   return useSWR(`${address}-stats`, {
     fetcher: async () => {

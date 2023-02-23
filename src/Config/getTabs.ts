@@ -56,6 +56,12 @@ export const getTabs = (marketFromStorage: string) => {
         subTabs: [],
         isExternalLink: true,
       },
+      {
+        to: `/profile`,
+        name: 'Profile',
+        subTabs: [],
+        isExternalLink: false,
+      },
 
       // {
       //   to: `/leaderboard/incentivised`,
@@ -117,6 +123,12 @@ export const getTabs = (marketFromStorage: string) => {
       {
         to: `/referral`,
         name: 'Referral',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/profile`,
+        name: 'Profile',
         subTabs: [],
         isExternalLink: false,
       },

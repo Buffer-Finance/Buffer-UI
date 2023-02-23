@@ -82,7 +82,7 @@ export const PNL = () => {
           }
         />
 
-        <DailyWebTable res={response} shouldShowTrophy={false} />
+        <DailyWebTable res={response} />
       </PNLStyles>
     </LeaderBoard>
   );
