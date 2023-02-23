@@ -115,8 +115,7 @@ export const Incentivised = () => {
                 head={'Reward Pool'}
                 // desc={<Display data={500} unit={"USDC"}  precisionj/>}
                 desc={
-                  endDay[activeChain.id] &&
-                  day - offset >= endDay[activeChain.id] ? (
+                  endDay[activeChain.id] && offset >= endDay[activeChain.id] ? (
                     '0 USDC'
                   ) : data &&
                     data.reward &&
