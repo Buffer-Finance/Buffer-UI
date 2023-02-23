@@ -81,7 +81,7 @@ export const HistoryTables = () => {
         activePage={history}
         configData={qtInfo}
         onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
-        shouldNotDisplayShareVisulise={viewOnlyMode}
+        shouldNotDisplayShareVisulise={true}
       />
       <MobileOnly>
         <MobileTable
@@ -89,7 +89,7 @@ export const HistoryTables = () => {
           configData={qtInfo}
           isHistoryTab
           onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
-          shouldNotDisplayShareVisulise={viewOnlyMode}
+          shouldNotDisplayShareVisulise={true}
         />
       </MobileOnly>
     </>
