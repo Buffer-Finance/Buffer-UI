@@ -9,12 +9,12 @@ export interface ITab {
   Img?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 }
 
-export const getTabs = (marketFromStorage:string) => {
-  const market = marketFromStorage || defaultMarket
+export const getTabs = (marketFromStorage: string) => {
+  const market = marketFromStorage || defaultMarket;
   if (import.meta.env.VITE_ENV === 'MAINNET') {
     return [
       {
-        to: `/binary/`+market,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -46,7 +46,7 @@ export const getTabs = (marketFromStorage:string) => {
 
       {
         to: `https://optopi.buffer.finance/`,
-        name: 'NFT',
+        name: 'Optopi NFT',
         subTabs: [],
         isExternalLink: true,
       },
@@ -79,7 +79,7 @@ export const getTabs = (marketFromStorage:string) => {
   } else
     return [
       {
-        to: `/binary/`+market,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -98,7 +98,7 @@ export const getTabs = (marketFromStorage:string) => {
       },
       {
         to: `https://optopi.buffer.finance/`,
-        name: 'NFT',
+        name: 'Optopi NFT',
         subTabs: [],
         isExternalLink: true,
       },
