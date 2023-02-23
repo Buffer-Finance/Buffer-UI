@@ -123,7 +123,7 @@ function App() {
         closeWarning={() => {}}
         shouldAllowClose={false}
         state={true}
-        className="disclaimer"
+        className="disclaimer sm:hidden"
       />
       <ConnectionDrawer className="open" />
       <MobileBottomTabs />

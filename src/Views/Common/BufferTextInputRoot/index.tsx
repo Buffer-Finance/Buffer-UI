@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import Background from "./style";
 import Fade from "react-reveal/Fade";
 import ErrorIcon from "src/SVG/Elements/ErrorIcon";
-
+import { twMerge } from "tailwind-merge";
 export interface IBufferInputBase {
   placeholder?: string;
   unit?: React.ReactChild;
@@ -84,12 +84,12 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
   return (
     <Background className={className}>
       <div
-        className={` background ${err && "error-boundary"} ${
+        className={` background h-full ${err && "error-boundary"} ${
           isGrey && "bg"
         } ${bgClass}`}
       >
         <div className="upper-part ">{header}</div>
-        <div className="lower-part">
+        <div className="lower-part h-full">
           {label ?label:null }
           <input
           
@@ -106,17 +106,25 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
             disabled={isDisabled}
             title={title}
           />
-          <div className={unit && "txxpl"}>{unit}</div>
+          {unit ? unit:null}
         </div>
+      </div>
         <Fade center when={err} collapse duration={500}>
-          <div className="error-message">
+           <div className="error-message ">
             <ErrorIcon className="error-icon" />
             <span className="text-6">{err}</span>
           </div>
         </Fade>
-      </div>
     </Background>
   );
 };
 
 export default BufferTextInputRoot;
+
+interface IComponent {
+  className?:string;
+  children?:React.ReactChild
+}
+export const BufferInputUnit = ({className,children}:IComponent)=>{
+  return <div className={className}>{children}</div>
+}
