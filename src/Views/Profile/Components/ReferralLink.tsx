@@ -24,7 +24,7 @@ export const ReferralLink = () => {
           </div>
           <div className="text-f14 sm:text-f12">
             Get fee discounts and rebates!&nbsp;
-            <span
+            {/* <span
               className="light-blue-text  whitespace-nowrap hover:underline  cursor-pointer"
               onClick={() => {
                 window.open('#', '_blank');
@@ -32,7 +32,7 @@ export const ReferralLink = () => {
             >
               Learn more
               <FrontArrow className="tml w-fit inline" />
-            </span>
+            </span> */}
           </div>
         </div>
       </div>
