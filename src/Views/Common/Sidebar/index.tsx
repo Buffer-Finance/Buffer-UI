@@ -93,7 +93,7 @@ const SideBar: React.FC<any> = () => {
               return (
                 <button
                   key={option.name}
-                  className={`item !w-full`}
+                  className={`item !w-full !ml-[0px] !mr-[0px]`}
                   onClick={() => {
                     handleChange(option.to);
                   }}
