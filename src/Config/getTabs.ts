@@ -1,3 +1,4 @@
+import { defaultMarket } from '@Views/BinaryOptions';
 import { SVGProps } from 'react';
 
 export interface ITab {
@@ -8,11 +9,12 @@ export interface ITab {
   Img?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 }
 
-export const getTabs = () => {
+export const getTabs = (marketFromStorage: string) => {
+  const market = marketFromStorage || defaultMarket;
   if (import.meta.env.VITE_ENV === 'MAINNET') {
     return [
       {
-        to: `/binary/BTC-USD`,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -44,7 +46,7 @@ export const getTabs = () => {
 
       {
         to: `https://optopi.buffer.finance/`,
-        name: 'NFT',
+        name: 'Optopi NFT',
         subTabs: [],
         isExternalLink: true,
       },
@@ -83,7 +85,7 @@ export const getTabs = () => {
   } else
     return [
       {
-        to: `/binary/BTC-USD`,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -102,7 +104,7 @@ export const getTabs = () => {
       },
       {
         to: `https://optopi.buffer.finance/`,
-        name: 'NFT',
+        name: 'Optopi NFT',
         subTabs: [],
         isExternalLink: true,
       },

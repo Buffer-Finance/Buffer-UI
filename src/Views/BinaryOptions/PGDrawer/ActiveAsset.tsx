@@ -56,7 +56,7 @@ export const ActiveAsset = () => {
   }
 
   const title = currentPrice
-    ? toFixed(currentPrice, singleAsset.price_precision.toString().length) +
+    ? toFixed(currentPrice, singleAsset.price_precision.toString().length-1) +
       ' | ' +
       singleAsset.tv_id
     : '';
@@ -81,13 +81,9 @@ export const ActiveAsset = () => {
         <span className="text-f14 mb-2 ">Selected Pair</span>
       </div>
       <div className="px-5 py-3 rounded-[10px] y-auto bg-1  whitespace-nowrap">
-        <div className={`flex items-center content-between assets w-full`}>
-          <div>
-            <PairTokenImage
-              pair={singleAsset.pair}
-              size={30}
-              className={singleAsset.token2 === 'USD' ? 'w-[30px]' : 'w-[60px]'}
-            />
+        <div className={`flex items-center content-between assets w-full h-max`}>
+          <div className="min-w-[30px] w-[30px] h-[30px] mr-3">
+            <PairTokenImage pair={singleAsset.pair} />
           </div>
           <div className="flex-col w-full items-stretch">
             <div className="w-full flex justify-between items-center text-1">

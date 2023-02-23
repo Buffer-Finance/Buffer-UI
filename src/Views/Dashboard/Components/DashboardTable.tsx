@@ -29,9 +29,11 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
     switch (col) {
       case 0:
         return (
-          <div className="flex items-center gap-2">
-            <PairTokenImage pair={currentRow.pair} size={20} />
-            <div className="-ml-[6px]">{currentRow.pair}</div>
+          <div className="flex items-center gap-[6px] ">
+            <div className="w-[20px] h-[20px]">
+              <PairTokenImage pair={currentRow.pair} />
+            </div>
+            <div className="">{currentRow.pair}</div>
           </div>
         );
       case 1:

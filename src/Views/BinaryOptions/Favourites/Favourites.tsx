@@ -14,7 +14,7 @@ import { useFavouritesFns } from '../Hooks/useFavouritesFns';
 import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '../Components/PairTokenImage';
 
 export default function Favourites({ className }: { className?: string }) {
@@ -146,18 +146,17 @@ export default function Favourites({ className }: { className?: string }) {
 
 function FavouriteCard({
   data,
-  onCross,
   isPrevActive,
   id,
 }: {
   data: IMarket;
-  onCross: () => void;
   isPrevActive: boolean;
   id: number;
 }) {
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
   const isActive = data.tv_id === activeAsset.tv_id;
+  console.log(`data.tv_id: `,data.tv_id,activeAsset.tv_id);
   const { deleteCardHandler } = useFavouritesFns();
   const [marketPrice] = useAtom(marketPriceAtom);
   const marketPriceObj = marketPrice?.[data.tv_id];
@@ -168,11 +167,11 @@ function FavouriteCard({
   const isAssetActive =
     routerPermission &&
     routerPermission[data.pools[0].options_contracts.current];
+   const navigate =  useNavigate();
 
   return (
-    <Link
-      to={`/binary/${data.pair}`}
-      className={`group mt-1 relative group pl-4 pr-3 py-3 text-2 flex flex-row items-center justify-between b1200:flex-col a1200:!min-w-[100px]  b1200:!px-3 b1200:rounded-md  b1200:mr-3 b1200:mt-[10px] b1200:items-start ${
+    <div
+      className={`cursor-pointer group mt-1 relative group pl-4 pr-3 py-3 text-2 flex flex-row items-center justify-between b1200:flex-col a1200:!min-w-[100px]  b1200:!px-3 b1200:rounded-md  b1200:mr-3 b1200:mt-[10px] b1200:items-start ${
         isActive
           ? 'text-1 bg-[#131722] rounded-t-[10px] cursor-default  left-border-needed '
           : `hover:bg-1 hover:rounded-t-[0px] b1200:bg-cross-bg after-border ${
@@ -180,10 +179,13 @@ function FavouriteCard({
             } ${!isAssetActive ? 'brightness-50' : ''} 
  `
       }`}
+      onClick={
+      ()=>  navigate(`/binary/${data.pair}`  )
+      }
     >
       <button
         className="!absolute z-[10] text-1 !-right-3 -top-1 !bg-cross-bg rounded-full w-[17px] h-[17px] group-hover:visible invisible"
-        onClick={(e) => deleteCardHandler(e, data, isActive)}
+        onClick={(e) =>{e.stopPropagation(); deleteCardHandler(e, data, isActive)}}
       >
         <CloseOutlined className="!w-4" />
       </button>
@@ -196,7 +198,9 @@ function FavouriteCard({
         /> */}
         <div className="text-f13 group-hover:text-3 whitespace-nowrap flex justify-start items-start text-3 mr-[0.4vw] b1200:flex-col">
           <span className="a1200:mr-3 flex b1200:mb-1 ">
-            <PairTokenImage pair={data.pair} size={18} />
+            <div className="w-[18px] h-[18px] mr-[6px]">
+              <PairTokenImage pair={data.pair} />
+            </div>
             {data.pair}
           </span>
           {price ? (
@@ -213,6 +217,6 @@ function FavouriteCard({
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
