@@ -255,14 +255,14 @@ export const UserData = () => {
       </div>
 
       {/* right side */}
-      <div className="bg-2 px-7 py-[20px] rounded-lg">
+      {/* <div className="bg-2 px-7 py-[20px] rounded-lg">
         <Col
           head={'Daily Rank'}
           desc={winnerUserRank}
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

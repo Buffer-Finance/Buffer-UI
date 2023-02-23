@@ -44,7 +44,7 @@ export const ReferralLink = () => {
 };
 
 const Button = () => {
-  const { address: account } = useUserAccount();
+  const { address: account, viewOnlyMode } = useUserAccount();
   const [open, setOpen] = useState(false);
   const [_, copyToClipboard] = useCopyToClipboard();
   const { hostname } = window.location;
@@ -71,6 +71,7 @@ const Button = () => {
     }
   }, [open]);
   console.log(account, 'account');
+  if (viewOnlyMode) return <></>;
   if (account === undefined) {
     return (
       <ConnectionRequired>

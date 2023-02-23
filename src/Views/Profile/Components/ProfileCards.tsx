@@ -119,7 +119,7 @@ const Referral = ({
           values={[
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
+                data={divide(data.totalRebateEarned, usdcDecimals)}
                 unit={'USDC'}
               />
             </div>,
@@ -128,10 +128,11 @@ const Referral = ({
             // </div>,
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.totalRebateEarned, usdcDecimals)}
+                data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
                 unit={'USDC'}
               />
             </div>,
+
             <div className={wrapperClasses}>{data.totalTradesReferred}</div>,
           ]}
         />
