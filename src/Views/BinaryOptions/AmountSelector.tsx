@@ -4,11 +4,10 @@ import { BufferInputUnit } from '@Views/Common/BufferTextInputRoot';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
+import { mobileUpperBound } from '.';
 import { ammountAtom } from './PGDrawer';
 
 const AmountSelector: React.FC<any> = ({activeAssetState,amount,setAmount}) => {
-  const [balance, allowanceWei, maxTrade, _, routerPermission] =
-    activeAssetState;
   return (
     <BaseInput
       id="amount"
@@ -22,14 +21,14 @@ const AmountSelector: React.FC<any> = ({activeAssetState,amount,setAmount}) => {
       className="w-fit"
       val={amount}
       numericValidations={
-        maxTrade && {
+        window.innerWidth > mobileUpperBound && activeAssetState?.[1] && {
           max: {
-            val: maxTrade + '',
+            val: activeAssetState[1] + '',
             error: (
               <div className="flex">
                 Maximum Amount is :&nbsp;{' '}
                 <Display
-                  data={maxTrade.toString()}
+                  data={activeAssetState[1].toString()}
                   unit={'USD'}
                 />
               </div>
@@ -37,7 +36,7 @@ const AmountSelector: React.FC<any> = ({activeAssetState,amount,setAmount}) => {
           },
           min: {
             val: '1',
-            error: gt(maxTrade.toString(), '1')
+            error: gt(activeAssetState[1].toString(), '1')
               ? 'Bet amount must be atleast 1 iBFR'
               : "Liquidity isn't available.",
           },
@@ -58,9 +57,9 @@ const DurationSelector: React.FC<any> = ({activeAssetState,amount,setAmount}) =>
     activeAssetState;
   return (
     <BaseInput
-      id="amount"
+      id="duration"
       label={
-        <label className="text-2 mr-2 text-f14 font-semibold" htmlFor="amount">
+        <label className="text-2 mr-2 text-f14 font-semibold" htmlFor="duration">
           Duration
         </label>
       }

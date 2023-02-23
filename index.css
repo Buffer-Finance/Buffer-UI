@@ -41,7 +41,7 @@ body {
   .TVChartContainer-wrapper{
     width: auto;
     resize: vertical;
-    height: 50vh;
+    height: 55vh;
   }
   
 }
@@ -252,7 +252,7 @@ div.chart-type-dd {
     transform: none;
   }
   .scrollbarnil::after {
-    right: 0px;
+    right: calc(-1 * var(--global-padding));
   }
 }
 
