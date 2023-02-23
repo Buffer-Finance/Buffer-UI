@@ -3,7 +3,7 @@ import { NFTContract } from './config';
 import { Background } from './style';
 
 export const ClaimedNFT = () => {
-  const { nfts } = useNFTGraph();
+  const { nfts } = useNFTGraph(false);
   // console.log(`nfts: `, nfts);
   const totalNfts = nfts?.length;
 

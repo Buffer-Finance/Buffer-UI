@@ -40,7 +40,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const [balance, allowance, _, currStats] = activeAssetState;
   const [expiration] = useAtom(QuickTradeExpiry);
   const [token] = useAtom(sessionAtom);
-  const { highestTierNFT } = useHighestTierNFT();
+  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
 
   const [, setIsApproveModalOpen] = useAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
@@ -53,7 +53,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   );
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
-    );
+  );
   const [marketPrice] = useAtom(marketPriceAtom);
   const toastify = useToast();
 
@@ -62,7 +62,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   };
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
-
     const isCustom = typeof customTrade.is_up === 'boolean';
 
     if (state.txnLoading > 1) {
@@ -183,7 +182,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   };
 
   const handleApproveClick = async (ammount = toFixed(getPosInf(), 0)) => {
-
     if (state.txnLoading > 1) {
       toastify({
         id: 'dddafsd3',
