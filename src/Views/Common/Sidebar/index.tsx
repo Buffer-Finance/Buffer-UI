@@ -73,7 +73,7 @@ const SideBar: React.FC<any> = () => {
         <div className="sidebar_container flex-col">
           <div className="icon_container mb-6">
             <div
-              className="flex items-center"
+              className="flex items-center justify-center"
               role={'button'}
               onClick={
                 () => {}

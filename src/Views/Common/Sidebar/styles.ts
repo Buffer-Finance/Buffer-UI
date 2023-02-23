@@ -273,7 +273,8 @@ const SidebarCSS = styled.div`
       top: 0;
       padding-top: 2rem;
       margin-top: 0 !important;
-      padding-left: 3rem !important;
+      justify-content: center !important;
+      /* padding-left: 3rem !important; */
       transform: translateX(-1rem);
       .buffer-logo {
         height: none;
