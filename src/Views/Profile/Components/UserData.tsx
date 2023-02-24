@@ -41,7 +41,7 @@ export const UserData = () => {
   });
 
   return (
-    <div className="flex items-center justify-between flex-wrap sm:items-stretch sm:gap-4">
+    <div className="flex items-center justify-between flex-wrap sm:items-stretch sm:gap-4 gap-7">
       {/* left side -- pfp and address */}
 
       <div className="flex items-center gap-7 sm:gap-5">
