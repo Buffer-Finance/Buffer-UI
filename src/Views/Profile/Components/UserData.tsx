@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { divide, gte } from '@Utils/NumString/stringArithmatics';
@@ -71,22 +72,25 @@ export const UserData = () => {
       </div>
 
       {/* right side -- data */}
-      <div className="bg-2 px-7 py-[20px] rounded-lg flex items-stretch justify-between w-fit ">
+      <DataWrapper className="bg-2 px-7 py-[20px] rounded-lg flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
         <Col
+          className={'winner-card'}
           head={'Daily Rank'}
           desc={dailyRank}
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
-        <Separator />
+        {/* <Separator /> */}
         <Col
+          className={'winner-card'}
           head={'Weekly Rank'}
           desc={weeklyRank}
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
-        <Separator />
+        {/* <Separator /> */}
         <Col
+          className={'winner-card'}
           head={'Net Pnl'}
           desc={
             tradingMetricsData ? (
@@ -105,8 +109,9 @@ export const UserData = () => {
               : 'text-red'
           }`}
         />
-        <Separator />
+        {/* <Separator /> */}
         <Col
+          className={'winner-card'}
           head={'Most Traded Asset'}
           desc={
             mostTradedAsset ? (
@@ -123,13 +128,13 @@ export const UserData = () => {
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
-      </div>
+      </DataWrapper>
     </div>
   );
 };
 
 const Separator = () => {
-  return <div className="w-1 h-auto bg-cross-bg mx-5"></div>;
+  return <div className="w-1 h-auto bg-cross-bg mx-5 sm:mx-[0]"></div>;
 };
 
 const useGetAssetData = ({ assetAddress }: { assetAddress: string | null }) => {
@@ -175,3 +180,25 @@ const CircleAroundPicture = () => {
     </svg>
   );
 };
+
+const DataWrapper = styled.div`
+  .winner-card {
+    border-right: 1px solid #2d2d3d;
+    padding: 0 30px;
+
+    :first-of-type {
+      padding-left: 0;
+    }
+    :last-of-type {
+      padding-right: 0;
+      border: none;
+    }
+    @media (max-width: 600px) {
+      width: 50%;
+      padding: 0;
+      :nth-of-type(even) {
+        border-right: none;
+      }
+    }
+  }
+`;
