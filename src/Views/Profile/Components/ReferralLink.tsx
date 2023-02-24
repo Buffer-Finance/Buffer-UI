@@ -13,6 +13,9 @@ import { useNavigate } from 'react-router-dom';
 import { useCopyToClipboard } from 'react-use';
 
 export const ReferralLink = () => {
+  const { viewOnlyMode } = useUserAccount();
+  if (viewOnlyMode) return <></>;
+
   return (
     <div className="rounded-lg px-[30px] py-8 bg-2 flex items-center justify-between my-6 sm:flex-col sm:gap-6 sm:px-6 sm:py-6">
       {/* left side */}
@@ -44,7 +47,7 @@ export const ReferralLink = () => {
 };
 
 const Button = () => {
-  const { address: account, viewOnlyMode } = useUserAccount();
+  const { address: account } = useUserAccount();
   const [open, setOpen] = useState(false);
   const [_, copyToClipboard] = useCopyToClipboard();
   const { hostname } = window.location;
@@ -71,7 +74,6 @@ const Button = () => {
     }
   }, [open]);
   console.log(account, 'account');
-  if (viewOnlyMode) return <></>;
   if (account === undefined) {
     return (
       <ConnectionRequired>
@@ -91,7 +93,7 @@ const Button = () => {
   }
 
   return (
-    <div className="flex flex-col items-end gap-2 sm:items-center">
+    <div className="flex flex-col gap-2 items-center">
       <Tooltip
         open={open}
         onClose={() => {
