@@ -127,7 +127,7 @@ export const useLeaderboardQuery = () => {
 
     if (rank === -1) return '-';
     else return (rank + 1).toString();
-  }, [data?.userData]);
+  }, [data?.userData, account]);
 
   const loserUserRank = useMemo(() => {
     if (!data || !data.loserStats || !account) return '-';
@@ -136,7 +136,7 @@ export const useLeaderboardQuery = () => {
     );
     if (rank === -1) return '-';
     else return (rank + 1).toString();
-  }, [data?.loserStats]);
+  }, [data?.loserStats, account]);
 
   const totalTournamentData = useMemo(() => {
     if (!data || !data.totalData) return null;

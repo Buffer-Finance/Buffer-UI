@@ -265,20 +265,25 @@ export const UserData = () => {
       </div>
 
       {/* right side */}
-      {/* <div className="bg-2 px-7 py-[20px] rounded-lg flex">
+      <div className="bg-2 px-7 py-[20px] rounded-lg flex">
         <Col
           head={'Daily Rank'}
           desc={dailyRank}
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
+        <Separator />
         <Col
           head={'Weekly Rank'}
           desc={weeklyRank}
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
-      </div> */}
+      </div>
     </div>
   );
+};
+
+const Separator = () => {
+  return <div className="w-1 h-auto bg-cross-bg mx-5"></div>;
 };

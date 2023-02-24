@@ -40,7 +40,7 @@ export const useWeeklyLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
   const { week } = useWeekOfTournament();
-  const timestamp = getWeekId(Number(week - Number(offset)));
+  const timestamp = getWeekId(Number(week - Number(offset ?? week)));
   console.log(timestamp, 'timestamp');
   const minimumTrades = isTestnet ? 5 : 3;
 
@@ -123,13 +123,14 @@ export const useWeeklyLeaderboardQuery = () => {
 
   const winnerUserRank = useMemo(() => {
     if (!data || !data.userStats || !account) return '-';
+    console.log('goes in here', data.userStats);
     const rank = data.userStats.findIndex(
       (data) => data.user.toLowerCase() == account.toLowerCase()
     );
 
     if (rank === -1) return '-';
     else return (rank + 1).toString();
-  }, [data?.userData]);
+  }, [data?.userData, account]);
 
   const loserUserRank = useMemo(() => {
     if (!data || !data.loserStats || !account) return '-';
@@ -138,7 +139,7 @@ export const useWeeklyLeaderboardQuery = () => {
     );
     if (rank === -1) return '-';
     else return (rank + 1).toString();
-  }, [data?.loserStats]);
+  }, [data?.loserStats, account]);
 
   const totalTournamentData = useMemo(() => {
     if (!data || !data.totalData) return null;
@@ -153,7 +154,7 @@ export const useWeeklyLeaderboardQuery = () => {
     return { allTradesCount, totalFee, totalRows, totalUsers };
   }, [data?.totalData, account]);
 
-  return { data, totalTournamentData,loserUserRank,winnerUserRank };
+  return { data, totalTournamentData, loserUserRank, winnerUserRank };
 };
 
 /*
