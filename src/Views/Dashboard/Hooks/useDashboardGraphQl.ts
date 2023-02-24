@@ -72,7 +72,6 @@ export const useDashboardGraphQl = () => {
   });
 
   const USDC24hrsStats = useMemo(() => {
-    console.log(data?.USDC24stats?.length, 'upper length');
     if (data?.USDC24stats) {
       return {
         ...data.USDC24stats.reduce(

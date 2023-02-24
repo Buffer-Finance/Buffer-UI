@@ -77,7 +77,6 @@ export const useDashboardTableData = () => {
 
   const oneDayVolume = useMemo(() => {
     if (!data || !data.volumePerContracts) return [];
-    console.log(data.volumePerContracts.length, 'lower length');
     return data.volumePerContracts.reduce((acc, item) => {
       const address = item.optionContract.address.toLowerCase();
       if (acc[address]) {
