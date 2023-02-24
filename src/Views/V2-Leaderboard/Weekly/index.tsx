@@ -44,7 +44,7 @@ export const Weekly = () => {
     [activePages.arbitrum]
   );
   const { data, totalTournamentData, loserUserRank, winnerUserRank } =
-  useWeeklyLeaderboardQuery();
+    useWeeklyLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -114,7 +114,7 @@ export const Weekly = () => {
               {activeChain.name}
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9"
+                href="https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52"
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
@@ -249,11 +249,10 @@ export const Weekly = () => {
               nftWinners={3}
               userRank={winnerUserRank}
               activePage={activePages.arbitrum}
-
             />,
             <DailyWebTable
-            activePage={activePages.arbitrum}
-            userRank={loserUserRank}
+              activePage={activePages.arbitrum}
+              userRank={loserUserRank}
               res={loserStats}
               count={totalPages.arbitrum}
               onpageChange={setActivePageNumber}
