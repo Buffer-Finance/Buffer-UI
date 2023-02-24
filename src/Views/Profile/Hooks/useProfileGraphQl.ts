@@ -1,5 +1,5 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { add } from '@Utils/NumString/stringArithmatics';
+import { add, subtract } from '@Utils/NumString/stringArithmatics';
 import axios from 'axios';
 import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
@@ -17,6 +17,7 @@ interface ProfileGraphQlResponse {
 
 export interface ItradingMetricsData {
   totalTrades: number;
+  net_pnl: string;
   openInterest: string;
   totalPayout: string;
   tradeWon: number;
@@ -62,11 +63,20 @@ export const useProfileGraphQl = () => {
             currentValue.payout
           );
           newData.tradeWon += 1;
+          newData.net_pnl = add(
+            accumulator.net_pnl,
+            subtract(currentValue.payout, currentValue.totalFee)
+          );
+        } else {
+          newData.net_pnl = add(
+            accumulator.net_pnl,
+            subtract('0', currentValue.totalFee)
+          );
         }
         newData.volume = add(accumulator.volume, currentValue.totalFee);
         return newData;
       },
-      { totalPayout: '0', tradeWon: 0, volume: '0' }
+      { totalPayout: '0', tradeWon: 0, volume: '0', net_pnl: '0' }
     );
 
     //counts openInterest
