@@ -58,7 +58,7 @@ export const getEarnCards = (data: IEarn) => {
             content={
               <>
                 USDC vault takes counterposition against each trade and collects
-                up to 70% of the settlement fee. USDC vault might face drawdowns
+                up to 60% of the settlement fee. USDC vault might face drawdowns
                 if traders are collectively net profitable.{' '}
                 <a
                   href="https://buffer-finance.medium.com/all-you-need-to-know-about-usdc-vaults-liqudity-pool-and-the-blp-token-d743b258da1d"
