@@ -266,7 +266,7 @@ export const UserData = () => {
       </div>
 
       {/* right side */}
-      <div className="bg-2 px-7 py-[20px] rounded-lg flex">
+      <div className="bg-2 px-7 py-[20px] rounded-lg flex items-stretch justify-between w-fit ">
         <Col
           head={'Daily Rank'}
           desc={dailyRank}
