@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { Launch } from '@mui/icons-material';
 import { divide, gte } from '@Utils/NumString/stringArithmatics';
 import { useQTinfo } from '@Views/BinaryOptions';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
@@ -10,6 +11,7 @@ import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQ
 import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
 
 export const UserData = () => {
@@ -67,7 +69,14 @@ export const UserData = () => {
           )}
         </div>
         <div className="text-[25px] text-buffer-blue sm:text-f18">
-          {address ? address.slice(0, 7) + '...' + address.slice(-7) : '-'}
+          <a
+            href={`https://arbiscan.io/address/${address}`}
+            target="_blank"
+            className="flex items-center gap-3"
+          >
+            {address ? address.slice(0, 7) + '...' + address.slice(-7) : '-'}{' '}
+            <Launch className="scale-125 mt-1" />
+          </a>
         </div>
       </div>
 
