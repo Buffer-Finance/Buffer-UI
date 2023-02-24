@@ -2,7 +2,8 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import axios from 'axios';
 import { baseGraphqlLiteUrl } from 'config';
 import { useMemo } from 'react';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
+import { useAccount } from 'wagmi';
 
 interface IGraphNFT {
   batchId: string;
@@ -13,8 +14,10 @@ interface IGraphNFT {
   phaseId: string;
 }
 
-export const useNFTGraph = () => {
+export const useNFTGraph = (userOnly = false) => {
   const { address: account } = useUserAccount();
+  const { address: userAccount } = useAccount();
+  const { cache } = useSWRConfig();
   const { data } = useSWR(`nfts-the-graph-account-${account}`, {
     fetcher: async () => {
       const response = await axios.post(baseGraphqlLiteUrl.testnet, {
@@ -38,7 +41,13 @@ export const useNFTGraph = () => {
   });
   // console.log(`data: `, data);
 
-  return { nfts: data?.nfts as IGraphNFT[] };
+  return {
+    nfts: userOnly
+      ? (cache.get(`nfts-the-graph-account-${userAccount}`)?.nfts as
+          | IGraphNFT[]
+          | undefined)
+      : (data?.nfts as IGraphNFT[]),
+  };
 };
 export enum Tier {
   SILVER,
@@ -47,8 +56,12 @@ export enum Tier {
   DIAMOND,
 }
 
-export const useHighestTierNFT = () => {
-  const { nfts } = useNFTGraph();
+export const useHighestTierNFT = ({
+  userOnly = false,
+}: {
+  userOnly?: boolean;
+}) => {
+  const { nfts } = useNFTGraph(userOnly);
   const { address: account } = useUserAccount();
 
   const highestTierNFT = useMemo(() => {

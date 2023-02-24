@@ -1,9 +1,11 @@
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useAccount } from 'wagmi';
 
 export default function NFTtier() {
-  const { highestTierNFT } = useHighestTierNFT();
-  const { address } = useUserAccount();
+  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
+  // const { address } = useUserAccount();
+  const { address } = useAccount();
   if (!highestTierNFT)
     if (address)
       return (
