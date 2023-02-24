@@ -44,7 +44,7 @@ export const HistoryTables = () => {
 
   return (
     <>
-      {/* <BufferTab
+      <BufferTab
         value={activeTabIdx}
         handleChange={(e, t) => {
           changeActiveTab(e, t);
@@ -52,7 +52,7 @@ export const HistoryTables = () => {
         distance={5}
         className="mb-5"
         tablist={[
-          // { name: 'Active' },
+          { name: 'Active' },
           { name: 'History' },
           // { name: 'Cancelled' },
         ]}
@@ -60,24 +60,47 @@ export const HistoryTables = () => {
       <TabSwitch
         value={activeTabIdx}
         childComponents={[
-          <PGTables
-            configData={qtInfo}
-            activePage={active}
-            onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
-          />,
-          <PGTables
-            activePage={history}
-            configData={qtInfo}
-            onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
-          />,
-          <PGTables
-            activePage={cancelled}
-            configData={qtInfo}
-            onPageChange={(e, pageNumber) => setCancelledPage(pageNumber)}
-          />,
+          <>
+            <PGTables
+              configData={qtInfo}
+              activePage={active}
+              onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+              shouldNotDisplayShareVisulise={true}
+            />{' '}
+            <MobileOnly>
+              <MobileTable
+                activePage={active}
+                configData={qtInfo}
+                onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+                shouldNotDisplayShareVisulise={true}
+              />
+            </MobileOnly>
+          </>,
+          <>
+            <PGTables
+              activePage={history}
+              configData={qtInfo}
+              onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
+              shouldNotDisplayShareVisulise={true}
+            />
+            <MobileOnly>
+              <MobileTable
+                activePage={history}
+                configData={qtInfo}
+                isHistoryTab
+                onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
+                shouldNotDisplayShareVisulise={true}
+              />
+            </MobileOnly>
+          </>,
+          // <PGTables
+          //   activePage={cancelled}
+          //   configData={qtInfo}
+          //   onPageChange={(e, pageNumber) => setCancelledPage(pageNumber)}
+          // />,
         ]}
-      /> */}
-      <PGTables
+      />
+      {/* <PGTables
         activePage={history}
         configData={qtInfo}
         onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
@@ -91,7 +114,7 @@ export const HistoryTables = () => {
           onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
           shouldNotDisplayShareVisulise={true}
         />
-      </MobileOnly>
+      </MobileOnly> */}
     </>
   );
 };
