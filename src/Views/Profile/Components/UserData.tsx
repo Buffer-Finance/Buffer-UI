@@ -72,14 +72,18 @@ export const UserData = () => {
           )}
         </div>
         <div className="text-[25px] text-buffer-blue sm:text-f18">
-          <a
-            href={`https://arbiscan.io/address/${address}`}
-            target="_blank"
-            className="flex items-center gap-3"
-          >
-            {address ? address.slice(0, 7) + '...' + address.slice(-7) : '-'}{' '}
-            <Launch className="scale-125 mt-1" />
-          </a>
+          {address ? (
+            <a
+              href={`https://arbiscan.io/address/${address}`}
+              target="_blank"
+              className="flex items-center gap-3"
+            >
+              {address.slice(0, 7) + '...' + address.slice(-7)}
+              <Launch className="scale-125 mt-1" />
+            </a>
+          ) : (
+            <>Wallet Not Connected.</>
+          )}
         </div>
       </div>
 
@@ -109,7 +113,7 @@ export const UserData = () => {
                 unit="USDC"
               />
             ) : (
-              'counting'
+              <div className="text-light-blue">-</div>
             )
           }
           headClass={'text-f14'}
