@@ -2,11 +2,14 @@ import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
+import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 
 export const UserData = () => {
   const { address } = useUserAccount();
-  const { winnerUserRank } = useLeaderboardQuery();
+  const { winnerUserRank: dailyRank } = useLeaderboardQuery();
+  const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT();
+  console.log(dailyRank, weeklyRank, 'ranks');
 
   return (
     <div className="flex items-center justify-between sm:flex-col sm:items-stretch sm:gap-4">
@@ -263,14 +266,25 @@ export const UserData = () => {
       </div>
 
       {/* right side */}
-      {/* <div className="bg-2 px-7 py-[20px] rounded-lg">
+      <div className="bg-2 px-7 py-[20px] rounded-lg flex">
         <Col
           head={'Daily Rank'}
-          desc={winnerUserRank}
+          desc={dailyRank}
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
-      </div> */}
+        <Separator />
+        <Col
+          head={'Weekly Rank'}
+          desc={weeklyRank}
+          headClass={'text-f14'}
+          descClass={'text-f16 text-buffer-blue'}
+        />
+      </div>
     </div>
   );
+};
+
+const Separator = () => {
+  return <div className="w-1 h-auto bg-cross-bg mx-5"></div>;
 };
