@@ -1,31 +1,26 @@
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import { useUserAccount } from '@Hooks/useUserAccount';
 import { useAccount } from 'wagmi';
 
-export default function NFTtier() {
-  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
-  // const { address } = useUserAccount();
+export default function NFTtier({ userOnly }: { userOnly: boolean }) {
+  const { highestTierNFT } = useHighestTierNFT({ userOnly: userOnly });
   const { address } = useAccount();
-  if (!highestTierNFT)
-    if (address)
-      return (
-        <div className="group flex items-center justify-center text-f13 bg-[#2C2C41] h-[30px] w-fit rounded-[7px] pl-5 special-hover hover:brightness-125 tb">
-          <img src={`/LeaderBoard/Bronze.png`} className="w-5 mr-2" />
-          <div className="pr-5 py-1 rounded-[5px] text-1 font-normal">
-            Bronze Tier
-          </div>
-        </div>
-      );
   if (!address) return <></>;
-  return (
-    <div className="group flex items-center justify-center text-f13 bg-[#2C2C41] h-[30px] w-fit rounded-[7px] pl-5 special-hover hover:brightness-125 tb">
-      <img
-        src={`/LeaderBoard/${highestTierNFT.tier}.png`}
-        className="w-5 mr-2"
-      />
-      <div className="pr-5 py-1 rounded-[5px] text-1 font-normal">
-        {highestTierNFT.tier} Tier
+  if (!highestTierNFT) {
+    return (
+      <div className="group flex items-center justify-center">
+        <img src={`/LeaderBoard/Bronze.png`} className="w-5 mr-2" />
+        <div className="text-1 font-normal">Bronze Tier</div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="group flex items-center justify-center ">
+        <img
+          src={`/LeaderBoard/${highestTierNFT.tier}.png`}
+          className="w-5 mr-2"
+        />
+        <div className="text-1 font-normal">{highestTierNFT.tier} Tier</div>
+      </div>
+    );
+  }
 }

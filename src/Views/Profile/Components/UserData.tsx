@@ -6,16 +6,16 @@ import { divide, gte } from '@Utils/NumString/stringArithmatics';
 import { useQTinfo } from '@Views/BinaryOptions';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { Col } from '@Views/Common/ConfirmationModal';
+import NFTtier from '@Views/Common/NFTtier';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
 import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
 
 export const UserData = () => {
-  const { address } = useUserAccount();
+  const { address, viewOnlyMode } = useUserAccount();
   const { winnerUserRank: dailyRank } = useLeaderboardQuery();
   const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
@@ -24,12 +24,15 @@ export const UserData = () => {
   //finds the address with the highest number from the tradingMetricsData.tradesPerAsset object
   const mostTradedAssetAddress = useMemo(() => {
     if (!tradingMetricsData || !tradingMetricsData.tradesPerAsset) return null;
-    return Object.keys(tradingMetricsData.tradesPerAsset).reduce((a, b) =>
-      tradingMetricsData.tradesPerAsset[a] >
-      tradingMetricsData.tradesPerAsset[b]
-        ? a
-        : b
-    );
+    const keysArray = Object.keys(tradingMetricsData.tradesPerAsset);
+    return keysArray.length > 0
+      ? keysArray.reduce((a, b) =>
+          tradingMetricsData.tradesPerAsset[a] >
+          tradingMetricsData.tradesPerAsset[b]
+            ? a
+            : b
+        )
+      : null;
   }, [tradingMetricsData]);
 
   //fetches the data of the asset from the config
@@ -89,7 +92,6 @@ export const UserData = () => {
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
-        {/* <Separator /> */}
         <Col
           className={'winner-card'}
           head={'Weekly Rank'}
@@ -97,7 +99,6 @@ export const UserData = () => {
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
-        {/* <Separator /> */}
         <Col
           className={'winner-card'}
           head={'Net Pnl'}
@@ -118,7 +119,6 @@ export const UserData = () => {
               : 'text-red'
           }`}
         />
-        {/* <Separator /> */}
         <Col
           className={'winner-card'}
           head={'Most Traded Asset'}
@@ -137,13 +137,18 @@ export const UserData = () => {
           headClass={'text-f14'}
           descClass={'text-f16 text-buffer-blue'}
         />
+        {viewOnlyMode && (
+          <Col
+            className={'winner-card'}
+            head={'NFT Tier'}
+            desc={<NFTtier userOnly={false} />}
+            headClass={'text-f14'}
+            descClass={'text-f16 text-buffer-blue'}
+          />
+        )}
       </DataWrapper>
     </div>
   );
-};
-
-const Separator = () => {
-  return <div className="w-1 h-auto bg-cross-bg mx-5 sm:mx-[0]"></div>;
 };
 
 const useGetAssetData = ({ assetAddress }: { assetAddress: string | null }) => {
