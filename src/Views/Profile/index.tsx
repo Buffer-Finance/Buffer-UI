@@ -16,12 +16,12 @@ const Profile = () => {
   return (
     <div className="px-7 my-8 sm:px-3">
       <UserData />
-      {/* <ReferralLink /> */}
+      <ReferralLink />
+      <ProfileCards />
       <div className="my-8 flex flex-col ">
-        <div className="text-f22 mb-7">Trade History</div>
+        <div className="text-f22 mb-7">Trades</div>
         <HistoryTables />
       </div>
-      <ProfileCards />
       <ClaimedNFT />
     </div>
   );
