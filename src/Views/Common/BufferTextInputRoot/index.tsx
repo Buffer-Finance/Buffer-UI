@@ -15,6 +15,8 @@ export interface IBufferInputBase {
   onError?: ([]) => void;
   title?: string;
   bgClass?: string;
+  autoFocus?:boolean;
+  onClick?:(e:any)=>void
 }
 
 interface IBufferTextInputRoot extends IBufferInputBase {
@@ -42,8 +44,10 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
   label,
   numeric,
   isGrey,
+  autoFocus,
   type,
   title,
+  onClick,
   isDisabled = false,
 }) => {
   const [errs, setErrs] = useState<ReactNode[]>([]);
@@ -80,9 +84,11 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
   const err = errs.length && errs[0];
   // useEffect(() => {
   //   onError(errs);
+  console.log(`autoFocus: `,autoFocus);
   // }, [errs]);
   return (
-    <Background className={className}>
+    <Background className={className} onClick={onClick}
+    >
       <div
         className={` background h-full ${err && "error-boundary"} ${
           isGrey && "bg"
@@ -98,6 +104,7 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
             type={
               inputType || numeric ? "number" : type ? "datetime-local" : "text"
             }
+            autoFocus={id=='amount-inner'?true:false}
             onChange={textChangeHandler}
             value={value}
             step="1"

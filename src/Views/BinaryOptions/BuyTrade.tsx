@@ -71,7 +71,8 @@ const BuyTrade: React.FC<any> = ({}) => {
   const isForex = activeAsset.category === 'Forex';
   // useIsMarketOpen();
   const isMarketOpen = knowTill.open && isForex;
-  const allowance = divide(allowanceWei, activePoolObj.token.decimals);
+  const allowance = divide(allowanceWei?.[0], activePoolObj.token.decimals);
+  console.log(`allowance: `,allowance,allowanceWei,activePoolObj.token.decimals);
   const isAssetActive =
     routerPermission &&
     routerPermission[activeAsset.pools[0].options_contracts.current];
