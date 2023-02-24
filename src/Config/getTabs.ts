@@ -62,6 +62,12 @@ export const getTabs = (marketFromStorage: string) => {
         subTabs: [],
         isExternalLink: false,
       },
+      {
+        to: `/trades`,
+        name: 'All Trades',
+        subTabs: [],
+        isExternalLink: false,
+      },
 
       // {
       //   to: `/leaderboard/incentivised`,
