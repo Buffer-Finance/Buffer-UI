@@ -3,13 +3,14 @@ import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add } from '@Utils/NumString/stringArithmatics';
-const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
-console.log(`prevDayEpoch: `,prevDayEpoch);
+import { getLinuxTimestampBefore24Hours } from './useDashboardTableData';
+// const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
+// console.log(`prevDayEpoch: `,prevDayEpoch);
 
 export const useDashboardGraphQl = () => {
   const { data } = useSWR('history-thegraph', {
     fetcher: async () => {
-const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
+      const prevDayEpoch = getLinuxTimestampBefore24Hours();
 
       const response = await axios.post(baseGraphqlUrl, {
         query: `{ 
@@ -29,6 +30,7 @@ const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
             USDC24stats:volumePerContracts(
               orderBy: timestamp
               orderDirection: desc
+              first: 1000
               where: {depositToken: "USDC", timestamp_gt: ${prevDayEpoch}}
             ) {
                 amount

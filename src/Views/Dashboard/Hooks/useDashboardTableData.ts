@@ -8,10 +8,11 @@ import { ENV } from '@Views/BinaryOptions/index';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 
-function getHourBefore24Hours() {
-  const date = new Date();
-  date.setHours(date.getHours() - 24);
-  return Math.floor(date.getTime() / (1000 * 3600));
+export function getLinuxTimestampBefore24Hours() {
+  // const date = new Date();
+  // date.setHours(date.getHours() - 24);
+  // return Math.floor(date.getTime() / (1000 * 3600));
+  return Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
 }
 
 export const useDashboardTableData = () => {
@@ -41,7 +42,9 @@ export const useDashboardTableData = () => {
             volume
             tradeCount
           }
-          volumePerContracts(where: {depositToken: "USDC", id_gte: "${getHourBefore24Hours()}"}) {
+          volumePerContracts(   
+            first: 1000
+            where: {depositToken: "USDC", timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
             optionContract {
               address
             }
@@ -74,7 +77,6 @@ export const useDashboardTableData = () => {
 
   const oneDayVolume = useMemo(() => {
     if (!data || !data.volumePerContracts) return [];
-
     return data.volumePerContracts.reduce((acc, item) => {
       const address = item.optionContract.address.toLowerCase();
       if (acc[address]) {
