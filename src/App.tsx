@@ -33,6 +33,7 @@ import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { ProfilePage } from '@Views/Profile';
 import { useEffect } from 'react';
 import { useToast } from '@Contexts/Toast';
+import { AllTradesPage } from '@Views/AllTrades';
 
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -89,6 +90,7 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
         {/* referral link handling */}
         <Route
