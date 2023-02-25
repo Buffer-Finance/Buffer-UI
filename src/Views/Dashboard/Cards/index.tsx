@@ -46,7 +46,7 @@ export const StatsOverView = ({ data }: { data: IOverview }) => {
                 <NumberTooltip
                   content={
                     toFixed(
-                      multiply(divide(data.usdc_pol, data.usdc_vault), 2),
+                      multiply(divide(data.usdc_pol, data.usdc_total), 2),
                       2
                     ) + '% of total liquidity in the USDC vault.'
                   }
