@@ -1,16 +1,15 @@
-import { useBlockNumber, useNetwork, useProvider, useSigner } from "wagmi";
-import routerAbi from "@Views/BinaryOptions/ABI/routerABI.json";
-import { multicallv2 } from "@Utils/Contract/multiContract";
-import getDeepCopy from "@Utils/getDeepCopy";
-import { convertBNtoString } from "@Utils/useReadCall";
-import { useEffect, useMemo, useState } from "react";
-import { IGQLHistory } from "@Views/BinaryOptions/Hooks/usePastTradeQuery";
-import optionsAbi from "@Views/BinaryOptions/ABI/optionsABI.json";
-import { ethers } from "ethers";
-import { getLogs } from "@Utils/getLogs";
-import useSWR from "swr";
-import { data } from "@Views/Common/GraphView/PriceData";
+import { useProvider } from 'wagmi';
+import routerAbi from '@Views/BinaryOptions/ABI/routerABI.json';
+import { multicallv2 } from '@Utils/Contract/multiContract';
+import getDeepCopy from '@Utils/getDeepCopy';
+import { convertBNtoString } from '@Utils/useReadCall';
+import { IGQLHistory } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
+import optionsAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
+import { ethers } from 'ethers';
+import { getLogs } from '@Utils/getLogs';
+import useSWR from 'swr';
 const routerIfc = new ethers.utils.Interface(routerAbi);
+
 enum Link {
   Router = 0,
   Option = 1,
@@ -38,10 +37,9 @@ export enum BetState {
   cancelled = 5,
 }
 
-
 const CallConfig = {
-  [Link.Router]: { abi: routerAbi, functionName: "queuedTrades" },
-  [Link.Option]: { abi: optionsAbi, functionName: "options" },
+  [Link.Router]: { abi: routerAbi, functionName: 'queuedTrades' },
+  [Link.Option]: { abi: optionsAbi, functionName: 'options' },
 };
 export interface TradeInputs {
   id: number;
@@ -50,16 +48,10 @@ export interface TradeInputs {
   link: Link;
   address: string;
 }
-enum BetState {
-  active = 1,
-  exercised = 2,
-  expired = 3,
-  queued = 4,
-  cancelled = 5,
-}
+
 const testAcc =
-  "0x00000000000000000000000032a49a15f8ee598c1eedc21138deb23b391f425b";
-("0xc977c5c0c972f982a1184c34ffef73f4c4a8ef2876956f704ed91b4ab6af0004");
+  '0x00000000000000000000000032a49a15f8ee598c1eedc21138deb23b391f425b';
+('0xc977c5c0c972f982a1184c34ffef73f4c4a8ef2876956f704ed91b4ab6af0004');
 interface IRouterOption {
   allowPartialFill: boolean;
   expectedStrike: string;
@@ -80,15 +72,7 @@ interface ILogTrade extends IRouterOption {
   createdAt: string;
   expiration: string;
 }
-//   1: 'active'
-//   2: 'exercised'
-//   3: 'expired'
-//   4: 'queued',
-// 5:cancelled
-// }
-const normalVariabl = {
-  propery: 213213,
-};
+
 const parseId = (n) => {
   return parseInt(n.toString());
 };
@@ -97,38 +81,31 @@ const optionsIfc = new ethers.utils.Interface(optionsAbi);
 // TODO = Make these topics dynamic
 // For 7.5k blocks  it is taking 1.5s to scan
 const openTrade =
-  "0x46961a5320eafc3fb71b3051774237104d4cec1687a31eed0c32262f0be47902";
+  '0x46961a5320eafc3fb71b3051774237104d4cec1687a31eed0c32262f0be47902';
 const createTopic =
-  "0xe3a07e2ac405f9c908f600ba464ed28dd28f04e308ccc0610a33ca7ed1c59abb";
+  '0xe3a07e2ac405f9c908f600ba464ed28dd28f04e308ccc0610a33ca7ed1c59abb';
 const initiateTrade =
-  "0xa058ea17deb3dad493dcf014f030710e90240e4bf900bace442ac371365ac3ec";
+  '0xa058ea17deb3dad493dcf014f030710e90240e4bf900bace442ac371365ac3ec';
 
 const cancelTrade =
-  "0xc804e178cb25d48cffff5de67dd01d385e72784ce35bbc52affad3e13dfa269a";
-const baseState = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], del: [] };
-interface IAheadTrades {
-  [BetState: number]: IGQLHistory[];
-  del: TradeInputs[];
-  fromBlock?: number;
-  toBlock?: number;
-}
+  '0xc804e178cb25d48cffff5de67dd01d385e72784ce35bbc52affad3e13dfa269a';
+
 const useAheadTrades = (startBlock: number, account: string) => {
-  const provider = useProvider();
   const signer = useProvider();
   // const { data: recentBlock } = useBlockNumber();
   const recentBlock = null;
   return useSWR(`${account}-augmentatio-v1`, {
     fetcher: async (args) => {
-      let splittedArgs = args.split("-");
+      let splittedArgs = args.split('-');
       const account = splittedArgs[0];
       if (!account) return -1;
       if (!startBlock) return -1;
 
       // if (recentBlock <= startBlock) return baseState;
-      const splittedAccount = account.split("0x");
+      const splittedAccount = account.split('0x');
       const adds64 = `0x${splittedAccount[0]}${splittedAccount[1].padStart(
         64,
-        "0"
+        '0'
       )}`;
       const decodedLogs = await getLogs({
         ifcs: [routerIfc, optionsIfc],
@@ -222,11 +199,11 @@ const useAheadTrades = (startBlock: number, account: string) => {
       const maliciousResponse = calls.filter((c, i) => {
         const res = resCopy?.[i];
         if (
-          res.targetContract === "0x0000000000000000000000000000000000000000" ||
-          res?.expiration == "0" ||
+          res.targetContract === '0x0000000000000000000000000000000000000000' ||
+          res?.expiration == '0' ||
           res?.expiration == 0
         ) {
-          console.log("[bug:aug]culprit-found 1", res, calls?.[i]);
+          console.log('[bug:aug]culprit-found 1', res, calls?.[i]);
           return true;
         }
         return false;
@@ -242,11 +219,11 @@ const useAheadTrades = (startBlock: number, account: string) => {
         let res: ILogTrade = resCopy?.[i];
 
         if (
-          res.targetContract === "0x0000000000000000000000000000000000000000" ||
-          res?.expiration == "0" ||
+          res.targetContract === '0x0000000000000000000000000000000000000000' ||
+          res?.expiration == '0' ||
           res?.expiration == 0
         ) {
-          console.log("[bug:aug]culprit-found 2", res, ip);
+          console.log('[bug:aug]culprit-found 2', res, ip);
           return null;
         }
         if (ip.link == Link.Option) {
@@ -254,7 +231,7 @@ const useAheadTrades = (startBlock: number, account: string) => {
             strike: res[1],
             totalFee: res.totalFee,
             state: BetState.active,
-            depositToken: "USDC",
+            depositToken: 'USDC',
             isAbove: res.isAbove,
             optionContract: {
               address: ip.address,
@@ -275,7 +252,7 @@ const useAheadTrades = (startBlock: number, account: string) => {
             strike: res.expectedStrike,
             totalFee: res.totalFee,
             state: ip.state,
-            depositToken: "USDC",
+            depositToken: 'USDC',
             isAbove: res.isAbove,
             optionContract: {
               address: res.targetContract,
@@ -303,7 +280,7 @@ const useAheadTrades = (startBlock: number, account: string) => {
         [BetState.active]: tempOptions.filter(
           (single) => single.state === BetState.active
         ),
-        ["del"]: toDeleteData,
+        ['del']: toDeleteData,
         fromBlock: startBlock,
         toBlock: recentBlock,
       };

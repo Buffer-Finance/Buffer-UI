@@ -1,4 +1,3 @@
-import { useAccount } from 'wagmi';
 import { ENV, IMarket, IToken } from '..';
 import MarketConfig from 'public/config.json';
 import { BetState, TradeInputs, useAheadTrades } from '@Hooks/useAheadTrades';
