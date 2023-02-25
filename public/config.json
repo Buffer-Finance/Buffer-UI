@@ -234,7 +234,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "01:00",
         "category": "Crypto",
         "tv_id": "ETHBTC",
         "pair": "ETH-BTC",
