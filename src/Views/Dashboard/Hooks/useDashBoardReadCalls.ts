@@ -148,7 +148,7 @@ export const useDashboardReadCalls = () => {
         total_staked: totalUSDCstaked,
         market_cap: multiply(blpPrice, fromWei(totalSupplyBLP, usd_decimals)),
         apr: fromWei(blpAprTotal, 2),
-        total_usdc: multiply(blpPrice, fromWei(blpSupply, usd_decimals)),
+        total_usdc: fromWei(amountUSDCpool, usd_decimals),
       },
     };
 
@@ -186,7 +186,7 @@ export const useDashboardReadCalls = () => {
           usdc_pol: USDCvaultPOL ? fromWei(USDCvaultPOL, usd_decimals) : null,
           bfr_total: fromWei(amountBFRpool),
           usdc_total: fromWei(amountUSDCpool, usd_decimals),
-          usdc_vault: multiply(blpPrice, fromWei(blpSupply, usd_decimals)),
+          usdc_vault: fromWei(amountUSDCpool, usd_decimals),
           bfr_vault: multiply(fromWei(amountBFRpool), bfrPrice),
           usdc_24_fees: USDC24stats
             ? fromWei(USDC24stats.settlementFee, usd_decimals)
