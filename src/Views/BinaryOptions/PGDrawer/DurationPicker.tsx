@@ -14,6 +14,11 @@ export const DurationPicker = () => {
   const oneSec = 1000;
   const durations = [
     {
+      duration: 1 * 60 * oneSec,
+      time: '00:01',
+      name: ['1', 'Min'],
+    },
+    {
       duration: 5 * 60 * oneSec,
       time: '00:05',
       name: ['5', 'Min'],
@@ -54,7 +59,7 @@ export const DurationPicker = () => {
         timeToMins(activeAsset.min_duration) * 60 * oneSec
     )
       setOpenCustomInput(true);
-    else setOpenCustomInput(false);
+    // else setOpenCustomInput(false);
   }, [currentTime, activeAsset]);
 
   return (
@@ -90,8 +95,7 @@ export const DurationPicker = () => {
                 className={
                   'each-duration py-1 font-medium text-f12 h-[55px] transition-colors ' +
                   ((timeToMins(currentTime) * 60 * oneSec === singleDuration &&
-                    !isDisabled &&
-                    !openCustomInput) ||
+                    !isDisabled) ||
                   (isLastElement && openCustomInput)
                     ? 'active text-1 '
                     : 'text-2') +

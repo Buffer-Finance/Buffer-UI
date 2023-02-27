@@ -5,7 +5,7 @@ import ErrorIcon from 'src/SVG/Elements/ErrorIcon';
 import BN from 'bn.js';
 import Big from 'big.js';
 import { useToast } from '@Contexts/Toast';
-import { lt } from '@Utils/NumString/stringArithmatics';
+import { add, lt } from '@Utils/NumString/stringArithmatics';
 import { PoolDropDown } from './PoolDropDown';
 
 const TimeSelectorStyles = styled.div`
@@ -246,13 +246,13 @@ export const TimeSelector = ({
     if (value > 23) hrsRef.current.value = 23;
     if (value.toString().length > 2)
       hrsRef.current.value = value.toString().slice(0, 2);
-    if (
-      (hrsRef.current.value === '00' ||
-        hrsRef.current.value === '0' ||
-        !hrsRef.current.value) &&
-      lt(minRef.current.value || '0', '5')
-    )
-      minRef.current.value = '5';
+    // if (
+    //   (hrsRef.current.value === '00' ||
+    //     hrsRef.current.value === '0' ||
+    //     !hrsRef.current.value) &&
+    //   lt(minRef.current.value || '0', '5')
+    // )
+    //   minRef.current.value = '5';
     // if (
     //   timeToMins(hrsRef.current.value + ":" + minRef.current.value) >
     //   maxTimeInMins
@@ -266,16 +266,20 @@ export const TimeSelector = ({
 
   const minValidations = (value) => {
     if (value < 0) minRef.current.value = 0;
-    if (value > 59) minRef.current.value = 59;
+    // if (value > 59) minRef.current.value = 59;
     if (value.toString().length > 2)
       minRef.current.value = value.toString().slice(0, 2);
-    if (
-      (hrsRef.current.value === '00' ||
-        hrsRef.current.value === '0' ||
-        !hrsRef.current.value) &&
-      lt(minRef.current.value || '0', '5')
-    )
-      minRef.current.value = '5';
+    // if (value > 59) {
+    //   minRef.current.value = 0;
+    //   hrsRef.current.value = add('1',hrsRef.current.value);
+    // }
+    // if (
+    //   (hrsRef.current.value === '00' ||
+    //     hrsRef.current.value === '0' ||
+    //     !hrsRef.current.value) &&
+    //   lt(minRef.current.value || '0', '5')
+    // )
+    //   minRef.current.value = '5';
     // if (
     //   timeToMins(hrsRef.current.value + ":" + minRef.current.value) >
     //   maxTimeInMins
@@ -290,7 +294,11 @@ export const TimeSelector = ({
   return (
     <>
       <TimeSelectorStyles className=" transition-colors bg-1  border-">
-        <div className="w-[max-content] hover:brightness-150 p-[6px]">
+        <div
+          className={`${
+            isTimeSelector ? 'w-full' : 'w-max'
+          } hover:brightness-150 p-[6px]`}
+        >
           <div className="flex-bw ">
             <button
               className="button-bg"
@@ -317,6 +325,8 @@ export const TimeSelector = ({
                   type="number"
                   onChange={(e) => hrsValidations(e.target.value)}
                   placeholder="00"
+                  min={0}
+                  max={23}
                 />
                 <div className="text-f16 text-1 mx-1 text-center">:</div>
                 <input
@@ -325,6 +335,8 @@ export const TimeSelector = ({
                   type="number"
                   onChange={(e) => minValidations(e.target.value)}
                   placeholder="00"
+                  min={0}
+                  max={59}
                 />
                 {/* <div className="f18 text-1 ">m</div> */}
               </div>
