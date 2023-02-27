@@ -47,6 +47,8 @@ interface IPGDesktopTables {
   onPageChange?: (e: ChangeEvent, p: number) => void;
   activePage: number;
   shouldNotDisplayShareVisulise: boolean;
+  totalPages: number;
+  filteredData: IGQLHistory[];
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
@@ -54,37 +56,19 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   onPageChange,
   activePage,
   shouldNotDisplayShareVisulise,
+  totalPages,
+  filteredData,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
   const activeMarket = configData.activePair;
-  const { active, history, cancelled } = useAtomValue(tardesAtom);
-  const {
-    active: activePages,
-    history: historyPages,
-    cancelled: cancelledPages,
-  } = useAtomValue(tardesTotalPageAtom);
+
   const { shouldConnectWallet } = useOpenConnectionDrawer();
 
   const { state } = useGlobal();
   const activeTab = state.tabs.activeIdx;
   const isHistoryTable = activeTab === 'History';
   const isCancelledTable = activeTab === 'Cancelled';
-  const totalPages = useMemo(() => {
-    if (isHistoryTable) {
-      return historyPages;
-    } else if (isCancelledTable) {
-      return cancelledPages;
-    } else return activePages;
-  }, [activePages, historyPages, cancelledPages, activeTab]);
-
-  const filteredData = useMemo(() => {
-    if (isHistoryTable) {
-      return history;
-    } else if (isCancelledTable) {
-      return cancelled;
-    } else return active;
-  }, [activeTab, active, history]);
 
   const headNameArray = useMemo(() => {
     if (isHistoryTable)
