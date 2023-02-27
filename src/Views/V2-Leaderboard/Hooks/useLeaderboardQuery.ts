@@ -10,6 +10,7 @@ import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { useDayOfTournament } from './useDayOfTournament';
 import { useDayOffset } from './useDayOffset';
+import { blockedAccounts } from './useWeeklyLeaderboardQuery';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -51,7 +52,9 @@ export const useLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${[
+          ...blockedAccounts,
+        ].map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -62,7 +65,9 @@ export const useLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: asc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${[
+          ...blockedAccounts,
+        ].map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
