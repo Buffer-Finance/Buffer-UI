@@ -149,7 +149,7 @@ export function CustomOption() {
           error={{
             min: minTradeAmount,
             minMsg:
-              "Can't invest less than " +
+              "Can't trade less than " +
               minTradeAmount +
               ' ' +
               activePoolObj.token.name,
