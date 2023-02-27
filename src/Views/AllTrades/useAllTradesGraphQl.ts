@@ -41,7 +41,7 @@ export const useAllTradesGraphQl = ({
   activefirst,
   currentTime,
 }: {
-  account: string;
+  // account: string;
   historyskip: number;
   historyfirst: number;
   activeskip: number;
