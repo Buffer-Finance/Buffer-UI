@@ -1,4 +1,11 @@
-import { useAllTradesGraphQl } from './useAllTradesGraphQl';
+import { useQTinfo } from '@Views/BinaryOptions';
+import PGDesktopTables from '@Views/BinaryOptions/Tables/Desktop';
+import BufferTab from '@Views/Common/BufferTab';
+import TabSwitch from '@Views/Common/TabSwitch';
+import { useHistoryTableTabs } from '@Views/Profile/Components/HistoryTable';
+import { atom, useAtom } from 'jotai';
+import { useEffect, useState } from 'react';
+import { useAllfilteredData } from './useAllfilteredData';
 
 export const AllTradesPage = () => {
   return (
@@ -8,14 +15,65 @@ export const AllTradesPage = () => {
   );
 };
 
+export const allATrdesTotalPageAtom = atom<{
+  active: number;
+  history: number;
+  cancelled: number;
+}>({
+  active: 1,
+  history: 1,
+  cancelled: 1,
+});
+
 const AllTrades = () => {
-  const { data } = useAllTradesGraphQl({
-    activefirst: 1000,
-    activeskip: 0,
-    currentTime: Math.floor(new Date().getTime() / 1000),
-    historyfirst: 1000,
-    historyskip: 0,
-  });
-  console.log('alltrades', data);
-  return <div className="px-7 my-8 sm:px-3">Trades</div>;
+  const { activeTrades, historyTrades } = useAllfilteredData();
+  const qtInfo = useQTinfo();
+  const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
+  const [totalPages, setTotalPages] = useAtom(allATrdesTotalPageAtom);
+
+  useEffect(() => {
+    changeActiveTab(null, 0);
+  }, []);
+
+  return (
+    <div className="px-7 my-8 sm:px-3">
+      {' '}
+      <BufferTab
+        value={activeTabIdx}
+        handleChange={(e, t) => {
+          changeActiveTab(e, t);
+        }}
+        distance={5}
+        className="mb-5"
+        tablist={[
+          { name: 'Active' },
+          { name: 'History' },
+          // { name: 'Cancelled' },
+        ]}
+      />
+      <TabSwitch
+        value={activeTabIdx}
+        childComponents={[
+          <PGDesktopTables
+            activePage={totalPages.active}
+            configData={qtInfo}
+            filteredData={activeTrades}
+            shouldNotDisplayShareVisulise
+            totalPages={2}
+            onPageChange={(e, p) => setTotalPages({ ...totalPages, active: p })}
+          />,
+          <PGDesktopTables
+            activePage={totalPages.history}
+            configData={qtInfo}
+            filteredData={historyTrades}
+            shouldNotDisplayShareVisulise
+            totalPages={500}
+            onPageChange={(e, p) =>
+              setTotalPages({ ...totalPages, history: p })
+            }
+          />,
+        ]}
+      />
+    </div>
+  );
 };
