@@ -59,7 +59,7 @@ const AllTrades = () => {
             configData={qtInfo}
             filteredData={activeTrades}
             shouldNotDisplayShareVisulise
-            totalPages={2}
+            totalPages={1}
             onPageChange={(e, p) => setTotalPages({ ...totalPages, active: p })}
           />,
           <PGDesktopTables
