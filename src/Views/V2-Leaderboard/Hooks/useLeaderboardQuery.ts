@@ -52,9 +52,9 @@ export const useLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${[
-          ...blockedAccounts,
-        ].map((address) => `"${address}"`)}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
           ) {
             user
             totalTrades
@@ -65,9 +65,9 @@ export const useLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: asc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${[
-          ...blockedAccounts,
-        ].map((address) => `"${address}"`)}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
           ) {
             user
             totalTrades
