@@ -87,7 +87,7 @@ const BuyTrade: React.FC<any> = ({}) => {
     <div>
       <div className="flex gap-3 my-3">
           <AmountSelector {...{ amount, setAmount, activeAssetState }} />
-          <DurationSelector {...{ amount, setAmount, activeAssetState }} />
+          <DurationSelector  />
       </div>
       {(currStats && currStats.max_loss && currStats.max_payout) ||
         (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (

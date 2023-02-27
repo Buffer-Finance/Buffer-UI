@@ -5,7 +5,7 @@ import { QuickTradeExpiry } from ".";
 import { useQTinfo } from "..";
 import { getUserError, TimeSelector, timeToMins } from "./TimeSelector";
 
-export const DurationPicker = () => {
+export const DurationPicker = ({onSelect}:{onSelect?:()=>void}) => {
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
   const [currentTime, setCurrentTime] = useAtom(QuickTradeExpiry);
@@ -73,6 +73,7 @@ export const DurationPicker = () => {
                 onClick={() => {
                   if (isDisabled) return;
                   if (isLastElement) return setOpenCustomInput(true);
+                  onSelect()
                   setCurrentTime(single.time);
                   setDur(idx);
                   setOpenCustomInput(false);
@@ -111,6 +112,7 @@ export const DurationPicker = () => {
           <div className="text-f14">Time (hh:mm) </div>
           <TimeSelector
             isTimeSelector
+            onSelect={onSelect}
             currentTime={currentTime}
             setTime={(newValue) => setCurrentTime(newValue)}
             maxTime={activeAsset.max_duration}

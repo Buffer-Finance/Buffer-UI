@@ -55,7 +55,7 @@ export default function Favourites({ className }: { className?: string }) {
     <Background
       className={
         className +
-        ' sticky  top-[0] z-[101] bg-primary w-full  tb:!max-w-[100vw]'
+        'sm:mb-[-10px]  top-[0] z-[101] bg-primary w-full  tb:!max-w-[100vw]'
       }
     >
       <div className="relative w-full b1200:h-[65px] a1200:h-[34px] scrollbarnil">
@@ -171,7 +171,7 @@ function FavouriteCard({
 
   return (
     <div
-      className={`cursor-pointer group mt-1 relative group pl-4 pr-3 py-3 text-2 flex flex-row items-center justify-between b1200:flex-col a1200:!min-w-[100px]  b1200:!px-3 b1200:rounded-md  b1200:mr-3 b1200:mt-[10px] b1200:items-start ${
+      className={`cursor-pointer group mt-1 relative group pl-4 pr-3 py-3 text-2 flex flex-row items-center justify-between b1200:flex-col a1200:!min-w-[100px]  b1200:!px-3 b1200:rounded-md  b1200:mr-3  b1200:items-start ${
         isActive
           ? 'text-1 bg-[#131722] rounded-t-[10px] cursor-default  left-border-needed '
           : `hover:bg-1 hover:rounded-t-[0px] b1200:bg-cross-bg after-border ${

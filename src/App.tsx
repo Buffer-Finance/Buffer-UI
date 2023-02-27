@@ -21,6 +21,7 @@ import { Integrations } from '@sentry/tracing';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
+import { History } from '@Views/BinaryOptions/History';
 
 if (import.meta.env.VITE_MODE === 'production') {
   console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -55,6 +56,7 @@ const AppRoutes = () => {
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/history" element={<History />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />} />
@@ -63,8 +65,7 @@ const AppRoutes = () => {
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/binary/:market" element={<BinryMarkets />} />
-        <Route path="/*" element={<Navigate to={"/binary/" + (activeMarketFromStorage || defaultMarket)} />} />
+        {/* <Route path="/*" element={<Navigate to={"/binary/" + (activeMarketFromStorage || defaultMarket)} />} /> */}
       </Routes>
     </div>
   );

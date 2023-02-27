@@ -9,7 +9,7 @@ const divide = (from: string, to: string | number) => {
     } else {
       toBN = new Big(to);
     }
-    if (toBN.eq('0')) return undefined;
+    if (toBN.eq('0'))  throw new Error("can't divide with zero");
     return fromBN.div(toBN).toString();
   } catch (e) {
     return null;

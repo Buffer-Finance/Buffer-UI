@@ -1450,9 +1450,7 @@ html .xxsph {
 html .text-left {
   text-align: left !important;
 }
-html .text-right {
-  text-align: right !important;
-}
+
 
 html .smv {
   margin: var(--s) 0;

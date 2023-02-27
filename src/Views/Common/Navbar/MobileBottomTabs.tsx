@@ -3,24 +3,26 @@ import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import { getTabs } from 'src/Config/getTabs';
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const BaseTab = ({
   tab,
   active,
   horizontal,
-  className
+  className,
 }: {
   tab: Partial<ReturnType<typeof getTabs>[0]>;
   active?: boolean;
   horizontal?: boolean;
-  className?:string;
+  className?: string;
 }) => {
   const Btn = (
     <div
       className={`flex ${
         !horizontal && 'flex-col'
-      } items-center content-center text-f12 text-${active ? '1' : '2'} ${className}`}
+      } items-center content-center text-f12 text-${
+        active ? '1' : '2'
+      } ${className}`}
     >
       {tab.icon}
       {tab.name}
@@ -40,32 +42,29 @@ const mobleMaxTabLimit = 5;
 
 const MoreIcon = (
   <svg
-    width="38"
-    height="38"
-    viewBox="0 0 38 38"
+    width="26"
+    height="26"
+    viewBox="0 0 26 26"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <circle
-      cx="8.95455"
-      cy="18.9545"
-      r="2.95455"
+    <path
+      d="M6 8H20"
       stroke="currentColor"
-      stroke-width="2"
+      stroke-width="1.75"
+      stroke-linecap="round"
     />
-    <circle
-      cx="19.5004"
-      cy="18.9545"
-      r="2.95455"
+    <path
+      d="M6 13H20"
       stroke="currentColor"
-      stroke-width="2"
+      stroke-width="1.75"
+      stroke-linecap="round"
     />
-    <circle
-      cx="30.0454"
-      cy="18.9545"
-      r="2.95455"
+    <path
+      d="M6 18H20"
       stroke="currentColor"
-      stroke-width="2"
+      stroke-width="1.75"
+      stroke-linecap="round"
     />
   </svg>
 );
@@ -76,13 +75,23 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
+  const location = useLocation();
   const isActive = (t: any) => {
+    let tabName = t.to.split('/')[1];
+    
+    console.log(`tabName: `,tabName);
+    if (tabName == 'trade') {
+      tabName = 'binary';
+    }
+    console.log(`tabName: `, tabName,location.pathname.toLowerCase());
+    if (tabName)
+      return location.pathname.toLowerCase().includes(tabName.toLowerCase());
     return false;
   };
   const areExtraTabs = tabs.length > mobleMaxTabLimit;
   const limit = areExtraTabs ? 4 : tabs.length;
   return (
-    <div className="mobile-bottom-drawer flex items-center mb-3 justify-between mx-3">
+    <div className="mobile-bottom-drawer flex items-center my-[5px] justify-between mx-3">
       {tabs.slice(0, limit).map((t) => (
         <BaseTab tab={t} active={isActive(t)} />
       ))}{' '}
@@ -101,7 +110,11 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
           {tabs.slice(limit).map((t) => {
             return (
               <MenuItem className={'!px-2 !py-[0px]  '}>
-               <BaseTab tab={t} horizontal className='text-[14px] child-svg-squeeze'/>
+                <BaseTab
+                  tab={t}
+                  horizontal
+                  className="text-[14px] child-svg-squeeze"
+                />
               </MenuItem>
             );
           })}
