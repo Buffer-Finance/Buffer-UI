@@ -65,7 +65,7 @@ const AppRoutes = () => {
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/referral" element={<ReferralPage />} />
-        {/* <Route path="/*" element={<Navigate to={"/binary/" + (activeMarketFromStorage || defaultMarket)} />} /> */}
+        <Route path="/*" element={<Navigate to={"/binary/" + (activeMarketFromStorage || defaultMarket)} />} />
       </Routes>
     </div>
   );

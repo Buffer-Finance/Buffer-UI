@@ -91,7 +91,7 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
   const areExtraTabs = tabs.length > mobleMaxTabLimit;
   const limit = areExtraTabs ? 4 : tabs.length;
   return (
-    <div className="mobile-bottom-drawer flex items-center my-[5px] justify-between mx-3">
+    <div className="nsm:hidden mobile-bottom-drawer flex items-center my-[5px] justify-between mx-3">
       {tabs.slice(0, limit).map((t) => (
         <BaseTab tab={t} active={isActive(t)} />
       ))}{' '}

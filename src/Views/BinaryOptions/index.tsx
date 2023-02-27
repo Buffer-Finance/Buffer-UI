@@ -272,7 +272,6 @@ function QTrade() {
                       }))}
                     />
                   </div>
-                  MarketTimingsModal
                 </div>
                 <div className="my-3">
                   {activeTab === binaryTabs[2] && (

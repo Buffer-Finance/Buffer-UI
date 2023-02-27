@@ -39,6 +39,7 @@ export const Navbar: React.FC<INavbar> = () => {
 
         <div className="tab:hidden flex gap-[6px] b1200:!hidden ">
           {tabs.slice(0, VISIBLETABS).map((tab, index) => {
+            if(tab.mobileOnly) return null;
             if (tab.isExternalLink) {
               return (
                 <button
