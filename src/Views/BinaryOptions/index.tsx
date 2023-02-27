@@ -344,7 +344,9 @@ function QTrade() {
           ) : (
             <Skeleton variant="rectangular" className="stat-skel lc" />
           )}
-          <BuyTrade />
+          <MobileOnly>
+            <BuyTrade />
+          </MobileOnly>
         </Background>
       </main>
       <BinaryDrawer />
