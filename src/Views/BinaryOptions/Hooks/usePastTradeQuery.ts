@@ -90,6 +90,99 @@ export interface IGQLHistory {
   configPair?: IMarket;
   blockNumber?: number;
 }
+export const getProcessedTrades = (
+  trades,
+  block,
+  tradesToBeDeleted?: TradeInputs[],
+  shouldAddHistoryPrice = false
+) => {
+  const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
+    console.log(singleTrade, 'singleTrade');
+    if (singleTrade.blockNumber) {
+      if (block >= singleTrade.blockNumber) {
+        // if graph scanned this block.
+        return null;
+      }
+    }
+    if (tradesToBeDeleted?.length) {
+      if (
+        tradesToBeDeleted.find(
+          (singleRawTrade) =>
+            singleRawTrade.id == +singleTrade.queueID &&
+            singleTrade.state === BetState.queued
+        )
+      ) {
+        return null;
+      }
+    }
+    let pool;
+    const configPair = MarketConfig[ENV].pairs.find((pair) => {
+      pool = pair.pools.find(
+        (pool) =>
+          pool.options_contracts.current.toLocaleLowerCase() ===
+          singleTrade.optionContract.address.toLowerCase()
+      );
+      return !!pool;
+      // if (singleTrade?.optionContract?.asset)
+      //   return pair.pair === singleTrade.optionContract.asset;
+      // else
+      //   return (
+      //     pair.pools[0].options_contracts.current.toLocaleLowerCase() ===
+      //       singleTrade.optionContract.address.toLowerCase() ||
+      //     !!pair.pools[0].options_contracts.past.find(
+      //       (address) =>
+      //         address.toLocaleLowerCase() ===
+      //         singleTrade.optionContract.address.toLowerCase()
+      //     ) ||
+      //     pair.pools[1]?.options_contracts.current.toLocaleLowerCase() ===
+      //       singleTrade.optionContract.address.toLowerCase() ||
+      //     !!pair.pools[1]?.options_contracts.past.find(
+      //       (address) =>
+      //         address.toLocaleLowerCase() ===
+      //         singleTrade.optionContract.address.toLowerCase()
+      //     )
+      //   );
+    });
+    if (!pool) return null;
+
+    const depositToken = MarketConfig[ENV].tokens[pool.token];
+    let updatedTrade = { ...singleTrade, depositToken, configPair };
+    if (shouldAddHistoryPrice) {
+      addExpiryPrice(updatedTrade);
+    }
+
+    return updatedTrade;
+  });
+  // filter out not-null bets.
+  tempTrades?.filter((t) => {
+    if (t) {
+      return true;
+    }
+    return false;
+  });
+
+  return tempTrades;
+};
+
+export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
+  if (currentTrade.state === BetState.active) {
+    axios
+      .post(`https://oracle.buffer.finance/price/query/`, [
+        {
+          pair: currentTrade.configPair.tv_id,
+          timestamp: currentTrade.expirationTime,
+        },
+      ])
+      .then((response) => {
+        if (
+          !expiryPriceCache[currentTrade.optionID] &&
+          response?.data?.[0]?.price
+        )
+          expiryPriceCache[currentTrade.optionID] =
+            response?.data?.[0].price.toString();
+      });
+  }
+};
 
 export const usePastTradeQuery = () => {
   const { address: account } = useUserAccount();
@@ -103,99 +196,6 @@ export const usePastTradeQuery = () => {
     [cancelled]
   );
 
-  const getProcessedTrades = (
-    trades,
-    block,
-    tradesToBeDeleted?: TradeInputs[],
-    shouldAddHistoryPrice = false
-  ) => {
-    const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
-      if (singleTrade.blockNumber) {
-        if (block >= singleTrade.blockNumber) {
-          // if graph scanned this block.
-          return null;
-        }
-      }
-      if (tradesToBeDeleted?.length) {
-        if (
-          tradesToBeDeleted.find(
-            (singleRawTrade) =>
-              singleRawTrade.id == +singleTrade.queueID &&
-              singleTrade.state === BetState.queued
-          )
-        ) {
-          return null;
-        }
-      }
-      let pool;
-      const configPair = MarketConfig[ENV].pairs.find((pair) => {
-        pool = pair.pools.find(
-          (pool) =>
-            pool.options_contracts.current.toLocaleLowerCase() ===
-            singleTrade.optionContract.address.toLowerCase()
-        );
-        return !!pool;
-        // if (singleTrade?.optionContract?.asset)
-        //   return pair.pair === singleTrade.optionContract.asset;
-        // else
-        //   return (
-        //     pair.pools[0].options_contracts.current.toLocaleLowerCase() ===
-        //       singleTrade.optionContract.address.toLowerCase() ||
-        //     !!pair.pools[0].options_contracts.past.find(
-        //       (address) =>
-        //         address.toLocaleLowerCase() ===
-        //         singleTrade.optionContract.address.toLowerCase()
-        //     ) ||
-        //     pair.pools[1]?.options_contracts.current.toLocaleLowerCase() ===
-        //       singleTrade.optionContract.address.toLowerCase() ||
-        //     !!pair.pools[1]?.options_contracts.past.find(
-        //       (address) =>
-        //         address.toLocaleLowerCase() ===
-        //         singleTrade.optionContract.address.toLowerCase()
-        //     )
-        //   );
-      });
-      if (!pool) return null;
-
-      const depositToken = MarketConfig[ENV].tokens[pool.token];
-      let updatedTrade = { ...singleTrade, depositToken, configPair };
-      if (shouldAddHistoryPrice) {
-        addExpiryPrice(updatedTrade);
-      }
-
-      return updatedTrade;
-    });
-    // filter out not-null bets.
-    tempTrades?.filter((t) => {
-      if (t) {
-        return true;
-      }
-      return false;
-    });
-
-    return tempTrades;
-  };
-
-  const addExpiryPrice = async (currentTrade: IGQLHistory) => {
-    if (currentTrade.state === BetState.active) {
-      axios
-        .post(`https://oracle.buffer.finance/price/query/`, [
-          {
-            pair: currentTrade.configPair.tv_id,
-            timestamp: currentTrade.expirationTime,
-          },
-        ])
-        .then((response) => {
-          if (
-            !expiryPriceCache[currentTrade.optionID] &&
-            response?.data?.[0]?.price
-          )
-            expiryPriceCache[currentTrade.optionID] =
-              response?.data?.[0].price.toString();
-        });
-    }
-  };
-
   const { data } = usePastTradeQueryByFetch({
     account: account,
     historyskip: historyPage,
@@ -208,8 +208,8 @@ export const usePastTradeQuery = () => {
   });
 
   const blockNumber = data?._meta?.block.number;
-  const { data: trades } = useAheadTrades(blockNumber, account);
-  console.log('p=[aug]trades', trades, data);
+  const { data: trades } = useAheadTrades(blockNumber, account, false);
+  console.log('p=[aug]trades', trades);
   useEffect(() => {
     let activeResponseArr = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])
