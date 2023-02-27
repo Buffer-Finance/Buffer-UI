@@ -40,6 +40,8 @@ export const HistoryTables = () => {
 
   useEffect(() => {
     changeActiveTab(null, 1);
+    setActivePage(1);
+    setHistoryPage(1);
   }, []);
 
   return (

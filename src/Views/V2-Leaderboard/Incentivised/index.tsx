@@ -76,11 +76,35 @@ export const Incentivised = () => {
     setActivePageNumber(1);
   }, [activeTab, offset]);
 
-  useEffect(() => {
-    if (offset === null) {
-      setOffset(day.toString());
+  const rewardPool = useMemo(() => {
+    if (endDay[activeChain.id] !== undefined) {
+      if (offset === null) {
+        if (day >= endDay[activeChain.id]) return '0 USDC';
+      } else {
+        if (Number(offset) >= endDay[activeChain.id]) return '0 USDC';
+      }
     }
-  }, [day]);
+    if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
+      return (
+        toFixed(
+          divide(
+            multiply(
+              '5',
+              divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
+            ),
+            '100'
+          ) ?? '0',
+          0
+        ) + ' USDC'
+      );
+    else return 'fetching...';
+  }, [activeChain, day, offset, data]);
+
+  // useEffect(() => {
+  //   if (offset === null) {
+  //     setOffset(day.toString());
+  //   }
+  // }, [day]);
 
   let content;
   if (!isTimerEnded) {
@@ -122,36 +146,12 @@ export const Incentivised = () => {
             <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
               <Col
                 head={'Reward Pool'}
-                // desc={<Display data={500} unit={"USDC"}  precisionj/>}
                 desc={
-                  endDay[activeChain.id] && offset >= endDay[activeChain.id] ? (
-                    '0 USDC'
-                  ) : data &&
-                    data.reward &&
-                    data.reward[0] &&
-                    data.reward[0].settlementFee ? (
-                    <NumberTooltip
-                      content={'5% of the fees collected for the day.'}
-                    >
-                      <div>
-                        {toFixed(
-                          divide(
-                            multiply(
-                              '5',
-                              divide(
-                                data.reward[0].settlementFee,
-                                usdcDecimals
-                              ) ?? '0'
-                            ),
-                            '100'
-                          ) ?? '0',
-                          0
-                        ) + ' USDC'}
-                      </div>
-                    </NumberTooltip>
-                  ) : (
-                    'fetching...'
-                  )
+                  <NumberTooltip
+                    content={'5% of the fees collected for the day.'}
+                  >
+                    <div>{rewardPool}</div>
+                  </NumberTooltip>
                 }
                 descClass="text-f16 tab:text-f14 font-medium light-blue-text "
                 headClass="text-f14 tab:text-f12 fw5 text-6"
@@ -265,7 +265,9 @@ export const Incentivised = () => {
           <div>
             <Warning
               closeWarning={() => {}}
-              state={endDay[activeChain.id] && day >= endDay[activeChain.id]}
+              state={
+                endDay[activeChain.id] ? day >= endDay[activeChain.id] : false
+              }
               shouldAllowClose={false}
               body={
                 <>
@@ -298,14 +300,18 @@ export function TimerBox({
 }) {
   const timer = useTimer(expiration);
   let arr = [
-    timer.days && {
-      name: 'Days',
-      value: timer.days,
-    },
-    (timer.hours || timer.days) && {
-      name: 'Hours',
-      value: timer.hours,
-    },
+    timer.days
+      ? {
+          name: 'Days',
+          value: timer.days,
+        }
+      : null,
+    timer.hours || timer.days
+      ? {
+          name: 'Hours',
+          value: timer.hours,
+        }
+      : null,
     {
       name: 'Minutes',
       value: timer.minutes,
@@ -327,6 +333,7 @@ export function TimerBox({
       {head}
       <div className="flex flex-row items-end text-f12">
         {arr.map((s, idx) => {
+          if (s === null) return <></>;
           return (
             <>
               <div className="flex flex-col items-center">

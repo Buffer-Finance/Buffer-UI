@@ -2,8 +2,6 @@ import { createArray } from '@Utils/JSUtils/createArray';
 import BufferDropdown from '@Views/Common/BufferDropdown';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styled from '@emotion/styled';
-import { useSearchParams } from 'react-router-dom';
-import { useEffect, useMemo } from 'react';
 
 const Background = styled.div`
   .scrollbar {
@@ -56,7 +54,7 @@ export function ContestFilterDD({
         initialActive={0}
         dropdownBox={(a, isOpen) => (
           <div className={`bg-1 rounded-sm flex items-center pl-3 pr-2`}>
-            #{offset}{' '}
+            #{offset ?? count}{' '}
             {isDD && (
               <div className="arrow-bg pl-2 pb-1">
                 <ExpandMoreIcon
