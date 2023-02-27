@@ -522,7 +522,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     };
   }, [address]);
   return (
-    <div className="w-[60vw] h-[35vh]">
+    <div className="w-full h-full">
       <div
         ref={containerDivRef}
         id="chart-element"

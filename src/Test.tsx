@@ -5,74 +5,111 @@ const initD = ['800123.32', '22313.2312', '312312.11', '32131123.231'];
 const Decd = ['800123.31', '22313.2311', '312312.10', '32131123.230'];
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import useWebSocket from 'react-use-websocket';
-import {  Market2Prices, Markets } from './Types/Market';
+import { Market2Prices, Markets } from './Types/Market';
 import { TradingChart } from './TradingView';
+import { usePrice } from '@Hooks/usePrice';
+import FlexLayout from 'flexlayout-react';
 
 const Test: React.FC<any> = ({}) => {
-  usePrice();
-  const price = useAtomValue(priceAtom);
-
-  const obj = Config;
-  return <div className="flex ">
-    
-    <TradingChart market='BTCUSD' /></div>;
+  return (
+    <div className="flex flex-col ">
+      <TradingChart market="BTCUSD" />
+      <TradingChart market="ETHUSD" />
+    </div>
+  );
 };
-
-const parsewsmsg = (res:string) => {
-  const priceObj : Partial<Market2Prices> = {};
-  const assets = res.split('|');
-  let partial = false;
-
-  let secondLastCharacter =
-    assets[assets.length - 1][assets[assets.length - 1].length - 2];
-  if (secondLastCharacter != '|') {
-    partial = true;
-  }
-
-  assets.forEach((asset, idx) => {
-    if (partial && idx === assets.length - 1) return;
-    asset.split('\n').forEach((newLinesSplitted, idx) => {
-      if (newLinesSplitted) {
-        newLinesSplitted.split('|').forEach((orSplitted, idx) => {
-          if (orSplitted)
-            orSplitted.split('\r').forEach((assetString, idx) => {
-              if (assetString) {
-                if (assetString.includes('[')) return;
-                const [assetName, decimalTs, numPrice, volume] =
-                  assetString.split(':');
-                if (!assetName || !decimalTs || !numPrice) return;
-                const [s, ms] = (decimalTs as string).split('.');
-                const ts = +s * 1000 + +ms;
-                const absolutePrice = numPrice;
-                const priceUpdate = {
-                  time: +ts,
-                  price: absolutePrice,
-                  volume: volume ? +volume : 0,
-                };
-                if (!priceObj[assetName as Markets]) {
-                  priceObj[assetName as Markets] = [priceUpdate];
-                } else {
-                  priceObj[assetName as Markets]?.push(priceUpdate);
-                }
-              }
-            });
-        });
-      }
-    });
-  });
-
-  return priceObj;
-};
-function usePrice() {
-  const setPrice = useSetAtom(priceAtom);
-  useWebSocket('wss://oracle-v2.buffer.finance', {
-    onMessage: (price) => {
-      const priceUpdates = parsewsmsg(price.data);
-      setPrice(priceUpdates);
+var json = {
+  global: { tabEnableClose: false },
+  borders: [
+    {
+      type: 'border',
+      location: 'bottom',
+      size: 100,
+      children: [
+        {
+          type: 'tab',
+          name: 'four',
+          component: 'text',
+        },
+      ],
     },
-  });
-}
+    {
+      type: 'border',
+      location: 'left',
+      size: 100,
+      children: [],
+    },
+  ],
+  layout: {
+    type: 'row',
+    weight: 100,
+    children: [
+      {
+        type: 'tabset',
+        weight: 50,
+        selected: 0,
+        children: [
+          {
+            type: 'tab',
+            name: 'ETHUSD',
+            component: 'TradingView',
+          },
+        ],
+      },
+      {
+        type: 'tabset',
+        weight: 50,
+        selected: 0,
+        children: [
+          {
+            type: 'tab',
+            name: 'GBPUSD',
+            component: 'TradingView',
+          },
+        ],
+      },
+      {
+        type: 'tabset',
+        weight: 50,
+        selected: 0,
+        children: [
+          {
+            type: 'tab',
+            name: 'BTCUSD',
+            component: 'TradingView',
+          },
+        ],
+      },
+    ],
+  },
+};
+
+const Man = () => {
+  const [layout, setLayout] = useState(FlexLayout.Model.fromJson(json));
+  usePrice();
+  const factory = (node) => {
+    var component = node.getComponent();
+    console.log(`component: `,component);
+    if (component === 'TradingView') {
+      return <TradingChart market={node.getName()} />;
+    }
+  };
+
+
+  return <FlexLayout.Layout model={layout} factory={factory}
+  
+  
+  // onRenderTab={(node,arr)=>{
+  //   console.log(`arr: `,arr);
+  //   console.log(`node: `,node);
+  //   arr.buttons.push(<Tab></Tab>)
+  // }}
+  />;
+};
 
 
 export const priceAtom = atom<Partial<Market2Prices>>({});
-export { Test };
+export { Man as Test };
+const Tab = ()=>{
+  <div>Hello i am a tab</div>
+}

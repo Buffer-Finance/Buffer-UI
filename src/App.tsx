@@ -48,7 +48,7 @@ function AppComponent() {
 
 const AppRoutes = () => {
   return (
-    <div className="root w-[100vw]">
+    <div className="relative root w-[100vw]">
       <Routes>
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
