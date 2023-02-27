@@ -31,6 +31,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
+import { minTradeAmount } from '../store';
 
 export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const binary = useQTinfo();
@@ -147,10 +148,14 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    if (gt('1', userInput)) {
+    if (gt(minTradeAmount.toString(), userInput)) {
       return toastify({
         type: 'error',
-        msg: 'Trade Amount must be atleast 1 ' + activePoolObj.token.name,
+        msg:
+          'Trade Amount must be atleast ' +
+          minTradeAmount +
+          ' ' +
+          activePoolObj.token.name,
         id: 'binaryBuy',
       });
     }
