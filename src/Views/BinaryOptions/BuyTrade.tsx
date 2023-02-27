@@ -2,8 +2,8 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import DownIcon from '@SVG/Elements/DownIcon';
-import UpIcon from '@SVG/Elements/UpIcon';
+import DownIcon, { DownIconWhite } from '@SVG/Elements/DownIcon';
+import UpIcon, { UpIconWhite } from '@SVG/Elements/UpIcon';
 import { getPriceFromKlines, marketPriceAtom } from '@TV/useDataFeed';
 import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
@@ -152,7 +152,7 @@ const BuyTrade: React.FC<any> = ({}) => {
                       className="bg-green text-1  hover:brightness-125 !text-f20 !font-bold"
                     >
                       <>
-                        <UpIcon  className={'mr-[10px]'} />
+                        <UpIconWhite  className={'mr-[10px]'} />
                         Up
                       </>
                     </GreenBtn>
@@ -168,7 +168,7 @@ const BuyTrade: React.FC<any> = ({}) => {
 
                     >
                       <>
-                        <DownIcon className={'mr-[10px]'}  />
+                        <DownIconWhite className={'mr-[10px]'}  />
                         Down
                       </>
                     </RedBtn>
