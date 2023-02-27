@@ -53,7 +53,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   );
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
-    );
+  );
   const [marketPrice] = useAtom(marketPriceAtom);
   const toastify = useToast();
 
@@ -62,7 +62,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   };
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
-
     const isCustom = typeof customTrade.is_up === 'boolean';
 
     if (state.txnLoading > 1) {
@@ -86,13 +85,25 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    if (isCustom && timeToMins(expiration) < MINIMUM_MINUTES) {
+    if (
+      isCustom &&
+      timeToMins(expiration) < timeToMins(activeAsset.min_duration)
+    ) {
       return toastify({
         type: 'error',
-        msg: 'Expiration should be greater then 5 minutes due to network congestion',
+        msg: `Expiration time should be greater than ${getUserError(
+          activeAsset.min_duration
+        )}`,
         id: 'binaryBuy',
       });
     }
+    // if (isCustom && timeToMins(expiration) < MINIMUM_MINUTES) {
+    //   return toastify({
+    //     type: 'error',
+    //     msg: 'Expiration should be greater then 5 minutes due to network congestion',
+    //     id: 'binaryBuy',
+    //   });
+    // }
 
     if (!userInput) {
       return toastify({
@@ -183,7 +194,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   };
 
   const handleApproveClick = async (ammount = toFixed(getPosInf(), 0)) => {
-
     if (state.txnLoading > 1) {
       toastify({
         id: 'dddafsd3',

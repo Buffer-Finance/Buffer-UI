@@ -1,12 +1,12 @@
-import styled from "@emotion/styled";
-import { Add, Remove } from "@mui/icons-material";
-import React, { ReactNode, useEffect, useRef } from "react";
-import ErrorIcon from "src/SVG/Elements/ErrorIcon";
-import BN from "bn.js";
-import Big from "big.js";
-import { useToast } from "@Contexts/Toast";
-import { lt } from "@Utils/NumString/stringArithmatics";
-import { PoolDropDown } from "./PoolDropDown";
+import styled from '@emotion/styled';
+import { Add, Remove } from '@mui/icons-material';
+import React, { ReactNode, useEffect, useRef } from 'react';
+import ErrorIcon from 'src/SVG/Elements/ErrorIcon';
+import BN from 'bn.js';
+import Big from 'big.js';
+import { useToast } from '@Contexts/Toast';
+import { add, lt } from '@Utils/NumString/stringArithmatics';
+import { PoolDropDown } from './PoolDropDown';
 
 const TimeSelectorStyles = styled.div`
   display: flex;
@@ -95,8 +95,8 @@ const TimeSelectorStyles = styled.div`
 
 export function timeToMins(time) {
   if (!time) return;
-  if (typeof time !== "string") return;
-  var b = time.split(":");
+  if (typeof time !== 'string') return;
+  var b = time.split(':');
 
   return +b[0] * 60 + +b[1];
 }
@@ -105,21 +105,21 @@ export function timeToMins(time) {
 // Returned value is in range 00  to 24 hrs
 export function timeFromMins(mins) {
   function z(n) {
-    return (n < 10 ? "0" : "") + n;
+    return (n < 10 ? '0' : '') + n;
   }
   var h = ((mins / 60) | 0) % 24;
   var m = mins % 60;
-  return z(h) + ":" + z(m);
+  return z(h) + ':' + z(m);
 }
 
 export function getUserError(maxTimeInHHMM: string) {
-  let hours = maxTimeInHHMM.toString().split(":")[0];
-  let minutes = maxTimeInHHMM.toString().split(":")[1];
-  if (hours.charAt(0) == "0") hours = hours.charAt(1);
-  if (minutes.charAt(0) == "0") minutes = minutes.charAt(1);
+  let hours = maxTimeInHHMM.toString().split(':')[0];
+  let minutes = maxTimeInHHMM.toString().split(':')[1];
+  if (hours.charAt(0) == '0') hours = hours.charAt(1);
+  if (minutes.charAt(0) == '0') minutes = minutes.charAt(1);
   let message;
-  if (minutes == "0") return `${hours} hours`;
-  else if (hours == "0") return `${minutes} minutes`;
+  if (minutes == '0') return `${hours} hours`;
+  else if (hours == '0') return `${minutes} minutes`;
   else return `${hours} hours ${minutes} minutes`;
 }
 
@@ -136,9 +136,9 @@ const getDisplayTime = (timestamp) => {
   const hours = Math.round(timestamp / 3600000);
   const minutes = Math.round(timestamp / 60000);
 
-  return `${hours.toString().padStart(2, "0")}:${minutes
+  return `${hours.toString().padStart(2, '0')}:${minutes
     .toString()
-    .padStart(2, "0")}`;
+    .padStart(2, '0')}`;
 };
 const INT_MAX = 1e18;
 
@@ -151,16 +151,16 @@ export const TimeSelector = ({
   setTime,
   investmentDD,
   max,
-  label,
   error,
-  title,
-  maxTime = "23:59",
+  maxTime = '23:59',
+  minTime = '00:05',
 }: {
   isTimeSelector?: boolean;
   currentTime: string | number;
   label?: string;
   investmentDD?: boolean;
   maxTime?: string;
+  minTime?: string;
   setTime: (any) => void;
   max?: number;
   title?: string;
@@ -171,21 +171,23 @@ export const TimeSelector = ({
     maxMsg?: ReactNode;
   };
 }) => {
-  const maxMins = parseInt(maxTime.split(":")[1]);
-  const maxHrs = parseInt(maxTime.split(":")[0]);
+  const maxMins = parseInt(maxTime.split(':')[1]);
+  const maxHrs = parseInt(maxTime.split(':')[0]);
   const maxTimeInMins = timeToMins(maxTime);
+  const minTimeInMins = timeToMins(minTime);
   const currentTimeInMins = timeToMins(currentTime);
   const hrsRef = useRef(null);
   const minRef = useRef(null);
   if (!currentTime) {
-    currentTime = "01:00";
+    currentTime = '01:00';
   }
 
   useEffect(() => {
+    if (currentTimeInMins === undefined || maxTimeInMins === undefined) return;
     if (currentTimeInMins > maxTimeInMins) {
       hrsRef.current.value = maxHrs;
       minRef.current.value = maxMins;
-      setTime(hrsRef.current.value + ":" + minRef.current.value);
+      setTime(hrsRef.current.value + ':' + minRef.current.value);
     }
   }, [maxTimeInMins]);
 
@@ -196,19 +198,19 @@ export const TimeSelector = ({
     //   minRef.current.value = maxMins;
     //   setTime(hrsRef.current.value + ":" + minRef.current.value);
     // }
-    hrsRef.current.value = currentTime.toString().split(":")[0];
-    minRef.current.value = currentTime.toString().split(":")[1];
+    hrsRef.current.value = currentTime.toString().split(':')[0];
+    minRef.current.value = currentTime.toString().split(':')[1];
     const listener = (e) => {
-      if (e.key === "ArrowRight") minRef.current?.focus();
-      if (e.key === "Enter") minRef.current?.focus();
-      if (e.key === "ArrowLeft") hrsRef.current?.focus();
+      if (e.key === 'ArrowRight') minRef.current?.focus();
+      if (e.key === 'Enter') minRef.current?.focus();
+      if (e.key === 'ArrowLeft') hrsRef.current?.focus();
     };
-    document.addEventListener("keydown", listener);
-    return removeEventListener("keydown", listener);
+    document.addEventListener('keydown', listener);
+    return removeEventListener('keydown', listener);
   }, [currentTime]);
 
   const minError = isTimeSelector
-    ? timeToMins(currentTime) < MINIMUM_MINUTES
+    ? timeToMins(currentTime) < minTimeInMins
     : currentTime < error.min;
   const maxError = isTimeSelector
     ? timeToMins(currentTime) > maxTimeInMins
@@ -216,13 +218,13 @@ export const TimeSelector = ({
 
   const btnClick = (isBack?) => {
     if (isTimeSelector) {
-      currentTime = hrsRef.current.value + ":" + minRef.current.value;
+      currentTime = hrsRef.current.value + ':' + minRef.current.value;
       if (isBack) {
-        if (currentTimeInMins > timeToMins("00:05")) {
-          setTime(subtractTImes(currentTime, "00:01"));
+        if (currentTimeInMins > timeToMins('00:05')) {
+          setTime(subtractTImes(currentTime, '00:01'));
         }
-      } else if (currentTimeInMins < timeToMins("23:59")) {
-        setTime(addTimes(currentTime, "00:01"));
+      } else if (currentTimeInMins < timeToMins('23:59')) {
+        setTime(addTimes(currentTime, '00:01'));
       }
     } else {
       setTime((time) => {
@@ -244,13 +246,13 @@ export const TimeSelector = ({
     if (value > 23) hrsRef.current.value = 23;
     if (value.toString().length > 2)
       hrsRef.current.value = value.toString().slice(0, 2);
-    if (
-      (hrsRef.current.value === "00" ||
-        hrsRef.current.value === "0" ||
-        !hrsRef.current.value) &&
-      lt(minRef.current.value || "0", "5")
-    )
-      minRef.current.value = "5";
+    // if (
+    //   (hrsRef.current.value === '00' ||
+    //     hrsRef.current.value === '0' ||
+    //     !hrsRef.current.value) &&
+    //   lt(minRef.current.value || '0', '5')
+    // )
+    //   minRef.current.value = '5';
     // if (
     //   timeToMins(hrsRef.current.value + ":" + minRef.current.value) >
     //   maxTimeInMins
@@ -259,21 +261,25 @@ export const TimeSelector = ({
     //   minRef.current.value = maxMins;
     //   setTime(hrsRef.current.value + ":" + minRef.current.value);
     // }
-    setTime(hrsRef.current.value + ":" + minRef.current.value);
+    setTime(hrsRef.current.value + ':' + minRef.current.value);
   };
 
   const minValidations = (value) => {
     if (value < 0) minRef.current.value = 0;
-    if (value > 59) minRef.current.value = 59;
+    // if (value > 59) minRef.current.value = 59;
     if (value.toString().length > 2)
       minRef.current.value = value.toString().slice(0, 2);
-    if (
-      (hrsRef.current.value === "00" ||
-        hrsRef.current.value === "0" ||
-        !hrsRef.current.value) &&
-      lt(minRef.current.value || "0", "5")
-    )
-      minRef.current.value = "5";
+    // if (value > 59) {
+    //   minRef.current.value = 0;
+    //   hrsRef.current.value = add('1',hrsRef.current.value);
+    // }
+    // if (
+    //   (hrsRef.current.value === '00' ||
+    //     hrsRef.current.value === '0' ||
+    //     !hrsRef.current.value) &&
+    //   lt(minRef.current.value || '0', '5')
+    // )
+    //   minRef.current.value = '5';
     // if (
     //   timeToMins(hrsRef.current.value + ":" + minRef.current.value) >
     //   maxTimeInMins
@@ -282,13 +288,17 @@ export const TimeSelector = ({
     //   minRef.current.value = maxMins;
     //   setTime(hrsRef.current.value + ":" + minRef.current.value);
     // }
-    setTime(hrsRef.current.value + ":" + minRef.current.value);
+    setTime(hrsRef.current.value + ':' + minRef.current.value);
   };
-  const timestyles = "timeRef timetip text-right text-f16 font-bold";
+  const timestyles = 'timeRef timetip text-right text-f16 font-bold';
   return (
     <>
       <TimeSelectorStyles className=" transition-colors bg-1  border-">
-        <div className="w-[max-content] hover:brightness-150 p-[6px]">
+        <div
+          className={`${
+            isTimeSelector ? 'w-full' : 'w-max'
+          } hover:brightness-150 p-[6px]`}
+        >
           <div className="flex-bw ">
             <button
               className="button-bg"
@@ -315,6 +325,8 @@ export const TimeSelector = ({
                   type="number"
                   onChange={(e) => hrsValidations(e.target.value)}
                   placeholder="00"
+                  min={0}
+                  max={23}
                 />
                 <div className="text-f16 text-1 mx-1 text-center">:</div>
                 <input
@@ -323,6 +335,8 @@ export const TimeSelector = ({
                   type="number"
                   onChange={(e) => minValidations(e.target.value)}
                   placeholder="00"
+                  min={0}
+                  max={59}
                 />
                 {/* <div className="f18 text-1 ">m</div> */}
               </div>
@@ -348,11 +362,11 @@ export const TimeSelector = ({
                     ];
                     if (!regexArr[decimals].test(valBN.toString())) {
                       toastify({
-                        type: "error",
+                        type: 'error',
                         msg: !decimals
                           ? "Decimal values aren't allowed"
-                          : "Only " + decimals + " decimal digits are allowed!",
-                        id: "decimals",
+                          : 'Only ' + decimals + ' decimal digits are allowed!',
+                        id: 'decimals',
                       });
                       return;
                     }
