@@ -12,13 +12,15 @@ import CloseLogo from '@SVG/Elements/Closelogo';
 import NFTtier from '../NFTtier';
 import LeaderboardTropy from '@Public/LeaderBoard/Trophy';
 import { Link } from 'react-router-dom';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
+import { useAccount } from 'wagmi';
 
 interface INavbar {}
 
 export const Navbar: React.FC<INavbar> = () => {
   const { state, dispatch } = useGlobal();
+  const { address } = useAccount();
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   const tabs = useMemo(
     () => getTabs(activeMarketFromStorage),
@@ -46,7 +48,7 @@ export const Navbar: React.FC<INavbar> = () => {
               return (
                 <button
                   key={tab.name}
-                  className={`font-normal text-4 text-f15  px-4 py-[4px] rounded-md hover:text-1 transition-colors 
+                  className={`font-normal text-4 text-f15  px-4 py-[4px] rounded-md hover:bg-1 hover:text-1 hover:brightness-125 transition-colors 
                  
                       : "hover:bg-1 hover:brightness-125"
                   `}
@@ -69,7 +71,11 @@ export const Navbar: React.FC<INavbar> = () => {
       </div>
 
       <div className="flex items-center gap-[7px] whitespace-nowrap">
-        <NFTtier />
+        {address && (
+          <div className="text-f13 bg-[#2C2C41] h-[30px] px-5 special-hover hover:brightness-125 tb  rounded-[7px] items-center flex w-fit">
+            <NFTtier userOnly />
+          </div>
+        )}
 
         {/* {import.meta.env.VITE_ENV === 'TESTNET' && (
           <BlueBtn

@@ -14,7 +14,7 @@ import { Variables } from '@Utils/Time';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { IQTrade, IToken } from '..';
+import { IQTrade } from '..';
 import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import {
   AssetCell,
@@ -44,15 +44,16 @@ export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
 interface IPGDesktopTables {
   configData: IQTrade;
-  className?: string;
-
   onPageChange?: (e: ChangeEvent, p: number) => void;
+  activePage: number;
+  shouldNotDisplayShareVisulise: boolean;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   configData,
-  className,
   onPageChange,
+  activePage,
+  shouldNotDisplayShareVisulise,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -97,9 +98,9 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Trade Size',
         'Payout',
         'Status',
-        '',
+        !shouldNotDisplayShareVisulise && '',
         // "Visualize",
-      ];
+      ].filter((name) => name !== null && name !== undefined && name !== false);
     else if (isCancelledTable)
       return ['Asset', 'Strike Price', 'Trade Size', 'Status', 'Reason'];
     else
@@ -112,12 +113,18 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Close Time',
         'Trade Size',
         'Probability',
-        'Visualize',
-      ];
+        !shouldNotDisplayShareVisulise && 'Visualize',
+      ].filter((name) => name !== null && name !== undefined && name !== false);
   }, [isHistoryTable]);
 
   const HeaderFomatter = (col: number) => {
-    return <TableHeader col={col} headsArr={headNameArray} />;
+    return (
+      <TableHeader
+        col={col}
+        headsArr={headNameArray}
+        firstColClassName="ml-4"
+      />
+    );
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
@@ -290,13 +297,13 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   };
 
   return (
-    <Background className={className}>
+    <Background>
       <BufferTable
-        count={onPageChange ? totalPages : null}
+        count={onPageChange ? totalPages : undefined}
+        activePage={activePage}
         onPageChange={(e, pageNumber) => {
           onPageChange ? onPageChange(e, pageNumber) : null;
         }}
-        shouldShowTroply={false}
         doubleHeight
         // shouldShowMobile
         headerJSX={HeaderFomatter}

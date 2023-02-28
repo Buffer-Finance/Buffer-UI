@@ -1,7 +1,7 @@
 import { CHAIN_CONFIGS } from 'config';
-import useStopWatch, { useTimer } from '@Hooks/Utilities/useStopWatch';
+import useStopWatch from '@Hooks/Utilities/useStopWatch';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
 import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
@@ -18,18 +18,17 @@ import { TopData } from '../Components/TopData';
 import { DailyWebTable } from '../Daily/DailyWebTable';
 import { DailyStyles } from '../Daily/stlye';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
-import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { endDay, startTimestamp } from './config';
-import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
-import { social } from '@Views/Common/SocialMedia';
+
 import TabSwitch from '@Views/Common/TabSwitch';
 import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
 import { useWeeklyLeaderboardQuery } from '../Hooks/useWeeklyLeaderboardQuery';
+import { TimerBox } from '../Incentivised';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -43,7 +42,8 @@ export const Weekly = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useWeeklyLeaderboardQuery();
+  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
+    useWeeklyLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -75,14 +75,46 @@ export const Weekly = () => {
     setActivePageNumber(1);
   }, [activeTab]);
 
-  useEffect(() => {
-    if (
-      (week !== null && offset === null) ||
-      (offset !== null && week !== null && offset.toString() != week.toFixed())
-    ) {
-      setOffset(week.toString());
-    }
-  }, [week, offset]);
+  const rewardPool = useMemo(() => {
+    if (week === null) return null;
+    if (endDay[activeChain.id] !== undefined) {
+      if (offset === null) {
+        if (week >= endDay[activeChain.id]) return '0 USDC';
+      } else {
+        if (Number(offset) >= endDay[activeChain.id]) return '0 USDC';
+      }
+    } else if (
+      data &&
+      data.reward &&
+      data.reward[0] &&
+      data.reward[0].settlementFee
+    )
+      return (
+        toFixed(
+          add(
+            '1000',
+            divide(
+              multiply(
+                '5',
+                divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
+              ),
+              '100'
+            ) ?? '0'
+          ),
+          0
+        ) + ' USDC'
+      );
+    else return 'fetching...';
+  }, [activeChain, week, offset, data]);
+
+  // useEffect(() => {
+  //   if (
+  //     (week !== null && offset === null) ||
+  //     (offset !== null && week !== null && offset.toString() != week.toFixed())
+  //   ) {
+  //     setOffset(week.toString());
+  //   }
+  // }, [week, offset]);
 
   let content;
   if (!isTimerEnded) {
@@ -113,7 +145,7 @@ export const Weekly = () => {
               {activeChain.name}
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9"
+                href="https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52"
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
@@ -124,41 +156,14 @@ export const Weekly = () => {
             <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
               <Col
                 head={'Reward Pool'}
-                // desc={<Display data={500} unit={"USDC"}  precisionj/>}
                 desc={
-                  endDay[activeChain.id] && offset >= endDay[activeChain.id] ? (
-                    '0 USDC'
-                  ) : data &&
-                    data.reward &&
-                    data.reward[0] &&
-                    data.reward[0].settlementFee ? (
-                    <NumberTooltip
-                      content={
-                        '1000 USDC + 5% of the fees collected for the week.'
-                      }
-                    >
-                      <div>
-                        {toFixed(
-                          add(
-                            '1000',
-                            divide(
-                              multiply(
-                                '5',
-                                divide(
-                                  data.reward[0].settlementFee,
-                                  usdcDecimals
-                                ) ?? '0'
-                              ),
-                              '100'
-                            ) ?? '0'
-                          ),
-                          0
-                        ) + ' USDC'}
-                      </div>
-                    </NumberTooltip>
-                  ) : (
-                    'fetching...'
-                  )
+                  <NumberTooltip
+                    content={
+                      '1000 USDC + 5% of the fees collected for the week.'
+                    }
+                  >
+                    <div>{rewardPool}</div>
+                  </NumberTooltip>
                 }
                 descClass="text-f16 tab:text-f14 font-medium light-blue-text "
                 headClass="text-f14 tab:text-f12 fw5 text-6"
@@ -246,8 +251,12 @@ export const Weekly = () => {
               userData={data?.userData}
               skip={skip}
               nftWinners={3}
+              userRank={winnerUserRank}
+              activePage={activePages.arbitrum}
             />,
             <DailyWebTable
+              activePage={activePages.arbitrum}
+              userRank={loserUserRank}
               res={loserStats}
               count={totalPages.arbitrum}
               onpageChange={setActivePageNumber}
@@ -268,7 +277,11 @@ export const Weekly = () => {
           <div>
             <Warning
               closeWarning={() => {}}
-              state={endDay[activeChain.id] && week >= endDay[activeChain.id]}
+              state={
+                endDay[activeChain.id] && week !== null
+                  ? week >= endDay[activeChain.id]
+                  : false
+              }
               shouldAllowClose={false}
               body={
                 <>
@@ -289,86 +302,3 @@ export const Weekly = () => {
     ></LeaderBoard>
   );
 };
-
-export function TimerBox({
-  expiration,
-  className,
-  head,
-}: {
-  expiration: number;
-  className?: string;
-  head: ReactNode;
-}) {
-  const timer = useTimer(expiration);
-  let arr = [
-    timer.days && {
-      name: 'Days',
-      value: timer.days,
-    },
-    (timer.hours || timer.days) && {
-      name: 'Hours',
-      value: timer.hours,
-    },
-    {
-      name: 'Minutes',
-      value: timer.minutes,
-    },
-    {
-      name: 'Seconds',
-      value: timer.seconds,
-    },
-  ];
-  arr = arr.filter((a) => a);
-
-  return (
-    <div
-      className={
-        'flex flex-col items-center w-fit  bg-1 p-[20px] rounded-[10px] px-[25px] ' +
-        className
-      }
-    >
-      {head}
-      <div className="flex flex-row items-end text-f12">
-        {arr.map((s, idx) => {
-          return (
-            <>
-              <div className="flex flex-col items-center">
-                <div
-                  className={
-                    'text-3 text-f14 uppercase ' +
-                    (idx < arr.length - 1 ? 'mr-[30%]' : '')
-                  }
-                >
-                  {s.name}
-                </div>
-                <div className="text-buffer-blue text-[50px] mt-[-8px]">
-                  {s.value.toString().padStart(2, '0')}
-                  {idx < arr.length - 1 ? ':' : ''}
-                </div>
-              </div>
-            </>
-          );
-        })}
-      </div>
-      <span className="text-f12 pb-4 ">Join to stay updated!</span>
-      <TImerStyle>
-        {social.map((social_link) => {
-          return (
-            <a
-              className="social_link pointer flex items-center"
-              target={'_blank'}
-              href={social_link.link}
-              key={social_link.name}
-            >
-              <img
-                key={social_link.name}
-                src={`/Social/Blue/${social_link.image}`}
-                className="social_link_icon"
-              />
-            </a>
-          );
-        })}
-      </TImerStyle>
-    </div>
-  );
-}

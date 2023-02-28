@@ -27,7 +27,7 @@ export function useActiveAssetState(amount = null, referralData) {
   const { activePoolObj } = useActivePoolObj();
   const [knowtil, setKnowTill] = useAtom(knowTillAtom);
   const setResInAtom = useSetAtom(setActiveAssetStateAtom);
-  const { highestTierNFT } = useHighestTierNFT();
+  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const payoutCalls = useMemo(() => {
     // return [];
     return qtInfo.pairs

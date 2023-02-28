@@ -1,7 +1,7 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useAtom } from 'jotai';
-import { useState, useEffect, ReactNode, useContext } from 'react';
+import { useState, useEffect, ReactNode, useContext, useMemo } from 'react';
 import { useCodeOwner } from './Hooks/useCodeOwner';
 import BufferInput from '@Views/Common/BufferInput';
 import BufferTransitionedTab from '@Views/Common/BufferTransitionedTab';
@@ -43,13 +43,14 @@ import { baseGraphqlUrl } from 'config';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { snackAtom } from 'src/App';
+import { useSearchParams } from 'react-router-dom';
 
 interface IReferral {}
 
 // status 1 - go ahead
 // status 2 - NA
 // status 3 - loading
-interface IReferralStat {
+export interface IReferralStat {
   totalTradesReferred: string;
   totalVolumeOfReferredTrades: string;
   totalRebateEarned: string;
@@ -100,10 +101,21 @@ const useUserAffilateCode = (activeChain: Chain) => {
   return data;
 };
 
+export const useRefferalTab = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = useMemo(() => searchParams.get('tab'), [searchParams]);
+
+  function setTab(tab: string) {
+    setSearchParams({ tab });
+  }
+
+  return { tab, setTab };
+};
+
+export const tabs = ['Use a Referral', 'Create your Referral'];
 const Referral: React.FC<IReferral> = ({}) => {
   const { activeChain } = useContext(ReferralContext);
   const [showCodeModal, setShowCodeModal] = useAtom(showCodeModalAtom);
-  const tabs = ['Use a Referral', 'Create your Referral'];
   const { writeTXN } = useReferralWriteCall();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [ip, setip] = useState('');
@@ -111,10 +123,11 @@ const Referral: React.FC<IReferral> = ({}) => {
   const owner = useCodeOwner(ip);
   const { state } = useGlobal();
   const referralCodes = useReferralCode(activeChain);
-  console.log(`referralCodes: `,referralCodes);
+  console.log(`referralCodes: `, referralCodes);
   const { address: account } = useUserAccount();
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   const { openConnectModal } = useConnectModal();
+  const { setTab, tab } = useRefferalTab();
 
   const shouldConnectWallet = !account;
   useEffect(() => {
@@ -130,6 +143,15 @@ const Referral: React.FC<IReferral> = ({}) => {
     )
       setip(referralCodes[1]);
   }, [activeTab, account]);
+
+  useEffect(() => {
+    if (tab === null) {
+      setTab(tabs[0]);
+    }
+    if (tab != activeTab && tab !== null) {
+      setActiveTab(tab);
+    }
+  }, [tab, activeTab]);
 
   const closeModal = () => {
     setShowCodeModal(false);
@@ -301,11 +323,9 @@ const Referral: React.FC<IReferral> = ({}) => {
             {' '}
             Get fee discounts and earn rebates.
           </span>
-          <span className=" block text-[#c0b8b8]">
+          <span className="italic  block">
             {' '}
-            Note that referral codes are case sensitive and that your code must
-            be <br className='sm:hidden'/> created on both Arbitrum as well as Polygon to earn rebates on
-            both networks.{' '}
+            Note: Referral codes are case sensitive
           </span>
           <br className="sm:hidden" />
           {/* For more information, please read the
@@ -324,6 +344,7 @@ const Referral: React.FC<IReferral> = ({}) => {
             key={s}
             onClick={() => {
               setActiveTab(s);
+              setTab(s);
             }}
             active={activeTab === s}
           >
@@ -484,7 +505,7 @@ const Affilate = ({
   );
 };
 
-const useUserReferralStats = () => {
+export const useUserReferralStats = () => {
   const { address } = useUserAccount();
   const { configContracts } = useActiveChain();
   return useSWR(`${address}-stats`, {

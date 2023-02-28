@@ -144,9 +144,10 @@ export const useDashboardReadCalls = () => {
       },
       BLP: {
         price: blpPrice,
-        supply: fromWei(totalSupplyBLP, usd_decimals),
+        supply: divide(fromWei(amountUSDCpool, usd_decimals), blpPrice),
         total_staked: totalUSDCstaked,
         market_cap: multiply(blpPrice, fromWei(totalSupplyBLP, usd_decimals)),
+
         apr: fromWei(blpAprTotal, 2),
         total_usdc: fromWei(amountUSDCpool, usd_decimals),
       },
