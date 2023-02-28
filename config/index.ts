@@ -44,7 +44,7 @@ export const baseGraphqlLiteUrl =
     : {
         sandbox:
           'https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox-lite',
-        sandbox:
+        testnet:
           'https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite',
       };
 
