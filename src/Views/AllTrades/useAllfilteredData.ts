@@ -26,22 +26,25 @@ export const useAllfilteredData = () => {
   console.log(augmentedTrades, 'augmentedTrades');
 
   const activeTrades = useMemo(() => {
+    let trades = [];
+    if (augmentedTrades !== -1 && augmentedTrades !== undefined)
+      trades = [
+        ...augmentedTrades[BetState.queued],
+        ...augmentedTrades[BetState.active],
+        ...trades,
+      ];
     if (data && data.activeTrades && data.queuedTrades) {
-      let trades = [...data.queuedTrades, ...data.activeTrades];
-
-      if (augmentedTrades !== -1 && augmentedTrades !== undefined)
-        trades = [
-          ...augmentedTrades[BetState.queued],
-          ...augmentedTrades[BetState.active],
-          ...trades,
-        ];
-      return getProcessedTrades(
-        trades,
-        data?._meta.block.number,
-        trades?.['del'] || []
-      ).filter((trade) => !!trade);
+      trades = [...trades, ...data.queuedTrades];
     }
-    return null;
+    if (data && data.activeTrades) {
+      trades = [...trades, ...data.activeTrades];
+    }
+
+    return getProcessedTrades(
+      trades,
+      data?._meta.block.number,
+      trades?.['del'] || []
+    ).filter((trade) => !!trade);
   }, [data?.activeTrades, data?.queuedTrades, augmentedTrades]);
 
   const historyTrades = useMemo(() => {
