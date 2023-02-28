@@ -7,7 +7,7 @@ import { IGQLHistory } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import optionsAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
 import { ethers } from 'ethers';
 import { getLogs } from '@Utils/getLogs';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 const routerIfc = new ethers.utils.Interface(routerAbi);
 
 enum Link {
@@ -97,6 +97,7 @@ const useAheadTrades = (
 ) => {
   console.log(startBlock, account, shouldNotFilterAccount, 'useAheadTrades');
   const signer = useProvider();
+  const { cache } = useSWRConfig();
   // const { data: recentBlock } = useBlockNumber();
   const recentBlock = null;
   return useSWR(
@@ -104,8 +105,10 @@ const useAheadTrades = (
     {
       fetcher: async (args) => {
         let splittedArgs = args.split('-');
-        const account = splittedArgs[0];
-        if (!account) return -1;
+        if (!shouldNotFilterAccount) {
+          const account = splittedArgs[0];
+          if (!account) return -1;
+        }
         if (!startBlock) return -1;
 
         // if (recentBlock <= startBlock) return baseState;
