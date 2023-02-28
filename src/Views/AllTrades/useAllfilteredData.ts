@@ -1,4 +1,4 @@
-import { useAheadTrades } from '@Hooks/useAheadTrades';
+import { BetState, useAheadTrades } from '@Hooks/useAheadTrades';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getProcessedTrades } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { useAtomValue } from 'jotai';
@@ -22,23 +22,47 @@ export const useAllfilteredData = () => {
   });
   const { data: augmentedTrades } = useAheadTrades(
     data?._meta.block.number,
-    address,
+    null,
     true
   );
   console.log(augmentedTrades, 'augmentedTrades');
 
+  const activeTrades = useMemo(() => {
+    if (data && data.activeTrades && data.queuedTrades) {
+      let trades = [...data.queuedTrades, ...data.activeTrades];
+
+      if (augmentedTrades !== -1 && augmentedTrades !== undefined)
+        trades = [
+          ...augmentedTrades[BetState.queued],
+          ...augmentedTrades[BetState.active],
+          ...trades,
+        ];
+      return getProcessedTrades(
+        trades,
+        data?._meta.block.number,
+        trades?.['del'] || []
+      );
+    }
+    return null;
+  }, [data?.activeTrades, data?.queuedTrades, augmentedTrades]);
+
+  const historyTrades = useMemo(() => {
+    if (data && data.historyTrades) {
+      let trades = [...data.historyTrades];
+
+      if (augmentedTrades !== -1 && augmentedTrades !== undefined)
+        trades = [...trades];
+      return getProcessedTrades(
+        data?.historyTrades,
+        data?._meta.block.number,
+        null,
+        true
+      );
+    }
+  }, [data?.historyTrades, augmentedTrades]);
+
   return {
-    activeTrades: useMemo(() => {
-      if (data && data.activeTrades && data.queuedTrades)
-        return getProcessedTrades(
-          [...data.queuedTrades, ...data.activeTrades],
-          data?._meta.block.number
-        );
-      return null;
-    }, [data?.activeTrades, data?.queuedTrades]),
-    historyTrades: useMemo(
-      () => getProcessedTrades(data?.historyTrades, data?._meta.block.number),
-      [data?.historyTrades]
-    ),
+    activeTrades,
+    historyTrades,
   };
 };
