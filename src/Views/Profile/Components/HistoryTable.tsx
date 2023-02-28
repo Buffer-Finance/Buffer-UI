@@ -24,7 +24,6 @@ export const useHistoryTableTabs = () => {
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
   );
-  usePastTradeQuery();
 
   const changeActiveTab = (e, pageNumber: number) =>
     dispatch({
@@ -42,6 +41,7 @@ export const HistoryTables = () => {
   const { active, history, cancelled } = useAtomValue(tardesPageAtom);
   const { viewOnlyMode } = useUserAccount();
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
+  usePastTradeQuery();
 
   useEffect(() => {
     changeActiveTab(null, 1);
