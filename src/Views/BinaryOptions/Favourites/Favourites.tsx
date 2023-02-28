@@ -67,7 +67,7 @@ export default function Favourites({ className }: { className?: string }) {
     <Background
       className={
         className +
-        ' sm:mb-[-10px]  top-[0] z-[101] bg-primary w-full  tb:!max-w-[100vw]'
+        ' sm:mb-[-6px]  top-[0] z-[101] bg-primary w-full  tb:!max-w-[100vw]'
       }
     >
       <div className="relative w-full b1200:h-[65px] a1200:h-[34px] scrollbarnil">
