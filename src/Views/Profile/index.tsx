@@ -10,11 +10,11 @@ import {
 
 export const ProfilePage = () => {
   return (
-    <ArbitrumOnly>
-      <main className="content-drawer">
-        <Profile />
-      </main>
-    </ArbitrumOnly>
+    // <ArbitrumOnly>
+    <main className="content-drawer">
+      <Profile />
+    </main>
+    // </ArbitrumOnly>
   );
 };
 // const profileHeadingClass=
