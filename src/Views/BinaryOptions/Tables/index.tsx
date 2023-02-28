@@ -52,6 +52,22 @@ const PGTables: React.FC<IPGTables> = ({
         shouldNotDisplayShareVisulise={shouldNotDisplayShareVisulise}
         filteredData={filteredData}
         totalPages={totalPages}
+        widths={
+          isHistoryTable
+            ? [
+                'auto',
+                'auto',
+                'auto',
+                'auto',
+                'auto',
+                'auto',
+                'auto',
+                '12%',
+                '10%',
+                '3%',
+              ]
+            : ['auto']
+        }
       />
     </>
   );
