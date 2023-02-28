@@ -62,6 +62,7 @@ const AllTrades = () => {
             totalPages={1}
             onPageChange={(e, p) => setTotalPages({ ...totalPages, active: p })}
             showUserAddress
+            widths={['auto']}
           />,
           <PGDesktopTables
             activePage={totalPages.history}
@@ -73,6 +74,18 @@ const AllTrades = () => {
               setTotalPages({ ...totalPages, history: p })
             }
             showUserAddress
+            widths={[
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              '9%',
+              'auto',
+            ]}
           />,
         ]}
       />

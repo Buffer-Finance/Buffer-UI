@@ -51,6 +51,7 @@ interface IPGDesktopTables {
   totalPages: number;
   filteredData: IGQLHistory[];
   showUserAddress?: boolean;
+  widths: string[];
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
@@ -61,6 +62,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   totalPages,
   filteredData,
   showUserAddress = false,
+  widths,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -303,22 +305,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         bodyJSX={BodyFormatter}
         cols={headNameArray.length}
         rows={filteredData ? filteredData.length : 0}
-        widths={
-          isHistoryTable
-            ? [
-                'auto',
-                'auto',
-                'auto',
-                'auto',
-                'auto',
-                'auto',
-                'auto',
-                '12%',
-                '10%',
-                '3%',
-              ]
-            : ['auto']
-        }
+        widths={widths}
         onRowClick={console.log}
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
@@ -332,7 +319,7 @@ const UserAddressColumn = ({ address }: { address: string }) => {
     <CellContent
       content={[
         <NumberTooltip content={address}>
-          <div>{getSlicedUserAddress(address, 4)}</div>
+          <div>{getSlicedUserAddress(address, 5)}</div>
         </NumberTooltip>,
       ]}
     />
