@@ -37,15 +37,15 @@ export const baseGraphqlLiteUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
     ? {
         sandbox:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite-v2',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite',
         testnet:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite-v2',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite',
       }
     : {
         sandbox:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox-lite',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite',
         testnet:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox-lite',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite',
       };
 
 export const periodsValue = [86400, 259200, 604800, 2592000, 5184000, 7776000];
@@ -621,5 +621,3 @@ export const getTabs = (chain: string, isLeaderboard = false) => {
     },
   ];
 };
-
-
