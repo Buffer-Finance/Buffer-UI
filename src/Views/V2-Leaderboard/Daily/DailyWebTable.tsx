@@ -17,9 +17,10 @@ import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
 import { useNavigate } from 'react-router-dom';
 import { Launch } from '@mui/icons-material';
+import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
 
 export const DailyWebTable: React.FC<{
-  res: ILeague[] | undefined;
+  res: ILeague[] | IWinrate[] | undefined;
   count: number;
   skip: number;
   onpageChange: (page: number) => void;
@@ -27,6 +28,7 @@ export const DailyWebTable: React.FC<{
   nftWinners?: number;
   userRank: string;
   activePage: number;
+  isWinrateTable?: boolean;
 }> = ({
   res,
   skip,
@@ -36,6 +38,7 @@ export const DailyWebTable: React.FC<{
   nftWinners,
   userRank,
   activePage,
+  isWinrateTable = false,
 }) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
@@ -53,9 +56,9 @@ export const DailyWebTable: React.FC<{
       'Rank',
       'User Address',
       'Volume',
-      'Trades',
-      'Net PnL (%)',
-      'Absolute Net PnL',
+      isWinrateTable ? 'Total Trades' : 'Trades',
+      isWinrateTable ? 'Trades Won' : 'Net PnL (%)',
+      isWinrateTable ? 'Win Rate' : 'Absolute Net PnL',
     ];
   }, []);
 
@@ -154,8 +157,11 @@ export const DailyWebTable: React.FC<{
         );
 
       case 4:
-        // if (!currentStanding.netPnL || currentStanding.netPnL === null)
-        // return <div>null</div>;
+        if (isWinrateTable && 'tradesWon' in currentStanding) {
+          return (
+            <CellContent content={[<div>{currentStanding.tradesWon}</div>]} />
+          );
+        }
         try {
           const perc = multiply(
             divide(currentStanding.netPnL, currentStanding.volume),
@@ -190,6 +196,13 @@ export const DailyWebTable: React.FC<{
         }
 
       case 5:
+        if (isWinrateTable && 'winRate' in currentStanding) {
+          return (
+            <CellContent
+              content={[<div>{divide(currentStanding.winRate, 3)}%</div>]}
+            />
+          );
+        }
         return (
           <CellContent
             content={[

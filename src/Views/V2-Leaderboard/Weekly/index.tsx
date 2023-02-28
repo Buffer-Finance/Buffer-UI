@@ -27,8 +27,12 @@ import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
-import { useWeeklyLeaderboardQuery } from '../Hooks/useWeeklyLeaderboardQuery';
+import {
+  IWinrate,
+  useWeeklyLeaderboardQuery,
+} from '../Hooks/useWeeklyLeaderboardQuery';
 import { TimerBox } from '../Incentivised';
+import { ILeague } from '../interfaces';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -42,18 +46,37 @@ export const Weekly = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
-    useWeeklyLeaderboardQuery();
+  const {
+    data,
+    totalTournamentData,
+    loserUserRank,
+    winnerUserRank,
+    loserWinrateUserRank,
+    winnerWinrateUserRank,
+  } = useWeeklyLeaderboardQuery();
+
   const tableData = useMemo(() => {
+    let res: {
+      winnerPnl: ILeague[];
+      loserPnl: ILeague[];
+      winnerWinRate: IWinrate[];
+      loserWinrate: IWinrate[];
+    } = { winnerPnl: [], loserPnl: [], winnerWinRate: [], loserWinrate: [] };
     if (data && data.userStats) {
-      return data.userStats.slice(skip, skip + ROWINAPAGE);
-    } else return [];
-  }, [data, skip]);
-  const loserStats = useMemo(() => {
+      res.winnerPnl = data.userStats.slice(skip, skip + ROWINAPAGE);
+    }
     if (data && data.loserStats) {
-      return data.loserStats.slice(skip, skip + ROWINAPAGE);
-    } else return [];
+      res.loserPnl = data.loserStats.slice(skip, skip + ROWINAPAGE);
+    }
+    if (data && data.winnerWinrate) {
+      res.winnerWinRate = data.winnerWinrate.slice(skip, skip + ROWINAPAGE);
+    }
+    if (data && data.loserWinrate) {
+      res.loserWinrate = data.loserWinrate.slice(skip, skip + ROWINAPAGE);
+    }
+    return res;
   }, [data, skip]);
+
   const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
 
   const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
@@ -239,13 +262,18 @@ export const Weekly = () => {
             setActiveTab(t);
           }}
           distance={5}
-          tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
+          tablist={[
+            { name: 'Winners Pnl' },
+            { name: 'Losers Pnl' },
+            { name: 'Winners Win Rate' },
+            { name: 'Losers Win Rate' },
+          ]}
         />
         <TabSwitch
           value={activeTab}
           childComponents={[
             <DailyWebTable
-              res={tableData}
+              res={tableData.winnerPnl}
               count={totalPages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
@@ -257,12 +285,34 @@ export const Weekly = () => {
             <DailyWebTable
               activePage={activePages.arbitrum}
               userRank={loserUserRank}
-              res={loserStats}
+              res={tableData.loserPnl}
               count={totalPages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
               nftWinners={4}
+            />,
+            <DailyWebTable
+              activePage={activePages.arbitrum}
+              userRank={winnerWinrateUserRank}
+              res={tableData.winnerWinRate}
+              count={totalPages.arbitrum}
+              onpageChange={setActivePageNumber}
+              userData={data?.userData}
+              skip={skip}
+              nftWinners={4}
+              isWinrateTable
+            />,
+            <DailyWebTable
+              activePage={activePages.arbitrum}
+              userRank={loserWinrateUserRank}
+              res={tableData.loserWinrate}
+              count={totalPages.arbitrum}
+              onpageChange={setActivePageNumber}
+              userData={data?.userData}
+              skip={skip}
+              nftWinners={4}
+              isWinrateTable
             />,
           ]}
         />

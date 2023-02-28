@@ -11,9 +11,16 @@ import { ILeague } from '../interfaces';
 import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
 
+export interface IWinrate extends ILeague {
+  winrate: string;
+  tradesWon: string;
+}
 interface ILeaderboardQuery {
   userStats: ILeague[];
   loserStats: ILeague[];
+  winrate: IWinrate[];
+  winnerWinrate: IWinrate[];
+  loserWinrate: IWinrate[];
   totalData: {
     totalTrades: number;
     volume: string;
@@ -42,6 +49,8 @@ export const blockedAccounts = [
   '0x547a821c692921d82ebd936320dc1a608a6e38c1',
   '0x2a007f31146ff8f939b6ca3ad18c8d2a6e42eb73',
 ];
+
+const winrateMinimumTrades = 10;
 export const useWeeklyLeaderboardQuery = () => {
   const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
@@ -82,6 +91,39 @@ export const useWeeklyLeaderboardQuery = () => {
             netPnL
             volume
           }
+
+          winnerWinrate: weeklyLeaderboards(
+            orderBy: winRate
+            orderDirection: desc
+            first: 100
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
+          ) {
+            user
+            totalTrades
+            netPnL
+            volume
+            winRate
+            tradesWon
+          }
+
+          loserWinrate: weeklyLeaderboards(
+            orderBy: winRate
+            orderDirection: asc
+            first: 100
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
+          ) {
+            user
+            totalTrades
+            netPnL
+            volume
+            winRate
+            tradesWon
+          }
+
           totalData: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: desc
@@ -105,6 +147,8 @@ export const useWeeklyLeaderboardQuery = () => {
           netPnL
           volume
           user
+          winRate
+          tradesWon
         }`
           : '';
 
@@ -134,7 +178,6 @@ export const useWeeklyLeaderboardQuery = () => {
 
   const winnerUserRank = useMemo(() => {
     if (!data || !data.userStats || !account) return '-';
-    console.log('goes in here', data.userStats);
     const rank = data.userStats.findIndex(
       (data) => data.user.toLowerCase() == account.toLowerCase()
     );
@@ -142,6 +185,16 @@ export const useWeeklyLeaderboardQuery = () => {
     if (rank === -1) return '-';
     else return (rank + 1).toString();
   }, [data?.userData, account]);
+
+  const winnerWinrateUserRank = useMemo(() => {
+    if (!data || !data.winnerWinrate || !account) return '-';
+    const rank = data.winnerWinrate.findIndex(
+      (data) => data.user.toLowerCase() == account.toLowerCase()
+    );
+
+    if (rank === -1) return '-';
+    else return (rank + 1).toString();
+  }, [data?.winnerWinrate, account]);
 
   const loserUserRank = useMemo(() => {
     if (!data || !data.loserStats || !account) return '-';
@@ -151,6 +204,15 @@ export const useWeeklyLeaderboardQuery = () => {
     if (rank === -1) return '-';
     else return (rank + 1).toString();
   }, [data?.loserStats, account]);
+
+  const loserWinrateUserRank = useMemo(() => {
+    if (!data || !data.loserWinrate || !account) return '-';
+    const rank = data.loserWinrate.findIndex(
+      (data) => data.user.toLowerCase() == account.toLowerCase()
+    );
+    if (rank === -1) return '-';
+    else return (rank + 1).toString();
+  }, [data?.loserWinrate, account]);
 
   const totalTournamentData = useMemo(() => {
     if (!data || !data.totalData) return null;
@@ -165,7 +227,14 @@ export const useWeeklyLeaderboardQuery = () => {
     return { allTradesCount, totalFee, totalRows, totalUsers };
   }, [data?.totalData, account]);
 
-  return { data, totalTournamentData, loserUserRank, winnerUserRank };
+  return {
+    data,
+    totalTournamentData,
+    loserUserRank,
+    winnerUserRank,
+    winnerWinrateUserRank,
+    loserWinrateUserRank,
+  };
 };
 
 /*
