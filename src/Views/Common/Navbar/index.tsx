@@ -12,20 +12,26 @@ import CloseLogo from '@SVG/Elements/Closelogo';
 import NFTtier from '../NFTtier';
 import LeaderboardTropy from '@Public/LeaderBoard/Trophy';
 import { Link } from 'react-router-dom';
+import { useAtom, useAtomValue } from 'jotai';
+import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
 
 interface INavbar {}
 
 export const Navbar: React.FC<INavbar> = () => {
   const { state, dispatch } = useGlobal();
-  const tabs = useMemo(() => getTabs(), []);
-  const VISIBLETABS = 8;
+  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
+  const tabs = useMemo(
+    () => getTabs(activeMarketFromStorage),
+    [activeMarketFromStorage]
+  );
+  const VISIBLETABS = 4;
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',
     });
   };
   return (
-    <header className="bg-primary flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1 z-[1500]">
+    <header className="bg-primary flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1 relative z-[102]">
       <div className=" flex items-center gap-[24px]">
         <div
           role={'button'}
@@ -80,10 +86,7 @@ export const Navbar: React.FC<INavbar> = () => {
           onClick={() => {}}
           className="!h-[30px] rounded-[6px] w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] pl-4 pr-5 sm:pl-1 sm:pr-1"
         >
-          <Link
-            to="/leaderboard/incentivised"
-            className="flex items-center gap-1"
-          >
+          <Link to="/leaderboard/weekly" className="flex items-center gap-1">
             <LeaderboardTropy height={23} />
             <span className="sm:hidden">Contest</span>
           </Link>

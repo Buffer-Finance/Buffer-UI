@@ -1,13 +1,12 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from 'jotai';
 import {
   activeAssetStateAtom,
   DisplayAssetsAtom,
   IMarket,
   useQTinfo,
-} from "..";
-import { replaceAsset } from "@Utils/appControls/replaceAsset";
-import { useEffect, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+} from '..';
+import { useEffect, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const useFavouritesFns = () => {
   const [assets, setAssets] = useAtom(DisplayAssetsAtom);
@@ -64,7 +63,7 @@ export const useFavouritesFns = () => {
   }, [params?.market]);
 
   const replaceAssetHandler = (currentAsset: string, isActive: boolean) => {
-    navigate(`/binary/${currentAsset}`)
+    navigate(`/binary/${currentAsset}`);
   };
 
   const deleteCardHandler = (e, currentAsset: IMarket, isActive: boolean) => {
@@ -75,10 +74,10 @@ export const useFavouritesFns = () => {
   };
 
   const addCardHandler = (selectedAsset: IMarket) => {
-    if(!selectedAsset) return;
+    if (!selectedAsset) return;
     if (!assets.find((asset) => asset === selectedAsset?.pair)) {
       assets.unshift(selectedAsset.pair);
-      if (assets.length > 5) assets.pop();
+      if (assets.length > 4) assets.pop();
       setAssets(assets);
     }
   };

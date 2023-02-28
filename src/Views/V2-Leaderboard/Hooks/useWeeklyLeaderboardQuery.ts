@@ -8,9 +8,8 @@ import { add } from '@Utils/NumString/stringArithmatics';
 import { updateLeaderboardTotalPageAtom } from '../atom';
 import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
-import { useDayOfTournament } from './useDayOfTournament';
-import { useDayOffset } from './useDayOffset';
-import { useActiveChain } from '@Hooks/useActiveChain';
+import { useWeekOffset } from './useWeekoffset';
+import { useWeekOfTournament } from './useWeekOfTournament';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -19,33 +18,38 @@ interface ILeaderboardQuery {
     totalTrades: number;
     volume: string;
   }[];
-  userData: ILeague;
+  // totalPaginationData: { user: string }[];
+  userData: ILeague[];
   reward: { settlementFee: string; totalFee: string }[];
 }
 
-export function getDayId(offset: number): number {
+export function getWeekId(offset: number): number {
+  console.log(offset, 'timestamp');
   let timestamp = new Date().getTime() / 1000;
   if (offset > 0) {
-    timestamp = timestamp - offset * 86400;
+    timestamp = timestamp - offset * (86400 * 7);
   }
-  let dayTimestamp = Math.floor((timestamp - 16 * 3600) / 86400);
+  let dayTimestamp = Math.floor(
+    (timestamp - 4 * 86400 - 16 * 3600) / (86400 * 7)
+  );
   return dayTimestamp;
 }
 
-export const useLeaderboardQuery = () => {
+export const useWeeklyLeaderboardQuery = () => {
   const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
-  const { offset } = useDayOffset();
-  const { day } = useDayOfTournament();
-  const timestamp = getDayId(Number(day - Number(offset)));
+  const { offset } = useWeekOffset();
+  const { week } = useWeekOfTournament();
+  const timestamp = getWeekId(Number(week - Number(offset)));
+  console.log(timestamp, 'timestamp');
   const minimumTrades = isTestnet ? 5 : 3;
-const {configContracts} = useActiveChain();
+
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-offset-${offset}-account-${account}-daily`,
+    `leaderboard-arbi-offset-${offset}-account-${account}-weekly`,
     {
       fetcher: async () => {
         const leaderboardQuery = `
-          userStats: leaderboards(
+          userStats: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: desc
             first: 100
@@ -56,7 +60,7 @@ const {configContracts} = useActiveChain();
             netPnL
             volume
           }
-          loserStats: leaderboards(
+          loserStats: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: asc
             first: 100
@@ -67,22 +71,23 @@ const {configContracts} = useActiveChain();
             netPnL
             volume
           }
-          totalData: leaderboards(
+          totalData: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: desc
+            first: 1000
             where: {timestamp: "${timestamp}"}
           ) {
             totalTrades
             volume
           }
-          reward:dailyRevenueAndFees(where: {id: "${timestamp}"}) {
+          reward:weeklyRevenueAndFees(where: {id: "${timestamp}"}) {
             settlementFee
             totalFee
           }
           
         `;
         const userQuery = account
-          ? `userData: leaderboards(
+          ? `userData: weeklyLeaderboards(
           where: {user: "${account}", timestamp: "${timestamp}"}
         ) {
           totalTrades
@@ -93,7 +98,7 @@ const {configContracts} = useActiveChain();
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(configContracts.graph.MAIN, {
+        const response = await axios.post(baseGraphqlUrl, {
           query,
         });
 

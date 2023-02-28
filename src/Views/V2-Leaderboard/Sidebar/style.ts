@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 export const LeaderBoardSidebarStyles = styled.div`
   background-color: transparent;
   color: var(--text-6);
   margin-right: 20px;
-  grid-template-areas: "sidebar";
+  grid-template-areas: 'sidebar';
   left: 0;
   top: var(--navbar-height);
   display: flex;
@@ -33,13 +33,13 @@ export const LeaderBoardSidebarStyles = styled.div`
     color: var(--text-6);
     font-size: 1.4rem;
     padding-left: 20px;
-    padding-right: 16px;
+    /* padding-right: 16px; */
     font-weight: 400;
     text-transform: capitalize;
     width: 100%;
     border-radius: 0;
     justify-content: flex-start;
-    margin: 0.8rem 0;
+    margin: 8px 0;
     :hover {
       color: var(--text-1);
     }
@@ -51,7 +51,7 @@ export const LeaderBoardSidebarStyles = styled.div`
     font-weight: 600;
 
     ::after {
-      content: "";
+      content: '';
       position: absolute;
       width: 2px;
       height: 100%;

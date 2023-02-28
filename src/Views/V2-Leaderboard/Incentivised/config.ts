@@ -6,5 +6,5 @@ export const startTimestamp = {
 };
 export const endDay = {
   421613: 9,
-  42161: null,
+  42161: 12,
 };

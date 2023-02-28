@@ -1,15 +1,13 @@
 import { Navbar } from './Views/Common/Navbar';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useSearchParams } from 'react-router-dom';
 import Drawer from '@Views/Common/V2-Drawer';
 import IbfrFaucet from '@Views/Faucet';
 import Background from './AppStyles';
 import { Alert, Snackbar } from '@mui/material';
-import { atom, useAtom } from 'jotai';
-import { useEffect } from 'react';
-import { useNetwork, useProvider, useSigner } from 'wagmi';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
-import BinryMarkets from '@Views/BinaryOptions';
+import BinryMarkets, { activeMarketFromStorageAtom, defaultMarket, referralCodeAtom } from '@Views/BinaryOptions';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Earn } from '@Views/Earn';
 import { Dashboard } from '@Views/Dashboard';
@@ -18,17 +16,20 @@ import SideBar from '@Views/Common/Sidebar';
 import { Test } from './Test';
 import ConnectionDrawer from '@Views/Common/V2-Drawer/connectionDrawer';
 import { useGraphStatus } from '@Utils/useGraphStatus';
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
+import { Weekly } from '@Views/V2-Leaderboard/Weekly';
+import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
+import { useEffect } from 'react';
+import { useToast } from '@Contexts/Toast';
 
-if (import.meta.env.VITE_MODE === "production") {
-  console.log(`import.meta.env.SENTRY_DSN: `,import.meta.env.VITE_SENTRY_DSN);
+if (import.meta.env.VITE_MODE === 'production') {
+  console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 0.5,
   });
-
 }
 function AppComponent() {
   return (
@@ -47,6 +48,21 @@ function AppComponent() {
 }
 
 const AppRoutes = () => {
+  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom)
+  const [searchParam] = useSearchParams();
+  const [ref, setRef] = useAtom(referralCodeAtom);
+const toastify = useToast();
+  useEffect(() => {
+    const referralCode = searchParam.get('ref');
+    if (referralCode) {
+      if (ref !== referralCode) setRef(referralCode);
+      toastify({
+        type:'success',
+        msg:'Referral Link  "'+referralCode+'" is applied successfully!',
+        id:23132
+      })
+    }
+  }, [searchParam]);
   return (
     <div className="root w-[100vw]">
       <Routes>
@@ -54,11 +70,16 @@ const AppRoutes = () => {
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
-        <Route path="/leaderboard/incentivised" element={<Incentivised />} />
+        <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
+          <Route path="daily" element={<Incentivised />} />
+          <Route path="weekly" element={<Weekly />} />
+        </Route>
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/*" element={<BinryMarkets />} />
+        <Route path="/binary/:market" element={<BinryMarkets />} />
+        {/* referral link handling */}
+        <Route path="/*" element={<Navigate to={"/binary/" + (activeMarketFromStorage || defaultMarket)} />} />
       </Routes>
     </div>
   );
@@ -76,13 +97,20 @@ function App() {
   const graphStatus = useGraphStatus();
   return (
     <Background>
-      {graphStatus && <Warning
-        body={<>We are facing some issues with the theGraph API. Trading experience on the platform may be hindered temporarily.</>}
-        closeWarning={() => {}}
-        shouldAllowClose={false}
-        state={graphStatus.error}
-        className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
-      />}
+      {graphStatus && (
+        <Warning
+          body={
+            <>
+              We are facing some issues with the theGraph API. Trading
+              experience on the platform may be hindered temporarily.
+            </>
+          }
+          closeWarning={() => {}}
+          shouldAllowClose={false}
+          state={graphStatus.error}
+          className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+        />
+      )}
       <Navbar />
       <AppRoutes />
       <Snackbar

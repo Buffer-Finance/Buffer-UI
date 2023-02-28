@@ -98,7 +98,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
               }
 
               return (
-                <div style={{ display: 'flex', gap: 12 }}>
+                <div style={{ display: 'flex', gap: 7 }}>
                   <div
                     onClick={openChainModal}
                     role="button"

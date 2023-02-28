@@ -39,6 +39,7 @@ import { BetState } from '@Hooks/useAheadTrades';
 import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
+import { PairTokenImage } from '../Components/PairTokenImage';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
@@ -330,15 +331,14 @@ export const AssetCell: React.FC<{
 
   return (
     <TableAssetCell
-      img={configData.img}
+      img={
+        <div className="w-[20px] h-[20px] mr-[6px]">
+          <PairTokenImage pair={currentRow.configPair?.pair} />
+        </div>
+      }
       head={
-        <div className={`flex ${split ? 'flex-col' : 'flex-row'}`}>
+        <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
           <span className={`weight-400 text-f15 `}>
-            {/* <span
-            className={`weight-400 text-f15 
-            // ${currentRow.blockNumber && "text-red"}
-            `}
-          > */}
             {configData.token1 + '-' + configData.token2}{' '}
           </span>
           <UpDownChip isUp={isUp} />
