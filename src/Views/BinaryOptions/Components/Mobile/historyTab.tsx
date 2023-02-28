@@ -71,7 +71,6 @@ const CancelButton = ({ option }) => {
 };
 
 const MobileTable: React.FC<{
-  configData: IQTrade;
   isHistoryTab?: boolean;
   isCancelledTab?: boolean;
   count?: number;
@@ -80,7 +79,6 @@ const MobileTable: React.FC<{
   activePage: number;
   shouldNotDisplayShareVisulise?: boolean;
 }> = ({
-  configData,
   isHistoryTab = false,
   isCancelledTab,
   onPageChange,
