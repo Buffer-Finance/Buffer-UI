@@ -31,9 +31,8 @@ export const useAllfilteredData = () => {
       trades = [
         ...augmentedTrades[BetState.queued],
         ...augmentedTrades[BetState.active],
-        ...trades,
       ];
-    if (data && data.activeTrades && data.queuedTrades) {
+    if (data && data.queuedTrades) {
       trades = [...trades, ...data.queuedTrades];
     }
     if (data && data.activeTrades) {
@@ -43,7 +42,7 @@ export const useAllfilteredData = () => {
     return getProcessedTrades(
       trades,
       data?._meta.block.number,
-      trades?.['del'] || []
+      augmentedTrades?.['del'] || []
     ).filter((trade) => !!trade);
   }, [data?.activeTrades, data?.queuedTrades, augmentedTrades]);
 
