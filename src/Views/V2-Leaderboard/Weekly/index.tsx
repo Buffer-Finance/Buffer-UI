@@ -296,7 +296,7 @@ export const Weekly = () => {
               activePage={activePages.arbitrum}
               userRank={winnerWinrateUserRank}
               res={tableData.winnerWinRate}
-              count={totalPages.arbitrum}
+              count={tableData.winnerWinRate.length}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
@@ -307,7 +307,7 @@ export const Weekly = () => {
               activePage={activePages.arbitrum}
               userRank={loserWinrateUserRank}
               res={tableData.loserWinrate}
-              count={totalPages.arbitrum}
+              count={tableData.loserWinrate.length}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
