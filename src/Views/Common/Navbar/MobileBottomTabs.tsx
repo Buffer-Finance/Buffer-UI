@@ -2,18 +2,20 @@ import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import { getTabs } from 'src/Config/getTabs';
-import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import { Link, useLocation } from 'react-router-dom';
+import { useGlobal } from '@Contexts/Global';
 
 const BaseTab = ({
   tab,
   active,
   horizontal,
   className,
+  onClick
 }: {
   tab: Partial<ReturnType<typeof getTabs>[0]>;
   active?: boolean;
   horizontal?: boolean;
+  onClick?:()=>void;
   className?: string;
 }) => {
   const Btn = (
@@ -23,6 +25,7 @@ const BaseTab = ({
       } items-center content-center text-f12 text-${
         active ? '1' : '2'
       } ${className}`}
+      onClick={onClick}
     >
       {tab.icon}
       {tab.name}
@@ -90,36 +93,18 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
   };
   const areExtraTabs = tabs.length > mobleMaxTabLimit;
   const limit = areExtraTabs ? 4 : tabs.length;
+  const {  dispatch } = useGlobal();
+  const handleClose = () => {
+    dispatch({
+      type: 'UPDATE_SIDEBAR_STATE',
+    });
+  };
   return (
     <div className="nsm:hidden mobile-bottom-drawer flex items-center my-[5px] justify-between mx-3">
       {tabs.slice(0, limit).map((t) => (
         <BaseTab tab={t} active={isActive(t)} />
       ))}{' '}
-      {areExtraTabs && (
-        <Menu
-          menuButton={
-            <MenuButton>
-              <BaseTab tab={{ name: 'More', icon: MoreIcon }} />
-            </MenuButton>
-          }
-          arrow
-          transition
-          theming="dark"
-          className={'bg-1 '}
-        >
-          {tabs.slice(limit).map((t) => {
-            return (
-              <MenuItem className={'!px-2 !py-[0px]  '}>
-                <BaseTab
-                  tab={t}
-                  horizontal
-                  className="text-[14px] child-svg-squeeze"
-                />
-              </MenuItem>
-            );
-          })}
-        </Menu>
-      )}
+      {areExtraTabs &&  <BaseTab tab={{ name: 'More', icon: MoreIcon }} onClick={handleClose} />}
     </div>
   );
 };

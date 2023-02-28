@@ -355,12 +355,12 @@ function QTrade() {
 }
 export default QTrade;
 
-function MobileOnly({ children }: { children: JSX.Element }) {
+export function MobileOnly({ children }: { children: JSX.Element }) {
   if (window.innerWidth > mobileUpperBound) return null;
   return <>{children}</>;
 }
 
-function WebOnly({ children }: { children: JSX.Element }) {
+export function WebOnly({ children }: { children: JSX.Element }) {
   if (window.innerWidth < mobileUpperBound) return null;
   return <>{children}</>;
 }

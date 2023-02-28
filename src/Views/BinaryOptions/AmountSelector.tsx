@@ -24,6 +24,7 @@ import {
 import { DurationPicker } from './PGDrawer/DurationPicker';
 import { Background } from './PGDrawer/style';
 import { useToast } from '@Contexts/Toast';
+import { USDCIcon } from '@SVG/Elements/usdc';
 const shutterModalAtom = atom<{ open: false | 'amount' | 'duration' }>({
   open: false,
 });
@@ -61,7 +62,7 @@ const AmountInput = ({
         {...props}
       ></input>
       <div className="min-h-full grid place-items-center p-2 bg-cross-bg  rounded-tr-sm rounded-br-sm">
-        <img src="/public/USDC.png" className="min-w-[29px] min-h-[29px]"></img>
+       <USDCIcon className="w-[29px]" />
       </div>
     </div>
   );
@@ -137,7 +138,7 @@ const AmountSelector: React.FC<any> = ({
               errors.push(`You don't have enough funds.`);
             }
             if (maxTradeSize && gt(val, maxTradeSize)) {
-              errors.push(`Not enough liquidity in pool to fund this trade!`);
+              errors.push(`Not enough liquidity to fund this trade. Please eneter a smaller amount!`);
             }
             setErr(errors);
           }}
@@ -252,7 +253,7 @@ const DurationInput = ({ onClick }: any) => {
         />
         <div className="text-f16 text-1 mx-1 text-center">:</div>
         <input
-          className={ipClasses + ' w-[22px]'}
+          className={ipClasses + ' !w-[22px]'}
           ref={minRef}
           type="number"
           onFocus={e=>e.target.blur()}
@@ -295,7 +296,7 @@ const DurationSelector = () => {
 
 export { AmountSelector, DurationSelector };
 
-function useShutterHandlers() {
+export function useShutterHandlers() {
   const setShutter = useSetAtom(shutterModalAtom);
 
   const toastify = useToast();
@@ -304,7 +305,7 @@ function useShutterHandlers() {
       if (!err) return setShutter({ open: false });
 
       if (err.length) {
-        return toastify({
+       toastify({
           msg: err[err.length - 1],
           type: 'error',
           id: err[err.length - 1],

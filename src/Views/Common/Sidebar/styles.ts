@@ -28,7 +28,7 @@ const SidebarCSS = styled.div`
     position: fixed;
     height: 100%;
     top: 0;
-    left: 0;
+    right: 0;
     /* background: var(--bg-17); */
     transition: 200ms ease-in;
     z-index: 1600;
@@ -275,7 +275,7 @@ const SidebarCSS = styled.div`
       }
     }
     .sidebar {
-      transform: translateX(-100%) !important;
+      transform: translateX(500%) !important;
       top: 0;
     }
     .sidebar-closed {
