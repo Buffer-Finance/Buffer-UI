@@ -56,7 +56,7 @@ export const HistoryTables = () => {
           {
             name: 'Active',
             icon: (
-              <div className="ml-2 text-f12 border border-1 px-2 rounded bg-cross-bg text-3 font-thin translate-y-[1px]">
+              <div className="ml-2 text-f12 border border-1 px-[6px] rounded bg-cross-bg text-3 font-thin translate-y-[1px]">
                 Beta
               </div>
             ),
