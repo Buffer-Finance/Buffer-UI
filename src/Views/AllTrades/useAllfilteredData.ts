@@ -1,5 +1,4 @@
 import { BetState, useAheadTrades } from '@Hooks/useAheadTrades';
-import { useUserAccount } from '@Hooks/useUserAccount';
 import { getProcessedTrades } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
@@ -12,9 +11,8 @@ export const useAllfilteredData = () => {
   const { active, history, cancelled } = useAtomValue(allATrdesTotalPageAtom);
   const activeSkip = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
   const historySkip = useMemo(() => TRADESINAPAGE * (history - 1), [history]);
-  const { address } = useUserAccount();
   const { data } = useAllTradesGraphQl({
-    activefirst: TRADESINAPAGE,
+    activefirst: 1000,
     activeskip: activeSkip,
     currentTime: Math.floor(new Date().getTime() / 1000),
     historyfirst: TRADESINAPAGE,
@@ -41,7 +39,7 @@ export const useAllfilteredData = () => {
         trades,
         data?._meta.block.number,
         trades?.['del'] || []
-      );
+      ).filter((trade) => !!trade);
     }
     return null;
   }, [data?.activeTrades, data?.queuedTrades, augmentedTrades]);
@@ -57,7 +55,7 @@ export const useAllfilteredData = () => {
         data?._meta.block.number,
         null,
         true
-      );
+      ).filter((trade) => !!trade);
     }
   }, [data?.historyTrades, augmentedTrades]);
 

@@ -315,6 +315,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
 };
 
 const UserAddressColumn = ({ address }: { address: string }) => {
+  if (!address) return <>{address}</>;
   return (
     <CellContent
       content={[

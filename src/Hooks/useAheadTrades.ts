@@ -95,7 +95,6 @@ const useAheadTrades = (
   account: string,
   shouldNotFilterAccount?: boolean
 ) => {
-  console.log(startBlock, account, shouldNotFilterAccount, 'useAheadTrades');
   const signer = useProvider();
   const { cache } = useSWRConfig();
   // const { data: recentBlock } = useBlockNumber();
@@ -105,19 +104,20 @@ const useAheadTrades = (
     {
       fetcher: async (args) => {
         let splittedArgs = args.split('-');
+        let restTopics = [];
         if (!shouldNotFilterAccount) {
           const account = splittedArgs[0];
           if (!account) return -1;
+          const splittedAccount = account.split('0x');
+          const adds64 = `0x${splittedAccount[0]}${splittedAccount[1].padStart(
+            64,
+            '0'
+          )}`;
+          restTopics = [adds64];
         }
         if (!startBlock) return -1;
-
         // if (recentBlock <= startBlock) return baseState;
-        const splittedAccount = account.split('0x');
-        const adds64 = `0x${splittedAccount[0]}${splittedAccount[1].padStart(
-          64,
-          '0'
-        )}`;
-        const restTopics = shouldNotFilterAccount ? [] : [adds64];
+
         const decodedLogs = await getLogs({
           ifcs: [routerIfc, optionsIfc],
           events: {
