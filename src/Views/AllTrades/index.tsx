@@ -61,6 +61,7 @@ const AllTrades = () => {
             shouldNotDisplayShareVisulise
             totalPages={1}
             onPageChange={(e, p) => setTotalPages({ ...totalPages, active: p })}
+            showUserAddress
           />,
           <PGDesktopTables
             activePage={totalPages.history}
@@ -71,6 +72,7 @@ const AllTrades = () => {
             onPageChange={(e, p) =>
               setTotalPages({ ...totalPages, history: p })
             }
+            showUserAddress
           />,
         ]}
       />

@@ -39,6 +39,7 @@ import { useGlobal } from '@Contexts/Global';
 import { BetState } from '@Hooks/useAheadTrades';
 import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { getSlicedUserAddress } from '@Utils/getUserAddress';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -49,6 +50,7 @@ interface IPGDesktopTables {
   shouldNotDisplayShareVisulise: boolean;
   totalPages: number;
   filteredData: IGQLHistory[];
+  showUserAddress?: boolean;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
@@ -58,6 +60,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   shouldNotDisplayShareVisulise,
   totalPages,
   filteredData,
+  showUserAddress = false,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -82,7 +85,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Trade Size',
         'Payout',
         'Status',
-        !shouldNotDisplayShareVisulise && '',
+        showUserAddress ? 'User' : !shouldNotDisplayShareVisulise && '',
         // "Visualize",
       ].filter((name) => name !== null && name !== undefined && name !== false);
     else if (isCancelledTable)
@@ -97,7 +100,9 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Close Time',
         'Trade Size',
         'Probability',
-        !shouldNotDisplayShareVisulise && 'Visualize',
+        showUserAddress
+          ? 'User'
+          : !shouldNotDisplayShareVisulise && 'Visualize',
       ].filter((name) => name !== null && name !== undefined && name !== false);
   }, [isHistoryTable]);
 
@@ -246,6 +251,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
             </>
           );
         }
+        if (showUserAddress)
+          return <UserAddressColumn address={currentRow.user.address} />;
 
         let isPresentInDisabled = visualized.includes(
           getIdentifier(currentRow)
@@ -268,6 +275,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
 
       case 8:
         // if (!currentRow.normal_option) return <CellContent content={["-"]} />;
+        if (showUserAddress)
+          return <UserAddressColumn address={currentRow.user.address} />;
         if (
           currentRow.state === BetState.queued ||
           currentRow.state === BetState.cancelled
@@ -315,6 +324,18 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
       />
     </Background>
+  );
+};
+
+const UserAddressColumn = ({ address }: { address: string }) => {
+  return (
+    <CellContent
+      content={[
+        <NumberTooltip content={address}>
+          <div>{getSlicedUserAddress(address, 4)}</div>
+        </NumberTooltip>,
+      ]}
+    />
   );
 };
 
