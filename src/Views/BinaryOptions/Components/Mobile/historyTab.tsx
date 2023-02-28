@@ -87,7 +87,6 @@ const MobileTable: React.FC<{
   activePage,
   shouldNotDisplayShareVisulise = false,
 }) => {
-  const activeMarket = configData.activePair;
   const [marketPrice] = useAtom(marketPriceAtom);
   const { active, history, cancelled } = useAtomValue(tardesAtom);
   const filteredData = isHistoryTab
@@ -193,7 +192,6 @@ const MobileTable: React.FC<{
             <ExpiryCurrentComponent
               isHistoryTable={isHistoryTab}
               trade={option}
-              activeMarket={activeMarket}
               marketPrice={marketPrice}
               configData={option.configPair}
             />
@@ -206,7 +204,6 @@ const MobileTable: React.FC<{
             <ProbabilityPNL
               isHistoryTable={isHistoryTab}
               trade={option}
-              activeMarket={activeMarket}
               marketPrice={marketPrice}
               onlyPnl
               configData={option.configPair}
@@ -227,7 +224,10 @@ const MobileTable: React.FC<{
             <div className="flex flex-col items-end justify-center">
               <div className="f13 flex gap-2">
                 {/* show status on history + queued state */}
-                <PayoutChip data={option} />
+                {option.state == BetState.queued ||
+                option.state == BetState.cancelled ? (
+                  <PayoutChip data={option} />
+                ) : null}
                 {/* dont show duration in queued | cancelled state */}
                 {normal_option ? (isHistoryTab ? 'Duration' : 'Time Left') : ''}
               </div>

@@ -474,13 +474,8 @@ const TVIntegrated = ({ assetInfo }) => {
       </div>
 
       <div
-        style={{
-          resize: 'vertical',
-          overflow: 'auto',
-          height: '60vh',
 
-          // borderBottom: "2px solid grey",
-        }}
+        className='TVChartContainer-wrapper'
       >
         <div
           ref={chartElementRef}

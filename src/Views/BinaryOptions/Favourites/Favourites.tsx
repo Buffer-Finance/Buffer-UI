@@ -6,8 +6,12 @@ import {
   activeAssetStateAtom,
   DisplayAssetsAtom,
   IMarket,
+  MobileOnly,
   useQTinfo,
+  WebOnly,
 } from '..';
+import ShutterDrawer from 'react-bottom-drawer';
+
 import { FavouriteAssetDD } from './FavouriteAssetDD';
 import { CloseOutlined } from '@mui/icons-material';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
@@ -16,6 +20,7 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { Link, useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '../Components/PairTokenImage';
+import { useShutterHandlers } from '../AmountSelector';
 
 export default function Favourites({ className }: { className?: string }) {
   const [toggle, setToggle] = useState(false);
@@ -51,11 +56,18 @@ export default function Favourites({ className }: { className?: string }) {
     qtInfo.pairs.find((m) => m.pair === singleMarket)
   );
   const { replaceAssetHandler } = useFavouritesFns();
+  const { closeShutter } = useShutterHandlers();
+  const FavourtiteAssetSelector = (
+    <FavouriteAssetDD
+    className="asset-dropdown-wrapper sm:!static nsm:!w-[500px] sm:!w-full"
+    setToggle={setToggle}
+  />
+  );
   return (
     <Background
       className={
         className +
-        ' sticky  top-[0] z-[101] bg-primary w-full  tb:!max-w-[100vw]'
+        ' sm:mb-[-6px]  top-[0] z-[101] bg-primary w-full  tb:!max-w-[100vw]'
       }
     >
       <div className="relative w-full b1200:h-[65px] a1200:h-[34px] scrollbarnil">
@@ -87,25 +99,38 @@ export default function Favourites({ className }: { className?: string }) {
               />
             </svg>
           </IconButton>
-
-          <Popover
-            anchorEl={anchor}
-            open={Boolean(anchor)}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            onClose={() => setAnchor(null)}
-          >
-            <FavouriteAssetDD
-              className="asset-dropdown-wrapper nsm:!w-[500px] sm:!w-[90vw]"
-              setToggle={setToggle}
-            />
-          </Popover>
+          <MobileOnly>
+            <ShutterDrawer
+              className="bg-1 "
+              isVisible={anchor ? true : false}
+              onClose={() => {
+                setAnchor(null);
+              }}
+              mountOnEnter
+              unmountOnExit
+            >
+                <div className="relative text-1">
+               {FavourtiteAssetSelector}
+                </div>
+            </ShutterDrawer>
+          </MobileOnly>
+          <WebOnly>
+            <Popover
+              anchorEl={anchor}
+              open={Boolean(anchor)}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              onClose={() => setAnchor(null)}
+            >
+              {FavourtiteAssetSelector}
+            </Popover>
+          </WebOnly>
 
           <div className=" b1200:w-full b1200:overflow-x-scroll overflow-x-scroll flex pr-3 pl-4 w-full tgp ">
             {assets.length ? (
@@ -156,7 +181,7 @@ function FavouriteCard({
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
   const isActive = data.tv_id === activeAsset.tv_id;
-  console.log(`data.tv_id: `,data.tv_id,activeAsset.tv_id);
+  console.log(`data.tv_id: `, data.tv_id, activeAsset.tv_id);
   const { deleteCardHandler } = useFavouritesFns();
   const [marketPrice] = useAtom(marketPriceAtom);
   const marketPriceObj = marketPrice?.[data.tv_id];
@@ -167,11 +192,11 @@ function FavouriteCard({
   const isAssetActive =
     routerPermission &&
     routerPermission[data.pools[0].options_contracts.current];
-   const navigate =  useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div
-      className={`cursor-pointer group mt-1 relative group pl-4 pr-3 py-3 text-2 flex flex-row items-center justify-between b1200:flex-col a1200:!min-w-[100px]  b1200:!px-3 b1200:rounded-md  b1200:mr-3 b1200:mt-[10px] b1200:items-start ${
+      className={`cursor-pointer group mt-1 relative group pl-4 pr-3 py-3 text-2 flex flex-row items-center justify-between b1200:flex-col a1200:!min-w-[100px]  b1200:!px-3 b1200:rounded-md  b1200:mr-3  b1200:items-start ${
         isActive
           ? 'text-1 bg-[#131722] rounded-t-[10px] cursor-default  left-border-needed '
           : `hover:bg-1 hover:rounded-t-[0px] b1200:bg-cross-bg after-border ${
@@ -179,13 +204,14 @@ function FavouriteCard({
             } ${!isAssetActive ? 'brightness-50' : ''} 
  `
       }`}
-      onClick={
-      ()=>  navigate(`/binary/${data.pair}`  )
-      }
+      onClick={() => navigate(`/binary/${data.pair}`)}
     >
       <button
         className="!absolute z-[10] text-1 !-right-3 -top-1 !bg-cross-bg rounded-full w-[17px] h-[17px] group-hover:visible invisible"
-        onClick={(e) =>{e.stopPropagation(); deleteCardHandler(e, data, isActive)}}
+        onClick={(e) => {
+          e.stopPropagation();
+          deleteCardHandler(e, data, isActive);
+        }}
       >
         <CloseOutlined className="!w-4" />
       </button>
