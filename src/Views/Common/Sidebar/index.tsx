@@ -9,7 +9,38 @@ import { getTabs, ITab } from 'src/Config/getTabs';
 import { BufferLogoComponent } from '../Navbar/BufferLogo';
 import { NavLink } from 'react-router-dom';
 // import usePages from "Hooks/Utilities/usePageInfo";
-
+import Twitter from "public/Social/twitter";
+import Discord from "public/Social/discord";
+import Medium from "public/Social/medium";
+import GitHub from "public/Social/github";
+import Telegram from "public/Social/telegram";
+const social = [
+  {
+    Img: Twitter,
+    link: "https://twitter.com/Buffer_Finance",
+    name: "Twitter",
+  },
+  {
+    Img: Discord,
+    link: "https://discord.com/invite/Hj4QF92Kdc",
+    name: "Discord",
+  },
+  {
+    Img: Telegram,
+    link: "https://t.me/bufferfinance",
+    name: "Telegram",
+  },
+  {
+    Img: Medium,
+    link: "https://buffer-finance.medium.com/",
+    name: "Medium",
+  },
+  {
+    Img: GitHub,
+    link: "https://github.com/Buffer-Finance",
+    name: "GitHub",
+  },
+];
 const SideBar: React.FC<any> = () => {
   const newPageNavElements = 9;
   const { state, dispatch } = useGlobal();
@@ -86,6 +117,18 @@ const SideBar: React.FC<any> = () => {
               </NavLink>
             );
           })}
+          <div className=' text-2 mb-3 text-f13 pl-[2rem]'>Connect with us </div>
+           <div className="flex w-[140px] flex-row items-center justify-center flex-wrap gap-[11px] px-3 bbborderrr">
+          {social.map((S) => {
+            return (
+              <a className="unset" href={S.link} target="_blank">
+                <span className="text-2 ">
+                  <S.Img  className=''/>
+                </span>
+              </a>
+            );
+          })}
+        </div>
         </div>
       </div>
     </SidebarCss>

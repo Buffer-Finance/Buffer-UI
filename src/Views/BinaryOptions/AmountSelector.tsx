@@ -10,7 +10,7 @@ const labelClasses = 'text-2 mr-2 text-f14 font-semibold';
 const ipClasses =
   'outline-none w-full text-1 text-f16 font-bold text-right mr-2 bg-transparent';
 const ipWrapperClasses =
-  ' w-full flex items-center bg-[#232334] !pl-[10px] !py-[0px] !pr-[0px]';
+  'rounded-l-sm w-full flex items-center bg-[#232334] !pl-[10px] !py-[0px] !pr-[0px]';
 import ShutterDrawer from 'react-bottom-drawer';
 import AccountInfo from '@Views/Common/AccountInfo';
 import { useActivePoolObj } from './PGDrawer/PoolDropDown';

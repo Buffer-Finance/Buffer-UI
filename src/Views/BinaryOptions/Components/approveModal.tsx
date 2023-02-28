@@ -27,6 +27,7 @@ const ApproveModalStyles = styled.div`
   /* transform: translateX(-5rem); */
   /* bottom:1rem; */
   @media (max-width:800px) {
+    border-radius:10px;
   padding: 3rem 2rem;
     
   }
