@@ -27,6 +27,7 @@ interface Iresponse {
   historyTrades: tradeType[];
   activeTrades: tradeType[];
   queuedTrades: tradeType[];
+  cancelledTrades: tradeType[];
   _meta: {
     block: {
       number: string;
@@ -40,6 +41,8 @@ export const useAllTradesGraphQl = ({
   activeskip,
   activefirst,
   currentTime,
+  cancelledfirst,
+  cancelledskip,
 }: {
   // account: string;
   historyskip: number;
@@ -47,9 +50,11 @@ export const useAllTradesGraphQl = ({
   activeskip: number;
   activefirst: number;
   currentTime: number;
+  cancelledfirst: number;
+  cancelledskip: number;
 }) => {
   return useSWR<Iresponse>(
-    `all-trades-thegraph-activePage-${activeskip}-historyPage${historyskip}`,
+    `all-trades-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledskip-${cancelledskip}`,
     {
       fetcher: async () => {
         const response = await axios.post(baseGraphqlLiteUrl.testnet, {
@@ -130,6 +135,31 @@ export const useAllTradesGraphQl = ({
                   address
                 }
                 optionContract {
+                  address
+                }
+            }
+            cancelledTrades: queuedOptionDatas(
+              first: ${cancelledfirst}
+              skip: ${cancelledskip}
+              orderBy: queueID
+              orderDirection: desc
+              where: {
+                state_in: [5],
+              }
+            ){
+                depositToken
+                isAbove
+                queueID
+                reason
+                state
+                slippage
+                strike
+                totalFee
+                user {
+                  address
+                }
+                optionContract {
+                  asset
                   address
                 }
             }

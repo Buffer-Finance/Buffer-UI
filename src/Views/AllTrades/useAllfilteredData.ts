@@ -11,19 +11,25 @@ export const useAllfilteredData = () => {
   const { active, history, cancelled } = useAtomValue(allATrdesTotalPageAtom);
   const activeSkip = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
   const historySkip = useMemo(() => TRADESINAPAGE * (history - 1), [history]);
+  const cancelledSkip = useMemo(
+    () => TRADESINAPAGE * (cancelled - 1),
+    [cancelled]
+  );
+
   const { data } = useAllTradesGraphQl({
     activefirst: 1000,
     activeskip: activeSkip,
     currentTime: Math.floor(new Date().getTime() / 1000),
     historyfirst: TRADESINAPAGE,
     historyskip: historySkip,
+    cancelledfirst: TRADESINAPAGE,
+    cancelledskip: cancelledSkip,
   });
   const { data: augmentedTrades } = useAheadTrades(
     data?._meta.block.number,
     null,
     true
   );
-  console.log(augmentedTrades, 'augmentedTrades');
 
   const activeTrades = useMemo(() => {
     let trades = [];
@@ -59,10 +65,23 @@ export const useAllfilteredData = () => {
         true
       ).filter((trade) => !!trade);
     }
+    return null;
   }, [data?.historyTrades, augmentedTrades]);
+
+  const cancelledTrades = useMemo(() => {
+    if (data && data.cancelledTrades) {
+      console.log(data.cancelledTrades, 'data.cancelledTrades');
+      return getProcessedTrades(
+        data?.cancelledTrades,
+        data?._meta.block.number
+      );
+    }
+    return null;
+  }, [data?.cancelledTrades]);
 
   return {
     activeTrades,
     historyTrades,
+    cancelledTrades,
   };
 };
