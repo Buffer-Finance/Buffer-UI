@@ -140,6 +140,9 @@ const AmountSelector: React.FC<any> = ({
             if (maxTradeSize && gt(val, maxTradeSize)) {
               errors.push(`Not enough liquidity to fund this trade. Please eneter a smaller amount!`);
             }
+            if(gt('5',val)){
+              errors.push('Minimum Trade Size is 5!')
+            }
             setErr(errors);
           }}
         />
