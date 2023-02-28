@@ -117,7 +117,7 @@ const SideBar: React.FC<any> = () => {
               </NavLink>
             );
           })}
-          <div className=' text-2 mb-3 text-f13 pl-[2rem]'>Connect with us </div>
+          <div className=' text-2 mb-3 mt-[10vh] text-f13 pl-[2rem]'>Connect with us </div>
            <div className="flex w-[140px] flex-row items-center justify-center flex-wrap gap-[11px] px-3 bbborderrr">
           {social.map((S) => {
             return (
