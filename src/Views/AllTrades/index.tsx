@@ -26,7 +26,8 @@ export const allATrdesTotalPageAtom = atom<{
 });
 
 const AllTrades = () => {
-  const { activeTrades, historyTrades } = useAllfilteredData();
+  const { activeTrades, historyTrades, cancelledTrades } = useAllfilteredData();
+  console.log(cancelledTrades, 'cancelledTrades');
   const qtInfo = useQTinfo();
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
   const [totalPages, setTotalPages] = useAtom(allATrdesTotalPageAtom);
@@ -48,7 +49,7 @@ const AllTrades = () => {
         tablist={[
           { name: 'Active' },
           { name: 'History' },
-          // { name: 'Cancelled' },
+          { name: 'Cancelled' },
         ]}
       />
       <TabSwitch
@@ -86,6 +87,18 @@ const AllTrades = () => {
               '9%',
               'auto',
             ]}
+          />,
+          <PGDesktopTables
+            activePage={totalPages.cancelled}
+            configData={qtInfo}
+            filteredData={cancelledTrades}
+            shouldNotDisplayShareVisulise
+            totalPages={50}
+            onPageChange={(e, p) =>
+              setTotalPages({ ...totalPages, cancelled: p })
+            }
+            showUserAddress
+            widths={['auto']}
           />,
         ]}
       />
