@@ -19,7 +19,7 @@ const TableBackground = styled.div`
 
   & ::-webkit-scrollbar {
     background: var(--bg-grey);
-    height: 7px !important;
+    height: 2px !important;
     width: 3px !important;
   }
 
@@ -56,7 +56,6 @@ const TableBackground = styled.div`
 
       th {
         text-transform: capitalize;
-        padding: 1.2rem 0;
         font-size: 1.4rem;
         font-weight: 400;
         color: ${(props) => (props?.v1 ? '#C3C2D4' : 'var(--text-6)')};
