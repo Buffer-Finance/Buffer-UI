@@ -263,10 +263,10 @@ export const Weekly = () => {
           }}
           distance={5}
           tablist={[
-            { name: 'Winners Pnl' },
-            { name: 'Losers Pnl' },
-            { name: 'Winners Win Rate' },
-            { name: 'Losers Win Rate' },
+            { name: 'Winners (by Pnl)' },
+            { name: 'Losers (by Pnl)' },
+            { name: 'Winners (by Win Rate)' },
+            { name: 'Losers (by Win Rate)' },
           ]}
         />
         <TabSwitch
