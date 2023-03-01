@@ -1,7 +1,7 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent, CellInfo } from '@Views/Common/BufferTable/CellInfo';
 import Background from './style';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { atom, useAtom } from 'jotai';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import {
@@ -29,11 +29,7 @@ import {
   TradeSize,
 } from './TableComponents';
 import { ChangeEvent, useMemo } from 'react';
-import {
-  IGQLHistory,
-  tardesAtom,
-  tardesTotalPageAtom,
-} from '../Hooks/usePastTradeQuery';
+import { IGQLHistory } from '../Hooks/usePastTradeQuery';
 import { subtract } from '@Utils/NumString/stringArithmatics';
 import { useGlobal } from '@Contexts/Global';
 import { BetState } from '@Hooks/useAheadTrades';
@@ -52,6 +48,7 @@ interface IPGDesktopTables {
   filteredData: IGQLHistory[];
   showUserAddress?: boolean;
   widths: string[];
+  onRowClick?: (index: number) => void;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
@@ -63,6 +60,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   filteredData,
   showUserAddress = false,
   widths,
+  onRowClick,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -306,7 +304,13 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         cols={headNameArray.length}
         rows={filteredData ? filteredData.length : 0}
         widths={widths}
-        onRowClick={console.log}
+        onRowClick={
+          onRowClick
+            ? onRowClick
+            : (idx) => {
+                // console.log(idx);
+              }
+        }
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
       />

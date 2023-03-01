@@ -4,7 +4,8 @@ import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
 import { useHistoryTableTabs } from '@Views/Profile/Components/HistoryTable';
 import { atom, useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAllfilteredData } from './useAllfilteredData';
 
 export const AllTradesPage = () => {
@@ -27,14 +28,19 @@ export const allATrdesTotalPageAtom = atom<{
 
 const AllTrades = () => {
   const { activeTrades, historyTrades, cancelledTrades } = useAllfilteredData();
-  console.log(cancelledTrades, 'cancelledTrades');
   const qtInfo = useQTinfo();
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
   const [totalPages, setTotalPages] = useAtom(allATrdesTotalPageAtom);
+  const navigate = useNavigate();
 
   useEffect(() => {
     changeActiveTab(null, 0);
   }, []);
+
+  const navigateToProfile = (address: string | undefined) => {
+    if (address === undefined) return;
+    navigate(`/profile?user_address=${address}`);
+  };
 
   return (
     <div className="px-7 my-8 sm:px-3">
@@ -64,6 +70,9 @@ const AllTrades = () => {
             onPageChange={(e, p) => setTotalPages({ ...totalPages, active: p })}
             showUserAddress
             widths={['auto']}
+            onRowClick={(index) =>
+              navigateToProfile(activeTrades[index].user.address)
+            }
           />,
           <PGDesktopTables
             activePage={totalPages.history}
@@ -73,6 +82,9 @@ const AllTrades = () => {
             totalPages={500}
             onPageChange={(e, p) =>
               setTotalPages({ ...totalPages, history: p })
+            }
+            onRowClick={(index) =>
+              navigateToProfile(historyTrades[index].user.address)
             }
             showUserAddress
             widths={[
