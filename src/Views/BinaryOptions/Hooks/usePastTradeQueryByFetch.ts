@@ -1,6 +1,6 @@
-import axios from "axios";
-import { baseGraphqlLiteUrl, baseGraphqlUrl } from "config";
-import useSWR from "swr";
+import axios from 'axios';
+import { baseGraphqlLiteUrl, baseGraphqlUrl } from 'config';
+import useSWR from 'swr';
 
 export const usePastTradeQueryByFetch = ({
   account,
@@ -130,6 +130,8 @@ export const usePastTradeQueryByFetch = ({
                 slippage
                 strike
                 totalFee
+                queueTimestamp
+                cancelTimestamp
                 user {
                   address
                 }

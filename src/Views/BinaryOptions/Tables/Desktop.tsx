@@ -102,7 +102,15 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         // "Visualize",
       ].filter((name) => name !== null && name !== undefined && name !== false);
     else if (isCancelledTable)
-      return ['Asset', 'Strike Price', 'Trade Size', 'Status', 'Reason'];
+      return [
+        'Asset',
+        'Strike Price',
+        'Trade Size',
+        'Status',
+        'Reason',
+        'Queue Time',
+        'Cancellation Time',
+      ];
     else
       return [
         'Asset',
@@ -216,8 +224,24 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           />
         );
       case 4:
-        // if (!currentRow.normal_option) return <CellContent content={["-"]} />;
-        // else
+        if (currentRow.state === BetState.cancelled)
+          return (
+            <NumberTooltip
+              content={`${getDisplayTimeUTC(
+                +currentRow.queueTimestamp
+              )} ${getDisplayDateUTC(+currentRow.queueTimestamp)} UTC`}
+            >
+              <div className="w-fit">
+                <CellContent
+                  content={[
+                    `${getDisplayTime(+currentRow.queueTimestamp)}`,
+                    `${getDisplayDate(+currentRow.queueTimestamp)}`,
+                  ]}
+                />
+              </div>
+            </NumberTooltip>
+          );
+
         if (
           currentRow.state === BetState.queued ||
           currentRow.state === BetState.cancelled
@@ -240,6 +264,23 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           </NumberTooltip>
         );
       case 5:
+        if (currentRow.state === BetState.cancelled)
+          return (
+            <NumberTooltip
+              content={`${getDisplayTimeUTC(
+                +currentRow.cancelTimestamp
+              )} ${getDisplayDateUTC(+currentRow.cancelTimestamp)} UTC`}
+            >
+              <div className="w-fit">
+                <CellContent
+                  content={[
+                    `${getDisplayTime(+currentRow.cancelTimestamp)}`,
+                    `${getDisplayDate(+currentRow.cancelTimestamp)}`,
+                  ]}
+                />
+              </div>
+            </NumberTooltip>
+          );
         return <TradeSize trade={currentRow} />;
       case 6:
         return (
