@@ -50,6 +50,7 @@ interface IPGDesktopTables {
   showUserAddress?: boolean;
   widths: string[];
   onRowClick?: (index: number) => void;
+  shouldShowMobile?: boolean;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
@@ -62,6 +63,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   showUserAddress = false,
   widths,
   onRowClick,
+  shouldShowMobile = false,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
@@ -168,7 +170,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
                 +openTimeStamp
               )} ${getDisplayDateUTC(+openTimeStamp)} UTC`}
             >
-              <div className="w-fit">
+              <div className="w-max">
                 <CellContent
                   content={[
                     `${getDisplayTime(+openTimeStamp)}`,
@@ -219,7 +221,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
               +currentRow.expirationTime
             )} ${getDisplayDateUTC(+currentRow.expirationTime)} UTC`}
           >
-            <div className="w-fit">
+            <div className="w-max">
               <CellContent
                 content={[
                   `${getDisplayTime(+currentRow.expirationTime)}`,
@@ -314,6 +316,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         }
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
+        shouldShowMobile={shouldShowMobile}
       />
     </Background>
   );

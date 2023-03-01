@@ -66,6 +66,7 @@ const AllTrades = () => {
             configData={qtInfo}
             filteredData={activeTrades}
             shouldNotDisplayShareVisulise
+            shouldShowMobile
             totalPages={1}
             onPageChange={(e, p) => setTotalPages({ ...totalPages, active: p })}
             showUserAddress
@@ -79,6 +80,7 @@ const AllTrades = () => {
             configData={qtInfo}
             filteredData={historyTrades}
             shouldNotDisplayShareVisulise
+            shouldShowMobile
             totalPages={500}
             onPageChange={(e, p) =>
               setTotalPages({ ...totalPages, history: p })
