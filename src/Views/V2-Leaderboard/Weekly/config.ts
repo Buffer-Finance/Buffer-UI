@@ -8,3 +8,8 @@ export const startTimestamp: startTimestampObj = {
 export const endDay: endTimestampObj = {
   421613: 0,
 };
+
+export const winRateStart: endTimestampObj = {
+  42161: 2,
+  421613: 2,
+};

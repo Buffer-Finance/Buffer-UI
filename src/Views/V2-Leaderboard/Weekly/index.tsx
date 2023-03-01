@@ -10,7 +10,6 @@ import { getDistance } from '@Utils/Staking/utils';
 import { LeaderBoard } from '..';
 import {
   readLeaderboardPageActivePageAtom,
-  readLeaderboardPageTotalPageAtom,
   updateLeaderboardActivePageAtom,
 } from '../atom';
 import { ContestFilterDD } from '../Components/ContestFilterDD';
@@ -20,15 +19,19 @@ import { DailyStyles } from '../Daily/stlye';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { endDay, startTimestamp } from './config';
+import { endDay, startTimestamp, winRateStart } from './config';
 
 import TabSwitch from '@Views/Common/TabSwitch';
 import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
-import { useWeeklyLeaderboardQuery } from '../Hooks/useWeeklyLeaderboardQuery';
+import {
+  IWinrate,
+  useWeeklyLeaderboardQuery,
+} from '../Hooks/useWeeklyLeaderboardQuery';
 import { TimerBox } from '../Incentivised';
+import { ILeague } from '../interfaces';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -38,23 +41,67 @@ export const Weekly = () => {
   const { activeChain } = useActiveChain();
   const { week, nextTimeStamp } = useWeekOfTournament();
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
+
   const skip = useMemo(
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
-    useWeeklyLeaderboardQuery();
+  const {
+    data,
+    totalTournamentData,
+    loserUserRank,
+    winnerUserRank,
+    loserWinrateUserRank,
+    winnerWinrateUserRank,
+  } = useWeeklyLeaderboardQuery();
+
+  const totalPages = useMemo(() => {
+    const pages = {
+      winnerPnl: 0,
+      loserPnl: 0,
+      winnerWinRate: 0,
+      loserWinRate: 0,
+    };
+    if (data) {
+      if (data.userStats && data.userStats.length > 0) {
+        pages.winnerPnl = Math.ceil(data.userStats.length / ROWINAPAGE);
+      }
+      if (data.loserStats && data.loserStats.length > 0) {
+        pages.loserPnl = Math.ceil(data.loserStats.length / ROWINAPAGE);
+      }
+      if (data.winnerWinrate && data.winnerWinrate.length > 0) {
+        pages.winnerWinRate = Math.ceil(data.winnerWinrate.length / ROWINAPAGE);
+      }
+      if (data.loserWinrate && data.loserWinrate.length > 0) {
+        pages.loserWinRate = Math.ceil(data.loserWinrate.length / ROWINAPAGE);
+      }
+    }
+    return pages;
+  }, [data]);
+
   const tableData = useMemo(() => {
-    if (data && data.userStats) {
-      return data.userStats.slice(skip, skip + ROWINAPAGE);
-    } else return [];
+    const res: {
+      winnerPnl: ILeague[];
+      loserPnl: ILeague[];
+      winnerWinRate: IWinrate[];
+      loserWinrate: IWinrate[];
+    } = { winnerPnl: [], loserPnl: [], winnerWinRate: [], loserWinrate: [] };
+    if (data) {
+      if (data.userStats) {
+        res.winnerPnl = data.userStats.slice(skip, skip + ROWINAPAGE);
+      }
+      if (data.loserStats) {
+        res.loserPnl = data.loserStats.slice(skip, skip + ROWINAPAGE);
+      }
+      if (data.winnerWinrate) {
+        res.winnerWinRate = data.winnerWinrate.slice(skip, skip + ROWINAPAGE);
+      }
+      if (data.loserWinrate) {
+        res.loserWinrate = data.loserWinrate.slice(skip, skip + ROWINAPAGE);
+      }
+    }
+    return res;
   }, [data, skip]);
-  const loserStats = useMemo(() => {
-    if (data && data.loserStats) {
-      return data.loserStats.slice(skip, skip + ROWINAPAGE);
-    } else return [];
-  }, [data, skip]);
-  const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
 
   const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
 
@@ -74,6 +121,12 @@ export const Weekly = () => {
   useEffect(() => {
     setActivePageNumber(1);
   }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab > tabList.length - 1) {
+      setActiveTab(0);
+    }
+  }, [offset]);
 
   const rewardPool = useMemo(() => {
     if (week === null) return null;
@@ -107,14 +160,20 @@ export const Weekly = () => {
     else return 'fetching...';
   }, [activeChain, week, offset, data]);
 
-  // useEffect(() => {
-  //   if (
-  //     (week !== null && offset === null) ||
-  //     (offset !== null && week !== null && offset.toString() != week.toFixed())
-  //   ) {
-  //     setOffset(week.toString());
-  //   }
-  // }, [week, offset]);
+  const tabList = useMemo(() => {
+    const list = [
+      { name: 'Winners (by Pnl)' },
+      { name: 'Losers (by Pnl)' },
+      { name: 'Winners (by Win Rate)' },
+      { name: 'Losers (by Win Rate)' },
+    ];
+    if (winRateStart[activeChain.id])
+      if (offset !== null && winRateStart[activeChain.id] > Number(offset))
+        return list.slice(0, 2);
+      else if (week !== null && winRateStart[activeChain.id] > Number(week))
+        return list.slice(0, 2);
+    return list;
+  }, [offset, activeChain]);
 
   let content;
   if (!isTimerEnded) {
@@ -239,14 +298,14 @@ export const Weekly = () => {
             setActiveTab(t);
           }}
           distance={5}
-          tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
+          tablist={tabList}
         />
         <TabSwitch
           value={activeTab}
           childComponents={[
             <DailyWebTable
-              res={tableData}
-              count={totalPages.arbitrum}
+              standings={tableData.winnerPnl}
+              count={totalPages.winnerPnl}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
@@ -257,12 +316,34 @@ export const Weekly = () => {
             <DailyWebTable
               activePage={activePages.arbitrum}
               userRank={loserUserRank}
-              res={loserStats}
-              count={totalPages.arbitrum}
+              standings={tableData.loserPnl}
+              count={totalPages.loserPnl}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
               nftWinners={4}
+            />,
+            <DailyWebTable
+              activePage={activePages.arbitrum}
+              userRank={winnerWinrateUserRank}
+              standings={tableData.winnerWinRate}
+              count={totalPages.winnerWinRate}
+              onpageChange={setActivePageNumber}
+              userData={data?.userData}
+              skip={skip}
+              nftWinners={4}
+              isWinrateTable
+            />,
+            <DailyWebTable
+              activePage={activePages.arbitrum}
+              userRank={loserWinrateUserRank}
+              standings={tableData.loserWinrate}
+              count={totalPages.loserWinRate}
+              onpageChange={setActivePageNumber}
+              userData={data?.userData}
+              skip={skip}
+              nftWinners={4}
+              isWinrateTable
             />,
           ]}
         />
