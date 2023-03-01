@@ -107,6 +107,7 @@ const AllTrades = () => {
             configData={qtInfo}
             filteredData={cancelledTrades}
             shouldNotDisplayShareVisulise
+            shouldShowMobile
             totalPages={50}
             onPageChange={(e, p) =>
               setTotalPages({ ...totalPages, cancelled: p })
