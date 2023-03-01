@@ -107,9 +107,9 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Strike Price',
         'Trade Size',
         'Status',
-        'Reason',
         'Queue Time',
         'Cancellation Time',
+        'Reason',
       ];
     else
       return [
@@ -199,7 +199,22 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
 
       case 3:
         if (currentRow.state === BetState.cancelled)
-          return <>{getErrorFromCode(currentRow?.reason)}</>;
+          return (
+            <NumberTooltip
+              content={`${getDisplayTimeUTC(
+                +currentRow.queueTimestamp
+              )} ${getDisplayDateUTC(+currentRow.queueTimestamp)} UTC`}
+            >
+              <div className="w-fit">
+                <CellContent
+                  content={[
+                    `${getDisplayTime(+currentRow.queueTimestamp)}`,
+                    `${getDisplayDate(+currentRow.queueTimestamp)}`,
+                  ]}
+                />
+              </div>
+            </NumberTooltip>
+          );
         if (currentRow.state === BetState.queued)
           return <CellContent content={['-']} />;
 
@@ -228,20 +243,19 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           return (
             <NumberTooltip
               content={`${getDisplayTimeUTC(
-                +currentRow.queueTimestamp
-              )} ${getDisplayDateUTC(+currentRow.queueTimestamp)} UTC`}
+                +currentRow.cancelTimestamp
+              )} ${getDisplayDateUTC(+currentRow.cancelTimestamp)} UTC`}
             >
               <div className="w-fit">
                 <CellContent
                   content={[
-                    `${getDisplayTime(+currentRow.queueTimestamp)}`,
-                    `${getDisplayDate(+currentRow.queueTimestamp)}`,
+                    `${getDisplayTime(+currentRow.cancelTimestamp)}`,
+                    `${getDisplayDate(+currentRow.cancelTimestamp)}`,
                   ]}
                 />
               </div>
             </NumberTooltip>
           );
-
         if (
           currentRow.state === BetState.queued ||
           currentRow.state === BetState.cancelled
@@ -265,22 +279,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         );
       case 5:
         if (currentRow.state === BetState.cancelled)
-          return (
-            <NumberTooltip
-              content={`${getDisplayTimeUTC(
-                +currentRow.cancelTimestamp
-              )} ${getDisplayDateUTC(+currentRow.cancelTimestamp)} UTC`}
-            >
-              <div className="w-fit">
-                <CellContent
-                  content={[
-                    `${getDisplayTime(+currentRow.cancelTimestamp)}`,
-                    `${getDisplayDate(+currentRow.cancelTimestamp)}`,
-                  ]}
-                />
-              </div>
-            </NumberTooltip>
-          );
+          return <>{getErrorFromCode(currentRow?.reason)}</>;
         return <TradeSize trade={currentRow} />;
       case 6:
         return (
