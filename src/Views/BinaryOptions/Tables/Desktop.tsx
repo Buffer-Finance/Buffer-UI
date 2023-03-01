@@ -36,6 +36,7 @@ import { BetState } from '@Hooks/useAheadTrades';
 import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
+import { Launch } from '@mui/icons-material';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -324,7 +325,10 @@ const UserAddressColumn = ({ address }: { address: string }) => {
     <CellContent
       content={[
         <NumberTooltip content={address}>
-          <div>{getSlicedUserAddress(address, 5)}</div>
+          <div className="flex items-center gap-2">
+            {getSlicedUserAddress(address, 5)}{' '}
+            <Launch className="invisible group-hover:visible" />
+          </div>
         </NumberTooltip>,
       ]}
     />
