@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const getBorderType = (props) => {
   if (props?.v1) return 'collapse';
@@ -26,10 +26,11 @@ const TableBackground = styled.div`
   table {
     border: ${getBorder};
     width: ${({ shouldShowMobile }: { shouldShowMobile: boolean }) =>
-      shouldShowMobile ? 'max-content' : 'max(100%, 500px)'}};
+      shouldShowMobile ? 'max-content' : 'max(100%, 500px)'};
     border-collapse: ${getBorderType};
     background: transparent;
     font-size: 1.6rem;
+
     .table-header {
       background: ${(props) => (props?.v1 ? '#1C1C28' : '#171722')};
 
@@ -57,11 +58,11 @@ const TableBackground = styled.div`
         text-transform: capitalize;
         font-size: 1.4rem;
         font-weight: 400;
-        color: ${(props) => (props.v1 ? '#C3C2D4' : 'var(--text-6)')};
+        color: ${(props) => (props?.v1 ? '#C3C2D4' : 'var(--text-6)')};
         border: none;
-        background: ${(props) => (props.v1 ? '#1C1C28' : '#171722')};
+        background: ${(props) => (props?.v1 ? '#1C1C28' : '#171722')};
         padding: ${({ shouldShowMobile }: { shouldShowMobile: boolean }) =>
-          shouldShowMobile ? '12px 10px' : '12px 0px'}};
+          shouldShowMobile ? '12px 10px' : '12px 0px'};
 
         &:first-of-type {
           padding-left: 0.6rem;
@@ -129,8 +130,8 @@ const TableBackground = styled.div`
           font-size: 13px;
           border-bottom: ${getBorder};
           padding: ${({ shouldShowMobile }: { shouldShowMobile: boolean }) =>
-            shouldShowMobile ? '6px 10px' : '6px 0px'}};
-          
+            shouldShowMobile ? '6px 10px' : '6px 0px'};
+
           &.double-height {
             height: 50px;
           }
