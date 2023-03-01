@@ -1,3 +1,4 @@
+import { defaultMarket } from '@Views/BinaryOptions';
 import { SVGProps } from 'react';
 
 export interface ITab {
@@ -8,11 +9,12 @@ export interface ITab {
   Img?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 }
 
-export const getTabs = () => {
+export const getTabs = (marketFromStorage: string) => {
+  const market = marketFromStorage || defaultMarket;
   if (import.meta.env.VITE_ENV === 'MAINNET') {
     return [
       {
-        to: `/binary/ETH-USD`,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -29,7 +31,12 @@ export const getTabs = () => {
         subTabs: [],
         isExternalLink: false,
       },
-
+      {
+        to: `/referral`,
+        name: 'Referral',
+        subTabs: [],
+        isExternalLink: false,
+      },
       {
         to: `https://testnet.buffer.finance/`,
         name: 'Practice Trading',
@@ -38,14 +45,8 @@ export const getTabs = () => {
       },
 
       {
-        to: `/referral`,
-        name: 'Referral',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
-        to: `https://optopi.buffer.finance/ARBITRUM`,
-        name: 'NFT',
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
         subTabs: [],
         isExternalLink: true,
       },
@@ -54,6 +55,12 @@ export const getTabs = () => {
         name: 'Stats',
         subTabs: [],
         isExternalLink: true,
+      },
+      {
+        to: `/profile`,
+        name: 'Profile',
+        subTabs: [],
+        isExternalLink: false,
       },
 
       // {
@@ -78,7 +85,7 @@ export const getTabs = () => {
   } else
     return [
       {
-        to: `/binary/ETH-USD`,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -88,18 +95,6 @@ export const getTabs = () => {
         name: 'Faucet',
         subTabs: [],
         isExternalLink: false,
-      },
-      {
-        to: `/leaderboard/incentivised`,
-        name: 'Competitions',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
-        to: `https://optopi.buffer.finance/ARBITRUM`,
-        name: 'NFT',
-        subTabs: [],
-        isExternalLink: true,
       },
       {
         to: `/earn`,
@@ -116,6 +111,19 @@ export const getTabs = () => {
       {
         to: `/referral`,
         name: 'Referral',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
+        subTabs: [],
+        isExternalLink: true,
+      },
+
+      {
+        to: `/profile`,
+        name: 'Profile',
         subTabs: [],
         isExternalLink: false,
       },

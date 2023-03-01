@@ -41,7 +41,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const [balance, allowance, _, currStats] = activeAssetState;
   const [expiration] = useAtom(QuickTradeExpiry);
   const [token] = useAtom(sessionAtom);
-  const { highestTierNFT } = useHighestTierNFT();
+  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
 
   const [, setIsApproveModalOpen] = useAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();

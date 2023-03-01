@@ -425,6 +425,12 @@ export const useGetTokenomics = () => {
         abi: BlpAbi,
         functionName: 'maxLiquidity',
       },
+      blpUSDCAmount: {
+        address: contracts.USDC,
+        abi: bfrAbi,
+        functionName: 'balanceOf',
+        args: [contracts.BLP],
+      },
     };
     return Object.keys(generic_call_data)
       .map(function (key) {
@@ -491,6 +497,7 @@ export const useGetTokenomics = () => {
       blpInitialRate,
       blpLockupPeriod,
       blpMaxLiquidity,
+      blpUSDCAmount,
       // User specifics
       userStakedBFR,
       bfrInWallet,

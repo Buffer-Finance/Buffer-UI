@@ -165,7 +165,7 @@ export function CustomOption() {
             ),
           }}
         />{' '}
-        <div className="flex-sbw flex-col items-start text-f14 ">
+        <div className="flex flex-col items-start text-f14 ">
           <AccountInfo
             shouldDisplayString
             unit={activePoolObj.token.name}
@@ -269,7 +269,7 @@ export function CustomOption() {
             </span>
           </ConnectionRequired>
         }
-        {/* {MarketOpenWarning} */}
+        {MarketOpenWarning}
       </div>
     </>
   );

@@ -1,20 +1,9 @@
-import React, { MouseEventHandler, ReactNode } from 'react';
-import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
-import DisconnectIcon from '@Assets/Elements/Disconnect';
+import React, { ReactNode } from 'react';
 import Wallet from '@Assets/Elements/wallet';
 import { ArrowDropDownRounded } from '@mui/icons-material';
-import { useAccount, useDisconnect } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import useOpenConnectionDrawer from '@Hooks/useOpenConnectionDrawer';
-import {
-  ConnectButton,
-  useAccountModal,
-  useChainModal,
-  useConnectModal,
-} from '@rainbow-me/rainbowkit';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import * as chain from '@wagmi/core/chains';
 import { BlueBtn } from '../V2-Button';
-import { useUserAccount } from '@Hooks/useUserAccount';
 
 interface IProps {
   inDrawer?: boolean;
@@ -98,14 +87,14 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
               }
 
               return (
-                <div style={{ display: 'flex', gap: 12 }}>
+                <div style={{ display: 'flex', gap: 7 }}>
                   <div
                     onClick={openChainModal}
                     role="button"
                     className={`hover:bg-1 hover:brightness-125 cursor-pointer flex items-center justify-center text-f13  h-[30px] w-max rounded-[7px] pl-3 pr-[1px] sm:pr-1 transition-all duration-300 `}
                   >
                     <div className="flex items-center dropdown-value f15 capitalize weight-400">
-                      {chain && (
+                      {chain && chain.name && (
                         <img
                           className="h-[18px] w-[18px] mr-[6px] sm:mr-[0px] rounded-full"
                           src={chain.iconUrl ?? chainImageMappipng[chain.name]}

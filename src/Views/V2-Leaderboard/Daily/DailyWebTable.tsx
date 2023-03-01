@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import BufferTable, {
   BufferTableCell,
   BufferTableRow,
@@ -15,18 +15,35 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
+import { useNavigate } from 'react-router-dom';
+import { Launch } from '@mui/icons-material';
+import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
 
 export const DailyWebTable: React.FC<{
-  res: ILeague[] | undefined;
+  standings: ILeague[] | IWinrate[] | undefined;
   count: number;
   skip: number;
-  onpageChange?: (page: number) => void;
-  totalRows: number;
-  userData?: ILeague[];
+  onpageChange: (page: number) => void;
+  userData?: ILeague[] | undefined;
   nftWinners?: number;
-}> = ({ res, skip, count, onpageChange, userData, nftWinners }) => {
+  userRank: string;
+  activePage: number;
+  isWinrateTable?: boolean;
+}> = ({
+  standings,
+  skip,
+  count,
+  onpageChange,
+  userData,
+  nftWinners,
+  userRank,
+  activePage,
+  isWinrateTable = false,
+}) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
+  const navigate = useNavigate();
+
   //Memos - to avoid re-rendering
   const firstColPadding = useMemo(() => {
     return {
@@ -34,18 +51,17 @@ export const DailyWebTable: React.FC<{
       body: 'ml-4',
     };
   }, []);
+
   const DailyCols = useMemo(() => {
     return [
       'Rank',
       'User Address',
       'Volume',
-      'Trades',
-      'Net PnL (%)',
-      'Absolute Net PnL',
+      isWinrateTable ? 'Total Trades' : 'Trades',
+      isWinrateTable ? 'Trades Won' : 'Net PnL (%)',
+      isWinrateTable ? 'Win Rate' : 'Absolute Net PnL',
     ];
   }, []);
-
-  //this adds the user data to the top of the table
 
   const HeaderFormatter = (col: number) => {
     return (
@@ -56,15 +72,20 @@ export const DailyWebTable: React.FC<{
       />
     );
   };
-  const standings = res;
-
-  const BodyFormatter = (row: number, col: number, user) => {
+  interface IuserData extends ILeague {
+    rank: string;
+  }
+  const BodyFormatter = (
+    row: number,
+    col: number,
+    user: IuserData | undefined
+  ) => {
     if (!standings) return <></>;
-    let currentStanding = standings[row];
+    let currentStanding: ILeague | IWinrate | IuserData = standings[row];
     if (user) {
       currentStanding = user;
     }
-    const isUser = user;
+    const isUser = !!user;
     switch (col) {
       case 0:
         return (
@@ -72,7 +93,7 @@ export const DailyWebTable: React.FC<{
             isUser={isUser}
             row={row}
             skip={skip}
-            userRank={currentStanding.rank}
+            userRank={(currentStanding as IuserData).rank}
             firstColPadding={firstColPadding.body}
             nftWinners={nftWinners}
           />
@@ -81,8 +102,9 @@ export const DailyWebTable: React.FC<{
         return (
           <CellContent
             content={[
-              <>
-                {currentStanding.user === account ? (
+              <div className="flex items-center gap-2">
+                {currentStanding.user.toLowerCase() ===
+                account?.toLowerCase() ? (
                   <span className="text-1">Your Account</span>
                 ) : (
                   <div className="flex">
@@ -102,7 +124,8 @@ export const DailyWebTable: React.FC<{
                     </NumberTooltip>
                   </div>
                 )}
-              </>,
+                <Launch className="invisible group-hover:visible" />
+              </div>,
             ]}
           />
         );
@@ -138,8 +161,11 @@ export const DailyWebTable: React.FC<{
         );
 
       case 4:
-        // if (!currentStanding.netPnL || currentStanding.netPnL === null)
-        // return <div>null</div>;
+        if (isWinrateTable && 'tradesWon' in currentStanding) {
+          return (
+            <CellContent content={[<div>{currentStanding.tradesWon}</div>]} />
+          );
+        }
         try {
           const perc = multiply(
             divide(currentStanding.netPnL, currentStanding.volume),
@@ -174,6 +200,13 @@ export const DailyWebTable: React.FC<{
         }
 
       case 5:
+        if (isWinrateTable && 'winRate' in currentStanding) {
+          return (
+            <CellContent
+              content={[<div>{divide(currentStanding.winRate, 3)}%</div>]}
+            />
+          );
+        }
         return (
           <CellContent
             content={[
@@ -199,29 +232,26 @@ export const DailyWebTable: React.FC<{
         return <div>Unhandled Cell.</div>;
     }
   };
-  let userInTop10 = -1;
-  if (res?.length && !skip && account) {
-    const foundIndex = res.findIndex(
-      (r) => r.user.toLowerCase() == account.toLowerCase()
-    );
-    if (foundIndex !== -1) {
-      userInTop10 = foundIndex + 1;
-    }
-  }
+
+  const navigateToProfile = (address: string | undefined) => {
+    if (address === undefined) return;
+    navigate(`/profile?user_address=${address}`);
+  };
+
   const topDecorator =
-    standings?.length && userData?.length ? (
-      // const topDecorator = false ? (
-      <BufferTableRow onClick={console.log} className="highlight">
+    standings?.length && userData?.length && Number(userRank) !== skip + 1 ? (
+      <BufferTableRow onClick={console.log} className="highlight group ">
         {new Array(DailyCols.length).fill(9).map((_, i) => (
-          <BufferTableCell onClick={console.log}>
+          <BufferTableCell onClick={() => navigateToProfile(account)}>
             {BodyFormatter(0, i, {
               ...userData[0],
-              rank: userInTop10 == -1 ? '-' : userInTop10,
+              rank: userRank,
             })}
           </BufferTableCell>
         ))}
       </BufferTableRow>
     ) : null;
+
   return (
     <LeaderBoardTableStyles>
       {isMobile && (
@@ -230,14 +260,13 @@ export const DailyWebTable: React.FC<{
           skip={skip}
           userData={userData}
           count={count}
+          activePage={activePage}
+          userRank={userRank}
           onpageChange={(e, p) => {
-            // router.push({
-            //   pathname: router.pathname,
-            //   query: { ...router.query, page: p },
-            // });
             onpageChange(p);
           }}
           nftWinners={nftWinners}
+          onClick={navigateToProfile}
         />
       )}
 
@@ -246,17 +275,15 @@ export const DailyWebTable: React.FC<{
         className="mt-4 tab:mt-[0] tab:mb-6"
         bodyJSX={BodyFormatter}
         cols={DailyCols.length}
-        rows={standings?.length}
+        rows={standings?.length ?? 0}
         headerJSX={HeaderFormatter}
         topDecorator={topDecorator}
-        // highlightIndexs={userRank && userData && userRank !== 0 ? [0] : []}
-        onRowClick={(idx) => {}}
+        onRowClick={(idx) => {
+          navigateToProfile(standings?.[idx].user);
+        }}
         count={count}
+        activePage={activePage}
         onPageChange={(a, p) => {
-          // router.push({
-          //   pathname: router.pathname,
-          //   query: { ...router.query, page: p },
-          // });
           onpageChange(p);
         }}
         loading={!standings}

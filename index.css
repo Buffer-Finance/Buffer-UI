@@ -22,17 +22,15 @@ body {
 html .MuiDialog-container {
   backdrop-filter: blur(10px);
 }
-.gradient_txt{
-
-  font-family: Arial, 
-      Helvetica, sans-serif;
-  background: linear-gradient( #bfe5f6, #A3E3FF);
+.gradient_txt {
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(#bfe5f6, #a3e3ff);
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
 }
 :root {
   --yellow-border: #e2ca18;
-  --white-border: #c2c1d3;
+  --white-border: #2bd67b26;
   --mole-offset: 140%;
   --mole-animation-duration: 0.4s;
 }
@@ -208,7 +206,7 @@ div.chart-type-dd {
   width: fit-content !important;
   background-color: #131722;
   padding: 8px;
-  max-height:fit-content !important;
+  max-height: fit-content !important;
 }
 .chart-type svg {
   width: 20px;
@@ -235,8 +233,6 @@ div.chart-type-dd {
 }
 
 @media (max-width: 600px) {
-
-
   .tv-h .ele {
     margin-right: 10px !important;
   }
@@ -1231,13 +1227,6 @@ html .flex-end {
   align-items: center;
 } */
 
-html .items-start {
-  align-items: flex-start;
-}
-
-html .items-end {
-  align-items: flex-end;
-}
 html .items-stretch {
   align-items: stretch;
 }

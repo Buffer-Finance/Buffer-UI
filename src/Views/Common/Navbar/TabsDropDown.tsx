@@ -37,13 +37,13 @@ export const TabsDropdown = ({
           </button>
 
           {open && (
-            <div className="transition-all duration-1000 flex-col absolute top-[45px] z-[10000] bg-1 py-[12px] px-[20px] rounded-[8px]">
+            <div className="transition-all duration-1000 flex-col absolute top-[45px] z-[10000] bg-1 py-[12px] px-[20px] rounded-[8px] flex items-start">
               {tabs.map((tab, idx) => {
                 if (tab.isExternalLink) {
                   return (
                     <button
                       key={tab.name}
-                      className={`transition-all duration-300 py-3 text-4 text-f15 hover:text-1 
+                      className={`transition-all duration-300 py-3 text-4 text-f15 hover:text-1 w-max
                        `}
                       onClick={() => {
                         window.open(tab.to, '_blank');
@@ -67,15 +67,15 @@ export const TabsDropdown = ({
                     key={tab.name}
                     to={tab.to}
                     className={({ isActive }) =>
-                      `py-3 text-4 text-f15 hover:text-1 ${
-                        isActive && 'bg-3 text-1'
+                      `!h-fit py-3 text-4 text-f15 hover:text-1 ${
+                        isActive ? ' text-1' : ''
                       } `
                     }
                     onClick={() => {
                       setOpen(false);
                     }}
                   >
-                    {tab.name}
+                    <div className="flex items-center">{tab.name}</div>
                   </NavLink>
                 );
               })}

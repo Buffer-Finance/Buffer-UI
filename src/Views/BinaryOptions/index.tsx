@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { atom, useAtom } from 'jotai';
+import { useEffect, useMemo } from 'react';
+import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
+import { useNavigate } from 'react-router-dom';
+
 import PGTables from './Tables';
 import BinaryDrawer from './PGDrawer';
 import { useGlobal } from '@Contexts/Global';
@@ -9,13 +11,10 @@ import { Skeleton } from '@mui/material';
 import Favourites from './Favourites/Favourites';
 import BufferTab from '@Views/Common/BufferTab';
 import { Navbar } from './Components/Mobile/Navbar';
-import YellowWarning from '@SVG/Elements/YellowWarning';
-
 import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
-import { tradesCount } from './Tables/Desktop';
 import {
   tardesPageAtom,
   updateActivePageNumber,
@@ -25,8 +24,6 @@ import {
 } from './Hooks/usePastTradeQuery';
 import { MarketTimingsModal } from './MarketTimingsModal';
 import MobileTable from './Components/Mobile/historyTab';
-import { marketPriceAtom } from '../../TradingView/useDataFeed';
-import isUserPaused from '@Utils/isUserPaused';
 import { binaryTabs } from 'config';
 import TVIntegrated from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
@@ -79,7 +76,7 @@ export interface IQTrade {
   routerContract?: string;
 }
 export const FavouriteAtom = atomWithLocalStorage('favourites3', []);
-export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV7', []);
+export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV8', []);
 
 export const activeAssetStateAtom = atom<{
   balance: string;
@@ -100,16 +97,24 @@ export const activeAssetStateAtom = atom<{
 export const setActiveAssetStateAtom = atom(null, (get, set, payload) => {
   set(activeAssetStateAtom, payload);
 });
+export const defaultMarket = 'BTC-USD';
+export const ENV =
+  import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
+    ? 'arbitrum-main'
+    : 'arbitrum-test';
 
-
+export const activeMarketFromStorageAtom = atomWithLocalStorage(
+  'user-active-market',
+  ''
+);
 export const useQTinfo = () => {
   const params = useParams();
-  const { activeChain,configContracts } = useActiveChain();
+  const { activeChain, configContracts } = useActiveChain();
   const data = useMemo(() => {
     let activeMarket = Config[activeChain.id].pairs.find((m) => {
       let market = params?.market || 'ETH-USD';
       // GBP
-      market = market.toUpperCase();
+      market = market?.toUpperCase();
       let currM = m.pair.toUpperCase();
       if (market == currM) {
         return true;
@@ -146,7 +151,7 @@ export const useQTinfo = () => {
       },
       optionMeta: configContracts.meta,
       routerContract: Config[activeChain.id].router,
-      activeChain
+      activeChain,
     };
   }, [params?.market, activeChain]);
   return data;
@@ -154,19 +159,28 @@ export const useQTinfo = () => {
 
 function QTrade() {
   const props = useQTinfo();
-  const [ref, setRef] = useAtom(referralCodeAtom);
+  const params = useParams();
+  const navigate = useNavigate();
+  const setActiveMarketFromStorage = useSetAtom(activeMarketFromStorageAtom);
+  useEffect(() => {
+    console.log(`params?.market: `, params?.market);
+    if (params?.market && params.market != 'undefined') {
+      setActiveMarketFromStorage(params.market);
+    } else {
+      navigate('/#/binary/' + defaultMarket);
+      console.log('marketnotfound');
+    }
+  }, [params?.market]);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
-  console.log('chainsss',arbitrumGoerli,arbitrum,polygon,polygonMumbai)
   // const [assets, setAssets] = useAtom(DisplayAssetsAtom);
   usePastTradeQuery();
   useGenericHooks();
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
-  const [
-    { active: activePage, history: historyPage, cancelled: cancelledPage },
-  ] = useAtom(tardesPageAtom);
+  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
+
   useEffect(() => {
     document.title = 'Buffer | Trade';
   }, []);
@@ -179,13 +193,6 @@ function QTrade() {
     subTabs: [],
     isExternalLink: false,
   };
-  const mapToPair = (market: IMarket) => market.pair;
-  // if (assets.length === 0 || assets.length > 5)
-  //   setAssets(
-  //     props.pairs.length > 5
-  //       ? props.pairs.slice(0, 5).map(mapToPair)
-  //       : props.pairs.map(mapToPair)
-  //   );
 
   useEffect(() => {
     dispatch({
@@ -200,13 +207,6 @@ function QTrade() {
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
   );
-  const [params] = useSearchParams();
-  useEffect(() => {
-    const referralCode = params.get('ref');
-    if (referralCode) {
-      if (ref !== referralCode) setRef(referralCode);
-    }
-  }, [params]);
 
   return (
     <>
@@ -220,9 +220,6 @@ function QTrade() {
           />
         </div>
       </div>
-      {/* <div> TV Status&nbsp;
-      {err ?'Error!!!':'Working'}
-      </div> */}
 
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
@@ -231,7 +228,7 @@ function QTrade() {
         <Background>
           {props.pairs ? (
             <>
-              <Warning
+              {/* <Warning
                 body={
                   <>
                     <WarningOutlined className="text-[#EEAA00] mt-[4px]" />{' '}
@@ -243,7 +240,7 @@ function QTrade() {
                 state={true}
                 shouldAllowClose={false}
                 className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
-              />
+              /> */}
               {typeof window !== 'undefined' &&
                 window.innerWidth < mobileUpperBound && <MobileScreens />}
 
@@ -278,14 +275,14 @@ function QTrade() {
                     <>
                       <PGTables
                         configData={props}
-                        currentPage={activePage}
-                        count={tradesCount}
+                        activePage={active}
                         onPageChange={(e, pageNumber) =>
                           setActivePage(pageNumber)
                         }
                       />
                       <MobileOnly>
                         <MobileTable
+                          activePage={active}
                           configData={props}
                           onPageChange={(e, pageNumber) =>
                             setActivePage(pageNumber)
@@ -297,16 +294,15 @@ function QTrade() {
                   {activeTab === binaryTabs[3] && (
                     <>
                       <PGTables
-                        isHistoryTable={true}
                         configData={props}
-                        currentPage={historyPage}
-                        count={tradesCount}
+                        activePage={history}
                         onPageChange={(e, pageNumber) =>
                           setHistoryPage(pageNumber)
                         }
                       />
                       <MobileOnly>
                         <MobileTable
+                          activePage={history}
                           configData={props}
                           isHistoryTab
                           onPageChange={(e, pageNumber) =>
@@ -319,10 +315,8 @@ function QTrade() {
                   {activeTab === binaryTabs[4] && (
                     <>
                       <PGTables
-                        isHistoryTable={true}
                         configData={props}
-                        currentPage={cancelledPage}
-                        count={tradesCount}
+                        activePage={cancelled}
                         onPageChange={(e, pageNumber) =>
                           setCancelledPage(pageNumber)
                         }
@@ -330,6 +324,7 @@ function QTrade() {
                       <MobileOnly>
                         <MobileTable
                           isCancelledTab
+                          activePage={cancelled}
                           configData={props}
                           onPageChange={(e, pageNumber) =>
                             setCancelledPage(pageNumber)

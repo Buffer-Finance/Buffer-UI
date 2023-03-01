@@ -30,16 +30,16 @@ export const isTestnet = import.meta.env.VITE_ENV.toUpperCase() === 'TESTNET';
 
 export const baseGraphqlUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
-    ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-mainnet'
+    ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy'
     : 'https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet';
 
 export const baseGraphqlLiteUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
     ? {
         sandbox:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy-v2',
         testnet:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy-v2',
       }
     : {
         sandbox:
@@ -324,78 +324,30 @@ export const European = 'European';
 export const American = 'American';
 export const getLeaderBoardTabs = (chain: string) => {
   return [
+    // {
+    //   pathname: '/[chain]/leaderboard/[offset]/incentivised',
+    //   as: `/ARBITRUM/leaderboard/0/incentivised`,
+    //   name: chain,
+    //   slug: 'leaderboard',
+    //   id: 0,
+    // },
     {
-      pathname: '/[chain]/leaderboard/[offset]/incentivised',
-      as: `/ARBITRUM/leaderboard/0/incentivised`,
-      name: chain,
-      slug: 'leaderboard',
-      id: 0,
+      pathname: '/[chain]/leaderboard/[offset]/daily',
+      as: `/leaderboard/daily`,
+      name: 'Daily',
+      slug: 'daily',
+      id: 1,
 
-      subTabs: [
-        // {
-        //   pathname: "/[chain]/leaderboard/[offset]/weekly/[league]",
-        //   as: `/POLYGON/leaderboard/0/weekly/diamond`,
-        //   name: "diamond",
-        //   slug: "diamond",
-        //   id: 2,
-        //   img: "/LeaderBoard/Diamond.png",
-        //   subTabs: [],
-        // },
-        // {
-        //   pathname: "/[chain]/leaderboard/[offset]/weekly/[league]",
-        //   as: `/POLYGON/leaderboard/0/weekly/platinum`,
-        //   name: "platinum",
-        //   slug: "platinum",
-        //   id: 3,
-        //   img: "/LeaderBoard/Platinum.png",
-        //   subTabs: [],
-        // },
-        // {
-        //   pathname: "/[chain]/leaderboard/[offset]/weekly/[league]",
-        //   as: `/POLYGON/leaderboard/0/weekly/gold`,
-        //   name: "gold",
-        //   slug: "gold",
-        //   id: 4,
-        //   img: "/LeaderBoard/Gold.png",
-        //   subTabs: [],
-        // },
-        // {
-        //   pathname: "/[chain]/leaderboard/[offset]/weekly/[league]",
-        //   as: `/POLYGON/leaderboard/0/weekly/silver`,
-        //   name: "silver",
-        //   slug: "silver",
-        //   id: 5,
-        //   img: "/LeaderBoard/Silver.png",
-        //   subTabs: [],
-        // },
-        // {
-        //   pathname: "/[chain]/leaderboard/[offset]/weekly/[league]",
-        //   as: `/POLYGON/leaderboard/0/weekly/bronze`,
-        //   name: "bronze",
-        //   slug: "bronze",
-        //   id: 6,
-        //   img: "/LeaderBoard/Bronze.png",
-        //   subTabs: [],
-        // },
-      ],
+      subTabs: [],
     },
-    // {
-    //   pathname: "/[chain]/leaderboard/[offset]/daily",
-    //   as: `/leaderboard/0/daily`,
-    //   name: "Daily",
-    //   slug: "daily",
-    //   id: 1,
-
-    //   subTabs: [],
-    // },
-    // {
-    //   pathname: "/[chain]/leaderboard/weekly",
-    //   as: `/leaderboard/weekly`,
-    //   name: "Weekly",
-    //   slug: "weekly",
-    //   id: 1,
-    //   subTabs: [],
-    // },
+    {
+      pathname: '/[chain]/leaderboard/weekly',
+      as: `/leaderboard/weekly`,
+      name: 'Weekly',
+      slug: 'weekly',
+      id: 7,
+      subTabs: [],
+    },
     {
       pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
       as: `/leaderboard/0/weekly/diamond`,

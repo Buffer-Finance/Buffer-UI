@@ -7,7 +7,7 @@ import MarketConfig from 'public/config.json';
 import poolABI from '@Views/BinaryOptions/ABI/poolABI.json';
 import { erc20ABI, useContractReads } from 'wagmi';
 import * as chain from '@wagmi/core/chains';
-import Config from 'public/config.json'
+import Config from 'public/config.json';
 
 import { convertBNtoString, useReadCall } from '@Utils/useReadCall';
 import {
@@ -144,11 +144,12 @@ export const useDashboardReadCalls = () => {
       },
       BLP: {
         price: blpPrice,
-        supply: fromWei(totalSupplyBLP, usd_decimals),
+        supply: fromWei(blpSupply, usd_decimals),
         total_staked: totalUSDCstaked,
         market_cap: multiply(blpPrice, fromWei(totalSupplyBLP, usd_decimals)),
+
         apr: fromWei(blpAprTotal, 2),
-        total_usdc: fromWei(amountUSDCpool, usd_decimals),
+        total_usdc: fromWei(blpTotalBalance, usd_decimals),
       },
     };
 
@@ -206,7 +207,7 @@ export const useDashboardReadCalls = () => {
 
 const useDashboardCalls = () => {
   const { activeChain } = useContext(DashboardContext);
-  const {configContracts} = useActiveChain();
+  const { configContracts } = useActiveChain();
   const earnContracts = CONTRACTS[activeChain?.id];
   const earnMainnetContracts = CONTRACTS[chain.arbitrum.id];
   const dashboardContracts: (typeof DASHBOARDCONTRACTS)[42161] =
@@ -361,7 +362,8 @@ const useDashboardCalls = () => {
       const multicallRes = await multicallv2(
         contracts,
         new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc'),
-        Config[42161].multicall      );
+        Config[42161].multicall
+      );
       const lpTokensCallLength = lpTokensCalls.length;
       const formattedRes = multicallRes.slice(0, -lpTokensCallLength);
 

@@ -1,15 +1,12 @@
-import { useAccount } from "wagmi";
-import {  IMarket, IToken } from "..";
-import MarketConfig from 'public/config.json';
-import { BetState, TradeInputs, useAheadTrades } from "@Hooks/useAheadTrades";
-import { atom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useMemo } from "react";
-import { usePastTradeQueryByFetch } from "./usePastTradeQueryByFetch";
-import axios from "axios";
-import { expiryPriceCache } from "./useTradeHistory";
-import { useUserAccount } from "@Hooks/useUserAccount";
-import { useActiveChain } from "@Hooks/useActiveChain";
-
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { IMarket, IToken } from '..';
+import { BetState, TradeInputs, useAheadTrades } from '@Hooks/useAheadTrades';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useMemo } from 'react';
+import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
+import axios from 'axios';
+import { expiryPriceCache } from './useTradeHistory';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -96,7 +93,7 @@ export interface IGQLHistory {
 
 export const usePastTradeQuery = () => {
   const { address: account } = useUserAccount();
-  const {configContracts} = useActiveChain();
+  const { configContracts } = useActiveChain();
   const setTrades = useSetAtom(tardesAtom);
   const setPageNumbers = useSetAtom(updateTotalPageNumber);
   const { active, history, cancelled } = useAtomValue(tardesPageAtom);
@@ -213,8 +210,8 @@ export const usePastTradeQuery = () => {
 
   const blockNumber = data?._meta?.block.number;
   const { data: trades } = useAheadTrades(blockNumber, account);
-  console.log("p=[aug]trades", trades, data);
-  useEffect(() =>  {
+  console.log('p=[aug]trades', trades, data);
+  useEffect(() => {
     let activeResponseArr = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])
       activeResponseArr = [
@@ -231,7 +228,7 @@ export const usePastTradeQuery = () => {
     activeResponseArr = getProcessedTrades(
       activeResponseArr,
       blockNumber,
-      trades?.["del"] || []
+      trades?.['del'] || []
     );
 
     let historyResponseArr = data?.historyTrades;
@@ -251,7 +248,6 @@ export const usePastTradeQuery = () => {
       true
     );
 
-
     setTrades({
       active: activeResponseArr?.filter((a) => a),
       history: historyResponseArr?.filter((a) => a),
@@ -263,6 +259,12 @@ export const usePastTradeQuery = () => {
         history: Math.ceil(data.historyLength.length / TRADESINAPAGE),
         cancelled: Math.ceil(data.cancelledLength.length / TRADESINAPAGE),
       });
+    else
+      setPageNumbers({
+        active: 0,
+        history: 0,
+        cancelled: 0,
+      });
   }, [
     data?.historyTrades,
     data?.activeTrades,
@@ -272,7 +274,7 @@ export const usePastTradeQuery = () => {
     data?.activeLength,
     data?.historyLength,
     data?.cancelledLength,
-
+    account,
     trades?.[BetState.active],
     trades?.[BetState.queued],
     trades?.fromBlock,

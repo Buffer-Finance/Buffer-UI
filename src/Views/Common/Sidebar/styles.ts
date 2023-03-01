@@ -1,6 +1,13 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes } from 'styled-components';
 
 const SidebarCSS = styled.div`
+  .bbborderrr {
+    padding-top: 15px;
+    padding-bottom: 10px;
+
+    border-top: 1px solid #4a4646;
+    border-bottom: 1px solid #4a4646;
+  }
   .collapse-icon {
     color: var(--text-1);
     display: none;
@@ -33,7 +40,7 @@ const SidebarCSS = styled.div`
     transition: 200ms ease-in;
     z-index: 1600;
     border-right: 2px solid var(--bg-8);
-    width: fit-content;
+    width: 50%;
     padding-bottom: calc(var(--top-banner-height) + 1.2rem);
     .icon_container {
       display: flex;
@@ -110,9 +117,9 @@ const SidebarCSS = styled.div`
       display: flex;
       /* background: var(--bg-17); */
       color: var(--text-6);
-      justify-content: flex-start;
+      justify-content: center;
       margin: auto;
-      width: 100%;
+      width: auto;
       padding: 1em 2rem;
       text-transform: capitalize;
       border-radius: 1.2rem;
@@ -120,9 +127,10 @@ const SidebarCSS = styled.div`
       align-items: center;
       /* font-family: "Inter", sans-serif; */
       font-weight: 400;
-      font-size: 1.4rem;
+      font-size: 16px;
       transition: 80ms ease;
-      margin-bottom: 0.3rem;
+      /* margin-bottom: 0.3rem; */
+      margin: 0 8px 3px 8px;
       &:hover {
         color: var(--text-blue);
       }
@@ -202,8 +210,8 @@ const SidebarCSS = styled.div`
 
   .sidebar_container {
     width: 100%;
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
+    /* padding-left: 0.8rem;
+    padding-right: 0.8rem; */
   }
   @media only screen and (min-width: 1200px) {
     .sidebar-closed {
@@ -266,7 +274,8 @@ const SidebarCSS = styled.div`
       top: 0;
       padding-top: 2rem;
       margin-top: 0 !important;
-      padding-left: 3rem !important;
+      justify-content: center !important;
+      /* padding-left: 3rem !important; */
       transform: translateX(-1rem);
       .buffer-logo {
         height: none;

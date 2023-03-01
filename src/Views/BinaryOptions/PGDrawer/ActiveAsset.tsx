@@ -18,13 +18,14 @@ import { useReadCall } from '@Utils/useReadCall';
 import BinaryOptionsABI from '../ABI/optionsABI.json';
 import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
 import { arbitrum } from 'wagmi/chains';
+import { PairTokenImage } from '../Components/PairTokenImage';
 
 export const chartReadyAtom = atom(false);
 const setDoccumentTitle = (title) => {
   document.title = title;
 };
 let boostedPayout = null;
-let fullPayout = null
+let fullPayout = null;
 
 export const ActiveAsset = () => {
   const qtInfo = useQTinfo();
@@ -48,13 +49,13 @@ export const ActiveAsset = () => {
     activeAssetStateHookData.payouts?.[
       activePoolObj?.options_contracts.current
     ];
-  if(response && fullPayout ){
-   let  base = subtract('100',multiply('2',divide(response,2)))
-boostedPayout = subtract(fullPayout,base);
+  if (response && fullPayout) {
+    let base = subtract('100', multiply('2', divide(response, 2)));
+    boostedPayout = subtract(fullPayout, base);
   }
 
   const title = currentPrice
-    ? toFixed(currentPrice, singleAsset.price_precision.toString().length) +
+    ? toFixed(currentPrice, singleAsset.price_precision.toString().length-1) +
       ' | ' +
       singleAsset.tv_id
     : '';
@@ -78,8 +79,10 @@ boostedPayout = subtract(fullPayout,base);
         <span className="text-f14 mb-2 ">Selected Pair</span>
       </div>
       <div className="px-5 py-3 rounded-[10px] y-auto bg-1  whitespace-nowrap">
-        <div className={`flex items-center content-between assets w-full`}>
-          <img className="assetImage mr-3 w-7" src={singleAsset.img} alt="" />
+        <div className={`flex items-center content-between assets w-full h-max`}>
+          <div className="min-w-[30px] w-[30px] h-[30px] mr-3">
+            <PairTokenImage pair={singleAsset.pair} />
+          </div>
           <div className="flex-col w-full items-stretch">
             <div className="w-full flex justify-between items-center text-1">
               <button
@@ -114,7 +117,7 @@ boostedPayout = subtract(fullPayout,base);
                 <NumberTooltip content={'Payout on winning'}>
                   <div className="text-1 text-f13 cursor-pointer">
                     {fullPayout ? '+' + fullPayout + '%' : 'loading...'}&nbsp;
-                    {boostedPayout && boostedPayout !== '0'? (
+                    {boostedPayout && boostedPayout !== '0' ? (
                       <span className="text-buffer-blue text-f12">
                         {'(' + boostedPayout + '% Boosted)'}
                       </span>
