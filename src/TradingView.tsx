@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   LatestPriceApiRes,
   Market2Kline,
@@ -45,7 +52,6 @@ import {
   tardesAtom,
 } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
-import { BetState } from '@Hooks/useAheadTrades';
 import { PRICE_DECIMALS } from '@Views/BinaryOptions/Tables/TableComponents';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
@@ -125,7 +131,6 @@ function drawPosition(
   visualized: any,
   chart: IChartWidgetApi
 ) {
-  console.log(`chart: `, chart);
   let vizIdentifiers = getVizIdentifier(option);
   const idx = visualized.indexOf(vizIdentifiers);
   const openTimeStamp = option.creationTime;
@@ -160,7 +165,6 @@ function drawPosition(
     .setPrice(optionPrice);
   // positions.current.push({ line, expiration: option.expirationTime });
 }
-
 
 export const TradingChart = ({ market }: { market: Markets }) => {
   const qtInfo = useQTinfo();
@@ -420,7 +424,6 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     };
   }, []);
   const syncTVwithWS = async () => {
-    console.log(`syncTVwithWScalled: `, syncTVwithWS);
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
     const activeResolution = realTimeUpdateRef.current?.resolution || '1m';
@@ -428,6 +431,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     let prevBar = lastSyncedKline?.current?.[key];
     if (!prevBar) return;
     const activeAssetStream = price[market];
+    console.log(`price: `, price);
     if (!activeAssetStream?.length) return;
     let aggregatedBar;
 
@@ -490,15 +494,13 @@ export const TradingChart = ({ market }: { market: Markets }) => {
   }, [visualized, activeTrades, chartReady]);
   const updatePositionTimeLeft = useCallback(() => {
     widgetRef.current?.save((d) => {
-      setDrawing(drawing=>{
+      setDrawing((drawing) => {
         return {
           ...drawing,
-          [market]:d
-        }
+          [market]: d,
+        };
       });
     });
-
-
 
     for (const trade in trade2visualisation.current) {
       if (trade2visualisation.current[+trade]?.visited) {
@@ -514,7 +516,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
         trade2visualisation.current[+trade]?.lineRef.setText(text);
       }
     }
-  },[]);
+  }, []);
   useEffect(() => {
     const interval = setInterval(updatePositionTimeLeft, 1000);
     return () => {

@@ -9,6 +9,7 @@ import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { activeAssetStateAtom, FavouriteAtom, IMarket, useQTinfo } from '..';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
 import { getFilteredAssets } from './Utils/getFilteredAssets';
+import { PairTokenImage } from '../Components/PairTokenImage';
 
 const colMapping = {
   0: 0,

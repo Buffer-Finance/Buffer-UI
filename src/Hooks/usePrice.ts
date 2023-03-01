@@ -9,7 +9,7 @@ export const  usePrice = ()=> {
       onMessage: (price) => {
         const priceUpdates = parsewsmsg(price.data);
         console.log(`priceUpdates: `,priceUpdates);
-        setPrice(priceUpdates);
+        setPrice(p=>({...p,...priceUpdates}));
       },
     });
   }

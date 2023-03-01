@@ -43,20 +43,24 @@ import { getErrorFromCode } from '@Utils/getErrorFromCode';
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
 interface IPGDesktopTables {
-  configData: IQTrade;
   className?: string;
-
+  isCancelledTable?: boolean;
+  count?: number;
+  currentPage: number;
+  isHistoryTable?: boolean;
   onPageChange?: (e: ChangeEvent, p: number) => void;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
-  configData,
+  isHistoryTable,
+  isCancelledTable,
   className,
+  currentPage,
+  count,
   onPageChange,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
-  const activeMarket = configData.activePair;
   const { active, history, cancelled } = useAtomValue(tardesAtom);
   const {
     active: activePages,
@@ -65,17 +69,13 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   } = useAtomValue(tardesTotalPageAtom);
   const { shouldConnectWallet } = useOpenConnectionDrawer();
 
-  const { state } = useGlobal();
-  const activeTab = state.tabs.activeIdx;
-  const isHistoryTable = activeTab === 'History';
-  const isCancelledTable = activeTab === 'Cancelled';
   const totalPages = useMemo(() => {
     if (isHistoryTable) {
       return historyPages;
     } else if (isCancelledTable) {
       return cancelledPages;
     } else return activePages;
-  }, [activePages, historyPages, cancelledPages, activeTab]);
+  }, [activePages, historyPages, cancelledPages]);
 
   const filteredData = useMemo(() => {
     if (isHistoryTable) {
@@ -83,7 +83,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
     } else if (isCancelledTable) {
       return cancelled;
     } else return active;
-  }, [activeTab, active, history]);
+  }, [active, history]);
 
   const headNameArray = useMemo(() => {
     if (isHistoryTable)
@@ -150,7 +150,6 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         if (isCancelledTable) return <TradeSize trade={currentRow} />;
         return (
           <ExpiryCurrentComponent
-            activeMarket={activeMarket}
             isHistoryTable={isHistoryTable}
             marketPrice={marketPrice}
             trade={currentRow}
@@ -237,7 +236,6 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
       case 6:
         return (
           <ProbabilityPNL
-            activeMarket={activeMarket}
             isHistoryTable={isHistoryTable || isCancelledTable}
             marketPrice={marketPrice}
             trade={currentRow}

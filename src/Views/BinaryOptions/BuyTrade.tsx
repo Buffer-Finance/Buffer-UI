@@ -1,4 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -59,20 +60,14 @@ const BuyTrade: React.FC<any> = ({}) => {
     }
   }, [account]);
   const knowTill = useAtomValue(knowTillAtom);
-  const { chain } = useNetwork();
-  const chains = getChains();
-  const { activeChain } = useActiveChain();
-  const activeChainName = activeChain?.name;
   const qtInfo = useQTinfo();
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const marketPrice = useAtomValue(priceAtom);
   const activeAsset = qtInfo?.activePair;
-  const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
   const isForex = activeAsset.category === 'Forex';
   // useIsMarketOpen();
   const isMarketOpen = knowTill.open && isForex;
   const allowance = divide(allowanceWei?.[0], activePoolObj.token.decimals);
-  console.log(`allowance: `,allowance,allowanceWei,activePoolObj.token.decimals);
   const isAssetActive =
     routerPermission &&
     routerPermission[activeAsset.pools[0].options_contracts.current];
@@ -86,107 +81,104 @@ const BuyTrade: React.FC<any> = ({}) => {
   return (
     <div>
       <div className="flex gap-3 my-3">
-          <AmountSelector {...{ amount, setAmount, activeAssetState }} />
-          <DurationSelector  />
+        <AmountSelector {...{ amount, setAmount, activeAssetState }} />
+        <DurationSelector />
       </div>
       {(currStats && currStats.max_loss && currStats.max_payout) ||
-        (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
-          <div className="flex-sbw text-f14 my-3 ">
-            <div className="f14  flex-start flex wrap text-2">
-              Payout :&nbsp;
-              <Display
-                className="text-1"
-                data={currStats.max_payout.toString()}
-                unit={activePoolObj.token.name}
-              />
-            </div>
-            <div className="f14 flex-start wrap flex text-2">
-              Profit :&nbsp;
-              <Display
-                className="text-1"
-                data={currStats.max_payout - currStats.max_loss}
-                unit={activePoolObj.token.name}
-              />{' '}
-            </div>
+      (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
+        <div className="flex-sbw text-f14 my-3 ">
+          <div className="f14  flex-start flex wrap text-2">
+            Payout :&nbsp;
+            <Display
+              className="text-1"
+              data={currStats.max_payout.toString()}
+              unit={activePoolObj.token.name}
+            />
           </div>
-        ) : (
-          <Skeleton
-            className="custom-h full-width sr lc mb3"
-            variant="rectangular"
-          />
-        )}
+          <div className="f14 flex-start wrap flex text-2">
+            Profit :&nbsp;
+            <Display
+              className="text-1"
+              data={currStats.max_payout - currStats.max_loss}
+              unit={activePoolObj.token.name}
+            />{' '}
+          </div>
+        </div>
+      ) : (
+        <Skeleton
+          className="custom-h full-width sr lc mb3"
+          variant="rectangular"
+        />
+      )}
       {
-          <ConnectionRequired>
-            <span>
-              {allowance == null || !activeAssetPrice ? (
-                <Skeleton className="h4 full-width sr lc mb3" />
-              ) : lt(allowance, amount.toString() || '0') ? (
-                <BlueBtn
-                  onClick={() => {
-                    account
-                      ? setIsApproveModalOpen(true)
-                      : openConnectModal?.();
-                  }}
-                >
-                  Approve
-                </BlueBtn>
-              ) : !isAssetActive ? (
-                <BlueBtn
-                  className="text-f13 text-1 text-center"
-                  isDisabled={true}
-                  onClick={() => {}}
-                >
-                  Trading is halted for this asset
-                </BlueBtn>
-              ) : (
-                <>
-                  <div className="flex gap-2">
-                    <GreenBtn
-                      onClick={UpHandler}
-                      isDisabled={isForex && !isMarketOpen}
-                      isLoading={
-                        loading &&
-                        typeof loading !== 'number' &&
-                        loading?.is_up === true
-                      }
-                      className="bg-green text-1  hover:brightness-125 !text-f20 !font-bold"
-                    >
-                      <>
-                        <UpIconWhite  className={'mr-[10px]'} />
-                        Up
-                      </>
-                    </GreenBtn>
-                    <RedBtn
-                      isDisabled={isForex && !isMarketOpen}
-                      isLoading={
-                        loading &&
-                        typeof loading !== 'number' &&
-                        loading?.is_up === false
-                      }
-                      onClick={DownHandler}
-                      className="!bg-red !text-1  hover:brightness-125 !text-f20 !font-bold"
-
-                    >
-                      <>
-                        <DownIconWhite className={'mr-[10px]'}  />
-                        Down
-                      </>
-                    </RedBtn>
-                  </div>
-                  <div
-                    className=" text-f13 mt-1 underline text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto"
-                    role={'button'}
-                    onClick={() =>
-                      !account ? openConnectModal?.() : handleApproveClick('0')
+        <ConnectionRequired>
+          <span>
+            {allowance == null || !activeAssetPrice ? (
+              <Skeleton className="h4 full-width sr lc mb3" />
+            ) : lt(allowance, amount.toString() || '0') ? (
+              <BlueBtn
+                onClick={() => {
+                  account ? setIsApproveModalOpen(true) : openConnectModal?.();
+                }}
+              >
+                Approve
+              </BlueBtn>
+            ) : !isAssetActive ? (
+              <BlueBtn
+                className="text-f13 text-1 text-center"
+                isDisabled={true}
+                onClick={() => {}}
+              >
+                Trading is halted for this asset
+              </BlueBtn>
+            ) : (
+              <>
+                <div className="flex gap-2">
+                  <GreenBtn
+                    onClick={UpHandler}
+                    isDisabled={isForex && !isMarketOpen}
+                    isLoading={
+                      loading &&
+                      typeof loading !== 'number' &&
+                      loading?.is_up === true
                     }
+                    className="bg-green text-1  hover:brightness-125 !text-f20 !font-bold"
                   >
-                    Revoke Approval
-                  </div>
-                </>
-              )}
-            </span>
-          </ConnectionRequired>
-        }
+                    <>
+                      <UpIconWhite className={'mr-[10px]'} />
+                      Up
+                    </>
+                  </GreenBtn>
+                  <RedBtn
+                    isDisabled={isForex && !isMarketOpen}
+                    isLoading={
+                      loading &&
+                      typeof loading !== 'number' &&
+                      loading?.is_up === false
+                    }
+                    onClick={DownHandler}
+                    className="!bg-red !text-1  hover:brightness-125 !text-f20 !font-bold"
+                  >
+                    <>
+                      <DownIconWhite className={'mr-[10px]'} />
+                      Down
+                    </>
+                  </RedBtn>
+                </div>
+                <div
+                  className=" text-f13 mt-1 underline text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto"
+                  role={'button'}
+                  onClick={() =>
+                    !account ? openConnectModal?.() : handleApproveClick('0')
+                  }
+                >
+                  Revoke Approval
+                </div>
+              </>
+            )}
+          </span>
+        </ConnectionRequired>
+      }
     </div>
   );
 };

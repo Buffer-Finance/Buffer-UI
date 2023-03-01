@@ -1,7 +1,7 @@
-import { ChangeEvent } from "react";
-import BufferDisclaimer from "@Views/Common/BufferDisclaimer";
-import { IQTrade } from "..";
-import PGDesktopTables from "./Desktop";
+import { ChangeEvent } from 'react';
+import BufferDisclaimer from '@Views/Common/BufferDisclaimer';
+import { IQTrade } from '..';
+import PGDesktopTables from './Desktop';
 
 interface IPGTables {
   configData: IQTrade;
@@ -20,7 +20,7 @@ const PGTables: React.FC<IPGTables> = ({
   onPageChange,
   currentPage,
   shouldFetchOldData,
-  isHistoryTable = false,
+  isHistoryTable,
 }) => {
   return (
     <>

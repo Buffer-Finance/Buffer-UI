@@ -13,14 +13,20 @@ import NFTtier from '../NFTtier';
 import LeaderboardTropy from '@Public/LeaderBoard/Trophy';
 import { Link } from 'react-router-dom';
 import { useAtom, useAtomValue } from 'jotai';
-import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
+import {
+  activeMarketFromStorageAtom,
+  mobileUpperBound,
+} from '@Views/BinaryOptions';
 
 interface INavbar {}
 
 export const Navbar: React.FC<INavbar> = () => {
   const { state, dispatch } = useGlobal();
-  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom)
-  const tabs = useMemo(() => getTabs(activeMarketFromStorage),[activeMarketFromStorage]);
+  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
+  const tabs = useMemo(
+    () => getTabs(activeMarketFromStorage),
+    [activeMarketFromStorage]
+  );
   const VISIBLETABS = 4;
   const handleClose = () => {
     dispatch({
@@ -34,12 +40,15 @@ export const Navbar: React.FC<INavbar> = () => {
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
         >
-          <BufferLogoComponent className="h-[30px] ml-[8px] sm:ml-[10px]" hideText />
+          <BufferLogoComponent
+            className="h-[30px] ml-[8px] sm:ml-[10px]"
+            hideText={window.innerWidth < mobileUpperBound}
+          />
         </div>
 
         <div className="tab:hidden flex gap-[6px] b1200:!hidden ">
           {tabs.slice(0, VISIBLETABS).map((tab, index) => {
-            if(tab.mobileOnly) return null;
+            if (tab.mobileOnly) return null;
             if (tab.isExternalLink) {
               return (
                 <button
@@ -93,8 +102,6 @@ export const Navbar: React.FC<INavbar> = () => {
           {/* <ChainDropdown /> */}
           <AccountDropdown />
         </div>
-
-    
       </div>
     </header>
   );

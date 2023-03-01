@@ -30,6 +30,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { getChains } from 'src/Config/wagmiClient';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { priceAtom } from '@Hooks/usePrice';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
@@ -69,12 +70,8 @@ export function CustomOption() {
     }
   }, [account]);
   const knowTill = useAtomValue(knowTillAtom);
-  const { chain } = useNetwork();
-  const chains = getChains();
-  const { activeChain } = useActiveChain();
-  const activeChainName = activeChain?.name;
   const qtInfo = useQTinfo();
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const marketPrice = useAtomValue(priceAtom);
   const activeAsset = qtInfo?.activePair;
   const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();

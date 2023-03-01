@@ -19,6 +19,10 @@ import BinaryOptionsABI from '../ABI/optionsABI.json';
 import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
 import { arbitrum } from 'wagmi/chains';
 import { PairTokenImage } from '../Components/PairTokenImage';
+import { priceAtom } from '@Hooks/usePrice';
+import { TVMarketSelector } from '../Favourites/TVMarketSelector';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@Contexts/Toast';
 
 export const chartReadyAtom = atom(false);
 const setDoccumentTitle = (title) => {
@@ -30,8 +34,9 @@ let fullPayout = null;
 export const ActiveAsset = () => {
   const qtInfo = useQTinfo();
   const singleAsset = qtInfo.activePair;
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const marketPrice = useAtomValue(priceAtom);
   const currentPrice = getPriceFromKlines(marketPrice, qtInfo.activePair);
+  console.log(`currentPrice: `, currentPrice);
   const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
@@ -56,20 +61,27 @@ export const ActiveAsset = () => {
   }
 
   const title = currentPrice
-    ? toFixed(currentPrice, singleAsset.price_precision.toString().length-1) +
+    ? toFixed(currentPrice, singleAsset.price_precision.toString().length - 1) +
       ' | ' +
       singleAsset.tv_id
     : '';
   console.log(`title: `, title);
   setDoccumentTitle(title);
+  const navigate = useNavigate();
+  const toastify = useToast();
   if (!singleAsset) return null;
   return (
     <AssetBackground className="relative min-w-full">
       {isOpen && (
         <>
           <Background>
-            <FavouriteAssetDD
-              setToggle={setIsOpen}
+            <TVMarketSelector
+              onMarketSelect={(m) =>
+                toastify({
+                  msg: 'Feature under developement. Please drive slow!',
+                  type: 'error',
+                })
+              }
               className="asset-dropdown-wrapper right-[0]"
             />
           </Background>
@@ -81,7 +93,9 @@ export const ActiveAsset = () => {
         <span className="text-f14 mb-2 ">Selected Pair</span>
       </div>
       <div className="px-5 py-3 rounded-[10px] y-auto bg-1  whitespace-nowrap">
-        <div className={`flex items-center content-between assets w-full h-max`}>
+        <div
+          className={`flex items-center content-between assets w-full h-max`}
+        >
           <div className="min-w-[30px] w-[30px] h-[30px] mr-3">
             <PairTokenImage pair={singleAsset.pair} />
           </div>

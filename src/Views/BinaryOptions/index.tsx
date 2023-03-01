@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import PGTables from './Tables';
 import BinaryDrawer from './PGDrawer';
 import { useGlobal } from '@Contexts/Global';
-import { Skeleton } from '@mui/material';
+import { Skeleton, useMediaQuery } from '@mui/material';
 import Favourites from './Favourites/Favourites';
 import BufferTab from '@Views/Common/BufferTab';
 import { Navbar } from './Components/Mobile/Navbar';
@@ -15,7 +15,7 @@ import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
-import { tradesCount } from './Tables/Desktop';
+import PGDesktopTables, { tradesCount } from './Tables/Desktop';
 import {
   tardesPageAtom,
   updateActivePageNumber,
@@ -366,3 +366,51 @@ export function WebOnly({ children }: { children: JSX.Element }) {
   if (window.innerWidth < mobileUpperBound) return null;
   return <>{children}</>;
 }
+
+export const ActiveTable = ({ width }) => {
+  const [, setActivePage] = useAtom(updateActivePageNumber);
+  const [{ active: activePage }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable onPageChange={(e, pageNumber) => setActivePage(pageNumber)} />
+  ) : (
+    <PGTables
+      currentPage={activePage}
+      count={tradesCount}
+      onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+    />
+  );
+};
+export const HistoryTable = ({ width }) => {
+  const [, setPageNumber] = useAtom(updateHistoryPageNumber);
+  const [{ history: historyPageNumber }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable
+      isHistoryTab
+      onPageChange={(e, pageNumber) => setPageNumber(pageNumber)}
+    />
+  ) : (
+    <PGDesktopTables
+      isHistoryTable
+      currentPage={historyPageNumber}
+      count={tradesCount}
+      onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+    />
+  );
+};
+export const CancelTable = ({ width }) => {
+  const [, setCancelPageNumber] = useAtom(updateCancelledPageNumber);
+  const [{ cancelled: canclledPage }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable
+      isCancelledTab
+      onPageChange={(e, pageNumber) => setCancelPageNumber(pageNumber)}
+    />
+  ) : (
+    <PGDesktopTables
+      currentPage={canclledPage}
+      count={tradesCount}
+      isCancelledTable
+      onPageChange={(e, pageNumber) => setCancelPageNumber(pageNumber)}
+    />
+  );
+};

@@ -4230,6 +4230,11 @@ acorn@^8.4.1, acorn@^8.5.0, acorn@^8.7.0, acorn@^8.8.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.2.tgz#1b2f25db02af965399b9776b0c2c391276d37c4a"
   integrity sha512-xjIYgE8HBrkpd/sJqOGNspf8uHG+NOHGOw6a/Urj8taM2EXfdNAH2oFcPeIFfsv3+kz/mJrS5VuMqbNLjCa2vw==
 
+add@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
+  integrity sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==
+
 aes-js@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.0.0.tgz#e21df10ad6c2053295bcbb8dab40b09dbea87e4d"
@@ -5572,6 +5577,11 @@ body-parser@^1.16.0:
     raw-body "2.5.2"
     type-is "~1.6.18"
     unpipe "1.0.0"
+
+body-scroll-lock@^3.0.1:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/body-scroll-lock/-/body-scroll-lock-3.1.5.tgz#c1392d9217ed2c3e237fee1e910f6cdd80b7aaec"
+  integrity sha512-Yi1Xaml0EvNA0OYWxXiYNqY24AfWkbA6w5vxE7GWxtKfzIbZM+Qw+aSmkgsbWzbHiy/RCSkUZBplVxTA+E4jJg==
 
 boolbase@^1.0.0:
   version "1.0.0"
@@ -14160,6 +14170,17 @@ rc@^1.0.1, rc@^1.1.6:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-bottom-drawer@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/react-bottom-drawer/-/react-bottom-drawer-0.1.1.tgz#6d54a44ec061c4c0734fecefe5bb8ce552b8d9f3"
+  integrity sha512-V2v2BAe/ZM22tuKyaFJEDBB4sCZdHkmi19p//gfFZpC1bInMVBxqbD8n00DteoXypIx199tG8Dkl0qyjm7P/Fg==
+  dependencies:
+    body-scroll-lock "^3.0.1"
+    clsx "^1.1.1"
+    lodash.debounce "^4.0.8"
+    react-swipeable "^5.5.1"
+    react-transition-group "^4.3.0"
 
 react-dom@^18.2.0:
   version "18.2.0"

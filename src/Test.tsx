@@ -8,95 +8,90 @@ import useWebSocket from 'react-use-websocket';
 import { Market2Prices, Markets } from './Types/Market';
 import { TradingChart } from './TradingView';
 import { usePrice } from '@Hooks/usePrice';
-import FlexLayout, { Layout } from 'flexlayout-react';
+import FlexLayout, { Layout, TabNode } from 'flexlayout-react';
 import { FavouriteAssetDD } from '@Views/BinaryOptions/Favourites/FavouriteAssetDD';
 import { TVMarketSelector } from '@Views/BinaryOptions/Favourites/TVMarketSelector';
 import { useToast } from '@Contexts/Toast';
 import { CustomOption } from '@Views/BinaryOptions/PGDrawer/CustomOption';
 import { Background } from '@Views/BinaryOptions/PGDrawer/style';
 import { ActiveAsset } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
+import PGTables from '@Views/BinaryOptions/Tables';
+import { ActiveTable, CancelTable, HistoryTable } from '@Views/BinaryOptions';
+import { usePastTradeQuery } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 
-const Test: React.FC<any> = ({}) => {
-  return (
-    <div className="flex flex-col ">
-      <TradingChart market="BTCUSD" />
-      <TradingChart market="ETHUSD" />
-    </div>
-  );
-};
 var json = {
-  global: { tabEnableClose: false },
-  borders: [
-    {
-      type: 'border',
-      location: 'bottom',
-      size: 100,
-      children: [
-        {
-          type: 'tab',
-          name: 'four',
-          component: 'text',
-        },
-      ],
-    },
-    {
-      type: 'border',
-      location: 'left',
-      size: 100,
-      children: [],
-    },
-  ],
+  global: { tabEnableClose: true },
+
   layout: {
     type: 'row',
     weight: 100,
     children: [
       {
-        type: 'tabset',
-        weight: 50,
-        selected: 0,
+        type: 'row',
+        weight: 1000,
         children: [
           {
-            type: 'tab',
-            name: 'ETHUSD',
-            id: 'ETHUSD',
-            component: 'TradingView',
+            type: 'tabset',
+            weight: 50,
+            selected: 0,
+            id: 'charts',
+            children: [
+              {
+                type: 'tab',
+                name: 'BTCUSD',
+                id: 'BTCUSD',
+                enableClose: false,
+                component: 'TradingView',
+              },
+            ],
           },
           {
-            type: 'tab',
-            name: '+',
-            component: 'AddButton',
+            type: 'tabset',
+            weight: 50,
+            selected: 0,
+            children: [
+              {
+                type: 'tab',
+                name: 'Active',
+                id: 'ActiveTable',
+                component: 'ActiveTable',
+                enableClose: false,
+              },
+              {
+                type: 'tab',
+                name: 'History',
+                id: 'HistoryTable',
+                component: 'HistoryTable',
+                enableClose: false,
+              },
+              {
+                type: 'tab',
+                name: 'Cancelled',
+                id: 'CancelledTable',
+                component: 'CancelledTable',
+                enableClose: false,
+              },
+            ],
           },
         ],
       },
       {
-        type: 'tabset',
-        weight: 50,
-        selected: 0,
+        type: 'row',
+        weight: 250,
         children: [
           {
-            type: 'tab',
-            name: 'GBPUSD',
-            id: 'GBPUSD',
-            component: 'TradingView',
-          },
-          {
-            type: 'tab',
-            name: 'BuyTrade',
-            id: 'BuyTrade',
-            component: 'BuyTrade',
-          },
-        ],
-      },
-      {
-        type: 'tabset',
-        weight: 50,
-        selected: 0,
-        children: [
-          {
-            type: 'tab',
-            name: 'BTCUSD',
-            id: 'BTCUSD',
-            component: 'TradingView',
+            type: 'tabset',
+            weight: 50,
+            selected: 0,
+            children: [
+              {
+                type: 'tab',
+                name: 'Trade',
+                id: 'BuyTrade',
+                component: 'BuyTrade',
+                enableClose: false,
+              },
+            ],
           },
         ],
       },
@@ -109,11 +104,13 @@ const Man = () => {
   const [layout, setLayout] = useState(FlexLayout.Model.fromJson(json));
   const toastify = useToast();
   usePrice();
-  const factory = (node) => {
+  usePastTradeQuery();
+
+  const factory = (node: TabNode) => {
     var component = node.getComponent();
     console.log(`component: `, component);
     if (component === 'TradingView') {
-      return <TradingChart market={node.getName()} />;
+      return <TradingChart market={node.getName() as Markets} />;
     }
     if (component === 'AddButton') {
       return (
@@ -130,6 +127,17 @@ const Man = () => {
           <CustomOption />
         </Background>
       );
+    }
+    const rect = node.getRect();
+    console.log(` rect: `, rect);
+    if (component === 'ActiveTable') {
+      return <ActiveTable width={rect.width} />;
+    }
+    if (component === 'HistoryTable') {
+      return <HistoryTable width={rect.width} />;
+    }
+    if (component === 'CancelledTable') {
+      return <CancelTable width={rect.width} />;
     }
   };
   function handleNewTabClick(market: string) {
@@ -161,6 +169,28 @@ const Man = () => {
         ref={layoutRef}
         model={layout}
         factory={factory}
+        onRenderTab={(d, v) => {
+          // v.buttons.p
+        }}
+        onRenderTabSet={(d, v) => {
+          if (d.getId() === 'charts') {
+            v.stickyButtons.push(
+              <button
+                className="text-f22"
+                onClick={() => {
+                  layoutRef.current!.addTabToTabSet('charts', {
+                    type: 'tab',
+                    name: 'Add Chart',
+                    component: 'AddButton',
+                    id: 'dd',
+                  });
+                }}
+              >
+                +
+              </button>
+            );
+          }
+        }}
       />
     </>
   );
