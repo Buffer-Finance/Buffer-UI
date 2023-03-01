@@ -273,7 +273,7 @@ export const Weekly = () => {
           value={activeTab}
           childComponents={[
             <DailyWebTable
-              res={tableData.winnerPnl}
+              standings={tableData.winnerPnl}
               count={totalPages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
@@ -285,7 +285,7 @@ export const Weekly = () => {
             <DailyWebTable
               activePage={activePages.arbitrum}
               userRank={loserUserRank}
-              res={tableData.loserPnl}
+              standings={tableData.loserPnl}
               count={totalPages.arbitrum}
               onpageChange={setActivePageNumber}
               userData={data?.userData}
@@ -295,7 +295,7 @@ export const Weekly = () => {
             <DailyWebTable
               activePage={activePages.arbitrum}
               userRank={winnerWinrateUserRank}
-              res={tableData.winnerWinRate}
+              standings={tableData.winnerWinRate}
               count={tableData.winnerWinRate.length}
               onpageChange={setActivePageNumber}
               userData={data?.userData}

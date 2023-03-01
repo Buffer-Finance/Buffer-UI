@@ -233,7 +233,7 @@ export const Incentivised = () => {
           value={activeTab}
           childComponents={[
             <DailyWebTable
-              res={tableData}
+              standings={tableData}
               count={totalPages.arbitrum}
               activePage={activePages.arbitrum}
               onpageChange={setActivePageNumber}
@@ -243,7 +243,7 @@ export const Incentivised = () => {
               userRank={winnerUserRank}
             />,
             <DailyWebTable
-              res={loserStats}
+              standings={loserStats}
               count={totalPages.arbitrum}
               activePage={activePages.arbitrum}
               onpageChange={setActivePageNumber}
