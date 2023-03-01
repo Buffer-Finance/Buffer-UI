@@ -110,7 +110,7 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
     <Card
-      top={'Total Stats'}
+      top={'Trading Overview'}
       middle={
         <TableAligner
           keyStyle={keyClasses}
@@ -120,6 +120,7 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
             'USDC Fees / Volume',
             'Total Traders',
             'Average Trade size',
+            'USDC fees / Volume (24h)',
           ]}
           values={[
             // <div className={wrapperClasses}>

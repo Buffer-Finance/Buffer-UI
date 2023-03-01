@@ -38,9 +38,9 @@ const descStyles = 'mx-3';
 
 export const Dashboard = () => {
   const { activeChain } = useActiveChain();
-  useEffect(()=>{
-    document.title = "Buffer | Dashboard"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Dashboard';
+  }, []);
   return (
     <DashboardContextProvider value={{ activeChain }}>
       <main className="content-drawer">
@@ -60,9 +60,13 @@ const DashboardPage = () => {
     <DashboardStyles>
       <Section
         Heading={<div className={topStyles}>Stats</div>}
-        subHeading={<div className={descStyles}>Arbitrum Total Stats (since 30th Jan, 2023)</div>}
+        subHeading={
+          <div className={descStyles}>
+            Arbitrum Total Stats (since 30th Jan, 2023)
+          </div>
+        }
         Cards={[
-          <StatsOverView data={overView} />,
+          // <StatsOverView data={overView} />,
           <StatsTotalStats data={total} />,
         ]}
       />{' '}
