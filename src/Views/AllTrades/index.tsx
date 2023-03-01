@@ -37,8 +37,8 @@ const AllTrades = () => {
     changeActiveTab(null, 0);
   }, []);
 
-  const navigateToProfile = (address: string | undefined) => {
-    if (address === undefined) return;
+  const navigateToProfile = (address: string | undefined | null) => {
+    if (address === undefined || address === null) return;
     navigate(`/profile?user_address=${address}`);
   };
 
