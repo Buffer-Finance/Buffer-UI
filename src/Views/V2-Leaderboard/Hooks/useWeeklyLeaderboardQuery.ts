@@ -1,12 +1,9 @@
 import axios from 'axios';
 import { baseGraphqlUrl, isTestnet } from 'config';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { useSetAtom } from 'jotai';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add } from '@Utils/NumString/stringArithmatics';
-import { updateLeaderboardTotalPageAtom } from '../atom';
-import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
@@ -52,7 +49,6 @@ export const blockedAccounts = [
 
 const winrateMinimumTrades = 10;
 export const useWeeklyLeaderboardQuery = () => {
-  const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
   const { week } = useWeekOfTournament();
@@ -162,19 +158,6 @@ export const useWeeklyLeaderboardQuery = () => {
       refreshInterval: 300,
     }
   );
-
-  useEffect(() => {
-    //sets total number of pages in arbiturm testnet page
-    if (data && data.userStats && data.userStats.length > 0) {
-      setTablePages({
-        arbitrum: Math.ceil(data.userStats.length / ROWINAPAGE),
-      });
-    } else {
-      setTablePages({
-        arbitrum: 0,
-      });
-    }
-  }, [data?.userStats]);
 
   const winnerUserRank = useMemo(() => {
     if (!data || !data.userStats || !account) return '-';
