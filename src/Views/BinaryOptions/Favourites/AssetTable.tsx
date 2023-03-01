@@ -7,10 +7,8 @@ import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { activeAssetStateAtom, FavouriteAtom, IMarket, useQTinfo } from '..';
-import { getFilteredAssets } from './Utils/getFilteredAssets';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
-import { LastDayChange } from './LastDayChange';
-import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
+import { getFilteredAssets } from './Utils/getFilteredAssets';
 
 const colMapping = {
   0: 0,
@@ -22,14 +20,24 @@ const colMapping = {
 export const AssetTable: React.FC<{
   assetsArray: IMarket[];
   activeCategory: string;
+  onMarketSelect: (a: string) => void;
   searchText: string;
-}> = ({ assetsArray, activeCategory, searchText }) => {
-  const qtInfo = useQTinfo();
+  catagories: string[];
+}> = ({
+  assetsArray,
+  activeCategory,
+  searchText,
+  catagories,
+  onMarketSelect,
+}) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 600;
   const [favourites, setFavourites] = useAtom(FavouriteAtom);
-  const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
-  const updatedArr = getFilteredAssets(assetsArray, searchText, activeCategory);
-  const { activePoolObj } = useActivePoolObj();
+  const updatedArr = getFilteredAssets(
+    assetsArray,
+    searchText,
+    activeCategory,
+    catagories
+  );
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
 
   const headers = useMemo(() => {
@@ -130,11 +138,11 @@ export const AssetTable: React.FC<{
 
   return (
     <BufferTable
-      overflow
       widths={['10%', 'auto', 'auto', 'auto']}
       headerJSX={HeadFormatter}
       cols={headers.length}
       shouldShowMobile
+      className="h-[100%]"
       rows={BodyArr.length}
       tableClass={'!w-full'}
       bodyJSX={BodyFormatter}
@@ -147,13 +155,10 @@ export const AssetTable: React.FC<{
       }
       v1
       isBodyTransparent
-      selectedIndex={BodyArr.findIndex(
-        (asset) => qtInfo.activePair.pair === asset.pair
-      )}
       onRowClick={(rowNumber) => {
         const selectedAsset = BodyArr[rowNumber];
-        addCardHandler(selectedAsset);
-        replaceAssetHandler(selectedAsset.pair, false);
+        onMarketSelect(selectedAsset.tv_id);
+        console.log(`selectedAsset: `, selectedAsset.tv_id);
       }}
     />
   );

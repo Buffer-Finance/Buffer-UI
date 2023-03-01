@@ -1,6 +1,6 @@
 import { Display } from '@Views/Common/Tooltips/Display';
 import Config from 'public/config.json';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 const initD = ['800123.32', '22313.2312', '312312.11', '32131123.231'];
 const Decd = ['800123.31', '22313.2311', '312312.10', '32131123.230'];
 import { atom, useAtomValue, useSetAtom } from 'jotai';
@@ -8,7 +8,13 @@ import useWebSocket from 'react-use-websocket';
 import { Market2Prices, Markets } from './Types/Market';
 import { TradingChart } from './TradingView';
 import { usePrice } from '@Hooks/usePrice';
-import FlexLayout from 'flexlayout-react';
+import FlexLayout, { Layout } from 'flexlayout-react';
+import { FavouriteAssetDD } from '@Views/BinaryOptions/Favourites/FavouriteAssetDD';
+import { TVMarketSelector } from '@Views/BinaryOptions/Favourites/TVMarketSelector';
+import { useToast } from '@Contexts/Toast';
+import { CustomOption } from '@Views/BinaryOptions/PGDrawer/CustomOption';
+import { Background } from '@Views/BinaryOptions/PGDrawer/style';
+import { ActiveAsset } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
 
 const Test: React.FC<any> = ({}) => {
   return (
@@ -52,7 +58,13 @@ var json = {
           {
             type: 'tab',
             name: 'ETHUSD',
+            id: 'ETHUSD',
             component: 'TradingView',
+          },
+          {
+            type: 'tab',
+            name: '+',
+            component: 'AddButton',
           },
         ],
       },
@@ -64,7 +76,14 @@ var json = {
           {
             type: 'tab',
             name: 'GBPUSD',
+            id: 'GBPUSD',
             component: 'TradingView',
+          },
+          {
+            type: 'tab',
+            name: 'BuyTrade',
+            id: 'BuyTrade',
+            component: 'BuyTrade',
           },
         ],
       },
@@ -76,6 +95,7 @@ var json = {
           {
             type: 'tab',
             name: 'BTCUSD',
+            id: 'BTCUSD',
             component: 'TradingView',
           },
         ],
@@ -85,31 +105,75 @@ var json = {
 };
 
 const Man = () => {
+  const layoutRef = useRef<Layout | null>(null);
   const [layout, setLayout] = useState(FlexLayout.Model.fromJson(json));
+  const toastify = useToast();
   usePrice();
   const factory = (node) => {
     var component = node.getComponent();
-    console.log(`component: `,component);
+    console.log(`component: `, component);
     if (component === 'TradingView') {
       return <TradingChart market={node.getName()} />;
     }
+    if (component === 'AddButton') {
+      return (
+        <TVMarketSelector
+          className="asset-dropdown-wrapper !h-[100%] !justify-start "
+          onMarketSelect={handleNewTabClick}
+        />
+      );
+    }
+    if (component === 'BuyTrade') {
+      return (
+        <Background className="bg-2">
+          <ActiveAsset />
+          <CustomOption />
+        </Background>
+      );
+    }
   };
+  function handleNewTabClick(market: string) {
+    console.log(`market: `, market);
+    try {
+      layoutRef.current!.addTabToActiveTabSet({
+        type: 'tab',
+        name: market,
+        component: 'TradingView',
+        id: market,
+      });
+    } catch (e) {
+      toastify({
+        msg: market + ' is already opened in different tab',
+        type: 'error',
+        id: e,
+      });
+      console.log('action', e);
+    }
+  }
 
+  return (
+    <>
+      <FlexLayout.Layout
+        onAction={(p) => {
+          console.log('action', p);
+          return p;
+        }}
+        ref={layoutRef}
+        model={layout}
+        factory={factory}
+      />
+    </>
+  );
 
-  return <FlexLayout.Layout model={layout} factory={factory}
-  
-  
   // onRenderTab={(node,arr)=>{
   //   console.log(`arr: `,arr);
   //   console.log(`node: `,node);
   //   arr.buttons.push(<Tab></Tab>)
   // }}
-  />;
 };
-
 
 export const priceAtom = atom<Partial<Market2Prices>>({});
 export { Man as Test };
-const Tab = ()=>{
-  <div>Hello i am a tab</div>
-}
+const Tab = () => {
+  <div>Hello i am a tab</div>;
+};

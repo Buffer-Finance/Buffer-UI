@@ -11,28 +11,19 @@ import { getAssetTypes } from './getAssetTypes';
 export function getFilteredAssets(
   assets: IMarket[],
   searchText: string,
-  category: string
-  // AssetTypes: string[]
+  category: string,
+  AssetTypes: string[]
 ) {
-  const qtInfo = useQTinfo();
-  const AssetTypes = getAssetTypes(qtInfo.pairs);
   const [favourites] = useAtom(FavouriteAtom);
-  const { activePoolObj } = useActivePoolObj();
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
 
-  let filteredAssets: IMarket[] = [];
+  let filteredAssets: IMarket[] = assets;
   if (!!searchText && searchText !== '')
     filteredAssets = assets.filter(
       (asset) =>
-        asset.pair.toLowerCase().includes(searchText.toLowerCase()) &&
-        routerPermission &&
-        routerPermission[asset.pools[0].options_contracts.current]
-    );
-  else {
-    filteredAssets = assets.filter(
-      (asset) => routerPermission[asset.pools[0].options_contracts.current]
-    );
-  }
+      asset.pair.toLowerCase().includes(searchText.toLowerCase())
+      );
+      console.log(`filteredAssets: `,filteredAssets);
+    console.log(`category: `,category);
   switch (category) {
     case AssetTypes[0]:
       return filteredAssets.filter((asset) => favourites.includes(asset.tv_id));
