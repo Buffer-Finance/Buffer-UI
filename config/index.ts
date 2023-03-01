@@ -37,9 +37,9 @@ export const baseGraphqlLiteUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
     ? {
         sandbox:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy-v2',
         testnet:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy-v2',
       }
     : {
         sandbox:
