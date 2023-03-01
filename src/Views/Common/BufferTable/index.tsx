@@ -1,4 +1,4 @@
-import Background from "./style";
+import Background from './style';
 import {
   Skeleton,
   Table,
@@ -8,12 +8,12 @@ import {
   TableRow,
   TableContainer,
   TableSortLabel,
-} from "@mui/material";
-import { createArray } from "@Utils/JSUtils/createArray";
-import { ChangeEvent, ReactNode } from "react";
-import BasicPagination from "../pagination";
+} from '@mui/material';
+import { createArray } from '@Utils/JSUtils/createArray';
+import { ChangeEvent, ReactNode } from 'react';
+import BasicPagination from '../pagination';
 const BufferTableRow = ({ children, onClick, className }) => (
-  <TableRow className={"table-row " + className} onClick={onClick}>
+  <TableRow className={'table-row ' + className} onClick={onClick}>
     {children}
   </TableRow>
 );
@@ -80,10 +80,10 @@ const BufferTable: React.FC<IBufferTable> = ({
   shouldShowTroply = true,
   highlightIndexs,
 }) => {
-  let rowClass = "";
-  let tableCellCls = "table-cell";
-  if (smHeight) tableCellCls += " sm";
-  if (doubleHeight) tableCellCls += " double-height";
+  let rowClass = '';
+  let tableCellCls = 'table-cell';
+  if (smHeight) tableCellCls += ' sm';
+  if (doubleHeight) tableCellCls += ' double-height';
   if (rows > 100) {
     rows = 100;
   }
@@ -93,23 +93,27 @@ const BufferTable: React.FC<IBufferTable> = ({
       className={`${className} 
     
     
-    ${shouldShowMobile ? "" : "tab-none"}
+    ${shouldShowMobile ? '' : 'tab-none'}
     `}
     >
-      <TableContainer sx={{ height: overflow ? 300 : "100%" }}>
+      <TableContainer sx={{ height: overflow ? 300 : '100%' }}>
         <Table
           stickyHeader
           className={`${tableClass} table ${
-            shouldShowMobile ? "" : "tab-none"
+            shouldShowMobile ? '' : 'tab-none'
           } `}
           aria-label="buffer-table"
         >
           <TableHead
-            className={`table-header ${shouldHideHeader ? "tab" : ""} `}
+            className={`table-header ${shouldHideHeader ? 'tab' : ''} `}
           >
             <TableRow className={`table-row-head`}>
               {createArray(cols).map((idx) => {
-                return <TableCell key={idx}>{headerJSX(idx)}</TableCell>;
+                return (
+                  <TableCell key={idx} className="!z-20">
+                    {headerJSX(idx)}
+                  </TableCell>
+                );
               })}
             </TableRow>
           </TableHead>
@@ -119,7 +123,7 @@ const BufferTable: React.FC<IBufferTable> = ({
             {loading ? (
               <TableRow
                 className={`table-row skel ${rowClass} ${
-                  isBodyTransparent ? "transparent transparent-hover" : ""
+                  isBodyTransparent ? 'transparent transparent-hover' : ''
                 }`}
               >
                 <TableCell className="skel-cell" colSpan={100}>
@@ -130,26 +134,26 @@ const BufferTable: React.FC<IBufferTable> = ({
               <></>
             ) : rows ? (
               createArray(rows).map((row, rowIdx) => {
-                let rowClass = "";
+                let rowClass = '';
                 if (selectedIndex === rowIdx) {
-                  rowClass = "active";
+                  rowClass = 'active';
                 } else if (
                   selectedIndex !== null &&
                   selectedIndex !== undefined
                 ) {
-                  rowClass = "blured";
+                  rowClass = 'blured';
                 }
                 if (highlightIndexs && highlightIndexs.length) {
                   for (let i of highlightIndexs) {
                     if (row === i) {
-                      rowClass = "highlight";
+                      rowClass = 'highlight';
                     }
                   }
                 }
                 if (bluredIndexes && bluredIndexes.length) {
                   for (let i of bluredIndexes) {
                     if (row === i) {
-                      rowClass = "blured";
+                      rowClass = 'blured';
                     }
                   }
                 }
@@ -157,7 +161,7 @@ const BufferTable: React.FC<IBufferTable> = ({
                   <TableRow
                     key={row}
                     className={`table-row ${rowClass} ${
-                      isBodyTransparent ? "transparent transparent-hover" : ""
+                      isBodyTransparent ? 'transparent transparent-hover' : ''
                     }`}
                     onClick={() => onRowClick(row)}
                   >
@@ -166,7 +170,7 @@ const BufferTable: React.FC<IBufferTable> = ({
                         key={row.toString() + colIdx}
                         className={tableCellCls}
                         width={
-                          widths && colIdx < widths.length ? widths[colIdx] : ""
+                          widths && colIdx < widths.length ? widths[colIdx] : ''
                         }
                       >
                         {bodyJSX(row, col)}
@@ -178,7 +182,7 @@ const BufferTable: React.FC<IBufferTable> = ({
             ) : (
               <TableRow
                 className={`table-row ${rowClass}  disable-animation ${
-                  isBodyTransparent ? "transparent" : ""
+                  isBodyTransparent ? 'transparent' : ''
                 }`}
               >
                 <TableCell className={tableCellCls} colSpan={100}>

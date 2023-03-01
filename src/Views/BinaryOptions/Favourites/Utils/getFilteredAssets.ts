@@ -5,7 +5,6 @@ import {
   IMarket,
   useQTinfo,
 } from '@Views/BinaryOptions';
-import { useActivePoolObj } from '@Views/BinaryOptions/PGDrawer/PoolDropDown';
 import { getAssetTypes } from './getAssetTypes';
 
 export function getFilteredAssets(

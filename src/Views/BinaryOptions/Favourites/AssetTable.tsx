@@ -56,11 +56,8 @@ export const AssetTable: React.FC<{
   let BodyArr = updatedArr;
 
   const BodyFormatter = (row: number, col: number) => {
+    if (!BodyArr) return <></>;
     const currentAsset: IMarket = BodyArr[row];
-
-    if (isMobile) {
-      col = colMapping[col];
-    }
     const isFavourite = favourites.find(
       (favourite) => currentAsset.tv_id === favourite
     );
@@ -70,22 +67,14 @@ export const AssetTable: React.FC<{
           <CellContent
             content={[
               <div className="flex">
-                <img
-                  src={currentAsset.img}
-                  alt="AssetLogo"
-                  className="width20 height20 mr-3"
-                />
-                <div className="text-1">{currentAsset.pair}</div>
+                <div className="w-[20px] h-[20px]">
+                  <PairTokenImage pair={currentAsset.pair} />
+                </div>
+                <div className="text-1 ml-3">{currentAsset.pair}</div>
               </div>,
             ]}
           />
         );
-      // case 2:
-      //   return (
-      //     <CellContent
-      //       content={[<LastDayChange currentAsset={currentAsset} />]}
-      //     />
-      //   );
       case 2:
         return (
           <CellContent
@@ -109,7 +98,6 @@ export const AssetTable: React.FC<{
           <CellContent
             content={[
               <div className="text-1 flex items-center justify-center ">
-                {/* <div className="mr3">{currentAsset.payout_range}</div> */}
                 <IconButton
                   onClick={(e) => {
                     e.stopPropagation();
@@ -153,9 +141,11 @@ export const AssetTable: React.FC<{
           shouldShowWalletMsg={false}
         />
       }
+      loading={!BodyArr}
       v1
       isBodyTransparent
       onRowClick={(rowNumber) => {
+        if (!BodyArr) return;
         const selectedAsset = BodyArr[rowNumber];
         onMarketSelect(selectedAsset.tv_id);
         console.log(`selectedAsset: `, selectedAsset.tv_id);

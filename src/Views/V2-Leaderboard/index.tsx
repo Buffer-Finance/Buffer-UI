@@ -1,6 +1,7 @@
 import { HeadTitle } from '@Views/Common/TitleHead';
+import { Outlet } from 'react-router-dom';
 import { LeaderBoardDrawers } from './drawers';
-import { LeaderBoardSidebar } from './Sidebar';
+import { LeaderBoardSidebar, MobileLeaderboardDropdwon } from './Sidebar';
 import { LeaderBoardStyles } from './style';
 
 export const LeaderBoard = (props: { children: JSX.Element }) => {
@@ -8,7 +9,7 @@ export const LeaderBoard = (props: { children: JSX.Element }) => {
     <main className="content-drawer">
       <HeadTitle title={'Buffer | Competitions'} />
       <LeaderBoardStyles>
-        {/* <MobileLeaderboardDropdwon /> */}
+        <MobileLeaderboardDropdwon />
         <LeaderBoardSidebar />
         {props.children}
       </LeaderBoardStyles>
@@ -25,3 +26,7 @@ export function getPageNumber(router: any) {
   const page = router.asPath.split('=')[1];
   return +page;
 }
+
+export const LeaderBoardOutlet = () => {
+  return <Outlet />;
+};

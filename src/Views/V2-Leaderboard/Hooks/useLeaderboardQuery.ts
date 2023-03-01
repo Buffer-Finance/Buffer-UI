@@ -8,8 +8,8 @@ import { add } from '@Utils/NumString/stringArithmatics';
 import { updateLeaderboardTotalPageAtom } from '../atom';
 import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
-import { useDayOffset } from '../Components/ContestFilterDD';
 import { useDayOfTournament } from './useDayOfTournament';
+import { useDayOffset } from './useDayOffset';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -41,7 +41,7 @@ export const useLeaderboardQuery = () => {
   const minimumTrades = isTestnet ? 5 : 3;
 
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-offset-${offset}-account-${account}`,
+    `leaderboard-arbi-offset-${offset}-account-${account}-daily`,
     {
       fetcher: async () => {
         const leaderboardQuery = `
@@ -108,6 +108,10 @@ export const useLeaderboardQuery = () => {
     if (data && data.userStats && data.userStats.length > 0) {
       setTablePages({
         arbitrum: Math.ceil(data.userStats.length / ROWINAPAGE),
+      });
+    } else {
+      setTablePages({
+        arbitrum: 0,
       });
     }
   }, [data?.userStats]);
