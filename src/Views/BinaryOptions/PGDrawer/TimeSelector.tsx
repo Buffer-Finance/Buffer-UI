@@ -5,7 +5,7 @@ import ErrorIcon from 'src/SVG/Elements/ErrorIcon';
 import BN from 'bn.js';
 import Big from 'big.js';
 import { useToast } from '@Contexts/Toast';
-import { add, lt } from '@Utils/NumString/stringArithmatics';
+import { add, gt, lt } from '@Utils/NumString/stringArithmatics';
 import { PoolDropDown } from './PoolDropDown';
 
 const TimeSelectorStyles = styled.div`
@@ -117,10 +117,13 @@ export function getUserError(maxTimeInHHMM: string) {
   let minutes = maxTimeInHHMM.toString().split(':')[1];
   if (hours.charAt(0) == '0') hours = hours.charAt(1);
   if (minutes.charAt(0) == '0') minutes = minutes.charAt(1);
-  let message;
-  if (minutes == '0') return `${hours} hours`;
-  else if (hours == '0') return `${minutes} minutes`;
-  else return `${hours} hours ${minutes} minutes`;
+  if (minutes == '0') return `${hours} hour${gt(hours, '1') ? 's' : ''}`;
+  else if (hours == '0')
+    return `${minutes} minute${gt(minutes, '1') ? 's' : ''}`;
+  else
+    return `${hours} hour${gt(hours, '1') ? 's' : ''} ${minutes} minute${
+      gt(minutes, '1') ? 's' : ''
+    }`;
 }
 
 // Add two times in hh:mm format
