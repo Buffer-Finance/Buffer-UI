@@ -9,4 +9,5 @@ export const endDay: endTimestampObj = {};
 
 export const winRateStart: endTimestampObj = {
   42161: 2,
+  421613: 2,
 };
