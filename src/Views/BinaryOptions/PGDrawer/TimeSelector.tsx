@@ -223,9 +223,7 @@ export const TimeSelector = ({
     if (isTimeSelector) {
       currentTime = hrsRef.current.value + ':' + minRef.current.value;
       if (isBack) {
-        if (currentTimeInMins > timeToMins('00:05')) {
-          setTime(subtractTImes(currentTime, '00:01'));
-        }
+        setTime(subtractTImes(currentTime, '00:01'));
       } else if (currentTimeInMins < timeToMins('23:59')) {
         setTime(addTimes(currentTime, '00:01'));
       }
