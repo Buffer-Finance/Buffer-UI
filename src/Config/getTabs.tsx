@@ -332,8 +332,8 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: `/history`,
-        name: 'History',
+        to: `/faucet`,
+        name: 'Faucet',
         subTabs: [],
         isExternalLink: false,
       },
@@ -349,12 +349,7 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-      {
-        to: `/faucet`,
-        name: 'Faucet',
-        subTabs: [],
-        isExternalLink: false,
-      },
+
       {
         to: `/leaderboard/weekly`,
         name: 'Competitions',
@@ -398,7 +393,7 @@ export const getMobileTabs = (
       },
       {
         to: `/history`,
-        name: 'History',
+        name: 'Activity',
         subTabs: [],
         isExternalLink: false,
         icon: TabIcon.History,
@@ -507,7 +502,7 @@ export const getMobileTabs = (
       },
       {
         to: `/history`,
-        name: 'History',
+        name: 'Activity',
         subTabs: [],
         isExternalLink: false,
         icon: TabIcon.History,
