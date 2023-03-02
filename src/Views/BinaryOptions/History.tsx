@@ -1,3 +1,4 @@
+import { useGenericHooks } from '@Hooks/useGenericHook';
 import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
 import { useAtom } from 'jotai';
 import { ReactNode, useState } from 'react';
@@ -16,25 +17,23 @@ const History: React.FC<IHistory> = ({}) => {
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
   usePastTradeQuery();
+  useGenericHooks();
   const [active, setActive] = useState(tabs[0]);
   return (
     <div className="text-f22">
-      <MobileTabs
-        {...{ active, setActive ,tabs}}
-      ></MobileTabs>
+      <MobileTabs {...{ active, setActive, tabs }}></MobileTabs>
       <HorizontalTransition value={tabs.indexOf(active)}>
-
-      <MobileTable
-        onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
-      />
-      <MobileTable
-        isHistoryTab
-        onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
-      />
-      <MobileTable
-                          isCancelledTab
-                          onPageChange={(e, pageNumber) => setCancelledPage(pageNumber)}
-      />
+        <MobileTable
+          onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+        />
+        <MobileTable
+          isHistoryTab
+          onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
+        />
+        <MobileTable
+          isCancelledTab
+          onPageChange={(e, pageNumber) => setCancelledPage(pageNumber)}
+        />
       </HorizontalTransition>
     </div>
   );
@@ -47,7 +46,7 @@ const MobileTabs: React.FC<{
   active: string;
   setActive: (a: string) => void;
 }> = ({ tabs, active, setActive }) => {
-  console.log(`active: `,active);
+  console.log(`active: `, active);
   return (
     <div className="bg-2   flex justify-between mx-3 rounded-lg mb-3 mt-3">
       {tabs.map((t) => (
