@@ -195,7 +195,6 @@ const MobileTable: React.FC<{
       option.state !== BetState.cancelled
     ) {
       const price = getPriceFromKlines(marketPrice, option.configPair);
-      console.log(`pricedd: `, price);
       if (isHistoryTab || price) {
         let additionalInfo = [
           {
