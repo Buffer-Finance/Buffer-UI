@@ -11,6 +11,8 @@ export interface IBLP
   extends Omit<IBFR, 'liquidity_pools_token' | 'total_staked'> {
   apr: string;
   total_usdc: string;
+  usdc_pol: string | null;
+  usdc_total: string;
 }
 export interface IOverview {
   price: string;
@@ -33,4 +35,6 @@ export interface ITotalStats {
   BFRvolume: string;
   totalTraders: number;
   avgTrade: string;
+  usdc_24_fees: string;
+  usdc_24_volume: string;
 }

@@ -15,6 +15,26 @@ export function getLinuxTimestampBefore24Hours() {
   return Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
 }
 
+type dashboardTableData = {
+  optionContracts: {
+    address: string;
+    openDown: number;
+    openUp: number;
+    currentUtilization: string;
+    openInterest: string;
+    payoutForDown: string;
+    payoutForUp: string;
+    volume: string;
+    tradeCount: number;
+  }[];
+  volumePerContracts: {
+    optionContract: {
+      address: string;
+    };
+    amount: string;
+  }[];
+};
+
 export const useDashboardTableData = () => {
   const { data: currentPrices } = useSWR('dashboard-current-prices', {
     fetcher: async () => {
@@ -52,25 +72,7 @@ export const useDashboardTableData = () => {
           }
         }`,
       });
-      return response.data?.data as {
-        optionContracts: {
-          address: string;
-          openDown: number;
-          openUp: number;
-          currentUtilization: string;
-          openInterest: string;
-          payoutForDown: string;
-          payoutForUp: string;
-          volume: string;
-          tradeCount: number;
-        }[];
-        volumePerContracts: {
-          optionContract: {
-            address: string;
-          };
-          amount: string;
-        }[];
-      };
+      return response.data?.data as dashboardTableData;
     },
     refreshInterval: 300,
   });
@@ -127,10 +129,10 @@ export const useDashboardTableData = () => {
     return upatedData;
   }, [data, currentPrices]);
 
-  const totalData = useMemo(() => {
-    if (!dashboardData) return null;
-    return {
-      ...dashboardData.reduce(
+  const totalData: { trades: number; volume: string; openInterest: number } =
+    useMemo(() => {
+      if (!dashboardData) return null;
+      return dashboardData.reduce(
         (acc, item) => {
           return {
             trades: acc.trades + item.tradeCount,
@@ -143,9 +145,8 @@ export const useDashboardTableData = () => {
           volume: '0',
           openInterest: 0,
         }
-      ),
-    };
-  }, [dashboardData]);
+      );
+    }, [dashboardData]);
 
   return { dashboardData, totalData };
 };

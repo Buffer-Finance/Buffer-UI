@@ -150,6 +150,8 @@ export const useDashboardReadCalls = () => {
 
         apr: fromWei(blpAprTotal, 2),
         total_usdc: fromWei(amountUSDCpool, usd_decimals),
+        usdc_pol: USDCvaultPOL ? fromWei(USDCvaultPOL, usd_decimals) : null,
+        usdc_total: fromWei(amountUSDCpool, usd_decimals),
       },
     };
 
@@ -180,6 +182,12 @@ export const useDashboardReadCalls = () => {
           BFRvolume: bfrVolume,
           avgTrade: avgTrade,
           totalTraders: totalTraders[0]?.uniqueCountCumulative || 0,
+          usdc_24_fees: USDC24stats
+            ? fromWei(USDC24stats.settlementFee, usd_decimals)
+            : '0',
+          usdc_24_volume: USDC24stats
+            ? fromWei(USDC24stats.amount, usd_decimals)
+            : '0',
         },
         overView: {
           price: blpPrice,

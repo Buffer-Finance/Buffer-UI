@@ -59,7 +59,7 @@ const DashboardPage = () => {
   return (
     <DashboardStyles>
       <Section
-        Heading={<div className={topStyles}>Stats</div>}
+        Heading={<div className={topStyles}>Dashboard</div>}
         subHeading={
           <div className={descStyles}>
             Arbitrum Total Stats (since 30th Jan, 2023)
