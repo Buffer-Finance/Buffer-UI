@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 interface IPlainCard {
   className?: string;
@@ -14,7 +14,7 @@ let PlainCard: {
       <div
         className={
           className +
-          "  bg-1 m-auto  rounded-lg  web:px-8  sm:p-6 sm:max-w-full "
+          '  bg-1 sm:m-auto  rounded-lg  web:px-8  sm:p-6 sm:max-w-full '
         }
       >
         {children}
@@ -23,14 +23,14 @@ let PlainCard: {
   },
   Header: ({ className, children }) => {
     return (
-      <div className={className + "  text-f18 text-center  mb-5 "}>
+      <div className={className + '  text-f18 text-center  mb-5 '}>
         {children}
       </div>
     );
   },
   Description: ({ className, children }) => {
     return (
-      <div className={className + "   text-f15    text-3"}>{children}</div>
+      <div className={className + '   text-f15    text-3'}>{children}</div>
     );
   },
 };
