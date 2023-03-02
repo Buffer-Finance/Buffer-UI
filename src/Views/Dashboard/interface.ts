@@ -37,4 +37,6 @@ export interface ITotalStats {
   avgTrade: string;
   usdc_24_fees: string;
   usdc_24_volume: string;
+  trades: number | null;
+  openInterest: number | null;
 }

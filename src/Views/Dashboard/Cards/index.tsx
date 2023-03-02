@@ -163,6 +163,10 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
                 <div>{getBalance(data.usdc_24_volume)} USDC </div>
               </NumberTooltip>
             </div>,
+            <div>
+              {data.openInterest ? data.openInterest + ' USDC' : 'fetching...'}
+            </div>,
+            <div>{data.trades ? data.trades : 'fetching...'}</div>,
           ]}
         />
       }

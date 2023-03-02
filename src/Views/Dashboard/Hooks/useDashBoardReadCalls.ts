@@ -29,6 +29,7 @@ import useSWR from 'swr';
 import { multicallv2 } from '@Utils/Contract/multiContract';
 import { ethers } from 'ethers';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
+import { useDashboardTableData } from './useDashboardTableData';
 export const HolderContracts = [
   '0x01fdd6777d10dD72b8dD716AEE05cE67DD2b7D85',
   '0x58b0F2445DfA2808eCB209B7f96EfBc584736b7D',
@@ -58,6 +59,7 @@ export const useDashboardReadCalls = () => {
   const usd_decimals = 6;
 
   const { calls, mainnetData } = useDashboardCalls();
+  const { totalData } = useDashboardTableData();
 
   const { data } = useReadCall({
     contracts: calls,
@@ -188,6 +190,9 @@ export const useDashboardReadCalls = () => {
           usdc_24_volume: USDC24stats
             ? fromWei(USDC24stats.amount, usd_decimals)
             : '0',
+          trades: totalData && totalData.trades ? totalData.trades : null,
+          openInterest:
+            totalData && totalData.openInterest ? totalData.openInterest : null,
         },
         overView: {
           price: blpPrice,
