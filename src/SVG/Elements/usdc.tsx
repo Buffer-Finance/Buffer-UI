@@ -36,3 +36,4 @@ const SvgComponent = (props) => {
 };
 
 export default SvgComponent;
+export {SvgComponent as USDCIcon}

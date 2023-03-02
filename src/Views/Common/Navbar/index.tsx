@@ -39,11 +39,12 @@ export const Navbar: React.FC<INavbar> = () => {
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
         >
-          <BufferLogoComponent className="h-[30px] ml-[8px] sm:ml-[10px]" />
+          <BufferLogoComponent className="h-[30px] ml-[8px] sm:ml-[10px]" hideText />
         </div>
 
         <div className="tab:hidden flex gap-[6px] b1200:!hidden ">
           {tabs.slice(0, VISIBLETABS).map((tab, index) => {
+            if(tab.mobileOnly) return null;
             if (tab.isExternalLink) {
               return (
                 <button
@@ -102,17 +103,7 @@ export const Navbar: React.FC<INavbar> = () => {
           <AccountDropdown />
         </div>
 
-        <div id="mobile-sidebar-logo" className="web:!hidden ">
-          {state.sidebar_active ? (
-            <MenuLogo className="icon menu" onClick={handleClose} />
-          ) : (
-            <CloseLogo
-              className="icon menu"
-              onClick={handleClose}
-              style={{ transform: 'scale(0.8)' }}
-            />
-          )}
-        </div>
+    
       </div>
     </header>
   );
