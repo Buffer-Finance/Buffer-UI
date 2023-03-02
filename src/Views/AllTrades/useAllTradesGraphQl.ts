@@ -155,6 +155,8 @@ export const useAllTradesGraphQl = ({
                 slippage
                 strike
                 totalFee
+                queueTimestamp
+                cancelTimestamp
                 user {
                   address
                 }
