@@ -36,6 +36,7 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import VerticalTransition from '@Views/Common/Transitions/Vertical';
 import { Variables } from '@Utils/Time';
 import { BlackBtn } from '@Views/Common/V2-Button';
+import { getErrorFromCode } from '@Utils/getErrorFromCode';
 
 const CancelButton = ({ option }) => {
   const toastify = useToast();
@@ -70,18 +71,20 @@ const CancelButton = ({ option }) => {
   );
 };
 
-const MobileTable: React.FC<any> = ({
-  configData,
-  isHistoryTab = false,
-  isCancelledTab,
-  onPageChange,
-}: {
-  configData?: IQTrade;
+const MobileTable: React.FC<{
   isHistoryTab?: boolean;
   isCancelledTab?: boolean;
   count?: number;
   currentPage?: number;
   onPageChange?: (e: ChangeEvent, p: number) => void;
+  activePage: number;
+  shouldNotDisplayShareVisulise?: boolean;
+}> = ({
+  isHistoryTab = false,
+  isCancelledTab,
+  onPageChange,
+  activePage,
+  shouldNotDisplayShareVisulise = false,
 }) => {
   const [marketPrice] = useAtom(marketPriceAtom);
   const { active, history, cancelled } = useAtomValue(tardesAtom);
@@ -169,6 +172,19 @@ const MobileTable: React.FC<any> = ({
     let arr = [StrikePrice];
     if (!isCancelledTab) {
       arr = [StartDate, ExpiryDate, StrikePrice];
+    } else {
+      arr = [
+        ...arr,
+        {
+          name: <>Queue Time</>,
+          val: <DisplayDate timestamp={+option.queueTimestamp} />,
+        },
+        {
+          name: <>Cancellation Time</>,
+          val: <DisplayDate timestamp={+option.cancelTimestamp} />,
+        },
+        { name: <>Reason</>, val: <>{getErrorFromCode(option?.reason)}</> },
+      ];
     }
     let visible = false;
     if (
@@ -231,7 +247,7 @@ const MobileTable: React.FC<any> = ({
                 {/* dont show duration in queued | cancelled state */}
                 {option.state == BetState.queued ||
                 option.state == BetState.cancelled ? (
-                  '-'
+                  ''
                 ) : isHistoryTab ? (
                   formatDistanceExpanded(
                     Variables(+option.expirationTime - +option.creationTime)
@@ -277,7 +293,9 @@ const MobileTable: React.FC<any> = ({
                 <CancelButton option={option} />
               )}
               <div className="flex items-center gap-3">
-                {normal_option && isHistoryTab && <Share data={option} />}
+                {normal_option &&
+                  isHistoryTab &&
+                  !shouldNotDisplayShareVisulise && <Share data={option} />}
                 <Gradientbtn
                   className={`details-btn`}
                   onClick={() => {
@@ -306,8 +324,8 @@ const MobileTable: React.FC<any> = ({
         rows={filteredData?.length}
         bodyJSX={BodyFormatterMobile}
         count={totalPages}
+        activePage={activePage}
         onPageChange={onPageChange}
-        shouldShowTroply={false}
         error={<ErrorMsg isHistoryTable={isHistoryTab} />}
         loading={!shouldConnectWallet && !filteredData}
       />

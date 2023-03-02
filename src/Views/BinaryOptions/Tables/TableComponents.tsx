@@ -393,8 +393,7 @@ export const ErrorMsg: React.FC<{ isHistoryTable: boolean }> = ({
   isHistoryTable,
 }) => {
   const { dispatch } = useGlobal();
-  const errMssg =
-    "You don't have any" + (isHistoryTable ? '' : ' active') + ' trades yet.';
+  const errMssg = 'No' + (isHistoryTable ? '' : ' active') + ' trades yet.';
   return (
     <TableErrorMsg
       msg={errMssg}

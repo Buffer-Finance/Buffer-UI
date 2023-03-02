@@ -31,6 +31,7 @@ import { getChains } from 'src/Config/wagmiClient';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { priceAtom } from '@Hooks/usePrice';
+import { minTradeAmount } from '../store';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
@@ -143,8 +144,12 @@ export function CustomOption() {
           title="Investment"
           label="$"
           error={{
-            min: 1,
-            minMsg: "Can't invest less than 1 " + activePoolObj.token.name,
+            min: minTradeAmount,
+            minMsg:
+              "Can't trade less than " +
+              minTradeAmount +
+              ' ' +
+              activePoolObj.token.name,
             max:
               balance == null
                 ? 1e44
@@ -157,7 +162,7 @@ export function CustomOption() {
             ),
           }}
         />{' '}
-        <div className="flex-sbw flex-col items-start text-f14 ">
+        <div className="flex flex-col items-start text-f14 ">
           <AccountInfo
             shouldDisplayString
             unit={activePoolObj.token.name}

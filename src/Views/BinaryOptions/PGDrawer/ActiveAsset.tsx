@@ -57,7 +57,6 @@ export const ActiveAsset = () => {
   if (response && fullPayout) {
     let base = subtract('100', multiply('2', divide(response, 2)));
     boostedPayout = subtract(fullPayout, base);
-    console.log(`boostedPayout: `, boostedPayout);
   }
 
   const title = currentPrice
@@ -65,7 +64,6 @@ export const ActiveAsset = () => {
       ' | ' +
       singleAsset.tv_id
     : '';
-  console.log(`title: `, title);
   setDoccumentTitle(title);
   const navigate = useNavigate();
   const toastify = useToast();

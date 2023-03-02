@@ -30,22 +30,22 @@ export const isTestnet = import.meta.env.VITE_ENV.toUpperCase() === 'TESTNET';
 
 export const baseGraphqlUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
-    ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-mainnet'
+    ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy'
     : 'https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet';
 
 export const baseGraphqlLiteUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
     ? {
         sandbox:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite-v2',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy-v2',
         testnet:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite-v2',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy-v2',
       }
     : {
         sandbox:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox-lite',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite',
         testnet:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox-lite',
+          'https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite',
       };
 
 export const periodsValue = [86400, 259200, 604800, 2592000, 5184000, 7776000];
@@ -573,7 +573,3 @@ export const getTabs = (chain: string, isLeaderboard = false) => {
     },
   ];
 };
-
-export enum ENV {
-  ArbitrumGoerli = 'arbitrum-test',
-}

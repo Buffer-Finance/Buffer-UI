@@ -8,7 +8,6 @@ import Fade from 'react-reveal/Fade';
 import { getTabs, ITab } from 'src/Config/getTabs';
 import { BufferLogoComponent } from '../Navbar/BufferLogo';
 import { NavLink } from 'react-router-dom';
-// import usePages from "Hooks/Utilities/usePageInfo";
 import Twitter from 'public/Social/twitter';
 import Discord from 'public/Social/discord';
 import Medium from 'public/Social/medium';
@@ -71,7 +70,7 @@ const SideBar: React.FC<any> = () => {
         <div className="sidebar_container flex-col">
           <div className="icon_container mb-6">
             <div
-              className="flex items-center"
+              className="flex items-center justify-center"
               role={'button'}
               onClick={
                 () => {}
@@ -91,7 +90,7 @@ const SideBar: React.FC<any> = () => {
               return (
                 <button
                   key={option.name}
-                  className={`item `}
+                  className={`item !w-full !ml-[0px] !mr-[0px]`}
                   onClick={() => {
                     handleChange(option.to);
                   }}
@@ -117,10 +116,10 @@ const SideBar: React.FC<any> = () => {
               </NavLink>
             );
           })}
-          <div className=" text-2 mb-3 mt-[10vh] text-f13 pl-[2rem]">
+          <div className=" text-2 mb-3 mt-[10vh] text-center text-f13 pl-[2rem]">
             Connect with us{' '}
           </div>
-          <div className="flex w-[140px] flex-row items-center justify-center flex-wrap gap-[11px] px-3 bbborderrr">
+          <div className="flex mx-auto w-[140px] flex-row items-center justify-center flex-wrap gap-[11px] px-3 bbborderrr">
             {social.map((S) => {
               return (
                 <a className="unset" href={S.link} target="_blank">

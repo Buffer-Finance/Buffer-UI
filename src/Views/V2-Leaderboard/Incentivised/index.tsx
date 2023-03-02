@@ -29,6 +29,7 @@ import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useDayOffset } from '../Hooks/useDayOffset';
+import { LeaderBoardTabs } from '../Weekly';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -43,7 +44,8 @@ export const Incentivised = () => {
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useLeaderboardQuery();
+  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
+    useLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -73,13 +75,37 @@ export const Incentivised = () => {
 
   useEffect(() => {
     setActivePageNumber(1);
-  }, [activeTab]);
+  }, [activeTab, offset]);
 
-  useEffect(() => {
-    if (offset === null) {
-      setOffset(day.toString());
+  const rewardPool = useMemo(() => {
+    if (endDay[activeChain.id] !== undefined) {
+      if (offset === null) {
+        if (day >= endDay[activeChain.id]) return '0 USDC';
+      } else {
+        if (Number(offset) >= endDay[activeChain.id]) return '0 USDC';
+      }
     }
-  }, [day]);
+    if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
+      return (
+        toFixed(
+          divide(
+            multiply(
+              '5',
+              divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
+            ),
+            '100'
+          ) ?? '0',
+          0
+        ) + ' USDC'
+      );
+    else return 'fetching...';
+  }, [activeChain, day, offset, data]);
+
+  // useEffect(() => {
+  //   if (offset === null) {
+  //     setOffset(day.toString());
+  //   }
+  // }, [day]);
 
   let content;
   if (!isTimerEnded) {
@@ -121,36 +147,12 @@ export const Incentivised = () => {
             <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
               <Col
                 head={'Reward Pool'}
-                // desc={<Display data={500} unit={"USDC"}  precisionj/>}
                 desc={
-                  endDay[activeChain.id] && offset >= endDay[activeChain.id] ? (
-                    '0 USDC'
-                  ) : data &&
-                    data.reward &&
-                    data.reward[0] &&
-                    data.reward[0].settlementFee ? (
-                    <NumberTooltip
-                      content={'5% of the fees collected for the day.'}
-                    >
-                      <div>
-                        {toFixed(
-                          divide(
-                            multiply(
-                              '5',
-                              divide(
-                                data.reward[0].settlementFee,
-                                usdcDecimals
-                              ) ?? '0'
-                            ),
-                            '100'
-                          ) ?? '0',
-                          0
-                        ) + ' USDC'}
-                      </div>
-                    </NumberTooltip>
-                  ) : (
-                    'fetching...'
-                  )
+                  <NumberTooltip
+                    content={'5% of the fees collected for the day.'}
+                  >
+                    <div>{rewardPool}</div>
+                  </NumberTooltip>
                 }
                 descClass="text-f16 tab:text-f14 font-medium light-blue-text "
                 headClass="text-f14 tab:text-f12 fw5 text-6"
@@ -220,35 +222,38 @@ export const Incentivised = () => {
             </div>
           }
         />
-        <BufferTab
-          value={activeTab}
-          handleChange={(e, t) => {
-            setActiveTab(t);
-          }}
-          distance={5}
-          tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
-        />
-        <TabSwitch
-          value={activeTab}
-          childComponents={[
-            <DailyWebTable
-              res={tableData}
-              count={totalPages.arbitrum}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={0}
-            />,
-            <DailyWebTable
-              res={loserStats}
-              count={totalPages.arbitrum}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={1}
-            />,
-          ]}
-        />
+        <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
+          <LeaderBoardTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabList={[{ name: 'Winners' }, { name: 'Losers' }]}
+          />
+          <TabSwitch
+            value={activeTab}
+            childComponents={[
+              <DailyWebTable
+                standings={tableData}
+                count={totalPages.arbitrum}
+                activePage={activePages.arbitrum}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={0}
+                userRank={winnerUserRank}
+              />,
+              <DailyWebTable
+                standings={loserStats}
+                count={totalPages.arbitrum}
+                activePage={activePages.arbitrum}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={1}
+                userRank={loserUserRank}
+              />,
+            ]}
+          />
+        </div>
       </div>
     );
   }
@@ -260,7 +265,9 @@ export const Incentivised = () => {
           <div>
             <Warning
               closeWarning={() => {}}
-              state={endDay[activeChain.id] && day >= endDay[activeChain.id]}
+              state={
+                endDay[activeChain.id] ? day >= endDay[activeChain.id] : false
+              }
               shouldAllowClose={false}
               body={
                 <>
@@ -293,14 +300,18 @@ export function TimerBox({
 }) {
   const timer = useTimer(expiration);
   let arr = [
-    timer.days && {
-      name: 'Days',
-      value: timer.days,
-    },
-    (timer.hours || timer.days) && {
-      name: 'Hours',
-      value: timer.hours,
-    },
+    timer.days
+      ? {
+          name: 'Days',
+          value: timer.days,
+        }
+      : null,
+    timer.hours || timer.days
+      ? {
+          name: 'Hours',
+          value: timer.hours,
+        }
+      : null,
     {
       name: 'Minutes',
       value: timer.minutes,
@@ -322,6 +333,7 @@ export function TimerBox({
       {head}
       <div className="flex flex-row items-end text-f12">
         {arr.map((s, idx) => {
+          if (s === null) return <></>;
           return (
             <>
               <div className="flex flex-col items-center">

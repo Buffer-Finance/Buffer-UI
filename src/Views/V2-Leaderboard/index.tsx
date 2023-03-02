@@ -1,24 +1,26 @@
-import { HeadTitle } from '@Views/Common/TitleHead';
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { LeaderBoardDrawers } from './drawers';
 import { LeaderBoardSidebar, MobileLeaderboardDropdwon } from './Sidebar';
 import { LeaderBoardStyles } from './style';
+import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 
 export const LeaderBoard = (props: { children: JSX.Element }) => {
   return (
-    <main className="content-drawer">
-      <HeadTitle title={'Buffer | Competitions'} />
-      <LeaderBoardStyles>
-        <MobileLeaderboardDropdwon />
-        <LeaderBoardSidebar />
-        {props.children}
-      </LeaderBoardStyles>
-      {typeof window === 'undefined' ? (
-        <LeaderBoardDrawers />
-      ) : (
-        window.innerWidth > 600 && <LeaderBoardDrawers />
-      )}{' '}
-    </main>
+    <ArbitrumOnly>
+      <main className="content-drawer">
+        <LeaderBoardStyles>
+          <MobileLeaderboardDropdwon />
+          <LeaderBoardSidebar />
+          {props.children}
+        </LeaderBoardStyles>
+        {typeof window === 'undefined' ? (
+          <LeaderBoardDrawers />
+        ) : (
+          window.innerWidth > 600 && <LeaderBoardDrawers />
+        )}{' '}
+      </main>
+    </ArbitrumOnly>
   );
 };
 
@@ -28,5 +30,8 @@ export function getPageNumber(router: any) {
 }
 
 export const LeaderBoardOutlet = () => {
+  useEffect(() => {
+    document.title = 'Buffer | Competitions';
+  }, []);
   return <Outlet />;
 };

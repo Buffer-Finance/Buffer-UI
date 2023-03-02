@@ -8,6 +8,7 @@ import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
+import { Launch } from '@mui/icons-material';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
@@ -16,23 +17,41 @@ export const DailyMobileTable: React.FC<{
   onpageChange?: (e, page: number) => void;
   count: number;
   nftWinners?: number;
-}> = ({ options, skip, userData, count, onpageChange, nftWinners }) => {
+  activePage: number;
+  userRank: string;
+  onClick: (address: string | undefined) => void;
+  isWinrateTable?: boolean;
+}> = ({
+  options,
+  skip,
+  userData,
+  count,
+  onpageChange,
+  nftWinners,
+  activePage,
+  userRank,
+  onClick,
+  isWinrateTable,
+}) => {
   const { address: account } = useUserAccount();
-  // if (!options)
-  //   return (
-  //     <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
-  //   );
-  let user = getUserIndex(options, skip, account);
+  if (!options)
+    return (
+      <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
+    );
+  let user = Number(userRank);
   const UserRow =
     userData?.length && options?.length ? (
       <MobileRow
         {...{
           index: 0,
-          currentStanding: { ...userData[0], rank: user == -1 ? '-' : '' },
+          currentStanding: { ...userData[0], rank: user },
           user,
           skip,
           userData,
           account,
+          nftWinners,
+          onClick,
+          isWinrateTable,
         }}
       />
     ) : null;
@@ -60,6 +79,8 @@ export const DailyMobileTable: React.FC<{
                   userData,
                   account,
                   nftWinners,
+                  onClick,
+                  isWinrateTable,
                 }}
               />
             );
@@ -72,25 +93,13 @@ export const DailyMobileTable: React.FC<{
           <BasicPagination
             onChange={onpageChange}
             count={count}
-            shouldShowTroply={false}
+            page={activePage}
           />
         </div>
       ) : null}
     </div>
   );
 };
-export function getUserIndex(res, skip, account) {
-  let userInTop10 = -1;
-  if (res?.length && !skip && account) {
-    const foundIndex = res.findIndex(
-      (r) => r.user.toLowerCase() == account.toLowerCase()
-    );
-    if (foundIndex !== -1) {
-      userInTop10 = foundIndex + 1;
-    }
-  }
-  return userInTop10;
-}
 
 const MobileRow = ({
   index,
@@ -100,6 +109,8 @@ const MobileRow = ({
   userData,
   account,
   nftWinners,
+  onClick,
+  isWinrateTable,
 }) => {
   const isUser = user ? true : false;
   const perc = multiply(
@@ -111,10 +122,12 @@ const MobileRow = ({
 
   return (
     <div
+      role="button"
       key={index}
       className={`text-f12 bg-1 rounded-lg p-5 table-width margin-auto ${
         user && 'highlight'
       }`}
+      onClick={() => onClick(currentStanding?.user)}
     >
       {/* FIrst Row */}
       <div className="flex justify-between items-center mb-3">
@@ -130,8 +143,8 @@ const MobileRow = ({
               nftWinners={nftWinners}
             />
           </div>
-          <div className="text-f13 ml-1">
-            {currentStanding?.user === account ? (
+          <div className="text-f13 ml-1 flex items-center gap-2">
+            {currentStanding?.user.toLowerCase() === account?.toLowerCase() ? (
               <span className="text-1">Your Account</span>
             ) : (
               <div className="flex">
@@ -151,12 +164,15 @@ const MobileRow = ({
                 </NumberTooltip>
               </div>
             )}
+            <Launch className="" />
           </div>
         </div>
 
         {/* Right Side*/}
         <div className="flex flex-col">
-          <div className="text-2 text-right">Trades</div>
+          <div className="text-2 text-right">
+            {isWinrateTable ? 'Total Trades' : 'Trades'}
+          </div>
           <div className="text-1 text-right">
             {!currentStanding.netPnL || currentStanding.netPnL === null
               ? '-'
@@ -170,9 +186,13 @@ const MobileRow = ({
         {/* Left Side*/}
         <div className="flex flex-col">
           <div className="flex">
-            <div className="text-2 mr-3">Net PnL</div>
+            <div className="text-2 mr-3">
+              {isWinrateTable ? 'Trades Won' : 'Net PnL'}
+            </div>
             <div>
-              {currentStanding.netPnL === null ? (
+              {isWinrateTable ? (
+                currentStanding.tradesWon
+              ) : currentStanding.netPnL === null ? (
                 '-'
               ) : (
                 <Display
@@ -185,9 +205,13 @@ const MobileRow = ({
             </div>
           </div>
           <div className="flex">
-            <div className="text-2 mr-3">Absolute PnL</div>
+            <div className="text-2 mr-3">
+              {isWinrateTable ? 'Win Rate' : 'Absolute PnL'}
+            </div>
             <div>
-              {currentStanding.netPnL === null ? (
+              {isWinrateTable ? (
+                divide(currentStanding.winRate, 3) + '%'
+              ) : currentStanding.netPnL === null ? (
                 '-'
               ) : (
                 <Display

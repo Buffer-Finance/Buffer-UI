@@ -49,8 +49,10 @@ interface IBufferTable {
   isBodyTransparent?: boolean;
   className?: string;
   doubleHeight?: boolean;
-  shouldShowTroply?: boolean;
-  onPageChange?: (e: ChangeEvent, p: number) => void;
+  onPageChange?:
+    | ((event: React.ChangeEvent<unknown>, page: number) => void)
+    | undefined;
+  activePage?: number;
 }
 
 const BufferTable: React.FC<IBufferTable> = ({
@@ -70,15 +72,15 @@ const BufferTable: React.FC<IBufferTable> = ({
   bluredIndexes,
   overflow = false,
   v1 = false,
-  onPageChange = false,
+  onPageChange = undefined,
   shouldShowMobile = false,
   shouldHideHeader = false,
   shouldHideBody = false,
   isBodyTransparent = false,
   className,
   doubleHeight = false,
-  shouldShowTroply = true,
   highlightIndexs,
+  activePage = 1,
 }) => {
   let rowClass = '';
   let tableCellCls = 'table-cell';
@@ -160,7 +162,7 @@ const BufferTable: React.FC<IBufferTable> = ({
                 return (
                   <TableRow
                     key={row}
-                    className={`table-row ${rowClass} ${
+                    className={`group table-row ${rowClass} ${
                       isBodyTransparent ? 'transparent transparent-hover' : ''
                     }`}
                     onClick={() => onRowClick(row)}
@@ -196,7 +198,7 @@ const BufferTable: React.FC<IBufferTable> = ({
           <BasicPagination
             onChange={onPageChange}
             count={count}
-            shouldShowTroply={shouldShowTroply}
+            page={activePage}
           />
         ) : null}
       </TableContainer>

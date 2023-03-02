@@ -1,7 +1,7 @@
 import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
-import { getTabs } from 'src/Config/getTabs';
+import { getMobileTabs, getTabs } from 'src/Config/getTabs';
 import { Link, useLocation } from 'react-router-dom';
 import { useGlobal } from '@Contexts/Global';
 
@@ -10,12 +10,12 @@ const BaseTab = ({
   active,
   horizontal,
   className,
-  onClick
+  onClick,
 }: {
   tab: Partial<ReturnType<typeof getTabs>[0]>;
   active?: boolean;
   horizontal?: boolean;
-  onClick?:()=>void;
+  onClick?: () => void;
   className?: string;
 }) => {
   const Btn = (
@@ -75,25 +75,25 @@ const MoreIcon = (
 const MobileBottomTabs: React.FC<any> = ({}) => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   const tabs = useMemo(
-    () => getTabs(activeMarketFromStorage),
+    () => getMobileTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
   const location = useLocation();
   const isActive = (t: any) => {
     let tabName = t.to.split('/')[1];
-    
-    console.log(`tabName: `,tabName);
+
+    console.log(`tabName: `, tabName);
     if (tabName == 'trade') {
       tabName = 'binary';
     }
-    console.log(`tabName: `, tabName,location.pathname.toLowerCase());
+    console.log(`tabName: `, tabName, location.pathname.toLowerCase());
     if (tabName)
       return location.pathname.toLowerCase().includes(tabName.toLowerCase());
     return false;
   };
   const areExtraTabs = tabs.length > mobleMaxTabLimit;
   const limit = areExtraTabs ? 4 : tabs.length;
-  const {  dispatch } = useGlobal();
+  const { dispatch } = useGlobal();
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',
@@ -104,7 +104,9 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
       {tabs.slice(0, limit).map((t) => (
         <BaseTab tab={t} active={isActive(t)} />
       ))}{' '}
-      {areExtraTabs &&  <BaseTab tab={{ name: 'More', icon: MoreIcon }} onClick={handleClose} />}
+      {areExtraTabs && (
+        <BaseTab tab={{ name: 'More', icon: MoreIcon }} onClick={handleClose} />
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { CHAIN_CONFIGS } from 'config';
-import useStopWatch, { useTimer } from '@Hooks/Utilities/useStopWatch';
+import useStopWatch from '@Hooks/Utilities/useStopWatch';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
 import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
@@ -10,7 +10,6 @@ import { getDistance } from '@Utils/Staking/utils';
 import { LeaderBoard } from '..';
 import {
   readLeaderboardPageActivePageAtom,
-  readLeaderboardPageTotalPageAtom,
   updateLeaderboardActivePageAtom,
 } from '../atom';
 import { ContestFilterDD } from '../Components/ContestFilterDD';
@@ -18,18 +17,23 @@ import { TopData } from '../Components/TopData';
 import { DailyWebTable } from '../Daily/DailyWebTable';
 import { DailyStyles } from '../Daily/stlye';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
-import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { endDay, startTimestamp } from './config';
-import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
-import { social } from '@Views/Common/SocialMedia';
+import { endDay, startTimestamp, winRateStart } from './config';
+
 import TabSwitch from '@Views/Common/TabSwitch';
-import BufferTab from '@Views/Common/BufferTab';
+import BufferTab, { ITab } from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
-import { useWeeklyLeaderboardQuery } from '../Hooks/useWeeklyLeaderboardQuery';
+import {
+  IWinrate,
+  useWeeklyLeaderboardQuery,
+} from '../Hooks/useWeeklyLeaderboardQuery';
+import { TimerBox } from '../Incentivised';
+import { ILeague } from '../interfaces';
+import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
+import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -39,22 +43,67 @@ export const Weekly = () => {
   const { activeChain } = useActiveChain();
   const { week, nextTimeStamp } = useWeekOfTournament();
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
+
   const skip = useMemo(
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData } = useWeeklyLeaderboardQuery();
+  const {
+    data,
+    totalTournamentData,
+    loserUserRank,
+    winnerUserRank,
+    loserWinrateUserRank,
+    winnerWinrateUserRank,
+  } = useWeeklyLeaderboardQuery();
+
+  const totalPages = useMemo(() => {
+    const pages = {
+      winnerPnl: 0,
+      loserPnl: 0,
+      winnerWinRate: 0,
+      loserWinRate: 0,
+    };
+    if (data) {
+      if (data.userStats && data.userStats.length > 0) {
+        pages.winnerPnl = Math.ceil(data.userStats.length / ROWINAPAGE);
+      }
+      if (data.loserStats && data.loserStats.length > 0) {
+        pages.loserPnl = Math.ceil(data.loserStats.length / ROWINAPAGE);
+      }
+      if (data.winnerWinrate && data.winnerWinrate.length > 0) {
+        pages.winnerWinRate = Math.ceil(data.winnerWinrate.length / ROWINAPAGE);
+      }
+      if (data.loserWinrate && data.loserWinrate.length > 0) {
+        pages.loserWinRate = Math.ceil(data.loserWinrate.length / ROWINAPAGE);
+      }
+    }
+    return pages;
+  }, [data]);
+
   const tableData = useMemo(() => {
-    if (data && data.userStats) {
-      return data.userStats.slice(skip, skip + ROWINAPAGE);
-    } else return [];
+    const res: {
+      winnerPnl: ILeague[];
+      loserPnl: ILeague[];
+      winnerWinRate: IWinrate[];
+      loserWinrate: IWinrate[];
+    } = { winnerPnl: [], loserPnl: [], winnerWinRate: [], loserWinrate: [] };
+    if (data) {
+      if (data.userStats) {
+        res.winnerPnl = data.userStats.slice(skip, skip + ROWINAPAGE);
+      }
+      if (data.loserStats) {
+        res.loserPnl = data.loserStats.slice(skip, skip + ROWINAPAGE);
+      }
+      if (data.winnerWinrate) {
+        res.winnerWinRate = data.winnerWinrate.slice(skip, skip + ROWINAPAGE);
+      }
+      if (data.loserWinrate) {
+        res.loserWinrate = data.loserWinrate.slice(skip, skip + ROWINAPAGE);
+      }
+    }
+    return res;
   }, [data, skip]);
-  const loserStats = useMemo(() => {
-    if (data && data.loserStats) {
-      return data.loserStats.slice(skip, skip + ROWINAPAGE);
-    } else return [];
-  }, [data, skip]);
-  const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
 
   const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
 
@@ -76,13 +125,57 @@ export const Weekly = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    if (
-      (week !== null && offset === null) ||
-      (offset !== null && week !== null && offset.toString() != week.toFixed())
-    ) {
-      setOffset(week.toString());
+    if (activeTab > tabList.length - 1) {
+      setActiveTab(0);
     }
-  }, [week, offset]);
+  }, [offset]);
+
+  const rewardPool = useMemo(() => {
+    if (week === null) return null;
+    if (endDay[activeChain.id] !== undefined) {
+      if (offset === null) {
+        if (week >= endDay[activeChain.id]) return '0 USDC';
+      } else {
+        if (Number(offset) >= endDay[activeChain.id]) return '0 USDC';
+      }
+    } else if (
+      data &&
+      data.reward &&
+      data.reward[0] &&
+      data.reward[0].settlementFee
+    )
+      return (
+        toFixed(
+          add(
+            '1000',
+            divide(
+              multiply(
+                '5',
+                divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
+              ),
+              '100'
+            ) ?? '0'
+          ),
+          0
+        ) + ' USDC'
+      );
+    else return 'fetching...';
+  }, [activeChain, week, offset, data]);
+
+  const tabList = useMemo(() => {
+    const list = [
+      { name: 'Winners (by Pnl)' },
+      { name: 'Losers (by Pnl)' },
+      { name: 'Winners (by Win Rate)' },
+      { name: 'Losers (by Win Rate)' },
+    ];
+    if (winRateStart[activeChain.id])
+      if (offset !== null && winRateStart[activeChain.id] > Number(offset))
+        return list.slice(0, 2);
+      else if (week !== null && winRateStart[activeChain.id] > Number(week))
+        return list.slice(0, 2);
+    return list;
+  }, [offset, activeChain]);
 
   let content;
   if (!isTimerEnded) {
@@ -113,7 +206,7 @@ export const Weekly = () => {
               {activeChain.name}
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9"
+                href="https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52"
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
@@ -124,41 +217,14 @@ export const Weekly = () => {
             <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
               <Col
                 head={'Reward Pool'}
-                // desc={<Display data={500} unit={"USDC"}  precisionj/>}
                 desc={
-                  endDay[activeChain.id] && offset >= endDay[activeChain.id] ? (
-                    '0 USDC'
-                  ) : data &&
-                    data.reward &&
-                    data.reward[0] &&
-                    data.reward[0].settlementFee ? (
-                    <NumberTooltip
-                      content={
-                        '1000 USDC + 5% of the fees collected for the week.'
-                      }
-                    >
-                      <div>
-                        {toFixed(
-                          add(
-                            '1000',
-                            divide(
-                              multiply(
-                                '5',
-                                divide(
-                                  data.reward[0].settlementFee,
-                                  usdcDecimals
-                                ) ?? '0'
-                              ),
-                              '100'
-                            ) ?? '0'
-                          ),
-                          0
-                        ) + ' USDC'}
-                      </div>
-                    </NumberTooltip>
-                  ) : (
-                    'fetching...'
-                  )
+                  <NumberTooltip
+                    content={
+                      '1000 USDC + 5% of the fees collected for the week.'
+                    }
+                  >
+                    <div>{rewardPool}</div>
+                  </NumberTooltip>
                 }
                 descClass="text-f16 tab:text-f14 font-medium light-blue-text "
                 headClass="text-f14 tab:text-f12 fw5 text-6"
@@ -228,35 +294,60 @@ export const Weekly = () => {
             </div>
           }
         />
-        <BufferTab
-          value={activeTab}
-          handleChange={(e, t) => {
-            setActiveTab(t);
-          }}
-          distance={5}
-          tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
-        />
-        <TabSwitch
-          value={activeTab}
-          childComponents={[
-            <DailyWebTable
-              res={tableData}
-              count={totalPages.arbitrum}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={3}
-            />,
-            <DailyWebTable
-              res={loserStats}
-              count={totalPages.arbitrum}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={4}
-            />,
-          ]}
-        />
+        <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
+          <LeaderBoardTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabList={tabList}
+          />
+          <TabSwitch
+            value={activeTab}
+            childComponents={[
+              <DailyWebTable
+                standings={tableData.winnerPnl}
+                count={totalPages.winnerPnl}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={3}
+                userRank={winnerUserRank}
+                activePage={activePages.arbitrum}
+              />,
+              <DailyWebTable
+                activePage={activePages.arbitrum}
+                userRank={loserUserRank}
+                standings={tableData.loserPnl}
+                count={totalPages.loserPnl}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={4}
+              />,
+              <DailyWebTable
+                activePage={activePages.arbitrum}
+                userRank={winnerWinrateUserRank}
+                standings={tableData.winnerWinRate}
+                count={totalPages.winnerWinRate}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={4}
+                isWinrateTable
+              />,
+              <DailyWebTable
+                activePage={activePages.arbitrum}
+                userRank={loserWinrateUserRank}
+                standings={tableData.loserWinrate}
+                count={totalPages.loserWinRate}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={4}
+                isWinrateTable
+              />,
+            ]}
+          />
+        </div>
       </div>
     );
   }
@@ -268,7 +359,11 @@ export const Weekly = () => {
           <div>
             <Warning
               closeWarning={() => {}}
-              state={endDay[activeChain.id] && week >= endDay[activeChain.id]}
+              state={
+                endDay[activeChain.id] && week !== null
+                  ? week >= endDay[activeChain.id]
+                  : false
+              }
               shouldAllowClose={false}
               body={
                 <>
@@ -290,85 +385,51 @@ export const Weekly = () => {
   );
 };
 
-export function TimerBox({
-  expiration,
-  className,
-  head,
+export const LeaderBoardTabs = ({
+  activeTab,
+  setActiveTab,
+  tabList,
 }: {
-  expiration: number;
-  className?: string;
-  head: ReactNode;
-}) {
-  const timer = useTimer(expiration);
-  let arr = [
-    timer.days && {
-      name: 'Days',
-      value: timer.days,
-    },
-    (timer.hours || timer.days) && {
-      name: 'Hours',
-      value: timer.hours,
-    },
-    {
-      name: 'Minutes',
-      value: timer.minutes,
-    },
-    {
-      name: 'Seconds',
-      value: timer.seconds,
-    },
-  ];
-  arr = arr.filter((a) => a);
-
-  return (
-    <div
-      className={
-        'flex flex-col items-center w-fit  bg-1 p-[20px] rounded-[10px] px-[25px] ' +
-        className
-      }
-    >
-      {head}
-      <div className="flex flex-row items-end text-f12">
-        {arr.map((s, idx) => {
+  activeTab: number;
+  setActiveTab: (t: number) => void;
+  tabList: ITab[];
+}) => {
+  if (window.innerWidth < 1200) {
+    return (
+      <BufferDropdown
+        rootClass="w-[200px]"
+        className="py-4 px-4 bg-2"
+        dropdownBox={(a, open, disabled) => (
+          <div className="flex items-center justify-between text-f15 bg-1 px-4 pt-2 pb-[6px] rounded-md">
+            {tabList[activeTab].name}
+            <DropdownArrow open={open} />
+          </div>
+        )}
+        items={tabList}
+        item={(tab, handleClose, onChange, isActive, index) => {
           return (
-            <>
-              <div className="flex flex-col items-center">
-                <div
-                  className={
-                    'text-3 text-f14 uppercase ' +
-                    (idx < arr.length - 1 ? 'mr-[30%]' : '')
-                  }
-                >
-                  {s.name}
-                </div>
-                <div className="text-buffer-blue text-[50px] mt-[-8px]">
-                  {s.value.toString().padStart(2, '0')}
-                  {idx < arr.length - 1 ? ':' : ''}
-                </div>
-              </div>
-            </>
-          );
-        })}
-      </div>
-      <span className="text-f12 pb-4 ">Join to stay updated!</span>
-      <TImerStyle>
-        {social.map((social_link) => {
-          return (
-            <a
-              className="social_link pointer flex items-center"
-              target={'_blank'}
-              href={social_link.link}
-              key={social_link.name}
+            <div
+              className={`text-f14 whitespace-nowrap ${
+                index === tabList.length - 1 ? '' : 'pb-[6px]'
+              } ${index === 0 ? '' : 'pt-[6px]'} ${
+                activeTab === index ? 'text-1' : 'text-2'
+              }`}
+              onClick={() => setActiveTab(index)}
             >
-              <img
-                key={social_link.name}
-                src={`/Social/Blue/${social_link.image}`}
-                className="social_link_icon"
-              />
-            </a>
+              {tab.name}
+            </div>
           );
-        })}
-      </TImerStyle>
-    </div>
-  );
-}
+        }}
+      />
+    );
+  } else
+    return (
+      <BufferTab
+        value={activeTab}
+        handleChange={(e, t) => {
+          setActiveTab(t);
+        }}
+        tablist={tabList}
+      />
+    );
+};

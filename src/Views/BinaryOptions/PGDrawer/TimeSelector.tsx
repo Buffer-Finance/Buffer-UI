@@ -6,6 +6,7 @@ import BN from 'bn.js';
 import Big from 'big.js';
 import { useToast } from '@Contexts/Toast';
 import { lt } from '@Utils/NumString/stringArithmatics';
+import { add, gt, lt } from '@Utils/NumString/stringArithmatics';
 import { PoolDropDown } from './PoolDropDown';
 
 const TimeSelectorStyles = styled.div`
@@ -117,10 +118,13 @@ export function getUserError(maxTimeInHHMM: string) {
   let minutes = maxTimeInHHMM.toString().split(':')[1];
   if (hours.charAt(0) == '0') hours = hours.charAt(1);
   if (minutes.charAt(0) == '0') minutes = minutes.charAt(1);
-  let message;
-  if (minutes == '0') return `${hours} hours`;
-  else if (hours == '0') return `${minutes} minutes`;
-  else return `${hours} hours ${minutes} minutes`;
+  if (minutes == '0') return `${hours} hour${gt(hours, '1') ? 's' : ''}`;
+  else if (hours == '0')
+    return `${minutes} minute${gt(minutes, '1') ? 's' : ''}`;
+  else
+    return `${hours} hour${gt(hours, '1') ? 's' : ''} ${minutes} minute${
+      gt(minutes, '1') ? 's' : ''
+    }`;
 }
 
 // Add two times in hh:mm format
@@ -151,20 +155,20 @@ export const TimeSelector = ({
   setTime,
   investmentDD,
   max,
-  label,
   error,
   onSelect,
-  title,
   maxTime = '23:59',
+  minTime = '00:05',
 }: {
   isTimeSelector?: boolean;
   currentTime: string | number;
   label?: string;
   investmentDD?: boolean;
   maxTime?: string;
+  minTime?: string;
   setTime: (any) => void;
   max?: number;
-  onSelect?:()=>void;
+  onSelect?: () => void;
   title?: string;
   error: {
     min: number;
@@ -176,6 +180,7 @@ export const TimeSelector = ({
   const maxMins = parseInt(maxTime.split(':')[1]);
   const maxHrs = parseInt(maxTime.split(':')[0]);
   const maxTimeInMins = timeToMins(maxTime);
+  const minTimeInMins = timeToMins(minTime);
   const currentTimeInMins = timeToMins(currentTime);
   const hrsRef = useRef(null);
   const minRef = useRef(null);
@@ -184,6 +189,7 @@ export const TimeSelector = ({
   }
 
   useEffect(() => {
+    if (currentTimeInMins === undefined || maxTimeInMins === undefined) return;
     if (currentTimeInMins > maxTimeInMins) {
       hrsRef.current.value = maxHrs;
       minRef.current.value = maxMins;
@@ -210,7 +216,7 @@ export const TimeSelector = ({
   }, [currentTime]);
 
   const minError = isTimeSelector
-    ? timeToMins(currentTime) < MINIMUM_MINUTES
+    ? timeToMins(currentTime) < minTimeInMins
     : currentTime < error.min;
   const maxError = isTimeSelector
     ? timeToMins(currentTime) > maxTimeInMins
@@ -220,9 +226,7 @@ export const TimeSelector = ({
     if (isTimeSelector) {
       currentTime = hrsRef.current.value + ':' + minRef.current.value;
       if (isBack) {
-        if (currentTimeInMins > timeToMins('00:05')) {
-          setTime(subtractTImes(currentTime, '00:01'));
-        }
+        setTime(subtractTImes(currentTime, '00:01'));
       } else if (currentTimeInMins < timeToMins('23:59')) {
         setTime(addTimes(currentTime, '00:01'));
       }
@@ -246,13 +250,13 @@ export const TimeSelector = ({
     if (value > 23) hrsRef.current.value = 23;
     if (value.toString().length > 2)
       hrsRef.current.value = value.toString().slice(0, 2);
-    if (
-      (hrsRef.current.value === '00' ||
-        hrsRef.current.value === '0' ||
-        !hrsRef.current.value) &&
-      lt(minRef.current.value || '0', '5')
-    )
-      minRef.current.value = '5';
+    // if (
+    //   (hrsRef.current.value === '00' ||
+    //     hrsRef.current.value === '0' ||
+    //     !hrsRef.current.value) &&
+    //   lt(minRef.current.value || '0', '5')
+    // )
+    //   minRef.current.value = '5';
     // if (
     //   timeToMins(hrsRef.current.value + ":" + minRef.current.value) >
     //   maxTimeInMins
@@ -266,16 +270,20 @@ export const TimeSelector = ({
 
   const minValidations = (value) => {
     if (value < 0) minRef.current.value = 0;
-    if (value > 59) minRef.current.value = 59;
+    // if (value > 59) minRef.current.value = 59;
     if (value.toString().length > 2)
       minRef.current.value = value.toString().slice(0, 2);
-    if (
-      (hrsRef.current.value === '00' ||
-        hrsRef.current.value === '0' ||
-        !hrsRef.current.value) &&
-      lt(minRef.current.value || '0', '5')
-    )
-      minRef.current.value = '5';
+    // if (value > 59) {
+    //   minRef.current.value = 0;
+    //   hrsRef.current.value = add('1',hrsRef.current.value);
+    // }
+    // if (
+    //   (hrsRef.current.value === '00' ||
+    //     hrsRef.current.value === '0' ||
+    //     !hrsRef.current.value) &&
+    //   lt(minRef.current.value || '0', '5')
+    // )
+    //   minRef.current.value = '5';
     // if (
     //   timeToMins(hrsRef.current.value + ":" + minRef.current.value) >
     //   maxTimeInMins
@@ -289,8 +297,12 @@ export const TimeSelector = ({
   const timestyles = 'timeRef timetip text-right text-f16 font-bold';
   return (
     <>
-      <TimeSelectorStyles className=" transition-colors bg-1  ">
-        <div className="w-[max-content] hover:brightness-150 p-[6px] flex-1">
+      <TimeSelectorStyles className=" transition-colors bg-1  border-">
+        <div
+          className={`${
+            isTimeSelector ? 'w-full' : 'w-max'
+          } hover:brightness-150 p-[6px]`}
+        >
           <div className="flex-bw ">
             <button
               className="button-bg"
@@ -314,22 +326,25 @@ export const TimeSelector = ({
                 <input
                   className="timeRef timetip text-right text-f16 font-bold text-1"
                   ref={hrsRef}
-                  onKeyDown={e=>e.key == 'Enter' && onSelect?.()}
+                  onKeyDown={(e) => e.key == 'Enter' && onSelect?.()}
                   type="number"
                   tabIndex={2}
                   onChange={(e) => hrsValidations(e.target.value)}
                   placeholder="00"
+                  min={0}
+                  max={23}
                 />
                 <div className="text-f16 text-1 mx-1 text-center">:</div>
                 <input
                   className="timeRef timetip text-f16 font-bold text-left text-1"
                   ref={minRef}
-                  onKeyDown={e=>e.key == 'Enter' && onSelect?.()}
+                  onKeyDown={(e) => e.key == 'Enter' && onSelect?.()}
                   type="number"
                   tabIndex={onSelect && 3}
-
                   onChange={(e) => minValidations(e.target.value)}
                   placeholder="00"
+                  min={0}
+                  max={59}
                 />
                 {/* <div className="f18 text-1 ">m</div> */}
               </div>

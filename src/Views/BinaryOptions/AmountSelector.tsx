@@ -4,8 +4,7 @@ import { BufferInputUnit } from '@Views/Common/BufferTextInputRoot';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import { mobileUpperBound, useQTinfo } from '.';
-import { ammountAtom, QuickTradeExpiry } from './PGDrawer';
+import {  QuickTradeExpiry } from './PGDrawer';
 const labelClasses = 'text-2 mr-2 text-f14 font-semibold';
 const ipClasses =
   'outline-none w-full text-1 text-f16 font-bold text-right mr-2 bg-transparent';
@@ -16,11 +15,6 @@ import AccountInfo from '@Views/Common/AccountInfo';
 import { useActivePoolObj } from './PGDrawer/PoolDropDown';
 import { Fade } from '@mui/material';
 import ErrorIcon from '@Assets/Elements/ErrorIcon';
-import {
-  getUserError,
-  TimeSelector,
-  timeToMins,
-} from './PGDrawer/TimeSelector';
 import { DurationPicker } from './PGDrawer/DurationPicker';
 import { Background } from './PGDrawer/style';
 import { useToast } from '@Contexts/Toast';

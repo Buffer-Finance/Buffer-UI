@@ -1,19 +1,23 @@
 import axios from 'axios';
 import { baseGraphqlUrl, isTestnet } from 'config';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { useSetAtom } from 'jotai';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add } from '@Utils/NumString/stringArithmatics';
-import { updateLeaderboardTotalPageAtom } from '../atom';
-import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
 
+export interface IWinrate extends ILeague {
+  winrate: string;
+  tradesWon: string;
+}
 interface ILeaderboardQuery {
   userStats: ILeague[];
   loserStats: ILeague[];
+  winrate: IWinrate[];
+  winnerWinrate: IWinrate[];
+  loserWinrate: IWinrate[];
   totalData: {
     totalTrades: number;
     volume: string;
@@ -34,13 +38,21 @@ export function getWeekId(offset: number): number {
   );
   return dayTimestamp;
 }
+export const blockedAccounts = [
+  '0x361e9013d7e4f2e4a035ba97fdb42cb7d2540259',
+  '0x6fae0eed696ec28c81269b99240ee960570666f1',
+  '0x0b8750c12fa14decd31eadff7e92cbd64a198094',
+  '0x10df9a95010c8b9fbdc8f6191de824df9c99a8d8',
+  '0x547a821c692921d82ebd936320dc1a608a6e38c1',
+  '0x2a007f31146ff8f939b6ca3ad18c8d2a6e42eb73',
+];
 
+const winrateMinimumTrades = 10;
 export const useWeeklyLeaderboardQuery = () => {
-  const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
   const { week } = useWeekOfTournament();
-  const timestamp = getWeekId(Number(week - Number(offset)));
+  const timestamp = getWeekId(Number(week - Number(offset ?? week)));
   console.log(timestamp, 'timestamp');
   const minimumTrades = isTestnet ? 5 : 3;
 
@@ -53,7 +65,9 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
           ) {
             user
             totalTrades
@@ -64,13 +78,48 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: asc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
           ) {
             user
             totalTrades
             netPnL
             volume
           }
+
+          winnerWinrate: weeklyLeaderboards(
+            orderBy: winRate
+            orderDirection: desc
+            first: 100
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
+          ) {
+            user
+            totalTrades
+            netPnL
+            volume
+            winRate
+            tradesWon
+          }
+
+          loserWinrate: weeklyLeaderboards(
+            orderBy: winRate
+            orderDirection: asc
+            first: 100
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
+          ) {
+            user
+            totalTrades
+            netPnL
+            volume
+            winRate
+            tradesWon
+          }
+
           totalData: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: desc
@@ -94,6 +143,8 @@ export const useWeeklyLeaderboardQuery = () => {
           netPnL
           volume
           user
+          winRate
+          tradesWon
         }`
           : '';
 
@@ -108,18 +159,43 @@ export const useWeeklyLeaderboardQuery = () => {
     }
   );
 
-  useEffect(() => {
-    //sets total number of pages in arbiturm testnet page
-    if (data && data.userStats && data.userStats.length > 0) {
-      setTablePages({
-        arbitrum: Math.ceil(data.userStats.length / ROWINAPAGE),
-      });
-    } else {
-      setTablePages({
-        arbitrum: 0,
-      });
-    }
-  }, [data?.userStats]);
+  const winnerUserRank = useMemo(() => {
+    if (!data || !data.userStats || !account) return '-';
+    const rank = data.userStats.findIndex(
+      (data) => data.user.toLowerCase() == account.toLowerCase()
+    );
+
+    if (rank === -1) return '-';
+    else return (rank + 1).toString();
+  }, [data?.userData, account]);
+
+  const winnerWinrateUserRank = useMemo(() => {
+    if (!data || !data.winnerWinrate || !account) return '-';
+    const rank = data.winnerWinrate.findIndex(
+      (data) => data.user.toLowerCase() == account.toLowerCase()
+    );
+
+    if (rank === -1) return '-';
+    else return (rank + 1).toString();
+  }, [data?.winnerWinrate, account]);
+
+  const loserUserRank = useMemo(() => {
+    if (!data || !data.loserStats || !account) return '-';
+    const rank = data.loserStats.findIndex(
+      (data) => data.user.toLowerCase() == account.toLowerCase()
+    );
+    if (rank === -1) return '-';
+    else return (rank + 1).toString();
+  }, [data?.loserStats, account]);
+
+  const loserWinrateUserRank = useMemo(() => {
+    if (!data || !data.loserWinrate || !account) return '-';
+    const rank = data.loserWinrate.findIndex(
+      (data) => data.user.toLowerCase() == account.toLowerCase()
+    );
+    if (rank === -1) return '-';
+    else return (rank + 1).toString();
+  }, [data?.loserWinrate, account]);
 
   const totalTournamentData = useMemo(() => {
     if (!data || !data.totalData) return null;
@@ -134,7 +210,14 @@ export const useWeeklyLeaderboardQuery = () => {
     return { allTradesCount, totalFee, totalRows, totalUsers };
   }, [data?.totalData, account]);
 
-  return { data, totalTournamentData };
+  return {
+    data,
+    totalTournamentData,
+    loserUserRank,
+    winnerUserRank,
+    winnerWinrateUserRank,
+    loserWinrateUserRank,
+  };
 };
 
 /*

@@ -1,11 +1,11 @@
-import { useAtom } from "jotai";
-import React, { useEffect, useState } from "react";
-import EditIcon from "public/ComponentSVGS/Edit";
-import { QuickTradeExpiry } from ".";
-import { useQTinfo } from "..";
-import { getUserError, TimeSelector, timeToMins } from "./TimeSelector";
+import { useAtom } from 'jotai';
+import React, { useEffect, useState } from 'react';
+import EditIcon from 'public/ComponentSVGS/Edit';
+import { QuickTradeExpiry } from '.';
+import { useQTinfo } from '..';
+import { getUserError, TimeSelector, timeToMins } from './TimeSelector';
 
-export const DurationPicker = ({onSelect}:{onSelect?:()=>void}) => {
+export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
   const [currentTime, setCurrentTime] = useAtom(QuickTradeExpiry);
@@ -14,40 +14,53 @@ export const DurationPicker = ({onSelect}:{onSelect?:()=>void}) => {
   const oneSec = 1000;
   const durations = [
     {
+      duration: 1 * 60 * oneSec,
+      time: '00:01',
+      name: ['1', 'Min'],
+    },
+    {
       duration: 5 * 60 * oneSec,
-      time: "00:05",
-      name: ["5", "Min"],
+      time: '00:05',
+      name: ['5', 'Min'],
     },
     {
       duration: 15 * 60 * oneSec,
-      time: "00:15",
-      name: ["15", "Min"],
+      time: '00:15',
+      name: ['15', 'Min'],
     },
     {
       duration: 60 * 60 * oneSec,
-      time: "01:00",
-      name: ["1", "Hour"],
+      time: '01:00',
+      name: ['1', 'Hour'],
     },
     {
       duration: 4 * 60 * 60 * oneSec,
-      time: "04:00",
-      name: ["4", "Hour"],
+      time: '04:00',
+      name: ['4', 'Hour'],
     },
     {
       duration: 24 * 60 * 60 * oneSec,
-      time: "23:59",
-      name: ["24", "Hour"],
+      time: '23:59',
+      name: ['24', 'Hour'],
     },
   ];
 
   useEffect(() => {
-    if (!currentTime) return;
-    localStorage.setItem("exp", currentTime);
+    if (!currentTime || !activeAsset) return;
+    localStorage.setItem('exp', currentTime);
     const activeDuration = durations.find(
       (item) => item.duration === timeToMins(currentTime) * 60 * oneSec
     );
-    if (!activeDuration) setOpenCustomInput(true);
-  }, [currentTime]);
+    if (
+      !activeDuration ||
+      activeDuration.duration >
+        timeToMins(activeAsset.max_duration) * 60 * oneSec ||
+      activeDuration.duration <
+        timeToMins(activeAsset.min_duration) * 60 * oneSec
+    )
+      setOpenCustomInput(true);
+    // else setOpenCustomInput(false);
+  }, [currentTime, activeAsset]);
 
   return (
     <>
@@ -60,9 +73,11 @@ export const DurationPicker = ({onSelect}:{onSelect?:()=>void}) => {
               : single.duration - 60 * oneSec;
 
             const isDisabled =
-              !isLastElement &&
-              durationIntoSeconds >
-                timeToMins(activeAsset.max_duration) * 60 * oneSec;
+              (!isLastElement &&
+                durationIntoSeconds >
+                  timeToMins(activeAsset.max_duration) * 60 * oneSec) ||
+              durationIntoSeconds <
+                timeToMins(activeAsset.min_duration) * 60 * oneSec;
             const singleDuration = isLastElement
               ? single.duration - 60 * oneSec
               : single.duration;
@@ -73,22 +88,21 @@ export const DurationPicker = ({onSelect}:{onSelect?:()=>void}) => {
                 onClick={() => {
                   if (isDisabled) return;
                   if (isLastElement) return setOpenCustomInput(true);
-                  onSelect()
+                  onSelect?.();
                   setCurrentTime(single.time);
                   setDur(idx);
                   setOpenCustomInput(false);
                 }}
                 className={
-                  "each-duration py-1 font-medium text-f12 h-[55px] transition-colors " +
+                  'each-duration py-1 font-medium text-f12 h-[55px] transition-colors ' +
                   ((timeToMins(currentTime) * 60 * oneSec === singleDuration &&
-                    !isDisabled &&
-                    !openCustomInput) ||
+                    !isDisabled) ||
                   (isLastElement && openCustomInput)
-                    ? "active text-1 "
-                    : "text-2") +
+                    ? 'active text-1 '
+                    : 'text-2') +
                   (isDisabled
-                    ? " !cursor-not-allowed opacity-40"
-                    : " hover:text-1 hover:brightness-150")
+                    ? ' !cursor-not-allowed opacity-40'
+                    : ' hover:text-1 hover:brightness-150')
                 }
               >
                 {isLastElement ? (
@@ -106,7 +120,7 @@ export const DurationPicker = ({onSelect}:{onSelect?:()=>void}) => {
             Trading is closed for Forex aseets right now.
           </div>
         )} */}
-      </div>{" "}
+      </div>{' '}
       {openCustomInput && (
         <>
           <div className="text-f14">Time (hh:mm) </div>
@@ -116,9 +130,12 @@ export const DurationPicker = ({onSelect}:{onSelect?:()=>void}) => {
             currentTime={currentTime}
             setTime={(newValue) => setCurrentTime(newValue)}
             maxTime={activeAsset.max_duration}
+            minTime={activeAsset.min_duration}
             error={{
-              min: 5 * 60,
-              minMsg: "Can't set expiry lower than 5 mins.",
+              min: timeToMins(activeAsset.min_duration),
+              minMsg: `Can't set expiry lower than ${getUserError(
+                activeAsset.min_duration
+              )}.`,
               max: timeToMins(activeAsset.max_duration),
               maxMsg: `Can't set expiry of more than ${getUserError(
                 activeAsset.max_duration

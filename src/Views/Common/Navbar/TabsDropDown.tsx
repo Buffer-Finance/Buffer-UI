@@ -68,7 +68,7 @@ export const TabsDropdown = ({
                     to={tab.to}
                     className={({ isActive }) =>
                       `!h-fit py-3 text-4 text-f15 hover:text-1 ${
-                        isActive ? 'bg-3 text-1' : ''
+                        isActive ? ' text-1' : ''
                       } `
                     }
                     onClick={() => {

@@ -10,7 +10,7 @@ import { useUserAccount } from "@Hooks/useUserAccount";
 export function useUserReferralData(activeChain: Chain) {
   const activeChainID = activeChain.id;
   const { address: account } = useUserAccount();
-  const referralAddress = getContract(activeChain.id, "referral");
+  const referralAddress = getContract(activeChain.id);
 
   const calls = referralAddress
     ? [

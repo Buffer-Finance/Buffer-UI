@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { atom, useAtom, useSetAtom } from 'jotai';
+import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
 import { useNavigate } from 'react-router-dom';
@@ -34,12 +34,15 @@ export const IV = 12000;
 export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
 import Config from 'public/config.json';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { useSearchParam } from 'react-use';
+import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
 import { WarningOutlined } from '@mui/icons-material';
 import { TradingChart } from 'src/TradingView';
 import { usePrice } from '@Hooks/usePrice';
+import { getChains } from 'src/Config/wagmiClient';
+import { BuyTrade } from './BuyTrade';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -110,10 +113,10 @@ export const activeMarketFromStorageAtom = atomWithLocalStorage(
 );
 export const useQTinfo = () => {
   const params = useParams();
-  const { activeChain } = useActiveChain();
+  const { activeChain, configContracts } = useActiveChain();
   const data = useMemo(() => {
-    let activeMarket = Config[ENV].pairs.find((m) => {
-      let market = params?.market;
+    let activeMarket = Config[activeChain.id].pairs.find((m) => {
+      let market = params?.market || 'ETH-USD';
       // GBP
       market = market?.toUpperCase();
       let currM = m.pair.toUpperCase();
@@ -125,18 +128,18 @@ export const useQTinfo = () => {
       return false;
     });
     if (!activeMarket) {
-      activeMarket = Config[ENV].pairs[0];
+      activeMarket = Config[activeChain.id].pairs[0];
     }
     return {
       chain: 'ARBITRUM',
       asset: activeMarket.pair,
-      pairs: Config[ENV].pairs.map((singlePair) => {
+      pairs: Config[activeChain.id].pairs.map((singlePair) => {
         return {
           ...singlePair,
           pools: singlePair.pools.map((singlePool) => {
             return {
               ...singlePool,
-              token: Config[ENV].tokens[singlePool.token],
+              token: Config[activeChain.id].tokens[singlePool.token],
             };
           }),
         };
@@ -146,18 +149,13 @@ export const useQTinfo = () => {
         pools: activeMarket.pools.map((singlePool) => {
           return {
             ...singlePool,
-            token: Config[ENV].tokens[singlePool.token],
+            token: Config[activeChain.id].tokens[singlePool.token],
           };
         }),
       },
-      optionMeta: '0x3D81B239F5D58e5086cC58d9012c326F34B3BC36',
-      routerContract: Config[ENV].router,
-      activeChain: {
-        ...(import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
-          ? arbitrum
-          : arbitrumGoerli),
-        testnet: false,
-      },
+      optionMeta: configContracts.meta,
+      routerContract: Config[activeChain.id].router,
+      activeChain,
     };
   }, [params?.market, activeChain]);
   return data;
@@ -165,9 +163,18 @@ export const useQTinfo = () => {
 
 function QTrade() {
   const props = useQTinfo();
-  usePrice();
-
-  const [ref, setRef] = useAtom(referralCodeAtom);
+  const params = useParams();
+  const navigate = useNavigate();
+  const setActiveMarketFromStorage = useSetAtom(activeMarketFromStorageAtom);
+  useEffect(() => {
+    console.log(`params?.market: `, params?.market);
+    if (params?.market && params.market != 'undefined') {
+      setActiveMarketFromStorage(params.market);
+    } else {
+      navigate('/#/binary/' + defaultMarket);
+      console.log('marketnotfound');
+    }
+  }, [params?.market]);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
   // const [assets, setAssets] = useAtom(DisplayAssetsAtom);
@@ -176,9 +183,8 @@ function QTrade() {
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
-  const [
-    { active: activePage, history: historyPage, cancelled: cancelledPage },
-  ] = useAtom(tardesPageAtom);
+  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
+
   useEffect(() => {
     document.title = 'Buffer | Trade';
   }, []);
@@ -191,13 +197,6 @@ function QTrade() {
     subTabs: [],
     isExternalLink: false,
   };
-  const mapToPair = (market: IMarket) => market.pair;
-  // if (assets.length === 0 || assets.length > 5)
-  //   setAssets(
-  //     props.pairs.length > 5
-  //       ? props.pairs.slice(0, 5).map(mapToPair)
-  //       : props.pairs.map(mapToPair)
-  //   );
 
   useEffect(() => {
     dispatch({
@@ -212,13 +211,6 @@ function QTrade() {
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
   );
-  const [searchParam] = useSearchParams();
-  useEffect(() => {
-    const referralCode = searchParam.get('ref');
-    if (referralCode) {
-      if (ref !== referralCode) setRef(referralCode);
-    }
-  }, [params]);
 
   return (
     <>
@@ -279,14 +271,14 @@ function QTrade() {
                     <>
                       <PGTables
                         configData={props}
-                        currentPage={activePage}
-                        count={tradesCount}
+                        activePage={active}
                         onPageChange={(e, pageNumber) =>
                           setActivePage(pageNumber)
                         }
                       />
                       <MobileOnly>
                         <MobileTable
+                          activePage={active}
                           configData={props}
                           onPageChange={(e, pageNumber) =>
                             setActivePage(pageNumber)
@@ -298,16 +290,15 @@ function QTrade() {
                   {activeTab === binaryTabs[3] && (
                     <>
                       <PGTables
-                        isHistoryTable={true}
                         configData={props}
-                        currentPage={historyPage}
-                        count={tradesCount}
+                        activePage={history}
                         onPageChange={(e, pageNumber) =>
                           setHistoryPage(pageNumber)
                         }
                       />
                       <MobileOnly>
                         <MobileTable
+                          activePage={history}
                           configData={props}
                           isHistoryTab
                           onPageChange={(e, pageNumber) =>
@@ -320,10 +311,8 @@ function QTrade() {
                   {activeTab === binaryTabs[4] && (
                     <>
                       <PGTables
-                        isHistoryTable={true}
                         configData={props}
-                        currentPage={cancelledPage}
-                        count={tradesCount}
+                        activePage={cancelled}
                         onPageChange={(e, pageNumber) =>
                           setCancelledPage(pageNumber)
                         }
@@ -331,6 +320,7 @@ function QTrade() {
                       <MobileOnly>
                         <MobileTable
                           isCancelledTab
+                          activePage={cancelled}
                           configData={props}
                           onPageChange={(e, pageNumber) =>
                             setCancelledPage(pageNumber)
