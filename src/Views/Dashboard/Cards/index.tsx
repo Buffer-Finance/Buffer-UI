@@ -164,9 +164,11 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
               </NumberTooltip>
             </div>,
             <div>
-              {data.openInterest ? data.openInterest + ' USDC' : 'fetching...'}
+              {data.openInterest !== null
+                ? data.openInterest + ' USDC'
+                : 'fetching...'}
             </div>,
-            <div>{data.trades ? data.trades : 'fetching...'}</div>,
+            <div>{data.trades !== null ? data.trades : 'fetching...'}</div>,
           ]}
         />
       }

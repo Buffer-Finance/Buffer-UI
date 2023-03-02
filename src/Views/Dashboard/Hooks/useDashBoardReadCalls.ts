@@ -65,7 +65,7 @@ export const useDashboardReadCalls = () => {
     contracts: calls,
   });
   // convertBNtoString(data);
-  console.log(`data: `, data);
+  // console.log(`data: `, data);
 
   let response: {
     BFR: IBFR;
@@ -190,9 +190,8 @@ export const useDashboardReadCalls = () => {
           usdc_24_volume: USDC24stats
             ? fromWei(USDC24stats.amount, usd_decimals)
             : '0',
-          trades: totalData && totalData.trades ? totalData.trades : null,
-          openInterest:
-            totalData && totalData.openInterest ? totalData.openInterest : null,
+          trades: totalData ? totalData.trades : null,
+          openInterest: totalData ? totalData.openInterest : null,
         },
         overView: {
           price: blpPrice,
@@ -396,7 +395,7 @@ const useDashboardCalls = () => {
     },
     refreshInterval: 10000,
   });
-  console.log(`mainnetData: `, mainnetData);
+  // console.log(`mainnetData: `, mainnetData);
 
   return { calls, mainnetData };
 };

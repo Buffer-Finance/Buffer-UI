@@ -129,24 +129,27 @@ export const useDashboardTableData = () => {
     return upatedData;
   }, [data, currentPrices]);
 
-  const totalData: { trades: number; volume: string; openInterest: number } =
-    useMemo(() => {
-      if (!dashboardData) return null;
-      return dashboardData.reduce(
-        (acc, item) => {
-          return {
-            trades: acc.trades + item.tradeCount,
-            volume: add(acc.volume, item.volume),
-            openInterest: acc.openInterest + item.openInterest,
-          };
-        },
-        {
-          trades: 0,
-          volume: '0',
-          openInterest: 0,
-        }
-      );
-    }, [dashboardData]);
-
+  const totalData: {
+    trades: number;
+    volume: string;
+    openInterest: number;
+  } | null = useMemo(() => {
+    if (!dashboardData) return null;
+    return dashboardData.reduce(
+      (acc, item) => {
+        return {
+          trades: acc.trades + item.tradeCount,
+          volume: add(acc.volume, item.volume),
+          openInterest: acc.openInterest + item.openInterest,
+        };
+      },
+      {
+        trades: 0,
+        volume: '0',
+        openInterest: 0,
+      }
+    );
+  }, [dashboardData]);
+  // console.log(dashboardData, totalData, 'dashboardData');
   return { dashboardData, totalData };
 };
