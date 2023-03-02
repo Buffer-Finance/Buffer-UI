@@ -418,7 +418,7 @@ export const getMobileTabs = (
       },
       {
         to: `/history`,
-        name: 'History',
+        name: 'Activity',
         subTabs: [],
         isExternalLink: false,
         icon: TabIcon.History,
@@ -528,7 +528,7 @@ export const getMobileTabs = (
       },
       {
         to: `/history`,
-        name: 'History',
+        name: 'Activity',
         subTabs: [],
         isExternalLink: false,
         icon: TabIcon.History,
