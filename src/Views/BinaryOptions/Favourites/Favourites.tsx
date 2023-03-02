@@ -7,11 +7,13 @@ import {
   DisplayAssetsAtom,
   IMarket,
   MobileOnly,
+  mobileUpperBound,
   useQTinfo,
   WebOnly,
 } from '..';
 import ShutterDrawer from 'react-bottom-drawer';
-
+const activeClasses =
+  'text-1 bg-[#131722] rounded-t-[10px] cursor-default  left-border-needed ';
 import { FavouriteAssetDD } from './FavouriteAssetDD';
 import { CloseOutlined } from '@mui/icons-material';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
@@ -59,9 +61,9 @@ export default function Favourites({ className }: { className?: string }) {
   const { closeShutter } = useShutterHandlers();
   const FavourtiteAssetSelector = (
     <FavouriteAssetDD
-    className="asset-dropdown-wrapper sm:!static nsm:!w-[500px] sm:!w-full"
-    setToggle={setToggle}
-  />
+      className="asset-dropdown-wrapper sm:!static nsm:!w-[500px] sm:!w-full"
+      setToggle={setToggle}
+    />
   );
   return (
     <Background
@@ -109,9 +111,7 @@ export default function Favourites({ className }: { className?: string }) {
               mountOnEnter
               unmountOnExit
             >
-                <div className="relative text-1">
-               {FavourtiteAssetSelector}
-                </div>
+              <div className="relative text-1">{FavourtiteAssetSelector}</div>
             </ShutterDrawer>
           </MobileOnly>
           <WebOnly>
@@ -193,12 +193,13 @@ function FavouriteCard({
     routerPermission &&
     routerPermission[data.pools[0].options_contracts.current];
   const navigate = useNavigate();
-
+  // T w>m desktop, isActive : T, active F, inactive
+  // F w<m mobile, isActive : T inactive , F active
   return (
     <div
       className={`cursor-pointer group mt-1 relative group pl-4 pr-3 py-3 text-2 flex flex-row items-center justify-between b1200:flex-col a1200:!min-w-[100px]  b1200:!px-3 b1200:rounded-md  b1200:mr-3  b1200:items-start ${
-        isActive
-          ? 'text-1 bg-[#131722] rounded-t-[10px] cursor-default  left-border-needed '
+        window.innerWidth > mobileUpperBound === isActive
+          ? activeClasses
           : `hover:bg-1 hover:rounded-t-[0px] b1200:bg-cross-bg after-border ${
               !isPrevActive && id ? 'before-border' : ''
             } ${!isAssetActive ? 'brightness-50' : ''} 
@@ -207,7 +208,7 @@ function FavouriteCard({
       onClick={() => navigate(`/binary/${data.pair}`)}
     >
       <button
-        className="!absolute z-[10] text-1 !-right-3 -top-1 !bg-cross-bg rounded-full w-[17px] h-[17px] group-hover:visible invisible"
+        className="!absolute z-[10] text-1 !-right-3 -top-1 !bg-cross-bg rounded-full w-[17px] h-[17px] group-hover:visible nsm:invisible"
         onClick={(e) => {
           e.stopPropagation();
           deleteCardHandler(e, data, isActive);
