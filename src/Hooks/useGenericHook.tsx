@@ -1,19 +1,19 @@
-import { useEffect, useRef } from "react";
-import { useAtom, useAtomValue } from "jotai";
-import { useToast } from "@Contexts/Toast";
+import { useEffect, useRef } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
+import { useToast } from '@Contexts/Toast';
 import {
   SetShareBetAtom,
   SetShareStateAtom,
-} from "@Views/BinaryOptions/Components/shareModal";
+} from '@Views/BinaryOptions/Components/shareModal';
 import {
   IGQLHistory,
   tardesAtom,
-} from "@Views/BinaryOptions/Hooks/usePastTradeQuery";
-import { getExpireNotification } from "@Views/BinaryOptions/Tables/TableComponents";
-import { BetState } from "@Hooks/useAheadTrades";
+} from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
+import { getExpireNotification } from '@Views/BinaryOptions/Tables/TableComponents';
+import { BetState } from '@Hooks/useAheadTrades';
 
 export const getIdentifier = (a: IGQLHistory) => {
-  return +a.optionID + "-" + a.configPair.pair;
+  return +a.optionID + '-' + a.configPair.pair;
 };
 
 const useGenericHooks = () => {
@@ -34,7 +34,7 @@ const useGenericHooks = () => {
   useEffect(() => {
     const delay = 2;
     if (!binaryData) return;
-    if (typeof binaryData.forEach !== "function") return;
+    if (typeof binaryData.forEach !== 'function') return;
 
     for (let trade of binaryData) {
       if (trade.state == BetState.active) {
@@ -45,6 +45,7 @@ const useGenericHooks = () => {
     for (let tradeIdentifier in tradeCache.current) {
       const currTrade = tradeCache.current[tradeIdentifier];
       if (!currTrade.visited) {
+        console.log(`notif-called-on-currTrade: `, currTrade);
         setTimeout(() => {
           getExpireNotification(
             { ...currTrade.trade },
@@ -69,4 +70,4 @@ const useGenericHooks = () => {
   }, [binaryData]);
 };
 
-export { useGenericHooks};
+export { useGenericHooks };
