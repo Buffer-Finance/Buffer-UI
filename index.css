@@ -13,7 +13,41 @@ body {
   margin: 0;
   background-color: var(--bg-17);
 }
+.child-svg-squeeze svg{
+  transform: scale(0.8);
+}
 
+.mobile-bottom-drawer{
+  grid-area: Footer;
+  display: hidden;
+
+}
+.drawer__handle-wrapper{
+  background-color: #17171F;
+}
+.TVChartContainer{
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.TVChartContainer-wrapper{
+  width: auto;
+  resize: vertical;
+  height: 60vh;
+}
+
+@media (max-width: 800px)  {
+  .mobile-bottom-drawer{
+    display: flex;
+  }
+  .TVChartContainer-wrapper{
+    width: auto;
+    resize: vertical;
+    height: 55vh;
+  }
+  
+}
 @media (max-width: 800px) and (min-width: 600px) {
   .custom-view {
     display: none;
@@ -183,11 +217,11 @@ onUpEnd(c-(idx)
     position: absolute;
     top: 0px;
     right: calc(var(--global-padding) * -1);
-    background: linear-gradient(
+    background:linear-gradient(
       90deg,
-      rgba(2, 0, 36, 0) 0%,
+      rgb(87 86 91 / 0%) 0%,
       rgba(255, 255, 255, 0) 0%,
-      rgba(0, 0, 0, 0.575) 100%
+      rgb(18 18 28 / 57%) 100%
     );
     content: '';
     width: 20px;
@@ -221,7 +255,7 @@ div.chart-type-dd {
     transform: none;
   }
   .scrollbarnil::after {
-    right: 0px;
+    right: calc(-1 * var(--global-padding));
   }
 }
 
@@ -1409,9 +1443,7 @@ html .xxsph {
 html .text-left {
   text-align: left !important;
 }
-html .text-right {
-  text-align: right !important;
-}
+
 
 html .smv {
   margin: var(--s) 0;
@@ -2082,12 +2114,7 @@ iframe {
   width: 100%;
   height: 100%;
 }
-@media (max-width: 600px) {
-  iframe {
-    width: 100%;
-    height: 80vh;
-  }
-}
+
 .cross-btn-all {
   padding: 0 !important;
   margin-right: 2px !important;

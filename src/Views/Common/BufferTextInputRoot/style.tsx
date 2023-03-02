@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 const Background = styled.div`
+  display:flex;
+  flex-direction:column;
   &.ip-border {
     border: 1.14763px solid #2a2a3a;
     border-radius: 11.4px;  
