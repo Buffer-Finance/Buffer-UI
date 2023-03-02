@@ -22,7 +22,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { endDay, startTimestamp, winRateStart } from './config';
 
 import TabSwitch from '@Views/Common/TabSwitch';
-import BufferTab from '@Views/Common/BufferTab';
+import BufferTab, { ITab } from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
@@ -32,6 +32,8 @@ import {
 } from '../Hooks/useWeeklyLeaderboardQuery';
 import { TimerBox } from '../Incentivised';
 import { ILeague } from '../interfaces';
+import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
+import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -292,61 +294,60 @@ export const Weekly = () => {
             </div>
           }
         />
-        <BufferTab
-          value={activeTab}
-          handleChange={(e, t) => {
-            setActiveTab(t);
-          }}
-          distance={5}
-          tablist={tabList}
-        />
-        <TabSwitch
-          value={activeTab}
-          childComponents={[
-            <DailyWebTable
-              standings={tableData.winnerPnl}
-              count={totalPages.winnerPnl}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={3}
-              userRank={winnerUserRank}
-              activePage={activePages.arbitrum}
-            />,
-            <DailyWebTable
-              activePage={activePages.arbitrum}
-              userRank={loserUserRank}
-              standings={tableData.loserPnl}
-              count={totalPages.loserPnl}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={4}
-            />,
-            <DailyWebTable
-              activePage={activePages.arbitrum}
-              userRank={winnerWinrateUserRank}
-              standings={tableData.winnerWinRate}
-              count={totalPages.winnerWinRate}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={4}
-              isWinrateTable
-            />,
-            <DailyWebTable
-              activePage={activePages.arbitrum}
-              userRank={loserWinrateUserRank}
-              standings={tableData.loserWinrate}
-              count={totalPages.loserWinRate}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={4}
-              isWinrateTable
-            />,
-          ]}
-        />
+        <div className="flex flex-col justify-center max-w-[590px] m-auto">
+          <LeaderBoardTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabList={tabList}
+          />
+          <TabSwitch
+            value={activeTab}
+            childComponents={[
+              <DailyWebTable
+                standings={tableData.winnerPnl}
+                count={totalPages.winnerPnl}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={3}
+                userRank={winnerUserRank}
+                activePage={activePages.arbitrum}
+              />,
+              <DailyWebTable
+                activePage={activePages.arbitrum}
+                userRank={loserUserRank}
+                standings={tableData.loserPnl}
+                count={totalPages.loserPnl}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={4}
+              />,
+              <DailyWebTable
+                activePage={activePages.arbitrum}
+                userRank={winnerWinrateUserRank}
+                standings={tableData.winnerWinRate}
+                count={totalPages.winnerWinRate}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={4}
+                isWinrateTable
+              />,
+              <DailyWebTable
+                activePage={activePages.arbitrum}
+                userRank={loserWinrateUserRank}
+                standings={tableData.loserWinrate}
+                count={totalPages.loserWinRate}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={4}
+                isWinrateTable
+              />,
+            ]}
+          />
+        </div>
       </div>
     );
   }
@@ -382,4 +383,53 @@ export const Weekly = () => {
       }
     ></LeaderBoard>
   );
+};
+
+export const LeaderBoardTabs = ({
+  activeTab,
+  setActiveTab,
+  tabList,
+}: {
+  activeTab: number;
+  setActiveTab: (t: number) => void;
+  tabList: ITab[];
+}) => {
+  if (window.innerWidth < 1200) {
+    return (
+      <BufferDropdown
+        rootClass="w-[200px]"
+        className="py-4 px-4 bg-2"
+        dropdownBox={(a, open, disabled) => (
+          <div className="flex items-center justify-between text-f15 bg-1 px-4 pt-2 pb-[6px] rounded-md">
+            {tabList[activeTab].name}
+            <DropdownArrow open={open} />
+          </div>
+        )}
+        items={tabList}
+        item={(tab, handleClose, onChange, isActive, index) => {
+          return (
+            <div
+              className={`text-f14 whitespace-nowrap ${
+                index === tabList.length - 1 ? '' : 'pb-[6px]'
+              } ${index === 0 ? '' : 'pt-[6px]'} ${
+                activeTab === index ? 'text-1' : 'text-2'
+              }`}
+              onClick={() => setActiveTab(index)}
+            >
+              {tab.name}
+            </div>
+          );
+        }}
+      />
+    );
+  } else
+    return (
+      <BufferTab
+        value={activeTab}
+        handleChange={(e, t) => {
+          setActiveTab(t);
+        }}
+        tablist={tabList}
+      />
+    );
 };
