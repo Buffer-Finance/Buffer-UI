@@ -7,7 +7,10 @@ import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { useAtom, useAtomValue } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { marketPriceAtom } from 'src/TradingView/useDataFeed';
+import {
+  getPriceFromKlines,
+  marketPriceAtom,
+} from 'src/TradingView/useDataFeed';
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
@@ -191,39 +194,43 @@ const MobileTable: React.FC<{
       option.state !== BetState.queued &&
       option.state !== BetState.cancelled
     ) {
-      let additionalInfo = [
-        {
-          name: (
-            <>
-              {option.state !== BetState.active
-                ? 'Price at Expiry'
-                : 'Current Price'}
-            </>
-          ),
-          val: (
-            <ExpiryCurrentComponent
-              isHistoryTable={isHistoryTab}
-              trade={option}
-              marketPrice={marketPrice}
-              configData={option.configPair}
-            />
-          ),
-        },
+      const price = getPriceFromKlines(marketPrice, option.configPair);
+      console.log(`pricedd: `, price);
+      if (isHistoryTab || price) {
+        let additionalInfo = [
+          {
+            name: (
+              <>
+                {option.state !== BetState.active
+                  ? 'Price at Expiry'
+                  : 'Current Price'}
+              </>
+            ),
+            val: (
+              <ExpiryCurrentComponent
+                isHistoryTable={isHistoryTab}
+                trade={option}
+                marketPrice={marketPrice}
+                configData={option.configPair}
+              />
+            ),
+          },
 
-        {
-          name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
-          val: (
-            <ProbabilityPNL
-              isHistoryTable={isHistoryTab}
-              trade={option}
-              marketPrice={marketPrice}
-              onlyPnl
-              configData={option.configPair}
-            />
-          ),
-        },
-      ];
-      arr = [...arr, ...additionalInfo];
+          {
+            name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
+            val: (
+              <ProbabilityPNL
+                isHistoryTable={isHistoryTab}
+                trade={option}
+                marketPrice={marketPrice}
+                onlyPnl
+                configData={option.configPair}
+              />
+            ),
+          },
+        ];
+        arr = [...arr, ...additionalInfo];
+      }
     }
     if (selectedIndex === row) visible = true;
 
