@@ -270,6 +270,119 @@ export const getTabs = (
   name: string;
   subTabs: [];
   isExternalLink: boolean;
+}[] => {
+  const market = marketFromStorage || defaultMarket;
+  if (import.meta.env.VITE_ENV === 'MAINNET') {
+    return [
+      {
+        to: `/binary/` + market,
+        name: 'Trade',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/earn`,
+        name: 'Earn',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/dashboard`,
+        name: 'Dashboard',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/referral`,
+        name: 'Referral',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `https://testnet.buffer.finance/`,
+        name: 'Practice Trading',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: `https://stats.buffer.finance/`,
+        name: 'Stats',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: `/profile`,
+        name: 'Profile',
+        subTabs: [],
+        isExternalLink: false,
+      },
+    ];
+  } else
+    return [
+      {
+        to: `/binary/` + market,
+        name: 'Trade',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/history`,
+        name: 'History',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/earn`,
+        name: 'Earn',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `https://optopi.buffer.finance/`,
+        name: 'NFT',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: `/faucet`,
+        name: 'Faucet',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/leaderboard/weekly`,
+        name: 'Competitions',
+        subTabs: [],
+        isExternalLink: false,
+      },
+
+      {
+        to: `/dashboard`,
+        name: 'Dashboard',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/referral`,
+        name: 'Referral',
+        subTabs: [],
+        isExternalLink: false,
+      },
+    ];
+};
+export const getMobileTabs = (
+  marketFromStorage: string
+): {
+  to: string;
+  name: string;
+  subTabs: [];
+  isExternalLink: boolean;
   mobileOnly?: boolean;
   icon: JSX.Element;
 }[] => {

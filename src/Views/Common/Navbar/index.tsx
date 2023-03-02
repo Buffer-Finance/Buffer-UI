@@ -26,7 +26,7 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = 7;
+  const VISIBLETABS = 4;
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',
@@ -47,7 +47,6 @@ export const Navbar: React.FC<INavbar> = () => {
 
         <div className="tab:hidden flex gap-[6px] b1200:!hidden ">
           {tabs.slice(0, VISIBLETABS).map((tab, index) => {
-            if (tab.mobileOnly) return null;
             if (tab.isExternalLink) {
               return (
                 <button
