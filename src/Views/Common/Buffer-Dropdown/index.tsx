@@ -6,7 +6,7 @@ import { CSSTransition } from 'react-transition-group';
 interface IBufferDropdown {
   items: any[];
   dropdownBox: (a: any, open: boolean, disabled?: boolean) => ReactNode;
-  item: (a: any, b: any, c: any, d: boolean) => ReactNode;
+  item: (a: any, b: any, c: any, d: boolean, index: number) => ReactNode;
   topDecorator?: ReactNode;
   bottomDecorator?: ReactNode;
   className?: string;
@@ -58,11 +58,7 @@ export const BufferDropdown: React.FC<IBufferDropdown> = ({
     <Background ref={wrapperRef}>
       {items.length ? (
         <div
-          className={[
-            'dropdown-box',
-            rootClass,
-            open ? 'active' : rootClass,
-          ].join(' ')}
+          className={['dropdown-box', rootClass].join(' ')}
           onClick={handelClick}
         >
           {dropdownBox(items[activeItemIndex], open, disabled)}
@@ -76,7 +72,7 @@ export const BufferDropdown: React.FC<IBufferDropdown> = ({
             <div className={`dropdown-items ${className}`} id="mobile-drop">
               {topDecorator}
               {items.map((i, key) =>
-                item(i, handelClose, onChange, key === activeItemIndex)
+                item(i, handelClose, onChange, key === activeItemIndex, key)
               )}
               {bottomDecorator}
             </div>

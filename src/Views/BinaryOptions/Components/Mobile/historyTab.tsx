@@ -36,6 +36,7 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import VerticalTransition from '@Views/Common/Transitions/Vertical';
 import { Variables } from '@Utils/Time';
 import { BlackBtn } from '@Views/Common/V2-Button';
+import { getErrorFromCode } from '@Utils/getErrorFromCode';
 
 const CancelButton = ({ option }) => {
   const toastify = useToast();
@@ -171,6 +172,19 @@ const MobileTable: React.FC<{
     let arr = [StrikePrice];
     if (!isCancelledTab) {
       arr = [StartDate, ExpiryDate, StrikePrice];
+    } else {
+      arr = [
+        ...arr,
+        {
+          name: <>Queue Time</>,
+          val: <DisplayDate timestamp={+option.queueTimestamp} />,
+        },
+        {
+          name: <>Cancellation Time</>,
+          val: <DisplayDate timestamp={+option.cancelTimestamp} />,
+        },
+        { name: <>Reason</>, val: <>{getErrorFromCode(option?.reason)}</> },
+      ];
     }
     let visible = false;
     if (
