@@ -29,6 +29,7 @@ import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useDayOffset } from '../Hooks/useDayOffset';
+import { LeaderBoardTabs } from '../Weekly';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -221,39 +222,38 @@ export const Incentivised = () => {
             </div>
           }
         />
-        <BufferTab
-          value={activeTab}
-          handleChange={(e, t) => {
-            setActiveTab(t);
-          }}
-          distance={5}
-          tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
-        />
-        <TabSwitch
-          value={activeTab}
-          childComponents={[
-            <DailyWebTable
-              standings={tableData}
-              count={totalPages.arbitrum}
-              activePage={activePages.arbitrum}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={0}
-              userRank={winnerUserRank}
-            />,
-            <DailyWebTable
-              standings={loserStats}
-              count={totalPages.arbitrum}
-              activePage={activePages.arbitrum}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={1}
-              userRank={loserUserRank}
-            />,
-          ]}
-        />
+        <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
+          <LeaderBoardTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabList={[{ name: 'Winners' }, { name: 'Losers' }]}
+          />
+          <TabSwitch
+            value={activeTab}
+            childComponents={[
+              <DailyWebTable
+                standings={tableData}
+                count={totalPages.arbitrum}
+                activePage={activePages.arbitrum}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={0}
+                userRank={winnerUserRank}
+              />,
+              <DailyWebTable
+                standings={loserStats}
+                count={totalPages.arbitrum}
+                activePage={activePages.arbitrum}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={1}
+                userRank={loserUserRank}
+              />,
+            ]}
+          />
+        </div>
       </div>
     );
   }
