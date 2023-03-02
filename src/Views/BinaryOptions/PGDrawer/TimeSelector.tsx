@@ -5,7 +5,6 @@ import ErrorIcon from 'src/SVG/Elements/ErrorIcon';
 import BN from 'bn.js';
 import Big from 'big.js';
 import { useToast } from '@Contexts/Toast';
-import { lt } from '@Utils/NumString/stringArithmatics';
 import { add, gt, lt } from '@Utils/NumString/stringArithmatics';
 import { PoolDropDown } from './PoolDropDown';
 
