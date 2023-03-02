@@ -26,7 +26,7 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = 4;
+  const VISIBLETABS = 7;
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',
@@ -39,12 +39,15 @@ export const Navbar: React.FC<INavbar> = () => {
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
         >
-          <BufferLogoComponent className="h-[30px] ml-[8px] sm:ml-[10px]" hideText />
+          <BufferLogoComponent
+            className="h-[30px] ml-[8px] sm:ml-[10px]"
+            hideText
+          />
         </div>
 
         <div className="tab:hidden flex gap-[6px] b1200:!hidden ">
           {tabs.slice(0, VISIBLETABS).map((tab, index) => {
-            if(tab.mobileOnly) return null;
+            if (tab.mobileOnly) return null;
             if (tab.isExternalLink) {
               return (
                 <button
@@ -102,8 +105,6 @@ export const Navbar: React.FC<INavbar> = () => {
           {/* <ChainDropdown /> */}
           <AccountDropdown />
         </div>
-
-    
       </div>
     </header>
   );
