@@ -294,7 +294,7 @@ export const Weekly = () => {
             </div>
           }
         />
-        <div className="flex flex-col justify-center max-w-[590px] m-auto">
+        <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
           <LeaderBoardTabs
             activeTab={activeTab}
             setActiveTab={setActiveTab}
