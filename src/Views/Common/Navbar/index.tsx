@@ -40,7 +40,7 @@ export const Navbar: React.FC<INavbar> = () => {
           onClick={() => window.open('https://buffer.finance/', '_blank')}
         >
           <BufferLogoComponent
-            className="h-[30px] ml-[8px] sm:ml-[10px]"
+            className="h-[30px] ml-[8px] sm:mx-[2px]"
             hideText
           />
         </div>
@@ -75,7 +75,7 @@ export const Navbar: React.FC<INavbar> = () => {
 
       <div className="flex items-center gap-[7px] whitespace-nowrap">
         {address && (
-          <div className="text-f13 bg-[#2C2C41] h-[30px] px-5 special-hover hover:brightness-125 tb  rounded-[7px] items-center flex w-fit">
+          <div className="text-f13 bg-[#2C2C41] h-[30px] px-5 special-hover hover:brightness-125  rounded-[7px] items-center flex w-fit">
             <NFTtier userOnly />
           </div>
         )}
