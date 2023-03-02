@@ -20,6 +20,7 @@ export const DailyMobileTable: React.FC<{
   activePage: number;
   userRank: string;
   onClick: (address: string | undefined) => void;
+  isWinrateTable?: boolean;
 }> = ({
   options,
   skip,
@@ -30,6 +31,7 @@ export const DailyMobileTable: React.FC<{
   activePage,
   userRank,
   onClick,
+  isWinrateTable,
 }) => {
   const { address: account } = useUserAccount();
   if (!options)
@@ -49,6 +51,7 @@ export const DailyMobileTable: React.FC<{
           account,
           nftWinners,
           onClick,
+          isWinrateTable,
         }}
       />
     ) : null;
@@ -77,6 +80,7 @@ export const DailyMobileTable: React.FC<{
                   account,
                   nftWinners,
                   onClick,
+                  isWinrateTable,
                 }}
               />
             );
@@ -106,6 +110,7 @@ const MobileRow = ({
   account,
   nftWinners,
   onClick,
+  isWinrateTable,
 }) => {
   const isUser = user ? true : false;
   const perc = multiply(
@@ -165,7 +170,9 @@ const MobileRow = ({
 
         {/* Right Side*/}
         <div className="flex flex-col">
-          <div className="text-2 text-right">Trades</div>
+          <div className="text-2 text-right">
+            {isWinrateTable ? 'Total Trades' : 'Trades'}
+          </div>
           <div className="text-1 text-right">
             {!currentStanding.netPnL || currentStanding.netPnL === null
               ? '-'
@@ -179,9 +186,13 @@ const MobileRow = ({
         {/* Left Side*/}
         <div className="flex flex-col">
           <div className="flex">
-            <div className="text-2 mr-3">Net PnL</div>
+            <div className="text-2 mr-3">
+              {isWinrateTable ? 'Trades Won' : 'Net PnL'}
+            </div>
             <div>
-              {currentStanding.netPnL === null ? (
+              {isWinrateTable ? (
+                currentStanding.tradesWon
+              ) : currentStanding.netPnL === null ? (
                 '-'
               ) : (
                 <Display
@@ -194,9 +205,13 @@ const MobileRow = ({
             </div>
           </div>
           <div className="flex">
-            <div className="text-2 mr-3">Absolute PnL</div>
+            <div className="text-2 mr-3">
+              {isWinrateTable ? 'Win Rate' : 'Absolute PnL'}
+            </div>
             <div>
-              {currentStanding.netPnL === null ? (
+              {isWinrateTable ? (
+                divide(currentStanding.winRate, 3) + '%'
+              ) : currentStanding.netPnL === null ? (
                 '-'
               ) : (
                 <Display
