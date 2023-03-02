@@ -12,8 +12,6 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useAtom, useAtomValue } from 'jotai';
 import { ReactNode, useEffect, useState } from 'react';
-import { getChains } from 'src/Config/wagmiClient';
-import { useNetwork } from 'wagmi';
 import { useQTinfo } from '.';
 import { AmountSelector, DurationSelector } from './AmountSelector';
 import { useBinaryActions } from './Hooks/useBinaryActions';
