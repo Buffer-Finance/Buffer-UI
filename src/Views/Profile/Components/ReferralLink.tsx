@@ -85,7 +85,7 @@ const Button = () => {
     return (
       <BlueBtn
         onClick={() => navigate(`/referral?tab=${tabs[1]}`)}
-        className="w-fit px-5"
+        className="!w-fit px-5"
       >
         Create Referral Code
       </BlueBtn>
@@ -111,7 +111,7 @@ const Button = () => {
       >
         <button
           onClick={copyLink}
-          className="bg-blue rounded-md text-f16 flex items-center gap-2 px-5 py-2"
+          className="bg-blue rounded-md text-f16 flex items-center gap-2 px-5 py-2 !w-fit"
         >
           <ContentCopy />
           Copy Referral Link
