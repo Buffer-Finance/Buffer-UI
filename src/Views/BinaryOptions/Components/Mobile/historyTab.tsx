@@ -236,8 +236,7 @@ const MobileTable: React.FC<{
             <div className="flex flex-col items-end justify-center">
               <div className="f13 flex gap-2">
                 {/* show status on history + queued state */}
-                {option.state == BetState.queued ||
-                option.state == BetState.cancelled ? (
+                {option.state != BetState.active ? (
                   <PayoutChip data={option} />
                 ) : null}
                 {/* dont show duration in queued | cancelled state */}
