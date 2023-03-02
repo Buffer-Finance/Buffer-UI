@@ -247,7 +247,7 @@ const MobileTable: React.FC<{
                 {/* dont show duration in queued | cancelled state */}
                 {option.state == BetState.queued ||
                 option.state == BetState.cancelled ? (
-                  '-'
+                  ''
                 ) : isHistoryTab ? (
                   formatDistanceExpanded(
                     Variables(+option.expirationTime - +option.creationTime)
