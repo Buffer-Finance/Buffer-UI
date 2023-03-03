@@ -112,6 +112,9 @@ const AllTrades = () => {
             onPageChange={(e, p) =>
               setTotalPages({ ...totalPages, cancelled: p })
             }
+            onRowClick={(index) =>
+              navigateToProfile(historyTrades[index].user.address)
+            }
             showUserAddress
             widths={['auto']}
           />,

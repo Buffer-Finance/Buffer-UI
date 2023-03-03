@@ -100,7 +100,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Queue Time',
         'Cancellation Time',
         'Reason',
-      ];
+        showUserAddress && 'User',
+      ].filter((name) => name !== null && name !== undefined && name !== false);
     else
       return [
         'Asset',
@@ -274,6 +275,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           return <>{getErrorFromCode(currentRow?.reason)}</>;
         return <TradeSize trade={currentRow} />;
       case 6:
+        if (showUserAddress && currentRow.state === BetState.cancelled)
+          return <UserAddressColumn address={currentRow.user.address} />;
         return (
           <ProbabilityPNL
             activeMarket={activeMarket}
