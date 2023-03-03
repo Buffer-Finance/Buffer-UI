@@ -114,7 +114,7 @@ export const useDashboardTableData = () => {
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(fromWei(item.openInterest, usdcDecimals)),
         precision: configPair?.price_precision,
-        totalTrades: add(item.openDown, item.openUp),
+        totalTrades: Number(add(item.openDown, item.openUp)),
         '24h_volume':
           Number(
             fromWei(oneDayVolume?.[item.address.toLowerCase()], usdcDecimals)
