@@ -102,7 +102,7 @@ export function useActiveAssetState(amount = null, referralData) {
     ],
     [activePoolObj, account, referralData]
   );
-
+  console.log(assetCalls, 'assetCalls');
   const userSpecificCalls = useMemo(
     () => [
       {
