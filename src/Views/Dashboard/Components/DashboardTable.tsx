@@ -15,10 +15,12 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
     { id: 'currentPrice', label: 'Current Price' },
-    { id: 'openInterest', label: 'Open Interest' },
-    { id: '24h_volume', label: '24h Volume' },
+
     { id: 'totalTrades', label: 'Open Up/Open Down' },
+    // { id: 'openInterest', label: 'Open Interest' },
+    { id: '24h_volume', label: '24h Volume' },
     { id: 'currentUtilization', label: 'Current Utilization' },
+    { id: 'sort_duration', label: 'Min/Max Duration' },
     { id: 'payoutForUp', label: 'Payouts' },
   ];
 
@@ -58,14 +60,21 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
         );
       case 2:
         return (
-          <CellContent
-            content={[
-              <div className="flex items-center">
-                <Display data={currentRow.openInterest} unit={'USDC'} />
-              </div>,
-            ]}
+          <OpenUpDownIndicator
+            openDown={+divide(currentRow.openDown, usdcDecimals)}
+            openUp={+divide(currentRow.openUp, usdcDecimals)}
           />
         );
+      // case 2:
+      //   return (
+      //     <CellContent
+      //       content={[
+      //         <div className="flex items-center">
+      //           <Display data={currentRow.openInterest} unit={'USDC'} />
+      //         </div>,
+      //       ]}
+      //     />
+      //   );
       case 3:
         return (
           <CellContent
@@ -76,20 +85,22 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
+
       case 4:
-        return (
-          <OpenUpDownIndicator
-            openDown={+divide(currentRow.openDown, usdcDecimals)}
-            openUp={+divide(currentRow.openUp, usdcDecimals)}
-          />
-        );
-      case 5:
         return (
           <CellContent
             content={[
               <div className="flex items-center">
                 <Display data={currentRow.currentUtilization} unit="%" />
               </div>,
+            ]}
+          />
+        );
+      case 5:
+        return (
+          <CellContent
+            content={[
+              currentRow.min_duration + ' / ' + currentRow.max_duration,
             ]}
           />
         );
@@ -125,7 +136,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
-      widths={['14%', '14%', '14%', '14%', '20%', '14%', '10%']}
+      widths={['auto']}
     />
   );
 };

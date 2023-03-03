@@ -7,6 +7,7 @@ import MarketConfig from 'public/config.json';
 import { ENV } from '@Views/BinaryOptions/index';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
+import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 
 export function getLinuxTimestampBefore24Hours() {
   // const date = new Date();
@@ -110,6 +111,9 @@ export const useDashboardTableData = () => {
         address: pool.options_contracts.current,
         pair: configPair?.pair,
         img: configPair?.img,
+        min_duration: configPair?.min_duration,
+        max_duration: configPair?.max_duration,
+        sort_duration: timeToMins(configPair?.min_duration),
         currentPrice: currentPrices?.[configPair.tv_id]?.p,
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(fromWei(item.openInterest, usdcDecimals)),
