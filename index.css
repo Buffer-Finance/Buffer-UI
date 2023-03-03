@@ -17,6 +17,13 @@ body {
   transform: scale(0.8);
 }
 
+.flexlayout__tab_button--selected{
+    background: #353945;
+}
+
+html .flip-y{
+  transform: rotateY(180deg);
+}
 .flexlayout__tab{
   background: #171722;
 }

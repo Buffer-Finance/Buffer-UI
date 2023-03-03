@@ -6,6 +6,7 @@ const Decd = ['800123.31', '22313.2311', '312312.10', '32131123.230'];
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import useWebSocket from 'react-use-websocket';
 import { Market2Prices, Markets } from './Types/Market';
+import ReplayIcon from '@mui/icons-material/Replay';
 import { TradingChart } from './TradingView';
 import { usePrice } from '@Hooks/usePrice';
 import FlexLayout, { Layout, TabNode } from 'flexlayout-react';
@@ -21,6 +22,7 @@ import { usePastTradeQuery } from '@Views/BinaryOptions/Hooks/usePastTradeQuery'
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { IconButton } from '@mui/material';
 var json = {
   global: { tabEnableClose: true },
   layout: {
@@ -176,6 +178,7 @@ const DesktopTrade = () => {
             const name = d.getName() as Markets;
             const market = Config.markets[name].pair;
             console.log(`market: `, market);
+
             v.leading = (
               <div className="w-[20px] h-[20px]">
                 <PairTokenImage pair={market} />
@@ -201,6 +204,14 @@ const DesktopTrade = () => {
               </button>
             );
           }
+          v.buttons.push(
+            <button
+              title="Reset layout. You can Drag and Drop to customize the UI."
+              className="flex justify-center items-center flip-y !text-2 hover:!bg-[#3d3d3d] rounded-sm "
+            >
+              <ReplayIcon />
+            </button>
+          );
         }}
         onModelChange={(model) => {
           console.log(`model: `, model);
