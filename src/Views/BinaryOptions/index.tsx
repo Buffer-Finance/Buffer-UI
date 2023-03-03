@@ -38,6 +38,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
 import { WarningOutlined } from '@mui/icons-material';
 import { BuyTrade } from './BuyTrade';
+import { History } from './History';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -160,11 +161,13 @@ export const useQTinfo = () => {
   }, [params?.market, activeChain]);
   return data;
 };
+export const isHistoryTabActiveAtom = atom(false);
 
 function QTrade() {
   const props = useQTinfo();
   const params = useParams();
   const navigate = useNavigate();
+  const isHistory = useAtomValue(isHistoryTabActiveAtom);
   const setActiveMarketFromStorage = useSetAtom(activeMarketFromStorageAtom);
   useEffect(() => {
     console.log(`params?.market: `, params?.market);
@@ -228,7 +231,10 @@ function QTrade() {
             <>
               <Favourites />
               <MobileOnly>
-                <TVIntegrated assetInfo={props.activePair} />
+                <TVIntegrated
+                  assetInfo={props.activePair}
+                  className={isHistory ? 'hidden' : ''}
+                />
               </MobileOnly>
               <WebOnly>
                 <div className="tab:hidden mb-3">
@@ -324,9 +330,7 @@ function QTrade() {
           ) : (
             <Skeleton variant="rectangular" className="stat-skel lc" />
           )}
-          <MobileOnly>
-            <BuyTrade />
-          </MobileOnly>
+          <MobileOnly>{isHistory ? <History /> : <BuyTrade />}</MobileOnly>
         </Background>
       </main>
       <BinaryDrawer />
