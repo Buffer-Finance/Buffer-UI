@@ -194,7 +194,6 @@ function drawPosition(
   )} - ${getDisplayDate(option.expirationTime)}, ${getDisplayTime(
     option.expirationTime
   )}`;
-  console.log(`color: `, color, text, tooltip);
   // console.log(`chart: `,chart.createPositionLine);
   return chart
     ?.createPositionLine()
@@ -257,7 +256,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
   }
   const price = useAtomValue(priceAtom);
 
-  const datafeed = useMemo((): IBasicDataFeed => {
+  const datafeed = useMemo((): any => {
     return {
       onReady: (callback) => {
         setTimeout(() => callback(defaults.confgis));
@@ -404,9 +403,6 @@ export const TradingChart = ({ market }: { market: Markets }) => {
           onResetCacheNeededCallback,
         };
       },
-      unsubscribeBars: (_) => {
-        realTimeUpdateRef.current = null;
-      },
     };
   }, []);
   const { active: activeTrades } = useAtomValue(tardesAtom);
@@ -478,11 +474,18 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
     const activeResolution = realTimeUpdateRef.current?.resolution || '1m';
+    // console.log(`[deb]1activeResolution: `, activeResolution);
+    console.log(`[deb]0key: `, lastSyncedKline);
+
     const key = market + timeDeltaMapping(activeResolution);
+    // console.log(`[deb]2key: `, key);
     let prevBar = lastSyncedKline?.current?.[key];
+    console.log(`[deb]1lastSyncedKline: `, lastSyncedKline);
+    console.log(`[deb]2prevBar: `, prevBar);
+    // console.log(`[deb]3prevBar: `, prevBar);
     if (!prevBar) return;
     const activeAssetStream = price[market];
-    console.log(`price: `, price);
+    // console.log(`[deb]4price: `, activeAssetStream);
     if (!activeAssetStream?.length) return;
     let aggregatedBar;
 
@@ -492,6 +495,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
         currBar,
         realTimeUpdateRef.current?.resolution
       );
+      // console.log(`[deb]5aggregatedBar: `, aggregatedBar);
       if (
         aggregatedBar &&
         realTimeUpdateRef.current.symbolInfo &&
