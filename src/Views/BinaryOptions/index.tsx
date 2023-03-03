@@ -161,7 +161,7 @@ export const useQTinfo = () => {
   }, [params?.market, activeChain]);
   return data;
 };
-export const isHistoryTabActiveAtom = atom(false);
+export const isHistoryTabActiveAtom = atomWithLocalStorage('isHistory', false);
 
 function QTrade() {
   const props = useQTinfo();
@@ -229,7 +229,7 @@ function QTrade() {
         <Background>
           {props.pairs ? (
             <>
-              <Favourites />
+              {!isHistory ? <Favourites /> : null}
               <MobileOnly>
                 <TVIntegrated
                   assetInfo={props.activePair}
