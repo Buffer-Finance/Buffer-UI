@@ -1,12 +1,14 @@
-import styled from "@emotion/styled";
-import { CloseOutlined } from "@mui/icons-material";
-import { Dialog, IconButton } from "@mui/material";
-import { atom, useAtom, WritableAtom } from "jotai";
-import React, { useState } from "react";
-import InfoIcon from "src/SVG/Elements/InfoIcon";
-import { gt } from "@Utils/NumString/stringArithmatics";
-import BufferSwitch from "@Views/Common/BufferSwitch";
-import { SettingsIcon } from "../PGDrawer/SettingsIcon";
+import styled from '@emotion/styled';
+import { CloseOutlined } from '@mui/icons-material';
+import { Dialog, IconButton } from '@mui/material';
+import { atom, useAtom, WritableAtom } from 'jotai';
+import React, { useState } from 'react';
+import InfoIcon from 'src/SVG/Elements/InfoIcon';
+import { gt } from '@Utils/NumString/stringArithmatics';
+import BufferSwitch from '@Views/Common/BufferSwitch';
+import { SettingsIcon } from '../PGDrawer/SettingsIcon';
+import { BlueBtn } from '@Views/Common/V2-Button';
+import { mobileUpperBound } from '..';
 
 const SlippageModalStyles = styled.div`
   background-color: var(--dropdown-hover);
@@ -23,7 +25,7 @@ const SlippageModalStyles = styled.div`
   /* bottom:1rem; */
   /* bottom:0; */
   & * {
-    font-family: "Relative Pro" !important;
+    font-family: 'Relative Pro' !important;
   }
 
   .close {
@@ -45,16 +47,17 @@ interface ISlippageModal {
   clickHandler: (isChecked: boolean) => void;
   closeModal: () => void;
   isOpen: boolean;
+  onResetLayout: () => void;
 }
 
 const defaults = [0.1, 0.5, 1.0];
-const HeadStyles = " flex flex-row items-center text-3 text-f14 ";
+const HeadStyles = ' flex flex-row items-center text-3 text-f14 ';
 const MAX_SLIPPAGE = 5;
 export const atomWithLocalStorage = <key, T>(
   key: string,
   initialValue: T
 ): WritableAtom<T, unknown, void> => {
-  if (typeof window == "undefined") return atom({ dummy: true });
+  if (typeof window == 'undefined') return atom({ dummy: true });
   const getInitialValue = () => {
     const item = localStorage.getItem(key);
     if (item !== null) {
@@ -67,14 +70,14 @@ export const atomWithLocalStorage = <key, T>(
     (get) => get(baseAtom),
     (get, set, update) => {
       const nextValue =
-        typeof update === "function" ? update(get(baseAtom)) : update;
+        typeof update === 'function' ? update(get(baseAtom)) : update;
       set(baseAtom, nextValue);
       localStorage.setItem(key, JSON.stringify(nextValue));
     }
   );
   return derivedAtom;
 };
-export const slippageAtom = atomWithLocalStorage("slippage-settings", {
+export const slippageAtom = atomWithLocalStorage('slippage-settings', {
   slippage: 0.5,
   allowPartial: true,
 });
@@ -83,6 +86,7 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
   clickHandler,
   closeModal,
   isOpen,
+  onResetLayout,
 }) => {
   const [settings, setSettings] = useAtom(slippageAtom);
   const [err, setErr] = useState(false);
@@ -95,12 +99,12 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
           <CloseOutlined />
         </IconButton>
         <span className="flex text-f18 text-3 items-start w-full">
-          <SettingsIcon className={"scale-[2] mr-5 origin-top"} />
+          <SettingsIcon className={'scale-[2] mr-5 origin-top'} />
           Settings
         </span>
         <section>
-          <div className={HeadStyles + "mt-5"}>
-            Slippage Tolerance{" "}
+          <div className={HeadStyles + 'mt-5'}>
+            Slippage Tolerance{' '}
             <InfoIcon
               sm
               className="ml-2"
@@ -113,9 +117,9 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
                 <div
                   className={
                     (+settings.slippage == s
-                      ? "bg-blue text-1 font-semibold text-f14 py-[5px] px-[15px]"
-                      : "bg-[#1C1C28] px-5 py-[8px] ") +
-                    " border border-[#2A2A3A]  rounded-lg hover:border-[#00bbff42] cursor-pointer"
+                      ? 'bg-blue text-1 font-semibold text-f14 py-[5px] px-[15px]'
+                      : 'bg-[#1C1C28] px-5 py-[8px] ') +
+                    ' border border-[#2A2A3A]  rounded-lg hover:border-[#00bbff42] cursor-pointer'
                   }
                   role="button"
                   onClick={() => {
@@ -133,7 +137,7 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
                 max={MAX_SLIPPAGE}
                 className={` border-2 border-[#2A2A3A] bg-[#222234] px-6 py-[6px] rounded-lg outline-none focus:border-[#00bbff42] w-[150px] text-f14 text-1`}
                 onChange={(e) => {
-                  if (gt(e.target.value || "0", MAX_SLIPPAGE.toString())) {
+                  if (gt(e.target.value || '0', MAX_SLIPPAGE.toString())) {
                     setErr(true);
                     return;
                   }
@@ -151,7 +155,7 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
           </div>
         </section>
         <section className="flex flex-row justify-between items-center w-full mt-2">
-          <div className={HeadStyles + " h-fit"}>
+          <div className={HeadStyles + ' h-fit'}>
             Partial Fill
             <InfoIcon
               sm
@@ -169,6 +173,21 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
             }}
           />
         </section>
+        {window.innerWidth > mobileUpperBound && (
+          <section className="flex flex-row justify-between items-center w-full mt-2">
+            <div className={HeadStyles + ' h-fit'}>
+              Reset Layout
+              <InfoIcon
+                sm
+                className="ml-2"
+                tooltip={`You can change app layouts of the app by dragging and dropping different sections.`}
+              />
+            </div>
+            <BlueBtn onClick={onResetLayout} className="!w-fit !px-5">
+              Reset
+            </BlueBtn>
+          </section>
+        )}
 
         {/* <div className="flex text-1">
         <BufferCheckbox

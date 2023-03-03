@@ -58,6 +58,10 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import {
+  ChartElementSVG,
+  ChartTypeSelectionDD,
+} from '@TV/ChartTypeSelectionDD';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   '1S' as ResolutionString,
@@ -71,6 +75,49 @@ export let supported_resolutions = [
   '4H' as ResolutionString,
   // "1D",
 ];
+
+const isntAvailable = (s) => {
+  return (
+    s && ['1s', '10s', '5m', '60', '120', '240', '1d'].includes(s.toLowerCase())
+  );
+};
+const formatResolution = (s) => {
+  if (s.toLowerCase() == '1s') {
+    return '1s';
+  }
+  if (s.toLowerCase() == '10s') {
+    return '10s';
+  }
+  // if(s.toLowerCase() == "10s"){
+  //   return "10s"
+  // }
+  if (s.toLowerCase() == '1') {
+    return '1m';
+  }
+  if (s.toLowerCase() == '5') {
+    return '5m';
+  }
+
+  if (s.toLowerCase() == '15') {
+    return '15m';
+  }
+  if (s.toLowerCase() == '30') {
+    return '30m';
+  }
+  if (s.toLowerCase() == '60') {
+    return '1h';
+  }
+  if (s.toLowerCase() == '120') {
+    return '2h';
+  }
+  if (s.toLowerCase() == '240') {
+    return '4h';
+  }
+  if (s.toLowerCase() == '1d') {
+    return '1d';
+  }
+  return s;
+};
 
 const defaults = {
   priceProvider: 'Buffer Finance',
@@ -168,6 +215,8 @@ function drawPosition(
 
 export const TradingChart = ({ market }: { market: Markets }) => {
   const qtInfo = useQTinfo();
+  const [chartConfigs, setChartConfigs] = useState({ resolution: '1' });
+
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
@@ -184,6 +233,8 @@ export const TradingChart = ({ market }: { market: Markets }) => {
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
   const [drawing, setDrawing] = useAtom(drawingAtom);
+  const [chartType, setChartType] = useState(1);
+
   async function getAllSymbols() {
     let allSymbols: any[] = [];
     let tempSymbols: any[] = [];
@@ -462,6 +513,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
   // draw positions.
   useEffect(() => {
     if (chartReady && activeTrades) {
+      console.log(`activeTrades: `, activeTrades);
       activeTrades.forEach((pos) => {
         if (!pos?.optionID) return;
         if (trade2visualisation.current[+pos.optionID]) {
@@ -477,13 +529,13 @@ export const TradingChart = ({ market }: { market: Markets }) => {
             option: pos,
           };
         }
-        for (const trade in trade2visualisation.current) {
-          if (!trade2visualisation.current[+trade]?.visited) {
-            trade2visualisation.current[+trade]!.lineRef.remove();
-            delete trade2visualisation.current[+trade];
-          }
-        }
       });
+    }
+    for (const trade in trade2visualisation.current) {
+      if (!trade2visualisation.current[+trade]?.visited) {
+        trade2visualisation.current[+trade]!.lineRef.remove();
+        delete trade2visualisation.current[+trade];
+      }
     }
     return () => {
       for (const trade in trade2visualisation.current) {
@@ -493,6 +545,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
     };
   }, [visualized, activeTrades, chartReady]);
   const updatePositionTimeLeft = useCallback(() => {
+    // save drawings
     widgetRef.current?.save((d) => {
       setDrawing((drawing) => {
         return {
@@ -516,20 +569,69 @@ export const TradingChart = ({ market }: { market: Markets }) => {
         trade2visualisation.current[+trade]?.lineRef.setText(text);
       }
     }
-  }, []);
+  }, [setDrawing]);
+
+  useEffect(() => {
+    if (chartReady) widgetRef.current.activeChart?.().setChartType(chartType);
+  }, [chartType, chartReady]);
+
+  useEffect(() => {
+    if (
+      chartReady &&
+      widgetRef.current &&
+      typeof widgetRef.current?.activeChart === 'function'
+    ) {
+      widgetRef.current.activeChart?.().setResolution(chartConfigs.resolution);
+    }
+  }, [chartConfigs.resolution, chartReady]);
   useEffect(() => {
     const interval = setInterval(updatePositionTimeLeft, 1000);
     return () => {
       clearInterval(interval);
     };
   }, [address]);
+
+  const toggleIndicatorDD = (_) => {
+    widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
+  };
   return (
-    <div className="w-full h-full">
-      <div
-        ref={containerDivRef}
-        id="chart-element"
-        className="TVChartContainer w-[100%] h-[100%]"
-      />
-    </div>
+    <>
+      <div className="items-center justify-between flex-row flex  bg-[#131722] w-full tv-h px-4 py-3">
+        <div className="flex flex-row justify-start font-[500]">
+          <div className="ele cursor-pointer">Time</div>
+          {supported_resolutions.map((s) => {
+            return (
+              <div
+                onClick={() => {
+                  setChartConfigs({ ...chartConfigs, resolution: s });
+                }}
+                className={`${
+                  s.toLowerCase() == chartConfigs.resolution.toLowerCase() &&
+                  'active'
+                } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
+              >
+                {formatResolution(s)}
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex">
+          <ChartTypeSelectionDD setActive={setChartType} active={chartType} />
+          <button
+            onClick={toggleIndicatorDD}
+            className="flex flex-row mr-3 ele text-f12  font-[500] "
+          >
+            <ChartElementSVG className="mr-[3px]" /> Indicators
+          </button>
+        </div>
+      </div>
+      <div className="w-full h-full">
+        <div
+          ref={containerDivRef}
+          id="chart-element"
+          className="TVChartContainer w-[100%] h-[100%]"
+        />
+      </div>
+    </>
   );
 };

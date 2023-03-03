@@ -635,7 +635,6 @@ export const TVStateAtom = atom<{ type: 'active' | 'stale'; ts?: number }>({
 });
 
 export const getPriceFromKlines = (marketPrice, asset: { tv_id: string }) => {
-  console.log(`marketPrice: `, marketPrice);
   const lastBar = getLastbar(marketPrice, asset);
   if (!lastBar) return null;
   return lastBar.price;

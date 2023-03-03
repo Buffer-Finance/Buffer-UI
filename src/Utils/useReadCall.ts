@@ -14,7 +14,6 @@ export const useReadCall = ({ contracts }) => {
   if(signer && !isWrongChain && address ) {
     signerOrProvider = signer;
   }
-  console.log(`signerOrProvider: `,signerOrProvider);
   return useSWR(calls && [calls,signerOrProvider], {
     fetcher: async (calls,signerOrProvider) => {
       if (!calls) return null;

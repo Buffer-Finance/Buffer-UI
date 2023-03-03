@@ -8,7 +8,8 @@ import { AssetTypeSelector } from './AssetTypeSelector';
 import { useAtomValue } from 'jotai';
 
 const FavouriteAssetDDStyles = styled.div`
-  padding: 2rem;
+  padding: 1rem !important;
+  max-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;

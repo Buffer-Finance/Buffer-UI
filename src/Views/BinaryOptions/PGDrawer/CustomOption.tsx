@@ -35,7 +35,7 @@ import { minTradeAmount } from '../store';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
-export function CustomOption() {
+export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   const [amount, setAmount] = useAtom(ammountAtom);
   const { address: account } = useUserAccount();
   const { openConnectModal } = useConnectModal();
@@ -98,6 +98,7 @@ export function CustomOption() {
           clickHandler: console.log,
           closeModal: () => setIsOpen(false),
           loading: false,
+          onResetLayout,
         }}
       />
       <ApproveModal

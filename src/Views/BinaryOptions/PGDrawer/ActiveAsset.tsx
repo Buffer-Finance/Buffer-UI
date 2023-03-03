@@ -36,7 +36,6 @@ export const ActiveAsset = () => {
   const singleAsset = qtInfo.activePair;
   const marketPrice = useAtomValue(priceAtom);
   const currentPrice = getPriceFromKlines(marketPrice, qtInfo.activePair);
-  console.log(`currentPrice: `, currentPrice);
   const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
@@ -74,13 +73,8 @@ export const ActiveAsset = () => {
         <>
           <Background>
             <TVMarketSelector
-              onMarketSelect={(m) =>
-                toastify({
-                  msg: 'Feature under developement. Please drive slow!',
-                  type: 'error',
-                })
-              }
-              className="asset-dropdown-wrapper right-[0]"
+              onMarketSelect={(m) => navigate('/test/' + m)}
+              className="asset-dropdown-wrapper right-[0] max-w-[300px] p-3"
             />
           </Background>
           <div id="overlay" onClick={() => setIsOpen(false)}></div>

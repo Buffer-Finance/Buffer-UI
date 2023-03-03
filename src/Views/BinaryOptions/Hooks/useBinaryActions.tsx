@@ -1,6 +1,6 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import React, { useState } from 'react';
 import { postRes } from '@Utils/apis/api';
 import ERC20ABI from 'src/ABIs/Token.json';
@@ -32,6 +32,7 @@ import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { minTradeAmount } from '../store';
+import { priceAtom } from '@Hooks/usePrice';
 
 export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const binary = useQTinfo();
@@ -55,7 +56,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
   );
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const marketPrice = useAtomValue(priceAtom);
   const toastify = useToast();
 
   const cb = (a) => {

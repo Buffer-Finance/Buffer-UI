@@ -119,7 +119,7 @@ export const useQTinfo = () => {
       let market = params?.market || 'ETH-USD';
       // GBP
       market = market?.toUpperCase();
-      let currM = m.pair.toUpperCase();
+      let currM = m.tv_id.toUpperCase();
       if (market == currM) {
         return true;
       }

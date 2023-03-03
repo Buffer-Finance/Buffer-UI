@@ -3,7 +3,7 @@ import Config from 'public/config.json';
 import { useEffect, useRef, useState } from 'react';
 const initD = ['800123.32', '22313.2312', '312312.11', '32131123.231'];
 const Decd = ['800123.31', '22313.2311', '312312.10', '32131123.230'];
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import useWebSocket from 'react-use-websocket';
 import { Market2Prices, Markets } from './Types/Market';
 import { TradingChart } from './TradingView';
@@ -18,6 +18,8 @@ import { ActiveAsset } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
 import PGTables from '@Views/BinaryOptions/Tables';
 import { ActiveTable, CancelTable, HistoryTable } from '@Views/BinaryOptions';
 import { usePastTradeQuery } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
+import { useGenericHooks } from '@Hooks/useGenericHook';
+import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 
 var json = {
   global: { tabEnableClose: true },
@@ -98,17 +100,19 @@ var json = {
     ],
   },
 };
-
+const layoutAtom = atomWithLocalStorage('Buffer-Layout-v1', json);
+const demoAtom = atomWithLocalStorage('Buffer-Layout-v2', 'hello');
 const Man = () => {
   const layoutRef = useRef<Layout | null>(null);
-  const [layout, setLayout] = useState(FlexLayout.Model.fromJson(json));
+  const [layout, setLayout] = useAtom(layoutAtom);
+  const [demo, setDemo] = useAtom(demoAtom);
   const toastify = useToast();
   usePrice();
   usePastTradeQuery();
+  useGenericHooks();
 
   const factory = (node: TabNode) => {
     var component = node.getComponent();
-    console.log(`component: `, component);
     if (component === 'TradingView') {
       return <TradingChart market={node.getName() as Markets} />;
     }
@@ -124,12 +128,11 @@ const Man = () => {
       return (
         <Background className="bg-2">
           <ActiveAsset />
-          <CustomOption />
+          <CustomOption onResetLayout={() => setLayout(json)} />
         </Background>
       );
     }
     const rect = node.getRect();
-    console.log(` rect: `, rect);
     if (component === 'ActiveTable') {
       return <ActiveTable width={rect.width} />;
     }
@@ -141,7 +144,6 @@ const Man = () => {
     }
   };
   function handleNewTabClick(market: string) {
-    console.log(`market: `, market);
     try {
       layoutRef.current!.addTabToActiveTabSet({
         type: 'tab',
@@ -149,6 +151,7 @@ const Man = () => {
         component: 'TradingView',
         id: market,
       });
+      layout.doAction(FlexLayout.Actions.deleteTab('dd'));
     } catch (e) {
       toastify({
         msg: market + ' is already opened in different tab',
@@ -167,7 +170,7 @@ const Man = () => {
           return p;
         }}
         ref={layoutRef}
-        model={layout}
+        model={FlexLayout.Model.fromJson(layout)}
         factory={factory}
         onRenderTab={(d, v) => {
           // v.buttons.p
@@ -190,6 +193,10 @@ const Man = () => {
               </button>
             );
           }
+        }}
+        onModelChange={(model) => {
+          console.log(`model: `, model);
+          setLayout(model.toJson());
         }}
       />
     </>

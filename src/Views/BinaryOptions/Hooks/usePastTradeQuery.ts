@@ -210,7 +210,6 @@ export const usePastTradeQuery = () => {
 
   const blockNumber = data?._meta?.block.number;
   const { data: trades } = useAheadTrades(blockNumber, account);
-  console.log('p=[aug]trades', trades, data);
   useEffect(() => {
     let activeResponseArr = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])
