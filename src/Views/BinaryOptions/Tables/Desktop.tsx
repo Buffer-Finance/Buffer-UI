@@ -288,7 +288,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   };
 
   return (
-    <Background className={className}>
+    <Background className={className + ' h-full'}>
       <BufferTable
         count={onPageChange ? totalPages : null}
         onPageChange={(e, pageNumber) => {
@@ -317,7 +317,9 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
               ]
             : ['auto']
         }
+        overflow
         onRowClick={console.log}
+        className="h-full"
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
       />

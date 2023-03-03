@@ -23,7 +23,7 @@ import { Earn } from '@Views/Earn';
 import { Dashboard } from '@Views/Dashboard';
 import { ReferralPage } from '@Views/Referral';
 import SideBar from '@Views/Common/Sidebar';
-import { Test } from './Test';
+import { DesktopLayout } from './Test';
 import ConnectionDrawer from '@Views/Common/V2-Drawer/connectionDrawer';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import * as Sentry from '@sentry/react';
@@ -81,7 +81,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/test/:market" element={<Test />} />
+        <Route path="/test/:market" element={<DesktopLayout />} />
         <Route path="/history" element={<History />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>

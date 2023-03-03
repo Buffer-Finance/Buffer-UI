@@ -218,7 +218,7 @@ const Man = () => {
 };
 
 export const priceAtom = atom<Partial<Market2Prices>>({});
-export { Man as Test };
+export { Man as DesktopLayout };
 const Tab = () => {
   <div>Hello i am a tab</div>;
 };
