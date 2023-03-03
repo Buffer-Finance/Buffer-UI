@@ -16,7 +16,7 @@ const Background = styled.div`
 
   .root {
     grid-area: Main;
-    overflow: auto;
+    /* overflow: auto; */
     display: flex;
     @media (max-width: 800px) {
       flex-direction: column;

@@ -23,7 +23,6 @@ import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 var json = {
   global: { tabEnableClose: true },
-
   layout: {
     type: 'row',
     weight: 100,
@@ -101,7 +100,7 @@ var json = {
   },
 };
 const layoutAtom = atomWithLocalStorage('Layout-v1', json);
-const Man = () => {
+const DesktopTrade = () => {
   const layoutRef = useRef<Layout | null>(null);
   const [layout, setLayout] = useAtom(layoutAtom);
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
@@ -218,7 +217,7 @@ const Man = () => {
 };
 
 export const priceAtom = atom<Partial<Market2Prices>>({});
-export { Man as DesktopLayout };
+export { DesktopTrade };
 const Tab = () => {
   <div>Hello i am a tab</div>;
 };

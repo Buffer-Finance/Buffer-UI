@@ -23,7 +23,6 @@ import { Earn } from '@Views/Earn';
 import { Dashboard } from '@Views/Dashboard';
 import { ReferralPage } from '@Views/Referral';
 import SideBar from '@Views/Common/Sidebar';
-import { DesktopLayout } from './Test';
 import ConnectionDrawer from '@Views/Common/V2-Drawer/connectionDrawer';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import * as Sentry from '@sentry/react';
@@ -35,6 +34,9 @@ import { useEffect } from 'react';
 import { useToast } from '@Contexts/Toast';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
+import { MobileTrade } from '@Views/BinaryOptions/MobileTrade';
+import { TradePage } from '@Views/BinaryOptions/TradePage';
+import { DesktopTrade } from './Test';
 
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -81,9 +83,8 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/test/:market" element={<DesktopLayout />} />
+        <Route path="/test/:market" element={<DesktopTrade />} />
         <Route path="/history" element={<History />} />
-        <Route path="/binary/:market" element={<BinryMarkets />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />} />
           <Route path="weekly" element={<Weekly />} />
@@ -92,7 +93,7 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/binary/:market" element={<BinryMarkets />} />
+        <Route path="/binary/:market" element={<TradePage />} />
         {/* referral link handling */}
         <Route
           path="/*"

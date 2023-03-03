@@ -572,7 +572,7 @@ export const TradingChart = ({ market }: { market: Markets }) => {
   }, [setDrawing]);
 
   useEffect(() => {
-    if (chartReady) widgetRef.current.activeChart?.().setChartType(chartType);
+    if (chartReady) widgetRef.current!.activeChart?.().setChartType(chartType);
   }, [chartType, chartReady]);
 
   useEffect(() => {
@@ -581,7 +581,9 @@ export const TradingChart = ({ market }: { market: Markets }) => {
       widgetRef.current &&
       typeof widgetRef.current?.activeChart === 'function'
     ) {
-      widgetRef.current.activeChart?.().setResolution(chartConfigs.resolution);
+      widgetRef.current
+        .activeChart?.()
+        .setResolution(chartConfigs.resolution as ResolutionString);
     }
   }, [chartConfigs.resolution, chartReady]);
   useEffect(() => {
