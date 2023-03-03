@@ -73,7 +73,7 @@ export interface IQTrade {
   activePair?: IMarket;
   routerContract?: string;
 }
-export const FavouriteAtom = atomWithLocalStorage('favourites3', []);
+export const FavouriteAtom = atomWithLocalStorage('favourites4', []);
 export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV9', []);
 
 export const activeAssetStateAtom = atom<{
