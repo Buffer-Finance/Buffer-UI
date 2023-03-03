@@ -355,7 +355,7 @@ const Referral: React.FC<IReferral> = ({}) => {
 
       <HorizontalTransition value={tabs.indexOf(activeTab)}>
         <>
-          <div className="flex justify-center gap-4 mt-6">
+          <div className="flex justify-center gap-4 mt-6 sm:flex-wrap">
             {referralCodes[2] !== '' && account ? (
               DataBoxArr?.map((singleData, index) => (
                 <DataCard
@@ -445,7 +445,7 @@ const Affilate = ({
   }, [open]);
   return (
     <>
-      <div className="flex justify-center gap-4 mt-6">
+      <div className="flex justify-center gap-4 mt-6 sm:flex-wrap">
         {isCodeSet &&
           affiliateBoxArr?.map((singleData, index) => (
             <DataCard
@@ -456,7 +456,7 @@ const Affilate = ({
           ))}
       </div>
 
-      <PlainCard.Container className="w-[440px] mt-6 nsm:py-6 tb:px-8">
+      <PlainCard.Container className="w-[440px] mt-6 nsm:py-6 tb:px-8 m-auto sm:mt-4">
         <PlainCard.Header>
           {isCodeSet ? 'Copy your Referral Link' : 'Share your Referral Code'}
         </PlainCard.Header>

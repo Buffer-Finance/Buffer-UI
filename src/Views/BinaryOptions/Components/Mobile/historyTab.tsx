@@ -7,7 +7,10 @@ import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { useAtom, useAtomValue } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { marketPriceAtom } from 'src/TradingView/useDataFeed';
+import {
+  getPriceFromKlines,
+  marketPriceAtom,
+} from 'src/TradingView/useDataFeed';
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
@@ -191,39 +194,42 @@ const MobileTable: React.FC<{
       option.state !== BetState.queued &&
       option.state !== BetState.cancelled
     ) {
-      let additionalInfo = [
-        {
-          name: (
-            <>
-              {option.state !== BetState.active
-                ? 'Price at Expiry'
-                : 'Current Price'}
-            </>
-          ),
-          val: (
-            <ExpiryCurrentComponent
-              isHistoryTable={isHistoryTab}
-              trade={option}
-              marketPrice={marketPrice}
-              configData={option.configPair}
-            />
-          ),
-        },
+      const price = getPriceFromKlines(marketPrice, option.configPair);
+      if (isHistoryTab || price) {
+        let additionalInfo = [
+          {
+            name: (
+              <>
+                {option.state !== BetState.active
+                  ? 'Price at Expiry'
+                  : 'Current Price'}
+              </>
+            ),
+            val: (
+              <ExpiryCurrentComponent
+                isHistoryTable={isHistoryTab}
+                trade={option}
+                marketPrice={marketPrice}
+                configData={option.configPair}
+              />
+            ),
+          },
 
-        {
-          name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
-          val: (
-            <ProbabilityPNL
-              isHistoryTable={isHistoryTab}
-              trade={option}
-              marketPrice={marketPrice}
-              onlyPnl
-              configData={option.configPair}
-            />
-          ),
-        },
-      ];
-      arr = [...arr, ...additionalInfo];
+          {
+            name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
+            val: (
+              <ProbabilityPNL
+                isHistoryTable={isHistoryTab}
+                trade={option}
+                marketPrice={marketPrice}
+                onlyPnl
+                configData={option.configPair}
+              />
+            ),
+          },
+        ];
+        arr = [...arr, ...additionalInfo];
+      }
     }
     if (selectedIndex === row) visible = true;
 
@@ -236,8 +242,7 @@ const MobileTable: React.FC<{
             <div className="flex flex-col items-end justify-center">
               <div className="f13 flex gap-2">
                 {/* show status on history + queued state */}
-                {option.state == BetState.queued ||
-                option.state == BetState.cancelled ? (
+                {option.state != BetState.active ? (
                   <PayoutChip data={option} />
                 ) : null}
                 {/* dont show duration in queued | cancelled state */}
