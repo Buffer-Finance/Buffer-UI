@@ -40,6 +40,7 @@ import VerticalTransition from '@Views/Common/Transitions/Vertical';
 import { Variables } from '@Utils/Time';
 import { BlackBtn } from '@Views/Common/V2-Button';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { Skeleton } from '@mui/material';
 
 const CancelButton = ({ option }) => {
   const toastify = useToast();
@@ -196,29 +197,33 @@ const MobileTable: React.FC<{
     ) {
       const price = getPriceFromKlines(marketPrice, option.configPair);
       console.log(`pricedd: `, price);
-      if (isHistoryTab || price) {
-        let additionalInfo = [
-          {
-            name: (
-              <>
-                {option.state !== BetState.active
-                  ? 'Price at Expiry'
-                  : 'Current Price'}
-              </>
-            ),
-            val: (
+      // if (isHistoryTab || price) {
+      let additionalInfo = [
+        {
+          name: (
+            <>
+              {option.state !== BetState.active
+                ? 'Price at Expiry'
+                : 'Current Price'}
+            </>
+          ),
+          val:
+            isHistoryTab || price ? (
               <ExpiryCurrentComponent
                 isHistoryTable={isHistoryTab}
                 trade={option}
                 marketPrice={marketPrice}
                 configData={option.configPair}
               />
+            ) : (
+              <Skeleton className="!w-5 !h-3" />
             ),
-          },
+        },
 
-          {
-            name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
-            val: (
+        {
+          name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
+          val:
+            isHistoryTab || price ? (
               <ProbabilityPNL
                 isHistoryTable={isHistoryTab}
                 trade={option}
@@ -226,11 +231,13 @@ const MobileTable: React.FC<{
                 onlyPnl
                 configData={option.configPair}
               />
+            ) : (
+              <Skeleton className="!w-5 !h-3" />
             ),
-          },
-        ];
-        arr = [...arr, ...additionalInfo];
-      }
+        },
+      ];
+      arr = [...arr, ...additionalInfo];
+      // }
     }
     if (selectedIndex === row) visible = true;
 
