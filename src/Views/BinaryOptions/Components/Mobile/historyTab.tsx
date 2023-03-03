@@ -216,7 +216,10 @@ const MobileTable: React.FC<{
                 configData={option.configPair}
               />
             ) : (
-              <Skeleton className="!w-5 !h-3" />
+              <Skeleton
+                variant="rectangular"
+                className="!w-[80px] bg-1  !h-[20px]"
+              />
             ),
         },
 
@@ -232,7 +235,10 @@ const MobileTable: React.FC<{
                 configData={option.configPair}
               />
             ) : (
-              <Skeleton className="!w-5 !h-3" />
+              <Skeleton
+                variant="rectangular"
+                className="!w-[80px] bg-1  !h-[20px]"
+              />
             ),
         },
       ];
