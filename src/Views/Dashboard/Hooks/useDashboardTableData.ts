@@ -8,6 +8,7 @@ import { ENV } from '@Views/BinaryOptions/index';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
+import { useMarketStatus } from './useMarketStatus';
 
 export function getLinuxTimestampBefore24Hours() {
   // const date = new Date();
@@ -37,6 +38,7 @@ type dashboardTableData = {
 };
 
 export const useDashboardTableData = () => {
+  useMarketStatus();
   const { data: currentPrices } = useSWR('dashboard-current-prices', {
     fetcher: async () => {
       const response = await axios.get(
