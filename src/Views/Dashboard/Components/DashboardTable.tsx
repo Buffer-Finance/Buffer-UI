@@ -7,6 +7,8 @@ import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { usdcDecimals } from '@Views/V2-Leaderboard/Weekly';
+import { divide } from '@Utils/NumString/stringArithmatics';
 
 export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
   const navigate = useNavigate();
@@ -77,8 +79,8 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       case 4:
         return (
           <OpenUpDownIndicator
-            openDown={currentRow.openDown}
-            openUp={currentRow.openUp}
+            openDown={+divide(currentRow.openDown, usdcDecimals)}
+            openUp={+divide(currentRow.openUp, usdcDecimals)}
           />
         );
       case 5:

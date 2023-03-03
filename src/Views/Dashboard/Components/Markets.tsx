@@ -15,6 +15,7 @@ export const Markets = () => {
     if (!dashboardData || !routerPermission) return [];
     return dashboardData.filter((data) => routerPermission[data.address]);
   }, [dashboardData, routerPermission]);
+  console.log(filteredDashboardData[0].totalTrades, 'totalData');
 
   // const totalDataArr = [
   //   {

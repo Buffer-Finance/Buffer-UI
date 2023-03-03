@@ -18,8 +18,8 @@ export function getLinuxTimestampBefore24Hours() {
 type dashboardTableData = {
   optionContracts: {
     address: string;
-    openDown: number;
-    openUp: number;
+    openDown: string;
+    openUp: string;
     currentUtilization: string;
     openInterest: string;
     payoutForDown: string;
@@ -114,7 +114,7 @@ export const useDashboardTableData = () => {
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(fromWei(item.openInterest, usdcDecimals)),
         precision: configPair?.price_precision,
-        totalTrades: item.openDown + item.openUp,
+        totalTrades: add(item.openDown, item.openUp),
         '24h_volume':
           Number(
             fromWei(oneDayVolume?.[item.address.toLowerCase()], usdcDecimals)
