@@ -23,6 +23,7 @@ import { priceAtom } from '@Hooks/usePrice';
 import { TVMarketSelector } from '../Favourites/TVMarketSelector';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@Contexts/Toast';
+import { ShareModal } from '../Components/shareModal';
 
 export const chartReadyAtom = atom(false);
 const setDoccumentTitle = (title) => {
@@ -74,12 +75,13 @@ export const ActiveAsset = () => {
           <Background>
             <TVMarketSelector
               onMarketSelect={(m) => navigate('/test/' + m)}
-              className="asset-dropdown-wrapper right-[0] max-w-[300px] p-3"
+              className="asset-dropdown-wrapper left-[0] max-w-[300px] p-3"
             />
           </Background>
           <div id="overlay" onClick={() => setIsOpen(false)}></div>
         </>
       )}
+      <ShareModal qtInfo={qtInfo} />
 
       <div className="flex flex-row justify-between items-center">
         <span className="text-f14 mb-2 ">Selected Pair</span>

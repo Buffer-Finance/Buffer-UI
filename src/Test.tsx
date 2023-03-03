@@ -43,6 +43,7 @@ var json = {
                 id: 'BTCUSD',
                 enableClose: false,
                 component: 'TradingView',
+                enableDrag: false,
               },
             ],
           },
@@ -124,7 +125,7 @@ const DesktopTrade = () => {
     }
     if (component === 'BuyTrade') {
       return (
-        <Background className="bg-2">
+        <Background className="bg-2 max-w-[420px] mx-auto">
           <ActiveAsset />
           <CustomOption onResetLayout={() => setLayout(json)} />
         </Background>

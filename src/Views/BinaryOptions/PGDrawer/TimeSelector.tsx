@@ -300,7 +300,7 @@ export const TimeSelector = ({
         <div
           className={`${
             isTimeSelector ? 'w-full' : 'w-max'
-          } hover:brightness-150 p-[6px]`}
+          } flex-1 hover:brightness-150 p-[6px]`}
         >
           <div className="flex-bw ">
             <button

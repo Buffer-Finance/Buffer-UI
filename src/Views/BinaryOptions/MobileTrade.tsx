@@ -2,6 +2,7 @@ import { Skeleton } from '@mui/material';
 import TVIntegrated from '@TV/TV';
 import { useQTinfo } from '.';
 import { BuyTrade } from './BuyTrade';
+import { ShareModal } from './Components/shareModal';
 import Favourites from './Favourites/Favourites';
 
 const MobileTrade: React.FC<any> = ({}) => {
@@ -10,6 +11,7 @@ const MobileTrade: React.FC<any> = ({}) => {
     <main>
       {props.pairs ? (
         <>
+          <ShareModal qtInfo={props} />
           <Favourites />
           <TVIntegrated assetInfo={props.activePair} />
           <BuyTrade />
