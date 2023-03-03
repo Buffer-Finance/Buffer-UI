@@ -108,6 +108,7 @@ export const useDashboardTableData = () => {
         address: pool.options_contracts.current,
         pair: configPair?.pair,
         img: configPair?.img,
+        is_paused: configPair?.is_paused,
         currentPrice: currentPrices?.[configPair.tv_id]?.p,
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(fromWei(item.openInterest, usdcDecimals)),

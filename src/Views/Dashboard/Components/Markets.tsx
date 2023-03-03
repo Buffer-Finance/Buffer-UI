@@ -12,12 +12,12 @@ export const Markets = () => {
   const { dashboardData, totalData } = useDashboardTableData();
   const { activeChain } = useActiveChain();
   const referralcode = useReferralCode(activeChain);
-  const [balance, allowance, maxTrade, stats, routerPermission] =
-    useActiveAssetState(null, referralcode);
+
+  useActiveAssetState(null, referralcode);
   const filteredDashboardData = useMemo(() => {
-    if (!dashboardData || !routerPermission) return [];
-    return dashboardData.filter((data) => routerPermission[data.address]);
-  }, [dashboardData, routerPermission]);
+    if (!dashboardData) return [];
+    return dashboardData.filter((data) => !data.is_paused);
+  }, [dashboardData]);
 
   const totalDataArr = [
     {

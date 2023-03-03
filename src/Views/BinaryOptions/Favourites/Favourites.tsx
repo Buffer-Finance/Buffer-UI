@@ -19,10 +19,8 @@ import { CloseOutlined } from '@mui/icons-material';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
 import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '../Components/PairTokenImage';
-import { useShutterHandlers } from '../AmountSelector';
 
 export default function Favourites({ className }: { className?: string }) {
   const [toggle, setToggle] = useState(false);
@@ -30,8 +28,6 @@ export default function Favourites({ className }: { className?: string }) {
   const [anchor, setAnchor] = useState(null);
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
-  const { activePoolObj } = useActivePoolObj();
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
 
   const getFavourtiesObjs = () => {
     return assets
@@ -39,16 +35,12 @@ export default function Favourites({ className }: { className?: string }) {
         const foundMarket = qtInfo.pairs.find(
           (pair) => pair.pair === singleMarket
         );
-        if (foundMarket) {
-          const isAssetActive =
-            routerPermission &&
-            routerPermission[foundMarket.pools[0].options_contracts.current];
-          if (!isAssetActive) return null;
-          return foundMarket;
-        } else return null;
+
+        return foundMarket;
       })
-      .filter((singleMarket) => singleMarket);
+      .filter((singleMarket) => !singleMarket?.is_paused);
   };
+  console.log(getFavourtiesObjs(), 'getFavourtiesObjs');
 
   if (!assets) {
     return <Skeleton className="lc w20 h4 sr" />;
@@ -58,7 +50,6 @@ export default function Favourites({ className }: { className?: string }) {
     qtInfo.pairs.find((m) => m.pair === singleMarket)
   );
   const { replaceAssetHandler } = useFavouritesFns();
-  const { closeShutter } = useShutterHandlers();
   const FavourtiteAssetSelector = (
     <FavouriteAssetDD
       className="asset-dropdown-wrapper sm:!static nsm:!w-[500px] sm:!w-full"
@@ -181,17 +172,13 @@ function FavouriteCard({
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
   const isActive = data.tv_id === activeAsset.tv_id;
-  console.log(`data.tv_id: `, data.tv_id, activeAsset.tv_id);
   const { deleteCardHandler } = useFavouritesFns();
   const [marketPrice] = useAtom(marketPriceAtom);
   const marketPriceObj = marketPrice?.[data.tv_id];
   const price = marketPrice?.[data.tv_id]?.length
     ? marketPriceObj[marketPrice?.[data.tv_id].length - 1]?.close
     : null;
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
-  const isAssetActive =
-    routerPermission &&
-    routerPermission[data.pools[0].options_contracts.current];
+
   const navigate = useNavigate();
   // T w>m desktop, isActive : T, active F, inactive
   // F w<m mobile, isActive : T inactive , F active
@@ -202,7 +189,7 @@ function FavouriteCard({
           ? activeClasses
           : `hover:bg-1 hover:rounded-t-[0px] b1200:bg-cross-bg after-border ${
               !isPrevActive && id ? 'before-border' : ''
-            } ${!isAssetActive ? 'brightness-50' : ''} 
+            } 
  `
       }`}
       onClick={() => navigate(`/binary/${data.pair}`)}
@@ -218,11 +205,6 @@ function FavouriteCard({
       </button>
 
       <div className="flex items-center">
-        {/* <img
-          src={data.img}
-          alt={data.full_name}
-          className="h-[18px] mr-2 tab:ml-2 b1200:hidden"
-        /> */}
         <div className="text-f13 group-hover:text-3 whitespace-nowrap flex justify-start items-start text-3 mr-[0.4vw] b1200:flex-col">
           <span className="a1200:mr-3 flex b1200:mb-1 ">
             <div className="w-[18px] h-[18px] mr-[6px]">

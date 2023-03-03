@@ -1,11 +1,6 @@
-import { useAtom, useAtomValue } from 'jotai';
-import {
-  activeAssetStateAtom,
-  DisplayAssetsAtom,
-  IMarket,
-  useQTinfo,
-} from '..';
-import { useEffect, useMemo } from 'react';
+import { useAtom } from 'jotai';
+import { DisplayAssetsAtom, IMarket, useQTinfo } from '..';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export const useFavouritesFns = () => {
@@ -13,49 +8,14 @@ export const useFavouritesFns = () => {
   const qtInfo = useQTinfo();
   const navigate = useNavigate();
   const activeMarket = qtInfo.activePair;
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
-
-  const includesTradeAvailableAsset = useMemo(() => {
-    if (
-      !routerPermission ||
-      routerPermission[qtInfo.pairs[0].pools[0].options_contracts.current] ===
-        undefined
-    )
-      return true;
-    const availablePairs = qtInfo.pairs.filter(
-      (market) => routerPermission?.[market.pools[0].options_contracts.current]
-    );
-    return !!availablePairs.find(
-      (market) => routerPermission[market.pools[0].options_contracts.current]
-    );
-  }, [routerPermission, assets]);
-
-  const firstTradeAvailableAsset = useMemo(
-    () =>
-      qtInfo.pairs.find(
-        (market) =>
-          routerPermission?.[market.pools[0].options_contracts.current]
-      ),
-    [includesTradeAvailableAsset]
-  );
 
   useEffect(() => {
     if (assets.length === 0)
-      setAssets(
-        qtInfo.pairs
-          .filter(
-            (market) =>
-              routerPermission?.[market.pools[0].options_contracts.current]
-          )
-          .slice(0, 7)
-      );
-  }, [routerPermission]);
-
-  useEffect(() => {
-    if (!includesTradeAvailableAsset) addCardHandler(firstTradeAvailableAsset);
-  }, [includesTradeAvailableAsset]);
+      setAssets(qtInfo.pairs.filter((market) => !market.is_paused).slice(0, 4));
+  }, []);
 
   const params = useParams();
+
   useEffect(() => {
     if (activeMarket && !assets.includes(activeMarket.pair)) {
       addCardHandler(activeMarket);

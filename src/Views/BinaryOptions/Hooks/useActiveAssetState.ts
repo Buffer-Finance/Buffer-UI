@@ -2,10 +2,7 @@ import { useReadCall } from '@Utils/useReadCall';
 import { setActiveAssetStateAtom, useQTinfo } from '..';
 import ERC20ABI from '@Views/Earn/Config/Abis/Token.json';
 import MaxTradeABI from '../ABI/MaxTrade.json';
-import RouterABI from '../ABI/routerABI.json';
 import ConfigABI from '../ABI/configABI.json';
-import { getContract } from '../Address';
-import { useBinaryActiveChainId } from './useBinaryActiveChainId';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { ethers } from 'ethers';
 import BinaryOptionsABI from '../ABI/optionsABI.json';
@@ -16,34 +13,26 @@ import { useMemo } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import { knowTillAtom } from './useIsMerketOpen';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import { useActiveChain } from '@Hooks/useActiveChain';
 
 export function useActiveAssetState(amount = null, referralData) {
   const { address: account } = useUserAccount();
   const qtInfo = useQTinfo();
-  const { activeChain } = useActiveChain();
-  const activeChainId = activeChain?.id;
-
   const { activePoolObj } = useActivePoolObj();
   const [knowtil, setKnowTill] = useAtom(knowTillAtom);
   const setResInAtom = useSetAtom(setActiveAssetStateAtom);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
+
   const payoutCalls = useMemo(() => {
-    // return [];
     return qtInfo.pairs
       .map((pairObj) => {
         return pairObj.pools.map((pool, index) => {
           return {
-            address: getContract(
-              activeChainId,
-              index === 0 ? 'USDC-reader' : 'BFR-reader'
-            ),
+            address: qtInfo.optionMeta,
             abi: MaxTradeABI,
             name: 'getPayout',
             params: [
               pool.options_contracts.current,
               referralData[2],
-              // 'BJP',
               account || '0x0000000000000000000000000000000000000000',
               highestTierNFT?.tokenId || 0,
               true,
@@ -54,30 +43,10 @@ export function useActiveAssetState(amount = null, referralData) {
       .flat(1);
   }, [referralData, account, highestTierNFT]);
 
-  const routerPermissionCalls = useMemo(
-    () =>
-      qtInfo.pairs
-        .map((pairObj) => {
-          return pairObj.pools.map((pool) => {
-            return {
-              address: qtInfo.routerContract,
-              abi: RouterABI,
-              name: 'contractRegistry',
-              params: [pool.options_contracts.current],
-            };
-          });
-        })
-        .flat(1),
-    []
-  );
-
   const assetCalls = useMemo(
     () => [
       {
-        address: getContract(
-          activeChainId,
-          activePoolObj.token.name === 'USDC' ? 'USDC-reader' : 'BFR-reader'
-        ),
+        address: qtInfo.optionMeta,
         abi: MaxTradeABI,
         name: 'calculateMaxAmount',
         params: [
@@ -140,16 +109,10 @@ export function useActiveAssetState(amount = null, referralData) {
       ? [
           ...assetCalls,
           ...payoutCalls,
-          ...routerPermissionCalls,
           ...marketStateCalls,
           ...userSpecificCalls,
         ]
-      : [
-          ...assetCalls,
-          ...payoutCalls,
-          ...routerPermissionCalls,
-          ...marketStateCalls,
-        ]
+      : [...assetCalls, ...payoutCalls, ...marketStateCalls]
     : [];
 
   let copy = useReadCall({ contracts: calls }).data as unknown as string[];
@@ -192,21 +155,9 @@ export function useActiveAssetState(amount = null, referralData) {
         );
       });
     });
-
-    const routerPermissionRes = copy.slice(
-      assetCalls.length + payoutCalls.length,
-      assetCalls.length + payoutCalls.length + routerPermissionCalls.length
-    );
-    const routerPermission: { [key: string]: string | undefined } = {};
-    qtInfo.pairs.forEach((pair) => {
-      pair.pools.forEach((pool) => {
-        routerPermission[pool.options_contracts.current] =
-          routerPermissionRes.shift()?.[0];
-      });
-    });
     const marketStatusCalls = copy.slice(
-      assetCalls.length + payoutCalls.length + routerPermissionCalls.length,
-      assetCalls.length + payoutCalls.length + routerPermissionCalls.length + 1
+      assetCalls.length + payoutCalls.length,
+      assetCalls.length + payoutCalls.length + 1
     );
     if (marketStateCalls?.length) {
       const [openHour, openMin, closeHour, closeMin] =
@@ -287,10 +238,9 @@ export function useActiveAssetState(amount = null, referralData) {
       maxTrade,
       stats,
       payouts,
-      routerPermission,
     });
     //update response
-    response = [balance, allowance, maxTrade, stats, routerPermission];
+    response = [balance, allowance, maxTrade, stats];
   }
 
   return response;

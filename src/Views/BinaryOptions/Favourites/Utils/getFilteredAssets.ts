@@ -1,10 +1,5 @@
-import { useAtom, useAtomValue } from 'jotai';
-import {
-  activeAssetStateAtom,
-  FavouriteAtom,
-  IMarket,
-  useQTinfo,
-} from '@Views/BinaryOptions';
+import { useAtom } from 'jotai';
+import { FavouriteAtom, IMarket, useQTinfo } from '@Views/BinaryOptions';
 import { getAssetTypes } from './getAssetTypes';
 
 export function getFilteredAssets(
@@ -16,22 +11,16 @@ export function getFilteredAssets(
   const qtInfo = useQTinfo();
   const AssetTypes = getAssetTypes(qtInfo.pairs);
   const [favourites] = useAtom(FavouriteAtom);
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
-  if (!routerPermission) return null;
+
   let filteredAssets: IMarket[] = [];
   if (!!searchText && searchText !== '')
     filteredAssets = assets.filter(
       (asset) =>
         asset.pair.toLowerCase().includes(searchText.toLowerCase()) &&
-        routerPermission &&
-        routerPermission[asset.pools[0].options_contracts.current]
+        !asset.is_paused
     );
   else {
-    filteredAssets = assets.filter(
-      (asset) =>
-        routerPermission &&
-        routerPermission[asset.pools[0].options_contracts.current]
-    );
+    filteredAssets = assets.filter((asset) => !asset.is_paused);
   }
   switch (category) {
     case AssetTypes[0]:

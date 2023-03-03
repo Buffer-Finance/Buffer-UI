@@ -27,14 +27,9 @@ export const FavouriteAssetDD: React.FC<{
 }> = ({ className, setToggle }) => {
   const qtInfo = useQTinfo();
   const [searchText, setSearchText] = useState('');
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
 
   const assetTypes = getAssetTypes(
-    qtInfo.pairs.filter(
-      (pair) =>
-        routerPermission &&
-        routerPermission[pair.pools[0].options_contracts.current]
-    )
+    qtInfo.pairs.filter((pair) => !pair.is_paused)
   );
   const [activeAsset, setActiveAsset] = useState(assetTypes[0]);
 

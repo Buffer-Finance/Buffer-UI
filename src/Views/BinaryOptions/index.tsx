@@ -3,15 +3,12 @@ import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
 import { useNavigate } from 'react-router-dom';
-
 import PGTables from './Tables';
 import BinaryDrawer from './PGDrawer';
 import { useGlobal } from '@Contexts/Global';
 import { Skeleton } from '@mui/material';
 import Favourites from './Favourites/Favourites';
 import BufferTab from '@Views/Common/BufferTab';
-import { Navbar } from './Components/Mobile/Navbar';
-import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
@@ -27,7 +24,7 @@ import MobileTable from './Components/Mobile/historyTab';
 import { binaryTabs } from 'config';
 import TVIntegrated from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 export const mobileUpperBound = 800;
 export const IV = 12000;
 export const defaultPair = 'GBP-USD';
@@ -35,8 +32,7 @@ export const referralSlug = 'ref';
 import Config from 'public/config.json';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { Warning } from '@Views/Common/Notification/warning';
-import { WarningOutlined } from '@mui/icons-material';
+
 import { BuyTrade } from './BuyTrade';
 import { History } from './History';
 export interface IToken {
@@ -56,6 +52,8 @@ export interface IPool {
   };
 }
 export interface IMarket {
+  min_duration: string;
+  is_paused: boolean;
   max_duration: string;
   category: 'Crypto' | 'Forex';
   tv_id: string;
@@ -76,7 +74,7 @@ export interface IQTrade {
   routerContract?: string;
 }
 export const FavouriteAtom = atomWithLocalStorage('favourites3', []);
-export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV8', []);
+export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV9', []);
 
 export const activeAssetStateAtom = atom<{
   balance: string;
@@ -84,14 +82,12 @@ export const activeAssetStateAtom = atom<{
   maxTrade: string;
   stats: string;
   payouts: { [key: string]: string } | null;
-  routerPermission: { [key: string]: string } | null;
 }>({
   balance: null,
   allowance: null,
   maxTrade: null,
   stats: null,
   payouts: null,
-  routerPermission: null,
 });
 
 export const setActiveAssetStateAtom = atom(null, (get, set, payload) => {
@@ -190,15 +186,6 @@ function QTrade() {
   useEffect(() => {
     document.title = 'Buffer | Trade';
   }, []);
-  const AllTradeTab = {
-    pathname: '/[chain]/all-trades/[asset]',
-    as: `/ARBITRUM/all-trades/${defaultPair}`,
-    name: 'Old Trades',
-    slug: 'old-trades',
-    id: 2,
-    subTabs: [],
-    isExternalLink: false,
-  };
 
   useEffect(() => {
     dispatch({
