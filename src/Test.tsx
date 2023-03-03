@@ -1,6 +1,6 @@
 import { Display } from '@Views/Common/Tooltips/Display';
 import Config from 'public/config.json';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 const initD = ['800123.32', '22313.2312', '312312.11', '32131123.231'];
 const Decd = ['800123.31', '22313.2311', '312312.10', '32131123.230'];
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
@@ -20,7 +20,7 @@ import { ActiveTable, CancelTable, HistoryTable } from '@Views/BinaryOptions';
 import { usePastTradeQuery } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
-
+import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 var json = {
   global: { tabEnableClose: true },
 
@@ -100,12 +100,11 @@ var json = {
     ],
   },
 };
-const layoutAtom = atomWithLocalStorage('Buffer-Layout-v1', json);
-const demoAtom = atomWithLocalStorage('Buffer-Layout-v2', 'hello');
+const layoutAtom = atomWithLocalStorage('Layout-v1', json);
 const Man = () => {
   const layoutRef = useRef<Layout | null>(null);
   const [layout, setLayout] = useAtom(layoutAtom);
-  const [demo, setDemo] = useAtom(demoAtom);
+  const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
   usePrice();
   usePastTradeQuery();
@@ -151,7 +150,7 @@ const Man = () => {
         component: 'TradingView',
         id: market,
       });
-      layout.doAction(FlexLayout.Actions.deleteTab('dd'));
+      layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
     } catch (e) {
       toastify({
         msg: market + ' is already opened in different tab',
@@ -170,10 +169,19 @@ const Man = () => {
           return p;
         }}
         ref={layoutRef}
-        model={FlexLayout.Model.fromJson(layout)}
+        model={layoutApi}
         factory={factory}
         onRenderTab={(d, v) => {
-          // v.buttons.p
+          if (d.getComponent() == 'TradingView') {
+            const name = d.getName() as Markets;
+            const market = Config.markets[name].pair;
+            console.log(`market: `, market);
+            v.leading = (
+              <div className="w-[20px] h-[20px]">
+                <PairTokenImage pair={market} />
+              </div>
+            );
+          }
         }}
         onRenderTabSet={(d, v) => {
           if (d.getId() === 'charts') {

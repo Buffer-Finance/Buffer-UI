@@ -20,6 +20,18 @@
       "full_name": "Ethereum",
       "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg" 
     },
+    "EURUSD": {
+      "max_duration": "04:00",
+      "min_duration": "00:01",
+      "category": "Forex",
+      "tv_id": "EURUSD",
+      "pair": "EUR-USD",
+      "price_precision": 1000000,
+      "token1": "EUR",
+      "token2": "USD",
+      "full_name": "Euro",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png"
+    },
     "GBPUSD":{
       "category": "Crypto",
       "tv_id": "GBPUSD",

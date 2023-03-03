@@ -72,6 +72,7 @@ const BuyTrade: React.FC<any> = ({}) => {
   // const [rpcState] = useRPCchecker();
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
+  console.log(`activeAssetPrice: `, activeAssetPrice, marketPrice, activeAsset);
   let MarketOpenWarning: ReactNode | null = null;
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
@@ -83,7 +84,7 @@ const BuyTrade: React.FC<any> = ({}) => {
         <DurationSelector />
       </div>
       {(currStats && currStats.max_loss && currStats.max_payout) ||
-      (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
+      (activeAssetPrice && currStats?.max_payout) ? (
         <div className="flex-sbw text-f14 my-3 ">
           <div className="f14  flex-start flex wrap text-2">
             Payout :&nbsp;

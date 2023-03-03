@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import PGTables from './Tables';
 import BinaryDrawer from './PGDrawer';
 import { useGlobal } from '@Contexts/Global';
-import { Skeleton, useMediaQuery } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import Favourites from './Favourites/Favourites';
 import BufferTab from '@Views/Common/BufferTab';
 import { Navbar } from './Components/Mobile/Navbar';
@@ -15,7 +15,6 @@ import { MobileScreens } from './Components/Mobile/Screens';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
-import PGDesktopTables, { tradesCount } from './Tables/Desktop';
 import {
   tardesPageAtom,
   updateActivePageNumber,
@@ -39,10 +38,9 @@ import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
 import { WarningOutlined } from '@mui/icons-material';
-import { TradingChart } from 'src/TradingView';
-import { usePrice } from '@Hooks/usePrice';
 import { getChains } from 'src/Config/wagmiClient';
 import { BuyTrade } from './BuyTrade';
+import PGDesktopTables, { tradesCount } from './Tables/Desktop';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -119,7 +117,7 @@ export const useQTinfo = () => {
       let market = params?.market || 'ETH-USD';
       // GBP
       market = market?.toUpperCase();
-      let currM = m.tv_id.toUpperCase();
+      let currM = m.pair.toUpperCase();
       if (market == currM) {
         return true;
       }
@@ -227,27 +225,17 @@ function QTrade() {
         <Background>
           {props.pairs ? (
             <>
-              <Warning
-                body={
-                  <>
-                    <WarningOutlined className="text-[#EEAA00] mt-[4px]" />{' '}
-                    &nbsp; Trading on Forex & Commodities is currently halted.
-                    It will be resumed shortly.
-                  </>
-                }
-                closeWarning={() => {}}
-                state={true}
-                shouldAllowClose={false}
-                className="!ml-1 !py-3 !px-4 !mb-3 !text-f14"
-              />
-              {typeof window !== 'undefined' &&
-                window.innerWidth < mobileUpperBound && <MobileScreens />}
-
-              <div className="tab:hidden mb-3">
-                {/* <Favourites /> */}
-                <TradingChart market="BTCUSD" />
-                <TradingChart market="ETHUSD" />
-              </div>
+              <Favourites />
+              <MobileOnly>
+                <TVIntegrated assetInfo={props.activePair} />
+              </MobileOnly>
+              <WebOnly>
+                <div className="tab:hidden mb-3">
+                  <GraphView className="tab:hidden">
+                    <TVIntegrated assetInfo={props.activePair} />
+                  </GraphView>
+                </div>
+              </WebOnly>
               <div className="custom-view b1200:w-[80%] mx-auto">
                 <div className="tab:hidden ">
                   <div className="flex b1200:justify-center items-center nsm:ml-4">
@@ -339,7 +327,6 @@ function QTrade() {
             <BuyTrade />
           </MobileOnly>
         </Background>
-        <TVIntegrated assetInfo={props.activePair} />
       </main>
       <BinaryDrawer />
     </>
@@ -363,7 +350,7 @@ export const ActiveTable = ({ width }) => {
   return width < mobileUpperBound ? (
     <MobileTable onPageChange={(e, pageNumber) => setActivePage(pageNumber)} />
   ) : (
-    <PGTables
+    <PGDesktopTables
       currentPage={activePage}
       count={tradesCount}
       onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
@@ -383,7 +370,7 @@ export const HistoryTable = ({ width }) => {
       isHistoryTable
       currentPage={historyPageNumber}
       count={tradesCount}
-      onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+      onPageChange={(e, pageNumber) => setPageNumber(pageNumber)}
     />
   );
 };
