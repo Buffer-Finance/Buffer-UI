@@ -166,12 +166,12 @@ function QTrade() {
   const isHistory = useAtomValue(isHistoryTabActiveAtom);
   const setActiveMarketFromStorage = useSetAtom(activeMarketFromStorageAtom);
   useEffect(() => {
-    console.log(`params?.market: `, params?.market);
+    // console.log(`params?.market: `, params?.market);
     if (params?.market && params.market != 'undefined') {
       setActiveMarketFromStorage(params.market);
     } else {
       navigate('/#/binary/' + defaultMarket);
-      console.log('marketnotfound');
+      // console.log('marketnotfound');
     }
   }, [params?.market]);
   const { state, dispatch } = useGlobal();
