@@ -51,10 +51,16 @@ export const HistoryTables = () => {
         handleChange={(e, t) => {
           changeActiveTab(e, t);
         }}
-        distance={5}
         className="mb-5"
         tablist={[
-          { name: 'Active' },
+          {
+            name: 'Active',
+            icon: (
+              <div className="ml-2 text-f12 border border-1 px-[6px] rounded bg-cross-bg text-3 font-thin translate-y-[1px]">
+                Beta
+              </div>
+            ),
+          },
           { name: 'History' },
           // { name: 'Cancelled' },
         ]}

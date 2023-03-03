@@ -83,11 +83,14 @@ export const getExpireNotification = async (
       win = true;
     }
   }
-
+  console.log('win-state', win);
   if (win) {
+    console.log(`currentRow[state]: `, currentRow);
     openShareModal(currentRow, expiryPrice.toString());
     return;
   } else {
+    console.log(`currentRow[state]: `, currentRow);
+
     const openTimeStamp = currentRow.creationTime;
     const closeTimeStamp = +currentRow.expirationTime;
     toastify({
@@ -448,10 +451,9 @@ export const StrikePriceComponent = ({
 export const ExpiryCurrentComponent: React.FC<{
   isHistoryTable: boolean;
   trade: IGQLHistory;
-  activeMarket: IMarket;
   marketPrice: any;
   configData: IMarket;
-}> = ({ isHistoryTable, trade, activeMarket, marketPrice, configData }) => {
+}> = ({ isHistoryTable, trade, marketPrice, configData }) => {
   const decimals = configData.price_precision.toString().length - 1;
 
   if (isHistoryTable) {
@@ -497,19 +499,6 @@ export const ExpiryCurrentComponent: React.FC<{
     );
   }
 
-  // if (activeMarket.tv_id === configData.tv_id)
-  //   return (
-  //     <CellContent
-  //       content={[
-  //         <Display
-  //           data={marketPrice.activeMarket?.close?.toString() || "0"}
-  //           unit={configData.token2}
-  //           precision={decimals}
-  //           className="justify-self-start content-start w-fit"
-  //         />,
-  //       ]}
-  //     />
-  //   );
   return (
     <CellContent
       content={[
@@ -527,14 +516,12 @@ export const ExpiryCurrentComponent: React.FC<{
 export const ProbabilityPNL = ({
   trade,
   isHistoryTable,
-  activeMarket,
   marketPrice,
   configData,
   onlyPnl = false,
 }: {
   trade: IGQLHistory;
   isHistoryTable: boolean;
-  activeMarket: IMarket;
   marketPrice: any;
   configData: IMarket;
   onlyPnl?: boolean;

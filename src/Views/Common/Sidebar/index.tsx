@@ -13,7 +13,6 @@ import Discord from 'public/Social/discord';
 import Medium from 'public/Social/medium';
 import GitHub from 'public/Social/github';
 import Telegram from 'public/Social/telegram';
-
 const social = [
   {
     Img: Twitter,
@@ -41,8 +40,6 @@ const social = [
     name: 'GitHub',
   },
 ];
-// import usePages from "Hooks/Utilities/usePageInfo";
-
 const SideBar: React.FC<any> = () => {
   const newPageNavElements = 9;
   const { state, dispatch } = useGlobal();
@@ -119,13 +116,15 @@ const SideBar: React.FC<any> = () => {
               </NavLink>
             );
           })}
-
-          <div className="flex flex-row items-center justify-center flex-wrap gap-3 px-8 bbborderrr">
+          <div className=" text-2 mb-3 mt-[10vh] text-center text-f13 pl-[2rem]">
+            Connect with us{' '}
+          </div>
+          <div className="flex mx-auto w-[140px] flex-row items-center justify-center flex-wrap gap-[11px] px-3 bbborderrr">
             {social.map((S) => {
               return (
                 <a className="unset" href={S.link} target="_blank">
                   <span className="text-2 ">
-                    <S.Img />
+                    <S.Img className="" />
                   </span>
                 </a>
               );

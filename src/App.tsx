@@ -33,6 +33,8 @@ import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { ProfilePage } from '@Views/Profile';
 import { useEffect } from 'react';
 import { useToast } from '@Contexts/Toast';
+import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
+import { History } from '@Views/BinaryOptions/History';
 
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -80,6 +82,7 @@ const AppRoutes = () => {
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/history" element={<History />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />} />
@@ -157,10 +160,10 @@ function App() {
         closeWarning={() => {}}
         shouldAllowClose={false}
         state={true}
-        className="disclaimer"
+        className="disclaimer sm:hidden"
       />
       <ConnectionDrawer className="open" />
-
+      <MobileBottomTabs />
       <TnCModal />
       <SideBar />
     </Background>

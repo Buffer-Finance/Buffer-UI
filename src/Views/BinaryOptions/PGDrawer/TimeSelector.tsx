@@ -152,6 +152,7 @@ export const TimeSelector = ({
   investmentDD,
   max,
   error,
+  onSelect,
   maxTime = '23:59',
   minTime = '00:05',
 }: {
@@ -163,6 +164,7 @@ export const TimeSelector = ({
   minTime?: string;
   setTime: (any) => void;
   max?: number;
+  onSelect?: () => void;
   title?: string;
   error: {
     min: number;
@@ -314,7 +316,9 @@ export const TimeSelector = ({
                 <input
                   className="timeRef timetip text-right text-f16 font-bold text-1"
                   ref={hrsRef}
+                  onKeyDown={(e) => e.key == 'Enter' && onSelect?.()}
                   type="number"
+                  tabIndex={2}
                   onChange={(e) => hrsValidations(e.target.value)}
                   placeholder="00"
                 />
@@ -322,7 +326,9 @@ export const TimeSelector = ({
                 <input
                   className="timeRef timetip text-f16 font-bold text-left text-1"
                   ref={minRef}
+                  onKeyDown={(e) => e.key == 'Enter' && onSelect?.()}
                   type="number"
+                  tabIndex={onSelect && 3}
                   onChange={(e) => minValidations(e.target.value)}
                   placeholder="00"
                 />
