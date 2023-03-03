@@ -15,7 +15,6 @@ import { ApproveModal } from '../Components/approveModal';
 import { BuyUSDCLink } from './BuyUsdcLink';
 import { TimeSelector } from './TimeSelector';
 import { useBinaryActions } from '../Hooks/useBinaryActions';
-import { useNetwork } from 'wagmi';
 import { useQTinfo } from '..';
 import { SettingsIcon } from './SettingsIcon';
 import { SlippageModal } from '../Components/SlippageModal';
@@ -26,8 +25,6 @@ import { useActivePoolObj } from './PoolDropDown';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { MarketTimingWarning } from '../MarketTimingWarning';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { getChains } from 'src/Config/wagmiClient';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 
@@ -69,23 +66,17 @@ export function CustomOption() {
     }
   }, [account]);
   const knowTill = useAtomValue(knowTillAtom);
-  const { chain } = useNetwork();
-  const chains = getChains();
-  const { activeChain } = useActiveChain();
-  const activeChainName = activeChain?.name;
   const qtInfo = useQTinfo();
   const [marketPrice] = useAtom(marketPriceAtom);
   const activeAsset = qtInfo?.activePair;
   const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
   const isForex = activeAsset.category === 'Forex';
-  // useIsMarketOpen();
   const isMarketOpen = knowTill.open && isForex;
   const allowance = divide(allowanceWei, activePoolObj.token.decimals);
   const isAssetActive =
     routerPermission &&
     routerPermission[activeAsset.pools[0].options_contracts.current];
-  // const [rpcState] = useRPCchecker();
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
   let MarketOpenWarning: ReactNode | null = null;
