@@ -134,6 +134,7 @@ function App() {
             className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
           />
         )}
+
         <Navbar />
         <AppRoutes />
         <Snackbar
@@ -153,6 +154,18 @@ function App() {
         <Warning
           body={
             <>
+              Coinbase, one of the exchanges we use for price feeds, is in
+              maintenance - trading will be temporarily halted as a result
+            </>
+          }
+          closeWarning={() => {}}
+          shouldAllowClose={false}
+          state={true}
+          className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+        />
+        {/* <Warning
+          body={
+            <>
               $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
               listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
               PancakeSwap or Apeswap on BNB chain.
@@ -162,7 +175,7 @@ function App() {
           shouldAllowClose={false}
           state={true}
           className="disclaimer sm:hidden"
-        />
+        /> */}
         <ConnectionDrawer className="open" />
         <TnCModal />
         <SideBar />
