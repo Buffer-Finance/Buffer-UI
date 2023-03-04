@@ -38,7 +38,7 @@ type dashboardTableData = {
 };
 
 export const useDashboardTableData = () => {
-  useMarketStatus();
+  const assetStatus = useMarketStatus();
   const { data: currentPrices } = useSWR('dashboard-current-prices', {
     fetcher: async () => {
       const response = await axios.get(
@@ -108,6 +108,10 @@ export const useDashboardTableData = () => {
         return !!pool;
       });
       if (!configPair) return;
+      console.log(
+        assetStatus[pool.options_contracts.current],
+        'assetStatus[pool.options_contracts.current]'
+      );
       const currData = {
         ...item,
         address: pool.options_contracts.current,
@@ -121,6 +125,13 @@ export const useDashboardTableData = () => {
         openInterest: Number(fromWei(item.openInterest, usdcDecimals)),
         precision: configPair?.price_precision,
         totalTrades: Number(add(item.openDown, item.openUp)),
+        max_trade_size:
+          Number(assetStatus[pool.options_contracts.current].maxTradeAmount) ||
+          0,
+        is_open:
+          (pool.category !== 'Crypto' &&
+            assetStatus[pool.options_contracts.current].isMarketOpen) ||
+          false,
         '24h_volume':
           Number(
             fromWei(oneDayVolume?.[item.address.toLowerCase()], usdcDecimals)

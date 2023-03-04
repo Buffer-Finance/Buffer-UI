@@ -21,7 +21,9 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
     { id: '24h_volume', label: '24h Volume' },
     { id: 'currentUtilization', label: 'Current Utilization' },
     { id: 'sort_duration', label: 'Min/Max Duration' },
-    { id: 'payoutForUp', label: 'Payouts' },
+    { id: 'max_trade_size', label: 'Max Trade Size' },
+    { id: 'max_trade_size', label: 'Max Trade Size' },
+    { id: 'is_open', label: 'Market Status' },
   ];
 
   const bodyJSX = (
@@ -105,6 +107,20 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
           />
         );
       case 6:
+        return (
+          <CellContent
+            content={[
+              <Display
+                data={currentRow.max_trade_size}
+                unit="USDC"
+                className="!justify-start"
+              />,
+            ]}
+          />
+        );
+      case 7:
+        return <CellContent content={[currentRow.is_open]} />;
+      case 8:
         return (
           <CellContent
             content={[
