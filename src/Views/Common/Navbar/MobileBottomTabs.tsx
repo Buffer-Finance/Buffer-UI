@@ -140,7 +140,7 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
     });
   };
   return (
-    <div className="bg-1 nsm:hidden mobile-bottom-drawer flex items-center pt-[5px] pb-[8px] justify-between px-3">
+    <div className="bg-1 fixed bottom-[0px] w-full z-10 nsm:hidden mobile-bottom-drawer flex items-center pt-[5px] pb-[8px] justify-between px-3">
       {tabs.slice(0, limit).map((t) => (
         <BaseTab tab={t} active={isActive(t)} />
       ))}{' '}
