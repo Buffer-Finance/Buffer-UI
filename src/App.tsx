@@ -134,6 +134,18 @@ function App() {
             className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
           />
         )}
+        <Warning
+          body={
+            <>
+              Coinbase, one of the exchanges we use for price feeds, is in
+              maintenance - trading will be temporarily halted as a result
+            </>
+          }
+          closeWarning={() => {}}
+          shouldAllowClose={false}
+          state={true}
+          className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+        />
         <Navbar />
         <AppRoutes />
         <Snackbar
