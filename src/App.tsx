@@ -118,55 +118,57 @@ function App() {
   const [snack, setSnack] = useAtom(snackAtom);
   const graphStatus = useGraphStatus();
   return (
-    <Background>
-      {graphStatus && (
+    <>
+      <Background>
+        {graphStatus && (
+          <Warning
+            body={
+              <>
+                We are facing some issues with the theGraph API. Trading
+                experience on the platform may be hindered temporarily.
+              </>
+            }
+            closeWarning={() => {}}
+            shouldAllowClose={false}
+            state={graphStatus.error}
+            className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+          />
+        )}
+        <Navbar />
+        <AppRoutes />
+        <Snackbar
+          open={snack.message ? true : false}
+          autoHideDuration={3500}
+          onClose={() => setSnack({ message: null })}
+          action={null}
+        >
+          <Alert
+            onClose={() => setSnack({ message: null })}
+            severity={snack.severity || 'info'}
+            sx={{ width: '100%' }}
+          >
+            {snack.message}
+          </Alert>
+        </Snackbar>
         <Warning
           body={
             <>
-              We are facing some issues with the theGraph API. Trading
-              experience on the platform may be hindered temporarily.
+              $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
+              listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
+              PancakeSwap or Apeswap on BNB chain.
             </>
           }
           closeWarning={() => {}}
           shouldAllowClose={false}
-          state={graphStatus.error}
-          className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+          state={true}
+          className="disclaimer sm:hidden"
         />
-      )}
-      <Navbar />
-      <AppRoutes />
-      <Snackbar
-        open={snack.message ? true : false}
-        autoHideDuration={3500}
-        onClose={() => setSnack({ message: null })}
-        action={null}
-      >
-        <Alert
-          onClose={() => setSnack({ message: null })}
-          severity={snack.severity || 'info'}
-          sx={{ width: '100%' }}
-        >
-          {snack.message}
-        </Alert>
-      </Snackbar>
-      <Warning
-        body={
-          <>
-            $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
-            listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
-            PancakeSwap or Apeswap on BNB chain.
-          </>
-        }
-        closeWarning={() => {}}
-        shouldAllowClose={false}
-        state={true}
-        className="disclaimer sm:hidden"
-      />
-      <ConnectionDrawer className="open" />
+        <ConnectionDrawer className="open" />
+        <TnCModal />
+        <SideBar />
+      </Background>
       <MobileBottomTabs />
-      <TnCModal />
-      <SideBar />
-    </Background>
+    </>
   );
 }
 
