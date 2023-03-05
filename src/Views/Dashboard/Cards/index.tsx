@@ -106,6 +106,10 @@ export const StatsOverView = ({ data }: { data: IOverview }) => {
 };
 
 export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
+  const totalDays = Math.ceil(
+    (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
+  );
+  console.log('totalDays', totalDays);
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
@@ -120,6 +124,7 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
             'USDC Fees / Volume',
             'Total Traders',
             'Average Trade size',
+            'Average Volume',
             'USDC fees / Volume (24h)',
             'Open Interest',
             'Total Trades',
@@ -148,6 +153,13 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
             <div className={wrapperClasses}>
               {' '}
               <Display data={data.avgTrade} unit={'USDC'} />
+            </div>,
+            <div className={wrapperClasses}>
+              {' '}
+              <Display
+                data={divide(data.USDCvolume, totalDays.toString())}
+                unit={'USDC'}
+              />
             </div>,
             <div className={wrapperClasses}>
               {' '}
