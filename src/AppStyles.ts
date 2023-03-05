@@ -13,9 +13,7 @@ const Background = styled.div`
     "Main" 1fr
     "Footer" auto / 100%;
   height: 100vh;
-@media (max-width:800px) {
-  margin-bottom:50px;
-}
+
   .root {
     grid-area: Main;
     overflow: auto;
