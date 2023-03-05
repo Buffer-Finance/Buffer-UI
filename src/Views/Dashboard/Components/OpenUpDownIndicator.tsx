@@ -34,13 +34,19 @@ export function OpenUpDownIndicator({
     <OpenUpDownBackground downPercent={downPercent} upPercent={upPercent}>
       <div className="flex flex-col items-start gap-2">
         <div className="flex justify-between w-[80%]">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 whitespace-nowrap">
             <UpTriangle className={`scale-75`} />
-            <div className="text-green mr-2"> {openUp} USDC</div>
+            <div className="text-green mr-2 whitespace-nowrap">
+              {' '}
+              {openUp} USDC
+            </div>
           </div>
 
-          <div className="flex items-center gap-1">
-            <div className="text-red ml-2"> {openDown} USDC</div>
+          <div className="flex items-center gap-1 whitespace-nowrap">
+            <div className="text-red ml-2 whitespace-nowrap">
+              {' '}
+              {openDown} USDC
+            </div>
             <DOwnTriangle className={`scale-75`} />
           </div>
         </div>

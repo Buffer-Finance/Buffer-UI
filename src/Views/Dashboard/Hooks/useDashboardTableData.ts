@@ -108,10 +108,7 @@ export const useDashboardTableData = () => {
         return !!pool;
       });
       if (!configPair) return;
-      console.log(
-        assetStatus[pool.options_contracts.current],
-        'assetStatus[pool.options_contracts.current]'
-      );
+
       const currData = {
         ...item,
         address: pool.options_contracts.current,
@@ -126,12 +123,13 @@ export const useDashboardTableData = () => {
         precision: configPair?.price_precision,
         totalTrades: Number(add(item.openDown, item.openUp)),
         max_trade_size:
-          Number(assetStatus[pool.options_contracts.current].maxTradeAmount) ||
+          Number(assetStatus[pool.options_contracts.current]?.maxTradeAmount) ||
           0,
         is_open:
-          (pool.category !== 'Crypto' &&
-            assetStatus[pool.options_contracts.current].isMarketOpen) ||
-          false,
+          configPair.category === 'Crypto'
+            ? true
+            : assetStatus[pool.options_contracts.current]?.isMarketOpen ||
+              false,
         '24h_volume':
           Number(
             fromWei(oneDayVolume?.[item.address.toLowerCase()], usdcDecimals)
@@ -139,12 +137,13 @@ export const useDashboardTableData = () => {
         currentUtilization: Number(fromWei(item.currentUtilization, 16)),
         payoutForDown: Number(fromWei(item.payoutForDown, 16)),
         payoutForUp: Number(fromWei(item.payoutForUp, 16)),
+        max_utilization: configPair?.max_utilization,
         // currentPrice: currentPrice?.p,
       };
       upatedData.push(currData);
     });
     return upatedData;
-  }, [data, currentPrices]);
+  }, [data, currentPrices, assetStatus]);
 
   const totalData: {
     trades: number;

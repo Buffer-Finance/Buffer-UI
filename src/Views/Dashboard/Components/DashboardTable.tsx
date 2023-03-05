@@ -15,15 +15,13 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
     { id: 'currentPrice', label: 'Current Price' },
-
     { id: 'totalTrades', label: 'Open Up/Open Down' },
-    // { id: 'openInterest', label: 'Open Interest' },
     { id: '24h_volume', label: '24h Volume' },
-    { id: 'currentUtilization', label: 'Current Utilization' },
+    { id: 'currentUtilization', label: 'Utilization' },
     { id: 'sort_duration', label: 'Min/Max Duration' },
     { id: 'max_trade_size', label: 'Max Trade Size' },
-    { id: 'max_trade_size', label: 'Max Trade Size' },
-    { id: 'is_open', label: 'Market Status' },
+    { id: 'payoutForUp', label: 'Payouts' },
+    { id: 'is_open', label: 'Status' },
   ];
 
   const bodyJSX = (
@@ -50,13 +48,6 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
                 currentPrice={currentRow.currentPrice}
                 price_precision={currentRow.precision.toString().length - 1}
               />,
-              // <div className="flex items-center">
-              //   <Stats
-              //     arrowStyles={'h-[20px] w-[12px] mt-2'}
-              //     fontSize={'text-f13 mbn3'}
-              //     info={currentRow['24h_change']}
-              //   />
-              // </div>,
             ]}
           />
         );
@@ -67,16 +58,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             openUp={+divide(currentRow.openUp, usdcDecimals)}
           />
         );
-      // case 2:
-      //   return (
-      //     <CellContent
-      //       content={[
-      //         <div className="flex items-center">
-      //           <Display data={currentRow.openInterest} unit={'USDC'} />
-      //         </div>,
-      //       ]}
-      //     />
-      //   );
+
       case 3:
         return (
           <CellContent
@@ -93,7 +75,12 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
           <CellContent
             content={[
               <div className="flex items-center">
-                <Display data={currentRow.currentUtilization} unit="%" />
+                Current&nbsp;:&nbsp;
+                <Display data={currentRow.currentUtilization / 100} unit="%" />
+              </div>,
+              <div className="flex items-center">
+                Max&nbsp;:&nbsp;
+                <Display data={currentRow.max_utilization / 100} unit="%" />
               </div>,
             ]}
           />
@@ -118,9 +105,27 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 7:
-        return <CellContent content={[currentRow.is_open]} />;
       case 8:
+        return (
+          <CellContent
+            content={[
+              <>
+                {currentRow.is_open ? (
+                  <div className="text-green flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-green" /> Open
+                  </div>
+                ) : (
+                  <div className="text-red flex items-center gap-2">
+                    {' '}
+                    <div className="h-3 w-3 rounded-full bg-red" />
+                    Closed
+                  </div>
+                )}
+              </>,
+            ]}
+          />
+        );
+      case 7:
         return (
           <CellContent
             content={[
@@ -152,7 +157,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
-      widths={['auto']}
+      widths={['11%', '11%', '15%', '11%', '11%', '11%', '11%', '9%', '9%']}
     />
   );
 };
