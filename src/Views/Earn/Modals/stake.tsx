@@ -82,7 +82,7 @@ const Common = ({ val, setVal, head, max, unit, isStakeModal }) => {
           setVal(val);
         }}
         unit={
-          <span className="text-f16 flex justify-between w-full">
+          <span className="text-f16 flex justify-between w-fit">
             <BlueBtn
               isDisabled={!gt(max, '0')}
               onClick={() => {

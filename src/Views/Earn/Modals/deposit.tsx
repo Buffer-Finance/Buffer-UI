@@ -80,7 +80,6 @@ export const DepositModal = ({
   );
   const [approveState, setApprovalState] = useState(false);
 
-
   const clickHandler = () => {
     if (validations(val)) return;
 
@@ -133,7 +132,7 @@ export const DepositModal = ({
         value={val}
         onChange={(val) => setVal(val)}
         unit={
-          <span className="text-f16 flex justify-between w-full">
+          <span className="text-f16 flex justify-between w-fit">
             <BlueBtn
               isDisabled={!gt(max, '0')}
               onClick={() => {

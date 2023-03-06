@@ -371,7 +371,6 @@ export default function useDataFeed(chartReady) {
       storedUpdates.current = bar;
       console.log('not-prev bar', storedUpdates.current, priceUpdates);
     }
-    console.timeEnd('fn-start');
 
     setMarketPrices((mp) => {
       return { ...mp, ...latestKline };

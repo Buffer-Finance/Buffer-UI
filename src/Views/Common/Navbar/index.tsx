@@ -39,7 +39,10 @@ export const Navbar: React.FC<INavbar> = () => {
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
         >
-          <BufferLogoComponent className="h-[30px] ml-[8px] sm:ml-[10px]" />
+          <BufferLogoComponent
+            className="h-[30px] ml-[8px] sm:mx-[2px]"
+            hideText
+          />
         </div>
 
         <div className="tab:hidden flex gap-[6px] b1200:!hidden ">
@@ -72,7 +75,7 @@ export const Navbar: React.FC<INavbar> = () => {
 
       <div className="flex items-center gap-[7px] whitespace-nowrap">
         {address && (
-          <div className="text-f13 bg-[#2C2C41] h-[30px] px-5 special-hover hover:brightness-125 tb  rounded-[7px] items-center flex w-fit">
+          <div className="text-f13 bg-[#2C2C41] h-[30px] px-5 special-hover hover:brightness-125  rounded-[7px] items-center flex w-fit">
             <NFTtier userOnly />
           </div>
         )}
@@ -100,18 +103,6 @@ export const Navbar: React.FC<INavbar> = () => {
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
           {/* <ChainDropdown /> */}
           <AccountDropdown />
-        </div>
-
-        <div id="mobile-sidebar-logo" className="web:!hidden ">
-          {state.sidebar_active ? (
-            <MenuLogo className="icon menu" onClick={handleClose} />
-          ) : (
-            <CloseLogo
-              className="icon menu"
-              onClick={handleClose}
-              style={{ transform: 'scale(0.8)' }}
-            />
-          )}
         </div>
       </div>
     </header>

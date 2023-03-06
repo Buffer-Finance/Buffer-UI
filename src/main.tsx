@@ -5,6 +5,9 @@ import { HashRouter } from 'react-router-dom';
 import { WagmiConfig } from 'wagmi';
 import App from './App';
 import '@rainbow-me/rainbowkit/styles.css'
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/theme-dark.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';

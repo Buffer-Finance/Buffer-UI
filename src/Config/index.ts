@@ -1,6 +1,6 @@
 import { IAsset } from '@Contexts/Global/interfaces';
 
-export const DEFAULT_GAS_LIMIT = 1500000;
+export const DEFAULT_GAS_LIMIT = 15000000;
 
 export const supportedWallets =
   import.meta.env.VITE_ENV.toLowerCase() === 'testnet'
