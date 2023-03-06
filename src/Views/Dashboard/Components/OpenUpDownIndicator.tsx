@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { getBalance } from '@Views/Common/AccountInfo';
 import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { UpTriangle } from 'public/ComponentSVGS/UpTriangle';
 import { useMemo } from 'react';
@@ -35,19 +36,19 @@ export function OpenUpDownIndicator({
       <div className="flex flex-col items-start gap-2">
         <div className="flex justify-between w-[80%]">
           <div className="flex items-center gap-1 whitespace-nowrap">
-            <UpTriangle className={`scale-75`} />
+            {/* <UpTriangle className={`scale-75`} /> */}
             <div className="text-green mr-2 whitespace-nowrap">
               {' '}
-              {openUp} USDC
+              {getBalance(openUp, 'USDC')}
             </div>
           </div>
 
           <div className="flex items-center gap-1 whitespace-nowrap">
             <div className="text-red ml-2 whitespace-nowrap">
               {' '}
-              {openDown} USDC
+              {getBalance(openDown, 'USDC')}
             </div>
-            <DOwnTriangle className={`scale-75`} />
+            {/* <DOwnTriangle className={`scale-75`} /> */}
           </div>
         </div>
         <div className="flex items-center w-[80%] ">

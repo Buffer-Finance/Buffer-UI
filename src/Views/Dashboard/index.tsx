@@ -9,7 +9,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useEffect } from 'react';
 
 const DashboardStyles = styled.div`
-  width: min(1200px, 100%);
+  width: min(1300px, 100%);
   margin: auto;
   height: 100%;
   padding-bottom: 24px;

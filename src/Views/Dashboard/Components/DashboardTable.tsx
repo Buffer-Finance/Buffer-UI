@@ -157,7 +157,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
-      widths={['11%', '11%', '15%', '11%', '11%', '11%', '11%', '9%', '9%']}
+      widths={['11%', '11%', '17%', '11%', '11%', '10%', '10%', '9%', '9%']}
     />
   );
 };
