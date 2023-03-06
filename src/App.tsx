@@ -103,6 +103,7 @@ const AppRoutes = () => {
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/referral" element={<ReferralPage />} />
         <Route path="/history" element={<History />} />
         <Route path="/refer/:referral_code" element={<Test />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
@@ -112,7 +113,6 @@ const AppRoutes = () => {
         </Route>
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
         {/* referral link handling */}
