@@ -102,7 +102,6 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/referandearn" element={<Test />} />
         <Route path="/test" element={<Test />} />
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/refer/:code" element={<Test />} />
