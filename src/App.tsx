@@ -5,6 +5,7 @@ import {
   Link,
   Navigate,
   useSearchParams,
+  useNavigate,
 } from 'react-router-dom';
 import Drawer from '@Views/Common/V2-Drawer';
 import IbfrFaucet from '@Views/Faucet';
@@ -65,11 +66,14 @@ const AppRoutes = () => {
   const [searchParam] = useSearchParams();
   const [ref, setRef] = useAtom(referralCodeAtom);
   const toastify = useToast();
+  const navigate = useNavigate();
   useEffect(() => {
     let referralCode = searchParam.get('ref');
+    console.log(`referralCode: `, referralCode);
     if (!referralCode) {
       let code = '';
       const codes = window.location.href.split('/');
+      console.log(`codes: `, codes);
       for (let i = 0; i < codes.length; i++) {
         if (codes[i] == 'refer') {
           code = codes?.[i + 1];
@@ -91,6 +95,7 @@ const AppRoutes = () => {
         });
       }
     }
+    navigate('/binary/ETH-USD');
   }, [searchParam]);
   return (
     <div className="root w-[100vw]">
@@ -99,8 +104,8 @@ const AppRoutes = () => {
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
         <Route path="/history" element={<History />} />
+        <Route path="/refer/:referral_code" element={<Test />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
-        <Route exact path="/referral/:referral_code" element={<Test />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />} />
           <Route path="weekly" element={<Weekly />} />
