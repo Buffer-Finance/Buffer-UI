@@ -7,17 +7,21 @@ import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { usdcDecimals } from '@Views/V2-Leaderboard/Weekly';
+import { divide } from '@Utils/NumString/stringArithmatics';
 
 export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
   const navigate = useNavigate();
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
     { id: 'currentPrice', label: 'Current Price' },
-    { id: 'openInterest', label: 'Open Interest' },
-    { id: '24h_volume', label: '24h Volume' },
     { id: 'totalTrades', label: 'Open Up/Open Down' },
-    { id: 'currentUtilization', label: 'Current Utilization' },
+    { id: '24h_volume', label: '24h Volume' },
+    { id: 'currentUtilization', label: 'Utilization' },
+    { id: 'sort_duration', label: 'Min/Max Duration' },
+    { id: 'max_trade_size', label: 'Max Trade Size' },
     { id: 'payoutForUp', label: 'Payouts' },
+    { id: 'is_open', label: 'Status' },
   ];
 
   const bodyJSX = (
@@ -44,26 +48,17 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
                 currentPrice={currentRow.currentPrice}
                 price_precision={currentRow.precision.toString().length - 1}
               />,
-              // <div className="flex items-center">
-              //   <Stats
-              //     arrowStyles={'h-[20px] w-[12px] mt-2'}
-              //     fontSize={'text-f13 mbn3'}
-              //     info={currentRow['24h_change']}
-              //   />
-              // </div>,
             ]}
           />
         );
       case 2:
         return (
-          <CellContent
-            content={[
-              <div className="flex items-center">
-                <Display data={currentRow.openInterest} unit={'USDC'} />
-              </div>,
-            ]}
+          <OpenUpDownIndicator
+            openDown={+divide(currentRow.openDown, usdcDecimals)}
+            openUp={+divide(currentRow.openUp, usdcDecimals)}
           />
         );
+
       case 3:
         return (
           <CellContent
@@ -74,24 +69,63 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
+
       case 4:
         return (
-          <OpenUpDownIndicator
-            openDown={currentRow.openDown}
-            openUp={currentRow.openUp}
+          <CellContent
+            content={[
+              <div className="flex items-center">
+                Current&nbsp;:&nbsp;
+                <Display data={currentRow.currentUtilization / 100} unit="%" />
+              </div>,
+              <div className="flex items-center">
+                Max&nbsp;:&nbsp;
+                <Display data={currentRow.max_utilization / 100} unit="%" />
+              </div>,
+            ]}
           />
         );
       case 5:
         return (
           <CellContent
             content={[
-              <div className="flex items-center">
-                <Display data={currentRow.currentUtilization} unit="%" />
-              </div>,
+              currentRow.min_duration + ' / ' + currentRow.max_duration,
             ]}
           />
         );
       case 6:
+        return (
+          <CellContent
+            content={[
+              <Display
+                data={currentRow.max_trade_size}
+                unit="USDC"
+                className="!justify-start"
+              />,
+            ]}
+          />
+        );
+      case 8:
+        return (
+          <CellContent
+            content={[
+              <>
+                {currentRow.is_open ? (
+                  <div className="text-green flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-green" /> Open
+                  </div>
+                ) : (
+                  <div className="text-red flex items-center gap-2">
+                    {' '}
+                    <div className="h-3 w-3 rounded-full bg-red" />
+                    Closed
+                  </div>
+                )}
+              </>,
+            ]}
+          />
+        );
+      case 7:
         return (
           <CellContent
             content={[
@@ -123,7 +157,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
-      widths={['14%', '14%', '14%', '14%', '20%', '14%', '10%']}
+      widths={['11%', '11%', '17%', '11%', '11%', '10%', '10%', '9%', '9%']}
     />
   );
 };

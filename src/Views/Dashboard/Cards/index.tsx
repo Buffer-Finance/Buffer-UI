@@ -106,11 +106,15 @@ export const StatsOverView = ({ data }: { data: IOverview }) => {
 };
 
 export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
+  const totalDays = Math.ceil(
+    (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
+  );
+  console.log('totalDays', totalDays);
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
     <Card
-      top={'Total Stats'}
+      top={'Trading Overview'}
       middle={
         <TableAligner
           keyStyle={keyClasses}
@@ -120,6 +124,10 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
             'USDC Fees / Volume',
             'Total Traders',
             'Average Trade size',
+            'Average Volume',
+            'USDC fees / Volume (24h)',
+            'Open Interest',
+            'Total Trades',
           ]}
           values={[
             // <div className={wrapperClasses}>
@@ -129,15 +137,50 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
             //   <Display data={data.BFRvolume} label="$" />
             // </div>,
             <div className={wrapperClasses}>
-              <Display data={data.USDCfees} unit={'USDC'} />
-              &nbsp;/&nbsp;
-              <Display data={data.USDCvolume} unit={'USDC'} />
+              <NumberTooltip
+                content={numberWithCommas(data.USDCfees) + ' USDC'}
+              >
+                <div>{getBalance(data.USDCfees)} USDC </div>
+              </NumberTooltip>
+              &nbsp;/&nbsp;{' '}
+              <NumberTooltip
+                content={numberWithCommas(data.USDCvolume) + ' USDC'}
+              >
+                <div> {getBalance(data.USDCvolume)} USDC </div>
+              </NumberTooltip>
             </div>,
             <div className={wrapperClasses}>{data.totalTraders}</div>,
             <div className={wrapperClasses}>
               {' '}
               <Display data={data.avgTrade} unit={'USDC'} />
             </div>,
+            <div className={wrapperClasses}>
+              {' '}
+              <Display
+                data={divide(data.USDCvolume, totalDays.toString())}
+                unit={'USDC'}
+              />
+            </div>,
+            <div className={wrapperClasses}>
+              {' '}
+              <NumberTooltip
+                content={numberWithCommas(data.usdc_24_fees) + ' USDC'}
+              >
+                <div>{getBalance(data.usdc_24_fees)} USDC </div>
+              </NumberTooltip>
+              &nbsp;/&nbsp;
+              <NumberTooltip
+                content={numberWithCommas(data.usdc_24_volume) + ' USDC'}
+              >
+                <div>{getBalance(data.usdc_24_volume)} USDC </div>
+              </NumberTooltip>
+            </div>,
+            <div>
+              {data.openInterest !== null
+                ? data.openInterest + ' USDC'
+                : 'fetching...'}
+            </div>,
+            <div>{data.trades !== null ? data.trades : 'fetching...'}</div>,
           ]}
         />
       }
@@ -396,6 +439,7 @@ export const TokensBLP = ({
             'Exchange Rate',
             'Total Supply',
             'Total USDC Amount',
+            'POL(USDC)',
             'APY',
           ]}
           values={[
@@ -409,7 +453,29 @@ export const TokensBLP = ({
             <div className={wrapperClasses}>
               <Display data={data.total_usdc} unit={'USDC'} />
             </div>,
-
+            <div className={wrapperClasses}>
+              {data.usdc_pol ? (
+                <NumberTooltip
+                  content={
+                    toFixed(
+                      multiply(divide(data.usdc_pol, data.usdc_total), 2),
+                      2
+                    ) + '% of total liquidity in the USDC vault.'
+                  }
+                >
+                  <div>
+                    <Display
+                      data={multiply(data.usdc_pol, data.price) || '0'}
+                      unit={'USDC'}
+                      disable
+                      className={underLineClass}
+                    />
+                  </div>
+                </NumberTooltip>
+              ) : (
+                <>-</>
+              )}
+            </div>,
             <div className={wrapperClasses}>
               <Display data={data.apr} unit="%" />
             </div>,
