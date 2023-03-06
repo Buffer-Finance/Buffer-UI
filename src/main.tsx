@@ -25,7 +25,7 @@ inject();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <WagmiConfig client={wagmiClient}>
     <RainbowKitProvider chains={chains} theme={darkTheme()}>
-      <BrowserRouter>
+      <HashRouter>
         <SWRConfig value={options}>
           <ContextProvider>
             <JotaiProvider>
@@ -33,7 +33,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             </JotaiProvider>
           </ContextProvider>
         </SWRConfig>
-      </BrowserRouter>
+      </HashRouter>
     </RainbowKitProvider>
   </WagmiConfig>
 );
