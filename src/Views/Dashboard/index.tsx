@@ -56,12 +56,33 @@ export const Dashboard = () => {
 };
 
 const DashboardPage = () => {
-  const { BFR, BLP, overView, total } = useDashboardReadCalls();
   return (
     <DashboardStyles>
-      {/* <ArbitrumOnly hide>
+      <ArbitrumOnly hide>
         <Boxes />
-      </ArbitrumOnly> */}
+      </ArbitrumOnly>
+
+      <Section
+        Heading={<div className={topStyles}>Markets</div>}
+        subHeading={
+          <div className={descStyles}>
+            Discover new Pairs available on Buffer (Stats since 30th Jan, 2023)
+          </div>
+        }
+        other={
+          <div className={descStyles}>
+            <Markets />
+          </div>
+        }
+      />
+    </DashboardStyles>
+  );
+};
+
+function Boxes() {
+  const { BFR, BLP, overView, total } = useDashboardReadCalls();
+  return (
+    <>
       <Section
         Heading={<div className={topStyles}>Dashboard</div>}
         subHeading={
@@ -84,19 +105,6 @@ const DashboardPage = () => {
           <TokensBLP data={BLP} tokenName={'BLP'} />,
         ]}
       />
-      <Section
-        Heading={<div className={topStyles}>Markets</div>}
-        subHeading={
-          <div className={descStyles}>
-            Discover new Pairs available on Buffer (Stats since 30th Jan, 2023)
-          </div>
-        }
-        other={
-          <div className={descStyles}>
-            <Markets />
-          </div>
-        }
-      />
-    </DashboardStyles>
+    </>
   );
-};
+}
