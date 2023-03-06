@@ -425,7 +425,7 @@ const Affilate = ({
   const { hostname } = window.location;
   const [state, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = useState(false);
-  const link = `https://${hostname}/refer/${affiliateCode}/`;
+  const link = `https://${hostname}/#/refer/${affiliateCode}/`;
   console.log(`link: `, link);
   const copyLink = () => {
     try {
