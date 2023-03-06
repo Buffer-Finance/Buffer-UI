@@ -30,8 +30,8 @@ export const isTestnet = import.meta.env.VITE_ENV.toUpperCase() === 'TESTNET';
 
 export const baseGraphqlUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
-    ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/mainet-dummy'
-    : 'https://api.thegraph.com/subgraphs/name/bufferfinance/mainet-dummy';
+    ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy'
+    : 'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy';
 
 export const baseGraphqlLiteUrl =
   import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
