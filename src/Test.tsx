@@ -1,6 +1,6 @@
 import { Display } from '@Views/Common/Tooltips/Display';
 import Config from 'public/config.json';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 const initD = ['800123.32', '22313.2312', '312312.11', '32131123.231'];
 const Decd = ['800123.31', '22313.2311', '312312.10', '32131123.230'];
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
@@ -23,6 +23,7 @@ import { useGenericHooks } from '@Hooks/useGenericHook';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { IconButton } from '@mui/material';
+import { useParams } from 'react-router-dom';
 var json = {
   global: { tabEnableClose: true },
   layout: {
@@ -89,11 +90,12 @@ var json = {
             selected: 0,
             children: [
               {
+                enableClose: false,
                 type: 'tab',
                 name: 'Trade',
-                id: 'BuyTrade',
+                enableDrag: false,
+                id: 'BuyTraded',
                 component: 'BuyTrade',
-                enableClose: false,
               },
             ],
           },
@@ -105,6 +107,8 @@ var json = {
 const layoutAtom = atomWithLocalStorage('Layout-v1', json);
 const DesktopTrade = () => {
   const layoutRef = useRef<Layout | null>(null);
+  const { market } = useParams();
+  console.log(`market: `, market);
   const [layout, setLayout] = useAtom(layoutAtom);
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
@@ -128,7 +132,7 @@ const DesktopTrade = () => {
     if (component === 'BuyTrade') {
       return (
         <Background className="bg-2 max-w-[420px] mx-auto">
-          <ActiveAsset />
+          <ActiveAsset cb={handleNewTabClick} />
           <CustomOption onResetLayout={() => setLayout(json)} />
         </Background>
       );
@@ -144,14 +148,22 @@ const DesktopTrade = () => {
       return <CancelTable width={rect.width} />;
     }
   };
-  function handleNewTabClick(market: string) {
+  function handleNewTabClick(market: string, custom?: string) {
     try {
-      layoutRef.current!.addTabToActiveTabSet({
-        type: 'tab',
-        name: market,
-        component: 'TradingView',
-        id: market,
-      });
+      if (custom)
+        layoutRef.current!.addTabToTabSet(custom, {
+          type: 'tab',
+          name: market,
+          component: 'TradingView',
+          id: market.replace('-', ''),
+        });
+      else
+        layoutRef.current!.addTabToActiveTabSet({
+          type: 'tab',
+          name: market,
+          component: 'TradingView',
+          id: market.replace('-', ''),
+        });
       layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
     } catch (e) {
       toastify({
@@ -162,7 +174,23 @@ const DesktopTrade = () => {
       console.log('action', e);
     }
   }
+  // useLayoutEffect(() => {
+  // if (market && document.getElementById(market!)) {
+  // document.getElementById(market!).className = ' !w-[2px] !h-[2px] ';
+  // }
+  // }, [market]);
+  useEffect(() => {
+    console.log(`ddmarket: `, market);
+    document
+      .querySelectorAll('.flexlayout__tab_button')
+      .forEach((d) => d.classList.remove('active-tab-tv'));
+    const closest = document
+      .getElementById(market?.replace('-', ''))
+      ?.closest('.flexlayout__tab_button');
 
+    console.log(`closest: `, closest);
+    closest?.classList.add('active-tab-tv');
+  });
   return (
     <>
       <FlexLayout.Layout
@@ -178,9 +206,8 @@ const DesktopTrade = () => {
             const name = d.getName() as Markets;
             const market = Config.markets[name].pair;
             console.log(`market: `, market);
-
             v.leading = (
-              <div className="w-[20px] h-[20px]">
+              <div className="w-[20px] h-[20px]" id={market.replace('-', '')}>
                 <PairTokenImage pair={market} />
               </div>
             );
@@ -188,6 +215,7 @@ const DesktopTrade = () => {
         }}
         onRenderTabSet={(d, v) => {
           if (d.getId() === 'charts') {
+            // v.headerButtons[0].
             v.stickyButtons.push(
               <button
                 className="text-f22"
@@ -208,6 +236,7 @@ const DesktopTrade = () => {
             <button
               title="Reset layout. You can Drag and Drop to customize the UI."
               className="flex justify-center items-center flip-y !text-2 hover:!bg-[#3d3d3d] rounded-sm "
+              onClick={() => setLayout(json)}
             >
               <ReplayIcon />
             </button>

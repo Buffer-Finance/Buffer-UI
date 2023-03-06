@@ -32,7 +32,7 @@ const setDoccumentTitle = (title) => {
 let boostedPayout = null;
 let fullPayout = null;
 
-export const ActiveAsset = () => {
+export const ActiveAsset = ({ cb }) => {
   const qtInfo = useQTinfo();
   const singleAsset = qtInfo.activePair;
   const marketPrice = useAtomValue(priceAtom);
@@ -74,7 +74,11 @@ export const ActiveAsset = () => {
         <>
           <Background>
             <TVMarketSelector
-              onMarketSelect={(m) => navigate('/test/' + m)}
+              onMarketSelect={(m) => {
+                cb(m, 'charts');
+                navigate('/test/' + m);
+                setIsOpen(false);
+              }}
               className="asset-dropdown-wrapper left-[0] max-w-[300px] p-3"
             />
           </Background>
