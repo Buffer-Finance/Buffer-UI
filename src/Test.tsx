@@ -104,7 +104,7 @@ var json = {
     ],
   },
 };
-const layoutAtom = atomWithLocalStorage('Layout-v1', json);
+const layoutAtom = atomWithLocalStorage('Layout-v100', json);
 const DesktopTrade = () => {
   const layoutRef = useRef<Layout | null>(null);
   const { market } = useParams();
