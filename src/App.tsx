@@ -94,8 +94,8 @@ const AppRoutes = () => {
           id: 23132,
         });
       }
+      navigate('/binary/ETH-USD');
     }
-    navigate('/binary/ETH-USD');
   }, [searchParam]);
   return (
     <div className="root w-[100vw]">
