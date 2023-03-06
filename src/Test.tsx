@@ -23,7 +23,7 @@ import { useGenericHooks } from '@Hooks/useGenericHook';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { IconButton } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 var json = {
   global: { tabEnableClose: true },
   layout: {
@@ -112,6 +112,7 @@ const DesktopTrade = () => {
   const [layout, setLayout] = useAtom(layoutAtom);
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
+  const navigate = useNavigate();
   usePrice();
   usePastTradeQuery();
   useGenericHooks();
@@ -208,6 +209,10 @@ const DesktopTrade = () => {
     <>
       <FlexLayout.Layout
         onAction={(p) => {
+          if (p.type == FlexLayout.Actions.SELECT_TAB) {
+            console.log('actionselect', p);
+            navigate('/test/' + p.data.tabNode);
+          }
           if (p.type == FlexLayout.Actions.DELETE_TAB) {
             console.log('action', p);
             if (
@@ -230,7 +235,8 @@ const DesktopTrade = () => {
         onRenderTab={(d, v) => {
           if (d.getComponent() == 'TradingView') {
             const name = d.getName() as Markets;
-            const market = Config.markets[name].pair;
+            console.log(`name: `, name);
+            const market = Config.markets[name.replace('-', '')].pair;
             console.log(`market: `, market);
             v.leading = (
               <div className="w-[20px] h-[20px]" id={market.replace('-', '')}>
