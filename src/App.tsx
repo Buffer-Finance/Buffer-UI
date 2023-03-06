@@ -75,12 +75,12 @@ const AppRoutes = () => {
           code = codes?.[i + 1];
         }
       }
-      console.log(`referralCode: `, code);
       if (code[code.length - 1] == '#') {
         code = code.slice(0, code.length - 1);
       }
       if (code) referralCode = code;
     }
+    console.log(`referralCode: `, referralCode, ref);
     if (referralCode) {
       if (ref !== referralCode) {
         setRef(referralCode);
