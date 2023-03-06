@@ -150,27 +150,31 @@ const DesktopTrade = () => {
   };
   function handleNewTabClick(market: string, custom?: string) {
     try {
-      if (custom)
+      if (custom) {
         layoutRef.current!.addTabToTabSet(custom, {
           type: 'tab',
           name: market,
           component: 'TradingView',
           id: market.replace('-', ''),
         });
-      else
+      } else {
         layoutRef.current!.addTabToActiveTabSet({
           type: 'tab',
           name: market,
           component: 'TradingView',
           id: market.replace('-', ''),
         });
+      }
       layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
     } catch (e) {
-      toastify({
-        msg: market + ' is already opened in different tab',
-        type: 'error',
-        id: e,
-      });
+      if (!custom) {
+        toastify({
+          msg: market + ' is already opened in different tab',
+          type: 'error',
+          id: e,
+        });
+        layoutApi.doAction(FlexLayout.Actions.selectTab(market));
+      }
       console.log('action', e);
     }
   }
@@ -180,22 +184,44 @@ const DesktopTrade = () => {
   // }
   // }, [market]);
   useEffect(() => {
-    console.log(`ddmarket: `, market);
-    document
-      .querySelectorAll('.flexlayout__tab_button')
-      .forEach((d) => d.classList.remove('active-tab-tv'));
-    const closest = document
-      .getElementById(market?.replace('-', ''))
-      ?.closest('.flexlayout__tab_button');
+    // console.log(`ddmarket: `, market);
+    // document
+    //   .querySelectorAll('.flexlayout__tab_button')
+    //   .forEach((d) => d.classList.remove('active-tab-tv'));
+    // const closest = document
+    //   .getElementById(market?.replace('-', ''))
+    //   ?.closest('.flexlayout__tab_button');
 
-    console.log(`closest: `, closest);
-    closest?.classList.add('active-tab-tv');
-  });
+    // console.log(`closest: `, closest);
+    // closest?.classList.add('active-tab-tv');
+    try {
+      layoutRef.current!.addTabToActiveTabSet({
+        type: 'tab',
+        name: market,
+        component: 'TradingView',
+        id: market.replace('-', ''),
+      });
+    } catch (e) {}
+    layoutApi.doAction(FlexLayout.Actions.selectTab(market?.replace('-', '')));
+  }, [market]);
   return (
     <>
       <FlexLayout.Layout
         onAction={(p) => {
-          console.log('action', p);
+          if (p.type == FlexLayout.Actions.DELETE_TAB) {
+            console.log('action', p);
+            if (
+              p.data.node.toLowerCase() ==
+              market?.replace('-', '').toLowerCase()
+            ) {
+              toastify({
+                type: 'error',
+                msg: "Can't remove the Active Chart!",
+                id: '231',
+              });
+              return false;
+            }
+          }
           return p;
         }}
         ref={layoutRef}

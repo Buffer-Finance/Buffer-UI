@@ -17,17 +17,6 @@ body {
   transform: scale(0.8);
 }
 
-.active-tab-tv{
-  background: #5353532e;
-}
-.active-tab-tv .flexlayout__tab_button_trailing{
-  visibility: visible;
-}
-
-.flexlayout__tab_button--selected{
-    background: transparent;
-    color: grey;
-}
 
 html .flip-y{
   transform: rotateY(180deg);
