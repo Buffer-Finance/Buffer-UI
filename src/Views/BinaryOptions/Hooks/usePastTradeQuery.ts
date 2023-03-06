@@ -1,13 +1,15 @@
-import { useAccount } from 'wagmi';
-import { ENV, IMarket, IToken } from '..';
+import { useAccount } from "wagmi";
+import {  IMarket, IToken } from "..";
 import MarketConfig from 'public/config.json';
-import { BetState, TradeInputs, useAheadTrades } from '@Hooks/useAheadTrades';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useMemo } from 'react';
-import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
-import axios from 'axios';
-import { expiryPriceCache } from './useTradeHistory';
-import { useUserAccount } from '@Hooks/useUserAccount';
+import { BetState, TradeInputs, useAheadTrades } from "@Hooks/useAheadTrades";
+import { atom, useAtomValue, useSetAtom } from "jotai";
+import { useEffect, useMemo } from "react";
+import { usePastTradeQueryByFetch } from "./usePastTradeQueryByFetch";
+import axios from "axios";
+import { expiryPriceCache } from "./useTradeHistory";
+import { useUserAccount } from "@Hooks/useUserAccount";
+import { useActiveChain } from "@Hooks/useActiveChain";
+
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { baseGraphqlLiteUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
-import { useAccount } from 'wagmi';
 import { useActiveChain } from './useActiveChain';
 
 interface IGraphNFT {
@@ -17,6 +16,7 @@ interface IGraphNFT {
 
 export const useNFTGraph = (userOnly = false) => {
   const { address: account } = useUserAccount();
+  const { cache } = useSWRConfig();
   const {configContracts} = useActiveChain();
   const { data } = useSWR(`nfts-the-graph-account-${account}`, {
     fetcher: async () => {
@@ -43,7 +43,7 @@ export const useNFTGraph = (userOnly = false) => {
 
   return {
     nfts: userOnly
-      ? (cache.get(`nfts-the-graph-account-${userAccount}`)?.nfts as
+      ? (cache.get(`nfts-the-graph-account-${account}`)?.nfts as
           | IGraphNFT[]
           | undefined)
       : (data?.nfts as IGraphNFT[]),
