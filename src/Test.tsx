@@ -10,23 +10,16 @@ import {
   useConnectModal,
 } from '@rainbow-me/rainbowkit';
 import { useNetwork } from 'wagmi';
+import { useLocation } from 'react-router-dom';
 
 const Test: React.FC<any> = ({}) => {
-  const { openConnectModal } = useConnectModal();
-  const { openAccountModal } = useAccountModal();
-  const { openChainModal } = useChainModal();
-  const {chain} = useNetwork();
-  useEffect(()=>{
-    console.log(`chain-c${chain}`);
-  },[chain])
-  
-  return (
-    <div>
-      <button onClick={openConnectModal}>openConnectModal</button>
-      <button onClick={openAccountModal}>openAccountModal</button>
-      <button onClick={openChainModal}>openChainModal</button>
-    </div>
-  );
+  const history = useLocation();
+  const { chain } = useNetwork();
+  useEffect(() => {
+    console.log(`history: `, window.location.href);
+  }, [chain]);
+
+  return <div>I am the test page</div>;
 };
 
 export { Test };

@@ -66,14 +66,30 @@ const AppRoutes = () => {
   const [ref, setRef] = useAtom(referralCodeAtom);
   const toastify = useToast();
   useEffect(() => {
-    const referralCode = searchParam.get('ref');
+    let referralCode = searchParam.get('ref');
+    if (!referralCode) {
+      let code = '';
+      const codes = window.location.href.split('/');
+      for (let i = 0; i < codes.length; i++) {
+        if (codes[i] == 'refer') {
+          code = codes?.[i + 1];
+        }
+      }
+      console.log(`referralCode: `, code);
+      if (code[code.length - 1] == '#') {
+        code = code.slice(0, code.length - 1);
+      }
+      if (code) referralCode = code;
+    }
     if (referralCode) {
-      if (ref !== referralCode) setRef(referralCode);
-      toastify({
-        type: 'success',
-        msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
-        id: 23132,
-      });
+      if (ref !== referralCode) {
+        setRef(referralCode);
+        toastify({
+          type: 'success',
+          msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
+          id: 23132,
+        });
+      }
     }
   }, [searchParam]);
   return (
@@ -84,6 +100,7 @@ const AppRoutes = () => {
         <Route path="/test" element={<Test />} />
         <Route path="/history" element={<History />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
+        <Route exact path="/referral/:referral_code" element={<Test />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />} />
           <Route path="weekly" element={<Weekly />} />
