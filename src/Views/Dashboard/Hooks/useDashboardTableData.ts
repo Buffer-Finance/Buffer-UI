@@ -4,9 +4,9 @@ import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add } from '@Utils/NumString/stringArithmatics';
 import MarketConfig from 'public/config.json';
-import { ENV } from '@Views/BinaryOptions/index';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export function getLinuxTimestampBefore24Hours() {
   // const date = new Date();
@@ -26,10 +26,10 @@ export const useDashboardTableData = () => {
     },
     // refreshInterval: 300,
   });
-
+  const { configContracts } = useActiveChain();
   const { data } = useSWR('dashboard-table-data', {
     fetcher: async () => {
-      const response = await axios.post(baseGraphqlUrl, {
+      const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
           optionContracts (where: {token: "USDC"}) {
             address
@@ -93,7 +93,7 @@ export const useDashboardTableData = () => {
     const upatedData = [];
     let pool = null;
     data.optionContracts.forEach((item) => {
-      const configPair = MarketConfig[ENV].pairs.find((pair) => {
+      const configPair = configContracts.pairs.find((pair) => {
         pool = null;
         pool = pair.pools.find(
           (pool) =>
@@ -102,7 +102,9 @@ export const useDashboardTableData = () => {
         );
         return !!pool;
       });
+
       if (!configPair) return;
+      // if(configPair.category == 'Forex' || configPair.category == 'Comodity') return;
       const currData = {
         ...item,
         address: pool.options_contracts.current,

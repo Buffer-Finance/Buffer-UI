@@ -7,6 +7,10 @@ import { useDashboardReadCalls } from './Hooks/useDashBoardReadCalls';
 import styled from '@emotion/styled';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useEffect } from 'react';
+import {
+  ArbitrumOnly,
+  ChainNotSupported,
+} from '@Views/Common/ChainNotSupported';
 
 const DashboardStyles = styled.div`
   width: min(1200px, 100%);
@@ -35,12 +39,11 @@ const DashboardStyles = styled.div`
 
 const topStyles = 'mx-3 text-f22';
 const descStyles = 'mx-3';
-
 export const Dashboard = () => {
   const { activeChain } = useActiveChain();
-  useEffect(()=>{
-    document.title = "Buffer | Dashboard"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Dashboard';
+  }, []);
   return (
     <DashboardContextProvider value={{ activeChain }}>
       <main className="content-drawer">
@@ -55,27 +58,11 @@ export const Dashboard = () => {
 };
 
 const DashboardPage = () => {
-  const { BFR, BLP, overView, total } = useDashboardReadCalls();
   return (
     <DashboardStyles>
-      <Section
-        Heading={<div className={topStyles}>Stats</div>}
-        subHeading={<div className={descStyles}>Arbitrum Total Stats (since 30th Jan, 2023)</div>}
-        Cards={[
-          <StatsOverView data={overView} />,
-          <StatsTotalStats data={total} />,
-        ]}
-      />{' '}
-      <Section
-        Heading={<div className={topStyles}>Tokens</div>}
-        subHeading={
-          <div className={descStyles}>Platform and BLP index tokens</div>
-        }
-        Cards={[
-          <TokensBFR data={BFR} tokenName={'BFR'} />,
-          <TokensBLP data={BLP} tokenName={'BLP'} />,
-        ]}
-      />
+      <ArbitrumOnly hide>
+       <Boxes/>
+      </ArbitrumOnly>
       <Section
         Heading={<div className={topStyles}>Markets</div>}
         subHeading={
@@ -92,3 +79,31 @@ const DashboardPage = () => {
     </DashboardStyles>
   );
 };
+
+function Boxes (){
+  const { BFR, BLP, overView, total } = useDashboardReadCalls();
+return  <>
+<Section
+  Heading={<div className={topStyles}>Stats</div>}
+  subHeading={
+    <div className={descStyles}>
+      Arbitrum Total Stats (since 30th Jan, 2023)
+    </div>
+  }
+  Cards={[
+    <StatsOverView data={overView} />,
+    <StatsTotalStats data={total} />,
+  ]}
+/>{' '}
+<Section
+  Heading={<div className={topStyles}>Tokens</div>}
+  subHeading={
+    <div className={descStyles}>Platform and BLP index tokens</div>
+  }
+  Cards={[
+    <TokensBFR data={BFR} tokenName={'BFR'} />,
+    <TokensBLP data={BLP} tokenName={'BLP'} />,
+  ]}
+/>
+</>
+}

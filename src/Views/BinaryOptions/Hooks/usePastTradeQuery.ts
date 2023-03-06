@@ -94,6 +94,7 @@ export interface IGQLHistory {
 
 export const usePastTradeQuery = () => {
   const { address: account } = useUserAccount();
+  const {configContracts} = useActiveChain();
   const setTrades = useSetAtom(tardesAtom);
   const setPageNumbers = useSetAtom(updateTotalPageNumber);
   const { active, history, cancelled } = useAtomValue(tardesPageAtom);
@@ -129,7 +130,7 @@ export const usePastTradeQuery = () => {
         }
       }
       let pool;
-      const configPair = MarketConfig[ENV].pairs.find((pair) => {
+      const configPair = configContracts.pairs.find((pair) => {
         pool = pair.pools.find(
           (pool) =>
             pool.options_contracts.current.toLocaleLowerCase() ===
@@ -158,7 +159,7 @@ export const usePastTradeQuery = () => {
       });
       if (!pool) return null;
 
-      const depositToken = MarketConfig[ENV].tokens[pool.token];
+      const depositToken = configContracts.tokens[pool.token];
       let updatedTrade = { ...singleTrade, depositToken, configPair };
       if (shouldAddHistoryPrice) {
         addExpiryPrice(updatedTrade);
