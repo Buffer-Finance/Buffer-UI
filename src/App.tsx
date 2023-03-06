@@ -105,6 +105,7 @@ const AppRoutes = () => {
         <Route path="/referandearn" element={<Test />} />
         <Route path="/test" element={<Test />} />
         <Route path="/referral" element={<ReferralPage />} />
+        <Route path="/refer/:code" element={<Test />} />
         <Route path="/history" element={<History />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
