@@ -148,7 +148,7 @@ export const AssetTable: React.FC<{
       onRowClick={(rowNumber) => {
         if (!BodyArr) return;
         const selectedAsset = BodyArr[rowNumber];
-        onMarketSelect(selectedAsset.tv_id);
+        onMarketSelect(selectedAsset.pair);
         console.log(`selectedAsset: `, selectedAsset.tv_id);
       }}
     />

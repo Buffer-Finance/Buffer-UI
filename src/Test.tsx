@@ -42,8 +42,8 @@ var json = {
             children: [
               {
                 type: 'tab',
-                name: 'BTCUSD',
-                id: 'BTCUSD',
+                name: 'BTC-USD',
+                id: 'BTC-USD',
                 enableClose: false,
                 component: 'TradingView',
                 enableDrag: false,
@@ -108,7 +108,6 @@ const layoutAtom = atomWithLocalStorage('Layout-v100', json);
 const DesktopTrade = () => {
   const layoutRef = useRef<Layout | null>(null);
   const { market } = useParams();
-  console.log(`market: `, market);
   const [layout, setLayout] = useAtom(layoutAtom);
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
@@ -150,34 +149,30 @@ const DesktopTrade = () => {
     }
   };
   function handleNewTabClick(market: string, custom?: string) {
-    try {
-      if (custom) {
-        layoutRef.current!.addTabToTabSet(custom, {
-          type: 'tab',
-          name: market,
-          component: 'TradingView',
-          id: market.replace('-', ''),
-        });
-      } else {
-        layoutRef.current!.addTabToActiveTabSet({
-          type: 'tab',
-          name: market,
-          component: 'TradingView',
-          id: market.replace('-', ''),
-        });
-      }
-      layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
-    } catch (e) {
-      if (!custom) {
-        toastify({
-          msg: market + ' is already opened in different tab',
-          type: 'error',
-          id: e,
-        });
-        layoutApi.doAction(FlexLayout.Actions.selectTab(market));
-      }
-      console.log('action', e);
-    }
+    // try {
+    //   if (custom) {
+    layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
+    navigate('/test/' + (market || custom));
+    //   } else {
+    //     layoutRef.current!.addTabToActiveTabSet({
+    //       type: 'tab',
+    //       name: market,
+    //       component: 'TradingView',
+    //       id: market.replace('-', ''),
+    //     });
+    //     layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
+    //   }
+    // } catch (e) {
+    //   if (!custom) {
+    //     toastify({
+    //       msg: market + ' is already opened in different tab',
+    //       type: 'error',
+    //       id: e,
+    //     });
+    //     layoutApi.doAction(FlexLayout.Actions.selectTab(market));
+    //   }
+    //   console.log('action', e);
+    // }
   }
   // useLayoutEffect(() => {
   // if (market && document.getElementById(market!)) {
@@ -196,14 +191,14 @@ const DesktopTrade = () => {
     // console.log(`closest: `, closest);
     // closest?.classList.add('active-tab-tv');
     try {
-      layoutRef.current!.addTabToActiveTabSet({
+      layoutRef.current!.addTabToTabSet('charts', {
         type: 'tab',
         name: market,
         component: 'TradingView',
-        id: market.replace('-', ''),
+        id: market,
       });
     } catch (e) {}
-    layoutApi.doAction(FlexLayout.Actions.selectTab(market?.replace('-', '')));
+    layoutApi.doAction(FlexLayout.Actions.selectTab(market));
   }, [market]);
   return (
     <>
@@ -211,7 +206,11 @@ const DesktopTrade = () => {
         onAction={(p) => {
           if (p.type == FlexLayout.Actions.SELECT_TAB) {
             console.log('actionselect', p);
-            navigate('/test/' + p.data.tabNode);
+            const market = p.data?.tabNode.replace('-', '');
+            if (market && Config.markets?.[market]) {
+              console.log(`p.data.tabNode: `, p.data.tabNode);
+              navigate('/test/' + p.data.tabNode);
+            }
           }
           if (p.type == FlexLayout.Actions.DELETE_TAB) {
             console.log('action', p);

@@ -212,7 +212,8 @@ function drawPosition(
   // positions.current.push({ line, expiration: option.expirationTime });
 }
 
-export const TradingChart = ({ market }: { market: Markets }) => {
+export const TradingChart = ({ market: marke }: { market: Markets }) => {
+  let market = marke.replace('-', '');
   const qtInfo = useQTinfo();
   const [chartConfigs, setChartConfigs] = useState({ resolution: '1' });
 
