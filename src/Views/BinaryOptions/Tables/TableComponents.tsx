@@ -195,7 +195,7 @@ export const Cancel: React.FC<{
         console.log(`queue_id: `, queue_id);
         cancelHandler(queue_id, setIsLoading);
       }}
-      className="!h-fit !px-4 !py-2 !rounded-md !text-f14 !font-medium !w-fit "
+      className="!h-fit !px-4 !py-2 !rounded-md !text-f14 !font-medium !w-max "
       isLoading={isLoading}
     >
       Cancel
@@ -308,7 +308,7 @@ export const PayoutChip: React.FC<{
   return (
     <NumberTooltip content={getChipContent().tooltip}>
       <div
-        className={`flex sm:flex-row-reverse items-center justify-between w-fit web:pl-3 web:pr-[6px] web:py-2 web:bg-2 rounded-[5px] ${className}`}
+        className={`flex sm:flex-row-reverse items-center justify-between w-max web:pl-3 web:pr-[6px] web:py-2 web:bg-2 rounded-[5px] ${className}`}
       >
         <div
           className={
@@ -367,7 +367,7 @@ export const UpDownChip: React.FC<{
 }) => {
   return (
     <div
-      className={`px-3 text-f12 flex gap-1 items-center rounded-[8px] font-medium  ml-2 bg-1 brightness-125 w-fit ${
+      className={`px-3 text-f12 flex gap-1 items-center rounded-[8px] font-medium  ml-2 bg-1 brightness-125 w-max ${
         isUp ? 'green' : 'red'
       }  ${className}`}
     >
@@ -430,7 +430,7 @@ export const StrikePriceComponent = ({
           !isMobile
             ? 'justify-self-start content-start'
             : 'justify-self-end content-end'
-        }  w-fit`}
+        }  w-max`}
       />
       {!isMobile && trade.state === BetState.queued ? (
         <div className="flex gap-2 align-center">
@@ -469,7 +469,7 @@ export const ExpiryCurrentComponent: React.FC<{
                   data={divide(computedExpiryPrice, 8)}
                   precision={decimals}
                   unit={configData.token2}
-                  className="justify-self-start content-start w-fit"
+                  className="justify-self-start content-start w-max"
                 />
               ) : (
                 '-'
@@ -489,7 +489,7 @@ export const ExpiryCurrentComponent: React.FC<{
               data={divide(trade.expirationPrice, 8)}
               precision={decimals}
               unit={configData.token2}
-              className="justify-self-start content-start w-fit"
+              className="justify-self-start content-start w-max"
             />
           ) : (
             '-'
@@ -506,7 +506,7 @@ export const ExpiryCurrentComponent: React.FC<{
           data={getPriceFromKlines(marketPrice, configData)}
           precision={decimals}
           unit={configData.token2}
-          className="justify-self-start content-start w-fit"
+          className="justify-self-start content-start w-max"
         />,
       ]}
     />
@@ -662,7 +662,7 @@ export const TradeSize: React.FC<{
         <Display
           data={divide(trade.totalFee, (trade.depositToken as IToken).decimals)}
           unit={(trade.depositToken as IToken).name}
-          className="text-1"
+          className="text-1 w-max"
         />,
       ]}
       whiteIdx={0}
