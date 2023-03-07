@@ -92,13 +92,9 @@ export default function BufferSortTable({
   let tableCellCls = 'table-cell';
 
   return (
-    <Background shouldShowMobile={shouldShowMobile}>
+    <Background shouldShowMobile={shouldShowMobile && window.innerWidth < 1200}>
       <TableContainer>
-        <Table
-          sx={{ minWidth: 750 }}
-          aria-labelledby="tableTitle"
-          size={'small'}
-        >
+        <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
           <TableHead className={`table-header`}>
             <TableRow className={`table-row-head`}>
               {headerJSX.map((headCell) => (
