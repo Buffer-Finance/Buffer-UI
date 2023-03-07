@@ -7,7 +7,11 @@ export interface Call {
 }
 export const arbMain = 'https://arb1.arbitrum.io/rpc';
 
-export const multicallv2 = async (calls: Call[], singerOrProvider,multicall) => {
+export const multicallv2 = async (
+  calls: Call[],
+  singerOrProvider,
+  multicall
+) => {
   if (!calls.length) return null;
   try {
     const calldata = calls.map((call) => {
@@ -32,10 +36,6 @@ export const multicallv2 = async (calls: Call[], singerOrProvider,multicall) => 
     });
     return res;
   } catch (err) {
-
-
-    console.log(`multicall-err: `,err,calls,singerOrProvider,multicall);
-
     return null;
   }
 };
