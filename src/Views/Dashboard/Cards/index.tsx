@@ -122,10 +122,10 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
           keysName={[
             // "BFR Fees / Volume ",
             'USDC Fees / Volume',
+            'USDC fees / Volume (24h)',
             'Total Traders',
             'Average Trade size',
             'Average Volume',
-            'USDC fees / Volume (24h)',
             'Open Interest',
             'Total Trades',
           ]}
@@ -149,18 +149,6 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
                 <div> {getBalance(data.USDCvolume)} USDC </div>
               </NumberTooltip>
             </div>,
-            <div className={wrapperClasses}>{data.totalTraders}</div>,
-            <div className={wrapperClasses}>
-              {' '}
-              <Display data={data.avgTrade} unit={'USDC'} />
-            </div>,
-            <div className={wrapperClasses}>
-              {' '}
-              <Display
-                data={divide(data.USDCvolume, totalDays.toString())}
-                unit={'USDC'}
-              />
-            </div>,
             <div className={wrapperClasses}>
               {' '}
               <NumberTooltip
@@ -175,6 +163,19 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
                 <div>{getBalance(data.usdc_24_volume)} USDC </div>
               </NumberTooltip>
             </div>,
+            <div className={wrapperClasses}>{data.totalTraders}</div>,
+            <div className={wrapperClasses}>
+              {' '}
+              <Display data={data.avgTrade} unit={'USDC'} />
+            </div>,
+            <div className={wrapperClasses}>
+              {' '}
+              <Display
+                data={divide(data.USDCvolume, totalDays.toString())}
+                unit={'USDC'}
+              />
+            </div>,
+
             <div>
               {data.openInterest !== null
                 ? data.openInterest + ' USDC'
@@ -250,14 +251,14 @@ export const TokensBFR = ({
               </span>
               <span className="whitespace-nowrap"> Circulating MC</span>
             </div>,
-            'Total Staked',
-            'Tokens In Liquidity Pool',
             <div className="flex flex-wrap">
               <span className="whitespace-nowrap">
                 Total Supply&nbsp;/&nbsp;
               </span>
               <span className="whitespace-nowrap">MC</span>
             </div>,
+            'Total Staked',
+            'Tokens In Liquidity Pool',
           ]}
           values={[
             <div className={wrapperClasses}>
@@ -292,6 +293,21 @@ export const TokensBFR = ({
               )}
             </div>,
             <div className={wrapperClasses}>
+              <NumberTooltip
+                content={numberWithCommas(data.supply) + ' ' + tokenName}
+              >
+                <div> {getBalance(data.supply, tokenName)}</div>
+              </NumberTooltip>
+              &nbsp;/&nbsp;
+              <NumberTooltip
+                content={
+                  '$' + numberWithCommas(multiply(data.supply, data.price))
+                }
+              >
+                <div>${getBalance(multiply(data.supply, data.price))} </div>
+              </NumberTooltip>
+            </div>,
+            <div className={wrapperClasses}>
               <Display
                 data={multiply(data.total_staked, data.price)}
                 label="$"
@@ -322,21 +338,6 @@ export const TokensBFR = ({
               ) : (
                 <>-</>
               )}
-            </div>,
-            <div className={wrapperClasses}>
-              <NumberTooltip
-                content={numberWithCommas(data.supply) + ' ' + tokenName}
-              >
-                <div> {getBalance(data.supply, tokenName)}</div>
-              </NumberTooltip>
-              &nbsp;/&nbsp;
-              <NumberTooltip
-                content={
-                  '$' + numberWithCommas(multiply(data.supply, data.price))
-                }
-              >
-                <div>${getBalance(multiply(data.supply, data.price))} </div>
-              </NumberTooltip>
             </div>,
           ]}
         />
