@@ -87,11 +87,7 @@ const DashboardPage = () => {
             Discover new Pairs available on Buffer (Stats since 30th Jan, 2023)
           </div>
         }
-        other={
-          <div className={descStyles}>
-            <Markets />
-          </div>
-        }
+        other={<Markets />}
       />
     </DashboardStyles>
   );

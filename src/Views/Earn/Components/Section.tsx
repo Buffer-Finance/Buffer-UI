@@ -21,7 +21,7 @@ export const Section = ({
             </div>
           ))}
       </div>
-      {other && <div className="mt-6">{other}</div>}
+      {other && <div>{other}</div>}
     </div>
   );
 };
