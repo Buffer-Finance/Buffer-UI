@@ -329,7 +329,6 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         onRowClick={console.log}
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
-        shouldShowMobile={shouldShowMobile}
       />
     </Background>
   );

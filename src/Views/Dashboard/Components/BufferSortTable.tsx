@@ -57,6 +57,7 @@ export default function BufferSortTable({
   data,
   defaultSortId,
   defaultOrder = 'asc',
+  shouldShowMobile = false,
 }: {
   data: any[];
   headerJSX: HeadCell[];
@@ -73,6 +74,7 @@ export default function BufferSortTable({
   error?: ReactNode;
   defaultSortId: string;
   defaultOrder?: Order;
+  shouldShowMobile?: boolean;
 }) {
   const [order, setOrder] = useState<Order>(defaultOrder);
   const [orderBy, setOrderBy] = useState<string>(defaultSortId);
@@ -90,7 +92,7 @@ export default function BufferSortTable({
   let tableCellCls = 'table-cell';
 
   return (
-    <Background>
+    <Background shouldShowMobile={shouldShowMobile}>
       <TableContainer>
         <Table
           sx={{ minWidth: 750 }}

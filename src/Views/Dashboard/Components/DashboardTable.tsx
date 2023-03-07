@@ -158,6 +158,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
       widths={['11%', '11%', '17%', '11%', '11%', '10%', '10%', '9%', '9%']}
+      shouldShowMobile={true}
     />
   );
 };
