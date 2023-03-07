@@ -53,7 +53,7 @@ export const Weekly = () => {
     totalTournamentData,
     loserUserRank,
     winnerUserRank,
-    loserWinrateUserRank,
+    // loserWinrateUserRank,
     winnerWinrateUserRank,
   } = useWeeklyLeaderboardQuery();
 
@@ -62,7 +62,7 @@ export const Weekly = () => {
       winnerPnl: 0,
       loserPnl: 0,
       winnerWinRate: 0,
-      loserWinRate: 0,
+      // loserWinRate: 0,
     };
     if (data) {
       if (data.userStats && data.userStats.length > 0) {
@@ -74,9 +74,9 @@ export const Weekly = () => {
       if (data.winnerWinrate && data.winnerWinrate.length > 0) {
         pages.winnerWinRate = Math.ceil(data.winnerWinrate.length / ROWINAPAGE);
       }
-      if (data.loserWinrate && data.loserWinrate.length > 0) {
-        pages.loserWinRate = Math.ceil(data.loserWinrate.length / ROWINAPAGE);
-      }
+      // if (data.loserWinrate && data.loserWinrate.length > 0) {
+      //   pages.loserWinRate = Math.ceil(data.loserWinrate.length / ROWINAPAGE);
+      // }
     }
     return pages;
   }, [data]);
@@ -86,7 +86,7 @@ export const Weekly = () => {
       winnerPnl: ILeague[];
       loserPnl: ILeague[];
       winnerWinRate: IWinrate[];
-      loserWinrate: IWinrate[];
+      // loserWinrate: IWinrate[];
     } = { winnerPnl: [], loserPnl: [], winnerWinRate: [], loserWinrate: [] };
     if (data) {
       if (data.userStats) {
@@ -98,9 +98,9 @@ export const Weekly = () => {
       if (data.winnerWinrate) {
         res.winnerWinRate = data.winnerWinrate.slice(skip, skip + ROWINAPAGE);
       }
-      if (data.loserWinrate) {
-        res.loserWinrate = data.loserWinrate.slice(skip, skip + ROWINAPAGE);
-      }
+      // if (data.loserWinrate) {
+      //   res.loserWinrate = data.loserWinrate.slice(skip, skip + ROWINAPAGE);
+      // }
     }
     return res;
   }, [data, skip]);
@@ -167,7 +167,7 @@ export const Weekly = () => {
       { name: 'Winners (by Pnl)' },
       { name: 'Losers (by Pnl)' },
       { name: 'Winners (by Win Rate)' },
-      { name: 'Losers (by Win Rate)' },
+      // { name: 'Losers (by Win Rate)' },
     ];
     if (winRateStart[activeChain.id])
       if (offset !== null && winRateStart[activeChain.id] > Number(offset))
@@ -331,20 +331,20 @@ export const Weekly = () => {
                 onpageChange={setActivePageNumber}
                 userData={data?.userData}
                 skip={skip}
-                nftWinners={4}
+                nftWinners={3}
                 isWinrateTable
               />,
-              <DailyWebTable
-                activePage={activePages.arbitrum}
-                userRank={loserWinrateUserRank}
-                standings={tableData.loserWinrate}
-                count={totalPages.loserWinRate}
-                onpageChange={setActivePageNumber}
-                userData={data?.userData}
-                skip={skip}
-                nftWinners={4}
-                isWinrateTable
-              />,
+              // <DailyWebTable
+              //   activePage={activePages.arbitrum}
+              //   userRank={loserWinrateUserRank}
+              //   standings={tableData.loserWinrate}
+              //   count={totalPages.loserWinRate}
+              //   onpageChange={setActivePageNumber}
+              //   userData={data?.userData}
+              //   skip={skip}
+              //   nftWinners={4}
+              //   isWinrateTable
+              // />,
             ]}
           />
         </div>

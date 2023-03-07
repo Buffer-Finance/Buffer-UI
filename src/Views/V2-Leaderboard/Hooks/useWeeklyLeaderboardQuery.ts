@@ -17,7 +17,7 @@ interface ILeaderboardQuery {
   loserStats: ILeague[];
   winrate: IWinrate[];
   winnerWinrate: IWinrate[];
-  loserWinrate: IWinrate[];
+  // loserWinrate: IWinrate[];
   totalData: {
     totalTrades: number;
     volume: string;
@@ -47,7 +47,9 @@ export const blockedAccounts = [
   '0x2a007f31146ff8f939b6ca3ad18c8d2a6e42eb73',
 ];
 
-const winrateMinimumTrades = 10;
+const winrateMinimumTrades = 5;
+const minimumWinrateVolume = '100000000';
+
 export const useWeeklyLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
@@ -92,7 +94,7 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: winRate
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blockedAccounts.map(
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, volume_gte: ${minimumWinrateVolume}, user_not_in: [${blockedAccounts.map(
           (address) => `"${address}"`
         )}]}
           ) {
@@ -104,21 +106,7 @@ export const useWeeklyLeaderboardQuery = () => {
             tradesWon
           }
 
-          loserWinrate: weeklyLeaderboards(
-            orderBy: winRate
-            orderDirection: asc
-            first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blockedAccounts.map(
-          (address) => `"${address}"`
-        )}]}
-          ) {
-            user
-            totalTrades
-            netPnL
-            volume
-            winRate
-            tradesWon
-          }
+         
 
           totalData: weeklyLeaderboards(
             orderBy: netPnL
@@ -188,14 +176,14 @@ export const useWeeklyLeaderboardQuery = () => {
     else return (rank + 1).toString();
   }, [data?.loserStats, account]);
 
-  const loserWinrateUserRank = useMemo(() => {
-    if (!data || !data.loserWinrate || !account) return '-';
-    const rank = data.loserWinrate.findIndex(
-      (data) => data.user.toLowerCase() == account.toLowerCase()
-    );
-    if (rank === -1) return '-';
-    else return (rank + 1).toString();
-  }, [data?.loserWinrate, account]);
+  // const loserWinrateUserRank = useMemo(() => {
+  //   if (!data || !data.loserWinrate || !account) return '-';
+  //   const rank = data.loserWinrate.findIndex(
+  //     (data) => data.user.toLowerCase() == account.toLowerCase()
+  //   );
+  //   if (rank === -1) return '-';
+  //   else return (rank + 1).toString();
+  // }, [data?.loserWinrate, account]);
 
   const totalTournamentData = useMemo(() => {
     if (!data || !data.totalData) return null;
@@ -216,9 +204,30 @@ export const useWeeklyLeaderboardQuery = () => {
     loserUserRank,
     winnerUserRank,
     winnerWinrateUserRank,
-    loserWinrateUserRank,
+    // loserWinrateUserRank,
   };
 };
+
+/*
+**** Looser winrate query ****
+
+ loserWinrate: weeklyLeaderboards(
+            orderBy: winRate
+            orderDirection: asc
+            first: 100
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blockedAccounts.map(
+          (address) => `"${address}"`
+        )}]}
+          ) {
+            user
+            totalTrades
+            netPnL
+            volume
+            winRate
+            tradesWon
+          }
+
+*/
 
 /*
 allTradesCount:
