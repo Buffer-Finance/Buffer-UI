@@ -10,7 +10,7 @@ import { SettingsIcon } from '../PGDrawer/SettingsIcon';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { mobileUpperBound } from '..';
 
-const SlippageModalStyles = styled.div`
+export const SlippageModalStyles = styled.div`
   background-color: var(--dropdown-hover);
   gap: 1.4rem;
   padding: 3rem;

@@ -6,6 +6,7 @@ import { getAssetTypes } from './Utils/getAssetTypes';
 import { AssetTable } from './AssetTable';
 import { AssetTypeSelector } from './AssetTypeSelector';
 import { useAtomValue } from 'jotai';
+import { BlueBtn } from '@Views/Common/V2-Button';
 
 const FavouriteAssetDDStyles = styled.div`
   display: flex;
@@ -23,8 +24,9 @@ const FavouriteAssetDDStyles = styled.div`
 const assetTypes = ['Favourites', 'Crypto', 'Forex'];
 export const TVMarketSelector: React.FC<{
   className: string;
+  onResetMarket?: () => void;
   onMarketSelect: (a: string) => void;
-}> = ({ className, onMarketSelect }) => {
+}> = ({ className, onMarketSelect, onResetMarket }) => {
   const qtInfo = useQTinfo();
   const [searchText, setSearchText] = useState('');
   const [activeAsset, setActiveAsset] = useState('Crypto');
@@ -69,6 +71,7 @@ export const TVMarketSelector: React.FC<{
         <AssetTypeSelector
           assetTypes={assetTypes}
           activeAsset={activeAsset}
+          onResetMarket={onResetMarket}
           setActiveAsset={(newAsset) => setActiveAsset(newAsset)}
         />
         <div className="full-width">

@@ -20,10 +20,14 @@ import PGTables from '@Views/BinaryOptions/Tables';
 import { ActiveTable, CancelTable, HistoryTable } from '@Views/BinaryOptions';
 import { usePastTradeQuery } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { useGenericHooks } from '@Hooks/useGenericHook';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { IconButton } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
+import React from 'react';
+import { ResetWarnModal } from './Modals/ResetWarnModal';
+import { CustomisationWarnModal } from './Modals/CustomisationWarnModal';
+import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
+import { deepEqual } from 'wagmi';
 var json = {
   global: { tabEnableClose: true },
   layout: {
@@ -36,7 +40,7 @@ var json = {
         children: [
           {
             type: 'tabset',
-            weight: 50,
+            weight: 75,
             selected: 0,
             id: 'charts',
             children: [
@@ -52,8 +56,9 @@ var json = {
           },
           {
             type: 'tabset',
-            weight: 50,
+            weight: 25,
             selected: 0,
+            id: 'PastTradeTab',
             children: [
               {
                 type: 'tab',
@@ -61,6 +66,7 @@ var json = {
                 id: 'ActiveTable',
                 component: 'ActiveTable',
                 enableClose: false,
+                enableDrag: false,
               },
               {
                 type: 'tab',
@@ -68,6 +74,7 @@ var json = {
                 id: 'HistoryTable',
                 component: 'HistoryTable',
                 enableClose: false,
+                enableDrag: false,
               },
               {
                 type: 'tab',
@@ -75,6 +82,7 @@ var json = {
                 id: 'CancelledTable',
                 component: 'CancelledTable',
                 enableClose: false,
+                enableDrag: false,
               },
             ],
           },
@@ -82,12 +90,13 @@ var json = {
       },
       {
         type: 'row',
-        weight: 250,
+        weight: 300,
         children: [
           {
             type: 'tabset',
             weight: 50,
             selected: 0,
+            id: 'BuyTradeTab',
             children: [
               {
                 enableClose: false,
@@ -104,10 +113,26 @@ var json = {
     ],
   },
 };
-const layoutAtom = atomWithLocalStorage('Layout-v100', json);
+
+// build RestWarnModal modal UI
+// build CustomizingWarnModal UI
+// build consets atoms
+
+const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
+  layoutCustomization: {
+    isModalOpen: false,
+    isUserEducated: false,
+  },
+  resetCustomization: {
+    isModalOpen: false,
+    isUserEducated: false,
+  },
+});
+const layoutAtom = atomWithLocalStorage('layout-persisted', json);
 const DesktopTrade = () => {
   const layoutRef = useRef<Layout | null>(null);
   const { market } = useParams();
+  const [layoutConset, seLayoutConsent] = useAtom(layoutConsentsAtom);
   const [layout, setLayout] = useAtom(layoutAtom);
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
@@ -126,6 +151,19 @@ const DesktopTrade = () => {
         <TVMarketSelector
           className="asset-dropdown-wrapper !h-[100%] !justify-start "
           onMarketSelect={handleNewTabClick}
+          onResetMarket={() =>
+            seLayoutConsent((l) => {
+              const updatedConsents = {
+                ...l,
+                resetCustomization: {
+                  isModalOpen: true,
+                  isUserEducated: true,
+                },
+              };
+              console.log(`updatedConsents: `, updatedConsents);
+              return updatedConsents;
+            })
+          }
         />
       );
     }
@@ -133,7 +171,21 @@ const DesktopTrade = () => {
       return (
         <Background className="bg-2 max-w-[420px] mx-auto">
           <ActiveAsset cb={handleNewTabClick} />
-          <CustomOption onResetLayout={() => setLayout(json)} />
+          <CustomOption
+            onResetLayout={() =>
+              seLayoutConsent((l) => {
+                const updatedConsents = {
+                  ...l,
+                  resetCustomization: {
+                    isModalOpen: true,
+                    isUserEducated: true,
+                  },
+                };
+                console.log(`updatedConsents: `, updatedConsents);
+                return updatedConsents;
+              })
+            }
+          />
         </Background>
       );
     }
@@ -149,63 +201,122 @@ const DesktopTrade = () => {
     }
   };
   function handleNewTabClick(market: string, custom?: string) {
-    // try {
-    //   if (custom) {
     layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
     navigate('/test/' + (market || custom));
-    //   } else {
-    //     layoutRef.current!.addTabToActiveTabSet({
-    //       type: 'tab',
-    //       name: market,
-    //       component: 'TradingView',
-    //       id: market.replace('-', ''),
-    //     });
-    //     layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
-    //   }
-    // } catch (e) {
-    //   if (!custom) {
-    //     toastify({
-    //       msg: market + ' is already opened in different tab',
-    //       type: 'error',
-    //       id: e,
-    //     });
-    //     layoutApi.doAction(FlexLayout.Actions.selectTab(market));
-    //   }
-    //   console.log('action', e);
-    // }
   }
-  // useLayoutEffect(() => {
-  // if (market && document.getElementById(market!)) {
-  // document.getElementById(market!).className = ' !w-[2px] !h-[2px] ';
-  // }
-  // }, [market]);
   useEffect(() => {
-    // console.log(`ddmarket: `, market);
-    // document
-    //   .querySelectorAll('.flexlayout__tab_button')
-    //   .forEach((d) => d.classList.remove('active-tab-tv'));
-    // const closest = document
-    //   .getElementById(market?.replace('-', ''))
-    //   ?.closest('.flexlayout__tab_button');
-
-    // console.log(`closest: `, closest);
-    // closest?.classList.add('active-tab-tv');
     try {
-      layoutRef.current!.addTabToTabSet('charts', {
+      if (deepEqual(json.layout, layout.layout)) {
+        console.log(`deepEqual: `);
+        layoutApi.doAction(FlexLayout.Actions.setActiveTabset('charts'));
+      }
+      layoutRef.current!.addTabToActiveTabSet({
         type: 'tab',
         name: market,
         component: 'TradingView',
         id: market,
       });
-    } catch (e) {}
-    layoutApi.doAction(FlexLayout.Actions.selectTab(market));
+    } catch (e) {
+      try {
+        layoutApi.doAction(FlexLayout.Actions.selectTab(market));
+      } catch (e) {
+        console.log('internal error,', e);
+      }
+      console.log('errorwhileadding', e);
+    }
   }, [market]);
   return (
     <>
+      <CustomisationWarnModal
+        onConfirm={() => {
+          seLayoutConsent((l) => {
+            const updatedConsents = {
+              ...l,
+              layoutCustomization: {
+                isModalOpen: false,
+                isUserEducated: true,
+              },
+            };
+            console.log(`updatedConsents: `, updatedConsents);
+            return updatedConsents;
+          });
+        }}
+        onTabDrag={() => {
+          console.log(`tabdragged: `);
+          if (layoutConset.layoutCustomization.isUserEducated) return;
+          seLayoutConsent((l) => {
+            const updatedConsents = {
+              ...l,
+              layoutCustomization: {
+                isModalOpen: true,
+                isUserEducated: true,
+              },
+            };
+            return updatedConsents;
+          });
+        }}
+        onCancel={() => {
+          setLayout(json);
+          seLayoutConsent((l) => {
+            const updatedConsents = {
+              ...l,
+              layoutCustomization: {
+                ...l.layoutCustomization,
+                isModalOpen: false,
+              },
+            };
+            console.log(`updatedConsents: `, updatedConsents);
+            return updatedConsents;
+          });
+        }}
+        open={layoutConset.layoutCustomization.isModalOpen}
+      />
+      <ResetWarnModal
+        onConfirm={() => {
+          setLayout(json);
+          seLayoutConsent((l) => {
+            const updatedConsents = {
+              ...l,
+              resetCustomization: {
+                isModalOpen: false,
+                isUserEducated: true,
+              },
+            };
+            console.log(`updatedConsents: `, updatedConsents);
+            return updatedConsents;
+          });
+        }}
+        onCancel={() => {
+          seLayoutConsent((l) => {
+            const updatedConsents = {
+              ...l,
+              resetCustomization: {
+                ...l.resetCustomization,
+                isModalOpen: false,
+              },
+            };
+            return updatedConsents;
+          });
+        }}
+        open={layoutConset.resetCustomization.isModalOpen}
+      />
       <FlexLayout.Layout
         onAction={(p) => {
+          console.log('actionselect', p);
+          if (p.type == FlexLayout.Actions.MOVE_NODE) {
+            if (layoutConset.layoutCustomization.isUserEducated) return p;
+            seLayoutConsent((l) => {
+              const updatedConsents = {
+                ...l,
+                layoutCustomization: {
+                  isModalOpen: true,
+                  isUserEducated: true,
+                },
+              };
+              return updatedConsents;
+            });
+          }
           if (p.type == FlexLayout.Actions.SELECT_TAB) {
-            console.log('actionselect', p);
             const market = p.data?.tabNode.replace('-', '');
             if (market && Config.markets?.[market]) {
               console.log(`p.data.tabNode: `, p.data.tabNode);
@@ -237,21 +348,30 @@ const DesktopTrade = () => {
             console.log(`name: `, name);
             const market = Config.markets[name.replace('-', '')].pair;
             console.log(`market: `, market);
-            v.leading = (
-              <div className="w-[20px] h-[20px]" id={market.replace('-', '')}>
-                <PairTokenImage pair={market} />
-              </div>
-            );
+            v.leading = <TabIcon market={market} />;
           }
         }}
         onRenderTabSet={(d, v) => {
-          if (d.getId() === 'charts') {
+          const id = d.getId();
+          if (id != 'BuyTradeTab' && id != 'PastTradeTab') {
             // v.headerButtons[0].
             v.stickyButtons.push(
               <button
                 className="text-f22"
                 onClick={() => {
-                  layoutRef.current!.addTabToTabSet('charts', {
+                  // make current tabset active
+                  layoutApi.doAction(
+                    FlexLayout.Actions.setActiveTabset(d.getId())
+                  );
+                  // delete all dds
+                  try {
+                    layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
+                  } catch (e) {
+                    console.log(e);
+                  }
+
+                  // add dd to activeTab
+                  layoutRef.current!.addTabToActiveTabSet({
                     type: 'tab',
                     name: 'Add Chart',
                     component: 'AddButton',
@@ -267,7 +387,19 @@ const DesktopTrade = () => {
             <button
               title="Reset layout. You can Drag and Drop to customize the UI."
               className="flex justify-center items-center flip-y !text-2 hover:!bg-[#3d3d3d] rounded-sm "
-              onClick={() => setLayout(json)}
+              onClick={() => {
+                seLayoutConsent((l) => {
+                  const updatedConsents = {
+                    ...l,
+                    resetCustomization: {
+                      isModalOpen: true,
+                      isUserEducated: true,
+                    },
+                  };
+                  console.log(`updatedConsents: `, updatedConsents);
+                  return updatedConsents;
+                });
+              }}
             >
               <ReplayIcon />
             </button>
@@ -290,6 +422,11 @@ const DesktopTrade = () => {
 
 export const priceAtom = atom<Partial<Market2Prices>>({});
 export { DesktopTrade };
-const Tab = () => {
-  <div>Hello i am a tab</div>;
-};
+
+const TabIcon = React.memo(({ market }) => {
+  return (
+    <div className="w-[20px] h-[20px]" id={market.replace('-', '')}>
+      <PairTokenImage pair={market} />
+    </div>
+  );
+});
