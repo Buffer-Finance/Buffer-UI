@@ -10,14 +10,14 @@ const CustomisationWarnModal: React.FC<any> = ({
     <ModalBase open={open} onClose={onCancel}>
       <div className="flex flex-col">
         <div className="text-f20">
-          We respect the Trader need of having a <b>Fully Customizable</b> UI.
-          But it comes with some responsibilites.
+          We respect Traders need of having a <b>Fully Customizable</b> UI.
         </div>
-        <div className=" text-f16 mt-5">
-          You can customize <b>everything</b>. You can make important tabs like
-          Trade, History etc hidden accidently and feel lost. <br />
-          You can <b>reset UI to default</b> by clicking on <b>Reset </b>button
-          under advanced settings section in Trade tab.
+        <div className=" text-f15 mt-5 text-3">
+          You can customize <b>everything</b> including tabs like Trade, Active,
+          History etc. You can <b>reset UI to default</b> by{' '}
+          <b>Reset Layout </b>
+          button which can be found under "Advanced Settings" or "Add Chart"
+          tab.
         </div>
 
         <div className="flex items-center justify-center gap-x-3 mt-7 ">

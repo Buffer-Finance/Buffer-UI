@@ -200,13 +200,20 @@ const DesktopTrade = () => {
       return <CancelTable width={rect.width} />;
     }
   };
+  const isCDMForMarketSelect = useRef(true);
   function handleNewTabClick(market: string, custom?: string) {
+    isCDMForMarketSelect.current = false;
     layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
     navigate('/test/' + (market || custom));
   }
+  function resetLayoutForced() {
+    navigate('/test/BTC-USD');
+    isCDMForMarketSelect.current = true;
+    setLayout(json);
+  }
   useEffect(() => {
     try {
-      if (deepEqual(json.layout, layout.layout)) {
+      if (isCDMForMarketSelect.current) {
         console.log(`deepEqual: `);
         layoutApi.doAction(FlexLayout.Actions.setActiveTabset('charts'));
       }
@@ -241,27 +248,13 @@ const DesktopTrade = () => {
             return updatedConsents;
           });
         }}
-        onTabDrag={() => {
-          console.log(`tabdragged: `);
-          if (layoutConset.layoutCustomization.isUserEducated) return;
-          seLayoutConsent((l) => {
-            const updatedConsents = {
-              ...l,
-              layoutCustomization: {
-                isModalOpen: true,
-                isUserEducated: true,
-              },
-            };
-            return updatedConsents;
-          });
-        }}
         onCancel={() => {
-          setLayout(json);
+          resetLayoutForced();
           seLayoutConsent((l) => {
             const updatedConsents = {
               ...l,
               layoutCustomization: {
-                ...l.layoutCustomization,
+                isUserEducated: false,
                 isModalOpen: false,
               },
             };
@@ -273,7 +266,7 @@ const DesktopTrade = () => {
       />
       <ResetWarnModal
         onConfirm={() => {
-          setLayout(json);
+          resetLayoutForced();
           seLayoutConsent((l) => {
             const updatedConsents = {
               ...l,
