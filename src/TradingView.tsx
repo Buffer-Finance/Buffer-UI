@@ -172,7 +172,7 @@ function getText(expiration: number) {
   }`;
 }
 const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage', null);
-
+const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
 function drawPosition(
   option: IGQLHistory,
   visualized: any,
@@ -214,8 +214,10 @@ function drawPosition(
 
 export const TradingChart = ({ market: marke }: { market: Markets }) => {
   let market = marke.replace('-', '');
+  const [market2resolution, setMarket2resolution] = useAtom(
+    market2resolutionAtom
+  );
   const qtInfo = useQTinfo();
-  const [chartConfigs, setChartConfigs] = useState({ resolution: '1' });
 
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
@@ -471,18 +473,16 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       setChartReady(false);
     };
   }, []);
+  const resolution: ResolutionString = market2resolution?.[market] || '1';
   const syncTVwithWS = async () => {
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
     const activeResolution = realTimeUpdateRef.current?.resolution || '1m';
     // console.log(`[deb]1activeResolution: `, activeResolution);
-    console.log(`[deb]0key: `, lastSyncedKline);
 
     const key = market + timeDeltaMapping(activeResolution);
     // console.log(`[deb]2key: `, key);
     let prevBar = lastSyncedKline?.current?.[key];
-    console.log(`[deb]1lastSyncedKline: `, lastSyncedKline);
-    console.log(`[deb]2prevBar: `, prevBar);
     // console.log(`[deb]3prevBar: `, prevBar);
     if (!prevBar) return;
     const activeAssetStream = price[market];
@@ -518,7 +518,6 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   // draw positions.
   useEffect(() => {
     if (chartReady && activeTrades) {
-      console.log(`activeTrades: `, activeTrades);
       activeTrades.forEach((pos) => {
         if (!pos?.optionID) return;
         if (trade2visualisation.current[+pos.optionID]) {
@@ -586,11 +585,9 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       widgetRef.current &&
       typeof widgetRef.current?.activeChart === 'function'
     ) {
-      widgetRef.current
-        .activeChart?.()
-        .setResolution(chartConfigs.resolution as ResolutionString);
+      widgetRef.current.activeChart?.().setResolution(resolution);
     }
-  }, [chartConfigs.resolution, chartReady]);
+  }, [market2resolution, chartReady]);
   useEffect(() => {
     const interval = setInterval(updatePositionTimeLeft, 1000);
     return () => {
@@ -602,7 +599,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
   return (
-    <>
+    <div className="flex flex-col w-full h-full">
       <div className="items-center justify-between flex-row flex  bg-[#131722] w-full tv-h px-4 py-3">
         <div className="flex flex-row justify-start font-[500]">
           <div className="ele cursor-pointer">Time</div>
@@ -610,11 +607,13 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
             return (
               <div
                 onClick={() => {
-                  setChartConfigs({ ...chartConfigs, resolution: s });
+                  setMarket2resolution((m) => ({
+                    ...m,
+                    [market]: s,
+                  }));
                 }}
                 className={`${
-                  s.toLowerCase() == chartConfigs.resolution.toLowerCase() &&
-                  'active'
+                  s.toLowerCase() == resolution.toLowerCase() && 'active'
                 } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
               >
                 {formatResolution(s)}
@@ -639,6 +638,16 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           className="TVChartContainer w-[100%] h-[100%]"
         />
       </div>
-    </>
+    </div>
   );
 };
+
+/*
+{
+  ETH-BTC : 1m
+  [nothing] : 1m
+}
+
+
+
+*/
