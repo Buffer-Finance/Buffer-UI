@@ -18,7 +18,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
     { id: 'totalTrades', label: 'Open Up/Open Down' },
     { id: '24h_volume', label: '24h Volume' },
     { id: 'currentUtilization', label: 'Utilization' },
-    { id: 'sort_duration', label: 'Min/Max Duration' },
+    { id: 'sort_duration', label: 'Minimum/Maximum Duration (HH:MM)' },
     { id: 'max_trade_size', label: 'Max Trade Size' },
     { id: 'payoutForUp', label: 'Payouts' },
     { id: 'is_open', label: 'Status' },
@@ -53,10 +53,20 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
         );
       case 2:
         return (
-          <OpenUpDownIndicator
-            openDown={+divide(currentRow.openDown, usdcDecimals)}
-            openUp={+divide(currentRow.openUp, usdcDecimals)}
-          />
+          <>
+            <OpenUpDownIndicator
+              openDown={+divide(currentRow.openDown, usdcDecimals)}
+              openUp={+divide(currentRow.openUp, usdcDecimals)}
+            />
+            <div className="mt-2">
+              Total :{' '}
+              <Display
+                data={divide(currentRow.totalTrades, usdcDecimals)}
+                unit="USDC"
+                className="inline"
+              />
+            </div>
+          </>
         );
 
       case 3:
@@ -157,7 +167,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
-      widths={['11%', '11%', '17%', '11%', '11%', '10%', '10%', '9%', '9%']}
+      widths={['11%', '11%', '18%', '11%', '11%', '13%', '11%', '9%', '5%']}
       shouldShowMobile={true}
     />
   );

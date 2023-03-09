@@ -84,7 +84,7 @@ const DashboardPage = () => {
         Heading={<div className={topStyles}>Markets</div>}
         subHeading={
           <div className={descStyles}>
-            Discover new Pairs available on Buffer (Stats since 30th Jan, 2023)
+            {/* Discover new Pairs available on Buffer (Stats since 30th Jan, 2023) */}
           </div>
         }
         other={<Markets />}
