@@ -7,7 +7,10 @@ import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { useAtom, useAtomValue } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { marketPriceAtom } from 'src/TradingView/useDataFeed';
+import {
+  getPriceFromKlines,
+  marketPriceAtom,
+} from 'src/TradingView/useDataFeed';
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
@@ -36,6 +39,8 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import VerticalTransition from '@Views/Common/Transitions/Vertical';
 import { Variables } from '@Utils/Time';
 import { BlackBtn } from '@Views/Common/V2-Button';
+import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { Skeleton } from '@mui/material';
 
 const CancelButton = ({ option }) => {
   const toastify = useToast();
@@ -71,7 +76,6 @@ const CancelButton = ({ option }) => {
 };
 
 const MobileTable: React.FC<{
-  configData: IQTrade;
   isHistoryTab?: boolean;
   isCancelledTab?: boolean;
   count?: number;
@@ -80,14 +84,12 @@ const MobileTable: React.FC<{
   activePage: number;
   shouldNotDisplayShareVisulise?: boolean;
 }> = ({
-  configData,
   isHistoryTab = false,
   isCancelledTab,
   onPageChange,
   activePage,
   shouldNotDisplayShareVisulise = false,
 }) => {
-  const activeMarket = configData.activePair;
   const [marketPrice] = useAtom(marketPriceAtom);
   const { active, history, cancelled } = useAtomValue(tardesAtom);
   const filteredData = isHistoryTab
@@ -174,12 +176,28 @@ const MobileTable: React.FC<{
     let arr = [StrikePrice];
     if (!isCancelledTab) {
       arr = [StartDate, ExpiryDate, StrikePrice];
+    } else {
+      arr = [
+        ...arr,
+        {
+          name: <>Queue Time</>,
+          val: <DisplayDate timestamp={+option.queueTimestamp} />,
+        },
+        {
+          name: <>Cancellation Time</>,
+          val: <DisplayDate timestamp={+option.cancelTimestamp} />,
+        },
+        { name: <>Reason</>, val: <>{getErrorFromCode(option?.reason)}</> },
+      ];
     }
     let visible = false;
     if (
       option.state !== BetState.queued &&
       option.state !== BetState.cancelled
     ) {
+      const price = getPriceFromKlines(marketPrice, option.configPair);
+      console.log(`pricedd: `, price);
+      // if (isHistoryTab || price) {
       let additionalInfo = [
         {
           name: (
@@ -189,32 +207,43 @@ const MobileTable: React.FC<{
                 : 'Current Price'}
             </>
           ),
-          val: (
-            <ExpiryCurrentComponent
-              isHistoryTable={isHistoryTab}
-              trade={option}
-              activeMarket={activeMarket}
-              marketPrice={marketPrice}
-              configData={option.configPair}
-            />
-          ),
+          val:
+            isHistoryTab || price ? (
+              <ExpiryCurrentComponent
+                isHistoryTable={isHistoryTab}
+                trade={option}
+                marketPrice={marketPrice}
+                configData={option.configPair}
+              />
+            ) : (
+              <Skeleton
+                variant="rectangular"
+                className="!w-[80px] bg-1  !h-[20px]"
+              />
+            ),
         },
 
         {
           name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
-          val: (
-            <ProbabilityPNL
-              isHistoryTable={isHistoryTab}
-              trade={option}
-              activeMarket={activeMarket}
-              marketPrice={marketPrice}
-              onlyPnl
-              configData={option.configPair}
-            />
-          ),
+          val:
+            isHistoryTab || price ? (
+              <ProbabilityPNL
+                isHistoryTable={isHistoryTab}
+                trade={option}
+                marketPrice={marketPrice}
+                onlyPnl
+                configData={option.configPair}
+              />
+            ) : (
+              <Skeleton
+                variant="rectangular"
+                className="!w-[80px] bg-1  !h-[20px]"
+              />
+            ),
         },
       ];
       arr = [...arr, ...additionalInfo];
+      // }
     }
     if (selectedIndex === row) visible = true;
 
@@ -227,7 +256,9 @@ const MobileTable: React.FC<{
             <div className="flex flex-col items-end justify-center">
               <div className="f13 flex gap-2">
                 {/* show status on history + queued state */}
-                <PayoutChip data={option} />
+                {isHistoryTab || option.state != BetState.active ? (
+                  <PayoutChip data={option} />
+                ) : null}
                 {/* dont show duration in queued | cancelled state */}
                 {normal_option ? (isHistoryTab ? 'Duration' : 'Time Left') : ''}
               </div>
@@ -235,7 +266,7 @@ const MobileTable: React.FC<{
                 {/* dont show duration in queued | cancelled state */}
                 {option.state == BetState.queued ||
                 option.state == BetState.cancelled ? (
-                  '-'
+                  ''
                 ) : isHistoryTab ? (
                   formatDistanceExpanded(
                     Variables(+option.expirationTime - +option.creationTime)
