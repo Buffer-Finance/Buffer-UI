@@ -1,6 +1,15 @@
 import { Display } from '@Views/Common/Tooltips/Display';
 import Config from 'public/config.json';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { useIdleTimer } from 'react-idle-timer';
+
 const initD = ['800123.32', '22313.2312', '312312.11', '32131123.231'];
 const Decd = ['800123.31', '22313.2311', '312312.10', '32131123.230'];
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
@@ -8,7 +17,7 @@ import useWebSocket from 'react-use-websocket';
 import { Market2Prices, Markets } from './Types/Market';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { TradingChart } from './TradingView';
-import { usePrice } from '@Hooks/usePrice';
+import { usePrice, wsStateAtom } from '@Hooks/usePrice';
 import FlexLayout, { Layout, TabNode } from 'flexlayout-react';
 import { FavouriteAssetDD } from '@Views/BinaryOptions/Favourites/FavouriteAssetDD';
 import { TVMarketSelector } from '@Views/BinaryOptions/Favourites/TVMarketSelector';
@@ -27,7 +36,10 @@ import React from 'react';
 import { ResetWarnModal } from './Modals/ResetWarnModal';
 import { CustomisationWarnModal } from './Modals/CustomisationWarnModal';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
-import { deepEqual } from 'wagmi';
+import { Detector } from 'react-detect-offline';
+import isUserPaused, { UserActivityAtom } from '@Utils/isUserPaused';
+import { ModalBase } from './Modals/BaseModal';
+import { BlueBtn } from '@Views/Common/V2-Button';
 var json = {
   global: { tabEnableClose: true },
   layout: {
@@ -117,7 +129,49 @@ var json = {
 // build RestWarnModal modal UI
 // build CustomizingWarnModal UI
 // build consets atoms
+const WithIdle = (C: any, duration: number) => {
+  const updatedComponent = () => {
+    const [isIdle, setIsIdle] = useState<boolean>(false);
 
+    const onIdle = () => {
+      setIsIdle(true);
+    };
+    const { getRemainingTime } = useIdleTimer({
+      onIdle,
+      timeout: duration,
+      throttle: 100,
+    });
+    const displayApp = () => {
+      setIsIdle(false);
+    };
+    useEffect(() => {
+      setInterval(() => {
+        setTimeLeft(getRemainingTime());
+      }, 1000);
+    }, []);
+    const [timeLeft, setTimeLeft] = useState(getRemainingTime());
+    return (
+      <>
+        <ModalBase open={isIdle} onClose={displayApp}>
+          <>
+            <div className="text-1 text-f16 mb-4">Are you still there?</div>
+            <BlueBtn onClick={displayApp} className="!h-[35px]">
+              Continue
+            </BlueBtn>
+          </>
+        </ModalBase>
+        <div
+          className=" fixed top-0 left-0 z-[200000] bg-[black] text-f20 text-1"
+          onClick={() => setTimeLeft(getRemainingTime())}
+        >
+          {timeLeft}
+        </div>
+        {!isIdle ? <C /> : null}
+      </>
+    );
+  };
+  return updatedComponent;
+};
 const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
   layoutCustomization: {
     isModalOpen: false,
@@ -129,8 +183,10 @@ const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
   },
 });
 const layoutAtom = atomWithLocalStorage('layout-persisted', json);
-const DesktopTrade = () => {
+const DesktopTrad = () => {
   const layoutRef = useRef<Layout | null>(null);
+  const wsState = useAtomValue(wsStateAtom);
+  const userActivity = useAtomValue(UserActivityAtom);
   const { market } = useParams();
   const [layoutConset, seLayoutConsent] = useAtom(layoutConsentsAtom);
   const [layout, setLayout] = useAtom(layoutAtom);
@@ -234,6 +290,16 @@ const DesktopTrade = () => {
   }, [market]);
   return (
     <>
+      {/* <Detector
+        onChange={(p) => {
+          console.log('detectorprops', p);
+        }}
+        render={({ online }) => (
+          <div className={online ? 'normal' : 'warning'}>
+            You are currently {online ? 'online' : 'offline'}
+          </div>
+        )}
+      /> */}
       <CustomisationWarnModal
         onConfirm={() => {
           seLayoutConsent((l) => {
@@ -412,7 +478,7 @@ const DesktopTrade = () => {
   //   arr.buttons.push(<Tab></Tab>)
   // }}
 };
-
+const DesktopTrade = WithIdle(DesktopTrad, 10 * 1000);
 export const priceAtom = atom<Partial<Market2Prices>>({});
 export { DesktopTrade };
 
@@ -423,3 +489,15 @@ const TabIcon = React.memo(({ market }) => {
     </div>
   );
 });
+
+export const Tes2 = () => {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+  return <div>{loading ? 'Loading' : 'Hello'}</div>;
+};
+
+export const Test2 = WithIdle(Tes2, 5 * 60 * 1000);

@@ -2,7 +2,11 @@ import { Dialog } from '@mui/material';
 import { SlippageModalStyles } from '@Views/BinaryOptions/Components/SlippageModal';
 import { ReactNode } from 'react';
 
-const ModalBase: React.FC<any> = ({
+const ModalBase: React.FC<{
+  open: boolean;
+  onClose: () => void;
+  children: JSX.Element;
+}> = ({
   open,
   onClose,
   children,

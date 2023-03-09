@@ -14,7 +14,6 @@ import { Variables } from '@Utils/Time';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { IQTrade, IToken } from '..';
 import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import {
   AssetCell,
