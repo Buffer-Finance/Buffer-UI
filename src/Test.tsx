@@ -40,7 +40,7 @@ var json = {
         children: [
           {
             type: 'tabset',
-            weight: 75,
+            weight: 65,
             selected: 0,
             id: 'charts',
             children: [
@@ -56,7 +56,7 @@ var json = {
           },
           {
             type: 'tabset',
-            weight: 25,
+            weight: 35,
             selected: 0,
             id: 'PastTradeTab',
             children: [

@@ -257,7 +257,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   }
   const price = useAtomValue(priceAtom);
 
-  const datafeed = useMemo((): any => {
+  const datafeed = useMemo((): Partial<IBasicDataFeed> => {
     return {
       onReady: (callback) => {
         setTimeout(() => callback(defaults.confgis));
