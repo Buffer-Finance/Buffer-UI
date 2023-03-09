@@ -125,7 +125,7 @@ export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
             'USDC fees / Volume (24h)',
             'Total Traders',
             'Average Trade size',
-            'Average Volume',
+            'Average Daily Volume',
             'Open Interest',
             'Total Trades',
           ]}
