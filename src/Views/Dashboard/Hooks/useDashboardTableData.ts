@@ -7,6 +7,8 @@ import MarketConfig from 'public/config.json';
 import { ENV } from '@Views/BinaryOptions/index';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
+import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
+import { useMarketStatus } from './useMarketStatus';
 
 export function getLinuxTimestampBefore24Hours() {
   // const date = new Date();
@@ -15,7 +17,28 @@ export function getLinuxTimestampBefore24Hours() {
   return Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
 }
 
+type dashboardTableData = {
+  optionContracts: {
+    address: string;
+    openDown: string;
+    openUp: string;
+    currentUtilization: string;
+    openInterest: string;
+    payoutForDown: string;
+    payoutForUp: string;
+    volume: string;
+    tradeCount: number;
+  }[];
+  volumePerContracts: {
+    optionContract: {
+      address: string;
+    };
+    amount: string;
+  }[];
+};
+
 export const useDashboardTableData = () => {
+  const assetStatus = useMarketStatus();
   const { data: currentPrices } = useSWR('dashboard-current-prices', {
     fetcher: async () => {
       const response = await axios.get(
@@ -52,25 +75,7 @@ export const useDashboardTableData = () => {
           }
         }`,
       });
-      return response.data?.data as {
-        optionContracts: {
-          address: string;
-          openDown: number;
-          openUp: number;
-          currentUtilization: string;
-          openInterest: string;
-          payoutForDown: string;
-          payoutForUp: string;
-          volume: string;
-          tradeCount: number;
-        }[];
-        volumePerContracts: {
-          optionContract: {
-            address: string;
-          };
-          amount: string;
-        }[];
-      };
+      return response.data?.data as dashboardTableData;
     },
     refreshInterval: 300,
   });
@@ -103,16 +108,28 @@ export const useDashboardTableData = () => {
         return !!pool;
       });
       if (!configPair) return;
+
       const currData = {
         ...item,
         address: pool.options_contracts.current,
         pair: configPair?.pair,
         img: configPair?.img,
+        min_duration: configPair?.min_duration,
+        max_duration: configPair?.max_duration,
+        sort_duration: timeToMins(configPair?.min_duration),
         currentPrice: currentPrices?.[configPair.tv_id]?.p,
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(fromWei(item.openInterest, usdcDecimals)),
         precision: configPair?.price_precision,
-        totalTrades: item.openDown + item.openUp,
+        totalTrades: Number(add(item.openDown, item.openUp)),
+        max_trade_size:
+          Number(assetStatus[pool.options_contracts.current]?.maxTradeAmount) ||
+          0,
+        is_open:
+          configPair.category === 'Crypto'
+            ? true
+            : assetStatus[pool.options_contracts.current]?.isMarketOpen ||
+              false,
         '24h_volume':
           Number(
             fromWei(oneDayVolume?.[item.address.toLowerCase()], usdcDecimals)
@@ -120,32 +137,35 @@ export const useDashboardTableData = () => {
         currentUtilization: Number(fromWei(item.currentUtilization, 16)),
         payoutForDown: Number(fromWei(item.payoutForDown, 16)),
         payoutForUp: Number(fromWei(item.payoutForUp, 16)),
+        max_utilization: configPair?.max_utilization,
         // currentPrice: currentPrice?.p,
       };
       upatedData.push(currData);
     });
     return upatedData;
-  }, [data, currentPrices]);
+  }, [data, currentPrices, assetStatus]);
 
-  const totalData = useMemo(() => {
+  const totalData: {
+    trades: number;
+    volume: string;
+    openInterest: number;
+  } | null = useMemo(() => {
     if (!dashboardData) return null;
-    return {
-      ...dashboardData.reduce(
-        (acc, item) => {
-          return {
-            trades: acc.trades + item.tradeCount,
-            volume: add(acc.volume, item.volume),
-            openInterest: acc.openInterest + item.openInterest,
-          };
-        },
-        {
-          trades: 0,
-          volume: '0',
-          openInterest: 0,
-        }
-      ),
-    };
+    return dashboardData.reduce(
+      (acc, item) => {
+        return {
+          trades: acc.trades + item.tradeCount,
+          volume: add(acc.volume, item.volume),
+          openInterest: acc.openInterest + item.openInterest,
+        };
+      },
+      {
+        trades: 0,
+        volume: '0',
+        openInterest: 0,
+      }
+    );
   }, [dashboardData]);
-
+  // console.log(dashboardData, totalData, 'dashboardData');
   return { dashboardData, totalData };
 };

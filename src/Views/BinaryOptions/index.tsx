@@ -149,7 +149,7 @@ export const useQTinfo = () => {
           };
         }),
       },
-      optionMeta: '0x3D81B239F5D58e5086cC58d9012c326F34B3BC36',
+      optionMeta: Config[ENV].meta,
       routerContract: Config[ENV].router,
       activeChain: {
         ...(import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'

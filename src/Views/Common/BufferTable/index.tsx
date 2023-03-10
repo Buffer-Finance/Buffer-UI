@@ -7,16 +7,17 @@ import {
   TableHead,
   TableRow,
   TableContainer,
-  TableSortLabel,
 } from '@mui/material';
 import { createArray } from '@Utils/JSUtils/createArray';
-import { ChangeEvent, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import BasicPagination from '../pagination';
+
 const BufferTableRow = ({ children, onClick, className }) => (
   <TableRow className={'table-row ' + className} onClick={onClick}>
     {children}
   </TableRow>
 );
+
 const BufferTableCell = ({ children, onClick }) => (
   <TableCell className="table-cell " onClick={onClick}>
     {children}
@@ -92,11 +93,9 @@ const BufferTable: React.FC<IBufferTable> = ({
   return (
     <Background
       v1={v1}
-      className={`${className} 
-    
-    
-    ${shouldShowMobile ? '' : 'tab-none'}
-    `}
+      className={`${className} ${shouldShowMobile ? '' : 'tab-none'}
+      `}
+      shouldShowMobile={shouldShowMobile && window.innerWidth < 1200}
     >
       <TableContainer sx={{ height: overflow ? 300 : '100%' }}>
         <Table

@@ -9,7 +9,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useEffect } from 'react';
 
 const DashboardStyles = styled.div`
-  width: min(1200px, 100%);
+  width: min(1300px, 100%);
   margin: auto;
   height: 100%;
   padding-bottom: 24px;
@@ -38,9 +38,9 @@ const descStyles = 'mx-3';
 
 export const Dashboard = () => {
   const { activeChain } = useActiveChain();
-  useEffect(()=>{
-    document.title = "Buffer | Dashboard"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Dashboard';
+  }, []);
   return (
     <DashboardContextProvider value={{ activeChain }}>
       <main className="content-drawer">
@@ -59,10 +59,14 @@ const DashboardPage = () => {
   return (
     <DashboardStyles>
       <Section
-        Heading={<div className={topStyles}>Stats</div>}
-        subHeading={<div className={descStyles}>Arbitrum Total Stats (since 30th Jan, 2023)</div>}
+        Heading={<div className={topStyles}>Dashboard</div>}
+        subHeading={
+          <div className={descStyles}>
+            Arbitrum Total Stats (since 30th Jan, 2023)
+          </div>
+        }
         Cards={[
-          <StatsOverView data={overView} />,
+          // <StatsOverView data={overView} />,
           <StatsTotalStats data={total} />,
         ]}
       />{' '}
@@ -80,14 +84,11 @@ const DashboardPage = () => {
         Heading={<div className={topStyles}>Markets</div>}
         subHeading={
           <div className={descStyles}>
-            Discover new Pairs available on Buffer (Stats since 30th Jan, 2023)
+            Discover new Pairs available on Buffer
+            {/* (Stats since 30th Jan, 2023) */}
           </div>
         }
-        other={
-          <div className={descStyles}>
-            <Markets />
-          </div>
-        }
+        other={<Markets />}
       />
     </DashboardStyles>
   );

@@ -186,7 +186,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
                 +openTimeStamp
               )} ${getDisplayDateUTC(+openTimeStamp)} UTC`}
             >
-              <div className="w-fit">
+              <div className="w-max">
                 <CellContent
                   content={[
                     `${getDisplayTime(+openTimeStamp)}`,
@@ -267,7 +267,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
               +currentRow.expirationTime
             )} ${getDisplayDateUTC(+currentRow.expirationTime)} UTC`}
           >
-            <div className="w-fit">
+            <div className="w-max">
               <CellContent
                 content={[
                   `${getDisplayTime(+currentRow.expirationTime)}`,

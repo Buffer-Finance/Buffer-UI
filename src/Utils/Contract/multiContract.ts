@@ -38,7 +38,6 @@ export const multicallv2 = async (calls: Call[], singerOrProvider) => {
     });
     return res;
   } catch (err) {
-
     return null;
   }
 };
