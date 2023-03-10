@@ -136,7 +136,7 @@ const WithIdle = (C: any, duration: number) => {
     const onIdle = () => {
       setIsIdle(true);
     };
-    const { getRemainingTime } = useIdleTimer({
+    useIdleTimer({
       onIdle,
       timeout: duration,
       throttle: 100,
@@ -144,12 +144,6 @@ const WithIdle = (C: any, duration: number) => {
     const displayApp = () => {
       setIsIdle(false);
     };
-    useEffect(() => {
-      setInterval(() => {
-        setTimeLeft(getRemainingTime());
-      }, 1000);
-    }, []);
-    const [timeLeft, setTimeLeft] = useState(getRemainingTime());
     return (
       <>
         <ModalBase open={isIdle} onClose={displayApp}>
@@ -160,12 +154,6 @@ const WithIdle = (C: any, duration: number) => {
             </BlueBtn>
           </>
         </ModalBase>
-        <div
-          className=" fixed top-0 left-0 z-[200000] bg-[black] text-f20 text-1"
-          onClick={() => setTimeLeft(getRemainingTime())}
-        >
-          {timeLeft}
-        </div>
         {!isIdle ? <C /> : null}
       </>
     );
