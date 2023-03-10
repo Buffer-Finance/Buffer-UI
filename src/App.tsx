@@ -5,6 +5,7 @@ import {
   Link,
   Navigate,
   useSearchParams,
+  useNavigate,
 } from 'react-router-dom';
 import Drawer from '@Views/Common/V2-Drawer';
 import IbfrFaucet from '@Views/Faucet';
@@ -67,15 +68,32 @@ const AppRoutes = () => {
   const [searchParam] = useSearchParams();
   const [ref, setRef] = useAtom(referralCodeAtom);
   const toastify = useToast();
+  const navigate = useNavigate();
   useEffect(() => {
-    const referralCode = searchParam.get('ref');
+    let referralCode = searchParam.get('ref');
+    console.log(`referralCode: `, referralCode);
+    if (!referralCode) {
+      let code = '';
+      const codes = window.location.href.split('/');
+      console.log(`codes: `, codes);
+      for (let i = 0; i < codes.length; i++) {
+        if (codes[i] == 'refer') {
+          code = codes?.[i + 1];
+        }
+      }
+      if (code) referralCode = code;
+    }
+    console.log(`referralCode: `, referralCode, ref);
     if (referralCode) {
-      if (ref !== referralCode) setRef(referralCode);
-      toastify({
-        type: 'success',
-        msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
-        id: 23132,
-      });
+      if (ref !== referralCode) {
+        setRef(referralCode);
+        toastify({
+          type: 'success',
+          msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
+          id: 23132,
+        });
+      }
+      navigate('/binary/ETH-USD');
     }
   }, [searchParam]);
   return (
@@ -91,7 +109,6 @@ const AppRoutes = () => {
         </Route>
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/binary/:market" element={<TradePage />} />
         {/* referral link handling */}
