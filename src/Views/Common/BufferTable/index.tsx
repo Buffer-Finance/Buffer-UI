@@ -97,7 +97,7 @@ const BufferTable: React.FC<IBufferTable> = ({
       `}
       shouldShowMobile={shouldShowMobile && window.innerWidth < 1200}
     >
-      <TableContainer sx={{ height: overflow ? 300 : '100%' }}>
+      <TableContainer sx={{ height: '100%' }}>
         <Table
           stickyHeader
           className={`${tableClass} table ${

@@ -14,7 +14,6 @@ import { Variables } from '@Utils/Time';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { IQTrade } from '..';
 import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import {
   AssetCell,
@@ -43,21 +42,24 @@ import { getErrorFromCode } from '@Utils/getErrorFromCode';
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
 interface IPGDesktopTables {
-  configData: IQTrade;
+  className?: string;
+  isCancelledTable?: boolean;
+  count?: number;
+  currentPage: number;
+  isHistoryTable?: boolean;
   onPageChange?: (e: ChangeEvent, p: number) => void;
-  activePage: number;
-  shouldNotDisplayShareVisulise: boolean;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
-  configData,
+  isHistoryTable,
+  isCancelledTable,
+  className,
+  currentPage,
+  count,
   onPageChange,
-  activePage,
-  shouldNotDisplayShareVisulise,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(marketPriceAtom);
-  const activeMarket = configData.activePair;
   const { active, history, cancelled } = useAtomValue(tardesAtom);
   const {
     active: activePages,
@@ -66,17 +68,13 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   } = useAtomValue(tardesTotalPageAtom);
   const { shouldConnectWallet } = useOpenConnectionDrawer();
 
-  const { state } = useGlobal();
-  const activeTab = state.tabs.activeIdx;
-  const isHistoryTable = activeTab === 'History';
-  const isCancelledTable = activeTab === 'Cancelled';
   const totalPages = useMemo(() => {
     if (isHistoryTable) {
       return historyPages;
     } else if (isCancelledTable) {
       return cancelledPages;
     } else return activePages;
-  }, [activePages, historyPages, cancelledPages, activeTab]);
+  }, [activePages, historyPages, cancelledPages]);
 
   const filteredData = useMemo(() => {
     if (isHistoryTable) {
@@ -84,7 +82,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
     } else if (isCancelledTable) {
       return cancelled;
     } else return active;
-  }, [activeTab, active, history]);
+  }, [active, history]);
 
   const headNameArray = useMemo(() => {
     if (isHistoryTable)
@@ -98,19 +96,11 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Trade Size',
         'Payout',
         'Status',
-        !shouldNotDisplayShareVisulise && '',
+        '',
         // "Visualize",
-      ].filter((name) => name !== null && name !== undefined && name !== false);
-    else if (isCancelledTable)
-      return [
-        'Asset',
-        'Strike Price',
-        'Trade Size',
-        'Status',
-        'Queue Time',
-        'Cancellation Time',
-        'Reason',
       ];
+    else if (isCancelledTable)
+      return ['Asset', 'Strike Price', 'Trade Size', 'Status', 'Reason'];
     else
       return [
         'Asset',
@@ -121,18 +111,12 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Close Time',
         'Trade Size',
         'Probability',
-        !shouldNotDisplayShareVisulise && 'Visualize',
-      ].filter((name) => name !== null && name !== undefined && name !== false);
+        'Visualize',
+      ];
   }, [isHistoryTable]);
 
   const HeaderFomatter = (col: number) => {
-    return (
-      <TableHeader
-        col={col}
-        headsArr={headNameArray}
-        firstColClassName="ml-4"
-      />
-    );
+    return <TableHeader col={col} headsArr={headNameArray} />;
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
@@ -165,7 +149,6 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         if (isCancelledTable) return <TradeSize trade={currentRow} />;
         return (
           <ExpiryCurrentComponent
-            activeMarket={activeMarket}
             isHistoryTable={isHistoryTable}
             marketPrice={marketPrice}
             trade={currentRow}
@@ -199,22 +182,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
 
       case 3:
         if (currentRow.state === BetState.cancelled)
-          return (
-            <NumberTooltip
-              content={`${getDisplayTimeUTC(
-                +currentRow.queueTimestamp
-              )} ${getDisplayDateUTC(+currentRow.queueTimestamp)} UTC`}
-            >
-              <div className="w-fit">
-                <CellContent
-                  content={[
-                    `${getDisplayTime(+currentRow.queueTimestamp)}`,
-                    `${getDisplayDate(+currentRow.queueTimestamp)}`,
-                  ]}
-                />
-              </div>
-            </NumberTooltip>
-          );
+          return <>{getErrorFromCode(currentRow?.reason)}</>;
         if (currentRow.state === BetState.queued)
           return <CellContent content={['-']} />;
 
@@ -239,23 +207,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           />
         );
       case 4:
-        if (currentRow.state === BetState.cancelled)
-          return (
-            <NumberTooltip
-              content={`${getDisplayTimeUTC(
-                +currentRow.cancelTimestamp
-              )} ${getDisplayDateUTC(+currentRow.cancelTimestamp)} UTC`}
-            >
-              <div className="w-fit">
-                <CellContent
-                  content={[
-                    `${getDisplayTime(+currentRow.cancelTimestamp)}`,
-                    `${getDisplayDate(+currentRow.cancelTimestamp)}`,
-                  ]}
-                />
-              </div>
-            </NumberTooltip>
-          );
+        // if (!currentRow.normal_option) return <CellContent content={["-"]} />;
+        // else
         if (
           currentRow.state === BetState.queued ||
           currentRow.state === BetState.cancelled
@@ -278,13 +231,10 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           </NumberTooltip>
         );
       case 5:
-        if (currentRow.state === BetState.cancelled)
-          return <>{getErrorFromCode(currentRow?.reason)}</>;
         return <TradeSize trade={currentRow} />;
       case 6:
         return (
           <ProbabilityPNL
-            activeMarket={activeMarket}
             isHistoryTable={isHistoryTable || isCancelledTable}
             marketPrice={marketPrice}
             trade={currentRow}
@@ -337,13 +287,13 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   };
 
   return (
-    <Background>
+    <Background className={className + ' h-full'}>
       <BufferTable
-        count={onPageChange ? totalPages : undefined}
-        activePage={activePage}
+        count={onPageChange ? totalPages : null}
         onPageChange={(e, pageNumber) => {
           onPageChange ? onPageChange(e, pageNumber) : null;
         }}
+        shouldShowTroply={false}
         doubleHeight
         // shouldShowMobile
         headerJSX={HeaderFomatter}
@@ -366,7 +316,9 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
               ]
             : ['auto']
         }
+        overflow
         onRowClick={console.log}
+        className="h-full"
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
       />

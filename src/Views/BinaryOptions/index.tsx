@@ -40,7 +40,7 @@ import { Warning } from '@Views/Common/Notification/warning';
 import { WarningOutlined } from '@mui/icons-material';
 import { getChains } from 'src/Config/wagmiClient';
 import { BuyTrade } from './BuyTrade';
-import { History } from './History';
+import PGDesktopTables, { tradesCount } from './Tables/Desktop';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -346,3 +346,51 @@ export function WebOnly({ children }: { children: JSX.Element }) {
   if (window.innerWidth < mobileUpperBound) return null;
   return <>{children}</>;
 }
+
+export const ActiveTable = ({ width }) => {
+  const [, setActivePage] = useAtom(updateActivePageNumber);
+  const [{ active: activePage }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable onPageChange={(e, pageNumber) => setActivePage(pageNumber)} />
+  ) : (
+    <PGDesktopTables
+      currentPage={activePage}
+      count={tradesCount}
+      onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+    />
+  );
+};
+export const HistoryTable = ({ width }) => {
+  const [, setPageNumber] = useAtom(updateHistoryPageNumber);
+  const [{ history: historyPageNumber }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable
+      isHistoryTab
+      onPageChange={(e, pageNumber) => setPageNumber(pageNumber)}
+    />
+  ) : (
+    <PGDesktopTables
+      isHistoryTable
+      currentPage={historyPageNumber}
+      count={tradesCount}
+      onPageChange={(e, pageNumber) => setPageNumber(pageNumber)}
+    />
+  );
+};
+export const CancelTable = ({ width }) => {
+  const [, setCancelPageNumber] = useAtom(updateCancelledPageNumber);
+  const [{ cancelled: canclledPage }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable
+      isCancelledTab
+      onPageChange={(e, pageNumber) => setCancelPageNumber(pageNumber)}
+    />
+  ) : (
+    <PGDesktopTables
+      currentPage={canclledPage}
+      count={tradesCount}
+      isCancelledTable
+      onPageChange={(e, pageNumber) => setCancelPageNumber(pageNumber)}
+    />
+  );
+};

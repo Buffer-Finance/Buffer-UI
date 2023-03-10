@@ -30,11 +30,12 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { getChains } from 'src/Config/wagmiClient';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { priceAtom } from '@Hooks/usePrice';
 import { minTradeAmount } from '../store';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
-export function CustomOption() {
+export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   const [amount, setAmount] = useAtom(ammountAtom);
   const { address: account } = useUserAccount();
   const { openConnectModal } = useConnectModal();
@@ -70,12 +71,8 @@ export function CustomOption() {
     }
   }, [account]);
   const knowTill = useAtomValue(knowTillAtom);
-  const { chain } = useNetwork();
-  const chains = getChains();
-  const { activeChain } = useActiveChain();
-  const activeChainName = activeChain?.name;
   const qtInfo = useQTinfo();
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const marketPrice = useAtomValue(priceAtom);
   const activeAsset = qtInfo?.activePair;
   const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
@@ -101,6 +98,7 @@ export function CustomOption() {
           clickHandler: console.log,
           closeModal: () => setIsOpen(false),
           loading: false,
+          onResetLayout,
         }}
       />
       <ApproveModal

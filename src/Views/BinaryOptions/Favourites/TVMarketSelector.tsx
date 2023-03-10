@@ -6,10 +6,9 @@ import { getAssetTypes } from './Utils/getAssetTypes';
 import { AssetTable } from './AssetTable';
 import { AssetTypeSelector } from './AssetTypeSelector';
 import { useAtomValue } from 'jotai';
+import { BlueBtn } from '@Views/Common/V2-Button';
 
 const FavouriteAssetDDStyles = styled.div`
-  padding: 1rem !important;
-  max-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,23 +21,15 @@ const FavouriteAssetDDStyles = styled.div`
     max-width: 100%;
   }
 `;
-export const FavouriteAssetDD: React.FC<{
+const assetTypes = ['Favourites', 'Crypto', 'Forex'];
+export const TVMarketSelector: React.FC<{
   className: string;
-  setToggle?: (state) => void;
-}> = ({ className }) => {
+  onResetMarket?: () => void;
+  onMarketSelect: (a: string) => void;
+}> = ({ className, onMarketSelect, onResetMarket }) => {
   const qtInfo = useQTinfo();
   const [searchText, setSearchText] = useState('');
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
-
-  const assetTypes = getAssetTypes(
-    qtInfo.pairs.filter(
-      (pair) =>
-        routerPermission &&
-        routerPermission[pair.pools[0].options_contracts.current]
-    )
-  );
-  const [activeAsset, setActiveAsset] = useState(assetTypes[1]);
-
+  const [activeAsset, setActiveAsset] = useState('Crypto');
   return (
     <>
       <FavouriteAssetDDStyles className={className + ` bg-2`}>
@@ -80,11 +71,14 @@ export const FavouriteAssetDD: React.FC<{
         <AssetTypeSelector
           assetTypes={assetTypes}
           activeAsset={activeAsset}
+          onResetMarket={onResetMarket}
           setActiveAsset={(newAsset) => setActiveAsset(newAsset)}
         />
         <div className="full-width">
           <AssetTable
+            catagories={assetTypes}
             assetsArray={qtInfo.pairs}
+            onMarketSelect={onMarketSelect}
             searchText={searchText}
             activeCategory={activeAsset}
           />

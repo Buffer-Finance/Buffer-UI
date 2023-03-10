@@ -72,7 +72,6 @@ const Background = styled.div`
     width: 100%;
     /* padding: 1.4rem 0; */
     border-radius: 0.9rem;
-    height: 100%;
     /* background-color: var(--bg-23); */
     display: flex;
     flex-direction: column;

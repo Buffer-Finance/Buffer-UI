@@ -195,7 +195,6 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
   const find = Object.keys(chartTypes).find(
     (c) => chartTypes[c].type == active
   );
-  console.log(`Object.keys(chartTypes): `,Object.keys(chartTypes)); 
   return (
     <div>
       <>
@@ -214,7 +213,6 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
           )}
           rootClass={'!w-[fit-content]'}
           item={(item) => {
-            console.log(`item: `,item);
             return (
               <div
                 onClick={(e) => {
@@ -245,4 +243,23 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
   );
 };
 
-export { ChartTypeSelectionDD };
+const ChartElementSVG = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width={18}
+    height={18}
+    fill="none"
+    className="css-9698k2"
+    {...props}
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M4 20h3v-6.791l3.767-3.767.967.966 1.767 1.768 6.364-6.364-1.767-1.768-4.596 4.596-.967-.966-1.768-1.768L7 9.673V4H4v16zm16 0H7v-3h13v3zm-6.5-7.823 2.828 2.828h-5.656l2.828-2.828z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+export { ChartTypeSelectionDD, ChartElementSVG };

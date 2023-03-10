@@ -78,3 +78,11 @@ export const getDHMSFromSeconds = (seconds: number) => {
   const sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
   return dDisplay + hDisplay + mDisplay + sDisplay;
 };
+import Timezones from './Timezones.json'
+export function getOslonTimezone() {
+  const ianaTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const found = Timezones.find((tz) => {
+    return tz.IANA == ianaTimezone;
+  });
+  return found?.OSLON || 'Etc/UTC';
+}

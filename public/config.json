@@ -1,4 +1,48 @@
 {
+  "markets":{
+    "BTCUSD":{
+      "category": "Crypto",
+      "tv_id": "BTCUSD",
+      "pair": "BTC-USD",
+      "price_precision": 100,
+      "token1": "BTC",
+      "token2": "USD",
+      "full_name": "Bitcoin",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg" 
+    },
+    "ETHUSD":{
+      "category": "Crypto",
+      "tv_id": "ETHUSD",
+      "pair": "ETH-USD",
+      "price_precision": 100,
+      "token1": "ETH",
+      "token2": "USD",
+      "full_name": "Ethereum",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg" 
+    },
+    "EURUSD": {
+      "max_duration": "04:00",
+      "min_duration": "00:01",
+      "category": "Forex",
+      "tv_id": "EURUSD",
+      "pair": "EUR-USD",
+      "price_precision": 1000000,
+      "token1": "EUR",
+      "token2": "USD",
+      "full_name": "Euro",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png"
+    },
+    "GBPUSD":{
+      "category": "Crypto",
+      "tv_id": "GBPUSD",
+      "pair": "GBP-USD",
+      "price_precision": 100,
+      "token1": "GBP",
+      "token2": "USD",
+      "full_name": "Pound",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg" 
+    }
+  },
   "421613": {
     "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
     "meta": "0xddc2Fbc6761eabf131E51101Dd3b43A295e121F1",
