@@ -102,6 +102,8 @@ const AppRoutes = () => {
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test/:market" element={<TradePage />} />
+        <Route path="/referral" element={<ReferralPage />} />
+        <Route path="/refer/:code" element={<div>Helo</div>} />
         <Route path="/history" element={<History />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />} />
