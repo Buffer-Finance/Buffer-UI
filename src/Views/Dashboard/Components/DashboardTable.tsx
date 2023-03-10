@@ -115,6 +115,21 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
+      case 7:
+        return (
+          <CellContent
+            content={[
+              <div className="flex items-center gap-1">
+                <UpTriangle className={`scale-75`} />
+                <Display data={currentRow.payoutForUp} unit="%" />
+              </div>,
+              <div className="flex items-center text-3 gap-1">
+                <DOwnTriangle className={`scale-75`} />
+                <Display data={currentRow.payoutForDown} unit="%" />
+              </div>,
+            ]}
+          />
+        );
       case 8:
         return (
           <CellContent
@@ -135,21 +150,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 7:
-        return (
-          <CellContent
-            content={[
-              <div className="flex items-center gap-1">
-                <UpTriangle className={`scale-75`} />
-                <Display data={currentRow.payoutForUp} unit="%" />
-              </div>,
-              <div className="flex items-center text-3 gap-1">
-                <DOwnTriangle className={`scale-75`} />
-                <Display data={currentRow.payoutForDown} unit="%" />
-              </div>,
-            ]}
-          />
-        );
+
       default:
         return null;
     }
