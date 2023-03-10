@@ -206,7 +206,7 @@ export const Weekly = () => {
               {activeChain.name}
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52"
+                href="https://futuristic-vertebra-e74.notion.site/Buffer-Weekly-Trading-Competitions-3d97c58ca2e245d2adb5db7d7d42fadb"
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
