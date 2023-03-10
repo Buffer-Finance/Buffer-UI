@@ -56,7 +56,6 @@ const BaseTab = ({
       </a>
     );
   }
-  console.log(`isHistoryTab: `, isHistoryTab);
   return isHistoryTab ? (
     isTrade ? (
       Btn

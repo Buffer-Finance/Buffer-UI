@@ -173,6 +173,7 @@ const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
 const layoutAtom = atomWithLocalStorage('layout-persisted', json);
 const DesktopTrad = () => {
   const layoutRef = useRef<Layout | null>(null);
+  const [forcefullyRerender, setforcefullyRerender] = useState(1);
   const wsState = useAtomValue(wsStateAtom);
   const userActivity = useAtomValue(UserActivityAtom);
   const { market } = useParams();
@@ -245,10 +246,14 @@ const DesktopTrad = () => {
     }
   };
   const isCDMForMarketSelect = useRef(true);
-  function handleNewTabClick(market: string, custom?: string) {
+  function handleNewTabClick(toMarket: string, custom?: string) {
     isCDMForMarketSelect.current = false;
     layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
-    navigate('/test/' + (market || custom));
+    console.log(`toMarket: `, toMarket, market);
+    if (toMarket == market) {
+      setforcefullyRerender((f) => f + 1);
+    }
+    navigate('/test/' + (toMarket || custom));
   }
   function resetLayoutForced() {
     navigate('/test/BTC-USD');
@@ -258,7 +263,6 @@ const DesktopTrad = () => {
   useEffect(() => {
     try {
       if (isCDMForMarketSelect.current) {
-        console.log(`deepEqual: `);
         layoutApi.doAction(FlexLayout.Actions.setActiveTabset('charts'));
       }
       layoutRef.current!.addTabToActiveTabSet({
@@ -267,15 +271,16 @@ const DesktopTrad = () => {
         component: 'TradingView',
         id: market,
       });
+      console.log('[adderr]', market);
     } catch (e) {
       try {
         layoutApi.doAction(FlexLayout.Actions.selectTab(market));
       } catch (e) {
-        console.log('internal error,', e);
+        console.log('[adderr]error,', e);
       }
-      console.log('errorwhileadding', e);
+      console.log('[adderr]errorwhileadding', e);
     }
-  }, [market]);
+  }, [market, forcefullyRerender]);
   return (
     <>
       {/* <Detector
