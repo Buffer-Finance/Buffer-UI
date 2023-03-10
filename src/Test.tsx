@@ -253,10 +253,10 @@ const DesktopTrad = () => {
     if (toMarket == market) {
       setforcefullyRerender((f) => f + 1);
     }
-    navigate('/test/' + (toMarket || custom));
+    navigate('/binary/' + (toMarket || custom));
   }
   function resetLayoutForced() {
-    navigate('/test/BTC-USD');
+    navigate('/binary/BTC-USD');
     isCDMForMarketSelect.current = true;
     setLayout(json);
   }
@@ -372,7 +372,7 @@ const DesktopTrad = () => {
             const market = p.data?.tabNode.replace('-', '');
             if (market && Config.markets?.[market]) {
               console.log(`p.data.tabNode: `, p.data.tabNode);
-              navigate('/test/' + p.data.tabNode);
+              navigate('/binary/' + p.data.tabNode);
             }
           }
           if (p.type == FlexLayout.Actions.DELETE_TAB) {
