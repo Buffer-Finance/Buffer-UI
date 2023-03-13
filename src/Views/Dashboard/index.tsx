@@ -60,7 +60,7 @@ export const Dashboard = () => {
 const DashboardPage = () => {
   return (
     <DashboardStyles>
-      {/* <Boxes /> */}
+      <Boxes />
       <Section
         Heading={<div className={topStyles}>Markets</div>}
         subHeading={
@@ -82,7 +82,7 @@ function Boxes() {
   const { BFR, BLP, overView, total } = useDashboardReadCalls();
   return (
     <>
-      <ArbitrumOnly hide>
+      <>
         <Section
           Heading={<div className={topStyles}>Stats</div>}
           subHeading={
@@ -95,17 +95,19 @@ function Boxes() {
             <StatsTotalStats data={total} />,
           ]}
         />{' '}
-        <Section
-          Heading={<div className={topStyles}>Tokens</div>}
-          subHeading={
-            <div className={descStyles}>Platform and BLP index tokens</div>
-          }
-          Cards={[
-            <TokensBFR data={BFR} tokenName={'BFR'} />,
-            <TokensBLP data={BLP} tokenName={'BLP'} />,
-          ]}
-        />
-      </ArbitrumOnly>
+        <ArbitrumOnly hide>
+          <Section
+            Heading={<div className={topStyles}>Tokens</div>}
+            subHeading={
+              <div className={descStyles}>Platform and BLP index tokens</div>
+            }
+            Cards={[
+              <TokensBFR data={BFR} tokenName={'BFR'} />,
+              <TokensBLP data={BLP} tokenName={'BLP'} />,
+            ]}
+          />
+        </ArbitrumOnly>
+      </>
     </>
   );
 }
