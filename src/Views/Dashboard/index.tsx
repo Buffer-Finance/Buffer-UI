@@ -88,7 +88,7 @@ function Boxes() {
             </div>
           }
           Cards={[
-            <StatsOverView data={overView} />,
+            // <StatsOverView data={overView} />,
             <StatsTotalStats data={total} />,
           ]}
         />{' '}
