@@ -85,7 +85,9 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         type: 'error',
         msg: `Expiration time should be less than ${getDisplayTime(
           +marketCloseTime
-        )} ${getDisplayDate(+marketCloseTime)} as the market will by then.`,
+        )} ${getDisplayDate(
+          +marketCloseTime
+        )} as the market will be closed by then.`,
         id: 'binaryBuy',
       });
     }
