@@ -13,7 +13,7 @@ import {
 } from '@Views/Common/ChainNotSupported';
 
 const DashboardStyles = styled.div`
-  width: min(1200px, 100%);
+  width: min(1300px, 100%);
   margin: auto;
   height: 100%;
   padding-bottom: 24px;
@@ -65,14 +65,11 @@ const DashboardPage = () => {
         Heading={<div className={topStyles}>Markets</div>}
         subHeading={
           <div className={descStyles}>
-            Discover new Pairs available on Buffer (Stats since 30th Jan, 2023)
+            Discover new Pairs available on Buffer
+            {/* (Stats since 30th Jan, 2023) */}
           </div>
         }
-        other={
-          <div className={descStyles}>
-            <Markets />
-          </div>
-        }
+        other={<Markets />}
       />
     </DashboardStyles>
   );

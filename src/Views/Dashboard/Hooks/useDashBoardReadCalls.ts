@@ -7,7 +7,7 @@ import MarketConfig from 'public/config.json';
 import poolABI from '@Views/BinaryOptions/ABI/poolABI.json';
 import { erc20ABI, useContractReads } from 'wagmi';
 import * as chain from '@wagmi/core/chains';
-import Config from 'public/config.json'
+import Config from 'public/config.json';
 
 import { convertBNtoString, useReadCall } from '@Utils/useReadCall';
 import {
@@ -30,6 +30,7 @@ import { multicallv2 } from '@Utils/Contract/multiContract';
 import { ethers } from 'ethers';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useDashboardTableData } from './useDashboardTableData';
 export const HolderContracts = [
   '0x01fdd6777d10dD72b8dD716AEE05cE67DD2b7D85',
   '0x58b0F2445DfA2808eCB209B7f96EfBc584736b7D',
@@ -58,12 +59,13 @@ export const useDashboardReadCalls = () => {
   const usd_decimals = 6;
 
   const { calls, mainnetData } = useDashboardCalls();
+  const { totalData } = useDashboardTableData();
 
   const { data } = useReadCall({
     contracts: calls,
   });
   // convertBNtoString(data);
-  console.log(`data: `, data);
+  // console.log(`data: `, data);
 
   let response: {
     BFR: IBFR;
@@ -150,6 +152,8 @@ export const useDashboardReadCalls = () => {
 
         apr: fromWei(blpAprTotal, 2),
         total_usdc: fromWei(amountUSDCpool, usd_decimals),
+        usdc_pol: USDCvaultPOL ? fromWei(USDCvaultPOL, usd_decimals) : null,
+        usdc_total: fromWei(amountUSDCpool, usd_decimals),
       },
     };
 
@@ -180,6 +184,14 @@ export const useDashboardReadCalls = () => {
           BFRvolume: bfrVolume,
           avgTrade: avgTrade,
           totalTraders: totalTraders[0]?.uniqueCountCumulative || 0,
+          usdc_24_fees: USDC24stats
+            ? fromWei(USDC24stats.settlementFee, usd_decimals)
+            : '0',
+          usdc_24_volume: USDC24stats
+            ? fromWei(USDC24stats.amount, usd_decimals)
+            : '0',
+          trades: totalData ? totalData.trades : null,
+          openInterest: totalData ? totalData.openInterest : null,
         },
         overView: {
           price: blpPrice,
@@ -207,7 +219,7 @@ export const useDashboardReadCalls = () => {
 
 const useDashboardCalls = () => {
   const { activeChain } = useContext(DashboardContext);
-  const {configContracts} = useActiveChain();
+  const { configContracts } = useActiveChain();
   const earnContracts = CONTRACTS[activeChain?.id];
   const earnMainnetContracts = CONTRACTS[chain.arbitrum.id];
   const dashboardContracts: (typeof DASHBOARDCONTRACTS)[42161] =
@@ -362,7 +374,8 @@ const useDashboardCalls = () => {
       const multicallRes = await multicallv2(
         contracts,
         new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc'),
-        Config[42161].multicall      );
+        Config[42161].multicall
+      );
       const lpTokensCallLength = lpTokensCalls.length;
       const formattedRes = multicallRes.slice(0, -lpTokensCallLength);
 
@@ -384,7 +397,7 @@ const useDashboardCalls = () => {
     },
     refreshInterval: 10000,
   });
-  console.log(`mainnetData: `, mainnetData);
+  // console.log(`mainnetData: `, mainnetData);
 
   return { calls, mainnetData };
 };

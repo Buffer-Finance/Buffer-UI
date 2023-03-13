@@ -10,7 +10,7 @@ export const Section = ({
   other?: JSX.Element;
 }) => {
   return (
-    <div className="first-of-type:mt-5 mt-8">
+    <div className="first-of-type:mt-5 mt-8 max-w-[100vw]">
       <div className="text-[22px]">{Heading}</div>
       <div className="text-f16 text-2 mb-6">{subHeading}</div>
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-1 mx-3">
@@ -21,7 +21,7 @@ export const Section = ({
             </div>
           ))}
       </div>
-      {other && <div className="mt-6">{other}</div>}
+      {other && <div className="mx-3">{other}</div>}
     </div>
   );
 };
