@@ -11,6 +11,7 @@ import {
   ArbitrumOnly,
   ChainNotSupported,
 } from '@Views/Common/ChainNotSupported';
+import { useDashboardGraphQl } from './Hooks/useDashboardGraphQl';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -76,7 +77,7 @@ const DashboardPage = () => {
 };
 
 function Boxes() {
-  const { BFR, BLP, overView, total } = useDashboardReadCalls();
+  const { overView } = useDashboardGraphQl();
   return (
     <>
       <>
@@ -87,24 +88,28 @@ function Boxes() {
               Arbitrum Total Stats (since 30th Jan, 2023)
             </div>
           }
-          Cards={[
-            // <StatsOverView data={overView} />,
-            <StatsTotalStats data={total} />,
-          ]}
+          Cards={[<StatsTotalStats data={overView} />]}
         />{' '}
         <ArbitrumOnly hide>
-          <Section
-            Heading={<div className={topStyles}>Tokens</div>}
-            subHeading={
-              <div className={descStyles}>Platform and BLP index tokens</div>
-            }
-            Cards={[
-              <TokensBFR data={BFR} tokenName={'BFR'} />,
-              <TokensBLP data={BLP} tokenName={'BLP'} />,
-            ]}
-          />
+          <DashboardData />
         </ArbitrumOnly>
       </>
     </>
   );
 }
+
+const DashboardData = () => {
+  const { BFR, BLP } = useDashboardReadCalls();
+  return (
+    <Section
+      Heading={<div className={topStyles}>Tokens</div>}
+      subHeading={
+        <div className={descStyles}>Platform and BLP index tokens</div>
+      }
+      Cards={[
+        <TokensBFR data={BFR} tokenName={'BFR'} />,
+        <TokensBLP data={BLP} tokenName={'BLP'} />,
+      ]}
+    />
+  );
+};
