@@ -12,6 +12,7 @@ export const Markets = () => {
   const [balance, allowance, maxTrade, stats, routerPermission] =
     useActiveAssetState(null, referralcode);
   const filteredDashboardData = useMemo(() => {
+    console.log(routerPermission, dashboardData, 'routerPermission');
     if (!dashboardData || !routerPermission) return [];
     return dashboardData.filter((data) => routerPermission[data.address]);
   }, [dashboardData, routerPermission]);
