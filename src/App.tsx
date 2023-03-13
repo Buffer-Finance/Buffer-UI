@@ -38,6 +38,7 @@ import { History } from '@Views/BinaryOptions/History';
 import { MobileTrade } from '@Views/BinaryOptions/MobileTrade';
 import { TradePage } from '@Views/BinaryOptions/TradePage';
 import { DesktopTrade } from './Test';
+import { TestComponent } from './TestComponent';
 
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -101,6 +102,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/refer/:code" element={<div>Helo</div>} />
