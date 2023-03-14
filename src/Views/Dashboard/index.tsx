@@ -1,25 +1,16 @@
 import Drawer from '@Views/Common/V2-Drawer';
 import { Section } from '@Views/Earn/Components/Section';
-import {
-  OtherBLP,
-  StatsOverView,
-  StatsTotalStats,
-  TokensBFR,
-  TokensBLP,
-} from './Cards';
+import { OtherBLP, StatsTotalStats, TokensBFR, TokensBLP } from './Cards';
 import { Markets } from './Components/Markets';
 import { DashboardContextProvider } from './dashboardAtom';
 import { useDashboardReadCalls } from './Hooks/useDashBoardReadCalls';
 import styled from '@emotion/styled';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useEffect } from 'react';
-import {
-  ArbitrumOnly,
-  ChainNotSupported,
-  ExceptArbitrum,
-} from '@Views/Common/ChainNotSupported';
+import { ArbitrumOnly, ExceptArbitrum } from '@Views/Common/ChainNotSupported';
 import { useDashboardGraphQl } from './Hooks/useDashboardGraphQl';
 import { useOtherChainCalls } from './Hooks/useOtherChainCalls';
+import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -86,6 +77,7 @@ const DashboardPage = () => {
 
 function Boxes() {
   const { overView } = useDashboardGraphQl();
+  const { activeChain } = useActiveChain();
   return (
     <>
       <>
@@ -93,7 +85,9 @@ function Boxes() {
           Heading={<div className={topStyles}>Dashboard</div>}
           subHeading={
             <div className={descStyles}>
-              Arbitrum Total Stats (since 30th Jan, 2023)
+              {[arbitrum.id, arbitrumGoerli.id].includes(activeChain.id)
+                ? 'Arbitrum Total Stats (since 30th Jan, 2023)'
+                : 'Polygon Total Stats (since 22nd Feb, 2023)'}
             </div>
           }
           Cards={[
