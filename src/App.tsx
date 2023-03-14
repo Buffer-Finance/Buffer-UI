@@ -39,6 +39,7 @@ import { MobileTrade } from '@Views/BinaryOptions/MobileTrade';
 import { TradePage } from '@Views/BinaryOptions/TradePage';
 import { DesktopTrade } from './Test';
 import { TestComponent } from './TestComponent';
+import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -63,6 +64,17 @@ function AppComponent() {
     </div>
   );
 }
+
+(function () {
+  const r = document.querySelector<HTMLElement>(':root');
+  const colors = getHashUrlQueryParam(window.location.href);
+  for (let color in colors) {
+    if (color.includes('-')) {
+      r!.style.setProperty(`--${color}`, colors[color]);
+    }
+  }
+  console.log(`params: `);
+})();
 
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);

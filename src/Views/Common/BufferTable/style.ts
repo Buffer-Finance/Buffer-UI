@@ -32,7 +32,7 @@ const TableBackground = styled.div`
     font-size: 1.6rem;
 
     .table-header {
-      background: ${(props) => (props?.v1 ? '#1C1C28' : '#171722')};
+      background: ${(props) => (props?.v1 ? 'var(--bg-0)' : 'var(--bg-2)')};
 
       .table-head {
         &:first-of-type {
@@ -60,7 +60,7 @@ const TableBackground = styled.div`
         font-weight: 400;
         color: ${(props) => (props?.v1 ? '#C3C2D4' : 'var(--text-6)')};
         border: none;
-        background: ${(props) => (props?.v1 ? '#1C1C28' : '#171722')};
+        background: ${(props) => (props?.v1 ? 'var(--bg-0)' : 'var(--bg-2)')};
         padding: ${({ shouldShowMobile }: { shouldShowMobile: boolean }) =>
           shouldShowMobile ? '12px 10px' : '12px 0px'};
 
