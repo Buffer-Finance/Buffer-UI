@@ -46,10 +46,9 @@ export function useUserReferralData(activeChain: Chain) {
   return response;
 }
 
-export function useRefereeCode(activeChain: Chain) {
-  const activeChainID = activeChain.id;
+export function useRefereeCode() {
   const { address: account } = useUserAccount();
-  const referralAddress = getContract(activeChain.id, 'referral');
+  const referralAddress = getContract();
 
   const calls = referralAddress
     ? [
@@ -63,6 +62,6 @@ export function useRefereeCode(activeChain: Chain) {
     : [];
   return useReadCall({
     contracts: calls,
-    swrKey: 'useUserReferralData',
+    swrKey: 'traderReferralCodes',
   });
 }

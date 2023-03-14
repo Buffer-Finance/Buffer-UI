@@ -96,14 +96,19 @@ function Boxes() {
               Arbitrum Total Stats (since 30th Jan, 2023)
             </div>
           }
-          Cards={[<StatsTotalStats data={overView} />]}
+          Cards={[
+            <StatsTotalStats data={overView} />,
+            <ExceptArbitrum hide>
+              <DashboardOtherChainData />
+            </ExceptArbitrum>,
+          ]}
         />{' '}
         <ArbitrumOnly hide>
           <DashboardData />
         </ArbitrumOnly>
-        <ExceptArbitrum hide>
+        {/* <ExceptArbitrum hide>
           <DashboardOtherChainData />
-        </ExceptArbitrum>
+        </ExceptArbitrum> */}
       </>
     </>
   );
@@ -127,13 +132,5 @@ const DashboardData = () => {
 
 const DashboardOtherChainData = () => {
   const { otherBLP } = useOtherChainCalls();
-  return (
-    <Section
-      Heading={<div className={topStyles}>Tokens</div>}
-      subHeading={
-        <div className={descStyles}>Platform and BLP index tokens</div>
-      }
-      Cards={[<OtherBLP data={otherBLP} tokenName={'BLP'} />]}
-    />
-  );
+  return <OtherBLP data={otherBLP} tokenName={'BLP'} />;
 };

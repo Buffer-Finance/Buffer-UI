@@ -1,18 +1,17 @@
 import { useAtomValue } from 'jotai';
 import { referralCodeAtom } from '@Views/BinaryOptions';
-import { Chain, useAccount } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useRefereeCode } from '../Hooks/useUserReferralData';
 import ReferralABI from '../Config/ReferralABI.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { multicallv2 } from '@Utils/Contract/multiContract';
 import { useReadCall } from '@Utils/useReadCall';
 import { isZero } from './isZero';
 
-export const useReferralCode = (activeChain: Chain) => {
+export const useReferralCode = () => {
   // return ["hello", "hello", "hello"];
   const { address } = useAccount();
   const referrerInLocalStorage = useAtomValue(referralCodeAtom);
-  const { data } = useRefereeCode(activeChain);
+  const { data } = useRefereeCode();
   const { configContracts } = useActiveChain();
   const contracts =
     referrerInLocalStorage && address

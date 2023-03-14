@@ -3,36 +3,37 @@ import { divide, gt } from '@Utils/NumString/stringArithmatics';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useMemo } from 'react';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import { useQTinfo } from '@Views/BinaryOptions';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import MaxTradeABI from '@Views/BinaryOptions/ABI/MaxTrade.json';
 import BinaryOptionsABI from '@Views/BinaryOptions/ABI/optionsABI.json';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export function useMarketStatus() {
   const { address: account } = useUserAccount();
-  const qtInfo = useQTinfo();
-  const referralData = useReferralCode(qtInfo.activeChain);
+  const { activeChain, configContracts } = useActiveChain();
+  const referralData = useReferralCode(activeChain);
+  console.log(referralData, 'referralData');
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
 
   const allAssetContracts = useMemo(
     () =>
-      qtInfo.pairs
+      configContracts.pairs
         .map((pair) =>
           pair.pools.map((pool) => [pool.options_contracts.current]).flat(1)
         )
         .flat(1),
-    [qtInfo]
+    [configContracts]
   );
 
   const assetCalls = useMemo(
     () =>
-      qtInfo.pairs
+      configContracts.pairs
         .map((pair) =>
           pair.pools
             .map((pool) => [
               {
-                address: qtInfo.optionMeta,
+                address: configContracts.meta,
                 abi: MaxTradeABI,
                 name: 'calculateMaxAmount',
                 params: [

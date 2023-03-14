@@ -86,7 +86,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             content={[
               <div className="flex items-center">
                 Current&nbsp;:&nbsp;
-                <Display data={currentRow.currentUtilization / 100} unit="%" />
+                <Display data={currentRow.currentUtilization} unit="%" />
               </div>,
               <div className="flex items-center">
                 Max&nbsp;:&nbsp;
