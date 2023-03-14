@@ -41,6 +41,7 @@ import { WarningOutlined } from '@mui/icons-material';
 import { getChains } from 'src/Config/wagmiClient';
 import { BuyTrade } from './BuyTrade';
 import PGDesktopTables, { tradesCount } from './Tables/Desktop';
+import { History } from './History';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -211,7 +212,7 @@ function QTrade() {
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
   );
-
+  // return <div>hello</div>;
   return (
     <>
       <MarketTimingsModal />
@@ -228,19 +229,11 @@ function QTrade() {
           {props.pairs ? (
             <>
               {!isHistory ? <Favourites /> : null}
-              <MobileOnly>
-                <TVIntegrated
-                  assetInfo={props.activePair}
-                  className={isHistory ? 'hidden' : ''}
-                />
-              </MobileOnly>
-              <WebOnly>
-                <div className="tab:hidden mb-3">
-                  <GraphView className="tab:hidden">
-                    <TVIntegrated assetInfo={props.activePair} />
-                  </GraphView>
-                </div>
-              </WebOnly>
+              <TVIntegrated
+                assetInfo={props.activePair}
+                className={isHistory ? 'hidden' : ''}
+              />
+
               <div className="custom-view b1200:w-[80%] mx-auto">
                 <div className="tab:hidden ">
                   <div className="flex b1200:justify-center items-center nsm:ml-4">
