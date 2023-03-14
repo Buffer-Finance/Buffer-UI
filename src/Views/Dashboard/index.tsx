@@ -1,6 +1,12 @@
 import Drawer from '@Views/Common/V2-Drawer';
 import { Section } from '@Views/Earn/Components/Section';
-import { StatsOverView, StatsTotalStats, TokensBFR, TokensBLP } from './Cards';
+import {
+  OtherBLP,
+  StatsOverView,
+  StatsTotalStats,
+  TokensBFR,
+  TokensBLP,
+} from './Cards';
 import { Markets } from './Components/Markets';
 import { DashboardContextProvider } from './dashboardAtom';
 import { useDashboardReadCalls } from './Hooks/useDashBoardReadCalls';
@@ -10,8 +16,10 @@ import { useEffect } from 'react';
 import {
   ArbitrumOnly,
   ChainNotSupported,
+  ExceptArbitrum,
 } from '@Views/Common/ChainNotSupported';
 import { useDashboardGraphQl } from './Hooks/useDashboardGraphQl';
+import { useOtherChainCalls } from './Hooks/useOtherChainCalls';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -93,6 +101,9 @@ function Boxes() {
         <ArbitrumOnly hide>
           <DashboardData />
         </ArbitrumOnly>
+        <ExceptArbitrum hide>
+          <DashboardOtherChainData />
+        </ExceptArbitrum>
       </>
     </>
   );
@@ -110,6 +121,19 @@ const DashboardData = () => {
         <TokensBFR data={BFR} tokenName={'BFR'} />,
         <TokensBLP data={BLP} tokenName={'BLP'} />,
       ]}
+    />
+  );
+};
+
+const DashboardOtherChainData = () => {
+  const { otherBLP } = useOtherChainCalls();
+  return (
+    <Section
+      Heading={<div className={topStyles}>Tokens</div>}
+      subHeading={
+        <div className={descStyles}>Platform and BLP index tokens</div>
+      }
+      Cards={[<OtherBLP data={otherBLP} tokenName={'BLP'} />]}
     />
   );
 };

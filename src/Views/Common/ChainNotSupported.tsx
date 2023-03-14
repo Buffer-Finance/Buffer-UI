@@ -1,34 +1,55 @@
-import { useActiveChain } from "@Hooks/useActiveChain";
-import Missing from "./Missing";
+import { useActiveChain } from '@Hooks/useActiveChain';
+import Missing from './Missing';
 
 export const ChainNotSupported = ({
   supportedChainIds,
   children,
-  hide
+  hide,
 }: {
   supportedChainIds: number[];
   children: JSX.Element;
-  hide?:boolean;
+  hide?: boolean;
 }) => {
   const { activeChain } = useActiveChain();
-  if(supportedChainIds.includes(+activeChain.id)) return children;
-  if(hide) return <></>
+  if (supportedChainIds.includes(+activeChain.id)) return children;
+  if (hide) return <></>;
   return (
     <div className="w-[100vw] h-[100vh] grid place-items-center text-f20">
-        <Missing
+      <Missing
         onClick={
           (e) => {}
           // idx === 5 ? redirectChain("AURORA") : redirectChain("BSC")
         }
         paddingTop="7%"
-      ></Missing>    </div>
+      ></Missing>{' '}
+    </div>
   );
 };
 
+export const ArbitrumOnly = ({
+  children,
+  hide,
+}: {
+  children: JSX.Element;
+  hide?: boolean;
+}) => {
+  return (
+    <ChainNotSupported supportedChainIds={[42161, 421613]} hide={hide}>
+      {children}
+    </ChainNotSupported>
+  );
+};
 
-
-export const ArbitrumOnly = ({children,hide}:{children:JSX.Element,hide?:boolean})=>{
-  return <ChainNotSupported supportedChainIds={[42161,421613]} hide={hide}>
-    {children}
-  </ChainNotSupported>
-}
+export const ExceptArbitrum = ({
+  children,
+  hide,
+}: {
+  children: JSX.Element;
+  hide?: boolean;
+}) => {
+  return (
+    <ChainNotSupported supportedChainIds={[80001, 137]} hide={hide}>
+      {children}
+    </ChainNotSupported>
+  );
+};
