@@ -64,16 +64,15 @@ function AppComponent() {
     </div>
   );
 }
+export const urlSettings = getHashUrlQueryParam(window.location.href);
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
-  const colors = getHashUrlQueryParam(window.location.href);
-  for (let color in colors) {
+  for (let color in urlSettings) {
     if (color.includes('-')) {
-      r!.style.setProperty(`--${color}`, colors[color]);
+      r!.style.setProperty(`--${color}`, '#' + urlSettings[color]);
     }
   }
-  console.log(`params: `);
 })();
 
 const AppRoutes = () => {
@@ -184,19 +183,21 @@ function App() {
             {snack.message}
           </Alert>
         </Snackbar>
-        <Warning
-          body={
-            <>
-              $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
-              listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
-              PancakeSwap or Apeswap on BNB chain.
-            </>
-          }
-          closeWarning={() => {}}
-          shouldAllowClose={false}
-          state={true}
-          className="disclaimer sm:hidden"
-        />
+        {!urlSettings?.hide && (
+          <Warning
+            body={
+              <>
+                $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
+                listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
+                PancakeSwap or Apeswap on BNB chain.
+              </>
+            }
+            closeWarning={() => {}}
+            shouldAllowClose={false}
+            state={true}
+            className="disclaimer sm:hidden"
+          />
+        )}
         <ConnectionDrawer className="open" />
         <TnCModal />
         <SideBar />

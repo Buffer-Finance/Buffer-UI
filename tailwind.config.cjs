@@ -61,6 +61,7 @@ module.exports = {
       "buffer-blue": "#A3E3FF",
       green: "#3fb68b",
       red: "#ff5353",
+      blue: "var(--bg-signature)",
       grey: "#353945",
       "light-border": "#2A2A3A",
       transparent: "transparent",
