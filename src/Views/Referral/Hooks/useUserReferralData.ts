@@ -1,11 +1,11 @@
-import { Chain, useAccount, useContractReads } from "wagmi";
-import getDeepCopy from "@Utils/getDeepCopy";
-import { convertBNtoString, useReadCall } from "@Utils/useReadCall";
-import ReferralABI from "../Config/ReferralABI.json";
-import { getContract } from "../Config/Address";
-import axios from "axios";
-import useSWR from "swr";
-import { useUserAccount } from "@Hooks/useUserAccount";
+import { Chain, useAccount, useContractReads } from 'wagmi';
+import getDeepCopy from '@Utils/getDeepCopy';
+import { convertBNtoString, useReadCall } from '@Utils/useReadCall';
+import ReferralABI from '../Config/ReferralABI.json';
+import { getContract } from '../Config/Address';
+import axios from 'axios';
+import useSWR from 'swr';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 export function useUserReferralData(activeChain: Chain) {
   const activeChainID = activeChain.id;
@@ -17,7 +17,7 @@ export function useUserReferralData(activeChain: Chain) {
         {
           address: referralAddress,
           abi: ReferralABI,
-          functionName: "traderReferralCodes",
+          functionName: 'traderReferralCodes',
           args: [account],
           chainId: activeChainID,
         },
@@ -49,19 +49,20 @@ export function useUserReferralData(activeChain: Chain) {
 export function useRefereeCode(activeChain: Chain) {
   const activeChainID = activeChain.id;
   const { address: account } = useUserAccount();
-  const referralAddress = getContract(activeChain.id, "referral");
+  const referralAddress = getContract(activeChain.id, 'referral');
 
   const calls = referralAddress
     ? [
         {
           address: referralAddress,
           abi: ReferralABI,
-          name: "traderReferralCodes",
+          name: 'traderReferralCodes',
           params: [account],
         },
       ]
     : [];
   return useReadCall({
     contracts: calls,
+    swrKey: 'useUserReferralData',
   });
 }

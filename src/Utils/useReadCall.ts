@@ -1,30 +1,36 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { multicallv2 } from './Contract/multiContract';
 import getDeepCopy from './getDeepCopy';
-export const useReadCall = ({ contracts }) => {
+export const useReadCall = ({ contracts, swrKey }) => {
   const calls = contracts;
   const { data: signer } = useSigner();
-  const {isWrongChain,configContracts} = useActiveChain();
-  const {address} = useAccount();
+  const { isWrongChain, configContracts } = useActiveChain();
+  const { address } = useAccount();
+  const { cache } = useSWRConfig();
   const p = useProvider();
   let signerOrProvider = p;
-  if(signer && !isWrongChain && address ) {
+  if (signer && !isWrongChain && address) {
     signerOrProvider = signer;
   }
-  console.log(`signerOrProvider: `,signerOrProvider);
-  return useSWR(calls && [calls,signerOrProvider], {
-    fetcher: async (calls,signerOrProvider) => {
+
+  console.log(`signerOrProvider: `, signerOrProvider);
+  return useSWR(swrKey, {
+    fetcher: async () => {
       if (!calls) return null;
-      let returnData = await multicallv2(calls,signerOrProvider ,configContracts.multicall);
+      let returnData = await multicallv2(
+        calls,
+        signerOrProvider,
+        configContracts.multicall
+      );
       if (returnData) {
         let copy = getDeepCopy(returnData);
         convertBNtoString(copy);
         return copy;
       }
-      return null;
+      return cache.get(swrKey);
     },
     refreshInterval: 500,
   });

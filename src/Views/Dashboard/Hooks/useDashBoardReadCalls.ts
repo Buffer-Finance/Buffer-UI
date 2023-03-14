@@ -54,6 +54,7 @@ export const useDashboardReadCalls = () => {
 
   const { data } = useReadCall({
     contracts: calls,
+    swrKey: 'useDashBoardReadCalls',
   });
   // convertBNtoString(data);
   // console.log(`data: `, data);

@@ -12,7 +12,7 @@ import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 export function useMarketStatus() {
   const { address: account } = useUserAccount();
   const qtInfo = useQTinfo();
-  const referralData = useReferralCode(qtInfo.activeChain);
+  // const referralData = useReferralCode(qtInfo.activeChain);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
 
   const allAssetContracts = useMemo(
@@ -38,7 +38,7 @@ export function useMarketStatus() {
                 params: [
                   pool.options_contracts.current,
                   highestTierNFT?.tokenId || 0,
-                  referralData[2],
+                  '',
                   account || '0x0000000000000000000000000000000000000000',
                 ],
               },
@@ -53,12 +53,13 @@ export function useMarketStatus() {
         )
         .flat(1),
 
-    [account, referralData, highestTierNFT]
+    [account, highestTierNFT]
   );
 
   const calls = [...assetCalls];
 
-  let copy = useReadCall({ contracts: calls }).data as unknown as any[];
+  let copy = useReadCall({ contracts: calls, swrKey: 'useMarketStatus' })
+    .data as unknown as any[];
 
   type marketStatusType = {
     maxTradeAmount: string | null | undefined;
