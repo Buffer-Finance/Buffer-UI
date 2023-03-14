@@ -17,12 +17,11 @@ export function getFilteredAssets(
 
   let filteredAssets: IMarket[] = assets;
   if (!!searchText && searchText !== '')
-    filteredAssets = assets.filter(
-      (asset) =>
+    filteredAssets = assets.filter((asset) =>
       asset.pair.toLowerCase().includes(searchText.toLowerCase())
-      );
-      console.log(`filteredAssets: `,filteredAssets);
-    console.log(`category: `,category);
+    );
+  console.log(`filteredAssets: `, filteredAssets);
+  console.log(`category: `, category);
   switch (category) {
     case AssetTypes[0]:
       return filteredAssets.filter((asset) => favourites.includes(asset.tv_id));
