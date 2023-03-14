@@ -19,7 +19,7 @@ export const useOtherChainCalls = () => {
   const { calls } = useDashboardCalls();
   const { data } = useReadCall({
     contracts: calls,
-    swrKey: 'useDashBoardReadCalls',
+    swrKey: 'useOtherChainCalls',
   });
 
   let response: {

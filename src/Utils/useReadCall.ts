@@ -20,24 +20,28 @@ export const useReadCall = ({ contracts, swrKey }) => {
   }
 
   console.log(`signerOrProvider: `, signerOrProvider);
-  return useSWR([swrKey, activeChain, account], {
-    fetcher: async () => {
-      if (!calls) return null;
-      let returnData = await multicallv2(
-        calls,
-        signerOrProvider,
-        configContracts.multicall,
-        swrKey
-      );
-      if (returnData) {
-        let copy = getDeepCopy(returnData);
-        convertBNtoString(copy);
-        return copy;
-      }
-      return cache.get(swrKey);
-    },
-    refreshInterval: 500,
-  });
+  return useSWR(
+    calls && calls.length ? swrKey + activeChain.id + account : null,
+    {
+      fetcher: async () => {
+        if (!calls) return null;
+        let returnData = await multicallv2(
+          calls,
+          signerOrProvider,
+          configContracts.multicall,
+          swrKey + activeChain.id + account
+        );
+        if (returnData) {
+          let copy = getDeepCopy(returnData);
+          convertBNtoString(copy);
+          return copy;
+        }
+        console.log(returnData, swrKey, cache.get(swrKey), 'returnData');
+        return cache.get(swrKey);
+      },
+      // refreshInterval: 500,
+    }
+  );
 };
 
 export function convertBNtoString(data) {
