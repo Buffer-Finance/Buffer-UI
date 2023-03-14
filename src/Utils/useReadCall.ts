@@ -26,7 +26,8 @@ export const useReadCall = ({ contracts, swrKey }) => {
       let returnData = await multicallv2(
         calls,
         signerOrProvider,
-        configContracts.multicall
+        configContracts.multicall,
+        swrKey
       );
       if (returnData) {
         let copy = getDeepCopy(returnData);

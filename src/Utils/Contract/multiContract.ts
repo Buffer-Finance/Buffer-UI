@@ -10,7 +10,8 @@ export const arbMain = 'https://arb1.arbitrum.io/rpc';
 export const multicallv2 = async (
   calls: Call[],
   singerOrProvider,
-  multicall
+  multicall,
+  swrKey
 ) => {
   if (!calls.length) return null;
   try {
@@ -36,7 +37,7 @@ export const multicallv2 = async (
     });
     return res;
   } catch (err) {
-    console.log(err, calls, 'multicall err');
+    console.log(err, calls, swrKey, 'multicall err');
     return null;
   }
 };
