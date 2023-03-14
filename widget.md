@@ -54,6 +54,7 @@ mainnet app link : https://app.buffer.fiance
     <code> ref=partner-app-referral-link</code>
      </li>
 </ul>
+<br/>
 One Example which <a href="https://app.level.finance/trade/btc/long">level.finance</a> will be using is :<code> http://app.buffer.finance/#/binary/BTC-USD?bg-2=161618&bg-1=29292c&bg-signature=ffb313&hide=true&bg-0=111111&chain=polygon&ref=levelFi-with-bufferFi&img=app.level.finance/assets/logo-4d8fd6f5.svg</code>
 
 </ol>
