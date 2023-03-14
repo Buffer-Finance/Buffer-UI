@@ -28,7 +28,7 @@ export const useReferralCode = () => {
     contracts,
     swrKey: 'useRefferalCode',
   });
-  const isZeroAdds = isZero(isCodeAvailable?.[0]);
+  const isZeroAdds = isCodeAvailable && isZero(isCodeAvailable[0]);
 
   const verifiedLocalCode = isCodeAvailable?.length
     ? isZeroAdds
