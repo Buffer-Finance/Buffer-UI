@@ -59,7 +59,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                     className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-4 hover:brightness-125 hover:bg-1`}
                     onClick={openConnectModal}
                   >
-                    <Wallet className="mr-[6px] ml-1" />
+                    <Wallet className="mr-[6px] ml-1 text-blue" />
 
                     <span>{'Connect Wallet'}</span>
                     <ArrowDropDownRounded
