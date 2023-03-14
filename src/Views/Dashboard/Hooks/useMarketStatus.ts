@@ -12,7 +12,7 @@ import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 export function useMarketStatus() {
   const { address: account } = useUserAccount();
   const qtInfo = useQTinfo();
-  // const referralData = useReferralCode(qtInfo.activeChain);
+  const referralData = useReferralCode(qtInfo.activeChain);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
 
   const allAssetContracts = useMemo(
@@ -38,7 +38,7 @@ export function useMarketStatus() {
                 params: [
                   pool.options_contracts.current,
                   highestTierNFT?.tokenId || 0,
-                  '',
+                  referralData[2],
                   account || '0x0000000000000000000000000000000000000000',
                 ],
               },
@@ -53,7 +53,7 @@ export function useMarketStatus() {
         )
         .flat(1),
 
-    [account, highestTierNFT]
+    [account, referralData, highestTierNFT]
   );
 
   const calls = [...assetCalls];

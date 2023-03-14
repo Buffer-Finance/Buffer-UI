@@ -1,4 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { ethers } from 'ethers';
 import useSWR, { useSWRConfig } from 'swr';
 import { useAccount, useProvider, useSigner } from 'wagmi';
@@ -6,6 +7,8 @@ import { multicallv2 } from './Contract/multiContract';
 import getDeepCopy from './getDeepCopy';
 export const useReadCall = ({ contracts, swrKey }) => {
   const calls = contracts;
+  const { activeChain } = useActiveChain();
+  const { address: account } = useUserAccount();
   const { data: signer } = useSigner();
   const { isWrongChain, configContracts } = useActiveChain();
   const { address } = useAccount();
@@ -17,7 +20,7 @@ export const useReadCall = ({ contracts, swrKey }) => {
   }
 
   console.log(`signerOrProvider: `, signerOrProvider);
-  return useSWR(swrKey, {
+  return useSWR([swrKey, activeChain, account], {
     fetcher: async () => {
       if (!calls) return null;
       let returnData = await multicallv2(
