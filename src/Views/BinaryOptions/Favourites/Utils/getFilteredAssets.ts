@@ -10,18 +10,30 @@ import { getAssetTypes } from './getAssetTypes';
 export function getFilteredAssets(
   assets: IMarket[],
   searchText: string,
-  category: string,
-  AssetTypes: string[]
+  category: string
+  // AssetTypes: string[]
 ) {
+  const qtInfo = useQTinfo();
+  const AssetTypes = getAssetTypes(qtInfo.pairs);
   const [favourites] = useAtom(FavouriteAtom);
-
-  let filteredAssets: IMarket[] = assets;
+  const { routerPermission } = useAtomValue(activeAssetStateAtom);
+  if (!routerPermission) return null;
+  let filteredAssets: IMarket[] = [];
   if (!!searchText && searchText !== '')
-    filteredAssets = assets.filter((asset) =>
-      asset.pair.toLowerCase().includes(searchText.toLowerCase())
+    filteredAssets = assets.filter(
+      (asset) =>
+        asset.pair.toLowerCase().includes(searchText.toLowerCase()) &&
+        routerPermission &&
+        routerPermission[asset.pools[0].options_contracts.current]
     );
-  console.log(`filteredAssets: `, filteredAssets);
-  console.log(`category: `, category);
+  else {
+    filteredAssets = assets.filter(
+      (asset) =>
+        routerPermission &&
+        routerPermission[asset.pools[0].options_contracts.current]
+    );
+  }
+  console.log(`AssetTypes: `, AssetTypes);
   switch (category) {
     case AssetTypes[0]:
       return filteredAssets.filter((asset) => favourites.includes(asset.tv_id));
