@@ -14,13 +14,24 @@ import {
   omniWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
+export const urlSettings = getHashUrlQueryParam(window.location.href);
 
+function getSupportedChains() {
+  const isTestnet = import.meta.env.VITE_ENV.toLowerCase() == 'testnet';
+  switch (urlSettings?.chain) {
+    case 'arbitrum':
+      return isTestnet ? [arbitrumGoerli, polygonMumbai] : [arbitrum, polygon];
+    case 'polygon':
+      return isTestnet ? [polygonMumbai, arbitrumGoerli] : [polygon, arbitrum];
+    default:
+      return isTestnet ? [arbitrumGoerli, polygonMumbai] : [arbitrum, polygon];
+  }
+}
+const SupprtedChains = getSupportedChains();
+console.log(`SupprtedChains: `, SupprtedChains);
 
-
-export const getChains = () =>
-  import.meta.env.VITE_ENV.toLowerCase() == 'testnet'
-    ? [arbitrumGoerli,polygonMumbai]
-    : [arbitrum,polygon];
+export const getChains = () => SupprtedChains;
 
 const getWallets = (chains: Chain[]) => {
   const bothSupported = [

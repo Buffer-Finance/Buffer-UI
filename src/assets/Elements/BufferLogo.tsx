@@ -1,5 +1,5 @@
 import { SVGProps } from 'react';
-import { urlSettings } from 'src/App';
+import { urlSettings } from 'src/Config/wagmiClient';
 
 const BufferLogo = (props: SVGProps<SVGSVGElement>) => {
   if (urlSettings?.img) {

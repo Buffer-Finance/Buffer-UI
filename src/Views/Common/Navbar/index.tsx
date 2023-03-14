@@ -16,7 +16,7 @@ import { useAtomValue } from 'jotai';
 import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
 import { useAccount } from 'wagmi';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
-import { urlSettings } from 'src/App';
+import { urlSettings } from 'src/Config/wagmiClient';
 
 interface INavbar {}
 

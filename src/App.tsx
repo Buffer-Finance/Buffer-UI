@@ -40,6 +40,7 @@ import { TradePage } from '@Views/BinaryOptions/TradePage';
 import { DesktopTrade } from './Test';
 import { TestComponent } from './TestComponent';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
+import { urlSettings } from './Config/wagmiClient';
 
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -64,7 +65,6 @@ function AppComponent() {
     </div>
   );
 }
-export const urlSettings = getHashUrlQueryParam(window.location.href);
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
