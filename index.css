@@ -2102,7 +2102,7 @@ html .secondary-btn:hover {
     grid-template-areas: 'Content';
     grid-template-columns: 100vw 0px;
     grid-template-rows: max-content max-content;
-    background-color: var(--color-layer-base);
+    background-color: var(--bg-2);
     overflow-x: hidden;
   }
   .portal-drawer {

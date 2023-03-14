@@ -1,5 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { priceAtom } from '@Hooks/usePrice';
+import { priceAtom, usePrice } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -57,6 +57,7 @@ const BuyTrade: React.FC<any> = ({}) => {
       setIsApproveModalOpen(false);
     }
   }, [account]);
+  usePrice();
   const knowTill = useAtomValue(knowTillAtom);
   const qtInfo = useQTinfo();
   const marketPrice = useAtomValue(priceAtom);
@@ -72,7 +73,13 @@ const BuyTrade: React.FC<any> = ({}) => {
   // const [rpcState] = useRPCchecker();
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
-  console.log(`activeAssetPrice: `, activeAssetPrice, marketPrice, activeAsset);
+  console.log(
+    `activeAssetPrice: `,
+    activeAssetPrice,
+    marketPrice,
+    activeAsset,
+    allowance
+  );
   let MarketOpenWarning: ReactNode | null = null;
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
