@@ -34,6 +34,7 @@ export const Navbar: React.FC<INavbar> = () => {
       type: 'UPDATE_SIDEBAR_STATE',
     });
   };
+  const show = !urlSettings?.hide;
   return (
     <header className="bg-primary flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1 relative z-[102]">
       <div className=" flex items-center gap-[24px]">
@@ -47,7 +48,7 @@ export const Navbar: React.FC<INavbar> = () => {
           />
         </div>
 
-        {!urlSettings?.hide && (
+        {show && (
           <div className="tab:hidden flex gap-[6px] b1200:!hidden ">
             {tabs.slice(0, VISIBLETABS).map((tab, index) => {
               if (tab.isExternalLink) {
