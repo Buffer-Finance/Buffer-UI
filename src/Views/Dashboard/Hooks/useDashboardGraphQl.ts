@@ -131,7 +131,7 @@ export const useDashboardGraphQl = () => {
           (data.USDCstats.totalTrades || 0) + (data.BFRstats?.totalTrades || 0)
         ).toString();
 
-    const avgTrade = divide(totalVolume, totalTrades);
+    const avgTrade = divide(totalVolume, totalTrades.toString());
 
     return {
       USDCfees: isUSDCnull
@@ -151,7 +151,7 @@ export const useDashboardGraphQl = () => {
       trades: totalData ? totalData.trades : null,
       openInterest: totalData ? totalData.openInterest : null,
     };
-  }, [data]);
+  }, [data, totalData]);
 
   console.log(overView, 'overView');
 
