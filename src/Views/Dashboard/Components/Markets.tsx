@@ -1,4 +1,3 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { useActiveAssetState } from '@Views/BinaryOptions/Hooks/useActiveAssetState';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useMemo } from 'react';
@@ -7,8 +6,7 @@ import { DashboardTable } from './DashboardTable';
 
 export const Markets = () => {
   const { dashboardData } = useDashboardTableData();
-  const { activeChain } = useActiveChain();
-  const referralcode = useReferralCode(activeChain);
+  const referralcode = useReferralCode();
   const [balance, allowance, maxTrade, stats, routerPermission] =
     useActiveAssetState(null, referralcode);
   const filteredDashboardData = useMemo(() => {

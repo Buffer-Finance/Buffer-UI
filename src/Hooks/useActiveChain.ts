@@ -1,22 +1,31 @@
-import {  useMemo } from 'react';
+import { useMemo } from 'react';
 import { Chain, useNetwork } from 'wagmi';
 import Config from 'public/config.json';
-
-import { arbitrumGoerli } from 'wagmi/chains';
 import { getChains } from 'src/Config/wagmiClient';
+import { useParams } from 'react-router-dom';
 const typeofConfig = Config[421613];
 
-
 export const useActiveChain = () => {
-  const {chain} = useNetwork();
+  const { chain } = useNetwork();
   const chains = getChains();
+  const params = useParams();
+  const chainName = params.chain;
 
-  const [activeChain, isWrongChain, configContracts] = useMemo<[Chain,boolean,typeof typeofConfig]>(() => {
-    let activeChain = chain;
+  const [activeChain, isWrongChain, configContracts] = useMemo<
+    [Chain, boolean, typeof typeofConfig]
+  >(() => {
+    let activeChain: Chain | undefined = undefined;
     let isWrongChain = false;
-    if(!chains.filter(c=>c.name == chain?.name)?.length){
-      activeChain = chains[0];
-      isWrongChain = true;
+    if (chainName !== undefined) {
+      activeChain = chains.find((chain) =>
+        chain.name.toUpperCase().includes(chainName.toUpperCase())
+      );
+    } else if (activeChain === undefined) {
+      activeChain = chain;
+      if (!chains.filter((c) => c.name == chain?.name)?.length) {
+        activeChain = chains[0];
+        isWrongChain = true;
+      }
     }
     return [
       activeChain,
@@ -24,6 +33,6 @@ export const useActiveChain = () => {
       Config[activeChain.id] as typeof typeofConfig,
     ];
   }, [chain]);
- 
+
   return { activeChain, isWrongChain, configContracts };
 };

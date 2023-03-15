@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { ArbitrumOnly, ExceptArbitrum } from '@Views/Common/ChainNotSupported';
 import { useDashboardGraphQl } from './Hooks/useDashboardGraphQl';
 import { useOtherChainCalls } from './Hooks/useOtherChainCalls';
-import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
