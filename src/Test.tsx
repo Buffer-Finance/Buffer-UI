@@ -253,7 +253,11 @@ const DesktopTrad = () => {
   const isCDMForMarketSelect = useRef(true);
   function handleNewTabClick(toMarket: string, custom?: string) {
     isCDMForMarketSelect.current = false;
-    layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
+    try {
+      layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
+    } catch (e) {
+      console.log('errwhile-deleting', e);
+    }
     console.log(`toMarket: `, toMarket, market);
     if (toMarket == market) {
       setforcefullyRerender((f) => f + 1);
