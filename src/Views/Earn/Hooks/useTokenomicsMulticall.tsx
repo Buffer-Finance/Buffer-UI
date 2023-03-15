@@ -789,8 +789,8 @@ export const useGetTokenomics = () => {
             token_value_abs: stakedBlp,
           },
           total_supply: {
-            value_in_usd: multiply(fromWei(blpSupply, usd_decimals), blpPrice),
-            token_value: fromWei(blpSupply, usd_decimals),
+            value_in_usd: fromWei(blpUSDCAmount, usd_decimals),
+            token_value: divide(fromWei(blpUSDCAmount, usd_decimals), blpPrice),
           },
           user: {
             rewards: add(
