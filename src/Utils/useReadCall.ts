@@ -18,16 +18,16 @@ export const useReadCall = ({
   const { activeChain, isWrongChain, configContracts, chainInURL } =
     useActiveChain();
   const { address: account } = useUserAccount();
-  const { data: signer } = useSigner();
+  const { data: signer } = useSigner({ chainId: activeChain.id });
   const { address } = useAccount();
   const { cache } = useSWRConfig();
   const p = useProvider({ chainId: activeChain.id });
   let signerOrProvider = p;
 
-  if (!chainInURL || (signer && !isWrongChain && address)) {
+  if (signer && !isWrongChain && address) {
     signerOrProvider = signer;
   }
-  console.log(signerOrProvider?._network?.chainId, 'provider');
+  console.log(signerOrProvider?._network?.chainId, activeChain, 'provider');
   const key = swrKey + activeChain.id + account + chainInURL;
 
   // console.log(`signerOrProvider: `, signerOrProvider);
