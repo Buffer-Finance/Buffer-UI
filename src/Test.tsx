@@ -41,7 +41,12 @@ import isUserPaused, { UserActivityAtom } from '@Utils/isUserPaused';
 import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
 var json = {
-  global: { tabEnableClose: true },
+  global: {
+    tabEnableClose: true,
+    // tabClassName: 'bg-2',
+    tabSetClassNameTabStrip: 'bg-2',
+    borderClassName: 'bg-2',
+  },
   layout: {
     type: 'row',
     weight: 100,

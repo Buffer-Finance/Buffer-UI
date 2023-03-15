@@ -33,17 +33,7 @@ const BaseTab = ({
       } items-center content-center text-f12 text-${
         active ? '1' : '2'
       } ${className}`}
-      onClick={
-        isHistoryTab
-          ? () => {
-              setHistory(true);
-            }
-          : isBinaryTab
-          ? () => {
-              setHistory(false);
-            }
-          : onClick
-      }
+      onClick={onClick}
     >
       {tab.icon}
       {tab.name}
@@ -56,15 +46,7 @@ const BaseTab = ({
       </a>
     );
   }
-  return isHistoryTab ? (
-    isTrade ? (
-      Btn
-    ) : (
-      <Link to={'/binary'}>{Btn}</Link>
-    )
-  ) : (
-    <Link to={tab.to!}>{Btn}</Link>
-  );
+  return <Link to={tab.to!}>{Btn}</Link>;
 };
 
 const mobleMaxTabLimit = 5;
@@ -108,26 +90,11 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
   const isHistory = useAtomValue(isHistoryTabActiveAtom);
   const isActive = (t: any) => {
     let tabName = t.to.split('/')[1];
-
     if (tabName == 'trade') {
       tabName = 'binary';
     }
-    const isActive = location.pathname
-      .toLowerCase()
-      .includes(tabName.toLowerCase());
-    if (
-      location.pathname.includes('binary') &&
-      (tabName == 'binary' || tabName == 'history')
-    ) {
-      if (tabName == 'binary') {
-        return isActive && !isHistory;
-      }
-      if (tabName == 'history') {
-        return isHistory;
-      }
-    }
-
-    if (tabName) return isActive;
+    if (tabName)
+      return location.pathname.toLowerCase().includes(tabName.toLowerCase());
     return false;
   };
   const areExtraTabs = tabs.length > mobleMaxTabLimit;

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Background = styled.div`
   color: var(--text-1);
@@ -10,7 +10,7 @@ const Background = styled.div`
     /* box-shadow: var(--white-shadow); */
   }
   .body {
-    background: var(--bg-23);
+    background: var(--bg-1);
     border-radius: 1.6rem;
     padding: 2.8rem 1.8rem;
     padding-bottom: 2.6rem;
