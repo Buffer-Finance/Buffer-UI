@@ -216,111 +216,14 @@ function QTrade() {
     <>
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
-      <WebOnly>
-        <div className="tabDispay:hidden  tab:mx-auto ">
-          <div className="flex flex-col items-start max-w-[100vw] overflow-hidden">
-            {props.pairs && <Favourites className="web:hidden mb-4" />}
-          </div>
-        </div>
-      </WebOnly>
       <main className="content-drawer" id="buffer-tv-wrapper">
         <Background>
-          {props.pairs ? (
-            <>
-              {!isHistory ? <Favourites /> : null}
-              <TVIntegrated
-                assetInfo={props.activePair}
-                className={isHistory ? 'hidden' : ''}
-              />
-
-              <div className="custom-view b1200:w-[80%] mx-auto">
-                <div className="tab:hidden ">
-                  <div className="flex b1200:justify-center items-center nsm:ml-4">
-                    <BufferTab
-                      value={activeTabIdx}
-                      handleChange={(e, t) => {
-                        dispatch({
-                          type: 'SET_ACIVE_TAB',
-                          payload: binaryTabs[t + 2], //Runs only for web. Hence 0 & 1 tab neglected.
-                        });
-                      }}
-                      distance={5}
-                      tablist={tabs.map((tabName): { name: string } => ({
-                        name: tabName,
-                      }))}
-                    />
-                  </div>
-                </div>
-                <div className="my-3">
-                  {activeTab === binaryTabs[2] && (
-                    <>
-                      <PGTables
-                        configData={props}
-                        activePage={active}
-                        onPageChange={(e, pageNumber) =>
-                          setActivePage(pageNumber)
-                        }
-                      />
-                      <MobileOnly>
-                        <MobileTable
-                          activePage={active}
-                          configData={props}
-                          onPageChange={(e, pageNumber) =>
-                            setActivePage(pageNumber)
-                          }
-                        />
-                      </MobileOnly>
-                    </>
-                  )}
-                  {activeTab === binaryTabs[3] && (
-                    <>
-                      <PGTables
-                        configData={props}
-                        activePage={history}
-                        onPageChange={(e, pageNumber) =>
-                          setHistoryPage(pageNumber)
-                        }
-                      />
-                      <MobileOnly>
-                        <MobileTable
-                          activePage={history}
-                          configData={props}
-                          isHistoryTab
-                          onPageChange={(e, pageNumber) =>
-                            setHistoryPage(pageNumber)
-                          }
-                        />
-                      </MobileOnly>
-                    </>
-                  )}
-                  {activeTab === binaryTabs[4] && (
-                    <>
-                      <PGTables
-                        configData={props}
-                        activePage={cancelled}
-                        onPageChange={(e, pageNumber) =>
-                          setCancelledPage(pageNumber)
-                        }
-                      />
-                      <MobileOnly>
-                        <MobileTable
-                          isCancelledTab
-                          activePage={cancelled}
-                          configData={props}
-                          onPageChange={(e, pageNumber) =>
-                            setCancelledPage(pageNumber)
-                          }
-                        />
-                      </MobileOnly>
-                    </>
-                  )}
-                </div>
-              </div>
-            </>
-          ) : (
-            <Skeleton variant="rectangular" className="stat-skel lc" />
-          )}
-          <MobileOnly>{isHistory ? <History /> : <BuyTrade />}</MobileOnly>
+          <Favourites />
+          <TVIntegrated
+            assetInfo={props.activePair}
+            className={isHistory ? 'hidden' : ''}
+          />
+          <BuyTrade />
         </Background>
       </main>
       <BinaryDrawer />
