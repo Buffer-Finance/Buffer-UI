@@ -354,9 +354,7 @@ export default function useDataFeed(chartReady) {
           prevBar.time < aggregatedBar.time
         ) {
           realTimeUpdate.current.onRealtimeCallback(aggregatedBar);
-          console.time('befor-update');
           await sleep(document.hidden ? 1 : 39);
-          console.timeEnd('befor-update');
           prevBar = aggregatedBar;
         }
       }

@@ -1,3 +1,4 @@
+import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import { ClaimedNFT } from '@Views/NFTView/Claimed';
 import { HistoryTables } from './Components/HistoryTable';
 import { ProfileCards } from './Components/ProfileCards';
@@ -22,7 +23,9 @@ const Profile = () => {
         <div className="text-f22 mb-7">Trades</div>
         <HistoryTables />
       </div>
-      <ClaimedNFT />
+      <ArbitrumOnly hide>
+        <ClaimedNFT />
+      </ArbitrumOnly>
     </div>
   );
 };

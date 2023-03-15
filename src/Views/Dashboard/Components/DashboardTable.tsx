@@ -164,7 +164,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       data={dashboardData}
       rows={dashboardData?.length}
       bodyJSX={bodyJSX}
-      loading={!dashboardData}
+      loading={!dashboardData.length}
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
