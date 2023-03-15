@@ -2,7 +2,6 @@ import { useActiveChain } from './useActiveChain';
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
-import { useAccount } from 'wagmi';
 import { useUserAccount } from './useUserAccount';
 
 interface IGraphNFT {
@@ -15,14 +14,14 @@ interface IGraphNFT {
 }
 
 export const useNFTGraph = (userOnly = false) => {
-  const { address: userAccount } = useAccount();
-  const { configContracts } = useActiveChain();
+  const { address: account } = useUserAccount();
   const { cache } = useSWRConfig();
-  const { data } = useSWR(`nfts-the-graph-account-${userAccount}`, {
+  const { configContracts } = useActiveChain();
+  const { data } = useSWR(`nfts-the-graph-account-${account}`, {
     fetcher: async () => {
       const response = await axios.post(configContracts.graph.LITE, {
         query: `{ 
-          nfts(orderBy: tokenId, orderDirection: desc,where: {owner: "${userAccount}"}) {
+          nfts(orderBy: tokenId, orderDirection: desc,where: {owner: "${account}"}) {
             batchId
             nftImage
             owner
@@ -43,7 +42,7 @@ export const useNFTGraph = (userOnly = false) => {
 
   return {
     nfts: userOnly
-      ? (cache.get(`nfts-the-graph-account-${userAccount}`)?.nfts as
+      ? (cache.get(`nfts-the-graph-account-${account}`)?.nfts as
           | IGraphNFT[]
           | undefined)
       : (data?.nfts as IGraphNFT[]),

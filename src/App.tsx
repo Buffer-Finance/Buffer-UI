@@ -110,7 +110,10 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />} />
         </Route>
         <Route path="/earn" element={<Earn />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />}>
+          <Route path=":chain" element={<Dashboard />} />
+        </Route>
+        <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/binary/:market" element={<TradePage />} />
         {/* referral link handling */}

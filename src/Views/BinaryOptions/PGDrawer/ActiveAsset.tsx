@@ -49,6 +49,7 @@ export const ActiveAsset = ({ cb }) => {
         params: [],
       },
     ],
+    swrKey: 'activeAsset',
   }).data?.[0]?.[0];
   const fullPayout =
     activeAssetStateHookData.payouts?.[

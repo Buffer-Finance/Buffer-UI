@@ -1,9 +1,7 @@
 import axios from 'axios';
-import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add } from '@Utils/NumString/stringArithmatics';
-import MarketConfig from 'public/config.json';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 import { useActiveChain } from '@Hooks/useActiveChain';
@@ -109,7 +107,6 @@ export const useDashboardTableData = () => {
       });
 
       if (!configPair) return;
-      // if(configPair.category == 'Forex' || configPair.category == 'Comodity') return;
       const currData = {
         ...item,
         address: pool.options_contracts.current,

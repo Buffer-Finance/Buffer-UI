@@ -1,7 +1,6 @@
-import MarketConfig from 'public/config.json'
+import { useActiveChain } from '@Hooks/useActiveChain';
 
-
-export function getContract(chainId:string | number) {
-  const contract = MarketConfig[chainId].referral_storage
-  return contract;
+export function getContract() {
+  const { configContracts } = useActiveChain();
+  return configContracts.referral_storage;
 }

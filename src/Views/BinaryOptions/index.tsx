@@ -114,7 +114,7 @@ export const useQTinfo = () => {
   const params = useParams();
   const { activeChain, configContracts } = useActiveChain();
   const data = useMemo(() => {
-    let activeMarket = Config[activeChain.id].pairs.find((m) => {
+    let activeMarket = configContracts.pairs.find((m) => {
       let market = params?.market || 'ETH-USD';
       // GBP
       market = market?.toUpperCase();
@@ -127,18 +127,18 @@ export const useQTinfo = () => {
       return false;
     });
     if (!activeMarket) {
-      activeMarket = Config[activeChain.id].pairs[0];
+      activeMarket = configContracts.pairs[0];
     }
     return {
       chain: 'ARBITRUM',
       asset: activeMarket.pair,
-      pairs: Config[activeChain.id].pairs.map((singlePair) => {
+      pairs: configContracts.pairs.map((singlePair) => {
         return {
           ...singlePair,
           pools: singlePair.pools.map((singlePool) => {
             return {
               ...singlePool,
-              token: Config[activeChain.id].tokens[singlePool.token],
+              token: configContracts.tokens[singlePool.token],
             };
           }),
         };
@@ -148,12 +148,12 @@ export const useQTinfo = () => {
         pools: activeMarket.pools.map((singlePool) => {
           return {
             ...singlePool,
-            token: Config[activeChain.id].tokens[singlePool.token],
+            token: configContracts.tokens[singlePool.token],
           };
         }),
       },
       optionMeta: configContracts.meta,
-      routerContract: Config[activeChain.id].router,
+      routerContract: configContracts.router,
       activeChain,
     };
   }, [params?.market, activeChain]);
@@ -178,7 +178,6 @@ function QTrade() {
   }, [params?.market]);
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
-  // const [assets, setAssets] = useAtom(DisplayAssetsAtom);
   usePastTradeQuery();
   useGenericHooks();
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);

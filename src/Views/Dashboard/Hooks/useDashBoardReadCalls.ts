@@ -48,21 +48,13 @@ export const HolderContracts = [
 ];
 export const useDashboardReadCalls = () => {
   const bfrPrice = useIbfrPrice();
-  const {
-    BFRstats,
-    USDCstats,
-    totalTraders,
-    isGqlDataAvailable,
-    BFR24stats,
-    USDC24stats,
-  } = useDashboardGraphQl();
   const usd_decimals = 6;
 
   const { calls, mainnetData } = useDashboardCalls();
-  const { totalData } = useDashboardTableData();
 
   const { data } = useReadCall({
     contracts: calls,
+    swrKey: 'useDashBoardReadCalls',
   });
   // convertBNtoString(data);
   // console.log(`data: `, data);
@@ -70,13 +62,9 @@ export const useDashboardReadCalls = () => {
   let response: {
     BFR: IBFR;
     BLP: IBLP;
-    overView: IOverview;
-    total: ITotalStats;
   } = {
     BFR: null,
     BLP: null,
-    overView: null,
-    total: null,
   };
   if (data && data.length > 1) {
     let [
@@ -132,7 +120,6 @@ export const useDashboardReadCalls = () => {
     const blpAprTotal = add(blpAprForRewardToken, blpAprForEsBfr);
 
     response = {
-      overView: null,
       total: null,
       BFR: {
         price: bfrPrice,
@@ -156,62 +143,6 @@ export const useDashboardReadCalls = () => {
         usdc_total: fromWei(blpTotalBalance, usd_decimals),
       },
     };
-
-    if (isGqlDataAvailable) {
-      const isUSDCnull = !USDCstats;
-      const isBFRnull = !BFRstats;
-      const usdcVolume = isUSDCnull
-        ? '0'
-        : fromWei(USDCstats.totalVolume, usd_decimals);
-      const bfrVolume = isBFRnull ? '0' : fromWei(BFRstats.totalVolume);
-      const totalVolume = add(usdcVolume, bfrVolume);
-      const totalTrades = isUSDCnull
-        ? '0'
-        : (
-            (USDCstats.totalTrades || 0) + (BFRstats?.totalTrades || 0)
-          ).toString();
-
-      const avgTrade = divide(totalVolume, totalTrades);
-
-      response = {
-        ...response,
-        total: {
-          USDCfees: isUSDCnull
-            ? '0'
-            : fromWei(USDCstats.totalSettlementFees, usd_decimals),
-          BFRfees: isBFRnull ? '0' : fromWei(BFRstats.totalSettlementFees),
-          USDCvolume: usdcVolume,
-          BFRvolume: bfrVolume,
-          avgTrade: avgTrade,
-          totalTraders: totalTraders[0]?.uniqueCountCumulative || 0,
-          usdc_24_fees: USDC24stats
-            ? fromWei(USDC24stats.settlementFee, usd_decimals)
-            : '0',
-          usdc_24_volume: USDC24stats
-            ? fromWei(USDC24stats.amount, usd_decimals)
-            : '0',
-          trades: totalData ? totalData.trades : null,
-          openInterest: totalData ? totalData.openInterest : null,
-        },
-        overView: {
-          price: blpPrice,
-          bfr_pol: BFRvaultPOL ? fromWei(BFRvaultPOL) : null,
-          usdc_pol: USDCvaultPOL ? fromWei(USDCvaultPOL, usd_decimals) : null,
-          bfr_total: fromWei(amountBFRpool),
-          usdc_total: fromWei(amountUSDCpool, usd_decimals),
-          usdc_vault: fromWei(amountUSDCpool, usd_decimals),
-          bfr_vault: multiply(fromWei(amountBFRpool), bfrPrice),
-          usdc_24_fees: USDC24stats
-            ? fromWei(USDC24stats.settlementFee, usd_decimals)
-            : '0',
-          usdc_24_volume: USDC24stats
-            ? fromWei(USDC24stats.amount, usd_decimals)
-            : '0',
-          bfr_24_fees: BFR24stats ? fromWei(BFR24stats.settlementFee) : '0',
-          bfr_24_volume: BFR24stats ? fromWei(BFR24stats.amount) : '0',
-        },
-      };
-    }
   }
 
   return response;
