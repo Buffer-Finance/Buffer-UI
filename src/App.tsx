@@ -38,6 +38,9 @@ import { History } from '@Views/BinaryOptions/History';
 import { MobileTrade } from '@Views/BinaryOptions/MobileTrade';
 import { TradePage } from '@Views/BinaryOptions/TradePage';
 import { DesktopTrade } from './Test';
+import { TestComponent } from './TestComponent';
+import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
+import { urlSettings } from './Config/wagmiClient';
 
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -62,6 +65,15 @@ function AppComponent() {
     </div>
   );
 }
+
+(function () {
+  const r = document.querySelector<HTMLElement>(':root');
+  for (let color in urlSettings) {
+    if (color.includes('-')) {
+      r!.style.setProperty(`--${color}`, '#' + urlSettings[color]);
+    }
+  }
+})();
 
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
@@ -101,6 +113,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/refer/:code" element={<div>Helo</div>} />
@@ -173,19 +186,21 @@ function App() {
             {snack.message}
           </Alert>
         </Snackbar>
-        <Warning
-          body={
-            <>
-              $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
-              listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
-              PancakeSwap or Apeswap on BNB chain.
-            </>
-          }
-          closeWarning={() => {}}
-          shouldAllowClose={false}
-          state={true}
-          className="disclaimer sm:hidden"
-        />
+        {!urlSettings?.hide && (
+          <Warning
+            body={
+              <>
+                $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
+                listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
+                PancakeSwap or Apeswap on BNB chain.
+              </>
+            }
+            closeWarning={() => {}}
+            shouldAllowClose={false}
+            state={true}
+            className="disclaimer sm:hidden"
+          />
+        )}
         <ConnectionDrawer className="open" />
         <TnCModal />
         <SideBar />

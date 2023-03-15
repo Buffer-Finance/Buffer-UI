@@ -121,6 +121,7 @@ const formatResolution = (s) => {
 
 const defaults = {
   priceProvider: 'Buffer Finance',
+  cssPath: '/tv.css',
   library_path: '/static/charting_library/',
   theme: 'Dark',
   interval: '1' as ResolutionString,
@@ -155,7 +156,7 @@ const defaults = {
       // ...
     ],
   },
-  BG: 'rgb(48, 48, 68)',
+  BG: 'var(--bg-2)',
   upIcon: '▲',
   downIcon: '▼',
   green: 'rgb(108, 211, 173)',
@@ -417,8 +418,11 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       interval: defaults.interval,
       timeframe: '200',
       locale: 'en',
+
       container: containerDivRef.current!,
       library_path: defaults.library_path,
+      custom_css_url: defaults.cssPath,
+
       timezone: getOslonTimezone() as Timezone,
       symbol: market,
       theme: defaults.theme as ThemeName,
@@ -543,7 +547,6 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     }
     return () => {
       for (const trade in trade2visualisation.current) {
-        console.log(`trade[mark]: `, trade, trade2visualisation);
         trade2visualisation.current[+trade]!.visited = false;
       }
     };
@@ -600,7 +603,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   };
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="items-center justify-between flex-row flex  bg-[#131722] w-full tv-h px-4 py-3">
+      <div className="items-center justify-between flex-row flex  bg-primary w-full tv-h px-4 py-3">
         <div className="flex flex-row justify-start font-[500]">
           <div className="ele cursor-pointer">Time</div>
           {supported_resolutions.map((s) => {
