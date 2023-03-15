@@ -13,13 +13,10 @@ export const useReadCall = ({
 }: {
   contracts: any[];
   swrKey: string;
-  chainName: string | undefined;
 }) => {
   const calls = contracts;
-  const params = useParams();
-  const chainName = params.chain;
-  const { activeChain, isWrongChain, configContracts } =
-    useActiveChain(chainName);
+  const { activeChain, isWrongChain, configContracts, chainInURL } =
+    useActiveChain();
   const { address: account } = useUserAccount();
   const { data: signer } = useSigner();
   const { address } = useAccount();
@@ -27,11 +24,11 @@ export const useReadCall = ({
   const p = useProvider({ chainId: activeChain.id });
   let signerOrProvider = p;
 
-  if (!chainName || (signer && !isWrongChain && address)) {
+  if (!chainInURL || (signer && !isWrongChain && address)) {
     signerOrProvider = signer;
   }
-  // console.log(signerOrProvider?._network?.chainId, 'provider');
-  const key = swrKey + activeChain.id + account + chainName;
+  console.log(signerOrProvider?._network?.chainId, 'provider');
+  const key = swrKey + activeChain.id + account + chainInURL;
 
   // console.log(`signerOrProvider: `, signerOrProvider);
   return useSWR(calls && calls.length ? key : null, {

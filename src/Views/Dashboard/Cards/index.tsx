@@ -106,7 +106,7 @@ export const StatsOverView = ({ data }: { data: IOverview }) => {
   );
 };
 
-export const StatsTotalStats = ({ data }: { data: ITotalStats }) => {
+export const StatsTotalStats = ({ data }: { data: IOverview | null }) => {
   const totalDays = Math.ceil(
     (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
   );
