@@ -44,6 +44,7 @@ export const ActiveAsset = () => {
         params: [],
       },
     ],
+    swrKey: 'activeAsset',
   }).data?.[0]?.[0];
   const fullPayout =
     activeAssetStateHookData.payouts?.[
@@ -52,15 +53,13 @@ export const ActiveAsset = () => {
   if (response && fullPayout) {
     let base = subtract('100', multiply('2', divide(response, 2)));
     boostedPayout = subtract(fullPayout, base);
-    console.log(`boostedPayout: `, boostedPayout);
   }
 
   const title = currentPrice
-    ? toFixed(currentPrice, singleAsset.price_precision.toString().length-1) +
+    ? toFixed(currentPrice, singleAsset.price_precision.toString().length - 1) +
       ' | ' +
       singleAsset.tv_id
     : '';
-  console.log(`title: `, title);
   setDoccumentTitle(title);
   if (!singleAsset) return null;
   return (
@@ -81,7 +80,9 @@ export const ActiveAsset = () => {
         <span className="text-f14 mb-2 ">Selected Pair</span>
       </div>
       <div className="px-5 py-3 rounded-[10px] y-auto bg-1  whitespace-nowrap">
-        <div className={`flex items-center content-between assets w-full h-max`}>
+        <div
+          className={`flex items-center content-between assets w-full h-max`}
+        >
           <div className="min-w-[30px] w-[30px] h-[30px] mr-3">
             <PairTokenImage pair={singleAsset.pair} />
           </div>

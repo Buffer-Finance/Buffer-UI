@@ -123,6 +123,7 @@ const Referral: React.FC<IReferral> = ({}) => {
   const owner = useCodeOwner(ip);
   const { state } = useGlobal();
   const referralCodes = useReferralCode(activeChain);
+  console.log(`referralCodes: `, referralCodes);
   const { address: account } = useUserAccount();
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   const { openConnectModal } = useConnectModal();
@@ -322,9 +323,11 @@ const Referral: React.FC<IReferral> = ({}) => {
             {' '}
             Get fee discounts and earn rebates.
           </span>
-          <span className="italic  block">
+          <span className=" block text-[#c0b8b8]">
             {' '}
-            Note: Referral codes are case sensitive
+            Note that referral codes are case sensitive and that your code must
+            be <br className="sm:hidden" /> created on both Arbitrum as well as
+            Polygon to earn rebates on both networks.{' '}
           </span>
           <br className="sm:hidden" />
           {/* For more information, please read the
@@ -506,9 +509,10 @@ const Affilate = ({
 
 export const useUserReferralStats = () => {
   const { address } = useUserAccount();
+  const { configContracts } = useActiveChain();
   return useSWR(`${address}-stats`, {
     fetcher: async () => {
-      const response = await axios.post(baseGraphqlUrl, {
+      const response = await axios.post(configContracts.graph.MAIN, {
         query: `{
             referralDatas (where: { id: "${address}"} ) {
               totalTradesReferred

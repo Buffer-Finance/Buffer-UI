@@ -1,8 +1,6 @@
-import MarketConfig from 'public/config.json'
+import { useActiveChain } from '@Hooks/useActiveChain';
 
-
-export function getContract(chainId:'ddsfd', name: "referral") {
-  const environment =  import.meta.env.VITE_ENV.toLowerCase() == 'testnet' ? 'arbitrum-test' :'arbitrum-main' 
-  const contract = MarketConfig[environment].referral_storage
-  return contract;
+export function getContract() {
+  const { configContracts } = useActiveChain();
+  return configContracts.referral_storage;
 }

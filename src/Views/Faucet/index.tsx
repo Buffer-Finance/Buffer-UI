@@ -8,31 +8,28 @@ import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import Drawer from '@Views/Common/V2-Drawer';
-import useOpenConnectionDrawer from '@Hooks/useOpenConnectionDrawer';
-import { CHAIN_CONFIG } from 'src/Config';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 
 const IbfrFaucet: React.FC = () => {
   const props = { chain: 'ARBITRUM' } as { chain: 'ARBITRUM' };
   const { state } = useGlobal();
   const toastify = useToast();
+  const { configContracts } = useActiveChain();
   const [btnLoading, setBtnLoading] = useState(0);
-  const { openConnectModal } = useConnectModal();
   useEffect(() => {
     document.title = 'Buffer | Faucet';
   }, []);
   const { writeCall: USDCwriteCall } = useWriteCall(
-    '0x1fe5b5c9159dEf950a0483d0B33C978B55d3fbe2',
+    configContracts.tokens.USDC.faucet,
     FaucetABI
   );
   const { writeCall: BFRWriteCall } = useWriteCall(
-    '0x8F4db9A46809782b67180F0f8f3d9843a5268137',
+    configContracts.tokens.BFR.faucet,
     FaucetABI
   );
-  const { openWalletDrawer, shouldConnectWallet } = useOpenConnectionDrawer();
-  const activeChainData = CHAIN_CONFIG[props.chain];
-
+  const { activeChain } = useActiveChain();
   const claim = (shouldCLaimUSDC = true) => {
     if (state.txnLoading > 1) {
       return toastify({
@@ -49,40 +46,37 @@ const IbfrFaucet: React.FC = () => {
     const methodName = 'claim';
     if (shouldCLaimUSDC) {
       setBtnLoading(1);
+      console.log(overRides.value.toString());
       return USDCwriteCall(cb, methodName, [], overRides);
     }
     setBtnLoading(2);
     BFRWriteCall(cb, methodName, [], overRides);
   };
 
-  const content = activeChainData && [
+  const content = activeChain && [
     {
       top: `Claim ${import.meta.env.VITE_ENV} ${
-        activeChainData?.nativeAsset.name
+        activeChain.nativeCurrency.symbol
       }`,
       middle: (
         <>
           You will have to claim{' '}
           <span className="text-1 w500">
-            {import.meta.env.VITE_ENV} {activeChainData?.nativeAsset.name}
+            {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
           </span>{' '}
           for gas fee.
         </>
       ),
       bottom: (
         <div className="flex flex-col">
-          <TestnetLinks chainName={props.chain} />
+          <TestnetLinks />
         </div>
       ),
     },
     {
       top: `Claim TESTNET Tokens`,
-      bottom: shouldConnectWallet ? (
-        <BlueBtn onClick={openConnectModal} className="btn">
-          Connect Wallet
-        </BlueBtn>
-      ) : (
-        <div className="flex items-center flex-col-m">
+      bottom: (
+        <ConnectionRequired>
           <BlueBtn
             isLoading={state.txnLoading === 1 && btnLoading === 1}
             isDisabled={btnLoading === 2}
@@ -91,14 +85,7 @@ const IbfrFaucet: React.FC = () => {
           >
             Claim 500 USDC
           </BlueBtn>
-          {/* <BlueBtn
-            className="btn ml20 nowrap"
-            isDisabled={btnLoading === 1}
-            isLoading={state.txnLoading === 1 && btnLoading === 2}
-          >
-            Claim 500 BFR
-          </BlueBtn> */}
-        </div>
+        </ConnectionRequired>
       ),
     },
   ];
@@ -108,7 +95,7 @@ const IbfrFaucet: React.FC = () => {
       {/* <HeadTitle title={'Buffer | Faucet'} /> */}
       <Background>
         <div className="wrapper">
-          {activeChainData && content ? (
+          {activeChain && content ? (
             content.map((s) => (
               <div className="faucet-card bg-1">
                 <div className="card-head">{s.top}</div>
@@ -128,19 +115,63 @@ const IbfrFaucet: React.FC = () => {
   );
 };
 
-const TestnetLinks = ({ chainName }: { chainName: 'ARBITRUM' }) => {
-  const activeChain = CHAIN_CONFIG[chainName];
+const faucetClaimingSteps = {
+  421613: {
+    name: 'AETH',
+    symbol: 'AETH',
+    faucet: [
+      {
+        step: 'Claim goerliETH from goerli faucet',
+        url: 'https://goerlifaucet.com/',
+        options: [
+          {
+            step: 'Using the Goerli faucet',
+            url: 'https://goerlifaucet.com/',
+          },
+          {
+            step: 'Using the Goerli Mudit faucet',
+            url: 'https://goerli-faucet.mudit.blog/',
+          },
+          {
+            step: 'Using the Paradigm Multifaucet',
+            url: 'https://faucet.paradigm.xyz/',
+          },
+        ],
+      },
+      {
+        step: 'Bridge GoerliETH to AETH',
+        url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
+      },
+    ],
+    img: '/Chains/ARBITRIUM.png',
+    decimals: 18,
+    category: 'Crypto',
+  },
+  80001: {
+    name: 'MATIC',
+    symbol: 'MATIC',
+    faucet: [
+      {
+        step: 'Claim testnet MATIC',
+        url: 'https://mumbaifaucet.com/',
+      },
+    ],
+  },
+};
 
+const TestnetLinks = () => {
+  const { activeChain } = useActiveChain();
+  console.log(`activeChain: `, activeChain);
   return (
     <div>
-      {activeChain.nativeAsset.faucet.map((s, idx) => {
+      {faucetClaimingSteps[activeChain.id].faucet.map((s, idx) => {
         if (s.options)
           return (
             <div
               key={s.url}
               className="whitespace-nowrap sm:max-w-[250px] text-ellipsis overflow-hidden"
             >
-              {activeChain.nativeAsset.faucet.length === 1 ? '' : idx + 1 + '.'}
+              {faucetClaimingSteps[activeChain.id].faucet.length === 1 ? '' : idx + 1 + '.'}
               <span className="w-full">
                 {s.step}
                 {s.options && (
@@ -164,7 +195,7 @@ const TestnetLinks = ({ chainName }: { chainName: 'ARBITRUM' }) => {
               key={s.url}
               className="whitespace-nowrap sm:max-w-[250px] text-ellipsis overflow-hidden"
             >
-              {activeChain.nativeAsset.faucet.length === 1 ? '' : idx + 1 + '.'}
+              {faucetClaimingSteps[activeChain.id].faucet.length === 1 ? '' : idx + 1 + '.'}
               <span className="w-full">
                 <a href={s.url || s} target="_blank">
                   {s.step || s}
