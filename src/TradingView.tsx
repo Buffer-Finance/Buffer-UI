@@ -156,7 +156,7 @@ const defaults = {
       // ...
     ],
   },
-  BG: 'var(--bg-2)',
+  BG: 'rgb(48, 48, 68)',
   upIcon: '▲',
   downIcon: '▼',
   green: 'rgb(108, 211, 173)',
