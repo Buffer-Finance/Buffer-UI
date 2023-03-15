@@ -17,12 +17,12 @@ const TradePageRoot: React.FC<any> = ({}) => {
 const TradePage = () => {
   return (
     <>
-      <Online>
-        <TradePageRoot />
-      </Online>
-      <Offline>
+      {/* <Online> */}
+      <TradePageRoot />
+      {/* </Online> */}
+      {/* <Offline>
         <NetworkDisconnected onClick={console.log} />
-      </Offline>
+      </Offline> */}
     </>
   );
 };
