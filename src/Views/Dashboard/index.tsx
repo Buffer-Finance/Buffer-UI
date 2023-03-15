@@ -147,7 +147,7 @@ const ChainSwitchDropdown = () => {
           <div className="flex items-center">
             <img
               src={chainImageMappipng[activeChain.name]}
-              className="h-[22px] w-[22px] mr-[6px] sm:mr-[0px] rounded-full"
+              className="h-[22px] w-[22px] mr-[6px] rounded-full"
             />
             {activeChain.name}
           </div>
@@ -168,7 +168,7 @@ const ChainSwitchDropdown = () => {
             <div className="flex">
               <img
                 src={chainImageMappipng[tab.name]}
-                className="h-[22px] w-[22px] mr-[6px] sm:mr-[0px] rounded-full"
+                className="h-[22px] w-[22px] mr-[6px] rounded-full"
               />
               {tab.name}
             </div>
