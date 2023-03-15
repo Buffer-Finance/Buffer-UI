@@ -1,4 +1,5 @@
 import { useGenericHooks } from '@Hooks/useGenericHook';
+import { usePrice } from '@Hooks/usePrice';
 import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
 import { useAtom } from 'jotai';
 import { ReactNode, useState } from 'react';
@@ -18,6 +19,7 @@ const History: React.FC<IHistory> = ({}) => {
   const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
   usePastTradeQuery();
   useGenericHooks();
+  usePrice();
   const [active, setActive] = useState(tabs[0]);
   return (
     <div className="text-f22">
