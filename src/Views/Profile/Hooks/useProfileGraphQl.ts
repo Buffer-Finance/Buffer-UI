@@ -2,7 +2,6 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { add, subtract } from '@Utils/NumString/stringArithmatics';
 import axios from 'axios';
-import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 
