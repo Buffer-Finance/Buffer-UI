@@ -1,5 +1,5 @@
 import { BetState, useAheadTrades } from '@Hooks/useAheadTrades';
-import { getProcessedTrades } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
+import { useProcessedTrades } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import { allATrdesTotalPageAtom } from '.';
@@ -8,6 +8,7 @@ import { useAllTradesGraphQl } from './useAllTradesGraphQl';
 const TRADESINAPAGE = 10;
 
 export const useAllfilteredData = () => {
+  const { getProcessedTrades } = useProcessedTrades();
   const { active, history, cancelled } = useAtomValue(allATrdesTotalPageAtom);
   const activeSkip = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
   const historySkip = useMemo(() => TRADESINAPAGE * (history - 1), [history]);

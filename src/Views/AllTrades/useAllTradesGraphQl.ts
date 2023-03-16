@@ -1,3 +1,4 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import { baseGraphqlLiteUrl } from 'config';
 import useSWR from 'swr';
@@ -53,11 +54,12 @@ export const useAllTradesGraphQl = ({
   cancelledfirst: number;
   cancelledskip: number;
 }) => {
+  const { configContracts, activeChain } = useActiveChain();
   return useSWR<Iresponse>(
-    `all-trades-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledskip-${cancelledskip}`,
+    `all-trades-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledskip-${cancelledskip}-chianId-${activeChain.id}`,
     {
       fetcher: async () => {
-        const response = await axios.post(baseGraphqlLiteUrl.testnet, {
+        const response = await axios.post(configContracts.graph.LITE, {
           query: `{ 
             historyTrades: userOptionDatas(
               orderBy: expirationTime

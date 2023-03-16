@@ -1,5 +1,4 @@
 import { ENV, IMarket, IToken } from '..';
-import MarketConfig from 'public/config.json';
 import { BetState, TradeInputs, useAheadTrades } from '@Hooks/useAheadTrades';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
@@ -91,78 +90,83 @@ export interface IGQLHistory {
   configPair?: IMarket;
   blockNumber?: number;
 }
-export const getProcessedTrades = (
-  trades,
-  block,
-  tradesToBeDeleted?: TradeInputs[],
-  shouldAddHistoryPrice = false
-) => {
-  const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
-    console.log(singleTrade, 'singleTrade');
-    if (singleTrade.blockNumber) {
-      if (block >= singleTrade.blockNumber) {
-        // if graph scanned this block.
-        return null;
+
+export const useProcessedTrades = () => {
+  const { configContracts } = useActiveChain();
+  const getProcessedTrades = (
+    trades,
+    block,
+    tradesToBeDeleted?: TradeInputs[],
+    shouldAddHistoryPrice = false
+  ) => {
+    const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
+      console.log(singleTrade, 'singleTrade');
+      if (singleTrade.blockNumber) {
+        if (block >= singleTrade.blockNumber) {
+          // if graph scanned this block.
+          return null;
+        }
       }
-    }
-    if (tradesToBeDeleted?.length) {
-      if (
-        tradesToBeDeleted.find(
-          (singleRawTrade) =>
-            singleRawTrade.id == +singleTrade.queueID &&
-            singleTrade.state === BetState.queued
-        )
-      ) {
-        return null;
+      if (tradesToBeDeleted?.length) {
+        if (
+          tradesToBeDeleted.find(
+            (singleRawTrade) =>
+              singleRawTrade.id == +singleTrade.queueID &&
+              singleTrade.state === BetState.queued
+          )
+        ) {
+          return null;
+        }
       }
-    }
-    let pool;
-    const configPair = MarketConfig[ENV].pairs.find((pair) => {
-      pool = pair.pools.find(
-        (pool) =>
-          pool.options_contracts.current.toLocaleLowerCase() ===
-          singleTrade.optionContract.address.toLowerCase()
-      );
-      return !!pool;
-      // if (singleTrade?.optionContract?.asset)
-      //   return pair.pair === singleTrade.optionContract.asset;
-      // else
-      //   return (
-      //     pair.pools[0].options_contracts.current.toLocaleLowerCase() ===
-      //       singleTrade.optionContract.address.toLowerCase() ||
-      //     !!pair.pools[0].options_contracts.past.find(
-      //       (address) =>
-      //         address.toLocaleLowerCase() ===
-      //         singleTrade.optionContract.address.toLowerCase()
-      //     ) ||
-      //     pair.pools[1]?.options_contracts.current.toLocaleLowerCase() ===
-      //       singleTrade.optionContract.address.toLowerCase() ||
-      //     !!pair.pools[1]?.options_contracts.past.find(
-      //       (address) =>
-      //         address.toLocaleLowerCase() ===
-      //         singleTrade.optionContract.address.toLowerCase()
-      //     )
-      //   );
+      let pool;
+      const configPair = configContracts.pairs.find((pair) => {
+        pool = pair.pools.find(
+          (pool) =>
+            pool.options_contracts.current.toLocaleLowerCase() ===
+            singleTrade.optionContract.address.toLowerCase()
+        );
+        return !!pool;
+        // if (singleTrade?.optionContract?.asset)
+        //   return pair.pair === singleTrade.optionContract.asset;
+        // else
+        //   return (
+        //     pair.pools[0].options_contracts.current.toLocaleLowerCase() ===
+        //       singleTrade.optionContract.address.toLowerCase() ||
+        //     !!pair.pools[0].options_contracts.past.find(
+        //       (address) =>
+        //         address.toLocaleLowerCase() ===
+        //         singleTrade.optionContract.address.toLowerCase()
+        //     ) ||
+        //     pair.pools[1]?.options_contracts.current.toLocaleLowerCase() ===
+        //       singleTrade.optionContract.address.toLowerCase() ||
+        //     !!pair.pools[1]?.options_contracts.past.find(
+        //       (address) =>
+        //         address.toLocaleLowerCase() ===
+        //         singleTrade.optionContract.address.toLowerCase()
+        //     )
+        //   );
+      });
+      if (!pool) return null;
+
+      const depositToken = configContracts.tokens[pool.token];
+      let updatedTrade = { ...singleTrade, depositToken, configPair };
+      if (shouldAddHistoryPrice) {
+        addExpiryPrice(updatedTrade);
+      }
+
+      return updatedTrade;
     });
-    if (!pool) return null;
+    // filter out not-null bets.
+    tempTrades?.filter((t) => {
+      if (t) {
+        return true;
+      }
+      return false;
+    });
 
-    const depositToken = MarketConfig[ENV].tokens[pool.token];
-    let updatedTrade = { ...singleTrade, depositToken, configPair };
-    if (shouldAddHistoryPrice) {
-      addExpiryPrice(updatedTrade);
-    }
-
-    return updatedTrade;
-  });
-  // filter out not-null bets.
-  tempTrades?.filter((t) => {
-    if (t) {
-      return true;
-    }
-    return false;
-  });
-
-  return tempTrades;
+    return tempTrades;
+  };
+  return { getProcessedTrades };
 };
 
 export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
@@ -187,7 +191,7 @@ export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
 
 export const usePastTradeQuery = () => {
   const { address: account } = useUserAccount();
-  const { configContracts } = useActiveChain();
+  const { getProcessedTrades } = useProcessedTrades();
   const setTrades = useSetAtom(tardesAtom);
   const setPageNumbers = useSetAtom(updateTotalPageNumber);
   const { active, history, cancelled } = useAtomValue(tardesPageAtom);
