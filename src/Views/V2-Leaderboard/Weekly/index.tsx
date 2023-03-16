@@ -29,7 +29,11 @@ import {
   IWinrate,
   useWeeklyLeaderboardQuery,
 } from '../Hooks/useWeeklyLeaderboardQuery';
-import { getRewardTooltip, TimerBox } from '../Incentivised';
+import {
+  getRewardTooltip,
+  getTournamentEndDate,
+  TimerBox,
+} from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
@@ -175,12 +179,12 @@ export const Weekly = () => {
       { name: 'Winners (by Win Rate)' },
       // { name: 'Losers (by Win Rate)' },
     ];
-    if (configValue.winrateStartDay) {
-      if (offset !== null && configValue.winrateStartDay > Number(offset))
+    if (configValue.winrateStartWeek) {
+      if (offset !== null && configValue.winrateStartWeek > Number(offset))
         return list.slice(0, 2);
-      else if (week !== null && configValue.winrateStartDay > Number(week))
+      else if (week !== null && configValue.winrateStartWeek > Number(week))
         return list.slice(0, 2);
-    } else if (configValue.winrateStartDay === undefined)
+    } else if (configValue.winrateStartWeek === undefined)
       return list.slice(0, 2);
     return list;
   }, [offset, activeChain]);
@@ -386,7 +390,12 @@ export const Weekly = () => {
                     alt="lightning"
                     className="mr-3 mt-2 h-[18px]"
                   />
-                  The competition ended on 20th Jan 4pm UTC.
+                  The competition ended on{' '}
+                  {getTournamentEndDate({
+                    startTimestamp: configValue.startTimestamp,
+                    endDay: configValue.endDay,
+                  })}{' '}
+                  UTC.
                 </>
               }
               className="!mb-3"

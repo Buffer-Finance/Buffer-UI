@@ -47,9 +47,6 @@ export const blockedAccounts = [
   '0x2a007f31146ff8f939b6ca3ad18c8d2a6e42eb73',
 ];
 
-const winrateMinimumTrades = 5;
-const minimumWinrateVolume = '100000000';
-
 export const useWeeklyLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
@@ -94,9 +91,11 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: winRate
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, volume_gte: ${minimumWinrateVolume}, user_not_in: [${blockedAccounts.map(
-          (address) => `"${address}"`
-        )}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+          configValue.minTradesToQualifyWinrate
+        }, volume_gte: ${
+          configValue.minVolumeToQualifyWinrate
+        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
