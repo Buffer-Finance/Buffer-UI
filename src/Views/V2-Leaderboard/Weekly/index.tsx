@@ -29,7 +29,11 @@ import {
   IWinrate,
   useWeeklyLeaderboardQuery,
 } from '../Hooks/useWeeklyLeaderboardQuery';
-import { getRewardTooltip, TimerBox } from '../Incentivised';
+import {
+  getRewardTooltip,
+  getTournamentEndDate,
+  TimerBox,
+} from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
@@ -386,7 +390,12 @@ export const Weekly = () => {
                     alt="lightning"
                     className="mr-3 mt-2 h-[18px]"
                   />
-                  The competition ended on 20th Jan 4pm UTC.
+                  The competition ended on{' '}
+                  {getTournamentEndDate({
+                    startTimestamp: configValue.startTimestamp,
+                    endDay: configValue.endDay,
+                  })}{' '}
+                  UTC.
                 </>
               }
               className="!mb-3"

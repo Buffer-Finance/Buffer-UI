@@ -24,12 +24,12 @@ import { DailyTournamentConfig } from './config';
 import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import { social } from '@Views/Common/SocialMedia';
 import TabSwitch from '@Views/Common/TabSwitch';
-import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useDayOffset } from '../Hooks/useDayOffset';
 import { LeaderBoardTabs } from '../Weekly';
 import { ChainSwitchDropdown } from '@Views/Dashboard';
+import { getDisplayDateUTC } from '@Utils/Dates/displayDateTime';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -46,6 +46,21 @@ export const getRewardTooltip = (
   if (gt(poolPercent, '0'))
     tooltip = tooltip + `${poolPercent}% of the fees collected for the day.`;
   return tooltip;
+};
+
+export const getTournamentEndDate = ({
+  startTimestamp,
+  endDay,
+}: {
+  startTimestamp: number;
+  endDay: number | undefined;
+}) => {
+  if (!startTimestamp || !endDay) return '';
+  const startdate = getDisplayDateUTC(
+    Math.floor(startTimestamp / 1000) + (endDay - 1) * 86400
+  );
+
+  return startdate;
 };
 
 export const Incentivised = () => {
@@ -291,7 +306,12 @@ export const Incentivised = () => {
                     alt="lightning"
                     className="mr-3 mt-2 h-[18px]"
                   />
-                  The competition ended on 20th Feb 4pm UTC.
+                  The competition ended on{' '}
+                  {getTournamentEndDate({
+                    startTimestamp: configValue.startTimestamp,
+                    endDay: configValue.endDay,
+                  })}{' '}
+                  UTC.
                 </>
               }
               className="!mb-3"
