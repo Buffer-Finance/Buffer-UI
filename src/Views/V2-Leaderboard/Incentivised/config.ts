@@ -40,11 +40,11 @@ export const DailyTournamentConfig: {
     startTimestamp: 1678896000000,
     winnersNFT: 0,
     losersNFT: 0,
-    endDay: 1,
+    endDay: undefined,
     contestRules:
       'https://futuristic-vertebra-e74.notion.site/Buffer-Weekly-Trading-Competitions-Polygon-c94c85f7739148f7816fb5a20c894c27',
-    rewardFixedAmount: '100',
-    poolPercent: '5',
+    rewardFixedAmount: '0',
+    poolPercent: '0',
     minTradesToQualifyPNL: 3,
   },
 };

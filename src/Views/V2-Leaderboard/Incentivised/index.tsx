@@ -41,7 +41,7 @@ export const getRewardTooltip = (
 ) => {
   let tooltip = '';
   if (gt(fixedAmount, '0')) {
-    tooltip = tooltip + `${fixedAmount} ${unit} `;
+    tooltip = tooltip + `${fixedAmount} ${unit} + `;
   }
   if (gt(poolPercent, '0'))
     tooltip = tooltip + `${poolPercent}% of the fees collected for the day.`;

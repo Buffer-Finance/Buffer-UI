@@ -175,12 +175,12 @@ export const Weekly = () => {
       { name: 'Winners (by Win Rate)' },
       // { name: 'Losers (by Win Rate)' },
     ];
-    if (configValue.winrateStartDay) {
-      if (offset !== null && configValue.winrateStartDay > Number(offset))
+    if (configValue.winrateStartWeek) {
+      if (offset !== null && configValue.winrateStartWeek > Number(offset))
         return list.slice(0, 2);
-      else if (week !== null && configValue.winrateStartDay > Number(week))
+      else if (week !== null && configValue.winrateStartWeek > Number(week))
         return list.slice(0, 2);
-    } else if (configValue.winrateStartDay === undefined)
+    } else if (configValue.winrateStartWeek === undefined)
       return list.slice(0, 2);
     return list;
   }, [offset, activeChain]);
