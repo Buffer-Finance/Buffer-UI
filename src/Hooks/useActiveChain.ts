@@ -21,7 +21,8 @@ export const useActiveChain = () => {
       activeChain = chains.find((chain) =>
         chain.name.toUpperCase().includes(chainName.toUpperCase())
       );
-    } else if (activeChain === undefined) {
+    }
+    if (activeChain === undefined) {
       activeChain = chain;
       if (!chains.filter((c) => c.name == chain?.name)?.length) {
         activeChain = chains[0];
