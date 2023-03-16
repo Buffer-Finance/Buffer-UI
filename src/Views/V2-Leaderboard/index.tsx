@@ -15,7 +15,7 @@ export const LeaderBoard = (props: { children: JSX.Element }) => {
     <main className="content-drawer">
       <HeadTitle title={'Buffer | Competitions'} />
       <LeaderBoardStyles>
-        {/* <MobileLeaderboardDropdwon /> */}
+        <MobileLeaderboardDropdwon />
         <LeaderBoardSidebar />
         {props.children}
       </LeaderBoardStyles>

@@ -216,7 +216,7 @@ export const Weekly = () => {
           }
           heading={
             <div className="flex flex-col items-start">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <div>Weekly Leaderboard</div>
                 <ChainSwitchDropdown baseUrl="/leaderboard/weekly" />
               </div>
