@@ -35,7 +35,7 @@ export const weeklyTournamentConfig: {
     minTradesToQualifyPNL: 3,
   },
   80001: {
-    startTimestamp: 1676908800000,
+    startTimestamp: 1678896000000,
     winnersNFT: 0,
     losersNFT: 0,
     endDay: undefined,
@@ -46,7 +46,7 @@ export const weeklyTournamentConfig: {
     minTradesToQualifyPNL: 5,
   },
   137: {
-    startTimestamp: 1676908800000,
+    startTimestamp: 1678896000000,
     winnersNFT: 0,
     losersNFT: 0,
     endDay: undefined,
