@@ -22,11 +22,11 @@ html .flip-y{
   transform: rotateY(180deg);
 }
 .flexlayout__tab{
-  background: var(--bg-2);
+  background: var(--bg-0);
 }
 
 .flexlayout__tabset_tabbar_outer{
-  background: var(--bg-2);
+  background: var(--bg-0);
 }
 
 .mobile-bottom-drawer{
@@ -86,6 +86,10 @@ html .MuiDialog-container {
   --white-border: #2bd67b26;
   --mole-offset: 140%;
   --mole-animation-duration: 0.4s;
+}
+body .flexlayout__layout {
+  --color-text: #eeeeee;
+  --color-background: var(--bg-0);
 }
 .flexlayout__tab_button_content{
   color:var(--text-1);

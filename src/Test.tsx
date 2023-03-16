@@ -219,7 +219,7 @@ const DesktopTrad = () => {
     }
     if (component === 'BuyTrade') {
       return (
-        <Background className="bg-2 max-w-[420px] mx-auto">
+        <Background className=" max-w-[420px] mx-auto">
           <ActiveAsset cb={handleNewTabClick} />
           <CustomOption
             onResetLayout={() =>
