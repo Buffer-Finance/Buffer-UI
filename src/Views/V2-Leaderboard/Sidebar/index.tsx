@@ -60,48 +60,49 @@ export const LeaderBoardSidebar = () => {
   const location = useLocation();
   return (
     <LeaderBoardSidebarStyles className="border-r-2 border-1">
-      <div className="mt-[10px] full-width">
-        <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
+      <div className="sticky top-1">
+        <div className="mt-[10px] full-width">
+          <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
 
-        {tabs.slice(0, 2).map((tab, index) => {
-          const isActive = doesLocationMatch(location, tab.slug);
-          return (
-            <div className="">
-              <LinkButton
-                tab={tab}
-                active={isActive}
-                chip={
-                  index === 1 ? (
-                    <CSChip
-                      text="Ongoing"
-                      className="text-[#2BD67B] bg-[#2bd67b26] border-[#00C4FF]  box-border"
-                    />
-                  ) : (
-                    <CSChip text="Ended" className="text-3 bg-2 " />
-                  )
-                }
-              />
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="mt-[10px] full-width">
-        <div className="flex items-center mb-2">
-          <Head name="LEAGUES" />
-          <CSChip />
+          {tabs.slice(0, 2).map((tab, index) => {
+            const isActive = doesLocationMatch(location, tab.slug);
+            return (
+              <div className="">
+                <LinkButton
+                  tab={tab}
+                  active={isActive}
+                  chip={
+                    index === 1 ? (
+                      <CSChip
+                        text="Ongoing"
+                        className="text-[#2BD67B] bg-[#2bd67b26] border-[#00C4FF]  box-border"
+                      />
+                    ) : (
+                      <CSChip text="Ended" className="text-3 bg-2 " />
+                    )
+                  }
+                />
+              </div>
+            );
+          })}
         </div>
-        {tabs.slice(2, -1).map((tab) => {
-          const isActive = doesLocationMatch(location, tab.slug);
-          return (
-            <div className="flex-col">
-              <LinkButton tab={tab} active={isActive} isDisabled />
-            </div>
-          );
-        })}
-      </div>
 
-      {/* <div className="mt-[10px] full-width">
+        <div className="mt-[10px] full-width">
+          <div className="flex items-center mb-2">
+            <Head name="LEAGUES" />
+            <CSChip />
+          </div>
+          {tabs.slice(2, -1).map((tab) => {
+            const isActive = doesLocationMatch(location, tab.slug);
+            return (
+              <div className="flex-col">
+                <LinkButton tab={tab} active={isActive} isDisabled />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* <div className="mt-[10px] full-width">
         <div className="flex items-center mb-2">
           <Head name="METRICS" />
           <CSChip />
@@ -115,6 +116,7 @@ export const LeaderBoardSidebar = () => {
           );
         })}
       </div> */}
+      </div>
     </LeaderBoardSidebarStyles>
   );
 };
