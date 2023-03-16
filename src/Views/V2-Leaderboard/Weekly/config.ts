@@ -42,7 +42,7 @@ export const weeklyTournamentConfig: {
     contestRules:
       'https://futuristic-vertebra-e74.notion.site/Buffer-Weekly-Trading-Competitions-Polygon-c94c85f7739148f7816fb5a20c894c27',
     rewardFixedAmount: '0',
-    poolPercent: '5',
+    poolPercent: '0',
     minTradesToQualifyPNL: 5,
   },
   137: {
