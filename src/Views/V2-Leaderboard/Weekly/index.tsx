@@ -29,6 +29,7 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
 import { useWeeklyLeaderboardQuery } from '../Hooks/useWeeklyLeaderboardQuery';
 import { TimerBox } from '../Incentivised';
+import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -135,7 +136,7 @@ export const Weekly = () => {
         <TopData
           pageImage={
             <img
-              src={CHAIN_CONFIGS['TESTNET']['ARBITRUM'].img}
+              src={chainImageMappipng[activeChain.name]}
               alt=""
               className="w-[45px]"
             />

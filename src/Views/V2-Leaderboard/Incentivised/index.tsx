@@ -29,6 +29,7 @@ import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useDayOffset } from '../Hooks/useDayOffset';
+import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -125,7 +126,7 @@ export const Incentivised = () => {
         <TopData
           pageImage={
             <img
-              src={CHAIN_CONFIGS['TESTNET']['ARBITRUM'].img}
+              src={chainImageMappipng[activeChain.name]}
               alt=""
               className="w-[45px]"
             />
@@ -133,6 +134,7 @@ export const Incentivised = () => {
           heading={
             <div className="flex flex-col items-start">
               {activeChain.name}
+              {/* <ChainSwitchDropdown /> */}
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
                 href="https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9"

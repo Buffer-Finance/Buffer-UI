@@ -134,7 +134,7 @@ const DashboardOtherChainData = () => {
   return <OtherBLP data={otherBLP} tokenName={'BLP'} />;
 };
 
-const ChainSwitchDropdown = () => {
+export const ChainSwitchDropdown = () => {
   const { activeChain } = useActiveChain();
   const tabList = getChains();
   const navigate = useNavigate();

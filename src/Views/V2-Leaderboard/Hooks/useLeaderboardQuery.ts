@@ -41,10 +41,11 @@ export const useLeaderboardQuery = () => {
   const { offset } = useDayOffset();
   const { day } = useDayOfTournament();
   const timestamp = getDayId(Number(day - Number(offset ?? day)));
+  const { configContracts, activeChain } = useActiveChain();
   const minimumTrades = isTestnet ? 5 : 3;
-const {configContracts} = useActiveChain();
+
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-offset-${offset}-account-${account}-daily`,
+    `leaderboard-arbi-offset-${offset}-account-${account}-daily-chainId-${activeChain.id}`,
     {
       fetcher: async () => {
         const leaderboardQuery = `

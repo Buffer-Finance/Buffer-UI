@@ -10,6 +10,7 @@ import { ROWINAPAGE } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -48,11 +49,13 @@ export const useWeeklyLeaderboardQuery = () => {
   const { offset } = useWeekOffset();
   const { week } = useWeekOfTournament();
   const timestamp = getWeekId(Number(week - Number(offset ?? week)));
-  console.log(timestamp, 'timestamp');
+  const { configContracts, activeChain } = useActiveChain();
   const minimumTrades = isTestnet ? 5 : 3;
 
+  // console.log(timestamp, 'timestamp');
+
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-offset-${offset}-account-${account}-weekly`,
+    `leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
     {
       fetcher: async () => {
         const leaderboardQuery = `
@@ -109,7 +112,7 @@ export const useWeeklyLeaderboardQuery = () => {
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(baseGraphqlUrl, {
+        const response = await axios.post(configContracts.graph.MAIN, {
           query,
         });
 
