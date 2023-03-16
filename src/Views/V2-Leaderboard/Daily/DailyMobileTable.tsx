@@ -5,10 +5,10 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { ILeague } from '../interfaces';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
-import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
 import { Launch } from '@mui/icons-material';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
@@ -32,6 +32,7 @@ export const DailyMobileTable: React.FC<{
   onClick,
 }) => {
   const { address: account } = useUserAccount();
+
   if (!options)
     return (
       <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
@@ -107,6 +108,9 @@ const MobileRow = ({
   nftWinners,
   onClick,
 }) => {
+  const { configContracts } = useActiveChain();
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+
   const isUser = user ? true : false;
   const perc = multiply(
     divide(currentStanding.netPnL, currentStanding.volume),

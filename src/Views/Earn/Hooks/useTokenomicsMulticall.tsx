@@ -63,7 +63,7 @@ export const useIbfrPrice = () => {
 };
 
 export const fromWei = (value: string, decimals: number = 18) => {
-  return divide(value, decimals);
+  return divide(value, decimals) ?? '0';
   // return Math.floor((value * 1e6) / 1e18) / 1e6;
 };
 

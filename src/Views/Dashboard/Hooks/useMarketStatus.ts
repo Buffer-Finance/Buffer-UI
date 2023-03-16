@@ -6,14 +6,12 @@ import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import MaxTradeABI from '@Views/BinaryOptions/ABI/MaxTrade.json';
 import BinaryOptionsABI from '@Views/BinaryOptions/ABI/optionsABI.json';
-import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 import { useActiveChain } from '@Hooks/useActiveChain';
 
 export function useMarketStatus() {
   const { address: account } = useUserAccount();
   const { activeChain, configContracts } = useActiveChain();
-  const referralData = useReferralCode(activeChain);
-  console.log(referralData, 'referralData');
+  const referralData = useReferralCode();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
 
   const allAssetContracts = useMemo(
@@ -75,7 +73,7 @@ export function useMarketStatus() {
     return maxFeeForAbove
       ? divide(
           gt(maxFeeForAbove, maxFeeForBelow) ? maxFeeForAbove : maxFeeForBelow,
-          usdcDecimals
+          configContracts.tokens['USDC'].decimals
         )
       : null;
   }

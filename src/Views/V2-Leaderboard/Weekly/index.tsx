@@ -31,10 +31,9 @@ import { ChainSwitchDropdown } from '@Views/Dashboard';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
-export const usdcDecimals = 6;
 
 export const Weekly = () => {
-  const { activeChain } = useActiveChain();
+  const { activeChain, configContracts } = useActiveChain();
   const { week, nextTimeStamp } = useWeekOfTournament();
   const { data, totalTournamentData, loserUserRank, winnerUserRank } =
     useWeeklyLeaderboardQuery();
@@ -50,6 +49,7 @@ export const Weekly = () => {
   const distance = getDistance(launchTimeStamp);
   const isTimerEnded = distance <= 0;
   const stopwatch = useStopWatch(midnightTimeStamp);
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
 
   const skip = useMemo(
     () => ROWINAPAGE * (activePages.arbitrum - 1),

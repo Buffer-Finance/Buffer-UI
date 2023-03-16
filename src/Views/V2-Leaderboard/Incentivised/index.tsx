@@ -32,7 +32,6 @@ import { ChainSwitchDropdown } from '@Views/Dashboard';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
-export const usdcDecimals = 6;
 
 export const getRewardTooltip = (
   fixedAmount: string,
@@ -49,7 +48,7 @@ export const getRewardTooltip = (
 };
 
 export const Incentivised = () => {
-  const { activeChain } = useActiveChain();
+  const { activeChain, configContracts } = useActiveChain();
   const { day, nextTimeStamp } = useDayOfTournament();
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
   const { data, totalTournamentData, loserUserRank, winnerUserRank } =
@@ -65,6 +64,7 @@ export const Incentivised = () => {
   const isTimerEnded = distance <= 0;
   const midnightTimeStamp = nextTimeStamp / 1000;
   const stopwatch = useStopWatch(midnightTimeStamp);
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
 
   const skip = useMemo(
     () => ROWINAPAGE * (activePages.arbitrum - 1),
