@@ -7,7 +7,9 @@ export type weeklyTournamentConfigType = {
   rewardFixedAmount: string;
   poolPercent: string;
   minTradesToQualifyPNL: number;
+  minTradesToQualifyWinrate: number;
   winrateStartDay: number | undefined;
+  minVolumeToQualifyWinrate: string | undefined;
   winrateNFT: number;
 };
 
@@ -26,6 +28,8 @@ export const weeklyTournamentConfig: {
     minTradesToQualifyPNL: 5,
     winrateStartDay: 2,
     winrateNFT: 3,
+    minTradesToQualifyWinrate: 5,
+    minVolumeToQualifyWinrate: '100000000',
   },
   42161: {
     startTimestamp: 1676908800000,
@@ -39,6 +43,8 @@ export const weeklyTournamentConfig: {
     minTradesToQualifyPNL: 3,
     winrateStartDay: 2,
     winrateNFT: 3,
+    minTradesToQualifyWinrate: 5,
+    minVolumeToQualifyWinrate: '100000000',
   },
   80001: {
     startTimestamp: 1678896000000,
@@ -50,8 +56,10 @@ export const weeklyTournamentConfig: {
     rewardFixedAmount: '0',
     poolPercent: '0',
     minTradesToQualifyPNL: 5,
-    winrateStartDay: undefined,
+    winrateStartDay: 1,
     winrateNFT: 0,
+    minTradesToQualifyWinrate: 5,
+    minVolumeToQualifyWinrate: '100000000',
   },
   137: {
     startTimestamp: 1678896000000,
@@ -63,7 +71,9 @@ export const weeklyTournamentConfig: {
     rewardFixedAmount: '100',
     poolPercent: '5',
     minTradesToQualifyPNL: 3,
-    winrateStartDay: undefined,
+    winrateStartDay: 1,
     winrateNFT: 0,
+    minTradesToQualifyWinrate: 5,
+    minVolumeToQualifyWinrate: '100000000',
   },
 };
