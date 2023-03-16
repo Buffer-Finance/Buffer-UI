@@ -19,13 +19,11 @@ interface ILeaderboardQuery {
     totalTrades: number;
     volume: string;
   }[];
-  // totalPaginationData: { user: string }[];
   userData: ILeague[];
   reward: { settlementFee: string; totalFee: string }[];
 }
 
 export function getWeekId(offset: number): number {
-  console.log(offset, 'timestamp');
   let timestamp = new Date().getTime() / 1000;
   if (offset > 0) {
     timestamp = timestamp - offset * (86400 * 7);
@@ -35,6 +33,7 @@ export function getWeekId(offset: number): number {
   );
   return dayTimestamp;
 }
+
 export const blockedAccounts = [
   '0x361e9013d7e4f2e4a035ba97fdb42cb7d2540259',
   '0x6fae0eed696ec28c81269b99240ee960570666f1',
@@ -43,6 +42,7 @@ export const blockedAccounts = [
   '0x547a821c692921d82ebd936320dc1a608a6e38c1',
   '0x2a007f31146ff8f939b6ca3ad18c8d2a6e42eb73',
 ];
+
 export const useWeeklyLeaderboardQuery = () => {
   const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
@@ -51,8 +51,6 @@ export const useWeeklyLeaderboardQuery = () => {
   const timestamp = getWeekId(Number(week - Number(offset ?? week)));
   const { configContracts, activeChain } = useActiveChain();
   const configValue = weeklyTournamentConfig[activeChain.id];
-
-  // console.log(timestamp, 'timestamp');
 
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
@@ -116,7 +114,7 @@ export const useWeeklyLeaderboardQuery = () => {
           query,
         });
 
-        return response.data?.data as {};
+        return response.data?.data as ILeaderboardQuery;
       },
       refreshInterval: 300,
     }
@@ -137,7 +135,6 @@ export const useWeeklyLeaderboardQuery = () => {
 
   const winnerUserRank = useMemo(() => {
     if (!data || !data.userStats || !account) return '-';
-    console.log('goes in here', data.userStats);
     const rank = data.userStats.findIndex(
       (data) => data.user.toLowerCase() == account.toLowerCase()
     );

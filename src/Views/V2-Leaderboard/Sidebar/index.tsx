@@ -24,36 +24,12 @@ export const MobileLeaderboardDropdwon = () => {
         handleChange={(e, t) => {
           navigate(tabs[t].as);
         }}
-        distance={5}
         tablist={[{ name: 'Daily' }, { name: 'Weekly' }]}
       />
     </div>
   );
 };
 
-function LeaderBoardMobileNavbar({ tabs }) {
-  const location = useLocation();
-
-  return (
-    <div className="mobile-navbar-leaderboard">
-      {tabs.map((tab) => {
-        const isActive = doesLocationMatch(location, tab.slug);
-
-        return (
-          <Link key={tab.name} to={tab.as}>
-            <div className={`league-btn-wrapper ${isActive && 'active'}`}>
-              <SidebarIcon
-                id={tab.id}
-                active={isActive}
-                name={tab.slug.split('/')[0]}
-              />{' '}
-            </div>
-          </Link>
-        );
-      })}
-    </div>
-  );
-}
 export const LeaderBoardSidebar = () => {
   const { activeChain } = useActiveChain();
   const tabs = getTabs(activeChain.name, true);
@@ -125,7 +101,17 @@ function Head({ name }: { name: string }) {
   return <div className="text-f12 fw5 pl-4 pr-3">{name}</div>;
 }
 
-const LinkButton = ({ tab, active, isDisabled = false, chip = <></> }) => {
+const LinkButton = ({
+  tab,
+  active,
+  isDisabled = false,
+  chip = <></>,
+}: {
+  tab: { id: number; name: string; as: string; slug: string };
+  active: boolean;
+  isDisabled?: boolean;
+  chip?: JSX.Element;
+}) => {
   return (
     <div className={`relative`} key={tab.id}>
       <Link
@@ -222,3 +208,27 @@ const CSChip = ({
     </div>
   );
 };
+
+// function LeaderBoardMobileNavbar({ tabs }) {
+//   const location = useLocation();
+
+//   return (
+//     <div className="mobile-navbar-leaderboard">
+//       {tabs.map((tab) => {
+//         const isActive = doesLocationMatch(location, tab.slug);
+
+//         return (
+//           <Link key={tab.name} to={tab.as}>
+//             <div className={`league-btn-wrapper ${isActive && 'active'}`}>
+//               <SidebarIcon
+//                 id={tab.id}
+//                 active={isActive}
+//                 name={tab.slug.split('/')[0]}
+//               />{' '}
+//             </div>
+//           </Link>
+//         );
+//       })}
+//     </div>
+//   );
+// }

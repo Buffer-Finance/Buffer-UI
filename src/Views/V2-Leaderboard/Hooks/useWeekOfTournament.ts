@@ -8,9 +8,6 @@ export const useWeekOfTournament = () => {
   const currentTimeStamp = new Date().getTime();
   const start = weeklyTournamentConfig[activeChain.id].startTimestamp;
 
-  if (start === undefined) {
-    return { week: null, nextTimeStamp: null };
-  }
   return {
     week: Math.floor((currentTimeStamp - start) / MSINWEEK) + 1,
     nextTimeStamp:

@@ -21,12 +21,11 @@ interface ILeaderboardQuery {
     volume: string;
     user: string;
   }[];
-  userData: ILeague;
+  userData: ILeague[];
   reward: { settlementFee: string; totalFee: string }[];
 }
 
 export function getDayId(offset: number): number {
-  console.log(offset, 'offset');
   let timestamp = new Date().getTime() / 1000;
   if (offset > 0) {
     timestamp = timestamp - offset * 86400;
@@ -106,7 +105,7 @@ export const useLeaderboardQuery = () => {
           query,
         });
 
-        return response.data?.data as {};
+        return response.data?.data as ILeaderboardQuery;
       },
       refreshInterval: 300,
     }
