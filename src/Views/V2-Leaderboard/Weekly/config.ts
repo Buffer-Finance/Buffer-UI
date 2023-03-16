@@ -1,13 +1,69 @@
-export type startTimestampObj = { [key: number]: number };
-export type endTimestampObj = { [key: number]: number };
-
-export const startTimestamp: startTimestampObj = {
-  421613: 1676908800000,
-  42161: 1676908800000,
+export type weeklyTournamentConfigType = {
+  startTimestamp: number;
+  endDay: number | undefined;
+  winnersNFT: number;
+  losersNFT: number;
+  contestRules: string;
+  rewardFixedAmount: string;
+  poolPercent: string;
+  minTradesToQualifyPNL: number;
+  winrateStartDay: number | undefined;
+  winrateNFT: number;
 };
-export const endDay: endTimestampObj = {};
 
-export const winRateStart: endTimestampObj = {
-  42161: 2,
-  421613: 2,
+export const weeklyTournamentConfig: {
+  [key: number]: weeklyTournamentConfigType;
+} = {
+  421613: {
+    startTimestamp: 1676908800000,
+    winnersNFT: 3,
+    losersNFT: 4,
+    endDay: undefined,
+    contestRules:
+      'https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
+    rewardFixedAmount: '1000',
+    poolPercent: '5',
+    minTradesToQualifyPNL: 5,
+    winrateStartDay: 2,
+    winrateNFT: 3,
+  },
+  42161: {
+    startTimestamp: 1676908800000,
+    winnersNFT: 3,
+    losersNFT: 4,
+    endDay: undefined,
+    contestRules:
+      'https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
+    rewardFixedAmount: '1000',
+    poolPercent: '5',
+    minTradesToQualifyPNL: 3,
+    winrateStartDay: 2,
+    winrateNFT: 3,
+  },
+  80001: {
+    startTimestamp: 1678896000000,
+    winnersNFT: 0,
+    losersNFT: 0,
+    endDay: undefined,
+    contestRules:
+      'https://futuristic-vertebra-e74.notion.site/Buffer-Weekly-Trading-Competitions-Polygon-c94c85f7739148f7816fb5a20c894c27',
+    rewardFixedAmount: '0',
+    poolPercent: '0',
+    minTradesToQualifyPNL: 5,
+    winrateStartDay: undefined,
+    winrateNFT: 0,
+  },
+  137: {
+    startTimestamp: 1678896000000,
+    winnersNFT: 0,
+    losersNFT: 0,
+    endDay: undefined,
+    contestRules:
+      'https://futuristic-vertebra-e74.notion.site/Buffer-Weekly-Trading-Competitions-Polygon-c94c85f7739148f7816fb5a20c894c27',
+    rewardFixedAmount: '100',
+    poolPercent: '5',
+    minTradesToQualifyPNL: 3,
+    winrateStartDay: undefined,
+    winrateNFT: 0,
+  },
 };

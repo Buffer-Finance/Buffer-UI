@@ -1,18 +1,23 @@
 import axios from 'axios';
-import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { add } from '@Utils/NumString/stringArithmatics';
-import { getLinuxTimestampBefore24Hours } from './useDashboardTableData';
-// const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
-// console.log(`prevDayEpoch: `,prevDayEpoch);
+import { add, divide } from '@Utils/NumString/stringArithmatics';
+import {
+  getLinuxTimestampBefore24Hours,
+  useDashboardTableData,
+} from './useDashboardTableData';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 
 export const useDashboardGraphQl = () => {
+  const { configContracts } = useActiveChain();
+  const { totalData } = useDashboardTableData();
+
   const { data } = useSWR('history-thegraph', {
     fetcher: async () => {
       const prevDayEpoch = getLinuxTimestampBefore24Hours();
 
-      const response = await axios.post(baseGraphqlUrl, {
+      const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
             USDCstats:dashboardStat (id : "USDC") {
               totalSettlementFees
@@ -105,12 +110,58 @@ export const useDashboardGraphQl = () => {
     return null;
   }, [data?.BFR24stats]);
 
+  const overView = useMemo(() => {
+    if (!data) return null;
+    const isUSDCnull = !data.USDCstats;
+    const isBFRnull = !data.BFRstats;
+    const usdcVolume = isUSDCnull
+      ? '0'
+      : fromWei(
+          data.USDCstats.totalVolume,
+          configContracts.tokens['USDC'].decimals
+        );
+    const bfrVolume = isBFRnull ? '0' : fromWei(data.BFRstats.totalVolume);
+    const totalVolume = add(usdcVolume, bfrVolume);
+    const totalTrades = isUSDCnull
+      ? '0'
+      : (
+          (data.USDCstats.totalTrades || 0) + (data.BFRstats?.totalTrades || 0)
+        ).toString();
+
+    const avgTrade = divide(totalVolume, totalTrades.toString());
+
+    return {
+      USDCfees: isUSDCnull
+        ? '0'
+        : fromWei(
+            data.USDCstats.totalSettlementFees,
+            configContracts.tokens['USDC'].decimals
+          ),
+      BFRfees: isBFRnull ? '0' : fromWei(data.BFRstats.totalSettlementFees),
+      USDCvolume: usdcVolume,
+      BFRvolume: bfrVolume,
+      avgTrade: avgTrade,
+      totalTraders: data.totalTraders[0]?.uniqueCountCumulative || 0,
+      usdc_24_fees: USDC24hrsStats
+        ? fromWei(
+            USDC24hrsStats.settlementFee,
+            configContracts.tokens['USDC'].decimals
+          )
+        : '0',
+      usdc_24_volume: USDC24hrsStats
+        ? fromWei(
+            USDC24hrsStats.amount,
+            configContracts.tokens['USDC'].decimals
+          )
+        : '0',
+      trades: totalData ? totalData.trades : null,
+      openInterest: totalData ? totalData.openInterest : null,
+    };
+  }, [data, totalData]);
+
+  console.log(overView, 'overView');
+
   return {
-    USDCstats: data?.USDCstats,
-    BFRstats: data?.BFRstats,
-    totalTraders: data?.totalTraders,
-    USDC24stats: USDC24hrsStats,
-    BFR24stats: BFR24hrsStats,
-    isGqlDataAvailable: data ? true : false,
+    overView,
   };
 };

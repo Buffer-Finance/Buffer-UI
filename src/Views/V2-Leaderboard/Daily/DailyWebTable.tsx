@@ -13,11 +13,11 @@ import { LeaderBoardTableStyles } from './stlye';
 import { DailyMobileTable } from './DailyMobileTable';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
-import { usdcDecimals } from '../Incentivised';
 import { Rank } from '../Components/Rank';
 import { useNavigate } from 'react-router-dom';
 import { Launch } from '@mui/icons-material';
 import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const DailyWebTable: React.FC<{
   standings: ILeague[] | IWinrate[] | undefined;
@@ -43,6 +43,8 @@ export const DailyWebTable: React.FC<{
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
   const navigate = useNavigate();
+  const { configContracts } = useActiveChain();
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
 
   //Memos - to avoid re-rendering
   const firstColPadding = useMemo(() => {

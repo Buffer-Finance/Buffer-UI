@@ -1,4 +1,3 @@
-import { CHAIN_CONFIGS } from 'config';
 import useStopWatch from '@Hooks/Utilities/useStopWatch';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
@@ -19,7 +18,7 @@ import { DailyStyles } from '../Daily/stlye';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { endDay, startTimestamp, winRateStart } from './config';
+import { weeklyTournamentConfig } from './config';
 
 import TabSwitch from '@Views/Common/TabSwitch';
 import BufferTab, { ITab } from '@Views/Common/BufferTab';
@@ -30,24 +29,19 @@ import {
   IWinrate,
   useWeeklyLeaderboardQuery,
 } from '../Hooks/useWeeklyLeaderboardQuery';
-import { TimerBox } from '../Incentivised';
+import { getRewardTooltip, TimerBox } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
+import { ChainSwitchDropdown } from '@Views/Dashboard';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
-export const usdcDecimals = 6;
 
 export const Weekly = () => {
-  const { activeChain } = useActiveChain();
+  const { activeChain, configContracts } = useActiveChain();
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
   const { week, nextTimeStamp } = useWeekOfTournament();
-  const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
-
-  const skip = useMemo(
-    () => ROWINAPAGE * (activePages.arbitrum - 1),
-    [activePages.arbitrum]
-  );
   const {
     data,
     totalTournamentData,
@@ -56,6 +50,12 @@ export const Weekly = () => {
     // loserWinrateUserRank,
     winnerWinrateUserRank,
   } = useWeeklyLeaderboardQuery();
+  const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
+
+  const skip = useMemo(
+    () => ROWINAPAGE * (activePages.arbitrum - 1),
+    [activePages.arbitrum]
+  );
 
   const totalPages = useMemo(() => {
     const pages = {
@@ -87,7 +87,12 @@ export const Weekly = () => {
       loserPnl: ILeague[];
       winnerWinRate: IWinrate[];
       // loserWinrate: IWinrate[];
-    } = { winnerPnl: [], loserPnl: [], winnerWinRate: [], loserWinrate: [] };
+    } = {
+      winnerPnl: [],
+      loserPnl: [],
+      winnerWinRate: [],
+      //  loserWinrate: []
+    };
     if (data) {
       if (data.userStats) {
         res.winnerPnl = data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -113,7 +118,8 @@ export const Weekly = () => {
 
   const midnightTimeStamp = nextTimeStamp / 1000;
 
-  const launchTimeStamp = startTimestamp[activeChain.id] / 1000;
+  const configValue = weeklyTournamentConfig[activeChain.id];
+  const launchTimeStamp = configValue.startTimestamp / 1000;
   const distance = getDistance(launchTimeStamp);
   const isTimerEnded = distance <= 0;
   const stopwatch = useStopWatch(midnightTimeStamp);
@@ -132,11 +138,11 @@ export const Weekly = () => {
 
   const rewardPool = useMemo(() => {
     if (week === null) return null;
-    if (endDay[activeChain.id] !== undefined) {
+    if (configValue.endDay !== undefined) {
       if (offset === null) {
-        if (week >= endDay[activeChain.id]) return '0 USDC';
+        if (week >= configValue.endDay) return '0 USDC';
       } else {
-        if (Number(offset) >= endDay[activeChain.id]) return '0 USDC';
+        if (Number(offset) >= configValue.endDay) return '0 USDC';
       }
     } else if (
       data &&
@@ -147,10 +153,10 @@ export const Weekly = () => {
       return (
         toFixed(
           add(
-            '1000',
+            configValue.rewardFixedAmount,
             divide(
               multiply(
-                '5',
+                configValue.poolPercent,
                 divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
               ),
               '100'
@@ -169,11 +175,13 @@ export const Weekly = () => {
       { name: 'Winners (by Win Rate)' },
       // { name: 'Losers (by Win Rate)' },
     ];
-    if (winRateStart[activeChain.id])
-      if (offset !== null && winRateStart[activeChain.id] > Number(offset))
+    if (configValue.winrateStartDay) {
+      if (offset !== null && configValue.winrateStartDay > Number(offset))
         return list.slice(0, 2);
-      else if (week !== null && winRateStart[activeChain.id] > Number(week))
+      else if (week !== null && configValue.winrateStartDay > Number(week))
         return list.slice(0, 2);
+    } else if (configValue.winrateStartDay === undefined)
+      return list.slice(0, 2);
     return list;
   }, [offset, activeChain]);
 
@@ -192,21 +200,25 @@ export const Weekly = () => {
     );
   } else {
     content = (
-      <div className="m-auto">
+      <div className="m-auto mb-7">
         <TopData
           pageImage={
-            <img
-              src={CHAIN_CONFIGS['TESTNET']['ARBITRUM'].img}
-              alt=""
-              className="w-[45px]"
-            />
+            <></>
+            // <img
+            //   src={chainImageMappipng[activeChain.name]}
+            //   alt=""
+            //   className="w-[45px]"
+            // />
           }
           heading={
             <div className="flex flex-col items-start">
-              {activeChain.name}
+              <div className="flex items-center gap-3">
+                <div>Weekly Leaderboard</div>
+                <ChainSwitchDropdown baseUrl="/leaderboard/weekly" />
+              </div>
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="https://futuristic-vertebra-e74.notion.site/Buffer-Weekly-Trading-Competitions-3d97c58ca2e245d2adb5db7d7d42fadb"
+                href={configValue.contestRules}
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
@@ -219,9 +231,11 @@ export const Weekly = () => {
                 head={'Reward Pool'}
                 desc={
                   <NumberTooltip
-                    content={
-                      '1000 USDC + 5% of the fees collected for the week.'
-                    }
+                    content={getRewardTooltip(
+                      configValue.rewardFixedAmount,
+                      configValue.poolPercent,
+                      'USDC'
+                    )}
                   >
                     <div>{rewardPool}</div>
                   </NumberTooltip>
@@ -309,7 +323,7 @@ export const Weekly = () => {
                 onpageChange={setActivePageNumber}
                 userData={data?.userData}
                 skip={skip}
-                nftWinners={3}
+                nftWinners={configValue.winnersNFT}
                 userRank={winnerUserRank}
                 activePage={activePages.arbitrum}
               />,
@@ -321,7 +335,7 @@ export const Weekly = () => {
                 onpageChange={setActivePageNumber}
                 userData={data?.userData}
                 skip={skip}
-                nftWinners={4}
+                nftWinners={configValue.losersNFT}
               />,
               <DailyWebTable
                 activePage={activePages.arbitrum}
@@ -331,7 +345,7 @@ export const Weekly = () => {
                 onpageChange={setActivePageNumber}
                 userData={data?.userData}
                 skip={skip}
-                nftWinners={3}
+                nftWinners={configValue.winrateNFT}
                 isWinrateTable
               />,
               // <DailyWebTable
@@ -360,8 +374,8 @@ export const Weekly = () => {
             <Warning
               closeWarning={() => {}}
               state={
-                endDay[activeChain.id] && week !== null
-                  ? week >= endDay[activeChain.id]
+                configValue.endDay && week !== null
+                  ? week >= configValue.endDay
                   : false
               }
               shouldAllowClose={false}

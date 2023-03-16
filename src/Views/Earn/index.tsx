@@ -13,6 +13,10 @@ import { IEarn, writeEarnData } from './earnAtom';
 import { useGetTokenomics } from './Hooks/useTokenomicsMulticall';
 import { EarnModals } from './Modals';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import {
+  ArbitrumOnly,
+  ChainNotSupported,
+} from '@Views/Common/ChainNotSupported';
 
 const EarnStyles = styled.div`
   width: min(1200px, 100%);
@@ -30,20 +34,20 @@ export const EarnContext = React.createContext<{ activeChain: Chain } | null>(
 const EarnContextProvider = EarnContext.Provider;
 export const Earn = () => {
   const { activeChain } = useActiveChain();
-  useEffect(()=>{
-    document.title = "Buffer | Earn"
-  },[])
+  useEffect(() => {
+    document.title = 'Buffer | Earn';
+  }, []);
   return (
-    <EarnContextProvider value={{ activeChain }}>
-      <main className="content-drawer">
-        {/* <HeadTitle title={'Buffer | Earn'} /> */}
-
-        <EarnPage />
-      </main>
-      <Drawer open={false}>
-        <></>
-      </Drawer>
-    </EarnContextProvider>
+    <ArbitrumOnly>
+      <EarnContextProvider value={{ activeChain }}>
+        <main className="content-drawer">
+          <EarnPage />
+        </main>
+        <Drawer open={false}>
+          <></>
+        </Drawer>
+      </EarnContextProvider>
+    </ArbitrumOnly>
   );
 };
 

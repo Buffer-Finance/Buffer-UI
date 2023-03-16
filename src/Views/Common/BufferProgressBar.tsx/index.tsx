@@ -1,6 +1,5 @@
-import styled from "@emotion/styled";
-import * as React from "react";
-import { toFixed } from "@Utils/NumString";
+import styled from '@emotion/styled';
+import { toFixed } from '@Utils/NumString';
 
 const ProgressbarBackground = styled.div<{ barWidth; fontSize }>`
   display: flex;

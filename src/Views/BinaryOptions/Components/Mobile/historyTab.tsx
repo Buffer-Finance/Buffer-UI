@@ -7,10 +7,16 @@ import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { useAtom, useAtomValue } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { marketPriceAtom } from 'src/TradingView/useDataFeed';
+import {
+  getPriceFromKlines,
+  marketPriceAtom,
+} from 'src/TradingView/useDataFeed';
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
+import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
+import { getIdentifier } from '@Hooks/useGenericHook';
+import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
 import { IQTrade, IToken, useQTinfo } from '@Views/BinaryOptions';
 import {
@@ -36,6 +42,8 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import VerticalTransition from '@Views/Common/Transitions/Vertical';
 import { Variables } from '@Utils/Time';
 import { BlackBtn } from '@Views/Common/V2-Button';
+import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { Skeleton } from '@mui/material';
 
 const CancelButton = ({ option }) => {
   const toastify = useToast();
@@ -71,7 +79,6 @@ const CancelButton = ({ option }) => {
 };
 
 const MobileTable: React.FC<{
-  configData: IQTrade;
   isHistoryTab?: boolean;
   isCancelledTab?: boolean;
   count?: number;
@@ -80,14 +87,12 @@ const MobileTable: React.FC<{
   activePage: number;
   shouldNotDisplayShareVisulise?: boolean;
 }> = ({
-  configData,
   isHistoryTab = false,
   isCancelledTab,
   onPageChange,
   activePage,
   shouldNotDisplayShareVisulise = false,
 }) => {
-  const activeMarket = configData.activePair;
   const [marketPrice] = useAtom(marketPriceAtom);
   const { active, history, cancelled } = useAtomValue(tardesAtom);
   const filteredData = isHistoryTab
@@ -102,6 +107,8 @@ const MobileTable: React.FC<{
     cancelled: cancelledPages,
   } = useAtomValue(tardesTotalPageAtom);
   const { state } = useGlobal();
+  const [visualized, setVisualized] = useAtom(visualizeddAtom);
+
   const { shouldConnectWallet } = useOpenConnectionDrawer();
 
   const activeTab = state.tabs.activeIdx;
@@ -174,12 +181,28 @@ const MobileTable: React.FC<{
     let arr = [StrikePrice];
     if (!isCancelledTab) {
       arr = [StartDate, ExpiryDate, StrikePrice];
+    } else {
+      arr = [
+        ...arr,
+        {
+          name: <>Queue Time</>,
+          val: <DisplayDate timestamp={+option.queueTimestamp} />,
+        },
+        {
+          name: <>Cancellation Time</>,
+          val: <DisplayDate timestamp={+option.cancelTimestamp} />,
+        },
+        { name: <>Reason</>, val: <>{getErrorFromCode(option?.reason)}</> },
+      ];
     }
     let visible = false;
     if (
       option.state !== BetState.queued &&
       option.state !== BetState.cancelled
     ) {
+      const price = getPriceFromKlines(marketPrice, option.configPair);
+      console.log(`pricedd: `, price);
+      // if (isHistoryTab || price) {
       let additionalInfo = [
         {
           name: (
@@ -189,32 +212,68 @@ const MobileTable: React.FC<{
                 : 'Current Price'}
             </>
           ),
-          val: (
-            <ExpiryCurrentComponent
-              isHistoryTable={isHistoryTab}
-              trade={option}
-              activeMarket={activeMarket}
-              marketPrice={marketPrice}
-              configData={option.configPair}
-            />
-          ),
+          val:
+            isHistoryTab || price ? (
+              <ExpiryCurrentComponent
+                isHistoryTable={isHistoryTab}
+                trade={option}
+                marketPrice={marketPrice}
+                configData={option.configPair}
+              />
+            ) : (
+              <Skeleton
+                variant="rectangular"
+                className="!w-[80px] bg-1  !h-[20px]"
+              />
+            ),
         },
 
         {
           name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
-          val: (
-            <ProbabilityPNL
-              isHistoryTable={isHistoryTab}
-              trade={option}
-              activeMarket={activeMarket}
-              marketPrice={marketPrice}
-              onlyPnl
-              configData={option.configPair}
-            />
-          ),
+          val:
+            isHistoryTab || price ? (
+              <ProbabilityPNL
+                isHistoryTable={isHistoryTab}
+                trade={option}
+                marketPrice={marketPrice}
+                onlyPnl
+                configData={option.configPair}
+              />
+            ) : (
+              <Skeleton
+                variant="rectangular"
+                className="!w-[80px] bg-1  !h-[20px]"
+              />
+            ),
         },
       ];
       arr = [...arr, ...additionalInfo];
+      let isPresentInDisabled = visualized.includes(getIdentifier(option));
+      const viz = [
+        isCancelledTab || isHistoryTab
+          ? null
+          : {
+              name: <> Visualize</>,
+              val: (
+                <BufferCheckbox
+                  checked={!isPresentInDisabled}
+                  onCheckChange={() => {
+                    const currIdentifier = getIdentifier(option);
+                    if (isPresentInDisabled) {
+                      let temp = [...visualized];
+                      temp.splice(visualized.indexOf(currIdentifier), 1);
+                      setVisualized(temp);
+                    } else {
+                      setVisualized([...visualized, currIdentifier]);
+                    }
+                  }}
+                />
+              ),
+            },
+      ];
+      arr = [...arr, ...additionalInfo, ...viz];
+      arr = arr.filter((arr) => arr);
+      // }
     }
     if (selectedIndex === row) visible = true;
 
@@ -227,7 +286,9 @@ const MobileTable: React.FC<{
             <div className="flex flex-col items-end justify-center">
               <div className="f13 flex gap-2">
                 {/* show status on history + queued state */}
-                <PayoutChip data={option} />
+                {isHistoryTab || option.state != BetState.active ? (
+                  <PayoutChip data={option} />
+                ) : null}
                 {/* dont show duration in queued | cancelled state */}
                 {normal_option ? (isHistoryTab ? 'Duration' : 'Time Left') : ''}
               </div>
@@ -235,7 +296,7 @@ const MobileTable: React.FC<{
                 {/* dont show duration in queued | cancelled state */}
                 {option.state == BetState.queued ||
                 option.state == BetState.cancelled ? (
-                  '-'
+                  ''
                 ) : isHistoryTab ? (
                   formatDistanceExpanded(
                     Variables(+option.expirationTime - +option.creationTime)
@@ -247,14 +308,15 @@ const MobileTable: React.FC<{
             </div>
           </div>
 
-          <VerticalTransition value={visible ? 1 : 0}>
-            <div></div>
+          {/* <VerticalTransition value={visible ? 1 : 0}> */}
+          {visible ? (
             <div>
               {arr.map((a) => (
                 <DataRow keyName={a.name} value={a.val} />
               ))}
             </div>
-          </VerticalTransition>
+          ) : null}
+          {/* </VerticalTransition> */}
 
           <div className="flex-bw mt15">
             <div className="flex flex-row items-start">

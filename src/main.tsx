@@ -5,6 +5,9 @@ import { HashRouter } from 'react-router-dom';
 import { WagmiConfig } from 'wagmi';
 import App from './App';
 import '@rainbow-me/rainbowkit/styles.css'
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/theme-dark.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
@@ -20,7 +23,6 @@ const options = {
 import { inject } from '@vercel/analytics';
 inject();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={darkTheme()}>
         <HashRouter>
@@ -34,5 +36,4 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </HashRouter>
       </RainbowKitProvider>
     </WagmiConfig>
-  </React.StrictMode>
 );

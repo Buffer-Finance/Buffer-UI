@@ -68,7 +68,7 @@ export function useActiveAssetState(amount = null, referralData) {
           });
         })
         .flat(1),
-    []
+    [activePoolObj]
   );
 
   const assetCalls = useMemo(
@@ -102,7 +102,6 @@ export function useActiveAssetState(amount = null, referralData) {
     ],
     [activePoolObj, account, referralData]
   );
-
   const userSpecificCalls = useMemo(
     () => [
       {
@@ -152,7 +151,8 @@ export function useActiveAssetState(amount = null, referralData) {
         ]
     : [];
 
-  let copy = useReadCall({ contracts: calls }).data as unknown as string[];
+  let copy = useReadCall({ contracts: calls, swrKey: 'UseActiveAssetState' })
+    .data as unknown as string[];
   let response = [null, null, null, null];
 
   if (copy) {

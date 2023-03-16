@@ -6,8 +6,8 @@ import { IEarn, IVestToken } from '../earnAtom';
 import { Card } from './Card';
 import { EarnButtons } from './EarnButtons';
 
-export const keyClasses = '!text-f15 !text-2 !text-left !py-2 !pl-[0px]';
-export const valueClasses = '!text-f15 text-1 !text-right !py-2 !pr-[0px]';
+export const keyClasses = '!text-f15 !text-2 !text-left !py-[6px] !pl-[0px]';
+export const valueClasses = '!text-f15 text-1 !text-right !py-[6px] !pr-[0px]';
 export const tooltipKeyClasses = '!text-f14 !text-2 !text-left !py-1 !pl-[0px]';
 export const tooltipValueClasses =
   '!text-f14 text-1 !text-right !py-1 !pr-[0px]';

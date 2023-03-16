@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { baseGraphqlUrl, isTestnet } from 'config';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useMemo } from 'react';
 import useSWR from 'swr';
@@ -7,6 +6,8 @@ import { add } from '@Utils/NumString/stringArithmatics';
 import { ILeague } from '../interfaces';
 import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { weeklyTournamentConfig } from '../Weekly/config';
 
 export interface IWinrate extends ILeague {
   winrate: string;
@@ -22,13 +23,11 @@ interface ILeaderboardQuery {
     totalTrades: number;
     volume: string;
   }[];
-  // totalPaginationData: { user: string }[];
   userData: ILeague[];
   reward: { settlementFee: string; totalFee: string }[];
 }
 
 export function getWeekId(offset: number): number {
-  console.log(offset, 'timestamp');
   let timestamp = new Date().getTime() / 1000;
   if (offset > 0) {
     timestamp = timestamp - offset * (86400 * 7);
@@ -38,6 +37,7 @@ export function getWeekId(offset: number): number {
   );
   return dayTimestamp;
 }
+
 export const blockedAccounts = [
   '0x361e9013d7e4f2e4a035ba97fdb42cb7d2540259',
   '0x6fae0eed696ec28c81269b99240ee960570666f1',
@@ -55,11 +55,11 @@ export const useWeeklyLeaderboardQuery = () => {
   const { offset } = useWeekOffset();
   const { week } = useWeekOfTournament();
   const timestamp = getWeekId(Number(week - Number(offset ?? week)));
-  console.log(timestamp, 'timestamp');
-  const minimumTrades = isTestnet ? 5 : 3;
+  const { configContracts, activeChain } = useActiveChain();
+  const configValue = weeklyTournamentConfig[activeChain.id];
 
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-offset-${offset}-account-${account}-weekly`,
+    `leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
     {
       fetcher: async () => {
         const leaderboardQuery = `
@@ -67,9 +67,9 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
-          (address) => `"${address}"`
-        )}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+          configValue.minTradesToQualifyPNL
+        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -80,9 +80,9 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: asc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
-          (address) => `"${address}"`
-        )}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+          configValue.minTradesToQualifyPNL
+        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -137,11 +137,11 @@ export const useWeeklyLeaderboardQuery = () => {
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(baseGraphqlUrl, {
+        const response = await axios.post(configContracts.graph.MAIN, {
           query,
         });
 
-        return response.data?.data as {};
+        return response.data?.data as ILeaderboardQuery;
       },
       refreshInterval: 300,
     }

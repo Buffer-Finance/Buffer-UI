@@ -5,15 +5,14 @@ export interface Call {
   params?: any[]; // Function params
   abi?: any[]; // Abi of the contract
 }
-const multicallContract =
-  import.meta.env.VITE_ENV.toLowerCase() == 'testnet'
-    ? '0xca11bde05977b3631167028862be2a173976ca11'
-    : '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2';
-// TODO Make it dynamic
-const ethProvider = 'https://goerli-rollup.arbitrum.io/rpc';
 export const arbMain = 'https://arb1.arbitrum.io/rpc';
 
-export const multicallv2 = async (calls: Call[], singerOrProvider) => {
+export const multicallv2 = async (
+  calls: Call[],
+  singerOrProvider,
+  multicall,
+  swrKey
+) => {
   if (!calls.length) return null;
   try {
     const calldata = calls.map((call) => {
@@ -24,7 +23,7 @@ export const multicallv2 = async (calls: Call[], singerOrProvider) => {
       ];
     });
 
-    const contract = new Contract(multicallContract, arbiAbi, singerOrProvider);
+    const contract = new Contract(multicall, arbiAbi, singerOrProvider);
 
     let returnData = await contract['callStatic']['aggregate'](calldata);
     if (typeof returnData === 'undefined') return;
@@ -38,7 +37,7 @@ export const multicallv2 = async (calls: Call[], singerOrProvider) => {
     });
     return res;
   } catch (err) {
-
+    console.log(err, calls, swrKey, 'multicall err');
     return null;
   }
 };
