@@ -5,14 +5,15 @@ import { useContract, useProvider } from "wagmi";
 import { ReferralContext } from "@Views/Referral/referralAtom";
 import { contractRead } from "@Utils/useReadCall";
 import { getContract } from "../Config/Address";
+import { useActiveChain } from "@Hooks/useActiveChain";
 
 export function useCodeOwner(code: string) {
   const [owner, setOwner] = useState(null);
-  const { activeChain } = useContext(ReferralContext);
+  const { activeChain } = useActiveChain();
   const provider = useProvider({ chainId: activeChain.id });
 
   const referralContract = useContract({
-    address: getContract(activeChain.id, "referral"),
+    address: getContract(activeChain.id),
     abi: ReferralABI,
     signerOrProvider: provider,
   });

@@ -7,6 +7,7 @@ import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
 import axios from 'axios';
 import { expiryPriceCache } from './useTradeHistory';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -186,6 +187,7 @@ export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
 
 export const usePastTradeQuery = () => {
   const { address: account } = useUserAccount();
+  const { configContracts } = useActiveChain();
   const setTrades = useSetAtom(tardesAtom);
   const setPageNumbers = useSetAtom(updateTotalPageNumber);
   const { active, history, cancelled } = useAtomValue(tardesPageAtom);

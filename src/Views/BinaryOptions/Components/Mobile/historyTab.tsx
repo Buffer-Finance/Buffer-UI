@@ -14,6 +14,9 @@ import {
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
+import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
+import { getIdentifier } from '@Hooks/useGenericHook';
+import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
 import { IQTrade, IToken, useQTinfo } from '@Views/BinaryOptions';
 import {
@@ -40,6 +43,7 @@ import VerticalTransition from '@Views/Common/Transitions/Vertical';
 import { Variables } from '@Utils/Time';
 import { BlackBtn } from '@Views/Common/V2-Button';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { Skeleton } from '@mui/material';
 
 const CancelButton = ({ option }) => {
   const toastify = useToast();
@@ -103,6 +107,8 @@ const MobileTable: React.FC<{
     cancelled: cancelledPages,
   } = useAtomValue(tardesTotalPageAtom);
   const { state } = useGlobal();
+  const [visualized, setVisualized] = useAtom(visualizeddAtom);
+
   const { shouldConnectWallet } = useOpenConnectionDrawer();
 
   const activeTab = state.tabs.activeIdx;
@@ -196,29 +202,36 @@ const MobileTable: React.FC<{
     ) {
       const price = getPriceFromKlines(marketPrice, option.configPair);
       console.log(`pricedd: `, price);
-      if (isHistoryTab || price) {
-        let additionalInfo = [
-          {
-            name: (
-              <>
-                {option.state !== BetState.active
-                  ? 'Price at Expiry'
-                  : 'Current Price'}
-              </>
-            ),
-            val: (
+      // if (isHistoryTab || price) {
+      let additionalInfo = [
+        {
+          name: (
+            <>
+              {option.state !== BetState.active
+                ? 'Price at Expiry'
+                : 'Current Price'}
+            </>
+          ),
+          val:
+            isHistoryTab || price ? (
               <ExpiryCurrentComponent
                 isHistoryTable={isHistoryTab}
                 trade={option}
                 marketPrice={marketPrice}
                 configData={option.configPair}
               />
+            ) : (
+              <Skeleton
+                variant="rectangular"
+                className="!w-[80px] bg-1  !h-[20px]"
+              />
             ),
-          },
+        },
 
-          {
-            name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
-            val: (
+        {
+          name: <> {isHistoryTab ? 'Pnl' : 'Probability'}</>,
+          val:
+            isHistoryTab || price ? (
               <ProbabilityPNL
                 isHistoryTable={isHistoryTab}
                 trade={option}
@@ -226,11 +239,41 @@ const MobileTable: React.FC<{
                 onlyPnl
                 configData={option.configPair}
               />
+            ) : (
+              <Skeleton
+                variant="rectangular"
+                className="!w-[80px] bg-1  !h-[20px]"
+              />
             ),
-          },
-        ];
-        arr = [...arr, ...additionalInfo];
-      }
+        },
+      ];
+      arr = [...arr, ...additionalInfo];
+      let isPresentInDisabled = visualized.includes(getIdentifier(option));
+      const viz = [
+        isCancelledTab || isHistoryTab
+          ? null
+          : {
+              name: <> Visualize</>,
+              val: (
+                <BufferCheckbox
+                  checked={!isPresentInDisabled}
+                  onCheckChange={() => {
+                    const currIdentifier = getIdentifier(option);
+                    if (isPresentInDisabled) {
+                      let temp = [...visualized];
+                      temp.splice(visualized.indexOf(currIdentifier), 1);
+                      setVisualized(temp);
+                    } else {
+                      setVisualized([...visualized, currIdentifier]);
+                    }
+                  }}
+                />
+              ),
+            },
+      ];
+      arr = [...arr, ...additionalInfo, ...viz];
+      arr = arr.filter((arr) => arr);
+      // }
     }
     if (selectedIndex === row) visible = true;
 
@@ -265,14 +308,15 @@ const MobileTable: React.FC<{
             </div>
           </div>
 
-          <VerticalTransition value={visible ? 1 : 0}>
-            <div></div>
+          {/* <VerticalTransition value={visible ? 1 : 0}> */}
+          {visible ? (
             <div>
               {arr.map((a) => (
                 <DataRow keyName={a.name} value={a.val} />
               ))}
             </div>
-          </VerticalTransition>
+          ) : null}
+          {/* </VerticalTransition> */}
 
           <div className="flex-bw mt15">
             <div className="flex flex-row items-start">

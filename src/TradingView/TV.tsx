@@ -67,7 +67,7 @@ const getColor = (cp, sp, isAbove) => {
   return !isAbove ? red : green;
 };
 
-function drawPosition(option, visualized, chart, cp,positions) {
+function drawPosition(option, visualized, chart, cp, positions) {
   let vizIdentifiers = getIdentifier(option);
   const idx = visualized.indexOf(vizIdentifiers);
   const openTimeStamp = option.creationTime;
@@ -112,7 +112,7 @@ function getOslonTimezone() {
   return found?.OSLON || 'Etc/UTC';
 }
 
-const TVIntegrated = ({ assetInfo }) => {
+const TVIntegrated = ({ assetInfo, className }) => {
   let positions = useRef([]);
   const chartElementRef = useRef();
   const [chartReady, setChartReady] = useAtom(chartReadyAtom);
@@ -137,10 +137,10 @@ const TVIntegrated = ({ assetInfo }) => {
       chartReady &&
       widgetRef.current &&
       typeof widgetRef.current?.activeChart === 'function'
-      ) {
+    ) {
       setChartReady((c) => false);
       // widgetRef.current.activeChart().resetData();
-      
+
       widgetRef.current?.activeChart?.().setSymbol(assetInfo.tv_id, () => {
         setChartReady((c) => true);
       });
@@ -233,7 +233,7 @@ const TVIntegrated = ({ assetInfo }) => {
       ['1s', '10s', '5m', '60', '120', '240', '1d'].includes(s.toLowerCase())
     );
   };
-  const [breakingCnt,setBreakingCnt] = useAtom(streamBreakedAtom);
+  const [breakingCnt, setBreakingCnt] = useAtom(streamBreakedAtom);
   // resolution syncing
   useEffect(() => {
     if (
@@ -252,15 +252,15 @@ const TVIntegrated = ({ assetInfo }) => {
   }, []);
 
   useEffect(() => {
-    console.log('stream-err1',breakingCnt,chartReady)
-    if (breakingCnt.state != 'break' ) return;
-    if(!chartReady) return;
+    console.log('stream-err1', breakingCnt, chartReady);
+    if (breakingCnt.state != 'break') return;
+    if (!chartReady) return;
     const chart = widgetRef?.current?.activeChart?.();
-    console.log('stream-err2',chart)
+    console.log('stream-err2', chart);
 
     realTimeUpdate.current?.onResetCacheNeededCallback();
     chart.resetData();
-    setBreakingCnt({state:'active'})
+    setBreakingCnt({ state: 'active' });
   }, [breakingCnt]);
   useLayoutEffect(() => {
     setChartReady(false);
@@ -293,7 +293,6 @@ const TVIntegrated = ({ assetInfo }) => {
       positions.current = [];
 
       data.map((option) => {
-
         if (
           option?.configPair?.pair.toLowerCase() !==
           activeMarket.pair.toLowerCase()
@@ -417,7 +416,7 @@ const TVIntegrated = ({ assetInfo }) => {
 
   return (
     <>
-    {/* <button onClick={()=>{
+      {/* <button onClick={()=>{
       setBreakingCnt({
         state:'break'
       })
@@ -443,7 +442,9 @@ const TVIntegrated = ({ assetInfo }) => {
           </BlueBtn>
         </div>
       </Dialog>
-      <div className="items-center justify-between flex-row flex  bg-[#131722] w-full tv-h px-4 py-3">
+      <div
+        className={`${className} items-center justify-between flex-row flex  bg-[#131722] w-full tv-h px-4 py-3`}
+      >
         <div className="flex flex-row justify-start font-[500]">
           <div className="ele cursor-pointer">Time</div>
           {supported_resolutions.map((s) => {
@@ -473,10 +474,7 @@ const TVIntegrated = ({ assetInfo }) => {
         </div>
       </div>
 
-      <div
-
-        className='TVChartContainer-wrapper'
-      >
+      <div className={'TVChartContainer-wrapper ' + className}>
         <div
           ref={chartElementRef}
           id="chart-element"

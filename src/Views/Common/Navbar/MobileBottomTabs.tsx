@@ -1,5 +1,8 @@
-import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
-import { useAtomValue } from 'jotai';
+import {
+  activeMarketFromStorageAtom,
+  isHistoryTabActiveAtom,
+} from '@Views/BinaryOptions';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useMemo } from 'react';
 import { getMobileTabs, getTabs } from 'src/Config/getTabs';
 import { Link, useLocation } from 'react-router-dom';
@@ -18,6 +21,11 @@ const BaseTab = ({
   onClick?: () => void;
   className?: string;
 }) => {
+  const isHistoryTab = tab.name?.toLowerCase() == 'activity';
+  const isBinaryTab = tab.name?.toLowerCase() == 'trade';
+  const location = useLocation();
+  const isTrade = location.pathname.includes('binary');
+  const setHistory = useSetAtom(isHistoryTabActiveAtom);
   const Btn = (
     <div
       className={`flex ${
@@ -25,7 +33,17 @@ const BaseTab = ({
       } items-center content-center text-f12 text-${
         active ? '1' : '2'
       } ${className}`}
-      onClick={onClick}
+      onClick={
+        isHistoryTab
+          ? () => {
+              setHistory(true);
+            }
+          : isBinaryTab
+          ? () => {
+              setHistory(false);
+            }
+          : onClick
+      }
     >
       {tab.icon}
       {tab.name}
@@ -38,7 +56,16 @@ const BaseTab = ({
       </a>
     );
   }
-  return <Link to={tab.to!}>{Btn}</Link>;
+  console.log(`isHistoryTab: `, isHistoryTab);
+  return isHistoryTab ? (
+    isTrade ? (
+      Btn
+    ) : (
+      <Link to={'/binary'}>{Btn}</Link>
+    )
+  ) : (
+    <Link to={tab.to!}>{Btn}</Link>
+  );
 };
 
 const mobleMaxTabLimit = 5;
@@ -79,16 +106,29 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
     [activeMarketFromStorage]
   );
   const location = useLocation();
+  const isHistory = useAtomValue(isHistoryTabActiveAtom);
   const isActive = (t: any) => {
     let tabName = t.to.split('/')[1];
 
-    console.log(`tabName: `, tabName);
     if (tabName == 'trade') {
       tabName = 'binary';
     }
-    console.log(`tabName: `, tabName, location.pathname.toLowerCase());
-    if (tabName)
-      return location.pathname.toLowerCase().includes(tabName.toLowerCase());
+    const isActive = location.pathname
+      .toLowerCase()
+      .includes(tabName.toLowerCase());
+    if (
+      location.pathname.includes('binary') &&
+      (tabName == 'binary' || tabName == 'history')
+    ) {
+      if (tabName == 'binary') {
+        return isActive && !isHistory;
+      }
+      if (tabName == 'history') {
+        return isHistory;
+      }
+    }
+
+    if (tabName) return isActive;
     return false;
   };
   const areExtraTabs = tabs.length > mobleMaxTabLimit;
@@ -100,7 +140,7 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
     });
   };
   return (
-    <div className="bg-1 nsm:hidden mobile-bottom-drawer flex items-center pt-[5px] pb-[8px] justify-between px-3">
+    <div className="bg-1 fixed bottom-[0px] w-full z-10 nsm:hidden mobile-bottom-drawer flex items-center pt-[5px] pb-[8px] justify-between px-3">
       {tabs.slice(0, limit).map((t) => (
         <BaseTab tab={t} active={isActive(t)} />
       ))}{' '}

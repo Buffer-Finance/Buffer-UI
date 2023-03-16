@@ -11,6 +11,7 @@ import { ILeague } from '../interfaces';
 import { useDayOfTournament } from './useDayOfTournament';
 import { useDayOffset } from './useDayOffset';
 import { blockedAccounts } from './useWeeklyLeaderboardQuery';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -20,8 +21,7 @@ interface ILeaderboardQuery {
     volume: string;
     user: string;
   }[];
-  // totalPaginationData: { user: string }[];
-  userData: ILeague[];
+  userData: ILeague;
   reward: { settlementFee: string; totalFee: string }[];
 }
 
@@ -42,7 +42,7 @@ export const useLeaderboardQuery = () => {
   const { day } = useDayOfTournament();
   const timestamp = getDayId(Number(day - Number(offset ?? day)));
   const minimumTrades = isTestnet ? 5 : 3;
-
+const {configContracts} = useActiveChain();
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-offset-${offset}-account-${account}-daily`,
     {
@@ -101,7 +101,7 @@ export const useLeaderboardQuery = () => {
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(baseGraphqlUrl, {
+        const response = await axios.post(configContracts.graph.MAIN, {
           query,
         });
 

@@ -107,6 +107,7 @@ const SideBar: React.FC<any> = () => {
               <NavLink
                 key={option.name}
                 to={option.to}
+                onClick={handleClose}
                 className={({ isActive }) =>
                   `item ${isActive ? 'active bg-4' : ''} 
           `

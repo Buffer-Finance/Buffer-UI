@@ -136,7 +136,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
             `Not enough ${
               // activeChain?.nativeCurrency?.symbol ||
 
-              'AETH'
+              activeChain.nativeCurrency.symbol
             } for Gas Fee!`
           );
         }
