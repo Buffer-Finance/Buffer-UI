@@ -127,7 +127,7 @@ export const Weekly = () => {
     );
   } else {
     content = (
-      <div className="m-auto">
+      <div className="m-auto mb-7">
         <TopData
           pageImage={
             <></>
