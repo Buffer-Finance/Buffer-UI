@@ -90,24 +90,24 @@ export const UserData = () => {
 
       {/* right side -- data */}
       <DataWrapper className="bg-2 px-7 py-[20px] rounded-lg flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
-        <ArbitrumOnly hide>
-          <>
-            <Col
-              className={'winner-card'}
-              head={'Daily Rank'}
-              desc={dailyRank}
-              headClass={'text-f14'}
-              descClass={'text-f16 text-buffer-blue'}
-            />
-            <Col
-              className={'winner-card'}
-              head={'Weekly Rank'}
-              desc={weeklyRank}
-              headClass={'text-f14'}
-              descClass={'text-f16 text-buffer-blue'}
-            />
-          </>
-        </ArbitrumOnly>
+        {/* <ArbitrumOnly hide> */}
+        <>
+          <Col
+            className={'winner-card'}
+            head={'Daily Rank'}
+            desc={dailyRank}
+            headClass={'text-f14'}
+            descClass={'text-f16 text-buffer-blue'}
+          />
+          <Col
+            className={'winner-card'}
+            head={'Weekly Rank'}
+            desc={weeklyRank}
+            headClass={'text-f14'}
+            descClass={'text-f16 text-buffer-blue'}
+          />
+        </>
+        {/* </ArbitrumOnly> */}
         <Col
           className={'winner-card'}
           head={'Net Pnl'}
