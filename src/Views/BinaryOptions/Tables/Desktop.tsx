@@ -38,6 +38,7 @@ import { useGlobal } from '@Contexts/Global';
 import { BetState } from '@Hooks/useAheadTrades';
 import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { priceAtom } from '@Hooks/usePrice';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -59,7 +60,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   onPageChange,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const [marketPrice] = useAtom(priceAtom);
   const { active, history, cancelled } = useAtomValue(tardesAtom);
   const {
     active: activePages,
