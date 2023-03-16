@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { baseGraphqlUrl, isTestnet } from 'config';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
@@ -11,6 +10,7 @@ import { ILeague } from '../interfaces';
 import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { weeklyTournamentConfig } from '../Weekly/config';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -50,7 +50,7 @@ export const useWeeklyLeaderboardQuery = () => {
   const { week } = useWeekOfTournament();
   const timestamp = getWeekId(Number(week - Number(offset ?? week)));
   const { configContracts, activeChain } = useActiveChain();
-  const minimumTrades = isTestnet ? 5 : 3;
+  const configValue = weeklyTournamentConfig[activeChain.id];
 
   // console.log(timestamp, 'timestamp');
 
@@ -63,9 +63,9 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
-          (address) => `"${address}"`
-        )}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+          configValue.minTradesToQualifyPNL
+        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -76,9 +76,9 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: asc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
-          (address) => `"${address}"`
-        )}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+          configValue.minTradesToQualifyPNL
+        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades

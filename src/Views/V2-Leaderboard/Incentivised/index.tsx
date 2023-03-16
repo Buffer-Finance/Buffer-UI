@@ -20,15 +20,7 @@ import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import {
-  contestRules,
-  endDay,
-  losersNFT,
-  poolPercent,
-  rewardFixedAmount,
-  startTimestamp,
-  winnersNFT,
-} from './config';
+import { DailyTournamentConfig } from './config';
 import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import { social } from '@Views/Common/SocialMedia';
 import TabSwitch from '@Views/Common/TabSwitch';
@@ -67,7 +59,8 @@ export const Incentivised = () => {
   const { offset, setOffset } = useDayOffset();
   const [activeTab, setActiveTab] = useState(0);
 
-  const launchTimeStamp = startTimestamp[activeChain.id] / 1000;
+  const configValue = DailyTournamentConfig[activeChain.id];
+  const launchTimeStamp = configValue.startTimestamp / 1000;
   const distance = getDistance(launchTimeStamp);
   const isTimerEnded = distance <= 0;
   const midnightTimeStamp = nextTimeStamp / 1000;
@@ -88,21 +81,21 @@ export const Incentivised = () => {
     } else return [];
   }, [data, skip]);
   const rewardPool = useMemo(() => {
-    if (endDay[activeChain.id] !== undefined) {
+    if (configValue.endDay !== undefined) {
       if (offset === null) {
-        if (day >= endDay[activeChain.id]) return '0 USDC';
+        if (day >= configValue.endDay) return '0 USDC';
       } else {
-        if (Number(offset) >= endDay[activeChain.id]) return '0 USDC';
+        if (Number(offset) >= configValue.endDay) return '0 USDC';
       }
     }
     if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
       return (
         toFixed(
           add(
-            rewardFixedAmount[activeChain.id],
+            configValue.rewardFixedAmount,
             divide(
               multiply(
-                poolPercent[activeChain.id],
+                configValue.poolPercent,
                 divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
               ),
               '100'
@@ -155,7 +148,7 @@ export const Incentivised = () => {
               </div>
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href={contestRules[activeChain.id]}
+                href={configValue.contestRules}
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
@@ -169,8 +162,8 @@ export const Incentivised = () => {
                 desc={
                   <NumberTooltip
                     content={getRewardTooltip(
-                      rewardFixedAmount[activeChain.id],
-                      poolPercent[activeChain.id],
+                      configValue.rewardFixedAmount,
+                      configValue.poolPercent,
                       'USDC'
                     )}
                   >
@@ -250,7 +243,6 @@ export const Incentivised = () => {
           handleChange={(e, t) => {
             setActiveTab(t);
           }}
-          distance={5}
           tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
         />
         <TabSwitch
@@ -263,7 +255,7 @@ export const Incentivised = () => {
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
-              nftWinners={winnersNFT[activeChain.id]}
+              nftWinners={configValue.winnersNFT}
               userRank={winnerUserRank}
             />,
             <DailyWebTable
@@ -273,7 +265,7 @@ export const Incentivised = () => {
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
-              nftWinners={losersNFT[activeChain.id]}
+              nftWinners={configValue.losersNFT}
               userRank={loserUserRank}
             />,
           ]}
@@ -289,9 +281,7 @@ export const Incentivised = () => {
           <div>
             <Warning
               closeWarning={() => {}}
-              state={
-                endDay[activeChain.id] ? day >= endDay[activeChain.id] : false
-              }
+              state={configValue.endDay ? day >= configValue.endDay : false}
               shouldAllowClose={false}
               body={
                 <>
