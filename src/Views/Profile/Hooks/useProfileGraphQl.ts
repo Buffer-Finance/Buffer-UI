@@ -23,8 +23,9 @@ type metricsData = {
   volume: string;
   totalPayout: string;
   net_pnl: string;
+  openInterest: string;
 };
-type ItradingMetricsData = metricsData & {
+export type ItradingMetricsData = metricsData & {
   totalTrades: number;
 };
 

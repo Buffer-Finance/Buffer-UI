@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Launch } from '@mui/icons-material';
@@ -11,7 +12,6 @@ import NFTtier from '@Views/Common/NFTtier';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
 import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
-import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 import { useMemo } from 'react';
 import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
 
@@ -21,6 +21,8 @@ export const UserData = () => {
   const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
   const { tradingMetricsData } = useProfileGraphQl();
+  const { configContracts } = useActiveChain();
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
 
   //finds the address with the highest number from the tradingMetricsData.tradesPerAsset object
   const mostTradedAssetAddress = useMemo(() => {
@@ -90,24 +92,24 @@ export const UserData = () => {
 
       {/* right side -- data */}
       <DataWrapper className="bg-2 px-7 py-[20px] rounded-lg flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
-        <ArbitrumOnly hide>
-          <>
-            <Col
-              className={'winner-card'}
-              head={'Daily Rank'}
-              desc={dailyRank}
-              headClass={'text-f14'}
-              descClass={'text-f16 text-buffer-blue'}
-            />
-            <Col
-              className={'winner-card'}
-              head={'Weekly Rank'}
-              desc={weeklyRank}
-              headClass={'text-f14'}
-              descClass={'text-f16 text-buffer-blue'}
-            />
-          </>
-        </ArbitrumOnly>
+        {/* <ArbitrumOnly hide> */}
+        <>
+          <Col
+            className={'winner-card'}
+            head={'Daily Rank'}
+            desc={dailyRank}
+            headClass={'text-f14'}
+            descClass={'text-f16 text-buffer-blue'}
+          />
+          <Col
+            className={'winner-card'}
+            head={'Weekly Rank'}
+            desc={weeklyRank}
+            headClass={'text-f14'}
+            descClass={'text-f16 text-buffer-blue'}
+          />
+        </>
+        {/* </ArbitrumOnly> */}
         <Col
           className={'winner-card'}
           head={'Net Pnl'}

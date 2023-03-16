@@ -119,8 +119,12 @@ const AppRoutes = () => {
         <Route path="/refer/:code" element={<div>Helo</div>} />
         <Route path="/history" element={<History />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          <Route path="daily" element={<Incentivised />} />
-          <Route path="weekly" element={<Weekly />} />
+          <Route path="daily" element={<Incentivised />}>
+            <Route path=":chain" element={<Incentivised />} />
+          </Route>
+          <Route path="weekly" element={<Weekly />}>
+            <Route path=":chain" element={<Weekly />} />
+          </Route>
         </Route>
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />}>

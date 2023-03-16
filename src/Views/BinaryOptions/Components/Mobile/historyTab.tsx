@@ -11,7 +11,6 @@ import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
-
 import { IQTrade, IToken, useQTinfo } from '@Views/BinaryOptions';
 import {
   IGQLHistory,
@@ -312,14 +311,15 @@ const MobileTable: React.FC<{
             </div>
           </div>
 
-          <VerticalTransition value={visible ? 1 : 0}>
-            <div></div>
+          {/* <VerticalTransition value={visible ? 1 : 0}> */}
+          {visible ? (
             <div>
               {arr.map((a) => (
                 <DataRow keyName={a.name} value={a.val} />
               ))}
             </div>
-          </VerticalTransition>
+          ) : null}
+          {/* </VerticalTransition> */}
 
           <div className="flex-bw mt15">
             <div className="flex flex-row items-start">

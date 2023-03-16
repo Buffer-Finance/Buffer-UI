@@ -1,26 +1,25 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { LeaderBoardDrawers } from './drawers';
-import { LeaderBoardSidebar, MobileLeaderboardDropdwon } from './Sidebar';
+import { LeaderBoardSidebar } from './Sidebar';
 import { LeaderBoardStyles } from './style';
-import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 
 export const LeaderBoard = (props: { children: JSX.Element }) => {
   return (
-    <ArbitrumOnly>
-      <main className="content-drawer">
-        <LeaderBoardStyles>
-          <MobileLeaderboardDropdwon />
-          <LeaderBoardSidebar />
-          {props.children}
-        </LeaderBoardStyles>
-        {typeof window === 'undefined' ? (
-          <LeaderBoardDrawers />
-        ) : (
-          window.innerWidth > 600 && <LeaderBoardDrawers />
-        )}{' '}
-      </main>
-    </ArbitrumOnly>
+    // <ArbitrumOnly>
+    <main className="content-drawer">
+      <LeaderBoardStyles>
+        {/* <MobileLeaderboardDropdwon /> */}
+        <LeaderBoardSidebar />
+        {props.children}
+      </LeaderBoardStyles>
+      {typeof window === 'undefined' ? (
+        <LeaderBoardDrawers />
+      ) : (
+        window.innerWidth > 600 && <LeaderBoardDrawers />
+      )}{' '}
+    </main>
+    // </ArbitrumOnly>
   );
 };
 
