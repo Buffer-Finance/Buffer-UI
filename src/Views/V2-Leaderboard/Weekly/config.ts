@@ -62,7 +62,7 @@ export const weeklyTournamentConfig: {
     minVolumeToQualifyWinrate: '100000000',
   },
   137: {
-    startTimestamp: 1678896000000,
+    startTimestamp: 1678723200000,
     winnersNFT: 0,
     losersNFT: 0,
     endDay: undefined,
