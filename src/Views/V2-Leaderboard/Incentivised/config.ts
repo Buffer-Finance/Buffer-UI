@@ -1,4 +1,8 @@
-import { endTimestampObj, startTimestampObj } from '../Weekly/config';
+import {
+  contestRulesType,
+  endTimestampObj,
+  startTimestampObj,
+} from '../Weekly/config';
 
 export const startTimestamp: startTimestampObj = {
   421613: 1675958400000,
@@ -21,4 +25,13 @@ export const losersNFT: startTimestampObj = {
   42161: 1,
   80001: 0,
   137: 0,
+};
+
+export const contestRules: contestRulesType = {
+  421613:
+    'https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9',
+  42161:
+    'https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9',
+  80001: '',
+  137: '',
 };

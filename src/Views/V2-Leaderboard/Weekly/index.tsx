@@ -1,4 +1,3 @@
-import { CHAIN_CONFIGS } from 'config';
 import useStopWatch from '@Hooks/Utilities/useStopWatch';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
@@ -20,8 +19,13 @@ import { DailyStyles } from '../Daily/stlye';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { endDay, losersNFT, startTimestamp, winnersNFT } from './config';
-
+import {
+  contestRules,
+  endDay,
+  losersNFT,
+  startTimestamp,
+  winnersNFT,
+} from './config';
 import TabSwitch from '@Views/Common/TabSwitch';
 import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
@@ -29,7 +33,6 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
 import { useWeeklyLeaderboardQuery } from '../Hooks/useWeeklyLeaderboardQuery';
 import { TimerBox } from '../Incentivised';
-import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 import { ChainSwitchDropdown } from '@Views/Dashboard';
 
 export const ROWINAPAGE = 10;
@@ -140,7 +143,7 @@ export const Weekly = () => {
               </div>
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52"
+                href={contestRules[activeChain.id]}
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />

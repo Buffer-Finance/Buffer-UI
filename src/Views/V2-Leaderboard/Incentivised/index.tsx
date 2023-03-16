@@ -20,7 +20,13 @@ import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { endDay, losersNFT, startTimestamp, winnersNFT } from './config';
+import {
+  contestRules,
+  endDay,
+  losersNFT,
+  startTimestamp,
+  winnersNFT,
+} from './config';
 import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import { social } from '@Views/Common/SocialMedia';
 import TabSwitch from '@Views/Common/TabSwitch';
@@ -28,7 +34,6 @@ import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useDayOffset } from '../Hooks/useDayOffset';
-import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 import { ChainSwitchDropdown } from '@Views/Dashboard';
 
 export const ROWINAPAGE = 10;
@@ -131,7 +136,7 @@ export const Incentivised = () => {
               </div>
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9"
+                href={contestRules[activeChain.id]}
                 target={'blank'}
               >
                 Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
