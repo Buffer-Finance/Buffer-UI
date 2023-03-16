@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { baseGraphqlLiteUrl, baseGraphqlUrl } from 'config';
-import useSWR from 'swr';
+import { useActiveChain } from "@Hooks/useActiveChain";
+import axios from "axios";
+import { baseGraphqlLiteUrl, baseGraphqlUrl } from "config";
+import useSWR from "swr";
 
 export const usePastTradeQueryByFetch = ({
   account,
@@ -21,11 +22,12 @@ export const usePastTradeQueryByFetch = ({
   cancelledfirst: number;
   currentTime: number;
 }) => {
+  const {configContracts} = useActiveChain();
   return useSWR(
     `history-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledPage-${cancelledskip}-account-${account}`,
     {
       fetcher: async () => {
-        const response = await axios.post(baseGraphqlLiteUrl.testnet, {
+        const response = await axios.post(configContracts.graph.LITE, {
           query: `{ 
             historyTrades: userOptionDatas(
               orderBy: expirationTime

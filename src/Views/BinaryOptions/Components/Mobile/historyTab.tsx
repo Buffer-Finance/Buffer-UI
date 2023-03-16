@@ -14,6 +14,9 @@ import {
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
+import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
+import { getIdentifier } from '@Hooks/useGenericHook';
+import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
 import { IQTrade, IToken, useQTinfo } from '@Views/BinaryOptions';
 import {
@@ -104,6 +107,8 @@ const MobileTable: React.FC<{
     cancelled: cancelledPages,
   } = useAtomValue(tardesTotalPageAtom);
   const { state } = useGlobal();
+  const [visualized, setVisualized] = useAtom(visualizeddAtom);
+
   const { shouldConnectWallet } = useOpenConnectionDrawer();
 
   const activeTab = state.tabs.activeIdx;
@@ -243,6 +248,31 @@ const MobileTable: React.FC<{
         },
       ];
       arr = [...arr, ...additionalInfo];
+      let isPresentInDisabled = visualized.includes(getIdentifier(option));
+      const viz = [
+        isCancelledTab || isHistoryTab
+          ? null
+          : {
+              name: <> Visualize</>,
+              val: (
+                <BufferCheckbox
+                  checked={!isPresentInDisabled}
+                  onCheckChange={() => {
+                    const currIdentifier = getIdentifier(option);
+                    if (isPresentInDisabled) {
+                      let temp = [...visualized];
+                      temp.splice(visualized.indexOf(currIdentifier), 1);
+                      setVisualized(temp);
+                    } else {
+                      setVisualized([...visualized, currIdentifier]);
+                    }
+                  }}
+                />
+              ),
+            },
+      ];
+      arr = [...arr, ...additionalInfo, ...viz];
+      arr = arr.filter((arr) => arr);
       // }
     }
     if (selectedIndex === row) visible = true;
@@ -278,14 +308,15 @@ const MobileTable: React.FC<{
             </div>
           </div>
 
-          <VerticalTransition value={visible ? 1 : 0}>
-            <div></div>
+          {/* <VerticalTransition value={visible ? 1 : 0}> */}
+          {visible ? (
             <div>
               {arr.map((a) => (
                 <DataRow keyName={a.name} value={a.val} />
               ))}
             </div>
-          </VerticalTransition>
+          ) : null}
+          {/* </VerticalTransition> */}
 
           <div className="flex-bw mt15">
             <div className="flex flex-row items-start">

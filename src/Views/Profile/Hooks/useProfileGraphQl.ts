@@ -1,7 +1,7 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { add, subtract } from '@Utils/NumString/stringArithmatics';
 import axios from 'axios';
-import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 
@@ -30,9 +30,10 @@ type ItradingMetricsData = metricsData & {
 
 export const useProfileGraphQl = () => {
   const { address: account } = useUserAccount();
+  const { configContracts } = useActiveChain();
   const { data } = useSWR(`profile-query-account-${account}`, {
     fetcher: async () => {
-      const response = await axios.post(baseGraphqlUrl, {
+      const response = await axios.post(configContracts.graph.LITE, {
         query: `{ 
             userOptionDatas(  
               first: 1000 
