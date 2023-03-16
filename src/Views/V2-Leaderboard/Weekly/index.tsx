@@ -395,7 +395,7 @@ export const Weekly = () => {
                     startTimestamp: configValue.startTimestamp,
                     endDay: configValue.endDay,
                   })}{' '}
-                  UTC.
+                  4pm UTC.
                 </>
               }
               className="!mb-3"
