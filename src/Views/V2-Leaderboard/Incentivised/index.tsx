@@ -311,7 +311,7 @@ export const Incentivised = () => {
                     startTimestamp: configValue.startTimestamp,
                     endDay: configValue.endDay,
                   })}{' '}
-                  UTC.
+                  4pm UTC.
                 </>
               }
               className="!mb-3"
