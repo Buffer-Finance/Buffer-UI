@@ -10,3 +10,15 @@ export const endDay: endTimestampObj = {
   421613: 9,
   42161: 12,
 };
+export const winnersNFT: startTimestampObj = {
+  421613: 0,
+  42161: 0,
+  80001: 0,
+  137: 0,
+};
+export const losersNFT: startTimestampObj = {
+  421613: 1,
+  42161: 1,
+  80001: 0,
+  137: 0,
+};

@@ -20,7 +20,7 @@ import { DailyStyles } from '../Daily/stlye';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { endDay, startTimestamp } from './config';
+import { endDay, losersNFT, startTimestamp, winnersNFT } from './config';
 
 import TabSwitch from '@Views/Common/TabSwitch';
 import BufferTab from '@Views/Common/BufferTab';
@@ -30,6 +30,7 @@ import { useWeekOffset } from '../Hooks/useWeekoffset';
 import { useWeeklyLeaderboardQuery } from '../Hooks/useWeeklyLeaderboardQuery';
 import { TimerBox } from '../Incentivised';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
+import { ChainSwitchDropdown } from '@Views/Dashboard';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -38,13 +39,24 @@ export const usdcDecimals = 6;
 export const Weekly = () => {
   const { activeChain } = useActiveChain();
   const { week, nextTimeStamp } = useWeekOfTournament();
+  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
+    useWeeklyLeaderboardQuery();
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
+  const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
+  const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
+  const { offset, setOffset } = useWeekOffset();
+  const [activeTab, setActiveTab] = useState(0);
+
+  const midnightTimeStamp = nextTimeStamp / 1000;
+  const launchTimeStamp = startTimestamp[activeChain.id] / 1000;
+  const distance = getDistance(launchTimeStamp);
+  const isTimerEnded = distance <= 0;
+  const stopwatch = useStopWatch(midnightTimeStamp);
+
   const skip = useMemo(
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
-    useWeeklyLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -55,27 +67,6 @@ export const Weekly = () => {
       return data.loserStats.slice(skip, skip + ROWINAPAGE);
     } else return [];
   }, [data, skip]);
-  const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
-
-  const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
-
-  const setActivePageNumber = (page: number) => {
-    setTableActivePage({ arbitrum: page });
-  };
-
-  const midnightTimeStamp = nextTimeStamp / 1000;
-
-  const launchTimeStamp = startTimestamp[activeChain.id] / 1000;
-  const distance = getDistance(launchTimeStamp);
-  const isTimerEnded = distance <= 0;
-  const stopwatch = useStopWatch(midnightTimeStamp);
-  const { offset, setOffset } = useWeekOffset();
-  const [activeTab, setActiveTab] = useState(0);
-
-  useEffect(() => {
-    setActivePageNumber(1);
-  }, [activeTab]);
-
   const rewardPool = useMemo(() => {
     if (week === null) return null;
     if (endDay[activeChain.id] !== undefined) {
@@ -108,14 +99,13 @@ export const Weekly = () => {
     else return 'fetching...';
   }, [activeChain, week, offset, data]);
 
-  // useEffect(() => {
-  //   if (
-  //     (week !== null && offset === null) ||
-  //     (offset !== null && week !== null && offset.toString() != week.toFixed())
-  //   ) {
-  //     setOffset(week.toString());
-  //   }
-  // }, [week, offset]);
+  useEffect(() => {
+    setActivePageNumber(1);
+  }, [activeTab]);
+
+  const setActivePageNumber = (page: number) => {
+    setTableActivePage({ arbitrum: page });
+  };
 
   let content;
   if (!isTimerEnded) {
@@ -135,15 +125,19 @@ export const Weekly = () => {
       <div className="m-auto">
         <TopData
           pageImage={
-            <img
-              src={chainImageMappipng[activeChain.name]}
-              alt=""
-              className="w-[45px]"
-            />
+            <></>
+            // <img
+            //   src={chainImageMappipng[activeChain.name]}
+            //   alt=""
+            //   className="w-[45px]"
+            // />
           }
           heading={
             <div className="flex flex-col items-start">
-              {activeChain.name}
+              <div className="flex items-center gap-3">
+                <div> Leaderboard </div>
+                <ChainSwitchDropdown baseUrl="/leaderboard/weekly" />
+              </div>
               <a
                 className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
                 href="https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52"
@@ -251,7 +245,7 @@ export const Weekly = () => {
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
-              nftWinners={3}
+              nftWinners={winnersNFT[activeChain.id]}
               userRank={winnerUserRank}
               activePage={activePages.arbitrum}
             />,
@@ -263,7 +257,7 @@ export const Weekly = () => {
               onpageChange={setActivePageNumber}
               userData={data?.userData}
               skip={skip}
-              nftWinners={4}
+              nftWinners={losersNFT[activeChain.id]}
             />,
           ]}
         />

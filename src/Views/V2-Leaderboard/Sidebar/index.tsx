@@ -1,4 +1,3 @@
-import { Button } from '@mui/material';
 import React from 'react';
 import { LeaderBoardSidebarStyles } from './style';
 import Daily from '@Public/LeaderBoard/Daily';
