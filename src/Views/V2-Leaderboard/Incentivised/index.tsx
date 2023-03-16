@@ -143,7 +143,7 @@ export const Incentivised = () => {
           heading={
             <div className="flex flex-col items-start">
               <div className="flex items-center gap-3">
-                <div> Leaderboard </div>
+                <div>Daily Leaderboard </div>
                 <ChainSwitchDropdown baseUrl="/leaderboard/daily" />
               </div>
               <a
