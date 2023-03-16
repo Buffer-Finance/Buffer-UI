@@ -23,8 +23,8 @@ export const weeklyTournamentConfig: {
     endDay: undefined,
     contestRules:
       'https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
-    rewardFixedAmount: '1000',
-    poolPercent: '5',
+    rewardFixedAmount: '0',
+    poolPercent: '0',
     minTradesToQualifyPNL: 5,
     winrateStartWeek: 2,
     winrateNFT: 3,
