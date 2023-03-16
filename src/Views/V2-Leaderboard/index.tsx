@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { LeaderBoardDrawers } from './drawers';
-import { LeaderBoardSidebar } from './Sidebar';
+import { LeaderBoardSidebar, MobileLeaderboardDropdwon } from './Sidebar';
 import { LeaderBoardStyles } from './style';
 
 export const LeaderBoard = (props: { children: JSX.Element }) => {
