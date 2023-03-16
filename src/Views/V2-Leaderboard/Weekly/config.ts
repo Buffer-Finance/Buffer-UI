@@ -33,3 +33,17 @@ export const contestRules: contestRulesType = {
   80001: '',
   137: '',
 };
+
+export const rewardFixedAmount: contestRulesType = {
+  421613: '1000',
+  42161: '1000',
+  80001: '0',
+  137: '0',
+};
+
+export const poolPercent: contestRulesType = {
+  421613: '5',
+  42161: '5',
+  80001: '5',
+  137: '5',
+};

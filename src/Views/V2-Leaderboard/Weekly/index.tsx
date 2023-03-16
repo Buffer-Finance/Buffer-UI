@@ -23,6 +23,8 @@ import {
   contestRules,
   endDay,
   losersNFT,
+  poolPercent,
+  rewardFixedAmount,
   startTimestamp,
   winnersNFT,
 } from './config';
@@ -87,10 +89,10 @@ export const Weekly = () => {
       return (
         toFixed(
           add(
-            '1000',
+            rewardFixedAmount[activeChain.id],
             divide(
               multiply(
-                '5',
+                poolPercent[activeChain.id],
                 divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
               ),
               '100'

@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { getDistance } from '@Utils/Staking/utils';
 import { LeaderBoard } from '..';
@@ -24,6 +24,8 @@ import {
   contestRules,
   endDay,
   losersNFT,
+  poolPercent,
+  rewardFixedAmount,
   startTimestamp,
   winnersNFT,
 } from './config';
@@ -82,13 +84,16 @@ export const Incentivised = () => {
     if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
       return (
         toFixed(
-          divide(
-            multiply(
-              '5',
-              divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
-            ),
-            '100'
-          ) ?? '0',
+          add(
+            rewardFixedAmount[activeChain.id],
+            divide(
+              multiply(
+                poolPercent[activeChain.id],
+                divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
+              ),
+              '100'
+            ) ?? '0'
+          ),
           0
         ) + ' USDC'
       );
