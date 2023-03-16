@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
-import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { getDistance } from '@Utils/Staking/utils';
 import { LeaderBoard } from '..';
@@ -41,6 +41,20 @@ import { ChainSwitchDropdown } from '@Views/Dashboard';
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
 export const usdcDecimals = 6;
+
+export const getRewardTooltip = (
+  fixedAmount: string,
+  poolPercent: string,
+  unit: string
+) => {
+  let tooltip = '';
+  if (gt(fixedAmount, '0')) {
+    tooltip = tooltip + `${fixedAmount} ${unit} `;
+  }
+  if (gt(poolPercent, '0'))
+    tooltip = tooltip + `${poolPercent}% of the fees collected for the day.`;
+  return tooltip;
+};
 
 export const Incentivised = () => {
   const { activeChain } = useActiveChain();
@@ -154,7 +168,11 @@ export const Incentivised = () => {
                 head={'Reward Pool'}
                 desc={
                   <NumberTooltip
-                    content={'5% of the fees collected for the day.'}
+                    content={getRewardTooltip(
+                      rewardFixedAmount[activeChain.id],
+                      poolPercent[activeChain.id],
+                      'USDC'
+                    )}
                   >
                     <div>{rewardPool}</div>
                   </NumberTooltip>

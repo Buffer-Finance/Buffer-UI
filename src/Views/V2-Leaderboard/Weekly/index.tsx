@@ -34,7 +34,7 @@ import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
 import { useWeeklyLeaderboardQuery } from '../Hooks/useWeeklyLeaderboardQuery';
-import { TimerBox } from '../Incentivised';
+import { getRewardTooltip, TimerBox } from '../Incentivised';
 import { ChainSwitchDropdown } from '@Views/Dashboard';
 
 export const ROWINAPAGE = 10;
@@ -158,9 +158,11 @@ export const Weekly = () => {
                 head={'Reward Pool'}
                 desc={
                   <NumberTooltip
-                    content={
-                      '1000 USDC + 5% of the fees collected for the week.'
-                    }
+                    content={getRewardTooltip(
+                      rewardFixedAmount[activeChain.id],
+                      poolPercent[activeChain.id],
+                      'USDC'
+                    )}
                   >
                     <div>{rewardPool}</div>
                   </NumberTooltip>
