@@ -24,13 +24,13 @@ const Profile = () => {
       <UserData />
       <ReferralLink />
       <ProfileCards />
-      <div className="my-8 flex flex-col ">
-        <div className="text-f22 mb-7">Trades</div>
-        <HistoryTables />
-      </div>
       <ArbitrumOnly hide>
         <ClaimedNFT />
       </ArbitrumOnly>
+      <div className="my-7 flex flex-col ">
+        <div className="text-f22 mb-7">Trades</div>
+        <HistoryTables />
+      </div>
     </div>
   );
 };

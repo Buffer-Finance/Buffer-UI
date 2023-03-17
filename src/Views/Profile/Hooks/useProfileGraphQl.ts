@@ -24,7 +24,7 @@ type metricsData = {
   totalPayout: string;
   net_pnl: string;
 };
-type ItradingMetricsData = metricsData & {
+export type ItradingMetricsData = metricsData & {
   totalTrades: number;
 };
 
