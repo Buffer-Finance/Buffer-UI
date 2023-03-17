@@ -15,7 +15,7 @@ import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { getChains } from 'src/Config/wagmiClient';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -89,7 +89,7 @@ function Boxes() {
         Heading={
           <div className="flex items-center">
             <div className={topStyles}>Dashboard</div>
-            <ChainSwitchDropdown />{' '}
+            <ChainSwitchDropdown baseUrl="/dashboard" />{' '}
           </div>
         }
         subHeading={
@@ -134,10 +134,12 @@ const DashboardOtherChainData = () => {
   return <OtherBLP data={otherBLP} tokenName={'BLP'} />;
 };
 
-const ChainSwitchDropdown = () => {
+export const ChainSwitchDropdown = ({ baseUrl }: { baseUrl: string }) => {
   const { activeChain } = useActiveChain();
   const tabList = getChains();
   const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <BufferDropdown
       rootClass="w-fit"
@@ -156,6 +158,10 @@ const ChainSwitchDropdown = () => {
       )}
       items={tabList}
       item={(tab, handleClose, onChange, isActive, index) => {
+        let navigationUrl = `${baseUrl}/${tab.name}`;
+        if (location.search !== '') {
+          navigationUrl = navigationUrl + location.search;
+        }
         return (
           <div
             className={`text-f14 whitespace-nowrap ${
@@ -163,7 +169,7 @@ const ChainSwitchDropdown = () => {
             } ${index === 0 ? '' : 'pt-[6px]'} ${
               activeChain.name === tab.name ? 'text-1' : 'text-2'
             }`}
-            onClick={() => navigate(`/dashboard/${tab.name}`)}
+            onClick={() => navigate(navigationUrl)}
           >
             <div className="flex">
               <img
