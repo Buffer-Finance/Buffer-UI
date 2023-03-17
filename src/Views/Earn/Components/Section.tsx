@@ -3,8 +3,7 @@ export const Section = ({
   subHeading,
   Cards,
   other,
-  className = '
-  ',
+  className = '',
 }: {
   Heading: JSX.Element;
   subHeading: JSX.Element;
