@@ -10,7 +10,7 @@ export function TopData({
   desc?: JSX.Element;
 }) {
   return (
-    <div className="w-fit mt-5 b1200:mx-auto tab:flex-col tab:items-center">
+    <div className="mt-5 b1200:mx-auto tab:flex-col tab:items-center">
       <div className="flex items-center">
         {pageImage && <div>{pageImage}</div>}
         <div className="flex-col">
