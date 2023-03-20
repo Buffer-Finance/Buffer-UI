@@ -146,114 +146,84 @@ export const Incentivised = () => {
     );
   } else {
     content = (
-      <div className="m-auto mb-7">
-        <TopData
-          pageImage={
-            <></>
-            // <img
-            //   src={chainImageMappipng[activeChain.name]}
-            //   alt=""
-            //   className="w-[45px]"
-            // />
-          }
-          heading={
-            <div className="flex flex-col items-start">
-              <div className="flex items-center gap-3">
-                <div>Daily Leaderboard </div>
-                <ChainSwitchDropdown baseUrl="/leaderboard/daily" />
-              </div>
-              <a
-                className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href={configValue.contestRules}
-                target={'blank'}
+      <>
+        <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
+          <Col
+            head={'Reward Pool'}
+            desc={
+              <NumberTooltip
+                content={getRewardTooltip(
+                  configValue.rewardFixedAmount,
+                  configValue.poolPercent,
+                  'USDC'
+                )}
               >
-                Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
-              </a>
-            </div>
-          }
-          DataCom={
-            <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
-              <Col
-                head={'Reward Pool'}
-                desc={
-                  <NumberTooltip
-                    content={getRewardTooltip(
-                      configValue.rewardFixedAmount,
-                      configValue.poolPercent,
-                      'USDC'
-                    )}
-                  >
-                    <div>{rewardPool}</div>
-                  </NumberTooltip>
-                }
-                descClass="text-f16 tab:text-f14 font-medium light-blue-text "
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
+                <div>{rewardPool}</div>
+              </NumberTooltip>
+            }
+            descClass="text-f16 tab:text-f14 font-medium light-blue-text "
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={`Countdown ${day ? `(#${day})` : ''}`}
+            desc={stopwatch}
+            descClass="text-f16 tab:text-f14 fw4 text-5"
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={'Trades'}
+            desc={
+              totalTournamentData?.allTradesCount
+                ? totalTournamentData.allTradesCount
+                : 'Counting...'
+            }
+            descClass="text-f16 tab:text-f14 fw4 text-5 "
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={'Volume'}
+            desc={
+              data && data.reward && data.reward[0] && data.reward[0].totalFee
+                ? numberWithCommas(
+                    toFixed(
+                      divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
+                      0
+                    )
+                  ) + ' USDC'
+                : 'Counting...'
+            }
+            descClass="text-f16 tab:text-f14 fw4 "
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={'Participants'}
+            desc={
+              totalTournamentData?.totalUsers
+                ? totalTournamentData.totalUsers
+                : 'Counting...'
+            }
+            descClass="text-f16 tab:text-f14 fw4 text-5"
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={'Day'}
+            desc={
+              <ContestFilterDD
+                count={day}
+                offset={offset}
+                setOffset={setOffset}
               />
-              <Col
-                head={`Countdown ${day ? `(#${day})` : ''}`}
-                desc={stopwatch}
-                descClass="text-f16 tab:text-f14 fw4 text-5"
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-              <Col
-                head={'Trades'}
-                desc={
-                  totalTournamentData?.allTradesCount
-                    ? totalTournamentData.allTradesCount
-                    : 'Counting...'
-                }
-                descClass="text-f16 tab:text-f14 fw4 text-5 "
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-              <Col
-                head={'Volume'}
-                desc={
-                  data &&
-                  data.reward &&
-                  data.reward[0] &&
-                  data.reward[0].totalFee
-                    ? numberWithCommas(
-                        toFixed(
-                          divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
-                          0
-                        )
-                      ) + ' USDC'
-                    : 'Counting...'
-                }
-                descClass="text-f16 tab:text-f14 fw4 "
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-              <Col
-                head={'Participants'}
-                desc={
-                  totalTournamentData?.totalUsers
-                    ? totalTournamentData.totalUsers
-                    : 'Counting...'
-                }
-                descClass="text-f16 tab:text-f14 fw4 text-5"
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-              <Col
-                head={'Day'}
-                desc={
-                  <ContestFilterDD
-                    count={day}
-                    offset={offset}
-                    setOffset={setOffset}
-                  />
-                }
-                descClass="text-f16 tab:text-f14 fw4 text-5 "
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-            </div>
-          }
-        />
+            }
+            descClass="text-f16 tab:text-f14 fw4 text-5 "
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+        </div>{' '}
         <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
           <LeaderBoardTabs
             activeTab={activeTab}
@@ -286,7 +256,7 @@ export const Incentivised = () => {
             ]}
           />
         </div>
-      </div>
+      </>
     );
   }
 
@@ -316,7 +286,34 @@ export const Incentivised = () => {
               }
               className="!mb-3"
             />
-            {content}
+            <div className="m-auto mb-7">
+              <TopData
+                pageImage={
+                  <></>
+                  // <img
+                  //   src={chainImageMappipng[activeChain.name]}
+                  //   alt=""
+                  //   className="w-[45px]"
+                  // />
+                }
+                heading={
+                  <div className="flex flex-col items-start">
+                    <div className="flex items-center gap-3">
+                      <div>Daily Leaderboard </div>
+                      <ChainSwitchDropdown baseUrl="/leaderboard/daily" />
+                    </div>
+                    <a
+                      className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
+                      href={configValue.contestRules}
+                      target={'blank'}
+                    >
+                      Contest Rules <FrontArrow className="tml w-fit inline" />
+                    </a>
+                  </div>
+                }
+                DataCom={content}
+              />
+            </div>{' '}
           </div>
         </DailyStyles>
       }
