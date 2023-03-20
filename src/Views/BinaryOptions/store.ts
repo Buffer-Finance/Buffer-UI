@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { IMarket } from '.';
 
-export const minTradeAmount = 5;
+export const minTradeAmount = 1;
 export interface IStatsData {
   underlying_asset: {
     address: string;

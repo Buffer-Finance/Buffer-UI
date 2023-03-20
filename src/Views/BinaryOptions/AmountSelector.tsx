@@ -19,6 +19,7 @@ import { DurationPicker } from './PGDrawer/DurationPicker';
 import { Background } from './PGDrawer/style';
 import { useToast } from '@Contexts/Toast';
 import { USDCIcon } from '@SVG/Elements/usdc';
+import { minTradeAmount } from './store';
 const shutterModalAtom = atom<{ open: false | 'amount' | 'duration' }>({
   open: false,
 });
@@ -140,8 +141,8 @@ const AmountSelector: React.FC<any> = ({
                 `Not enough liquidity to fund this trade. Please eneter a smaller amount!`
               );
             }
-            if (gt('5', val)) {
-              errors.push('Minimum Trade Size is 5!');
+            if (gt(minTradeAmount.toString(), val)) {
+              errors.push('Minimum Trade Size is ' + minTradeAmount.toString());
             }
             setErr(errors);
           }}
