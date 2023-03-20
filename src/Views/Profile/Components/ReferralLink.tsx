@@ -17,7 +17,7 @@ export const ReferralLink = () => {
   if (viewOnlyMode) return <></>;
 
   return (
-    <div className="rounded-lg px-[30px] py-8 bg-2 flex items-center justify-between my-6 sm:flex-col sm:gap-6 sm:px-6 sm:py-6">
+    <div className="rounded-lg px-7 py-5 bg-2 flex items-center justify-between mt-5 mb-[0] sm:flex-col sm:gap-6 sm:px-6 sm:py-6">
       {/* left side */}
       <div className="flex items-start gap-5">
         <BufferLogo height={60} width={60} />{' '}

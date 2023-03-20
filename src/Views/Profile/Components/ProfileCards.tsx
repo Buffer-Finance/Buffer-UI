@@ -1,3 +1,4 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Skeleton } from '@mui/material';
 import { divide } from '@Utils/NumString/stringArithmatics';
@@ -8,7 +9,6 @@ import { Section } from '@Views/Earn/Components/Section';
 import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
 import { IReferralStat, useUserReferralStats } from '@Views/Referral';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
-import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 import {
   ItradingMetricsData,
   useProfileGraphQl,
@@ -28,6 +28,7 @@ export const ProfileCards = () => {
         <Trading data={tradingMetricsData} heading={'Trading Metrics'} />,
         <Referral data={data} heading={'Referral Metrics'} />,
       ]}
+      className="!mt-7"
     />
   );
 };
@@ -40,6 +41,9 @@ const Trading = ({
   heading: string;
 }) => {
   const { address: account } = useUserAccount();
+  const { configContracts } = useActiveChain();
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
 
@@ -96,6 +100,9 @@ const Referral = ({
   heading: string;
 }) => {
   const { address: account } = useUserAccount();
+  const { configContracts } = useActiveChain();
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
   if (data === undefined)

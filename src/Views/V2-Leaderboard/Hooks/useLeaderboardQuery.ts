@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { baseGraphqlUrl, isTestnet } from 'config';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
@@ -12,6 +11,7 @@ import { useDayOfTournament } from './useDayOfTournament';
 import { useDayOffset } from './useDayOffset';
 import { blockedAccounts } from './useWeeklyLeaderboardQuery';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { DailyTournamentConfig } from '../Incentivised/config';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -21,12 +21,11 @@ interface ILeaderboardQuery {
     volume: string;
     user: string;
   }[];
-  userData: ILeague;
+  userData: ILeague[];
   reward: { settlementFee: string; totalFee: string }[];
 }
 
 export function getDayId(offset: number): number {
-  console.log(offset, 'offset');
   let timestamp = new Date().getTime() / 1000;
   if (offset > 0) {
     timestamp = timestamp - offset * 86400;
@@ -41,10 +40,11 @@ export const useLeaderboardQuery = () => {
   const { offset } = useDayOffset();
   const { day } = useDayOfTournament();
   const timestamp = getDayId(Number(day - Number(offset ?? day)));
-  const minimumTrades = isTestnet ? 5 : 3;
-const {configContracts} = useActiveChain();
+  const { configContracts, activeChain } = useActiveChain();
+  const configValue = DailyTournamentConfig[activeChain.id];
+
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-offset-${offset}-account-${account}-daily`,
+    `leaderboard-arbi-offset-${offset}-account-${account}-daily-chainId-${activeChain.id}`,
     {
       fetcher: async () => {
         const leaderboardQuery = `
@@ -52,9 +52,9 @@ const {configContracts} = useActiveChain();
             orderBy: netPnL
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
-          (address) => `"${address}"`
-        )}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+          configValue.minTradesToQualifyPNL
+        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -65,9 +65,9 @@ const {configContracts} = useActiveChain();
             orderBy: netPnL
             orderDirection: asc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${minimumTrades}, user_not_in: [${blockedAccounts.map(
-          (address) => `"${address}"`
-        )}]}
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+          configValue.minTradesToQualifyPNL
+        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -105,7 +105,7 @@ const {configContracts} = useActiveChain();
           query,
         });
 
-        return response.data?.data as {};
+        return response.data?.data as ILeaderboardQuery;
       },
       refreshInterval: 300,
     }

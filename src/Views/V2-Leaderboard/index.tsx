@@ -11,21 +11,21 @@ import { HeadTitle } from '@Views/Common/TitleHead';
 
 export const LeaderBoard = (props: { children: JSX.Element }) => {
   return (
-    <ArbitrumOnly>
-      <main className="content-drawer">
-        <HeadTitle title={'Buffer | Competitions'} />
-        <LeaderBoardStyles>
-          {/* <MobileLeaderboardDropdwon /> */}
-          <LeaderBoardSidebar />
-          {props.children}
-        </LeaderBoardStyles>
-        {typeof window === 'undefined' ? (
-          <LeaderBoardDrawers />
-        ) : (
-          window.innerWidth > 600 && <LeaderBoardDrawers />
-        )}{' '}
-      </main>
-    </ArbitrumOnly>
+    // <ArbitrumOnly>
+    <main className="content-drawer">
+      <HeadTitle title={'Buffer | Competitions'} />
+      <LeaderBoardStyles>
+        <MobileLeaderboardDropdwon />
+        <LeaderBoardSidebar />
+        {props.children}
+      </LeaderBoardStyles>
+      {typeof window === 'undefined' ? (
+        <LeaderBoardDrawers />
+      ) : (
+        window.innerWidth > 600 && <LeaderBoardDrawers />
+      )}{' '}
+    </main>
+    // </ArbitrumOnly>
   );
 };
 

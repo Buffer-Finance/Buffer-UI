@@ -1,10 +1,9 @@
-import { CHAIN_CONFIGS } from 'config';
 import useStopWatch, { useTimer } from '@Hooks/Utilities/useStopWatch';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { getDistance } from '@Utils/Staking/utils';
 import { LeaderBoard } from '..';
@@ -21,30 +20,72 @@ import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
 import { Warning } from '@Views/Common/Notification/warning';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { endDay, startTimestamp } from './config';
+import { DailyTournamentConfig } from './config';
 import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import { social } from '@Views/Common/SocialMedia';
 import TabSwitch from '@Views/Common/TabSwitch';
-import BufferTab from '@Views/Common/BufferTab';
 import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useDayOffset } from '../Hooks/useDayOffset';
+import { LeaderBoardTabs } from '../Weekly';
+import { ChainSwitchDropdown } from '@Views/Dashboard';
+import { getDisplayDateUTC } from '@Utils/Dates/displayDateTime';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
-export const usdcDecimals = 6;
+
+export const getRewardTooltip = (
+  fixedAmount: string,
+  poolPercent: string,
+  unit: string
+) => {
+  let tooltip = '';
+  if (gt(fixedAmount, '0')) {
+    tooltip = tooltip + `${fixedAmount} ${unit} + `;
+  }
+  if (gt(poolPercent, '0'))
+    tooltip = tooltip + `${poolPercent}% of the fees collected for the day.`;
+  return tooltip;
+};
+
+export const getTournamentEndDate = ({
+  startTimestamp,
+  endDay,
+}: {
+  startTimestamp: number;
+  endDay: number | undefined;
+}) => {
+  if (!startTimestamp || !endDay) return '';
+  const startdate = getDisplayDateUTC(
+    Math.floor(startTimestamp / 1000) + (endDay - 1) * 86400
+  );
+
+  return startdate;
+};
 
 export const Incentivised = () => {
-  const { activeChain } = useActiveChain();
+  const { activeChain, configContracts } = useActiveChain();
   const { day, nextTimeStamp } = useDayOfTournament();
-  console.log(day, 'day in incentivised');
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
+  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
+    useLeaderboardQuery();
+  const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
+  const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
+  const { offset, setOffset } = useDayOffset();
+  const [activeTab, setActiveTab] = useState(0);
+
+  const configValue = DailyTournamentConfig[activeChain.id];
+  const launchTimeStamp = configValue.startTimestamp / 1000;
+  const distance = getDistance(launchTimeStamp);
+  const isTimerEnded = distance <= 0;
+  const midnightTimeStamp = nextTimeStamp / 1000;
+  const stopwatch = useStopWatch(midnightTimeStamp);
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+
   const skip = useMemo(
     () => ROWINAPAGE * (activePages.arbitrum - 1),
     [activePages.arbitrum]
   );
-  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
-    useLeaderboardQuery();
   const tableData = useMemo(() => {
     if (data && data.userStats) {
       return data.userStats.slice(skip, skip + ROWINAPAGE);
@@ -55,56 +96,40 @@ export const Incentivised = () => {
       return data.loserStats.slice(skip, skip + ROWINAPAGE);
     } else return [];
   }, [data, skip]);
-  const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
-
-  const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
-
-  const setActivePageNumber = (page: number) => {
-    setTableActivePage({ arbitrum: page });
-  };
-
-  const midnightTimeStamp = nextTimeStamp / 1000;
-
-  const launchTimeStamp = startTimestamp[activeChain.id] / 1000;
-  const distance = getDistance(launchTimeStamp);
-  const isTimerEnded = distance <= 0;
-  const stopwatch = useStopWatch(midnightTimeStamp);
-  const { offset, setOffset } = useDayOffset();
-  const [activeTab, setActiveTab] = useState(0);
-
-  useEffect(() => {
-    setActivePageNumber(1);
-  }, [activeTab, offset]);
-
   const rewardPool = useMemo(() => {
-    if (endDay[activeChain.id] !== undefined) {
+    if (configValue.endDay !== undefined) {
       if (offset === null) {
-        if (day >= endDay[activeChain.id]) return '0 USDC';
+        if (day >= configValue.endDay) return '0 USDC';
       } else {
-        if (Number(offset) >= endDay[activeChain.id]) return '0 USDC';
+        if (Number(offset) >= configValue.endDay) return '0 USDC';
       }
     }
     if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
       return (
         toFixed(
-          divide(
-            multiply(
-              '5',
-              divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
-            ),
-            '100'
-          ) ?? '0',
+          add(
+            configValue.rewardFixedAmount,
+            divide(
+              multiply(
+                configValue.poolPercent,
+                divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
+              ),
+              '100'
+            ) ?? '0'
+          ),
           0
         ) + ' USDC'
       );
     else return 'fetching...';
   }, [activeChain, day, offset, data]);
 
-  // useEffect(() => {
-  //   if (offset === null) {
-  //     setOffset(day.toString());
-  //   }
-  // }, [day]);
+  useEffect(() => {
+    setActivePageNumber(1);
+  }, [activeTab, offset]);
+
+  const setActivePageNumber = (page: number) => {
+    setTableActivePage({ arbitrum: page });
+  };
 
   let content;
   if (!isTimerEnded) {
@@ -121,140 +146,117 @@ export const Incentivised = () => {
     );
   } else {
     content = (
-      <div className="m-auto">
-        <TopData
-          pageImage={
-            <img
-              src={CHAIN_CONFIGS['TESTNET']['ARBITRUM'].img}
-              alt=""
-              className="w-[45px]"
-            />
-          }
-          heading={
-            <div className="flex flex-col items-start">
-              {activeChain.name}
-              <a
-                className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
-                href="https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9"
-                target={'blank'}
+      <>
+        <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
+          <Col
+            head={'Reward Pool'}
+            desc={
+              <NumberTooltip
+                content={getRewardTooltip(
+                  configValue.rewardFixedAmount,
+                  configValue.poolPercent,
+                  'USDC'
+                )}
               >
-                Contest Rules <FrontArrow className="tml w-fit inline mt-2" />
-              </a>
-            </div>
-          }
-          DataCom={
-            <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
-              <Col
-                head={'Reward Pool'}
-                desc={
-                  <NumberTooltip
-                    content={'5% of the fees collected for the day.'}
-                  >
-                    <div>{rewardPool}</div>
-                  </NumberTooltip>
-                }
-                descClass="text-f16 tab:text-f14 font-medium light-blue-text "
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
+                <div>{rewardPool}</div>
+              </NumberTooltip>
+            }
+            descClass="text-f16 tab:text-f14 font-medium light-blue-text "
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={`Countdown ${day ? `(#${day})` : ''}`}
+            desc={stopwatch}
+            descClass="text-f16 tab:text-f14 fw4 text-5"
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={'Trades'}
+            desc={
+              totalTournamentData?.allTradesCount
+                ? totalTournamentData.allTradesCount
+                : 'Counting...'
+            }
+            descClass="text-f16 tab:text-f14 fw4 text-5 "
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={'Volume'}
+            desc={
+              data && data.reward && data.reward[0] && data.reward[0].totalFee
+                ? numberWithCommas(
+                    toFixed(
+                      divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
+                      0
+                    )
+                  ) + ' USDC'
+                : 'Counting...'
+            }
+            descClass="text-f16 tab:text-f14 fw4 "
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={'Participants'}
+            desc={
+              totalTournamentData?.totalUsers
+                ? totalTournamentData.totalUsers
+                : 'Counting...'
+            }
+            descClass="text-f16 tab:text-f14 fw4 text-5"
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+          <Col
+            head={'Day'}
+            desc={
+              <ContestFilterDD
+                count={day}
+                offset={offset}
+                setOffset={setOffset}
               />
-              <Col
-                head={`Countdown ${day ? `(#${day})` : ''}`}
-                desc={stopwatch}
-                descClass="text-f16 tab:text-f14 fw4 text-5"
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-              <Col
-                head={'Trades'}
-                desc={
-                  totalTournamentData?.allTradesCount
-                    ? totalTournamentData.allTradesCount
-                    : 'Counting...'
-                }
-                descClass="text-f16 tab:text-f14 fw4 text-5 "
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-              <Col
-                head={'Volume'}
-                desc={
-                  data &&
-                  data.reward &&
-                  data.reward[0] &&
-                  data.reward[0].totalFee
-                    ? numberWithCommas(
-                        toFixed(
-                          divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
-                          0
-                        )
-                      ) + ' USDC'
-                    : 'Counting...'
-                }
-                descClass="text-f16 tab:text-f14 fw4 "
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-              <Col
-                head={'Participants'}
-                desc={
-                  totalTournamentData?.totalUsers
-                    ? totalTournamentData.totalUsers
-                    : 'Counting...'
-                }
-                descClass="text-f16 tab:text-f14 fw4 text-5"
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-              <Col
-                head={'Day'}
-                desc={
-                  <ContestFilterDD
-                    count={day}
-                    offset={offset}
-                    setOffset={setOffset}
-                  />
-                }
-                descClass="text-f16 tab:text-f14 fw4 text-5 "
-                headClass="text-f14 tab:text-f12 fw5 text-6"
-                className="winner-card"
-              />
-            </div>
-          }
-        />
-        <BufferTab
-          value={activeTab}
-          handleChange={(e, t) => {
-            setActiveTab(t);
-          }}
-          distance={5}
-          tablist={[{ name: 'Winners' }, { name: 'Losers' }]}
-        />
-        <TabSwitch
-          value={activeTab}
-          childComponents={[
-            <DailyWebTable
-              res={tableData}
-              count={totalPages.arbitrum}
-              activePage={activePages.arbitrum}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={0}
-              userRank={winnerUserRank}
-            />,
-            <DailyWebTable
-              res={loserStats}
-              count={totalPages.arbitrum}
-              activePage={activePages.arbitrum}
-              onpageChange={setActivePageNumber}
-              userData={data?.userData}
-              skip={skip}
-              nftWinners={1}
-              userRank={loserUserRank}
-            />,
-          ]}
-        />
-      </div>
+            }
+            descClass="text-f16 tab:text-f14 fw4 text-5 "
+            headClass="text-f14 tab:text-f12 fw5 text-6"
+            className="winner-card"
+          />
+        </div>{' '}
+        <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
+          <LeaderBoardTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabList={[{ name: 'Winners' }, { name: 'Losers' }]}
+          />
+          <TabSwitch
+            value={activeTab}
+            childComponents={[
+              <DailyWebTable
+                standings={tableData}
+                count={totalPages.arbitrum}
+                activePage={activePages.arbitrum}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={configValue.winnersNFT}
+                userRank={winnerUserRank}
+              />,
+              <DailyWebTable
+                standings={loserStats}
+                count={totalPages.arbitrum}
+                activePage={activePages.arbitrum}
+                onpageChange={setActivePageNumber}
+                userData={data?.userData}
+                skip={skip}
+                nftWinners={configValue.losersNFT}
+                userRank={loserUserRank}
+              />,
+            ]}
+          />
+        </div>
+      </>
     );
   }
 
@@ -265,9 +267,7 @@ export const Incentivised = () => {
           <div>
             <Warning
               closeWarning={() => {}}
-              state={
-                endDay[activeChain.id] ? day >= endDay[activeChain.id] : false
-              }
+              state={configValue.endDay ? day >= configValue.endDay : false}
               shouldAllowClose={false}
               body={
                 <>
@@ -276,12 +276,44 @@ export const Incentivised = () => {
                     alt="lightning"
                     className="mr-3 mt-2 h-[18px]"
                   />
-                  The competition ended on 20th Feb 4pm UTC.
+                  The competition ended on{' '}
+                  {getTournamentEndDate({
+                    startTimestamp: configValue.startTimestamp,
+                    endDay: configValue.endDay,
+                  })}{' '}
+                  4pm UTC.
                 </>
               }
               className="!mb-3"
             />
-            {content}
+            <div className="m-auto mb-7">
+              <TopData
+                pageImage={
+                  <></>
+                  // <img
+                  //   src={chainImageMappipng[activeChain.name]}
+                  //   alt=""
+                  //   className="w-[45px]"
+                  // />
+                }
+                heading={
+                  <div className="flex flex-col items-start">
+                    <div className="flex items-center gap-3">
+                      <div>Daily Leaderboard </div>
+                      <ChainSwitchDropdown baseUrl="/leaderboard/daily" />
+                    </div>
+                    <a
+                      className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
+                      href={configValue.contestRules}
+                      target={'blank'}
+                    >
+                      Contest Rules <FrontArrow className="tml w-fit inline" />
+                    </a>
+                  </div>
+                }
+                DataCom={content}
+              />
+            </div>{' '}
           </div>
         </DailyStyles>
       }

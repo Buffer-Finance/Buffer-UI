@@ -7,11 +7,12 @@ import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
-import { usdcDecimals } from '@Views/V2-Leaderboard/Weekly';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
   const navigate = useNavigate();
+  const { configContracts } = useActiveChain();
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
     { id: 'currentPrice', label: 'Current Price' },
@@ -55,13 +56,26 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
         return (
           <>
             <OpenUpDownIndicator
-              openDown={+divide(currentRow.openDown, usdcDecimals)}
-              openUp={+divide(currentRow.openUp, usdcDecimals)}
+              openDown={Number(
+                divide(
+                  currentRow.openDown,
+                  configContracts.tokens['USDC'].decimals
+                )
+              )}
+              openUp={Number(
+                divide(
+                  currentRow.openUp,
+                  configContracts.tokens['USDC'].decimals
+                )
+              )}
             />
             <div className="mt-2">
               Total :{' '}
               <Display
-                data={divide(currentRow.totalTrades, usdcDecimals)}
+                data={divide(
+                  currentRow.totalTrades,
+                  configContracts.tokens['USDC'].decimals
+                )}
                 unit="USDC"
                 className="inline"
               />

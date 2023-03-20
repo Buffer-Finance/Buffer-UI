@@ -85,15 +85,21 @@ const AppRoutes = () => {
         <Route path="/history" element={<History />} />
         <Route path="/binary/:market" element={<BinryMarkets />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          <Route path="daily" element={<Incentivised />} />
-          <Route path="weekly" element={<Weekly />} />
+          <Route path="daily" element={<Incentivised />}>
+            <Route path=":chain" element={<Incentivised />} />
+          </Route>
+          <Route path="weekly" element={<Weekly />}>
+            <Route path=":chain" element={<Weekly />} />
+          </Route>
         </Route>
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path=":chain" element={<Dashboard />} />
         </Route>
         <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile" element={<ProfilePage />}>
+          <Route path=":chain" element={<ProfilePage />} />
+        </Route>
         <Route path="/binary/:market" element={<BinryMarkets />} />
         {/* referral link handling */}
         <Route
