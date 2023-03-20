@@ -252,6 +252,9 @@ const DesktopTrad = () => {
   };
   const isCDMForMarketSelect = useRef(true);
   function handleNewTabClick(toMarket: string, custom?: string) {
+    if (custom == 'charts') {
+      layoutApi.doAction(FlexLayout.Actions.setActiveTabset('charts'));
+    }
     isCDMForMarketSelect.current = false;
     try {
       layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
