@@ -3,6 +3,7 @@ import DDIcon from 'src/SVG/Elements/DDIcon';
 import { atom, useAtom } from 'jotai';
 import { useQTinfo } from '..';
 import { useEffect, useMemo } from 'react';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 const activePoolAtom = atom<{ activePool: string | null }>({
   activePool: null,
@@ -12,6 +13,7 @@ export const useActivePoolObj = () => {
   const [{ activePool }, setActivePool] = useAtom(activePoolAtom);
   const qtInfo = useQTinfo();
   const activePair = qtInfo.activePair;
+
   const dropdownItems = useMemo(() => {
     if (!activePair) return [];
 
@@ -24,7 +26,10 @@ export const useActivePoolObj = () => {
 
   const activePoolObj = useMemo(() => {
     if (activePool && activePair) {
-      const pool = activePair.pools.find((pair) => pair.token === activePool);
+      const pool = activePair.pools.find(
+        (pool) => pool.token.name === activePool
+      );
+      console.log(pool, activePair, activePool, 'pool');
       if (pool) return pool;
       else return activePair.pools[0];
     } else return activePair.pools[0];
@@ -35,18 +40,15 @@ export const useActivePoolObj = () => {
 
 export const PoolDropDown = () => {
   const [{ activePool }, setActivePool] = useAtom(activePoolAtom);
+  const { configContracts } = useActiveChain();
 
   const { dropdownItems } = useActivePoolObj();
   if (dropdownItems.length === 1)
     return (
       <div className="token-dd flex items-center bg-cross-bg w-fit px-4 py-[5px] text-f16  text-1">
         <img
-          src={
-            activePool === 'USDC'
-              ? 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png'
-              : 'https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png'
-          }
-          className="w-[15px] h-[15px]  mr-2 "
+          src={activePool && configContracts.tokens[activePool].img}
+          className="w-[18px] h-[18px]  mr-2 "
         />
         {activePool}
       </div>
@@ -61,12 +63,8 @@ export const PoolDropDown = () => {
       dropdownBox={(isActive, isOpen, d) => (
         <div className="token-dd w-fit hover:brightness-150 flex items-center bg-cross-bg px-4 py-[5px] text-f16 transition-all duration-150 text-1">
           <img
-            src={
-              activePool === 'USDC'
-                ? 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png'
-                : 'https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png'
-            }
-            className="w-[15px] h-[15px]  mr-2 "
+            src={activePool && configContracts.tokens[activePool].img}
+            className="w-[18px] h-[18px]  mr-2 "
           />
           {activePool}
           <DDIcon
@@ -85,12 +83,8 @@ export const PoolDropDown = () => {
           key={singleItem}
         >
           <img
-            src={
-              singleItem === 'USDC'
-                ? 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png'
-                : 'https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png'
-            }
-            className="w-[15px] h-[15px] mr-2 "
+            src={activePool && configContracts.tokens[singleItem].img}
+            className="w-[18px] h-[18px] mr-2 "
           />
           {singleItem}
         </button>
