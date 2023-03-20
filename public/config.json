@@ -1,12 +1,12 @@
 {
   "421613": {
     "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
-    "meta": "0x8c2015A994ac631f907c418Cc5703D529c6527fB",
     "router": "0x76c52E83d7dcCc70107a66BAd44D042D22D06be7",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
     "tokens": {
       "USDC": {
         "address": "0x658e6B62e7ab1d2B29a08F85f8442edEed562b48",
+        "meta": "0xaB9Babe3A7445333d8c2BAA0A5bF749cF37096b5",
         "decimals": 6,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
@@ -15,6 +15,7 @@
       },
       "BFR": {
         "address": "0x89fEF05446aEA764C53a2f09bB763876FB57ea8E",
+        "meta": "0xaB9Babe3A7445333d8c2BAA0A5bF749cF37096b5",
         "decimals": 18,
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
         "name": "BFR",
@@ -23,6 +24,7 @@
       },
       "ARB": {
         "address": "0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8",
+        "meta": "0x2e32CDf0AC7a0110f2EfAF97E3a4803a238b607D",
         "decimals": 18,
         "img": "/Chains/ARBITRIUM.png",
         "name": "ARB",
@@ -141,18 +143,18 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet",
-      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite"
+      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox",
+      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox"
     }
   },
   "42161": {
     "referral_storage": "0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29",
-    "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
     "router": "0x0e0A1241C9cE6649d5D30134a194BA3E24130305",
     "multicall": "0x842eC2c7D803033Edf55E478F461FC547Bc54EB2",
     "tokens": {
       "USDC": {
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+        "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
         "decimals": 6,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
         "name": "USDC",
@@ -161,6 +163,7 @@
       },
       "BFR": {
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+        "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
         "decimals": 18,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
         "name": "BFR",
@@ -574,12 +577,12 @@
   },
   "80001": {
     "referral_storage": "0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7",
-    "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
     "router": "0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
     "tokens": {
       "USDC": {
         "address": "0x6f9FE619b6BF88028ac57cD665D527A507a6d2Ef",
+        "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
         "decimals": 6,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
         "name": "USDC",
@@ -588,6 +591,7 @@
       },
       "BFR": {
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+        "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
         "decimals": 18,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
         "name": "BFR",
@@ -688,12 +692,12 @@
   },
   "137": {
     "referral_storage": "0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6",
-    "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
     "router": "0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7",
     "multicall": "0xcA11bde05977b3631167028862bE2a173976CA11",
     "tokens": {
       "USDC": {
         "address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
         "decimals": 6,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
         "name": "USDC",
@@ -701,6 +705,7 @@
       },
       "BFR": {
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+        "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
         "decimals": 18,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
         "name": "BFR",

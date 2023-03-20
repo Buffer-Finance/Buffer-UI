@@ -4,8 +4,6 @@ import ERC20ABI from '@Views/Earn/Config/Abis/Token.json';
 import MaxTradeABI from '../ABI/MaxTrade.json';
 import RouterABI from '../ABI/routerABI.json';
 import ConfigABI from '../ABI/configABI.json';
-import { getContract } from '../Address';
-import { useBinaryActiveChainId } from './useBinaryActiveChainId';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { ethers } from 'ethers';
 import BinaryOptionsABI from '../ABI/optionsABI.json';
@@ -16,14 +14,10 @@ import { useMemo } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import { knowTillAtom } from './useIsMerketOpen';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import { useActiveChain } from '@Hooks/useActiveChain';
 
 export function useActiveAssetState(amount = null, referralData) {
   const { address: account } = useUserAccount();
   const qtInfo = useQTinfo();
-  const { activeChain } = useActiveChain();
-  const activeChainId = activeChain?.id;
-
   const { activePoolObj } = useActivePoolObj();
   const [knowtil, setKnowTill] = useAtom(knowTillAtom);
   const setResInAtom = useSetAtom(setActiveAssetStateAtom);
@@ -34,10 +28,7 @@ export function useActiveAssetState(amount = null, referralData) {
       .map((pairObj) => {
         return pairObj.pools.map((pool, index) => {
           return {
-            address: getContract(
-              activeChainId,
-              index === 0 ? 'USDC-reader' : 'BFR-reader'
-            ),
+            address: pool.token.meta,
             abi: MaxTradeABI,
             name: 'getPayout',
             params: [
@@ -74,10 +65,7 @@ export function useActiveAssetState(amount = null, referralData) {
   const assetCalls = useMemo(
     () => [
       {
-        address: getContract(
-          activeChainId,
-          activePoolObj.token.name === 'USDC' ? 'USDC-reader' : 'BFR-reader'
-        ),
+        address: activePoolObj.token.meta,
         abi: MaxTradeABI,
         name: 'calculateMaxAmount',
         params: [
@@ -153,6 +141,7 @@ export function useActiveAssetState(amount = null, referralData) {
 
   let copy = useReadCall({ contracts: calls, swrKey: 'UseActiveAssetState' })
     .data as unknown as string[];
+  console.log(calls, copy, 'calls');
   let response = [null, null, null, null];
 
   if (copy) {
