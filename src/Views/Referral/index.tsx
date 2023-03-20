@@ -404,7 +404,7 @@ const DataCard = ({ header, desc }) => {
   );
 };
 
-export function affilate2referralLink(affiliateCode) {
+export function affilateCode2ReferralLink(affiliateCode) {
   const { hostname } = window.location;
   const link = `https://${hostname}/#/refer/${affiliateCode}/`;
   return link;
@@ -423,7 +423,7 @@ const Affilate = ({
   const [snack, setSnack] = useAtom(snackAtom);
   const [state, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = useState(false);
-  const link = affilate2referralLink(affiliateCode);
+  const link = affilateCode2ReferralLink(affiliateCode);
   const copyLink = () => {
     try {
       copyToClipboard(link);
