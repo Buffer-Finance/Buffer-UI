@@ -23,7 +23,7 @@ export const weeklyTournamentConfig: {
     winrateNFT: 3,
     endDay: undefined,
     contestRules:
-      'https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
+      ' https://zinc-atlasaurus-c98.notion.site/Buffer-Arbitrum-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
     rewardFixedAmount: '0',
     poolPercent: '0',
     winrateStartWeek: undefined,
@@ -38,7 +38,7 @@ export const weeklyTournamentConfig: {
     winrateNFT: 3,
     endDay: undefined,
     contestRules:
-      'https://zinc-atlasaurus-c98.notion.site/Buffer-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
+      ' https://zinc-atlasaurus-c98.notion.site/Buffer-Arbitrum-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
     rewardFixedAmount: '1000',
     poolPercent: '5',
     winrateStartWeek: 5,
@@ -53,7 +53,7 @@ export const weeklyTournamentConfig: {
     winrateNFT: 0,
     endDay: undefined,
     contestRules:
-      'https://futuristic-vertebra-e74.notion.site/Buffer-Weekly-Trading-Competitions-Polygon-c94c85f7739148f7816fb5a20c894c27',
+      'https://zinc-atlasaurus-c98.notion.site/Buffer-Polygon-Weekly-Trading-Competitions-1a568febffc542c1a855fea57a8487f2',
     rewardFixedAmount: '0',
     poolPercent: '0',
     winrateStartWeek: 1,
@@ -68,7 +68,7 @@ export const weeklyTournamentConfig: {
     winrateNFT: 0,
     endDay: undefined,
     contestRules:
-      'https://futuristic-vertebra-e74.notion.site/Buffer-Weekly-Trading-Competitions-Polygon-c94c85f7739148f7816fb5a20c894c27',
+      'https://zinc-atlasaurus-c98.notion.site/Buffer-Polygon-Weekly-Trading-Competitions-1a568febffc542c1a855fea57a8487f2',
     rewardFixedAmount: '100',
     poolPercent: '5',
     winrateStartWeek: 1,
