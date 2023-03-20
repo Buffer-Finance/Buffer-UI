@@ -159,7 +159,7 @@ export const ChainSwitchDropdown = ({
 
   return (
     <BufferDropdown
-      rootClass="w-fit"
+      rootClass="w-fit m-auto"
       className="py-4 px-4 bg-2 !w-max"
       dropdownBox={(a, open, disabled) => (
         <div

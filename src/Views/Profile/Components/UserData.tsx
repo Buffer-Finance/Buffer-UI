@@ -92,7 +92,7 @@ export const UserData = () => {
       </div>
 
       {/* right side -- data */}
-      <DataWrapper className="bg-2 px-7 py-[20px] rounded-lg flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
+      <DataWrapper className="bg-2 px-7 py-[20px] rounded-lg flex items-center justify-start my-6 max1000:!w-full max1000:flex-wrap max1000:gap-y-5 whitespace-nowrap">
         {/* <ArbitrumOnly hide> */}
         <>
           <Col
@@ -236,7 +236,7 @@ const DataWrapper = styled.div`
       padding-right: 0;
       border: none;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 1000px) {
       width: 50%;
       padding: 0;
       :nth-of-type(even) {
