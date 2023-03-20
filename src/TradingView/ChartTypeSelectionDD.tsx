@@ -89,15 +89,23 @@ const chartTypes = {
         className="ele"
       >
         <path
-          d="M9.12659 3.93579H15.1266V10.9358H9.12659V3.93579Z"
+          d="M21.1267 4.09009L14.6266 10.5902L10.1468 6.13251L2.07397 14.2053L4.1953 16.3266L10.152 10.3699L14.6318 14.8276L23.248 6.21141L21.1267 4.09009Z"
           fill="currentColor"
         ></path>
         <path
-          d="M9.12659 10.9358V17.9358H3.12659V10.9358H9.12659Z"
+          d="M3.12659 18.3205H6.12659V21.3205H3.12659V18.3205Z"
           fill="currentColor"
         ></path>
         <path
-          d="M15.1266 10.9358V21.9358H21.1266V10.9358H15.1266Z"
+          d="M8.12659 18.3205H11.1266V21.3205H8.12659V18.3205Z"
+          fill="currentColor"
+        ></path>
+        <path
+          d="M13.1266 18.3205H16.1266V21.3205H13.1266V18.3205Z"
+          fill="currentColor"
+        ></path>
+        <path
+          d="M18.1266 18.3205H21.1266V21.3205H18.1266V18.3205Z"
           fill="currentColor"
         ></path>
       </svg>
@@ -184,6 +192,26 @@ const chartTypes = {
         ></path>
         <path
           d="M8.12659 11.7051H11.1266V17.7051H8.12659V21.7051H5.12659V17.7051H2.12659V11.7051H5.12659V7.70508H8.12659V11.7051Z"
+          fill="currentColor"
+        ></path>
+      </svg>
+    ),
+  },
+  'Heikin-Ashi': {
+    type: 8,
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 25 25"
+        fill="none"
+        className="ele"
+      >
+        <path
+          d="M8.12659 6.63989H11.1266V15.6239H2.12659V6.63989H5.12659V2.63989H8.12659V6.63989Z"
+          fill="currentColor"
+        ></path>
+        <path
+          d="M19.1266 3.62817H16.1266L16.1266 7.62817H13.1266V21.6282H22.1266V7.62817H19.1266V3.62817Z"
           fill="currentColor"
         ></path>
       </svg>
