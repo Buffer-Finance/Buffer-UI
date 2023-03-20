@@ -15,7 +15,7 @@ import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { getChains } from 'src/Config/wagmiClient';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -135,20 +135,40 @@ const DashboardOtherChainData = () => {
   return <OtherBLP data={otherBLP} tokenName={'BLP'} />;
 };
 
-export const ChainSwitchDropdown = ({ baseUrl }: { baseUrl: string }) => {
+export const ChainSwitchDropdown = ({
+  baseUrl,
+  classes = {
+    imgDimentions: 'h-[22px] w-[22px] ',
+    fontSize: 'text-f15',
+    itemFontSize: 'text-f14',
+    verticalPadding: 'py-[6px]',
+  },
+}: {
+  baseUrl: string;
+  classes?: {
+    imgDimentions: string;
+    fontSize: string;
+    itemFontSize: string;
+    verticalPadding: string;
+  };
+}) => {
   const { activeChain } = useActiveChain();
   const tabList = getChains();
   const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <BufferDropdown
       rootClass="w-fit"
       className="py-4 px-4 bg-2 !w-max"
       dropdownBox={(a, open, disabled) => (
-        <div className="flex items-center justify-between text-f15 font-medium bg-[#2c2c41] pl-3 pr-[0] py-[6px] rounded-sm text-1">
+        <div
+          className={`flex items-center justify-between ${classes.fontSize} font-medium bg-[#2c2c41] pl-3 pr-[0] ${classes.verticalPadding} rounded-sm text-1`}
+        >
           <div className="flex items-center">
             <img
               src={chainImageMappipng[activeChain.name]}
-              className="h-[22px] w-[22px] mr-[6px] rounded-full"
+              className={`${classes.imgDimentions} mr-[6px] rounded-full`}
             />
             {activeChain.name}
           </div>
@@ -157,19 +177,23 @@ export const ChainSwitchDropdown = ({ baseUrl }: { baseUrl: string }) => {
       )}
       items={tabList}
       item={(tab, handleClose, onChange, isActive, index) => {
+        let navigationUrl = `${baseUrl}/${tab.name}`;
+        if (location.search !== '') {
+          navigationUrl = navigationUrl + location.search;
+        }
         return (
           <div
-            className={`text-f14 whitespace-nowrap ${
+            className={`${classes.itemFontSize} whitespace-nowrap ${
               index === tabList.length - 1 ? '' : 'pb-[6px]'
             } ${index === 0 ? '' : 'pt-[6px]'} ${
               activeChain.name === tab.name ? 'text-1' : 'text-2'
             }`}
-            onClick={() => navigate(`${baseUrl}/${tab.name}`)}
+            onClick={() => navigate(navigationUrl)}
           >
             <div className="flex">
               <img
                 src={chainImageMappipng[tab.name]}
-                className="h-[22px] w-[22px] mr-[6px] rounded-full"
+                className={`${classes.imgDimentions} mr-[6px] rounded-full`}
               />
               {tab.name}
             </div>

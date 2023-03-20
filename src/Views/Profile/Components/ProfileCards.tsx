@@ -28,6 +28,7 @@ export const ProfileCards = () => {
         <Trading data={tradingMetricsData} heading={'Trading Metrics'} />,
         <Referral data={data} heading={'Referral Metrics'} />,
       ]}
+      className="!mt-7"
     />
   );
 };

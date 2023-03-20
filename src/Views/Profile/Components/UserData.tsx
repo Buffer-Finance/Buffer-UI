@@ -10,6 +10,7 @@ import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import { Col } from '@Views/Common/ConfirmationModal';
 import NFTtier from '@Views/Common/NFTtier';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { ChainSwitchDropdown } from '@Views/Dashboard';
 import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
 import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 import { useMemo } from 'react';
@@ -94,6 +95,23 @@ export const UserData = () => {
       <DataWrapper className="bg-2 px-7 py-[20px] rounded-lg flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
         {/* <ArbitrumOnly hide> */}
         <>
+          <Col
+            className={'winner-card'}
+            head={'Chain'}
+            desc={
+              <ChainSwitchDropdown
+                baseUrl="/profile"
+                classes={{
+                  imgDimentions: 'w-[17px] h-[17px]',
+                  fontSize: 'text-f13',
+                  itemFontSize: 'text-f13',
+                  verticalPadding: 'py-[0px]',
+                }}
+              />
+            }
+            headClass={'text-f14'}
+            descClass={'text-f16 text-buffer-blue'}
+          />
           <Col
             className={'winner-card'}
             head={'Daily Rank'}
