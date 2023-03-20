@@ -404,6 +404,12 @@ const DataCard = ({ header, desc }) => {
   );
 };
 
+export function affilate2referralLink(affiliateCode) {
+  const { hostname } = window.location;
+  const link = `https://${hostname}/#/refer/${affiliateCode}/`;
+  return link;
+}
+
 const Affilate = ({
   affiliateBoxArr,
   shouldConnectWallet,
@@ -415,11 +421,9 @@ const Affilate = ({
   const { affiliateCode } = useUserCode(activeChain);
   const isCodeSet = !!affiliateCode;
   const [snack, setSnack] = useAtom(snackAtom);
-  const { hostname } = window.location;
   const [state, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = useState(false);
-  const link = `https://${hostname}/#/refer/${affiliateCode}/`;
-  console.log(`link: `, link);
+  const link = affilate2referralLink(affiliateCode);
   const copyLink = () => {
     try {
       copyToClipboard(link);
