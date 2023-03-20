@@ -145,7 +145,7 @@
     ],
     "graph": {
       "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox",
-      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox"
+      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite"
     }
   },
   "42161": {
