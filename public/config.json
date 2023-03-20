@@ -28,7 +28,8 @@
         "decimals": 18,
         "img": "/Chains/ARBITRIUM.png",
         "name": "ARB",
-        "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6"
+        "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
+        "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f"
     }
     },
     "pairs": [
@@ -143,8 +144,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet",
-      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite"
+      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox",
+      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox"
     }
   },
   "42161": {
