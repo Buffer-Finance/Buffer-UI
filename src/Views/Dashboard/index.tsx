@@ -15,7 +15,7 @@ import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { getChains } from 'src/Config/wagmiClient';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -138,6 +138,8 @@ export const ChainSwitchDropdown = ({ baseUrl }: { baseUrl: string }) => {
   const { activeChain } = useActiveChain();
   const tabList = getChains();
   const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <BufferDropdown
       rootClass="w-fit"
@@ -156,6 +158,10 @@ export const ChainSwitchDropdown = ({ baseUrl }: { baseUrl: string }) => {
       )}
       items={tabList}
       item={(tab, handleClose, onChange, isActive, index) => {
+        let navigationUrl = `${baseUrl}/${tab.name}`;
+        if (location.search !== '') {
+          navigationUrl = navigationUrl + location.search;
+        }
         return (
           <div
             className={`text-f14 whitespace-nowrap ${
@@ -163,7 +169,7 @@ export const ChainSwitchDropdown = ({ baseUrl }: { baseUrl: string }) => {
             } ${index === 0 ? '' : 'pt-[6px]'} ${
               activeChain.name === tab.name ? 'text-1' : 'text-2'
             }`}
-            onClick={() => navigate(`${baseUrl}/${tab.name}`)}
+            onClick={() => navigate(navigationUrl)}
           >
             <div className="flex">
               <img
