@@ -87,6 +87,7 @@ export const HistoryTables = () => {
           <>
             <PGTables
               activePage={history}
+              isHistoryTable
               configData={qtInfo}
               onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
               shouldNotDisplayShareVisulise={true}
