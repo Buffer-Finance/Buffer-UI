@@ -14,7 +14,7 @@ import { DailyMobileTable } from './DailyMobileTable';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { Rank } from '../Components/Rank';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Launch } from '@mui/icons-material';
 import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
 import { useActiveChain } from '@Hooks/useActiveChain';
@@ -45,6 +45,7 @@ export const DailyWebTable: React.FC<{
   const navigate = useNavigate();
   const { configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const params = useParams();
 
   //Memos - to avoid re-rendering
   const firstColPadding = useMemo(() => {
@@ -236,8 +237,10 @@ export const DailyWebTable: React.FC<{
   };
 
   const navigateToProfile = (address: string | undefined) => {
+    let url = '/profile';
+    if (params.chain) url = url + '/' + params.chain;
     if (address === undefined) return;
-    navigate(`/profile?user_address=${address}`);
+    navigate(`${url}?user_address=${address}`);
   };
 
   const topDecorator =
