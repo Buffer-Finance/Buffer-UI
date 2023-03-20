@@ -14,6 +14,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { ReactNode, useEffect, useState } from 'react';
 import { useQTinfo } from '.';
 import { AmountSelector, DurationSelector } from './AmountSelector';
+import { ShareModal } from './Components/shareModal';
 import { useBinaryActions } from './Hooks/useBinaryActions';
 import { knowTillAtom } from './Hooks/useIsMerketOpen';
 import { MarketTimingWarning } from './MarketTimingWarning';

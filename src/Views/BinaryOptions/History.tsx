@@ -23,6 +23,8 @@ const History: React.FC<IHistory> = ({}) => {
   const [active, setActive] = useState(tabs[0]);
   return (
     <div className="text-f22">
+      {/* <ShareModal qtInfo={qtInfo} /> */}
+
       <MobileTabs {...{ active, setActive, tabs }}></MobileTabs>
       <HorizontalTransition value={tabs.indexOf(active)}>
         <MobileTable
