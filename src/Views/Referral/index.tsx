@@ -404,7 +404,7 @@ const DataCard = ({ header, desc }) => {
   );
 };
 
-export function affilateCode2ReferralLink(affiliateCode) {
+export function affilateCode2ReferralLink(affiliateCode: string) {
   const { hostname } = window.location;
   const link = `https://${hostname}/#/refer/${affiliateCode}/`;
   return link;
