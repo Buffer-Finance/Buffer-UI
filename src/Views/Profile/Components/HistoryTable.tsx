@@ -55,11 +55,11 @@ export const HistoryTables = () => {
         tablist={[
           {
             name: 'Active',
-            icon: (
-              <div className="ml-2 text-f12 border border-1 px-[6px] rounded bg-cross-bg text-3 font-thin translate-y-[1px]">
-                Beta
-              </div>
-            ),
+            // icon: (
+            //   <div className="ml-2 text-f12 border border-1 px-[6px] rounded bg-cross-bg text-3 font-thin translate-y-[1px]">
+            //     Beta
+            //   </div>
+            // ),
           },
           { name: 'History' },
           // { name: 'Cancelled' },
@@ -71,7 +71,7 @@ export const HistoryTables = () => {
           <>
             <PGTables
               configData={qtInfo}
-              activePage={active}
+              currentPage={active}
               onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
               shouldNotDisplayShareVisulise={true}
             />{' '}
@@ -86,7 +86,7 @@ export const HistoryTables = () => {
           </>,
           <>
             <PGTables
-              activePage={history}
+              currentPage={history}
               isHistoryTable
               configData={qtInfo}
               onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}

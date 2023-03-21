@@ -130,23 +130,25 @@ export const UserData = () => {
         {/* </ArbitrumOnly> */}
         <Col
           className={'winner-card'}
-          head={'Net Pnl'}
+          head={'Win Rate'}
           desc={
             tradingMetricsData ? (
               <Display
-                data={divide(tradingMetricsData.net_pnl, usdcDecimals)}
-                unit="USDC"
+                data={
+                  (tradingMetricsData.tradeWon * 100) /
+                    tradingMetricsData.totalTrades || '0'
+                }
+                unit={'%'}
+                content={
+                  <>{`Won ${tradingMetricsData.tradeWon}/${tradingMetricsData.totalTrades} trades.`}</>
+                }
               />
             ) : (
               <div className="text-light-blue">-</div>
             )
           }
           headClass={'text-f14'}
-          descClass={`text-f16 ${
-            tradingMetricsData && gte(tradingMetricsData.net_pnl, '0')
-              ? 'text-green'
-              : 'text-red'
-          }`}
+          descClass={`text-f16 `}
         />
         <Col
           className={'winner-card'}

@@ -1,3 +1,4 @@
+import { usePrice } from '@Hooks/usePrice';
 import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import { ClaimedNFT } from '@Views/NFTView/Claimed';
 import { HistoryTables } from './Components/HistoryTable';
@@ -13,6 +14,7 @@ export const ProfilePage = () => {
   );
 };
 const Profile = () => {
+  usePrice();
   return (
     <div className="px-7 my-8 sm:px-3">
       <UserData />

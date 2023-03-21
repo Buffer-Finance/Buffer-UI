@@ -1,7 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Skeleton } from '@mui/material';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, gte } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
@@ -59,7 +59,7 @@ const Trading = ({
           className="mt-3"
           keyStyle={keyClasses}
           valueStyle={valueClasses}
-          keysName={['Total Payout', 'Win Rate', 'Open Interest', 'Volume']}
+          keysName={['Total Payout', 'Net PnL', 'Open Interest', 'Volume']}
           values={[
             <div className={wrapperClasses}>
               <Display
@@ -69,11 +69,11 @@ const Trading = ({
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={(data.tradeWon * 100) / data.totalTrades || '0'}
-                unit={'%'}
-                content={
-                  <>{`Won ${data.tradeWon}/${data.totalTrades} trades.`}</>
+                className={
+                  data && gte(data.net_pnl, '0') ? 'text-green' : 'text-red'
                 }
+                data={divide(data.net_pnl, usdcDecimals)}
+                unit="USDC"
               />
             </div>,
             <div className={wrapperClasses}>
