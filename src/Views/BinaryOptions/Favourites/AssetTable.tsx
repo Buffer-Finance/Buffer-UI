@@ -131,6 +131,7 @@ export const AssetTable: React.FC<{
       headerJSX={HeadFormatter}
       cols={headers.length}
       shouldShowMobile
+      tableBodyClass="!bg-2"
       className="h-[100%]"
       rows={BodyArr.length}
       tableClass={'!w-full'}

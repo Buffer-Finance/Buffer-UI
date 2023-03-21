@@ -42,6 +42,7 @@ interface IBufferTable {
   loading?: boolean;
   smHeight?: boolean;
   count?: number;
+  tableBodyClass?: string;
   shouldShowMobile?: boolean;
   shouldHideHeader?: boolean;
   shouldHideBody?: boolean;
@@ -71,6 +72,7 @@ const BufferTable: React.FC<IBufferTable> = ({
   loading,
   count,
   bluredIndexes,
+  tableBodyClass,
   overflow = false,
   v1 = false,
   onPageChange = undefined,
@@ -118,7 +120,7 @@ const BufferTable: React.FC<IBufferTable> = ({
               })}
             </TableRow>
           </TableHead>
-          <TableBody className="table-body">
+          <TableBody className={'table-body ' + tableBodyClass}>
             {topDecorator}
 
             {loading ? (
