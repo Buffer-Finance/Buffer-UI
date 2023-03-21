@@ -89,7 +89,7 @@ const AppRoutes = () => {
       const codes = window.location.href.split('/');
       console.log(`codes: `, codes);
       for (let i = 0; i < codes.length; i++) {
-        if (codes[i] == 'referral') {
+        if (codes[i] == 'refer') {
           code = codes?.[i + 1];
         }
       }
