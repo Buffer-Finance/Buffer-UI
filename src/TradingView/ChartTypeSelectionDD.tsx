@@ -260,14 +260,6 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
             );
           }}
         ></BufferDropdown>
-        {/* <div
-          onClick={(e) => {
-            setActive(chartTypes[type].type);
-          }}
-          className={
-            chartTypes[type].type == active ? "active chart-type" : "chart-type"
-          }
-        ></div> */}
       </>
     </div>
   );
