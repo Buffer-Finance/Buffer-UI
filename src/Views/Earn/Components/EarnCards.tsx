@@ -132,7 +132,7 @@ export const getEarnCards = (data: IEarn) => {
             content={
               <>
                 ARB vault takes counterposition against each trade and collects
-                up to 60% of the settlement fee. USDC vault might face drawdowns
+                up to 60% of the settlement fee. ARB vault might face drawdowns
                 if traders are collectively net profitable.{' '}
                 <a
                   href="https://buffer-finance.medium.com/all-you-need-to-know-about-usdc-vaults-liqudity-pool-and-the-blp-token-d743b258da1d"
@@ -571,7 +571,7 @@ const BLP = ({
               <Display
                 className="!justify-end inline"
                 data={data.user.wallet_balance.value_in_usd}
-                unit={'USDC'}
+                unit={depositToken}
               />
               )
             </span>
@@ -588,7 +588,7 @@ const BLP = ({
               <Display
                 className="!justify-end inline"
                 data={data.user.staked.value_in_usd}
-                unit={'USDC'}
+                unit={depositToken}
               />
               )
             </span>
@@ -721,7 +721,7 @@ const BLP = ({
               <Display
                 className="!justify-end inline"
                 data={data.total_staked.value_in_usd}
-                unit={'USDC'}
+                unit={depositToken}
               />
               )
             </span>
@@ -738,7 +738,7 @@ const BLP = ({
               <Display
                 className="!justify-end inline"
                 data={data.total_supply.value_in_usd}
-                unit={'USDC'}
+                unit={depositToken}
               />
               )
             </span>
