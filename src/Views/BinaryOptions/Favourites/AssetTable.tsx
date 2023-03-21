@@ -42,12 +42,7 @@ export const AssetTable: React.FC<{
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
 
   const headers = useMemo(() => {
-    return [
-      '',
-      'Asset',
-      // "24H Change",
-      <div className="flex items-center">Payout</div>,
-    ];
+    return ['', 'Asset', <div className="flex items-center">Payout</div>];
   }, []);
 
   const HeadFormatter = (col: number) => {
