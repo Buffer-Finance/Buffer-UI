@@ -477,7 +477,6 @@ const DesktopTrad = () => {
     </>
   );
 
-  // onRenderTab={(node,arr)=>{
   //   console.log(`arr: `,arr);
   //   console.log(`node: `,node);
   //   arr.buttons.push(<Tab></Tab>)
