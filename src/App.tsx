@@ -89,7 +89,7 @@ const AppRoutes = () => {
       const codes = window.location.href.split('/');
       console.log(`codes: `, codes);
       for (let i = 0; i < codes.length; i++) {
-        if (codes[i] == 'refer') {
+        if (codes[i] == 'ref') {
           code = codes?.[i + 1];
         }
       }
@@ -116,7 +116,7 @@ const AppRoutes = () => {
         <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/refer/:code" element={<div>Helo</div>} />
+        <Route path="/ref/:code" element={<div>Helo</div>} />
         <Route path="/history" element={<History />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />}>
