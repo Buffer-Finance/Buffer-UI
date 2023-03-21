@@ -98,7 +98,7 @@ export const DepositModal = ({
         msg: 'Not enough tokens to reserve',
         id: '008',
       });
-    return depositFn(val, vesterContract);
+    depositFn(val, vesterContract);
   };
 
   return (

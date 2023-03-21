@@ -595,7 +595,7 @@ export const useGetTokenomics = () => {
         functionName: 'maxLiquidity',
       },
       arbblpUSDCAmount: {
-        address: contracts.USDC,
+        address: contracts.ARB,
         abi: bfrAbi,
         functionName: 'balanceOf',
         args: [contracts.BLP2],

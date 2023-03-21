@@ -30,8 +30,8 @@ export const useEarnWriteCalls = (
     EarnRouterABI
   );
   const { writeCall: Vester2 } = useWriteCall(
-    CONTRACTS[activeChain.id].EarnVesterContract2,
-    EarnRouterABI
+    CONTRACTS[activeChain.id].BlpVester2,
+    VesterABI
   );
 
   const toastify = useToast();
