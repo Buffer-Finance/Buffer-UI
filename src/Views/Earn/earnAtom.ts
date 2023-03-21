@@ -29,6 +29,22 @@ export const compoundRewardsAtom = atomWithLocalStorage('compoundrewardsKeys', {
   shouldclaimeth: true,
   shouldconvertweth: true,
 });
+export const compoundRewardsAtom2 = atomWithLocalStorage(
+  'compoundrewardsKeys2',
+  {
+    shouldclaimiBFR: true,
+    shouldstakeiBFR: true,
+    shouldclaimesBFR: true,
+    shouldstakeesBFR: true,
+    shouldclaimarb: true,
+  }
+);
+
+export const claimRewardsAtom2 = atomWithLocalStorage('claimrewardsKeys2', {
+  shouldclaimiBFR: true,
+  shouldclaimesBFR: true,
+  shouldclaimarb: true,
+});
 
 export const claimRewardsAtom = atomWithLocalStorage('claimrewardsKeys', {
   shouldclaimiBFR: true,

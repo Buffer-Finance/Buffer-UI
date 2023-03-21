@@ -511,7 +511,7 @@ const TotalRewards = ({ data }: { data: ITotalRewards }) => {
       />
       <div className="mt-5">
         {' '}
-        <EarnButtons cardNum={1} />
+        <EarnButtons cardNum={8} />
       </div>
     </>
   );

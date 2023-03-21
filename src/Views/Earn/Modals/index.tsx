@@ -16,6 +16,8 @@ import {
   useEarnWriteCalls,
   useGetApprovalAmount,
 } from '../Hooks/useEarnWriteCalls';
+import { Compound2 } from './Compound2';
+import { Claim2 } from './claim2';
 
 export const EarnModals = () => {
   const [pageState, setPageState] = useAtom(earnAtom);
@@ -177,6 +179,11 @@ function ModalChild() {
 
     case 'claim':
       return <Claim />;
+    case 'compound2':
+      return <Compound2 />;
+
+    case 'claim2':
+      return <Claim2 />;
 
     case 'iBFRdeposit':
       const { deposit, validations: BFRVesetValidatinos } = useEarnWriteCalls(

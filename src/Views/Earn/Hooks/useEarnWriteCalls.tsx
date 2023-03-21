@@ -104,6 +104,34 @@ export const useEarnWriteCalls = (
     // if(validations(amount)) return;
     Vester2(callBack, 'withdraw', []);
   }
+  function compound2(
+    shouldClaimiBFR,
+    shouldStakeiBFR,
+    shouldCLaimesBFR,
+    shouldStakeesBFR,
+    shouldClaimWeth
+  ) {
+    RewardRouter2(callBack, 'handleRewards', [
+      shouldClaimiBFR || shouldStakeiBFR,
+      shouldStakeiBFR,
+      shouldCLaimesBFR || shouldStakeesBFR,
+      shouldStakeesBFR,
+      false,
+      shouldClaimWeth,
+    ]);
+  }
+
+  function claim2(shouldClaimiBFR, shouldCLaimesBFR, shouldClaimWeth) {
+    RewardRouter2(callBack, 'handleRewards', [
+      shouldClaimiBFR,
+      false,
+      shouldCLaimesBFR,
+      false,
+      false,
+      shouldClaimWeth,
+      // shouldConvertWeth,
+    ]);
+  }
   function compound(
     shouldClaimiBFR,
     shouldStakeiBFR,
@@ -152,6 +180,8 @@ export const useEarnWriteCalls = (
     sellARBBLP,
     deposit2,
     withdraw2,
+    compound2,
+    claim2,
   };
 };
 

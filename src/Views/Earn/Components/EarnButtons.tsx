@@ -42,14 +42,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
     case 0:
 
     case 3:
-      const wallet_value =
-        cardNum === 0
-          ? pageState.earn.ibfr.user.wallet_balance.token_value
-          : pageState.earn.esBfr.user.wallet_balance.token_value;
-      const staked_value =
-        cardNum === 0
-          ? pageState.earn.ibfr.user.staked.token_value
-          : pageState.earn.esBfr.user.staked.token_value;
       return (
         <div className="flex gap-5">
           {cardNum === 0 && (
@@ -102,7 +94,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
         </div>
       );
     case 1:
-      const isRewardAvailable = gt(pageState.earn.total_rewards.total, '0');
+    case 8:
       return (
         <div className="flex gap-5">
           <BlueBtn
@@ -112,7 +104,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
                 //   ?
                 setPageState({
                   ...state,
-                  activeModal: 'compound',
+                  activeModal: cardNum === 1 ? 'compound' : 'compound2',
                   isModalOpen: true,
                 })
               // :
@@ -129,7 +121,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
                 //   ?
                 setPageState({
                   ...state,
-                  activeModal: 'claim',
+                  activeModal: cardNum === 1 ? 'claim' : 'claim2',
                   isModalOpen: true,
                 })
               // : showToast("You don't have any rewards yet.")
