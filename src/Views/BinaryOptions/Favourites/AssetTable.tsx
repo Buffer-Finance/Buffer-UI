@@ -6,7 +6,13 @@ import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
-import { activeAssetStateAtom, FavouriteAtom, IMarket, useQTinfo } from '..';
+import {
+  activeAssetStateAtom,
+  FavouriteAtom,
+  IMarket,
+  mobileUpperBound,
+  useQTinfo,
+} from '..';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
 import { getFilteredAssets } from './Utils/getFilteredAssets';
 import { PairTokenImage } from '../Components/PairTokenImage';
@@ -40,6 +46,7 @@ export const AssetTable: React.FC<{
     catagories
   );
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
+  const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
 
   const headers = useMemo(() => {
     return ['', 'Asset', <div className="flex items-center">Payout</div>];
@@ -142,8 +149,13 @@ export const AssetTable: React.FC<{
       v1
       isBodyTransparent
       onRowClick={(rowNumber) => {
-        if (!BodyArr) return;
         const selectedAsset = BodyArr[rowNumber];
+        if (window.innerWidth < mobileUpperBound) {
+          addCardHandler(selectedAsset);
+          replaceAssetHandler(selectedAsset.pair, false);
+          return;
+        }
+        if (!BodyArr) return;
         onMarketSelect(selectedAsset.pair);
         console.log(`selectedAsset: `, selectedAsset.tv_id);
       }}
