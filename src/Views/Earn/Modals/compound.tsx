@@ -1,5 +1,4 @@
 import { useAtom } from 'jotai';
-import { useEffect } from 'react';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { compoundRewardsAtom } from '../earnAtom';
@@ -18,6 +17,7 @@ export const Compound = () => {
     shouldstakeiBFR,
     shouldstakemultiplierpoints,
   } = compoundState;
+
   return (
     <div className="min-w-[250px] tab:min-w-fit">
       <div className="text-f14 mb-5">Compound Rewards</div>

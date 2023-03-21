@@ -30,30 +30,27 @@ import {
 } from '../Components/VestCards';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { EarnContext } from '..';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const DepositModal = ({
   head,
   type,
+  depositFn,
+  validatinosFn,
 }: {
   head: string;
-  type: 'ibfr' | 'blp';
+  type: 'ibfr' | 'blp' | 'arbblp';
+  depositFn: (amount: string, vesterContract: string) => void;
+  validatinosFn: (amount: any) => true | undefined;
 }) => {
   const [val, setVal] = useState('');
   const [pageState] = useAtom(readEarnData);
-  const { deposit, validations } = useEarnWriteCalls(
-    'Vester',
-    type === 'ibfr' ? 'BFR' : 'BLP'
-  );
+  const currentVault = pageState.vest[type];
+
   const { state } = useGlobal();
-  const { activeChain } = useContext(EarnContext);
-  const vesterContract =
-    type === 'ibfr'
-      ? CONTRACTS[activeChain?.id].BfrVester
-      : CONTRACTS[activeChain?.id].BlpVester;
-  const tokenContract =
-    type === 'ibfr'
-      ? CONTRACTS[activeChain?.id].StakedBfrTracker
-      : CONTRACTS[activeChain?.id].StakedBlpTracker;
+  const { activeChain } = useActiveChain();
+  const vesterContract = currentVault.vesterContract;
+  const tokenContract = currentVault.tokenContract;
   const { approve } = useGetApprovalAmount(
     iBFRABI,
     CONTRACTS[activeChain?.id].ES_BFR,
@@ -69,7 +66,7 @@ export const DepositModal = ({
       />
     );
   const isApproved = gte(pageState.vest[type].allowance, val || '1');
-  const currentVault = pageState.vest[type];
+
   const max = pageState.vest[type].maxVestableAmount;
   const reserveAmount = getNewReserve(
     val,
@@ -81,7 +78,7 @@ export const DepositModal = ({
   const [approveState, setApprovalState] = useState(false);
 
   const clickHandler = () => {
-    if (validations(val)) return;
+    if (validatinosFn(val)) return;
 
     if (gt(val, pageState.earn.esBfr.user.wallet_balance.token_value))
       return toastify({
@@ -101,7 +98,7 @@ export const DepositModal = ({
         msg: 'Not enough tokens to reserve',
         id: '008',
       });
-    return deposit(val, vesterContract);
+    return depositFn(val, vesterContract);
   };
 
   return (
@@ -182,14 +179,11 @@ export const DepositModal = ({
         >
           <div className={`flex ${underLineClass}`}>
             <Display
-              data={add(pageState.vest[type].vesting_status.vested, val || '0')}
+              data={add(currentVault.vesting_status.vested, val || '0')}
               disable
             />
             &nbsp;/&nbsp;
-            <Display
-              data={pageState.vest[type].maxVestableAmountExact}
-              disable
-            />
+            <Display data={currentVault.maxVestableAmountExact} disable />
           </div>
         </NumberTooltip>
       </div>
@@ -221,7 +215,7 @@ export const DepositModal = ({
           <div className={`flex ${underLineClass}`}>
             <Display data={reserveAmount} disable />
             &nbsp;/&nbsp;
-            <Display data={pageState.vest[type].staked_tokens.value} disable />
+            <Display data={currentVault.staked_tokens.value} disable />
           </div>
         </NumberTooltip>
       </div>

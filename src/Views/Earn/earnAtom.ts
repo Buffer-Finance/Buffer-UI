@@ -125,6 +125,9 @@ export interface ITotalRewards {
   usd: IValue;
   esBfr: IValue;
   bfr: IValue;
+  arb: IValue;
+  arbesBfr: IValue;
+  arbbfr: IValue;
 }
 
 export interface IStakedToken {
@@ -132,6 +135,8 @@ export interface IStakedToken {
   tooltip: ITooltip[];
 }
 export interface IVestToken {
+  tokenContract: string;
+  vesterContract: string;
   staked_tokens: IStakedToken;
   reserved_for_vesting: string[];
   vesting_status: { claimed: string; vested: string };
@@ -143,17 +148,15 @@ export interface IVestToken {
   allowance: string;
   hasEnoughReserveTokens: boolean;
 }
-interface IContract {
-  abi: any[];
-  address: string;
-}
 export interface IEarn {
   earn?: {
     ibfr: IiBFR;
     blp: IBLPV2;
+    arbblp: IBLPV2;
     esBfr: IesBfr;
     total_rewards: ITotalRewards;
     usdc: { wallet_balance: string; allowance: string };
+    arb: { wallet_balance: string; allowance: string };
   };
-  vest?: { ibfr: IVestToken; blp: IVestToken };
+  vest?: { ibfr: IVestToken; blp: IVestToken; arbblp: IVestToken };
 }
