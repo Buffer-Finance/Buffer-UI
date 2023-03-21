@@ -132,6 +132,17 @@ export const useEarnWriteCalls = (
       // shouldConvertWeth,
     ]);
   }
+  function claimARB() {
+    RewardRouter2(callBack, 'handleRewards', [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      // shouldConvertWeth,
+    ]);
+  }
   function compound(
     shouldClaimiBFR,
     shouldStakeiBFR,
@@ -182,6 +193,7 @@ export const useEarnWriteCalls = (
     withdraw2,
     compound2,
     claim2,
+    claimARB,
   };
 };
 

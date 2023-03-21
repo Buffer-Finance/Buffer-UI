@@ -45,6 +45,11 @@ export const getEarnCards = (data: IEarn) => {
     <Card
       top="Total Rewards"
       middle={<TotalRewards data={data.earn.total_rewards} />}
+      bottom={
+        <div className="mt-5">
+          <EarnButtons cardNum={1} />{' '}
+        </div>
+      }
     />,
     <Card
       top={
@@ -67,7 +72,7 @@ export const getEarnCards = (data: IEarn) => {
             }
             className="!py-3"
           >
-            <span className={underLineClass}>USDC Vault (BLP Token)</span>
+            <span className={underLineClass}>USDC Vault (uBLP Token)</span>
           </NumberTooltip>
 
           <div className="text-f12 text-3  mt-2">
@@ -109,7 +114,7 @@ export const getEarnCards = (data: IEarn) => {
           </div> */}
         </>
       }
-      middle={<BLP data={data.earn.blp} unit="BLP" depositToken="USDC" />}
+      middle={<BLP data={data.earn.blp} unit="uBLP" depositToken="USDC" />}
       bottom={
         <div className="mt-5">
           <EarnButtons cardNum={2} />
@@ -146,7 +151,7 @@ export const getEarnCards = (data: IEarn) => {
             }
             className="!py-3"
           >
-            <span className={underLineClass}>ARB Vault (ARBBLP Token)</span>
+            <span className={underLineClass}>ARB Vault (aBLP Token)</span>
           </NumberTooltip>
 
           <div className="text-f12 text-3  mt-2">
@@ -188,7 +193,7 @@ export const getEarnCards = (data: IEarn) => {
           </div> */}
         </>
       }
-      middle={<BLP data={data.earn.arbblp} unit="ARBBLP" depositToken="ARB" />}
+      middle={<BLP data={data.earn.arbblp} unit="aBLP" depositToken="ARB" />}
       bottom={
         <div className="mt-5">
           <EarnButtons cardNum={7} />
@@ -404,10 +409,13 @@ const TotalRewards = ({ data }: { data: ITotalRewards }) => {
   return (
     <>
       <TableAligner
-        keysName={['USDC', 'BFR', 'Escrowed BFR']}
+        keysName={['USDC', 'ARB', 'BFR', 'Escrowed BFR']}
         values={[
           <div className={`${wrapperClasses}`}>
             <Display data={data.usd.token_value} />
+          </div>,
+          <div className={`${wrapperClasses}`}>
+            <Display data={data.arb.token_value} />
           </div>,
           <div className={`${wrapperClasses}`}>
             <Display data={data.bfr.token_value} />
@@ -467,7 +475,7 @@ const TotalRewards = ({ data }: { data: ITotalRewards }) => {
         keyStyle={keyClasses}
         valueStyle={valueClasses}
       />
-      <div className="mt-5 mb-6">
+      {/* <div className="mt-5 mb-6">
         {' '}
         <EarnButtons cardNum={1} />
       </div>
@@ -512,7 +520,7 @@ const TotalRewards = ({ data }: { data: ITotalRewards }) => {
       <div className="mt-5">
         {' '}
         <EarnButtons cardNum={8} />
-      </div>
+      </div> */}
     </>
   );
 };
@@ -540,7 +548,7 @@ const BLP = ({
                 }
               >
                 <div className={underLineClass}>
-                  <Display data={'1'} unit={'BLP'} className="inline" />
+                  <Display data={'1'} unit={unit} className="inline" />
                   &nbsp;=&nbsp;
                   <Display
                     data={roundToTwo(data.blpToUsdc, 2)}
@@ -695,7 +703,7 @@ const BLP = ({
               <Display
                 className="!justify-end"
                 data={data.user.max_unlocked_amount}
-                unit="BLP"
+                unit={unit}
               />
             </div>
           ),

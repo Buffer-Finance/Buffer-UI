@@ -38,15 +38,15 @@ export const getVestCards = (data: IEarn) => {
         </div>
       }
     />,
-    <Card
-      top="ARBBLP Vault"
-      middle={<VestCard data={data.vest.arbblp} unit="ARBBLP" />}
-      bottom={
-        <div className="mt-5">
-          <EarnButtons cardNum={6} />
-        </div>
-      }
-    />,
+    // <Card
+    //   top="ARBBLP Vault"
+    //   middle={<VestCard data={data.vest.arbblp} unit="ARBBLP" />}
+    //   bottom={
+    //     <div className="mt-5">
+    //       <EarnButtons cardNum={6} />
+    //     </div>
+    //   }
+    // />,
   ];
 };
 
