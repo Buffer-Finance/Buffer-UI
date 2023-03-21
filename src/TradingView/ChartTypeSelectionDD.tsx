@@ -195,7 +195,7 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
   const find = Object.keys(chartTypes).find(
     (c) => chartTypes[c].type == active
   );
-  console.log(`Object.keys(chartTypes): `,Object.keys(chartTypes)); 
+  console.log(`Object.keys(chartTypes): `, Object.keys(chartTypes));
   return (
     <div>
       <>
@@ -214,7 +214,7 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
           )}
           rootClass={'!w-[fit-content]'}
           item={(item) => {
-            console.log(`item: `,item);
+            console.log(`item: `, item);
             return (
               <div
                 onClick={(e) => {
@@ -232,14 +232,6 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
             );
           }}
         ></BufferDropdown>
-        {/* <div
-          onClick={(e) => {
-            setActive(chartTypes[type].type);
-          }}
-          className={
-            chartTypes[type].type == active ? "active chart-type" : "chart-type"
-          }
-        ></div> */}
       </>
     </div>
   );
