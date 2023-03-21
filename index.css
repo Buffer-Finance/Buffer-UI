@@ -17,6 +17,9 @@ body {
   transform: scale(0.8);
 }
 
+.flexlayout__layout{
+  margin:0px 5px
+}
 
 html .flip-y{
   transform: rotateY(180deg);

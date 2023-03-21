@@ -77,7 +77,7 @@ export const ActiveAsset = ({ cb }) => {
             <TVMarketSelector
               onMarketSelect={(m) => {
                 cb(m, 'charts');
-                navigate('/test/' + m);
+                navigate('/binary/' + m);
                 setIsOpen(false);
               }}
               className="asset-dropdown-wrapper left-[0] max-w-[300px] p-3"

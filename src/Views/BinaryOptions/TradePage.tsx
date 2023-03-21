@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@mui/material';
-import { DesktopTrade } from 'src/Test';
+import { DesktopTrade } from 'src/MultiChartLayout';
 import { MobileTrade } from './MobileTrade';
 import { Online, Offline } from 'react-detect-offline';
 import { ReactNode } from 'react';

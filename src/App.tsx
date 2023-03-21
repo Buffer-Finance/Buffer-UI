@@ -37,7 +37,7 @@ import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
 import { MobileTrade } from '@Views/BinaryOptions/MobileTrade';
 import { TradePage } from '@Views/BinaryOptions/TradePage';
-import { DesktopTrade } from './Test';
+import { DesktopTrade } from './MultiChartLayout';
 import { TestComponent } from './TestComponent';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { urlSettings } from './Config/wagmiClient';
