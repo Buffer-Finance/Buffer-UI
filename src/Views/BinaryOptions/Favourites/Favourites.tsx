@@ -23,6 +23,7 @@ import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { Link, useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '../Components/PairTokenImage';
 import { useShutterHandlers } from '../AmountSelector';
+import { priceAtom } from '@Hooks/usePrice';
 
 export default function Favourites({ className }: { className?: string }) {
   const [toggle, setToggle] = useState(false);
@@ -183,7 +184,7 @@ function FavouriteCard({
   const isActive = data.tv_id === activeAsset.tv_id;
   console.log(`data.tv_id: `, data.tv_id, activeAsset.tv_id);
   const { deleteCardHandler } = useFavouritesFns();
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const [marketPrice] = useAtom(priceAtom);
   const marketPriceObj = marketPrice?.[data.tv_id];
   const price = marketPrice?.[data.tv_id]?.length
     ? marketPriceObj[marketPrice?.[data.tv_id].length - 1]?.close

@@ -3,7 +3,7 @@ import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
 import { useNavigate } from 'react-router-dom';
-
+import Config from 'public/config.json';
 import PGTables from './Tables';
 import BinaryDrawer from './PGDrawer';
 import { useGlobal } from '@Contexts/Global';
@@ -25,14 +25,12 @@ import {
 import { MarketTimingsModal } from './MarketTimingsModal';
 import MobileTable from './Components/Mobile/historyTab';
 import { binaryTabs } from 'config';
-import TVIntegrated from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { useParams, useSearchParams } from 'react-router-dom';
 export const mobileUpperBound = 800;
 export const IV = 12000;
 export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
-import Config from 'public/config.json';
 import { useSearchParam } from 'react-use';
 import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
@@ -42,6 +40,8 @@ import { getChains } from 'src/Config/wagmiClient';
 import { BuyTrade } from './BuyTrade';
 import PGDesktopTables, { tradesCount } from './Tables/Desktop';
 import { History } from './History';
+import { TradingChart } from 'src/TradingView';
+import { Markets } from 'src/Types/Market';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -212,6 +212,7 @@ function QTrade() {
     [state.tabs.activeIdx]
   );
   // return <div>hello</div>;
+  console.log(`props.activePair.tv_id: `, props.activePair.tv_id);
   return (
     <>
       <MarketTimingsModal />
@@ -219,10 +220,15 @@ function QTrade() {
       <main className="content-drawer" id="buffer-tv-wrapper">
         <Background>
           <Favourites />
-          <TVIntegrated
-            assetInfo={props.activePair}
-            className={isHistory ? 'hidden' : ''}
-          />
+          {Object.keys(Config.markets).map((s) => {
+            if (Config.markets[s].tv_id == props.activePair.tv_id) {
+              return (
+                <TradingChart market={Config.markets[s].tv_id as Markets} />
+              );
+            }
+            return null;
+          })}
+
           <BuyTrade />
         </Background>
       </main>
