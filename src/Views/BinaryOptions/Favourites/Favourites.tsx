@@ -17,7 +17,10 @@ const activeClasses =
 import { FavouriteAssetDD } from './FavouriteAssetDD';
 import { CloseOutlined } from '@mui/icons-material';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
-import { marketPriceAtom } from 'src/TradingView/useDataFeed';
+import {
+  getPriceFromKlines,
+  marketPriceAtom,
+} from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { Link, useNavigate } from 'react-router-dom';
@@ -185,10 +188,7 @@ function FavouriteCard({
   console.log(`data.tv_id: `, data.tv_id, activeAsset.tv_id);
   const { deleteCardHandler } = useFavouritesFns();
   const [marketPrice] = useAtom(priceAtom);
-  const marketPriceObj = marketPrice?.[data.tv_id];
-  const price = marketPrice?.[data.tv_id]?.length
-    ? marketPriceObj[marketPrice?.[data.tv_id].length - 1]?.close
-    : null;
+  const price = getPriceFromKlines(marketPrice, data);
   const { routerPermission } = useAtomValue(activeAssetStateAtom);
   const isAssetActive =
     routerPermission &&
