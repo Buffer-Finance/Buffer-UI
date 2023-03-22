@@ -1058,10 +1058,7 @@ export const useGetTokenomics = () => {
           },
           user: {
             rewards: {
-              value: add(
-                fromWei(multiply(stakedArbBlpTrackerRewards, arbPrice)),
-                fromWei(feeArbBlpTrackerRewards, arb_decimals)
-              ),
+              value: fromWei(feeArbBlpTrackerRewards, arb_decimals),
               tooltip: [
                 {
                   key: 'ARB',
@@ -1140,13 +1137,13 @@ export const useGetTokenomics = () => {
               tooltip: [
                 {
                   key: 'USDC',
-                  value: [fromWei(feeArbBlpTrackerRewards, arb_decimals)],
+                  value: [fromWei(feeBlpTrackerRewards, arb_decimals)],
                 },
                 {
                   key: 'Escrowed BFR',
                   value: [
-                    fromWei(stakedArbBlpTrackerRewards),
-                    fromWei(multiply(stakedArbBlpTrackerRewards, bfrPrice)),
+                    fromWei(stakedBlpTrackerRewards),
+                    fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
                   ],
                 },
               ],

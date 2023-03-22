@@ -645,7 +645,8 @@ const BLP = ({
               <Display
                 className="!justify-end"
                 data={data.user.rewards.value}
-                label="$"
+                label={depositToken === 'ARB' ? '' : '$'}
+                unit={depositToken === 'ARB' ? 'ARB' : ''}
                 placement="bottom"
                 content={
                   <span>
