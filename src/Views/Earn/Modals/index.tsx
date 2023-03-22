@@ -116,7 +116,7 @@ function ModalChild() {
           approveFn={approve}
           blpToTokenPrice={pageData.earn?.blp.blpToUsdc}
           tokenToBlpPrice={pageData.earn.blp.usdcToBlp}
-          blpTokenName={'BLP'}
+          blpTokenName={'uBLP'}
           tokenXName={'USDC'}
         />
       );
@@ -138,7 +138,7 @@ function ModalChild() {
           approveFn={approveARB}
           blpToTokenPrice={pageData.earn?.arbblp.blpToUsdc}
           tokenToBlpPrice={pageData.earn?.arbblp.usdcToBlp}
-          blpTokenName={'ARBBLP'}
+          blpTokenName={'aBLP'}
           tokenXName={'ARB'}
         />
       );
@@ -148,7 +148,7 @@ function ModalChild() {
         useEarnWriteCalls('Router');
       return (
         <Sell
-          blpTokenName={'BLP'}
+          blpTokenName={'uBLP'}
           tokenXName={'USDC'}
           sellCall={sellBLP}
           blpToTokenPrice={pageData.earn?.blp.blpToUsdc}
@@ -163,7 +163,7 @@ function ModalChild() {
         useEarnWriteCalls('Router');
       return (
         <Sell
-          blpTokenName={'ARBBLP'}
+          blpTokenName={'aBLP'}
           tokenXName={'ARB'}
           sellCall={sellARBBLP}
           blpToTokenPrice={pageData.earn?.arbblp.blpToUsdc}
@@ -204,7 +204,7 @@ function ModalChild() {
         useEarnWriteCalls('Vester', 'BLP');
       return (
         <DepositModal
-          head="BLP Vault"
+          head="uBLP Vault"
           type="blp"
           depositFn={BLPDeposit}
           validatinosFn={BLPVesetValidatinos}
@@ -215,7 +215,7 @@ function ModalChild() {
         useEarnWriteCalls('Vester', 'BLP');
       return (
         <DepositModal
-          head="ARBBLP Vault"
+          head="aBLP Vault"
           type="arbblp"
           depositFn={deposit2}
           validatinosFn={ARBBLPVesetValidatinos}

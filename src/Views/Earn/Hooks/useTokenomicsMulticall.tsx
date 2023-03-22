@@ -73,6 +73,7 @@ export const useGetTokenomics = () => {
   const { activeChain, configContracts } = useActiveChain();
   const contracts: (typeof CONTRACTS)[421613] = CONTRACTS[activeChain.id];
   const bfrPrice = useIbfrPrice();
+  const arbPrice = '1';
   const usd_decimals = configContracts.tokens.USDC.decimals;
   const arb_decimals = configContracts.tokens.ARB?.decimals ?? 18;
 
@@ -835,7 +836,7 @@ export const useGetTokenomics = () => {
     const stakedArbBlpTrackerAnnualRewardsUsd = fromWei(
       multiply(
         multiply(stakedArbBlpTrackerTokensPerInterval, SECONDS_PER_YEAR),
-        bfrPrice
+        arbPrice
       )
     );
     const arbblpAprForEsBfr =
@@ -1028,7 +1029,7 @@ export const useGetTokenomics = () => {
           apr: {
             value: fromWei(arbblpAprTotal, 2),
             tooltip: [
-              { key: 'Escrowed BFR APR', value: fromWei(arbblpAprForEsBfr, 2) },
+              // { key: 'Escrowed BFR APR', value: fromWei(arbblpAprForEsBfr, 2) },
               { key: 'ARB APR', value: fromWei(arbblpAprForRewardToken, 2) },
             ],
             description:
@@ -1043,7 +1044,7 @@ export const useGetTokenomics = () => {
           total_staked: {
             value_in_usd: multiply(
               fromWei(stakedArbBlp, arb_decimals),
-              blpPrice
+              arbblpPrice
             ),
             token_value: fromWei(stakedArbBlp, arb_decimals),
             token_value_abs: stakedArbBlp,
@@ -1052,14 +1053,26 @@ export const useGetTokenomics = () => {
             value_in_usd: fromWei(arbblpUSDCAmount, arb_decimals),
             token_value: divide(
               fromWei(arbblpUSDCAmount, arb_decimals),
-              blpPrice
+              arbblpPrice
             ),
           },
           user: {
-            rewards: add(
-              fromWei(multiply(stakedArbBlpTrackerRewards, bfrPrice)),
-              fromWei(feeArbBlpTrackerRewards, arb_decimals)
-            ),
+            rewards: {
+              value: fromWei(feeArbBlpTrackerRewards, arb_decimals),
+              tooltip: [
+                {
+                  key: 'ARB',
+                  value: [fromWei(feeArbBlpTrackerRewards, arb_decimals)],
+                },
+                // {
+                //   key: 'Escrowed BFR',
+                //   value: [
+                //     fromWei(stakedArbBlpTrackerRewards),
+                //     fromWei(multiply(stakedArbBlpTrackerRewards, arbPrice)),
+                //   ],
+                // },
+              ],
+            },
             usd_reward: fromWei(feeArbBlpTrackerRewards, arb_decimals),
             esBfr_rewards: {
               value_in_usd: fromWei(
@@ -1116,10 +1129,25 @@ export const useGetTokenomics = () => {
             token_value: divide(fromWei(blpUSDCAmount, usd_decimals), blpPrice),
           },
           user: {
-            rewards: add(
-              fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
-              fromWei(feeBlpTrackerRewards, usd_decimals)
-            ),
+            rewards: {
+              value: add(
+                fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
+                fromWei(feeBlpTrackerRewards, usd_decimals)
+              ),
+              tooltip: [
+                {
+                  key: 'USDC',
+                  value: [fromWei(feeBlpTrackerRewards, arb_decimals)],
+                },
+                {
+                  key: 'Escrowed BFR',
+                  value: [
+                    fromWei(stakedBlpTrackerRewards),
+                    fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
+                  ],
+                },
+              ],
+            },
             usd_reward: fromWei(feeBlpTrackerRewards, usd_decimals),
             esBfr_rewards: {
               value_in_usd: fromWei(
@@ -1259,7 +1287,7 @@ export const useGetTokenomics = () => {
           arbesBfr: {
             value_in_usd: multiply(
               fromWei(stakedArbBlpTrackerRewards),
-              bfrPrice
+              arbPrice
             ),
             token_value: fromWei(stakedArbBlpTrackerRewards),
           },

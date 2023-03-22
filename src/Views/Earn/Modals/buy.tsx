@@ -71,7 +71,7 @@ export const Buy = ({
 
     return (
       <div className="w-[350px] sm:w-full flex flex-col gap-4">
-        <div className="text-f15 font-medium">Buy BLP</div>
+        <div className="text-f15 font-medium">Buy {blpTokenName}</div>
         <BufferInput
           value={payAmount}
           onChange={(newValue) => {
@@ -95,7 +95,13 @@ export const Buy = ({
           header={
             <div className="text-f14 font-medium text-3 flex justify-between w-full mb-4">
               <span className="flex">
-                Pay: <Display data={payAmount} label="$" />
+                Pay
+                {tokenXName === 'USDC' && (
+                  <span>
+                    &nbsp;:&nbsp;
+                    <Display data={payAmount} label="$" className="inline" />
+                  </span>
+                )}
               </span>
               <span className="flex">
                 Balance:

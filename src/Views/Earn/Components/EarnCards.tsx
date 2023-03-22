@@ -6,7 +6,7 @@ import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
-import { IBLP, IEarn, IesBfr, IiBFR, ITotalRewards } from '../earnAtom';
+import { IBLP, IBLPV2, IEarn, IesBfr, IiBFR, ITotalRewards } from '../earnAtom';
 import { Card } from './Card';
 import { Divider } from './Divider';
 import { EarnButtons } from './EarnButtons';
@@ -530,7 +530,7 @@ const BLP = ({
   unit,
   depositToken,
 }: {
-  data: IBLP | IesBfr;
+  data: IBLPV2 | IesBfr;
   unit: string;
   depositToken: string;
 }) => {
@@ -543,18 +543,16 @@ const BLP = ({
           <div className={`${wrapperClasses}`}>
             {isBLPCard ? (
               <NumberTooltip
-                content={
-                  'Exchange rate is used to mint and redeem BLP tokens and is calculated as (the total worth of assets in the pool, including profits and losses of all previous trades) / (BLP supply)'
-                }
+                content={`Exchange rate is used to mint and redeem ${unit} tokens and is calculated as (the total worth of assets in the pool, including profits and losses of all previous trades) / (${unit} supply)`}
               >
                 <div className={underLineClass}>
                   <Display data={'1'} unit={unit} className="inline" />
                   &nbsp;=&nbsp;
                   <Display
-                    data={roundToTwo(data.blpToUsdc, 2)}
+                    data={roundToTwo((data as IBLPV2).blpToUsdc, 2)}
                     unit={depositToken}
                     className="inline"
-                    content={toFixed(data.blpToUsdc, 4)}
+                    content={toFixed((data as IBLPV2).blpToUsdc, 4)}
                   />
                 </div>
               </NumberTooltip>
@@ -646,30 +644,25 @@ const BLP = ({
             <div className={`${wrapperClasses}`}>
               <Display
                 className="!justify-end"
-                data={data.user.rewards}
-                label="$"
+                data={data.user.rewards.value}
+                label={depositToken === 'ARB' ? '' : '$'}
+                unit={depositToken === 'ARB' ? 'ARB' : ''}
                 placement="bottom"
                 content={
                   <span>
                     <TableAligner
-                      keysName={['USDC', 'Escrowed BFR']}
+                      keysName={data.user.rewards.tooltip.map((s) => s.key)}
                       keyStyle={tooltipKeyClasses}
                       valueStyle={tooltipValueClasses}
-                      values={[
-                        [data.user.usd_reward],
-                        [
-                          data.user.esBfr_rewards.value_abs,
-                          data.user.esBfr_rewards.value_in_usd,
-                        ],
-                      ].map((s) => (
+                      values={data.user.rewards.tooltip.map((s) => (
                         <div className="flex w-fit ml-auto">
-                          <Display className="!justify-end" data={s[0]} />
-                          {s[1] ? (
+                          <Display className="!justify-end" data={s.value[0]} />
+                          {s.value[1] ? (
                             <>
                               ({' '}
                               <Display
                                 className="!justify-end"
-                                data={s[1]}
+                                data={s.value[1]}
                                 label="$"
                               />
                               )
@@ -702,7 +695,7 @@ const BLP = ({
             <div className={`${wrapperClasses}`}>
               <Display
                 className="!justify-end"
-                data={data.user.max_unlocked_amount}
+                data={(data as IBLP).user.max_unlocked_amount}
                 unit={unit}
               />
             </div>
