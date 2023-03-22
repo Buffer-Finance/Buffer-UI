@@ -1,4 +1,5 @@
 import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
+import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
 import { ClaimedNFT } from '@Views/NFTView/Claimed';
 import { HistoryTables } from './Components/HistoryTable';
 import { ProfileCards } from './Components/ProfileCards';
@@ -15,17 +16,20 @@ export const ProfilePage = () => {
 // const profileHeadingClass=
 const Profile = () => {
   return (
-    <div className="px-7 my-8 sm:px-3">
-      <UserData />
-      <ReferralLink />
-      <ProfileCards />
-      <div className="my-8 flex flex-col ">
-        <div className="text-f22 mb-7">Trades</div>
-        <HistoryTables />
+    <div>
+      <TokenDataNotIncludedWarning />
+      <div className="px-7 my-8 sm:px-3">
+        <UserData />
+        <ReferralLink />
+        <ProfileCards />
+        <div className="my-8 flex flex-col ">
+          <div className="text-f22 mb-7">Trades</div>
+          <HistoryTables />
+        </div>
+        <ArbitrumOnly hide>
+          <ClaimedNFT />
+        </ArbitrumOnly>
       </div>
-      <ArbitrumOnly hide>
-        <ClaimedNFT />
-      </ArbitrumOnly>
     </div>
   );
 };

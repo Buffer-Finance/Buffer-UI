@@ -44,6 +44,7 @@ import { HeadTitle } from '@Views/Common/TitleHead';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { snackAtom } from 'src/App';
 import { useSearchParams } from 'react-router-dom';
+import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
 
 interface IReferral {}
 
@@ -302,6 +303,7 @@ const Referral: React.FC<IReferral> = ({}) => {
 
   return (
     <>
+      <TokenDataNotIncludedWarning />
       <ReferralCodeModal
         isOpen={showCodeModal}
         closeModal={closeModal}

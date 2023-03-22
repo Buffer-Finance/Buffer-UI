@@ -16,6 +16,7 @@ import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { getChains } from 'src/Config/wagmiClient';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 import { useNavigate } from 'react-router-dom';
+import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -65,6 +66,7 @@ export const Dashboard = () => {
 const DashboardPage = () => {
   return (
     <DashboardStyles>
+      <TokenDataNotIncludedWarning />
       <Boxes />
       <Section
         Heading={<div className={topStyles}>Markets</div>}

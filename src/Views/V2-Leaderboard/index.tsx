@@ -8,6 +8,7 @@ import {
   ChainNotSupported,
 } from '@Views/Common/ChainNotSupported';
 import { HeadTitle } from '@Views/Common/TitleHead';
+import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
 
 export const LeaderBoard = (props: { children: JSX.Element }) => {
   return (
@@ -17,7 +18,10 @@ export const LeaderBoard = (props: { children: JSX.Element }) => {
         <LeaderBoardStyles>
           {/* <MobileLeaderboardDropdwon /> */}
           <LeaderBoardSidebar />
-          {props.children}
+          <div>
+            <TokenDataNotIncludedWarning />
+            {props.children}
+          </div>
         </LeaderBoardStyles>
         {typeof window === 'undefined' ? (
           <LeaderBoardDrawers />
