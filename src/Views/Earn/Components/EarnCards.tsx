@@ -44,12 +44,12 @@ export const getEarnCards = (data: IEarn) => {
     />,
     <Card
       top="Total Rewards"
+      middle={<TotalRewards data={data.earn.total_rewards} />}
       bottom={
         <div className="mt-5">
-          <EarnButtons cardNum={1} />
+          <EarnButtons cardNum={1} />{' '}
         </div>
       }
-      middle={<TotalRewards data={data.earn.total_rewards} />}
     />,
     <Card
       top={
@@ -72,7 +72,7 @@ export const getEarnCards = (data: IEarn) => {
             }
             className="!py-3"
           >
-            <span className={underLineClass}>USDC Vault (BLP Token)</span>
+            <span className={underLineClass}>USDC Vault (uBLP Token)</span>
           </NumberTooltip>
 
           <div className="text-f12 text-3  mt-2">
@@ -114,7 +114,7 @@ export const getEarnCards = (data: IEarn) => {
           </div> */}
         </>
       }
-      middle={<BLP data={data.earn.blp} unit="BLP" />}
+      middle={<BLP data={data.earn.blp} unit="uBLP" depositToken="USDC" />}
       bottom={
         <div className="mt-5">
           <EarnButtons cardNum={2} />
@@ -123,10 +123,80 @@ export const getEarnCards = (data: IEarn) => {
     />,
     <Card
       top="Escrowed BFR"
-      middle={<BLP data={data.earn.esBfr} unit="esBFR" />}
+      middle={<BLP data={data.earn.esBfr} unit="esBFR" depositToken="USDC" />}
       bottom={
         <div className="mt-5">
           <EarnButtons cardNum={3} />
+        </div>
+      }
+    />,
+    <Card
+      top={
+        <>
+          <NumberTooltip
+            content={
+              <>
+                ARB vault takes counterposition against each trade and collects
+                up to 60% of the settlement fee. ARB vault might face drawdowns
+                if traders are collectively net profitable.{' '}
+                <a
+                  href="https://buffer-finance.medium.com/all-you-need-to-know-about-usdc-vaults-liqudity-pool-and-the-blp-token-d743b258da1d"
+                  target={'_blank'}
+                  className="text-light-blue whitespace-nowrap hover:underline"
+                >
+                  Read details here
+                  <FrontArrow className="tml w-fit inline" />
+                </a>
+              </>
+            }
+            className="!py-3"
+          >
+            <span className={underLineClass}>ARB Vault (aBLP Token)</span>
+          </NumberTooltip>
+
+          <div className="text-f12 text-3  mt-2">
+            Max Capacity&nbsp;:&nbsp;
+            <Display
+              data={data.earn.arbblp.maxLiquidity}
+              unit="ARB"
+              className="inline"
+              disable
+            />
+          </div>
+          <div className="max-w-[300px]">
+            <BufferProgressBar
+              fontSize={12}
+              progressPercent={Number(
+                multiply(
+                  divide(
+                    gte(
+                      data.earn.arbblp.currentLiquidity,
+                      data.earn.arbblp.maxLiquidity
+                    )
+                      ? data.earn.arbblp.maxLiquidity
+                      : data.earn.arbblp.currentLiquidity,
+                    data.earn.arbblp.maxLiquidity
+                  ) ?? '0',
+                  2
+                )
+              )}
+            />
+          </div>
+          {/* <div className="text-3 text-f12 flex  mt-2">
+            <img
+              src="/lightning.png"
+              alt="lightning"
+              className="mr-2 mt-[2px] h-[14px]"
+            />{" "}
+            New Vault (Option trading will start in the the first week of
+            January.)
+          </div> */}
+        </>
+      }
+      middle={<BLP data={data.earn.arbblp} unit="aBLP" depositToken="ARB" />}
+      bottom={
+        <div className="mt-5">
+          <EarnButtons cardNum={7} />
         </div>
       }
     />,
@@ -339,10 +409,13 @@ const TotalRewards = ({ data }: { data: ITotalRewards }) => {
   return (
     <>
       <TableAligner
-        keysName={['USDC', 'BFR', 'Escrowed BFR']}
+        keysName={['USDC', 'ARB', 'BFR', 'Escrowed BFR']}
         values={[
           <div className={`${wrapperClasses}`}>
             <Display data={data.usd.token_value} />
+          </div>,
+          <div className={`${wrapperClasses}`}>
+            <Display data={data.arb.token_value} />
           </div>,
           <div className={`${wrapperClasses}`}>
             <Display data={data.bfr.token_value} />
@@ -402,13 +475,66 @@ const TotalRewards = ({ data }: { data: ITotalRewards }) => {
         keyStyle={keyClasses}
         valueStyle={valueClasses}
       />
-      {/* <Divider /> */}
+      {/* <div className="mt-5 mb-6">
+        {' '}
+        <EarnButtons cardNum={1} />
+      </div>
+      <Divider />
+      <div className="text-1 text-f16 my-4">ARB Rewards</div> <Divider />
+      <TableAligner
+        keysName={['ARB', 'BFR', 'Escrowed BFR']}
+        values={[
+          <div className={`${wrapperClasses}`}>
+            <Display data={data.arb.token_value} />
+          </div>,
+          <div className={`${wrapperClasses}`}>
+            <Display data={data.arbbfr.token_value} />
+            &nbsp;
+            <span>
+              (
+              <Display
+                className="!justify-end inline"
+                data={data.arbbfr.value_in_usd}
+                label="$"
+              />
+              )
+            </span>
+          </div>,
+          <div className={`${wrapperClasses}`}>
+            <Display data={data.arbesBfr.token_value} />
+            &nbsp;
+            <span>
+              (
+              <Display
+                className="!justify-end inline"
+                data={data.arbesBfr.value_in_usd}
+                label="$"
+              />
+              )
+            </span>
+          </div>,
+        ]}
+        keyStyle={keyClasses}
+        valueStyle={valueClasses}
+      />
+      <div className="mt-5">
+        {' '}
+        <EarnButtons cardNum={8} />
+      </div> */}
     </>
   );
 };
 
-const BLP = ({ data, unit }: { data: IBLP | IesBfr; unit: string }) => {
-  const isBLPCard = unit === 'BLP';
+const BLP = ({
+  data,
+  unit,
+  depositToken,
+}: {
+  data: IBLP | IesBfr;
+  unit: string;
+  depositToken: string;
+}) => {
+  const isBLPCard = unit !== 'esBFR';
   return (
     <>
       <TableAligner
@@ -422,11 +548,11 @@ const BLP = ({ data, unit }: { data: IBLP | IesBfr; unit: string }) => {
                 }
               >
                 <div className={underLineClass}>
-                  <Display data={'1'} unit={'BLP'} className="inline" />
+                  <Display data={'1'} unit={unit} className="inline" />
                   &nbsp;=&nbsp;
                   <Display
                     data={roundToTwo(data.blpToUsdc, 2)}
-                    unit={'USDC'}
+                    unit={depositToken}
                     className="inline"
                     content={toFixed(data.blpToUsdc, 4)}
                   />
@@ -453,7 +579,7 @@ const BLP = ({ data, unit }: { data: IBLP | IesBfr; unit: string }) => {
               <Display
                 className="!justify-end inline"
                 data={data.user.wallet_balance.value_in_usd}
-                unit={'USDC'}
+                unit={depositToken}
               />
               )
             </span>
@@ -470,7 +596,7 @@ const BLP = ({ data, unit }: { data: IBLP | IesBfr; unit: string }) => {
               <Display
                 className="!justify-end inline"
                 data={data.user.staked.value_in_usd}
-                unit={'USDC'}
+                unit={depositToken}
               />
               )
             </span>
@@ -577,7 +703,7 @@ const BLP = ({ data, unit }: { data: IBLP | IesBfr; unit: string }) => {
               <Display
                 className="!justify-end"
                 data={data.user.max_unlocked_amount}
-                unit="BLP"
+                unit={unit}
               />
             </div>
           ),
@@ -603,7 +729,7 @@ const BLP = ({ data, unit }: { data: IBLP | IesBfr; unit: string }) => {
               <Display
                 className="!justify-end inline"
                 data={data.total_staked.value_in_usd}
-                unit={'USDC'}
+                unit={depositToken}
               />
               )
             </span>
@@ -620,7 +746,7 @@ const BLP = ({ data, unit }: { data: IBLP | IesBfr; unit: string }) => {
               <Display
                 className="!justify-end inline"
                 data={data.total_supply.value_in_usd}
-                unit={'USDC'}
+                unit={depositToken}
               />
               )
             </span>

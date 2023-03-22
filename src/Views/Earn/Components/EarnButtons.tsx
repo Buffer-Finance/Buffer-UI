@@ -10,16 +10,17 @@ import { CONTRACTS } from '../Config/Address';
 import { earnAtom, readEarnData } from '../earnAtom';
 import { useEarnWriteCalls } from '../Hooks/useEarnWriteCalls';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const btnClasses = '!w-fit px-4 rounded-sm !h-7';
 
 export function EarnButtons({ cardNum }: { cardNum: number }) {
   const { address: account } = useUserAccount();
   const [state, setPageState] = useAtom(earnAtom);
-  const { activeChain } = useContext(EarnContext);
+  const { activeChain } = useActiveChain();
   const [pageState] = useAtom(readEarnData);
   const { chain } = useNetwork();
-  const { withdraw } = useEarnWriteCalls(
+  const { withdraw, claimARB } = useEarnWriteCalls(
     'Vester',
     cardNum === 4 ? 'BFR' : 'BLP'
   );
@@ -41,14 +42,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
     case 0:
 
     case 3:
-      const wallet_value =
-        cardNum === 0
-          ? pageState.earn.ibfr.user.wallet_balance.token_value
-          : pageState.earn.esBfr.user.wallet_balance.token_value;
-      const staked_value =
-        cardNum === 0
-          ? pageState.earn.ibfr.user.staked.token_value
-          : pageState.earn.esBfr.user.staked.token_value;
       return (
         <div className="flex gap-5">
           {cardNum === 0 && (
@@ -101,7 +94,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
         </div>
       );
     case 1:
-      const isRewardAvailable = gt(pageState.earn.total_rewards.total, '0');
+    case 8:
       return (
         <div className="flex gap-5">
           <BlueBtn
@@ -111,7 +104,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
                 //   ?
                 setPageState({
                   ...state,
-                  activeModal: 'compound',
+                  activeModal: cardNum === 1 ? 'compound' : 'compound2',
                   isModalOpen: true,
                 })
               // :
@@ -128,7 +121,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
                 //   ?
                 setPageState({
                   ...state,
-                  activeModal: 'claim',
+                  activeModal: cardNum === 1 ? 'claim' : 'claim2',
                   isModalOpen: true,
                 })
               // : showToast("You don't have any rewards yet.")
@@ -136,6 +129,9 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
             className={btnClasses}
           >
             Claim
+          </BlueBtn>
+          <BlueBtn onClick={claimARB} className={btnClasses}>
+            Claim ARB
           </BlueBtn>
         </div>
       );
@@ -168,23 +164,27 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
       );
     case 4:
     case 5:
-      const wallet_balance =
-        pageState.earn.esBfr.user.wallet_balance.token_value;
+    case 6:
+      let activeModalname = '';
+      let shouldWithdraw = false;
+      if (cardNum === 4) {
+        activeModalname = 'iBFRdeposit';
+        shouldWithdraw = pageState.vest.ibfr.vesting_status.vested !== '0';
+      } else if (cardNum === 5) {
+        activeModalname = 'BLPdeposit';
+        shouldWithdraw = pageState.vest.blp.vesting_status.vested !== '0';
+      } else if (cardNum === 6) {
+        activeModalname = 'ARBBLPdeposit';
+        shouldWithdraw = pageState.vest.arbblp.vesting_status.vested !== '0';
+      }
 
-      const shouldWithdraw =
-        cardNum === 4
-          ? pageState.vest.ibfr.vesting_status.vested !== '0'
-          : pageState.vest.blp.vesting_status.vested !== '0';
       return (
         <div className="flex gap-5">
           <BlueBtn
             onClick={() =>
-              // wallet_balance === "0"
-              //   ? showToast(`Not enough esBFR.`)
-              //   :
               setPageState({
                 ...state,
-                activeModal: cardNum === 4 ? 'iBFRdeposit' : 'BLPdeposit',
+                activeModal: activeModalname,
                 isModalOpen: true,
               })
             }
@@ -195,16 +195,47 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
           <BlueBtn
             onClick={() =>
               shouldWithdraw
-                ? withdraw(
-                    cardNum === 4
-                      ? CONTRACTS[activeChain?.id].BfrVester
-                      : CONTRACTS[activeChain?.id].BlpVester
-                  )
+                ? withdraw()
                 : showToast('You have not deposited any tokens.')
             }
             className={btnClasses}
           >
             Withdraw
+          </BlueBtn>
+        </div>
+      );
+    case 7:
+      return (
+        <div className="flex gap-5">
+          <BlueBtn
+            onClick={() =>
+              // pageState.earn.usdc.wallet_balance === "0"
+              //   ? showToast(`Not enough USDC.`)
+              //   :
+              setPageState({
+                ...state,
+                activeModal: 'buyARB',
+                isModalOpen: true,
+              })
+            }
+            className={btnClasses}
+          >
+            Add Funds
+          </BlueBtn>
+          <BlueBtn
+            onClick={() =>
+              // pageState.earn.blp.user.staked.token_value === "0"
+              //   ? showToast("You don't have any BLP.")
+              //   :
+              setPageState({
+                ...state,
+                activeModal: 'sellARB',
+                isModalOpen: true,
+              })
+            }
+            className={btnClasses}
+          >
+            Withdraw Funds
           </BlueBtn>
         </div>
       );

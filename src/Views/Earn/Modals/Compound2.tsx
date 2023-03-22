@@ -1,28 +1,26 @@
 import { useAtom } from 'jotai';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { compoundRewardsAtom } from '../earnAtom';
+import { compoundRewardsAtom, compoundRewardsAtom2 } from '../earnAtom';
 import { useEarnWriteCalls } from '../Hooks/useEarnWriteCalls';
 
-export const Compound = () => {
-  const { compound } = useEarnWriteCalls('Router');
-  const [compoundState, setCompoundState] = useAtom(compoundRewardsAtom);
+export const Compound2 = () => {
+  const { compound2 } = useEarnWriteCalls('Router');
+  const [compoundState, setCompoundState] = useAtom(compoundRewardsAtom2);
 
   const {
-    shouldclaimesBFR,
-    shouldclaimeth,
     shouldclaimiBFR,
-    shouldconvertweth,
-    shouldstakeesBFR,
     shouldstakeiBFR,
-    shouldstakemultiplierpoints,
+    shouldclaimesBFR,
+    shouldstakeesBFR,
+    shouldclaimarb,
   } = compoundState;
 
   return (
     <div className="min-w-[250px] tab:min-w-fit">
       <div className="text-f14 mb-5">Compound Rewards</div>
       <div className="flex flex-col gap-3">
-        <div className="flex text-f13">
+        {/* <div className="flex text-f13">
           <BufferCheckbox
             checked={true}
             isDisabled={true}
@@ -40,7 +38,7 @@ export const Compound = () => {
           <div className={`${false ? 'text-1' : 'text-2'}`}>
             Stake Multiplier Points
           </div>
-        </div>
+        </div> */}
         <div className="flex text-f13">
           <BufferCheckbox
             checked={shouldclaimiBFR || shouldstakeiBFR}
@@ -122,24 +120,21 @@ export const Compound = () => {
         </div>
         <div className="flex text-f13">
           <BufferCheckbox
-            checked={shouldclaimeth || shouldconvertweth}
-            isDisabled={shouldconvertweth}
-            onCheckChange={() =>
-              setCompoundState((prvState) => {
-                return {
-                  ...prvState,
-                  shouldclaimeth: !prvState.shouldclaimeth || shouldconvertweth,
-                };
-              })
+            checked={shouldclaimarb}
+            isDisabled={true}
+            onCheckChange={
+              () => {}
+              //   setCompoundState((prvState) => {
+              //     return {
+              //       ...prvState,
+              //       shouldclaimarb: !prvState.shouldclaimarb,
+              //     };
+              //   })
             }
             className="mr-3"
           />
-          <div
-            className={`${
-              shouldclaimeth && !shouldconvertweth ? 'text-1' : 'text-2'
-            }`}
-          >
-            Claim USDC Rewards
+          <div className={`${false ? 'text-1' : 'text-2'}`}>
+            Claim ARB Rewards
           </div>
         </div>
         {/* <div className="flex text-f13">
@@ -162,13 +157,12 @@ export const Compound = () => {
       </div>
       <BlueBtn
         onClick={() =>
-          compound(
+          compound2(
             shouldclaimiBFR,
             shouldstakeiBFR,
             shouldclaimesBFR,
             shouldstakeesBFR,
-            shouldstakemultiplierpoints,
-            shouldclaimeth
+            shouldclaimarb
           )
         }
         className={'px-4 rounded-sm !h-7 w-full mt-5'}
