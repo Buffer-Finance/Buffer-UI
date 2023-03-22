@@ -12,7 +12,7 @@ const ipWrapperClasses =
   'rounded-l-sm w-full flex items-center bg-[#232334] !pl-[10px] !py-[0px] !pr-[0px]';
 import ShutterDrawer from 'react-bottom-drawer';
 import AccountInfo from '@Views/Common/AccountInfo';
-import { useActivePoolObj } from './PGDrawer/PoolDropDown';
+import { PoolDropDown, useActivePoolObj } from './PGDrawer/PoolDropDown';
 import { Fade } from '@mui/material';
 import ErrorIcon from '@Assets/Elements/ErrorIcon';
 import { DurationPicker } from './PGDrawer/DurationPicker';
@@ -20,6 +20,7 @@ import { Background } from './PGDrawer/style';
 import { useToast } from '@Contexts/Toast';
 import { USDCIcon } from '@SVG/Elements/usdc';
 import { minTradeAmount } from './store';
+import { useActiveChain } from '@Hooks/useActiveChain';
 const shutterModalAtom = atom<{ open: false | 'amount' | 'duration' }>({
   open: false,
 });
@@ -28,6 +29,12 @@ const AmountInput = ({
   onClick,
   value,
   max,
+  assetPoolComponent = (
+    <div className="min-h-full grid place-items-center p-2 bg-cross-bg  rounded-tr-sm rounded-br-sm w-max">
+      {' '}
+      <PoolDropDown />{' '}
+    </div>
+  ),
   onChange,
   ...props
 }: React.DetailedHTMLProps<
@@ -59,12 +66,12 @@ const AmountInput = ({
         onChange={onChange}
         {...props}
       ></input>
-      <div className="min-h-full grid place-items-center p-2 bg-cross-bg  rounded-tr-sm rounded-br-sm">
-        <USDCIcon className="w-[29px]" />
-      </div>
+
+      {assetPoolComponent}
     </div>
   );
 };
+
 const AmountSelector: React.FC<any> = ({
   activeAssetState,
   amount,
@@ -74,6 +81,7 @@ const AmountSelector: React.FC<any> = ({
   const setShutter = useSetAtom(shutterModalAtom);
   const shutter = useAtomValue(shutterModalAtom);
   const { activePoolObj } = useActivePoolObj();
+  const { configContracts } = useActiveChain();
   const balance = activeAssetState?.[0];
   console.log(`activeAssetState: `, activeAssetState);
   const isShutterOpen = shutter.open == 'amount';
@@ -146,6 +154,19 @@ const AmountSelector: React.FC<any> = ({
             }
             setErr(errors);
           }}
+          assetPoolComponent={
+            <div className="text-f13 bg-cross-bg  rounded-tr-sm rounded-br-sm min-h-full flex items-center justify-center w-[100px] px-2 py-1 rounded-sm ">
+              {' '}
+              <img
+                src={
+                  activePoolObj &&
+                  configContracts.tokens[activePoolObj.token.name].img
+                }
+                className="w-[18px] h-[18px]  mr-2 "
+              />
+              <div>{activePoolObj.token.name}</div>
+            </div>
+          }
         />
 
         <Fade in={err.length ? true : false}>
@@ -169,6 +190,7 @@ const AmountSelector: React.FC<any> = ({
     </>
   );
 };
+
 const DurationInput = ({ onClick }: any) => {
   const [currentTime, setCurrentTime] = useAtom(QuickTradeExpiry);
 
@@ -266,6 +288,7 @@ const DurationInput = ({ onClick }: any) => {
     </div>
   );
 };
+
 const DurationSelector = () => {
   const setShutter = useSetAtom(shutterModalAtom);
   const shutter = useAtomValue(shutterModalAtom);
