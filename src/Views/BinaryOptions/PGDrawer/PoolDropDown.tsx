@@ -46,7 +46,7 @@ export const PoolDropDown = () => {
 
   if (dropdownItems.length === 1)
     return (
-      <div className="token-dd flex items-center bg-cross-bg w-fit px-4 py-[5px] text-f16  text-1">
+      <div className="token-dd flex items-center bg-cross-bg w-fit px-4 py-[5px]  sm:px-[0] sm:py-[0]  text-f16  text-1">
         <img
           src={activePool && configContracts.tokens[activePool].img}
           className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "

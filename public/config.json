@@ -339,7 +339,7 @@
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
         "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5"
@@ -348,7 +348,7 @@
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
         "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
         "decimals": 18,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
         "name": "BFR",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x8F4db9A46809782b67180F0f8f3d9843a5268137"
@@ -766,7 +766,7 @@
         "address": "0x6f9FE619b6BF88028ac57cD665D527A507a6d2Ef",
         "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
         "faucet": "0x4fccf1139FcA44EF716534bae9D3f87a01583338"
@@ -775,7 +775,7 @@
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
         "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
         "decimals": 18,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
         "name": "BFR",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
         "faucet": "0x8F4db9A46809782b67180F0f8f3d9843a5268137"
@@ -885,7 +885,7 @@
         "address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
         "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d"
       },
@@ -893,7 +893,7 @@
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
         "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
         "decimals": 18,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
         "name": "BFR",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0"
       }
