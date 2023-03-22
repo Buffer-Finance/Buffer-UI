@@ -73,6 +73,7 @@ export const useGetTokenomics = () => {
   const { activeChain, configContracts } = useActiveChain();
   const contracts: (typeof CONTRACTS)[421613] = CONTRACTS[activeChain.id];
   const bfrPrice = useIbfrPrice();
+  const arbPrice = '1';
   const usd_decimals = configContracts.tokens.USDC.decimals;
   const arb_decimals = configContracts.tokens.ARB?.decimals ?? 18;
 
@@ -835,7 +836,7 @@ export const useGetTokenomics = () => {
     const stakedArbBlpTrackerAnnualRewardsUsd = fromWei(
       multiply(
         multiply(stakedArbBlpTrackerTokensPerInterval, SECONDS_PER_YEAR),
-        bfrPrice
+        arbPrice
       )
     );
     const arbblpAprForEsBfr =
@@ -1058,7 +1059,7 @@ export const useGetTokenomics = () => {
           user: {
             rewards: {
               value: add(
-                fromWei(multiply(stakedArbBlpTrackerRewards, bfrPrice)),
+                fromWei(multiply(stakedArbBlpTrackerRewards, arbPrice)),
                 fromWei(feeArbBlpTrackerRewards, arb_decimals)
               ),
               tooltip: [
@@ -1070,7 +1071,7 @@ export const useGetTokenomics = () => {
                 //   key: 'Escrowed BFR',
                 //   value: [
                 //     fromWei(stakedArbBlpTrackerRewards),
-                //     fromWei(multiply(stakedArbBlpTrackerRewards, bfrPrice)),
+                //     fromWei(multiply(stakedArbBlpTrackerRewards, arbPrice)),
                 //   ],
                 // },
               ],
@@ -1289,7 +1290,7 @@ export const useGetTokenomics = () => {
           arbesBfr: {
             value_in_usd: multiply(
               fromWei(stakedArbBlpTrackerRewards),
-              bfrPrice
+              arbPrice
             ),
             token_value: fromWei(stakedArbBlpTrackerRewards),
           },
