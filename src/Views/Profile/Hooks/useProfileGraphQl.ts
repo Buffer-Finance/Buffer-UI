@@ -33,7 +33,7 @@ export const useProfileGraphQl = () => {
   const { configContracts } = useActiveChain();
   const { data } = useSWR(`profile-query-account-${account}`, {
     fetcher: async () => {
-      const response = await axios.post(configContracts.graph.LITE, {
+      const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
             userOptionDatas(  
               first: 1000 
