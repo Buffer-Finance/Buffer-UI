@@ -29,8 +29,8 @@ export const chartReadyAtom = atom(false);
 const setDoccumentTitle = (title) => {
   document.title = title;
 };
-let boostedPayout = null;
-let fullPayout = null;
+// let boostedPayout = null;
+// let fullPayout = null;
 
 export const ActiveAsset = ({ cb }) => {
   const qtInfo = useQTinfo();
@@ -39,26 +39,14 @@ export const ActiveAsset = ({ cb }) => {
   const currentPrice = getPriceFromKlines(marketPrice, qtInfo.activePair);
   const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
-  const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
-  const response = useReadCall({
-    contracts: [
-      {
-        address: qtInfo.activePair.pools[0].options_contracts.current,
-        abi: BinaryOptionsABI,
-        name: 'baseSettlementFeePercentageForAbove',
-        params: [],
-      },
-    ],
-    swrKey: 'activeAsset',
-  }).data?.[0]?.[0];
-  const fullPayout =
-    activeAssetStateHookData.payouts?.[
-      activePoolObj?.options_contracts.current
-    ];
-  if (response && fullPayout) {
-    let base = subtract('100', multiply('2', divide(response, 2)));
-    boostedPayout = subtract(fullPayout, base);
-  }
+  const { fullPayout, boostedPayout } = useAtomValue(activeAssetStateAtom);
+  // const fullPayout =
+  //   activeAssetStateHookData.payouts?.[
+  //     activePoolObj?.options_contracts.current
+  //   ];
+  // if (activeAssetStateHookData.basePayout && fullPayout) {
+  //   boostedPayout = subtract(fullPayout, activeAssetStateHookData.basePayout);
+  // }
 
   const title = currentPrice
     ? toFixed(currentPrice, singleAsset.price_precision.toString().length - 1) +

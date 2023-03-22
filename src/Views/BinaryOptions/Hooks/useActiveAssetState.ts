@@ -6,7 +6,12 @@ import RouterABI from '../ABI/routerABI.json';
 import ConfigABI from '../ABI/configABI.json';
 import { getContract } from '../Address';
 import { useBinaryActiveChainId } from './useBinaryActiveChainId';
-import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import {
+  divide,
+  gt,
+  multiply,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import { ethers } from 'ethers';
 import BinaryOptionsABI from '../ABI/optionsABI.json';
 import { toFixed } from '@Utils/NumString';
@@ -99,6 +104,12 @@ export function useActiveAssetState(amount = null, referralData) {
           highestTierNFT?.tokenId || 0,
         ],
       },
+      {
+        address: qtInfo.activePair.pools[0].options_contracts.current,
+        abi: BinaryOptionsABI,
+        name: 'baseSettlementFeePercentageForAbove',
+        params: [],
+      },
     ],
     [activePoolObj, account, referralData]
   );
@@ -156,8 +167,13 @@ export function useActiveAssetState(amount = null, referralData) {
   let response = [null, null, null, null];
 
   if (copy) {
-    let [maxAmounts, fees] = copy.slice(0, assetCalls.length);
+    let [maxAmounts, fees, activeBasePayout] = copy.slice(0, assetCalls.length);
     console.log(`maxAmounts: `, maxAmounts);
+
+    const basePayout = subtract(
+      '100',
+      multiply('2', divide(activeBasePayout, 2))
+    );
 
     //calculate maxTradeValue
     const maxTrade = maxAmounts?.[0]
@@ -277,6 +293,9 @@ export function useActiveAssetState(amount = null, referralData) {
 
 
 */
+    const activeAssetPayout = payouts[activePoolObj?.options_contracts.current];
+    const boostedPayout = subtract(activeAssetPayout, basePayout);
+
     //destructuring the account response
     const [balance, allowance] = account
       ? copy.slice(-userSpecificCalls.length)
@@ -289,9 +308,20 @@ export function useActiveAssetState(amount = null, referralData) {
       stats,
       payouts,
       routerPermission,
+      activeAssetPayout,
+      boostedPayout,
     });
     //update response
-    response = [balance, allowance, maxTrade, stats, routerPermission];
+    response = [
+      balance,
+      allowance,
+      maxTrade,
+      stats,
+      routerPermission,
+
+      boostedPayout,
+      activeAssetPayout,
+    ];
   }
 
   return response;
