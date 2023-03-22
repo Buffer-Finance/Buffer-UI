@@ -33,8 +33,8 @@ export function getFilteredAssets(
         routerPermission[asset.pools[0].options_contracts.current]
     );
   }
-  console.log(`AssetTypes: `, AssetTypes);
-  switch (category) {
+
+  switch (category.toLowerCase()) {
     case AssetTypes[0]:
       return filteredAssets.filter((asset) => favourites.includes(asset.tv_id));
     case AssetTypes[1]:
