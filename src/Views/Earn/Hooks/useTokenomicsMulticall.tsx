@@ -1044,7 +1044,7 @@ export const useGetTokenomics = () => {
           total_staked: {
             value_in_usd: multiply(
               fromWei(stakedArbBlp, arb_decimals),
-              blpPrice
+              arbblpPrice
             ),
             token_value: fromWei(stakedArbBlp, arb_decimals),
             token_value_abs: stakedArbBlp,
@@ -1053,7 +1053,7 @@ export const useGetTokenomics = () => {
             value_in_usd: fromWei(arbblpUSDCAmount, arb_decimals),
             token_value: divide(
               fromWei(arbblpUSDCAmount, arb_decimals),
-              blpPrice
+              arbblpPrice
             ),
           },
           user: {
