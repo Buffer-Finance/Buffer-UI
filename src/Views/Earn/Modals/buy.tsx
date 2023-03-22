@@ -95,7 +95,13 @@ export const Buy = ({
           header={
             <div className="text-f14 font-medium text-3 flex justify-between w-full mb-4">
               <span className="flex">
-                Pay: <Display data={payAmount} label="$" />
+                Pay
+                {tokenXName === 'USDC' && (
+                  <span>
+                    &nbsp;:&nbsp;
+                    <Display data={payAmount} label="$" className="inline" />
+                  </span>
+                )}
               </span>
               <span className="flex">
                 Balance:
