@@ -30,8 +30,8 @@ export const getVestCards = (data: IEarn) => {
       }
     />,
     <Card
-      top="BLP Vault"
-      middle={<VestCard data={data.vest.blp} unit="BLP" />}
+      top="uBLP Vault"
+      middle={<VestCard data={data.vest.blp} unit="uBLP" />}
       bottom={
         <div className="mt-5">
           <EarnButtons cardNum={5} />

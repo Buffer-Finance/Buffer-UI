@@ -57,7 +57,7 @@ export const Sell = ({
   };
   return (
     <div className="w-[350px] sm:w-full flex flex-col gap-4">
-      <div className="text-f15 font-medium">Sell BLP</div>
+      <div className="text-f15 font-medium">Sell {blpTokenName}</div>
       <BufferInput
         value={payAmount}
         onChange={(newValue) => {

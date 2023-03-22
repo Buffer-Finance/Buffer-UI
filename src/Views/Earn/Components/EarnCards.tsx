@@ -543,9 +543,7 @@ const BLP = ({
           <div className={`${wrapperClasses}`}>
             {isBLPCard ? (
               <NumberTooltip
-                content={
-                  'Exchange rate is used to mint and redeem BLP tokens and is calculated as (the total worth of assets in the pool, including profits and losses of all previous trades) / (BLP supply)'
-                }
+                content={`Exchange rate is used to mint and redeem ${unit} tokens and is calculated as (the total worth of assets in the pool, including profits and losses of all previous trades) / (${unit} supply)`}
               >
                 <div className={underLineClass}>
                   <Display data={'1'} unit={unit} className="inline" />
