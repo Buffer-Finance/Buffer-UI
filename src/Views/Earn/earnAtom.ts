@@ -96,7 +96,7 @@ export interface IBLP {
   lockupPeriod: string;
   user: {
     usd_reward: string;
-    rewards: string;
+    rewards: IApr;
     staked: IValue;
     wallet_balance: IValue;
     max_unlocked_amount: string;
@@ -124,7 +124,7 @@ export interface IesBfr extends Omit<IBLP, 'user'> {
   user: {
     allowance: string;
     usd_reward: string;
-    rewards: string;
+    rewards: IApr;
     staked: IValue;
     wallet_balance: IValue;
     esBfr_rewards: { value_abs: string; value_in_usd: string };

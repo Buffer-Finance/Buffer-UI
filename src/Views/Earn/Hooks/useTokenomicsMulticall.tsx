@@ -1028,7 +1028,7 @@ export const useGetTokenomics = () => {
           apr: {
             value: fromWei(arbblpAprTotal, 2),
             tooltip: [
-              { key: 'Escrowed BFR APR', value: fromWei(arbblpAprForEsBfr, 2) },
+              // { key: 'Escrowed BFR APR', value: fromWei(arbblpAprForEsBfr, 2) },
               { key: 'ARB APR', value: fromWei(arbblpAprForRewardToken, 2) },
             ],
             description:
@@ -1056,10 +1056,25 @@ export const useGetTokenomics = () => {
             ),
           },
           user: {
-            rewards: add(
-              fromWei(multiply(stakedArbBlpTrackerRewards, bfrPrice)),
-              fromWei(feeArbBlpTrackerRewards, arb_decimals)
-            ),
+            rewards: {
+              value: add(
+                fromWei(multiply(stakedArbBlpTrackerRewards, bfrPrice)),
+                fromWei(feeArbBlpTrackerRewards, arb_decimals)
+              ),
+              tooltip: [
+                {
+                  key: 'ARB',
+                  value: [fromWei(feeArbBlpTrackerRewards, arb_decimals)],
+                },
+                // {
+                //   key: 'Escrowed BFR',
+                //   value: [
+                //     fromWei(stakedArbBlpTrackerRewards),
+                //     fromWei(multiply(stakedArbBlpTrackerRewards, bfrPrice)),
+                //   ],
+                // },
+              ],
+            },
             usd_reward: fromWei(feeArbBlpTrackerRewards, arb_decimals),
             esBfr_rewards: {
               value_in_usd: fromWei(
@@ -1116,10 +1131,25 @@ export const useGetTokenomics = () => {
             token_value: divide(fromWei(blpUSDCAmount, usd_decimals), blpPrice),
           },
           user: {
-            rewards: add(
-              fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
-              fromWei(feeBlpTrackerRewards, usd_decimals)
-            ),
+            rewards: {
+              value: add(
+                fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
+                fromWei(feeBlpTrackerRewards, usd_decimals)
+              ),
+              tooltip: [
+                {
+                  key: 'USDC',
+                  value: [fromWei(feeArbBlpTrackerRewards, arb_decimals)],
+                },
+                {
+                  key: 'Escrowed BFR',
+                  value: [
+                    fromWei(stakedArbBlpTrackerRewards),
+                    fromWei(multiply(stakedArbBlpTrackerRewards, bfrPrice)),
+                  ],
+                },
+              ],
+            },
             usd_reward: fromWei(feeBlpTrackerRewards, usd_decimals),
             esBfr_rewards: {
               value_in_usd: fromWei(
