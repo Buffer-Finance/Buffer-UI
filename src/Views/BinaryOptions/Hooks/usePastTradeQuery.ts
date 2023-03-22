@@ -1,15 +1,12 @@
-import { useAccount } from "wagmi";
-import {  IMarket, IToken } from "..";
-import MarketConfig from 'public/config.json';
-import { BetState, TradeInputs, useAheadTrades } from "@Hooks/useAheadTrades";
-import { atom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useMemo } from "react";
-import { usePastTradeQueryByFetch } from "./usePastTradeQueryByFetch";
-import axios from "axios";
-import { expiryPriceCache } from "./useTradeHistory";
-import { useUserAccount } from "@Hooks/useUserAccount";
-import { useActiveChain } from "@Hooks/useActiveChain";
-
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { IMarket, IToken } from '..';
+import { BetState, TradeInputs, useAheadTrades } from '@Hooks/useAheadTrades';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useMemo } from 'react';
+import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
+import axios from 'axios';
+import { expiryPriceCache } from './useTradeHistory';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -96,7 +93,7 @@ export interface IGQLHistory {
 
 export const usePastTradeQuery = () => {
   const { address: account } = useUserAccount();
-  const {configContracts} = useActiveChain();
+  const { configContracts } = useActiveChain();
   const setTrades = useSetAtom(tardesAtom);
   const setPageNumbers = useSetAtom(updateTotalPageNumber);
   const { active, history, cancelled } = useAtomValue(tardesPageAtom);
@@ -213,7 +210,6 @@ export const usePastTradeQuery = () => {
 
   const blockNumber = data?._meta?.block.number;
   const { data: trades } = useAheadTrades(blockNumber, account);
-  console.log('p=[aug]trades', trades, data);
   useEffect(() => {
     let activeResponseArr = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])

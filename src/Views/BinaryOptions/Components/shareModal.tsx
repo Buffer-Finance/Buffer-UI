@@ -29,6 +29,7 @@ import { useUserCode } from '@Views/Referral/Hooks/useUserCode';
 import { QRCodeSVG } from 'qrcode.react';
 import { useHostName } from '../Hooks/useHostName';
 import { BufferLogoComponent } from '@Views/Common/Navbar/BufferLogo';
+import { affilateCode2ReferralLink } from '@Views/Referral';
 
 interface IShareModal {
   qtInfo: IQTrade;
@@ -100,8 +101,9 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
   const isCodeSet = !!affiliateCode;
   const { hostname } = useHostName();
   const baseURL = `https://${hostname}/#/`;
-  const sharableLink = isCodeSet ? `${baseURL}?ref=${affiliateCode}` : baseURL;
-  console.log(`sharableLink: `, sharableLink);
+  const sharableLink = isCodeSet
+    ? affilateCode2ReferralLink(affiliateCode)
+    : baseURL;
 
   const uploadToServer = async () => {
     setLoading(true);

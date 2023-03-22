@@ -19,6 +19,7 @@ import { DurationPicker } from './PGDrawer/DurationPicker';
 import { Background } from './PGDrawer/style';
 import { useToast } from '@Contexts/Toast';
 import { USDCIcon } from '@SVG/Elements/usdc';
+import { minTradeAmount } from './store';
 const shutterModalAtom = atom<{ open: false | 'amount' | 'duration' }>({
   open: false,
 });
@@ -74,6 +75,7 @@ const AmountSelector: React.FC<any> = ({
   const shutter = useAtomValue(shutterModalAtom);
   const { activePoolObj } = useActivePoolObj();
   const balance = activeAssetState?.[0];
+  console.log(`activeAssetState: `, activeAssetState);
   const isShutterOpen = shutter.open == 'amount';
   const toastify = useToast();
   const { closeShutter } = useShutterHandlers();
@@ -139,8 +141,8 @@ const AmountSelector: React.FC<any> = ({
                 `Not enough liquidity to fund this trade. Please eneter a smaller amount!`
               );
             }
-            if (gt('1', val)) {
-              errors.push('Minimum Trade Size is 1!');
+            if (gt(minTradeAmount.toString(), val)) {
+              errors.push('Minimum Trade Size is ' + minTradeAmount.toString());
             }
             setErr(errors);
           }}

@@ -1,4 +1,186 @@
 {
+  "markets": {
+    "BTCUSD": {
+      "category": "Crypto",
+      "tv_id": "BTCUSD",
+      "pair": "BTC-USD",
+      "price_precision": 100,
+      "token1": "BTC",
+      "token2": "USD",
+      "full_name": "Bitcoin",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg"
+    },
+    "ETHUSD": {
+      "category": "Crypto",
+      "tv_id": "ETHUSD",
+      "pair": "ETH-USD",
+      "price_precision": 100,
+      "token1": "ETH",
+      "token2": "USD",
+      "full_name": "Ethereum",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg"
+    },
+    "EURUSD": {
+      "category": "Forex",
+      "tv_id": "EURUSD",
+      "pair": "EUR-USD",
+      "price_precision": 1000000,
+      "token1": "EUR",
+      "token2": "USD",
+      "full_name": "Euro",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png"
+    },
+    "GBPUSD": {
+      "category": "Forex",
+      "tv_id": "GBPUSD",
+      "pair": "GBP-USD",
+      "price_precision": 1000000,
+      "token1": "GBP",
+      "token2": "USD",
+      "full_name": "Pound",
+      "img": "https://cdn.buffer.finance/Buffer-Media/main/GBP.png"
+    },
+    "SOLUSD": {
+      "category": "Crypto",
+      "tv_id": "SOLUSD",
+      "pair": "SOL-USD",
+      "price_precision": 100,
+      "token1": "SOL",
+      "token2": "USD",
+      "full_name": "Solana",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/sol.svg"
+    },
+    "ETHBTC": {
+      "category": "Crypto",
+      "tv_id": "ETHBTC",
+      "pair": "ETH-BTC",
+      "price_precision": 1000000,
+      "token1": "ETH",
+      "token2": "BTC",
+      "full_name": "Ethereum",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg"
+    },
+    "LINKUSD": {
+      "category": "Crypto",
+      "tv_id": "LINKUSD",
+      "pair": "LINK-USD",
+      "price_precision": 100,
+      "token1": "LINK",
+      "token2": "USD",
+      "full_name": "Chainlink",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/link.svg"
+    },
+    "XAUUSD": {
+      "category": "Commodity",
+      "tv_id": "XAUUSD",
+      "pair": "XAU-USD",
+      "price_precision": 100,
+      "token1": "XAU",
+      "token2": "USD",
+      "full_name": "Gold",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xau.svg"
+    },
+    "XAGUSD": {
+      "category": "Commodity",
+      "tv_id": "XAGUSD",
+      "pair": "XAG-USD",
+      "price_precision": 1000,
+      "token1": "XAG",
+      "token2": "USD",
+      "full_name": "Silver",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xag.svg"
+    },
+    "AUDUSD": {
+      "category": "Forex",
+      "tv_id": "AUDUSD",
+      "pair": "AUD-USD",
+      "price_precision": 1000000,
+      "token1": "AUD",
+      "token2": "USD",
+      "full_name": "Australian Dollar",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/aud1.svg"
+    },
+    "USDJPY": {
+      "category": "Forex",
+      "tv_id": "USDJPY",
+      "pair": "USD-JPY",
+      "price_precision": 1000000,
+      "token1": "USD",
+      "token2": "JPY",
+      "full_name": "United States Dollar",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg"
+    },
+    "EURGBP": {
+      "category": "Forex",
+      "tv_id": "EURGBP",
+      "pair": "EUR-GBP",
+      "price_precision": 1000000,
+      "token1": "EUR",
+      "token2": "GBP",
+      "full_name": "Euro",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg"
+    },
+    "EURJPY": {
+      "category": "Forex",
+      "tv_id": "EURJPY",
+      "pair": "EUR-JPY",
+      "price_precision": 1000000,
+      "token1": "EUR",
+      "token2": "JPY",
+      "full_name": "Euro",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg"
+    },
+    "GBPJPY": {
+      "category": "Forex",
+      "tv_id": "GBPJPY",
+      "pair": "GBP-JPY",
+      "price_precision": 1000000,
+      "token1": "GBP",
+      "token2": "JPY",
+      "full_name": "British Pound",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg"
+    },
+    "NZDUSD": {
+      "category": "Forex",
+      "tv_id": "NZDUSD",
+      "pair": "NZD-USD",
+      "price_precision": 1000000,
+      "token1": "NZD",
+      "token2": "USD",
+      "full_name": "New Zealand Dollar",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/nzd.svg"
+    },
+    "USDCHF": {
+      "category": "Forex",
+      "tv_id": "USDCHF",
+      "pair": "USD-CHF",
+      "price_precision": 1000000,
+      "token1": "USD",
+      "token2": "CHF",
+      "full_name": "United States Dollar",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg"
+    },
+    "GBPCHF": {
+      "category": "Forex",
+      "tv_id": "GBPCHF",
+      "pair": "GBP-CHF",
+      "price_precision": 1000000,
+      "token1": "GBP",
+      "token2": "CHF",
+      "full_name": "British Pound",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg"
+    },
+    "USDCAD": {
+      "category": "Forex",
+      "tv_id": "USDCAD",
+      "pair": "USD-CAD",
+      "price_precision": 1000000,
+      "token1": "USD",
+      "token2": "CAD",
+      "full_name": "United States Dollar",
+      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg"
+    }
+  },
   "421613": {
     "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
     "router": "0x76c52E83d7dcCc70107a66BAd44D042D22D06be7",
@@ -35,7 +217,7 @@
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
@@ -64,7 +246,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
@@ -93,7 +275,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "EURUSD",
@@ -122,7 +304,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "GBPUSD",
@@ -569,8 +751,7 @@
           }
         ]
       }
-    ]
-,
+    ],
     "graph": {
       "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-mainnet",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite"
@@ -603,7 +784,8 @@
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
+        "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
         "pair": "BTC-USD",
@@ -623,8 +805,9 @@
         ]
       },
       {
-        "max_duration": "04:00", 
-        "min_duration": "00:05",
+        "max_duration": "04:00",
+        "min_duration": "00:01",
+        "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
         "pair": "ETH-USD",
@@ -645,7 +828,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
+        "max_utilization": 300,
         "category": "Forex",
         "tv_id": "EURUSD",
         "pair": "EUR-USD",
@@ -665,8 +849,9 @@
         ]
       },
       {
-        "max_duration": "04:00", 
-        "min_duration": "00:05",
+        "max_duration": "04:00",
+        "min_duration": "00:01",
+        "max_utilization": 300,
         "category": "Forex",
         "tv_id": "GBPUSD",
         "pair": "GBP-USD",
@@ -716,8 +901,8 @@
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":200,
+        "min_duration": "00:05",
+        "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
         "pair": "BTC-USD",
@@ -738,8 +923,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":200,
+        "min_duration": "00:05",
+        "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
         "pair": "ETH-USD",
@@ -760,8 +945,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Crypto",
         "tv_id": "SOLUSD",
         "pair": "SOL-USD",
@@ -782,8 +967,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"01:00",
-        "max_utilization":150,
+        "min_duration": "01:00",
+        "max_utilization": 150,
         "category": "Crypto",
         "tv_id": "ETHBTC",
         "pair": "ETH-BTC",
@@ -804,8 +989,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"01:00",
-        "max_utilization":150,
+        "min_duration": "01:00",
+        "max_utilization": 150,
         "category": "Crypto",
         "tv_id": "LINKUSD",
         "pair": "LINK-USD",
@@ -826,8 +1011,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":300,
+        "min_duration": "00:05",
+        "max_utilization": 300,
         "category": "Forex",
         "tv_id": "EURUSD",
         "pair": "EUR-USD",
@@ -848,8 +1033,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":300,
+        "min_duration": "00:05",
+        "max_utilization": 300,
         "category": "Forex",
         "tv_id": "GBPUSD",
         "pair": "GBP-USD",
@@ -870,8 +1055,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "AUDUSD",
         "pair": "AUD-USD",
@@ -892,8 +1077,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDJPY",
         "pair": "USD-JPY",
@@ -914,8 +1099,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "EURGBP",
         "pair": "EUR-GBP",
@@ -936,8 +1121,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "EURJPY",
         "pair": "EUR-JPY",
@@ -958,8 +1143,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "GBPJPY",
         "pair": "GBP-JPY",
@@ -980,8 +1165,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "NZDUSD",
         "pair": "NZD-USD",
@@ -1002,8 +1187,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDCHF",
         "pair": "USD-CHF",
@@ -1024,8 +1209,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "GBPCHF",
         "pair": "GBP-CHF",
@@ -1046,8 +1231,8 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration":"00:05",
-        "max_utilization":150,
+        "min_duration": "00:05",
+        "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDCAD",
         "pair": "USD-CAD",

@@ -1,9 +1,10 @@
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import EditIcon from 'public/ComponentSVGS/Edit';
 import { QuickTradeExpiry } from '.';
 import { useQTinfo } from '..';
 import { getUserError, TimeSelector, timeToMins } from './TimeSelector';
+import { isTestnet } from 'config';
 
 export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
   const qtInfo = useQTinfo();
@@ -13,6 +14,11 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
   const [openCustomInput, setOpenCustomInput] = useState(false);
   const oneSec = 1000;
   const durations = [
+    isTestnet && {
+      duration: 1 * 60 * oneSec,
+      time: '00:01',
+      name: ['1', 'Min'],
+    },
     {
       duration: 5 * 60 * oneSec,
       time: '00:05',
@@ -38,7 +44,7 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
       time: '23:59',
       name: ['24', 'Hour'],
     },
-  ];
+  ].slice(isTestnet ? 0 : 1);
 
   useEffect(() => {
     if (!currentTime || !activeAsset) return;
@@ -54,7 +60,7 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
         timeToMins(activeAsset.min_duration) * 60 * oneSec
     )
       setOpenCustomInput(true);
-    else setOpenCustomInput(false);
+    // else setOpenCustomInput(false);
   }, [currentTime, activeAsset]);
 
   return (
@@ -91,8 +97,7 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
                 className={
                   'each-duration py-1 font-medium text-f12 h-[55px] transition-colors ' +
                   ((timeToMins(currentTime) * 60 * oneSec === singleDuration &&
-                    !isDisabled &&
-                    !openCustomInput) ||
+                    !isDisabled) ||
                   (isLastElement && openCustomInput)
                     ? 'active text-1 '
                     : 'text-2') +

@@ -1,9 +1,8 @@
-import { useUserAccount } from '@Hooks/useUserAccount';
+import { useActiveChain } from './useActiveChain';
 import axios from 'axios';
-import { baseGraphqlLiteUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
-import { useActiveChain } from './useActiveChain';
+import { useUserAccount } from './useUserAccount';
 
 interface IGraphNFT {
   batchId: string;
@@ -17,7 +16,7 @@ interface IGraphNFT {
 export const useNFTGraph = (userOnly = false) => {
   const { address: account } = useUserAccount();
   const { cache } = useSWRConfig();
-  const {configContracts} = useActiveChain();
+  const { configContracts } = useActiveChain();
   const { data } = useSWR(`nfts-the-graph-account-${account}`, {
     fetcher: async () => {
       const response = await axios.post(configContracts.graph.LITE, {

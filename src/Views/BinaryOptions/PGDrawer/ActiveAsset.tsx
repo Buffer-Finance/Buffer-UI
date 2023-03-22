@@ -19,6 +19,11 @@ import BinaryOptionsABI from '../ABI/optionsABI.json';
 import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
 import { arbitrum } from 'wagmi/chains';
 import { PairTokenImage } from '../Components/PairTokenImage';
+import { priceAtom } from '@Hooks/usePrice';
+import { TVMarketSelector } from '../Favourites/TVMarketSelector';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@Contexts/Toast';
+import { ShareModal } from '../Components/shareModal';
 
 export const chartReadyAtom = atom(false);
 const setDoccumentTitle = (title) => {
@@ -27,10 +32,10 @@ const setDoccumentTitle = (title) => {
 let boostedPayout = null;
 let fullPayout = null;
 
-export const ActiveAsset = () => {
+export const ActiveAsset = ({ cb }) => {
   const qtInfo = useQTinfo();
   const singleAsset = qtInfo.activePair;
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const marketPrice = useAtomValue(priceAtom);
   const currentPrice = getPriceFromKlines(marketPrice, qtInfo.activePair);
   const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
@@ -61,20 +66,27 @@ export const ActiveAsset = () => {
       singleAsset.tv_id
     : '';
   setDoccumentTitle(title);
+  const navigate = useNavigate();
+  const toastify = useToast();
   if (!singleAsset) return null;
   return (
     <AssetBackground className="relative min-w-full">
       {isOpen && (
         <>
           <Background>
-            <FavouriteAssetDD
-              setToggle={setIsOpen}
-              className="asset-dropdown-wrapper right-[0]"
+            <TVMarketSelector
+              onMarketSelect={(m) => {
+                cb(m, 'charts');
+                navigate('/binary/' + m);
+                setIsOpen(false);
+              }}
+              className="asset-dropdown-wrapper left-[0] max-w-[300px] p-3"
             />
           </Background>
           <div id="overlay" onClick={() => setIsOpen(false)}></div>
         </>
       )}
+      <ShareModal qtInfo={qtInfo} />
 
       <div className="flex flex-row justify-between items-center">
         <span className="text-f14 mb-2 ">Selected Pair</span>

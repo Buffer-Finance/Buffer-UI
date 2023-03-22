@@ -305,7 +305,7 @@ export default function useDataFeed(chartReady) {
     state: TVSyncingStates.SyncNeeded,
   });
 
-  const fn = (async (res) => {
+  const fn = async (res) => {
     if (!chartReady) return;
     if (showPauseModal) return;
     const priceUpdates = parsewsmsg(res);
@@ -377,7 +377,7 @@ export default function useDataFeed(chartReady) {
     //   setBreakingCount({state:'break'});
     //   streamInit();
     // }
-  });
+  };
   useEffect(() => {
     if (!chartReady) return;
     console.log(`client: `, client);
@@ -637,7 +637,7 @@ export const TVStateAtom = atom<{ type: 'active' | 'stale'; ts?: number }>({
 export const getPriceFromKlines = (marketPrice, asset: { tv_id: string }) => {
   const lastBar = getLastbar(marketPrice, asset);
   if (!lastBar) return null;
-  return lastBar.close;
+  return lastBar.price;
 };
 export const get24hChange = (marketPrice, asset: { tv_id: string }) => {
   return marketPrice[asset.tv_id] ?? 'N/A';

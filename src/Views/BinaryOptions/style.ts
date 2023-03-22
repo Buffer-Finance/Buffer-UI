@@ -1,9 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Background = styled.div`
   grid-area: Content;
   /* max-width: 1100px; */
   width: 100%;
+  height: 62vh;
   margin: 0rem auto;
   padding: 0rem var(--global-padding);
   /* margin-top: 1rem; */
@@ -149,7 +150,7 @@ const ActiveTabStyles = styled.div`
   font-size: 1.2rem;
   /* margin-bottom: 2rem; */
   .option {
-    background-color: var(--revenue-info);
+    background-color: var(--bg-1);
     padding: 14px 20px;
     border-radius: 1rem;
     /* margin-bottom: 1rem; */

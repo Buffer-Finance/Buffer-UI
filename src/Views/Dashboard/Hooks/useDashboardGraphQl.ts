@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { baseGraphqlUrl } from 'config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add, divide } from '@Utils/NumString/stringArithmatics';
@@ -7,13 +6,8 @@ import {
   getLinuxTimestampBefore24Hours,
   useDashboardTableData,
 } from './useDashboardTableData';
-// const prevDayEpoch =  Math.floor((Date.now() - 24*60*60*1000) / 1000);
-// console.log(`prevDayEpoch: `,prevDayEpoch);
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
-import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
-const prevDayEpoch = Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
-console.log(`prevDayEpoch: `, prevDayEpoch);
 
 export const useDashboardGraphQl = () => {
   const { configContracts } = useActiveChain();
@@ -122,7 +116,10 @@ export const useDashboardGraphQl = () => {
     const isBFRnull = !data.BFRstats;
     const usdcVolume = isUSDCnull
       ? '0'
-      : fromWei(data.USDCstats.totalVolume, usdcDecimals);
+      : fromWei(
+          data.USDCstats.totalVolume,
+          configContracts.tokens['USDC'].decimals
+        );
     const bfrVolume = isBFRnull ? '0' : fromWei(data.BFRstats.totalVolume);
     const totalVolume = add(usdcVolume, bfrVolume);
     const totalTrades = isUSDCnull
@@ -136,17 +133,26 @@ export const useDashboardGraphQl = () => {
     return {
       USDCfees: isUSDCnull
         ? '0'
-        : fromWei(data.USDCstats.totalSettlementFees, usdcDecimals),
+        : fromWei(
+            data.USDCstats.totalSettlementFees,
+            configContracts.tokens['USDC'].decimals
+          ),
       BFRfees: isBFRnull ? '0' : fromWei(data.BFRstats.totalSettlementFees),
       USDCvolume: usdcVolume,
       BFRvolume: bfrVolume,
       avgTrade: avgTrade,
       totalTraders: data.totalTraders[0]?.uniqueCountCumulative || 0,
       usdc_24_fees: USDC24hrsStats
-        ? fromWei(USDC24hrsStats.settlementFee, usdcDecimals)
+        ? fromWei(
+            USDC24hrsStats.settlementFee,
+            configContracts.tokens['USDC'].decimals
+          )
         : '0',
       usdc_24_volume: USDC24hrsStats
-        ? fromWei(USDC24hrsStats.amount, usdcDecimals)
+        ? fromWei(
+            USDC24hrsStats.amount,
+            configContracts.tokens['USDC'].decimals
+          )
         : '0',
       trades: totalData ? totalData.trades : null,
       openInterest: totalData ? totalData.openInterest : null,
