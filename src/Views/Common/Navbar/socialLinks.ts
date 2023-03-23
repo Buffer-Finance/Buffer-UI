@@ -41,11 +41,11 @@ export const social = [
     isExternalLink: true,
     subTabs: [],
   },
-  {
-    Img: GitBook,
-    to: 'https://docs.buffer.finance/introduction/readme',
-    name: 'Docs',
-    isExternalLink: true,
-    subTabs: [],
-  },
+  // {
+  //   Img: GitBook,
+  //   to: 'https://docs.buffer.finance/introduction/readme',
+  //   name: 'Docs',
+  //   isExternalLink: true,
+  //   subTabs: [],
+  // },
 ];
