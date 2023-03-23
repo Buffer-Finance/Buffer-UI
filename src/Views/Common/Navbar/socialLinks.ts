@@ -2,6 +2,7 @@ import Twitter from '@Assets/Social/DD/twitter';
 import Discord from '@Assets/Social/DD/discord';
 import Medium from '@Assets/Social/DD/medium';
 import GitHub from '@Assets/Social/DD/github';
+import GitBook from '@Assets/Social/DD/gitbook';
 import Telegram from '@Assets/Social/DD/telegram';
 
 export const social = [
@@ -40,4 +41,11 @@ export const social = [
     isExternalLink: true,
     subTabs: [],
   },
+  // {
+  //   Img: GitBook,
+  //   to: 'https://docs.buffer.finance/introduction/readme',
+  //   name: 'Docs',
+  //   isExternalLink: true,
+  //   subTabs: [],
+  // },
 ];
