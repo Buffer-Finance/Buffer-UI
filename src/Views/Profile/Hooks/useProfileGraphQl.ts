@@ -23,17 +23,19 @@ type metricsData = {
   volume: string;
   totalPayout: string;
   net_pnl: string;
+  openInterest: string;
 };
-type ItradingMetricsData = metricsData & {
+export type ItradingMetricsData = metricsData & {
   totalTrades: number;
 };
 
 export const useProfileGraphQl = () => {
   const { address: account } = useUserAccount();
   const { configContracts } = useActiveChain();
+
   const { data } = useSWR(`profile-query-account-${account}`, {
     fetcher: async () => {
-      const response = await axios.post(configContracts.graph.LITE, {
+      const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
             userOptionDatas(  
               first: 1000 

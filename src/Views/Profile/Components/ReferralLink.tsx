@@ -6,7 +6,7 @@ import BufferLogo from '@Public/ComponentSVGS/bufferLogo';
 import FrontArrow from '@SVG/frontArrow';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { tabs } from '@Views/Referral';
+import { affilateCode2ReferralLink, tabs } from '@Views/Referral';
 import { useUserCode } from '@Views/Referral/Hooks/useUserCode';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ export const ReferralLink = () => {
   if (viewOnlyMode) return <></>;
 
   return (
-    <div className="rounded-lg px-[30px] py-8 bg-2 flex items-center justify-between my-6 sm:flex-col sm:gap-6 sm:px-6 sm:py-6">
+    <div className="rounded-lg px-7 py-5 bg-2 flex items-center justify-between mt-5 mb-[0] sm:flex-col sm:gap-6 sm:px-6 sm:py-6">
       {/* left side */}
       <div className="flex items-start gap-5">
         <BufferLogo height={60} width={60} />{' '}
@@ -54,8 +54,10 @@ const Button = () => {
   const { activeChain } = useActiveChain();
   const { affiliateCode } = useUserCode(activeChain);
   const navigate = useNavigate();
-
-  const link = `https://${hostname}/#/?ref=${affiliateCode}`;
+  const baseURL = `https://${hostname}/#/`;
+  const link = !!affiliateCode
+    ? affilateCode2ReferralLink(affiliateCode)
+    : baseURL;
 
   const copyLink = () => {
     try {

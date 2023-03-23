@@ -1,4 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { priceAtom, usePrice } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -11,10 +12,9 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useAtom, useAtomValue } from 'jotai';
 import { ReactNode, useEffect, useState } from 'react';
-import { getChains } from 'src/Config/wagmiClient';
-import { useNetwork } from 'wagmi';
 import { useQTinfo } from '.';
 import { AmountSelector, DurationSelector } from './AmountSelector';
+import { ShareModal } from './Components/shareModal';
 import { useBinaryActions } from './Hooks/useBinaryActions';
 import { knowTillAtom } from './Hooks/useIsMerketOpen';
 import { MarketTimingWarning } from './MarketTimingWarning';
@@ -58,36 +58,34 @@ const BuyTrade: React.FC<any> = ({}) => {
       setIsApproveModalOpen(false);
     }
   }, [account]);
+  usePrice();
   const knowTill = useAtomValue(knowTillAtom);
-  const { chain } = useNetwork();
-  const chains = getChains();
-  const { activeChain } = useActiveChain();
-  const activeChainName = activeChain?.name;
   const qtInfo = useQTinfo();
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const marketPrice = useAtomValue(priceAtom);
   const activeAsset = qtInfo?.activePair;
-  const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
   const isForex = activeAsset.category === 'Forex';
   // useIsMarketOpen();
   const isMarketOpen = knowTill.open && isForex;
   const allowance = divide(allowanceWei?.[0], activePoolObj.token.decimals);
-  console.log(
-    `allowance: `,
-    allowance,
-    allowanceWei,
-    activePoolObj.token.decimals
-  );
   const isAssetActive =
     routerPermission &&
     routerPermission[activeAsset.pools[0].options_contracts.current];
   // const [rpcState] = useRPCchecker();
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
+  console.log(
+    `activeAssetPrice: `,
+    activeAssetPrice,
+    marketPrice,
+    activeAsset,
+    allowance
+  );
   let MarketOpenWarning: ReactNode | null = null;
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
   }
+  usePrice();
   return (
     <div>
       <div className="flex gap-3 my-3">
@@ -95,7 +93,7 @@ const BuyTrade: React.FC<any> = ({}) => {
         <DurationSelector />
       </div>
       {(currStats && currStats.max_loss && currStats.max_payout) ||
-      (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
+      (activeAssetPrice && currStats?.max_payout) ? (
         <div className="flex-sbw text-f14 my-3 ">
           <div className="f14  flex-start flex wrap text-2">
             Payout :&nbsp;
@@ -189,7 +187,6 @@ const BuyTrade: React.FC<any> = ({}) => {
           </span>
         </ConnectionRequired>
       }
-      {MarketOpenWarning}
     </div>
   );
 };

@@ -1,6 +1,7 @@
-import { atom } from "jotai";
-import { IMarket } from ".";
+import { atom } from 'jotai';
+import { IMarket } from '.';
 
+export const minTradeAmount = 1;
 export interface IStatsData {
   underlying_asset: {
     address: string;
@@ -8,7 +9,7 @@ export interface IStatsData {
     name: string;
     full_name: string;
     current_price: number;
-    "24_hour_change": string;
+    '24_hour_change': string;
   };
   payout?: number;
   available_liquidity: string;
@@ -34,12 +35,12 @@ export interface IBet {
 
 export interface IHistory {
   state:
-    | "active"
-    | "expired"
-    | "cancelled"
-    | "queued"
-    | "pending"
-    | "exercised";
+    | 'active'
+    | 'expired'
+    | 'cancelled'
+    | 'queued'
+    | 'pending'
+    | 'exercised';
   strike: number;
   normal_option: boolean;
   size: number;

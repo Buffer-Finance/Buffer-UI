@@ -1,7 +1,7 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useAtom } from 'jotai';
-import { useState, useEffect, ReactNode, useContext, useMemo } from 'react';
+import { useState, useEffect, ReactNode, useMemo } from 'react';
 import { useCodeOwner } from './Hooks/useCodeOwner';
 import BufferInput from '@Views/Common/BufferInput';
 import BufferTransitionedTab from '@Views/Common/BufferTransitionedTab';
@@ -12,22 +12,15 @@ import PlainCard from '@Views/Referral/Components/PlainCard';
 import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
 import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-
-import {
-  ReferralContext,
-  ReferralContextProvider,
-  showCodeModalAtom,
-} from './referralAtom';
+import { ReferralContextProvider, showCodeModalAtom } from './referralAtom';
 import ReferralABI from './Config/ReferralABI.json';
-const USDC_DECIMALS = 6;
 import { isNullAdds } from './Utils/isNullAds';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useReferralCode } from './Utils/useReferralCode';
 import YellowWarning from '@SVG/Elements/YellowWarning';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useUserCode } from './Hooks/useUserCode';
-import { Chain, useAccount, useContractReads } from 'wagmi';
-import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
+import { Chain, useContractReads } from 'wagmi';
 import { ContentCopy } from '@mui/icons-material';
 import { useCopyToClipboard } from 'react-use';
 import { getContract } from './Config/Address';
@@ -38,8 +31,6 @@ import axios from 'axios';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { Tooltip } from '@mui/material';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { defaultPair } from '@Views/BinaryOptions';
-import { baseGraphqlUrl } from 'config';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { snackAtom } from 'src/App';
@@ -75,7 +66,7 @@ export const ReferralPage = () => {
 
 const useUserAffilateCode = (activeChain: Chain) => {
   const { address } = useUserAccount();
-  const referralAddress = getContract(activeChain.id, 'referral');
+  const referralAddress = getContract();
 
   const calls = referralAddress
     ? [
@@ -114,7 +105,7 @@ export const useRefferalTab = () => {
 
 export const tabs = ['Use a Referral', 'Create your Referral'];
 const Referral: React.FC<IReferral> = ({}) => {
-  const { activeChain } = useContext(ReferralContext);
+  const { configContracts } = useActiveChain();
   const [showCodeModal, setShowCodeModal] = useAtom(showCodeModalAtom);
   const { writeTXN } = useReferralWriteCall();
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -122,12 +113,12 @@ const Referral: React.FC<IReferral> = ({}) => {
   const toastify = useToast();
   const owner = useCodeOwner(ip);
   const { state } = useGlobal();
-  const referralCodes = useReferralCode(activeChain);
-  console.log(`referralCodes: `, referralCodes);
+  const referralCodes = useReferralCode();
   const { address: account } = useUserAccount();
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   const { openConnectModal } = useConnectModal();
   const { setTab, tab } = useRefferalTab();
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
 
   const shouldConnectWallet = !account;
   useEffect(() => {
@@ -192,7 +183,7 @@ const Referral: React.FC<IReferral> = ({}) => {
           header: 'Total Trading Volume',
           desc: (
             <Display
-              data={divide(data.totalTradingVolume, USDC_DECIMALS)}
+              data={divide(data.totalTradingVolume, usdcDecimals)}
               unit={'USDC'}
             />
           ),
@@ -201,7 +192,7 @@ const Referral: React.FC<IReferral> = ({}) => {
           header: 'Total Discount',
           desc: (
             <Display
-              data={divide(data.totalDiscountAvailed, USDC_DECIMALS)}
+              data={divide(data.totalDiscountAvailed, usdcDecimals)}
               unit={'USDC'}
             />
           ),
@@ -230,7 +221,7 @@ const Referral: React.FC<IReferral> = ({}) => {
         header: 'Total Trading Volume',
         desc: (
           <Display
-            data={divide(data.totalVolumeOfReferredTrades, USDC_DECIMALS)}
+            data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
             unit={'USDC'}
           />
         ),
@@ -243,7 +234,7 @@ const Referral: React.FC<IReferral> = ({}) => {
         header: 'Total Rebate Earned',
         desc: (
           <Display
-            data={divide(data.totalRebateEarned, USDC_DECIMALS)}
+            data={divide(data.totalRebateEarned, usdcDecimals)}
             unit={'USDC'}
           />
         ),
@@ -413,6 +404,12 @@ const DataCard = ({ header, desc }) => {
   );
 };
 
+export function affilateCode2ReferralLink(affiliateCode: string) {
+  const { hostname } = window.location;
+  const link = `https://${hostname}/#/ref/${affiliateCode}/`;
+  return link;
+}
+
 const Affilate = ({
   affiliateBoxArr,
   shouldConnectWallet,
@@ -420,15 +417,13 @@ const Affilate = ({
   setInput,
   btn,
 }) => {
-  const { activeChain } = useContext(ReferralContext);
+  const { activeChain } = useActiveChain();
   const { affiliateCode } = useUserCode(activeChain);
   const isCodeSet = !!affiliateCode;
   const [snack, setSnack] = useAtom(snackAtom);
-  const { hostname } = window.location;
   const [state, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = useState(false);
-  const link = `https://${hostname}/#/?ref=${affiliateCode}`;
-  console.log(`link: `, link);
+  const link = affilateCode2ReferralLink(affiliateCode);
   const copyLink = () => {
     try {
       copyToClipboard(link);

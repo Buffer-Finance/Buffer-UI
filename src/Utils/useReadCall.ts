@@ -1,7 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { ethers } from 'ethers';
-import { useParams } from 'react-router-dom';
 import useSWR, { useSWRConfig } from 'swr';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { multicallv2 } from './Contract/multiContract';

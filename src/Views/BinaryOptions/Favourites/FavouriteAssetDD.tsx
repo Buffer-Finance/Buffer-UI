@@ -8,7 +8,8 @@ import { AssetTypeSelector } from './AssetTypeSelector';
 import { useAtomValue } from 'jotai';
 
 const FavouriteAssetDDStyles = styled.div`
-  padding: 2rem;
+  padding: 1rem !important;
+  /* max-width: 300px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,8 +24,8 @@ const FavouriteAssetDDStyles = styled.div`
 `;
 export const FavouriteAssetDD: React.FC<{
   className: string;
-  setToggle: (state: boolean) => void;
-}> = ({ className, setToggle }) => {
+  setToggle?: (state) => void;
+}> = ({ className }) => {
   const qtInfo = useQTinfo();
   const [searchText, setSearchText] = useState('');
   const { routerPermission } = useAtomValue(activeAssetStateAtom);
@@ -36,7 +37,7 @@ export const FavouriteAssetDD: React.FC<{
         routerPermission[pair.pools[0].options_contracts.current]
     )
   );
-  const [activeAsset, setActiveAsset] = useState(assetTypes[0]);
+  const [activeAsset, setActiveAsset] = useState(assetTypes[1]);
 
   return (
     <>

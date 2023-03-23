@@ -3,7 +3,7 @@ import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { Background } from './style';
 import GraphView from '@Views/Common/GraphView';
 import { useNavigate } from 'react-router-dom';
-
+import Config from 'public/config.json';
 import PGTables from './Tables';
 import BinaryDrawer from './PGDrawer';
 import { useGlobal } from '@Contexts/Global';
@@ -25,22 +25,23 @@ import {
 import { MarketTimingsModal } from './MarketTimingsModal';
 import MobileTable from './Components/Mobile/historyTab';
 import { binaryTabs } from 'config';
-import TVIntegrated from '../../TradingView/TV';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { useParams, useSearchParams } from 'react-router-dom';
 export const mobileUpperBound = 800;
 export const IV = 12000;
 export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
-import Config from 'public/config.json';
 import { useSearchParam } from 'react-use';
 import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Warning } from '@Views/Common/Notification/warning';
 import { WarningOutlined } from '@mui/icons-material';
-import { BuyTrade } from './BuyTrade';
-import { History } from './History';
 import { getChains } from 'src/Config/wagmiClient';
+import { BuyTrade } from './BuyTrade';
+import PGDesktopTables, { tradesCount } from './Tables/Desktop';
+import { History } from './History';
+import { TradingChart } from 'src/TradingView';
+import { Markets } from 'src/Types/Market';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -210,124 +211,25 @@ function QTrade() {
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
   );
-
+  // return <div>hello</div>;
+  console.log(`props.activePair.tv_id: `, props.activePair.tv_id);
   return (
     <>
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
-      <WebOnly>
-        <div className="tabDispay:hidden  tab:mx-auto ">
-          <div className="flex flex-col items-start max-w-[100vw] overflow-hidden">
-            {props.pairs && <Favourites className="web:hidden mb-4" />}
-          </div>
-        </div>
-      </WebOnly>
       <main className="content-drawer" id="buffer-tv-wrapper">
         <Background>
-          {props.pairs ? (
-            <>
-              {!isHistory ? <Favourites /> : null}
-              <MobileOnly>
-                <TVIntegrated
-                  assetInfo={props.activePair}
-                  className={isHistory ? 'hidden' : ''}
-                />
-              </MobileOnly>
-              <WebOnly>
-                <div className="tab:hidden mb-3">
-                  <GraphView className="tab:hidden">
-                    <TVIntegrated assetInfo={props.activePair} />
-                  </GraphView>
-                </div>
-              </WebOnly>
-              <div className="custom-view b1200:w-[80%] mx-auto">
-                <div className="tab:hidden ">
-                  <div className="flex b1200:justify-center items-center nsm:ml-4">
-                    <BufferTab
-                      value={activeTabIdx}
-                      handleChange={(e, t) => {
-                        dispatch({
-                          type: 'SET_ACIVE_TAB',
-                          payload: binaryTabs[t + 2], //Runs only for web. Hence 0 & 1 tab neglected.
-                        });
-                      }}
-                      distance={5}
-                      tablist={tabs.map((tabName): { name: string } => ({
-                        name: tabName,
-                      }))}
-                    />
-                  </div>
-                </div>
-                <div className="my-3">
-                  {activeTab === binaryTabs[2] && (
-                    <>
-                      <PGTables
-                        configData={props}
-                        activePage={active}
-                        onPageChange={(e, pageNumber) =>
-                          setActivePage(pageNumber)
-                        }
-                      />
-                      <MobileOnly>
-                        <MobileTable
-                          activePage={active}
-                          configData={props}
-                          onPageChange={(e, pageNumber) =>
-                            setActivePage(pageNumber)
-                          }
-                        />
-                      </MobileOnly>
-                    </>
-                  )}
-                  {activeTab === binaryTabs[3] && (
-                    <>
-                      <PGTables
-                        configData={props}
-                        activePage={history}
-                        onPageChange={(e, pageNumber) =>
-                          setHistoryPage(pageNumber)
-                        }
-                      />
-                      <MobileOnly>
-                        <MobileTable
-                          activePage={history}
-                          configData={props}
-                          isHistoryTab
-                          onPageChange={(e, pageNumber) =>
-                            setHistoryPage(pageNumber)
-                          }
-                        />
-                      </MobileOnly>
-                    </>
-                  )}
-                  {activeTab === binaryTabs[4] && (
-                    <>
-                      <PGTables
-                        configData={props}
-                        activePage={cancelled}
-                        onPageChange={(e, pageNumber) =>
-                          setCancelledPage(pageNumber)
-                        }
-                      />
-                      <MobileOnly>
-                        <MobileTable
-                          isCancelledTab
-                          activePage={cancelled}
-                          configData={props}
-                          onPageChange={(e, pageNumber) =>
-                            setCancelledPage(pageNumber)
-                          }
-                        />
-                      </MobileOnly>
-                    </>
-                  )}
-                </div>
-              </div>
-            </>
-          ) : (
-            <Skeleton variant="rectangular" className="stat-skel lc" />
-          )}
-          <MobileOnly>{isHistory ? <History /> : <BuyTrade />}</MobileOnly>
+          <Favourites />
+          {Object.keys(Config.markets).map((s) => {
+            if (Config.markets[s].tv_id == props.activePair.tv_id) {
+              return (
+                <TradingChart market={Config.markets[s].tv_id as Markets} />
+              );
+            }
+            return null;
+          })}
+
+          <BuyTrade />
         </Background>
       </main>
       <BinaryDrawer />
@@ -345,3 +247,51 @@ export function WebOnly({ children }: { children: JSX.Element }) {
   if (window.innerWidth < mobileUpperBound) return null;
   return <>{children}</>;
 }
+
+export const ActiveTable = ({ width }) => {
+  const [, setActivePage] = useAtom(updateActivePageNumber);
+  const [{ active: activePage }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable onPageChange={(e, pageNumber) => setActivePage(pageNumber)} />
+  ) : (
+    <PGDesktopTables
+      currentPage={activePage}
+      count={tradesCount}
+      onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+    />
+  );
+};
+export const HistoryTable = ({ width }) => {
+  const [, setPageNumber] = useAtom(updateHistoryPageNumber);
+  const [{ history: historyPageNumber }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable
+      isHistoryTab
+      onPageChange={(e, pageNumber) => setPageNumber(pageNumber)}
+    />
+  ) : (
+    <PGDesktopTables
+      isHistoryTable
+      currentPage={historyPageNumber}
+      count={tradesCount}
+      onPageChange={(e, pageNumber) => setPageNumber(pageNumber)}
+    />
+  );
+};
+export const CancelTable = ({ width }) => {
+  const [, setCancelPageNumber] = useAtom(updateCancelledPageNumber);
+  const [{ cancelled: canclledPage }] = useAtom(tardesPageAtom);
+  return width < mobileUpperBound ? (
+    <MobileTable
+      isCancelledTab
+      onPageChange={(e, pageNumber) => setCancelPageNumber(pageNumber)}
+    />
+  ) : (
+    <PGDesktopTables
+      currentPage={canclledPage}
+      count={tradesCount}
+      isCancelledTable
+      onPageChange={(e, pageNumber) => setCancelPageNumber(pageNumber)}
+    />
+  );
+};

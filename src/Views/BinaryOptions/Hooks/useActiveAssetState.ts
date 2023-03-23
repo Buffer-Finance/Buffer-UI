@@ -157,6 +157,7 @@ export function useActiveAssetState(amount = null, referralData) {
 
   if (copy) {
     let [maxAmounts, fees] = copy.slice(0, assetCalls.length);
+    console.log(`maxAmounts: `, maxAmounts);
 
     //calculate maxTradeValue
     const maxTrade = maxAmounts?.[0]

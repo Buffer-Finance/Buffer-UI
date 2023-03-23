@@ -1,6 +1,6 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import React, { useState } from 'react';
 import { postRes } from '@Utils/apis/api';
 import ERC20ABI from 'src/ABIs/Token.json';
@@ -31,6 +31,10 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
+import { minTradeAmount } from '../store';
+import { priceAtom } from '@Hooks/usePrice';
+import { knowTillAtom } from './useIsMerketOpen';
+import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 
 export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const binary = useQTinfo();
@@ -54,8 +58,9 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
   );
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const marketPrice = useAtomValue(priceAtom);
   const toastify = useToast();
+  const knowTill = useAtomValue(knowTillAtom);
 
   const cb = (a) => {
     setLoading(null);
@@ -63,6 +68,10 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
     const isCustom = typeof customTrade.is_up === 'boolean';
+    const expirationInMins = timeToMins(expiration);
+    const isForex = activeAsset.category === 'Forex';
+    const marketCloseTime = Math.floor(knowTill.date / 1000);
+    const currentTime = Math.floor(new Date().getTime() / 1000);
 
     if (state.txnLoading > 1) {
       toastify({
@@ -73,10 +82,18 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       return true;
     }
 
-    if (
-      isCustom &&
-      timeToMins(expiration) > timeToMins(activeAsset.max_duration)
-    ) {
+    if (isForex && currentTime + expirationInMins * 60 >= marketCloseTime) {
+      return toastify({
+        type: 'error',
+        msg: `Expiration time should be less than ${getDisplayTime(
+          +marketCloseTime
+        )} ${getDisplayDate(
+          +marketCloseTime
+        )} as the market will be closed by then.`,
+        id: 'binaryBuy',
+      });
+    }
+    if (isCustom && expirationInMins > timeToMins(activeAsset.max_duration)) {
       return toastify({
         type: 'error',
         msg: `Expiration time should be within ${getUserError(
@@ -85,10 +102,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    if (
-      isCustom &&
-      timeToMins(expiration) < timeToMins(activeAsset.min_duration)
-    ) {
+    if (isCustom && expirationInMins < timeToMins(activeAsset.min_duration)) {
       return toastify({
         type: 'error',
         msg: `Expiration time should be greater than ${getUserError(
@@ -97,7 +111,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    // if (isCustom && timeToMins(expiration) < MINIMUM_MINUTES) {
+    // if (isCustom && expirationInMins< MINIMUM_MINUTES) {
     //   return toastify({
     //     type: 'error',
     //     msg: 'Expiration should be greater then 5 minutes due to network congestion',
@@ -147,10 +161,14 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    if (gt('1', userInput)) {
+    if (gt(minTradeAmount.toString(), userInput)) {
       return toastify({
         type: 'error',
-        msg: 'Trade Amount must be atleast 1 ' + activePoolObj.token.name,
+        msg:
+          'Trade Amount must be atleast ' +
+          minTradeAmount +
+          ' ' +
+          activePoolObj.token.name,
         id: 'binaryBuy',
       });
     }
@@ -169,7 +187,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
 
     let args = [
       toFixed(multiply(userInput, activePoolObj.token.decimals), 0),
-      timeToMins(expiration) * 60 + '',
+      expirationInMins * 60 + '',
       customTrade.is_up,
       activePoolObj.options_contracts.current,
       toFixed(multiply(('' + price).toString(), 8), 0),

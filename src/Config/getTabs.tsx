@@ -154,25 +154,51 @@ export const TabIcon = {
   ),
   Faucet: (
     <svg
-      width="38"
-      height="38"
-      viewBox="0 0 38 38"
+      width="26"
+      height="26"
+      viewBox="0 0 26 26"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M28.9113 23.8086C29.2393 24.1366 29.2393 24.6684 28.9113 24.9965L25.9893 27.9185H27.9213C28.3852 27.9185 28.7613 28.2947 28.7613 28.7586C28.7613 29.2225 28.3852 29.5987 27.9213 29.5987H23.9611C23.4972 29.5987 23.1211 29.2225 23.1211 28.7586V24.7986C23.1211 24.3345 23.4972 23.9585 23.9611 23.9585C24.4251 23.9585 24.8012 24.3345 24.8012 24.7986V26.7305L27.7232 23.8086C28.0513 23.4805 28.5832 23.4805 28.9113 23.8086Z"
+        d="M18.0423 7.07732C18.0423 8.09702 16.8587 9.00747 15.056 9.57194C13.9762 9.8763 12.8633 10.0475 11.742 10.0818C11.536 10.0999 11.3289 10.0999 11.1229 10.0818C7.31721 10.0818 4.22168 8.71612 4.22168 7.0409C4.22168 5.36567 7.31721 4 11.1229 4H11.742C12.0515 4 12.3429 4 12.6342 4C14.2608 4.13751 15.8205 4.70983 17.1501 5.65702C17.3934 5.81427 17.5994 6.02291 17.7536 6.26828C17.9077 6.51365 18.0063 6.7898 18.0423 7.07732V7.07732Z"
+        stroke="currentColor"
+        stroke-width="1.4748"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M18.0425 7.07812V11.4301C18.0425 12.5408 16.7133 13.4877 14.7103 14.0157C13.521 14.3233 12.2969 14.4763 11.0685 14.471C7.91834 14.471 5.25983 13.5423 4.44043 12.2859"
+        stroke="currentColor"
+        stroke-width="1.4748"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M18.0423 11.4297V15.9637C18.0423 17.6572 14.9468 19.0046 11.1229 19.0046C7.299 19.0046 4.22168 17.6572 4.22168 15.9637"
+        stroke="currentColor"
+        stroke-width="1.4748"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M4.22168 15.9641V7.07812"
+        stroke="currentColor"
+        stroke-width="1.4748"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <rect
+        x="11"
+        y="12"
+        width="10.5556"
+        height="10.1333"
+        rx="1.66667"
         fill="currentColor"
       />
       <path
-        d="M8.24604 14.7901C8.57411 15.1182 9.106 15.1182 9.43406 14.7901L12.3561 11.8681V13.8001C12.3561 14.2641 12.7322 14.6402 13.1961 14.6402C13.6601 14.6402 14.0362 14.2641 14.0362 13.8001V9.84005C14.0362 9.61726 13.9477 9.40358 13.7901 9.24605C13.6326 9.08851 13.4189 9 13.1961 9H9.23606C8.77211 9 8.39601 9.3761 8.39601 9.84005C8.39601 10.304 8.77211 10.6801 9.23606 10.6801H11.168L8.24604 13.6021C7.91799 13.9302 7.91799 14.4621 8.24604 14.7901Z"
-        fill="currentColor"
-      />
-      <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M14.5734 29.2048C14.7993 29.2277 15.0286 29.2395 15.2606 29.2395C18.9722 29.2395 21.981 26.2306 21.981 22.5191C25.6926 22.5191 28.7015 19.5102 28.7015 15.7986C28.7015 12.5509 26.3978 9.84127 23.3353 9.21466C22.9251 9.13073 22.5014 9.08416 22.0677 9.07867C22.0388 9.0783 22.0099 9.07812 21.9809 9.07812C18.2693 9.07812 15.2605 12.087 15.2605 15.7986C11.5489 15.7986 8.54004 18.8074 8.54004 22.5189C8.54004 25.8826 11.0112 28.669 14.237 29.162C14.3483 29.179 14.4604 29.1932 14.5734 29.2048ZM10.7802 22.5189C10.7802 20.0446 12.7861 18.0387 15.2605 18.0387C15.3915 18.0387 15.521 18.0443 15.6487 18.0552C16.3245 19.9514 17.828 21.4549 19.7242 22.1307C19.7352 22.2585 19.7408 22.388 19.7408 22.5189C19.7408 24.9934 17.7348 26.9992 15.2605 26.9992C12.7861 26.9992 10.7802 24.9934 10.7802 22.5189ZM17.5006 15.7986C17.5006 13.3242 19.5066 11.3183 21.9809 11.3183C24.4553 11.3183 26.4612 13.3242 26.4612 15.7986C26.4612 18.273 24.4553 20.2788 21.9809 20.2788C19.5066 20.2788 17.5006 18.273 17.5006 15.7986Z"
-        fill="currentColor"
+        d="M18.2234 16.6716V17.7338H14V16.6716H18.2234ZM16.6915 15V19.4858H15.5362V15H16.6915Z"
+        fill="white"
       />
     </svg>
   ),
@@ -322,6 +348,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+      {
+        to: 'https://docs.buffer.finance/introduction/readme',
+        name: 'Docs',
+        subTabs: [],
+        isExternalLink: true,
+      },
     ];
   } else
     return [
@@ -344,20 +376,6 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: `https://optopi.buffer.finance/`,
-        name: 'NFT',
-        subTabs: [],
-        isExternalLink: true,
-      },
-
-      {
-        to: `/leaderboard/weekly`,
-        name: 'Competitions',
-        subTabs: [],
-        isExternalLink: false,
-      },
-
-      {
         to: `/dashboard`,
         name: 'Dashboard',
         subTabs: [],
@@ -368,6 +386,25 @@ export const getTabs = (
         name: 'Referral',
         subTabs: [],
         isExternalLink: false,
+      },
+      {
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
+        subTabs: [],
+        isExternalLink: true,
+      },
+
+      {
+        to: `/profile`,
+        name: 'Profile',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: 'https://docs.buffer.finance/introduction/readme',
+        name: 'Docs',
+        subTabs: [],
+        isExternalLink: true,
       },
     ];
 };
@@ -399,6 +436,7 @@ export const getMobileTabs = (
         icon: TabIcon.History,
         mobileOnly: true,
       },
+
       {
         to: `/earn`,
         name: 'Earn',
@@ -509,11 +547,11 @@ export const getMobileTabs = (
         mobileOnly: true,
       },
       {
-        to: `/earn`,
-        name: 'Earn',
+        to: `/faucet`,
+        name: 'Faucet',
         subTabs: [],
         isExternalLink: false,
-        icon: TabIcon.Earn,
+        icon: TabIcon.Faucet,
       },
       {
         to: `https://optopi.buffer.finance/`,
@@ -521,6 +559,13 @@ export const getMobileTabs = (
         subTabs: [],
         isExternalLink: true,
         icon: TabIcon.NFT,
+      },
+      {
+        to: `/earn`,
+        name: 'Earn',
+        subTabs: [],
+        isExternalLink: false,
+        icon: TabIcon.Earn,
       },
       {
         to: `/faucet`,

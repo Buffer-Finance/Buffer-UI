@@ -7,17 +7,10 @@ import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { useAtom, useAtomValue } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import {
-  getPriceFromKlines,
-  marketPriceAtom,
-} from 'src/TradingView/useDataFeed';
+import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
-import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
-import { getIdentifier } from '@Hooks/useGenericHook';
-import BufferCheckbox from '@Views/Common/BufferCheckbox';
-
 import { IQTrade, IToken, useQTinfo } from '@Views/BinaryOptions';
 import {
   IGQLHistory,
@@ -44,6 +37,10 @@ import { Variables } from '@Utils/Time';
 import { BlackBtn } from '@Views/Common/V2-Button';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { Skeleton } from '@mui/material';
+import { priceAtom } from '@Hooks/usePrice';
+import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
+import { getIdentifier } from '@Hooks/useGenericHook';
+import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
 const CancelButton = ({ option }) => {
   const toastify = useToast();
@@ -93,7 +90,9 @@ const MobileTable: React.FC<{
   activePage,
   shouldNotDisplayShareVisulise = false,
 }) => {
-  const [marketPrice] = useAtom(marketPriceAtom);
+  const [visualized, setVisualized] = useAtom(visualizeddAtom);
+
+  const [marketPrice] = useAtom(priceAtom);
   const { active, history, cancelled } = useAtomValue(tardesAtom);
   const filteredData = isHistoryTab
     ? history
@@ -107,8 +106,6 @@ const MobileTable: React.FC<{
     cancelled: cancelledPages,
   } = useAtomValue(tardesTotalPageAtom);
   const { state } = useGlobal();
-  const [visualized, setVisualized] = useAtom(visualizeddAtom);
-
   const { shouldConnectWallet } = useOpenConnectionDrawer();
 
   const activeTab = state.tabs.activeIdx;
@@ -201,7 +198,8 @@ const MobileTable: React.FC<{
       option.state !== BetState.cancelled
     ) {
       const price = getPriceFromKlines(marketPrice, option.configPair);
-      console.log(`pricedd: `, price);
+      console.log(`pricedd: `, marketPrice, option.configPair);
+
       // if (isHistoryTab || price) {
       let additionalInfo = [
         {
@@ -247,8 +245,9 @@ const MobileTable: React.FC<{
             ),
         },
       ];
-      arr = [...arr, ...additionalInfo];
       let isPresentInDisabled = visualized.includes(getIdentifier(option));
+      const currIdentifier = getIdentifier(option);
+
       const viz = [
         isCancelledTab || isHistoryTab
           ? null
@@ -273,6 +272,10 @@ const MobileTable: React.FC<{
       ];
       arr = [...arr, ...additionalInfo, ...viz];
       arr = arr.filter((arr) => arr);
+      // if (viz[0]) {
+      //   arr = [...arr, ...additionalInfo, ...viz];
+      // }
+
       // }
     }
     if (selectedIndex === row) visible = true;

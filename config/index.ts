@@ -573,5 +573,3 @@ export const getTabs = (chain: string, isLeaderboard = false) => {
     },
   ];
 };
-
-

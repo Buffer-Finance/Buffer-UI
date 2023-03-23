@@ -14,8 +14,6 @@ import { Variables } from '@Utils/Time';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { IQTrade } from '..';
-import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import {
   AssetCell,
   Cancel,
@@ -31,17 +29,22 @@ import {
 import { ChangeEvent, useMemo } from 'react';
 import { IGQLHistory } from '../Hooks/usePastTradeQuery';
 import { subtract } from '@Utils/NumString/stringArithmatics';
-import { useGlobal } from '@Contexts/Global';
 import { BetState } from '@Hooks/useAheadTrades';
 import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
+import { priceAtom } from '@Hooks/usePrice';
+import { useGlobal } from '@Contexts/Global';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
 interface IPGDesktopTables {
-  configData: IQTrade;
+  className?: string;
+  isCancelledTable?: boolean;
+  count?: number;
+  currentPage: number;
+  isHistoryTable?: boolean;
   onPageChange?: (e: ChangeEvent, p: number) => void;
   activePage: number;
   shouldNotDisplayShareVisulise: boolean;
@@ -54,7 +57,9 @@ interface IPGDesktopTables {
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
-  configData,
+  className,
+  currentPage,
+  count,
   onPageChange,
   activePage,
   shouldNotDisplayShareVisulise,
@@ -66,9 +71,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   shouldShowMobile = false,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
-  const [marketPrice] = useAtom(marketPriceAtom);
-  const activeMarket = configData.activePair;
-
+  const [marketPrice] = useAtom(priceAtom);
   const { shouldConnectWallet } = useOpenConnectionDrawer();
 
   const { state } = useGlobal();
@@ -119,13 +122,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   }, [isHistoryTable]);
 
   const HeaderFomatter = (col: number) => {
-    return (
-      <TableHeader
-        col={col}
-        headsArr={headNameArray}
-        firstColClassName="ml-4"
-      />
-    );
+    return <TableHeader col={col} headsArr={headNameArray} />;
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
@@ -158,7 +155,6 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         if (isCancelledTable) return <TradeSize trade={currentRow} />;
         return (
           <ExpiryCurrentComponent
-            activeMarket={activeMarket}
             isHistoryTable={isHistoryTable}
             marketPrice={marketPrice}
             trade={currentRow}
@@ -279,7 +275,6 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           return <UserAddressColumn address={currentRow.user.address} />;
         return (
           <ProbabilityPNL
-            activeMarket={activeMarket}
             isHistoryTable={isHistoryTable || isCancelledTable}
             marketPrice={marketPrice}
             trade={currentRow}
@@ -336,14 +331,15 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   };
 
   return (
-    <Background>
+    <Background className={className + ' h-full'}>
       <BufferTable
-        count={onPageChange ? totalPages : undefined}
-        activePage={activePage}
+        count={onPageChange ? totalPages : null}
         onPageChange={(e, pageNumber) => {
           onPageChange ? onPageChange(e, pageNumber) : null;
         }}
+        shouldShowTroply={false}
         doubleHeight
+        activePage={currentPage}
         // shouldShowMobile
         headerJSX={HeaderFomatter}
         bodyJSX={BodyFormatter}
@@ -357,6 +353,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
                 // console.log(idx);
               }
         }
+        overflow
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
         shouldShowMobile={shouldShowMobile}

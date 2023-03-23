@@ -5,7 +5,6 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { useReadCall } from '@Utils/useReadCall';
-import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 
 export type otherBlpType = {
   price: string | null;
@@ -17,6 +16,8 @@ export type otherBlpType = {
 
 export const useOtherChainCalls = () => {
   const { calls } = useDashboardCalls();
+  const { configContracts } = useActiveChain();
+
   const { data } = useReadCall({
     contracts: calls,
     swrKey: 'useOtherChainCalls',
@@ -40,10 +41,19 @@ export const useOtherChainCalls = () => {
     response = {
       otherBLP: {
         price: blpPrice,
-        supply: fromWei(blpSupply, usdcDecimals),
-        total_usdc: fromWei(amountUSDCpool, usdcDecimals),
-        usdc_pol: fromWei(amountUSDCpool, usdcDecimals),
-        usdc_total: fromWei(amountUSDCpool, usdcDecimals),
+        supply: fromWei(blpSupply, configContracts.tokens['USDC'].decimals),
+        total_usdc: fromWei(
+          amountUSDCpool,
+          configContracts.tokens['USDC'].decimals
+        ),
+        usdc_pol: fromWei(
+          amountUSDCpool,
+          configContracts.tokens['USDC'].decimals
+        ),
+        usdc_total: fromWei(
+          amountUSDCpool,
+          configContracts.tokens['USDC'].decimals
+        ),
       },
     };
   }

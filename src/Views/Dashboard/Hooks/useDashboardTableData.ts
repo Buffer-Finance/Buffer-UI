@@ -3,15 +3,11 @@ import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add } from '@Utils/NumString/stringArithmatics';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
-import { usdcDecimals } from '@Views/V2-Leaderboard/Incentivised';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { useMarketStatus } from './useMarketStatus';
 
 export function getLinuxTimestampBefore24Hours() {
-  // const date = new Date();
-  // date.setHours(date.getHours() - 24);
-  // return Math.floor(date.getTime() / (1000 * 3600));
   return Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
 }
 
@@ -36,17 +32,18 @@ type dashboardTableData = {
 };
 
 export const useDashboardTableData = () => {
-  const assetStatus = useMarketStatus();
   const { data: currentPrices } = useSWR('dashboard-current-prices', {
     fetcher: async () => {
       const response = await axios.get(
-        `https://oracle.buffer.finance/price/latest/`
+        `https://oracle.buffer-finance-api.link/price/latest/`
       );
 
       return response.data?.data;
     },
     // refreshInterval: 300,
   });
+
+  const assetStatus = useMarketStatus();
   const { configContracts } = useActiveChain();
   const { data } = useSWR('dashboard-table-data', {
     fetcher: async () => {
@@ -117,7 +114,9 @@ export const useDashboardTableData = () => {
         sort_duration: timeToMins(configPair?.min_duration),
         currentPrice: currentPrices?.[configPair.tv_id]?.p,
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
-        openInterest: Number(fromWei(item.openInterest, usdcDecimals)),
+        openInterest: Number(
+          fromWei(item.openInterest, configContracts.tokens['USDC'].decimals)
+        ),
         precision: configPair?.price_precision,
         totalTrades: Number(add(item.openDown, item.openUp)),
         max_trade_size:
@@ -127,10 +126,13 @@ export const useDashboardTableData = () => {
           configPair.category === 'Crypto'
             ? true
             : assetStatus[pool.options_contracts.current]?.isMarketOpen ||
-              false,
+            false,
         '24h_volume':
           Number(
-            fromWei(oneDayVolume?.[item.address.toLowerCase()], usdcDecimals)
+            fromWei(
+              oneDayVolume?.[item.address.toLowerCase()],
+              configContracts.tokens['USDC'].decimals
+            )
           ) || '0',
         currentUtilization: Number(fromWei(item.currentUtilization, 16)),
         payoutForDown: Number(fromWei(item.payoutForDown, 16)),

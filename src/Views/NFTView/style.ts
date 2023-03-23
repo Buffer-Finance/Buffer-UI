@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const Background = styled.div`
   color: var(--text-1);
-  margin: 48px 0;
+  margin: 32px 0;
   .header {
     font-size: 3rem;
     font-weight: 400;
