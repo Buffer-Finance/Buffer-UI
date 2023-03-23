@@ -1,4 +1,4 @@
-import { useQTinfo } from '@Views/BinaryOptions';
+import { usePrice } from '@Hooks/usePrice';
 import PGDesktopTables from '@Views/BinaryOptions/Tables/Desktop';
 import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
@@ -28,10 +28,10 @@ export const allATrdesTotalPageAtom = atom<{
 
 const AllTrades = () => {
   const { activeTrades, historyTrades, cancelledTrades } = useAllfilteredData();
-  const qtInfo = useQTinfo();
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
   const [totalPages, setTotalPages] = useAtom(allATrdesTotalPageAtom);
   const navigate = useNavigate();
+  usePrice();
 
   useEffect(() => {
     changeActiveTab(null, 0);
@@ -50,7 +50,6 @@ const AllTrades = () => {
         handleChange={(e, t) => {
           changeActiveTab(e, t);
         }}
-        distance={5}
         className="mb-5"
         tablist={[
           { name: 'Active' },
@@ -62,8 +61,7 @@ const AllTrades = () => {
         value={activeTabIdx}
         childComponents={[
           <PGDesktopTables
-            activePage={totalPages.active}
-            configData={qtInfo}
+            currentPage={totalPages.active}
             filteredData={activeTrades}
             shouldNotDisplayShareVisulise
             shouldShowMobile
@@ -76,8 +74,7 @@ const AllTrades = () => {
             }
           />,
           <PGDesktopTables
-            activePage={totalPages.history}
-            configData={qtInfo}
+            currentPage={totalPages.history}
             filteredData={historyTrades}
             shouldNotDisplayShareVisulise
             shouldShowMobile
@@ -88,6 +85,7 @@ const AllTrades = () => {
             onRowClick={(index) =>
               navigateToProfile(historyTrades[index].user.address)
             }
+            isHistoryTable
             showUserAddress
             widths={[
               'auto',
@@ -103,8 +101,7 @@ const AllTrades = () => {
             ]}
           />,
           <PGDesktopTables
-            activePage={totalPages.cancelled}
-            configData={qtInfo}
+            currentPage={totalPages.cancelled}
             filteredData={cancelledTrades}
             shouldNotDisplayShareVisulise
             shouldShowMobile
@@ -116,6 +113,7 @@ const AllTrades = () => {
               navigateToProfile(historyTrades[index].user.address)
             }
             showUserAddress
+            isCancelledTable
             widths={['auto']}
           />,
         ]}

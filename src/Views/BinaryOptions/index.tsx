@@ -16,7 +16,9 @@ import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
 import {
+  tardesAtom,
   tardesPageAtom,
+  tardesTotalPageAtom,
   updateActivePageNumber,
   updateCancelledPageNumber,
   updateHistoryPageNumber,
@@ -249,6 +251,11 @@ export function WebOnly({ children }: { children: JSX.Element }) {
 }
 
 export const ActiveTable = ({ width }) => {
+  const { active } = useAtomValue(tardesAtom);
+  const { active: activePages } = useAtomValue(tardesTotalPageAtom);
+  const totalPages = activePages;
+  const filteredData = active;
+
   const [, setActivePage] = useAtom(updateActivePageNumber);
   const [{ active: activePage }] = useAtom(tardesPageAtom);
   return width < mobileUpperBound ? (
@@ -256,12 +263,20 @@ export const ActiveTable = ({ width }) => {
   ) : (
     <PGDesktopTables
       currentPage={activePage}
-      count={tradesCount}
       onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
+      filteredData={filteredData}
+      totalPages={totalPages}
+      shouldNotDisplayShareVisulise={false}
+      widths={['auto']}
     />
   );
 };
 export const HistoryTable = ({ width }) => {
+  const { history } = useAtomValue(tardesAtom);
+  const { history: historyPages } = useAtomValue(tardesTotalPageAtom);
+  const totalPages = historyPages;
+  const filteredData = history;
+
   const [, setPageNumber] = useAtom(updateHistoryPageNumber);
   const [{ history: historyPageNumber }] = useAtom(tardesPageAtom);
   return width < mobileUpperBound ? (
@@ -273,12 +288,19 @@ export const HistoryTable = ({ width }) => {
     <PGDesktopTables
       isHistoryTable
       currentPage={historyPageNumber}
-      count={tradesCount}
       onPageChange={(e, pageNumber) => setPageNumber(pageNumber)}
+      filteredData={filteredData}
+      totalPages={totalPages}
+      shouldNotDisplayShareVisulise={false}
+      widths={['auto']}
     />
   );
 };
 export const CancelTable = ({ width }) => {
+  const { cancelled } = useAtomValue(tardesAtom);
+  const { cancelled: cancelledPages } = useAtomValue(tardesTotalPageAtom);
+  const totalPages = cancelledPages;
+  const filteredData = cancelled;
   const [, setCancelPageNumber] = useAtom(updateCancelledPageNumber);
   const [{ cancelled: canclledPage }] = useAtom(tardesPageAtom);
   return width < mobileUpperBound ? (
@@ -289,9 +311,12 @@ export const CancelTable = ({ width }) => {
   ) : (
     <PGDesktopTables
       currentPage={canclledPage}
-      count={tradesCount}
       isCancelledTable
       onPageChange={(e, pageNumber) => setCancelPageNumber(pageNumber)}
+      filteredData={filteredData}
+      totalPages={totalPages}
+      shouldNotDisplayShareVisulise={false}
+      widths={['auto']}
     />
   );
 };

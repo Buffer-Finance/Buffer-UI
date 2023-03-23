@@ -35,18 +35,15 @@ import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
-import { useGlobal } from '@Contexts/Global';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
 interface IPGDesktopTables {
   className?: string;
   isCancelledTable?: boolean;
-  count?: number;
   currentPage: number;
   isHistoryTable?: boolean;
   onPageChange?: (e: ChangeEvent, p: number) => void;
-  activePage: number;
   shouldNotDisplayShareVisulise: boolean;
   totalPages: number;
   filteredData: IGQLHistory[];
@@ -59,9 +56,7 @@ interface IPGDesktopTables {
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   className,
   currentPage,
-  count,
   onPageChange,
-  activePage,
   shouldNotDisplayShareVisulise,
   totalPages,
   filteredData,
@@ -69,16 +64,13 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   widths,
   onRowClick,
   shouldShowMobile = false,
+  isHistoryTable,
+  isCancelledTable,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const { shouldConnectWallet } = useOpenConnectionDrawer();
-
-  const { state } = useGlobal();
-  const activeTab = state.tabs.activeIdx;
-  const isHistoryTable = activeTab === 'History';
-  const isCancelledTable = activeTab === 'Cancelled';
-
+  console.log(filteredData, 'filteredData');
   const headNameArray = useMemo(() => {
     if (isHistoryTable)
       return [
