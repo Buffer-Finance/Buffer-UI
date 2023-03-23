@@ -14,7 +14,6 @@ import { Variables } from '@Utils/Time';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { marketPriceAtom } from 'src/TradingView/useDataFeed';
 import {
   AssetCell,
   Cancel,
@@ -34,7 +33,6 @@ import {
   tardesTotalPageAtom,
 } from '../Hooks/usePastTradeQuery';
 import { subtract } from '@Utils/NumString/stringArithmatics';
-import { useGlobal } from '@Contexts/Global';
 import { BetState } from '@Hooks/useAheadTrades';
 import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
@@ -101,7 +99,15 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         // "Visualize",
       ];
     else if (isCancelledTable)
-      return ['Asset', 'Strike Price', 'Trade Size', 'Status', 'Reason'];
+      return [
+        'Asset',
+        'Strike Price',
+        'Trade Size',
+        'Status',
+        'Queue Time',
+        'Cancellation Time',
+        'Reason',
+      ];
     else
       return [
         'Asset',
@@ -183,7 +189,22 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
 
       case 3:
         if (currentRow.state === BetState.cancelled)
-          return <>{getErrorFromCode(currentRow?.reason)}</>;
+          return (
+            <NumberTooltip
+              content={`${getDisplayTimeUTC(
+                +currentRow.queueTimestamp
+              )} ${getDisplayDateUTC(+currentRow.queueTimestamp)} UTC`}
+            >
+              <div className="w-fit">
+                <CellContent
+                  content={[
+                    `${getDisplayTime(+currentRow.queueTimestamp)}`,
+                    `${getDisplayDate(+currentRow.queueTimestamp)}`,
+                  ]}
+                />
+              </div>
+            </NumberTooltip>
+          );
         if (currentRow.state === BetState.queued)
           return <CellContent content={['-']} />;
 
@@ -208,8 +229,23 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           />
         );
       case 4:
-        // if (!currentRow.normal_option) return <CellContent content={["-"]} />;
-        // else
+        if (currentRow.state === BetState.cancelled)
+          return (
+            <NumberTooltip
+              content={`${getDisplayTimeUTC(
+                +currentRow.cancelTimestamp
+              )} ${getDisplayDateUTC(+currentRow.cancelTimestamp)} UTC`}
+            >
+              <div className="w-fit">
+                <CellContent
+                  content={[
+                    `${getDisplayTime(+currentRow.cancelTimestamp)}`,
+                    `${getDisplayDate(+currentRow.cancelTimestamp)}`,
+                  ]}
+                />
+              </div>
+            </NumberTooltip>
+          );
         if (
           currentRow.state === BetState.queued ||
           currentRow.state === BetState.cancelled
@@ -232,6 +268,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           </NumberTooltip>
         );
       case 5:
+        if (currentRow.state === BetState.cancelled)
+          return <>{getErrorFromCode(currentRow?.reason)}</>;
         return <TradeSize trade={currentRow} />;
       case 6:
         return (

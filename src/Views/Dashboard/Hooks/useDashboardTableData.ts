@@ -35,7 +35,7 @@ export const useDashboardTableData = () => {
   const { data: currentPrices } = useSWR('dashboard-current-prices', {
     fetcher: async () => {
       const response = await axios.get(
-        `https://oracle.buffer.finance/price/latest/`
+        `https://oracle.buffer-finance-api.link/price/latest/`
       );
 
       return response.data?.data;
@@ -126,7 +126,7 @@ export const useDashboardTableData = () => {
           configPair.category === 'Crypto'
             ? true
             : assetStatus[pool.options_contracts.current]?.isMarketOpen ||
-              false,
+            false,
         '24h_volume':
           Number(
             fromWei(
