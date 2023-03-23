@@ -164,13 +164,12 @@ const defaults = {
 };
 function getText(expiration: number) {
   const curr = Math.round(Date.now() / 1000);
-  return `${
-    expiration <= curr
+  return `${expiration <= curr
       ? 'Processing...'
       : `${formatDistanceExpanded(
-          Variables(expiration - Math.round(Date.now() / 1000))
-        )}`
-  }`;
+        Variables(expiration - Math.round(Date.now() / 1000))
+      )}`
+    }`;
 }
 const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage', null);
 const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
@@ -340,20 +339,20 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
 
           const req = firstDataRequest
             ? {
-                pair: getBarsFnActiveAsset,
-                interval: timeDeltaMapping(resolution),
-                limit: 1000,
-              }
+              pair: getBarsFnActiveAsset,
+              interval: timeDeltaMapping(resolution),
+              limit: 1000,
+            }
             : {
-                pair: getBarsFnActiveAsset,
-                interval: timeDeltaMapping(resolution),
-                limit: 1000,
-                start_time: from * 1000,
-                end_time: to * 1000,
-              };
+              pair: getBarsFnActiveAsset,
+              interval: timeDeltaMapping(resolution),
+              limit: 1000,
+              start_time: from * 1000,
+              end_time: to * 1000,
+            };
           const bundle = [
-            axios.post(`https://oracle.buffer.finance/multi/uiKlines/`, [req]),
-            axios.get('https://oracle.buffer.finance/price/latest/'),
+            axios.post(`https://oracle.buffer-finance-api.link/multi/uiKlines/`, [req]),
+            axios.get('https://oracle.buffer-finance-api.link/price/latest/'),
           ];
           const [assetBars, allPrices] = await Promise.all(bundle);
           const allPricesData = allPrices.data.data as LatestPriceApiRes;
@@ -615,9 +614,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
                     [market]: s,
                   }));
                 }}
-                className={`${
-                  s.toLowerCase() == resolution.toLowerCase() && 'active'
-                } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
+                className={`${s.toLowerCase() == resolution.toLowerCase() && 'active'
+                  } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
               >
                 {formatResolution(s)}
               </div>
