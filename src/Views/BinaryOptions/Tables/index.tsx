@@ -50,6 +50,8 @@ const PGTables: React.FC<IPGTables> = ({
       return cancelled;
     } else return active;
   }, [activeTab, active, history]);
+
+  console.log(filteredData, 'filteredData');
   return (
     <>
       {/* <BufferDisclaimer

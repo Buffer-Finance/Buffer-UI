@@ -85,7 +85,6 @@ const BuyTrade: React.FC<any> = ({}) => {
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
   }
-  usePrice();
   return (
     <div>
       <div className="flex gap-3 my-3">
