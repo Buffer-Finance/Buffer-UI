@@ -721,7 +721,7 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-mainnet",
+      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite"
     }
   },
