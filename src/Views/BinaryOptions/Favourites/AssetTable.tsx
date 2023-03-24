@@ -49,7 +49,12 @@ export const AssetTable: React.FC<{
   const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
 
   const headers = useMemo(() => {
-    return ['', 'Asset', <div className="flex items-center">Payout</div>];
+    return [
+      '',
+      'Asset',
+      <div className="flex items-center">Payout USDC</div>,
+      'Payout ARB',
+    ];
   }, []);
 
   const HeadFormatter = (col: number) => {
@@ -96,6 +101,24 @@ export const AssetTable: React.FC<{
             ]}
           />
         );
+      case 3:
+        return (
+          <CellContent
+            content={[
+              <div className="text-1 flex items-center">
+                <div className="mr3">
+                  {activeAssetStateHookData.payouts
+                    ? '+' +
+                      activeAssetStateHookData.payouts[
+                        currentAsset.pools[1].options_contracts.current
+                      ] +
+                      '%'
+                    : 'loading...'}
+                </div>
+              </div>,
+            ]}
+          />
+        );
       case 0:
         return (
           <CellContent
@@ -129,7 +152,7 @@ export const AssetTable: React.FC<{
 
   return (
     <BufferTable
-      widths={['10%', 'auto', 'auto', 'auto']}
+      widths={['10%', '35%', 'auto', 'auto']}
       headerJSX={HeadFormatter}
       cols={headers.length}
       shouldShowMobile
