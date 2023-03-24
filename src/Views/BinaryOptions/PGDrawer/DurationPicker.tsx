@@ -44,7 +44,7 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
       time: '23:59',
       name: ['24', 'Hour'],
     },
-  ].slice(isTestnet ? 0 : 1);
+  ];
 
   useEffect(() => {
     if (!currentTime || !activeAsset) return;
