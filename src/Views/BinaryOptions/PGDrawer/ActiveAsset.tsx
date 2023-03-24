@@ -28,7 +28,6 @@ export const ActiveAsset = ({ cb }) => {
   const [isOpen, setIsOpen] = useState(false);
   const atomValue = useAtomValue(activeAssetStateAtom);
   const { activeAssetPayout: fullPayout, boostedPayout } = atomValue;
-  console.log(fullPayout, boostedPayout, 'fullPayout');
 
   const title = currentPrice
     ? toFixed(currentPrice, singleAsset.price_precision.toString().length - 1) +
