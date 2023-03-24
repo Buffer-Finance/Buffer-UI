@@ -4,7 +4,12 @@ import ERC20ABI from '@Views/Earn/Config/Abis/Token.json';
 import MaxTradeABI from '../ABI/MaxTrade.json';
 import RouterABI from '../ABI/routerABI.json';
 import ConfigABI from '../ABI/configABI.json';
-import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import {
+  divide,
+  gt,
+  multiply,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import { ethers } from 'ethers';
 import BinaryOptionsABI from '../ABI/optionsABI.json';
 import { toFixed } from '@Utils/NumString';
@@ -87,6 +92,12 @@ export function useActiveAssetState(amount = null, referralData) {
           highestTierNFT?.tokenId || 0,
         ],
       },
+      {
+        address: activePoolObj.options_contracts.current,
+        abi: BinaryOptionsABI,
+        name: 'baseSettlementFeePercentageForAbove',
+        params: [],
+      },
     ],
     [activePoolObj, account, referralData]
   );
@@ -139,14 +150,19 @@ export function useActiveAssetState(amount = null, referralData) {
         ]
     : [];
 
-  let copy = useReadCall({ contracts: calls, swrKey: 'UseActiveAssetState' })
-    .data as unknown as string[];
-  console.log(calls, copy, 'calls');
+  let copy = useReadCall({
+    contracts: calls,
+    swrKey: `UseActiveAssetState-${activePoolObj.token.name}-${activePoolObj.options_contracts.current}`,
+  }).data as unknown as string[];
   let response = [null, null, null, null];
 
   if (copy) {
-    let [maxAmounts, fees] = copy.slice(0, assetCalls.length);
-    console.log(`maxAmounts: `, maxAmounts);
+    let [maxAmounts, fees, activeBasePayout] = copy.slice(0, assetCalls.length);
+
+    const basePayout = subtract(
+      '100',
+      multiply('2', divide(activeBasePayout, 2))
+    );
 
     //calculate maxTradeValue
     const maxTrade = maxAmounts?.[0]
@@ -266,6 +282,9 @@ export function useActiveAssetState(amount = null, referralData) {
 
 
 */
+    const activeAssetPayout = payouts[activePoolObj?.options_contracts.current];
+    const boostedPayout = subtract(activeAssetPayout, basePayout);
+
     //destructuring the account response
     const [balance, allowance] = account
       ? copy.slice(-userSpecificCalls.length)
@@ -278,9 +297,19 @@ export function useActiveAssetState(amount = null, referralData) {
       stats,
       payouts,
       routerPermission,
+      activeAssetPayout,
+      boostedPayout,
     });
     //update response
-    response = [balance, allowance, maxTrade, stats, routerPermission];
+    response = [
+      balance,
+      allowance,
+      maxTrade,
+      stats,
+      routerPermission,
+      boostedPayout,
+      activeAssetPayout,
+    ];
   }
 
   return response;
