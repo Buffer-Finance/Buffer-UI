@@ -14,7 +14,7 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
   const [openCustomInput, setOpenCustomInput] = useState(false);
   const oneSec = 1000;
   const durations = [
-    isTestnet && {
+    {
       duration: 1 * 60 * oneSec,
       time: '00:01',
       name: ['1', 'Min'],
