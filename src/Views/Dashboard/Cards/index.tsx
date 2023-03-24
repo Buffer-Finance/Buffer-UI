@@ -174,6 +174,7 @@ export const StatsTotalStats = ({ data }: { data: IOverview | null }) => {
               <Display
                 data={divide(data.USDCvolume, totalDays.toString())}
                 unit={'USDC'}
+                precision={2}
               />
             </div>,
 
