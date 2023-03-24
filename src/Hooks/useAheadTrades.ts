@@ -8,6 +8,7 @@ import optionsAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
 import { ethers } from 'ethers';
 import { getLogs } from '@Utils/getLogs';
 import useSWR, { useSWRConfig } from 'swr';
+import { useActiveChain } from './useActiveChain';
 const routerIfc = new ethers.utils.Interface(routerAbi);
 
 enum Link {
@@ -97,6 +98,8 @@ const useAheadTrades = (
 ) => {
   const signer = useProvider();
   const { cache } = useSWRConfig();
+  const { configContracts } = useActiveChain();
+
   // const { data: recentBlock } = useBlockNumber();
   const recentBlock = null;
   return useSWR(
@@ -203,7 +206,12 @@ const useAheadTrades = (
           params: [data.id.toString()],
           abi: CallConfig[data.link].abi,
         }));
-        let tempRes = await multicallv2(calls, signer);
+        let tempRes = await multicallv2(
+          calls,
+          signer,
+          configContracts.multicall,
+          `augmentation-${startBlock}`
+        );
         let resCopy = getDeepCopy(tempRes);
 
         convertBNtoString(resCopy);

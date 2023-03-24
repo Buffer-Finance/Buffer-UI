@@ -1,7 +1,7 @@
 import { CloseOutlined } from '@mui/icons-material';
 import { Dialog, IconButton } from '@mui/material';
 import { useAtom } from 'jotai';
-import React, { useContext } from 'react';
+import USDCABI from '../Config/Abis/Token.json';
 import { earnAtom, readEarnData } from '../earnAtom';
 import { Buy } from './buy';
 import { Compound } from './compound';
@@ -11,7 +11,13 @@ import { StakeModal } from './stake';
 import iBFRABI from '../Config/Abis/BFR.json';
 import { CONTRACTS } from '../Config/Address';
 import { Claim } from './claim';
-import { EarnContext } from '..';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import {
+  useEarnWriteCalls,
+  useGetApprovalAmount,
+} from '../Hooks/useEarnWriteCalls';
+import { Compound2 } from './Compound2';
+import { Claim2 } from './claim2';
 
 export const EarnModals = () => {
   const [pageState, setPageState] = useAtom(earnAtom);
@@ -40,7 +46,8 @@ export const EarnModals = () => {
 function ModalChild() {
   const [pageState] = useAtom(earnAtom);
   const [pageData] = useAtom(readEarnData);
-  const { activeChain } = useContext(EarnContext);
+  const { activeChain } = useActiveChain();
+
   switch (pageState.activeModal) {
     case 'iBFRstake':
       return (
@@ -93,22 +100,127 @@ function ModalChild() {
       );
 
     case 'buy':
-      return <Buy />;
+      const { buyBLP, validations } = useEarnWriteCalls('Router');
+      const { approve } = useGetApprovalAmount(
+        USDCABI,
+        CONTRACTS[activeChain.id].USDC,
+        CONTRACTS[activeChain.id].BLP
+      );
+
+      return (
+        <Buy
+          allowance={pageData.earn?.usdc.allowance}
+          walletBalance={pageData.earn?.usdc.wallet_balance}
+          buyCall={buyBLP}
+          validatinosFn={validations}
+          approveFn={approve}
+          blpToTokenPrice={pageData.earn?.blp.blpToUsdc}
+          tokenToBlpPrice={pageData.earn.blp.usdcToBlp}
+          blpTokenName={'uBLP'}
+          tokenXName={'USDC'}
+        />
+      );
+    case 'buyARB':
+      const { buyARBBLP, validations: validationsARB } =
+        useEarnWriteCalls('Router');
+      const { approve: approveARB } = useGetApprovalAmount(
+        USDCABI,
+        CONTRACTS[activeChain.id].ARB,
+        CONTRACTS[activeChain.id].BLP2
+      );
+
+      return (
+        <Buy
+          allowance={pageData.earn?.arb.allowance}
+          walletBalance={pageData.earn?.arb.wallet_balance}
+          buyCall={buyARBBLP}
+          validatinosFn={validationsARB}
+          approveFn={approveARB}
+          blpToTokenPrice={pageData.earn?.arbblp.blpToUsdc}
+          tokenToBlpPrice={pageData.earn?.arbblp.usdcToBlp}
+          blpTokenName={'aBLP'}
+          tokenXName={'ARB'}
+        />
+      );
 
     case 'sell':
-      return <Sell />;
+      const { sellBLP, validations: sellValidations } =
+        useEarnWriteCalls('Router');
+      return (
+        <Sell
+          blpTokenName={'uBLP'}
+          tokenXName={'USDC'}
+          sellCall={sellBLP}
+          blpToTokenPrice={pageData.earn?.blp.blpToUsdc}
+          tokenToBlpPrice={pageData.earn?.blp.usdcToBlp}
+          validatinosFn={sellValidations}
+          max={pageData.earn?.blp.max_unstakeable}
+          blpPrice={pageData.earn.blp.price}
+        />
+      );
+    case 'sellARB':
+      const { sellARBBLP, validations: sellARBValidations } =
+        useEarnWriteCalls('Router');
+      return (
+        <Sell
+          blpTokenName={'aBLP'}
+          tokenXName={'ARB'}
+          sellCall={sellARBBLP}
+          blpToTokenPrice={pageData.earn?.arbblp.blpToUsdc}
+          tokenToBlpPrice={pageData.earn?.arbblp.usdcToBlp}
+          validatinosFn={sellARBValidations}
+          max={pageData.earn?.arbblp.max_unstakeable}
+          blpPrice={pageData.earn?.arbblp.price}
+        />
+      );
 
     case 'compound':
       return <Compound />;
 
     case 'claim':
       return <Claim />;
+    case 'compound2':
+      return <Compound2 />;
+
+    case 'claim2':
+      return <Claim2 />;
 
     case 'iBFRdeposit':
-      return <DepositModal head="BFR Vault" type="ibfr" />;
+      const { deposit, validations: BFRVesetValidatinos } = useEarnWriteCalls(
+        'Vester',
+        'BFR'
+      );
+      return (
+        <DepositModal
+          head="BFR Vault"
+          type="ibfr"
+          depositFn={deposit}
+          validatinosFn={BFRVesetValidatinos}
+        />
+      );
 
     case 'BLPdeposit':
-      return <DepositModal head="BLP Vault" type="blp" />;
+      const { deposit: BLPDeposit, validations: BLPVesetValidatinos } =
+        useEarnWriteCalls('Vester', 'BLP');
+      return (
+        <DepositModal
+          head="uBLP Vault"
+          type="blp"
+          depositFn={BLPDeposit}
+          validatinosFn={BLPVesetValidatinos}
+        />
+      );
+    case 'ARBBLPdeposit':
+      const { deposit2, validations: ARBBLPVesetValidatinos } =
+        useEarnWriteCalls('Vester', 'BLP');
+      return (
+        <DepositModal
+          head="aBLP Vault"
+          type="arbblp"
+          depositFn={deposit2}
+          validatinosFn={ARBBLPVesetValidatinos}
+        />
+      );
 
     default:
       return <div></div>;

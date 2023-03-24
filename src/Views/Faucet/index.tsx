@@ -3,7 +3,6 @@ import Background from './style';
 import FaucetABI from './Faucet.json';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
-// import { HeadTitle } from 'Views/Common/TitleHead';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { BlueBtn } from '@Views/Common/V2-Button';
@@ -13,44 +12,13 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 
 const IbfrFaucet: React.FC = () => {
-  const props = { chain: 'ARBITRUM' } as { chain: 'ARBITRUM' };
-  const { state } = useGlobal();
-  const toastify = useToast();
-  const { configContracts } = useActiveChain();
-  const [btnLoading, setBtnLoading] = useState(0);
   useEffect(() => {
     document.title = 'Buffer | Faucet';
   }, []);
-  const { writeCall: USDCwriteCall } = useWriteCall(
-    configContracts.tokens.USDC.faucet,
-    FaucetABI
-  );
-  const { writeCall: BFRWriteCall } = useWriteCall(
-    configContracts.tokens.BFR.faucet,
-    FaucetABI
-  );
   const { activeChain } = useActiveChain();
-  const claim = (shouldCLaimUSDC = true) => {
-    if (state.txnLoading > 1) {
-      return toastify({
-        type: 'error',
-        msg: 'Please Confirm your pending txns.',
-      });
-    }
-    function cb(res: any) {
-      setBtnLoading(0);
-    }
-    const overRides = {
-      value: ethers.utils.parseEther('0.001'),
-    };
-    const methodName = 'claim';
-    if (shouldCLaimUSDC) {
-      setBtnLoading(1);
-      console.log(overRides.value.toString());
-      return USDCwriteCall(cb, methodName, [], overRides);
-    }
-    setBtnLoading(2);
-    BFRWriteCall(cb, methodName, [], overRides);
+  const tokenChains = {
+    '421613': ['USDC', 'ARB'],
+    '80001': ['USDC'],
   };
 
   const content = activeChain && [
@@ -76,23 +44,17 @@ const IbfrFaucet: React.FC = () => {
     {
       top: `Claim TESTNET Tokens`,
       bottom: (
-        <ConnectionRequired>
-          <BlueBtn
-            isLoading={state.txnLoading === 1 && btnLoading === 1}
-            isDisabled={btnLoading === 2}
-            className="btn nowrap"
-            onClick={claim}
-          >
-            Claim 500 USDC
-          </BlueBtn>
-        </ConnectionRequired>
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          {tokenChains[activeChain.id].map((token: string) => (
+            <ClaimButton token={token} />
+          ))}
+        </div>
       ),
     },
   ];
 
   return (
     <main className="content-drawer">
-      {/* <HeadTitle title={'Buffer | Faucet'} /> */}
       <Background>
         <div className="wrapper">
           {activeChain && content ? (
@@ -112,6 +74,48 @@ const IbfrFaucet: React.FC = () => {
         <></>
       </Drawer>
     </main>
+  );
+};
+
+const ClaimButton = ({ token }: { token: string }) => {
+  const { state } = useGlobal();
+  const [btnLoading, setBtnLoading] = useState(0);
+  const { configContracts } = useActiveChain();
+  const { writeCall } = useWriteCall(
+    configContracts.tokens[token].faucet,
+    FaucetABI
+  );
+  const toastify = useToast();
+
+  const claim = () => {
+    if (state.txnLoading > 1) {
+      return toastify({
+        type: 'error',
+        msg: 'Please Confirm your pending txns.',
+      });
+    }
+    function cb(res: any) {
+      setBtnLoading(0);
+    }
+    const overRides = {
+      value: ethers.utils.parseEther('0.001'),
+    };
+    const methodName = 'claim';
+    setBtnLoading(1);
+    return writeCall(cb, methodName, [], overRides);
+  };
+
+  return (
+    <ConnectionRequired>
+      <BlueBtn
+        isLoading={state.txnLoading === 1 && btnLoading === 1}
+        isDisabled={state.txnLoading === 1}
+        className="btn nowrap"
+        onClick={claim}
+      >
+        Claim 500 {token}
+      </BlueBtn>
+    </ConnectionRequired>
   );
 };
 
@@ -171,7 +175,9 @@ const TestnetLinks = () => {
               key={s.url}
               className="whitespace-nowrap sm:max-w-[250px] text-ellipsis overflow-hidden"
             >
-              {faucetClaimingSteps[activeChain.id].faucet.length === 1 ? '' : idx + 1 + '.'}
+              {faucetClaimingSteps[activeChain.id].faucet.length === 1
+                ? ''
+                : idx + 1 + '.'}
               <span className="w-full">
                 {s.step}
                 {s.options && (
@@ -195,7 +201,9 @@ const TestnetLinks = () => {
               key={s.url}
               className="whitespace-nowrap sm:max-w-[250px] text-ellipsis overflow-hidden"
             >
-              {faucetClaimingSteps[activeChain.id].faucet.length === 1 ? '' : idx + 1 + '.'}
+              {faucetClaimingSteps[activeChain.id].faucet.length === 1
+                ? ''
+                : idx + 1 + '.'}
               <span className="w-full">
                 <a href={s.url || s} target="_blank">
                   {s.step || s}

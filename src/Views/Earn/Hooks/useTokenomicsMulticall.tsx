@@ -22,6 +22,7 @@ import { Chain, useContractReads } from 'wagmi';
 import { EarnContext } from '..';
 import { useContext } from 'react';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const BASIS_POINTS_DIVISOR = '10000';
 export const SECONDS_PER_YEAR = '31536000';
@@ -69,15 +70,12 @@ export const fromWei = (value: string, decimals: number = 18) => {
 
 export const useGetTokenomics = () => {
   const { address: account } = useUserAccount();
-  let activeChain: Chain | null = null;
-  const earnContextValue = useContext(EarnContext);
-  if (earnContextValue) {
-    activeChain = earnContextValue.activeChain;
-  }
-  // const { state } = useGlobal();
-  const contracts: (typeof CONTRACTS)[42161] = CONTRACTS[activeChain?.id];
+  const { activeChain, configContracts } = useActiveChain();
+  const contracts: (typeof CONTRACTS)[421613] = CONTRACTS[activeChain.id];
   const bfrPrice = useIbfrPrice();
-  const usd_decimals = 6;
+  const arbPrice = '1';
+  const usd_decimals = configContracts.tokens.USDC.decimals;
+  const arb_decimals = configContracts.tokens.ARB?.decimals ?? 18;
 
   const getUserSpecificCalls = () => {
     if (!activeChain || !contracts) return [];
@@ -312,6 +310,114 @@ export const useGetTokenomics = () => {
         functionName: 'balanceOf',
         args: [account],
       },
+
+      //arb-blp calls
+      feeArbBlpTrackerRewards: {
+        address: contracts.FeeBlpTracker2,
+        abi: RewardTrackerAbi,
+        functionName: 'claimable',
+        args: [account],
+      },
+      arbblpVesterRewards: {
+        address: contracts.BlpVester2,
+        abi: VesterAbi,
+        functionName: 'claimable',
+        args: [account],
+      },
+      stakedArbBlpTrackerRewards: {
+        address: contracts.StakedBlpTracker2,
+        abi: RewardTrackerAbi,
+        functionName: 'claimable',
+        args: [account],
+      },
+      userStakedArbBlp: {
+        address: contracts.FeeBlpTracker2,
+        abi: RewardTrackerAbi,
+        functionName: 'depositBalances',
+        args: [account, contracts.BLP2],
+      },
+      arbblpVesterPairAmount: {
+        address: contracts.BlpVester2,
+        abi: VesterAbi,
+        functionName: 'pairAmounts',
+        args: [account],
+      },
+      arbblpVesterVestedAmount: {
+        address: contracts.BlpVester2,
+        abi: VesterAbi,
+        functionName: 'getVestedAmount',
+        args: [account],
+      },
+      arbblpVesterClaimedAmounts: {
+        address: contracts.BlpVester2,
+        abi: VesterAbi,
+        functionName: 'claimedAmounts',
+        args: [account],
+      },
+      arbblpVesterClaimable: {
+        address: contracts.BlpVester2,
+        abi: VesterAbi,
+        functionName: 'claimable',
+        args: [account],
+      },
+      userArbBlpBalance: {
+        address: contracts.BLP2,
+        abi: BlpAbi,
+        functionName: 'balanceOf',
+        args: [account],
+      },
+      arbblpMaxVestableAmount: {
+        address: contracts.BlpVester2,
+        abi: VesterAbi,
+        functionName: 'getMaxVestableAmount',
+        args: [account],
+      },
+      feeArbBlpTrackerUserBalance: {
+        address: contracts.FeeBlpTracker2,
+        abi: RewardTrackerAbi,
+        functionName: 'balanceOf',
+        args: [account],
+      },
+      stakedArbBlpTrackerUserBalance: {
+        address: contracts.StakedBlpTracker2,
+        abi: RewardTrackerAbi,
+        functionName: 'balanceOf',
+        args: [account],
+      },
+      userUnlockedArbBlpAmount: {
+        address: contracts.BLP2,
+        abi: BlpAbi,
+        functionName: 'getUnlockedLiquidity',
+        args: [account],
+      },
+      arbblpVesterAverageStakedAmount: {
+        address: contracts.BlpVester2,
+        abi: VesterAbi,
+        functionName: 'getCombinedAverageStakedAmount',
+        args: [account],
+      },
+      arbblpUsdcAllowance: {
+        //blp-buy modal
+        address: contracts.ARB, //token
+        abi: TokenAbi,
+        functionName: 'allowance',
+        args: [account, contracts.BLP2], //spender
+        watch: true,
+      },
+      esbfrStakedArbBlpTrackerAllowance: {
+        //blp-deposit modal
+        address: contracts.ES_BFR, //token
+        abi: bfrAbi,
+        functionName: 'allowance',
+        args: [account, contracts.StakedBlpTracker2], //spender
+        watch: true,
+      },
+      userArbBalance: {
+        address: contracts.ARB,
+        abi: bfrAbi,
+        functionName: 'balanceOf',
+        args: [account],
+      },
     };
     return Object.keys(user_specific_data).map(function (key) {
       return user_specific_data[key];
@@ -431,6 +537,70 @@ export const useGetTokenomics = () => {
         functionName: 'balanceOf',
         args: [contracts.BLP],
       },
+      //arb-blp calls
+      stakedArbBlp: {
+        address: contracts.BLP2,
+        abi: bfrAbi,
+        functionName: 'balanceOf',
+        args: [contracts.FeeBlpTracker2],
+      },
+      arbblpSupply: {
+        address: contracts.BLP2,
+        abi: bfrAbi,
+        functionName: 'totalSupply',
+      },
+      stakedArbBlpDistributorBalance: {
+        address: contracts.ES_BFR,
+        abi: bfrAbi,
+        functionName: 'balanceOf',
+        args: [contracts.StakedBlpDistributor2],
+      },
+      feeArbBlpTrackerTokensPerInterval: {
+        address: contracts.FeeBlpTracker2,
+        abi: RewardTrackerAbi,
+        functionName: 'tokensPerInterval',
+      },
+      stakedArbBlpTrackerTokensPerInterval: {
+        address: contracts.StakedBlpTracker2,
+        abi: RewardTrackerAbi,
+        functionName: 'tokensPerInterval',
+      },
+      arbblpVesterPairToken: {
+        address: contracts.BlpVester2,
+        abi: VesterAbi,
+        functionName: 'pairToken',
+      },
+      arbblpTotalBalance: {
+        address: contracts.BLP2,
+        abi: BlpAbi,
+        functionName: 'totalTokenXBalance',
+      },
+      maxTokenXToWithdrawArb: {
+        address: contracts.BLP2,
+        abi: BlpAbi,
+        functionName: 'availableBalance',
+      },
+      arbblpInitialRate: {
+        address: contracts.BLP2,
+        abi: BlpAbi,
+        functionName: 'INITIAL_RATE',
+      },
+      arbblpLockupPeriod: {
+        address: contracts.BLP2,
+        abi: BlpAbi,
+        functionName: 'lockupPeriod',
+      },
+      arbblpMaxLiquidity: {
+        address: contracts.BLP2,
+        abi: BlpAbi,
+        functionName: 'maxLiquidity',
+      },
+      arbblpUSDCAmount: {
+        address: contracts.ARB,
+        abi: bfrAbi,
+        functionName: 'balanceOf',
+        args: [contracts.BLP2],
+      },
     };
     return Object.keys(generic_call_data)
       .map(function (key) {
@@ -498,6 +668,20 @@ export const useGetTokenomics = () => {
       blpLockupPeriod,
       blpMaxLiquidity,
       blpUSDCAmount,
+      //arb-blp calls
+      stakedArbBlp,
+      arbblpSupply,
+      stakedArbBlpDistributorBalance,
+      feeArbBlpTrackerTokensPerInterval,
+      stakedArbBlpTrackerTokensPerInterval,
+      arbblpVesterPairToken,
+      arbblpTotalBalance,
+      maxTokenXToWithdrawArb,
+      arbblpInitialRate,
+      arbblpLockupPeriod,
+      arbblpMaxLiquidity,
+      arbblpUSDCAmount,
+
       // User specifics
       userStakedBFR,
       bfrInWallet,
@@ -536,6 +720,25 @@ export const useGetTokenomics = () => {
       esbfrStakedBfrTrackerAllowance,
       esbfrStakedBlpTrackerAllowance,
       feeBfrTrackerUserBalance,
+
+      //arb-blp calls
+      feeArbBlpTrackerRewards,
+      arbblpVesterRewards,
+      stakedArbBlpTrackerRewards,
+      userStakedArbBlp,
+      arbblpVesterPairAmount,
+      arbblpVesterVestedAmount,
+      arbblpVesterClaimedAmounts,
+      arbblpVesterClaimable,
+      userArbBlpBalance,
+      arbblpMaxVestableAmount,
+      feeArbBlpTrackerUserBalance,
+      stakedArbBlpTrackerUserBalance,
+      userUnlockedArbBlpAmount,
+      arbblpVesterAverageStakedAmount,
+      arbblpUsdcAllowance,
+      esbfrStakedArbBlpTrackerAllowance,
+      userArbBalance,
     ] = account
       ? data.flat()
       : data.concat(new Array(getUserSpecificCalls().length).fill('0')).flat();
@@ -544,6 +747,10 @@ export const useGetTokenomics = () => {
       blpSupply > 0
         ? divide(blpTotalBalance, blpSupply)
         : divide('1', blpInitialRate);
+    const arbblpPrice =
+      arbblpSupply > 0
+        ? divide(arbblpTotalBalance, arbblpSupply)
+        : divide('1', arbblpInitialRate);
 
     const boostBasisPoints =
       bonusBfrInFeeBfr > 0
@@ -614,6 +821,33 @@ export const useGetTokenomics = () => {
         : '0';
     const blpAprTotal = add(blpAprForRewardToken, blpAprForEsBfr);
 
+    // ARB-BLP APR
+    const feeArbBlpTrackerAnnualRewardsUsd = fromWei(
+      multiply(feeArbBlpTrackerTokensPerInterval, SECONDS_PER_YEAR),
+      arb_decimals
+    );
+    const arbblpAprForRewardToken =
+      arbblpSupply > 0
+        ? divide(
+            multiply(feeArbBlpTrackerAnnualRewardsUsd, BASIS_POINTS_DIVISOR),
+            fromWei(multiply(arbblpSupply, arbblpPrice), arb_decimals)
+          )
+        : '0';
+    const stakedArbBlpTrackerAnnualRewardsUsd = fromWei(
+      multiply(
+        multiply(stakedArbBlpTrackerTokensPerInterval, SECONDS_PER_YEAR),
+        arbPrice
+      )
+    );
+    const arbblpAprForEsBfr =
+      arbblpSupply > 0
+        ? divide(
+            multiply(stakedArbBlpTrackerAnnualRewardsUsd, BASIS_POINTS_DIVISOR),
+            fromWei(multiply(arbblpSupply, arbblpPrice), arb_decimals)
+          )
+        : '0';
+    const arbblpAprTotal = add(arbblpAprForRewardToken, arbblpAprForEsBfr);
+
     // Unstakeable max amount
     const availableTokens = fromWei(
       subtract(add(bnBfrInFeeBfr, bonusBfrInFeeBfr), bfrVesterPairAmount)
@@ -651,6 +885,13 @@ export const useGetTokenomics = () => {
     if (lt(esBFRInWallet, blpRemainingVestableAmount)) {
       blpRemainingVestableAmount = esBFRInWallet;
     }
+    let arbblpRemainingVestableAmount = subtract(
+      arbblpMaxVestableAmount,
+      arbblpVesterVestedAmount
+    );
+    if (lt(esBFRInWallet, arbblpRemainingVestableAmount)) {
+      arbblpRemainingVestableAmount = esBFRInWallet;
+    }
 
     // MaX withdrawal
     const dividedValue = divide(maxTokenXToWithdraw, blpPrice);
@@ -662,6 +903,19 @@ export const useGetTokenomics = () => {
     if (gt(maxBlpToWithdraw, maxUnstakeableBlp)) {
       maxBlpToWithdraw = maxUnstakeableBlp;
     }
+    // MaX Arb withdrawal
+    const dividedValueArb = divide(maxTokenXToWithdrawArb, arbblpPrice);
+    let maxArbBlpToWithdraw = lt(userUnlockedArbBlpAmount, dividedValueArb)
+      ? userUnlockedArbBlpAmount
+      : dividedValue;
+
+    let maxUnstakeableArbBlp = subtract(
+      userStakedArbBlp,
+      arbblpVesterPairAmount
+    );
+    if (gt(maxArbBlpToWithdraw, maxUnstakeableArbBlp)) {
+      maxArbBlpToWithdraw = maxUnstakeableArbBlp;
+    }
 
     // FORMATTING
     response = {
@@ -669,6 +923,10 @@ export const useGetTokenomics = () => {
         usdc: {
           allowance: fromWei(blpUsdcAllowance, usd_decimals),
           wallet_balance: fromWei(userUsdcBalance, usd_decimals),
+        },
+        arb: {
+          allowance: fromWei(arbblpUsdcAllowance, arb_decimals),
+          wallet_balance: fromWei(userArbBalance, arb_decimals),
         },
         ibfr: {
           price: bfrPrice,
@@ -766,6 +1024,84 @@ export const useGetTokenomics = () => {
             },
           },
         },
+        arbblp: {
+          price: arbblpPrice,
+          apr: {
+            value: fromWei(arbblpAprTotal, 2),
+            tooltip: [
+              // { key: 'Escrowed BFR APR', value: fromWei(arbblpAprForEsBfr, 2) },
+              { key: 'ARB APR', value: fromWei(arbblpAprForRewardToken, 2) },
+            ],
+            description:
+              'APRs are updated weekly on Wednesday and will depend on the fees collected for the week.',
+          },
+          currentLiquidity: fromWei(arbblpTotalBalance, arb_decimals),
+          maxLiquidity: fromWei(arbblpMaxLiquidity, arb_decimals),
+          lockupPeriod: arbblpLockupPeriod,
+          blpToUsdc: arbblpPrice,
+          usdcToBlp: gt(arbblpPrice, '0') ? divide('1', arbblpPrice) : '0',
+          max_unstakeable: fromWei(maxArbBlpToWithdraw, arb_decimals),
+          total_staked: {
+            value_in_usd: multiply(
+              fromWei(stakedArbBlp, arb_decimals),
+              arbblpPrice
+            ),
+            token_value: fromWei(stakedArbBlp, arb_decimals),
+            token_value_abs: stakedArbBlp,
+          },
+          total_supply: {
+            value_in_usd: fromWei(arbblpUSDCAmount, arb_decimals),
+            token_value: divide(
+              fromWei(arbblpUSDCAmount, arb_decimals),
+              arbblpPrice
+            ),
+          },
+          user: {
+            rewards: {
+              value: fromWei(feeArbBlpTrackerRewards, arb_decimals),
+              tooltip: [
+                {
+                  key: 'ARB',
+                  value: [fromWei(feeArbBlpTrackerRewards, arb_decimals)],
+                },
+                // {
+                //   key: 'Escrowed BFR',
+                //   value: [
+                //     fromWei(stakedArbBlpTrackerRewards),
+                //     fromWei(multiply(stakedArbBlpTrackerRewards, arbPrice)),
+                //   ],
+                // },
+              ],
+            },
+            usd_reward: fromWei(feeArbBlpTrackerRewards, arb_decimals),
+            esBfr_rewards: {
+              value_in_usd: fromWei(
+                multiply(stakedArbBlpTrackerRewards, bfrPrice)
+              ),
+              value_abs: fromWei(stakedArbBlpTrackerRewards),
+            },
+            staked: {
+              value_in_usd: multiply(
+                fromWei(userStakedArbBlp, arb_decimals),
+                arbblpPrice
+              ),
+              token_value: fromWei(userStakedArbBlp, arb_decimals),
+              token_value_abs: userStakedArbBlp,
+            },
+            wallet_balance: {
+              value_in_usd: multiply(
+                fromWei(userStakedArbBlp, arb_decimals),
+                arbblpPrice
+              ),
+              token_value: fromWei(userStakedArbBlp, arb_decimals),
+              token_value_abs: userStakedArbBlp,
+            },
+            max_unlocked_amount: fromWei(
+              userUnlockedArbBlpAmount,
+              arb_decimals
+            ),
+          },
+        },
         blp: {
           price: blpPrice,
           apr: {
@@ -793,10 +1129,25 @@ export const useGetTokenomics = () => {
             token_value: divide(fromWei(blpUSDCAmount, usd_decimals), blpPrice),
           },
           user: {
-            rewards: add(
-              fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
-              fromWei(feeBlpTrackerRewards, usd_decimals)
-            ),
+            rewards: {
+              value: add(
+                fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
+                fromWei(feeBlpTrackerRewards, usd_decimals)
+              ),
+              tooltip: [
+                {
+                  key: 'USDC',
+                  value: [fromWei(feeBlpTrackerRewards, arb_decimals)],
+                },
+                {
+                  key: 'Escrowed BFR',
+                  value: [
+                    fromWei(stakedBlpTrackerRewards),
+                    fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
+                  ],
+                },
+              ],
+            },
             usd_reward: fromWei(feeBlpTrackerRewards, usd_decimals),
             esBfr_rewards: {
               value_in_usd: fromWei(
@@ -921,6 +1272,9 @@ export const useGetTokenomics = () => {
               usd_decimals
             ),
           },
+          arb: {
+            token_value: fromWei(feeArbBlpTrackerRewards, arb_decimals),
+          },
           esBfr: {
             value_in_usd: multiply(
               fromWei(add(stakedBFRTrackerRewards, stakedBlpTrackerRewards)),
@@ -930,6 +1284,13 @@ export const useGetTokenomics = () => {
               add(stakedBFRTrackerRewards, stakedBlpTrackerRewards)
             ),
           },
+          arbesBfr: {
+            value_in_usd: multiply(
+              fromWei(stakedArbBlpTrackerRewards),
+              arbPrice
+            ),
+            token_value: fromWei(stakedArbBlpTrackerRewards),
+          },
           bfr: {
             value_in_usd: multiply(
               fromWei(add(blpVesterRewards, bfrVesterRewards)),
@@ -937,10 +1298,15 @@ export const useGetTokenomics = () => {
             ),
             token_value: fromWei(add(blpVesterRewards, bfrVesterRewards)),
           },
+          arbbfr: {
+            value_in_usd: multiply(fromWei(arbblpVesterRewards), bfrPrice),
+            token_value: fromWei(arbblpVesterRewards),
+          },
         },
       },
       vest: {
         ibfr: {
+          tokenContract: CONTRACTS[activeChain?.id].StakedBfrTracker,
           staked_tokens: {
             value: fromWei(add(bnBfrInFeeBfr, bonusBfrInFeeBfr)),
             tooltip: [
@@ -971,7 +1337,41 @@ export const useGetTokenomics = () => {
             bfrVesterPairAmount
           ),
         },
+        arbblp: {
+          tokenContract: CONTRACTS[activeChain?.id].StakedBlpTracker2,
+          staked_tokens: {
+            value: fromWei(userStakedArbBlp, arb_decimals),
+            tooltip: [],
+          },
+          pair_token: arbblpVesterPairToken,
+          reserved_for_vesting: [
+            fromWei(arbblpVesterPairAmount, arb_decimals),
+            fromWei(userStakedArbBlp, arb_decimals),
+          ],
+          vesting_status: {
+            claimed: fromWei(
+              add(arbblpVesterClaimedAmounts, arbblpVesterClaimable)
+            ),
+            vested: fromWei(arbblpVesterVestedAmount),
+          },
+          claimable: fromWei(arbblpVesterClaimable),
+          maxVestableAmount: fromWei(arbblpRemainingVestableAmount),
+          averageStakedAmount: fromWei(
+            arbblpVesterAverageStakedAmount,
+            arb_decimals
+          ),
+          maxVestableAmountExact: fromWei(arbblpMaxVestableAmount),
+          allowance: fromWei(esbfrStakedArbBlpTrackerAllowance),
+          hasEnoughReserveTokens: isVestable(
+            arbblpVesterAverageStakedAmount,
+            arbblpMaxVestableAmount,
+            stakedArbBlpTrackerUserBalance,
+            esBFRInWallet,
+            arbblpVesterPairAmount
+          ),
+        },
         blp: {
+          tokenContract: CONTRACTS[activeChain?.id].StakedBlpTracker,
           staked_tokens: {
             value: fromWei(userStakedBlp, usd_decimals),
             tooltip: [],

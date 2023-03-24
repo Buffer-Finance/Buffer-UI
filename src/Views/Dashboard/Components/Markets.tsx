@@ -1,3 +1,4 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useActiveAssetState } from '@Views/BinaryOptions/Hooks/useActiveAssetState';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useMemo } from 'react';
@@ -7,12 +8,20 @@ import { DashboardTable } from './DashboardTable';
 export const Markets = () => {
   const { dashboardData } = useDashboardTableData();
   const referralcode = useReferralCode();
+  const { configContracts } = useActiveChain();
+  const arbMarkets = useMemo(() => {
+    return configContracts.pairs.map(
+      (pair) => pair.pools[1]?.options_contracts.current
+    );
+  }, []);
   const [balance, allowance, maxTrade, stats, routerPermission] =
     useActiveAssetState(null, referralcode);
   const filteredDashboardData = useMemo(() => {
-    console.log(routerPermission, dashboardData, 'routerPermission');
     if (!dashboardData || !routerPermission) return [];
-    return dashboardData.filter((data) => routerPermission[data.address]);
+    return dashboardData.filter(
+      (data) =>
+        routerPermission[data.address] && !arbMarkets.includes(data.address)
+    );
   }, [dashboardData, routerPermission]);
   // console.log(filteredDashboardData[0].totalTrades, 'totalData');
 

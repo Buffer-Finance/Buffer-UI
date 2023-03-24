@@ -95,14 +95,18 @@ export const useDashboardTableData = () => {
     data.optionContracts.forEach((item) => {
       const configPair = configContracts.pairs.find((pair) => {
         pool = null;
-        pool = pair.pools.find(
-          (pool) =>
-            pool.options_contracts.current.toLowerCase() ===
-            item.address.toLowerCase()
-        );
+        if (
+          pair.pools[0].options_contracts.current.toLowerCase() ===
+          item.address.toLowerCase()
+        )
+          pool = pair.pools[0];
+        // pool = pair.pools.find(
+        //   (pool) =>
+        //     pool.options_contracts.current.toLowerCase() ===
+        //     item.address.toLowerCase()
+        // );
         return !!pool;
       });
-
       if (!configPair) return;
       const currData = {
         ...item,
@@ -126,7 +130,7 @@ export const useDashboardTableData = () => {
           configPair.category === 'Crypto'
             ? true
             : assetStatus[pool.options_contracts.current]?.isMarketOpen ||
-            false,
+              false,
         '24h_volume':
           Number(
             fromWei(

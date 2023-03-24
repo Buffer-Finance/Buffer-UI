@@ -52,7 +52,6 @@ export interface IToken {
   pool_address: string;
 }
 export interface IPool {
-  payout: number;
   token: IToken;
   options_contracts: {
     current: string;
@@ -76,7 +75,6 @@ export const referralCodeAtom = atomWithLocalStorage('referral-code5', '');
 export interface IQTrade {
   activeChain?: Chain | null;
   pairs?: IMarket[];
-  optionMeta?: string;
   activePair?: IMarket;
   routerContract?: string;
 }
@@ -154,7 +152,6 @@ export const useQTinfo = () => {
           };
         }),
       },
-      optionMeta: configContracts.meta,
       routerContract: configContracts.router,
       activeChain,
     };
