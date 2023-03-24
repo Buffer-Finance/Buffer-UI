@@ -365,7 +365,7 @@
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
@@ -394,7 +394,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
@@ -423,7 +423,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "EURUSD",
@@ -452,7 +452,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "GBPUSD",
@@ -605,7 +605,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "AUDUSD",
@@ -634,7 +634,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDJPY",
@@ -663,7 +663,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "EURGBP",
@@ -692,7 +692,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "EURJPY",
@@ -721,7 +721,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "GBPJPY",
@@ -750,7 +750,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "NZDUSD",
@@ -779,7 +779,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDCHF",
@@ -808,7 +808,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "GBPCHF",
@@ -837,7 +837,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDCAD",
