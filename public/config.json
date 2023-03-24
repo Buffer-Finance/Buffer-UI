@@ -183,25 +183,35 @@
   },
   "421613": {
     "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
-    "meta": "0xddc2Fbc6761eabf131E51101Dd3b43A295e121F1",
     "router": "0x76c52E83d7dcCc70107a66BAd44D042D22D06be7",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
     "tokens": {
       "USDC": {
         "address": "0x658e6B62e7ab1d2B29a08F85f8442edEed562b48",
+        "meta": "0xaB9Babe3A7445333d8c2BAA0A5bF749cF37096b5",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5"
       },
       "BFR": {
         "address": "0x89fEF05446aEA764C53a2f09bB763876FB57ea8E",
+        "meta": "0xaB9Babe3A7445333d8c2BAA0A5bF749cF37096b5",
         "decimals": 18,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
         "name": "BFR",
         "pool_address": "0xEAf4738C83B48055b54B5E9E48a96A7ee6CbB412",
         "faucet": "0x8F4db9A46809782b67180F0f8f3d9843a5268137"
+      },
+      "ARB": {
+        "address": "0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8",
+        "meta": "0x2e32CDf0AC7a0110f2EfAF97E3a4803a238b607D",
+        "decimals": 18,
+        "img": "/Chains/ARBITRIUM.png",
+        "name": "ARB",
+        "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
+        "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f"
       }
     },
     "pairs": [
@@ -223,6 +233,13 @@
             "options_contracts": {
               "config": "0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d",
               "current": "0x0823584A67005C9855ff583FC7840D40cfB30276"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xf0565425853a27B170AdD5C0e6fFBAc66403f4f5",
+              "current": "0x6406d4FB22Ebac283CbdaB0806684da0013615Fb"
             }
           }
         ]
@@ -246,6 +263,13 @@
               "config": "0x28b11Bde44236FBF2772ED6e0e2DD992B65ceCac",
               "current": "0xd7c4448e2Ac721e77360d86e413Ae66620034b8A"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x90A3A26Ee9B25eb23C1Afcb1b47A18fa98636E45",
+              "current": "0x7f8A37f6F03450f2641f56Eff7bb589F65Cc1eD2"
+            }
           }
         ]
       },
@@ -267,6 +291,13 @@
             "options_contracts": {
               "config": "0x25E845e9B6d361fE6aa1a796CcE010F55daA9A50",
               "current": "0xfe1F6691dF24B1b786e7C7a3c57D4ec0cfc43B77"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x3d48bF4BbF81150d2630861AE43EB00FDEAdd5cD",
+              "current": "0x50025C0b1a2Ce3E1A145BDD1C54cFE297cE3DD38"
             }
           }
         ]
@@ -301,25 +332,34 @@
   },
   "42161": {
     "referral_storage": "0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29",
-    "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
     "router": "0x0e0A1241C9cE6649d5D30134a194BA3E24130305",
     "multicall": "0x842eC2c7D803033Edf55E478F461FC547Bc54EB2",
     "tokens": {
       "USDC": {
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+        "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5"
       },
       "BFR": {
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+        "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
         "decimals": 18,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
         "name": "BFR",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x8F4db9A46809782b67180F0f8f3d9843a5268137"
+      },
+      "ARB": {
+        "address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
+        "meta": "0x6f63ba810092D1743f3EE78d614F072caE1A408D",
+        "decimals": 18,
+        "img": "/Chains/ARBITRIUM.png",
+        "name": "ARB",
+        "pool_address": "0xaE0628C88EC6C418B3F5C005f804E905f8123833"
       }
     },
     "pairs": [
@@ -341,6 +381,13 @@
             "options_contracts": {
               "config": "0x08d5E019fB16f92822befaC9986E7b7402DAE610",
               "current": "0x532321e6a2D8A54cf87E34850A7d55466B1ec197"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xab4D8f4f4F39C4eE76f8d6493876995f5A6e9Fe3",
+              "current": "0xbe4e89945DB947ABB4f931F9239BB9dE8F662b27"
             }
           }
         ]
@@ -364,6 +411,13 @@
               "config": "0xbC7DBEB9a7b158711b4B5fb0177F3E0bE024125a",
               "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xF09DAD7E91aEC1F81011819129bAe96E0A12b0Bc",
+              "current": "0x5B58cc39360472c908a26b129cF19f533Ff00ACE"
+            }
           }
         ]
       },
@@ -386,6 +440,13 @@
               "config": "0x8DaC2Eb302DD9CcB3a9A23263BC021f6f1E8Cd9C",
               "current": "0xbCD52d37F41dA2277aF92617D70931A787f66Fd5"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x09283F9D0eec02961E61B7b82Cb094619f1Bf2a0",
+              "current": "0x37a42a8841ffF3D47351e68a2c31AdD4a1080358"
+            }
           }
         ]
       },
@@ -407,6 +468,13 @@
             "options_contracts": {
               "config": "0xc1925460Fe5669878D5963c29aC51677866dE67F",
               "current": "0x5d61FE708c9D41acf59009013f14496d559aad09"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xb96CdF0276a36f9159aB04924f2337110f9288Cb",
+              "current": "0x175E5CE07aD6A15e9cbB49E27Ff94EC8E2fc0562"
             }
           }
         ]
@@ -452,6 +520,13 @@
               "config": "0x98ff74B8A3804ceb7B1cFaEb67d7d2C50Cf6bd10",
               "current": "0x5D6f1D376e5EA088532Ae03dBE8F46177c42b814"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xe888eF6957aB087D295CB4b5d7E5Fb7198376734",
+              "current": "0x32F6Ba7bB3F0436fCc080308D1398A3fc2fEF3bE"
+            }
           }
         ]
       },
@@ -473,6 +548,13 @@
             "options_contracts": {
               "config": "0x5C95BDA32cDE3A8D73FB5237C973Cce4f1d60bC8",
               "current": "0xD384131B8697F28E8505cC24e1e405962b88b21F"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xf9594d38B97eaCa0c29a07301e0E395B113feC18",
+              "current": "0xef5D3501BBd570f62C9A950B1173565856736D0C"
             }
           }
         ]
@@ -540,6 +622,13 @@
               "config": "0x486Bd19965067Fe4A77d897B1b976941cf9aD803",
               "current": "0x63E0af4Ec5Af8D103C1Fb2ab606BD938D3dD27dA"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x6d5857eB94F77bB382cf0106B1d0e2425CAfb384",
+              "current": "0x65D01535f16b9D08513b2D11c8F6B93E7d58e946"
+            }
           }
         ]
       },
@@ -561,6 +650,13 @@
             "options_contracts": {
               "config": "0x243FF9E6a14b0491f196CC6B942c1a15Ed7777f1",
               "current": "0xA51696a6B909314ce0fb66d180d3f05c21804234"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x8991A7Faac110e30E6E900888D01078A361a9af2",
+              "current": "0x54f0cc19f6b71fA70f028230F97bf9CbdD954098"
             }
           }
         ]
@@ -584,6 +680,13 @@
               "config": "0xD27100A2993A2D4f9d8016F6EC0375Bd7899491f",
               "current": "0x7b5E6B8Ae5840F5e78f79689B29C441B90803Cb0"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x440c3DfDD4a22634215F89900D42e8746B68685b",
+              "current": "0x99cE137Ac1378DB2ab91E1132B084F100be9C2e9"
+            }
           }
         ]
       },
@@ -605,6 +708,13 @@
             "options_contracts": {
               "config": "0xEaDEC1d07f88773e370615FdB44a875871d1DfEb",
               "current": "0x6C42CE8098EF47A9E2171d931E89F0fb9fF0465d"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x0C0f15a840F3020e8b5093F89244F775D2A1cEdA",
+              "current": "0x2578A97aD34C837ea4296190a122BBCF868D9970"
             }
           }
         ]
@@ -628,6 +738,13 @@
               "config": "0xe8a40Bd544eceBDcFFb6688442f0726c47C1bCc8",
               "current": "0xC17BA7E19c383e3710E27b7aDd64E62379EDA0a3"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x86659A6823F443FBbaFe0ab5f006290f71591adD",
+              "current": "0x254f94Ee41A3b6228f2A191f2C964789F0dCdC31"
+            }
           }
         ]
       },
@@ -649,6 +766,13 @@
             "options_contracts": {
               "config": "0x27535bde6cFa621D7dC1B0B0736d4809Af3303AE",
               "current": "0x8D7A09DEb687D0F77f47c8B0B3a44015d8cD31Fa"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x475fA4e8f090B778AAFA8158F79B35B182eDA27A",
+              "current": "0xa5f3bD207EafAB401571751ECFa83278edB1fD8c"
             }
           }
         ]
@@ -672,6 +796,13 @@
               "config": "0x48d165EE66CF399F2708718eb53c4ae438aea24f",
               "current": "0xAE10C1434Fe50B9C6c65D25A752B43ff43d266aD"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x1c7CA44F7FeAA8F6ECE3833d90C096771eCb7E2C",
+              "current": "0xF2bef06229Cd20FBAD9C5A64bF04FCcfC8F088A9"
+            }
           }
         ]
       },
@@ -693,6 +824,13 @@
             "options_contracts": {
               "config": "0x131EE30DfaBA8D5622B4c9BDa155284b8eB43b18",
               "current": "0x13779aEB682f922770f1971313F2543E5D5f44e8"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xcdEB27302bfBDdA79e3d63379d2786D9fb34BE49",
+              "current": "0x2700Ea9458a0E7A9Ebd0936a0f9C20db3038Ad55"
             }
           }
         ]
@@ -716,33 +854,41 @@
               "config": "0xBCbbf5630CFE5FFBF048ca56614ca04AFA1437c7",
               "current": "0xCBA232eB6B0d3c81d209c921941Ec35f15A9e612"
             }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x224D74D62F5760b4f22face7B9e03DA8aC200e13",
+              "current": "0x5ee2352D01f3C3e29f06aD0cc99692B43d2814fa"
+            }
           }
         ]
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-mainnet",
+      "MAIN": " https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-dummy",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite"
     }
   },
   "80001": {
     "referral_storage": "0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7",
-    "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
     "router": "0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
     "tokens": {
       "USDC": {
         "address": "0x6f9FE619b6BF88028ac57cD665D527A507a6d2Ef",
+        "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
         "faucet": "0x4fccf1139FcA44EF716534bae9D3f87a01583338"
       },
       "BFR": {
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+        "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
         "decimals": 18,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
         "name": "BFR",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
         "faucet": "0x8F4db9A46809782b67180F0f8f3d9843a5268137"
@@ -845,21 +991,22 @@
   },
   "137": {
     "referral_storage": "0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6",
-    "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
     "router": "0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7",
     "multicall": "0xcA11bde05977b3631167028862bE2a173976CA11",
     "tokens": {
       "USDC": {
         "address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d"
       },
       "BFR": {
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+        "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
         "decimals": 18,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg",
+        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
         "name": "BFR",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0"
       }

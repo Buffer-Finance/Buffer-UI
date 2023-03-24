@@ -10,7 +10,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 
 export function useMarketStatus() {
   const { address: account } = useUserAccount();
-  const { activeChain, configContracts } = useActiveChain();
+  const { configContracts } = useActiveChain();
   const referralData = useReferralCode();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
 
@@ -23,7 +23,6 @@ export function useMarketStatus() {
         .flat(1),
     [configContracts]
   );
-
   const assetCalls = useMemo(
     () =>
       configContracts.pairs
@@ -31,7 +30,7 @@ export function useMarketStatus() {
           pair.pools
             .map((pool) => [
               {
-                address: configContracts.meta,
+                address: configContracts.tokens[pool.token].meta,
                 abi: MaxTradeABI,
                 name: 'calculateMaxAmount',
                 params: [

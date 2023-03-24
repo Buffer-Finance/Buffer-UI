@@ -3,23 +3,39 @@ import { Skeleton } from '@mui/material';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useAtom } from 'jotai';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toFixed } from '@Utils/NumString';
 import { gt, multiply } from '@Utils/NumString/stringArithmatics';
 import BufferInput from '@Views/Common/BufferInput';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { readEarnData } from '../earnAtom';
-import { useEarnWriteCalls } from '../Hooks/useEarnWriteCalls';
 
-export const Sell = () => {
+export const Sell = ({
+  max,
+  sellCall,
+  validatinosFn,
+
+  tokenToBlpPrice,
+  blpToTokenPrice,
+  blpTokenName,
+  tokenXName,
+  blpPrice,
+}: {
+  max: string;
+  sellCall: (amount: string) => void;
+  validatinosFn: (amount: any) => true | undefined;
+  tokenToBlpPrice: string;
+  blpToTokenPrice: string;
+  blpTokenName: string;
+  tokenXName: string;
+  blpPrice: string;
+}) => {
   const [payAmount, setPayAmount] = useState('');
   const [receiveAmount, setReceiveAmount] = useState('');
-  const { sellBLP, validations } = useEarnWriteCalls('Router');
   const { state } = useGlobal();
   const [pageState] = useAtom(readEarnData);
   const toastify = useToast();
-  const max = pageState.earn?.blp.max_unstakeable;
 
   if (!pageState.earn)
     return (
@@ -30,24 +46,24 @@ export const Sell = () => {
     );
 
   const clickHandler = () => {
-    if (validations(payAmount)) return;
+    if (validatinosFn(payAmount)) return;
     if (gt(payAmount, max))
       return toastify({
         type: 'error',
         msg: 'Amount exceeds balance.',
         id: '007',
       });
-    sellBLP(payAmount);
+    sellCall(payAmount);
   };
   return (
     <div className="w-[350px] sm:w-full flex flex-col gap-4">
-      <div className="text-f15 font-medium">Sell BLP</div>
+      <div className="text-f15 font-medium">Sell {blpTokenName}</div>
       <BufferInput
         value={payAmount}
         onChange={(newValue) => {
           setPayAmount(newValue);
           setReceiveAmount(
-            toFixed(multiply(newValue || '0', pageState.earn.blp.blpToUsdc), 6)
+            toFixed(multiply(newValue || '0', blpToTokenPrice), 6)
           );
         }}
         inputType="number"
@@ -58,14 +74,20 @@ export const Sell = () => {
         header={
           <div className="text-f14 font-medium text-3 flex justify-between w-full mb-4">
             <span className="flex">
-              Pay:{' '}
-              <Display
-                data={multiply(payAmount || '0', pageState.earn.blp.price)}
-                label="$"
-              />
+              Pay
+              {tokenXName === 'USDC' && (
+                <span>
+                  &nbsp;:&nbsp;
+                  <Display
+                    data={multiply(payAmount || '0', blpPrice)}
+                    label="$"
+                    className="inline"
+                  />
+                </span>
+              )}
             </span>
             <span className="flex">
-              Max Amount: <Display data={max} unit="BLP" />
+              Max Amount: <Display data={max} unit={blpTokenName} />
             </span>
           </div>
         }
@@ -84,7 +106,7 @@ export const Sell = () => {
               onClick={() => {
                 setPayAmount(toFixed(max, 6));
                 setReceiveAmount(
-                  toFixed(multiply(max || '0', pageState.earn.blp.blpToUsdc), 6)
+                  toFixed(multiply(max || '0', blpToTokenPrice), 6)
                 );
               }}
               className="!py-1 !px-3 !h-fit text-f13 rounded-sm mr-3"
@@ -102,9 +124,7 @@ export const Sell = () => {
         value={receiveAmount}
         onChange={(newValue) => {
           setReceiveAmount(newValue);
-          setPayAmount(
-            toFixed(multiply(newValue || '0', pageState.earn.blp.usdcToBlp), 6)
-          );
+          setPayAmount(toFixed(multiply(newValue || '0', tokenToBlpPrice), 6));
         }}
         inputType="number"
         hideSearchBar
@@ -133,7 +153,7 @@ export const Sell = () => {
         }}
         unit={
           <div className="text-1 text-f15 font-medium flex items-center">
-            <div>USDC</div>
+            <div>{tokenXName}</div>
           </div>
         }
       />

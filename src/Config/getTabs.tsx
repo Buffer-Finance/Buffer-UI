@@ -348,6 +348,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+      {
+        to: 'https://docs.buffer.finance/introduction/readme',
+        name: 'Docs',
+        subTabs: [],
+        isExternalLink: true,
+      },
     ];
   } else
     return [
@@ -393,6 +399,12 @@ export const getTabs = (
         name: 'Profile',
         subTabs: [],
         isExternalLink: false,
+      },
+      {
+        to: 'https://docs.buffer.finance/introduction/readme',
+        name: 'Docs',
+        subTabs: [],
+        isExternalLink: true,
       },
     ];
 };
