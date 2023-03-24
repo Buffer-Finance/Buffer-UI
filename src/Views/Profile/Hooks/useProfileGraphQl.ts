@@ -39,7 +39,7 @@ export const useProfileGraphQl = () => {
         query: `{ 
             userOptionDatas(  
               first: 1000 
-              where: {user: "${account}", state_not: 1, token: "USDC"}) {
+              where: {user: "${account}", state_not: 1, depositToken: "USDC"}) {
                 optionContract {
                   address
                 }
@@ -47,7 +47,7 @@ export const useProfileGraphQl = () => {
                 totalFee
               }
             activeData:userOptionDatas(
-              where: {user: "${account}", state: 1, token: "USDC"}
+              where: {user: "${account}", state: 1, depositToken: "USDC"}
             ) {
                 totalFee
               }
