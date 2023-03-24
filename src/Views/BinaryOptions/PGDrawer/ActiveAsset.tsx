@@ -43,7 +43,7 @@ export const ActiveAsset = ({ cb }) => {
   const response = useReadCall({
     contracts: [
       {
-        address: qtInfo.activePair.pools[0].options_contracts.current,
+        address: activePoolObj.options_contracts.current,
         abi: BinaryOptionsABI,
         name: 'baseSettlementFeePercentageForAbove',
         params: [],
