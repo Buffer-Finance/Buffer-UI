@@ -1,36 +1,24 @@
-import { atom, useAtom, useAtomValue } from 'jotai';
-import {
-  getPriceFromKlines,
-  marketPriceAtom,
-} from 'src/TradingView/useDataFeed';
+import { atom, useAtomValue } from 'jotai';
+import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { Background as AssetBackground } from '@Views/Common/v2-AssetDropDown/style';
 import { activeAssetStateAtom, useQTinfo } from '..';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Background from '../Favourites/style';
-import { FavouriteAssetDD } from '../Favourites/FavouriteAssetDD';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { toFixed } from '@Utils/NumString';
 import { LastDayChange } from '../Favourites/LastDayChange';
-import { useActivePoolObj } from './PoolDropDown';
-import { useReadCall } from '@Utils/useReadCall';
-import BinaryOptionsABI from '../ABI/optionsABI.json';
-import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
-import { arbitrum } from 'wagmi/chains';
 import { PairTokenImage } from '../Components/PairTokenImage';
 import { priceAtom } from '@Hooks/usePrice';
 import { TVMarketSelector } from '../Favourites/TVMarketSelector';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '@Contexts/Toast';
 import { ShareModal } from '../Components/shareModal';
 
 export const chartReadyAtom = atom(false);
 const setDoccumentTitle = (title) => {
   document.title = title;
 };
-// let boostedPayout = null;
-// let fullPayout = null;
 
 export const ActiveAsset = ({ cb }) => {
   const qtInfo = useQTinfo();
@@ -38,15 +26,9 @@ export const ActiveAsset = ({ cb }) => {
   const marketPrice = useAtomValue(priceAtom);
   const currentPrice = getPriceFromKlines(marketPrice, qtInfo.activePair);
   const [isOpen, setIsOpen] = useState(false);
-  const { activePoolObj } = useActivePoolObj();
-  const { fullPayout, boostedPayout } = useAtomValue(activeAssetStateAtom);
-  // const fullPayout =
-  //   activeAssetStateHookData.payouts?.[
-  //     activePoolObj?.options_contracts.current
-  //   ];
-  // if (activeAssetStateHookData.basePayout && fullPayout) {
-  //   boostedPayout = subtract(fullPayout, activeAssetStateHookData.basePayout);
-  // }
+  const atomValue = useAtomValue(activeAssetStateAtom);
+  const { activeAssetPayout: fullPayout, boostedPayout } = atomValue;
+  console.log(fullPayout, boostedPayout, 'fullPayout');
 
   const title = currentPrice
     ? toFixed(currentPrice, singleAsset.price_precision.toString().length - 1) +
@@ -55,7 +37,6 @@ export const ActiveAsset = ({ cb }) => {
     : '';
   setDoccumentTitle(title);
   const navigate = useNavigate();
-  const toastify = useToast();
   if (!singleAsset) return null;
   return (
     <AssetBackground className="relative min-w-full">

@@ -150,14 +150,14 @@ export function useActiveAssetState(amount = null, referralData) {
         ]
     : [];
 
-  let copy = useReadCall({ contracts: calls, swrKey: 'UseActiveAssetState' })
-    .data as unknown as string[];
-  console.log(calls, copy, 'calls');
+  let copy = useReadCall({
+    contracts: calls,
+    swrKey: `UseActiveAssetState-${activePoolObj.token.name}-${activePoolObj.options_contracts.current}`,
+  }).data as unknown as string[];
   let response = [null, null, null, null];
 
   if (copy) {
     let [maxAmounts, fees, activeBasePayout] = copy.slice(0, assetCalls.length);
-    console.log(`maxAmounts: `, maxAmounts);
 
     const basePayout = subtract(
       '100',
@@ -307,7 +307,6 @@ export function useActiveAssetState(amount = null, referralData) {
       maxTrade,
       stats,
       routerPermission,
-
       boostedPayout,
       activeAssetPayout,
     ];
