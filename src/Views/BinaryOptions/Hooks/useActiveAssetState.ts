@@ -105,7 +105,7 @@ export function useActiveAssetState(amount = null, referralData) {
         ],
       },
       {
-        address: qtInfo.activePair.pools[0].options_contracts.current,
+        address: activePoolObj.options_contracts.current,
         abi: BinaryOptionsABI,
         name: 'baseSettlementFeePercentageForAbove',
         params: [],
