@@ -30,19 +30,28 @@ export const getVestCards = (data: IEarn) => {
       }
     />,
     <Card
-      top="BLP Vault"
-      middle={<VestCard data={data.vest.blp} unit="BLP" />}
+      top="uBLP Vault"
+      middle={<VestCard data={data.vest.blp} unit="uBLP" />}
       bottom={
         <div className="mt-5">
           <EarnButtons cardNum={5} />
         </div>
       }
     />,
+    // <Card
+    //   top="ARBBLP Vault"
+    //   middle={<VestCard data={data.vest.arbblp} unit="ARBBLP" />}
+    //   bottom={
+    //     <div className="mt-5">
+    //       <EarnButtons cardNum={6} />
+    //     </div>
+    //   }
+    // />,
   ];
 };
 
 const VestCard = ({ data, unit }: { data: IVestToken; unit: string }) => {
-  const isBLPCard = unit === 'BLP';
+  const isBLPCard = unit !== 'esBFR';
   return (
     <TableAligner
       keysName={[
