@@ -1137,7 +1137,7 @@ export const useGetTokenomics = () => {
               tooltip: [
                 {
                   key: 'USDC',
-                  value: [fromWei(feeBlpTrackerRewards, arb_decimals)],
+                  value: [fromWei(feeBlpTrackerRewards, usd_decimals)],
                 },
                 {
                   key: 'Escrowed BFR',
