@@ -515,11 +515,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         realTimeUpdateRef.current.symbolInfo &&
         realTimeUpdateRef.current.symbolInfo.name === market
       ) {
-        console.log(`[sync]prevBar: `, prevBar);
-        console.log(`[sync]currBar: `, currBar);
-        console.log(`[sync]aggregatedBar: `, aggregatedBar);
         realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
-        await sleep(document.hidden ? 1 : 30);
+        // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
       }
     }
