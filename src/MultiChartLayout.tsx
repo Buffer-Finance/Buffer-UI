@@ -482,7 +482,7 @@ const DesktopTrad = () => {
   //   arr.buttons.push(<Tab></Tab>)
   // }}
 };
-const DesktopTrade = WithIdle(DesktopTrad, 10 * 60 * 1000);
+const DesktopTrade = WithIdle(DesktopTrad, 30 * 60 * 1000);
 export const priceAtom = atom<Partial<Market2Prices>>({});
 export { DesktopTrade };
 
