@@ -118,6 +118,7 @@ export const getAggregatedBarv2 = (
     Math.floor(currentBar.time / resolutionInSeconds) ==
     Math.floor(prevBar.time / resolutionInSeconds);
   let time = Math.floor(currentBar.time / resolutionInSeconds);
+
   time *= resolutionInSeconds;
   if (isSameCandle)
     updatedBar = {
@@ -125,7 +126,7 @@ export const getAggregatedBarv2 = (
       close: +currentBar.price,
       high: Math.max(+prevBar.high, +currentBar.price),
       low: Math.min(+prevBar.low, +currentBar.price),
-      open: prevBar.close,
+      open: prevBar.open,
       volume: currentBar.volume,
     };
   else {
@@ -134,22 +135,12 @@ export const getAggregatedBarv2 = (
       close: +currentBar.price,
       high: +currentBar.price,
       low: +currentBar.price,
-      open: +currentBar.price,
+      open: +prevBar.close,
       volume: currentBar.volume,
     };
   }
   const d = new Date(time);
   const e = new Date(prevBar.time);
-  console.log('[debsync]prevbar', prevBar);
-  console.log('[debsync]updatedBar', updatedBar);
-  console.log(
-    '[debsync]updatedTime',
-    d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
-  );
-  console.log(
-    '[debsync]prevTime',
-    e.getHours() + ':' + e.getMinutes() + ':' + e.getSeconds()
-  );
   return updatedBar;
 };
 

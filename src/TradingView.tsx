@@ -491,17 +491,13 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
 
     const key = market + timeDeltaMapping(activeResolution);
     // console.log(`[deb]2key: `, key);
-    console.log(`[sync]stored-price: `, lastSyncedKline?.current);
-    console.log(`[sync]key: `, key);
     let prevBar = lastSyncedKline?.current?.[key];
-    console.log(`[sync]prevBar: `, prevBar);
     // console.log(`[deb]3prevBar: `, prevBar);
     if (!prevBar) return;
     const activeAssetStream = price[market];
     // console.log(`[deb]4price: `, activeAssetStream);
     if (!activeAssetStream?.length) return;
     let aggregatedBar;
-    console.log(`[sync]updates: `, activeAssetStream);
 
     for (let currBar of activeAssetStream) {
       aggregatedBar = getAggregatedBarv2(
@@ -509,7 +505,6 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         currBar,
         realTimeUpdateRef.current?.resolution
       );
-      // console.log(`[deb]5aggregatedBar: `, aggregatedBar);
       if (
         aggregatedBar &&
         realTimeUpdateRef.current.symbolInfo &&
@@ -518,6 +513,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
         // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
+        lastSyncedKline.current[key] = prevBar;
       }
     }
   };
