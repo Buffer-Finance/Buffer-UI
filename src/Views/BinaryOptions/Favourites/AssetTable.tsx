@@ -16,6 +16,7 @@ import {
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
 import { getFilteredAssets } from './Utils/getFilteredAssets';
 import { PairTokenImage } from '../Components/PairTokenImage';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 const colMapping = {
   0: 0,
@@ -47,6 +48,7 @@ export const AssetTable: React.FC<{
   );
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
   const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
+  const { activeChain } = useActiveChain();
 
   const headers = useMemo(() => {
     return [
@@ -54,7 +56,7 @@ export const AssetTable: React.FC<{
       'Asset',
       <div className="flex items-center">Payout USDC</div>,
       'Payout ARB',
-    ];
+    ].slice(0, [42161, 421613].includes(activeChain.id) ? 3 : -1);
   }, []);
 
   const HeadFormatter = (col: number) => {
