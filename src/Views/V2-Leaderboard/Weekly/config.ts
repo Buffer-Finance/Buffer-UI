@@ -77,3 +77,5 @@ export const weeklyTournamentConfig: {
     minVolumeToQualifyWinrate: '100000000',
   },
 };
+
+export const isTestnet = import.meta.env.VITE_ENV.toLowerCase == 'testnet';

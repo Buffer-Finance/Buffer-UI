@@ -1,4 +1,6 @@
+import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 import BufferDropdown from '@Views/Common/BufferDropdown';
+import { isTestnet } from 'config';
 
 const chartTypes = {
   Bar: {
@@ -197,7 +199,7 @@ const chartTypes = {
       </svg>
     ),
   },
-  ...(process.env.ENV?.toLowerCase() == 'testnet' && {
+  ...(isTestnet && {
     'Heikin-Ashi': {
       type: 8,
       icon: (
@@ -220,6 +222,11 @@ const chartTypes = {
     },
   }),
 };
+
+export const ChartTypePersistedAtom = atomWithLocalStorage(
+  'persisted-chart-types',
+  {}
+);
 
 const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
   const find = Object.keys(chartTypes).find(
