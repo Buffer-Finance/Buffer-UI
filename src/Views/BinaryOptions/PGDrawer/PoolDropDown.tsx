@@ -1,57 +1,54 @@
 import BufferDropdown from '@Views/Common/BufferDropdown';
-import DDIcon from 'src/SVG/Elements/DDIcon';
-import { atom, useAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useQTinfo } from '..';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
+import { atomWithLocalStorage } from '../Components/SlippageModal';
 
-const activePoolAtom = atom<{ activePool: string | null }>({
+const activePoolAtom = atomWithLocalStorage('last-selected-pool-v1', {
   activePool: null,
 });
 
 export const useActivePoolObj = () => {
-  const [{ activePool }, setActivePool] = useAtom(activePoolAtom);
+  const { activePool } = useAtomValue(activePoolAtom);
   const qtInfo = useQTinfo();
+  const { activeChain } = useActiveChain();
   const activePair = qtInfo.activePair;
 
   const dropdownItems = useMemo(() => {
     if (!activePair) return [];
 
     return activePair.pools.map((pool) => pool.token.name);
-  }, [activePair]);
-
-  useEffect(() => {
-    setActivePool({ activePool: dropdownItems[0] });
-  }, [activePair]);
+  }, [activePair, activeChain]);
 
   const activePoolObj = useMemo(() => {
     if (activePool && activePair) {
       const pool = activePair.pools.find(
         (pool) => pool.token.name === activePool
       );
-      console.log(pool, activePair, activePool, 'pool');
+
       if (pool) return pool;
       else return activePair.pools[0];
     } else return activePair.pools[0];
-  }, [activePair, activePool]);
+  }, [activePair, activePool, activeChain]);
 
   return { activePoolObj, dropdownItems };
 };
 
 export const PoolDropDown = () => {
-  const [{ activePool }, setActivePool] = useAtom(activePoolAtom);
+  const setActivePool = useSetAtom(activePoolAtom);
   const { configContracts } = useActiveChain();
-  const { dropdownItems } = useActivePoolObj();
+  const { dropdownItems, activePoolObj } = useActivePoolObj();
 
   if (dropdownItems.length === 1)
     return (
       <div className="token-dd flex items-center bg-cross-bg w-fit px-4 py-[5px]  sm:px-[0] sm:py-[0]  text-f16  text-1">
         <img
-          src={activePool && configContracts.tokens[activePool].img}
+          src={activePoolObj.token.img}
           className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "
         />
-        <div className="sm:hidden">{activePool}</div>
+        <div className="sm:hidden">{activePoolObj.token.name}</div>
       </div>
     );
   return (
@@ -64,10 +61,10 @@ export const PoolDropDown = () => {
       dropdownBox={(isActive, isOpen, d) => (
         <div className="token-dd w-fit hover:brightness-150 flex items-center bg-cross-bg px-4 py-[5px] sm:px-[0] sm:py-[0] text-f16 transition-all duration-150 text-1">
           <img
-            src={activePool && configContracts.tokens[activePool].img}
+            src={activePoolObj.token.img}
             className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "
           />
-          <div className="sm:hidden">{activePool}</div>
+          <div className="sm:hidden">{activePoolObj.token.name}</div>
           <DropdownArrow open={isOpen} />
         </div>
       )}
@@ -80,7 +77,7 @@ export const PoolDropDown = () => {
           key={singleItem}
         >
           <img
-            src={activePool && configContracts.tokens[singleItem].img}
+            src={configContracts.tokens[singleItem].img}
             className="w-[18px] h-[18px] sm:w-[23px] sm:h-[23px] sm:max-w-max sm:mr-[0] mr-2 "
           />{' '}
           <div className="sm:hidden">{singleItem}</div>
