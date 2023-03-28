@@ -621,20 +621,11 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
             return (
               <div
                 onClick={async () => {
-                  console.log(
-                    `[reseting]realTimeUpdateRef.current?.onResetCacheNeededCallback: `,
-                    realTimeUpdateRef.current?.onResetCacheNeededCallback
-                  );
-                  console.log(
-                    `[reseting]widgetRef.current?.activeChart().resetData: `,
-                    widgetRef.current?.activeChart().resetData
-                  );
-
                   setMarket2resolution((m) => ({
                     ...m,
                     [market]: s,
                   }));
-                  await sleep(200);
+                  await sleep(100);
                   realTimeUpdateRef.current?.onResetCacheNeededCallback();
 
                   widgetRef.current?.activeChart().resetData();
