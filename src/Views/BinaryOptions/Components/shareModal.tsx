@@ -30,6 +30,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useHostName } from '../Hooks/useHostName';
 import { BufferLogoComponent } from '@Views/Common/Navbar/BufferLogo';
 import { affilateCode2ReferralLink } from '@Views/Referral';
+import { Divider } from '@Views/Earn/Components/Divider';
 
 interface IShareModal {
   qtInfo: IQTrade;
@@ -200,17 +201,27 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
                   {trade.isAbove ? 'Up' : 'Down'}
                 </div>
               </div>
-              <RedGreenText
-                conditionValue={pnl}
-                displayText={
-                  <Display
-                    data={multiply(divide(pnl, trade.totalFee), '100')}
-                    unit={'%'}
-                    label={gt(pnl, '0') ? '+' : ''}
-                    className="text-[30px] font-bold"
-                  />
-                }
-              />
+              <div className="flex items-center">
+                <RedGreenText
+                  conditionValue={pnl}
+                  displayText={
+                    <Display
+                      data={multiply(divide(pnl, trade.totalFee), '100')}
+                      unit={'%'}
+                      label={gt(pnl, '0') ? '+' : ''}
+                      className="text-[28px] font-bold"
+                    />
+                  }
+                />
+                <div className="w-1 h-[30px] bg-grey mx-3"></div>
+                <div className="text-f16 text-3 flex items-center justify-center">
+                  <img
+                    src={trade.depositToken.img}
+                    className="w-[22px] h-[22px] mr-2 "
+                  />{' '}
+                  ${trade.depositToken.name}
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col justify-center items-center">
@@ -228,7 +239,8 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
               </div>
               {isCodeSet ? (
                 <div className="text-[12px] font-bold mt-2 text-3">
-                  {affiliateCode}
+                  {affiliateCode.slice(0, 7)}
+                  {affiliateCode.length > 7 ? '...' : ''}
                 </div>
               ) : (
                 // <div className="text-[12px] font-bold mt-2 text-3">
