@@ -513,6 +513,11 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
         // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
+        console.log(
+          `[syncdeb]aggregatedBar: `,
+          aggregatedBar.close,
+          currBar.price
+        );
         lastSyncedKline.current[key] = prevBar;
       }
     }
