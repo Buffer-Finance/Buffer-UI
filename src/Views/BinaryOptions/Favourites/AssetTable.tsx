@@ -49,16 +49,14 @@ export const AssetTable: React.FC<{
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
   const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
   const { activeChain } = useActiveChain();
-
   const headers = useMemo(() => {
     return [
       '',
       'Asset',
       <div className="flex items-center">Payout USDC</div>,
       'Payout ARB',
-    ].slice(0, [42161, 421613].includes(activeChain.id) ? 3 : -1);
-  }, []);
-
+    ].slice(0, [42161, 421613].includes(activeChain.id) ? 4 : -1);
+  }, [activeChain]);
   const HeadFormatter = (col: number) => {
     return <TableHeader col={col} headsArr={headers} />;
   };

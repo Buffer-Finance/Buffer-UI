@@ -1,19 +1,21 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { isTestnet } from 'config';
 import React, { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
-export function BuyUSDCLink({ token }: { token: 'USDC' | 'BFR' }) {
+export function BuyUSDCLink({ token }: { token: 'USDC' | 'BFR' | 'ARB' }) {
+  const { configContracts } = useActiveChain();
   const link = isTestnet
-    ? `https://testnet.buffer.finance/ARBITRUM/faucet`
-    : token === 'USDC'
-    ? 'https://app.uniswap.org/#/tokens/arbitrum/0xff970a61a04b1ca14834a43f5de4533ebddb5cc8'
-    : 'https://app.uniswap.org/#/tokens/arbitrum/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d';
+    ? `/faucet`
+    : `https://app.uniswap.org/#/tokens/arbitrum/${configContracts.tokens[token].address}`;
+
   return (
-    <a href={link} target={!isTestnet ? '_blank' : '_self'}>
+    <Link to={link} target={!isTestnet ? '_blank' : '_self'}>
       <div className="text-f12 text-3 underline underline-offset-1 font-bold cursor-pointer">
         {/* <EnterIcon /> */}
         Buy {token}
       </div>
-    </a>
+    </Link>
   );
 }
 export const BufferRedirectionLink: React.FC<{
