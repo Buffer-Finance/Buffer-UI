@@ -44,11 +44,13 @@ const IbfrFaucet: React.FC = () => {
     {
       top: `Claim TESTNET Tokens`,
       bottom: (
-        <div className="flex items-center justify-center gap-3 flex-wrap">
-          {tokenChains[activeChain.id].map((token: string) => (
-            <ClaimButton token={token} />
-          ))}
-        </div>
+        <ConnectionRequired>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            {tokenChains[activeChain.id].map((token: string) => (
+              <ClaimButton token={token} />
+            ))}
+          </div>{' '}
+        </ConnectionRequired>
       ),
     },
   ];
@@ -106,16 +108,14 @@ const ClaimButton = ({ token }: { token: string }) => {
   };
 
   return (
-    <ConnectionRequired>
-      <BlueBtn
-        isLoading={state.txnLoading === 1 && btnLoading === 1}
-        isDisabled={state.txnLoading === 1}
-        className="btn nowrap"
-        onClick={claim}
-      >
-        Claim 500 {token}
-      </BlueBtn>
-    </ConnectionRequired>
+    <BlueBtn
+      isLoading={state.txnLoading === 1 && btnLoading === 1}
+      isDisabled={state.txnLoading === 1}
+      className="btn nowrap"
+      onClick={claim}
+    >
+      Claim 500 {token}
+    </BlueBtn>
   );
 };
 
