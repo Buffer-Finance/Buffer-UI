@@ -33,16 +33,11 @@ const SupprtedChains = getSupportedChains();
 export const getChains = () => SupprtedChains;
 
 const getWallets = (chains: Chain[]) => {
-  const w = safeWallet({ chains });
-  console.log(`safew: `, w.iconUrl());
-  const consolelog = async () => {};
   const bothSupported = [
     {
       groupName: 'Recommended',
       wallets: [
         metaMaskWallet({ chains }),
-        safeWallet({ chains }),
-
         coinbaseWallet({ chains, appName: 'Buffer Finance' }),
       ],
     },
@@ -52,7 +47,24 @@ const getWallets = (chains: Chain[]) => {
     : [
         {
           groupName: bothSupported[0].groupName,
-          wallets: [safeWallet({ chains })],
+          wallets: [
+            ...bothSupported[0].wallets,
+            trustWallet({ chains }),
+            injectedWallet({ chains }),
+            walletConnectWallet({ chains }),
+            safeWallet({ chains }),
+          ],
+        },
+        {
+          groupName: 'Others',
+          wallets: [
+            rainbowWallet({ chains }),
+            imTokenWallet({ chains }),
+            ledgerWallet({ chains }),
+            omniWallet({ chains }),
+            braveWallet({ chains }),
+            // argentWallet({ chains }),
+          ],
         },
       ];
 };
