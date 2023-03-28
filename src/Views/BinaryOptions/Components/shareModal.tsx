@@ -201,7 +201,7 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
                   {trade.isAbove ? 'Up' : 'Down'}
                 </div>
               </div>
-              <div className="flex ">
+              <div className="flex items-center">
                 <RedGreenText
                   conditionValue={pnl}
                   displayText={
@@ -209,15 +209,15 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
                       data={multiply(divide(pnl, trade.totalFee), '100')}
                       unit={'%'}
                       label={gt(pnl, '0') ? '+' : ''}
-                      className="text-[30px] font-bold"
+                      className="text-[28px] font-bold"
                     />
                   }
                 />
-                <div className="w-1 min-h-[80%] max-h-[80%] bg-grey mx-4"></div>
-                <div className="text-f18 text-3 flex items-center justify-center">
+                <div className="w-1 h-[30px] bg-grey mx-3"></div>
+                <div className="text-f16 text-3 flex items-center justify-center">
                   <img
                     src={trade.depositToken.img}
-                    className="w-[25px] h-[25px] mr-2 "
+                    className="w-[22px] h-[22px] mr-2 "
                   />{' '}
                   ${trade.depositToken.name}
                 </div>
@@ -239,7 +239,8 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
               </div>
               {isCodeSet ? (
                 <div className="text-[12px] font-bold mt-2 text-3">
-                  {affiliateCode}
+                  {affiliateCode.slice(0, 7)}
+                  {affiliateCode.length > 7 ? '...' : ''}
                 </div>
               ) : (
                 // <div className="text-[12px] font-bold mt-2 text-3">
