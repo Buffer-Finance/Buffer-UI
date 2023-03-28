@@ -30,6 +30,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useHostName } from '../Hooks/useHostName';
 import { BufferLogoComponent } from '@Views/Common/Navbar/BufferLogo';
 import { affilateCode2ReferralLink } from '@Views/Referral';
+import { Divider } from '@Views/Earn/Components/Divider';
 
 interface IShareModal {
   qtInfo: IQTrade;
@@ -200,17 +201,27 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
                   {trade.isAbove ? 'Up' : 'Down'}
                 </div>
               </div>
-              <RedGreenText
-                conditionValue={pnl}
-                displayText={
-                  <Display
-                    data={multiply(divide(pnl, trade.totalFee), '100')}
-                    unit={'%'}
-                    label={gt(pnl, '0') ? '+' : ''}
-                    className="text-[30px] font-bold"
-                  />
-                }
-              />
+              <div className="flex ">
+                <RedGreenText
+                  conditionValue={pnl}
+                  displayText={
+                    <Display
+                      data={multiply(divide(pnl, trade.totalFee), '100')}
+                      unit={'%'}
+                      label={gt(pnl, '0') ? '+' : ''}
+                      className="text-[30px] font-bold"
+                    />
+                  }
+                />
+                <div className="w-1 min-h-[80%] max-h-[80%] bg-grey mx-4"></div>
+                <div className="text-f18 text-3 flex items-center justify-center">
+                  <img
+                    src={trade.depositToken.img}
+                    className="w-[25px] h-[25px] mr-2 "
+                  />{' '}
+                  ${trade.depositToken.name}
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col justify-center items-center">
