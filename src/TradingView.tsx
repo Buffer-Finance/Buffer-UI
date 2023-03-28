@@ -620,13 +620,24 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           {supported_resolutions.map((s) => {
             return (
               <div
-                onClick={() => {
-                  realTimeUpdateRef.current?.onResetCacheNeededCallback();
-                  widgetRef.current?.activeChart().resetData();
+                onClick={async () => {
+                  console.log(
+                    `[reseting]realTimeUpdateRef.current?.onResetCacheNeededCallback: `,
+                    realTimeUpdateRef.current?.onResetCacheNeededCallback
+                  );
+                  console.log(
+                    `[reseting]widgetRef.current?.activeChart().resetData: `,
+                    widgetRef.current?.activeChart().resetData
+                  );
+
                   setMarket2resolution((m) => ({
                     ...m,
                     [market]: s,
                   }));
+                  await sleep(200);
+                  realTimeUpdateRef.current?.onResetCacheNeededCallback();
+
+                  widgetRef.current?.activeChart().resetData();
                 }}
                 className={`${
                   s.toLowerCase() == resolution.toLowerCase() && 'active'
