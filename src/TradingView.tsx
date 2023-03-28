@@ -412,6 +412,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           onResetCacheNeededCallback,
         };
       },
+      unsubscribeBars: () => console.log,
     };
   }, []);
   const { active: activeTrades } = useAtomValue(tardesAtom);
@@ -620,6 +621,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
             return (
               <div
                 onClick={() => {
+                  realTimeUpdateRef.current?.onResetCacheNeededCallback();
+                  widgetRef.current?.activeChart().resetData();
                   setMarket2resolution((m) => ({
                     ...m,
                     [market]: s,
