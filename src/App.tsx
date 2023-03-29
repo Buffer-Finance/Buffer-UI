@@ -42,6 +42,7 @@ import { DesktopTrade } from './MultiChartLayout';
 import { TestComponent } from './TestComponent';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { urlSettings } from './Config/wagmiClient';
+import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
@@ -135,7 +136,8 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
-        <Route path="/trades" element={<AllTradesPage />} />
+        <Route path="/trades/merged" element={<MergedPage />} />
+        {/* <Route path="/trades" element={<AllTradesPage />} /> */}
         <Route path="/binary/:market" element={<TradePage />} />
         {/* referral link handling */}
         <Route
