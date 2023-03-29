@@ -15,7 +15,6 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
-import { safeWallet } from './SafeWallet';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 
 function getSupportedChains() {
@@ -30,19 +29,16 @@ function getSupportedChains() {
   }
 }
 const SupprtedChains = getSupportedChains();
+console.log(`SupprtedChains: `, SupprtedChains);
+
 export const getChains = () => SupprtedChains;
 
 const getWallets = (chains: Chain[]) => {
-  const w = safeWallet({ chains });
-  console.log(`safew: `, w.iconUrl());
-  const consolelog = async () => {};
   const bothSupported = [
     {
       groupName: 'Recommended',
       wallets: [
         metaMaskWallet({ chains }),
-        safeWallet({ chains }),
-
         coinbaseWallet({ chains, appName: 'Buffer Finance' }),
       ],
     },
@@ -52,7 +48,23 @@ const getWallets = (chains: Chain[]) => {
     : [
         {
           groupName: bothSupported[0].groupName,
-          wallets: [safeWallet({ chains })],
+          wallets: [
+            ...bothSupported[0].wallets,
+            trustWallet({ chains }),
+            injectedWallet({ chains }),
+            walletConnectWallet({ chains }),
+          ],
+        },
+        {
+          groupName: 'Others',
+          wallets: [
+            rainbowWallet({ chains }),
+            imTokenWallet({ chains }),
+            ledgerWallet({ chains }),
+            omniWallet({ chains }),
+            braveWallet({ chains }),
+            // argentWallet({ chains }),
+          ],
         },
       ];
 };
