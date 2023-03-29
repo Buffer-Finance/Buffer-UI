@@ -339,7 +339,7 @@
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
         "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
+        "img": "/tokens/USDC.png",
         "name": "USDC",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5"
@@ -348,7 +348,7 @@
         "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
         "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
         "decimals": 18,
-        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png",
+        "img": "/tokens/BFR.png",
         "name": "BFR",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x8F4db9A46809782b67180F0f8f3d9843a5268137"
@@ -365,7 +365,7 @@
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
@@ -394,7 +394,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:01",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
