@@ -106,36 +106,57 @@ export const getKlineFromPrice = (chunk: string) => {
 
   return priceObj;
 };
+export const resolution2Sec = (resolution: string) => {
+  console.log(`[dd]]resolution: `, resolution);
+
+  let inSec = +resolution * 60 * 1000;
+  if (resolution.includes('S') || resolution.includes('s')) {
+    let numericResolution = resolution.replace('S', '');
+    numericResolution = numericResolution.replace('s', '');
+    inSec = +numericResolution * 1000;
+  }
+  return inSec;
+};
 
 export const getAggregatedBarv2 = (
   prevBar: OHLCBlock,
   currentBar: WSUpdate,
   resolution: ResolutionString
 ): OHLCBlock => {
-  const resolutionInSeconds = +resolution * 60 * 1000;
+  const resolutionInSeconds = resolution2Sec(resolution);
+  console.log(`[sync]resolution: `, resolution);
+  console.log(`[sync]resolutionInSeconds: `, resolutionInSeconds);
   let updatedBar: OHLCBlock | null = null;
   const isSameCandle =
     Math.floor(currentBar.time / resolutionInSeconds) ==
     Math.floor(prevBar.time / resolutionInSeconds);
+  let time = Math.floor(currentBar.time / resolutionInSeconds);
+  console.log(`[sync]time: `, time);
+
+  time *= resolutionInSeconds;
   if (isSameCandle)
     updatedBar = {
-      time: currentBar.time,
+      time,
       close: +currentBar.price,
       high: Math.max(+prevBar.high, +currentBar.price),
       low: Math.min(+prevBar.low, +currentBar.price),
-      open: prevBar.close,
+      open: prevBar.open,
       volume: currentBar.volume,
     };
   else {
     updatedBar = {
-      time: currentBar.time,
+      time,
       close: +currentBar.price,
       high: +currentBar.price,
       low: +currentBar.price,
-      open: +currentBar.price,
+      open: +prevBar.close,
       volume: currentBar.volume,
     };
   }
+  console.log(`[sync]updatedBar: `, updatedBar);
+
+  const d = new Date(time);
+  const e = new Date(prevBar.time);
   return updatedBar;
 };
 

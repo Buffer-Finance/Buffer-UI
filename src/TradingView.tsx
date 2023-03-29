@@ -34,7 +34,7 @@ import {
   getDisplayTime,
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
 import { useQTinfo } from '@Views/BinaryOptions';
 import {
@@ -60,6 +60,7 @@ import { Variables } from '@Utils/Time';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import {
   ChartElementSVG,
+  ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
 const PRICE_PROVIDER = 'Buffer Finance';
@@ -164,12 +165,13 @@ const defaults = {
 };
 function getText(expiration: number) {
   const curr = Math.round(Date.now() / 1000);
-  return `${expiration <= curr
+  return `${
+    expiration <= curr
       ? 'Processing...'
       : `${formatDistanceExpanded(
-        Variables(expiration - Math.round(Date.now() / 1000))
-      )}`
-    }`;
+          Variables(expiration - Math.round(Date.now() / 1000))
+        )}`
+  }`;
 }
 const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage', null);
 const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
@@ -235,7 +237,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
   const [drawing, setDrawing] = useAtom(drawingAtom);
-  const [chartType, setChartType] = useState(1);
+  const chartType = useAtomValue(ChartTypePersistedAtom);
+  const setChartType = useSetAtom(ChartTypePersistedAtom);
 
   async function getAllSymbols() {
     let allSymbols: any[] = [];
@@ -339,19 +342,22 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
 
           const req = firstDataRequest
             ? {
-              pair: getBarsFnActiveAsset,
-              interval: timeDeltaMapping(resolution),
-              limit: 1000,
-            }
+                pair: getBarsFnActiveAsset,
+                interval: timeDeltaMapping(resolution),
+                limit: 1000,
+              }
             : {
-              pair: getBarsFnActiveAsset,
-              interval: timeDeltaMapping(resolution),
-              limit: 1000,
-              start_time: from * 1000,
-              end_time: to * 1000,
-            };
+                pair: getBarsFnActiveAsset,
+                interval: timeDeltaMapping(resolution),
+                limit: 1000,
+                start_time: from * 1000,
+                end_time: to * 1000,
+              };
           const bundle = [
-            axios.post(`https://oracle.buffer-finance-api.link/multi/uiKlines/`, [req]),
+            axios.post(
+              `https://oracle.buffer-finance-api.link/multi/uiKlines/`,
+              [req]
+            ),
             axios.get('https://oracle.buffer-finance-api.link/price/latest/'),
           ];
           const [assetBars, allPrices] = await Promise.all(bundle);
@@ -406,10 +412,12 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           onResetCacheNeededCallback,
         };
       },
+      unsubscribeBars: () => console.log,
     };
   }, []);
   const { active: activeTrades } = useAtomValue(tardesAtom);
   const [visualized] = useAtom(visualizeddAtom);
+  const resolution: ResolutionString = market2resolution?.[market] || '1';
 
   useLayoutEffect(() => {
     const chart = new widget({
@@ -456,7 +464,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           text: '10',
           resolution: '1S' as ResolutionString,
           description: '10 Minute look back',
-          title: '15Min',
+          title: '10Min',
         },
       ],
       saved_data: drawing?.[market],
@@ -476,7 +484,6 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       setChartReady(false);
     };
   }, []);
-  const resolution: ResolutionString = market2resolution?.[market] || '1';
   const syncTVwithWS = async () => {
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
@@ -499,16 +506,20 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         currBar,
         realTimeUpdateRef.current?.resolution
       );
-      // console.log(`[deb]5aggregatedBar: `, aggregatedBar);
       if (
         aggregatedBar &&
         realTimeUpdateRef.current.symbolInfo &&
-        realTimeUpdateRef.current.symbolInfo.name === market &&
-        prevBar.time < aggregatedBar.time
+        realTimeUpdateRef.current.symbolInfo.name === market
       ) {
         realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
-        await sleep(document.hidden ? 1 : 30);
+        // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
+        console.log(
+          `[syncdeb]aggregatedBar: `,
+          aggregatedBar.close,
+          currBar.price
+        );
+        lastSyncedKline.current[key] = prevBar;
       }
     }
   };
@@ -516,7 +527,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
-  }, [price]);
+  }, [price[market]]);
 
   // draw positions.
   useEffect(() => {
@@ -578,7 +589,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   }, [setDrawing]);
 
   useEffect(() => {
-    if (chartReady) widgetRef.current!.activeChart?.().setChartType(chartType);
+    if (!chartReady) return;
+    widgetRef.current!.activeChart?.().setChartType(chartType[marke] ?? 1);
   }, [chartType, chartReady]);
 
   useEffect(() => {
@@ -608,14 +620,19 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           {supported_resolutions.map((s) => {
             return (
               <div
-                onClick={() => {
+                onClick={async () => {
                   setMarket2resolution((m) => ({
                     ...m,
                     [market]: s,
                   }));
+                  await sleep(100);
+                  realTimeUpdateRef.current?.onResetCacheNeededCallback();
+
+                  widgetRef.current?.activeChart().resetData();
                 }}
-                className={`${s.toLowerCase() == resolution.toLowerCase() && 'active'
-                  } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
+                className={`${
+                  s.toLowerCase() == resolution.toLowerCase() && 'active'
+                } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
               >
                 {formatResolution(s)}
               </div>
@@ -623,7 +640,13 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           })}
         </div>
         <div className="flex">
-          <ChartTypeSelectionDD setActive={setChartType} active={chartType} />
+          <ChartTypeSelectionDD
+            setActive={(updatedType: number) => {
+              console.log(`updatedType: `, updatedType);
+              setChartType((ct) => ({ ...ct, [marke]: updatedType }));
+            }}
+            active={chartType[marke] ?? 1}
+          />
           <button
             onClick={toggleIndicatorDD}
             className="flex flex-row mr-3 ele text-f12  font-[500] "
