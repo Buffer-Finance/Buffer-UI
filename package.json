@@ -14,6 +14,8 @@
     "@ethersproject/providers": "^5.1.2",
     "@ethersproject/units": "^5.1.0",
     "@formkit/auto-animate": "^1.0.0-beta.6",
+    "@lingui/macro": "^3.17.2",
+    "@lingui/react": "^3.17.2",
     "@mui/core": "^5.0.0-alpha.54",
     "@mui/icons-material": "^5.3.1",
     "@mui/lab": "^5.0.0-alpha.67",
@@ -85,6 +87,7 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
+    "@lingui/cli": "^3.17.2",
     "@types/big.js": "^6.1.6",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
