@@ -111,13 +111,13 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    // if (isCustom && expirationInMins< MINIMUM_MINUTES) {
-    //   return toastify({
-    //     type: 'error',
-    //     msg: 'Expiration should be greater then 5 minutes due to network congestion',
-    //     id: 'binaryBuy',
-    //   });
-    // }
+    if (isCustom && expirationInMins < MINIMUM_MINUTES) {
+      return toastify({
+        type: 'error',
+        msg: 'Expiration should be greater then 5 minutes due to network congestion',
+        id: 'binaryBuy',
+      });
+    }
 
     if (!userInput) {
       return toastify({
