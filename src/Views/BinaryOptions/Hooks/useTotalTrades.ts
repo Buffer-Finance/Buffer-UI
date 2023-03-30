@@ -1,6 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 
 function getQuery(queryNumber: number, account: string, currentTime: number) {
@@ -90,16 +90,8 @@ export const useTotalTrades = ({
     account,
     currentTime
   );
-  responseMap.current.set(currentQueryIndex, data);
-  console.log(responseMap.current, data, currentQueryIndex, 'responseMap');
 
-  const totalPages = useMemo(() => {
-    let totalTrades = {
-      historyLength: 0,
-      activeLength: 0,
-      cancelledLength: 0,
-    };
-
+  useEffect(() => {
     if (data) {
       if (
         data[`historyLength${currentQueryIndex}`].length === 1000 ||
@@ -108,19 +100,28 @@ export const useTotalTrades = ({
       ) {
         setCurrentQueryIndex((prv) => prv + 1);
       }
+      const lastValue = responseMap.current.get(currentQueryIndex - 1);
 
-      responseMap.current.forEach((value, key) => {
-        totalTrades = {
+      if (lastValue) {
+        responseMap.current.set(currentQueryIndex, {
           historyLength:
-            totalTrades.historyLength + value[`historyLength${key}`].length,
+            lastValue.historyLength +
+            data[`historyLength${currentQueryIndex}`].length,
           activeLength:
-            totalTrades.activeLength + value[`activeLength${key}`].length,
+            lastValue.activeLength +
+            data[`activeLength${currentQueryIndex}`].length,
           cancelledLength:
-            totalTrades.cancelledLength + value[`cancelledLength${key}`].length,
-        };
-      });
+            lastValue.cancelledLength +
+            data[`cancelledLength${currentQueryIndex}`].length,
+        });
+      } else {
+        responseMap.current.set(currentQueryIndex, {
+          historyLength: data[`historyLength1`].length,
+          activeLength: data[`activeLength1`].length,
+          cancelledLength: data[`cancelledLength1`].length,
+        });
+      }
     }
-    return totalTrades;
   }, [data]);
-  console.log(totalPages, 'totalPages');
+  console.log(responseMap.current, 'totalPages');
 };
