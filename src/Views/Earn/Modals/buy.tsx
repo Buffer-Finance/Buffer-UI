@@ -162,7 +162,7 @@ export const Buy = ({
             onCheckChange={() => setCheckBoxState(!checkBoxState)}
           >
             <span className="text-f13 ml-2">
-              I have read how the {tokenXName} vault works and aware of risk
+              I have read how the {tokenXName} vault works and am aware of risk
               associated with being a liquidity provider
             </span>
           </BufferCheckbox>

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Background = styled.div`
   height: 100%;
@@ -72,6 +72,12 @@ const Background = styled.div`
       @media (max-width: 600px) {
         /* transform: translateX(-42%) scale(1); */
         transform: translateX(-64%) scale(1);
+      }
+    }
+    .dropdown-items--enter-done.chain-dropdown-bottom {
+      @media (max-width: 800px) {
+        transform: translateY(calc(-100% - 5px)) translateX(-50%) scale(1) !important;
+        top: 0%;
       }
     }
     .chain-dropdown-exit--enter {
