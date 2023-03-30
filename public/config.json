@@ -274,7 +274,7 @@
         ]
       },
       {
-        "max_duration": "16:00",
+        "max_duration": "04:00",
         "min_duration": "00:01",
         "max_utilization": 300,
         "category": "Forex",
