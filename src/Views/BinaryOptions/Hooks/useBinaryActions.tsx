@@ -72,6 +72,11 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
     const isForex = activeAsset.category === 'Forex';
     const marketCloseTime = Math.floor(knowTill.date / 1000);
     const currentTime = Math.floor(new Date().getTime() / 1000);
+    console.log(
+      timeToMins(activeAsset.min_duration),
+      expirationInMins,
+      'expiration'
+    );
 
     if (state.txnLoading > 1) {
       toastify({
@@ -111,13 +116,13 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    if (isCustom && expirationInMins < MINIMUM_MINUTES) {
-      return toastify({
-        type: 'error',
-        msg: 'Expiration should be greater then 5 minutes due to network congestion',
-        id: 'binaryBuy',
-      });
-    }
+    // if (isCustom && expirationInMins < MINIMUM_MINUTES) {
+    //   return toastify({
+    //     type: 'error',
+    //     msg: 'Expiration should be greater then 5 minutes due to network congestion',
+    //     id: 'binaryBuy',
+    //   });
+    // }
 
     if (!userInput) {
       return toastify({
