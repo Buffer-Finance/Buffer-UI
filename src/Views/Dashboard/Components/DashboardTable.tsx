@@ -7,12 +7,9 @@ import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
-import { divide } from '@Utils/NumString/stringArithmatics';
-import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
   const navigate = useNavigate();
-  const { configContracts } = useActiveChain();
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
     { id: 'currentPrice', label: 'Current Price' },
@@ -56,27 +53,15 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
         return (
           <>
             <OpenUpDownIndicator
-              openDown={Number(
-                divide(
-                  currentRow.openDown,
-                  configContracts.tokens['USDC'].decimals
-                )
-              )}
-              openUp={Number(
-                divide(
-                  currentRow.openUp,
-                  configContracts.tokens['USDC'].decimals
-                )
-              )}
+              openDown={Number(currentRow.openDown)}
+              openUp={Number(currentRow.openUp)}
+              unit={currentRow.pool}
             />
             <div className="mt-2">
               Total :{' '}
               <Display
-                data={divide(
-                  currentRow.totalTrades,
-                  configContracts.tokens['USDC'].decimals
-                )}
-                unit="USDC"
+                data={currentRow.totalTrades}
+                unit={currentRow.pool}
                 className="inline"
               />
             </div>
@@ -88,7 +73,10 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
           <CellContent
             content={[
               <div className="flex items-center">
-                <Display data={currentRow['24h_volume']} unit={'USDC'} />
+                <Display
+                  data={currentRow['24h_volume']}
+                  unit={currentRow.pool}
+                />
               </div>,
             ]}
           />
@@ -123,7 +111,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             content={[
               <Display
                 data={currentRow.max_trade_size}
-                unit="USDC"
+                unit={currentRow.pool}
                 className="!justify-start"
               />,
             ]}

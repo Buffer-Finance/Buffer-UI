@@ -21,9 +21,11 @@ const OpenUpDownBackground = styled.div<{
 export function OpenUpDownIndicator({
   openDown,
   openUp,
+  unit,
 }: {
   openUp: number;
   openDown: number;
+  unit: string;
 }) {
   const total = useMemo(() => openUp + openDown, [openDown, openUp]);
   const upPercent = useMemo(
@@ -39,14 +41,14 @@ export function OpenUpDownIndicator({
             {/* <UpTriangle className={`scale-75`} /> */}
             <div className="text-green mr-2 whitespace-nowrap">
               {' '}
-              {getBalance(openUp, 'USDC')}
+              {getBalance(openUp, unit)}
             </div>
           </div>
 
           <div className="flex items-center gap-1 whitespace-nowrap">
             <div className="text-red ml-2 whitespace-nowrap">
               {' '}
-              {getBalance(openDown, 'USDC')}
+              {getBalance(openDown, unit)}
             </div>
             {/* <DOwnTriangle className={`scale-75`} /> */}
           </div>
