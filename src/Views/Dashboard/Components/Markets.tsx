@@ -18,7 +18,7 @@ export const Markets = () => {
         pair.pools.find((pool) => pool.token === activeToken)?.options_contracts
           .current
     );
-  }, [activeToken]);
+  }, [activeToken, configContracts]);
 
   const [balance, allowance, maxTrade, stats, routerPermission] =
     useActiveAssetState(null, referralcode);
