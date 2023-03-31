@@ -249,10 +249,11 @@ export const TokenDropdown = ({
   };
 }) => {
   const { configContracts, activeChain } = useActiveChain();
-  const tabList = useMemo(
-    () => Object.keys(configContracts.tokens),
-    [activeChain]
-  );
+  const tabList = useMemo(() => {
+    const tokens = Object.keys(configContracts.tokens);
+    tokens.unshift('All');
+    return tokens;
+  }, [activeChain]);
   const [activeToken, setActiveToken] = useAtom(tokenAtom);
   useEffect(() => {
     setActiveToken(tabList[0]);
@@ -267,10 +268,12 @@ export const TokenDropdown = ({
           className={`flex items-center justify-between ${classes.fontSize} font-medium bg-[#2c2c41] pl-3 pr-[0] ${classes.verticalPadding} rounded-sm text-1`}
         >
           <div className="flex items-center">
-            <img
-              src={configContracts.tokens[activeToken]?.img}
-              className={`${classes.imgDimentions} mr-[6px] rounded-full`}
-            />
+            {activeToken !== tabList[0] && (
+              <img
+                src={configContracts.tokens[activeToken]?.img}
+                className={`${classes.imgDimentions} mr-[6px] rounded-full`}
+              />
+            )}
             {activeToken}
           </div>
           <DropdownArrow open={open} />
@@ -288,10 +291,12 @@ export const TokenDropdown = ({
             onClick={() => setActiveToken(tabList[index])}
           >
             <div className="flex">
-              <img
-                src={configContracts.tokens[tab]?.img}
-                className={`${classes.imgDimentions} mr-[6px] rounded-full`}
-              />
+              {tab !== tabList[0] && (
+                <img
+                  src={configContracts.tokens[tab]?.img}
+                  className={`${classes.imgDimentions} mr-[6px] rounded-full`}
+                />
+              )}
               {tab}
             </div>
           </div>

@@ -13,6 +13,10 @@ export const Markets = () => {
   const { configContracts } = useActiveChain();
   const activeToken = useAtomValue(tokenAtom);
   const markets = useMemo(() => {
+    if (activeToken === 'All')
+      return configContracts.pairs
+        .map((pair) => pair.pools.map((pool) => pool.options_contracts.current))
+        .flat();
     return configContracts.pairs.map(
       (pair) =>
         pair.pools.find((pool) => pool.token === activeToken)?.options_contracts
