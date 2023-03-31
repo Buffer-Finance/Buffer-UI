@@ -350,9 +350,11 @@ export const TokensBFR = ({
 export const TokensBLP = ({
   data,
   tokenName,
+  poolName,
 }: {
   data: IBLP;
   tokenName: string;
+  poolName: string;
 }) => {
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
@@ -429,7 +431,7 @@ export const TokensBLP = ({
             </defs>
           </svg>
           <div className="flex flex-col ml-2">
-            <div>{tokenName}</div>
+            <div>{poolName}</div>
           </div>
         </div>
       }
@@ -440,20 +442,20 @@ export const TokensBLP = ({
           keysName={[
             'Exchange Rate',
             'Total Supply',
-            'Total USDC Amount',
-            'POL(USDC)',
+            `Total ${tokenName} Amount`,
+            `POL(${tokenName})`,
             'APY',
           ]}
           values={[
             <div className={wrapperClasses}>
-              <Display data={data.price} unit={'USDC'} precision={4} />
+              <Display data={data.price} unit={tokenName} precision={4} />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={data.supply} unit={tokenName} />
+              <Display data={data.supply} unit={poolName} />
             </div>,
 
             <div className={wrapperClasses}>
-              <Display data={data.total_usdc} unit={'USDC'} />
+              <Display data={data.total_usdc} unit={tokenName} />
             </div>,
             <div className={wrapperClasses}>
               {data.usdc_pol ? (
@@ -462,13 +464,13 @@ export const TokensBLP = ({
                     toFixed(
                       multiply(divide(data.usdc_pol, data.usdc_total), 2),
                       2
-                    ) + '% of total liquidity in the USDC vault.'
+                    ) + `% of total liquidity in the ${tokenName} vault.`
                   }
                 >
                   <div>
                     <Display
                       data={multiply(data.usdc_pol, data.price) || '0'}
-                      unit={'USDC'}
+                      unit={tokenName}
                       disable
                       className={underLineClass}
                     />

@@ -117,7 +117,7 @@ function Boxes() {
 }
 
 const DashboardData = () => {
-  const { BFR, BLP } = useDashboardReadCalls();
+  const { BFR, BLP, aBLP } = useDashboardReadCalls();
   return (
     <Section
       Heading={<div className={topStyles}>Tokens</div>}
@@ -126,7 +126,8 @@ const DashboardData = () => {
       }
       Cards={[
         <TokensBFR data={BFR} tokenName={'BFR'} />,
-        <TokensBLP data={BLP} tokenName={'BLP'} />,
+        <TokensBLP data={BLP} tokenName={'USDC'} poolName={'uBLP'} />,
+        <TokensBLP data={aBLP} tokenName={'ARB'} poolName={'aBLP'} />,
       ]}
     />
   );
