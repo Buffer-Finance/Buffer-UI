@@ -10,6 +10,8 @@ import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import {
   keyClasses,
+  tooltipKeyClasses,
+  tooltipValueClasses,
   underLineClass,
   valueClasses,
 } from '@Views/Earn/Components/VestCards';
@@ -22,6 +24,7 @@ import {
   tokenX24hrsStats,
 } from '../Hooks/useArbitrumOverview,';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useMemo } from 'react';
 
 export const StatsOverView = ({ data }: { data: IOverview }) => {
   if (!data)
@@ -204,8 +207,7 @@ export const OverviewArbitrum = ({
     (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
   );
   const { configContracts } = useActiveChain();
-  const usdc_decimals = configContracts.tokens.USDC.decimals;
-  const arb_decimals = configContracts.tokens.ARB.decimals;
+  const tokens = useMemo(() => Object.keys(configContracts.tokens), []);
 
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
@@ -229,32 +231,51 @@ export const OverviewArbitrum = ({
             <div className={wrapperClasses}>
               <NumberTooltip
                 content={
-                  numberWithCommas(
-                    (data.totalstats as toalTokenXstats).totalSettlementFees
-                  ) + ' USDC'
+                  <TableAligner
+                    keysName={tokens}
+                    keyStyle={tooltipKeyClasses}
+                    valueStyle={tooltipValueClasses}
+                    values={tokens.map((token) => {
+                      const stats = data[`${token}stats`];
+                      if (stats)
+                        return (
+                          <div className={' flex items-center justify-end'}>
+                            <div>
+                              {getBalance(
+                                (stats as toalTokenXstats).totalSettlementFees
+                              )}{' '}
+                              USDC{' '}
+                            </div>
+                            &nbsp;/&nbsp;{' '}
+                            <div>
+                              {' '}
+                              {getBalance(
+                                (stats as toalTokenXstats).totalVolume
+                              )}{' '}
+                              USDC{' '}
+                            </div>
+                          </div>
+                        );
+                      else return <></>;
+                    })}
+                  />
                 }
               >
-                <div>
-                  {getBalance(
-                    (data.totalstats as toalTokenXstats).totalSettlementFees
-                  )}{' '}
-                  USDC{' '}
-                </div>
-              </NumberTooltip>
-              &nbsp;/&nbsp;{' '}
-              <NumberTooltip
-                content={
-                  numberWithCommas(
-                    (data.totalstats as toalTokenXstats).totalVolume
-                  ) + ' USDC'
-                }
-              >
-                <div>
-                  {' '}
-                  {getBalance(
-                    (data.totalstats as toalTokenXstats).totalVolume
-                  )}{' '}
-                  USDC{' '}
+                <div className={underLineClass + ' flex items-center'}>
+                  <div>
+                    {getBalance(
+                      (data.totalstats as toalTokenXstats).totalSettlementFees
+                    )}{' '}
+                    USDC{' '}
+                  </div>
+                  &nbsp;/&nbsp;{' '}
+                  <div>
+                    {' '}
+                    {getBalance(
+                      (data.totalstats as toalTokenXstats).totalVolume
+                    )}{' '}
+                    USDC{' '}
+                  </div>
                 </div>
               </NumberTooltip>
             </div>,
@@ -262,29 +283,48 @@ export const OverviewArbitrum = ({
               {' '}
               <NumberTooltip
                 content={
-                  numberWithCommas(
-                    (data.total24stats as tokenX24hrsStats).settlementFee
-                  ) + ' USDC'
+                  <TableAligner
+                    keysName={tokens}
+                    keyStyle={tooltipKeyClasses}
+                    valueStyle={tooltipValueClasses}
+                    values={tokens.map((token) => {
+                      const stats = data[`${token}24stats`];
+                      if (stats)
+                        return (
+                          <div className={' flex items-center justify-end'}>
+                            <div>
+                              {getBalance(
+                                (stats as tokenX24hrsStats).settlementFee
+                              )}{' '}
+                              USDC{' '}
+                            </div>
+                            &nbsp;/&nbsp;{' '}
+                            <div>
+                              {' '}
+                              {getBalance(
+                                (stats as tokenX24hrsStats).amount
+                              )}{' '}
+                              USDC{' '}
+                            </div>
+                          </div>
+                        );
+                      else return <>-</>;
+                    })}
+                  />
                 }
               >
-                <div>
-                  {getBalance(
-                    (data.total24stats as tokenX24hrsStats).settlementFee
-                  )}{' '}
-                  USDC{' '}
-                </div>
-              </NumberTooltip>
-              &nbsp;/&nbsp;
-              <NumberTooltip
-                content={
-                  numberWithCommas(
-                    (data.total24stats as tokenX24hrsStats).amount
-                  ) + ' USDC'
-                }
-              >
-                <div>
-                  {getBalance((data.total24stats as tokenX24hrsStats).amount)}{' '}
-                  USDC{' '}
+                <div className={underLineClass + ' flex items-center'}>
+                  <div>
+                    {getBalance(
+                      (data.total24stats as tokenX24hrsStats).settlementFee
+                    )}{' '}
+                    USDC{' '}
+                  </div>
+                  &nbsp;/&nbsp;
+                  <div>
+                    {getBalance((data.total24stats as tokenX24hrsStats).amount)}{' '}
+                    USDC{' '}
+                  </div>
                 </div>
               </NumberTooltip>
             </div>,
@@ -297,6 +337,28 @@ export const OverviewArbitrum = ({
                   (data.totalstats as toalTokenXstats).totalTrades.toString()
                 )}
                 unit={'USDC'}
+                content={
+                  <TableAligner
+                    keysName={tokens}
+                    keyStyle={tooltipKeyClasses}
+                    valueStyle={tooltipValueClasses}
+                    values={tokens.map((token) => {
+                      const stats = data[`${token}stats`];
+                      if (stats)
+                        return (
+                          '$' +
+                          toFixed(
+                            divide(
+                              (stats as toalTokenXstats).totalVolume,
+                              (stats as toalTokenXstats).totalTrades.toString()
+                            ) as string,
+                            2
+                          )
+                        );
+                      else return '-';
+                    })}
+                  />
+                }
               />
             </div>,
             <div className={wrapperClasses}>
@@ -316,7 +378,24 @@ export const OverviewArbitrum = ({
                 ? data.openInterest + ' USDC'
                 : 'fetching...'}
             </div>,
-            <div>{(data.totalstats as toalTokenXstats).totalTrades}</div>,
+            <NumberTooltip
+              content={
+                <TableAligner
+                  keysName={tokens}
+                  keyStyle={tooltipKeyClasses}
+                  valueStyle={tooltipValueClasses}
+                  values={tokens.map((token) => {
+                    const stats = data[`${token}stats`];
+                    if (stats) return (stats as toalTokenXstats).totalTrades;
+                    else return '-';
+                  })}
+                />
+              }
+            >
+              <div className={underLineClass}>
+                {(data.totalstats as toalTokenXstats).totalTrades}
+              </div>
+            </NumberTooltip>,
           ]}
         />
       }

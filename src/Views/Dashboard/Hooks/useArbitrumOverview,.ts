@@ -143,7 +143,7 @@ export const useArbitrumOverview = () => {
     for (let [key, value] of Object.entries(data)) {
       if (value && !key.includes('24') && key.includes('stats')) {
         const decimals =
-          configContracts.tokens[key.split('24')[0]]?.decimals ?? 6;
+          configContracts.tokens[key.split('stats')[0]]?.decimals ?? 6;
         returnObj[key] = getTotalStats(value as toalTokenXstats, decimals);
       }
     }
