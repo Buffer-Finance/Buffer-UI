@@ -16,6 +16,12 @@ import {
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { IBFR, IBLP, IOverview, ITotalStats } from '../interface';
 import { otherBlpType } from '../Hooks/useOtherChainCalls';
+import {
+  arbitrumOverview,
+  toalTokenXstats,
+  tokenX24hrsStats,
+} from '../Hooks/useArbitrumOverview,';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const StatsOverView = ({ data }: { data: IOverview }) => {
   if (!data)
@@ -183,6 +189,134 @@ export const StatsTotalStats = ({ data }: { data: IOverview | null }) => {
                 : 'fetching...'}
             </div>,
             <div>{data.trades !== null ? data.trades : 'fetching...'}</div>,
+          ]}
+        />
+      }
+    />
+  );
+};
+export const OverviewArbitrum = ({
+  data,
+}: {
+  data: arbitrumOverview | null;
+}) => {
+  const totalDays = Math.ceil(
+    (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
+  );
+  const { configContracts } = useActiveChain();
+  const usdc_decimals = configContracts.tokens.USDC.decimals;
+  const arb_decimals = configContracts.tokens.ARB.decimals;
+
+  if (!data)
+    return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
+  return (
+    <Card
+      top={'Trading Overview'}
+      middle={
+        <TableAligner
+          keyStyle={keyClasses}
+          valueStyle={valueClasses}
+          keysName={[
+            'Fees / Volume',
+            'fees / Volume (24h)',
+            'Total Traders',
+            'Average Trade size',
+            'Average Daily Volume',
+            'Open Interest',
+            'Total Trades',
+          ]}
+          values={[
+            <div className={wrapperClasses}>
+              <NumberTooltip
+                content={
+                  numberWithCommas(
+                    (data.totalstats as toalTokenXstats).totalSettlementFees
+                  ) + ' USDC'
+                }
+              >
+                <div>
+                  {getBalance(
+                    (data.totalstats as toalTokenXstats).totalSettlementFees
+                  )}{' '}
+                  USDC{' '}
+                </div>
+              </NumberTooltip>
+              &nbsp;/&nbsp;{' '}
+              <NumberTooltip
+                content={
+                  numberWithCommas(
+                    (data.totalstats as toalTokenXstats).totalVolume
+                  ) + ' USDC'
+                }
+              >
+                <div>
+                  {' '}
+                  {getBalance(
+                    (data.totalstats as toalTokenXstats).totalVolume
+                  )}{' '}
+                  USDC{' '}
+                </div>
+              </NumberTooltip>
+            </div>,
+            <div className={wrapperClasses}>
+              {' '}
+              <NumberTooltip
+                content={
+                  numberWithCommas(
+                    (data.total24stats as tokenX24hrsStats).settlementFee
+                  ) + ' USDC'
+                }
+              >
+                <div>
+                  {getBalance(
+                    (data.total24stats as tokenX24hrsStats).settlementFee
+                  )}{' '}
+                  USDC{' '}
+                </div>
+              </NumberTooltip>
+              &nbsp;/&nbsp;
+              <NumberTooltip
+                content={
+                  numberWithCommas(
+                    (data.total24stats as tokenX24hrsStats).amount
+                  ) + ' USDC'
+                }
+              >
+                <div>
+                  {getBalance((data.total24stats as tokenX24hrsStats).amount)}{' '}
+                  USDC{' '}
+                </div>
+              </NumberTooltip>
+            </div>,
+            <div className={wrapperClasses}>{data.totalTraders}</div>,
+            <div className={wrapperClasses}>
+              {' '}
+              <Display
+                data={divide(
+                  (data.totalstats as toalTokenXstats).totalVolume,
+                  (data.totalstats as toalTokenXstats).totalTrades.toString()
+                )}
+                unit={'USDC'}
+              />
+            </div>,
+            <div className={wrapperClasses}>
+              {' '}
+              <Display
+                data={divide(
+                  (data.totalstats as toalTokenXstats).totalVolume,
+
+                  totalDays.toString()
+                )}
+                unit={'USDC'}
+              />
+            </div>,
+
+            <div>
+              {data.openInterest !== null
+                ? data.openInterest + ' USDC'
+                : 'fetching...'}
+            </div>,
+            <div>{(data.totalstats as toalTokenXstats).totalTrades}</div>,
           ]}
         />
       }
