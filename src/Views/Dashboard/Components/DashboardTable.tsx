@@ -31,7 +31,6 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
     sortedData: typeof dashboardData
   ) => {
     const currentRow = sortedData[row];
-    console.log(currentRow, 'currentRow');
     switch (col) {
       case 0:
         return (
