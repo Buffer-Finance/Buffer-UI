@@ -56,10 +56,10 @@ export function useActiveAssetState(amount = null, referralData) {
         .map((pairObj) => {
           return pairObj.pools.map((pool) => {
             return {
-              address: qtInfo.routerContract,
-              abi: RouterABI,
-              name: 'contractRegistry',
-              params: [pool.options_contracts.current],
+              address: pool.options_contracts.current,
+              abi: BinaryOptionsABI,
+              name: 'isPaused',
+              params: [],
             };
           });
         })
@@ -207,7 +207,7 @@ export function useActiveAssetState(amount = null, referralData) {
     qtInfo.pairs.forEach((pair) => {
       pair.pools.forEach((pool) => {
         routerPermission[pool.options_contracts.current] =
-          routerPermissionRes.shift()?.[0];
+          !routerPermissionRes.shift()?.[0];
       });
     });
     const marketStatusCalls = copy.slice(
