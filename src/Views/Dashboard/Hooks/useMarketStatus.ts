@@ -17,9 +17,7 @@ export function useMarketStatus() {
   const allAssetContracts = useMemo(
     () =>
       configContracts.pairs
-        .map((pair) =>
-          pair.pools.map((pool) => [pool.options_contracts.current]).flat(1)
-        )
+        .map((pair) => pair.pools.map((pool) => pool).flat(1))
         .flat(1),
     [configContracts]
   );
@@ -65,25 +63,29 @@ export function useMarketStatus() {
   };
   let response: { [key: string]: marketStatusType } = {};
 
-  function getMaxAmount([maxFeeForAbove, maxFeeForBelow]: [
-    maxFeeForAbove: string,
-    maxFeeForBelow: string
-  ]): string | null | undefined {
+  function getMaxAmount(
+    [maxFeeForAbove, maxFeeForBelow]: [
+      maxFeeForAbove: string,
+      maxFeeForBelow: string
+    ],
+    deciamls: number
+  ): string | null | undefined {
     return maxFeeForAbove
       ? divide(
           gt(maxFeeForAbove, maxFeeForBelow) ? maxFeeForAbove : maxFeeForBelow,
-          configContracts.tokens['USDC'].decimals
+          deciamls
         )
       : null;
   }
 
   function createObject(
     maxAmountArr: [string, string],
-    marketOpenArray: boolean[]
+    marketOpenArray: boolean[],
+    decimals: number
   ): marketStatusType {
     return {
       isMarketOpen: marketOpenArray[0],
-      maxTradeAmount: getMaxAmount(maxAmountArr),
+      maxTradeAmount: getMaxAmount(maxAmountArr, decimals),
     };
   }
 
@@ -92,14 +94,16 @@ export function useMarketStatus() {
     let assetIdx = 0;
     copy.forEach((res, idx) => {
       if (idx % numberofResponseForAnAsset === 0) {
-        response[allAssetContracts[assetIdx]] = createObject(
-          copy[idx],
-          copy[idx + 1]
-        );
+        response[allAssetContracts[assetIdx].options_contracts.current] =
+          createObject(
+            copy[idx],
+            copy[idx + 1],
+            configContracts.tokens[allAssetContracts[assetIdx].token].decimals
+          );
         assetIdx++;
       }
     });
   }
-  console.log(response, 'response');
-  return response;
+  console.log(response, '');
+  return { assetStatus: response, allAssetContracts };
 }

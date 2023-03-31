@@ -1,7 +1,9 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useActiveAssetState } from '@Views/BinaryOptions/Hooks/useActiveAssetState';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
+import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
+import { tokenAtom } from '..';
 import { useDashboardTableData } from '../Hooks/useDashboardTableData';
 import { DashboardTable } from './DashboardTable';
 
@@ -9,59 +11,26 @@ export const Markets = () => {
   const { dashboardData } = useDashboardTableData();
   const referralcode = useReferralCode();
   const { configContracts } = useActiveChain();
-  const arbMarkets = useMemo(() => {
+  const activeToken = useAtomValue(tokenAtom);
+  const markets = useMemo(() => {
     return configContracts.pairs.map(
-      (pair) => pair.pools[1]?.options_contracts.current
+      (pair) =>
+        pair.pools.find((pool) => pool.token === activeToken)?.options_contracts
+          .current
     );
-  }, []);
+  }, [activeToken]);
+
   const [balance, allowance, maxTrade, stats, routerPermission] =
     useActiveAssetState(null, referralcode);
   const filteredDashboardData = useMemo(() => {
     if (!dashboardData || !routerPermission) return [];
     return dashboardData.filter(
-      (data) =>
-        routerPermission[data.address] && !arbMarkets.includes(data.address)
+      (data) => routerPermission[data.address] && markets.includes(data.address)
     );
   }, [dashboardData, routerPermission]);
-  // console.log(filteredDashboardData[0].totalTrades, 'totalData');
 
-  // const totalDataArr = [
-  //   {
-  //     key: 'Trading Volume',
-  //     value: totalData ? (
-  //       <Display
-  //         data={divide(totalData.volume || '0', usdcDecimals)}
-  //         unit={'USDC'}
-  //       />
-  //     ) : (
-  //       '-'
-  //     ),
-  //   },
-  //   {
-  //     key: 'Open Interest',
-  //     value: totalData ? (
-  //       <Display data={totalData.openInterest || '0'} unit={'USDC'} />
-  //     ) : (
-  //       '-'
-  //     ),
-  //   },
-  //   {
-  //     key: 'Total Trades',
-  //     value: totalData?.trades || '0',
-  //   },
-  // ];
   return (
     <div>
-      {/* <div className="flex items-stretch justify-between gap-6 w-3/4 mb-7 max1000:w-[80%] max800:!w-full max800:flex-wrap">
-        {totalDataArr.map((item) => (
-          <div className="flex flex-col items-start gap-2 bg-2 rounded-lg py-5 px-7 flex-1">
-            <div className="text-f18 whitespace-nowrap">{item.key}</div>
-            <div className="text-[22px] text-light-blue font-medium">
-              {item.value}
-            </div>
-          </div>
-        ))}
-      </div> */}
       <DashboardTable dashboardData={filteredDashboardData} />
     </div>
   );
