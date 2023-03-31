@@ -256,7 +256,7 @@ export const TokenDropdown = ({
   const [activeToken, setActiveToken] = useAtom(tokenAtom);
   useEffect(() => {
     setActiveToken(tabList[0]);
-  }, []);
+  }, [activeChain]);
 
   return (
     <BufferDropdown
