@@ -97,10 +97,9 @@ export const StatsOverView = ({ data }: { data: IOverview }) => {
             //   )}
             // </div>,
             <div className={wrapperClasses}>
-              {' '}
               <Display data={data.usdc_24_fees} unit={'USDC'} />
               &nbsp;/&nbsp;
-              <Display data={data.usdc_24_volume} unit={'USDC'} />{' '}
+              <Display data={data.usdc_24_volume} unit={'USDC'} />
             </div>,
             // <div className={wrapperClasses}>
             //   {" "}
@@ -152,7 +151,7 @@ export const StatsTotalStats = ({ data }: { data: IOverview | null }) => {
               >
                 <div>{getBalance(data.USDCfees)} USDC </div>
               </NumberTooltip>
-              &nbsp;/&nbsp;{' '}
+              &nbsp;/&nbsp;
               <NumberTooltip
                 content={numberWithCommas(data.USDCvolume) + ' USDC'}
               >
@@ -160,7 +159,6 @@ export const StatsTotalStats = ({ data }: { data: IOverview | null }) => {
               </NumberTooltip>
             </div>,
             <div className={wrapperClasses}>
-              {' '}
               <NumberTooltip
                 content={numberWithCommas(data.usdc_24_fees) + ' USDC'}
               >
@@ -175,11 +173,9 @@ export const StatsTotalStats = ({ data }: { data: IOverview | null }) => {
             </div>,
             <div className={wrapperClasses}>{data.totalTraders}</div>,
             <div className={wrapperClasses}>
-              {' '}
               <Display data={data.avgTrade} unit={'USDC'} />
             </div>,
             <div className={wrapperClasses}>
-              {' '}
               <Display
                 data={divide(data.USDCvolume, totalDays.toString())}
                 unit={'USDC'}
@@ -243,16 +239,15 @@ export const OverviewArbitrum = ({
                             <div>
                               {getBalance(
                                 (stats as toalTokenXstats).totalSettlementFees
-                              )}{' '}
-                              USDC{' '}
+                              )}
+                              {token}
                             </div>
-                            &nbsp;/&nbsp;{' '}
+                            &nbsp;/&nbsp;
                             <div>
-                              {' '}
                               {getBalance(
                                 (stats as toalTokenXstats).totalVolume
-                              )}{' '}
-                              USDC{' '}
+                              )}
+                              {token}
                             </div>
                           </div>
                         );
@@ -265,22 +260,20 @@ export const OverviewArbitrum = ({
                   <div>
                     {getBalance(
                       (data.totalstats as toalTokenXstats).totalSettlementFees
-                    )}{' '}
-                    USDC{' '}
+                    )}
+                    USDC
                   </div>
-                  &nbsp;/&nbsp;{' '}
+                  &nbsp;/&nbsp;
                   <div>
-                    {' '}
                     {getBalance(
                       (data.totalstats as toalTokenXstats).totalVolume
-                    )}{' '}
-                    USDC{' '}
+                    )}
+                    USDC
                   </div>
                 </div>
               </NumberTooltip>
             </div>,
             <div className={wrapperClasses}>
-              {' '}
               <NumberTooltip
                 content={
                   <TableAligner
@@ -295,16 +288,13 @@ export const OverviewArbitrum = ({
                             <div>
                               {getBalance(
                                 (stats as tokenX24hrsStats).settlementFee
-                              )}{' '}
-                              USDC{' '}
+                              )}
+                              {token}
                             </div>
-                            &nbsp;/&nbsp;{' '}
+                            &nbsp;/&nbsp;
                             <div>
-                              {' '}
-                              {getBalance(
-                                (stats as tokenX24hrsStats).amount
-                              )}{' '}
-                              USDC{' '}
+                              {getBalance((stats as tokenX24hrsStats).amount)}
+                              {token}
                             </div>
                           </div>
                         );
@@ -317,20 +307,19 @@ export const OverviewArbitrum = ({
                   <div>
                     {getBalance(
                       (data.total24stats as tokenX24hrsStats).settlementFee
-                    )}{' '}
-                    USDC{' '}
+                    )}
+                    USDC
                   </div>
                   &nbsp;/&nbsp;
                   <div>
-                    {getBalance((data.total24stats as tokenX24hrsStats).amount)}{' '}
-                    USDC{' '}
+                    {getBalance((data.total24stats as tokenX24hrsStats).amount)}
+                    USDC
                   </div>
                 </div>
               </NumberTooltip>
             </div>,
             <div className={wrapperClasses}>{data.totalTraders}</div>,
             <div className={wrapperClasses}>
-              {' '}
               <Display
                 data={divide(
                   (data.totalstats as toalTokenXstats).totalVolume,
@@ -346,14 +335,15 @@ export const OverviewArbitrum = ({
                       const stats = data[`${token}stats`];
                       if (stats)
                         return (
-                          '$' +
                           toFixed(
                             divide(
                               (stats as toalTokenXstats).totalVolume,
                               (stats as toalTokenXstats).totalTrades.toString()
                             ) as string,
                             2
-                          )
+                          ) +
+                          ' ' +
+                          token
                         );
                       else return '-';
                     })}
@@ -362,7 +352,6 @@ export const OverviewArbitrum = ({
               />
             </div>,
             <div className={wrapperClasses}>
-              {' '}
               <Display
                 data={divide(
                   (data.totalstats as toalTokenXstats).totalVolume,
@@ -481,7 +470,6 @@ export const TokensBFR = ({
             <div className={wrapperClasses}>
               {data.circulatingSupply ? (
                 <>
-                  {' '}
                   <NumberTooltip
                     content={numberWithCommas(data.circulatingSupply) + ' BFR'}
                   >
