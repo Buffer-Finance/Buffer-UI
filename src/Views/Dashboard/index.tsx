@@ -10,13 +10,14 @@ import { useEffect } from 'react';
 import { ArbitrumOnly, ExceptArbitrum } from '@Views/Common/ChainNotSupported';
 import { useDashboardGraphQl } from './Hooks/useDashboardGraphQl';
 import { useOtherChainCalls } from './Hooks/useOtherChainCalls';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { getChains } from 'src/Config/wagmiClient';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
+import { useArbitrumOverview } from './Hooks/useArbitrumOverview,';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -84,7 +85,6 @@ const DashboardPage = () => {
 };
 
 function Boxes() {
-  const { overView } = useDashboardGraphQl();
   const { activeChain } = useActiveChain();
   return (
     <>
@@ -103,20 +103,20 @@ function Boxes() {
           </div>
         }
         Cards={[
-          <StatsTotalStats data={overView} />,
+          <OverViewData />,
           <ExceptArbitrum hide>
             <DashboardOtherChainData />
           </ExceptArbitrum>,
         ]}
       />
       <ArbitrumOnly hide>
-        <DashboardData />
+        <DashboardTokensData />
       </ArbitrumOnly>
     </>
   );
 }
 
-const DashboardData = () => {
+const DashboardTokensData = () => {
   const { BFR, BLP, aBLP } = useDashboardReadCalls();
   return (
     <Section
@@ -131,6 +131,24 @@ const DashboardData = () => {
       ]}
     />
   );
+};
+
+const OverViewData = () => {
+  const { activeChain } = useActiveChain();
+  const { overView } = useDashboardGraphQl();
+  const { overView: arbitrumOverview } = useArbitrumOverview();
+  switch (activeChain.id) {
+    case arbitrum.id:
+    case arbitrumGoerli.id:
+      return <StatsTotalStats data={arbitrumOverview} />;
+
+    case polygon.id:
+    case polygonMumbai.id:
+      return <StatsTotalStats data={overView} />;
+
+    default:
+      return <StatsTotalStats data={overView} />;
+  }
 };
 
 const DashboardOtherChainData = () => {
