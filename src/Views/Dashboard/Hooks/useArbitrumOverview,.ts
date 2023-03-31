@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import useSWR from 'swr';
 import { add, divide } from '@Utils/NumString/stringArithmatics';
 import {
@@ -9,25 +9,28 @@ import {
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
-import { IToken } from '@Views/BinaryOptions';
 
-type tokenX24hrsStats = {
+export type tokenX24hrsStats = {
   amount: string;
   settlementFee: string;
-}[];
+};
 
-type toalTokenXstats = {
+export type toalTokenXstats = {
   totalSettlementFees: string;
   totalVolume: string;
   totalTrades: number;
 };
 
-type responseType = {
-  totalTraders: [{ uniqueCountCumulative: number }];
-  USDC24stats: tokenX24hrsStats;
-  ARB24stats: tokenX24hrsStats;
+type responseType = { totalTraders: [{ uniqueCountCumulative: number }] };
+
+type totalStats = { [key: string]: tokenX24hrsStats[] | toalTokenXstats };
+
+export type arbitrumOverview = {
+  [key: string]: tokenX24hrsStats | toalTokenXstats;
+} & {
+  totalTraders: string;
+  openInterest: string | null;
 };
-type totalStats = { [key: string]: toalTokenXstats };
 
 function getTokenXquery(tokensArray: string[]) {
   return tokensArray
@@ -40,23 +43,72 @@ function getTokenXquery(tokensArray: string[]) {
     )
     .join(' ');
 }
+function getTokenX24hrsquery(tokensArray: string[], prevDayEpoch: number) {
+  return tokensArray
+    .map(
+      (token) => `${token}24stats:volumePerContracts(
+        orderBy: timestamp
+        orderDirection: desc
+        first: 1000
+        where: {depositToken: "${token}", timestamp_gt: ${prevDayEpoch}}
+      ) {
+          amount
+          settlementFee
+      }`
+    )
+    .join(' ');
+}
+
+const getTotalStats = (
+  data: toalTokenXstats,
+  decimals: number
+): toalTokenXstats => {
+  return {
+    totalSettlementFees: divide(data.totalSettlementFees, decimals) as string,
+    totalTrades: data.totalTrades,
+    totalVolume: divide(data.totalVolume, decimals) as string,
+  };
+};
+const get24hrsStats = (
+  data: tokenX24hrsStats[],
+  decimals: number
+): tokenX24hrsStats => {
+  return data.reduce(
+    (acc, curr) => {
+      return {
+        amount: add(acc.amount, divide(curr.amount, decimals) as string),
+        settlementFee: add(
+          acc.settlementFee,
+          divide(curr.settlementFee, decimals) as string
+        ),
+      };
+    },
+    { amount: '0', settlementFee: '0' }
+  );
+};
 
 export const useArbitrumOverview = () => {
   const { configContracts, activeChain } = useActiveChain();
   const { totalData } = useDashboardTableData();
+  const prevDayEpoch = getLinuxTimestampBefore24Hours();
+  const tokensArray = useMemo(() => {
+    const array = Object.keys(configContracts.tokens);
+    array.unshift('total');
+    return array;
+  }, []);
 
   const statsQuery = useMemo(() => {
-    const tokensArray = Object.keys(configContracts.tokens);
-    tokensArray.unshift('total');
     return getTokenXquery(tokensArray);
   }, []);
+  const stats24hrsQuery = useMemo(() => {
+    return getTokenX24hrsquery(tokensArray, prevDayEpoch);
+  }, [prevDayEpoch]);
 
   const { data } = useSWR('arbitrum-overview', {
     fetcher: async () => {
       if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id)) {
         return null;
       }
-      const prevDayEpoch = getLinuxTimestampBefore24Hours();
 
       const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
@@ -64,24 +116,7 @@ export const useArbitrumOverview = () => {
             totalTraders:userStats(where: {period: total}) {
               uniqueCountCumulative
             }
-            
-            USDC24stats:volumePerContracts(
-              orderBy: timestamp
-              orderDirection: desc
-              first: 1000
-              where: {depositToken: "USDC", timestamp_gt: ${prevDayEpoch}}
-            ) {
-                amount
-                settlementFee
-            }
-            ARB24stats:volumePerContracts(
-              orderBy: timestamp
-              orderDirection: desc
-              where: {depositToken: "ARB", timestamp_gt: ${prevDayEpoch}}
-            ) {
-                amount
-                settlementFee
-            }
+           ${stats24hrsQuery}
           }`,
       });
       return response.data?.data as responseType & totalStats;
@@ -89,102 +124,43 @@ export const useArbitrumOverview = () => {
     refreshInterval: 300,
   });
 
-  const get24hrsStats = (data: tokenX24hrsStats, tokenName: string) => {
-    return data.reduce(
-      (acc, curr) => {
-        return {
-          amount: add(acc.amount, curr.amount),
-          settlementFee: add(acc.settlementFee, curr.settlementFee),
-        };
-      },
-      { amount: '0', settlementFee: '0' }
-    );
-  };
-
-  const USDC24hrsStats = useMemo(() => {
-    if (data?.USDC24stats) {
-      return {
-        ...data.USDC24stats.reduce(
-          (acc, curr) => {
-            return {
-              amount: add(acc.amount, curr.amount),
-              settlementFee: add(acc.settlementFee, curr.settlementFee),
-            };
-          },
-          { amount: '0', settlementFee: '0' }
-        ),
-      };
+  const total24hrsStats = useMemo(() => {
+    if (!data) return null;
+    const returnObj: Partial<{ [key: string]: tokenX24hrsStats }> = {};
+    for (let [key, value] of Object.entries(data)) {
+      if (value && key.includes('24')) {
+        const decimals =
+          configContracts.tokens[key.split('24')[0]]?.decimals ?? 6;
+        returnObj[key] = get24hrsStats(value as tokenX24hrsStats[], decimals);
+      }
     }
-    return null;
-  }, [data?.USDC24stats]);
+    return returnObj;
+  }, [data]);
 
-  const ARB24hrsStats = useMemo(() => {
-    if (data?.ARB24stats) {
-      return {
-        ...data.ARB24stats.reduce(
-          (acc, curr) => {
-            return {
-              amount: add(acc.amount, curr.amount),
-              settlementFee: add(acc.settlementFee, curr.settlementFee),
-            };
-          },
-          { amount: '0', settlementFee: '0' }
-        ),
-      };
+  const totalStats = useMemo(() => {
+    if (!data) return null;
+    const returnObj: Partial<{ [key: string]: toalTokenXstats }> = {};
+    for (let [key, value] of Object.entries(data)) {
+      if (value && !key.includes('24') && key.includes('stats')) {
+        const decimals =
+          configContracts.tokens[key.split('24')[0]]?.decimals ?? 6;
+        returnObj[key] = getTotalStats(value as toalTokenXstats, decimals);
+      }
     }
-    return null;
-  }, [data?.ARB24stats]);
+    return returnObj;
+  }, [data]);
 
   const overView = useMemo(() => {
     if (!data) return null;
-    const isUSDCnull = !data.USDCstats;
-    const isARBnull = !data.ARBstats;
-    const usdcVolume = isUSDCnull
-      ? '0'
-      : fromWei(
-          data.USDCstats.totalVolume,
-          configContracts.tokens['USDC'].decimals
-        );
-    const arbVolume = isARBnull ? '0' : fromWei(data.ARBstats.totalVolume);
-    const totalVolume = add(usdcVolume, arbVolume);
-    const totalTrades = isUSDCnull
-      ? '0'
-      : (
-          (data.USDCstats.totalTrades || 0) + (data.ARBstats?.totalTrades || 0)
-        ).toString();
-
-    const avgTrade = divide(totalVolume, totalTrades.toString());
-
     return {
-      USDCfees: isUSDCnull
-        ? '0'
-        : fromWei(
-            data.USDCstats.totalSettlementFees,
-            configContracts.tokens['USDC'].decimals
-          ),
-      ARBfees: isARBnull ? '0' : fromWei(data.ARBstats.totalSettlementFees),
-      USDCvolume: usdcVolume,
-      ARBvolume: arbVolume,
-      avgTrade: avgTrade,
       totalTraders: data.totalTraders[0]?.uniqueCountCumulative || 0,
-      usdc_24_fees: USDC24hrsStats
-        ? fromWei(
-            USDC24hrsStats.settlementFee,
-            configContracts.tokens['USDC'].decimals
-          )
-        : '0',
-      usdc_24_volume: USDC24hrsStats
-        ? fromWei(
-            USDC24hrsStats.amount,
-            configContracts.tokens['USDC'].decimals
-          )
-        : '0',
-      trades: totalData ? totalData.trades : null,
       openInterest: totalData ? totalData.openInterest : null,
+      ...total24hrsStats,
+      ...totalStats,
     };
   }, [data, totalData]);
 
-  console.log(overView, 'overView');
+  console.log(overView, 'overViewResponse');
 
   return {
     overView,

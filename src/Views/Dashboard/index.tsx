@@ -1,6 +1,12 @@
 import Drawer from '@Views/Common/V2-Drawer';
 import { Section } from '@Views/Earn/Components/Section';
-import { OtherBLP, StatsTotalStats, TokensBFR, TokensBLP } from './Cards';
+import {
+  OtherBLP,
+  OverviewArbitrum,
+  StatsTotalStats,
+  TokensBFR,
+  TokensBLP,
+} from './Cards';
 import { Markets } from './Components/Markets';
 import { DashboardContextProvider } from './dashboardAtom';
 import { useDashboardReadCalls } from './Hooks/useDashBoardReadCalls';
@@ -140,7 +146,7 @@ const OverViewData = () => {
   switch (activeChain.id) {
     case arbitrum.id:
     case arbitrumGoerli.id:
-      return <StatsTotalStats data={arbitrumOverview} />;
+      return <OverviewArbitrum data={arbitrumOverview} />;
 
     case polygon.id:
     case polygonMumbai.id:
