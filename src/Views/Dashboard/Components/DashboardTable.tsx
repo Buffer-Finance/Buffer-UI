@@ -12,6 +12,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
   const navigate = useNavigate();
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
+    { id: 'pool', label: 'Pool' },
     { id: 'currentPrice', label: 'Current Price' },
     { id: 'totalTrades', label: 'Open Up/Open Down' },
     { id: '24h_volume', label: '24h Volume' },
@@ -39,6 +40,8 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
           </div>
         );
       case 1:
+        return currentRow.pool;
+      case 2:
         return (
           <CellContent
             content={[
@@ -49,7 +52,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 2:
+      case 3:
         return (
           <>
             <OpenUpDownIndicator
@@ -68,7 +71,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
           </>
         );
 
-      case 3:
+      case 4:
         return (
           <CellContent
             content={[
@@ -82,7 +85,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
           />
         );
 
-      case 4:
+      case 5:
         return (
           <CellContent
             content={[
@@ -97,7 +100,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 5:
+      case 6:
         return (
           <CellContent
             content={[
@@ -105,7 +108,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 6:
+      case 7:
         return (
           <CellContent
             content={[
@@ -117,7 +120,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 7:
+      case 8:
         return (
           <CellContent
             content={[
@@ -132,7 +135,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 8:
+      case 9:
         return (
           <CellContent
             content={[
@@ -170,7 +173,18 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
-      widths={['11%', '11%', '18%', '11%', '11%', '13%', '11%', '9%', '5%']}
+      widths={[
+        '11%',
+        '5%',
+        '10%',
+        '16%',
+        '11%',
+        '10%',
+        '12%',
+        '11%',
+        '9%',
+        '5%',
+      ]}
       shouldShowMobile={true}
     />
   );
