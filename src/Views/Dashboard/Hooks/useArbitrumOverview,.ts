@@ -89,7 +89,7 @@ const get24hrsStats = (
 
 export const useArbitrumOverview = () => {
   const { configContracts, activeChain } = useActiveChain();
-  const { totalData } = useDashboardTableData();
+  const { dashboardData } = useDashboardTableData();
   const prevDayEpoch = getLinuxTimestampBefore24Hours();
   const tokensArray = useMemo(() => {
     const array = Object.keys(configContracts.tokens);
@@ -150,15 +150,34 @@ export const useArbitrumOverview = () => {
     return returnObj;
   }, [data]);
 
+  const openInterest: { [key: string]: { openInterest: number } } | null =
+    useMemo(() => {
+      if (!dashboardData) return null;
+      const returnObj: { [key: string]: { openInterest: number } } = {};
+      dashboardData.forEach((data) => {
+        const poolName = `${data.pool}openInterest`;
+        if (returnObj[poolName] === undefined) {
+          returnObj[poolName] = {
+            openInterest: data.openInterest,
+          };
+        } else {
+          returnObj[poolName] = {
+            openInterest: returnObj[poolName].openInterest + data.openInterest,
+          };
+        }
+      });
+      return returnObj;
+    }, [dashboardData]);
+
   const overView = useMemo(() => {
     if (!data) return null;
     return {
       totalTraders: data.totalTraders[0]?.uniqueCountCumulative || 0,
-      openInterest: totalData ? totalData.openInterest : null,
+      ...openInterest,
       ...total24hrsStats,
       ...totalStats,
     };
-  }, [data, totalData]);
+  }, [data, openInterest, total24hrsStats, totalStats]);
 
   console.log(overView, 'overViewResponse');
 
