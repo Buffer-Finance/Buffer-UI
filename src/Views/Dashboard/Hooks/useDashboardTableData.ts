@@ -189,6 +189,6 @@ export const useDashboardTableData = () => {
       }
     );
   }, [dashboardData]);
-  // console.log(dashboardData, totalData, 'dashboardData');
+  console.log(dashboardData, totalData, 'dashboardData');
   return { dashboardData, totalData };
 };

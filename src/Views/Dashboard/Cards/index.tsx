@@ -361,12 +361,32 @@ export const OverviewArbitrum = ({
                 unit={'USDC'}
               />
             </div>,
-
-            <div>
-              {data.openInterest !== null
-                ? data.openInterest + ' USDC'
-                : 'fetching...'}
-            </div>,
+            <NumberTooltip
+              content={
+                <TableAligner
+                  keysName={tokens}
+                  keyStyle={tooltipKeyClasses}
+                  valueStyle={tooltipValueClasses}
+                  values={tokens.map((token) => {
+                    const stats = data[`${token}openInterest`];
+                    if (stats) return (stats as toalTokenXstats).openInterest;
+                    else return '-';
+                  })}
+                />
+              }
+            >
+              <div className={underLineClass}>
+                $
+                {tokens.reduce((acc, curr) => {
+                  return acc + data[`${curr}openInterest`]?.openInterest || 0;
+                }, 0)}
+              </div>
+            </NumberTooltip>,
+            // <div>
+            //   {data.openInterest !== null
+            //     ? data.openInterest + ' USDC'
+            //     : 'fetching...'}
+            // </div>,
             <NumberTooltip
               content={
                 <TableAligner
