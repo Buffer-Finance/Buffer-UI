@@ -1,4 +1,4 @@
-import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
+import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import BufferDropdown from '@Views/Common/BufferDropdown';
 import { isTestnet } from 'config';
 

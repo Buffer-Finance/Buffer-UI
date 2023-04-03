@@ -35,7 +35,7 @@ import {
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
+import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { useQTinfo } from '@Views/BinaryOptions';
 import {
   getAggregatedBarv2,
