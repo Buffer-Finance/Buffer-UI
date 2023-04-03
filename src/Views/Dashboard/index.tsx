@@ -23,7 +23,7 @@ import { getChains } from 'src/Config/wagmiClient';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
-import { useArbitrumOverview } from './Hooks/useArbitrumOverview,';
+import { useArbitrumOverview } from './Hooks/useArbitrumOverview';
 import { atom, useAtom } from 'jotai';
 
 const DashboardStyles = styled.div`

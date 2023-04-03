@@ -22,7 +22,7 @@ import {
   arbitrumOverview,
   toalTokenXstats,
   tokenX24hrsStats,
-} from '../Hooks/useArbitrumOverview,';
+} from '../Hooks/useArbitrumOverview';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useMemo } from 'react';
 
