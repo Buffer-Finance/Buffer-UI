@@ -396,7 +396,7 @@ const Referral: React.FC<IReferral> = ({}) => {
 
   return (
     <>
-      <TokenDataNotIncludedWarning />
+      {/* <TokenDataNotIncludedWarning /> */}
       <ReferralCodeModal
         isOpen={showCodeModal}
         closeModal={closeModal}
