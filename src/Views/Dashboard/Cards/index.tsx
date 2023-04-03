@@ -220,7 +220,8 @@ export const OverviewArbitrum = ({
             'Total Traders',
             'Average Trade size',
             'Average Daily Volume',
-            'Open Interest',
+            'Open Interest (USDC)',
+            'Open Interest (ARB)',
             'Total Trades',
           ]}
           values={[
@@ -361,32 +362,40 @@ export const OverviewArbitrum = ({
                 unit={'USDC'}
               />
             </div>,
-            <NumberTooltip
-              content={
-                <TableAligner
-                  keysName={tokens}
-                  keyStyle={tooltipKeyClasses}
-                  valueStyle={tooltipValueClasses}
-                  values={tokens.map((token) => {
-                    const stats = data[`${token}openInterest`];
-                    if (stats) return (stats as toalTokenXstats).openInterest;
-                    else return '-';
-                  })}
-                />
-              }
-            >
-              <div className={underLineClass}>
-                $
-                {tokens.reduce((acc, curr) => {
-                  return acc + data[`${curr}openInterest`]?.openInterest || 0;
-                }, 0)}
-              </div>
-            </NumberTooltip>,
-            // <div>
-            //   {data.openInterest !== null
-            //     ? data.openInterest + ' USDC'
-            //     : 'fetching...'}
-            // </div>,
+            // <NumberTooltip
+            //   content={
+            //     <TableAligner
+            //       keysName={tokens}
+            //       keyStyle={tooltipKeyClasses}
+            //       valueStyle={tooltipValueClasses}
+            // values={tokens.map((token) => {
+            //   const stats = data[`${token}openInterest`];
+            //   if (stats) return (stats as toalTokenXstats).openInterest;
+            //   else return '-';
+            // })}
+            //     />
+            //   }
+            // >
+            //   <div className={underLineClass}>
+            //     $
+            //     {tokens.reduce((acc, curr) => {
+            //       return acc + data[`${curr}openInterest`]?.openInterest || 0;
+            //     }, 0)}
+            //   </div>
+            // </NumberTooltip>,
+
+            <div>
+              {data.openInterest !== null
+                ? (data.USDCopenInterest as toalTokenXstats)?.openInterest +
+                  ' USDC'
+                : 'fetching...'}
+            </div>,
+            <div>
+              {data.openInterest !== null
+                ? (data.ARBopenInterest as toalTokenXstats)?.openInterest +
+                  ' ARB'
+                : 'fetching...'}
+            </div>,
             <NumberTooltip
               content={
                 <TableAligner
