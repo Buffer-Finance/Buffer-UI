@@ -242,6 +242,7 @@ export const Incentivised = () => {
                 skip={skip}
                 nftWinners={configValue.winnersNFT}
                 userRank={winnerUserRank}
+                isDailyTable
               />,
               <DailyWebTable
                 standings={loserStats}
@@ -252,6 +253,7 @@ export const Incentivised = () => {
                 skip={skip}
                 nftWinners={configValue.losersNFT}
                 userRank={loserUserRank}
+                isDailyTable
               />,
             ]}
           />

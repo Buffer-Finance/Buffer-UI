@@ -7,7 +7,6 @@ import {
   useDashboardTableData,
 } from './useDashboardTableData';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 export type tokenX24hrsStats = {
@@ -87,12 +86,23 @@ const get24hrsStats = (
   );
 };
 
+export const usePoolNames = () => {
+  const { configContracts } = useActiveChain();
+  return {
+    poolNames: useMemo(
+      () => Object.keys(configContracts.tokens),
+      [configContracts]
+    ),
+  };
+};
+
 export const useArbitrumOverview = () => {
   const { configContracts, activeChain } = useActiveChain();
   const { dashboardData } = useDashboardTableData();
   const prevDayEpoch = getLinuxTimestampBefore24Hours();
+  const { poolNames } = usePoolNames();
   const tokensArray = useMemo(() => {
-    const array = Object.keys(configContracts.tokens);
+    const array = [...poolNames];
     array.unshift('total');
     return array;
   }, []);
