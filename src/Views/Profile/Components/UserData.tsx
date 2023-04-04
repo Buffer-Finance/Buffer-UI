@@ -139,6 +139,7 @@ export const UserData = () => {
                     tradingMetricsData.totalTrades || '0'
                 }
                 unit={'%'}
+                className="!w-full"
                 content={
                   <>{`Won ${tradingMetricsData.tradeWon}/${tradingMetricsData.totalTrades} trades.`}</>
                 }
