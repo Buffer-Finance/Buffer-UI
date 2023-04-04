@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { ReactNode } from 'react';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
+import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 interface IEarnAtom {
   isModalOpen: boolean;
   activeModal: string | null;

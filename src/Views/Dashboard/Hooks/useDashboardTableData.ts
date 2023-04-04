@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { add } from '@Utils/NumString/stringArithmatics';
+import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
@@ -43,13 +43,13 @@ export const useDashboardTableData = () => {
     // refreshInterval: 300,
   });
 
-  const assetStatus = useMarketStatus();
+  const { assetStatus } = useMarketStatus();
   const { configContracts } = useActiveChain();
   const { data } = useSWR('dashboard-table-data', {
     fetcher: async () => {
       const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
-          optionContracts (where: {token: "USDC"}) {
+          optionContracts {
             address
             openDown
             openUp
@@ -62,7 +62,7 @@ export const useDashboardTableData = () => {
           }
           volumePerContracts(   
             first: 1000
-            where: {depositToken: "USDC", timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
+            where: { timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
             optionContract {
               address
             }
@@ -88,6 +88,8 @@ export const useDashboardTableData = () => {
     }, {});
   }, [data]);
 
+  console.log(oneDayVolume, 'oneDayVolume');
+
   const dashboardData = useMemo(() => {
     if (!data || !data.optionContracts) return [];
     const upatedData = [];
@@ -95,19 +97,20 @@ export const useDashboardTableData = () => {
     data.optionContracts.forEach((item) => {
       const configPair = configContracts.pairs.find((pair) => {
         pool = null;
-        if (
-          pair.pools[0].options_contracts.current.toLowerCase() ===
-          item.address.toLowerCase()
-        )
-          pool = pair.pools[0];
-        // pool = pair.pools.find(
-        //   (pool) =>
-        //     pool.options_contracts.current.toLowerCase() ===
-        //     item.address.toLowerCase()
-        // );
+        // if (
+        //   pair.pools[0].options_contracts.current.toLowerCase() ===
+        //   item.address.toLowerCase()
+        // )
+        // pool = pair.pools[0];
+        pool = pair.pools.find(
+          (pool) =>
+            pool.options_contracts.current.toLowerCase() ===
+            item.address.toLowerCase()
+        );
         return !!pool;
       });
       if (!configPair) return;
+
       const currData = {
         ...item,
         address: pool.options_contracts.current,
@@ -119,10 +122,26 @@ export const useDashboardTableData = () => {
         currentPrice: currentPrices?.[configPair.tv_id]?.p,
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(
-          fromWei(item.openInterest, configContracts.tokens['USDC'].decimals)
+          fromWei(
+            item.openInterest,
+            configContracts.tokens[pool.token].decimals
+          )
         ),
         precision: configPair?.price_precision,
-        totalTrades: Number(add(item.openDown, item.openUp)),
+        openUp: fromWei(
+          item.openUp,
+          configContracts.tokens[pool.token].decimals
+        ),
+        openDown: fromWei(
+          item.openDown,
+          configContracts.tokens[pool.token].decimals
+        ),
+        totalTrades: Number(
+          fromWei(
+            add(item.openDown, item.openUp),
+            configContracts.tokens[pool.token].decimals
+          )
+        ),
         max_trade_size:
           Number(assetStatus[pool.options_contracts.current]?.maxTradeAmount) ||
           0,
@@ -135,14 +154,14 @@ export const useDashboardTableData = () => {
           Number(
             fromWei(
               oneDayVolume?.[item.address.toLowerCase()],
-              configContracts.tokens['USDC'].decimals
+              configContracts.tokens[pool.token].decimals
             )
           ) || '0',
         currentUtilization: Number(fromWei(item.currentUtilization, 16)),
         payoutForDown: Number(fromWei(item.payoutForDown, 16)),
         payoutForUp: Number(fromWei(item.payoutForUp, 16)),
         max_utilization: configPair?.max_utilization,
-        // currentPrice: currentPrice?.p,
+        pool: pool.token,
       };
       upatedData.push(currData);
     });
@@ -170,6 +189,6 @@ export const useDashboardTableData = () => {
       }
     );
   }, [dashboardData]);
-  // console.log(dashboardData, totalData, 'dashboardData');
+  console.log(dashboardData, totalData, 'dashboardData');
   return { dashboardData, totalData };
 };

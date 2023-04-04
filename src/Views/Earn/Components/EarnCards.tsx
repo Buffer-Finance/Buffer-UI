@@ -267,7 +267,7 @@ const IBFRCard = ({ data }: { data: IiBFR }) => {
           // <div className={`${wrapperClasses}`}>
           //   <Display className="!justify-end" data={data.apr} unit="%" />
           // </div>,
-          <div>
+          <div className={`${wrapperClasses}`}>
             <Display
               className="!justify-end"
               data={data.apr.value}

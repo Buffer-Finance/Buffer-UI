@@ -7,14 +7,27 @@ import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
-import { divide } from '@Utils/NumString/stringArithmatics';
-import { useActiveChain } from '@Hooks/useActiveChain';
+import { useState } from 'react';
 
-export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
+export const DashboardTable = ({
+  dashboardData,
+  loading,
+  count,
+  onPageChange,
+  activePage,
+}: {
+  dashboardData: any[];
+  loading: boolean;
+  count?: number;
+  onPageChange?:
+    | ((event: React.ChangeEvent<unknown>, page: number) => void)
+    | undefined;
+  activePage: number;
+}) => {
   const navigate = useNavigate();
-  const { configContracts } = useActiveChain();
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
+    { id: 'pool', label: 'Pool' },
     { id: 'currentPrice', label: 'Current Price' },
     { id: 'totalTrades', label: 'Open Up/Open Down' },
     { id: '24h_volume', label: '24h Volume' },
@@ -31,7 +44,6 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
     sortedData: typeof dashboardData
   ) => {
     const currentRow = sortedData[row];
-    console.log(currentRow, 'currentRow');
     switch (col) {
       case 0:
         return (
@@ -43,6 +55,8 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
           </div>
         );
       case 1:
+        return currentRow.pool;
+      case 2:
         return (
           <CellContent
             content={[
@@ -53,49 +67,40 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 2:
+      case 3:
         return (
           <>
             <OpenUpDownIndicator
-              openDown={Number(
-                divide(
-                  currentRow.openDown,
-                  configContracts.tokens['USDC'].decimals
-                )
-              )}
-              openUp={Number(
-                divide(
-                  currentRow.openUp,
-                  configContracts.tokens['USDC'].decimals
-                )
-              )}
+              openDown={Number(currentRow.openDown)}
+              openUp={Number(currentRow.openUp)}
+              unit={currentRow.pool}
             />
             <div className="mt-2">
               Total :{' '}
               <Display
-                data={divide(
-                  currentRow.totalTrades,
-                  configContracts.tokens['USDC'].decimals
-                )}
-                unit="USDC"
+                data={currentRow.totalTrades}
+                unit={currentRow.pool}
                 className="inline"
               />
             </div>
           </>
         );
 
-      case 3:
+      case 4:
         return (
           <CellContent
             content={[
               <div className="flex items-center">
-                <Display data={currentRow['24h_volume']} unit={'USDC'} />
+                <Display
+                  data={currentRow['24h_volume']}
+                  unit={currentRow.pool}
+                />
               </div>,
             ]}
           />
         );
 
-      case 4:
+      case 5:
         return (
           <CellContent
             content={[
@@ -110,7 +115,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 5:
+      case 6:
         return (
           <CellContent
             content={[
@@ -118,19 +123,19 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 6:
+      case 7:
         return (
           <CellContent
             content={[
               <Display
                 data={currentRow.max_trade_size}
-                unit="USDC"
+                unit={currentRow.pool}
                 className="!justify-start"
               />,
             ]}
           />
         );
-      case 7:
+      case 8:
         return (
           <CellContent
             content={[
@@ -145,7 +150,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
             ]}
           />
         );
-      case 8:
+      case 9:
         return (
           <CellContent
             content={[
@@ -179,12 +184,26 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       data={dashboardData}
       rows={dashboardData?.length}
       bodyJSX={bodyJSX}
-      loading={!dashboardData.length}
+      loading={loading}
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
-      widths={['11%', '11%', '18%', '11%', '11%', '13%', '11%', '9%', '5%']}
+      widths={[
+        '11%',
+        '5%',
+        '10%',
+        '16%',
+        '11%',
+        '10%',
+        '12%',
+        '11%',
+        '9%',
+        '5%',
+      ]}
       shouldShowMobile={true}
+      activePage={activePage}
+      count={count}
+      onPageChange={onPageChange}
     />
   );
 };

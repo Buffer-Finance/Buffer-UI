@@ -36,6 +36,13 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { snackAtom } from 'src/App';
 import { useSearchParams } from 'react-router-dom';
 import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
+import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
+import {
+  tooltipKeyClasses,
+  tooltipValueClasses,
+} from '@Views/Earn/Components/VestCards';
+import { toFixed } from '@Utils/NumString';
 
 interface IReferral {}
 
@@ -48,6 +55,7 @@ export interface IReferralStat {
   totalRebateEarned: string;
   totalTradingVolume: string;
   totalDiscountAvailed: string;
+  [key: string]: string;
 }
 export const ReferralPage = () => {
   const { activeChain } = useActiveChain();
@@ -120,6 +128,7 @@ const Referral: React.FC<IReferral> = ({}) => {
   const { openConnectModal } = useConnectModal();
   const { setTab, tab } = useRefferalTab();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const { poolNames: tokens } = usePoolNames();
 
   const shouldConnectWallet = !account;
   useEffect(() => {
@@ -186,6 +195,28 @@ const Referral: React.FC<IReferral> = ({}) => {
             <Display
               data={divide(data.totalTradingVolume, usdcDecimals)}
               unit={'USDC'}
+              className="!w-full"
+              content={
+                tokens.length > 1 && (
+                  <TableAligner
+                    keysName={tokens}
+                    keyStyle={tooltipKeyClasses}
+                    valueStyle={tooltipValueClasses}
+                    values={tokens.map(
+                      (token) =>
+                        toFixed(
+                          divide(
+                            data[`totalTradingVolume${token}`],
+                            configContracts.tokens[token].decimals
+                          ) as string,
+                          2
+                        ) +
+                        ' ' +
+                        token
+                    )}
+                  />
+                )
+              }
             />
           ),
         },
@@ -195,6 +226,28 @@ const Referral: React.FC<IReferral> = ({}) => {
             <Display
               data={divide(data.totalDiscountAvailed, usdcDecimals)}
               unit={'USDC'}
+              className="!w-full"
+              content={
+                tokens.length > 1 && (
+                  <TableAligner
+                    keysName={tokens}
+                    keyStyle={tooltipKeyClasses}
+                    valueStyle={tooltipValueClasses}
+                    values={tokens.map(
+                      (token) =>
+                        toFixed(
+                          divide(
+                            data[`totalDiscountAvailed${token}`],
+                            configContracts.tokens[token].decimals
+                          ) as string,
+                          2
+                        ) +
+                        ' ' +
+                        token
+                    )}
+                  />
+                )
+              }
             />
           ),
         },
@@ -224,12 +277,51 @@ const Referral: React.FC<IReferral> = ({}) => {
           <Display
             data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
             unit={'USDC'}
+            className="!w-full"
+            content={
+              tokens.length > 1 && (
+                <TableAligner
+                  keysName={tokens}
+                  keyStyle={tooltipKeyClasses}
+                  valueStyle={tooltipValueClasses}
+                  values={tokens.map(
+                    (token) =>
+                      toFixed(
+                        divide(
+                          data[`totalVolumeOfReferredTrades${token}`],
+                          configContracts.tokens[token].decimals
+                        ) as string,
+                        2
+                      ) +
+                      ' ' +
+                      token
+                  )}
+                />
+              )
+            }
           />
         ),
       },
       {
         header: 'Total Referred trades',
-        desc: data?.totalTradesReferred,
+        desc: (
+          <Display
+            data={data?.totalTradesReferred}
+            className="!w-full"
+            content={
+              tokens.length > 1 && (
+                <TableAligner
+                  keysName={tokens}
+                  keyStyle={tooltipKeyClasses}
+                  valueStyle={tooltipValueClasses}
+                  values={tokens.map(
+                    (token) => data[`totalTradesReferred${token}`]
+                  )}
+                />
+              )
+            }
+          />
+        ),
       },
       {
         header: 'Total Rebate Earned',
@@ -237,6 +329,28 @@ const Referral: React.FC<IReferral> = ({}) => {
           <Display
             data={divide(data.totalRebateEarned, usdcDecimals)}
             unit={'USDC'}
+            className="!w-full"
+            content={
+              tokens.length > 1 && (
+                <TableAligner
+                  keysName={tokens}
+                  keyStyle={tooltipKeyClasses}
+                  valueStyle={tooltipValueClasses}
+                  values={tokens.map(
+                    (token) =>
+                      toFixed(
+                        divide(
+                          data[`totalRebateEarned${token}`],
+                          configContracts.tokens[token].decimals
+                        ) as string,
+                        2
+                      ) +
+                      ' ' +
+                      token
+                  )}
+                />
+              )
+            }
           />
         ),
       },
@@ -294,7 +408,7 @@ const Referral: React.FC<IReferral> = ({}) => {
 
   return (
     <>
-      <TokenDataNotIncludedWarning />
+      {/* <TokenDataNotIncludedWarning /> */}
       <ReferralCodeModal
         isOpen={showCodeModal}
         closeModal={closeModal}
@@ -504,10 +618,30 @@ const Affilate = ({
   );
 };
 
+function getTokenXleaderboardQueryFields(token: string) {
+  const fields = [
+    'totalTradesReferred',
+    'totalVolumeOfReferredTrades',
+    'totalRebateEarned',
+    'totalTradingVolume',
+    'totalDiscountAvailed',
+  ];
+  return fields.map((field) => field + token).join(' ');
+}
+
 export const useUserReferralStats = () => {
   const { address } = useUserAccount();
   const { configContracts } = useActiveChain();
-  return useSWR(`${address}-stats`, {
+  const { poolNames } = usePoolNames();
+  const queryFields = useMemo(() => {
+    if (poolNames.length > 1)
+      return poolNames
+        .map((poolName) => getTokenXleaderboardQueryFields(poolName))
+        .join(' ');
+    else return '';
+  }, [poolNames]);
+
+  return useSWR(`${address}-referral-stats`, {
     fetcher: async () => {
       const response = await axios.post(configContracts.graph.MAIN, {
         query: `{
@@ -517,6 +651,7 @@ export const useUserReferralStats = () => {
               totalRebateEarned
               totalTradingVolume
               totalDiscountAvailed
+              ${queryFields}
             }
           }
           `,
