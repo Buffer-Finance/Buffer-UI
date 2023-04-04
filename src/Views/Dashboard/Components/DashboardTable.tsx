@@ -7,13 +7,22 @@ import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { useState } from 'react';
 
 export const DashboardTable = ({
   dashboardData,
   loading,
+  count,
+  onPageChange,
+  activePage,
 }: {
   dashboardData: any[];
   loading: boolean;
+  count?: number;
+  onPageChange?:
+    | ((event: React.ChangeEvent<unknown>, page: number) => void)
+    | undefined;
+  activePage: number;
 }) => {
   const navigate = useNavigate();
   const headerJSX = [
@@ -192,6 +201,9 @@ export const DashboardTable = ({
         '5%',
       ]}
       shouldShowMobile={true}
+      activePage={activePage}
+      count={count}
+      onPageChange={onPageChange}
     />
   );
 };
