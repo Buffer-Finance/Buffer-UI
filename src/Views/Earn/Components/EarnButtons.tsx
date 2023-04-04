@@ -48,10 +48,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
       return (
         <div className="flex gap-5">
           {cardNum === 0 && (
-            <BlueBtn
-              onClick={() => setSwapAtom((s) => !s)}
-              className={btnClasses}
-            >
+            <BlueBtn onClick={() => setSwapAtom('BFR')} className={btnClasses}>
               Buy BFR
             </BlueBtn>
           )}

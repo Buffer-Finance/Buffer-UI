@@ -60,7 +60,6 @@ export const EarnPage = () => {
 
   return (
     <EarnStyles>
-      <OpenOcean />
       <EarnModals />
       <Section
         Heading={

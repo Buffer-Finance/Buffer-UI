@@ -4,16 +4,15 @@ import { ShareModalStyles } from '@Views/BinaryOptions/Components/shareModal';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { ModalBase } from 'src/Modals/BaseModal';
 
-export const isOceanSwapOpenAtom = atom<boolean>(false);
+export const isOceanSwapOpenAtom = atom<false | 'BFR' | 'USDC'>(false);
 export const OpenOcean = () => {
   const swapAtom = useAtomValue(isOceanSwapOpenAtom);
-  console.log(`swapAtom: `, swapAtom);
   const setSwapAtom = useSetAtom(isOceanSwapOpenAtom);
 
   return (
     <>
       <ModalBase
-        open={swapAtom}
+        open={swapAtom ? true : false}
         onClose={() => {
           setSwapAtom(false);
         }}
@@ -27,7 +26,9 @@ export const OpenOcean = () => {
         </button>
         <iframe
           className=" w-[440px] sm:w-[370px] h-[658px]"
-          src="https://widget.openocean.finance/CLASSIC#/ARBITRUM/UNI/BFR"
+          src={
+            'https://widget.openocean.finance/CLASSIC#/ARBITRUM/ETH/' + swapAtom
+          }
         ></iframe>
       </ModalBase>
     </>
