@@ -454,6 +454,7 @@ export const DailyWebTable: React.FC<{
           nftWinners={nftWinners}
           onClick={navigateToProfile}
           isWinrateTable={isWinrateTable}
+          isDailyTable={isDailyTable}
         />
       )}
 
