@@ -625,6 +625,7 @@ export const TokensBLP = ({
   poolName: string;
 }) => {
   const { configContracts } = useActiveChain();
+  const shouldDisplayPOL = poolName !== 'aBLP';
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
@@ -650,9 +651,9 @@ export const TokensBLP = ({
             'Exchange Rate',
             'Total Supply',
             `Total ${tokenName} Amount`,
-            `POL(${tokenName})`,
+            shouldDisplayPOL && `POL(${tokenName})`,
             'APY',
-          ]}
+          ].filter((key) => key)}
           values={[
             <div className={wrapperClasses}>
               <Display data={data.price} unit={tokenName} precision={4} />
@@ -664,33 +665,35 @@ export const TokensBLP = ({
             <div className={wrapperClasses}>
               <Display data={data.total_usdc} unit={tokenName} />
             </div>,
-            <div className={wrapperClasses}>
-              {data.usdc_pol ? (
-                <NumberTooltip
-                  content={
-                    toFixed(
-                      multiply(divide(data.usdc_pol, data.usdc_total), 2),
-                      2
-                    ) + `% of total liquidity in the ${tokenName} vault.`
-                  }
-                >
-                  <div>
-                    <Display
-                      data={multiply(data.usdc_pol, data.price) || '0'}
-                      unit={tokenName}
-                      disable
-                      className={underLineClass}
-                    />
-                  </div>
-                </NumberTooltip>
-              ) : (
-                <>-</>
-              )}
-            </div>,
+            shouldDisplayPOL && (
+              <div className={wrapperClasses}>
+                {data.usdc_pol ? (
+                  <NumberTooltip
+                    content={
+                      toFixed(
+                        multiply(divide(data.usdc_pol, data.usdc_total), 2),
+                        2
+                      ) + `% of total liquidity in the ${tokenName} vault.`
+                    }
+                  >
+                    <div>
+                      <Display
+                        data={multiply(data.usdc_pol, data.price) || '0'}
+                        unit={tokenName}
+                        disable
+                        className={underLineClass}
+                      />
+                    </div>
+                  </NumberTooltip>
+                ) : (
+                  <>-</>
+                )}
+              </div>
+            ),
             <div className={wrapperClasses}>
               <Display data={data.apr} unit="%" />
             </div>,
-          ]}
+          ].filter((value) => value)}
         />
       }
     />
