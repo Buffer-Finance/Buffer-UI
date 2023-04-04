@@ -15,7 +15,7 @@ export const Section = ({
 }) => {
   return (
     <div className={`first-of-type:mt-5 mt-8 max-w-[100vw] ${className}`}>
-      <div className="flex items-center justify-between flex-wrap mb-6 gap-3">
+      <div className="flex items-end justify-between flex-wrap mb-6 gap-3">
         <div className={!HeadingRight ? 'w-full' : 'w-fit'}>
           <div className="text-[22px]">{Heading}</div>
           <div className="text-f16 text-2 ">{subHeading}</div>
