@@ -1,6 +1,24 @@
-export const PairTokenImage = ({ pair }: { pair: string }) => {
+export const PairTokenImage = ({
+  pair,
+  image1,
+  image2,
+}: {
+  pair?: string;
+  image1: string | undefined;
+  image2: string | undefined;
+}) => {
+  if (image1 !== undefined && image2 !== undefined)
+    return (
+      <div
+        className={`relative w-full h-full
+      `}
+      >
+        <img src={image1} className="absolute z-10 -left-[5px]" />
+        <img src={image2} className="absolute z-0 -right-[5px]" />
+      </div>
+    );
   const [token1, token2] = pair.split('-');
-  const shouldShowSecondImage = token2.toLowerCase() !== 'usd';
+  const shouldShowSecondImage = token2?.toLowerCase() !== 'usd';
   const imageSrc =
     'https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/';
   if (!shouldShowSecondImage)
