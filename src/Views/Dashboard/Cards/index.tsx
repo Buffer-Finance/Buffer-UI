@@ -247,14 +247,14 @@ export const OverviewArbitrum = ({
                       if (stats)
                         return (
                           <div className={' flex items-center justify-end'}>
-                            <div>
+                            <div className="whitespace-nowrap">
                               {getBalance(
                                 (stats as toalTokenXstats).totalSettlementFees
                               )}
                               {token}
                             </div>
                             &nbsp;/&nbsp;
-                            <div>
+                            <div className="whitespace-nowrap">
                               {getBalance(
                                 (stats as toalTokenXstats).totalVolume
                               )}
@@ -267,15 +267,17 @@ export const OverviewArbitrum = ({
                   />
                 }
               >
-                <div className={underLineClass + ' flex items-center'}>
-                  <div>
+                <div
+                  className={underLineClass + ' flex items-center flex-wrap'}
+                >
+                  <div className="whitespace-nowrap">
                     {getBalance(
                       (data.totalstats as toalTokenXstats).totalSettlementFees
                     )}
                     USDC
                   </div>
                   &nbsp;/&nbsp;
-                  <div>
+                  <div className="whitespace-nowrap">
                     {getBalance(
                       (data.totalstats as toalTokenXstats).totalVolume
                     )}
@@ -296,14 +298,14 @@ export const OverviewArbitrum = ({
                       if (stats)
                         return (
                           <div className={' flex items-center justify-end'}>
-                            <div>
+                            <div className="whitespace-nowrap">
                               {getBalance(
                                 (stats as tokenX24hrsStats).settlementFee
                               )}
                               {token}
                             </div>
                             &nbsp;/&nbsp;
-                            <div>
+                            <div className="whitespace-nowrap">
                               {getBalance((stats as tokenX24hrsStats).amount)}
                               {token}
                             </div>
@@ -314,15 +316,17 @@ export const OverviewArbitrum = ({
                   />
                 }
               >
-                <div className={underLineClass + ' flex items-center'}>
-                  <div>
+                <div
+                  className={underLineClass + ' flex items-center flex-wrap'}
+                >
+                  <div className="whitespace-nowrap">
                     {getBalance(
                       (data.total24stats as tokenX24hrsStats).settlementFee
                     )}
                     USDC
                   </div>
                   &nbsp;/&nbsp;
-                  <div>
+                  <div className="whitespace-nowrap">
                     {getBalance((data.total24stats as tokenX24hrsStats).amount)}
                     USDC
                   </div>
