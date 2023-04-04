@@ -169,7 +169,7 @@ export function CustomOption() {
         </div>
         {/* TODO at 180, marketPrice?.[activeAsset.tv_id]?.close always return false, since marketPrice?.[activeAsset.tv_id] is an array */}
         {(currStats && currStats.max_loss && currStats.max_payout) ||
-        (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
+          (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
           <div className="flex-sbw text-f14 my-3 ">
             <div className="f14  flex-start flex wrap text-2">
               Payout :&nbsp;
@@ -213,9 +213,9 @@ export function CustomOption() {
                 <BlueBtn
                   className="text-f13 text-1 text-center"
                   isDisabled={true}
-                  onClick={() => {}}
+                  onClick={() => { }}
                 >
-                  Trading is halted for this asset
+                  Trading is halted for this market
                 </BlueBtn>
               ) : (
                 <>

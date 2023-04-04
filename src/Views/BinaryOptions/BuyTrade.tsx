@@ -22,7 +22,7 @@ import { ammountAtom, approveModalAtom } from './PGDrawer';
 import { DurationPicker } from './PGDrawer/DurationPicker';
 import { useActivePoolObj } from './PGDrawer/PoolDropDown';
 
-const BuyTrade: React.FC<any> = ({}) => {
+const BuyTrade: React.FC<any> = ({ }) => {
   const [amount, setAmount] = useAtom(ammountAtom);
 
   const { address: account } = useUserAccount();
@@ -95,7 +95,7 @@ const BuyTrade: React.FC<any> = ({}) => {
         <DurationSelector />
       </div>
       {(currStats && currStats.max_loss && currStats.max_payout) ||
-      (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
+        (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
         <div className="flex-sbw text-f14 my-3 ">
           <div className="f14  flex-start flex wrap text-2">
             Payout :&nbsp;
@@ -137,9 +137,9 @@ const BuyTrade: React.FC<any> = ({}) => {
               <BlueBtn
                 className="text-f13 text-1 text-center"
                 isDisabled={true}
-                onClick={() => {}}
+                onClick={() => { }}
               >
-                Trading is halted for this asset
+                Trading is halted for this market
               </BlueBtn>
             ) : (
               <>
