@@ -216,7 +216,7 @@ export const OverviewArbitrum = ({
           valueStyle={valueClasses}
           keysName={[
             'Fees / Volume',
-            'fees / Volume (24h)',
+            'Fees / Volume (24h)',
             'Total Traders',
             'Average Trade size',
             'Average Daily Volume',
