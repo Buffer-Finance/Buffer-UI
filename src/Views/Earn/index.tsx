@@ -17,6 +17,7 @@ import {
   ArbitrumOnly,
   ChainNotSupported,
 } from '@Views/Common/ChainNotSupported';
+import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 
 const EarnStyles = styled.div`
   width: min(1200px, 100%);

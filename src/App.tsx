@@ -41,6 +41,7 @@ import { DesktopTrade } from './MultiChartLayout';
 import { TestComponent } from './TestComponent';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { urlSettings } from './Config/wagmiClient';
+import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 window.addEventListener('message', (...args) => {
   console.log('msg-args', args);
 });
@@ -112,6 +113,8 @@ const AppRoutes = () => {
   }, [searchParam]);
   return (
     <div className="relative root w-[100vw]">
+      <OpenOcean />
+
       <Routes>
         <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
