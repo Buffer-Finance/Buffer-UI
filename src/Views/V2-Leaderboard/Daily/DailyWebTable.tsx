@@ -55,6 +55,7 @@ export const DailyWebTable: React.FC<{
   const { configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
   const params = useParams();
+  const { poolNames: tokens } = usePoolNames();
 
   //Memos - to avoid re-rendering
   const firstColPadding = useMemo(() => {
@@ -92,7 +93,6 @@ export const DailyWebTable: React.FC<{
     col: number,
     user: IuserData | undefined
   ) => {
-    const { poolNames: tokens } = usePoolNames();
     if (!standings) return <></>;
     let currentStanding: ILeague | IWinrate | IuserData = standings[row];
 
