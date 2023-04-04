@@ -34,12 +34,12 @@ export const ProfileCards = () => {
       Cards={[
         <Trading
           data={tradingMetricsData}
-          heading={'Trading Metrics USDC'}
+          heading={'USDC Trading Metrics'}
           tokenName="USDC"
         />,
         <Trading
           data={tradingMetricsData}
-          heading={'Trading Metrics ARB'}
+          heading={'ARB Trading Metrics'}
           tokenName="ARB"
         />,
         <Referral data={data} heading={'Referral Metrics'} />,
