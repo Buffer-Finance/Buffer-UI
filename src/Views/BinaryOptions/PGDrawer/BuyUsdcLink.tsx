@@ -11,7 +11,15 @@ export function BuyUSDCLink({ token }: { token: 'USDC' | 'BFR' | 'ARB' }) {
   const link = isTestnet
     ? `/faucet`
     : `https://app.uniswap.org/#/tokens/arbitrum/${configContracts.tokens[token].address}`;
-
+  if (isTestnet)
+    return (
+      <Link to={link} target={!isTestnet ? '_blank' : '_self'}>
+        <div className="text-f12 text-3 underline underline-offset-1 font-bold cursor-pointer">
+          {/* <EnterIcon /> */}
+          Buy {token}
+        </div>
+      </Link>
+    );
   return (
     <div
       className="text-f12 text-3 underline underline-offset-1 font-bold cursor-pointer"
