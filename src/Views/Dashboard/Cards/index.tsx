@@ -268,7 +268,9 @@ export const OverviewArbitrum = ({
                 }
               >
                 <div
-                  className={underLineClass + ' flex items-center flex-wrap'}
+                  className={
+                    underLineClass + ' flex items-center flex-wrap justify-end'
+                  }
                 >
                   <div className="whitespace-nowrap">
                     {getBalance(
@@ -317,7 +319,9 @@ export const OverviewArbitrum = ({
                 }
               >
                 <div
-                  className={underLineClass + ' flex items-center flex-wrap'}
+                  className={
+                    underLineClass + ' flex items-center flex-wrap justify-end'
+                  }
                 >
                   <div className="whitespace-nowrap">
                     {getBalance(
