@@ -627,7 +627,7 @@ export const TokensBLP = ({
     <Card
       top={
         <div className="flex items-center">
-          <div className="w-[20px] h-[20px] mr-[6px]">
+          <div className="w-[28px] h-[28px] mr-[6px]">
             <PairTokenImage
               image2={'/BLPlogo.png'}
               image1={configContracts.tokens[tokenName].img}

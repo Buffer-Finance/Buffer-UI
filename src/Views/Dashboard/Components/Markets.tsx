@@ -11,18 +11,16 @@ export const Markets = () => {
   const { dashboardData } = useDashboardTableData();
   const referralcode = useReferralCode();
   const { configContracts } = useActiveChain();
-  const activeToken = useAtomValue(tokenAtom);
+  const activeTokenArr = useAtomValue(tokenAtom);
   const markets = useMemo(() => {
-    if (activeToken === 'All')
-      return configContracts.pairs
-        .map((pair) => pair.pools.map((pool) => pool.options_contracts.current))
-        .flat();
-    return configContracts.pairs.map(
-      (pair) =>
-        pair.pools.find((pool) => pool.token === activeToken)?.options_contracts
-          .current
-    );
-  }, [activeToken, configContracts]);
+    return configContracts.pairs
+      .map((pair) =>
+        pair.pools
+          .filter((pool) => activeTokenArr.includes(pool.token))
+          .map((pool) => pool.options_contracts.current)
+      )
+      .flat();
+  }, [activeTokenArr, configContracts]);
 
   const [balance, allowance, maxTrade, stats, routerPermission] =
     useActiveAssetState(null, referralcode);
@@ -35,7 +33,10 @@ export const Markets = () => {
 
   return (
     <div>
-      <DashboardTable dashboardData={filteredDashboardData} />
+      <DashboardTable
+        dashboardData={filteredDashboardData}
+        loading={!dashboardData && markets.length > 1}
+      />
     </div>
   );
 };
