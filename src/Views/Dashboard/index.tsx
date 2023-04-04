@@ -243,7 +243,7 @@ export const TokenDropdown = () => {
   const { poolNames: tabList } = usePoolNames();
   const [activeToken, setActiveToken] = useAtom(tokenAtom);
   useEffect(() => {
-    setActiveToken(tabList);
+    setActiveToken([...tabList]);
   }, [activeChain]);
 
   function onCheckChange(tokenName: string) {
