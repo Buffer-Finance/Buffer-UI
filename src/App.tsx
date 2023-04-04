@@ -41,7 +41,9 @@ import { DesktopTrade } from './MultiChartLayout';
 import { TestComponent } from './TestComponent';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { urlSettings } from './Config/wagmiClient';
-
+window.addEventListener('message', (...args) => {
+  console.log('msg-args', args);
+});
 if (import.meta.env.VITE_MODE === 'production') {
   // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
   Sentry.init({
