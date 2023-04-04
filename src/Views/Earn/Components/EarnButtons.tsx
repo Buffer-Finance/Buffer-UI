@@ -1,6 +1,6 @@
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useContext } from 'react';
 import { gt } from '@Utils/NumString/stringArithmatics';
 import { BlueBtn } from '@Views/Common/V2-Button';
@@ -11,6 +11,7 @@ import { earnAtom, readEarnData } from '../earnAtom';
 import { useEarnWriteCalls } from '../Hooks/useEarnWriteCalls';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { isOceanSwapOpenAtom } from '@Views/Common/OpenOceanWidget';
 
 export const btnClasses = '!w-fit px-4 rounded-sm !h-7';
 
@@ -29,6 +30,8 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
   const showToast = (msg = 'Not enough balance') => {
     return toastify({ type: 'error', id: '007', msg });
   };
+  const swapAtom = useAtomValue(isOceanSwapOpenAtom);
+  const setSwapAtom = useSetAtom(isOceanSwapOpenAtom);
 
   if (!account || activeChain.id !== chain?.id)
     return (
@@ -46,12 +49,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
         <div className="flex gap-5">
           {cardNum === 0 && (
             <BlueBtn
-              onClick={() =>
-                window.open(
-                  'https://app.uniswap.org/#/tokens/arbitrum/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d',
-                  '_blank'
-                )
-              }
+              onClick={() => setSwapAtom((s) => !s)}
               className={btnClasses}
             >
               Buy BFR
