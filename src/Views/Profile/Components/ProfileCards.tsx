@@ -158,14 +158,17 @@ const Referral = ({
                       keysName={tokens}
                       keyStyle={tooltipKeyClasses}
                       valueStyle={tooltipValueClasses}
-                      values={tokens.map((token) =>
-                        toFixed(
-                          divide(
-                            data[`totalRebateEarned${token}`],
-                            configContracts.tokens[token].decimals
-                          ) as string,
-                          2
-                        )
+                      values={tokens.map(
+                        (token) =>
+                          toFixed(
+                            divide(
+                              data[`totalRebateEarned${token}`],
+                              configContracts.tokens[token].decimals
+                            ) as string,
+                            2
+                          ) +
+                          ' ' +
+                          token
                       )}
                     />
                   )
@@ -183,14 +186,17 @@ const Referral = ({
                       keysName={tokens}
                       keyStyle={tooltipKeyClasses}
                       valueStyle={tooltipValueClasses}
-                      values={tokens.map((token) =>
-                        toFixed(
-                          divide(
-                            data[`totalVolumeOfReferredTrades${token}`],
-                            configContracts.tokens[token].decimals
-                          ) as string,
-                          2
-                        )
+                      values={tokens.map(
+                        (token) =>
+                          toFixed(
+                            divide(
+                              data[`totalVolumeOfReferredTrades${token}`],
+                              configContracts.tokens[token].decimals
+                            ) as string,
+                            2
+                          ) +
+                          ' ' +
+                          token
                       )}
                     />
                   )

@@ -161,16 +161,19 @@ export const DailyWebTable: React.FC<{
                           keysName={tokens}
                           keyStyle={tooltipKeyClasses}
                           valueStyle={tooltipValueClasses}
-                          values={tokens.map((token) =>
-                            toFixed(
-                              divide(
-                                currentStanding[
-                                  `${token.toLowerCase()}Volume`
-                                ] as string,
-                                configContracts.tokens[token].decimals
-                              ) as string,
-                              2
-                            )
+                          values={tokens.map(
+                            (token) =>
+                              toFixed(
+                                divide(
+                                  currentStanding[
+                                    `${token.toLowerCase()}Volume`
+                                  ] as string,
+                                  configContracts.tokens[token].decimals
+                                ) as string,
+                                2
+                              ) +
+                              ' ' +
+                              token
                           )}
                         />
                       )
@@ -379,6 +382,7 @@ export const DailyWebTable: React.FC<{
                                   ] as string,
                                   configContracts.tokens[token].decimals
                                 )}
+                                unit={token}
                                 label={
                                   gte(
                                     currentStanding[
