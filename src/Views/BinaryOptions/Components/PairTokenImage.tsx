@@ -13,8 +13,14 @@ export const PairTokenImage = ({
         className={`relative w-full h-full
       `}
       >
-        <img src={image1} className="absolute z-10 -left-[5px]" />
-        <img src={image2} className="absolute z-0 -right-[5px]" />
+        <img
+          src={image1}
+          className="absolute z-10 -left-[1px] bottom-[0] w-[75%] h-[75%]"
+        />
+        <img
+          src={image2}
+          className="absolute z-0 -right-[1px] top-[0] w-[75%] h-[75%]"
+        />
       </div>
     );
   const [token1, token2] = pair.split('-');

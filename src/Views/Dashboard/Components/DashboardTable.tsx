@@ -8,7 +8,13 @@ import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 
-export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
+export const DashboardTable = ({
+  dashboardData,
+  loading,
+}: {
+  dashboardData: any[];
+  loading: boolean;
+}) => {
   const navigate = useNavigate();
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
@@ -169,7 +175,7 @@ export const DashboardTable = ({ dashboardData }: { dashboardData: any[] }) => {
       data={dashboardData}
       rows={dashboardData?.length}
       bodyJSX={bodyJSX}
-      loading={!dashboardData.length}
+      loading={loading}
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
