@@ -44,6 +44,12 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
       time: '23:59',
       name: ['24', 'Hour'],
     },
+    //the last one is replaced with edit button
+    {
+      duration: 24 * 60 * 60 * oneSec,
+      time: '23:59',
+      name: ['24', 'Hour'],
+    },
   ];
 
   useEffect(() => {
