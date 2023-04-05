@@ -175,7 +175,7 @@ const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
     isUserEducated: false,
   },
 });
-const layoutAtom = atomWithLocalStorage('layout-persisted', json);
+const layoutAtom = atomWithLocalStorage('layout-persisted-v2', json);
 const DesktopTrad = () => {
   const layoutRef = useRef<Layout | null>(null);
   const [forcefullyRerender, setforcefullyRerender] = useState(1);
@@ -277,6 +277,8 @@ const DesktopTrad = () => {
       if (isCDMForMarketSelect.current) {
         layoutApi.doAction(FlexLayout.Actions.setActiveTabset('charts'));
       }
+      if (market && !(market.replace('-', '') in Config.markets))
+        return navigate('/binary/BTC-USD');
       layoutRef.current!.addTabToActiveTabSet({
         type: 'tab',
         name: market,
