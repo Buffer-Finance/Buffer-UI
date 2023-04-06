@@ -9,6 +9,7 @@ import { useActiveChain } from './useActiveChain';
 import { DEFAULT_GAS_LIMIT } from 'src/Config';
 import { getError } from 'src/Utils/Contract/getError';
 import { convertBNtoString } from '@Utils/useReadCall';
+import { inIframe } from '@Utils/isInIframe';
 
 interface ICustomToast {
   body?: JSX.Element;
@@ -38,6 +39,7 @@ export interface IConfirmationModal {
 export function useWriteCall(contractAddress: string, abi: any[]) {
   const { dispatch } = useGlobal();
   const toastify = useToast();
+
   const { address: account, viewOnlyMode } = useUserAccount();
   const { activeChain } = useActiveChain();
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
@@ -129,7 +131,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
         totalFee = add(totalFee, value);
       }
 
-      if (totalFee && balance?.formatted) {
+      if (!inIframe() && totalFee && balance?.formatted) {
         if (lt(balance.formatted, totalFee)) {
           // dispatch({ type: "SET_TXN_LOADING", payload: 0 });
           throw new Error(
