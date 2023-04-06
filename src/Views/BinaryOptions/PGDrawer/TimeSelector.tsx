@@ -156,7 +156,7 @@ export const TimeSelector = ({
   max,
   error,
   onSelect,
-  maxTime = '23:59',
+  maxTime = '24:00',
   minTime = '00:05',
 }: {
   isTimeSelector?: boolean;
@@ -226,7 +226,7 @@ export const TimeSelector = ({
       currentTime = hrsRef.current.value + ':' + minRef.current.value;
       if (isBack) {
         setTime(subtractTImes(currentTime, '00:01'));
-      } else if (currentTimeInMins < timeToMins('23:59')) {
+      } else if (currentTimeInMins < timeToMins('24:00')) {
         setTime(addTimes(currentTime, '00:01'));
       }
     } else {
@@ -246,7 +246,7 @@ export const TimeSelector = ({
 
   const hrsValidations = (value) => {
     if (value < 0) hrsRef.current.value = 0;
-    if (value > 23) hrsRef.current.value = 23;
+    if (value > 24) hrsRef.current.value = 24;
     if (value.toString().length > 2)
       hrsRef.current.value = value.toString().slice(0, 2);
     // if (
@@ -331,7 +331,7 @@ export const TimeSelector = ({
                   onChange={(e) => hrsValidations(e.target.value)}
                   placeholder="00"
                   min={0}
-                  max={23}
+                  max={24}
                 />
                 <div className="text-f16 text-1 mx-1 text-center">:</div>
                 <input
