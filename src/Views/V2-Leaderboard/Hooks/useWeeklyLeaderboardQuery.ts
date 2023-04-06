@@ -135,7 +135,7 @@ export const useWeeklyLeaderboardQuery = () => {
             totalTrades
             volume
           }
-          reward:weeklyRevenueAndFees(where: {id: "${timestamp}"}) {
+          reward:weeklyRevenueAndFees(where: {id: "${timestamp}USDC"}) {
             settlementFee
             totalFee
           }

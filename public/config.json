@@ -848,7 +848,7 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox-lite",
+      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite"
     }
   },
