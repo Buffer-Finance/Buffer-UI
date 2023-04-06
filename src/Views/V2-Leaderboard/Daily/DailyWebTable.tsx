@@ -72,7 +72,7 @@ export const DailyWebTable: React.FC<{
       'Volume',
       isWinrateTable ? 'Total Trades' : 'Trades',
       isWinrateTable ? 'Trades Won' : 'Net PnL (%)',
-      isWinrateTable ? 'Win Rate' : 'Absolute Net PnL',
+      isWinrateTable ? 'Win Rate' : 'Total Payout',
     ];
   }, []);
 
