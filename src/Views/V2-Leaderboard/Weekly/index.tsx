@@ -38,6 +38,14 @@ import { ILeague } from '../interfaces';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { ChainSwitchDropdown } from '@Views/Dashboard';
+import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
+import { TableAligner } from '../Components/TableAligner';
+import {
+  tooltipKeyClasses,
+  tooltipValueClasses,
+} from '@Views/Earn/Components/VestCards';
+import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { Display } from '@Views/Common/Tooltips/Display';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -46,11 +54,13 @@ export const Weekly = () => {
   const { activeChain, configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
   const { week, nextTimeStamp } = useWeekOfTournament();
+  const { poolNames: tokens } = usePoolNames();
   const {
     data,
     totalTournamentData,
     loserUserRank,
     winnerUserRank,
+    openInterest,
     // loserWinrateUserRank,
     winnerWinrateUserRank,
   } = useWeeklyLeaderboardQuery();
@@ -281,6 +291,39 @@ export const Weekly = () => {
             headClass="text-f14 tab:text-f12 fw5 text-6"
             className="winner-card"
           />
+          <ArbitrumOnly hide>
+            <Col
+              head={'Open Interest'}
+              desc={
+                <Display
+                  data={openInterest?.['total']}
+                  precision={2}
+                  label={'$'}
+                  className="!w-full"
+                  content={
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map((token) => {
+                        const stats = openInterest?.[token];
+                        if (stats)
+                          return (
+                            <div className={' flex items-center justify-end'}>
+                              {stats} {token}
+                            </div>
+                          );
+                        else return <>-</>;
+                      })}
+                    />
+                  }
+                />
+              }
+              descClass="text-f16 tab:text-f14 fw4 text-5 "
+              headClass="text-f14 tab:text-f12 fw5 text-6"
+              className="winner-card"
+            />
+          </ArbitrumOnly>
         </div>
         <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
           <LeaderBoardTabs

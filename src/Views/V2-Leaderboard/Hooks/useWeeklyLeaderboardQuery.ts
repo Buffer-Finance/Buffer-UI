@@ -2,13 +2,14 @@ import axios from 'axios';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { add } from '@Utils/NumString/stringArithmatics';
+import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { ILeague } from '../interfaces';
 import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { weeklyTournamentConfig } from '../Weekly/config';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 export interface IWinrate extends ILeague {
   winrate: string;
@@ -26,6 +27,10 @@ interface ILeaderboardQuery {
   }[];
   userData: ILeague[];
   reward: { settlementFee: string; totalFee: string }[];
+  dashboardStats: {
+    id: string;
+    openInterest: string;
+  }[];
 }
 
 export function getWeekId(offset: number): number {
@@ -124,8 +129,6 @@ export const useWeeklyLeaderboardQuery = () => {
             ${queryFields}
           }
 
-         
-
           totalData: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: desc
@@ -135,12 +138,13 @@ export const useWeeklyLeaderboardQuery = () => {
             totalTrades
             volume
           }
+
           reward:weeklyRevenueAndFees(where: {id: "${timestamp}USDC"}) {
             settlementFee
             totalFee
           }
-          
         `;
+
         const userQuery = account
           ? `userData: weeklyLeaderboards(
           where: {user: "${account}", timestamp: "${timestamp}"}
@@ -155,7 +159,16 @@ export const useWeeklyLeaderboardQuery = () => {
         }`
           : '';
 
-        const query = `{${leaderboardQuery}${userQuery}}`;
+        const openInterestQuery = [arbitrum.id, arbitrumGoerli.id].includes(
+          activeChain.id
+        )
+          ? ` dashboardStats {
+            id
+            openInterest
+          }`
+          : '';
+
+        const query = `{${leaderboardQuery}${userQuery}${openInterestQuery}}`;
         const response = await axios.post(configContracts.graph.MAIN, {
           query,
         });
@@ -203,6 +216,15 @@ export const useWeeklyLeaderboardQuery = () => {
   //   if (rank === -1) return '-';
   //   else return (rank + 1).toString();
   // }, [data?.loserWinrate, account]);
+  const openInterest: { [key: string]: string } | null = useMemo(() => {
+    if (!data || !data.dashboardStats) return null;
+    const response: { [key: string]: string } = {};
+    for (let pool of data.dashboardStats) {
+      const decimals = configContracts.tokens?.[pool.id]?.decimals ?? 6;
+      response[pool.id] = divide(pool.openInterest, decimals) as string;
+    }
+    return response;
+  }, [data?.dashboardStats]);
 
   const totalTournamentData = useMemo(() => {
     if (!data || !data.totalData) return null;
@@ -223,6 +245,7 @@ export const useWeeklyLeaderboardQuery = () => {
     loserUserRank,
     winnerUserRank,
     winnerWinrateUserRank,
+    openInterest,
     // loserWinrateUserRank,
   };
 };
