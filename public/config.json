@@ -193,7 +193,8 @@
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
-        "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5"
+        "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
+        "min_amount": 5
       },
       "ARB": {
         "address": "0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8",
@@ -202,7 +203,8 @@
         "img": "/Chains/ARBITRIUM.png",
         "name": "ARB",
         "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
-        "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f"
+        "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f",
+        "min_amount": 5
       }
     },
     "pairs": [
@@ -333,7 +335,8 @@
         "img": "/tokens/USDC.png",
         "name": "USDC",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
-        "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5"
+        "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
+        "min_amount": 25
       },
       "ARB": {
         "address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
@@ -341,7 +344,8 @@
         "decimals": 18,
         "img": "/Chains/ARBITRIUM.png",
         "name": "ARB",
-        "pool_address": "0xaE0628C88EC6C418B3F5C005f804E905f8123833"
+        "pool_address": "0xaE0628C88EC6C418B3F5C005f804E905f8123833",
+        "min_amount": 20
       }
     },
     "pairs": [
@@ -864,7 +868,8 @@
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
-        "faucet": "0x4fccf1139FcA44EF716534bae9D3f87a01583338"
+        "faucet": "0x4fccf1139FcA44EF716534bae9D3f87a01583338",
+        "min_amount": 5
       }
     },
     "pairs": [
@@ -973,7 +978,8 @@
         "decimals": 6,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
-        "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d"
+        "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d",
+        "min_amount": 25
       }
     },
     "pairs": [
