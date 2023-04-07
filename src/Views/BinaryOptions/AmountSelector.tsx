@@ -1,6 +1,4 @@
 import { divide, gt } from '@Utils/NumString/stringArithmatics';
-import BufferInput from '@Views/Common/BufferInput';
-import { BufferInputUnit } from '@Views/Common/BufferTextInputRoot';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
@@ -18,8 +16,6 @@ import ErrorIcon from '@Assets/Elements/ErrorIcon';
 import { DurationPicker } from './PGDrawer/DurationPicker';
 import { Background } from './PGDrawer/style';
 import { useToast } from '@Contexts/Toast';
-import { USDCIcon } from '@SVG/Elements/usdc';
-import { minTradeAmount } from './store';
 import { useActiveChain } from '@Hooks/useActiveChain';
 const shutterModalAtom = atom<{ open: false | 'amount' | 'duration' }>({
   open: false,
@@ -83,7 +79,7 @@ const AmountSelector: React.FC<any> = ({
   const { activePoolObj } = useActivePoolObj();
   const { configContracts } = useActiveChain();
   const balance = activeAssetState?.[0];
-  console.log(`activeAssetState: `, activeAssetState);
+  const minTradeAmount = activePoolObj.token.min_amount;
   const isShutterOpen = shutter.open == 'amount';
   const toastify = useToast();
   const { closeShutter } = useShutterHandlers();
