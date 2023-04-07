@@ -11,114 +11,43 @@ import {
   FavouriteAtom,
   IMarket,
   mobileUpperBound,
-  useQTinfo,
 } from '..';
 import { useFavouritesFns } from '../Hooks/useFavouritesFns';
 import { getFilteredAssets } from './Utils/getFilteredAssets';
 import { PairTokenImage } from '../Components/PairTokenImage';
 import { useActiveChain } from '@Hooks/useActiveChain';
-
-const colMapping = {
-  0: 0,
-  1: 1,
-  2: 2,
-  3: 3,
-};
+import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 
 export const AssetTable: React.FC<{
   assetsArray: IMarket[];
   activeCategory: string;
   onMarketSelect: (a: string) => void;
   searchText: string;
-  catagories: string[];
-}> = ({
-  assetsArray,
-  activeCategory,
-  searchText,
-  catagories,
-  onMarketSelect,
-}) => {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 600;
+}> = ({ assetsArray, activeCategory, searchText, onMarketSelect }) => {
   const [favourites, setFavourites] = useAtom(FavouriteAtom);
-  const updatedArr = getFilteredAssets(
-    assetsArray,
-    searchText,
-    activeCategory,
-    catagories
-  );
+  const updatedArr = getFilteredAssets(assetsArray, searchText, activeCategory);
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
   const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
   const { activeChain } = useActiveChain();
+  const { poolNames } = usePoolNames();
+  const payoutCols = useMemo(
+    () => poolNames.map((poolName) => `Payout ${poolName}`),
+    [poolNames]
+  );
   const headers = useMemo(() => {
-    return [
-      '',
-      'Asset',
-      <div className="flex items-center">Payout USDC</div>,
-      'Payout ARB',
-    ].slice(0, [42161, 421613].includes(activeChain.id) ? 4 : -1);
+    return ['', 'Asset', ...payoutCols];
   }, [activeChain]);
   const HeadFormatter = (col: number) => {
     return <TableHeader col={col} headsArr={headers} />;
   };
 
-  let BodyArr = updatedArr;
-
   const BodyFormatter = (row: number, col: number) => {
-    if (!BodyArr) return <></>;
-    const currentAsset: IMarket = BodyArr[row];
+    if (!updatedArr) return <></>;
+    const currentAsset: IMarket = updatedArr[row];
     const isFavourite = favourites.find(
       (favourite) => currentAsset.tv_id === favourite
     );
     switch (col) {
-      case 1:
-        return (
-          <CellContent
-            content={[
-              <div className="flex">
-                <div className="w-[20px] h-[20px]">
-                  <PairTokenImage pair={currentAsset.pair} />
-                </div>
-                <div className="text-1 ml-3">{currentAsset.pair}</div>
-              </div>,
-            ]}
-          />
-        );
-      case 2:
-        return (
-          <CellContent
-            content={[
-              <div className="text-1 flex items-center">
-                <div className="mr3">
-                  {activeAssetStateHookData.payouts
-                    ? '+' +
-                      activeAssetStateHookData.payouts[
-                        currentAsset.pools[0].options_contracts.current
-                      ] +
-                      '%'
-                    : 'loading...'}
-                </div>
-              </div>,
-            ]}
-          />
-        );
-      case 3:
-        return (
-          <CellContent
-            content={[
-              <div className="text-1 flex items-center">
-                <div className="mr3">
-                  {activeAssetStateHookData.payouts
-                    ? '+' +
-                      activeAssetStateHookData.payouts[
-                        currentAsset.pools[1].options_contracts.current
-                      ] +
-                      '%'
-                    : 'loading...'}
-                </div>
-              </div>,
-            ]}
-          />
-        );
       case 0:
         return (
           <CellContent
@@ -144,6 +73,42 @@ export const AssetTable: React.FC<{
             ]}
           />
         );
+      case 1:
+        return (
+          <CellContent
+            content={[
+              <div className="flex">
+                <div className="w-[20px] h-[20px]">
+                  <PairTokenImage pair={currentAsset.pair} />
+                </div>
+                <div className="text-1 ml-3">{currentAsset.pair}</div>
+              </div>,
+            ]}
+          />
+        );
+
+      case 2:
+        if (!currentAsset.pools[0]) return '-';
+        else if (!activeAssetStateHookData.payouts) return 'loading...';
+        else
+          return (
+            '+' +
+            activeAssetStateHookData.payouts[
+              currentAsset.pools[0].options_contracts.current
+            ] +
+            '%'
+          );
+      case 3:
+        if (!currentAsset.pools[1]) return '-';
+        else if (!activeAssetStateHookData.payouts) return 'loading...';
+        else
+          return (
+            '+' +
+            activeAssetStateHookData.payouts[
+              currentAsset.pools[1].options_contracts.current
+            ] +
+            '%'
+          );
 
       default:
         return <div>Unhandled Column.</div>;
@@ -158,7 +123,7 @@ export const AssetTable: React.FC<{
       shouldShowMobile
       tableBodyClass="!bg-2"
       className="h-[100%]"
-      rows={BodyArr.length}
+      rows={updatedArr?.length ?? 0}
       tableClass={'!w-full'}
       bodyJSX={BodyFormatter}
       error={
@@ -168,19 +133,18 @@ export const AssetTable: React.FC<{
           shouldShowWalletMsg={false}
         />
       }
-      loading={!BodyArr}
+      loading={!updatedArr}
       v1
       isBodyTransparent
       onRowClick={(rowNumber) => {
-        const selectedAsset = BodyArr[rowNumber];
+        if (!updatedArr) return;
+        const selectedAsset = updatedArr[rowNumber];
         if (window.innerWidth < mobileUpperBound) {
           addCardHandler(selectedAsset);
           replaceAssetHandler(selectedAsset.pair, false);
           return;
         }
-        if (!BodyArr) return;
         onMarketSelect(selectedAsset.pair);
-        console.log(`selectedAsset: `, selectedAsset.tv_id);
       }}
     />
   );
