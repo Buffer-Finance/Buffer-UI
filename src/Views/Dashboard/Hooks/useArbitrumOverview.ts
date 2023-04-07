@@ -146,6 +146,7 @@ export const useArbitrumOverview = () => {
     }
     return returnObj;
   }, [data]);
+  console.log(total24hrsStats, 'total24hrsStats');
 
   const totalStats = useMemo(() => {
     if (!data) return null;

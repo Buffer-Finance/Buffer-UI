@@ -61,12 +61,15 @@ export const useDashboardTableData = () => {
             tradeCount
           }
           volumePerContracts(   
+            orderBy: timestamp
+            orderDirection: desc
             first: 1000
             where: { timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
             optionContract {
               address
             }
             amount
+            depositToken
           }
         }`,
       });
@@ -79,10 +82,12 @@ export const useDashboardTableData = () => {
     if (!data || !data.volumePerContracts) return [];
     return data.volumePerContracts.reduce((acc, item) => {
       const address = item.optionContract.address.toLowerCase();
-      if (acc[address]) {
-        acc[address] = add(acc[address], item.amount);
-      } else {
-        acc[address] = item.amount;
+      if (item.depositToken !== 'total') {
+        if (acc[address]) {
+          acc[address] = add(acc[address], item.amount);
+        } else {
+          acc[address] = item.amount;
+        }
       }
       return acc;
     }, {});
