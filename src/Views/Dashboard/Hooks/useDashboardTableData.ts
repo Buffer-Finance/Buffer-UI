@@ -28,6 +28,7 @@ type dashboardTableData = {
       address: string;
     };
     amount: string;
+    depositToken: string;
   }[];
 };
 
