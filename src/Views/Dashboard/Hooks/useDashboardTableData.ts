@@ -165,10 +165,10 @@ export const useDashboardTableData = () => {
           ) || '0',
         currentUtilization: Number(fromWei(item.currentUtilization, 16)),
         payoutForDown: Number(
-          assetStatus[pool.options_contracts.current]?.payout
+          assetStatus[pool.options_contracts.current]?.payout ?? '0'
         ),
         payoutForUp: Number(
-          assetStatus[pool.options_contracts.current]?.payout
+          assetStatus[pool.options_contracts.current]?.payout ?? '0'
         ),
         max_utilization: configPair?.max_utilization,
         pool: pool.token,
