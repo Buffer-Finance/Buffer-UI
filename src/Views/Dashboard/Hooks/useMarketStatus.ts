@@ -44,6 +44,19 @@ export function useMarketStatus() {
                 name: 'isInCreationWindow',
                 params: [500],
               },
+              {
+                address: configContracts.tokens[pool.token].meta,
+                abi: MaxTradeABI,
+                name: 'getPayout',
+                params: [
+                  pool.options_contracts.current,
+                  referralData[2],
+                  // 'BJP',
+                  account || '0x0000000000000000000000000000000000000000',
+                  highestTierNFT?.tokenId || 0,
+                  true,
+                ],
+              },
             ])
             .flat(1)
         )
@@ -60,6 +73,7 @@ export function useMarketStatus() {
   type marketStatusType = {
     maxTradeAmount: string | null | undefined;
     isMarketOpen: boolean;
+    payout: string | null | undefined;
   };
   let response: { [key: string]: marketStatusType } = {};
 
@@ -77,15 +91,24 @@ export function useMarketStatus() {
         )
       : null;
   }
+  function getPayout(payout: string) {
+    return divide(
+      payout,
+      // payoutRes.shift()?.[0] ?? '0',
+      2
+    );
+  }
 
   function createObject(
     maxAmountArr: [string, string],
     marketOpenArray: boolean[],
+    payout: string,
     decimals: number
   ): marketStatusType {
     return {
       isMarketOpen: marketOpenArray[0],
       maxTradeAmount: getMaxAmount(maxAmountArr, decimals),
+      payout: getPayout(payout),
     };
   }
 
@@ -98,12 +121,13 @@ export function useMarketStatus() {
           createObject(
             copy[idx],
             copy[idx + 1],
+            copy[idx + 2],
             configContracts.tokens[allAssetContracts[assetIdx].token].decimals
           );
         assetIdx++;
       }
     });
   }
-  console.log(response, '');
+
   return { assetStatus: response, allAssetContracts };
 }
