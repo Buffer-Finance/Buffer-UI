@@ -94,7 +94,7 @@ export const useDashboardTableData = () => {
     }, {});
   }, [data]);
 
-  console.log(oneDayVolume, 'oneDayVolume');
+  // console.log(oneDayVolume, 'oneDayVolume');
 
   const dashboardData = useMemo(() => {
     if (!data || !data.optionContracts) return [];
@@ -199,6 +199,6 @@ export const useDashboardTableData = () => {
       }
     );
   }, [dashboardData]);
-  console.log(dashboardData, totalData, 'dashboardData');
+  // console.log(dashboardData, totalData, 'dashboardData');
   return { dashboardData, totalData };
 };

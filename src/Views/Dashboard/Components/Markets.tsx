@@ -31,7 +31,7 @@ export const Markets = () => {
       (data) => routerPermission[data.address] && markets.includes(data.address)
     );
   }, [dashboardData, routerPermission]);
-  console.log(filteredDashboardData, 'filteredDashboardData');
+  // console.log(filteredDashboardData, 'filteredDashboardData');
   return (
     <div>
       <DashboardTable

@@ -189,7 +189,7 @@ export const useArbitrumOverview = () => {
     };
   }, [data, openInterest, total24hrsStats, totalStats]);
 
-  console.log(overView, 'overViewResponse');
+  // console.log(overView, 'overViewResponse');
 
   return {
     overView,
