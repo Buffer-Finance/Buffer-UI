@@ -94,7 +94,7 @@ export const useDashboardTableData = () => {
     }, {});
   }, [data]);
 
-  console.log(oneDayVolume, 'oneDayVolume');
+  // console.log(oneDayVolume, 'oneDayVolume');
 
   const dashboardData = useMemo(() => {
     if (!data || !data.optionContracts) return [];
@@ -164,8 +164,12 @@ export const useDashboardTableData = () => {
             )
           ) || '0',
         currentUtilization: Number(fromWei(item.currentUtilization, 16)),
-        payoutForDown: Number(fromWei(item.payoutForDown, 16)),
-        payoutForUp: Number(fromWei(item.payoutForUp, 16)),
+        payoutForDown: Number(
+          assetStatus[pool.options_contracts.current]?.payout ?? '0'
+        ),
+        payoutForUp: Number(
+          assetStatus[pool.options_contracts.current]?.payout ?? '0'
+        ),
         max_utilization: configPair?.max_utilization,
         pool: pool.token,
       };
@@ -195,6 +199,6 @@ export const useDashboardTableData = () => {
       }
     );
   }, [dashboardData]);
-  console.log(dashboardData, totalData, 'dashboardData');
+  // console.log(dashboardData, totalData, 'dashboardData');
   return { dashboardData, totalData };
 };
