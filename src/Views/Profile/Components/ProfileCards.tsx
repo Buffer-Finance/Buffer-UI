@@ -20,6 +20,7 @@ import {
 } from '../Hooks/useProfileGraphQl';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { toFixed } from '@Utils/NumString';
+import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 
 const profileCardClass = 'rounded-lg px-7';
 
@@ -32,17 +33,19 @@ export const ProfileCards = () => {
       Heading={<div className="text-f22">Metrics</div>}
       subHeading={<></>}
       Cards={[
+        <Referral data={data} heading={'Referral Metrics'} />,
         <Trading
           data={tradingMetricsData}
           heading={'USDC Trading Metrics'}
           tokenName="USDC"
         />,
-        <Trading
-          data={tradingMetricsData}
-          heading={'ARB Trading Metrics'}
-          tokenName="ARB"
-        />,
-        <Referral data={data} heading={'Referral Metrics'} />,
+        <ArbitrumOnly hide>
+          <Trading
+            data={tradingMetricsData}
+            heading={'ARB Trading Metrics'}
+            tokenName="ARB"
+          />
+        </ArbitrumOnly>,
       ]}
       className="!mt-7"
     />
