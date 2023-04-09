@@ -351,7 +351,7 @@
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration": "00:01",
+        "min_duration": "00:15",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
@@ -380,7 +380,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:01",
+        "min_duration": "00:15",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
