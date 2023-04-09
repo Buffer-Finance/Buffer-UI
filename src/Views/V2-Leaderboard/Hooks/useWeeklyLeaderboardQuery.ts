@@ -8,6 +8,7 @@ import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { weeklyTournamentConfig } from '../Weekly/config';
+import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 
 export interface IWinrate extends ILeague {
   winrate: string;
@@ -47,6 +48,11 @@ export const blockedAccounts = [
   '0x2a007f31146ff8f939b6ca3ad18c8d2a6e42eb73',
 ];
 
+function getTokenXleaderboardQueryFields(token: string) {
+  const fields = ['NetPnL', 'TotalTrades', 'TradesWon', 'Volume', 'WinRate'];
+  return fields.map((field) => token + field).join(' ');
+}
+
 export const useWeeklyLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
@@ -54,6 +60,16 @@ export const useWeeklyLeaderboardQuery = () => {
   const timestamp = getWeekId(Number(week - Number(offset ?? week)));
   const { configContracts, activeChain } = useActiveChain();
   const configValue = weeklyTournamentConfig[activeChain.id];
+  const { poolNames } = usePoolNames();
+  const queryFields = useMemo(() => {
+    if (poolNames.length > 1)
+      return poolNames
+        .map((poolName) =>
+          getTokenXleaderboardQueryFields(poolName.toLowerCase())
+        )
+        .join(' ');
+    else return '';
+  }, [poolNames]);
 
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
@@ -72,6 +88,7 @@ export const useWeeklyLeaderboardQuery = () => {
             totalTrades
             netPnL
             volume
+            ${queryFields}
           }
           loserStats: weeklyLeaderboards(
             orderBy: netPnL
@@ -85,6 +102,7 @@ export const useWeeklyLeaderboardQuery = () => {
             totalTrades
             netPnL
             volume
+            ${queryFields}
           }
 
           winnerWinrate: weeklyLeaderboards(
@@ -103,6 +121,7 @@ export const useWeeklyLeaderboardQuery = () => {
             volume
             winRate
             tradesWon
+            ${queryFields}
           }
 
          
@@ -116,7 +135,7 @@ export const useWeeklyLeaderboardQuery = () => {
             totalTrades
             volume
           }
-          reward:weeklyRevenueAndFees(where: {id: "${timestamp}"}) {
+          reward:weeklyRevenueAndFees(where: {id: "${timestamp}USDC"}) {
             settlementFee
             totalFee
           }
@@ -132,6 +151,7 @@ export const useWeeklyLeaderboardQuery = () => {
           user
           winRate
           tradesWon
+          ${queryFields}
         }`
           : '';
 

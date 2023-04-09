@@ -35,7 +35,7 @@ import {
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/PGDrawer';
+import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { useQTinfo } from '@Views/BinaryOptions';
 import {
   getAggregatedBarv2,
@@ -563,14 +563,18 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   }, [visualized, activeTrades, chartReady]);
   const updatePositionTimeLeft = useCallback(() => {
     // save drawings
-    widgetRef.current?.save((d) => {
-      setDrawing((drawing) => {
-        return {
-          ...drawing,
-          [market]: d,
-        };
+    try {
+      widgetRef.current?.save((d) => {
+        setDrawing((drawing) => {
+          return {
+            ...drawing,
+            [market]: d,
+          };
+        });
       });
-    });
+    } catch (e) {
+      console.log('major-bug', e);
+    }
 
     for (const trade in trade2visualisation.current) {
       if (trade2visualisation.current[+trade]?.visited) {

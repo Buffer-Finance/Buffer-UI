@@ -54,7 +54,7 @@ export const PoolDropDown = () => {
   return (
     <BufferDropdown
       rootClass="token-dd flex-center "
-      className="bg-cross-bg dd-items text-3"
+      className="bg-cross-bg dd-items text-3 chain-dropdown-bottom mb-3"
       items={dropdownItems}
       initialActive={1}
       rootClassName="token-dd w-fit"

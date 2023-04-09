@@ -20,4 +20,5 @@ export interface ILeague {
   id: string;
   netPnL: string;
   volume: string;
+  [key: string]: string | number;
 }

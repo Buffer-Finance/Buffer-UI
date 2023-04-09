@@ -12,6 +12,8 @@ import {
   imTokenWallet,
   ledgerWallet,
   omniWallet,
+  safeWallet,
+  tahoWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
@@ -53,11 +55,13 @@ const getWallets = (chains: Chain[]) => {
             trustWallet({ chains }),
             injectedWallet({ chains }),
             walletConnectWallet({ chains }),
+            safeWallet({ chains }),
           ],
         },
         {
           groupName: 'Others',
           wallets: [
+            tahoWallet({ chains }),
             rainbowWallet({ chains }),
             imTokenWallet({ chains }),
             ledgerWallet({ chains }),
