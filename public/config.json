@@ -345,7 +345,7 @@
         "img": "/Chains/ARBITRIUM.png",
         "name": "ARB",
         "pool_address": "0xaE0628C88EC6C418B3F5C005f804E905f8123833",
-        "min_amount": 20
+        "min_amount": 25
       }
     },
     "pairs": [
