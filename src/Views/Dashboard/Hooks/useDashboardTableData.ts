@@ -170,7 +170,8 @@ export const useDashboardTableData = () => {
         payoutForUp: Number(
           assetStatus[pool.options_contracts.current]?.payout ?? '0'
         ),
-        max_utilization: configPair?.max_utilization,
+        max_utilization:
+          assetStatus[pool.options_contracts.current]?.maxUtilization ?? '0',
         pool: pool.token,
       };
       upatedData.push(currData);

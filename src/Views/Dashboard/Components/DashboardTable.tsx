@@ -110,7 +110,7 @@ export const DashboardTable = ({
               </div>,
               <div className="flex items-center">
                 Max&nbsp;:&nbsp;
-                <Display data={currentRow.max_utilization / 100} unit="%" />
+                <Display data={currentRow.max_utilization} unit="%" />
               </div>,
             ]}
           />

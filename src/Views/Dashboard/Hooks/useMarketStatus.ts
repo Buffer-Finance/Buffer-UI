@@ -6,6 +6,7 @@ import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import MaxTradeABI from '@Views/BinaryOptions/ABI/MaxTrade.json';
 import BinaryOptionsABI from '@Views/BinaryOptions/ABI/optionsABI.json';
+import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
 
 export function useMarketStatus() {
@@ -57,6 +58,12 @@ export function useMarketStatus() {
                   true,
                 ],
               },
+              {
+                address: pool.options_contracts.config,
+                abi: ConfigABI,
+                name: 'assetUtilizationLimit',
+                params: [],
+              },
             ])
             .flat(1)
         )
@@ -74,6 +81,7 @@ export function useMarketStatus() {
     maxTradeAmount: string | null | undefined;
     isMarketOpen: boolean;
     payout: string | null | undefined;
+    maxUtilization: string | null | undefined;
   };
   let response: { [key: string]: marketStatusType } = {};
 
@@ -98,17 +106,22 @@ export function useMarketStatus() {
       2
     );
   }
+  function getMaxUtilization(maxUtilization: string) {
+    return divide(maxUtilization, 2);
+  }
 
   function createObject(
     maxAmountArr: [string, string],
     marketOpenArray: boolean[],
     payout: string,
+    maxUtilization: string,
     decimals: number
   ): marketStatusType {
     return {
       isMarketOpen: marketOpenArray[0],
       maxTradeAmount: getMaxAmount(maxAmountArr, decimals),
       payout: getPayout(payout),
+      maxUtilization: getMaxUtilization(maxUtilization),
     };
   }
 
@@ -122,12 +135,13 @@ export function useMarketStatus() {
             copy[idx],
             copy[idx + 1],
             copy[idx + 2],
+            copy[idx + 3],
             configContracts.tokens[allAssetContracts[assetIdx].token].decimals
           );
         assetIdx++;
       }
     });
   }
-
+  // console.log(response, 'response');
   return { assetStatus: response, allAssetContracts };
 }
