@@ -162,7 +162,7 @@ export const useDashboardGraphQl = () => {
     };
   }, [data, totalData]);
 
-  console.log(overView, 'overView');
+  // console.log(overView, 'overView');
 
   return {
     overView,
