@@ -27,7 +27,7 @@ import { useGraphStatus } from '@Utils/useGraphStatus';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
-import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
+import { LeaderBoard, LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { ProfilePage } from '@Views/Profile';
 import { useEffect } from 'react';
 import { useToast } from '@Contexts/Toast';
@@ -108,6 +108,14 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
+          <Route
+            path="trades"
+            element={
+              <LeaderBoard>
+                <AllTradesPage />
+              </LeaderBoard>
+            }
+          />
         </Route>
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />}>

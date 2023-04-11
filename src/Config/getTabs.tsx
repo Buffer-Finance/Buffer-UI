@@ -349,6 +349,12 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
+        to: `/trades`,
+        name: 'All Trades',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
         to: 'https://docs.buffer.finance/introduction/readme',
         name: 'Docs',
         subTabs: [],
@@ -397,6 +403,12 @@ export const getTabs = (
       {
         to: `/profile`,
         name: 'Profile',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `/trades`,
+        name: 'All Trades',
         subTabs: [],
         isExternalLink: false,
       },

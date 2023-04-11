@@ -3,7 +3,13 @@ import { LeaderBoardSidebarStyles } from './style';
 import Daily from '@Public/LeaderBoard/Daily';
 import SmPnl from 'src/SVG/Elements/PNLL';
 import { CHAIN_CONFIGS, getTabs, isTestnet } from 'config';
-import { Link, Location, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  Location,
+  NavLink,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import BufferTab from '@Views/Common/BufferTab';
 
@@ -37,7 +43,7 @@ export const LeaderBoardSidebar = () => {
   return (
     <LeaderBoardSidebarStyles className="border-r-2 border-1">
       <div className="sticky top-1">
-        <div className="mt-[10px] full-width">
+        <div className="mt-[16px] full-width">
           <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
 
           {tabs.slice(0, 2).map((tab, index) => {
@@ -63,7 +69,7 @@ export const LeaderBoardSidebar = () => {
           })}
         </div>
 
-        <div className="mt-[10px] full-width">
+        <div className="mt-[24px] full-width">
           <div className="flex items-center mb-2">
             <Head name="LEAGUES" />
             <CSChip />
@@ -78,20 +84,23 @@ export const LeaderBoardSidebar = () => {
           })}
         </div>
 
-        {/* <div className="mt-[10px] full-width">
-        <div className="flex items-center mb-2">
-          <Head name="METRICS" />
-          <CSChip />
+        <div className="mt-[24px] full-width">
+          <NavLink
+            key={'ALL TRADES'}
+            to={'/leaderboard/trades'}
+            className={({ isActive }) => {
+              return `flex items-center justify-start px-3 text-f12 ${
+                isActive
+                  ? 'text-1'
+                  : 'hover:bg-1 hover:text-1 hover:brightness-125 text-3'
+              } 
+              `;
+            }}
+          >
+            <img src="/alltrades.png" alt="icon" className="inline w-7" />
+            ALL TRADES
+          </NavLink>
         </div>
-        {tabs.slice(-1).map((tab) => {
-          const isActive = doesLocationMatch(location, tab.slug);
-          return (
-            <div className="flex-col">
-              <LinkButton tab={tab} active={isActive} isDisabled />
-            </div>
-          );
-        })}
-      </div> */}
       </div>
     </LeaderBoardSidebarStyles>
   );
