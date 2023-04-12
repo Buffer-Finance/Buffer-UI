@@ -37,6 +37,7 @@ import { TradePage } from '@Views/BinaryOptions/TradePage';
 import { TestComponent } from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
+import { TradingConfig } from '@Views/TradingConfig';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -94,6 +95,7 @@ const AppRoutes = () => {
 
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/tradingConfig" element={<TradingConfig />} />
         <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
