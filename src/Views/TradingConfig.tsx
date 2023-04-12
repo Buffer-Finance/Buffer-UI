@@ -13,10 +13,14 @@ import { useReadCall } from '@Utils/useReadCall';
 import { TableAligner } from './V2-Leaderboard/Components/TableAligner';
 import { keyClasses } from './Earn/Components/VestCards';
 import { valueClasses } from './Earn/Components/VestCards';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import BufferInput from './Common/BufferInput';
 import { ModalBase } from 'src/Modals/BaseModal';
 import { BlueBtn } from './Common/V2-Button';
+import {
+  PoolDropDown,
+  useActivePoolObj,
+} from './BinaryOptions/PGDrawer/PoolDropDown';
 
 interface ConfigValue {
   getter: string;
@@ -104,6 +108,9 @@ const TradingConfig: React.FC<any> = ({}) => {
   );
   const [configData, setConfigData] = useAtom(configDataAtom);
   const [activePool, setActivePool] = useState('USDC');
+  const { activePoolObj } = useActivePoolObj();
+
+  console.log(`activePoolObj.token: `, activePoolObj.token);
   const [configReadCalls, configState]: [null, null] | [Call[], ConfigValue[]] =
     useMemo(() => {
       if (!activeChain?.id) return [null, null];
@@ -112,7 +119,7 @@ const TradingConfig: React.FC<any> = ({}) => {
       const activeChainData = Config[activeChain.id.toString()] as ChainInfo;
       activeChainData.pairs.forEach((d) => {
         const activePoolAddress = d.pools.find(
-          (pool) => pool.token == activePool
+          (pool) => pool.token == activePoolObj.token.name
         )?.options_contracts.config;
         if (activePoolAddress)
           for (let config in initialConfigValues) {
@@ -134,7 +141,7 @@ const TradingConfig: React.FC<any> = ({}) => {
           }
       });
       return [calls, configValues];
-    }, [activeChain, activePool]);
+    }, [activeChain, activePoolObj?.token?.name]);
   console.log(`configReadCalls: `, configReadCalls);
   useEffect(() => {
     setConfigData(configState);
@@ -203,7 +210,9 @@ const ConfigValueManager: React.FC<{
           ))}
         </div>
       </ModalBase>
-
+      <div className="">
+        <PoolDropDown />
+      </div>
       <TableAligner
         keyStyle={keyClasses}
         valueStyle={valueClasses}
