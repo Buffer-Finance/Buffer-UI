@@ -10,6 +10,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { weeklyTournamentConfig } from '../Weekly/config';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { blacklist } from '../blacklist.json';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 export interface IWinrate extends ILeague {
   winrate: string;
   tradesWon: string;
@@ -48,7 +49,7 @@ export const useWeeklyLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
   const { week } = useWeekOfTournament();
-  const timestamp = getWeekId(Number(week - Number(offset ?? week)));
+
   const { configContracts, activeChain } = useActiveChain();
   const configValue = weeklyTournamentConfig[activeChain.id];
   const { poolNames } = usePoolNames();
@@ -66,6 +67,12 @@ export const useWeeklyLeaderboardQuery = () => {
     `leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
     {
       fetcher: async () => {
+        const timestamp = getWeekId(Number(week - Number(offset ?? week)));
+        const rewardQueryId = [arbitrum.id, arbitrumGoerli.id].includes(
+          activeChain.id
+        )
+          ? `${timestamp}USDC`
+          : timestamp;
         const leaderboardQuery = `
           userStats: weeklyLeaderboards(
             orderBy: netPnL
@@ -81,6 +88,7 @@ export const useWeeklyLeaderboardQuery = () => {
             volume
             ${queryFields}
           }
+
           loserStats: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: asc
@@ -115,8 +123,6 @@ export const useWeeklyLeaderboardQuery = () => {
             ${queryFields}
           }
 
-         
-
           totalData: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: desc
@@ -126,12 +132,13 @@ export const useWeeklyLeaderboardQuery = () => {
             totalTrades
             volume
           }
-          reward:weeklyRevenueAndFees(where: {id: "${timestamp}USDC"}) {
+
+          reward:weeklyRevenueAndFees(where: {id: "${rewardQueryId}"}) {
             settlementFee
             totalFee
           }
-          
         `;
+
         const userQuery = account
           ? `userData: weeklyLeaderboards(
           where: {user: "${account}", timestamp: "${timestamp}"}
