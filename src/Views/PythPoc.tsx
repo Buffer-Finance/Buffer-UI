@@ -6,7 +6,7 @@ import {
 import { Connection } from '@solana/web3.js';
 import { valueClasses } from './Earn/Components/VestCards';
 const solanaClusterName = 'pythnet';
-const solanaWeb3Connection = 'http://pythnet.rpcpool.com/';
+const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 const PythPoc: React.FC<any> = ({}) => {
   const [ad, setAd] = useState('');
   const pythConnection = useRef(
@@ -22,11 +22,11 @@ const PythPoc: React.FC<any> = ({}) => {
     );
 
     pythConnection.current.onPriceChange((p, o) => {
-      if (!o.price) {
+      if (!o?.price) {
         return;
       }
       setAd((ad) => {
-        return ad + '\n|||' + p.description + ' : ' + o.price + '|||';
+        return ad + '\n|||' + p?.description + ' : ' + o?.price + '|||';
       });
     });
     pythConnection.current.start();
