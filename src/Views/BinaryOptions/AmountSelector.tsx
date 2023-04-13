@@ -48,7 +48,7 @@ const AmountInput = ({
       }, 100);
   }, [props.autoFocus]);
   return (
-    <div className={ipWrapperClasses} onClick={onClick}>
+    <div className={ipWrapperClasses + ' !w-fit'} onClick={onClick}>
       <label
         className={labelClasses}
         htmlFor={props.autoFocus ? 'inner' : 'outer'}
@@ -260,7 +260,7 @@ const DurationInput = ({ onClick }: any) => {
     return removeEventListener('keydown', listener);
   }, [currentTime]);
   return (
-    <div className={ipWrapperClasses} onClick={onClick}>
+    <div className={ipWrapperClasses + ' !w-fit'} onClick={onClick}>
       <label className={labelClasses} htmlFor="duration">
         <svg
           width="19"
@@ -277,9 +277,9 @@ const DurationInput = ({ onClick }: any) => {
           />
         </svg>
       </label>
-      <div className="flex-center">
+      <div className="flex items-center justify-end mx-[10px] w-fit">
         <input
-          className={ipClasses + ' mr-[0px]'}
+          className={ipClasses + ' mr-[0px] !w-[22px]'}
           ref={hrsRef}
           id="duration"
           onFocus={(e) => e.target.blur()}
