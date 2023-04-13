@@ -23,7 +23,7 @@ const PythPoc: React.FC<any> = ({}) => {
 
     pythConnection.current.onPriceChange((p, o) => {
       if (!o.price) {
-        console.log('corrupted', p, o);
+        return;
       }
       setAd((ad) => {
         return ad + '\n|||' + p.description + ' : ' + o.price + '|||';
