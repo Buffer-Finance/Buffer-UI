@@ -576,31 +576,6 @@ export const TokensBFR = ({
                 </div>
               </NumberTooltip>
             </div>,
-            // <div className={wrapperClasses}>
-            //   <Display
-            //     data={multiply(data.total_staked, data.price)}
-            //     label="$"
-            //     content={
-            //       data.circulatingSupply ? (
-            //         <>
-            //           <Display
-            //             data={multiply(
-            //               divide(data.total_staked, data.circulatingSupply),
-            //               2
-            //             )}
-            //             unit="%"
-            //             className="inline"
-            //           />
-            //           <span>
-            //             &nbsp;of the circulating supply has been staked.
-            //           </span>
-            //         </>
-            //       ) : (
-            //         <></>
-            //       )
-            //     }
-            //   />
-            // </div>,
             <div className={wrapperClasses}>
               {data.liquidity_pools_token ? (
                 <Display data={data.liquidity_pools_token} unit={tokenName} />
@@ -690,8 +665,33 @@ export const TokensBLP = ({
                 )}
               </div>
             ),
-            <div className={wrapperClasses}>
-              <Display data={data.apr} unit="%" />
+            <div className={`${wrapperClasses}`}>
+              <Display
+                className="!justify-end"
+                data={data.apr.value}
+                placement="bottom"
+                unit="%"
+                content={
+                  <span>
+                    <TableAligner
+                      keysName={data.apr.tooltip.map((s) => s.key)}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={data.apr.tooltip.map((s) => (
+                        <Display
+                          className="!justify-end"
+                          data={s.value}
+                          unit="%"
+                        />
+                      ))}
+                    ></TableAligner>
+                    {/* <div className="text-left mt-3 font-normal">
+                      {data.apr.description}
+                    </div> */}
+                  </span>
+                }
+                // unit={unit === "BLP" && unit}
+              />{' '}
             </div>,
           ].filter((value) => value)}
         />

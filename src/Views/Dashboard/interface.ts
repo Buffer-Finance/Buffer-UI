@@ -1,3 +1,5 @@
+import { IApr } from '@Views/Earn/earnAtom';
+
 export interface IBFR {
   price: string;
   supply: string;
@@ -9,7 +11,7 @@ export interface IBFR {
 
 export interface IBLP
   extends Omit<IBFR, 'liquidity_pools_token' | 'total_staked'> {
-  apr: string;
+  apr: IApr;
   total_usdc: string;
   usdc_pol: string | null;
   usdc_total: string;
