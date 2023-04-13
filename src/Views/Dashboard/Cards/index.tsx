@@ -567,11 +567,17 @@ export const TokensBFR = ({
                     : ''
                 }
               >
-                <div>
-                  <span>{getBalance(data.total_staked)} BFR</span>
+                <div
+                  className={
+                    underLineClass + ' flex items-center flex-wrap justify-end'
+                  }
+                >
+                  <span className="whitespace-nowrap">
+                    {getBalance(data.total_staked) + ' BFR'}
+                  </span>
                   &nbsp;/&nbsp;
-                  <span>
-                    $ {getBalance(multiply(data.total_staked, data.price))}
+                  <span className="whitespace-nowrap">
+                    {'$' + getBalance(multiply(data.total_staked, data.price))}
                   </span>
                 </div>
               </NumberTooltip>
@@ -690,7 +696,6 @@ export const TokensBLP = ({
                     </div> */}
                   </span>
                 }
-                // unit={unit === "BLP" && unit}
               />{' '}
             </div>,
           ].filter((value) => value)}
