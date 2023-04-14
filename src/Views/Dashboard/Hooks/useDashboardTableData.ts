@@ -46,7 +46,7 @@ export const useDashboardTableData = () => {
   //   },
   //   // refreshInterval: 300,
   // });
-  usePrice();
+  usePrice(true);
   const currentPrices = useAtomValue(priceAtom);
 
   const { assetStatus } = useMarketStatus();
