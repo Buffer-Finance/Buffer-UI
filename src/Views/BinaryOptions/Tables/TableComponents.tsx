@@ -86,7 +86,7 @@ export const getExpireNotification = async (
   console.log('win-state', win);
   if (win) {
     console.log(`currentRow[state]: `, currentRow);
-    openShareModal(currentRow, expiryPrice.toString());
+    openShareModal(currentRow, multiply(expiryPrice, 8));
     return;
   } else {
     console.log(`currentRow[state]: `, currentRow);
