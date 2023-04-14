@@ -211,6 +211,7 @@ export function UTF8ArrToStr(aBytes) {
   }
   return sView;
 }
+const supportedAssets = ['BTC/USD', 'GBP/USD', 'EUR/USD', 'ETH/USD'];
 export const getKlineFromPrice = (asset) => {
   const priceObj = {};
 
@@ -221,13 +222,13 @@ export const getKlineFromPrice = (asset) => {
           try {
             if (assetString.length > 4) {
               const parsed = JSON.parse(assetString);
-
-              priceObj[parsed.id.replace('/', '')] = [
-                {
-                  time: parsed.t * 1000,
-                  price: parsed.p,
-                },
-              ];
+              if (parsed?.id && supportedAssets.includes(parsed.id))
+                priceObj[parsed.id.replace('/', '')] = [
+                  {
+                    time: parsed.t * 1000,
+                    price: parsed.p,
+                  },
+                ];
             }
           } catch (err) {}
           // try {

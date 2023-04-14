@@ -59,11 +59,11 @@ export const getExpireNotification = async (
   if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
     return null;
   }
-  const expiryPrice = response.data
-    .filter((d) =>
-      d.symbol.includes(currentRow.configPair?.pair.replace('-', '/'))
-    )
-    .price.toString();
+  const expiryPriceObj = response.data.find((d) =>
+    d.symbol.includes('.' + currentRow.configPair?.pair.replace('-', '/'))
+  );
+  console.log(`[notif]expiryPriceObj: `, expiryPriceObj);
+  const expiryPrice = expiryPriceObj?.price.toString();
   console.log(`[notif]expiryPrice: `, expiryPrice);
   if (!expiryPrice) return;
   let win = true;
