@@ -2,20 +2,21 @@ import { useAtomValue } from 'jotai';
 import { useQTinfo } from '..';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { ammountAtom } from '../PGDrawer';
-import { lt } from '@Utils/NumString/stringArithmatics';
 
 export const useTradePolOrBlpPool = () => {
   const { activePair } = useQTinfo();
   const { activePoolObj } = useActivePoolObj();
   const userInput = useAtomValue(ammountAtom);
-  console.log(userInput, 'userInput');
+
   let response = {
     min_amount: activePoolObj.token.min_amount,
     option_contract: activePoolObj.options_contracts,
   };
+
   const polExists = activePair.pools.find((pool) =>
     pool.token.name.toLowerCase().includes('pol')
   );
+
   if (polExists) {
     response.min_amount = polExists.token.min_amount;
     if (
