@@ -31,7 +31,10 @@ export const AssetTable: React.FC<{
   const { activeChain } = useActiveChain();
   const { poolNames } = usePoolNames();
   const payoutCols = useMemo(
-    () => poolNames.map((poolName) => `Payout ${poolName}`),
+    () =>
+      poolNames
+        .filter((pool) => !pool.toLowerCase().includes('pol'))
+        .map((poolName) => `Payout ${poolName}`),
     [poolNames]
   );
   const headers = useMemo(() => {

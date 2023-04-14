@@ -415,13 +415,7 @@
               "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"
             }
           },
-          {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0xbC7DBEB9a7b158711b4B5fb0177F3E0bE024125a",
-              "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"
-            }
-          },
+         
           {
             "token": "ARB",
             "options_contracts": {
