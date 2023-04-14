@@ -633,7 +633,7 @@ export const TokensBLP = ({
             'Total Supply',
             `Total ${tokenName} Amount`,
             shouldDisplayPOL && `POL(${tokenName})`,
-            'APY',
+            'APR',
           ].filter((key) => key)}
           values={[
             <div className={wrapperClasses}>
@@ -770,7 +770,7 @@ export const OtherBLP = ({
             'Total Supply',
             'Total USDC Amount',
             'POL(USDC)',
-            // 'APY',
+            // 'APR',
           ]}
           values={[
             <div className={wrapperClasses}>
