@@ -110,7 +110,7 @@ export const AssetTable: React.FC<{
                   {activeAssetStateHookData.payouts
                     ? '+' +
                       activeAssetStateHookData.payouts[
-                        currentAsset.pools[1].options_contracts.current
+                        currentAsset.pools[0].options_contracts.current
                       ] +
                       '%'
                     : 'loading...'}
