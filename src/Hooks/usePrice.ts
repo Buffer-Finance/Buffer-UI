@@ -84,24 +84,21 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
       // }];
 
       if (p?.description && o?.price && o.timestamp) {
-        if (p.description == 'BTC/USD') {
-          console.log('price-update:BTC', o);
+        if (p.description == 'BTC/USD' || p.description == 'ETH/USD') {
+          const marketId = p.description.replace('/', '');
+          const ts = Number(o.timestamp) * 1000;
+          const price = o.price;
+          const priceUpdates = {
+            [marketId]: [
+              {
+                time: ts,
+                price,
+              },
+            ],
+          };
+          console.log(`[pyth]priceUpdates: `, priceUpdates);
+          setPrice((p) => ({ ...p, ...priceUpdates }));
         }
-        if (p.description == 'ETH/USD') {
-          console.log('price-update:ETH', o);
-        }
-        const marketId = p.description.replace('/', '');
-        const ts = Number(o.timestamp) * 1000;
-        const price = o.price;
-        const priceUpdates = {
-          [marketId]: [
-            {
-              ts,
-              price,
-            },
-          ],
-        };
-        setPrice((p) => ({ ...p, ...priceUpdates }));
       }
     });
     pythConnection.current.start();

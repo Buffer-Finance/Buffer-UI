@@ -131,6 +131,7 @@ export const getAggregatedBarv2 = (
     Math.floor(currentBar.time / resolutionInSeconds) ==
     Math.floor(prevBar.time / resolutionInSeconds);
   let time = Math.floor(currentBar.time / resolutionInSeconds);
+  console.log(`[sync]currentBar.time: `, currentBar.time);
   console.log(`[sync]time: `, time);
 
   time *= resolutionInSeconds;
