@@ -65,8 +65,8 @@ import {
 } from '@TV/ChartTypeSelectionDD';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
-  '1S' as ResolutionString,
-  '10S' as ResolutionString,
+  // '1S' as ResolutionString,
+  // '10S' as ResolutionString,
   '1' as ResolutionString,
   '5' as ResolutionString,
   '15' as ResolutionString,
