@@ -39,6 +39,8 @@ import { TestComponent } from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
 import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
+import { TradingConfig } from '@Views/TradingConfig';
+import { PythPoc } from '@Views/PythPoc';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -96,6 +98,8 @@ const AppRoutes = () => {
 
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/pyth" element={<PythPoc />} />
+        <Route path="/tradingConfig" element={<TradingConfig />} />
         <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />

@@ -9,7 +9,8 @@ import { useWeekOfTournament } from './useWeekOfTournament';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { weeklyTournamentConfig } from '../Weekly/config';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
-
+import { blacklist } from '../blacklist.json';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 export interface IWinrate extends ILeague {
   winrate: string;
   tradesWon: string;
@@ -39,15 +40,6 @@ export function getWeekId(offset: number): number {
   return dayTimestamp;
 }
 
-export const blockedAccounts = [
-  '0x361e9013d7e4f2e4a035ba97fdb42cb7d2540259',
-  '0x6fae0eed696ec28c81269b99240ee960570666f1',
-  '0x0b8750c12fa14decd31eadff7e92cbd64a198094',
-  '0x10df9a95010c8b9fbdc8f6191de824df9c99a8d8',
-  '0x547a821c692921d82ebd936320dc1a608a6e38c1',
-  '0x2a007f31146ff8f939b6ca3ad18c8d2a6e42eb73',
-];
-
 function getTokenXleaderboardQueryFields(token: string) {
   const fields = ['NetPnL', 'TotalTrades', 'TradesWon', 'Volume', 'WinRate'];
   return fields.map((field) => token + field).join(' ');
@@ -57,7 +49,7 @@ export const useWeeklyLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
   const { week } = useWeekOfTournament();
-  const timestamp = getWeekId(Number(week - Number(offset ?? week)));
+
   const { configContracts, activeChain } = useActiveChain();
   const configValue = weeklyTournamentConfig[activeChain.id];
   const { poolNames } = usePoolNames();
@@ -75,6 +67,12 @@ export const useWeeklyLeaderboardQuery = () => {
     `leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
     {
       fetcher: async () => {
+        const timestamp = getWeekId(Number(week - Number(offset ?? week)));
+        const rewardQueryId = [arbitrum.id, arbitrumGoerli.id].includes(
+          activeChain.id
+        )
+          ? `${timestamp}USDC`
+          : timestamp;
         const leaderboardQuery = `
           userStats: weeklyLeaderboards(
             orderBy: netPnL
@@ -82,7 +80,7 @@ export const useWeeklyLeaderboardQuery = () => {
             first: 100
             where: {timestamp: "${timestamp}", totalTrades_gte: ${
           configValue.minTradesToQualifyPNL
-        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
+        }, user_not_in: [${blacklist.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -90,13 +88,14 @@ export const useWeeklyLeaderboardQuery = () => {
             volume
             ${queryFields}
           }
+
           loserStats: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: asc
             first: 100
             where: {timestamp: "${timestamp}", totalTrades_gte: ${
           configValue.minTradesToQualifyPNL
-        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
+        }, user_not_in: [${blacklist.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -113,7 +112,7 @@ export const useWeeklyLeaderboardQuery = () => {
           configValue.minTradesToQualifyWinrate
         }, volume_gte: ${
           configValue.minVolumeToQualifyWinrate
-        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
+        }, user_not_in: [${blacklist.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -124,8 +123,6 @@ export const useWeeklyLeaderboardQuery = () => {
             ${queryFields}
           }
 
-         
-
           totalData: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: desc
@@ -135,12 +132,13 @@ export const useWeeklyLeaderboardQuery = () => {
             totalTrades
             volume
           }
-          reward:weeklyRevenueAndFees(where: {id: "${timestamp}USDC"}) {
+
+          reward:weeklyRevenueAndFees(where: {id: "${rewardQueryId}"}) {
             settlementFee
             totalFee
           }
-          
         `;
+
         const userQuery = account
           ? `userData: weeklyLeaderboards(
           where: {user: "${account}", timestamp: "${timestamp}"}
@@ -234,7 +232,7 @@ export const useWeeklyLeaderboardQuery = () => {
             orderBy: winRate
             orderDirection: asc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blockedAccounts.map(
+            where: {timestamp: "${timestamp}", totalTrades_gte: ${winrateMinimumTrades}, user_not_in: [${blacklist.map(
           (address) => `"${address}"`
         )}]}
           ) {

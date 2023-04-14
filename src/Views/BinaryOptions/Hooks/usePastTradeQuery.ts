@@ -7,6 +7,7 @@ import axios from 'axios';
 import { expiryPriceCache } from './useTradeHistory';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -169,38 +170,31 @@ export const useProcessedTrades = () => {
   return { getProcessedTrades };
 };
 
-export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
-  if (currentTrade.state === BetState.active) {
-    axios
-      .post(`https://oracle.buffer.finance/price/query/`, [
-        {
-          pair: currentTrade.configPair.tv_id,
-          timestamp: currentTrade.expirationTime,
-        },
-      ])
-      .then((response) => {
-        if (
-          !expiryPriceCache[currentTrade.optionID] &&
-          response?.data?.[0]?.price
+  const addExpiryPrice = async (currentTrade: IGQLHistory) => {
+    if (currentTrade.state === BetState.active) {
+      console.log(`[augexp]currentTrade: `, currentTrade);
+      axios
+        .get(
+          `https://web-api.pyth.network/benchmark_prices?timestamp=${currentTrade.expirationTime}`
         )
-          expiryPriceCache[currentTrade.optionID] =
-            response?.data?.[0].price.toString();
-      });
-  }
-};
-
-export const usePastTradeQuery = () => {
-  const { address: account } = useUserAccount();
-  const { getProcessedTrades } = useProcessedTrades();
-  const setTrades = useSetAtom(tardesAtom);
-  const setPageNumbers = useSetAtom(updateTotalPageNumber);
-  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
-  const activePage = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
-  const historyPage = useMemo(() => TRADESINAPAGE * (history - 1), [history]);
-  const cancelledPage = useMemo(
-    () => TRADESINAPAGE * (cancelled - 1),
-    [cancelled]
-  );
+        .then((response) => {
+          if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
+            return null;
+          }
+          const expiryPriceObj = response.data.find((d) =>
+            d.symbol.includes(
+              '.' + currentTrade.configPair?.pair.replace('-', '/')
+            )
+          );
+          const expiryPrice = expiryPriceObj?.price.toString();
+          if (
+            !expiryPriceCache[currentTrade.optionID] &&
+            response?.data?.[0]?.price
+          )
+            expiryPriceCache[currentTrade.optionID] = multiply(expiryPrice, 8);
+        });
+    }
+  };
 
   const { data } = usePastTradeQueryByFetch({
     account: account,

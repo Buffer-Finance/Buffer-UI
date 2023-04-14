@@ -4,8 +4,8 @@ export const PairTokenImage = ({
   image2,
 }: {
   pair?: string;
-  image1: string | undefined;
-  image2: string | undefined;
+  image1?: string;
+  image2?: string;
 }) => {
   if (image1 !== undefined && image2 !== undefined)
     return (
