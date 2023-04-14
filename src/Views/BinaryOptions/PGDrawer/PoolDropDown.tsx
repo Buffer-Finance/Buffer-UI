@@ -19,9 +19,7 @@ export const useActivePoolObj = () => {
   const dropdownItems = useMemo(() => {
     if (!activePair) return [];
 
-    return activePair.pools
-      .filter((pool) => !pool.token.is_pol)
-      .map((pool) => pool.token.name);
+    return activePair.pools.map((pool) => pool.token.name);
   }, [activePair, activeChain]);
 
   const activePoolObj = useMemo(() => {

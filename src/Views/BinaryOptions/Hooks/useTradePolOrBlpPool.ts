@@ -25,6 +25,6 @@ export const useTradePolOrBlpPool = () => {
       response.option_contract = polExists.options_contracts;
     }
   }
-
+  console.log(response, 'response');
   return response;
 };
