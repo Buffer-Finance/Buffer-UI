@@ -170,31 +170,44 @@ export const useProcessedTrades = () => {
   return { getProcessedTrades };
 };
 
-  const addExpiryPrice = async (currentTrade: IGQLHistory) => {
-    if (currentTrade.state === BetState.active) {
-      console.log(`[augexp]currentTrade: `, currentTrade);
-      axios
-        .get(
-          `https://web-api.pyth.network/benchmark_prices?timestamp=${currentTrade.expirationTime}`
-        )
-        .then((response) => {
-          if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
-            return null;
-          }
-          const expiryPriceObj = response.data.find((d) =>
-            d.symbol.includes(
-              '.' + currentTrade.configPair?.pair.replace('-', '/')
-            )
-          );
-          const expiryPrice = expiryPriceObj?.price.toString();
-          if (
-            !expiryPriceCache[currentTrade.optionID] &&
-            response?.data?.[0]?.price
+const addExpiryPrice = async (currentTrade: IGQLHistory) => {
+  if (currentTrade.state === BetState.active) {
+    console.log(`[augexp]currentTrade: `, currentTrade);
+    axios
+      .get(
+        `https://web-api.pyth.network/benchmark_prices?timestamp=${currentTrade.expirationTime}`
+      )
+      .then((response) => {
+        if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
+          return null;
+        }
+        const expiryPriceObj = response.data.find((d) =>
+          d.symbol.includes(
+            '.' + currentTrade.configPair?.pair.replace('-', '/')
           )
-            expiryPriceCache[currentTrade.optionID] = multiply(expiryPrice, 8);
-        });
-    }
-  };
+        );
+        const expiryPrice = expiryPriceObj?.price.toString();
+        if (
+          !expiryPriceCache[currentTrade.optionID] &&
+          response?.data?.[0]?.price
+        )
+          expiryPriceCache[currentTrade.optionID] = multiply(expiryPrice, 8);
+      });
+  }
+};
+
+export const usePastTradeQuery = () => {
+  const { address: account } = useUserAccount();
+  const { getProcessedTrades } = useProcessedTrades();
+  const setTrades = useSetAtom(tardesAtom);
+  const setPageNumbers = useSetAtom(updateTotalPageNumber);
+  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
+  const activePage = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
+  const historyPage = useMemo(() => TRADESINAPAGE * (history - 1), [history]);
+  const cancelledPage = useMemo(
+    () => TRADESINAPAGE * (cancelled - 1),
+    [cancelled]
+  );
 
   const { data } = usePastTradeQueryByFetch({
     account: account,
