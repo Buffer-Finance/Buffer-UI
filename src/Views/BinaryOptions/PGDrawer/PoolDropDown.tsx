@@ -20,7 +20,7 @@ export const useActivePoolObj = () => {
     if (!activePair) return [];
 
     return activePair.pools
-      .filter((pool) => !pool.token.name.toLowerCase().includes('pol'))
+      .filter((pool) => !pool.token.is_pol)
       .map((pool) => pool.token.name);
   }, [activePair, activeChain]);
 

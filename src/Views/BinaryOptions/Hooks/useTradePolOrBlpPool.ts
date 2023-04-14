@@ -13,9 +13,7 @@ export const useTradePolOrBlpPool = () => {
     option_contract: activePoolObj.options_contracts,
   };
 
-  const polExists = activePair.pools.find((pool) =>
-    pool.token.name.toLowerCase().includes('pol')
-  );
+  const polExists = activePair.pools.find((pool) => pool.token.is_pol);
 
   if (polExists) {
     response.min_amount = polExists.token.min_amount;
