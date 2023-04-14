@@ -19,6 +19,8 @@ import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { SlippageModalChild } from './Components/SlippageModal';
 import { SettingsIcon } from './PGDrawer/SettingsIcon';
+import { useTradePolOrBlpPool } from './Hooks/useTradePolOrBlpPool';
+
 const shutterModalAtom = atom<{
   open: false | 'amount' | 'duration' | 'settings';
 }>({
@@ -83,10 +85,10 @@ const AmountSelector: React.FC<any> = ({
   const { activePoolObj } = useActivePoolObj();
   const { configContracts } = useActiveChain();
   const balance = activeAssetState?.[0];
-  const minTradeAmount = activePoolObj.token.min_amount;
+  const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
   const isShutterOpen = shutter.open == 'amount';
-  const toastify = useToast();
   const { closeShutter } = useShutterHandlers();
+
   return (
     <>
       <ShutterDrawer
