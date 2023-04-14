@@ -17,7 +17,8 @@ export const TokenDataNotIncludedWarning = ({
             alt="lightning"
             className="mr-3 mt-2 h-[18px]"
           />
-          Stats for {tokenName} token will be live shortly.
+          Trades under 100 USDC are not accounted for currently, stats for the
+          same will be live shortly.
         </>
       }
       className="!mb-3"
