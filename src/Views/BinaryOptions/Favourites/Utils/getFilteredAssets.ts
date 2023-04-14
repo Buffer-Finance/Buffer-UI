@@ -11,7 +11,6 @@ export function getFilteredAssets(
   assets: IMarket[],
   searchText: string,
   category: string
-  // AssetTypes: string[]
 ) {
   const qtInfo = useQTinfo();
   const AssetTypes = getAssetTypes(qtInfo.pairs);
