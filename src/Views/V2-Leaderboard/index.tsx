@@ -12,7 +12,7 @@ export const LeaderBoard = (props: { children: JSX.Element }) => {
         <MobileLeaderboardDropdwon />
         <LeaderBoardSidebar />
         <div>
-          {/* <TokenDataNotIncludedWarning /> */}
+          <TokenDataNotIncludedWarning />
           {props.children}
         </div>
       </LeaderBoardStyles>

@@ -17,7 +17,7 @@ export const TokenDataNotIncludedWarning = ({
             alt="lightning"
             className="mr-3 mt-2 h-[18px]"
           />
-          Stats for trades under 100 USDC are currently not being displayed.
+          Data for trades under 100 USDC is currently not being accounted for.
           This will be fixed shortly.
         </>
       }
