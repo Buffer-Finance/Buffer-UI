@@ -6,6 +6,9 @@ import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { useMarketStatus } from './useMarketStatus';
+import { useAtomValue } from 'jotai';
+import { priceAtom, usePrice } from '@Hooks/usePrice';
+import { getPriceFromKlines } from '@TV/useDataFeed';
 
 export function getLinuxTimestampBefore24Hours() {
   return Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
@@ -33,16 +36,18 @@ type dashboardTableData = {
 };
 
 export const useDashboardTableData = () => {
-  const { data: currentPrices } = useSWR('dashboard-current-prices', {
-    fetcher: async () => {
-      const response = await axios.get(
-        `https://oracle.buffer-finance-api.link/price/latest/`
-      );
+  // const { data: currentPrices } = useSWR('dashboard-current-prices', {
+  //   fetcher: async () => {
+  //     const response = await axios.get(
+  //       `https://oracle.buffer-finance-api.link/price/latest/`
+  //     );
 
-      return response.data?.data;
-    },
-    // refreshInterval: 300,
-  });
+  //     return response.data?.data;
+  //   },
+  //   // refreshInterval: 300,
+  // });
+  usePrice();
+  const currentPrices = useAtomValue(priceAtom);
 
   const { assetStatus } = useMarketStatus();
   const { configContracts } = useActiveChain();
@@ -125,7 +130,7 @@ export const useDashboardTableData = () => {
         min_duration: configPair?.min_duration,
         max_duration: configPair?.max_duration,
         sort_duration: timeToMins(configPair?.min_duration),
-        currentPrice: currentPrices?.[configPair.tv_id]?.p,
+        currentPrice: getPriceFromKlines(currentPrices, configPair),
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(
           fromWei(
