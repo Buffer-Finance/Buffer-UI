@@ -7,6 +7,7 @@ import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
 import axios from 'axios';
 import { expiryPriceCache } from './useTradeHistory';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -198,7 +199,7 @@ export const usePastTradeQuery = () => {
             !expiryPriceCache[currentTrade.optionID] &&
             response?.data?.[0]?.price
           )
-            expiryPriceCache[currentTrade.optionID] = expiryPrice;
+            expiryPriceCache[currentTrade.optionID] = multiply(expiryPrice, 8);
         });
     }
   };
