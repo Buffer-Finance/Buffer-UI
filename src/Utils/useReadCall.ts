@@ -30,7 +30,6 @@ export const useReadCall = ({
   const key = swrKey + activeChain.id + account + chainInURL;
 
   // console.log(`signerOrProvider: `, signerOrProvider);
-  console.log(`calls: `, calls);
   return useSWR(calls && calls.length ? key : null, {
     fetcher: async () => {
       if (!calls) return null;
@@ -40,7 +39,6 @@ export const useReadCall = ({
         configContracts.multicall,
         swrKey + activeChain.id + account
       );
-      console.log(`returnData: `, returnData);
       if (returnData) {
         let copy = getDeepCopy(returnData);
         convertBNtoString(copy);

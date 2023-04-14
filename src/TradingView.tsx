@@ -529,6 +529,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       }
     }
   };
+  console.log(`[ip]price: `, price);
 
   // sync to ws updates
   useEffect(() => {

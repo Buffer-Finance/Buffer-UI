@@ -185,7 +185,7 @@ const DesktopTrad = () => {
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
   const navigate = useNavigate();
-  usePrice();
+  usePrice(true);
   usePastTradeQuery();
   useGenericHooks();
 
