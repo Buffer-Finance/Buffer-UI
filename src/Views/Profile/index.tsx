@@ -15,10 +15,10 @@ export const ProfilePage = () => {
   );
 };
 const Profile = () => {
-  usePrice();
+  usePrice(true);
   return (
     <div>
-      {/* <TokenDataNotIncludedWarning /> */}
+      <TokenDataNotIncludedWarning />
       <div className="px-7 my-8 sm:px-3">
         <UserData />
         <ReferralLink />

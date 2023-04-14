@@ -90,7 +90,10 @@ export const usePoolNames = () => {
   const { configContracts } = useActiveChain();
   return {
     poolNames: useMemo(
-      () => Object.keys(configContracts.tokens),
+      () =>
+        Object.keys(configContracts.tokens).filter(
+          (token) => !token.toLowerCase().includes('pol')
+        ),
       [configContracts]
     ),
   };

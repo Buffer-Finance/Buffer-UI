@@ -17,7 +17,7 @@ import useWebSocket from 'react-use-websocket';
 import { Market2Prices, Markets } from './Types/Market';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { TradingChart } from './TradingView';
-import { usePrice, wsStateAtom } from '@Hooks/usePrice';
+import { usePrice } from '@Hooks/usePrice';
 import FlexLayout, { Layout, TabNode } from 'flexlayout-react';
 import { FavouriteAssetDD } from '@Views/BinaryOptions/Favourites/FavouriteAssetDD';
 import { TVMarketSelector } from '@Views/BinaryOptions/Favourites/TVMarketSelector';
@@ -179,15 +179,13 @@ const layoutAtom = atomWithLocalStorage('layout-persisted-v2', json);
 const DesktopTrad = () => {
   const layoutRef = useRef<Layout | null>(null);
   const [forcefullyRerender, setforcefullyRerender] = useState(1);
-  const wsState = useAtomValue(wsStateAtom);
-  const userActivity = useAtomValue(UserActivityAtom);
   const { market } = useParams();
   const [layoutConset, seLayoutConsent] = useAtom(layoutConsentsAtom);
   const [layout, setLayout] = useAtom(layoutAtom);
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
   const navigate = useNavigate();
-  usePrice();
+  usePrice(true);
   usePastTradeQuery();
   useGenericHooks();
 

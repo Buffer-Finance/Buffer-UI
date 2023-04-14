@@ -25,6 +25,7 @@ import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { priceAtom } from '@Hooks/usePrice';
+import { useTradePolOrBlpPool } from '../Hooks/useTradePolOrBlpPool';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
@@ -81,7 +82,8 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
   }
-  const minTradeAmount = activePoolObj.token.min_amount;
+  const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
+
   return (
     <>
       <SlippageModal
