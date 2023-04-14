@@ -330,13 +330,14 @@
     "tokens": {
       "USDC": {
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
-        "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
+        "meta": "0x195b720567B7e7a6DCF5b131F5Bdc4Ea091EFa4B",
         "decimals": 6,
         "img": "/tokens/USDC.png",
         "name": "USDC",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 25,"is_pol":false
+        "min_amount": 100,
+        "is_pol":false
       },
       "USDC_POL": {
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
@@ -344,9 +345,10 @@
         "decimals": 6,
         "img": "/tokens/USDC.png",
         "name": "USDC",
-        "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
+        "pool_address": "0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 5,"is_pol":true
+        "min_amount": 5,
+        "is_pol":true
       },
       "ARB": {
         "address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
@@ -355,13 +357,14 @@
         "img": "/Chains/ARBITRIUM.png",
         "name": "ARB",
         "pool_address": "0xaE0628C88EC6C418B3F5C005f804E905f8123833",
-        "min_amount": 25,"is_pol":false
+        "min_amount": 25,
+        "is_pol":false
       }
     },
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:03",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
@@ -382,8 +385,8 @@
           {
             "token": "USDC_POL",
             "options_contracts": {
-              "config": "0x08d5E019fB16f92822befaC9986E7b7402DAE610",
-              "current": "0x532321e6a2D8A54cf87E34850A7d55466B1ec197"
+              "config": "0xdCe9F7383c36e3C7E71110A671Fe3FDe09AD094D",
+              "current": "0xeacaa1F47a90df6d284dDEFE6D148c814DE1a17c"
             }
           },
           {
@@ -397,7 +400,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:03",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
@@ -415,7 +418,13 @@
               "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"
             }
           },
-         
+          {
+            "token": "USDC_POL",
+            "options_contracts": {
+              "config": "0x102DAd71c122822345A0E73F179E2bc58C5E5F82",
+              "current": "0x8cF36930EE277F537c5e815B3893A1Ea8C54a3b3"
+            }
+          },
           {
             "token": "ARB",
             "options_contracts": {
@@ -427,7 +436,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:03",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "EURUSD",
@@ -446,6 +455,13 @@
             }
           },
           {
+            "token": "USDC_POL",
+            "options_contracts": {
+              "config": "0x31bE72CC1A56DE96BF5e3992aF70e4dB762BFe2d",
+              "current": "0x824F6209b6C022bE9ac2c121604A509A3eD3960E"
+            }
+          },
+          {
             "token": "ARB",
             "options_contracts": {
               "config": "0x09283F9D0eec02961E61B7b82Cb094619f1Bf2a0",
@@ -456,7 +472,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:03",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "GBPUSD",
@@ -472,6 +488,13 @@
             "options_contracts": {
               "config": "0xc1925460Fe5669878D5963c29aC51677866dE67F",
               "current": "0x5d61FE708c9D41acf59009013f14496d559aad09"
+            }
+          },
+          {
+            "token": "USDC_POL",
+            "options_contracts": {
+              "config": "0xB90C35F0F03F16996CE27E23A2aC51ADF5FF2c2B",
+              "current": "0x69359690AE2F6d8bfCAb5F4FB30d3d2ecbfbb3ef"
             }
           },
           {
@@ -887,7 +910,8 @@
         "name": "USDC",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
         "faucet": "0x4fccf1139FcA44EF716534bae9D3f87a01583338",
-        "min_amount": 5,"is_pol":false
+        "min_amount": 5,
+        "is_pol":false
       }
     },
     "pairs": [
@@ -997,13 +1021,14 @@
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d",
-        "min_amount": 25,"is_pol":false
+        "min_amount": 25,
+        "is_pol":false
       }
     },
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:03",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
@@ -1025,7 +1050,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:03",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
@@ -1113,7 +1138,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:03",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "EURUSD",
@@ -1135,7 +1160,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:03",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "GBPUSD",
