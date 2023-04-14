@@ -1,4 +1,9 @@
-import { getOHLCfromPrice, parsewsmsg } from '@TV/utils';
+import {
+  UTF8ArrToStr,
+  getKlineFromPrice,
+  getOHLCfromPrice,
+  parsewsmsg,
+} from '@TV/utils';
 import axios from 'axios';
 import { atom, useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
@@ -21,7 +26,7 @@ const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 
 export const usePrice = (fetchInitialPrices?: boolean) => {
   const setPrice = useSetAtom(priceAtom);
-  // const { readyState } = useWebSocket(
+  // const { readyState } = useWebSocklet(
   //   'wss://oracle-v2.buffer-finance-api.link',
   //   {
   //     onMessage: (price) => {
@@ -75,33 +80,21 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
       getPythProgramKeyForCluster(solanaClusterName)
     )
   );
+  const fn = async () => {
+    const url = 'https://pyth-api.vintage-orange-muffin.com/v2/streaming';
+    const response = await fetch(url);
+    const reader = response.body.getReader();
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      const updateStr = UTF8ArrToStr(value);
+      const updatePrices = getKlineFromPrice(updateStr);
+      console.log(`updatePrices: `, updatePrices);
+      setPrice((p) => ({ ...p, ...updatePrices }));
+    }
+  };
   useEffect(() => {
-    pythConnection.current.onPriceChange((p, o) => {
-      // BTCUSD [{
-      //   time: +ts,
-      //   price: absolutePrice,
-      //   volume: volume ? +volume : 0,
-      // }];
-
-      if (p?.description && o?.price && o.timestamp) {
-        if (p.description == 'BTC/USD' || p.description == 'ETH/USD') {
-          const marketId = p.description.replace('/', '');
-          const ts = Number(o.timestamp) * 1000;
-          const price = o.price;
-          const priceUpdates = {
-            [marketId]: [
-              {
-                time: ts,
-                price,
-              },
-            ],
-          };
-          console.log(`[pyth]priceUpdates: `, priceUpdates);
-          setPrice((p) => ({ ...p, ...priceUpdates }));
-        }
-      }
-    });
-    pythConnection.current.start();
+    fn();
   }, []);
 };
 
