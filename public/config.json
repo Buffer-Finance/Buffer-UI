@@ -338,6 +338,16 @@
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
         "min_amount": 25
       },
+      "USDC_POL": {
+        "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+        "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
+        "decimals": 6,
+        "img": "/tokens/USDC.png",
+        "name": "USDC_POL",
+        "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
+        "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
+        "min_amount": 5
+      },
       "ARB": {
         "address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
         "meta": "0x6f63ba810092D1743f3EE78d614F072caE1A408D",
@@ -370,6 +380,13 @@
             }
           },
           {
+            "token": "USDC_POL",
+            "options_contracts": {
+              "config": "0x08d5E019fB16f92822befaC9986E7b7402DAE610",
+              "current": "0x532321e6a2D8A54cf87E34850A7d55466B1ec197"
+            }
+          },
+          {
             "token": "ARB",
             "options_contracts": {
               "config": "0xab4D8f4f4F39C4eE76f8d6493876995f5A6e9Fe3",
@@ -393,6 +410,13 @@
         "pools": [
           {
             "token": "USDC",
+            "options_contracts": {
+              "config": "0xbC7DBEB9a7b158711b4B5fb0177F3E0bE024125a",
+              "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"
+            }
+          },
+          {
+            "token": "USDC_POL",
             "options_contracts": {
               "config": "0xbC7DBEB9a7b158711b4B5fb0177F3E0bE024125a",
               "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"

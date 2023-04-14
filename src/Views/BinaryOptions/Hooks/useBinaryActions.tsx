@@ -26,6 +26,7 @@ import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { priceAtom } from '@Hooks/usePrice';
 import { knowTillAtom } from './useIsMerketOpen';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
+import { useTradePolOrBlpPool } from './useTradePolOrBlpPool';
 
 export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const binary = useQTinfo();
@@ -51,6 +52,8 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const marketPrice = useAtomValue(priceAtom);
   const toastify = useToast();
   const knowTill = useAtomValue(knowTillAtom);
+  const { option_contract, min_amount: minTradeAmount } =
+    useTradePolOrBlpPool();
 
   const cb = (a) => {
     setLoading(null);
@@ -62,7 +65,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
     const isForex = activeAsset.category === 'Forex';
     const marketCloseTime = Math.floor(knowTill.date / 1000);
     const currentTime = Math.floor(new Date().getTime() / 1000);
-    const minTradeAmount = activePoolObj.token.min_amount;
 
     if (state.txnLoading > 1) {
       toastify({
@@ -180,7 +182,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       toFixed(multiply(userInput, activePoolObj.token.decimals), 0),
       expirationInMins * 60 + '',
       customTrade.is_up,
-      activePoolObj.options_contracts.current,
+      option_contract.current,
       toFixed(multiply(('' + price).toString(), 8), 0),
       // '10000000000',
       toFixed(multiply(settings.slippage.toString(), 2), 0),
