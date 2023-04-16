@@ -206,6 +206,9 @@ export const OverviewArbitrum = ({
       USDC: Math.ceil(
         (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
       ),
+      USDC_POL: Math.ceil(
+        (Date.now() - Date.parse('14 APR 2023 16:00:00 GMT')) / 86400000
+      ),
       ARB: Math.ceil(
         (Date.now() - Date.parse('17 Mar 2023 017:15:45 GMT')) / 86400000
       ),

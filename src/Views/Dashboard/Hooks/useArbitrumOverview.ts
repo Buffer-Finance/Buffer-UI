@@ -90,10 +90,7 @@ export const usePoolNames = () => {
   const { configContracts } = useActiveChain();
   return {
     poolNames: useMemo(
-      () =>
-        Object.keys(configContracts.tokens).filter(
-          (token) => !token.toLowerCase().includes('pol')
-        ),
+      () => Object.keys(configContracts.tokens),
       [configContracts]
     ),
   };
@@ -192,7 +189,7 @@ export const useArbitrumOverview = () => {
     };
   }, [data, openInterest, total24hrsStats, totalStats]);
 
-  // console.log(overView, 'overViewResponse');
+  console.log(overView, 'overViewResponse');
 
   return {
     overView,
