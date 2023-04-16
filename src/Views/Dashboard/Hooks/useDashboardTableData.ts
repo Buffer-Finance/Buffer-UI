@@ -36,19 +36,8 @@ type dashboardTableData = {
 };
 
 export const useDashboardTableData = () => {
-  // const { data: currentPrices } = useSWR('dashboard-current-prices', {
-  //   fetcher: async () => {
-  //     const response = await axios.get(
-  //       `https://oracle.buffer-finance-api.link/price/latest/`
-  //     );
-
-  //     return response.data?.data;
-  //   },
-  //   // refreshInterval: 300,
-  // });
   usePrice(true);
   const currentPrices = useAtomValue(priceAtom);
-
   const { assetStatus } = useMarketStatus();
   const { configContracts } = useActiveChain();
   const { data } = useSWR('dashboard-table-data', {
@@ -75,6 +64,7 @@ export const useDashboardTableData = () => {
               address
             }
             amount
+            settlementFee
             depositToken
           }
         }`,
@@ -108,11 +98,7 @@ export const useDashboardTableData = () => {
     data.optionContracts.forEach((item) => {
       const configPair = configContracts.pairs.find((pair) => {
         pool = null;
-        // if (
-        //   pair.pools[0].options_contracts.current.toLowerCase() ===
-        //   item.address.toLowerCase()
-        // )
-        // pool = pair.pools[0];
+
         pool = pair.pools.find(
           (pool) =>
             pool.options_contracts.current.toLowerCase() ===
@@ -178,6 +164,7 @@ export const useDashboardTableData = () => {
         max_utilization:
           assetStatus[pool.options_contracts.current]?.maxUtilization ?? '0',
         pool: pool.token,
+        poolUnit: configContracts.tokens[pool.token].name,
       };
       upatedData.push(currData);
     });
@@ -205,6 +192,6 @@ export const useDashboardTableData = () => {
       }
     );
   }, [dashboardData]);
-  // console.log(dashboardData, totalData, 'dashboardData');
+  console.log(dashboardData, totalData, 'dashboardData');
   return { dashboardData, totalData };
 };

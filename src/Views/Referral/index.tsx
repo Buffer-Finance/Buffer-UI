@@ -93,8 +93,11 @@ const Referral: React.FC<IReferral> = ({}) => {
   const { openConnectModal } = useConnectModal();
   const { setTab, tab } = useRefferalTab();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
-  const { poolNames: tokens } = usePoolNames();
-
+  const { poolNames } = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
   const shouldConnectWallet = !account;
   useEffect(() => {
     setip('');

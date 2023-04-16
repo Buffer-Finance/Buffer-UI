@@ -44,17 +44,22 @@ function getTokenXquery(tokensArray: string[]) {
 }
 function getTokenX24hrsquery(tokensArray: string[], prevDayEpoch: number) {
   return tokensArray
-    .map(
-      (token) => `${token}24stats:volumePerContracts(
-        orderBy: timestamp
-        orderDirection: desc
-        first: 1000
-        where: {depositToken: "${token}", timestamp_gt: ${prevDayEpoch}}
-      ) {
-          amount
-          settlementFee
-      }`
-    )
+    .map((token) => {
+      const condition =
+        token === 'total'
+          ? `depositToken: "${token}"`
+          : `optionContract_: {pool: "${token}"}`;
+
+      return `${token}24stats:volumePerContracts(
+          orderBy: timestamp
+          orderDirection: desc
+          first: 1000
+          where: {${condition}, timestamp_gt: ${prevDayEpoch}}
+          ) {
+            amount
+            settlementFee
+          }`;
+    })
     .join(' ');
 }
 
@@ -90,15 +95,34 @@ export const usePoolNames = () => {
   const { configContracts } = useActiveChain();
   return {
     poolNames: useMemo(
-      () =>
-        Object.keys(configContracts.tokens).filter(
-          (token) => !token.toLowerCase().includes('pol')
-        ),
+      () => Object.keys(configContracts.tokens),
       [configContracts]
     ),
   };
 };
+export const usePoolDisplayNames = () => {
+  const pools = usePoolNames();
+  const { configContracts } = useActiveChain();
 
+  return {
+    poolDisplayNameMapping: useMemo(
+      () =>
+        pools.poolNames.reduce((acc, curr) => {
+          acc[curr] = configContracts.tokens[curr].name;
+          return acc;
+        }, {} as { [key: string]: string }),
+      [pools.poolNames, configContracts]
+    ),
+    poolDisplayKeyMapping: useMemo(
+      () =>
+        pools.poolNames.reduce((acc, curr) => {
+          acc[curr] = curr.replace('_', '-');
+          return acc;
+        }, {} as { [key: string]: string }),
+      [pools.poolNames, configContracts]
+    ),
+  };
+};
 export const useArbitrumOverview = () => {
   const { configContracts, activeChain } = useActiveChain();
   const { dashboardData } = useDashboardTableData();
@@ -192,7 +216,7 @@ export const useArbitrumOverview = () => {
     };
   }, [data, openInterest, total24hrsStats, totalStats]);
 
-  // console.log(overView, 'overViewResponse');
+  console.log(overView, data, 'overViewResponse');
 
   return {
     overView,
