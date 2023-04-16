@@ -8,6 +8,7 @@ import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { useState } from 'react';
+import { usePoolDisplayNames } from '../Hooks/useArbitrumOverview';
 
 export const DashboardTable = ({
   dashboardData,
@@ -25,6 +26,7 @@ export const DashboardTable = ({
   activePage: number;
 }) => {
   const navigate = useNavigate();
+  const { poolDisplayKeyMapping } = usePoolDisplayNames();
   const headerJSX = [
     { id: 'pair', label: 'Pair' },
     { id: 'pool', label: 'Pool' },
@@ -55,7 +57,11 @@ export const DashboardTable = ({
           </div>
         );
       case 1:
-        return currentRow.pool;
+        return (
+          <span className="whitespace-nowrap">
+            {poolDisplayKeyMapping[currentRow.pool]}
+          </span>
+        );
       case 2:
         return (
           <CellContent
@@ -73,13 +79,13 @@ export const DashboardTable = ({
             <OpenUpDownIndicator
               openDown={Number(currentRow.openDown)}
               openUp={Number(currentRow.openUp)}
-              unit={currentRow.pool}
+              unit={currentRow.poolUnit}
             />
             <div className="mt-2">
               Total :{' '}
               <Display
                 data={currentRow.totalTrades}
-                unit={currentRow.pool}
+                unit={currentRow.poolUnit}
                 className="inline"
               />
             </div>
@@ -93,7 +99,7 @@ export const DashboardTable = ({
               <div className="flex items-center">
                 <Display
                   data={currentRow['24h_volume']}
-                  unit={currentRow.pool}
+                  unit={currentRow.poolUnit}
                 />
               </div>,
             ]}
@@ -129,7 +135,7 @@ export const DashboardTable = ({
             content={[
               <Display
                 data={currentRow.max_trade_size}
-                unit={currentRow.pool}
+                unit={currentRow.poolUnit}
                 className="!justify-start"
               />,
             ]}
@@ -190,10 +196,10 @@ export const DashboardTable = ({
       }}
       widths={[
         '11%',
-        '5%',
-        '10%',
+        '7%',
+        '9%',
         '16%',
-        '11%',
+        '10%',
         '10%',
         '12%',
         '11%',

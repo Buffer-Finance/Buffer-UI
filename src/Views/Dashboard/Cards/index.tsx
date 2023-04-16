@@ -22,6 +22,7 @@ import {
   arbitrumOverview,
   toalTokenXstats,
   tokenX24hrsStats,
+  usePoolDisplayNames,
   usePoolNames,
 } from '../Hooks/useArbitrumOverview';
 import { useMemo } from 'react';
@@ -215,6 +216,13 @@ export const OverviewArbitrum = ({
     };
   }, []);
   const { poolNames: tokens } = usePoolNames();
+  const { poolDisplayNameMapping, poolDisplayKeyMapping } =
+    usePoolDisplayNames();
+  const keys = useMemo(() => {
+    return Object.values(poolDisplayKeyMapping);
+  }, [poolDisplayKeyMapping]);
+
+  console.log(poolDisplayNameMapping, keys, 'poolDisplayNameMapping');
   function getAverageTradeVolume(volume: string, days: string) {
     return divide(volume, days);
   }
@@ -235,6 +243,7 @@ export const OverviewArbitrum = ({
             'Total Trades',
             'Open Interest (USDC)',
             'Open Interest (ARB)',
+            'Open Interest (USDC-POL)',
             'Total Traders',
           ]}
           values={[
@@ -242,7 +251,9 @@ export const OverviewArbitrum = ({
               <NumberTooltip
                 content={
                   <TableAligner
-                    keysName={tokens}
+                    keysName={keys.map((key) => (
+                      <span>{key}</span>
+                    ))}
                     keyStyle={tooltipKeyClasses}
                     valueStyle={tooltipValueClasses}
                     values={tokens.map((token) => {
@@ -254,14 +265,14 @@ export const OverviewArbitrum = ({
                               {getBalance(
                                 (stats as toalTokenXstats).totalSettlementFees
                               )}
-                              {token}
+                              {poolDisplayNameMapping[token]}
                             </div>
                             &nbsp;/&nbsp;
                             <div className="whitespace-nowrap">
                               {getBalance(
                                 (stats as toalTokenXstats).totalVolume
                               )}
-                              {token}
+                              {poolDisplayNameMapping[token]}
                             </div>
                           </div>
                         );
@@ -295,7 +306,9 @@ export const OverviewArbitrum = ({
               <NumberTooltip
                 content={
                   <TableAligner
-                    keysName={tokens}
+                    keysName={keys.map((key) => (
+                      <span>{key}</span>
+                    ))}
                     keyStyle={tooltipKeyClasses}
                     valueStyle={tooltipValueClasses}
                     values={tokens.map((token) => {
@@ -307,12 +320,12 @@ export const OverviewArbitrum = ({
                               {getBalance(
                                 (stats as tokenX24hrsStats).settlementFee
                               )}
-                              {token}
+                              {poolDisplayNameMapping[token]}
                             </div>
                             &nbsp;/&nbsp;
                             <div className="whitespace-nowrap">
                               {getBalance((stats as tokenX24hrsStats).amount)}
-                              {token}
+                              {poolDisplayNameMapping[token]}
                             </div>
                           </div>
                         );
@@ -350,7 +363,9 @@ export const OverviewArbitrum = ({
                 precision={2}
                 content={
                   <TableAligner
-                    keysName={tokens}
+                    keysName={keys.map((key) => (
+                      <span>{key}</span>
+                    ))}
                     keyStyle={tooltipKeyClasses}
                     valueStyle={tooltipValueClasses}
                     values={tokens.map((token, index) => {
@@ -365,7 +380,7 @@ export const OverviewArbitrum = ({
                             2
                           ) +
                           ' ' +
-                          token
+                          poolDisplayNameMapping[token]
                         );
                       else return '-';
                     })}
@@ -382,7 +397,9 @@ export const OverviewArbitrum = ({
                 unit={'USDC'}
                 content={
                   <TableAligner
-                    keysName={tokens}
+                    keysName={keys.map((key) => (
+                      <span>{key}</span>
+                    ))}
                     keyStyle={tooltipKeyClasses}
                     valueStyle={tooltipValueClasses}
                     values={tokens.map((token) => {
@@ -397,7 +414,7 @@ export const OverviewArbitrum = ({
                             2
                           ) +
                           ' ' +
-                          token
+                          poolDisplayNameMapping[token]
                         );
                       else return '-';
                     })}
@@ -408,7 +425,9 @@ export const OverviewArbitrum = ({
             <NumberTooltip
               content={
                 <TableAligner
-                  keysName={tokens}
+                  keysName={keys.map((key) => (
+                    <span>{key}</span>
+                  ))}
                   keyStyle={tooltipKeyClasses}
                   valueStyle={tooltipValueClasses}
                   values={tokens.map((token) => {
@@ -427,7 +446,7 @@ export const OverviewArbitrum = ({
             // <NumberTooltip
             //   content={
             //     <TableAligner
-            //       keysName={tokens}
+            //       keysName={keys}
             //       keyStyle={tooltipKeyClasses}
             //       valueStyle={tooltipValueClasses}
             // values={tokens.map((token) => {
@@ -447,16 +466,45 @@ export const OverviewArbitrum = ({
             // </NumberTooltip>,
 
             <div>
-              {data.openInterest !== null
-                ? (data.USDCopenInterest as toalTokenXstats)?.openInterest +
-                  ' USDC'
-                : 'fetching...'}
+              {data.openInterest !== null || data.openInterest !== undefined ? (
+                <Display
+                  data={
+                    (data.USDCopenInterest as toalTokenXstats)?.openInterest
+                  }
+                  precision={2}
+                  unit="USDC"
+                  className="!justify-end"
+                />
+              ) : (
+                'fetching...'
+              )}
             </div>,
             <div>
-              {data.openInterest !== null
-                ? (data.ARBopenInterest as toalTokenXstats)?.openInterest +
-                  ' ARB'
-                : 'fetching...'}
+              {data.openInterest !== null || data.openInterest !== undefined ? (
+                <Display
+                  data={(data.ARBopenInterest as toalTokenXstats)?.openInterest}
+                  precision={2}
+                  unit="USDC"
+                  className="!justify-end"
+                />
+              ) : (
+                'fetching...'
+              )}
+            </div>,
+            <div>
+              {(data.USDC_POLopenInterest as toalTokenXstats)?.openInterest !==
+              undefined ? (
+                <Display
+                  data={
+                    (data.USDC_POLopenInterest as toalTokenXstats)?.openInterest
+                  }
+                  precision={2}
+                  unit="USDC"
+                  className="!justify-end"
+                />
+              ) : (
+                'fetching...'
+              )}
             </div>,
             <div className={wrapperClasses}>{data.totalTraders}</div>,
           ]}
