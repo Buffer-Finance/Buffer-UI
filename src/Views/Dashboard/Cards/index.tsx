@@ -252,7 +252,7 @@ export const OverviewArbitrum = ({
                 content={
                   <TableAligner
                     keysName={keys.map((key) => (
-                      <span>{key}</span>
+                      <span className="whitespace-nowrap">{key}</span>
                     ))}
                     keyStyle={tooltipKeyClasses}
                     valueStyle={tooltipValueClasses}
@@ -307,7 +307,7 @@ export const OverviewArbitrum = ({
                 content={
                   <TableAligner
                     keysName={keys.map((key) => (
-                      <span>{key}</span>
+                      <span className="whitespace-nowrap">{key}</span>
                     ))}
                     keyStyle={tooltipKeyClasses}
                     valueStyle={tooltipValueClasses}
@@ -364,7 +364,7 @@ export const OverviewArbitrum = ({
                 content={
                   <TableAligner
                     keysName={keys.map((key) => (
-                      <span>{key}</span>
+                      <span className="whitespace-nowrap">{key}</span>
                     ))}
                     keyStyle={tooltipKeyClasses}
                     valueStyle={tooltipValueClasses}
@@ -398,7 +398,7 @@ export const OverviewArbitrum = ({
                 content={
                   <TableAligner
                     keysName={keys.map((key) => (
-                      <span>{key}</span>
+                      <span className="whitespace-nowrap">{key}</span>
                     ))}
                     keyStyle={tooltipKeyClasses}
                     valueStyle={tooltipValueClasses}
@@ -426,7 +426,7 @@ export const OverviewArbitrum = ({
               content={
                 <TableAligner
                   keysName={keys.map((key) => (
-                    <span>{key}</span>
+                    <span className="whitespace-nowrap">{key}</span>
                   ))}
                   keyStyle={tooltipKeyClasses}
                   valueStyle={tooltipValueClasses}
@@ -465,7 +465,7 @@ export const OverviewArbitrum = ({
             //   </div>
             // </NumberTooltip>,
 
-            <div>
+            <div className={wrapperClasses}>
               {data.openInterest !== null || data.openInterest !== undefined ? (
                 <Display
                   data={
@@ -473,25 +473,25 @@ export const OverviewArbitrum = ({
                   }
                   precision={2}
                   unit="USDC"
-                  className="!justify-end"
+                  className="!w-fit"
                 />
               ) : (
                 'fetching...'
               )}
             </div>,
-            <div>
+            <div className={wrapperClasses}>
               {data.openInterest !== null || data.openInterest !== undefined ? (
                 <Display
                   data={(data.ARBopenInterest as toalTokenXstats)?.openInterest}
                   precision={2}
                   unit="USDC"
-                  className="!justify-end"
+                  className="!w-fit"
                 />
               ) : (
                 'fetching...'
               )}
             </div>,
-            <div>
+            <div className={wrapperClasses}>
               {(data.USDC_POLopenInterest as toalTokenXstats)?.openInterest !==
               undefined ? (
                 <Display
@@ -500,7 +500,7 @@ export const OverviewArbitrum = ({
                   }
                   precision={2}
                   unit="USDC"
-                  className="!justify-end"
+                  className="!w-fit"
                 />
               ) : (
                 'fetching...'
