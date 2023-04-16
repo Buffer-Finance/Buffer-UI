@@ -52,16 +52,19 @@ export const Markets = () => {
   return (
     <div>
       <DashboardTable
-        dashboardData={filteredDashboardData.slice(
-          (currentPage - 1) * ROWSINAMARKETSPAGE,
-          currentPage * ROWSINAMARKETSPAGE
-        )}
+        dashboardData={
+          filteredDashboardData
+          //   .slice(
+          //   (currentPage - 1) * ROWSINAMARKETSPAGE,
+          //   currentPage * ROWSINAMARKETSPAGE
+          // )
+        }
         loading={!dashboardData && markets.length > 1}
         activePage={currentPage}
         onPageChange={(e, p) => {
           setCurrentPage(p);
         }}
-        count={Math.ceil(filteredDashboardData?.length / ROWSINAMARKETSPAGE)}
+        // count={Math.ceil(filteredDashboardData?.length / ROWSINAMARKETSPAGE)}
       />
     </div>
   );
