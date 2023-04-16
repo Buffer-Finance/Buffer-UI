@@ -53,15 +53,19 @@ export const useWeeklyLeaderboardQuery = () => {
   const { configContracts, activeChain } = useActiveChain();
   const configValue = weeklyTournamentConfig[activeChain.id];
   const { poolNames } = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
   const queryFields = useMemo(() => {
-    if (poolNames.length > 1)
-      return poolNames
+    if (tokens.length > 1)
+      return tokens
         .map((poolName) =>
           getTokenXleaderboardQueryFields(poolName.toLowerCase())
         )
         .join(' ');
     else return '';
-  }, [poolNames]);
+  }, [tokens]);
 
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
