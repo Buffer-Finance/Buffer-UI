@@ -80,7 +80,7 @@ export const Dashboard = () => {
 const DashboardPage = () => {
   return (
     <DashboardStyles>
-      <TokenDataNotIncludedWarning />
+      {/* <TokenDataNotIncludedWarning /> */}
       <Boxes />
       <Section
         Heading={<div className={topStyles}>Markets</div>}
