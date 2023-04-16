@@ -64,16 +64,16 @@ export const getExpireNotification = async (
   );
   console.log(`[notif]expiryPriceObj: `, expiryPriceObj);
   const expiryPrice = expiryPriceObj?.price.toString();
-  console.log(`[notif]expiryPrice: `, expiryPrice);
+  console.log(`[notif]expiryPrice: `, currentRow, expiryPrice);
   if (!expiryPrice) return;
   let win = true;
-  if (lt(currentRow.strike, expiryPrice)) {
+  if (lt(currentRow.strike, multiply(expiryPrice, 8))) {
     if (currentRow.isAbove) {
       win = true;
     } else {
       win = false;
     }
-  } else if (currentRow.strike == expiryPrice) {
+  } else if (currentRow.strike == multiply(expiryPrice, 8)) {
     //to be asked
     win = false;
   } else {
