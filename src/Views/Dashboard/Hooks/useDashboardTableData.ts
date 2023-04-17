@@ -75,7 +75,7 @@ export const useDashboardTableData = () => {
   });
 
   const oneDayVolume = useMemo(() => {
-    if (!data || !data.volumePerContracts) return [];
+    if (!data || !data.volumePerContracts) return {};
     return data.volumePerContracts.reduce((acc, item) => {
       const address = item.optionContract.address.toLowerCase();
       if (item.depositToken !== 'total') {
