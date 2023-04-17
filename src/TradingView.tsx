@@ -68,11 +68,13 @@ export let supported_resolutions = [
   // '1S' as ResolutionString,
   // '10S' as ResolutionString,
   '1' as ResolutionString,
+  '3' as ResolutionString,
   '5' as ResolutionString,
+  // '10' as ResolutionString,
   '15' as ResolutionString,
   '30' as ResolutionString,
   '1H' as ResolutionString,
-  // "2H" as ResolutionString,
+  '2H' as ResolutionString,
   '4H' as ResolutionString,
   // "1D",
 ];
@@ -98,9 +100,15 @@ const formatResolution = (s) => {
   if (s.toLowerCase() == '5') {
     return '5m';
   }
+  if (s.toLowerCase() == '3') {
+    return '3m';
+  }
 
   if (s.toLowerCase() == '15') {
     return '15m';
+  }
+  if (s.toLowerCase() == '10') {
+    return '10m';
   }
   if (s.toLowerCase() == '30') {
     return '30m';
