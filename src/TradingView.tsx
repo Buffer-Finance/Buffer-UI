@@ -34,7 +34,7 @@ import {
   getDisplayTime,
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { useQTinfo } from '@Views/BinaryOptions';
 import {
@@ -65,8 +65,8 @@ import {
 } from '@TV/ChartTypeSelectionDD';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
-  '1S' as ResolutionString,
-  '10S' as ResolutionString,
+  // '1S' as ResolutionString,
+  // '10S' as ResolutionString,
   '1' as ResolutionString,
   '5' as ResolutionString,
   '15' as ResolutionString,
@@ -173,8 +173,32 @@ function getText(expiration: number) {
         )}`
   }`;
 }
-const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage', null);
-const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
+const pythOHLC2rawOHLC = (pythOHLC: {
+  c: number[];
+  h: number[];
+  l: number[];
+  o: number[];
+  t: number[];
+  v: number[];
+}) => {
+  console.log(`pythOHLC: `, pythOHLC);
+  const rawOhlc = [];
+  pythOHLC.c.forEach((element, idx) => {
+    rawOhlc.push({
+      time: pythOHLC.t[idx] * 1000,
+      open: pythOHLC.o[idx],
+      close: pythOHLC.c[idx],
+      high: pythOHLC.h[idx],
+      low: pythOHLC.l[idx],
+      volume: pythOHLC.v[idx],
+    });
+  });
+  return rawOhlc;
+};
+const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage-v2', null);
+// uncomment this for persisting user Resolution - but this has some bugs.
+// const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
+const market2resolutionAtom = atom({});
 function drawPosition(
   option: IGQLHistory,
   visualized: any,
@@ -312,6 +336,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           pricescale: symbolItem.pricescale,
           has_intraday: true,
           has_seconds: true,
+          visible_plots_set: 'ohlc',
+          has_no_volume: true,
           seconds_multipliers: ['1', '10'],
           has_weekly_and_monthly: true,
           supported_resolutions,
@@ -340,59 +366,38 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           let bars: OHLCBlock[] = [];
           const getBarsFnActiveAsset = symbolInfo.name;
 
-          const req = firstDataRequest
-            ? {
-                pair: getBarsFnActiveAsset,
-                interval: timeDeltaMapping(resolution),
-                limit: 1000,
-              }
-            : {
-                pair: getBarsFnActiveAsset,
-                interval: timeDeltaMapping(resolution),
-                limit: 1000,
-                start_time: from * 1000,
-                end_time: to * 1000,
-              };
-          const bundle = [
-            axios.post(
-              `https://oracle.buffer-finance-api.link/multi/uiKlines/`,
-              [req]
-            ),
-            axios.get('https://oracle.buffer-finance-api.link/price/latest/'),
-          ];
-          const [assetBars, allPrices] = await Promise.all(bundle);
-          const allPricesData = allPrices.data.data as LatestPriceApiRes;
-          let mappedData: Partial<Market2Kline> = {};
-          let keys = Object.keys(allPricesData);
-          console.log(keys);
-          if (allPricesData) {
-            for (let a in allPricesData) {
-              mappedData[a as Markets] = getOHLCfromPrice(
-                allPricesData[a as Markets],
-                allPricesData.timestamp as number
-              );
+          const req = {
+            from,
+            to,
+            symbol: getBarsFnActiveAsset,
+            resolution,
+          };
+
+          const pythOHLC = await axios.get(
+            `https://pyth-api.vintage-orange-muffin.com/v2/history`,
+            {
+              params: req,
             }
-          }
-          const tempData = assetBars.data[0].result as number[][];
-          const query = assetBars.data[0].query;
-          if (!tempData) return;
-          tempData.forEach((bar, idx) => {
-            bars = [...bars, getBlockFromBar(bar)];
-          });
+          );
+          const ohlc = pythOHLC2rawOHLC(pythOHLC.data);
+          console.log(`ohlc: `, ohlc);
+          // const tempData = rawOHLC;
+          // console.log(`tempData: `, tempData);
+          // if (!tempData) return;
+          // tempData.forEach((bar, idx) => {
+          //   bars = [...bars, getBlockFromBar(bar)];
+          // });
 
-          const recentBar = bars[bars.length - 1];
+          // const recentBar = bars[bars.length - 1];
 
-          if (firstDataRequest && bars.length) {
+          if (firstDataRequest && ohlc.length) {
             lastSyncedKline.current[
               getBarsFnActiveAsset + timeDeltaMapping(resolution)
-            ] = recentBar;
+            ] = ohlc[ohlc.length - 1];
             console.log(`lastSyncedKline: `, lastSyncedKline);
           }
-          const isLastChunk =
-            query.start_time / 1000 <= FIRST_TIMESTAMP ? true : false;
-
-          onHistoryCallback(bars, {
-            noData: isLastChunk,
+          onHistoryCallback(ohlc, {
+            noData: false,
           });
         } catch (error) {
           onErrorCallback(error as string);
@@ -429,7 +434,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       container: containerDivRef.current!,
       library_path: defaults.library_path,
       custom_css_url: defaults.cssPath,
-
+      create_volume_indicator_by_default: false,
       timezone: getOslonTimezone() as Timezone,
       symbol: market,
       theme: defaults.theme as ThemeName,
@@ -496,6 +501,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     // console.log(`[deb]3prevBar: `, prevBar);
     if (!prevBar) return;
     const activeAssetStream = price[market];
+    console.log(`[pyth]activeAssetStream: `, activeAssetStream);
     // console.log(`[deb]4price: `, activeAssetStream);
     if (!activeAssetStream?.length) return;
     let aggregatedBar;
@@ -511,7 +517,11 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         realTimeUpdateRef.current.symbolInfo &&
         realTimeUpdateRef.current.symbolInfo.name === market
       ) {
-        realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
+        try {
+          realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
+        } catch (err) {
+          console.log('[sync]error white updating', err);
+        }
         // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
         console.log(
@@ -527,6 +537,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
+    console.log(`price[market]: `, price[market]?.[0]);
   }, [price[market]]);
 
   // draw positions.

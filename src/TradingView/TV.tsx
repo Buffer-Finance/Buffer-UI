@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import useDataFeed, {
+import {
   getPriceFromKlines,
   marketPriceAtom,
   streamBreakedAtom,
@@ -414,75 +414,7 @@ const TVIntegrated = ({ assetInfo, className }) => {
     return s;
   };
 
-  return (
-    <>
-      {/* <button onClick={()=>{
-      setBreakingCnt({
-        state:'break'
-      })
-    }}>Break</button> */}
-      <Dialog open={showPauseModal} onClose={() => setShowPasuseModal(true)}>
-        <div className="bg-1 text-3 flex items-center flex-col p-6 gap-4">
-          <div className="text-f20 mb-4">Are you still there?</div>
-          <BlueBtn
-            className="bg-3 text-2 text-f14 p-3 !px-5 rounded-md !w-fit"
-            onClick={() => {
-              const chart = widgetRef?.current?.activeChart?.();
-
-              realTimeUpdate.current?.onResetCacheNeededCallback();
-              chart.resetData();
-              setState({ type: 'active' });
-              setShowPasuseModal(false);
-              setVal((v) => {
-                return { ts: Date.now(), type: 'click' };
-              });
-            }}
-          >
-            Continue
-          </BlueBtn>
-        </div>
-      </Dialog>
-      <div
-        className={`${className} items-center justify-between flex-row flex  bg-[#131722] w-full tv-h px-4 py-3`}
-      >
-        <div className="flex flex-row justify-start font-[500]">
-          <div className="ele cursor-pointer">Time</div>
-          {supported_resolutions.map((s) => {
-            return (
-              <div
-                onClick={() => {
-                  setChartConfigs({ ...chartConfigs, resolution: s });
-                }}
-                className={`${
-                  s.toLowerCase() == chartConfigs.resolution.toLowerCase() &&
-                  'active'
-                } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
-              >
-                {formatResolution(s)}
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex">
-          <ChartTypeSelectionDD setActive={setChartType} active={chartType} />
-          <button
-            onClick={toggleIndicatorDD}
-            className="flex flex-row mr-3 ele text-f12  font-[500] "
-          >
-            <ChartElementSVG className="mr-[3px]" /> Indicators
-          </button>
-        </div>
-      </div>
-
-      <div className={'TVChartContainer-wrapper ' + className}>
-        <div
-          ref={chartElementRef}
-          id="chart-element"
-          className="TVChartContainer"
-        />
-      </div>
-    </>
-  );
+  return <div></div>;
 };
 
 function expectedTimer(timer) {

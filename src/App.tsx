@@ -2,19 +2,17 @@ import { Navbar } from './Views/Common/Navbar';
 import {
   Routes,
   Route,
-  Link,
   Navigate,
   useSearchParams,
   useNavigate,
 } from 'react-router-dom';
-import Drawer from '@Views/Common/V2-Drawer';
 import IbfrFaucet from '@Views/Faucet';
 import Background from './AppStyles';
 import { Alert, Snackbar } from '@mui/material';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
-import BinryMarkets, {
+import {
   activeMarketFromStorageAtom,
   defaultMarket,
   referralCodeAtom,
@@ -35,38 +33,19 @@ import { useEffect } from 'react';
 import { useToast } from '@Contexts/Toast';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
-import { MobileTrade } from '@Views/BinaryOptions/MobileTrade';
 import { TradePage } from '@Views/BinaryOptions/TradePage';
-import { DesktopTrade } from './MultiChartLayout';
 import { TestComponent } from './TestComponent';
-import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { urlSettings } from './Config/wagmiClient';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
-window.addEventListener('message', (...args) => {
-  console.log('msg-args', args);
-});
+import { TradingConfig } from '@Views/TradingConfig';
+import { PythPoc } from '@Views/PythPoc';
+
 if (import.meta.env.VITE_MODE === 'production') {
-  // console.log(`import.meta.env.SENTRY_DSN: `, import.meta.env.VITE_SENTRY_DSN);
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 0.5,
   });
-}
-function AppComponent() {
-  return (
-    <div className=" text-blue-1 font-bold">
-      <div className="main">
-        <ul>
-          <Link to={'/faucet'}>Faucet</Link>
-          <Link to={'/home'}>Home</Link>
-        </ul>
-      </div>
-      <Drawer>
-        <></>
-      </Drawer>
-    </div>
-  );
 }
 
 (function () {
@@ -86,11 +65,11 @@ const AppRoutes = () => {
   const navigate = useNavigate();
   useEffect(() => {
     let referralCode = searchParam.get('ref');
-    console.log(`referralCode: `, referralCode);
+
     if (!referralCode) {
       let code = '';
       const codes = window.location.href.split('/');
-      console.log(`codes: `, codes);
+
       for (let i = 0; i < codes.length; i++) {
         if (codes[i] == 'ref') {
           code = codes?.[i + 1];
@@ -98,7 +77,7 @@ const AppRoutes = () => {
       }
       if (code) referralCode = code;
     }
-    console.log(`referralCode: `, referralCode, ref);
+
     if (referralCode) {
       if (ref !== referralCode) {
         setRef(referralCode);
@@ -116,8 +95,9 @@ const AppRoutes = () => {
       <OpenOcean />
 
       <Routes>
-        <Route path="/home" element={<AppComponent />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/pyth" element={<PythPoc />} />
+        <Route path="/tradingConfig" element={<TradingConfig />} />
         <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />

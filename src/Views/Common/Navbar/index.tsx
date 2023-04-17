@@ -109,6 +109,17 @@ export const Navbar: React.FC<INavbar> = () => {
           {/* <ChainDropdown /> */}
           <AccountDropdown />
         </div>
+        <div id="mobile-sidebar-logo" className="web:!hidden ">
+          {state.sidebar_active ? (
+            <MenuLogo className="icon menu" onClick={handleClose} />
+          ) : (
+            <CloseLogo
+              className="icon menu"
+              onClick={handleClose}
+              style={{ transform: 'scale(0.8)' }}
+            />
+          )}
+        </div>
       </div>
     </header>
   );

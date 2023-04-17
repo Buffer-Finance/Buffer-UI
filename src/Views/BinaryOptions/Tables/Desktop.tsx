@@ -335,7 +335,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         shouldShowTroply={false}
         doubleHeight
         activePage={currentPage}
-        // shouldShowMobile
+        shouldShowMobile={false}
         headerJSX={HeaderFomatter}
         bodyJSX={BodyFormatter}
         cols={headNameArray.length}

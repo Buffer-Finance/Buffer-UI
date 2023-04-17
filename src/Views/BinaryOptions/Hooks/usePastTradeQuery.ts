@@ -7,6 +7,7 @@ import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
 import axios from 'axios';
 import { expiryPriceCache } from './useTradeHistory';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -179,20 +180,26 @@ export const usePastTradeQuery = () => {
 
   const addExpiryPrice = async (currentTrade: IGQLHistory) => {
     if (currentTrade.state === BetState.active) {
+      console.log(`[augexp]currentTrade: `, currentTrade);
       axios
-        .post(`https://oracle.buffer-finance-api.link/price/query/`, [
-          {
-            pair: currentTrade.configPair.tv_id,
-            timestamp: currentTrade.expirationTime,
-          },
-        ])
+        .get(
+          `https://web-api.pyth.network/benchmark_prices?timestamp=${currentTrade.expirationTime}`
+        )
         .then((response) => {
+          if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
+            return null;
+          }
+          const expiryPriceObj = response.data.find((d) =>
+            d.symbol.includes(
+              '.' + currentTrade.configPair?.pair.replace('-', '/')
+            )
+          );
+          const expiryPrice = expiryPriceObj?.price.toString();
           if (
             !expiryPriceCache[currentTrade.optionID] &&
             response?.data?.[0]?.price
           )
-            expiryPriceCache[currentTrade.optionID] =
-              response?.data?.[0].price.toString();
+            expiryPriceCache[currentTrade.optionID] = multiply(expiryPrice, 8);
         });
     }
   };

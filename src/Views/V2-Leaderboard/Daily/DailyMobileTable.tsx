@@ -296,7 +296,7 @@ const MobileRow = ({
           </div>
           <div className="flex">
             <div className="text-2 mr-3">
-              {isWinrateTable ? 'Win Rate' : 'Absolute PnL'}
+              {isWinrateTable ? 'Win Rate' : 'Total Payout'}
             </div>
             <div>
               {isWinrateTable ? (

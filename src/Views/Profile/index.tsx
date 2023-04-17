@@ -15,7 +15,7 @@ export const ProfilePage = () => {
   );
 };
 const Profile = () => {
-  usePrice();
+  usePrice(true);
   return (
     <div>
       {/* <TokenDataNotIncludedWarning /> */}

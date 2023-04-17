@@ -47,33 +47,33 @@ export const getExpireNotification = async (
   toastify,
   openShareModal: (trade: IGQLHistory, expiry: string) => void
 ) => {
-  let response;
-  const query = {
-    pair: currentRow.configPair.tv_id,
-    timestamp: currentRow.expirationTime,
-  };
-  response = await axios.post(`https://oracle.buffer-finance-api.link/price/query/`, [
-    query,
-  ]);
-  if (!response.data?.length) {
-    response = await axios.post(`https://oracle.buffer-finance-api.link/price/query/`, [
-      query,
-    ]);
-  }
+  const response = await axios.get(
+    `https://web-api.pyth.network/benchmark_prices?timestamp=${currentRow.expirationTime}`
+  );
+  console.log(`[notif]response: `, response);
 
+  console.log(
+    `[notif]currentRow.configPair?.pair.replace('-', '/'): `,
+    currentRow.configPair?.pair.replace('-', '/')
+  );
   if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
     return null;
   }
-
-  const expiryPrice = response.data[0].price.toString();
+  const expiryPriceObj = response.data.find((d) =>
+    d.symbol.includes('.' + currentRow.configPair?.pair.replace('-', '/'))
+  );
+  console.log(`[notif]expiryPriceObj: `, expiryPriceObj);
+  const expiryPrice = expiryPriceObj?.price.toString();
+  console.log(`[notif]expiryPrice: `, currentRow, expiryPrice);
+  if (!expiryPrice) return;
   let win = true;
-  if (lt(currentRow.strike, expiryPrice)) {
+  if (lt(currentRow.strike, multiply(expiryPrice, 8))) {
     if (currentRow.isAbove) {
       win = true;
     } else {
       win = false;
     }
-  } else if (currentRow.strike == expiryPrice) {
+  } else if (currentRow.strike == multiply(expiryPrice, 8)) {
     //to be asked
     win = false;
   } else {
@@ -86,7 +86,7 @@ export const getExpireNotification = async (
   console.log('win-state', win);
   if (win) {
     console.log(`currentRow[state]: `, currentRow);
-    openShareModal(currentRow, expiryPrice.toString());
+    openShareModal(currentRow, multiply(expiryPrice, 8));
     return;
   } else {
     console.log(`currentRow[state]: `, currentRow);
@@ -223,13 +223,13 @@ export const PayoutChip: React.FC<{
 }> = ({ data, className = '' }) => {
   const net_pnl = data.payout
     ? divide(
-      subtract(data.payout, data.totalFee),
-      (data.depositToken as IToken).decimals
-    )
+        subtract(data.payout, data.totalFee),
+        (data.depositToken as IToken).decimals
+      )
     : divide(
-      subtract('0', data.totalFee),
-      (data.depositToken as IToken).decimals
-    );
+        subtract('0', data.totalFee),
+        (data.depositToken as IToken).decimals
+      );
 
   const isPending = data.state === BetState.active;
   let isWin = gt(net_pnl, '0');
@@ -365,21 +365,22 @@ export const UpDownChip: React.FC<{
   upText = 'Up',
   downText = 'Down',
 }) => {
-    return (
-      <div
-        className={`px-3 text-f12 flex gap-1 items-center rounded-[8px] font-medium  ml-2 bg-1 brightness-125 w-max ${isUp ? 'green' : 'red'
-          }  ${className}`}
-      >
-        {shouldShowImage &&
-          (isUp ? (
-            <UpTriangle className={`scale-[0.70] mt-1`} />
-          ) : (
-            <DOwnTriangle className={`mt-1 scale-[0.70]`} />
-          ))}
-        {isUp ? upText : downText}
-      </div>
-    );
-  };
+  return (
+    <div
+      className={`px-3 text-f12 flex gap-1 items-center rounded-[8px] font-medium  ml-2 bg-1 brightness-125 w-max ${
+        isUp ? 'green' : 'red'
+      }  ${className}`}
+    >
+      {shouldShowImage &&
+        (isUp ? (
+          <UpTriangle className={`scale-[0.70] mt-1`} />
+        ) : (
+          <DOwnTriangle className={`mt-1 scale-[0.70]`} />
+        ))}
+      {isUp ? upText : downText}
+    </div>
+  );
+};
 
 export const UpDownChipWOText: React.FC<{
   isUp: boolean;
@@ -425,10 +426,11 @@ export const StrikePriceComponent = ({
         data={divide(trade.strike, 8)}
         unit={configData.token2}
         precision={decimals}
-        className={`${!isMobile
+        className={`${
+          !isMobile
             ? 'justify-self-start content-start'
             : 'justify-self-end content-end'
-          }  w-max`}
+        }  w-max`}
       />
       {!isMobile && trade.state === BetState.queued ? (
         <div className="flex gap-2 align-center">
@@ -540,8 +542,9 @@ export const ProbabilityPNL = ({
       if (onlyPnl)
         return (
           <span
-            className={`nowrap flex ${lt(pnl, '0') ? 'text-red' : 'text-green'
-              }`}
+            className={`nowrap flex ${
+              lt(pnl, '0') ? 'text-red' : 'text-green'
+            }`}
           >
             <Display
               data={divide(
@@ -566,8 +569,9 @@ export const ProbabilityPNL = ({
             />
             <div className="flex content-sbw full-width">
               <span
-                className={`nowrap flex ${lt(pnl, '0') ? 'text-red' : 'text-green'
-                  }`}
+                className={`nowrap flex ${
+                  lt(pnl, '0') ? 'text-red' : 'text-green'
+                }`}
               >
                 Net PnL :&nbsp;{' '}
                 <Display
@@ -605,8 +609,9 @@ export const ProbabilityPNL = ({
           />
           <div className="flex content-sbw full-width">
             <span
-              className={`nowrap flex ${+net_pnl < 0 ? 'text-red' : 'text-green'
-                }`}
+              className={`nowrap flex ${
+                +net_pnl < 0 ? 'text-red' : 'text-green'
+              }`}
             >
               Net PnL :&nbsp;{' '}
               <Display

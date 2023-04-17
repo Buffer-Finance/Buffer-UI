@@ -23,7 +23,11 @@ import { getChains } from 'src/Config/wagmiClient';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
-import { useArbitrumOverview, usePoolNames } from './Hooks/useArbitrumOverview';
+import {
+  useArbitrumOverview,
+  usePoolDisplayNames,
+  usePoolNames,
+} from './Hooks/useArbitrumOverview';
 import { atom, useAtom } from 'jotai';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
@@ -242,6 +246,8 @@ export const TokenDropdown = () => {
   const { activeChain } = useActiveChain();
   const { poolNames: tabList } = usePoolNames();
   const [activeToken, setActiveToken] = useAtom(tokenAtom);
+  const { poolDisplayKeyMapping } = usePoolDisplayNames();
+
   useEffect(() => {
     setActiveToken([...tabList]);
   }, [activeChain]);
@@ -270,7 +276,7 @@ export const TokenDropdown = () => {
                 isActive ? 'text-1' : 'text-3'
               }`}
             >
-              {tab}
+              {poolDisplayKeyMapping[tab]}
             </div>
           </div>
         );

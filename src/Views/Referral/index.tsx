@@ -13,19 +13,14 @@ import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
 import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ReferralContextProvider, showCodeModalAtom } from './referralAtom';
-import ReferralABI from './Config/ReferralABI.json';
 import { isNullAdds } from './Utils/isNullAds';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useReferralCode } from './Utils/useReferralCode';
 import YellowWarning from '@SVG/Elements/YellowWarning';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useUserCode } from './Hooks/useUserCode';
-import { Chain, useContractReads } from 'wagmi';
 import { ContentCopy } from '@mui/icons-material';
 import { useCopyToClipboard } from 'react-use';
-import { getContract } from './Config/Address';
-import getDeepCopy from '@Utils/getDeepCopy';
-import { convertBNtoString } from '@Utils/useReadCall';
 import useSWR from 'swr';
 import axios from 'axios';
 import { divide } from '@Utils/NumString/stringArithmatics';
@@ -33,9 +28,7 @@ import { Tooltip } from '@mui/material';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { snackAtom } from 'src/App';
 import { useSearchParams } from 'react-router-dom';
-import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import {
@@ -73,34 +66,6 @@ export const ReferralPage = () => {
   );
 };
 
-const useUserAffilateCode = (activeChain: Chain) => {
-  const { address } = useUserAccount();
-  const referralAddress = getContract();
-
-  const calls = referralAddress
-    ? [
-        {
-          address: referralAddress,
-          abi: ReferralABI,
-          functionName: 'traderReferralCodes',
-          args: [address],
-          chainId: activeChain.id,
-        },
-      ]
-    : [];
-
-  const { data } = useContractReads({
-    contracts: calls,
-    watch: true,
-  });
-
-  if (data && data?.[0]) {
-    const convertedData = getDeepCopy(data?.[0]);
-    convertBNtoString(convertedData);
-  }
-  return data;
-};
-
 export const useRefferalTab = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = useMemo(() => searchParams.get('tab'), [searchParams]);
@@ -128,8 +93,11 @@ const Referral: React.FC<IReferral> = ({}) => {
   const { openConnectModal } = useConnectModal();
   const { setTab, tab } = useRefferalTab();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
-  const { poolNames: tokens } = usePoolNames();
-
+  const { poolNames } = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
   const shouldConnectWallet = !account;
   useEffect(() => {
     setip('');
@@ -536,7 +504,6 @@ const Affilate = ({
   const { activeChain } = useActiveChain();
   const { affiliateCode } = useUserCode(activeChain);
   const isCodeSet = !!affiliateCode;
-  const [snack, setSnack] = useAtom(snackAtom);
   const [state, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = useState(false);
   const link = affilateCode2ReferralLink(affiliateCode);
@@ -633,13 +600,17 @@ export const useUserReferralStats = () => {
   const { address } = useUserAccount();
   const { configContracts } = useActiveChain();
   const { poolNames } = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
   const queryFields = useMemo(() => {
-    if (poolNames.length > 1)
-      return poolNames
+    if (tokens.length > 1)
+      return tokens
         .map((poolName) => getTokenXleaderboardQueryFields(poolName))
         .join(' ');
     else return '';
-  }, [poolNames]);
+  }, [tokens]);
 
   return useSWR(`${address}-referral-stats`, {
     fetcher: async () => {

@@ -10,6 +10,7 @@ interface ProfileGraphQlResponse {
     optionContract: {
       address: string;
       token: string;
+      asset: string;
     };
     payout: string | null;
     totalFee: string;
@@ -52,6 +53,7 @@ export const useProfileGraphQl = () => {
                 optionContract {
                   address
                   token
+                  asset
                 }
                 payout
                 totalFee
@@ -83,7 +85,7 @@ export const useProfileGraphQl = () => {
         let newData = accumulator;
 
         //increase counter for the asset contract address in tradesPerAsset object
-        const assetAddress = currentValue.optionContract.address;
+        const assetAddress = currentValue.optionContract.asset;
         const token = currentValue.optionContract.token;
         if (newData.tradesPerAsset[assetAddress] !== undefined) {
           newData.tradesPerAsset[assetAddress] += 1;

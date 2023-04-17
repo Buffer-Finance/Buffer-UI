@@ -20,6 +20,8 @@ import {
 } from '../Hooks/useProfileGraphQl';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { toFixed } from '@Utils/NumString';
+import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
+import { useMemo } from 'react';
 
 const profileCardClass = 'rounded-lg px-7';
 
@@ -32,17 +34,19 @@ export const ProfileCards = () => {
       Heading={<div className="text-f22">Metrics</div>}
       subHeading={<></>}
       Cards={[
+        <Referral data={data} heading={'Referral Metrics'} />,
         <Trading
           data={tradingMetricsData}
           heading={'USDC Trading Metrics'}
           tokenName="USDC"
         />,
-        <Trading
-          data={tradingMetricsData}
-          heading={'ARB Trading Metrics'}
-          tokenName="ARB"
-        />,
-        <Referral data={data} heading={'Referral Metrics'} />,
+        <ArbitrumOnly hide>
+          <Trading
+            data={tradingMetricsData}
+            heading={'ARB Trading Metrics'}
+            tokenName="ARB"
+          />
+        </ArbitrumOnly>,
       ]}
       className="!mt-7"
     />
@@ -125,8 +129,11 @@ const Referral = ({
   const { address: account } = useUserAccount();
   const { configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
-  const { poolNames: tokens } = usePoolNames();
-
+  const { poolNames } = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
   if (data === undefined)
