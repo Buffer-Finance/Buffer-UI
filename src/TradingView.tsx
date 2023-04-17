@@ -34,7 +34,7 @@ import {
   getDisplayTime,
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { useQTinfo } from '@Views/BinaryOptions';
 import {
@@ -196,7 +196,9 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   return rawOhlc;
 };
 const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage', null);
-const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
+// uncomment this for persisting user Resolution - but this has some bugs.
+// const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
+const market2resolutionAtom = atom({});
 function drawPosition(
   option: IGQLHistory,
   visualized: any,
