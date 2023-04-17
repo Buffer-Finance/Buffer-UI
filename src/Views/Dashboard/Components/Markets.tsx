@@ -35,7 +35,7 @@ export const Markets = () => {
   const marketsByPool = useMarketsByPool();
   const markets = useMemo(() => {
     return activeTokenArr.reduce((acc, token) => {
-      const markets = marketsByPool[token];
+      const markets = marketsByPool[token] ?? [];
       return [...acc, ...markets];
     }, []);
   }, [activeTokenArr, configContracts]);
