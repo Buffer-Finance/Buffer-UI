@@ -31,7 +31,7 @@ import {
 } from '../Hooks/useWeeklyLeaderboardQuery';
 import {
   getRewardTooltip,
-  getTournamentEndDate,
+  getTournamentEndDateFromWeek,
   TimerBox,
 } from '../Incentivised';
 import { ILeague } from '../interfaces';
@@ -148,12 +148,8 @@ export const Weekly = () => {
       } else {
         if (Number(offset) >= configValue.endDay) return '0 USDC';
       }
-    } else if (
-      data &&
-      data.reward &&
-      data.reward[0] &&
-      data.reward[0].settlementFee
-    )
+    }
+    if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
       return (
         toFixed(
           add(
@@ -361,9 +357,9 @@ export const Weekly = () => {
                     className="mr-3 mt-2 h-[18px]"
                   />
                   The competition ended on{' '}
-                  {getTournamentEndDate({
+                  {getTournamentEndDateFromWeek({
                     startTimestamp: configValue.startTimestamp,
-                    endDay: configValue.endDay,
+                    endWeek: configValue.endDay,
                   })}{' '}
                   4pm UTC.
                 </>
