@@ -523,39 +523,9 @@ export const TokensBFR = ({
 }) => {
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
-  // let bfrDistributionData = null;
-  // if (tokenName == "BFR") {
-  // data.circulatingSupply = 1e8 - x
-  // x = y - 1e8
-  // const totalLiquidity = subtract((1e8).toString(), data.circulatingSupply);
-  // const notStaked = 1e8 - +totalLiquidity - +data.total_staked;
-  // bfrDistributionData = [
-  //   {
-  //     name: `staked`,
-  //     value: +data.total_staked,
-  //     color: "#ADA4E1",
-  //   },
-  //   {
-  //     name: `in liquidity`,
-  //     value: +totalLiquidity,
-  //     color: "#A3E3FF",
-  //   },
-  //   {
-  //     name: `not staked`,
-  //     value: notStaked,
-  //     color: "#3772FF",
-  //   },
-  // ];
-  // }
+
   return (
     <Card
-      // right={
-      //   tokenName === "BFR" &&
-      //   data.circulatingSupply &&
-      //   bfrDistributionData && (
-      //     <Chart bfrDistributionData={bfrDistributionData} />
-      //   )
-      // }
       top={
         <div className="flex items-center">
           <BufferLogo />
@@ -632,29 +602,36 @@ export const TokensBFR = ({
               </NumberTooltip>
             </div>,
             <div className={wrapperClasses}>
-              <Display
-                data={multiply(data.total_staked, data.price)}
-                label="$"
+              <NumberTooltip
                 content={
-                  data.circulatingSupply ? (
-                    <>
-                      <Display
-                        data={multiply(
-                          divide(data.total_staked, data.circulatingSupply),
+                  data.circulatingSupply
+                    ? toFixed(
+                        multiply(
+                          divide(
+                            data.total_staked,
+                            data.circulatingSupply
+                          ) as string,
                           2
-                        )}
-                        unit="%"
-                        className="inline"
-                      />
-                      <span>
-                        &nbsp;of the circulating supply has been staked.
-                      </span>
-                    </>
-                  ) : (
-                    <></>
-                  )
+                        ),
+                        2
+                      ) + '% of the circulating supply has been staked.'
+                    : ''
                 }
-              />
+              >
+                <div
+                  className={
+                    underLineClass + ' flex items-center flex-wrap justify-end'
+                  }
+                >
+                  <span className="whitespace-nowrap">
+                    {getBalance(data.total_staked) + ' BFR'}
+                  </span>
+                  &nbsp;/&nbsp;
+                  <span className="whitespace-nowrap">
+                    {'$' + getBalance(multiply(data.total_staked, data.price))}
+                  </span>
+                </div>
+              </NumberTooltip>
             </div>,
             <div className={wrapperClasses}>
               {data.liquidity_pools_token ? (
@@ -707,7 +684,7 @@ export const TokensBLP = ({
             'Total Supply',
             `Total ${tokenName} Amount`,
             shouldDisplayPOL && `POL(${tokenName})`,
-            'APY',
+            'APR',
           ].filter((key) => key)}
           values={[
             <div className={wrapperClasses}>
@@ -745,8 +722,32 @@ export const TokensBLP = ({
                 )}
               </div>
             ),
-            <div className={wrapperClasses}>
-              <Display data={data.apr} unit="%" />
+            <div className={`${wrapperClasses}`}>
+              <Display
+                className="!justify-end"
+                data={data.apr.value}
+                placement="bottom"
+                unit="%"
+                content={
+                  <span>
+                    <TableAligner
+                      keysName={data.apr.tooltip.map((s) => s.key)}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={data.apr.tooltip.map((s) => (
+                        <Display
+                          className="!justify-end"
+                          data={s.value}
+                          unit="%"
+                        />
+                      ))}
+                    ></TableAligner>
+                    {/* <div className="text-left mt-3 font-normal">
+                      {data.apr.description}
+                    </div> */}
+                  </span>
+                }
+              />{' '}
             </div>,
           ].filter((value) => value)}
         />
@@ -820,7 +821,7 @@ export const OtherBLP = ({
             'Total Supply',
             'Total USDC Amount',
             'POL(USDC)',
-            // 'APY',
+            // 'APR',
           ]}
           values={[
             <div className={wrapperClasses}>
