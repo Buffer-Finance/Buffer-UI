@@ -600,13 +600,17 @@ export const useUserReferralStats = () => {
   const { address } = useUserAccount();
   const { configContracts } = useActiveChain();
   const { poolNames } = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
   const queryFields = useMemo(() => {
-    if (poolNames.length > 1)
-      return poolNames
+    if (tokens.length > 1)
+      return tokens
         .map((poolName) => getTokenXleaderboardQueryFields(poolName))
         .join(' ');
     else return '';
-  }, [poolNames]);
+  }, [tokens]);
 
   return useSWR(`${address}-referral-stats`, {
     fetcher: async () => {
