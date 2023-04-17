@@ -336,6 +336,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           pricescale: symbolItem.pricescale,
           has_intraday: true,
           has_seconds: true,
+          visible_plots_set: 'ohlc',
+          has_no_volume: true,
           seconds_multipliers: ['1', '10'],
           has_weekly_and_monthly: true,
           supported_resolutions,
@@ -432,7 +434,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       container: containerDivRef.current!,
       library_path: defaults.library_path,
       custom_css_url: defaults.cssPath,
-
+      create_volume_indicator_by_default: false,
       timezone: getOslonTimezone() as Timezone,
       symbol: market,
       theme: defaults.theme as ThemeName,
