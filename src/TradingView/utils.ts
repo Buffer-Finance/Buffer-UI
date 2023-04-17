@@ -82,17 +82,13 @@ export const getAggregatedBarv2 = (
   resolution: ResolutionString
 ): OHLCBlock => {
   const resolutionInSeconds = resolution2Sec(resolution);
-  console.log(`[sync]resolution: `, resolution);
-  console.log(`[sync]resolutionInSeconds: `, resolutionInSeconds);
   let updatedBar: OHLCBlock | null = null;
-  const isSameCandle =
-    Math.floor(currentBar.time / resolutionInSeconds) ==
-    Math.floor(prevBar.time / resolutionInSeconds);
-  let time = Math.floor(currentBar.time / resolutionInSeconds);
-  console.log(`[sync]currentBar.time: `, currentBar.time);
-  console.log(`[sync]time: `, time);
-
-  time *= resolutionInSeconds;
+  const currCandleIndex = Math.floor(Date.now() / resolutionInSeconds);
+  console.log(`[sync]currCandleIndex: `, currCandleIndex);
+  const prevCandleIndex = Math.floor(prevBar.time / resolutionInSeconds);
+  console.log(`[sync]prevCandleIndex: `, prevCandleIndex);
+  const isSameCandle = currCandleIndex == prevCandleIndex;
+  const time = currCandleIndex * resolutionInSeconds;
   if (isSameCandle)
     updatedBar = {
       time,
