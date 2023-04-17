@@ -27,15 +27,17 @@ import { useGraphStatus } from '@Utils/useGraphStatus';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
-import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
+import { LeaderBoard, LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { ProfilePage } from '@Views/Profile';
 import { useEffect } from 'react';
 import { useToast } from '@Contexts/Toast';
+import { AllTradesPage } from '@Views/AllTrades';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
 import { TradePage } from '@Views/BinaryOptions/TradePage';
 import { TestComponent } from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
+import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import { TradingConfig } from '@Views/TradingConfig';
 import { PythPoc } from '@Views/PythPoc';
@@ -110,6 +112,14 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
+          <Route
+            path="trades"
+            element={
+              <LeaderBoard>
+                <AllTradesPage />
+              </LeaderBoard>
+            }
+          />
         </Route>
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />}>
@@ -119,6 +129,8 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
+        <Route path="/trades/merged" element={<MergedPage />} />
+        <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<TradePage />} />
         {/* referral link handling */}
         <Route

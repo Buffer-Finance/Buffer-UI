@@ -410,7 +410,7 @@ const DesktopTrad = () => {
           if (d.getComponent() == 'TradingView') {
             const name = d.getName() as Markets;
             console.log(`name: `, name);
-            const market = Config.markets[name.replace('-', '')].pair;
+            const market = Config.markets[name.replace('-', '')]?.pair;
             console.log(`market: `, market);
             v.leading = <TabIcon market={market} />;
           }

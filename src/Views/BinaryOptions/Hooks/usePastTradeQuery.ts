@@ -1,4 +1,3 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { IMarket, IToken } from '..';
 import { BetState, TradeInputs, useAheadTrades } from '@Hooks/useAheadTrades';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
@@ -7,6 +6,7 @@ import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
 import axios from 'axios';
 import { expiryPriceCache } from './useTradeHistory';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 
 export const tardesAtom = atom<{
@@ -92,19 +92,8 @@ export interface IGQLHistory {
   blockNumber?: number;
 }
 
-export const usePastTradeQuery = () => {
-  const { address: account } = useUserAccount();
+export const useProcessedTrades = () => {
   const { configContracts } = useActiveChain();
-  const setTrades = useSetAtom(tardesAtom);
-  const setPageNumbers = useSetAtom(updateTotalPageNumber);
-  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
-  const activePage = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
-  const historyPage = useMemo(() => TRADESINAPAGE * (history - 1), [history]);
-  const cancelledPage = useMemo(
-    () => TRADESINAPAGE * (cancelled - 1),
-    [cancelled]
-  );
-
   const getProcessedTrades = (
     trades,
     block,
@@ -112,6 +101,7 @@ export const usePastTradeQuery = () => {
     shouldAddHistoryPrice = false
   ) => {
     const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
+      console.log(singleTrade, 'singleTrade');
       if (singleTrade.blockNumber) {
         if (block >= singleTrade.blockNumber) {
           // if graph scanned this block.
@@ -177,32 +167,47 @@ export const usePastTradeQuery = () => {
 
     return tempTrades;
   };
+  return { getProcessedTrades };
+};
 
-  const addExpiryPrice = async (currentTrade: IGQLHistory) => {
-    if (currentTrade.state === BetState.active) {
-      console.log(`[augexp]currentTrade: `, currentTrade);
-      axios
-        .get(
-          `https://web-api.pyth.network/benchmark_prices?timestamp=${currentTrade.expirationTime}`
-        )
-        .then((response) => {
-          if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
-            return null;
-          }
-          const expiryPriceObj = response.data.find((d) =>
-            d.symbol.includes(
-              '.' + currentTrade.configPair?.pair.replace('-', '/')
-            )
-          );
-          const expiryPrice = expiryPriceObj?.price.toString();
-          if (
-            !expiryPriceCache[currentTrade.optionID] &&
-            response?.data?.[0]?.price
+const addExpiryPrice = async (currentTrade: IGQLHistory) => {
+  if (currentTrade.state === BetState.active) {
+    console.log(`[augexp]currentTrade: `, currentTrade);
+    axios
+      .get(
+        `https://web-api.pyth.network/benchmark_prices?timestamp=${currentTrade.expirationTime}`
+      )
+      .then((response) => {
+        if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
+          return null;
+        }
+        const expiryPriceObj = response.data.find((d) =>
+          d.symbol.includes(
+            '.' + currentTrade.configPair?.pair.replace('-', '/')
           )
-            expiryPriceCache[currentTrade.optionID] = multiply(expiryPrice, 8);
-        });
-    }
-  };
+        );
+        const expiryPrice = expiryPriceObj?.price.toString();
+        if (
+          !expiryPriceCache[currentTrade.optionID] &&
+          response?.data?.[0]?.price
+        )
+          expiryPriceCache[currentTrade.optionID] = multiply(expiryPrice, 8);
+      });
+  }
+};
+
+export const usePastTradeQuery = () => {
+  const { address: account } = useUserAccount();
+  const { getProcessedTrades } = useProcessedTrades();
+  const setTrades = useSetAtom(tardesAtom);
+  const setPageNumbers = useSetAtom(updateTotalPageNumber);
+  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
+  const activePage = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
+  const historyPage = useMemo(() => TRADESINAPAGE * (history - 1), [history]);
+  const cancelledPage = useMemo(
+    () => TRADESINAPAGE * (cancelled - 1),
+    [cancelled]
+  );
 
   const { data } = usePastTradeQueryByFetch({
     account: account,
@@ -216,7 +221,8 @@ export const usePastTradeQuery = () => {
   });
 
   const blockNumber = data?._meta?.block.number;
-  const { data: trades } = useAheadTrades(blockNumber, account);
+  const { data: trades } = useAheadTrades(blockNumber, account, false);
+  console.log('p=[aug]trades', trades);
   useEffect(() => {
     let activeResponseArr = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])
