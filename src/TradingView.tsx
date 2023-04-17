@@ -195,7 +195,7 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   });
   return rawOhlc;
 };
-const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage', null);
+const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage-v2', null);
 // uncomment this for persisting user Resolution - but this has some bugs.
 // const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
 const market2resolutionAtom = atom({});
