@@ -349,7 +349,7 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: `/trades`,
+        to: `/leaderboard/trades`,
         name: 'All Trades',
         subTabs: [],
         isExternalLink: false,
@@ -407,7 +407,7 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: `/trades`,
+        to: `/leaderboard/trades`,
         name: 'All Trades',
         subTabs: [],
         isExternalLink: false,
