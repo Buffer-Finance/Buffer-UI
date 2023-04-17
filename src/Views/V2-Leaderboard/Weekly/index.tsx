@@ -148,12 +148,8 @@ export const Weekly = () => {
       } else {
         if (Number(offset) >= configValue.endDay) return '0 USDC';
       }
-    } else if (
-      data &&
-      data.reward &&
-      data.reward[0] &&
-      data.reward[0].settlementFee
-    )
+    }
+    if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
       return (
         toFixed(
           add(
