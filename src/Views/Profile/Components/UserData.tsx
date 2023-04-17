@@ -24,9 +24,10 @@ export const UserData = () => {
   const { tradingMetricsData } = useProfileGraphQl();
   const { configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const { markets } = useActiveChain();
 
   //finds the address with the highest number from the tradingMetricsData.tradesPerAsset object
-  const mostTradedAssetAddress = useMemo(() => {
+  const mostTradedAsset = useMemo(() => {
     if (!tradingMetricsData || !tradingMetricsData.tradesPerAsset) return null;
     const keysArray = Object.keys(tradingMetricsData.tradesPerAsset);
     return keysArray.length > 0
@@ -40,9 +41,9 @@ export const UserData = () => {
   }, [tradingMetricsData]);
 
   //fetches the data of the asset from the config
-  const mostTradedAsset = useGetAssetData({
-    assetAddress: mostTradedAssetAddress,
-  });
+  // const mostTradedAsset = useGetAssetData({
+  //   assetAddress: mostTradedAssetAddress,
+  // });
 
   return (
     <div className="flex items-center justify-between flex-wrap sm:items-stretch sm:gap-4 gap-7">
@@ -155,12 +156,12 @@ export const UserData = () => {
           className={'winner-card'}
           head={'Most Traded Asset'}
           desc={
-            mostTradedAsset ? (
+            !!markets[mostTradedAsset] ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="h-[20px] w-[20px]">
-                  <PairTokenImage pair={mostTradedAsset.pair} />
+                  <PairTokenImage pair={markets[mostTradedAsset].pair} />
                 </div>
-                {mostTradedAsset.pair}
+                {markets[mostTradedAsset].pair}
               </div>
             ) : (
               <>-</>

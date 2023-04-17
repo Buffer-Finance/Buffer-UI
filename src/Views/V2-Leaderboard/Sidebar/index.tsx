@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LeaderBoardSidebarStyles } from './style';
 import Daily from '@Public/LeaderBoard/Daily';
 import SmPnl from 'src/SVG/Elements/PNLL';
@@ -12,6 +12,10 @@ import {
 } from 'react-router-dom';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import BufferTab from '@Views/Common/BufferTab';
+import { useDayOfTournament } from '../Hooks/useDayOfTournament';
+import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
+import { weeklyTournamentConfig } from '../Weekly/config';
+import { DailyTournamentConfig } from '../Incentivised/config';
 
 export const MobileLeaderboardDropdwon = () => {
   const { activeChain } = useActiveChain();
@@ -35,11 +39,38 @@ export const MobileLeaderboardDropdwon = () => {
     </div>
   );
 };
-
+const OnGoingChip = () => {
+  return (
+    <CSChip
+      text="Ongoing"
+      className="text-[#2BD67B] bg-[#2bd67b26] border-[#00C4FF]  box-border"
+    />
+  );
+};
+const EndedChip = () => {
+  return <CSChip text="Ended" className="text-3 bg-2 " />;
+};
 export const LeaderBoardSidebar = () => {
   const { activeChain } = useActiveChain();
   const tabs = getTabs(activeChain.name, true);
   const location = useLocation();
+  const { day } = useDayOfTournament();
+  const { week } = useWeekOfTournament();
+  const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];
+  const dailyConfigValue = DailyTournamentConfig[activeChain.id];
+  const DailyChip = useMemo(() => {
+    if (dailyConfigValue.endDay === undefined) return <OnGoingChip />;
+    else if (day !== null && day < dailyConfigValue.endDay)
+      return <OnGoingChip />;
+    else return <EndedChip />;
+  }, [day]);
+  const WeeklyChip = useMemo(() => {
+    if (weeklyConfigValue.endDay === undefined) return <OnGoingChip />;
+    else if (week !== null && week < weeklyConfigValue.endDay)
+      return <OnGoingChip />;
+    else return <EndedChip />;
+  }, [week]);
+
   return (
     <LeaderBoardSidebarStyles className="border-r-2 border-1">
       <div className="sticky top-1">
@@ -53,16 +84,7 @@ export const LeaderBoardSidebar = () => {
                 <LinkButton
                   tab={tab}
                   active={isActive}
-                  chip={
-                    index === 1 ? (
-                      <CSChip
-                        text="Ongoing"
-                        className="text-[#2BD67B] bg-[#2bd67b26] border-[#00C4FF]  box-border"
-                      />
-                    ) : (
-                      <CSChip text="Ended" className="text-3 bg-2 " />
-                    )
-                  }
+                  chip={index === 1 ? WeeklyChip : DailyChip}
                 />
               </div>
             );

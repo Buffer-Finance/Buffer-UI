@@ -21,7 +21,7 @@ export const weeklyTournamentConfig: {
     winnersNFT: 3,
     losersNFT: 4,
     winrateNFT: 3,
-    endDay: undefined,
+    endDay: 1,
     contestRules:
       ' https://zinc-atlasaurus-c98.notion.site/Buffer-Arbitrum-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
     rewardFixedAmount: '0',
@@ -36,7 +36,7 @@ export const weeklyTournamentConfig: {
     winnersNFT: 3,
     losersNFT: 4,
     winrateNFT: 3,
-    endDay: undefined,
+    endDay: 9,
     contestRules:
       ' https://zinc-atlasaurus-c98.notion.site/Buffer-Arbitrum-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
     rewardFixedAmount: '1000',
@@ -51,7 +51,7 @@ export const weeklyTournamentConfig: {
     winnersNFT: 0,
     losersNFT: 0,
     winrateNFT: 0,
-    endDay: undefined,
+    endDay: 1,
     contestRules:
       'https://zinc-atlasaurus-c98.notion.site/Buffer-Polygon-Weekly-Trading-Competitions-1a568febffc542c1a855fea57a8487f2',
     rewardFixedAmount: '0',
