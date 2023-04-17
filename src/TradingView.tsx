@@ -533,11 +533,11 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       }
     }
   };
-  console.log(`[ip]price: `, price);
 
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
+    console.log(`price[market]: `, price[market]?.[0]);
   }, [price[market]]);
 
   // draw positions.
