@@ -22,33 +22,56 @@ import {
 import { Connection } from '@solana/web3.js';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import Big from 'big.js';
-
 const solanaClusterName = 'pythnet';
 const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 
 export const usePrice = (fetchInitialPrices?: boolean) => {
   const setPrice = useSetAtom(priceAtom);
-
-  const fn = async () => {
-    if (fetchInitialPrices) {
-      const prices = await getPrice();
-      console.log(`pmmprices: `, prices);
-      setPrice((p) => ({ ...p, ...prices }));
-    }
-    const url = 'https://pyth-api.vintage-orange-muffin.com/v2/streaming';
-    const response = await fetch(url);
-    const reader = response.body.getReader();
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      const updateStr = UTF8ArrToStr(value);
-      const updatePrices = getKlineFromPrice(updateStr);
-      setPrice((p) => ({ ...p, ...updatePrices }));
-    }
+  const pythConnection = useRef(
+    new PythConnection(
+      new Connection(solanaWeb3Connection),
+      getPythProgramKeyForCluster(solanaClusterName)
+    )
+  );
+  const subscribeToUpdates = async () => {
+    pythConnection.current.onPriceChangeVerbose(
+      (productAccount, priceAccount) => {
+        const product = productAccount.accountInfo.data.product;
+        const price = priceAccount.accountInfo.data;
+        const ts = Number(price.timestamp) * 1000;
+        // sample output:
+        // SOL/USD: $14.627930000000001 ±$0.01551797
+        if (price.price && price.confidence) {
+          const marketId = product.description.replace('/', '');
+          const tempPrice = price.price;
+          const priceUpdates = {
+            [marketId]: [
+              {
+                time: ts,
+                price: tempPrice,
+              },
+            ],
+          };
+          setPrice((p) => ({ ...p, ...priceUpdates }));
+        } else {
+          // tslint:disable-next-line:no-console
+        }
+      }
+    );
+    pythConnection.current.start();
+  };
+  const getInitialPrices = async () => {
+    const prices = await getPrice();
+    console.log(`pmmprices: `, prices);
+    setPrice((p) => ({ ...p, ...prices }));
   };
   useEffect(() => {
-    fn();
-  }, []);
+    console.log(`fetchInitialPrices: `, fetchInitialPrices);
+    if (fetchInitialPrices) {
+      getInitialPrices();
+    }
+    subscribeToUpdates();
+  }, [fetchInitialPrices]);
 };
 
 export const wsStateAtom = atom<{ state: string }>({

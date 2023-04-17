@@ -21,6 +21,7 @@ import {
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { toFixed } from '@Utils/NumString';
 import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
+import { useMemo } from 'react';
 
 const profileCardClass = 'rounded-lg px-7';
 
@@ -128,8 +129,11 @@ const Referral = ({
   const { address: account } = useUserAccount();
   const { configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
-  const { poolNames: tokens } = usePoolNames();
-
+  const { poolNames } = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
   if (data === undefined)

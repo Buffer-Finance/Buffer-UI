@@ -34,7 +34,7 @@ import {
   getDisplayTime,
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { useQTinfo } from '@Views/BinaryOptions';
 import {
@@ -195,8 +195,10 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   });
   return rawOhlc;
 };
-const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage', null);
-const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
+const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage-v2', null);
+// uncomment this for persisting user Resolution - but this has some bugs.
+// const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
+const market2resolutionAtom = atom({});
 function drawPosition(
   option: IGQLHistory,
   visualized: any,
@@ -334,6 +336,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           pricescale: symbolItem.pricescale,
           has_intraday: true,
           has_seconds: true,
+          visible_plots_set: 'ohlc',
+          has_no_volume: true,
           seconds_multipliers: ['1', '10'],
           has_weekly_and_monthly: true,
           supported_resolutions,
@@ -430,7 +434,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       container: containerDivRef.current!,
       library_path: defaults.library_path,
       custom_css_url: defaults.cssPath,
-
+      create_volume_indicator_by_default: false,
       timezone: getOslonTimezone() as Timezone,
       symbol: market,
       theme: defaults.theme as ThemeName,
@@ -529,11 +533,11 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       }
     }
   };
-  console.log(`[ip]price: `, price);
 
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
+    console.log(`price[market]: `, price[market]?.[0]);
   }, [price[market]]);
 
   // draw positions.

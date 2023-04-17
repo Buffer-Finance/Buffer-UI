@@ -330,7 +330,7 @@
     "tokens": {
       "USDC": {
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
-        "meta": "0x195b720567B7e7a6DCF5b131F5Bdc4Ea091EFa4B",
+        "meta": "0xd43eBDeA4efEDFa14024F9894169fad8896728A4",
         "decimals": 6,
         "img": "/tokens/USDC.png",
         "name": "USDC",
@@ -341,7 +341,7 @@
       },
       "USDC_POL": {
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
-        "meta": "0x5254C2894FaC60FF66ba008A4362D828d8a087E2",
+        "meta": "0x195b720567B7e7a6DCF5b131F5Bdc4Ea091EFa4B",
         "decimals": 6,
         "img": "/tokens/USDC.png",
         "name": "USDC",
@@ -893,7 +893,7 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/sandbox",
+      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-temp",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite"
     }
   },

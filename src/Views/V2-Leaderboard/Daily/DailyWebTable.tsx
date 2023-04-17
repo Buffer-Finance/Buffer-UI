@@ -55,7 +55,12 @@ export const DailyWebTable: React.FC<{
   const { configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
   const params = useParams();
-  const { poolNames: tokens } = usePoolNames();
+  const { poolNames } = usePoolNames();
+
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
 
   //Memos - to avoid re-rendering
   const firstColPadding = useMemo(() => {
