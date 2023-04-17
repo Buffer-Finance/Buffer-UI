@@ -16,27 +16,32 @@ import { binaryTabs } from 'config';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo } from 'react';
 
-export const HistoryTables = () => {
+export const useHistoryTableTabs = () => {
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
-  const qtInfo = useQTinfo();
-  const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
-  const [, setActivePage] = useAtom(updateActivePageNumber);
-  const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
-  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
-  const { viewOnlyMode } = useUserAccount();
 
   const activeTabIdx = useMemo(
     () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
     [state.tabs.activeIdx]
   );
-  usePastTradeQuery();
 
   const changeActiveTab = (e, pageNumber: number) =>
     dispatch({
       type: 'SET_ACIVE_TAB',
       payload: binaryTabs[pageNumber + 2], //Runs only for web. Hence 0 & 1 tab neglected.
     });
+  return { activeTabIdx, changeActiveTab };
+};
+
+export const HistoryTables = () => {
+  const qtInfo = useQTinfo();
+  const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
+  const [, setActivePage] = useAtom(updateActivePageNumber);
+  const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
+  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
+  const { viewOnlyMode } = useUserAccount();
+  const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
+  usePastTradeQuery();
 
   useEffect(() => {
     changeActiveTab(null, 1);

@@ -158,7 +158,6 @@ const Referral = ({
               <Display
                 data={divide(data.totalRebateEarned, usdcDecimals)}
                 unit={'USDC'}
-                className="!w-full !justify-end"
                 content={
                   tokens.length > 1 && (
                     <TableAligner
@@ -186,7 +185,6 @@ const Referral = ({
               <Display
                 data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
                 unit={'USDC'}
-                className="!w-full !justify-end"
                 content={
                   tokens.length > 1 && (
                     <TableAligner
@@ -214,7 +212,6 @@ const Referral = ({
             <div className={wrapperClasses}>
               <Display
                 data={data?.totalTradesReferred}
-                className="!w-full !justify-end"
                 content={
                   tokens.length > 1 && (
                     <TableAligner
