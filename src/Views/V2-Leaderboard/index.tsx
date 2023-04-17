@@ -9,7 +9,7 @@ export const LeaderBoard = (props: { children: JSX.Element }) => {
     // <ArbitrumOnly>
     <main className="content-drawer">
       <LeaderBoardStyles>
-        <MobileLeaderboardDropdwon />
+        {/* <MobileLeaderboardDropdwon /> */}
         <LeaderBoardSidebar />
         <div>
           <TokenDataNotIncludedWarning />

@@ -51,7 +51,7 @@ export const weeklyTournamentConfig: {
     winnersNFT: 0,
     losersNFT: 0,
     winrateNFT: 0,
-    endDay: undefined,
+    endDay: 1,
     contestRules:
       'https://zinc-atlasaurus-c98.notion.site/Buffer-Polygon-Weekly-Trading-Competitions-1a568febffc542c1a855fea57a8487f2',
     rewardFixedAmount: '0',
