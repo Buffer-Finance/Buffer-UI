@@ -156,7 +156,7 @@ export const UserData = () => {
           className={'winner-card'}
           head={'Most Traded Asset'}
           desc={
-            mostTradedAsset ? (
+            !!markets[mostTradedAsset] ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="h-[20px] w-[20px]">
                   <PairTokenImage pair={markets[mostTradedAsset].pair} />
