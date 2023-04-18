@@ -8,7 +8,7 @@ import { useDashboardTableData } from './Dashboard/Hooks/useDashboardTableData';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Markets } from 'src/Types/Market';
 const ifc = new ethers.utils.Interface(ConfigContract);
-console.log(`ifc: `, ifc.functions);
+
 import { useReadCall } from '@Utils/useReadCall';
 import { TableAligner } from './V2-Leaderboard/Components/TableAligner';
 import { keyClasses } from './Earn/Components/VestCards';
@@ -22,7 +22,11 @@ import {
   useActivePoolObj,
 } from './BinaryOptions/PGDrawer/PoolDropDown';
 import { Button } from '@mui/material';
-import { encodeMulti, MetaTransaction, OperationType } from 'ethers-multisend';
+import {
+  encodeMulti,
+  MetaTransaction,
+  TransactionType,
+} from 'ethers-multisend';
 
 interface ConfigValue {
   getter: string;
@@ -202,17 +206,21 @@ const ConfigValueManager: React.FC<{
     //  const multi =  encodeMulti([{
     //   to:
     //   }])
-    console.log(`changeData: `, changeData);
+    // console.log(`changeData: `, changeData);
     const multiBundle: MetaTransaction[] = changeData.map((s) => {
+      const data = ifc.encodeFunctionData(s.method, [s.value]);
+
       return {
         to: '0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d',
-        data: s.value,
-        operation: s.method,
+        data,
         value: '0',
       };
     });
     console.log(`multiBundle: `, multiBundle);
-    const encoded = encodeMulti(multiBundle);
+    const encoded = encodeMulti(
+      multiBundle,
+      '0xAb3224e76fa5a46D9f8364cd14F4cB03087d6Fd8'
+    );
     console.log(`encoded: `, encoded);
   };
   return (
