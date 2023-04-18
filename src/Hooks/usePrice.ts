@@ -62,7 +62,6 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
   };
   const getInitialPrices = async () => {
     const prices = await getPrice();
-    console.log(`pmmprices: `, prices);
     setPrice((p) => ({ ...p, ...prices }));
   };
   useEffect(() => {
