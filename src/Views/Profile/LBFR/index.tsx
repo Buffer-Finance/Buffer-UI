@@ -19,6 +19,7 @@ import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { LBFRmodals } from './modals';
 import { useSetAtom } from 'jotai';
 import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 export const LBFR = () => {
   return (
@@ -35,6 +36,7 @@ export const LBFR = () => {
 };
 
 const ClaimCard = () => {
+  const { viewOnlyMode } = useUserAccount();
   const unit = 'LBFR';
   const { poolNames } = usePoolNames();
   const tokens = useMemo(
@@ -88,7 +90,11 @@ const ClaimCard = () => {
       bottom={
         <ConnectionRequired className={'mt-7 mb-5 ' + btnClasses}>
           <div className="flex items-center gap-4 mt-7 mb-5 ">
-            <BlueBtn onClick={claim} className={btnClasses}>
+            <BlueBtn
+              onClick={claim}
+              className={btnClasses}
+              isDisabled={viewOnlyMode}
+            >
               Claim
             </BlueBtn>
           </div>
@@ -101,6 +107,7 @@ const ClaimCard = () => {
 const StakeCard = () => {
   const setIsModalOpen = useSetAtom(LBFRModalAtom);
   const setActiveModalNumber = useSetAtom(LBFRModalNumberAtom);
+  const { viewOnlyMode } = useUserAccount();
   const unit = 'LBFR';
   const rewardUnit = 'BFR';
   function stake() {
@@ -147,13 +154,25 @@ const StakeCard = () => {
       bottom={
         <ConnectionRequired className={'mt-7 mb-5 ' + btnClasses}>
           <div className="flex items-center gap-4 mt-7 mb-5 ">
-            <BlueBtn onClick={stake} className={btnClasses}>
+            <BlueBtn
+              onClick={stake}
+              className={btnClasses}
+              isDisabled={viewOnlyMode}
+            >
               Stake
             </BlueBtn>
-            <BlueBtn onClick={unstake} className={btnClasses}>
+            <BlueBtn
+              onClick={unstake}
+              className={btnClasses}
+              isDisabled={viewOnlyMode}
+            >
               Unstake
             </BlueBtn>
-            <BlueBtn onClick={claim} className={btnClasses}>
+            <BlueBtn
+              onClick={claim}
+              className={btnClasses}
+              isDisabled={viewOnlyMode}
+            >
               Claim BFR
             </BlueBtn>
           </div>
