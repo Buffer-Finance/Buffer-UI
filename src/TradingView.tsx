@@ -63,6 +63,7 @@ import {
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
+import { getIdentifier } from '@Hooks/useGenericHook';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -212,8 +213,9 @@ function drawPosition(
   visualized: any,
   chart: IChartWidgetApi
 ) {
-  let vizIdentifiers = getVizIdentifier(option);
+  let vizIdentifiers = getIdentifier(option);
   const idx = visualized.indexOf(vizIdentifiers);
+  console.log(`idx: `, idx);
   const openTimeStamp = option.creationTime;
   const optionPrice = +option.strike / PRICE_DECIMALS;
 
@@ -553,6 +555,14 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     if (chartReady && activeTrades) {
       activeTrades.forEach((pos) => {
         if (!pos?.optionID) return;
+        // if(visualized[pos.])
+        const identifier = getIdentifier(pos);
+        console.log(`identifier: `, identifier);
+        console.log(
+          `visualized.includes(identifier): `,
+          visualized.includes(identifier)
+        );
+        if (visualized.includes(identifier)) return;
         if (trade2visualisation.current[+pos.optionID]) {
           trade2visualisation.current[+pos.optionID]!.visited = true;
         } else {
@@ -569,15 +579,24 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       });
     }
     for (const trade in trade2visualisation.current) {
+      // mark all them
       if (!trade2visualisation.current[+trade]?.visited) {
         trade2visualisation.current[+trade]!.lineRef.remove();
+
         delete trade2visualisation.current[+trade];
       }
     }
+
+    console.log(`[changed]visualized: `, visualized);
     return () => {
+      // mark all them not visited.
       for (const trade in trade2visualisation.current) {
         trade2visualisation.current[+trade]!.visited = false;
       }
+      console.log(
+        `b4trade2visualisation.current: `,
+        trade2visualisation.current
+      );
     };
   }, [visualized, activeTrades, chartReady]);
   const updatePositionTimeLeft = useCallback(() => {
