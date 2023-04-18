@@ -1,7 +1,7 @@
 export const CONTRACTS = {
   421613: {
-    LBFRfaucet: '',
-    LBFR: '',
+    LBFRfaucet: '0x72B213A8F5a07a148b985d3092259490c916cD0c',
+    LBFR: '0x000010eF1E662787555B6290145cE6632726a087',
     LBFRrewardDistributor: '',
     LBFRrewardTracker: '',
   },
