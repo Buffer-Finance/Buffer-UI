@@ -21,18 +21,26 @@ import { useSetAtom } from 'jotai';
 import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useLBLPreadCalls } from './Hooks/useReadCalls';
+import { useLBFRGraphql } from './Hooks/useGraphql';
 
 export const LBFR = () => {
   return (
     <>
       <LBFRmodals />
-      <Section
-        Heading={<div className="text-f22">Loyalty Program</div>}
-        subHeading={<></>}
-        Cards={[<ClaimCard />, <StakeCard />]}
-        className="!mt-7"
-      />
+      <Cards />
     </>
+  );
+};
+const Cards = () => {
+  useLBFRGraphql();
+  useLBLPreadCalls();
+  return (
+    <Section
+      Heading={<div className="text-f22">Loyalty Program</div>}
+      subHeading={<></>}
+      Cards={[<ClaimCard />, <StakeCard />]}
+      className="!mt-7"
+    />
   );
 };
 
@@ -111,7 +119,7 @@ const StakeCard = () => {
   const { viewOnlyMode } = useUserAccount();
   const unit = 'LBFR';
   const rewardUnit = 'BFR';
-  useLBLPreadCalls();
+
   function stake() {
     setIsModalOpen(true);
     setActiveModalNumber(0);
