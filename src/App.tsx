@@ -98,6 +98,7 @@ const AppRoutes = () => {
 
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/test" element={<TestComponent />} />
         <Route path="/pyth" element={<PythPoc />} />
         <Route path="/tradingConfig" element={<TradingConfig />} />
         <Route path="/test2" element={<TestComponent />} />

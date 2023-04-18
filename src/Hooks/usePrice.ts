@@ -1,19 +1,8 @@
-import {
-  UTF8ArrToStr,
-  getKlineFromPrice,
-  getOHLCfromPrice,
-  parsewsmsg,
-} from '@TV/utils';
+import { UTF8ArrToStr, getKlineFromPrice } from '@TV/utils';
 import axios from 'axios';
 import { atom, useSetAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
-import {
-  LatestPriceApiRes,
-  Market2Kline,
-  Market2Prices,
-  Markets,
-} from 'src/Types/Market';
+import { useEffect } from 'react';
+import { Market2Prices } from 'src/Types/Market';
 
 import {
   PythConnection,
@@ -29,15 +18,10 @@ const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 export const usePrice = (fetchInitialPrices?: boolean) => {
   const setPrice = useSetAtom(priceAtom);
 
-  const fn = async () => {
-    if (fetchInitialPrices) {
-      const prices = await getPrice();
-      console.log(`pmmprices: `, prices);
-      setPrice((p) => ({ ...p, ...prices }));
-    }
+  const subscribeToStreamUpdates = async () => {
     const url = 'https://pyth-api.vintage-orange-muffin.com/v2/streaming';
     const response = await fetch(url);
-    const reader = response.body.getReader();
+    const reader = response.body?.getReader();
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
@@ -46,9 +30,47 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
       setPrice((p) => ({ ...p, ...updatePrices }));
     }
   };
+
+  const subscribeToWSUpdates = async () => {
+    const pythConnection = new PythConnection(
+      new Connection(solanaWeb3Connection),
+      getPythProgramKeyForCluster(solanaClusterName)
+    );
+    pythConnection.onPriceChangeVerbose((productAccount, priceAccount) => {
+      const product = productAccount.accountInfo.data.product;
+      const price = priceAccount.accountInfo.data;
+      const ts = Number(price.timestamp) * 1000;
+      // sample output:
+      // SOL/USD: $14.627930000000001 ±$0.01551797
+      if (price.price && price.confidence) {
+        const marketId = product.description.replace('/', '');
+        const tempPrice = price.price;
+        const priceUpdates = {
+          [marketId]: [
+            {
+              time: ts,
+              price: tempPrice,
+            },
+          ],
+        };
+        setPrice((p) => ({ ...p, ...priceUpdates }));
+      } else {
+        // tslint:disable-next-line:no-console
+      }
+    });
+    pythConnection.start();
+  };
+  const getInitialPrices = async () => {
+    const prices = await getPrice();
+    console.log(`pmmprices: `, prices);
+    setPrice((p) => ({ ...p, ...prices }));
+  };
   useEffect(() => {
-    fn();
-  }, []);
+    if (fetchInitialPrices) {
+      getInitialPrices();
+    }
+    subscribeToStreamUpdates();
+  }, [fetchInitialPrices]);
 };
 
 export const wsStateAtom = atom<{ state: string }>({
