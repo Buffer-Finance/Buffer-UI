@@ -62,11 +62,11 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
   };
   const getInitialPrices = async () => {
     const prices = await getPrice();
-    console.log(`pmmprices: `, prices);
+    // console.log(`pmmprices: `, prices);
     setPrice((p) => ({ ...p, ...prices }));
   };
   useEffect(() => {
-    console.log(`fetchInitialPrices: `, fetchInitialPrices);
+    // console.log(`fetchInitialPrices: `, fetchInitialPrices);
     if (fetchInitialPrices) {
       getInitialPrices();
     }
@@ -92,7 +92,7 @@ export const getPrice = async () => {
         .join('&')
   );
   const marketPrice = {};
-  console.log(`price.data: `, price.data);
+  // console.log(`price.data: `, price.data);
   price.data.forEach((e) => {
     marketPrice[pythIds[e.id]] = [
       {

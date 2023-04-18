@@ -182,6 +182,6 @@ export const useProfileGraphQl = () => {
       ARBopenInterest,
     };
   }, [data?.userOptionDatas, data?.activeData]);
-  console.log(tradingMetricsData, 'tradingMetricsData');
+  // console.log(tradingMetricsData, 'tradingMetricsData');
   return { tradingMetricsData };
 };

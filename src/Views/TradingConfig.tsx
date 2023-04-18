@@ -56,7 +56,7 @@ const initialConfigValues = Object.keys(ifc.functions).reduce(
         newValue: null,
       };
     }
-    console.log(`acc: `, acc);
+    // console.log(`acc: `, acc);
     return acc;
   },
   {}
