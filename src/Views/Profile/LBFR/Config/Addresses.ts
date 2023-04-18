@@ -2,8 +2,8 @@ export const CONTRACTS = {
   421613: {
     LBFRfaucet: '0x72B213A8F5a07a148b985d3092259490c916cD0c',
     LBFR: '0x000010eF1E662787555B6290145cE6632726a087',
-    LBFRrewardDistributor: '',
-    LBFRrewardTracker: '',
+    LBFRrewardDistributor: '0xe831dCE9ed8860fD9144E099534EE584FAe6212E',
+    LBFRrewardTracker: '0x857cb5A25e99Dfe29A4eE47553607B5e22c03678',
   },
   42161: {
     LBFRfaucet: '',
