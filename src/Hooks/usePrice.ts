@@ -23,8 +23,11 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     const response = await fetch(url);
     const reader = response.body?.getReader();
     while (true) {
+      console.time('stream-update');
       const { value, done } = await reader.read();
+      console.timeEnd('stream-update');
       if (done) break;
+      console.log('stream-u', value, done, updateStr, updatePrices);
       const updateStr = UTF8ArrToStr(value);
       const updatePrices = getKlineFromPrice(updateStr);
       setPrice((p) => ({ ...p, ...updatePrices }));
