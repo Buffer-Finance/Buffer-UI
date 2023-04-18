@@ -64,6 +64,7 @@
     "react-bottom-drawer": "^0.1.1",
     "react-detect-offline": "^2.4.5",
     "react-dom": "^18.2.0",
+    "react-fetch-streams": "^1.1.2",
     "react-gravatar": "^2.6.3",
     "react-html-parser": "^2.0.2",
     "react-idle-timer": "^5.5.3",
