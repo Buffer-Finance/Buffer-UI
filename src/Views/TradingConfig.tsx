@@ -21,6 +21,8 @@ import {
   PoolDropDown,
   useActivePoolObj,
 } from './BinaryOptions/PGDrawer/PoolDropDown';
+import { Button } from '@mui/material';
+import { encodeMulti, MetaTransaction, OperationType } from 'ethers-multisend';
 
 interface ConfigValue {
   getter: string;
@@ -183,6 +185,7 @@ const ConfigValueManager: React.FC<{
     const changeArr = [];
     configData.forEach((c, id) => {
       if (c.newValue && values[id]?.[0] && c.newValue != values[id]?.[0]) {
+        console.log(`ddc: `, c);
         changeArr.push({
           contract: c.contract,
           abi: c.abi,
@@ -193,6 +196,24 @@ const ConfigValueManager: React.FC<{
       setChangeData(changeArr);
       setConfigData((datas) => datas.map((d) => ({ ...d, newValue: null })));
     });
+  };
+
+  const handleConfigChange = () => {
+    //  const multi =  encodeMulti([{
+    //   to:
+    //   }])
+    console.log(`changeData: `, changeData);
+    const multiBundle: MetaTransaction[] = changeData.map((s) => {
+      return {
+        to: '0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d',
+        data: s.value,
+        operation: s.method,
+        value: '0',
+      };
+    });
+    console.log(`multiBundle: `, multiBundle);
+    const encoded = encodeMulti(multiBundle);
+    console.log(`encoded: `, encoded);
   };
   return (
     <>
@@ -208,6 +229,7 @@ const ConfigValueManager: React.FC<{
               {c.method}&nbsp;:&nbsp;{c.value}
             </div>
           ))}
+          <BlueBtn onClick={handleConfigChange}>Change</BlueBtn>
         </div>
       </ModalBase>
       <div className="">
