@@ -6,6 +6,7 @@ import { HistoryTables } from './Components/HistoryTable';
 import { ProfileCards } from './Components/ProfileCards';
 import { ReferralLink } from './Components/ReferralLink';
 import { UserData } from './Components/UserData';
+import { LBFR } from './LBFR';
 
 export const ProfilePage = () => {
   return (
@@ -22,6 +23,9 @@ const Profile = () => {
       <div className="px-7 my-8 sm:px-3">
         <UserData />
         <ReferralLink />
+        <ArbitrumOnly hide>
+          <LBFR />
+        </ArbitrumOnly>
         <ProfileCards />
         <ArbitrumOnly hide>
           <ClaimedNFT />
