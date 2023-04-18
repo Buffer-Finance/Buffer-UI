@@ -1,3 +1,3 @@
-export const useLBLPwriteCalls = () => {
+export const useLBFRwriteCalls = () => {
   return {};
 };

@@ -1,2 +1,2 @@
-export interface IlblpStakeCard {}
+export interface ILBFRStakeCard {}
 export interface IblpClaimCard {}

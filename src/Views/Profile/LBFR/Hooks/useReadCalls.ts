@@ -3,23 +3,63 @@ import { getContract } from '../Config/Addresses';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useMemo } from 'react';
 import { useReadCall } from '@Utils/useReadCall';
-
-export const useLBLPreadCalls = () => {
+import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
+export type stakedType = null | {
+  decimals: number;
+  userBalance: string;
+  userStaked: string;
+  totalStakedLBFR: string;
+};
+export const useLBFRreadCalls = () => {
   const { address: account } = useAccount();
   const { activeChain } = useActiveChain();
 
-  const calls = useMemo(() => {
+  const genericCalls = useMemo(() => {
     let res: null | {
       [key: string]: { address: string; abi: any; name: string; params: any[] };
     } = null;
     if (account) {
       try {
         res = {
-          userLBPLbalance: {
+          LBFRdecimals: {
+            address: getContract(activeChain.id, 'LBFR'),
+            abi: erc20ABI,
+            name: 'decimals',
+            params: [],
+          },
+          totalStakedLBFR: {
+            address: getContract(activeChain.id, 'LBFR'),
+            abi: erc20ABI,
+            name: 'balanceOf',
+            params: [getContract(activeChain.id, 'LBFRrewardTracker')],
+          },
+        };
+      } catch (e) {
+        console.log(e, 'LBFR readcalls error');
+      }
+    }
+    if (res !== null) return Object.values(res);
+    return res;
+  }, [activeChain]);
+
+  const userCalls = useMemo(() => {
+    let res: null | {
+      [key: string]: { address: string; abi: any; name: string; params: any[] };
+    } = null;
+    if (account) {
+      try {
+        res = {
+          userLBFRbalance: {
             address: getContract(activeChain.id, 'LBFR'),
             abi: erc20ABI,
             name: 'balanceOf',
             params: [account],
+          },
+          userStakedLBFR: {
+            address: getContract(activeChain.id, 'LBFRrewardTracker'),
+            abi: RewardTrackerAbi,
+            name: 'depositBalances',
+            params: [account, getContract(activeChain.id, 'LBFR')],
           },
         };
       } catch (e) {
@@ -29,16 +69,24 @@ export const useLBLPreadCalls = () => {
     if (res !== null) return Object.values(res);
     return res;
   }, [account, activeChain]);
-
+  const calls = genericCalls?.concat(account ? userCalls ?? [] : []);
   const { data } = useReadCall({
     contracts: calls,
-    swrKey: 'useLBLPreadCalls',
+    swrKey: 'useLBFRreadCalls',
   });
 
-  let response: null | { userBalance: string } = null;
+  let response: stakedType = null;
   if (data) {
+    const [decimals, totalStakedLBFR, userLBFRbalance, userStakedLBFR] = account
+      ? data.flat()
+      : data.concat(new Array(userCalls?.length).fill('0')).flat();
     response = {
-      userBalance: data[0][0],
+      decimals: decimals,
+      totalStakedLBFR: totalStakedLBFR,
+
+      //user-specific
+      userBalance: userLBFRbalance,
+      userStaked: userStakedLBFR,
     };
   }
   console.log(calls, data, response, 'calls');

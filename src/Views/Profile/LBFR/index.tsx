@@ -20,8 +20,15 @@ import { LBFRmodals } from './modals';
 import { useSetAtom } from 'jotai';
 import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { useLBLPreadCalls } from './Hooks/useReadCalls';
-import { useLBFRGraphql } from './Hooks/useGraphql';
+import { stakedType, useLBFRreadCalls } from './Hooks/useReadCalls';
+import {
+  LBFRclaimType,
+  LBFRgraphtype,
+  useLBFRGraphql,
+} from './Hooks/useGraphql';
+import { divide } from '@Utils/NumString/stringArithmatics';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { toFixed } from '@Utils/NumString';
 
 export const LBFR = () => {
   return (
@@ -32,20 +39,25 @@ export const LBFR = () => {
   );
 };
 const Cards = () => {
-  useLBFRGraphql();
-  useLBLPreadCalls();
+  const graphData = useLBFRGraphql();
+  const readcallData = useLBFRreadCalls();
   return (
     <Section
       Heading={<div className="text-f22">Loyalty Program</div>}
       subHeading={<></>}
-      Cards={[<ClaimCard />, <StakeCard />]}
+      Cards={[
+        <ClaimCard data={graphData} />,
+        <StakeCard data={readcallData} />,
+      ]}
       className="!mt-7"
     />
   );
 };
 
-const ClaimCard = () => {
+const ClaimCard = ({ data }: { data: null | LBFRclaimType }) => {
   const { viewOnlyMode } = useUserAccount();
+  const { configContracts } = useActiveChain();
+  const usdcDecimals = configContracts.tokens['USDC'].decimals;
   const unit = 'LBFR';
   const { poolNames } = usePoolNames();
   const tokens = useMemo(
@@ -55,6 +67,7 @@ const ClaimCard = () => {
   function claim() {
     console.log('Claim');
   }
+  if (!data) return <></>;
   return (
     <Card
       className={profileCardClass}
@@ -68,7 +81,7 @@ const ClaimCard = () => {
           keysName={['Claimable', 'Claimed', 'Last claimed', 'Volume', 'Slab']}
           values={[
             <div className={wrapperClasses}>
-              <Display data={'11234'} unit={unit} />
+              <Display data={data} unit={unit} />
             </div>,
             <div className={wrapperClasses}>
               <Display data={'145'} unit={unit} />
@@ -76,7 +89,7 @@ const ClaimCard = () => {
             <div className={wrapperClasses}>{getDisplayDate(1681452781)}</div>,
             <div className={wrapperClasses}>
               <Display
-                data={'10000'}
+                data={divide(data.volume, usdcDecimals)}
                 unit={'USDC'}
                 content={
                   tokens.length > 1 && (
@@ -84,7 +97,22 @@ const ClaimCard = () => {
                       keysName={tokens}
                       keyStyle={tooltipKeyClasses}
                       valueStyle={tooltipValueClasses}
-                      values={tokens.map((token) => 5000 + ' ' + token)}
+                      values={tokens.map((token) => {
+                        const stats = data[`volume${token}`];
+                        if (stats)
+                          return (
+                            toFixed(
+                              divide(
+                                stats,
+                                configContracts.tokens[token].decimals
+                              ) as string,
+                              2
+                            ) +
+                            ' ' +
+                            token
+                          );
+                        else return '-';
+                      })}
                     />
                   )
                 }
@@ -113,7 +141,7 @@ const ClaimCard = () => {
   );
 };
 
-const StakeCard = () => {
+const StakeCard = ({ data }: { data: null | stakedType }) => {
   const setIsModalOpen = useSetAtom(LBFRModalAtom);
   const setActiveModalNumber = useSetAtom(LBFRModalNumberAtom);
   const { viewOnlyMode } = useUserAccount();
@@ -131,6 +159,8 @@ const StakeCard = () => {
   function claim() {
     console.log('Claim');
   }
+
+  if (!data) return <></>;
   return (
     <Card
       className={profileCardClass}
@@ -144,16 +174,25 @@ const StakeCard = () => {
           keysName={['Wallet', 'Staked', 'APR', 'Total Staked', 'Rewards']}
           values={[
             <div className={wrapperClasses}>
-              <Display data={'11234'} unit={unit} />
+              <Display
+                data={divide(data.userBalance, data.decimals)}
+                unit={unit}
+              />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={'145'} unit={unit} />
+              <Display
+                data={divide(data.userStaked, data.decimals)}
+                unit={unit}
+              />
             </div>,
             <div className={wrapperClasses}>
               <Display data={'12'} unit="%" />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={'1235'} unit={unit} />
+              <Display
+                data={divide(data.totalStakedLBFR, data.decimals)}
+                unit={unit}
+              />
             </div>,
             <div className={wrapperClasses}>
               <Display data={'147'} unit={rewardUnit} />
