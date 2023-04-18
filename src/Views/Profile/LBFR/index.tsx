@@ -20,6 +20,7 @@ import { LBFRmodals } from './modals';
 import { useSetAtom } from 'jotai';
 import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useLBLPreadCalls } from './Hooks/useReadCalls';
 
 export const LBFR = () => {
   return (
@@ -110,6 +111,7 @@ const StakeCard = () => {
   const { viewOnlyMode } = useUserAccount();
   const unit = 'LBFR';
   const rewardUnit = 'BFR';
+  useLBLPreadCalls();
   function stake() {
     setIsModalOpen(true);
     setActiveModalNumber(0);
