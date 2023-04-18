@@ -16,15 +16,21 @@ import { useMemo } from 'react';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { btnClasses } from '@Views/Earn/Components/EarnButtons';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { LBFRmodals } from './modals';
+import { useSetAtom } from 'jotai';
+import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
 
 export const LBFR = () => {
   return (
-    <Section
-      Heading={<div className="text-f22">Loyalty Program</div>}
-      subHeading={<></>}
-      Cards={[<ClaimCard />, <StakeCard />]}
-      className="!mt-7"
-    />
+    <>
+      <LBFRmodals />
+      <Section
+        Heading={<div className="text-f22">Loyalty Program</div>}
+        subHeading={<></>}
+        Cards={[<ClaimCard />, <StakeCard />]}
+        className="!mt-7"
+      />
+    </>
   );
 };
 
@@ -93,13 +99,17 @@ const ClaimCard = () => {
 };
 
 const StakeCard = () => {
+  const setIsModalOpen = useSetAtom(LBFRModalAtom);
+  const setActiveModalNumber = useSetAtom(LBFRModalNumberAtom);
   const unit = 'LBFR';
   const rewardUnit = 'BFR';
   function stake() {
-    console.log('Stake');
+    setIsModalOpen(true);
+    setActiveModalNumber(0);
   }
   function unstake() {
-    console.log('Unstake');
+    setIsModalOpen(true);
+    setActiveModalNumber(1);
   }
   function claim() {
     console.log('Claim');
