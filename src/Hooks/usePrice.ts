@@ -75,14 +75,7 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     pythConnection.start();
   };
 
-  const getInitialPrices = async () => {
-    const prices = await getPrice();
-    setPrice((p) => ({ ...p, ...prices }));
-  };
   useEffect(() => {
-    if (fetchInitialPrices) {
-      getInitialPrices();
-    }
     const interval = setInterval(async () => {
       const data = await getPrice();
       setPrice((p) => ({ ...p, ...data }));
@@ -91,7 +84,7 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
       clearInterval(interval);
     };
     // subscribeToWSUpdates();
-  }, [fetchInitialPrices]);
+  }, []);
 };
 
 export const wsStateAtom = atom<{ state: string }>({
@@ -112,7 +105,6 @@ export const getPrice = async () => {
         .join('&')
   );
   const marketPrice = {};
-  console.log(`price.data: `, price.data);
   price.data.forEach((e) => {
     marketPrice[pythIds[e.id]] = [
       {
