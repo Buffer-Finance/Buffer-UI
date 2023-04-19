@@ -75,40 +75,38 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     pythConnection.start();
   };
 
-  const { data } = useSWR('price-updates', {
-    fetcher: async () => {
-      const date = Math.floor(Date.now() / 1000);
+  // const { data } = useSWR('price-updates', {
+  //   fetcher: async () => {
+  //     // const date = Math.floor(Date.now() / 1000);
 
-      const req = Object.keys(pythIds).map((id) => {
-        const req = {
-          from: date - 20,
-          to: date + 20,
-          symbol: pythIds[id],
-          resolution: '1',
-        };
-        return axios.get(
-          `https://pyth-api.vintage-orange-muffin.com/v2/history`,
-          {
-            params: req,
-          }
-        );
-      });
-      const response = await Promise.all(req);
-      const res = {};
-      Object.keys(pythIds).forEach((id, idx) => {
-        const pythOHLC = response[idx];
-        const close = pythOHLC.data.c?.[pythOHLC.data.c.length - 1];
-        res[pythIds[id]] = [{ price: close, ts: (date + 20) * 1000 }];
-      });
-      console.log(`res: `, res);
-      return res;
-    },
-    refreshInterval: 10,
-  });
-  useEffect(() => {
-    setPrice((p) => ({ ...p, ...data }));
-    // console.log(`data: `, data);
-  }, [data]);
+  //     // const req = Object.keys(pythIds).map((id) => {
+  //     //   const req = {
+  //     //     from: date - 20,
+  //     //     to: date + 20,
+  //     //     symbol: pythIds[id],
+  //     //     resolution: '1',
+  //     //   };
+  //     //   return axios.get(
+  //     //     `https://pyth-api.vintage-orange-muffin.com/v2/history`,
+  //     //     {
+  //     //       params: req,
+  //     //     }
+  //     //   );
+  //     // });
+  //     // const response = await Promise.all(req);
+  //     // const res = {};
+  //     // Object.keys(pythIds).forEach((id, idx) => {
+  //     //   const pythOHLC = response[idx];
+  //     //   const close = pythOHLC.data.c?.[pythOHLC.data.c.length - 1];
+  //     //   res[pythIds[id]] = [{ price: close, ts: (date + 20) * 1000 }];
+  //     // });
+  //     // console.log(`res: `, res);
+  //     const price = getPrice();
+  //     return price;
+  //   },
+  //   refreshInterval: 10,
+  // });
+
   const getInitialPrices = async () => {
     const prices = await getPrice();
     setPrice((p) => ({ ...p, ...prices }));
@@ -117,6 +115,11 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     if (fetchInitialPrices) {
       getInitialPrices();
     }
+    setInterval(async () => {
+      const data = await getPrice();
+      console.log(`dddata: `, data);
+      setPrice((p) => ({ ...p, ...data }));
+    }, 1000);
     // subscribeToWSUpdates();
   }, [fetchInitialPrices]);
 };
