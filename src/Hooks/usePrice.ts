@@ -11,6 +11,7 @@ import {
 import { Connection } from '@solana/web3.js';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import Big from 'big.js';
+import useSWR from 'swr';
 
 const solanaClusterName = 'pythnet';
 const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
@@ -22,12 +23,19 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     const url = 'https://pyth-api.vintage-orange-muffin.com/v2/streaming';
     const response = await fetch(url);
     const reader = response.body?.getReader();
+    console.log('[stream]err', response.body?.locked);
+    let loop = true;
     while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      const updateStr = UTF8ArrToStr(value);
-      const updatePrices = getKlineFromPrice(updateStr);
-      setPrice((p) => ({ ...p, ...updatePrices }));
+      try {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const updateStr = UTF8ArrToStr(value);
+        const updatePrices = getKlineFromPrice(updateStr);
+        setPrice((p) => ({ ...p, ...updatePrices }));
+      } catch (err) {
+        console.log('[stream]err', response.body?.locked);
+        loop = false;
+      }
     }
   };
 
@@ -36,30 +44,71 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
       new Connection(solanaWeb3Connection),
       getPythProgramKeyForCluster(solanaClusterName)
     );
-    pythConnection.onPriceChangeVerbose((productAccount, priceAccount) => {
-      const product = productAccount.accountInfo.data.product;
-      const price = priceAccount.accountInfo.data;
-      const ts = Number(price.timestamp) * 1000;
-      // sample output:
-      // SOL/USD: $14.627930000000001 ±$0.01551797
-      if (price.price && price.confidence) {
-        const marketId = product.description.replace('/', '');
-        const tempPrice = price.price;
+    pythConnection.onPriceChange((p, o) => {
+      // BTCUSD [{
+      //   time: +ts,
+      //   price: absolutePrice,
+      //   volume: volume ? +volume : 0,
+      // }];
+
+      if (p?.description && o?.price && o.timestamp) {
+        if (p.description == 'BTC/USD') {
+          console.log('price-update:BTC', o);
+        }
+        if (p.description == 'ETH/USD') {
+          console.log('price-update:ETH', o);
+        }
+        const marketId = p.description.replace('/', '');
+        const ts = Number(o.timestamp) * 1000;
+        const price = o.price;
         const priceUpdates = {
           [marketId]: [
             {
-              time: ts,
-              price: tempPrice,
+              ts,
+              price,
             },
           ],
         };
         setPrice((p) => ({ ...p, ...priceUpdates }));
-      } else {
-        // tslint:disable-next-line:no-console
       }
     });
     pythConnection.start();
   };
+
+  const { data } = useSWR('price-updates', {
+    fetcher: async () => {
+      const date = Math.floor(Date.now() / 1000);
+
+      const req = Object.keys(pythIds).map((id) => {
+        const req = {
+          from: date - 20,
+          to: date + 20,
+          symbol: pythIds[id],
+          resolution: '1',
+        };
+        return axios.get(
+          `https://pyth-api.vintage-orange-muffin.com/v2/history`,
+          {
+            params: req,
+          }
+        );
+      });
+      const response = await Promise.all(req);
+      const res = {};
+      Object.keys(pythIds).forEach((id, idx) => {
+        const pythOHLC = response[idx];
+        const close = pythOHLC.data.c?.[pythOHLC.data.c.length - 1];
+        res[pythIds[id]] = [{ price: close, ts: (date + 20) * 1000 }];
+      });
+      console.log(`res: `, res);
+      return res;
+    },
+    refreshInterval: 10,
+  });
+  useEffect(() => {
+    setPrice((p) => ({ ...p, ...data }));
+    // console.log(`data: `, data);
+  }, [data]);
   const getInitialPrices = async () => {
     const prices = await getPrice();
     setPrice((p) => ({ ...p, ...prices }));
@@ -68,7 +117,7 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     if (fetchInitialPrices) {
       getInitialPrices();
     }
-    subscribeToStreamUpdates();
+    // subscribeToWSUpdates();
   }, [fetchInitialPrices]);
 };
 
