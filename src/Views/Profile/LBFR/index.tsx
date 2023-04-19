@@ -27,6 +27,9 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { toFixed } from '@Utils/NumString';
 import { Skeleton } from '@mui/material';
 import { WalletNotConnectedCard } from '../Components/ProfileCards';
+import { useWriteCall } from '@Hooks/useWriteCall';
+import { getContract } from './Config/Addresses';
+import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
 
 export const LBFR = () => {
   return (
@@ -173,9 +176,15 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
   const { address: account } = useUserAccount();
   const setIsModalOpen = useSetAtom(LBFRModalAtom);
   const setActiveModalNumber = useSetAtom(LBFRModalNumberAtom);
+  const { activeChain, configContracts } = useActiveChain();
+  const { writeCall } = useWriteCall(
+    getContract(activeChain.id, 'LBFRrewardTracker'),
+    RewardTrackerAbi
+  );
   const { viewOnlyMode } = useUserAccount();
   const unit = 'LBFR';
   const rewardUnit = 'BFR';
+  const rewardDecimals = 18;
   const heading = 'Stake LBFR';
 
   function stake() {
@@ -187,7 +196,7 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
     setActiveModalNumber(1);
   }
   function claim() {
-    console.log('Claim');
+    writeCall(() => {}, 'claim', [account]);
   }
 
   if (account === undefined)
@@ -234,7 +243,10 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
               />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={'0000'} unit={'dummy'} />
+              <Display
+                data={divide(data.userRewards, rewardDecimals)}
+                unit={rewardUnit}
+              />
             </div>,
           ]}
         />

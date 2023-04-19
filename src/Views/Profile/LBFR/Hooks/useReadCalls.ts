@@ -10,6 +10,7 @@ export type stakedType = null | {
   userStaked: string;
   totalStakedLBFR: string;
   allowance: string;
+  userRewards: string;
 };
 export const useLBFRreadCalls = () => {
   const { address: account } = useAccount();
@@ -68,6 +69,12 @@ export const useLBFRreadCalls = () => {
             name: 'allowance',
             params: [account, getContract(activeChain.id, 'LBFRrewardTracker')],
           },
+          userRewards: {
+            address: getContract(activeChain.id, 'LBFRrewardTracker'),
+            abi: RewardTrackerAbi,
+            name: 'claimable',
+            params: [account],
+          },
         };
       } catch (e) {
         console.log(e, 'LBFR readcalls error');
@@ -90,6 +97,7 @@ export const useLBFRreadCalls = () => {
       userLBFRbalance,
       userStakedLBFR,
       userRewardTrackerAllowance,
+      userRewards,
     ] = account
       ? data.flat()
       : data.concat(new Array(userCalls?.length).fill('0')).flat();
@@ -101,6 +109,7 @@ export const useLBFRreadCalls = () => {
       userBalance: userLBFRbalance,
       userStaked: userStakedLBFR,
       allowance: userRewardTrackerAllowance,
+      userRewards: userRewards,
     };
   }
   console.log(calls, data, response, 'calls');
