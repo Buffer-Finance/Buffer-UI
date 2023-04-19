@@ -115,11 +115,13 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     if (fetchInitialPrices) {
       getInitialPrices();
     }
-    setInterval(async () => {
+    const interval = setInterval(async () => {
       const data = await getPrice();
-      console.log(`dddata: `, data);
       setPrice((p) => ({ ...p, ...data }));
     }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
     // subscribeToWSUpdates();
   }, [fetchInitialPrices]);
 };
