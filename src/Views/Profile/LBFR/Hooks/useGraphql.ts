@@ -14,96 +14,56 @@ export const getWeekIdFromTimestamp = (timestamp: number) => {
 };
 
 export const useLBFRGraphql = () => {
-  const { configContracts, activeChain } = useActiveChain();
+  const { configContracts } = useActiveChain();
   const { address: account } = useAccount();
-  const weekId = useMemo(() => {
-    let response = null;
-    try {
-      const timestamp = getLBFRconfig(activeChain.id).startTimestamp;
-      response = getWeekIdFromTimestamp(timestamp);
-    } catch (e) {
-      console.log(e, 'LBFR graphql error');
-    }
-    return response;
-  }, []);
-  const { data } = useSWR(
-    `LBFR-graphql-query-account-${account}-weekId-${weekId}`,
-    {
-      fetcher: async () => {
-        const response = await axios.post(configContracts.graph.MAIN, {
-          query: `{ 
-            lbfrstatsPerUsers(where: {userAddress: "${account}", id_gte: "${weekId}"}, period: "weekly") {
-                lBFRAlloted
+
+  const { data } = useSWR(`LBFR-graphql-query-account-${account}`, {
+    fetcher: async () => {
+      const response = await axios.post(configContracts.graph.MAIN, {
+        query: `{ 
+          totalVolume: lbfrstatsPerUsers(where: {userAddress: "${account}", period: "total"}) {
                 volume
                 volumeUSDC
                 volumeARB
               }
-              claimedLBFRPerUsers(where: {userAddress: "${account}"}) {
-                lBFRClaimed
-                timestamp
+              lbfrclaimDataPerUser(id: "${account}"){
+                claimed
+                claimable
+                lastClaimedTimestamp
               }
         }`,
-        });
-        return response.data?.data as {
-          lbfrstatsPerUsers: {
-            lBFRAlloted: string;
-            timestamp: string;
-            volume: string;
-            volumeUSDC: string;
-            volumeARB: string;
-          }[];
-          claimedLBFRPerUsers: {
-            lBFRClaimed: string;
+      });
+      return response.data?.data as {
+        totalVolume: {
+          volume: string;
+          volumeUSDC: string;
+          volumeARB: string;
+        }[];
+        lbfrclaimDataPerUser: {
+          claimed: string;
+          claimable: string;
+          lastClaimedTimestamp: string;
+        } | null;
+      };
+    },
+    refreshInterval: 300,
+  });
 
-            timestamp: string;
-          };
-        };
-      },
-      refreshInterval: 300,
-    }
-  );
-
-  const totalbfrstatsPerUsersData: LBFRgraphtype = useMemo(() => {
-    let response = null;
-    if (data?.lbfrstatsPerUsers) {
-      response = data.lbfrstatsPerUsers.reduce(
-        (acc, cur) => {
-          acc.lBFRAlloted = add(acc.lBFRAlloted, cur.lBFRAlloted);
-          acc.volume = add(acc.volume, cur.volume);
-          acc.volumeUSDC = add(acc.volumeUSDC, cur.volumeUSDC);
-          acc.volumeARB = add(acc.volumeARB, cur.volumeARB);
-          return acc;
-        },
-        {
-          lBFRAlloted: '0',
-          volume: '0',
-          volumeUSDC: '0',
-          volumeARB: '0',
-        }
-      );
-    }
-    if (data?.claimedLBFRPerUsers) {
-      response;
-    }
-    return response;
-  }, [data]);
-
-  console.log(data, totalbfrstatsPerUsersData, 'data');
-  return {
-    ...totalbfrstatsPerUsersData,
-    lastClaimed: data?.claimedLBFRPerUsers.timestamp,
-    claimed: data?.claimedLBFRPerUsers.lBFRClaimed,
-  };
+  console.log(data, 'data');
+  return data;
 };
-export type LBFRgraphtype = {
-  lBFRAlloted: string;
-  volume: string;
-  volumeUSDC: string;
-  volumeARB: string;
-} | null;
-export type LBFRclaimType =
-  | LBFRgraphtype
+
+export type LBFRGraphqlType =
   | {
-      lastClaimed: string | undefined;
-      claimed: string | undefined;
-    };
+      totalVolume: {
+        volume: string;
+        volumeUSDC: string;
+        volumeARB: string;
+      }[];
+      lbfrclaimDataPerUser: {
+        claimed: string;
+        claimable: string;
+        lastClaimedTimestamp: string;
+      } | null;
+    }
+  | undefined;

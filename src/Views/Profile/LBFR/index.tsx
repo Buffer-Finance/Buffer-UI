@@ -21,14 +21,12 @@ import { useSetAtom } from 'jotai';
 import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { stakedType, useLBFRreadCalls } from './Hooks/useReadCalls';
-import {
-  LBFRclaimType,
-  LBFRgraphtype,
-  useLBFRGraphql,
-} from './Hooks/useGraphql';
+import { LBFRGraphqlType, useLBFRGraphql } from './Hooks/useGraphql';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { toFixed } from '@Utils/NumString';
+import { Skeleton } from '@mui/material';
+import { WalletNotConnectedCard } from '../Components/ProfileCards';
 
 export const LBFR = () => {
   return (
@@ -54,11 +52,14 @@ const Cards = () => {
   );
 };
 
-const ClaimCard = ({ data }: { data: null | LBFRclaimType }) => {
+const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
   const { viewOnlyMode } = useUserAccount();
   const { configContracts } = useActiveChain();
+  const { address: account } = useUserAccount();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const decimals = 18;
   const unit = 'LBFR';
+  const heading = 'Claim LBFR';
   const { poolNames } = usePoolNames();
   const tokens = useMemo(
     () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
@@ -67,29 +68,62 @@ const ClaimCard = ({ data }: { data: null | LBFRclaimType }) => {
   function claim() {
     console.log('Claim');
   }
-  if (!data) return <></>;
+  if (account === undefined)
+    return <WalletNotConnectedCard heading={heading} />;
+  if (data === undefined)
+    return (
+      <Skeleton
+        key={'claimCardLoader'}
+        variant="rectangular"
+        className="w-full !h-full min-h-[270px] !transform-none !bg-1"
+      />
+    );
   return (
     <Card
       className={profileCardClass}
       shouldShowDivider={false}
-      top={'Claim LBFR'}
+      top={heading}
       middle={
         <TableAligner
           className="mt-3"
           keyStyle={keyClasses}
           valueStyle={valueClasses}
-          keysName={['Claimable', 'Claimed', 'Last claimed', 'Volume', 'Slab']}
+          keysName={[
+            'Claimable',
+            'Claimed',
+            'Last claimed',
+            'Volume',
+            //  'Slab'
+          ]}
           values={[
             <div className={wrapperClasses}>
-              <Display data={data} unit={unit} />
+              <Display
+                data={divide(
+                  data.lbfrclaimDataPerUser?.claimable ?? '0',
+                  decimals
+                )}
+                unit={unit}
+              />
             </div>,
-            <div className={wrapperClasses}>
-              <Display data={'145'} unit={unit} />
-            </div>,
-            <div className={wrapperClasses}>{getDisplayDate(1681452781)}</div>,
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.volume, usdcDecimals)}
+                data={divide(
+                  data.lbfrclaimDataPerUser?.claimed ?? '0',
+                  decimals
+                )}
+                unit={unit}
+              />
+            </div>,
+            <div className={wrapperClasses}>
+              {data.lbfrclaimDataPerUser?.lastClaimedTimestamp
+                ? getDisplayDate(
+                    Number(data.lbfrclaimDataPerUser.lastClaimedTimestamp)
+                  )
+                : 'Not claimed yet.'}
+            </div>,
+            <div className={wrapperClasses}>
+              <Display
+                data={divide(data.totalVolume?.[0]?.volume ?? '0', decimals)}
                 unit={'USDC'}
                 content={
                   tokens.length > 1 && (
@@ -98,16 +132,10 @@ const ClaimCard = ({ data }: { data: null | LBFRclaimType }) => {
                       keyStyle={tooltipKeyClasses}
                       valueStyle={tooltipValueClasses}
                       values={tokens.map((token) => {
-                        const stats = data[`volume${token}`];
+                        const stats = data.totalVolume?.[0]?.[`volume${token}`];
                         if (stats)
                           return (
-                            toFixed(
-                              divide(
-                                stats,
-                                configContracts.tokens[token].decimals
-                              ) as string,
-                              2
-                            ) +
+                            toFixed(divide(stats, decimals) as string, 2) +
                             ' ' +
                             token
                           );
@@ -118,9 +146,9 @@ const ClaimCard = ({ data }: { data: null | LBFRclaimType }) => {
                 }
               />
             </div>,
-            <div className={wrapperClasses}>
-              <Display data={'12.54'} unit={unit + '/Per Unit Volume'} />
-            </div>,
+            // <div className={wrapperClasses}>
+            //   <Display data={'12.54'} unit={unit + '/Per Unit Volume'} />
+            // </div>,
           ]}
         />
       }
@@ -142,11 +170,13 @@ const ClaimCard = ({ data }: { data: null | LBFRclaimType }) => {
 };
 
 const StakeCard = ({ data }: { data: null | stakedType }) => {
+  const { address: account } = useUserAccount();
   const setIsModalOpen = useSetAtom(LBFRModalAtom);
   const setActiveModalNumber = useSetAtom(LBFRModalNumberAtom);
   const { viewOnlyMode } = useUserAccount();
   const unit = 'LBFR';
   const rewardUnit = 'BFR';
+  const heading = 'Stake LBFR';
 
   function stake() {
     setIsModalOpen(true);
@@ -160,12 +190,21 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
     console.log('Claim');
   }
 
-  if (!data) return <></>;
+  if (account === undefined)
+    return <WalletNotConnectedCard heading={heading} />;
+  if (!data)
+    return (
+      <Skeleton
+        key={'stakeCardLoader'}
+        variant="rectangular"
+        className="w-full !h-full min-h-[270px] !transform-none !bg-1"
+      />
+    );
   return (
     <Card
       className={profileCardClass}
       shouldShowDivider={false}
-      top={'Stake LBFR'}
+      top={heading}
       middle={
         <TableAligner
           className="mt-3"
@@ -186,7 +225,7 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
               />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={'12'} unit="%" />
+              <Display data={'0000'} unit="dummy" />
             </div>,
             <div className={wrapperClasses}>
               <Display
@@ -195,7 +234,7 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
               />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={'147'} unit={rewardUnit} />
+              <Display data={'0000'} unit={'dummy'} />
             </div>,
           ]}
         />
