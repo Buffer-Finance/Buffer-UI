@@ -49,16 +49,14 @@ export const useLBFRGraphql = () => {
     refreshInterval: 300,
   });
 
-  console.log(data, 'data');
+  // console.log(data, 'data');
   return data;
 };
 
 export type LBFRGraphqlType =
   | {
       totalVolume: {
-        volume: string;
-        volumeUSDC: string;
-        volumeARB: string;
+        [key: string]: string;
       }[];
       lbfrclaimDataPerUser: {
         claimed: string;

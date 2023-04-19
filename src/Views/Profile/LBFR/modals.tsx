@@ -20,6 +20,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
 import useWriteCallValidations from '@Hooks/Utilities/useWriteCallValidations';
 import { useToast } from '@Contexts/Toast';
+import { SomethingWentWrongModal } from '@Views/Common/Modals/SomethingWentWrong';
 
 export const LBFRmodals = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(LBFRModalAtom);
@@ -40,88 +41,107 @@ export const LBFRmodals = () => {
 };
 
 const LBFRstakeModal = () => {
-  const { activeChain } = useActiveChain();
-  const readcallData = useLBFRreadCalls();
-  const [approveState, setApprovalState] = useState(false);
-  const { approve } = useGetApprovalAmount(
-    erc20ABI,
-    getContract(activeChain.id, 'LBFR'),
-    getContract(activeChain.id, 'LBFRrewardTracker')
-  );
-  const { writeCall } = useWriteCall(
-    getContract(activeChain.id, 'LBFRrewardTracker'),
-    RewardTrackerAbi
-  );
-  const { amountValidations, exitValidations, userBalanceValidations } =
-    useWriteCallValidations();
-  const userBalance = divide(
-    readcallData?.userBalance ?? '0',
-    readcallData?.decimals ?? '0'
-  ) as string;
-
-  function approveFunction(): void {
-    approve(toFixed(getPosInf(), 0), setApprovalState);
-  }
-
-  function stake(amount: string): void {
-    if (
-      amountValidations(amount) ||
-      exitValidations() ||
-      userBalanceValidations(amount, userBalance)
-    )
-      return;
-    writeCall(() => {}, 'stake', [
+  const toastify = useToast();
+  try {
+    const { activeChain } = useActiveChain();
+    const readcallData = useLBFRreadCalls();
+    const [approveState, setApprovalState] = useState(false);
+    const { approve } = useGetApprovalAmount(
+      erc20ABI,
       getContract(activeChain.id, 'LBFR'),
-      multiply(amount, readcallData?.decimals ?? '0'),
-    ]);
+      getContract(activeChain.id, 'LBFRrewardTracker')
+    );
+    const { writeCall } = useWriteCall(
+      getContract(activeChain.id, 'LBFRrewardTracker'),
+      RewardTrackerAbi
+    );
+    const { amountValidations, exitValidations, userBalanceValidations } =
+      useWriteCallValidations();
+    const userBalance = divide(
+      readcallData?.userBalance ?? '0',
+      readcallData?.decimals ?? '0'
+    ) as string;
+
+    function approveFunction(): void {
+      approve(toFixed(getPosInf(), 0), setApprovalState);
+    }
+
+    function stake(amount: string): void {
+      if (
+        amountValidations(amount) ||
+        exitValidations() ||
+        userBalanceValidations(amount, userBalance)
+      )
+        return;
+      writeCall(() => {}, 'stake', [
+        getContract(activeChain.id, 'LBFR'),
+        multiply(amount, readcallData?.decimals ?? '0'),
+      ]);
+    }
+    return (
+      <StakeModal
+        head="Stake LBFR"
+        max={userBalance}
+        unit="LBFR"
+        approveFunction={approveFunction}
+        stakeFunction={stake}
+        isApproveLoading={approveState}
+        allowance={readcallData?.allowance ?? '0'}
+      />
+    );
+  } catch (e) {
+    toastify({
+      type: 'error',
+      msg: (e as Error).message + ' on LBFR stake modal component',
+      id: 'LBFRstakeModal',
+    });
+    return <SomethingWentWrongModal />;
   }
-  return (
-    <StakeModal
-      head="Stake LBFR"
-      max={userBalance}
-      unit="LBFR"
-      approveFunction={approveFunction}
-      stakeFunction={stake}
-      isApproveLoading={approveState}
-      allowance={readcallData?.allowance ?? '0'}
-    />
-  );
 };
 
 const LBFRunstakeModal = () => {
-  const { activeChain } = useActiveChain();
-  const readcallData = useLBFRreadCalls();
   const toastify = useToast();
-  const { writeCall } = useWriteCall(
-    getContract(activeChain.id, 'LBFRrewardTracker'),
-    RewardTrackerAbi
-  );
-  const { amountValidations, exitValidations } = useWriteCallValidations();
-  const userStaked = divide(
-    readcallData?.userStaked ?? '0',
-    readcallData?.decimals ?? '0'
-  ) as string;
+  try {
+    const { activeChain } = useActiveChain();
+    const readcallData = useLBFRreadCalls();
+    const { writeCall } = useWriteCall(
+      getContract(activeChain.id, 'LBFRrewardTracker'),
+      RewardTrackerAbi
+    );
+    const { amountValidations, exitValidations } = useWriteCallValidations();
+    const userStaked = divide(
+      readcallData?.userStaked ?? '0',
+      readcallData?.decimals ?? '0'
+    ) as string;
 
-  function unstake(amount: string): void {
-    if (amountValidations(amount) || exitValidations()) return;
-    if (gt(amount, userStaked))
-      return toastify({
-        type: 'error',
-        msg: "Can't unstake more than staked",
-        id: 'LBFRunstake',
-      });
-    writeCall(() => {}, 'unstake', [
-      getContract(activeChain.id, 'LBFR'),
-      multiply(amount, readcallData?.decimals ?? '0'),
-    ]);
+    function unstake(amount: string): void {
+      if (amountValidations(amount) || exitValidations()) return;
+      if (gt(amount, userStaked))
+        return toastify({
+          type: 'error',
+          msg: "Can't unstake more than staked",
+          id: 'LBFRunstake',
+        });
+      writeCall(() => {}, 'unstake', [
+        getContract(activeChain.id, 'LBFR'),
+        multiply(amount, readcallData?.decimals ?? '0'),
+      ]);
+    }
+
+    return (
+      <UnstakeModal
+        head="Unstake LBFR"
+        max={userStaked}
+        unit="LBFR"
+        unstakeFunction={unstake}
+      />
+    );
+  } catch (e) {
+    toastify({
+      type: 'error',
+      msg: (e as Error).message + ' on LBFR unstake modal component',
+      id: 'LBFRstakeModal',
+    });
+    return <SomethingWentWrongModal />;
   }
-
-  return (
-    <UnstakeModal
-      head="Unstake LBFR"
-      max={userStaked}
-      unit="LBFR"
-      unstakeFunction={unstake}
-    />
-  );
 };

@@ -12,7 +12,7 @@ import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getDisplayDate } from '@Utils/Dates/displayDateTime';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { btnClasses } from '@Views/Earn/Components/EarnButtons';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
@@ -30,6 +30,10 @@ import { WalletNotConnectedCard } from '../Components/ProfileCards';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { getContract } from './Config/Addresses';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
+import { useToast } from '@Contexts/Toast';
+import { SomethingWentWrongModal } from '@Views/Common/Modals/SomethingWentWrong';
+import axios from 'axios';
+import LBFRabi from './Config/FaucetLBFR.json';
 
 export const LBFR = () => {
   return (
@@ -56,10 +60,11 @@ const Cards = () => {
 };
 
 const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
+  const toastify = useToast();
+  const [btnState, setBtnState] = useState(false);
   const { viewOnlyMode } = useUserAccount();
-  const { configContracts } = useActiveChain();
   const { address: account } = useUserAccount();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const { activeChain } = useActiveChain();
   const decimals = 18;
   const unit = 'LBFR';
   const heading = 'Claim LBFR';
@@ -68,8 +73,41 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
     () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
     [poolNames]
   );
-  function claim() {
-    console.log('Claim');
+  const { writeCall } = useWriteCall(
+    getContract(activeChain.id, 'LBFRfaucet'),
+    LBFRabi
+  );
+
+  async function claim() {
+    setBtnState(true);
+    try {
+      const res = await axios.get(
+        `https://oracle.buffer-finance-api.link/lbfr/claim/${account}`
+      );
+      console.log(res, 'res');
+      if (res.data.error) {
+        setBtnState(false);
+        return;
+      }
+      const {
+        signed_hash: signature,
+        claimable_tokens: amount,
+        timestamp,
+      } = res.data;
+
+      writeCall(() => setBtnState(false), 'claim', [
+        signature,
+        amount,
+        timestamp,
+      ]);
+    } catch (e) {
+      toastify({
+        type: 'error',
+        msg: 'Failed to fetch data. Please try again.',
+        id: 'claimLBFR',
+      });
+      setBtnState(false);
+    }
   }
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
@@ -162,6 +200,7 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
               onClick={claim}
               className={btnClasses}
               isDisabled={viewOnlyMode}
+              isLoading={btnState}
             >
               Claim
             </BlueBtn>
@@ -173,111 +212,126 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
 };
 
 const StakeCard = ({ data }: { data: null | stakedType }) => {
-  const { address: account } = useUserAccount();
-  const setIsModalOpen = useSetAtom(LBFRModalAtom);
-  const setActiveModalNumber = useSetAtom(LBFRModalNumberAtom);
-  const { activeChain, configContracts } = useActiveChain();
-  const { writeCall } = useWriteCall(
-    getContract(activeChain.id, 'LBFRrewardTracker'),
-    RewardTrackerAbi
-  );
-  const { viewOnlyMode } = useUserAccount();
-  const unit = 'LBFR';
-  const rewardUnit = 'BFR';
-  const rewardDecimals = 18;
-  const heading = 'Stake LBFR';
+  const toastify = useToast();
+  try {
+    const [btnState, setBtnState] = useState(false);
+    const { address: account } = useUserAccount();
+    const setIsModalOpen = useSetAtom(LBFRModalAtom);
+    const setActiveModalNumber = useSetAtom(LBFRModalNumberAtom);
+    const { activeChain } = useActiveChain();
+    const { writeCall } = useWriteCall(
+      getContract(activeChain.id, 'LBFRrewardTracker'),
+      RewardTrackerAbi
+    );
+    const { viewOnlyMode } = useUserAccount();
+    const unit = 'LBFR';
+    const rewardUnit = 'BFR';
+    const rewardDecimals = 18;
+    const heading = 'Stake LBFR';
 
-  function stake() {
-    setIsModalOpen(true);
-    setActiveModalNumber(0);
-  }
-  function unstake() {
-    setIsModalOpen(true);
-    setActiveModalNumber(1);
-  }
-  function claim() {
-    writeCall(() => {}, 'claim', [account]);
-  }
+    function stake() {
+      setIsModalOpen(true);
+      setActiveModalNumber(0);
+    }
+    function unstake() {
+      setIsModalOpen(true);
+      setActiveModalNumber(1);
+    }
+    function claim() {
+      setBtnState(true);
+      writeCall(
+        () => {
+          setBtnState(false);
+        },
+        'claim',
+        [account]
+      );
+    }
 
-  if (account === undefined)
-    return <WalletNotConnectedCard heading={heading} />;
-  if (!data)
+    if (account === undefined)
+      return <WalletNotConnectedCard heading={heading} />;
+    if (!data)
+      return (
+        <Skeleton
+          key={'stakeCardLoader'}
+          variant="rectangular"
+          className="w-full !h-full min-h-[270px] !transform-none !bg-1"
+        />
+      );
     return (
-      <Skeleton
-        key={'stakeCardLoader'}
-        variant="rectangular"
-        className="w-full !h-full min-h-[270px] !transform-none !bg-1"
+      <Card
+        className={profileCardClass}
+        shouldShowDivider={false}
+        top={heading}
+        middle={
+          <TableAligner
+            className="mt-3"
+            keyStyle={keyClasses}
+            valueStyle={valueClasses}
+            keysName={['Wallet', 'Staked', 'APR', 'Total Staked', 'Rewards']}
+            values={[
+              <div className={wrapperClasses}>
+                <Display
+                  data={divide(data.userBalance, data.decimals)}
+                  unit={unit}
+                />
+              </div>,
+              <div className={wrapperClasses}>
+                <Display
+                  data={divide(data.userStaked, data.decimals)}
+                  unit={unit}
+                />
+              </div>,
+              <div className={wrapperClasses}>
+                <Display data={'0000'} unit="dummy" />
+              </div>,
+              <div className={wrapperClasses}>
+                <Display
+                  data={divide(data.totalStakedLBFR, data.decimals)}
+                  unit={unit}
+                />
+              </div>,
+              <div className={wrapperClasses}>
+                <Display
+                  data={divide(data.userRewards, rewardDecimals)}
+                  unit={rewardUnit}
+                />
+              </div>,
+            ]}
+          />
+        }
+        bottom={
+          <ConnectionRequired className={'mt-7 mb-5 ' + btnClasses}>
+            <div className="flex items-center gap-4 mt-7 mb-5 ">
+              <BlueBtn
+                onClick={stake}
+                className={btnClasses}
+                isDisabled={viewOnlyMode}
+              >
+                Stake
+              </BlueBtn>
+              <BlueBtn
+                onClick={unstake}
+                className={btnClasses}
+                isDisabled={viewOnlyMode}
+              >
+                Unstake
+              </BlueBtn>
+              <BlueBtn
+                onClick={claim}
+                className={btnClasses}
+                isDisabled={viewOnlyMode}
+                isLoading={btnState}
+              >
+                Claim BFR
+              </BlueBtn>
+            </div>
+          </ConnectionRequired>
+        }
       />
     );
-  return (
-    <Card
-      className={profileCardClass}
-      shouldShowDivider={false}
-      top={heading}
-      middle={
-        <TableAligner
-          className="mt-3"
-          keyStyle={keyClasses}
-          valueStyle={valueClasses}
-          keysName={['Wallet', 'Staked', 'APR', 'Total Staked', 'Rewards']}
-          values={[
-            <div className={wrapperClasses}>
-              <Display
-                data={divide(data.userBalance, data.decimals)}
-                unit={unit}
-              />
-            </div>,
-            <div className={wrapperClasses}>
-              <Display
-                data={divide(data.userStaked, data.decimals)}
-                unit={unit}
-              />
-            </div>,
-            <div className={wrapperClasses}>
-              <Display data={'0000'} unit="dummy" />
-            </div>,
-            <div className={wrapperClasses}>
-              <Display
-                data={divide(data.totalStakedLBFR, data.decimals)}
-                unit={unit}
-              />
-            </div>,
-            <div className={wrapperClasses}>
-              <Display
-                data={divide(data.userRewards, rewardDecimals)}
-                unit={rewardUnit}
-              />
-            </div>,
-          ]}
-        />
-      }
-      bottom={
-        <ConnectionRequired className={'mt-7 mb-5 ' + btnClasses}>
-          <div className="flex items-center gap-4 mt-7 mb-5 ">
-            <BlueBtn
-              onClick={stake}
-              className={btnClasses}
-              isDisabled={viewOnlyMode}
-            >
-              Stake
-            </BlueBtn>
-            <BlueBtn
-              onClick={unstake}
-              className={btnClasses}
-              isDisabled={viewOnlyMode}
-            >
-              Unstake
-            </BlueBtn>
-            <BlueBtn
-              onClick={claim}
-              className={btnClasses}
-              isDisabled={viewOnlyMode}
-            >
-              Claim BFR
-            </BlueBtn>
-          </div>
-        </ConnectionRequired>
-      }
-    />
-  );
+  } catch (e) {
+    toastify({ type: 'error', msg: 'Stake Card ' + (e as Error).message });
+    return <SomethingWentWrongModal />;
+  }
 };

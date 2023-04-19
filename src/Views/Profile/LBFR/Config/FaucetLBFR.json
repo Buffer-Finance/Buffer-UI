@@ -21,7 +21,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "to",
+        "name": "account",
         "type": "address"
       },
       {
@@ -31,7 +31,7 @@
         "type": "uint256"
       }
     ],
-    "name": "MintLBFR",
+    "name": "Claim",
     "type": "event"
   },
   {
@@ -56,12 +56,35 @@
   {
     "inputs": [
       {
+        "internalType": "bytes",
+        "name": "signature",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "claim",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
-    "name": "ClaimedAmount",
+    "name": "claimedAmounts",
     "outputs": [
       {
         "internalType": "uint256",
@@ -75,45 +98,12 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "hashedMessage",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint8",
-        "name": "v",
-        "type": "uint8"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "r",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "s",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "claim",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
-    "name": "lastClaimedTimestamp",
+    "name": "lastClaimedTimestamps",
     "outputs": [
       {
         "internalType": "uint256",
@@ -132,6 +122,25 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "previousSignatures",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",

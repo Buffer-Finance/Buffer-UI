@@ -4,6 +4,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useMemo } from 'react';
 import { useReadCall } from '@Utils/useReadCall';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
+
 export type stakedType = null | {
   decimals: number;
   userBalance: string;
@@ -12,6 +13,7 @@ export type stakedType = null | {
   allowance: string;
   userRewards: string;
 };
+
 export const useLBFRreadCalls = () => {
   const { address: account } = useAccount();
   const { activeChain } = useActiveChain();
@@ -83,7 +85,9 @@ export const useLBFRreadCalls = () => {
     if (res !== null) return Object.values(res);
     return res;
   }, [account, activeChain]);
+
   const calls = genericCalls?.concat(account ? userCalls ?? [] : []);
+
   const { data } = useReadCall({
     contracts: calls,
     swrKey: 'useLBFRreadCalls',
@@ -112,6 +116,6 @@ export const useLBFRreadCalls = () => {
       userRewards: userRewards,
     };
   }
-  console.log(calls, data, response, 'calls');
+  // console.log(calls, data, response, 'calls');
   return response;
 };
