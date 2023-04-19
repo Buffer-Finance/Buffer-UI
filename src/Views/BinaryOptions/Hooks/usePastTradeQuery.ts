@@ -173,7 +173,7 @@ export const useProcessedTrades = () => {
 export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
   if (currentTrade.state === BetState.active) {
     axios
-      .post(`https://oracle.buffer.finance/price/query/`, [
+      .post(`https://oracle.buffer-finance-api.link/price/query/`, [
         {
           pair: currentTrade.configPair.tv_id,
           timestamp: currentTrade.expirationTime,
