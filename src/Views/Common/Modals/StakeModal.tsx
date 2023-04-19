@@ -13,19 +13,20 @@ export function StakeModal({
   max,
   approveFunction,
   isApproveLoading,
-  isApproved,
+  allowance,
   stakeFunction,
 }: {
   head: string;
   unit: string;
   max: string;
   approveFunction: () => void;
-  stakeFunction: () => void;
+  stakeFunction: (amount: string) => void;
   isApproveLoading: boolean;
-  isApproved: boolean;
+  allowance: string;
 }) {
   const [userInput, setUserInput] = useState('');
   const { state } = useGlobal();
+  const isApproved = gt(allowance, userInput || '0');
   return (
     <>
       <div className="text-f15 mb-5">{head}</div>
@@ -80,7 +81,7 @@ export function StakeModal({
             Approve
           </BlueBtn>
           <BlueBtn
-            onClick={stakeFunction}
+            onClick={() => stakeFunction(userInput)}
             className="rounded"
             isDisabled={state.txnLoading > 1 || !isApproved}
             isLoading={state.txnLoading === 1 && !isApproveLoading}

@@ -16,7 +16,7 @@ export const UnstakeModal = ({
   head: string;
   unit: string;
   max: string;
-  unstakeFunction: () => void;
+  unstakeFunction: (amount: string) => void;
 }) => {
   const [userInput, setUserInput] = useState('');
   const { state } = useGlobal();
@@ -67,7 +67,7 @@ export const UnstakeModal = ({
       <ConnectionRequired>
         <BlueBtn
           className={'px-4 rounded-sm !h-7 w-full mt-5'}
-          onClick={unstakeFunction}
+          onClick={() => unstakeFunction(userInput)}
           isDisabled={state.txnLoading > 1}
           isLoading={state.txnLoading === 1}
         >

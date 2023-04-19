@@ -9,6 +9,7 @@ export type stakedType = null | {
   userBalance: string;
   userStaked: string;
   totalStakedLBFR: string;
+  allowance: string;
 };
 export const useLBFRreadCalls = () => {
   const { address: account } = useAccount();
@@ -61,6 +62,12 @@ export const useLBFRreadCalls = () => {
             name: 'depositBalances',
             params: [account, getContract(activeChain.id, 'LBFR')],
           },
+          userRewardTrackerAllowance: {
+            address: getContract(activeChain.id, 'LBFR'),
+            abi: erc20ABI,
+            name: 'allowance',
+            params: [account, getContract(activeChain.id, 'LBFRrewardTracker')],
+          },
         };
       } catch (e) {
         console.log(e, 'LBFR readcalls error');
@@ -77,7 +84,13 @@ export const useLBFRreadCalls = () => {
 
   let response: stakedType = null;
   if (data) {
-    const [decimals, totalStakedLBFR, userLBFRbalance, userStakedLBFR] = account
+    const [
+      decimals,
+      totalStakedLBFR,
+      userLBFRbalance,
+      userStakedLBFR,
+      userRewardTrackerAllowance,
+    ] = account
       ? data.flat()
       : data.concat(new Array(userCalls?.length).fill('0')).flat();
     response = {
@@ -87,6 +100,7 @@ export const useLBFRreadCalls = () => {
       //user-specific
       userBalance: userLBFRbalance,
       userStaked: userStakedLBFR,
+      allowance: userRewardTrackerAllowance,
     };
   }
   console.log(calls, data, response, 'calls');
