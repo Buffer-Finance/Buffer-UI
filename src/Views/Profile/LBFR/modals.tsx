@@ -125,7 +125,7 @@ const LBFRunstakeModal = ({ closeModalFn }: { closeModalFn: () => void }) => {
           msg: "Can't unstake more than staked",
           id: 'LBFRunstake',
         });
-      writeCall(() => {}, 'unstake', [
+      writeCall(closeModalFn, 'unstake', [
         getContract(activeChain.id, 'LBFR'),
         toFixed(multiply(amount, readcallData?.decimals ?? '0'), 0),
       ]);
