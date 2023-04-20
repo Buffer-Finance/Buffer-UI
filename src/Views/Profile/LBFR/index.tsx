@@ -82,7 +82,7 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
     setBtnState(true);
     try {
       const res = await axios.get(
-        `https://oracle.buffer-finance-api.link/lbfr/claim/${account}`
+        `https://lbfr.buffer-finance-api.link/lbfr/claim/${import.meta.env.VITE_ENV.toLowerCase()}/${account}`
       );
       console.log(res, 'res');
       if (res.data.error) {
@@ -91,7 +91,7 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
       }
       const {
         signed_hash: signature,
-        claimable_tokens: amount,
+        allocated_tokens: amount,
         timestamp,
       } = res.data;
 
@@ -103,7 +103,7 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
     } catch (e) {
       toastify({
         type: 'error',
-        msg: 'Failed to fetch data. Please try again.',
+        msg: `Failed to fetch data. Please try again. ${e}`,
         id: 'claimLBFR',
       });
       setBtnState(false);
