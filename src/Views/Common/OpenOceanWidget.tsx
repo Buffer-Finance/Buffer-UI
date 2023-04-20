@@ -27,7 +27,8 @@ export const OpenOcean = () => {
         <iframe
           className=" w-[440px] sm:w-[370px] h-[658px]"
           src={
-            'https://widget.openocean.finance/CLASSIC#/ARBITRUM/ETH/' + swapAtom
+            'https://widget.openocean.finance/?chain=arbitrum&fromSymbol=ETH&toSymbol=usdc&amount=10' +
+            swapAtom
           }
         ></iframe>
       </ModalBase>
