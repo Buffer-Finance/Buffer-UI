@@ -656,7 +656,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   };
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="items-center justify-between flex-row flex  bg-2 w-full tv-h px-4 py-3">
+      <div className="items-center justify-between flex-row flex  bg-1 w-full tv-h px-4 py-3">
         <div className="flex flex-row justify-start font-[500]">
           <div className="ele cursor-pointer">Time</div>
           {supported_resolutions.map((s) => {

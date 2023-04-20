@@ -43,8 +43,9 @@ import { BlueBtn } from '@Views/Common/V2-Button';
 var json = {
   global: {
     tabEnableClose: true,
+    splitterSize: 4,
     // tabClassName: 'bg-2',
-    tabSetClassNameTabStrip: 'bg-2',
+    tabSetClassNameTabStrip: 'bg-0',
     borderClassName: 'bg-2',
   },
   layout: {
@@ -71,62 +72,62 @@ var json = {
               },
             ],
           },
-          {
-            type: 'tabset',
-            weight: 45,
-            selected: 0,
-            id: 'PastTradeTab',
-            children: [
-              {
-                type: 'tab',
-                name: 'Active',
-                id: 'ActiveTable',
-                component: 'ActiveTable',
-                enableClose: false,
-                enableDrag: false,
-              },
-              {
-                type: 'tab',
-                name: 'History',
-                id: 'HistoryTable',
-                component: 'HistoryTable',
-                enableClose: false,
-                enableDrag: false,
-              },
-              {
-                type: 'tab',
-                name: 'Cancelled',
-                id: 'CancelledTable',
-                component: 'CancelledTable',
-                enableClose: false,
-                enableDrag: false,
-              },
-            ],
-          },
+          // {
+          //   type: 'tabset',
+          //   weight: 45,
+          //   selected: 0,
+          //   id: 'PastTradeTab',
+          //   children: [
+          //     {
+          //       type: 'tab',
+          //       name: 'Active',
+          //       id: 'ActiveTable',
+          //       component: 'ActiveTable',
+          //       enableClose: false,
+          //       enableDrag: false,
+          //     },
+          //     {
+          //       type: 'tab',
+          //       name: 'History',
+          //       id: 'HistoryTable',
+          //       component: 'HistoryTable',
+          //       enableClose: false,
+          //       enableDrag: false,
+          //     },
+          //     {
+          //       type: 'tab',
+          //       name: 'Cancelled',
+          //       id: 'CancelledTable',
+          //       component: 'CancelledTable',
+          //       enableClose: false,
+          //       enableDrag: false,
+          //     },
+          //   ],
+          // },
         ],
       },
-      {
-        type: 'row',
-        weight: 300,
-        children: [
-          {
-            type: 'tabset',
-            weight: 50,
-            selected: 0,
-            id: 'BuyTradeTab',
-            children: [
-              {
-                enableClose: false,
-                type: 'tab',
-                name: 'Trade',
-                enableDrag: false,
-                id: 'BuyTraded',
-                component: 'BuyTrade',
-              },
-            ],
-          },
-        ],
-      },
+      // {
+      //   type: 'row',
+      //   weight: 300,
+      //   children: [
+      //     {
+      //       type: 'tabset',
+      //       weight: 50,
+      //       selected: 0,
+      //       id: 'BuyTradeTab',
+      //       children: [
+      //         {
+      //           enableClose: false,
+      //           type: 'tab',
+      //           name: 'Trade',
+      //           enableDrag: false,
+      //           id: 'BuyTraded',
+      //           component: 'BuyTrade',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
     ],
   },
 };
@@ -181,7 +182,7 @@ const DesktopTrad = () => {
   const [forcefullyRerender, setforcefullyRerender] = useState(1);
   const { market } = useParams();
   const [layoutConset, seLayoutConsent] = useAtom(layoutConsentsAtom);
-  const [layout, setLayout] = useAtom(layoutAtom);
+  const [layout, setLayout] = [json, () => {}];
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
   const navigate = useNavigate();
@@ -214,38 +215,6 @@ const DesktopTrad = () => {
           }
         />
       );
-    }
-    if (component === 'BuyTrade') {
-      return (
-        <Background className=" max-w-[420px] mx-auto">
-          <ActiveAsset cb={handleNewTabClick} />
-          <CustomOption
-            onResetLayout={() =>
-              seLayoutConsent((l) => {
-                const updatedConsents = {
-                  ...l,
-                  resetCustomization: {
-                    isModalOpen: true,
-                    isUserEducated: true,
-                  },
-                };
-                console.log(`updatedConsents: `, updatedConsents);
-                return updatedConsents;
-              })
-            }
-          />
-        </Background>
-      );
-    }
-    const rect = node.getRect();
-    if (component === 'ActiveTable') {
-      return <ActiveTable width={rect.width} />;
-    }
-    if (component === 'HistoryTable') {
-      return <HistoryTable width={rect.width} />;
-    }
-    if (component === 'CancelledTable') {
-      return <CancelTable width={rect.width} />;
     }
   };
   const isCDMForMarketSelect = useRef(true);
@@ -364,116 +333,137 @@ const DesktopTrad = () => {
         }}
         open={layoutConset.resetCustomization.isModalOpen}
       />
-      <FlexLayout.Layout
-        onAction={(p) => {
-          console.log('actionselect', p);
-          if (p.type == FlexLayout.Actions.MOVE_NODE) {
-            if (layoutConset.layoutCustomization.isUserEducated) return p;
-            seLayoutConsent((l) => {
-              const updatedConsents = {
-                ...l,
-                layoutCustomization: {
-                  isModalOpen: true,
-                  isUserEducated: true,
-                },
-              };
-              return updatedConsents;
-            });
-          }
-          if (p.type == FlexLayout.Actions.SELECT_TAB) {
-            const market = p.data?.tabNode.replace('-', '');
-            if (market && Config.markets?.[market]) {
-              console.log(`p.data.tabNode: `, p.data.tabNode);
-              navigate('/binary/' + p.data.tabNode);
-            }
-          }
-          if (p.type == FlexLayout.Actions.DELETE_TAB) {
-            console.log('action', p);
-            if (
-              p.data.node.toLowerCase() ==
-              market?.replace('-', '').toLowerCase()
-            ) {
-              toastify({
-                type: 'error',
-                msg: "Can't remove the Active Chart!",
-                id: '231',
-              });
-              return false;
-            }
-          }
-          return p;
-        }}
-        ref={layoutRef}
-        model={layoutApi}
-        factory={factory}
-        onRenderTab={(d, v) => {
-          if (d.getComponent() == 'TradingView') {
-            const name = d.getName() as Markets;
-            console.log(`name: `, name);
-            const market = Config.markets[name.replace('-', '')]?.pair;
-            console.log(`market: `, market);
-            v.leading = <TabIcon market={market} />;
-          }
-        }}
-        onRenderTabSet={(d, v) => {
-          const id = d.getId();
-          if (id != 'BuyTradeTab' && id != 'PastTradeTab') {
-            // v.headerButtons[0].
-            v.stickyButtons.push(
-              <button
-                className="text-f22"
-                onClick={() => {
-                  // make current tabset active
-                  layoutApi.doAction(
-                    FlexLayout.Actions.setActiveTabset(d.getId())
-                  );
-                  // delete all dds
-                  try {
-                    layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
-                  } catch (e) {
-                    console.log(e);
-                  }
-
-                  // add dd to activeTab
-                  layoutRef.current!.addTabToActiveTabSet({
-                    type: 'tab',
-                    name: 'Add Chart',
-                    component: 'AddButton',
-                    id: 'dd',
-                  });
-                }}
-              >
-                +
-              </button>
-            );
-          }
-          v.buttons.push(
-            <button
-              title="Reset layout. You can Drag and Drop to customize the UI."
-              className="flex justify-center items-center flip-y !text-2 hover:!bg-[#3d3d3d] rounded-sm "
-              onClick={() => {
+      <div className="flex w-full">
+        <div className="relative w-full">
+          <FlexLayout.Layout
+            onAction={(p) => {
+              console.log('actionselect', p);
+              if (p.type == FlexLayout.Actions.MOVE_NODE) {
+                if (layoutConset.layoutCustomization.isUserEducated) return p;
                 seLayoutConsent((l) => {
                   const updatedConsents = {
                     ...l,
-                    resetCustomization: {
+                    layoutCustomization: {
                       isModalOpen: true,
                       isUserEducated: true,
                     },
                   };
-                  console.log(`updatedConsents: `, updatedConsents);
                   return updatedConsents;
                 });
-              }}
-            >
-              <ReplayIcon />
-            </button>
-          );
-        }}
-        onModelChange={(model) => {
-          console.log(`model: `, model);
-          setLayout(model.toJson());
-        }}
-      />
+              }
+              if (p.type == FlexLayout.Actions.SELECT_TAB) {
+                const market = p.data?.tabNode.replace('-', '');
+                if (market && Config.markets?.[market]) {
+                  console.log(`p.data.tabNode: `, p.data.tabNode);
+                  navigate('/binary/' + p.data.tabNode);
+                }
+              }
+              if (p.type == FlexLayout.Actions.DELETE_TAB) {
+                console.log('action', p);
+                if (
+                  p.data.node.toLowerCase() ==
+                  market?.replace('-', '').toLowerCase()
+                ) {
+                  toastify({
+                    type: 'error',
+                    msg: "Can't remove the Active Chart!",
+                    id: '231',
+                  });
+                  return false;
+                }
+              }
+              return p;
+            }}
+            ref={layoutRef}
+            model={layoutApi}
+            factory={factory}
+            onRenderTab={(d, v) => {
+              if (d.getComponent() == 'TradingView') {
+                const name = d.getName() as Markets;
+                console.log(`name: `, name);
+                const market = Config.markets[name.replace('-', '')]?.pair;
+                console.log(`market: `, market);
+                v.leading = <TabIcon market={market} />;
+              }
+            }}
+            onRenderTabSet={(d, v) => {
+              const id = d.getId();
+              if (id != 'BuyTradeTab' && id != 'PastTradeTab') {
+                // v.headerButtons[0].
+                v.stickyButtons.push(
+                  <button
+                    className="text-f22"
+                    onClick={() => {
+                      // make current tabset active
+                      layoutApi.doAction(
+                        FlexLayout.Actions.setActiveTabset(d.getId())
+                      );
+                      // delete all dds
+                      try {
+                        layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
+                      } catch (e) {
+                        console.log(e);
+                      }
+                      // add dd to activeTab
+                      layoutRef.current!.addTabToActiveTabSet({
+                        type: 'tab',
+                        name: 'Add Chart',
+                        component: 'AddButton',
+                        id: 'dd',
+                      });
+                    }}
+                  >
+                    +
+                  </button>
+                );
+              }
+              v.buttons.push(
+                <button
+                  title="Reset layout. You can Drag and Drop to customize the UI."
+                  className="flex justify-center items-center flip-y !text-2 hover:!bg-[#3d3d3d] rounded-sm "
+                  onClick={() => {
+                    seLayoutConsent((l) => {
+                      const updatedConsents = {
+                        ...l,
+                        resetCustomization: {
+                          isModalOpen: true,
+                          isUserEducated: true,
+                        },
+                      };
+                      console.log(`updatedConsents: `, updatedConsents);
+                      return updatedConsents;
+                    });
+                  }}
+                >
+                  <ReplayIcon />
+                </button>
+              );
+            }}
+            onModelChange={(model) => {
+              console.log(`model: `, model);
+              setLayout(model.toJson());
+            }}
+          />
+        </div>
+        <Background className=" max-w-[420px] mx-auto">
+          <ActiveAsset cb={handleNewTabClick} />
+          <CustomOption
+            onResetLayout={() =>
+              seLayoutConsent((l) => {
+                const updatedConsents = {
+                  ...l,
+                  resetCustomization: {
+                    isModalOpen: true,
+                    isUserEducated: true,
+                  },
+                };
+                console.log(`updatedConsents: `, updatedConsents);
+                return updatedConsents;
+              })
+            }
+          />
+        </Background>
+      </div>
     </>
   );
 

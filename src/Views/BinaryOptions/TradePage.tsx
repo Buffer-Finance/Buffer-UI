@@ -19,6 +19,7 @@ const TradePage = () => {
     <>
       {/* <Online> */}
       <TradePageRoot />
+      {/* <Trade /> */}
       {/* </Online> */}
       {/* <Offline>
         <NetworkDisconnected onClick={console.log} />

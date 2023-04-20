@@ -36,8 +36,8 @@ export const Navbar: React.FC<INavbar> = () => {
   };
   const show = !urlSettings?.hide;
   return (
-    <header className="bg-primary flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1 relative z-[102]">
-      <div className=" flex items-center gap-[24px]">
+    <header className="flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1 relative z-[102]">
+      <div className="flex items-center gap-[24px]">
         <div
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}

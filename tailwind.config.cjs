@@ -50,6 +50,7 @@ module.exports = {
       shareModal: { max: "425px" },
     },
     colors: {
+      0: "var(--text-0)",
       1: "var(--text-1)",
       2: "var(--text-2)",
       3: "var(--text-3)",

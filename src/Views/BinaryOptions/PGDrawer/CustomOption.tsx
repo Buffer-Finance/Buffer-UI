@@ -123,6 +123,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
           </button>
         </div>
         <DurationPicker />
+        ''
         <div className="flex-sbw items-center text-f14 ">
           Trade Size
           <MaxSizeComponent
