@@ -35,12 +35,15 @@ export const LBFRmodals = () => {
       isModalOpen={isModalOpen}
       closeModalFunction={closeModal}
       activeModalNumberFrom0={activeModalNumberFrom0}
-      modalsArray={[<LBFRstakeModal />, <LBFRunstakeModal />]}
+      modalsArray={[
+        <LBFRstakeModal closeModalFn={closeModal} />,
+        <LBFRunstakeModal closeModalFn={closeModal} />,
+      ]}
     />
   );
 };
 
-const LBFRstakeModal = () => {
+const LBFRstakeModal = ({ closeModalFn }: { closeModalFn: () => void }) => {
   const toastify = useToast();
   try {
     const { activeChain } = useActiveChain();
@@ -73,7 +76,7 @@ const LBFRstakeModal = () => {
         userBalanceValidations(amount, userBalance)
       )
         return;
-      writeCall(() => {}, 'stake', [
+      writeCall(closeModalFn, 'stake', [
         getContract(activeChain.id, 'LBFR'),
         toFixed(multiply(amount, readcallData?.decimals ?? '0'), 0),
       ]);
@@ -99,7 +102,7 @@ const LBFRstakeModal = () => {
   }
 };
 
-const LBFRunstakeModal = () => {
+const LBFRunstakeModal = ({ closeModalFn }: { closeModalFn: () => void }) => {
   const toastify = useToast();
   try {
     const { activeChain } = useActiveChain();
