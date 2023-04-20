@@ -12,6 +12,7 @@ export type stakedType = null | {
   totalStakedLBFR: string;
   allowance: string;
   userRewards: string;
+  tokensPerInterval: string;
 };
 
 export const useLBFRreadCalls = () => {
@@ -36,6 +37,12 @@ export const useLBFRreadCalls = () => {
             abi: erc20ABI,
             name: 'balanceOf',
             params: [getContract(activeChain.id, 'LBFRrewardTracker')],
+          },
+          tokensPerInterval: {
+            address: getContract(activeChain.id, 'LBFRrewardTracker'),
+            abi: RewardTrackerAbi,
+            name: 'tokensPerInterval',
+            params: [],
           },
         };
       } catch (e) {
@@ -98,6 +105,8 @@ export const useLBFRreadCalls = () => {
     const [
       decimals,
       totalStakedLBFR,
+      tokensPerInterval,
+      //user-specific data
       userLBFRbalance,
       userStakedLBFR,
       userRewardTrackerAllowance,
@@ -108,6 +117,7 @@ export const useLBFRreadCalls = () => {
     response = {
       decimals: decimals,
       totalStakedLBFR: totalStakedLBFR,
+      tokensPerInterval: tokensPerInterval,
 
       //user-specific
       userBalance: userLBFRbalance,

@@ -22,7 +22,7 @@ import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { stakedType, useLBFRreadCalls } from './Hooks/useReadCalls';
 import { LBFRGraphqlType, useLBFRGraphql } from './Hooks/useGraphql';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { toFixed } from '@Utils/NumString';
 import { Skeleton } from '@mui/material';
@@ -268,7 +268,14 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
             className="mt-3"
             keyStyle={keyClasses}
             valueStyle={valueClasses}
-            keysName={['Wallet', 'Staked', 'APR', 'Total Staked', 'Rewards']}
+            keysName={[
+              'Wallet',
+              'Staked',
+              //  'APR',
+              'Weekly Reward Pool',
+              'Total Staked',
+              'Rewards',
+            ]}
             values={[
               <div className={wrapperClasses}>
                 <Display
@@ -282,8 +289,17 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
                   unit={unit}
                 />
               </div>,
+              // <div className={wrapperClasses}>
+              //   <Display data={'0000'} unit="dummy" />
+              // </div>,
               <div className={wrapperClasses}>
-                <Display data={'0000'} unit="dummy" />
+                <Display
+                  data={divide(
+                    multiply(multiply(data.tokensPerInterval, '7'), '86400'),
+                    rewardDecimals
+                  )}
+                  unit={rewardUnit}
+                />
               </div>,
               <div className={wrapperClasses}>
                 <Display
