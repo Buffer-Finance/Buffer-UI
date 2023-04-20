@@ -17,6 +17,7 @@ import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
 import { useAccount } from 'wagmi';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { urlSettings } from 'src/Config/wagmiClient';
+import { isTestnet } from 'config';
 
 interface INavbar {}
 
@@ -28,7 +29,8 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = 4;
+  const VISIBLETABS = isTestnet ? 5 : 3;
+  const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',
@@ -69,9 +71,14 @@ export const Navbar: React.FC<INavbar> = () => {
               }
               return <Tab tab={tab} key={tab.name} />;
             })}
-
             {tabs.length > VISIBLETABS && (
-              <TabsDropdown tabs={tabs.slice(VISIBLETABS)} defaultName="More" />
+              <TabsDropdown
+                tabs={tabs.slice(VISIBLETABS, -MORETABS)}
+                defaultName="Analytics"
+              />
+            )}
+            {tabs.length > VISIBLETABS && (
+              <TabsDropdown tabs={tabs.slice(-MORETABS)} defaultName="More" />
             )}
             <TabsDropdown tabs={social} defaultName="Socials" />
           </div>
