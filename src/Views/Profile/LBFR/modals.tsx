@@ -75,7 +75,7 @@ const LBFRstakeModal = () => {
         return;
       writeCall(() => {}, 'stake', [
         getContract(activeChain.id, 'LBFR'),
-        multiply(amount, readcallData?.decimals ?? '0'),
+        toFixed(multiply(amount, readcallData?.decimals ?? '0'), 0),
       ]);
     }
     return (
@@ -124,7 +124,7 @@ const LBFRunstakeModal = () => {
         });
       writeCall(() => {}, 'unstake', [
         getContract(activeChain.id, 'LBFR'),
-        multiply(amount, readcallData?.decimals ?? '0'),
+        toFixed(multiply(amount, readcallData?.decimals ?? '0'), 0),
       ]);
     }
 
