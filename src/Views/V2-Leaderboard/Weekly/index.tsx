@@ -45,7 +45,10 @@ export const TOTALWINNERS = 10;
 export const Weekly = () => {
   const { activeChain, configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
-  const { week, nextTimeStamp } = useWeekOfTournament();
+  const configValue = weeklyTournamentConfig[activeChain.id];
+  const { week, nextTimeStamp } = useWeekOfTournament({
+    startTimestamp: configValue.startTimestamp,
+  });
   const {
     data,
     totalTournamentData,
@@ -122,7 +125,6 @@ export const Weekly = () => {
 
   const midnightTimeStamp = nextTimeStamp / 1000;
 
-  const configValue = weeklyTournamentConfig[activeChain.id];
   const launchTimeStamp = configValue.startTimestamp / 1000;
   const distance = getDistance(launchTimeStamp);
   const isTimerEnded = distance <= 0;

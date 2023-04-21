@@ -48,10 +48,12 @@ function getTokenXleaderboardQueryFields(token: string) {
 export const useWeeklyLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
-  const { week } = useWeekOfTournament();
-
   const { configContracts, activeChain } = useActiveChain();
   const configValue = weeklyTournamentConfig[activeChain.id];
+  const { week } = useWeekOfTournament({
+    startTimestamp: configValue.startTimestamp,
+  });
+
   const { poolNames } = usePoolNames();
   const tokens = useMemo(
     () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),

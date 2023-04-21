@@ -30,6 +30,7 @@ export const useLBFRGraphql = () => {
                 volumeARB
                 claimable
                 claimed
+                currentSlab
               }
               lbfrclaimDataPerUser(id: "${account}"){
                 lastClaimedTimestamp
@@ -43,6 +44,7 @@ export const useLBFRGraphql = () => {
           volumeARB: string;
           claimed: string;
           claimable: string;
+          currentSlab: string;
         }[];
         lbfrclaimDataPerUser: {
           lastClaimedTimestamp: string;

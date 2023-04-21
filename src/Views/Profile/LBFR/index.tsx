@@ -34,6 +34,9 @@ import { useToast } from '@Contexts/Toast';
 import { SomethingWentWrongModal } from '@Views/Common/Modals/SomethingWentWrong';
 import axios from 'axios';
 import LBFRabi from './Config/FaucetLBFR.json';
+import useStopWatch from '@Hooks/Utilities/useStopWatch';
+import { useWeekOfTournament } from '@Views/V2-Leaderboard/Hooks/useWeekOfTournament';
+import { LBFRconfig } from './config';
 
 export const LBFR = () => {
   return (
@@ -57,6 +60,16 @@ const Cards = () => {
       className="!mt-7"
     />
   );
+};
+
+const TimeLeft = () => {
+  const { activeChain } = useActiveChain();
+  const { nextTimeStamp } = useWeekOfTournament({
+    startTimestamp: LBFRconfig[activeChain.id]?.startTimestamp,
+  });
+
+  const stopwatch = useStopWatch(nextTimeStamp / 1000);
+  return <>{stopwatch}</>;
 };
 
 const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
@@ -130,7 +143,8 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
             'Claimed',
             'Last claimed',
             'Volume',
-            //  'Slab'
+            'Loyalty points per USDC',
+            'Time left for reset',
           ]}
           values={[
             <div className={wrapperClasses}>
@@ -177,9 +191,15 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
                 }
               />
             </div>,
-            // <div className={wrapperClasses}>
-            //   <Display data={'12.54'} unit={unit + '/Per Unit Volume'} />
-            // </div>,
+            <div className={wrapperClasses}>
+              <Display
+                data={divide(data.totalVolume?.[0].currentSlab ?? '0', 2)}
+                unit={unit + '/USDC'}
+              />
+            </div>,
+            <div className={wrapperClasses}>
+              <TimeLeft />
+            </div>,
           ]}
         />
       }

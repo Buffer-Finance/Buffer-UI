@@ -55,8 +55,10 @@ export const LeaderBoardSidebar = () => {
   const tabs = getTabs(activeChain.name, true);
   const location = useLocation();
   const { day } = useDayOfTournament();
-  const { week } = useWeekOfTournament();
   const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];
+  const { week } = useWeekOfTournament({
+    startTimestamp: weeklyConfigValue.startTimestamp,
+  });
   const dailyConfigValue = DailyTournamentConfig[activeChain.id];
   const DailyChip = useMemo(() => {
     if (dailyConfigValue.endDay === undefined) return <OnGoingChip />;
