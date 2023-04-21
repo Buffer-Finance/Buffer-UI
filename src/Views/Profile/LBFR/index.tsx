@@ -328,7 +328,7 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
         }
         bottom={
           <ConnectionRequired className={'mt-7 mb-5 ' + btnClasses}>
-            <div className="flex items-center gap-4 mt-7 mb-5 ">
+            <div className="flex items-center gap-4 mt-7 mb-5 flex-wrap">
               <BlueBtn
                 onClick={stake}
                 className={btnClasses}
