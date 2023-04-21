@@ -159,7 +159,7 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
             <div className={wrapperClasses}>
               <Display
                 data={divide(data.totalVolume?.[0]?.volume ?? '0', decimals)}
-                unit={'Unit Volume'}
+                unit={'USDC'}
                 content={
                   tokens.length > 1 && (
                     <TableAligner
