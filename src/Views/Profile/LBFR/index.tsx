@@ -92,14 +92,10 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
       const {
         signed_hash: signature,
         allocated_tokens: amount,
-        weekID: timestamp,
+        weekID,
       } = res.data;
 
-      writeCall(() => setBtnState(false), 'claim', [
-        signature,
-        amount,
-        timestamp,
-      ]);
+      writeCall(() => setBtnState(false), 'claim', [signature, amount, weekID]);
     } catch (e) {
       toastify({
         type: 'error',
