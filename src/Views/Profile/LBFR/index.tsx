@@ -10,7 +10,7 @@ import { Card } from '@Views/Earn/Components/Card';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { getDisplayDate } from '@Utils/Dates/displayDateTime';
+import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { useMemo, useState } from 'react';
 import { BlueBtn } from '@Views/Common/V2-Button';
@@ -162,6 +162,10 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
             <div className={wrapperClasses}>
               {data.lbfrclaimDataPerUser?.lastClaimedTimestamp
                 ? getDisplayDate(
+                    Number(data.lbfrclaimDataPerUser.lastClaimedTimestamp)
+                  ) +
+                  ' ' +
+                  getDisplayTime(
                     Number(data.lbfrclaimDataPerUser.lastClaimedTimestamp)
                   )
                 : 'Not claimed yet.'}
