@@ -67,7 +67,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "weekID",
         "type": "uint256"
       }
     ],
@@ -97,6 +97,19 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "setTimeOffset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "token",
     "outputs": [
@@ -115,9 +128,14 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "totalTokensAllocatedPerUser",
+    "name": "totalTokensAllocatedPerUserPerWeek",
     "outputs": [
       {
         "internalType": "uint256",
@@ -154,4 +172,5 @@
     "stateMutability": "view",
     "type": "function"
   }
-]
+ ]
+ 
