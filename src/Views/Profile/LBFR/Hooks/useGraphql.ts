@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import { useAccount } from 'wagmi';
 import { getLBFRconfig } from '../config';
 import { add, subtract } from '@Utils/NumString/stringArithmatics';
+import { getWeekId } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 
 export const getWeekIdFromTimestamp = (timestamp: number) => {
   let dayTimestamp = Math.floor(
@@ -21,14 +22,16 @@ export const useLBFRGraphql = () => {
     fetcher: async () => {
       const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
-          totalVolume: lbfrstatsPerUsers(where: {userAddress: "${account}", period: "total"}) {
+          totalVolume: lbfrstatsPerUsers(where: {userAddress: "${account}", period: weekly, periodID: "${getWeekId(
+          0
+        )}"}) {
                 volume
                 volumeUSDC
                 volumeARB
+                claimable
+                claimed
               }
               lbfrclaimDataPerUser(id: "${account}"){
-                claimed
-                claimable
                 lastClaimedTimestamp
               }
         }`,
@@ -38,10 +41,10 @@ export const useLBFRGraphql = () => {
           volume: string;
           volumeUSDC: string;
           volumeARB: string;
-        }[];
-        lbfrclaimDataPerUser: {
           claimed: string;
           claimable: string;
+        }[];
+        lbfrclaimDataPerUser: {
           lastClaimedTimestamp: string;
         } | null;
       };
@@ -59,8 +62,6 @@ export type LBFRGraphqlType =
         [key: string]: string;
       }[];
       lbfrclaimDataPerUser: {
-        claimed: string;
-        claimable: string;
         lastClaimedTimestamp: string;
       } | null;
     }

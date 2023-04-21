@@ -139,19 +139,13 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
           values={[
             <div className={wrapperClasses}>
               <Display
-                data={divide(
-                  data.lbfrclaimDataPerUser?.claimable ?? '0',
-                  decimals
-                )}
+                data={divide(data.totalVolume?.[0]?.claimable ?? '0', decimals)}
                 unit={unit}
               />
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={divide(
-                  data.lbfrclaimDataPerUser?.claimed ?? '0',
-                  decimals
-                )}
+                data={divide(data.totalVolume?.[0]?.claimed ?? '0', decimals)}
                 unit={unit}
               />
             </div>,
