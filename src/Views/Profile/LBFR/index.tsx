@@ -92,7 +92,7 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
       const {
         signed_hash: signature,
         allocated_tokens: amount,
-        timestamp,
+        weekID: timestamp,
       } = res.data;
 
       writeCall(() => setBtnState(false), 'claim', [
