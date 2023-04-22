@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { useQTinfo } from '..';
 import { useMemo } from 'react';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
+import { DropDownArrowSm, DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { atomWithLocalStorage } from '../Components/SlippageModal';
 
 const activePoolAtom = atomWithLocalStorage('last-selected-pool-v1', {
@@ -61,13 +61,13 @@ export const PoolDropDown = () => {
       initialActive={1}
       rootClassName="token-dd w-fit"
       dropdownBox={(isActive, isOpen, d) => (
-        <div className="token-dd w-fit hover:brightness-150 flex items-center bg-cross-bg px-4 py-[5px] sm:px-[0] sm:py-[0] text-f16 transition-all duration-150 text-1">
+        <div className="token-dd w-fit hover:brightness-150 flex items-center bg-2 px-4 py-[5px] sm:px-[0] sm:py-[0] text-f14 transition-all duration-150 text-1">
           <img
             src={activePoolObj.token.img}
             className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "
           />
           <div className="sm:hidden">{activePoolObj.token.name}</div>
-          <DropdownArrow open={isOpen} />
+          <DropDownArrowSm open={isOpen} className="ml-2" />
         </div>
       )}
       item={(singleItem, handleClose, onChange, activel) => (

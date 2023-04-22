@@ -445,7 +445,7 @@ const DesktopTrad = () => {
             }}
           />
         </div>
-        <Background className=" max-w-[420px] mx-auto">
+        <Background className=" max-w-[280px] mx-auto">
           <ActiveAsset cb={handleNewTabClick} />
           <CustomOption
             onResetLayout={() =>

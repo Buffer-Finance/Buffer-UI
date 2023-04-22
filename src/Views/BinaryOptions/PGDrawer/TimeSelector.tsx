@@ -5,8 +5,9 @@ import ErrorIcon from 'src/SVG/Elements/ErrorIcon';
 import BN from 'bn.js';
 import Big from 'big.js';
 import { useToast } from '@Contexts/Toast';
-import { add, gt, lt } from '@Utils/NumString/stringArithmatics';
+import { add, gt, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { PoolDropDown } from './PoolDropDown';
+import { toFixed } from '@Utils/NumString';
 
 const TimeSelectorStyles = styled.div`
   display: flex;
@@ -390,6 +391,173 @@ export const TimeSelector = ({
         </div>
         {investmentDD && <PoolDropDown />}
       </TimeSelectorStyles>
+      {(minError || maxError) && (
+        <div className="text-1 text-f12 mt-2 flex items-center">
+          <ErrorIcon className="error-icon" />
+          {minError
+            ? error.minMsg || "Can't decrease from " + `"${error.min}"`
+            : error.maxMsg || "Can't increase from " + `"${error.max}"`}
+        </div>
+      )}
+    </>
+  );
+};
+export const AmountSelector = ({
+  isTimeSelector,
+  currentTime,
+  setTime,
+  investmentDD,
+  max,
+  error,
+  onSelect,
+  balance,
+  maxTime = '23:59',
+  minTime = '00:05',
+}: {
+  isTimeSelector?: boolean;
+  currentTime: string | number;
+  label?: string;
+  investmentDD?: boolean;
+  maxTime?: string;
+  minTime?: string;
+  setTime: (any) => void;
+  max?: number;
+  onSelect?: () => void;
+  title?: string;
+  balance?: any;
+  error: {
+    min: number;
+    minMsg?: ReactNode;
+    max: number;
+    maxMsg?: ReactNode;
+  };
+}) => {
+  const maxMins = parseInt(maxTime.split(':')[1]);
+  const maxHrs = parseInt(maxTime.split(':')[0]);
+  const maxTimeInMins = timeToMins(maxTime);
+  const minTimeInMins = timeToMins(minTime);
+  const currentTimeInMins = timeToMins(currentTime);
+  const hrsRef = useRef(null);
+  const minRef = useRef(null);
+  if (!currentTime) {
+    currentTime = '01:00';
+  }
+
+  console.log(`balance: `, balance);
+  useEffect(() => {
+    if (currentTimeInMins === undefined || maxTimeInMins === undefined) return;
+    if (currentTimeInMins > maxTimeInMins) {
+      hrsRef.current.value = maxHrs;
+      minRef.current.value = maxMins;
+      setTime(hrsRef.current.value + ':' + minRef.current.value);
+    }
+  }, [maxTimeInMins]);
+
+  useEffect(() => {
+    if (!hrsRef.current || !minRef.current) return;
+
+    hrsRef.current.value = currentTime.toString().split(':')[0];
+    minRef.current.value = currentTime.toString().split(':')[1];
+    const listener = (e) => {
+      if (e.key === 'ArrowRight') minRef.current?.focus();
+      if (e.key === 'Enter') minRef.current?.focus();
+      if (e.key === 'ArrowLeft') hrsRef.current?.focus();
+    };
+    document.addEventListener('keydown', listener);
+    return removeEventListener('keydown', listener);
+  }, [currentTime]);
+
+  const minError = isTimeSelector
+    ? timeToMins(currentTime) < minTimeInMins
+    : currentTime < error.min;
+  const maxError = isTimeSelector
+    ? timeToMins(currentTime) > maxTimeInMins
+    : currentTime > error.max;
+
+  const toastify = useToast();
+  const getActiveCondition = (single) => {
+    if (+single == single) {
+      return toFixed(multiply(balance, single + ''), 0) == currentTime
+        ? 'active text-1 '
+        : 'text-2';
+    }
+    return toFixed(currentTime, 0) == toFixed(balance, 0)
+      ? 'active text-1 '
+      : 'text-2';
+  };
+  return (
+    <>
+      <TimeSelectorStyles className=" transition-colors bg-3  border-">
+        <div
+          className={`${
+            isTimeSelector ? 'w-full' : 'w-max'
+          } flex-1 hover:brightness-150 p-[6px]`}
+        >
+          <div className="flex-bw ">
+            <input
+              value={currentTime}
+              className="timetip number text-f16 text-1 "
+              type="number"
+              // title={title}
+              max={max}
+              onChange={(e) => {
+                if (e.target.value) {
+                  const decimals = 6;
+                  const valBN: BN = Big(e.target.value);
+                  const regexArr = [
+                    /^\d*(\.)?(\d{0,0})?$/,
+                    /^\d*(\.)?(\d{0,1})?$/,
+                    /^\d*(\.)?(\d{0,2})?$/,
+                    /^\d*(\.)?(\d{0,3})?$/,
+                    /^\d*(\.)?(\d{0,4})?$/,
+                    /^\d*(\.)?(\d{0,5})?$/,
+                    /^\d*(\.)?(\d{0,6})?$/,
+                  ];
+                  if (!regexArr[decimals].test(valBN.toString())) {
+                    toastify({
+                      type: 'error',
+                      msg: !decimals
+                        ? "Decimal values aren't allowed"
+                        : 'Only ' + decimals + ' decimal digits are allowed!',
+                      id: 'decimals',
+                    });
+                    return;
+                  }
+                }
+                if (+e.target.value < INT_MAX) setTime(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        {investmentDD && <PoolDropDown />}
+      </TimeSelectorStyles>
+      {balance && gt(balance, '0') && (
+        <div>
+          <div className="duration-container ">
+            {[0.05, 0.1, 0.2, 0.5, 'Max'].map((single, idx) => {
+              return (
+                <div
+                  key={single}
+                  onClick={() => {
+                    if (+single === single) {
+                      setTime(toFixed(multiply(balance, single + ''), 0));
+                    } else {
+                      setTime(balance);
+                    }
+                    // setTime()
+                  }}
+                  className={
+                    'each-duration py-1 font-medium text-f12  transition-colors ' +
+                    getActiveCondition(single)
+                  }
+                >
+                  {+single === single ? Math.floor(single * 100) + '%' : single}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       {(minError || maxError) && (
         <div className="text-1 text-f12 mt-2 flex items-center">
           <ErrorIcon className="error-icon" />

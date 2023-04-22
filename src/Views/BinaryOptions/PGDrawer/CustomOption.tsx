@@ -10,7 +10,7 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { ammountAtom, approveModalAtom } from '../PGDrawer';
 import { ApproveModal } from '../Components/approveModal';
 import { BuyUSDCLink } from './BuyUsdcLink';
-import { TimeSelector } from './TimeSelector';
+import { AmountSelector, TimeSelector } from './TimeSelector';
 import { useBinaryActions } from '../Hooks/useBinaryActions';
 import { useQTinfo } from '..';
 import { SettingsIcon } from './SettingsIcon';
@@ -110,20 +110,19 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
       />
 
       <div className="custom-wrapper gap-y-3">
-        <div className="text-f14 flex-sbw items-center">
-          <div className="text-f14">Select Duration</div>
+        <div className="text-f14 text-0 flex-sbw items-center">
+          <div className="">Time</div>
           <button
             onClick={() => setIsOpen(true)}
-            className="flex items-center gap-2 underline underline-offset-2 hover:brightness-125"
+            className="flex items-center gap-1   hover:brightness-125"
           >
             Advanced
-            <div className="!p-[5px] !bg-1 hover:brightness-125 sr">
+            <div className=" hover:brightness-125 sr">
               <SettingsIcon />
             </div>
           </button>
         </div>
         <DurationPicker />
-        ''
         <div className="flex-sbw items-center text-f14 ">
           Trade Size
           <MaxSizeComponent
@@ -132,11 +131,12 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
             userInput={amount}
           />
         </div>
-        <TimeSelector
+        <AmountSelector
           currentTime={amount}
           setTime={setAmount}
           investmentDD
           max={maxTrade}
+          balance={divide(balance, activePoolObj.token.decimals)}
           title="Investment"
           label="$"
           error={{
@@ -169,18 +169,18 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
         {(currStats && currStats.max_loss && currStats.max_payout) ||
         (marketPrice?.[activeAsset.tv_id]?.close && currStats?.max_payout) ? (
           <div className="flex-sbw text-f14 my-3 ">
-            <div className="f14  flex-start flex wrap text-2">
+            <div className="text-f12 w-full items-start flex-col flex-start flex wrap text-2">
               Payout :&nbsp;
               <Display
-                className="text-1"
+                className="text-1 text-f16"
                 data={currStats.max_payout.toString()}
                 unit={activePoolObj.token.name}
               />
             </div>
-            <div className="f14 flex-start wrap flex text-2">
+            <div className="text-f12  w-full items-start flex-col flex-start wrap flex text-2">
               Profit :&nbsp;
               <Display
-                className="text-1"
+                className=" text-f16 text-green"
                 data={currStats.max_payout - currStats.max_loss}
                 unit={activePoolObj.token.name}
               />{' '}
@@ -226,7 +226,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
                         typeof loading !== 'number' &&
                         loading?.is_up === true
                       }
-                      className="bg-cross-bg text-green hover:bg-green hover:text-1"
+                      className=" text-1 bg-green hover:text-1"
                     >
                       <>
                         <UpIcon className="mr-[6px] scale-150" />
@@ -240,6 +240,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
                         typeof loading !== 'number' &&
                         loading?.is_up === false
                       }
+                      className=" text-1 bg-red hover:text-1"
                       onClick={DownHandler}
                     >
                       <>
@@ -290,7 +291,7 @@ const MaxSizeComponent = ({
         />
       )}
       &nbsp;&nbsp;
-      <span className="whitespace-nowrap"> Max :</span>
+      <span className="whitespace-nowrap"> Avail :</span>
       {maxSize ? (
         <Display
           data={maxSize}
