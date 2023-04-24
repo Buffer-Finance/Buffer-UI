@@ -1,12 +1,14 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { useAccount } from 'wagmi';
-import { getLBFRconfig } from '../config';
-import { add, subtract } from '@Utils/NumString/stringArithmatics';
+import { add } from '@Utils/NumString/stringArithmatics';
 import { getWeekId } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
+import { isTestnet } from 'config';
 
+const LBFRgraphEndpoint = isTestnet
+  ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/lbfr-testnet'
+  : 'https://api.thegraph.com/subgraphs/name/bufferfinance/lbfr-mainnet';
 export const getWeekIdFromTimestamp = (timestamp: number) => {
   let dayTimestamp = Math.floor(
     (timestamp - 4 * 86400 - 16 * 3600) / (86400 * 7)
@@ -15,14 +17,13 @@ export const getWeekIdFromTimestamp = (timestamp: number) => {
 };
 
 export const useLBFRGraphql = () => {
-  const { configContracts } = useActiveChain();
   const { address: account } = useAccount();
   const currentWeekId = getWeekId(0);
   const lastWeekId = getWeekId(1);
 
   const { data } = useSWR(`LBFR-graphql-query-account-${account}`, {
     fetcher: async () => {
-      const response = await axios.post(configContracts.graph.MAIN, {
+      const response = await axios.post(LBFRgraphEndpoint, {
         query: `{ 
           totalVolume: lbfrstatsPerUsers(where: {userAddress: "${account}", period: weekly, periodID_in: ["${currentWeekId}","${lastWeekId}"]}) {
                 volume

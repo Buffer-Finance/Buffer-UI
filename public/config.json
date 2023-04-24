@@ -893,7 +893,7 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/lbfr-mainnet",
+      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-temp",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite"
     }
   },
