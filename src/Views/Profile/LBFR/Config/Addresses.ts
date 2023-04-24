@@ -6,10 +6,10 @@ export const CONTRACTS = {
     LBFRrewardTracker: '0x16be3a1f310189c216Cd907367D73282330831c1',
   },
   42161: {
-    LBFRfaucet: '',
-    LBFR: '',
-    LBFRrewardDistributor: '',
-    LBFRrewardTracker: '',
+    LBFRfaucet: '0x06F9a2414Ac91ECe109ede8D41C60fAf2669D6e3',
+    LBFR: '0x5B806d42946a08A6C345291771c20165774D9605',
+    LBFRrewardDistributor: '0xF868bE7a7df0a8a515Cf41fD6e1400Faf15d8c8F',
+    LBFRrewardTracker: '0x0d17734dFdbC386D5DAF1D4d91334E4C67Ca4Bd1',
   },
 };
 
