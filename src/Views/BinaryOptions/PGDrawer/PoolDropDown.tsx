@@ -55,13 +55,13 @@ export const PoolDropDown = () => {
     );
   return (
     <BufferDropdown
-      rootClass="token-dd flex-center "
-      className="bg-cross-bg dd-items text-3 chain-dropdown-bottom mb-3"
+      rootClass="token-dd flex-center h-full "
+      className="bg-[#303044] dd-items text-3 chain-dropdown-bottom mb-3"
       items={dropdownItems}
       initialActive={1}
       rootClassName="token-dd w-fit"
       dropdownBox={(isActive, isOpen, d) => (
-        <div className="token-dd w-fit hover:brightness-150 flex items-center bg-2 px-4 py-[5px] sm:px-[0] sm:py-[0] text-f14 transition-all duration-150 text-1">
+        <div className="token-dd w-fit hover:brightness-150 flex items-center bg-[#303044] px-4 py-[5px] sm:px-[0] sm:py-[0] text-f14 transition-all duration-150 text-1">
           <img
             src={activePoolObj.token.img}
             className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "

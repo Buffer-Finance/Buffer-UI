@@ -40,6 +40,7 @@ import { Detector } from 'react-detect-offline';
 import isUserPaused, { UserActivityAtom } from '@Utils/isUserPaused';
 import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import { UserTrades } from '@Views/BinaryOptions/UserTrades';
 var json = {
   global: {
     tabEnableClose: true,
@@ -462,6 +463,7 @@ const DesktopTrad = () => {
               })
             }
           />
+          <UserTrades />
         </Background>
       </div>
     </>

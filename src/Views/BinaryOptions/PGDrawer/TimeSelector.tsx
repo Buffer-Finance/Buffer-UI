@@ -301,7 +301,7 @@ export const TimeSelector = ({
         <div
           className={`${
             isTimeSelector ? 'w-full' : 'w-max'
-          } flex-1 hover:brightness-150 p-[6px]`}
+          } flex-1 hover:brightness-150 p-[3px] bg-1 `}
         >
           <div className="flex-bw ">
             <button
@@ -491,7 +491,7 @@ export const AmountSelector = ({
         <div
           className={`${
             isTimeSelector ? 'w-full' : 'w-max'
-          } flex-1 hover:brightness-150 p-[6px]`}
+          } flex-1 hover:brightness-150 p-[3px] bg-1`}
         >
           <div className="flex-bw ">
             <input

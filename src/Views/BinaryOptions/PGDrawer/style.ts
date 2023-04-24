@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 const Background = styled.div`
-  background-color: var(--bg-1);
+  background-color: var(--bg-0);
   color: var(--text-6);
   height: 100%;
   padding: 0px 10px;
@@ -129,7 +129,7 @@ const Background = styled.div`
       text-align: center;
       border-radius: 6px;
       padding: 8px 10px;
-      background: var(--bg-3);
+      background: var(--bg-1);
       &.active {
         background: var(--bg-0);
         border: 1px solid #a3e3ff;

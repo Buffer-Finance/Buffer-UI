@@ -34,7 +34,7 @@ import { useToast } from '@Contexts/Toast';
 import { AllTradesPage } from '@Views/AllTrades';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
-import { TradePage } from '@Views/BinaryOptions/TradePage';
+import { NoLossTrade, TradePage } from '@Views/BinaryOptions/TradePage';
 import { TestComponent } from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
 import { MergedPage } from '@Views/AllTrades/allTradesMerged';
