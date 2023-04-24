@@ -103,12 +103,18 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
         return;
       }
       const {
-        signed_hash: signature,
-        allocated_tokens: amount,
+        signed_hash,
+        current_week_token_allocation,
+        former_week_token_allocation,
         weekID,
       } = res.data;
 
-      writeCall(() => setBtnState(false), 'claim', [signature, amount, weekID]);
+      writeCall(() => setBtnState(false), 'claim', [
+        signed_hash,
+        current_week_token_allocation,
+        former_week_token_allocation,
+        weekID,
+      ]);
     } catch (e) {
       toastify({
         type: 'error',
