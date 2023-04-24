@@ -29,6 +29,12 @@
         "internalType": "uint256",
         "name": "claimedTokens",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "weekID",
+        "type": "uint16"
       }
     ],
     "name": "Claim",
@@ -62,13 +68,18 @@
       },
       {
         "internalType": "uint256",
-        "name": "totalTokensAllocated",
+        "name": "currentWeekTokenAllocation",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "weekID",
+        "name": "formerWeekTokenAllocation",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint16",
+        "name": "weekID",
+        "type": "uint16"
       }
     ],
     "name": "claim",
@@ -172,5 +183,4 @@
     "stateMutability": "view",
     "type": "function"
   }
- ]
- 
+]
