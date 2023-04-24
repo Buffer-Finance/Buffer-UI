@@ -43,6 +43,8 @@ import LBFRabi from './Config/FaucetLBFR.json';
 import useStopWatch from '@Hooks/Utilities/useStopWatch';
 import { useWeekOfTournament } from '@Views/V2-Leaderboard/Hooks/useWeekOfTournament';
 import { LBFRconfig } from './config';
+import { TimerBox } from '@Views/V2-Leaderboard/Incentivised';
+import { getDistance } from '@Utils/Time';
 
 export const LBFR = () => {
   return (
@@ -55,6 +57,41 @@ export const LBFR = () => {
 const Cards = () => {
   const graphData = useLBFRGraphql();
   const readcallData = useLBFRreadCalls();
+  const { activeChain } = useActiveChain();
+  const launchTimeStamp = LBFRconfig[activeChain.id]?.startTimestamp / 1000;
+  const distance = getDistance(launchTimeStamp);
+  if (!launchTimeStamp) return <></>;
+  if (distance > 0)
+    return (
+      <></>
+      // <TimerBox
+      //   expiration={launchTimeStamp}
+      //   className="mt-[5vh] m-auto"
+      //   head={
+      //     <span className="text-5  mb-[25px] text-f16">
+      //       Loyalty Program starts in
+      //     </span>
+      //   }
+      // />
+    );
+  // return (
+  //   <Section
+  //     Heading={<div className="text-f22">Loyalty Program</div>}
+  //     subHeading={<></>}
+  //     Cards={[
+  //       <TimerBox
+  //         expiration={launchTimeStamp}
+  //         className="mt-[5vh] m-auto"
+  //         head={
+  //           <span className="text-5  mb-[25px] text-f16">
+  //             Loyalty Program starts in
+  //           </span>
+  //         }
+  //       />,
+  //     ]}
+  //     className="!mt-7"
+  //   />
+  // );
   return (
     <Section
       Heading={<div className="text-f22">Loyalty Program</div>}
@@ -67,6 +104,8 @@ const Cards = () => {
     />
   );
 };
+
+const Timer = () => {};
 
 const TimeLeft = () => {
   const { activeChain } = useActiveChain();
