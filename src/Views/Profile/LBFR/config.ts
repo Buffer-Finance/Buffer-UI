@@ -6,10 +6,10 @@ export const LBFRconfig: {
   [key: number]: LBFRconfigType;
 } = {
   421613: {
-    startTimestamp: 1682352000000,
+    startTimestamp: 1682438400000,
   },
   42161: {
-    startTimestamp: 1682352000000,
+    startTimestamp: 1682438400000,
   },
 };
 
