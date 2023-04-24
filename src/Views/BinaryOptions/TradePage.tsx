@@ -27,4 +27,11 @@ const TradePage = () => {
     </>
   );
 };
-export { TradePage };
+const NoLossTrade = () => {
+  return (
+    <>
+      <TradePageRoot />
+    </>
+  );
+};
+export { TradePage, NoLossTrade };

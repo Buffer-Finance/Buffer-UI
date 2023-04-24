@@ -41,7 +41,7 @@ import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import { TradingConfig } from '@Views/TradingConfig';
 import { PythPoc } from '@Views/PythPoc';
-
+const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -132,7 +132,10 @@ const AppRoutes = () => {
         </Route>
         <Route path="/trades/merged" element={<MergedPage />} />
         <Route path="/trades" element={<AllTradesPage />} />
-        <Route path="/binary/:market" element={<TradePage />} />
+        <Route
+          path="/binary/:market"
+          element={isNoLoss ? <NoLossTrade /> : <TradePage />}
+        />
         {/* referral link handling */}
         <Route
           path="/*"
