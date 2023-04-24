@@ -22,7 +22,13 @@ import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { stakedType, useLBFRreadCalls } from './Hooks/useReadCalls';
 import { LBFRGraphqlType, useLBFRGraphql } from './Hooks/useGraphql';
-import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import {
+  divide,
+  gt,
+  lt,
+  lte,
+  multiply,
+} from '@Utils/NumString/stringArithmatics';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { toFixed } from '@Utils/NumString';
 import { Skeleton } from '@mui/material';
@@ -92,6 +98,18 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
   );
 
   async function claim() {
+    if (
+      data &&
+      data.totalVolume &&
+      data.totalVolume[0] &&
+      lte(data.totalVolume[0].claimable, '0')
+    )
+      return toastify({
+        type: 'error',
+        msg: `You have no LBFR to claim`,
+        id: 'claimLBFR',
+      });
+
     setBtnState(true);
     try {
       const res = await axios.get(
@@ -124,6 +142,14 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
       setBtnState(false);
     }
   }
+  const currentSlab = useMemo(() => {
+    if (!data || !data.totalVolume?.[0].currentSlab) return '1';
+    const slab = data.totalVolume[0].currentSlab;
+    console.log(slab, 'slab');
+    if (lt(slab, '1')) return '1';
+    return divide(slab, 2);
+  }, []);
+
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
   if (data === undefined)
@@ -134,6 +160,7 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
         className="w-full !h-full min-h-[270px] !transform-none !bg-1"
       />
     );
+
   return (
     <Card
       className={profileCardClass}
@@ -202,10 +229,7 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
               />
             </div>,
             <div className={wrapperClasses}>
-              <Display
-                data={divide(data.totalVolume?.[0].currentSlab ?? '0', 2)}
-                unit={unit + '/USDC'}
-              />
+              <Display data={currentSlab} unit={unit + '/USDC'} />
             </div>,
             <div className={wrapperClasses}>
               <TimeLeft />
