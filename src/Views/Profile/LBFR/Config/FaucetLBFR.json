@@ -32,9 +32,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint16",
+        "internalType": "uint256",
         "name": "weekID",
-        "type": "uint16"
+        "type": "uint256"
       }
     ],
     "name": "Claim",
@@ -77,14 +77,27 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint16",
+        "internalType": "uint256",
         "name": "weekID",
-        "type": "uint16"
+        "type": "uint256"
       }
     ],
     "name": "claim",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getWeekID",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "weekID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -118,6 +131,19 @@
     "name": "setTimeOffset",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "timeOffset",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
