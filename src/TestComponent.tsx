@@ -1,10 +1,18 @@
+import { priceAtom, usePrice } from '@Hooks/usePrice';
+import { useAtomValue } from 'jotai';
+import { useCallback, useState } from 'react';
+import { useStream } from 'react-fetch-streams';
+
 const TestComponent: React.FC<any> = ({}) => {
+  usePrice();
+  const price = useAtomValue(priceAtom);
+  console.log(`price: `, price);
+  document.title = price?.['BTCUSD']?.[0].price;
   return (
     <div>
-      <iframe
-        style={{ width: '100vw', height: '100vh' }}
-        src="https://testnet-buffer-finance-git-iframe-tut-bufferfinance.vercel.app/#/binary/BTC-USD?bg-2=161618&bg-1=29292c&bg-signature=ffb313&hide=true&bg-0=111111&img=app.level.finance/assets/logo-4d8fd6f5.svg"
-      ></iframe>
+      <h1 className="text-f20 text-center w-full">
+        {price?.['BTCUSD']?.[0].price}
+      </h1>
     </div>
   );
 };
