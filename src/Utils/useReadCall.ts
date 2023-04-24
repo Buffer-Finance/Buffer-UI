@@ -10,7 +10,7 @@ export const useReadCall = ({
   contracts,
   swrKey,
 }: {
-  contracts: any[];
+  contracts: any;
   swrKey: string;
 }) => {
   const calls = contracts;

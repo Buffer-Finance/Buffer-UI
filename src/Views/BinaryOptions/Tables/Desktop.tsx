@@ -70,7 +70,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const { shouldConnectWallet } = useOpenConnectionDrawer();
-  console.log(filteredData, 'filteredData');
+  // console.log(filteredData, 'filteredData');
   const headNameArray = useMemo(() => {
     if (isHistoryTable)
       return [

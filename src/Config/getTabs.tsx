@@ -313,8 +313,32 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
+        to: `/profile`,
+        name: 'Profile',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
         to: `/dashboard`,
         name: 'Dashboard',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: `https://stats.buffer.finance/`,
+        name: 'Stats',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: `/leaderboard/trades`,
+        name: 'All Trades',
         subTabs: [],
         isExternalLink: false,
       },
@@ -329,30 +353,6 @@ export const getTabs = (
         name: 'Practice Trading',
         subTabs: [],
         isExternalLink: true,
-      },
-      {
-        to: `https://optopi.buffer.finance/`,
-        name: 'Optopi NFT',
-        subTabs: [],
-        isExternalLink: true,
-      },
-      {
-        to: `https://stats.buffer.finance/`,
-        name: 'Stats',
-        subTabs: [],
-        isExternalLink: true,
-      },
-      {
-        to: `/profile`,
-        name: 'Profile',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
-        to: `/leaderboard/trades`,
-        name: 'All Trades',
-        subTabs: [],
-        isExternalLink: false,
       },
       {
         to: 'https://docs.buffer.finance/introduction/readme',
@@ -382,14 +382,8 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: `/dashboard`,
-        name: 'Dashboard',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
-        to: `/referral`,
-        name: 'Referral',
+        to: `/profile`,
+        name: 'Profile',
         subTabs: [],
         isExternalLink: false,
       },
@@ -401,10 +395,16 @@ export const getTabs = (
       },
 
       {
-        to: `/profile`,
-        name: 'Profile',
+        to: `/dashboard`,
+        name: 'Dashboard',
         subTabs: [],
         isExternalLink: false,
+      },
+      {
+        to: `https://stats.buffer.finance/`,
+        name: 'Stats',
+        subTabs: [],
+        isExternalLink: true,
       },
       {
         to: `/leaderboard/trades`,
@@ -412,6 +412,13 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+      {
+        to: `/referral`,
+        name: 'Referral',
+        subTabs: [],
+        isExternalLink: false,
+      },
+
       {
         to: 'https://docs.buffer.finance/introduction/readme',
         name: 'Docs',

@@ -21,7 +21,7 @@ const CustomButton: React.FC<IButton> = ({
       disabled={isDisabled || isLoading}
       className={`flex justify-center items-center transition-all duration-300 w-full rounded-[10px] text-f16 font-bold disabled:bg-cross-bg disabled:text-3 disabled:cursor-not-allowed h-[40px]  ${className}`}
     >
-      {isLoading ? <ButtonLoader /> : children}
+      {isLoading ? <ButtonLoader className="min-w-[50px]" /> : children}
     </button>
   );
 };

@@ -75,7 +75,7 @@ const Button = () => {
       }, 4000);
     }
   }, [open]);
-  console.log(account, 'account');
+  // console.log(account, 'account');
   if (account === undefined) {
     return (
       <ConnectionRequired>

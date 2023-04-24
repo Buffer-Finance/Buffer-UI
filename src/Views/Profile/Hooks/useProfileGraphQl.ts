@@ -45,6 +45,7 @@ export const useProfileGraphQl = () => {
 
   const { data } = useSWR(`profile-query-account-${account}`, {
     fetcher: async () => {
+      //Warning: Cant use lite endpioint as it doesnt contain the token and asset data for the query.
       const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
             userOptionDatas(  
@@ -181,6 +182,6 @@ export const useProfileGraphQl = () => {
       ARBopenInterest,
     };
   }, [data?.userOptionDatas, data?.activeData]);
-
+  // console.log(tradingMetricsData, 'tradingMetricsData');
   return { tradingMetricsData };
 };

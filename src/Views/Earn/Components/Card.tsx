@@ -30,7 +30,7 @@ export function Card({
           <div className="justify-self-end">
             {bottom && (
               <>
-                <Divider />
+                {shouldShowDivider && <Divider />}
                 {bottom}
               </>
             )}

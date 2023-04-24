@@ -137,7 +137,13 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   );
 };
 
-export const ConnectionRequired = ({ children }: { children: ReactNode }) => {
+export const ConnectionRequired = ({
+  children,
+  className = '',
+}: {
+  children: ReactNode;
+  className?: string;
+}) => {
   return (
     <ConnectButton.Custom>
       {({
@@ -174,7 +180,7 @@ export const ConnectionRequired = ({ children }: { children: ReactNode }) => {
                 return (
                   <BlueBtn
                     onClick={openConnectModal}
-                    className="px-5 py-[5px] !h-fit"
+                    className={'px-5 py-[5px] !h-fit ' + className}
                   >
                     Connect Wallet
                   </BlueBtn>
@@ -185,7 +191,7 @@ export const ConnectionRequired = ({ children }: { children: ReactNode }) => {
                 return (
                   <BlueBtn
                     onClick={openChainModal}
-                    className="px-5 py-[5px] !h-fit"
+                    className={'px-5 py-[5px] !h-fit ' + className}
                   >
                     {/* <Wallet className="" /> */}
                     Switch Network

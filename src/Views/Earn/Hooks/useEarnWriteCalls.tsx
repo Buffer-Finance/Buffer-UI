@@ -198,7 +198,7 @@ export const useEarnWriteCalls = (
 };
 
 export const useGetApprovalAmount = (
-  abi: any[],
+  abi: any,
   token_address: string,
   spender_address: string
   // user_amount?: string

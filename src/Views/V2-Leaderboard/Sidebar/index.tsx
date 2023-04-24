@@ -55,8 +55,10 @@ export const LeaderBoardSidebar = () => {
   const tabs = getTabs(activeChain.name, true);
   const location = useLocation();
   const { day } = useDayOfTournament();
-  const { week } = useWeekOfTournament();
   const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];
+  const { week } = useWeekOfTournament({
+    startTimestamp: weeklyConfigValue.startTimestamp,
+  });
   const dailyConfigValue = DailyTournamentConfig[activeChain.id];
   const DailyChip = useMemo(() => {
     if (dailyConfigValue.endDay === undefined) return <OnGoingChip />;
@@ -106,16 +108,16 @@ export const LeaderBoardSidebar = () => {
           })}
         </div>
 
-        <div className="mt-[24px] full-width">
+        <div className="mt-[24px] full-width relative">
           <NavLink
             key={'ALL TRADES'}
             to={'/leaderboard/trades'}
             className={({ isActive }) => {
-              return `flex items-center justify-start px-3 text-f12 ${
+              return `flex items-center justify-start px-3 text-f12  ${
                 isActive
                   ? 'text-1'
                   : 'hover:bg-1 hover:text-1 hover:brightness-125 text-3'
-              } 
+              } ${isActive && ' activeLink'}
               `;
             }}
           >

@@ -101,7 +101,7 @@ export const useProcessedTrades = () => {
     shouldAddHistoryPrice = false
   ) => {
     const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
-      console.log(singleTrade, 'singleTrade');
+      // console.log(singleTrade, 'singleTrade');
       if (singleTrade.blockNumber) {
         if (block >= singleTrade.blockNumber) {
           // if graph scanned this block.
@@ -172,6 +172,7 @@ export const useProcessedTrades = () => {
 
 export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
   if (currentTrade.state === BetState.active) {
+    // console.log(`[augexp]currentTrade: `, currentTrade);
     axios
       .post(`https://oracle.buffer-finance-api.link/price/query/`, [
         {
@@ -217,7 +218,7 @@ export const usePastTradeQuery = () => {
 
   const blockNumber = data?._meta?.block.number;
   const { data: trades } = useAheadTrades(blockNumber, account, false);
-  console.log('p=[aug]trades', trades);
+  // console.log('p=[aug]trades', trades);
   useEffect(() => {
     let activeResponseArr = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])

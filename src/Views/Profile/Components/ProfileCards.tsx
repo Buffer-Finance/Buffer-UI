@@ -23,7 +23,7 @@ import { toFixed } from '@Utils/NumString';
 import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import { useMemo } from 'react';
 
-const profileCardClass = 'rounded-lg px-7';
+export const profileCardClass = 'rounded-lg px-7';
 
 export const ProfileCards = () => {
   const { tradingMetricsData } = useProfileGraphQl();

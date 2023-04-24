@@ -1,17 +1,17 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { weeklyTournamentConfig } from '../Weekly/config';
-
 const MSINWEEK = 604800000;
 
-export const useWeekOfTournament = () => {
-  const { activeChain } = useActiveChain();
+export const useWeekOfTournament = ({
+  startTimestamp,
+}: {
+  startTimestamp: number;
+}) => {
   const currentTimeStamp = new Date().getTime();
-  const start = weeklyTournamentConfig[activeChain.id].startTimestamp;
 
   return {
-    week: Math.floor((currentTimeStamp - start) / MSINWEEK) + 1,
+    week: Math.floor((currentTimeStamp - startTimestamp) / MSINWEEK) + 1,
     nextTimeStamp:
-      start +
-      MSINWEEK * (Math.floor((currentTimeStamp - start) / MSINWEEK) + 1),
+      startTimestamp +
+      MSINWEEK *
+        (Math.floor((currentTimeStamp - startTimestamp) / MSINWEEK) + 1),
   };
 };
