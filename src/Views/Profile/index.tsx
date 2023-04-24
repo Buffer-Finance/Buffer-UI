@@ -7,8 +7,12 @@ import { ProfileCards } from './Components/ProfileCards';
 import { ReferralLink } from './Components/ReferralLink';
 import { UserData } from './Components/UserData';
 import { LBFR } from './LBFR';
+import { useEffect } from 'react';
 
 export const ProfilePage = () => {
+  useEffect(() => {
+    document.title = 'Buffer | Profile';
+  }, []);
   return (
     <main className="content-drawer">
       <Profile />
