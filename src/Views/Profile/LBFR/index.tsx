@@ -22,7 +22,7 @@ import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { stakedType, useLBFRreadCalls } from './Hooks/useReadCalls';
 import { LBFRGraphqlType, useLBFRGraphql } from './Hooks/useGraphql';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { toFixed } from '@Utils/NumString';
 import { Skeleton } from '@mui/material';
@@ -259,6 +259,18 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
     }
     function claim() {
       setBtnState(true);
+      if (
+        data &&
+        !gt(divide(data.userRewards, rewardDecimals) as string, '0')
+      ) {
+        toastify({
+          type: 'error',
+          msg: `No rewards to claim.`,
+          id: 'claimLBFR',
+        });
+        setBtnState(false);
+        return;
+      }
       writeCall(
         () => {
           setBtnState(false);
