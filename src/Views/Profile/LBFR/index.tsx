@@ -394,11 +394,14 @@ export const ClaimLBFRBtn = ({
           </svg>
         )}
         Claim{' '}
-        {shouldShowValue &&
-          getBalance(
-            divide(data.totalVolume?.[0]?.claimable ?? '0', decimals),
-            'LBFR'
-          )}
+        {shouldShowValue && (
+          <>
+            {getBalance(
+              divide(data.totalVolume?.[0]?.claimable ?? '0', decimals)
+            )}{' '}
+            <span className="sm:hidden ml-2">LBFR</span>
+          </>
+        )}
       </BlueBtn>
     </SVGclasses>
   );
