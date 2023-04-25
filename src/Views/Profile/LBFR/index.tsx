@@ -317,7 +317,7 @@ export const ClaimLBFRBtn = ({
       setBtnState(false);
     }
   }
-
+  if (account === undefined) return <></>;
   if (data === undefined)
     return (
       <BlueBtn
