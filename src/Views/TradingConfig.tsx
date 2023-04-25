@@ -8,7 +8,7 @@ import { useDashboardTableData } from './Dashboard/Hooks/useDashboardTableData';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Markets } from 'src/Types/Market';
 const ifc = new ethers.utils.Interface(ConfigContract);
-
+import TestAvatarAbi from '@Views/ConfigContractAbi.json';
 import { useReadCall } from '@Utils/useReadCall';
 import { TableAligner } from './V2-Leaderboard/Components/TableAligner';
 import { keyClasses } from './Earn/Components/VestCards';
@@ -109,8 +109,8 @@ const TradingConfig: React.FC<any> = ({}) => {
   const [configValues] = useState(initialConfigValues);
   const { activeChain } = useActiveChain();
   const { writeCall } = useWriteCall(
-    '0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d',
-    ConfigContract
+    '0x99c758a4Aff8d0d51F18c5fBd94fD182ec49BaaA',
+    TestAvatarAbi
   );
   const [configData, setConfigData] = useAtom(configDataAtom);
   const [activePool, setActivePool] = useState('USDC');
@@ -183,6 +183,10 @@ export { TradingConfig };
 const ConfigValueManager: React.FC<{
   values: any[][];
 }> = ({ values }) => {
+  const { writeCall } = useWriteCall(
+    '0x99c758a4Aff8d0d51F18c5fBd94fD182ec49BaaA',
+    TestAvatarAbi
+  );
   const [changeData, setChangeData] = useState([]);
   const [configData, setConfigData] = useAtom(configDataAtom);
   const changeChanged = () => {
@@ -220,6 +224,14 @@ const ConfigValueManager: React.FC<{
     const encoded = encodeMulti(
       multiBundle,
       '0xAb3224e76fa5a46D9f8364cd14F4cB03087d6Fd8'
+    );
+    writeCall(
+      () => {
+        console.log('success');
+      },
+      'execTransactionFromModule',
+      [encoded.to, encoded.value, encoded.data, encoded.operation || 0],
+      null
     );
     console.log(`encoded: `, encoded);
   };

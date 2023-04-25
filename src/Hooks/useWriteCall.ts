@@ -53,6 +53,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const { data: balance } = useBalance({ address: account });
   let gasPrice = data?.formatted?.gasPrice || (1e8).toString();
   // gasPrice = multiply(gasPrice, "2");
+  console.log(`contract?.callStatic: `, contract?.callStatic);
 
   const writeCall = async (
     callBack: (a?: any) => void,
@@ -148,6 +149,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       console.log(`[blockchain]contract: `, contractAddress);
       console.log(`[blockchain]methodArgs: `, methodArgs);
       console.log(`[blockchain]methodName: `, methodName);
+      console.log(`[blockchain]contract: `, contract?.callStatic);
       const call = await contract?.callStatic[methodName](...methodArgs, {
         ...defaultValues,
       });

@@ -41,6 +41,7 @@ import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import { TradingConfig } from '@Views/TradingConfig';
 import { PythPoc } from '@Views/PythPoc';
+import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -98,6 +99,7 @@ const AppRoutes = () => {
 
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />
         <Route path="/pyth" element={<PythPoc />} />
         <Route path="/tradingConfig" element={<TradingConfig />} />
