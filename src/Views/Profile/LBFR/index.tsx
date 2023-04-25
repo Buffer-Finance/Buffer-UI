@@ -47,6 +47,7 @@ import { TimerBox } from '@Views/V2-Leaderboard/Incentivised';
 import { getDistance } from '@Utils/Time';
 import { getBalance } from '@Views/Common/AccountInfo';
 import styled from '@emotion/styled';
+import { useGlobal } from '@Contexts/Global';
 
 export const LBFR = () => {
   return (
@@ -238,14 +239,17 @@ const ClaimCard = ({ data }: { data: LBFRGraphqlType }) => {
 export const ClaimLBFRBtn = ({
   shouldShowValue = false,
   shouldShowIcon = false,
+  shouldNotShowForZero = false,
   className = '',
 }: {
   shouldShowValue?: boolean;
   shouldShowIcon?: boolean;
+  shouldNotShowForZero?: boolean;
   className?: string;
 }) => {
   const { address: account } = useUserAccount();
   const toastify = useToast();
+  const { state } = useGlobal();
   const [btnState, setBtnState] = useState(false);
   const { viewOnlyMode } = useUserAccount();
   const { activeChain } = useActiveChain();
@@ -326,13 +330,20 @@ export const ClaimLBFRBtn = ({
         Claim LBFR
       </BlueBtn>
     );
-
+  if (
+    shouldNotShowForZero &&
+    data &&
+    data.totalVolume &&
+    data.totalVolume[0] &&
+    lte(data.totalVolume[0].claimable, '0')
+  )
+    return <></>;
   return (
     <SVGclasses>
       <BlueBtn
         onClick={claim}
         className={btnClasses + ' ' + className}
-        isDisabled={viewOnlyMode}
+        isDisabled={viewOnlyMode || state.txnLoading >= 1}
         isLoading={btnState}
       >
         {shouldShowIcon && (
@@ -396,6 +407,7 @@ export const ClaimLBFRBtn = ({
 const StakeCard = ({ data }: { data: null | stakedType }) => {
   const toastify = useToast();
   try {
+    const { state } = useGlobal();
     const [btnState, setBtnState] = useState(false);
     const { address: account } = useUserAccount();
     const setIsModalOpen = useSetAtom(LBFRModalAtom);
@@ -516,21 +528,21 @@ const StakeCard = ({ data }: { data: null | stakedType }) => {
               <BlueBtn
                 onClick={stake}
                 className={btnClasses}
-                isDisabled={viewOnlyMode}
+                isDisabled={viewOnlyMode || state.txnLoading >= 1}
               >
                 Stake
               </BlueBtn>
               <BlueBtn
                 onClick={unstake}
                 className={btnClasses}
-                isDisabled={viewOnlyMode}
+                isDisabled={viewOnlyMode || state.txnLoading >= 1}
               >
                 Unstake
               </BlueBtn>
               <BlueBtn
                 onClick={claim}
                 className={btnClasses}
-                isDisabled={viewOnlyMode}
+                isDisabled={viewOnlyMode || state.txnLoading >= 1}
                 isLoading={btnState}
               >
                 Claim BFR

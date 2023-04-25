@@ -110,6 +110,7 @@ export const Navbar: React.FC<INavbar> = () => {
           <ClaimLBFRBtn
             shouldShowValue
             shouldShowIcon
+            shouldNotShowForZero
             className="!h-[30px] !bg-[#232334] hover:!bg-blue !rounded-[7px] !w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] px-4 sm:px-3"
           />
         )}
