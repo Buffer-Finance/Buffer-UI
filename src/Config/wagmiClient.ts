@@ -77,7 +77,7 @@ const { chains, provider } = configureChains(getChains(), [publicProvider()]);
 const connectors = connectorsForWallets(getWallets(chains));
 export { chains };
 const wagmiClient = createClient({
-  // autoConnect: true,
+  autoConnect: true,
   connectors,
   provider,
 });
