@@ -319,7 +319,7 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/lbfr-testnet",
+      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite"
     }
   },
