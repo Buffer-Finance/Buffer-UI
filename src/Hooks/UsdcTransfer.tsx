@@ -4,7 +4,7 @@ import { useWriteCall } from './useWriteCall';
 import { useReadCall } from '@Utils/useReadCall';
 import { ethers } from 'ethers';
 const ifc = new ethers.utils.Interface(TestAvatarAbi);
-const AABI = [
+const ExecutionModuleCallAbi = [
   {
     inputs: [
       {
@@ -71,7 +71,7 @@ const AABI = [
 const UsdcTransfer: React.FC<any> = ({}) => {
   const { writeCall } = useWriteCall(
     '0x99c758a4Aff8d0d51F18c5fBd94fD182ec49BaaA',
-    AABI
+    ExecutionModuleCallAbi
   );
   const calls = [
     {
@@ -107,7 +107,6 @@ const UsdcTransfer: React.FC<any> = ({}) => {
       ],
       '0xAb3224e76fa5a46D9f8364cd14F4cB03087d6Fd8'
     );
-    console.log(`encoded.to: `, encoded.to);
     writeCall(
       () => {
         console.log('success');
