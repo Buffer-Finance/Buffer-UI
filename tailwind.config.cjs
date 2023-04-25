@@ -47,6 +47,12 @@ module.exports = {
       a1200: {
         min: "1200px",
       },
+      b1400: {
+        max: "1400px",
+      },
+      a1400: {
+        min: "1400px",
+      },
       shareModal: { max: "425px" },
     },
     colors: {

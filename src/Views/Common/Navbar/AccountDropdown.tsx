@@ -56,7 +56,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                 return (
                   <div
                     role="button"
-                    className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-4 hover:brightness-125 hover:bg-1`}
+                    className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#232334] hover:brightness-125 hover:bg-1`}
                     onClick={openConnectModal}
                   >
                     <Wallet className="mr-[6px] ml-1 text-blue" />
@@ -73,7 +73,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                 return (
                   <div
                     role="button"
-                    className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-4 hover:brightness-125 hover:bg-1`}
+                    className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#232334] hover:brightness-125 hover:bg-1`}
                     onClick={openChainModal}
                   >
                     <Wallet className="mr-[6px] ml-1" />
@@ -87,11 +87,11 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
               }
 
               return (
-                <div style={{ display: 'flex', gap: 7 }}>
+                <div style={{ display: 'flex', gap: 3 }}>
                   <div
                     onClick={openChainModal}
                     role="button"
-                    className={`hover:bg-1 hover:brightness-125 cursor-pointer flex items-center justify-center text-f13  h-[30px] w-max rounded-[7px] pl-3 pr-[1px] sm:pr-1 transition-all duration-300 `}
+                    className={`bg-[#232334] hover:brightness-125 hover:bg-1cursor-pointer flex items-center justify-center text-f13  h-[30px] w-max rounded-[7px] pl-3 pr-[1px] sm:pr-1 transition-all duration-300 `}
                   >
                     <div className="flex items-center dropdown-value f15 capitalize weight-400">
                       {chain && chain.name && (
@@ -110,7 +110,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                   </div>
                   <div
                     role="button"
-                    className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-4 hover:brightness-125 hover:bg-1`}
+                    className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#232334] hover:brightness-125 hover:bg-1`}
                     onClick={openAccountModal}
                   >
                     <Wallet className="mr-[6px] ml-1 text-blue" />
