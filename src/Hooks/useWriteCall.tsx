@@ -192,7 +192,17 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
       let err = errReason || getError(error, contractArgs);
       console.log('[blockchain]err : ', err);
-      toastify({ id: contractAddress, msg: err, type: 'error' });
+      toastify({
+        id: contractAddress,
+        msg: (
+          <span>
+            Oops! There is some error. Can you please try again?
+            <br />
+            <span className="!text-3">Error: {err}</span>
+          </span>
+        ),
+        type: 'error',
+      });
       callBack({});
     }
   };
