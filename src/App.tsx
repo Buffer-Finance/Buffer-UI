@@ -41,6 +41,7 @@ import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import { TradingConfig } from '@Views/TradingConfig';
 import { PythPoc } from '@Views/PythPoc';
+import { useAutoConnect } from './Config/useAutoConnectSafe';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -155,6 +156,7 @@ export const snackAtom = atom<{
 });
 
 function App() {
+  useAutoConnect();
   const [snack, setSnack] = useAtom(snackAtom);
   const graphStatus = useGraphStatus();
   return (
