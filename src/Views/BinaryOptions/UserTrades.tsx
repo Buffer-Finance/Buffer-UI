@@ -20,6 +20,8 @@ import { priceAtom } from '@Hooks/usePrice';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { Bar } from '@Views/Common/Toast/style';
 import NumberTooltip from '@Views/Common/Tooltips';
+import { PayoutChip } from './Tables/TableComponents';
+import { ProbabilityPNL } from './Tables/TableComponents';
 
 const tableTypes = ['Open', 'Closed', 'Cancelled'];
 export const UserTrades: React.FC<any> = ({}) => {
@@ -49,7 +51,7 @@ export const UserTrades: React.FC<any> = ({}) => {
       <ol>
         {history?.map((s) => (
           <li key={s.optionID}>
-            <ClosedTradeMarkup trade={s} />
+            <UserTrade trade={s} tableType={tableType} />
           </li>
         ))}
         {/* {active?.map((s) => (
@@ -103,9 +105,10 @@ export function getProbability(trade: IGQLHistory, price) {
     ) * 100
   );
 }
-export const ActiveTradeMarkup: React.FC<{ trade: IGQLHistory }> = ({
-  trade,
-}) => {
+export const UserTrade: React.FC<{
+  trade: IGQLHistory;
+  tableType?: 'Closed' | 'Open' | 'Cancel';
+}> = ({ trade, tableType }) => {
   console.log(`trade: `, trade);
   const [marketPrice] = useAtom(priceAtom);
 
@@ -113,82 +116,41 @@ export const ActiveTradeMarkup: React.FC<{ trade: IGQLHistory }> = ({
   if (typeof price === 'string') {
     price = +price;
   }
-  console.log(`price: `, price);
   const probability = getProbability(trade, price);
   const { width, timeTillExpiration } = getBarWidthAndTimeTillExpiration(trade);
-  console.log(`probability: `, probability);
-  return (
-    <div className="bg-2 flex flex-col px-[10px] pb-[20px] pt-[15px]">
-      <div className="flex items-center justify-between text-1 text-f12">
-        <div className="flex ">
-          {trade.isAbove ? (
-            <UpTriangle className={`scale-[0.70] mt-1`} />
-          ) : (
-            <DownIcon className={`scale-[0.70] mt-1`} />
-          )}
-          {trade.configPair?.tv_id}
-        </div>
-        <NumberTooltip content={timeTillExpiration + ' lerft'}>
-          <div className="flex items-center gap-x-[4px]">
-            <TimerIcon />
-            {getDuration(trade)}
-          </div>
-        </NumberTooltip>
+  let bottomRight = (
+    <>
+      <div>Probability</div>
+      <div className="text-1">
+        {probability ? (
+          <Display data={probability} unit={'%'} />
+        ) : (
+          'Calculating..'
+        )}
       </div>
-      <div className="flex items-center justify-between mt-[6px] text-f12 ">
-        <div className="flex flex-col items-start ">
-          <div>Size</div>
-          <div className="text-1">{getTradeSize(trade)}</div>
-        </div>
-        <div className="flex items-center flex-col items-end ">
-          <div>Probability</div>
-          <div className="text-1">
-            {probability ? (
-              <Display data={probability} unit={'%'} />
-            ) : (
-              'Calculating..'
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="mt-[8px]">
-        <NumberTooltip content={timeTillExpiration + ' left'}>
-          <div className="relative w-full mt-[4px]">
-            <Bar
-              width={width + '%'}
-              className={trade.isAbove ? 'bg-green' : 'bg-red'}
-            />
-          </div>
-        </NumberTooltip>
-      </div>
-    </div>
+    </>
   );
-};
-export const ClosedTradeMarkup: React.FC<{ trade: IGQLHistory }> = ({
-  trade,
-}) => {
-  console.log(`trade: `, trade);
-  const [marketPrice] = useAtom(priceAtom);
-
-  let price = getPriceFromKlines(marketPrice, trade.configPair);
-  if (typeof price === 'string') {
-    price = +price;
+  if (tableType == 'Closed') {
+    bottomRight = (
+      <>
+        <div>Payout</div>
+        <div className="text-1"></div>
+      </>
+    );
   }
-  console.log(`price: `, price);
-  const probability = getProbability(trade, price);
-  const { width, timeTillExpiration } = getBarWidthAndTimeTillExpiration(trade);
-  console.log(`probability: `, probability);
   return (
-    <div className="bg-2 flex flex-col px-[10px] pb-[20px] pt-[15px]">
+    <div className="bg-2 flex flex-col px-[10px] pb-[15px] pt-[15px]">
       <div className="flex items-center justify-between text-1 text-f12">
-        <div className="flex ">
-          {trade.isAbove ? (
-            <UpTriangle className={`scale-[0.70] mt-1`} />
-          ) : (
-            <DownIcon className={`scale-[0.70] mt-1`} />
-          )}
-          {trade.configPair?.tv_id}
-        </div>
+        <NumberTooltip content={'Strike : ' + divide(trade.strike, 8)}>
+          <div className="flex ">
+            {trade.isAbove ? (
+              <UpTriangle className={`scale-[0.70] mt-1`} />
+            ) : (
+              <DownIcon className={`scale-[0.70] mt-1`} />
+            )}
+            {trade.configPair?.tv_id}
+          </div>
+        </NumberTooltip>
         <NumberTooltip content={timeTillExpiration + ' lerft'}>
           <div className="flex items-center gap-x-[4px]">
             <TimerIcon />
@@ -196,21 +158,14 @@ export const ClosedTradeMarkup: React.FC<{ trade: IGQLHistory }> = ({
           </div>
         </NumberTooltip>
       </div>
-      <div className="flex items-center justify-between mt-[6px] text-f12 ">
+      <div className="flex items-center justify-between mt-[4px] text-f12 ">
         <div className="flex flex-col items-start ">
           <div>Size</div>
-          <div className="text-1">{getTradeSize(trade)}</div>
-        </div>
-        <div className="flex items-center flex-col items-end ">
-          <div>Probability</div>
           <div className="text-1">
-            {probability ? (
-              <Display data={probability} unit={'%'} />
-            ) : (
-              'Calculating..'
-            )}
+            {<Display data={getTradeSize(trade)} unit={'USDC'} />}
           </div>
         </div>
+        <div className="flex  flex-col items-end ">{bottomRight}</div>
       </div>
       <div className="mt-[8px]">
         <NumberTooltip content={timeTillExpiration + ' left'}>
