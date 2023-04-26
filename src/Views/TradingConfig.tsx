@@ -92,33 +92,30 @@ const TradingConfig: React.FC<any> = ({}) => {
         const activePoolOptionAddress = d.pools.find(
           (pool) => pool.token == activePoolObj.token.name
         )?.options_contracts.current;
-        {
-          if (activePoolConfigAddress && activePoolOptionAddress)
-            // config contract values
-            for (let config in initialConfigValues) {
-              console.log(`config: `, config);
-              if (
-                !notYetHandledConfigs.includes(
-                  initialConfigValues[config].getter
-                )
-              ) {
-                calls.push({
-                  address: activePoolConfigAddress,
-                  abi: ConfigContract,
-                  name: initialConfigValues[config].getter,
-                  params: [],
-                });
-                configValues.push({
-                  ...initialConfigValues[config],
-                  ...{
-                    market: {
-                      pair: d.pair,
-                      contract: activePoolConfigAddress,
-                    },
+        if (activePoolConfigAddress && activePoolOptionAddress) {
+          // config contract values
+          for (let config in initialConfigValues) {
+            console.log(`config: `, config);
+            if (
+              !notYetHandledConfigs.includes(initialConfigValues[config].getter)
+            ) {
+              calls.push({
+                address: activePoolConfigAddress,
+                abi: ConfigContract,
+                name: initialConfigValues[config].getter,
+                params: [],
+              });
+              configValues.push({
+                ...initialConfigValues[config],
+                ...{
+                  market: {
+                    pair: d.pair,
+                    contract: activePoolConfigAddress,
                   },
-                });
-              }
+                },
+              });
             }
+          }
           // option contract values
           calls.push({
             address: activePoolOptionAddress!,
@@ -226,11 +223,11 @@ const TradingConfig: React.FC<any> = ({}) => {
 
   const response = useReadCall({
     contracts: configReadCalls!,
-    swrKey: 'swr-key',
+    swrKey: 'swr-key' + activePoolObj.token.name,
   }).data;
   const poolResponse = useReadCall({
     contracts: poolConfigReadCalls!,
-    swrKey: 'swr-key-pools',
+    swrKey: 'swr-key-pools' + activePoolObj.token.name,
   }).data;
   const { writeCall } = useIndependentWriteCall();
 
