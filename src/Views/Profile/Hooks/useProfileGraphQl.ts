@@ -2,7 +2,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { add, subtract } from '@Utils/NumString/stringArithmatics';
 import axios from 'axios';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import useSWR from 'swr';
 
 interface ProfileGraphQlResponse {
@@ -20,6 +20,16 @@ interface ProfileGraphQlResponse {
       address: string;
       token: string;
     };
+    totalFee: string;
+  }[];
+  next1000: {
+    optionContract: {
+      address: string;
+      token: string;
+
+      asset: string;
+    };
+    payout: string | null;
     totalFee: string;
   }[];
 }
@@ -42,40 +52,70 @@ export type ItradingMetricsData = metricsData & {
 export const useProfileGraphQl = () => {
   const { address: account } = useUserAccount();
   const { configContracts } = useActiveChain();
+  const [lastSavedTimestamp, setLastSavedTimestamp] = useState<string>('');
+  // console.log(lastSavedTimestamp, 'lastSavedTimestamp');
+  const { data } = useSWR(
+    `profile-query-account-${account}-lastSavedTimestamp-${lastSavedTimestamp}`,
+    {
+      fetcher: async () => {
+        const basicQuery = `
+        userOptionDatas(  
+          first: 1000 
+          where: {user: "${account}", state_not: 1}) {
+            optionContract {
+              address
+              token
+              asset
+            }
+            payout
+            totalFee
+            expirationTime
+          }
+        activeData:userOptionDatas(
+          where: {user: "${account}", state: 1}
+        ) {
+          optionContract {
+            address
+            token
+          }
+            totalFee
+          }
+      `;
 
-  const { data } = useSWR(`profile-query-account-${account}`, {
-    fetcher: async () => {
-      //Warning: Cant use lite endpioint as it doesnt contain the token and asset data for the query.
-      const response = await axios.post(configContracts.graph.MAIN, {
-        query: `{ 
-            userOptionDatas(  
-              first: 1000 
-              where: {user: "${account}", state_not: 1}) {
-                optionContract {
-                  address
-                  token
-                  asset
-                }
-                payout
-                totalFee
-              }
-            activeData:userOptionDatas(
-              where: {user: "${account}", state: 1}
-            ) {
-              optionContract {
-                address
-                token
-              }
-                totalFee
-              }
-          }`,
-      });
+        const extraQuery = `
+       next1000: userOptionDatas(
+          first: 1000
+          where: {user: "${account}", state_not: 1, expirationTime_gt: ${lastSavedTimestamp}}
+        ) {
+          optionContract {
+            address
+            token
+            asset
+          }
+          payout
+          totalFee
+          expirationTime
+        }
+      `;
+        const query = lastSavedTimestamp
+          ? `{${basicQuery + extraQuery}}`
+          : `{${basicQuery}}`;
+        //Warning: Cant use lite endpioint as it doesnt contain the token and asset data for the query.
+        const response = await axios.post(configContracts.graph.MAIN, {
+          query,
+        });
+        if (response.data?.data.userOptionDatas.length === 1000) {
+          setLastSavedTimestamp(
+            response.data?.data.userOptionDatas[999].expirationTime
+          );
+        }
 
-      // console.log(response, 'response');
-      return response.data?.data as ProfileGraphQlResponse;
-    },
-    refreshInterval: 300,
-  });
+        // console.log(response, 'response');
+        return response.data?.data as ProfileGraphQlResponse;
+      },
+      refreshInterval: 300,
+    }
+  );
 
   const tradingMetricsData: ItradingMetricsData | null = useMemo(() => {
     if (!data || !data.userOptionDatas || !data.activeData) return null;
@@ -157,6 +197,68 @@ export const useProfileGraphQl = () => {
       } as metricsData
     );
 
+    //add next1000 data to the computedData
+
+    if (data.next1000) {
+      data.next1000.forEach((element) => {
+        const assetAddress = element.optionContract.asset;
+        if (computedData.tradesPerAsset[assetAddress] !== undefined) {
+          computedData.tradesPerAsset[assetAddress] += 1;
+        } else {
+          computedData.tradesPerAsset[assetAddress] = 1;
+        }
+        if (element.payout) {
+          if (element.optionContract.token === 'USDC') {
+            computedData.USDCtotalPayout = add(
+              computedData.USDCtotalPayout,
+
+              element.payout
+            );
+          } else {
+            computedData.ARBtotalPayout = add(
+              computedData.ARBtotalPayout,
+              element.payout
+            );
+          }
+          computedData.tradeWon += 1;
+          if (element.optionContract.token === 'USDC') {
+            computedData.USDCnet_pnl = add(
+              computedData.USDCnet_pnl,
+              subtract(element.payout, element.totalFee)
+            );
+          } else {
+            computedData.ARBnet_pnl = add(
+              computedData.ARBnet_pnl,
+              subtract(element.payout, element.totalFee)
+            );
+          }
+        } else {
+          if (element.optionContract.token === 'USDC') {
+            computedData.USDCnet_pnl = add(
+              computedData.USDCnet_pnl,
+              subtract('0', element.totalFee)
+            );
+          } else {
+            computedData.ARBnet_pnl = add(
+              computedData.ARBnet_pnl,
+              subtract('0', element.totalFee)
+            );
+          }
+        }
+        if (element.optionContract.token === 'USDC') {
+          computedData.USDCvolume = add(
+            computedData.USDCvolume,
+            element.totalFee
+          );
+        } else {
+          computedData.ARBvolume = add(
+            computedData.ARBvolume,
+            element.totalFee
+          );
+        }
+      });
+    }
+
     //counts openInterest
     const USDCopenInterest = data.activeData.reduce(
       (accumulator, currentValue) => {
@@ -175,13 +277,16 @@ export const useProfileGraphQl = () => {
       '0'
     );
 
+    const totalTrades =
+      data.userOptionDatas.length + (data.next1000?.length || 0);
+
     return {
       ...computedData,
-      totalTrades: data.userOptionDatas.length,
+      totalTrades,
       USDCopenInterest,
       ARBopenInterest,
     };
-  }, [data?.userOptionDatas, data?.activeData]);
-  // console.log(tradingMetricsData, 'tradingMetricsData');
+  }, [data?.userOptionDatas, data?.activeData, data?.next1000]);
+  // console.log(tradingMetricsData, data, 'tradingMetricsData');
   return { tradingMetricsData };
 };
