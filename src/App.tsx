@@ -98,7 +98,6 @@ const AppRoutes = () => {
   return (
     <div className="relative root w-[100vw]">
       <OpenOcean />
-
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
