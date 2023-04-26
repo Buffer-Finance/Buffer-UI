@@ -120,7 +120,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
 
       toastify({
         id: contractAddress,
-        msg: "Waiting for user's confirmation",
+        msg: 'Transaction confirmation in progress...',
         type: 'info',
         inf: 1,
       });
