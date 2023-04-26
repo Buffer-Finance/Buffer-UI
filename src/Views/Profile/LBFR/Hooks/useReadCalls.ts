@@ -1,9 +1,10 @@
-import { erc20ABI, useAccount } from 'wagmi';
+import { erc20ABI } from 'wagmi';
 import { getContract } from '../Config/Addresses';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useMemo } from 'react';
 import { useReadCall } from '@Utils/useReadCall';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 export type stakedType = null | {
   decimals: number;
@@ -16,7 +17,7 @@ export type stakedType = null | {
 };
 
 export const useLBFRreadCalls = () => {
-  const { address: account } = useAccount();
+  const { address: account } = useUserAccount();
   const { activeChain } = useActiveChain();
 
   const genericCalls = useMemo(() => {
