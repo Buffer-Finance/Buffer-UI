@@ -9,6 +9,9 @@ import { atomWithLocalStorage } from '../Components/SlippageModal';
 const activePoolAtom = atomWithLocalStorage('last-selected-pool-v1', {
   activePool: null,
 });
+const activePoolALlAtom = atomWithLocalStorage('last-selected-pool-v1', {
+  activePool: null,
+});
 
 export const useActivePoolObj = () => {
   const { activePool } = useAtomValue(activePoolAtom);
@@ -37,11 +40,43 @@ export const useActivePoolObj = () => {
 
   return { activePoolObj, dropdownItems };
 };
+export const useActivePoolAll = () => {
+  const { activePool } = useAtomValue(activePoolALlAtom);
+  const qtInfo = useQTinfo();
+  const { activeChain, configContracts } = useActiveChain();
+  const activePair = qtInfo.activePair;
+
+  const dropdownItems = useMemo(() => {
+    if (!activePair) return [];
+
+    console.log(`activePair.pools: `, activePair.pools);
+    return (
+      activePair.pools
+        // .filter((pool) => !pool.token.is_pol)
+        .map((pool) => pool.token.name)
+    );
+  }, [activePair, activeChain]);
+
+  console.log(`dropdownItems: `, dropdownItems);
+  const activePoolObj = useMemo(() => {
+    console.log(
+      `configContracts.tokens[activePool]: `,
+      configContracts.tokens[activePool]
+    );
+    let name = activePool;
+    const poolObj = { token: { ...configContracts.tokens[activePool], name } };
+    return poolObj;
+  }, [activePool, configContracts]);
+
+  return { activePoolObj, dropdownItems };
+};
 
 export const PoolDropDown = () => {
   const setActivePool = useSetAtom(activePoolAtom);
   const { configContracts } = useActiveChain();
+  console.log(`configContracts: `, configContracts);
   const { dropdownItems, activePoolObj } = useActivePoolObj();
+  console.log(`dropdownItems: `, dropdownItems);
 
   if (dropdownItems.length === 1)
     return (
@@ -58,6 +93,57 @@ export const PoolDropDown = () => {
       rootClass="token-dd flex-center "
       className="bg-cross-bg dd-items text-3 chain-dropdown-bottom mb-3"
       items={dropdownItems}
+      initialActive={1}
+      rootClassName="token-dd w-fit"
+      dropdownBox={(isActive, isOpen, d) => (
+        <div className="token-dd w-fit hover:brightness-150 flex items-center bg-cross-bg px-4 py-[5px] sm:px-[0] sm:py-[0] text-f16 transition-all duration-150 text-1">
+          <img
+            src={activePoolObj.token.img}
+            className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "
+          />
+          <div className="sm:hidden">{activePoolObj.token.name}</div>
+          <DropdownArrow open={isOpen} />
+        </div>
+      )}
+      item={(singleItem, handleClose, onChange, activel) => (
+        <button
+          className="hover:brightness-150 mt-2 flex items-center sm:p-2 sm:justify-center"
+          onClick={() => {
+            setActivePool({ activePool: singleItem });
+          }}
+          key={singleItem}
+        >
+          <img
+            src={configContracts.tokens[singleItem].img}
+            className="w-[18px] h-[18px] sm:w-[23px] sm:h-[23px] sm:max-w-max sm:mr-[0] mr-2 "
+          />{' '}
+          <div className="sm:hidden">{singleItem}</div>
+        </button>
+      )}
+    />
+  );
+};
+export const PoolDropDownAll = () => {
+  const setActivePool = useSetAtom(activePoolALlAtom);
+  const { configContracts } = useActiveChain();
+  console.log(`configContracts: `, configContracts);
+  const { dropdownItems, activePoolObj } = useActivePoolAll();
+
+  if (dropdownItems.length === 1)
+    return (
+      <div className="token-dd flex items-center bg-cross-bg w-fit px-4 py-[5px]  sm:px-[0] sm:py-[0]  text-f16  text-1">
+        <img
+          src={activePoolObj.token.img}
+          className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "
+        />
+        <div className="sm:hidden">{activePoolObj.token.name}</div>
+      </div>
+    );
+  return (
+    <BufferDropdown
+      rootClass="token-dd flex-center "
+      className="bg-cross-bg dd-items text-3 chain-dropdown-bottom mb-3"
+      items={Object.keys(configContracts.tokens)}
       initialActive={1}
       rootClassName="token-dd w-fit"
       dropdownBox={(isActive, isOpen, d) => (

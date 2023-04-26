@@ -19,6 +19,8 @@ import { ModalBase } from 'src/Modals/BaseModal';
 import { BlueBtn } from './Common/V2-Button';
 import {
   PoolDropDown,
+  PoolDropDownAll,
+  useActivePoolAll,
   useActivePoolObj,
 } from './BinaryOptions/PGDrawer/PoolDropDown';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
@@ -77,7 +79,7 @@ const TradingConfig: React.FC<any> = ({}) => {
 
   const [configData, setConfigData] = useAtom(configDataAtom);
   const [poolConfig, setPoolConfig] = useAtom(poolConfigAtom);
-  const { activePoolObj } = useActivePoolObj();
+  const { activePoolObj } = useActivePoolAll();
 
   const [configReadCalls, configState]: [null, null] | [Call[], ConfigValue[]] =
     useMemo(() => {
@@ -235,7 +237,7 @@ const TradingConfig: React.FC<any> = ({}) => {
   return (
     <div className="mx-[30px]">
       <div className="">
-        <PoolDropDown />
+        <PoolDropDownAll />
       </div>
       <div className="flex items-center text-f14">
         <div>Search : </div>
