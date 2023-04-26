@@ -22,12 +22,12 @@ export const ProfilePage = () => {
   );
 };
 const Profile = () => {
-  const { address: account } = useUserAccount();
+  // const { address: account } = useUserAccount();
   usePrice(true);
-  useTotalTrades({
-    account,
-    currentTime: Math.floor(new Date().getTime() / 1000),
-  });
+  // useTotalTrades({
+  //   account,
+  //   currentTime: Math.floor(new Date().getTime() / 1000),
+  // });
   return (
     <div>
       {/* <TokenDataNotIncludedWarning /> */}
