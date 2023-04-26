@@ -13,7 +13,7 @@ import { useReadCall } from '@Utils/useReadCall';
 import { TableAligner } from './V2-Leaderboard/Components/TableAligner';
 import { keyClasses } from './Earn/Components/VestCards';
 import { valueClasses } from './Earn/Components/VestCards';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import BufferInput from './Common/BufferInput';
 import { ModalBase } from 'src/Modals/BaseModal';
 import { BlueBtn } from './Common/V2-Button';
@@ -30,6 +30,7 @@ import {
 import { IMarket } from './BinaryOptions';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
 import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
+import OptionAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
 
 interface ConfigValue {
   getter: string;
@@ -39,7 +40,7 @@ interface ConfigValue {
   value: null;
   selected: boolean;
   newValue: null;
-  market?: IMarket;
+  market: { pair: string; contract: string };
   abi: any[];
 }
 
@@ -109,14 +110,9 @@ const configDataAtom = atom<ConfigValue[]>([]);
 type ChainInfo = (typeof Config)['421613'];
 // all markets, all config values.
 const TradingConfig: React.FC<any> = ({}) => {
-  const [configValues] = useState(initialConfigValues);
   const { activeChain } = useActiveChain();
-  const { writeCall } = useWriteCall(
-    '0x99c758a4Aff8d0d51F18c5fBd94fD182ec49BaaA',
-    TestAvatarAbi
-  );
-  const [configData, setConfigData] = useAtom(configDataAtom);
-  const [activePool, setActivePool] = useState('USDC');
+
+  const setConfigData = useSetAtom(configDataAtom);
   const { activePoolObj } = useActivePoolObj();
 
   console.log(`activePoolObj.token: `, activePoolObj.token);
@@ -127,27 +123,101 @@ const TradingConfig: React.FC<any> = ({}) => {
       const configValues: ConfigValue[] = [];
       const activeChainData = Config[activeChain.id.toString()] as ChainInfo;
       activeChainData.pairs.forEach((d) => {
-        const activePoolAddress = d.pools.find(
+        const activePoolConfigAddress = d.pools.find(
           (pool) => pool.token == activePoolObj.token.name
         )?.options_contracts.config;
-        if (activePoolAddress)
-          for (let config in initialConfigValues) {
-            console.log(`config: `, config);
-            if (
-              !notYetHandledConfigs.includes(initialConfigValues[config].getter)
-            ) {
-              calls.push({
-                address: activePoolAddress,
-                abi: ConfigContract,
-                name: initialConfigValues[config].getter,
-                params: [],
-              });
-              configValues.push({
-                ...initialConfigValues[config],
-                ...{ market: d },
-              });
+        const activePoolOptionAddress = d.pools.find(
+          (pool) => pool.token == activePoolObj.token.name
+        )?.options_contracts.current;
+        {
+          if (activePoolConfigAddress && activePoolOptionAddress)
+            // config contract values
+            for (let config in initialConfigValues) {
+              console.log(`config: `, config);
+              if (
+                !notYetHandledConfigs.includes(
+                  initialConfigValues[config].getter
+                )
+              ) {
+                calls.push({
+                  address: activePoolConfigAddress,
+                  abi: ConfigContract,
+                  name: initialConfigValues[config].getter,
+                  params: [],
+                });
+                configValues.push({
+                  ...initialConfigValues[config],
+                  ...{
+                    market: {
+                      pair: d.pair,
+                      contract: activePoolConfigAddress,
+                    },
+                  },
+                });
+              }
             }
-          }
+          // option contract values
+          calls.push({
+            address: activePoolOptionAddress!,
+            abi: OptionAbi,
+            name: 'baseSettlementFeePercentageForAbove',
+            params: [],
+          });
+          calls.push({
+            address: activePoolOptionAddress!,
+            abi: OptionAbi,
+            name: 'baseSettlementFeePercentageForBelow',
+            params: [],
+          });
+          calls.push({
+            address: activePoolOptionAddress!,
+            abi: OptionAbi,
+            name: 'isPaused',
+            params: [],
+          });
+          configValues.push({
+            getter: 'baseSettlementFeePercentageForAbove',
+            setter: 'configure',
+            index: 'configure',
+            contract: '',
+            value: null,
+            selected: false,
+            newValue: null,
+            abi: OptionAbi,
+            market: {
+              pair: d.pair,
+              contract: activePoolOptionAddress!,
+            },
+          });
+          configValues.push({
+            getter: 'baseSettlementFeePercentageForBelow',
+            setter: 'configure',
+            index: 'configure',
+            contract: '',
+            value: null,
+            selected: false,
+            newValue: null,
+            abi: OptionAbi,
+            market: {
+              pair: d.pair,
+              contract: activePoolOptionAddress!,
+            },
+          });
+          configValues.push({
+            getter: 'isPaused',
+            setter: 'toggleCreation',
+            index: 'toggleCreation',
+            contract: '',
+            value: null,
+            selected: false,
+            newValue: null,
+            abi: OptionAbi,
+            market: {
+              pair: d.pair,
+              contract: activePoolOptionAddress!,
+            },
+          });
+        }
       });
       return [calls, configValues];
     }, [activeChain, activePoolObj?.token?.name]);
@@ -161,18 +231,6 @@ const TradingConfig: React.FC<any> = ({}) => {
     swrKey: 'swr-key',
   }).data;
 
-  const ones = () => {
-    const method = configValues[Object.keys(configValues)[0]].setter;
-    const args = [2];
-    writeCall(
-      () => {
-        console.log('success');
-      },
-      method,
-      args,
-      null
-    );
-  };
   if (!configState || !response) return <div>Loading....</div>;
   return (
     <div className="mx-[30px]">
@@ -186,79 +244,16 @@ export { TradingConfig };
 const ConfigValueManager: React.FC<{
   values: any[][];
 }> = ({ values }) => {
-  // const { writeCall } = useWriteCall(
-  //   '0x99c758a4Aff8d0d51F18c5fBd94fD182ec49BaaA',
-  //   TestAvatarAbi
-  // );
   const { writeCall } = useIndependentWriteCall();
   const [changeData, setChangeData] = useState([]);
   const [configData, setConfigData] = useAtom(configDataAtom);
-  // const changeChanged = () => {
-  //   const changeArr = [];
-  //   configData.forEach((c, id) => {
-  //     if (c.newValue && values[id]?.[0] && c.newValue != values[id]?.[0]) {
-  //       console.log(`ddc: `, c);
-  //       changeArr.push({
-  //         contract: c.contract,
-  //         abi: c.abi,
-  //         value: c.newValue,
-  //         method: c.setter,
-  //       });
-  //     }
-  //     setChangeData(changeArr);
-  //     setConfigData((datas) => datas.map((d) => ({ ...d, newValue: null })));
-  //   });
-  // };
 
-  // const handleConfigChange = () => {
-  //   //  const multi =  encodeMulti([{
-  //   //   to:
-  //   //   }])
-  //   // console.log(`changeData: `, changeData);
-  //   const multiBundle: MetaTransaction[] = changeData.map((s) => {
-  //     const data = ifc.encodeFunctionData(s.method, [s.value]);
-
-  //     return {
-  //       to: '0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d',
-  //       data,
-  //       value: '0',
-  //     };
-  //   });
-  //   console.log(`multiBundle: `, multiBundle);
-  //   const encoded = encodeMulti(
-  //     multiBundle,
-  //     '0xAb3224e76fa5a46D9f8364cd14F4cB03087d6Fd8'
-  //   );
-  //   writeCall(
-  //     () => {
-  //       console.log('success');
-  //     },
-  //     'execTransactionFromModule',
-  //     [encoded.to, encoded.value, encoded.data, encoded.operation || 0],
-  //     null
-  //   );
-  //   console.log(`encoded: `, encoded);
-  // };
   return (
     <>
-      {/* <ModalBase
-        open={changeData.length > 0}
-        onClose={() => {
-          setChangeData([]), reset();
-        }}
-      >
-        <div className={valueClasses + 'overflow-auto'}>
-          {changeData.map((c) => (
-            <div>
-              {c.method}&nbsp;:&nbsp;{c.value}
-            </div>
-          ))}
-          <BlueBtn onClick={handleConfigChange}>Change</BlueBtn>
-        </div>
-      </ModalBase> */}
       <div className="">
         <PoolDropDown />
       </div>
+      <div className="text-f14 mt-3">Option Configs</div>
       <TableAligner
         keyStyle={keyClasses}
         valueStyle={valueClasses}
@@ -267,12 +262,6 @@ const ConfigValueManager: React.FC<{
           <ValueEditor value={v[0]} id={id} writeCall={writeCall} />
         ))}
       ></TableAligner>
-      {/* <BlueBtn
-        onClick={changeChanged}
-        className="px-[20px] !my -[20px] !mx-auto !w-fit"
-      >
-        Chnage
-      </BlueBtn> */}
     </>
   );
 };
@@ -285,7 +274,19 @@ const ValueEditor: React.FC<{
   const { activePoolObj } = useActivePoolObj();
   const [configData, setConfigData] = useAtom(configDataAtom);
   const isChanged = configData[id].newValue && value != configData[id].newValue;
-
+  const isBoolean = typeof value == 'boolean';
+  const wc = () => {
+    const activePool = configData[id].market?.contract;
+    console.log(`activePool: `, activePool);
+    writeCall(
+      activePool,
+      configData[id].abi || ConfigABI,
+      () => {},
+      configData[id].setter,
+      isBoolean ? [] : [configData[id].newValue]
+    );
+  };
+  console.log(`configData[id].setter: `, configData[id].setter);
   return (
     <div className="flex gap-x-[10px] items-center">
       <span
@@ -293,10 +294,13 @@ const ValueEditor: React.FC<{
           isChanged && 'line-through decoration-[red] decoration-[2px]'
         }
       >
-        {value}
+        {isBoolean ? JSON.stringify(value) : value}
       </span>
       <button
         onClick={() => {
+          if (isBoolean) {
+            return wc();
+          }
           setConfigData((s) => {
             const updatedS = [...s];
             updatedS[id].selected = !updatedS[id].selected;
@@ -305,40 +309,26 @@ const ValueEditor: React.FC<{
           });
         }}
       >
-        Edit
+        {isBoolean ? 'Toggle' : ' Edit'}
       </button>
-      {configData[id].selected && (
-        <BufferInput
-          value={configData[id].newValue}
-          className="!w-full"
-          onChange={(val) => {
-            setConfigData((s) => {
-              const updatedS = [...s];
-              updatedS[id].newValue = val;
-              return updatedS;
-            });
-          }}
-        />
-      )}
+      {configData[id].selected &&
+        (configData[id].setter == 'confgiure' ? (
+          <div>Hello</div>
+        ) : (
+          <BufferInput
+            value={configData[id].newValue}
+            className="!w-full"
+            onChange={(val) => {
+              setConfigData((s) => {
+                const updatedS = [...s];
+                updatedS[id].newValue = val;
+                return updatedS;
+              });
+            }}
+          />
+        ))}
       {isChanged && (
-        <BlueBtn
-          className="!w-[80px] !px-[10px] "
-          onClick={() => {
-            console.log(`activePoolObj: `, activePoolObj);
-            const activePool = configData[id].market?.pools.find((a) => {
-              return a.token == activePoolObj.token.name;
-            });
-            console.log(`activePool: `, activePool);
-            console.log(configData[id]);
-            writeCall(
-              activePool?.options_contracts.config,
-              ConfigABI,
-              () => {},
-              configData[id].setter,
-              [configData[id].newValue]
-            );
-          }}
-        >
+        <BlueBtn className="!w-[80px] !px-[10px] " onClick={wc}>
           Change
         </BlueBtn>
       )}
