@@ -213,7 +213,7 @@ const SidebarCSS = styled.div`
     /* padding-left: 0.8rem;
     padding-right: 0.8rem; */
   }
-  @media only screen and (min-width: 1200px) {
+  @media only screen and (min-width: 1400px) {
     .sidebar-closed {
       width: 8rem;
       .name {
@@ -259,7 +259,7 @@ const SidebarCSS = styled.div`
       padding: 0;
     }
   } */
-  @media only screen and (max-width: 1200px) {
+  @media only screen and (max-width: 1400px) {
     .overlay {
       position: fixed;
       background-color: rgba(0, 0, 0, 0.4);

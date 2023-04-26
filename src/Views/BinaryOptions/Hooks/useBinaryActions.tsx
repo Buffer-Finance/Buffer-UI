@@ -1,8 +1,7 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useAtom, useAtomValue } from 'jotai';
-import React, { useState } from 'react';
-import { postRes } from '@Utils/apis/api';
+import { useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
 import { toFixed } from '@Utils/NumString';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
@@ -14,16 +13,9 @@ import {
   multiply,
 } from '@Utils/NumString/stringArithmatics';
 import { sessionAtom } from 'src/atoms/generic';
-import {
-  getPriceFromKlines,
-  marketPriceAtom,
-} from 'src/TradingView/useDataFeed';
+import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { approveModalAtom, QuickTradeExpiry } from '../PGDrawer';
-import {
-  getUserError,
-  MINIMUM_MINUTES,
-  timeToMins,
-} from '../PGDrawer/TimeSelector';
+import { getUserError, timeToMins } from '../PGDrawer/TimeSelector';
 import { slippageAtom } from '../Components/SlippageModal';
 import { useActiveAssetState } from './useActiveAssetState';
 import { useQTinfo } from '..';
@@ -31,10 +23,10 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import { minTradeAmount } from '../store';
 import { priceAtom } from '@Hooks/usePrice';
 import { knowTillAtom } from './useIsMerketOpen';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
+import { useTradePolOrBlpPool } from './useTradePolOrBlpPool';
 
 export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const binary = useQTinfo();
@@ -45,7 +37,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const [expiration] = useAtom(QuickTradeExpiry);
   const [token] = useAtom(sessionAtom);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
-
   const [, setIsApproveModalOpen] = useAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
   const activeAsset = binary.activePair;
@@ -61,6 +52,8 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const marketPrice = useAtomValue(priceAtom);
   const toastify = useToast();
   const knowTill = useAtomValue(knowTillAtom);
+  const { option_contract, min_amount: minTradeAmount } =
+    useTradePolOrBlpPool();
 
   const cb = (a) => {
     setLoading(null);
@@ -111,7 +104,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    // if (isCustom && expirationInMins< MINIMUM_MINUTES) {
+    // if (isCustom && expirationInMins < MINIMUM_MINUTES) {
     //   return toastify({
     //     type: 'error',
     //     msg: 'Expiration should be greater then 5 minutes due to network congestion',
@@ -189,7 +182,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       toFixed(multiply(userInput, activePoolObj.token.decimals), 0),
       expirationInMins * 60 + '',
       customTrade.is_up,
-      activePoolObj.options_contracts.current,
+      option_contract.current,
       toFixed(multiply(('' + price).toString(), 8), 0),
       // '10000000000',
       toFixed(multiply(settings.slippage.toString(), 2), 0),

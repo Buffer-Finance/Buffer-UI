@@ -1,6 +1,7 @@
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useAccount } from 'wagmi';
+import NumberTooltip from './Tooltips';
 
 export default function NFTtier({ userOnly }: { userOnly: boolean }) {
   const { highestTierNFT } = useHighestTierNFT({ userOnly: userOnly });
@@ -11,22 +12,26 @@ export default function NFTtier({ userOnly }: { userOnly: boolean }) {
   if (!account) return <></>;
   if (!highestTierNFT) {
     return (
-      <div className="group flex items-center justify-center">
-        <img src={`/LeaderBoard/Bronze.png`} className="w-5 mr-2" />
-        <div className="text-1 font-normal">Bronze {TierText}</div>
-      </div>
+      <NumberTooltip content={'Bronze Tier'}>
+        <div className="group flex items-center justify-center">
+          <img src={`/LeaderBoard/Bronze.png`} className="w-5 mr-2" />
+          <div className="text-1 font-normal">Bronze</div>
+        </div>
+      </NumberTooltip>
     );
   } else {
     return (
-      <div className="group flex items-center justify-center ">
-        <img
-          src={`/LeaderBoard/${highestTierNFT.tier}.png`}
-          className="w-5 mr-2"
-        />
-        <div className="text-1 font-normal">
-          {highestTierNFT.tier} {TierText}
+      <NumberTooltip content={highestTierNFT.tier + ' Tier'}>
+        <div className="group flex items-center justify-center gap-2">
+          <img
+            src={`/LeaderBoard/${highestTierNFT.tier}.png`}
+            className="w-5"
+          />
+          <div className="text-1 font-normal sm:hidden">
+            {highestTierNFT.tier}
+          </div>
         </div>
-      </div>
+      </NumberTooltip>
     );
   }
 }

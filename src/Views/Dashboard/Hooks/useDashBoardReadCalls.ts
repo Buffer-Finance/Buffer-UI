@@ -48,7 +48,10 @@ export const HolderContracts = [
 ];
 export const useDashboardReadCalls = () => {
   const bfrPrice = useIbfrPrice();
-  const usd_decimals = 6;
+  const arbPrice = '1';
+  const { configContracts } = useActiveChain();
+  const usd_decimals = configContracts.tokens['USDC'].decimals;
+  const arb_decimals = configContracts.tokens['ARB'].decimals;
 
   const { calls, mainnetData } = useDashboardCalls();
 
@@ -62,9 +65,11 @@ export const useDashboardReadCalls = () => {
   let response: {
     BFR: IBFR;
     BLP: IBLP;
+    aBLP: IBLP;
   } = {
     BFR: null,
     BLP: null,
+    aBLP: null,
   };
   if (data && data.length > 1) {
     let [
@@ -76,11 +81,16 @@ export const useDashboardReadCalls = () => {
       totalStakedBLP,
       totalSupplyBLP,
       amountUSDCpool,
-      amountBFRpool,
       feeBlpTrackerTokensPerInterval,
       stakedBlpTrackerTokensPerInterval,
       USDCvaultPOL,
-      BFRvaultPOL,
+      ablpTotalBalance,
+      ablpSupply,
+      ablpInitialRate,
+      amountARBpool,
+      stakedArbBlpTrackerTokensPerInterval,
+      feeArbBlpTrackerTokensPerInterval,
+      ARBvaultPOL,
     ]: any[] = data;
 
     const blpPrice =
@@ -119,6 +129,38 @@ export const useDashboardReadCalls = () => {
         : '0';
     const blpAprTotal = add(blpAprForRewardToken, blpAprForEsBfr);
 
+    // aBLp
+    const ablpPrice =
+      ablpSupply > 0
+        ? divide(ablpTotalBalance, ablpSupply)
+        : divide('1', ablpInitialRate);
+
+    const feeArbBlpTrackerAnnualRewardsUsd = fromWei(
+      multiply(feeArbBlpTrackerTokensPerInterval, SECONDS_PER_YEAR),
+      arb_decimals
+    );
+    const arbblpAprForRewardToken =
+      ablpSupply > 0
+        ? divide(
+            multiply(feeArbBlpTrackerAnnualRewardsUsd, BASIS_POINTS_DIVISOR),
+            fromWei(multiply(ablpSupply, ablpPrice), arb_decimals)
+          )
+        : '0';
+    const stakedArbBlpTrackerAnnualRewardsUsd = fromWei(
+      multiply(
+        multiply(stakedArbBlpTrackerTokensPerInterval, SECONDS_PER_YEAR),
+        arbPrice
+      )
+    );
+    const arbblpAprForEsBfr =
+      ablpSupply > 0
+        ? divide(
+            multiply(stakedArbBlpTrackerAnnualRewardsUsd, BASIS_POINTS_DIVISOR),
+            fromWei(multiply(ablpSupply, ablpPrice), arb_decimals)
+          )
+        : '0';
+    const ablpAprTotal = add(arbblpAprForRewardToken, arbblpAprForEsBfr);
+
     response = {
       total: null,
       BFR: {
@@ -137,10 +179,34 @@ export const useDashboardReadCalls = () => {
         total_staked: totalUSDCstaked,
         market_cap: multiply(blpPrice, fromWei(totalSupplyBLP, usd_decimals)),
 
-        apr: fromWei(blpAprTotal, 2),
+        apr: {
+          value: fromWei(blpAprTotal, 2),
+          tooltip: [
+            { key: 'Escrowed BFR APR', value: fromWei(blpAprForEsBfr, 2) },
+            { key: 'USDC APR', value: fromWei(blpAprForRewardToken, 2) },
+          ],
+          description:
+            'APRs are updated weekly on Wednesday and will depend on the fees collected for the week.',
+        },
         total_usdc: fromWei(amountUSDCpool, usd_decimals),
         usdc_pol: USDCvaultPOL ? fromWei(USDCvaultPOL, usd_decimals) : null,
         usdc_total: fromWei(amountUSDCpool, usd_decimals),
+      },
+      aBLP: {
+        price: ablpPrice,
+        supply: fromWei(ablpSupply, arb_decimals),
+        total_usdc: fromWei(amountARBpool, arb_decimals),
+        apr: {
+          value: fromWei(ablpAprTotal, 2),
+          tooltip: [
+            // { key: 'Escrowed BFR APR', value: fromWei(arbblpAprForEsBfr, 2) },
+            { key: 'ARB APR', value: fromWei(arbblpAprForRewardToken, 2) },
+          ],
+          description:
+            'APRs are updated weekly on Wednesday and will depend on the fees collected for the week.',
+        },
+        usdc_pol: ARBvaultPOL ? fromWei(ARBvaultPOL, arb_decimals) : null,
+        usdc_total: fromWei(amountUSDCpool, arb_decimals),
       },
     };
   }
@@ -209,13 +275,6 @@ const useDashboardCalls = () => {
         params: [binaryContracts.tokens['USDC'].pool_address],
         chainID: activeChain?.id,
       },
-      amountBFRpool: {
-        address: binaryContracts.tokens['BFR'].address,
-        abi: bfrAbi,
-        name: 'balanceOf',
-        params: [binaryContracts.tokens['BFR'].pool_address],
-        chainID: activeChain?.id,
-      },
       feeBlpTrackerTokensPerInterval: {
         address: earnContracts.FeeBlpTracker,
         abi: RewardTrackerAbi,
@@ -239,11 +298,50 @@ const useDashboardCalls = () => {
         ],
         chainID: activeChain?.id,
       },
-      BFRvaultPOL: {
-        address: binaryContracts.tokens['BFR'].pool_address,
-        abi: poolABI,
-        name: 'shareOf',
-        params: [dashboardContracts.bfrLiquidityAddress],
+
+      ablpTotalBalance: {
+        address: configContracts.tokens['ARB'].pool_address,
+        abi: BlpAbi,
+        name: 'totalTokenXBalance',
+        chainID: activeChain?.id,
+      },
+      ablpSupply: {
+        address: configContracts.tokens['ARB'].pool_address,
+        abi: bfrAbi,
+        name: 'totalSupply',
+        chainID: activeChain?.id,
+      },
+      ablpInitialRate: {
+        address: configContracts.tokens['ARB'].pool_address,
+        abi: BlpAbi,
+        name: 'INITIAL_RATE',
+        chainID: activeChain?.id,
+      },
+      amountARBpool: {
+        address: configContracts.tokens['ARB'].address,
+        abi: bfrAbi,
+        name: 'balanceOf',
+        params: [configContracts.tokens['ARB'].pool_address],
+        chainID: activeChain?.id,
+      },
+      stakedArbBlpTrackerTokensPerInterval: {
+        address: earnContracts.StakedBlpTracker2,
+        abi: RewardTrackerAbi,
+        name: 'tokensPerInterval',
+      },
+      feeArbBlpTrackerTokensPerInterval: {
+        address: earnContracts.FeeBlpTracker2,
+        abi: RewardTrackerAbi,
+        name: 'tokensPerInterval',
+      },
+      ARBvaultPOL: {
+        address: earnContracts.StakedBlpTracker2,
+        abi: RewardTrackerAbi,
+        name: 'depositBalances',
+        params: [
+          dashboardContracts.usdcLiquidityAddress,
+          earnContracts.FeeBlpTracker2,
+        ],
         chainID: activeChain?.id,
       },
     };
@@ -305,7 +403,8 @@ const useDashboardCalls = () => {
       const multicallRes = await multicallv2(
         contracts,
         new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc'),
-        Config[42161].multicall
+        Config[42161].multicall,
+        'dashoboard-read-calls'
       );
       const lpTokensCallLength = lpTokensCalls.length;
       const formattedRes = multicallRes.slice(0, -lpTokensCallLength);

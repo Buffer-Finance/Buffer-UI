@@ -11,6 +11,7 @@ import {
 import { ReactNode, useMemo, useState } from 'react';
 import { createArray } from '@Utils/JSUtils/createArray';
 import Background from '@Views/Common/BufferTable/style';
+import BasicPagination from '@Views/Common/pagination';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -58,6 +59,9 @@ export default function BufferSortTable({
   defaultSortId,
   defaultOrder = 'asc',
   shouldShowMobile = false,
+  activePage = 1,
+  count,
+  onPageChange,
 }: {
   data: any[];
   headerJSX: HeadCell[];
@@ -75,6 +79,11 @@ export default function BufferSortTable({
   defaultSortId: string;
   defaultOrder?: Order;
   shouldShowMobile?: boolean;
+  count?: number;
+  onPageChange?:
+    | ((event: React.ChangeEvent<unknown>, page: number) => void)
+    | undefined;
+  activePage?: number;
 }) {
   const [order, setOrder] = useState<Order>(defaultOrder);
   const [orderBy, setOrderBy] = useState<string>(defaultSortId);
@@ -176,6 +185,13 @@ export default function BufferSortTable({
             )}
           </TableBody>
         </Table>
+        {count && count > 1 ? (
+          <BasicPagination
+            onChange={onPageChange}
+            count={count}
+            page={activePage}
+          />
+        ) : null}
       </TableContainer>
     </Background>
   );

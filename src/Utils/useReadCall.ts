@@ -10,7 +10,7 @@ export const useReadCall = ({
   contracts,
   swrKey,
 }: {
-  contracts: any[];
+  contracts: any;
   swrKey: string;
 }) => {
   const calls = contracts;
@@ -26,7 +26,7 @@ export const useReadCall = ({
   if (signer && !isWrongChain && address) {
     signerOrProvider = signer;
   }
-  console.log(signerOrProvider?._network?.chainId, activeChain, 'provider');
+  // console.log(signerOrProvider?._network?.chainId, activeChain, 'provider');
   const key = swrKey + activeChain.id + account + chainInURL;
 
   // console.log(`signerOrProvider: `, signerOrProvider);

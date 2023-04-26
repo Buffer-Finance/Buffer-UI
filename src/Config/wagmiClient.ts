@@ -12,9 +12,12 @@ import {
   imTokenWallet,
   ledgerWallet,
   omniWallet,
+  safeWallet,
+  tahoWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
+import { inIframe } from '@Utils/isInIframe';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 
 function getSupportedChains() {
@@ -53,11 +56,13 @@ const getWallets = (chains: Chain[]) => {
             trustWallet({ chains }),
             injectedWallet({ chains }),
             walletConnectWallet({ chains }),
+            safeWallet({ chains }),
           ],
         },
         {
           groupName: 'Others',
           wallets: [
+            tahoWallet({ chains }),
             rainbowWallet({ chains }),
             imTokenWallet({ chains }),
             ledgerWallet({ chains }),
@@ -73,7 +78,7 @@ const { chains, provider } = configureChains(getChains(), [publicProvider()]);
 const connectors = connectorsForWallets(getWallets(chains));
 export { chains };
 const wagmiClient = createClient({
-  autoConnect: true,
+  autoConnect: inIframe() ? false : true,
   connectors,
   provider,
 });

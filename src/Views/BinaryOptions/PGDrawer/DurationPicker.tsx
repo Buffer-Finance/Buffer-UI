@@ -14,10 +14,15 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
   const [openCustomInput, setOpenCustomInput] = useState(false);
   const oneSec = 1000;
   const durations = [
+    // {
+    //   duration: 1 * 60 * oneSec,
+    //   time: '00:01',
+    //   name: ['1', 'Min'],
+    // },
     {
-      duration: 1 * 60 * oneSec,
-      time: '00:01',
-      name: ['1', 'Min'],
+      duration: 3 * 60 * oneSec,
+      time: '00:03',
+      name: ['3', 'Min'],
     },
     {
       duration: 5 * 60 * oneSec,

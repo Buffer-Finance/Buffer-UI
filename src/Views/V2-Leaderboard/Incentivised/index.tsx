@@ -48,7 +48,7 @@ export const getRewardTooltip = (
   return tooltip;
 };
 
-export const getTournamentEndDate = ({
+export const getTournamentEndDateFromDay = ({
   startTimestamp,
   endDay,
 }: {
@@ -58,6 +58,21 @@ export const getTournamentEndDate = ({
   if (!startTimestamp || !endDay) return '';
   const startdate = getDisplayDateUTC(
     Math.floor(startTimestamp / 1000) + (endDay - 1) * 86400
+  );
+
+  return startdate;
+};
+
+export const getTournamentEndDateFromWeek = ({
+  startTimestamp,
+  endWeek,
+}: {
+  startTimestamp: number;
+  endWeek: number | undefined;
+}) => {
+  if (!startTimestamp || !endWeek) return '';
+  const startdate = getDisplayDateUTC(
+    Math.floor(startTimestamp / 1000) + (endWeek - 1) * 604800
   );
 
   return startdate;
@@ -242,6 +257,7 @@ export const Incentivised = () => {
                 skip={skip}
                 nftWinners={configValue.winnersNFT}
                 userRank={winnerUserRank}
+                isDailyTable
               />,
               <DailyWebTable
                 standings={loserStats}
@@ -252,6 +268,7 @@ export const Incentivised = () => {
                 skip={skip}
                 nftWinners={configValue.losersNFT}
                 userRank={loserUserRank}
+                isDailyTable
               />,
             ]}
           />
@@ -277,7 +294,7 @@ export const Incentivised = () => {
                     className="mr-3 mt-2 h-[18px]"
                   />
                   The competition ended on{' '}
-                  {getTournamentEndDate({
+                  {getTournamentEndDateFromDay({
                     startTimestamp: configValue.startTimestamp,
                     endDay: configValue.endDay,
                   })}{' '}

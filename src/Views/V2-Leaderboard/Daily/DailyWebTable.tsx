@@ -12,12 +12,19 @@ import { ILeague } from '../interfaces';
 import { LeaderBoardTableStyles } from './stlye';
 import { DailyMobileTable } from './DailyMobileTable';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, gte, multiply } from '@Utils/NumString/stringArithmatics';
 import { Rank } from '../Components/Rank';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Launch } from '@mui/icons-material';
 import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { TableAligner } from '../Components/TableAligner';
+import {
+  tooltipKeyClasses,
+  tooltipValueClasses,
+} from '@Views/Earn/Components/VestCards';
+import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { toFixed } from '@Utils/NumString';
 
 export const DailyWebTable: React.FC<{
   standings: ILeague[] | IWinrate[] | undefined;
@@ -29,6 +36,7 @@ export const DailyWebTable: React.FC<{
   userRank: string;
   activePage: number;
   isWinrateTable?: boolean;
+  isDailyTable?: boolean;
 }> = ({
   standings,
   skip,
@@ -39,6 +47,7 @@ export const DailyWebTable: React.FC<{
   userRank,
   activePage,
   isWinrateTable = false,
+  isDailyTable = false,
 }) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
@@ -46,6 +55,12 @@ export const DailyWebTable: React.FC<{
   const { configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
   const params = useParams();
+  const { poolNames } = usePoolNames();
+
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
 
   //Memos - to avoid re-rendering
   const firstColPadding = useMemo(() => {
@@ -62,7 +77,7 @@ export const DailyWebTable: React.FC<{
       'Volume',
       isWinrateTable ? 'Total Trades' : 'Trades',
       isWinrateTable ? 'Trades Won' : 'Net PnL (%)',
-      isWinrateTable ? 'Win Rate' : 'Absolute Net PnL',
+      isWinrateTable ? 'Win Rate' : 'Total Payout',
     ];
   }, []);
 
@@ -85,6 +100,7 @@ export const DailyWebTable: React.FC<{
   ) => {
     if (!standings) return <></>;
     let currentStanding: ILeague | IWinrate | IuserData = standings[row];
+
     if (user) {
       currentStanding = user;
     }
@@ -143,6 +159,30 @@ export const DailyWebTable: React.FC<{
                   <Display
                     data={divide(currentStanding.volume, usdcDecimals)}
                     unit={'USDC'}
+                    content={
+                      tokens.length > 1 &&
+                      !isDailyTable && (
+                        <TableAligner
+                          keysName={tokens}
+                          keyStyle={tooltipKeyClasses}
+                          valueStyle={tooltipValueClasses}
+                          values={tokens.map(
+                            (token) =>
+                              toFixed(
+                                divide(
+                                  currentStanding[
+                                    `${token.toLowerCase()}Volume`
+                                  ] as string,
+                                  configContracts.tokens[token].decimals
+                                ) as string,
+                                2
+                              ) +
+                              ' ' +
+                              token
+                          )}
+                        />
+                      )
+                    }
                   />
                 )}
               </div>,
@@ -155,9 +195,31 @@ export const DailyWebTable: React.FC<{
           <CellContent
             content={[
               <div>
-                {!currentStanding.netPnL || currentStanding.netPnL === null
-                  ? '-'
-                  : currentStanding.totalTrades}
+                {!currentStanding.netPnL || currentStanding.netPnL === null ? (
+                  '-'
+                ) : (
+                  <Display
+                    data={currentStanding.totalTrades}
+                    precision={0}
+                    className="!justify-start"
+                    content={
+                      tokens.length > 1 &&
+                      !isDailyTable && (
+                        <TableAligner
+                          keysName={tokens}
+                          keyStyle={tooltipKeyClasses}
+                          valueStyle={tooltipValueClasses}
+                          values={tokens.map(
+                            (token) =>
+                              currentStanding[
+                                `${token.toLowerCase()}TotalTrades`
+                              ]
+                          )}
+                        />
+                      )
+                    }
+                  />
+                )}
               </div>,
             ]}
           />
@@ -166,7 +228,28 @@ export const DailyWebTable: React.FC<{
       case 4:
         if (isWinrateTable && 'tradesWon' in currentStanding) {
           return (
-            <CellContent content={[<div>{currentStanding.tradesWon}</div>]} />
+            <CellContent
+              content={[
+                <Display
+                  data={currentStanding.tradesWon}
+                  precision={0}
+                  content={
+                    tokens.length > 1 &&
+                    !isDailyTable && (
+                      <TableAligner
+                        keysName={tokens}
+                        keyStyle={tooltipKeyClasses}
+                        valueStyle={tooltipValueClasses}
+                        values={tokens.map(
+                          (token) =>
+                            currentStanding[`${token.toLowerCase()}TradesWon`]
+                        )}
+                      />
+                    )
+                  }
+                />,
+              ]}
+            />
           );
         }
         try {
@@ -192,6 +275,45 @@ export const DailyWebTable: React.FC<{
                       label={!isNeg ? '+' : ''}
                       className={`f15 ${!isNeg ? 'green' : 'red'}`}
                       unit={'%'}
+                      content={
+                        tokens.length > 1 &&
+                        !isDailyTable && (
+                          <TableAligner
+                            keysName={tokens}
+                            keyStyle={tooltipKeyClasses}
+                            valueStyle={tooltipValueClasses}
+                            values={tokens.map((token) => {
+                              const percentage = multiply(
+                                divide(
+                                  currentStanding[
+                                    `${token.toLowerCase()}NetPnL`
+                                  ] as string,
+                                  currentStanding[
+                                    `${token.toLowerCase()}Volume`
+                                  ]
+                                ) ?? '0',
+                                2
+                              );
+                              const isNegative =
+                                typeof percentage === 'string'
+                                  ? percentage[0] == '-'
+                                    ? true
+                                    : false
+                                  : percentage < 0;
+                              return (
+                                <Display
+                                  data={percentage}
+                                  label={!isNegative ? '+' : ''}
+                                  className={`f15 ${
+                                    !isNegative ? 'green' : 'red'
+                                  }`}
+                                  unit={'%'}
+                                />
+                              );
+                            })}
+                          />
+                        )
+                      }
                     />
                   )}
                 </div>,
@@ -206,7 +328,32 @@ export const DailyWebTable: React.FC<{
         if (isWinrateTable && 'winRate' in currentStanding) {
           return (
             <CellContent
-              content={[<div>{divide(currentStanding.winRate, 3)}%</div>]}
+              content={[
+                <Display
+                  data={divide(currentStanding.winRate, 3)}
+                  precision={2}
+                  unit="%"
+                  content={
+                    tokens.length > 1 &&
+                    !isDailyTable && (
+                      <TableAligner
+                        keysName={tokens}
+                        keyStyle={tooltipKeyClasses}
+                        valueStyle={tooltipValueClasses}
+                        values={tokens.map(
+                          (token) =>
+                            divide(
+                              currentStanding[
+                                `${token.toLowerCase()}WinRate`
+                              ] as string,
+                              3
+                            ) + '%'
+                        )}
+                      />
+                    )
+                  }
+                />,
+              ]}
             />
           );
         }
@@ -219,11 +366,54 @@ export const DailyWebTable: React.FC<{
                 ) : (
                   <Display
                     data={divide(currentStanding.netPnL, usdcDecimals)}
-                    label={gt(currentStanding.netPnL, '0') ? '+' : ''}
+                    label={gte(currentStanding.netPnL, '0') ? '+' : ''}
                     className={`f15 ${
-                      gt(currentStanding.netPnL, '0') ? 'green' : 'red'
+                      gte(currentStanding.netPnL, '0') ? 'green' : 'red'
                     }`}
                     unit={'USDC'}
+                    content={
+                      tokens.length > 1 &&
+                      !isDailyTable && (
+                        <TableAligner
+                          keysName={tokens}
+                          keyStyle={tooltipKeyClasses}
+                          valueStyle={tooltipValueClasses}
+                          values={tokens.map((token) => (
+                            <div className="flex justify-end">
+                              <Display
+                                data={divide(
+                                  currentStanding[
+                                    `${token.toLowerCase()}NetPnL`
+                                  ] as string,
+                                  configContracts.tokens[token].decimals
+                                )}
+                                unit={token}
+                                label={
+                                  gte(
+                                    currentStanding[
+                                      `${token.toLowerCase()}NetPnL`
+                                    ] as string,
+                                    '0'
+                                  )
+                                    ? '+'
+                                    : ''
+                                }
+                                className={`f15 !ml-auto ${
+                                  gte(
+                                    currentStanding[
+                                      `${token.toLowerCase()}NetPnL`
+                                    ] as string,
+                                    '0'
+                                  )
+                                    ? 'green'
+                                    : 'red'
+                                }`}
+                              />
+                            </div>
+                          ))}
+                        />
+                      )
+                    }
                   />
                 )}
               </div>,
@@ -273,6 +463,7 @@ export const DailyWebTable: React.FC<{
           nftWinners={nftWinners}
           onClick={navigateToProfile}
           isWinrateTable={isWinrateTable}
+          isDailyTable={isDailyTable}
         />
       )}
 

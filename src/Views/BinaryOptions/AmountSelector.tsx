@@ -1,6 +1,4 @@
 import { divide, gt } from '@Utils/NumString/stringArithmatics';
-import BufferInput from '@Views/Common/BufferInput';
-import { BufferInputUnit } from '@Views/Common/BufferTextInputRoot';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
@@ -18,10 +16,14 @@ import ErrorIcon from '@Assets/Elements/ErrorIcon';
 import { DurationPicker } from './PGDrawer/DurationPicker';
 import { Background } from './PGDrawer/style';
 import { useToast } from '@Contexts/Toast';
-import { USDCIcon } from '@SVG/Elements/usdc';
-import { minTradeAmount } from './store';
 import { useActiveChain } from '@Hooks/useActiveChain';
-const shutterModalAtom = atom<{ open: false | 'amount' | 'duration' }>({
+import { SlippageModalChild } from './Components/SlippageModal';
+import { SettingsIcon } from './PGDrawer/SettingsIcon';
+import { useTradePolOrBlpPool } from './Hooks/useTradePolOrBlpPool';
+
+const shutterModalAtom = atom<{
+  open: false | 'amount' | 'duration' | 'settings';
+}>({
   open: false,
 });
 
@@ -49,7 +51,7 @@ const AmountInput = ({
       }, 100);
   }, [props.autoFocus]);
   return (
-    <div className={ipWrapperClasses} onClick={onClick}>
+    <div className={ipWrapperClasses + ' !w-fit'} onClick={onClick}>
       <label
         className={labelClasses}
         htmlFor={props.autoFocus ? 'inner' : 'outer'}
@@ -83,10 +85,10 @@ const AmountSelector: React.FC<any> = ({
   const { activePoolObj } = useActivePoolObj();
   const { configContracts } = useActiveChain();
   const balance = activeAssetState?.[0];
-  console.log(`activeAssetState: `, activeAssetState);
+  const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
   const isShutterOpen = shutter.open == 'amount';
-  const toastify = useToast();
   const { closeShutter } = useShutterHandlers();
+
   return (
     <>
       <ShutterDrawer
@@ -261,13 +263,26 @@ const DurationInput = ({ onClick }: any) => {
     return removeEventListener('keydown', listener);
   }, [currentTime]);
   return (
-    <div className={ipWrapperClasses} onClick={onClick}>
+    <div className={ipWrapperClasses + ' !w-fit'} onClick={onClick}>
       <label className={labelClasses} htmlFor="duration">
-        Duration
+        <svg
+          width="19"
+          height="19"
+          viewBox="0 0 19 19"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M7.82357 0.128829C2.84485 0.986429 -0.686465 5.93524 0.113088 10.9348C0.941485 16.1137 5.8279 19.7004 10.9432 18.8842C18.1372 17.7361 21.4157 9.47043 16.9971 3.62155C15.0078 0.988563 11.2156 -0.455355 7.82357 0.128829ZM11.4788 1.70359C17.581 3.29136 19.6087 10.6885 15.1693 15.1669C11.9903 18.3741 7.08257 18.3694 3.83436 15.1565C-0.625782 10.7449 1.42502 3.37652 7.58405 1.68288C8.89021 1.32366 10.0419 1.32985 11.4788 1.70359ZM9.13316 4.7325C8.93701 4.81169 8.86607 5.64581 8.86607 7.86964V10.8992L10.3137 12.3341C11.7854 13.793 12.2455 14.0105 12.7008 13.4626C13.0442 13.0494 12.7997 12.646 11.3391 11.2151L10.1481 10.0484V7.44937C10.1481 5.27635 10.0927 4.82919 9.81006 4.72076C9.62417 4.64948 9.45601 4.59889 9.43614 4.60807C9.41648 4.61725 9.28016 4.67338 9.13316 4.7325Z"
+            fill="#6B728E"
+          />
+        </svg>
       </label>
-      <div className="flex-center">
+      <div className="flex items-center justify-end mx-[10px] w-fit">
         <input
-          className={ipClasses + ' mr-[0px]'}
+          className={ipClasses + ' mr-[0px] !w-[22px]'}
           ref={hrsRef}
           id="duration"
           onFocus={(e) => e.target.blur()}
@@ -314,6 +329,39 @@ const DurationSelector = () => {
         }}
         j
       />
+    </>
+  );
+};
+
+export const SettingsSelector = () => {
+  const setShutter = useSetAtom(shutterModalAtom);
+  const shutter = useAtomValue(shutterModalAtom);
+  const isShutterOpen = shutter.open == 'settings';
+  const { closeShutter } = useShutterHandlers();
+  return (
+    <>
+      <ShutterDrawer
+        className="bg-1 "
+        isVisible={isShutterOpen}
+        onClose={closeShutter}
+        mountOnEnter
+        unmountOnExit
+      >
+        <Background>
+          <SlippageModalChild />
+          <div className="mb-4"></div>
+        </Background>
+      </ShutterDrawer>
+
+      <div
+        role="button"
+        onClick={() => {
+          setShutter({ open: 'settings' });
+        }}
+        className="h-fit w-fit m-auto bg-[#232334] p-[10px] rounded-2"
+      >
+        <SettingsIcon />
+      </div>
     </>
   );
 };

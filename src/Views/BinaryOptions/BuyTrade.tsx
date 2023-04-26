@@ -13,7 +13,11 @@ import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useAtom, useAtomValue } from 'jotai';
 import { ReactNode, useEffect, useState } from 'react';
 import { useQTinfo } from '.';
-import { AmountSelector, DurationSelector } from './AmountSelector';
+import {
+  AmountSelector,
+  DurationSelector,
+  SettingsSelector,
+} from './AmountSelector';
 import { ShareModal } from './Components/shareModal';
 import { useBinaryActions } from './Hooks/useBinaryActions';
 import { knowTillAtom } from './Hooks/useIsMerketOpen';
@@ -85,12 +89,13 @@ const BuyTrade: React.FC<any> = ({}) => {
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
   }
-  usePrice();
+  usePrice(true);
   return (
     <div>
       <div className="flex gap-3 my-3">
         <AmountSelector {...{ amount, setAmount, activeAssetState }} />
         <DurationSelector />
+        <SettingsSelector />
       </div>
       {(currStats && currStats.max_loss && currStats.max_payout) ||
       (activeAssetPrice && currStats?.max_payout) ? (

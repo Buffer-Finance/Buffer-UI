@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { add } from '@Utils/NumString/stringArithmatics';
+import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { useMarketStatus } from './useMarketStatus';
+import { useAtomValue } from 'jotai';
+import { priceAtom, usePrice } from '@Hooks/usePrice';
+import { getPriceFromKlines } from '@TV/useDataFeed';
 
 export function getLinuxTimestampBefore24Hours() {
   return Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
@@ -28,28 +31,20 @@ type dashboardTableData = {
       address: string;
     };
     amount: string;
+    depositToken: string;
   }[];
 };
 
 export const useDashboardTableData = () => {
-  const { data: currentPrices } = useSWR('dashboard-current-prices', {
-    fetcher: async () => {
-      const response = await axios.get(
-        `https://oracle.buffer-finance-api.link/price/latest/`
-      );
-
-      return response.data?.data;
-    },
-    // refreshInterval: 300,
-  });
-
-  const assetStatus = useMarketStatus();
+  usePrice(true);
+  const currentPrices = useAtomValue(priceAtom);
+  const { assetStatus } = useMarketStatus();
   const { configContracts } = useActiveChain();
   const { data } = useSWR('dashboard-table-data', {
     fetcher: async () => {
       const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
-          optionContracts (where: {token: "USDC"}) {
+          optionContracts {
             address
             openDown
             openUp
@@ -61,12 +56,16 @@ export const useDashboardTableData = () => {
             tradeCount
           }
           volumePerContracts(   
+            orderBy: timestamp
+            orderDirection: desc
             first: 1000
-            where: {depositToken: "USDC", timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
+            where: { timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
             optionContract {
               address
             }
             amount
+            settlementFee
+            depositToken
           }
         }`,
       });
@@ -76,17 +75,21 @@ export const useDashboardTableData = () => {
   });
 
   const oneDayVolume = useMemo(() => {
-    if (!data || !data.volumePerContracts) return [];
+    if (!data || !data.volumePerContracts) return {};
     return data.volumePerContracts.reduce((acc, item) => {
       const address = item.optionContract.address.toLowerCase();
-      if (acc[address]) {
-        acc[address] = add(acc[address], item.amount);
-      } else {
-        acc[address] = item.amount;
+      if (item.depositToken !== 'total') {
+        if (acc[address]) {
+          acc[address] = add(acc[address], item.amount);
+        } else {
+          acc[address] = item.amount;
+        }
       }
       return acc;
     }, {});
   }, [data]);
+
+  // console.log(oneDayVolume, 'oneDayVolume');
 
   const dashboardData = useMemo(() => {
     if (!data || !data.optionContracts) return [];
@@ -95,19 +98,16 @@ export const useDashboardTableData = () => {
     data.optionContracts.forEach((item) => {
       const configPair = configContracts.pairs.find((pair) => {
         pool = null;
-        if (
-          pair.pools[0].options_contracts.current.toLowerCase() ===
-          item.address.toLowerCase()
-        )
-          pool = pair.pools[0];
-        // pool = pair.pools.find(
-        //   (pool) =>
-        //     pool.options_contracts.current.toLowerCase() ===
-        //     item.address.toLowerCase()
-        // );
+
+        pool = pair.pools.find(
+          (pool) =>
+            pool.options_contracts.current.toLowerCase() ===
+            item.address.toLowerCase()
+        );
         return !!pool;
       });
       if (!configPair) return;
+
       const currData = {
         ...item,
         address: pool.options_contracts.current,
@@ -116,13 +116,29 @@ export const useDashboardTableData = () => {
         min_duration: configPair?.min_duration,
         max_duration: configPair?.max_duration,
         sort_duration: timeToMins(configPair?.min_duration),
-        currentPrice: currentPrices?.[configPair.tv_id]?.p,
+        currentPrice: getPriceFromKlines(currentPrices, configPair),
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(
-          fromWei(item.openInterest, configContracts.tokens['USDC'].decimals)
+          fromWei(
+            item.openInterest,
+            configContracts.tokens[pool.token].decimals
+          )
         ),
         precision: configPair?.price_precision,
-        totalTrades: Number(add(item.openDown, item.openUp)),
+        openUp: fromWei(
+          item.openUp,
+          configContracts.tokens[pool.token].decimals
+        ),
+        openDown: fromWei(
+          item.openDown,
+          configContracts.tokens[pool.token].decimals
+        ),
+        totalTrades: Number(
+          fromWei(
+            add(item.openDown, item.openUp),
+            configContracts.tokens[pool.token].decimals
+          )
+        ),
         max_trade_size:
           Number(assetStatus[pool.options_contracts.current]?.maxTradeAmount) ||
           0,
@@ -135,14 +151,20 @@ export const useDashboardTableData = () => {
           Number(
             fromWei(
               oneDayVolume?.[item.address.toLowerCase()],
-              configContracts.tokens['USDC'].decimals
+              configContracts.tokens[pool.token].decimals
             )
           ) || '0',
         currentUtilization: Number(fromWei(item.currentUtilization, 16)),
-        payoutForDown: Number(fromWei(item.payoutForDown, 16)),
-        payoutForUp: Number(fromWei(item.payoutForUp, 16)),
-        max_utilization: configPair?.max_utilization,
-        // currentPrice: currentPrice?.p,
+        payoutForDown: Number(
+          assetStatus[pool.options_contracts.current]?.payout ?? '0'
+        ),
+        payoutForUp: Number(
+          assetStatus[pool.options_contracts.current]?.payout ?? '0'
+        ),
+        max_utilization:
+          assetStatus[pool.options_contracts.current]?.maxUtilization ?? '0',
+        pool: pool.token,
+        poolUnit: configContracts.tokens[pool.token].name,
       };
       upatedData.push(currData);
     });
@@ -170,6 +192,6 @@ export const useDashboardTableData = () => {
       }
     );
   }, [dashboardData]);
-  // console.log(dashboardData, totalData, 'dashboardData');
+  console.log(dashboardData, totalData, 'dashboardData');
   return { dashboardData, totalData };
 };

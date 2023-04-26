@@ -3,10 +3,7 @@ import { atom, useAtom, useAtomValue } from 'jotai';
 import { ReactNode, useEffect, useState } from 'react';
 import DownIcon from 'src/SVG/Elements/DownIcon';
 import UpIcon from 'src/SVG/Elements/UpIcon';
-import {
-  getPriceFromKlines,
-  marketPriceAtom,
-} from 'src/TradingView/useDataFeed';
+import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { divide, gt, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import AccountInfo from '@Views/Common/AccountInfo';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -28,7 +25,7 @@ import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { priceAtom } from '@Hooks/usePrice';
-import { minTradeAmount } from '../store';
+import { useTradePolOrBlpPool } from '../Hooks/useTradePolOrBlpPool';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
@@ -85,6 +82,8 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
   }
+  const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
+
   return (
     <>
       <SlippageModal

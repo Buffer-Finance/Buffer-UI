@@ -1,22 +1,35 @@
 import Drawer from '@Views/Common/V2-Drawer';
 import { Section } from '@Views/Earn/Components/Section';
-import { OtherBLP, StatsTotalStats, TokensBFR, TokensBLP } from './Cards';
+import {
+  OtherBLP,
+  OverviewArbitrum,
+  StatsTotalStats,
+  TokensBFR,
+  TokensBLP,
+} from './Cards';
 import { Markets } from './Components/Markets';
 import { DashboardContextProvider } from './dashboardAtom';
 import { useDashboardReadCalls } from './Hooks/useDashBoardReadCalls';
 import styled from '@emotion/styled';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ArbitrumOnly, ExceptArbitrum } from '@Views/Common/ChainNotSupported';
 import { useDashboardGraphQl } from './Hooks/useDashboardGraphQl';
 import { useOtherChainCalls } from './Hooks/useOtherChainCalls';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { getChains } from 'src/Config/wagmiClient';
 import { chainImageMappipng } from '@Views/Common/Navbar/chainDropdown';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
+import {
+  useArbitrumOverview,
+  usePoolDisplayNames,
+  usePoolNames,
+} from './Hooks/useArbitrumOverview';
+import { atom, useAtom } from 'jotai';
+import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -67,7 +80,7 @@ export const Dashboard = () => {
 const DashboardPage = () => {
   return (
     <DashboardStyles>
-      <TokenDataNotIncludedWarning />
+      {/* <TokenDataNotIncludedWarning /> */}
       <Boxes />
       <Section
         Heading={<div className={topStyles}>Markets</div>}
@@ -78,13 +91,17 @@ const DashboardPage = () => {
           </div>
         }
         other={<Markets />}
+        HeadingRight={
+          <div className="mx-3">
+            <TokenDropdown />
+          </div>
+        }
       />
     </DashboardStyles>
   );
 };
 
 function Boxes() {
-  const { overView } = useDashboardGraphQl();
   const { activeChain } = useActiveChain();
   return (
     <>
@@ -103,21 +120,21 @@ function Boxes() {
           </div>
         }
         Cards={[
-          <StatsTotalStats data={overView} />,
+          <OverViewData />,
           <ExceptArbitrum hide>
             <DashboardOtherChainData />
           </ExceptArbitrum>,
         ]}
       />
       <ArbitrumOnly hide>
-        <DashboardData />
+        <DashboardTokensData />
       </ArbitrumOnly>
     </>
   );
 }
 
-const DashboardData = () => {
-  const { BFR, BLP } = useDashboardReadCalls();
+const DashboardTokensData = () => {
+  const { BFR, BLP, aBLP } = useDashboardReadCalls();
   return (
     <Section
       Heading={<div className={topStyles}>Tokens</div>}
@@ -126,10 +143,29 @@ const DashboardData = () => {
       }
       Cards={[
         <TokensBFR data={BFR} tokenName={'BFR'} />,
-        <TokensBLP data={BLP} tokenName={'BLP'} />,
+        <TokensBLP data={BLP} tokenName={'USDC'} poolName={'uBLP'} />,
+        <TokensBLP data={aBLP} tokenName={'ARB'} poolName={'aBLP'} />,
       ]}
     />
   );
+};
+
+const OverViewData = () => {
+  const { activeChain } = useActiveChain();
+  const { overView } = useDashboardGraphQl();
+  const { overView: arbitrumOverview } = useArbitrumOverview();
+  switch (activeChain.id) {
+    case arbitrum.id:
+    case arbitrumGoerli.id:
+      return <OverviewArbitrum data={arbitrumOverview} />;
+
+    case polygon.id:
+    case polygonMumbai.id:
+      return <StatsTotalStats data={overView} />;
+
+    default:
+      return <StatsTotalStats data={overView} />;
+  }
 };
 
 const DashboardOtherChainData = () => {
@@ -203,5 +239,48 @@ export const ChainSwitchDropdown = ({
         );
       }}
     />
+  );
+};
+export const tokenAtom = atom<string[]>([]);
+export const TokenDropdown = () => {
+  const { activeChain } = useActiveChain();
+  const { poolNames: tabList } = usePoolNames();
+  const [activeToken, setActiveToken] = useAtom(tokenAtom);
+  const { poolDisplayKeyMapping } = usePoolDisplayNames();
+
+  useEffect(() => {
+    setActiveToken([...tabList]);
+  }, [activeChain]);
+
+  function onCheckChange(tokenName: string) {
+    const isTokenActive = activeToken.find((tab) => tab === tokenName);
+    if (isTokenActive)
+      setActiveToken(activeToken.filter((tab) => tab !== tokenName));
+    else setActiveToken([...activeToken, tokenName]);
+  }
+  if (tabList.length < 2) return <></>;
+  return (
+    <div className="flex items-center gap-5">
+      {' '}
+      {tabList.map((tab) => {
+        const isActive = activeToken.includes(tab);
+        return (
+          <div className="flex items-center gap-2">
+            <BufferCheckbox
+              svgClasses="h-4 w-4"
+              checked={isActive}
+              onCheckChange={() => onCheckChange(tab)}
+            />
+            <div
+              className={`text-f15 font-medium ${
+                isActive ? 'text-1' : 'text-3'
+              }`}
+            >
+              {poolDisplayKeyMapping[tab]}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 };

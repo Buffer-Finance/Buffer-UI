@@ -52,13 +52,15 @@ export const getExpireNotification = async (
     pair: currentRow.configPair.tv_id,
     timestamp: currentRow.expirationTime,
   };
-  response = await axios.post(`https://oracle.buffer-finance-api.link/price/query/`, [
-    query,
-  ]);
+  response = await axios.post(
+    `https://oracle.buffer-finance-api.link/price/query/`,
+    [query]
+  );
   if (!response.data?.length) {
-    response = await axios.post(`https://oracle.buffer-finance-api.link/price/query/`, [
-      query,
-    ]);
+    response = await axios.post(
+      `https://oracle.buffer-finance-api.link/price/query/`,
+      [query]
+    );
   }
 
   if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
@@ -66,6 +68,7 @@ export const getExpireNotification = async (
   }
 
   const expiryPrice = response.data[0].price.toString();
+  console.log(`[fetch]expiryPrice: `, expiryPrice, currentRow.strike);
   let win = true;
   if (lt(currentRow.strike, expiryPrice)) {
     if (currentRow.isAbove) {
@@ -223,13 +226,13 @@ export const PayoutChip: React.FC<{
 }> = ({ data, className = '' }) => {
   const net_pnl = data.payout
     ? divide(
-      subtract(data.payout, data.totalFee),
-      (data.depositToken as IToken).decimals
-    )
+        subtract(data.payout, data.totalFee),
+        (data.depositToken as IToken).decimals
+      )
     : divide(
-      subtract('0', data.totalFee),
-      (data.depositToken as IToken).decimals
-    );
+        subtract('0', data.totalFee),
+        (data.depositToken as IToken).decimals
+      );
 
   const isPending = data.state === BetState.active;
   let isWin = gt(net_pnl, '0');
@@ -365,21 +368,22 @@ export const UpDownChip: React.FC<{
   upText = 'Up',
   downText = 'Down',
 }) => {
-    return (
-      <div
-        className={`px-3 text-f12 flex gap-1 items-center rounded-[8px] font-medium  ml-2 bg-1 brightness-125 w-max ${isUp ? 'green' : 'red'
-          }  ${className}`}
-      >
-        {shouldShowImage &&
-          (isUp ? (
-            <UpTriangle className={`scale-[0.70] mt-1`} />
-          ) : (
-            <DOwnTriangle className={`mt-1 scale-[0.70]`} />
-          ))}
-        {isUp ? upText : downText}
-      </div>
-    );
-  };
+  return (
+    <div
+      className={`px-3 text-f12 flex gap-1 items-center rounded-[8px] font-medium  ml-2 bg-1 brightness-125 w-max ${
+        isUp ? 'green' : 'red'
+      }  ${className}`}
+    >
+      {shouldShowImage &&
+        (isUp ? (
+          <UpTriangle className={`scale-[0.70] mt-1`} />
+        ) : (
+          <DOwnTriangle className={`mt-1 scale-[0.70]`} />
+        ))}
+      {isUp ? upText : downText}
+    </div>
+  );
+};
 
 export const UpDownChipWOText: React.FC<{
   isUp: boolean;
@@ -425,10 +429,11 @@ export const StrikePriceComponent = ({
         data={divide(trade.strike, 8)}
         unit={configData.token2}
         precision={decimals}
-        className={`${!isMobile
+        className={`${
+          !isMobile
             ? 'justify-self-start content-start'
             : 'justify-self-end content-end'
-          }  w-max`}
+        }  w-max`}
       />
       {!isMobile && trade.state === BetState.queued ? (
         <div className="flex gap-2 align-center">
@@ -540,8 +545,9 @@ export const ProbabilityPNL = ({
       if (onlyPnl)
         return (
           <span
-            className={`nowrap flex ${lt(pnl, '0') ? 'text-red' : 'text-green'
-              }`}
+            className={`nowrap flex ${
+              lt(pnl, '0') ? 'text-red' : 'text-green'
+            }`}
           >
             <Display
               data={divide(
@@ -566,8 +572,9 @@ export const ProbabilityPNL = ({
             />
             <div className="flex content-sbw full-width">
               <span
-                className={`nowrap flex ${lt(pnl, '0') ? 'text-red' : 'text-green'
-                  }`}
+                className={`nowrap flex ${
+                  lt(pnl, '0') ? 'text-red' : 'text-green'
+                }`}
               >
                 Net PnL :&nbsp;{' '}
                 <Display
@@ -605,8 +612,9 @@ export const ProbabilityPNL = ({
           />
           <div className="flex content-sbw full-width">
             <span
-              className={`nowrap flex ${+net_pnl < 0 ? 'text-red' : 'text-green'
-                }`}
+              className={`nowrap flex ${
+                +net_pnl < 0 ? 'text-red' : 'text-green'
+              }`}
             >
               Net PnL :&nbsp;{' '}
               <Display

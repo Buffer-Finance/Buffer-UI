@@ -171,7 +171,7 @@ export function getDecimalBlockFromBar(bar) {
   };
   return updatedBar;
 }
-const client = new W3CWebsocket('wss://oracle-v2.buffer-finance-api.link');
+const client = {};
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   '1S',
@@ -326,7 +326,7 @@ export default function useDataFeed(chartReady) {
     const activeResolution = realTimeUpdate.current?.resolution || '1m';
     let prevBar =
       lastSyncedKline?.current?.[
-      activeAsset.tv_id + timeDeltaMapping(activeResolution)
+        activeAsset.tv_id + timeDeltaMapping(activeResolution)
       ];
     const activeAssetStream = priceUpdates[activeAsset.tv_id];
     const latestKline = getKlineFromPrice(res);
@@ -381,17 +381,6 @@ export default function useDataFeed(chartReady) {
   useEffect(() => {
     if (!chartReady) return;
     console.log(`client: `, client);
-    client.onmessage = (e) => {
-      fn(e.data);
-    };
-    client.onerror = (e) => {
-      console.log(`wse: `, e);
-      breakConnection();
-    };
-    client.onclose = (e) => {
-      console.log(`wse: `, e);
-      breakConnection();
-    };
   }, [chartReady]);
   const breakConnection = () => {
     setShowPasuseModal(true);
@@ -523,19 +512,22 @@ export default function useDataFeed(chartReady) {
 
           const req = firstDataRequest
             ? {
-              pair: getBarsFnActiveAsset,
-              interval: timeDeltaMapping(resolution),
-              limit: 1000,
-            }
+                pair: getBarsFnActiveAsset,
+                interval: timeDeltaMapping(resolution),
+                limit: 1000,
+              }
             : {
-              pair: getBarsFnActiveAsset,
-              interval: timeDeltaMapping(resolution),
-              limit: 1000,
-              start_time: from * 1000,
-              end_time: to * 1000,
-            };
+                pair: getBarsFnActiveAsset,
+                interval: timeDeltaMapping(resolution),
+                limit: 1000,
+                start_time: from * 1000,
+                end_time: to * 1000,
+              };
           const bundle = [
-            axios.post(`https://oracle.buffer-finance-api.link/multi/uiKlines/`, [req]),
+            axios.post(
+              `https://oracle.buffer-finance-api.link/multi/uiKlines/`,
+              [req]
+            ),
             axios.get('https://oracle.buffer-finance-api.link/price/latest/'),
           ];
           const [d, allPrices] = await Promise.all(bundle);
@@ -605,7 +597,7 @@ export default function useDataFeed(chartReady) {
         onResetCacheNeededCallback();
         // updateBar();
       },
-      unsubscribeBars: (subscriberUID) => { },
+      unsubscribeBars: (subscriberUID) => {},
     },
     realTimeUpdate,
   ];
@@ -614,15 +606,15 @@ export default function useDataFeed(chartReady) {
 export const lastTimestampAtom = atom<any>({});
 export const marketPriceAtom = atom<{
   [market: string]:
-  | {
-    close: number;
-    hight: number;
-    low: number;
-    open: number;
-    time: number;
-    '24h_change': number;
-  }
-  | SUpdate[];
+    | {
+        close: number;
+        hight: number;
+        low: number;
+        open: number;
+        time: number;
+        '24h_change': number;
+      }
+    | SUpdate[];
 }>({});
 export const market2dayChangeAtom = atom<{
   [market: string]: {

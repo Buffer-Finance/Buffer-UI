@@ -8,8 +8,13 @@ import { HistoryTables } from './Components/HistoryTable';
 import { ProfileCards } from './Components/ProfileCards';
 import { ReferralLink } from './Components/ReferralLink';
 import { UserData } from './Components/UserData';
+import { LBFR } from './LBFR';
+import { useEffect } from 'react';
 
 export const ProfilePage = () => {
+  useEffect(() => {
+    document.title = 'Buffer | Profile';
+  }, []);
   return (
     <main className="content-drawer">
       <Profile />
@@ -18,17 +23,20 @@ export const ProfilePage = () => {
 };
 const Profile = () => {
   const { address: account } = useUserAccount();
-  usePrice();
+  usePrice(true);
   useTotalTrades({
     account,
     currentTime: Math.floor(new Date().getTime() / 1000),
   });
   return (
     <div>
-      <TokenDataNotIncludedWarning />
+      {/* <TokenDataNotIncludedWarning /> */}
       <div className="px-7 my-8 sm:px-3">
         <UserData />
         <ReferralLink />
+        <ArbitrumOnly hide>
+          <LBFR />
+        </ArbitrumOnly>
         <ProfileCards />
         <ArbitrumOnly hide>
           <ClaimedNFT />

@@ -10,7 +10,7 @@ import { ILeague } from '../interfaces';
 import { useDayOfTournament } from './useDayOfTournament';
 import { useDayOffset } from './useDayOffset';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { blockedAccounts } from './useWeeklyLeaderboardQuery';
+import { blacklist } from '../blacklist.json';
 import { DailyTournamentConfig } from '../Incentivised/config';
 
 interface ILeaderboardQuery {
@@ -54,7 +54,7 @@ export const useLeaderboardQuery = () => {
             first: 100
             where: {timestamp: "${timestamp}", totalTrades_gte: ${
           configValue.minTradesToQualifyPNL
-        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
+        }, user_not_in: [${blacklist.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades
@@ -67,7 +67,7 @@ export const useLeaderboardQuery = () => {
             first: 100
             where: {timestamp: "${timestamp}", totalTrades_gte: ${
           configValue.minTradesToQualifyPNL
-        }, user_not_in: [${blockedAccounts.map((address) => `"${address}"`)}]}
+        }, user_not_in: [${blacklist.map((address) => `"${address}"`)}]}
           ) {
             user
             totalTrades

@@ -1,8 +1,6 @@
-import { isTestnet } from 'config';
 import { atom } from 'jotai';
 import { IMarket } from '.';
 
-export const minTradeAmount = isTestnet ? 5 : 1;
 export interface IStatsData {
   underlying_asset: {
     address: string;

@@ -17,7 +17,7 @@ interface IDisplayProp {
 }
 
 export const underLineClass =
-  'underline underline-offset-4 decoration decoration-[#ffffff30]  w-fit ml-auto';
+  'underline underline-offset-4 decoration decoration-[#ffffff30]  w-fit';
 
 const stringify = (num: string | number) => {
   if (typeof num == 'number') {

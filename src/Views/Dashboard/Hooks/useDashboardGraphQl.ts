@@ -8,15 +8,18 @@ import {
 } from './useDashboardTableData';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 export const useDashboardGraphQl = () => {
-  const { configContracts } = useActiveChain();
+  const { configContracts, activeChain } = useActiveChain();
   const { totalData } = useDashboardTableData();
 
-  const { data } = useSWR('history-thegraph', {
+  const { data } = useSWR('except-arbitrum-overview', {
     fetcher: async () => {
+      if ([arbitrum.id, arbitrumGoerli.id].includes(activeChain.id)) {
+        return null;
+      }
       const prevDayEpoch = getLinuxTimestampBefore24Hours();
-
       const response = await axios.post(configContracts.graph.MAIN, {
         query: `{ 
             USDCstats:dashboardStat (id : "USDC") {
@@ -159,7 +162,7 @@ export const useDashboardGraphQl = () => {
     };
   }, [data, totalData]);
 
-  console.log(overView, 'overView');
+  // console.log(overView, 'overView');
 
   return {
     overView,

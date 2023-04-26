@@ -1,4 +1,3 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { IMarket, IToken } from '..';
 import { BetState, TradeInputs, useAheadTrades } from '@Hooks/useAheadTrades';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
@@ -7,6 +6,8 @@ import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
 import axios from 'axios';
 import { expiryPriceCache } from './useTradeHistory';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -91,19 +92,8 @@ export interface IGQLHistory {
   blockNumber?: number;
 }
 
-export const usePastTradeQuery = () => {
-  const { address: account } = useUserAccount();
+export const useProcessedTrades = () => {
   const { configContracts } = useActiveChain();
-  const setTrades = useSetAtom(tardesAtom);
-  const setPageNumbers = useSetAtom(updateTotalPageNumber);
-  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
-  const activePage = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
-  const historyPage = useMemo(() => TRADESINAPAGE * (history - 1), [history]);
-  const cancelledPage = useMemo(
-    () => TRADESINAPAGE * (cancelled - 1),
-    [cancelled]
-  );
-
   const getProcessedTrades = (
     trades,
     block,
@@ -111,6 +101,7 @@ export const usePastTradeQuery = () => {
     shouldAddHistoryPrice = false
   ) => {
     const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
+      // console.log(singleTrade, 'singleTrade');
       if (singleTrade.blockNumber) {
         if (block >= singleTrade.blockNumber) {
           // if graph scanned this block.
@@ -176,26 +167,43 @@ export const usePastTradeQuery = () => {
 
     return tempTrades;
   };
+  return { getProcessedTrades };
+};
 
-  const addExpiryPrice = async (currentTrade: IGQLHistory) => {
-    if (currentTrade.state === BetState.active) {
-      axios
-        .post(`https://oracle.buffer-finance-api.link/price/query/`, [
-          {
-            pair: currentTrade.configPair.tv_id,
-            timestamp: currentTrade.expirationTime,
-          },
-        ])
-        .then((response) => {
-          if (
-            !expiryPriceCache[currentTrade.optionID] &&
-            response?.data?.[0]?.price
-          )
-            expiryPriceCache[currentTrade.optionID] =
-              response?.data?.[0].price.toString();
-        });
-    }
-  };
+export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
+  if (currentTrade.state === BetState.active) {
+    // console.log(`[augexp]currentTrade: `, currentTrade);
+    axios
+      .post(`https://oracle.buffer-finance-api.link/price/query/`, [
+        {
+          pair: currentTrade.configPair.tv_id,
+          timestamp: currentTrade.expirationTime,
+        },
+      ])
+      .then((response) => {
+        console.log(`response[fetch]: `, response);
+        if (
+          !expiryPriceCache[currentTrade.optionID] &&
+          response?.data?.[0]?.price
+        )
+          expiryPriceCache[currentTrade.optionID] =
+            response?.data?.[0].price.toString();
+      });
+  }
+};
+
+export const usePastTradeQuery = () => {
+  const { address: account } = useUserAccount();
+  const { getProcessedTrades } = useProcessedTrades();
+  const setTrades = useSetAtom(tardesAtom);
+  const setPageNumbers = useSetAtom(updateTotalPageNumber);
+  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
+  const activePage = useMemo(() => TRADESINAPAGE * (active - 1), [active]);
+  const historyPage = useMemo(() => TRADESINAPAGE * (history - 1), [history]);
+  const cancelledPage = useMemo(
+    () => TRADESINAPAGE * (cancelled - 1),
+    [cancelled]
+  );
 
   const { data } = usePastTradeQueryByFetch({
     account: account,
@@ -209,7 +217,8 @@ export const usePastTradeQuery = () => {
   });
 
   const blockNumber = data?._meta?.block.number;
-  const { data: trades } = useAheadTrades(blockNumber, account);
+  const { data: trades } = useAheadTrades(blockNumber, account, false);
+  // console.log('p=[aug]trades', trades);
   useEffect(() => {
     let activeResponseArr = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])

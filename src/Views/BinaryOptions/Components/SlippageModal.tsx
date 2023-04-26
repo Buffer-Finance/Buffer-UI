@@ -88,8 +88,6 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
   isOpen,
   onResetLayout,
 }) => {
-  const [settings, setSettings] = useAtom(slippageAtom);
-  const [err, setErr] = useState(false);
   // const [isChecked, setIsChecked] = useState(false);
   if (!isOpen) return <></>;
   return (
@@ -102,77 +100,7 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
           <SettingsIcon className={'scale-[2] mr-5 origin-top'} />
           Settings
         </span>
-        <section>
-          <div className={HeadStyles + 'mt-5'}>
-            Slippage Tolerance{' '}
-            <InfoIcon
-              sm
-              className="ml-2"
-              tooltip={`Slippage tolerance is the %age of price fluctuation you can tolerate before your trade is opened`}
-            />
-          </div>
-          <div className="flex flex-row  gap-x-5 text-f12  text-3 mt-3 items-center sm:flex-col sm:items-start">
-            <div className="flex flex-row  gap-5 text-f12  text-3  items-center">
-              {defaults.map((s) => (
-                <div
-                  className={
-                    (+settings.slippage == s
-                      ? 'bg-blue text-1 font-semibold text-f14 py-[5px] px-[15px]'
-                      : 'bg-[#1C1C28] px-5 py-[8px] ') +
-                    ' border border-[#2A2A3A]  rounded-lg hover:border-[#00bbff42] cursor-pointer'
-                  }
-                  role="button"
-                  onClick={() => {
-                    setSettings({ ...settings, slippage: s });
-                  }}
-                >
-                  {s}%
-                </div>
-              ))}
-            </div>
-            <div className="relative sm:mt-3 flex flex-row gap-x-4 items-center">
-              <input
-                value={settings.slippage}
-                type="number"
-                max={MAX_SLIPPAGE}
-                className={` border-2 border-[#2A2A3A] bg-[#222234] px-6 py-[6px] rounded-lg outline-none focus:border-[#00bbff42] w-[150px] text-f14 text-1`}
-                onChange={(e) => {
-                  if (gt(e.target.value || '0', MAX_SLIPPAGE.toString())) {
-                    setErr(true);
-                    return;
-                  }
-                  setSettings({ ...settings, slippage: e.target.value });
-                  setErr(false);
-                }}
-              />
-              {err && (
-                <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
-                  Slippage rate must be less then {MAX_SLIPPAGE}%
-                </span>
-              )}
-              %
-            </div>
-          </div>
-        </section>
-        <section className="flex flex-row justify-between items-center w-full mt-2">
-          <div className={HeadStyles + ' h-fit'}>
-            Partial Fill
-            <InfoIcon
-              sm
-              className="ml-2"
-              tooltip={`By enabling "Partial Fill" your trade will be partially filled rather than canceled in case of insufficient funds in the write pool.`}
-            />
-          </div>
-          <BufferSwitch
-            value={settings.allowPartial}
-            onChange={() => {
-              setSettings({
-                ...settings,
-                allowPartial: !settings.allowPartial,
-              });
-            }}
-          />
-        </section>
+        <SlippageModalChild />
         {window.innerWidth > mobileUpperBound && (
           <section className="flex flex-row justify-between items-center w-full mt-2">
             <div className={HeadStyles + ' h-fit'}>
@@ -198,5 +126,86 @@ export const SlippageModal: React.FC<ISlippageModal> = ({
       </div> */}
       </SlippageModalStyles>
     </Dialog>
+  );
+};
+
+export const SlippageModalChild = () => {
+  const [settings, setSettings] = useAtom(slippageAtom);
+  const [err, setErr] = useState(false);
+  return (
+    <>
+      {' '}
+      <section>
+        <div className={HeadStyles + 'mt-5'}>
+          Slippage Tolerance{' '}
+          <InfoIcon
+            sm
+            className="ml-2"
+            tooltip={`Slippage tolerance is the %age of price fluctuation you can tolerate before your trade is opened`}
+          />
+        </div>
+        <div className="flex flex-row  gap-x-5 text-f12  text-3 mt-3 items-center sm:flex-col sm:items-start">
+          <div className="flex flex-row  gap-5 text-f12  text-3  items-center">
+            {defaults.map((s) => (
+              <div
+                className={
+                  (+settings.slippage == s
+                    ? 'bg-blue text-1 font-semibold text-f14 py-[5px] px-[15px]'
+                    : 'bg-[#1C1C28] px-5 py-[8px] ') +
+                  ' border border-[#2A2A3A]  rounded-lg hover:border-[#00bbff42] cursor-pointer'
+                }
+                role="button"
+                onClick={() => {
+                  setSettings({ ...settings, slippage: s });
+                }}
+              >
+                {s}%
+              </div>
+            ))}
+          </div>
+          <div className="relative sm:mt-3 flex flex-row gap-x-4 items-center">
+            <input
+              value={settings.slippage}
+              type="number"
+              max={MAX_SLIPPAGE}
+              className={` border-2 border-[#2A2A3A] bg-[#222234] px-6 py-[6px] rounded-lg outline-none focus:border-[#00bbff42] w-[150px] text-f14 text-1`}
+              onChange={(e) => {
+                if (gt(e.target.value || '0', MAX_SLIPPAGE.toString())) {
+                  setErr(true);
+                  return;
+                }
+                setSettings({ ...settings, slippage: e.target.value });
+                setErr(false);
+              }}
+            />
+            {err && (
+              <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
+                Slippage rate must be less then {MAX_SLIPPAGE}%
+              </span>
+            )}
+            %
+          </div>
+        </div>
+      </section>
+      <section className="flex flex-row justify-between items-center w-full mt-2">
+        <div className={HeadStyles + ' h-fit'}>
+          Partial Fill
+          <InfoIcon
+            sm
+            className="ml-2"
+            tooltip={`By enabling "Partial Fill" your trade will be partially filled rather than canceled in case of insufficient funds in the write pool.`}
+          />
+        </div>
+        <BufferSwitch
+          value={settings.allowPartial}
+          onChange={() => {
+            setSettings({
+              ...settings,
+              allowPartial: !settings.allowPartial,
+            });
+          }}
+        />
+      </section>
+    </>
   );
 };

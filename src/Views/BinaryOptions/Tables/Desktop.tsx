@@ -1,7 +1,7 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent, CellInfo } from '@Views/Common/BufferTable/CellInfo';
 import Background from './style';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { atom, useAtom } from 'jotai';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import {
@@ -27,15 +27,13 @@ import {
   TradeSize,
 } from './TableComponents';
 import { ChangeEvent, useMemo } from 'react';
-import {
-  IGQLHistory,
-  tardesAtom,
-  tardesTotalPageAtom,
-} from '../Hooks/usePastTradeQuery';
+import { IGQLHistory } from '../Hooks/usePastTradeQuery';
 import { subtract } from '@Utils/NumString/stringArithmatics';
 import { BetState } from '@Hooks/useAheadTrades';
 import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { getSlicedUserAddress } from '@Utils/getUserAddress';
+import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
 
 export const tradesCount = 10;
@@ -43,46 +41,36 @@ export const visualizeddAtom = atom([]);
 interface IPGDesktopTables {
   className?: string;
   isCancelledTable?: boolean;
-  count?: number;
   currentPage: number;
   isHistoryTable?: boolean;
   onPageChange?: (e: ChangeEvent, p: number) => void;
+  shouldNotDisplayShareVisulise: boolean;
+  totalPages: number;
+  filteredData: IGQLHistory[];
+  showUserAddress?: boolean;
+  widths: string[];
+  onRowClick?: (index: number) => void;
+  shouldShowMobile?: boolean;
 }
 
 const PGDesktopTables: React.FC<IPGDesktopTables> = ({
-  isHistoryTable,
-  isCancelledTable,
   className,
   currentPage,
-  count,
   onPageChange,
+  shouldNotDisplayShareVisulise,
+  totalPages,
+  filteredData,
+  showUserAddress = false,
+  widths,
+  onRowClick,
+  shouldShowMobile = false,
+  isHistoryTable,
+  isCancelledTable,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
-  const { active, history, cancelled } = useAtomValue(tardesAtom);
-  const {
-    active: activePages,
-    history: historyPages,
-    cancelled: cancelledPages,
-  } = useAtomValue(tardesTotalPageAtom);
   const { shouldConnectWallet } = useOpenConnectionDrawer();
-
-  const totalPages = useMemo(() => {
-    if (isHistoryTable) {
-      return historyPages;
-    } else if (isCancelledTable) {
-      return cancelledPages;
-    } else return activePages;
-  }, [activePages, historyPages, cancelledPages]);
-
-  const filteredData = useMemo(() => {
-    if (isHistoryTable) {
-      return history;
-    } else if (isCancelledTable) {
-      return cancelled;
-    } else return active;
-  }, [active, history]);
-
+  // console.log(filteredData, 'filteredData');
   const headNameArray = useMemo(() => {
     if (isHistoryTable)
       return [
@@ -95,9 +83,9 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Trade Size',
         'Payout',
         'Status',
-        '',
+        showUserAddress ? 'User' : !shouldNotDisplayShareVisulise && '',
         // "Visualize",
-      ];
+      ].filter((name) => name !== null && name !== undefined && name !== false);
     else if (isCancelledTable)
       return [
         'Asset',
@@ -107,7 +95,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Queue Time',
         'Cancellation Time',
         'Reason',
-      ];
+        showUserAddress && 'User',
+      ].filter((name) => name !== null && name !== undefined && name !== false);
     else
       return [
         'Asset',
@@ -118,8 +107,10 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         'Close Time',
         'Trade Size',
         'Probability',
-        'Visualize',
-      ];
+        showUserAddress
+          ? 'User'
+          : !shouldNotDisplayShareVisulise && 'Visualize',
+      ].filter((name) => name !== null && name !== undefined && name !== false);
   }, [isHistoryTable]);
 
   const HeaderFomatter = (col: number) => {
@@ -272,6 +263,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
           return <>{getErrorFromCode(currentRow?.reason)}</>;
         return <TradeSize trade={currentRow} />;
       case 6:
+        if (showUserAddress && currentRow.state === BetState.cancelled)
+          return <UserAddressColumn address={currentRow.user.address} />;
         return (
           <ProbabilityPNL
             isHistoryTable={isHistoryTable || isCancelledTable}
@@ -291,6 +284,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
             </>
           );
         }
+        if (showUserAddress)
+          return <UserAddressColumn address={currentRow.user.address} />;
 
         let isPresentInDisabled = visualized.includes(
           getIdentifier(currentRow)
@@ -313,6 +308,8 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
 
       case 8:
         // if (!currentRow.normal_option) return <CellContent content={["-"]} />;
+        if (showUserAddress)
+          return <UserAddressColumn address={currentRow.user.address} />;
         if (
           currentRow.state === BetState.queued ||
           currentRow.state === BetState.cancelled
@@ -335,34 +332,41 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         shouldShowTroply={false}
         doubleHeight
         activePage={currentPage}
-        // shouldShowMobile
+        shouldShowMobile={false}
         headerJSX={HeaderFomatter}
         bodyJSX={BodyFormatter}
         cols={headNameArray.length}
         rows={filteredData ? filteredData.length : 0}
-        widths={
-          isHistoryTable
-            ? [
-                'auto',
-                'auto',
-                'auto',
-                'auto',
-                'auto',
-                'auto',
-                'auto',
-                '12%',
-                '10%',
-                '3%',
-              ]
-            : ['auto']
+        widths={widths}
+        onRowClick={
+          onRowClick
+            ? onRowClick
+            : (idx) => {
+                // console.log(idx);
+              }
         }
         overflow
-        onRowClick={console.log}
-        className="h-full"
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
+        shouldShowMobile={shouldShowMobile}
       />
     </Background>
+  );
+};
+
+export const UserAddressColumn = ({ address }: { address: string }) => {
+  if (!address) return <>{address}</>;
+  return (
+    <CellContent
+      content={[
+        <NumberTooltip content={address}>
+          <div className="flex items-center gap-2">
+            {getSlicedUserAddress(address, 5)}{' '}
+            <Launch className="invisible group-hover:visible" />
+          </div>
+        </NumberTooltip>,
+      ]}
+    />
   );
 };
 
