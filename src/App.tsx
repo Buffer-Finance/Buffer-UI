@@ -42,6 +42,8 @@ import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import { TradingConfig } from '@Views/TradingConfig';
 import { PythPoc } from '@Views/PythPoc';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
+import { UsdcTransfer } from '@Hooks/UsdcTransfer';
+import { AddMarket } from './AddMarket';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -99,9 +101,11 @@ const AppRoutes = () => {
 
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />
         <Route path="/pyth" element={<PythPoc />} />
         <Route path="/tradingConfig" element={<TradingConfig />} />
+        <Route path="/addMarket" element={<AddMarket />} />
         <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
