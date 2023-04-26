@@ -275,15 +275,20 @@ const ValueEditor: React.FC<{
   const [configData, setConfigData] = useAtom(configDataAtom);
   const isChanged = configData[id].newValue && value != configData[id].newValue;
   const isBoolean = typeof value == 'boolean';
+  const isConfigure = configData[id].setter == 'configure';
+  const [configure, setConfigure] = useState(['', '', '']);
+
   const wc = () => {
     const activePool = configData[id].market?.contract;
-    console.log(`activePool: `, activePool);
+    console.log(`configure: `, configure);
+    let args = configure;
+    args[2] = configure[2].split(' ');
     writeCall(
       activePool,
       configData[id].abi || ConfigABI,
       () => {},
       configData[id].setter,
-      isBoolean ? [] : [configData[id].newValue]
+      isBoolean ? [] : isConfigure ? configure : [configData[id].newValue]
     );
   };
   console.log(`configData[id].setter: `, configData[id].setter);
@@ -312,8 +317,29 @@ const ValueEditor: React.FC<{
         {isBoolean ? 'Toggle' : ' Edit'}
       </button>
       {configData[id].selected &&
-        (configData[id].setter == 'confgiure' ? (
-          <div>Hello</div>
+        (isConfigure ? (
+          <div className="">
+            {[
+              '_baseSettlementFeePercentageForAbove',
+              '_baseSettlementFeePercentageForBelow',
+              '_nftTierStep (4 space separted digits)',
+            ].map((s, idx) => (
+              <div className="text-f14 text-1">
+                <div className="">{s.replace('_', '')}</div>
+                <BufferInput
+                  value={configure[idx]}
+                  className="!w-full"
+                  onChange={(val) => {
+                    setConfigure((s) => {
+                      let up = [...s];
+                      up[idx] = val;
+                      return up;
+                    });
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         ) : (
           <BufferInput
             value={configData[id].newValue}
@@ -327,7 +353,7 @@ const ValueEditor: React.FC<{
             }}
           />
         ))}
-      {isChanged && (
+      {((isConfigure && configData[id].selected) || isChanged) && (
         <BlueBtn className="!w-[80px] !px-[10px] " onClick={wc}>
           Change
         </BlueBtn>
