@@ -226,6 +226,7 @@ const TradingConfig: React.FC<any> = ({}) => {
     setConfigData(configState);
   }, [configState]);
 
+  const poolCalls = [];
   const response = useReadCall({
     contracts: configReadCalls,
     swrKey: 'swr-key',
@@ -254,6 +255,15 @@ const ConfigValueManager: React.FC<{
         <PoolDropDown />
       </div>
       <div className="text-f14 mt-3">Option Configs</div>
+      <TableAligner
+        keyStyle={keyClasses}
+        valueStyle={valueClasses}
+        keysName={configData.map((c, id) => c.market.pair + ' : ' + c.getter)}
+        values={values.map((v, id) => (
+          <ValueEditor value={v[0]} id={id} writeCall={writeCall} />
+        ))}
+      ></TableAligner>
+      <div className="text-f14 mt-3">Pools Max Utilization</div>
       <TableAligner
         keyStyle={keyClasses}
         valueStyle={valueClasses}
