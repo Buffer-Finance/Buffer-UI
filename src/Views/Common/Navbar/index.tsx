@@ -20,6 +20,7 @@ import { urlSettings } from 'src/Config/wagmiClient';
 import { isTestnet } from 'config';
 import { ClaimLBFRBtn } from '@Views/Profile/LBFR';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { ArbitrumOnly } from '../ChainNotSupported';
 
 interface INavbar {}
 
@@ -107,12 +108,14 @@ export const Navbar: React.FC<INavbar> = () => {
         )} */}
 
         {!viewOnlyMode && (
-          <ClaimLBFRBtn
-            shouldShowValue
-            shouldShowIcon
-            shouldNotShowForZero
-            className="!h-[30px] !bg-[#232334] hover:!bg-blue !rounded-[7px] !w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] px-4 sm:px-3"
-          />
+          <ArbitrumOnly hide>
+            <ClaimLBFRBtn
+              shouldShowValue
+              shouldShowIcon
+              shouldNotShowForZero
+              className="!h-[30px] !bg-[#232334] hover:!bg-blue !rounded-[7px] !w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] px-4 sm:px-3"
+            />
+          </ArbitrumOnly>
         )}
         {/* <BlueBtn
           onClick={() => {}}
