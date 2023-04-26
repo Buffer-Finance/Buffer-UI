@@ -23,31 +23,30 @@ export const useLBFRreadCalls = () => {
     let res: null | {
       [key: string]: { address: string; abi: any; name: string; params: any[] };
     } = null;
-    if (account) {
-      try {
-        res = {
-          LBFRdecimals: {
-            address: getContract(activeChain.id, 'LBFR'),
-            abi: erc20ABI,
-            name: 'decimals',
-            params: [],
-          },
-          totalStakedLBFR: {
-            address: getContract(activeChain.id, 'LBFR'),
-            abi: erc20ABI,
-            name: 'balanceOf',
-            params: [getContract(activeChain.id, 'LBFRrewardTracker')],
-          },
-          tokensPerInterval: {
-            address: getContract(activeChain.id, 'LBFRrewardTracker'),
-            abi: RewardTrackerAbi,
-            name: 'tokensPerInterval',
-            params: [],
-          },
-        };
-      } catch (e) {
-        console.log(e, 'LBFR readcalls error');
-      }
+
+    try {
+      res = {
+        LBFRdecimals: {
+          address: getContract(activeChain.id, 'LBFR'),
+          abi: erc20ABI,
+          name: 'decimals',
+          params: [],
+        },
+        totalStakedLBFR: {
+          address: getContract(activeChain.id, 'LBFR'),
+          abi: erc20ABI,
+          name: 'balanceOf',
+          params: [getContract(activeChain.id, 'LBFRrewardTracker')],
+        },
+        tokensPerInterval: {
+          address: getContract(activeChain.id, 'LBFRrewardTracker'),
+          abi: RewardTrackerAbi,
+          name: 'tokensPerInterval',
+          params: [],
+        },
+      };
+    } catch (e) {
+      console.log(e, 'LBFR readcalls error');
     }
     if (res !== null) return Object.values(res);
     return res;
@@ -126,6 +125,6 @@ export const useLBFRreadCalls = () => {
       userRewards: userRewards,
     };
   }
-  // console.log(calls, data, response, 'calls');
+  console.log(calls, data, response, 'calls');
   return response;
 };
