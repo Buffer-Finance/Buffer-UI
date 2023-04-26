@@ -104,7 +104,7 @@ const AppRoutes = () => {
         <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />
         <Route path="/pyth" element={<PythPoc />} />
-        <Route path="/tradingConfig" element={<TradingConfig />} />
+        <Route path="/admin" element={<TradingConfig />} />
         <Route path="/addMarket" element={<AddMarket />} />
         <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
