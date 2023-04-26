@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { useAccount } from 'wagmi';
 import { add } from '@Utils/NumString/stringArithmatics';
 import { getWeekId } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 import { isTestnet } from 'config';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 const LBFRgraphEndpoint = isTestnet
   ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/lbfr-testnet'
@@ -17,7 +17,7 @@ export const getWeekIdFromTimestamp = (timestamp: number) => {
 };
 
 export const useLBFRGraphql = () => {
-  const { address: account } = useAccount();
+  const { address: account } = useUserAccount();
   const currentWeekId = getWeekId(0);
   const lastWeekId = getWeekId(1);
 

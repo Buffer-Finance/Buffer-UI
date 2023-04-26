@@ -1,9 +1,10 @@
-import { erc20ABI, useAccount } from 'wagmi';
+import { erc20ABI } from 'wagmi';
 import { getContract } from '../Config/Addresses';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useMemo } from 'react';
 import { useReadCall } from '@Utils/useReadCall';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 export type stakedType = null | {
   decimals: number;
@@ -16,38 +17,37 @@ export type stakedType = null | {
 };
 
 export const useLBFRreadCalls = () => {
-  const { address: account } = useAccount();
+  const { address: account } = useUserAccount();
   const { activeChain } = useActiveChain();
 
   const genericCalls = useMemo(() => {
     let res: null | {
       [key: string]: { address: string; abi: any; name: string; params: any[] };
     } = null;
-    if (account) {
-      try {
-        res = {
-          LBFRdecimals: {
-            address: getContract(activeChain.id, 'LBFR'),
-            abi: erc20ABI,
-            name: 'decimals',
-            params: [],
-          },
-          totalStakedLBFR: {
-            address: getContract(activeChain.id, 'LBFR'),
-            abi: erc20ABI,
-            name: 'balanceOf',
-            params: [getContract(activeChain.id, 'LBFRrewardTracker')],
-          },
-          tokensPerInterval: {
-            address: getContract(activeChain.id, 'LBFRrewardTracker'),
-            abi: RewardTrackerAbi,
-            name: 'tokensPerInterval',
-            params: [],
-          },
-        };
-      } catch (e) {
-        console.log(e, 'LBFR readcalls error');
-      }
+
+    try {
+      res = {
+        LBFRdecimals: {
+          address: getContract(activeChain.id, 'LBFR'),
+          abi: erc20ABI,
+          name: 'decimals',
+          params: [],
+        },
+        totalStakedLBFR: {
+          address: getContract(activeChain.id, 'LBFR'),
+          abi: erc20ABI,
+          name: 'balanceOf',
+          params: [getContract(activeChain.id, 'LBFRrewardTracker')],
+        },
+        tokensPerInterval: {
+          address: getContract(activeChain.id, 'LBFRrewardTracker'),
+          abi: RewardTrackerAbi,
+          name: 'tokensPerInterval',
+          params: [],
+        },
+      };
+    } catch (e) {
+      console.log(e, 'LBFR readcalls error');
     }
     if (res !== null) return Object.values(res);
     return res;
@@ -126,6 +126,6 @@ export const useLBFRreadCalls = () => {
       userRewards: userRewards,
     };
   }
-  // console.log(calls, data, response, 'calls');
+  console.log(calls, data, response, 'calls');
   return response;
 };
