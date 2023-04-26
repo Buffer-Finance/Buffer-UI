@@ -21,16 +21,10 @@ import {
   PoolDropDown,
   useActivePoolObj,
 } from './BinaryOptions/PGDrawer/PoolDropDown';
-import { Button } from '@mui/material';
-import {
-  encodeMulti,
-  MetaTransaction,
-  TransactionType,
-} from 'ethers-multisend';
-import { IMarket } from './BinaryOptions';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
 import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
 import OptionAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
+import PoolAbi from '@Views/BinaryOptions/ABI/poolABI.json';
 
 interface ConfigValue {
   getter: string;
@@ -72,50 +66,19 @@ const initialConfigValues = Object.keys(ifc.functions).reduce(
   {}
 );
 
-const getMarketConfigs = (contract: string, abi: any[]) => {
-  Object.keys(ifc.functions).reduce(
-    (acc: { [key: string]: ConfigValue }, item) => {
-      const rawFunctionName = ifc.functions[item].name;
-      if (item.length > 3 && item.substring(0, 3).includes('set')) {
-        const getter =
-          rawFunctionName.substring(3, 4).toLowerCase() +
-          rawFunctionName.substring(4);
-        acc[item] = {
-          getter,
-          contract,
-          abi,
-          setter: rawFunctionName,
-          index: item,
-          value: null,
-          selected: false,
-          newValue: null,
-        };
-      }
-      return acc;
-    },
-    {}
-  );
-};
-// function getCallsFromConfigValues (configValues:ConfigValue[]):Call{
-
-//   return configValues.map(configValue=>({
-//     address:
-//   }))
-
-// }
 const notYetHandledConfigs = ['marketTime'];
 
 const configDataAtom = atom<ConfigValue[]>([]);
+const poolConfigAtom = atom<ConfigValue[]>([]);
 
 type ChainInfo = (typeof Config)['421613'];
-// all markets, all config values.
 const TradingConfig: React.FC<any> = ({}) => {
   const { activeChain } = useActiveChain();
 
-  const setConfigData = useSetAtom(configDataAtom);
+  const [configData, setConfigData] = useAtom(configDataAtom);
+  const [poolConfig, setPoolConfig] = useAtom(poolConfigAtom);
   const { activePoolObj } = useActivePoolObj();
 
-  console.log(`activePoolObj.token: `, activePoolObj.token);
   const [configReadCalls, configState]: [null, null] | [Call[], ConfigValue[]] =
     useMemo(() => {
       if (!activeChain?.id) return [null, null];
@@ -221,36 +184,59 @@ const TradingConfig: React.FC<any> = ({}) => {
       });
       return [calls, configValues];
     }, [activeChain, activePoolObj?.token?.name]);
+  const [poolConfigReadCalls, poolConfigState]:
+    | [null, null]
+    | [Call[], ConfigValue[]] = useMemo(() => {
+    if (!activeChain?.id) return [null, null];
+    let calls: Call[] = [];
+    const configValues: ConfigValue[] = [];
+    const activeChainData = Config[activeChain.id.toString()] as ChainInfo;
+    for (const token in activeChainData.tokens) {
+      calls.push({
+        address: activeChainData.tokens[token].pool_address,
+        abi: PoolAbi,
+        name: 'maxLiquidity',
+        params: [],
+      });
+      configValues.push({
+        getter: 'maxLiquidity',
+        setter: 'setMaxLiquidity',
+        index: 'maxLiquidity',
+        contract: '',
+        value: null,
+        selected: false,
+        newValue: null,
+        abi: PoolAbi,
+        market: {
+          pair: token,
+          contract: activeChainData.tokens[token].pool_address!,
+        },
+      });
+    }
+    console.log(`cddalls: `, calls);
+    return [calls, configValues];
+  }, [activeChain, activePoolObj?.token?.name]);
   console.log(`configReadCalls: `, configReadCalls);
   useEffect(() => {
     setConfigData(configState);
   }, [configState]);
+  useEffect(() => {
+    setPoolConfig(poolConfigState);
+  }, [poolConfigState]);
 
-  const poolCalls = [];
   const response = useReadCall({
-    contracts: configReadCalls,
+    contracts: configReadCalls!,
     swrKey: 'swr-key',
   }).data;
+  const poolResponse = useReadCall({
+    contracts: poolConfigReadCalls!,
+    swrKey: 'swr-key-pools',
+  }).data;
+  const { writeCall } = useIndependentWriteCall();
 
   if (!configState || !response) return <div>Loading....</div>;
   return (
     <div className="mx-[30px]">
-      <ConfigValueManager values={response} />
-    </div>
-  );
-};
-
-export { TradingConfig };
-
-const ConfigValueManager: React.FC<{
-  values: any[][];
-}> = ({ values }) => {
-  const { writeCall } = useIndependentWriteCall();
-  const [changeData, setChangeData] = useState([]);
-  const [configData, setConfigData] = useAtom(configDataAtom);
-
-  return (
-    <>
       <div className="">
         <PoolDropDown />
       </div>
@@ -259,30 +245,44 @@ const ConfigValueManager: React.FC<{
         keyStyle={keyClasses}
         valueStyle={valueClasses}
         keysName={configData.map((c, id) => c.market.pair + ' : ' + c.getter)}
-        values={values.map((v, id) => (
-          <ValueEditor value={v[0]} id={id} writeCall={writeCall} />
+        values={response.map((v, id) => (
+          <ValueEditor
+            value={v[0]}
+            id={id}
+            {...{ writeCall, configData, setConfigData }}
+          />
         ))}
       ></TableAligner>
-      <div className="text-f14 mt-3">Pools Max Utilization</div>
+      <div className="text-f14 mt-3">Pools Config</div>
       <TableAligner
         keyStyle={keyClasses}
         valueStyle={valueClasses}
-        keysName={configData.map((c, id) => c.market.pair + ' : ' + c.getter)}
-        values={values.map((v, id) => (
-          <ValueEditor value={v[0]} id={id} writeCall={writeCall} />
+        keysName={poolConfig.map((c, id) => c.market.pair + ' : ' + c.getter)}
+        values={poolResponse.map((v, id) => (
+          <ValueEditor
+            value={v[0]}
+            id={id}
+            {...{
+              writeCall,
+              configData: poolConfig,
+              setConfigData: setPoolConfig,
+            }}
+          />
         ))}
-      ></TableAligner>
-    </>
+      ></TableAligner>{' '}
+    </div>
   );
 };
+
+export { TradingConfig };
 
 const ValueEditor: React.FC<{
   value: string | number;
   id: number;
   writeCall: any;
-}> = ({ value, writeCall, id }) => {
-  const { activePoolObj } = useActivePoolObj();
-  const [configData, setConfigData] = useAtom(configDataAtom);
+  configData: any;
+  setConfigData: any;
+}> = ({ value, writeCall, id, configData, setConfigData }) => {
   const isChanged = configData[id].newValue && value != configData[id].newValue;
   const isBoolean = typeof value == 'boolean';
   const isConfigure = configData[id].setter == 'configure';
