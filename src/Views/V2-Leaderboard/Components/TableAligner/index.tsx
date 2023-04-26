@@ -1,12 +1,12 @@
-import React from "react";
-import { TableAlignerStyles } from "./style";
+import React from 'react';
+import { TableAlignerStyles } from './style';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from "@mui/material";
+} from '@mui/material';
 
 interface ITableAligner {
   keysName: any[];
@@ -14,6 +14,7 @@ interface ITableAligner {
   keyStyle?: string;
   valueStyle?: string;
   className?: string;
+  getClassName?: (a: string, b: number) => string;
 }
 
 export const TableAligner: React.FC<ITableAligner> = ({
@@ -22,6 +23,7 @@ export const TableAligner: React.FC<ITableAligner> = ({
   keyStyle,
   valueStyle,
   className,
+  getClassName,
 }) => {
   return (
     <TableAlignerStyles className={className}>
@@ -29,8 +31,14 @@ export const TableAligner: React.FC<ITableAligner> = ({
         <TableHead></TableHead>
         <TableBody>
           {keysName.map((row, rowIdx) => {
+            console.log(`getClassName: `, getClassName);
+            let classes = '';
+            if (getClassName) {
+              classes = getClassName(row, rowIdx);
+              console.log(`classes:ns `, classes);
+            }
             return (
-              <TableRow key={rowIdx}>
+              <TableRow key={rowIdx} className={classes}>
                 {[0, 1].map((col, colIdx) => {
                   return (
                     <TableCell

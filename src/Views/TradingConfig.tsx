@@ -220,7 +220,7 @@ const TradingConfig: React.FC<any> = ({}) => {
   useEffect(() => {
     setPoolConfig(poolConfigState);
   }, [poolConfigState]);
-
+  const [search, setSearch] = useState('');
   const response = useReadCall({
     contracts: configReadCalls!,
     swrKey: 'swr-key' + activePoolObj.token.name,
@@ -237,10 +237,25 @@ const TradingConfig: React.FC<any> = ({}) => {
       <div className="">
         <PoolDropDown />
       </div>
+      <div className="flex items-center text-f14">
+        <div>Search : </div>
+        <BufferInput value={search} onChange={(val) => setSearch(val)} />
+      </div>
       <div className="text-f14 mt-3">Option Configs</div>
       <TableAligner
         keyStyle={keyClasses}
         valueStyle={valueClasses}
+        getClassName={(key, idx) => {
+          let retClass = '';
+          if (search) {
+            console.log(`key.includes(search): `, key.includes(search));
+            if (!key.includes(search)) {
+              retClass = '!hidden';
+            }
+            console.log(`retClass: `, retClass);
+          }
+          return retClass;
+        }}
         keysName={configData.map((c, id) => c.market.pair + ' : ' + c.getter)}
         values={response.map((v, id) => (
           <ValueEditor
