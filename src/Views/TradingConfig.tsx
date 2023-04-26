@@ -27,6 +27,9 @@ import {
   MetaTransaction,
   TransactionType,
 } from 'ethers-multisend';
+import { IMarket } from './BinaryOptions';
+import { useIndependentWriteCall } from '@Hooks/writeCall';
+import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
 
 interface ConfigValue {
   getter: string;
@@ -36,7 +39,7 @@ interface ConfigValue {
   value: null;
   selected: boolean;
   newValue: null;
-  market?: string;
+  market?: IMarket;
   abi: any[];
 }
 
@@ -141,7 +144,7 @@ const TradingConfig: React.FC<any> = ({}) => {
               });
               configValues.push({
                 ...initialConfigValues[config],
-                ...{ market: d.pair },
+                ...{ market: d },
               });
             }
           }
@@ -183,61 +186,62 @@ export { TradingConfig };
 const ConfigValueManager: React.FC<{
   values: any[][];
 }> = ({ values }) => {
-  const { writeCall } = useWriteCall(
-    '0x99c758a4Aff8d0d51F18c5fBd94fD182ec49BaaA',
-    TestAvatarAbi
-  );
+  // const { writeCall } = useWriteCall(
+  //   '0x99c758a4Aff8d0d51F18c5fBd94fD182ec49BaaA',
+  //   TestAvatarAbi
+  // );
+  const { writeCall } = useIndependentWriteCall();
   const [changeData, setChangeData] = useState([]);
   const [configData, setConfigData] = useAtom(configDataAtom);
-  const changeChanged = () => {
-    const changeArr = [];
-    configData.forEach((c, id) => {
-      if (c.newValue && values[id]?.[0] && c.newValue != values[id]?.[0]) {
-        console.log(`ddc: `, c);
-        changeArr.push({
-          contract: c.contract,
-          abi: c.abi,
-          value: c.newValue,
-          method: c.setter,
-        });
-      }
-      setChangeData(changeArr);
-      setConfigData((datas) => datas.map((d) => ({ ...d, newValue: null })));
-    });
-  };
+  // const changeChanged = () => {
+  //   const changeArr = [];
+  //   configData.forEach((c, id) => {
+  //     if (c.newValue && values[id]?.[0] && c.newValue != values[id]?.[0]) {
+  //       console.log(`ddc: `, c);
+  //       changeArr.push({
+  //         contract: c.contract,
+  //         abi: c.abi,
+  //         value: c.newValue,
+  //         method: c.setter,
+  //       });
+  //     }
+  //     setChangeData(changeArr);
+  //     setConfigData((datas) => datas.map((d) => ({ ...d, newValue: null })));
+  //   });
+  // };
 
-  const handleConfigChange = () => {
-    //  const multi =  encodeMulti([{
-    //   to:
-    //   }])
-    // console.log(`changeData: `, changeData);
-    const multiBundle: MetaTransaction[] = changeData.map((s) => {
-      const data = ifc.encodeFunctionData(s.method, [s.value]);
+  // const handleConfigChange = () => {
+  //   //  const multi =  encodeMulti([{
+  //   //   to:
+  //   //   }])
+  //   // console.log(`changeData: `, changeData);
+  //   const multiBundle: MetaTransaction[] = changeData.map((s) => {
+  //     const data = ifc.encodeFunctionData(s.method, [s.value]);
 
-      return {
-        to: '0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d',
-        data,
-        value: '0',
-      };
-    });
-    console.log(`multiBundle: `, multiBundle);
-    const encoded = encodeMulti(
-      multiBundle,
-      '0xAb3224e76fa5a46D9f8364cd14F4cB03087d6Fd8'
-    );
-    writeCall(
-      () => {
-        console.log('success');
-      },
-      'execTransactionFromModule',
-      [encoded.to, encoded.value, encoded.data, encoded.operation || 0],
-      null
-    );
-    console.log(`encoded: `, encoded);
-  };
+  //     return {
+  //       to: '0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d',
+  //       data,
+  //       value: '0',
+  //     };
+  //   });
+  //   console.log(`multiBundle: `, multiBundle);
+  //   const encoded = encodeMulti(
+  //     multiBundle,
+  //     '0xAb3224e76fa5a46D9f8364cd14F4cB03087d6Fd8'
+  //   );
+  //   writeCall(
+  //     () => {
+  //       console.log('success');
+  //     },
+  //     'execTransactionFromModule',
+  //     [encoded.to, encoded.value, encoded.data, encoded.operation || 0],
+  //     null
+  //   );
+  //   console.log(`encoded: `, encoded);
+  // };
   return (
     <>
-      <ModalBase
+      {/* <ModalBase
         open={changeData.length > 0}
         onClose={() => {
           setChangeData([]), reset();
@@ -251,41 +255,42 @@ const ConfigValueManager: React.FC<{
           ))}
           <BlueBtn onClick={handleConfigChange}>Change</BlueBtn>
         </div>
-      </ModalBase>
+      </ModalBase> */}
       <div className="">
         <PoolDropDown />
       </div>
       <TableAligner
         keyStyle={keyClasses}
         valueStyle={valueClasses}
-        keysName={configData.map((c, id) => c.market + ' : ' + c.getter)}
+        keysName={configData.map((c, id) => c.market.pair + ' : ' + c.getter)}
         values={values.map((v, id) => (
-          <ValueEditor value={v[0]} id={id} />
+          <ValueEditor value={v[0]} id={id} writeCall={writeCall} />
         ))}
       ></TableAligner>
-      <BlueBtn
+      {/* <BlueBtn
         onClick={changeChanged}
         className="px-[20px] !my -[20px] !mx-auto !w-fit"
       >
         Chnage
-      </BlueBtn>
+      </BlueBtn> */}
     </>
   );
 };
 
-const ValueEditor: React.FC<{ value: string | number; id: number }> = ({
-  value,
-  id,
-}) => {
+const ValueEditor: React.FC<{
+  value: string | number;
+  id: number;
+  writeCall: any;
+}> = ({ value, writeCall, id }) => {
+  const { activePoolObj } = useActivePoolObj();
   const [configData, setConfigData] = useAtom(configDataAtom);
+  const isChanged = configData[id].newValue && value != configData[id].newValue;
 
   return (
     <div className="flex gap-x-[10px] items-center">
       <span
         className={
-          configData[id].newValue &&
-          value != configData[id].newValue &&
-          'line-through decoration-[red] decoration-[2px]'
+          isChanged && 'line-through decoration-[red] decoration-[2px]'
         }
       >
         {value}
@@ -305,6 +310,7 @@ const ValueEditor: React.FC<{ value: string | number; id: number }> = ({
       {configData[id].selected && (
         <BufferInput
           value={configData[id].newValue}
+          className="!w-full"
           onChange={(val) => {
             setConfigData((s) => {
               const updatedS = [...s];
@@ -313,6 +319,28 @@ const ValueEditor: React.FC<{ value: string | number; id: number }> = ({
             });
           }}
         />
+      )}
+      {isChanged && (
+        <BlueBtn
+          className="!w-[80px] !px-[10px] "
+          onClick={() => {
+            console.log(`activePoolObj: `, activePoolObj);
+            const activePool = configData[id].market?.pools.find((a) => {
+              return a.token == activePoolObj.token.name;
+            });
+            console.log(`activePool: `, activePool);
+            console.log(configData[id]);
+            writeCall(
+              activePool?.options_contracts.config,
+              ConfigABI,
+              () => {},
+              configData[id].setter,
+              [configData[id].newValue]
+            );
+          }}
+        >
+          Change
+        </BlueBtn>
       )}
     </div>
   );

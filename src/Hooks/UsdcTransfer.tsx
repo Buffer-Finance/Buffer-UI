@@ -70,7 +70,7 @@ const ExecutionModuleCallAbi = [
 
 const UsdcTransfer: React.FC<any> = ({}) => {
   const { writeCall } = useWriteCall(
-    '0x99c758a4Aff8d0d51F18c5fBd94fD182ec49BaaA',
+    '0x28346dd04079a2b48daF1AC933Fe8F04D92bc773',
     ExecutionModuleCallAbi
   );
   const calls = [
@@ -112,7 +112,7 @@ const UsdcTransfer: React.FC<any> = ({}) => {
         console.log('success');
       },
       'execTransactionFromModule',
-      [encoded.to, encoded.value, encoded.data, encoded.operation || 0],
+      [encoded.to, encoded.value, encoded.data, 1],
       null
     );
   };

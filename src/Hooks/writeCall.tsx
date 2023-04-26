@@ -42,7 +42,7 @@ export interface IConfirmationModal {
  * @param overrides An overrides object to pass to the method. gasPrice passed in here will take priority over the price returned by useGasPrice
  * @returns https://docs.ethers.io/v5/api/providers/types/#providers-TransactionReceipt
  */
-export function useWriteCall(contractAddress: string, abi: any[]) {
+export function useIndependentWriteCall() {
   const { dispatch } = useGlobal();
   const toastify = useToast();
   const provider = useProvider();
@@ -52,19 +52,20 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const { activeChain } = useActiveChain();
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   const { data: signer, isError, isLoading } = useSigner();
-  const contract = useContract({
-    address: contractAddress,
-    abi: abi,
-    signerOrProvider: signer,
-    // signerOrProvider: new ethers.Wallet(your_private_key_string, provider),
-  });
+  // const contract = useContract({
+  //   address: contractAddress,
+  //   abi: abi,
+  //   signerOrProvider: signer,
+  //   // signerOrProvider: new ethers.Wallet(your_private_key_string, provider),
+  // });
   const { data } = useFeeData();
   const { data: balance } = useBalance({ address: account });
   let gasPrice = data?.formatted?.gasPrice || (1e8).toString();
   // gasPrice = multiply(gasPrice, "2");
-  console.log(`contract?.callStatic: `, contract?.callStatic);
 
   const writeCall = async (
+    contractAddress: string,
+    abi: any[],
     callBack: (a?: any) => void,
     methodName: string,
     methodArgs: any[] = [],
@@ -72,6 +73,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     customToast: ICustomToast | null = null,
     confirmationModal: IConfirmationModal | null = null
   ) => {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
     if (viewOnlyMode) {
       toastify({
         id: 'view-only',
