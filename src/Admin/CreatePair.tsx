@@ -381,8 +381,8 @@ const CreatePair: React.FC<any> = ({}) => {
   };
   return (
     <div>
-      <BlueBtn onClick={send}>Create</BlueBtn>
       <RenderForm form={form} setForm={setForm} id="" />
+      <BlueBtn onClick={send}>Create</BlueBtn>
     </div>
   );
 };
