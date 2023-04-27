@@ -1,5 +1,5 @@
 import BufferDropdown from '@Views/Common/BufferDropdown';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useQTinfo } from '..';
 import { useMemo } from 'react';
 import { useActiveChain } from '@Hooks/useActiveChain';
@@ -9,8 +9,8 @@ import { atomWithLocalStorage } from '../Components/SlippageModal';
 const activePoolAtom = atomWithLocalStorage('last-selected-pool-v1', {
   activePool: null,
 });
-const activePoolALlAtom = atomWithLocalStorage('last-selected-pool-v1', {
-  activePool: null,
+const activePoolALlAtom = atom({
+  activePool: 'USDC',
 });
 
 export const useActivePoolObj = () => {
