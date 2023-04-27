@@ -376,7 +376,7 @@ const CreatePair: React.FC<any> = ({}) => {
       MarketFactoryABI,
       () => console.log,
       'createPair',
-      gargs
+      [gargs]
     );
   };
   return (
