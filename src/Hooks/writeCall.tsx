@@ -161,9 +161,9 @@ export function useIndependentWriteCall() {
       console.log(`[blockchain]methodArgs: `, methodArgs);
       console.log(`[blockchain]methodName: `, methodName);
       console.log(`[blockchain]contract: `, contract?.callStatic);
-      // const call = await contract?.callStatic[methodName](...methodArgs, {
-      //   ...defaultValues,
-      // });
+      const call = await contract?.callStatic[methodName](...methodArgs, {
+        ...defaultValues,
+      });
       // console.log(`[blockchain]call: `, call);
       const txn = await contract?.functions[methodName](...methodArgs, {
         ...defaultValues,

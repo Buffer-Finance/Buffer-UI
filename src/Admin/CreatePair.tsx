@@ -246,7 +246,7 @@ const mapping: IInput[] = [
   },
   {
     type: 'string',
-    name: 'minFee Arb(8 dec) USDC(6 dec)',
+    name: 'minFee Arb(18 dec) USDC(6 dec)',
   },
 ];
 
@@ -343,7 +343,14 @@ const map2initState = (mapping: IInput[]): IInitState => {
   const initState: IInitState = {};
   for (const map of mapping) {
     if (typeof map.type == 'string') {
-      initState[map.name] = '';
+      let initVal = '';
+      if (
+        ['Start_Hour', 'Start_Minute', 'End_Hour', 'End_Minutemap'].includes(
+          map.name
+        )
+      )
+        initVal = '0';
+      initState[map.name] = initVal;
     } else {
       initState[map.name] = map2initState(map.type);
     }
@@ -351,10 +358,12 @@ const map2initState = (mapping: IInput[]): IInitState => {
   return initState;
 };
 const res = map2initState(mapping);
+console.log(`res-map: `, res);
 const formAtom = atom(map2initState(mapping));
 
 const CreatePair: React.FC<any> = ({}) => {
   const [form, setForm] = useAtom(formAtom);
+  console.log(`form: `, form);
   const { writeCall } = useIndependentWriteCall();
   const send = async () => {
     const addParam = (formInstance) => {
@@ -418,6 +427,7 @@ const RenderForm = ({ form, setForm, id }) => {
           if (ids.length == 1) {
             value = origForm[key];
           }
+          console.log(`value: `, key, value);
           return (
             <div className="text-f12 ml-2  mt-4">
               <div>{key}</div>
