@@ -33,7 +33,8 @@ export const DashboardTable = ({
     { id: 'currentPrice', label: 'Current Price' },
     { id: 'totalTrades', label: 'Open Up/Open Down' },
     { id: '24h_volume', label: '24h Volume' },
-    { id: 'currentUtilization', label: 'Utilization' },
+    // { id: 'currentUtilization', label: 'Utilization' },
+    { id: 'max_open_interest', label: 'Max OI' },
     { id: 'sort_duration', label: 'Minimum/Maximum Duration (HH:MM)' },
     { id: 'max_trade_size', label: 'Max Trade Size' },
     { id: 'payoutForUp', label: 'Payouts' },
@@ -106,18 +107,31 @@ export const DashboardTable = ({
           />
         );
 
+      // case 5:
+      //   return (
+      //     <CellContent
+      //       content={[
+      //         <div className="flex items-center">
+      //           Current&nbsp;:&nbsp;
+      //           <Display data={currentRow.currentUtilization} unit="%" />
+      //         </div>,
+      //         <div className="flex items-center">
+      //           Max&nbsp;:&nbsp;
+      //           <Display data={currentRow.max_utilization} unit="%" />
+      //         </div>,
+      //       ]}
+      //     />
+      //   );
+
       case 5:
         return (
           <CellContent
             content={[
-              <div className="flex items-center">
-                Current&nbsp;:&nbsp;
-                <Display data={currentRow.currentUtilization} unit="%" />
-              </div>,
-              <div className="flex items-center">
-                Max&nbsp;:&nbsp;
-                <Display data={currentRow.max_utilization} unit="%" />
-              </div>,
+              <Display
+                data={currentRow.max_open_interest}
+                unit={currentRow.poolUnit}
+                className="!justify-start"
+              />,
             ]}
           />
         );

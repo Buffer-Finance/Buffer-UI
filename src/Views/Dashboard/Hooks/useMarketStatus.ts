@@ -59,17 +59,28 @@ export function useMarketStatus() {
                 ],
               },
               {
-                address: pool.options_contracts.config,
-                abi: ConfigABI,
-                name: 'assetUtilizationLimit',
-                params: [],
+                address: configContracts.tokens[pool.token].meta,
+                abi: MaxTradeABI,
+                name: 'getPoolBasedMaxAmount',
+                params: [
+                  pool.options_contracts.current,
+                  highestTierNFT?.tokenId || 0,
+                  referralData[2],
+                  account || '0x0000000000000000000000000000000000000000',
+                ],
               },
-              {
-                address: pool.options_contracts.current,
-                abi: BinaryOptionsABI,
-                name: 'totalLockedAmount',
-                params: [],
-              },
+              // {
+              //   address: pool.options_contracts.config,
+              //   abi: ConfigABI,
+              //   name: 'assetUtilizationLimit',
+              //   params: [],
+              // },
+              // {
+              //   address: pool.options_contracts.current,
+              //   abi: BinaryOptionsABI,
+              //   name: 'totalLockedAmount',
+              //   params: [],
+              // },
             ])
             .flat(1)
         )
@@ -87,8 +98,9 @@ export function useMarketStatus() {
     maxTradeAmount: string | null | undefined;
     isMarketOpen: boolean;
     payout: string | null | undefined;
-    maxUtilization: string | null | undefined;
-    openInterest: string;
+    maxOpenInterest: string | null | undefined;
+    // maxUtilization: string | null | undefined;
+    // openInterest: string;
   };
   let response: { [key: string]: marketStatusType } = {};
 
@@ -121,16 +133,18 @@ export function useMarketStatus() {
     maxAmountArr: [string, string],
     marketOpenArray: boolean[],
     payout: string,
-    maxUtilization: string,
-    openInterest: string,
+    maxPoolAmountArr: [string, string],
+    // maxUtilization: string,
+    // openInterest: string,
     decimals: number
   ): marketStatusType {
     return {
       isMarketOpen: marketOpenArray[0],
       maxTradeAmount: getMaxAmount(maxAmountArr, decimals),
       payout: getPayout(payout),
-      maxUtilization: getMaxUtilization(maxUtilization),
-      openInterest: openInterest,
+      maxOpenInterest: getMaxAmount(maxPoolAmountArr, decimals),
+      // maxUtilization: getMaxUtilization(maxUtilization),
+      // openInterest: openInterest,
     };
   }
 
@@ -145,13 +159,12 @@ export function useMarketStatus() {
             copy[idx + 1],
             copy[idx + 2],
             copy[idx + 3],
-            copy[idx + 4],
             configContracts.tokens[allAssetContracts[assetIdx].token].decimals
           );
         assetIdx++;
       }
     });
   }
-  // console.log(response, 'response');
+  console.log(response, 'response');
   return { assetStatus: response, allAssetContracts };
 }

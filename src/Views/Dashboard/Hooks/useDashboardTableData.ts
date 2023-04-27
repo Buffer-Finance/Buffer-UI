@@ -154,17 +154,21 @@ export const useDashboardTableData = () => {
               configContracts.tokens[pool.token].decimals
             )
           ) || '0',
-        currentUtilization: Number(fromWei(item.currentUtilization, 16)),
+        // currentUtilization: Number(fromWei(item.currentUtilization, 16)),
         payoutForDown: Number(
           assetStatus[pool.options_contracts.current]?.payout ?? '0'
         ),
         payoutForUp: Number(
           assetStatus[pool.options_contracts.current]?.payout ?? '0'
         ),
-        max_utilization:
-          assetStatus[pool.options_contracts.current]?.maxUtilization ?? '0',
+        // max_utilization:
+        //   assetStatus[pool.options_contracts.current]?.maxUtilization ?? '0',
         pool: pool.token,
         poolUnit: configContracts.tokens[pool.token].name,
+        max_open_interest:
+          Number(
+            assetStatus[pool.options_contracts.current]?.maxOpenInterest
+          ) || 0,
       };
       upatedData.push(currData);
     });
