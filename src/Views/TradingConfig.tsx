@@ -92,8 +92,11 @@ const TradingConfig: React.FC<any> = ({}) => {
     let decimalObj = {
       assetUtilizationLimit: 2,
       optionFeePerTxnLimitPercent: 2,
+      baseSettlementFeePercentageForAbove: 2,
+      baseSettlementFeePercentageForBelow: 2,
       overallPoolUtilizationLimit: 2,
       minFee,
+      maxLiquidity: minFee,
     };
     if (!activeChain?.id) return [null, null];
     let calls: Call[] = [];
@@ -289,7 +292,13 @@ const TradingConfig: React.FC<any> = ({}) => {
       <TableAligner
         keyStyle={keyClasses}
         valueStyle={valueClasses}
-        keysName={poolConfig.map((c, id) => c.market.pair + ' : ' + c.getter)}
+        keysName={poolConfig.map(
+          (c, id) =>
+            c.market.pair +
+            ' : ' +
+            c.getter +
+            (decimals[c.getter] ? ' (' + decimals[c.getter] + ' dec)' : '')
+        )}
         values={poolResponse.map((v, id) => (
           <ValueEditor
             value={v[0]}
@@ -299,6 +308,7 @@ const TradingConfig: React.FC<any> = ({}) => {
               configData: poolConfig,
               setConfigData: setPoolConfig,
             }}
+            decimals={decimals}
           />
         ))}
       ></TableAligner>{' '}
@@ -348,6 +358,12 @@ const ValueEditor: React.FC<{
           : (() => {
               if (!Number.isNaN(+value)) {
                 if (decimals?.[configData[id]?.getter]) {
+                  console.log(
+                    `value: `,
+                    configData[id].getter,
+                    decimals,
+                    divide(value, decimals[configData[id].getter])
+                  );
                   return divide(value, decimals[configData[id].getter]);
                 }
               }
