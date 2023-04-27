@@ -388,7 +388,7 @@ const CreatePair: React.FC<any> = ({}) => {
       </div>
       <div className="text-f14 text-1 ml-[30px] mt-4">
         Enter the raw values in the form, make sure that no input remains blank,
-        than press "Create" below the form.
+        after that press "Create" below the form.
       </div>
       <RenderForm form={form} setForm={setForm} id="" />
       <BlueBtn onClick={send}>Create</BlueBtn>
