@@ -1021,14 +1021,14 @@
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d",
-        "min_amount": 25,
+        "min_amount": 5,
         "is_pol":false
       }
     },
     "pairs": [
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:03",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "BTCUSD",
@@ -1050,7 +1050,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:03",
         "max_utilization": 200,
         "category": "Crypto",
         "tv_id": "ETHUSD",
