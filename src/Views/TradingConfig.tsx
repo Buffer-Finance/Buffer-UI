@@ -88,7 +88,7 @@ const TradingConfig: React.FC<any> = ({}) => {
     | [Call[], ConfigValue[] | object] = useMemo(() => {
     let minFee = 6;
     if (activePoolObj.token.name.toLowerCase() == 'arb') {
-      minFee = 8;
+      minFee = 18;
     }
     let decimalObj = {
       assetUtilizationLimit: 2,
