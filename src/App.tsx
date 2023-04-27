@@ -27,18 +27,24 @@ import { useGraphStatus } from '@Utils/useGraphStatus';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
-import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
+import { LeaderBoard, LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { ProfilePage } from '@Views/Profile';
 import { useEffect } from 'react';
 import { useToast } from '@Contexts/Toast';
+import { AllTradesPage } from '@Views/AllTrades';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
 import { TradePage } from '@Views/BinaryOptions/TradePage';
 import { TestComponent } from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
+import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import { TradingConfig } from '@Views/TradingConfig';
 import { PythPoc } from '@Views/PythPoc';
+import { useAutoConnect } from './Config/useAutoConnectSafe';
+import { UsdcTransfer } from '@Hooks/UsdcTransfer';
+import { AddMarket } from './AddMarket';
+import { CreatePair } from './Admin/CreatePair';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -93,11 +99,14 @@ const AppRoutes = () => {
   return (
     <div className="relative root w-[100vw]">
       <OpenOcean />
-
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/pyth" element={<PythPoc />} />
-        <Route path="/tradingConfig" element={<TradingConfig />} />
+        <Route path="/transfer" element={<UsdcTransfer />} />
+        <Route path="/test" element={<TestComponent />} />
+        <Route path="/pyth" element={<PythPoc />}></Route>
+        <Route path="/admin" element={<TradingConfig />}></Route>
+        <Route path="/admin/create-pair" element={<CreatePair />}></Route>
+        <Route path="/addMarket" element={<AddMarket />} />
         <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
@@ -110,6 +119,14 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
+          <Route
+            path="trades"
+            element={
+              <LeaderBoard>
+                <AllTradesPage />
+              </LeaderBoard>
+            }
+          />
         </Route>
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<Dashboard />}>
@@ -119,6 +136,8 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
+        <Route path="/trades/merged" element={<MergedPage />} />
+        <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<TradePage />} />
         {/* referral link handling */}
         <Route
@@ -142,6 +161,7 @@ export const snackAtom = atom<{
 });
 
 function App() {
+  useAutoConnect();
   const [snack, setSnack] = useAtom(snackAtom);
   const graphStatus = useGraphStatus();
   return (

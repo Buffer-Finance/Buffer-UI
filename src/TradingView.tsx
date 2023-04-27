@@ -63,16 +63,19 @@ import {
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
+import { getIdentifier } from '@Hooks/useGenericHook';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
   // '10S' as ResolutionString,
   '1' as ResolutionString,
+  '3' as ResolutionString,
   '5' as ResolutionString,
+  // '10' as ResolutionString,
   '15' as ResolutionString,
   '30' as ResolutionString,
   '1H' as ResolutionString,
-  // "2H" as ResolutionString,
+  '2H' as ResolutionString,
   '4H' as ResolutionString,
   // "1D",
 ];
@@ -98,9 +101,15 @@ const formatResolution = (s) => {
   if (s.toLowerCase() == '5') {
     return '5m';
   }
+  if (s.toLowerCase() == '3') {
+    return '3m';
+  }
 
   if (s.toLowerCase() == '15') {
     return '15m';
+  }
+  if (s.toLowerCase() == '10') {
+    return '10m';
   }
   if (s.toLowerCase() == '30') {
     return '30m';
@@ -204,8 +213,9 @@ function drawPosition(
   visualized: any,
   chart: IChartWidgetApi
 ) {
-  let vizIdentifiers = getVizIdentifier(option);
+  let vizIdentifiers = getIdentifier(option);
   const idx = visualized.indexOf(vizIdentifiers);
+  console.log(`idx: `, idx);
   const openTimeStamp = option.creationTime;
   const optionPrice = +option.strike / PRICE_DECIMALS;
 
@@ -545,6 +555,14 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     if (chartReady && activeTrades) {
       activeTrades.forEach((pos) => {
         if (!pos?.optionID) return;
+        // if(visualized[pos.])
+        const identifier = getIdentifier(pos);
+        console.log(`identifier: `, identifier);
+        console.log(
+          `visualized.includes(identifier): `,
+          visualized.includes(identifier)
+        );
+        if (visualized.includes(identifier)) return;
         if (trade2visualisation.current[+pos.optionID]) {
           trade2visualisation.current[+pos.optionID]!.visited = true;
         } else {
@@ -561,15 +579,24 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       });
     }
     for (const trade in trade2visualisation.current) {
+      // mark all them
       if (!trade2visualisation.current[+trade]?.visited) {
         trade2visualisation.current[+trade]!.lineRef.remove();
+
         delete trade2visualisation.current[+trade];
       }
     }
+
+    console.log(`[changed]visualized: `, visualized);
     return () => {
+      // mark all them not visited.
       for (const trade in trade2visualisation.current) {
         trade2visualisation.current[+trade]!.visited = false;
       }
+      console.log(
+        `b4trade2visualisation.current: `,
+        trade2visualisation.current
+      );
     };
   }, [visualized, activeTrades, chartReady]);
   const updatePositionTimeLeft = useCallback(() => {

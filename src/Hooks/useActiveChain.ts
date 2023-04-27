@@ -40,6 +40,7 @@ export const useActiveChain = () => {
     activeChain,
     isWrongChain,
     configContracts,
+    markets: Config['markets'],
     chainInURL: chainName,
   };
 };

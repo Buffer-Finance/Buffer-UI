@@ -23,7 +23,7 @@ import { toFixed } from '@Utils/NumString';
 import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import { useMemo } from 'react';
 
-const profileCardClass = 'rounded-lg px-7';
+export const profileCardClass = 'rounded-lg px-7';
 
 export const ProfileCards = () => {
   const { tradingMetricsData } = useProfileGraphQl();
@@ -158,7 +158,6 @@ const Referral = ({
               <Display
                 data={divide(data.totalRebateEarned, usdcDecimals)}
                 unit={'USDC'}
-                className="!w-full !justify-end"
                 content={
                   tokens.length > 1 && (
                     <TableAligner
@@ -186,7 +185,6 @@ const Referral = ({
               <Display
                 data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
                 unit={'USDC'}
-                className="!w-full !justify-end"
                 content={
                   tokens.length > 1 && (
                     <TableAligner
@@ -214,7 +212,6 @@ const Referral = ({
             <div className={wrapperClasses}>
               <Display
                 data={data?.totalTradesReferred}
-                className="!w-full !justify-end"
                 content={
                   tokens.length > 1 && (
                     <TableAligner

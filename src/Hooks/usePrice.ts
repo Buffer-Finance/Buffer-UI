@@ -1,19 +1,8 @@
-import {
-  UTF8ArrToStr,
-  getKlineFromPrice,
-  getOHLCfromPrice,
-  parsewsmsg,
-} from '@TV/utils';
+import { UTF8ArrToStr, getKlineFromPrice } from '@TV/utils';
 import axios from 'axios';
 import { atom, useSetAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
-import {
-  LatestPriceApiRes,
-  Market2Kline,
-  Market2Prices,
-  Markets,
-} from 'src/Types/Market';
+import { useEffect } from 'react';
+import { Market2Prices } from 'src/Types/Market';
 
 import {
   PythConnection,
@@ -22,56 +11,80 @@ import {
 import { Connection } from '@solana/web3.js';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import Big from 'big.js';
+import useSWR from 'swr';
+
 const solanaClusterName = 'pythnet';
 const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 
 export const usePrice = (fetchInitialPrices?: boolean) => {
   const setPrice = useSetAtom(priceAtom);
-  const pythConnection = useRef(
-    new PythConnection(
+
+  const subscribeToStreamUpdates = async () => {
+    const url = 'https://pyth-api.vintage-orange-muffin.com/v2/streaming';
+    const response = await fetch(url);
+    const reader = response.body?.getReader();
+    console.log('[stream]err', response.body?.locked);
+    let loop = true;
+    while (true) {
+      try {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const updateStr = UTF8ArrToStr(value);
+        const updatePrices = getKlineFromPrice(updateStr);
+        setPrice((p) => ({ ...p, ...updatePrices }));
+      } catch (err) {
+        console.log('[stream]err', response.body?.locked);
+        loop = false;
+      }
+    }
+  };
+
+  const subscribeToWSUpdates = async () => {
+    const pythConnection = new PythConnection(
       new Connection(solanaWeb3Connection),
       getPythProgramKeyForCluster(solanaClusterName)
-    )
-  );
-  const subscribeToUpdates = async () => {
-    pythConnection.current.onPriceChangeVerbose(
-      (productAccount, priceAccount) => {
-        const product = productAccount.accountInfo.data.product;
-        const price = priceAccount.accountInfo.data;
-        const ts = Number(price.timestamp) * 1000;
-        // sample output:
-        // SOL/USD: $14.627930000000001 ±$0.01551797
-        if (price.price && price.confidence) {
-          const marketId = product.description.replace('/', '');
-          const tempPrice = price.price;
-          const priceUpdates = {
-            [marketId]: [
-              {
-                time: ts,
-                price: tempPrice,
-              },
-            ],
-          };
-          setPrice((p) => ({ ...p, ...priceUpdates }));
-        } else {
-          // tslint:disable-next-line:no-console
-        }
-      }
     );
-    pythConnection.current.start();
+    pythConnection.onPriceChange((p, o) => {
+      // BTCUSD [{
+      //   time: +ts,
+      //   price: absolutePrice,
+      //   volume: volume ? +volume : 0,
+      // }];
+
+      if (p?.description && o?.price && o.timestamp) {
+        if (p.description == 'BTC/USD') {
+          console.log('price-update:BTC', o);
+        }
+        if (p.description == 'ETH/USD') {
+          console.log('price-update:ETH', o);
+        }
+        const marketId = p.description.replace('/', '');
+        const ts = Number(o.timestamp) * 1000;
+        const price = o.price;
+        const priceUpdates = {
+          [marketId]: [
+            {
+              ts,
+              price,
+            },
+          ],
+        };
+        setPrice((p) => ({ ...p, ...priceUpdates }));
+      }
+    });
+    pythConnection.start();
   };
-  const getInitialPrices = async () => {
-    const prices = await getPrice();
-    console.log(`pmmprices: `, prices);
-    setPrice((p) => ({ ...p, ...prices }));
-  };
+
   useEffect(() => {
-    console.log(`fetchInitialPrices: `, fetchInitialPrices);
-    if (fetchInitialPrices) {
-      getInitialPrices();
-    }
-    subscribeToUpdates();
-  }, [fetchInitialPrices]);
+    const interval = setInterval(async () => {
+      const data = await getPrice();
+      setPrice((p) => ({ ...p, ...data }));
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+    // subscribeToWSUpdates();
+  }, []);
 };
 
 export const wsStateAtom = atom<{ state: string }>({
@@ -86,13 +99,12 @@ export const pythIds = {
 };
 export const getPrice = async () => {
   const price = await axios.get(
-    `https://xc-mainnet.pyth.network/api/latest_price_feeds?` +
+    `https://oracle.buffer-finance-api.link/api/latest_price_feeds?` +
       Object.keys(pythIds)
         .map((d) => 'ids[]=0x' + d)
         .join('&')
   );
   const marketPrice = {};
-  console.log(`price.data: `, price.data);
   price.data.forEach((e) => {
     marketPrice[pythIds[e.id]] = [
       {

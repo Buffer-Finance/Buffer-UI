@@ -78,7 +78,7 @@ interface ITooltip {
   key: string;
   value: string;
 }
-interface IApr {
+export interface IApr {
   description: string;
   tooltip: ITooltip[];
   value: string;

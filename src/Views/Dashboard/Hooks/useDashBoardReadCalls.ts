@@ -179,7 +179,15 @@ export const useDashboardReadCalls = () => {
         total_staked: totalUSDCstaked,
         market_cap: multiply(blpPrice, fromWei(totalSupplyBLP, usd_decimals)),
 
-        apr: fromWei(blpAprTotal, 2),
+        apr: {
+          value: fromWei(blpAprTotal, 2),
+          tooltip: [
+            { key: 'Escrowed BFR APR', value: fromWei(blpAprForEsBfr, 2) },
+            { key: 'USDC APR', value: fromWei(blpAprForRewardToken, 2) },
+          ],
+          description:
+            'APRs are updated weekly on Wednesday and will depend on the fees collected for the week.',
+        },
         total_usdc: fromWei(amountUSDCpool, usd_decimals),
         usdc_pol: USDCvaultPOL ? fromWei(USDCvaultPOL, usd_decimals) : null,
         usdc_total: fromWei(amountUSDCpool, usd_decimals),
@@ -188,7 +196,15 @@ export const useDashboardReadCalls = () => {
         price: ablpPrice,
         supply: fromWei(ablpSupply, arb_decimals),
         total_usdc: fromWei(amountARBpool, arb_decimals),
-        apr: fromWei(ablpAprTotal, 2),
+        apr: {
+          value: fromWei(ablpAprTotal, 2),
+          tooltip: [
+            // { key: 'Escrowed BFR APR', value: fromWei(arbblpAprForEsBfr, 2) },
+            { key: 'ARB APR', value: fromWei(arbblpAprForRewardToken, 2) },
+          ],
+          description:
+            'APRs are updated weekly on Wednesday and will depend on the fees collected for the week.',
+        },
         usdc_pol: ARBvaultPOL ? fromWei(ARBvaultPOL, arb_decimals) : null,
         usdc_total: fromWei(amountUSDCpool, arb_decimals),
       },

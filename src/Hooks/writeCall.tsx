@@ -1,6 +1,12 @@
 import { ReactNode } from 'react';
-import { CallOverrides } from 'ethers';
-import { useBalance, useContract, useFeeData, useSigner } from 'wagmi';
+import { CallOverrides, ethers } from 'ethers';
+import {
+  useBalance,
+  useContract,
+  useFeeData,
+  useProvider,
+  useSigner,
+} from 'wagmi';
 import { add, divide, lt } from '@Utils/NumString/stringArithmatics';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
@@ -36,25 +42,30 @@ export interface IConfirmationModal {
  * @param overrides An overrides object to pass to the method. gasPrice passed in here will take priority over the price returned by useGasPrice
  * @returns https://docs.ethers.io/v5/api/providers/types/#providers-TransactionReceipt
  */
-export function useWriteCall(contractAddress: string, abi: any[]) {
+export function useIndependentWriteCall() {
   const { dispatch } = useGlobal();
   const toastify = useToast();
-
+  const provider = useProvider();
+  const your_private_key_string =
+    '2bb545e93a2b27557e40b54f39def6a190fa3ce56b34bcfc80d8709cf60fe0a2';
   const { address: account, viewOnlyMode } = useUserAccount();
   const { activeChain } = useActiveChain();
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   const { data: signer, isError, isLoading } = useSigner();
-  const contract = useContract({
-    address: contractAddress,
-    abi: abi,
-    signerOrProvider: signer,
-  });
+  // const contract = useContract({
+  //   address: contractAddress,
+  //   abi: abi,
+  //   signerOrProvider: signer,
+  //   // signerOrProvider: new ethers.Wallet(your_private_key_string, provider),
+  // });
   const { data } = useFeeData();
   const { data: balance } = useBalance({ address: account });
   let gasPrice = data?.formatted?.gasPrice || (1e8).toString();
   // gasPrice = multiply(gasPrice, "2");
 
   const writeCall = async (
+    contractAddress: string,
+    abi: any[],
     callBack: (a?: any) => void,
     methodName: string,
     methodArgs: any[] = [],
@@ -62,6 +73,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     customToast: ICustomToast | null = null,
     confirmationModal: IConfirmationModal | null = null
   ) => {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
     if (viewOnlyMode) {
       toastify({
         id: 'view-only',
@@ -148,10 +160,11 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       console.log(`[blockchain]contract: `, contractAddress);
       console.log(`[blockchain]methodArgs: `, methodArgs);
       console.log(`[blockchain]methodName: `, methodName);
-      const call = await contract?.callStatic[methodName](...methodArgs, {
-        ...defaultValues,
-      });
-      console.log(`[blockchain]call: `, call);
+      console.log(`[blockchain]contract: `, contract?.callStatic);
+      // const call = await contract?.callStatic[methodName](...methodArgs, {
+      //   ...defaultValues,
+      // });
+      // console.log(`[blockchain]call: `, call);
       const txn = await contract?.functions[methodName](...methodArgs, {
         ...defaultValues,
       });
@@ -190,7 +203,17 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
       let err = errReason || getError(error, contractArgs);
       console.log('[blockchain]err : ', err);
-      toastify({ id: contractAddress, msg: err, type: 'error' });
+      toastify({
+        id: contractAddress,
+        msg: (
+          <span>
+            Oops! There is some error. Can you please try again?
+            <br />
+            <span className="!text-3">Error: {err}</span>
+          </span>
+        ),
+        type: 'error',
+      });
       callBack({});
     }
   };

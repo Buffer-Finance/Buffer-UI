@@ -47,33 +47,36 @@ export const getExpireNotification = async (
   toastify,
   openShareModal: (trade: IGQLHistory, expiry: string) => void
 ) => {
-  const response = await axios.get(
-    `https://web-api.pyth.network/benchmark_prices?timestamp=${currentRow.expirationTime}`
+  let response;
+  const query = {
+    pair: currentRow.configPair.tv_id,
+    timestamp: currentRow.expirationTime,
+  };
+  response = await axios.post(
+    `https://oracle.buffer-finance-api.link/price/query/`,
+    [query]
   );
-  console.log(`[notif]response: `, response);
+  if (!response.data?.length) {
+    response = await axios.post(
+      `https://oracle.buffer-finance-api.link/price/query/`,
+      [query]
+    );
+  }
 
-  console.log(
-    `[notif]currentRow.configPair?.pair.replace('-', '/'): `,
-    currentRow.configPair?.pair.replace('-', '/')
-  );
   if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
     return null;
   }
-  const expiryPriceObj = response.data.find((d) =>
-    d.symbol.includes('.' + currentRow.configPair?.pair.replace('-', '/'))
-  );
-  console.log(`[notif]expiryPriceObj: `, expiryPriceObj);
-  const expiryPrice = expiryPriceObj?.price.toString();
-  console.log(`[notif]expiryPrice: `, currentRow, expiryPrice);
-  if (!expiryPrice) return;
+
+  const expiryPrice = response.data[0].price.toString();
+  console.log(`[fetch]expiryPrice: `, expiryPrice, currentRow.strike);
   let win = true;
-  if (lt(currentRow.strike, multiply(expiryPrice, 8))) {
+  if (lt(currentRow.strike, expiryPrice)) {
     if (currentRow.isAbove) {
       win = true;
     } else {
       win = false;
     }
-  } else if (currentRow.strike == multiply(expiryPrice, 8)) {
+  } else if (currentRow.strike == expiryPrice) {
     //to be asked
     win = false;
   } else {
@@ -86,7 +89,7 @@ export const getExpireNotification = async (
   console.log('win-state', win);
   if (win) {
     console.log(`currentRow[state]: `, currentRow);
-    openShareModal(currentRow, multiply(expiryPrice, 8));
+    openShareModal(currentRow, expiryPrice.toString());
     return;
   } else {
     console.log(`currentRow[state]: `, currentRow);

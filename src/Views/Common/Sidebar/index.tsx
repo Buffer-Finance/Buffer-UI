@@ -63,9 +63,9 @@ const SideBar: React.FC<any> = () => {
       )}
 
       <div
-        className={`bg-1 sidebar ${
+        className={`bg-1 max-w-[300px] sidebar ${
           state.sidebar_active ? '' : 'sidebar-closed'
-        } min1000:!hidden`}
+        } a1400:!hidden`}
       >
         <div className="sidebar_container flex-col">
           <div className="icon_container mb-6">
@@ -120,16 +120,18 @@ const SideBar: React.FC<any> = () => {
           <div className=" text-2 mb-3 mt-[10vh] text-center text-f13 pl-[2rem]">
             Connect with us{' '}
           </div>
-          <div className="flex mx-auto w-[140px] flex-row items-center justify-center flex-wrap gap-[11px] px-3 bbborderrr">
-            {social.map((S) => {
-              return (
-                <a className="unset" href={S.link} target="_blank">
-                  <span className="text-2 ">
-                    <S.Img className="" />
-                  </span>
-                </a>
-              );
-            })}
+          <div className=" bbborderrr">
+            <div className="flex max-w-[140px] mx-auto flex-row items-center justify-center flex-wrap gap-[11px] px-3">
+              {social.map((S) => {
+                return (
+                  <a className="unset" href={S.link} target="_blank">
+                    <span className="text-2 ">
+                      <S.Img className="" />
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

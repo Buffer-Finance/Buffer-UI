@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LeaderBoardSidebarStyles } from './style';
 import Daily from '@Public/LeaderBoard/Daily';
 import SmPnl from 'src/SVG/Elements/PNLL';
 import { CHAIN_CONFIGS, getTabs, isTestnet } from 'config';
-import { Link, Location, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  Location,
+  NavLink,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import BufferTab from '@Views/Common/BufferTab';
+import { useDayOfTournament } from '../Hooks/useDayOfTournament';
+import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
+import { weeklyTournamentConfig } from '../Weekly/config';
+import { DailyTournamentConfig } from '../Incentivised/config';
 
 export const MobileLeaderboardDropdwon = () => {
   const { activeChain } = useActiveChain();
@@ -29,15 +39,44 @@ export const MobileLeaderboardDropdwon = () => {
     </div>
   );
 };
-
+const OnGoingChip = () => {
+  return (
+    <CSChip
+      text="Ongoing"
+      className="text-[#2BD67B] bg-[#2bd67b26] border-[#00C4FF]  box-border"
+    />
+  );
+};
+const EndedChip = () => {
+  return <CSChip text="Ended" className="text-3 bg-2 " />;
+};
 export const LeaderBoardSidebar = () => {
   const { activeChain } = useActiveChain();
   const tabs = getTabs(activeChain.name, true);
   const location = useLocation();
+  const { day } = useDayOfTournament();
+  const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];
+  const { week } = useWeekOfTournament({
+    startTimestamp: weeklyConfigValue.startTimestamp,
+  });
+  const dailyConfigValue = DailyTournamentConfig[activeChain.id];
+  const DailyChip = useMemo(() => {
+    if (dailyConfigValue.endDay === undefined) return <OnGoingChip />;
+    else if (day !== null && day < dailyConfigValue.endDay)
+      return <OnGoingChip />;
+    else return <EndedChip />;
+  }, [day]);
+  const WeeklyChip = useMemo(() => {
+    if (weeklyConfigValue.endDay === undefined) return <OnGoingChip />;
+    else if (week !== null && week < weeklyConfigValue.endDay)
+      return <OnGoingChip />;
+    else return <EndedChip />;
+  }, [week]);
+
   return (
     <LeaderBoardSidebarStyles className="border-r-2 border-1">
       <div className="sticky top-1">
-        <div className="mt-[10px] full-width">
+        <div className="mt-[16px] full-width">
           <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
 
           {tabs.slice(0, 2).map((tab, index) => {
@@ -47,23 +86,14 @@ export const LeaderBoardSidebar = () => {
                 <LinkButton
                   tab={tab}
                   active={isActive}
-                  chip={
-                    index === 1 ? (
-                      <CSChip
-                        text="Ongoing"
-                        className="text-[#2BD67B] bg-[#2bd67b26] border-[#00C4FF]  box-border"
-                      />
-                    ) : (
-                      <CSChip text="Ended" className="text-3 bg-2 " />
-                    )
-                  }
+                  chip={index === 1 ? WeeklyChip : DailyChip}
                 />
               </div>
             );
           })}
         </div>
 
-        <div className="mt-[10px] full-width">
+        <div className="mt-[24px] full-width">
           <div className="flex items-center mb-2">
             <Head name="LEAGUES" />
             <CSChip />
@@ -78,20 +108,23 @@ export const LeaderBoardSidebar = () => {
           })}
         </div>
 
-        {/* <div className="mt-[10px] full-width">
-        <div className="flex items-center mb-2">
-          <Head name="METRICS" />
-          <CSChip />
+        <div className="mt-[24px] full-width relative">
+          <NavLink
+            key={'ALL TRADES'}
+            to={'/leaderboard/trades'}
+            className={({ isActive }) => {
+              return `flex items-center justify-start px-3 text-f12  ${
+                isActive
+                  ? 'text-1'
+                  : 'hover:bg-1 hover:text-1 hover:brightness-125 text-3'
+              } ${isActive && ' activeLink'}
+              `;
+            }}
+          >
+            <img src="/alltrades.png" alt="icon" className="inline w-7" />
+            ALL TRADES
+          </NavLink>
         </div>
-        {tabs.slice(-1).map((tab) => {
-          const isActive = doesLocationMatch(location, tab.slug);
-          return (
-            <div className="flex-col">
-              <LinkButton tab={tab} active={isActive} isDisabled />
-            </div>
-          );
-        })}
-      </div> */}
       </div>
     </LeaderBoardSidebarStyles>
   );

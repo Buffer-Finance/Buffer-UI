@@ -15,6 +15,8 @@ import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQ
 import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 import { useMemo } from 'react';
 import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
+import { getChains } from 'src/Config/wagmiClient';
+import { Chain } from 'wagmi';
 
 export const UserData = () => {
   const { address, viewOnlyMode } = useUserAccount();
@@ -22,11 +24,20 @@ export const UserData = () => {
   const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
   const { tradingMetricsData } = useProfileGraphQl();
-  const { configContracts } = useActiveChain();
+  const { configContracts, activeChain } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const { markets } = useActiveChain();
+  const chains: Chain[] = getChains();
+  const activeChainExplorer = useMemo(() => {
+    const chain: Chain | undefined = chains.find(
+      (chain) => chain.id === activeChain.id
+    );
+    if (!chain) return null;
+    return chain.blockExplorers?.default.url;
+  }, [chains, activeChain.id]);
 
   //finds the address with the highest number from the tradingMetricsData.tradesPerAsset object
-  const mostTradedAssetAddress = useMemo(() => {
+  const mostTradedAsset = useMemo(() => {
     if (!tradingMetricsData || !tradingMetricsData.tradesPerAsset) return null;
     const keysArray = Object.keys(tradingMetricsData.tradesPerAsset);
     return keysArray.length > 0
@@ -40,9 +51,9 @@ export const UserData = () => {
   }, [tradingMetricsData]);
 
   //fetches the data of the asset from the config
-  const mostTradedAsset = useGetAssetData({
-    assetAddress: mostTradedAssetAddress,
-  });
+  // const mostTradedAsset = useGetAssetData({
+  //   assetAddress: mostTradedAssetAddress,
+  // });
 
   return (
     <div className="flex items-center justify-between flex-wrap sm:items-stretch sm:gap-4 gap-7">
@@ -78,7 +89,7 @@ export const UserData = () => {
         <div className="text-[25px] text-buffer-blue sm:text-f18">
           {address ? (
             <a
-              href={`https://arbiscan.io/address/${address}`}
+              href={`${activeChainExplorer}/address/${address}`}
               target="_blank"
               className="flex items-center gap-3"
             >
@@ -155,12 +166,12 @@ export const UserData = () => {
           className={'winner-card'}
           head={'Most Traded Asset'}
           desc={
-            mostTradedAsset ? (
+            !!markets[mostTradedAsset] ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="h-[20px] w-[20px]">
-                  <PairTokenImage pair={mostTradedAsset.pair} />
+                  <PairTokenImage pair={markets[mostTradedAsset].pair} />
                 </div>
-                {mostTradedAsset.pair}
+                {markets[mostTradedAsset].pair}
               </div>
             ) : (
               <>-</>

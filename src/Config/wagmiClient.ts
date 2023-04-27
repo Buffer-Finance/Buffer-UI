@@ -17,6 +17,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
+import { inIframe } from '@Utils/isInIframe';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 
 function getSupportedChains() {
@@ -77,7 +78,7 @@ const { chains, provider } = configureChains(getChains(), [publicProvider()]);
 const connectors = connectorsForWallets(getWallets(chains));
 export { chains };
 const wagmiClient = createClient({
-  autoConnect: true,
+  autoConnect: inIframe() ? false : true,
   connectors,
   provider,
 });
