@@ -44,6 +44,7 @@ import { PythPoc } from '@Views/PythPoc';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 import { AddMarket } from './AddMarket';
+import { CreatePair } from './Admin/CreatePair';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -102,8 +103,9 @@ const AppRoutes = () => {
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />
-        <Route path="/pyth" element={<PythPoc />} />
-        <Route path="/admin" element={<TradingConfig />} />
+        <Route path="/pyth" element={<PythPoc />}></Route>
+        <Route path="/admin" element={<TradingConfig />}></Route>
+        <Route path="/admin/create-pair" element={<CreatePair />}></Route>
         <Route path="/addMarket" element={<AddMarket />} />
         <Route path="/test2" element={<TestComponent />} />
         <Route path="/test/:market" element={<TradePage />} />

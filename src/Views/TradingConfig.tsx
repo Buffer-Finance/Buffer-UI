@@ -27,6 +27,7 @@ import { useIndependentWriteCall } from '@Hooks/writeCall';
 import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
 import OptionAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
 import PoolAbi from '@Views/BinaryOptions/ABI/poolABI.json';
+import { divide } from '@Utils/NumString/stringArithmatics';
 
 interface ConfigValue {
   getter: string;
@@ -81,108 +82,118 @@ const TradingConfig: React.FC<any> = ({}) => {
   const [poolConfig, setPoolConfig] = useAtom(poolConfigAtom);
   const { activePoolObj } = useActivePoolAll();
 
-  const [configReadCalls, configState]: [null, null] | [Call[], ConfigValue[]] =
-    useMemo(() => {
-      if (!activeChain?.id) return [null, null];
-      let calls: Call[] = [];
-      const configValues: ConfigValue[] = [];
-      const activeChainData = Config[activeChain.id.toString()] as ChainInfo;
-      activeChainData.pairs.forEach((d) => {
-        const activePoolConfigAddress = d.pools.find(
-          (pool) => pool.token == activePoolObj.token.name
-        )?.options_contracts.config;
-        const activePoolOptionAddress = d.pools.find(
-          (pool) => pool.token == activePoolObj.token.name
-        )?.options_contracts.current;
-        if (activePoolConfigAddress && activePoolOptionAddress) {
-          // config contract values
-          for (let config in initialConfigValues) {
-            console.log(`config: `, config);
-            if (
-              !notYetHandledConfigs.includes(initialConfigValues[config].getter)
-            ) {
-              calls.push({
-                address: activePoolConfigAddress,
-                abi: ConfigContract,
-                name: initialConfigValues[config].getter,
-                params: [],
-              });
-              configValues.push({
-                ...initialConfigValues[config],
-                ...{
-                  market: {
-                    pair: d.pair,
-                    contract: activePoolConfigAddress,
-                  },
+  const [configReadCalls, configState, decimals]:
+    | [null, null, null]
+    | [Call[], ConfigValue[] | object] = useMemo(() => {
+    let minFee = 6;
+    if (activePoolObj.token.name.toLowerCase() == 'arb') {
+      minFee = 8;
+    }
+    let decimalObj = {
+      assetUtilizationLimit: 2,
+      optionFeePerTxnLimitPercent: 2,
+      overallPoolUtilizationLimit: 2,
+      minFee,
+    };
+    if (!activeChain?.id) return [null, null];
+    let calls: Call[] = [];
+    const configValues: ConfigValue[] = [];
+    const activeChainData = Config[activeChain.id.toString()] as ChainInfo;
+    activeChainData.pairs.forEach((d) => {
+      const activePoolConfigAddress = d.pools.find(
+        (pool) => pool.token == activePoolObj.token.name
+      )?.options_contracts.config;
+      const activePoolOptionAddress = d.pools.find(
+        (pool) => pool.token == activePoolObj.token.name
+      )?.options_contracts.current;
+      if (activePoolConfigAddress && activePoolOptionAddress) {
+        // config contract values
+        for (let config in initialConfigValues) {
+          if (
+            !notYetHandledConfigs.includes(initialConfigValues[config].getter)
+          ) {
+            calls.push({
+              address: activePoolConfigAddress,
+              abi: ConfigContract,
+              name: initialConfigValues[config].getter,
+              params: [],
+            });
+            configValues.push({
+              ...initialConfigValues[config],
+              ...{
+                market: {
+                  pair: d.pair,
+                  contract: activePoolConfigAddress,
                 },
-              });
-            }
+              },
+            });
           }
-          // option contract values
-          calls.push({
-            address: activePoolOptionAddress!,
-            abi: OptionAbi,
-            name: 'baseSettlementFeePercentageForAbove',
-            params: [],
-          });
-          calls.push({
-            address: activePoolOptionAddress!,
-            abi: OptionAbi,
-            name: 'baseSettlementFeePercentageForBelow',
-            params: [],
-          });
-          calls.push({
-            address: activePoolOptionAddress!,
-            abi: OptionAbi,
-            name: 'isPaused',
-            params: [],
-          });
-          configValues.push({
-            getter: 'baseSettlementFeePercentageForAbove',
-            setter: 'configure',
-            index: 'configure',
-            contract: '',
-            value: null,
-            selected: false,
-            newValue: null,
-            abi: OptionAbi,
-            market: {
-              pair: d.pair,
-              contract: activePoolOptionAddress!,
-            },
-          });
-          configValues.push({
-            getter: 'baseSettlementFeePercentageForBelow',
-            setter: 'configure',
-            index: 'configure',
-            contract: '',
-            value: null,
-            selected: false,
-            newValue: null,
-            abi: OptionAbi,
-            market: {
-              pair: d.pair,
-              contract: activePoolOptionAddress!,
-            },
-          });
-          configValues.push({
-            getter: 'isPaused',
-            setter: 'toggleCreation',
-            index: 'toggleCreation',
-            contract: '',
-            value: null,
-            selected: false,
-            newValue: null,
-            abi: OptionAbi,
-            market: {
-              pair: d.pair,
-              contract: activePoolOptionAddress!,
-            },
-          });
         }
-      });
-      return [calls, configValues];
-    }, [activeChain, activePoolObj?.token?.name]);
+        // option contract values
+        calls.push({
+          address: activePoolOptionAddress!,
+          abi: OptionAbi,
+          name: 'baseSettlementFeePercentageForAbove',
+          params: [],
+        });
+        calls.push({
+          address: activePoolOptionAddress!,
+          abi: OptionAbi,
+          name: 'baseSettlementFeePercentageForBelow',
+          params: [],
+        });
+        calls.push({
+          address: activePoolOptionAddress!,
+          abi: OptionAbi,
+          name: 'isPaused',
+          params: [],
+        });
+        configValues.push({
+          getter: 'baseSettlementFeePercentageForAbove',
+          setter: 'configure',
+          index: 'configure',
+          contract: '',
+          value: null,
+          selected: false,
+          newValue: null,
+          abi: OptionAbi,
+          market: {
+            pair: d.pair,
+            contract: activePoolOptionAddress!,
+          },
+        });
+        configValues.push({
+          getter: 'baseSettlementFeePercentageForBelow',
+          setter: 'configure',
+          index: 'configure',
+          contract: '',
+          value: null,
+          selected: false,
+          newValue: null,
+          abi: OptionAbi,
+          market: {
+            pair: d.pair,
+            contract: activePoolOptionAddress!,
+          },
+        });
+        configValues.push({
+          getter: 'isPaused',
+          setter: 'toggleCreation',
+          index: 'toggleCreation',
+          contract: '',
+          value: null,
+          selected: false,
+          newValue: null,
+          abi: OptionAbi,
+          market: {
+            pair: d.pair,
+            contract: activePoolOptionAddress!,
+          },
+        });
+      }
+    });
+    return [calls, configValues, decimalObj];
+  }, [activeChain, activePoolObj?.token?.name]);
   const [poolConfigReadCalls, poolConfigState]:
     | [null, null]
     | [Call[], ConfigValue[]] = useMemo(() => {
@@ -258,10 +269,17 @@ const TradingConfig: React.FC<any> = ({}) => {
           }
           return retClass;
         }}
-        keysName={configData.map((c, id) => c.market.pair + ' : ' + c.getter)}
+        keysName={configData.map(
+          (c, id) =>
+            c.market.pair +
+            ' : ' +
+            c.getter +
+            (decimals[c.getter] ? ' (' + decimals[c.getter] + ' dec)' : '')
+        )}
         values={response.map((v, id) => (
           <ValueEditor
             value={v[0]}
+            decimals={decimals}
             id={id}
             {...{ writeCall, configData, setConfigData }}
           />
@@ -296,7 +314,9 @@ const ValueEditor: React.FC<{
   writeCall: any;
   configData: any;
   setConfigData: any;
-}> = ({ value, writeCall, id, configData, setConfigData }) => {
+  decimals: any;
+}> = ({ value, writeCall, id, configData, setConfigData, decimals }) => {
+  console.log(`decimal: `, decimals);
   const isChanged = configData[id].newValue && value != configData[id].newValue;
   const isBoolean = typeof value == 'boolean';
   const isConfigure = configData[id].setter == 'configure';
@@ -323,7 +343,16 @@ const ValueEditor: React.FC<{
           isChanged && 'line-through decoration-[red] decoration-[2px]'
         }
       >
-        {isBoolean ? JSON.stringify(value) : value}
+        {isBoolean
+          ? JSON.stringify(value)
+          : (() => {
+              if (!Number.isNaN(+value)) {
+                if (decimals?.[configData[id]?.getter]) {
+                  return divide(value, decimals[configData[id].getter]);
+                }
+              }
+              return value;
+            })()}
       </span>
       <button
         onClick={() => {
@@ -344,8 +373,8 @@ const ValueEditor: React.FC<{
         (isConfigure ? (
           <div className="">
             {[
-              '_baseSettlementFeePercentageForAbove',
-              '_baseSettlementFeePercentageForBelow',
+              '_baseSettlementFeePercentageForAbove (2 dec)',
+              '_baseSettlementFeePercentageForBelow (2 dec)',
               '_nftTierStep (4 space separted digits)',
             ].map((s, idx) => (
               <div className="text-f14 text-1">
