@@ -431,9 +431,11 @@ const RenderForm = ({ form, setForm, id }) => {
           return (
             <div className="text-f12 ml-2  mt-4">
               <div>{key}</div>
-              <BufferInput
-                val={value}
-                onChange={(val) => {
+              <input
+                className="text-1 bg-3 px-3 py-1 mt-3"
+                value={value}
+                onChange={(e) => {
+                  const val = e.target.value;
                   const ids = currId.split(':');
                   setOrigForm((updatedF) => {
                     let f = { ...updatedF };
