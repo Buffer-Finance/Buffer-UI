@@ -74,7 +74,7 @@ const notYetHandledConfigs = ['marketTime'];
 
 const configDataAtom = atom<ConfigValue[]>([]);
 const poolConfigAtom = atom<ConfigValue[]>([]);
-
+const poolDecimals = [6,6,18]
 type ChainInfo = (typeof Config)['421613'];
 const TradingConfig: React.FC<any> = ({}) => {
   const { activeChain } = useActiveChain();
@@ -308,7 +308,7 @@ const TradingConfig: React.FC<any> = ({}) => {
             c.market.pair +
             ' : ' +
             c.getter +
-            (decimals[c.getter] ? ' (' + decimals[c.getter] + ' dec)' : '')
+            (' (' + poolDecimals[id]+ ' dec)' )
         )}
         values={poolResponse.map((v, id) => (
           <ValueEditor
@@ -369,12 +369,10 @@ const ValueEditor: React.FC<{
           : (() => {
               if (!Number.isNaN(+value)) {
                 if (decimals?.[configData[id]?.getter]) {
-                  console.log(
-                    `value: `,
-                    configData[id].getter,
-                    decimals,
-                    divide(value, decimals[configData[id].getter])
-                  );
+                  if(configData[id].getter == 'maxLiquidity' && configData[id].market.pair.includes('ARB')){
+                    return divide(value, 18);
+
+                  }
                   return divide(value, decimals[configData[id].getter]);
                 }
               }
