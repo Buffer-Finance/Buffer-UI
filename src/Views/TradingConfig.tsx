@@ -28,6 +28,7 @@ import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
 import OptionAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
 import PoolAbi from '@Views/BinaryOptions/ABI/poolABI.json';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { RenderAdminNavbar } from 'src/Admin/CreatePair';
 
 interface ConfigValue {
   getter: string;
@@ -249,7 +250,9 @@ const TradingConfig: React.FC<any> = ({}) => {
 
   if (!configState || !response) return <div>Loading....</div>;
   return (
-    <div className="mx-[30px]">
+    <div className="mx-[30px] mt-[20px]">
+      <RenderAdminNavbar />
+
       <div className="text-f12 text-2 mt-4">
         Tip: You can filter settings via entering market-name or setting-name in
         search box.

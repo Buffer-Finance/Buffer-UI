@@ -4,6 +4,7 @@ import { BlueBtn } from '@Views/Common/V2-Button';
 import { atom, useAtom } from 'jotai';
 import { useState } from 'react';
 import MarketFactoryABI from '@ABIs/MarketFactory.json';
+import { useNavigate } from 'react-router-dom';
 interface IInput {
   name: string;
   type: string | IInput[];
@@ -380,7 +381,8 @@ const CreatePair: React.FC<any> = ({}) => {
     );
   };
   return (
-    <div>
+    <div className="mt-[20px]">
+      <RenderAdminNavbar className={'ml-[30px]'} />
       <div className="text-f12 text-2 ml-[30px] mt-4">
         Tip: Press tab for navigating to next input
       </div>
@@ -466,3 +468,23 @@ const RenderForm = ({ form, setForm, id }) => {
   );
 };
 export { CreatePair };
+
+export const RenderAdminNavbar = ({ className }) => {
+  const navigate = useNavigate();
+  return (
+    <div className={'  flex gap-x-[20px] ' + className}>
+      <div
+        onClick={() => navigate('/admin')}
+        className="cursor-pointer bg-blue px-[15px] py-[5px]  rounded-[7px]"
+      >
+        Change Settings
+      </div>
+      <div
+        onClick={() => navigate('/admin/create-pair')}
+        className="cursor-pointer bg-blue px-[15px] py-[5px] rounded-[7px]"
+      >
+        Create Pair
+      </div>
+    </div>
+  );
+};
