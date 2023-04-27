@@ -197,11 +197,11 @@ const mapping: IInput[] = [
   },
   {
     type: 'string',
-    name: '_baseSettlementFeePercentageForAbove',
+    name: '_baseSettlementFeePercentageForAbove (2dec)',
   },
   {
     type: 'string',
-    name: '_baseSettlementFeePercentageForBelow',
+    name: '_baseSettlementFeePercentageForBelow (2dec)',
   },
   {
     type: [
