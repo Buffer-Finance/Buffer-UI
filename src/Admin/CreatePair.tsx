@@ -381,6 +381,13 @@ const CreatePair: React.FC<any> = ({}) => {
   };
   return (
     <div>
+      <div className="text-f12 text-2 ml-[30px] mt-4">
+        Tip: Press tab for navigating to next input
+      </div>
+      <div className="text-f14 text-1 ml-[30px] mt-4">
+        Enter the raw values in the form, make sure that no input remains blank,
+        than press "Create" below the form.
+      </div>
       <RenderForm form={form} setForm={setForm} id="" />
       <BlueBtn onClick={send}>Create</BlueBtn>
     </div>
@@ -391,7 +398,7 @@ const RenderForm = ({ form, setForm, id }) => {
   const [origForm, setOrigForm] = useAtom(formAtom);
 
   return (
-    <div className="ml-[30px]">
+    <div className="ml-[30px] mt-4">
       {Object.keys(form).map((key) => {
         if (typeof form[key] == 'string') {
           const currId = id + ':' + key;
@@ -410,7 +417,7 @@ const RenderForm = ({ form, setForm, id }) => {
             value = origForm[key];
           }
           return (
-            <div className="text-f12 ml-2">
+            <div className="text-f12 ml-2  mt-4">
               <div>{key}</div>
               <BufferInput
                 val={value}

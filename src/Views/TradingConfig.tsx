@@ -250,11 +250,19 @@ const TradingConfig: React.FC<any> = ({}) => {
   if (!configState || !response) return <div>Loading....</div>;
   return (
     <div className="mx-[30px]">
-      <div className="">
+      <div className="text-f12 text-2 mt-4">
+        Tip: You can filter settings via entering market-name or setting-name in
+        search box.
+      </div>
+      <div className="text-f14 text-1 mt-4">
+        Click on "Edit" -> Press "Change" 
+      </div>
+      <div className="flex items-center text-f14 mt-4">
+        Select Pool :&nbsp;&nbsp;&nbsp;
         <PoolDropDownAll />
       </div>
-      <div className="flex items-center text-f14">
-        <div>Search : </div>
+      <div className="flex items-center text-f14 mt-4">
+        <div>Search :&nbsp;&nbsp;&nbsp; </div>
         <BufferInput value={search} onChange={(val) => setSearch(val)} />
       </div>
       <div className="text-f14 mt-3">Option Configs</div>
