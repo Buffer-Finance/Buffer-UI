@@ -5,6 +5,7 @@ import { atom, useAtom } from 'jotai';
 import { useState } from 'react';
 import MarketFactoryABI from '@ABIs/MarketFactory.json';
 import { useNavigate } from 'react-router-dom';
+import { useActiveChain } from '@Hooks/useActiveChain';
 interface IInput {
   name: string;
   type: string | IInput[];
@@ -357,11 +358,10 @@ const map2initState = (mapping: IInput[]): IInitState => {
   }
   return initState;
 };
-const res = map2initState(mapping);
-console.log(`res-map: `, res);
 const formAtom = atom(map2initState(mapping));
-
 const CreatePair: React.FC<any> = ({}) => {
+  const { configContracts } = useActiveChain();
+  console.log(`configContracts: `, configContracts.marketFactory);
   const [form, setForm] = useAtom(formAtom);
   console.log(`form: `, form);
   const { writeCall } = useIndependentWriteCall();
@@ -382,9 +382,11 @@ const CreatePair: React.FC<any> = ({}) => {
     const gargs = addParam(form);
     console.log(`gargs: `, gargs);
     writeCall(
-      '0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467',
+      configContracts.marketFactory,
       MarketFactoryABI,
-      () => console.log,
+      (data) => {
+        console.log('final-response', data, data?.payload?.market);
+      },
       'createPair',
       [gargs]
     );

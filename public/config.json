@@ -182,6 +182,7 @@
     }
   },
   "421613": {
+    "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
     "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
     "router": "0x76c52E83d7dcCc70107a66BAd44D042D22D06be7",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
@@ -194,7 +195,8 @@
         "name": "USDC",
         "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 5,"is_pol":false
+        "min_amount": 5,
+        "is_pol": false
       },
       "ARB": {
         "address": "0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8",
@@ -204,7 +206,8 @@
         "name": "ARB",
         "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
         "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f",
-        "min_amount": 5,"is_pol":false
+        "min_amount": 5,
+        "is_pol": false
       }
     },
     "pairs": [
@@ -324,6 +327,8 @@
     }
   },
   "42161": {
+    "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
+
     "referral_storage": "0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29",
     "router": "0x0e0A1241C9cE6649d5D30134a194BA3E24130305",
     "multicall": "0x842eC2c7D803033Edf55E478F461FC547Bc54EB2",
@@ -337,7 +342,7 @@
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
         "min_amount": 100,
-        "is_pol":false
+        "is_pol": false
       },
       "USDC_POL": {
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
@@ -348,7 +353,7 @@
         "pool_address": "0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
         "min_amount": 5,
-        "is_pol":true
+        "is_pol": true
       },
       "ARB": {
         "address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
@@ -358,7 +363,7 @@
         "name": "ARB",
         "pool_address": "0xaE0628C88EC6C418B3F5C005f804E905f8123833",
         "min_amount": 25,
-        "is_pol":false
+        "is_pol": false
       }
     },
     "pairs": [
@@ -898,6 +903,8 @@
     }
   },
   "80001": {
+    "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
+
     "referral_storage": "0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7",
     "router": "0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
@@ -911,7 +918,7 @@
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
         "faucet": "0x4fccf1139FcA44EF716534bae9D3f87a01583338",
         "min_amount": 5,
-        "is_pol":false
+        "is_pol": false
       }
     },
     "pairs": [
@@ -1010,6 +1017,8 @@
     }
   },
   "137": {
+    "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
+
     "referral_storage": "0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6",
     "router": "0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7",
     "multicall": "0xcA11bde05977b3631167028862bE2a173976CA11",
@@ -1022,7 +1031,7 @@
         "name": "USDC",
         "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d",
         "min_amount": 5,
-        "is_pol":false
+        "is_pol": false
       }
     },
     "pairs": [
