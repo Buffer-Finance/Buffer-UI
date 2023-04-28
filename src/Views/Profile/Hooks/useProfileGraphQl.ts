@@ -71,31 +71,31 @@ export const useProfileGraphQl = () => {
             totalFee
             expirationTime
           }
-        activeData:userOptionDatas(
-          where: {user: "${account}", state: 1}
-        ) {
-          optionContract {
-            address
-            token
-          }
-            totalFee
-          }
+          activeData:userOptionDatas(
+            where: {user: "${account}", state: 1}
+          ) {
+            optionContract {
+              address
+              token
+            }
+              totalFee
+            }
       `;
 
         const extraQuery = `
-       next1000: userOptionDatas(
-          first: 1000
-          where: {user: "${account}", state_not: 1, expirationTime_gt: ${lastSavedTimestamp}}
-        ) {
-          optionContract {
-            address
-            token
-            asset
+          next1000: userOptionDatas(
+            first: 1000
+            where: {user: "${account}", state_not: 1, expirationTime_gt: ${lastSavedTimestamp}}
+          ) {
+            optionContract {
+              address
+              token
+              asset
+            }
+            payout
+            totalFee
+            expirationTime
           }
-          payout
-          totalFee
-          expirationTime
-        }
       `;
         const query = lastSavedTimestamp
           ? `{${basicQuery + extraQuery}}`

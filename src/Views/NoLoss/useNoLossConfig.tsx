@@ -21,16 +21,20 @@ const useNoLossConfig = () => {
   const { data } = useSWR(`config-${config.chainId}`, {
     fetcher: async (name) => {
       const basicQuery = `
-      optionContracts(first: 1000) {
-        id
-        address
-        config
-        asset
-        isPaused
+        optionContracts: optionContracts(
+          first: 1000
+        ) {
+          id
+          address
+          config
+          asset
+          isPaused
       }
     `;
-      console.log(`config.graphUrl: `, config.graphUrl);
-      const response = await axios.post(config.graphUrl, basicQuery);
+      const response = await axios.post(config.graphUrl, {
+        query: `{${basicQuery}}`,
+      });
+      const optionIds = response.data.data.optionContracts;
       console.log(`response: `, response);
       return { hello: 'there' };
     },
