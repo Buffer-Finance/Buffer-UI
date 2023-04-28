@@ -197,11 +197,11 @@ const mapping: IInput[] = [
   },
   {
     type: 'string',
-    name: '_baseSettlementFeePercentageForAbove',
+    name: '_baseSettlementFeePercentageForAbove (2 dec)',
   },
   {
     type: 'string',
-    name: '_baseSettlementFeePercentageForBelow',
+    name: '_baseSettlementFeePercentageForBelow (2 dec)',
   },
   {
     type: [
@@ -345,7 +345,7 @@ const map2initState = (mapping: IInput[]): IInitState => {
     if (typeof map.type == 'string') {
       let initVal = '';
       if (
-        ['Start_Hour', 'Start_Minute', 'End_Hour', 'End_Minutemap'].includes(
+        ['Start_Hour', 'Start_Minute', 'End_Hour', 'End_Minute'].includes(
           map.name
         )
       )
