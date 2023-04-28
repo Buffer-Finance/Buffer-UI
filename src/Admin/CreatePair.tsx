@@ -14,7 +14,7 @@ interface IInput {
 const mapping: IInput[] = [
   {
     type: 'string',
-    name: 'Address',
+    name: 'Pool Address',
   },
   {
     type: 'string',
@@ -22,7 +22,7 @@ const mapping: IInput[] = [
   },
   {
     type: 'string',
-    name: 'Catagory',
+    name: 'Category',
   },
   {
     name: 'Market_Timings',
