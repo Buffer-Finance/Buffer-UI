@@ -310,7 +310,7 @@ const TradingConfig: React.FC<any> = ({}) => {
             c.getter +
             (' (' + poolDecimals[id]+ ' dec)' )
         )}
-        values={poolResponse.map((v, id) => (
+        values={poolResponse?.map((v, id) => (
           <ValueEditor
             value={v[0]}
             id={id}

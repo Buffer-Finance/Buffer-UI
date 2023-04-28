@@ -189,9 +189,7 @@ export function useIndependentWriteCall() {
           confirmationModal: confirmationModal,
           timings: 100,
         });
-        const ifc = new ethers.utils.Interface(abi);
-        const data = ifc.decodeFunctionResult(methodName, txn.data);
-        callBack({ payload: data });
+        callBack({ payload: res });
         dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
       } else {
         toastify({ msg: 'Transaction Failed', type: 'error' });
