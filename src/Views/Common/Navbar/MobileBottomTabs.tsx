@@ -62,20 +62,20 @@ const MoreIcon = (
     <path
       d="M6 8H20"
       stroke="currentColor"
-      stroke-width="1.75"
-      stroke-linecap="round"
+      strokeWidth="1.75"
+      strokeLinecap="round"
     />
     <path
       d="M6 13H20"
       stroke="currentColor"
-      stroke-width="1.75"
-      stroke-linecap="round"
+      strokeWidth="1.75"
+      strokeLinecap="round"
     />
     <path
       d="M6 18H20"
       stroke="currentColor"
-      stroke-width="1.75"
-      stroke-linecap="round"
+      strokeWidth="1.75"
+      strokeLinecap="round"
     />
   </svg>
 );
@@ -108,7 +108,7 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
   return (
     <div className="bg-1 fixed bottom-[0px] w-full z-10 nsm:hidden mobile-bottom-drawer flex items-center pt-[5px] pb-[8px] justify-between px-3">
       {tabs.slice(0, limit).map((t) => (
-        <BaseTab tab={t} active={isActive(t)} />
+        <BaseTab key={t.name} tab={t} active={isActive(t)} />
       ))}{' '}
       {areExtraTabs && (
         <BaseTab tab={{ name: 'More', icon: MoreIcon }} onClick={handleClose} />

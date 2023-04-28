@@ -5,6 +5,7 @@ import useSWR, { useSWRConfig } from 'swr';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { multicallv2 } from './Contract/multiContract';
 import getDeepCopy from './getDeepCopy';
+import { useMemo } from 'react';
 
 export const useReadCall = ({
   contracts,
@@ -80,4 +81,23 @@ export const contractRead = async (contract, method, args, debug = false) => {
     console.log(`${method}-arg: `, args);
   }
   return copy;
+};
+
+export const useSignerOrPorvider = () => {
+  const { address } = useAccount();
+
+  const { activeChain, isWrongChain, configContracts, chainInURL } =
+    useActiveChain();
+  const { data: signer } = useSigner({ chainId: activeChain.id });
+
+  const p = useProvider({ chainId: activeChain.id });
+  const signerOrProvider = useMemo(() => {
+    let signerOrProvider = p;
+
+    if (signer && !isWrongChain && address) {
+      signerOrProvider = signer;
+    }
+    return signerOrProvider;
+  }, [p, signer]);
+  return signerOrProvider;
 };

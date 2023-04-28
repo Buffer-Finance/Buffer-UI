@@ -802,8 +802,8 @@ export const OtherBLP = ({
                 y2="22"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#0DB6D2" />
-                <stop offset="1" stop-color="#4326F2" />
+                <stop stopColor="#0DB6D2" />
+                <stop offset="1" stopColor="#4326F2" />
               </linearGradient>
             </defs>
           </svg>
