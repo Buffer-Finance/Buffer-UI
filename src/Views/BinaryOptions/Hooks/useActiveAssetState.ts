@@ -39,7 +39,6 @@ export function useActiveAssetState(amount = null, referralData) {
             params: [
               pool.options_contracts.current,
               referralData[2],
-              // 'BJP',
               account || '0x0000000000000000000000000000000000000000',
               highestTierNFT?.tokenId || 0,
               true,
