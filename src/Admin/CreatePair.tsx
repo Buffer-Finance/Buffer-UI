@@ -381,6 +381,29 @@ const CreatePair: React.FC<any> = ({}) => {
     };
     const gargs = addParam(form);
     console.log(`gargs: `, gargs);
+    const staticArgs = [
+      '0x1CDA6A34D84F444183E89D2D41D920EeaE883439',
+      'BTCUSD',
+      '1',
+      [
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+      ],
+      '2000',
+      '2000',
+      ['4', '8', '12', '16'],
+      '100',
+      '40',
+      '100',
+      '180',
+      '14400',
+      '25000000',
+    ];
     writeCall(
       configContracts.marketFactory,
       MarketFactoryABI,
@@ -388,6 +411,7 @@ const CreatePair: React.FC<any> = ({}) => {
         console.log('final-response', data, data?.payload?.market);
       },
       'createPair',
+      // [staticArgs]
       [gargs]
     );
   };
