@@ -45,6 +45,7 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
+import { NoLoss } from '@Views/NoLoss/NoLoss';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -139,6 +140,7 @@ const AppRoutes = () => {
         <Route path="/trades/merged" element={<MergedPage />} />
         <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<TradePage />} />
+        <Route path="/no-loss/:market" element={<NoLoss />} />
         {/* referral link handling */}
         <Route
           path="/*"
