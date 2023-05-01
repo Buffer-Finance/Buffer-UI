@@ -10,7 +10,7 @@ import { multicallv2 } from '@Utils/Contract/multiContract';
 import getDeepCopy from '@Utils/getDeepCopy';
 const Calls = ['minPeriod', 'maxPeriod', 'minFee', 'maxFee'];
 
-const useNoLossStaticConfig = () => {
+export const useNoLossStaticConfig = () => {
   const { activeChain } = useActiveChain();
   const data = useMemo(() => {
     console.log(`activeChain.id: `, activeChain.id);
@@ -18,7 +18,11 @@ const useNoLossStaticConfig = () => {
     console.log(`noLossConfig[activeChain.id]: `, noLossConfig[activeChain.id]);
     const chainId = activeChain.id;
     const multicall = noLossConfig[activeChain.id]?.multicall;
-    return { graphUrl, chainId, multicall };
+    const allConfig = noLossConfig['421613'];
+    return {
+      chainId,
+      ...allConfig,
+    };
   }, [activeChain.id]);
   return data;
 };
@@ -65,11 +69,9 @@ const useNoLossConfig = () => {
           isPaused
         }
         `;
-      console.log(`basicQuery: `, basicQuery);
-      const response = await axios.post(config.graphUrl, {
+      const response = await axios.post(config.graph.MAIN, {
         query: `{${basicQuery}}`,
       });
-      console.log(`response: `, response);
       let calls = [];
       response.data.data.optionContracts.forEach((s) => {
         Calls.forEach((c) => {
@@ -86,35 +88,29 @@ const useNoLossConfig = () => {
       let copy = getDeepCopy(returnData);
       convertBNtoString(copy);
       let appConfig = {};
-      console.log(`appConfig: `, appConfig);
-      try {
-        response.data.data.optionContracts.forEach((s, sid) => {
-          const key = s.asset;
-          Calls.forEach((c, cid) => {
-            console.log(`c: `, c);
-            if (appConfig?.[key]) {
-              appConfig[key] = {
-                ...appConfig[key],
-                [c]: copy[sid + cid][0] + '',
-              };
-            } else {
-              appConfig[key] = {
-                [c]: copy[sid + cid][0] + '',
-              };
-            }
-          });
-          appConfig[key] = {
-            ...appConfig[key],
-            configContract: s.config,
-            market: marketid2Info[s.asset],
-            isPaused: s.isPaused,
-            optionsContract: s.address,
-          };
+      response.data.data.optionContracts.forEach((s, sid) => {
+        const key = s.asset;
+        Calls.forEach((c, cid) => {
+          if (appConfig?.[key]) {
+            appConfig[key] = {
+              ...appConfig[key],
+              [c]: copy[sid + cid][0] + '',
+            };
+          } else {
+            appConfig[key] = {
+              [c]: copy[sid + cid][0] + '',
+            };
+          }
         });
-        console.log(`appConfig: `, appConfig);
-      } catch (e) {
-        console.log('errrrr', e);
-      }
+        appConfig[key] = {
+          ...appConfig[key],
+          configContract: s.config,
+          market: marketid2Info[s.asset],
+          isPaused: s.isPaused,
+          optionsContract: s.address,
+        };
+      });
+
       return { hello: 'there' };
     },
     // TODO see if there is retrying machanism on swr than only do this req one time

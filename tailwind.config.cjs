@@ -75,6 +75,7 @@ module.exports = {
     backgroundColor: {
       primary: "var(--bg-0)",
       "cross-bg": "#303044",
+      "vertical-gradient": "var(--bg-vertical-gradient)",
       1: "var(--bg-1)",
       2: "var(--bg-2)",
       3: "#12121a",

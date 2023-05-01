@@ -80,6 +80,7 @@ html .MuiDialog-container {
   --bg-0:#1c1c28;
   --bg-1:#232334;
   --bg-2:#171722;
+  --bg-vertical-gradient:linear-gradient(180deg, #000000 43%,var(--bg-1) 93.44%);
   --text-2:#808191;
   --text-3:#C3C2D4;
   --text-1:#ffffff;
@@ -88,6 +89,14 @@ html .MuiDialog-container {
   --white-border: #2bd67b26;
   --mole-offset: 140%;
   --mole-animation-duration: 0.4s;
+}
+.chip-green-border {
+  border: 0.381579px solid #2BD67B;
+border-radius: 4.07018px;
+
+}
+.background-vertical-gradient{
+  background:var(--bg-vertical-gradient);
 }
 body .flexlayout__layout {
   --color-text: #eeeeee;
