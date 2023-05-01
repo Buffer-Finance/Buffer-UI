@@ -1,8 +1,29 @@
 [
+  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
   {
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "assetPair",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "options",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "optionsConfig",
+        "type": "address"
+      }
+    ],
+    "name": "PairCreated",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -82,39 +103,21 @@
   {
     "inputs": [],
     "name": "DEFAULT_ADMIN_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "OPTION_ISSUER_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "ROUTER_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -122,16 +125,8 @@
     "inputs": [
       {
         "components": [
-          {
-            "internalType": "address",
-            "name": "pool",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "assetPair",
-            "type": "string"
-          },
+          { "internalType": "address", "name": "pool", "type": "address" },
+          { "internalType": "string", "name": "assetPair", "type": "string" },
           {
             "internalType": "enum IBufferBinaryOptions.AssetCategory",
             "name": "assetCategory",
@@ -139,26 +134,14 @@
           },
           {
             "components": [
-              {
-                "internalType": "uint8",
-                "name": "startHour",
-                "type": "uint8"
-              },
+              { "internalType": "uint8", "name": "startHour", "type": "uint8" },
               {
                 "internalType": "uint8",
                 "name": "startMinute",
                 "type": "uint8"
               },
-              {
-                "internalType": "uint8",
-                "name": "endHour",
-                "type": "uint8"
-              },
-              {
-                "internalType": "uint8",
-                "name": "endMinute",
-                "type": "uint8"
-              }
+              { "internalType": "uint8", "name": "endHour", "type": "uint8" },
+              { "internalType": "uint8", "name": "endMinute", "type": "uint8" }
             ],
             "internalType": "struct IOptionsConfig.Window[]",
             "name": "windows",
@@ -194,129 +177,9 @@
             "name": "assetUtilizationLimit",
             "type": "uint16"
           },
-          {
-            "internalType": "uint32",
-            "name": "minPeriod",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "maxPeriod",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint256",
-            "name": "minFee",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Controller.Market[]",
-        "name": "markets",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "createOrEditPair",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "pool",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "assetPair",
-            "type": "string"
-          },
-          {
-            "internalType": "enum IBufferBinaryOptions.AssetCategory",
-            "name": "assetCategory",
-            "type": "uint8"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint8",
-                "name": "startHour",
-                "type": "uint8"
-              },
-              {
-                "internalType": "uint8",
-                "name": "startMinute",
-                "type": "uint8"
-              },
-              {
-                "internalType": "uint8",
-                "name": "endHour",
-                "type": "uint8"
-              },
-              {
-                "internalType": "uint8",
-                "name": "endMinute",
-                "type": "uint8"
-              }
-            ],
-            "internalType": "struct IOptionsConfig.Window[]",
-            "name": "windows",
-            "type": "tuple[]"
-          },
-          {
-            "internalType": "uint16",
-            "name": "_baseSettlementFeePercentageForAbove",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "_baseSettlementFeePercentageForBelow",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint8[4]",
-            "name": "_nftTierStep",
-            "type": "uint8[4]"
-          },
-          {
-            "internalType": "uint16",
-            "name": "optionFeePerTxnLimitPercent",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "overallPoolUtilizationLimit",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "assetUtilizationLimit",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint32",
-            "name": "minPeriod",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "maxPeriod",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint256",
-            "name": "minFee",
-            "type": "uint256"
-          }
+          { "internalType": "uint32", "name": "minPeriod", "type": "uint32" },
+          { "internalType": "uint32", "name": "maxPeriod", "type": "uint32" },
+          { "internalType": "uint256", "name": "minFee", "type": "uint256" }
         ],
         "internalType": "struct Controller.Market",
         "name": "market",
@@ -324,172 +187,23 @@
       }
     ],
     "name": "createPair",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "pool",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "assetPair",
-            "type": "string"
-          },
-          {
-            "internalType": "enum IBufferBinaryOptions.AssetCategory",
-            "name": "assetCategory",
-            "type": "uint8"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint8",
-                "name": "startHour",
-                "type": "uint8"
-              },
-              {
-                "internalType": "uint8",
-                "name": "startMinute",
-                "type": "uint8"
-              },
-              {
-                "internalType": "uint8",
-                "name": "endHour",
-                "type": "uint8"
-              },
-              {
-                "internalType": "uint8",
-                "name": "endMinute",
-                "type": "uint8"
-              }
-            ],
-            "internalType": "struct IOptionsConfig.Window[]",
-            "name": "windows",
-            "type": "tuple[]"
-          },
-          {
-            "internalType": "uint16",
-            "name": "_baseSettlementFeePercentageForAbove",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "_baseSettlementFeePercentageForBelow",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint8[4]",
-            "name": "_nftTierStep",
-            "type": "uint8[4]"
-          },
-          {
-            "internalType": "uint16",
-            "name": "optionFeePerTxnLimitPercent",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "overallPoolUtilizationLimit",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "assetUtilizationLimit",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint32",
-            "name": "minPeriod",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "maxPeriod",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint256",
-            "name": "minFee",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Controller.Market",
-        "name": "market",
-        "type": "tuple"
-      }
-    ],
-    "name": "editPair",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      }
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" }
     ],
     "name": "getRoleAdmin",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "targetContract",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "grantContractRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "grantRole",
     "outputs": [],
@@ -498,25 +212,11 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "hasRole",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -554,60 +254,16 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "name": "marketRegistry",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "poolSFD",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "renounceRole",
     "outputs": [],
@@ -616,16 +272,8 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "revokeRole",
     "outputs": [],
@@ -634,39 +282,8 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "pool",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "assetPair",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "options",
-        "type": "address"
-      }
-    ],
-    "name": "setMarketRegistry",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "pool",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "sfd",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "pool", "type": "address" },
+      { "internalType": "address", "name": "sfd", "type": "address" }
     ],
     "name": "setSFD",
     "outputs": [],
@@ -675,39 +292,11 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "bytes4",
-        "name": "interfaceId",
-        "type": "bytes4"
-      }
+      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
     ],
     "name": "supportsInterface",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "targetContract",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

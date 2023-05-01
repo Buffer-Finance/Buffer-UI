@@ -189,7 +189,7 @@ export function useIndependentWriteCall() {
           confirmationModal: confirmationModal,
           timings: 100,
         });
-        callBack({ payload: { res } });
+        callBack({ payload: res });
         dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
       } else {
         toastify({ msg: 'Transaction Failed', type: 'error' });
