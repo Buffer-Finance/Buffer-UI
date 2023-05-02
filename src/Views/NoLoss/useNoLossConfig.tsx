@@ -29,34 +29,38 @@ export const useNoLossStaticConfig = () => {
 
 const marketid2Info = {
   BTCUSD: {
-    pricePrecision: 100,
+    price_precision: 100,
     pair: 'BTC-USD',
     category: 'Crypto',
     fullName: 'Bitcoin',
+    tv_id: 'BTCUSD',
   },
   ETHUSD: {
-    pricePrecision: 100,
+    price_precision: 100,
     pair: 'ETH-USD',
     category: 'Crypto',
     fullName: 'Ethereum',
+    tv_id: 'ETHUSD',
   },
   GBPUSD: {
-    pricePrecision: 100,
+    price_precision: 100,
     pair: 'GBP-USD',
-    category: 'Crypto',
+    category: 'Forex',
     fullName: 'Pound',
+    tv_id: 'GBPUSD',
   },
   EURUSD: {
-    pricePrecision: 100,
+    price_precision: 100,
     pair: 'EUR-USD',
-    category: 'Crypto',
+    category: 'Forex',
     fullName: 'Euro',
+    tv_id: 'EURUSD',
   },
 };
 const useNoLossConfig = () => {
   const config = useNoLossStaticConfig();
   const sOrP = useSignerOrPorvider();
-  const { data } = useSWR(`config-${config.chainId}`, {
+  return useSWR(`config-root-config-${config.chainId}`, {
     fetcher: async (name) => {
       const basicQuery = `
       optionContracts: optionContracts(
@@ -88,6 +92,10 @@ const useNoLossConfig = () => {
       let copy = getDeepCopy(returnData);
       convertBNtoString(copy);
       let appConfig = {};
+      console.log(
+        `response.data.data.optionContracts: `,
+        response.data.data.optionContracts
+      );
       response.data.data.optionContracts.forEach((s, sid) => {
         const key = s.asset;
         Calls.forEach((c, cid) => {
@@ -105,18 +113,18 @@ const useNoLossConfig = () => {
         appConfig[key] = {
           ...appConfig[key],
           configContract: s.config,
-          market: marketid2Info[s.asset],
           isPaused: s.isPaused,
           optionsContract: s.address,
+          ...marketid2Info[s.asset],
         };
       });
 
-      return { hello: 'there' };
+      console.log(`appConfig: `, appConfig);
+      return appConfig;
     },
     // TODO see if there is retrying machanism on swr than only do this req one time
     refreshInterval: 100000,
   });
-  return { hello: 'name' };
 };
 
 export { useNoLossConfig };

@@ -1,10 +1,14 @@
-import { atom } from 'jotai';
+import { atom, useAtom } from 'jotai';
 import useSWR from 'swr';
 import {
   ITournament,
   useNoLossTournaments,
   useTournamentData,
 } from './useNoLossTournamets';
+import { SVGProps } from 'react';
+import { BlueBtn } from '@Views/Common/V2-Button';
+import { activetIdAtom } from './NoLoss';
+
 import { useEffect, useState } from 'react';
 import { useTimer } from '@Hooks/Utilities/useStopWatch';
 const tournamentStyles =
@@ -19,7 +23,7 @@ const NoLossTournamentList: React.FC<any> = ({}) => {
   >(tournamentTypes[0]);
   return (
     <div className="w-[220px] px-[10px] ">
-      <div className="flex items-center justify-evenly text-2">
+      <div className="flex items-center justify-evenly text-2 mb-2">
         {tournamentTypes.map((s) => (
           <div
             className={`flex gap-x-[3px] items-center cursor-pointer ${
@@ -30,7 +34,7 @@ const NoLossTournamentList: React.FC<any> = ({}) => {
             {s}
             {s == 'Live' && data?.['Live']?.length && (
               <div className="text-1 text-center mt-[2px] p-0 text-[8px]  bold pt-[-8px] bg-red w-[13px] h-[13px] rounded-full">
-                {data?.[activeTournamentType].length}
+                {data?.[activeTournamentType]?.length}
               </div>
             )}
           </div>
@@ -71,13 +75,25 @@ const TournamentCard = ({ tournament }: { tournament: ITournament }) => {
   const { data } = useTournamentData();
   const tournamentInfo = data?.[tournament.id];
   console.log(`tournamentInfo: `, tournamentInfo);
+  const [activeTid, setactiveTid] = useAtom(activetIdAtom);
+
   return data?.[tournament.id] ? (
-    <div className="w-[100%]  background-vertical-gradient rounded-[4px]  px-[12px] py-[10px] pb-[20px]">
+    <div
+      className={`w-[100%]  background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
+        tournament.id == activeTid
+          ? 'border-[var(--bg-signature)] '
+          : 'border-[transparent]'
+      }`}
+      role="button"
+      onClick={() => {
+        setactiveTid(tournament.id);
+      }}
+    >
       <div className="flex items-center justify-between">
         <div className="text-3 font-semibold text-f12">
           {data[tournament.id].tournamentMeta.name}
         </div>
-        <div className="text-[8px] text-green font-semibold bg-green bg-opacity-20 chip-green-border px-[8px] py-[2px]">
+        <div className="text-[8px] text-green font-semibold bg-green    bg-opacity-20 chip-green-border px-[8px] py-[2px]">
           {tournament.state}
         </div>
       </div>
@@ -116,8 +132,6 @@ const TournamentCard = ({ tournament }: { tournament: ITournament }) => {
 };
 
 export { NoLossTournamentList };
-import { SVGProps } from 'react';
-import { BlueBtn } from '@Views/Common/V2-Button';
 const TournamentRank = (props: SVGProps<SVGSVGElement>) => (
   <div className="flex items-center gap-x-2">
     <svg

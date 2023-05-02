@@ -1,3 +1,4 @@
+import { convertBNtoString } from '@Utils/useReadCall';
 import { Contract, ethers } from 'ethers';
 export interface Call {
   address: string; // Address of the contract
@@ -36,6 +37,46 @@ export const multicallv2 = async (
       return tempRes;
     });
     return res;
+  } catch (err) {
+    console.log(err, calls, swrKey, 'multicall err');
+    return null;
+  }
+};
+
+export const getReadId = (call: Call) => {
+  return call.address + call.name;
+};
+export const multicallLinked = async (
+  calls: Call[],
+  singerOrProvider,
+  multicall,
+  swrKey
+) => {
+  if (!calls.length) return null;
+  try {
+    const calldata = calls.map((call) => {
+      const itf = ethers.utils && new ethers.utils.Interface(call.abi);
+      return [
+        call.address.toLowerCase(),
+        itf.encodeFunctionData(call.name, call.params),
+      ];
+    });
+
+    const contract = new Contract(multicall, arbiAbi, singerOrProvider);
+
+    let returnData = await contract['callStatic']['aggregate'](calldata);
+    if (typeof returnData === 'undefined') return;
+    const resultMap = {};
+
+    returnData.returnData.forEach((call, i) => {
+      const [data] = call;
+      if (!call) return null;
+      const itf = new ethers.utils.Interface(calls[i].abi);
+      resultMap[getReadId(call[i])] = convertBNtoString(
+        itf.decodeFunctionResult(calls[i].name, call)
+      );
+    });
+    return resultMap;
   } catch (err) {
     console.log(err, calls, swrKey, 'multicall err');
     return null;

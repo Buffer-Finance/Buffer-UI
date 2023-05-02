@@ -40,6 +40,7 @@ import { Detector } from 'react-detect-offline';
 import isUserPaused, { UserActivityAtom } from '@Utils/isUserPaused';
 import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import { DynamicMarketSelector } from '@Views/NoLoss/Favourites/TVMarketSelector';
 var json = {
   global: {
     tabEnableClose: true,
@@ -71,100 +72,12 @@ var json = {
               },
             ],
           },
-          {
-            type: 'tabset',
-            weight: 45,
-            selected: 0,
-            id: 'PastTradeTab',
-            children: [
-              {
-                type: 'tab',
-                name: 'Active',
-                id: 'ActiveTable',
-                component: 'ActiveTable',
-                enableClose: false,
-                enableDrag: false,
-              },
-              {
-                type: 'tab',
-                name: 'History',
-                id: 'HistoryTable',
-                component: 'HistoryTable',
-                enableClose: false,
-                enableDrag: false,
-              },
-              {
-                type: 'tab',
-                name: 'Cancelled',
-                id: 'CancelledTable',
-                component: 'CancelledTable',
-                enableClose: false,
-                enableDrag: false,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: 'row',
-        weight: 300,
-        children: [
-          {
-            type: 'tabset',
-            weight: 50,
-            selected: 0,
-            id: 'BuyTradeTab',
-            children: [
-              {
-                enableClose: false,
-                type: 'tab',
-                name: 'Trade',
-                enableDrag: false,
-                id: 'BuyTraded',
-                component: 'BuyTrade',
-              },
-            ],
-          },
         ],
       },
     ],
   },
 };
 
-// build RestWarnModal modal UI
-// build CustomizingWarnModal UI
-// build consets atoms
-const WithIdle = (C: any, duration: number) => {
-  const updatedComponent = () => {
-    const [isIdle, setIsIdle] = useState<boolean>(false);
-
-    const onIdle = () => {
-      setIsIdle(true);
-    };
-    useIdleTimer({
-      onIdle,
-      timeout: duration,
-      throttle: 100,
-    });
-    const displayApp = () => {
-      setIsIdle(false);
-    };
-    return (
-      <>
-        <ModalBase open={isIdle} onClose={displayApp}>
-          <>
-            <div className="text-1 text-f16 mb-4">Are you still there?</div>
-            <BlueBtn onClick={displayApp} className="!h-[35px]">
-              Continue
-            </BlueBtn>
-          </>
-        </ModalBase>
-        {!isIdle ? <C /> : null}
-      </>
-    );
-  };
-  return updatedComponent;
-};
 const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
   layoutCustomization: {
     isModalOpen: false,
@@ -175,8 +88,37 @@ const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
     isUserEducated: false,
   },
 });
-const layoutAtom = atomWithLocalStorage('layout-persisted-v2', json);
-const DesktopTrad = () => {
+const layoutAtom = atomWithLocalStorage('layout-persisted-v3', json);
+export interface MarketInterface {
+  minPeriod: string;
+  maxPeriod: string;
+  minFee: string;
+  maxFee: string;
+  configContract: string;
+  isPaused: boolean;
+  optionsContract: string;
+  price_precision: number;
+  pair: string;
+  category: string;
+  fullName: string;
+  tv_id: string;
+}
+
+export interface Market {
+  pricePrecision: number;
+  pair: string;
+  category: string;
+  fullName: string;
+}
+
+const MultiChart = ({
+  markets,
+  product,
+}: {
+  markets: { [key: string]: MarketInterface };
+  product: 'no-loss' | 'binary';
+}) => {
+  console.log(`markets: `, markets);
   const layoutRef = useRef<Layout | null>(null);
   const [forcefullyRerender, setforcefullyRerender] = useState(1);
   const { market } = useParams();
@@ -185,7 +127,7 @@ const DesktopTrad = () => {
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
   const navigate = useNavigate();
-  usePrice(true);
+  usePrice();
   usePastTradeQuery();
   useGenericHooks();
 
@@ -196,11 +138,13 @@ const DesktopTrad = () => {
     }
     if (component === 'AddButton') {
       return (
-        <TVMarketSelector
+        <DynamicMarketSelector
+          markets={Object.keys(markets).map((s) => markets[s])}
           className="asset-dropdown-wrapper !h-[100%] !justify-start "
           onMarketSelect={handleNewTabClick}
           onResetMarket={() =>
             seLayoutConsent((l) => {
+              l;
               const updatedConsents = {
                 ...l,
                 resetCustomization: {
@@ -215,37 +159,12 @@ const DesktopTrad = () => {
         />
       );
     }
-    if (component === 'BuyTrade') {
-      return (
-        <Background className=" max-w-[420px] mx-auto">
-          <ActiveAsset cb={handleNewTabClick} />
-          <CustomOption
-            onResetLayout={() =>
-              seLayoutConsent((l) => {
-                const updatedConsents = {
-                  ...l,
-                  resetCustomization: {
-                    isModalOpen: true,
-                    isUserEducated: true,
-                  },
-                };
-                console.log(`updatedConsents: `, updatedConsents);
-                return updatedConsents;
-              })
-            }
-          />
-        </Background>
-      );
-    }
-    const rect = node.getRect();
-    if (component === 'ActiveTable') {
-      return <ActiveTable width={rect.width} />;
-    }
-    if (component === 'HistoryTable') {
-      return <HistoryTable width={rect.width} />;
-    }
-    if (component === 'CancelledTable') {
-      return <CancelTable width={rect.width} />;
+  };
+  const redirectTo = (market?: string) => {
+    if (!market) {
+      navigate(`/${product}/BTC-USD`);
+    } else {
+      navigate(`/${product}/${market}`);
     }
   };
   const isCDMForMarketSelect = useRef(true);
@@ -263,10 +182,10 @@ const DesktopTrad = () => {
     if (toMarket == market) {
       setforcefullyRerender((f) => f + 1);
     }
-    navigate('/binary/' + (toMarket || custom));
+    redirectTo(toMarket || custom);
   }
   function resetLayoutForced() {
-    navigate('/binary/BTC-USD');
+    redirectTo();
     isCDMForMarketSelect.current = true;
     setLayout(json);
   }
@@ -276,7 +195,7 @@ const DesktopTrad = () => {
         layoutApi.doAction(FlexLayout.Actions.setActiveTabset('charts'));
       }
       if (market && !(market.replace('-', '') in Config.markets))
-        return navigate('/binary/BTC-USD');
+        return redirectTo();
       layoutRef.current!.addTabToActiveTabSet({
         type: 'tab',
         name: market,
@@ -384,7 +303,7 @@ const DesktopTrad = () => {
             const market = p.data?.tabNode.replace('-', '');
             if (market && Config.markets?.[market]) {
               console.log(`p.data.tabNode: `, p.data.tabNode);
-              navigate('/binary/' + p.data.tabNode);
+              redirectTo(p.data.tabNode);
             }
           }
           if (p.type == FlexLayout.Actions.DELETE_TAB) {
@@ -411,7 +330,6 @@ const DesktopTrad = () => {
             const name = d.getName() as Markets;
             console.log(`name: `, name);
             const market = Config.markets[name.replace('-', '')]?.pair;
-            if (!market) return;
             console.log(`market: `, market);
             v.leading = <TabIcon market={market} />;
           }
@@ -483,9 +401,8 @@ const DesktopTrad = () => {
   //   arr.buttons.push(<Tab></Tab>)
   // }}
 };
-const DesktopTrade = WithIdle(DesktopTrad, 30 * 60 * 1000);
 export const priceAtom = atom<Partial<Market2Prices>>({});
-export { DesktopTrade };
+export { MultiChart };
 
 const TabIcon = React.memo(({ market }) => {
   return (
@@ -504,5 +421,3 @@ export const Tes2 = () => {
   }, []);
   return <div>{loading ? 'Loading' : 'Hello'}</div>;
 };
-
-export const Test2 = WithIdle(Tes2, 5 * 60 * 1000);
