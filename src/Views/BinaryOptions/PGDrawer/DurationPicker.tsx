@@ -17,37 +17,37 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
     // {
     //   duration: 1 * 60 * oneSec,
     //   time: '00:01',
-    //   name: ['1', 'Min'],
+    //   name: ['1'],
     // },
     {
       duration: 3 * 60 * oneSec,
       time: '00:03',
-      name: ['3', 'Min'],
+      name: ['3m'],
     },
     {
       duration: 5 * 60 * oneSec,
       time: '00:05',
-      name: ['5', 'Min'],
+      name: ['5m'],
     },
     {
       duration: 15 * 60 * oneSec,
       time: '00:15',
-      name: ['15', 'Min'],
+      name: ['15m'],
     },
     {
       duration: 60 * 60 * oneSec,
       time: '01:00',
-      name: ['1', 'Hour'],
+      name: ['1h'],
     },
     {
       duration: 4 * 60 * 60 * oneSec,
       time: '04:00',
-      name: ['4', 'Hour'],
+      name: ['4h'],
     },
     {
       duration: 24 * 60 * 60 * oneSec,
       time: '23:59',
-      name: ['24', 'Hour'],
+      name: ['24h'],
     },
   ];
 
@@ -100,7 +100,7 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
                   setOpenCustomInput(false);
                 }}
                 className={
-                  'each-duration py-1 font-medium text-f12 h-[55px] transition-colors ' +
+                  'each-duration py-1 font-medium text-f12  transition-colors ' +
                   ((timeToMins(currentTime) * 60 * oneSec === singleDuration &&
                     !isDisabled) ||
                   (isLastElement && openCustomInput)

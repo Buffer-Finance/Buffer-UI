@@ -1,21 +1,21 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Background = styled.div`
   margin: 0;
   padding: 0;
   z-index: 100;
-  background-color: #1c1c28;
+  background-color: var(--bg-0);
   overflow-x: hidden;
   display: grid;
   grid-template:
-    "Notification"
-    "Header" auto
-    "Main" 1fr
-    "Footer" auto / 100%;
+    'Notification'
+    'Header' auto
+    'Main' 1fr
+    'Footer' auto / 100%;
   height: 100vh;
-@media (max-width:800px) {
-  margin-bottom:50px;
-}
+  @media (max-width: 800px) {
+    margin-bottom: 50px;
+  }
   .root {
     grid-area: Main;
     /* overflow: auto; */

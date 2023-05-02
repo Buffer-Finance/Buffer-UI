@@ -34,7 +34,7 @@ import { useToast } from '@Contexts/Toast';
 import { AllTradesPage } from '@Views/AllTrades';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
-import { TradePage } from '@Views/BinaryOptions/TradePage';
+import { NoLossTrade, TradePage } from '@Views/BinaryOptions/TradePage';
 import { TestComponent } from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
 import { MergedPage } from '@Views/AllTrades/allTradesMerged';
@@ -47,6 +47,7 @@ import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
 import { NoLoss } from '@Views/NoLoss/NoLoss';
 
+const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
