@@ -128,7 +128,7 @@ export const DashboardTable = ({
           <CellContent
             content={[
               <Display
-                data={currentRow.max_open_interest}
+                data={currentRow.max_open_interest + currentRow.totalTrades}
                 unit={currentRow.poolUnit}
                 className="!justify-start"
               />,
