@@ -7,8 +7,8 @@ import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { CurrentPriceComponent } from './CurrentPriceComponent';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
-import { useState } from 'react';
 import { usePoolDisplayNames } from '../Hooks/useArbitrumOverview';
+import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 
 export const DashboardTable = ({
   dashboardData,
@@ -34,7 +34,7 @@ export const DashboardTable = ({
     { id: 'totalTrades', label: 'Open Up/Open Down' },
     { id: '24h_volume', label: '24h Volume' },
     // { id: 'currentUtilization', label: 'Utilization' },
-    { id: 'max_open_interest', label: 'Max Utilization' },
+    { id: 'max_open_interest', label: 'Open Interest' },
     { id: 'sort_duration', label: 'Minimum/Maximum Duration (HH:MM)' },
     { id: 'max_trade_size', label: 'Max Trade Size' },
     { id: 'payoutForUp', label: 'Payouts' },
@@ -125,15 +125,24 @@ export const DashboardTable = ({
 
       case 5:
         return (
-          <CellContent
-            content={[
+          <>
+            <div className="max-w-[150px]">
+              <BufferProgressBar
+                fontSize={12}
+                progressPercent={
+                  (currentRow.totalTrades * 100) / currentRow.max_open_interest
+                }
+              />
+            </div>
+            <div className="whitespace-nowrap mt-2">
+              Max:&nbsp;{' '}
               <Display
                 data={currentRow.max_open_interest + currentRow.totalTrades}
                 unit={currentRow.poolUnit}
-                className="!justify-start"
-              />,
-            ]}
-          />
+                className="!inline whitespace-nowrap "
+              />
+            </div>
+          </>
         );
       case 6:
         return (
@@ -211,12 +220,12 @@ export const DashboardTable = ({
       widths={[
         '11%',
         '7%',
-        '9%',
-        '16%',
+        '8%',
+        '14%',
         '10%',
-        '10%',
+        '14%',
         '12%',
-        '11%',
+        '10%',
         '9%',
         '5%',
       ]}
