@@ -179,9 +179,46 @@
       "token2": "CAD",
       "full_name": "United States Dollar",
       "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg"
+    },
+    "ARBUSD": {
+      "category": "Crypto",
+      "tv_id": "ARBUSD",
+      "pair": "ARB-USD",
+      "price_precision": 100,
+      "token1": "ARB",
+      "token2": "USD",
+      "full_name": "Arbitrum"
+    },
+    "BNBUSD": {
+      "category": "Crypto",
+      "tv_id": "BNBUSD",
+      "pair": "BNB-USD",
+      "price_precision": 100,
+      "token1": "BNB",
+      "token2": "USD",
+      "full_name": "Binance Coin"
+    },
+    "MATICUSD": {
+      "category": "Crypto",
+      "tv_id": "MATICUSD",
+      "pair": "MATIC-USD",
+      "price_precision": 100,
+      "token1": "MATIC",
+      "token2": "USD",
+      "full_name": "Matic"
+    },
+    "OPUSD": {
+      "category": "Crypto",
+      "tv_id": "OPUSD",
+      "pair": "OP-USD",
+      "price_precision": 100,
+      "token1": "OP",
+      "token2": "USD",
+      "full_name": "Optimism"
     }
   },
   "421613": {
+    "marketFactory": "0x4ffb103F4Cfa8eF4a72227799c325DA53341Da59",
     "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
     "router": "0x76c52E83d7dcCc70107a66BAd44D042D22D06be7",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
@@ -194,7 +231,8 @@
         "name": "USDC",
         "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 5,"is_pol":false
+        "min_amount": 5,
+        "is_pol": false
       },
       "ARB": {
         "address": "0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8",
@@ -204,7 +242,8 @@
         "name": "ARB",
         "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
         "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f",
-        "min_amount": 5,"is_pol":false
+        "min_amount": 5,
+        "is_pol": false
       }
     },
     "pairs": [
@@ -324,6 +363,8 @@
     }
   },
   "42161": {
+    "marketFactory": "0xeb26C551F606A9692c05FE06Af885717db8cDD24",
+
     "referral_storage": "0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29",
     "router": "0x0e0A1241C9cE6649d5D30134a194BA3E24130305",
     "multicall": "0x842eC2c7D803033Edf55E478F461FC547Bc54EB2",
@@ -337,7 +378,7 @@
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
         "min_amount": 100,
-        "is_pol":false
+        "is_pol": false
       },
       "USDC_POL": {
         "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
@@ -348,7 +389,7 @@
         "pool_address": "0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
         "min_amount": 5,
-        "is_pol":true
+        "is_pol": true
       },
       "ARB": {
         "address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
@@ -358,7 +399,7 @@
         "name": "ARB",
         "pool_address": "0xaE0628C88EC6C418B3F5C005f804E905f8123833",
         "min_amount": 25,
-        "is_pol":false
+        "is_pol": false
       }
     },
     "pairs": [
@@ -890,6 +931,142 @@
             }
           }
         ]
+      },
+      {
+        "max_duration": "04:00",
+        "min_duration": "00:15",
+        "category": "Crypto",
+        "tv_id": "ARBUSD",
+        "pair": "ARB-USD",
+        "price_precision": 10000,
+        "token1": "ARB",
+        "token2": "USD",
+        "full_name": "Arbitrum",
+        "pools": [
+          {
+            "token": "USDC_POL",
+            "options_contracts": {
+              "config": "0x06cE0BcD204DF7bB182d4D024bdEdDdE020250bA",
+              "current": "0x5839f05Fb67F26D5D36ad1d518C7B50c48d5697B"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xb9c8E05c1F923419eDCf2f3080ab63d7ACd0D617",
+              "current": "0xB715B53BC57408093cd68d78918974a110f71283"
+            }
+          },
+          {
+            "token": "USDC",
+            "options_contracts": {
+              "config": "0xFe8f09f42d8D8a01Dea2d54d7beb73A8e60Cb247",
+              "current": "0xD9A83FAD6Da740C467aDCb9d443fC846a3fC9660"
+            }
+          }
+        ]
+      },
+      {
+        "max_duration": "04:00",
+        "min_duration": "00:15",
+        "category": "Crypto",
+        "tv_id": "BNBUSD",
+        "pair": "BNB-USD",
+        "price_precision": 100,
+        "token1": "BNB",
+        "token2": "USD",
+        "full_name": "Binance Coin",
+        "pools": [
+          {
+            "token": "USDC_POL",
+            "options_contracts": {
+              "config": "0x020BFd714333876dAd3624F512cbaBF3beEED2a6",
+              "current": "0x4c6c07864f3415012eeC5a0F4613697e6C0a8Fc9"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xeA18D5b4D3D624704c8908b16F4871739d03707D",
+              "current": "0xda93BC6eB17d719BF90b1f5F1640a199Af18a548"
+            }
+          },
+          {
+            "token": "USDC",
+            "options_contracts": {
+              "config": "0x563c416bDebeFACa7184Fd5f8163ba4c98c847d9",
+              "current": "0xae54094B1AE833E04519B41557697a3b8F262E89"
+            }
+          }
+        ]
+      },
+      {
+        "max_duration": "04:00",
+        "min_duration": "00:15",
+        "category": "Crypto",
+        "tv_id": "MATICUSD",
+        "pair": "MATIC-USD",
+        "price_precision": 10000,
+        "token1": "MATIC",
+        "token2": "USD",
+        "full_name": "Matic",
+        "pools": [
+          {
+            "token": "USDC_POL",
+            "options_contracts": {
+              "config": "0x25Dd4e1b21Cc22C66d4036BE8fA1cD062541Db13",
+              "current": "0x6d564623fe71793A638F7ccDd5770b323937b662"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0xBE98d0Abec3AAF403389C5dd5470A3a0219d955B",
+              "current": "0xA67AbE9cE08D2559203F84538c66eA9588d8747C"
+            }
+          },
+          {
+            "token": "USDC",
+            "options_contracts": {
+              "config": "0xab9e4EF2EF88b989AD9A0871A178a6BF321986E1",
+              "current": "0x6d3538826f1707Ab29cee9B16696b3C2Fd817a9c"
+            }
+          }
+        ]
+      },
+      {
+        "max_duration": "04:00",
+        "min_duration": "00:15",
+        "category": "Crypto",
+        "tv_id": "OPUSD",
+        "pair": "OP-USD",
+        "price_precision": 1000,
+        "token1": "OP",
+        "token2": "USD",
+        "full_name": "Optimism",
+        "pools": [
+          {
+            "token": "USDC_POL",
+            "options_contracts": {
+              "config": "0x5c043d02b94d5c07852C8720fBE600B19152E6e6",
+              "current": "0xf840246041561a2CC0Ac2FCA66E36F60E13ceE0B"
+            }
+          },
+          {
+            "token": "ARB",
+            "options_contracts": {
+              "config": "0x0536AE64d02E96635c42De58A64B60525DDE60eA",
+              "current": "0x56eE41fE789123D8af2E2Fae619f9fded5f93929"
+            }
+          },
+          {
+            "token": "USDC",
+            "options_contracts": {
+              "config": "0xc987149dB440F0a382F713B64325A5961F6dB40a",
+              "current": "0xc78C4F0Eb182Ab8F5C0C35D2DdCf1A8dA67fcEcf"
+            }
+          }
+        ]
       }
     ],
     "graph": {
@@ -898,6 +1075,8 @@
     }
   },
   "80001": {
+    "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
+
     "referral_storage": "0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7",
     "router": "0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
@@ -911,7 +1090,7 @@
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
         "faucet": "0x4fccf1139FcA44EF716534bae9D3f87a01583338",
         "min_amount": 5,
-        "is_pol":false
+        "is_pol": false
       }
     },
     "pairs": [
@@ -1010,6 +1189,8 @@
     }
   },
   "137": {
+    "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
+
     "referral_storage": "0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6",
     "router": "0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7",
     "multicall": "0xcA11bde05977b3631167028862bE2a173976CA11",
@@ -1021,8 +1202,8 @@
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
         "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d",
-        "min_amount": 25,
-        "is_pol":false
+        "min_amount": 5,
+        "is_pol": false
       }
     },
     "pairs": [
@@ -1072,7 +1253,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:03",
         "max_utilization": 150,
         "category": "Crypto",
         "tv_id": "SOLUSD",
@@ -1138,7 +1319,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:03",
+        "min_duration": "00:15",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "EURUSD",
@@ -1160,7 +1341,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:03",
+        "min_duration": "00:15",
         "max_utilization": 300,
         "category": "Forex",
         "tv_id": "GBPUSD",
@@ -1182,7 +1363,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "AUDUSD",
@@ -1204,7 +1385,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDJPY",
@@ -1226,7 +1407,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "EURGBP",
@@ -1248,7 +1429,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "EURJPY",
@@ -1270,7 +1451,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "GBPJPY",
@@ -1292,7 +1473,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "NZDUSD",
@@ -1314,7 +1495,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDCHF",
@@ -1336,7 +1517,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "GBPCHF",
@@ -1358,7 +1539,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:05",
+        "min_duration": "00:15",
         "max_utilization": 150,
         "category": "Forex",
         "tv_id": "USDCAD",

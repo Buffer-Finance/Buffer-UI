@@ -28,6 +28,7 @@ import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
 import OptionAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
 import PoolAbi from '@Views/BinaryOptions/ABI/poolABI.json';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { RenderAdminNavbar } from 'src/Admin/CreatePair';
 
 interface ConfigValue {
   getter: string;
@@ -73,7 +74,7 @@ const notYetHandledConfigs = ['marketTime'];
 
 const configDataAtom = atom<ConfigValue[]>([]);
 const poolConfigAtom = atom<ConfigValue[]>([]);
-
+const poolDecimals = [6,6,18]
 type ChainInfo = (typeof Config)['421613'];
 const TradingConfig: React.FC<any> = ({}) => {
   const { activeChain } = useActiveChain();
@@ -87,13 +88,16 @@ const TradingConfig: React.FC<any> = ({}) => {
     | [Call[], ConfigValue[] | object] = useMemo(() => {
     let minFee = 6;
     if (activePoolObj.token.name.toLowerCase() == 'arb') {
-      minFee = 8;
+      minFee = 18;
     }
     let decimalObj = {
       assetUtilizationLimit: 2,
       optionFeePerTxnLimitPercent: 2,
+      baseSettlementFeePercentageForAbove: 2,
+      baseSettlementFeePercentageForBelow: 2,
       overallPoolUtilizationLimit: 2,
       minFee,
+      maxLiquidity: minFee,
     };
     if (!activeChain?.id) return [null, null];
     let calls: Call[] = [];
@@ -246,12 +250,22 @@ const TradingConfig: React.FC<any> = ({}) => {
 
   if (!configState || !response) return <div>Loading....</div>;
   return (
-    <div className="mx-[30px]">
-      <div className="">
+    <div className="mx-[30px] mt-[20px]">
+      <RenderAdminNavbar />
+
+      <div className="text-f12 text-2 mt-4">
+        Tip: You can filter settings via entering market-name or setting-name in
+        search box.
+      </div>
+      <div className="text-f14 text-1 mt-4">
+        Click on "Edit" -> Press "Change" 
+      </div>
+      <div className="flex items-center text-f14 mt-4">
+        Select Pool :&nbsp;&nbsp;&nbsp;
         <PoolDropDownAll />
       </div>
-      <div className="flex items-center text-f14">
-        <div>Search : </div>
+      <div className="flex items-center text-f14 mt-4">
+        <div>Search :&nbsp;&nbsp;&nbsp; </div>
         <BufferInput value={search} onChange={(val) => setSearch(val)} />
       </div>
       <div className="text-f14 mt-3">Option Configs</div>
@@ -289,8 +303,14 @@ const TradingConfig: React.FC<any> = ({}) => {
       <TableAligner
         keyStyle={keyClasses}
         valueStyle={valueClasses}
-        keysName={poolConfig.map((c, id) => c.market.pair + ' : ' + c.getter)}
-        values={poolResponse.map((v, id) => (
+        keysName={poolConfig.map(
+          (c, id) =>
+            c.market.pair +
+            ' : ' +
+            c.getter +
+            (' (' + poolDecimals[id]+ ' dec)' )
+        )}
+        values={poolResponse?.map((v, id) => (
           <ValueEditor
             value={v[0]}
             id={id}
@@ -299,6 +319,7 @@ const TradingConfig: React.FC<any> = ({}) => {
               configData: poolConfig,
               setConfigData: setPoolConfig,
             }}
+            decimals={decimals}
           />
         ))}
       ></TableAligner>{' '}
@@ -348,6 +369,10 @@ const ValueEditor: React.FC<{
           : (() => {
               if (!Number.isNaN(+value)) {
                 if (decimals?.[configData[id]?.getter]) {
+                  if(configData[id].getter == 'maxLiquidity' && configData[id].market.pair.includes('ARB')){
+                    return divide(value, 18);
+
+                  }
                   return divide(value, decimals[configData[id].getter]);
                 }
               }

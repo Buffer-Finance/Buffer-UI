@@ -16,11 +16,7 @@ export const useTradePolOrBlpPool = () => {
     };
 
     const polExists = activePair.pools.filter((pool) => pool.token.is_pol);
-    const pol = polExists
-      ? polExists.find(
-          (pool) => pool.token.name.split('_')[0] === activePoolObj.token.name
-        )
-      : null;
+    const pol = polExists ? polExists.find((pool) => pool.token.is_pol) : null;
 
     if (polExists.length > 0 && pol) {
       response.min_amount = pol.token.min_amount;
@@ -32,7 +28,7 @@ export const useTradePolOrBlpPool = () => {
         response.option_contract = pol.options_contracts;
       }
     }
-    console.log(`[augexp]response: `, response);
+    console.log(`poolRouting: `, response.option_contract.current);
     return response;
   }, [activePair, activePoolObj, userInput]);
 

@@ -4,6 +4,9 @@ import { BlueBtn } from '@Views/Common/V2-Button';
 import { atom, useAtom } from 'jotai';
 import { useState } from 'react';
 import MarketFactoryABI from '@ABIs/MarketFactory.json';
+import { useNavigate } from 'react-router-dom';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useContractEvent } from 'wagmi';
 interface IInput {
   name: string;
   type: string | IInput[];
@@ -11,7 +14,7 @@ interface IInput {
 const mapping: IInput[] = [
   {
     type: 'string',
-    name: 'Address',
+    name: 'Pool Address',
   },
   {
     type: 'string',
@@ -19,7 +22,7 @@ const mapping: IInput[] = [
   },
   {
     type: 'string',
-    name: 'Catagory',
+    name: 'Category',
   },
   {
     name: 'Market_Timings',
@@ -196,11 +199,11 @@ const mapping: IInput[] = [
   },
   {
     type: 'string',
-    name: '_baseSettlementFeePercentageForAbove',
+    name: '_baseSettlementFeePercentageForAbove (2 dec)',
   },
   {
     type: 'string',
-    name: '_baseSettlementFeePercentageForBelow',
+    name: '_baseSettlementFeePercentageForBelow (2 dec)',
   },
   {
     type: [
@@ -245,7 +248,7 @@ const mapping: IInput[] = [
   },
   {
     type: 'string',
-    name: 'minFee Arb(8 dec) USDC(6 dec)',
+    name: 'minFee Arb(18 dec) USDC(6 dec)',
   },
 ];
 
@@ -342,18 +345,26 @@ const map2initState = (mapping: IInput[]): IInitState => {
   const initState: IInitState = {};
   for (const map of mapping) {
     if (typeof map.type == 'string') {
-      initState[map.name] = '';
+      let initVal = '';
+      if (
+        ['Start_Hour', 'Start_Minute', 'End_Hour', 'End_Minute'].includes(
+          map.name
+        )
+      )
+        initVal = '0';
+      initState[map.name] = initVal;
     } else {
       initState[map.name] = map2initState(map.type);
     }
   }
   return initState;
 };
-const res = map2initState(mapping);
 const formAtom = atom(map2initState(mapping));
-
 const CreatePair: React.FC<any> = ({}) => {
+  const { configContracts } = useActiveChain();
+  console.log(`configContracts: `, configContracts.marketFactory);
   const [form, setForm] = useAtom(formAtom);
+  console.log(`form: `, form);
   const { writeCall } = useIndependentWriteCall();
   const send = async () => {
     const addParam = (formInstance) => {
@@ -371,18 +382,58 @@ const CreatePair: React.FC<any> = ({}) => {
     };
     const gargs = addParam(form);
     console.log(`gargs: `, gargs);
+    const staticArgs = [
+      '0x1CDA6A34D84F444183E89D2D41D920EeaE883439',
+      'BTCUSD',
+      '1',
+      [
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+        ['0', '0', '0', '0'],
+      ],
+      '2000',
+      '2000',
+      ['4', '8', '12', '16'],
+      '100',
+      '40',
+      '100',
+      '180',
+      '14400',
+      '25000000',
+    ];
     writeCall(
-      '0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467',
+      configContracts.marketFactory,
       MarketFactoryABI,
-      () => console.log,
+      (data) => {
+        console.log('final-response', data, data?.payload?.market);
+      },
       'createPair',
+      // [staticArgs]
       [gargs]
     );
   };
   return (
-    <div>
-      <BlueBtn onClick={send}>Create</BlueBtn>
+    <div className="mt-[20px] ">
+      <RenderAdminNavbar className={'ml-[30px]'} />
+      <div className="text-f12 text-2 ml-[30px] mt-4">
+        Tip: Press tab for navigating to next input
+      </div>
+      <div className="text-f12 text-2 ml-[30px] mt-4">
+        Tip: After pair creation, it will be automatically reflected on top of
+        page.
+      </div>
+      <div className="text-f14 text-1 ml-[30px] mt-4">
+        Enter the raw values in the form, make sure that no input remains blank,
+        than press "Create" below the form.
+      </div>
       <RenderForm form={form} setForm={setForm} id="" />
+      <BlueBtn className="!w-fit px-5 ml-[40px] mt-5 mb-5" onClick={send}>
+        Create
+      </BlueBtn>
     </div>
   );
 };
@@ -391,7 +442,7 @@ const RenderForm = ({ form, setForm, id }) => {
   const [origForm, setOrigForm] = useAtom(formAtom);
 
   return (
-    <div className="ml-[30px]">
+    <div className="ml-[30px] mt-4">
       {Object.keys(form).map((key) => {
         if (typeof form[key] == 'string') {
           const currId = id + ':' + key;
@@ -409,12 +460,15 @@ const RenderForm = ({ form, setForm, id }) => {
           if (ids.length == 1) {
             value = origForm[key];
           }
+          console.log(`value: `, key, value);
           return (
-            <div className="text-f12 ml-2">
+            <div className="text-f12 ml-2  mt-4">
               <div>{key}</div>
-              <BufferInput
-                val={value}
-                onChange={(val) => {
+              <input
+                className="text-1 bg-3 px-3 py-1 mt-3"
+                value={value}
+                onChange={(e) => {
+                  const val = e.target.value;
                   const ids = currId.split(':');
                   setOrigForm((updatedF) => {
                     let f = { ...updatedF };
@@ -459,3 +513,65 @@ const RenderForm = ({ form, setForm, id }) => {
   );
 };
 export { CreatePair };
+import FactoryAbi from '@Views/BinaryOptions/ABI/routerABI.json';
+import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
+const addresses = ['helo', 'there'];
+
+const createdMarketsAtom = atomWithLocalStorage('markets-created-v1', []);
+export const RenderAdminNavbar = ({ className }) => {
+  const navigate = useNavigate();
+  const [createdMarkets, setCreatedMarkets] = useAtom(createdMarketsAtom);
+  const { configContracts } = useActiveChain();
+  useContractEvent({
+    address: configContracts.marketFactory,
+    abi: MarketFactoryABI,
+    eventName: 'PairCreated',
+    listener(assetPair, optionsAddress, configAddress, ...args) {
+      setCreatedMarkets((s) => {
+        let updatedMarkets = [...s];
+        updatedMarkets.push({
+          assetPair,
+          optionsAddress,
+          configAddress,
+        });
+        return updatedMarkets;
+      });
+    },
+  });
+  console.log(`createdMarkets: `, createdMarkets);
+  return (
+    <>
+      {createdMarkets?.length ? (
+        <div className={className + ' mb-4'}>
+          <div className="text-f14">Created Pairs</div>
+          <div className="flex items-center gap-x-3">
+            {createdMarkets.map((s) => {
+              return (
+                <div className="bg-[#311b67] text-f12  mt-3 flex-col items-center w-fit rounded-md p-3 ">
+                  <div>Pair : {s.assetPair}</div>
+                  <div>Options : {s.optionsAddress}</div>
+                  <div>Config : {s.configAddress}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+      <div className={' text-f12  flex gap-x-[20px] items-center ' + className}>
+        <div>Navigate to</div>
+        <div
+          onClick={() => navigate('/admin')}
+          className="cursor-pointer hover:brightness-125 bg-1 px-[15px] py-[5px]  rounded-[7px]"
+        >
+          Change Settings
+        </div>
+        <div
+          onClick={() => navigate('/admin/create-pair')}
+          className="cursor-pointer hover:brightness-125 bg-1 px-[15px] py-[5px] rounded-[7px]"
+        >
+          Create Pair
+        </div>
+      </div>
+    </>
+  );
+};

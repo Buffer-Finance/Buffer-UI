@@ -484,7 +484,7 @@ export const OverviewArbitrum = ({
                 <Display
                   data={(data.ARBopenInterest as toalTokenXstats)?.openInterest}
                   precision={2}
-                  unit="USDC"
+                  unit="ARB"
                   className="!w-fit"
                 />
               ) : (

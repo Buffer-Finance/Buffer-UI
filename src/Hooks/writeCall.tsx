@@ -161,9 +161,9 @@ export function useIndependentWriteCall() {
       console.log(`[blockchain]methodArgs: `, methodArgs);
       console.log(`[blockchain]methodName: `, methodName);
       console.log(`[blockchain]contract: `, contract?.callStatic);
-      // const call = await contract?.callStatic[methodName](...methodArgs, {
-      //   ...defaultValues,
-      // });
+      const call = await contract?.callStatic[methodName](...methodArgs, {
+        ...defaultValues,
+      });
       // console.log(`[blockchain]call: `, call);
       const txn = await contract?.functions[methodName](...methodArgs, {
         ...defaultValues,
@@ -189,7 +189,7 @@ export function useIndependentWriteCall() {
           confirmationModal: confirmationModal,
           timings: 100,
         });
-        callBack({ payload: { res } });
+        callBack({ payload: res });
         dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
       } else {
         toastify({ msg: 'Transaction Failed', type: 'error' });
