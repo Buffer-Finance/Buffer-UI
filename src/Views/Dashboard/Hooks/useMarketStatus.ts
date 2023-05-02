@@ -9,12 +9,8 @@ import BinaryOptionsABI from '@Views/BinaryOptions/ABI/optionsABI.json';
 import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
 
-export function useMarketStatus() {
-  const { address: account } = useUserAccount();
+export const useAllContracts = () => {
   const { configContracts } = useActiveChain();
-  const referralData = useReferralCode();
-  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
-
   const allAssetContracts = useMemo(
     () =>
       configContracts.pairs
@@ -22,6 +18,16 @@ export function useMarketStatus() {
         .flat(1),
     [configContracts]
   );
+  return { allAssetContracts };
+};
+
+export function useMarketStatus() {
+  const { address: account } = useUserAccount();
+  const { configContracts } = useActiveChain();
+  const referralData = useReferralCode();
+  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
+
+  const { allAssetContracts } = useAllContracts();
   const assetCalls = useMemo(
     () =>
       configContracts.pairs
@@ -64,9 +70,9 @@ export function useMarketStatus() {
                 name: 'getPoolBasedMaxAmount',
                 params: [
                   pool.options_contracts.current,
-                  highestTierNFT?.tokenId || 0,
-                  referralData[2],
-                  account || '0x0000000000000000000000000000000000000000',
+                  0,
+                  '',
+                  '0x0000000000000000000000000000000000000000',
                 ],
               },
               // {
