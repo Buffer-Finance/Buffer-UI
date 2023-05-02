@@ -130,7 +130,8 @@ export const DashboardTable = ({
               <BufferProgressBar
                 fontSize={12}
                 progressPercent={
-                  (currentRow.totalTrades * 100) / currentRow.max_open_interest
+                  (currentRow.totalTrades * 100) /
+                  (currentRow.max_open_interest + currentRow.totalTrades)
                 }
               />
             </div>
