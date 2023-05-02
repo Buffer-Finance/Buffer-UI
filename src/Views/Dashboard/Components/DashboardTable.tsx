@@ -34,7 +34,7 @@ export const DashboardTable = ({
     { id: 'totalTrades', label: 'Open Up/Open Down' },
     { id: '24h_volume', label: '24h Volume' },
     // { id: 'currentUtilization', label: 'Utilization' },
-    { id: 'max_open_interest', label: 'Open Interest' },
+    { id: 'max_open_interest', label: 'Utilization' },
     { id: 'sort_duration', label: 'Minimum/Maximum Duration (HH:MM)' },
     { id: 'max_trade_size', label: 'Max Trade Size' },
     { id: 'payoutForUp', label: 'Payouts' },
