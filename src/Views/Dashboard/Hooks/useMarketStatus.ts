@@ -9,12 +9,8 @@ import BinaryOptionsABI from '@Views/BinaryOptions/ABI/optionsABI.json';
 import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
 
-export function useMarketStatus() {
-  const { address: account } = useUserAccount();
+export const useAllContracts = () => {
   const { configContracts } = useActiveChain();
-  const referralData = useReferralCode();
-  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
-
   const allAssetContracts = useMemo(
     () =>
       configContracts.pairs
@@ -22,6 +18,16 @@ export function useMarketStatus() {
         .flat(1),
     [configContracts]
   );
+  return { allAssetContracts };
+};
+
+export function useMarketStatus() {
+  const { address: account } = useUserAccount();
+  const { configContracts } = useActiveChain();
+  const referralData = useReferralCode();
+  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
+
+  const { allAssetContracts } = useAllContracts();
   const assetCalls = useMemo(
     () =>
       configContracts.pairs
@@ -59,11 +65,28 @@ export function useMarketStatus() {
                 ],
               },
               {
-                address: pool.options_contracts.config,
-                abi: ConfigABI,
-                name: 'assetUtilizationLimit',
-                params: [],
+                address: configContracts.tokens[pool.token].meta,
+                abi: MaxTradeABI,
+                name: 'getPoolBasedMaxAmount',
+                params: [
+                  pool.options_contracts.current,
+                  0,
+                  '',
+                  '0x0000000000000000000000000000000000000000',
+                ],
               },
+              // {
+              //   address: pool.options_contracts.config,
+              //   abi: ConfigABI,
+              //   name: 'assetUtilizationLimit',
+              //   params: [],
+              // },
+              // {
+              //   address: pool.options_contracts.current,
+              //   abi: BinaryOptionsABI,
+              //   name: 'totalLockedAmount',
+              //   params: [],
+              // },
             ])
             .flat(1)
         )
@@ -81,7 +104,9 @@ export function useMarketStatus() {
     maxTradeAmount: string | null | undefined;
     isMarketOpen: boolean;
     payout: string | null | undefined;
-    maxUtilization: string | null | undefined;
+    maxOpenInterest: string | null | undefined;
+    // maxUtilization: string | null | undefined;
+    // openInterest: string;
   };
   let response: { [key: string]: marketStatusType } = {};
 
@@ -114,14 +139,18 @@ export function useMarketStatus() {
     maxAmountArr: [string, string],
     marketOpenArray: boolean[],
     payout: string,
-    maxUtilization: string,
+    maxPoolAmountArr: [string, string],
+    // maxUtilization: string,
+    // openInterest: string,
     decimals: number
   ): marketStatusType {
     return {
       isMarketOpen: marketOpenArray[0],
       maxTradeAmount: getMaxAmount(maxAmountArr, decimals),
       payout: getPayout(payout),
-      maxUtilization: getMaxUtilization(maxUtilization),
+      maxOpenInterest: getMaxAmount(maxPoolAmountArr, decimals),
+      // maxUtilization: getMaxUtilization(maxUtilization),
+      // openInterest: openInterest,
     };
   }
 
@@ -142,6 +171,6 @@ export function useMarketStatus() {
       }
     });
   }
-  // console.log(response, 'response');
+  console.log(response, 'response');
   return { assetStatus: response, allAssetContracts };
 }

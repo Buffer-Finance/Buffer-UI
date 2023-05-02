@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { add, divide } from '@Utils/NumString/stringArithmatics';
+import { add } from '@Utils/NumString/stringArithmatics';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
-import { useMarketStatus } from './useMarketStatus';
+import { useAllContracts, useMarketStatus } from './useMarketStatus';
 import { useAtomValue } from 'jotai';
 import { priceAtom, usePrice } from '@Hooks/usePrice';
 import { getPriceFromKlines } from '@TV/useDataFeed';
@@ -40,6 +40,7 @@ export const useDashboardTableData = () => {
   const currentPrices = useAtomValue(priceAtom);
   const { assetStatus } = useMarketStatus();
   const { configContracts } = useActiveChain();
+  const { allAssetContracts } = useAllContracts();
   const { data } = useSWR('dashboard-table-data', {
     fetcher: async () => {
       const response = await axios.post(configContracts.graph.MAIN, {
@@ -91,11 +92,36 @@ export const useDashboardTableData = () => {
 
   // console.log(oneDayVolume, 'oneDayVolume');
 
+  const otherContracts = useMemo(() => {
+    if (!data || !data.optionContracts) return [];
+    return allAssetContracts
+      .filter((contract) => {
+        return !data.optionContracts.find(
+          (item) =>
+            item.address.toLowerCase() ===
+            contract.options_contracts.current.toLowerCase()
+        );
+      })
+      .map((item) => {
+        return {
+          address: item.options_contracts.current,
+          openDown: '0',
+          openUp: '0',
+          currentUtilization: '0',
+          openInterest: '0',
+          payoutForDown: '0',
+          payoutForUp: '0',
+          volume: '0',
+          tradeCount: '0',
+        };
+      });
+  }, [allAssetContracts, data]);
+
   const dashboardData = useMemo(() => {
     if (!data || !data.optionContracts) return [];
     const upatedData = [];
     let pool = null;
-    data.optionContracts.forEach((item) => {
+    data.optionContracts.concat(otherContracts).forEach((item) => {
       const configPair = configContracts.pairs.find((pair) => {
         pool = null;
 
@@ -107,7 +133,7 @@ export const useDashboardTableData = () => {
         return !!pool;
       });
       if (!configPair) return;
-
+      // console.log(data.optionContracts.concat(otherContracts), 'configPair');
       const currData = {
         ...item,
         address: pool.options_contracts.current,
@@ -154,17 +180,21 @@ export const useDashboardTableData = () => {
               configContracts.tokens[pool.token].decimals
             )
           ) || '0',
-        currentUtilization: Number(fromWei(item.currentUtilization, 16)),
+        // currentUtilization: Number(fromWei(item.currentUtilization, 16)),
         payoutForDown: Number(
           assetStatus[pool.options_contracts.current]?.payout ?? '0'
         ),
         payoutForUp: Number(
           assetStatus[pool.options_contracts.current]?.payout ?? '0'
         ),
-        max_utilization:
-          assetStatus[pool.options_contracts.current]?.maxUtilization ?? '0',
+        // max_utilization:
+        //   assetStatus[pool.options_contracts.current]?.maxUtilization ?? '0',
         pool: pool.token,
         poolUnit: configContracts.tokens[pool.token].name,
+        max_open_interest:
+          Number(
+            assetStatus[pool.options_contracts.current]?.maxOpenInterest
+          ) || 0,
       };
       upatedData.push(currData);
     });
