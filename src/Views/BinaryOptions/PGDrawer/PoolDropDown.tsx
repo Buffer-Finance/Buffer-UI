@@ -18,6 +18,7 @@ export const useActivePoolObj = () => {
   const qtInfo = useQTinfo();
   const { activeChain } = useActiveChain();
   const activePair = qtInfo.activePair;
+  const defaultPool = activePair.pools.filter((pool) => !pool.token.is_pol)[0];
 
   const dropdownItems = useMemo(() => {
     if (!activePair) return [];
@@ -30,14 +31,14 @@ export const useActivePoolObj = () => {
   const activePoolObj = useMemo(() => {
     if (activePool && activePair) {
       const pool = activePair.pools.find(
-        (pool) => pool.token.name === activePool
+        (pool) => pool.token.name === activePool && !pool.token.is_pol
       );
 
       if (pool) return pool;
-      else return activePair.pools[0];
-    } else return activePair.pools[0];
+      else return defaultPool;
+    } else return defaultPool;
   }, [activePair, activePool, activeChain]);
-
+  // console.log(activePoolObj, 'activePoolObj');
   return { activePoolObj, dropdownItems };
 };
 export const useActivePoolAll = () => {
