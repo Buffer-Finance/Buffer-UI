@@ -103,23 +103,29 @@ export const pythIds = {
   '385f64d993f7b77d8182ed5003d97c60aa3361f3cecfe711544d2d59165e9bdf': 'OPUSD',
 };
 export const getPrice = async () => {
-  const price = await axios.get(
-    `https://oracle.buffer-finance-api.link/api/latest_price_feeds?` +
-      Object.keys(pythIds)
-        .map((d) => 'ids[]=0x' + d)
-        .join('&')
-  );
-  const marketPrice = {};
-  price.data.forEach((e) => {
-    marketPrice[pythIds[e.id]] = [
-      {
-        price: multiply(
-          e.price.price,
-          new Big('10').pow(e.price.expo).toString()
-        ),
-        time: e.price.publish_time * 1000,
-      },
-    ];
-  });
-  return marketPrice;
+  try {
+    const price = await axios.get(
+      `https://oracle.buffer-finance-api.link/api/latest_price_feeds?` +
+        Object.keys(pythIds)
+          .map((d) => 'ids[]=0x' + d)
+          .join('&')
+    );
+    const marketPrice = {};
+    price.data.forEach((e) => {
+      marketPrice[pythIds[e.id]] = [
+        {
+          price: multiply(
+            e.price.price,
+            new Big('10').pow(e.price.expo).toString()
+          ),
+          time: e.price.publish_time * 1000,
+        },
+      ];
+    });
+
+    return marketPrice;
+  } catch (e) {
+    console.log('getPrice error' + e);
+    return {};
+  }
 };
