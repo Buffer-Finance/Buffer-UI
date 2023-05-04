@@ -27,10 +27,28 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { MarketTimingWarning } from '../MarketTimingWarning';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useTradePolOrBlpPool } from '../Hooks/useTradePolOrBlpPool';
+import { MarketInterface } from 'src/MultiChart';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
-export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
+// things we pass dynamically
+// TODO pass balance, allowance, maxTrade, minTrade
+// TODO OptionBuying Machanism
+// TODO remove useBinaryActions
+// TODO stats machanism
+export function DynamicCustomOption({
+  markets,
+}: // balance,
+// approveHandler,
+// buyHandler,
+// minFee,
+// maxFee,
+// minDuration,
+// maxDuration,
+// token,
+{
+  markets: MarketInterface[];
+}) {
   const [amount, setAmount] = useAtom(ammountAtom);
   const { address: account } = useUserAccount();
   const { openConnectModal } = useConnectModal();
@@ -41,10 +59,11 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
     loading,
     currStats,
     activeAssetState,
+    isActive,
   } = useBinaryActions(amount, true, true);
-
-  const [balance, allowanceWei, maxTrade, _, routerPermission] =
-    activeAssetState;
+  const isAssetActive = true;
+  const [, allowanceWei, maxTrade, _, routerPermission] = activeAssetState;
+  const allowance = divide(allowanceWei, '8');
 
   const UpHandler = () => {
     if (!account) return openConnectModal?.();
@@ -52,7 +71,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
       return setIsApproveModalOpen(true);
     buyHandler({ is_up: true });
   };
-
+  const balance = '0';
   const DownHandler = () => {
     if (!account) return openConnectModal?.();
     if (lt(allowance || '0', amount.toString() || '0'))
@@ -73,10 +92,6 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   const { activePoolObj } = useActivePoolObj();
   const isForex = activeAsset.category === 'Forex';
   const isMarketOpen = knowTill.open && isForex;
-  const allowance = divide(allowanceWei, activePoolObj.token.decimals);
-  const isAssetActive =
-    routerPermission &&
-    routerPermission[activeAsset.pools[0].options_contracts.current];
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
   let MarketOpenWarning: ReactNode | null = null;
@@ -93,7 +108,8 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
           clickHandler: console.log,
           closeModal: () => setIsOpen(false),
           loading: false,
-          onResetLayout,
+          balance,
+          onResetLayout: console.log,
         }}
       />
       <ApproveModal

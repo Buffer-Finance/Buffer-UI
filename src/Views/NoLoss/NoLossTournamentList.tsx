@@ -9,9 +9,9 @@ import { SVGProps } from 'react';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { activetIdAtom } from './NoLoss';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTimer } from '@Hooks/Utilities/useStopWatch';
-const tournamentStyles =
+export const tournamentButtonStyles =
   'bg-blue flex gap-x-2 px-[8px] py-[2px] text-f12 items-center rounded-[4px] ';
 export const touramentsAtom = atom([]);
 const tournamentTypes = ['Live', 'Upcoming', 'Closed'];
@@ -74,7 +74,6 @@ const NoLossTournamentTimer = ({ close }: { close: string }) => {
 const TournamentCard = ({ tournament }: { tournament: ITournament }) => {
   const { data } = useTournamentData();
   const tournamentInfo = data?.[tournament.id];
-  console.log(`tournamentInfo: `, tournamentInfo);
   const [activeTid, setactiveTid] = useAtom(activetIdAtom);
 
   return data?.[tournament.id] ? (
@@ -119,11 +118,11 @@ const TournamentCard = ({ tournament }: { tournament: ITournament }) => {
         </div>
       </div>
       <div className="flex items-center justify-center gap-x-[5px] mt-4">
-        <button className={tournamentStyles}>
+        <button className={tournamentButtonStyles}>
           <TradeIcon />
           Hello
         </button>
-        <button className={tournamentStyles}>Entry $2</button>
+        <button className={tournamentButtonStyles}>Entry $2</button>
       </div>
     </div>
   ) : (

@@ -45,9 +45,7 @@ const useNoLossTournaments = () => {
   const sOrP = useSignerOrPorvider();
 
   const { data } = useSWR<{
-    tids?: {
-      [index in 'Upcoming' | 'Closed' | 'Live']: ITournament[];
-    };
+    [index in 'Upcoming' | 'Closed' | 'Live']: ITournament[];
   }>(`config-${config.chainId}`, {
     fetcher: async (name) => {
       const basicQuery = `
@@ -80,7 +78,10 @@ const useNoLossTournaments = () => {
   });
   return data;
 };
-
+export interface ITournament {
+  tournamentConditions: Conditions;
+  tournamentMeta: MetaInfo;
+}
 const useTournamentData = (id?: number) => {
   const data = useNoLossTournaments();
   const config = useNoLossStaticConfig();
@@ -94,10 +95,7 @@ const useTournamentData = (id?: number) => {
   });
 
   return useSWR<{
-    [id: string]: {
-      tournamentConditions: Conditions;
-      tournamentMeta: MetaInfo;
-    };
+    [id: string]: ITournament;
   }>(`tournament-data-${JSON.stringify(ids)}`, {
     fetcher: async () => {
       if (!ids.length) return {};

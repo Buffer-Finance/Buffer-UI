@@ -129,6 +129,8 @@ const Background = styled.div`
       text-align: center;
       border-radius: 6px;
       padding: 8px 10px;
+      border: 1px solid transparent;
+
       background: var(--bg-1);
       &.active {
         background: var(--bg-0);

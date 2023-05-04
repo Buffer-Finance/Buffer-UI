@@ -6,6 +6,9 @@ export interface Call {
   params?: any[]; // Function params
   abi?: any[]; // Abi of the contract
 }
+import bigNumberToString from 'bignumber-to-string';
+import getDeepCopy from '@Utils/getDeepCopy';
+
 export const arbMain = 'https://arb1.arbitrum.io/rpc';
 
 export const multicallv2 = async (
@@ -33,7 +36,6 @@ export const multicallv2 = async (
       if (!call) return null;
       const itf = new ethers.utils.Interface(calls[i].abi);
       const tempRes = itf.decodeFunctionResult(calls[i].name, call);
-
       return tempRes;
     });
     return res;
@@ -44,6 +46,7 @@ export const multicallv2 = async (
 };
 
 export const getReadId = (call: Call) => {
+  console.log(`getReadIdcall: `, call);
   return call.address + call.name;
 };
 export const multicallLinked = async (
@@ -69,12 +72,12 @@ export const multicallLinked = async (
     const resultMap = {};
 
     returnData.returnData.forEach((call, i) => {
-      const [data] = call;
       if (!call) return null;
       const itf = new ethers.utils.Interface(calls[i].abi);
-      resultMap[getReadId(call[i])] = convertBNtoString(
-        itf.decodeFunctionResult(calls[i].name, call)
-      );
+      const returnCall = itf.decodeFunctionResult(calls[i].name, call);
+      const copy = getDeepCopy(returnCall);
+      convertBNtoString(copy);
+      resultMap[getReadId(calls[i])] = copy;
     });
     return resultMap;
   } catch (err) {

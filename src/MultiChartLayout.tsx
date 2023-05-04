@@ -19,25 +19,19 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import { TradingChart } from './TradingView';
 import { usePrice } from '@Hooks/usePrice';
 import FlexLayout, { Layout, TabNode } from 'flexlayout-react';
-import { FavouriteAssetDD } from '@Views/BinaryOptions/Favourites/FavouriteAssetDD';
 import { TVMarketSelector } from '@Views/BinaryOptions/Favourites/TVMarketSelector';
 import { useToast } from '@Contexts/Toast';
 import { CustomOption } from '@Views/BinaryOptions/PGDrawer/CustomOption';
 import { Background } from '@Views/BinaryOptions/PGDrawer/style';
 import { ActiveAsset } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
-import PGTables from '@Views/BinaryOptions/Tables';
-import { ActiveTable, CancelTable, HistoryTable } from '@Views/BinaryOptions';
 import { usePastTradeQuery } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
-import { IconButton } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import React from 'react';
 import { ResetWarnModal } from './Modals/ResetWarnModal';
 import { CustomisationWarnModal } from './Modals/CustomisationWarnModal';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
-import { Detector } from 'react-detect-offline';
-import isUserPaused, { UserActivityAtom } from '@Utils/isUserPaused';
 import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { UserTrades } from '@Views/BinaryOptions/UserTrades';
@@ -334,95 +328,13 @@ const DesktopTrad = () => {
         }}
         open={layoutConset.resetCustomization.isModalOpen}
       />
-      <FlexLayout.Layout
-        onAction={(p) => {
-          console.log('actionselect', p);
-          if (p.type == FlexLayout.Actions.MOVE_NODE) {
-            if (layoutConset.layoutCustomization.isUserEducated) return p;
-            seLayoutConsent((l) => {
-              const updatedConsents = {
-                ...l,
-                layoutCustomization: {
-                  isModalOpen: true,
-                  isUserEducated: true,
-                },
-              };
-              return updatedConsents;
-            });
-          }
-          if (p.type == FlexLayout.Actions.SELECT_TAB) {
-            const market = p.data?.tabNode.replace('-', '');
-            if (market && Config.markets?.[market]) {
-              console.log(`p.data.tabNode: `, p.data.tabNode);
-              navigate('/binary/' + p.data.tabNode);
-            }
-          }
-          if (p.type == FlexLayout.Actions.DELETE_TAB) {
-            console.log('action', p);
-            if (
-              p.data.node.toLowerCase() ==
-              market?.replace('-', '').toLowerCase()
-            ) {
-              toastify({
-                type: 'error',
-                msg: "Can't remove the Active Chart!",
-                id: '231',
-              });
-              return false;
-            }
-          }
-          return p;
-        }}
-        ref={layoutRef}
-        model={layoutApi}
-        factory={factory}
-        onRenderTab={(d, v) => {
-          if (d.getComponent() == 'TradingView') {
-            const name = d.getName() as Markets;
-            console.log(`name: `, name);
-            const market = Config.markets[name.replace('-', '')]?.pair;
-            if (!market) return;
-            console.log(`market: `, market);
-            v.leading = <TabIcon market={market} />;
-          }
-        }}
-        onRenderTabSet={(d, v) => {
-          const id = d.getId();
-          if (id != 'BuyTradeTab' && id != 'PastTradeTab') {
-            // v.headerButtons[0].
-            v.stickyButtons.push(
-              <button
-                className="text-f22"
-                onClick={() => {
-                  // make current tabset active
-                  layoutApi.doAction(
-                    FlexLayout.Actions.setActiveTabset(d.getId())
-                  );
-                  // delete all dds
-                  try {
-                    layoutApi.doAction(FlexLayout.Actions.deleteTab('dd'));
-                  } catch (e) {
-                    console.log(e);
-                  }
-
-                  // add dd to activeTab
-                  layoutRef.current!.addTabToActiveTabSet({
-                    type: 'tab',
-                    name: 'Add Chart',
-                    component: 'AddButton',
-                    id: 'dd',
-                  });
-                }}
-              >
-                +
-              </button>
-            );
-          }
-          v.buttons.push(
-            <button
-              title="Reset layout. You can Drag and Drop to customize the UI."
-              className="flex justify-center items-center flip-y !text-2 hover:!bg-[#3d3d3d] rounded-sm "
-              onClick={() => {
+      <div className="flex w-full">
+        <div className="relative w-full">
+          <FlexLayout.Layout
+            onAction={(p) => {
+              console.log('actionselect', p);
+              if (p.type == FlexLayout.Actions.MOVE_NODE) {
+                if (layoutConset.layoutCustomization.isUserEducated) return p;
                 seLayoutConsent((l) => {
                   const updatedConsents = {
                     ...l,
