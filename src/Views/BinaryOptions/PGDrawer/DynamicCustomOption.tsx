@@ -4,7 +4,14 @@ import { ReactNode, useEffect, useState } from 'react';
 import DownIcon from 'src/SVG/Elements/DownIcon';
 import UpIcon from 'src/SVG/Elements/UpIcon';
 import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
-import { divide, gt, lt, multiply } from '@Utils/NumString/stringArithmatics';
+import {
+  divide,
+  getPosInf,
+  gt,
+  lt,
+  multiply,
+  toFixed,
+} from '@Utils/NumString/stringArithmatics';
 import AccountInfo from '@Views/Common/AccountInfo';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { ammountAtom, approveModalAtom } from '../PGDrawer';
@@ -28,6 +35,10 @@ import { MarketTimingWarning } from '../MarketTimingWarning';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useTradePolOrBlpPool } from '../Hooks/useTradePolOrBlpPool';
 import { MarketInterface } from 'src/MultiChart';
+import { OptionBuyintMarketState } from '@Views/NoLoss/NoLossOptionBuying';
+import { useWriteCall } from '@Hooks/useWriteCall';
+import { useIndependentWriteCall } from '@Hooks/writeCall';
+import { erc20ABI } from 'wagmi';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
@@ -38,99 +49,72 @@ export const ForexTimingsModalAtom = atom<boolean>(false);
 // TODO stats machanism
 export function DynamicCustomOption({
   markets,
-}: // balance,
-// approveHandler,
-// buyHandler,
-// minFee,
-// maxFee,
-// minDuration,
-// maxDuration,
-// token,
-{
-  markets: MarketInterface[];
+  data,
+  tradeToken,
+  routerContract,
+}: {
+  data?: OptionBuyintMarketState;
+  markets: { [a: string]: MarketInterface };
+  tradeToken: {
+    address: string;
+    name: string;
+    decimal: number;
+  };
+  routerContract: string;
 }) {
+  const allowance = data?.allowance;
   const [amount, setAmount] = useAtom(ammountAtom);
   const { address: account } = useUserAccount();
   const { openConnectModal } = useConnectModal();
   const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
-  const {
-    handleApproveClick,
-    buyHandler,
-    loading,
-    currStats,
-    activeAssetState,
-    isActive,
-  } = useBinaryActions(amount, true, true);
-  const isAssetActive = true;
-  const [, allowanceWei, maxTrade, _, routerPermission] = activeAssetState;
-  const allowance = divide(allowanceWei, '8');
-
-  const UpHandler = () => {
-    if (!account) return openConnectModal?.();
-    if (lt(allowance || '0', amount.toString() || '0'))
-      return setIsApproveModalOpen(true);
-    buyHandler({ is_up: true });
-  };
-  const balance = '0';
-  const DownHandler = () => {
-    if (!account) return openConnectModal?.();
-    if (lt(allowance || '0', amount.toString() || '0'))
-      return setIsApproveModalOpen(true);
-    buyHandler({ is_up: false });
-  };
-
-  useEffect(() => {
-    if (isApproveModalOpen && account) {
-      setIsApproveModalOpen(false);
-    }
-  }, [account]);
-  const knowTill = useAtomValue(knowTillAtom);
-  const qtInfo = useQTinfo();
+  const isAssetActive = !data?.activeMarket.isPaused;
+  const balance = data?.balance;
   const marketPrice = useAtomValue(priceAtom);
-  const activeAsset = qtInfo?.activePair;
-  const [isOpen, setIsOpen] = useState(false);
-  const { activePoolObj } = useActivePoolObj();
+  const activeAsset = data?.activeMarket;
+  const [isSlippageModalOpen, setIsSlippageModalOpen] = useState(false);
   const isForex = activeAsset.category === 'Forex';
-  const isMarketOpen = knowTill.open && isForex;
+  const { writeCall } = useIndependentWriteCall();
+
+  const tradeTokenName = tradeToken.name;
+  const tradeTokenDecimals = tradeToken.decimal;
+  const min_amount = data?.minFee;
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
-  let MarketOpenWarning: ReactNode | null = null;
-  if (activeAsset.category == 'Forex') {
-    MarketOpenWarning = <MarketTimingWarning />;
-  }
-  const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
+  const currStats = {
+    max_loss: '12',
+    max_payout: '12',
+  };
+  const maxTrade = data?.maxFee;
 
+  if (!data?.maxFee) {
+    console.log(`DynamicCustomOption-maxTrade: `, maxTrade);
+    return 'Loading...';
+  }
+  const handleApproveClick = async (ammount = toFixed(getPosInf(), 0)) => {
+    writeCall(tradeToken.address, erc20ABI, () => console.log, 'approve', [
+      routerContract,
+      ammount,
+    ]);
+    // writeCall()
+  };
   return (
     <>
       <SlippageModal
         {...{
-          isOpen,
+          isOpen: isSlippageModalOpen,
           clickHandler: console.log,
-          closeModal: () => setIsOpen(false),
+          closeModal: () => setIsSlippageModalOpen(false),
           loading: false,
           balance,
           onResetLayout: console.log,
         }}
-      />
-      <ApproveModal
-        token={activePoolObj.token.name}
-        clickHandler={(isChecked) => {
-          handleApproveClick(
-            !isChecked
-              ? multiply(amount, activePoolObj.token.decimals)
-              : undefined
-          );
-        }}
-        isOpen={isApproveModalOpen}
-        closeModal={() => setIsApproveModalOpen(false)}
-        loading={loading as number}
       />
 
       <div className="custom-wrapper gap-y-3">
         <div className="text-f14 text-0 flex-sbw items-center">
           <div className="">Time</div>
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={() => setIsSlippageModalOpen(true)}
             className="flex items-center gap-1   hover:brightness-125"
           >
             Advanced
@@ -144,7 +128,7 @@ export function DynamicCustomOption({
           Trade Size
           <MaxSizeComponent
             maxSize={maxTrade}
-            unit={activePoolObj.token.name}
+            unit={tradeToken.name}
             userInput={amount}
           />
         </div>
@@ -153,24 +137,18 @@ export function DynamicCustomOption({
           setTime={setAmount}
           investmentDD
           max={maxTrade}
-          balance={divide(balance, activePoolObj.token.decimals)}
+          balance={divide(balance, tradeTokenDecimals)}
           title="Investment"
           label="$"
           error={{
-            min: minTradeAmount,
+            min: min_amount,
             minMsg:
-              "Can't trade less than " +
-              minTradeAmount +
-              ' ' +
-              activePoolObj.token.name,
-            max:
-              balance == null
-                ? 1e44
-                : +divide(balance, activePoolObj.token.decimals),
+              "Can't trade less than " + min_amount + ' ' + tradeTokenName,
+            max: balance == null ? 1e44 : +divide(balance, tradeTokenDecimals),
             maxMsg: (
               <div className="flex-center">
-                You don't have enough {activePoolObj.token.name}.&nbsp;
-                <BuyUSDCLink token={activePoolObj.token.name} />
+                You don't have enough {tradeTokenName}.&nbsp;
+                <BuyUSDCLink token={tradeTokenName} />
               </div>
             ),
           }}
@@ -178,8 +156,8 @@ export function DynamicCustomOption({
         <div className="flex flex-col items-start text-f14 ">
           <AccountInfo
             shouldDisplayString
-            unit={activePoolObj.token.name}
-            balance={divide(balance, activePoolObj.token.decimals)}
+            unit={tradeTokenName}
+            balance={divide(balance, tradeTokenDecimals)}
           />
         </div>
         {/* TODO at 180, marketPrice?.[activeAsset.tv_id]?.close always return false, since marketPrice?.[activeAsset.tv_id] is an array */}
@@ -190,8 +168,8 @@ export function DynamicCustomOption({
               Payout :&nbsp;
               <Display
                 className="text-1 text-f16"
-                data={currStats.max_payout.toString()}
-                unit={activePoolObj.token.name}
+                data={'3'}
+                unit={tradeTokenName}
               />
             </div>
             <div className="text-f12  w-full items-start flex-col flex-start wrap flex text-2">
@@ -199,7 +177,7 @@ export function DynamicCustomOption({
               <Display
                 className=" text-f16 text-green"
                 data={currStats.max_payout - currStats.max_loss}
-                unit={activePoolObj.token.name}
+                unit={tradeTokenName}
               />{' '}
             </div>
           </div>
@@ -212,18 +190,8 @@ export function DynamicCustomOption({
         {
           <ConnectionRequired>
             <span>
-              {allowance == null || !activeAssetPrice ? (
-                <Skeleton className="h4 full-width sr lc mb3" />
-              ) : lt(allowance, amount.toString() || '0') ? (
-                <BlueBtn
-                  onClick={() => {
-                    account
-                      ? setIsApproveModalOpen(true)
-                      : openConnectModal?.();
-                  }}
-                >
-                  Approve
-                </BlueBtn>
+              {allowance == '0' ? (
+                <BlueBtn onClick={handleApproveClick}>Approve</BlueBtn>
               ) : !isAssetActive ? (
                 <BlueBtn
                   className="text-f13 text-1 text-center"
@@ -236,13 +204,8 @@ export function DynamicCustomOption({
                 <>
                   <div className="btn-wrapper">
                     <GreenBtn
-                      onClick={UpHandler}
-                      isDisabled={isForex && !isMarketOpen}
-                      isLoading={
-                        loading &&
-                        typeof loading !== 'number' &&
-                        loading?.is_up === true
-                      }
+                      onClick={console.log}
+                      isLoading={false}
                       className=" text-1 bg-green hover:text-1"
                     >
                       <>
@@ -251,14 +214,9 @@ export function DynamicCustomOption({
                       </>
                     </GreenBtn>
                     <RedBtn
-                      isDisabled={isForex && !isMarketOpen}
-                      isLoading={
-                        loading &&
-                        typeof loading !== 'number' &&
-                        loading?.is_up === false
-                      }
+                      isLoading={false}
                       className=" text-1 bg-red "
-                      onClick={DownHandler}
+                      onClick={console.log}
                     >
                       <>
                         <DownIcon className="mr-[6px] scale-150" />
@@ -266,21 +224,11 @@ export function DynamicCustomOption({
                       </>
                     </RedBtn>
                   </div>
-                  <div
-                    className="approve-btn-styles text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto"
-                    role={'button'}
-                    onClick={() =>
-                      !account ? openConnectModal?.() : handleApproveClick('0')
-                    }
-                  >
-                    Revoke Approval
-                  </div>
                 </>
               )}
             </span>
           </ConnectionRequired>
         }
-        {MarketOpenWarning}
       </div>
     </>
   );

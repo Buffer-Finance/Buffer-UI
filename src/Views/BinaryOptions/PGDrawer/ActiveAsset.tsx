@@ -224,6 +224,7 @@ export const getActiveMarket = (
   params: any
 ): MarketInterface => {
   let activeMaket = null;
+  console.log(`ActiveAsset-markets: `, markets);
   const urlMarket = params.market.toUpperCase();
   if (urlMarket in markets) {
     activeMaket = markets[urlMarket];

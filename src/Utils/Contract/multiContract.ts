@@ -49,6 +49,9 @@ export const getReadId = (call: Call) => {
   console.log(`getReadIdcall: `, call);
   return call.address + call.name;
 };
+export const getCallId = (address: string, method: string) => {
+  return address + method;
+};
 export const multicallLinked = async (
   calls: Call[],
   singerOrProvider,

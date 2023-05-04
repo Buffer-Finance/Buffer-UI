@@ -26,8 +26,6 @@ const ifc = new ethers.utils.Interface(MarketFactoryABI);
 const NoLoss: React.FC<any> = ({}) => {
   const { data: appConfig } = useNoLossConfig();
   const activeTournament = useActiveTournament();
-  console.log(`activeTournament: `, activeTournament);
-
   return (
     <main className="flex relative bg-grey w-[100vw]">
       <NoLossNavigation />
@@ -42,7 +40,7 @@ const NoLoss: React.FC<any> = ({}) => {
             {activeTournament ? (
               <NoLossOptionBuying
                 activeTournament={activeTournament}
-                markets={Object.keys(appConfig).map((s) => appConfig[s])}
+                markets={appConfig}
               />
             ) : (
               'Tournament loading...'
