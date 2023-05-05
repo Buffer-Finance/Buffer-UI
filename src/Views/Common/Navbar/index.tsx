@@ -18,9 +18,9 @@ import { useAccount } from 'wagmi';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { urlSettings } from 'src/Config/wagmiClient';
 import { isTestnet } from 'config';
-import { ClaimLBFRBtn } from '@Views/Profile/LBFR';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { ArbitrumOnly } from '../ChainNotSupported';
+import { ClaimLBFRBtn } from '@Views/Profile/LBFR/Components/ClaimLBFRbtn';
 
 interface INavbar {}
 
