@@ -377,7 +377,7 @@
         "name": "USDC",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 100,
+        "min_amount": 5,
         "is_pol": false
       },
 
