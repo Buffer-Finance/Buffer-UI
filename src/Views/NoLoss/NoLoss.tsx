@@ -18,6 +18,11 @@ import {
   useTournamentData,
 } from './useNoLossTournamets';
 import { useMemo } from 'react';
+import { Skeleton } from '@mui/material';
+import { useActiveAssetState } from '@Views/BinaryOptions/Hooks/useActiveAssetState';
+import { useActiveTournamentState } from './NoLossOptionBuying';
+import { getCallId } from '@Utils/Contract/multiContract';
+import { divide } from '@Utils/NumString/stringArithmatics';
 
 const MainBackground = styled.main`
   display: grid;
@@ -27,15 +32,23 @@ const NoLoss: React.FC<any> = ({}) => {
   const { data: appConfig } = useNoLossConfig();
   const activeTournament = useActiveTournament();
   return (
-    <main className="flex relative bg-grey w-[100vw]">
+    <main className="flex relative  w-[100vw]">
       <NoLossNavigation />
-      <NoLossTournamentList />
+      <NoLossTournamentList
+        markets={appConfig}
+        activeTournament={activeTournament}
+      />
       {appConfig ? (
         <>
-          <div className="flex-1 relative  bg-green ">
-            <MultiChart markets={appConfig} product="no-loss" />
+          <div className="flex flex-col flex-1">
+            {activeTournament && (
+              <ActiveTournamentSection markets={appConfig} />
+            )}
+            <div className="flex-1 relative  mr-2 ">
+              <MultiChart markets={appConfig} product="no-loss" />
+            </div>
           </div>
-          <div className="w-[280px] h-full ">
+          <div className="w-[280px] h-full border-left  pr-2 ">
             <DynamicActiveAsset markets={appConfig} payout="23%" />
             {activeTournament ? (
               <NoLossOptionBuying
@@ -48,7 +61,10 @@ const NoLoss: React.FC<any> = ({}) => {
           </div>
         </>
       ) : (
-        'Loadig...'
+        <Skeleton
+          className="lc sr w-full flex-1 !h-[50vh] m-5  "
+          variant="rectangular"
+        />
       )}
     </main>
   );
@@ -72,4 +88,67 @@ const useActiveTournament = (): null | ITournament => {
     return tournamentId2data[activeTournamentId];
   }, [tournamentId2data, noLossTournaments, address, activeTournamentId]);
   return tournamentInfo;
+};
+
+const ActiveTournamentInfo = ({
+  header,
+  data,
+  border,
+}: {
+  header: any;
+  data: any | null;
+  border?: boolean;
+}) => {
+  return (
+    <div
+      className={`flex flex-col px-4 items-center justify-center ${
+        border ? 'border-right' : ''
+      }`}
+    >
+      <div>{header}</div>
+      <div className="text-1 text-f16">
+        {data || (
+          <Skeleton
+            className="lc sr !w-[40px] !h-[16px]"
+            variant="reactangular"
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+const headers = ['Claim', 'Score', 'Rank', 'Play Tokens'];
+
+const ActiveTournamentSection = ({ markets }) => {
+  const { address } = useUserAccount();
+  const config = useNoLossStaticConfig();
+  const activeTournament = useActiveTournament();
+  const { data } = useActiveTournamentState(activeTournament, markets);
+  const balance =
+    data?.[
+      getCallId(config.tournament.manager, 'balanceOf', activeTournament.id)
+    ];
+  const stats = activeTournament && [
+    '2',
+    '21',
+    '12',
+    balance ? divide(balance, 18) : '',
+  ];
+  // console.log(`NoLoss-activeTournament: `, activeTournament);
+  return address ? (
+    <div className="text-f14 text-3 flex items-start  justify-between mt-3 pl-4">
+      {activeTournament?.tournamentMeta.name}
+      <div className="flex">
+        {headers.map((s, idx) => (
+          <ActiveTournamentInfo
+            header={s}
+            data={stats[idx]}
+            border={idx == headers.length - 1 ? false : true}
+          />
+        ))}
+      </div>
+    </div>
+  ) : (
+    <></>
+  );
 };

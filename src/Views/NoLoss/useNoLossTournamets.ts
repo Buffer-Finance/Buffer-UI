@@ -10,7 +10,12 @@ import { multicallv2 } from '@Utils/Contract/multiContract';
 import getDeepCopy from '@Utils/getDeepCopy';
 import { useNoLossStaticConfig } from './useNoLossConfig';
 import tournamentManagerAbi from './ABI/TournamentsManager.json';
+import tlAbi from './ABI/TournamentsLeaderboardManager.json';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 const Calls = ['minPeriod', 'maxPeriod', 'minFee', 'maxFee'];
+
+export const baseFeeMethodName = 'baseSettlementFeePercentageForAbove';
+
 export interface Conditions {
   guaranteedWinningAmount: string;
   maxBuyinsPerWallet: string;
@@ -81,6 +86,8 @@ const useNoLossTournaments = () => {
 export interface ITournament {
   tournamentConditions: Conditions;
   tournamentMeta: MetaInfo;
+  rewards: string[];
+  prizePool: string;
 }
 const useTournamentData = (id?: number) => {
   const data = useNoLossTournaments();
@@ -108,18 +115,44 @@ const useTournamentData = (id?: number) => {
           params: [ids],
         },
       ];
+      ids.forEach((id) => {
+        calls.push({
+          address: config.tournament.manager,
+          name: 'tournamentRewardPools',
+          abi: tournamentManagerAbi,
+          params: [id],
+        });
+        calls.push({
+          address: config.tournament.leaderboard,
+          name: 'getLeaderboardConfig',
+          abi: tlAbi,
+          params: [id],
+        });
+      });
       console.log(`calls: `, calls);
       let returnData = await multicallv2(calls, sOrP, config.multicall, '');
       let copy = getDeepCopy(returnData);
       convertBNtoString(copy);
-      console.log(`copy: `, copy);
+      console.log(`ddddcopy: `, copy);
       if (copy[0]?.['bulkTournaments']) {
         for (let id in copy[0]?.['bulkTournaments']) {
           tid2Info[ids[id]] = {
+            id: ids[id],
             ...copy[0]?.['bulkTournaments'][id],
           };
         }
       }
+      let index = 1;
+      ids.forEach((id, idx) => {
+        tid2Info[id] = {
+          ...tid2Info[id],
+          prizePool: copy[index][0],
+          rewards: copy[index + 1][0][6].map((s) =>
+            multiply(copy[index][0] + '', divide(s + '', 2))
+          ),
+        };
+        index += 2;
+      });
       console.log(`tid2info: `, tid2Info);
 
       return tid2Info;

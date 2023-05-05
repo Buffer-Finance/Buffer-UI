@@ -13,7 +13,7 @@ import { UpTriangle } from '@Public/ComponentSVGS/UpTriangle';
 import DownIcon from '@SVG/Elements/DownIcon';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, subtract } from '@Utils/NumString/stringArithmatics';
 import { IToken } from '.';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { priceAtom } from '@Hooks/usePrice';
@@ -22,18 +22,23 @@ import { Bar } from '@Views/Common/Toast/style';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { PayoutChip } from './Tables/TableComponents';
 import { ProbabilityPNL } from './Tables/TableComponents';
+import FailureIcon from '@SVG/Elements/FailureIcon';
 
 const tableTypes = ['Open', 'Closed', 'Cancelled'];
 export const UserTrades: React.FC<any> = ({}) => {
   const [tableType, setTableType] = useState(tableTypes[0]);
-  const { active, history } = useAtomValue(tardesAtom);
-  const { active: activePages, history: historyPages } =
-    useAtomValue(tardesTotalPageAtom);
+  const { active, history, cancelled } = useAtomValue(tardesAtom);
+  const {
+    active: activePages,
+    history: historyPages,
+    cancelled: cancelledPages,
+  } = useAtomValue(tardesTotalPageAtom);
   const totalPages = activePages;
   const filteredData = active;
 
   const setActivePage = useSetAtom(updateActivePageNumber);
   const { active: activePage } = useAtomValue(tardesPageAtom);
+  console.log(`UserTrades-tableType: `, tableType, tableTypes, active, history);
   return (
     <>
       <div className="w-full bg-1 flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  ">
@@ -48,18 +53,33 @@ export const UserTrades: React.FC<any> = ({}) => {
           );
         })}
       </div>
-      <ol>
-        {history?.map((s) => (
-          <li key={s.optionID}>
-            <UserTrade trade={s} tableType={tableType} />
-          </li>
-        ))}
-        {/* {active?.map((s) => (
-          <li key={s.optionID}>
-            <ActiveTradeMarkup trade={s} />
-          </li>
-        ))} */}
-      </ol>
+      {tableType === tableTypes[0] && (
+        <ol>
+          {active?.map((s) => (
+            <li key={s.optionID}>
+              <UserTrade trade={s} tableType={tableType} />
+            </li>
+          ))}
+        </ol>
+      )}
+      {tableType === tableTypes[1] && (
+        <ol>
+          {history?.map((s) => (
+            <li key={s.optionID}>
+              <UserTradeClosed trade={s} tableType={tableType} />
+            </li>
+          ))}
+        </ol>
+      )}
+      {tableType === tableTypes[2] && (
+        <ol>
+          {cancelled?.map((s) => (
+            <li key={s.optionID}>
+              <UserTradeCancelled trade={s} tableType={tableType} />
+            </li>
+          ))}
+        </ol>
+      )}
     </>
   );
   // return <div>{active?.length}</div>;
@@ -118,26 +138,7 @@ export const UserTrade: React.FC<{
   }
   const probability = getProbability(trade, price);
   const { width, timeTillExpiration } = getBarWidthAndTimeTillExpiration(trade);
-  let bottomRight = (
-    <>
-      <div>Probability</div>
-      <div className="text-1">
-        {probability ? (
-          <Display data={probability} unit={'%'} />
-        ) : (
-          'Calculating..'
-        )}
-      </div>
-    </>
-  );
-  if (tableType == 'Closed') {
-    bottomRight = (
-      <>
-        <div>Payout</div>
-        <div className="text-1"></div>
-      </>
-    );
-  }
+
   return (
     <div className="bg-2 flex flex-col px-[10px] pb-[15px] pt-[15px]">
       <div className="flex items-center justify-between text-1 text-f12">
@@ -165,7 +166,17 @@ export const UserTrade: React.FC<{
             {<Display data={getTradeSize(trade)} unit={'USDC'} />}
           </div>
         </div>
-        <div className="flex  flex-col items-end ">{bottomRight}</div>
+        <div className="flex  flex-col items-end ">
+          {' '}
+          <div>Probability</div>
+          <div className="text-1">
+            {probability ? (
+              <Display data={probability} unit={'%'} />
+            ) : (
+              'Calculating..'
+            )}
+          </div>
+        </div>
       </div>
       <div className="mt-[8px]">
         <NumberTooltip content={timeTillExpiration + ' left'}>
@@ -176,6 +187,145 @@ export const UserTrade: React.FC<{
             />
           </div>
         </NumberTooltip>
+      </div>
+    </div>
+  );
+};
+export const UserTradeClosed: React.FC<{
+  trade: IGQLHistory;
+  tableType?: 'Closed' | 'Open' | 'Cancel';
+}> = ({ trade, tableType }) => {
+  console.log(`trade: `, trade);
+  const [marketPrice] = useAtom(priceAtom);
+
+  let price = getPriceFromKlines(marketPrice, trade.configPair);
+  if (typeof price === 'string') {
+    price = +price;
+  }
+
+  const net_pnl = trade.payout
+    ? subtract(trade.payout, trade.totalFee)
+    : subtract('0', trade.totalFee);
+  return (
+    <div className="bg-2 flex flex-col px-[10px] pb-[15px] pt-[15px]">
+      <div className="flex items-center justify-between text-1 text-f12">
+        <NumberTooltip content={'Strike : ' + divide(trade.strike, 8)}>
+          <div className="flex ">
+            {trade.isAbove ? (
+              <UpTriangle className={`scale-[0.70] mt-1`} />
+            ) : (
+              <DownIcon className={`scale-[0.70] mt-1`} />
+            )}
+            {trade.configPair?.tv_id}
+          </div>
+        </NumberTooltip>
+        <div className="flex items-center gap-x-[4px]">
+          <TimerIcon />
+          {getDuration(trade)}
+        </div>
+      </div>
+      <div className="flex items-center justify-between mt-[4px] text-f12 ">
+        <div className="flex flex-col items-start ">
+          <div>Size</div>
+          <div className="text-1">
+            {<Display data={getTradeSize(trade)} unit={'USDC'} />}
+          </div>
+        </div>
+        <div className="flex  flex-col items-end ">
+          <div className="flex">
+            Payout:{' '}
+            <Display
+              unit={(trade.depositToken as IToken).name}
+              data={divide(
+                trade.payout,
+                (trade.depositToken as IToken).decimals
+              )}
+              className="f15 weight-400"
+            />
+          </div>
+          <div className="flex  items-start">
+            <span
+              className={`nowrap flex ${
+                +net_pnl < 0 ? 'text-red' : 'text-green'
+              }`}
+            >
+              <Display
+                label={+net_pnl > 0 ? '+' : ''}
+                data={divide(net_pnl, (trade.depositToken as IToken).decimals)}
+                unit={(trade.depositToken as IToken).name}
+              />
+            </span>
+          </div>{' '}
+        </div>
+      </div>
+    </div>
+  );
+};
+export const UserTradeCancelled: React.FC<{
+  trade: IGQLHistory;
+  tableType?: 'Closed' | 'Open' | 'Cancel';
+}> = ({ trade, tableType }) => {
+  console.log(`trade: `, trade);
+  const [marketPrice] = useAtom(priceAtom);
+
+  let price = getPriceFromKlines(marketPrice, trade.configPair);
+  if (typeof price === 'string') {
+    price = +price;
+  }
+
+  const net_pnl = trade.payout
+    ? subtract(trade.payout, trade.totalFee)
+    : subtract('0', trade.totalFee);
+  return (
+    <div className="bg-2 flex flex-col px-[10px] pb-[15px] pt-[15px]">
+      <div className="flex items-center justify-between text-1 text-f12">
+        <NumberTooltip content={'Strike : ' + divide(trade.strike, 8)}>
+          <div className="flex ">
+            {trade.isAbove ? (
+              <UpTriangle className={`scale-[0.70] mt-1`} />
+            ) : (
+              <DownIcon className={`scale-[0.70] mt-1`} />
+            )}
+            {trade.configPair?.tv_id}
+          </div>
+        </NumberTooltip>
+        <div className="flex items-center gap-x-[4px]">
+          <FailureIcon width={14} height={14} />
+        </div>
+      </div>
+      <div className="flex items-center justify-between mt-[4px] text-f12 ">
+        <div className="flex flex-col items-start ">
+          <div>Size</div>
+          <div className="text-1">
+            {<Display data={getTradeSize(trade)} unit={'USDC'} />}
+          </div>
+        </div>
+        <div className="flex  flex-col items-end ">
+          <div className="flex">
+            Payout:{' '}
+            <Display
+              unit={(trade.depositToken as IToken).name}
+              data={divide(
+                trade.payout,
+                (trade.depositToken as IToken).decimals
+              )}
+              className="f15 weight-400"
+            />
+          </div>
+          <div className="flex  items-start">
+            <span
+              className={`nowrap flex ${
+                +net_pnl < 0 ? 'text-red' : 'text-green'
+              }`}
+            >
+              <Display
+                label={+net_pnl > 0 ? '+' : ''}
+                data={divide(net_pnl, (trade.depositToken as IToken).decimals)}
+                unit={(trade.depositToken as IToken).name}
+              />
+            </span>
+          </div>{' '}
+        </div>
       </div>
     </div>
   );

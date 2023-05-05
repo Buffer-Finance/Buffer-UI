@@ -157,6 +157,7 @@ export function useActiveAssetState(amount = null, referralData) {
 
   if (copy) {
     let [maxAmounts, fees, activeBasePayout] = copy.slice(0, assetCalls.length);
+    console.log(`activeBasePayout: `, activeBasePayout);
 
     const basePayout = subtract(
       '100',

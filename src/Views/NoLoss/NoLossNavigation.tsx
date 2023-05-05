@@ -3,9 +3,9 @@ const NoLossNavigation: React.FC<any> = ({}) => {
   const navigate = useNavigate();
 
   return (
-    <aside className="min-h-full bg-green w-[4rem]">
-      <Tournaments />
-      <img
+    <aside className="min-h-full border-right  w-[4rem] fex-col items-center">
+      <Tournaments className="m-auto mt-4" />
+      {/* <img
         src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-large/1f419@2x.png"
         width={60}
         height={60}
@@ -13,7 +13,7 @@ const NoLossNavigation: React.FC<any> = ({}) => {
         // className={
         //   'absolute z-0 rounded-full left-[0] right-[0] top-[0] bottom-[0] m-auto'
         // }
-      />
+      /> */}
     </aside>
   );
 };

@@ -9,5 +9,6 @@ export const noLossConfig = {
       manager: '0x9E9bE7b36ADf4D14520d1F3DE15Eda450331F190',
       leaderboard: '0xADee63f9Dca834b7B6c652CDA83778530a89E5fb',
     },
+    reader: '0x03f5130B77CCA0b91B685913629d97EbBB5f79eD',
   },
 };

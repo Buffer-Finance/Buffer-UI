@@ -131,7 +131,7 @@ export function useIndependentWriteCall() {
       };
 
       toastify({
-        id: contractAddress,
+        id: contractAddress + JSON.stringify(methodArgs),
         msg: "Waiting for user's confirmation",
         type: 'info',
         inf: 1,
@@ -172,7 +172,7 @@ export function useIndependentWriteCall() {
       dispatch({ type: 'SET_TXN_LOADING', payload: 3 });
       if (txn)
         toastify({
-          id: contractAddress,
+          id: contractAddress + JSON.stringify(methodArgs),
           msg: 'Transaction is in process',
           type: 'info',
           inf: 1,
@@ -181,7 +181,7 @@ export function useIndependentWriteCall() {
       const res = await txn?.wait();
       if (res.status) {
         toastify({
-          id: contractAddress,
+          id: contractAddress + JSON.stringify(methodArgs),
           msg: customToast ? customToast.content : 'Transaction successful!',
           type: 'success',
           hash: `${blockExplorer}/tx/${res.transactionHash}`,
@@ -204,7 +204,7 @@ export function useIndependentWriteCall() {
       let err = errReason || getError(error, contractArgs);
       console.log('[blockchain]err : ', err);
       toastify({
-        id: contractAddress,
+        id: contractAddress + JSON.stringify(methodArgs),
         msg: (
           <span>
             Oops! There is some error. Can you please try again?

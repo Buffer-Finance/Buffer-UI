@@ -531,7 +531,7 @@ export const AmountSelector = ({
         </div>
         {investmentDD && <PoolDropDown />}
       </TimeSelectorStyles>
-      {balance && gt(balance, '0') && (
+      {/* {balance && gt(balance, '0') && (
         <div>
           <div className="duration-container ">
             {[0.05, 0.1, 0.2, 0.5, 'Max'].map((single, idx) => {
@@ -557,7 +557,7 @@ export const AmountSelector = ({
             })}
           </div>
         </div>
-      )}
+      )} */}
       {(minError || maxError) && (
         <div className="text-1 text-f12 mt-2 flex items-center">
           <ErrorIcon className="error-icon" />

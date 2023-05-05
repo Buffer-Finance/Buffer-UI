@@ -16,6 +16,15 @@ body {
   transform: scale(0.8);
 }
 
+.border-right{
+  border-right: 2px solid #2A2A3A;
+}
+.border-left{
+  border-left: 2px solid #2A2A3A;
+}
+.border-bottom{
+  border-bottom: 2px solid #2A2A3A;
+}
 .flexlayout__layout{
   margin:0px 5px
 }
@@ -151,8 +160,8 @@ body .flexlayout__layout {
 }
 
 .tv-h {
-  border-top-right-radius: 20px;
-  border-top-left-radius: 20px;
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
   padding-top: 10px;
 }
 

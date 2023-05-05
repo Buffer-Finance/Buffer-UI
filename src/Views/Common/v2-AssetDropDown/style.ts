@@ -1,11 +1,10 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 const Background = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;
   color: var(--text-6);
-  margin-bottom: 2rem;
   /* overflow: visible; */
 
   .back-icon {

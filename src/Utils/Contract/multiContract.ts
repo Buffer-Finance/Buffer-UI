@@ -5,6 +5,7 @@ export interface Call {
   name: string; // Function name on the contract (example: balanceOf)
   params?: any[]; // Function params
   abi?: any[]; // Abi of the contract
+  id?: string; //identifier of call
 }
 import bigNumberToString from 'bignumber-to-string';
 import getDeepCopy from '@Utils/getDeepCopy';
@@ -49,8 +50,8 @@ export const getReadId = (call: Call) => {
   console.log(`getReadIdcall: `, call);
   return call.address + call.name;
 };
-export const getCallId = (address: string, method: string) => {
-  return address + method;
+export const getCallId = (address: string, method: string, ...rest) => {
+  return address + method + rest.join('');
 };
 export const multicallLinked = async (
   calls: Call[],
@@ -80,7 +81,10 @@ export const multicallLinked = async (
       const returnCall = itf.decodeFunctionResult(calls[i].name, call);
       const copy = getDeepCopy(returnCall);
       convertBNtoString(copy);
-      resultMap[getReadId(calls[i])] = copy;
+      console.log(`calls[i]?.id: `, calls[i]?.id);
+      const id = calls[i]?.id || getReadId(calls[i]);
+      console.log(`id: `, id);
+      resultMap[id] = copy;
     });
     return resultMap;
   } catch (err) {

@@ -6,10 +6,15 @@ import { useQTinfo } from '..';
 import { getUserError, TimeSelector, timeToMins } from './TimeSelector';
 import { isTestnet } from 'config';
 
-export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
+export const DurationPicker = ({
+  currentTime,
+  setCurrentTime,
+}: {
+  currentTime: string;
+  setCurrentTime: (a: string) => void;
+}) => {
   const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
-  const [currentTime, setCurrentTime] = useAtom(QuickTradeExpiry);
   const [, setDur] = useState(0);
   const [openCustomInput, setOpenCustomInput] = useState(false);
   const oneSec = 1000;
@@ -156,14 +161,16 @@ export const DurationPicker = ({ onSelect }: { onSelect?: () => void }) => {
 export const DynamicDurationPicker = ({
   currentTime,
   setCurrentTime,
+  max_duration,
+  min_duration,
   onSelect,
 }: {
   currentTime: number;
+  max_duration: string;
+  min_duration: string;
   setCurrentTime: (a: any) => void;
   onSelect: (a: any) => void;
 }) => {
-  const qtInfo = useQTinfo();
-  const activeAsset = qtInfo.activePair;
   const [, setDur] = useState(0);
   const [openCustomInput, setOpenCustomInput] = useState(false);
   const oneSec = 1000;
@@ -206,21 +213,19 @@ export const DynamicDurationPicker = ({
   ];
 
   useEffect(() => {
-    if (!currentTime || !activeAsset) return;
+    if (!currentTime) return;
     localStorage.setItem('exp', currentTime);
     const activeDuration = durations.find(
       (item) => item.duration === timeToMins(currentTime) * 60 * oneSec
     );
     if (
       !activeDuration ||
-      activeDuration.duration >
-        timeToMins(activeAsset.max_duration) * 60 * oneSec ||
-      activeDuration.duration <
-        timeToMins(activeAsset.min_duration) * 60 * oneSec
+      activeDuration.duration > timeToMins(max_duration) * 60 * oneSec ||
+      activeDuration.duration < timeToMins(min_duration) * 60 * oneSec
     )
       setOpenCustomInput(true);
     // else setOpenCustomInput(false);
-  }, [currentTime, activeAsset]);
+  }, [currentTime]);
 
   return (
     <>
@@ -234,10 +239,8 @@ export const DynamicDurationPicker = ({
 
             const isDisabled =
               (!isLastElement &&
-                durationIntoSeconds >
-                  timeToMins(activeAsset.max_duration) * 60 * oneSec) ||
-              durationIntoSeconds <
-                timeToMins(activeAsset.min_duration) * 60 * oneSec;
+                durationIntoSeconds > timeToMins(max_duration) * 60 * oneSec) ||
+              durationIntoSeconds < timeToMins(min_duration) * 60 * oneSec;
             const singleDuration = isLastElement
               ? single.duration - 60 * oneSec
               : single.duration;
@@ -289,16 +292,16 @@ export const DynamicDurationPicker = ({
             onSelect={onSelect}
             currentTime={currentTime}
             setTime={(newValue) => setCurrentTime(newValue)}
-            maxTime={activeAsset.max_duration}
-            minTime={activeAsset.min_duration}
+            maxTime={max_duration}
+            minTime={min_duration}
             error={{
-              min: timeToMins(activeAsset.min_duration),
+              min: timeToMins(min_duration),
               minMsg: `Can't set expiry lower than ${getUserError(
-                activeAsset.min_duration
+                min_duration
               )}.`,
-              max: timeToMins(activeAsset.max_duration),
+              max: timeToMins(max_duration),
               maxMsg: `Can't set expiry of more than ${getUserError(
-                activeAsset.max_duration
+                max_duration
               )}.`,
             }}
           />

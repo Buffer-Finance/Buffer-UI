@@ -259,10 +259,10 @@ export const DynamicActiveAsset = ({
   const navigate = useNavigate();
   if (!singleAsset) return null;
   return (
-    <AssetBackground className="relative min-w-full">
+    <AssetBackground className="relative min-w-full border-bottom ">
       {isOpen && (
         <>
-          <Background>
+          <Background className=" !translate-x-[-20%] !translate-y-[30px]">
             <DynamicMarketSelector
               onMarketSelect={(m) => {
                 cb(m, 'charts');
@@ -277,19 +277,19 @@ export const DynamicActiveAsset = ({
         </>
       )}
       {/* <ShareModal qtInfo={qtInfo} /> */}
-      <div className="px-5 py-3 rounded-[10px] y-auto bg-1  whitespace-nowrap">
+      <div className="px-5 py-3 rounded-[10px] y-auto  whitespace-nowrap pl-4">
         <div
           className={`flex items-center content-between assets w-full h-max`}
         >
-          <div className="min-w-[30px] w-[30px] h-[30px] mr-3">
+          <div className=" w-[20px] h-[20px] mr-[5px]">
             <PairTokenImage pair={singleAsset.pair} />
           </div>
           <div className="flex-col w-full items-stretch">
-            <div className="w-full flex justify-between items-center text-1">
+            <div className="w-full flex justify-between items-center text-3">
               <button
-                className={`text-f14 flex items-center bg-[#2c2c41] ${
+                className={`text-f14 flex items-center ${
                   !isOpen ? 'hover:brightness-125' : 'brightness-125'
-                }  pl-3 rounded`}
+                }  rounded`}
                 onClick={() => setIsOpen((prvState) => !prvState)}
               >
                 {singleAsset.pair}
@@ -302,7 +302,8 @@ export const DynamicActiveAsset = ({
                     precision={
                       singleAsset.price_precision.toString().length - 1
                     }
-                    unit={singleAsset.token2}
+                    unit={singleAsset.pair.split('-')[1]}
+                    colored
                     className="text-1 text-f14 items-end justify-end leading-tight"
                   />
                 ) : (
