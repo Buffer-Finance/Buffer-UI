@@ -380,17 +380,7 @@
         "min_amount": 100,
         "is_pol": false
       },
-      "USDC_POL": {
-        "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
-        "meta": "0x195b720567B7e7a6DCF5b131F5Bdc4Ea091EFa4B",
-        "decimals": 6,
-        "img": "/tokens/USDC.png",
-        "name": "USDC",
-        "pool_address": "0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1",
-        "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 5,
-        "is_pol": true
-      },
+
       "ARB": {
         "address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
         "meta": "0x6f63ba810092D1743f3EE78d614F072caE1A408D",
@@ -424,13 +414,6 @@
             }
           },
           {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0xdCe9F7383c36e3C7E71110A671Fe3FDe09AD094D",
-              "current": "0xeacaa1F47a90df6d284dDEFE6D148c814DE1a17c"
-            }
-          },
-          {
             "token": "ARB",
             "options_contracts": {
               "config": "0xab4D8f4f4F39C4eE76f8d6493876995f5A6e9Fe3",
@@ -457,13 +440,6 @@
             "options_contracts": {
               "config": "0xbC7DBEB9a7b158711b4B5fb0177F3E0bE024125a",
               "current": "0x89dD9bA4d290045211A6cE597a98181C7f9D899d"
-            }
-          },
-          {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0x102DAd71c122822345A0E73F179E2bc58C5E5F82",
-              "current": "0x8cF36930EE277F537c5e815B3893A1Ea8C54a3b3"
             }
           },
           {
@@ -496,13 +472,6 @@
             }
           },
           {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0x31bE72CC1A56DE96BF5e3992aF70e4dB762BFe2d",
-              "current": "0x824F6209b6C022bE9ac2c121604A509A3eD3960E"
-            }
-          },
-          {
             "token": "ARB",
             "options_contracts": {
               "config": "0x09283F9D0eec02961E61B7b82Cb094619f1Bf2a0",
@@ -529,13 +498,6 @@
             "options_contracts": {
               "config": "0xc1925460Fe5669878D5963c29aC51677866dE67F",
               "current": "0x5d61FE708c9D41acf59009013f14496d559aad09"
-            }
-          },
-          {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0xB90C35F0F03F16996CE27E23A2aC51ADF5FF2c2B",
-              "current": "0x69359690AE2F6d8bfCAb5F4FB30d3d2ecbfbb3ef"
             }
           },
           {
@@ -944,13 +906,6 @@
         "full_name": "Arbitrum",
         "pools": [
           {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0x06cE0BcD204DF7bB182d4D024bdEdDdE020250bA",
-              "current": "0x5839f05Fb67F26D5D36ad1d518C7B50c48d5697B"
-            }
-          },
-          {
             "token": "ARB",
             "options_contracts": {
               "config": "0xb9c8E05c1F923419eDCf2f3080ab63d7ACd0D617",
@@ -977,13 +932,6 @@
         "token2": "USD",
         "full_name": "Binance Coin",
         "pools": [
-          {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0x020BFd714333876dAd3624F512cbaBF3beEED2a6",
-              "current": "0x4c6c07864f3415012eeC5a0F4613697e6C0a8Fc9"
-            }
-          },
           {
             "token": "ARB",
             "options_contracts": {
@@ -1012,13 +960,6 @@
         "full_name": "Matic",
         "pools": [
           {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0x25Dd4e1b21Cc22C66d4036BE8fA1cD062541Db13",
-              "current": "0x6d564623fe71793A638F7ccDd5770b323937b662"
-            }
-          },
-          {
             "token": "ARB",
             "options_contracts": {
               "config": "0xBE98d0Abec3AAF403389C5dd5470A3a0219d955B",
@@ -1045,13 +986,6 @@
         "token2": "USD",
         "full_name": "Optimism",
         "pools": [
-          {
-            "token": "USDC_POL",
-            "options_contracts": {
-              "config": "0x5c043d02b94d5c07852C8720fBE600B19152E6e6",
-              "current": "0xf840246041561a2CC0Ac2FCA66E36F60E13ceE0B"
-            }
-          },
           {
             "token": "ARB",
             "options_contracts": {
