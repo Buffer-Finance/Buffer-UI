@@ -243,7 +243,7 @@ export const OverviewArbitrum = ({
             'Total Trades',
             'Open Interest (USDC)',
             'Open Interest (ARB)',
-            'Open Interest (USDC-POL)',
+            // 'Open Interest (USDC-POL)',
             'Total Traders',
           ]}
           values={[
@@ -491,21 +491,21 @@ export const OverviewArbitrum = ({
                 'fetching...'
               )}
             </div>,
-            <div className={wrapperClasses}>
-              {(data.USDC_POLopenInterest as toalTokenXstats)?.openInterest !==
-              undefined ? (
-                <Display
-                  data={
-                    (data.USDC_POLopenInterest as toalTokenXstats)?.openInterest
-                  }
-                  precision={2}
-                  unit="USDC"
-                  className="!w-fit"
-                />
-              ) : (
-                'fetching...'
-              )}
-            </div>,
+            // <div className={wrapperClasses}>
+            //   {(data.USDC_POLopenInterest as toalTokenXstats)?.openInterest !==
+            //   undefined ? (
+            //     <Display
+            //       data={
+            //         (data.USDC_POLopenInterest as toalTokenXstats)?.openInterest
+            //       }
+            //       precision={2}
+            //       unit="USDC"
+            //       className="!w-fit"
+            //     />
+            //   ) : (
+            //     'fetching...'
+            //   )}
+            // </div>,
             <div className={wrapperClasses}>{data.totalTraders}</div>,
           ]}
         />
