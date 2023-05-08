@@ -11,6 +11,7 @@ import {
   gt,
   lt,
   multiply,
+  subtract,
   toFixed,
 } from '@Utils/NumString/stringArithmatics';
 import AccountInfo from '@Views/Common/AccountInfo';
@@ -195,7 +196,10 @@ export function DynamicCustomOption({
               Profit :&nbsp;
               <Display
                 className=" text-f16 text-green"
-                data={currStats.max_payout - currStats.max_loss}
+                data={subtract(
+                  multiply(add('1', divide(data.payout.total, 2)), amount),
+                  amount
+                )}
                 unit={tradeTokenName}
               />{' '}
             </div>

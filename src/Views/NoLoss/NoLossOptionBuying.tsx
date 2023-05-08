@@ -70,10 +70,10 @@ const NoLossOptionBuying: React.FC<any> = ({
     if (!markets) return;
     const buyinToken = activeTournament.tournamentMeta.buyinToken;
 
-    const balance =
-      data?.[
-        getCallId(config.tournament.manager, 'balanceOf', activeTournament.id)
-      ];
+    const balance = console.log(`NoLossOptionBuying-data: `, data);
+    data?.[
+      getCallId(config.tournament.manager, 'balanceOf', activeTournament.id)
+    ];
     const activeMarket = getActiveMarket(markets, params);
 
     const allowance =
@@ -91,14 +91,21 @@ const NoLossOptionBuying: React.FC<any> = ({
     const baseFee =
       data?.[getCallId(activeMarket.optionsContract, baseFeeMethodName)]?.[0];
     const totalPayoutExpanded =
-      data?.[getCallId(config.reader, 'getPayout')]?.[0];
+      data?.[getCallId(config.optionsReader, 'getPayout')]?.[0];
+    console.log(
+      `NoLossOptionBuying-totalPayoutExpanded: `,
+      totalPayoutExpanded
+    );
     const totalPayout = totalPayoutExpanded
       ? divide(totalPayoutExpanded + '', 2)
       : '0';
+    console.log(`NoLossOptionBuying-totalPayout: `, totalPayout);
     data?.[getCallId(activeMarket.optionsContract, baseFeeMethodName)]?.[0];
     const basePayout = baseFee ? getPayoutFromSettlementFee(baseFee) : '';
+    console.log(`NoLossOptionBuying-basePayout: `, basePayout);
     const boostedPayout =
       totalPayout && basePayout ? subtract(totalPayout, basePayout) : '0';
+    console.log(`NoLossOptionBuying-boostedPayout: `, boostedPayout);
     return {
       balance: balance?.[0],
       allowance: allowance?.[0],
