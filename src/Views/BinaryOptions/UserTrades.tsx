@@ -37,6 +37,8 @@ export const UserTrades: React.FC<any> = ({}) => {
     history: historyPages,
     cancelled: cancelledPages,
   } = useAtomValue(tardesTotalPageAtom);
+  console.log(`UserTrades-activePages: `, activePages, historyPages);
+
   const totalPages = {
     Open: activePages,
     Closed: historyPages,
