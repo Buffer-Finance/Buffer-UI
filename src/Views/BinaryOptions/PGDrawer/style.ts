@@ -2,11 +2,8 @@ import styled from '@emotion/styled';
 
 const Background = styled.div`
   background-color: var(--bg-0);
-  color: var(--text-6);
-  height: 100%;
   padding: 0px 10px;
-  /* max-width: 400px;
-  margin: 0 auto; */
+  color: var(--text-6);
   .marketTxt {
     display: inline;
     font-size: 1.9rem;
@@ -128,7 +125,7 @@ const Background = styled.div`
       font-size: 14px;
       text-align: center;
       border-radius: 6px;
-      padding: 8px 10px;
+      padding: 6px 8.55px;
       border: 1px solid transparent;
 
       background: var(--bg-1);

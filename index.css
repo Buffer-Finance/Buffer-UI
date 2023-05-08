@@ -89,13 +89,14 @@ html .MuiDialog-container {
   -webkit-background-clip: text;
 }
 :root {
-  --bg-0:#1c1c28;
-  --bg-1:#232334;
+  --bg-0: #0D0D15;
+  --bg-1:#282B39;
   --bg-2:#171722;
   --bg-vertical-gradient:linear-gradient(180deg, #000000 43%,var(--bg-1) 93.44%);
-  --text-2:#808191;
+  --text-2:#7F87A7;
   --text-3:#C3C2D4;
   --text-1:#ffffff;
+  --text-4: #808191;
   --bg-signature:#3772ff;
   --yellow-border: #e2ca18;
   --white-border: #2bd67b26;
@@ -116,6 +117,9 @@ body .flexlayout__layout {
 }
 .flexlayout__tab_button_content{
   color:var(--text-1);
+}
+.flexlayout__tab_button--selected{
+  background-color: #21232f;
 }
 .blue-text-shadow {
   text-shadow: 0px 5px 34px rgba(255, 255, 255, 0.39);
@@ -162,7 +166,8 @@ body .flexlayout__layout {
 .tv-h {
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
-  padding-top: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .mouse-animation {

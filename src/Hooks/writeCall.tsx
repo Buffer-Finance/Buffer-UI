@@ -111,6 +111,7 @@ export function useIndependentWriteCall() {
       const getGasLimit = async () => {
         try {
           let res = await contract?.estimateGas[methodName](...methodArgs);
+          console.log(`writeCall-res: `, res);
           if (res) {
             res = { res };
 
@@ -118,11 +119,13 @@ export function useIndependentWriteCall() {
             return res?.res;
           } else return DEFAULT_GAS_LIMIT;
         } catch (e) {
+          console.log(`writeCall-e: `, e);
           return DEFAULT_GAS_LIMIT;
         }
       };
 
       const gasLimit = await getGasLimit();
+      console.log(`writeCall-DEFAULT_GAS_LIMIT: `, gasLimit, DEFAULT_GAS_LIMIT);
 
       const defaultValues = {
         ...overrides,

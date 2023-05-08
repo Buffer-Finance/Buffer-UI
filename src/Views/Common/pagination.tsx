@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
   ul: {
     display: 'flex',
     justifyContent: 'center',
-    marginTop: '2rem',
+    marginTop: '1rem',
     '& .MuiPaginationItem-root': {
       color: '#fff',
       fontSize: '1.4rem',
@@ -30,9 +30,11 @@ export default function BasicPagination({
   count,
   onChange,
   page,
+  size,
 }: {
   page: number;
   count: number;
+  size?: 'small' | 'medium' | 'large';
   onChange:
     | ((event: React.ChangeEvent<unknown>, page: number) => void)
     | undefined;
@@ -49,6 +51,7 @@ export default function BasicPagination({
           text: 'text-1',
         }}
         onChange={onChange}
+        size={size}
         defaultPage={1}
         renderItem={(item) => <PaginationItem {...item} />}
       />

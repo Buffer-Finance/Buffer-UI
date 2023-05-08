@@ -421,15 +421,6 @@
   },
   {
     "inputs": [
-      { "internalType": "string[]", "name": "newAssets", "type": "string[]" }
-    ],
-    "name": "addNewUnderlyingAsset",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "address", "name": "account", "type": "address" },
       { "internalType": "uint256", "name": "id", "type": "uint256" }
     ],
@@ -446,116 +437,6 @@
     "name": "balanceOfBatch",
     "outputs": [
       { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "tournamentIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "bulkFetchTournaments",
-    "outputs": [
-      {
-        "components": [
-          {
-            "components": [
-              { "internalType": "string", "name": "name", "type": "string" },
-              { "internalType": "uint256", "name": "start", "type": "uint256" },
-              { "internalType": "uint256", "name": "close", "type": "uint256" },
-              {
-                "internalType": "uint256",
-                "name": "ticketCost",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "playTokenMintAmount",
-                "type": "uint256"
-              },
-              { "internalType": "bool", "name": "isClosed", "type": "bool" },
-              { "internalType": "bool", "name": "isVerified", "type": "bool" },
-              {
-                "internalType": "bool",
-                "name": "tradingStarted",
-                "type": "bool"
-              },
-              {
-                "internalType": "bool",
-                "name": "shouldRefundTickets",
-                "type": "bool"
-              },
-              {
-                "internalType": "enum ITournamentManager.TournamentType",
-                "name": "tournamentType",
-                "type": "uint8"
-              },
-              {
-                "internalType": "contract IERC20",
-                "name": "buyinToken",
-                "type": "address"
-              },
-              {
-                "internalType": "contract IERC20",
-                "name": "rewardToken",
-                "type": "address"
-              },
-              {
-                "internalType": "address",
-                "name": "creator",
-                "type": "address"
-              }
-            ],
-            "internalType": "struct ITournamentManager.TournamentMeta",
-            "name": "tournamentMeta",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "maxBuyinsPerWallet",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "minParticipants",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "maxParticipants",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "guaranteedWinningAmount",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "startPriceMoney",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "rakePercent",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct ITournamentManager.TournamentConditions",
-            "name": "tournamentConditions",
-            "type": "tuple"
-          }
-        ],
-        "internalType": "struct ITournamentManager.Tournament[]",
-        "name": "bulkTournaments",
-        "type": "tuple[]"
-      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -583,128 +464,9 @@
   {
     "inputs": [
       {
-        "components": [
-          { "internalType": "string", "name": "name", "type": "string" },
-          { "internalType": "uint256", "name": "start", "type": "uint256" },
-          { "internalType": "uint256", "name": "close", "type": "uint256" },
-          {
-            "internalType": "uint256",
-            "name": "ticketCost",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "playTokenMintAmount",
-            "type": "uint256"
-          },
-          { "internalType": "bool", "name": "isClosed", "type": "bool" },
-          { "internalType": "bool", "name": "isVerified", "type": "bool" },
-          { "internalType": "bool", "name": "tradingStarted", "type": "bool" },
-          {
-            "internalType": "bool",
-            "name": "shouldRefundTickets",
-            "type": "bool"
-          },
-          {
-            "internalType": "enum ITournamentManager.TournamentType",
-            "name": "tournamentType",
-            "type": "uint8"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "buyinToken",
-            "type": "address"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "rewardToken",
-            "type": "address"
-          },
-          { "internalType": "address", "name": "creator", "type": "address" }
-        ],
-        "internalType": "struct ITournamentManager.TournamentMeta",
-        "name": "tournamentMeta",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "maxBuyinsPerWallet",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "minParticipants",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "maxParticipants",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "guaranteedWinningAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "startPriceMoney",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rakePercent",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ITournamentManager.TournamentConditions",
-        "name": "tournamentConditions",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          { "internalType": "bytes32", "name": "rankFirst", "type": "bytes32" },
-          { "internalType": "bytes32", "name": "rankLast", "type": "bytes32" },
-          { "internalType": "uint256", "name": "userCount", "type": "uint256" },
-          {
-            "internalType": "uint256",
-            "name": "totalBuyins",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rakeCollected",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "totalWinners",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "rewardPercentages",
-            "type": "uint256[]"
-          }
-        ],
-        "internalType": "struct ITournamentLeaderboard.TournamentLeaderBoard",
-        "name": "tournamentLeaderboard",
-        "type": "tuple"
-      }
-    ],
-    "name": "checkParams",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "underlyingAssetIndex",
-        "type": "uint256[]"
+        "internalType": "string[]",
+        "name": "underlyingAssets",
+        "type": "string[]"
       },
       {
         "components": [
@@ -735,12 +497,12 @@
             "type": "uint8"
           },
           {
-            "internalType": "contract IERC20",
+            "internalType": "contract ERC20",
             "name": "buyinToken",
             "type": "address"
           },
           {
-            "internalType": "contract IERC20",
+            "internalType": "contract ERC20",
             "name": "rewardToken",
             "type": "address"
           },
@@ -862,116 +624,6 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tournamentId", "type": "uint256" }
-    ],
-    "name": "getTournamentAssets",
-    "outputs": [{ "internalType": "string[]", "name": "", "type": "string[]" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "tournamentId", "type": "uint256" }
-    ],
-    "name": "getTournamentConditions",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "maxBuyinsPerWallet",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "minParticipants",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "maxParticipants",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "guaranteedWinningAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "startPriceMoney",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rakePercent",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ITournamentManager.TournamentConditions",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "tournamentId", "type": "uint256" }
-    ],
-    "name": "getTournamentMeta",
-    "outputs": [
-      {
-        "components": [
-          { "internalType": "string", "name": "name", "type": "string" },
-          { "internalType": "uint256", "name": "start", "type": "uint256" },
-          { "internalType": "uint256", "name": "close", "type": "uint256" },
-          {
-            "internalType": "uint256",
-            "name": "ticketCost",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "playTokenMintAmount",
-            "type": "uint256"
-          },
-          { "internalType": "bool", "name": "isClosed", "type": "bool" },
-          { "internalType": "bool", "name": "isVerified", "type": "bool" },
-          { "internalType": "bool", "name": "tradingStarted", "type": "bool" },
-          {
-            "internalType": "bool",
-            "name": "shouldRefundTickets",
-            "type": "bool"
-          },
-          {
-            "internalType": "enum ITournamentManager.TournamentType",
-            "name": "tournamentType",
-            "type": "uint8"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "buyinToken",
-            "type": "address"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "rewardToken",
-            "type": "address"
-          },
-          { "internalType": "address", "name": "creator", "type": "address" }
-        ],
-        "internalType": "struct ITournamentManager.TournamentMeta",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "bytes32", "name": "role", "type": "bytes32" },
       { "internalType": "address", "name": "account", "type": "address" }
     ],
@@ -997,17 +649,6 @@
     ],
     "name": "isApprovedForAll",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "string", "name": "asset", "type": "string" },
-      { "internalType": "uint256", "name": "tournamentId", "type": "uint256" },
-      { "internalType": "uint256", "name": "expiration", "type": "uint256" }
-    ],
-    "name": "isTradingAllowed",
-    "outputs": [],
     "stateMutability": "view",
     "type": "function"
   },
@@ -1123,6 +764,15 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "_reader", "type": "address" }
+    ],
+    "name": "setTournamentReader",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "tournamentId", "type": "uint256" }
     ],
     "name": "startTournament",
@@ -1140,6 +790,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "tournamentReader",
+    "outputs": [
+      {
+        "internalType": "contract ITournamentReader",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "tournamentRewardPools",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
@@ -1153,16 +816,6 @@
     ],
     "name": "tournamentUnderlyingAssets",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "", "type": "uint256" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "tournamentUnderlyingAssetsList",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -1209,12 +862,12 @@
             "type": "uint8"
           },
           {
-            "internalType": "contract IERC20",
+            "internalType": "contract ERC20",
             "name": "buyinToken",
             "type": "address"
           },
           {
-            "internalType": "contract IERC20",
+            "internalType": "contract ERC20",
             "name": "rewardToken",
             "type": "address"
           },
@@ -1278,13 +931,6 @@
     "inputs": [],
     "name": "treasury",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "underlyingAssets",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   },

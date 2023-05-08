@@ -35,6 +35,7 @@ import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageMo
 import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { UserTrades } from '@Views/BinaryOptions/UserTrades';
+import { ActiveTable } from '@Views/BinaryOptions';
 var json = {
   global: {
     tabEnableClose: true,
@@ -440,7 +441,7 @@ const DesktopTrad = () => {
             }}
           />
         </div>
-        <Background className=" max-w-[280px] mx-auto">
+        <Background className=" max-w-[280px] mx-auto flex flex-col">
           <ActiveAsset cb={handleNewTabClick} />
           <CustomOption
             onResetLayout={() =>
@@ -457,7 +458,9 @@ const DesktopTrad = () => {
               })
             }
           />
-          <UserTrades />
+          <div className="flex-1 max-h-full w-full relative">
+            <UserTrades />
+          </div>
         </Background>
       </div>
     </>

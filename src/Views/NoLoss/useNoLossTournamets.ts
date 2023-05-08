@@ -10,8 +10,9 @@ import { multicallv2 } from '@Utils/Contract/multiContract';
 import getDeepCopy from '@Utils/getDeepCopy';
 import { useNoLossStaticConfig } from './useNoLossConfig';
 import tournamentManagerAbi from './ABI/TournamentsManager.json';
-import tlAbi from './ABI/TournamentsLeaderboardManager.json';
+import tlAbi from './ABI/TournamentsLeaderboard.json';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import readerAbi from '@Views/NoLoss/ABI/NoLossReaderTournamentAbi.json';
 const Calls = ['minPeriod', 'maxPeriod', 'minFee', 'maxFee'];
 
 export const baseFeeMethodName = 'baseSettlementFeePercentageForAbove';
@@ -109,9 +110,9 @@ const useTournamentData = (id?: number) => {
       let tid2Info = {};
       const calls = [
         {
-          address: config.tournament.manager,
+          address: config.tournament.reader,
           name: 'bulkFetchTournaments',
-          abi: tournamentManagerAbi,
+          abi: readerAbi,
           params: [ids],
         },
       ];

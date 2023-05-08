@@ -1,6 +1,7 @@
 import React from 'react';
 import ButtonLoader from './ButtonLoader';
-
+export const buttonAnimation =
+  ' hover:translate-y-[-2.5px] active:translate-y-1 ';
 interface IButton {
   isLoading?: boolean;
   children?: any;
@@ -19,7 +20,7 @@ const CustomButton: React.FC<IButton> = ({
     <button
       onClick={onClick}
       disabled={isDisabled || isLoading}
-      className={`flex justify-center items-center transition-all duration-300 w-full rounded-[10px] text-f16 font-bold disabled:bg-cross-bg disabled:text-3 disabled:cursor-not-allowed h-[40px]  ${className}`}
+      className={`${buttonAnimation} flex justify-center items-center transition-all duration-300 w-full rounded-[10px] text-f16 font-bold disabled:bg-cross-bg disabled:text-3 disabled:cursor-not-allowed h-[36px]  ${className}`}
     >
       {isLoading ? <ButtonLoader className="min-w-[50px]" /> : children}
     </button>
@@ -37,7 +38,7 @@ export const GreenBtn: React.FC<IButton> = ({
     <CustomButton
       isLoading={isLoading}
       isDisabled={isDisabled || isLoading}
-      className={`${className} bg-cross-bg text-green hover:text-1 hover:bg-green`}
+      className={`${className}  bg-cross-bg text-green hover:text-1 hover:bg-green hover:translate-y-[-3px] active:translate-y-1`}
       onClick={onClick}
     >
       {children}

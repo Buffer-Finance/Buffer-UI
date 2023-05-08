@@ -32,7 +32,6 @@ const NoLossTournamentList: React.FC<{
   const data = useNoLossTournaments();
   const [activeTid, setActiveTid] = useAtom(activetIdAtom);
 
-  console.log(`data: `, data);
   const [activeTournamentType, setActiveTournamentType] = useState<
     'Live' | 'Upcoming' | 'Closed'
   >(tournamentTypes[0]);
@@ -45,11 +44,11 @@ const NoLossTournamentList: React.FC<{
   const { data: state } = useActiveTournamentState(activeTournament, markets);
   const config = useNoLossStaticConfig();
   return (
-    <div className="w-[220px] px-[10px] mt-4 ">
-      <div className="flex items-center justify-evenly text-2 mb-2">
+    <div className="w-[220px] px-[10px] mt-3 ">
+      <div className="flex items-center justify-evenly text-4 mb-3">
         {tournamentTypes.map((s) => (
           <div
-            className={`flex gap-x-[3px] items-center cursor-pointer text-f12 font-semibold ${
+            className={`flex gap-x-[3px] items-center cursor-pointer text-f12  font-[500] ${
               s == activeTournamentType ? 'text-1' : ''
             }`}
             onClick={() => setActiveTournamentType(s)}
@@ -85,21 +84,21 @@ const NoLossTournamentList: React.FC<{
 };
 const Timer = ({ header, bottom }: { header: number; bottom: string }) => (
   <div className="flex-col">
-    <div className="text-f14  font-semibold">
+    <div className="text-f14  font-[500]">
       {header.toString().padStart(2, '0')}
     </div>
-    <div className="text-[9px] ">{bottom}</div>
+    <div className="text-[9px] font-[500] ">{bottom}</div>
   </div>
 );
 
 const NoLossTournamentTimer = ({ close }: { close: string }) => {
   const timer = useTimer(close);
   return (
-    <div className="flex gap-x-[8px] mt-[8px] mb-[10px]">
+    <div className="text-1 flex gap-x-[8px] mt-[8px] mb-[10px]">
       <Timer header={timer.days} bottom="Days" />
-      <Timer header={timer.hours} bottom="Hours" />
-      <Timer header={timer.minutes} bottom="Minutes" />
-      <Timer header={timer.seconds} bottom="Seconds" />
+      <Timer header={timer.hours} bottom="Hrs" />
+      <Timer header={timer.minutes} bottom="Mins" />
+      <Timer header={timer.seconds} bottom="Secs" />
     </div>
   );
 };
@@ -151,15 +150,18 @@ const TournamentCard = ({
       </div>
 
       <div className="flex justify-between items-center">
-        <div className="flex-col items-center">
+        <div className="flex-col text-f12 items-center">
           <div className="text-3">Prize Pool</div>
           <div>{activeTournament.prizePool}</div>
         </div>
-        <div className="flex-col  items-center">
+        <div className="flex-col text-f12 items-end">
           <div className="text-3">Play Tokens</div>
           <div>
             {balance ? (
-              <Display data={divide(balance, 18)} />
+              <Display
+                data={divide(balance, 18)}
+                className="text-1 content-end"
+              />
             ) : (
               <Skeleton className="lc sr !w-[20px] !h-[14px]" />
             )}
@@ -167,9 +169,9 @@ const TournamentCard = ({
         </div>
       </div>
       <div className="flex items-center justify-between mt-3">
-        <div className="flex items-ce">
+        <div className="flex items-center text-f12 ">
           <TournamentRank />
-          <div className="mt-1 ml-2">{activeTournament.rewards[0]}</div>
+          <div className="mt-1  text-1 ml-2">{activeTournament.rewards[0]}</div>
         </div>
 
         <div className="flex items-center gap-x-2">

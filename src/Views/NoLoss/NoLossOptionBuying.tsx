@@ -9,8 +9,8 @@ import {
   useNoLossTournaments,
   useTournamentData,
 } from './useNoLossTournamets';
+import NoLossOptionsReader from '@Views/NoLoss/ABI/NoLossOptionsReader.json';
 import OptionsAbi from '@Views/NoLoss/ABI/OptionsABI.json';
-import NoLossReaderAbi from '@Views/NoLoss/ABI/NoLossReaderAbi.json';
 import TournamentMangerABI from '@Views/NoLoss/ABI/TournamentsManager.json';
 import playTokenAbi from '@Views/NoLoss/ABI/PlayTokenABI.json';
 import { useAtom, useAtomValue } from 'jotai';
@@ -38,7 +38,7 @@ import { slippageAtom } from '@Views/BinaryOptions/Components/SlippageModal';
 const noLossApprovalMethod = 'isApprovedForAll';
 export interface OptionBuyintMarketState {
   balance: string;
-  allowance: string;
+  allowance: boolean;
   maxFee: string;
   minFee: string;
   maxPeriod: string;
@@ -64,9 +64,7 @@ const NoLossOptionBuying: React.FC<any> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const config = useNoLossStaticConfig();
 
-  console.log(`activeTournament: `, activeTournament);
   const { data } = useActiveTournamentState(activeTournament, markets);
-  console.log(`NoLossOptionBuying:data: `, data);
   const params = useParams();
   const state = useMemo(() => {
     if (!markets) return;
@@ -78,7 +76,14 @@ const NoLossOptionBuying: React.FC<any> = ({
       ];
     const activeMarket = getActiveMarket(markets, params);
 
-    const allowance = data?.[getCallId(buyinToken, 'allowance')];
+    const allowance =
+      data?.[
+        getCallId(
+          config.tournament.manager,
+          noLossApprovalMethod,
+          activeTournament.id
+        )
+      ];
     let bundle: Partial<OptionBuyintMarketState> = {};
     ['maxFee', 'minFee', 'maxPeriod', 'minPeriod'].forEach((m) => {
       bundle[m] = data?.[getCallId(activeMarket.configContract, 'maxFee')]?.[0];
@@ -106,6 +111,7 @@ const NoLossOptionBuying: React.FC<any> = ({
       ...bundle,
     };
   }, [data, activeTournament, markets, params]);
+
   const { writeCall } = useIndependentWriteCall();
   const [settings] = useAtom(slippageAtom);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
@@ -159,10 +165,8 @@ export const useActiveTournamentState = (
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const params = useParams();
   const calls = useMemo(() => {
-    console.log(`NoLossOptionBuying-markets: `, markets);
     if (!markets) return [];
     if (!Object.keys(markets).length || !activeTournament) return [];
-    console.log(`NoLossOptionBuying-params: `, params);
     const activeMarket = getActiveMarket(markets, params);
     // if (!activeMarket) return [];
     const allowance = {
@@ -214,8 +218,8 @@ export const useActiveTournamentState = (
       params: [],
     });
     configCalls.push({
-      address: config.reader,
-      abi: NoLossReaderAbi,
+      address: config.optionsReader,
+      abi: NoLossOptionsReader,
       name: 'getPayout',
       params: [
         activeMarket.optionsContract,

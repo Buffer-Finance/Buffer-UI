@@ -23,6 +23,8 @@ import { useActiveAssetState } from '@Views/BinaryOptions/Hooks/useActiveAssetSt
 import { useActiveTournamentState } from './NoLossOptionBuying';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { UserTrade } from '@Views/BinaryOptions/UserTrades';
+import { UserTrades } from '@Views/BinaryOptions/UserTrades';
 
 const MainBackground = styled.main`
   display: grid;
@@ -44,17 +46,22 @@ const NoLoss: React.FC<any> = ({}) => {
             {activeTournament && (
               <ActiveTournamentSection markets={appConfig} />
             )}
-            <div className="flex-1 relative  mr-2 ">
+            <div className="flex-1 relative  mr-2 mt-2 ">
               <MultiChart markets={appConfig} product="no-loss" />
             </div>
           </div>
-          <div className="w-[280px] h-full border-left  pr-2 ">
+          <div className="w-[281px] flex flex-col  border-left  pr-2 ">
             <DynamicActiveAsset markets={appConfig} payout="23%" />
             {activeTournament ? (
-              <NoLossOptionBuying
-                activeTournament={activeTournament}
-                markets={appConfig}
-              />
+              <>
+                <NoLossOptionBuying
+                  activeTournament={activeTournament}
+                  markets={appConfig}
+                />
+                <div className="flex-grow relative mt-[18px] text-2 mx-3">
+                  <UserTrades />
+                </div>
+              </>
             ) : (
               'Tournament loading...'
             )}
@@ -77,7 +84,6 @@ export const activetIdAtom = atom<string>('');
 const useActiveTournament = (): null | ITournament => {
   const { address } = useUserAccount();
   const config = useNoLossStaticConfig();
-  console.log(`config: `, config);
   const noLossTournaments = useNoLossTournaments();
   const { data: tournamentId2data } = useTournamentData();
   const activeTournamentId = useAtomValue(activetIdAtom);

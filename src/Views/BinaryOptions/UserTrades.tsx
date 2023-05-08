@@ -10,7 +10,6 @@ import { BlackScholes } from '@Utils/Formulas/blackscholes';
 
 import { SVGProps, useState } from 'react';
 import { UpTriangle } from '@Public/ComponentSVGS/UpTriangle';
-import DownIcon from '@SVG/Elements/DownIcon';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { divide, subtract } from '@Utils/NumString/stringArithmatics';
@@ -20,10 +19,15 @@ import { priceAtom } from '@Hooks/usePrice';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { Bar } from '@Views/Common/Toast/style';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { PayoutChip } from './Tables/TableComponents';
-import { ProbabilityPNL } from './Tables/TableComponents';
 import FailureIcon from '@SVG/Elements/FailureIcon';
-
+import BasicPagination from '@Views/Common/pagination';
+import { ErrorMsg } from './Tables/TableComponents';
+import { Skeleton } from '@mui/material';
+import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { DOwnTriangle } from '@Public/ComponentSVGS/DownTriangle';
+import { useUserAccount } from '@Hooks/useUserAccount';
+const userTradeRootDivStyle =
+  'bg-2 flex flex-col py-[9px] px-[10px] my-1 rounded-[4px]';
 const tableTypes = ['Open', 'Closed', 'Cancelled'];
 export const UserTrades: React.FC<any> = ({}) => {
   const [tableType, setTableType] = useState(tableTypes[0]);
@@ -33,15 +37,26 @@ export const UserTrades: React.FC<any> = ({}) => {
     history: historyPages,
     cancelled: cancelledPages,
   } = useAtomValue(tardesTotalPageAtom);
-  const totalPages = activePages;
-  const filteredData = active;
+  const totalPages = {
+    Open: activePages,
+    Closed: historyPages,
+    Cancelled: cancelledPages,
+  };
 
-  const setActivePage = useSetAtom(updateActivePageNumber);
-  const { active: activePage } = useAtomValue(tardesPageAtom);
-  console.log(`UserTrades-tableType: `, tableType, tableTypes, active, history);
+  const [pageNumber, setPageNumber] = useAtom(tardesPageAtom);
+  const activePage = {
+    Open: pageNumber.active,
+    Closed: pageNumber.history,
+    Cancelled: pageNumber.cancelled,
+  };
+  const { address } = useUserAccount();
+  const data = [active, history, cancelled];
+  const renderers = [UserTrade, UserTradeClosed, UserTradeCancelled];
+  console.log(`UserTrades-activePage[tableType] : `, activePage[tableType]);
+
   return (
-    <>
-      <div className="w-full bg-1 flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  ">
+    <div className=" overflow-y-scroll absolute  top-[0px] left-[0px] right-[0px] bottom-[0px] pb-3">
+      <div className="sticky top-[0px] z-40 w-full bg-1 flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  ">
         {tableTypes.map((s) => {
           return (
             <div
@@ -53,34 +68,68 @@ export const UserTrades: React.FC<any> = ({}) => {
           );
         })}
       </div>
-      {tableType === tableTypes[0] && (
-        <ol>
-          {active?.map((s) => (
-            <li key={s.optionID}>
-              <UserTrade trade={s} tableType={tableType} />
-            </li>
-          ))}
-        </ol>
-      )}
-      {tableType === tableTypes[1] && (
-        <ol>
-          {history?.map((s) => (
-            <li key={s.optionID}>
-              <UserTradeClosed trade={s} tableType={tableType} />
-            </li>
-          ))}
-        </ol>
-      )}
-      {tableType === tableTypes[2] && (
-        <ol>
-          {cancelled?.map((s) => (
-            <li key={s.optionID}>
-              <UserTradeCancelled trade={s} tableType={tableType} />
-            </li>
-          ))}
-        </ol>
-      )}
-    </>
+      {tableTypes.map((d, idx) => {
+        if (d != tableType) return null;
+        const ActiveRenderer = renderers[idx];
+
+        return (
+          <ol>
+            {!address ? (
+              <li className="text-f13">
+                <ErrorMsg
+                  isHistoryTable={idx ? true : false}
+                  className="!mt-1 !bg-2"
+                />
+              </li>
+            ) : !data[idx] ? (
+              <Skeleton
+                className="!w-full !rounded-md !h-[100px] lc "
+                variant="rectangular"
+              />
+            ) : data[idx].length ? (
+              data[idx].map((s) => (
+                <li key={s.optionID}>
+                  <ActiveRenderer trade={s} tableType={tableType} />
+                </li>
+              ))
+            ) : (
+              <li className="text-f13">
+                <ErrorMsg
+                  isHistoryTable={idx ? true : false}
+                  className="!mt-1 !bg-2"
+                />
+              </li>
+            )}
+          </ol>
+        );
+      })}
+      {totalPages[tableType] ? (
+        <BasicPagination
+          onChange={(e, pageNumber) =>
+            setPageNumber((d) => {
+              const updatedNumbers = { ...d };
+              switch (tableType) {
+                case tableTypes[0]:
+                  updatedNumbers['active'] = pageNumber;
+                  break;
+                case tableTypes[1]:
+                  updatedNumbers['history'] = pageNumber;
+                  break;
+
+                case tableTypes[2]:
+                  updatedNumbers['cancelled'] = pageNumber;
+                  break;
+              }
+              console.log(`UserTrades-updatedNumbers: `, updatedNumbers);
+              return updatedNumbers;
+            })
+          }
+          size="small"
+          count={totalPages[tableType]}
+          page={activePage[tableType]}
+        />
+      ) : null}
+    </div>
   );
   // return <div>{active?.length}</div>;
 };
@@ -140,18 +189,10 @@ export const UserTrade: React.FC<{
   const { width, timeTillExpiration } = getBarWidthAndTimeTillExpiration(trade);
 
   return (
-    <div className="bg-2 flex flex-col px-[10px] pb-[15px] pt-[15px]">
+    <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
-        <NumberTooltip content={'Strike : ' + divide(trade.strike, 8)}>
-          <div className="flex ">
-            {trade.isAbove ? (
-              <UpTriangle className={`scale-[0.70] mt-1`} />
-            ) : (
-              <DownIcon className={`scale-[0.70] mt-1`} />
-            )}
-            {trade.configPair?.tv_id}
-          </div>
-        </NumberTooltip>
+        <TradeMarket trade={trade} />
+
         <NumberTooltip content={timeTillExpiration + ' lerft'}>
           <div className="flex items-center gap-x-[4px]">
             <TimerIcon />
@@ -207,18 +248,10 @@ export const UserTradeClosed: React.FC<{
     ? subtract(trade.payout, trade.totalFee)
     : subtract('0', trade.totalFee);
   return (
-    <div className="bg-2 flex flex-col px-[10px] pb-[15px] pt-[15px]">
+    <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
-        <NumberTooltip content={'Strike : ' + divide(trade.strike, 8)}>
-          <div className="flex ">
-            {trade.isAbove ? (
-              <UpTriangle className={`scale-[0.70] mt-1`} />
-            ) : (
-              <DownIcon className={`scale-[0.70] mt-1`} />
-            )}
-            {trade.configPair?.tv_id}
-          </div>
-        </NumberTooltip>
+        <TradeMarket trade={trade} />
+
         <div className="flex items-center gap-x-[4px]">
           <TimerIcon />
           {getDuration(trade)}
@@ -233,13 +266,10 @@ export const UserTradeClosed: React.FC<{
         </div>
         <div className="flex  flex-col items-end ">
           <div className="flex">
-            Payout:{' '}
+            Expire @
             <Display
               unit={(trade.depositToken as IToken).name}
-              data={divide(
-                trade.payout,
-                (trade.depositToken as IToken).decimals
-              )}
+              data={divide(trade.expirationPrice, 8)}
               className="f15 weight-400"
             />
           </div>
@@ -277,20 +307,11 @@ export const UserTradeCancelled: React.FC<{
     ? subtract(trade.payout, trade.totalFee)
     : subtract('0', trade.totalFee);
   return (
-    <div className="bg-2 flex flex-col px-[10px] pb-[15px] pt-[15px]">
+    <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
-        <NumberTooltip content={'Strike : ' + divide(trade.strike, 8)}>
-          <div className="flex ">
-            {trade.isAbove ? (
-              <UpTriangle className={`scale-[0.70] mt-1`} />
-            ) : (
-              <DownIcon className={`scale-[0.70] mt-1`} />
-            )}
-            {trade.configPair?.tv_id}
-          </div>
-        </NumberTooltip>
+        <TradeMarket trade={trade} />
         <div className="flex items-center gap-x-[4px]">
-          <FailureIcon width={14} height={14} />
+          <FailureIcon width={14} height={14} /> Cancelled
         </div>
       </div>
       <div className="flex items-center justify-between mt-[4px] text-f12 ">
@@ -301,33 +322,28 @@ export const UserTradeCancelled: React.FC<{
           </div>
         </div>
         <div className="flex  flex-col items-end ">
-          <div className="flex">
-            Payout:{' '}
-            <Display
-              unit={(trade.depositToken as IToken).name}
-              data={divide(
-                trade.payout,
-                (trade.depositToken as IToken).decimals
-              )}
-              className="f15 weight-400"
-            />
+          <div className="flex flex-col items-end">
+            Reason
+            <div className="text-1">{getErrorFromCode(trade.reason)}</div>
           </div>
-          <div className="flex  items-start">
-            <span
-              className={`nowrap flex ${
-                +net_pnl < 0 ? 'text-red' : 'text-green'
-              }`}
-            >
-              <Display
-                label={+net_pnl > 0 ? '+' : ''}
-                data={divide(net_pnl, (trade.depositToken as IToken).decimals)}
-                unit={(trade.depositToken as IToken).name}
-              />
-            </span>
-          </div>{' '}
         </div>
       </div>
     </div>
+  );
+};
+
+const TradeMarket = ({ trade }: { trade: IGQLHistory }) => {
+  return (
+    <NumberTooltip content={'Strike : ' + divide(trade.strike, 8)}>
+      <div className="flex ">
+        {trade.isAbove ? (
+          <UpTriangle className={`scale-[0.70] mt-1`} />
+        ) : (
+          <DOwnTriangle className={`scale-[0.70] mt-1`} />
+        )}
+        {trade.configPair?.tv_id}
+      </div>
+    </NumberTooltip>
   );
 };
 

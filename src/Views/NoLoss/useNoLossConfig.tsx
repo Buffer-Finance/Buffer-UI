@@ -91,11 +91,20 @@ const useNoLossConfig = () => {
       let returnData = await multicallv2(calls, sOrP, config.multicall, '');
       let copy = getDeepCopy(returnData);
       convertBNtoString(copy);
-      let appConfig = {};
-      console.log(
-        `response.data.data.optionContracts: `,
-        response.data.data.optionContracts
-      );
+      let appConfig = {
+        // BTCUSD: {
+        //   optionsContract: '0x63C682610E162444b71547b5E5C229cF9Fa848ED',
+        //   id: '0x63C682610E162444b71547b5E5C229cF9Fa848ED',
+        //   configContract: '0xbd8Df9383a69B8cB549E6CE0bB8E75f9194c7098',
+        //   asset: 'BTCUSD',
+        //   isPaused: false,
+        //   ...marketid2Info['BTCUSD'],
+        // },
+      };
+      // console.log(
+      //   `response.data.data.optionContracts: `,
+      //   response.data.data.optionContracts
+      // );
       response.data.data.optionContracts.forEach((s, sid) => {
         const key = s.asset;
         Calls.forEach((c, cid) => {

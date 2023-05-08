@@ -20,7 +20,7 @@ import { useQTinfo } from '..';
 import { SettingsIcon } from './SettingsIcon';
 import { SlippageModal } from '../Components/SlippageModal';
 import YellowWarning from '@SVG/Elements/YellowWarning';
-import { DurationPicker } from './DurationPicker';
+import { DurationPicker, DynamicDurationPicker } from './DurationPicker';
 import { knowTillAtom } from '../Hooks/useIsMerketOpen';
 import { useActivePoolObj } from './PoolDropDown';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -84,7 +84,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
     MarketOpenWarning = <MarketTimingWarning />;
   }
   const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
-
+  const [currentTime, setCurrentTime] = useState('00:06');
   return (
     <>
       <SlippageModal
@@ -123,7 +123,15 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
             </div>
           </button>
         </div>
-        <DurationPicker />
+        <DynamicDurationPicker
+          {...{
+            currentTime,
+            setCurrentTime,
+            max_duration: '23:00',
+            min_duration: '00:05',
+            onSelect: console.log,
+          }}
+        />
         <div className="flex-sbw items-center text-f14 ">
           Trade Size
           <MaxSizeComponent

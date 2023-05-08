@@ -96,16 +96,14 @@ export function DynamicCustomOption({
   const maxTrade = data?.maxFee;
 
   if (!data?.maxFee) {
-    console.log(`DynamicCustomOption-maxTrade: `, maxTrade);
-    return 'Loading...';
+    return (
+      <Skeleton
+        variant="rectangular"
+        className="!w-full !h-[250px] lc !rounded-md mx-2 mt-3 "
+      />
+    );
   }
-
-  console.log(
-    `DynamicCustomOption-add('1', divide('100', data.payout.total)): `,
-    data.payout.total,
-    divide(data.payout.total, '100')
-  );
-
+  console.log(`DynamicCustomOption-data: `, data);
   return (
     <>
       <SlippageModal
@@ -119,7 +117,7 @@ export function DynamicCustomOption({
         }}
       />
 
-      <div className="custom-wrapper gap-y-3 mt-3">
+      <div className="custom-wrapper  mt-3">
         <div className="text-f14 text-0 flex-sbw items-center">
           <div className="">Time</div>
           <button
@@ -140,7 +138,7 @@ export function DynamicCustomOption({
             min_duration: '00:05',
           }}
         />
-        <div className="flex-sbw items-center text-f14 ">
+        <div className="flex-sbw items-center text-f14 mt-3">
           Trade Size
           <MaxSizeComponent
             maxSize={maxTrade}
@@ -177,9 +175,9 @@ export function DynamicCustomOption({
         </div>
         {/* TODO at 180, marketPrice?.[activeAsset.tv_id]?.close always return false, since marketPrice?.[activeAsset.tv_id] is an array */}
         {amount && data.payout.total ? (
-          <div className="flex-sbw text-f14 my-3 ">
+          <div className="flex-sbw text-f14 my-3 mb-4">
             <div className="text-f12 w-full items-start flex-col flex-start flex wrap text-2">
-              <span className="nowrap">
+              <span className="nowrap mb-1">
                 {' '}
                 Payout
                 {data.payout.boosted &&
@@ -193,7 +191,7 @@ export function DynamicCustomOption({
                 unit={tradeTokenName}
               />
             </div>
-            <div className="text-f12  w-[90%] items-start flex-col flex-start wrap flex text-2">
+            <div className="text-f12  w-[90%] items-start flex-col flex-start wrap flex text-2  gap-y-1">
               Profit :&nbsp;
               <Display
                 className=" text-f16 text-green"
@@ -211,7 +209,7 @@ export function DynamicCustomOption({
         {
           <ConnectionRequired>
             <span>
-              {allowance == '0' ? (
+              {!allowance ? (
                 <BlueBtn onClick={() => handleApprove()}>Approve</BlueBtn>
               ) : !isAssetActive ? (
                 <BlueBtn

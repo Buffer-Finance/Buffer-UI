@@ -395,14 +395,16 @@ export const UpDownChipWOText: React.FC<{
   );
 };
 
-export const ErrorMsg: React.FC<{ isHistoryTable: boolean }> = ({
-  isHistoryTable,
-}) => {
+export const ErrorMsg: React.FC<{
+  isHistoryTable: boolean;
+  className?: string;
+}> = ({ isHistoryTable, className }) => {
   const { dispatch } = useGlobal();
   const errMssg = 'No' + (isHistoryTable ? '' : ' active') + ' trades yet.';
   return (
     <TableErrorMsg
       msg={errMssg}
+      calssName={className}
       onClick={() => {
         dispatch({
           type: 'SET_ACIVE_TAB',

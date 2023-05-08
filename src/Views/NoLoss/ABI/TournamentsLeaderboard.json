@@ -334,17 +334,38 @@
     "outputs": [
       {
         "components": [
-          { "internalType": "bytes32", "name": "next", "type": "bytes32" },
-          { "internalType": "bytes32", "name": "previous", "type": "bytes32" },
-          { "internalType": "address", "name": "user", "type": "address" },
-          { "internalType": "int256", "name": "score", "type": "int256" },
-          { "internalType": "uint256", "name": "trades", "type": "uint256" },
-          { "internalType": "int256", "name": "netPnl", "type": "int256" },
-          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-          { "internalType": "bool", "name": "hasClaimed", "type": "bool" },
-          { "internalType": "bool", "name": "exists", "type": "bool" }
+          { "internalType": "bytes32", "name": "rank", "type": "bytes32" },
+          {
+            "components": [
+              { "internalType": "bytes32", "name": "next", "type": "bytes32" },
+              {
+                "internalType": "bytes32",
+                "name": "previous",
+                "type": "bytes32"
+              },
+              { "internalType": "address", "name": "user", "type": "address" },
+              { "internalType": "int256", "name": "score", "type": "int256" },
+              {
+                "internalType": "uint256",
+                "name": "trades",
+                "type": "uint256"
+              },
+              { "internalType": "int256", "name": "netPnl", "type": "int256" },
+              {
+                "internalType": "uint256",
+                "name": "totalFee",
+                "type": "uint256"
+              },
+              { "internalType": "bool", "name": "hasClaimed", "type": "bool" },
+              { "internalType": "bool", "name": "exists", "type": "bool" }
+            ],
+            "internalType": "struct ITournamentLeaderboard.Stats",
+            "name": "stats",
+            "type": "tuple"
+          },
+          { "internalType": "uint256", "name": "rebuys", "type": "uint256" }
         ],
-        "internalType": "struct ITournamentLeaderboard.Rank[]",
+        "internalType": "struct ITournamentLeaderboard.LeaderBoard[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -361,6 +382,54 @@
     "outputs": [
       { "internalType": "uint256", "name": "reward", "type": "uint256" },
       { "internalType": "bytes32", "name": "rankIndex", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "uint256", "name": "tournamentId", "type": "uint256" }
+    ],
+    "name": "getUserTournamentRank",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "bytes32", "name": "rank", "type": "bytes32" },
+          {
+            "components": [
+              { "internalType": "bytes32", "name": "next", "type": "bytes32" },
+              {
+                "internalType": "bytes32",
+                "name": "previous",
+                "type": "bytes32"
+              },
+              { "internalType": "address", "name": "user", "type": "address" },
+              { "internalType": "int256", "name": "score", "type": "int256" },
+              {
+                "internalType": "uint256",
+                "name": "trades",
+                "type": "uint256"
+              },
+              { "internalType": "int256", "name": "netPnl", "type": "int256" },
+              {
+                "internalType": "uint256",
+                "name": "totalFee",
+                "type": "uint256"
+              },
+              { "internalType": "bool", "name": "hasClaimed", "type": "bool" },
+              { "internalType": "bool", "name": "exists", "type": "bool" }
+            ],
+            "internalType": "struct ITournamentLeaderboard.Stats",
+            "name": "stats",
+            "type": "tuple"
+          },
+          { "internalType": "uint256", "name": "rebuys", "type": "uint256" }
+        ],
+        "internalType": "struct ITournamentLeaderboard.LeaderBoard",
+        "name": "",
+        "type": "tuple"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -460,6 +529,15 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "_reader", "type": "address" }
+    ],
+    "name": "setTournamentReader",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
     ],
     "name": "supportsInterface",
@@ -473,6 +551,19 @@
     "outputs": [
       {
         "internalType": "contract ITournamentManager",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tournamentReader",
+    "outputs": [
+      {
+        "internalType": "contract ITournamentReader",
         "name": "",
         "type": "address"
       }

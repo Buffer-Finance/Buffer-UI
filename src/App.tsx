@@ -35,7 +35,7 @@ import { AllTradesPage } from '@Views/AllTrades';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
 import { NoLossTrade, TradePage } from '@Views/BinaryOptions/TradePage';
-import { TestComponent } from './TestComponent';
+import ExampleComponent from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
 import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
@@ -104,12 +104,12 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
-        <Route path="/test" element={<TestComponent />} />
+        <Route path="/test" element={<ExampleComponent />} />
         <Route path="/pyth" element={<PythPoc />}></Route>
         <Route path="/admin" element={<TradingConfig />}></Route>
         <Route path="/admin/create-pair" element={<CreatePair />}></Route>
         <Route path="/addMarket" element={<AddMarket />} />
-        <Route path="/test2" element={<TestComponent />} />
+        <Route path="/test2" element={<ExampleComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/ref/:code" element={<div>Helo</div>} />
