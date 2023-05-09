@@ -360,7 +360,8 @@
     "graph": {
       "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite"
-    }
+    },
+    "env": "arbitrum-testnet"
   },
   "42161": {
     "marketFactory": "0xeb26C551F606A9692c05FE06Af885717db8cDD24",
@@ -1072,7 +1073,8 @@
     "graph": {
       "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-temp",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite"
-    }
+    },
+    "env": "arbitrum-one"
   },
   "80001": {
     "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
@@ -1186,7 +1188,8 @@
     "graph": {
       "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-test",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-test-lite"
-    }
+    },
+    "env": "polygon-mumbai"
   },
   "137": {
     "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
@@ -1563,6 +1566,7 @@
     "graph": {
       "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-mainnet",
       "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-mainnet-lite"
-    }
+    },
+    "env": "polygon-mumbai"
   }
 }
