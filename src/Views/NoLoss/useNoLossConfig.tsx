@@ -8,6 +8,7 @@ import configABI from './ABI/ConfigABI.json';
 import { convertBNtoString, useSignerOrPorvider } from '@Utils/useReadCall';
 import { multicallv2 } from '@Utils/Contract/multiContract';
 import getDeepCopy from '@Utils/getDeepCopy';
+import { MarketInterface } from 'src/MultiChart';
 const Calls = ['minPeriod', 'maxPeriod', 'minFee', 'maxFee'];
 
 export const useNoLossStaticConfig = () => {
@@ -60,9 +61,11 @@ const marketid2Info = {
 const useNoLossConfig = () => {
   const config = useNoLossStaticConfig();
   const sOrP = useSignerOrPorvider();
-  return useSWR(`config-root-config-${config.chainId}`, {
-    fetcher: async (name) => {
-      const basicQuery = `
+  return useSWR<{ [a: string]: MarketInterface }>(
+    `config-root-config-${config.chainId}`,
+    {
+      fetcher: async (name) => {
+        const basicQuery = `
       optionContracts: optionContracts(
         first: 1000
         ) {
@@ -73,67 +76,68 @@ const useNoLossConfig = () => {
           isPaused
         }
         `;
-      const response = await axios.post(config.graph.MAIN, {
-        query: `{${basicQuery}}`,
-      });
-      let calls = [];
-      response.data.data.optionContracts.forEach((s) => {
-        Calls.forEach((c) => {
-          calls.push({
-            address: s.config,
-            abi: configABI,
-            name: c,
-            params: [],
+        const response = await axios.post(config.graph.MAIN, {
+          query: `{${basicQuery}}`,
+        });
+        let calls = [];
+        response.data.data.optionContracts.forEach((s) => {
+          Calls.forEach((c) => {
+            calls.push({
+              address: s.config,
+              abi: configABI,
+              name: c,
+              params: [],
+            });
           });
         });
-      });
 
-      let returnData = await multicallv2(calls, sOrP, config.multicall, '');
-      let copy = getDeepCopy(returnData);
-      convertBNtoString(copy);
-      let appConfig = {
-        // BTCUSD: {
-        //   optionsContract: '0x63C682610E162444b71547b5E5C229cF9Fa848ED',
-        //   id: '0x63C682610E162444b71547b5E5C229cF9Fa848ED',
-        //   configContract: '0xbd8Df9383a69B8cB549E6CE0bB8E75f9194c7098',
-        //   asset: 'BTCUSD',
-        //   isPaused: false,
-        //   ...marketid2Info['BTCUSD'],
-        // },
-      };
-      // console.log(
-      //   `response.data.data.optionContracts: `,
-      //   response.data.data.optionContracts
-      // );
-      response.data.data.optionContracts.forEach((s, sid) => {
-        const key = s.asset;
-        Calls.forEach((c, cid) => {
-          if (appConfig?.[key]) {
-            appConfig[key] = {
-              ...appConfig[key],
-              [c]: copy[sid + cid][0] + '',
-            };
-          } else {
-            appConfig[key] = {
-              [c]: copy[sid + cid][0] + '',
-            };
-          }
-        });
-        appConfig[key] = {
-          ...appConfig[key],
-          configContract: s.config,
-          isPaused: s.isPaused,
-          optionsContract: s.address,
-          ...marketid2Info[s.asset],
+        let returnData = await multicallv2(calls, sOrP, config.multicall, '');
+        let copy = getDeepCopy(returnData);
+        convertBNtoString(copy);
+        let appConfig = {
+          // BTCUSD: {
+          //   optionsContract: '0x63C682610E162444b71547b5E5C229cF9Fa848ED',
+          //   id: '0x63C682610E162444b71547b5E5C229cF9Fa848ED',
+          //   configContract: '0xbd8Df9383a69B8cB549E6CE0bB8E75f9194c7098',
+          //   asset: 'BTCUSD',
+          //   isPaused: false,
+          //   ...marketid2Info['BTCUSD'],
+          // },
         };
-      });
+        // console.log(
+        //   `response.data.data.optionContracts: `,
+        //   response.data.data.optionContracts
+        // );
+        response.data.data.optionContracts.forEach((s, sid) => {
+          const key = s.asset;
+          Calls.forEach((c, cid) => {
+            if (appConfig?.[key]) {
+              appConfig[key] = {
+                ...appConfig[key],
+                [c]: copy[sid + cid][0] + '',
+              };
+            } else {
+              appConfig[key] = {
+                [c]: copy[sid + cid][0] + '',
+              };
+            }
+          });
+          appConfig[key] = {
+            ...appConfig[key],
+            configContract: s.config,
+            isPaused: s.isPaused,
+            optionsContract: s.address,
+            ...marketid2Info[s.asset],
+          };
+        });
 
-      console.log(`appConfig: `, appConfig);
-      return appConfig;
-    },
-    // TODO see if there is retrying machanism on swr than only do this req one time
-    refreshInterval: 100000,
-  });
+        console.log(`appConfig: `, appConfig);
+        return appConfig;
+      },
+      // TODO see if there is retrying machanism on swr than only do this req one time
+      refreshInterval: 100000,
+    }
+  );
 };
 
 export { useNoLossConfig };

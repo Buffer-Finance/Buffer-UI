@@ -6,7 +6,7 @@ import {
   useTournamentData,
 } from './useNoLossTournamets';
 import TournamentManagerAbi from '@Views/NoLoss/ABI/TournamentsManager.json';
-import { SVGProps, useEffect } from 'react';
+import { SVGProps, useEffect, useRef } from 'react';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { activetIdAtom } from './NoLoss';
 
@@ -21,14 +21,17 @@ import { useActiveTournamentState } from './NoLossOptionBuying';
 import { MarketInterface } from 'src/MultiChart';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { CSSTransition } from 'react-transition-group';
 export const tournamentButtonStyles =
   'bg-blue flex gap-x-2 px-[8px] py-[2px] text-f12 items-center rounded-[4px] ';
 export const touramentsAtom = atom([]);
 const tournamentTypes = ['Live', 'Upcoming', 'Closed'];
 const NoLossTournamentList: React.FC<{
-  markets: { [a: string]: MarketInterface };
-  activeTournament: ITournament;
-}> = ({ markets, activeTournament }) => {
+  markets: { [a: string]: MarketInterface } | undefined;
+  activeTournament: ITournament | null;
+  sidebarOpen: boolean;
+  className?: string;
+}> = ({ markets, activeTournament, className, sidebarOpen }) => {
   const data = useNoLossTournaments();
   const [activeTid, setActiveTid] = useAtom(activetIdAtom);
 
@@ -43,43 +46,53 @@ const NoLossTournamentList: React.FC<{
   }, [activeTid, data, setActiveTid]);
   const { data: state } = useActiveTournamentState(activeTournament, markets);
   const config = useNoLossStaticConfig();
+  const nodeRef = useRef(null);
+  console.log(`NoLossTournamentList-sidebarOpen: `, sidebarOpen);
   return (
-    <div className="w-[220px] px-[10px] mt-3 ">
-      <div className="flex items-center justify-evenly text-4 mb-3">
-        {tournamentTypes.map((s) => (
-          <div
-            className={`flex gap-x-[3px] items-center cursor-pointer text-f12  font-[500] ${
-              s == activeTournamentType ? 'text-1' : ''
-            }`}
-            onClick={() => setActiveTournamentType(s)}
-          >
-            {s}
-            {s == 'Live' && data?.['Live']?.length && (
-              <div className="text-1 text-center   p-0 text-[8px]  bold pt-[-8px] bg-red w-[13px] h-[13px] rounded-sm">
-                {data?.['Live']?.length}
-              </div>
-            )}
-          </div>
-        ))}
+    <CSSTransition
+      nodeRef={nodeRef}
+      in={sidebarOpen}
+      timeout={200}
+      classNames="my-node"
+      // unmountOnExit
+    >
+      <div ref={nodeRef} className={`w-[220px] px-[10px] mt-3 `}>
+        <div className="flex items-center justify-evenly text-4 mb-3">
+          {tournamentTypes.map((s) => (
+            <div
+              className={`flex gap-x-[3px] items-center cursor-pointer text-f12  font-[500] ${
+                s == activeTournamentType ? 'text-1' : ''
+              }`}
+              onClick={() => setActiveTournamentType(s)}
+            >
+              {s}
+              {s == 'Live' && data?.['Live']?.length && (
+                <div className="text-1 text-center   p-0 text-[8px]  bold pt-[-8px] bg-red w-[13px] h-[13px] rounded-sm">
+                  {data?.['Live']?.length}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="flex-col">
+          {data?.[activeTournamentType]
+            ? data[activeTournamentType].map((s) => {
+                return (
+                  <TournamentCard
+                    tournament={s}
+                    key={s.id}
+                    balance={
+                      state?.[
+                        getCallId(config.tournament.manager, 'balanceOf', s.id)
+                      ]
+                    }
+                  />
+                );
+              })
+            : `We can't find any ${activeTournamentType} tornaments...`}{' '}
+        </div>
       </div>
-      <div className="flex-col">
-        {data?.[activeTournamentType]
-          ? data[activeTournamentType].map((s) => {
-              return (
-                <TournamentCard
-                  tournament={s}
-                  key={s.id}
-                  balance={
-                    state?.[
-                      getCallId(config.tournament.manager, 'balanceOf', s.id)
-                    ]
-                  }
-                />
-              );
-            })
-          : `We can't find any ${activeTournamentType} tornaments...`}{' '}
-      </div>
-    </div>
+    </CSSTransition>
   );
 };
 const Timer = ({ header, bottom }: { header: number; bottom: string }) => (

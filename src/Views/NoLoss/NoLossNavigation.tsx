@@ -1,10 +1,17 @@
 import * as React from 'react';
-const NoLossNavigation: React.FC<any> = ({}) => {
-  const navigate = useNavigate();
+const NoLossNavigation: React.FC<{
+  className?: string;
 
+  setSidebarOpen: (a: any) => void;
+}> = ({ className, setSidebarOpen }) => {
   return (
-    <aside className="min-h-full border-right  w-[4rem] fex-col items-center">
-      <Tournaments className="m-auto mt-4" />
+    <aside
+      className={`min-h-full border-right  w-[4rem]  bg-primary z-10 fex-col items-center ${className}`}
+    >
+      <Tournaments
+        className="m-auto mt-4"
+        onClick={() => setSidebarOpen((a) => !a)}
+      />
       {/* <img
         src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-large/1f419@2x.png"
         width={60}

@@ -17,7 +17,7 @@ import {
   useNoLossTournaments,
   useTournamentData,
 } from './useNoLossTournamets';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Skeleton } from '@mui/material';
 import { useActiveAssetState } from '@Views/BinaryOptions/Hooks/useActiveAssetState';
 import { useActiveTournamentState } from './NoLossOptionBuying';
@@ -32,13 +32,18 @@ const MainBackground = styled.main`
 const ifc = new ethers.utils.Interface(MarketFactoryABI);
 const NoLoss: React.FC<any> = ({}) => {
   const { data: appConfig } = useNoLossConfig();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const activeTournament = useActiveTournament();
   return (
-    <main className="flex relative  w-[100vw]">
-      <NoLossNavigation />
+    <main className="flex  w-[100vw]">
+      <NoLossNavigation setSidebarOpen={setSidebarOpen} />
       <NoLossTournamentList
         markets={appConfig}
         activeTournament={activeTournament}
+        sidebarOpen={sidebarOpen}
+        className={
+          sidebarOpen ? 'open-sidebar-animation' : 'closed-sidebar-animation'
+        }
       />
       {appConfig ? (
         <>
