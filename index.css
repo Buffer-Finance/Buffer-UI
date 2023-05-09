@@ -21,6 +21,7 @@ body {
 }
 .my-node-enter-active {
   max-width: 899px;
+
   transform: translateX(0%);
 
 }
@@ -30,12 +31,15 @@ body {
 
 }
 .my-node-exit-active {
-  transform: translateX(-1000%);
+  opacity: 0;
+  transform: translateX(-100%);
   transition:  200ms ;
   max-width: 0px;
 }
 .my-node-exit-done {
-  transform: translateX(-1000%);
+  opacity: 0;
+  transform: translateX(-100%);
+  transition:  200ms;
   max-width:0px;
 }
 
