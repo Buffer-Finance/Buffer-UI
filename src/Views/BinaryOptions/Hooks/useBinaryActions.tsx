@@ -29,8 +29,10 @@ import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { useTradePolOrBlpPool } from './useTradePolOrBlpPool';
 import { isTestnet } from 'config';
 import axios from 'axios';
-import { useAccount } from 'wagmi';
+import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { ethers } from 'ethers';
+import { multicallv2 } from '@Utils/Contract/multiContract';
 
 export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const binary = useQTinfo();
@@ -44,7 +46,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const [, setIsApproveModalOpen] = useAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
-  console.log(`useBinaryActions-state: `, state);
   const activeAsset = binary.activePair;
   const { address } = useAccount();
   const { activePoolObj } = useActivePoolObj();
@@ -65,6 +66,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const cb = (a) => {
     setLoading(null);
   };
+  const { data: signer } = useSigner({ chainId: binary.activeChain.id });
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
     const isCustom = typeof customTrade.is_up === 'boolean';
@@ -209,10 +211,55 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
     };
     if (isTestnet) {
       const id = 'InstantTradingId';
-      const user_signature = 'sign';
-      const signature_timestamp = 'sing-ts';
+      toastify({
+        id,
+        msg: 'Transaction confirmation in progress...',
+        type: 'info',
+        inf: 1,
+      });
       const instantTradingApiUrl =
         'https://app.buffer.finance/api/v1/instant-trading';
+      let currentTimestamp = Date.now();
+      let currentUTCTimestamp = Math.round(
+        (currentTimestamp + new Date().getTimezoneOffset() * 60 * 1000) / 1000
+      );
+
+      // const msg = [address, ...args, currentUTCTimestamp];
+      const msg = [
+        '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
+        5000000,
+        900,
+        true,
+        '0xf7EE46d45Da17A12734685dB4E238d35af8E6e0C',
+        110026400,
+        50,
+        true,
+        'test',
+        10,
+        1683601318,
+      ];
+      console.log(`useBinaryActions-msg: `, msg);
+      const argTypes = [
+        'address',
+        'uint256',
+        'uint256',
+        'bool',
+        'address',
+        'uint256',
+        'uint256',
+        'bool',
+        'string',
+        'uint256',
+        'uint256',
+      ];
+      /*
+      0x000000000000000000000000fbea9559ae33214a080c03c68ecf1d3af0f58a7d00000000000000000000000000000000000000000000000000000000004c4b4000000000000000000000000000000000000000000000000000000000000003840000000000000000000000000000000000000000000000000000000000000001000000000000000000000000f7ee46d45da17a12734685db4e238d35af8e6e0c00000000000000000000000000000000000000000000000000000000068edea0000000000000000000000000000000000000000000000000000000000000003200000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000006459b7a600000000000000000000000000000000000000000000000000000000000000047465737400000000000000000000000000000000000000000000000000000000
+      */
+      const hashedMessage = 'gekkkoi';
+      console.log(`useBinaryActions-msg: `, msg);
+      console.log(`useBinaryActions-hashedMessage: `, hashedMessage);
+      const signature = await signer!.signMessage(hashedMessage);
+      console.log(`useBinaryActions-signature: `, signature);
       const TradeQuery = {
         totalFee: args[0],
         period: args[1],
@@ -228,21 +275,16 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         trade: TradeQuery,
         pair: activeAsset.tv_id,
         user_address: address,
-        user_signature,
-        signature_timestamp,
-        env: configContracts.env,
+        user_signature: signature,
+        signature_timestamp: currentUTCTimestamp,
+        env: binary.activeChain.id,
       };
+      console.log(`useBinaryActions-reqBody: `, reqBody);
       // dispatch({ type: 'SET_TXN_LOADING', payload: 1 });
-      toastify({
-        id,
-        msg: 'Transaction confirmation in progress...',
-        type: 'info',
-        inf: 1,
-      });
+
       try {
         await sleep(2000);
         const txHash = 'fsadfasd';
-        console.log(`useBinaryActions-reqBody: `, reqBody);
         // dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
         toastify({
           id,
