@@ -33,6 +33,8 @@ import routerAbi from '@Views/NoLoss/ABI/routerAbi.json';
 import { toFixed } from '@Utils/NumString';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { slippageAtom } from '@Views/BinaryOptions/Components/SlippageModal';
+import { useGlobal } from '@Contexts/Global';
+import { useToast } from '@Contexts/Toast';
 // fetch balance
 // fetch payout
 const noLossApprovalMethod = 'isApprovedForAll';
@@ -65,15 +67,15 @@ const NoLossOptionBuying: React.FC<any> = ({
   const config = useNoLossStaticConfig();
 
   const { data } = useActiveTournamentState(activeTournament, markets);
+  console.log(`NoLossOptionBuying-data: `, data);
   const params = useParams();
-  const state = useMemo(() => {
+  const noLossState = useMemo(() => {
     if (!markets) return;
-    const buyinToken = activeTournament.tournamentMeta.buyinToken;
 
-    const balance = console.log(`NoLossOptionBuying-data: `, data);
-    data?.[
-      getCallId(config.tournament.manager, 'balanceOf', activeTournament.id)
-    ];
+    const balance =
+      data?.[
+        getCallId(config.tournament.manager, 'balanceOf', activeTournament.id)
+      ];
     const activeMarket = getActiveMarket(markets, params);
 
     const allowance =
@@ -86,26 +88,19 @@ const NoLossOptionBuying: React.FC<any> = ({
       ];
     let bundle: Partial<OptionBuyintMarketState> = {};
     ['maxFee', 'minFee', 'maxPeriod', 'minPeriod'].forEach((m) => {
-      bundle[m] = data?.[getCallId(activeMarket.configContract, 'maxFee')]?.[0];
+      bundle[m] = data?.[getCallId(activeMarket.configContract, m)]?.[0];
     });
     const baseFee =
       data?.[getCallId(activeMarket.optionsContract, baseFeeMethodName)]?.[0];
     const totalPayoutExpanded =
       data?.[getCallId(config.optionsReader, 'getPayout')]?.[0];
-    console.log(
-      `NoLossOptionBuying-totalPayoutExpanded: `,
-      totalPayoutExpanded
-    );
     const totalPayout = totalPayoutExpanded
       ? divide(totalPayoutExpanded + '', 2)
       : '0';
-    console.log(`NoLossOptionBuying-totalPayout: `, totalPayout);
     data?.[getCallId(activeMarket.optionsContract, baseFeeMethodName)]?.[0];
     const basePayout = baseFee ? getPayoutFromSettlementFee(baseFee) : '';
-    console.log(`NoLossOptionBuying-basePayout: `, basePayout);
     const boostedPayout =
       totalPayout && basePayout ? subtract(totalPayout, basePayout) : '0';
-    console.log(`NoLossOptionBuying-boostedPayout: `, boostedPayout);
     return {
       balance: balance?.[0],
       allowance: allowance?.[0],
@@ -122,12 +117,13 @@ const NoLossOptionBuying: React.FC<any> = ({
   const { writeCall } = useIndependentWriteCall();
   const [settings] = useAtom(slippageAtom);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
-
+  const { state } = useGlobal();
+  const toastify = useToast();
   return (
     <Background>
       <DynamicCustomOption
         markets={markets}
-        data={state}
+        data={noLossState}
         tradeToken={{
           address: activeTournament.tournamentMeta.buyinToken,
           name: activeTournament.tournamentMeta.name,
@@ -144,11 +140,41 @@ const NoLossOptionBuying: React.FC<any> = ({
           );
         }}
         buyHandler={(amount, isUp, duration, price) => {
+          if (state.txnLoading > 1) {
+            toastify({
+              id: '2321123',
+              type: 'error',
+              msg: 'Please confirm your previous pending transactions.',
+            });
+            return true;
+          }
+          // if (
+          //   duration > +noLossState?.maxPeriod ||
+          //   duration < +noLossState?.minPeriod
+          // ) {
+          //   return toastify({
+          //     type: 'error',
+          //     msg: `Option duration should be within ${minsToTime(
+          //       noLossState?.minPeriod
+          //     )} and ${minsToTime(noLossState?.maxPeriod)}`,
+          //     id: 'binaryBuy',
+          //   });
+          // }
+
+          const minFee = divide(noLossState?.minFee + '', 8);
+          const maxFee = divide(noLossState?.maxFee + '', 8);
+          if (+amount > +minFee || +amount < +maxFee) {
+            return toastify({
+              type: 'error',
+              msg: `Trade Size must be within ${minFee} and ${maxFee}`,
+            });
+          }
+
           writeCall(config.router, routerAbi, () => {}, 'initiateTrade', [
             toFixed(multiply(amount, 18), 0),
             duration * 60 + '',
             isUp,
-            state?.activeMarket.optionsContract,
+            noLossState?.activeMarket.optionsContract,
             toFixed(multiply(('' + price).toString(), 8), 0),
             toFixed(multiply(settings.slippage.toString(), 2), 0),
             highestTierNFT?.tokenId || '0',
@@ -159,6 +185,14 @@ const NoLossOptionBuying: React.FC<any> = ({
     </Background>
   );
 };
+
+function minsToTime(minutes: number | string): string {
+  let hours: number = Math.floor(+minutes / 60);
+  let remainingMinutes: number = +minutes % 60;
+  return `${hours.toString().padStart(2, '0')}h:${remainingMinutes
+    .toString()
+    .padStart(2, '0')}m`;
+}
 
 export { NoLossOptionBuying };
 

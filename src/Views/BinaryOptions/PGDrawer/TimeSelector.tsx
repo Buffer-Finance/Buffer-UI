@@ -8,6 +8,7 @@ import { useToast } from '@Contexts/Toast';
 import { add, gt, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { PoolDropDown } from './PoolDropDown';
 import { toFixed } from '@Utils/NumString';
+import { MaxButton } from './DynamicCustomOption';
 
 const TimeSelectorStyles = styled.div`
   display: flex;
@@ -443,7 +444,6 @@ export const AmountSelector = ({
     currentTime = '01:00';
   }
 
-  console.log(`balance: `, balance);
   useEffect(() => {
     if (currentTimeInMins === undefined || maxTimeInMins === undefined) return;
     if (currentTimeInMins > maxTimeInMins) {
@@ -475,16 +475,7 @@ export const AmountSelector = ({
     : currentTime > error.max;
 
   const toastify = useToast();
-  const getActiveCondition = (single) => {
-    if (+single == single) {
-      return toFixed(multiply(balance, single + ''), 0) == currentTime
-        ? 'active text-1 '
-        : 'text-2';
-    }
-    return toFixed(currentTime, 0) == toFixed(balance, 0)
-      ? 'active text-1 '
-      : 'text-2';
-  };
+
   return (
     <>
       <TimeSelectorStyles className=" transition-colors bg-3  border-">
@@ -496,7 +487,7 @@ export const AmountSelector = ({
           <div className="flex-bw ">
             <input
               value={currentTime}
-              className="timetip number text-f16 text-1 "
+              className="timetip number text-f16 text-1 !py-[2px]"
               type="number"
               // title={title}
               max={max}
@@ -527,37 +518,18 @@ export const AmountSelector = ({
                 if (+e.target.value < INT_MAX) setTime(e.target.value);
               }}
             />
+            <MaxButton
+              onChange={(max) => {
+                setTime(max);
+              }}
+              className="!w-fit !px-[6px] !py-[2px] rounded-[4px] !h-[20px] mr-[5px]"
+              balance={balance}
+            />
           </div>
         </div>
         {investmentDD && <PoolDropDown />}
       </TimeSelectorStyles>
-      {/* {balance && gt(balance, '0') && (
-        <div>
-          <div className="duration-container ">
-            {[0.05, 0.1, 0.2, 0.5, 'Max'].map((single, idx) => {
-              return (
-                <div
-                  key={single}
-                  onClick={() => {
-                    if (+single === single) {
-                      setTime(toFixed(multiply(balance, single + ''), 0));
-                    } else {
-                      setTime(balance);
-                    }
-                    // setTime()
-                  }}
-                  className={
-                    'each-duration py-1 font-medium text-f12  transition-colors ' +
-                    getActiveCondition(single)
-                  }
-                >
-                  {+single === single ? Math.floor(single * 100) + '%' : single}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )} */}
+
       {(minError || maxError) && (
         <div className="text-1 text-f12 mt-2 flex items-center">
           <ErrorIcon className="error-icon" />

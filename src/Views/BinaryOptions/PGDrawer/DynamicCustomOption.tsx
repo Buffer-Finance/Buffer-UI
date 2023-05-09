@@ -7,48 +7,28 @@ import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import {
   add,
   divide,
-  getPosInf,
   gt,
-  lt,
   multiply,
   subtract,
-  toFixed,
 } from '@Utils/NumString/stringArithmatics';
 import AccountInfo from '@Views/Common/AccountInfo';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { QuickTradeExpiry, ammountAtom, approveModalAtom } from '../PGDrawer';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { QuickTradeExpiry, ammountAtom } from '../PGDrawer';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { priceAtom } from '@Hooks/usePrice';
 
-import { ApproveModal } from '../Components/approveModal';
 import { BuyUSDCLink } from './BuyUsdcLink';
-import { AmountSelector, TimeSelector, timeToMins } from './TimeSelector';
-import { useBinaryActions } from '../Hooks/useBinaryActions';
-import { useQTinfo } from '..';
+import { AmountSelector, timeToMins } from './TimeSelector';
 import { SettingsIcon } from './SettingsIcon';
 import { SlippageModal } from '../Components/SlippageModal';
 import YellowWarning from '@SVG/Elements/YellowWarning';
-import { DurationPicker, DynamicDurationPicker } from './DurationPicker';
-import { knowTillAtom } from '../Hooks/useIsMerketOpen';
-import { useActivePoolObj } from './PoolDropDown';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { MarketTimingWarning } from '../MarketTimingWarning';
+import { DynamicDurationPicker } from './DurationPicker';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
-import { useTradePolOrBlpPool } from '../Hooks/useTradePolOrBlpPool';
 import { MarketInterface } from 'src/MultiChart';
 import { OptionBuyintMarketState } from '@Views/NoLoss/NoLossOptionBuying';
-import { useWriteCall } from '@Hooks/useWriteCall';
-import { useIndependentWriteCall } from '@Hooks/writeCall';
-import { erc20ABI } from 'wagmi';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
-// things we pass dynamically
-// TODO pass balance, allowance, maxTrade, minTrade
-// TODO OptionBuying Machanism
-// TODO remove useBinaryActions
-// TODO stats machanism
 export function DynamicCustomOption({
   markets,
   data,
@@ -73,7 +53,13 @@ export function DynamicCustomOption({
   ) => void;
   routerContract: string;
 }) {
-  if (!data?.activeMarket) return <></>;
+  if (!data?.activeMarket)
+    return (
+      <Skeleton
+        variant="rectangular"
+        className="!w-full !h-[250px] lc !rounded-md mx-2 mt-3 "
+      />
+    );
   const allowance = data?.allowance;
   const [amount, setAmount] = useAtom(ammountAtom);
   const [currentTime, setCurrentTime] = useAtom(QuickTradeExpiry);
@@ -136,7 +122,7 @@ export function DynamicCustomOption({
             currentTime,
             setCurrentTime,
             max_duration: '04:04',
-            min_duration: '00:05',
+            min_duration: '00:00',
           }}
         />
         <div className="flex-sbw items-center text-f14 mt-3">
@@ -166,7 +152,7 @@ export function DynamicCustomOption({
               </div>
             ),
           }}
-        />{' '}
+        />
         <div className="flex flex-col items-start text-f14 ">
           <AccountInfo
             shouldDisplayString
@@ -191,6 +177,15 @@ export function DynamicCustomOption({
                 data={multiply(add('1', divide(data.payout.total, 2)), amount)}
                 unit={tradeTokenName}
               />
+              {console.log(
+                `DynamicCustomOption-multiply(add('1', divide(data.payout.total, 2)), amount): `,
+                multiply(add('1', divide(data.payout.total, 2)), amount)
+              )}
+              {console.log(
+                `DynamicCustomOption-divide(data.payout.total, 2)): `,
+                add('1', divide(data.payout.total, 2))
+              )}
+              {console.log(`DynamicCustomOption-amount: `, amount)}
             </div>
             <div className="text-f12  w-[90%] items-start flex-col flex-start wrap flex text-2  gap-y-1">
               Profit :&nbsp;
@@ -318,5 +313,28 @@ export const SlippageButton = ({ onClick }: { onClick: (e: any) => void }) => {
         <SettingsIcon />
       </div>
     </button>
+  );
+};
+
+export const MaxButton = ({
+  onChange,
+  balance,
+  className,
+}: {
+  onChange: (a: string) => void;
+  balance: string | undefined;
+  className?: string;
+}) => {
+  if (!balance) return <></>;
+  return (
+    <BlueBtn
+      onClick={() => onChange(balance)}
+      className={
+        '!font-thin !text-f12  flex items-center gap-1   hover:brightness-125 ' +
+        className
+      }
+    >
+      Max
+    </BlueBtn>
   );
 };

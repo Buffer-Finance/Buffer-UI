@@ -63,7 +63,10 @@ const NoLoss: React.FC<any> = ({}) => {
                 </div>
               </>
             ) : (
-              'Tournament loading...'
+              <Skeleton
+                className="lc sr w-full flex-1 !h-[300px] m-5  "
+                variant="rectangular"
+              />
             )}
           </div>
         </>
