@@ -79,7 +79,8 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
   let MarketOpenWarning: ReactNode | null = null;
-  if (activeAsset.category == 'Forex') {
+  console.log(`CustomOption-knowTill: `, knowTill);
+  if (activeAsset.category == 'Forex' && knowTill == false) {
     MarketOpenWarning = <MarketTimingWarning />;
   }
   const { min_amount: minTradeAmount } = useTradePolOrBlpPool();

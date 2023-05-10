@@ -85,14 +85,10 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       return true;
     }
 
-    if (isForex && currentTime + expirationInMins * 60 >= marketCloseTime) {
+    if (isForex && !knowTill) {
       return toastify({
         type: 'error',
-        msg: `Expiration time should be less than ${getDisplayTime(
-          +marketCloseTime
-        )} ${getDisplayDate(
-          +marketCloseTime
-        )} as the market will be closed by then.`,
+        msg: 'Forex Market is closed currently!',
         id: 'binaryBuy',
       });
     }
@@ -373,3 +369,45 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
     activeAssetState,
   };
 };
+function getWeekId(timestamp: number): number {
+  return Math.floor((timestamp - 3 * 86400 - 17 * 3600) / 604800);
+}
+
+const getUsualRoutine = (start?: number | null, end?: boolean) => {
+  if (end) {
+    return [[0, 17 * 60]];
+  }
+  return [
+    [start || 0, 22 * 60],
+    [23 * 60, 23 * 60 + 59],
+  ];
+};
+const day2Intervals = {
+  0: getUsualRoutine(17 * 50),
+  1: getUsualRoutine(),
+  2: getUsualRoutine(),
+  3: getUsualRoutine(),
+  4: getUsualRoutine(null, true),
+  5: [[]],
+};
+console.log(`useBinaryActions-schedule: `, day2Intervals);
+function isTradingOpen(): boolean {
+  const now = new Date();
+  const dayOfWeek = now.getUTCDay();
+  const hour = now.getUTCHours();
+  const min = now.getUTCMinutes();
+  const nowMin = hour * 60 + min;
+  const todaySchedule = day2Intervals[dayOfWeek];
+  console.log(`useBinaryActions-todaySchedule: `, todaySchedule, nowMin);
+}
+// Check if it's a weekday (Mon-Fri) and within trading hours
+// | [ ] [ ] [ ]   ||  [ ]|[ ] [ ]     open will be next%7 first arr[0]
+//   [|] [ ] [ ]                       open will be arr[1]
+
+isTradingOpen();
+
+// 0 : 17:00 22::00_23:00 23:59
+// 1 : 00:00 22::00_23:00 23:59
+// ..
+// 5 : 00:00 17:00 __
+// sat off

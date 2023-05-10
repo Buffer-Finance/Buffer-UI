@@ -10,23 +10,31 @@ import {
   multiply,
   subtract,
 } from '@Utils/NumString/stringArithmatics';
+import CreationWindowAbi from '@ABIs/creationWindowAbi.json';
 import { ethers } from 'ethers';
 import BinaryOptionsABI from '../ABI/optionsABI.json';
 import { toFixed } from '@Utils/NumString';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useMemo } from 'react';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { knowTillAtom } from './useIsMerketOpen';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
+import { QuickTradeExpiry } from '../PGDrawer';
+import { timeToMins } from '../PGDrawer/TimeSelector';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export function useActiveAssetState(amount = null, referralData) {
   const { address: account } = useUserAccount();
   const qtInfo = useQTinfo();
   const { activePoolObj } = useActivePoolObj();
+  console.log(`activePoolObj: `, activePoolObj);
+  const { configContracts } = useActiveChain();
   const [knowtil, setKnowTill] = useAtom(knowTillAtom);
   const setResInAtom = useSetAtom(setActiveAssetStateAtom);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
+  const currTime = useAtomValue(QuickTradeExpiry);
+  console.log(`currTime: `, timeToMins(currTime));
   const payoutCalls = useMemo(() => {
     // return [];
     return qtInfo.pairs
@@ -118,7 +126,17 @@ export function useActiveAssetState(amount = null, referralData) {
     ],
     [account, activePoolObj]
   );
-  const marketStateCalls = [];
+
+  const marketStateCalls = useMemo(() => {
+    return [
+      {
+        address: configContracts.creation_window,
+        abi: CreationWindowAbi,
+        name: 'isInCreationWindow',
+        params: [currTime ? timeToMins(currTime) : '00:01'],
+      },
+    ];
+  }, [currTime, configContracts.creation_window]);
 
   const calls = activePoolObj
     ? account
@@ -202,40 +220,8 @@ export function useActiveAssetState(amount = null, referralData) {
       assetCalls.length + payoutCalls.length + routerPermissionCalls.length + 1
     );
     if (marketStateCalls?.length) {
-      const [openHour, openMin, closeHour, closeMin] =
-        marketStatusCalls[0] as number[];
-
-      const currentTime =
-        new Date().getUTCHours() * 60 + new Date().getUTCMinutes();
-      const openTime = openHour * 60 + openMin;
-
-      const closeTime = closeHour * 60 + closeMin;
-
-      const closeTs = new Date();
-      closeTs.setUTCHours(closeHour);
-      closeTs.setUTCMinutes(closeMin);
-      closeTs.setUTCSeconds(0);
-      closeTs.setUTCMilliseconds(0);
-      const openTs = new Date();
-      openTs.setUTCHours(openHour);
-      openTs.setUTCMinutes(openMin);
-      openTs.setUTCSeconds(0);
-      openTs.setUTCMilliseconds(0);
-      let tempKnowTill = { date: -1, open: false };
-      // o....t....c -  knowtill:c  ,market open knowtil c  Tested
-      if (currentTime > openTime && currentTime < closeTime)
-        tempKnowTill = { date: closeTs.getTime(), open: true };
-      // TODO - Test
-      // t o--------c - knowtill:o  ,market close knowtill o
-      else if (currentTime < openTime && currentTime < closeTime)
-        tempKnowTill = { date: openTs.getTime(), open: false };
-      // TODO - Test
-      // o.......c  t -  knowtill:-1  ,market close for the day knowtill:-1
-      else if (currentTime > openTime && currentTime > closeTime)
-        tempKnowTill = { date: -1, open: false };
-      if (knowtil.date !== tempKnowTill.date) {
-        setKnowTill(tempKnowTill);
-      }
+      console.log(`marketStatusCalls[0]: `, marketStatusCalls[0]);
+      setKnowTill(marketStatusCalls[0]);
     }
     /*
 

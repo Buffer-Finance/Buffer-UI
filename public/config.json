@@ -221,6 +221,7 @@
     "referral_storage": "0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a",
     "router": "0x2Acf434D53B6427d450Ae44563820f9714B5d776",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
+    "creation_window": "0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1",
     "tokens": {
       "USDC": {
         "address": "0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E",
@@ -332,6 +333,7 @@
   },
   "42161": {
     "marketFactory": "0xeb26C551F606A9692c05FE06Af885717db8cDD24",
+    "creation_window": "0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1",
 
     "referral_storage": "0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29",
     "router": "0x0e0A1241C9cE6649d5D30134a194BA3E24130305",
@@ -1045,7 +1047,7 @@
   },
   "80001": {
     "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
-
+    "creation_window": "0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1",
     "referral_storage": "0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7",
     "router": "0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
@@ -1160,7 +1162,7 @@
   },
   "137": {
     "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
-
+    "creation_window": "0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1",
     "referral_storage": "0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6",
     "router": "0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7",
     "multicall": "0xcA11bde05977b3631167028862bE2a173976CA11",
