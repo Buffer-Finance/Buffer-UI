@@ -1,31 +1,31 @@
-import { Dialog } from "@mui/material";
-import { useAtom } from "jotai";
-import { ShareModalStyles } from "./Components/shareModal";
-import { ForexTimingsModalAtom } from "./PGDrawer/CustomOption";
-import { CloseOutlined } from "@mui/icons-material";
-import { TableHeader } from "@Views/Pro/Common/TableHead";
-import { CellContent } from "@Views/Common/BufferTable/CellInfo";
-import BufferTable from "@Views/Common/BufferTable";
+import { Dialog } from '@mui/material';
+import { useAtom } from 'jotai';
+import { ShareModalStyles } from './Components/shareModal';
+import { ForexTimingsModalAtom } from './PGDrawer/CustomOption';
+import { CloseOutlined } from '@mui/icons-material';
+import { TableHeader } from '@Views/Pro/Common/TableHead';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import BufferTable from '@Views/Common/BufferTable';
 interface IMarketTimingsModal {}
-const headNameArray = ["Day of the week", "Market open/close"];
+const headNameArray = ['Day of the week', 'Market open/close'];
 const dataArr = [
   [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ],
   [
-    "Open all day",
-    "Open all day",
-    "Open all day",
-    "Open all day",
-    "Closed from 16:00 GMT",
-    "Open all day",
-    "Open from 17:00 GMT",
+    'Closed from 10:00PM - 11:00PM UTC',
+    'Closed from 10:00PM - 11:00PM UTC',
+    'Closed from 10:00PM - 11:00PM UTC',
+    'Closed from 10:00PM - 11:00PM UTC',
+    'Closed from 17:00PM UTC',
+    'Closed all day',
+    'Open from 17:00 UTC',
   ],
 ];
 const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
@@ -37,13 +37,16 @@ const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
       <TableHeader
         col={col}
         headsArr={headNameArray}
-        className="text-f10 text-1"
+        className="text-f11 text-1 mr-4"
       />
     );
   };
   const BodyFormatter = (row: number, col: number) => {
     return (
-      <CellContent content={[dataArr[col][row]]} className="text-f10  text-6" />
+      <CellContent
+        content={[dataArr[col][row]]}
+        className="text-f11  text-6 font-[500] "
+      />
     );
   };
 
@@ -51,7 +54,7 @@ const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
     <Dialog open={show} onClose={closeModal}>
       <ShareModalStyles>
         <ModalHeader
-          header={"Forex Trading Timings"}
+          header={'Forex Trading Timings'}
           onClick={closeModal}
           className=""
         />
@@ -67,14 +70,14 @@ const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
             shouldShowMobile
           />
         </div>
-        <div className="text-6 text-f10 mt-5 sm:px-2">
+        {/* <div className="text-6 text-f10 mt-5 sm:px-2">
           Additionally, there are the following <b>holidays</b> where market are
           closed throughout the day:
           <div className="ml-1 my-3">
             <div className="mt-2">1.&nbsp; January 1st - 3rd</div>
             <div className="mt-2">2.&nbsp; December 25th - 27th </div>
           </div>
-        </div>
+        </div> */}
       </ShareModalStyles>
     </Dialog>
   );

@@ -86,7 +86,7 @@ const BuyTrade: React.FC<any> = ({}) => {
     allowance
   );
   let MarketOpenWarning: ReactNode | null = null;
-  if (activeAsset.category == 'Forex') {
+  if (activeAsset.category == 'Forex' && knowTill === false) {
     MarketOpenWarning = <MarketTimingWarning />;
   }
   usePrice(true);
@@ -192,6 +192,7 @@ const BuyTrade: React.FC<any> = ({}) => {
           </span>
         </ConnectionRequired>
       }
+      {MarketOpenWarning}
     </div>
   );
 };

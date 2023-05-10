@@ -73,7 +73,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
     const isCustom = typeof customTrade.is_up === 'boolean';
     const expirationInMins = timeToMins(expiration);
     const isForex = activeAsset.category === 'Forex';
-    const marketCloseTime = Math.floor(knowTill.date / 1000);
     const currentTime = Math.floor(new Date().getTime() / 1000);
 
     if (state.txnLoading > 1) {
@@ -85,7 +84,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       return true;
     }
 
-    if (isForex && !knowTill) {
+    if (isForex && knowTill === false) {
       return toastify({
         type: 'error',
         msg: 'Forex Market is closed currently!',
