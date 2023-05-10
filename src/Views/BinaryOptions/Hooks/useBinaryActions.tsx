@@ -219,26 +219,11 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         inf: 1,
       });
       const instantTradingApiUrl =
-        'https://app.buffer.finance/api/v1/instant-trading';
+        'https://oracle.buffer-finance-api.link/instant-trading/trade/initiate/';
       let currentTimestamp = Date.now();
-      let currentUTCTimestamp = Math.round(
-        (currentTimestamp + new Date().getTimezoneOffset() * 60 * 1000) / 1000
-      );
+      let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
 
-      // const msg = [address, ...args, currentUTCTimestamp];
-      const msg = [
-        '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
-        5000000,
-        900,
-        true,
-        '0xf7EE46d45Da17A12734685dB4E238d35af8E6e0C',
-        110026400,
-        50,
-        true,
-        'test',
-        10,
-        1683601318,
-      ];
+      const msg = [address, ...args, currentUTCTimestamp];
       console.log(`useBinaryActions-msg: `, msg);
       const argTypes = [
         'address',
@@ -279,7 +264,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         traderNFTId: args[8],
       };
       const reqBody = {
-        trade: TradeQuery,
         pair: activeAsset.tv_id,
         user_address: address,
         user_signature: signature,
@@ -287,21 +271,36 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         env: binary.activeChain.id,
       };
       console.log(`useBinaryActions-reqBody: `, reqBody);
-      // dispatch({ type: 'SET_TXN_LOADING', payload: 1 });
-
       try {
-        await sleep(2000);
-        const txHash = 'fsadfasd';
-        // dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-        toastify({
-          id,
-          msg: confirmationModal.content,
-          type: 'success',
-          hash: `${binary.activeChain.blockExplorers?.default.url}/tx/${txHash}`,
-          body: null,
-          confirmationModal: null,
-          timings: 100,
+        const response = await axios.post(instantTradingApiUrl, TradeQuery, {
+          params: reqBody,
         });
+        console.log(`useBinaryActions-response: `, response);
+        if (response.data?.error) {
+          // error code
+          toastify({
+            id,
+            msg: (
+              <span>
+                Oops! There is some error. Can you please try again?
+                <br />
+                <span className="!text-3">Error: {response.data.error}</span>
+              </span>
+            ),
+            type: 'error',
+          });
+        } else {
+          // no error
+          toastify({
+            id,
+            msg: confirmationModal.content,
+            type: 'success',
+            hash: `${binary.activeChain.blockExplorers?.default.url}/tx/${response.data?.hash}`,
+            body: null,
+            confirmationModal: null,
+            timings: 100,
+          });
+        }
       } catch (e) {
         toastify({
           id,
@@ -316,7 +315,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         });
       }
       setLoading(null);
-      // const response = await axios.post(instantTradingApiUrl, reqBody);
     } else {
       writeCall(cb, 'initiateTrade', args, null, confirmationModal);
     }

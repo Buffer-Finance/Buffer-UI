@@ -218,30 +218,18 @@
     }
   },
   "421613": {
-    "marketFactory": "0x4ffb103F4Cfa8eF4a72227799c325DA53341Da59",
-    "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
-    "router": "0x76c52E83d7dcCc70107a66BAd44D042D22D06be7",
+    "referral_storage": "0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a",
+    "router": "0x2Acf434D53B6427d450Ae44563820f9714B5d776",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
     "tokens": {
       "USDC": {
-        "address": "0x658e6B62e7ab1d2B29a08F85f8442edEed562b48",
-        "meta": "0xaB9Babe3A7445333d8c2BAA0A5bF749cF37096b5",
+        "address": "0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E",
+        "meta": "0x4B435688BB22cCcF61Ed1b4B6464393a3607bA38",
         "decimals": 6,
         "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
         "name": "USDC",
-        "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
-        "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 5,
-        "is_pol": false
-      },
-      "ARB": {
-        "address": "0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8",
-        "meta": "0x2e32CDf0AC7a0110f2EfAF97E3a4803a238b607D",
-        "decimals": 18,
-        "img": "/Chains/ARBITRIUM.png",
-        "name": "ARB",
-        "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
-        "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f",
+        "pool_address": "0x997CF4dDf0F38e77bE0Ff8f14A050949503288ee",
+        "faucet": "0x51469Ec9B8AE9B3Fbf985e735C2E3758FbD4e408",
         "min_amount": 5,
         "is_pol": false
       }
@@ -263,15 +251,8 @@
           {
             "token": "USDC",
             "options_contracts": {
-              "config": "0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d",
-              "current": "0x0823584A67005C9855ff583FC7840D40cfB30276"
-            }
-          },
-          {
-            "token": "ARB",
-            "options_contracts": {
-              "config": "0xf0565425853a27B170AdD5C0e6fFBAc66403f4f5",
-              "current": "0x6406d4FB22Ebac283CbdaB0806684da0013615Fb"
+              "config": "0x7036D2b82078e7749f684975167942EC8F1bCe57",
+              "current": "0x01D0A89c7b0AdF4E6b28Cc6b6A7D33b7aB98d814"
             }
           }
         ]
@@ -292,15 +273,8 @@
           {
             "token": "USDC",
             "options_contracts": {
-              "config": "0x28b11Bde44236FBF2772ED6e0e2DD992B65ceCac",
-              "current": "0xd7c4448e2Ac721e77360d86e413Ae66620034b8A"
-            }
-          },
-          {
-            "token": "ARB",
-            "options_contracts": {
-              "config": "0x90A3A26Ee9B25eb23C1Afcb1b47A18fa98636E45",
-              "current": "0x7f8A37f6F03450f2641f56Eff7bb589F65Cc1eD2"
+              "config": "0x3907CAa03Fe8dFC2b4ff4e649CF53AA863F8C14d",
+              "current": "0x53EA55C80201f6Dbe531516996216aD11e252683"
             }
           }
         ]
@@ -321,15 +295,8 @@
           {
             "token": "USDC",
             "options_contracts": {
-              "config": "0x25E845e9B6d361fE6aa1a796CcE010F55daA9A50",
-              "current": "0xfe1F6691dF24B1b786e7C7a3c57D4ec0cfc43B77"
-            }
-          },
-          {
-            "token": "ARB",
-            "options_contracts": {
-              "config": "0x3d48bF4BbF81150d2630861AE43EB00FDEAdd5cD",
-              "current": "0x50025C0b1a2Ce3E1A145BDD1C54cFE297cE3DD38"
+              "config": "0x00Ab4339aB8150AB34CBC57F36A66Cb6700b27E5",
+              "current": "0x2D3D330612D974Cf63dAd79Ad3Bc2160725503EC"
             }
           }
         ]
@@ -350,16 +317,16 @@
           {
             "token": "USDC",
             "options_contracts": {
-              "config": "0x06f96c3c08679642d80878A51F5919dF1B380869",
-              "current": "0x105e1f5044e651309F7E2fc1114351Ab8dffBBE9"
+              "config": "0x40717F8Be495571Df24Fc5DF771c7dfFa3dac759",
+              "current": "0xBc6eDA5959174A7333b12088596d06A94F41Ad28"
             }
           }
         ]
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet",
-      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite"
+      "MAIN": "https://api.thegraph.com/subgraphs/name/buffertech/instant-trading-arbitrum-test",
+      "LITE": "https://api.thegraph.com/subgraphs/name/buffertech/instant-trading-arbitrum-test"
     },
     "env": "arbitrum-testnet"
   },

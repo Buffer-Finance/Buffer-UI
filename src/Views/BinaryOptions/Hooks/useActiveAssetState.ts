@@ -118,20 +118,7 @@ export function useActiveAssetState(amount = null, referralData) {
     ],
     [account, activePoolObj]
   );
-  const marketStateCalls = useMemo(() => {
-    // return [];
-    const currDay = new Date().getUTCDay();
-    // TODO verify Sunday - Saturday : 0 - 6
-
-    return [
-      {
-        address: activePoolObj.options_contracts.config,
-        abi: ConfigABI,
-        name: 'marketTimes',
-        params: [currDay.toString()],
-      },
-    ];
-  }, [activePoolObj]);
+  const marketStateCalls = [];
 
   const calls = activePoolObj
     ? account
