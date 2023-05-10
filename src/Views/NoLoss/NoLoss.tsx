@@ -41,6 +41,7 @@ const NoLoss: React.FC<any> = ({}) => {
         markets={appConfig}
         activeTournament={activeTournament}
         sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
         className={
           sidebarOpen ? 'open-sidebar-animation' : 'closed-sidebar-animation'
         }

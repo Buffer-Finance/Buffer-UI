@@ -22,6 +22,7 @@ import { MarketInterface } from 'src/MultiChart';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { CSSTransition } from 'react-transition-group';
+import NumberTooltip from '@Views/Common/Tooltips';
 export const tournamentButtonStyles =
   'bg-blue flex gap-x-2 px-[8px] py-[2px] text-f12 items-center rounded-[4px] ';
 export const touramentsAtom = atom([]);
@@ -30,8 +31,15 @@ const NoLossTournamentList: React.FC<{
   markets: { [a: string]: MarketInterface } | undefined;
   activeTournament: ITournament | null;
   sidebarOpen: boolean;
+  setSidebarOpen: (a: any) => void;
   className?: string;
-}> = ({ markets, activeTournament, className, sidebarOpen }) => {
+}> = ({
+  markets,
+  activeTournament,
+  className,
+  setSidebarOpen,
+  sidebarOpen,
+}) => {
   const data = useNoLossTournaments();
   const [activeTid, setActiveTid] = useAtom(activetIdAtom);
 
@@ -73,6 +81,10 @@ const NoLossTournamentList: React.FC<{
               )}
             </div>
           ))}
+          <CrossIcon
+            className={'cursor-pointer'}
+            onClick={() => setSidebarOpen(false)}
+          />
         </div>
         <div className="flex-col">
           {data?.[activeTournamentType]
@@ -106,6 +118,12 @@ const Timer = ({ header, bottom }: { header: number; bottom: string }) => (
 
 const NoLossTournamentTimer = ({ close }: { close: string }) => {
   const timer = useTimer(close);
+  if (timer.seconds < 0)
+    return (
+      <div className="text-f14 text-3 my-3">
+        This contest has expired. Admin will close it shortly
+      </div>
+    );
   return (
     <div className="text-1 flex gap-x-[8px] mt-[8px] mb-[10px]">
       <Timer header={timer.days} bottom="Days" />
@@ -138,6 +156,8 @@ const TournamentCard = ({
       [activeTid]
     );
   };
+  const playTokenDecimals = 18;
+  console.log(`NoLossTournamentList-activeTournament: `, activeTournament);
   return activeTournament ? (
     <div
       className={`w-[100%]  background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
@@ -147,14 +167,20 @@ const TournamentCard = ({
       }`}
       role="button"
       onClick={() => {
-        setactiveTid(tournament.id);
+        if (activeTournament.state == 'Live') setactiveTid(tournament.id);
       }}
     >
       <div className="flex items-center justify-between">
         <div className="text-3 font-semibold text-f12">
           {data[tournament.id].tournamentMeta.name}
         </div>
-        <div className="text-[8px] text-green font-semibold bg-green    bg-opacity-20 chip-green-border px-[8px] py-[2px]">
+        <div
+          className={`text-[8px]  font-semibold ${
+            activeTournament.state == 'Live'
+              ? 'bg-green chip-green-border text-green'
+              : 'chip-blue-border text-3'
+          }  bg-opacity-20 px-[8px] py-[2px]`}
+        >
           {tournament.state}
         </div>
       </div>
@@ -165,14 +191,19 @@ const TournamentCard = ({
       <div className="flex justify-between items-center">
         <div className="flex-col text-f12 items-center">
           <div className="text-3">Prize Pool</div>
-          <div>{activeTournament.prizePool}</div>
+          <div>
+            {divide(
+              activeTournament.prizePool,
+              activeTournament.rewardTokenDecimals
+            )}
+          </div>
         </div>
         <div className="flex-col text-f12 items-end">
           <div className="text-3">Play Tokens</div>
           <div>
             {balance ? (
               <Display
-                data={divide(balance, 18)}
+                data={divide(balance, playTokenDecimals)}
                 className="text-1 content-end"
               />
             ) : (
@@ -184,26 +215,52 @@ const TournamentCard = ({
       <div className="flex items-center justify-between mt-3">
         <div className="flex items-center text-f12 ">
           <TournamentRank />
-          <div className="mt-1  text-1 ml-2">{activeTournament.rewards[0]}</div>
+          <div className="mt-1  text-1 ml-2">
+            <Display
+              data={divide(
+                activeTournament.rewards[0],
+                activeTournament.buyinTokenDecimals
+              )}
+              unit={activeTournament.rewardTokenSymbol}
+            />
+          </div>
         </div>
 
-        <div className="flex items-center gap-x-2">
-          <MIcon />
-          Upto {activeTournament.tournamentConditions.maxParticipants}
-        </div>
+        <NumberTooltip
+          content={
+            'Only upto ' +
+            activeTournament.tournamentConditions.maxParticipants +
+            ' patricipants are allowed for this tournament'
+          }
+        >
+          <div className="flex items-center gap-x-2 text-f12">
+            <MIcon />
+            Upto {activeTournament.tournamentConditions.maxParticipants}
+          </div>
+        </NumberTooltip>
       </div>
       <div className="flex items-center justify-center gap-x-[5px] mt-4">
-        <button
-          className={tournamentButtonStyles}
-          onClick={() => {
-            setactiveTid(tournament.id);
-          }}
-        >
-          <TradeIcon />
-          Trade
-        </button>
+        {activeTournament.state == 'Live' && (
+          <button
+            className={tournamentButtonStyles}
+            onClick={() => {
+              setactiveTid(tournament.id);
+            }}
+          >
+            <TradeIcon />
+            Trade
+          </button>
+        )}
         <button className={tournamentButtonStyles} onClick={buyPlayTokens}>
-          Entry ${divide(activeTournament.tournamentMeta.ticketCost, 6)}
+          Entry
+          <Display
+            data={divide(
+              activeTournament.tournamentMeta.ticketCost,
+              activeTournament.buyinTokenDecimals
+            )}
+            unit={activeTournament.buyinTokenSymbol}
+            precision={0}
+          />
         </button>
       </div>
     </div>
@@ -274,6 +331,29 @@ const TradeIcon = (props: SVGProps<SVGSVGElement>) => (
       fillRule="evenodd"
       d="M3.467 11.473a3.544 3.544 0 0 0 3.906-3.526 3.544 3.544 0 1 0-3.544-3.544 3.544 3.544 0 0 0-.362 7.07Zm-2-3.526a2.363 2.363 0 0 1 2.567-2.354c.356 1 1.149 1.793 2.149 2.15a2.363 2.363 0 1 1-4.717.205ZM5.01 4.403a2.363 2.363 0 1 1 4.726 0 2.363 2.363 0 0 1-4.726 0Z"
       clipRule="evenodd"
+    />
+  </svg>
+);
+
+const CrossIcon = (props: HTMLOrSVGElement) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={22}
+    height={22}
+    fill="none"
+    {...props}
+  >
+    <rect
+      width={14.963}
+      height={14.963}
+      y={10.64}
+      fill="#282B39"
+      rx={7}
+      transform="rotate(-45.321 0 10.64)"
+    />
+    <path
+      fill="#fff"
+      d="m12.32 8.092 1.008.996-4.209 4.256-1.008-.996 4.209-4.256Zm-3.113-.025 4.256 4.208-1.15 1.165L8.055 9.23l1.151-1.164Z"
     />
   </svg>
 );

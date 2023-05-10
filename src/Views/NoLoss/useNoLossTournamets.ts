@@ -88,19 +88,32 @@ export interface ITournament {
   tournamentConditions: Conditions;
   tournamentMeta: MetaInfo;
   rewards: string[];
+  rewardTokenSymbol: string;
+  buyinTokenSymbol: string;
+  rewardTokenDecimals: number;
+  buyinTokenDecimals: number;
   prizePool: string;
 }
 const useTournamentData = (id?: number) => {
   const data = useNoLossTournaments();
   const config = useNoLossStaticConfig();
   const sOrP = useSignerOrPorvider();
-  console.log(`data?.tids: `, data?.tids);
+  console.log(`data?.tids: `, data);
   let ids = [];
   ['Closed', 'Upcoming', 'Live'].forEach((d) => {
     if (data?.[d]) {
       ids = [...ids, ...data?.[d].map((s) => s.id)];
     }
   });
+  let ids2Info = {};
+  ['Closed', 'Upcoming', 'Live'].forEach((d) => {
+    if (data?.[d]) {
+      data[d].forEach((a) => {
+        ids2Info[a.id] = a;
+      });
+    }
+  });
+  console.log(`ids2Info: `, ids2Info);
 
   return useSWR<{
     [id: string]: ITournament;
@@ -137,8 +150,10 @@ const useTournamentData = (id?: number) => {
       console.log(`ddddcopy: `, copy);
       if (copy[0]?.['bulkTournaments']) {
         for (let id in copy[0]?.['bulkTournaments']) {
+          console.log(`ids2Info[id]: `, ids2Info[ids[id]]);
           tid2Info[ids[id]] = {
             id: ids[id],
+            ...ids2Info?.[ids?.[id]],
             ...copy[0]?.['bulkTournaments'][id],
           };
         }

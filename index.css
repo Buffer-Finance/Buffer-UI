@@ -139,6 +139,11 @@ html .MuiDialog-container {
 border-radius: 4.07018px;
 
 }
+.chip-blue-border {
+  border: 0.381579px solid var(--bg-signature);
+border-radius: 4.07018px;
+
+}
 .background-vertical-gradient{
   background:var(--bg-vertical-gradient);
 }
