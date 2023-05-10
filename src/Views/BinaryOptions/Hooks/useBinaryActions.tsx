@@ -245,33 +245,33 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       0xfe233d5ac7aafbdb70a5bca39cab7ea269c40ef8a956b085b45f60dee823aec3262d7dc981899b725c8181164540b3066ce59138fa28f1f8c2c10ad8ef6d61ca1c - solidity pack
       0xf4f26d1699b1029317f045d2a49fdae49c58f7e8253ddc56679c017fe55f05672b681ef25ffce02b173bfe3cbbed9ae3c595cbaddb9ee2f461387e68a1d4266f1c - solidity sha256
       */
-      const hashedMessage = ethers.utils.solidityKeccak256(argTypes, msg);
-      console.log(`useBinaryActions-msg: `, msg);
-      console.log(`useBinaryActions-hashedMessage: `, hashedMessage);
-      const signature = await signer?.signMessage(arrayify(hashedMessage));
-      // const sig = ethers.utils.splitSignature(signature);
-
-      console.log(`useBinaryActions-signature: `, signature);
-      const TradeQuery = {
-        totalFee: args[0],
-        period: args[1],
-        isAbove: args[2],
-        targetContract: args[3],
-        expectedStrike: args[4],
-        slippage: args[5],
-        allowPartialFill: args[6],
-        referralCode: args[7],
-        traderNFTId: args[8],
-      };
-      const reqBody = {
-        pair: activeAsset.tv_id,
-        user_address: address,
-        user_signature: signature,
-        signature_timestamp: currentUTCTimestamp,
-        env: binary.activeChain.id,
-      };
-      console.log(`useBinaryActions-reqBody: `, reqBody);
       try {
+        const hashedMessage = ethers.utils.solidityKeccak256(argTypes, msg);
+        console.log(`useBinaryActions-msg: `, msg);
+        console.log(`useBinaryActions-hashedMessage: `, hashedMessage);
+        const signature = await signer?.signMessage(arrayify(hashedMessage));
+        // const sig = ethers.utils.splitSignature(signature);
+
+        console.log(`useBinaryActions-signature: `, signature);
+        const TradeQuery = {
+          totalFee: args[0],
+          period: args[1],
+          isAbove: args[2],
+          targetContract: args[3],
+          expectedStrike: args[4],
+          slippage: args[5],
+          allowPartialFill: args[6],
+          referralCode: args[7],
+          traderNFTId: args[8],
+        };
+        const reqBody = {
+          pair: activeAsset.tv_id,
+          user_address: address,
+          user_signature: signature,
+          signature_timestamp: currentUTCTimestamp,
+          env: binary.activeChain.id,
+        };
+        console.log(`useBinaryActions-reqBody: `, reqBody);
         const response = await axios.post(instantTradingApiUrl, TradeQuery, {
           params: reqBody,
         });
@@ -308,7 +308,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
             <span>
               Oops! There is some error. Can you please try again?
               <br />
-              <span className="!text-3">Error: {JSON.stringify(e)}</span>
+              <span className="!text-3">Error: {e?.reason}</span>
             </span>
           ),
           type: 'error',
