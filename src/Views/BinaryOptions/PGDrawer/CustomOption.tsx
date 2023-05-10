@@ -71,7 +71,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const { activePoolObj } = useActivePoolObj();
   const isForex = activeAsset.category === 'Forex';
-  const isMarketOpen = knowTill.open && isForex;
+  const isMarketOpen = true;
   const allowance = divide(allowanceWei, activePoolObj.token.decimals);
   const isAssetActive =
     routerPermission &&
