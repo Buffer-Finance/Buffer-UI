@@ -12,18 +12,14 @@ body {
   margin: 0;
   background-color: var(--bg-17);
 }
-.my-node{
-}
-.my-node-enter {
-  transition:  200ms ease-out;
-  max-width:899px;
 
+.my-node-enter {
+  transition:  200ms;
+  max-width:0px;
 }
 .my-node-enter-active {
   max-width: 899px;
-
   transform: translateX(0%);
-
 }
 .my-node-exit {
   transform: translateX(0%);

@@ -52,7 +52,7 @@ const NoLossTournamentList: React.FC<{
     <CSSTransition
       nodeRef={nodeRef}
       in={sidebarOpen}
-      timeout={200}
+      timeout={2000}
       classNames="my-node"
       // unmountOnExit
     >
