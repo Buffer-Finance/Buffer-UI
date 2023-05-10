@@ -17,7 +17,7 @@ const IbfrFaucet: React.FC = () => {
   }, []);
   const { activeChain } = useActiveChain();
   const tokenChains = {
-    '421613': ['USDC', 'ARB'],
+    '421613': ['USDC'],
     '80001': ['USDC'],
   };
 
@@ -83,8 +83,13 @@ const ClaimButton = ({ token }: { token: string }) => {
   const { state } = useGlobal();
   const [btnLoading, setBtnLoading] = useState(0);
   const { configContracts } = useActiveChain();
+  console.log(`index-token: `, token);
+  console.log(
+    `index-configContracts.tokens[token]: `,
+    configContracts.tokens[token]
+  );
   const { writeCall } = useWriteCall(
-    configContracts.tokens[token].faucet,
+    configContracts.tokens?.[token]?.faucet,
     FaucetABI
   );
   const toastify = useToast();
