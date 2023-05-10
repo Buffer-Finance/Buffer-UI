@@ -105,7 +105,7 @@ const ClaimButton = ({ token }: { token: string }) => {
       setBtnLoading(0);
     }
     const overRides = {
-      value: ethers.utils.parseEther('0.001'),
+      value: ethers.utils.parseEther('0.001').toString(),
     };
     const methodName = 'claim';
     setBtnLoading(1);
