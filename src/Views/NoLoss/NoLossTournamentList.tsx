@@ -219,7 +219,7 @@ const TournamentCard = ({
             <Display
               data={divide(
                 activeTournament.rewards[0],
-                activeTournament.buyinTokenDecimals
+                activeTournament.rewardTokenDecimals
               )}
               unit={activeTournament.rewardTokenSymbol}
             />

@@ -65,6 +65,7 @@ const useNoLossConfig = () => {
     `config-root-config-${config.chainId}`,
     {
       fetcher: async (name) => {
+        console.time('GraphForConig');
         const basicQuery = `
       optionContracts: optionContracts(
         first: 1000
@@ -90,6 +91,9 @@ const useNoLossConfig = () => {
             });
           });
         });
+
+        console.timeEnd('GraphForConig');
+        console.time('ContractsForConig');
 
         let returnData = await multicallv2(calls, sOrP, config.multicall, '');
         let copy = getDeepCopy(returnData);
@@ -132,6 +136,8 @@ const useNoLossConfig = () => {
         });
 
         console.log(`appConfig: `, appConfig);
+        console.timeEnd('ContractsForConig');
+
         return appConfig;
       },
       // TODO see if there is retrying machanism on swr than only do this req one time
