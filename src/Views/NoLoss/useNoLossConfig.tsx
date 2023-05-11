@@ -95,6 +95,7 @@ const useNoLossConfig = () => {
         console.timeEnd('GraphForConig');
         console.time('ContractsForConig');
 
+        console.log(`useNoLossConfig-calls: `, calls);
         let returnData = await multicallv2(calls, sOrP, config.multicall, '');
         let copy = getDeepCopy(returnData);
         convertBNtoString(copy);
@@ -115,6 +116,12 @@ const useNoLossConfig = () => {
         response.data.data.optionContracts.forEach((s, sid) => {
           const key = s.asset;
           Calls.forEach((c, cid) => {
+            console.log(
+              `useNoLossConfig-copy[sid + cid][0]: `,
+              copy,
+              sid + cid
+            );
+
             if (appConfig?.[key]) {
               appConfig[key] = {
                 ...appConfig[key],
@@ -126,6 +133,10 @@ const useNoLossConfig = () => {
               };
             }
           });
+          console.log(
+            `useNoLossConfig-appConfig: `,
+            JSON.parse(JSON.stringify(appConfig))
+          );
           appConfig[key] = {
             ...appConfig[key],
             configContract: s.config,

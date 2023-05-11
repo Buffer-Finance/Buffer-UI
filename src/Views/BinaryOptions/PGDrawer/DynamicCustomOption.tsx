@@ -73,14 +73,14 @@ export function DynamicCustomOption({
   const [isSlippageModalOpen, setIsSlippageModalOpen] = useState(false);
 
   const tradeTokenName = tradeToken.name;
-  const min_amount = data?.minFee;
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
   const currStats = {
     max_loss: '12',
     max_payout: '12',
   };
-  const maxTrade = data?.maxFee;
+  const maxTrade = divide(data?.maxFee, tradeTokenDecimals);
+  const min_amount = divide(data?.minFee, tradeTokenDecimals);
 
   if (!data?.maxFee) {
     return (

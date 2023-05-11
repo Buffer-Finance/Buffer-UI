@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
   data: Record<string, any>;
@@ -10,44 +10,27 @@ interface Props {
 }
 
 const NestedObjectDisplay: React.FC<Props> = ({ data, onDataChange }) => {
-  const [localData, setLocalData] = useState(data);
-
-  const handleValueChange = (key: string, value: any) => {
-    const updatedData = {
-      ...localData,
-      [key]: value,
+  const [epoch, setEpoch] = useState(0);
+  const [pause, setPause] = useState(false);
+  useEffect(() => {
+    let interval;
+    if (!pause) {
+      interval = setInterval(() => {
+        setEpoch((e) => e + 100);
+      }, 100);
+    }
+    return () => {
+      clearInterval(interval);
     };
-    setLocalData(updatedData);
-    onDataChange && onDataChange(updatedData);
-  };
-
-  const renderData = (obj: Record<string, any>): JSX.Element[] => {
-    return Object.keys(obj).map((key: string) => {
-      const value = obj[key];
-      if (typeof value === 'object' && value !== null) {
-        return (
-          <div key={key}>
-            <h3>{key}</h3>
-            {renderData(value)}
-          </div>
-        );
-      } else {
-        return (
-          <div key={key}>
-            <span>{key}: </span>
-            <input
-              type="text "
-              className="text-blue"
-              value={localData[key]}
-              onChange={(e) => handleValueChange(key, e.target.value)}
-            />
-          </div>
-        );
-      }
-    });
-  };
-
-  return <div>{renderData(localData)}</div>;
+  }, [pause]);
+  return (
+    <div>
+      {epoch / 1000}s {epoch % 1000}ms
+      <button onClick={() => setPause((p) => !p)}>
+        {pause ? 'paused' : 'not-paused'}
+      </button>
+    </div>
+  );
 };
 
 interface Person {

@@ -51,6 +51,7 @@ export interface OptionBuyintMarketState {
     boosted: string;
   };
 }
+const playTokenDecimals = 18;
 export function getPayoutFromSettlementFee(
   basePayoutExpanded: number | string
 ) {
@@ -127,7 +128,7 @@ const NoLossOptionBuying: React.FC<any> = ({
         tradeToken={{
           address: activeTournament.tournamentMeta.buyinToken,
           name: activeTournament.tournamentMeta.name,
-          decimal: 18,
+          decimal: playTokenDecimals,
         }}
         routerContract={config.router}
         handleApprove={() => {
@@ -161,8 +162,8 @@ const NoLossOptionBuying: React.FC<any> = ({
           //   });
           // }
 
-          const minFee = divide(noLossState?.minFee + '', 8);
-          const maxFee = divide(noLossState?.maxFee + '', 8);
+          const minFee = divide(noLossState?.minFee + '', playTokenDecimals);
+          const maxFee = divide(noLossState?.maxFee + '', playTokenDecimals);
           if (+amount > +minFee || +amount < +maxFee) {
             return toastify({
               type: 'error',
@@ -171,7 +172,7 @@ const NoLossOptionBuying: React.FC<any> = ({
           }
 
           writeCall(config.router, routerAbi, () => {}, 'initiateTrade', [
-            toFixed(multiply(amount, 18), 0),
+            toFixed(multiply(amount, playTokenDecimals), 0),
             duration * 60 + '',
             isUp,
             noLossState?.activeMarket.optionsContract,
