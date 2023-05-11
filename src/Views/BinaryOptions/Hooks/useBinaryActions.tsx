@@ -29,7 +29,7 @@ import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { useTradePolOrBlpPool } from './useTradePolOrBlpPool';
 import { isTestnet } from 'config';
 import axios from 'axios';
-import { useAccount, useSigner } from 'wagmi';
+import { useAccount, useContractEvent, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
 import { multicallv2 } from '@Utils/Contract/multiContract';
@@ -58,6 +58,20 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
   );
+  useContractEvent({
+    address: configContracts.router,
+    abi: routerABI,
+    eventName: 'OpenTrade',
+    listener(assetPair, optionsAddress, configAddress, ...args) {
+      console.log(
+        'opentrade called',
+        assetPair,
+        optionsAddress,
+        configAddress,
+        ...args
+      );
+    },
+  });
   const marketPrice = useAtomValue(priceAtom);
   const toastify = useToast();
   const knowTill = useAtomValue(knowTillAtom);
