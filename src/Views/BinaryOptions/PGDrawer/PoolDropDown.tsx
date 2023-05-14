@@ -43,8 +43,8 @@ export const PoolDropDown = () => {
         <img
           src={
             activePool === 'USDC'
-              ? 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png'
-              : 'https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png'
+              ? 'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png'
+              : 'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085787/bfr.png'
           }
           className="w-[15px] h-[15px]  mr-2 "
         />
@@ -63,16 +63,15 @@ export const PoolDropDown = () => {
           <img
             src={
               activePool === 'USDC'
-                ? 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png'
-                : 'https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png'
+                ? 'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png'
+                : 'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085787/bfr.png'
             }
             className="w-[15px] h-[15px]  mr-2 "
           />
           {activePool}
           <DDIcon
-            className={`ml-[9px] w-[26px] h-[8px] ${
-              isOpen ? 'origin rotate-180' : ''
-            }`}
+            className={`ml-[9px] w-[26px] h-[8px] ${isOpen ? 'origin rotate-180' : ''
+              }`}
           />
         </div>
       )}
@@ -87,8 +86,8 @@ export const PoolDropDown = () => {
           <img
             src={
               singleItem === 'USDC'
-                ? 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png'
-                : 'https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/bfr.png'
+                ? 'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png'
+                : 'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085787/bfr.png'
             }
             className="w-[15px] h-[15px] mr-2 "
           />
