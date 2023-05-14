@@ -11,9 +11,9 @@ interface IProps {
 
 const chainImageMappipng = {
   [chain.polygon.name]:
-    'https://cdn.buffer.finance/Buffer-Website-Data/main/chains/polygon2.png',
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684086043/polygon2.png',
   [chain.polygonMumbai.name]:
-    'https://cdn.buffer.finance/Buffer-Website-Data/main/chains/polygon2.png',
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684086043/polygon2.png',
   [chain.arbitrum.name]: '/Chains/ARBITRIUM.png',
   [chain.arbitrumGoerli.name]: '/Chains/ARBITRIUM.png',
   ['BSC']: '/Chains/BSC.png',
@@ -118,9 +118,9 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                     <span>
                       {account
                         ? `${account.address.slice(
-                            0,
-                            4
-                          )}...${account.address.slice(-4)}`
+                          0,
+                          4
+                        )}...${account.address.slice(-4)}`
                         : 'Connect'}
                     </span>
                     <ArrowDropDownRounded
