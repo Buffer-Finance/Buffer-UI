@@ -47,7 +47,6 @@ export function useActiveAssetState(amount = null, referralData) {
             params: [
               pool.options_contracts.current,
               referralData[2],
-              // 'BJP',
               account || '0x0000000000000000000000000000000000000000',
               highestTierNFT?.tokenId || 0,
               true,
@@ -163,6 +162,7 @@ export function useActiveAssetState(amount = null, referralData) {
 
   if (copy) {
     let [maxAmounts, fees, activeBasePayout] = copy.slice(0, assetCalls.length);
+    console.log(`activeBasePayout: `, activeBasePayout);
 
     const basePayout = subtract(
       '100',

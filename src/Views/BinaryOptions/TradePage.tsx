@@ -19,6 +19,7 @@ const TradePage = () => {
     <>
       {/* <Online> */}
       <TradePageRoot />
+      {/* <Trade /> */}
       {/* </Online> */}
       {/* <Offline>
         <NetworkDisconnected onClick={console.log} />
@@ -26,4 +27,11 @@ const TradePage = () => {
     </>
   );
 };
-export { TradePage };
+const NoLossTrade = () => {
+  return (
+    <>
+      <TradePageRoot />
+    </>
+  );
+};
+export { TradePage, NoLossTrade };

@@ -374,8 +374,8 @@ export const ClaimLBFRBtn = ({
                 y2="5.69167"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#13D6C9" />
-                <stop offset="1" stop-color="#0047D0" />
+                <stop stopColor="#13D6C9" />
+                <stop offset="1" stopColor="#0047D0" />
               </linearGradient>
               <defs>
                 <linearGradient
@@ -386,8 +386,8 @@ export const ClaimLBFRBtn = ({
                   y2="6.18402"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stop-color="#13D6C9" />
-                  <stop offset="1" stop-color="#0047D0" />
+                  <stop stopColor="#13D6C9" />
+                  <stop offset="1" stopColor="#0047D0" />
                 </linearGradient>
               </defs>
             </defs>

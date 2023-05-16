@@ -62,7 +62,6 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const { data: balance } = useBalance({ address: account });
   let gasPrice = data?.formatted?.gasPrice || (1e8).toString();
   // gasPrice = multiply(gasPrice, "2");
-  console.log(`contract?.callStatic: `, contract?.callStatic);
 
   const writeCall = async (
     callBack: (a?: any) => void,

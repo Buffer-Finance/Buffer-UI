@@ -1,4 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useNoLossStaticConfig } from '@Views/NoLoss/useNoLossConfig';
 import axios from 'axios';
 import useSWR from 'swr';
 
@@ -22,11 +23,12 @@ export const usePastTradeQueryByFetch = ({
   currentTime: number;
 }) => {
   const { configContracts } = useActiveChain();
+  const config = useNoLossStaticConfig();
   return useSWR(
     `history-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledPage-${cancelledskip}-account-${account}`,
     {
       fetcher: async () => {
-        const response = await axios.post(configContracts.graph.LITE, {
+        const response = await axios.post(config.graph.MAIN, {
           query: `{ 
             historyTrades: userOptionDatas(
               orderBy: expirationTime

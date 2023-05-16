@@ -1,0 +1,15 @@
+{
+  "buyinToken": "0x600f43Be47203A1a00f5d1ACbA644Cc77E455e18",
+  "close": "1683094815",
+  "creator": "0x32A49a15F8eE598C1EeDc21138DEb23b391f425b",
+  "isClosed": false,
+  "isVerified": true,
+  "name": "Type 0",
+  "playTokenMintAmount": "100000000000000000000",
+  "rewardToken": "0x48E0b889059fD24911b3615d3C718d22D12bd037",
+  "shouldRefundTickets": false,
+  "start": "1683008415",
+  "ticketCost": "1000000000000000000",
+  "tournamentType": 0,
+  "tradingStarted": false
+}

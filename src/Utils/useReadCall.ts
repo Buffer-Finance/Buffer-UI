@@ -3,8 +3,9 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { ethers } from 'ethers';
 import useSWR, { useSWRConfig } from 'swr';
 import { useAccount, useProvider, useSigner } from 'wagmi';
-import { multicallv2 } from './Contract/multiContract';
+import { multicallLinked, multicallv2 } from './Contract/multiContract';
 import getDeepCopy from './getDeepCopy';
+import { useMemo } from 'react';
 
 export const useReadCall = ({
   contracts,
@@ -50,6 +51,41 @@ export const useReadCall = ({
     // refreshInterval: 500,
   });
 };
+export const useCall2Data = (contracts: any, swrKey: string) => {
+  const calls = contracts;
+  const { activeChain, isWrongChain, configContracts, chainInURL } =
+    useActiveChain();
+  const { address: account } = useUserAccount();
+  const { data: signer } = useSigner({ chainId: activeChain.id });
+  const { address } = useAccount();
+  const { cache } = useSWRConfig();
+  const p = useProvider({ chainId: activeChain.id });
+  let signerOrProvider = p;
+
+  if (signer && !isWrongChain && address) {
+    signerOrProvider = signer;
+  }
+  // console.log(signerOrProvider?._network?.chainId, activeChain, 'provider');
+  const key = swrKey + activeChain.id + account + chainInURL;
+
+  // console.log(`signerOrProvider: `, signerOrProvider);
+  return useSWR(calls && calls.length ? key : null, {
+    fetcher: async () => {
+      if (!calls) return null;
+      console.log(`calls: `, calls);
+      let returnData = await multicallLinked(
+        calls,
+        signerOrProvider,
+        configContracts.multicall,
+        swrKey + activeChain.id + account
+      );
+
+      // console.log(returnData, swrKey, cache.get(key), 'returnData');
+      return returnData || cache.get(key);
+    },
+    // refreshInterval: 500,
+  });
+};
 
 export function convertBNtoString(data) {
   if (!data) return;
@@ -80,4 +116,23 @@ export const contractRead = async (contract, method, args, debug = false) => {
     console.log(`${method}-arg: `, args);
   }
   return copy;
+};
+
+export const useSignerOrPorvider = () => {
+  const { address } = useAccount();
+
+  const { activeChain, isWrongChain, configContracts, chainInURL } =
+    useActiveChain();
+  const { data: signer } = useSigner({ chainId: activeChain.id });
+
+  const p = useProvider({ chainId: activeChain.id });
+  const signerOrProvider = useMemo(() => {
+    let signerOrProvider = p;
+
+    if (signer && !isWrongChain && address) {
+      signerOrProvider = signer;
+    }
+    return signerOrProvider;
+  }, [p, signer]);
+  return signerOrProvider;
 };

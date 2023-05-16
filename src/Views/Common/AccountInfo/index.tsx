@@ -24,7 +24,7 @@ const AccountInfo: React.FC<IAccountInfo> = ({
         shouldDisplayString
           ? ''
           : 'px-3 bg-4 special-hover hover:brightness-125'
-      } flex items-center justify-start text-f13 h-[30px] w-fit rounded-[6px]`}
+      } flex items-center justify-start text-f13  w-fit rounded-[6px]`}
     >
       {!shouldDisplayString && <Wallet className="mr-[6px]" />}
       {!account || balance !== null ? (

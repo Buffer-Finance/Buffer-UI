@@ -1,10 +1,15 @@
+import { convertBNtoString } from '@Utils/useReadCall';
 import { Contract, ethers } from 'ethers';
 export interface Call {
   address: string; // Address of the contract
   name: string; // Function name on the contract (example: balanceOf)
   params?: any[]; // Function params
   abi?: any[]; // Abi of the contract
+  id?: string; //identifier of call
 }
+import bigNumberToString from 'bignumber-to-string';
+import getDeepCopy from '@Utils/getDeepCopy';
+
 export const arbMain = 'https://arb1.arbitrum.io/rpc';
 
 export const multicallv2 = async (
@@ -32,10 +37,56 @@ export const multicallv2 = async (
       if (!call) return null;
       const itf = new ethers.utils.Interface(calls[i].abi);
       const tempRes = itf.decodeFunctionResult(calls[i].name, call);
-
       return tempRes;
     });
     return res;
+  } catch (err) {
+    console.log(err, calls, swrKey, 'multicall err');
+    return null;
+  }
+};
+
+export const getReadId = (call: Call) => {
+  console.log(`getReadIdcall: `, call);
+  return call.address + call.name;
+};
+export const getCallId = (address: string, method: string, ...rest) => {
+  return address + method + rest.join('');
+};
+export const multicallLinked = async (
+  calls: Call[],
+  singerOrProvider,
+  multicall,
+  swrKey
+) => {
+  if (!calls.length) return null;
+  try {
+    const calldata = calls.map((call) => {
+      const itf = ethers.utils && new ethers.utils.Interface(call.abi);
+      return [
+        call.address.toLowerCase(),
+        itf.encodeFunctionData(call.name, call.params),
+      ];
+    });
+
+    const contract = new Contract(multicall, arbiAbi, singerOrProvider);
+
+    let returnData = await contract['callStatic']['aggregate'](calldata);
+    if (typeof returnData === 'undefined') return;
+    const resultMap = {};
+
+    returnData.returnData.forEach((call, i) => {
+      if (!call) return null;
+      const itf = new ethers.utils.Interface(calls[i].abi);
+      const returnCall = itf.decodeFunctionResult(calls[i].name, call);
+      const copy = getDeepCopy(returnCall);
+      convertBNtoString(copy);
+      console.log(`calls[i]?.id: `, calls[i]?.id);
+      const id = calls[i]?.id || getReadId(calls[i]);
+      console.log(`id: `, id);
+      resultMap[id] = copy;
+    });
+    return resultMap;
   } catch (err) {
     console.log(err, calls, swrKey, 'multicall err');
     return null;

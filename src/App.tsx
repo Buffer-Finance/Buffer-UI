@@ -34,8 +34,8 @@ import { useToast } from '@Contexts/Toast';
 import { AllTradesPage } from '@Views/AllTrades';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
-import { TradePage } from '@Views/BinaryOptions/TradePage';
-import { TestComponent } from './TestComponent';
+import { NoLossTrade, TradePage } from '@Views/BinaryOptions/TradePage';
+import ExampleComponent from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
 import { MergedPage } from '@Views/AllTrades/allTradesMerged';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
@@ -45,7 +45,9 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
+import { NoLoss } from '@Views/NoLoss/NoLoss';
 
+const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -102,12 +104,12 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
-        <Route path="/test" element={<TestComponent />} />
+        <Route path="/test" element={<ExampleComponent />} />
         <Route path="/pyth" element={<PythPoc />}></Route>
         <Route path="/admin" element={<TradingConfig />}></Route>
         <Route path="/admin/create-pair" element={<CreatePair />}></Route>
         <Route path="/addMarket" element={<AddMarket />} />
-        <Route path="/test2" element={<TestComponent />} />
+        <Route path="/test2" element={<ExampleComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/ref/:code" element={<div>Helo</div>} />
@@ -139,6 +141,7 @@ const AppRoutes = () => {
         <Route path="/trades/merged" element={<MergedPage />} />
         <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<TradePage />} />
+        <Route path="/no-loss/:market" element={<NoLoss />} />
         {/* referral link handling */}
         <Route
           path="/*"

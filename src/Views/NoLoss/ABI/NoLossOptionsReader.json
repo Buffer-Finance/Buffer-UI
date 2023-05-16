@@ -1,0 +1,20 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "optionsContract",
+        "type": "address"
+      },
+      { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "uint256", "name": "traderNFTId", "type": "uint256" },
+      { "internalType": "bool", "name": "isAbove", "type": "bool" }
+    ],
+    "name": "getPayout",
+    "outputs": [
+      { "internalType": "uint256", "name": "payout", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

@@ -1,10 +1,9 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 const Background = styled.div`
+  background-color: var(--bg-0);
+  padding: 0px 10px;
   color: var(--text-6);
-  height: 100%;
-  /* max-width: 400px;
-  margin: 0 auto; */
   .marketTxt {
     display: inline;
     font-size: 1.9rem;
@@ -118,30 +117,21 @@ const Background = styled.div`
     display: flex;
     width: 100%;
     align-items: center;
-    border-radius: 0.4rem;
-    border: 0.8px solid var(--border-color);
-
+    justify-content: space-between;
+    /* border-radius: 0.4rem; */
     .each-duration {
       cursor: pointer;
-      width: 100%;
+      /* width: 100%; */
+      font-size: 14px;
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 4px solid var(--time-selector-bg);
-      padding-bottom: 6px;
-      padding-top: 6px;
-      border-top: 0.4px solid transparent;
-      border-left: 0.4px solid transparent;
-      border-right: 0.4px solid transparent;
+      border-radius: 6px;
+      padding: 6px 8.55px;
+      border: 1px solid transparent;
 
+      background: var(--bg-1);
       &.active {
-        border-bottom: 4px solid #a3e3ff;
-        background-color: var(--time-selector-bg);
-        border-top: 0.4px solid var(--border-color);
-        border-left: 0.4px solid var(--border-color);
-        border-right: 0.4px solid var(--border-color);
+        background: var(--bg-0);
+        border: 1px solid #a3e3ff;
       }
     }
   }

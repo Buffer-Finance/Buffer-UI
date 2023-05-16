@@ -12,12 +12,55 @@ body {
   margin: 0;
   background-color: var(--bg-17);
 }
+
+.my-node-enter {
+  transition:  200ms;
+  max-width:0px;
+}
+.my-node-enter-active {
+  max-width: 899px;
+  transform: translateX(0%);
+}
+.my-node-exit {
+  transform: translateX(0%);
+  max-width: 899px;
+
+}
+.my-node-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition:  200ms ;
+  max-width: 0px;
+}
+.my-node-exit-done {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition:  200ms;
+  max-width:0px;
+}
+
+  
+/* write close sidebar animation just like open sidebar animation above */
+
+
 .child-svg-squeeze svg{
   transform: scale(0.8);
 }
 
+.border-right{
+  border-right: 2px solid #2A2A3A;
+}
+.border-left{
+  border-left: 2px solid #2A2A3A;
+}
+.border-bottom{
+  border-bottom: 2px solid #2A2A3A;
+}
 .flexlayout__layout{
   margin:0px 5px
+}
+.left-border{
+  border-left-width: 3px;
 }
 
 html .flip-y{
@@ -77,17 +120,32 @@ html .MuiDialog-container {
   -webkit-background-clip: text;
 }
 :root {
-  --bg-0:#1c1c28;
-  --bg-1:#232334;
+  --bg-0: #0D0D15;
+  --bg-1:#282B39;
   --bg-2:#171722;
-  --text-2:#808191;
+  --bg-vertical-gradient:linear-gradient(180deg, #000000 43%,var(--bg-1) 93.44%);
+  --text-2:#7F87A7;
   --text-3:#C3C2D4;
   --text-1:#ffffff;
+  --text-4: #808191;
   --bg-signature:#3772ff;
   --yellow-border: #e2ca18;
   --white-border: #2bd67b26;
   --mole-offset: 140%;
   --mole-animation-duration: 0.4s;
+}
+.chip-green-border {
+  border: 0.381579px solid #2BD67B;
+border-radius: 4.07018px;
+
+}
+.chip-blue-border {
+  border: 0.381579px solid var(--bg-signature);
+border-radius: 4.07018px;
+
+}
+.background-vertical-gradient{
+  background:var(--bg-vertical-gradient);
 }
 body .flexlayout__layout {
   --color-text: #eeeeee;
@@ -95,6 +153,9 @@ body .flexlayout__layout {
 }
 .flexlayout__tab_button_content{
   color:var(--text-1);
+}
+.flexlayout__tab_button--selected{
+  background-color: #21232f;
 }
 .blue-text-shadow {
   text-shadow: 0px 5px 34px rgba(255, 255, 255, 0.39);
@@ -139,9 +200,10 @@ body .flexlayout__layout {
 }
 
 .tv-h {
-  border-top-right-radius: 20px;
-  border-top-left-radius: 20px;
-  padding-top: 10px;
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .mouse-animation {

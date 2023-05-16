@@ -59,8 +59,9 @@ module.exports = {
       1: "var(--text-1)",
       2: "var(--text-2)",
       3: "var(--text-3)",
-      4: "#6f6e84",
+      4: "var(--text-4)",
       5: "F7F7F7",
+      6: "var(--text-4)",
       "blue-1": "#5973fe",
       "blue-2": "#0788e6",
       "light-blue": "#99D5EF",
@@ -75,6 +76,7 @@ module.exports = {
     backgroundColor: {
       primary: "var(--bg-0)",
       "cross-bg": "#303044",
+      "vertical-gradient": "var(--bg-vertical-gradient)",
       1: "var(--bg-1)",
       2: "var(--bg-2)",
       3: "#12121a",

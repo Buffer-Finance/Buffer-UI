@@ -105,7 +105,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    if (isCustom && expirationInMins > timeToMins(activeAsset.max_duration)) {
+    if (expirationInMins > timeToMins(activeAsset.max_duration)) {
       return toastify({
         type: 'error',
         msg: `Expiration time should be within ${getUserError(
@@ -114,7 +114,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    if (isCustom && expirationInMins < timeToMins(activeAsset.min_duration)) {
+    if (expirationInMins < timeToMins(activeAsset.min_duration)) {
       return toastify({
         type: 'error',
         msg: `Expiration time should be greater than ${getUserError(
