@@ -1558,8 +1558,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-mainnet",
-      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-mainnet-lite"
+      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api"
     }
   }
 }
