@@ -1182,8 +1182,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-test",
-      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/polygon-test-lite"
+      "MAIN": "https://api.thegraph.com/subgraphs/name/buffertech/arbitrum-testnet",
+      "LITE": "https://api.thegraph.com/subgraphs/name/buffertech/arbitrum-testnet"
     }
   },
   "137": {
