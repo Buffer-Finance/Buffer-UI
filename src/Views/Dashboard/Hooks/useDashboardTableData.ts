@@ -49,10 +49,7 @@ export const useDashboardTableData = () => {
             address
             openDown
             openUp
-            currentUtilization
             openInterest
-            payoutForDown
-            payoutForUp
             volume
             tradeCount
           }
