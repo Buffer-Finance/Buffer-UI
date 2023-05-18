@@ -36,6 +36,7 @@ import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { UserTrades } from '@Views/BinaryOptions/UserTrades';
 import { ActiveTable } from '@Views/BinaryOptions';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
 var json = {
   global: {
     tabEnableClose: true,
@@ -270,6 +271,7 @@ const DesktopTrad = () => {
           </div>
         )}
       /> */}
+      <OneCTModal />
       <CustomisationWarnModal
         onConfirm={() => {
           seLayoutConsent((l) => {

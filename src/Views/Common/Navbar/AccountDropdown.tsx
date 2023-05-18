@@ -4,6 +4,7 @@ import { ArrowDropDownRounded } from '@mui/icons-material';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import * as chain from '@wagmi/core/chains';
 import { BlueBtn } from '../V2-Button';
+import { OneCTButton } from '@Views/OneCT/OneCTButton';
 
 interface IProps {
   inDrawer?: boolean;
@@ -108,6 +109,8 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                       className={`dropdown-arrow transition-all duration-300 w-6 h-6 ease-out `}
                     />
                   </div>
+                  <OneCTButton />
+
                   <div
                     role="button"
                     className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#232334] hover:brightness-125 hover:bg-1`}

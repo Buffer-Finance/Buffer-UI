@@ -74,7 +74,7 @@ const notYetHandledConfigs = ['marketTime'];
 
 const configDataAtom = atom<ConfigValue[]>([]);
 const poolConfigAtom = atom<ConfigValue[]>([]);
-const poolDecimals = [6,6,18]
+const poolDecimals = [6, 6, 18];
 type ChainInfo = (typeof Config)['421613'];
 const TradingConfig: React.FC<any> = ({}) => {
   const { activeChain } = useActiveChain();
@@ -252,13 +252,12 @@ const TradingConfig: React.FC<any> = ({}) => {
   return (
     <div className="mx-[30px] mt-[20px]">
       <RenderAdminNavbar />
-
       <div className="text-f12 text-2 mt-4">
         Tip: You can filter settings via entering market-name or setting-name in
         search box.
       </div>
       <div className="text-f14 text-1 mt-4">
-        Click on "Edit" -> Press "Change" 
+        Click on "Edit" {'->'} Press "Change"
       </div>
       <div className="flex items-center text-f14 mt-4">
         Select Pool :&nbsp;&nbsp;&nbsp;
@@ -308,7 +307,7 @@ const TradingConfig: React.FC<any> = ({}) => {
             c.market.pair +
             ' : ' +
             c.getter +
-            (' (' + poolDecimals[id]+ ' dec)' )
+            (' (' + poolDecimals[id] + ' dec)')
         )}
         values={poolResponse?.map((v, id) => (
           <ValueEditor
@@ -369,9 +368,11 @@ const ValueEditor: React.FC<{
           : (() => {
               if (!Number.isNaN(+value)) {
                 if (decimals?.[configData[id]?.getter]) {
-                  if(configData[id].getter == 'maxLiquidity' && configData[id].market.pair.includes('ARB')){
+                  if (
+                    configData[id].getter == 'maxLiquidity' &&
+                    configData[id].market.pair.includes('ARB')
+                  ) {
                     return divide(value, 18);
-
                   }
                   return divide(value, decimals[configData[id].getter]);
                 }
