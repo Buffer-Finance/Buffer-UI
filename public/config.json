@@ -358,8 +358,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet",
-      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite"
+      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api"
     }
   },
   "42161": {
@@ -1070,7 +1070,7 @@
     ],
     "graph": {
       "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api",
-      "LITE": "https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite"
+      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api"
     }
   },
   "80001": {
