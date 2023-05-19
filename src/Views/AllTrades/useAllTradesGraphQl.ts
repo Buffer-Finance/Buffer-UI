@@ -163,6 +163,7 @@ export const useAllTradesGraphQl = ({
                   address
                 }
                 optionContract {
+                  asset
                   address
                 }
             }
