@@ -29,7 +29,7 @@ import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useTradePolOrBlpPool } from '../Hooks/useTradePolOrBlpPool';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
-
+export const binaryOptionsAtom = atom<string>('00:05');
 export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   const [amount, setAmount] = useAtom(ammountAtom);
   const { address: account } = useUserAccount();
@@ -85,7 +85,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
     MarketOpenWarning = <MarketTimingWarning />;
   }
   const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
-  const [currentTime, setCurrentTime] = useState('00:06');
+  const [currentTime, setCurrentTime] = useAtom(binaryOptionsAtom);
   return (
     <>
       <SlippageModal

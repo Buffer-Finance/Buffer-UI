@@ -1,8 +1,16 @@
 import { atom, useSetAtom } from 'jotai';
 import { SVGProps } from 'react';
+import { useOneCTWallet } from './useOneCTWallet';
 
 const OneCTButton: React.FC<any> = ({}) => {
   const setModal = useSetAtom(isOneCTModalOpenAtom);
+  const { registeredOneCT } = useOneCTWallet();
+  if (registeredOneCT)
+    return (
+      <span title="Blazingly Fast 1 Click Trading enabled. Click to disable">
+        <LightningIconSquare />
+      </span>
+    );
   return (
     <button
       onClick={() => setModal((m) => !m)}
@@ -31,3 +39,19 @@ export const LightningIcon = (props: SVGProps<SVGSVGElement>) => (
 );
 
 export const isOneCTModalOpenAtom = atom<boolean>(false);
+export const LightningIconSquare = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={28}
+    height={28}
+    fill="none"
+    className=" brightness-125 glowing-animation"
+    {...props}
+  >
+    <rect width={28} height={28} fill="#FFE200" rx={3} />
+    <path
+      fill="#232334"
+      d="M17.918 7.394a1 1 0 0 0-1.578-1.147l-7.998 7A1.001 1.001 0 0 0 9.002 15h3.483l-2.403 5.606a1 1 0 0 0 1.578 1.147l7.998-7a1 1 0 0 0 .278-1.103 1.002 1.002 0 0 0-.937-.647h-3.484l2.403-5.609Z"
+    />
+  </svg>
+);

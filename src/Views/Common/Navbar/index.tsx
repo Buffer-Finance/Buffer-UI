@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { BufferLogoComponent } from './BufferLogo';
 import { BlueBtn } from '../V2-Button';
 import { getTabs } from 'src/Config/getTabs';
@@ -40,6 +40,7 @@ export const Navbar: React.FC<INavbar> = () => {
       type: 'UPDATE_SIDEBAR_STATE',
     });
   };
+
   const show = !urlSettings?.hide;
   return (
     <header className="sticky bg-primary top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1  z-[102]">

@@ -88,6 +88,7 @@ export const activeAssetStateAtom = atom<{
   stats: string;
   payouts: { [key: string]: string } | null;
   routerPermission: { [key: string]: string } | null;
+  user2signer: string[];
 }>({
   balance: null,
   allowance: null,
@@ -95,6 +96,7 @@ export const activeAssetStateAtom = atom<{
   stats: null,
   payouts: null,
   routerPermission: null,
+  user2signer: null,
 });
 
 export const setActiveAssetStateAtom = atom(null, (get, set, payload) => {

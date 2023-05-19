@@ -18,7 +18,7 @@ import { approveModalAtom, QuickTradeExpiry } from '../PGDrawer';
 import { getUserError, timeToMins } from '../PGDrawer/TimeSelector';
 import { slippageAtom } from '../Components/SlippageModal';
 import { useActiveAssetState } from './useActiveAssetState';
-import { useQTinfo } from '..';
+import { activeAssetStateAtom, useQTinfo } from '..';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
@@ -29,11 +29,13 @@ import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { useTradePolOrBlpPool } from './useTradePolOrBlpPool';
 import { isTestnet } from 'config';
 import axios from 'axios';
-import { useAccount, useContractEvent, useSigner } from 'wagmi';
+import { useAccount, useContractEvent, useProvider, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
 import { multicallv2 } from '@Utils/Contract/multiContract';
 import { arrayify, hexlify } from 'ethers/lib/utils.js';
+import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import secureLocalStorage from 'react-secure-storage';
 
 export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const binary = useQTinfo();
@@ -42,7 +44,13 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const referralData = useReferralCode(binary.activeChain);
   const activeAssetState = useActiveAssetState(userInput, referralData);
   const [balance, allowance, _, currStats] = activeAssetState;
+  console.log(`useBinaryActions-currStats: `, currStats);
   const [expiration] = useAtom(QuickTradeExpiry);
+  const res = activeAssetState?.[activeAssetState?.length - 1];
+  console.log(`useBinaryActions-res: `, res);
+  // useOneCTWallet();
+  const provider = useProvider({ chainId: binary.activeChain.id });
+
   const [token] = useAtom(sessionAtom);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const [, setIsApproveModalOpen] = useAtom(approveModalAtom);
@@ -81,6 +89,10 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const cb = (a) => {
     setLoading(null);
   };
+  const pk = secureLocalStorage.getItem('one-ct-wallet-pk' + address);
+
+  const registeredOneCT = res ? is1CTEnabled(res, pk, provider) : false;
+  console.log(`useBinaryActions-registeredOneCT: `, registeredOneCT);
   const { data: signer } = useSigner({ chainId: binary.activeChain.id });
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
@@ -199,7 +211,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
 
     let args = [
       toFixed(multiply(userInput, activePoolObj.token.decimals), 0),
-      expirationInMins * 60 + '',
+      '300',
       customTrade.is_up,
       option_contract.current,
       toFixed(multiply(('' + price).toString(), 8), 0),
@@ -255,13 +267,23 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       0xf4f26d1699b1029317f045d2a49fdae49c58f7e8253ddc56679c017fe55f05672b681ef25ffce02b173bfe3cbbed9ae3c595cbaddb9ee2f461387e68a1d4266f1c - solidity sha256
       */
       try {
-        const hashedMessage = ethers.utils.solidityKeccak256(argTypes, msg);
-        console.log(`useBinaryActions-msg: `, msg);
-        console.log(`useBinaryActions-hashedMessage: `, hashedMessage);
-        const signature = await signer?.signMessage(arrayify(hashedMessage));
+        const hashedMessage = arrayify(
+          ethers.utils.solidityKeccak256(argTypes, msg)
+        );
+        let signature = null;
+        console.log(`useBinaryActions-registeredOneCT: `, registeredOneCT);
+        if (registeredOneCT) {
+          const oneCTWallet = new ethers.Wallet(
+            pk,
+            provider as ethers.providers.StaticJsonRpcProvider
+          );
+          signature = await oneCTWallet?.signMessage(hashedMessage);
+          console.log(`useBinaryActions-signature: `, signature);
+        } else {
+          signature = await signer?.signMessage(hashedMessage);
+        }
         // const sig = ethers.utils.splitSignature(signature);
 
-        console.log(`useBinaryActions-signature: `, signature);
         const TradeQuery = {
           totalFee: args[0],
           period: args[1],
@@ -279,6 +301,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
           user_signature: signature,
           signature_timestamp: currentUTCTimestamp,
           env: binary.activeChain.id,
+          isOneCT: registeredOneCT ? true : false,
         };
         console.log(`useBinaryActions-reqBody: `, reqBody);
         const response = await axios.post(instantTradingApiUrl, TradeQuery, {

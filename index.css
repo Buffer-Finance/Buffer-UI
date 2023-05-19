@@ -26,6 +26,16 @@ body {
   max-width: 899px;
 
 }
+.glowing-animation {
+  animation: glowing 1000ms infinite alternate ease-in-out; 
+}
+@keyframes glowing {
+  from{
+    box-shadow: #FFE200 0px 0px 0px 0px;
+  }to{
+    box-shadow: #FFE200 0px 0px 10px 0.5px;
+  }
+}
 .my-node-exit-active {
   opacity: 0;
   transform: translateX(-100%);

@@ -122,6 +122,13 @@ export function useActiveAssetState(amount = null, referralData) {
         name: 'allowance',
         params: [account, qtInfo.routerContract],
       },
+
+      {
+        address: qtInfo.routerContract,
+        abi: RouterABI,
+        name: 'accountMapping',
+        params: [account],
+      },
     ],
     [account, activePoolObj]
   );
@@ -259,10 +266,11 @@ export function useActiveAssetState(amount = null, referralData) {
     const boostedPayout = subtract(activeAssetPayout, basePayout);
 
     //destructuring the account response
-    const [balance, allowance] = account
+    const [balance, allowance, user2signer] = account
       ? copy.slice(-userSpecificCalls.length)
       : new Array(userSpecificCalls.length).fill(null);
 
+    console.log(`user2signer: `, user2signer);
     setResInAtom({
       balance,
       allowance,
@@ -272,6 +280,7 @@ export function useActiveAssetState(amount = null, referralData) {
       routerPermission,
       activeAssetPayout,
       boostedPayout,
+      user2signer,
     });
     //update response
     response = [
@@ -282,6 +291,7 @@ export function useActiveAssetState(amount = null, referralData) {
       routerPermission,
       boostedPayout,
       activeAssetPayout,
+      user2signer,
     ];
   }
 

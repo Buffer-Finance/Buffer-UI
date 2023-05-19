@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import Wallet from '@Assets/Elements/wallet';
 import { ArrowDropDownRounded, Share } from '@mui/icons-material';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -18,6 +18,8 @@ import { useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useDisconnect } from 'wagmi';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 interface IProps {
   inDrawer?: boolean;
 }
@@ -37,7 +39,11 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
   const { activeChain } = useActiveChain();
   const disconnect = useDisconnect();
+  const { address } = useUserAccount();
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
+  useEffect(() => {
+    setOneCTModal(false);
+  }, [address]);
   return (
     <ConnectButton.Custom>
       {({
