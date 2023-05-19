@@ -55,7 +55,7 @@ export const usePastTradeQueryByFetch = ({
                   address
                 }
                 optionContract {
-         
+                  asset
                   address
                 }
             }
@@ -86,7 +86,7 @@ export const usePastTradeQueryByFetch = ({
                   address
                 }
                 optionContract {
-         
+                  asset
                   address
                 }
             }
@@ -109,7 +109,7 @@ export const usePastTradeQueryByFetch = ({
                   address
                 }
                 optionContract {
-         
+                  asset
                   address
                 }
             }
@@ -137,7 +137,7 @@ export const usePastTradeQueryByFetch = ({
                   address
                 }
                 optionContract {
-         
+                  asset
                   address
                 }
             }
