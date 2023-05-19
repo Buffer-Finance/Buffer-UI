@@ -56,7 +56,7 @@ export const useDashboardTableData = () => {
           volumePerContracts(   
             orderBy: timestamp
             orderDirection: desc
-            first: 1000
+            first: 10000
             where: { timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
             optionContract {
               address

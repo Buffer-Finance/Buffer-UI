@@ -151,7 +151,7 @@ export const usePastTradeQueryByFetch = ({
             historyLength: userOptionDatas(
               orderBy: expirationTime
               orderDirection: desc
-              first: 1000
+              first: 10000
               where: {
                 user_: {address: "${account}"},
                 state_in: [1,2,3],

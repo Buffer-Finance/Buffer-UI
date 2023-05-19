@@ -132,7 +132,7 @@ export const useWeeklyLeaderboardQuery = () => {
           totalData: weeklyLeaderboards(
             orderBy: netPnL
             orderDirection: desc
-            first: 1000
+            first: 10000
             where: {timestamp: "${timestamp}"}
           ) {
             totalTrades

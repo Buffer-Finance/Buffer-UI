@@ -57,7 +57,7 @@ export const useProfileGraphQl = () => {
     if (!account) return null;
     const basicQuery = `
       userOptionDatas(  
-        first: 1000 
+        first: 10000 
         where: {user: "${account}", state_not: 1}) {
           optionContract {
             address
@@ -69,6 +69,7 @@ export const useProfileGraphQl = () => {
           expirationTime
         }
       activeData:userOptionDatas(
+        first: 10000 
         where: {user: "${account}", state: 1}
       ) {
         optionContract {
@@ -81,7 +82,7 @@ export const useProfileGraphQl = () => {
 
     const extraQuery = `
       next1000: userOptionDatas(
-        first: 1000
+        first: 10000
         where: {user: "${account}", state_not: 1, expirationTime_gt: ${lastSavedTimestamp}}
       ) {
         optionContract {
@@ -95,11 +96,16 @@ export const useProfileGraphQl = () => {
       }
     `;
 
-    const query = lastSavedTimestamp
-      ? `{${basicQuery + extraQuery}}`
-      : `{${basicQuery}}`;
+    const query =
+      // lastSavedTimestamp
+      // ? `{${basicQuery + extraQuery}}`
+      // :
+      `{${basicQuery}}`;
 
-    const response = await axios.post(configContracts.graph.MAIN, { query });
+    const response = await axios.post(configContracts.graph.MAIN, {
+      query,
+      variables: {},
+    });
 
     let responseData = response.data?.data;
 
