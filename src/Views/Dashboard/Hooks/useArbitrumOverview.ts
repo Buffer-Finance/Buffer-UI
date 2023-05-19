@@ -53,7 +53,7 @@ function getTokenX24hrsquery(tokensArray: string[], prevDayEpoch: number) {
       return `${token}24stats:volumePerContracts(
           orderBy: timestamp
           orderDirection: desc
-          first: 1000
+          first: 10000
           where: {${condition}, timestamp_gt: ${prevDayEpoch}}
           ) {
             amount

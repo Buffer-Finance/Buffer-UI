@@ -51,12 +51,13 @@ export type ItradingMetricsData = metricsData & {
 
 export const useProfileGraphQl = () => {
   const { address: account } = useUserAccount();
-  const { configContracts } = useActiveChain();
+  const { configContracts, activeChain } = useActiveChain();
 
   const fetchData = async (account: string, lastSavedTimestamp: string) => {
+    if (!account) return null;
     const basicQuery = `
       userOptionDatas(  
-        first: 1000 
+        first: 10000 
         where: {user: "${account}", state_not: 1}) {
           optionContract {
             address
@@ -68,6 +69,7 @@ export const useProfileGraphQl = () => {
           expirationTime
         }
       activeData:userOptionDatas(
+        first: 10000 
         where: {user: "${account}", state: 1}
       ) {
         optionContract {
@@ -80,7 +82,7 @@ export const useProfileGraphQl = () => {
 
     const extraQuery = `
       next1000: userOptionDatas(
-        first: 1000
+        first: 10000
         where: {user: "${account}", state_not: 1, expirationTime_gt: ${lastSavedTimestamp}}
       ) {
         optionContract {
@@ -94,11 +96,16 @@ export const useProfileGraphQl = () => {
       }
     `;
 
-    const query = lastSavedTimestamp
-      ? `{${basicQuery + extraQuery}}`
-      : `{${basicQuery}}`;
+    const query =
+      // lastSavedTimestamp
+      // ? `{${basicQuery + extraQuery}}`
+      // :
+      `{${basicQuery}}`;
 
-    const response = await axios.post(configContracts.graph.MAIN, { query });
+    const response = await axios.post(configContracts.graph.MAIN, {
+      query,
+      // variables: {},
+    });
 
     let responseData = response.data?.data;
 
@@ -125,7 +132,7 @@ export const useProfileGraphQl = () => {
   };
 
   const { data } = useSWR(
-    `profile-query-account-${account}-lastSavedTimestamp`,
+    `profile-query-account-${account}-lastSavedTimestamp-activeChain-${activeChain}`,
     {
       fetcher: () => fetchData(account, null),
       refreshInterval: 300,

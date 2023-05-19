@@ -28,26 +28,6 @@ interface IChainConfig {
 
 export const isTestnet = import.meta.env.VITE_ENV.toUpperCase() === 'TESTNET';
 
-export const baseGraphqlUrl =
-  import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
-    ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-mainnet'
-    : 'https://api.thegraph.com/subgraphs/name/bufferfinance/buffer-testnet';
-
-export const baseGraphqlLiteUrl =
-  import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
-    ? {
-        sandbox:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite',
-        testnet:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/mainnet-lite',
-      }
-    : {
-        sandbox:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite',
-        testnet:
-          'https://api.thegraph.com/subgraphs/name/bufferfinance/testnet-lite',
-      };
-
 export const periodsValue = [86400, 259200, 604800, 2592000, 5184000, 7776000];
 export const optionsPeriodsValue = [
   86400, 604800, 1209600, 1814400, 2419200, 2592000, 5184000, 7776000,

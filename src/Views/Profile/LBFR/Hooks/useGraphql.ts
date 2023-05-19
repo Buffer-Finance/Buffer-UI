@@ -7,8 +7,8 @@ import { isTestnet } from 'config';
 import { useUserAccount } from '@Hooks/useUserAccount';
 
 const LBFRgraphEndpoint = isTestnet
-  ? 'https://api.thegraph.com/subgraphs/name/bufferfinance/lbfr-testnet'
-  : 'https://api.thegraph.com/subgraphs/name/bufferfinance/lbfr-mainnet';
+  ? 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/lbfr-arbitrum-testnet/api'
+  : 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/lbfr-arbitrum-mainnet/api';
 export const getWeekIdFromTimestamp = (timestamp: number) => {
   let dayTimestamp = Math.floor(
     (timestamp - 4 * 86400 - 16 * 3600) / (86400 * 7)
