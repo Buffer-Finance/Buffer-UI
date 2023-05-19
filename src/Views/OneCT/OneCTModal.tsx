@@ -10,9 +10,9 @@ const OneCTModal: React.FC<any> = ({}) => {
   const isModalOpen = useAtomValue(isOneCTModalOpenAtom);
   const setModal = useSetAtom(isOneCTModalOpenAtom);
   const { loadOrCreate } = useOneCTWallet();
-  useEffect(() => {
-    if (isModalOpen) loadOrCreate();
-  }, [isModalOpen]);
+  // useEffect(() => {
+  //   if (isModalOpen) loadOrCreate();
+  // }, [isModalOpen]);
   return (
     <ModalBase open={isModalOpen} onClose={() => setModal((m) => false)}>
       <div className="flex justify-between items-center">
@@ -29,6 +29,14 @@ const OneCTModal: React.FC<any> = ({}) => {
       </div>
 
       <div className="flex-col mt-[25px] ">
+        <Card>
+          <>
+            <div className="text-3 text-f14 font-[500]">Create 1CT Account</div>
+            <BlueBtn className=" !w-fit px-[15px]" onClick={console.log}>
+              Create
+            </BlueBtn>
+          </>
+        </Card>
         <Card>
           <>
             <div className="text-3 text-f14 font-[500]">Hello I am link</div>
