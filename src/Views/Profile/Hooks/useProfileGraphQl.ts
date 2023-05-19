@@ -52,41 +52,13 @@ export type ItradingMetricsData = metricsData & {
 export const useProfileGraphQl = () => {
   const { address: account } = useUserAccount();
   const { configContracts, activeChain } = useActiveChain();
-  const [lastSavedTimestamp, setLastSavedTimestamp] = useState<string>('');
-  // console.log(lastSavedTimestamp, 'lastSavedTimestamp');
-  const { data } = useSWR(
-    `profile-query-account-${account}-lastSavedTimestamp-${lastSavedTimestamp}-activeChain-${activeChain}`,
-    {
-      fetcher: async () => {
-        const basicQuery = `
-        userOptionDatas(  
-          first: 1000 
-          where: {user: "${account}", state_not: 1}) {
-            optionContract {
-              address
-              token
-              asset
-            }
-            payout
-            totalFee
-            expirationTime
-          }
-        activeData:userOptionDatas(
-          where: {user: "${account}", state: 1}
-        ) {
-          optionContract {
-            address
-            token
-          }
-            totalFee
-          }
-      `;
 
-        const extraQuery = `
-       next1000: userOptionDatas(
-          first: 1000
-          where: {user: "${account}", state_not: 1, expirationTime_gt: ${lastSavedTimestamp}}
-        ) {
+  const fetchData = async (account: string, lastSavedTimestamp: string) => {
+    if (!account) return null;
+    const basicQuery = `
+      userOptionDatas(  
+        first: 1000 
+        where: {user: "${account}", state_not: 1}) {
           optionContract {
             address
             token
@@ -96,23 +68,67 @@ export const useProfileGraphQl = () => {
           totalFee
           expirationTime
         }
-      `;
-        const query = lastSavedTimestamp
-          ? `{${basicQuery + extraQuery}}`
-          : `{${basicQuery}}`;
-        //Warning: Cant use lite endpioint as it doesnt contain the token and asset data for the query.
-        const response = await axios.post(configContracts.graph.MAIN, {
-          query,
-        });
-        if (response.data?.data.userOptionDatas.length === 1000) {
-          setLastSavedTimestamp(
-            response.data?.data.userOptionDatas[999].expirationTime
-          );
+      activeData:userOptionDatas(
+        where: {user: "${account}", state: 1}
+      ) {
+        optionContract {
+          address
+          token
         }
+        totalFee
+      }
+    `;
 
-        // console.log(response, 'response');
-        return response.data?.data as ProfileGraphQlResponse;
-      },
+    const extraQuery = `
+      next1000: userOptionDatas(
+        first: 1000
+        where: {user: "${account}", state_not: 1, expirationTime_gt: ${lastSavedTimestamp}}
+      ) {
+        optionContract {
+          address
+          token
+          asset
+        }
+        payout
+        totalFee
+        expirationTime
+      }
+    `;
+
+    const query = lastSavedTimestamp
+      ? `{${basicQuery + extraQuery}}`
+      : `{${basicQuery}}`;
+
+    const response = await axios.post(configContracts.graph.MAIN, { query });
+
+    let responseData = response.data?.data;
+
+    if (
+      lastSavedTimestamp === null &&
+      responseData.userOptionDatas.length === 1000
+    ) {
+      const newLastSavedTimestamp =
+        responseData.userOptionDatas[999].expirationTime;
+      const nextData = await fetchData(account, newLastSavedTimestamp);
+      responseData.userOptionDatas = [
+        ...responseData.userOptionDatas,
+        ...nextData.userOptionDatas,
+      ];
+      responseData.next1000 = nextData.next1000;
+    }
+
+    if (lastSavedTimestamp && responseData.next1000.length === 1000) {
+      const newLastSavedTimestamp = responseData.next1000[999].expirationTime;
+      const nextData = await fetchData(account, newLastSavedTimestamp);
+      responseData.next1000 = [...responseData.next1000, ...nextData.next1000];
+    }
+    return responseData as ProfileGraphQlResponse;
+  };
+
+  const { data } = useSWR(
+    `profile-query-account-${account}-lastSavedTimestamp-activeChain-${activeChain}`,
+    {
+      fetcher: () => fetchData(account, null),
       refreshInterval: 300,
     }
   );
