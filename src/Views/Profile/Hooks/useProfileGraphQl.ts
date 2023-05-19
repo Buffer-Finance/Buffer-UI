@@ -51,11 +51,11 @@ export type ItradingMetricsData = metricsData & {
 
 export const useProfileGraphQl = () => {
   const { address: account } = useUserAccount();
-  const { configContracts } = useActiveChain();
+  const { configContracts, activeChain } = useActiveChain();
   const [lastSavedTimestamp, setLastSavedTimestamp] = useState<string>('');
   // console.log(lastSavedTimestamp, 'lastSavedTimestamp');
   const { data } = useSWR(
-    `profile-query-account-${account}-lastSavedTimestamp-${lastSavedTimestamp}`,
+    `profile-query-account-${account}-lastSavedTimestamp-${lastSavedTimestamp}-activeChain-${activeChain}`,
     {
       fetcher: async () => {
         const basicQuery = `
