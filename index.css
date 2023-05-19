@@ -39,6 +39,9 @@ body {
   max-width:0px;
 }
 
+.MuiSnackbar-anchorOriginTopCenter {
+  background-color: #232334;
+}
   
 /* write close sidebar animation just like open sidebar animation above */
 

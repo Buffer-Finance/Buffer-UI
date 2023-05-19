@@ -191,6 +191,7 @@ function App() {
           autoHideDuration={3500}
           onClose={() => setSnack({ message: null })}
           action={null}
+          anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
         >
           <Alert
             onClose={() => setSnack({ message: null })}
