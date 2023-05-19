@@ -21,9 +21,9 @@ export const usePastTradeQueryByFetch = ({
   cancelledfirst: number;
   currentTime: number;
 }) => {
-  const { configContracts } = useActiveChain();
+  const { configContracts, activeChain } = useActiveChain();
   return useSWR(
-    `history-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledPage-${cancelledskip}-account-${account}`,
+    `history-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledPage-${cancelledskip}-account-${account}-activeChain-${activeChain}`,
     {
       fetcher: async () => {
         const response = await axios.post(configContracts.graph.LITE, {
