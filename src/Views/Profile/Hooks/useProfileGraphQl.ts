@@ -104,7 +104,7 @@ export const useProfileGraphQl = () => {
 
     const response = await axios.post(configContracts.graph.MAIN, {
       query,
-      variables: {},
+      // variables: {},
     });
 
     let responseData = response.data?.data;
