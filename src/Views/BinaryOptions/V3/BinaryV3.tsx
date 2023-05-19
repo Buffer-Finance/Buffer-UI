@@ -1,11 +1,11 @@
 import { useV3Config } from './useV3Config';
 import { MultiChart } from 'src/MultiChart';
 import { DynamicActiveAsset } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
-// import { NoLossOptionBuying } from './NoLossOptionBuying';
 import { Skeleton } from '@mui/material';
 import { UserTrades } from '@Views/BinaryOptions/UserTrades';
+import { V3OptionBuying } from './v3OptionBuying';
 
-const NoLoss: React.FC<any> = ({}) => {
+const BinaryV3: React.FC<any> = ({}) => {
   const { data: appConfig } = useV3Config();
   const activeTournament = false; //FIXME - temporary fix
   return (
@@ -21,10 +21,10 @@ const NoLoss: React.FC<any> = ({}) => {
             <DynamicActiveAsset markets={appConfig} payout="23%" />
             {activeTournament ? (
               <>
-                {/* <NoLossOptionBuying
+                <V3OptionBuying
                   activeTournament={activeTournament}
                   markets={appConfig}
-                /> */}
+                />
                 <div className="flex-grow relative mt-[18px] text-2 mx-3">
                   <UserTrades />
                 </div>
@@ -47,4 +47,4 @@ const NoLoss: React.FC<any> = ({}) => {
   );
 };
 
-export { NoLoss };
+export { BinaryV3 };
