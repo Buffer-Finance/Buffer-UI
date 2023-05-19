@@ -1182,8 +1182,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://api.thegraph.com/subgraphs/name/buffertech/arbitrum-testnet",
-      "LITE": "https://api.thegraph.com/subgraphs/name/buffertech/arbitrum-testnet"
+      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api"
     }
   },
   "137": {
