@@ -92,7 +92,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const pk = secureLocalStorage.getItem('one-ct-wallet-pk' + address);
 
   const registeredOneCT = res ? is1CTEnabled(res, pk, provider) : false;
-  console.log(`useBinaryActions-registeredOneCT: `, registeredOneCT);
   const { data: signer } = useSigner({ chainId: binary.activeChain.id });
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
@@ -271,14 +270,14 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
           ethers.utils.solidityKeccak256(argTypes, msg)
         );
         let signature = null;
-        console.log(`useBinaryActions-registeredOneCT: `, registeredOneCT);
         if (registeredOneCT) {
           const oneCTWallet = new ethers.Wallet(
             pk,
             provider as ethers.providers.StaticJsonRpcProvider
           );
+          console.log(`useBinaryActions[1ct]-oneCTWallet: `, oneCTWallet);
           signature = await oneCTWallet?.signMessage(hashedMessage);
-          console.log(`useBinaryActions-signature: `, signature);
+          console.log(`useBinaryActions[1ct]-signature: `, signature);
         } else {
           signature = await signer?.signMessage(hashedMessage);
         }
@@ -303,11 +302,12 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
           env: binary.activeChain.id,
           isOneCT: registeredOneCT ? true : false,
         };
-        console.log(`useBinaryActions-reqBody: `, reqBody);
+        console.log(`useBinaryActions[1ct]-reqBody: `, reqBody);
+        console.log(`useBinaryActions[1ct]-TradeQuery: `, TradeQuery);
         const response = await axios.post(instantTradingApiUrl, TradeQuery, {
           params: reqBody,
         });
-        console.log(`useBinaryActions-response: `, response);
+        console.log(`useBinaryActions[1ct]-response: `, response);
         if (response.data?.error) {
           // error code
           toastify({

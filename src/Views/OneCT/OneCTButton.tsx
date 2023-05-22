@@ -2,22 +2,39 @@ import { atom, useSetAtom } from 'jotai';
 import { SVGProps } from 'react';
 import { useOneCTWallet } from './useOneCTWallet';
 
+import { useQTinfo } from '@Views/BinaryOptions';
+import Joyride from 'react-joyride';
 const OneCTButton: React.FC<any> = ({}) => {
   const setModal = useSetAtom(isOneCTModalOpenAtom);
+  const qtInfo = useQTinfo();
+  const { disableOneCt } = useOneCTWallet();
+
+  const steps = [
+    {
+      target: '#onect-enable-btn',
+      content: 'This is my awesome feature!',
+    },
+  ];
   const { registeredOneCT } = useOneCTWallet();
   if (registeredOneCT)
     return (
-      <span title="Blazingly Fast 1 Click Trading enabled. Click to disable">
+      <span
+        title="Blazingly Fast 1 Click Trading enabled. Click to disable"
+        onClick={disableOneCt}
+      >
         <LightningIconSquare />
       </span>
     );
   return (
-    <button
-      onClick={() => setModal((m) => !m)}
-      className="bg-[#232334]  flex items-center  w-[30px] justify-center rounded-sm hover:brightness-125 active:brightness-75"
-    >
-      <LightningIcon className=" scale-105 " />
-    </button>
+    <Joyride steps={steps}>
+      <button
+        onClick={() => setModal((m) => !m)}
+        id="onect-enable-btn"
+        className="bg-[#232334]  flex items-center  w-[30px] justify-center rounded-sm hover:brightness-125 active:brightness-75"
+      >
+        <LightningIcon className=" scale-105 " />
+      </button>
+    </Joyride>
   );
 };
 

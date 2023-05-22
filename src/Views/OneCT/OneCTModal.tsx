@@ -14,20 +14,20 @@ const OneCTModal: React.FC<any> = ({}) => {
   const isModalOpen = useAtomValue(isOneCTModalOpenAtom);
   const setModal = useSetAtom(isOneCTModalOpenAtom);
   const [laoding, setLaoding] = useState(false);
-  const {
-    oneCTWallet,
-    generatePk,
-    registeredOneCT,
-    registerOneCt,
-    createLoading,
-    oneCtPk,
-  } = useOneCTWallet();
+  const { activeChain } = useActiveChain();
+  const { generatePk, registeredOneCT, registerOneCt, createLoading, oneCtPk } =
+    useOneCTWallet();
   const { writeCall } = useIndependentWriteCall();
+  const provider = useProvider({ chainId: activeChain.id });
   const qtInfo = useQTinfo();
   const toastify = useToast();
-  const handleRegister = () => {
-    if (oneCTWallet?.address) {
+  const handleRegister = (privateKey?: string) => {
+    if (privateKey || oneCtPk) {
       setLaoding(true);
+      const oneCTWallet = new ethers.Wallet(
+        privateKey || oneCtPk,
+        provider as ethers.providers.StaticJsonRpcProvider
+      );
       writeCall(
         qtInfo.routerContract,
         RouterAbi,
@@ -46,10 +46,12 @@ const OneCTModal: React.FC<any> = ({}) => {
   };
   const initializers = async () => {
     if (!isModalOpen) return;
-    console.log(`OneCTModal-oneCTWallet: `, oneCTWallet);
+    console.log(`[flow]OneCTModal-oneCTWallet: `, oneCtPk);
     if (!oneCtPk) {
-      await generatePk();
-      handleRegister();
+      const pk = await generatePk();
+      console.log(`[flow]pk generated: `, pk);
+
+      handleRegister(pk);
       return;
     } else if (!registeredOneCT) return handleRegister();
   };
@@ -76,7 +78,7 @@ const OneCTModal: React.FC<any> = ({}) => {
         <Card>
           <>
             <div className="">Create 1CT Account</div>
-            {oneCTWallet?.address ? (
+            {oneCtPk ? (
               <div className="flex gap-x-2">
                 <GreenTickMark />
                 Created
@@ -126,6 +128,9 @@ const Card = ({ children }: { children: JSX.Element }) => (
   </div>
 );
 import { SVGProps } from 'react';
+import { useProvider } from 'wagmi';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { ethers } from 'ethers';
 const GreenTickMark = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

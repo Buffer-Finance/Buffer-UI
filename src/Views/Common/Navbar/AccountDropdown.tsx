@@ -14,12 +14,13 @@ import BufferDropdown from '../BufferDropdown';
 import { SVGProps } from 'react';
 import copyToClipboard from '@Utils/copyToClipBoard';
 import { Tooltip } from '@mui/material';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useDisconnect } from 'wagmi';
+import { useDisconnect, useProvider } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { activeAssetStateAtom } from '@Views/BinaryOptions';
 interface IProps {
   inDrawer?: boolean;
 }
@@ -40,10 +41,16 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   const { activeChain } = useActiveChain();
   const disconnect = useDisconnect();
   const { address } = useUserAccount();
+  const { oneCtPk, disableOneCt } = useOneCTWallet();
+  const provider = useProvider({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   useEffect(() => {
     setOneCTModal(false);
   }, [address]);
+  const res = useAtomValue(activeAssetStateAtom);
+  const registeredOneCT = res?.user2signer
+    ? is1CTEnabled(res?.user2signer, oneCtPk, provider)
+    : false;
   return (
     <ConnectButton.Custom>
       {({
@@ -51,7 +58,6 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
         chain,
         openAccountModal,
         openChainModal,
-
         openConnectModal,
         authenticationStatus,
         mounted,
@@ -135,9 +141,9 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                   </div>
                   <OneCTButton />
                   <BufferDropdown
-                    items={Object.keys({ name: 'amit' }).map((s) => ({
+                    items={Object.keys({ name: 'maxwell' }).map((s) => ({
                       name: s,
-                      value: 'amit',
+                      value: 'maxwell',
                     }))}
                     className={'chart-type-dd !translate-x-[-73%] '}
                     initialActive={0}
@@ -215,14 +221,23 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                           </div>
                           <div className="flex items-center gap-x-3 text-f14">
                             <LightningIcon /> One Click Trading
-                            <BlueBtn
-                              className="!ml-[13px] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
-                              onClick={() => {
-                                setOneCTModal(true);
-                              }}
-                            >
-                              Activate
-                            </BlueBtn>
+                            {registeredOneCT ? (
+                              <BlueBtn
+                                className="!ml-[13px] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+                                onClick={disableOneCt}
+                              >
+                                DeActivate
+                              </BlueBtn>
+                            ) : (
+                              <BlueBtn
+                                className="!ml-[13px] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+                                onClick={() => {
+                                  setOneCTModal(true);
+                                }}
+                              >
+                                Activate
+                              </BlueBtn>
+                            )}
                           </div>
                         </div>
                       );

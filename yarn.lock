@@ -1863,6 +1863,11 @@
   resolved "https://registry.npmjs.org/@formkit/auto-animate/-/auto-animate-1.0.0-beta.6.tgz"
   integrity sha512-PVDhLAlr+B4Xb7e+1wozBUWmXa6BFU8xUPR/W/E+TsQhPS1qkAdAsJ25keEnFrcePSnXHrOsh3tiFbEToOzV9w==
 
+"@gilbarbara/deep-equal@^0.1.1":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@gilbarbara/deep-equal/-/deep-equal-0.1.2.tgz#1a106721368dba5e7e9fb7e9a3a6f9efbd8df36d"
+  integrity sha512-jk+qzItoEb0D0xSSmrKDDzf9sheQj/BAPxlgNxgmOaA3mxpUa6ndJLYGZKsJnIVEQSD8zcTbyILz7I0HcnBCRA==
+
 "@gnosis.pm/safe-deployments@1.19.0":
   version "1.19.0"
   resolved "https://registry.npmjs.org/@gnosis.pm/safe-deployments/-/safe-deployments-1.19.0.tgz"
@@ -8124,7 +8129,7 @@ deep-object-diff@^1.1.0:
   resolved "https://registry.npmjs.org/deep-object-diff/-/deep-object-diff-1.1.9.tgz"
   integrity sha512-Rn+RuwkmkDwCi2/oXOFS9Gsr5lJZu/yTGpK7wAaAIE75CC+LCGEZHpY6VQJa/RoJcrmaA/docWJZvYohlNkWPA==
 
-deepmerge@^4.2.2:
+deepmerge@^4.2.2, deepmerge@^4.3.1:
   version "4.3.1"
   resolved "https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz"
   integrity sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==
@@ -10060,6 +10065,11 @@ executable@^4.1.1:
   dependencies:
     pify "^2.2.0"
 
+exenv@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
+  integrity sha512-Z+ktTxTwv9ILfgKCk32OX3n/doe+OcLTRtqK9pcL+JsP3J1/VW8Uvl4ZjLlKqeW4rzK4oesDOGMEMRIZqtP4Iw==
+
 expand-brackets@^2.1.4:
   version "2.1.4"
   resolved "https://registry.npmjs.org/expand-brackets/-/expand-brackets-2.1.4.tgz"
@@ -11889,6 +11899,16 @@ is-interactive@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/is-interactive/-/is-interactive-1.0.0.tgz"
   integrity sha512-2HvIEKRoqS62guEC+qBjpvRubdX910WCMuJTZ+I9yvqKU2/12eSL549HMwtabb4oupdj2sMP50k+XJfB/8JE6w==
+
+is-lite@^0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/is-lite/-/is-lite-0.8.2.tgz#26ab98b32aae8cc8b226593b9a641d2bf4bd3b6a"
+  integrity sha512-JZfH47qTsslwaAsqbMI3Q6HNNjUuq6Cmzzww50TdP5Esb6e1y2sK2UAaZZuzfAzpoI2AkxoPQapZdlDuP6Vlsw==
+
+is-lite@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/is-lite/-/is-lite-0.9.2.tgz#4b19e9a26b7c99ed50f748bcf088db57893d0730"
+  integrity sha512-qZuxbaEiKLOKhX4sbHLfhFN9iA3YciuZLb37/DfXCpWnz8p7qNL2lwkpxYMXfjlS8eEEjpULPZxAUI8N6FYvYQ==
 
 is-lower-case@^1.1.0:
   version "1.1.3"
@@ -14631,6 +14651,11 @@ pofile@^1.1.0:
   resolved "https://registry.npmjs.org/pofile/-/pofile-1.1.4.tgz"
   integrity sha512-r6Q21sKsY1AjTVVjOuU02VYKVNQGJNQHjTIvs4dEbeuuYfxgYk/DGD2mqqq4RDaVkwdSq0VEtmQUOPe/wH8X3g==
 
+popper.js@^1.16.0:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
+  integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
+
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.npmjs.org/posix-character-classes/-/posix-character-classes-0.1.1.tgz"
@@ -15267,6 +15292,19 @@ react-fetch-streams@^1.1.2:
   resolved "https://registry.yarnpkg.com/react-fetch-streams/-/react-fetch-streams-1.1.2.tgz#a93dee4c69b1c5762311570b9fd2a5cc783f296c"
   integrity sha512-hSs3VnklUjhicsiBWHJRtYIYu/nCm+zihkMbAJYGZBvWTXhjFzKk5ieuJNtuoszoXUjA7G7ISLwJz+IWETcVQQ==
 
+react-floater@^0.7.6:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/react-floater/-/react-floater-0.7.6.tgz#a98ee90e3d51200c6e6a564ff33496f3c0d7cfee"
+  integrity sha512-tt/15k/HpaShbtvWCwsQYLR+ebfUuYbl+oAUJ3DcEDkgYKeUcSkDey2PdAIERdVwzdFZANz47HbwoET2/Rduxg==
+  dependencies:
+    deepmerge "^4.2.2"
+    exenv "^1.2.2"
+    is-lite "^0.8.2"
+    popper.js "^1.16.0"
+    prop-types "^15.8.1"
+    react-proptype-conditional-require "^1.0.4"
+    tree-changes "^0.9.1"
+
 react-gravatar@^2.6.3:
   version "2.6.3"
   resolved "https://registry.npmjs.org/react-gravatar/-/react-gravatar-2.6.3.tgz"
@@ -15303,10 +15341,30 @@ react-is@^18.2.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
+react-joyride@^2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/react-joyride/-/react-joyride-2.5.4.tgz#e428fe322acf867624179cb3561ad128648495bd"
+  integrity sha512-CLV1Ju79iRKIP/KqsEX05nSxMBzT41BhPAyNrTdBQWEYAkpyo6iiCPelk6No2W8iPgw373JKk2cK7AQ5Q3lFew==
+  dependencies:
+    deepmerge "^4.3.1"
+    exenv "^1.2.2"
+    is-lite "^0.9.2"
+    prop-types "^15.8.1"
+    react-floater "^0.7.6"
+    react-is "^16.13.1"
+    scroll "^3.0.1"
+    scrollparent "^2.0.1"
+    tree-changes "^0.9.2"
+
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.npmjs.org/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-proptype-conditional-require@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-proptype-conditional-require/-/react-proptype-conditional-require-1.0.4.tgz#69c2d5741e6df5e08f230f36bbc2944ee1222555"
+  integrity sha512-nopsRn7KnGgazBe2c3H2+Kf+Csp6PGDRLiBkYEDMKY8o/EIgft/WnIm/OnAKTawZiLnJXHAqhpFBddvs6NiXlw==
 
 react-qr-code@^2.0.11:
   version "2.0.11"
@@ -16158,6 +16216,16 @@ screenfull@^5.1.0:
   version "5.2.0"
   resolved "https://registry.npmjs.org/screenfull/-/screenfull-5.2.0.tgz"
   integrity sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==
+
+scroll@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/scroll/-/scroll-3.0.1.tgz#d5afb59fb3592ee3df31c89743e78b39e4cd8a26"
+  integrity sha512-pz7y517OVls1maEzlirKO5nPYle9AXsFzTMNJrRGmT951mzpIBy7sNHOg5o/0MQd/NqliCiWnAi0kZneMPFLcg==
+
+scrollparent@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/scrollparent/-/scrollparent-2.0.1.tgz#715d5b9cc57760fb22bdccc3befb5bfe06b1a317"
+  integrity sha512-HSdN78VMvFCSGCkh0oYX/tY4R3P1DW61f8+TeZZ4j2VLgfwvw0bpRSOv4PCVKisktIwbzHCfZsx+rLbbDBqIBA==
 
 scrypt-js@2.0.4:
   version "2.0.4"
@@ -17489,6 +17557,14 @@ tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
+
+tree-changes@^0.9.1, tree-changes@^0.9.2:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/tree-changes/-/tree-changes-0.9.3.tgz#89433ab3b4250c2910d386be1f83912b7144efcc"
+  integrity sha512-vvvS+O6kEeGRzMglTKbc19ltLWNtmNt1cpBoSYLj/iEcPVvpJasemKOlxBrmZaCtDJoF+4bwv3m01UKYi8mukQ==
+  dependencies:
+    "@gilbarbara/deep-equal" "^0.1.1"
+    is-lite "^0.8.2"
 
 treeify@^1.1.0:
   version "1.1.0"
