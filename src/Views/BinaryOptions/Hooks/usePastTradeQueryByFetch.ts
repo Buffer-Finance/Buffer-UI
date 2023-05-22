@@ -28,7 +28,7 @@ export const usePastTradeQueryByFetch = ({
     `history-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledPage-${cancelledskip}-account-${account}`,
     {
       fetcher: async () => {
-        const response = await axios.post(config.graph.MAIN, {
+        const response = await axios.post(configContracts.graph.LITE, {
           query: `{ 
             historyTrades: userOptionDatas(
               orderBy: expirationTime

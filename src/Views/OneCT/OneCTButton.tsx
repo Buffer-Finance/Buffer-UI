@@ -1,5 +1,5 @@
 import { atom, useSetAtom } from 'jotai';
-import { SVGProps } from 'react';
+import { SVGProps, useEffect, useState } from 'react';
 import { useOneCTWallet } from './useOneCTWallet';
 
 import { useQTinfo } from '@Views/BinaryOptions';
@@ -7,34 +7,52 @@ import Joyride from 'react-joyride';
 const OneCTButton: React.FC<any> = ({}) => {
   const setModal = useSetAtom(isOneCTModalOpenAtom);
   const qtInfo = useQTinfo();
-  const { disableOneCt } = useOneCTWallet();
-
+  const { disableOneCt, registeredOneCT } = useOneCTWallet();
+  const [run, setRun] = useState(false);
+  useEffect(() => {
+    setRun(true);
+  }, []);
   const steps = [
     {
       target: '#onect-enable-btn',
-      content: 'This is my awesome feature!',
+      content: 'You can activate 1 Click Trading from here!',
+      disableBeacon: true,
     },
   ];
-  const { registeredOneCT } = useOneCTWallet();
-  if (registeredOneCT)
-    return (
-      <span
-        title="Blazingly Fast 1 Click Trading enabled. Click to disable"
-        onClick={disableOneCt}
-      >
-        <LightningIconSquare />
-      </span>
-    );
+
   return (
-    <Joyride steps={steps}>
-      <button
-        onClick={() => setModal((m) => !m)}
-        id="onect-enable-btn"
+    <>
+      <Joyride
+        continuous
+        steps={steps}
+        run={run}
+        styles={{
+          options: {
+            zIndex: 10000,
+          },
+        }}
+      />
+      <span
         className="bg-[#232334]  flex items-center  w-[30px] justify-center rounded-sm hover:brightness-125 active:brightness-75"
+        id="onect-enable-btn"
       >
-        <LightningIcon className=" scale-105 " />
-      </button>
-    </Joyride>
+        {registeredOneCT ? (
+          <span
+            title="Blazingly Fast 1 Click Trading enabled. Click to disable"
+            onClick={disableOneCt}
+          >
+            <LightningIconSquare />
+          </span>
+        ) : (
+          <button
+            onClick={() => setModal((m) => !m)}
+            className="bg-[#232334]  flex items-center  w-[30px] justify-center rounded-sm hover:brightness-125 active:brightness-75"
+          >
+            <LightningIcon className=" scale-105 " />
+          </button>
+        )}
+      </span>
+    </>
   );
 };
 

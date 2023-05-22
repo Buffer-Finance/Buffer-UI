@@ -258,13 +258,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         'uint256',
         'uint256',
       ];
-      /*
-      
-      0x17d18dab7a5519e2fb6820cad3c1f02f89b6b4c5d8fa6e99f07330f6ba6b021e51e5a97384d13c47bf5613809b79d38cf9cbc3015f81cb15ad7c267e2c8cb9691c - defaultABiencoder
-      0xd96787c4586ee6cc855b789219901dd2d22ddd3532beff762e07e1a9a97b46dd47e49140babd9265dd4f13ed7da6f16956e0d52349fd1f62dc2751ed647ee7451c - solidity keccak
-      0xfe233d5ac7aafbdb70a5bca39cab7ea269c40ef8a956b085b45f60dee823aec3262d7dc981899b725c8181164540b3066ce59138fa28f1f8c2c10ad8ef6d61ca1c - solidity pack
-      0xf4f26d1699b1029317f045d2a49fdae49c58f7e8253ddc56679c017fe55f05672b681ef25ffce02b173bfe3cbbed9ae3c595cbaddb9ee2f461387e68a1d4266f1c - solidity sha256
-      */
       try {
         const hashedMessage = arrayify(
           ethers.utils.solidityKeccak256(argTypes, msg)
@@ -275,7 +268,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
             pk,
             provider as ethers.providers.StaticJsonRpcProvider
           );
-          console.log(`useBinaryActions[1ct]-oneCTWallet: `, oneCTWallet);
+          console.log(`useBinaryActions[1ct]-oneCTWallet: `, pk);
           signature = await oneCTWallet?.signMessage(hashedMessage);
           console.log(`useBinaryActions[1ct]-signature: `, signature);
         } else {

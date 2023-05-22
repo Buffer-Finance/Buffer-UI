@@ -14,6 +14,7 @@ export const is1CTEnabled = (
   pk: string | null,
   provider: any
 ) => {
+  console.log('ddddeb', pk, account);
   if (!account || !pk || !provider) return null;
   if (!account?.[0]) return null;
   const oneCTWallet = new ethers.Wallet(

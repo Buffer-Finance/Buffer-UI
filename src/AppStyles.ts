@@ -4,6 +4,7 @@ const Background = styled.div`
   margin: 0;
   padding: 0;
   z-index: 100;
+  overflow-x: hidden !important;
   background-color: var(--bg-0);
   overflow-x: hidden;
   display: grid;
