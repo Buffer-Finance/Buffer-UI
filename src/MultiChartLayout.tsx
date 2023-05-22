@@ -443,7 +443,7 @@ const DesktopTrad = () => {
             }}
           />
         </div>
-        <Background className=" max-w-[280px] mx-auto flex flex-col">
+        <Background className=" max-w-[280px] mx-auto flex flex-col ">
           <ActiveAsset cb={handleNewTabClick} />
           <CustomOption
             onResetLayout={() =>
@@ -460,7 +460,7 @@ const DesktopTrad = () => {
               })
             }
           />
-          <div className="flex-1 max-h-full w-full relative">
+          <div className="flex-1 max-h-full w-full relative mt-4">
             <UserTrades />
           </div>
         </Background>

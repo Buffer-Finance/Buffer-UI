@@ -138,7 +138,7 @@ export const ActiveAsset = ({ cb }) => {
   const navigate = useNavigate();
   if (!singleAsset) return null;
   return (
-    <AssetBackground className="relative min-w-full">
+    <AssetBackground className={`relative min-w-full $`}>
       {isOpen && (
         <>
           <Background>
