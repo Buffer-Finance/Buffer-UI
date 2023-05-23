@@ -8,6 +8,7 @@ import { expiryPriceCache } from './useTradeHistory';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { useAugmentedTrades } from './useAugmentedTrades';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -102,23 +103,23 @@ export const useProcessedTrades = () => {
   ) => {
     const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
       // console.log(singleTrade, 'singleTrade');
-      if (singleTrade.blockNumber) {
-        if (block >= singleTrade.blockNumber) {
-          // if graph scanned this block.
-          return null;
-        }
-      }
-      if (tradesToBeDeleted?.length) {
-        if (
-          tradesToBeDeleted.find(
-            (singleRawTrade) =>
-              singleRawTrade.id == +singleTrade.queueID &&
-              singleTrade.state === BetState.queued
-          )
-        ) {
-          return null;
-        }
-      }
+      // if (singleTrade.blockNumber) {
+      //   if (block >= singleTrade.blockNumber) {
+      //     // if graph scanned this block.
+      //     return null;
+      //   }
+      // }
+      // if (tradesToBeDeleted?.length) {
+      //   if (
+      //     tradesToBeDeleted.find(
+      //       (singleRawTrade) =>
+      //         singleRawTrade.id == +singleTrade.queueID &&
+      //         singleTrade.state === BetState.queued
+      //     )
+      //   ) {
+      //     return null;
+      //   }
+      // }
       let pool;
       const configPair = configContracts.pairs.find((pair) => {
         pool = pair.pools.find(
@@ -127,25 +128,6 @@ export const useProcessedTrades = () => {
             singleTrade.optionContract.address.toLowerCase()
         );
         return !!pool;
-        // if (singleTrade?.optionContract?.asset)
-        //   return pair.pair === singleTrade.optionContract.asset;
-        // else
-        //   return (
-        //     pair.pools[0].options_contracts.current.toLocaleLowerCase() ===
-        //       singleTrade.optionContract.address.toLowerCase() ||
-        //     !!pair.pools[0].options_contracts.past.find(
-        //       (address) =>
-        //         address.toLocaleLowerCase() ===
-        //         singleTrade.optionContract.address.toLowerCase()
-        //     ) ||
-        //     pair.pools[1]?.options_contracts.current.toLocaleLowerCase() ===
-        //       singleTrade.optionContract.address.toLowerCase() ||
-        //     !!pair.pools[1]?.options_contracts.past.find(
-        //       (address) =>
-        //         address.toLocaleLowerCase() ===
-        //         singleTrade.optionContract.address.toLowerCase()
-        //     )
-        //   );
       });
       if (!pool) return null;
 
@@ -171,7 +153,10 @@ export const useProcessedTrades = () => {
 };
 
 export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
-  if (currentTrade.state === BetState.active) {
+  if (
+    currentTrade.state === BetState.active &&
+    !expiryPriceCache?.[currentTrade.optionID]
+  ) {
     // console.log(`[augexp]currentTrade: `, currentTrade);
     axios
       .post(`https://oracle.buffer-finance-api.link/price/query/`, [
@@ -205,7 +190,7 @@ export const usePastTradeQuery = () => {
     [cancelled]
   );
 
-  const { data } = usePastTradeQueryByFetch({
+  const { data: remoteData } = usePastTradeQueryByFetch({
     account: account,
     historyskip: historyPage,
     historyfirst: TRADESINAPAGE,
@@ -216,28 +201,17 @@ export const usePastTradeQuery = () => {
     currentTime: Math.floor(new Date().getTime() / 1000),
   });
 
-  const blockNumber = data?._meta?.block.number;
-  const { data: trades } = useAheadTrades(blockNumber, account, false);
-  // console.log('p=[aug]trades', trades);
+  const blockNumber = remoteData?._meta?.block.number;
+  // const { data: trades } = useAheadTrades(data, account, false);
+  const { data } = useAugmentedTrades(remoteData);
+  console.log(`data: `, data);
   useEffect(() => {
     let activeResponseArr = [];
-    if (trades?.[BetState.queued] || trades?.[BetState.active])
-      activeResponseArr = [
-        ...trades[BetState.queued],
-        ...trades[BetState.active],
-      ];
-    if (data?.queuedTrades) {
-      activeResponseArr = [...activeResponseArr, ...data?.queuedTrades];
-    }
-    if (data?.activeTrades) {
-      activeResponseArr = [...activeResponseArr, ...data.activeTrades];
-    }
+    if (!data) return;
+    activeResponseArr = data?.queuedTrades;
+    activeResponseArr = [...activeResponseArr, ...data.activeTrades];
 
-    activeResponseArr = getProcessedTrades(
-      activeResponseArr,
-      blockNumber,
-      trades?.['del'] || []
-    );
+    activeResponseArr = getProcessedTrades(activeResponseArr, blockNumber, []);
 
     let historyResponseArr = data?.historyTrades;
     let cancelledResponseArr = data?.cancelledTrades;
@@ -283,12 +257,5 @@ export const usePastTradeQuery = () => {
     data?.historyLength,
     data?.cancelledLength,
     account,
-    trades?.[BetState.active],
-    trades?.[BetState.queued],
-    trades?.fromBlock,
-    trades?.toBlock,
-    trades?.del,
-    // loading,
-    trades,
   ]);
 };
