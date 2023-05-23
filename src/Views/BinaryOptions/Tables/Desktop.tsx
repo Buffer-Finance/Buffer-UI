@@ -33,7 +33,7 @@ import { BetState } from '@Hooks/useAheadTrades';
 import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import { Launch } from '@mui/icons-material';
+import { CurrencyBitcoin, Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
 
 export const tradesCount = 10;
@@ -374,7 +374,7 @@ export default PGDesktopTables;
 
 export function getPendingData(currentRow: IGQLHistory, expiryPrice: string) {
   console.log(`currentRow: `, currentRow);
-
+  if (currentRow || !expiryPrice) return ['0', '0'];
   let payout = currentRow.amount;
   let pnl = subtract(payout, currentRow.totalFee);
   const currExpiryPrice = expiryPrice;
