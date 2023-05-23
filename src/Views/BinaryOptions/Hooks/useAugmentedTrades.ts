@@ -246,7 +246,12 @@ const useAugmentedTrades = (data: IGQLResponse) => {
               return aTrade.queueID == trade.queueId;
             });
 
-          if (!foundTrade) {
+          // can be in history
+          const foundTradeInHistory = data?.historyTrades?.find((aTrade) => {
+            return aTrade.queueID == trade.queueId;
+          });
+
+          if (!foundTrade && !foundTradeInHistory) {
             // delete from queued
             dataClone.queuedTrades = dataClone.queuedTrades.filter((qTrade) => {
               return qTrade.queueID != trade.queueId;
