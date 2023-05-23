@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 
 const Background = styled.div`
   background-color: var(--bg-0);
-  padding: 0px 10px;
   color: var(--text-6);
   .marketTxt {
     display: inline;

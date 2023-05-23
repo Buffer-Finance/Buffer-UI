@@ -69,9 +69,7 @@ body {
 .border-bottom{
   border-bottom: 2px solid #2A2A3A;
 }
-.flexlayout__layout{
-  margin:0px 5px
-}
+
 .left-border{
   border-left-width: 3px;
 }

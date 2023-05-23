@@ -23,7 +23,10 @@ import { TVMarketSelector } from '@Views/BinaryOptions/Favourites/TVMarketSelect
 import { useToast } from '@Contexts/Toast';
 import { CustomOption } from '@Views/BinaryOptions/PGDrawer/CustomOption';
 import { Background } from '@Views/BinaryOptions/PGDrawer/style';
-import { ActiveAsset } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
+import {
+  ActiveAsset,
+  DynamicAsset,
+} from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
 import { usePastTradeQuery } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
@@ -35,7 +38,7 @@ import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageMo
 import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { UserTrades } from '@Views/BinaryOptions/UserTrades';
-import { ActiveTable } from '@Views/BinaryOptions';
+import { ActiveTable, useQTinfo } from '@Views/BinaryOptions';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 var json = {
   global: {
@@ -259,6 +262,7 @@ const DesktopTrad = () => {
       console.log('[adderr]errorwhileadding', e);
     }
   }, [market, forcefullyRerender]);
+  const qtInfo = useQTinfo();
   return (
     <>
       {/* <Detector
@@ -331,8 +335,8 @@ const DesktopTrad = () => {
         }}
         open={layoutConset.resetCustomization.isModalOpen}
       />
-      <div className="flex w-full">
-        <div className="relative w-full">
+      <div className="flex w-full  ">
+        <div className="relative w-full m-[10px]">
           <FlexLayout.Layout
             onAction={(p) => {
               console.log('actionselect', p);
@@ -443,8 +447,8 @@ const DesktopTrad = () => {
             }}
           />
         </div>
-        <Background className=" max-w-[280px] mx-auto flex flex-col ">
-          <ActiveAsset cb={handleNewTabClick} />
+        <Background className=" max-w-[280px] mx-auto flex flex-col border-left ">
+          <DynamicAsset market={qtInfo.activePair} cb={handleNewTabClick} />
           <CustomOption
             onResetLayout={() =>
               seLayoutConsent((l) => {
@@ -460,7 +464,7 @@ const DesktopTrad = () => {
               })
             }
           />
-          <div className="flex-1 max-h-full w-full relative mt-4">
+          <div className="flex-1 max-h-full w-full relative mt-4 ">
             <UserTrades />
           </div>
         </Background>

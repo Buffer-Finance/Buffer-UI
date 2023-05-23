@@ -79,7 +79,7 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     const interval = setInterval(async () => {
       const data = await getPrice();
       setPrice((p) => ({ ...p, ...data }));
-    }, 1000);
+    }, 1500);
     return () => {
       clearInterval(interval);
     };

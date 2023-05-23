@@ -111,7 +111,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
         loading={loading as number}
       />
 
-      <div className="custom-wrapper gap-y-3 mt-3">
+      <div className="custom-wrapper gap-y-3 mt-3 px-[10px]">
         <div className="text-f14 text-0 flex-sbw items-center">
           <div className="">Time</div>
           <button
