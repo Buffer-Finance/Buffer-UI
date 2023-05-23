@@ -7,6 +7,7 @@ import {
   updateActivePageNumber,
 } from './Hooks/usePastTradeQuery';
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
+import { expiryPriceCache } from '../Hooks/useTradeHistory';
 
 import { SVGProps, useState } from 'react';
 import { UpTriangle } from '@Public/ComponentSVGS/UpTriangle';
@@ -196,9 +197,7 @@ export const UserTrade: React.FC<{
     <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
         <TradeMarket trade={trade} />
-        <div className="flex-col">
-          {timeTillExpiration} left<div>Ony shown in dev </div>
-        </div>
+        <div className="flex-col"></div>
         <NumberTooltip content={timeTillExpiration + ' lerft'}>
           <div className="flex items-center gap-x-[4px]">
             <TimerIcon />
@@ -253,6 +252,7 @@ export const UserTradeClosed: React.FC<{
   const net_pnl = trade.payout
     ? subtract(trade.payout, trade.totalFee)
     : subtract('0', trade.totalFee);
+
   return (
     <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
