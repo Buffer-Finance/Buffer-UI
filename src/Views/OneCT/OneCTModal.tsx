@@ -2,11 +2,11 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { ModalBase } from 'src/Modals/BaseModal';
 import { LightningIcon, isOneCTModalOpenAtom } from './OneCTButton';
 import { useEffect, useState } from 'react';
-import { useOneCTWallet } from './useOneCTWallet';
+import { is1CTEnabled, useOneCTWallet } from './useOneCTWallet';
 import { CloseOutlined } from '@mui/icons-material';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
-import { useQTinfo } from '@Views/BinaryOptions';
+import { activeAssetStateAtom, useQTinfo } from '@Views/BinaryOptions';
 import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
 
@@ -18,16 +18,29 @@ const OneCTModal: React.FC<any> = ({}) => {
   const { generatePk, registeredOneCT, registerOneCt, createLoading, oneCtPk } =
     useOneCTWallet();
   const { writeCall } = useIndependentWriteCall();
+  const res = useAtomValue(activeAssetStateAtom);
   const provider = useProvider({ chainId: activeChain.id });
+
   const qtInfo = useQTinfo();
   const toastify = useToast();
   const handleRegister = (privateKey?: string) => {
     if (privateKey || oneCtPk) {
-      setLaoding(true);
       const oneCTWallet = new ethers.Wallet(
         privateKey || oneCtPk,
         provider as ethers.providers.StaticJsonRpcProvider
       );
+      const isOneCTEnabled = is1CTEnabled(
+        res.user2signer || [ethers.constants.AddressZero],
+        privateKey || oneCtPk,
+        provider
+      );
+      if (isOneCTEnabled) {
+        return toastify({
+          msg: 'You have already registered your 1CT Account. You can start 1CT now!',
+          type: 'success',
+        });
+      }
+      setLaoding(true);
       writeCall(
         qtInfo.routerContract,
         RouterAbi,

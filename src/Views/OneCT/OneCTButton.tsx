@@ -29,17 +29,22 @@ const OneCTButton: React.FC<any> = ({}) => {
   };
   return (
     <>
-      <Joyride
-        continuous
-        steps={steps}
-        run={run}
-        styles={{
-          options: {
-            zIndex: 10000,
-          },
-        }}
-        callback={handleJoyrideCallback}
-      />
+      {run && (
+        <Joyride
+          continuous
+          steps={steps}
+          run={run}
+          locale={{
+            last: 'Got it!',
+          }}
+          styles={{
+            options: {
+              zIndex: 10000,
+            },
+          }}
+          callback={handleJoyrideCallback}
+        />
+      )}
       <span
         className="bg-[#232334]  flex items-center  w-[30px] justify-center rounded-sm hover:brightness-125 active:brightness-75"
         id="onect-enable-btn"

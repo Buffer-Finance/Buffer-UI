@@ -7,12 +7,12 @@ import {
   updateActivePageNumber,
 } from './Hooks/usePastTradeQuery';
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
-
+import { expiryPriceCache } from './Hooks/useTradeHistory';
 import { SVGProps, useState } from 'react';
 import { UpTriangle } from '@Public/ComponentSVGS/UpTriangle';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
-import { divide, subtract } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, subtract } from '@Utils/NumString/stringArithmatics';
 import { IToken } from '.';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { priceAtom } from '@Hooks/usePrice';
@@ -26,6 +26,7 @@ import { Skeleton } from '@mui/material';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { DOwnTriangle } from '@Public/ComponentSVGS/DownTriangle';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { getPendingData } from './Tables/Desktop';
 const userTradeRootDivStyle =
   'bg-2 flex flex-col py-[9px] px-[10px] my-1 rounded-[4px]';
 const tableTypes = ['Open', 'Closed', 'Cancelled'];
@@ -57,7 +58,7 @@ export const UserTrades: React.FC<any> = ({}) => {
   console.log(`UserTrades-activePage[tableType] : `, activePage[tableType]);
 
   return (
-    <div className=" overflow-y-scroll absolute  top-[0px] left-[0px] right-[0px] bottom-[0px] pb-3">
+    <div className=" overflow-y-scroll absolute  top-[0px] left-[0px] right-[0px] bottom-[0px] pb-3 px-[10px]">
       <div className="sticky top-[0px] z-40 w-full bg-1 flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  ">
         {tableTypes.map((s) => {
           return (
@@ -91,7 +92,11 @@ export const UserTrades: React.FC<any> = ({}) => {
             ) : data[idx].length ? (
               data[idx].map((s) => (
                 <li key={s.optionID}>
-                  <ActiveRenderer trade={s} tableType={tableType} />
+                  <ActiveRenderer
+                    key={idx + ':' + s.queueID}
+                    trade={s}
+                    tableType={tableType}
+                  />
                 </li>
               ))
             ) : (
@@ -196,13 +201,11 @@ export const UserTrade: React.FC<{
     <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
         <TradeMarket trade={trade} />
-        <div className="flex-col">
-          {timeTillExpiration} left<div>Ony shown in dev </div>
-        </div>
+        <div className="flex-col"></div>
         <NumberTooltip content={timeTillExpiration + ' lerft'}>
           <div className="flex items-center gap-x-[4px]">
             <TimerIcon />
-            {getDuration(trade)}
+            {trade.expirationTime ? getDuration(trade) : 'In Queue'}
           </div>
         </NumberTooltip>
       </div>
@@ -249,10 +252,13 @@ export const UserTradeClosed: React.FC<{
   if (typeof price === 'string') {
     price = +price;
   }
+  let betExpiryPrice =
+    trade.expirationPrice || expiryPriceCache?.[trade.optionID];
+  const processing = true;
+  const [pnl, payout] = getPendingData(trade, betExpiryPrice);
+  const isWin = +pnl > 0;
+  console.log(`UserTrades-pnl, payout: `, pnl, payout, trade.expirationPrice);
 
-  const net_pnl = trade.payout
-    ? subtract(trade.payout, trade.totalFee)
-    : subtract('0', trade.totalFee);
   return (
     <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
@@ -261,6 +267,16 @@ export const UserTradeClosed: React.FC<{
         <div className="flex items-center gap-x-[4px]">
           <TimerIcon />
           {getDuration(trade)}
+          {processing && isWin && (
+            <NumberTooltip
+              content={'You won the trade. Transfering the amount...'}
+            >
+              <img
+                src="/Gear.png"
+                className="transition-transform animate-spin"
+              />
+            </NumberTooltip>
+          )}
         </div>
       </div>
       <div className="flex items-center justify-between mt-[4px] text-f12 ">
@@ -270,29 +286,33 @@ export const UserTradeClosed: React.FC<{
             {<Display data={getTradeSize(trade)} unit={'USDC'} />}
           </div>
         </div>
-        <div className="flex  flex-col items-end ">
-          <div className="flex">
-            Expire @
-            <Display
-              unit={(trade.depositToken as IToken).name}
-              data={divide(trade.expirationPrice, 8)}
-              className="f15 weight-400"
-            />
+        {betExpiryPrice ? (
+          <div className="flex  flex-col items-end ">
+            <div className="flex">
+              <>
+                Expire @
+                <Display
+                  unit={(trade.depositToken as IToken).name}
+                  data={divide(betExpiryPrice, 8)}
+                  className="f15 weight-400"
+                />
+              </>
+            </div>
+            <div className="flex  items-start">
+              <span
+                className={`nowrap flex ${isWin ? 'text-green' : 'text-red'}`}
+              >
+                <Display
+                  label={isWin ? '+' : ''}
+                  data={divide(pnl, (trade.depositToken as IToken).decimals)}
+                  unit={(trade.depositToken as IToken).name}
+                />
+              </span>
+            </div>{' '}
           </div>
-          <div className="flex  items-start">
-            <span
-              className={`nowrap flex ${
-                +net_pnl < 0 ? 'text-red' : 'text-green'
-              }`}
-            >
-              <Display
-                label={+net_pnl > 0 ? '+' : ''}
-                data={divide(net_pnl, (trade.depositToken as IToken).decimals)}
-                unit={(trade.depositToken as IToken).name}
-              />
-            </span>
-          </div>{' '}
-        </div>
+        ) : (
+          'Fetching price'
+        )}
       </div>
     </div>
   );

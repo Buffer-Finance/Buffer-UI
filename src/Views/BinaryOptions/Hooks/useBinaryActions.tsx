@@ -36,6 +36,7 @@ import { multicallv2 } from '@Utils/Contract/multiContract';
 import { arrayify, hexlify } from 'ethers/lib/utils.js';
 import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import secureLocalStorage from 'react-secure-storage';
+import { binaryOptionsAtom } from '../PGDrawer/CustomOption';
 
 export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const binary = useQTinfo();
@@ -45,7 +46,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const activeAssetState = useActiveAssetState(userInput, referralData);
   const [balance, allowance, _, currStats] = activeAssetState;
   console.log(`useBinaryActions-currStats: `, currStats);
-  const [expiration] = useAtom(QuickTradeExpiry);
+  const [expiration] = useAtom(binaryOptionsAtom);
   const res = activeAssetState?.[activeAssetState?.length - 1];
   console.log(`useBinaryActions-res: `, res);
   // useOneCTWallet();
@@ -210,7 +211,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
 
     let args = [
       toFixed(multiply(userInput, activePoolObj.token.decimals), 0),
-      '300',
+      expirationInMins * 60 + '',
       customTrade.is_up,
       option_contract.current,
       toFixed(multiply(('' + price).toString(), 8), 0),

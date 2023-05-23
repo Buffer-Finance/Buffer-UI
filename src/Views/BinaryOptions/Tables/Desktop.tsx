@@ -374,7 +374,7 @@ export default PGDesktopTables;
 
 export function getPendingData(currentRow: IGQLHistory, expiryPrice: string) {
   console.log(`currentRow: `, currentRow);
-  if (currentRow || !expiryPrice) return ['0', '0'];
+  if (!currentRow && !expiryPrice) return ['0', '0'];
   let payout = currentRow.amount;
   let pnl = subtract(payout, currentRow.totalFee);
   const currExpiryPrice = expiryPrice;
