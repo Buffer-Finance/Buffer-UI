@@ -341,7 +341,7 @@ export const UserTradeCancelled: React.FC<{
 const TradeMarket = ({ trade }: { trade: IGQLHistory }) => {
   return (
     <NumberTooltip content={'Strike : ' + divide(trade.strike, 8)}>
-      <div className="flex ">
+      <div className="flex items-center">
         {trade.isAbove ? (
           <UpTriangle className={`scale-[0.70] mt-1`} />
         ) : (
