@@ -151,11 +151,13 @@ export function getBarWidthAndTimeTillExpiration(trade: IGQLHistory) {
   const currDiff = Variables(+trade.expirationTime - currentEpoch);
 
   return {
-    width:
+    width: Math.min(
       100 -
-      (totalDiff.distance && currDiff.distance
-        ? Math.round((currDiff.distance / totalDiff.distance) * 100)
-        : 100),
+        (totalDiff.distance && currDiff.distance
+          ? Math.round((currDiff.distance / totalDiff.distance) * 100)
+          : 100),
+      100
+    ),
     timeTillExpiration: formatDistanceExpanded(currDiff),
   };
 }

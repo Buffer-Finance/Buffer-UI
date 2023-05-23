@@ -211,7 +211,12 @@ export const usePastTradeQuery = () => {
     activeResponseArr = data?.queuedTrades;
     activeResponseArr = [...activeResponseArr, ...data.activeTrades];
 
-    activeResponseArr = getProcessedTrades(activeResponseArr, blockNumber, []);
+    activeResponseArr = getProcessedTrades(
+      activeResponseArr,
+      blockNumber,
+      [],
+      true
+    );
 
     let historyResponseArr = data?.historyTrades;
     let cancelledResponseArr = data?.cancelledTrades;
