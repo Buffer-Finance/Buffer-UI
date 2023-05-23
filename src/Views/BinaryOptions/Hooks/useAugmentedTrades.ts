@@ -136,18 +136,22 @@ const useAugmentedTrades = (data: IGQLResponse) => {
   const [upatedData, setUpdatedData] = useState(data);
   useEffect(() => {
     const interval = setInterval(async () => {
+      let lastQueueId = -1;
+      if (data?.queuedTrades?.length) {
+        lastQueueId = data.queuedTrades[data.queuedTrades.length - 1]?.queueID;
+      } else if (data?.activeTrades?.length) {
+        lastQueueId = data.activeTrades?.[0].queueID;
+      } else if (data?.historyTrades?.length) {
+        lastQueueId = data.historyTrades?.[0].queueID;
+      }
+      console.log(`lastQueueId: `, lastQueueId);
       const calls = address &&
         data && [
           {
             address: configContracts.router,
             abi: routerAbi,
             name: 'getLatestUserData',
-            params: [
-              address,
-              data?.queuedTrades
-                ? data.queuedTrades[data.queuedTrades.length - 1]?.queueID || 0
-                : data.activeTrades?.[0].queueID || 0,
-            ],
+            params: [address, lastQueueId],
           },
         ];
 
@@ -165,7 +169,6 @@ const useAugmentedTrades = (data: IGQLResponse) => {
       if (!tempRes?.length) return null;
 
       const updatedTrades: Response[] = tempRes[0].trades;
-      console.log(`tempRes: `, updatedTrades?.length, calls, updatedTrades);
       updatedTrades.forEach((trade) => {
         // search for an q->a trade
         if (trade.isCancelled) {
