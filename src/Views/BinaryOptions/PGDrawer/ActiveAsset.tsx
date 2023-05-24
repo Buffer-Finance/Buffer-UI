@@ -18,7 +18,7 @@ import { DynamicMarketSelector } from '@Views/NoLoss/Favourites/TVMarketSelector
 import { MarketInterface } from 'src/MultiChart';
 
 export const chartReadyAtom = atom(false);
-const setDoccumentTitle = (title) => {
+export const setDoccumentTitle = (title) => {
   document.title = title;
 };
 

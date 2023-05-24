@@ -54,3 +54,34 @@ export const v3AppConfig = {
     },
   },
 };
+
+export const marketsForChart = {
+  BTCUSD: {
+    price_precision: 100,
+    pair: 'BTC-USD',
+    category: 'Crypto',
+    fullName: 'Bitcoin',
+    tv_id: 'BTCUSD',
+  },
+  ETHUSD: {
+    price_precision: 100,
+    pair: 'ETH-USD',
+    category: 'Crypto',
+    fullName: 'Ethereum',
+    tv_id: 'ETHUSD',
+  },
+  GBPUSD: {
+    price_precision: 100,
+    pair: 'GBP-USD',
+    category: 'Forex',
+    fullName: 'Pound',
+    tv_id: 'GBPUSD',
+  },
+  EURUSD: {
+    price_precision: 100,
+    pair: 'EUR-USD',
+    category: 'Forex',
+    fullName: 'Euro',
+    tv_id: 'EURUSD',
+  },
+};
