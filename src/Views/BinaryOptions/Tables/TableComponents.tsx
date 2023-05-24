@@ -85,14 +85,10 @@ export const getExpireNotification = async (
       win = true;
     }
   }
-  console.log(`[win-state]expiryPrice: `, expiryPrice, currentRow.strike, is);
   if (win) {
-    console.log(`[win-state]winningModal: `, currentRow);
     openShareModal(currentRow, expiryPrice.toString());
     return;
   } else {
-    console.log(`currentRow[state]: `, currentRow);
-
     const openTimeStamp = currentRow.creationTime;
     const closeTimeStamp = +currentRow.expirationTime;
     toastify({

@@ -10,8 +10,8 @@ const OneCTButton: React.FC<any> = ({}) => {
   const { disableOneCt, registeredOneCT } = useOneCTWallet();
   const [run, setRun] = useState(false);
   useEffect(() => {
-    let a = localStorage.getItem(userOnectAcknowledgementString);
-    if (a) return;
+    // let a = localStorage.getItem(userOnectAcknowledgementString);
+    // if (a) return;
     setRun(true);
   }, []);
   const steps = [
@@ -40,6 +40,13 @@ const OneCTButton: React.FC<any> = ({}) => {
           styles={{
             options: {
               zIndex: 10000,
+              backgroundColor: '#1d2027',
+              textColor: 'var(--text-1)',
+            },
+            buttonNext: {
+              backgroundColor: 'var(--bg-signature)',
+              borderRadius: 4,
+              color: '#fff',
             },
           }}
           callback={handleJoyrideCallback}

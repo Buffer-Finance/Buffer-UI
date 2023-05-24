@@ -276,7 +276,6 @@ export const DynamicActiveAsset = ({
           <div id="overlay" onClick={() => setIsOpen(false)}></div>
         </>
       )}
-      {/* <ShareModal qtInfo={qtInfo} /> */}
       <div className="px-5 py-3 rounded-[10px] y-auto  whitespace-nowrap pl-4">
         <div
           className={`flex items-center content-between assets w-full h-max`}

@@ -41,6 +41,7 @@ import { UserTrades } from '@Views/BinaryOptions/UserTrades';
 import { ActiveTable, useQTinfo } from '@Views/BinaryOptions';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { WideTableModal } from './WideTableModal';
+import { ShareModal } from '@Views/BinaryOptions/Components/shareModal';
 var json = {
   global: {
     tabEnableClose: true,
@@ -276,6 +277,8 @@ const DesktopTrad = () => {
           </div>
         )}
       /> */}
+      <ShareModal qtInfo={qtInfo} />
+
       <WideTableModal />
       <OneCTModal />
       <CustomisationWarnModal

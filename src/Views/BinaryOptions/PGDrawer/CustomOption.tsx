@@ -129,7 +129,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
             currentTime,
             setCurrentTime,
             max_duration: '23:00',
-            min_duration: '00:05',
+            min_duration: '00:01',
             onSelect: console.log,
           }}
         />

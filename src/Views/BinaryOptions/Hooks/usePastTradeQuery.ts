@@ -134,6 +134,11 @@ export const useProcessedTrades = () => {
       const depositToken = configContracts.tokens[pool.token];
       let updatedTrade = { ...singleTrade, depositToken, configPair };
       if (shouldAddHistoryPrice) {
+        if (singleTrade.expirationTime < Date.now() / 1000)
+          console.log(
+            `singleTrade.expirationTime: `,
+            singleTrade.expirationTime
+          );
         addExpiryPrice(updatedTrade);
       }
 
@@ -166,7 +171,6 @@ export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
         },
       ])
       .then((response) => {
-        console.log(`response[fetch]: `, response);
         if (
           !expiryPriceCache[currentTrade.optionID] &&
           response?.data?.[0]?.price

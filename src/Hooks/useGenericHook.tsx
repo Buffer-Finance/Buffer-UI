@@ -13,7 +13,7 @@ import { getExpireNotification } from '@Views/BinaryOptions/Tables/TableComponen
 import { BetState } from '@Hooks/useAheadTrades';
 
 export const getIdentifier = (a: IGQLHistory) => {
-  return +a.optionID + '-' + a.configPair.pair;
+  return +a.queueID;
 };
 
 const useGenericHooks = () => {
@@ -35,16 +35,19 @@ const useGenericHooks = () => {
     const delay = 2;
     if (!binaryData) return;
     if (typeof binaryData.forEach !== 'function') return;
-
+    // make all new true
     for (let trade of binaryData) {
       if (trade.state == BetState.active) {
         let tradeIdentifier = getIdentifier(trade);
         tradeCache.current[tradeIdentifier] = { trade, visited: true };
       }
     }
+
     for (let tradeIdentifier in tradeCache.current) {
       const currTrade = tradeCache.current[tradeIdentifier];
+      // one which is not getting true, i.e not in newer set of activeTrades i.e got expired
       if (!currTrade.visited) {
+        console.log(`[win-state]useGenericHook-currTrade: `, currTrade);
         setTimeout(() => {
           getExpireNotification(
             { ...currTrade.trade },
@@ -57,7 +60,7 @@ const useGenericHooks = () => {
     }
 
     return () => {
-      // make all false
+      // make all prev false
       for (let tradeIdentifier in tradeCache.current) {
         tradeCache.current[tradeIdentifier] = {
           ...tradeCache.current[tradeIdentifier],
