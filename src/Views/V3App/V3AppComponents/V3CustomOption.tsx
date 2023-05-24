@@ -40,6 +40,7 @@ import { marketsForChart } from '../config';
 import { ApproveModal } from '@Views/BinaryOptions/Components/approveModal';
 import { knowTillAtom } from '@Views/BinaryOptions/Hooks/useIsMerketOpen';
 import { MarketTimingWarning } from '@Views/BinaryOptions/MarketTimingWarning';
+import { binaryOptionsAtom } from '@Views/BinaryOptions/PGDrawer/CustomOption';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
@@ -51,7 +52,7 @@ export function V3CustomOption({
   const { switchPool, poolDetails } = useSwitchPoolForTrade();
   const { activeMarket } = useV3AppActiveMarket();
   const [amount, setAmount] = useAtom(ammountAtom);
-  const [currentTime, setCurrentTime] = useAtom(QuickTradeExpiry);
+  const [currentTime, setCurrentTime] = useAtom(binaryOptionsAtom);
   const readcallData = useV3AppData();
   const marketPrice = useAtomValue(priceAtom);
   const knowTill = useAtomValue(knowTillAtom);
@@ -152,7 +153,7 @@ export function V3CustomOption({
           <AccountInfo
             shouldDisplayString
             unit={tradeToken}
-            balance={divide(balance, decimals)}
+            balance={balance}
           />
         </div>
         {/* TODO at 180, marketPrice?.[activeAsset.tv_id]?.close always return false, since marketPrice?.[activeAsset.tv_id] is an array */}
