@@ -70,7 +70,7 @@ const BuyTrade: React.FC<any> = ({}) => {
   const { activePoolObj } = useActivePoolObj();
   const isForex = activeAsset.category === 'Forex';
   // useIsMarketOpen();
-  const isMarketOpen = knowTill.open && isForex;
+  const isMarketOpen = knowTill?.open && isForex;
   const allowance = divide(allowanceWei?.[0], activePoolObj.token.decimals);
   const isAssetActive =
     routerPermission &&

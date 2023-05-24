@@ -44,6 +44,7 @@ import PGDesktopTables, { tradesCount } from './Tables/Desktop';
 import { History } from './History';
 import { TradingChart } from 'src/TradingView';
 import { Markets } from 'src/Types/Market';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -216,6 +217,8 @@ function QTrade() {
   console.log(`props.activePair.tv_id: `, props.activePair.tv_id);
   return (
     <>
+      <OneCTModal />
+
       <MarketTimingsModal />
       <ShareModal qtInfo={props} />
       <main className="content-drawer" id="buffer-tv-wrapper">

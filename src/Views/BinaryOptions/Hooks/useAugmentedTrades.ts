@@ -180,7 +180,6 @@ const useAugmentedTrades = (data: IGQLResponse) => {
         return foundTrade ? true : false;
       };
       updatedTrades.forEach((trade, idx) => {
-        console.log(`[aug]trade: `, trade, lastQueueId);
         // skip first if user has some trades already
         if (!idx && lastQueueId != '0') return;
 
