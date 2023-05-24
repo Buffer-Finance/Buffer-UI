@@ -140,6 +140,11 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
         totalFee = add(totalFee, value);
       }
 
+      console.log(`[blockchain]defaultValues: `, defaultValues);
+      console.log(`[blockchain]contract: `, contractAddress);
+      console.log(`[blockchain]methodArgs: `, methodArgs);
+      console.log(`[blockchain]methodName: `, methodName);
+      console.log(`[blockchain]contract: `, contract?.callStatic);
       if (!inIframe() && totalFee && balance?.formatted) {
         if (lt(balance.formatted, totalFee)) {
           // dispatch({ type: "SET_TXN_LOADING", payload: 0 });
@@ -153,11 +158,6 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
         }
       }
 
-      console.log(`[blockchain]defaultValues: `, defaultValues);
-      console.log(`[blockchain]contract: `, contractAddress);
-      console.log(`[blockchain]methodArgs: `, methodArgs);
-      console.log(`[blockchain]methodName: `, methodName);
-      console.log(`[blockchain]contract: `, contract?.callStatic);
       const call = await contract?.callStatic[methodName](...methodArgs, {
         ...defaultValues,
       });
