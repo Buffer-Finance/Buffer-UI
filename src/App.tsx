@@ -46,6 +46,7 @@ import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
 import { NoLoss } from '@Views/NoLoss/NoLoss';
+import { V3AppTradePage } from '@Views/V3App/V3TradePage';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
@@ -142,6 +143,7 @@ const AppRoutes = () => {
         <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<TradePage />} />
         <Route path="/no-loss/:market" element={<NoLoss />} />
+        <Route path="/v3/:market" element={<V3AppTradePage />} />
         {/* referral link handling */}
         <Route
           path="/*"
