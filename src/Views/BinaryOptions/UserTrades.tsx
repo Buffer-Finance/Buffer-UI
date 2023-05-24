@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   IGQLHistory,
   tardesAtom,
@@ -29,7 +29,8 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { getPendingData } from './Tables/Desktop';
 const userTradeRootDivStyle =
   'bg-2 flex flex-col py-[9px] px-[10px] my-1 rounded-[4px]';
-const tableTypes = ['Open', 'Closed', 'Cancelled'];
+export const tableTypes = ['Open', 'Closed', 'Cancelled'];
+export const isWideTableEnabled = atom<boolean>(false);
 export const UserTrades: React.FC<any> = ({}) => {
   const [tableType, setTableType] = useState(tableTypes[0]);
   const { active, history, cancelled } = useAtomValue(tardesAtom);
@@ -38,7 +39,7 @@ export const UserTrades: React.FC<any> = ({}) => {
     history: historyPages,
     cancelled: cancelledPages,
   } = useAtomValue(tardesTotalPageAtom);
-  console.log(`UserTrades-activePages: `, activePages, historyPages);
+  const setWideTable = useSetAtom(isWideTableEnabled);
 
   const totalPages = {
     Open: activePages,
@@ -55,7 +56,6 @@ export const UserTrades: React.FC<any> = ({}) => {
   const { address } = useUserAccount();
   const data = [active, history, cancelled];
   const renderers = [UserTrade, UserTradeClosed, UserTradeCancelled];
-  console.log(`UserTrades-activePage[tableType] : `, activePage[tableType]);
 
   return (
     <div className=" overflow-y-scroll absolute  top-[0px] left-[0px] right-[0px] bottom-[0px] pb-3 px-[10px]">
@@ -70,6 +70,14 @@ export const UserTrades: React.FC<any> = ({}) => {
             </div>
           );
         })}
+        <button
+          className="bg-primary w-[22px] h-[22px] rounded-[6px] grid  place-items-center hover:text-1 active:text-3"
+          onClick={() => {
+            setWideTable(true);
+          }}
+        >
+          <BroadIcon />
+        </button>
       </div>
       {tableTypes.map((d, idx) => {
         if (d != tableType) return null;
@@ -385,3 +393,19 @@ const TimerIcon = () => {
     </svg>
   );
 };
+
+const BroadIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={13}
+    height={11}
+    fill="none"
+    {...props}
+  >
+    <path
+      fill="currentColor"
+      d="m.5 11 5.636-1.25-3.9-4.257L.5 11Zm12-11L6.864 1.25l3.9 4.257L12.5 0ZM4.155 8.328l2.683-2.46-.676-.737-2.683 2.46.676.737Zm2.683-2.46L9.52 3.41l-.676-.737-2.683 2.46.676.737Z"
+    />
+  </svg>
+);
+export default BroadIcon;

@@ -332,7 +332,7 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         shouldShowTroply={false}
         doubleHeight
         activePage={currentPage}
-        shouldShowMobile={false}
+        shouldShowMobile={true}
         headerJSX={HeaderFomatter}
         bodyJSX={BodyFormatter}
         cols={headNameArray.length}
@@ -348,7 +348,6 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
         overflow
         loading={!shouldConnectWallet && !filteredData}
         error={<ErrorMsg isHistoryTable={isHistoryTable || isCancelledTable} />}
-        shouldShowMobile={shouldShowMobile}
       />
     </Background>
   );

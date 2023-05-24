@@ -97,7 +97,7 @@ const BufferTable: React.FC<IBufferTable> = ({
       v1={v1}
       className={`${className} ${shouldShowMobile ? '' : 'tab-none'}
       `}
-      shouldShowMobile={shouldShowMobile && window.innerWidth < 1200}
+      shouldShowMobile={shouldShowMobile}
     >
       <TableContainer sx={{ height: '100%' }}>
         <Table

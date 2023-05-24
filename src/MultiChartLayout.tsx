@@ -40,6 +40,7 @@ import { BlueBtn } from '@Views/Common/V2-Button';
 import { UserTrades } from '@Views/BinaryOptions/UserTrades';
 import { ActiveTable, useQTinfo } from '@Views/BinaryOptions';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { WideTableModal } from './WideTableModal';
 var json = {
   global: {
     tabEnableClose: true,
@@ -275,6 +276,7 @@ const DesktopTrad = () => {
           </div>
         )}
       /> */}
+      <WideTableModal />
       <OneCTModal />
       <CustomisationWarnModal
         onConfirm={() => {
