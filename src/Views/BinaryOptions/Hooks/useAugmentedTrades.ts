@@ -15,6 +15,8 @@ interface IGQLResponse {
   cancelledTrades: IGQLHistory[];
   historyLength: { id: string }[];
   activeLength: { id: string }[];
+  lastActive: { queueID: string }[];
+  lastExpired: { queueID: string }[];
   cancelledLength: { id: string }[];
   _meta: {
     block: {
@@ -136,15 +138,11 @@ const useAugmentedTrades = (data: IGQLResponse) => {
   const [upatedData, setUpdatedData] = useState(data);
   useEffect(() => {
     const interval = setInterval(async () => {
-      let lastQueueId = -1;
-      if (data?.queuedTrades?.length) {
-        lastQueueId = data.queuedTrades[data.queuedTrades.length - 1]?.queueID;
-      } else if (data?.activeTrades?.length) {
-        lastQueueId = data.activeTrades?.[0].queueID;
-      } else if (data?.historyTrades?.length) {
-        lastQueueId = data.historyTrades?.[0].queueID;
+      let lastQueueId = '0';
+      if (data?.lastExpired?.length) {
+        lastQueueId = data.lastExpired?.[0].queueID;
       }
-      console.log(`lastQueueId: `, lastQueueId);
+      console.log(`[aug]lastQueueId: `, lastQueueId, data);
       const calls = address &&
         data && [
           {
@@ -165,124 +163,84 @@ const useAugmentedTrades = (data: IGQLResponse) => {
 
       convertBNtoString(tempRes);
       if (!tempRes) return null;
-      const dataClone = JSON.parse(JSON.stringify(data));
+      const dataClone: IGQLResponse = JSON.parse(JSON.stringify(data));
       if (!tempRes?.length) return null;
 
       const updatedTrades: Response[] = tempRes[0].trades;
-      updatedTrades.forEach((trade) => {
-        // search for an q->a trade
+
+      const removeTrade = (trade: Response, trades: IGQLResponse) => {
+        trades.queuedTrades = trades.queuedTrades.filter((qTrade) => {
+          return qTrade.queueID != trade.queueId;
+        });
+      };
+      const alreadyExists = (trade: Response, trades: IGQLHistory[]) => {
+        const foundTrade = trades.find(
+          (qTrade) => qTrade.queueID == trade.queueId
+        );
+        return foundTrade ? true : false;
+      };
+      updatedTrades.forEach((trade, idx) => {
+        // skip first
+        if (!idx) return;
+
+        // metaInfo about trade
+        const optionsContract = {
+          asset: 'BTCUSD',
+          address: trade.queuedTrade.targetContract,
+        };
+        removeTrade(trade, dataClone);
+
         if (trade.isCancelled) {
-          // cancelled option
-          // q->c
-
-          // if already in cancelled then ignore
-          const foundTrade =
-            data?.cancelledTrades &&
-            data?.cancelledTrades.find((aTrade) => {
-              return aTrade.queueID == trade.queueId;
-            });
-          if (!foundTrade) {
-            //delete from queued
-            dataClone.queuedTrades = dataClone.queuedTrades.filter((qTrade) => {
-              return qTrade.queueID != trade.queueId;
-            });
-
-            // add to cancelled
-            const optionsContract = {
-              asset: 'BTCUSD',
-              address: trade.queuedTrade.targetContract,
-            };
-            console.log(`optionsContract: `, optionsContract);
-            const cancelledTrade: IGQLHistory = {
-              depositToken: null,
-              isAbove: trade.queuedTrade.isAbove,
-              optionContract: optionsContract,
-              queueID: trade.queueId,
-              slippage: trade.queuedTrade.slippage,
-              state: 5,
-              strike: trade.queuedTrade.expectedStrike,
-              totalFee: trade.queuedTrade.totalFee,
-              augmented: true,
-            };
-            dataClone.cancelledTrades.push(cancelledTrade);
-          }
-        } else if (trade.option.strike === '0') {
-          // queued option
-          const foundTrade =
-            data?.queuedTrades &&
-            data.queuedTrades.find((qTrade) => {
-              console.log(`qTrade.queueID: `, qTrade, trade);
-              return qTrade.queueID == trade.queueId;
-            });
-          if (!foundTrade) {
-            const optionsContract = {
-              asset: 'BTCUSD',
-              address: trade.queuedTrade.targetContract,
-            };
-            console.log(`optionsContract: `, optionsContract);
-            const queuedTrade: IGQLHistory = {
-              depositToken: null,
-              isAbove: trade.queuedTrade.isAbove,
-              optionContract: optionsContract,
-              queueID: trade.queueId,
-              slippage: trade.queuedTrade.slippage,
-              state: 4,
-              strike: trade.queuedTrade.expectedStrike,
-              totalFee: trade.queuedTrade.totalFee,
-              augmented: true,
-            };
-            dataClone.queuedTrades.push(queuedTrade);
-          }
-          // []->[q]
-          // search in existing queued option if it exists or not.
+          if (alreadyExists(trade, dataClone.cancelledTrades)) return;
+          const cancelledTrade: IGQLHistory = {
+            depositToken: null,
+            isAbove: trade.queuedTrade.isAbove,
+            optionContract: optionsContract,
+            queueID: trade.queueId,
+            slippage: trade.queuedTrade.slippage,
+            state: 5,
+            strike: trade.queuedTrade.expectedStrike,
+            totalFee: trade.queuedTrade.totalFee,
+            augmented: true,
+          };
+          dataClone.cancelledTrades.push(cancelledTrade);
+        } else if (trade.option.strike == '0') {
+          // got a queued trade
+          const queuedTrade: IGQLHistory = {
+            depositToken: null,
+            isAbove: trade.queuedTrade.isAbove,
+            optionContract: optionsContract,
+            queueID: trade.queueId,
+            slippage: trade.queuedTrade.slippage,
+            state: 4,
+            strike: trade.queuedTrade.expectedStrike,
+            totalFee: trade.queuedTrade.totalFee,
+            augmented: true,
+          };
+          dataClone.queuedTrades.push(queuedTrade);
         } else {
-          // active option
-          // q->a
-
-          // if already in active then discard.
-          const foundTrade =
-            data?.activeTrades &&
-            data?.activeTrades.find((aTrade) => {
-              return aTrade.queueID == trade.queueId;
-            });
-
-          // can be in history
-          const foundTradeInHistory = data?.historyTrades?.find((aTrade) => {
-            return aTrade.queueID == trade.queueId;
-          });
-
-          if (!foundTrade && !foundTradeInHistory) {
-            // delete from queued
-            dataClone.queuedTrades = dataClone.queuedTrades.filter((qTrade) => {
-              return qTrade.queueID != trade.queueId;
-            });
-
-            // add to active
-            const optionsContract = {
-              asset: 'BTCUSD',
-              address: trade.queuedTrade.targetContract,
-            };
-            const newActiveTrade: IGQLHistory = {
-              ammount: trade.option.amount,
-              creationTime: trade.option.createdAt,
-              depositToken: 'USDC',
-              expirationPrice: null,
-              expirationTime: trade.option.expiration,
-              isAbove: trade.option.isAbove,
-              payout: null,
-              queueID: trade.queueId,
-              optionID: trade.optionId,
-              state: 1,
-              strike: trade.option.strike,
-              totalFee: trade.option.totalFee,
-              user: { address: address },
-              optionContract: optionsContract,
-              augmented: true,
-            };
-            dataClone.activeTrades.push(newActiveTrade);
-          }
+          if (alreadyExists(trade, dataClone.activeTrades)) return;
+          const newActiveTrade: IGQLHistory = {
+            ammount: trade.option.amount,
+            creationTime: trade.option.createdAt,
+            depositToken: 'USDC',
+            expirationPrice: null,
+            expirationTime: trade.option.expiration,
+            isAbove: trade.option.isAbove,
+            payout: null,
+            queueID: trade.queueId,
+            optionID: trade.optionId,
+            state: 1,
+            strike: trade.option.strike,
+            totalFee: trade.option.totalFee,
+            user: { address: address },
+            optionContract: optionsContract,
+            augmented: true,
+          };
+          dataClone.activeTrades.push(newActiveTrade);
         }
       });
+      console.log(`[aug]dataClone: `, dataClone);
       setUpdatedData(dataClone);
     }, 1000);
 

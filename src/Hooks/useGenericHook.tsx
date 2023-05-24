@@ -45,7 +45,6 @@ const useGenericHooks = () => {
     for (let tradeIdentifier in tradeCache.current) {
       const currTrade = tradeCache.current[tradeIdentifier];
       if (!currTrade.visited) {
-        console.log(`notif-called-on-currTrade: `, currTrade);
         setTimeout(() => {
           getExpireNotification(
             { ...currTrade.trade },

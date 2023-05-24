@@ -164,7 +164,31 @@ export const usePastTradeQueryByFetch = ({
                 id
                 
             }
-             activeLength: userOptionDatas(
+            lastActive: userOptionDatas(
+              orderBy: creationTime
+              first: 1
+              orderDirection: desc
+              where: {
+                user_: {address: "${account}"},
+                state_in: [1],
+                expirationTime_lt: ${currentTime},
+              }
+            ){
+              queueID
+            }
+            lastExpired: userOptionDatas(
+              orderBy: expirationTime
+              first: 1
+              orderDirection: desc
+              where: {
+                user_: {address: "${account}"},
+                state_in: [1,2,3],
+                expirationTime_lt: ${currentTime},
+              }
+            ){
+              queueID
+            }
+            activeLength: userOptionDatas(
               orderBy: creationTime
               orderDirection: desc
               where: {
@@ -174,7 +198,7 @@ export const usePastTradeQueryByFetch = ({
               }
             ){
                 
-                id
+              queueID
                 
             }
 
