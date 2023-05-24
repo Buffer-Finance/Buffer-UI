@@ -33,7 +33,7 @@ import { useAccount, useContractEvent, useProvider, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
 import { multicallv2 } from '@Utils/Contract/multiContract';
-import { arrayify, hexlify } from 'ethers/lib/utils.js';
+import { arrayify, hashMessage, hexlify } from 'ethers/lib/utils.js';
 import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import secureLocalStorage from 'react-secure-storage';
 import { binaryOptionsAtom } from '../PGDrawer/CustomOption';
@@ -45,10 +45,8 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
   const referralData = useReferralCode(binary.activeChain);
   const activeAssetState = useActiveAssetState(userInput, referralData);
   const [balance, allowance, _, currStats] = activeAssetState;
-  console.log(`useBinaryActions-currStats: `, currStats);
   const [expiration] = useAtom(binaryOptionsAtom);
   const res = activeAssetState?.[activeAssetState?.length - 1];
-  console.log(`useBinaryActions-res: `, res);
   // useOneCTWallet();
   const provider = useProvider({ chainId: binary.activeChain.id });
 
@@ -203,6 +201,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
+    // if(state.txnLoading)
     if (isCustom) {
       setLoading({ is_up: customTrade.is_up });
     } else {
@@ -232,7 +231,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       ),
     };
     if (isTestnet) {
-      const id = 'InstantTradingId';
+      const id = hashMessage;
       toastify({
         id,
         msg: 'Transaction confirmation in progress...',
@@ -245,7 +244,6 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
       let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
 
       const msg = [address, ...args, currentUTCTimestamp];
-      console.log(`useBinaryActions-msg: `, msg);
       const argTypes = [
         'address',
         'uint256',
@@ -269,9 +267,7 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
             pk,
             provider as ethers.providers.StaticJsonRpcProvider
           );
-          console.log(`useBinaryActions[1ct]-oneCTWallet: `, pk);
           signature = await oneCTWallet?.signMessage(hashedMessage);
-          console.log(`useBinaryActions[1ct]-signature: `, signature);
         } else {
           signature = await signer?.signMessage(hashedMessage);
         }

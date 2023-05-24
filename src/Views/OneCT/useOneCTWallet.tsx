@@ -14,7 +14,6 @@ export const is1CTEnabled = (
   pk: string | null,
   provider: any
 ) => {
-  console.log('ddddeb', pk, account);
   if (!account || !pk || !provider) return null;
   if (!account?.[0]) return null;
   const oneCTWallet = new ethers.Wallet(
@@ -51,7 +50,6 @@ const useOneCTWallet = () => {
   const pkLocalStorageIdentifier = 'one-ct-wallet-pk' + address;
   const checkStorage = () => {
     const pk = secureLocalStorage.getItem(pkLocalStorageIdentifier);
-    console.log(`useOneCTWallet-pkLocalStorageIdentifier: `, pk);
     setPk(pk);
   };
   useEffect(() => {
@@ -79,7 +77,6 @@ const useOneCTWallet = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
     checkStorage();
   };
-  console.log(`useOneCTWallet-qtInfo.routerContract: `, qtInfo.routerContract);
   const disableOneCt = () => {
     writeCall(
       qtInfo.routerContract,

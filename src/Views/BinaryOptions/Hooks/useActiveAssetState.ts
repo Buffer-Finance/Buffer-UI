@@ -28,13 +28,11 @@ export function useActiveAssetState(amount = null, referralData) {
   const { address: account } = useUserAccount();
   const qtInfo = useQTinfo();
   const { activePoolObj } = useActivePoolObj();
-  console.log(`activePoolObj: `, activePoolObj);
   const { configContracts } = useActiveChain();
   const [knowtil, setKnowTill] = useAtom(knowTillAtom);
   const setResInAtom = useSetAtom(setActiveAssetStateAtom);
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const currTime = useAtomValue(QuickTradeExpiry);
-  console.log(`currTime: `, timeToMins(currTime));
   const payoutCalls = useMemo(() => {
     // return [];
     return qtInfo.pairs
@@ -169,7 +167,6 @@ export function useActiveAssetState(amount = null, referralData) {
 
   if (copy) {
     let [maxAmounts, fees, activeBasePayout] = copy.slice(0, assetCalls.length);
-    console.log(`activeBasePayout: `, activeBasePayout);
 
     const basePayout = subtract(
       '100',
@@ -227,7 +224,6 @@ export function useActiveAssetState(amount = null, referralData) {
       assetCalls.length + payoutCalls.length + routerPermissionCalls.length + 1
     );
     if (marketStateCalls?.length) {
-      console.log(`marketStatusCalls[0]: `, marketStatusCalls[0]);
       setKnowTill(marketStatusCalls[0]);
     }
     /*
@@ -270,7 +266,6 @@ export function useActiveAssetState(amount = null, referralData) {
       ? copy.slice(-userSpecificCalls.length)
       : new Array(userSpecificCalls.length).fill(null);
 
-    console.log(`user2signer: `, user2signer);
     setResInAtom({
       balance,
       allowance,

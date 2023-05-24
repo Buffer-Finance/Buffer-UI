@@ -511,7 +511,6 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     // console.log(`[deb]3prevBar: `, prevBar);
     if (!prevBar) return;
     const activeAssetStream = price[market];
-    console.log(`[pyth]activeAssetStream: `, activeAssetStream);
     // console.log(`[deb]4price: `, activeAssetStream);
     if (!activeAssetStream?.length) return;
     let aggregatedBar;
@@ -534,11 +533,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         }
         // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
-        console.log(
-          `[syncdeb]aggregatedBar: `,
-          aggregatedBar.close,
-          currBar.price
-        );
+
         lastSyncedKline.current[key] = prevBar;
       }
     }
@@ -547,7 +542,6 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
-    console.log(`price[market]: `, price[market]?.[0]);
   }, [price[market]]);
 
   // draw positions.
@@ -557,11 +551,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         if (!pos?.optionID) return;
         // if(visualized[pos.])
         const identifier = getIdentifier(pos);
-        console.log(`identifier: `, identifier);
-        console.log(
-          `visualized.includes(identifier): `,
-          visualized.includes(identifier)
-        );
+
         if (visualized.includes(identifier)) return;
         if (trade2visualisation.current[+pos.optionID]) {
           trade2visualisation.current[+pos.optionID]!.visited = true;
@@ -587,16 +577,11 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       }
     }
 
-    console.log(`[changed]visualized: `, visualized);
     return () => {
       // mark all them not visited.
       for (const trade in trade2visualisation.current) {
         trade2visualisation.current[+trade]!.visited = false;
       }
-      console.log(
-        `b4trade2visualisation.current: `,
-        trade2visualisation.current
-      );
     };
   }, [visualized, activeTrades, chartReady]);
   const updatePositionTimeLeft = useCallback(() => {

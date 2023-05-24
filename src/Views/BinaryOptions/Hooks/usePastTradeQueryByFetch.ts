@@ -177,7 +177,7 @@ export const usePastTradeQueryByFetch = ({
               queueID
             }
             lastExpired: userOptionDatas(
-              orderBy: expirationTime
+              orderBy: queueID
               first: 1
               orderDirection: desc
               where: {

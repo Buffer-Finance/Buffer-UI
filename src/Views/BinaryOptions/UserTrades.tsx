@@ -231,7 +231,7 @@ export const UserTrade: React.FC<{
             {probability ? (
               <Display data={probability} unit={'%'} />
             ) : (
-              'Calculating..'
+              'Processing..'
             )}
           </div>
         </div>

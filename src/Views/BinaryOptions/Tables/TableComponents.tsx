@@ -68,7 +68,6 @@ export const getExpireNotification = async (
   }
 
   const expiryPrice = response.data[0].price.toString();
-  console.log(`[fetch]expiryPrice: `, expiryPrice, currentRow.strike);
   let win = true;
   if (lt(currentRow.strike, expiryPrice)) {
     if (currentRow.isAbove) {
@@ -86,9 +85,9 @@ export const getExpireNotification = async (
       win = true;
     }
   }
-  console.log('win-state', win);
+  console.log(`[win-state]expiryPrice: `, expiryPrice, currentRow.strike, is);
   if (win) {
-    console.log(`currentRow[state]: `, currentRow);
+    console.log(`[win-state]winningModal: `, currentRow);
     openShareModal(currentRow, expiryPrice.toString());
     return;
   } else {

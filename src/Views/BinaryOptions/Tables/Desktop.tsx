@@ -372,7 +372,6 @@ export const UserAddressColumn = ({ address }: { address: string }) => {
 export default PGDesktopTables;
 
 export function getPendingData(currentRow: IGQLHistory, expiryPrice: string) {
-  console.log(`currentRow: `, currentRow);
   if (!currentRow && !expiryPrice) return ['0', '0'];
   let payout = currentRow.amount;
   let pnl = subtract(payout, currentRow.totalFee);
