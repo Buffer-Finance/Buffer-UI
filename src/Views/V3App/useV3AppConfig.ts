@@ -137,7 +137,7 @@ type response = {
   }[];
 };
 
-enum AssetCategory {
+export enum AssetCategory {
   Forex,
   Crypto,
   Commodities,

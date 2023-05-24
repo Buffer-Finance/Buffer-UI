@@ -226,7 +226,13 @@ export const DynamicDurationPicker = ({
       setOpenCustomInput(true);
     // else setOpenCustomInput(false);
   }, [currentTime]);
-
+  console.log(
+    timeToMins(min_duration) * 60 * oneSec,
+    min_duration,
+    timeToMins(max_duration) * 60 * oneSec,
+    max_duration,
+    'timeToMins(min_duration) * 60 * oneSec'
+  );
   return (
     <>
       <div className="duration">

@@ -3,12 +3,11 @@ import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { Background as AssetBackground } from '@Views/Common/v2-AssetDropDown/style';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Background from '@Views/BinaryOptions/Favourites/style';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { toFixed } from '@Utils/NumString';
 import { priceAtom } from '@Hooks/usePrice';
-import { useParams } from 'react-router-dom';
 // import { DynamicMarketSelector } from '@Views/NoLoss/Favourites/TVMarketSelector';
 import { setDoccumentTitle } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
@@ -17,22 +16,25 @@ import { V3AppConfig } from '../useV3AppConfig';
 import { useV3AppConfig } from '../useV3AppConfig';
 import { joinStrings } from '../helperFns';
 import { marketsForChart } from '../config';
+import { V3MarketSelector } from './V3MarketSelector';
+import { useV3AppActiveMarket } from '../Utils/useV3AppActiveMarket';
 
 export const V3ActiveAsset = () => {
-  const params = useParams();
   const marketPrice = useAtomValue(priceAtom);
   const [isOpen, setIsOpen] = useState(false);
   const markets = useV3AppConfig();
-  const singleAsset = useMemo(() => {
-    return getActiveMarket(markets, params);
-  }, [params, markets]);
+  const { activeMarket: singleAsset } = useV3AppActiveMarket();
 
-  if (!singleAsset) return <></>;
+  if (!singleAsset || !markets) return <></>;
 
   const assetPair = joinStrings(singleAsset.token0, singleAsset.token1, '-');
   const chartMarket =
     marketsForChart[
-      joinStrings(singleAsset.token0, singleAsset.token1, '') as 'BTCUSD'
+      joinStrings(
+        singleAsset.token0,
+        singleAsset.token1,
+        ''
+      ) as keyof typeof marketsForChart
     ];
   const currentPrice = getPriceFromKlines(marketPrice, chartMarket);
   const title = currentPrice
@@ -47,15 +49,16 @@ export const V3ActiveAsset = () => {
       {isOpen && (
         <>
           <Background className=" !translate-x-[-20%] !translate-y-[30px]">
-            {/* <DynamicMarketSelector
+            <V3MarketSelector
               onMarketSelect={(m) => {
-                cb(m, 'charts');
-                navigate('/binary/' + m);
+                // cb(m, 'charts');
+                //TODO - v3 Change Url
+                // navigate('/v3/' + m);
                 setIsOpen(false);
               }}
-              markets={Object.keys(markets).map((m) => markets[m])}
+              markets={markets}
               className="asset-dropdown-wrapper left-[0] max-w-[300px] p-3"
-            /> */}
+            />
             <></>
           </Background>
           <div id="overlay" onClick={() => setIsOpen(false)}></div>
@@ -103,6 +106,7 @@ export const V3ActiveAsset = () => {
               <div className="flex items-center mt-1">
                 <NumberTooltip content={'Payout on winning'}>
                   <div className="text-1 text-f13 cursor-pointer">
+                    //TODO - V3 add payout
                     {/* {fullPayout ? '+' + fullPayout + '%' : 'loading...'}&nbsp;
                     {boostedPayout && boostedPayout !== '0' ? (
                       <span className="text-buffer-blue text-f12">

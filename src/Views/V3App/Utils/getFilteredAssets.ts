@@ -1,28 +1,33 @@
 import { useAtom } from 'jotai';
 import { FavouriteAtom } from '@Views/BinaryOptions';
-import { MarketInterface } from 'src/MultiChart';
+import { V3AppConfig } from '../useV3AppConfig';
+import { joinStrings } from '../helperFns';
 
-export function getFilteredAssets(
-  assets: MarketInterface[],
+export function getV3AppFilteredAssets(
+  assets: V3AppConfig[],
   searchText: string,
   category: string
 ) {
   const AssetTypes = ['favourites', 'crypto', 'forex'];
   const [favourites] = useAtom(FavouriteAtom);
-  let filteredAssets: MarketInterface[] = [];
+  let filteredAssets: V3AppConfig[] = [];
   if (!!searchText && searchText !== '')
-    filteredAssets = assets.filter((asset) =>
-      asset.pair.toLowerCase().includes(searchText.toLowerCase())
+    filteredAssets = assets.filter(
+      (asset) =>
+        asset.token0.toLowerCase().includes(searchText.toLowerCase()) ||
+        asset.token1.toLowerCase().includes(searchText.toLowerCase())
     );
   else {
     filteredAssets = assets;
   }
-  console.log(`filteredAssets: `, filteredAssets);
+  console.log(`getV3AppFilteredAssets: `, filteredAssets, assets);
 
   console.log(`category.toLowerCase(): `, category.toLowerCase());
   switch (category.toLowerCase()) {
     case AssetTypes[0]:
-      return filteredAssets.filter((asset) => favourites.includes(asset.pair));
+      return filteredAssets.filter((asset) =>
+        favourites.includes(joinStrings(asset.token0, asset.token1, '-'))
+      );
     case AssetTypes[1]:
       return filteredAssets.filter(
         (asset) => asset.category.toLowerCase() === AssetTypes[1].toLowerCase()

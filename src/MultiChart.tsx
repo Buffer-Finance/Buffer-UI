@@ -404,7 +404,7 @@ const MultiChart = ({
 export const priceAtom = atom<Partial<Market2Prices>>({});
 export { MultiChart };
 
-const TabIcon = React.memo(({ market }) => {
+export const TabIcon = React.memo(({ market }) => {
   return (
     <div className="w-[20px] h-[20px]" id={market.replace('-', '')}>
       <PairTokenImage pair={market} />

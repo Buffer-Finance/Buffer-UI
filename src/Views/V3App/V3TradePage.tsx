@@ -6,6 +6,7 @@ import { V3AppTradePageComponent } from './V3AppComponents/V3TradePage';
 const V3AppTradePageRoot: React.FC<any> = ({}) => {
   const isMobile = useMediaQuery('(max-width:600px)');
   const v3Config = useV3AppConfig();
+
   console.log(v3Config, 'v3Config');
 
   //   if (isMobile) return <QTrade />;
