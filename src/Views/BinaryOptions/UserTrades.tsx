@@ -210,9 +210,6 @@ export const UserTrade: React.FC<{
     <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
         <TradeMarket trade={trade} />
-        <div className="flex-col">
-          {timeTillExpiration} left<div>Ony shown in dev </div>
-        </div>{' '}
         <NumberTooltip content={timeTillExpiration + ' lerft'}>
           <div className="flex items-center gap-x-[4px]">
             <TimerIcon />
