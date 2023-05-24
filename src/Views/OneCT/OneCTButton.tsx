@@ -54,7 +54,7 @@ const OneCTButton: React.FC<any> = ({}) => {
         />
       )}
       <span
-        className="bg-[#232334]  flex items-center  w-[30px] justify-center rounded-sm hover:brightness-125 active:brightness-75"
+        className="bg-[#232334]  cursor-pointer flex items-center  w-[30px] justify-center rounded-sm hover:brightness-125 active:brightness-75"
         id="onect-enable-btn"
       >
         {registeredOneCT ? (

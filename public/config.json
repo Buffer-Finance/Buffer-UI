@@ -8,7 +8,7 @@
       "token1": "BTC",
       "token2": "USD",
       "full_name": "Bitcoin",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/btc.svg"
     },
     "ETHUSD": {
       "category": "Crypto",
@@ -18,7 +18,7 @@
       "token1": "ETH",
       "token2": "USD",
       "full_name": "Ethereum",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/btc.svg"
     },
     "EURUSD": {
       "category": "Forex",
@@ -28,7 +28,7 @@
       "token1": "EUR",
       "token2": "USD",
       "full_name": "Euro",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/euro.png"
     },
     "GBPUSD": {
       "category": "Forex",
@@ -48,7 +48,7 @@
       "token1": "SOL",
       "token2": "USD",
       "full_name": "Solana",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/sol.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/sol.svg"
     },
     "ETHBTC": {
       "category": "Crypto",
@@ -58,7 +58,7 @@
       "token1": "ETH",
       "token2": "BTC",
       "full_name": "Ethereum",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eth.svg"
     },
     "LINKUSD": {
       "category": "Crypto",
@@ -68,7 +68,7 @@
       "token1": "LINK",
       "token2": "USD",
       "full_name": "Chainlink",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/link.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/link.svg"
     },
     "XAUUSD": {
       "category": "Commodity",
@@ -78,7 +78,7 @@
       "token1": "XAU",
       "token2": "USD",
       "full_name": "Gold",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xau.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/xau.svg"
     },
     "XAGUSD": {
       "category": "Commodity",
@@ -88,7 +88,7 @@
       "token1": "XAG",
       "token2": "USD",
       "full_name": "Silver",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xag.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/xag.svg"
     },
     "AUDUSD": {
       "category": "Forex",
@@ -98,7 +98,7 @@
       "token1": "AUD",
       "token2": "USD",
       "full_name": "Australian Dollar",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/aud1.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/aud1.svg"
     },
     "USDJPY": {
       "category": "Forex",
@@ -108,7 +108,7 @@
       "token1": "USD",
       "token2": "JPY",
       "full_name": "United States Dollar",
-      "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg"
+      "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/USDC.svg"
     },
     "EURGBP": {
       "category": "Forex",
@@ -227,7 +227,7 @@
         "address": "0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E",
         "meta": "0xC33A64475f84C88DfB139fcFF29642a055587fe4",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png",
         "name": "USDC",
         "pool_address": "0xA3769f6E42E1D7936919904E9156527dBc23C1b4",
         "faucet": "0x51469Ec9B8AE9B3Fbf985e735C2E3758FbD4e408",
@@ -247,7 +247,7 @@
         "token1": "BTC",
         "token2": "USD",
         "full_name": "Bitcoin",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/btc.svg",
         "pools": [
           {
             "token": "USDC",
@@ -269,7 +269,7 @@
         "token1": "ETH",
         "token2": "USD",
         "full_name": "Ethereum",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eth.svg",
         "pools": [
           {
             "token": "USDC",
@@ -291,7 +291,7 @@
         "token1": "EUR",
         "token2": "USD",
         "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/euro.png",
         "pools": [
           {
             "token": "USDC",
@@ -384,7 +384,7 @@
         "token1": "BTC",
         "token2": "USD",
         "full_name": "Bitcoin",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/btc.svg",
         "pools": [
           {
             "token": "USDC",
@@ -420,7 +420,7 @@
         "token1": "ETH",
         "token2": "USD",
         "full_name": "Ethereum",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eth.svg",
         "pools": [
           {
             "token": "USDC",
@@ -456,7 +456,7 @@
         "token1": "EUR",
         "token2": "USD",
         "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/euro.png",
         "pools": [
           {
             "token": "USDC",
@@ -528,7 +528,7 @@
         "token1": "SOL",
         "token2": "USD",
         "full_name": "Solana",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/sol.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/sol.svg",
         "pools": [
           {
             "token": "USDC",
@@ -550,7 +550,7 @@
         "token1": "ETH",
         "token2": "BTC",
         "full_name": "Ethereum",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eth.svg",
         "pools": [
           {
             "token": "USDC",
@@ -579,7 +579,7 @@
         "token1": "LINK",
         "token2": "USD",
         "full_name": "Chainlink",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/link.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/link.svg",
         "pools": [
           {
             "token": "USDC",
@@ -608,7 +608,7 @@
         "token1": "XAU",
         "token2": "USD",
         "full_name": "Gold",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xau.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/xau.svg",
         "pools": [
           {
             "token": "USDC",
@@ -630,7 +630,7 @@
         "token1": "XAG",
         "token2": "USD",
         "full_name": "Silver",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xag.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/xag.svg",
         "pools": [
           {
             "token": "USDC",
@@ -652,7 +652,7 @@
         "token1": "AUD",
         "token2": "USD",
         "full_name": "Australian Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/aud1.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/aud1.svg",
         "pools": [
           {
             "token": "USDC",
@@ -681,7 +681,7 @@
         "token1": "USD",
         "token2": "JPY",
         "full_name": "United States Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/USDC.svg",
         "pools": [
           {
             "token": "USDC",
@@ -710,7 +710,7 @@
         "token1": "EUR",
         "token2": "GBP",
         "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eur.svg",
         "pools": [
           {
             "token": "USDC",
@@ -739,7 +739,7 @@
         "token1": "EUR",
         "token2": "JPY",
         "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eur.svg",
         "pools": [
           {
             "token": "USDC",
@@ -768,7 +768,7 @@
         "token1": "GBP",
         "token2": "JPY",
         "full_name": "British Pound",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/GBP.svg",
         "pools": [
           {
             "token": "USDC",
@@ -797,7 +797,7 @@
         "token1": "NZD",
         "token2": "USD",
         "full_name": "New Zealand Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/nzd.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/nzd.svg",
         "pools": [
           {
             "token": "USDC",
@@ -826,7 +826,7 @@
         "token1": "USD",
         "token2": "CHF",
         "full_name": "United States Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/USDC.svg",
         "pools": [
           {
             "token": "USDC",
@@ -855,7 +855,7 @@
         "token1": "GBP",
         "token2": "CHF",
         "full_name": "British Pound",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/GBP.svg",
         "pools": [
           {
             "token": "USDC",
@@ -884,7 +884,7 @@
         "token1": "USD",
         "token2": "CAD",
         "full_name": "United States Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/USDC.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1056,7 +1056,7 @@
         "address": "0x6f9FE619b6BF88028ac57cD665D527A507a6d2Ef",
         "meta": "0xCfB18Ab5bC28AbfAbC2ccC216e269b16A99325f4",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png",
         "name": "USDC",
         "pool_address": "0xcE5467a403eb433391F72007E151DBb8119728E0",
         "faucet": "0x4fccf1139FcA44EF716534bae9D3f87a01583338",
@@ -1076,7 +1076,7 @@
         "token1": "BTC",
         "token2": "USD",
         "full_name": "Bitcoin",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/btc.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1098,7 +1098,7 @@
         "token1": "ETH",
         "token2": "USD",
         "full_name": "Ethereum",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eth.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1120,7 +1120,7 @@
         "token1": "EUR",
         "token2": "USD",
         "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/euro.png",
         "pools": [
           {
             "token": "USDC",
@@ -1171,7 +1171,7 @@
         "address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
         "meta": "0x34BaE543efb77E912f34e65Dd9b821C5ABaE665A",
         "decimals": 6,
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/usdc.png",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png",
         "name": "USDC",
         "pool_address": "0x6FD5B386d8bed29b3b62C0856250cdD849b3564d",
         "min_amount": 5,
@@ -1190,7 +1190,7 @@
         "token1": "BTC",
         "token2": "USD",
         "full_name": "Bitcoin",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/btc.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1212,7 +1212,7 @@
         "token1": "ETH",
         "token2": "USD",
         "full_name": "Ethereum",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eth.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1234,7 +1234,7 @@
         "token1": "SOL",
         "token2": "USD",
         "full_name": "Solana",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/sol.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/sol.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1256,7 +1256,7 @@
         "token1": "ETH",
         "token2": "BTC",
         "full_name": "Ethereum",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eth.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1278,7 +1278,7 @@
         "token1": "LINK",
         "token2": "USD",
         "full_name": "Chainlink",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/link.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/link.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1300,7 +1300,7 @@
         "token1": "EUR",
         "token2": "USD",
         "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/euro.png",
         "pools": [
           {
             "token": "USDC",
@@ -1344,7 +1344,7 @@
         "token1": "AUD",
         "token2": "USD",
         "full_name": "Australian Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/AUD.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/AUD.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1366,7 +1366,7 @@
         "token1": "USD",
         "token2": "JPY",
         "full_name": "United States Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/USDC.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1388,7 +1388,7 @@
         "token1": "EUR",
         "token2": "GBP",
         "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eur.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1410,7 +1410,7 @@
         "token1": "EUR",
         "token2": "JPY",
         "full_name": "Euro",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/eur.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1432,7 +1432,7 @@
         "token1": "GBP",
         "token2": "JPY",
         "full_name": "British Pound",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/GBP.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1454,7 +1454,7 @@
         "token1": "NZD",
         "token2": "USD",
         "full_name": "New Zealand Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/NZ.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/NZ.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1476,7 +1476,7 @@
         "token1": "USD",
         "token2": "CHF",
         "full_name": "United States Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/USDC.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1498,7 +1498,7 @@
         "token1": "GBP",
         "token2": "CHF",
         "full_name": "British Pound",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/GBP.svg",
         "pools": [
           {
             "token": "USDC",
@@ -1520,7 +1520,7 @@
         "token1": "USD",
         "token2": "CAD",
         "full_name": "United States Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg",
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/USDC.svg",
         "pools": [
           {
             "token": "USDC",

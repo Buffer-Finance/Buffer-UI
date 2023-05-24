@@ -201,7 +201,13 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
         id: 'binaryBuy',
       });
     }
-    // if(state.txnLoading)
+    if (loading) {
+      return toastify({
+        type: 'error',
+        msg: 'Please wait for previous transaction confirmation.',
+        id: 'ddd',
+      });
+    }
     if (isCustom) {
       setLoading({ is_up: customTrade.is_up });
     } else {
@@ -292,7 +298,11 @@ export const useBinaryActions = (userInput, isYes, isQuickTrade = false) => {
           env: binary.activeChain.id,
           isOneCT: registeredOneCT ? true : false,
         };
-        console.log(`useBinaryActions[1ct]-reqBody: `, reqBody);
+        console.log(
+          `useBinaryActions[1ct]-reqBody: `,
+          reqBody,
+          state.txnLoading
+        );
         console.log(`useBinaryActions[1ct]-TradeQuery: `, TradeQuery);
         const response = await axios.post(instantTradingApiUrl, TradeQuery, {
           params: reqBody,

@@ -297,14 +297,7 @@ export const UserTradeClosed: React.FC<{
         {betExpiryPrice ? (
           <div className="flex  flex-col items-end ">
             <div className="flex">
-              <>
-                Expire @
-                <Display
-                  unit={(trade.depositToken as IToken).name}
-                  data={divide(betExpiryPrice, 8)}
-                  className="f15 weight-400"
-                />
-              </>
+              <>Payout:</>
             </div>
             <div className="flex  items-start">
               <span
