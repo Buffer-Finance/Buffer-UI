@@ -80,7 +80,7 @@ export const PoolDropDown = () => {
   const configData =
     v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
   const { poolNameList: dropdownItems, activePoolObj } = useV3ActivePoolObj();
-  const activeToken = configData.poolsInfo[activePoolObj.pool].token;
+  const activeToken = configData.poolsInfo[activePoolObj?.pool]?.token;
 
   function getImageUrl(tokenName: string) {
     return `https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/${tokenName}.png`;
