@@ -66,14 +66,19 @@ export const useV3AppData = () => {
   const { switchPool, poolDetails } = useSwitchPoolForTrade();
 
   const response = useMemo(() => {
-    if (!readCallData || !poolDetails || !switchPool) {
+    if (
+      !readCallData ||
+      !poolDetails ||
+      !switchPool ||
+      Object.entries(readCallData).length === 0
+    ) {
       return null;
     }
-    const payout = readCallData[getCallId(poolDetails.meta, 'getPayout')][0];
+    const payout = readCallData[getCallId(poolDetails.meta, 'getPayout')]?.[0];
     const balance =
-      readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')][0];
+      readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
     const allowance =
-      readCallData[getCallId(poolDetails.tokenAddress, 'allowance')][0];
+      readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
     return {
       totalPayout: divide(payout, 2) as string,
       balance,
