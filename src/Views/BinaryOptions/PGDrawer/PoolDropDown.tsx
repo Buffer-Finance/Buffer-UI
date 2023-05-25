@@ -5,6 +5,8 @@ import { useMemo } from 'react';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { DropDownArrowSm, DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { atomWithLocalStorage } from '../Components/SlippageModal';
+import { useV3ActivePoolObj } from '@Views/V3App/Utils/useSwitchPoolForTrade';
+import { v3AppConfig } from '@Views/V3App/config';
 
 const activePoolAtom = atomWithLocalStorage('last-selected-pool-v1', {
   activePool: null,
@@ -74,19 +76,25 @@ export const useActivePoolAll = () => {
 
 export const PoolDropDown = () => {
   const setActivePool = useSetAtom(activePoolAtom);
-  const { configContracts } = useActiveChain();
-  console.log(`configContracts: `, configContracts);
-  const { dropdownItems, activePoolObj } = useActivePoolObj();
-  console.log(`dropdownItems: `, dropdownItems);
+  const { activeChain } = useActiveChain();
+  const configData =
+    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
+  const { poolNameList: dropdownItems, activePoolObj } = useV3ActivePoolObj();
+  const activeToken = configData.poolsInfo[activePoolObj.pool].token;
 
+  function getImageUrl(tokenName: string) {
+    return `https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/${tokenName}.png`;
+  }
+
+  if (activePoolObj === null || dropdownItems === null) return <></>;
   if (dropdownItems.length === 1)
     return (
       <div className="token-dd flex items-center bg-cross-bg w-fit px-4 py-[5px]  sm:px-[0] sm:py-[0]  text-f16  text-1">
         <img
-          src={activePoolObj.token.img}
+          src={getImageUrl(activeToken)}
           className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "
         />
-        <div className="sm:hidden">{activePoolObj.token.name}</div>
+        <div className="sm:hidden">{activeToken}</div>
       </div>
     );
   return (
@@ -99,28 +107,30 @@ export const PoolDropDown = () => {
       dropdownBox={(isActive, isOpen, d) => (
         <div className="token-dd w-fit hover:brightness-150 flex items-center bg-[#303044] px-4 py-[5px] sm:px-[0] sm:py-[0] text-f14 transition-all duration-150 text-1">
           <img
-            src={activePoolObj.token.img}
+            src={getImageUrl(activeToken)}
             className="w-[18px] h-[18px] sm:w-[25px] sm:h-[25px] sm:max-w-max sm:mr-[0]  mr-2 "
           />
-          <div className="sm:hidden">{activePoolObj.token.name}</div>
+          <div className="sm:hidden">{activeToken}</div>
           <DropDownArrowSm open={isOpen} className="ml-2" />
         </div>
       )}
-      item={(singleItem, handleClose, onChange, activel) => (
-        <button
-          className="hover:brightness-150 mt-2 flex items-center sm:p-2 sm:justify-center"
-          onClick={() => {
-            setActivePool({ activePool: singleItem });
-          }}
-          key={singleItem}
-        >
-          <img
-            src={configContracts.tokens[singleItem].img}
-            className="w-[18px] h-[18px] sm:w-[23px] sm:h-[23px] sm:max-w-max sm:mr-[0] mr-2 "
-          />{' '}
-          <div className="sm:hidden">{singleItem}</div>
-        </button>
-      )}
+      item={(singleItem: string, handleClose, onChange, activel) => {
+        return (
+          <button
+            className="hover:brightness-150 mt-2 flex items-center sm:p-2 sm:justify-center"
+            onClick={() => {
+              setActivePool({ activePool: singleItem });
+            }}
+            key={singleItem}
+          >
+            <img
+              src={getImageUrl(singleItem)}
+              className="w-[18px] h-[18px] sm:w-[23px] sm:h-[23px] sm:max-w-max sm:mr-[0] mr-2 "
+            />{' '}
+            <div className="sm:hidden">{singleItem}</div>
+          </button>
+        );
+      }}
     />
   );
 };
