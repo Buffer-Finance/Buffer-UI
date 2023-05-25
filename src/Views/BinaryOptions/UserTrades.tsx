@@ -27,6 +27,7 @@ import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { DOwnTriangle } from '@Public/ComponentSVGS/DownTriangle';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getPendingData } from './Tables/Desktop';
+import { BetState } from '@Hooks/useAheadTrades';
 
 const userTradeRootDivStyle =
   'bg-2 flex flex-col py-[9px] px-[10px] my-1 rounded-[4px]';
@@ -214,7 +215,7 @@ export const UserTrade: React.FC<{
     <div className={userTradeRootDivStyle}>
       <div className="flex items-center justify-between text-1 text-f12">
         <TradeMarket trade={trade} />
-        <NumberTooltip content={timeTillExpiration + ' lerft'}>
+        <NumberTooltip content={timeTillExpiration + ' left'}>
           <div className="flex items-center gap-x-[4px]">
             <TimerIcon />
             {trade.expirationTime ? getDuration(trade) : 'In Queue'}
@@ -266,7 +267,7 @@ export const UserTradeClosed: React.FC<{
   }
   let betExpiryPrice =
     trade.expirationPrice || expiryPriceCache?.[trade.optionID];
-  const processing = true;
+  const processing = trade.state === BetState.active;
   const [pnl, payout] = getPendingData(trade, betExpiryPrice);
   const isWin = +pnl > 0;
   console.log(`UserTrades-pnl, payout: `, pnl, payout, trade.expirationPrice);
