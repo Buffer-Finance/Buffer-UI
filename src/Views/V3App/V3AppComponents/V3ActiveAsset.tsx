@@ -8,7 +8,6 @@ import Background from '@Views/BinaryOptions/Favourites/style';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { toFixed } from '@Utils/NumString';
 import { priceAtom } from '@Hooks/usePrice';
-// import { DynamicMarketSelector } from '@Views/NoLoss/Favourites/TVMarketSelector';
 import { setDoccumentTitle } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 // import { LastDayChange } from '@Views/NoLoss/Favourites/LastDayChange';
@@ -24,8 +23,6 @@ import { useV3AppData } from '../Utils/useV3AppReadCalls';
 
 export const V3ActiveAsset = () => {
   const marketPrice = useAtomValue(priceAtom);
-  const { switchPool } = useSwitchPoolForTrade();
-  const readcallData = useV3AppData();
   const [isOpen, setIsOpen] = useState(false);
   const markets = useV3AppConfig();
   const { activeMarket: singleAsset } = useV3AppActiveMarket();
@@ -48,12 +45,6 @@ export const V3ActiveAsset = () => {
       chartMarket.tv_id
     : '';
   setDoccumentTitle(title);
-
-  if (!readcallData || !switchPool) return <></>;
-
-  const fullPayout = readcallData.totalPayout;
-  const basePayout = switchPool.base_settlement_fee;
-  const boostedPayout = subtract(fullPayout, basePayout);
 
   return (
     <AssetBackground className="relative min-w-full border-bottom ">
@@ -114,18 +105,7 @@ export const V3ActiveAsset = () => {
             </div>
 
             <div className="flex justify-between">
-              <div className="flex items-center mt-1">
-                <NumberTooltip content={'Payout on winning'}>
-                  <div className="text-1 text-f13 cursor-pointer">
-                    {fullPayout ? '+' + fullPayout + '%' : 'loading...'}&nbsp;
-                    {boostedPayout && boostedPayout !== '0' ? (
-                      <span className="text-buffer-blue text-f12">
-                        {'(' + boostedPayout + '% Boosted)'}
-                      </span>
-                    ) : null}
-                  </div>
-                </NumberTooltip>
-              </div>
+              <Payout />
               <div className="flex text-f12 justify-end items-center jus">
                 {/* <LastDayChange currentAsset={singleAsset} /> */}
               </div>
@@ -134,6 +114,30 @@ export const V3ActiveAsset = () => {
         </div>
       </div>
     </AssetBackground>
+  );
+};
+
+const Payout = () => {
+  const { switchPool } = useSwitchPoolForTrade();
+  const readcallData = useV3AppData();
+
+  if (!readcallData || !switchPool) return <></>;
+  const fullPayout = readcallData.totalPayout;
+  const basePayout = switchPool.base_settlement_fee;
+  const boostedPayout = subtract(fullPayout, basePayout);
+  return (
+    <div className="flex items-center mt-1">
+      <NumberTooltip content={'Payout on winning'}>
+        <div className="text-1 text-f13 cursor-pointer">
+          {fullPayout ? '+' + fullPayout + '%' : 'loading...'}&nbsp;
+          {boostedPayout && boostedPayout !== '0' ? (
+            <span className="text-buffer-blue text-f12">
+              {'(' + boostedPayout + '% Boosted)'}
+            </span>
+          ) : null}
+        </div>
+      </NumberTooltip>
+    </div>
   );
 };
 
