@@ -21,17 +21,12 @@ import { SettingsIcon } from '@Views/BinaryOptions/PGDrawer/SettingsIcon';
 import YellowWarning from '@SVG/Elements/YellowWarning';
 import { DynamicDurationPicker } from '@Views/BinaryOptions/PGDrawer/DurationPicker';
 import { SlippageModal } from '@Views/BinaryOptions/Components/SlippageModal';
-import {
-  QuickTradeExpiry,
-  ammountAtom,
-  approveModalAtom,
-} from '@Views/BinaryOptions/PGDrawer';
+import { ammountAtom, approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
 import { useSwitchPoolForTrade } from '../Utils/useSwitchPoolForTrade';
 import { AmountSelector } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import { useV3AppData } from '../Utils/useV3AppReadCalls';
 import { useAccount } from 'wagmi';
-import { useBinaryActions } from '@Views/BinaryOptions/Hooks/useBinaryActions';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useV3AppActiveMarket } from '../Utils/useV3AppActiveMarket';
 import { AssetCategory } from '../useV3AppConfig';
@@ -41,6 +36,7 @@ import { ApproveModal } from '@Views/BinaryOptions/Components/approveModal';
 import { knowTillAtom } from '@Views/BinaryOptions/Hooks/useIsMerketOpen';
 import { MarketTimingWarning } from '@Views/BinaryOptions/MarketTimingWarning';
 import { binaryOptionsAtom } from '@Views/BinaryOptions/PGDrawer/CustomOption';
+import { useV3BinaryActions } from '../Utils/useV3BinaryActions';
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 
@@ -197,7 +193,7 @@ const TradeButton = ({
   const { poolDetails } = useSwitchPoolForTrade();
   const { openConnectModal } = useConnectModal();
   const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
-  const { handleApproveClick, buyHandler, loading } = useBinaryActions(
+  const { handleApproveClick, buyHandler, loading } = useV3BinaryActions(
     amount,
     true,
     true
