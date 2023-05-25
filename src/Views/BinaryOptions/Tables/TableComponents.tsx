@@ -52,7 +52,7 @@ export const getExpireNotification = async (
 ) => {
   let response;
   const query = {
-    pair: currentRow.configPair.tv_id,
+    pair: currentRow.chartData.tv_id,
     timestamp: currentRow.expirationTime,
   };
   response = await axios.post(
@@ -100,11 +100,11 @@ export const getExpireNotification = async (
       msg: (
         <div className="flex-col">
           <div className="flex whitespace-nowrap">
-            {currentRow.configPair.token1}-{currentRow.configPair.token2}{' '}
+            {currentRow.configPair?.token0}-{currentRow.configPair?.token1}{' '}
             {currentRow.isAbove ? 'Up' : 'Down'} @&nbsp;
             <Display
               data={divide(currentRow.strike, 8)}
-              unit={currentRow.configPair.token2}
+              unit={currentRow.configPair?.token1}
               className="!whitespace-nowrap"
             />{' '}
             &nbsp;
@@ -118,7 +118,7 @@ export const getExpireNotification = async (
                 data={
                   win ? subtract(currentRow.amount, currentRow.totalFee) : 0
                 }
-                unit={(currentRow.depositToken as IToken).name}
+                unit={currentRow.poolInfo.token}
               />
               )
             </span>
@@ -137,27 +137,34 @@ export const SlippageTooltip: React.FC<{
   option: IGQLHistory;
   className?: string;
 }> = ({ option, className }) => {
+  if (!option?.slippage || option?.strike) return <></>;
   return (
     <InfoIcon
       className={className}
       sm
       tooltip={`The strike price will be in the range of ${toFixed(
         subtract(
-          divide(option.strike, 8),
+          divide(option.strike, 8) as string,
           divide(
-            multiply(divide(option.strike, 8), divide(option.slippage, 2)),
+            multiply(
+              divide(option.strike, 8) as string,
+              divide(option.slippage, 2) as string
+            ),
             '100'
-          )
+          ) as string
         ),
 
         4
       )} - ${toFixed(
         add(
-          divide(option.strike, 8),
+          divide(option.strike, 8) as string,
           divide(
-            multiply(divide(option.strike, 8), divide(option.slippage, 2)),
+            multiply(
+              divide(option.strike, 8) as string,
+              divide(option.slippage, 2) as string
+            ),
             '100'
-          )
+          ) as string
         ),
 
         4
@@ -177,7 +184,7 @@ export const Cancel: React.FC<{
   const { writeCall } = useWriteCall(configData.router, routerABI);
   const cancelHandler = async (
     queuedId: number,
-    cb: (loadingState) => void
+    cb: (loadingState: boolean) => void
   ) => {
     if (queuedId === null || queuedId === undefined) {
       toastify({
@@ -210,6 +217,7 @@ export const StopWatch: React.FC<{
   expiry: number;
 }> = ({ expiry }) => {
   const stopwatch = useStopWatch(expiry);
+  if (!stopwatch) return <></>;
   const result = stopwatch.replace(/(.)\1+/g, '$1');
   return (
     <div>
@@ -423,7 +431,7 @@ export const StrikePriceComponent = ({
     <>
       <Display
         data={divide(trade.strike, 8)}
-        unit={configData.token2}
+        unit={configData.token1}
         precision={decimals}
         className={`${
           !isMobile
@@ -467,7 +475,7 @@ export const ExpiryCurrentComponent: React.FC<{
                 <Display
                   data={divide(computedExpiryPrice, 8)}
                   precision={decimals}
-                  unit={configData.token2}
+                  unit={configData.token1}
                   className="justify-self-start content-start w-max"
                 />
               ) : (
@@ -487,7 +495,7 @@ export const ExpiryCurrentComponent: React.FC<{
             <Display
               data={divide(trade.expirationPrice, 8)}
               precision={decimals}
-              unit={configData.token2}
+              unit={configData.token1}
               className="justify-self-start content-start w-max"
             />
           ) : (
@@ -516,7 +524,6 @@ export const ProbabilityPNL = ({
   trade,
   isHistoryTable,
   marketPrice,
-  configData,
   onlyPnl = false,
 }: {
   trade: IGQLHistory;
@@ -614,7 +621,7 @@ export const ProbabilityPNL = ({
       </div>
     );
   }
-  let price = getPriceFromKlines(marketPrice, configData);
+  let price = getPriceFromKlines(marketPrice, trade.chartData);
   if (typeof price === 'string') {
     price = +price;
   }
