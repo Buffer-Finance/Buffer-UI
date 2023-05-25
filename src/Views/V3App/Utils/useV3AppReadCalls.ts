@@ -8,8 +8,8 @@ import { getCallId } from '@Utils/Contract/multiContract';
 import { erc20ABI } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '../config';
-import { getPayout } from '../helperFns';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
 
 function useV3AppReadCalls() {
   const { address } = useUserAccount();
@@ -50,6 +50,12 @@ function useV3AppReadCalls() {
         name: 'allowance',
         params: [address, configData.router],
       },
+      {
+        address: configData.router,
+        abi: RouterABI,
+        name: 'accountMapping',
+        params: [address],
+      },
     ];
 
     if (!address) {
@@ -64,6 +70,9 @@ function useV3AppReadCalls() {
 export const useV3AppData = () => {
   const { data: readCallData } = useV3AppReadCalls();
   const { switchPool, poolDetails } = useSwitchPoolForTrade();
+  const { activeChain } = useActiveChain();
+  const configData =
+    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
 
   const response = useMemo(() => {
     if (
@@ -79,12 +88,15 @@ export const useV3AppData = () => {
       readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
     const allowance =
       readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
+    const user2signer =
+      readCallData[getCallId(configData.router, 'accountMapping')]?.[0];
     return {
       totalPayout: divide(payout, 2) as string,
       balance,
       allowance,
+      user2signer,
     };
-  }, [readCallData, poolDetails, switchPool]);
+  }, [readCallData, poolDetails, switchPool, configData]);
 
   return response;
 };
