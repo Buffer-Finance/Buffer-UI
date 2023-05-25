@@ -27,7 +27,7 @@ import TableAssetCell from '@Views/Common/BufferTable/TableAssetCell';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlackBtn } from '@Views/Common/V2-Button';
-import { IMarket, IToken, IV, useQTinfo } from '..';
+import { IToken, IV } from '..';
 import { SetShareBetAtom, SetShareStateAtom } from '../Components/shareModal';
 import { IGQLHistory } from '../Hooks/usePastTradeQuery';
 import { expiryPriceCache } from '../Hooks/useTradeHistory';
@@ -40,6 +40,9 @@ import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { PairTokenImage } from '../Components/PairTokenImage';
+import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { v3AppConfig } from '@Views/V3App/config';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
@@ -167,9 +170,11 @@ export const Cancel: React.FC<{
   queue_id: number;
 }> = ({ queue_id }) => {
   const toastify = useToast();
-  const binary = useQTinfo();
+  const { activeChain } = useActiveChain();
+  const configData =
+    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
   //
-  const { writeCall } = useWriteCall(binary.routerContract, routerABI);
+  const { writeCall } = useWriteCall(configData.router, routerABI);
   const cancelHandler = async (
     queuedId: number,
     cb: (loadingState) => void
@@ -220,14 +225,8 @@ export const PayoutChip: React.FC<{
   className?: string;
 }> = ({ data, className = '' }) => {
   const net_pnl = data.payout
-    ? divide(
-        subtract(data.payout, data.totalFee),
-        (data.depositToken as IToken).decimals
-      )
-    : divide(
-        subtract('0', data.totalFee),
-        (data.depositToken as IToken).decimals
-      );
+    ? divide(subtract(data.payout, data.totalFee), data.poolInfo.decimals)
+    : divide(subtract('0', data.totalFee), data.poolInfo.decimals);
 
   const isPending = data.state === BetState.active;
   let isWin = gt(net_pnl, '0');
@@ -326,7 +325,7 @@ export const PayoutChip: React.FC<{
 export const AssetCell: React.FC<{
   currentRow: IGQLHistory;
   split?: boolean;
-  configData: IMarket;
+  configData: V3AppConfig;
 }> = ({ currentRow, split, configData }) => {
   const isUp = currentRow.isAbove;
 
@@ -334,13 +333,13 @@ export const AssetCell: React.FC<{
     <TableAssetCell
       img={
         <div className="w-[20px] h-[20px] mr-[6px]">
-          <PairTokenImage pair={currentRow.configPair?.pair} />
+          <PairTokenImage pair={currentRow.chartData?.pair} />
         </div>
       }
       head={
         <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
           <span className={`weight-400 text-f15 `}>
-            {configData.token1 + '-' + configData.token2}{' '}
+            {configData.token0 + '-' + configData.token1}{' '}
           </span>
           <UpDownChip isUp={isUp} />
         </div>
@@ -416,10 +415,10 @@ export const StrikePriceComponent = ({
   isMobile = false,
 }: {
   trade: IGQLHistory;
-  configData: IMarket;
+  configData: V3AppConfig;
   isMobile?: boolean;
 }) => {
-  const decimals = configData.price_precision.toString().length - 1;
+  const decimals = trade.chartData.price_precision.toString().length - 1;
   return (
     <>
       <Display
@@ -437,7 +436,7 @@ export const StrikePriceComponent = ({
           <SlippageTooltip option={trade} className="mt-[2px] mr-[3px]" />
           Slippage -
           <Display
-            data={divide(trade.slippage, 2)}
+            data={divide(trade?.slippage, 2)}
             unit="%"
             className="mr-[3px]"
             precision={2}
@@ -452,9 +451,9 @@ export const ExpiryCurrentComponent: React.FC<{
   isHistoryTable: boolean;
   trade: IGQLHistory;
   marketPrice: any;
-  configData: IMarket;
+  configData: V3AppConfig;
 }> = ({ isHistoryTable, trade, marketPrice, configData }) => {
-  const decimals = configData.price_precision.toString().length - 1;
+  const decimals = trade.chartData.price_precision.toString().length - 1;
 
   if (isHistoryTable) {
     if (trade.state === BetState.active) {
@@ -503,9 +502,9 @@ export const ExpiryCurrentComponent: React.FC<{
     <CellContent
       content={[
         <Display
-          data={getPriceFromKlines(marketPrice, configData)}
+          data={getPriceFromKlines(marketPrice, trade.chartData)}
           precision={decimals}
-          unit={configData.token2}
+          unit={configData.token1}
           className="justify-self-start content-start w-max"
         />,
       ]}
@@ -523,7 +522,7 @@ export const ProbabilityPNL = ({
   trade: IGQLHistory;
   isHistoryTable: boolean;
   marketPrice: any;
-  configData: IMarket;
+  configData: V3AppConfig;
   onlyPnl?: boolean;
 }) => {
   let currentEpoch = Math.round(new Date().getTime() / 1000);
@@ -547,11 +546,8 @@ export const ProbabilityPNL = ({
             }`}
           >
             <Display
-              data={divide(
-                pnl.toString(),
-                (trade.depositToken as IToken).decimals
-              )}
-              unit={(trade.depositToken as IToken).name}
+              data={divide(pnl.toString(), trade.poolInfo.decimals)}
+              unit={trade.poolInfo.token}
             />
           </span>
         );
@@ -560,11 +556,8 @@ export const ProbabilityPNL = ({
         <div className="flex flex-row items-center gap-x-8">
           <div className="flex flex-col items-start">
             <Display
-              unit={(trade.depositToken as IToken).name}
-              data={divide(
-                payout.toString(),
-                (trade.depositToken as IToken).decimals
-              )}
+              unit={trade.poolInfo.token}
+              data={divide(payout.toString(), trade.poolInfo.decimals)}
               className="f15 weight-400"
             />
             <div className="flex content-sbw full-width">
@@ -575,11 +568,8 @@ export const ProbabilityPNL = ({
               >
                 Net PnL :&nbsp;{' '}
                 <Display
-                  data={divide(
-                    pnl.toString(),
-                    (trade.depositToken as IToken).decimals
-                  )}
-                  unit={(trade.depositToken as IToken).name}
+                  data={divide(pnl.toString(), trade.poolInfo.decimals)}
+                  unit={trade.poolInfo.token}
                 />
               </span>
             </div>
@@ -593,8 +583,8 @@ export const ProbabilityPNL = ({
           className={`nowrap flex ${+net_pnl < 0 ? 'text-red' : 'text-green'}`}
         >
           <Display
-            data={divide(net_pnl, (trade.depositToken as IToken).decimals)}
-            unit={(trade.depositToken as IToken).name}
+            data={divide(net_pnl, trade.poolInfo.decimals)}
+            unit={trade.poolInfo.token}
           />
         </span>
       );
@@ -603,8 +593,8 @@ export const ProbabilityPNL = ({
       <div className="flex flex-row items-center gap-x-8">
         <div className="flex flex-col items-start">
           <Display
-            unit={(trade.depositToken as IToken).name}
-            data={divide(trade.payout, (trade.depositToken as IToken).decimals)}
+            unit={trade.poolInfo.token}
+            data={divide(trade.payout, trade.poolInfo.decimals)}
             className="f15 weight-400"
           />
           <div className="flex content-sbw full-width">
@@ -615,8 +605,8 @@ export const ProbabilityPNL = ({
             >
               Net PnL :&nbsp;{' '}
               <Display
-                data={divide(net_pnl, (trade.depositToken as IToken).decimals)}
-                unit={(trade.depositToken as IToken).name}
+                data={divide(net_pnl, trade.poolInfo.decimals)}
+                unit={trade.poolInfo.token}
               />
             </span>
           </div>
@@ -660,8 +650,8 @@ export const TradeSize: React.FC<{
     <CellInfo
       labels={[
         <Display
-          data={divide(trade.totalFee, (trade.depositToken as IToken).decimals)}
-          unit={(trade.depositToken as IToken).name}
+          data={divide(trade.totalFee, trade.poolInfo.decimals)}
+          unit={trade.poolInfo.token}
           className="text-1 w-max"
         />,
       ]}

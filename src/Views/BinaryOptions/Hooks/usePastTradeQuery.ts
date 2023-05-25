@@ -9,6 +9,10 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { useAugmentedTrades } from './useAugmentedTrades';
+import { V3AppConfig, useV3AppConfig } from '@Views/V3App/useV3AppConfig';
+import { marketsForChart, v3AppConfig } from '@Views/V3App/config';
+import { valueof } from 'react-joyride';
+import { joinStrings } from '@Views/V3App/helperFns';
 
 export const tardesAtom = atom<{
   active: IGQLHistory[];
@@ -69,7 +73,6 @@ export interface IGQLHistory {
   strike: string;
   totalFee: string;
   state: BetState;
-  depositToken: string | IToken;
   isAbove: boolean;
   optionContract: {
     asset: string;
@@ -89,12 +92,23 @@ export interface IGQLHistory {
   };
   slippage?: string;
   //added on FE
-  configPair?: IMarket;
+  configPair?: V3AppConfig;
   blockNumber?: number;
+  chartData: typeof marketsForChart.ARBUSD;
+  poolInfo: {
+    tokenAddress: string;
+    meta: string;
+    decimals: number;
+    token: string;
+    is_pol: boolean;
+  };
 }
 
 export const useProcessedTrades = () => {
-  const { configContracts } = useActiveChain();
+  const { activeChain } = useActiveChain();
+  const configData =
+    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
+  const v3Config = useV3AppConfig();
   const getProcessedTrades = (
     trades,
     block,
@@ -102,44 +116,30 @@ export const useProcessedTrades = () => {
     shouldAddHistoryPrice = false
   ) => {
     const tempTrades = trades?.map((singleTrade: IGQLHistory) => {
-      // console.log(singleTrade, 'singleTrade');
-      // if (singleTrade.blockNumber) {
-      //   if (block >= singleTrade.blockNumber) {
-      //     // if graph scanned this block.
-      //     return null;
-      //   }
-      // }
-      // if (tradesToBeDeleted?.length) {
-      //   if (
-      //     tradesToBeDeleted.find(
-      //       (singleRawTrade) =>
-      //         singleRawTrade.id == +singleTrade.queueID &&
-      //         singleTrade.state === BetState.queued
-      //     )
-      //   ) {
-      //     return null;
-      //   }
-      // }
+      if (v3Config === null) return;
       let pool;
-      const configPair = configContracts.pairs.find((pair) => {
+      const configPair = v3Config.find((pair) => {
         pool = pair.pools.find(
           (pool) =>
-            pool.options_contracts.current.toLocaleLowerCase() ===
+            pool.optionContract.toLocaleLowerCase() ===
             singleTrade.optionContract.address.toLowerCase()
         );
         return !!pool;
       });
       if (!pool) return null;
 
-      const depositToken = configContracts.tokens[pool.token];
-      let updatedTrade = { ...singleTrade, depositToken, configPair };
+      const poolInfo = configData.poolsInfo[pool.pool];
+      const marketId = joinStrings(configPair?.token0, configPair?.token1, '');
+      const chartData =
+        marketsForChart[marketId as keyof typeof marketsForChart];
+      let updatedTrade = { ...singleTrade, configPair, chartData, poolInfo };
       if (shouldAddHistoryPrice) {
         if (singleTrade.expirationTime < Date.now() / 1000)
-          console.log(
-            `singleTrade.expirationTime: `,
-            singleTrade.expirationTime
-          );
-        addExpiryPrice(updatedTrade);
+          // console.log(
+          //   `singleTrade.expirationTime: `,
+          //   singleTrade.expirationTime
+          // );
+          addExpiryPrice(updatedTrade);
       }
 
       return updatedTrade;
@@ -208,7 +208,7 @@ export const usePastTradeQuery = () => {
   const blockNumber = remoteData?._meta?.block.number;
   // const { data: trades } = useAheadTrades(data, account, false);
   const { data } = useAugmentedTrades(remoteData);
-  console.log(`data: `, data);
+  // console.log(`data: `, data);
   useEffect(() => {
     let activeResponseArr = [];
     if (!data) return;

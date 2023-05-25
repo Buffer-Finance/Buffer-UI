@@ -46,7 +46,6 @@ const useFetchV3AppConfig = () => {
 
 export const useV3AppConfig = () => {
   const { data, error } = useFetchV3AppConfig();
-  console.log(data, 'data');
   if (error) {
     console.log(error);
   }

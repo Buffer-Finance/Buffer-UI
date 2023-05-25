@@ -49,7 +49,7 @@ export const useSwitchPoolForTrade = () => {
     ];
   }, [switchPool]);
 
-  console.log(`switchPool: `, switchPool, poolDetails);
+  // console.log(`switchPool: `, switchPool, poolDetails);
 
   return { switchPool, poolDetails };
 };

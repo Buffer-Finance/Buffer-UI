@@ -193,11 +193,8 @@ const TradeButton = ({
   const { poolDetails } = useSwitchPoolForTrade();
   const { openConnectModal } = useConnectModal();
   const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
-  const { handleApproveClick, buyHandler, loading } = useV3BinaryActions(
-    amount,
-    true,
-    true
-  );
+  const { handleApproveClick, buyHandler, loading } =
+    useV3BinaryActions(amount);
 
   const UpHandler = () => {
     if (!account) return openConnectModal?.();

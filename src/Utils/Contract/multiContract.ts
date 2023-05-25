@@ -47,7 +47,7 @@ export const multicallv2 = async (
 };
 
 export const getReadId = (call: Call) => {
-  console.log(`getReadIdcall: `, call);
+  // console.log(`getReadIdcall: `, call);
   return call.address + call.name;
 };
 export const getCallId = (address: string, method: string, ...rest) => {
@@ -81,9 +81,9 @@ export const multicallLinked = async (
       const returnCall = itf.decodeFunctionResult(calls[i].name, call);
       const copy = getDeepCopy(returnCall);
       convertBNtoString(copy);
-      console.log(`calls[i]?.id: `, calls[i]?.id);
+      // console.log(`calls[i]?.id: `, calls[i]?.id);
       const id = calls[i]?.id || getReadId(calls[i]);
-      console.log(`id: `, id);
+      // console.log(`id: `, id);
       resultMap[id] = copy;
     });
     return resultMap;

@@ -27,10 +27,14 @@ import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { DOwnTriangle } from '@Public/ComponentSVGS/DownTriangle';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getPendingData } from './Tables/Desktop';
+
 const userTradeRootDivStyle =
   'bg-2 flex flex-col py-[9px] px-[10px] my-1 rounded-[4px]';
+
 export const tableTypes = ['Open', 'Closed', 'Cancelled'];
+
 export const isWideTableEnabled = atom<boolean>(false);
+
 export const UserTrades: React.FC<any> = ({}) => {
   const [tableType, setTableType] = useState(tableTypes[0]);
   const { active, history, cancelled } = useAtomValue(tardesAtom);
@@ -39,7 +43,7 @@ export const UserTrades: React.FC<any> = ({}) => {
     history: historyPages,
     cancelled: cancelledPages,
   } = useAtomValue(tardesTotalPageAtom);
-  console.log(`UserTrades-activePages: `, active);
+  // console.log(`UserTrades-activePages: `, active);
   const setWideTable = useSetAtom(isWideTableEnabled);
 
   const totalPages = {
@@ -151,7 +155,7 @@ export const UserTrades: React.FC<any> = ({}) => {
 };
 
 export function getTradeSize(trade: IGQLHistory) {
-  return divide(trade.totalFee, (trade.depositToken as IToken).decimals);
+  return divide(trade.totalFee, trade.poolInfo.decimals);
 }
 export function getDuration(trade: IGQLHistory) {
   return formatDistanceExpanded(
@@ -196,10 +200,10 @@ export const UserTrade: React.FC<{
   trade: IGQLHistory;
   tableType?: 'Closed' | 'Open' | 'Cancel';
 }> = ({ trade, tableType }) => {
-  console.log(`trade: `, trade);
+  // console.log(`trade: `, trade);
   const [marketPrice] = useAtom(priceAtom);
 
-  let price = getPriceFromKlines(marketPrice, trade.configPair);
+  let price = getPriceFromKlines(marketPrice, trade.chartData);
   if (typeof price === 'string') {
     price = +price;
   }
@@ -256,7 +260,7 @@ export const UserTradeClosed: React.FC<{
   console.log(`trade: `, trade);
   const [marketPrice] = useAtom(priceAtom);
 
-  let price = getPriceFromKlines(marketPrice, trade.configPair);
+  let price = getPriceFromKlines(marketPrice, trade.chartData);
   if (typeof price === 'string') {
     price = +price;
   }
@@ -305,8 +309,8 @@ export const UserTradeClosed: React.FC<{
               >
                 <Display
                   label={isWin ? '+' : ''}
-                  data={divide(pnl, (trade.depositToken as IToken).decimals)}
-                  unit={(trade.depositToken as IToken).name}
+                  data={divide(pnl, trade.poolInfo.decimals)}
+                  unit={trade.poolInfo.token}
                 />
               </span>
             </div>{' '}
@@ -325,7 +329,7 @@ export const UserTradeCancelled: React.FC<{
   console.log(`trade: `, trade);
   const [marketPrice] = useAtom(priceAtom);
 
-  let price = getPriceFromKlines(marketPrice, trade.configPair);
+  let price = getPriceFromKlines(marketPrice, trade.chartData);
   if (typeof price === 'string') {
     price = +price;
   }
@@ -368,7 +372,7 @@ const TradeMarket = ({ trade }: { trade: IGQLHistory }) => {
         ) : (
           <DOwnTriangle className={`scale-[0.70] mt-1`} />
         )}
-        {trade.configPair?.tv_id}
+        {trade.chartData?.tv_id}
       </div>
     </NumberTooltip>
   );

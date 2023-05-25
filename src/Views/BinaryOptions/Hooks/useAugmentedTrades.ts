@@ -130,7 +130,7 @@ const dataD = {
   ],
 };
 const useAugmentedTrades = (data: IGQLResponse) => {
-  console.log(`remotedata: `, data);
+  // console.log(`remotedata: `, data);
   const { configContracts, activeChain } = useActiveChain();
   const { address } = useUserAccount();
   const p = useProvider({ chainId: activeChain.id });
@@ -142,7 +142,7 @@ const useAugmentedTrades = (data: IGQLResponse) => {
       if (data?.lastExpired?.length) {
         lastQueueId = data.lastExpired?.[0].queueID;
       }
-      console.log(`[aug]lastQueueId: `, lastQueueId, data);
+      // console.log(`[aug]lastQueueId: `, lastQueueId, data);
       const calls = address &&
         data && [
           {
@@ -240,7 +240,7 @@ const useAugmentedTrades = (data: IGQLResponse) => {
           dataClone.activeTrades.push(newActiveTrade);
         }
       });
-      console.log(`[aug]dataClone: `, dataClone);
+      // console.log(`[aug]dataClone: `, dataClone);
       setUpdatedData(dataClone);
     }, 1000);
 
