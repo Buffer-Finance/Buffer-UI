@@ -20,13 +20,14 @@ import { useV3AppActiveMarket } from '../Utils/useV3AppActiveMarket';
 import { subtract } from '@Utils/NumString/stringArithmatics';
 import { useSwitchPoolForTrade } from '../Utils/useSwitchPoolForTrade';
 import { useV3AppData } from '../Utils/useV3AppReadCalls';
+import { useNavigate } from 'react-router-dom';
 
-export const V3ActiveAsset = () => {
+export const V3ActiveAsset = ({ cb }) => {
   const marketPrice = useAtomValue(priceAtom);
   const [isOpen, setIsOpen] = useState(false);
   const markets = useV3AppConfig();
   const { activeMarket: singleAsset } = useV3AppActiveMarket();
-
+  const navigate = useNavigate();
   if (!singleAsset || !markets) return <></>;
 
   const assetPair = joinStrings(singleAsset.token0, singleAsset.token1, '-');
@@ -47,26 +48,26 @@ export const V3ActiveAsset = () => {
   setDoccumentTitle(title);
 
   return (
-    <AssetBackground className={`relative min-w-full $`}>
+    <AssetBackground className="relative min-w-full border-bottom ">
       {isOpen && (
         <>
           <Background className=" !translate-x-[-20%] !translate-y-[30px]">
             <V3MarketSelector
               onMarketSelect={(m) => {
-                // cb(m, 'charts');
+                cb(m, 'charts');
                 //TODO - v3 Change Url
-                // navigate('/v3/' + m);
+                navigate('/v3/' + m);
                 setIsOpen(false);
               }}
               markets={markets}
               className="asset-dropdown-wrapper left-[0] max-w-[300px] p-3"
             />
-            <></>
           </Background>
           <div id="overlay" onClick={() => setIsOpen(false)}></div>
         </>
       )}
       {/* <ShareModal qtInfo={qtInfo} /> */}
+
       <div className="px-5 py-3 rounded-[10px] y-auto  whitespace-nowrap pl-4">
         <div
           className={`flex items-center content-between assets w-full h-max`}
@@ -106,7 +107,7 @@ export const V3ActiveAsset = () => {
 
             <div className="flex justify-between">
               <Payout />
-              <div className="flex text-f12 justify-end items-center jus">
+              <div className="flex text-f12 justify-end items-center">
                 {/* <LastDayChange currentAsset={singleAsset} /> */}
               </div>
             </div>

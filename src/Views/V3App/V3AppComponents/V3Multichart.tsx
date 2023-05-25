@@ -376,7 +376,7 @@ const MultiChart = ({
           />{' '}
         </div>
         <Background className=" max-w-[280px] mx-auto flex flex-col border-left ">
-          <V3ActiveAsset />
+          <V3ActiveAsset cb={handleNewTabClick} />
           <V3OptionBuying />
           <div className="flex-1 max-h-full w-full relative mt-4 ">
             <UserTrades />
