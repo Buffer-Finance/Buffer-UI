@@ -209,7 +209,7 @@ const MultiChart = ({
         )}
       /> */}
       {/*//TODO - v3 fix this shareModal*/}
-      {/* <ShareModal qtInfo={qtInfo} /> */}
+      <ShareModal qtInfo={ddConfig} />
       <WideTableModal />
       <OneCTModal />
       <CustomisationWarnModal

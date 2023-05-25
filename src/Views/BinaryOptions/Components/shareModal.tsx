@@ -1,6 +1,6 @@
 import { Dialog } from '@mui/material';
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+
 import { UpDownChipWOText } from '../Tables/TableComponents';
 import {
   CloseOutlined,
@@ -9,7 +9,6 @@ import {
 } from '@mui/icons-material';
 import { atom, useAtom } from 'jotai';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { defaultPair, IQTrade } from '..';
 import { getPendingData } from '../Tables/Desktop';
 import { downloadGetLink, getNodeSnapshot, uploadImage } from '@Utils/DOMutils';
 import { useCopyToClipboard } from 'react-use';
@@ -30,10 +29,13 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useHostName } from '../Hooks/useHostName';
 import { BufferLogoComponent } from '@Views/Common/Navbar/BufferLogo';
 import { affilateCode2ReferralLink } from '@Views/Referral';
-import { Divider } from '@Views/Earn/Components/Divider';
+import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { getImageUrl } from '../PGDrawer/PoolDropDown';
+import styled from '@emotion/styled';
 
 interface IShareModal {
-  qtInfo: IQTrade;
+  qtInfo: V3AppConfig;
 }
 
 export const ShareModalStyles = styled.div`
@@ -88,17 +90,18 @@ export const ShareModal: React.FC<IShareModal> = ({ qtInfo }) => {
 };
 export const apiBaseUrl = 'https://share.buffer.finance';
 
-const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
+const ModalChild: React.FC<{ closeModal: () => void; qtInfo: V3AppConfig }> = ({
   closeModal,
   qtInfo,
 }) => {
+  const { activeChain } = useActiveChain();
   const [{ trade, expiryPrice }] = useAtom(ShareBetAtom);
   const ref = useRef();
   const [loading, setLoading] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
-  const decimals = trade?.configPair.price_precision?.toString()?.length - 1;
+  const decimals = trade?.chartData.price_precision?.toString()?.length - 1;
   const toastify = useToast();
-  const { affiliateCode } = useUserCode(qtInfo.activeChain);
+  const { affiliateCode } = useUserCode(activeChain);
   const isCodeSet = !!affiliateCode;
   const { hostname } = useHostName();
   const baseURL = `https://${hostname}/#/`;
@@ -124,15 +127,16 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
     const image = await getNodeSnapshot(ref.current);
     downloadGetLink(
       image,
-      trade.configPair.token1 +
+      trade.configPair?.token0 +
         '-' +
-        trade.configPair.token2 +
+        trade.configPair?.token1 +
         '|' +
         (trade.isAbove ? 'Up' : 'Down')
     );
   };
 
-  if (!trade) return <div className="text-f20 text-1">Loading...</div>;
+  if (!trade || !trade.configPair)
+    return <div className="text-f20 text-1">Loading...</div>;
 
   const tradeExpiry = expiryPrice;
   const { pnl, payout } = getPayout(trade, tradeExpiry);
@@ -145,7 +149,7 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
       value: (
         <Display
           data={divide(trade.strike, 8)}
-          unit={trade.configPair.token2}
+          unit={trade.configPair.token1}
           precision={decimals}
           className="inline whitespace-pre"
         />
@@ -156,7 +160,7 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
       value: (
         <Display
           data={divide(tradeExpiry, 8)}
-          unit={trade.configPair.token2}
+          unit={trade.configPair.token1}
           precision={decimals}
           className="inline whitespace-nowrap"
         />
@@ -190,7 +194,7 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
               />
               <div className="flex items-center text-f16 bg-[#02072C] px-4 py-1 rounded font-bold mt-3">
                 <div className="mr-2 text-[#FFFFFF]">
-                  {trade.configPair.token1}-{trade.configPair.token2}
+                  {trade.configPair.token1}-{trade.configPair.token1}
                 </div>
                 <UpDownChipWOText isUp={trade.isAbove} />
                 <div
@@ -216,10 +220,10 @@ const ModalChild: React.FC<{ closeModal: () => void; qtInfo: IQTrade }> = ({
                 <div className="w-1 h-[30px] bg-grey mx-3"></div>
                 <div className="text-f16 text-3 flex items-center justify-center">
                   <img
-                    src={trade.depositToken.img}
+                    src={getImageUrl(trade.poolInfo.token)}
                     className="w-[22px] h-[22px] mr-2 "
                   />{' '}
-                  ${trade.depositToken.name}
+                  ${trade.poolInfo.token}
                 </div>
               </div>
             </div>
