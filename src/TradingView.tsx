@@ -36,7 +36,6 @@ import {
 } from '@Utils/Dates/displayDateTime';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
-import { useQTinfo } from '@Views/BinaryOptions';
 import {
   getAggregatedBarv2,
   getBlockFromBar,
@@ -64,6 +63,9 @@ import {
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
 import { getIdentifier } from '@Hooks/useGenericHook';
+import { useV3AppConfig } from '@Views/V3App/useV3AppConfig';
+import { marketsForChart } from '@Views/V3App/config';
+import { joinStrings } from '@Views/V3App/helperFns';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -253,8 +255,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
-  const qtInfo = useQTinfo();
-
+  const v3AppConfig = useV3AppConfig();
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
@@ -277,21 +278,32 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   async function getAllSymbols() {
     let allSymbols: any[] = [];
     let tempSymbols: any[] = [];
-    for (const singleAsset of qtInfo.pairs) {
-      tempSymbols = [
-        {
-          symbol: singleAsset.tv_id,
-          full_name: singleAsset.tv_id,
-          description: singleAsset.tv_id,
-          exchange: PRICE_PROVIDER,
-          type: singleAsset.category,
-          pricescale: singleAsset.price_precision,
-          pair: singleAsset.pair,
-        },
-        ...tempSymbols,
-      ];
-      allSymbols = [...tempSymbols];
+    if (v3AppConfig !== null) {
+      for (const singleAsset of v3AppConfig) {
+        const marketId = joinStrings(
+          singleAsset.token0,
+          singleAsset.token1,
+          ''
+        );
+        const chartMarket =
+          marketsForChart[marketId as keyof typeof marketsForChart];
+
+        tempSymbols = [
+          {
+            symbol: chartMarket.tv_id,
+            full_name: chartMarket.tv_id,
+            description: chartMarket.tv_id,
+            exchange: PRICE_PROVIDER,
+            type: singleAsset.category,
+            pricescale: chartMarket.price_precision,
+            pair: chartMarket.pair,
+          },
+          ...tempSymbols,
+        ];
+        allSymbols = [...tempSymbols];
+      }
     }
+
     return allSymbols;
   }
   const price = useAtomValue(priceAtom);

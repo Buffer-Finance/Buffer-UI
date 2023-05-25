@@ -1,12 +1,12 @@
 import { atom, useSetAtom } from 'jotai';
 import { SVGProps, useEffect, useState } from 'react';
 import { useOneCTWallet } from './useOneCTWallet';
-import { useQTinfo } from '@Views/BinaryOptions';
 import Joyride from 'react-joyride';
 const userOnectAcknowledgementString = 'user-know-about-1ct';
+
 const OneCTButton: React.FC<any> = ({}) => {
   const setModal = useSetAtom(isOneCTModalOpenAtom);
-  const qtInfo = useQTinfo();
+
   const { disableOneCt, registeredOneCT } = useOneCTWallet();
   const [run, setRun] = useState(false);
   useEffect(() => {

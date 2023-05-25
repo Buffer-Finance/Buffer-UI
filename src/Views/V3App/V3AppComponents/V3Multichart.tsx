@@ -26,6 +26,7 @@ import { Background } from '@Views/BinaryOptions/PGDrawer/style';
 import { V3ActiveAsset } from './V3ActiveAsset';
 import { V3OptionBuying } from './V3optionBuying';
 import { UserTrades } from '@Views/BinaryOptions/UserTrades';
+import { json, layoutConsentsAtom } from 'src/MultiChartLayout';
 
 export const V3MultiChart = () => {
   const appChartConfig = useV3MultiChartConfig();
@@ -75,54 +76,6 @@ type chartMarkets = {
   };
 }[];
 
-var json = {
-  global: {
-    tabEnableClose: true,
-    // tabClassName: 'bg-2',
-    tabSetClassNameTabStrip: 'bg-2',
-    borderClassName: 'bg-2',
-  },
-  layout: {
-    type: 'row',
-    weight: 100,
-    children: [
-      {
-        type: 'row',
-        weight: 1000,
-        children: [
-          {
-            type: 'tabset',
-            weight: 55,
-            selected: 0,
-            id: 'charts',
-            children: [
-              {
-                type: 'tab',
-                name: 'BTC-USD',
-                id: 'BTC-USD',
-                enableClose: false,
-                component: 'TradingView',
-                enableDrag: false,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-};
-
-const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
-  layoutCustomization: {
-    isModalOpen: false,
-    isUserEducated: false,
-  },
-  resetCustomization: {
-    isModalOpen: false,
-    isUserEducated: false,
-  },
-});
-const layoutAtom = atomWithLocalStorage('layout-persisted-v3', json);
 export interface MarketInterface {
   minPeriod: string;
   maxPeriod: string;
@@ -158,11 +111,11 @@ const MultiChart = ({
   const [forcefullyRerender, setforcefullyRerender] = useState(1);
   const { market } = useParams();
   const [layoutConset, seLayoutConsent] = useAtom(layoutConsentsAtom);
-  const [layout, setLayout] = useAtom(layoutAtom);
+  const [layout, setLayout] = [json, () => {}];
   const layoutApi = useMemo(() => FlexLayout.Model.fromJson(layout), [layout]);
   const toastify = useToast();
   const navigate = useNavigate();
-  usePrice();
+  usePrice(true);
   usePastTradeQuery();
   useGenericHooks();
 
@@ -220,7 +173,7 @@ const MultiChart = ({
   function resetLayoutForced() {
     redirectTo();
     isCDMForMarketSelect.current = true;
-    setLayout(json);
+    setLayout();
   }
   useEffect(() => {
     try {

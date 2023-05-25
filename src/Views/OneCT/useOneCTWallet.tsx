@@ -1,6 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
-import { activeAssetStateAtom, useQTinfo } from '@Views/BinaryOptions';
+import { activeAssetStateAtom } from '@Views/BinaryOptions';
 import { ethers } from 'ethers';
 import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -8,7 +8,9 @@ import secureLocalStorage from 'react-secure-storage';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
+import { v3AppConfig } from '@Views/V3App/config';
 const registerOneCtMethod = 'registerAccount';
+
 export const is1CTEnabled = (
   account: string[],
   pk: string | null,
@@ -28,11 +30,13 @@ const useOneCTWallet = () => {
   const { address } = useAccount();
   const { writeCall } = useIndependentWriteCall();
   const toastify = useToast();
-  const qtInfo = useQTinfo();
+
   const res = useAtomValue(activeAssetStateAtom);
   const [createLoading, setCreateLoading] = useState(false);
 
   const { activeChain } = useActiveChain();
+  const configData =
+    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
   const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
   const registeredOneCT = res.user2signer
@@ -79,7 +83,7 @@ const useOneCTWallet = () => {
   };
   const disableOneCt = () => {
     writeCall(
-      qtInfo.routerContract,
+      configData.router,
       RouterAbi,
       (payload) => {
         if (payload.payload) {

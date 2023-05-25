@@ -47,7 +47,7 @@ export const V3ActiveAsset = () => {
   setDoccumentTitle(title);
 
   return (
-    <AssetBackground className="relative min-w-full border-bottom ">
+    <AssetBackground className={`relative min-w-full $`}>
       {isOpen && (
         <>
           <Background className=" !translate-x-[-20%] !translate-y-[30px]">

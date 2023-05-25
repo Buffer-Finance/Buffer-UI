@@ -42,7 +42,7 @@ import { ActiveTable, useQTinfo } from '@Views/BinaryOptions';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { WideTableModal } from './WideTableModal';
 import { ShareModal } from '@Views/BinaryOptions/Components/shareModal';
-var json = {
+export var json = {
   global: {
     tabEnableClose: true,
     splitterSize: 4,
@@ -168,16 +168,19 @@ const WithIdle = (C: any, duration: number) => {
   };
   return updatedComponent;
 };
-const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
-  layoutCustomization: {
-    isModalOpen: false,
-    isUserEducated: false,
-  },
-  resetCustomization: {
-    isModalOpen: false,
-    isUserEducated: false,
-  },
-});
+export const layoutConsentsAtom = atomWithLocalStorage(
+  'layout-consents-persisted',
+  {
+    layoutCustomization: {
+      isModalOpen: false,
+      isUserEducated: false,
+    },
+    resetCustomization: {
+      isModalOpen: false,
+      isUserEducated: false,
+    },
+  }
+);
 const layoutAtom = atomWithLocalStorage('layout-persisted-v2', json);
 const DesktopTrad = () => {
   const layoutRef = useRef<Layout | null>(null);

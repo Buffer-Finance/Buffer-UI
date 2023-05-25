@@ -6,7 +6,7 @@ import { is1CTEnabled, useOneCTWallet } from './useOneCTWallet';
 import { CloseOutlined } from '@mui/icons-material';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
-import { activeAssetStateAtom, useQTinfo } from '@Views/BinaryOptions';
+import { activeAssetStateAtom } from '@Views/BinaryOptions';
 import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
 
@@ -15,13 +15,13 @@ const OneCTModal: React.FC<any> = ({}) => {
   const setModal = useSetAtom(isOneCTModalOpenAtom);
   const [laoding, setLaoding] = useState(false);
   const { activeChain } = useActiveChain();
+  const configData =
+    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
   const { generatePk, registeredOneCT, registerOneCt, createLoading, oneCtPk } =
     useOneCTWallet();
   const { writeCall } = useIndependentWriteCall();
   const res = useAtomValue(activeAssetStateAtom);
   const provider = useProvider({ chainId: activeChain.id });
-
-  const qtInfo = useQTinfo();
   const toastify = useToast();
   const handleRegister = (privateKey?: string) => {
     if (privateKey || oneCtPk) {
@@ -42,7 +42,7 @@ const OneCTModal: React.FC<any> = ({}) => {
       }
       setLaoding(true);
       writeCall(
-        qtInfo.routerContract,
+        configData.router,
         RouterAbi,
         (payload) => {
           setLaoding(false);
@@ -144,6 +144,7 @@ import { SVGProps } from 'react';
 import { useProvider } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
+import { v3AppConfig } from '@Views/V3App/config';
 const GreenTickMark = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

@@ -7,16 +7,16 @@ import BufferCheckbox from '@Views/Common/BufferCheckbox';
 import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
 import { PrimaryBtn, SecondaryBtn } from '@Views/Common/Buttons';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { useQTinfo } from '..';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 const ApproveModalStyles = styled.div`
-  background-color:#232334;
-  display:flex;
-  flex-direction:column;
+  background-color: #232334;
+  display: flex;
+  flex-direction: column;
   gap: 1.8rem;
   padding: 3rem 4rem;
-  margin:auto;
-  width:min(650px,95%);
+  margin: auto;
+  width: min(650px, 95%);
 
   padding-bottom: 2rem;
   position: relative;
@@ -26,10 +26,9 @@ const ApproveModalStyles = styled.div`
   /* top: 35rem; */
   /* transform: translateX(-5rem); */
   /* bottom:1rem; */
-  @media (max-width:800px) {
-    border-radius:10px;
-  padding: 3rem 2rem;
-    
+  @media (max-width: 800px) {
+    border-radius: 10px;
+    padding: 3rem 2rem;
   }
 
   .close {
@@ -61,28 +60,29 @@ export const ApproveModal: React.FC<IApproveModal> = ({
   isOpen,
   loading,
 }) => {
-  // const { state } = useGlobal();
-  const qtInfo = useQTinfo();
-
+  const { activeChain } = useActiveChain();
   const [loadingState, setLoadingState] = useState(0);
   const [isChecked, setIsChecked] = useState(true);
   if (!isOpen) return <></>;
   return (
     <Dialog open={isOpen} onClose={closeModal}>
-      <ApproveModalStyles >
+      <ApproveModalStyles>
         <IconButton className="close" onClick={closeModal}>
           <CloseOutlined />
         </IconButton>
         <div className="text-f24 fw5 text-1">Approve {token}</div>
         <div className="text-f20 fw5 text-2 ">
-          Allow Buffer to spend your <span className='text-1'>{token}</span> on{' '}
-          <span className='text-1'>   {qtInfo.activeChain.name.split(' ')[0].toUpperCase()}</span>
+          Allow Buffer to spend your <span className="text-1">{token}</span> on{' '}
+          <span className="text-1">
+            {' '}
+            {activeChain.name.split(' ')[0].toUpperCase()}
+          </span>
         </div>
-        <div className='w-full text-f16 text-2 '>
-          <span className='text-1 '>Trading UX Disclaimer : </span>
-          Please note that there may be a delay between trade placement and  
+        <div className="w-full text-f16 text-2 ">
+          <span className="text-1 ">Trading UX Disclaimer : </span>
+          Please note that there may be a delay between trade placement and
           order execution, but the timestamp and price are taken at the time
-          when the transaction is signed from your wallet for a fair and 
+          when the transaction is signed from your wallet for a fair and
           accurate trading experience.
         </div>
         <div
