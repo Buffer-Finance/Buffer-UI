@@ -12,11 +12,11 @@ import {
   IMarket,
   mobileUpperBound,
 } from '..';
-import { useFavouritesFns } from '../Hooks/useFavouritesFns';
-import { getFilteredAssets } from './Utils/getFilteredAssets';
 import { PairTokenImage } from '../Components/PairTokenImage';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { useV3AppFavouritesFns } from '@Views/V3App/Utils/useV3AppFavouriteFns';
+import { getV3AppFilteredAssets } from '@Views/V3App/Utils/getFilteredAssets';
 
 export const AssetTable: React.FC<{
   assetsArray: IMarket[];
@@ -25,9 +25,13 @@ export const AssetTable: React.FC<{
   searchText: string;
 }> = ({ assetsArray, activeCategory, searchText, onMarketSelect }) => {
   const [favourites, setFavourites] = useAtom(FavouriteAtom);
-  const updatedArr = getFilteredAssets(assetsArray, searchText, activeCategory);
+  const updatedArr = getV3AppFilteredAssets(
+    assetsArray,
+    searchText,
+    activeCategory
+  );
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
-  const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
+  const { addCardHandler, replaceAssetHandler } = useV3AppFavouritesFns();
   const { activeChain } = useActiveChain();
   const { poolNames } = usePoolNames();
   const payoutCols = useMemo(

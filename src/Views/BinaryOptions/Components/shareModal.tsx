@@ -34,9 +34,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { getImageUrl } from '../PGDrawer/PoolDropDown';
 import styled from '@emotion/styled';
 
-interface IShareModal {
-  qtInfo: V3AppConfig;
-}
+interface IShareModal {}
 
 export const ShareModalStyles = styled.div`
   padding: 20px;
@@ -73,7 +71,7 @@ export const SetShareBetAtom = atom(
     set(ShareBetAtom, update)
 );
 
-export const ShareModal: React.FC<IShareModal> = ({ qtInfo }) => {
+export const ShareModal: React.FC<IShareModal> = () => {
   const [{ isOpen }, setIsOpen] = useAtom(ShareStateAtom);
   const [, setBet] = useAtom(SetShareBetAtom);
 
@@ -84,16 +82,15 @@ export const ShareModal: React.FC<IShareModal> = ({ qtInfo }) => {
 
   return (
     <Dialog open={isOpen} onClose={closeModal}>
-      <ModalChild closeModal={closeModal} qtInfo={qtInfo} />
+      <ModalChild closeModal={closeModal} />
     </Dialog>
   );
 };
 export const apiBaseUrl = 'https://share.buffer.finance';
 
-const ModalChild: React.FC<{ closeModal: () => void; qtInfo: V3AppConfig }> = ({
-  closeModal,
-  qtInfo,
-}) => {
+const ModalChild: React.FC<{
+  closeModal: () => void;
+}> = ({ closeModal }) => {
   const { activeChain } = useActiveChain();
   const [{ trade, expiryPrice }] = useAtom(ShareBetAtom);
   const ref = useRef();

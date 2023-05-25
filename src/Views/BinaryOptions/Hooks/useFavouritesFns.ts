@@ -1,16 +1,10 @@
 import { useAtom, useAtomValue } from 'jotai';
-import {
-  activeAssetStateAtom,
-  DisplayAssetsAtom,
-  IMarket,
-  useQTinfo,
-} from '..';
+import { activeAssetStateAtom, DisplayAssetsAtom, IMarket } from '..';
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export const useFavouritesFns = () => {
   const [assets, setAssets] = useAtom(DisplayAssetsAtom);
-  const qtInfo = useQTinfo();
   const navigate = useNavigate();
   const activeMarket = qtInfo.activePair;
   const { routerPermission } = useAtomValue(activeAssetStateAtom);

@@ -1,17 +1,9 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { Background } from './style';
-import GraphView from '@Views/Common/GraphView';
 import { useNavigate } from 'react-router-dom';
-import Config from 'public/config.json';
-import PGTables from './Tables';
-import BinaryDrawer from './PGDrawer';
-import { useGlobal } from '@Contexts/Global';
-import { Skeleton } from '@mui/material';
-import Favourites from './Favourites/Favourites';
-import BufferTab from '@Views/Common/BufferTab';
-import { Navbar } from './Components/Mobile/Navbar';
-import { MobileScreens } from './Components/Mobile/Screens';
+// import BinaryDrawer from './PGDrawer';
+// import Favourites from './Favourites/Favourites';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
@@ -26,25 +18,19 @@ import {
 } from './Hooks/usePastTradeQuery';
 import { MarketTimingsModal } from './MarketTimingsModal';
 import MobileTable from './Components/Mobile/historyTab';
-import { binaryTabs } from 'config';
 import { useGenericHooks } from '@Hooks/useGenericHook';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 export const mobileUpperBound = 800;
 export const IV = 12000;
 export const defaultPair = 'GBP-USD';
 export const referralSlug = 'ref';
-import { useSearchParam } from 'react-use';
-import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { Warning } from '@Views/Common/Notification/warning';
-import { WarningOutlined } from '@mui/icons-material';
-import { getChains } from 'src/Config/wagmiClient';
 import { BuyTrade } from './BuyTrade';
-import PGDesktopTables, { tradesCount } from './Tables/Desktop';
-import { History } from './History';
+import PGDesktopTables from './Tables/Desktop';
 import { TradingChart } from 'src/TradingView';
-import { Markets } from 'src/Types/Market';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { useV3AppActiveMarket } from '@Views/V3App/Utils/useV3AppActiveMarket';
+import { joinStrings } from '@Views/V3App/helperFns';
+import { marketsForChart } from '@Views/V3App/config';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -100,19 +86,6 @@ export const activeAssetStateAtom = atom<{
   user2signer: null,
 });
 
-export const setActiveAssetStateAtom = atom(null, (get, set, payload) => {
-  set(activeAssetStateAtom, payload);
-});
-export const defaultMarket = 'BTC-USD';
-export const ENV =
-  import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
-    ? 'arbitrum-main'
-    : 'arbitrum-test';
-
-export const activeMarketFromStorageAtom = atomWithLocalStorage(
-  'user-active-market',
-  ''
-);
 export const useQTinfo = () => {
   const params = useParams();
   const { activeChain, configContracts } = useActiveChain();
@@ -161,82 +134,63 @@ export const useQTinfo = () => {
   }, [params?.market, activeChain]);
   return data;
 };
+
+export const setActiveAssetStateAtom = atom(null, (get, set, payload) => {
+  set(activeAssetStateAtom, payload);
+});
+export const defaultMarket = 'BTC-USD';
+export const ENV =
+  import.meta.env.VITE_ENV.toLowerCase() === 'mainnet'
+    ? 'arbitrum-main'
+    : 'arbitrum-test';
+
+export const activeMarketFromStorageAtom = atomWithLocalStorage(
+  'user-active-market',
+  ''
+);
+
 export const isHistoryTabActiveAtom = atomWithLocalStorage('isHistory', false);
 
 function QTrade() {
-  const props = useQTinfo();
+  const { activeMarket } = useV3AppActiveMarket();
+  const marketId = joinStrings(
+    activeMarket?.token0 as string,
+    activeMarket?.token1 as string,
+    ''
+  );
+  const chartMarket = marketsForChart[marketId as keyof typeof marketsForChart];
   const params = useParams();
   const navigate = useNavigate();
-  const isHistory = useAtomValue(isHistoryTabActiveAtom);
   const setActiveMarketFromStorage = useSetAtom(activeMarketFromStorageAtom);
   useEffect(() => {
-    console.log(`params?.market: `, params?.market);
     if (params?.market && params.market != 'undefined') {
       setActiveMarketFromStorage(params.market);
     } else {
       navigate('/#/binary/' + defaultMarket);
-      console.log('marketnotfound');
     }
   }, [params?.market]);
-  const { state, dispatch } = useGlobal();
-  const activeTab = state.tabs.activeIdx;
+
   usePastTradeQuery();
   useGenericHooks();
-  const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
-  const [, setActivePage] = useAtom(updateActivePageNumber);
-  const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
-  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
-
   useEffect(() => {
     document.title = 'Buffer | Trade';
   }, []);
-  const AllTradeTab = {
-    pathname: '/[chain]/all-trades/[asset]',
-    as: `/ARBITRUM/all-trades/${defaultPair}`,
-    name: 'Old Trades',
-    slug: 'old-trades',
-    id: 2,
-    subTabs: [],
-    isExternalLink: false,
-  };
-
-  useEffect(() => {
-    dispatch({
-      type: 'SET_ACIVE_TAB',
-      payload:
-        window && window.innerWidth < 1200 ? binaryTabs[0] : binaryTabs[2],
-    });
-  }, []);
-
-  const tabs = binaryTabs.slice(2);
-  const activeTabIdx = useMemo(
-    () => binaryTabs.findIndex((tab) => tab === activeTab) - 2,
-    [state.tabs.activeIdx]
-  );
-  // return <div>hello</div>;
-  console.log(`props.activePair.tv_id: `, props.activePair.tv_id);
+  if (!activeMarket) return <></>;
   return (
     <>
       <OneCTModal />
-
       <MarketTimingsModal />
-      <ShareModal qtInfo={props} />
+      <ShareModal />
       <main className="content-drawer" id="buffer-tv-wrapper">
         <Background>
-          <Favourites />
-          {Object.keys(Config.markets).map((s) => {
-            if (Config.markets[s].tv_id == props.activePair.tv_id) {
-              return (
-                <TradingChart market={Config.markets[s].tv_id as Markets} />
-              );
-            }
-            return null;
-          })}
+          {/* <Favourites /> */}
+
+          <TradingChart market={chartMarket.tv_id} />
 
           <BuyTrade />
         </Background>
       </main>
-      <BinaryDrawer />
+      {/* <BinaryDrawer /> */}
     </>
   );
 }

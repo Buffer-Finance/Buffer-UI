@@ -1,23 +1,18 @@
 import { IconButton } from '@mui/material';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import Star from 'public/ComponentSVGS/Star';
 import { useMemo } from 'react';
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
-import {
-  activeAssetStateAtom,
-  FavouriteAtom,
-  IMarket,
-  mobileUpperBound,
-} from '@Views/BinaryOptions';
+import { FavouriteAtom, mobileUpperBound } from '@Views/BinaryOptions';
 import { useFavouritesFns } from '@Views/BinaryOptions/Hooks/useFavouritesFns';
-import { getFilteredAssets } from './Utils/getFilteredAssets';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { MarketInterface } from 'src/MultiChart';
+import { getV3AppFilteredAssets } from '@Views/V3App/Utils/getFilteredAssets';
 
 export const AssetTable: React.FC<{
   assetsArray: MarketInterface[];
@@ -26,7 +21,11 @@ export const AssetTable: React.FC<{
   searchText: string;
 }> = ({ assetsArray, activeCategory, searchText, onMarketSelect }) => {
   const [favourites, setFavourites] = useAtom(FavouriteAtom);
-  const updatedArr = getFilteredAssets(assetsArray, searchText, activeCategory);
+  const updatedArr = getV3AppFilteredAssets(
+    assetsArray,
+    searchText,
+    activeCategory
+  );
   console.log(`updatedArr: `, updatedArr);
   const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
   const { activeChain } = useActiveChain();

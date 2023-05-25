@@ -1,12 +1,12 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import useSWR from 'swr';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useRef, useState } from 'react';
+import { atom, useAtom, useSetAtom } from 'jotai';
 import axios from 'axios';
-import { IMarket, useQTinfo } from '@Views/BinaryOptions';
-import { w3cwebsocket as W3CWebsocket } from 'websocket';
 
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { UserActivityAtom } from '@Utils/isUserPaused';
+import { useV3AppActiveMarket } from '@Views/V3App/Utils/useV3AppActiveMarket';
+import { joinStrings } from '@Views/V3App/helperFns';
+import { marketsForChart } from '@Views/V3App/config';
+import { useV3AppConfig } from '@Views/V3App/useV3AppConfig';
 const FIRST_TIMESTAMP = 1673239587;
 export function getBlockFromBar(bar) {
   if (bar.time) return bar;
@@ -294,13 +294,18 @@ const getMergedBars = (storedBars, newBars, time) => {
   return mergedBars;
 };
 export default function useDataFeed(chartReady) {
-  const qtInfo = useQTinfo();
   const storedUpdates = useRef({});
-
+  const v3AppConfig = useV3AppConfig();
   const [marketPrices, setMarketPrices] = useAtom(marketPriceAtom);
   const setLastDayChange = useSetAtom(market2dayChangeAtom);
   const [showPauseModal, setShowPasuseModal] = useState(false);
-  const activeAsset = qtInfo.activePair;
+  const { activeMarket: activeAsset } = useV3AppActiveMarket();
+  const marketId = joinStrings(
+    activeAsset?.token0 as string,
+    activeAsset?.token1 as string,
+    ''
+  );
+  const chartMarket = marketsForChart[marketId as keyof typeof marketsForChart];
   const [sync, setSync] = useState<ITVSyncing>({
     state: TVSyncingStates.SyncNeeded,
   });
@@ -326,14 +331,14 @@ export default function useDataFeed(chartReady) {
     const activeResolution = realTimeUpdate.current?.resolution || '1m';
     let prevBar =
       lastSyncedKline?.current?.[
-        activeAsset.tv_id + timeDeltaMapping(activeResolution)
+        chartMarket.tv_id + timeDeltaMapping(activeResolution)
       ];
-    const activeAssetStream = priceUpdates[activeAsset.tv_id];
+    const activeAssetStream = priceUpdates[chartMarket.tv_id];
     const latestKline = getKlineFromPrice(res);
 
     if (activeAssetStream?.length && prevBar) {
       let aggregatedBar;
-      const storedBars = storedUpdates.current[activeAsset.tv_id];
+      const storedBars = storedUpdates.current[chartMarket.tv_id];
       const completeBars = getMergedBars(
         storedBars,
         activeAssetStream,
@@ -350,7 +355,7 @@ export default function useDataFeed(chartReady) {
 
         if (
           aggregatedBar &&
-          realTimeUpdate.current.symbolInfo.name === activeAsset.tv_id &&
+          realTimeUpdate.current.symbolInfo.name === chartMarket.tv_id &&
           prevBar.time < aggregatedBar.time
         ) {
           realTimeUpdate.current.onRealtimeCallback(aggregatedBar);
@@ -360,7 +365,7 @@ export default function useDataFeed(chartReady) {
       }
       if (aggregatedBar) {
         lastSyncedKline.current[
-          activeAsset.tv_id + timeDeltaMapping(activeResolution)
+          chartMarket.tv_id + timeDeltaMapping(activeResolution)
         ] = aggregatedBar;
       }
     }
@@ -415,20 +420,30 @@ export default function useDataFeed(chartReady) {
   async function getAllSymbols() {
     let allSymbols = [];
     let tempSymbols = [];
-    for (const singleAsset of qtInfo.pairs) {
-      tempSymbols = [
-        {
-          symbol: singleAsset.tv_id,
-          full_name: singleAsset.tv_id,
-          description: singleAsset.tv_id,
-          exchange: PRICE_PROVIDER,
-          type: singleAsset.category,
-          pricescale: singleAsset.price_precision,
-          pair: singleAsset.pair,
-        },
-        ...tempSymbols,
-      ];
-      allSymbols = [...tempSymbols];
+    if (v3AppConfig !== null) {
+      for (const singleAsset of v3AppConfig) {
+        const marketId = joinStrings(
+          singleAsset.token0,
+          singleAsset.token1,
+          ''
+        );
+        const chartMarket =
+          marketsForChart[marketId as keyof typeof marketsForChart];
+
+        tempSymbols = [
+          {
+            symbol: chartMarket.tv_id,
+            full_name: chartMarket.tv_id,
+            description: chartMarket.tv_id,
+            exchange: PRICE_PROVIDER,
+            type: singleAsset.category,
+            pricescale: chartMarket.price_precision,
+            pair: chartMarket.pair,
+          },
+          ...tempSymbols,
+        ];
+        allSymbols = [...tempSymbols];
+      }
     }
     return allSymbols;
   }

@@ -174,7 +174,7 @@ export function V3CustomOption({
   );
 }
 
-const TradeButton = ({
+export const TradeButton = ({
   allowance,
   activeAssetPrice,
   amount,
@@ -296,7 +296,7 @@ const TradeButton = ({
   );
 };
 
-const PayoutProfit = ({
+export const PayoutProfit = ({
   amount,
   boostedPayout,
   totalPayout,

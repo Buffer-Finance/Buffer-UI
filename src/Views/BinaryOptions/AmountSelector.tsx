@@ -82,8 +82,7 @@ const AmountSelector: React.FC<any> = ({
   const [err, setErr] = useState<ReactNode[]>([]);
   const setShutter = useSetAtom(shutterModalAtom);
   const shutter = useAtomValue(shutterModalAtom);
-  const { activePoolObj } = useActivePoolObj();
-  const { configContracts } = useActiveChain();
+
   const balance = activeAssetState?.[0];
   const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
   const isShutterOpen = shutter.open == 'amount';

@@ -8,7 +8,6 @@ import {
   IMarket,
   MobileOnly,
   mobileUpperBound,
-  useQTinfo,
   WebOnly,
 } from '..';
 import ShutterDrawer from 'react-bottom-drawer';
@@ -16,26 +15,20 @@ const activeClasses =
   'text-1 bg-[#131722] rounded-t-[10px] cursor-default  left-border-needed ';
 import { FavouriteAssetDD } from './FavouriteAssetDD';
 import { CloseOutlined } from '@mui/icons-material';
-import { useFavouritesFns } from '../Hooks/useFavouritesFns';
-import {
-  getPriceFromKlines,
-  marketPriceAtom,
-} from 'src/TradingView/useDataFeed';
+
+import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '../Components/PairTokenImage';
 import { useShutterHandlers } from '../AmountSelector';
 import { priceAtom } from '@Hooks/usePrice';
+import { useV3AppFavouritesFns } from '@Views/V3App/Utils/useV3AppFavouriteFns';
 
 export default function Favourites({ className }: { className?: string }) {
   const [toggle, setToggle] = useState(false);
   const [assets] = useAtom(DisplayAssetsAtom);
   const [anchor, setAnchor] = useState(null);
-  const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
-  const { activePoolObj } = useActivePoolObj();
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
 
   const getFavourtiesObjs = () => {
     return assets
@@ -61,7 +54,7 @@ export default function Favourites({ className }: { className?: string }) {
   const filteredAsset = assets.filter((singleMarket) =>
     qtInfo.pairs.find((m) => m.pair === singleMarket)
   );
-  const { replaceAssetHandler } = useFavouritesFns();
+  const { replaceAssetHandler } = useV3AppFavouritesFns();
   const { closeShutter } = useShutterHandlers();
   const FavourtiteAssetSelector = (
     <FavouriteAssetDD
@@ -182,11 +175,10 @@ function FavouriteCard({
   isPrevActive: boolean;
   id: number;
 }) {
-  const qtInfo = useQTinfo();
   const activeAsset = qtInfo.activePair;
   const isActive = data.tv_id === activeAsset.tv_id;
   console.log(`data.tv_id: `, data.tv_id, activeAsset.tv_id);
-  const { deleteCardHandler } = useFavouritesFns();
+  const { deleteCardHandler } = useV3AppFavouritesFns();
   const [marketPrice] = useAtom(priceAtom);
   const price = getPriceFromKlines(marketPrice, data);
   const { routerPermission } = useAtomValue(activeAssetStateAtom);
