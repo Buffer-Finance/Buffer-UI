@@ -8,7 +8,7 @@ export const v3AppConfig = {
     router: '0x2d44Df5d4106C0C62893606E8956443DcA3a4Da2',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     poolsInfo: {
-      '0xa3769f6e42e1d7936919904e9156527dbc23c1b4': {
+      '0xA3769f6E42E1D7936919904E9156527dBc23C1b4': {
         tokenAddress: '0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E',
         meta: '0xC33A64475f84C88DfB139fcFF29642a055587fe4',
         decimals: 6,

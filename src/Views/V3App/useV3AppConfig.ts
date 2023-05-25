@@ -8,10 +8,12 @@ import {
   getTokens,
   secondsToHHMM,
 } from './helperFns';
+import { getAddress } from 'ethers/lib/utils.js';
 
 const useFetchV3AppConfig = () => {
   const { activeChain } = useActiveChain();
-  const configData = v3AppConfig[activeChain.id];
+  const configData =
+    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
 
   async function fetcher(): Promise<response> {
     const response = await axios.post(configData.graph.MAIN, {
@@ -59,7 +61,7 @@ export const useV3AppConfig = () => {
     );
     if (index !== -1) {
       v3AppConfig[index].pools.push({
-        pool: item.poolContract,
+        pool: getAddress(item.poolContract),
         max_fee: item.configContract.maxFee,
         min_fee: item.configContract.minFee,
         base_settlement_fee: getPayout(
@@ -71,8 +73,8 @@ export const useV3AppConfig = () => {
         max_duration: secondsToHHMM(Number(item.configContract.maxPeriod)),
         min_duration: secondsToHHMM(Number(item.configContract.minPeriod)),
         isPaused: item.isPaused,
-        configContract: item.configContract.address,
-        optionContract: item.address,
+        configContract: getAddress(item.configContract.address),
+        optionContract: getAddress(item.address),
       });
     } else {
       v3AppConfig.push({
@@ -81,7 +83,7 @@ export const useV3AppConfig = () => {
         token1,
         pools: [
           {
-            pool: item.poolContract,
+            pool: getAddress(item.poolContract),
             max_fee: item.configContract.maxFee,
             min_fee: item.configContract.minFee,
             base_settlement_fee: getPayout(
@@ -93,8 +95,8 @@ export const useV3AppConfig = () => {
             max_duration: secondsToHHMM(Number(item.configContract.maxPeriod)),
             min_duration: secondsToHHMM(Number(item.configContract.minPeriod)),
             isPaused: item.isPaused,
-            configContract: item.configContract.address,
-            optionContract: item.address,
+            configContract: getAddress(item.configContract.address),
+            optionContract: getAddress(item.address),
           },
         ],
       });
