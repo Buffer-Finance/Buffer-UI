@@ -116,7 +116,7 @@ export function V3CustomOption({
             onSelect: (duration) => console.log(duration),
           }}
         />
-        <div className="flex-sbw items-center text-f14 mt-3">
+        <div className="flex-sbw items-center text-f14 ">
           Trade Size
           <MaxSizeComponent
             maxSize={maxFee}

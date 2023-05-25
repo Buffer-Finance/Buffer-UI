@@ -72,9 +72,6 @@ export const V3ActiveAsset = ({ cb }) => {
         <div
           className={`flex items-center content-between assets w-full h-max`}
         >
-          <div className=" w-[20px] h-[20px] mr-[5px]">
-            <PairTokenImage pair={assetPair} />
-          </div>
           <div className="flex-col w-full items-stretch">
             <div className="w-full flex justify-between items-center text-3">
               <button
@@ -83,6 +80,9 @@ export const V3ActiveAsset = ({ cb }) => {
                 }  rounded`}
                 onClick={() => setIsOpen((prvState) => !prvState)}
               >
+                <div className=" w-[20px] h-[20px] mr-[5px]">
+                  <PairTokenImage pair={assetPair} />
+                </div>
                 {assetPair}
                 <DropdownArrow open={isOpen} />
               </button>
