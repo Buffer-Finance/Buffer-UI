@@ -55,8 +55,7 @@ export const V3ActiveAsset = ({ cb }) => {
             <V3MarketSelector
               onMarketSelect={(m) => {
                 cb(m, 'charts');
-                //TODO - v3 Change Url
-                navigate('/v3/' + m);
+                navigate('/binary/' + m);
                 setIsOpen(false);
               }}
               markets={markets}

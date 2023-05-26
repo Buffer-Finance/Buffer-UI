@@ -208,7 +208,6 @@ const MultiChart = ({
           </div>
         )}
       /> */}
-      {/*//TODO - v3 fix this shareModal*/}
       <ShareModal />
       <WideTableModal />
       <OneCTModal />

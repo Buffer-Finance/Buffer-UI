@@ -317,7 +317,7 @@ export const PayoutProfit = ({
             {boostedPayout &&
               gt(boostedPayout, '0') &&
               '(' + boostedPayout + '% Boosted)'}
-            &nbsp;;
+            &nbsp;:&nbsp;
           </span>
           <Display
             className="text-1 text-f16 sm:text-f14"

@@ -141,7 +141,7 @@ const AppRoutes = () => {
         </Route>
         <Route path="/trades/merged" element={<MergedPage />} />
         <Route path="/trades" element={<AllTradesPage />} />
-        <Route path="/binary/:market" element={<TradePage />} />
+        <Route path="/binary/:market" element={<V3AppTradePage />} />
         <Route path="/no-loss/:market" element={<NoLoss />} />
         <Route path="/v3/:market" element={<V3AppTradePage />} />
         {/* referral link handling */}
