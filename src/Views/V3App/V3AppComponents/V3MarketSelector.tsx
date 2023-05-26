@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import V2BufferInput from '@Views/Common/v2-BufferInput';
-
 import { V3AppConfig } from '../useV3AppConfig';
 import { AssetTypeSelector } from '@Views/NoLoss/Favourites/AssetTypeSelector';
-import { AssetTable } from '@Views/NoLoss/Favourites/AssetTable';
 import { V3AssetTable } from './V3AssetTable';
 
 const FavouriteAssetDDStyles = styled.div`
@@ -23,7 +21,7 @@ const FavouriteAssetDDStyles = styled.div`
 //TODO -v3 make asset types dynamic
 const assetTypes = ['Favourites', 'Crypto', 'Forex'];
 export const V3MarketSelector: React.FC<{
-  markets: V3AppConfig[];
+  markets: V3AppConfig[] | null;
   className: string;
   onResetMarket?: () => void;
   onMarketSelect: (a: string) => void;

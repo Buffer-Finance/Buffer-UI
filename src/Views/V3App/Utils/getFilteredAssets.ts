@@ -4,13 +4,14 @@ import { V3AppConfig } from '../useV3AppConfig';
 import { joinStrings } from '../helperFns';
 
 export function getV3AppFilteredAssets(
-  assets: V3AppConfig[],
+  assets: V3AppConfig[] | null,
   searchText: string,
   category: string
 ) {
   const AssetTypes = ['favourites', 'crypto', 'forex'];
   const [favourites] = useAtom(FavouriteAtom);
   let filteredAssets: V3AppConfig[] = [];
+  if (!assets) return filteredAssets;
   if (!!searchText && searchText !== '')
     filteredAssets = assets.filter(
       (asset) =>

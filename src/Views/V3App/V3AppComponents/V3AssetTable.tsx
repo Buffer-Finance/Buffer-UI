@@ -16,7 +16,7 @@ import { joinStrings } from '../helperFns';
 import { useV3AppFavouritesFns } from '../Utils/useV3AppFavouriteFns';
 
 export const V3AssetTable: React.FC<{
-  assetsArray: V3AppConfig[];
+  assetsArray: V3AppConfig[] | null;
   activeCategory: string;
   onMarketSelect: (a: string) => void;
   searchText: string;

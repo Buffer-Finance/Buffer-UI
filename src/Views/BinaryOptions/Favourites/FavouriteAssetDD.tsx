@@ -1,11 +1,10 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import V2BufferInput from '@Views/Common/v2-BufferInput';
-import { activeAssetStateAtom, useQTinfo } from '..';
 import { getAssetTypes } from './Utils/getAssetTypes';
 import { AssetTable } from './AssetTable';
 import { AssetTypeSelector } from './AssetTypeSelector';
-import { useAtomValue } from 'jotai';
+import { useV3AppConfig } from '@Views/V3App/useV3AppConfig';
 
 const FavouriteAssetDDStyles = styled.div`
   padding: 1rem !important;
@@ -24,19 +23,14 @@ const FavouriteAssetDDStyles = styled.div`
 `;
 export const FavouriteAssetDD: React.FC<{
   className: string;
-  setToggle?: (state) => void;
+  setToggle?: (state: boolean) => void;
 }> = ({ className }) => {
-  const qtInfo = useQTinfo();
   const [searchText, setSearchText] = useState('');
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
+  const v3AppConfig = useV3AppConfig();
 
-  const assetTypes = getAssetTypes(
-    qtInfo.pairs.filter(
-      (pair) =>
-        routerPermission &&
-        routerPermission[pair.pools[0].options_contracts.current]
-    )
-  );
+  const assetTypes = v3AppConfig
+    ? getAssetTypes(v3AppConfig.filter((pair) => pair.pools[0].isPaused))
+    : [];
   const [activeAsset, setActiveAsset] = useState(assetTypes[1]);
 
   return (

@@ -3,7 +3,7 @@ import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { Background } from './style';
 import { useNavigate } from 'react-router-dom';
 // import BinaryDrawer from './PGDrawer';
-// import Favourites from './Favourites/Favourites';
+import Favourites from './Favourites/Favourites';
 import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
@@ -183,7 +183,7 @@ function QTrade() {
       <ShareModal />
       <main className="content-drawer" id="buffer-tv-wrapper">
         <Background>
-          {/* <Favourites /> */}
+          <Favourites />
 
           <TradingChart market={chartMarket.tv_id} />
 

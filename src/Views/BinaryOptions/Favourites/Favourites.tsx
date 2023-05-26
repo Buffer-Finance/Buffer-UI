@@ -1,45 +1,43 @@
 import { IconButton, Popover, Skeleton } from '@mui/material';
 import { useState } from 'react';
 import Background from './style';
-import { useAtom, useAtomValue } from 'jotai';
-import {
-  activeAssetStateAtom,
-  DisplayAssetsAtom,
-  IMarket,
-  MobileOnly,
-  mobileUpperBound,
-  WebOnly,
-} from '..';
+import { useAtom } from 'jotai';
+import { DisplayAssetsAtom, MobileOnly, mobileUpperBound, WebOnly } from '..';
 import ShutterDrawer from 'react-bottom-drawer';
 const activeClasses =
   'text-1 bg-[#131722] rounded-t-[10px] cursor-default  left-border-needed ';
 import { FavouriteAssetDD } from './FavouriteAssetDD';
 import { CloseOutlined } from '@mui/icons-material';
-
 import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '../Components/PairTokenImage';
-import { useShutterHandlers } from '../AmountSelector';
 import { priceAtom } from '@Hooks/usePrice';
 import { useV3AppFavouritesFns } from '@Views/V3App/Utils/useV3AppFavouriteFns';
+import { useV3AppActiveMarket } from '@Views/V3App/Utils/useV3AppActiveMarket';
+import { V3AppConfig, useV3AppConfig } from '@Views/V3App/useV3AppConfig';
+import { joinStrings } from '@Views/V3App/helperFns';
+import { marketsForChart } from '@Views/V3App/config';
 
 export default function Favourites({ className }: { className?: string }) {
   const [toggle, setToggle] = useState(false);
   const [assets] = useAtom(DisplayAssetsAtom);
-  const [anchor, setAnchor] = useState(null);
-  const activeAsset = qtInfo.activePair;
+  const [anchor, setAnchor] = useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null);
+  const { activeMarket: activeAsset } = useV3AppActiveMarket();
+  const v3AppConfig = useV3AppConfig();
+  const { replaceAssetHandler } = useV3AppFavouritesFns();
 
   const getFavourtiesObjs = () => {
+    if (!assets || !v3AppConfig) return [];
     return assets
       .map((singleMarket) => {
-        const foundMarket = qtInfo.pairs.find(
-          (pair) => pair.pair === singleMarket
+        const foundMarket = v3AppConfig.find(
+          (pair) => joinStrings(pair.token0, pair.token1, '-') === singleMarket
         );
         if (foundMarket) {
-          const isAssetActive =
-            routerPermission &&
-            routerPermission[foundMarket.pools[0].options_contracts.current];
+          const isAssetActive = !foundMarket.pools[0].isPaused;
           if (!isAssetActive) return null;
           return foundMarket;
         } else return null;
@@ -52,10 +50,11 @@ export default function Favourites({ className }: { className?: string }) {
   }
 
   const filteredAsset = assets.filter((singleMarket) =>
-    qtInfo.pairs.find((m) => m.pair === singleMarket)
+    v3AppConfig?.find(
+      (pair) => joinStrings(pair.token0, pair.token1, '-') === singleMarket
+    )
   );
-  const { replaceAssetHandler } = useV3AppFavouritesFns();
-  const { closeShutter } = useShutterHandlers();
+
   const FavourtiteAssetSelector = (
     <FavouriteAssetDD
       className="asset-dropdown-wrapper sm:!static nsm:!w-[500px] sm:!w-full"
@@ -137,23 +136,15 @@ export default function Favourites({ className }: { className?: string }) {
                   key={index}
                   id={index}
                   isPrevActive={
-                    filteredAsset.length &&
-                    index &&
-                    filteredAsset[index - 1] == activeAsset.pair
+                    filteredAsset.length !== 0 &&
+                    index !== 0 &&
+                    filteredAsset[index - 1] ==
+                      joinStrings(
+                        activeAsset?.token0 as string,
+                        activeAsset?.token1 as string,
+                        '-'
+                      )
                   }
-                  onCross={() => {
-                    // if next exists, make next the selected.
-                    if (index + 1 < filteredAsset.length) {
-                      replaceAssetHandler(filteredAsset[index + 1], false);
-                    }
-
-                    // if prev exists make prev the selected.
-                    else if (index > 0) {
-                      replaceAssetHandler(filteredAsset[index - 1], false);
-                    }
-                    // make default asset selected
-                    else replaceAssetHandler(assets[0], false);
-                  }}
                 />
               ))
             ) : (
@@ -171,21 +162,33 @@ function FavouriteCard({
   isPrevActive,
   id,
 }: {
-  data: IMarket;
+  data: V3AppConfig | null;
   isPrevActive: boolean;
   id: number;
 }) {
-  const activeAsset = qtInfo.activePair;
-  const isActive = data.tv_id === activeAsset.tv_id;
-  console.log(`data.tv_id: `, data.tv_id, activeAsset.tv_id);
-  const { deleteCardHandler } = useV3AppFavouritesFns();
+  const { activeMarket: activeAsset } = useV3AppActiveMarket();
   const [marketPrice] = useAtom(priceAtom);
-  const price = getPriceFromKlines(marketPrice, data);
-  const { routerPermission } = useAtomValue(activeAssetStateAtom);
-  const isAssetActive =
-    routerPermission &&
-    routerPermission[data.pools[0].options_contracts.current];
+  const { deleteCardHandler } = useV3AppFavouritesFns();
   const navigate = useNavigate();
+
+  if (!data || !activeAsset) return <></>;
+  const marketIdActiveAsset = joinStrings(
+    activeAsset.token0,
+    activeAsset.token1,
+    ''
+  );
+  const chartMarketActiveAsset =
+    marketsForChart[marketIdActiveAsset as keyof typeof marketsForChart];
+
+  const marketIdData = joinStrings(data.token0, data.token1, '');
+  const chartMarketData =
+    marketsForChart[marketIdData as keyof typeof marketsForChart];
+
+  const isActive = chartMarketData.tv_id === chartMarketActiveAsset.tv_id;
+
+  const price = getPriceFromKlines(marketPrice, chartMarketData);
+  const isAssetActive = !data.pools[0].isPaused;
+  const dataPair = joinStrings(data.token0, data.token1, '-');
   // T w>m desktop, isActive : T, active F, inactive
   // F w<m mobile, isActive : T inactive , F active
   return (
@@ -198,7 +201,7 @@ function FavouriteCard({
             } ${!isAssetActive ? 'brightness-50' : ''} 
  `
       }`}
-      onClick={() => navigate(`/binary/${data.pair}`)}
+      onClick={() => navigate(`/binary/${dataPair}`)}
     >
       <button
         className="!absolute z-[10] text-1 !-right-3 -top-1 !bg-cross-bg rounded-full w-[17px] h-[17px] group-hover:visible nsm:invisible"
@@ -219,18 +222,18 @@ function FavouriteCard({
         <div className="text-f13 group-hover:text-3 whitespace-nowrap flex justify-start items-start text-3 mr-[0.4vw] b1200:flex-col">
           <span className="a1200:mr-3 flex b1200:mb-1 ">
             <div className="w-[18px] h-[18px] mr-[6px]">
-              <PairTokenImage pair={data.pair} />
+              <PairTokenImage pair={dataPair} />
             </div>
-            {data.pair}
+            {dataPair}
           </span>
           {price ? (
             <Display
               className="text-left content-start items-center"
               data={price || '2'}
               disable
-              unit={data.token2}
+              unit={data.token1}
               colored
-              precision={data.price_precision.toString().length - 1}
+              precision={chartMarketData.price_precision.toString().length - 1}
             />
           ) : (
             'Fetching...'
