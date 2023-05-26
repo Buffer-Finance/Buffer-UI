@@ -63,7 +63,7 @@ const BuyTrade: React.FC<any> = ({}) => {
   return (
     <div>
       <div className="flex gap-3 my-3">
-        {/* <AmountSelector {...{ amount, setAmount }} /> */}
+        <AmountSelector amount={amount} setAmount={setAmount} />
         <DurationSelector />
         <SettingsSelector />
       </div>

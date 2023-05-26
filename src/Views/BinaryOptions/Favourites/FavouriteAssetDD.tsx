@@ -29,7 +29,7 @@ export const FavouriteAssetDD: React.FC<{
   const v3AppConfig = useV3AppConfig();
 
   const assetTypes = v3AppConfig
-    ? getAssetTypes(v3AppConfig.filter((pair) => pair.pools[0].isPaused))
+    ? getAssetTypes(v3AppConfig.filter((pair) => !pair.pools[0].isPaused))
     : [];
   const [activeAsset, setActiveAsset] = useState(assetTypes[1]);
 
@@ -78,9 +78,12 @@ export const FavouriteAssetDD: React.FC<{
         />
         <div className="full-width">
           <AssetTable
-            assetsArray={qtInfo.pairs}
+            assetsArray={v3AppConfig}
             searchText={searchText}
             activeCategory={activeAsset}
+            onMarketSelect={(market) => {
+              console.log('selected market in FavouriteAssetDD', market);
+            }}
           />
         </div>
       </FavouriteAssetDDStyles>

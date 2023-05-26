@@ -180,7 +180,6 @@ export const Cancel: React.FC<{
   const { activeChain } = useActiveChain();
   const configData =
     v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
-  //
   const { writeCall } = useWriteCall(configData.router, routerABI);
   const cancelHandler = async (
     queuedId: number,
@@ -333,10 +332,10 @@ export const PayoutChip: React.FC<{
 export const AssetCell: React.FC<{
   currentRow: IGQLHistory;
   split?: boolean;
-  configData: V3AppConfig;
+  configData: V3AppConfig | undefined;
 }> = ({ currentRow, split, configData }) => {
   const isUp = currentRow.isAbove;
-
+  if (!configData) return <></>;
   return (
     <TableAssetCell
       img={
@@ -423,9 +422,10 @@ export const StrikePriceComponent = ({
   isMobile = false,
 }: {
   trade: IGQLHistory;
-  configData: V3AppConfig;
+  configData: V3AppConfig | undefined;
   isMobile?: boolean;
 }) => {
+  if (!configData) return <></>;
   const decimals = trade.chartData.price_precision.toString().length - 1;
   return (
     <>
@@ -459,8 +459,9 @@ export const ExpiryCurrentComponent: React.FC<{
   isHistoryTable: boolean;
   trade: IGQLHistory;
   marketPrice: any;
-  configData: V3AppConfig;
+  configData: V3AppConfig | undefined;
 }> = ({ isHistoryTable, trade, marketPrice, configData }) => {
+  if (!configData) return <></>;
   const decimals = trade.chartData.price_precision.toString().length - 1;
 
   if (isHistoryTable) {
@@ -529,7 +530,6 @@ export const ProbabilityPNL = ({
   trade: IGQLHistory;
   isHistoryTable: boolean;
   marketPrice: any;
-  configData: V3AppConfig;
   onlyPnl?: boolean;
 }) => {
   let currentEpoch = Math.round(new Date().getTime() / 1000);

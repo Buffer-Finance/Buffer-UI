@@ -185,7 +185,7 @@ function QTrade() {
         <Background>
           <Favourites />
 
-          <TradingChart market={chartMarket.tv_id} />
+          <TradingChart market={chartMarket.tv_id as 'ETHUSD'} />
 
           <BuyTrade />
         </Background>

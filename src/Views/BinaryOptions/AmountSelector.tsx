@@ -20,6 +20,10 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { SlippageModalChild } from './Components/SlippageModal';
 import { SettingsIcon } from './PGDrawer/SettingsIcon';
 import { useTradePolOrBlpPool } from './Hooks/useTradePolOrBlpPool';
+import { useSwitchPoolForTrade } from '@Views/V3App/Utils/useSwitchPoolForTrade';
+import { getImageUrl } from './PGDrawer/PoolDropDown';
+import { useV3AppData } from '@Views/V3App/Utils/useV3AppReadCalls';
+import { binaryOptionsAtom } from './PGDrawer/CustomOption';
 
 const shutterModalAtom = atom<{
   open: false | 'amount' | 'duration' | 'settings';
@@ -74,19 +78,24 @@ const AmountInput = ({
   );
 };
 
-const AmountSelector: React.FC<any> = ({
-  activeAssetState,
-  amount,
-  setAmount,
-}) => {
+const AmountSelector: React.FC<{
+  amount: string;
+  setAmount: (value: any) => void;
+}> = ({ amount, setAmount }) => {
   const [err, setErr] = useState<ReactNode[]>([]);
   const setShutter = useSetAtom(shutterModalAtom);
   const shutter = useAtomValue(shutterModalAtom);
-
-  const balance = activeAssetState?.[0];
-  const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
+  const readcallData = useV3AppData();
   const isShutterOpen = shutter.open == 'amount';
   const { closeShutter } = useShutterHandlers();
+  const { switchPool, poolDetails } = useSwitchPoolForTrade();
+  if (!poolDetails || !readcallData || !switchPool) return <></>;
+
+  const tradeToken = poolDetails.token;
+  const decimals = poolDetails.decimals;
+  const minTradeAmount = divide(switchPool.min_fee, decimals) as string;
+  const maxTradeAmount = divide(switchPool.max_fee, decimals) as string;
+  const balance = divide(readcallData.balance, decimals) as string;
 
   return (
     <>
@@ -102,16 +111,13 @@ const AmountSelector: React.FC<any> = ({
         <div className="flex justify-between items-center">
           <div className="flex text-3 text-f13">
             Max :&nbsp;
-            <Display
-              data={activeAssetState?.[2]}
-              unit={activePoolObj.token.name}
-            />{' '}
+            <Display data={maxTradeAmount} unit={tradeToken} />{' '}
           </div>
           {balance && (
             <AccountInfo
               shouldDisplayString
-              unit={activePoolObj.token.name}
-              balance={divide(balance, activePoolObj.token.decimals)}
+              unit={tradeToken}
+              balance={divide(balance, decimals)}
             />
           )}
         </div>
@@ -119,15 +125,12 @@ const AmountSelector: React.FC<any> = ({
           key="inner-input"
           autoFocus
           value={amount}
-          max={activeAssetState?.[2]}
+          max={maxTradeAmount}
           onKeyDown={(e) => {
-            console.log(`e.key: `, e.key);
-            console.log('onSubmit called');
             if (e.key != 'Enter') return;
             closeShutter(err);
           }}
           onChange={(e) => {
-            console.log(`e: `, e);
             let errors = [];
             let val = e?.target?.value;
             setAmount(e.target.value);
@@ -136,12 +139,11 @@ const AmountSelector: React.FC<any> = ({
             let bal: string = '';
             let maxTradeSize = '';
             if (balance?.[0]) {
-              bal = divide(balance[0], activePoolObj.token.decimals)!;
+              bal = divide(balance[0], decimals)!;
             }
-            if (activeAssetState?.[2]) {
-              maxTradeSize = activeAssetState?.[2];
+            if (maxTradeAmount) {
+              maxTradeSize = maxTradeAmount;
             }
-            console.log(`bal: `, bal, maxTradeSize, val);
             if (bal && gt(val, bal)) {
               errors.push(`You don't have enough funds.`);
             }
@@ -159,13 +161,10 @@ const AmountSelector: React.FC<any> = ({
             <div className="text-f13 bg-cross-bg  rounded-tr-sm rounded-br-sm min-h-full flex items-center justify-center w-[100px] px-2 py-1 rounded-sm ">
               {' '}
               <img
-                src={
-                  activePoolObj &&
-                  configContracts.tokens[activePoolObj.token.name].img
-                }
+                src={getImageUrl(tradeToken)}
                 className="w-[18px] h-[18px]  mr-2 "
               />
-              <div>{activePoolObj.token.name}</div>
+              <div>{tradeToken}</div>
             </div>
           }
         />
@@ -179,7 +178,7 @@ const AmountSelector: React.FC<any> = ({
       </ShutterDrawer>
       <AmountInput
         value={amount}
-        max={activeAssetState?.[2]}
+        max={maxTradeAmount}
         onChange={(e) => {
           setAmount(e.target.value);
         }}
@@ -193,7 +192,7 @@ const AmountSelector: React.FC<any> = ({
 };
 
 const DurationInput = ({ onClick }: any) => {
-  const [currentTime, setCurrentTime] = useAtom(QuickTradeExpiry);
+  const [currentTime, setCurrentTime] = useAtom(binaryOptionsAtom);
 
   const hrsRef = useRef<string | number | null>(null);
   const minRef = useRef<string | number | null>(null);
@@ -308,6 +307,8 @@ const DurationSelector = () => {
   const shutter = useAtomValue(shutterModalAtom);
   const isShutterOpen = shutter.open == 'duration';
   const { closeShutter } = useShutterHandlers();
+  const [currentTime, setCurrentTime] = useAtom(binaryOptionsAtom);
+
   return (
     <>
       <ShutterDrawer
@@ -318,7 +319,11 @@ const DurationSelector = () => {
         unmountOnExit
       >
         <Background>
-          <DurationPicker onSelect={closeShutter} />
+          <DurationPicker
+            onSelect={closeShutter}
+            currentTime={currentTime}
+            setCurrentTime={setCurrentTime}
+          />
           <div className="mb-4"></div>
         </Background>
       </ShutterDrawer>

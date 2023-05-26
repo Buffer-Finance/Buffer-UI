@@ -17,9 +17,12 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { useV3AppFavouritesFns } from '@Views/V3App/Utils/useV3AppFavouriteFns';
 import { getV3AppFilteredAssets } from '@Views/V3App/Utils/getFilteredAssets';
+import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
+import { joinStrings } from '@Views/V3App/helperFns';
+import { marketsForChart } from '@Views/V3App/config';
 
 export const AssetTable: React.FC<{
-  assetsArray: IMarket[];
+  assetsArray: V3AppConfig[] | null;
   activeCategory: string;
   onMarketSelect: (a: string) => void;
   searchText: string;
@@ -50,9 +53,18 @@ export const AssetTable: React.FC<{
 
   const BodyFormatter = (row: number, col: number) => {
     if (!updatedArr) return <></>;
-    const currentAsset: IMarket = updatedArr[row];
+    const currentAsset: V3AppConfig = updatedArr[row];
+    const pairName = joinStrings(currentAsset.token0, currentAsset.token1, '-');
+    const pairNameForChart = joinStrings(
+      currentAsset.token0,
+      currentAsset.token1,
+      ''
+    );
+    const chartMarket =
+      marketsForChart[pairNameForChart as keyof typeof marketsForChart];
+
     const isFavourite = favourites.find(
-      (favourite) => currentAsset.tv_id === favourite
+      (favourite) => chartMarket.tv_id === favourite
     );
     switch (col) {
       case 0:
@@ -64,11 +76,11 @@ export const AssetTable: React.FC<{
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!isFavourite) {
-                      setFavourites([...favourites, currentAsset.tv_id]);
+                      setFavourites([...favourites, chartMarket.tv_id]);
                     } else {
                       setFavourites(
                         favourites.filter(
-                          (favourite) => favourite !== currentAsset.tv_id
+                          (favourite) => favourite !== chartMarket.tv_id
                         )
                       );
                     }
@@ -86,36 +98,17 @@ export const AssetTable: React.FC<{
             content={[
               <div className="flex">
                 <div className="w-[20px] h-[20px]">
-                  <PairTokenImage pair={currentAsset.pair} />
+                  <PairTokenImage pair={pairName} />
                 </div>
-                <div className="text-1 ml-3">{currentAsset.pair}</div>
+                <div className="text-1 ml-3">{pairName}</div>
               </div>,
             ]}
           />
         );
 
       case 2:
-        if (!currentAsset.pools[0]) return '-';
-        else if (!activeAssetStateHookData.payouts) return 'loading...';
-        else
-          return (
-            '+' +
-            activeAssetStateHookData.payouts[
-              currentAsset.pools[0].options_contracts.current
-            ] +
-            '%'
-          );
-      case 3:
-        if (!currentAsset.pools[1]) return '-';
-        else if (!activeAssetStateHookData.payouts) return 'loading...';
-        else
-          return (
-            '+' +
-            activeAssetStateHookData.payouts[
-              currentAsset.pools[1].options_contracts.current
-            ] +
-            '%'
-          );
+        //TODO - v3 amke this dynamic
+        return currentAsset.pools[0].base_settlement_fee + '%';
 
       default:
         return <div>Unhandled Column.</div>;
@@ -146,12 +139,17 @@ export const AssetTable: React.FC<{
       onRowClick={(rowNumber) => {
         if (!updatedArr) return;
         const selectedAsset = updatedArr[rowNumber];
+        const pairName = joinStrings(
+          selectedAsset.token0,
+          selectedAsset.token1,
+          '-'
+        );
         if (window.innerWidth < mobileUpperBound) {
           addCardHandler(selectedAsset);
-          replaceAssetHandler(selectedAsset.pair, false);
+          replaceAssetHandler(pairName);
           return;
         }
-        onMarketSelect(selectedAsset.pair);
+        onMarketSelect(pairName);
       }}
     />
   );

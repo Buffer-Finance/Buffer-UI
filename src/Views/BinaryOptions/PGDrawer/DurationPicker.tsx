@@ -1,20 +1,20 @@
-import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import EditIcon from 'public/ComponentSVGS/Edit';
-import { QuickTradeExpiry } from '.';
-import { useQTinfo } from '..';
 import { getUserError, TimeSelector, timeToMins } from './TimeSelector';
-import { isTestnet } from 'config';
+import { useV3AppActiveMarket } from '@Views/V3App/Utils/useV3AppActiveMarket';
+import { useSwitchPoolForTrade } from '@Views/V3App/Utils/useSwitchPoolForTrade';
 
 export const DurationPicker = ({
   currentTime,
   setCurrentTime,
+  onSelect,
 }: {
   currentTime: string;
   setCurrentTime: (a: string) => void;
+  onSelect: (a: any) => void;
 }) => {
-  const qtInfo = useQTinfo();
-  const activeAsset = qtInfo.activePair;
+  const { activeMarket: activeAsset } = useV3AppActiveMarket();
+  const { switchPool, poolDetails } = useSwitchPoolForTrade();
   const [, setDur] = useState(0);
   const [openCustomInput, setOpenCustomInput] = useState(false);
   const oneSec = 1000;
@@ -57,7 +57,7 @@ export const DurationPicker = ({
   ];
 
   useEffect(() => {
-    if (!currentTime || !activeAsset) return;
+    if (!currentTime || !activeAsset || !poolDetails || !switchPool) return;
     localStorage.setItem('exp', currentTime);
     const activeDuration = durations.find(
       (item) => item.duration === timeToMins(currentTime) * 60 * oneSec
@@ -65,13 +65,18 @@ export const DurationPicker = ({
     if (
       !activeDuration ||
       activeDuration.duration >
-        timeToMins(activeAsset.max_duration) * 60 * oneSec ||
+        timeToMins(switchPool.max_duration) * 60 * oneSec ||
       activeDuration.duration <
-        timeToMins(activeAsset.min_duration) * 60 * oneSec
+        timeToMins(switchPool.min_duration) * 60 * oneSec
     )
       setOpenCustomInput(true);
     // else setOpenCustomInput(false);
   }, [currentTime, activeAsset]);
+
+  if (!activeAsset || !poolDetails || !switchPool) return <></>;
+
+  const maxDuration = switchPool.max_duration;
+  const minDuration = switchPool.min_duration;
 
   return (
     <>
@@ -85,10 +90,8 @@ export const DurationPicker = ({
 
             const isDisabled =
               (!isLastElement &&
-                durationIntoSeconds >
-                  timeToMins(activeAsset.max_duration) * 60 * oneSec) ||
-              durationIntoSeconds <
-                timeToMins(activeAsset.min_duration) * 60 * oneSec;
+                durationIntoSeconds > timeToMins(maxDuration) * 60 * oneSec) ||
+              durationIntoSeconds < timeToMins(minDuration) * 60 * oneSec;
             const singleDuration = isLastElement
               ? single.duration - 60 * oneSec
               : single.duration;
@@ -99,7 +102,7 @@ export const DurationPicker = ({
                 onClick={() => {
                   if (isDisabled) return;
                   if (isLastElement) return setOpenCustomInput(true);
-                  onSelect?.();
+                  // onSelect?.();
                   setCurrentTime(single.time);
                   setDur(idx);
                   setOpenCustomInput(false);
@@ -140,16 +143,16 @@ export const DurationPicker = ({
             onSelect={onSelect}
             currentTime={currentTime}
             setTime={(newValue) => setCurrentTime(newValue)}
-            maxTime={activeAsset.max_duration}
-            minTime={activeAsset.min_duration}
+            maxTime={maxDuration}
+            minTime={minDuration}
             error={{
-              min: timeToMins(activeAsset.min_duration),
+              min: timeToMins(minDuration),
               minMsg: `Can't set expiry lower than ${getUserError(
-                activeAsset.min_duration
+                minDuration
               )}.`,
-              max: timeToMins(activeAsset.max_duration),
+              max: timeToMins(maxDuration),
               maxMsg: `Can't set expiry of more than ${getUserError(
-                activeAsset.max_duration
+                maxDuration
               )}.`,
             }}
           />

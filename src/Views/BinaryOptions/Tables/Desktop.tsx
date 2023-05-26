@@ -270,7 +270,6 @@ const PGDesktopTables: React.FC<IPGDesktopTables> = ({
             isHistoryTable={isHistoryTable || isCancelledTable}
             marketPrice={marketPrice}
             trade={currentRow}
-            configData={currentRow.configPair}
           />
         );
 
@@ -374,7 +373,10 @@ export default PGDesktopTables;
 export function getPendingData(currentRow: IGQLHistory, expiryPrice: string) {
   if (!currentRow && !expiryPrice) return ['0', '0'];
   let payout = currentRow.amount;
-  let pnl = subtract(payout, currentRow.totalFee);
+  let pnl = '0';
+  if (payout) {
+    pnl = subtract(payout, currentRow.totalFee);
+  }
   const currExpiryPrice = expiryPrice;
   if (currExpiryPrice) {
     if (currentRow.isAbove) {

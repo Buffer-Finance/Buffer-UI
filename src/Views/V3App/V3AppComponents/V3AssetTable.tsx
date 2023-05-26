@@ -49,13 +49,6 @@ export const V3AssetTable: React.FC<{
     );
     const chartMarket =
       marketsForChart[pairNameForChart as keyof typeof marketsForChart];
-    console.log(
-      `currentAsset: `,
-      updatedArr,
-      pairName,
-      pairNameForChart,
-      currentAsset
-    );
 
     const isFavourite = favourites.find(
       (favourite) => chartMarket.tv_id === favourite

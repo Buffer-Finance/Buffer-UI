@@ -6,10 +6,10 @@ import { joinStrings } from '../helperFns';
 export function getV3AppFilteredAssets(
   assets: V3AppConfig[] | null,
   searchText: string,
-  category: string
+  category: string | null
 ) {
   const AssetTypes = ['favourites', 'crypto', 'forex'];
-  const [favourites] = useAtom(FavouriteAtom);
+  const [favourites] = useAtom<string[]>(FavouriteAtom);
   let filteredAssets: V3AppConfig[] = [];
   if (!assets) return filteredAssets;
   if (!!searchText && searchText !== '')
@@ -21,9 +21,8 @@ export function getV3AppFilteredAssets(
   else {
     filteredAssets = assets;
   }
-  console.log(`getV3AppFilteredAssets: `, filteredAssets, assets);
+  if (!category) return filteredAssets;
 
-  console.log(`category.toLowerCase(): `, category.toLowerCase());
   switch (category.toLowerCase()) {
     case AssetTypes[0]:
       return filteredAssets.filter((asset) =>

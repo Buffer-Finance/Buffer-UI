@@ -267,7 +267,6 @@ const DesktopTrad = () => {
       console.log('[adderr]errorwhileadding', e);
     }
   }, [market, forcefullyRerender]);
-  const qtInfo = useQTinfo();
   return (
     <>
       {/* <Detector
@@ -280,7 +279,7 @@ const DesktopTrad = () => {
           </div>
         )}
       /> */}
-      <ShareModal qtInfo={qtInfo} />
+      <ShareModal />
 
       <WideTableModal />
       <OneCTModal />

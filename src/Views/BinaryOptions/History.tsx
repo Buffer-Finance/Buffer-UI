@@ -2,8 +2,7 @@ import { useGenericHooks } from '@Hooks/useGenericHook';
 import { usePrice } from '@Hooks/usePrice';
 import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
 import { useAtom } from 'jotai';
-import { ReactNode, useState } from 'react';
-import { useQTinfo } from '.';
+import { useState } from 'react';
 import MobileTable from './Components/Mobile/historyTab';
 import { ShareModal } from './Components/shareModal';
 import {
@@ -22,11 +21,10 @@ const History: React.FC<IHistory> = ({}) => {
   usePastTradeQuery();
   useGenericHooks();
   usePrice();
-  const qtInfo = useQTinfo();
   const [active, setActive] = useState(tabs[0]);
   return (
     <div className="text-f22">
-      <ShareModal qtInfo={qtInfo} />
+      <ShareModal />
 
       <MobileTabs {...{ active, setActive, tabs }}></MobileTabs>
       <HorizontalTransition value={tabs.indexOf(active)}>

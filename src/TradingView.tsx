@@ -192,7 +192,7 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   t: number[];
   v: number[];
 }) => {
-  console.log(`pythOHLC: `, pythOHLC);
+  // console.log(`pythOHLC: `, pythOHLC);
   const rawOhlc = [];
   pythOHLC.c.forEach((element, idx) => {
     rawOhlc.push({
@@ -217,16 +217,15 @@ function drawPosition(
 ) {
   let vizIdentifiers = getIdentifier(option);
   const idx = visualized.indexOf(vizIdentifiers);
-  console.log(`idx: `, idx);
   const openTimeStamp = option.creationTime;
   const optionPrice = +option.strike / PRICE_DECIMALS;
 
   let color = !option.isAbove ? defaults.red : defaults.green;
   const text =
     `${toFixed(
-      divide(option.totalFee?.toString(), option.depositToken.decimals!)!,
+      divide(option.totalFee?.toString(), option.poolInfo.decimals!)!,
       2
-    )} ${option.depositToken?.name} | ` + getText(option.expirationTime);
+    )} ${option.poolInfo?.token} | ` + getText(option.expirationTime);
   const tooltip = `${getDisplayDate(openTimeStamp)}, ${getDisplayTime(
     openTimeStamp
   )} - ${getDisplayDate(option.expirationTime)}, ${getDisplayTime(
@@ -402,7 +401,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
             }
           );
           const ohlc = pythOHLC2rawOHLC(pythOHLC.data);
-          console.log(`ohlc: `, ohlc);
+          // console.log(`ohlc: `, ohlc);
           // const tempData = rawOHLC;
           // console.log(`tempData: `, tempData);
           // if (!tempData) return;
@@ -416,7 +415,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
             lastSyncedKline.current[
               getBarsFnActiveAsset + timeDeltaMapping(resolution)
             ] = ohlc[ohlc.length - 1];
-            console.log(`lastSyncedKline: `, lastSyncedKline);
+            // console.log(`lastSyncedKline: `, lastSyncedKline);
           }
           onHistoryCallback(ohlc, {
             noData: false,
@@ -541,7 +540,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         try {
           realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
         } catch (err) {
-          console.log('[sync]error white updating', err);
+          // console.log('[sync]error white updating', err);
         }
         // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
@@ -681,7 +680,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
         <div className="flex">
           <ChartTypeSelectionDD
             setActive={(updatedType: number) => {
-              console.log(`updatedType: `, updatedType);
+              // console.log(`updatedType: `, updatedType);
               setChartType((ct) => ({ ...ct, [marke]: updatedType }));
             }}
             active={chartType[marke] ?? 1}

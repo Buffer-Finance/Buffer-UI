@@ -11,7 +11,6 @@ import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import DisplayDate from '@Utils/DisplayDate';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
-import { IQTrade, IToken, useQTinfo } from '@Views/BinaryOptions';
 import {
   IGQLHistory,
   tardesAtom,
@@ -32,7 +31,6 @@ import {
 import Gradientbtn from '@Views/Common/Buttons';
 import TableMobile from '@Views/Common/TableMobile';
 import { Display } from '@Views/Common/Tooltips/Display';
-import VerticalTransition from '@Views/Common/Transitions/Vertical';
 import { Variables } from '@Utils/Time';
 import { BlackBtn } from '@Views/Common/V2-Button';
 import { getErrorFromCode } from '@Utils/getErrorFromCode';
@@ -41,16 +39,20 @@ import { priceAtom } from '@Hooks/usePrice';
 import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { v3AppConfig } from '@Views/V3App/config';
 
-const CancelButton = ({ option }) => {
+const CancelButton = ({ option }: { option: IGQLHistory }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const toastify = useToast();
-  const binary = useQTinfo();
-
-  const { writeCall } = useWriteCall(binary.routerContract, routerABI);
+  const { activeChain } = useActiveChain();
+  const configData =
+    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
+  const { writeCall } = useWriteCall(configData.router, routerABI);
 
   const cancelHandler = async (
     queuedId: number,
-    cb: (loadingState) => void
+    cb: (loadingState: boolean) => void
   ) => {
     if (queuedId === null || queuedId === undefined) {
       toastify({
@@ -63,10 +65,11 @@ const CancelButton = ({ option }) => {
     cb(true);
     writeCall(() => cb(false), 'cancelQueuedTrade', [queuedId]);
   };
-  const [isLoading, setIsLoading] = useState(false);
+
+  if (option && option.queueID !== undefined) return <></>;
   return (
     <BlackBtn
-      onClick={() => cancelHandler(option?.queue_id, setIsLoading)}
+      onClick={() => cancelHandler(Number(option.queueID), setIsLoading)}
       className="!h-fit px-4 py-2 !rounded-md !text-f14 !font-medium !w-fit c-232334 mr-[7px]"
       isLoading={isLoading}
     >
@@ -126,7 +129,7 @@ const MobileTable: React.FC<{
     handleClick: (idx: number) => void
   ) => {
     const option: IGQLHistory = filteredData[row];
-    const deposit_token = (option.depositToken as IToken).name;
+    const deposit_token = option.poolInfo.token;
     const normal_option =
       option.state != BetState.queued && option.state != BetState.cancelled;
     const StartDate = {
@@ -197,7 +200,7 @@ const MobileTable: React.FC<{
       option.state !== BetState.queued &&
       option.state !== BetState.cancelled
     ) {
-      const price = getPriceFromKlines(marketPrice, option.configPair);
+      const price = getPriceFromKlines(marketPrice, option.chartData);
       // console.log(`pricedd: `, marketPrice, option.configPair);
 
       // if (isHistoryTab || price) {
@@ -235,7 +238,6 @@ const MobileTable: React.FC<{
                 trade={option}
                 marketPrice={marketPrice}
                 onlyPnl
-                configData={option.configPair}
               />
             ) : (
               <Skeleton
@@ -331,7 +333,7 @@ const MobileTable: React.FC<{
                       className="justify-endk"
                       data={divide(
                         option.totalFee.toString(),
-                        (option.depositToken as IToken).decimals
+                        option.poolInfo.decimals
                       )}
                       unit={deposit_token}
                     />

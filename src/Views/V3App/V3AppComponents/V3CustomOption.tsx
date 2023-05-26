@@ -247,7 +247,7 @@ export const TradeButton = ({
             </BlueBtn>
           ) : (
             <>
-              <div className="btn-wrapper">
+              <div className="sm:flex sm:gap-2">
                 <GreenBtn
                   onClick={UpHandler}
                   isDisabled={isForex && !isMarketOpen}
@@ -280,7 +280,7 @@ export const TradeButton = ({
                 </RedBtn>
               </div>
               <div
-                className="approve-btn-styles text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto"
+                className="approve-btn-styles text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13"
                 role={'button'}
                 onClick={() =>
                   !account ? openConnectModal?.() : handleApproveClick('0')
@@ -310,7 +310,7 @@ export const PayoutProfit = ({
   if (amount && totalPayout) {
     return (
       <div className="flex-sbw text-f14 my-3 mb-4">
-        <div className="text-f12 w-full items-start flex-col flex-start flex wrap text-2">
+        <div className="text-f12 sm:text-f14 w-full items-start flex-col flex-start flex wrap text-2 sm:flex-row">
           <span className="nowrap mb-1">
             {' '}
             Payout
@@ -320,15 +320,15 @@ export const PayoutProfit = ({
             &nbsp;;
           </span>
           <Display
-            className="text-1 text-f16"
+            className="text-1 text-f16 sm:text-f14"
             data={multiply(add('1', divide(totalPayout, 2)), amount)}
             unit={tradeToken}
           />
         </div>
-        <div className="text-f12  w-[90%] items-start flex-col flex-start wrap flex text-2  gap-y-1">
+        <div className="text-f12 sm:text-f14 w-[90%] items-start flex-col flex-start wrap flex text-2  gap-y-1 sm:flex-row">
           Profit :&nbsp;
           <Display
-            className=" text-f16 text-green"
+            className=" text-f16 text-green sm:text-f14"
             data={subtract(
               multiply(add('1', divide(totalPayout, 2)), amount),
               amount
