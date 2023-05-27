@@ -73,16 +73,16 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   const isForex = activeAsset.category === 'Forex';
   const isMarketOpen = knowTill.open && isForex;
   const allowance = divide(allowanceWei, activePoolObj.token.decimals);
+  const { min_amount: minTradeAmount, option_contract } =
+    useTradePolOrBlpPool();
   const isAssetActive =
-    routerPermission &&
-    routerPermission[activeAsset.pools[0].options_contracts.current];
+    routerPermission && routerPermission[option_contract.current];
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
   let MarketOpenWarning: ReactNode | null = null;
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
   }
-  const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
 
   return (
     <>
