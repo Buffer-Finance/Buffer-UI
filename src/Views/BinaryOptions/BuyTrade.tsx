@@ -25,6 +25,7 @@ import { MarketTimingWarning } from './MarketTimingWarning';
 import { ammountAtom, approveModalAtom } from './PGDrawer';
 import { DurationPicker } from './PGDrawer/DurationPicker';
 import { useActivePoolObj } from './PGDrawer/PoolDropDown';
+import { useTradePolOrBlpPool } from './Hooks/useTradePolOrBlpPool';
 
 const BuyTrade: React.FC<any> = ({}) => {
   const [amount, setAmount] = useAtom(ammountAtom);
@@ -72,19 +73,13 @@ const BuyTrade: React.FC<any> = ({}) => {
   // useIsMarketOpen();
   const isMarketOpen = knowTill.open && isForex;
   const allowance = divide(allowanceWei?.[0], activePoolObj.token.decimals);
+  const { option_contract } = useTradePolOrBlpPool();
   const isAssetActive =
-    routerPermission &&
-    routerPermission[activeAsset.pools[0].options_contracts.current];
-  // const [rpcState] = useRPCchecker();
+    routerPermission && routerPermission[option_contract.current];
+
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
-  console.log(
-    `activeAssetPrice: `,
-    activeAssetPrice,
-    marketPrice,
-    activeAsset,
-    allowance
-  );
+
   let MarketOpenWarning: ReactNode | null = null;
   if (activeAsset.category == 'Forex') {
     MarketOpenWarning = <MarketTimingWarning />;
