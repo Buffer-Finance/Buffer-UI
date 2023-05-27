@@ -20,13 +20,13 @@ export const useTradePolOrBlpPool = () => {
 
     if (polExists.length > 0 && pol) {
       response.min_amount = pol.token.min_amount;
-      // if (
-      //   userInput &&
-      //   userInput !== '' &&
-      //   userInput < activePoolObj.token.min_amount
-      // ) {
-      response.option_contract = pol.options_contracts;
-      // }
+      if (
+        userInput &&
+        userInput !== '' &&
+        userInput < activePoolObj.token.min_amount
+      ) {
+        response.option_contract = pol.options_contracts;
+      }
     }
     console.log(`poolRouting: `, response.option_contract.current);
     return response;
