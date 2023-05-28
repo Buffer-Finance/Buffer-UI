@@ -104,10 +104,10 @@ export const pythIds = {
 };
 export const getPrice = async () => {
   const price = await axios.get(
-    `https://oracle.buffer-finance-api.link/api/latest_price_feeds?` +
-      Object.keys(pythIds)
-        .map((d) => 'ids[]=0x' + d)
-        .join('&')
+    `https://xc-mainnet.pyth.network/api/latest_price_feeds?` +
+    Object.keys(pythIds)
+      .map((d) => 'ids[]=0x' + d)
+      .join('&')
   );
   const marketPrice = {};
   price.data.forEach((e) => {
