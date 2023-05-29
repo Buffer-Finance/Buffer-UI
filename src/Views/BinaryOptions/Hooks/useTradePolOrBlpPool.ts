@@ -16,7 +16,12 @@ export const useTradePolOrBlpPool = () => {
     };
 
     const polExists = activePair.pools.filter((pool) => pool.token.is_pol);
-    const pol = polExists ? polExists.find((pool) => pool.token.is_pol) : null;
+    const pol = polExists
+      ? polExists.find(
+          (pool) =>
+            pool.token.name === activePoolObj.token.name.split('_POL')[0]
+        )
+      : null;
 
     if (polExists.length > 0 && pol) {
       response.min_amount = pol.token.min_amount;
