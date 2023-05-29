@@ -1,5 +1,5 @@
 <p  style="display:flex;align-items:center">
-<a href="https://buffer.finance" target="blank"><img align="center" src="https://cdn.buffer.finance/Buffer-Media/main/bfr.png" alt="harshalmaniya2" height="30" width="30" /></a> 
+<a href="https://buffer.finance" target="blank"><img align="center" src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085787/bfr.png" alt="harshalmaniya2" height="30" width="30" /></a> 
 </p>
 
 # Buffer Finance

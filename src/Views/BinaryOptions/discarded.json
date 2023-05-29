@@ -1,346 +1,343 @@
 [
-    {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "ETHBTC",
-        "pair": "ETH-BTC",
-        "price_precision": 1000000,
-        "token1": "ETH",
-        "token2": "BTC",
-        "full_name": "Ethereum Bitcoin",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x75bc161311f2b2795f4e8f53d9504a9a2cc894ee",
-              "current": "0x3195A342dCF89a4442f86D0932D4D990a76d843c"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0x59c9c0bd7c412ca4ca0eb32c37c58e945ddaeac7",
-              "current": "0x0D4a07EBDc29A8d3024cbBFe2B28b0311284e26b"
-            }
-          }
-        ]
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "ETHBTC",
+    "pair": "ETH-BTC",
+    "price_precision": 1000000,
+    "token1": "ETH",
+    "token2": "BTC",
+    "full_name": "Ethereum Bitcoin",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eth.svg",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x75bc161311f2b2795f4e8f53d9504a9a2cc894ee",
+          "current": "0x3195A342dCF89a4442f86D0932D4D990a76d843c"
+        }
       },
       {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "LINKUSD",
-        "pair": "LINK-USD",
-        "price_precision": 1000,
-        "token1": "LINK",
-        "token2": "USD",
-        "full_name": "Chainlink",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/link.svg",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xc2d6c848129441ec879d644ed7d51a4b3faa13b8",
-              "current": "0x3F812848d6b1425C5FEA838191F39f3bA3a12d8a"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0xa8829df1b002a57c2dc246e1fb572da1b50f7f15",
-              "current": "0x4591200ca366Bc3DCAF1e4936F4A9288baf0EE61"
-            }
-          }
-        ]
-      },
-      {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "UNIUSD",
-        "pair": "UNI-USD",
-        "price_precision": 1000,
-        "token1": "UNI",
-        "token2": "USD",
-        "full_name": "Uniswap",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/uni.png",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x7df941e34a63a434632761540666641cf2239ff8",
-              "current": "0x6006b97727Ee3f8D2A027876000B1141c18008B6"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0x866779cf1a2e385fc6e24bfe026554b691236799",
-              "current": "0x50697FE8b4cd12e2e7d264d84c191Ea94F7d8C84"
-            }
-          }
-        ]
-      },
-      {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "AAVEUSD",
-        "pair": "AAVE-USD",
-        "price_precision": 1000,
-        "token1": "AAVE",
-        "token2": "USD",
-        "full_name": "Aave",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/aave.svg",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x8b29138a6d85527a882dbb0d6277a268f76571e1",
-              "current": "0xd825B3833AfAC66B6aed2c3c190b43076C82c468"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0xd9d418c7555142f96c48f33a53ddf81d542fcf34",
-              "current": "0x8DA18250E31257fC435274E60A33ddAA0da296e4"
-            }
-          }
-        ]
-      },
-      {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "XRPUSD",
-        "pair": "XRP-USD",
-        "price_precision": 10000,
-        "token1": "XRP",
-        "token2": "USD",
-        "full_name": "Ripple",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xrp.svg",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x853529f59f98495be260299623b2560e6872c243",
-              "current": "0xdc77b77E0745f2555A71f7183530b9c7658a1A40"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0xf99a31f43bffad90630568652f57b63dd6078143",
-              "current": "0x9B7a4aC17CF133b7f9C17333Ff624Ab9A91346Cc"
-            }
-          }
-        ]
-      },
-
-      {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "SOLUSD",
-        "pair": "SOL-USD",
-        "price_precision": 100,
-        "token1": "SOL",
-        "token2": "USD",
-        "full_name": "Solana",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/sol.svg",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x600b4ea7fcf009d00bbd61de3b449710c22a6e69",
-              "current": "0xEbd69b15053EB17563e533AD6A4833f22A0a0841"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0x6bc9d50b805ef34bc9794aeb90335fb03aa68be3",
-              "current": "0xce935ED294ce5B66E590d5Ae56A359Bc205190Fe"
-            }
-          }
-        ]
-      },
-      {
-        "max_duration": "04:00",
-        "category": "Forex",
-        "tv_id": "EURCHF",
-        "pair": "EUR-CHF",
-        "price_precision": 1000000,
-        "token1": "EUR",
-        "token2": "CHF",
-        "full_name": "Australian Dollar",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x680820dee82b3f1006bf9d935bfe4cc9825d4bc9",
-              "current": "0xc36C0D901369C5FA93bCB76675f5D290dad5879d"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0x4a6d6d08506b5ee642bf05001ad149a5d8d5269c",
-              "current": "0x5470DC599bfD9529CEaaB4ED8bB0CABD20D9CE49"
-            }
-          }
-        ]
-      },
-      {
-        "max_duration": "04:00",
-        "category": "Forex",
-        "tv_id": "AUDUSD",
-        "pair": "AUD-USD",
-        "price_precision": 1000000,
-        "token1": "AUD",
-        "token2": "USD",
-        "full_name": "Australian Dollar",
-        "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/AUD.png",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x3d2a5d3557ce0106da39cded55a5faf23ae631da",
-              "current": "0xeb4E1899aecdb95273f4ce7f99a107617fa44Aa7"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0x1bcdfec2ce48ae7d7ab8d96c4e9bcfcd39729349",
-              "current": "0xCEe0356184fe1d850674e0937DFB1b715B5eFeDE"
-            }
-          }
-        ]
-      },
-   
-      {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "DOGEUSD",
-        "pair": "DOGE-USD",
-        "price_precision": 100000,
-        "token1": "DOGE",
-        "token2": "USD",
-        "full_name": "Dogecoin",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/doge.svg",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x0e4676187483a711c771f17cba583b3aa2b82114",
-              "current": "0xaC88A349dBa1F5c5C4d943bfa3eeBd9cF855EB7b"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0xa2b02b7580d8acd36398f5bf8be700ca2114fdf9",
-              "current": "0x9398A5e7681A9AeC6b0Db99e4e9719F30Ee1AE5C"
-            }
-          }
-        ]
-      },
-      {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "AVAXUSD",
-        "pair": "AVAX-USD",
-        "price_precision": 100,
-        "token1": "AVAX",
-        "token2": "USD",
-        "full_name": "Avalanche",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/avax.svg",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x0eecb4291aae303b88b66104453e8f133039a800",
-              "current": "0x1Fc36df53c612085c0a8FCD4dA4058f8197CB7f3"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0x5069bcd6c9caf63f4112337a30a84c122910c2b6",
-              "current": "0x767A5A211Ef07420cA3E3A4C789db2Db8b66841E"
-            }
-          }
-        ]
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0x59c9c0bd7c412ca4ca0eb32c37c58e945ddaeac7",
+          "current": "0x0D4a07EBDc29A8d3024cbBFe2B28b0311284e26b"
+        }
       }
-      , {
-        "max_duration": "04:00",
-        "category": "Crypto",
-        "tv_id": "MATICUSD",
-        "pair": "MATIC-USD",
-        "price_precision": 10000,
-        "token1": "MATIC",
-        "token2": "USD",
-        "full_name": "Matic",
-        "img": "https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/matic.svg",
-        "pools": [
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xdae146183e1110dcd5715cc825ae08733160a745",
-              "current": "0xB98Fc589BE43062FB96e920d9DFe38a9543610A0"
-            }
-          },
-          {
-            "payout": 70,
-            "is_trade_paused": false,
-            "token": "BFR",
-            "options_contracts": {
-              "config": "0xbd4bb8d3fef0a65de4f6f5d40bf9b029a34cc844",
-              "current": "0xa85eA9ca702A0644C08fc271289ED1d7625c7FAa"
-            }
-          }
-        ]
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "LINKUSD",
+    "pair": "LINK-USD",
+    "price_precision": 1000,
+    "token1": "LINK",
+    "token2": "USD",
+    "full_name": "Chainlink",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/link.svg",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0xc2d6c848129441ec879d644ed7d51a4b3faa13b8",
+          "current": "0x3F812848d6b1425C5FEA838191F39f3bA3a12d8a"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0xa8829df1b002a57c2dc246e1fb572da1b50f7f15",
+          "current": "0x4591200ca366Bc3DCAF1e4936F4A9288baf0EE61"
+        }
       }
-    
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "UNIUSD",
+    "pair": "UNI-USD",
+    "price_precision": 1000,
+    "token1": "UNI",
+    "token2": "USD",
+    "full_name": "Uniswap",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/uni.png",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x7df941e34a63a434632761540666641cf2239ff8",
+          "current": "0x6006b97727Ee3f8D2A027876000B1141c18008B6"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0x866779cf1a2e385fc6e24bfe026554b691236799",
+          "current": "0x50697FE8b4cd12e2e7d264d84c191Ea94F7d8C84"
+        }
+      }
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "AAVEUSD",
+    "pair": "AAVE-USD",
+    "price_precision": 1000,
+    "token1": "AAVE",
+    "token2": "USD",
+    "full_name": "Aave",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/aave.svg",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x8b29138a6d85527a882dbb0d6277a268f76571e1",
+          "current": "0xd825B3833AfAC66B6aed2c3c190b43076C82c468"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0xd9d418c7555142f96c48f33a53ddf81d542fcf34",
+          "current": "0x8DA18250E31257fC435274E60A33ddAA0da296e4"
+        }
+      }
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "XRPUSD",
+    "pair": "XRP-USD",
+    "price_precision": 10000,
+    "token1": "XRP",
+    "token2": "USD",
+    "full_name": "Ripple",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/xrp.svg",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x853529f59f98495be260299623b2560e6872c243",
+          "current": "0xdc77b77E0745f2555A71f7183530b9c7658a1A40"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0xf99a31f43bffad90630568652f57b63dd6078143",
+          "current": "0x9B7a4aC17CF133b7f9C17333Ff624Ab9A91346Cc"
+        }
+      }
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "SOLUSD",
+    "pair": "SOL-USD",
+    "price_precision": 100,
+    "token1": "SOL",
+    "token2": "USD",
+    "full_name": "Solana",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/sol.svg",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x600b4ea7fcf009d00bbd61de3b449710c22a6e69",
+          "current": "0xEbd69b15053EB17563e533AD6A4833f22A0a0841"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0x6bc9d50b805ef34bc9794aeb90335fb03aa68be3",
+          "current": "0xce935ED294ce5B66E590d5Ae56A359Bc205190Fe"
+        }
+      }
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Forex",
+    "tv_id": "EURCHF",
+    "pair": "EUR-CHF",
+    "price_precision": 1000000,
+    "token1": "EUR",
+    "token2": "CHF",
+    "full_name": "Australian Dollar",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/euro.png",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x680820dee82b3f1006bf9d935bfe4cc9825d4bc9",
+          "current": "0xc36C0D901369C5FA93bCB76675f5D290dad5879d"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0x4a6d6d08506b5ee642bf05001ad149a5d8d5269c",
+          "current": "0x5470DC599bfD9529CEaaB4ED8bB0CABD20D9CE49"
+        }
+      }
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Forex",
+    "tv_id": "AUDUSD",
+    "pair": "AUD-USD",
+    "price_precision": 1000000,
+    "token1": "AUD",
+    "token2": "USD",
+    "full_name": "Australian Dollar",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/AUD.png",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x3d2a5d3557ce0106da39cded55a5faf23ae631da",
+          "current": "0xeb4E1899aecdb95273f4ce7f99a107617fa44Aa7"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0x1bcdfec2ce48ae7d7ab8d96c4e9bcfcd39729349",
+          "current": "0xCEe0356184fe1d850674e0937DFB1b715B5eFeDE"
+        }
+      }
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "DOGEUSD",
+    "pair": "DOGE-USD",
+    "price_precision": 100000,
+    "token1": "DOGE",
+    "token2": "USD",
+    "full_name": "Dogecoin",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/doge.svg",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x0e4676187483a711c771f17cba583b3aa2b82114",
+          "current": "0xaC88A349dBa1F5c5C4d943bfa3eeBd9cF855EB7b"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0xa2b02b7580d8acd36398f5bf8be700ca2114fdf9",
+          "current": "0x9398A5e7681A9AeC6b0Db99e4e9719F30Ee1AE5C"
+        }
+      }
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "AVAXUSD",
+    "pair": "AVAX-USD",
+    "price_precision": 100,
+    "token1": "AVAX",
+    "token2": "USD",
+    "full_name": "Avalanche",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/avax.svg",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0x0eecb4291aae303b88b66104453e8f133039a800",
+          "current": "0x1Fc36df53c612085c0a8FCD4dA4058f8197CB7f3"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0x5069bcd6c9caf63f4112337a30a84c122910c2b6",
+          "current": "0x767A5A211Ef07420cA3E3A4C789db2Db8b66841E"
+        }
+      }
+    ]
+  },
+  {
+    "max_duration": "04:00",
+    "category": "Crypto",
+    "tv_id": "MATICUSD",
+    "pair": "MATIC-USD",
+    "price_precision": 10000,
+    "token1": "MATIC",
+    "token2": "USD",
+    "full_name": "Matic",
+    "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/matic.svg",
+    "pools": [
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "USDC",
+        "options_contracts": {
+          "config": "0xdae146183e1110dcd5715cc825ae08733160a745",
+          "current": "0xB98Fc589BE43062FB96e920d9DFe38a9543610A0"
+        }
+      },
+      {
+        "payout": 70,
+        "is_trade_paused": false,
+        "token": "BFR",
+        "options_contracts": {
+          "config": "0xbd4bb8d3fef0a65de4f6f5d40bf9b029a34cc844",
+          "current": "0xa85eA9ca702A0644C08fc271289ED1d7625c7FAa"
+        }
+      }
+    ]
+  }
 ]

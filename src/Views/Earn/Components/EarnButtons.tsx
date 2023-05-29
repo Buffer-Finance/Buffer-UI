@@ -48,7 +48,15 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
       return (
         <div className="flex gap-5">
           {cardNum === 0 && (
-            <BlueBtn onClick={() => setSwapAtom('BFR')} className={btnClasses}>
+            <BlueBtn
+              onClick={() =>
+                window.open(
+                  'https://app.uniswap.org/#/tokens/arbitrum/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d',
+                  '_blank'
+                )
+              }
+              className={btnClasses}
+            >
               Buy BFR
             </BlueBtn>
           )}

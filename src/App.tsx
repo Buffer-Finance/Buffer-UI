@@ -201,9 +201,17 @@ function App() {
           <Warning
             body={
               <>
-                $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
-                listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
-                PancakeSwap or Apeswap on BNB chain.
+                $BFR token{' '}
+                {/* <a
+                  className=" cursor-pointer"
+                  href="https://app.uniswap.org/#/tokens/arbitrum/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d"
+                  target="_blank"
+                >
+                  &nbsp; */}
+                0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D &nbsp;
+                {/* </a>{' '} */}
+                has been listed on Uniswap V3 Arbitrum. Don't trade $iBFR token
+                on PancakeSwap or Apeswap on BNB chain.
               </>
             }
             closeWarning={() => {}}

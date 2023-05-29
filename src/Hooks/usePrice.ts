@@ -105,7 +105,7 @@ export const pythIds = {
 export const getPrice = async () => {
   try {
     const price = await axios.get(
-      `https://oracle.buffer-finance-api.link/api/latest_price_feeds?` +
+      `https://xc-mainnet.pyth.network/api/latest_price_feeds?` +
         Object.keys(pythIds)
           .map((d) => 'ids[]=0x' + d)
           .join('&')
@@ -122,7 +122,6 @@ export const getPrice = async () => {
         },
       ];
     });
-
     return marketPrice;
   } catch (e) {
     console.log('getPrice error' + e);

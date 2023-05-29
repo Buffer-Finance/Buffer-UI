@@ -85,7 +85,7 @@ export const getEarnCards = (data: IEarn) => {
             />
           </div>
           <div className="max-w-[300px]">
-            <BufferProgressBar
+            {/* <BufferProgressBar
               fontSize={12}
               progressPercent={Number(
                 multiply(
@@ -101,7 +101,7 @@ export const getEarnCards = (data: IEarn) => {
                   2
                 )
               )}
-            />
+            /> */}
           </div>
           {/* <div className="text-3 text-f12 flex  mt-2">
             <img
@@ -164,7 +164,7 @@ export const getEarnCards = (data: IEarn) => {
             />
           </div>
           <div className="max-w-[300px]">
-            <BufferProgressBar
+            {/* <BufferProgressBar
               fontSize={12}
               progressPercent={Number(
                 multiply(
@@ -180,7 +180,7 @@ export const getEarnCards = (data: IEarn) => {
                   2
                 )
               )}
-            />
+            /> */}
           </div>
           {/* <div className="text-3 text-f12 flex  mt-2">
             <img
