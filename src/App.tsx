@@ -34,7 +34,6 @@ import { useToast } from '@Contexts/Toast';
 import { AllTradesPage } from '@Views/AllTrades';
 import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
-import { NoLossTrade, TradePage } from '@Views/BinaryOptions/TradePage';
 import ExampleComponent from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
 import { MergedPage } from '@Views/AllTrades/allTradesMerged';
@@ -47,6 +46,7 @@ import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
 import { NoLoss } from '@Views/NoLoss/NoLoss';
 import { V3AppTradePage } from '@Views/V3App/V3TradePage';
+import { TradePage } from '@Views/TradePage';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
@@ -110,6 +110,7 @@ const AppRoutes = () => {
         <Route path="/admin" element={<TradingConfig />}></Route>
         <Route path="/admin/create-pair" element={<CreatePair />}></Route>
         <Route path="/addMarket" element={<AddMarket />} />
+        <Route path="/addMarket" element={<AddMarket />} />
         <Route path="/test2" element={<ExampleComponent />} />
         <Route path="/test/:market" element={<TradePage />} />
         <Route path="/referral" element={<ReferralPage />} />
@@ -143,7 +144,7 @@ const AppRoutes = () => {
         <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<V3AppTradePage />} />
         <Route path="/no-loss/:market" element={<NoLoss />} />
-        <Route path="/v3/:market" element={<V3AppTradePage />} />
+        <Route path="/v2/:market" element={<TradePage />} />
         {/* referral link handling */}
         <Route
           path="/*"
