@@ -54,6 +54,26 @@ export const appConfig = {
   },
 };
 
+export const defaultSettings = {
+  trade: {
+    partialFill: true,
+    slippageTolerance: 0.5,
+    limitOrdersExpiry: 86400,
+  },
+  share: {
+    showTradeSize: true,
+    showSharePopup: true,
+  },
+  premium: {
+    showRecentTrades: true,
+  },
+  miscs: {
+    showFavoriteAsset: true,
+  },
+  tradePanelPostion: 0,
+  notificationPosition: 3,
+};
+
 export const marketsForChart = {
   BTCUSD: {
     category: 'Crypto',

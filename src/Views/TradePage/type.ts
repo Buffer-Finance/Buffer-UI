@@ -42,3 +42,15 @@ export enum AssetCategory {
   Crypto,
   Commodities,
 }
+
+export enum notificationPosition {
+  TopLeft,
+  TopRight,
+  BottomLeft,
+  BottomRight,
+}
+
+export enum tradePanelPosition {
+  Left,
+  Right,
+}
