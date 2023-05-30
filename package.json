@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "vite",
     "build": " vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "extract": "lingui extract",
+    "compile": "lingui compile --typescript"
   },
   "dependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
