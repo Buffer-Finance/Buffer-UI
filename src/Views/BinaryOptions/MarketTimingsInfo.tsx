@@ -1,12 +1,5 @@
-import { Popover } from "@mui/material";
-import { useSetAtom } from "jotai";
-import { useState } from "react";
-import BufferTable from "@Views/Common/BufferTable";
-import { CellContent } from "@Views/Common/BufferTable/CellInfo";
-import { LeftBorderedDiv } from "@Views/Common/LeftBorderedDiv";
-import { TableHeader } from "@Views/Pro/Common/TableHead";
-import { DropdownArrow } from "@SVG/Elements/DropDownArrow"";
-import { ForexTimingsModalAtom } from "./PGDrawer/CustomOption";
+import { useSetAtom } from 'jotai';
+import { ForexTimingsModalAtom } from './PGDrawer/CustomOption';
 
 interface IMarketTimingsInfo {}
 

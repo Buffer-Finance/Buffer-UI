@@ -47,6 +47,8 @@ import { CreatePair } from './Admin/CreatePair';
 import { NoLoss } from '@Views/NoLoss/NoLoss';
 import { V3AppTradePage } from '@Views/V3App/V3TradePage';
 import { TradePage } from '@Views/TradePage';
+import { I18nProvider } from '@lingui/react';
+import { i18n } from '@lingui/core';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
@@ -159,6 +161,12 @@ const AppRoutes = () => {
   );
 };
 
+async function activateLocale(locale: string) {
+  const { messages } = await import(`./locales/${locale}/messages.ts`);
+  i18n.load(locale, messages);
+  i18n.activate(locale);
+}
+activateLocale('en');
 export const snackAtom = atom<{
   message: null | React.ReactNode;
   severity?: 'success' | 'warning' | 'info' | 'error';
@@ -172,66 +180,68 @@ function App() {
   const graphStatus = useGraphStatus();
   return (
     <>
-      <Background>
-        {graphStatus && (
-          <Warning
-            body={
-              <>
-                We are facing some issues with the theGraph API. Trading
-                experience on the platform may be hindered temporarily.
-              </>
-            }
-            closeWarning={() => {}}
-            shouldAllowClose={false}
-            state={graphStatus.error}
-            className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
-          />
-        )}
-        <Navbar />
-        <AppRoutes />
-        <Snackbar
-          open={snack.message ? true : false}
-          autoHideDuration={3500}
-          onClose={() => setSnack({ message: null })}
-          action={null}
-          anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-        >
-          <Alert
+      <I18nProvider i18n={i18n}>
+        <Background>
+          {graphStatus && (
+            <Warning
+              body={
+                <>
+                  We are facing some issues with the theGraph API. Trading
+                  experience on the platform may be hindered temporarily.
+                </>
+              }
+              closeWarning={() => {}}
+              shouldAllowClose={false}
+              state={graphStatus.error}
+              className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+            />
+          )}
+          <Navbar />
+          <AppRoutes />
+          <Snackbar
+            open={snack.message ? true : false}
+            autoHideDuration={3500}
             onClose={() => setSnack({ message: null })}
-            severity={snack.severity || 'info'}
-            sx={{ width: '100%' }}
+            action={null}
+            anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
           >
-            {snack.message}
-          </Alert>
-        </Snackbar>
-        {!urlSettings?.hide && (
-          <Warning
-            body={
-              <>
-                $BFR token{' '}
-                {/* <a
+            <Alert
+              onClose={() => setSnack({ message: null })}
+              severity={snack.severity || 'info'}
+              sx={{ width: '100%' }}
+            >
+              {snack.message}
+            </Alert>
+          </Snackbar>
+          {!urlSettings?.hide && (
+            <Warning
+              body={
+                <>
+                  $BFR token{' '}
+                  {/* <a
                   className=" cursor-pointer"
                   href="https://app.uniswap.org/#/tokens/arbitrum/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d"
                   target="_blank"
                 >
                   &nbsp; */}
-                0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D &nbsp;
-                {/* </a>{' '} */}
-                has been listed on Uniswap V3 Arbitrum. Don't trade $iBFR token
-                on PancakeSwap or Apeswap on BNB chain.
-              </>
-            }
-            closeWarning={() => {}}
-            shouldAllowClose={false}
-            state={true}
-            className="disclaimer sm:hidden"
-          />
-        )}
-        <ConnectionDrawer className="open" />
-        <TnCModal />
-        <SideBar />
-      </Background>
-      <MobileBottomTabs />
+                  0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D &nbsp;
+                  {/* </a>{' '} */}
+                  has been listed on Uniswap V3 Arbitrum. Don't trade $iBFR
+                  token on PancakeSwap or Apeswap on BNB chain.
+                </>
+              }
+              closeWarning={() => {}}
+              shouldAllowClose={false}
+              state={true}
+              className="disclaimer sm:hidden"
+            />
+          )}
+          <ConnectionDrawer className="open" />
+          <TnCModal />
+          <SideBar />
+        </Background>
+        <MobileBottomTabs />
+      </I18nProvider>
     </>
   );
 }
