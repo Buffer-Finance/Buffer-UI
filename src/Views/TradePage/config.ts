@@ -61,7 +61,7 @@ export const defaultSettings = {
     limitOrdersExpiry: 86400,
   },
   share: {
-    showTradeSize: true,
+    showTradeSize: false,
     showSharePopup: true,
   },
   premium: {
@@ -70,9 +70,12 @@ export const defaultSettings = {
   miscs: {
     showFavoriteAsset: true,
   },
-  tradePanelPostion: 0,
+  tradePanelPosition: 0,
   notificationPosition: 3,
 };
+
+export const SLIPPAGE_DEFAULTS = [0.1, 0.5, 1.0];
+export const MAX_SLIPPAGE = 5;
 
 export const marketsForChart = {
   BTCUSD: {

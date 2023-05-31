@@ -43,12 +43,12 @@ const Background = styled.div`
 
 export const Switch: React.FC<{
   isOn: boolean;
-  onChange: (event: ChangeEvent) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }> = ({ isOn = true, onChange, className = '' }) => {
   return (
     <Background>
-      <label className="theme-switcher" htmlFor="themeswitch">
+      <label className="theme-switcher">
         <div className="background"></div>
         <input
           checked={isOn}

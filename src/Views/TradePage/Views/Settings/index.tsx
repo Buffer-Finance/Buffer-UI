@@ -1,30 +1,25 @@
-import { NotificationPositionSelectorSVG } from '../../Components/NotificationPositionSelectorSVG';
-import { ResetButton } from '../../Components/ResetButton';
-import { TradingPanelSideSelectorSVG } from '../../Components/TradingPanelSideSelectorSVG';
-import { Switch } from '../../Components/Switch';
-import { useState } from 'react';
+import { PremiumSettings } from './PremiumSettings';
+import { MiscSettings } from './MiscSettings';
+import { NotificationPositionSettings } from './NotificationPositionSettings';
+import { TradePanelSettings } from './TradePanelSettings';
+import { ShareSettings } from './ShareSettings';
+import { ResetAllButton } from './ResetAllButton';
+import { SettingsHeader } from './SettingsHeader';
+import { TradeSettings } from './TradeSettings';
 
 const Settings: React.FC<{ className?: string }> = ({ className = '' }) => {
-  const [isOn, setIsOn] = useState(false);
   return (
     <div
-      className={`${className} max-w-[400px] w-full bg-[#232334] h-screen pl-[38px] pr-[30px] pt-[26px] pb-[32px] rounded-[10px]`}
+      className={`${className} max-w-[400px] w-full bg-[#232334] h-screen pl-[38px] pr-[30px] pt-[26px] pb-[32px] rounded-[10px] flex flex-col gap-7 overflow-y-auto`}
     >
-      Settings
-      <Switch
-        isOn={isOn}
-        onChange={(event) => {
-          console.log('switch');
-          setIsOn(!isOn);
-        }}
-      />
-      <ResetButton
-        onClick={() => {
-          console.log('reset');
-        }}
-      />
-      <NotificationPositionSelectorSVG selectedPosition={0} />
-      <TradingPanelSideSelectorSVG selectedSide={1} />
+      <SettingsHeader />
+      <TradeSettings />
+      <ShareSettings />
+      <PremiumSettings />
+      <MiscSettings />
+      <TradePanelSettings />
+      <NotificationPositionSettings />
+      <ResetAllButton />
     </div>
   );
 };
