@@ -7,6 +7,7 @@ import {
 } from '@Views/TradePage/Components/TextWrapper';
 import { premiumSettingsAtom } from '@Views/TradePage/atoms';
 import { defaultSettings } from '@Views/TradePage/config';
+import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
 
 export const PremiumSettings: React.FC<any> = () => {
@@ -28,11 +29,15 @@ export const PremiumSettings: React.FC<any> = () => {
   return (
     <div>
       <RowGapItemsTop gap="4px">
-        <SettingsHeaderText>Premium Features</SettingsHeaderText>
+        <SettingsHeaderText>
+          <Trans>Premium Features</Trans>
+        </SettingsHeaderText>
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
       <RowBetween>
-        <SettingsText>show recent trade</SettingsText>
+        <SettingsText>
+          <Trans>show recent trade</Trans>
+        </SettingsText>
         <Switch
           isOn={settings.showRecentTrades}
           onChange={toggleShowRecentTrades}

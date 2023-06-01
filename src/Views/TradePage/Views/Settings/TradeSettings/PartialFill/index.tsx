@@ -2,6 +2,7 @@ import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import { Switch } from '@Views/TradePage/Components/Switch';
 import { SettingsText } from '@Views/TradePage/Components/TextWrapper';
+import { Trans } from '@lingui/macro';
 
 export const PartialFill: React.FC<{
   isOn: boolean;
@@ -10,7 +11,9 @@ export const PartialFill: React.FC<{
   return (
     <RowBetween>
       <RowGap gap="4px">
-        <SettingsText>Partial fill</SettingsText>
+        <SettingsText>
+          <Trans>Partial fill</Trans>
+        </SettingsText>
         <IconToolTip
           content={`By enabling "Partial Fill" your trade will be partially filled rather than canceled in case of insufficient funds in the write pool.`}
         />

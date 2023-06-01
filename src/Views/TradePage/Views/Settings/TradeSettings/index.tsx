@@ -8,6 +8,7 @@ import { useAtom } from 'jotai';
 import { PartialFill } from './PartialFill';
 import { Slippage } from './Slippage';
 import { LimitOrdersExpiry } from './LimitOrdersExpiry';
+import { Trans } from '@lingui/macro';
 
 export const TradeSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(tradeSettingsAtom);
@@ -33,7 +34,9 @@ export const TradeSettings: React.FC = () => {
   return (
     <div>
       <RowGapItemsTop gap="4px">
-        <SettingsHeaderText>Trade Settings</SettingsHeaderText>
+        <SettingsHeaderText>
+          <Trans>Trade Settings</Trans>
+        </SettingsHeaderText>
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
       <ColumnGap gap="12px">

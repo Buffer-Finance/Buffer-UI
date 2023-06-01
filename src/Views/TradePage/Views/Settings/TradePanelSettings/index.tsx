@@ -5,6 +5,7 @@ import { useAtom } from 'jotai';
 import { TradePanelSideSelector } from './TradePanelSideSelector';
 import { defaultSettings } from '@Views/TradePage/config';
 import { tradePanelPositionSettingsAtom } from '@Views/TradePage/atoms';
+import { Trans } from '@lingui/macro';
 
 export const TradePanelSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(tradePanelPositionSettingsAtom);
@@ -21,7 +22,9 @@ export const TradePanelSettings: React.FC = () => {
   return (
     <div>
       <RowGapItemsTop gap="4px">
-        <SettingsHeaderText>Trading Panel Side</SettingsHeaderText>
+        <SettingsHeaderText>
+          <Trans>Trading Panel Side</Trans>
+        </SettingsHeaderText>
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
       <TradePanelSideSelector

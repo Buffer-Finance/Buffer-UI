@@ -5,6 +5,7 @@ import { PositionSelector } from './PositionSelector';
 import { useAtom } from 'jotai';
 import { defaultSettings } from '@Views/TradePage/config';
 import { notificationPositionSettingsAtom } from '@Views/TradePage/atoms';
+import { Trans } from '@lingui/macro';
 
 export const NotificationPositionSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(notificationPositionSettingsAtom);
@@ -22,7 +23,9 @@ export const NotificationPositionSettings: React.FC = () => {
   return (
     <div>
       <RowGapItemsTop gap="4px">
-        <SettingsHeaderText>Notification Position</SettingsHeaderText>
+        <SettingsHeaderText>
+          <Trans>Notification Position</Trans>
+        </SettingsHeaderText>
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
       <PositionSelector

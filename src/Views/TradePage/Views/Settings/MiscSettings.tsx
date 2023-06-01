@@ -7,6 +7,7 @@ import {
 } from '@Views/TradePage/Components/TextWrapper';
 import { miscsSettingsAtom } from '@Views/TradePage/atoms';
 import { defaultSettings } from '@Views/TradePage/config';
+import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
 
 export const MiscSettings: React.FC = () => {
@@ -28,11 +29,15 @@ export const MiscSettings: React.FC = () => {
   return (
     <div>
       <RowGapItemsTop gap="4px">
-        <SettingsHeaderText>Share Related Settings</SettingsHeaderText>
+        <SettingsHeaderText>
+          <Trans>Share Related Settings</Trans>
+        </SettingsHeaderText>
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
       <RowBetween>
-        <SettingsText>show favorite Asset</SettingsText>
+        <SettingsText>
+          <Trans>show favorite asset</Trans>
+        </SettingsText>
         <Switch
           isOn={settings.showFavoriteAsset}
           onChange={toggleShowRecentTrades}

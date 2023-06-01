@@ -8,6 +8,7 @@ import {
 } from '@Views/TradePage/Components/TextWrapper';
 import { shareSettingsAtom } from '@Views/TradePage/atoms';
 import { defaultSettings } from '@Views/TradePage/config';
+import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
 
 export const ShareSettings: React.FC<any> = () => {
@@ -36,19 +37,25 @@ export const ShareSettings: React.FC<any> = () => {
   return (
     <div>
       <RowGapItemsTop gap="4px">
-        <SettingsHeaderText>Share Related Settings</SettingsHeaderText>
+        <SettingsHeaderText>
+          <Trans>Share Related Settings</Trans>
+        </SettingsHeaderText>
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
       <ColumnGap gap="12px">
         <RowBetween>
-          <SettingsText>Show trade size</SettingsText>
+          <SettingsText>
+            <Trans>Show trade size</Trans>
+          </SettingsText>
           <Switch
             isOn={settings.showTradeSize}
             onChange={toggleShowTradeSize}
           />
         </RowBetween>
         <RowBetween>
-          <SettingsText>Show share pop up</SettingsText>
+          <SettingsText>
+            <Trans>Show share pop up</Trans>
+          </SettingsText>
           <Switch
             isOn={settings.showSharePopup}
             onChange={toggleShowSharePopup}
