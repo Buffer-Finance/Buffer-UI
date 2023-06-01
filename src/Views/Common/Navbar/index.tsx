@@ -21,6 +21,8 @@ import { isTestnet } from 'config';
 import { ClaimLBFRBtn } from '@Views/Profile/LBFR';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { ArbitrumOnly } from '../ChainNotSupported';
+import { SettingsIcon } from './SettingsIcon';
+import { SettingsDD } from './SettingsDD';
 
 interface INavbar {}
 
@@ -132,6 +134,9 @@ export const Navbar: React.FC<INavbar> = () => {
           {/* <ChainDropdown /> */}
           <AccountDropdown />
         </div>
+
+        <SettingsDD />
+
         <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
           {state.sidebar_active ? (
             <MenuLogo className="icon menu" onClick={handleClose} />

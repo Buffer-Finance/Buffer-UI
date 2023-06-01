@@ -6,13 +6,39 @@ import { ShareSettings } from './ShareSettings';
 import { ResetAllButton } from './ResetAllButton';
 import { SettingsHeader } from './SettingsHeader';
 import { TradeSettings } from './TradeSettings';
+import styled from '@emotion/styled';
 
-const Settings: React.FC<{ className?: string }> = ({ className = '' }) => {
+const SettingsBackground = styled.div`
+  background-color: #232334;
+  padding: 15px 20px 20px 25px;
+  border-radius: 9px;
+  flex: 1;
+  overflow-y: auto;
+  height: 80vh;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 24px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 24px;
+  }
+`;
+
+const Settings: React.FC<{ className?: string; closeDropdown: () => void }> = ({
+  className = '',
+  closeDropdown,
+}) => {
   return (
-    <div
-      className={`${className} max-w-[400px] w-full bg-[#232334] h-screen pl-[38px] pr-[30px] pt-[26px] pb-[32px] rounded-[10px] flex flex-col gap-7 overflow-y-auto`}
-    >
-      <SettingsHeader />
+    <SettingsBackground className={className}>
+      <SettingsHeader onClose={closeDropdown} />
       <TradeSettings />
       <ShareSettings />
       <PremiumSettings />
@@ -20,7 +46,7 @@ const Settings: React.FC<{ className?: string }> = ({ className = '' }) => {
       <TradePanelSettings />
       <NotificationPositionSettings />
       <ResetAllButton />
-    </div>
+    </SettingsBackground>
   );
 };
 

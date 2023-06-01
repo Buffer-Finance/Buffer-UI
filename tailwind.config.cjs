@@ -6,10 +6,15 @@ module.exports = {
     keyframes: {
       fadeIn: { from: { opacity: 0, transform: 'scale(.95)' } },
       fadeOut: { to: { opacity: 0, transform: 'scale(.95)' } },
+      'animate-roatate': {
+        from: { transform: 'rotate(0deg)' },
+        to: { transform: 'rotate(360deg)' },
+      },
     },
     animation: {
       fadeIn: 'fadeIn 0.1s ease-out',
       fadeOut: 'fadeOut 0.15s ease-out forwards',
+      'animate-roatate': 'animate-roatate 10s linear',
     },
     screens: {
       sm: { max: '600px' },

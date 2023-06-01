@@ -9,6 +9,7 @@ export const ResetSVG: React.FC<SVGProps<SVGSVGElement>> = (props) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
+      className="active:animate-roatate"
     >
       <path
         d="M0.420657 5C0.420657 2.4709 2.4709 0.420657 5 0.420657H12C14.5291 0.420657 16.5793 2.4709 16.5793 5V13C16.5793 15.5291 14.5291 17.5793 12 17.5793H5C2.4709 17.5793 0.420657 15.5291 0.420657 13V5Z"
