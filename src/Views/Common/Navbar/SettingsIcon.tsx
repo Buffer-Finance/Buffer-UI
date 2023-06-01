@@ -11,7 +11,7 @@ export const SettingsIcon: React.FC<{
       xmlns="http://www.w3.org/2000/svg"
       {...svgProps}
       role="button"
-      className="animate-spin"
+      className={className}
     >
       <path
         d="M0 4C0 1.79086 1.79086 0 4 0H25C27.2091 0 29 1.79086 29 4V27C29 29.2091 27.2091 31 25 31H4C1.79086 31 0 29.2091 0 27V4Z"

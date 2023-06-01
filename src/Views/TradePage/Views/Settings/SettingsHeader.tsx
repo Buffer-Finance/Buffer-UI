@@ -8,7 +8,10 @@ export const SettingsHeader: React.FC<{ onClose: () => void }> = ({
   return (
     <RowBetween>
       <SettingsComponentHeader>Advanced Settings</SettingsComponentHeader>
-      <CloseButton onClick={onClose} />
+      <CloseButton
+        onClick={onClose}
+        className="hover:brightness-125 hover:scale-125 transition-all duration-100 ease-in-out"
+      />
     </RowBetween>
   );
 };

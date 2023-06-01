@@ -21,7 +21,7 @@ export const SettingsDD: React.FC = () => {
   return (
     <>
       <button type="button" ref={ref} {...anchorProps}>
-        <SettingsIcon />
+        <SettingsIcon className="hover:brightness-125 transition-all duration-100 ease-in-out" />
       </button>
       <ControlledMenu
         {...menuState}
