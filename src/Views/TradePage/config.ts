@@ -75,6 +75,45 @@ export const defaultSettings = {
   notificationPosition: 3,
 };
 
+export const oneSec = 1000;
+export const durations = [
+  {
+    duration: 1 * 60,
+    time: '00:01',
+    name: ['1m'],
+  },
+  // {
+  //   duration: 3 * 60 * oneSec,
+  //   time: '00:03',
+  //   name: ['3m'],
+  // },
+  {
+    duration: 5 * 60,
+    time: '00:05',
+    name: ['5m'],
+  },
+  {
+    duration: 15 * 60,
+    time: '00:15',
+    name: ['15m'],
+  },
+  {
+    duration: 60 * 60,
+    time: '01:00',
+    name: ['1h'],
+  },
+  {
+    duration: 4 * 60 * 60,
+    time: '04:00',
+    name: ['4h'],
+  },
+  {
+    duration: 24 * 60 * 60,
+    time: '23:59',
+    name: ['24h'],
+  },
+];
+
 export const SLIPPAGE_DEFAULTS = [0.1, 0.5, 1.0];
 export const MAX_SLIPPAGE = 5;
 

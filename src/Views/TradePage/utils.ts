@@ -42,6 +42,12 @@ export function secondsToHHMM(seconds: number) {
   return `${formattedHours}:${formattedMinutes}`;
 }
 
+//returns the time fromHH:MM format in seconds
+export function HHMMToSeconds(time: string) {
+  const [hours, minutes] = time.split(':');
+  return Number(hours) * 3600 + Number(minutes) * 60;
+}
+
 //returns the maximum value from two strings
 export function getMaximumValue(value1: string, value2: string): string {
   if (gt(value1, value2)) {

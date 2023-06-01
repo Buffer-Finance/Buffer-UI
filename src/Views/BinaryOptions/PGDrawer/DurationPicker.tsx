@@ -161,6 +161,7 @@ export const DurationPicker = ({
     </>
   );
 };
+
 export const DynamicDurationPicker = ({
   currentTime,
   setCurrentTime,

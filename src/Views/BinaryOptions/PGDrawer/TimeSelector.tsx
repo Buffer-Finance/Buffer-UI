@@ -95,7 +95,7 @@ const TimeSelectorStyles = styled.div`
   }
 `;
 
-export function timeToMins(time) {
+export function timeToMins(time: string) {
   if (!time) return;
   if (typeof time !== 'string') return;
   var b = time.split(':');
