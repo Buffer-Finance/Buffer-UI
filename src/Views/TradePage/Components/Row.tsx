@@ -17,7 +17,7 @@ export const RowFixed = styled.div`
   align-items: center;
 `;
 
-export const RowGap = styled.div<{ gap?: string }>`
+export const RowGap = styled.div<{ gap: string }>`
   display: flex;
   align-items: center;
   gap: ${({ gap }) => gap || '0px'};

@@ -58,7 +58,8 @@ export const defaultSettings = {
   trade: {
     partialFill: true,
     slippageTolerance: 0.5,
-    limitOrdersExpiry: 86400,
+    limitOrdersExpiry: 12,
+    selectedTimeFrame: 'm',
   },
   share: {
     showTradeSize: false,

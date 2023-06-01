@@ -3672,10 +3672,10 @@
     start-server-and-test "1.14.0"
     synthetix-js "2.66.0"
 
-"@szhsin/react-menu@^3.4.1":
-  version "3.5.2"
-  resolved "https://registry.npmjs.org/@szhsin/react-menu/-/react-menu-3.5.2.tgz"
-  integrity sha512-eR7dzDBrwlt9RSgGmLXjfA1Rd5tYqD5mnqjQgZJysf3Jt3vBPkrbDT1oW21nLpfUCkyUQOuZ38n2IdhWl9KkzQ==
+"@szhsin/react-menu@^3.5.3":
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/@szhsin/react-menu/-/react-menu-3.5.3.tgz#eb20f5921265f3663ccf5eec2d3fe2dcd61f6582"
+  integrity sha512-jxo8oaRwxmVjUzkyOi/ZJiXaZiuFPMIxFzyJdUKfnhBLYiEOVTU9M2CiPuEkirILoareR2GJj2K3y8a81CBPlw==
   dependencies:
     prop-types "^15.7.2"
     react-transition-state "^1.1.5"

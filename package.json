@@ -29,7 +29,7 @@
     "@sentry/react": "^6.15.0",
     "@sentry/tracing": "^6.15.0",
     "@synthetixio/synpress": "^1.2.0",
-    "@szhsin/react-menu": "^3.4.1",
+    "@szhsin/react-menu": "^3.5.3",
     "@thirdweb-dev/react": "^3.6.9",
     "@thirdweb-dev/sdk": "^3.6.9",
     "@types/react": "^17.0.38",
