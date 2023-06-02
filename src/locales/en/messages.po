@@ -21,6 +21,22 @@ msgstr ""
 #~ msgid "<0>{0}</0>"
 #~ msgstr "<0>{0}</0>"
 
+#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:39
+msgid "<0>Max {activeFrame} : {MAX} </0>"
+msgstr "<0>Max {activeFrame} : {MAX} </0>"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:33
+msgid "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
+msgstr "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
+
+#: src/Views/TradePage/Views/Settings/SettingsHeader.tsx:12
+msgid "Advanced Settings"
+msgstr "Advanced Settings"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/PartialFill/index.tsx:19
+msgid "By enabling \"Partial Fill\" your trade will be partially filled rather than canceled in case of insufficient funds in the write pool."
+msgstr "By enabling \"Partial Fill\" your trade will be partially filled rather than canceled in case of insufficient funds in the write pool."
+
 #: src/Views/Common/Navbar/index.tsx:126
 #~ msgid "Contest"
 #~ msgstr "Contests"
@@ -33,6 +49,63 @@ msgstr ""
 #~ msgid "Continue with <0/>"
 #~ msgstr "Continue with <0/>"
 
-#: src/Views/TradePage/index.tsx:6
+#: src/Views/TradePage/index.tsx:7
 msgid "hello"
 msgstr "dello"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/index.tsx:22
+msgid "Limit orders expiry time"
+msgstr "Limit orders expiry time"
+
+#: src/Views/TradePage/Views/Settings/NotificationPositionSettings/index.tsx:27
+msgid "Notification Position"
+msgstr "Notification Position"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/PartialFill/index.tsx:15
+msgid "Partial fill"
+msgstr "Partial fill"
+
+#: src/Views/TradePage/Views/Settings/PremiumSettings.tsx:33
+msgid "Premium Features"
+msgstr "Premium Features"
+
+#: src/Views/TradePage/Views/Settings/ResetAllButton.tsx:25
+msgid "Reset All Settings"
+msgstr "Reset All Settings"
+
+#: src/Views/TradePage/Views/Settings/MiscSettings.tsx:33
+#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:41
+msgid "Share Related Settings"
+msgstr "Share Related Settings"
+
+#: src/Views/TradePage/Views/Settings/MiscSettings.tsx:39
+msgid "show favorite asset"
+msgstr "show favorite asset"
+
+#: src/Views/TradePage/Views/Settings/PremiumSettings.tsx:39
+msgid "show recent trade"
+msgstr "show recent trade"
+
+#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:57
+msgid "Show share pop up"
+msgstr "Show share pop up"
+
+#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:48
+msgid "Show trade size"
+msgstr "Show trade size"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/index.tsx:16
+msgid "Slippage tolerance"
+msgstr "Slippage tolerance"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/index.tsx:20
+msgid "Slippage tolerance is the %age of price fluctuation you can tolerate before your trade is opened"
+msgstr "Slippage tolerance is the %age of price fluctuation you can tolerate before your trade is opened"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/index.tsx:38
+msgid "Trade Settings"
+msgstr "Trade Settings"
+
+#: src/Views/TradePage/Views/Settings/TradePanelSettings/index.tsx:26
+msgid "Trading Panel Side"
+msgstr "Trading Panel Side"
