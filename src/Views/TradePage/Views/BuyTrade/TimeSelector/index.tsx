@@ -3,6 +3,7 @@ import { TimePicker } from './TimePicker';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { setTimeSelectorAtom, timeSelectorAtom } from '@Views/TradePage/atoms';
+import { Trans } from '@lingui/macro';
 
 export const TimeSelector: React.FC = () => {
   const currentTime = useAtomValue(timeSelectorAtom);
@@ -10,7 +11,9 @@ export const TimeSelector: React.FC = () => {
 
   return (
     <ColumnGap gap="7px">
-      <BuyTradeHeadText>Time</BuyTradeHeadText>
+      <BuyTradeHeadText>
+        <Trans>Time</Trans>
+      </BuyTradeHeadText>
       <TimePicker
         currentTime={currentTime.HHMM}
         max_duration="00:15"

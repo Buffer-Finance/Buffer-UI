@@ -1,11 +1,11 @@
-import { useState, useEffect, ReactNode, Children, useCallback } from "react";
-import { isEqual } from "lodash";
+import { ReactNode } from 'react';
 interface IBufferTransitionedTab {
   className?: string;
   children?: ReactNode[];
 }
-const selected = {};
-const wrapper = {};
+const selected: { current: HTMLDivElement | null } = {
+  current: null,
+};
 
 let BufferTransitionedTab: {
   Container: React.FC<IBufferTransitionedTab>;
@@ -16,12 +16,12 @@ let BufferTransitionedTab: {
     onClick: (a) => void;
   }>;
 } = {
-  Container: ({ className, children }) => {
+  Container: ({ className, children = [] }) => {
     return (
       <>
         <div
           className={
-            className + " relative w-fit flex flex-row mx-auto rounded-lg bg-1"
+            className + ' relative w-fit flex flex-row mx-auto rounded-lg bg-1'
           }
         >
           <>
@@ -42,12 +42,11 @@ let BufferTransitionedTab: {
       <div
         className={
           className +
-          "  text-f15 py-3 px-[30px] rounded-lg pointer z-20  font-bold " +
-          (active && "bg-blue")
+          '  text-f15 py-3 px-[30px] rounded-lg pointer z-20  font-bold ' +
+          (active && 'bg-blue')
         }
         onClick={() => {
-
-          onClick("");
+          onClick('');
         }}
         ref={(ref) => {
           if (active) {

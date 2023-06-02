@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 import { TimeSelector } from './TimeSelector';
+import { TradeSizeSelector } from './TradeSizeSelector';
+import { TradeTypeSelector } from './TradeTypeSelector';
 
 const BuyTradeBackground = styled.div`
   max-width: 275px;
@@ -13,6 +15,8 @@ export const BuyTrade: React.FC = () => {
   return (
     <BuyTradeBackground>
       <TimeSelector />
+      <TradeSizeSelector />
+      <TradeTypeSelector />
     </BuyTradeBackground>
   );
 };
