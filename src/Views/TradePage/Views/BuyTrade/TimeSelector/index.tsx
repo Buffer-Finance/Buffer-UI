@@ -1,9 +1,11 @@
+import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
 import { TimePicker } from './TimePicker';
+import { ColumnGap } from '@Views/TradePage/Components/Column';
 
 export const TimeSelector: React.FC = () => {
   return (
-    <>
-      <div>Time</div>
+    <ColumnGap gap="7px">
+      <BuyTradeHeadText>Time</BuyTradeHeadText>
       <TimePicker
         currentTime="00:15"
         max_duration="00:15"
@@ -12,6 +14,6 @@ export const TimeSelector: React.FC = () => {
           console.log('lmao dont set');
         }}
       />
-    </>
+    </ColumnGap>
   );
 };

@@ -20,3 +20,12 @@ export const SettingsComponentHeader = styled.div`
   color: #c3c2d4;
   text-transform: capitalize;
 `;
+
+export const BuyTradeHeadText = styled.div`
+  font-size: 14px;
+  color: #7f87a7;
+  font-weight: 400;
+  ::first-letter {
+    text-transform: capitalize;
+  }
+`;
