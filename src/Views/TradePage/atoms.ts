@@ -1,6 +1,8 @@
 import { atom } from 'jotai';
-import { defaultSettings } from './config';
+import { defaultSelectedTime, defaultSettings } from './config';
+import { HHMMToSeconds } from './utils';
 
+//Share Atoms
 export const shareSettingsAtom = atom(defaultSettings.share);
 export const miscsSettingsAtom = atom(defaultSettings.miscs);
 export const tradeSettingsAtom = atom(defaultSettings.trade);
@@ -23,3 +25,13 @@ export const setSettingsAtom = atom(
     set(tradePanelPositionSettingsAtom, update.tradePanelPosition);
   }
 );
+
+//BuyTrade Atoms
+export const timeSelectorAtom = atom<{ HHMM: string; seconds: number }>({
+  HHMM: defaultSelectedTime,
+  seconds: HHMMToSeconds(defaultSelectedTime),
+});
+
+export const setTimeSelectorAtom = atom(null, (get, set, update: string) => {
+  set(timeSelectorAtom, { HHMM: update, seconds: HHMMToSeconds(update) });
+});

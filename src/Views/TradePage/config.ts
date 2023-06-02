@@ -75,6 +75,7 @@ export const defaultSettings = {
   notificationPosition: 3,
 };
 
+export const defaultSelectedTime = '00:15';
 export const oneSec = 1000;
 export const durations = [
   {

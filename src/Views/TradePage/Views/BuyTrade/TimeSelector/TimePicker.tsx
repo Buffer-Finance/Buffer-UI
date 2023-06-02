@@ -33,7 +33,7 @@ export const TimePicker: React.FC<{
   currentTime: string;
   max_duration: string;
   min_duration: string;
-  setCurrentTime: (a: any) => void;
+  setCurrentTime: (newTime: string) => void;
   onSelect?: (a: any) => void;
 }> = ({
   currentTime,
