@@ -3,19 +3,6 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   plugins: [],
   theme: {
-    keyframes: {
-      fadeIn: { from: { opacity: 0, transform: 'scale(.95)' } },
-      fadeOut: { to: { opacity: 0, transform: 'scale(.95)' } },
-      'animate-roatate': {
-        from: { transform: 'rotate(0deg)' },
-        to: { transform: 'rotate(360deg)' },
-      },
-    },
-    animation: {
-      fadeIn: 'fadeIn 0.1s ease-out',
-      fadeOut: 'fadeOut 0.15s ease-out forwards',
-      'animate-roatate': 'animate-roatate 10s linear',
-    },
     screens: {
       sm: { max: '600px' },
       tb: { max: '900px', min: '600px' },
@@ -99,6 +86,25 @@ module.exports = {
       transparent: 'transparent',
     },
     extend: {
+      keyframes: {
+        fadeIn: { from: { opacity: 0, transform: 'scale(.95)' } },
+        fadeOut: { to: { opacity: 0, transform: 'scale(.95)' } },
+        roatate: {
+          from: {
+            transform: 'rotate(0deg)',
+            'transform-origin': 'center center',
+          },
+          to: {
+            transform: 'rotate(360deg)',
+            'transform-origin': 'center center',
+          },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.1s ease-out',
+        fadeOut: 'fadeOut 0.15s ease-out forwards',
+        roatate: 'roatate 1s linear ',
+      },
       spacing: {
         1: '2px',
         2: '4px',
