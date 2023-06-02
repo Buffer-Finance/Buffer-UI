@@ -11,9 +11,9 @@ export const SlippageSelector: React.FC<{
           key={s}
           className={
             (+currentSlippage == s
-              ? 'bg-blue text-1 font-semibold'
-              : 'bg-[#1C1C28] text-[#c3c2d4]') +
-            ' border border-[#2A2A3A] rounded-[5px] hover:border-[#00bbff42] cursor-pointer px-5 py-3'
+              ? 'border-[#a3e3ff] text-1 font-semibold'
+              : ' border-[#2A2A3A] text-[#c3c2d4]') +
+            ' border bg-[#1C1C28] rounded-[5px] hover:border-[#a3e3ff] cursor-pointer px-5 py-3'
           }
           role="button"
           onClick={() => onClick(s)}
