@@ -7,7 +7,7 @@ export const ResetButton: React.FC<{
 }> = ({ className = '', onClick }) => {
   return (
     <NumberTooltip content={'Reset'}>
-      <div className={className + ' !w-fit'} role="button" onClick={onClick}>
+      <div className={className + ' !w-fit group'} role="div" onClick={onClick}>
         <ResetSVG />
       </div>
     </NumberTooltip>

@@ -89,7 +89,7 @@ module.exports = {
       keyframes: {
         fadeIn: { from: { opacity: 0, transform: 'scale(.95)' } },
         fadeOut: { to: { opacity: 0, transform: 'scale(.95)' } },
-        roatate: {
+        rotate: {
           from: {
             transform: 'rotate(0deg)',
             'transform-origin': 'center center',
@@ -103,7 +103,7 @@ module.exports = {
       animation: {
         fadeIn: 'fadeIn 0.1s ease-out',
         fadeOut: 'fadeOut 0.15s ease-out forwards',
-        roatate: 'roatate 1s linear ',
+        rotate: 'rotate 1s linear infinite',
       },
       spacing: {
         1: '2px',
