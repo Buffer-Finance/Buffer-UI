@@ -16,7 +16,12 @@ export const Slippage: React.FC<{
           <Trans>Slippage tolerance</Trans>
         </SettingsText>
         <IconToolTip
-          content={`Slippage tolerance is the %age of price fluctuation you can tolerate before your trade is opened`}
+          content={
+            <Trans>
+              Slippage tolerance is the %age of price fluctuation you can
+              tolerate before your trade is opened
+            </Trans>
+          }
         />
       </RowGap>
       <RowGap gap="8px" className="mt-3">

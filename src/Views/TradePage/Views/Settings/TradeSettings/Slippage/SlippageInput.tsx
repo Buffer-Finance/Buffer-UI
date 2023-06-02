@@ -1,5 +1,6 @@
 import { gt } from '@Utils/NumString/stringArithmatics';
 import { MAX_SLIPPAGE, SLIPPAGE_DEFAULTS } from '@Views/TradePage/config';
+import { Trans } from '@lingui/macro';
 import { useState } from 'react';
 
 export const SlippageInput: React.FC<{
@@ -29,9 +30,11 @@ export const SlippageInput: React.FC<{
       />
       <span className="absolute right-5">%</span>
       {err && (
-        <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
-          Slippage rate must be less then {MAX_SLIPPAGE}%
-        </span>
+        <Trans>
+          <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
+            Slippage rate must be less then {MAX_SLIPPAGE}%
+          </span>
+        </Trans>
       )}
     </div>
   );

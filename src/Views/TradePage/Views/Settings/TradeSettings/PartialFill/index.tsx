@@ -15,7 +15,13 @@ export const PartialFill: React.FC<{
           <Trans>Partial fill</Trans>
         </SettingsText>
         <IconToolTip
-          content={`By enabling "Partial Fill" your trade will be partially filled rather than canceled in case of insufficient funds in the write pool.`}
+          content={
+            <Trans>
+              By enabling "Partial Fill" your trade will be partially filled
+              rather than canceled in case of insufficient funds in the write
+              pool.
+            </Trans>
+          }
         />
       </RowGap>
       <Switch isOn={isOn} onChange={onToggle} />

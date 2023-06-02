@@ -1,6 +1,7 @@
 import { gt, lt } from '@Utils/NumString/stringArithmatics';
 import { MHdropDown } from './MHdropDown';
 import { useState } from 'react';
+import { Trans } from '@lingui/macro';
 
 export const MinutesInput: React.FC<{
   onChange: (newSlippage: number) => void;
@@ -35,9 +36,11 @@ export const MinutesInput: React.FC<{
         <MHdropDown setFrame={setFrame} activeFrame={activeFrame} />
       </span>
       {err && (
-        <span className="absolute top-full left-auto right-auto  text-red whitespace-nowrap">
-          {`Max ${activeFrame} : ${MAX} `}
-        </span>
+        <Trans>
+          <span className="absolute top-full left-auto right-auto  text-red whitespace-nowrap">
+            {`Max ${activeFrame} : ${MAX} `}
+          </span>
+        </Trans>
       )}
     </div>
   );
