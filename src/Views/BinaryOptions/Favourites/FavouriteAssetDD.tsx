@@ -34,7 +34,9 @@ export const FavouriteAssetDD: React.FC<{
     qtInfo.pairs.filter(
       (pair) =>
         routerPermission &&
-        routerPermission[pair.pools[0].options_contracts.current]
+        !!foundMarket.pools.find(
+          (pool) => routerPermission[pool.options_contracts.current]
+        )
     )
   );
   const [activeAsset, setActiveAsset] = useState(assetTypes[1]);
