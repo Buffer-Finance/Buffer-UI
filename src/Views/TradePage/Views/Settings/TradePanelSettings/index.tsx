@@ -10,8 +10,6 @@ import { Trans } from '@lingui/macro';
 export const TradePanelSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(tradePanelPositionSettingsAtom);
 
-  console.log('trade panel rerenders');
-
   function resetToDefault() {
     setSettings(defaultSettings.tradePanelPosition);
   }

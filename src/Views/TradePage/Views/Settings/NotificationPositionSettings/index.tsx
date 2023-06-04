@@ -10,8 +10,6 @@ import { Trans } from '@lingui/macro';
 export const NotificationPositionSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(notificationPositionSettingsAtom);
 
-  console.log('notification position rerenders');
-
   function resetToDefault() {
     setSettings(defaultSettings.notificationPosition);
   }

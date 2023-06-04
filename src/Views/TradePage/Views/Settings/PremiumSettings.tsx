@@ -13,8 +13,6 @@ import { useAtom } from 'jotai';
 export const PremiumSettings: React.FC<any> = () => {
   const [settings, setSettings] = useAtom(premiumSettingsAtom);
 
-  console.log('premium rerenders');
-
   function resetToDefault() {
     setSettings(defaultSettings.premium);
   }

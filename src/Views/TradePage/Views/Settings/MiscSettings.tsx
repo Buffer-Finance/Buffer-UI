@@ -13,8 +13,6 @@ import { useAtom } from 'jotai';
 export const MiscSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(miscsSettingsAtom);
 
-  console.log('miscs rerenders');
-
   function resetToDefault() {
     setSettings(defaultSettings.miscs);
   }

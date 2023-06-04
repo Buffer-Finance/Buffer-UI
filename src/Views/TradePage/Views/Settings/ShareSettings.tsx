@@ -14,8 +14,6 @@ import { useAtom } from 'jotai';
 export const ShareSettings: React.FC<any> = () => {
   const [settings, setSettings] = useAtom(shareSettingsAtom);
 
-  console.log('share rerenders');
-
   function resetToDefault() {
     setSettings(defaultSettings.share);
   }
