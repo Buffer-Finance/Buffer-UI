@@ -35,3 +35,5 @@ export const timeSelectorAtom = atom<{ HHMM: string; seconds: number }>({
 export const setTimeSelectorAtom = atom(null, (get, set, update: string) => {
   set(timeSelectorAtom, { HHMM: update, seconds: HHMMToSeconds(update) });
 });
+
+export const tradeSizeAtom = atom(5);
