@@ -165,7 +165,7 @@ export const useDashboardReadCalls = () => {
       total: null,
       BFR: {
         price: bfrPrice,
-        supply: fromWei(totalSupplyBFR),
+        supply: (80 * 10 ** 6).toString(),
         total_staked: fromWei(totalStakedBFR),
         market_cap: multiply(bfrPrice, fromWei(totalSupplyBFR)),
         circulatingSupply: mainnetData?.circulatingSupply
