@@ -5,8 +5,8 @@ import { ApproveModal } from '@Views/BinaryOptions/Components/approveModal';
 import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
+import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { useV3BinaryActions } from '@Views/V3App/Utils/useV3BinaryActions';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtom } from 'jotai';
@@ -32,7 +32,7 @@ export const BuyButtons = ({
   const { openConnectModal } = useConnectModal();
   const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
   const { handleApproveClick, buyHandler, loading } =
-    useV3BinaryActions(amount);
+    useBuyTradeActions(amount);
 
   const UpHandler = () => {
     if (!account) return openConnectModal?.();
@@ -85,7 +85,7 @@ export const BuyButtons = ({
             </BlueBtn>
           ) : (
             <>
-              <div className="sm:flex sm:gap-2">
+              <div className="flex gap-2">
                 <GreenBtn
                   onClick={UpHandler}
                   isDisabled={isForex && !isMarketOpen}
