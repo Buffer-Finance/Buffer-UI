@@ -1,4 +1,4 @@
-import TabList from '@Views/Common/TabList';
+import { BuyTradeTabList } from '@Views/TradePage/Components/BuyTradeTabList';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 
@@ -12,7 +12,7 @@ export const TradeTypeSelector: React.FC = () => {
   };
   return (
     <TradeTypeSelectorBackground>
-      <TabList
+      <BuyTradeTabList
         tabs={['Market', 'Limit']}
         setActiveTab={handleChange}
         activeTab={activeTab}
