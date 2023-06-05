@@ -14,7 +14,7 @@ import {
   Markets,
   OHLCBlock,
   RealtimeUpdate,
-} from './Types/Market';
+} from './MakrketTypes';
 import {
   widget,
   IChartingLibraryWidget,
@@ -26,7 +26,7 @@ import {
   IChartWidgetApi,
   IPositionLineAdapter,
   SeriesFormat,
-} from '../public/static/charting_library';
+} from '../../../../../public/static/charting_library';
 const FIRST_TIMESTAMP = 1673239587;
 
 import {
@@ -249,7 +249,13 @@ function drawPosition(
   // positions.current.push({ line, expiration: option.expirationTime });
 }
 
-export const TradingChart = ({ market: marke }: { market: Markets }) => {
+export const MultiResolutionChart = ({
+  market: marke,
+  index,
+}: {
+  market: Markets;
+  index: number;
+}) => {
   let market = marke.replace('-', '');
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
@@ -502,16 +508,8 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     });
     chart.onChartReady(() => {
       setChartReady(true);
-      chart
-        ?.activeChart?.()
-        .crossHairMoved()
-        .subscribe(null, ({ time, price }) =>
-          console.log('iamclicked', time, price)
-        );
     });
     widgetRef.current = chart;
-
-    // chart.subscribe('onTick', (...p) => console.log('iamclicked', p));
 
     return () => {
       widgetRef.current?.remove();
@@ -660,12 +658,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
   return (
-    <div
-      className="flex flex-col w-full h-full"
-      onClick={() => {
-        console.log('iamclicked');
-      }}
-    >
+    <div className="flex flex-col w-full h-full">
       <div className="items-center justify-between flex-row flex  bg-1 w-full tv-h px-4 ">
         <div className="flex flex-row justify-start font-[500]">
           <div className="ele cursor-pointer">Time</div>
@@ -717,13 +710,3 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     </div>
   );
 };
-
-/*
-{
-  ETH-BTC : 1m
-  [nothing] : 1m
-}
-
-
-
-*/

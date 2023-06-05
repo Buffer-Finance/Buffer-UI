@@ -1,11 +1,11 @@
 import { Trans } from '@lingui/macro';
-import { BuyTrade } from './Views/BuyTrade';
+import { MarketChart } from './Views/MarketChart';
 
 const TradePage: React.FC<any> = ({}) => {
   return (
     <div>
-      <Trans>hello</Trans>
-      <BuyTrade />
+      <MarketChart />
+      {/* <Trans>hello</Trans> */}
     </div>
   );
 };
