@@ -5,11 +5,12 @@ import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 
-export const TradeSizeInput: React.FC = () => {
+export const TradeSizeInput: React.FC<{
+  maxTradeSize: string;
+  tokenName: string;
+}> = ({ maxTradeSize, tokenName }) => {
   const [err, setErr] = useState(false);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
-  const maxTradeSize = '10';
-  const tokenName = 'USDC';
 
   return (
     <div className="relative flex flex-row gap-x-4 items-center">

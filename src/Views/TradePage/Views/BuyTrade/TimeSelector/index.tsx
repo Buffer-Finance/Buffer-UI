@@ -4,10 +4,14 @@ import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { setTimeSelectorAtom, timeSelectorAtom } from '@Views/TradePage/atoms';
 import { Trans } from '@lingui/macro';
+import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 
 export const TimeSelector: React.FC = () => {
   const currentTime = useAtomValue(timeSelectorAtom);
   const setCurrentTime = useSetAtom(setTimeSelectorAtom);
+  const { switchPool } = useSwitchPool();
+
+  if (!switchPool) return <></>;
 
   return (
     <ColumnGap gap="7px">
@@ -16,8 +20,8 @@ export const TimeSelector: React.FC = () => {
       </BuyTradeHeadText>
       <TimePicker
         currentTime={currentTime.HHMM}
-        max_duration="00:15"
-        min_duration="00:01"
+        max_duration={switchPool?.max_duration}
+        min_duration={switchPool?.min_duration}
         setCurrentTime={setCurrentTime}
       />
     </ColumnGap>

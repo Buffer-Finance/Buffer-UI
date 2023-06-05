@@ -20,7 +20,7 @@ const CustomButton: React.FC<IButton> = ({
     <button
       onClick={onClick}
       disabled={isDisabled || isLoading}
-      className={`${buttonAnimation} flex justify-center items-center transition-all duration-300 w-full rounded-[10px] text-f16 font-bold disabled:bg-cross-bg disabled:text-3 disabled:cursor-not-allowed h-[36px]  ${className}`}
+      className={`${buttonAnimation} flex justify-center items-center transition-all duration-300 w-full rounded-[5px] text-f16 disabled:bg-cross-bg disabled:text-3 disabled:cursor-not-allowed h-[36px]  ${className}`}
     >
       {isLoading ? <ButtonLoader className="min-w-[50px]" /> : children}
     </button>

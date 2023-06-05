@@ -37,3 +37,7 @@ export const setTimeSelectorAtom = atom(null, (get, set, update: string) => {
 });
 
 export const tradeSizeAtom = atom(5);
+
+export const activePoolObjAtom = atom({
+  activePool: 'USDC',
+});
