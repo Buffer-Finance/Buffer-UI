@@ -122,6 +122,7 @@ const MultiChart = ({
   const factory = (node: TabNode) => {
     var component = node.getComponent();
     if (component === 'TradingView') {
+      console.log(`V3Multichart-node.getName(): `, node.getName());
       return <TradingChart market={node.getName() as Markets} />;
     }
     if (component === 'AddButton') {
