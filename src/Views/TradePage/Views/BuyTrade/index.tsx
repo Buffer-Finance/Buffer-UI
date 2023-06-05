@@ -9,10 +9,9 @@ import { Skeleton } from '@mui/material';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useAtom, useAtomValue } from 'jotai';
-import { timeSelectorAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
+import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { priceAtom, usePrice } from '@Hooks/usePrice';
 import { knowTillAtom } from '@Views/BinaryOptions/Hooks/useIsMerketOpen';
-import { useState } from 'react';
 import { divide, subtract } from '@Utils/NumString/stringArithmatics';
 import { AssetCategory } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
@@ -56,7 +55,6 @@ export const BuyTrade: React.FC = () => {
   const activeChartMarket =
     marketsForChart[marketId as keyof typeof marketsForChart];
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeChartMarket);
-  console.log(activeMarket, activeAssetPrice, marketPrice, 'activeMarket');
   return (
     <BuyTradeBackground>
       <TimeSelector />

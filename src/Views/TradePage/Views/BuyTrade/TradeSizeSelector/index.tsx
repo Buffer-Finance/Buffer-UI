@@ -1,5 +1,5 @@
 import { ColumnGap } from '@Views/TradePage/Components/Column';
-import { RowBetween } from '@Views/TradePage/Components/Row';
+import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
 import styled from '@emotion/styled';
 import { WalletBalance, formatBalance } from './WalletBalance';
@@ -8,6 +8,7 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { getMaximumValue } from '@Views/TradePage/utils';
+import { PoolDropdown } from './PoolDropdown';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -33,7 +34,10 @@ export const TradeSizeSelector: React.FC = () => {
 
           <WalletBalance balance={formatBalance(balance)} unit={tradeToken} />
         </RowBetween>
-        <TradeSizeInput maxTradeSize={maxTradeSize} tokenName={tradeToken} />
+        <RowGap gap="0px">
+          <TradeSizeInput maxTradeSize={maxTradeSize} tokenName={tradeToken} />
+          <PoolDropdown />
+        </RowGap>
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );
