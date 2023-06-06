@@ -422,7 +422,7 @@ const useDashboardCalls = () => {
       // console.log(`lpTokens: `, sum, lpTokens);
 
       return {
-        circulatingSupply: subtract('100000000', sum),
+        circulatingSupply: subtract(fromWei(TOTALSUPPLY.toString()), sum),
         lpTokens,
       };
     },
