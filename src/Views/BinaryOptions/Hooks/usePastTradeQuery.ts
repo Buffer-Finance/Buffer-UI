@@ -127,25 +127,6 @@ export const useProcessedTrades = () => {
             singleTrade.optionContract.address.toLowerCase()
         );
         return !!pool;
-        // if (singleTrade?.optionContract?.asset)
-        //   return pair.pair === singleTrade.optionContract.asset;
-        // else
-        //   return (
-        //     pair.pools[0].options_contracts.current.toLocaleLowerCase() ===
-        //       singleTrade.optionContract.address.toLowerCase() ||
-        //     !!pair.pools[0].options_contracts.past.find(
-        //       (address) =>
-        //         address.toLocaleLowerCase() ===
-        //         singleTrade.optionContract.address.toLowerCase()
-        //     ) ||
-        //     pair.pools[1]?.options_contracts.current.toLocaleLowerCase() ===
-        //       singleTrade.optionContract.address.toLowerCase() ||
-        //     !!pair.pools[1]?.options_contracts.past.find(
-        //       (address) =>
-        //         address.toLocaleLowerCase() ===
-        //         singleTrade.optionContract.address.toLowerCase()
-        //     )
-        //   );
       });
       if (!pool) return null;
 

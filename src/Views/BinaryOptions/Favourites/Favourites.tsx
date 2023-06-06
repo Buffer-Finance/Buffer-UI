@@ -46,7 +46,10 @@ export default function Favourites({ className }: { className?: string }) {
         if (foundMarket) {
           const isAssetActive =
             routerPermission &&
-            routerPermission[foundMarket.pools[0].options_contracts.current];
+            !!foundMarket.pools.find(
+              (pool) => routerPermission[pool.options_contracts.current]
+            );
+
           if (!isAssetActive) return null;
           return foundMarket;
         } else return null;
@@ -192,7 +195,9 @@ function FavouriteCard({
   const { routerPermission } = useAtomValue(activeAssetStateAtom);
   const isAssetActive =
     routerPermission &&
-    routerPermission[data.pools[0].options_contracts.current];
+    !!data.pools.find(
+      (pool) => routerPermission[pool.options_contracts.current]
+    );
   const navigate = useNavigate();
   // T w>m desktop, isActive : T, active F, inactive
   // F w<m mobile, isActive : T inactive , F active

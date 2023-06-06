@@ -91,27 +91,21 @@ export const AssetTable: React.FC<{
         );
 
       case 2:
-        if (!currentAsset.pools[0]) return '-';
+        const usdcPoolContract = currentAsset.pools.find(
+          (pool) => pool.token.name.toUpperCase() === 'USDC'
+        )?.options_contracts.current;
+        if (!usdcPoolContract) return '-';
         else if (!activeAssetStateHookData.payouts) return 'loading...';
         else
-          return (
-            '+' +
-            activeAssetStateHookData.payouts[
-              currentAsset.pools[0].options_contracts.current
-            ] +
-            '%'
-          );
+          return '+' + activeAssetStateHookData.payouts[usdcPoolContract] + '%';
       case 3:
-        if (!currentAsset.pools[1]) return '-';
+        const arbPoolContract = currentAsset.pools.find(
+          (pool) => pool.token.name.toUpperCase() === 'ARB'
+        )?.options_contracts.current;
+        if (!arbPoolContract) return '-';
         else if (!activeAssetStateHookData.payouts) return 'loading...';
         else
-          return (
-            '+' +
-            activeAssetStateHookData.payouts[
-              currentAsset.pools[1].options_contracts.current
-            ] +
-            '%'
-          );
+          return '+' + activeAssetStateHookData.payouts[arbPoolContract] + '%';
 
       default:
         return <div>Unhandled Column.</div>;
