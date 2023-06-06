@@ -93,12 +93,6 @@ export const Navbar: React.FC<INavbar> = () => {
       </div>
 
       <div className="flex items-center gap-[3px] whitespace-nowrap">
-        {address && (
-          <div className="text-f13 bg-[#2C2C41] h-[30px] px-3 sm:px-2 special-hover hover:brightness-125 rounded-[7px] items-center flex !w-fit">
-            <NFTtier userOnly />
-          </div>
-        )}
-
         {/* {import.meta.env.VITE_ENV === 'TESTNET' && (
           <BlueBtn
             onClick={() => {
