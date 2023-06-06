@@ -67,6 +67,7 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   }, [account]);
   const knowTill = useAtomValue(knowTillAtom);
   const qtInfo = useQTinfo();
+  const [currentTime, setCurrentTime] = useAtom(binaryOptionsAtom);
   const marketPrice = useAtomValue(priceAtom);
   const activeAsset = qtInfo?.activePair;
   const [isOpen, setIsOpen] = useState(false);
@@ -74,9 +75,10 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   const isForex = activeAsset.category === 'Forex';
   const isMarketOpen = true;
   const allowance = divide(allowanceWei, activePoolObj.token.decimals);
+  const { min_amount: minTradeAmount, option_contract } =
+    useTradePolOrBlpPool();
   const isAssetActive =
-    routerPermission &&
-    routerPermission[activeAsset.pools[0].options_contracts.current];
+    routerPermission && routerPermission[option_contract.current];
   if (!activeAsset) return null;
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeAsset);
   let MarketOpenWarning: ReactNode | null = null;
@@ -84,8 +86,6 @@ export function CustomOption({ onResetLayout }: { onResetLayout: () => void }) {
   if (activeAsset.category == 'Forex' && knowTill === false) {
     MarketOpenWarning = <MarketTimingWarning />;
   }
-  const { min_amount: minTradeAmount } = useTradePolOrBlpPool();
-  const [currentTime, setCurrentTime] = useAtom(binaryOptionsAtom);
   return (
     <>
       <SlippageModal

@@ -27,9 +27,9 @@ interface IProps {
 
 const chainImageMappipng = {
   [chain.polygon.name]:
-    'https://cdn.buffer.finance/Buffer-Website-Data/main/chains/polygon2.png',
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684086043/polygon2.png',
   [chain.polygonMumbai.name]:
-    'https://cdn.buffer.finance/Buffer-Website-Data/main/chains/polygon2.png',
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684086043/polygon2.png',
   [chain.arbitrum.name]: '/Chains/ARBITRIUM.png',
   [chain.arbitrumGoerli.name]: '/Chains/ARBITRIUM.png',
   ['BSC']: '/Chains/BSC.png',

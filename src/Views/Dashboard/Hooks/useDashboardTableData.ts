@@ -49,17 +49,14 @@ export const useDashboardTableData = () => {
             address
             openDown
             openUp
-            currentUtilization
             openInterest
-            payoutForDown
-            payoutForUp
             volume
             tradeCount
           }
           volumePerContracts(   
             orderBy: timestamp
             orderDirection: desc
-            first: 1000
+            first: 10000
             where: { timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
             optionContract {
               address
@@ -142,7 +139,7 @@ export const useDashboardTableData = () => {
         min_duration: configPair?.min_duration,
         max_duration: configPair?.max_duration,
         sort_duration: timeToMins(configPair?.min_duration),
-        currentPrice: getPriceFromKlines(currentPrices, configPair),
+        currentPrice: Number(getPriceFromKlines(currentPrices, configPair)),
         '24h_change': currentPrices?.[configPair.tv_id]?.['24h_change'],
         openInterest: Number(
           fromWei(

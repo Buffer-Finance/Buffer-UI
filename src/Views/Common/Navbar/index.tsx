@@ -110,7 +110,7 @@ export const Navbar: React.FC<INavbar> = () => {
           </BlueBtn>
         )} */}
 
-        {!viewOnlyMode && (
+        {/* {!viewOnlyMode && (
           <ArbitrumOnly hide>
             <ClaimLBFRBtn
               shouldShowValue
@@ -119,7 +119,7 @@ export const Navbar: React.FC<INavbar> = () => {
               className="!h-[30px] !bg-[#232334] hover:!bg-blue !rounded-[7px] !w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] px-4 sm:px-3"
             />
           </ArbitrumOnly>
-        )}
+        )} */}
         {/* <BlueBtn
           onClick={() => {}}
           className="!h-[30px] rounded-[6px] !w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] pl-4 pr-5 sm:pl-1 sm:pr-1"

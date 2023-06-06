@@ -46,7 +46,7 @@ const BuyTrade: React.FC<any> = ({}) => {
   const isForex = activeMarket.category === AssetCategory[0];
   const isMarketOpen = true;
   const decimals = poolDetails.decimals;
-  const allowance = divide(readcallData.allowance, decimals) as string;
+  const allowance = divide(readcallDasta.allowance, decimals) as string;
   const totalPayout = readcallData.totalPayout;
   const basePayout = switchPool.base_settlement_fee;
   const boostedPayout = subtract(totalPayout, basePayout);
