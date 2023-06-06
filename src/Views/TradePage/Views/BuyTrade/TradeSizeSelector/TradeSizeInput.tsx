@@ -18,7 +18,7 @@ export const TradeSizeInput: React.FC<{
         value={tradeSize}
         type="number"
         max={maxTradeSize}
-        className={`relative bg-[#282b39] px-5 py-3 rounded-[5px] outline-none w-full text-f16 text-1`}
+        className={`relative bg-[#282b39] px-5 py-3 rounded-l-[5px] outline-none w-full text-f16 text-1`}
         onChange={(e) => {
           if (gt(e.target.value || '0', maxTradeSize)) {
             setErr(true);

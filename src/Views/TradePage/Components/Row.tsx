@@ -23,6 +23,12 @@ export const RowGap = styled.div<{ gap: string }>`
   gap: ${({ gap }) => gap || '0px'};
 `;
 
+export const RowGapItemsStretched = styled.div<{ gap?: string }>`
+  display: flex;
+  align-items: stretch;
+  gap: ${({ gap }) => gap || '0px'};
+`;
+
 export const RowGapItemsTop = styled.div<{ gap?: string }>`
   display: flex;
   align-items: flex-start;
