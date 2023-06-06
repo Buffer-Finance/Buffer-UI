@@ -32,6 +32,7 @@ import { ethers } from 'ethers';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useDashboardTableData } from './useDashboardTableData';
+import { roundToTwo } from '@Utils/roundOff';
 export const HolderContracts = [
   '0x01fdd6777d10dD72b8dD716AEE05cE67DD2b7D85',
   '0x58b0F2445DfA2808eCB209B7f96EfBc584736b7D',
@@ -92,6 +93,7 @@ export const useDashboardReadCalls = () => {
       stakedArbBlpTrackerTokensPerInterval,
       feeArbBlpTrackerTokensPerInterval,
       ARBvaultPOL,
+      burnBFRAmount,
     ]: any[] = data;
 
     const blpPrice =
@@ -161,17 +163,22 @@ export const useDashboardReadCalls = () => {
           )
         : '0';
     const ablpAprTotal = add(arbblpAprForRewardToken, arbblpAprForEsBfr);
+    const netSupply = roundToTwo(
+      fromWei(subtract(totalSupplyBFR, burnBFRAmount)),
+      2
+    );
+    const circulatingSupply = mainnetData
+      ? subtract(netSupply, mainnetData.amountInPools)
+      : undefined;
 
     response = {
       total: null,
       BFR: {
         price: bfrPrice,
-        supply: fromWei(TOTALSUPPLY.toString()),
+        supply: netSupply,
         total_staked: fromWei(totalStakedBFR),
         market_cap: multiply(bfrPrice, fromWei(totalSupplyBFR)),
-        circulatingSupply: mainnetData?.circulatingSupply
-          ? '' + mainnetData.circulatingSupply
-          : null,
+        circulatingSupply: circulatingSupply,
         liquidity_pools_token: mainnetData?.lpTokens,
       },
       BLP: {
@@ -345,6 +352,12 @@ const useDashboardCalls = () => {
         ],
         chainID: activeChain?.id,
       },
+      burnBFRAmount: {
+        address: earnContracts.iBFR,
+        abi: bfrAbi,
+        name: 'balanceOf',
+        params: [earnContracts.burnAddress],
+      },
     };
     return Object.keys(calls).map(function (key) {
       return calls[key];
@@ -422,7 +435,7 @@ const useDashboardCalls = () => {
       // console.log(`lpTokens: `, sum, lpTokens);
 
       return {
-        circulatingSupply: subtract(fromWei(TOTALSUPPLY.toString()), sum),
+        amountInPools: sum,
         lpTokens,
       };
     },

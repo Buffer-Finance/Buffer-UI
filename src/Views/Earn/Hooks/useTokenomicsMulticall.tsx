@@ -23,6 +23,7 @@ import { EarnContext } from '..';
 import { useContext } from 'react';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { roundToTwo } from '@Utils/roundOff';
 
 export const BASIS_POINTS_DIVISOR = '10000';
 export const SECONDS_PER_YEAR = '31536000';
@@ -603,6 +604,12 @@ export const useGetTokenomics = () => {
         functionName: 'balanceOf',
         args: [contracts.BLP2],
       },
+      burnBFRamount: {
+        address: contracts.iBFR,
+        abi: bfrAbi,
+        functionName: 'balanceOf',
+        args: [contracts.burnAddress],
+      },
     };
     return Object.keys(generic_call_data)
       .map(function (key) {
@@ -683,6 +690,7 @@ export const useGetTokenomics = () => {
       arbblpLockupPeriod,
       arbblpMaxLiquidity,
       arbblpUSDCAmount,
+      burnBFRamount,
 
       // User specifics
       userStakedBFR,
@@ -919,6 +927,11 @@ export const useGetTokenomics = () => {
       maxArbBlpToWithdraw = maxUnstakeableArbBlp;
     }
 
+    const netBFRsupply = roundToTwo(
+      fromWei(subtract(totalBFRSupply, burnBFRamount)),
+      2
+    );
+
     // FORMATTING
     response = {
       earn: {
@@ -998,8 +1011,8 @@ export const useGetTokenomics = () => {
             token_value_abs: totalStakedBFR,
           },
           total_supply: {
-            value_in_usd: multiply(fromWei(TOTALSUPPLY.toString()), bfrPrice),
-            token_value: fromWei(TOTALSUPPLY.toString()),
+            value_in_usd: multiply(netBFRsupply, bfrPrice),
+            token_value: netBFRsupply,
           },
           user: {
             allowance: fromWei(bfrStakedBfrTrackerAllowance),
