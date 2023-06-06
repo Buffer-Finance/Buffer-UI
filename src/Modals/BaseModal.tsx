@@ -15,9 +15,7 @@ const ModalBase = ({
 }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <SlippageModalStyles
-        className={'text-1  max-w-[520px] text-center ' + className}
-      >
+      <SlippageModalStyles className={'text-1  max-w-[520px]  ' + className}>
         {children}
       </SlippageModalStyles>
     </Dialog>
