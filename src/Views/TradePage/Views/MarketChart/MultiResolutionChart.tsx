@@ -209,7 +209,10 @@ const pythOHLC2rawOHLC = (pythOHLC: {
 const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage-v2', null);
 // uncomment this for persisting user Resolution - but this has some bugs.
 // const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
-const market2resolutionAtom = atom({});
+const market2resolutionAtom = atomWithLocalStorage(
+  'TradingChartDrawingStorage-market2resolutionAtom',
+  null
+);
 function drawPosition(
   option: IGQLHistory,
   visualized: any,
@@ -260,6 +263,7 @@ export const MultiResolutionChart = ({
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
+  const chartId = market + index;
   const v3AppConfig = useV3AppConfig();
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
@@ -325,6 +329,7 @@ export const MultiResolutionChart = ({
         onResultReadyCallback
       ) => {
         const symbols = await getAllSymbols();
+        console.log(`TradingView-newSymbols: `, symbols, userInput);
 
         const newSymbols = symbols.filter((symbol) => {
           return (
@@ -343,9 +348,15 @@ export const MultiResolutionChart = ({
       ) => {
         const parsedSymbol = symbolName.replace('-', '');
         const symbols = await getAllSymbols();
+        console.log(`MultiResolutionChart-symbols: `, symbols);
         const symbolItem = symbols?.find(
           ({ symbol, full_name }) =>
             symbol === parsedSymbol || full_name === parsedSymbol
+        );
+        console.log(
+          `MultiResolutionChart-symbolItem: `,
+          symbolItem,
+          symbolName
         );
         if (!symbolItem) {
           onResolveErrorCallback('cannot resolve symbol');
@@ -450,7 +461,7 @@ export const MultiResolutionChart = ({
   }, []);
   const { active: activeTrades } = useAtomValue(tardesAtom);
   const [visualized] = useAtom(visualizeddAtom);
-  const resolution: ResolutionString = market2resolution?.[market] || '1';
+  const resolution: ResolutionString = market2resolution?.[chartId] || '1';
 
   useLayoutEffect(() => {
     const chart = new widget({
@@ -500,7 +511,7 @@ export const MultiResolutionChart = ({
           title: '10Min',
         },
       ],
-      saved_data: drawing?.[market],
+      saved_data: drawing?.[chartId],
       disabled_features:
         window.innerWidth < 600
           ? ['left_toolbar', ...defaults.basicDisabled]
@@ -609,7 +620,7 @@ export const MultiResolutionChart = ({
         setDrawing((drawing) => {
           return {
             ...drawing,
-            [market]: d,
+            [chartId]: d,
           };
         });
       });
@@ -647,6 +658,7 @@ export const MultiResolutionChart = ({
       widgetRef.current.activeChart?.().setResolution(resolution);
     }
   }, [market2resolution, chartReady]);
+  console.log(`MultiResolutionChart-market2resolution: `, market2resolution);
   useEffect(() => {
     const interval = setInterval(updatePositionTimeLeft, 1000);
     return () => {
@@ -657,6 +669,9 @@ export const MultiResolutionChart = ({
   const toggleIndicatorDD = (_) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
+  if (!v3AppConfig?.length) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="flex flex-col w-full h-full">
       <div className="items-center justify-between flex-row flex  bg-1 w-full tv-h px-4 ">
@@ -668,7 +683,7 @@ export const MultiResolutionChart = ({
                 onClick={async () => {
                   setMarket2resolution((m) => ({
                     ...m,
-                    [market]: s,
+                    [chartId]: s,
                   }));
                   await sleep(100);
                   realTimeUpdateRef.current?.onResetCacheNeededCallback();
@@ -688,7 +703,7 @@ export const MultiResolutionChart = ({
           <ChartTypeSelectionDD
             setActive={(updatedType: number) => {
               // console.log(`updatedType: `, updatedType);
-              setChartType((ct) => ({ ...ct, [marke]: updatedType }));
+              setChartType((ct) => ({ ...ct, [chartId]: updatedType }));
             }}
             active={chartType[marke] ?? 1}
           />
@@ -700,7 +715,7 @@ export const MultiResolutionChart = ({
           </button>
         </div>
       </div>
-      <div className="w-full h-full">
+      <div className="w-full  flex-grow">
         <div
           ref={containerDivRef}
           id="chart-element"
