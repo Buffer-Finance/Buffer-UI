@@ -14,9 +14,9 @@ interface INavbar {
 }
 export const chainImageMappipng = {
   [chain.polygon.name]:
-    "https://cdn.buffer.finance/Buffer-Website-Data/main/chains/polygon2.png",
+    "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684086043/polygon2.png",
   [chain.polygonMumbai.name]:
-    "https://cdn.buffer.finance/Buffer-Website-Data/main/chains/polygon2.png",
+    "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684086043/polygon2.png",
   [chain.arbitrum.name]: "/Chains/ARBITRIUM.png",
   [chain.arbitrumGoerli.name]: "/Chains/ARBITRIUM.png",
   ["BSC"]: "/Chains/BSC.png",
@@ -31,9 +31,9 @@ export const chainSymbolMapping = {
 };
 
 export const useChains = () => {
-  let tempChain = useMemo(()=>{
-    return { activeChain:chain.arbitrum };
-  },[])
+  let tempChain = useMemo(() => {
+    return { activeChain: chain.arbitrum };
+  }, [])
   return tempChain;
 };
 
@@ -43,9 +43,9 @@ const ChainAccountDropdowns: React.FC<INavbar> = ({ className }) => {
   const chains = getChains();
   // const router = useRouter();
   const activeIndex = 1;
-function switchChain(){
-  // FIXME Multichain
-}
+  function switchChain() {
+    // FIXME Multichain
+  }
 
   let disabled = false;
   if (typeof window !== "undefined") {
@@ -55,9 +55,9 @@ function switchChain(){
   }
   return (
     <Background>
-      
 
-        <AccountConnectionDropdown inDrawer />
+
+      <AccountConnectionDropdown inDrawer />
     </Background>
   );
 };

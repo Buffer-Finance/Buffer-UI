@@ -27,6 +27,8 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 export const BASIS_POINTS_DIVISOR = '10000';
 export const SECONDS_PER_YEAR = '31536000';
 
+export const TOTALSUPPLY = 80 * 10 ** 6 * 10 ** 18;
+
 const ibfrPriceCache = {
   cache: '0',
 };
@@ -996,8 +998,8 @@ export const useGetTokenomics = () => {
             token_value_abs: totalStakedBFR,
           },
           total_supply: {
-            value_in_usd: multiply(fromWei(totalBFRSupply), bfrPrice),
-            token_value: fromWei(totalBFRSupply),
+            value_in_usd: multiply(fromWei(TOTALSUPPLY.toString()), bfrPrice),
+            token_value: fromWei(TOTALSUPPLY.toString()),
           },
           user: {
             allowance: fromWei(bfrStakedBfrTrackerAllowance),

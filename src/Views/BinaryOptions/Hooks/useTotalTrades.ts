@@ -13,7 +13,7 @@ function getQuery(queryNumber: number, account: string, currentTime: number) {
     historyLength${queryNumber}: userOptionDatas(
       orderBy: expirationTime
       orderDirection: desc
-      first: 1000
+      first: 10000
       where: {
         user_: {address: "${account}"},
         state_in: [1,2,3],
@@ -25,7 +25,7 @@ function getQuery(queryNumber: number, account: string, currentTime: number) {
      activeLength${queryNumber}: userOptionDatas(
       orderBy: creationTime
       orderDirection: desc
-      first: 1000
+      first: 10000
       where: {
         user_: {address: "${account}"},
         state_in: [1],
@@ -38,7 +38,7 @@ function getQuery(queryNumber: number, account: string, currentTime: number) {
      cancelledLength${queryNumber}: queuedOptionDatas(
       orderBy: queueID
       orderDirection: desc
-      first: 1000
+      first: 10000
       where: {
         user_: {address: "${account}"},
         state_in: [5],

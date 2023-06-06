@@ -34,9 +34,9 @@ const Profile = () => {
       <div className="px-7 my-8 sm:px-3">
         <UserData />
         <ReferralLink />
-        <ArbitrumOnly hide>
+        {/* <ArbitrumOnly hide>
           <LBFR />
-        </ArbitrumOnly>
+        </ArbitrumOnly> */}
         <ProfileCards />
         <ArbitrumOnly hide>
           <ClaimedNFT />

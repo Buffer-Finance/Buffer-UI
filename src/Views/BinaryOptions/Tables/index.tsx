@@ -26,6 +26,7 @@ const PGTables: React.FC<IPGTables> = ({
   shouldNotDisplayShareVisulise,
 }) => {
   const { active, history, cancelled } = useAtomValue(tardesAtom);
+  console.log(`index-active, history, cancelled: `, active, history, cancelled);
   const {
     active: activePages,
     history: historyPages,

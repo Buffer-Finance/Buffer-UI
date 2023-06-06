@@ -2,6 +2,7 @@ import { Trans } from '@lingui/macro';
 import { MarketChart } from './Views/MarketChart';
 import { AccordionTable } from './Views/AccordionTable';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { BuyTrade } from './Views/BuyTrade';
 
 const TradePage: React.FC<any> = ({}) => {
   return (
@@ -12,7 +13,9 @@ const TradePage: React.FC<any> = ({}) => {
           <MarketChart />
           <AccordionTable />
         </div>
-        <div className="w-[300px] bg-red h-[100%]"></div>
+        <div className="h-[100%]">
+          <BuyTrade />
+        </div>{' '}
         {/* <Trans>hello</Trans> */}
       </div>
     </>

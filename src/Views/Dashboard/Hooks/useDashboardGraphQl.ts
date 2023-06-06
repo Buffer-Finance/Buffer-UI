@@ -38,7 +38,7 @@ export const useDashboardGraphQl = () => {
             USDC24stats:volumePerContracts(
               orderBy: timestamp
               orderDirection: desc
-              first: 1000
+              first: 10000
               where: {depositToken: "USDC", timestamp_gt: ${prevDayEpoch}}
             ) {
                 amount

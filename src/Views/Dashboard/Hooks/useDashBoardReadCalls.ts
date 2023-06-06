@@ -14,6 +14,7 @@ import {
   BASIS_POINTS_DIVISOR,
   fromWei,
   SECONDS_PER_YEAR,
+  TOTALSUPPLY,
   useIbfrPrice,
 } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import {
@@ -165,7 +166,7 @@ export const useDashboardReadCalls = () => {
       total: null,
       BFR: {
         price: bfrPrice,
-        supply: fromWei(totalSupplyBFR),
+        supply: fromWei(TOTALSUPPLY.toString()),
         total_staked: fromWei(totalStakedBFR),
         market_cap: multiply(bfrPrice, fromWei(totalSupplyBFR)),
         circulatingSupply: mainnetData?.circulatingSupply
