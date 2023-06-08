@@ -45,4 +45,12 @@ export const activePoolObjAtom = atom({
 // pinned assets and asset selector atoms
 export const assetSelectorPoolAtom = atom('USDC');
 
-export const pinnedAssetsAtom = atom<string[]>(['BTC/USD', 'ETH/USD']);
+export const pinnedMarketsAtom = atom<string[]>(['BTC/USD', 'ETH/USD']);
+
+export const favouriteMarketsAtom = atom<string[]>([]);
+
+export const categoriesAtom = atom<string>('favourites');
+
+export const searchBarAtom = atom('');
+
+export const radioValueAtom = atom('USDC');

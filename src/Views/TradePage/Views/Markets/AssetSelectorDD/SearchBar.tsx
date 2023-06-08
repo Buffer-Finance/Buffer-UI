@@ -1,8 +1,10 @@
 import { SearchIconSVG } from '@Views/TradePage/Components/SearchIconSVG';
+import { searchBarAtom } from '@Views/TradePage/atoms';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
 
 export const SearchBar: React.FC = () => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useAtom(searchBarAtom);
   return (
     <div className="relative flex flex-row gap-x-4 items-center">
       <input

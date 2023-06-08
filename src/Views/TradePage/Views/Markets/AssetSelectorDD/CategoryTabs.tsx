@@ -1,4 +1,7 @@
+import { useCategories } from '@Views/TradePage/Hooks/useCategories';
+import { categoriesAtom } from '@Views/TradePage/atoms';
 import styled from '@emotion/styled';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
 
 const CategoryTabsBackground = styled.div`
@@ -22,15 +25,8 @@ const CategoryTabsBackground = styled.div`
 `;
 
 export const CategoryTabs: React.FC = () => {
-  const assetTypes = [
-    'favourites',
-    'forex',
-    'commodities',
-    'stock indices',
-    'stocks',
-    'crypto',
-  ];
-  const [activeAsset, setActiveAsset] = useState(assetTypes[0]);
+  const { categories: assetTypes } = useCategories();
+  const [activeAsset, setActiveAsset] = useAtom(categoriesAtom);
 
   return (
     <CategoryTabsBackground className="flex-center ">

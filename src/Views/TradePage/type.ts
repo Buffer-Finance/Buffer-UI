@@ -13,6 +13,7 @@ export type marketType = {
     isPaused: boolean;
     configContract: string;
     optionContract: string;
+    openInterest: string;
   }[];
 };
 
@@ -35,6 +36,7 @@ export type responseObj = {
   isPaused: boolean;
   category: number;
   asset: string;
+  openInterest: string;
 };
 
 export enum AssetCategory {
