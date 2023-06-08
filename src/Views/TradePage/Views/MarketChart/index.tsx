@@ -3,8 +3,9 @@ import { MultiResolutionChart } from './MultiResolutionChart';
 import { createArray } from '@Utils/JSUtils/createArray';
 import { usePrice } from '@Hooks/usePrice';
 import { useV3AppConfig } from '@Views/V3App/useV3AppConfig';
-import { MarketStatsBar, chartNumberAtom } from './MarketStatsBar';
+import { MarketStatsBar } from './MarketStatsBar';
 import { useAtomValue } from 'jotai';
+import { chartNumberAtom } from '@Views/TradePage/atoms';
 
 const SidebySideCharts = ({
   indexes,

@@ -16,6 +16,7 @@ import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { toFixed } from '@Utils/NumString';
 import { priceAtom } from '@Hooks/usePrice';
+import { chartNumberAtom } from '@Views/TradePage/atoms';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -181,8 +182,6 @@ const MarketStatsBar: React.FC<any> = ({}) => {
 };
 
 export { MarketStatsBar };
-
-export const chartNumberAtom = atomWithLocalStorage('hello', 1);
 
 const MarketPrice: React.FC<{ token0: string; token1: string }> = ({
   token0,

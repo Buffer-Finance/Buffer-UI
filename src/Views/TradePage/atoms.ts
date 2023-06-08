@@ -1,6 +1,7 @@
 import { atom } from 'jotai';
 import { defaultSelectedTime, defaultSettings } from './config';
 import { HHMMToSeconds } from './utils';
+import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 
 //Share Atoms
 export const shareSettingsAtom = atom(defaultSettings.share);
@@ -54,3 +55,5 @@ export const categoriesAtom = atom<string>('favourites');
 export const searchBarAtom = atom('');
 
 export const radioValueAtom = atom('USDC');
+
+export const chartNumberAtom = atomWithLocalStorage('hello', 1);
