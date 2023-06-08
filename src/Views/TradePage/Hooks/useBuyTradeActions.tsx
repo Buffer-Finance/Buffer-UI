@@ -73,46 +73,35 @@ export const useBuyTradeActions = (userInput: string) => {
 
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
-  const { writeCall } = useWriteCall(configData.router, routerABI);
   const { writeCall: approve } = useWriteCall(tokenAddress as string, ERC20ABI);
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
   );
-  useContractEvent({
-    address: configData.router,
-    abi: routerABI,
-    eventName: 'OpenTrade',
-    listener(assetPair, optionsAddress, configAddress, ...args) {
-      console.log(
-        'opentrade called',
-        assetPair,
-        optionsAddress,
-        configAddress,
-        ...args
-      );
-    },
-  });
+
   const marketPrice = useAtomValue(priceAtom);
   const toastify = useToast();
   const knowTill = useAtomValue(knowTillAtom);
   const option_contract = switchPool?.optionContract;
-  const min_amount = switchPool?.min_fee;
 
-  const cb = (a) => {
-    setLoading(null);
-  };
-  const pk = secureLocalStorage.getItem('one-ct-wallet-pk' + address);
+  const pk = secureLocalStorage.getItem('one-ct-wallet-pk' + address) as string;
 
   const registeredOneCT = res ? is1CTEnabled(res, pk, provider) : false;
-  const { data: signer } = useSigner({ chainId: activeChain.id });
+  console.log(`useBuyTradeActions-registeredOneCT: `, registeredOneCT, res, pk);
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
     const isCustom = typeof customTrade?.is_up === 'boolean';
     const expirationInMins = expiration.seconds / 60;
     const isForex = activeAsset?.category === AssetCategory[0];
     const maxDuration = switchPool?.max_duration;
-    const maxdurationInMins = timeToMins(maxDuration);
     const minDuration = switchPool?.min_duration;
+    if (!maxDuration || !minDuration) {
+      return toastify({
+        type: 'error',
+        msg: 'Pool Data missing! Please try again later',
+        id: 'PoolNotFound',
+      });
+    }
+    const maxdurationInMins = timeToMins(maxDuration);
     const mindurationInMins = timeToMins(minDuration);
     const minTradeAmount = switchPool?.min_fee;
 
@@ -221,23 +210,18 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'ddd',
         });
       }
+      if (!registeredOneCT) {
+        return toastify({
+          type: 'error',
+          msg: 'Please activate your acccount first!',
+          id: 'activationfailure',
+        });
+      }
       if (customTrade && isCustom) {
         setLoading({ is_up: customTrade.is_up });
       } else {
         setLoading(2);
       }
-
-      let args = [
-        toFixed(multiply(userInput, decimals), 0),
-        expirationInMins * 60 + '',
-        customTrade.is_up,
-        option_contract,
-        toFixed(multiply(('' + price).toString(), 8), 0),
-        toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
-        settings.partialFill,
-        referralData[2],
-        highestTierNFT?.tokenId || '0',
-      ];
 
       const confirmationModal = {
         content: (
@@ -250,120 +234,97 @@ export const useBuyTradeActions = (userInput: string) => {
         ),
       };
 
-      if (isTestnet) {
-        const id = hashMessage;
-        toastify({
-          id,
-          msg: 'Transaction confirmation in progress...',
-          type: 'info',
-          inf: 1,
-        });
-        const instantTradingApiUrl =
-          'https://oracle.buffer-finance-api.link/instant-trading/trade/initiate/';
-        let currentTimestamp = Date.now();
-        let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
+      const id = hashMessage;
+      toastify({
+        id,
+        msg: 'Transaction confirmation in progress...',
+        type: 'info',
+        inf: 1,
+      });
+      const instantTradingApiUrl =
+        'https://oracle.buffer-finance-api.link/instant-trading/trade/initiate/';
+      let currentTimestamp = Date.now();
+      let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
+      let baseArgs = [
+        address,
+        toFixed(multiply(userInput, decimals), 0),
+        expirationInMins * 60 + '',
+        option_contract,
+        toFixed(multiply(('' + price).toString(), 8), 0),
+        toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+        settings.partialFill,
+        referralData[2],
+        highestTierNFT?.tokenId || '0',
+      ];
 
-        const msg = [address, ...args, currentUTCTimestamp];
-        const argTypes = [
-          'address',
-          'uint256',
-          'uint256',
-          'bool',
-          'address',
-          'uint256',
-          'uint256',
-          'bool',
-          'string',
-          'uint256',
-          'uint256',
-        ];
-        try {
-          const hashedMessage = arrayify(
-            ethers.utils.solidityKeccak256(argTypes, msg)
+      /*
+        partial
+                params.user,
+                params.totalFee,
+                params.period,
+                params.targetContract,
+                params.strike,
+                params.slippage,
+                params.allowPartialFill,
+                params.referralCode,
+                params.traderNFTId,
+                signInfo.timestamp
+
+
+      full
+                queuedTrade.user,
+                queuedTrade.totalFee,
+                queuedTrade.period,
+                queuedTrade.targetContract,
+                queuedTrade.strike,
+                queuedTrade.slippage,
+                queuedTrade.allowPartialFill,
+                queuedTrade.referralCode,
+                queuedTrade.traderNFTId,
+                params.isAbove,
+                signInfo.timestamp
+    */
+      const baseArgTypes = [
+        'address',
+        'uint256',
+        'uint256',
+        'address',
+        'uint256',
+        'uint256',
+        'bool',
+        'string',
+        'uint256',
+      ];
+
+      const args = [
+        {
+          values: [...baseArgs, currentUTCTimestamp],
+          types: [...baseArgTypes, 'uint256'],
+        },
+        {
+          values: [...baseArgs, customTrade.is_up, currentUTCTimestamp],
+          types: [...baseArgTypes, 'bool', 'uint256'],
+        },
+      ];
+
+      try {
+        const hashedMessage = ['partial', 'full'].map((s, idx) => {
+          return arrayify(
+            ethers.utils.solidityKeccak256(args[idx].types, args[idx].values)
           );
-          let signature = null;
-          if (registeredOneCT) {
-            const oneCTWallet = new ethers.Wallet(
-              pk,
-              provider as ethers.providers.StaticJsonRpcProvider
-            );
-            signature = await oneCTWallet?.signMessage(hashedMessage);
-          } else {
-            signature = await signer?.signMessage(hashedMessage);
-          }
-          // const sig = ethers.utils.splitSignature(signature);
-
-          const TradeQuery = {
-            totalFee: args[0],
-            period: args[1],
-            isAbove: args[2],
-            targetContract: args[3],
-            expectedStrike: args[4],
-            slippage: args[5],
-            allowPartialFill: args[6],
-            referralCode: args[7],
-            traderNFTId: args[8],
-          };
-          const reqBody = {
-            pair: chartMarket.tv_id,
-            user_address: address,
-            user_signature: signature,
-            signature_timestamp: currentUTCTimestamp,
-            env: activeChain.id,
-            isOneCT: registeredOneCT ? true : false,
-          };
-          // console.log(
-          //   `useBinaryActions[1ct]-reqBody: `,
-          //   reqBody,
-          //   state.txnLoading
-          // );
-          // console.log(`useBinaryActions[1ct]-TradeQuery: `, TradeQuery);
-          const response = await axios.post(instantTradingApiUrl, TradeQuery, {
-            params: reqBody,
-          });
-          // console.log(`useBinaryActions[1ct]-response: `, response);
-          if (response.data?.error) {
-            // error code
-            toastify({
-              id,
-              msg: (
-                <span>
-                  Oops! There is some error. Can you please try again?
-                  <br />
-                  <span className="!text-3">Error: {response.data.error}</span>
-                </span>
-              ),
-              type: 'error',
-            });
-          } else {
-            // no error
-            toastify({
-              id,
-              msg: confirmationModal.content,
-              type: 'success',
-              hash: `${activeChain.blockExplorers?.default.url}/tx/${response.data?.hash}`,
-              body: null,
-              confirmationModal: null,
-              timings: 100,
-            });
-          }
-        } catch (e) {
-          toastify({
-            id,
-            msg: (
-              <span>
-                Oops! There is some error. Can you please try again?
-                <br />
-                <span className="!text-3">Error: {e?.reason}</span>
-              </span>
-            ),
-            type: 'error',
-          });
-        }
-        setLoading(null);
-      } else {
-        writeCall(cb, 'initiateTrade', args, null, confirmationModal);
-      }
+        });
+        const oneCTWallet = new ethers.Wallet(
+          pk,
+          provider as ethers.providers.StaticJsonRpcProvider
+        );
+        const params = await Promise.all([
+          oneCTWallet?.signMessage(hashedMessage[0]),
+          oneCTWallet?.signMessage(hashedMessage[1]),
+        ]);
+        console.log(`useBuyTradeActions-params: `, params);
+        // const sig = ethers.utils.splitSignature(signature);
+      } catch (e) {}
+      setLoading(null);
     }
   };
 
@@ -393,69 +354,9 @@ export const useBuyTradeActions = (userInput: string) => {
     );
   };
 
-  const cancelHandler = async (
-    queuedId: number,
-    cb: (loadingState: boolean) => void
-  ) => {
-    if (queuedId === null || queuedId === undefined) {
-      toastify({
-        id: 'queuedId',
-        type: 'error',
-        msg: 'Something went wrong. Please try again later.',
-      });
-      return true;
-    }
-    cb(true);
-    writeCall(() => cb(false), 'cancelQueuedTrade', [queuedId]);
-  };
-
   return {
     handleApproveClick,
     buyHandler,
     loading,
-    balance,
-    cancelHandler,
   };
 };
-// function getWeekId(timestamp: number): number {
-//   return Math.floor((timestamp - 3 * 86400 - 17 * 3600) / 604800);
-// }
-
-// const getUsualRoutine = (start?: number | null, end?: boolean) => {
-//   if (end) {
-//     return [[0, 17 * 60]];
-//   }
-//   return [
-//     [start || 0, 22 * 60],
-//     [23 * 60, 23 * 60 + 59],
-//   ];
-// };
-// const day2Intervals = {
-//   0: getUsualRoutine(17 * 50),
-//   1: getUsualRoutine(),
-//   2: getUsualRoutine(),
-//   3: getUsualRoutine(),
-//   4: getUsualRoutine(null, true),
-//   5: [[]],
-// };
-// console.log(`useBinaryActions-schedule: `, day2Intervals);
-// function isTradingOpen(): boolean {
-//   const now = new Date();
-//   const dayOfWeek = now.getUTCDay();
-//   const hour = now.getUTCHours();
-//   const min = now.getUTCMinutes();
-//   const nowMin = hour * 60 + min;
-//   const todaySchedule = day2Intervals[dayOfWeek];
-//   console.log(`useBinaryActions-todaySchedule: `, todaySchedule, nowMin);
-// }
-// Check if it's a weekday (Mon-Fri) and within trading hours
-// | [ ] [ ] [ ]   ||  [ ]|[ ] [ ]     open will be next%7 first arr[0]
-//   [|] [ ] [ ]                       open will be arr[1]
-
-// isTradingOpen();
-
-// 0 : 17:00 22::00_23:00 23:59
-// 1 : 00:00 22::00_23:00 23:59
-// ..
-// 5 : 00:00 17:00 __
-// sat off

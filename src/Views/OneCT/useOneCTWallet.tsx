@@ -13,18 +13,17 @@ import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 const registerOneCtMethod = 'registerAccount';
 
 export const is1CTEnabled = (
-  account: string[],
+  account: string,
   pk: string | null,
   provider: any
 ) => {
   if (!account || !pk || !provider) return null;
-  if (!account?.[0]) return null;
   const oneCTWallet = new ethers.Wallet(
     pk,
     provider as ethers.providers.StaticJsonRpcProvider
   );
 
-  return oneCTWallet.address.toLowerCase() === account[0].toLowerCase();
+  return oneCTWallet.address.toLowerCase() === account.toLowerCase();
 };
 
 const useOneCTWallet = () => {
@@ -42,7 +41,7 @@ const useOneCTWallet = () => {
   const provider = useProvider({ chainId: activeChain.id });
   console.log(`useOneCTWallet-res?.user2signer: `, res?.user2signer);
   const registeredOneCT = res?.user2signer
-    ? is1CTEnabled([res.user2signer], oneCtPk, provider)
+    ? is1CTEnabled(res.user2signer, oneCtPk, provider)
     : false;
   const { data: signer } = useSigner({ chainId: activeChain.id });
   const oneCTWallet = useMemo(() => {
@@ -55,7 +54,7 @@ const useOneCTWallet = () => {
 
   const pkLocalStorageIdentifier = 'one-ct-wallet-pk' + address;
   const checkStorage = () => {
-    const pk = secureLocalStorage.getItem(pkLocalStorageIdentifier);
+    const pk = secureLocalStorage.getItem(pkLocalStorageIdentifier) as string;
     setPk(pk);
   };
   useEffect(() => {
