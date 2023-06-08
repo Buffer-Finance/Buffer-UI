@@ -8,11 +8,76 @@ import {
   useClick,
   useMenuState,
 } from '@szhsin/react-menu';
-import { atom, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { SVGProps, useRef } from 'react';
 
+const OneChart = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={11}
+    height={13}
+    fill="none"
+    {...props}
+  >
+    <path
+      fill="currentColor"
+      d="M9.429 1.625c.434 0 .785.363.785.813v8.124c0 .45-.35.813-.785.813H1.57a.799.799 0 0 1-.785-.813V2.438c0-.45.35-.813.785-.813H9.43ZM1.57.812C.705.813 0 1.542 0 2.438v8.126c0 .896.705 1.624 1.571 1.624H9.43c.866 0 1.571-.728 1.571-1.624V2.437c0-.896-.705-1.624-1.571-1.624H1.57Z"
+    />
+  </svg>
+);
+
+const TwoChartHorizontal = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={13}
+    height={13}
+    fill="none"
+    {...props}
+  >
+    <path
+      fill="currentColor"
+      d="M12.188 4.063c0 .449-.364.812-.813.812h-9.75a.812.812 0 0 1-.813-.813V2.438c0-.449.364-.812.813-.812h9.75c.45 0 .813.363.813.813v1.624Zm-.813 1.625c.896 0 1.625-.73 1.625-1.625V2.438c0-.897-.729-1.626-1.625-1.626h-9.75C.729.813 0 1.542 0 2.438v1.626c0 .896.729 1.625 1.625 1.625h9.75ZM13 10.563V8.937c0-.896-.729-1.624-1.625-1.624h-9.75C.729 7.313 0 8.04 0 8.938v1.624c0 .897.729 1.626 1.625 1.626h9.75c.896 0 1.625-.73 1.625-1.626Zm-1.625.812h-9.75a.812.812 0 0 1-.813-.813V8.938c0-.45.364-.813.813-.813h9.75c.45 0 .813.363.813.813v1.624c0 .45-.364.813-.813.813Z"
+    />
+  </svg>
+);
+const TwoChartsvertical = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={13}
+    height={15}
+    fill="none"
+    {...props}
+  >
+    <path
+      fill="currentColor"
+      d="M8.916 13.197a.812.812 0 0 1-.81-.816l.037-9.75a.812.812 0 0 1 .815-.81l1.625.007c.45.001.811.366.81.815l-.036 9.75a.812.812 0 0 1-.816.81l-1.625-.006Zm-1.622-.819a1.627 1.627 0 0 0 1.62 1.631l1.624.006a1.626 1.626 0 0 0 1.631-1.62l.036-9.749a1.627 1.627 0 0 0-1.62-1.631l-1.624-.006A1.627 1.627 0 0 0 7.33 2.63l-.036 9.749Zm-4.88 1.607 1.624.006a1.626 1.626 0 0 0 1.631-1.619l.036-9.75A1.627 1.627 0 0 0 4.086.992L2.461.984a1.627 1.627 0 0 0-1.63 1.62l-.037 9.75a1.627 1.627 0 0 0 1.62 1.63Zm-.807-1.628.036-9.75a.812.812 0 0 1 .815-.81l1.625.007c.45.001.811.366.81.815l-.036 9.75a.812.812 0 0 1-.816.81l-1.625-.006a.812.812 0 0 1-.81-.816Z"
+    />
+  </svg>
+);
+const FourCharts = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={13}
+    height={13}
+    fill="none"
+    {...props}
+  >
+    <path
+      fill="currentColor"
+      d="M2.031 1.625a.407.407 0 0 0-.406.406V4.47c0 .223.183.406.406.406H4.47a.407.407 0 0 0 .406-.406V2.03a.407.407 0 0 0-.406-.406H2.03Zm-1.219.406A1.22 1.22 0 0 1 2.032.812h2.437a1.22 1.22 0 0 1 1.218 1.22v2.437A1.22 1.22 0 0 1 4.47 5.687H2.03A1.22 1.22 0 0 1 .812 4.47V2.03Zm1.22 6.094a.407.407 0 0 0-.407.406v2.438c0 .223.183.406.406.406H4.47a.407.407 0 0 0 .406-.406V8.53a.407.407 0 0 0-.406-.406H2.03Zm-1.22.406a1.22 1.22 0 0 1 1.22-1.219h2.437a1.22 1.22 0 0 1 1.218 1.22v2.437a1.22 1.22 0 0 1-1.218 1.219H2.03a1.22 1.22 0 0 1-1.219-1.22V8.532ZM10.97 1.625H8.53a.407.407 0 0 0-.406.406V4.47c0 .223.183.406.406.406h2.438a.407.407 0 0 0 .406-.406V2.03a.407.407 0 0 0-.406-.406ZM8.53.812h2.438a1.22 1.22 0 0 1 1.219 1.22v2.437a1.22 1.22 0 0 1-1.22 1.218H8.532A1.22 1.22 0 0 1 7.312 4.47V2.03A1.22 1.22 0 0 1 8.533.812Zm0 7.313a.407.407 0 0 0-.406.406v2.438c0 .223.183.406.406.406h2.438a.407.407 0 0 0 .406-.406V8.53a.407.407 0 0 0-.406-.406H8.53Zm-1.219.406a1.22 1.22 0 0 1 1.22-1.219h2.437a1.22 1.22 0 0 1 1.219 1.22v2.437c0 .673-.546 1.219-1.22 1.219H8.532a1.22 1.22 0 0 1-1.219-1.22V8.532Z"
+    />
+  </svg>
+);
+
+const Idx2icon = {
+  0: OneChart,
+  1: TwoChartHorizontal,
+  2: TwoChartsvertical,
+  3: FourCharts,
+};
 const MarketStatsBar: React.FC<any> = ({}) => {
   const setChartTimes = useSetAtom(chartNumberAtom);
+  const chartTimes = useAtomValue(chartNumberAtom);
   const data = [
     {
       header: 'Max Trade Size',
@@ -39,7 +104,7 @@ const MarketStatsBar: React.FC<any> = ({}) => {
     toggleMenu(false);
   }
 
-  const arr = [1, 2, 4];
+  const arr = [1, 2, 2.5, 4];
   return (
     <div className="flex p-3 gap-x-[35px] items-center">
       <div className="flex items-center ">
@@ -62,7 +127,7 @@ const MarketStatsBar: React.FC<any> = ({}) => {
         type="button"
         ref={ref}
         {...anchorProps}
-        className="hover:brightness-125"
+        className="hover:brightness-125 ml-auto"
       >
         <FourRectanglesSVG />
       </button>
@@ -78,19 +143,24 @@ const MarketStatsBar: React.FC<any> = ({}) => {
           menuClassName={'!p-[0] !rounded-[10px] hover:!rounded-[10px]'}
           offsetY={10}
         >
-          {arr.map((s) => (
-            <MenuItem
-              className={({ hover }) => {
-                return ` text-2 hover:brightness-110 !bg-2 hover:text-1`;
-              }}
-              onClick={(e: ClickEvent) => {
-                // e.keepOpen = true;
-                setChartTimes(s);
-              }}
-            >
-              {s} Charts
-            </MenuItem>
-          ))}
+          {arr.map((s, idx) => {
+            const Icon = Idx2icon[idx];
+            return (
+              <MenuItem
+                className={({ hover }) => {
+                  return `  ${
+                    chartTimes == s ? 'text-1' : 'text-2'
+                  } hover:brightness-110 !bg-2 hover:text-1`;
+                }}
+                onClick={(e: ClickEvent) => {
+                  // e.keepOpen = true;
+                  setChartTimes(s);
+                }}
+              >
+                <Icon /> &nbsp;{Math.floor(s)} Chart{s > 1 ? 's' : ''}
+              </MenuItem>
+            );
+          })}
         </ControlledMenu>
       </div>
     </div>

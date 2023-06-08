@@ -32,6 +32,15 @@ const MarketChart: React.FC<any> = ({}) => {
   if (chartTimes == 2) {
     chartLayout = <SidebySideCharts indexes={[1, 2]} className="h-full" />;
   }
+  console.log(`index-chartTimes: `, chartTimes);
+  if (chartTimes == 2.5) {
+    chartLayout = (
+      <div className="flex-col w-[100%] h-full">
+        <SidebySideCharts indexes={[1]} className="h-1/2" />
+        <SidebySideCharts indexes={[2]} className="h-1/2" />
+      </div>
+    );
+  }
   if (chartTimes == 4) {
     chartLayout = (
       <div className="flex-col w-[100%] h-full">

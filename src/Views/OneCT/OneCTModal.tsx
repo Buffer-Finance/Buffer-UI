@@ -365,12 +365,12 @@ const OneCTModal: React.FC<any> = ({}) => {
               <div className={desc}>Sign using a web 3 wallet</div>
             </div>
             <BlueBtn
-              className={` !w-[100px] px-[15px] ${oneCtPk ? '!bg-green' : ''}`}
+              className={` !w-[120px] px-[15px] ${oneCtPk ? '!bg-green' : ''}`}
               onClick={generatePk}
               isLoading={createLoading}
             >
               {oneCtPk ? (
-                <div className="flex" items-center>
+                <div className="flex items-center">
                   {' '}
                   <GreenTickMark /> Created
                 </div>
@@ -389,7 +389,7 @@ const OneCTModal: React.FC<any> = ({}) => {
             <BlueBtn
               className={`${
                 registeredOneCT ? '!bg-green' : ''
-              } !w-[100px] px-[15px]`}
+              } !w-[120px] px-[15px]`}
               onClick={handleRegister}
               isLoading={laoding}
             >
