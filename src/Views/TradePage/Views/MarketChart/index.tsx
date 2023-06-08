@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { MultiResolutionChart } from './MultiResolutionChart';
-import { createArray } from '@Utils/JSUtils/createArray';
 import { usePrice } from '@Hooks/usePrice';
-import { useV3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { MarketStatsBar } from './MarketStatsBar';
 import { useAtomValue } from 'jotai';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 
 const SidebySideCharts = ({
   indexes,
@@ -25,7 +23,7 @@ const SidebySideCharts = ({
 
 const MarketChart: React.FC<any> = ({}) => {
   usePrice();
-  const v3AppConfig = useV3AppConfig();
+  const v3AppConfig = useMarketsConfig();
   const chartTimes = useAtomValue(chartNumberAtom);
   if (!v3AppConfig?.length) return <div>Loadding...</div>;
   let chartLayout = <SidebySideCharts indexes={[1]} className="h-full" />;

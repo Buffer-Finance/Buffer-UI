@@ -22,7 +22,7 @@ export const useBuyTradeData = () => {
     ) {
       return null;
     }
-    const payout = readCallData[getCallId(poolDetails.meta, 'getPayout')]?.[0];
+    // const payout = readCallData[getCallId(poolDetails.meta, 'getPayout')]?.[0];
     const balance =
       readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
     const allowance =
@@ -30,7 +30,7 @@ export const useBuyTradeData = () => {
     const user2signer =
       readCallData[getCallId(configData.router, 'accountMapping')]?.[0];
     return {
-      totalPayout: divide(payout, 2) as string,
+      // totalPayout: divide(payout, 2) as string,
       balance,
       allowance,
       user2signer,

@@ -1,6 +1,6 @@
 import { useToast } from '@Contexts/Toast';
 import { AssetCategory, marketType, responseObj } from '../type';
-import { getMaximumValue, getPayout, getTokens, secondsToHHMM } from '../utils';
+import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
 import { getAddress } from 'ethers/lib/utils.js';
 
@@ -45,12 +45,6 @@ function createPoolObject(market: responseObj) {
     pool: getAddress(market.poolContract),
     max_fee: market.configContract.maxFee,
     min_fee: market.configContract.minFee,
-    base_settlement_fee: getPayout(
-      getMaximumValue(
-        market.configContract.baseSettlementFeeForAbove,
-        market.configContract.baseSettlementFeeForBelow
-      )
-    ),
     max_duration: secondsToHHMM(Number(market.configContract.maxPeriod)),
     min_duration: secondsToHHMM(Number(market.configContract.minPeriod)),
     isPaused: market.isPaused,

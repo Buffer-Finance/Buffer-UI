@@ -40,15 +40,15 @@ export const BuyTrade: React.FC = () => {
     return (
       <Skeleton
         variant="rectangular"
-        className="!w-full !h-[250px] lc !rounded-md mx-2 mt-3 "
+        className="!w-[500px] !h-[250px] lc !rounded-md mx-2 mt-3 "
       />
     );
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
   const allowance = divide(readcallData.allowance, decimals) as string;
-  const totalPayout = readcallData.totalPayout;
-  const basePayout = switchPool.base_settlement_fee;
-  const boostedPayout = subtract(totalPayout, basePayout);
+  // const totalPayout = readcallData.totalPayout;
+  // const basePayout = switchPool.base_settlement_fee;
+  // const boostedPayout = subtract(totalPayout, basePayout);
   const isForex = activeMarket.category === AssetCategory[0];
   const isMarketOpen = true;
   const marketId = joinStrings(activeMarket.token0, activeMarket.token1, '');
@@ -63,8 +63,8 @@ export const BuyTrade: React.FC = () => {
       <CurrentPrice price={activeAssetPrice} />
       <PayoutProfit
         amount={amount.toString()}
-        boostedPayout={boostedPayout}
-        totalPayout={totalPayout}
+        boostedPayout={'92'}
+        totalPayout={'80'}
         tradeToken={tradeToken}
       />
       <BuyButtons

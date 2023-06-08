@@ -7,7 +7,6 @@ export type marketType = {
     pool: string;
     max_fee: string;
     min_fee: string;
-    base_settlement_fee: string;
     max_duration: string;
     min_duration: string;
     isPaused: boolean;
@@ -24,8 +23,6 @@ export type response = {
 export type responseObj = {
   configContract: {
     address: string;
-    baseSettlementFeeForAbove: string;
-    baseSettlementFeeForBelow: string;
     maxFee: string;
     maxPeriod: string;
     minFee: string;
