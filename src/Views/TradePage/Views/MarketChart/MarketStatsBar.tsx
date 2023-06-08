@@ -157,7 +157,7 @@ const MarketStatsBar: React.FC<any> = ({}) => {
           offsetY={10}
         >
           {arr.map((s, idx) => {
-            const Icon = Idx2icon[idx];
+            const Icon = (Idx2icon as any)[idx];
             return (
               <MenuItem
                 className={({ hover }) => {

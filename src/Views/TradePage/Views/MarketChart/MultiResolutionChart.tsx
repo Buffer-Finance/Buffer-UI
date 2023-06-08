@@ -82,12 +82,12 @@ export let supported_resolutions = [
   // "1D",
 ];
 
-const isntAvailable = (s) => {
+const isntAvailable = (s: string | null) => {
   return (
     s && ['1s', '10s', '5m', '60', '120', '240', '1d'].includes(s.toLowerCase())
   );
 };
-const formatResolution = (s) => {
+const formatResolution = (s: string) => {
   if (s.toLowerCase() == '1s') {
     return '1s';
   }
@@ -193,7 +193,7 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   v: number[];
 }) => {
   // console.log(`pythOHLC: `, pythOHLC);
-  const rawOhlc = [];
+  const rawOhlc: any[] = [];
   pythOHLC.c.forEach((element, idx) => {
     rawOhlc.push({
       time: pythOHLC.t[idx] * 1000,
@@ -228,10 +228,10 @@ function drawPosition(
     `${toFixed(
       divide(option.totalFee?.toString(), option.poolInfo.decimals!)!,
       2
-    )} ${option.poolInfo?.token} | ` + getText(option.expirationTime);
-  const tooltip = `${getDisplayDate(openTimeStamp)}, ${getDisplayTime(
+    )} ${option.poolInfo?.token} | ` + getText(option.expirationTime as any);
+  const tooltip = `${getDisplayDate(openTimeStamp as any)}, ${getDisplayTime(
     openTimeStamp
-  )} - ${getDisplayDate(option.expirationTime)}, ${getDisplayTime(
+  )} - ${getDisplayDate(option.expirationTime as any)}, ${getDisplayTime(
     option.expirationTime
   )}`;
   // console.log(`chart: `,chart.createPositionLine);
@@ -317,7 +317,7 @@ export const MultiResolutionChart = ({
   }
   const price = useAtomValue(priceAtom);
 
-  const datafeed = useMemo((): Partial<IBasicDataFeed> => {
+  const datafeed: IBasicDataFeed = useMemo(() => {
     return {
       onReady: (callback) => {
         setTimeout(() => callback(defaults.confgis));
@@ -461,7 +461,8 @@ export const MultiResolutionChart = ({
   }, []);
   const { active: activeTrades } = useAtomValue(tardesAtom);
   const [visualized] = useAtom(visualizeddAtom);
-  const resolution: ResolutionString = market2resolution?.[chartId] || '1';
+  const resolution: ResolutionString =
+    market2resolution?.[chartId] || ('1' as ResolutionString);
 
   useLayoutEffect(() => {
     const chart = new widget({
@@ -473,7 +474,7 @@ export const MultiResolutionChart = ({
       container: containerDivRef.current!,
       library_path: defaults.library_path,
       custom_css_url: defaults.cssPath,
-      create_volume_indicator_by_default: false,
+      // create_volume_indicator_by_default: false,
       timezone: getOslonTimezone() as Timezone,
       symbol: market,
       theme: defaults.theme as ThemeName,
@@ -539,7 +540,7 @@ export const MultiResolutionChart = ({
     let prevBar = lastSyncedKline?.current?.[key];
     // console.log(`[deb]3prevBar: `, prevBar);
     if (!prevBar) return;
-    const activeAssetStream = price[market];
+    const activeAssetStream = (price as any)[market];
     // console.log(`[deb]4price: `, activeAssetStream);
     if (!activeAssetStream?.length) return;
     let aggregatedBar;
@@ -571,7 +572,7 @@ export const MultiResolutionChart = ({
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
-  }, [price[market]]);
+  }, [(price as any)?.[market]]);
 
   // draw positions.
   useEffect(() => {
@@ -580,7 +581,7 @@ export const MultiResolutionChart = ({
         if (!pos?.optionID) return;
         // if(visualized[pos.])
         const identifier = getIdentifier(pos);
-
+        // @ts-ignore
         if (visualized.includes(identifier)) return;
         if (trade2visualisation.current[+pos.optionID]) {
           trade2visualisation.current[+pos.optionID]!.visited = true;
@@ -617,7 +618,7 @@ export const MultiResolutionChart = ({
     // save drawings
     try {
       widgetRef.current?.save((d) => {
-        setDrawing((drawing) => {
+        setDrawing((drawing: any) => {
           return {
             ...drawing,
             [chartId]: d,
@@ -638,7 +639,9 @@ export const MultiResolutionChart = ({
         const text =
           inv +
           '| ' +
-          getText(trade2visualisation.current[+trade]?.option.expirationTime);
+          getText(
+            (trade2visualisation.current as any)[+trade]?.option.expirationTime
+          );
         trade2visualisation.current[+trade]?.lineRef.setText(text);
       }
     }
@@ -646,7 +649,9 @@ export const MultiResolutionChart = ({
 
   useEffect(() => {
     if (!chartReady) return;
-    widgetRef.current!.activeChart?.().setChartType(chartType[marke] ?? 1);
+    widgetRef
+      .current!.activeChart?.()
+      .setChartType((chartType as any)?.[market] ?? 1);
   }, [chartType, chartReady]);
 
   useEffect(() => {
@@ -666,7 +671,7 @@ export const MultiResolutionChart = ({
     };
   }, [address]);
 
-  const toggleIndicatorDD = (_) => {
+  const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
   if (!v3AppConfig?.length) {
@@ -681,7 +686,7 @@ export const MultiResolutionChart = ({
             return (
               <div
                 onClick={async () => {
-                  setMarket2resolution((m) => ({
+                  setMarket2resolution((m: any) => ({
                     ...m,
                     [chartId]: s,
                   }));
@@ -703,9 +708,9 @@ export const MultiResolutionChart = ({
           <ChartTypeSelectionDD
             setActive={(updatedType: number) => {
               // console.log(`updatedType: `, updatedType);
-              setChartType((ct) => ({ ...ct, [chartId]: updatedType }));
+              setChartType((ct: any) => ({ ...ct, [chartId]: updatedType }));
             }}
-            active={chartType[marke] ?? 1}
+            active={(chartType as any)[chartId] ?? 1}
           />
           <button
             onClick={toggleIndicatorDD}
