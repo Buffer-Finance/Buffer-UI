@@ -5,12 +5,12 @@ export const appConfig = {
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
-    router: '0x2d44Df5d4106C0C62893606E8956443DcA3a4Da2',
+    router: '0xDA2ed71B802fD62Caa8fd5cCBd2Af518268E9F68',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     poolsInfo: {
-      '0xA3769f6E42E1D7936919904E9156527dBc23C1b4': {
+      '0x112F40505Fc28D2fE7Be40B3FF5Ecc1cb57279eE': {
         tokenAddress: '0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E',
-        meta: '0xC33A64475f84C88DfB139fcFF29642a055587fe4',
+        meta: '0xC33A64475f84C88DfB139fcFF29642a055587fe4', // not found in new contracts
         decimals: 6,
         token: 'USDC',
         is_pol: false,
