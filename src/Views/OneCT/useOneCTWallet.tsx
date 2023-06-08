@@ -9,6 +9,7 @@ import { useAccount, useProvider, useSigner } from 'wagmi';
 import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
 import { v3AppConfig } from '@Views/V3App/config';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 const registerOneCtMethod = 'registerAccount';
 
 export const is1CTEnabled = (
@@ -30,8 +31,8 @@ const useOneCTWallet = () => {
   const { address } = useAccount();
   const { writeCall } = useIndependentWriteCall();
   const toastify = useToast();
+  const res = useBuyTradeData();
 
-  const res = useAtomValue(activeAssetStateAtom);
   const [createLoading, setCreateLoading] = useState(false);
 
   const { activeChain } = useActiveChain();
@@ -39,8 +40,9 @@ const useOneCTWallet = () => {
     v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
   const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
-  const registeredOneCT = res.user2signer
-    ? is1CTEnabled(res.user2signer, oneCtPk, provider)
+  console.log(`useOneCTWallet-res?.user2signer: `, res?.user2signer);
+  const registeredOneCT = res?.user2signer
+    ? is1CTEnabled([res.user2signer], oneCtPk, provider)
     : false;
   const { data: signer } = useSigner({ chainId: activeChain.id });
   const oneCTWallet = useMemo(() => {
@@ -73,9 +75,11 @@ const useOneCTWallet = () => {
       const privateKey = ethers.utils.keccak256(signature).slice(2);
       secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
       checkStorage();
+      setCreateLoading(false);
       return privateKey;
-    } catch (e) {}
-    setCreateLoading(false);
+    } catch (e) {
+      setCreateLoading(false);
+    }
   }, [signer]);
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);

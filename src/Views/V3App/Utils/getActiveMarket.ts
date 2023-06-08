@@ -12,7 +12,7 @@ export const getActiveMarket = (
     );
   }
 
-  if (!markets) return undefined;
+  if (!markets || !params?.market) return undefined;
   const urlMarket = params.market.toUpperCase();
   const [token0, token1] = urlMarket.split('-');
   const market = findMarket(markets, token0, token1);
