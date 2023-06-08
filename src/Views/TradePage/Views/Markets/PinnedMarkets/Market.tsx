@@ -21,14 +21,15 @@ const MarketBackground = styled.button<{ isActive: boolean }>`
   all: unset;
   cursor: pointer;
   background: transparent;
-  border-left: 1px solid #232334;
-  border-right: 1px solid #232334;
+  border: 1px solid #232334;
   color: ${({ isActive }) => (isActive ? '#ffffff' : '#DDDDE3')};
   font-size: 12px;
   font-weight: 400;
   line-height: 13px;
   padding: 5px 12px;
   width: fit-content;
+
+  border-left: none;
 `;
 
 export const Market: React.FC<{
