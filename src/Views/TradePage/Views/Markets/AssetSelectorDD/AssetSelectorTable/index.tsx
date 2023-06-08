@@ -11,7 +11,6 @@ import { useAssetSelectorPool } from '@Views/TradePage/Hooks/useAssetSelectorPoo
 import { useAssetTableFilters } from '@Views/TradePage/Hooks/useAssetTableFilters';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
-import { usePinnedMarkets } from '@Views/TradePage/Hooks/usePinnedMarkets';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { marketType } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
@@ -24,8 +23,8 @@ export const AssetSelectorTable: React.FC = () => {
     favouriteMarkets: favourites,
     addFavouriteMarket,
     removeFavouriteMarket,
+    navigateToMarket,
   } = useFavouriteMarkets();
-  const { pinMarket, navigateToMarket } = usePinnedMarkets();
   const { getSelectedPoolNotPol } = useAssetSelectorPool();
   const { getChartMarketData } = useChartMarketData();
   const { getPoolInfo } = usePoolInfo();
@@ -46,33 +45,44 @@ export const AssetSelectorTable: React.FC = () => {
     return <TableHeader col={col} headsArr={headers} />;
   };
 
+  function addOrRemoveFavourite(market: marketType, isFavourite: boolean) {
+    if (isFavourite) {
+      removeFavouriteMarket(market);
+    } else {
+      addFavouriteMarket(market);
+      navigateToMarket(market);
+    }
+  }
+
+  function findFavourite(market: marketType) {
+    const chartMarket = getChartMarketData(market.token0, market.token1);
+
+    return !!favourites.find(
+      (favourite) =>
+        chartMarket.tv_id ===
+        joinStrings(favourite.token0, favourite.token1, '')
+    );
+  }
+
   const { filteredMarkets: updatedArr } = useAssetTableFilters();
 
   const BodyFormatter = (row: number, col: number) => {
     if (!updatedArr) return <></>;
     const currentAsset: marketType = updatedArr[row];
     const pairName = joinStrings(currentAsset.token0, currentAsset.token1, '-');
+
+    const selectedPool = getSelectedPoolNotPol(currentAsset);
+    const poolInfo = getPoolInfo(selectedPool.pool);
+
+    const isFavourite = findFavourite(currentAsset);
     const chartMarket = getChartMarketData(
       currentAsset.token0,
       currentAsset.token1
     );
-    const selectedPool = getSelectedPoolNotPol(currentAsset);
-    const poolInfo = getPoolInfo(selectedPool.pool);
 
-    const isFavourite = favourites.find(
-      (favourite) =>
-        chartMarket.tv_id ===
-        joinStrings(favourite.token0, favourite.token1, '')
-    );
-
-    function onStartClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    function onStarClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
       e.stopPropagation();
-      if (isFavourite) {
-        removeFavouriteMarket(currentAsset);
-      } else {
-        addFavouriteMarket(currentAsset);
-        navigateToMarket(currentAsset);
-      }
+      addOrRemoveFavourite(currentAsset, isFavourite);
     }
 
     const price = getPriceFromKlines(marketPrice, chartMarket);
@@ -83,7 +93,7 @@ export const AssetSelectorTable: React.FC = () => {
           <CellContent
             content={[
               <div className="text-1 flex items-center justify-center ">
-                <IconButton onClick={onStartClick}>
+                <IconButton onClick={onStarClick}>
                   <Star active={isFavourite} />
                 </IconButton>
               </div>,
@@ -197,8 +207,7 @@ export const AssetSelectorTable: React.FC = () => {
       onRowClick={(rowNumber) => {
         if (!updatedArr) return;
         const selectedAsset = updatedArr[rowNumber];
-        pinMarket(selectedAsset);
-        navigateToMarket(selectedAsset);
+        addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
       }}
     />
   );
