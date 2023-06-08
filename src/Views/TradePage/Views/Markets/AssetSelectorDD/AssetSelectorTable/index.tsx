@@ -11,7 +11,6 @@ import { useAssetSelectorPool } from '@Views/TradePage/Hooks/useAssetSelectorPoo
 import { useAssetTableFilters } from '@Views/TradePage/Hooks/useAssetTableFilters';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { usePinnedMarkets } from '@Views/TradePage/Hooks/usePinnedMarkets';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { marketType } from '@Views/TradePage/type';
@@ -48,7 +47,6 @@ export const AssetSelectorTable: React.FC = () => {
   };
 
   const { filteredMarkets: updatedArr } = useAssetTableFilters();
-  console.log(updatedArr, 'updatedArr');
 
   const BodyFormatter = (row: number, col: number) => {
     if (!updatedArr) return <></>;
