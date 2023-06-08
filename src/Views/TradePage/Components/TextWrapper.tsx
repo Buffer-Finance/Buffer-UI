@@ -35,3 +35,9 @@ export const BuyTradeDescText = styled.div`
   color: #ffffff;
   font-weight: 500;
 `;
+
+export const RadioTextHead = styled.div`
+  font-size: 12px;
+  color: #808191;
+  font-weight: 400;
+`;

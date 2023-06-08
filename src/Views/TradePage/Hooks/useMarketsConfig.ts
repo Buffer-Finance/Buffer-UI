@@ -56,5 +56,6 @@ function createPoolObject(market: responseObj) {
     isPaused: market.isPaused,
     configContract: getAddress(market.configContract.address),
     optionContract: getAddress(market.address),
+    openInterest: market.openInterest,
   };
 }

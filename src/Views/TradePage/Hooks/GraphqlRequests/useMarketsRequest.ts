@@ -28,6 +28,7 @@ export const useMarketsRequest = () => {
                   isPaused
                   category
                   asset
+                  openInterest
                 }
             }`,
     });

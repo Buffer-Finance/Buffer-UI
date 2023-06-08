@@ -49,6 +49,7 @@ interface IBufferTable {
   tableClass?: string;
   overflow?: boolean;
   isBodyTransparent?: boolean;
+  isHeaderTransparent?: boolean;
   className?: string;
   doubleHeight?: boolean;
   onPageChange?:
@@ -80,6 +81,7 @@ const BufferTable: React.FC<IBufferTable> = ({
   shouldHideHeader = false,
   shouldHideBody = false,
   isBodyTransparent = false,
+  isHeaderTransparent = false,
   className,
   doubleHeight = false,
   highlightIndexs,
@@ -108,12 +110,21 @@ const BufferTable: React.FC<IBufferTable> = ({
           aria-label="buffer-table"
         >
           <TableHead
-            className={`table-header ${shouldHideHeader ? 'tab' : ''} `}
+            className={`${
+              isBodyTransparent ? '!bg-transparent transparent-hover' : ''
+            } table-header ${shouldHideHeader ? 'tab' : ''} `}
           >
-            <TableRow className={`table-row-head`}>
+            <TableRow className={` table-row-head`}>
               {createArray(cols).map((idx) => {
                 return (
-                  <TableCell key={idx} className="!z-20">
+                  <TableCell
+                    key={idx}
+                    className={`${
+                      isBodyTransparent
+                        ? '!bg-transparent transparent-hover'
+                        : ''
+                    } !z-20`}
+                  >
                     {headerJSX(idx)}
                   </TableCell>
                 );

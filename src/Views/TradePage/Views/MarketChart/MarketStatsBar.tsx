@@ -1,6 +1,7 @@
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import {
   ClickEvent,
   ControlledMenu,
@@ -8,8 +9,13 @@ import {
   useClick,
   useMenuState,
 } from '@szhsin/react-menu';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { SVGProps, useRef } from 'react';
+import { MarketSelectorDD } from './MarketSelectorDD';
+import { getPriceFromKlines } from '@TV/useDataFeed';
+import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
+import { toFixed } from '@Utils/NumString';
+import { priceAtom } from '@Hooks/usePrice';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -78,24 +84,9 @@ const Idx2icon = {
 const MarketStatsBar: React.FC<any> = ({}) => {
   const setChartTimes = useSetAtom(chartNumberAtom);
   const chartTimes = useAtomValue(chartNumberAtom);
-  const data = [
-    {
-      header: 'Max Trade Size',
-      data: '67 USDC',
-    },
-    {
-      header: 'Current OI',
-      data: '67 USDC',
-    },
-    {
-      header: 'Max OI',
-      data: '67 USDC',
-    },
-    {
-      header: '24h Change',
-      data: <div>57.4</div>,
-    },
-  ];
+
+  const { activeMarket } = useActiveMarket();
+  const { poolDetails, switchPool } = useSwitchPool();
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
@@ -105,16 +96,38 @@ const MarketStatsBar: React.FC<any> = ({}) => {
   }
 
   const arr = [1, 2, 2.5, 4];
+  const data = [
+    {
+      header: 'Max Trade Size',
+      data: <Display data={switchPool?.max_fee} unit={poolDetails?.token} />,
+    },
+    {
+      header: 'Current OI',
+      data: (
+        <Display data={switchPool?.openInterest} unit={poolDetails?.token} />
+      ),
+    },
+    {
+      header: 'Max OI',
+      data: '67 USDC',
+    },
+    {
+      header: 'Payout',
+      data: <div>57.4</div>,
+    },
+  ];
+
+  if (!activeMarket) {
+    return <></>;
+  }
+
   return (
     <div className="flex p-3 gap-x-[35px] items-center">
-      <div className="flex items-center ">
-        {' '}
-        <div className="w-[24px] h-[24px]">
-          <PairTokenImage pair="BTC-USD" />
-        </div>
-        <h2 className="ml-[10px] text-[19px]  ">BTC/USD</h2>
-      </div>
-      <MarketPrice />
+      <MarketSelectorDD
+        token0={activeMarket.token0}
+        token1={activeMarket.token1}
+      />
+      <MarketPrice token0={activeMarket.token0} token1={activeMarket.token1} />
       {data.map((d) => {
         return (
           <div className="flex flex-col justify-center items-center gap-y-1">
@@ -171,10 +184,21 @@ export { MarketStatsBar };
 
 export const chartNumberAtom = atomWithLocalStorage('hello', 1);
 
-const MarketPrice = () => {
+const MarketPrice: React.FC<{ token0: string; token1: string }> = ({
+  token0,
+  token1,
+}) => {
+  const marketPrice = useAtomValue(priceAtom);
+  const { getChartMarketData } = useChartMarketData();
+  const chartData = getChartMarketData(token0, token1);
+  const price = toFixed(
+    getPriceFromKlines(marketPrice, chartData),
+    chartData.price_precision.toString().length - 1
+  );
+
   return (
     <div className="flex flex-col">
-      <span className="text-f18">27791</span>
+      <span className="text-f18">{price}</span>
       <Display className="text-f12" colored data={24.2} />
     </div>
   );
