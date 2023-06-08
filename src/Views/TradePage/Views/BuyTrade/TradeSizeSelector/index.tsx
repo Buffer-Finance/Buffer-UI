@@ -1,7 +1,6 @@
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import {
   RowBetween,
-  RowGap,
   RowGapItemsStretched,
 } from '@Views/TradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';

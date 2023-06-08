@@ -63,9 +63,9 @@ import {
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
 import { getIdentifier } from '@Hooks/useGenericHook';
-import { useV3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { marketsForChart } from '@Views/V3App/config';
 import { joinStrings } from '@Views/V3App/helperFns';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -264,7 +264,7 @@ export const MultiResolutionChart = ({
     market2resolutionAtom
   );
   const chartId = market + index;
-  const v3AppConfig = useV3AppConfig();
+  const v3AppConfig = useMarketsConfig();
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});

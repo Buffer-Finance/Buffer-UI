@@ -61,7 +61,7 @@ export function useBuyTradePageReadcalls() {
     if (!address) {
       return [...othercalls];
     }
-    return [...othercalls, ...userSpecificCalls];
+    return [...userSpecificCalls];
   }, [switchPool, poolDetails, address, highestTierNFT]);
 
   return useCall2Data(calls, 'V3-app-read-calls');

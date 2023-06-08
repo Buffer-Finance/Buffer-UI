@@ -4,14 +4,28 @@ import { HHMMToSeconds } from './utils';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 
 //Share Atoms
-export const shareSettingsAtom = atom(defaultSettings.share);
-export const miscsSettingsAtom = atom(defaultSettings.miscs);
-export const tradeSettingsAtom = atom(defaultSettings.trade);
-export const notificationPositionSettingsAtom = atom(
+export const shareSettingsAtom = atomWithLocalStorage(
+  'shareSettingsAtom',
+  defaultSettings.share
+);
+export const miscsSettingsAtom = atomWithLocalStorage(
+  'miscsSettingsAtom',
+  defaultSettings.miscs
+);
+export const tradeSettingsAtom = atomWithLocalStorage(
+  'tradeSettingsAtom',
+  defaultSettings.trade
+);
+export const notificationPositionSettingsAtom = atomWithLocalStorage(
+  'notificationPositionSettingsAtom',
   defaultSettings.notificationPosition
 );
-export const premiumSettingsAtom = atom(defaultSettings.premium);
-export const tradePanelPositionSettingsAtom = atom(
+export const premiumSettingsAtom = atomWithLocalStorage(
+  'premiumSettingsAtom',
+  defaultSettings.premium
+);
+export const tradePanelPositionSettingsAtom = atomWithLocalStorage(
+  'tradePanelPositionSettingsAtom',
   defaultSettings.tradePanelPosition
 );
 
@@ -28,7 +42,7 @@ export const setSettingsAtom = atom(
 );
 
 //BuyTrade Atoms
-export const timeSelectorAtom = atom<{ HHMM: string; seconds: number }>({
+export const timeSelectorAtom = atomWithLocalStorage('timeSelectorAtom', {
   HHMM: defaultSelectedTime,
   seconds: HHMMToSeconds(defaultSelectedTime),
 });
@@ -37,18 +51,23 @@ export const setTimeSelectorAtom = atom(null, (get, set, update: string) => {
   set(timeSelectorAtom, { HHMM: update, seconds: HHMMToSeconds(update) });
 });
 
-export const tradeSizeAtom = atom(5);
+export const tradeSizeAtom = atomWithLocalStorage('tradeSizeAtom', 5);
 
-export const activePoolObjAtom = atom({
+export const activePoolObjAtom = atomWithLocalStorage('activePoolObjAtom', {
   activePool: 'USDC',
 });
 
 // pinned assets and asset selector atoms
 export const assetSelectorPoolAtom = atom('USDC');
 
-export const pinnedMarketsAtom = atom<string[]>(['BTC/USD', 'ETH/USD']);
+export const pinnedMarketsAtom = atomWithLocalStorage('pinnedMarketsAtom', [
+  '',
+]);
 
-export const favouriteMarketsAtom = atom<string[]>([]);
+export const favouriteMarketsAtom = atomWithLocalStorage(
+  'favouriteMarketsAtom',
+  ['']
+);
 
 export const categoriesAtom = atom<string>('favourites');
 

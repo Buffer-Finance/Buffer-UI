@@ -16,8 +16,6 @@ export const useMarketsRequest = () => {
               optionContracts {
                   configContract {
                     address
-                    baseSettlementFeeForAbove
-                    baseSettlementFeeForBelow
                     maxFee
                     maxPeriod
                     minFee
