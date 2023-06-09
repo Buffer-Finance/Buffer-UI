@@ -1,7 +1,7 @@
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://api.thegraph.com/subgraphs/name/faraday26/bufferv2-1',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
