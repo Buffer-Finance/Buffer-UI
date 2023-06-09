@@ -7,10 +7,10 @@ export const useLimitOrdersExpiry = () => {
 
   const limitOrderExpiryInMinutes = useMemo(() => {
     if (tradeSettings.selectedTimeFrame === 'm') {
-      return tradeSettings.limitOrdersExpiry;
+      return tradeSettings.limitOrdersExpiry * 60;
     }
     if (tradeSettings.selectedTimeFrame === 'h') {
-      return tradeSettings.limitOrdersExpiry * 60;
+      return tradeSettings.limitOrdersExpiry * 60 * 60;
     }
   }, [tradeSettings.limitOrdersExpiry, tradeSettings.selectedTimeFrame]);
 

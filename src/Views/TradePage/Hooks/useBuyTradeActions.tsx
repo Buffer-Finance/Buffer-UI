@@ -35,11 +35,21 @@ import { useSwitchPool } from './useSwitchPool';
 import { useBuyTradeData } from './useBuyTradeData';
 import { useActiveMarket } from './useActiveMarket';
 import { joinStrings } from '../utils';
-import { appConfig, marketsForChart } from '../config';
+import { appConfig, baseUrl, marketsForChart } from '../config';
 import { AssetCategory } from '../type';
 import { timeSelectorAtom, tradeSettingsAtom } from '../atoms';
 import { useSettlementFee } from './useSettlementFee';
-
+enum ArgIndex {
+  Strike = 4,
+  Period = 2,
+  TargetContract = 3,
+  UserAddress = 0,
+  Size = 1,
+  PartialFill = 6,
+  Referral = 7,
+  NFT = 8,
+  Slippage = 5,
+}
 export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
   const [settings] = useAtom(tradeSettingsAtom);
@@ -52,7 +62,6 @@ export const useBuyTradeActions = (userInput: string) => {
   const res = readcallData?.user2signer;
   const tokenAddress = poolDetails?.tokenAddress;
   const settelmentFee = useSettlementFee();
-  console.log(`useBuyTradeActions-settelmentFee: `, settelmentFee);
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = useProvider({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
@@ -80,13 +89,17 @@ export const useBuyTradeActions = (userInput: string) => {
     null
   );
 
-  const marketPrice = useAtomValue(priceAtom);
   const toastify = useToast();
   const knowTill = useAtomValue(knowTillAtom);
   const option_contract = switchPool?.optionContract;
   const { oneCtPk } = useOneCTWallet();
 
-  const buyHandler = async (customTrade?: { is_up: boolean }) => {
+  const buyHandler = async (customTrade: {
+    is_up: boolean;
+    strike: string;
+    limitOrderExpiry: number;
+  }) => {
+    const price = customTrade?.strike;
     const isCustom = typeof customTrade?.is_up === 'boolean';
     const expirationInMins = expiration.seconds / 60;
     const isForex = activeAsset?.category === AssetCategory[0];
@@ -178,7 +191,6 @@ export const useBuyTradeActions = (userInput: string) => {
         });
       }
 
-      const price = getPriceFromKlines(marketPrice, chartMarket);
       if (!activeAsset) {
         return toastify({
           type: 'error',
@@ -233,8 +245,6 @@ export const useBuyTradeActions = (userInput: string) => {
         type: 'info',
         inf: 1,
       });
-      const instantTradingApiUrl =
-        'https://oracle.buffer-finance-api.link/instant-trading/trade/initiate/';
       let currentTimestamp = Date.now();
       let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
       let baseArgs = [
@@ -286,11 +296,35 @@ export const useBuyTradeActions = (userInput: string) => {
           oneCtPk!,
           provider as ethers.providers.StaticJsonRpcProvider
         );
-        const params = await Promise.all(
+        const signatures = await Promise.all(
           hashedMessage.map((s) => oneCTWallet?.signMessage(s))
         );
-        console.log(`useBuyTradeActions-params: `, params);
+        const apiParams = {
+          signature_timestamp: currentUTCTimestamp,
+          strike: baseArgs[ArgIndex.Strike],
+          period: baseArgs[ArgIndex.Period],
+          target_contract: baseArgs[ArgIndex.TargetContract],
+          partial_signature: signatures[0],
+          full_signature: signatures[1],
+          user_address: baseArgs[ArgIndex.UserAddress],
+          trade_size: baseArgs[ArgIndex.Size],
+          allow_partial_fill: baseArgs[ArgIndex.PartialFill],
+          referral_code: baseArgs[ArgIndex.Referral],
+          trader_nft_id: baseArgs[ArgIndex.NFT],
+          slippage: baseArgs[ArgIndex.Slippage],
+          is_above: customTrade.is_up,
+          is_limit_order: customTrade.limitOrderExpiry ? true : false,
+          limit_order_expiration: customTrade.limitOrderExpiry,
+          settelmentFee: settelmentFee?.settlement_fee,
+          settlement_fee_sign_expiration:
+            settelmentFee?.settlement_fee_sign_expiration,
+          settlement_fee_signature: settelmentFee?.settlement_fee_signature,
+          environment: activeChain.id,
+        };
+        console.log(`useBuyTradeActions-apiParams: `, apiParams);
         // const sig = ethers.utils.splitSignature(signature);
+        const resp = await axios.post(baseUrl + 'trade/create/', apiParams);
+        console.log(`useBuyTradeActions-resp: `, resp);
       } catch (e) {}
       setLoading(null);
     }

@@ -67,7 +67,7 @@ const BuyTrade: React.FC<any> = ({}) => {
         <DurationSelector />
         <SettingsSelector />
       </div>
-      <PayoutProfit
+      {/* <PayoutProfit
         amount={amount}
         boostedPayout={boostedPayout}
         totalPayout={totalPayout}
@@ -80,7 +80,7 @@ const BuyTrade: React.FC<any> = ({}) => {
         isAssetActive={!switchPool.isPaused}
         isForex={isForex}
         isMarketOpen={isMarketOpen}
-      />
+      /> */}
       {MarketOpenWarning}
     </div>
   );

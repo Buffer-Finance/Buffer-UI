@@ -6,10 +6,12 @@ import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
+import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useAccount } from 'wagmi';
 
 export const BuyButtons = ({
@@ -33,21 +35,25 @@ export const BuyButtons = ({
   const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
   const { handleApproveClick, buyHandler, loading } =
     useBuyTradeActions(amount);
-
-  const UpHandler = () => {
+  const expiry = useLimitOrdersExpiry();
+  const tradeType = useAtomValue(tradeTypeAtom);
+  const limitStrike = useAtomValue(limitOrderStrikeAtom);
+  const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
     if (lt(allowance || '0', amount.toString() || '0'))
       return setIsApproveModalOpen(true);
-    buyHandler({ is_up: true });
+    let strike = activeAssetPrice;
+    let limitOrderExpiry = 0;
+    if (tradeType == 'Limit' && limitStrike) {
+      limitOrderExpiry = expiry;
+      strike = limitStrike;
+    }
+    buyHandler({
+      is_up: isUp ? true : false,
+      strike,
+      limitOrderExpiry,
+    });
   };
-
-  const DownHandler = () => {
-    if (!account) return openConnectModal?.();
-    if (lt(allowance || '0', amount.toString() || '0'))
-      return setIsApproveModalOpen(true);
-    buyHandler({ is_up: false });
-  };
-
   if (!poolDetails) return <>Error: Pool not found</>;
 
   return (
@@ -87,7 +93,7 @@ export const BuyButtons = ({
             <>
               <div className="flex gap-2">
                 <GreenBtn
-                  onClick={UpHandler}
+                  onClick={() => buyTrade(true)}
                   isDisabled={isForex && !isMarketOpen}
                   isLoading={
                     !!loading &&
@@ -109,7 +115,7 @@ export const BuyButtons = ({
                     loading?.is_up === false
                   }
                   className=" text-1 bg-red "
-                  onClick={DownHandler}
+                  onClick={() => buyTrade(false)}
                 >
                   <>
                     <DownIcon className="mr-[6px] scale-150" />
