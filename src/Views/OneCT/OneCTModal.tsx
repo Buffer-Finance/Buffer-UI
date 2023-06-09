@@ -265,7 +265,7 @@ const OneCTModal: React.FC<any> = ({}) => {
   const { generatePk, registeredOneCT, registerOneCt, createLoading, oneCtPk } =
     useOneCTWallet();
   const { writeCall } = useIndependentWriteCall();
-  const res = useAtomValue(activeAssetStateAtom);
+  const buyTradeData = useBuyTradeData();
   const provider = useProvider({ chainId: activeChain.id });
   const toastify = useToast();
   const handleRegister = (privateKey?: string) => {
@@ -274,8 +274,9 @@ const OneCTModal: React.FC<any> = ({}) => {
         privateKey || oneCtPk,
         provider as ethers.providers.StaticJsonRpcProvider
       );
+      console.log(`OneCTModal-oneCTWallet: `, oneCTWallet);
       const isOneCTEnabled = is1CTEnabled(
-        res.user2signer || [ethers.constants.AddressZero],
+        buyTradeData?.user2signer?.signer || ethers.constants.AddressZero,
         privateKey || oneCtPk,
         provider
       );
@@ -422,6 +423,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
 import { v3AppConfig } from '@Views/V3App/config';
 import NumberTooltip from '@Views/Common/Tooltips';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 const GreenTickMark = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

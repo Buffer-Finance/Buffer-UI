@@ -52,6 +52,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const res = readcallData?.user2signer;
   const tokenAddress = poolDetails?.tokenAddress;
   const settelmentFee = useSettlementFee();
+  console.log(`useBuyTradeActions-settelmentFee: `, settelmentFee);
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = useProvider({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
@@ -84,8 +85,6 @@ export const useBuyTradeActions = (userInput: string) => {
   const knowTill = useAtomValue(knowTillAtom);
   const option_contract = switchPool?.optionContract;
   const { oneCtPk } = useOneCTWallet();
-
-  const registeredOneCT = res ? is1CTEnabled(res, oneCtPk, provider) : false;
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
     const isCustom = typeof customTrade?.is_up === 'boolean';
@@ -209,13 +208,7 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'ddd',
         });
       }
-      if (!registeredOneCT) {
-        return toastify({
-          type: 'error',
-          msg: 'Please activate your acccount first!',
-          id: 'activationfailure',
-        });
-      }
+
       if (customTrade && isCustom) {
         setLoading({ is_up: customTrade.is_up });
       } else {
@@ -267,15 +260,19 @@ export const useBuyTradeActions = (userInput: string) => {
         'string',
         'uint256',
       ];
-
+      const baseArgsEnding = [
+        currentUTCTimestamp,
+        settelmentFee?.settlement_fee,
+      ];
+      const baseArgsEndingTypes = ['uint256', 'uint256'];
       const args = [
         {
-          values: [...baseArgs, currentUTCTimestamp],
-          types: [...baseArgTypes, 'uint256'],
+          values: [...baseArgs, ...baseArgsEnding],
+          types: [...baseArgTypes, ...baseArgsEndingTypes],
         },
         {
-          values: [...baseArgs, customTrade.is_up, currentUTCTimestamp],
-          types: [...baseArgTypes, 'bool', 'uint256'],
+          values: [...baseArgs, customTrade.is_up, ...baseArgsEnding],
+          types: [...baseArgTypes, 'bool', ...baseArgsEndingTypes],
         },
       ];
 

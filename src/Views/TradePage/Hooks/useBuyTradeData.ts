@@ -27,8 +27,11 @@ export const useBuyTradeData = () => {
       readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
     const allowance =
       readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
-    const user2signer =
-      readCallData[getCallId(configData.router, 'accountMapping')]?.[0];
+    const user2signer = {
+      signer: readCallData[getCallId(configData.router, 'accountMapping')]?.[0],
+      nonce: readCallData[getCallId(configData.router, 'accountMapping')]?.[1],
+    };
+
     return {
       // totalPayout: divide(payout, 2) as string,
       balance,

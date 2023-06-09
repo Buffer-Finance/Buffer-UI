@@ -337,4 +337,5 @@ export const marketsForChart = {
   },
 };
 
-export const baseUrl = 'https://oracle.buffer-finance-api.link/';
+export const baseUrl =
+  'https://oracle.buffer-finance-api.link/instant-trading/';
