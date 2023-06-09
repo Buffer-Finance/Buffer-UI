@@ -35,5 +35,6 @@ export const useMarketsRequest = () => {
 
   return useSWR<response, Error>('v3AppConfig', {
     fetcher: fetcher,
+    refreshInterval: 30000,
   });
 };
