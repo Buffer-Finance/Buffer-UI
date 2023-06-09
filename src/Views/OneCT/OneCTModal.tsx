@@ -261,7 +261,7 @@ const OneCTModal: React.FC<any> = ({}) => {
   const [laoding, setLaoding] = useState(false);
   const { activeChain } = useActiveChain();
   const configData =
-    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
+    appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const { generatePk, registeredOneCT, registerOneCt, createLoading, oneCtPk } =
     useOneCTWallet();
   const { writeCall } = useIndependentWriteCall();
@@ -424,6 +424,7 @@ import { ethers } from 'ethers';
 import { v3AppConfig } from '@Views/V3App/config';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { appConfig } from '@Views/TradePage/config';
 const GreenTickMark = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

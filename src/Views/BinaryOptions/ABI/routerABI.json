@@ -1,7 +1,21 @@
 [
   {
     "inputs": [
-      { "internalType": "address", "name": "_publisher", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_publisher",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_sfPublisher",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -54,6 +68,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "DeregisterAccount",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "queueId",
@@ -86,31 +113,6 @@
       }
     ],
     "name": "FailUnlock",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "queueId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "queuedTime",
-        "type": "uint256"
-      }
-    ],
-    "name": "InitiateTrade",
     "type": "event"
   },
   {
@@ -235,51 +237,57 @@
   {
     "inputs": [],
     "name": "DEFAULT_ADMIN_ROLE",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "accountMapping",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "queueId", "type": "uint256" }
-    ],
-    "name": "cancelQueuedTrade",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "cancelledQueueIds",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "contractRegistry",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" },
-      { "internalType": "uint256", "name": "latestQueueId", "type": "uint256" }
-    ],
-    "name": "getLatestUserData",
     "outputs": [
       {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "accountMapping",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "oneCT",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nonce",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "components": [
-          { "internalType": "uint256", "name": "optionId", "type": "uint256" },
-          { "internalType": "uint256", "name": "queueId", "type": "uint256" },
           {
             "components": [
               {
@@ -289,21 +297,9 @@
               },
               {
                 "internalType": "uint256",
-                "name": "userQueueIndex",
+                "name": "optionId",
                 "type": "uint256"
               },
-              { "internalType": "address", "name": "user", "type": "address" },
-              {
-                "internalType": "uint256",
-                "name": "totalFee",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "period",
-                "type": "uint256"
-              },
-              { "internalType": "bool", "name": "isAbove", "type": "bool" },
               {
                 "internalType": "address",
                 "name": "targetContract",
@@ -311,93 +307,195 @@
               },
               {
                 "internalType": "uint256",
-                "name": "expectedStrike",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "slippage",
+                "name": "closingPrice",
                 "type": "uint256"
               },
               {
                 "internalType": "bool",
-                "name": "allowPartialFill",
+                "name": "isAbove",
                 "type": "bool"
               },
               {
-                "internalType": "uint256",
-                "name": "queuedTime",
-                "type": "uint256"
+                "components": [
+                  {
+                    "internalType": "bytes",
+                    "name": "signature",
+                    "type": "bytes"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "timestamp",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct IBufferRouter.SignInfo",
+                "name": "marketDirectionSignInfo",
+                "type": "tuple"
               },
-              { "internalType": "bool", "name": "isQueued", "type": "bool" },
               {
-                "internalType": "string",
-                "name": "referralCode",
-                "type": "string"
-              },
-              {
-                "internalType": "uint256",
-                "name": "traderNFTId",
-                "type": "uint256"
+                "components": [
+                  {
+                    "internalType": "bytes",
+                    "name": "signature",
+                    "type": "bytes"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "timestamp",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct IBufferRouter.SignInfo",
+                "name": "publisherSignInfo",
+                "type": "tuple"
               }
             ],
-            "internalType": "struct IBufferRouter.QueuedTrade",
-            "name": "queuedTrade",
+            "internalType": "struct IBufferRouter.CloseTradeParams",
+            "name": "closeTradeParams",
             "type": "tuple"
           },
           {
             "components": [
               {
-                "internalType": "enum IBufferBinaryOptions.State",
-                "name": "state",
-                "type": "uint8"
+                "internalType": "bytes",
+                "name": "signature",
+                "type": "bytes"
               },
               {
                 "internalType": "uint256",
-                "name": "strike",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lockedAmount",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "premium",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "expiration",
-                "type": "uint256"
-              },
-              { "internalType": "bool", "name": "isAbove", "type": "bool" },
-              {
-                "internalType": "uint256",
-                "name": "totalFee",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "createdAt",
+                "name": "timestamp",
                 "type": "uint256"
               }
             ],
-            "internalType": "struct IBufferBinaryOptions.Option",
-            "name": "option",
+            "internalType": "struct IBufferRouter.SignInfo",
+            "name": "userSignInfo",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct IBufferRouter.CloseAnytimeParams[]",
+        "name": "closeParams",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "closeAnytime",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "contractRegistry",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "deregisterAccount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "queueId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "optionId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "targetContract",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "closingPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAbove",
+            "type": "bool"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "signature",
+                "type": "bytes"
+              },
+              {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct IBufferRouter.SignInfo",
+            "name": "marketDirectionSignInfo",
             "type": "tuple"
           },
-          { "internalType": "bool", "name": "isCancelled", "type": "bool" }
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "signature",
+                "type": "bytes"
+              },
+              {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct IBufferRouter.SignInfo",
+            "name": "publisherSignInfo",
+            "type": "tuple"
+          }
         ],
-        "internalType": "struct IBufferRouter.TradeData[]",
-        "name": "trades",
+        "internalType": "struct IBufferRouter.CloseTradeParams[]",
+        "name": "optionData",
         "type": "tuple[]"
+      }
+    ],
+    "name": "executeOptions",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getRoleAdmin",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -405,17 +503,16 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" }
-    ],
-    "name": "getRoleAdmin",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
     ],
     "name": "grantRole",
     "outputs": [],
@@ -424,205 +521,57 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
-    ],
-    "name": "hasRole",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
       {
-        "components": [
-          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-          { "internalType": "uint256", "name": "period", "type": "uint256" },
-          { "internalType": "bool", "name": "isAbove", "type": "bool" },
-          {
-            "internalType": "address",
-            "name": "targetContract",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "expectedStrike",
-            "type": "uint256"
-          },
-          { "internalType": "uint256", "name": "slippage", "type": "uint256" },
-          {
-            "internalType": "bool",
-            "name": "allowPartialFill",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "referralCode",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "traderNFTId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct IBufferRouter.TradeParams",
-        "name": "params",
-        "type": "tuple"
-      },
-      { "internalType": "address", "name": "user", "type": "address" },
-      {
-        "internalType": "uint256",
-        "name": "queuedTimestamp",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
       },
       {
-        "internalType": "uint256",
-        "name": "signatureTimestamp",
-        "type": "uint256"
-      },
-      { "internalType": "bytes", "name": "userSignature", "type": "bytes" },
-      { "internalType": "bytes", "name": "resolveSignature", "type": "bytes" },
-      { "internalType": "uint256", "name": "signedPrice", "type": "uint256" },
-      { "internalType": "bool", "name": "isOneCT", "type": "bool" }
-    ],
-    "name": "initiateAndResolve",
-    "outputs": [
-      { "internalType": "uint256", "name": "queueId", "type": "uint256" }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-          { "internalType": "uint256", "name": "period", "type": "uint256" },
-          { "internalType": "bool", "name": "isAbove", "type": "bool" },
-          {
-            "internalType": "address",
-            "name": "targetContract",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "expectedStrike",
-            "type": "uint256"
-          },
-          { "internalType": "uint256", "name": "slippage", "type": "uint256" },
-          {
-            "internalType": "bool",
-            "name": "allowPartialFill",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "referralCode",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "traderNFTId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct IBufferRouter.TradeParams",
-        "name": "params",
-        "type": "tuple"
-      },
-      { "internalType": "address", "name": "user", "type": "address" },
-      {
-        "internalType": "uint256",
-        "name": "queuedTimestamp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "signatureTimestamp",
-        "type": "uint256"
-      },
-      { "internalType": "bytes", "name": "userSignature", "type": "bytes" },
-      { "internalType": "bool", "name": "isOneCT", "type": "bool" }
-    ],
-    "name": "initiateTradeForAccount",
-    "outputs": [
-      { "internalType": "uint256", "name": "queueId", "type": "uint256" }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-          { "internalType": "uint256", "name": "period", "type": "uint256" },
-          { "internalType": "bool", "name": "isAbove", "type": "bool" },
-          {
-            "internalType": "address",
-            "name": "targetContract",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "expectedStrike",
-            "type": "uint256"
-          },
-          { "internalType": "uint256", "name": "slippage", "type": "uint256" },
-          {
-            "internalType": "bool",
-            "name": "allowPartialFill",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "referralCode",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "traderNFTId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct IBufferRouter.TradeParams",
-        "name": "params",
-        "type": "tuple"
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
       }
     ],
-    "name": "initiateTradeFromAccount",
+    "name": "hasRole",
     "outputs": [
-      { "internalType": "uint256", "name": "queueId", "type": "uint256" }
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "isInPrivateKeeperMode",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "name": "isKeeper",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "limitOrder",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "nextQueueId",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -630,9 +579,26 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-          { "internalType": "uint256", "name": "period", "type": "uint256" },
-          { "internalType": "bool", "name": "isAbove", "type": "bool" },
+          {
+            "internalType": "uint256",
+            "name": "queueId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "user",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "period",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "targetContract",
@@ -640,10 +606,14 @@
           },
           {
             "internalType": "uint256",
-            "name": "expectedStrike",
+            "name": "strike",
             "type": "uint256"
           },
-          { "internalType": "uint256", "name": "slippage", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "slippage",
+            "type": "uint256"
+          },
           {
             "internalType": "bool",
             "name": "allowPartialFill",
@@ -658,76 +628,146 @@
             "internalType": "uint256",
             "name": "traderNFTId",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "settlementFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isLimitOrder",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "limitOrderExpiry",
+            "type": "uint256"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "signature",
+                "type": "bytes"
+              },
+              {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct IBufferRouter.SignInfo",
+            "name": "settlementFeeSignInfo",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "signature",
+                "type": "bytes"
+              },
+              {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct IBufferRouter.SignInfo",
+            "name": "userSignInfo",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "signature",
+                "type": "bytes"
+              },
+              {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct IBufferRouter.SignInfo",
+            "name": "publisherSignInfo",
+            "type": "tuple"
           }
         ],
-        "internalType": "struct IBufferRouter.TradeParams",
+        "internalType": "struct IBufferRouter.TradeParams[]",
         "name": "params",
-        "type": "tuple"
-      },
-      { "internalType": "address", "name": "user", "type": "address" },
-      {
-        "internalType": "uint256",
-        "name": "queuedTimestamp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "signatureTimestamp",
-        "type": "uint256"
-      },
-      { "internalType": "bytes", "name": "userSignature", "type": "bytes" },
-      { "internalType": "bool", "name": "isOneCT", "type": "bool" },
-      {
-        "internalType": "uint256",
-        "name": "limitOrderTimestamp",
-        "type": "uint256"
+        "type": "tuple[]"
       }
     ],
-    "name": "openLimitOrder",
-    "outputs": [
-      { "internalType": "uint256", "name": "queueId", "type": "uint256" }
-    ],
+    "name": "openTrades",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
-    "name": "prevSignatures",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "prevSignature",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "publisher",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "queueIdToOptionId",
     "outputs": [
-      { "internalType": "uint256", "name": "optionId", "type": "uint256" },
-      { "internalType": "bool", "name": "isSet", "type": "bool" }
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "queuedTrades",
-    "outputs": [
-      { "internalType": "uint256", "name": "queueId", "type": "uint256" },
+    "inputs": [
       {
         "internalType": "uint256",
-        "name": "userQueueIndex",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "queuedTrades",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalFee",
         "type": "uint256"
       },
-      { "internalType": "address", "name": "user", "type": "address" },
-      { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-      { "internalType": "uint256", "name": "period", "type": "uint256" },
-      { "internalType": "bool", "name": "isAbove", "type": "bool" },
+      {
+        "internalType": "uint256",
+        "name": "period",
+        "type": "uint256"
+      },
       {
         "internalType": "address",
         "name": "targetContract",
@@ -735,22 +775,55 @@
       },
       {
         "internalType": "uint256",
-        "name": "expectedStrike",
+        "name": "strike",
         "type": "uint256"
       },
-      { "internalType": "uint256", "name": "slippage", "type": "uint256" },
-      { "internalType": "bool", "name": "allowPartialFill", "type": "bool" },
-      { "internalType": "uint256", "name": "queuedTime", "type": "uint256" },
-      { "internalType": "bool", "name": "isQueued", "type": "bool" },
-      { "internalType": "string", "name": "referralCode", "type": "string" },
-      { "internalType": "uint256", "name": "traderNFTId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "slippage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "allowPartialFill",
+        "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "referralCode",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "traderNFTId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "settlementFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isLimitOrder",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "isTradeResolved",
+        "type": "bool"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "oneCT", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "oneCT",
+        "type": "address"
+      }
     ],
     "name": "registerAccount",
     "outputs": [],
@@ -759,8 +832,16 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
     ],
     "name": "renounceRole",
     "outputs": [],
@@ -770,26 +851,15 @@
   {
     "inputs": [
       {
-        "components": [
-          { "internalType": "uint256", "name": "queueId", "type": "uint256" },
-          { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
-          { "internalType": "uint256", "name": "price", "type": "uint256" },
-          { "internalType": "bytes", "name": "signature", "type": "bytes" }
-        ],
-        "internalType": "struct IBufferRouter.OpenTradeParams[]",
-        "name": "params",
-        "type": "tuple[]"
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
       }
-    ],
-    "name": "resolveQueuedTrades",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "revokeRole",
     "outputs": [],
@@ -803,7 +873,11 @@
         "name": "targetContract",
         "type": "address"
       },
-      { "internalType": "bool", "name": "register", "type": "bool" }
+      {
+        "internalType": "bool",
+        "name": "register",
+        "type": "bool"
+      }
     ],
     "name": "setContractRegistry",
     "outputs": [],
@@ -819,8 +893,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_keeper", "type": "address" },
-      { "internalType": "bool", "name": "_isActive", "type": "bool" }
+      {
+        "internalType": "address",
+        "name": "_keeper",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isActive",
+        "type": "bool"
+      }
     ],
     "name": "setKeeper",
     "outputs": [],
@@ -828,114 +910,34 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
-    ],
-    "name": "supportsInterface",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
+    "inputs": [],
+    "name": "sfPublisher",
+    "outputs": [
       {
-        "components": [
-          { "internalType": "uint256", "name": "optionId", "type": "uint256" },
-          {
-            "internalType": "address",
-            "name": "targetContract",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "expiryTimestamp",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "priceAtExpiry",
-            "type": "uint256"
-          },
-          { "internalType": "bytes", "name": "signature", "type": "bytes" }
-        ],
-        "internalType": "struct IBufferRouter.CloseTradeParams[]",
-        "name": "optionData",
-        "type": "tuple[]"
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
-    "name": "unlockOptions",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" }
-    ],
-    "name": "userQueueCount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "userQueuedIds",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "components": [
-          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-          { "internalType": "uint256", "name": "period", "type": "uint256" },
-          { "internalType": "bool", "name": "isAbove", "type": "bool" },
-          {
-            "internalType": "address",
-            "name": "targetContract",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "expectedStrike",
-            "type": "uint256"
-          },
-          { "internalType": "uint256", "name": "slippage", "type": "uint256" },
-          {
-            "internalType": "bool",
-            "name": "allowPartialFill",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "referralCode",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "traderNFTId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct IBufferRouter.TradeParams",
-        "name": "params",
-        "type": "tuple"
-      },
-      { "internalType": "address", "name": "user", "type": "address" },
-      { "internalType": "bytes", "name": "userSignature", "type": "bytes" },
-      {
-        "internalType": "uint256",
-        "name": "signatureTimestamp",
-        "type": "uint256"
-      },
-      { "internalType": "bool", "name": "isOneCT", "type": "bool" }
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
     ],
-    "name": "verifyTrade",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "name": "supportsInterface",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   }

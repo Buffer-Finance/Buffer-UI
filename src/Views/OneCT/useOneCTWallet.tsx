@@ -8,7 +8,7 @@ import secureLocalStorage from 'react-secure-storage';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
-import { v3AppConfig } from '@Views/V3App/config';
+import { appConfig } from '@Views/TradePage/config';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 const registerOneCtMethod = 'registerAccount';
 
@@ -36,7 +36,7 @@ const useOneCTWallet = () => {
 
   const { activeChain } = useActiveChain();
   const configData =
-    v3AppConfig[activeChain.id as unknown as keyof typeof v3AppConfig];
+    appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
   console.log(`useOneCTWallet-res?.user2signer: `, res?.user2signer);
