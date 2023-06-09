@@ -15,13 +15,15 @@ const registerOneCtMethod = 'registerAccount';
 export const is1CTEnabled = (
   account: string,
   pk: string | null,
-  provider: any
+  provider: any,
+  deb?: string
 ) => {
   if (!account || !pk || !provider) return null;
   const oneCTWallet = new ethers.Wallet(
     pk,
     provider as ethers.providers.StaticJsonRpcProvider
   );
+  if (deb) console.log(deb, oneCTWallet.address, account);
 
   return oneCTWallet.address.toLowerCase() === account.toLowerCase();
 };
@@ -39,10 +41,15 @@ const useOneCTWallet = () => {
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
-  console.log(`useOneCTWallet-res?.user2signer: `, res?.user2signer);
-  const registeredOneCT = res?.user2signer?.signer
-    ? is1CTEnabled(res.user2signer.signer, oneCtPk, provider)
-    : false;
+  const registeredOneCT = useMemo(() => {
+    console.log(`useOneCTWallet-res?.user2signer: `, oneCtPk, res?.user2signer);
+
+    const isEnabled = res?.user2signer?.signer
+      ? is1CTEnabled(res.user2signer.signer, oneCtPk, provider, 'debugggging')
+      : false;
+    console.log(`useOneCTWallet-isEnabled: `, isEnabled);
+    return isEnabled;
+  }, [res, oneCtPk, provider]);
   const { data: signer } = useSigner({ chainId: activeChain.id });
   const oneCTWallet = useMemo(() => {
     if (!oneCtPk) return null;

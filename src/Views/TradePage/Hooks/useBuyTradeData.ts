@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { divide } from '@Utils/NumString/stringArithmatics';
 
-export const useBuyTradeData = () => {
+export const useBuyTradeData = (deb?: string) => {
   const { data: readCallData } = useBuyTradePageReadcalls();
   const { switchPool, poolDetails } = useSwitchPool();
   const { activeChain } = useActiveChain();
@@ -14,6 +14,7 @@ export const useBuyTradeData = () => {
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
 
   const response = useMemo(() => {
+    console.log(`${deb}: `, readCallData, poolDetails, switchPool, configData);
     if (
       !readCallData ||
       !poolDetails ||

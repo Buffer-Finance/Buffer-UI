@@ -72,6 +72,7 @@ export const useCall2Data = (contracts: any, swrKey: string) => {
   return useSWR(calls && calls.length ? key : null, {
     fetcher: async () => {
       if (!calls) return null;
+      console.log(`useSWR-calls: `, calls);
       // console.log(`calls: `, calls);
       let returnData = await multicallLinked(
         calls,

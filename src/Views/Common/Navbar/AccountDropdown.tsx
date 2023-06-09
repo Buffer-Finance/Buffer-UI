@@ -30,6 +30,7 @@ import DDArrow from '@SVG/Elements/Arrow';
 import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
 import { SettingsIcon } from './SettingsIcon';
 import NFTtier from '../NFTtier';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 const token2image = {
   ETH: ETHImage,
 };
@@ -63,10 +64,17 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   useEffect(() => {
     setOneCTModal(false);
   }, [address]);
-  const res = useAtomValue(activeAssetStateAtom);
+  const res = useBuyTradeData('hellloodfd');
   const registeredOneCT = res?.user2signer
-    ? is1CTEnabled(res?.user2signer, oneCtPk, provider)
+    ? is1CTEnabled(res?.user2signer.signer, oneCtPk, provider)
     : false;
+  console.log(
+    `AccountDropdown-registeredOneCT: `,
+    registeredOneCT,
+    oneCtPk,
+    provider,
+    res
+  );
   return (
     <ConnectButton.Custom>
       {({
