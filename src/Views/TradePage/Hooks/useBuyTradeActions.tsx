@@ -23,7 +23,7 @@ import { useAccount, useContractEvent, useProvider, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
 import { arrayify, hashMessage } from 'ethers/lib/utils.js';
-import { is1CTEnabled } from '@Views/OneCT/useOneCTWallet';
+import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import secureLocalStorage from 'react-secure-storage';
 import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
 import { knowTillAtom } from '@Views/BinaryOptions/Hooks/useIsMerketOpen';
@@ -38,6 +38,7 @@ import { joinStrings } from '../utils';
 import { appConfig, marketsForChart } from '../config';
 import { AssetCategory } from '../type';
 import { timeSelectorAtom, tradeSettingsAtom } from '../atoms';
+import { useSettlementFee } from './useSettlementFee';
 
 export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
@@ -50,7 +51,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const tokenName = poolDetails?.token;
   const res = readcallData?.user2signer;
   const tokenAddress = poolDetails?.tokenAddress;
-
+  const settelmentFee = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = useProvider({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
@@ -82,11 +83,9 @@ export const useBuyTradeActions = (userInput: string) => {
   const toastify = useToast();
   const knowTill = useAtomValue(knowTillAtom);
   const option_contract = switchPool?.optionContract;
+  const { oneCtPk } = useOneCTWallet();
 
-  const pk = secureLocalStorage.getItem('one-ct-wallet-pk' + address) as string;
-
-  const registeredOneCT = res ? is1CTEnabled(res, pk, provider) : false;
-  console.log(`useBuyTradeActions-registeredOneCT: `, registeredOneCT, res, pk);
+  const registeredOneCT = res ? is1CTEnabled(res, oneCtPk, provider) : false;
 
   const buyHandler = async (customTrade?: { is_up: boolean }) => {
     const isCustom = typeof customTrade?.is_up === 'boolean';
@@ -257,33 +256,6 @@ export const useBuyTradeActions = (userInput: string) => {
         highestTierNFT?.tokenId || '0',
       ];
 
-      /*
-        partial
-                params.user,
-                params.totalFee,
-                params.period,
-                params.targetContract,
-                params.strike,
-                params.slippage,
-                params.allowPartialFill,
-                params.referralCode,
-                params.traderNFTId,
-                signInfo.timestamp
-
-
-      full
-                queuedTrade.user,
-                queuedTrade.totalFee,
-                queuedTrade.period,
-                queuedTrade.targetContract,
-                queuedTrade.strike,
-                queuedTrade.slippage,
-                queuedTrade.allowPartialFill,
-                queuedTrade.referralCode,
-                queuedTrade.traderNFTId,
-                params.isAbove,
-                signInfo.timestamp
-    */
       const baseArgTypes = [
         'address',
         'uint256',
@@ -314,13 +286,12 @@ export const useBuyTradeActions = (userInput: string) => {
           );
         });
         const oneCTWallet = new ethers.Wallet(
-          pk,
+          oneCtPk!,
           provider as ethers.providers.StaticJsonRpcProvider
         );
-        const params = await Promise.all([
-          oneCTWallet?.signMessage(hashedMessage[0]),
-          oneCTWallet?.signMessage(hashedMessage[1]),
-        ]);
+        const params = await Promise.all(
+          hashedMessage.map((s) => oneCTWallet?.signMessage(s))
+        );
         console.log(`useBuyTradeActions-params: `, params);
         // const sig = ethers.utils.splitSignature(signature);
       } catch (e) {}

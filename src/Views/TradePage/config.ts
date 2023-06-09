@@ -336,3 +336,5 @@ export const marketsForChart = {
     full_name: 'Optimism',
   },
 };
+
+export const baseUrl = 'https://oracle.buffer-finance-api.link/';
