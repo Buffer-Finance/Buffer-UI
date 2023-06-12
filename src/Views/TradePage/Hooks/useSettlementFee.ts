@@ -20,7 +20,6 @@ export const useSettlementFee = () => {
         const response = await axios.get(
           baseUrl + 'settlement_fee/?environment=421613&asset_pair=ETHUSD'
         );
-        console.log(`response: `, response);
         if (response?.data?.USDC) {
           return response.data.USDC.BTCUSD;
         }

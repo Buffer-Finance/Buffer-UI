@@ -19,7 +19,6 @@ export const multicallv2 = async (
   swrKey
 ) => {
   if (!calls?.length) return null;
-  console.log(`calls: `, calls);
   try {
     const calldata = calls.map((call) => {
       const itf = ethers.utils && new ethers.utils.Interface(call.abi);
@@ -61,7 +60,6 @@ export const multicallLinked = async (
   swrKey
 ) => {
   if (!calls.length) return null;
-  console.log(`calls: `, calls);
 
   try {
     const calldata = calls.map((call) => {

@@ -14,7 +14,6 @@ export const useBuyTradeData = (deb?: string) => {
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
 
   const response = useMemo(() => {
-    console.log(`${deb}: `, readCallData, poolDetails, switchPool, configData);
     if (
       !readCallData ||
       !poolDetails ||

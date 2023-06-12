@@ -1,4 +1,5 @@
-import styled, { keyframes } from "styled-components";
+import { notificationPosition } from '@Views/TradePage/type';
+import styled, { keyframes } from 'styled-components';
 
 const fadeIn = keyframes`
 from{
@@ -20,9 +21,59 @@ to{
 
 export const Background = styled.div`
   position: fixed;
-  right: 0;
+  bottom: ${(props: { position: number }) => {
+    switch (props.position) {
+      case notificationPosition.BottomLeft:
+        return '0';
+      case notificationPosition.BottomRight:
+        return '0';
+      case notificationPosition.TopLeft:
+        return 'unset';
+      case notificationPosition.TopRight:
+        return 'unset';
+    }
+    return 'unset';
+  }};
+  left: ${(props: { position: number }) => {
+    switch (props.position) {
+      case notificationPosition.BottomLeft:
+        return '0';
+      case notificationPosition.BottomRight:
+        return 'unset';
+      case notificationPosition.TopLeft:
+        return '0';
+      case notificationPosition.TopRight:
+        return 'unset';
+    }
+    return 'unset';
+  }};
+  right: ${(props: { position: number }) => {
+    switch (props.position) {
+      case notificationPosition.BottomLeft:
+        return 'unset';
+      case notificationPosition.BottomRight:
+        return '0';
+      case notificationPosition.TopLeft:
+        return 'unset';
+      case notificationPosition.TopRight:
+        return '0';
+    }
+    return 'unset';
+  }};
+  top: ${(props: { position: number }) => {
+    switch (props.position) {
+      case notificationPosition.BottomLeft:
+        return 'unset';
+      case notificationPosition.BottomRight:
+        return 'unset';
+      case notificationPosition.TopLeft:
+        return '0';
+      case notificationPosition.TopRight:
+        return '0';
+    }
+    return 'unset';
+  }};
   padding: 10px;
-  top: 0;
   z-index: 1000000;
 `;
 export const SingleNotification = styled.div`

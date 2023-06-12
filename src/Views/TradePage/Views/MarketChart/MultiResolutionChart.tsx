@@ -348,16 +348,11 @@ export const MultiResolutionChart = ({
       ) => {
         const parsedSymbol = symbolName.replace('-', '');
         const symbols = await getAllSymbols();
-        console.log(`MultiResolutionChart-symbols: `, symbols);
         const symbolItem = symbols?.find(
           ({ symbol, full_name }) =>
             symbol === parsedSymbol || full_name === parsedSymbol
         );
-        console.log(
-          `MultiResolutionChart-symbolItem: `,
-          symbolItem,
-          symbolName
-        );
+
         if (!symbolItem) {
           onResolveErrorCallback('cannot resolve symbol');
           return;
@@ -651,7 +646,7 @@ export const MultiResolutionChart = ({
     if (!chartReady) return;
     widgetRef
       .current!.activeChart?.()
-      .setChartType((chartType as any)?.[market] ?? 1);
+      .setChartType((chartType as any)?.[chartId] ?? 1);
   }, [chartType, chartReady]);
 
   useEffect(() => {
@@ -663,7 +658,6 @@ export const MultiResolutionChart = ({
       widgetRef.current.activeChart?.().setResolution(resolution);
     }
   }, [market2resolution, chartReady]);
-  console.log(`MultiResolutionChart-market2resolution: `, market2resolution);
   useEffect(() => {
     const interval = setInterval(updatePositionTimeLeft, 1000);
     return () => {

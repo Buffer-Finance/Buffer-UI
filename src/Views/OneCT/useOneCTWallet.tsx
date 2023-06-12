@@ -42,12 +42,9 @@ const useOneCTWallet = () => {
   const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
   const registeredOneCT = useMemo(() => {
-    console.log(`useOneCTWallet-res?.user2signer: `, oneCtPk, res?.user2signer);
-
     const isEnabled = res?.user2signer?.signer
       ? is1CTEnabled(res.user2signer.signer, oneCtPk, provider, 'debugggging')
       : false;
-    console.log(`useOneCTWallet-isEnabled: `, isEnabled);
     return isEnabled;
   }, [res, oneCtPk, provider]);
   const { data: signer } = useSigner({ chainId: activeChain.id });

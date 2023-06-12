@@ -68,13 +68,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   const registeredOneCT = res?.user2signer
     ? is1CTEnabled(res?.user2signer.signer, oneCtPk, provider)
     : false;
-  console.log(
-    `AccountDropdown-registeredOneCT: `,
-    registeredOneCT,
-    oneCtPk,
-    provider,
-    res
-  );
+
   return (
     <ConnectButton.Custom>
       {({

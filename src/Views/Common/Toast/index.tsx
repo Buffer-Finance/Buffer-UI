@@ -9,6 +9,11 @@ import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import ErrorIcon from '@Assets/Elements/ErrorIcon';
 import FailedSuccessIcon from '@Assets/Elements/FailedSuccess';
 import { CLoseSVG } from '@Views/TradePage/Components/CloseSVG';
+import { useAtom } from 'jotai';
+import {
+  notificationPositionSettingsAtom,
+  tradeSettingsAtom,
+} from '@Views/TradePage/atoms';
 
 // import { useWindowSize } from "src/Providers";
 
@@ -149,8 +154,9 @@ function Layout(props) {
 }
 
 function Toasts(props) {
+  const [notifPosition] = useAtom(notificationPositionSettingsAtom);
   return (
-    <Background>
+    <Background position={notifPosition}>
       {props.state.map((notification) => (
         <Layout key={notification.id} toast={notification} />
       ))}

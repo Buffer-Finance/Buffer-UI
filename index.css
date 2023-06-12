@@ -26,6 +26,9 @@ body {
   max-width: 899px;
 
 }
+.accordion-table-strip-right-border{
+  border-right: 1px solid var(--text-2);
+}
 .glowing-animation {
   animation: glowing 1000ms infinite alternate ease-in-out; 
 }
@@ -135,8 +138,8 @@ html .MuiDialog-container {
   --bg-1:#282B39;
   --bg-2:#171722;
   --bg-vertical-gradient:linear-gradient(180deg, #000000 43%,var(--bg-1) 93.44%);
-  --text-2:#7F87A7;
-  --text-3:#C3C2D4;
+  --text-2:#808191;
+  --text-3:#6B728E;
   --text-1:#ffffff;
   --text-4: #808191;
   --bg-signature:#3772ff;

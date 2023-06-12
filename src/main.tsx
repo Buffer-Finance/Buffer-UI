@@ -27,11 +27,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <RainbowKitProvider chains={chains} theme={darkTheme()}>
       <HashRouter>
         <SWRConfig value={options}>
-          <ContextProvider>
-            <JotaiProvider>
+          <JotaiProvider>
+            <ContextProvider>
               <App />
-            </JotaiProvider>
-          </ContextProvider>
+            </ContextProvider>
+          </JotaiProvider>
         </SWRConfig>
       </HashRouter>
     </RainbowKitProvider>

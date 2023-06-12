@@ -39,6 +39,8 @@ import { appConfig, baseUrl, marketsForChart } from '../config';
 import { AssetCategory } from '../type';
 import { timeSelectorAtom, tradeSettingsAtom } from '../atoms';
 import { useSettlementFee } from './useSettlementFee';
+import UpIcon from '@SVG/Elements/UpIcon';
+import DownIcon from '@SVG/Elements/DownIcon';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -105,6 +107,7 @@ export const useBuyTradeActions = (userInput: string) => {
     const isForex = activeAsset?.category === AssetCategory[0];
     const maxDuration = switchPool?.max_duration;
     const minDuration = switchPool?.min_duration;
+    console.log(`useBuyTradeActions-minDuration: `, minDuration);
     if (!maxDuration || !minDuration) {
       return toastify({
         type: 'error',
@@ -190,6 +193,7 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
+      console.log(`useBuyTradeActions-userInput: `, userInput);
 
       if (!activeAsset) {
         return toastify({
@@ -238,13 +242,6 @@ export const useBuyTradeActions = (userInput: string) => {
         ),
       };
 
-      const id = hashMessage;
-      toastify({
-        id,
-        msg: 'Transaction confirmation in progress...',
-        type: 'info',
-        inf: 1,
-      });
       let currentTimestamp = Date.now();
       let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
       let baseArgs = [
@@ -286,53 +283,94 @@ export const useBuyTradeActions = (userInput: string) => {
         },
       ];
 
-      try {
-        const hashedMessage = ['partial', 'full'].map((s, idx) => {
-          return arrayify(
-            ethers.utils.solidityKeccak256(args[idx].types, args[idx].values)
-          );
-        });
-        const oneCTWallet = new ethers.Wallet(
-          oneCtPk!,
-          provider as ethers.providers.StaticJsonRpcProvider
+      // try {
+      const hashedMessage: string[] = ['partial', 'full'].map((s, idx) => {
+        return ethers.utils.solidityKeccak256(
+          args[idx].types,
+          args[idx].values
         );
-        const signatures = await Promise.all(
-          hashedMessage.map((s) => oneCTWallet?.signMessage(s))
-        );
-        const apiParams = {
-          signature_timestamp: currentUTCTimestamp,
-          strike: baseArgs[ArgIndex.Strike],
-          period: baseArgs[ArgIndex.Period],
-          target_contract: baseArgs[ArgIndex.TargetContract],
-          partial_signature: signatures[0],
-          full_signature: signatures[1],
-          user_address: baseArgs[ArgIndex.UserAddress],
-          trade_size: baseArgs[ArgIndex.Size],
-          allow_partial_fill: baseArgs[ArgIndex.PartialFill],
-          referral_code: baseArgs[ArgIndex.Referral],
-          trader_nft_id: baseArgs[ArgIndex.NFT],
-          slippage: baseArgs[ArgIndex.Slippage],
-          is_above: customTrade.is_up,
-          is_limit_order: customTrade.limitOrderExpiry ? true : false,
-          limit_order_expiration: customTrade.limitOrderExpiry,
-          settlement_fee: settelmentFee?.settlement_fee,
-          settlement_fee_sign_expiration:
-            settelmentFee?.settlement_fee_sign_expiration,
-          settlement_fee_signature: settelmentFee?.settlement_fee_signature,
-          environment: activeChain.id,
-        };
-        console.log(`useBuyTradeActions-apiParams: `, apiParams);
-        // const sig = ethers.utils.splitSignature(signature);
-        const resp = await axios.post(baseUrl + 'trade/create/', null, {
-          params: apiParams,
-        });
-        toastify({
-          id,
-          msg: 'Position opened',
-          type: 'success',
-        });
-        console.log(`useBuyTradeActions-resp: `, resp);
-      } catch (e) {}
+      });
+      const id = hashedMessage[0];
+      console.log(`useBuyTradeActions-hashMessage: `, id);
+      toastify({
+        id,
+        msg: 'Transaction confirmation in progress...',
+        type: 'info',
+        inf: 1,
+      });
+      const oneCTWallet = new ethers.Wallet(
+        oneCtPk!,
+        provider as ethers.providers.StaticJsonRpcProvider
+      );
+      const signatures = await Promise.all(
+        hashedMessage.map((s) => oneCTWallet?.signMessage(arrayify(s)))
+      );
+      const apiParams = {
+        signature_timestamp: currentUTCTimestamp,
+        strike: baseArgs[ArgIndex.Strike],
+        period: baseArgs[ArgIndex.Period],
+        target_contract: baseArgs[ArgIndex.TargetContract],
+        partial_signature: signatures[0],
+        full_signature: signatures[1],
+        user_address: baseArgs[ArgIndex.UserAddress],
+        trade_size: baseArgs[ArgIndex.Size],
+        allow_partial_fill: baseArgs[ArgIndex.PartialFill],
+        referral_code: baseArgs[ArgIndex.Referral],
+        trader_nft_id: baseArgs[ArgIndex.NFT],
+        slippage: baseArgs[ArgIndex.Slippage],
+        is_above: customTrade.is_up,
+        is_limit_order: customTrade.limitOrderExpiry ? true : false,
+        limit_order_expiration: customTrade.limitOrderExpiry,
+        settlement_fee: settelmentFee?.settlement_fee,
+        settlement_fee_sign_expiration:
+          settelmentFee?.settlement_fee_sign_expiration,
+        settlement_fee_signature: settelmentFee?.settlement_fee_signature,
+        environment: activeChain.id,
+      };
+      console.log(`useBuyTradeActions-apiParams: `, apiParams);
+      // const sig = ethers.utils.splitSignature(signature);
+      const resp = await axios.post(baseUrl + 'trade/create/', null, {
+        params: apiParams,
+      });
+      const content = (
+        <div className="flex flex-col gap-y-2 text-f12 ">
+          <div className="nowrap font-[600]">
+            {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
+            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+          </div>
+          <div className="flex items-center">
+            {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
+            <span className="!text-3">to go</span>&nbsp;
+            {customTrade.is_up ? (
+              <>
+                <UpIcon className="text-green scale-125" /> &nbsp;Higher
+              </>
+            ) : (
+              <>
+                <DownIcon className="text-red scale-125" />
+                &nbsp; Lower
+              </>
+            )}
+          </div>
+          <div>
+            <span>
+              <span className="!text-3">Total amount:</span>
+              {userInput}&nbsp;USDC
+            </span>
+          </div>
+        </div>
+      );
+      toastify({
+        id,
+        type: 'success',
+        timings: 100,
+        body: null,
+        msg: content,
+      });
+      console.log(`useBuyTradeActions-resp: `, resp);
+      // } catch (e) {
+      //   con
+      // }
       setLoading(null);
     }
   };
