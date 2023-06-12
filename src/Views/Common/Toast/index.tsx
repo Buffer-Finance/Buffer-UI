@@ -8,6 +8,7 @@ import ToastCrossIcon from '@Assets/Elements/ToastCrossIcon';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import ErrorIcon from '@Assets/Elements/ErrorIcon';
 import FailedSuccessIcon from '@Assets/Elements/FailedSuccess';
+import { CLoseSVG } from '@Views/TradePage/Components/CloseSVG';
 
 // import { useWindowSize } from "src/Providers";
 
@@ -138,7 +139,7 @@ function Layout(props) {
         )}
 
         <IconButton className="icon-btn cross" onClick={(e) => setWidth(101)}>
-          <ToastCrossIcon className="cross-icon" />
+          <CLoseSVG />
         </IconButton>
       </div>
       {props.toast.body && <div>{props.toast.body}</div>}

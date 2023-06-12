@@ -323,13 +323,14 @@ export const useBuyTradeActions = (userInput: string) => {
         };
         console.log(`useBuyTradeActions-apiParams: `, apiParams);
         // const sig = ethers.utils.splitSignature(signature);
-        const resp = await axios.post(
-          'https://oracle.buffer-finance-api.link/instant-trading/trade/create/',
-          null,
-          {
-            params: apiParams,
-          }
-        );
+        const resp = await axios.post(baseUrl + 'trade/create/', null, {
+          params: apiParams,
+        });
+        toastify({
+          id,
+          msg: 'Position opened',
+          type: 'success',
+        });
         console.log(`useBuyTradeActions-resp: `, resp);
       } catch (e) {}
       setLoading(null);
