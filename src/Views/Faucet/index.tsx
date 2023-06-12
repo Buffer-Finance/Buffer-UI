@@ -2,7 +2,7 @@ import { Skeleton } from '@mui/material';
 import Background from './style';
 import FaucetABI from './Faucet.json';
 import { ethers } from 'ethers';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { BlueBtn } from '@Views/Common/V2-Button';
@@ -10,16 +10,23 @@ import Drawer from '@Views/Common/V2-Drawer';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { usePoolDisplayNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 
 const IbfrFaucet: React.FC = () => {
   useEffect(() => {
     document.title = 'Buffer | Faucet';
   }, []);
   const { activeChain } = useActiveChain();
-  const tokenChains = {
-    '421613': ['USDC', 'ARB'],
-    '80001': ['USDC'],
-  };
+  // const tokenChains = {
+  //   '421613': ['USDC', 'ARB', 'BFR'],
+  //   '80001': ['USDC'],
+  // };
+  const { poolDisplayNameMapping } = usePoolDisplayNames();
+  const tokenChains = useMemo(() => {
+    return Object.keys(poolDisplayNameMapping).filter(
+      (token) => !token.includes('-POL')
+    );
+  }, [poolDisplayNameMapping]);
 
   const content = activeChain && [
     {
@@ -46,7 +53,7 @@ const IbfrFaucet: React.FC = () => {
       bottom: (
         <ConnectionRequired>
           <div className="flex items-center justify-center gap-3 flex-wrap">
-            {tokenChains[activeChain.id].map((token: string) => (
+            {tokenChains.map((token: string) => (
               <ClaimButton token={token} />
             ))}
           </div>{' '}
