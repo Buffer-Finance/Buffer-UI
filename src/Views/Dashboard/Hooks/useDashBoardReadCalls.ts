@@ -177,7 +177,6 @@ export const useDashboardReadCalls = () => {
         price: bfrPrice,
         supply: netSupply,
         total_staked: fromWei(totalStakedBFR),
-        market_cap: multiply(bfrPrice, fromWei(totalSupplyBFR)),
         circulatingSupply: circulatingSupply,
         liquidity_pools_token: mainnetData?.lpTokens,
       },
@@ -185,7 +184,6 @@ export const useDashboardReadCalls = () => {
         price: blpPrice,
         supply: divide(fromWei(amountUSDCpool, usd_decimals), blpPrice),
         total_staked: totalUSDCstaked,
-        market_cap: multiply(blpPrice, fromWei(totalSupplyBLP, usd_decimals)),
 
         apr: {
           value: fromWei(blpAprTotal, 2),
