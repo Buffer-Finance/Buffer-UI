@@ -71,7 +71,9 @@ const Trading = ({
 }) => {
   const { address: account } = useUserAccount();
   const { configContracts } = useActiveChain();
-  const usdcDecimals = configContracts.tokens[tokenName].decimals;
+  const decimals =
+    configContracts.tokens[tokenName as keyof typeof configContracts.tokens]
+      .decimals;
 
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
@@ -92,7 +94,7 @@ const Trading = ({
           values={[
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.totalPayouts[tokenName] ?? '0', usdcDecimals)}
+                data={divide(data.totalPayouts[tokenName] ?? '0', decimals)}
                 unit={tokenName}
               />
             </div>,
@@ -103,19 +105,19 @@ const Trading = ({
                     ? 'text-green'
                     : 'text-red'
                 }
-                data={divide(data.net_pnl[tokenName] ?? '0', usdcDecimals)}
+                data={divide(data.net_pnl[tokenName] ?? '0', decimals)}
                 unit={tokenName}
               />
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.openInterest[tokenName] ?? '0', usdcDecimals)}
+                data={divide(data.openInterest[tokenName] ?? '0', decimals)}
                 unit={tokenName}
               />
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.volume[tokenName] ?? '0', usdcDecimals)}
+                data={divide(data.volume[tokenName] ?? '0', decimals)}
                 unit={tokenName}
               />
             </div>,
@@ -171,18 +173,23 @@ const Referral = ({
                       keysName={tokens}
                       keyStyle={tooltipKeyClasses}
                       valueStyle={tooltipValueClasses}
-                      values={tokens.map(
-                        (token) =>
+                      values={tokens.map((token) => {
+                        const decimals =
+                          configContracts.tokens[
+                            token as keyof typeof configContracts.tokens
+                          ].decimals;
+                        return (
                           toFixed(
                             divide(
                               data[`totalRebateEarned${token}`],
-                              configContracts.tokens[token].decimals
+                              decimals
                             ) as string,
                             2
                           ) +
                           ' ' +
                           token
-                      )}
+                        );
+                      })}
                     />
                   )
                 }
@@ -198,18 +205,24 @@ const Referral = ({
                       keysName={tokens}
                       keyStyle={tooltipKeyClasses}
                       valueStyle={tooltipValueClasses}
-                      values={tokens.map(
-                        (token) =>
+                      values={tokens.map((token) => {
+                        const decimals =
+                          configContracts.tokens[
+                            token as keyof typeof configContracts.tokens
+                          ].decimals;
+
+                        return (
                           toFixed(
                             divide(
                               data[`totalVolumeOfReferredTrades${token}`],
-                              configContracts.tokens[token].decimals
+                              decimals
                             ) as string,
                             2
                           ) +
                           ' ' +
                           token
-                      )}
+                        );
+                      })}
                     />
                   )
                 }

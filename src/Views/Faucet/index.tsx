@@ -91,7 +91,7 @@ const ClaimButton = ({ token }: { token: string }) => {
   const [btnLoading, setBtnLoading] = useState(0);
   const { configContracts } = useActiveChain();
   const { writeCall } = useWriteCall(
-    configContracts.tokens[token].faucet,
+    configContracts.tokens[token as keyof typeof configContracts.tokens].faucet,
     FaucetABI
   );
   const toastify = useToast();
