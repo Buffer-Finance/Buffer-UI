@@ -158,3 +158,23 @@ function Toasts(props) {
 }
 
 export default Toasts;
+// const FinalConfirmationModal = ({ data, hash }) => {
+//   const [open, setOpen] = useState(true);
+//   const { state } = useGlobal();
+//   return (
+// <DraggableModal isOpen={open} closeModal={() => setOpen(false)}>
+// <ConfirmationModal
+//   asset={data.asset}
+//   expiration={data.expiration}
+//   strike={data.strike}
+//   type={data.type}
+//   duration={data.duration}
+//   scannerLink={`${
+//     CHAIN_CONFIGS[import.meta.env.VITE_ENV][state.settings.activeChain?.name]
+//       ?.blockExplorerUrls[0]
+//   }tx/${hash}`}
+//   is_above={data.is_above}
+// />
+// </DraggableModal>
+// );
+// };

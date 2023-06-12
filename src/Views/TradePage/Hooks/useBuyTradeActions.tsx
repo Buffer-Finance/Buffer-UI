@@ -315,7 +315,7 @@ export const useBuyTradeActions = (userInput: string) => {
           is_above: customTrade.is_up,
           is_limit_order: customTrade.limitOrderExpiry ? true : false,
           limit_order_expiration: customTrade.limitOrderExpiry,
-          settelmentFee: settelmentFee?.settlement_fee,
+          settlement_fee: settelmentFee?.settlement_fee,
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
@@ -323,7 +323,13 @@ export const useBuyTradeActions = (userInput: string) => {
         };
         console.log(`useBuyTradeActions-apiParams: `, apiParams);
         // const sig = ethers.utils.splitSignature(signature);
-        const resp = await axios.post(baseUrl + 'trade/create/', apiParams);
+        const resp = await axios.post(
+          'https://oracle.buffer-finance-api.link/instant-trading/trade/create/',
+          null,
+          {
+            params: apiParams,
+          }
+        );
         console.log(`useBuyTradeActions-resp: `, resp);
       } catch (e) {}
       setLoading(null);
