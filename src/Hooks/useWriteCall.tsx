@@ -155,10 +155,15 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       }
 
       console.log(`[blockchain]defaultValues: `, defaultValues);
-      console.log(`[blockchain]contract: `, contractAddress);
+      console.log(
+        `[blockchain]contract: `,
+        contractAddress,
+        contract,
+        contract?.callStatic,
+        contract?.callStatic?.[methodName]
+      );
       console.log(`[blockchain]methodArgs: `, methodArgs);
       console.log(`[blockchain]methodName: `, methodName);
-      console.log(`[blockchain]contract: `, contract?.callStatic);
       const call = await contract?.callStatic[methodName](...methodArgs, {
         ...defaultValues,
       });
