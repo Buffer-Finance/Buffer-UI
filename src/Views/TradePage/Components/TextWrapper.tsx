@@ -41,3 +41,9 @@ export const RadioTextHead = styled.div`
   color: #808191;
   font-weight: 400;
 `;
+
+export const White12pxText = styled.div`
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 400;
+`;

@@ -18,6 +18,8 @@ import { joinStrings } from '@Views/TradePage/utils';
 import { marketsForChart } from '@Views/TradePage/config';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { ActiveTrades } from './ActiveTrades';
+import { TradeCard } from './ActiveTrades/Trade';
 
 const BuyTradeBackground = styled.div`
   max-width: 275px;
@@ -75,6 +77,8 @@ export const BuyTrade: React.FC = () => {
         isForex={isForex}
         isMarketOpen={isMarketOpen}
       />
+      <ActiveTrades />
+      <TradeCard />
     </BuyTradeBackground>
   );
 };
