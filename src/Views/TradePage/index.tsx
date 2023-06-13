@@ -22,7 +22,7 @@ const TradePage: React.FC<any> = ({}) => {
           <MarketChart />
           <AccordionTable />
         </div>
-        <div className="h-[100%]">
+        <div className="h-[100%] sticky">
           <BuyTrade />
         </div>
       </div>

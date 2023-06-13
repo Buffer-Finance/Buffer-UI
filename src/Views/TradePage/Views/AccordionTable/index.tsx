@@ -1,7 +1,7 @@
 import DDArrow from '@SVG/Elements/Arrow';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
 import { useState } from 'react';
-import { SwitchTransition } from 'react-transition-group';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import OngoingTradesTable from './OngoingTradesTable';
 const tables = [
   'Trades',
@@ -45,7 +45,11 @@ const AccordionTable: React.FC<any> = ({}) => {
           />
         </button>
       </div>
-      <div className={` ${expanded ? 'h-[400px]' : 'h-[0px]'} transition-all`}>
+      <div
+        className={` ${
+          expanded ? 'h-[400px]' : 'h-[0px]'
+        } transition-all  overflow-hidden`}
+      >
         <OngoingTradesTable />
       </div>
     </div>
