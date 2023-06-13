@@ -43,6 +43,7 @@ import { PairTokenImage } from '../Components/PairTokenImage';
 import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '@Views/V3App/config';
+import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
@@ -421,12 +422,12 @@ export const StrikePriceComponent = ({
   configData,
   isMobile = false,
 }: {
-  trade: IGQLHistory;
+  trade: OngoingTradeSchema;
   configData: V3AppConfig | undefined;
   isMobile?: boolean;
 }) => {
   if (!configData) return <></>;
-  const decimals = trade.chartData.price_precision.toString().length - 1;
+  const decimals = 2;
   return (
     <>
       <Display

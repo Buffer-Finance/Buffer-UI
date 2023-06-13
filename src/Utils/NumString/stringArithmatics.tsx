@@ -1,6 +1,6 @@
 import Big from 'big.js';
 
-const divide = (from: string, to: string | number) => {
+const divide = (from: string | number, to: string | number) => {
   try {
     const fromBN = new Big(from);
     let toBN: Big;
@@ -9,7 +9,7 @@ const divide = (from: string, to: string | number) => {
     } else {
       toBN = new Big(to);
     }
-    if (toBN.eq('0'))  throw new Error("can't divide with zero");
+    if (toBN.eq('0')) throw new Error("can't divide with zero");
     return fromBN.div(toBN).toString();
   } catch (e) {
     return null;

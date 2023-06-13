@@ -12,7 +12,7 @@ const getBorder = (props) => {
   }
 };
 const TableBackground = styled.div`
-  --border-radius: 8px;
+  --border-radius: 3px;
   --padding-left: 15px;
   overflow-x: hidden;
   border-radius: 12px 12px 0px 0px;
@@ -24,15 +24,14 @@ const TableBackground = styled.div`
   }
 
   table {
-    border: ${getBorder};
-    width: ${({ shouldShowMobile }: { shouldShowMobile: boolean }) =>
-      shouldShowMobile ? 'max-content' : 'max(100%, 500px)'};
-    border-collapse: ${getBorderType};
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 3px;
     background: transparent;
     font-size: 1.6rem;
 
     .table-header {
-      background: ${(props) => (props?.v1 ? 'var(--bg-0)' : 'var(--bg-2)')};
+      background: #171722;
 
       .table-head {
         &:first-of-type {
@@ -82,8 +81,11 @@ const TableBackground = styled.div`
     }
     .table-body {
       .table-row {
+        margin-top: 2px;
+        background: #171722;
+
         --selected-row-border: none;
-        border-top: ${getBorder};
+        /* border-top: ${getBorder}; */
         transition: 200ms;
         font-size: 1.6rem;
         cursor: pointer;
@@ -128,7 +130,7 @@ const TableBackground = styled.div`
           color: rgb(195, 194, 212);
           border-top: none;
           font-size: 13px;
-          border-bottom: ${getBorder};
+          border-bottom: 0px;
           padding: ${({ shouldShowMobile }: { shouldShowMobile: boolean }) =>
             shouldShowMobile ? '6px 10px' : '6px 0px'};
 
@@ -140,9 +142,11 @@ const TableBackground = styled.div`
           }
           &:first-of-type {
             padding-left: var(--padding-left);
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
           }
           &:last-of-type {
             padding-right: calc(var(--padding-left) - 1rem);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
           }
         }
         &:hover {

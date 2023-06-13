@@ -36,6 +36,7 @@ export const useMarketsConfig = () => {
     }
   });
 
+  console.log(`DDDresponse: `, response);
   return response;
 };
 

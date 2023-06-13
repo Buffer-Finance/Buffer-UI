@@ -7,7 +7,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 enum TradeState {
   Queued = 'QUEUED',
 }
-interface TradeSchema {
+export interface OngoingTradeSchema {
   id: number;
   signature_timestamp: number;
   queued_timestamp: number;
@@ -53,7 +53,7 @@ const useOngoingTrades = () => {
         },
       });
       console.log(`ongoingres: `, res);
-      return res?.data as TradeSchema[];
+      return res?.data as OngoingTradeSchema[];
     },
     refreshInterval: 1000,
   });

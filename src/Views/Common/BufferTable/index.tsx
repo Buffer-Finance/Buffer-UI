@@ -96,7 +96,6 @@ const BufferTable: React.FC<IBufferTable> = ({
   }
   return (
     <Background
-      v1={v1}
       className={`${className} ${shouldShowMobile ? '' : 'tab-none'}
       `}
       shouldShowMobile={shouldShowMobile}

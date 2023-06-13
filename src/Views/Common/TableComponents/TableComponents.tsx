@@ -1,7 +1,14 @@
-import { ReactChild, ReactNode } from "react";
-import InfoIcon from "src/SVG/Elements/InfoIcon";
-import VersionChip from "@Views/Common/VersionChip";
-import { AssetCellLayout, CellDescLayout } from "./style";
+import { ReactChild, ReactNode } from 'react';
+import InfoIcon from 'src/SVG/Elements/InfoIcon';
+import VersionChip from '@Views/Common/VersionChip';
+import { AssetCellLayout, CellDescLayout } from './style';
+import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
+import { marketType } from '@Views/TradePage/type';
+import { Display } from '../Tooltips/Display';
+import { divide } from '@Utils/NumString/stringArithmatics';
+import TableAssetCell from '../BufferTable/TableAssetCell';
+import { UpDownChip } from '@Views/BinaryOptions/Tables/TableComponents';
+import { PairTokenImage } from '../PairTokenImage';
 
 interface ITableCellInfo {
   label: string | ReactChild;
@@ -40,6 +47,71 @@ const CellHeadDesc: React.FC<ILockeValue> = ({ labels }) => {
   );
 };
 
+export const StrikePriceComponent = ({
+  trade,
+  configData,
+  isMobile = false,
+}: {
+  trade: OngoingTradeSchema;
+  configData: marketType | undefined;
+  isMobile?: boolean;
+}) => {
+  if (!configData) return <></>;
+  const decimals = 2;
+  return (
+    <>
+      <Display
+        data={divide(trade.strike, 8)}
+        unit={configData.token1}
+        precision={decimals}
+        className={`${
+          !isMobile
+            ? 'justify-self-start content-start'
+            : 'justify-self-end content-end'
+        }  w-max`}
+      />
+      {/* {!isMobile && trade.state === BetState.queued ? (
+        <div className="flex gap-2 align-center">
+          <SlippageTooltip option={trade} className="mt-[2px] mr-[3px]" />
+          Slippage -
+          <Display
+            data={divide(trade?.slippage, 2)}
+            unit="%"
+            className="mr-[3px]"
+            precision={2}
+          />
+        </div>
+      ) : null} */}
+    </>
+  );
+};
+
+const AssetCell: React.FC<{
+  currentRow: OngoingTradeSchema;
+  split?: boolean;
+  configData: marketType | undefined;
+}> = ({ currentRow, split, configData }) => {
+  const isUp = currentRow.is_above;
+  if (!configData) return <></>;
+  return (
+    <TableAssetCell
+      img={
+        <div className="w-[20px] h-[20px] mr-[6px]">
+          <PairTokenImage pair={configData} />
+        </div>
+      }
+      head={
+        <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
+          <span className={`weight-400 text-f15 `}>
+            {configData.token0 + '-' + configData.token1}{' '}
+          </span>
+          <UpDownChip isUp={isUp} />
+        </div>
+      }
+      desc={<></>}
+    />
+  );
+};
 interface IAssetCell {
   version?: number | string;
   tooltip?: string;
@@ -50,46 +122,6 @@ interface IAssetCell {
   remark?: ReactNode;
   assetStyle?: string;
 }
-
-const AssetCell: React.FC<IAssetCell> = ({
-  version,
-  head,
-  desc,
-  tooltip,
-  remark,
-  img,
-  assetStyle,
-  style,
-}) => {
-  return (
-    <AssetCellLayout>
-      <div className={`${style ? style : "flex"}`}>
-        <div className={`relative ${assetStyle}`}>
-          {img && <img className="table-asset-icon" src={img}></img>}
-          {version && (
-            <div className="version-chip">
-              <VersionChip version={20} />
-            </div>
-          )}
-        </div>
-        <div className="flex-col sxml">
-          <span className="head-text text-left flex content-start items-center">
-            {head}
-            {tooltip && (
-              <InfoIcon
-                sm
-                className="tml"
-                tooltip="The APR comes from revenue distribution generated through options trading"
-              />
-            )}
-          </span>
-          {desc && <span className="desc-text text-left ">{desc}</span>}
-          {remark && <span className="desc-text text-left">{remark}</span>}
-        </div>
-      </div>
-    </AssetCellLayout>
-  );
-};
 
 interface ITableHeads {
   children: string | JSX.Element;
