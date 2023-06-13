@@ -1,5 +1,8 @@
 import DDArrow from '@SVG/Elements/Arrow';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
 import { useState } from 'react';
+import { SwitchTransition } from 'react-transition-group';
+import OngoingTradesTable from './OngoingTradesTable';
 const tables = [
   'Trades',
   'Limit Orders',
@@ -10,9 +13,11 @@ const tables = [
 const gap = [2];
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useState(false);
+  const trades = useOngoingTrades();
+  console.log(`index-trades: `, trades);
   const [activeTable, setActiveTable] = useState('Trades');
   return (
-    <div className="flex flex-col bg-1">
+    <div className="flex flex-col ">
       <div className="w-full flex items-center  justify-between p-3">
         <div className="flex gap-x-[15px]">
           {tables.map((s) => (
@@ -41,7 +46,7 @@ const AccordionTable: React.FC<any> = ({}) => {
         </button>
       </div>
       <div className={` ${expanded ? 'h-[400px]' : 'h-[0px]'} transition-all`}>
-        I am table
+        <OngoingTradesTable />
       </div>
     </div>
   );

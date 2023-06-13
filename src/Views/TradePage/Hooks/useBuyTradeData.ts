@@ -33,7 +33,6 @@ export const useBuyTradeData = (deb?: string) => {
     };
 
     return {
-      // totalPayout: divide(payout, 2) as string,
       balance,
       allowance,
       user2signer,

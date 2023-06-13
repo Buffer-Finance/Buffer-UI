@@ -10,6 +10,10 @@ import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
 import { appConfig } from '@Views/TradePage/config';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import useSWR from 'swr';
+import { useCall2Data } from '@Utils/useReadCall';
+import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
+
 const registerOneCtMethod = 'registerAccount';
 
 export const is1CTEnabled = (
@@ -41,6 +45,18 @@ const useOneCTWallet = () => {
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
+  const { data } = useCall2Data(
+    [
+      {
+        address: configData.router,
+        abi: RouterABI,
+        name: 'accountMapping',
+        params: [address],
+      },
+    ],
+    'accountMapping'
+  );
+  console.log(`useOneCTWallet-data: `, data);
   const registeredOneCT = useMemo(() => {
     const isEnabled = res?.user2signer?.signer
       ? is1CTEnabled(res.user2signer.signer, oneCtPk, provider, 'debugggging')

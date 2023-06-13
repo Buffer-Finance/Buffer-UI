@@ -235,11 +235,8 @@ function App() {
               className="disclaimer sm:hidden"
             />
           )}
-          <ConnectionDrawer className="open" />
           <TnCModal />
-          <SideBar />
         </Background>
-        <MobileBottomTabs />
       </I18nProvider>
     </>
   );
