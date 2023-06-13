@@ -213,6 +213,9 @@ export const OverviewArbitrum = ({
       ARB: Math.ceil(
         (Date.now() - Date.parse('17 Mar 2023 017:15:45 GMT')) / 86400000
       ),
+      BFR: Math.ceil(
+        (Date.now() - Date.parse('11 June 2023 017:15:45 GMT')) / 86400000
+      ),
     };
   }, []);
   const { poolNames: tokens } = usePoolNames();
@@ -243,7 +246,7 @@ export const OverviewArbitrum = ({
             'Total Trades',
             'Open Interest (USDC)',
             'Open Interest (ARB)',
-            'Open Interest (USDC-POL)',
+            'Open Interest (BFR)',
             'Total Traders',
           ]}
           values={[
@@ -276,7 +279,7 @@ export const OverviewArbitrum = ({
                             </div>
                           </div>
                         );
-                      else return <></>;
+                      else return <>-</>;
                     })}
                   />
                 }
@@ -443,42 +446,28 @@ export const OverviewArbitrum = ({
               </div>
             </NumberTooltip>,
 
-            // <NumberTooltip
-            //   content={
-            //     <TableAligner
-            //       keysName={keys}
-            //       keyStyle={tooltipKeyClasses}
-            //       valueStyle={tooltipValueClasses}
-            // values={tokens.map((token) => {
-            //   const stats = data[`${token}openInterest`];
-            //   if (stats) return (stats as toalTokenXstats).openInterest;
-            //   else return '-';
-            // })}
-            //     />
-            //   }
-            // >
-            //   <div className={underLineClass}>
-            //     $
-            //     {tokens.reduce((acc, curr) => {
-            //       return acc + data[`${curr}openInterest`]?.openInterest || 0;
-            //     }, 0)}
-            //   </div>
-            // </NumberTooltip>,
-
-            <div className={wrapperClasses}>
-              {data.openInterest !== null || data.openInterest !== undefined ? (
-                <Display
-                  data={
-                    (data.USDCopenInterest as toalTokenXstats)?.openInterest
-                  }
-                  precision={2}
-                  unit="USDC"
-                  className="!w-fit"
+            <NumberTooltip
+              content={
+                <TableAligner
+                  keysName={['USDC', 'USDC_POL']}
+                  keyStyle={tooltipKeyClasses}
+                  valueStyle={tooltipValueClasses}
+                  values={['USDC', 'USDC-POL'].map((token) => {
+                    const stats = data[`${token}openInterest`];
+                    if (stats) return (stats as toalTokenXstats).openInterest;
+                    else return '-';
+                  })}
                 />
-              ) : (
-                'fetching...'
-              )}
-            </div>,
+              }
+            >
+              <div className={underLineClass}>
+                $
+                {tokens.reduce((acc, curr) => {
+                  return acc + data[`${curr}openInterest`]?.openInterest || 0;
+                }, 0)}
+              </div>
+            </NumberTooltip>,
+
             <div className={wrapperClasses}>
               {data.openInterest !== null || data.openInterest !== undefined ? (
                 <Display
@@ -491,15 +480,14 @@ export const OverviewArbitrum = ({
                 'fetching...'
               )}
             </div>,
+
             <div className={wrapperClasses}>
-              {(data.USDC_POLopenInterest as toalTokenXstats)?.openInterest !==
+              {(data.BFRopenInterest as toalTokenXstats)?.openInterest !==
               undefined ? (
                 <Display
-                  data={
-                    (data.USDC_POLopenInterest as toalTokenXstats)?.openInterest
-                  }
+                  data={(data.BFRopenInterest as toalTokenXstats)?.openInterest}
                   precision={2}
-                  unit="USDC"
+                  unit="BFR"
                   className="!w-fit"
                 />
               ) : (
