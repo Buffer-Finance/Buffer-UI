@@ -210,6 +210,13 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
+      if (!oneCtPk) {
+        return toastify({
+          type: 'error',
+          msg: 'Please activate your Trading Account first.',
+          id: 'binaryBuy',
+        });
+      }
       if (!activeChain || !price) {
         return toastify({
           type: 'error',
