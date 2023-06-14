@@ -454,7 +454,11 @@ export const OverviewArbitrum = ({
                   valueStyle={tooltipValueClasses}
                   values={usdcPools.map((token) => {
                     const stats = data[`${token}openInterest`];
-                    if (stats) return (stats as toalTokenXstats).openInterest;
+                    if (stats)
+                      return toFixed(
+                        (stats as toalTokenXstats).openInterest,
+                        2
+                      );
                     else return '-';
                   })}
                 />
@@ -462,12 +466,15 @@ export const OverviewArbitrum = ({
             >
               <div className={underLineClass}>
                 $
-                {usdcPools.reduce((acc, curr) => {
-                  return add(
-                    acc,
-                    data[`${curr}openInterest`]?.openInterest || 0
-                  );
-                }, '0')}
+                {toFixed(
+                  usdcPools.reduce((acc, curr) => {
+                    return add(
+                      acc,
+                      data[`${curr}openInterest`]?.openInterest || 0
+                    );
+                  }, '0'),
+                  2
+                )}
               </div>
             </NumberTooltip>,
 
