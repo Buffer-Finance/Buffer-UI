@@ -37,7 +37,8 @@ export interface OngoingTradeSchema {
   environment: '421613' | '42161';
 }
 
-let signatureCache = null;
+export let signatureCache =
+  '0x1e8a7e159ab9eb4ac8770db32dce52e26366c52f91bbf224ef1d75d96fc656586058a5899701adda5956002fb1fdf53fda0d1aa981be6a493bc08914508bf2d51c';
 
 const getCachedSignature = async (oneCTWallet: Signer) => {
   if (!signatureCache) {
@@ -57,6 +58,7 @@ const useOngoingTrades = () => {
   const { data, error } = useSWR<OngoingTradeSchema[][]>([oneCTWallet], {
     fetcher: async (oneCTWallet) => {
       const signature = await getCachedSignature(oneCTWallet);
+      console.log(`ssssignature: `, signature);
       const res = await axios.get(`${baseUrl}trades/user/active/`, {
         params: {
           user_signature: signature,

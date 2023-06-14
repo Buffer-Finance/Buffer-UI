@@ -3,28 +3,28 @@ import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
 import { useState } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import OngoingTradesTable from './OngoingTradesTable';
-const tables = [
-  'Trades',
-  'Limit Orders',
-  'History',
-  'Platform Trades',
-  'Platform History',
-];
-const gap = [2];
+import LimitOrderTable from './LimitOrderTable';
+const tables = {
+  Trades: OngoingTradesTable,
+  'Limit Orders': LimitOrderTable,
+  History: OngoingTradesTable,
+  'Platform Trades': OngoingTradesTable,
+  'Platform History': OngoingTradesTable,
+};
+const gap = ['History'];
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useState(false);
-  const trades = useOngoingTrades();
-  console.log(`index-trades: `, trades);
   const [activeTable, setActiveTable] = useState('Trades');
+  const TableComponent = (tables as any)[activeTable];
   return (
     <div className="flex flex-col ">
       <div className="w-full flex items-center  justify-between p-3">
         <div className="flex gap-x-[15px]">
-          {tables.map((s) => (
+          {Object.keys(tables).map((s) => (
             <button
               onClick={() => setActiveTable(s)}
               className={`text-${s == activeTable ? '1' : '2'} text-f14 ${
-                gap.filter((i) => tables[i] == s).length
+                gap.filter((i) => i == s).length
                   ? ' pr-[10px] accordion-table-strip-right-border'
                   : ''
               }`}
@@ -50,7 +50,7 @@ const AccordionTable: React.FC<any> = ({}) => {
           expanded ? 'h-[400px]' : 'h-[0px]'
         } transition-all  overflow-hidden mx-3`}
       >
-        <OngoingTradesTable />
+        <TableComponent />
       </div>
     </div>
   );

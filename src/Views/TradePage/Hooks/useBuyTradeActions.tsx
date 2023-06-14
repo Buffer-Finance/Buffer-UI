@@ -289,6 +289,7 @@ export const useBuyTradeActions = (userInput: string) => {
           types: [...baseArgTypes, 'bool', ...baseArgsEndingTypes],
         },
       ];
+      console.log(`useBuyTradeActions-args: `, args);
 
       // try {
       const hashedMessage: string[] = ['partial', 'full'].map((s, idx) => {

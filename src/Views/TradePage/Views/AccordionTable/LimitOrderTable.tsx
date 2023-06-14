@@ -1,6 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
-import { CellContent, CellInfo } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import { atom, useAtom } from 'jotai';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import {
@@ -9,25 +9,17 @@ import {
   getDisplayTime,
   getDisplayTimeUTC,
 } from '@Utils/Dates/displayDateTime';
-import { BlackScholes } from '@Utils/Formulas/blackscholes';
 
 import { Variables } from '@Utils/Time';
-import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
-import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { ChangeEvent, useMemo } from 'react';
-import { divide, subtract } from '@Utils/NumString/stringArithmatics';
-import { BetState } from '@Hooks/useAheadTrades';
-import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
-import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import { CurrencyBitcoin, Launch } from '@mui/icons-material';
+import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
 import {
-  OngoingTradeSchema,
+  signatureCache,
   useOngoingTrades,
 } from '@Views/TradePage/Hooks/ongoingTrades';
-import { toFixed } from '@Utils/NumString';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import {
   AssetCell,
@@ -35,49 +27,62 @@ import {
 } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
+import { GreyBtn } from '@Views/Common/V2-Button';
+import { useState } from 'react';
+import axios from 'axios';
+import { baseUrl } from '@Views/TradePage/config';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { useAccount } from 'wagmi';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
 const headNameArray = [
   'Asset',
-  'Strike Price',
+  'TriggerPrice',
   'Current Price',
-  'Open Time',
-  'Time Left',
-  'Close Time',
+  'Duration',
+  'Order Expiry',
   'Trade Size',
-  'Probability',
+  '',
 ];
 
 enum TableColumn {
   Asset = 0,
-  Strike = 1,
+  TriggerPrice = 1,
   CurrentPrice = 2,
-  OpenTime = 3,
-  TimeLeft = 4,
-  CloseTime = 5,
-  TradeSize = 6,
-  Probability = 7,
+  Duration = 3,
+  OrderExpiry = 4,
+  TradeSize = 5,
+  ActionButtons = 6,
 }
 const priceDecimals = 8;
 
-const OngoingTradesTable = () => {
+const LimitOrderTable = () => {
   // const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
-  const [ongoingData] = useOngoingTrades();
+  const [_, ongoingData] = useOngoingTrades();
   const markets = useMarketsConfig();
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
+  const { activeChain } = useActiveChain();
 
-  const queuedTradeFallBack = (trade: OngoingTradeSchema, icon?: boolean) => {
-    if (!trade.close_time) {
-      if (icon) return 'icon';
-      return '-';
-    }
-    return null;
+  const { address } = useAccount();
+  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
+  const handleCancel = async (queue_id) => {
+    setCancelLoading(queue_id);
+
+    const res = await axios.get(`${baseUrl}/instant-trading/trade/cancel/`, {
+      params: {
+        user_signature: signatureCache,
+        user_address: address,
+        queue_id,
+        environment: activeChain.id,
+      },
+    });
+    setCancelLoading(null);
   };
-
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = ongoingData?.[row];
 
@@ -90,8 +95,12 @@ const OngoingTradesTable = () => {
       return !!pool;
     });
     if (!trade) return 'Problem';
+    let currentEpoch = Math.round(new Date().getTime() / 1000);
+
+    console.log(`LimitOrderTable-trade: `, trade);
+
     switch (col) {
-      case TableColumn.Strike:
+      case TableColumn.TriggerPrice:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
       case TableColumn.Asset:
         return <AssetCell configData={tradeMarket} currentRow={trade} />;
@@ -102,27 +111,17 @@ const OngoingTradesTable = () => {
             data={getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })}
           />
         );
-      case TableColumn.OpenTime:
+      case TableColumn.Duration:
         return (
-          queuedTradeFallBack(trade) || (
-            <DisplayTime ts={trade.queued_timestamp} />
-          )
+          <div>
+            {formatDistanceExpanded(
+              Variables(+trade.expiration_time * 1000 - currentEpoch)
+            )}
+          </div>
         );
-      case TableColumn.TimeLeft:
-        let currentEpoch = Math.round(new Date().getTime() / 1000);
-        return (
-          queuedTradeFallBack(trade) || (
-            <div>
-              {formatDistanceExpanded(
-                Variables(+trade.close_time - currentEpoch)
-              )}
-            </div>
-          )
-        );
-      case TableColumn.CloseTime:
-        return (
-          queuedTradeFallBack(trade) || <DisplayTime ts={trade.close_time} />
-        );
+      case TableColumn.OrderExpiry:
+        return <DisplayTime ts={+trade.expiration_time * 1000} />;
+
       case TableColumn.TradeSize:
         return (
           <Display
@@ -131,13 +130,16 @@ const OngoingTradesTable = () => {
             unit={tradeMarket?.token1}
           />
         );
-      case TableColumn.Probability:
+      case TableColumn.ActionButtons:
         return (
-          <div>
-            {getProbability(
-              trade,
-              +getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })
-            )}
+          <div className="flex items-center">
+            <GreyBtn onClick={console.log}>Edit</GreyBtn>
+            <GreyBtn
+              onClick={() => handleCancel(trade.queue_id)}
+              isLoading={cancelLoading == trade.queue_id}
+            >
+              Cancel
+            </GreyBtn>
           </div>
         );
     }
@@ -174,7 +176,7 @@ export const UserAddressColumn = ({ address }: { address: string }) => {
   );
 };
 
-export default OngoingTradesTable;
+export default LimitOrderTable;
 
 export const DisplayTime = ({ ts }: { ts: number | string }) => {
   return (
@@ -188,22 +190,4 @@ export const DisplayTime = ({ ts }: { ts: number | string }) => {
       </div>
     </NumberTooltip>
   );
-};
-
-const getProbability = (trade: OngoingTradeSchema, price: number) => {
-  console.log(`OngoingTradesTable-price: `, price);
-  let currentEpoch = Math.round(Date.now() / 1000);
-  const IV = 1.2;
-
-  const probability =
-    BlackScholes(
-      true,
-      trade.is_above,
-      price,
-      +trade.strike / 1 ** priceDecimals,
-      +trade.close_time - currentEpoch,
-      0,
-      12000 / 10000
-    ) * 100;
-  return probability;
 };
