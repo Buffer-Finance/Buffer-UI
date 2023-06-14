@@ -81,31 +81,17 @@ const OngoingTradesTable = () => {
     if (!trade) return 'Problem';
     switch (col) {
       case TableColumn.Strike:
-        return (
-          <div>
-            <StrikePriceComponent trade={trade} configData={tradeMarket} />
-          </div>
-        );
+        return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
       case TableColumn.Asset:
-        return (
-          <div>
-            <AssetCell configData={tradeMarket} currentRow={trade} />
-          </div>
-        );
+        return <AssetCell configData={tradeMarket} currentRow={trade} />;
       case TableColumn.CurrentPrice:
         return (
-          <div>
-            <Display
-              data={getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })}
-            />
-          </div>
+          <Display
+            data={getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })}
+          />
         );
       case TableColumn.OpenTime:
-        return (
-          <div>
-            <DisplayTime ts={trade.queued_timestamp} />
-          </div>
-        );
+        return <DisplayTime ts={trade.queued_timestamp} />;
       case TableColumn.TimeLeft:
         return (
           <div>
@@ -115,20 +101,14 @@ const OngoingTradesTable = () => {
           </div>
         );
       case TableColumn.CloseTime:
-        return (
-          <div>
-            <DisplayTime ts={trade.expiration_time} />
-          </div>
-        );
+        return <DisplayTime ts={trade.expiration_time} />;
       case TableColumn.TradeSize:
         return (
-          <div>
-            <Display
-              data={divide(trade.trade_size, 6)}
-              className="items-start"
-              unit={tradeMarket?.token1}
-            />
-          </div>
+          <Display
+            data={divide(trade.trade_size, 6)}
+            className="!justify-start"
+            unit={tradeMarket?.token1}
+          />
         );
     }
     return 'Unhandled Body';
