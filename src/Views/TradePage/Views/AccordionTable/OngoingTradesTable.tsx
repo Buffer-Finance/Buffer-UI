@@ -1,6 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent, CellInfo } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import {
@@ -24,7 +24,12 @@ import { priceAtom } from '@Hooks/usePrice';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
 import { toFixed } from '@Utils/NumString';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { StrikePriceComponent } from '@Views/Common/TableComponents/TableComponents';
+import {
+  AssetCell,
+  StrikePriceComponent,
+} from '@Views/Common/TableComponents/TableComponents';
+import { Display } from '@Views/Common/Tooltips/Display';
+import { getPriceFromKlines } from '@TV/useDataFeed';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -54,15 +59,17 @@ const priceDecimals = 8;
 const OngoingTradesTable = () => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
-  const ongoingData = useOngoingTrades();
+  const [ongoingData] = useOngoingTrades();
+  console.log(`OngoingTradesTable-ongoingData: `, ongoingData);
   const markets = useMarketsConfig();
-
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = ongoingData?.[row];
+    console.log(`OngoingTradesTable-trade: `, trade);
+
     const tradeMarket = markets?.find((pair) => {
       const pool = pair.pools.find(
         (pool) =>
@@ -80,7 +87,49 @@ const OngoingTradesTable = () => {
           </div>
         );
       case TableColumn.Asset:
-        return <div>{tradeMarket?.token0 + '-' + tradeMarket?.token1}</div>;
+        return (
+          <div>
+            <AssetCell configData={tradeMarket} currentRow={trade} />
+          </div>
+        );
+      case TableColumn.CurrentPrice:
+        return (
+          <div>
+            <Display
+              data={getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })}
+            />
+          </div>
+        );
+      case TableColumn.OpenTime:
+        return (
+          <div>
+            <DisplayTime ts={trade.queued_timestamp} />
+          </div>
+        );
+      case TableColumn.TimeLeft:
+        return (
+          <div>
+            {formatDistanceExpanded(
+              Variables(+trade.expiration_time - +trade.queued_timestamp)
+            )}
+          </div>
+        );
+      case TableColumn.CloseTime:
+        return (
+          <div>
+            <DisplayTime ts={trade.expiration_time} />
+          </div>
+        );
+      case TableColumn.TradeSize:
+        return (
+          <div>
+            <Display
+              data={divide(trade.trade_size, 6)}
+              className="items-start"
+              unit={tradeMarket?.token1}
+            />
+          </div>
+        );
     }
     return 'Unhandled Body';
   };
@@ -116,3 +165,17 @@ export const UserAddressColumn = ({ address }: { address: string }) => {
 };
 
 export default OngoingTradesTable;
+
+export const DisplayTime = ({ ts }: { ts: number | string }) => {
+  return (
+    <NumberTooltip
+      content={`${getDisplayTimeUTC(+ts)} ${getDisplayDateUTC(+ts)} UTC`}
+    >
+      <div className="w-max">
+        <CellContent
+          content={[`${getDisplayTime(+ts)}`, `${getDisplayDate(+ts)}`]}
+        />
+      </div>
+    </NumberTooltip>
+  );
+};
