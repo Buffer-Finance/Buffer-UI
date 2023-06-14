@@ -93,10 +93,11 @@ const OngoingTradesTable = () => {
         id: '232',
       });
     setCancelLoading(queuedId);
-    const res = await cancelQueueTrade([queuedId], {
+    const res = await cancelQueueTrade({
       user_signature: signatureCache,
       user_address: address,
       environment: activeChain.id,
+      queue_id: queuedId,
     });
     setCancelLoading(null);
   };

@@ -67,13 +67,11 @@ export const queuedTradeFallBack = (
   return null;
 };
 
-export const cancelQueueTrade = async (
-  body: number[],
-  params: {
-    user_signature: string;
-    user_address: `0x${string}`;
-    environment: number;
-  }
-) => {
-  return await axios.post(`${baseUrl}trade/cancel/`, body, { params });
+export const cancelQueueTrade = async (params: {
+  user_signature: string;
+  user_address: `0x${string}`;
+  environment: number;
+  queue_id: number;
+}) => {
+  return await axios.post(`${baseUrl}trade/cancel/`, null, { params });
 };

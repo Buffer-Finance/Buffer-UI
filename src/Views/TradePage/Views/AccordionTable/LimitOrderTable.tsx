@@ -83,10 +83,11 @@ const LimitOrderTable = () => {
         id: '232',
       });
     setCancelLoading(queue_id);
-    const res = await cancelQueueTrade([queue_id], {
+    const res = await cancelQueueTrade({
       user_signature: signatureCache,
       user_address: address,
       environment: activeChain.id,
+      queue_id,
     });
     setCancelLoading(null);
   };
