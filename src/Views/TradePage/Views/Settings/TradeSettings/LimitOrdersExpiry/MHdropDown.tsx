@@ -11,7 +11,13 @@ import {
 export const MHdropDown: React.FC<{
   activeFrame: string;
   setFrame: (newFrame: string) => void;
-}> = ({ activeFrame, setFrame }) => {
+  className?: string;
+}> = ({
+  activeFrame,
+  setFrame,
+
+  className = '',
+}) => {
   function onClick(e: ClickEvent) {
     setFrame(e.value);
   }
@@ -21,9 +27,7 @@ export const MHdropDown: React.FC<{
       menuButton={({ open }) => {
         return (
           <MenuButton
-            className={
-              '!bg-[#1c1c28] rounded-[2px] py-2 text-f12 text-[#C3C2D4] px-3 font-medium'
-            }
+            className={`${className} !bg-[#1c1c28] rounded-[2px] py-2 text-f12 text-[#C3C2D4] px-3 font-medium`}
           >
             <RowGap gap="4px">
               {activeFrame}
