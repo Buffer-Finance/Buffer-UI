@@ -37,6 +37,7 @@ export const EditModal: React.FC<{
   const [price, setPrice] = useState('0');
   const [duration, setduration] = useState({ min: '00:05', max: '24:00' });
   useEffect(() => {
+    if (!trade) return;
     setPrice(divide(trade.strike, 8)!);
     setMinutes(trade.limit_order_expiration / 60);
     setFrame('m');
