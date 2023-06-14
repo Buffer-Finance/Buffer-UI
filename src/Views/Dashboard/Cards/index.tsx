@@ -2,7 +2,7 @@ import { Skeleton } from '@mui/material';
 import BufferLogo from 'public/ComponentSVGS/bufferLogo';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { getBalance } from '@Views/Common/AccountInfo';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -121,7 +121,6 @@ export const StatsTotalStats = ({ data }: { data: IOverview | null }) => {
   const totalDays = Math.ceil(
     (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
   );
-  console.log('totalDays', totalDays);
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
@@ -225,10 +224,11 @@ export const OverviewArbitrum = ({
     return Object.values(poolDisplayKeyMapping);
   }, [poolDisplayKeyMapping]);
 
-  console.log(poolDisplayNameMapping, keys, 'poolDisplayNameMapping');
   function getAverageTradeVolume(volume: string, days: string) {
     return divide(volume, days);
   }
+  const usdcPools = ['USDC', 'USDC_POL'];
+
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
@@ -449,10 +449,10 @@ export const OverviewArbitrum = ({
             <NumberTooltip
               content={
                 <TableAligner
-                  keysName={['USDC', 'USDC_POL']}
+                  keysName={usdcPools}
                   keyStyle={tooltipKeyClasses}
                   valueStyle={tooltipValueClasses}
-                  values={['USDC', 'USDC-POL'].map((token) => {
+                  values={usdcPools.map((token) => {
                     const stats = data[`${token}openInterest`];
                     if (stats) return (stats as toalTokenXstats).openInterest;
                     else return '-';
@@ -462,9 +462,12 @@ export const OverviewArbitrum = ({
             >
               <div className={underLineClass}>
                 $
-                {tokens.reduce((acc, curr) => {
-                  return acc + data[`${curr}openInterest`]?.openInterest || 0;
-                }, 0)}
+                {usdcPools.reduce((acc, curr) => {
+                  return add(
+                    acc,
+                    data[`${curr}openInterest`]?.openInterest || 0
+                  );
+                }, '0')}
               </div>
             </NumberTooltip>,
 
