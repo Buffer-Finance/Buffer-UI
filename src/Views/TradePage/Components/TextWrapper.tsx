@@ -24,6 +24,7 @@ export const SettingsComponentHeader = styled.div<{ fontSize?: string }>`
 export const BuyTradeHeadText = styled.div`
   font-size: 12px;
   color: #7f87a7;
+  white-space: nowrap;
   font-weight: 400;
   ::first-letter {
     text-transform: capitalize;

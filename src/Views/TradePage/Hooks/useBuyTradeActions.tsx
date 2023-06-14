@@ -41,6 +41,8 @@ import { timeSelectorAtom, tradeSettingsAtom } from '../atoms';
 import { useSettlementFee } from './useSettlementFee';
 import UpIcon from '@SVG/Elements/UpIcon';
 import DownIcon from '@SVG/Elements/DownIcon';
+import { generateTradeSignature } from './generateTradeSignature';
+import { duration } from '@mui/material';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -251,6 +253,10 @@ export const useBuyTradeActions = (userInput: string) => {
 
       let currentTimestamp = Date.now();
       let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
+      const oneCTWallet = new ethers.Wallet(
+        oneCtPk!,
+        provider as ethers.providers.StaticJsonRpcProvider
+      );
       let baseArgs = [
         address,
         toFixed(multiply(userInput, decimals), 0),
@@ -262,56 +268,20 @@ export const useBuyTradeActions = (userInput: string) => {
         referralData[2],
         highestTierNFT?.tokenId || '0',
       ];
-
-      const baseArgTypes = [
-        'address',
-        'uint256',
-        'uint256',
-        'address',
-        'uint256',
-        'uint256',
-        'bool',
-        'string',
-        'uint256',
-      ];
-      const baseArgsEnding = [
+      const signatures = await generateTradeSignature(
+        address,
+        multiply(userInput, decimals),
+        expirationInMins,
+        option_contract,
+        price,
+        toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+        settings.partialFill,
+        referralData[2],
+        highestTierNFT?.tokenId || '0',
         currentUTCTimestamp,
-        settelmentFee?.settlement_fee,
-      ];
-      const baseArgsEndingTypes = ['uint256', 'uint256'];
-      const args = [
-        {
-          values: [...baseArgs, ...baseArgsEnding],
-          types: [...baseArgTypes, ...baseArgsEndingTypes],
-        },
-        {
-          values: [...baseArgs, customTrade.is_up, ...baseArgsEnding],
-          types: [...baseArgTypes, 'bool', ...baseArgsEndingTypes],
-        },
-      ];
-      console.log(`useBuyTradeActions-args: `, args);
-
-      // try {
-      const hashedMessage: string[] = ['partial', 'full'].map((s, idx) => {
-        return ethers.utils.solidityKeccak256(
-          args[idx].types,
-          args[idx].values
-        );
-      });
-      const id = hashedMessage[0];
-      console.log(`useBuyTradeActions-hashMessage: `, id);
-      toastify({
-        id,
-        msg: 'Transaction confirmation in progress...',
-        type: 'info',
-        inf: 1,
-      });
-      const oneCTWallet = new ethers.Wallet(
-        oneCtPk!,
-        provider as ethers.providers.StaticJsonRpcProvider
-      );
-      const signatures = await Promise.all(
-        hashedMessage.map((s) => oneCTWallet?.signMessage(arrayify(s)))
+        settelmentFee?.settlement_fee!,
+        customTrade.is_up,
+        oneCTWallet
       );
       const apiParams = {
         signature_timestamp: currentUTCTimestamp,
@@ -369,7 +339,7 @@ export const useBuyTradeActions = (userInput: string) => {
         </div>
       );
       toastify({
-        id,
+        price,
         type: 'success',
         timings: 100,
         body: null,

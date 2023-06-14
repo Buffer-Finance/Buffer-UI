@@ -3,9 +3,14 @@ import { AccordionTable } from './Views/AccordionTable';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { BuyTrade } from './Views/BuyTrade';
 import { PinnedMarkets } from './Views/Markets/PinnedMarkets';
-import { useAtomValue } from 'jotai';
-import { tradePanelPositionSettingsAtom } from './atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
+import {
+  selectedOrderToEditAtom,
+  tradePanelPositionSettingsAtom,
+} from './atoms';
 import { tradePanelPosition } from './type';
+import { EditModal } from './Views/EditModal';
+import { ModalBase } from 'src/Modals/BaseModal';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -33,8 +38,21 @@ const TradePage: React.FC<any> = ({}) => {
 export { TradePage };
 
 export const EssentialModals = () => {
+  const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
+  const selectedTrade = useAtomValue(selectedOrderToEditAtom);
+
   return (
     <>
+      <ModalBase
+        className="!p-[0px]"
+        open={selectedTrade ? true : false}
+        onClose={() => setSelectedTrade(null)}
+      >
+        <EditModal
+          trade={selectedTrade?.trade!}
+          market={selectedTrade?.market!}
+        />
+      </ModalBase>
       <OneCTModal />
     </>
   );

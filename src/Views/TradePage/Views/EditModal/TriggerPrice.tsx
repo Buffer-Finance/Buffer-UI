@@ -2,8 +2,8 @@ import { RowBetween } from '@Views/TradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
 
 export const TriggerPrice: React.FC<{
-  price: number;
-  setPrice: (newPrice: number) => void;
+  price: string;
+  setPrice: (newPrice: string) => void;
 }> = ({ price, setPrice }) => {
   return (
     <RowBetween>
@@ -11,8 +11,24 @@ export const TriggerPrice: React.FC<{
       <input
         value={price}
         type="number"
-        onChange={(e) => setPrice(Number(e.target.value))}
-        className="border-none bg-[#282b39] text-f14 px-2 outline-none text-center text-1 rounded-sm w-[85px]"
+        onChange={(e) => setPrice(e.target.value)}
+        className="!w-full border-none bg-[#282b39] text-f14 px-2 outline-none text-center text-1 rounded-sm "
+      />
+    </RowBetween>
+  );
+};
+export const LimitOrderTradeSize: React.FC<{
+  size: string;
+  setSize: (newSize: string) => void;
+}> = ({ size, setSize }) => {
+  return (
+    <RowBetween>
+      <BuyTradeHeadText>Trade Size</BuyTradeHeadText>
+      <input
+        value={size}
+        type="number"
+        onChange={(e) => setSize(e.target.value)}
+        className="!w-full border-none bg-[#282b39] text-f14 px-2 outline-none text-center text-1 rounded-sm "
       />
     </RowBetween>
   );

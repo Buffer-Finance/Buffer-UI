@@ -2,6 +2,8 @@ import { atom } from 'jotai';
 import { defaultSelectedTime, defaultSettings } from './config';
 import { HHMMToSeconds } from './utils';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
+import { OngoingTradeSchema } from './Hooks/ongoingTrades';
+import { marketType } from './type';
 
 //Share Atoms
 export const shareSettingsAtom = atomWithLocalStorage(
@@ -80,3 +82,8 @@ export const tradeTypeAtom = atom<'Market' | 'Limit'>('Market');
 export const limitOrderStrikeAtom = atom<null | string>(null);
 
 export const isTableShownAtom = atom<boolean>(false);
+
+export const selectedOrderToEditAtom = atom<null | {
+  trade: OngoingTradeSchema;
+  market: marketType;
+}>(null);

@@ -3,6 +3,12 @@ export type marketType = {
   category: string;
   token0: string;
   token1: string;
+  tv_id: string;
+  pair: string;
+  price_precision: number;
+  full_name: string;
+  img: string;
+  pythId: string;
   pools: {
     pool: string;
     max_fee: string;

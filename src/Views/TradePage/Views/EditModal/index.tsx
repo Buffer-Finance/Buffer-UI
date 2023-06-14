@@ -10,20 +10,46 @@ import {
   EditTextValueText,
   SettingsComponentHeader,
 } from '@Views/TradePage/Components/TextWrapper';
-import { TriggerPrice } from './TriggerPrice';
-import { useState } from 'react';
-import { directionBtn } from '@Views/TradePage/type';
+import { LimitOrderTradeSize, TriggerPrice } from './TriggerPrice';
+import { useEffect, useState } from 'react';
+import { directionBtn, marketType } from '@Views/TradePage/type';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
+import { ModalBase } from 'src/Modals/BaseModal';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
+import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
+import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
+import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
+import { ethers } from 'ethers';
+import { arrayify } from 'ethers/lib/utils.js';
 
-export const EditModal: React.FC = () => {
-  const [price, setPrice] = useState(0);
+export const EditModal: React.FC<{
+  trade: OngoingTradeSchema;
+  market: marketType;
+}> = ({ trade, market }) => {
+  console.log(`index-trade: `, trade);
   const [buttonDirection, setButtonDirection] = useState(directionBtn.Up);
   const [frame, setFrame] = useState('m');
   const [minutes, setMinutes] = useState(0);
   const [currentTime, setCurrentTime] = useState('00:15');
-  const tradeSize = 123.123;
-  const pair = 'BTC-USD';
+  const [size, setSize] = useState('0');
+  const [price, setPrice] = useState('0');
+  const [duration, setduration] = useState({ min: '00:05', max: '24:00' });
+  useEffect(() => {
+    setPrice(divide(trade.strike, 8)!);
+    setMinutes(trade.limit_order_expiration / 60);
+    setFrame('m');
+    const pool = market.pools.find(
+      (p) =>
+        p.optionContract.toLowerCase() == trade.target_contract.toLowerCase()
+    );
+    // setCurrentTime(timeToMins())
+
+    setSize(divide(trade.trade_size, 6)!);
+    setButtonDirection(trade.is_above ? directionBtn.Up : directionBtn.Down);
+    console.log(`ddindex-trade: `, trade.close_time - trade.queued_timestamp);
+  }, [trade]);
   function onTimeChange(value: number) {
     setMinutes(value);
     //convert in whatever format needed
@@ -31,29 +57,27 @@ export const EditModal: React.FC = () => {
     } else {
     }
   }
-  const minDuration = '00:05';
-  const maxDuration = '24:00';
-
+  const editHandler = () => {
+    console.log('handle edit');
+  };
+  if (!trade) return <></>;
   return (
     <EditModalBackground>
       <RowGap gap="6px" className="mb-3">
         <div className="h-[20] w-[20px]">
-          <PairTokenImage pair={pair} />
+          <PairTokenImage pair={market.pair} />
         </div>
         <SettingsComponentHeader fontSize="14px">
-          {pair}
+          {market.pair}
         </SettingsComponentHeader>
       </RowGap>
       <div className="data">
         <ColumnGap gap="12px">
-          <RowBetween>
-            <BuyTradeHeadText>Trade size</BuyTradeHeadText>
-            <EditTextValueText>{tradeSize}</EditTextValueText>
-          </RowBetween>
+          <LimitOrderTradeSize size={size} setSize={setPrice} />
           <TimePicker
             currentTime={currentTime}
-            max_duration={maxDuration}
-            min_duration={minDuration}
+            max_duration={duration.max}
+            min_duration={duration.min}
             setCurrentTime={setCurrentTime}
           />{' '}
           <RowBetween>
@@ -71,7 +95,7 @@ export const EditModal: React.FC = () => {
             activeBtn={buttonDirection}
             setActiveBtn={setButtonDirection}
           />
-          <SaveButton />
+          <SaveButton onClick={editHandler} />
         </ColumnGap>
       </div>
     </EditModalBackground>

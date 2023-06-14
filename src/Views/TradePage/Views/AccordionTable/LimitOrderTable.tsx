@@ -1,6 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useSetAtom } from 'jotai';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import {
@@ -36,6 +36,7 @@ import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { cancelQueueTrade } from './Common';
 import { useToast } from '@Contexts/Toast';
+import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -64,6 +65,7 @@ const LimitOrderTable = () => {
   // const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const [_, ongoingData] = useOngoingTrades();
+  const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const markets = useMarketsConfig();
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
@@ -102,7 +104,7 @@ const LimitOrderTable = () => {
       );
       return !!pool;
     });
-    if (!trade) return 'Problem';
+    if (!trade || !tradeMarket) return 'Problem';
     let currentEpoch = Math.round(new Date().getTime() / 1000);
 
     console.log(`LimitOrderTable-trade: `, trade);
@@ -141,7 +143,11 @@ const LimitOrderTable = () => {
       case TableColumn.ActionButtons:
         return (
           <div className="flex items-center">
-            <GreyBtn onClick={console.log}>Edit</GreyBtn>
+            <GreyBtn
+              onClick={() => setSelectedTrade({ trade, market: tradeMarket })}
+            >
+              Edit
+            </GreyBtn>
             <GreyBtn
               onClick={() => handleCancel(trade.queue_id)}
               isLoading={cancelLoading == trade.queue_id}
