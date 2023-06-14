@@ -15,7 +15,7 @@ import { Variables } from '@Utils/Time';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { ChangeEvent, useMemo } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { divide, subtract } from '@Utils/NumString/stringArithmatics';
 import { BetState } from '@Hooks/useAheadTrades';
 import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
@@ -25,6 +25,7 @@ import { CurrencyBitcoin, Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
 import {
   OngoingTradeSchema,
+  signatureCache,
   useOngoingTrades,
 } from '@Views/TradePage/Hooks/ongoingTrades';
 import { toFixed } from '@Utils/NumString';
@@ -35,6 +36,16 @@ import {
 } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
+import { GreyBtn } from '@Views/Common/V2-Button';
+import {
+  DisplayTime,
+  cancelQueueTrade,
+  getProbability,
+  queuedTradeFallBack,
+} from './Common';
+import { useAccount } from 'wagmi';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useToast } from '@Contexts/Toast';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -66,16 +77,28 @@ const OngoingTradesTable = () => {
   const [marketPrice] = useAtom(priceAtom);
   const [ongoingData] = useOngoingTrades();
   const markets = useMarketsConfig();
+  const { activeChain } = useActiveChain();
+  const { address } = useAccount();
+  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-
-  const queuedTradeFallBack = (trade: OngoingTradeSchema, icon?: boolean) => {
-    if (!trade.close_time) {
-      if (icon) return 'icon';
-      return '-';
-    }
-    return null;
+  const toastify = useToast();
+  const cancelHandler = async (queuedId: number) => {
+    if (!address) return;
+    if (cancelLoading)
+      return toastify({
+        msg: 'Please wait for prev transaction.',
+        type: 'error',
+        id: '232',
+      });
+    setCancelLoading(queuedId);
+    const res = await cancelQueueTrade([queuedId], {
+      user_signature: signatureCache,
+      user_address: address,
+      environment: activeChain.id,
+    });
+    setCancelLoading(null);
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
@@ -111,10 +134,10 @@ const OngoingTradesTable = () => {
       case TableColumn.TimeLeft:
         let currentEpoch = Math.round(new Date().getTime() / 1000);
         return (
-          queuedTradeFallBack(trade) || (
+          queuedTradeFallBack(trade, true) || (
             <div>
               {formatDistanceExpanded(
-                Variables(+trade.close_time - currentEpoch)
+                Variables(+trade.expiration_time - currentEpoch)
               )}
             </div>
           )
@@ -132,7 +155,17 @@ const OngoingTradesTable = () => {
           />
         );
       case TableColumn.Probability:
-        return (
+        return queuedTradeFallBack(trade, true) ? (
+          <GreyBtn
+            className="!text-1"
+            onClick={() => {
+              cancelHandler(trade.queue_id);
+            }}
+            isLoading={cancelLoading == trade.queue_id}
+          >
+            Cancel
+          </GreyBtn>
+        ) : (
           <div>
             {getProbability(
               trade,
@@ -175,35 +208,3 @@ export const UserAddressColumn = ({ address }: { address: string }) => {
 };
 
 export default OngoingTradesTable;
-
-export const DisplayTime = ({ ts }: { ts: number | string }) => {
-  return (
-    <NumberTooltip
-      content={`${getDisplayTimeUTC(+ts)} ${getDisplayDateUTC(+ts)} UTC`}
-    >
-      <div className="w-max">
-        <CellContent
-          content={[`${getDisplayTime(+ts)}`, `${getDisplayDate(+ts)}`]}
-        />
-      </div>
-    </NumberTooltip>
-  );
-};
-
-const getProbability = (trade: OngoingTradeSchema, price: number) => {
-  console.log(`OngoingTradesTable-price: `, price);
-  let currentEpoch = Math.round(Date.now() / 1000);
-  const IV = 1.2;
-
-  const probability =
-    BlackScholes(
-      true,
-      trade.is_above,
-      price,
-      +trade.strike / 1 ** priceDecimals,
-      +trade.close_time - currentEpoch,
-      0,
-      12000 / 10000
-    ) * 100;
-  return probability;
-};

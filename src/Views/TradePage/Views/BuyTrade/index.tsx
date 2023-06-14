@@ -78,7 +78,6 @@ export const BuyTrade: React.FC = () => {
         isMarketOpen={isMarketOpen}
       />
       <ActiveTrades />
-      <TradeCard />
     </BuyTradeBackground>
   );
 };
