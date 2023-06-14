@@ -1,8 +1,10 @@
 import { EditIconSVG } from '@Views/TradePage/Components/EditIconSVG';
 import { durations } from '@Views/TradePage/config';
-import { HHMMToSeconds } from '@Views/TradePage/utils';
+import { HHMMToSeconds, secondsToHHMM } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { MHdropDown } from '../../Settings/TradeSettings/LimitOrdersExpiry/MHdropDown';
+import { MinutesInput } from '../../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
 
 const TimePickerBackground = styled.div`
   .duration-container {
@@ -48,35 +50,26 @@ export const TimePicker: React.FC<{
     <TimePickerBackground>
       <div className="duration-container ">
         {durations.map((single, idx) => {
-          const isLastElement = idx === durations.length - 1;
-          const durationIntoSeconds = !isLastElement
-            ? single.duration
-            : single.duration - 60;
+          const durationIntoSeconds = single.duration;
 
-          const isDisabled = !isLastElement
-            ? durationIntoSeconds > HHMMToSeconds(max_duration) ||
-              durationIntoSeconds < HHMMToSeconds(min_duration)
-            : false;
+          const isDisabled =
+            durationIntoSeconds > HHMMToSeconds(max_duration) ||
+            durationIntoSeconds < HHMMToSeconds(min_duration);
 
-          const singleDuration = isLastElement
-            ? single.duration - 60
-            : single.duration;
+          const singleDuration = single.duration;
 
           return (
             <div
               key={single.duration}
               onClick={() => {
                 if (isDisabled) return;
-                if (isLastElement) return setOpenCustomInput(true);
                 onSelect?.(single);
                 setCurrentTime(single.time);
                 setOpenCustomInput(false);
               }}
               className={
                 'each-duration py-1 font-medium text-f14  transition-colors ' +
-                ((HHMMToSeconds(currentTime) === singleDuration &&
-                  !isDisabled) ||
-                (isLastElement && openCustomInput)
+                (HHMMToSeconds(currentTime) === singleDuration && !isDisabled
                   ? 'active text-1 '
                   : 'text-2') +
                 (isDisabled
@@ -84,15 +77,57 @@ export const TimePicker: React.FC<{
                   : ' hover:text-1 hover:brightness-150')
               }
             >
-              {isLastElement ? (
-                <EditIconSVG />
-              ) : (
-                single.name.map((d) => <div key={d}>{d}</div>)
-              )}
+              {single.name.map((d) => (
+                <div key={d}>{d}</div>
+              ))}
             </div>
           );
         })}
+        <button
+          className={`each-duration ${openCustomInput ? 'active' : ''}`}
+          onClick={() => {
+            setOpenCustomInput(true);
+          }}
+        >
+          <EditTime
+            showCustomInput={openCustomInput}
+            setTime={setCurrentTime}
+          />
+        </button>
       </div>
     </TimePickerBackground>
   );
+};
+
+const EditTime: React.FC<{
+  showCustomInput: boolean;
+  setTime: (newMMHHtime: string) => void;
+}> = ({ showCustomInput, setTime }) => {
+  const [activeFrame, setActiveFrame] = useState('m');
+  const [inputValue, setInputValue] = useState(30);
+
+  function onChange(newInput: number) {
+    setInputValue(newInput);
+
+    let seconds = 0;
+    if (activeFrame === 'm') {
+      seconds = newInput * 60;
+    } else {
+      seconds = newInput * 3600;
+    }
+    const newMMHHtime = secondsToHHMM(seconds);
+    setTime(newMMHHtime);
+  }
+
+  if (showCustomInput) {
+    return (
+      <MinutesInput
+        activeFrame={activeFrame}
+        setFrame={setActiveFrame}
+        minutes={inputValue}
+        onChange={onChange}
+      />
+    );
+  }
+  return <EditIconSVG />;
 };

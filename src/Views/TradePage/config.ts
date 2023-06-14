@@ -108,11 +108,6 @@ export const durations = [
     time: '04:00',
     name: ['4h'],
   },
-  {
-    duration: 24 * 60 * 60,
-    time: '23:59',
-    name: ['24h'],
-  },
 ];
 
 export const SLIPPAGE_DEFAULTS = [0.1, 0.5, 1.0];
