@@ -53,3 +53,8 @@ export enum tradePanelPosition {
   Left,
   Right,
 }
+
+export enum directionBtn {
+  Up,
+  Down,
+}

@@ -42,7 +42,7 @@ export const BuyTrade: React.FC = () => {
     return (
       <Skeleton
         variant="rectangular"
-        className="!w-[500px] !h-[250px] lc !rounded-md mx-2 mt-3 "
+        className="!w-[275px] !h-[250px] lc !rounded-md mx-2 mt-3 "
       />
     );
   const tradeToken = poolDetails.token;
