@@ -10,6 +10,7 @@ import { TradePoolChip } from './TradePoolChip';
 import { TradeTypeChip } from './TradeTypeChip';
 import { TradeDataView } from './TradeDataView';
 import { TradeActionButton } from './TradeActionButton';
+import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -17,7 +18,7 @@ const TradeCardBackground = styled.div`
   border-radius: 5px;
 `;
 
-export const TradeCard: React.FC = () => {
+export const TradeCard = ({ trade }: { trade: OngoingTradeSchema }) => {
   const pairName = 'BTC-USD';
   const isUp = true;
   const width = 50;

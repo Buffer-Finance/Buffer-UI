@@ -78,3 +78,5 @@ export const radioValueAtom = atom('USDC');
 export const chartNumberAtom = atomWithLocalStorage('hello', 1);
 export const tradeTypeAtom = atom<'Market' | 'Limit'>('Market');
 export const limitOrderStrikeAtom = atom<null | string>(null);
+
+export const isTableShownAtom = atom<boolean>(false);

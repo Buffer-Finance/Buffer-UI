@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import OngoingTradesTable from './OngoingTradesTable';
 import LimitOrderTable from './LimitOrderTable';
+import { useAtom } from 'jotai';
+import { isTableShownAtom } from '@Views/TradePage/atoms';
 const tables = {
   Trades: OngoingTradesTable,
   'Limit Orders': LimitOrderTable,
@@ -12,8 +14,9 @@ const tables = {
   'Platform History': OngoingTradesTable,
 };
 const gap = ['History'];
+
 const AccordionTable: React.FC<any> = ({}) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useAtom(isTableShownAtom);
   const [activeTable, setActiveTable] = useState('Trades');
   const TableComponent = (tables as any)[activeTable];
   return (
@@ -22,7 +25,10 @@ const AccordionTable: React.FC<any> = ({}) => {
         <div className="flex gap-x-[15px]">
           {Object.keys(tables).map((s) => (
             <button
-              onClick={() => setActiveTable(s)}
+              onClick={() => {
+                setExpanded(true);
+                setActiveTable(s);
+              }}
               className={`text-${s == activeTable ? '1' : '2'} text-f14 ${
                 gap.filter((i) => i == s).length
                   ? ' pr-[10px] accordion-table-strip-right-border'
@@ -37,7 +43,7 @@ const AccordionTable: React.FC<any> = ({}) => {
           className="flex items-center gap-x-2 px-4 text-f14 transition group"
           onClick={() => setExpanded((p) => !p)}
         >
-          Show Position{' '}
+          {expanded ? 'Hide ' : 'Show '} Positions{' '}
           <DDArrow
             className={`transition scale group-hover:scale-150  ${
               expanded ? ' rotate-0' : 'rotate-180'

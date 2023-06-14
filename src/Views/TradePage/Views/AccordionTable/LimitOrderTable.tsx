@@ -34,6 +34,8 @@ import { baseUrl } from '@Views/TradePage/config';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { cancelQueueTrade } from './Common';
+import { useToast } from '@Contexts/Toast';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -69,16 +71,22 @@ const LimitOrderTable = () => {
   const { activeChain } = useActiveChain();
 
   const { address } = useAccount();
-  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
-  const handleCancel = async (queue_id) => {
-    setCancelLoading(queue_id);
+  const toastify = useToast();
 
-    const res = await axios.post(`${baseUrl}trade/cancel/`, [queue_id], {
-      params: {
-        user_signature: signatureCache,
-        user_address: address,
-        environment: activeChain.id,
-      },
+  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
+  const handleCancel = async (queue_id: number) => {
+    if (!address) return;
+    if (cancelLoading)
+      return toastify({
+        msg: 'Please wait for prev transaction.',
+        type: 'error',
+        id: '232',
+      });
+    setCancelLoading(queue_id);
+    const res = await cancelQueueTrade([queue_id], {
+      user_signature: signatureCache,
+      user_address: address,
+      environment: activeChain.id,
     });
     setCancelLoading(null);
   };
