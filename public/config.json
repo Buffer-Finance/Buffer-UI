@@ -246,8 +246,7 @@
         "is_pol": false
       }
     },
-    "pairs": [
-      {
+    "pairs": [{
         "max_duration": "04:00",
         "min_duration": "00:01",
         "max_utilization": 200,
@@ -259,8 +258,7 @@
         "token2": "USD",
         "full_name": "Bitcoin",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/btc.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0xc6C370741eCa565D2f10F0Aeee34E6398A7DBA4d",
@@ -288,8 +286,7 @@
         "token2": "USD",
         "full_name": "Ethereum",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eth.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x28b11Bde44236FBF2772ED6e0e2DD992B65ceCac",
@@ -317,8 +314,7 @@
         "token2": "USD",
         "full_name": "Euro",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/euro.png",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x25E845e9B6d361fE6aa1a796CcE010F55daA9A50",
@@ -346,15 +342,13 @@
         "token2": "USD",
         "full_name": "Pound",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/GBP.png",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x06f96c3c08679642d80878A51F5919dF1B380869",
-              "current": "0x105e1f5044e651309F7E2fc1114351Ab8dffBBE9"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x06f96c3c08679642d80878A51F5919dF1B380869",
+            "current": "0x105e1f5044e651309F7E2fc1114351Ab8dffBBE9"
           }
-        ]
+        }]
       }
     ],
     "graph": {
@@ -401,8 +395,7 @@
         "is_pol": false
       }
     },
-    "pairs": [
-      {
+    "pairs": [{
         "max_duration": "04:00",
         "min_duration": "00:03",
         "max_utilization": 200,
@@ -414,8 +407,7 @@
         "token2": "USD",
         "full_name": "Bitcoin",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/btc.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x08d5E019fB16f92822befaC9986E7b7402DAE610",
@@ -450,8 +442,7 @@
         "token2": "USD",
         "full_name": "Ethereum",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eth.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0xbC7DBEB9a7b158711b4B5fb0177F3E0bE024125a",
@@ -486,8 +477,7 @@
         "token2": "USD",
         "full_name": "Euro",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/euro.png",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x8DaC2Eb302DD9CcB3a9A23263BC021f6f1E8Cd9C",
@@ -522,8 +512,7 @@
         "token2": "USD",
         "full_name": "Pound",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/GBP.png",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0xc1925460Fe5669878D5963c29aC51677866dE67F",
@@ -558,15 +547,13 @@
         "token2": "USD",
         "full_name": "Solana",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/sol.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xf2E6Fd172f706ee12b3F9Fb1750086b0a72E1230",
-              "current": "0xFE9FAEAA880A6109F2ADF0E4257dC535c7a5Ba20"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0xf2E6Fd172f706ee12b3F9Fb1750086b0a72E1230",
+            "current": "0xFE9FAEAA880A6109F2ADF0E4257dC535c7a5Ba20"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -580,8 +567,7 @@
         "token2": "BTC",
         "full_name": "Ethereum",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eth.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x98ff74B8A3804ceb7B1cFaEb67d7d2C50Cf6bd10",
@@ -609,8 +595,7 @@
         "token2": "USD",
         "full_name": "Chainlink",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/link.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x5C95BDA32cDE3A8D73FB5237C973Cce4f1d60bC8",
@@ -638,15 +623,13 @@
         "token2": "USD",
         "full_name": "Gold",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/xau.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x13610AA5c469118878AdB32cE548F2BbD9aa0180",
-              "current": "0x5c61a87C2E3cf9e2bf996e0cF93a7b084557E468"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x13610AA5c469118878AdB32cE548F2BbD9aa0180",
+            "current": "0x5c61a87C2E3cf9e2bf996e0cF93a7b084557E468"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -660,15 +643,13 @@
         "token2": "USD",
         "full_name": "Silver",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/xag.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xeE78F7aD81cB79d7c6f1c3dfC27002882403DA47",
-              "current": "0xAd6b3a99Fe957A9E29D5AA6Cf2b3aC1b8794EFd9"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0xeE78F7aD81cB79d7c6f1c3dfC27002882403DA47",
+            "current": "0xAd6b3a99Fe957A9E29D5AA6Cf2b3aC1b8794EFd9"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -682,8 +663,7 @@
         "token2": "USD",
         "full_name": "Australian Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/aud1.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x486Bd19965067Fe4A77d897B1b976941cf9aD803",
@@ -711,8 +691,7 @@
         "token2": "JPY",
         "full_name": "United States Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x243FF9E6a14b0491f196CC6B942c1a15Ed7777f1",
@@ -740,8 +719,7 @@
         "token2": "GBP",
         "full_name": "Euro",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eur.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0xD27100A2993A2D4f9d8016F6EC0375Bd7899491f",
@@ -769,8 +747,7 @@
         "token2": "JPY",
         "full_name": "Euro",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eur.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0xEaDEC1d07f88773e370615FdB44a875871d1DfEb",
@@ -798,8 +775,7 @@
         "token2": "JPY",
         "full_name": "British Pound",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/GBP.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0xe8a40Bd544eceBDcFFb6688442f0726c47C1bCc8",
@@ -827,8 +803,7 @@
         "token2": "USD",
         "full_name": "New Zealand Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/nzd.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x27535bde6cFa621D7dC1B0B0736d4809Af3303AE",
@@ -856,8 +831,7 @@
         "token2": "CHF",
         "full_name": "United States Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x48d165EE66CF399F2708718eb53c4ae438aea24f",
@@ -885,8 +859,7 @@
         "token2": "CHF",
         "full_name": "British Pound",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/GBP.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0x131EE30DfaBA8D5622B4c9BDa155284b8eB43b18",
@@ -914,8 +887,7 @@
         "token2": "CAD",
         "full_name": "United States Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC",
             "options_contracts": {
               "config": "0xBCbbf5630CFE5FFBF048ca56614ca04AFA1437c7",
@@ -933,7 +905,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "ARBUSD",
         "pair": "ARB-USD",
@@ -941,8 +913,7 @@
         "token1": "ARB",
         "token2": "USD",
         "full_name": "Arbitrum",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC_POL",
             "options_contracts": {
               "config": "0x06cE0BcD204DF7bB182d4D024bdEdDdE020250bA",
@@ -967,7 +938,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "BNBUSD",
         "pair": "BNB-USD",
@@ -975,8 +946,7 @@
         "token1": "BNB",
         "token2": "USD",
         "full_name": "Binance Coin",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC_POL",
             "options_contracts": {
               "config": "0x020BFd714333876dAd3624F512cbaBF3beEED2a6",
@@ -1001,7 +971,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "MATICUSD",
         "pair": "MATIC-USD",
@@ -1009,8 +979,7 @@
         "token1": "MATIC",
         "token2": "USD",
         "full_name": "Matic",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC_POL",
             "options_contracts": {
               "config": "0x25Dd4e1b21Cc22C66d4036BE8fA1cD062541Db13",
@@ -1035,7 +1004,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "OPUSD",
         "pair": "OP-USD",
@@ -1043,8 +1012,7 @@
         "token1": "OP",
         "token2": "USD",
         "full_name": "Optimism",
-        "pools": [
-          {
+        "pools": [{
             "token": "USDC_POL",
             "options_contracts": {
               "config": "0x5c043d02b94d5c07852C8720fBE600B19152E6e6",
@@ -1091,8 +1059,7 @@
         "is_pol": false
       }
     },
-    "pairs": [
-      {
+    "pairs": [{
         "max_duration": "04:00",
         "min_duration": "00:01",
         "max_utilization": 200,
@@ -1104,15 +1071,13 @@
         "token2": "USD",
         "full_name": "Bitcoin",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/btc.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x207673F7Cd3390dFB5b1Cd006390489C64c8030d",
-              "current": "0x3EaB8f06473B9A980EbdfA56c75FD8e7898Da907"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x207673F7Cd3390dFB5b1Cd006390489C64c8030d",
+            "current": "0x3EaB8f06473B9A980EbdfA56c75FD8e7898Da907"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1126,15 +1091,13 @@
         "token2": "USD",
         "full_name": "Ethereum",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eth.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x8210b52d733d710D2068870cd55d41E91FC4B086",
-              "current": "0x264FFb92760118eDb078888B84E1E2A8364D201e"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x8210b52d733d710D2068870cd55d41E91FC4B086",
+            "current": "0x264FFb92760118eDb078888B84E1E2A8364D201e"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1148,15 +1111,13 @@
         "token2": "USD",
         "full_name": "Euro",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/euro.png",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x47F37398fFD4FCa625Ea5C9eDF69FDd3FfB16AbD",
-              "current": "0x4A4B9890aA1203EDA729BfF71De597290B5383f9"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x47F37398fFD4FCa625Ea5C9eDF69FDd3FfB16AbD",
+            "current": "0x4A4B9890aA1203EDA729BfF71De597290B5383f9"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1170,15 +1131,13 @@
         "token2": "USD",
         "full_name": "Pound",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/GBP.png",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x286b1DFD6B6F61e99EE11a551f134de8C46C7E11",
-              "current": "0xC8A6f8682E3c7953288997F727c3Fc31d277B07A"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x286b1DFD6B6F61e99EE11a551f134de8C46C7E11",
+            "current": "0xC8A6f8682E3c7953288997F727c3Fc31d277B07A"
           }
-        ]
+        }]
       }
     ],
     "graph": {
@@ -1203,8 +1162,7 @@
         "is_pol": false
       }
     },
-    "pairs": [
-      {
+    "pairs": [{
         "max_duration": "04:00",
         "min_duration": "00:03",
         "max_utilization": 200,
@@ -1216,15 +1174,13 @@
         "token2": "USD",
         "full_name": "Bitcoin",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/btc.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x9ad0EBEdf49Bd42519b8aCAd6A413Fe63a35051f",
-              "current": "0xd7e11b4C04f4ed0Df06B6C66e8A0fe81FF3a12E7"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x9ad0EBEdf49Bd42519b8aCAd6A413Fe63a35051f",
+            "current": "0xd7e11b4C04f4ed0Df06B6C66e8A0fe81FF3a12E7"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1238,15 +1194,13 @@
         "token2": "USD",
         "full_name": "Ethereum",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eth.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x6549D877AFfa9eC8b40478D836210b0Bab3a3959",
-              "current": "0xdD24Edfb0D0cf4B2CB4B627eC20255245b5B0cee"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x6549D877AFfa9eC8b40478D836210b0Bab3a3959",
+            "current": "0xdD24Edfb0D0cf4B2CB4B627eC20255245b5B0cee"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1260,15 +1214,13 @@
         "token2": "USD",
         "full_name": "Solana",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/sol.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x0E871Ebcb2850C10C75abe29F536E5Fd40b52e41",
-              "current": "0x4D7F87D29320d9647e54cEe6a77809c2572D7bb6"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x0E871Ebcb2850C10C75abe29F536E5Fd40b52e41",
+            "current": "0x4D7F87D29320d9647e54cEe6a77809c2572D7bb6"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1282,15 +1234,13 @@
         "token2": "BTC",
         "full_name": "Ethereum",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eth.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xaFc1c191CDb15195faB897a763aB030670DBa9Db",
-              "current": "0xBCd8C1585A81133E2Bc86A2355d70E3B72AFbA1a"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0xaFc1c191CDb15195faB897a763aB030670DBa9Db",
+            "current": "0xBCd8C1585A81133E2Bc86A2355d70E3B72AFbA1a"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1304,15 +1254,13 @@
         "token2": "USD",
         "full_name": "Chainlink",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/link.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x82935c3d8F55B691529619F301EF090C14d2243d",
-              "current": "0xaA911d19763e8df01896b541997d664cAa17798D"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x82935c3d8F55B691529619F301EF090C14d2243d",
+            "current": "0xaA911d19763e8df01896b541997d664cAa17798D"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1326,15 +1274,13 @@
         "token2": "USD",
         "full_name": "Euro",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/euro.png",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x8b173540421443EA6dfa89aD4d9315E20C829C5A",
-              "current": "0x07Dc81A0Fa3a1caC30Ea2Aa50be623A0be4BB758"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x8b173540421443EA6dfa89aD4d9315E20C829C5A",
+            "current": "0x07Dc81A0Fa3a1caC30Ea2Aa50be623A0be4BB758"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1348,15 +1294,13 @@
         "token2": "USD",
         "full_name": "Pound",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/GBP.png",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x3c3A80875da0790c92967572E8A5A60E7572bd9b",
-              "current": "0xB681B91546Bb63ca9b3D6042106a0Bd8a29d5095"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x3c3A80875da0790c92967572E8A5A60E7572bd9b",
+            "current": "0xB681B91546Bb63ca9b3D6042106a0Bd8a29d5095"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1370,15 +1314,13 @@
         "token2": "USD",
         "full_name": "Australian Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/AUD.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xD946BD222d99cE6aC24F52303832298F5b72bAB5",
-              "current": "0xaf8C7374ec533239dfA4B346C1282Aa740898f9A"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0xD946BD222d99cE6aC24F52303832298F5b72bAB5",
+            "current": "0xaf8C7374ec533239dfA4B346C1282Aa740898f9A"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1392,15 +1334,13 @@
         "token2": "JPY",
         "full_name": "United States Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x48789dF3ba4886EB07AD9587A2F9A6Eb4D97A1F8",
-              "current": "0xA4538a05333Fa64EF38ea699fA8972fDCcaE62f8"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x48789dF3ba4886EB07AD9587A2F9A6Eb4D97A1F8",
+            "current": "0xA4538a05333Fa64EF38ea699fA8972fDCcaE62f8"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1414,15 +1354,13 @@
         "token2": "GBP",
         "full_name": "Euro",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eur.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x1142e6d7b8AaA8C4b9935e77d6c32E56b1acCc78",
-              "current": "0x5a8f9E2b7bb7A7117eAD6245BB37f1C36d88C06a"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x1142e6d7b8AaA8C4b9935e77d6c32E56b1acCc78",
+            "current": "0x5a8f9E2b7bb7A7117eAD6245BB37f1C36d88C06a"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1436,15 +1374,13 @@
         "token2": "JPY",
         "full_name": "Euro",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eur.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x0801102b8779Dd3986753D229730Fe278BC06a9f",
-              "current": "0xe43304218e50b024d3d0D53f52bDBd02bB5110b6"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x0801102b8779Dd3986753D229730Fe278BC06a9f",
+            "current": "0xe43304218e50b024d3d0D53f52bDBd02bB5110b6"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1458,15 +1394,13 @@
         "token2": "JPY",
         "full_name": "British Pound",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/GBP.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xB2152907b5EE175567f2f910EB697E839D5065f5",
-              "current": "0x7184b170fda4871AB8ad82Fc81d57cf24c4099Fe"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0xB2152907b5EE175567f2f910EB697E839D5065f5",
+            "current": "0x7184b170fda4871AB8ad82Fc81d57cf24c4099Fe"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1480,15 +1414,13 @@
         "token2": "USD",
         "full_name": "New Zealand Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/NZ.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0xC2455ee736E5D97359f0F09602F3ccf9910Bf837",
-              "current": "0x24E7bEb042A804974963b8eA3Fa42E6aB5eA8b35"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0xC2455ee736E5D97359f0F09602F3ccf9910Bf837",
+            "current": "0x24E7bEb042A804974963b8eA3Fa42E6aB5eA8b35"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1502,15 +1434,13 @@
         "token2": "CHF",
         "full_name": "United States Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x60d737902A7A155654fEaFa67EAEE6571AF15b46",
-              "current": "0xb3d1Ffe9cBC03d363EBc7EE3027359a7F6b6F9C9"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x60d737902A7A155654fEaFa67EAEE6571AF15b46",
+            "current": "0xb3d1Ffe9cBC03d363EBc7EE3027359a7F6b6F9C9"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1524,15 +1454,13 @@
         "token2": "CHF",
         "full_name": "British Pound",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/GBP.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x55Dc991F05101Df1C47d446696b13856d63EB99B",
-              "current": "0x409FD2B70fDBF61dC1a3695875B92ead90Ae39d1"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x55Dc991F05101Df1C47d446696b13856d63EB99B",
+            "current": "0x409FD2B70fDBF61dC1a3695875B92ead90Ae39d1"
           }
-        ]
+        }]
       },
       {
         "max_duration": "04:00",
@@ -1546,15 +1474,13 @@
         "token2": "CAD",
         "full_name": "United States Dollar",
         "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg",
-        "pools": [
-          {
-            "token": "USDC",
-            "options_contracts": {
-              "config": "0x92BD9504ad95D4ff94e69AAeD12f9eb36440D9aC",
-              "current": "0x01532fb7CbeAd7C5Cf8f58eAd92E7cE027E19f75"
-            }
+        "pools": [{
+          "token": "USDC",
+          "options_contracts": {
+            "config": "0x92BD9504ad95D4ff94e69AAeD12f9eb36440D9aC",
+            "current": "0x01532fb7CbeAd7C5Cf8f58eAd92E7cE027E19f75"
           }
-        ]
+        }]
       }
     ],
     "graph": {
