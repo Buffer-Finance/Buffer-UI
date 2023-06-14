@@ -3,6 +3,7 @@ import { AssetCategory, marketType, responseObj } from '../type';
 import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
 import { getAddress } from 'ethers/lib/utils.js';
+import { marketsForChart } from '../config';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
@@ -27,7 +28,9 @@ export const useMarketsConfig = () => {
     if (index !== -1) {
       response[index].pools.push(createPoolObject(item));
     } else {
+      const marketInfo = (marketsForChart as any)[token0 + token1];
       response.push({
+        ...marketInfo,
         category: AssetCategory[item.category],
         token0,
         token1,

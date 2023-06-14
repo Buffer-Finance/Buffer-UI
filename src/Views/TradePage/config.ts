@@ -123,6 +123,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Bitcoin',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg',
+    pythId:
+      '0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43',
   },
   ETHUSD: {
     category: 'Crypto',
@@ -133,6 +135,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Ethereum',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/btc.svg',
+    pythId:
+      '0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace',
   },
   EURUSD: {
     category: 'Forex',
@@ -143,6 +147,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Euro',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/euro.png',
+    pythId:
+      '0xa995d00bb36a63cef7fd2c287dc105fc8f3d93779f062f09551b0af3e81ec30b',
   },
   GBPUSD: {
     category: 'Forex',
@@ -153,6 +159,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Pound',
     img: 'https://cdn.buffer.finance/Buffer-Media/main/GBP.png',
+    pythId:
+      '0x84c2dde9633d93d1bcad84e7dc41c9d56578b7ec52fabedc1f335d673df0a7c1',
   },
   SOLUSD: {
     category: 'Crypto',
@@ -163,16 +171,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Solana',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/sol.svg',
-  },
-  ETHBTC: {
-    category: 'Crypto',
-    tv_id: 'ETHBTC',
-    pair: 'ETH-BTC',
-    price_precision: 1000000,
-    token1: 'ETH',
-    token2: 'BTC',
-    full_name: 'Ethereum',
-    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eth.svg',
+    pythId:
+      '0xef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d',
   },
   LINKUSD: {
     category: 'Crypto',
@@ -183,6 +183,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Chainlink',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/link.svg',
+    pythId:
+      '0x8ac0c70fff57e9aefdf5edf44b51d62c2d433653cbb2cf5cc06bb115af04d221',
   },
   XAUUSD: {
     category: 'Commodity',
@@ -193,6 +195,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Gold',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xau.svg',
+    pythId:
+      '0x765d2ba906dbc32ca17cc11f5310a89e9ee1f6420508c63861f2f8ba4ee34bb2',
   },
   XAGUSD: {
     category: 'Commodity',
@@ -203,6 +207,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Silver',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xag.svg',
+    pythId:
+      '0xf2fb02c32b055c805e7238d628e5e9dadef274376114eb1f012337cabe93871e',
   },
   AUDUSD: {
     category: 'Forex',
@@ -213,6 +219,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'Australian Dollar',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/aud1.svg',
+    pythId:
+      '0x67a6f93030420c1c9e3fe37c1ab6b77966af82f995944a9fefce357a22854a80',
   },
   USDJPY: {
     category: 'Forex',
@@ -223,36 +231,8 @@ export const marketsForChart = {
     token2: 'JPY',
     full_name: 'United States Dollar',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg',
-  },
-  EURGBP: {
-    category: 'Forex',
-    tv_id: 'EURGBP',
-    pair: 'EUR-GBP',
-    price_precision: 1000000,
-    token1: 'EUR',
-    token2: 'GBP',
-    full_name: 'Euro',
-    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg',
-  },
-  EURJPY: {
-    category: 'Forex',
-    tv_id: 'EURJPY',
-    pair: 'EUR-JPY',
-    price_precision: 1000000,
-    token1: 'EUR',
-    token2: 'JPY',
-    full_name: 'Euro',
-    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/eur.svg',
-  },
-  GBPJPY: {
-    category: 'Forex',
-    tv_id: 'GBPJPY',
-    pair: 'GBP-JPY',
-    price_precision: 1000000,
-    token1: 'GBP',
-    token2: 'JPY',
-    full_name: 'British Pound',
-    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg',
+    pythId:
+      '0xef2c98c804ba503c6a707e38be4dfbb16683775f195b091252bf24693042fd52',
   },
   NZDUSD: {
     category: 'Forex',
@@ -263,6 +243,8 @@ export const marketsForChart = {
     token2: 'USD',
     full_name: 'New Zealand Dollar',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/nzd.svg',
+    pythId:
+      '0x92eea8ba1b00078cdc2ef6f64f091f262e8c7d0576ee4677572f314ebfafa4c7',
   },
   USDCHF: {
     category: 'Forex',
@@ -273,16 +255,8 @@ export const marketsForChart = {
     token2: 'CHF',
     full_name: 'United States Dollar',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg',
-  },
-  GBPCHF: {
-    category: 'Forex',
-    tv_id: 'GBPCHF',
-    pair: 'GBP-CHF',
-    price_precision: 1000000,
-    token1: 'GBP',
-    token2: 'CHF',
-    full_name: 'British Pound',
-    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/GBP.svg',
+    pythId:
+      '0x0b1e3297e69f162877b577b0d6a47a0d63b2392bc8499e6540da4187a63e28f8',
   },
   USDCAD: {
     category: 'Forex',
@@ -293,6 +267,8 @@ export const marketsForChart = {
     token2: 'CAD',
     full_name: 'United States Dollar',
     img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg',
+    pythId:
+      '0x3112b03a41c910ed446852aacf67118cb1bec67b2cd0b9a214c58cc0eaa2ecca',
   },
   ARBUSD: {
     category: 'Crypto',
@@ -302,6 +278,8 @@ export const marketsForChart = {
     token1: 'ARB',
     token2: 'USD',
     full_name: 'Arbitrum',
+    pythId:
+      '0x3fa4252848f9f0a1480be62745a4629d9eb1322aebab8a791e344b3b9c1adcf5',
   },
   BNBUSD: {
     category: 'Crypto',
@@ -311,6 +289,8 @@ export const marketsForChart = {
     token1: 'BNB',
     token2: 'USD',
     full_name: 'Binance Coin',
+    pythId:
+      '0x2f95862b045670cd22bee3114c39763a4a08beeb663b145d283c31d7d1101c4f',
   },
   MATICUSD: {
     category: 'Crypto',
@@ -320,6 +300,8 @@ export const marketsForChart = {
     token1: 'MATIC',
     token2: 'USD',
     full_name: 'Matic',
+    pythId:
+      '0x5de33a9112c2b700b8d30b8a3402c103578ccfa2765696471cc672bd5cf6ac52',
   },
   OPUSD: {
     category: 'Crypto',
@@ -329,6 +311,8 @@ export const marketsForChart = {
     token1: 'OP',
     token2: 'USD',
     full_name: 'Optimism',
+    pythId:
+      '0x385f64d993f7b77d8182ed5003d97c60aa3361f3cecfe711544d2d59165e9bdf',
   },
 };
 
