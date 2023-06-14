@@ -54,7 +54,6 @@ const useOngoingTrades = () => {
   const { activeChain } = useActiveChain();
   const { data: oneCTWallet } = useSigner({ chainId: activeChain.id });
   const { address } = useAccount();
-  console.log(`oneCTWallet: `, oneCTWallet);
   const { data, error } = useSWR<OngoingTradeSchema[][]>([oneCTWallet], {
     fetcher: async (oneCTWallet) => {
       const signature = await getCachedSignature(oneCTWallet);

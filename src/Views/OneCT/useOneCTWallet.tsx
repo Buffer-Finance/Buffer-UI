@@ -56,7 +56,6 @@ const useOneCTWallet = () => {
     ],
     'accountMapping'
   );
-  console.log(`useOneCTWallet-data: `, oneCtPk);
   const registeredOneCT = useMemo(() => {
     const isEnabled = res?.user2signer?.signer
       ? is1CTEnabled(res.user2signer.signer, oneCtPk, provider, 'debugggging')
@@ -71,6 +70,7 @@ const useOneCTWallet = () => {
       provider as ethers.providers.StaticJsonRpcProvider
     );
   }, [oneCtPk, provider]);
+  console.log(`useOneCTWallet-data: `, oneCTWallet);
 
   const pkLocalStorageIdentifier = 'one-ct-wallet-pk' + address;
   const checkStorage = () => {

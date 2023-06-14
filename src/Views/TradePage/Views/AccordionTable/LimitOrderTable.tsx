@@ -73,11 +73,10 @@ const LimitOrderTable = () => {
   const handleCancel = async (queue_id) => {
     setCancelLoading(queue_id);
 
-    const res = await axios.get(`${baseUrl}/instant-trading/trade/cancel/`, {
+    const res = await axios.post(`${baseUrl}trade/cancel/`, [queue_id], {
       params: {
         user_signature: signatureCache,
         user_address: address,
-        queue_id,
         environment: activeChain.id,
       },
     });
