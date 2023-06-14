@@ -2,16 +2,17 @@ import { EditIconSVG } from '@Views/TradePage/Components/EditIconSVG';
 import { durations } from '@Views/TradePage/config';
 import { HHMMToSeconds, secondsToHHMM } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MHdropDown } from '../../Settings/TradeSettings/LimitOrdersExpiry/MHdropDown';
 import { MinutesInput } from '../../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
+import { RowGap } from '@Views/TradePage/Components/Row';
 
 const TimePickerBackground = styled.div`
   .duration-container {
     display: flex;
     gap: 3px;
     width: 100%;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
 
     .each-duration {
@@ -20,6 +21,21 @@ const TimePickerBackground = styled.div`
       text-align: center;
       border-radius: 6px;
       padding: 6px 8.55px;
+      border: 1px solid transparent;
+      background: #2b2b39;
+
+      &.active {
+        background: #141823;
+        border: 1px solid #a3e3ff;
+      }
+    }
+
+    .edit-duration {
+      cursor: pointer;
+      font-size: 14px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 0 2px 0 0;
       border: 1px solid transparent;
       background: #2b2b39;
 
@@ -83,8 +99,8 @@ export const TimePicker: React.FC<{
             </div>
           );
         })}
-        <button
-          className={`each-duration ${openCustomInput ? 'active' : ''}`}
+        <div
+          className={`edit-duration ${openCustomInput ? 'active' : ''}`}
           onClick={() => {
             setOpenCustomInput(true);
           }}
@@ -93,7 +109,7 @@ export const TimePicker: React.FC<{
             showCustomInput={openCustomInput}
             setTime={setCurrentTime}
           />
-        </button>
+        </div>
       </div>
     </TimePickerBackground>
   );
@@ -105,7 +121,7 @@ const EditTime: React.FC<{
 }> = ({ showCustomInput, setTime }) => {
   const [activeFrame, setActiveFrame] = useState('m');
   const [inputValue, setInputValue] = useState(30);
-
+  const MAX = activeFrame === 'm' ? 60 : 24;
   function onChange(newInput: number) {
     setInputValue(newInput);
 
@@ -119,14 +135,32 @@ const EditTime: React.FC<{
     setTime(newMMHHtime);
   }
 
+  useEffect(() => {
+    if (activeFrame.trim() === 'h' && inputValue > 24) {
+      onChange(24);
+    }
+  }, [activeFrame]);
+
   if (showCustomInput) {
     return (
-      <MinutesInput
-        activeFrame={activeFrame}
-        setFrame={setActiveFrame}
-        minutes={inputValue}
-        onChange={onChange}
-      />
+      <RowGap gap="2px" className="h-full">
+        <input
+          value={inputValue}
+          type="number"
+          max={MAX}
+          min={1}
+          className={`bg-transparent rounded-[5px] text-center w-[20px] text-1 outline-none`}
+          onChange={(e) => {
+            onChange(+e.target.value);
+          }}
+          placeholder="10"
+        />
+        <MHdropDown
+          activeFrame={activeFrame}
+          setFrame={setActiveFrame}
+          className="px-[0] py-[0] !bg-[#303044] rounded-[2px]"
+        />
+      </RowGap>
     );
   }
   return <EditIconSVG />;
