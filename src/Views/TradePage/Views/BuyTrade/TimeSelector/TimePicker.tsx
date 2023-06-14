@@ -100,7 +100,9 @@ export const TimePicker: React.FC<{
           );
         })}
         <div
-          className={`edit-duration ${openCustomInput ? 'active' : ''}`}
+          className={`${
+            openCustomInput ? 'active edit-duration' : 'each-duration'
+          }`}
           onClick={() => {
             setOpenCustomInput(true);
           }}
