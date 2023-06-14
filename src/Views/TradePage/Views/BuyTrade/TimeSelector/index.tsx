@@ -6,7 +6,9 @@ import { setTimeSelectorAtom, timeSelectorAtom } from '@Views/TradePage/atoms';
 import { Trans } from '@lingui/macro';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 
-export const TimeSelector: React.FC = () => {
+export const TimeSelector: React.FC<{
+  className?: string;
+}> = ({ className = '' }) => {
   const currentTime = useAtomValue(timeSelectorAtom);
   const setCurrentTime = useSetAtom(setTimeSelectorAtom);
   const { switchPool } = useSwitchPool();
@@ -14,10 +16,11 @@ export const TimeSelector: React.FC = () => {
   if (!switchPool) return <></>;
 
   return (
-    <ColumnGap gap="7px">
+    <ColumnGap gap={`${className} 7px`}>
       <BuyTradeHeadText>
         <Trans>Time</Trans>
       </BuyTradeHeadText>
+
       <TimePicker
         currentTime={currentTime.HHMM}
         max_duration={switchPool?.max_duration}

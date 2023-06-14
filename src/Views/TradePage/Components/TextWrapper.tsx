@@ -15,8 +15,8 @@ export const SettingsText = styled.div`
   }
 `;
 
-export const SettingsComponentHeader = styled.div`
-  font-size: 16px;
+export const SettingsComponentHeader = styled.div<{ fontSize?: string }>`
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : '16px')};
   color: #c3c2d4;
   text-transform: capitalize;
 `;
@@ -45,5 +45,11 @@ export const RadioTextHead = styled.div`
 export const White12pxText = styled.div`
   font-size: 12px;
   color: #ffffff;
+  font-weight: 400;
+`;
+
+export const EditTextValueText = styled.div`
+  font-size: 14px;
+  color: #c2c1d3;
   font-weight: 400;
 `;
