@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import { baseUrl } from '../config';
 import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { Signer } from 'ethers';
 enum TradeState {
   Queued = 'QUEUED',
 }
@@ -36,6 +37,17 @@ export interface OngoingTradeSchema {
   environment: '421613' | '42161';
 }
 
+let signatureCache = null;
+
+const getCachedSignature = async (oneCTWallet: Signer) => {
+  if (!signatureCache) {
+    signatureCache = await oneCTWallet.signMessage(
+      import.meta.env.VITE_SIGN_MESSAGE
+    );
+  }
+  return signatureCache;
+};
+
 const useOngoingTrades = () => {
   // const { oneCTWallet } = useOneCTWallet();
   const { activeChain } = useActiveChain();
@@ -44,8 +56,7 @@ const useOngoingTrades = () => {
   console.log(`oneCTWallet: `, oneCTWallet);
   const { data, error } = useSWR<OngoingTradeSchema[][]>([oneCTWallet], {
     fetcher: async (oneCTWallet) => {
-      const signature =
-        '0xcfd630d3128b6528e5c69e03ac16fac4d211a1ad662bc39d78587420b61f84ae3660dcbf909cf51d31fece68fdbc6c37501ad82206e969e2a16ccb6a94e8f3901b';
+      const signature = await getCachedSignature(oneCTWallet);
       const res = await axios.get(`${baseUrl}trades/user/active/`, {
         params: {
           user_signature: signature,

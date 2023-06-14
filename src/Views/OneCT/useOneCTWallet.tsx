@@ -56,7 +56,7 @@ const useOneCTWallet = () => {
     ],
     'accountMapping'
   );
-  console.log(`useOneCTWallet-data: `, data);
+  console.log(`useOneCTWallet-data: `, oneCtPk);
   const registeredOneCT = useMemo(() => {
     const isEnabled = res?.user2signer?.signer
       ? is1CTEnabled(res.user2signer.signer, oneCtPk, provider, 'debugggging')
