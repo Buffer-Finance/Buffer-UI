@@ -48,7 +48,7 @@ export const ActiveAsset = ({ cb }) => {
                 navigate('/binary/' + m);
                 setIsOpen(false);
               }}
-              className="asset-dropdown-wrapper left-[0] max-w-[300px] p-3"
+              className="asset-dropdown-wrapper left-[0] max-w-[350px] p-3"
             />
           </Background>
           <div id="overlay" onClick={() => setIsOpen(false)}></div>

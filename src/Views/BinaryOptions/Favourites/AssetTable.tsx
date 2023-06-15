@@ -107,6 +107,15 @@ export const AssetTable: React.FC<{
         else
           return '+' + activeAssetStateHookData.payouts[arbPoolContract] + '%';
 
+      case 4:
+        const bfrPoolContract = currentAsset.pools.find(
+          (pool) => pool.token.name.toUpperCase() === 'BFR'
+        )?.options_contracts.current;
+        if (!bfrPoolContract) return '-';
+        else if (!activeAssetStateHookData.payouts) return 'loading...';
+        else
+          return '+' + activeAssetStateHookData.payouts[bfrPoolContract] + '%';
+
       default:
         return <div>Unhandled Column.</div>;
     }
