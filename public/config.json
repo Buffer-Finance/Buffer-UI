@@ -1010,7 +1010,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "ARBUSD",
         "pair": "ARB-USD",
@@ -1051,7 +1051,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "BNBUSD",
         "pair": "BNB-USD",
@@ -1092,7 +1092,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "MATICUSD",
         "pair": "MATIC-USD",
@@ -1133,7 +1133,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "OPUSD",
         "pair": "OP-USD",
