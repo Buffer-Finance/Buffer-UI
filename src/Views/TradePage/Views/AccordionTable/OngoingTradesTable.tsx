@@ -96,7 +96,7 @@ const OngoingTradesTable = () => {
           queuedTradeFallBack(trade, true) || (
             <div>
               {formatDistanceExpanded(
-                Variables(+trade.expiration_time - currentEpoch)
+                Variables(+trade.close_time - currentEpoch)
               )}
             </div>
           )

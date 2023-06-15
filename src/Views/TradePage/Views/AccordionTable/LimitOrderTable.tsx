@@ -36,7 +36,7 @@ import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useToast } from '@Contexts/Toast';
 import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
-import { cancelQueueTrade } from '@Views/TradePage/utils';
+import { cancelQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -122,13 +122,8 @@ const LimitOrderTable = () => {
           />
         );
       case TableColumn.Duration:
-        return (
-          <div>
-            {formatDistanceExpanded(
-              Variables(+trade.expiration_time * 1000 - currentEpoch)
-            )}
-          </div>
-        );
+        const hhmmstr = secondsToHHMM(trade.period).split(':');
+        return <div>{hhmmstr[0] + 'h:' + hhmmstr[1] + 'm'}</div>;
       case TableColumn.OrderExpiry:
         return <DisplayTime ts={+trade.expiration_time * 1000} />;
 

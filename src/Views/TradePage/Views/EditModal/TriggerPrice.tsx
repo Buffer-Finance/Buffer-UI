@@ -6,13 +6,13 @@ export const TriggerPrice: React.FC<{
   setPrice: (newPrice: string) => void;
 }> = ({ price, setPrice }) => {
   return (
-    <RowBetween>
+    <RowBetween className=" gap-x-3">
       <BuyTradeHeadText>Trigger price</BuyTradeHeadText>
       <input
         value={price}
         type="number"
         onChange={(e) => setPrice(e.target.value)}
-        className="!w-full border-none bg-[#282b39] text-f14 px-2 outline-none text-center text-1 rounded-sm "
+        className="!w-full text-right border-none bg-[#282b39] text-f14 px-2 outline-none  text-1 rounded-sm "
       />
     </RowBetween>
   );
@@ -22,13 +22,13 @@ export const LimitOrderTradeSize: React.FC<{
   setSize: (newSize: string) => void;
 }> = ({ size, setSize }) => {
   return (
-    <RowBetween>
+    <RowBetween className=" gap-x-3">
       <BuyTradeHeadText>Trade Size</BuyTradeHeadText>
       <input
         value={size}
         type="number"
         onChange={(e) => setSize(e.target.value)}
-        className="!w-full border-none bg-[#282b39] text-f14 px-2 outline-none text-center text-1 rounded-sm "
+        className="!w-full  text-right border-none bg-[#282b39] text-f14 px-2 outline-none  text-1 rounded-sm "
       />
     </RowBetween>
   );
