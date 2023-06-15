@@ -18,24 +18,43 @@ import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
 import { ModalBase } from 'src/Modals/BaseModal';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
+import {
+  OngoingTradeSchema,
+  signatureCache,
+} from '@Views/TradePage/Hooks/ongoingTrades';
 import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
+import { editQueueTrade, generateTradeSignature } from '@Views/TradePage/utils';
+import { useAccount } from 'wagmi';
+import { HHMMToSeconds } from '@Views/TradePage/utils';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useToast } from '@Contexts/Toast';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const EditModal: React.FC<{
   trade: OngoingTradeSchema;
   market: marketType;
 }> = ({ trade, market }) => {
   console.log(`index-trade: `, trade);
+  const { address } = useAccount();
   const [buttonDirection, setButtonDirection] = useState(directionBtn.Up);
   const [frame, setFrame] = useState('m');
   const [minutes, setMinutes] = useState(0);
   const [currentTime, setCurrentTime] = useState('00:15');
   const [size, setSize] = useState('0');
   const [price, setPrice] = useState('0');
-  const [duration, setduration] = useState({ min: '00:05', max: '24:00' });
+  const [editLoading, setEditLoading] = useState<null | number>(null);
+  const [periodValidations, setduration] = useState({
+    min: '00:05',
+    max: '24:00',
+  });
+  const { activeChain } = useActiveChain();
+  console.log(`index-duration: `, trade);
+
+  // things to get rom pool
+  const poolDecimals = 6;
   useEffect(() => {
     if (!trade) return;
     setPrice(divide(trade.strike, 8)!);
@@ -47,7 +66,7 @@ export const EditModal: React.FC<{
     );
     // setCurrentTime(timeToMins())
 
-    setSize(divide(trade.trade_size, 6)!);
+    setSize(divide(trade.trade_size, poolDecimals)!);
     setButtonDirection(trade.is_above ? directionBtn.Up : directionBtn.Down);
     console.log(`ddindex-trade: `, trade.close_time - trade.queued_timestamp);
   }, [trade]);
@@ -58,8 +77,49 @@ export const EditModal: React.FC<{
     } else {
     }
   }
-  const editHandler = () => {
-    console.log('handle edit');
+  const { oneCTWallet } = useOneCTWallet();
+  const toastify = useToast();
+  const editHandler = async () => {
+    // console.log('handle edit');
+    if (!trade || !oneCTWallet || !address)
+      return toastify({
+        msg: 'Something went wrong',
+        type: 'errror',
+        id: 'dsfs',
+      });
+    setEditLoading(trade.queue_id);
+    const currentTs = Math.round(Date.now() / 1e3);
+    const signs = await generateTradeSignature(
+      address,
+      multiply(size, poolDecimals),
+      HHMMToSeconds(currentTime),
+      trade.target_contract,
+      multiply(price, 8),
+      trade.slippage + '',
+      trade.allow_partial_fill,
+      trade.referral_code,
+      trade.trader_nft_id + '',
+      currentTs,
+      trade.settlement_fee,
+      buttonDirection == directionBtn.Up ? true : false,
+      oneCTWallet
+    );
+    console.log(`index-signs: `, signs);
+    const res = editQueueTrade(
+      signatureCache,
+      trade.queue_id,
+      currentTs,
+      multiply(price, 8),
+      HHMMToSeconds(currentTime),
+      signs[0],
+      signs[1],
+      address,
+      trade.slippage,
+      buttonDirection == directionBtn.Up ? true : false,
+      HHMMToSeconds(currentTime),
+      activeChain.id
+    );
+    setEditLoading(null);
   };
   if (!trade) return <></>;
   return (
@@ -77,8 +137,8 @@ export const EditModal: React.FC<{
           <LimitOrderTradeSize size={size} setSize={setPrice} />
           <TimePicker
             currentTime={currentTime}
-            max_duration={duration.max}
-            min_duration={duration.min}
+            max_duration={periodValidations.max}
+            min_duration={periodValidations.min}
             setCurrentTime={setCurrentTime}
           />{' '}
           <RowBetween>
@@ -96,7 +156,10 @@ export const EditModal: React.FC<{
             activeBtn={buttonDirection}
             setActiveBtn={setButtonDirection}
           />
-          <SaveButton onClick={editHandler} />
+          <SaveButton
+            isLoading={editLoading == trade.queue_id}
+            onClick={editHandler}
+          />
         </ColumnGap>
       </div>
     </EditModalBackground>

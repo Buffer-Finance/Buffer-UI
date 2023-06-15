@@ -34,9 +34,9 @@ import { baseUrl } from '@Views/TradePage/config';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { cancelQueueTrade } from './Common';
 import { useToast } from '@Contexts/Toast';
 import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
+import { cancelQueueTrade } from '@Views/TradePage/utils';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);

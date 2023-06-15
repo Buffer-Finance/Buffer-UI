@@ -41,7 +41,7 @@ import { timeSelectorAtom, tradeSettingsAtom } from '../atoms';
 import { useSettlementFee } from './useSettlementFee';
 import UpIcon from '@SVG/Elements/UpIcon';
 import DownIcon from '@SVG/Elements/DownIcon';
-import { generateTradeSignature } from './generateTradeSignature';
+import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
 enum ArgIndex {
   Strike = 4,

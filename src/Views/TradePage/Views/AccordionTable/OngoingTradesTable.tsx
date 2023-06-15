@@ -3,25 +3,13 @@ import { CellContent, CellInfo } from '@Views/Common/BufferTable/CellInfo';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
-import {
-  getDisplayDate,
-  getDisplayDateUTC,
-  getDisplayTime,
-  getDisplayTimeUTC,
-} from '@Utils/Dates/displayDateTime';
-import { BlackScholes } from '@Utils/Formulas/blackscholes';
 
 import { Variables } from '@Utils/Time';
-import { getIdentifier } from '@Hooks/useGenericHook';
 import NumberTooltip from '@Views/Common/Tooltips';
-import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { ChangeEvent, useMemo, useState } from 'react';
-import { divide, subtract } from '@Utils/NumString/stringArithmatics';
-import { BetState } from '@Hooks/useAheadTrades';
-import useOpenConnectionDrawer from '@Hooks/Utilities/useOpenConnectionDrawer';
-import { getErrorFromCode } from '@Utils/getErrorFromCode';
+import { useState } from 'react';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import { CurrencyBitcoin, Launch } from '@mui/icons-material';
+import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
 import {
   OngoingTradeSchema,
@@ -37,15 +25,11 @@ import {
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
-import {
-  DisplayTime,
-  cancelQueueTrade,
-  getProbability,
-  queuedTradeFallBack,
-} from './Common';
+import { DisplayTime, getProbability, queuedTradeFallBack } from './Common';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useToast } from '@Contexts/Toast';
+import { cancelQueueTrade } from '@Views/TradePage/utils';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
