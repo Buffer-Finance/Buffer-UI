@@ -54,6 +54,7 @@ export const useDashboardReadCalls = () => {
   const { configContracts } = useActiveChain();
   const usd_decimals = configContracts.tokens['USDC'].decimals;
   const arb_decimals = configContracts.tokens['ARB'].decimals;
+  const bfrPool = configContracts.tokens['BFR'];
 
   const { calls, mainnetData } = useDashboardCalls();
 
@@ -94,6 +95,7 @@ export const useDashboardReadCalls = () => {
       feeArbBlpTrackerTokensPerInterval,
       ARBvaultPOL,
       burnBFRAmount,
+      bfrPoolBalance,
     ]: any[] = data;
 
     const blpPrice =
@@ -167,9 +169,13 @@ export const useDashboardReadCalls = () => {
       fromWei(subtract(totalSupplyBFR, burnBFRAmount)),
       2
     );
-    const circulatingSupply = mainnetData
-      ? subtract(netSupply, mainnetData.amountInPools)
-      : undefined;
+    const circulatingSupply =
+      mainnetData && netSupply && bfrPoolBalance
+        ? subtract(
+            subtract(netSupply, mainnetData.amountInPools),
+            fromWei(bfrPoolBalance, bfrPool.decimals)
+          )
+        : undefined;
 
     response = {
       total: null,
@@ -177,7 +183,6 @@ export const useDashboardReadCalls = () => {
         price: bfrPrice,
         supply: netSupply,
         total_staked: fromWei(totalStakedBFR),
-        market_cap: multiply(bfrPrice, fromWei(totalSupplyBFR)),
         circulatingSupply: circulatingSupply,
         liquidity_pools_token: mainnetData?.lpTokens,
       },
@@ -185,7 +190,6 @@ export const useDashboardReadCalls = () => {
         price: blpPrice,
         supply: divide(fromWei(amountUSDCpool, usd_decimals), blpPrice),
         total_staked: totalUSDCstaked,
-        market_cap: multiply(blpPrice, fromWei(totalSupplyBLP, usd_decimals)),
 
         apr: {
           value: fromWei(blpAprTotal, 2),
@@ -230,6 +234,7 @@ const useDashboardCalls = () => {
   const dashboardContracts: (typeof DASHBOARDCONTRACTS)[42161] =
     DASHBOARDCONTRACTS[activeChain?.id];
   const binaryContracts = configContracts;
+  const bfrPoolAddress = configContracts.tokens['BFR'].pool_address;
 
   const getCalls = () => {
     const calls = {
@@ -357,6 +362,12 @@ const useDashboardCalls = () => {
         abi: bfrAbi,
         name: 'balanceOf',
         params: [earnContracts.burnAddress],
+      },
+      bfrPoolBalance: {
+        address: earnContracts.iBFR,
+        abi: bfrAbi,
+        name: 'balanceOf',
+        params: [bfrPoolAddress],
       },
     };
     return Object.keys(calls).map(function (key) {
