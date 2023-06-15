@@ -1,6 +1,5 @@
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import styled from '@emotion/styled';
-import { TimeSelector } from '../BuyTrade/TimeSelector';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import { MinutesInput } from '../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
 import { SaveButton } from './SaveButton';
@@ -10,22 +9,16 @@ import {
   EditTextValueText,
   SettingsComponentHeader,
 } from '@Views/TradePage/Components/TextWrapper';
-import { LimitOrderTradeSize, TriggerPrice } from './TriggerPrice';
+import { TriggerPrice } from './TriggerPrice';
 import { useEffect, useMemo, useState } from 'react';
 import { directionBtn, marketType } from '@Views/TradePage/type';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
-import { ModalBase } from 'src/Modals/BaseModal';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
 import {
   OngoingTradeSchema,
   signatureCache,
 } from '@Views/TradePage/Hooks/ongoingTrades';
 import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
-import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
-import { ethers } from 'ethers';
-import { arrayify } from 'ethers/lib/utils.js';
 import { editQueueTrade, generateTradeSignature } from '@Views/TradePage/utils';
 import { useAccount } from 'wagmi';
 import { HHMMToSeconds } from '@Views/TradePage/utils';
@@ -54,6 +47,7 @@ export const EditModal: React.FC<{
   const { activeChain } = useActiveChain();
   console.log(`index-duration: `, trade, market);
   const pool = useMemo(() => {
+    if (!market) return null;
     const pool =
       market.pools.find(
         (p) =>
