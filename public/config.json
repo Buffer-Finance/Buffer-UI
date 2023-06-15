@@ -484,6 +484,13 @@
               "config": "0xab4D8f4f4F39C4eE76f8d6493876995f5A6e9Fe3",
               "current": "0xbe4e89945DB947ABB4f931F9239BB9dE8F662b27"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "current": "0xDBEdc2A1aa21A87879F4CC062e18190d5525c084",
+              "config": "0x92af4EBCa254e3543d0603785bB1DB9BF16A12E8"
+            }
           }
         ]
       },
@@ -519,6 +526,13 @@
             "options_contracts": {
               "config": "0xF09DAD7E91aEC1F81011819129bAe96E0A12b0Bc",
               "current": "0x5B58cc39360472c908a26b129cF19f533Ff00ACE"
+            }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "current": "0x5fC7b38F1bc237069145AF7AcfBB9Eb0A8e1B4b5",
+              "config": "0x9760d89eBEA17f9DDEf490C37f3FEd6E61A06E0b"
             }
           }
         ]
@@ -556,6 +570,13 @@
               "config": "0x09283F9D0eec02961E61B7b82Cb094619f1Bf2a0",
               "current": "0x37a42a8841ffF3D47351e68a2c31AdD4a1080358"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "current": "0xaC5337D5A53Ff32887BF7829a44AE1F5F3166C4B",
+              "config": "0xEF922235657B845A2632371032Ecb25377aC3305"
+            }
           }
         ]
       },
@@ -591,6 +612,13 @@
             "options_contracts": {
               "config": "0xb96CdF0276a36f9159aB04924f2337110f9288Cb",
               "current": "0x175E5CE07aD6A15e9cbB49E27Ff94EC8E2fc0562"
+            }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "current": "0x12d974E8F0030f002552e0451D750dE0C0Ed6bC3",
+              "config": "0x2ce1E8b4c19E019c486093C338E3f5a76DC9d16f"
             }
           }
         ]
@@ -1011,6 +1039,13 @@
               "config": "0xFe8f09f42d8D8a01Dea2d54d7beb73A8e60Cb247",
               "current": "0xD9A83FAD6Da740C467aDCb9d443fC846a3fC9660"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0xB4d4a92E84a203BeA742356e7F594c24e8902300",
+              "current": "0xa1568547cA58Ef4C5621e031173e003caBB9B438"
+            }
           }
         ]
       },
@@ -1044,6 +1079,13 @@
             "options_contracts": {
               "config": "0x563c416bDebeFACa7184Fd5f8163ba4c98c847d9",
               "current": "0xae54094B1AE833E04519B41557697a3b8F262E89"
+            }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0x0341f977A2A60D2d88Bf5cF13CBF5389814d3c97",
+              "current": "0xf15055AaB7c8291D0276A85D9Cb34bD23D063600"
             }
           }
         ]
@@ -1079,6 +1121,13 @@
               "config": "0xab9e4EF2EF88b989AD9A0871A178a6BF321986E1",
               "current": "0x6d3538826f1707Ab29cee9B16696b3C2Fd817a9c"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0xf07475d3df900827A567C117acbf930e9904A4d4",
+              "current": "0xeEc6D471EF314097C3366196c16B9286858c1A44"
+            }
           }
         ]
       },
@@ -1112,6 +1161,13 @@
             "options_contracts": {
               "config": "0xc987149dB440F0a382F713B64325A5961F6dB40a",
               "current": "0xc78C4F0Eb182Ab8F5C0C35D2DdCf1A8dA67fcEcf"
+            }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0x1B5dcdf5100a76EFFd86709C03Ca94FfD3Cefe64",
+              "current": "0xA7420114839f487A8DC2F0fc83Cc76cC5166E734"
             }
           }
         ]
