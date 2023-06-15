@@ -50,6 +50,10 @@ export const EssentialModals = () => {
       >
         <EditModal
           trade={selectedTrade?.trade!}
+          onSave={() => {
+            console.log(`index-setSelectedTrade: `, setSelectedTrade);
+            setSelectedTrade(null);
+          }}
           market={selectedTrade?.market!}
         />
       </ModalBase>

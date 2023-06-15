@@ -11,7 +11,7 @@ import {
   SettingsComponentHeader,
 } from '@Views/TradePage/Components/TextWrapper';
 import { LimitOrderTradeSize, TriggerPrice } from './TriggerPrice';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { directionBtn, marketType } from '@Views/TradePage/type';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
@@ -36,40 +36,45 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 export const EditModal: React.FC<{
   trade: OngoingTradeSchema;
   market: marketType;
-}> = ({ trade, market }) => {
+  onSave: () => void;
+}> = ({ trade, market, onSave }) => {
   console.log(`index-trade: `, trade);
   const { address } = useAccount();
   const [buttonDirection, setButtonDirection] = useState(directionBtn.Up);
   const [frame, setFrame] = useState('m');
   const [minutes, setMinutes] = useState(0);
   const [currentTime, setCurrentTime] = useState('00:15');
-  const [size, setSize] = useState('0');
   const [price, setPrice] = useState('0');
   const [editLoading, setEditLoading] = useState<null | number>(null);
-  const [periodValidations, setduration] = useState({
+  const [periodValidations, setPeriodValidation] = useState({
     min: '00:05',
     max: '24:00',
   });
   const { activeChain } = useActiveChain();
-  console.log(`index-duration: `, trade);
-
+  console.log(`index-duration: `, trade, market);
+  const pool = useMemo(() => {
+    const pool =
+      market.pools.find(
+        (p) =>
+          p.optionContract.toLowerCase() == trade.target_contract.toLowerCase()
+      ) || market.pools[0];
+    return pool;
+  }, [trade, market]);
   // things to get rom pool
   const poolDecimals = 6;
   useEffect(() => {
-    if (!trade) return;
+    if (!trade || !market) return;
     setPrice(divide(trade.strike, 8)!);
     setMinutes(trade.limit_order_expiration / 60);
     setFrame('m');
-    const pool = market.pools.find(
-      (p) =>
-        p.optionContract.toLowerCase() == trade.target_contract.toLowerCase()
-    );
-    // setCurrentTime(timeToMins())
 
-    setSize(divide(trade.trade_size, poolDecimals)!);
+    // setCurrentTime(timeToMins())
+    setPeriodValidation({
+      min: pool?.min_duration,
+      max: pool?.max_duration,
+    });
     setButtonDirection(trade.is_above ? directionBtn.Up : directionBtn.Down);
-    console.log(`ddindex-trade: `, trade.close_time - trade.queued_timestamp);
-  }, [trade]);
+  }, [trade, market, pool]);
   function onTimeChange(value: number) {
     setMinutes(value);
     //convert in whatever format needed
@@ -91,7 +96,7 @@ export const EditModal: React.FC<{
     const currentTs = Math.round(Date.now() / 1e3);
     const signs = await generateTradeSignature(
       address,
-      multiply(size, poolDecimals),
+      trade.trade_size + '',
       HHMMToSeconds(currentTime),
       trade.target_contract,
       multiply(price, 8),
@@ -105,7 +110,7 @@ export const EditModal: React.FC<{
       oneCTWallet
     );
     console.log(`index-signs: `, signs);
-    const res = editQueueTrade(
+    const res = await editQueueTrade(
       signatureCache,
       trade.queue_id,
       currentTs,
@@ -116,9 +121,17 @@ export const EditModal: React.FC<{
       address,
       trade.slippage,
       buttonDirection == directionBtn.Up ? true : false,
-      HHMMToSeconds(currentTime),
+      +minutes * 60,
       activeChain.id
     );
+    if (res) {
+      onSave();
+      return toastify({
+        msg: 'Limit order updated successfully',
+        type: 'success',
+        id: '211',
+      });
+    }
     setEditLoading(null);
   };
   if (!trade) return <></>;
@@ -134,7 +147,12 @@ export const EditModal: React.FC<{
       </RowGap>
       <div className="data">
         <ColumnGap gap="12px">
-          <LimitOrderTradeSize size={size} setSize={setPrice} />
+          <RowBetween>
+            <BuyTradeHeadText>Trade size</BuyTradeHeadText>
+            <EditTextValueText>
+              {divide(trade.trade_size, poolDecimals)}
+            </EditTextValueText>
+          </RowBetween>
           <TimePicker
             currentTime={currentTime}
             max_duration={periodValidations.max}
