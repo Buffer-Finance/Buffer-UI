@@ -1,22 +1,16 @@
 import BufferTable from '@Views/Common/BufferTable';
-import { CellContent, CellInfo } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import { atom, useAtom } from 'jotai';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { useState } from 'react';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
-import {
-  OngoingTradeSchema,
-  signatureCache,
-  useOngoingTrades,
-} from '@Views/TradePage/Hooks/ongoingTrades';
-import { toFixed } from '@Utils/NumString';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import {
   AssetCell,
@@ -26,10 +20,8 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
 import { DisplayTime, getProbability, queuedTradeFallBack } from './Common';
-import { useAccount } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { useToast } from '@Contexts/Toast';
-import { cancelQueueTrade } from '@Views/TradePage/utils';
+import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
+import { useState } from 'react';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -61,30 +53,12 @@ const OngoingTradesTable = () => {
   const [marketPrice] = useAtom(priceAtom);
   const [ongoingData] = useOngoingTrades();
   const markets = useMarketsConfig();
-  const { activeChain } = useActiveChain();
-  const { address } = useAccount();
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
+
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const toastify = useToast();
-  const cancelHandler = async (queuedId: number) => {
-    if (!address) return;
-    if (cancelLoading)
-      return toastify({
-        msg: 'Please wait for prev transaction.',
-        type: 'error',
-        id: '232',
-      });
-    setCancelLoading(queuedId);
-    const res = await cancelQueueTrade({
-      user_signature: signatureCache,
-      user_address: address,
-      environment: activeChain.id,
-      queue_id: queuedId,
-    });
-    setCancelLoading(null);
-  };
+  const { cancelHandler } = useCancelTradeFunction();
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = ongoingData?.[row];
@@ -144,7 +118,7 @@ const OngoingTradesTable = () => {
           <GreyBtn
             className="!text-1"
             onClick={() => {
-              cancelHandler(trade.queue_id);
+              cancelHandler(trade.queue_id, cancelLoading, setCancelLoading);
             }}
             isLoading={cancelLoading == trade.queue_id}
           >
