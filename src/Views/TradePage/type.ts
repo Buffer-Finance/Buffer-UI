@@ -1,3 +1,5 @@
+import { appConfig, marketsForChart } from './config';
+
 //type of markets needed on trade page
 export type marketType = {
   category: string;
@@ -64,3 +66,10 @@ export enum directionBtn {
   Up,
   Down,
 }
+
+export type configType = (typeof appConfig)['421613'];
+
+export type poolInfoType =
+  (typeof appConfig)['421613']['poolsInfo']['0xEbB1314A9549EE12F0FAA76B9E66e017b1De7dc5'];
+
+export type chartDataType = (typeof marketsForChart)['BTCUSD'];

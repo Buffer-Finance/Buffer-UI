@@ -5,7 +5,7 @@ import { baseUrl } from '../config';
 import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Signer } from 'ethers';
-enum TradeState {
+export enum TradeState {
   Queued = 'QUEUED',
 }
 export interface OngoingTradeSchema {

@@ -27,6 +27,11 @@ const BuyTradeBackground = styled.div`
   border-left: 1px solid #2a2a3a;
   border-right: 1px solid #2a2a3a;
   padding: 16px;
+  height: calc(100vh - 75px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
 `;
 
 export const BuyTrade: React.FC = () => {
@@ -38,6 +43,13 @@ export const BuyTrade: React.FC = () => {
   const marketPrice = useAtomValue(priceAtom);
   const knowTill = useAtomValue(knowTillAtom);
 
+  console.log(
+    switchPool,
+    poolDetails,
+    readcallData,
+    activeMarket,
+    'buytradeData'
+  );
   if (!switchPool || !poolDetails || !readcallData || !activeMarket)
     return (
       <Skeleton

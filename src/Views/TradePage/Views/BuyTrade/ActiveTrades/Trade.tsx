@@ -5,27 +5,57 @@ import styled from '@emotion/styled';
 import { DirectionChip } from './DirectionChip';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { QueuedChip } from './QueuedChip';
-import { Bar } from '@Views/Common/Toast/style';
 import { TradePoolChip } from './TradePoolChip';
 import { TradeTypeChip } from './TradeTypeChip';
 import { TradeDataView } from './TradeDataView';
 import { TradeActionButton } from './TradeActionButton';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
+import {
+  OngoingTradeSchema,
+  TradeState,
+} from '@Views/TradePage/Hooks/ongoingTrades';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import { joinStrings } from '@Views/TradePage/utils';
+import { TradeTimeElapsed } from './TradeTimeElapsed';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
   background-color: #141823;
   border-radius: 5px;
+  margin-top: 8px;
 `;
 
-export const TradeCard = ({ trade }: { trade: OngoingTradeSchema }) => {
-  const pairName = 'BTC-USD';
-  const isUp = true;
-  const width = 50;
-  const assetName = 'USDC';
-  const tradeType = 'Limit order';
-  const isQueued = true;
+export const TradeCard = ({
+  trade,
+  cancelLoading,
+  setCancelLoading,
+}: {
+  trade: OngoingTradeSchema;
+  cancelLoading: number | null;
+  setCancelLoading: (newValue: number | null) => void;
+}) => {
+  const markets = useMarketsConfig();
+  const { getPoolInfo } = usePoolInfo();
+  const tradeMarket = markets?.find((pair) => {
+    const pool = pair.pools.find(
+      (pool) =>
+        pool.optionContract.toLowerCase() ===
+        trade?.target_contract.toLowerCase()
+    );
+    return !!pool;
+  });
 
+  if (!tradeMarket) return <>Error</>;
+  const poolContract = tradeMarket?.pools.find(
+    (pool) =>
+      pool.optionContract.toLowerCase() === trade?.target_contract.toLowerCase()
+  )?.pool;
+  const poolInfo = getPoolInfo(poolContract);
+  const pairName = joinStrings(tradeMarket.token0, tradeMarket.token1, '-');
+  const isUp = trade.is_above;
+  const assetName = tradeMarket.token1;
+  const tradeType = trade.is_limit_order ? 'Limit order' : 'Market';
+  const isQueued = trade.state === TradeState.Queued;
   return (
     <TradeCardBackground>
       <ColumnGap gap="15px">
@@ -41,13 +71,23 @@ export const TradeCard = ({ trade }: { trade: OngoingTradeSchema }) => {
         </RowBetween>
         <QueuedChip />
       </ColumnGap>
-      {/* <div className="relative">
-        <Bar width={width + '%'} className={isUp ? 'bg-green' : 'bg-red'} />
-      </div> */}
-      <TradePoolChip assetName={assetName} />
+      <TradeTimeElapsed trade={trade} />
+      <div className="mb-3">
+        <TradePoolChip assetName={assetName} />
+      </div>
 
-      <TradeDataView isQueued={isQueued} />
-      <TradeActionButton isQueued={isQueued} />
+      <TradeDataView
+        isQueued={isQueued}
+        trade={trade}
+        poolInfo={poolInfo}
+        configData={tradeMarket}
+      />
+      <TradeActionButton
+        trade={trade}
+        tradeMarket={tradeMarket}
+        cancelLoading={cancelLoading}
+        setCancelLoading={setCancelLoading}
+      />
     </TradeCardBackground>
   );
 };

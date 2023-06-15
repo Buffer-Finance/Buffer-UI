@@ -8,16 +8,20 @@ import { isTableShownAtom } from '@Views/TradePage/atoms';
 const tableTypes = ['Trades', 'Limit Orders'];
 
 export const ActiveTrades: React.FC = () => {
+  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const [tableType, setTableType] = useState(tableTypes[0]);
-  // const [activeTrades] = useOngoingTrades();
+  const [activeTrades, limitOrderTrades] = useOngoingTrades();
   const setIsTableShown = useSetAtom(isTableShownAtom);
+  const trades = tableType == 'Trades' ? activeTrades : limitOrderTrades;
   return (
     <>
-      <div className="sticky top-[0px] z-40 w-full bg-1 flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  ">
+      <div className="w-full bg-1 flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  mt-3">
         {tableTypes.map((s) => {
           return (
             <div
-              className={' cursor-pointer ' + (tableType == s ? 'text-1' : '')}
+              className={
+                ' cursor-pointer ' + (tableType == s ? 'text-1' : 'text-2')
+              }
               onClick={() => setTableType(s)}
             >
               {s}
@@ -33,10 +37,15 @@ export const ActiveTrades: React.FC = () => {
           <ExpandSVG />
         </button>
       </div>
-      <div className=" flex-grow overflow-y-scroll relative">
-        {/* {activeTrades.map((t) => (
-          <TradeCard trade={t} />
-        ))} */}
+      <div className="flex-grow overflow-y-auto">
+        {trades.map((t) => (
+          <TradeCard
+            trade={t}
+            key={t.id}
+            cancelLoading={cancelLoading}
+            setCancelLoading={setCancelLoading}
+          />
+        ))}
       </div>
     </>
   );
