@@ -213,7 +213,7 @@ export const OverviewArbitrum = ({
         (Date.now() - Date.parse('17 Mar 2023 017:15:45 GMT')) / 86400000
       ),
       BFR: Math.ceil(
-        (Date.now() - Date.parse('11 June 2023 017:15:45 GMT')) / 86400000
+        (Date.now() - Date.parse('14 Jun 2023 019:36:22 GMT')) / 86400000
       ),
     };
   }, []);
