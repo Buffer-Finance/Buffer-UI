@@ -32,6 +32,7 @@ import { HHMMToSeconds } from '@Views/TradePage/utils';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { Display } from '@Views/Common/Tooltips/Display';
 
 export const EditModal: React.FC<{
   trade: OngoingTradeSchema;
@@ -150,7 +151,10 @@ export const EditModal: React.FC<{
           <RowBetween>
             <BuyTradeHeadText>Trade size</BuyTradeHeadText>
             <EditTextValueText>
-              {divide(trade.trade_size, poolDecimals)}
+              <Display
+                data={divide(trade.trade_size, poolDecimals)}
+                unit={'USDC'}
+              />
             </EditTextValueText>
           </RowBetween>
           <TimePicker
