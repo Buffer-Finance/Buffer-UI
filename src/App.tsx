@@ -49,6 +49,8 @@ import { V3AppTradePage } from '@Views/V3App/V3TradePage';
 import { TradePage } from '@Views/TradePage';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
+import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
+import { PasswordModal } from '@Views/Common/PasswordModal';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
@@ -173,12 +175,17 @@ export const snackAtom = atom<{
   message: null,
 });
 
+export const isAutorizedAtom = atomWithLocalStorage(
+  'authorized user or not',
+  false
+);
 function App() {
   useAutoConnect();
   const [snack, setSnack] = useAtom(snackAtom);
   const graphStatus = useGraphStatus();
   return (
     <>
+      <PasswordModal />
       <I18nProvider i18n={i18n}>
         <Background>
           {graphStatus && (

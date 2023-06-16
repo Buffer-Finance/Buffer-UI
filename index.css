@@ -26,6 +26,10 @@ body {
   max-width: 899px;
 
 }
+.password-border {
+  border: 1.34417px solid #2A2A3A;
+  outline-width: 0.3px;
+}
 .accordion-table-strip-right-border{
   border-right: 1px solid var(--text-2);
 }
@@ -216,8 +220,8 @@ body .flexlayout__layout {
 .tv-h {
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 .mouse-animation {
