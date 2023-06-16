@@ -8,9 +8,8 @@ export const appConfig = {
     router: '0xFD2Af6FB0EfBefBDA609fdF95761b9e635422F92',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     poolsInfo: {
-      '0xEbB1314A9549EE12F0FAA76B9E66e017b1De7dc5': {
+      '0xA33e460642e6620Feb51708F0F2c13444E489439': {
         tokenAddress: '0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E',
-        meta: '0xC33A64475f84C88DfB139fcFF29642a055587fe4',
         faucet: '0x51469Ec9B8AE9B3Fbf985e735C2E3758FbD4e408',
         decimals: 6,
         token: 'USDC',
