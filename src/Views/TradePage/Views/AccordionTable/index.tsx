@@ -57,7 +57,7 @@ const AccordionTable: React.FC<any> = ({}) => {
       <div
         className={` ${
           expanded ? 'h-[355px]' : 'h-[0px]'
-        } transition-all  overflow-y-hidden mx-3`}
+        } flex flex-col transition-all  overflow-y-hidden mx-3`}
       >
         {activeTable == 'Trades' ? (
           <OngoingTradesTable />
