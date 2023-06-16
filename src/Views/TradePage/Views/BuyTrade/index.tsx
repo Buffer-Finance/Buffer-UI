@@ -32,7 +32,6 @@ const BuyTradeBackground = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: calc(100vh - 75px);
   align-items: stretch;
 `;
 
