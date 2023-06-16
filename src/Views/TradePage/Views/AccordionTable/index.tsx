@@ -6,10 +6,11 @@ import OngoingTradesTable from './OngoingTradesTable';
 import LimitOrderTable from './LimitOrderTable';
 import { useAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
+import HistoryTable from './HistoryTable';
 const tables = {
   Trades: OngoingTradesTable,
   'Limit Orders': LimitOrderTable,
-  History: OngoingTradesTable,
+  History: HistoryTable,
   'Platform Trades': OngoingTradesTable,
   'Platform History': OngoingTradesTable,
 };

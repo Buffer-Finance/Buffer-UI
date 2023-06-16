@@ -155,7 +155,7 @@ const OngoingTradesTable = () => {
             <div>
               {getProbability(
                 trade,
-                +getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })
+                +getPriceFromKlines(marketPrice, tradeMarket)
               )}
             </div>
           )

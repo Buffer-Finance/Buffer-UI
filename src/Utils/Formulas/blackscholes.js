@@ -7,7 +7,7 @@
 // a=Above
 // y=Yes
 const BlackScholes = (y, a, s, x, t, r, v) => {
-  // console.log(`y, a, s, x, t, r, v: `, y, a, s, x, t, r, v);
+  console.log(`y, a, s, x, t, r, v: `, y, a, s, x, t, r, v);
   var d1, d2;
   var DAYS_365 = 86400 * 365;
   t = t / DAYS_365;

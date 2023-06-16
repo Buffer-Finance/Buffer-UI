@@ -26,46 +26,44 @@ import {
 } from './Common';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useState } from 'react';
+import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom<number[]>([]);
 const headNameArray = [
   'Asset',
   'Strike Price',
-  'Current Price',
+  'Expiry Price',
   'Open Time',
   'Time Left',
   'Close Time',
   'Trade Size',
-  'Probability',
-  'Show',
+  'Payout',
+  'Status',
 ];
 
 enum TableColumn {
   Asset = 0,
   Strike = 1,
-  CurrentPrice = 2,
+  ExpiryPrice = 2,
   OpenTime = 3,
   TimeLeft = 4,
   CloseTime = 5,
   TradeSize = 6,
-  Probability = 7,
-  Show = 8,
+  Payout = 7,
+  Status = 8,
 }
 const priceDecimals = 8;
 
 const HistoryTable = () => {
-  const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
-  const [ongoingData] = useOngoingTrades();
-  console.log(`OngoingTradesTable-ongoingData: `, ongoingData?.length);
+  const [ongoingData] = useHistoryTrades();
   const markets = useMarketsConfig();
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
 
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const { cancelHandler } = useCancelTradeFunction();
 
   const BodyFormatter: any = (row: number, col: number) => {
     console.log(`OngoingTradesTable-row: `, row);
@@ -81,37 +79,13 @@ const HistoryTable = () => {
     });
     if (!trade || !tradeMarket) return 'Problem';
     switch (col) {
-      case TableColumn.Show:
-        const isVisualized = visualized.includes(trade.queue_id);
-        return queuedTradeFallBack(trade, false, true) ? (
-          <GreyBtn
-            className={tableButtonClasses}
-            onClick={() => {
-              cancelHandler(trade.queue_id, cancelLoading, setCancelLoading);
-            }}
-            isLoading={cancelLoading == trade.queue_id}
-          >
-            Cancel
-          </GreyBtn>
-        ) : (
-          <ShowIcon
-            show={isVisualized}
-            onToggle={() => {
-              if (isVisualized) {
-                let temp = [...visualized];
-                temp.splice(visualized.indexOf(trade.queue_id as any), 1);
-                setVisualized(temp);
-              } else {
-                setVisualized([...visualized, trade.queue_id]);
-              }
-            }}
-          />
-        );
+      case TableColumn.Status:
+        return <div>Status</div>;
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
       case TableColumn.Asset:
         return <AssetCell configData={tradeMarket} currentRow={trade} />;
-      case TableColumn.CurrentPrice:
+      case TableColumn.ExpiryPrice:
         return (
           <Display
             className="!justify-start"
@@ -149,17 +123,10 @@ const HistoryTable = () => {
             unit={tradeMarket?.token1}
           />
         );
-      case TableColumn.Probability:
-        return (
-          queuedTradeFallBack(trade) || (
-            <div>
-              {getProbability(
-                trade,
-                +getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })
-              )}
-            </div>
-          )
-        );
+      case TableColumn.Payout:
+        return <div>Hello</div>;
+      case TableColumn.Status:
+        return <div>Status</div>;
     }
     return 'Unhandled Body';
   };
