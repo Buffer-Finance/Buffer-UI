@@ -6,7 +6,7 @@ import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, subtract } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
@@ -27,6 +27,8 @@ import {
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useState } from 'react';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
+import SuccessIcon from '@SVG/Elements/FailedSuccess';
+import FailedSuccess from '@SVG/Elements/FailedSuccess';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom<number[]>([]);
@@ -35,7 +37,7 @@ const headNameArray = [
   'Strike Price',
   'Expiry Price',
   'Open Time',
-  'Time Left',
+  'Duration',
   'Close Time',
   'Trade Size',
   'Payout',
@@ -59,15 +61,14 @@ const HistoryTable = () => {
   const [marketPrice] = useAtom(priceAtom);
   const [ongoingData] = useHistoryTrades();
   const markets = useMarketsConfig();
-  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
 
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
-    console.log(`OngoingTradesTable-row: `, row);
     const trade = ongoingData?.[row];
+    console.log(`BodyFormatter-row: `, trade);
 
     const tradeMarket = markets?.find((pair) => {
       const pool = pair.pools.find(
@@ -77,10 +78,23 @@ const HistoryTable = () => {
       );
       return !!pool;
     });
-    if (!trade || !tradeMarket) return 'Problem';
+    if (!tradeMarket) return 'Problem';
+    const status =
+      trade.payout > 0
+        ? {
+            tooltip: 'You won this bet!',
+            chip: 'Win',
+            icon: <SuccessIcon width={14} height={14} />,
+            textColor: 'text-green',
+          }
+        : {
+            tooltip: 'You lost this trade!',
+            chip: 'Loss',
+            icon: <FailedSuccess width={14} height={14} />,
+            textColor: 'text-red',
+          };
+    const minClosingTime = Math.min(trade.expiration_time!, trade.close_time);
     switch (col) {
-      case TableColumn.Status:
-        return <div>Status</div>;
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
       case TableColumn.Asset:
@@ -104,16 +118,14 @@ const HistoryTable = () => {
           queuedTradeFallBack(trade, true) || (
             <div>
               {formatDistanceExpanded(
-                Variables(+trade.expiration_time! - currentEpoch)
+                Variables(minClosingTime - trade.queued_timestamp)
               )}
             </div>
           )
         );
       case TableColumn.CloseTime:
         return (
-          queuedTradeFallBack(trade) || (
-            <DisplayTime ts={trade.expiration_time!} />
-          )
+          queuedTradeFallBack(trade) || <DisplayTime ts={minClosingTime} />
         );
       case TableColumn.TradeSize:
         return (
@@ -124,9 +136,46 @@ const HistoryTable = () => {
           />
         );
       case TableColumn.Payout:
-        return <div>Hello</div>;
+        return (
+          <div>
+            <Display
+              className="!justify-start"
+              data={divide(trade.payout, 6)}
+              unit="USDC"
+            />
+            <span className={status.textColor}>
+              Net Pnl :{' '}
+              {status.chip == 'Win'
+                ? '+'
+                : '-' +
+                  divide(
+                    status.chip == 'Win'
+                      ? subtract(trade.payout, trade.trade_size)
+                      : trade.trade_size,
+                    6
+                  )}{' '}
+            </span>
+          </div>
+        );
       case TableColumn.Status:
-        return <div>Status</div>;
+        return (
+          <NumberTooltip content={status.tooltip}>
+            <div
+              className={`flex ${status.textColor} sm:flex-row-reverse items-center justify-between w-max web:pl-3 web:pr-[6px] web:py-2  rounded-[5px] bg-[#282B39]`}
+            >
+              <div
+                className={
+                  'text-f13 font-normal web:mr-3 tab:mx-2' +
+                  ` ${status.textColor}`
+                }
+              >
+                {status.chip}
+              </div>
+
+              {status.icon}
+            </div>
+          </NumberTooltip>
+        );
     }
     return 'Unhandled Body';
   };

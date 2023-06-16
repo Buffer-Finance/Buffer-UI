@@ -55,7 +55,7 @@ const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
   const { data: oneCTWallet } = useSigner({ chainId: activeChain.id });
   const { address } = useAccount();
-  const { data, error } = useSWR<OngoingTradeSchema[]>([oneCTWallet], {
+  const { data, error } = useSWR<OngoingTradeSchema[]>('i am the history', {
     fetcher: async (oneCTWallet) => {
       const signature = await getCachedSignature(oneCTWallet);
       console.log(`ssssignature: `, signature);
@@ -74,7 +74,7 @@ const useHistoryTrades = () => {
     },
     refreshInterval: 10,
   });
-  return data || ([[], []] as OngoingTradeSchema[][]);
+  return data || ([[]] as [OngoingTradeSchema[]]);
 };
 
 export { useHistoryTrades };

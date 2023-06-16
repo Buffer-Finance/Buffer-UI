@@ -8,18 +8,17 @@ import { useAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
 import HistoryTable from './HistoryTable';
 const tables = {
-  Trades: OngoingTradesTable,
-  'Limit Orders': LimitOrderTable,
-  History: HistoryTable,
-  'Platform Trades': OngoingTradesTable,
-  'Platform History': OngoingTradesTable,
+  Trades: 'h',
+  'Limit Orders': 'h',
+  History: 'h',
+  'Platform Trades': 'h',
+  'Platform History': 'h',
 };
 const gap = ['History'];
 
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
   const [activeTable, setActiveTable] = useState('Trades');
-  const TableComponent = (tables as any)[activeTable];
   return (
     <div className="flex flex-col ">
       <div className="w-full flex items-center  justify-between p-3">
@@ -57,7 +56,13 @@ const AccordionTable: React.FC<any> = ({}) => {
           expanded ? 'h-[405px]' : 'h-[0px]'
         } transition-all  overflow-y-hidden mx-3`}
       >
-        <TableComponent />
+        {activeTable == 'Trades' ? (
+          <OngoingTradesTable />
+        ) : activeTable == 'Limit Orders' ? (
+          <LimitOrderTable />
+        ) : (
+          <HistoryTable />
+        )}
       </div>
     </div>
   );
