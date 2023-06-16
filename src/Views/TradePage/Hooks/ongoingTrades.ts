@@ -55,25 +55,34 @@ const useOngoingTrades = () => {
   const { activeChain } = useActiveChain();
   const { data: oneCTWallet } = useSigner({ chainId: activeChain.id });
   const { address } = useAccount();
-  const { data, error } = useSWR<OngoingTradeSchema[][]>([oneCTWallet], {
-    fetcher: async (oneCTWallet) => {
-      const signature = await getCachedSignature(oneCTWallet);
-      console.log(`ssssignature: `, signature);
-      const res = await axios.get(`${baseUrl}trades/user/active/`, {
-        params: {
-          user_signature: signature,
-          user_address: address,
-          environment: activeChain.id,
-        },
-      });
-      if (!res?.data?.length) return [[], []];
-      const activeTrades = res.data.filter((t: any) => !t.is_limit_order);
-      const limitOrders = res.data.filter((t: any) => t.is_limit_order);
-      console.log(`activeTrades: `, activeTrades, limitOrders);
-      return [activeTrades, limitOrders] as OngoingTradeSchema[];
-    },
-    refreshInterval: 10,
-  });
+  const { data, error } = useSWR<OngoingTradeSchema[][]>(
+    'i am the active data',
+    {
+      fetcher: async (oneCTWallet) => {
+        const signature = await getCachedSignature(oneCTWallet);
+        console.log(`ssssignature: `, signature);
+        const res = await axios.get(`${baseUrl}trades/user/active/`, {
+          params: {
+            user_signature: signature,
+            user_address: address,
+            environment: activeChain.id,
+          },
+        });
+        if (!res?.data?.length) return [[], []];
+        // limitOrders
+        const limitOrders = res.data.filter(
+          (t: any) => t.is_limit_order && t.state === 'QUEUED'
+        );
+        const activeTrades = res.data.filter(
+          (t: any) =>
+            !t.is_limit_order || (t.is_limit_order && t.state !== 'QUEUED')
+        );
+        console.log(`activeTrades: `, activeTrades, limitOrders);
+        return [activeTrades, limitOrders] as OngoingTradeSchema[];
+      },
+      refreshInterval: 10,
+    }
+  );
   return data || ([[], []] as OngoingTradeSchema[][]);
 };
 
