@@ -45,7 +45,7 @@ export const getProbability = (trade: OngoingTradeSchema, price: number) => {
       true,
       trade.is_above,
       price,
-      +trade.strike / 1 ** 8,
+      +trade.strike / 100000000,
       +trade.expiration_time - currentEpoch,
       0,
       12000 / 10000

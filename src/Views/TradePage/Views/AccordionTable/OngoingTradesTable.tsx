@@ -150,12 +150,17 @@ const OngoingTradesTable = () => {
           />
         );
       case TableColumn.Probability:
+        const probabiliyt = getProbability(
+          trade,
+          +getPriceFromKlines(marketPrice, tradeMarket)
+        );
         return (
           queuedTradeFallBack(trade) || (
             <div>
-              {getProbability(
-                trade,
-                +getPriceFromKlines(marketPrice, tradeMarket)
+              {probabiliyt ? (
+                <Display data={probabiliyt} precision={2} />
+              ) : (
+                'Calculating...'
               )}
             </div>
           )
