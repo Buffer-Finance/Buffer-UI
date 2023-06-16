@@ -10,7 +10,6 @@ export const appConfig = {
     poolsInfo: {
       '0xEbB1314A9549EE12F0FAA76B9E66e017b1De7dc5': {
         tokenAddress: '0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E',
-        meta: '0xC33A64475f84C88DfB139fcFF29642a055587fe4',
         faucet: '0x51469Ec9B8AE9B3Fbf985e735C2E3758FbD4e408',
         decimals: 6,
         token: 'USDC',
