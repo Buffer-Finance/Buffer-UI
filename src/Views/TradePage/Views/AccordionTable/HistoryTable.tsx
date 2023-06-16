@@ -28,7 +28,7 @@ import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFun
 import { useState } from 'react';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import FailedSuccess from '@SVG/Elements/FailedSuccess';
-import SuccessIcon from '@SVG/Elements/FailedSuccess';
+import SuccessIcon from '@Assets/Elements/SuccessIcon';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom<number[]>([]);
@@ -159,11 +159,11 @@ const HistoryTable = () => {
         return (
           <NumberTooltip content={status.tooltip}>
             <div
-              className={`flex ${status.textColor} sm:flex-row-reverse items-center justify-between w-max web:pl-3 web:pr-[6px] web:py-2  rounded-[5px] bg-[#282B39]`}
+              className={`flex ${status.textColor} sm:flex-row-reverse items-center justify-between w-max px-2   rounded-[5px] bg-[#282B39]`}
             >
               <div
                 className={
-                  'text-f13 font-normal web:mr-3 tab:mx-2' +
+                  'text-f13 font-normal web:mr-2 tab:mx-2' +
                   ` ${status.textColor}`
                 }
               >
