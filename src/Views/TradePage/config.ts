@@ -5,7 +5,7 @@ export const appConfig = {
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
-    router: '0x12DAB5616fd779E7F902F6149cE26B506DF92B70',
+    router: '0xFD2Af6FB0EfBefBDA609fdF95761b9e635422F92',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     poolsInfo: {
       '0xEbB1314A9549EE12F0FAA76B9E66e017b1De7dc5': {

@@ -165,8 +165,9 @@ export const generateTradeSignature = async (
     referral,
     NFTid,
   ];
-  const baseArgsEnding = [ts, settlementFee];
-  const baseArgsEndingTypes = ['uint256', 'uint256'];
+  const isLimit = settlementFee == 0;
+  const baseArgsEnding = isLimit ? [ts] : [ts, settlementFee];
+  const baseArgsEndingTypes = isLimit ? ['uint256'] : ['uint256', 'uint256'];
   const args = [
     {
       values: [...baseArgs, ...baseArgsEnding],

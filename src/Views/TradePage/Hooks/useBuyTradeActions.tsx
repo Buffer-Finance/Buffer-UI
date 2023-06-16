@@ -279,7 +279,7 @@ export const useBuyTradeActions = (userInput: string) => {
         referralData[2],
         highestTierNFT?.tokenId || '0',
         currentUTCTimestamp,
-        settelmentFee?.settlement_fee!,
+        customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
         customTrade.is_up,
         oneCTWallet
       );

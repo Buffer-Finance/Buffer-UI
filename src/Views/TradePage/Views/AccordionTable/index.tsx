@@ -53,7 +53,7 @@ const AccordionTable: React.FC<any> = ({}) => {
       </div>
       <div
         className={` ${
-          expanded ? 'h-[400px]' : 'h-[0px]'
+          expanded ? 'h-[500px]' : 'h-[0px]'
         } transition-all  mx-3`}
       >
         <TableComponent />
