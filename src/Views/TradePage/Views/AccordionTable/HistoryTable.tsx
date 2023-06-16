@@ -27,8 +27,8 @@ import {
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useState } from 'react';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
-import SuccessIcon from '@SVG/Elements/FailedSuccess';
 import FailedSuccess from '@SVG/Elements/FailedSuccess';
+import SuccessIcon from '@SVG/Elements/FailedSuccess';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom<number[]>([]);
@@ -145,15 +145,13 @@ const HistoryTable = () => {
             />
             <span className={status.textColor}>
               Net Pnl :{' '}
-              {status.chip == 'Win'
-                ? '+'
-                : '-' +
-                  divide(
-                    status.chip == 'Win'
-                      ? subtract(trade.payout, trade.trade_size)
-                      : trade.trade_size,
-                    6
-                  )}{' '}
+              {(status.chip == 'Win' ? '+' : '-') +
+                divide(
+                  status.chip == 'Win'
+                    ? subtract(trade.payout, trade.trade_size)
+                    : trade.trade_size,
+                  6
+                )}{' '}
             </span>
           </div>
         );
