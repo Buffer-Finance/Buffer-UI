@@ -44,6 +44,7 @@ export const ActiveTrades: React.FC = () => {
         <NoTrades isLimitOrderTable={isLimitOrderTable} />
       ) : (
         <TradesBackground>
+          {/* <div className="w-full h-[900px] bg-red"></div> */}
           {trades.map((t) => (
             <TradeCard
               trade={t}
@@ -60,6 +61,9 @@ export const ActiveTrades: React.FC = () => {
 
 const TradesBackground = styled.div`
   flex-grow: 1;
+  /* padding: 20px; */
+  /* background: blue; */
+  flex-basis: 0;
   overflow-y: auto;
   ::-webkit-scrollbar {
     width: 2px;
