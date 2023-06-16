@@ -53,7 +53,7 @@ export const setTimeSelectorAtom = atom(null, (get, set, update: string) => {
   set(timeSelectorAtom, { HHMM: update, seconds: HHMMToSeconds(update) });
 });
 
-export const tradeSizeAtom = atomWithLocalStorage('tradeSizeAtom', 5);
+export const tradeSizeAtom = atomWithLocalStorage('tradeSizeAtom', '5');
 
 export const activePoolObjAtom = atomWithLocalStorage('activePoolObjAtom', {
   activePool: 'USDC',

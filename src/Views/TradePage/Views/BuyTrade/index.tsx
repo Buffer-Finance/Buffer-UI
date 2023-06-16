@@ -23,16 +23,14 @@ import { TradeCard } from './ActiveTrades/Trade';
 
 const BuyTradeBackground = styled.div`
   max-width: 275px;
-  position: sticky;
-  top: 45px;
   background-color: #1c1c28;
   border-left: 1px solid #2a2a3a;
   border-right: 1px solid #2a2a3a;
   padding: 16px;
-  height: calc(100vh - 75px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  height: calc(100vh - 75px);
   align-items: stretch;
 `;
 
@@ -45,13 +43,6 @@ export const BuyTrade: React.FC = () => {
   const marketPrice = useAtomValue(priceAtom);
   const knowTill = useAtomValue(knowTillAtom);
 
-  console.log(
-    switchPool,
-    poolDetails,
-    readcallData,
-    activeMarket,
-    'buytradeData'
-  );
   if (!switchPool || !poolDetails || !readcallData || !activeMarket)
     return (
       <Skeleton
@@ -62,9 +53,6 @@ export const BuyTrade: React.FC = () => {
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
   const allowance = divide(readcallData.allowance, decimals) as string;
-  // const totalPayout = readcallData.totalPayout;
-  // const basePayout = switchPool.base_settlement_fee;
-  // const boostedPayout = subtract(totalPayout, basePayout);
   const isForex = activeMarket.category === AssetCategory[0];
   const isMarketOpen = true;
   const marketId = joinStrings(activeMarket.token0, activeMarket.token1, '');

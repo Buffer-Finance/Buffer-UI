@@ -18,17 +18,19 @@ const TradePage: React.FC<any> = ({}) => {
     <>
       <EssentialModals />
       <div
-        className={`flex justify-between w-[100%] ${
+        className={`flex items-start h-screen w-full ${
           panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
         }`}
       >
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col flex-1 overflow-y-scroll">
           <PinnedMarkets />
           <MarketChart />
           <AccordionTable />
         </div>
 
-        <BuyTrade />
+        <div className="overflow-y-hidden">
+          <BuyTrade />
+        </div>
       </div>
     </>
   );

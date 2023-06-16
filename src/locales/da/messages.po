@@ -21,12 +21,24 @@ msgstr ""
 #~ msgid "<0>{0}</0>"
 #~ msgstr ""
 
-#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:39
+#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:48
 msgid "<0>Max {activeFrame} : {MAX} </0>"
+msgstr ""
+
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:66
+msgid "<0>Max trade size is {maxTradeSize} {tokenName}</0>"
+msgstr ""
+
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:58
+msgid "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 msgstr ""
 
 #: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:33
 msgid "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
+msgstr ""
+
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:74
+msgid "<0>You don't have enough {tokenName}. <1/> </0>"
 msgstr ""
 
 #: src/Views/TradePage/Views/Settings/SettingsHeader.tsx:12
@@ -50,14 +62,14 @@ msgstr ""
 #~ msgstr ""
 
 #: src/Views/TradePage/index.tsx:7
-msgid "hello"
-msgstr ""
+#~ msgid "hello"
+#~ msgstr ""
 
 #: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/index.tsx:22
 msgid "Limit orders expiry time"
 msgstr ""
 
-#: src/Views/TradePage/Views/Settings/NotificationPositionSettings/index.tsx:27
+#: src/Views/TradePage/Views/Settings/NotificationPositionSettings/index.tsx:25
 msgid "Notification Position"
 msgstr ""
 
@@ -65,32 +77,36 @@ msgstr ""
 msgid "Partial fill"
 msgstr ""
 
-#: src/Views/TradePage/Views/Settings/PremiumSettings.tsx:33
+#: src/Views/TradePage/Views/Settings/PremiumSettings.tsx:31
 msgid "Premium Features"
+msgstr ""
+
+#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:45
+msgid "Price"
 msgstr ""
 
 #: src/Views/TradePage/Views/Settings/ResetAllButton.tsx:25
 msgid "Reset All Settings"
 msgstr ""
 
-#: src/Views/TradePage/Views/Settings/MiscSettings.tsx:33
-#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:41
+#: src/Views/TradePage/Views/Settings/MiscSettings.tsx:31
+#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:39
 msgid "Share Related Settings"
 msgstr ""
 
-#: src/Views/TradePage/Views/Settings/MiscSettings.tsx:39
+#: src/Views/TradePage/Views/Settings/MiscSettings.tsx:37
 msgid "show favorite asset"
 msgstr ""
 
-#: src/Views/TradePage/Views/Settings/PremiumSettings.tsx:39
+#: src/Views/TradePage/Views/Settings/PremiumSettings.tsx:37
 msgid "show recent trade"
 msgstr ""
 
-#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:57
+#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:55
 msgid "Show share pop up"
 msgstr ""
 
-#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:48
+#: src/Views/TradePage/Views/Settings/ShareSettings.tsx:46
 msgid "Show trade size"
 msgstr ""
 
@@ -102,10 +118,18 @@ msgstr ""
 msgid "Slippage tolerance is the %age of price fluctuation you can tolerate before your trade is opened"
 msgstr ""
 
+#: src/Views/TradePage/Views/BuyTrade/TimeSelector/index.tsx:21
+msgid "Time"
+msgstr ""
+
 #: src/Views/TradePage/Views/Settings/TradeSettings/index.tsx:38
 msgid "Trade Settings"
 msgstr ""
 
-#: src/Views/TradePage/Views/Settings/TradePanelSettings/index.tsx:26
+#: src/Views/TradePage/Views/Markets/AssetSelectorDD/PoolRadio.tsx:19
+msgid "Trading Asset"
+msgstr ""
+
+#: src/Views/TradePage/Views/Settings/TradePanelSettings/index.tsx:24
 msgid "Trading Panel Side"
 msgstr ""
