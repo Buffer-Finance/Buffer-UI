@@ -54,7 +54,7 @@ const AccordionTable: React.FC<any> = ({}) => {
       <div
         className={` ${
           expanded ? 'h-[400px]' : 'h-[0px]'
-        } transition-all  overflow-hidden mx-3`}
+        } transition-all  mx-3`}
       >
         <TableComponent />
       </div>

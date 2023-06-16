@@ -12,19 +12,23 @@ import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import {
-  AssetCell,
-  StrikePriceComponent,
-} from '@Views/Common/TableComponents/TableComponents';
+import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
-import { DisplayTime, getProbability, queuedTradeFallBack } from './Common';
+import {
+  DisplayTime,
+  StrikePriceComponent,
+  TableButton,
+  getProbability,
+  queuedTradeFallBack,
+  tableButtonClasses,
+} from './Common';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useState } from 'react';
 
 export const tradesCount = 10;
-export const visualizeddAtom = atom([]);
+export const visualizeddAtom = atom<number[]>([]);
 const headNameArray = [
   'Asset',
   'Strike Price',
@@ -54,6 +58,7 @@ const OngoingTradesTable = () => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const [ongoingData] = useOngoingTrades();
+  console.log(`OngoingTradesTable-ongoingData: `, ongoingData?.length);
   const markets = useMarketsConfig();
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
 
@@ -63,6 +68,7 @@ const OngoingTradesTable = () => {
   const { cancelHandler } = useCancelTradeFunction();
 
   const BodyFormatter: any = (row: number, col: number) => {
+    console.log(`OngoingTradesTable-row: `, row);
     const trade = ongoingData?.[row];
 
     const tradeMarket = markets?.find((pair) => {
@@ -73,17 +79,27 @@ const OngoingTradesTable = () => {
       );
       return !!pool;
     });
-    if (!trade) return 'Problem';
+    if (!trade || !tradeMarket) return 'Problem';
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
-        return (
+        return queuedTradeFallBack(trade, false, true) ? (
+          <GreyBtn
+            className={tableButtonClasses}
+            onClick={() => {
+              cancelHandler(trade.queue_id, cancelLoading, setCancelLoading);
+            }}
+            isLoading={cancelLoading == trade.queue_id}
+          >
+            Cancel
+          </GreyBtn>
+        ) : (
           <ShowIcon
             show={isVisualized}
             onToggle={() => {
               if (isVisualized) {
                 let temp = [...visualized];
-                temp.splice(visualized.indexOf(trade.queue_id), 1);
+                temp.splice(visualized.indexOf(trade.queue_id as any), 1);
                 setVisualized(temp);
               } else {
                 setVisualized([...visualized, trade.queue_id]);
@@ -155,23 +171,7 @@ const OngoingTradesTable = () => {
       rows={ongoingData ? ongoingData.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow
-    />
-  );
-};
-
-export const UserAddressColumn = ({ address }: { address: string }) => {
-  if (!address) return <>{address}</>;
-  return (
-    <CellContent
-      content={[
-        <NumberTooltip content={address}>
-          <div className="flex items-center gap-2">
-            {getSlicedUserAddress(address, 5)}{' '}
-            <Launch className="invisible group-hover:visible" />
-          </div>
-        </NumberTooltip>,
-      ]}
+      overflow={400}
     />
   );
 };
@@ -200,7 +200,7 @@ const ShowIcon = ({
       width={17}
       height={17}
       x={0.266}
-      fill={!show ? '#282B39' : ' var(--bg-signature)'}
+      fill={!show ? '#282B39' : ' bg-blue'}
       rx={2}
     />
     <path

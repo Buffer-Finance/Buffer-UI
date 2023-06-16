@@ -15,8 +15,8 @@ const TableBackground = styled.div`
   --border-radius: 3px;
   --padding-left: 15px;
   overflow-x: hidden;
+  height: ${(props) => (props?.overflow ? props?.overflow + 'px' : 'auto')};
   border-radius: 12px 12px 0px 0px;
-
   & ::-webkit-scrollbar {
     background: var(--bg-grey);
     height: 2px !important;
@@ -31,6 +31,7 @@ const TableBackground = styled.div`
     font-size: 1.6rem;
 
     .table-header {
+      height: ${(props) => (props?.overflow ? 'sticky' : 'static')};
       background: #171722;
 
       .table-head {
