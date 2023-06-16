@@ -21,7 +21,7 @@ export interface OngoingTradeSchema {
   user_full_signature: string;
   user_address: string;
   trade_size: number;
-  trade_amount: number;
+  locked_amount: number;
   allow_partial_fill: boolean;
   referral_code: string;
   trader_nft_id: number;
