@@ -115,7 +115,7 @@ const OngoingTradesTable = () => {
         return (
           <Display
             className="!justify-start"
-            data={getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })}
+            data={getPriceFromKlines(marketPrice, tradeMarket)}
           />
         );
       case TableColumn.OpenTime:
@@ -130,14 +130,16 @@ const OngoingTradesTable = () => {
           queuedTradeFallBack(trade, true) || (
             <div>
               {formatDistanceExpanded(
-                Variables(+trade.close_time - currentEpoch)
+                Variables(+trade.expiration_time! - currentEpoch)
               )}
             </div>
           )
         );
       case TableColumn.CloseTime:
         return (
-          queuedTradeFallBack(trade) || <DisplayTime ts={trade.close_time} />
+          queuedTradeFallBack(trade) || (
+            <DisplayTime ts={trade.expiration_time!} />
+          )
         );
       case TableColumn.TradeSize:
         return (

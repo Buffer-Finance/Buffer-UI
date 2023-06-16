@@ -252,7 +252,7 @@ export const useBuyTradeActions = (userInput: string) => {
         ),
       };
 
-      let settlementFee = allSettlementFees[activeAsset.tv_id];
+      let settelmentFee = allSettlementFees[activeAsset.tv_id];
       let currentTimestamp = Date.now();
       let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
       const oneCTWallet = new ethers.Wallet(

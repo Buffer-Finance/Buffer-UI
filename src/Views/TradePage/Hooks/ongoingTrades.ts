@@ -72,7 +72,7 @@ const useOngoingTrades = () => {
       console.log(`activeTrades: `, activeTrades, limitOrders);
       return [activeTrades, limitOrders] as OngoingTradeSchema[];
     },
-    refreshInterval: 1000,
+    refreshInterval: 10,
   });
   return data || ([[], []] as OngoingTradeSchema[][]);
 };
