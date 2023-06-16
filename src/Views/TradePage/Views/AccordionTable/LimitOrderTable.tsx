@@ -34,7 +34,12 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useToast } from '@Contexts/Toast';
 import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
 import { cancelQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
-import { StrikePriceComponent, tableButtonClasses } from './Common';
+import {
+  StrikePriceComponent,
+  TableErrorRow,
+  tableButtonClasses,
+} from './Common';
+import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -165,6 +170,7 @@ const LimitOrderTable = () => {
       widths={['auto']}
       onRowClick={console.log}
       overflow={400}
+      error={<TableErrorRow msg="No active limit orders." />}
     />
   );
 };

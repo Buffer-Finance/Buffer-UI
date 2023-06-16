@@ -96,7 +96,7 @@ const MarketStatsBar: React.FC<any> = ({}) => {
     toggleMenu(false);
   }
 
-  const arr = [1, 2, 2.5, 4];
+  const arr = [1, 2.5, 2, 4];
   const data = [
     {
       header: 'Max Trade Size',

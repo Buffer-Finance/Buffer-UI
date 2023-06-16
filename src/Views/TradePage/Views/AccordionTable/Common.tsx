@@ -21,6 +21,7 @@ import {
   subtract,
   toFixed,
 } from '@Utils/NumString/stringArithmatics';
+import styled from 'styled-components';
 
 export const DisplayTime = ({ ts }: { ts: number | string }) => {
   return (
@@ -158,5 +159,42 @@ export const SlippageTooltip: React.FC<{
         4
       )}`}
     />
+  );
+};
+
+import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
+
+const Background = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 2.5rem;
+  padding: 1rem 0;
+  padding-bottom: 2rem;
+  font-family: Relative Pro;
+  .button {
+    width: fit-content;
+    font-size: 1.4rem;
+    padding: 0.6rem 1.4rem;
+    font-family: Relative Pro;
+    &:hover {
+      width: fit-content;
+      font-size: 1.4rem;
+      padding: 0.6rem 1.4rem;
+    }
+  }
+`;
+
+export const TableErrorRow: React.FC<{
+  msg: string;
+  children?: JSX.Element;
+}> = ({ msg, children }) => {
+  return (
+    <Background className={`mt-5 `}>
+      <NoMatchFound />
+      {msg}
+      {children}
+    </Background>
   );
 };

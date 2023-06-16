@@ -20,6 +20,7 @@ import {
   DisplayTime,
   StrikePriceComponent,
   TableButton,
+  TableErrorRow,
   getProbability,
   queuedTradeFallBack,
   tableButtonClasses,
@@ -179,6 +180,7 @@ const OngoingTradesTable = () => {
       widths={['auto']}
       onRowClick={console.log}
       overflow={400}
+      error={<TableErrorRow msg="No active trades present." />}
     />
   );
 };

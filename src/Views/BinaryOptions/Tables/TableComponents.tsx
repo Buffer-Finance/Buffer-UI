@@ -372,7 +372,7 @@ export const UpDownChip: React.FC<{
 }) => {
   return (
     <div
-      className={`px-3 text-f12 flex gap-1 items-center rounded-[8px] font-medium  ml-2 bg-1 brightness-125 w-max ${
+      className={`px-2 h-[22px] text-f12 flex gap-1 items-center rounded-[5px] font-medium  ml-2 bg-1 brightness-125 w-max ${
         isUp ? 'green' : 'red'
       }  ${className}`}
     >
