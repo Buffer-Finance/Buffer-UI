@@ -37,7 +37,6 @@ export const DisplayTime = ({ ts }: { ts: number | string }) => {
 };
 
 export const getProbability = (trade: OngoingTradeSchema, price: number) => {
-  console.log(`OngoingTradesTable-price: `, price);
   let currentEpoch = Math.round(Date.now() / 1000);
   const IV = 1.2;
 
@@ -47,10 +46,11 @@ export const getProbability = (trade: OngoingTradeSchema, price: number) => {
       trade.is_above,
       price,
       +trade.strike / 1 ** 8,
-      +trade.close_time - currentEpoch,
+      +trade.expiration_time - currentEpoch,
       0,
       12000 / 10000
     ) * 100;
+  console.log('probability', probability);
   return probability;
 };
 

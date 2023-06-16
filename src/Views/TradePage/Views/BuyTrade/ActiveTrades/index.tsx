@@ -4,6 +4,8 @@ import { TradeCard } from './Trade';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
 import { useSetAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
+import { NoTrades } from './NoTrades';
+import styled from '@emotion/styled';
 
 const tableTypes = ['Trades', 'Limit Orders'];
 
@@ -12,7 +14,8 @@ export const ActiveTrades: React.FC = () => {
   const [tableType, setTableType] = useState(tableTypes[0]);
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
   const setIsTableShown = useSetAtom(isTableShownAtom);
-  const trades = tableType == 'Trades' ? activeTrades : limitOrderTrades;
+  const isLimitOrderTable = tableType == 'Limit Orders';
+  const trades = !isLimitOrderTable ? activeTrades : limitOrderTrades;
   return (
     <>
       <div className="w-full bg-1 flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  mt-3">
@@ -37,16 +40,34 @@ export const ActiveTrades: React.FC = () => {
           <ExpandSVG />
         </button>
       </div>
-      <div className="flex-grow overflow-y-auto">
-        {trades.map((t) => (
-          <TradeCard
-            trade={t}
-            key={t.id}
-            cancelLoading={cancelLoading}
-            setCancelLoading={setCancelLoading}
-          />
-        ))}
-      </div>
+      {trades && trades.length === 0 ? (
+        <NoTrades isLimitOrderTable={isLimitOrderTable} />
+      ) : (
+        <TradesBackground>
+          {trades.map((t) => (
+            <TradeCard
+              trade={t}
+              key={t.id}
+              cancelLoading={cancelLoading}
+              setCancelLoading={setCancelLoading}
+            />
+          ))}
+        </TradesBackground>
+      )}
     </>
   );
 };
+
+const TradesBackground = styled.div`
+  flex-grow: 1;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 24px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 24px;
+  }
+`;

@@ -2,6 +2,7 @@ import { DDarrow } from '@Views/TradePage/Components/DDarrow';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { useActivePoolObject } from '@Views/TradePage/Hooks/useActivePoolObject';
 import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import styled from '@emotion/styled';
 import {
   Menu,
   MenuButton,
@@ -20,12 +21,13 @@ export const PoolDropdown: React.FC = () => {
   }
 
   return (
+    // <MenuBackground>
     <Menu
       menuButton={({ open }) => {
         return (
           <MenuButton
             className={
-              '!bg-[#303044] rounded-r-[5px] py-2 text-f14 text-1 px-3 font-medium'
+              '!bg-[#303044] rounded-r-[5px] py-2 text-f14 text-1 px-3 font-medium h-[40px]'
             }
           >
             <RowGap gap="8px">
@@ -50,6 +52,7 @@ export const PoolDropdown: React.FC = () => {
         <></>
       )}
     </Menu>
+    // </MenuBackground>
   );
 };
 
@@ -65,9 +68,19 @@ const menuItemClassName = ({
   } ${hover && ''}}`;
 
 const MenuItem = (props: MenuItemProps) => (
-  <MenuItemInner
-    {...props}
-    className={menuItemClassName}
-    onClick={props.onClick}
-  />
+  <MenuBackground>
+    <MenuItemInner
+      {...props}
+      className={menuItemClassName}
+      onClick={props.onClick}
+    />
+  </MenuBackground>
 );
+
+const MenuBackground = styled.div`
+  height: 100%;
+  .szh-menu__item--hover {
+    color: #ffffff;
+    background-color: transparent;
+  }
+`;

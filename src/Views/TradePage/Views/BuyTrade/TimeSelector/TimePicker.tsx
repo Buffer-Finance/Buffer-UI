@@ -138,6 +138,9 @@ const EditTime: React.FC<{
   }
 
   useEffect(() => {
+    if (showCustomInput) onChange(inputValue);
+  }, [showCustomInput]);
+  useEffect(() => {
     if (activeFrame.trim() === 'h' && inputValue > 24) {
       onChange(24);
     }

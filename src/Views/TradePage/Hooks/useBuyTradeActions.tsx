@@ -119,7 +119,19 @@ export const useBuyTradeActions = (userInput: string) => {
     }
     const maxdurationInMins = timeToMins(maxDuration);
     const mindurationInMins = timeToMins(minDuration);
-    const minTradeAmount = switchPool?.min_fee;
+    const minTradeAmount = add(
+      switchPool?.min_fee ?? '0',
+      switchPool?.platformFee ?? '0'
+    );
+    const maxTradeAmount =
+      readcallData?.maxTradeSizes[switchPool.optionContract] ?? '0';
+    console.log(
+      minTradeAmount,
+      maxTradeAmount,
+      readcallData?.maxTradeSizes,
+      switchPool.pool,
+      'minTradeAmount'
+    );
 
     if (
       isCustom === undefined ||
@@ -208,7 +220,21 @@ export const useBuyTradeActions = (userInput: string) => {
         return toastify({
           type: 'error',
           msg:
-            'Trade Amount must be atleast ' + minTradeAmount + ' ' + tokenName,
+            'Trade Amount must be atleast ' +
+            divide(minTradeAmount, decimals) +
+            ' ' +
+            tokenName,
+          id: 'binaryBuy',
+        });
+      }
+      if (gt(userInput, divide(maxTradeAmount, decimals) as string)) {
+        return toastify({
+          type: 'error',
+          msg:
+            'Trade Amount must be less than ' +
+            divide(maxTradeAmount, decimals) +
+            ' ' +
+            tokenName,
           id: 'binaryBuy',
         });
       }

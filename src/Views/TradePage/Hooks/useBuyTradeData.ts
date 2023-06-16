@@ -5,6 +5,7 @@ import { appConfig } from '../config';
 import { useMemo } from 'react';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { useMarketsConfig } from './useMarketsConfig';
 
 export const useBuyTradeData = (deb?: string) => {
   const { data: readCallData } = useBuyTradePageReadcalls();
@@ -12,6 +13,7 @@ export const useBuyTradeData = (deb?: string) => {
   const { activeChain } = useActiveChain();
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const config = useMarketsConfig();
 
   const response = useMemo(() => {
     if (
@@ -31,11 +33,22 @@ export const useBuyTradeData = (deb?: string) => {
       signer: readCallData[getCallId(configData.router, 'accountMapping')]?.[0],
       nonce: readCallData[getCallId(configData.router, 'accountMapping')]?.[1],
     };
+    const maxTradeSizes: { [key: string]: string } = {};
+
+    config?.forEach((item) => {
+      item.pools.forEach((pool) => {
+        maxTradeSizes[pool.optionContract] =
+          readCallData[getCallId(pool.optionContract, 'getMaxTradeSize')]?.[0];
+      });
+    });
+
+    // console.log('maxTradeSizes', maxTradeSizes);
 
     return {
       balance,
       allowance,
       user2signer,
+      maxTradeSizes,
     };
   }, [readCallData, poolDetails, switchPool, configData]);
 

@@ -2,6 +2,7 @@ import { priceAtom } from '@Hooks/usePrice';
 import Star from '@Public/ComponentSVGS/Star';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { toFixed } from '@Utils/NumString';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
@@ -159,7 +160,8 @@ export const AssetSelectorTable: React.FC = () => {
             content={[
               <div className="flex items-center">
                 <div className="text-1">
-                  {selectedPool?.openInterest} {poolInfo.token}
+                  {divide(selectedPool?.openInterest ?? '0', poolInfo.decimals)}{' '}
+                  {poolInfo.token}
                 </div>
               </div>,
             ]}

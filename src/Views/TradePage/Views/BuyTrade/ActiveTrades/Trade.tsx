@@ -17,6 +17,7 @@ import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { joinStrings } from '@Views/TradePage/utils';
 import { TradeTimeElapsed } from './TradeTimeElapsed';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { CountDown } from './CountDown';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -69,7 +70,11 @@ export const TradeCard = ({
           </RowGap>
           <TradeTypeChip tradeType={tradeType} />
         </RowBetween>
-        <QueuedChip />
+        {isQueued ? (
+          <QueuedChip />
+        ) : (
+          <CountDown expiration={trade.expiration_time} />
+        )}
       </ColumnGap>
       <TradeTimeElapsed trade={trade} />
       <div className="mb-3">
