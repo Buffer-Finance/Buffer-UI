@@ -13,20 +13,20 @@ interface SettlementFee {
 export const useSettlementFee = () => {
   const account = useAccount();
   const { activeChain } = useActiveChain();
-  const { data } = useSWR<SettlementFee, SettlementFee>(
-    [account, 'settlementFee'],
-    {
-      fetcher: async (account: string, key: string) => {
-        const response = await axios.get(
-          baseUrl + 'settlement_fee/?environment=421613&asset_pair=ETHUSD'
-        );
-        if (response?.data) {
-          return response.data.BTCUSD;
-        }
-        return null;
-      },
-      refreshInterval: 1000000,
-    }
-  );
+  const { data } = useSWR<
+    { [key: string]: SettlementFee },
+    { [key: string]: SettlementFee }
+  >([account, 'settlementFee'], {
+    fetcher: async (account: string, key: string) => {
+      const response = await axios.get(
+        baseUrl + 'settlement_fee/?environment=421613'
+      );
+      if (response?.data) {
+        return response.data;
+      }
+      return null;
+    },
+    refreshInterval: 1000000,
+  });
   return data || null;
 };

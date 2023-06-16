@@ -65,7 +65,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const tokenName = poolDetails?.token;
   const res = readcallData?.user2signer;
   const tokenAddress = poolDetails?.tokenAddress;
-  const settelmentFee = useSettlementFee();
+  const allSettlementFees = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = useProvider({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
@@ -197,7 +197,7 @@ export const useBuyTradeActions = (userInput: string) => {
       }
       console.log(`useBuyTradeActions-userInput: `, userInput);
 
-      if (!activeAsset) {
+      if (!allSettlementFees || !activeAsset) {
         return toastify({
           type: 'error',
           msg: 'There is some error while fetching the data!',
@@ -212,6 +212,7 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
+
       if (!oneCtPk) {
         return toastify({
           type: 'error',
@@ -251,6 +252,7 @@ export const useBuyTradeActions = (userInput: string) => {
         ),
       };
 
+      let settlementFee = allSettlementFees[activeAsset.tv_id];
       let currentTimestamp = Date.now();
       let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
       const oneCTWallet = new ethers.Wallet(
