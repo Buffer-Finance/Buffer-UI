@@ -25,7 +25,7 @@ export const TradeSizeSelector: React.FC = () => {
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
   const decimals = poolDetails.decimals;
-  const balance = divide(readcallData.balance, decimals) as string;
+  const balance = divide(readcallData.balance ?? 0, decimals) as string;
   const tradeToken = poolDetails.token;
   const minFee = divide(
     add(switchPool.min_fee || '0', switchPool.platformFee || '0'),

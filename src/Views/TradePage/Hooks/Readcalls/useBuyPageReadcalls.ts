@@ -77,11 +77,9 @@ export function useBuyTradePageReadcalls() {
       .flat(1);
 
     if (!address) {
-      return [];
+      return [...optionCalls];
     }
-    if (!optionCalls) {
-      return [...userSpecificCalls];
-    }
+
     return [...userSpecificCalls, ...optionCalls];
   }, [switchPool, poolDetails, address, highestTierNFT]);
 
