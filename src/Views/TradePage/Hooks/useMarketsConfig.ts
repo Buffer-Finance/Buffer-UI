@@ -55,5 +55,6 @@ function createPoolObject(market: responseObj) {
     configContract: getAddress(market.configContract.address),
     optionContract: getAddress(market.address),
     openInterest: market.openInterest,
+    platformFee: market.configContract.platformFee,
   };
 }

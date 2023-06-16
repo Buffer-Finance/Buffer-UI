@@ -21,6 +21,7 @@ export type marketType = {
     configContract: string;
     optionContract: string;
     openInterest: string;
+    platformFee: string;
   }[];
 };
 
@@ -35,6 +36,7 @@ export type responseObj = {
     maxPeriod: string;
     minFee: string;
     minPeriod: string;
+    platformFee: string;
   };
   address: string;
   poolContract: string;
