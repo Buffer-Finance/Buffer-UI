@@ -20,6 +20,7 @@ import {
   DisplayTime,
   StrikePriceComponent,
   TableButton,
+  TableErrorRow,
   getProbability,
   queuedTradeFallBack,
   tableButtonClasses,
@@ -188,6 +189,7 @@ const HistoryTable = () => {
       widths={['auto']}
       onRowClick={console.log}
       overflow={400}
+      error={<TableErrorRow msg="No trade history present." />}
     />
   );
 };

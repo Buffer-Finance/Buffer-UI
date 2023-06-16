@@ -7,6 +7,9 @@ import LimitOrderTable from './LimitOrderTable';
 import { useAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
 import HistoryTable from './HistoryTable';
+import PlatformTable from './PlatformTrades';
+import { usePlatformTrades } from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
+import PlatformHistory from './PlatformHistory';
 const tables = {
   Trades: 'h',
   'Limit Orders': 'h',
@@ -53,13 +56,17 @@ const AccordionTable: React.FC<any> = ({}) => {
       </div>
       <div
         className={` ${
-          expanded ? 'h-[405px]' : 'h-[0px]'
+          expanded ? 'h-[355px]' : 'h-[0px]'
         } transition-all  overflow-y-hidden mx-3`}
       >
         {activeTable == 'Trades' ? (
           <OngoingTradesTable />
         ) : activeTable == 'Limit Orders' ? (
           <LimitOrderTable />
+        ) : activeTable == 'Platform Trades' ? (
+          <PlatformTable />
+        ) : activeTable == 'Platform History' ? (
+          <PlatformHistory />
         ) : (
           <HistoryTable />
         )}

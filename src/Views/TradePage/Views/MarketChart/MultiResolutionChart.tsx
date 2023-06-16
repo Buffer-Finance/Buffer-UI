@@ -66,6 +66,10 @@ import { getIdentifier } from '@Hooks/useGenericHook';
 import { marketsForChart } from '@Views/V3App/config';
 import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import {
+  OngoingTradeSchema,
+  useOngoingTrades,
+} from '@Views/TradePage/Hooks/ongoingTrades';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -174,7 +178,8 @@ const defaults = {
   green: 'rgb(108, 211, 173)',
   red: 'rgb(255, 104, 104)',
 };
-function getText(expiration: number) {
+function getText(option: OngoingTradeSchema) {
+  const expiration = option.expiration_time;
   const curr = Math.round(Date.now() / 1000);
   return `${
     expiration <= curr
@@ -214,25 +219,21 @@ const market2resolutionAtom = atomWithLocalStorage(
   null
 );
 function drawPosition(
-  option: IGQLHistory,
+  option: OngoingTradeSchema,
   visualized: any,
   chart: IChartWidgetApi
 ) {
-  let vizIdentifiers = getIdentifier(option);
-  const idx = visualized.indexOf(vizIdentifiers);
-  const openTimeStamp = option.creationTime;
+  const idx = visualized.indexOf(option.queue_id);
+  const openTimeStamp = option.queued_timestamp;
   const optionPrice = +option.strike / PRICE_DECIMALS;
-
-  let color = !option.isAbove ? defaults.red : defaults.green;
+  let color = !option.is_above ? defaults.red : defaults.green;
   const text =
-    `${toFixed(
-      divide(option.totalFee?.toString(), option.poolInfo.decimals!)!,
-      2
-    )} ${option.poolInfo?.token} | ` + getText(option.expirationTime as any);
+    `${toFixed(divide(option.trade_size?.toString(), 6!)!, 2)} USDC | ` +
+    getText(option);
   const tooltip = `${getDisplayDate(openTimeStamp as any)}, ${getDisplayTime(
     openTimeStamp
-  )} - ${getDisplayDate(option.expirationTime as any)}, ${getDisplayTime(
-    option.expirationTime
+  )} - ${getDisplayDate(option.close_time as any)}, ${getDisplayTime(
+    option.expiration_time
   )}`;
   // console.log(`chart: `,chart.createPositionLine);
   return chart
@@ -247,7 +248,7 @@ function drawPosition(
     .setQuantityBorderColor(color)
     .setLineColor(color)
     .setBodyTextColor('rgb(255,255,255)')
-    .setQuantity(option.isAbove ? defaults.upIcon : defaults.downIcon)
+    .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
     .setPrice(optionPrice);
   // positions.current.push({ line, expiration: option.expirationTime });
 }
@@ -271,12 +272,13 @@ export const MultiResolutionChart = ({
   let trade2visualisation = useRef<
     Partial<{
       [key: number]: {
-        option: IGQLHistory;
+        option: OngoingTradeSchema;
         visited: boolean;
         lineRef: IPositionLineAdapter;
       };
     }>
   >({});
+  const [activeTrades] = useOngoingTrades();
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
@@ -454,7 +456,6 @@ export const MultiResolutionChart = ({
       unsubscribeBars: () => console.log,
     };
   }, []);
-  const { active: activeTrades } = useAtomValue(tardesAtom);
   const [visualized] = useAtom(visualizeddAtom);
   const resolution: ResolutionString =
     market2resolution?.[chartId] || ('1' as ResolutionString);
@@ -571,17 +572,19 @@ export const MultiResolutionChart = ({
 
   // draw positions.
   useEffect(() => {
+    // if()
     if (chartReady && activeTrades) {
       activeTrades.forEach((pos) => {
-        if (!pos?.optionID) return;
+        if (pos.state == 'QUEUED') return;
+        if (!pos?.queue_id) return;
         // if(visualized[pos.])
-        const identifier = getIdentifier(pos);
+        // const identifier = getIdentifier(pos);
         // @ts-ignore
-        if (visualized.includes(identifier)) return;
-        if (trade2visualisation.current[+pos.optionID]) {
-          trade2visualisation.current[+pos.optionID]!.visited = true;
+        if (visualized.includes(pos.queue_id)) return;
+        if (trade2visualisation.current[+pos.queue_id]) {
+          trade2visualisation.current[+pos.queue_id]!.visited = true;
         } else {
-          trade2visualisation.current[+pos.optionID] = {
+          trade2visualisation.current[+pos.queue_id] = {
             visited: true,
             lineRef: drawPosition(
               pos,
