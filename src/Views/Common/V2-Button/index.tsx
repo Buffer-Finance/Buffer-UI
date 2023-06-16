@@ -112,7 +112,7 @@ export const GreyBtn: React.FC<IButton> = ({
       isLoading={isLoading}
       isDisabled={isDisabled}
       onClick={onClick}
-      className="bg-[#232334] text-[#8E8E8E] hover:bg-[#2D2D3A] hover:text-[#FFFFFF] hover:translate-y-[-3px] active:translate-y-1"
+      className={`bg-[#232334] text-[#8E8E8E] hover:bg-[#2D2D3A] hover:text-[#FFFFFF] hover:translate-y-[-3px] active:translate-y-1 ${className}`}
     >
       {children}
     </CustomButton>

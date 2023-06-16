@@ -47,7 +47,7 @@ interface IBufferTable {
   shouldHideHeader?: boolean;
   shouldHideBody?: boolean;
   tableClass?: string;
-  overflow?: boolean;
+  overflow?: number;
   isBodyTransparent?: boolean;
   isHeaderTransparent?: boolean;
   className?: string;
@@ -74,7 +74,7 @@ const BufferTable: React.FC<IBufferTable> = ({
   count,
   bluredIndexes,
   tableBodyClass,
-  overflow = false,
+  overflow,
   v1 = false,
   onPageChange = undefined,
   shouldShowMobile = false,
@@ -96,7 +96,8 @@ const BufferTable: React.FC<IBufferTable> = ({
   }
   return (
     <Background
-      className={`${className} ${shouldShowMobile ? '' : 'tab-none'}
+      overflow={overflow}
+      className={` ${className} ${shouldShowMobile ? '' : 'tab-none'}
       `}
       shouldShowMobile={shouldShowMobile}
     >

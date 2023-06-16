@@ -21,10 +21,7 @@ import {
   useOngoingTrades,
 } from '@Views/TradePage/Hooks/ongoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import {
-  AssetCell,
-  StrikePriceComponent,
-} from '@Views/Common/TableComponents/TableComponents';
+import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
@@ -37,6 +34,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useToast } from '@Contexts/Toast';
 import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
 import { cancelQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
+import { StrikePriceComponent, tableButtonClasses } from './Common';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -125,7 +123,7 @@ const LimitOrderTable = () => {
         const hhmmstr = secondsToHHMM(trade.period).split(':');
         return <div>{hhmmstr[0] + 'h:' + hhmmstr[1] + 'm'}</div>;
       case TableColumn.OrderExpiry:
-        return <DisplayTime ts={+trade.expiration_time * 1000} />;
+        return <DisplayTime ts={+trade.expiration_time! * 1000} />;
 
       case TableColumn.TradeSize:
         return (
@@ -139,11 +137,13 @@ const LimitOrderTable = () => {
         return (
           <div className="flex items-center">
             <GreyBtn
+              className={tableButtonClasses}
               onClick={() => setSelectedTrade({ trade, market: tradeMarket })}
             >
               Edit
             </GreyBtn>
             <GreyBtn
+              className={tableButtonClasses}
               onClick={() => handleCancel(trade.queue_id)}
               isLoading={cancelLoading == trade.queue_id}
             >
@@ -164,7 +164,7 @@ const LimitOrderTable = () => {
       rows={ongoingData ? ongoingData.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow
+      overflow={400}
     />
   );
 };
