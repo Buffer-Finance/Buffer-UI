@@ -12,7 +12,7 @@ import { arrayify } from 'ethers/lib/utils.js';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useAccount } from 'wagmi';
 import { useToast } from '@Contexts/Toast';
-import { signatureCache } from './Hooks/ongoingTrades';
+import { signatureCache } from './Hooks/useOngoingTrades';
 import { useActiveChain } from '@Hooks/useActiveChain';
 
 // returns the token1 and toklen0 value from string

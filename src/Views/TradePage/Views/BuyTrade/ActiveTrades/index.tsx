@@ -1,7 +1,7 @@
 import { ExpandSVG } from '@Views/TradePage/Components/Expand';
 import { useState } from 'react';
 import { TradeCard } from './Trade';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useSetAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
 import { NoTrades } from './NoTrades';

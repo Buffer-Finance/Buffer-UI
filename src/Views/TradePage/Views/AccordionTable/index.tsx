@@ -1,5 +1,5 @@
 import DDArrow from '@SVG/Elements/Arrow';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/ongoingTrades';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useState } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import OngoingTradesTable from './OngoingTradesTable';

@@ -6,6 +6,8 @@
 // v=Volatility
 // a=Above
 // y=Yes
+
+// @ts-nocheck
 const BlackScholes = (y, a, s, x, t, r, v) => {
   console.log(`y, a, s, x, t, r, v: `, y, a, s, x, t, r, v);
   var d1, d2;

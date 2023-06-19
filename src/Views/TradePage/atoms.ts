@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { defaultSelectedTime, defaultSettings } from './config';
 import { HHMMToSeconds } from './utils';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { OngoingTradeSchema } from './Hooks/ongoingTrades';
+import { OngoingTradeSchema } from './Hooks/useOngoingTrades';
 import { marketType } from './type';
 
 //Share Atoms
@@ -87,3 +87,5 @@ export const selectedOrderToEditAtom = atom<null | {
   trade: OngoingTradeSchema;
   market: marketType;
 }>(null);
+
+export const visualizeddAtom = atom<number[]>([]);

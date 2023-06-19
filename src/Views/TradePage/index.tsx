@@ -14,6 +14,7 @@ import { ModalBase } from 'src/Modals/BaseModal';
 import styled from '@emotion/styled';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import { ShareModal } from '@Views/BinaryOptions/Components/shareModal';
+import { useGenericHooks } from '@Hooks/useGenericHook';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -142,7 +143,7 @@ const MobileWarning = () => {
 export const EssentialModals = () => {
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const selectedTrade = useAtomValue(selectedOrderToEditAtom);
-
+  useGenericHooks();
   return (
     <>
       <ShareModal />

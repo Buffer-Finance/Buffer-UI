@@ -6,15 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  LatestPriceApiRes,
-  Market2Kline,
-  Market2Prices,
-  Market2Prices3priceApi,
-  Markets,
-  OHLCBlock,
-  RealtimeUpdate,
-} from './MakrketTypes';
+import { Markets, OHLCBlock, RealtimeUpdate } from './MakrketTypes';
 import {
   widget,
   IChartingLibraryWidget,
@@ -50,7 +42,6 @@ import {
   IGQLHistory,
   tardesAtom,
 } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
-import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
 import { PRICE_DECIMALS } from '@Views/BinaryOptions/Tables/TableComponents';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
@@ -66,10 +57,9 @@ import { getIdentifier } from '@Hooks/useGenericHook';
 import { marketsForChart } from '@Views/V3App/config';
 import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import {
-  OngoingTradeSchema,
-  useOngoingTrades,
-} from '@Views/TradePage/Hooks/ongoingTrades';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { visualizeddAtom } from '@Views/TradePage/atoms';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -179,7 +169,7 @@ const defaults = {
   red: 'rgb(255, 104, 104)',
 };
 function getText(option: OngoingTradeSchema) {
-  const expiration = option.expiration_time;
+  const expiration = option.expiration_time!;
   const curr = Math.round(Date.now() / 1000);
   return `${
     expiration <= curr

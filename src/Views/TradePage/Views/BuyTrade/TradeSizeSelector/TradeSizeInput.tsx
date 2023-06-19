@@ -2,6 +2,7 @@ import { gt, lt } from '@Utils/NumString/stringArithmatics';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { getMaximumValue } from '@Views/TradePage/utils';
+import { getMinimumValue } from '@Views/V3App/helperFns';
 import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
@@ -45,7 +46,7 @@ export const TradeSizeInput: React.FC<{
         <button
           className="absolute right-3 bg-[#141823] rounded-[6px] py-2 px-[6px] text-f12"
           onClick={() => {
-            setTradeSize(getMaximumValue(maxTradeSize, balance));
+            setTradeSize(getMinimumValue(maxTradeSize, balance));
             setmaxErr(false);
             setminErr(false);
           }}

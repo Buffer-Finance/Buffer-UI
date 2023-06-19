@@ -19,7 +19,7 @@ import { priceAtom } from '@Hooks/usePrice';
 import {
   signatureCache,
   useOngoingTrades,
-} from '@Views/TradePage/Hooks/ongoingTrades';
+} from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -42,7 +42,6 @@ import {
 import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 
 export const tradesCount = 10;
-export const visualizeddAtom = atom([]);
 const headNameArray = [
   'Asset',
   'TriggerPrice',

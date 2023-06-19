@@ -4,7 +4,7 @@ import { RowGap } from '@Views/TradePage/Components/Row';
 import {
   OngoingTradeSchema,
   TradeState,
-} from '@Views/TradePage/Hooks/ongoingTrades';
+} from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';

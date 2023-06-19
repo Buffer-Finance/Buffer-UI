@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { DataCol } from './DataCol';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
+import { OngoingTradeSchema } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { marketType, poolInfoType, chartDataType } from '@Views/TradePage/type';
 import { divide, subtract } from '@Utils/NumString/stringArithmatics';
 import { toFixed } from '@Utils/NumString';

@@ -17,7 +17,7 @@ import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
 import {
   OngoingTradeSchema,
   signatureCache,
-} from '@Views/TradePage/Hooks/ongoingTrades';
+} from '@Views/TradePage/Hooks/useOngoingTrades';
 import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
 import { editQueueTrade, generateTradeSignature } from '@Views/TradePage/utils';
 import { useAccount } from 'wagmi';
