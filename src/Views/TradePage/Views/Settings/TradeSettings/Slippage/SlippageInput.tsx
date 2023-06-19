@@ -23,6 +23,11 @@ export const SlippageInput: React.FC<{
             setErr(true);
             return;
           }
+          if (
+            e.target.value.split('.')[1] &&
+            e.target.value.split('.')[1].length > 2
+          )
+            return;
           onChange(+e.target.value);
           setErr(false);
         }}
