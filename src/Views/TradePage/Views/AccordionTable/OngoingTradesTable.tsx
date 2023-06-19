@@ -124,7 +124,13 @@ export const OngoingTradesTable: React.FC<{
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
       case TableColumn.Asset:
-        return <AssetCell configData={tradeMarket} currentRow={trade} />;
+        return (
+          <AssetCell
+            configData={tradeMarket}
+            currentRow={trade}
+            platform={platform}
+          />
+        );
       case TableColumn.CurrentPrice:
         return (
           <Display
