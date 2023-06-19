@@ -4,20 +4,18 @@ import { White12pxText } from '@Views/TradePage/Components/TextWrapper';
 import styled from '@emotion/styled';
 import { DirectionChip } from './DirectionChip';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
-import { QueuedChip } from './QueuedChip';
+import { OrderExpiry, QueuedChip } from './QueuedChip';
 import { TradePoolChip } from './TradePoolChip';
 import { TradeTypeChip } from './TradeTypeChip';
 import { TradeDataView } from './TradeDataView';
 import { TradeActionButton } from './TradeActionButton';
-import {
-  OngoingTradeSchema,
-  TradeState,
-} from '@Views/TradePage/Hooks/useOngoingTrades';
+import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { joinStrings } from '@Views/TradePage/utils';
 import { TradeTimeElapsed } from './TradeTimeElapsed';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { CountDown } from './CountDown';
+import { OngoingTradeSchema } from '@Views/TradePage/type';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -70,11 +68,7 @@ export const TradeCard = ({
           </RowGap>
           <TradeTypeChip tradeType={tradeType} />
         </RowBetween>
-        {isQueued ? (
-          <QueuedChip />
-        ) : (
-          <CountDown expiration={trade.expiration_time} />
-        )}
+        <TimerChip trade={trade} />
       </ColumnGap>
       <TradeTimeElapsed trade={trade} />
       <div className="mb-3">
@@ -95,4 +89,20 @@ export const TradeCard = ({
       />
     </TradeCardBackground>
   );
+};
+
+const TimerChip = ({ trade }: { trade: OngoingTradeSchema }) => {
+  const isQueued = trade.state === TradeState.Queued;
+  const isLimitOrder = trade.is_limit_order;
+  if (isLimitOrder && isQueued) {
+    return (
+      <RowGap gap="4px">
+        <CountDown expiration={trade.limit_order_expiration} /> <OrderExpiry />
+      </RowGap>
+    );
+  }
+  if (isQueued) {
+    return <QueuedChip />;
+  }
+  return <CountDown expiration={trade.expiration_time} />;
 };
