@@ -107,7 +107,7 @@ const ModalChild: React.FC<{
 }> = ({ closeModal }) => {
   const { activeChain } = useActiveChain();
   const { trade, expiryPrice, market, poolInfo } = useAtomValue(ShareBetAtom);
-  console.log(trade, expiryPrice, poolInfo, market, 'shareModal');
+  // console.log(trade, expiryPrice, poolInfo, market, 'shareModal');
   const ref = useRef();
   const [loading, setLoading] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
@@ -153,11 +153,14 @@ const ModalChild: React.FC<{
   const chartData = getChartMarketData(market.token0, market.token1);
   const decimals = chartData.price_precision?.toString()?.length - 1;
   const unit = market.token1;
+  const token0 = market.token0;
 
   const tradeExpiry = expiryPrice;
   const { pnl, payout } = getPayout(trade, tradeExpiry);
-  if (!pnl || !payout || !tradeExpiry)
+  if (!pnl || !payout || !tradeExpiry) {
+    console.log(pnl, payout, tradeExpiry, 'shareModal');
     return <div className="text-f20 text-1">Could not fetch data...</div>;
+  }
 
   const priceArr = [
     {
@@ -208,7 +211,7 @@ const ModalChild: React.FC<{
               />
               <div className="flex items-center text-f16 bg-[#02072C] px-4 py-1 rounded font-bold mt-3">
                 <div className="mr-2 text-[#FFFFFF]">
-                  {unit}-{unit}
+                  {token0}-{unit}
                 </div>
                 <UpDownChipWOText isUp={trade.is_above} />
                 <div
@@ -225,7 +228,7 @@ const ModalChild: React.FC<{
                   displayText={
                     <Display
                       data={multiply(
-                        divide(pnl, trade.locked_amount) as string,
+                        divide(pnl, trade.trade_size.toString()) as string,
                         '100'
                       )}
                       unit={'%'}
@@ -329,14 +332,14 @@ const RedGreenText = ({
 };
 
 const getPayout = (trade: OngoingTradeSchema, expiryPrice) => {
-  const [pnl, payout] = getPendingData(trade, expiryPrice);
-  if (trade.state === TradeState.Active) {
+  if (trade.state === 'OPENED') {
+    const [pnl, payout] = getPendingData(trade, expiryPrice);
     return { payout: payout as string, pnl: pnl as string };
   } else
     return {
       payout: trade?.payout || '0',
       pnl: trade?.payout
-        ? subtract(trade.payout, trade.locked_amount.toString())
-        : subtract('0', trade.locked_amount.toString()),
+        ? trade.payout - trade.trade_size
+        : subtract('0', trade.trade_size.toString()),
     };
 };
