@@ -120,7 +120,7 @@ const HistoryTable: React.FC<{
           <AssetCell
             configData={tradeMarket}
             currentRow={trade}
-            platform={platform}
+            // platform={platform}
           />
         );
       case TableColumn.ExpiryPrice:
