@@ -49,7 +49,7 @@ export const TradeActionButton: React.FC<{
   function cancelLimitOrder() {
     console.log('cancel limit order');
   }
-  if (isLimitOrder) {
+  if (isLimitOrder && isQueued) {
     return (
       <RowGap gap="4px">
         <CancelButton onClick={editLimitOrder}>Edit</CancelButton>
