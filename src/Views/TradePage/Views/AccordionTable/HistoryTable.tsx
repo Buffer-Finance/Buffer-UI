@@ -156,7 +156,7 @@ const HistoryTable: React.FC<{
           <Display
             data={divide(trade.trade_size, 6)}
             className="!justify-start"
-            unit={tradeMarket?.token1}
+            unit={'USDC'}
           />
         );
       case TableColumn.Payout:
