@@ -7,11 +7,8 @@ import {
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
-import { baseUrl } from '@Views/TradePage/config';
-import axios from 'axios';
 import { GreyBtn } from '@Views/Common/V2-Button';
-import { marketType } from '@Views/TradePage/type';
+import { OngoingTradeSchema, marketType } from '@Views/TradePage/type';
 import { Display } from '@Views/Common/Tooltips/Display';
 import InfoIcon from '@SVG/Elements/InfoIcon';
 import {
@@ -47,7 +44,7 @@ export const getProbability = (trade: OngoingTradeSchema, price: number) => {
       trade.is_above,
       price,
       +trade.strike / 100000000,
-      +trade.expiration_time - currentEpoch,
+      +trade.expiration_time! - currentEpoch,
       0,
       12000 / 10000
     ) * 100;

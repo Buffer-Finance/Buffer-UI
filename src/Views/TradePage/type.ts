@@ -25,6 +25,36 @@ export type marketType = {
   }[];
 };
 
+export interface OngoingTradeSchema {
+  id: number;
+  signature_timestamp: number;
+  queued_timestamp: number;
+  queue_id: number;
+  strike: number;
+  period: number;
+  target_contract: string;
+  payout: number | null;
+  user_partial_signature: string;
+  close_time: number;
+  user_full_signature: string;
+  user_address: string;
+  trade_size: number;
+  locked_amount: number;
+  allow_partial_fill: boolean;
+  referral_code: string;
+  trader_nft_id: number;
+  slippage: number;
+  settlement_fee: number;
+  settlement_fee_sign_expiration: number;
+  settlement_fee_signature: string;
+  expiration_time: null | number;
+  is_above: boolean;
+  state: 'QUEUED' | 'OPENED' | 'CLOSED';
+  option_id: null | number;
+  is_limit_order: boolean;
+  limit_order_expiration: 0 | number;
+  environment: '421613' | '42161';
+}
 //type of data returned from graphql
 export type response = {
   optionContracts: responseObj[];
@@ -72,6 +102,6 @@ export enum directionBtn {
 export type configType = (typeof appConfig)['421613'];
 
 export type poolInfoType =
-  (typeof appConfig)['421613']['poolsInfo']['0xEbB1314A9549EE12F0FAA76B9E66e017b1De7dc5'];
+  (typeof appConfig)['421613']['poolsInfo']['0x11096F56b5E9c93a6e50F4A865516db80aAB97a6'];
 
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];

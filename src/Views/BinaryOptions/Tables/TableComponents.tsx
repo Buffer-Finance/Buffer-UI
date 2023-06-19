@@ -43,7 +43,7 @@ import { PairTokenImage } from '../Components/PairTokenImage';
 import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '@Views/V3App/config';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
+import { OngoingTradeSchema } from '@Views/TradePage/Hooks/useOngoingTrades';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (

@@ -2,7 +2,7 @@ import { ReactChild, ReactNode } from 'react';
 import InfoIcon from 'src/SVG/Elements/InfoIcon';
 import VersionChip from '@Views/Common/VersionChip';
 import { AssetCellLayout, CellDescLayout } from './style';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
+import { OngoingTradeSchema } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { marketType } from '@Views/TradePage/type';
 import { Display } from '../Tooltips/Display';
 import { divide } from '@Utils/NumString/stringArithmatics';

@@ -69,7 +69,7 @@ import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import {
   OngoingTradeSchema,
   useOngoingTrades,
-} from '@Views/TradePage/Hooks/ongoingTrades';
+} from '@Views/TradePage/Hooks/useOngoingTrades';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,

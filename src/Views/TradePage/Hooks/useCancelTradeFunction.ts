@@ -1,7 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 
 import { useAccount } from 'wagmi';
-import { signatureCache } from './ongoingTrades';
+import { signatureCache } from './useOngoingTrades';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { cancelQueueTrade } from '../utils';
 

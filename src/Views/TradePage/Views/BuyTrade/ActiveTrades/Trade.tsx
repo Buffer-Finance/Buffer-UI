@@ -12,7 +12,7 @@ import { TradeActionButton } from './TradeActionButton';
 import {
   OngoingTradeSchema,
   TradeState,
-} from '@Views/TradePage/Hooks/ongoingTrades';
+} from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { joinStrings } from '@Views/TradePage/utils';
 import { TradeTimeElapsed } from './TradeTimeElapsed';
