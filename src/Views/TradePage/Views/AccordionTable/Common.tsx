@@ -48,7 +48,7 @@ export const getProbability = (trade: OngoingTradeSchema, price: number) => {
       0,
       12000 / 10000
     ) * 100;
-  console.log('probability', probability);
+  // console.log('probability', probability);
   return probability;
 };
 
