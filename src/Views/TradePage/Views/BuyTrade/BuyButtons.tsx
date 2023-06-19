@@ -36,6 +36,7 @@ export const BuyButtons = ({
   const { handleApproveClick, buyHandler, loading } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
+  console.log(`BuyButtons-expiry: `, expiry);
   const tradeType = useAtomValue(tradeTypeAtom);
   const limitStrike = useAtomValue(limitOrderStrikeAtom);
   const buyTrade = (isUp?: boolean) => {

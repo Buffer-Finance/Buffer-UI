@@ -54,6 +54,7 @@ export interface OngoingTradeSchema {
   option_id: null | number;
   is_limit_order: boolean;
   limit_order_expiration: 0 | number;
+  limit_order_duration: 0 | number;
   environment: '421613' | '42161';
 }
 //type of data returned from graphql

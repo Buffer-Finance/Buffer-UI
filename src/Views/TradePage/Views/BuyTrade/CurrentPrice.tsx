@@ -22,7 +22,7 @@ export const CurrentPrice: React.FC<{
   price: string;
 }> = ({ price }) => {
   const { activeMarket } = useActiveMarket();
-  const tradeType = useAtomValue(tradeTypeAtom);
+  const [tradeType] = useAtom(tradeTypeAtom);
 
   const chartMarket =
     marketsForChart[
@@ -38,6 +38,7 @@ export const CurrentPrice: React.FC<{
   );
   const title = price ? precisePrice + ' | ' + chartMarket.tv_id : '';
   setDoccumentTitle(title);
+  console.log(`CurrentPrice-tradeType: `, tradeType);
   return (
     <CurrentPriceBackground>
       <RowBetween>

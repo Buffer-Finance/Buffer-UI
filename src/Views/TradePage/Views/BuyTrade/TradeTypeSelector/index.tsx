@@ -12,6 +12,7 @@ export const TradeTypeSelector: React.FC = () => {
   const handleChange = (index: string) => {
     setActiveTab(index);
   };
+
   return (
     <TradeTypeSelectorBackground>
       <BuyTradeTabList

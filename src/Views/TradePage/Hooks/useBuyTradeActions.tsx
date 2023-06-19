@@ -325,7 +325,7 @@ export const useBuyTradeActions = (userInput: string) => {
         slippage: baseArgs[ArgIndex.Slippage],
         is_above: customTrade.is_up,
         is_limit_order: customTrade.limitOrderExpiry ? true : false,
-        limit_order_expiration: customTrade.limitOrderExpiry,
+        limit_order_duration: customTrade.limitOrderExpiry,
         settlement_fee: settelmentFee?.settlement_fee,
         settlement_fee_sign_expiration:
           settelmentFee?.settlement_fee_sign_expiration,
@@ -365,6 +365,7 @@ export const useBuyTradeActions = (userInput: string) => {
           </div>
         </div>
       );
+      console.log(`useBuyTradeActions-toastify: `, toastify);
       toastify({
         price,
         type: 'success',

@@ -107,7 +107,7 @@ export const editQueueTrade = async (
   user_address: string,
   slippage: number,
   is_above: boolean,
-  limit_order_expiration: number,
+  limit_order_duration: number,
   environment: number
 ) => {
   return await axios.get(`${baseUrl}trade/edit/`, {
@@ -122,7 +122,7 @@ export const editQueueTrade = async (
       user_address,
       slippage,
       is_above,
-      limit_order_expiration,
+      limit_order_duration,
       environment,
     },
   });

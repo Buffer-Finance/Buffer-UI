@@ -58,8 +58,8 @@ const useOneCTWallet = () => {
     'accountMapping'
   );
   const registeredOneCT = useMemo(() => {
-    const isEnabled = res?.user2signer?.signer
-      ? is1CTEnabled(res.user2signer.signer, oneCtPk, provider, 'debugggging')
+    const isEnabled = res?.length
+      ? is1CTEnabled(res[0], oneCtPk, provider, 'debugggging')
       : false;
     return isEnabled;
   }, [res, oneCtPk, provider]);
@@ -115,12 +115,12 @@ const useOneCTWallet = () => {
             msg: '1 Click Trading is now disablted.',
             type: 'success',
           });
-          deleteOneCTPk();
+          // deleteOneCTPk();
           checkStorage();
         }
       },
-      registerOneCtMethod,
-      [ethers.constants.AddressZero]
+      'deregisterAccount',
+      []
     );
   };
   return {
@@ -132,6 +132,7 @@ const useOneCTWallet = () => {
     oneCTWallet,
     deleteOneCTPk,
     disableOneCt,
+    accountMapping: res,
   };
 };
 
