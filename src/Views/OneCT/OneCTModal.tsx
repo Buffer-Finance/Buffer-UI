@@ -274,7 +274,6 @@ const OneCTModal: React.FC<any> = ({}) => {
         privateKey || oneCtPk,
         provider as ethers.providers.StaticJsonRpcProvider
       );
-      console.log(`OneCTModal-oneCTWallet: `, oneCTWallet);
       const isOneCTEnabled = is1CTEnabled(
         buyTradeData?.user2signer?.signer || ethers.constants.AddressZero,
         privateKey || oneCtPk,
@@ -367,7 +366,7 @@ const OneCTModal: React.FC<any> = ({}) => {
             </div>
             <BlueBtn
               className={` !w-[120px] px-[15px] ${oneCtPk ? '!bg-green' : ''}`}
-              onClick={generatePk}
+              onClick={oneCtPk ? console.log : generatePk}
               isLoading={createLoading}
             >
               {oneCtPk ? (

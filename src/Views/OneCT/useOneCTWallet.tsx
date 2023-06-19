@@ -115,12 +115,12 @@ const useOneCTWallet = () => {
             msg: '1 Click Trading is now disablted.',
             type: 'success',
           });
-          deleteOneCTPk();
+          // deleteOneCTPk();
           checkStorage();
         }
       },
-      registerOneCtMethod,
-      [ethers.constants.AddressZero]
+      'deregisterAccount',
+      []
     );
   };
   return {
