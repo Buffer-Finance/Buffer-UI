@@ -178,7 +178,9 @@ const MarketStatsBar: React.FC<any> = ({}) => {
           direction="bottom"
           position="initial"
           align="center"
-          menuClassName={'!p-[0] !rounded-[10px] hover:!rounded-[10px]'}
+          menuClassName={
+            '!p-[0] !rounded-[10px] !bg-[#232334] !py-2 hover:!rounded-[10px]'
+          }
           offsetY={10}
         >
           {arr.map((s, idx) => {
@@ -188,14 +190,15 @@ const MarketStatsBar: React.FC<any> = ({}) => {
                 className={({ hover }) => {
                   return `  ${
                     chartTimes == s ? 'text-1' : 'text-2'
-                  } hover:brightness-110 !bg-2 hover:text-1`;
+                  } hover:brightness-110 hover:bg-[#232334]  hover:text-1`;
                 }}
                 onClick={(e: ClickEvent) => {
                   // e.keepOpen = true;
                   setChartTimes(s);
                 }}
               >
-                <Icon /> &nbsp;{Math.floor(s)} Chart{s > 1 ? 's' : ''}
+                <Icon className="mr-2" /> &nbsp;{Math.floor(s)} Chart
+                {s > 1 ? 's' : ''}
               </MenuItem>
             );
           })}
