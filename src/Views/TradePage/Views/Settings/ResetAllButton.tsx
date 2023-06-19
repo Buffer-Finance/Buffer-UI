@@ -1,3 +1,4 @@
+import { useToast } from '@Contexts/Toast';
 import CustomButton from '@Views/Common/V2-Button';
 import { ResetSVG } from '@Views/TradePage/Components/ResetSVG';
 import { RowGap } from '@Views/TradePage/Components/Row';
@@ -10,9 +11,15 @@ export const ResetAllButton: React.FC<{ className?: string }> = ({
   className = '',
 }) => {
   const setSettings = useSetAtom(setSettingsAtom);
+  const toastify = useToast();
 
   function resetToDefault() {
     setSettings(defaultSettings);
+    toastify({
+      type: 'success',
+      msg: 'Notifications will show up here.',
+      id: 'notificationPosition',
+    });
   }
   return (
     <CustomButton

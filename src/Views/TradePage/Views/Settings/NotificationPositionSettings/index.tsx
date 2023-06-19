@@ -6,16 +6,28 @@ import { useAtom } from 'jotai';
 import { defaultSettings } from '@Views/TradePage/config';
 import { notificationPositionSettingsAtom } from '@Views/TradePage/atoms';
 import { Trans } from '@lingui/macro';
+import { useToast } from '@Contexts/Toast';
 
 export const NotificationPositionSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(notificationPositionSettingsAtom);
+  const toastify = useToast();
 
   function resetToDefault() {
     setSettings(defaultSettings.notificationPosition);
+    toastify({
+      type: 'success',
+      msg: 'Notifications will show up here.',
+      id: 'notificationPosition',
+    });
   }
 
   function handlePositionClick(position: number) {
     setSettings(position);
+    toastify({
+      type: 'success',
+      msg: 'Notifications will show up here.',
+      id: 'notificationPosition',
+    });
   }
 
   return (
