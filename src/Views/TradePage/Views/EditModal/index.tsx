@@ -60,7 +60,7 @@ export const EditModal: React.FC<{
   useEffect(() => {
     if (!trade || !market) return;
     setPrice(divide(trade.strike, 8)!);
-    setMinutes(trade.limit_order_expiration / 60);
+    setMinutes(trade.limit_order_duration / 60);
     setFrame('m');
 
     // setCurrentTime(timeToMins())

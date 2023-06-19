@@ -13,7 +13,7 @@ import BufferDropdown from '../BufferDropdown';
 
 import { SVGProps } from 'react';
 import copyToClipboard from '@Utils/copyToClipBoard';
-import { MenuItem, Tooltip } from '@mui/material';
+import { MenuItem, Skeleton, Tooltip } from '@mui/material';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
 import { useActiveChain } from '@Hooks/useActiveChain';
@@ -32,6 +32,7 @@ import { SettingsIcon } from './SettingsIcon';
 import NFTtier from '../NFTtier';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import WalletIcon from '@SVG/Elements/WalletIcon';
+import { gt } from '@Utils/NumString/stringArithmatics';
 const token2image = {
   ETH: ETHImage,
 };
@@ -59,17 +60,40 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   }
 
   const { address } = useUserAccount();
-  const { oneCtPk, disableOneCt } = useOneCTWallet();
+  const { oneCtPk, disableOneCt, registeredOneCT, accountMapping } =
+    useOneCTWallet();
+  console.log(`AccountDropdown-accountMapping: `, accountMapping);
   const provider = useProvider({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   useEffect(() => {
     setOneCTModal(false);
   }, [address]);
-  const res = useBuyTradeData('hellloodfd');
-  const registeredOneCT = res?.user2signer
-    ? is1CTEnabled(res?.user2signer.signer, oneCtPk, provider)
-    : false;
 
+  let OneCTManager = (
+    <Skeleton variant="rectangular" className="lc sr w-[70px] h-[30px]" />
+  );
+  if (accountMapping?.length) {
+    if (registeredOneCT) {
+      OneCTManager = (
+        <BlueBtn
+          className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+          onClick={disableOneCt}
+        >
+          Deactivate Acount
+        </BlueBtn>
+      );
+    } else
+      OneCTManager = (
+        <BlueBtn
+          className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+          onClick={() => {
+            setOneCTModal(true);
+          }}
+        >
+          {gt(accountMapping[1], '0') ? 'Reregister' : ' Activate'} Acount
+        </BlueBtn>
+      );
+  }
   return (
     <ConnectButton.Custom>
       {({
@@ -248,23 +272,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                           </div>
                         </div>
                         <div className="flex items-center gap-x-3 text-f14">
-                          {registeredOneCT ? (
-                            <BlueBtn
-                              className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
-                              onClick={disableOneCt}
-                            >
-                              Deactivate Acount
-                            </BlueBtn>
-                          ) : (
-                            <BlueBtn
-                              className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
-                              onClick={() => {
-                                setOneCTModal(true);
-                              }}
-                            >
-                              Activate Acount
-                            </BlueBtn>
-                          )}
+                          {OneCTManager}
                           <a
                             className="unset"
                             href="https://www.google.com/"
