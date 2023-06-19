@@ -53,7 +53,7 @@ export const PayoutProfit = ({
   } else {
     return (
       <Skeleton
-        className="custom-h full-width sr lc mb3"
+        className="custom-h full-width sr lc my-3 !h-6"
         variant="rectangular"
       />
     );
