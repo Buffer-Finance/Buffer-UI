@@ -196,7 +196,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                     offsetY={10}
                   >
                     <MenuItem className={'!bg-[#232334] text-1 cursor-auto'}>
-                      <div className="mx-[10px] my-[10px]">
+                      <div className="mx-[10px] my-[10px] mb-[14px]">
                         <div className="flex items-center justify-between text-f14 mb-[20px]">
                           <div className="flex flex-col">
                             {account

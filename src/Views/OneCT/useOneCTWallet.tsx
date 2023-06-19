@@ -13,6 +13,7 @@ import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import useSWR from 'swr';
 import { useCall2Data } from '@Utils/useReadCall';
 import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
+import useAccountMapping from './useAccountMapping';
 
 const registerOneCtMethod = 'registerAccount';
 
@@ -36,7 +37,7 @@ const useOneCTWallet = () => {
   const { address } = useAccount();
   const { writeCall } = useIndependentWriteCall();
   const toastify = useToast();
-  const res = useBuyTradeData();
+  const res = useAccountMapping();
 
   const [createLoading, setCreateLoading] = useState(false);
 
