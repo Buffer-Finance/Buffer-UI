@@ -39,3 +39,13 @@ export const QueuedChip: React.FC<{ className?: string }> = ({
     </QueuedChipBackground>
   );
 };
+
+export const OrderExpiry: React.FC<{
+  className?: string;
+}> = ({ className }) => {
+  return (
+    <QueuedChipBackground className={className}>
+      Order expiry
+    </QueuedChipBackground>
+  );
+};

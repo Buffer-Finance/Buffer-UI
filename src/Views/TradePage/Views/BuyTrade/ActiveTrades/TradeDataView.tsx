@@ -1,7 +1,10 @@
 import styled from '@emotion/styled';
 import { DataCol } from './DataCol';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { marketType, poolInfoType, chartDataType } from '@Views/TradePage/type';
+import {
+  OngoingTradeSchema,
+  marketType,
+  poolInfoType,
+} from '@Views/TradePage/type';
 import { divide, subtract } from '@Utils/NumString/stringArithmatics';
 import { toFixed } from '@Utils/NumString';
 import { StrikePrice } from './StrikePrice';
@@ -10,6 +13,7 @@ import { RowGap } from '@Views/TradePage/Components/Row';
 import React from 'react';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { getProbability } from '../../AccordionTable/Common';
+import { secondsToHHMM } from '@Views/TradePage/utils';
 
 export const TradeDataView: React.FC<{
   trade: OngoingTradeSchema;
@@ -103,7 +107,7 @@ export const TradeDataView: React.FC<{
       },
       {
         head: <span>Duration</span>,
-        desc: <></>,
+        desc: <>{secondsToHHMM(trade.period)}</>,
       },
       {
         head: <span>Trade Size</span>,
