@@ -20,6 +20,7 @@ import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { ActiveTrades } from './ActiveTrades';
 import { TradeCard } from './ActiveTrades/Trade';
+import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -42,9 +43,17 @@ export const BuyTrade: React.FC = () => {
   const { activeMarket } = useActiveMarket();
   const [amount, setAmount] = useAtom(tradeSizeAtom);
   const marketPrice = useAtomValue(priceAtom);
+  const allSettlementFees = useSettlementFee();
+
   // const knowTill = useAtomValue(knowTillAtom);
 
-  if (!switchPool || !poolDetails || !readcallData || !activeMarket)
+  if (
+    !switchPool ||
+    !poolDetails ||
+    !readcallData ||
+    !activeMarket ||
+    !allSettlementFees
+  )
     return (
       <Skeleton
         variant="rectangular"
@@ -60,6 +69,11 @@ export const BuyTrade: React.FC = () => {
   const activeChartMarket =
     marketsForChart[marketId as keyof typeof marketsForChart];
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeChartMarket);
+  const totalPayout = readcallData.settlementFees[switchPool.optionContract];
+  const baseSettlementFee =
+    allSettlementFees[activeChartMarket.tv_id].settlement_fee;
+  const boostedPayout = subtract(totalPayout, baseSettlementFee.toString());
+
   return (
     <BuyTradeBackground>
       <TimeSelector />
@@ -68,8 +82,8 @@ export const BuyTrade: React.FC = () => {
       <CurrentPrice price={activeAssetPrice} />
       <PayoutProfit
         amount={amount.toString()}
-        boostedPayout={'92'}
-        totalPayout={'80'}
+        boostedPayout={boostedPayout}
+        totalPayout={totalPayout}
         tradeToken={tradeToken}
       />
       <BuyButtons

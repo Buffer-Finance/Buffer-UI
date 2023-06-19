@@ -1,3 +1,4 @@
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { RowGap } from '@Views/TradePage/Components/Row';
 
 export const StrikePrice: React.FC<{ slippage: number; strike: string }> = ({
@@ -25,7 +26,7 @@ export const StrikePrice: React.FC<{ slippage: number; strike: string }> = ({
           />
         </svg>
 
-        <span>{slippage}%</span>
+        <span>{divide(slippage, 2)}%</span>
       </RowGap>
     </RowGap>
   );

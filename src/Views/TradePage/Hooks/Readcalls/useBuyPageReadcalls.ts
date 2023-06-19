@@ -12,6 +12,7 @@ import OptionContractABI from '../../ABIs/OptionContract.json';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useMarketsConfig } from '../useMarketsConfig';
 import { useSettlementFee } from '../useSettlementFee';
+import { joinStrings } from '@Views/TradePage/utils';
 
 export function useBuyTradePageReadcalls() {
   const { address } = useUserAccount();
@@ -65,16 +66,36 @@ export function useBuyTradePageReadcalls() {
 
     const optionCalls = config
       ?.map((market) => {
-        return market.pools.map((pool) => {
-          return {
-            address: pool.optionContract,
-            abi: OptionContractABI,
-            name: 'getMaxTradeSize',
-            params: [],
-          };
-        });
+        const baseSettlementFee =
+          baseSettlementFees?.[joinStrings(market.token0, market.token1, '')]
+            ?.settlement_fee;
+        return market.pools
+          .map((pool) => {
+            return [
+              {
+                address: pool.optionContract,
+                abi: OptionContractABI,
+                name: 'getMaxTradeSize',
+                params: [],
+              },
+              {
+                address: pool.optionContract,
+                abi: OptionContractABI,
+                name: 'getSettlementFeePercentage',
+                params: [
+                  '0x0000000000000000000000000000000000000000',
+                  address,
+                  highestTierNFT?.tokenId || 0,
+                  baseSettlementFee ?? 1500,
+                ],
+              },
+            ];
+          })
+          .flat(1);
       })
       .flat(1);
+
+    // console.log('optionCalls', optionCalls);
 
     if (!address) {
       return [...optionCalls];
