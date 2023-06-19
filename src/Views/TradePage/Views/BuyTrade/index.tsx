@@ -72,7 +72,10 @@ export const BuyTrade: React.FC = () => {
   const totalPayout = readcallData.settlementFees[switchPool.optionContract];
   const baseSettlementFee =
     allSettlementFees[activeChartMarket.tv_id].settlement_fee;
-  const boostedPayout = subtract(totalPayout, baseSettlementFee.toString());
+  const boostedPayout = subtract(
+    totalPayout ?? '0',
+    baseSettlementFee?.toString() || '0'
+  );
 
   return (
     <BuyTradeBackground>

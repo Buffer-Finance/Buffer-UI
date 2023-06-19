@@ -72,7 +72,7 @@ export function useBuyTradePageReadcalls() {
             ?.settlement_fee;
         return market.pools
           .map((pool) => {
-            return [
+            const calls = [
               {
                 address: pool.optionContract,
                 abi: OptionContractABI,
@@ -91,7 +91,9 @@ export function useBuyTradePageReadcalls() {
                 name: 'totalMarketOI',
                 params: [],
               },
-              {
+            ];
+            if (address && baseSettlementFee) {
+              calls.push({
                 address: pool.optionContract,
                 abi: OptionContractABI,
                 name: 'getSettlementFeePercentage',
@@ -101,8 +103,9 @@ export function useBuyTradePageReadcalls() {
                   highestTierNFT?.tokenId || 0,
                   baseSettlementFee ?? 1500,
                 ],
-              },
-            ];
+              });
+            }
+            return calls;
           })
           .flat(1);
       })
