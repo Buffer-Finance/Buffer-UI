@@ -627,9 +627,7 @@ export const MultiResolutionChart = ({
         const text =
           inv +
           '| ' +
-          getText(
-            (trade2visualisation.current as any)[+trade]?.option.expirationTime
-          );
+          getText((trade2visualisation.current as any)[+trade]?.option);
         trade2visualisation.current[+trade]?.lineRef.setText(text);
       }
     }
