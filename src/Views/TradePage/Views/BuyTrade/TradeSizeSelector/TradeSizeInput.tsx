@@ -37,6 +37,7 @@ export const TradeSizeInput: React.FC<{
           value={tradeSize}
           // max={maxTradeSize}
           // min={minTradeSize}
+          type="number"
           className={`relative bg-[#282b39] px-5 py-3 rounded-l-[5px] outline-none w-full text-f16 text-1`}
           onChange={(e) => {
             setTradeSize(e.target.value);
