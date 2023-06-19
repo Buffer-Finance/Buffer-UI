@@ -124,7 +124,7 @@ export const BuyButtons = ({
                 </RedBtn>
               </div>
               <div
-                className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13"
+                className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13 mt-3"
                 role={'button'}
                 onClick={() =>
                   !account ? openConnectModal?.() : handleApproveClick('0')
