@@ -1,7 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { atom, useAtom } from 'jotai';
-import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
@@ -19,8 +18,8 @@ import { GreyBtn } from '@Views/Common/V2-Button';
 import {
   DisplayTime,
   StrikePriceComponent,
-  TableButton,
   TableErrorRow,
+  TableHeader,
   getProbability,
   queuedTradeFallBack,
   tableButtonClasses,

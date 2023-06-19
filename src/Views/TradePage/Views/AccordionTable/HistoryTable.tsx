@@ -1,6 +1,5 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { atom, useAtom } from 'jotai';
-import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
@@ -16,6 +15,7 @@ import {
   DisplayTime,
   StrikePriceComponent,
   TableErrorRow,
+  TableHeader,
   queuedTradeFallBack,
 } from './Common';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';

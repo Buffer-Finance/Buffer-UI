@@ -64,7 +64,11 @@ export const useBuyTradeData = (deb?: string) => {
         }
       });
     });
-
+    const isInCreationWindow =
+      readCallData[
+        getCallId(configData.creation_window, 'isInCreationWindow')
+      ]?.[0];
+    // console.log(`isInCreationWindow: `, isInCreationWindow);
     // console.log('maxTradeSizes', maxTradeSizes);
 
     return {
@@ -75,6 +79,7 @@ export const useBuyTradeData = (deb?: string) => {
       settlementFees,
       maxOIs,
       currentOIs,
+      isInCreationWindow,
     };
   }, [readCallData, poolDetails, switchPool, configData]);
 
