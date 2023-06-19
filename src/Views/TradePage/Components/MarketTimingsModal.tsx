@@ -1,11 +1,11 @@
 import { Dialog } from '@mui/material';
 import { useAtom } from 'jotai';
-import { ForexTimingsModalAtom } from './PGDrawer/CustomOption';
 import { CloseOutlined } from '@mui/icons-material';
 import BufferTable from '@Views/Common/BufferTable';
 import { ModalBase } from 'src/Modals/BaseModal';
 import { TableHeader } from '../Views/AccordionTable/Common';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import { ForexTimingsModalAtom } from '../atoms';
 interface IMarketTimingsModal {}
 const headNameArray = ['Day of the week', 'Market open/close'];
 const dataArr = [
@@ -68,3 +68,5 @@ const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
     </ModalBase>
   );
 };
+
+export { MarketTimingsModal };

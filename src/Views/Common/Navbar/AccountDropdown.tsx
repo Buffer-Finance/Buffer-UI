@@ -31,6 +31,7 @@ import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
 import { SettingsIcon } from './SettingsIcon';
 import NFTtier from '../NFTtier';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import WalletIcon from '@SVG/Elements/WalletIcon';
 const token2image = {
   ETH: ETHImage,
 };
@@ -108,7 +109,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                     className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#232334] hover:brightness-125 hover:bg-1`}
                     onClick={openConnectModal}
                   >
-                    <Wallet className="mr-[6px] ml-1 text-blue" />
+                    <WalletIcon className="mr-[6px] ml-1 text-blue" />
 
                     <span>{'Connect Wallet'}</span>
                     <ArrowDropDownRounded
@@ -125,7 +126,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                     className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#232334] hover:brightness-125 hover:bg-1`}
                     onClick={openChainModal}
                   >
-                    <Wallet className="mr-[6px] ml-1" />
+                    <WalletIcon className="mr-[6px] ml-1" />
 
                     <span>{'Switch Network'}</span>
                     <ArrowDropDownRounded
@@ -162,7 +163,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                     <div
                       className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#191B20]  hover:brightness-125 hover:bg-1`}
                     >
-                      <Wallet className="mr-2 ml-1 text-blue" />
+                      <WalletIcon className="mr-2 ml-1 text-blue" />
                       <div className="flex items-center">
                         <Display
                           data={account.balanceFormatted}
@@ -195,7 +196,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                     offsetY={10}
                   >
                     <MenuItem className={'!bg-[#232334] text-1 cursor-auto'}>
-                      <div className="mx-[10px] my-[5px]">
+                      <div className="mx-[10px] my-[10px]">
                         <div className="flex items-center justify-between text-f14 mb-[20px]">
                           <div className="flex flex-col">
                             {account
@@ -249,14 +250,14 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                         <div className="flex items-center gap-x-3 text-f14">
                           {registeredOneCT ? (
                             <BlueBtn
-                              className="!ml-[13px] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+                              className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
                               onClick={disableOneCt}
                             >
                               Deactivate Acount
                             </BlueBtn>
                           ) : (
                             <BlueBtn
-                              className="!ml-[13px] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+                              className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
                               onClick={() => {
                                 setOneCTModal(true);
                               }}
@@ -269,7 +270,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                             href="https://www.google.com/"
                             target="_blank"
                           >
-                            <div className=" underline flex items-center ">
+                            <div className="text-f12 underline flex items-center ">
                               Learn More{' '}
                               <ShareIcon className=" scale-[0.65] ml-[1px] mb-[-2px]" />
                             </div>

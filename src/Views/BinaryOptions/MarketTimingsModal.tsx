@@ -70,26 +70,8 @@ const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
             shouldShowMobile
           />
         </div>
-        {/* <div className="text-6 text-f10 mt-5 sm:px-2">
-          Additionally, there are the following <b>holidays</b> where market are
-          closed throughout the day:
-          <div className="ml-1 my-3">
-            <div className="mt-2">1.&nbsp; January 1st - 3rd</div>
-            <div className="mt-2">2.&nbsp; December 25th - 27th </div>
-          </div>
-        </div> */}
       </ShareModalStyles>
     </Dialog>
-  );
-};
-
-const ModalButton = ({ children, className, onClick }) => {
-  return (
-    <button
-      className={`text-f16 text-3 bg-2 pb-[3px] pr-4 pl-[10px] rounded-sm h-[30px] whitespace-nowrap w-[80px] transition-all duration-300 hover:text-1 ${className}`}
-    >
-      {children}
-    </button>
   );
 };
 

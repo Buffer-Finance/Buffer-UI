@@ -15,6 +15,7 @@ import styled from '@emotion/styled';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import { ShareModal } from '@Views/BinaryOptions/Components/shareModal';
 import { useGenericHooks } from '@Hooks/useGenericHook';
+import { MarketTimingsModal } from './Components/MarketTimingsModal';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -146,6 +147,7 @@ export const EssentialModals = () => {
   useGenericHooks();
   return (
     <>
+      <MarketTimingsModal />
       <ShareModal />
       <ModalBase
         className="!p-[0px]"
