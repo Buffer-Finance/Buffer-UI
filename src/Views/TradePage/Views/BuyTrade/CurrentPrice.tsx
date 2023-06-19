@@ -65,12 +65,12 @@ const StrikePricePicker: React.FC<any> = ({
     setStrike(initialStrike);
   }, []);
   return (
-    <BuyTradeDescText>
+    <BuyTradeDescText className=" flex justify-end w-fit">
       <input
         type="number"
         step={1}
         min={0.0000001}
-        className="unset  !text-right"
+        className=" bg-[#282B39] !text-right px-3 py-[3px] rounded-sm w-[70%] outline-none"
         value={strike}
         onChange={(e) => {
           setStrike(e.target.value);
