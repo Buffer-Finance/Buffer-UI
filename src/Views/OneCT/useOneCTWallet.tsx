@@ -27,7 +27,7 @@ export const is1CTEnabled = (
     pk,
     provider as ethers.providers.StaticJsonRpcProvider
   );
-  if (deb) console.log(deb, oneCTWallet.address, account);
+  // if (deb) console.log(deb, oneCTWallet.address, account);
 
   return oneCTWallet.address.toLowerCase() === account.toLowerCase();
 };
@@ -70,7 +70,7 @@ const useOneCTWallet = () => {
       provider as ethers.providers.StaticJsonRpcProvider
     );
   }, [oneCtPk, provider]);
-  console.log(`useOneCTWallet-data: `, oneCTWallet);
+  // console.log(`useOneCTWallet-data: `, oneCTWallet);
 
   const pkLocalStorageIdentifier = 'one-ct-wallet-pk' + address;
   const checkStorage = () => {

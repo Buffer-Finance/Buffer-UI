@@ -33,7 +33,7 @@ const useOngoingTrades = () => {
     {
       fetcher: async (oneCTWallet) => {
         const signature = await getCachedSignature(oneCTWallet);
-        console.log(`ssssignature: `, signature);
+        // console.log(`ssssignature: `, signature);
         const res = await axios.get(`${baseUrl}trades/user/active/`, {
           params: {
             user_signature: signature,
@@ -50,7 +50,7 @@ const useOngoingTrades = () => {
           (t: any) =>
             !t.is_limit_order || (t.is_limit_order && t.state !== 'QUEUED')
         );
-        console.log(`activeTrades: `, activeTrades, limitOrders);
+        // console.log(`activeTrades: `, activeTrades, limitOrders);
         return [activeTrades, limitOrders] as OngoingTradeSchema[];
       },
       refreshInterval: 10,

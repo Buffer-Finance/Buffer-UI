@@ -67,7 +67,7 @@ const HistoryTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
-    console.log(`BodyFormatter-row: `, trade);
+    // console.log(`BodyFormatter-row: `, trade);
 
     const tradeMarket = markets?.find((pair) => {
       const pool = pair.pools.find(
@@ -204,7 +204,7 @@ export { HistoryTable };
 
 const UserHistory = () => {
   const [ongoingData] = useHistoryTrades();
-  console.log(`HistoryTable-ongoingData: `, ongoingData);
+  // console.log(`HistoryTable-ongoingData: `, ongoingData);
   return <HistoryTable trades={ongoingData} />;
 };
 export default UserHistory;
