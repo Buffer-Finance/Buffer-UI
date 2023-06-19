@@ -85,7 +85,8 @@ const TableBackground = styled.div`
     .table-body {
       .table-row {
         margin-top: 2px;
-        background: #171722;
+        background: ${(props) =>
+          props?.isBodyTransparent ? 'transparent' : '#171722'};
 
         --selected-row-border: none;
         /* border-top: ${getBorder}; */
@@ -113,6 +114,19 @@ const TableBackground = styled.div`
         &.disable-animation {
           &:hover {
             transform: scaleX(1);
+          }
+        }
+
+        .transparent-hover {
+          &:hover {
+            background: var(--bg-19);
+          }
+          &.active {
+            background: var(--bg-19);
+            --selected-row-border: none;
+          }
+          &.blured {
+            opacity: 1;
           }
         }
 

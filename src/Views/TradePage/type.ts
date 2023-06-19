@@ -33,6 +33,7 @@ export interface OngoingTradeSchema {
   strike: number;
   period: number;
   target_contract: string;
+  expiry_price: number | null;
   payout: number | null;
   user_partial_signature: string;
   close_time: number;

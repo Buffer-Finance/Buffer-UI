@@ -42,7 +42,11 @@ import { PairTokenImage } from '../Components/PairTokenImage';
 import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '@Views/V3App/config';
-import { OngoingTradeSchema, marketType } from '@Views/TradePage/type';
+import {
+  OngoingTradeSchema,
+  marketType,
+  poolInfoType,
+} from '@Views/TradePage/type';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
@@ -679,21 +683,22 @@ export const Share: React.FC<{
 }> = ({ data, market, poolInfo }) => {
   const [, setIsOpen] = useAtom(SetShareStateAtom);
   const [, setBet] = useAtom(SetShareBetAtom);
-
   return (
     <button
       onClick={(e) => {
         e.stopPropagation();
-        setIsOpen(true);
+        console.log('dataShare', data, market, poolInfo);
         setBet({
           trade: data,
           expiryPrice:
-            data.state === TradeState.Active
-              ? expiryPriceCache[data.option_id]
-              : data.expirationPrice,
+            // data.state === TradeState.Active
+            //   ? expiryPriceCache[data.option_id]
+            // :
+            data.expiry_price,
           market: market,
           poolInfo: poolInfo,
         });
+        setIsOpen(true);
       }}
     >
       <ShareIcon />
