@@ -1,3 +1,5 @@
+import { notificationPosition, tradePanelPosition } from './type';
+
 export const appConfig = {
   '421613': {
     graph: {
@@ -71,8 +73,8 @@ export const defaultSettings = {
   miscs: {
     showFavoriteAsset: true,
   },
-  tradePanelPosition: 0,
-  notificationPosition: 3,
+  tradePanelPosition: tradePanelPosition.Right,
+  notificationPosition: notificationPosition.BottomRight,
 };
 
 export const defaultSelectedTime = '00:15';
