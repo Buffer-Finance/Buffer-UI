@@ -5,7 +5,7 @@ import {
   marketType,
   poolInfoType,
 } from '@Views/TradePage/type';
-import { divide, subtract } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
 import { toFixed } from '@Utils/NumString';
 import { StrikePrice } from './StrikePrice';
 import { CurrentPrice } from './CurrentPrice';
@@ -150,15 +150,26 @@ const Pnl: React.FC<{
     token0: configData.token0,
     token1: configData.token1,
   });
+  const probability = getProbability(trade, +currentPrice);
   const isUp = trade.is_above;
   const lockedAmount = divide(trade.locked_amount, poolInfo.decimals) as string;
   const strike = divide(trade.strike, 1e8) as string;
   const isWin = isUp ? currentPrice > strike : currentPrice < strike;
   const tradeSize = divide(trade.trade_size, poolInfo.decimals) as string;
-  const lossAmount = subtract(lockedAmount, tradeSize);
-  const probability = getProbability(trade, +currentPrice);
+  const lossAmount = divide(
+    multiply(subtract(lockedAmount, tradeSize), probability.toString()),
+    2
+  );
+  const winAmount = divide(multiply(lockedAmount, probability.toString()), 2);
+
+  let pnl = <span className="text-red">-{toFixed(lossAmount, 2)}</span>;
   if (isWin) {
-    return <span className="text-green">+{lockedAmount}</span>;
+    pnl = <span className="text-green">+{toFixed(winAmount, 2)}</span>;
   }
-  return <span className="text-red">-{lossAmount}</span>;
+  return (
+    <RowGap gap="2px">
+      {pnl}
+      <span className="text-[9px]">{probability.toFixed(2)}%</span>
+    </RowGap>
+  );
 };
