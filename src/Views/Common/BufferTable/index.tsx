@@ -97,6 +97,7 @@ const BufferTable: React.FC<IBufferTable> = ({
   return (
     <Background
       overflow={overflow}
+      isBodyTransparent={isBodyTransparent}
       className={` ${className} ${shouldShowMobile ? '' : 'tab-none'}
       `}
       shouldShowMobile={shouldShowMobile}
