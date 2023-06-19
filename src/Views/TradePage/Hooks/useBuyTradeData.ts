@@ -39,11 +39,22 @@ export const useBuyTradeData = (deb?: string) => {
     const settlementFees: {
       [key: string]: string;
     } = {};
+    const maxOIs: {
+      [key: string]: string;
+    } = {};
+    const currentOIs: {
+      [key: string]: string;
+    } = {};
 
     config?.forEach((item) => {
       item.pools.forEach((pool) => {
         maxTradeSizes[pool.optionContract] =
           readCallData[getCallId(pool.optionContract, 'getMaxTradeSize')]?.[0];
+        maxOIs[pool.optionContract] =
+          readCallData[getCallId(pool.optionContract, 'getMaxOI')]?.[0];
+        currentOIs[pool.optionContract] =
+          readCallData[getCallId(pool.optionContract, 'totalMarketOI')]?.[0];
+
         const settlement_fee =
           readCallData[
             getCallId(pool.optionContract, 'getSettlementFeePercentage')
@@ -62,6 +73,8 @@ export const useBuyTradeData = (deb?: string) => {
       user2signer,
       maxTradeSizes,
       settlementFees,
+      maxOIs,
+      currentOIs,
     };
   }, [readCallData, poolDetails, switchPool, configData]);
 

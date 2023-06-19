@@ -17,6 +17,8 @@ import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { toFixed } from '@Utils/NumString';
 import { priceAtom } from '@Hooks/usePrice';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { divide } from '@Utils/NumString/stringArithmatics';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -91,6 +93,28 @@ const MarketStatsBar: React.FC<any> = ({}) => {
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
+  const readcallData = useBuyTradeData();
+  let maxFee = null;
+  let maxOI = null;
+  let currentOI = null;
+  let payout = null;
+
+  if (readcallData && switchPool && poolDetails) {
+    maxFee = divide(
+      readcallData?.maxTradeSizes[switchPool?.optionContract] ?? '0',
+      poolDetails.decimals
+    ) as string;
+    maxOI = divide(
+      readcallData?.maxOIs[switchPool?.optionContract] ?? '0',
+      poolDetails.decimals
+    ) as string;
+    currentOI = divide(
+      readcallData?.currentOIs[switchPool?.optionContract] ?? '0',
+      poolDetails.decimals
+    ) as string;
+
+    payout = readcallData?.settlementFees[switchPool?.optionContract];
+  }
 
   function closeDropdown() {
     toggleMenu(false);
@@ -100,21 +124,21 @@ const MarketStatsBar: React.FC<any> = ({}) => {
   const data = [
     {
       header: 'Max Trade Size',
-      data: <Display data={switchPool?.max_fee} unit={poolDetails?.token} />,
+      data: <Display data={maxFee} unit={poolDetails?.token} precision={2} />,
     },
     {
       header: 'Current OI',
       data: (
-        <Display data={switchPool?.openInterest} unit={poolDetails?.token} />
+        <Display data={currentOI} unit={poolDetails?.token} precision={2} />
       ),
     },
     {
       header: 'Max OI',
-      data: '67 USDC',
+      data: <Display data={maxOI} unit={poolDetails?.token} precision={2} />,
     },
     {
       header: 'Payout',
-      data: <div>57.4</div>,
+      data: <div>{payout}%</div>,
     },
   ];
 

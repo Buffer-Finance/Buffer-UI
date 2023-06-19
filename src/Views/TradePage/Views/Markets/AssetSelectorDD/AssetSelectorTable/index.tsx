@@ -96,6 +96,14 @@ export const AssetSelectorTable: React.FC = () => {
       readcallData?.maxTradeSizes[selectedPool?.optionContract] ?? '0',
       poolInfo.decimals
     ) as string;
+    const maxOI = divide(
+      readcallData.maxOIs[selectedPool?.optionContract] ?? '0',
+      poolInfo.decimals
+    );
+    const currentOI = divide(
+      readcallData.currentOIs[selectedPool?.optionContract] ?? '0',
+      poolInfo.decimals
+    );
 
     switch (col) {
       case 0:
@@ -167,8 +175,7 @@ export const AssetSelectorTable: React.FC = () => {
             content={[
               <div className="flex items-center">
                 <div className="text-1">
-                  {divide(selectedPool?.openInterest ?? '0', poolInfo.decimals)}{' '}
-                  {poolInfo.token}
+                  {currentOI} {poolInfo.token}
                 </div>
               </div>,
             ]}
@@ -180,7 +187,7 @@ export const AssetSelectorTable: React.FC = () => {
             content={[
               <div className="flex items-center">
                 <div className="text-1">
-                  {/* {currentAsset.maxOpenInterest.toFixed(2)} */}
+                  {maxOI} {poolInfo.token}
                 </div>
               </div>,
             ]}

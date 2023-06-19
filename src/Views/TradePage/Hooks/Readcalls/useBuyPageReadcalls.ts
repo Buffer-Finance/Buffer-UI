@@ -81,6 +81,18 @@ export function useBuyTradePageReadcalls() {
               {
                 address: pool.optionContract,
                 abi: OptionContractABI,
+                name: 'getMaxOI',
+                params: [],
+              },
+              {
+                address: pool.optionContract,
+                abi: OptionContractABI,
+                name: 'totalMarketOI',
+                params: [],
+              },
+              {
+                address: pool.optionContract,
+                abi: OptionContractABI,
                 name: 'getSettlementFeePercentage',
                 params: [
                   '0x0000000000000000000000000000000000000000',
