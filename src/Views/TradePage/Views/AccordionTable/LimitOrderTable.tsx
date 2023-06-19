@@ -1,7 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { atom, useAtom, useSetAtom } from 'jotai';
-import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import {
   getDisplayDate,
@@ -26,9 +25,6 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
 import { useState } from 'react';
-import axios from 'axios';
-import { baseUrl } from '@Views/TradePage/config';
-import { useUserAccount } from '@Hooks/useUserAccount';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useToast } from '@Contexts/Toast';
@@ -37,6 +33,7 @@ import { cancelQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
 import {
   StrikePriceComponent,
   TableErrorRow,
+  TableHeader,
   tableButtonClasses,
 } from './Common';
 import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
@@ -61,7 +58,6 @@ enum TableColumn {
   TradeSize = 5,
   ActionButtons = 6,
 }
-const priceDecimals = 8;
 
 const LimitOrderTable = () => {
   // const [visualized, setVisualized] = useAtom(visualizeddAtom);

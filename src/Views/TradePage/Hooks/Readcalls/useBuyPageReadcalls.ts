@@ -13,7 +13,8 @@ import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useMarketsConfig } from '../useMarketsConfig';
 import { useSettlementFee } from '../useSettlementFee';
 import { joinStrings } from '@Views/TradePage/utils';
-
+import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
+import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
 export function useBuyTradePageReadcalls() {
   const { address } = useUserAccount();
   const { switchPool, poolDetails } = useSwitchPool();
@@ -64,7 +65,7 @@ export function useBuyTradePageReadcalls() {
       },
     ];
 
-    const optionCalls = config
+    let optionCalls = config
       ?.map((market) => {
         const baseSettlementFee =
           baseSettlementFees?.[joinStrings(market.token0, market.token1, '')]
@@ -106,14 +107,19 @@ export function useBuyTradePageReadcalls() {
           .flat(1);
       })
       .flat(1);
-
+    optionCalls?.push({
+      address: configData.creation_window,
+      abi: CreationWindowABI,
+      name: 'isInCreationWindow',
+      params: [timeToMins('00:05')],
+    });
     // console.log('optionCalls', optionCalls);
 
     if (!address) {
-      return [...optionCalls];
+      return [...optionCalls!];
     }
 
-    return [...userSpecificCalls, ...optionCalls];
+    return [...userSpecificCalls, ...optionCalls!];
   }, [switchPool, poolDetails, address, highestTierNFT]);
 
   return useCall2Data(calls, 'V3-app-read-calls');

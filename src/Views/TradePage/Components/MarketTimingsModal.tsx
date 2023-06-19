@@ -1,11 +1,11 @@
 import { Dialog } from '@mui/material';
 import { useAtom } from 'jotai';
-import { ShareModalStyles } from './Components/shareModal';
-import { ForexTimingsModalAtom } from './PGDrawer/CustomOption';
 import { CloseOutlined } from '@mui/icons-material';
-import { TableHeader } from '@Views/Pro/Common/TableHead';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import BufferTable from '@Views/Common/BufferTable';
+import { ModalBase } from 'src/Modals/BaseModal';
+import { TableHeader } from '../Views/AccordionTable/Common';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import { ForexTimingsModalAtom } from '../atoms';
 interface IMarketTimingsModal {}
 const headNameArray = ['Day of the week', 'Market open/close'];
 const dataArr = [
@@ -51,40 +51,21 @@ const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
   };
 
   return (
-    <Dialog open={show} onClose={closeModal}>
-      <ShareModalStyles>
-        <ModalHeader
-          header={'Forex Trading Timings'}
-          onClick={closeModal}
-          className=""
+    <ModalBase open={show} onClose={closeModal}>
+      <div>Forex Trading Timings</div>
+      <div>
+        <BufferTable
+          tableClass="!w-full"
+          className="mt-1"
+          headerJSX={HeaderFomatter}
+          bodyJSX={BodyFormatter}
+          cols={headNameArray.length}
+          rows={dataArr[0].length}
+          onRowClick={console.log}
+          shouldShowMobile
         />
-        <div>
-          <BufferTable
-            tableClass="!w-full"
-            className="mt-1"
-            headerJSX={HeaderFomatter}
-            bodyJSX={BodyFormatter}
-            cols={headNameArray.length}
-            rows={dataArr[0].length}
-            onRowClick={console.log}
-            shouldShowMobile
-          />
-        </div>
-      </ShareModalStyles>
-    </Dialog>
-  );
-};
-
-const ModalHeader = ({ onClick, header, className }) => {
-  return (
-    <div
-      className={`flex justify-between items-center mb-4 shareModal:mb-3 shareModal:pl-5 shareModal:pr-3 w-full ${className}`}
-    >
-      <div className="text-f20 text-1 pb-2">{header}</div>
-      <button className="p-3 text-1 rounded-full bg-2" onClick={onClick}>
-        <CloseOutlined />
-      </button>
-    </div>
+      </div>
+    </ModalBase>
   );
 };
 

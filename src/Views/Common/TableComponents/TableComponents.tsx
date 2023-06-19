@@ -9,6 +9,7 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import TableAssetCell from '../BufferTable/TableAssetCell';
 import { UpDownChip } from '@Views/BinaryOptions/Tables/TableComponents';
 import { PairTokenImage } from '../PairTokenImage';
+import LockIcon from '@SVG/Elements/LockIcon';
 
 interface ITableCellInfo {
   label: string | ReactChild;
@@ -90,7 +91,8 @@ const AssetCell: React.FC<{
   currentRow: OngoingTradeSchema;
   split?: boolean;
   configData: marketType | undefined;
-}> = ({ currentRow, split, configData }) => {
+  platform?: boolean;
+}> = ({ currentRow, split, configData, platform }) => {
   const isUp = currentRow.is_above;
   if (!configData) return <></>;
   return (
@@ -105,7 +107,7 @@ const AssetCell: React.FC<{
           <span className={`weight-400 text-f15 `}>
             {configData.token0 + '-' + configData.token1}{' '}
           </span>
-          <UpDownChip isUp={isUp} />
+          {platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}
         </div>
       }
       desc={<></>}

@@ -71,12 +71,12 @@ const useGenericHooks = () => {
           });
         }
         setTimeout(() => {
-          getExpireNotification(
-            { ...currTrade.trade },
-            tradeMarket!,
-            toastify,
-            openShareModal
-          );
+          // getExpireNotification(
+          //   { ...currTrade.trade },
+          //   tradeMarket!,
+          //   toastify,
+          //   openShareModal
+          // );
         }, delay * 1000);
         delete tradeCache.current[tradeIdentifier];
       }

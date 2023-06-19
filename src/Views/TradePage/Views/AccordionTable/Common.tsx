@@ -86,6 +86,44 @@ export const TableButton = (props: any) => {
   );
 };
 
+interface ITableHeads {
+  children: string | JSX.Element;
+  tooltip?: string;
+  style?: string;
+}
+
+const TableHeads: React.FC<ITableHeads> = ({ children, style, tooltip }) => {
+  return (
+    <div className={`f14 capitialize ${style}`}>
+      {children}
+      {tooltip && (
+        <img src="/PredictionGames/info.svg" alt="" className="info-tooltip" />
+      )}
+    </div>
+  );
+};
+interface ITableHeader {
+  col: number;
+  headsArr: (string | JSX.Element)[];
+  className?: string;
+  firstColClassName?: string;
+}
+export const TableHeader: React.FC<ITableHeader> = ({
+  col,
+  headsArr,
+  className,
+  firstColClassName,
+}) => {
+  if (col > headsArr.length) return <div>Unhandled col of header</div>;
+  return (
+    <TableHeads
+      style={col === 0 ? firstColClassName + ' ' + className : className}
+    >
+      {headsArr[col]}
+    </TableHeads>
+  );
+};
+
 export const StrikePriceComponent = ({
   trade,
   configData,

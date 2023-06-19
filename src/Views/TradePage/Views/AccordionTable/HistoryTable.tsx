@@ -1,6 +1,5 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { atom, useAtom } from 'jotai';
-import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
@@ -16,6 +15,7 @@ import {
   DisplayTime,
   StrikePriceComponent,
   TableErrorRow,
+  TableHeader,
   queuedTradeFallBack,
 } from './Common';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
@@ -26,18 +26,6 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
 
 export const tradesCount = 10;
-const headNameArray = [
-  'Asset',
-  'Strike Price',
-  'Expiry Price',
-  'Open Time',
-  'Duration',
-  'Close Time',
-  'Trade Size',
-  'Payout',
-  'Status',
-  '',
-];
 
 enum TableColumn {
   Asset = 0,
@@ -61,6 +49,30 @@ const HistoryTable: React.FC<{
   const markets = useMarketsConfig();
   const { getPoolInfo } = usePoolInfo();
 
+  const headNameArray = platform
+    ? [
+        'Asset',
+        'Strike Price',
+        'Expiry Price',
+        'Open Time',
+        'Duration',
+        'Close Time',
+        'Trade Size',
+        'Payout',
+        'Status',
+      ]
+    : [
+        'Asset',
+        'Strike Price',
+        'Expiry Price',
+        'Open Time',
+        'Duration',
+        'Close Time',
+        'Trade Size',
+        'Payout',
+        'Status',
+        '',
+      ];
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
@@ -104,7 +116,13 @@ const HistoryTable: React.FC<{
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
       case TableColumn.Asset:
-        return <AssetCell configData={tradeMarket} currentRow={trade} />;
+        return (
+          <AssetCell
+            configData={tradeMarket}
+            currentRow={trade}
+            platform={platform}
+          />
+        );
       case TableColumn.ExpiryPrice:
         return (
           <Display
