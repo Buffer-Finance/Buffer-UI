@@ -67,7 +67,7 @@ const TableBackground = styled.div`
           shouldShowMobile ? '12px 10px' : '12px 0px'};
 
         &:first-of-type {
-          padding-left: 0.6rem;
+          padding-left: 1.6rem;
           border-radius: var(--border-radius) 0 0 var(--border-radius);
         }
         &:last-of-type {
@@ -157,14 +157,14 @@ const TableBackground = styled.div`
           &.sm {
             padding: 1.7rem 0;
           }
-          &:first-of-type {
+          /* &:first-of-type {
             padding-left: var(--padding-left);
             border-radius: var(--border-radius) 0 0 var(--border-radius);
-          }
-          &:last-of-type {
+          } */
+          /* &:last-of-type {
             padding-right: calc(var(--padding-left) - 1rem);
             border-radius: 0 var(--border-radius) var(--border-radius) 0;
-          }
+          } */
         }
         &:hover {
           .table-cell {

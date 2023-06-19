@@ -111,7 +111,7 @@ export const AssetSelectorTable: React.FC = () => {
           <CellContent
             content={[
               <div className="text-1 flex items-center justify-center ">
-                <IconButton onClick={onStarClick}>
+                <IconButton onClick={onStarClick} className="!p-[0]">
                   <Star active={isFavourite} />
                 </IconButton>
               </div>,
