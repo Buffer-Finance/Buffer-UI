@@ -18,8 +18,7 @@ const useAccountMapping = () => {
     params: [address],
   };
 
-
-  const { data } = 
+  // const { data } =
 };
 
 export default useAccountMapping;
