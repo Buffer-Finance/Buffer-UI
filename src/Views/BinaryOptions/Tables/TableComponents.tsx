@@ -43,18 +43,19 @@ import { PairTokenImage } from '../Components/PairTokenImage';
 import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '@Views/V3App/config';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { OngoingTradeSchema, marketType } from '@Views/TradePage/type';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
-  currentRow: IGQLHistory,
-  toastify,
-  openShareModal: (trade: IGQLHistory, expiry: string) => void
+  currentRow: OngoingTradeSchema,
+  tradeMarket: marketType,
+  toastify: (a: any) => void,
+  openShareModal: (trade: OngoingTradeSchema, expiry: string) => void
 ) => {
   let response;
   const query = {
-    pair: currentRow.chartData.tv_id,
-    timestamp: currentRow.expirationTime,
+    pair: tradeMarket.tv_id,
+    timestamp: currentRow.expiration_time,
   };
   response = await axios.post(
     `https://oracle.buffer-finance-api.link/price/query/`,
@@ -73,8 +74,8 @@ export const getExpireNotification = async (
 
   const expiryPrice = response.data[0].price.toString();
   let win = true;
-  if (lt(currentRow.strike, expiryPrice)) {
-    if (currentRow.isAbove) {
+  if (lt(currentRow.strike + '', expiryPrice)) {
+    if (currentRow.is_above) {
       win = true;
     } else {
       win = false;
@@ -83,7 +84,7 @@ export const getExpireNotification = async (
     //to be asked
     win = false;
   } else {
-    if (currentRow.isAbove) {
+    if (currentRow.is_above) {
       win = false;
     } else {
       win = true;
