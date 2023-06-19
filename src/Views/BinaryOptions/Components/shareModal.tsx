@@ -33,12 +33,14 @@ import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getImageUrl } from '../PGDrawer/PoolDropDown';
 import styled from '@emotion/styled';
+
 import {
   OngoingTradeSchema,
-  TradeState,
-} from '@Views/TradePage/Hooks/ongoingTrades';
-import { marketType, poolInfoType } from '@Views/TradePage/type';
+  marketType,
+  poolInfoType,
+} from '@Views/TradePage/type';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
+import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
 
 interface IShareModal {}
 
