@@ -29,7 +29,6 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { BlackBtn } from '@Views/Common/V2-Button';
 import { IToken, IV } from '..';
 import { SetShareBetAtom, SetShareStateAtom } from '../Components/shareModal';
-import { IGQLHistory } from '../Hooks/usePastTradeQuery';
 import { expiryPriceCache } from '../Hooks/useTradeHistory';
 import { getPendingData } from './Desktop';
 import { UpTriangle } from '@Public/ComponentSVGS/UpTriangle';
@@ -43,13 +42,17 @@ import { PairTokenImage } from '../Components/PairTokenImage';
 import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '@Views/V3App/config';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/ongoingTrades';
+import {
+  OngoingTradeSchema,
+  TradeState,
+} from '@Views/TradePage/Hooks/ongoingTrades';
+import { marketType, poolInfoType } from '@Views/TradePage/type';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
-  currentRow: IGQLHistory,
+  currentRow: OngoingTradeSchema,
   toastify,
-  openShareModal: (trade: IGQLHistory, expiry: string) => void
+  openShareModal: (trade: OngoingTradeSchema, expiry: string) => void
 ) => {
   let response;
   const query = {
@@ -135,7 +138,7 @@ export const getExpireNotification = async (
 };
 
 export const SlippageTooltip: React.FC<{
-  option: IGQLHistory;
+  option: OngoingTradeSchema;
   className?: string;
 }> = ({ option, className }) => {
   if (!option?.slippage || option?.strike) return <></>;
@@ -229,7 +232,7 @@ export const StopWatch: React.FC<{
 };
 
 export const PayoutChip: React.FC<{
-  data: IGQLHistory;
+  data: OngoingTradeSchema;
   className?: string;
 }> = ({ data, className = '' }) => {
   const net_pnl = data.payout
@@ -331,7 +334,7 @@ export const PayoutChip: React.FC<{
 };
 
 export const AssetCell: React.FC<{
-  currentRow: IGQLHistory;
+  currentRow: OngoingTradeSchema;
   split?: boolean;
   configData: V3AppConfig | undefined;
 }> = ({ currentRow, split, configData }) => {
@@ -458,7 +461,7 @@ export const StrikePriceComponent = ({
 
 export const ExpiryCurrentComponent: React.FC<{
   isHistoryTable: boolean;
-  trade: IGQLHistory;
+  trade: OngoingTradeSchema;
   marketPrice: any;
   configData: V3AppConfig | undefined;
 }> = ({ isHistoryTable, trade, marketPrice, configData }) => {
@@ -528,7 +531,7 @@ export const ProbabilityPNL = ({
   marketPrice,
   onlyPnl = false,
 }: {
-  trade: IGQLHistory;
+  trade: OngoingTradeSchema;
   isHistoryTable: boolean;
   marketPrice: any;
   onlyPnl?: boolean;
@@ -652,7 +655,7 @@ export const ProbabilityPNL = ({
 };
 
 export const TradeSize: React.FC<{
-  trade: IGQLHistory;
+  trade: OngoingTradeSchema;
 }> = ({ trade }) => {
   return (
     <CellInfo
@@ -669,8 +672,10 @@ export const TradeSize: React.FC<{
 };
 
 export const Share: React.FC<{
-  data: IGQLHistory;
-}> = ({ data }) => {
+  data: OngoingTradeSchema;
+  market: marketType;
+  poolInfo: poolInfoType;
+}> = ({ data, market, poolInfo }) => {
   const [, setIsOpen] = useAtom(SetShareStateAtom);
   const [, setBet] = useAtom(SetShareBetAtom);
 
@@ -682,9 +687,11 @@ export const Share: React.FC<{
         setBet({
           trade: data,
           expiryPrice:
-            data.state === BetState.active
-              ? expiryPriceCache[data.optionID]
+            data.state === TradeState.Active
+              ? expiryPriceCache[data.option_id]
               : data.expirationPrice,
+          market: market,
+          poolInfo: poolInfo,
         });
       }}
     >

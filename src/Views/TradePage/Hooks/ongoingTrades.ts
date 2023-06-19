@@ -7,6 +7,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { Signer } from 'ethers';
 export enum TradeState {
   Queued = 'QUEUED',
+  Active = 'ACTIVE',
 }
 export interface OngoingTradeSchema {
   id: number;

@@ -7,7 +7,7 @@ import {
   ContentCopy,
   FileDownloadOutlined,
 } from '@mui/icons-material';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPendingData } from '../Tables/Desktop';
 import { downloadGetLink, getNodeSnapshot, uploadImage } from '@Utils/DOMutils';
@@ -15,6 +15,7 @@ import { useCopyToClipboard } from 'react-use';
 import {
   divide,
   gt,
+  lt,
   multiply,
   subtract,
 } from '@Utils/NumString/stringArithmatics';
@@ -22,7 +23,6 @@ import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { useToast } from '@Contexts/Toast';
-import { IGQLHistory } from '../Hooks/usePastTradeQuery';
 import { BetState } from '@Hooks/useAheadTrades';
 import { useUserCode } from '@Views/Referral/Hooks/useUserCode';
 import { QRCodeSVG } from 'qrcode.react';
@@ -33,6 +33,12 @@ import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getImageUrl } from '../PGDrawer/PoolDropDown';
 import styled from '@emotion/styled';
+import {
+  OngoingTradeSchema,
+  TradeState,
+} from '@Views/TradePage/Hooks/ongoingTrades';
+import { marketType, poolInfoType } from '@Views/TradePage/type';
+import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 
 interface IShareModal {}
 
@@ -61,14 +67,20 @@ export const ShareStateAtom = atom<{ isOpen: boolean }>({ isOpen: false });
 export const SetShareStateAtom = atom(null, (get, set, update: boolean) =>
   set(ShareStateAtom, { isOpen: update })
 );
-export const ShareBetAtom = atom<{ trade: IGQLHistory; expiryPrice: string }>({
+type ShareBetType = {
+  trade: OngoingTradeSchema | null;
+  expiryPrice: string | null;
+  poolInfo: poolInfoType | null;
+  market: marketType | null;
+};
+export const ShareBetAtom = atom<ShareBetType>({
   trade: null,
   expiryPrice: null,
+  poolInfo: null,
+  market: null,
 });
-export const SetShareBetAtom = atom(
-  null,
-  (get, set, update: { trade: IGQLHistory; expiryPrice: string }) =>
-    set(ShareBetAtom, update)
+export const SetShareBetAtom = atom(null, (get, set, update: ShareBetType) =>
+  set(ShareBetAtom, update)
 );
 
 export const ShareModal: React.FC<IShareModal> = () => {
@@ -77,7 +89,7 @@ export const ShareModal: React.FC<IShareModal> = () => {
 
   const closeModal = () => {
     setIsOpen({ isOpen: false });
-    setBet({ expiryPrice: null, trade: null });
+    setBet({ expiryPrice: null, trade: null, poolInfo: null, market: null });
   };
 
   return (
@@ -92,11 +104,11 @@ const ModalChild: React.FC<{
   closeModal: () => void;
 }> = ({ closeModal }) => {
   const { activeChain } = useActiveChain();
-  const [{ trade, expiryPrice }] = useAtom(ShareBetAtom);
+  const { trade, expiryPrice, market, poolInfo } = useAtomValue(ShareBetAtom);
+  console.log(trade, expiryPrice, poolInfo, market, 'shareModal');
   const ref = useRef();
   const [loading, setLoading] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
-  const decimals = trade?.chartData.price_precision?.toString()?.length - 1;
   const toastify = useToast();
   const { affiliateCode } = useUserCode(activeChain);
   const isCodeSet = !!affiliateCode;
@@ -105,6 +117,7 @@ const ModalChild: React.FC<{
   const sharableLink = isCodeSet
     ? affilateCode2ReferralLink(affiliateCode)
     : baseURL;
+  const { getChartMarketData } = useChartMarketData();
 
   const uploadToServer = async () => {
     setLoading(true);
@@ -120,20 +133,24 @@ const ModalChild: React.FC<{
     copyToClipboard(url);
   };
 
+  if (!trade || !expiryPrice || !poolInfo || !market)
+    return <div className="text-f20 text-1">Loading...</div>;
+
   const downloadImage = async () => {
     const image = await getNodeSnapshot(ref.current);
     downloadGetLink(
       image,
-      trade.configPair?.token0 +
+      market.token0 +
         '-' +
-        trade.configPair?.token1 +
+        market.token1 +
         '|' +
-        (trade.isAbove ? 'Up' : 'Down')
+        (trade.is_above ? 'Up' : 'Down')
     );
   };
 
-  if (!trade || !trade.configPair)
-    return <div className="text-f20 text-1">Loading...</div>;
+  const chartData = getChartMarketData(market.token0, market.token1);
+  const decimals = chartData.price_precision?.toString()?.length - 1;
+  const unit = market.token1;
 
   const tradeExpiry = expiryPrice;
   const { pnl, payout } = getPayout(trade, tradeExpiry);
@@ -146,7 +163,7 @@ const ModalChild: React.FC<{
       value: (
         <Display
           data={divide(trade.strike, 8)}
-          unit={trade.configPair.token1}
+          unit={unit}
           precision={decimals}
           className="inline whitespace-pre"
         />
@@ -157,7 +174,7 @@ const ModalChild: React.FC<{
       value: (
         <Display
           data={divide(tradeExpiry, 8)}
-          unit={trade.configPair.token1}
+          unit={unit}
           precision={decimals}
           className="inline whitespace-nowrap"
         />
@@ -165,9 +182,7 @@ const ModalChild: React.FC<{
     },
     {
       key: 'Duration',
-      value: formatDistanceExpanded(
-        Variables(+trade.expirationTime - +trade.creationTime)
-      ),
+      value: formatDistanceExpanded(Variables(+trade.period)),
     },
   ];
 
@@ -191,15 +206,15 @@ const ModalChild: React.FC<{
               />
               <div className="flex items-center text-f16 bg-[#02072C] px-4 py-1 rounded font-bold mt-3">
                 <div className="mr-2 text-[#FFFFFF]">
-                  {trade.configPair.token1}-{trade.configPair.token1}
+                  {unit}-{unit}
                 </div>
-                <UpDownChipWOText isUp={trade.isAbove} />
+                <UpDownChipWOText isUp={trade.is_above} />
                 <div
                   className={`font-medium ml-2 ${
-                    trade.isAbove ? 'text-green' : 'text-red'
+                    trade.is_above ? 'text-green' : 'text-red'
                   }`}
                 >
-                  {trade.isAbove ? 'Up' : 'Down'}
+                  {trade.is_above ? 'Up' : 'Down'}
                 </div>
               </div>
               <div className="flex items-center">
@@ -207,7 +222,10 @@ const ModalChild: React.FC<{
                   conditionValue={pnl}
                   displayText={
                     <Display
-                      data={multiply(divide(pnl, trade.totalFee), '100')}
+                      data={multiply(
+                        divide(pnl, trade.locked_amount) as string,
+                        '100'
+                      )}
                       unit={'%'}
                       label={gt(pnl, '0') ? '+' : ''}
                       className="text-[28px] font-bold"
@@ -217,10 +235,10 @@ const ModalChild: React.FC<{
                 <div className="w-1 h-[30px] bg-grey mx-3"></div>
                 <div className="text-f16 text-3 flex items-center justify-center">
                   <img
-                    src={getImageUrl(trade.poolInfo.token)}
+                    src={getImageUrl(poolInfo.token)}
                     className="w-[22px] h-[22px] mr-2 "
                   />{' '}
-                  ${trade.poolInfo.token}
+                  ${poolInfo.token}
                 </div>
               </div>
             </div>
@@ -290,11 +308,17 @@ const ModalChild: React.FC<{
   );
 };
 
-const RedGreenText = ({ displayText, conditionValue }) => {
+const RedGreenText = ({
+  displayText,
+  conditionValue,
+}: {
+  displayText: JSX.Element;
+  conditionValue: string;
+}) => {
   return (
     <span
       className={`nowrap flex ${
-        conditionValue < 0 ? 'text-red' : 'text-green'
+        lt(conditionValue, '0') ? 'text-red' : 'text-green'
       }`}
     >
       {displayText}
@@ -302,15 +326,15 @@ const RedGreenText = ({ displayText, conditionValue }) => {
   );
 };
 
-const getPayout = (trade: IGQLHistory, expiryPrice) => {
+const getPayout = (trade: OngoingTradeSchema, expiryPrice) => {
   const [pnl, payout] = getPendingData(trade, expiryPrice);
-  if (trade.state === BetState.active) {
-    return { payout: payout.toString(), pnl: pnl.toString() };
+  if (trade.state === TradeState.Active) {
+    return { payout: payout as string, pnl: pnl as string };
   } else
     return {
       payout: trade?.payout || '0',
       pnl: trade?.payout
-        ? subtract(trade.payout, trade.totalFee)
-        : subtract('0', trade.totalFee),
+        ? subtract(trade.payout, trade.locked_amount.toString())
+        : subtract('0', trade.locked_amount.toString()),
     };
 };

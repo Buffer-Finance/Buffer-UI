@@ -47,7 +47,7 @@ export const TradeCard = ({
   });
 
   if (!tradeMarket) return <>Error</>;
-  const poolContract = tradeMarket?.pools.find(
+  const poolContract = tradeMarket.pools.find(
     (pool) =>
       pool.optionContract.toLowerCase() === trade?.target_contract.toLowerCase()
   )?.pool;

@@ -30,6 +30,8 @@ import { useState } from 'react';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import FailedSuccess from '@SVG/Elements/FailedSuccess';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
+import { Share } from '@Views/BinaryOptions/Tables/TableComponents';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom<number[]>([]);
@@ -43,6 +45,7 @@ const headNameArray = [
   'Trade Size',
   'Payout',
   'Status',
+  '',
 ];
 
 enum TableColumn {
@@ -55,6 +58,7 @@ enum TableColumn {
   TradeSize = 6,
   Payout = 7,
   Status = 8,
+  Share = 9,
 }
 const priceDecimals = 8;
 
@@ -62,6 +66,7 @@ const HistoryTable = () => {
   const [marketPrice] = useAtom(priceAtom);
   const [ongoingData] = useHistoryTrades();
   const markets = useMarketsConfig();
+  const { getPoolInfo } = usePoolInfo();
 
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
@@ -79,6 +84,13 @@ const HistoryTable = () => {
       );
       return !!pool;
     });
+    const poolContract = tradeMarket?.pools.find(
+      (pool) =>
+        pool.optionContract.toLowerCase() ===
+        trade?.target_contract.toLowerCase()
+    )?.pool;
+    const poolInfo = getPoolInfo(poolContract);
+
     if (!tradeMarket) return 'Problem';
     const status =
       trade.payout > 0
@@ -175,6 +187,8 @@ const HistoryTable = () => {
             </div>
           </NumberTooltip>
         );
+      case TableColumn.Share:
+        return <Share data={trade} market={tradeMarket} poolInfo={poolInfo} />;
     }
     return 'Unhandled Body';
   };

@@ -13,6 +13,7 @@ import { EditModal } from './Views/EditModal';
 import { ModalBase } from 'src/Modals/BaseModal';
 import styled from '@emotion/styled';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
+import { ShareModal } from '@Views/BinaryOptions/Components/shareModal';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -144,6 +145,7 @@ export const EssentialModals = () => {
 
   return (
     <>
+      <ShareModal />
       <ModalBase
         className="!p-[0px]"
         open={selectedTrade ? true : false}
