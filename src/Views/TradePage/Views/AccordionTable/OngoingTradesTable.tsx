@@ -32,48 +32,58 @@ import { OngoingTradeSchema } from '@Views/TradePage/type';
 import { visualizeddAtom } from '@Views/TradePage/atoms';
 
 export const tradesCount = 10;
-const headNameArray = [
-  'Asset',
-  'Strike Price',
-  'Current Price',
-  'Open Time',
-  'Time Left',
-  'Close Time',
-  'Trade Size',
-  'Probability',
-  'Show',
-];
 
-enum TableColumn {
-  Asset = 0,
-  Strike = 1,
-  CurrentPrice = 2,
-  OpenTime = 3,
-  TimeLeft = 4,
-  CloseTime = 5,
-  TradeSize = 6,
-  Probability = 7,
-  Show = 8,
-}
 const priceDecimals = 8;
 
 export const OngoingTradesTable: React.FC<{
   trades: OngoingTradeSchema[];
   platform?: boolean;
 }> = ({ trades, platform }) => {
+  console.log(`OngoingTradesTable-trades: `, trades);
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
-  const [ongoingData] = useOngoingTrades();
   const markets = useMarketsConfig();
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
+  const headNameArray = platform
+    ? [
+        'Asset',
+        'Strike Price',
+        'Current Price',
+        'Open Time',
+        'Time Left',
+        'Close Time',
+        'Trade Size',
+      ]
+    : [
+        'Asset',
+        'Strike Price',
+        'Current Price',
+        'Open Time',
+        'Time Left',
+        'Close Time',
+        'Trade Size',
+        'Probability',
+        'Show',
+      ];
 
+  enum TableColumn {
+    Asset = 0,
+    Strike = 1,
+    CurrentPrice = 2,
+    OpenTime = 3,
+    TimeLeft = 4,
+    CloseTime = 5,
+    TradeSize = 6,
+    Probability = 7,
+    Show = 8,
+  }
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
   const { cancelHandler } = useCancelTradeFunction();
 
   const BodyFormatter: any = (row: number, col: number) => {
-    const trade = ongoingData?.[row];
+    const trade = trades?.[row];
 
     const tradeMarket = markets?.find((pair) => {
       const pool = pair.pools.find(
@@ -179,7 +189,7 @@ export const OngoingTradesTable: React.FC<{
       headerJSX={HeaderFomatter}
       bodyJSX={BodyFormatter}
       cols={headNameArray.length}
-      rows={ongoingData ? ongoingData.length : 0}
+      rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
       overflow={400}
