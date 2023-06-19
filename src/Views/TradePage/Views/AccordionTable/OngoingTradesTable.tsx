@@ -29,9 +29,9 @@ import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFun
 import { useState } from 'react';
 import { ShowIcon } from '@SVG/Elements/ShowIcon';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { visualizeddAtom } from '@Views/TradePage/atoms';
 
 export const tradesCount = 10;
-export const visualizeddAtom = atom<number[]>([]);
 const headNameArray = [
   'Asset',
   'Strike Price',
@@ -99,7 +99,7 @@ export const OngoingTradesTable: React.FC<{
           </GreyBtn>
         ) : (
           <ShowIcon
-            show={isVisualized}
+            show={!isVisualized}
             onToggle={() => {
               if (isVisualized) {
                 let temp = [...visualized];

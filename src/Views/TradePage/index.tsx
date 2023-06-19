@@ -11,6 +11,7 @@ import {
 import { tradePanelPosition } from './type';
 import { EditModal } from './Views/EditModal';
 import { ModalBase } from 'src/Modals/BaseModal';
+import { useGenericHooks } from '@Hooks/useGenericHook';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -39,7 +40,7 @@ export { TradePage };
 export const EssentialModals = () => {
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const selectedTrade = useAtomValue(selectedOrderToEditAtom);
-
+  useGenericHooks();
   return (
     <>
       <ModalBase

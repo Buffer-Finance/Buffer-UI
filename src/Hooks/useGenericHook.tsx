@@ -37,6 +37,9 @@ const useGenericHooks = () => {
   };
 
   useEffect(() => {
+    // make all trade as not visited.
+    // whenever trades arr changed check all trades & mark them true.
+    // trades which remains false even after checking are the trades which are expired.
     const delay = 2;
     if (!activeTrades) return;
     if (typeof activeTrades.forEach !== 'function') return;
@@ -47,7 +50,7 @@ const useGenericHooks = () => {
         tradeCache.current[tradeIdentifier] = { trade, visited: true };
       }
     }
-
+    console.log(`useGenericHook-tradeCache.current: `, tradeCache.current);
     for (let tradeIdentifier in tradeCache.current) {
       const currTrade = tradeCache.current[tradeIdentifier];
       // one which is not getting true, i.e not in newer set of activeTrades i.e got expired

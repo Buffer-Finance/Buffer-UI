@@ -42,7 +42,6 @@ import {
 import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 
 export const tradesCount = 10;
-export const visualizeddAtom = atom([]);
 const headNameArray = [
   'Asset',
   'TriggerPrice',

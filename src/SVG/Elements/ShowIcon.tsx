@@ -20,7 +20,7 @@ export const ShowIcon = ({
       width={17}
       height={17}
       x={0.266}
-      fill={!show ? '#282B39' : ' bg-blue'}
+      fill={!show ? '#282B39' : ' var(--bg-signature)'}
       rx={2}
     />
     <path

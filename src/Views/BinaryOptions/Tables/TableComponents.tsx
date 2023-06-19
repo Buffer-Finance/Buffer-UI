@@ -53,14 +53,17 @@ export const getExpireNotification = async (
   openShareModal: (trade: OngoingTradeSchema, expiry: string) => void
 ) => {
   let response;
+
   const query = {
     pair: tradeMarket.tv_id,
     timestamp: currentRow.expiration_time,
   };
+  console.log(`TableComponents-query: `, query);
   response = await axios.post(
     `https://oracle.buffer-finance-api.link/price/query/`,
     [query]
   );
+  console.log(`TableComponents-response: `, response);
   if (!response.data?.length) {
     response = await axios.post(
       `https://oracle.buffer-finance-api.link/price/query/`,
@@ -90,39 +93,40 @@ export const getExpireNotification = async (
       win = true;
     }
   }
+  console.log(`TableComponents-win: `, win);
+
   if (win) {
     openShareModal(currentRow, expiryPrice.toString());
     return;
   } else {
-    const openTimeStamp = currentRow.creationTime;
-    const closeTimeStamp = +currentRow.expirationTime;
+    const openTimeStamp = currentRow.queued_timestamp;
+    const closeTimeStamp = +currentRow.expiration_time!;
+    console.log(
+      `TableComponents-openTimeStamp: `,
+      openTimeStamp,
+      closeTimeStamp
+    );
+
     toastify({
       type: 'loss',
       // inf: true,
       msg: (
         <div className="flex-col">
           <div className="flex whitespace-nowrap">
-            {currentRow.configPair?.token0}-{currentRow.configPair?.token1}{' '}
-            {currentRow.isAbove ? 'Up' : 'Down'} @&nbsp;
+            {tradeMarket?.token0}-{tradeMarket?.token1}{' '}
+            {currentRow.is_above ? 'Up' : 'Down'} @&nbsp;
             <Display
               data={divide(currentRow.strike, 8)}
-              unit={currentRow.configPair?.token1}
+              unit={tradeMarket.token1}
               className="!whitespace-nowrap"
             />{' '}
             &nbsp;
-            <span
-              className={`flex !whitespace-nowrap `}
-              style={{ color: win ? 'var(--green)' : 'text-1' }}
-            >
-              (+{' '}
+            <span className={`flex !whitespace-nowrap `}>
               <Display
-                className={'text-1 !whitespace-nowrap ' + win && 'green'}
-                data={
-                  win ? subtract(currentRow.amount, currentRow.totalFee) : 0
-                }
-                unit={currentRow.poolInfo.token}
+                className={'text-red !whitespace-nowrap '}
+                data={'-' + divide(currentRow.trade_size, 6)}
+                unit={'USDC'}
               />
-              )
             </span>
           </div>
           <div className="nowrap f12 mt5 text-6 @whitespace-nowrap">

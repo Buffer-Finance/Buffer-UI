@@ -42,7 +42,6 @@ import {
   IGQLHistory,
   tardesAtom,
 } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
-import { visualizeddAtom } from '@Views/BinaryOptions/Tables/Desktop';
 import { PRICE_DECIMALS } from '@Views/BinaryOptions/Tables/TableComponents';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
@@ -60,6 +59,7 @@ import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { visualizeddAtom } from '@Views/TradePage/atoms';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,

@@ -24,7 +24,6 @@ import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
 
 export const tradesCount = 10;
-export const visualizeddAtom = atom<number[]>([]);
 const headNameArray = [
   'Asset',
   'Strike Price',
@@ -191,6 +190,7 @@ export { HistoryTable };
 
 const UserHistory = () => {
   const [ongoingData] = useHistoryTrades();
+  console.log(`HistoryTable-ongoingData: `, ongoingData);
   return <HistoryTable trades={ongoingData} />;
 };
 export default UserHistory;

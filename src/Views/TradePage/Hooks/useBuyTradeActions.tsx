@@ -109,7 +109,6 @@ export const useBuyTradeActions = (userInput: string) => {
     const isForex = activeAsset?.category === AssetCategory[0];
     const maxDuration = switchPool?.max_duration;
     const minDuration = switchPool?.min_duration;
-    console.log(`useBuyTradeActions-minDuration: `, minDuration);
     if (!maxDuration || !minDuration) {
       return toastify({
         type: 'error',

@@ -87,3 +87,5 @@ export const selectedOrderToEditAtom = atom<null | {
   trade: OngoingTradeSchema;
   market: marketType;
 }>(null);
+
+export const visualizeddAtom = atom<number[]>([]);
