@@ -116,21 +116,22 @@ const LimitOrderTable = () => {
         return (
           <Display
             className="!justify-start"
-            data={getPriceFromKlines(marketPrice, { tv_id: 'BTCUSD' })}
+            data={getPriceFromKlines(marketPrice, tradeMarket)}
+            unit={tradeMarket.token1}
           />
         );
       case TableColumn.Duration:
         const hhmmstr = secondsToHHMM(trade.period).split(':');
         return <div>{hhmmstr[0] + 'h:' + hhmmstr[1] + 'm'}</div>;
       case TableColumn.OrderExpiry:
-        return <DisplayTime ts={+trade.expiration_time! * 1000} />;
+        return <DisplayTime ts={+trade.limit_order_expiration!} />;
 
       case TableColumn.TradeSize:
         return (
           <Display
             data={divide(trade.trade_size, 6)}
             className="!justify-start"
-            unit={tradeMarket?.token1}
+            unit={'USDC'}
           />
         );
       case TableColumn.ActionButtons:

@@ -135,6 +135,7 @@ export const OngoingTradesTable: React.FC<{
           <Display
             className="!justify-start"
             data={getPriceFromKlines(marketPrice, tradeMarket)}
+            unit={tradeMarket.token1}
           />
         );
       case TableColumn.OpenTime:
@@ -165,7 +166,7 @@ export const OngoingTradesTable: React.FC<{
           <Display
             data={divide(trade.trade_size, 6)}
             className="!justify-start"
-            unit={tradeMarket?.token1}
+            unit={'USDC'}
           />
         );
       case TableColumn.Probability:
