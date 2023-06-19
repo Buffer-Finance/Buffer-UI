@@ -10,6 +10,7 @@ import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { useAssetSelectorPool } from '@Views/TradePage/Hooks/useAssetSelectorPool';
 import { useAssetTableFilters } from '@Views/TradePage/Hooks/useAssetTableFilters';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
@@ -30,6 +31,7 @@ export const AssetSelectorTable: React.FC = () => {
   const { getChartMarketData } = useChartMarketData();
   const { getPoolInfo } = usePoolInfo();
   const [marketPrice] = useAtom(priceAtom);
+  const readcallData = useBuyTradeData();
 
   const headers = useMemo(() => {
     return [
@@ -73,7 +75,6 @@ export const AssetSelectorTable: React.FC = () => {
     const pairName = joinStrings(currentAsset.token0, currentAsset.token1, '-');
 
     const selectedPool = getSelectedPoolNotPol(currentAsset);
-    const poolInfo = getPoolInfo(selectedPool.pool);
 
     const isFavourite = findFavourite(currentAsset);
     const chartMarket = getChartMarketData(
@@ -85,8 +86,16 @@ export const AssetSelectorTable: React.FC = () => {
       e.stopPropagation();
       addOrRemoveFavourite(currentAsset, isFavourite);
     }
-
     const price = getPriceFromKlines(marketPrice, chartMarket);
+
+    if (!selectedPool || !readcallData) return <></>;
+
+    const poolInfo = getPoolInfo(selectedPool.pool);
+    const payout = readcallData?.settlementFees[selectedPool?.optionContract];
+    const maxFee = divide(
+      readcallData?.maxTradeSizes[selectedPool?.optionContract] ?? '0',
+      poolInfo.decimals
+    ) as string;
 
     switch (col) {
       case 0:
@@ -135,9 +144,7 @@ export const AssetSelectorTable: React.FC = () => {
           <CellContent
             content={[
               <div className="flex items-center">
-                <div className="text-1">
-                  {selectedPool?.base_settlement_fee}%
-                </div>
+                <div className="text-1">{payout}%</div>
               </div>,
             ]}
           />
@@ -148,7 +155,7 @@ export const AssetSelectorTable: React.FC = () => {
             content={[
               <div className="flex items-center">
                 <div className="text-1">
-                  {selectedPool?.max_fee} {poolInfo.token}
+                  {maxFee} {poolInfo.token}
                 </div>
               </div>,
             ]}

@@ -34,7 +34,7 @@ export const PayoutProfit = ({
               )}
               unit={tradeToken}
             />
-            {boostedPayout && gt(boostedPayout, '0') && boostedPayout + '%'}
+            {totalPayout + '%'}
           </RowGap>
         </div>
         <div className="text-f12 sm:text-f14 items-start flex-col flex-start wrap flex text-2  gap-y-1 sm:flex-row">

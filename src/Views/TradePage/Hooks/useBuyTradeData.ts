@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useMarketsConfig } from './useMarketsConfig';
+import { getPayout } from '../utils';
 
 export const useBuyTradeData = (deb?: string) => {
   const { data: readCallData } = useBuyTradePageReadcalls();
@@ -35,10 +36,21 @@ export const useBuyTradeData = (deb?: string) => {
     };
     const maxTradeSizes: { [key: string]: string } = {};
 
+    const settlementFees: {
+      [key: string]: string;
+    } = {};
+
     config?.forEach((item) => {
       item.pools.forEach((pool) => {
         maxTradeSizes[pool.optionContract] =
           readCallData[getCallId(pool.optionContract, 'getMaxTradeSize')]?.[0];
+        const settlement_fee =
+          readCallData[
+            getCallId(pool.optionContract, 'getSettlementFeePercentage')
+          ]?.[0];
+        if (settlement_fee) {
+          settlementFees[pool.optionContract] = getPayout(settlement_fee);
+        }
       });
     });
 
@@ -49,6 +61,7 @@ export const useBuyTradeData = (deb?: string) => {
       allowance,
       user2signer,
       maxTradeSizes,
+      settlementFees,
     };
   }, [readCallData, poolDetails, switchPool, configData]);
 
