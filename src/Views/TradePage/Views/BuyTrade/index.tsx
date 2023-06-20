@@ -77,7 +77,7 @@ export const BuyTrade: React.FC = () => {
   const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = '0';
   if (amount !== undefined && amount !== null && amount !== '') {
-    userAmount = subtract(userAmount, platformFee);
+    userAmount = subtract(userAmount, platformFee ?? '0');
   }
 
   return (
