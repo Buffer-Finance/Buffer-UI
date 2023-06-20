@@ -5,7 +5,7 @@ import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, gt } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
@@ -27,8 +27,15 @@ import {
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useState } from 'react';
 import { ShowIcon } from '@SVG/Elements/ShowIcon';
-import { OngoingTradeSchema } from '@Views/TradePage/type';
+import {
+  OngoingTradeSchema,
+  marketType,
+  poolInfoType,
+} from '@Views/TradePage/type';
 import { visualizeddAtom } from '@Views/TradePage/atoms';
+import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { toFixed } from '@Utils/NumString';
 
 export const tradesCount = 10;
 
@@ -61,8 +68,8 @@ export const OngoingTradesTable: React.FC<{
         'Time Left',
         'Close Time',
         'Trade Size',
-        'Probability',
-        'Show',
+        'PnL | Probability',
+        'Display',
       ];
 
   enum TableColumn {
@@ -81,6 +88,7 @@ export const OngoingTradesTable: React.FC<{
   };
   const { cancelHandler, earlyCloseHandler, earlyCloseLoading } =
     useCancelTradeFunction();
+  const { getPoolInfo } = usePoolInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -93,6 +101,14 @@ export const OngoingTradesTable: React.FC<{
       );
       return !!pool;
     });
+
+    const poolContract = tradeMarket?.pools.find(
+      (pool) =>
+        pool.optionContract.toLowerCase() ===
+        trade?.target_contract.toLowerCase()
+    )?.pool;
+    const poolInfo = getPoolInfo(poolContract);
+
     if (!trade || !tradeMarket) return 'Problem';
     switch (col) {
       case TableColumn.Show:
@@ -108,7 +124,7 @@ export const OngoingTradesTable: React.FC<{
             Cancel
           </GreyBtn>
         ) : (
-          <div>
+          <div className="flex  gap-x-[20px] items-center">
             <ShowIcon
               show={!isVisualized}
               onToggle={() => {
@@ -190,7 +206,14 @@ export const OngoingTradesTable: React.FC<{
           queuedTradeFallBack(trade) || (
             <div>
               {probabiliyt ? (
-                <Display data={probabiliyt} precision={2} />
+                <>
+                  <Pnl
+                    configData={tradeMarket}
+                    trade={trade}
+                    poolInfo={poolInfo}
+                  />
+                  {toFixed(probabiliyt, 2) + '%'}
+                </>
               ) : (
                 'Calculating...'
               )}
@@ -222,3 +245,24 @@ const UserOngoingTrades = () => {
 };
 
 export default UserOngoingTrades;
+export const Pnl = ({
+  trade,
+  configData,
+  poolInfo,
+}: {
+  trade: OngoingTradeSchema;
+  configData: marketType;
+  poolInfo: poolInfoType;
+}) => {
+  const pnl = useEarlyPnl({ trade, configData, poolInfo });
+  console.log(`OngoingTradesTable-pnl: `, pnl);
+  const isWin = gt(pnl.earlycloseAmount, '0');
+  return (
+    <Display
+      data={pnl.earlycloseAmount}
+      label={isWin ? '+' : ''}
+      className={`!justify-start ${isWin ? 'text-green' : 'text-red'}`}
+      unit={poolInfo.token}
+    />
+  );
+};
