@@ -45,7 +45,6 @@ export const OngoingTradesTable: React.FC<{
   trades: OngoingTradeSchema[];
   platform?: boolean;
 }> = ({ trades, platform }) => {
-  console.log(`OngoingTradesTable-trades: `, trades);
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const markets = useMarketsConfig();

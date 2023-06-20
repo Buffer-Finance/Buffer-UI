@@ -49,14 +49,6 @@ export const BuyTrade: React.FC = () => {
     !activeMarket ||
     !allSettlementFees
   ) {
-    console.log(
-      'buyTradeWholeLoading',
-      switchPool,
-      poolDetails,
-      readcallData,
-      activeMarket,
-      allSettlementFees
-    );
     return (
       <Skeleton
         variant="rectangular"

@@ -100,7 +100,6 @@ const HistoryTable: React.FC<{
 
     if (!tradeMarket) return 'Problem';
     const { pnl, payout } = getPayout(trade, trade.expiry_price + '');
-    console.log(`HistoryTable-pnl: `, trade.strike, pnl, payout);
     const status = gt(pnl?.toString(), '0')
       ? {
           tooltip: 'You won this bet!',
@@ -224,7 +223,6 @@ export { HistoryTable };
 
 const UserHistory = () => {
   const [ongoingData] = useHistoryTrades();
-  console.log(`HistoryTable-ongoingData: `, ongoingData);
   // console.log(`HistoryTable-ongoingData: `, ongoingData);
   return <HistoryTable trades={ongoingData} />;
 };

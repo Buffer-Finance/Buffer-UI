@@ -10,6 +10,7 @@ import TableAssetCell from '../BufferTable/TableAssetCell';
 import { UpDownChip } from '@Views/BinaryOptions/Tables/TableComponents';
 import { PairTokenImage } from '../PairTokenImage';
 import LockIcon from '@SVG/Elements/LockIcon';
+import NumberTooltip from '../Tooltips';
 
 interface ITableCellInfo {
   label: string | ReactChild;
@@ -103,12 +104,20 @@ const AssetCell: React.FC<{
         </div>
       }
       head={
-        <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
-          <span className={`weight-400 text-f15 `}>
-            {configData.token0 + '-' + configData.token1}{' '}
-          </span>
-          {platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}
-        </div>
+        <NumberTooltip
+          content={
+            platform
+              ? 'Trade directions are hidden.'
+              : 'You choosed ' + (isUp ? 'Up' : 'Down')
+          }
+        >
+          <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
+            <span className={`weight-400 text-f15 `}>
+              {configData.token0 + '-' + configData.token1}{' '}
+            </span>
+            {platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}
+          </div>
+        </NumberTooltip>
       }
       desc={<></>}
     />
