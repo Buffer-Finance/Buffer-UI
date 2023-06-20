@@ -157,7 +157,7 @@ const Pnl: React.FC<{
   const isWin = isUp ? currentPrice > strike : currentPrice < strike;
   const tradeSize = divide(trade.trade_size, poolInfo.decimals) as string;
   const lossAmount = divide(
-    multiply(subtract(lockedAmount, tradeSize), probability.toString()),
+    multiply(subtract(lockedAmount, tradeSize), probability?.toString() ?? '0'),
     2
   );
   const winAmount = divide(multiply(lockedAmount, probability.toString()), 2);
