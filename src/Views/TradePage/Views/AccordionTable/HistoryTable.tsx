@@ -4,7 +4,7 @@ import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, subtract } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, subtract } from '@Utils/NumString/stringArithmatics';
 import { priceAtom } from '@Hooks/usePrice';
 
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
@@ -24,6 +24,7 @@ import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import { Share } from '@Views/BinaryOptions/Tables/TableComponents';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { getPendingData } from '@Views/BinaryOptions/Tables/Desktop';
 
 export const tradesCount = 10;
 
@@ -97,20 +98,21 @@ const HistoryTable: React.FC<{
     const poolInfo = getPoolInfo(poolContract);
 
     if (!tradeMarket) return 'Problem';
-    const status =
-      trade.payout && trade.payout > 0
-        ? {
-            tooltip: 'You won this bet!',
-            chip: 'Win',
-            icon: <SuccessIcon width={14} height={14} />,
-            textColor: 'text-green',
-          }
-        : {
-            tooltip: 'You lost this trade!',
-            chip: 'Loss',
-            icon: <FailedSuccess width={14} height={14} />,
-            textColor: 'text-red',
-          };
+    const [pnl, payout] = getPendingData(trade, trade.expiry_price + '');
+    console.log(`HistoryTable-pnl: `, pnl, trade);
+    const status = gt(pnl, '0')
+      ? {
+          tooltip: 'You won this bet!',
+          chip: 'Win',
+          icon: <SuccessIcon width={14} height={14} />,
+          textColor: 'text-green',
+        }
+      : {
+          tooltip: 'You lost this trade!',
+          chip: 'Loss',
+          icon: <FailedSuccess width={14} height={14} />,
+          textColor: 'text-red',
+        };
     const minClosingTime = Math.min(trade.expiration_time!, trade.close_time);
     switch (col) {
       case TableColumn.Strike:
@@ -127,7 +129,7 @@ const HistoryTable: React.FC<{
         return (
           <Display
             className="!justify-start"
-            data={getPriceFromKlines(marketPrice, tradeMarket)}
+            data={divide(trade.expiry_price, 8)}
           />
         );
       case TableColumn.OpenTime:
@@ -164,18 +166,17 @@ const HistoryTable: React.FC<{
           <div>
             <Display
               className="!justify-start"
-              data={divide(trade.payout!, 6)}
+              data={divide(payout!, 6)}
               unit="USDC"
             />
-            <span className={status.textColor}>
+            <span className={status.textColor + ' flex '}>
               Net Pnl :{' '}
-              {(status.chip == 'Win' ? '+' : '-') +
-                divide(
-                  status.chip == 'Win'
-                    ? subtract(trade.payout! + '', trade.trade_size + '')
-                    : trade.trade_size,
-                  6
-                )}{' '}
+              <Display
+                label={status.chip == 'Win' ? '+' : ''}
+                className="!justify-start"
+                data={divide(pnl, 6)}
+                unit="USDC"
+              />
             </span>
           </div>
         );
