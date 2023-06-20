@@ -99,7 +99,7 @@ export const TradeDataView: React.FC<{
         ),
       },
     ];
-  if (trade.is_limit_order) {
+  if (trade.is_limit_order && isQueued) {
     TradeData = [
       {
         head: <span>Trigger Price</span>,
