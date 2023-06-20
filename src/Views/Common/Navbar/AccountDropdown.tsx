@@ -33,6 +33,7 @@ import NFTtier from '../NFTtier';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import WalletIcon from '@SVG/Elements/WalletIcon';
 import { gt } from '@Utils/NumString/stringArithmatics';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 const token2image = {
   ETH: ETHImage,
 };
@@ -50,6 +51,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   const setSnack = useSetAtom(snackAtom);
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
   const { activeChain } = useActiveChain();
+  useOngoingTrades();
   const disconnect = useDisconnect();
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });

@@ -376,19 +376,20 @@ export function getPendingData(
   expiryPrice: string
 ) {
   if (!currentRow && !expiryPrice) return ['0', '0'];
-  let payout = currentRow.amount;
+  let payout = currentRow.locked_amount + '';
   let pnl = '0';
   if (payout) {
-    pnl = subtract(payout, currentRow.totalFee);
+    pnl = subtract(payout, currentRow.trade_size);
   }
+  console.log(`Desktop-currentRow.trade_size: `, currentRow.trade_size);
   const currExpiryPrice = expiryPrice;
   if (currExpiryPrice) {
-    if (currentRow.isAbove) {
+    if (currentRow.is_above) {
       if (currExpiryPrice > currentRow.strike) {
         // pnl = winPayout;
       } else {
         // pnl = losePayout;
-        pnl = subtract('0', currentRow.totalFee);
+        pnl = subtract('0', currentRow.trade_size + '');
         payout = '0';
       }
     } else {
@@ -396,7 +397,7 @@ export function getPendingData(
         // pnl = winPayout;
       } else {
         // pnl = losePayout;
-        pnl = subtract('0', currentRow.totalFee);
+        pnl = subtract('0', currentRow.trade_size + '');
         payout = '0';
       }
     }

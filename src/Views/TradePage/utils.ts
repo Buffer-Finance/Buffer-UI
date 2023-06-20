@@ -110,21 +110,24 @@ export const editQueueTrade = async (
   limit_order_duration: number,
   environment: number
 ) => {
+  const params = {
+    user_signature,
+    queue_id,
+    signature_timestamp,
+    strike,
+    period,
+    partial_signature,
+    full_signature,
+    user_address,
+    slippage,
+    is_above,
+    limit_order_duration,
+    environment,
+  };
+  console.log(`index-edit-deb: `, params);
+
   return await axios.get(`${baseUrl}trade/edit/`, {
-    params: {
-      user_signature,
-      queue_id,
-      signature_timestamp,
-      strike,
-      period,
-      partial_signature,
-      full_signature,
-      user_address,
-      slippage,
-      is_above,
-      limit_order_duration,
-      environment,
-    },
+    params,
   });
 };
 
@@ -165,7 +168,6 @@ export const generateTradeSignature = async (
     referral,
     NFTid,
   ];
-  console.log(`index-duration-sign: `, baseArgs);
   const isLimit = settlementFee == 0;
   const baseArgsEnding = isLimit ? [ts] : [ts, settlementFee];
   const baseArgsEndingTypes = isLimit ? ['uint256'] : ['uint256', 'uint256'];
@@ -179,6 +181,7 @@ export const generateTradeSignature = async (
       types: [...baseArgTypes, 'bool', ...baseArgsEndingTypes],
     },
   ];
+  console.log(`index-edit-deb-args: `, args[0], args[1]);
   const hashedMessage: string[] = ['partial', 'full'].map((s, idx) => {
     return ethers.utils.solidityKeccak256(args[idx].types, args[idx].values);
   });

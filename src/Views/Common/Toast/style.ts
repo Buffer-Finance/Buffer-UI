@@ -125,6 +125,7 @@ export const SingleNotification = styled.div`
     --dim: 2.1rem;
     min-width: var(--dim);
     max-width: var(--dim);
+    margin-top: 10px;
     margin-right: 1rem;
     min-height: var(--dim);
     max-height: var(--dim);
@@ -136,7 +137,7 @@ export const SingleNotification = styled.div`
     display: flex;
     padding: 2.7rem;
     padding-bottom: 2.7rem;
-    align-items: center;
+    /* align-items: center; */
 
     .cross {
       position: absolute;

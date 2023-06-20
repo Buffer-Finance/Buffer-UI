@@ -89,8 +89,9 @@ export const EditModal: React.FC<{
         type: 'errror',
         id: 'dsfs',
       });
-    setEditLoading(trade.queue_id);
+    console.log(`index-edit-deb-trade: `, trade);
 
+    setEditLoading(trade.queue_id);
     const currentTs = Math.round(Date.now() / 1e3);
     const signs = await generateTradeSignature(
       address,
@@ -103,7 +104,7 @@ export const EditModal: React.FC<{
       trade.referral_code,
       trade.trader_nft_id + '',
       currentTs,
-      trade.settlement_fee,
+      0,
       buttonDirection == directionBtn.Up ? true : false,
       oneCTWallet
     );
@@ -114,12 +115,11 @@ export const EditModal: React.FC<{
         type: 'error',
         id: '1231',
       });
-    console.log(`index-signs: `, signs);
     const res = await editQueueTrade(
       signature,
       trade.queue_id,
       currentTs,
-      multiply(price, 8),
+      toFixed(multiply(price, 8), 0),
       HHMMToSeconds(currentTime),
       signs[0],
       signs[1],
