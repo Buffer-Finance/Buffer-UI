@@ -5,7 +5,7 @@ import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, gt } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
@@ -107,6 +107,7 @@ export const OngoingTradesTable: React.FC<{
         trade?.target_contract.toLowerCase()
     )?.pool;
     const poolInfo = getPoolInfo(poolContract);
+    const marketPrecision = tradeMarket?.price_precision.toString().length - 1;
 
     if (!trade || !tradeMarket) return 'Problem';
     switch (col) {
@@ -161,7 +162,11 @@ export const OngoingTradesTable: React.FC<{
         return (
           <Display
             className="!justify-start"
-            data={getPriceFromKlines(marketPrice, tradeMarket)}
+            data={round(
+              getPriceFromKlines(marketPrice, tradeMarket),
+              marketPrecision
+            )}
+            precision={marketPrecision}
             unit={tradeMarket.token1}
           />
         );

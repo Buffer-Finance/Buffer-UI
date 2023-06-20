@@ -2,6 +2,7 @@ import { toFixed } from '@Utils/NumString';
 import { round } from '@Utils/NumString/stringArithmatics';
 import { roundToTwo } from '@Utils/roundOff';
 import { setDoccumentTitle } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import {
   BuyTradeDescText,
@@ -40,7 +41,7 @@ export const CurrentPrice: React.FC<{
   );
   const title = price ? precisePrice + ' | ' + chartMarket.tv_id : '';
   setDoccumentTitle(title);
-  console.log(`CurrentPrice-tradeType: `, tradeType);
+  const precision = chartMarket.price_precision.toString().length - 1;
   return (
     <CurrentPriceBackground>
       <RowBetween>
@@ -48,7 +49,9 @@ export const CurrentPrice: React.FC<{
           <Trans>Price</Trans>
         </BuyTradeHeadText>
         {tradeType == 'Market' ? (
-          <BuyTradeDescText>{round(price, 2)}</BuyTradeDescText>
+          <BuyTradeDescText>
+            <Display data={round(price, precision)} precision={precision} />
+          </BuyTradeDescText>
         ) : (
           <StrikePricePicker initialStrike={price} />
         )}

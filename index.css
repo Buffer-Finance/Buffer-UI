@@ -2808,6 +2808,7 @@ html .wf {
   width: 6px;
   height: 6px;
   border-radius: 50%;
+  margin-top: 6px;
   -webkit-animation: typing 1s linear infinite alternate;
   -moz-animation: Typing 1s linear infinite alternate;
   animation: typing 1s linear infinite alternate;

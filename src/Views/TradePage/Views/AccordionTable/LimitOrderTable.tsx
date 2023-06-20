@@ -11,7 +11,7 @@ import {
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, round } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
@@ -70,7 +70,6 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
 
   const { address } = useAccount();
   const toastify = useToast();
-
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const { cancelHandler } = useCancelTradeFunction();
   const handleCancel = async (trade: OngoingTradeSchema) => {
@@ -87,6 +86,8 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
       );
       return !!pool;
     });
+    const marketPrecision = tradeMarket?.price_precision.toString().length - 1;
+
     if (!trade || !tradeMarket) return 'Problem';
     let currentEpoch = Math.round(new Date().getTime() / 1000);
 
@@ -99,7 +100,11 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
         return (
           <Display
             className="!justify-start"
-            data={getPriceFromKlines(marketPrice, tradeMarket)}
+            data={round(
+              getPriceFromKlines(marketPrice, tradeMarket),
+              marketPrecision
+            )}
+            precision={marketPrecision}
             unit={tradeMarket.token1}
           />
         );
