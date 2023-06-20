@@ -48,13 +48,22 @@ export const BuyTrade: React.FC = () => {
     !readcallData ||
     !activeMarket ||
     !allSettlementFees
-  )
+  ) {
+    console.log(
+      'buyTradeWholeLoading',
+      switchPool,
+      poolDetails,
+      readcallData,
+      activeMarket,
+      allSettlementFees
+    );
     return (
       <Skeleton
         variant="rectangular"
         className="!w-[275px] !h-[250px] lc !rounded-md mx-2 mt-3 "
       />
     );
+  }
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
   const allowance = divide(readcallData.allowance, decimals) as string;

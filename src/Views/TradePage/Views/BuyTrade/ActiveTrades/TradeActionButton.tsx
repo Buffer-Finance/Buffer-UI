@@ -36,7 +36,7 @@ export const TradeActionButton: React.FC<{
   const isCancelLoading = cancelLoading === trade.queue_id;
   const isEarlyCloseLoading = earlyCloseLoading === trade.queue_id;
   function cancelTrade() {
-    cancelHandler(trade.queue_id, cancelLoading, setCancelLoading);
+    cancelHandler(trade, cancelLoading, setCancelLoading);
   }
 
   function earlyClose() {
@@ -46,9 +46,7 @@ export const TradeActionButton: React.FC<{
   function editLimitOrder() {
     setSelectedTrade({ trade, market: tradeMarket });
   }
-  function cancelLimitOrder() {
-    cancelHandler(trade.queue_id, cancelLoading, setCancelLoading);
-  }
+
   if (isLimitOrder && isQueued) {
     return (
       <RowGap gap="4px">
@@ -58,7 +56,7 @@ export const TradeActionButton: React.FC<{
         >
           {isCancelLoading ? <ButtonLoader /> : 'Edit'}
         </CancelButton>
-        <CancelButton onClick={cancelLimitOrder}>Cancel</CancelButton>
+        <CancelButton onClick={cancelTrade}>Cancel</CancelButton>
       </RowGap>
     );
   }

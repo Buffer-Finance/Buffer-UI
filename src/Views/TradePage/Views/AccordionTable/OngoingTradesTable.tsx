@@ -117,7 +117,7 @@ export const OngoingTradesTable: React.FC<{
           <GreyBtn
             className={tableButtonClasses}
             onClick={() => {
-              cancelHandler(trade.queue_id, cancelLoading, setCancelLoading);
+              cancelHandler(trade, cancelLoading, setCancelLoading);
             }}
             isLoading={cancelLoading == trade.queue_id}
           >
