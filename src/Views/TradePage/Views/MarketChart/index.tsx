@@ -69,7 +69,7 @@ const MarketChart: React.FC<any> = ({}) => {
     );
   }
   return (
-    <div className="flex flex-col flex-grow border-right h-full ">
+    <div className="flex flex-col flex-grow  h-full ">
       <MarketStatsBar />
       {chartLayout}
     </div>

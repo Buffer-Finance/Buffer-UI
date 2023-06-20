@@ -44,11 +44,11 @@ const AccordionTable: React.FC<any> = ({}) => {
             >
               <div className="flex items-center gap-x-2">
                 {s}
-                {s == 'Trades' && activeTrades.length && (
+                {s == 'Trades' && activeTrades.length ? (
                   <div className="text-[#C3C2D4] bg-[#171722] text-f10 h-[16px] p-2 pt-[0px] pb-[">
                     <span>{activeTrades.length}</span>
                   </div>
-                )}
+                ) : null}
               </div>
             </button>
           ))}
@@ -68,7 +68,7 @@ const AccordionTable: React.FC<any> = ({}) => {
       <div
         className={` ${
           expanded ? 'h-[355px]' : 'h-[0px]'
-        } flex flex-col transition-all  overflow-y-hidden mx-3`}
+        } flex flex-col transition-all  overflow-y-hidden `}
       >
         {activeTable == 'Trades' ? (
           <OngoingTradesTable trades={activeTrades} />

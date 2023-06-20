@@ -24,11 +24,11 @@ const TradePage: React.FC<any> = ({}) => {
     <>
       <EssentialModals />
       <div
-        className={`flex justify-between w-[100%] ${
+        className={`flex justify-between w-[100%] bg-[#1C1C28] ${
           panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
         }`}
       >
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full mx-3">
           <PinnedMarkets />
           <MarketChart />
           <AccordionTable />
