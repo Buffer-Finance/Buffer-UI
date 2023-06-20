@@ -25,6 +25,11 @@ const multiply = (from: string, to: string | number) => {
   const fromBN = new Big(from);
   return fromBN.times(toBN).toString();
 };
+const round = (from: string, to: number) => {
+  if (!from) return null;
+  const fromBN = new Big(from).round(to, 1);
+  return fromBN.toString();
+};
 const gte = (from: string, to: string) => {
   const fromBN = new Big(from);
   const toBN = new Big(to);
@@ -87,5 +92,6 @@ export {
   lt,
   roundUp,
   getPosInf,
+  round,
   toFixed,
 };
