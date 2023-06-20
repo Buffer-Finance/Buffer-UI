@@ -12,6 +12,7 @@ export const TradeTimeElapsed: React.FC<{ trade: OngoingTradeSchema }> = ({
     const elapsedTime = currentTime - startTime;
     timeElapsedPercent = Math.round((elapsedTime / trade.period) * 100);
   }
+  timeElapsedPercent = Math.min(timeElapsedPercent, 100);
   return (
     <div className="my-3">
       <TimeElapsedBar progressPercent={timeElapsedPercent} />
