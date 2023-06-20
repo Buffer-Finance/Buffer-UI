@@ -55,6 +55,11 @@ export const useCancelTradeFunction = () => {
   ) => {
     const ts = Math.round(Date.now() / 1000);
     setEarlyCloseLoading(trade.queue_id);
+    console.log(`[tradeMarket.tv_id, ts, trade.option_id]: `, [
+      tradeMarket.tv_id,
+      ts,
+      trade.option_id,
+    ]);
     const hashedMessage = ethers.utils.solidityKeccak256(
       ['string', 'uint256', 'uint256'],
       [tradeMarket.tv_id, ts, trade.option_id]
@@ -68,7 +73,7 @@ export const useCancelTradeFunction = () => {
       environment: activeChain.id,
     };
     console.log(`ec-params: `, params);
-    const res = await axios.get(`${baseUrl}trade/cancel/`, { params });
+    const res = await axios.get(`${baseUrl}trade/close/`, { params });
     setEarlyCloseLoading(null);
   };
 
