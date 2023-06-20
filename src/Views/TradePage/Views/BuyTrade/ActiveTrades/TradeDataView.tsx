@@ -167,9 +167,11 @@ const Pnl: React.FC<{
     pnl = <span className="text-green">+{toFixed(winAmount, 2)}</span>;
   }
   return (
-    <RowGap gap="2px">
+    <RowGap gap="2px" className="!items-end">
       {pnl}
-      <span className="text-[9px]">{probability.toFixed(2)}%</span>
+      <span className="text-[9px] text-[#6F6E84]">
+        {probability.toFixed(2)}%
+      </span>
     </RowGap>
   );
 };

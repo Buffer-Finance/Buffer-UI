@@ -68,7 +68,7 @@ export const BuyButtons = ({
 
   console.log(
     `BuyButtons-!accountMapping.oneCT: `,
-    !accountMapping.oneCT,
+    !accountMapping?.oneCT,
     registeredOneCT,
     provider,
     oneCtPk
