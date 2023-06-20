@@ -1,12 +1,11 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { priceAtom } from '@Hooks/usePrice';
 import Star from '@Public/ComponentSVGS/Star';
-import { getPriceFromKlines } from '@TV/useDataFeed';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
+import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
 import { assetSelectorPoolAtom } from '@Views/TradePage/atoms';
 import { appConfig } from '@Views/TradePage/config';
@@ -14,7 +13,7 @@ import { marketType } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { IconButton } from '@mui/material';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 
 const MarketBackground = styled.button<{ isActive: boolean }>`
@@ -35,15 +34,17 @@ const MarketBackground = styled.button<{ isActive: boolean }>`
 export const Market: React.FC<{
   market: marketType;
 }> = ({ market }) => {
-  const [marketPrice] = useAtom(priceAtom);
   const selectedPool = useAtomValue(assetSelectorPoolAtom);
   const { activeChain } = useActiveChain();
   const { activeMarket } = useActiveMarket();
   const { getChartMarketData } = useChartMarketData();
   const { navigateToMarket } = useFavouriteMarkets();
-
   const chartMarket = getChartMarketData(market.token0, market.token1);
-  const price = getPriceFromKlines(marketPrice, chartMarket);
+  const { currentPrice } = useCurrentPrice({
+    token0: market.token0,
+    token1: market.token1,
+  });
+
   const pools =
     appConfig[activeChain.id.toString() as keyof typeof appConfig].poolsInfo;
 
@@ -103,7 +104,7 @@ export const Market: React.FC<{
         {token0}/{token1}
         {isOpen ? (
           <Display
-            data={price}
+            data={currentPrice}
             colored
             precision={chartMarket.price_precision.toString().length - 1}
           />
