@@ -60,15 +60,15 @@ export const EditModal: React.FC<{
   // things to get rom pool
   const poolDecimals = 6;
   useEffect(() => {
-    if (!trade || !market) return;
+    if (!trade || !market || !pool) return;
     setPrice(divide(trade.strike, 8)!);
     setMinutes(trade.limit_order_duration / 60);
     setFrame('m');
 
     setCurrentTime(secondsToHHMM(trade.period));
     setPeriodValidation({
-      min: pool?.min_duration,
-      max: pool?.max_duration,
+      min: pool.min_duration,
+      max: pool.max_duration,
     });
     setButtonDirection(trade.is_above ? directionBtn.Up : directionBtn.Down);
   }, [trade, market, pool]);
@@ -79,7 +79,7 @@ export const EditModal: React.FC<{
     } else {
     }
   }
-  const { oneCTWallet } = useOneCTWallet();
+  const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const toastify = useToast();
   const editHandler = async () => {
     // console.log('handle edit');
@@ -90,7 +90,7 @@ export const EditModal: React.FC<{
         id: 'dsfs',
       });
     console.log(`index-edit-deb-trade: `, trade);
-
+    console.log(`index-edit-deb-pk: `, oneCtPk);
     setEditLoading(trade.queue_id);
     const currentTs = Math.round(Date.now() / 1e3);
     const signs = await generateTradeSignature(

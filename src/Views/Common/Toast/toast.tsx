@@ -92,7 +92,7 @@ function Layout(props) {
             </div>
           ) : (
             <div>
-              <div className="typing_loader"></div>
+              <div className="typing_loader !mt-[7px]"></div>
             </div>
           )
         ) : props.toast.type === 'loss' ? (
