@@ -1,4 +1,6 @@
 import { toFixed } from '@Utils/NumString';
+import { round } from '@Utils/NumString/stringArithmatics';
+import { roundToTwo } from '@Utils/roundOff';
 import { setDoccumentTitle } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import {
@@ -46,7 +48,7 @@ export const CurrentPrice: React.FC<{
           <Trans>Price</Trans>
         </BuyTradeHeadText>
         {tradeType == 'Market' ? (
-          <BuyTradeDescText>{precisePrice}</BuyTradeDescText>
+          <BuyTradeDescText>{round(price, 2)}</BuyTradeDescText>
         ) : (
           <StrikePricePicker initialStrike={price} />
         )}
