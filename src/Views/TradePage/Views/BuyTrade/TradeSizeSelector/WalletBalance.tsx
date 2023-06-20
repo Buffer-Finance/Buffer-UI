@@ -1,5 +1,4 @@
-import { toFixed } from '@Utils/NumString';
-import { divide, gte, lt } from '@Utils/NumString/stringArithmatics';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { SettingsText } from '@Views/TradePage/Components/TextWrapper';
 
@@ -34,7 +33,7 @@ export const WalletBalance: React.FC<{
       </svg>
 
       <SettingsText>
-        {balance} {unit}
+        <Display data={balance} unit={unit} precision={2} />
       </SettingsText>
     </RowGap>
   );
