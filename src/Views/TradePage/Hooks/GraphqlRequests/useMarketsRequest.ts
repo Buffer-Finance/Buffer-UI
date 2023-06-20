@@ -20,6 +20,7 @@ export const useMarketsRequest = () => {
                     maxPeriod
                     minFee
                     minPeriod
+                    platformFee
                   }
                   address
                   poolContract
