@@ -35,6 +35,7 @@ import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { CurrencyBitcoin, Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
+import { OngoingTradeSchema } from '@Views/TradePage/type';
 
 export const tradesCount = 10;
 export const visualizeddAtom = atom([]);
@@ -370,7 +371,10 @@ export const UserAddressColumn = ({ address }: { address: string }) => {
 
 export default PGDesktopTables;
 
-export function getPendingData(currentRow: IGQLHistory, expiryPrice: string) {
+export function getPendingData(
+  currentRow: OngoingTradeSchema,
+  expiryPrice: string
+) {
   if (!currentRow && !expiryPrice) return ['0', '0'];
   let payout = currentRow.amount;
   let pnl = '0';

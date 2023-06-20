@@ -157,6 +157,15 @@ const ModalChild: React.FC<{
 
   const tradeExpiry = expiryPrice;
   const { pnl, payout } = getPayout(trade, tradeExpiry);
+  console.log(
+    `TableComponents-pnl,payout: `,
+    trade,
+    expiryPrice,
+    poolInfo,
+    market,
+    pnl,
+    payout
+  );
   if (!pnl || !payout || !tradeExpiry) {
     console.log(pnl, payout, tradeExpiry, 'shareModal');
     return <div className="text-f20 text-1">Could not fetch data...</div>;

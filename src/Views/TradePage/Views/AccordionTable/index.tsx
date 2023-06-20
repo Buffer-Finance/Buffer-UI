@@ -10,6 +10,7 @@ import HistoryTable from './HistoryTable';
 import PlatformTable from './PlatformTrades';
 import { usePlatformTrades } from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
 import PlatformHistory from './PlatformHistory';
+import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 const tables = {
   Trades: 'h',
   'Limit Orders': 'h',
@@ -21,6 +22,8 @@ const gap = ['History'];
 
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
+  const chage = usePriceChange();
+  console.log(`index-chage: `, chage);
   const [activeTable, setActiveTable] = useState('Trades');
   return (
     <div className="flex flex-col ">

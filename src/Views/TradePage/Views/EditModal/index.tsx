@@ -26,13 +26,14 @@ import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
+import { secondsToHHMM } from '@Views/V3App/helperFns';
 
 export const EditModal: React.FC<{
   trade: OngoingTradeSchema;
   market: marketType;
   onSave: () => void;
 }> = ({ trade, market, onSave }) => {
-  console.log(`index-trade: `, trade);
   const { address } = useAccount();
   const [buttonDirection, setButtonDirection] = useState(directionBtn.Up);
   const [frame, setFrame] = useState('m');
@@ -45,7 +46,7 @@ export const EditModal: React.FC<{
     max: '24:00',
   });
   const { activeChain } = useActiveChain();
-  console.log(`index-duration: `, trade, market);
+  console.log(`index-duration-trade: `, trade);
   const pool = useMemo(() => {
     if (!market) return null;
     const pool =
@@ -63,7 +64,7 @@ export const EditModal: React.FC<{
     setMinutes(trade.limit_order_duration / 60);
     setFrame('m');
 
-    // setCurrentTime(timeToMins())
+    setCurrentTime(secondsToHHMM(trade.period));
     setPeriodValidation({
       min: pool?.min_duration,
       max: pool?.max_duration,
@@ -88,13 +89,14 @@ export const EditModal: React.FC<{
         id: 'dsfs',
       });
     setEditLoading(trade.queue_id);
+
     const currentTs = Math.round(Date.now() / 1e3);
     const signs = await generateTradeSignature(
       address,
       trade.trade_size + '',
-      HHMMToSeconds(currentTime),
+      HHMMToSeconds(currentTime) / 60,
       trade.target_contract,
-      multiply(price, 8),
+      price,
       trade.slippage + '',
       trade.allow_partial_fill,
       trade.referral_code,
@@ -129,6 +131,7 @@ export const EditModal: React.FC<{
     }
     setEditLoading(null);
   };
+
   if (!trade) return <></>;
   return (
     <EditModalBackground>

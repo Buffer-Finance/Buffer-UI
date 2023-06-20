@@ -455,6 +455,76 @@ export const MultiResolutionChart = ({
       datafeed,
       interval: defaults.interval,
       timeframe: '200',
+      custom_formatters: {
+        tickMarkFormatter: (date, tickMarkType) => {
+          switch (tickMarkType) {
+            case 'Year':
+              return 'Y' + date.getUTCFullYear();
+
+            case 'Month':
+              return 'M' + (date.getUTCMonth() + 1);
+
+            case 'DayOfMonth':
+              return 'D' + date.getUTCDate();
+
+            case 'Time':
+              return 'T' + date.getUTCHours() + ':' + date.getUTCMinutes();
+
+            case 'TimeWithSeconds':
+              return (
+                'S' +
+                date.getUTCHours() +
+                ':' +
+                date.getUTCMinutes() +
+                ':' +
+                date.getUTCSeconds()
+              );
+          }
+
+          throw new Error('unhandled tick mark type ' + tickMarkType);
+        },
+        priceFormatterFactory: (symbolInfo, minTick) => {
+          console.log(`MultiResolutionChart-symbolInfo: `, symbolInfo);
+          if (
+            symbolInfo?.fractional ||
+            (minTick !== 'default' && minTick.split(',')[2] === 'true')
+          ) {
+            return {
+              format: (price, signPositive) => {
+                // return the appropriate format
+                return price.toFixed(1);
+              },
+            };
+          }
+          return null; // this is to use default formatter;
+        },
+        studyFormatterFactory: (format, symbolInfo) => {
+          if (format.type === 'price') {
+            const numberFormat = new Intl.NumberFormat('en-US', {
+              notation: 'scientific',
+            });
+            return {
+              format: (value) => numberFormat.format(value),
+            };
+          }
+
+          if (format.type === 'volume') {
+            return {
+              format: (value) =>
+                (value / 1e9).toPrecision(format?.precision || 2) + 'B',
+            };
+          }
+
+          if (format.type === 'percent') {
+            return {
+              format: (value) =>
+                `${value.toPrecision(format?.precision || 4)} percent`,
+            };
+          }
+
+          return null; // this is to use default formatter;
+        },
+      },
       locale: 'en',
 
       container: containerDivRef.current!,

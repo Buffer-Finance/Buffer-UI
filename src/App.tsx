@@ -51,6 +51,7 @@ import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { PasswordModal } from '@Views/Common/PasswordModal';
+import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
@@ -106,6 +107,7 @@ const AppRoutes = () => {
   return (
     <div className="relative root w-[100vw]">
       <OpenOcean />
+      <OnboardingAnimation />
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/transfer" element={<UsdcTransfer />} />

@@ -91,3 +91,4 @@ export const selectedOrderToEditAtom = atom<null | {
 export const visualizeddAtom = atom<number[]>([]);
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
+export const showOnboardingAnimationAtom = atom<boolean>(false);

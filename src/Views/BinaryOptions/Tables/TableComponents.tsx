@@ -53,7 +53,13 @@ export const getExpireNotification = async (
   currentRow: OngoingTradeSchema,
   tradeMarket: marketType,
   toastify: (a: any) => void,
-  openShareModal: (trade: OngoingTradeSchema, expiry: string) => void
+  openShareModal: (
+    trade: OngoingTradeSchema,
+    expiry: string,
+    market: marketType,
+    poolInfo: poolInfoType
+  ) => void,
+  poolInfo: poolInfoType
 ) => {
   let response;
 
@@ -99,7 +105,7 @@ export const getExpireNotification = async (
   console.log(`TableComponents-win: `, win);
 
   if (win) {
-    openShareModal(currentRow, expiryPrice.toString());
+    openShareModal(currentRow, expiryPrice.toString(), tradeMarket, poolInfo);
     return;
   } else {
     const openTimeStamp = currentRow.queued_timestamp;

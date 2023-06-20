@@ -1,3 +1,4 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { lt, multiply } from '@Utils/NumString/stringArithmatics';
@@ -5,14 +6,16 @@ import { ApproveModal } from '@Views/BinaryOptions/Components/approveModal';
 import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
+import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useAtom, useAtomValue } from 'jotai';
-import { useAccount } from 'wagmi';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAccount, useProvider } from 'wagmi';
 
 export const BuyButtons = ({
   allowance,
@@ -29,6 +32,7 @@ export const BuyButtons = ({
   amount: string;
   isAssetActive: boolean;
 }) => {
+  const { registeredOneCT, accountMapping, oneCtPk } = useOneCTWallet();
   const { address: account } = useAccount();
   const { poolDetails } = useSwitchPool();
   const { openConnectModal } = useConnectModal();
@@ -36,7 +40,11 @@ export const BuyButtons = ({
   const { handleApproveClick, buyHandler, loading } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
-  console.log(`BuyButtons-expiry: `, expiry);
+  const { activeChain } = useActiveChain();
+
+  const provider = useProvider({ chainId: activeChain.id });
+  const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
+
   const tradeType = useAtomValue(tradeTypeAtom);
   const limitStrike = useAtomValue(limitOrderStrikeAtom);
   const buyTrade = (isUp?: boolean) => {
@@ -55,8 +63,16 @@ export const BuyButtons = ({
       limitOrderExpiry,
     });
   };
+
   if (!poolDetails) return <>Error: Pool not found</>;
 
+  console.log(
+    `BuyButtons-!accountMapping.oneCT: `,
+    !accountMapping.oneCT,
+    registeredOneCT,
+    provider,
+    oneCtPk
+  );
   return (
     <>
       <ApproveModal
@@ -72,7 +88,10 @@ export const BuyButtons = ({
       />
       <ConnectionRequired>
         <span>
-          {allowance == null || !activeAssetPrice ? (
+          {allowance == null ||
+          !activeAssetPrice ||
+          !accountMapping ||
+          !accountMapping.oneCT ? (
             <Skeleton className="h4 full-width sr lc mb3" />
           ) : lt(allowance, amount.toString() || '0') ? (
             <BlueBtn
@@ -89,6 +108,10 @@ export const BuyButtons = ({
               onClick={() => {}}
             >
               Trading is halted for this asset
+            </BlueBtn>
+          ) : !registeredOneCT ? (
+            <BlueBtn onClick={() => setOneCTModal(true)}>
+              Activate Account
             </BlueBtn>
           ) : (
             <>

@@ -2,7 +2,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
 import { activeAssetStateAtom } from '@Views/BinaryOptions';
 import { ethers } from 'ethers';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { useAccount, useProvider, useSigner } from 'wagmi';
@@ -14,6 +14,7 @@ import useSWR from 'swr';
 import { useCall2Data } from '@Utils/useReadCall';
 import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
 import useAccountMapping from './useAccountMapping';
+import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 
 const registerOneCtMethod = 'registerAccount';
 
@@ -57,9 +58,16 @@ const useOneCTWallet = () => {
     ],
     'accountMapping'
   );
+  const pkLocalStorageIdentifier = 'one-ct-wallet-pk' + address;
+
   const registeredOneCT = useMemo(() => {
     const isEnabled = res?.length
-      ? is1CTEnabled(res[0], oneCtPk, provider, 'debugggging')
+      ? is1CTEnabled(
+          res[0],
+          secureLocalStorage.getItem(pkLocalStorageIdentifier) || '',
+          provider,
+          'debugggging'
+        )
       : false;
     return isEnabled;
   }, [res, oneCtPk, provider]);
@@ -73,7 +81,6 @@ const useOneCTWallet = () => {
   }, [oneCtPk, provider]);
   // console.log(`useOneCTWallet-data: `, oneCTWallet);
 
-  const pkLocalStorageIdentifier = 'one-ct-wallet-pk' + address;
   const checkStorage = () => {
     const pk = secureLocalStorage.getItem(pkLocalStorageIdentifier) as string;
     setPk(pk);

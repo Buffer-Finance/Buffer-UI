@@ -2,18 +2,23 @@ import { useEffect, useRef } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import { useToast } from '@Contexts/Toast';
 import {
-  SetShareBetAtom,
-  SetShareStateAtom,
-} from '@Views/BinaryOptions/Components/shareModal';
-import {
   IGQLHistory,
   tardesAtom,
 } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { getExpireNotification } from '@Views/BinaryOptions/Tables/TableComponents';
 import { BetState } from '@Hooks/useAheadTrades';
-import { OngoingTradeSchema } from '@Views/TradePage/type';
+import {
+  OngoingTradeSchema,
+  marketType,
+  poolInfoType,
+} from '@Views/TradePage/type';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import {
+  SetShareBetAtom,
+  SetShareStateAtom,
+} from '@Views/BinaryOptions/Components/shareModal';
 
 export const getIdentifier = (a: IGQLHistory) => {
   return +a.queueID;
@@ -30,10 +35,22 @@ const useGenericHooks = () => {
   const toastify = useToast();
   const [, setIsOpen] = useAtom(SetShareStateAtom);
   const [, setBet] = useAtom(SetShareBetAtom);
-
-  const openShareModal = (trade: OngoingTradeSchema, expiry: string) => {
+  const { getPoolInfo } = usePoolInfo();
+  const openShareModal = (
+    trade: OngoingTradeSchema,
+    expiry: string,
+    market: marketType,
+    poolInfo: poolInfoType
+  ) => {
     setIsOpen(true);
-    setBet({ trade, expiryPrice: expiry });
+    console.log(
+      `TableComponents-, market, poolInfo: `,
+      trade,
+      expiry,
+      market,
+      poolInfo
+    );
+    setBet({ trade, expiryPrice: expiry, market, poolInfo });
   };
 
   useEffect(() => {
@@ -50,7 +67,6 @@ const useGenericHooks = () => {
         tradeCache.current[tradeIdentifier] = { trade, visited: true };
       }
     }
-    console.log(`useGenericHook-tradeCache.current: `, tradeCache.current);
     for (let tradeIdentifier in tradeCache.current) {
       const currTrade = tradeCache.current[tradeIdentifier];
       // one which is not getting true, i.e not in newer set of activeTrades i.e got expired
@@ -63,6 +79,12 @@ const useGenericHooks = () => {
           );
           return !!pool;
         });
+        const poolContract = tradeMarket?.pools.find(
+          (pool) =>
+            pool.optionContract.toLowerCase() ===
+            currTrade.trade?.target_contract.toLowerCase()
+        )?.pool;
+        const poolInfo = getPoolInfo(poolContract);
         if (!tradeMarket) {
           toastify({
             msg: 'some wrong config passed in history',
@@ -71,12 +93,13 @@ const useGenericHooks = () => {
           });
         }
         setTimeout(() => {
-          // getExpireNotification(
-          //   { ...currTrade.trade },
-          //   tradeMarket!,
-          //   toastify,
-          //   openShareModal
-          // );
+          getExpireNotification(
+            { ...currTrade.trade },
+            tradeMarket!,
+            toastify,
+            openShareModal,
+            poolInfo
+          );
         }, delay * 1000);
         delete tradeCache.current[tradeIdentifier];
       }

@@ -268,6 +268,7 @@ const OneCTModal: React.FC<any> = ({}) => {
   const buyTradeData = useBuyTradeData();
   const provider = useProvider({ chainId: activeChain.id });
   const toastify = useToast();
+  const setOnboardingAnimation = useSetAtom(showOnboardingAnimationAtom);
   const handleRegister = (privateKey?: string) => {
     if (privateKey || oneCtPk) {
       const oneCTWallet = new ethers.Wallet(
@@ -291,11 +292,10 @@ const OneCTModal: React.FC<any> = ({}) => {
         RouterAbi,
         (payload) => {
           setLaoding(false);
-          if (payload.payload)
-            toastify({
-              msg: 'You can seemlessly trade with just a Click!',
-              type: 'success',
-            });
+          if (payload.payload) {
+            setOnboardingAnimation(true);
+            setModal(false);
+          }
         },
         registerOneCt,
         [oneCTWallet?.address]
@@ -424,6 +424,7 @@ import { v3AppConfig } from '@Views/V3App/config';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { appConfig } from '@Views/TradePage/config';
+import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 const GreenTickMark = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

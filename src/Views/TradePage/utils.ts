@@ -165,6 +165,7 @@ export const generateTradeSignature = async (
     referral,
     NFTid,
   ];
+  console.log(`index-duration-sign: `, baseArgs);
   const isLimit = settlementFee == 0;
   const baseArgsEnding = isLimit ? [ts] : [ts, settlementFee];
   const baseArgsEndingTypes = isLimit ? ['uint256'] : ['uint256', 'uint256'];
@@ -230,7 +231,7 @@ export const useEditTrade = () => {
       isUp,
       oneCTWallet
     );
-    console.log(`index-signs: `, signs);
+    console.log(`index-duration-signs: `, signs);
     const res = await editQueueTrade(
       signatureCache,
       queue_id,
