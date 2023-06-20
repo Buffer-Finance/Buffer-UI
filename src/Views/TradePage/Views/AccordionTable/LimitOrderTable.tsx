@@ -15,10 +15,7 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
-import {
-  signatureCache,
-  useOngoingTrades,
-} from '@Views/TradePage/Hooks/useOngoingTrades';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -37,6 +34,7 @@ import {
   tableButtonClasses,
 } from './Common';
 import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
+import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 
 export const tradesCount = 10;
 const headNameArray = [
@@ -74,22 +72,9 @@ const LimitOrderTable = () => {
   const toastify = useToast();
 
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
-  const handleCancel = async (queue_id: number) => {
-    if (!address) return;
-    if (cancelLoading)
-      return toastify({
-        msg: 'Please wait for prev transaction.',
-        type: 'error',
-        id: '232',
-      });
-    setCancelLoading(queue_id);
-    const res = await cancelQueueTrade({
-      user_signature: signatureCache,
-      user_address: address,
-      environment: activeChain.id,
-      queue_id,
-    });
-    setCancelLoading(null);
+  const { cancelHandler } = useCancelTradeFunction();
+  const handleCancel = async (id: number) => {
+    cancelHandler(id, cancelLoading, setCancelLoading);
   };
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = ongoingData?.[row];

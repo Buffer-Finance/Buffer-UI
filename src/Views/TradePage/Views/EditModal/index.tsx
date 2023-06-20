@@ -11,13 +11,13 @@ import {
 } from '@Views/TradePage/Components/TextWrapper';
 import { TriggerPrice } from './TriggerPrice';
 import { useEffect, useMemo, useState } from 'react';
-import { directionBtn, marketType } from '@Views/TradePage/type';
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
-import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
 import {
   OngoingTradeSchema,
-  signatureCache,
-} from '@Views/TradePage/Hooks/useOngoingTrades';
+  directionBtn,
+  marketType,
+} from '@Views/TradePage/type';
+import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
 import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
 import { editQueueTrade, generateTradeSignature } from '@Views/TradePage/utils';
 import { useAccount } from 'wagmi';
@@ -28,6 +28,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { secondsToHHMM } from '@Views/V3App/helperFns';
+import { getSingatureCached } from '@Views/TradePage/cahce';
 
 export const EditModal: React.FC<{
   trade: OngoingTradeSchema;
@@ -106,9 +107,16 @@ export const EditModal: React.FC<{
       buttonDirection == directionBtn.Up ? true : false,
       oneCTWallet
     );
+    const signature = await getSingatureCached(oneCTWallet);
+    if (!signature)
+      return toastify({
+        msg: 'Please activate your account first!',
+        type: 'error',
+        id: '1231',
+      });
     console.log(`index-signs: `, signs);
     const res = await editQueueTrade(
-      signatureCache,
+      signature,
       trade.queue_id,
       currentTs,
       multiply(price, 8),

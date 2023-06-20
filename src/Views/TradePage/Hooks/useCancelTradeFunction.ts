@@ -1,15 +1,16 @@
 import { useToast } from '@Contexts/Toast';
 
 import { useAccount } from 'wagmi';
-import { signatureCache } from './useOngoingTrades';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { cancelQueueTrade } from '../utils';
+import { getSingatureCached } from '../cahce';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 
 export const useCancelTradeFunction = () => {
   const { address } = useAccount();
   const toastify = useToast();
   const { activeChain } = useActiveChain();
-
+  const { oneCTWallet } = useOneCTWallet();
   const cancelHandler = async (
     queuedId: number,
     cancelLoading: number | null,
@@ -23,8 +24,15 @@ export const useCancelTradeFunction = () => {
         id: '232',
       });
     setCancelLoading(queuedId);
+    const signature = await getSingatureCached(oneCTWallet);
+    if (!signature)
+      return toastify({
+        msg: 'Please activate your account first',
+        type: 'error',
+        id: '2311',
+      });
     const res = await cancelQueueTrade({
-      user_signature: signatureCache,
+      user_signature: signature,
       user_address: address,
       environment: activeChain.id,
       queue_id: queuedId,

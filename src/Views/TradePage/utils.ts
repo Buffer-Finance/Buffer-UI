@@ -12,8 +12,8 @@ import { arrayify } from 'ethers/lib/utils.js';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useAccount } from 'wagmi';
 import { useToast } from '@Contexts/Toast';
-import { signatureCache } from './Hooks/useOngoingTrades';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { getSingatureCached } from './cahce';
 
 // returns the token1 and toklen0 value from string
 export function getTokens(inputString: string, delimiter: string): string[] {
@@ -232,8 +232,10 @@ export const useEditTrade = () => {
       oneCTWallet
     );
     console.log(`index-duration-signs: `, signs);
+    const signature = await getSingatureCached(oneCTWallet);
+
     const res = await editQueueTrade(
-      signatureCache,
+      signature,
       queue_id,
       currentTs,
       strike,
