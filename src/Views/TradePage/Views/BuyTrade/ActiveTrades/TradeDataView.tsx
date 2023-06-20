@@ -151,6 +151,7 @@ const Pnl: React.FC<{
     token1: configData.token1,
   });
   const probability = getProbability(trade, +currentPrice);
+  if (!probability) return <span>-</span>;
   const isUp = trade.is_above;
   const lockedAmount = divide(trade.locked_amount, poolInfo.decimals) as string;
   const strike = divide(trade.strike, 1e8) as string;
@@ -158,7 +159,7 @@ const Pnl: React.FC<{
   const tradeSize = divide(trade.trade_size, poolInfo.decimals) as string;
   const lossAmount = divide(
     multiply(
-      subtract(lockedAmount ?? '0', tradeSize ?? '0'),
+      subtract(lockedAmount ?? '0', tradeSize ?? '0') ?? '0',
       probability?.toString() ?? '0'
     ),
     2
