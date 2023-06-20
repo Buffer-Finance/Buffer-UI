@@ -34,7 +34,7 @@ export const TradeActionButton: React.FC<{
   const isLimitOrder = trade.is_limit_order;
 
   const isCancelLoading = cancelLoading === trade.queue_id;
-  const isEarlyCloseLoading = earlyCloseLoading === trade.queue_id;
+  const isEarlyCloseLoading = earlyCloseLoading[trade.queue_id];
   function cancelTrade() {
     cancelHandler(trade, cancelLoading, setCancelLoading);
   }
