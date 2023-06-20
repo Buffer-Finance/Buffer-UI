@@ -92,7 +92,7 @@ export const EditModal: React.FC<{
     console.log(`index-edit-deb-trade: `, trade);
     console.log(`index-edit-deb-pk: `, oneCtPk);
     setEditLoading(trade.queue_id);
-    const currentTs = Math.round(Date.now() / 1e3);
+    const currentTs = Math.round(Date.now() / 1000);
     const signs = await generateTradeSignature(
       address,
       trade.trade_size + '',

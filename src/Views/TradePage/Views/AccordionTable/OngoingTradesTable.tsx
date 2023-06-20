@@ -79,7 +79,8 @@ export const OngoingTradesTable: React.FC<{
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const { cancelHandler } = useCancelTradeFunction();
+  const { cancelHandler, earlyCloseHandler, earlyCloseLoading } =
+    useCancelTradeFunction();
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -107,18 +108,29 @@ export const OngoingTradesTable: React.FC<{
             Cancel
           </GreyBtn>
         ) : (
-          <ShowIcon
-            show={!isVisualized}
-            onToggle={() => {
-              if (isVisualized) {
-                let temp = [...visualized];
-                temp.splice(visualized.indexOf(trade.queue_id as any), 1);
-                setVisualized(temp);
-              } else {
-                setVisualized([...visualized, trade.queue_id]);
-              }
-            }}
-          />
+          <div>
+            <ShowIcon
+              show={!isVisualized}
+              onToggle={() => {
+                if (isVisualized) {
+                  let temp = [...visualized];
+                  temp.splice(visualized.indexOf(trade.queue_id as any), 1);
+                  setVisualized(temp);
+                } else {
+                  setVisualized([...visualized, trade.queue_id]);
+                }
+              }}
+            />
+            <GreyBtn
+              className={tableButtonClasses}
+              onClick={() => {
+                earlyCloseHandler(trade, tradeMarket);
+              }}
+              isLoading={earlyCloseLoading == trade.queue_id}
+            >
+              Close
+            </GreyBtn>{' '}
+          </div>
         );
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;

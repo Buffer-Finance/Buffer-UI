@@ -144,6 +144,7 @@ export const getExpireNotification = async (
           </div>
         </div>
       ),
+      id: currentRow.queue_id,
     });
   }
 };

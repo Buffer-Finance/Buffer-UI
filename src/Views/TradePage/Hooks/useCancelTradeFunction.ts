@@ -5,12 +5,21 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { cancelQueueTrade } from '../utils';
 import { getSingatureCached } from '../cahce';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { OngoingTradeSchema, marketType } from '../type';
+import { ethers } from 'ethers';
+import { arrayify } from 'ethers/lib/utils.js';
+import axios from 'axios';
+import { baseUrl } from '../config';
+import { useState } from 'react';
 
 export const useCancelTradeFunction = () => {
   const { address } = useAccount();
   const toastify = useToast();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
+  const [earlyCloseLoading, setEarlyCloseLoading] = useState<number | null>(
+    null
+  );
   const cancelHandler = async (
     queuedId: number,
     cancelLoading: number | null,
@@ -40,5 +49,33 @@ export const useCancelTradeFunction = () => {
     setCancelLoading(null);
   };
 
-  return { cancelHandler };
+  const earlyCloseHandler = async (
+    trade: OngoingTradeSchema,
+    tradeMarket: marketType
+  ) => {
+    const ts = Math.round(Date.now() / 1000);
+    setEarlyCloseLoading(trade.queue_id);
+    console.log(`[tradeMarket.tv_id, ts, trade.option_id]: `, [
+      tradeMarket.tv_id,
+      ts,
+      trade.option_id,
+    ]);
+    const hashedMessage = ethers.utils.solidityKeccak256(
+      ['string', 'uint256', 'uint256'],
+      [tradeMarket.tv_id, ts, trade.option_id]
+    );
+    console.log(`ec-hashedMessage: `, hashedMessage);
+    const signature = await oneCTWallet?.signMessage(arrayify(hashedMessage));
+    const params = {
+      closing_time: ts,
+      queue_id: trade.queue_id,
+      user_signature: signature,
+      environment: activeChain.id,
+    };
+    console.log(`ec-params: `, params);
+    const res = await axios.get(`${baseUrl}trade/close/`, { params });
+    setEarlyCloseLoading(null);
+  };
+
+  return { cancelHandler, earlyCloseHandler, earlyCloseLoading };
 };
