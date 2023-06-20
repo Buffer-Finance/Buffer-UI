@@ -1,5 +1,5 @@
 import { TimeElapsedBar } from '@Views/TradePage/Components/TimeElapsedBar';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { OngoingTradeSchema } from '@Views/TradePage/type';
 
 export const TradeTimeElapsed: React.FC<{ trade: OngoingTradeSchema }> = ({
   trade,
@@ -12,6 +12,7 @@ export const TradeTimeElapsed: React.FC<{ trade: OngoingTradeSchema }> = ({
     const elapsedTime = currentTime - startTime;
     timeElapsedPercent = Math.round((elapsedTime / trade.period) * 100);
   }
+  timeElapsedPercent = Math.min(timeElapsedPercent, 100);
   return (
     <div className="my-3">
       <TimeElapsedBar progressPercent={timeElapsedPercent} />

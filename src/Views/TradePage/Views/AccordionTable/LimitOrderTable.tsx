@@ -73,8 +73,8 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
 
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const { cancelHandler } = useCancelTradeFunction();
-  const handleCancel = async (id: number) => {
-    cancelHandler(id, cancelLoading, setCancelLoading);
+  const handleCancel = async (trade: OngoingTradeSchema) => {
+    cancelHandler(trade, cancelLoading, setCancelLoading);
   };
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -130,7 +130,7 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
             </GreyBtn>
             <GreyBtn
               className={tableButtonClasses}
-              onClick={() => handleCancel(trade.queue_id)}
+              onClick={() => handleCancel(trade)}
               isLoading={cancelLoading == trade.queue_id}
             >
               Cancel

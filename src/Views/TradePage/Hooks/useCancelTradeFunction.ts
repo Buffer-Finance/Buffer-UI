@@ -21,7 +21,7 @@ export const useCancelTradeFunction = () => {
     [queued_id: number]: boolean;
   }>({});
   const cancelHandler = async (
-    queuedId: number,
+    trade: OngoingTradeSchema,
     cancelLoading: number | null,
     setCancelLoading: (newValue: number | null) => void
   ) => {
@@ -32,7 +32,7 @@ export const useCancelTradeFunction = () => {
         type: 'error',
         id: '232',
       });
-    setCancelLoading(queuedId);
+    setCancelLoading(trade.queue_id);
     const signature = await getSingatureCached(oneCTWallet);
     if (!signature)
       return toastify({
@@ -44,8 +44,29 @@ export const useCancelTradeFunction = () => {
       user_signature: signature,
       user_address: address,
       environment: activeChain.id,
-      queue_id: queuedId,
+      queue_id: trade.queue_id,
     });
+    try {
+      if (res.status === 200) {
+        toastify({
+          msg: 'Trade cancelled successfully',
+          type: 'success',
+          id: trade.queue_id,
+        });
+      } else {
+        toastify({
+          msg: 'Something went wrong' + res.data.message,
+          type: 'error',
+          id: '231',
+        });
+      }
+    } catch (e) {
+      toastify({
+        msg: 'Something went wrong' + (e as any).message,
+        type: 'error',
+        id: '231',
+      });
+    }
     setCancelLoading(null);
   };
 
@@ -73,8 +94,31 @@ export const useCancelTradeFunction = () => {
       environment: activeChain.id,
     };
     console.log(`ec-params: `, params);
-    const res = await axios.get(`${baseUrl}trade/close/`, { params });
-    // setEarlyCloseLoading((l) => ({ ...l, [trade.queue_id]: false }));
+
+    try {
+      const res = await axios.get(`${baseUrl}trade/close/`, { params });
+      if (res.status === 200) {
+        toastify({
+          msg: 'Trade closed successfully',
+          type: 'success',
+          id: trade.queue_id + 'earlyClose',
+        });
+      } else {
+        toastify({
+          msg: 'Something went wrong' + res.data.message,
+          type: 'error',
+          id: trade.queue_id + 'earlyClose',
+        });
+      }
+    } catch (e) {
+      toastify({
+        msg: 'Something went wrong' + (e as any).message,
+        type: 'error',
+        id: trade.queue_id + 'earlyClose',
+      });
+    }
+
+    // setEarlyCloseLoading(null);
   };
 
   return { cancelHandler, earlyCloseHandler, earlyCloseLoading };

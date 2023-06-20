@@ -19,6 +19,9 @@ import { priceAtom } from '@Hooks/usePrice';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { joinStrings } from '@Views/TradePage/utils';
+import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
+import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -87,7 +90,6 @@ const Idx2icon = {
 const MarketStatsBar: React.FC<any> = ({}) => {
   const setChartTimes = useSetAtom(chartNumberAtom);
   const chartTimes = useAtomValue(chartNumberAtom);
-
   const { activeMarket } = useActiveMarket();
   const { poolDetails, switchPool } = useSwitchPool();
   const ref = useRef(null);
@@ -217,15 +219,24 @@ const MarketPrice: React.FC<{ token0: string; token1: string }> = ({
   const marketPrice = useAtomValue(priceAtom);
   const { getChartMarketData } = useChartMarketData();
   const chartData = getChartMarketData(token0, token1);
+  const assetPrices = usePriceChange();
+
   const price = toFixed(
     getPriceFromKlines(marketPrice, chartData),
     chartData.price_precision.toString().length - 1
   );
+  const oneDayChange = (
+    assetPrices?.[joinStrings(token0, token1, '')]?.change ?? 0
+  ).toFixed(2);
 
   return (
     <div className="flex flex-col">
       <span className="text-f18">{price}</span>
-      <Display className="text-f12" colored data={24.2} />
+      <OneDayChange
+        oneDayChange={oneDayChange}
+        className="text-f12"
+        svgClassName="scale-125"
+      />
     </div>
   );
 };

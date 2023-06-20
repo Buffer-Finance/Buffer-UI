@@ -2,8 +2,9 @@ import { priceAtom } from '@Hooks/usePrice';
 import Star from '@Public/ComponentSVGS/Star';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { toFixed } from '@Utils/NumString';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, gte } from '@Utils/NumString/stringArithmatics';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { UpDownChip } from '@Views/BinaryOptions/Tables/TableComponents';
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
@@ -14,11 +15,13 @@ import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { marketType } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import { IconButton } from '@mui/material';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
+import { OneDayChange } from './OneDayChange';
 
 export const AssetSelectorTable: React.FC = () => {
   const {
@@ -32,6 +35,7 @@ export const AssetSelectorTable: React.FC = () => {
   const { getPoolInfo } = usePoolInfo();
   const [marketPrice] = useAtom(priceAtom);
   const readcallData = useBuyTradeData();
+  const assetPrices = usePriceChange();
 
   const headers = useMemo(() => {
     return [
@@ -104,6 +108,10 @@ export const AssetSelectorTable: React.FC = () => {
       readcallData.currentOIs[selectedPool?.optionContract] ?? '0',
       poolInfo.decimals
     );
+    const oneDayChange = (
+      assetPrices?.[joinStrings(currentAsset.token0, currentAsset.token1, '')]
+        ?.change ?? 0
+    ).toFixed(2);
 
     switch (col) {
       case 0:
@@ -136,12 +144,15 @@ export const AssetSelectorTable: React.FC = () => {
         return (
           <CellContent
             content={[
-              <div className="flex items-center">
+              <div className="flex flex-col items-start">
                 <div className="text-1">
                   {toFixed(
                     price,
                     chartMarket.price_precision.toString().length - 1
                   )}
+                </div>
+                <div>
+                  <OneDayChange oneDayChange={oneDayChange} />
                 </div>
               </div>,
             ]}
