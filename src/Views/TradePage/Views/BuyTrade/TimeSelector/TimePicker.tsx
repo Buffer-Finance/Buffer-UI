@@ -153,9 +153,10 @@ const EditTime: React.FC<{
           value={inputValue}
           type="number"
           max={MAX}
-          min={1}
           className={`bg-transparent rounded-[5px] text-center w-[20px] text-1 outline-none`}
           onChange={(e) => {
+            if (e.target.value == '.' || e.target.value.length > 2) return;
+            if (+e.target.value > MAX) return onChange(MAX);
             onChange(+e.target.value);
           }}
           placeholder="10"
@@ -163,7 +164,7 @@ const EditTime: React.FC<{
         <MHdropDown
           activeFrame={activeFrame}
           setFrame={setActiveFrame}
-          className="px-[0] py-[0] !bg-[#303044] rounded-[2px]"
+          className="px-[2px] py-[0] !bg-[#303044] rounded-[2px]"
         />
       </RowGap>
     );
