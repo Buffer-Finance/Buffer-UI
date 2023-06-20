@@ -193,7 +193,7 @@ export const useEarlyPnl = ({
 
   const earlycloseAmount = divide(
     subtract(
-      multiply(lockedAmount.toString(), (probability / 100).toString()),
+      multiply(lockedAmount?.toString() ?? '0', (probability / 100).toString()),
       tradeSize.toString()
     ),
     poolInfo.decimals
