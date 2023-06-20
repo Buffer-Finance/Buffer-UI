@@ -1,5 +1,5 @@
 import { TimeElapsedBar } from '@Views/TradePage/Components/TimeElapsedBar';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { OngoingTradeSchema } from '@Views/TradePage/type';
 
 export const TradeTimeElapsed: React.FC<{ trade: OngoingTradeSchema }> = ({
   trade,
