@@ -157,7 +157,10 @@ const Pnl: React.FC<{
   const isWin = isUp ? currentPrice > strike : currentPrice < strike;
   const tradeSize = divide(trade.trade_size, poolInfo.decimals) as string;
   const lossAmount = divide(
-    multiply(subtract(lockedAmount, tradeSize), probability.toString()),
+    multiply(
+      subtract(lockedAmount ?? '0', tradeSize ?? '0'),
+      probability?.toString() ?? '0'
+    ),
     2
   );
   const winAmount = divide(multiply(lockedAmount, probability.toString()), 2);
@@ -167,9 +170,11 @@ const Pnl: React.FC<{
     pnl = <span className="text-green">+{toFixed(winAmount, 2)}</span>;
   }
   return (
-    <RowGap gap="2px">
+    <RowGap gap="2px" className="!items-end">
       {pnl}
-      <span className="text-[9px]">{probability.toFixed(2)}%</span>
+      <span className="text-[9px] text-[#6F6E84]">
+        {probability.toFixed(2)}%
+      </span>
     </RowGap>
   );
 };
