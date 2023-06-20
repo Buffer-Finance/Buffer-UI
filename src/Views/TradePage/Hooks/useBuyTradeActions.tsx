@@ -183,7 +183,7 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      if (!userInput) {
+      if (!userInput || userInput === '0' || userInput === '') {
         return toastify({
           type: 'error',
           msg: 'Plese enter a positive integer as trade Amount',
