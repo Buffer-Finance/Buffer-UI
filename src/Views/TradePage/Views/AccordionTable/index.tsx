@@ -1,17 +1,14 @@
 import DDArrow from '@SVG/Elements/Arrow';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useState } from 'react';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import OngoingTradesTable from './OngoingTradesTable';
 import LimitOrderTable from './LimitOrderTable';
 import { useAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
-import HistoryTable from './HistoryTable';
-import PlatformTable from './PlatformTrades';
 import { usePlatformTrades } from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
-import PlatformHistory from './PlatformHistory';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
+import { OngoingTradesTable } from './OngoingTradesTable';
+import { HistoryTable } from './HistoryTable';
 const tables = {
   Trades: 'h',
   'Limit Orders': 'h',
@@ -24,8 +21,9 @@ const gap = ['History'];
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
   const chage = usePriceChange();
-  useHistoryTrades();
-  useOngoingTrades();
+  const [historyTrades] = useHistoryTrades();
+  const [activeTrades, limitOrders] = useOngoingTrades();
+  const [platformActiveTrades, platformHistoryTrades] = usePlatformTrades();
   console.log(`index-chage: `, chage);
   const [activeTable, setActiveTable] = useState('Trades');
   return (
@@ -66,15 +64,15 @@ const AccordionTable: React.FC<any> = ({}) => {
         } flex flex-col transition-all  overflow-y-hidden mx-3`}
       >
         {activeTable == 'Trades' ? (
-          <OngoingTradesTable />
+          <OngoingTradesTable trades={activeTrades} />
         ) : activeTable == 'Limit Orders' ? (
-          <LimitOrderTable />
+          <LimitOrderTable trades={limitOrders} />
         ) : activeTable == 'Platform Trades' ? (
-          <PlatformTable />
+          <OngoingTradesTable trades={platformActiveTrades} platform />
         ) : activeTable == 'Platform History' ? (
-          <PlatformHistory />
+          <HistoryTable trades={platformHistoryTrades} platform />
         ) : (
-          <HistoryTable />
+          <HistoryTable trades={historyTrades} />
         )}
       </div>
     </div>

@@ -35,6 +35,7 @@ import {
 } from './Common';
 import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
+import { OngoingTradeSchema } from '@Views/TradePage/type';
 
 export const tradesCount = 10;
 const headNameArray = [
@@ -57,10 +58,9 @@ enum TableColumn {
   ActionButtons = 6,
 }
 
-const LimitOrderTable = () => {
+const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
   // const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
-  const [_, ongoingData] = useOngoingTrades();
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const markets = useMarketsConfig();
   const HeaderFomatter = (col: number) => {
@@ -77,7 +77,7 @@ const LimitOrderTable = () => {
     cancelHandler(id, cancelLoading, setCancelLoading);
   };
   const BodyFormatter: any = (row: number, col: number) => {
-    const trade = ongoingData?.[row];
+    const trade = trades?.[row];
 
     const tradeMarket = markets?.find((pair) => {
       const pool = pair.pools.find(
@@ -147,7 +147,7 @@ const LimitOrderTable = () => {
       headerJSX={HeaderFomatter}
       bodyJSX={BodyFormatter}
       cols={headNameArray.length}
-      rows={ongoingData ? ongoingData.length : 0}
+      rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
       overflow={400}

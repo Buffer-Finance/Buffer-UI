@@ -21,7 +21,7 @@ const usePlatformTrades = () => {
       '-' +
       oneCTWallet?.address,
     {
-      fetcher: async (oneCTWallet) => {
+      fetcher: async () => {
         const signature = await getSingatureCached(oneCTWallet);
         console.log(`ssssignature: `, signature);
         const response = await Promise.all([
