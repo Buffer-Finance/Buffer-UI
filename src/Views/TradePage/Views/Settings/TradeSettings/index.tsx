@@ -18,14 +18,14 @@ export const TradeSettings: React.FC = () => {
   }
 
   function togglePartialFill(event: React.ChangeEvent<HTMLInputElement>) {
-    setSettings((prev) => ({
+    setSettings((prev: typeof settings) => ({
       ...prev,
       partialFill: !prev.partialFill,
     }));
   }
 
   function setSlippage(newSlippage: number) {
-    setSettings((prev) => ({
+    setSettings((prev: typeof settings) => ({
       ...prev,
       slippageTolerance: newSlippage,
     }));

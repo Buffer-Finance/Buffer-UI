@@ -8,7 +8,7 @@ import { Trans } from '@lingui/macro';
 export const LimitOrdersExpiry: React.FC = () => {
   const [settings, setSettings] = useAtom(tradeSettingsAtom);
 
-  const setExpiry = (newExpiry: number) => {
+  const setExpiry = (newExpiry: string) => {
     setSettings({ ...settings, limitOrdersExpiry: newExpiry });
   };
 
