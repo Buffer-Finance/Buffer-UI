@@ -27,7 +27,7 @@ const BuyTradeBackground = styled.div`
   background-color: #1c1c28;
   border-left: 1px solid #2a2a3a;
   border-right: 1px solid #2a2a3a;
-  padding: 16px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

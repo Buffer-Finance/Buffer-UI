@@ -90,8 +90,6 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
     if (!trade || !tradeMarket) return 'Problem';
     let currentEpoch = Math.round(new Date().getTime() / 1000);
 
-    console.log(`LimitOrderTable-trade: `, trade);
-
     switch (col) {
       case TableColumn.TriggerPrice:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
