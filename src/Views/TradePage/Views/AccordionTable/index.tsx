@@ -20,11 +20,9 @@ const gap = ['History'];
 
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
-  const chage = usePriceChange();
   const [historyTrades] = useHistoryTrades();
   const [activeTrades, limitOrders] = useOngoingTrades();
   const [platformActiveTrades, platformHistoryTrades] = usePlatformTrades();
-  console.log(`index-chage: `, chage);
   const [activeTable, setActiveTable] = useState('Trades');
   return (
     <div className="flex flex-col    ">
