@@ -134,6 +134,7 @@ export const Display: React.FC<IDisplayProp> = ({
     // if (isDecimal) {
     return DefaultExport;
   } catch (e) {
+    console.log(e, 'this si the error');
     return <div className="text-[blue]">{data}</div>;
   }
 };

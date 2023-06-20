@@ -32,9 +32,7 @@ export const WalletBalance: React.FC<{
         </defs>
       </svg>
 
-      <SettingsText>
-        <Display data={balance} unit={unit} precision={2} />
-      </SettingsText>
+      <SettingsText>{balance}</SettingsText>
     </RowGap>
   );
 };
