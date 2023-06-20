@@ -14,5 +14,6 @@ export const useLimitOrdersExpiry = () => {
     }
   }, [tradeSettings.limitOrdersExpiry, tradeSettings.selectedTimeFrame]);
 
+  console.log('limitOrderExpiryInMinutes', limitOrderExpiryInMinutes);
   return limitOrderExpiryInMinutes;
 };

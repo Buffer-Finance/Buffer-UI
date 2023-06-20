@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { Trans } from '@lingui/macro';
 
 export const MinutesInput: React.FC<{
-  onChange: (newSlippage: number) => void;
+  onChange: (newSlippage: string) => void;
   setFrame: (newFrame: string) => void;
-  minutes: number;
+  minutes: string;
   activeFrame: string;
   className?: string;
   inputClassName?: string;
@@ -23,30 +23,35 @@ export const MinutesInput: React.FC<{
   const MAX = activeFrame === 'm' ? 60 : 24;
 
   return (
-    <div className={`${className} relative flex flex-row gap-4 items-center`}>
-      <input
-        value={minutes}
-        type="number"
-        max={MAX}
-        min={1}
-        className={`${inputClassName} border-2 border-[#2A2A3A] bg-[#222234] px-3 py-[10px] rounded-[5px] outline-none focus:border-[#00bbff42] w-[68px] text-f10 text-1`}
-        onChange={(e) => {
-          if (gt(e.target.value || '0', MAX.toString())) {
-            setErr(true);
-            return;
-          }
+    <div className={`${className} relative flex flex-col items-start`}>
+      <div className={`${className} relative flex flex-row gap-4 items-center`}>
+        <input
+          value={minutes}
+          type="number"
+          max={MAX}
+          min={1}
+          className={`${inputClassName} border-2 border-[#2A2A3A] bg-[#222234] px-3 py-[10px] rounded-[5px] outline-none focus:border-[#00bbff42] w-[68px] text-f10 text-1`}
+          onChange={(e) => {
+            if (e.target.value === '.') return;
+            if (e.target.value.length > 2) return;
+            if (gt(e.target.value || '0', MAX.toString())) {
+              setErr(true);
+              onChange(MAX.toString());
+            } else {
+              setErr(false);
+              onChange(e.target.value);
+            }
+          }}
+          placeholder="10"
+        />
+        <span className="absolute right-3">
+          <MHdropDown setFrame={setFrame} activeFrame={activeFrame} />
+        </span>
+      </div>
 
-          onChange(+e.target.value);
-          setErr(false);
-        }}
-        placeholder="10"
-      />
-      <span className="absolute right-3">
-        <MHdropDown setFrame={setFrame} activeFrame={activeFrame} />
-      </span>
       {err && (
         <Trans>
-          <span className="absolute top-full left-auto right-auto  text-red whitespace-nowrap">
+          <span className=" text-red whitespace-nowrap">
             {`Max ${activeFrame} : ${MAX} `}
           </span>
         </Trans>
