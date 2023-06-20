@@ -5,12 +5,17 @@ import {
   marketType,
   poolInfoType,
 } from '@Views/TradePage/type';
-import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
+import {
+  divide,
+  gte,
+  multiply,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import { toFixed } from '@Utils/NumString';
 import { StrikePrice } from './StrikePrice';
 import { CurrentPrice } from './CurrentPrice';
 import { RowGap } from '@Views/TradePage/Components/Row';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { getProbability } from '../../AccordionTable/Common';
 import { secondsToHHMM } from '@Views/TradePage/utils';
@@ -146,29 +151,14 @@ const Pnl: React.FC<{
   poolInfo: poolInfoType;
   configData: marketType;
 }> = ({ trade, poolInfo, configData }) => {
-  const { currentPrice } = useCurrentPrice({
-    token0: configData.token0,
-    token1: configData.token1,
+  const { earlycloseAmount, isWin, probability } = useEarlyPnl({
+    trade,
+    poolInfo,
+    configData,
   });
-  const probability = getProbability(trade, +currentPrice);
-  if (!probability) return <span>-</span>;
-  const isUp = trade.is_above;
-  const lockedAmount = divide(trade.locked_amount, poolInfo.decimals) as string;
-  const strike = divide(trade.strike, 1e8) as string;
-  const isWin = isUp ? currentPrice > strike : currentPrice < strike;
-  const tradeSize = divide(trade.trade_size, poolInfo.decimals) as string;
-  const lossAmount = divide(
-    multiply(
-      subtract(lockedAmount ?? '0', tradeSize ?? '0') ?? '0',
-      probability?.toString() ?? '0'
-    ),
-    2
-  );
-  const winAmount = divide(multiply(lockedAmount, probability.toString()), 2);
-
-  let pnl = <span className="text-red">-{toFixed(lossAmount, 2)}</span>;
+  let pnl = <span className="text-red">{toFixed(earlycloseAmount, 2)}</span>;
   if (isWin) {
-    pnl = <span className="text-green">+{toFixed(winAmount, 2)}</span>;
+    pnl = <span className="text-green">+{toFixed(earlycloseAmount, 2)}</span>;
   }
   return (
     <RowGap gap="2px" className="!items-end">
@@ -178,4 +168,37 @@ const Pnl: React.FC<{
       </span>
     </RowGap>
   );
+};
+
+export const useEarlyPnl = ({
+  trade,
+  poolInfo,
+  configData,
+}: {
+  trade: OngoingTradeSchema;
+  poolInfo: poolInfoType;
+  configData: marketType;
+}) => {
+  const { currentPrice } = useCurrentPrice({
+    token0: configData.token0,
+    token1: configData.token1,
+  });
+  let probability = useMemo(
+    () => getProbability(trade, +currentPrice),
+    [trade, currentPrice]
+  );
+  if (!probability) probability = 0;
+  const lockedAmount = trade.locked_amount;
+  const tradeSize = trade.trade_size;
+
+  const earlycloseAmount = divide(
+    subtract(
+      multiply(lockedAmount.toString(), (probability / 100).toString()),
+      tradeSize.toString()
+    ),
+    poolInfo.decimals
+  ) as string;
+
+  const isWin = gte(earlycloseAmount, '0');
+  return { earlycloseAmount, isWin, probability };
 };
