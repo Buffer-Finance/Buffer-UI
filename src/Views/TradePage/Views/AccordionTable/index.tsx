@@ -27,8 +27,8 @@ const AccordionTable: React.FC<any> = ({}) => {
   console.log(`index-chage: `, chage);
   const [activeTable, setActiveTable] = useState('Trades');
   return (
-    <div className="flex flex-col ">
-      <div className="w-full flex items-center  justify-between p-3">
+    <div className="flex flex-col    ">
+      <div className="w-full bg-[#282B39] rounded-[2px] flex items-center  justify-between p-3 ">
         <div className="flex gap-x-[15px]">
           {Object.keys(tables).map((s) => (
             <button
@@ -42,7 +42,14 @@ const AccordionTable: React.FC<any> = ({}) => {
                   : ''
               }`}
             >
-              {s}
+              <div className="flex items-center gap-x-2">
+                {s}
+                {s == 'Trades' && activeTrades.length && (
+                  <div className="text-[#C3C2D4] bg-[#171722] text-f10 h-[16px] p-2 pt-[0px] pb-[">
+                    <span>{activeTrades.length}</span>
+                  </div>
+                )}
+              </div>
             </button>
           ))}
         </div>
