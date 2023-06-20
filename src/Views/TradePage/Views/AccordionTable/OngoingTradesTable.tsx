@@ -142,7 +142,7 @@ export const OngoingTradesTable: React.FC<{
               onClick={() => {
                 earlyCloseHandler(trade, tradeMarket);
               }}
-              isLoading={earlyCloseLoading == trade.queue_id}
+              isLoading={earlyCloseLoading?.[trade.queue_id]}
             >
               Close
             </GreyBtn>{' '}

@@ -340,7 +340,7 @@ const RedGreenText = ({
   );
 };
 
-const getPayout = (trade: OngoingTradeSchema, expiryPrice) => {
+export const getPayout = (trade: OngoingTradeSchema, expiryPrice) => {
   if (trade.state === 'OPENED') {
     const [pnl, payout] = getPendingData(trade, expiryPrice);
     return { payout: payout as string, pnl: pnl as string };

@@ -25,6 +25,7 @@ import { Share } from '@Views/BinaryOptions/Tables/TableComponents';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
 import { getPendingData } from '@Views/BinaryOptions/Tables/Desktop';
+import { getPayout } from '@Views/BinaryOptions/Components/shareModal';
 
 export const tradesCount = 10;
 
@@ -98,9 +99,9 @@ const HistoryTable: React.FC<{
     const poolInfo = getPoolInfo(poolContract);
 
     if (!tradeMarket) return 'Problem';
-    const [pnl, payout] = getPendingData(trade, trade.expiry_price + '');
-    console.log(`HistoryTable-pnl: `, pnl, trade);
-    const status = gt(pnl, '0')
+    const { pnl, payout } = getPayout(trade, trade.expiry_price + '');
+    console.log(`HistoryTable-pnl: `, trade.strike, pnl, payout);
+    const status = gt(pnl?.toString(), '0')
       ? {
           tooltip: 'You won this bet!',
           chip: 'Win',

@@ -17,9 +17,9 @@ export const useCancelTradeFunction = () => {
   const toastify = useToast();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
-  const [earlyCloseLoading, setEarlyCloseLoading] = useState<number | null>(
-    null
-  );
+  const [earlyCloseLoading, setEarlyCloseLoading] = useState<{
+    [queued_id: number]: boolean;
+  }>({});
   const cancelHandler = async (
     queuedId: number,
     cancelLoading: number | null,
@@ -54,7 +54,7 @@ export const useCancelTradeFunction = () => {
     tradeMarket: marketType
   ) => {
     const ts = Math.round(Date.now() / 1000);
-    setEarlyCloseLoading(trade.queue_id);
+    setEarlyCloseLoading((l) => ({ ...l, [trade.queue_id]: true }));
     console.log(`[tradeMarket.tv_id, ts, trade.option_id]: `, [
       tradeMarket.tv_id,
       ts,
@@ -74,7 +74,7 @@ export const useCancelTradeFunction = () => {
     };
     console.log(`ec-params: `, params);
     const res = await axios.get(`${baseUrl}trade/close/`, { params });
-    setEarlyCloseLoading(null);
+    // setEarlyCloseLoading((l) => ({ ...l, [trade.queue_id]: false }));
   };
 
   return { cancelHandler, earlyCloseHandler, earlyCloseLoading };

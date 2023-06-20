@@ -697,11 +697,7 @@ export const Share: React.FC<{
         console.log('dataShare', data, market, poolInfo);
         setBet({
           trade: data,
-          expiryPrice:
-            // data.state === TradeState.Active
-            //   ? expiryPriceCache[data.option_id]
-            // :
-            data.expiry_price,
+          expiryPrice: data.expiry_price,
           market: market,
           poolInfo: poolInfo,
         });
