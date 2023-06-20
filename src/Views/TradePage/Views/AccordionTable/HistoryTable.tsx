@@ -222,6 +222,7 @@ export { HistoryTable };
 
 const UserHistory = () => {
   const [ongoingData] = useHistoryTrades();
+  console.log(`HistoryTable-ongoingData: `, ongoingData);
   // console.log(`HistoryTable-ongoingData: `, ongoingData);
   return <HistoryTable trades={ongoingData} />;
 };
