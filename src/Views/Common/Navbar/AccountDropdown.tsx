@@ -65,6 +65,8 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   const { oneCtPk, disableOneCt, registeredOneCT, accountMapping } =
     useOneCTWallet();
   console.log(`AccountDropdown-accountMapping: `, accountMapping);
+  console.log(`index-edit-deb-pk: `, oneCtPk);
+
   const provider = useProvider({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   useEffect(() => {
