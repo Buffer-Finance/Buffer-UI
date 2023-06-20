@@ -24,15 +24,7 @@ const TradeCardBackground = styled.div`
   margin-top: 8px;
 `;
 
-export const TradeCard = ({
-  trade,
-  cancelLoading,
-  setCancelLoading,
-}: {
-  trade: OngoingTradeSchema;
-  cancelLoading: number | null;
-  setCancelLoading: (newValue: number | null) => void;
-}) => {
+export const TradeCard = ({ trade }: { trade: OngoingTradeSchema }) => {
   const markets = useMarketsConfig();
   const { getPoolInfo } = usePoolInfo();
   const tradeMarket = markets?.find((pair) => {
@@ -84,8 +76,7 @@ export const TradeCard = ({
       <TradeActionButton
         trade={trade}
         tradeMarket={tradeMarket}
-        cancelLoading={cancelLoading}
-        setCancelLoading={setCancelLoading}
+        poolInfo={poolInfo}
       />
     </TradeCardBackground>
   );

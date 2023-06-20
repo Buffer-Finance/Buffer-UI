@@ -10,7 +10,6 @@ import styled from '@emotion/styled';
 const tableTypes = ['Trades', 'Limit Orders'];
 
 export const ActiveTrades: React.FC = () => {
-  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const [tableType, setTableType] = useState(tableTypes[0]);
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
   const setIsTableShown = useSetAtom(isTableShownAtom);
@@ -46,12 +45,7 @@ export const ActiveTrades: React.FC = () => {
         <TradesBackground>
           {/* <div className="w-full h-[900px] bg-red"></div> */}
           {trades.map((t) => (
-            <TradeCard
-              trade={t}
-              key={t.id}
-              cancelLoading={cancelLoading}
-              setCancelLoading={setCancelLoading}
-            />
+            <TradeCard trade={t} key={t.id} />
           ))}
         </TradesBackground>
       )}

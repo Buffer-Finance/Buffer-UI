@@ -1,58 +1,63 @@
 import { toFixed } from '@Utils/NumString';
-import { subtract } from '@Utils/NumString/stringArithmatics';
 import { RowGap } from '@Views/TradePage/Components/Row';
+import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
+import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
 import {
   OngoingTradeSchema,
-  TradeState,
-} from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
-import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
-import { marketType } from '@Views/TradePage/type';
+  marketType,
+  poolInfoType,
+} from '@Views/TradePage/type';
 import styled from '@emotion/styled';
 import { useSetAtom } from 'jotai';
+import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
+import { useState } from 'react';
+import { useEarlyPnl } from './TradeDataView';
 
 export const TradeActionButton: React.FC<{
   trade: OngoingTradeSchema;
   tradeMarket: marketType;
-  cancelLoading: number | null;
-  setCancelLoading: (newValue: number | null) => void;
-}> = ({ trade, tradeMarket, cancelLoading, setCancelLoading }) => {
-  const { cancelHandler } = useCancelTradeFunction();
-  const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
-  const { currentPrice, precision } = useCurrentPrice({
-    token0: tradeMarket.token0,
-    token1: tradeMarket.token1,
+  poolInfo: poolInfoType;
+}> = ({ trade, tradeMarket, poolInfo }) => {
+  const { cancelHandler, earlyCloseHandler, earlyCloseLoading } =
+    useCancelTradeFunction();
+  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
+  const { earlycloseAmount, isWin } = useEarlyPnl({
+    trade,
+    configData: tradeMarket,
+    poolInfo,
   });
+
+  const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
+
   const isQueued = trade.state === TradeState.Queued;
   const isLimitOrder = trade.is_limit_order;
-  const isUp = trade.is_above;
-  const strikePrice = toFixed(trade.strike / 1e8, precision);
-  const profitOrLoss = subtract(currentPrice, strikePrice);
-  const isProfit = isUp ? +profitOrLoss > 0 : +profitOrLoss < 0;
 
+  const isCancelLoading = cancelLoading === trade.queue_id;
+  const isEarlyCloseLoading = earlyCloseLoading === trade.queue_id;
   function cancelTrade() {
     cancelHandler(trade.queue_id, cancelLoading, setCancelLoading);
   }
 
-  function closeAtProfit() {
-    console.log('close at profit');
-  }
-
-  function closeAtLoss() {
-    console.log('close at loss');
+  function earlyClose() {
+    earlyCloseHandler(trade, tradeMarket);
   }
 
   function editLimitOrder() {
     setSelectedTrade({ trade, market: tradeMarket });
   }
   function cancelLimitOrder() {
-    console.log('cancel limit order');
+    cancelHandler(trade.queue_id, cancelLoading, setCancelLoading);
   }
   if (isLimitOrder && isQueued) {
     return (
       <RowGap gap="4px">
-        <CancelButton onClick={editLimitOrder}>Edit</CancelButton>
+        <CancelButton
+          onClick={editLimitOrder}
+          disabled={isCancelLoading || isEarlyCloseLoading}
+        >
+          {isCancelLoading ? <ButtonLoader /> : 'Edit'}
+        </CancelButton>
         <CancelButton onClick={cancelLimitOrder}>Cancel</CancelButton>
       </RowGap>
     );
@@ -60,22 +65,43 @@ export const TradeActionButton: React.FC<{
   if (isQueued) {
     return (
       <>
-        <CancelButton onClick={cancelTrade}>Cancel</CancelButton>
+        <CancelButton
+          onClick={cancelTrade}
+          disabled={isCancelLoading || isEarlyCloseLoading}
+        >
+          {isCancelLoading ? <ButtonLoader /> : 'Cancel'}
+        </CancelButton>
       </>
     );
   }
-  if (isProfit) {
+  if (isWin) {
     return (
       <>
-        <CloseAtProfitButton onClick={closeAtProfit}>
-          Close at profit
+        <CloseAtProfitButton
+          onClick={earlyClose}
+          disabled={isCancelLoading || isEarlyCloseLoading}
+        >
+          {isEarlyCloseLoading ? (
+            <ButtonLoader />
+          ) : (
+            `Close at +${toFixed(earlycloseAmount, 2)}`
+          )}
         </CloseAtProfitButton>
       </>
     );
   }
 
   return (
-    <CloseAtLossButton onClick={closeAtLoss}>Close at loss</CloseAtLossButton>
+    <CloseAtLossButton
+      onClick={earlyClose}
+      disabled={isCancelLoading || isEarlyCloseLoading}
+    >
+      {isEarlyCloseLoading ? (
+        <ButtonLoader />
+      ) : (
+        `Close at ${toFixed(earlycloseAmount, 2)}`
+      )}
+    </CloseAtLossButton>
   );
 };
 
@@ -87,6 +113,7 @@ const buttonStyle = styled.button`
   padding: 5px 0;
   transition: 0.2s;
   margin-top: 12px;
+  min-height: 28px;
 
   :hover {
     scale: 1.05;
