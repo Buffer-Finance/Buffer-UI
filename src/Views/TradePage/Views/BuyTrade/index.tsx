@@ -75,9 +75,11 @@ export const BuyTrade: React.FC = () => {
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeChartMarket);
   const totalPayout = readcallData.settlementFees[switchPool.optionContract];
   const platformFee = divide(switchPool.platformFee, decimals);
-  let userAmount = '0';
+  let userAmount = amount;
   if (amount !== undefined && amount !== null && amount !== '') {
     userAmount = subtract(userAmount, platformFee ?? '0');
+  } else {
+    userAmount = '0';
   }
 
   return (
