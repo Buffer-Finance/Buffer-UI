@@ -40,6 +40,7 @@ export const BuyButtons = ({
   const { handleApproveClick, buyHandler, loading } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
+  console.log(`BuyButtons-expiry: `, expiry);
   const { activeChain } = useActiveChain();
 
   const provider = useProvider({ chainId: activeChain.id });
@@ -55,6 +56,7 @@ export const BuyButtons = ({
     let limitOrderExpiry = 0;
     if (tradeType == 'Limit' && limitStrike) {
       limitOrderExpiry = expiry;
+      console.log(`BuyButtons-limitOrderExpiry: `, limitOrderExpiry);
       strike = limitStrike;
     }
     buyHandler({
