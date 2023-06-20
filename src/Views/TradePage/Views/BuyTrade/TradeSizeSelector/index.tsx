@@ -1,6 +1,7 @@
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import {
   RowBetween,
+  RowGap,
   RowGapItemsStretched,
 } from '@Views/TradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
@@ -10,8 +11,8 @@ import { TradeSizeInput } from './TradeSizeInput';
 import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { getMaximumValue } from '@Views/TradePage/utils';
 import { PoolDropdown } from './PoolDropdown';
+import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -40,7 +41,17 @@ export const TradeSizeSelector: React.FC = () => {
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px">
         <RowBetween>
-          <BuyTradeHeadText>Trade Size</BuyTradeHeadText>
+          <RowGap gap="4px">
+            <BuyTradeHeadText>Trade Size</BuyTradeHeadText>
+            <IconToolTip
+              content={
+                <>
+                  {divide(switchPool.platformFee, decimals)} {tradeToken} will
+                  be charged as platform fee.
+                </>
+              }
+            />
+          </RowGap>
 
           <WalletBalance balance={formatBalance(balance)} unit={tradeToken} />
         </RowBetween>

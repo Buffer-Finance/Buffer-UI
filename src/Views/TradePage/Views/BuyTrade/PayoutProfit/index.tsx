@@ -11,13 +11,11 @@ import { Skeleton } from '@mui/material';
 
 export const PayoutProfit = ({
   amount,
-  boostedPayout,
   totalPayout,
   tradeToken,
 }: {
   amount: string;
   totalPayout: string;
-  boostedPayout: string;
   tradeToken: string;
 }) => {
   if (amount && totalPayout) {
