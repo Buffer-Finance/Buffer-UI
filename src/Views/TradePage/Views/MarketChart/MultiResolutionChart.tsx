@@ -59,7 +59,7 @@ import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
-import { visualizeddAtom } from '@Views/TradePage/atoms';
+import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -455,76 +455,7 @@ export const MultiResolutionChart = ({
       datafeed,
       interval: defaults.interval,
       timeframe: '200',
-      custom_formatters: {
-        tickMarkFormatter: (date, tickMarkType) => {
-          switch (tickMarkType) {
-            case 'Year':
-              return 'Y' + date.getUTCFullYear();
 
-            case 'Month':
-              return 'M' + (date.getUTCMonth() + 1);
-
-            case 'DayOfMonth':
-              return 'D' + date.getUTCDate();
-
-            case 'Time':
-              return 'T' + date.getUTCHours() + ':' + date.getUTCMinutes();
-
-            case 'TimeWithSeconds':
-              return (
-                'S' +
-                date.getUTCHours() +
-                ':' +
-                date.getUTCMinutes() +
-                ':' +
-                date.getUTCSeconds()
-              );
-          }
-
-          throw new Error('unhandled tick mark type ' + tickMarkType);
-        },
-        priceFormatterFactory: (symbolInfo, minTick) => {
-          console.log(`MultiResolutionChart-symbolInfo: `, symbolInfo);
-          if (
-            symbolInfo?.fractional ||
-            (minTick !== 'default' && minTick.split(',')[2] === 'true')
-          ) {
-            return {
-              format: (price, signPositive) => {
-                // return the appropriate format
-                return price.toFixed(1);
-              },
-            };
-          }
-          return null; // this is to use default formatter;
-        },
-        studyFormatterFactory: (format, symbolInfo) => {
-          if (format.type === 'price') {
-            const numberFormat = new Intl.NumberFormat('en-US', {
-              notation: 'scientific',
-            });
-            return {
-              format: (value) => numberFormat.format(value),
-            };
-          }
-
-          if (format.type === 'volume') {
-            return {
-              format: (value) =>
-                (value / 1e9).toPrecision(format?.precision || 2) + 'B',
-            };
-          }
-
-          if (format.type === 'percent') {
-            return {
-              format: (value) =>
-                `${value.toPrecision(format?.precision || 4)} percent`,
-            };
-          }
-
-          return null; // this is to use default formatter;
-        },
-      },
       locale: 'en',
 
       container: containerDivRef.current!,
@@ -585,6 +516,7 @@ export const MultiResolutionChart = ({
       setChartReady(false);
     };
   }, []);
+  const priceCache = useAtomValue(queuets2priceAtom);
   const syncTVwithWS = async () => {
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
@@ -635,7 +567,7 @@ export const MultiResolutionChart = ({
     // if()
     if (chartReady && activeTrades) {
       activeTrades.forEach((pos) => {
-        if (pos.state == 'QUEUED') return;
+        // if (pos.state == 'QUEUED') return;
         if (!pos?.queue_id) return;
         // if(visualized[pos.])
         // const identifier = getIdentifier(pos);
@@ -644,10 +576,16 @@ export const MultiResolutionChart = ({
         if (trade2visualisation.current[+pos.queue_id]) {
           trade2visualisation.current[+pos.queue_id]!.visited = true;
         } else {
+          if (pos.state === 'QUEUED' && !priceCache?.[pos.queue_id]) return;
+          let updatedPos = pos;
+          if (pos.state === 'QUEUED') {
+            updatedPos.strike = priceCache[pos.queue_id];
+            updatedPos.expiration_time = pos.queued_timestamp + pos.period;
+          }
           trade2visualisation.current[+pos.queue_id] = {
             visited: true,
             lineRef: drawPosition(
-              pos,
+              updatedPos,
               visualized,
               widgetRef.current?.activeChart()!
             ),
@@ -671,7 +609,7 @@ export const MultiResolutionChart = ({
         trade2visualisation.current[+trade]!.visited = false;
       }
     };
-  }, [visualized, activeTrades, chartReady]);
+  }, [visualized, activeTrades, chartReady, priceCache]);
   const updatePositionTimeLeft = useCallback(() => {
     // save drawings
     try {

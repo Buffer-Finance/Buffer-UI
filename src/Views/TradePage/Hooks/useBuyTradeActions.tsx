@@ -348,6 +348,16 @@ export const useBuyTradeActions = (userInput: string) => {
       };
       console.log(`useBuyTradeActions-apiParams: `, apiParams);
       console.time('read-call');
+
+      // const sig = ethers.utils.splitSignature(signature);
+      // const lockedAmount = await Promise.all[,getPrice(query)];
+      const resp: { data: OngoingTradeSchema } = await axios.post(
+        baseUrl + 'trade/create/',
+        null,
+        {
+          params: apiParams,
+        }
+      );
       getLockedAmount(
         baseArgs[ArgIndex.Strike],
         baseArgs[ArgIndex.Size],
@@ -369,15 +379,6 @@ export const useBuyTradeActions = (userInput: string) => {
           [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
         }));
       });
-      // const sig = ethers.utils.splitSignature(signature);
-      // const lockedAmount = await Promise.all[,getPrice(query)];
-      const resp: { data: OngoingTradeSchema } = await axios.post(
-        baseUrl + 'trade/create/',
-        null,
-        {
-          params: apiParams,
-        }
-      );
       console.time('read-call-price');
       const queuedPrice = await getPrice({
         pair: activeAsset.tv_id,

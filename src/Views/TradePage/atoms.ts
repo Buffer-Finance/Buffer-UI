@@ -91,4 +91,4 @@ export const visualizeddAtom = atom<number[]>([]);
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 export const showOnboardingAnimationAtom = atom<boolean>(false);
-export const queuets2priceAtom = atom<{ [key: string]: number }>({});
+export const queuets2priceAtom = atomWithLocalStorage('augmentation-h-ji', {});

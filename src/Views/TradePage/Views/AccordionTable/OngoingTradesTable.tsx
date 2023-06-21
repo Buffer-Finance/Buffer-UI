@@ -116,13 +116,17 @@ export const OngoingTradesTable: React.FC<{
     if (!tradeExpiryTime) {
       tradeExpiryTime = trade.queued_timestamp + trade.period;
     }
-    const currTradePrice = cachedPrices?.[trade.queue_id];
+
+    let currTradePrice = trade.strike;
+    if (trade.state == 'QUEUED') {
+      currTradePrice = cachedPrices?.[trade.queue_id];
+    }
     const lockedAmmount = cachedPrices?.[tradeMarket.tv_id + trade.trade_size];
     console.log(`OngoingTradesTable-lockedAmmount: `, lockedAmmount);
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
-        return queuedTradeFallBack(trade, false, true) ? (
+        return !currTradePrice ? (
           <GreyBtn
             className={tableButtonClasses}
             onClick={() => {
