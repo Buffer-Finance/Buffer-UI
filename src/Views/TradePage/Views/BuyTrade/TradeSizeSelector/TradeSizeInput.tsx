@@ -74,7 +74,7 @@ export const TradeSizeInput: React.FC<{
 
       {tradeSize && gt(tradeSize ?? '0', balance ?? '0') && (
         <Trans>
-          <span className="text-red whitespace-nowrap flex items-center">
+          <span className="text-red whitespace-nowrap flex items-end">
             You don't have enough {tokenName}.&nbsp;
             <BuyUSDCLink token={tokenName} />{' '}
           </span>

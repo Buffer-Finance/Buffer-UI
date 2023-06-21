@@ -18,27 +18,31 @@ export const MinutesInput: React.FC<{
   className = '',
   inputClassName = '',
 }) => {
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState<null | string>(null);
 
   const MAX = activeFrame === 'm' ? 60 : 24;
 
   return (
-    <div className={`${className} relative flex flex-col items-start`}>
+    <div className={`${className} relative flex flex-col items-center`}>
       <div className={`${className} relative flex flex-row gap-4 items-center`}>
         <input
           value={minutes}
           type="number"
           max={MAX}
-          min={1}
           className={`${inputClassName} border-2 border-[#2A2A3A] bg-[#222234] px-3 py-[10px] rounded-[5px] outline-none focus:border-[#00bbff42] w-[68px] text-f10 text-1`}
           onChange={(e) => {
+            console.log(e.target.value, 'minutesInput');
+            if (e.target.value === '-') return;
             if (e.target.value === '.') return;
             if (e.target.value.length > 2) return;
             if (gt(e.target.value || '0', MAX.toString())) {
-              setErr(true);
+              setErr(`Max ${activeFrame} : ${MAX}`);
               onChange(MAX.toString());
+            } else if (lt(e.target.value || '0', '0')) {
+              setErr(`Min ${activeFrame} : 1`);
+              onChange('1');
             } else {
-              setErr(false);
+              setErr(null);
               onChange(e.target.value);
             }
           }}
@@ -51,9 +55,7 @@ export const MinutesInput: React.FC<{
 
       {err && (
         <Trans>
-          <span className=" text-red whitespace-nowrap">
-            {`Max ${activeFrame} : ${MAX} `}
-          </span>
+          <span className=" text-red whitespace-nowrap">{err}</span>
         </Trans>
       )}
     </div>

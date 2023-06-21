@@ -137,7 +137,7 @@ export const StrikePriceComponent = ({
     <>
       <Display
         data={divide(trade.strike, 8)}
-        unit={configData.token1}
+        // unit={configData.token1}
         precision={decimals}
         className={`justify-self-start content-start  w-max`}
       />

@@ -28,7 +28,7 @@ export const MiscSettings: React.FC = () => {
     <div>
       <RowGapItemsTop gap="4px">
         <SettingsHeaderText>
-          <Trans>Share Related Settings</Trans>
+          <Trans>Miscellaneous</Trans>
         </SettingsHeaderText>
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
