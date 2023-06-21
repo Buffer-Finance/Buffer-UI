@@ -14,6 +14,7 @@ import { useAccount } from 'wagmi';
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getSingatureCached } from './cahce';
+import { OngoingTradeSchema, marketType } from './type';
 
 // returns the token1 and toklen0 value from string
 export function getTokens(inputString: string, delimiter: string): string[] {
@@ -261,4 +262,30 @@ export const useEditTrade = () => {
   };
 
   return editTrade;
+};
+
+export const addMarketInTrades = (
+  trades: OngoingTradeSchema[],
+  markets: marketType[] | null
+): OngoingTradeSchema[] => {
+  if (!markets || !markets?.length) return trades;
+  return trades.map((t) => {
+    const tradeMarket = markets?.find((pair) => {
+      const pool = pair.pools.find(
+        (pool) =>
+          pool.optionContract.toLowerCase() === t?.target_contract.toLowerCase()
+      );
+      return !!pool;
+    });
+
+    const poolContract = tradeMarket?.pools.find(
+      (pool) =>
+        pool.optionContract.toLowerCase() === t?.target_contract.toLowerCase()
+    )?.pool;
+    return {
+      ...t,
+      market: tradeMarket,
+      pool: poolContract,
+    };
+  });
 };

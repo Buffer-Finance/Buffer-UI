@@ -12,6 +12,7 @@ import { Connection } from '@solana/web3.js';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import Big from 'big.js';
 import useSWR from 'swr';
+import { pricePublisherBaseUrl } from '@Views/TradePage/config';
 
 const solanaClusterName = 'pythnet';
 const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
@@ -122,4 +123,14 @@ export const getPrice = async () => {
     ];
   });
   return marketPrice;
+};
+
+export const getPriceWithRetry = async (
+  queries: { pair: string; timestamp: number }[]
+): Promise<number> => {
+  const priceResponse = await axios.post(pricePublisherBaseUrl, queries);
+  const priceObject = priceResponse?.data;
+  console.log(`[aug]:: `, priceResponse);
+  if (!priceObject?.length) return getPriceWithRetry(queries);
+  return priceObject;
 };

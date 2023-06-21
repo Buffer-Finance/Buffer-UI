@@ -473,6 +473,19 @@ const getPrice = async (query: any): Promise<number> => {
   if (!priceObject) return getPrice(query);
   return priceObject;
 };
+
+let cache: { [key: string]: number } = {};
+export const getCachedPrice = async (query: any): Promise<number> => {
+  const id = query.pair + ':' + query.timestamp;
+  if (!(id in cache)) {
+    const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
+    const priceObject = priceResponse?.data[0]?.price;
+    console.log(`[aug]:: `, priceResponse);
+    if (!priceObject) return getCachedPrice(query);
+    cache[id] = priceObject;
+  }
+  return cache[id];
+};
 const getLockedAmount = async (
   price: string,
   totalFee: string,

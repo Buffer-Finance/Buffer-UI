@@ -5,8 +5,10 @@ import { baseUrl } from '../config';
 import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Signer, Wallet } from 'ethers';
-import { OngoingTradeSchema } from '../type';
+import { OngoingTradeSchema, TradeType } from '../type';
 import { getSingatureCached } from '../cahce';
+import { useMarketsConfig } from './useMarketsConfig';
+import { addMarketInTrades } from '../utils';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
@@ -17,7 +19,8 @@ const useOngoingTrades = () => {
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
-  const { data, error } = useSWR<OngoingTradeSchema[][]>(
+  const markets = useMarketsConfig();
+  const { data, error } = useSWR<TradeType[][]>(
     'active-trades-' +
       address +
       '-' +
@@ -49,12 +52,15 @@ const useOngoingTrades = () => {
             !t.is_limit_order || (t.is_limit_order && t.state !== 'QUEUED')
         );
         // console.log(`activeTrades: `, activeTrades, limitOrders);
-        return [activeTrades, limitOrders] as OngoingTradeSchema[];
+        return [
+          addMarketInTrades(activeTrades, markets),
+          addMarketInTrades(limitOrders, markets),
+        ] as TradeType[][];
       },
       refreshInterval: 10,
     }
   );
-  return data || ([[], []] as OngoingTradeSchema[][]);
+  return data || ([[], []] as TradeType[][]);
 };
 
 export { useOngoingTrades };
