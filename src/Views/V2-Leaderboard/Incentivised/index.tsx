@@ -201,10 +201,11 @@ export const Incentivised = () => {
           <Col
             head={'Volume'}
             desc={
-              data && data.reward && data.reward[0] && data.reward[0].totalFee
+              totalTournamentData?.totalFee
                 ? numberWithCommas(
                     toFixed(
-                      divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
+                      divide(totalTournamentData?.totalFee, usdcDecimals) ??
+                        '0',
                       0
                     )
                   ) + ' USDC'
