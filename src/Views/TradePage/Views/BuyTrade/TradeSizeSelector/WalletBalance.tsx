@@ -1,4 +1,3 @@
-import { Display } from '@Views/Common/Tooltips/Display';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { SettingsText } from '@Views/TradePage/Components/TextWrapper';
 
@@ -32,7 +31,9 @@ export const WalletBalance: React.FC<{
         </defs>
       </svg>
 
-      <SettingsText>{balance}</SettingsText>
+      <SettingsText>
+        {balance}&nbsp;{unit}
+      </SettingsText>
     </RowGap>
   );
 };

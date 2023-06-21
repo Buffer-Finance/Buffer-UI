@@ -13,6 +13,7 @@ import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { PoolDropdown } from './PoolDropdown';
 import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
+import { toFixed } from '@Utils/NumString';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -53,7 +54,10 @@ export const TradeSizeSelector: React.FC = () => {
             />
           </RowGap>
 
-          <WalletBalance balance={formatBalance(balance)} unit={tradeToken} />
+          <WalletBalance
+            balance={formatBalance(toFixed(balance, 2))}
+            unit={tradeToken}
+          />
         </RowBetween>
         <RowGapItemsStretched gap="0px">
           <TradeSizeInput
