@@ -2,6 +2,7 @@ import { gt, lt } from '@Utils/NumString/stringArithmatics';
 import { MHdropDown } from './MHdropDown';
 import { useState } from 'react';
 import { Trans } from '@lingui/macro';
+import { defaultSettings } from '@Views/TradePage/config';
 
 export const MinutesInput: React.FC<{
   onChange: (newSlippage: string) => void;
@@ -46,7 +47,7 @@ export const MinutesInput: React.FC<{
               onChange(e.target.value);
             }
           }}
-          placeholder="10"
+          placeholder={defaultSettings.trade.limitOrdersExpiry}
         />
         <span className="absolute right-3">
           <MHdropDown setFrame={setFrame} activeFrame={activeFrame} />
