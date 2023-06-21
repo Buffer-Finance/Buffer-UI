@@ -20,6 +20,97 @@ animation-timing-function: ease-in-out;
 animation-fill-mode: forwards;
   /* animation: rotate-big 1s ease-in-out forwards; */
 }
+
+.loader {
+  width: 100vw;
+  background: #12131c;
+  height: 100vh;
+}
+.container {
+  margin: auto;
+  height: 100%;
+  display: flex;
+}
+.load {
+  transform: rotate(90deg);
+}
+.container1 {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
+.particleRoot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0 !important;
+  right: 0px !important;
+  
+}
+
+#Man {
+  animation: shake 2s infinite ease-in-out alternate;
+  /* animation-delay: 150ms; */
+}
+#grains {
+  animation: shakeGrains 2s infinite ease-in-out alternate;
+}
+#Anitclockwise {
+  /*   transform:rotate(60deg); */
+  transform-origin: center;
+  animation: clock 5.4s alternate ease-in-out infinite;
+}
+#clockwise {
+  /*   transform:rotate(60deg); */
+  transform-origin: center;
+  animation: anticlock 5s alternate ease-in-out infinite;
+}
+
+@keyframes clock {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes anticlock {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+#buffer_logo {
+  animation: glow 1s alternate infinite;
+}
+
+@keyframes glow {
+  from {
+    filter: none;
+  }
+  to {
+    filter: drop-shadow(0px 0px 10px #47c7e452);
+  }
+}
+@keyframes shake {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(5%);
+  }
+}
+.container_1 {
+  position: "relative";
+  display: flex;
+  transform: scale(0.8);
+  justify-content: center;
+}
+
 .custom-paper-class{
   min-width: 100vw;
   display: grid !important;
