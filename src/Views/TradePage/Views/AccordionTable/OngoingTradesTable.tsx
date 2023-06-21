@@ -47,6 +47,8 @@ export const OngoingTradesTable: React.FC<{
 }> = ({ trades, platform }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
+  const cachedPrices = useAtomValue(queuets2priceAtom);
+
   const markets = useMarketsConfig();
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const headNameArray = platform
@@ -110,6 +112,13 @@ export const OngoingTradesTable: React.FC<{
     const marketPrecision = tradeMarket?.price_precision.toString().length - 1;
 
     if (!trade || !tradeMarket) return 'Problem';
+    let tradeExpiryTime = trade.expiration_time;
+    if (!tradeExpiryTime) {
+      tradeExpiryTime = trade.queued_timestamp + trade.period;
+    }
+    const currTradePrice = cachedPrices?.[trade.queue_id];
+    const lockedAmmount = cachedPrices?.[tradeMarket.tv_id + trade.trade_size];
+    console.log(`OngoingTradesTable-lockedAmmount: `, lockedAmmount);
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
@@ -171,26 +180,26 @@ export const OngoingTradesTable: React.FC<{
         );
       case TableColumn.OpenTime:
         return (
-          queuedTradeFallBack(trade) || (
-            <DisplayTime ts={trade.queued_timestamp} />
-          )
+          // queuedTradeFallBack(trade) || (
+          <DisplayTime ts={trade.queued_timestamp} />
+          // )
         );
       case TableColumn.TimeLeft:
         let currentEpoch = Math.round(new Date().getTime() / 1000);
         return (
-          queuedTradeFallBack(trade, true) || (
-            <div>
-              {formatDistanceExpanded(
-                Variables(+trade.expiration_time! - currentEpoch)
-              )}
-            </div>
-          )
+          // queuedTradeFallBack(trade, true) || (
+          <div>
+            {formatDistanceExpanded(
+              Variables(+tradeExpiryTime! - currentEpoch)
+            )}
+          </div>
+          // )
         );
       case TableColumn.CloseTime:
         return (
-          queuedTradeFallBack(trade) || (
-            <DisplayTime ts={trade.expiration_time!} />
-          )
+          // queuedTradeFallBack(trade) || (
+          <DisplayTime ts={tradeExpiryTime} />
+          // )
         );
       case TableColumn.TradeSize:
         return (
@@ -203,25 +212,27 @@ export const OngoingTradesTable: React.FC<{
       case TableColumn.Probability:
         const probabiliyt = getProbability(
           trade,
-          +getPriceFromKlines(marketPrice, tradeMarket)
+          +getPriceFromKlines(marketPrice, tradeMarket),
+          tradeExpiryTime
         );
         return (
-          queuedTradeFallBack(trade) || (
-            <div>
-              {probabiliyt ? (
-                <>
-                  <Pnl
-                    configData={tradeMarket}
-                    trade={trade}
-                    poolInfo={poolInfo}
-                  />
-                  {toFixed(probabiliyt, 2) + '%'}
-                </>
-              ) : (
-                'Calculating...'
-              )}
-            </div>
-          )
+          // queuedTradeFallBack(trade) || (
+          <div>
+            {probabiliyt ? (
+              <>
+                <Pnl
+                  configData={tradeMarket}
+                  trade={trade}
+                  poolInfo={poolInfo}
+                  lockedAmmount={lockedAmmount}
+                />
+                {toFixed(probabiliyt, 2) + '%'}
+              </>
+            ) : (
+              'Calculating...'
+            )}
+          </div>
+          // )
         );
     }
     return 'Unhandled Body';
@@ -252,20 +263,25 @@ export const Pnl = ({
   trade,
   configData,
   poolInfo,
+  lockedAmmount,
 }: {
   trade: OngoingTradeSchema;
   configData: marketType;
   poolInfo: poolInfoType;
+  lockedAmmount?: string;
 }) => {
-  const pnl = useEarlyPnl({ trade, configData, poolInfo });
-  console.log(`OngoingTradesTable-pnl: `, pnl);
+  const pnl = useEarlyPnl({ trade, configData, poolInfo, lockedAmmount });
+  if (trade.state == 'QUEUED')
+    console.log(`OngoingTradesTable-pnl: `, trade.state, pnl, lockedAmmount);
   const isWin = gt(pnl.earlycloseAmount, '0');
-  return (
-    <Display
-      data={pnl.earlycloseAmount}
-      label={isWin ? '+' : ''}
-      className={`!justify-start ${isWin ? 'text-green' : 'text-red'}`}
-      unit={poolInfo.token}
-    />
-  );
+  if (trade.locked_amount || lockedAmmount)
+    return (
+      <Display
+        data={pnl.earlycloseAmount}
+        label={isWin ? '+' : ''}
+        className={`!justify-start ${isWin ? 'text-green' : 'text-red'}`}
+        unit={poolInfo.token}
+      />
+    );
+  return <div>Calculating..</div>;
 };

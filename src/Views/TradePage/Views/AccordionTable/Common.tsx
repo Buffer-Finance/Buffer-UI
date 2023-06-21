@@ -34,9 +34,15 @@ export const DisplayTime = ({ ts }: { ts: number | string }) => {
   );
 };
 
-export const getProbability = (trade: OngoingTradeSchema, price: number) => {
+export const getProbability = (
+  trade: OngoingTradeSchema,
+  price: number,
+  expiryTs?: number
+) => {
   let currentEpoch = Math.round(Date.now() / 1000);
   const IV = 1.2;
+  let expiryTime = +trade.expiration_time;
+  if (expiryTs) expiryTime = expiryTs;
 
   const probability =
     BlackScholes(
@@ -44,7 +50,7 @@ export const getProbability = (trade: OngoingTradeSchema, price: number) => {
       trade.is_above,
       price,
       +trade.strike / 100000000,
-      +trade.expiration_time! - currentEpoch,
+      expiryTime - currentEpoch,
       0,
       12000 / 10000
     ) * 100;
@@ -133,18 +139,22 @@ export const StrikePriceComponent = ({
 }) => {
   console.log(`Common-trade: `, trade);
   const cachedPrices = useAtomValue(queuets2priceAtom);
-  const currTradePrice = cachedPrices?.[trade.queue_id];
+  let strikePrice = trade.strike;
+  const isPriceArrived = cachedPrices?.[trade.queue_id];
+  if (trade.state == 'QUEUED' && isPriceArrived) {
+    strikePrice = cachedPrices?.[trade.queue_id];
+  }
   if (!configData) return <></>;
   const decimals = 2;
   return (
     <>
       <Display
-        data={divide(trade.strike, 8)}
+        data={divide(strikePrice, 8)}
         // unit={configData.token1}
         precision={decimals}
         className={`justify-self-start content-start  w-max`}
       />
-      {/* {trade.state === 'QUEUED' ? (
+      {trade.state === 'QUEUED' && !isPriceArrived ? (
         <div className="flex gap-2 align-center">
           <SlippageTooltip option={trade} className="mt-[2px] mr-[3px]" />
           Slippage -
@@ -155,8 +165,8 @@ export const StrikePriceComponent = ({
             precision={2}
           />
         </div>
-      ) : null} */}
-      {currTradePrice}
+      ) : null}
+      {/* {trade.state == 'QUEUED' ? 'queued' : null} */}
     </>
   );
 };
