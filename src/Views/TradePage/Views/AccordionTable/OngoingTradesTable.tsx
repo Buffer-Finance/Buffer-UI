@@ -1,6 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
@@ -32,7 +32,7 @@ import {
   marketType,
   poolInfoType,
 } from '@Views/TradePage/type';
-import { visualizeddAtom } from '@Views/TradePage/atoms';
+import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { toFixed } from '@Utils/NumString';

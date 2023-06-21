@@ -1,10 +1,10 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
-import { useAtom, useAtomValue } from 'jotai';
-import { useState } from 'react';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
 import { toFixed } from '@Utils/NumString';
-import routerABI from '@Views/BinaryOptions/ABI/routerABI.json';
+import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import {
   add,
   divide,
@@ -35,14 +35,24 @@ import { useSwitchPool } from './useSwitchPool';
 import { useBuyTradeData } from './useBuyTradeData';
 import { useActiveMarket } from './useActiveMarket';
 import { joinStrings } from '../utils';
-import { appConfig, baseUrl, marketsForChart } from '../config';
-import { AssetCategory } from '../type';
-import { timeSelectorAtom, tradeSettingsAtom } from '../atoms';
+import {
+  appConfig,
+  baseUrl,
+  marketsForChart,
+  pricePublisherBaseUrl,
+} from '../config';
+import { AssetCategory, OngoingTradeSchema } from '../type';
+import {
+  queuets2priceAtom,
+  timeSelectorAtom,
+  tradeSettingsAtom,
+} from '../atoms';
 import { useSettlementFee } from './useSettlementFee';
 import UpIcon from '@SVG/Elements/UpIcon';
 import DownIcon from '@SVG/Elements/DownIcon';
 import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
+import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -57,6 +67,8 @@ enum ArgIndex {
 export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
   const [settings] = useAtom(tradeSettingsAtom);
+  const setPriceCache = useSetAtom(queuets2priceAtom);
+  const priceCache = useAtomValue(queuets2priceAtom);
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
@@ -97,7 +109,9 @@ export const useBuyTradeActions = (userInput: string) => {
   const knowTill = useAtomValue(knowTillAtom);
   const option_contract = switchPool?.optionContract;
   const { oneCtPk } = useOneCTWallet();
-
+  useEffect(() => {
+    console.log(`useBuyTradeActions-priceCache: `, priceCache);
+  }, [priceCache]);
   const buyHandler = async (customTrade: {
     is_up: boolean;
     strike: string;
@@ -333,10 +347,48 @@ export const useBuyTradeActions = (userInput: string) => {
         environment: activeChain.id,
       };
       console.log(`useBuyTradeActions-apiParams: `, apiParams);
-      // const sig = ethers.utils.splitSignature(signature);
-      const resp = await axios.post(baseUrl + 'trade/create/', null, {
-        params: apiParams,
+      console.time('read-call');
+      getLockedAmount(
+        baseArgs[ArgIndex.Strike],
+        baseArgs[ArgIndex.Size],
+        baseArgs[ArgIndex.Period],
+        baseArgs[ArgIndex.PartialFill],
+        address as string,
+        baseArgs[ArgIndex.Referral],
+        baseArgs[ArgIndex.NFT],
+        settelmentFee.settlement_fee,
+        baseArgs[ArgIndex.Slippage],
+        baseArgs[ArgIndex.TargetContract],
+        provider,
+        appConfig[activeChain.id].multicall
+      ).then((lockedAmount) => {
+        console.timeEnd('read-call');
+
+        setPriceCache((t) => ({
+          ...t,
+          [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
+        }));
       });
+      // const sig = ethers.utils.splitSignature(signature);
+      // const lockedAmount = await Promise.all[,getPrice(query)];
+      const resp: { data: OngoingTradeSchema } = await axios.post(
+        baseUrl + 'trade/create/',
+        null,
+        {
+          params: apiParams,
+        }
+      );
+      console.time('read-call-price');
+      const queuedPrice = await getPrice({
+        pair: activeAsset.tv_id,
+        timestamp: resp.data.queued_timestamp,
+      });
+      console.timeEnd('read-call-price');
+
+      setPriceCache((t) => ({
+        ...t,
+        [resp.data.queue_id]: queuedPrice,
+      }));
       const content = (
         <div className="flex flex-col gap-y-2 text-f12 ">
           <div className="nowrap font-[600]">
@@ -412,4 +464,77 @@ export const useBuyTradeActions = (userInput: string) => {
     buyHandler,
     loading,
   };
+};
+
+const getPrice = async (query: any): Promise<number> => {
+  const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
+  const priceObject = priceResponse?.data[0]?.price;
+  console.log(`[aug]:: `, priceResponse);
+  if (!priceObject) return getPrice(query);
+  return priceObject;
+};
+const getLockedAmount = async (
+  price: string,
+  totalFee: string,
+  period: string,
+  allowPartialFill: boolean,
+  user: string,
+  referrer: string,
+  nftId: string,
+  settlementFee: number,
+  slippage: number,
+  optionContract: string,
+  provider: ethers.providers.Provider,
+  multicallAddress: string
+): Promise<{
+  amount: string;
+  isReferralValid: boolean;
+  revisedFee: string;
+}> => {
+  const calls = [
+    {
+      address: optionContract,
+      abi: OptionsABI,
+      params: [
+        [
+          price,
+          '0',
+          period,
+          allowPartialFill,
+          totalFee,
+          user,
+          referrer,
+          nftId,
+          settlementFee + '',
+        ],
+        slippage + '',
+      ],
+      name: 'evaluateParams',
+    },
+  ];
+  console.log(`useBuyTradeActions-optionContract: `, calls);
+  // const calls = [];
+  const res = await multicallLinked(
+    calls,
+    provider,
+    multicallAddress,
+    'hellowthere'
+  );
+  const callId = getCallId(optionContract, 'evaluateParams');
+  if (!res?.[callId])
+    return getLockedAmount(
+      price,
+      totalFee,
+      period,
+      allowPartialFill,
+      user,
+      referrer,
+      nftId,
+      settlementFee,
+      slippage,
+      optionContract,
+      provider,
+      multicallAddress
+    );
+  return res[callId];
 };

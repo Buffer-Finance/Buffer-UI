@@ -148,6 +148,12 @@
       },
       {
         "indexed": false,
+        "internalType": "enum IBufferBinaryOptions.AssetCategory",
+        "name": "category",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
         "internalType": "uint8[4]",
         "name": "nftTiersStep",
         "type": "uint8[4]"

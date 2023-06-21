@@ -131,6 +131,9 @@ export const StrikePriceComponent = ({
   trade: OngoingTradeSchema;
   configData: marketType;
 }) => {
+  console.log(`Common-trade: `, trade);
+  const cachedPrices = useAtomValue(queuets2priceAtom);
+  const currTradePrice = cachedPrices?.[trade.queue_id];
   if (!configData) return <></>;
   const decimals = 2;
   return (
@@ -141,7 +144,7 @@ export const StrikePriceComponent = ({
         precision={decimals}
         className={`justify-self-start content-start  w-max`}
       />
-      {trade.state === 'QUEUED' ? (
+      {/* {trade.state === 'QUEUED' ? (
         <div className="flex gap-2 align-center">
           <SlippageTooltip option={trade} className="mt-[2px] mr-[3px]" />
           Slippage -
@@ -152,7 +155,8 @@ export const StrikePriceComponent = ({
             precision={2}
           />
         </div>
-      ) : null}
+      ) : null} */}
+      {currTradePrice}
     </>
   );
 };
@@ -198,6 +202,8 @@ export const SlippageTooltip: React.FC<{
 };
 
 import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
+import { useAtomValue } from 'jotai';
+import { queuets2priceAtom } from '@Views/TradePage/atoms';
 
 const Background = styled.div`
   display: flex;

@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { marketsForChart } from '../config';
+import { marketsForChart, pricePublisherBaseUrl } from '../config';
 import axios from 'axios';
 // 25 - 41
 const usePriceChange = () => {
@@ -8,11 +8,10 @@ const usePriceChange = () => {
       const nowEpoch = Math.round(Date.now() / 1000) - 3;
       const yesterdayEpoch = nowEpoch - 60 * 60 * 24;
       const queries = [];
-      const priceUrl = 'https://oracle.buffer-finance-api.link/price/query/';
       for (const marketName in marketsForChart) {
         const market = (marketsForChart as any)[marketName];
         queries.push(
-          axios.post(priceUrl, [
+          axios.post(pricePublisherBaseUrl, [
             {
               pair: market.tv_id,
               timestamp: nowEpoch,
