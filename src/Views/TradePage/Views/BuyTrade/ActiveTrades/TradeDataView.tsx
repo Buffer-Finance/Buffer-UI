@@ -174,10 +174,12 @@ export const useEarlyPnl = ({
   trade,
   poolInfo,
   configData,
+  lockedAmmount,
 }: {
   trade: OngoingTradeSchema;
   poolInfo: poolInfoType;
   configData: marketType;
+  lockedAmmount?: string;
 }) => {
   const { currentPrice } = useCurrentPrice({
     token0: configData.token0,
@@ -188,7 +190,7 @@ export const useEarlyPnl = ({
     [trade, currentPrice]
   );
   if (!probability) probability = 0;
-  const lockedAmount = trade.locked_amount;
+  const lockedAmount = trade.locked_amount || lockedAmmount;
   const tradeSize = trade.trade_size;
 
   const earlycloseAmount = divide(
