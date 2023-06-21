@@ -105,7 +105,7 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
               marketPrecision
             )}
             precision={marketPrecision}
-            unit={tradeMarket.token1}
+            // unit={tradeMarket.token1}
           />
         );
       case TableColumn.Duration:
