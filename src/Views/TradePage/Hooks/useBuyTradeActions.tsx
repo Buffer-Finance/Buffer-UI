@@ -358,38 +358,39 @@ export const useBuyTradeActions = (userInput: string) => {
           params: apiParams,
         }
       );
-      getLockedAmount(
-        baseArgs[ArgIndex.Strike],
-        baseArgs[ArgIndex.Size],
-        baseArgs[ArgIndex.Period],
-        baseArgs[ArgIndex.PartialFill],
-        address as string,
-        baseArgs[ArgIndex.Referral],
-        baseArgs[ArgIndex.NFT],
-        settelmentFee.settlement_fee,
-        baseArgs[ArgIndex.Slippage],
-        baseArgs[ArgIndex.TargetContract],
-        provider,
-        appConfig[activeChain.id].multicall
-      ).then((lockedAmount) => {
-        console.timeEnd('read-call');
+      if (!customTrade.limitOrderExpiry) {
+        getLockedAmount(
+          baseArgs[ArgIndex.Strike],
+          baseArgs[ArgIndex.Size],
+          baseArgs[ArgIndex.Period],
+          baseArgs[ArgIndex.PartialFill],
+          address as string,
+          baseArgs[ArgIndex.Referral],
+          baseArgs[ArgIndex.NFT],
+          settelmentFee.settlement_fee,
+          baseArgs[ArgIndex.Slippage],
+          baseArgs[ArgIndex.TargetContract],
+          provider,
+          appConfig[activeChain.id].multicall
+        ).then((lockedAmount) => {
+          console.timeEnd('read-call');
+
+          setPriceCache((t) => ({
+            ...t,
+            [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
+          }));
+        });
+        const queuedPrice = await getPrice({
+          pair: activeAsset.tv_id,
+          timestamp: resp.data.queued_timestamp,
+        });
 
         setPriceCache((t) => ({
           ...t,
-          [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
+          [resp.data.queue_id]: queuedPrice,
         }));
-      });
-      console.time('read-call-price');
-      const queuedPrice = await getPrice({
-        pair: activeAsset.tv_id,
-        timestamp: resp.data.queued_timestamp,
-      });
-      console.timeEnd('read-call-price');
+      }
 
-      setPriceCache((t) => ({
-        ...t,
-        [resp.data.queue_id]: queuedPrice,
-      }));
       const content = (
         <div className="flex flex-col gap-y-2 text-f12 ">
           <div className="nowrap font-[600]">

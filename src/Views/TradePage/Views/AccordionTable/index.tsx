@@ -2,7 +2,7 @@ import DDArrow from '@SVG/Elements/Arrow';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useEffect, useState } from 'react';
 import LimitOrderTable from './LimitOrderTable';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { isTableShownAtom, queuets2priceAtom } from '@Views/TradePage/atoms';
 import { usePlatformTrades } from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
@@ -31,6 +31,7 @@ const AccordionTable: React.FC<any> = ({}) => {
   const [historyTrades] = useHistoryTrades();
   const [activeTrades, limitOrders] = useOngoingTrades();
   const setPriceCache = useSetAtom(queuets2priceAtom);
+  const priceCache = useAtomValue(queuets2priceAtom);
   const [platformActiveTrades, platformHistoryTrades] = usePlatformTrades();
   const { activeChain } = useActiveChain();
   const provider = useProvider({ chainId: activeChain.id });
@@ -68,30 +69,31 @@ const AccordionTable: React.FC<any> = ({}) => {
     activeTrades.forEach((trade) => {
       if (trade.state == 'QUEUED') {
         if (trade.market) {
-          priceQueries.push({
-            pair: trade.market.tv_id,
-            timestamp: trade.queued_timestamp,
-            queueId: trade.queue_id,
-          });
-          lockedAmmountQuery.push({
-            address: trade.target_contract,
-            abi: OptionsABI,
-            name: lockedAmountQueryName,
-            params: [
-              [
-                trade.strike.toString(),
-                '0',
-                trade.period.toString(),
-                trade.allow_partial_fill,
-                trade.trade_size.toString(),
-                address,
-                trade.referral_code,
-                trade.trader_nft_id.toString(),
-                trade.settlement_fee.toString(),
-              ],
-              trade.slippage + '',
-            ],
-          });
+          if (!(trade.queue_id in priceCache))
+            priceQueries.push({
+              pair: trade.market.tv_id,
+              timestamp: trade.queued_timestamp,
+              queueId: trade.queue_id,
+            });
+          // lockedAmmountQuery.push({
+          //   address: trade.target_contract,
+          //   abi: OptionsABI,
+          //   name: lockedAmountQueryName,
+          //   params: [
+          //     [
+          //       trade.strike.toString(),
+          //       '0',
+          //       trade.period.toString(),
+          //       trade.allow_partial_fill,
+          //       trade.trade_size.toString(),
+          //       address,
+          //       trade.referral_code,
+          //       trade.trader_nft_id.toString(),
+          //       trade.settlement_fee.toString(),
+          //     ],
+          //     trade.slippage + '',
+          //   ],
+          // });
         }
 
         // queries.push({pair:trade.});
