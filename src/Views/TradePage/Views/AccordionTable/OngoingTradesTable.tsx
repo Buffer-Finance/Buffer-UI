@@ -167,7 +167,6 @@ export const OngoingTradesTable: React.FC<{
               marketPrecision
             )}
             precision={marketPrecision}
-            unit={tradeMarket.token1}
           />
         );
       case TableColumn.OpenTime:
