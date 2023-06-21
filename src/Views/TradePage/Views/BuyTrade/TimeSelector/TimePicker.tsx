@@ -4,10 +4,16 @@ import { HHMMToSeconds, secondsToHHMM } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { MHdropDown } from '../../Settings/TradeSettings/LimitOrdersExpiry/MHdropDown';
-import { MinutesInput } from '../../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
 import { RowGap } from '@Views/TradePage/Components/Row';
+import { lt, lte } from '@Utils/NumString/stringArithmatics';
+import { Trans } from '@lingui/macro';
 
 const TimePickerBackground = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+
   .duration-container {
     display: flex;
     gap: 3px;
@@ -61,6 +67,14 @@ export const TimePicker: React.FC<{
   onSelect,
 }) => {
   const [openCustomInput, setOpenCustomInput] = useState(false);
+  useEffect(() => {
+    if (!openCustomInput) {
+      const duration = durations.find((d) => d.time === currentTime);
+      if (duration === undefined) {
+        setOpenCustomInput(true);
+      }
+    }
+  }, [openCustomInput, currentTime]);
 
   return (
     <TimePickerBackground>
@@ -110,41 +124,88 @@ export const TimePicker: React.FC<{
           <EditTime
             showCustomInput={openCustomInput}
             setTime={setCurrentTime}
+            initialValue={currentTime}
           />
         </div>
       </div>
+      <TimerError
+        currentTime={currentTime}
+        maxDuration={max_duration}
+        minDuration={min_duration}
+      />
     </TimePickerBackground>
+  );
+};
+
+const TimerError: React.FC<{
+  currentTime: string;
+  minDuration: string;
+  maxDuration: string;
+}> = ({ currentTime, maxDuration, minDuration }) => {
+  const [error, setError] = useState<null | string>(null);
+
+  useEffect(() => {
+    if (HHMMToSeconds(currentTime) > HHMMToSeconds(maxDuration)) {
+      setError(`Maximum duration is ${maxDuration}`);
+    } else if (HHMMToSeconds(currentTime) < HHMMToSeconds(minDuration)) {
+      setError(`Minimum duration is ${minDuration}`);
+    } else {
+      setError(null);
+    }
+  }, [currentTime, maxDuration, minDuration]);
+  return (
+    <Trans>
+      <span className="text-red whitespace-nowrap">{error}</span>
+    </Trans>
   );
 };
 
 const EditTime: React.FC<{
   showCustomInput: boolean;
   setTime: (newMMHHtime: string) => void;
-}> = ({ showCustomInput, setTime }) => {
+  initialValue: string;
+}> = ({ showCustomInput, setTime, initialValue }) => {
   const [activeFrame, setActiveFrame] = useState('m');
-  const [inputValue, setInputValue] = useState(30);
+  const [inputValue, setInputValue] = useState<number | ''>(30);
   const MAX = activeFrame === 'm' ? 60 : 24;
-  function onChange(newInput: number) {
+  function onChange(newInput: number | '') {
     setInputValue(newInput);
 
     let seconds = 0;
     if (activeFrame === 'm') {
-      seconds = newInput * 60;
+      seconds = (newInput as number) * 60;
     } else {
-      seconds = newInput * 3600;
+      seconds = (newInput as number) * 3600;
     }
     const newMMHHtime = secondsToHHMM(seconds);
     setTime(newMMHHtime);
   }
 
   useEffect(() => {
+    if (inputValue === '') return;
     if (showCustomInput) onChange(inputValue);
   }, [showCustomInput]);
   useEffect(() => {
+    if (inputValue === '') return;
     if (activeFrame.trim() === 'h' && inputValue > 24) {
       onChange(24);
     }
   }, [activeFrame]);
+
+  useEffect(() => {
+    if (initialValue) {
+      const [hours, minutes] = initialValue.split(':');
+      if (hours === '00' && lte(minutes, '60')) {
+        setActiveFrame('m');
+        setInputValue(+minutes);
+      } else {
+        setActiveFrame('h');
+        setInputValue(+hours);
+      }
+    }
+  }, []);
+
+  useEffect(() => {}, [inputValue]);
 
   if (showCustomInput) {
     return (
@@ -153,11 +214,21 @@ const EditTime: React.FC<{
           value={inputValue}
           type="number"
           max={MAX}
+          min={1}
           className={`bg-transparent rounded-[5px] text-center w-[20px] text-1 outline-none`}
           onChange={(e) => {
-            if (e.target.value == '.' || e.target.value.length > 2) return;
-            if (+e.target.value > MAX) return onChange(MAX);
-            onChange(+e.target.value);
+            if (e.target.value === '') return onChange('');
+            if (e.target.value === '-') {
+              return onChange('');
+            } else if (lt(e.target.value, '0')) {
+              return onChange('');
+            } else if (e.target.value === '.' || e.target.value.length > 2) {
+              return onChange(+e.target.value.slice(0, 2));
+            } else if (+e.target.value > MAX) {
+              return onChange(MAX);
+            } else {
+              onChange(+e.target.value);
+            }
           }}
           placeholder="10"
         />
