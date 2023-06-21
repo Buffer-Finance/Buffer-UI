@@ -22,6 +22,7 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { joinStrings } from '@Views/TradePage/utils';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
+import { CurrentPrice } from '../BuyTrade/ActiveTrades/CurrentPrice';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -221,17 +222,15 @@ const MarketPrice: React.FC<{ token0: string; token1: string }> = ({
   const chartData = getChartMarketData(token0, token1);
   const assetPrices = usePriceChange();
 
-  const price = toFixed(
-    getPriceFromKlines(marketPrice, chartData),
-    chartData.price_precision.toString().length - 1
-  );
   const oneDayChange = (
     assetPrices?.[joinStrings(token0, token1, '')]?.change ?? 0
   ).toFixed(2);
 
   return (
     <div className="flex flex-col">
-      <span className="text-f18">{price}</span>
+      <span className="text-f18">
+        <CurrentPrice token0={token0} token1={token1} />
+      </span>
       <OneDayChange
         oneDayChange={oneDayChange}
         className="text-f12"
