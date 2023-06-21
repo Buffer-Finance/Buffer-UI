@@ -30,9 +30,9 @@ export const MinutesInput: React.FC<{
           value={minutes}
           type="number"
           max={MAX}
+          min={1}
           className={`${inputClassName} border-2 border-[#2A2A3A] bg-[#222234] px-3 py-[10px] rounded-[5px] outline-none focus:border-[#00bbff42] w-[68px] text-f10 text-1`}
           onChange={(e) => {
-            console.log(e.target.value, 'minutesInput');
             if (e.target.value === '-') return;
             if (e.target.value === '.') return;
             if (e.target.value.length > 2) return;
@@ -42,6 +42,9 @@ export const MinutesInput: React.FC<{
             } else if (lt(e.target.value || '0', '0')) {
               setErr(`Min ${activeFrame} : 1`);
               onChange('1');
+            } else if (e.target.value === '') {
+              setErr(`Min ${activeFrame} : 1`);
+              onChange(e.target.value);
             } else {
               setErr(null);
               onChange(e.target.value);

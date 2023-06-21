@@ -1,7 +1,6 @@
 import { gt, lt } from '@Utils/NumString/stringArithmatics';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
-import { getMaximumValue } from '@Views/TradePage/utils';
 import { getMinimumValue } from '@Views/V3App/helperFns';
 import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
