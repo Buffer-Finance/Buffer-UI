@@ -18,14 +18,16 @@ import { Call, multicallLinked } from '@Utils/Contract/multiContract';
 import { appConfig } from '@Views/TradePage/config';
 import { getCachedPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { useCancelledTrades } from '@Views/TradePage/Hooks/useCancelledTrades';
+import { CancelledTable } from './CancelTable';
 const tables = {
   Trades: 'h',
   'Limit Orders': 'h',
   History: 'h',
+  Cancelled: 'h',
   'Platform Trades': 'h',
   'Platform History': 'h',
 };
-const gap = ['History'];
+const gap = ['Cancelled'];
 
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
@@ -116,7 +118,7 @@ const AccordionTable: React.FC<any> = ({}) => {
               }}
               className={`text-${s == activeTable ? '1' : '2'} text-f14 ${
                 gap.filter((i) => i == s).length
-                  ? ' pr-[10px] accordion-table-strip-right-border'
+                  ? ' pr-[13px] accordion-table-strip-right-border'
                   : ''
               }`}
             >
@@ -156,6 +158,8 @@ const AccordionTable: React.FC<any> = ({}) => {
           <OngoingTradesTable trades={platformActiveTrades} platform />
         ) : activeTable == 'Platform History' ? (
           <HistoryTable trades={platformHistoryTrades} platform />
+        ) : activeTable == 'Cancelled' ? (
+          <CancelledTable trades={canclledTrades} />
         ) : (
           <HistoryTable trades={historyTrades} />
         )}
