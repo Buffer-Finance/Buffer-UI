@@ -137,8 +137,8 @@ export const StrikePriceComponent = ({
   trade: OngoingTradeSchema;
   configData: marketType;
 }) => {
-  console.log(`Common-trade: `, trade);
   const cachedPrices = useAtomValue(queuets2priceAtom);
+
   let strikePrice = trade.strike;
   const isPriceArrived = cachedPrices?.[trade.queue_id];
   if (trade.state == 'QUEUED' && isPriceArrived) {

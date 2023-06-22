@@ -97,25 +97,26 @@ export const useCancelTradeFunction = () => {
 
     try {
       const res = await axios.get(`${baseUrl}trade/close/`, { params });
-      if (res.status === 200) {
-        toastify({
-          msg: 'Trade closed successfully',
-          type: 'success',
-          id: trade.queue_id + 'earlyClose',
-        });
-      } else {
-        toastify({
-          msg: 'Something went wrong' + res.data.message,
-          type: 'error',
-          id: trade.queue_id + 'earlyClose',
-        });
-      }
+      console.log(`res-cancel: `, res);
+      // if (res.status === 200) {
+      //   toastify({
+      //     msg: 'Trade closed successfully',
+      //     type: 'success',
+      //     id: trade.queue_id + 'earlyClose',
+      //   });
+      // } else {
+      //   toastify({
+      //     msg: 'Something went wrong' + res.data.message,
+      //     type: 'error',
+      //     id: trade.queue_id + 'earlyClose',
+      //   });
+      // }
     } catch (e) {
-      toastify({
-        msg: 'Something went wrong' + (e as any).message,
-        type: 'error',
-        id: trade.queue_id + 'earlyClose',
-      });
+      // toastify({
+      //   msg: 'Something went wrong' + (e as any).message,
+      //   type: 'error',
+      //   id: trade.queue_id + 'earlyClose',
+      // });
     }
 
     // setEarlyCloseLoading(null);
