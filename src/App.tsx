@@ -168,7 +168,7 @@ function App() {
   return (
     <>
       <Background>
-        {isTestnet && (
+        {/* {isTestnet && (
           <Warning
             body={
               <>
@@ -181,7 +181,7 @@ function App() {
             state={true}
             className="disclaimer !bg-[#3772FF] !text-[white] !text-f13 !p-2 !text-semibold hover:!brightness-100"
           />
-        )}
+        )} */}
         {graphStatus && (
           <Warning
             body={
