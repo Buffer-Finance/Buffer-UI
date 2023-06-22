@@ -103,11 +103,17 @@ const useOneCTWallet = () => {
       secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
       checkStorage();
       setCreateLoading(false);
+      if (is1CTEnabled(res[0], privateKey, provider)) {
+        toastify({
+          msg: 'You have already registered your 1CT Account. You can start trading now!',
+          type: 'success',
+        });
+      }
       return privateKey;
     } catch (e) {
       setCreateLoading(false);
     }
-  }, [signer]);
+  }, [signer, res?.[0], provider]);
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
     checkStorage();
