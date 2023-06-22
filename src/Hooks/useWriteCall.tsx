@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { CallOverrides, ethers } from 'ethers';
+import { CallOverrides } from 'ethers';
 import {
   useBalance,
   useContract,
@@ -7,7 +7,7 @@ import {
   useProvider,
   useSigner,
 } from 'wagmi';
-import { add, divide, lt } from '@Utils/NumString/stringArithmatics';
+import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from './useUserAccount';
@@ -61,7 +61,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const { data } = useFeeData();
   const { data: balance } = useBalance({ address: account });
   let gasPrice = data?.formatted?.gasPrice || (1e8).toString();
-  // gasPrice = multiply(gasPrice, "2");
+  // gasPrice = multiply(gasPrice, '2');
 
   const writeCall = async (
     callBack: (a?: any) => void,
@@ -107,7 +107,10 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     try {
       const getGasLimit = async () => {
         try {
-          let res = await contract?.estimateGas[methodName](...methodArgs);
+          let res = await contract?.estimateGas[methodName](...methodArgs, {
+            ...overrides,
+          });
+          console.log('res', res);
           if (res) {
             res = { res };
 
@@ -115,6 +118,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
             return res?.res;
           } else return DEFAULT_GAS_LIMIT;
         } catch (e) {
+          console.log('egetGasLimit', e);
           return DEFAULT_GAS_LIMIT;
         }
       };
@@ -133,12 +137,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
         type: 'info',
         inf: 1,
       });
-      let totalFee = divide((+gasPrice * gasLimit).toString(), 18);
-
-      if (defaultValues.value) {
-        const value = divide(defaultValues.value.toString(), 18);
-        totalFee = add(totalFee, value);
-      }
+      const totalFee = divide((+gasPrice * gasLimit).toString(), 18);
 
       console.log(`[blockchain]defaultValues: `, defaultValues);
       console.log(`[blockchain]contract: `, contractAddress);
@@ -146,6 +145,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       console.log(`[blockchain]methodName: `, methodName);
       console.log(`[blockchain]contract: `, contract?.callStatic);
       if (!inIframe() && totalFee && balance?.formatted) {
+        console.log(`[blockchain]totalFee: `, totalFee, balance.formatted);
         if (lt(balance.formatted, totalFee)) {
           // dispatch({ type: "SET_TXN_LOADING", payload: 0 });
           throw new Error(
