@@ -230,7 +230,7 @@
         "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png",
         "name": "USDC",
         "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
-        "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
+        "faucet": "0xe67EeCfBc9b9f8Fac825DA31cF421FAE3846dA20",
         "min_amount": 150,
         "is_pol": false
       },
@@ -241,7 +241,7 @@
         "img": "/Chains/ARBITRIUM.png",
         "name": "ARB",
         "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
-        "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f",
+        "faucet": "0x894Ce84237aCB9985e3c9A930C65D202B633E017",
         "min_amount": 150,
         "is_pol": false
       },
@@ -252,7 +252,7 @@
         "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/bfr.png",
         "name": "BFR",
         "pool_address": "0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0",
-        "faucet": "0x968f894a77913171cDfb5dB43AF95B75268c951b",
+        "faucet": "0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5",
         "min_amount": 150,
         "is_pol": false
       }
