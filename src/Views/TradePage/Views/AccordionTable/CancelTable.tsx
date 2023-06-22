@@ -1,58 +1,26 @@
 import BufferTable from '@Views/Common/BufferTable';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom, useAtomValue } from 'jotai';
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
-import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
-import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import { Launch } from '@mui/icons-material';
-import { priceAtom } from '@Hooks/usePrice';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { getPriceFromKlines } from '@TV/useDataFeed';
-import { GreyBtn } from '@Views/Common/V2-Button';
 import {
   DisplayTime,
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
-  getExpiry,
-  getLockedAmount,
-  getProbability,
-  queuedTradeFallBack,
-  tableButtonClasses,
 } from './Common';
-import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { useState } from 'react';
-import { ShowIcon } from '@SVG/Elements/ShowIcon';
-import {
-  OngoingTradeSchema,
-  marketType,
-  poolInfoType,
-} from '@Views/TradePage/type';
-import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
-import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { toFixed } from '@Utils/NumString';
+import { TradeType } from '@Views/TradePage/type';
+import FailureIcon from '@SVG/Elements/FailureIcon';
 
 export const tradesCount = 10;
 
-const priceDecimals = 8;
-
-export const CancelTable: React.FC<{
-  trades: OngoingTradeSchema[];
+export const CancelledTable: React.FC<{
+  trades: TradeType[];
   platform?: boolean;
 }> = ({ trades, platform }) => {
-  const [visualized, setVisualized] = useAtom(visualizeddAtom);
-  const [marketPrice] = useAtom(priceAtom);
-  const cachedPrices = useAtomValue(queuets2priceAtom);
-
   const markets = useMarketsConfig();
-  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const headNameArray = [
     'Asset',
     'Strike Price',
@@ -66,20 +34,15 @@ export const CancelTable: React.FC<{
   enum TableColumn {
     Asset = 0,
     Strike = 1,
-    CurrentPrice = 2,
-    OpenTime = 3,
-    TimeLeft = 4,
-    CloseTime = 5,
-    TradeSize = 6,
-    Probability = 7,
-    Show = 8,
+    TradeSize = 2,
+    QueueTime = 3,
+    CancellationTime = 4,
+    Reason = 5,
+    Status = 6,
   }
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const { cancelHandler, earlyCloseHandler, earlyCloseLoading } =
-    useCancelTradeFunction();
-  const { getPoolInfo } = usePoolInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -93,66 +56,8 @@ export const CancelTable: React.FC<{
       return !!pool;
     });
 
-    const poolContract = tradeMarket?.pools.find(
-      (pool) =>
-        pool.optionContract.toLowerCase() ===
-        trade?.target_contract.toLowerCase()
-    )?.pool;
-    const poolInfo = getPoolInfo(poolContract);
-    const marketPrecision = tradeMarket?.price_precision.toString().length - 1;
-
-    if (!trade || !tradeMarket) return 'Problem';
-    let tradeExpiryTime = getExpiry(trade);
-
-    let currTradePrice = trade.strike;
-    if (trade.state == 'QUEUED') {
-      currTradePrice = cachedPrices?.[trade.queue_id];
-    }
-    const lockedAmmount = getLockedAmount(trade, cachedPrices);
-    earlyCloseLoading?.[trade.queue_id] &&
-      console.log(`OngoingTradesTable-lockedAmmount: `, trade);
-    const distanceObject = Variables(
-      +tradeExpiryTime! - Math.round(Date.now() / 1000)
-    );
-
+    console.log(`CancelTable-trade: `, trade);
     switch (col) {
-      case TableColumn.Show:
-        const isVisualized = visualized.includes(trade.queue_id);
-        return !currTradePrice ? (
-          <GreyBtn
-            className={tableButtonClasses}
-            onClick={() => {
-              cancelHandler(trade, cancelLoading, setCancelLoading);
-            }}
-            isLoading={cancelLoading == trade.queue_id}
-          >
-            Cancel
-          </GreyBtn>
-        ) : (
-          <div className="flex  gap-x-[20px] items-center">
-            <ShowIcon
-              show={!isVisualized}
-              onToggle={() => {
-                if (isVisualized) {
-                  let temp = [...visualized];
-                  temp.splice(visualized.indexOf(trade.queue_id as any), 1);
-                  setVisualized(temp);
-                } else {
-                  setVisualized([...visualized, trade.queue_id]);
-                }
-              }}
-            />
-            <GreyBtn
-              className={tableButtonClasses}
-              onClick={() => {
-                earlyCloseHandler(trade, tradeMarket);
-              }}
-              isLoading={earlyCloseLoading?.[trade.queue_id]}
-            >
-              Close
-            </GreyBtn>{' '}
-          </div>
-        );
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
       case TableColumn.Asset:
@@ -163,38 +68,23 @@ export const CancelTable: React.FC<{
             platform={platform}
           />
         );
-      case TableColumn.CurrentPrice:
-        return (
-          <Display
-            className="!justify-start"
-            data={round(
-              getPriceFromKlines(marketPrice, tradeMarket),
-              marketPrecision
-            )}
-            precision={marketPrecision}
-          />
-        );
-      case TableColumn.OpenTime:
+
+      case TableColumn.QueueTime:
         return (
           // queuedTradeFallBack(trade) || (
           <DisplayTime ts={trade.queued_timestamp} />
           // )
         );
-      case TableColumn.TimeLeft:
-        let currentEpoch = Math.round(new Date().getTime() / 1000);
+      case TableColumn.CancellationTime:
         return (
-          // queuedTradeFallBack(trade, true) || (
-          <div>
-            {distanceObject.distance >= 0
-              ? formatDistanceExpanded(distanceObject)
-              : '00h:00m:00s'}
-          </div>
-          // )
+          <DisplayTime
+            ts={trade.cancellation_timestamp || Math.round(Date.now() / 1000)}
+          />
         );
-      case TableColumn.CloseTime:
+      case TableColumn.Reason:
         return (
+          <div>{trade.canellation_reason || 'Some server issue'}</div>
           // queuedTradeFallBack(trade) || (
-          <DisplayTime ts={tradeExpiryTime} />
           // )
         );
       case TableColumn.TradeSize:
@@ -205,30 +95,22 @@ export const CancelTable: React.FC<{
             unit={'USDC'}
           />
         );
-      case TableColumn.Probability:
-        const probabiliyt = getProbability(
-          trade,
-          +getPriceFromKlines(marketPrice, tradeMarket),
-          tradeExpiryTime
-        );
+      case TableColumn.Status:
         return (
-          // queuedTradeFallBack(trade) || (
-          <div>
-            {probabiliyt ? (
-              <>
-                <Pnl
-                  configData={tradeMarket}
-                  trade={trade}
-                  poolInfo={poolInfo}
-                  lockedAmmount={lockedAmmount}
-                />
-                {toFixed(probabiliyt, 2) + '%'}
-              </>
-            ) : (
-              'Calculating...'
-            )}
-          </div>
-          // )
+          <NumberTooltip content={'The trade is cancelled'}>
+            <div
+              className={`flex  sm:flex-row-reverse items-center justify-between w-max px-2   rounded-[5px] bg-[#282B39]`}
+            >
+              <span
+                className={
+                  'text-f12 font-normal web:mr-2 tab:mx-2 text-[#C3C2D4]'
+                }
+              >
+                Cancelled
+              </span>
+              <FailureIcon width={12} height={12} class />
+            </div>
+          </NumberTooltip>
         );
     }
     return 'Unhandled Body';

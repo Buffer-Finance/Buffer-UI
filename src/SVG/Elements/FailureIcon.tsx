@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 const FailureIcon = (props) => (
   <svg
@@ -7,6 +7,7 @@ const FailureIcon = (props) => (
     viewBox="0 0 13 13"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    {...props}
   >
     <circle cx="6.5" cy="6.5" r="6.5" fill="white" />
     <path
