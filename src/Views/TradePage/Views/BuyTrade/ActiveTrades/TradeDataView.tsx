@@ -76,7 +76,7 @@ export const TradeDataView: React.FC<{
           <RowGap gap="4px">
             <span>Pnl</span>
             <span>|</span>
-            <span className="text-[7px]">probability</span>
+            <span className="text-[10px]">probability</span>
           </RowGap>
         ),
         desc: (
@@ -177,7 +177,7 @@ const Pnl: React.FC<{
   return (
     <RowGap gap="2px" className="!items-end">
       {pnl}
-      <span className="text-[9px] text-[#6F6E84]">
+      <span className="text-[10px] text-[#6F6E84]">
         {probability.toFixed(2)}%
       </span>
     </RowGap>
