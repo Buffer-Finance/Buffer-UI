@@ -95,14 +95,6 @@ export const BuyButtons = ({
           !accountMapping ||
           !accountMapping.oneCT ? (
             <Skeleton className="h4 full-width sr lc mb3" />
-          ) : lt(allowance, amount.toString() || '0') ? (
-            <BlueBtn
-              onClick={() => {
-                account ? setIsApproveModalOpen(true) : openConnectModal?.();
-              }}
-            >
-              Approve
-            </BlueBtn>
           ) : !isAssetActive ? (
             <BlueBtn
               className="text-f13 text-1 text-center"
@@ -114,6 +106,14 @@ export const BuyButtons = ({
           ) : !registeredOneCT ? (
             <BlueBtn onClick={() => setOneCTModal(true)}>
               Activate Account
+            </BlueBtn>
+          ) : lt(allowance, amount.toString() || '0') ? (
+            <BlueBtn
+              onClick={() => {
+                account ? setIsApproveModalOpen(true) : openConnectModal?.();
+              }}
+            >
+              Approve
             </BlueBtn>
           ) : (
             <>
