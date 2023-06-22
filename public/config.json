@@ -231,7 +231,7 @@
         "name": "USDC",
         "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 5,
+        "min_amount": 150,
         "is_pol": false
       },
       "ARB": {
@@ -242,7 +242,7 @@
         "name": "ARB",
         "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
         "faucet": "0x03Aa1E125D68D8F076D329347C220c21975aEf0f",
-        "min_amount": 5,
+        "min_amount": 150,
         "is_pol": false
       },
       "BFR": {
@@ -253,7 +253,7 @@
         "name": "BFR",
         "pool_address": "0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0",
         "faucet": "0x968f894a77913171cDfb5dB43AF95B75268c951b",
-        "min_amount": 5,
+        "min_amount": 150,
         "is_pol": false
       }
     },
