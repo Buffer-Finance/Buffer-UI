@@ -8,7 +8,11 @@ import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
 import { GreyBtn } from '@Views/Common/V2-Button';
-import { OngoingTradeSchema, marketType } from '@Views/TradePage/type';
+import {
+  OngoingTradeSchema,
+  TradeType,
+  marketType,
+} from '@Views/TradePage/type';
 import { Display } from '@Views/Common/Tooltips/Display';
 import InfoIcon from '@SVG/Elements/InfoIcon';
 import {
@@ -41,8 +45,7 @@ export const getProbability = (
 ) => {
   let currentEpoch = Math.round(Date.now() / 1000);
   const IV = 1.2;
-  let expiryTime = +trade.expiration_time;
-  if (expiryTs) expiryTime = expiryTs;
+  let expiryTime = getExpiry(trade);
 
   const probability =
     BlackScholes(
@@ -139,11 +142,7 @@ export const StrikePriceComponent = ({
 }) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
 
-  let strikePrice = trade.strike;
-  const isPriceArrived = cachedPrices?.[trade.queue_id];
-  if (trade.state == 'QUEUED' && isPriceArrived) {
-    strikePrice = cachedPrices?.[trade.queue_id];
-  }
+  const { isPriceArrived, strikePrice } = getStrike(trade, cachedPrices);
   if (!configData) return <></>;
   const decimals = 2;
   return (
@@ -247,5 +246,24 @@ export const TableErrorRow: React.FC<{
       {msg}
       {children}
     </Background>
+  );
+};
+
+export const getExpiry = (trade: OngoingTradeSchema) => {
+  return trade.close_time || trade.queued_timestamp + trade.period;
+};
+export const getStrike = (trade: OngoingTradeSchema, cachedPrice: any) => {
+  let strikePrice = trade.strike;
+  const isPriceArrived = cachedPrice?.[trade.queue_id];
+  if (trade.state == 'QUEUED' && isPriceArrived) {
+    strikePrice = cachedPrice?.[trade.queue_id];
+  }
+
+  return { isPriceArrived, strikePrice };
+};
+
+export const getLockedAmount = (trade: TradeType, cachedPrices: any) => {
+  return (
+    trade.locked_amount || cachedPrices?.[trade.market.tv_id + trade.trade_size]
   );
 };

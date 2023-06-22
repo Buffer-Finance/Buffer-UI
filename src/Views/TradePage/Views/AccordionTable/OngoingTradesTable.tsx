@@ -20,6 +20,8 @@ import {
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
+  getExpiry,
+  getLockedAmount,
   getProbability,
   queuedTradeFallBack,
   tableButtonClasses,
@@ -112,17 +114,19 @@ export const OngoingTradesTable: React.FC<{
     const marketPrecision = tradeMarket?.price_precision.toString().length - 1;
 
     if (!trade || !tradeMarket) return 'Problem';
-    let tradeExpiryTime = trade.expiration_time;
-    if (!tradeExpiryTime) {
-      tradeExpiryTime = trade.queued_timestamp + trade.period;
-    }
+    let tradeExpiryTime = getExpiry(trade);
 
     let currTradePrice = trade.strike;
     if (trade.state == 'QUEUED') {
       currTradePrice = cachedPrices?.[trade.queue_id];
     }
-    const lockedAmmount = cachedPrices?.[tradeMarket.tv_id + trade.trade_size];
-    console.log(`OngoingTradesTable-lockedAmmount: `, lockedAmmount);
+    const lockedAmmount = getLockedAmount(trade, cachedPrices);
+    earlyCloseLoading?.[trade.queue_id] &&
+      console.log(`OngoingTradesTable-lockedAmmount: `, trade);
+    const distanceObject = Variables(
+      +tradeExpiryTime! - Math.round(Date.now() / 1000)
+    );
+
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
@@ -193,9 +197,9 @@ export const OngoingTradesTable: React.FC<{
         return (
           // queuedTradeFallBack(trade, true) || (
           <div>
-            {formatDistanceExpanded(
-              Variables(+tradeExpiryTime! - currentEpoch)
-            )}
+            {distanceObject.distance >= 0
+              ? formatDistanceExpanded(distanceObject)
+              : '00h:00m:00s'}
           </div>
           // )
         );

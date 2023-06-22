@@ -17,6 +17,7 @@ import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import { Call, multicallLinked } from '@Utils/Contract/multiContract';
 import { appConfig } from '@Views/TradePage/config';
 import { getCachedPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { useCancelledTrades } from '@Views/TradePage/Hooks/useCancelledTrades';
 const tables = {
   Trades: 'h',
   'Limit Orders': 'h',
@@ -33,10 +34,11 @@ const AccordionTable: React.FC<any> = ({}) => {
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const priceCache = useAtomValue(queuets2priceAtom);
   const [platformActiveTrades, platformHistoryTrades] = usePlatformTrades();
-  const { activeChain } = useActiveChain();
-  const provider = useProvider({ chainId: activeChain.id });
+  const [canclledTrades] = useCancelledTrades();
+  // const { activeChain } = useActiveChain();
+  // const provider = useProvider({ chainId: activeChain.id });
   const [activeTable, setActiveTable] = useState('Trades');
-  const { address } = useAccount();
+  // const { address } = useAccount();
   const getAugmentedData = async (
     queries: { pair: string; timestamp: number; queueId: number }[],
     lockedAmmountQuery: Call[]
