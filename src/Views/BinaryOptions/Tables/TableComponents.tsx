@@ -48,6 +48,7 @@ import {
   poolInfoType,
 } from '@Views/TradePage/type';
 import { getExpiry } from '@Views/TradePage/Views/AccordionTable/Common';
+import { getPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
@@ -63,30 +64,13 @@ export const getExpireNotification = async (
   poolInfo: poolInfoType
 ) => {
   try {
-    let response;
-
     const query = {
       pair: tradeMarket.tv_id,
       timestamp: getExpiry(currentRow),
     };
     console.log(`TableComponents-query: `, query);
-    response = await axios.post(
-      `https://oracle.buffer-finance-api.link/price/query/`,
-      [query]
-    );
-    console.log(`TableComponents-response: `, response);
-    if (!response.data?.length) {
-      response = await axios.post(
-        `https://oracle.buffer-finance-api.link/price/query/`,
-        [query]
-      );
-    }
-
-    if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
-      return null;
-    }
-
-    const expiryPrice = response.data[0].price.toString();
+    const expiryPrice = await getPrice(query);
+    console.log(`TableComponents-expiryPrice: `, expiryPrice);
     let win = true;
     if (lt(currentRow.strike + '', expiryPrice)) {
       if (currentRow.is_above) {
