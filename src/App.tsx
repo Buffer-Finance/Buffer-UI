@@ -45,6 +45,7 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
+import { isTestnet } from 'config';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -167,6 +168,20 @@ function App() {
   return (
     <>
       <Background>
+        {isTestnet && (
+          <Warning
+            body={
+              <>
+                For a smooth trading experience, please transfer some goerliAETH
+                to address 0xc5A774124960281307428FbeE0452D324911258B.
+              </>
+            }
+            closeWarning={() => {}}
+            shouldAllowClose={false}
+            state={true}
+            className="disclaimer !bg-[#3772FF] !text-[white] !text-f13 !p-2 !text-semibold hover:!brightness-100"
+          />
+        )}
         {graphStatus && (
           <Warning
             body={
