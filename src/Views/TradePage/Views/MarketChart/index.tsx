@@ -2,10 +2,11 @@ import { MultiResolutionChart } from './MultiResolutionChart';
 import { usePrice } from '@Hooks/usePrice';
 import { MarketStatsBar } from './MarketStatsBar';
 import { useAtomValue } from 'jotai';
-import { chartNumberAtom } from '@Views/TradePage/atoms';
+import { chartNumberAtom, isTableShownAtom } from '@Views/TradePage/atoms';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useMemo } from 'react';
+import { isWideTableEnabled } from '@Views/BinaryOptions/UserTrades';
 
 const SidebySideCharts = ({
   indexes,
@@ -29,6 +30,7 @@ const SidebySideCharts = ({
 
 const MarketChart: React.FC<any> = ({}) => {
   usePrice();
+  const isTableExpanded = useAtomValue(isTableShownAtom);
   const v3AppConfig = useMarketsConfig();
   const chartTimes = useAtomValue(chartNumberAtom);
   const { activeMarket } = useActiveMarket();
@@ -69,7 +71,10 @@ const MarketChart: React.FC<any> = ({}) => {
     );
   }
   return (
-    <div className="flex flex-col flex-grow  h-full ">
+    <div
+      className="flex flex-col flex-grow  h-full "
+      style={isTableExpanded ? { resize: 'vertical', overflow: 'auto' } : {}}
+    >
       <MarketStatsBar />
       {chartLayout}
     </div>
