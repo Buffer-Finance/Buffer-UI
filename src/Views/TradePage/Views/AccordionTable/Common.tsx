@@ -249,7 +249,8 @@ export const TableErrorRow: React.FC<{
   );
 };
 
-export const getExpiry = (trade: OngoingTradeSchema) => {
+export const getExpiry = (trade: OngoingTradeSchema, deb?: string) => {
+  deb && console.log('TableComponents-deb-close', trade);
   return trade.close_time || trade.queued_timestamp + trade.period;
 };
 export const getStrike = (trade: OngoingTradeSchema, cachedPrice: any) => {
