@@ -182,9 +182,12 @@ const EditTime: React.FC<{
   }
 
   useEffect(() => {
-    if (inputValue === '') return;
-    if (showCustomInput) onChange(inputValue);
+    if (inputValue === '') {
+      setActiveFrame('m');
+      setInputValue(30);
+    } else if (showCustomInput) onChange(inputValue);
   }, [showCustomInput]);
+
   useEffect(() => {
     if (inputValue === '') return;
     if (activeFrame.trim() === 'h' && inputValue > 24) {
@@ -193,7 +196,7 @@ const EditTime: React.FC<{
   }, [activeFrame]);
 
   useEffect(() => {
-    if (initialValue) {
+    if (initialValue !== '00:00') {
       const [hours, minutes] = initialValue.split(':');
       if (hours === '00' && lte(minutes, '60')) {
         setActiveFrame('m');
@@ -202,10 +205,13 @@ const EditTime: React.FC<{
         setActiveFrame('h');
         setInputValue(+hours);
       }
+    } else {
+      {
+        setActiveFrame('m');
+        setInputValue(30);
+      }
     }
   }, []);
-
-  useEffect(() => {}, [inputValue]);
 
   if (showCustomInput) {
     return (
