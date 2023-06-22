@@ -87,7 +87,7 @@ export const TradeDataView: React.FC<{
         ),
       },
       {
-        head: <span>payout</span>,
+        head: <span>Max Payout</span>,
         desc: (
           <span>
             {toFixed(
