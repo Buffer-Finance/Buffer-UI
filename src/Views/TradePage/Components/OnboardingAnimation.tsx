@@ -3,6 +3,7 @@ import { showOnboardingAnimationAtom } from '../atoms';
 import { Dialog } from '@mui/material';
 import { useEffect, SVGProps } from 'react';
 import BufferLogo from '@Assets/Elements/BufferLogo';
+import BufferAnimation from '@SVG/BufferAnimation';
 
 const duration = 5000;
 // 37
@@ -31,9 +32,14 @@ const ModalChild = () => {
   });
 
   return (
-    <div className="flex flex-col items-center">
-      <BufferLogoBig className="rotate-big-animation" />
-      <div className="text-[55px] text-1 mt-5">Welcome to Buffer</div>
+    <div className="flex w-[100vw] h-[100vh] overflow-hidden items-center  justify-center gap-x-[150px]">
+      <div className="text-1 font-[700]">
+        <div className="text-[85px]">Welcome to</div>
+        <div className="text-[150px] mt-[-44px]">Buffer</div>
+      </div>
+      <div className="loader">
+        <BufferAnimation />
+      </div>
     </div>
   );
 };

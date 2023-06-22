@@ -270,6 +270,7 @@ const OneCTModal: React.FC<any> = ({}) => {
   const toastify = useToast();
   const setOnboardingAnimation = useSetAtom(showOnboardingAnimationAtom);
   const handleRegister = (privateKey?: string) => {
+    console.log(`OneCTModal-oneCtPk: `, oneCtPk);
     if (privateKey || oneCtPk) {
       const oneCTWallet = new ethers.Wallet(
         privateKey || oneCtPk,
@@ -280,6 +281,7 @@ const OneCTModal: React.FC<any> = ({}) => {
         privateKey || oneCtPk,
         provider
       );
+      console.log(`OneCTModal-isOneCTEnabled: `, isOneCTEnabled);
       if (isOneCTEnabled) {
         return toastify({
           msg: 'You have already registered your 1CT Account. You can start 1CT now!',
@@ -390,7 +392,7 @@ const OneCTModal: React.FC<any> = ({}) => {
               className={`${
                 registeredOneCT ? '!bg-green' : ''
               } !w-[120px] px-[15px]`}
-              onClick={handleRegister}
+              onClick={() => handleRegister()}
               isLoading={laoding}
             >
               {registeredOneCT ? (

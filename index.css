@@ -22,9 +22,8 @@ animation-fill-mode: forwards;
 }
 
 .loader {
-  width: 100vw;
-  background: #12131c;
-  height: 100vh;
+  width: min(40vw,500px);
+  /* background: #12131c; */
 }
 .container {
   margin: auto;
