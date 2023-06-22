@@ -21,23 +21,31 @@ msgstr ""
 #~ msgid "<0>{0}</0>"
 #~ msgstr "<0>{0}</0>"
 
-#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:48
-msgid "<0>Max {activeFrame} : {MAX} </0>"
-msgstr "<0>Max {activeFrame} : {MAX} </0>"
+#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:61
+msgid "<0>{err}</0>"
+msgstr "<0>{err}</0>"
 
-#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:66
+#: src/Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker.tsx:157
+msgid "<0>{error}</0>"
+msgstr "<0>{error}</0>"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:48
+#~ msgid "<0>Max {activeFrame} : {MAX} </0>"
+#~ msgstr "<0>Max {activeFrame} : {MAX} </0>"
+
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:67
 msgid "<0>Max trade size is {maxTradeSize} {tokenName}</0>"
 msgstr "<0>Max trade size is {maxTradeSize} {tokenName}</0>"
 
-#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:58
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:59
 msgid "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 msgstr "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 
-#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:33
+#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:38
 msgid "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
 msgstr "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
 
-#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:74
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:75
 msgid "<0>You don't have enough {tokenName}. <1/> </0>"
 msgstr "<0>You don't have enough {tokenName}. <1/> </0>"
 
@@ -69,7 +77,11 @@ msgstr "By enabling \"Partial Fill\" your trade will be partially filled rather 
 msgid "Limit orders expiry time"
 msgstr "Limit orders expiry time"
 
-#: src/Views/TradePage/Views/Settings/NotificationPositionSettings/index.tsx:25
+#: src/Views/TradePage/Views/Settings/MiscSettings.tsx:31
+msgid "Miscellaneous"
+msgstr "Miscellaneous"
+
+#: src/Views/TradePage/Views/Settings/NotificationPositionSettings/index.tsx:37
 msgid "Notification Position"
 msgstr "Notification Position"
 
@@ -81,15 +93,14 @@ msgstr "Partial fill"
 msgid "Premium Features"
 msgstr "Premium Features"
 
-#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:45
+#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:49
 msgid "Price"
 msgstr "Price"
 
-#: src/Views/TradePage/Views/Settings/ResetAllButton.tsx:25
+#: src/Views/TradePage/Views/Settings/ResetAllButton.tsx:32
 msgid "Reset All Settings"
 msgstr "Reset All Settings"
 
-#: src/Views/TradePage/Views/Settings/MiscSettings.tsx:31
 #: src/Views/TradePage/Views/Settings/ShareSettings.tsx:39
 msgid "Share Related Settings"
 msgstr "Share Related Settings"
