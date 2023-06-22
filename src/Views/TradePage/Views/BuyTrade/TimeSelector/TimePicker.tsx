@@ -192,6 +192,8 @@ const EditTime: React.FC<{
     if (inputValue === '') return;
     if (activeFrame.trim() === 'h' && inputValue > 24) {
       onChange(24);
+    } else {
+      onChange(inputValue);
     }
   }, [activeFrame]);
 
