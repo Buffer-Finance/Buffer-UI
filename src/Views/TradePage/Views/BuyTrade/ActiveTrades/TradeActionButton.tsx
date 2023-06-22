@@ -2,35 +2,42 @@ import { toFixed } from '@Utils/NumString';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
 import {
-  OngoingTradeSchema,
-  marketType,
-  poolInfoType,
-} from '@Views/TradePage/type';
+  queuets2priceAtom,
+  selectedOrderToEditAtom,
+} from '@Views/TradePage/atoms';
+import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import styled from '@emotion/styled';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
 import { useState } from 'react';
 import { useEarlyPnl } from './TradeDataView';
+import { getLockedAmount, getStrike } from '../../AccordionTable/Common';
 
 export const TradeActionButton: React.FC<{
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   tradeMarket: marketType;
   poolInfo: poolInfoType;
 }> = ({ trade, tradeMarket, poolInfo }) => {
   const { cancelHandler, earlyCloseHandler, earlyCloseLoading } =
     useCancelTradeFunction();
   const [cancelLoading, setCancelLoading] = useState<null | number>(null);
+  const cachedPrices = useAtomValue(queuets2priceAtom);
+  const { isPriceArrived } = getStrike(trade, cachedPrices);
+
+  const lockedAmmount = getLockedAmount(trade, cachedPrices);
+
   const { earlycloseAmount, isWin } = useEarlyPnl({
     trade,
     configData: tradeMarket,
     poolInfo,
+    lockedAmmount,
   });
 
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
 
-  const isQueued = trade.state === TradeState.Queued;
+  const isLimitQueued = trade.state === TradeState.Queued;
+  const isQueued = isLimitQueued && !isPriceArrived;
   const isLimitOrder = trade.is_limit_order;
 
   const isCancelLoading = cancelLoading === trade.queue_id;
@@ -47,7 +54,7 @@ export const TradeActionButton: React.FC<{
     setSelectedTrade({ trade, market: tradeMarket });
   }
 
-  if (isLimitOrder && isQueued) {
+  if (isLimitOrder && isLimitQueued) {
     return (
       <RowGap gap="4px">
         <CancelButton
