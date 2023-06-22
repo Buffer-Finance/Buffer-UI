@@ -80,7 +80,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
     if (registeredOneCT) {
       OneCTManager = (
         <BlueBtn
-          className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+          className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
           onClick={disableOneCt}
         >
           Deactivate Acount
@@ -94,7 +94,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
             setOneCTModal(true);
           }}
         >
-          {gt(accountMapping[1], '0') ? 'Reregister' : ' Activate'} Acount
+          {gt(accountMapping[1], '0') ? 'Reactivate' : ' Activate'} Acount
         </BlueBtn>
       );
   }

@@ -100,7 +100,7 @@ export const TradeDataView: React.FC<{
         ),
       },
       {
-        head: <span>max payout</span>,
+        head: <span>Max Payout</span>,
         desc: (
           <span>
             {toFixed(divide(lockedAmmount, poolInfo.decimals) as string, 2)}{' '}

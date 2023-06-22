@@ -314,7 +314,7 @@ const OneCTModal: React.FC<any> = ({}) => {
     } else if (!registeredOneCT) return handleRegister();
   };
   useEffect(() => {
-    initializers();
+    // initializers();
   }, [isModalOpen]);
   return (
     <ModalBase

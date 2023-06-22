@@ -467,7 +467,7 @@ export const useBuyTradeActions = (userInput: string) => {
   };
 };
 
-const getPrice = async (query: any): Promise<number> => {
+export const getPrice = async (query: any): Promise<number> => {
   const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
   const priceObject = priceResponse?.data[0]?.price;
   console.log(`[aug]:: `, priceResponse);
