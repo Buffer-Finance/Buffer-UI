@@ -1,5 +1,5 @@
 const CancelTable: React.FC<any> = ({}) => {
-  return;
+  return <div></div>;
 };
 
 export { CancelTable };

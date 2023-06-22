@@ -241,7 +241,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
                             <IconBG
                               onClick={(e) => {
                                 e.preventDefault();
-                                copyToClipboard(account);
+                                copyToClipboard(account.address);
                                 setSnack({
                                   message:
                                     'Account coppied to clipboard Successfully!',
