@@ -12,7 +12,11 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
 import { useState } from 'react';
 import { useEarlyPnl } from './TradeDataView';
-import { getLockedAmount, getStrike } from '../../AccordionTable/Common';
+import {
+  getExpiry,
+  getLockedAmount,
+  getStrike,
+} from '../../AccordionTable/Common';
 
 export const TradeActionButton: React.FC<{
   trade: TradeType;
@@ -40,6 +44,11 @@ export const TradeActionButton: React.FC<{
   const isQueued = isLimitQueued && !isPriceArrived;
   const isLimitOrder = trade.is_limit_order;
 
+  const currentEpoch = Math.round(new Date().getTime() / 1000);
+  const expiration = getExpiry(trade);
+
+  const distance = expiration - currentEpoch;
+
   const isCancelLoading = cancelLoading === trade.queue_id;
   const isEarlyCloseLoading = earlyCloseLoading[trade.queue_id];
   function cancelTrade() {
@@ -59,7 +68,7 @@ export const TradeActionButton: React.FC<{
       <RowGap gap="4px">
         <CancelButton
           onClick={editLimitOrder}
-          disabled={isCancelLoading || isEarlyCloseLoading}
+          disabled={isCancelLoading || isEarlyCloseLoading || distance < 0}
         >
           {isCancelLoading ? <ButtonLoader /> : 'Edit'}
         </CancelButton>
@@ -72,7 +81,7 @@ export const TradeActionButton: React.FC<{
       <>
         <CancelButton
           onClick={cancelTrade}
-          disabled={isCancelLoading || isEarlyCloseLoading}
+          disabled={isCancelLoading || isEarlyCloseLoading || distance < 0}
         >
           {isCancelLoading ? <ButtonLoader /> : 'Cancel'}
         </CancelButton>
@@ -84,7 +93,7 @@ export const TradeActionButton: React.FC<{
       <>
         <CloseAtProfitButton
           onClick={earlyClose}
-          disabled={isCancelLoading || isEarlyCloseLoading}
+          disabled={isCancelLoading || isEarlyCloseLoading || distance < 0}
         >
           {isEarlyCloseLoading ? (
             <ButtonLoader />
@@ -99,7 +108,7 @@ export const TradeActionButton: React.FC<{
   return (
     <CloseAtLossButton
       onClick={earlyClose}
-      disabled={isCancelLoading || isEarlyCloseLoading}
+      disabled={isCancelLoading || isEarlyCloseLoading || distance < 0}
     >
       {isEarlyCloseLoading ? (
         <ButtonLoader />
@@ -122,6 +131,13 @@ const buttonStyle = styled.button`
 
   :hover {
     scale: 1.05;
+  }
+
+  :disabled {
+    scale: 1;
+    cursor: not-allowed;
+    background-color: #282b39;
+    color: rgba(255, 255, 255, 0.6);
   }
 `;
 

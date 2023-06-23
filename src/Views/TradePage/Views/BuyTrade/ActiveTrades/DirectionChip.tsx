@@ -14,7 +14,7 @@ const DirectionChipBackground = styled.div<{ isUp: boolean }>`
   gap: 2px;
 
   .text {
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 400;
     color: ${(props) => (props.isUp ? '#3FB68B' : '#FF5353')};
   }
