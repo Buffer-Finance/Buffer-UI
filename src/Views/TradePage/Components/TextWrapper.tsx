@@ -33,6 +33,7 @@ export const BuyTradeHeadText = styled.div`
 
 export const BuyTradeDescText = styled.div`
   font-size: 16px;
+  padding: 1px 0;
   color: #ffffff;
   font-weight: 500;
 `;

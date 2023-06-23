@@ -50,10 +50,14 @@ export const CurrentPrice: React.FC<{
         </BuyTradeHeadText>
         {tradeType == 'Market' ? (
           <BuyTradeDescText>
-            <Display data={round(price, precision)} precision={precision} />
+            <Display
+              data={round(price, precision)}
+              precision={precision}
+              className="!py-[1px]"
+            />
           </BuyTradeDescText>
         ) : (
-          <StrikePricePicker initialStrike={price} />
+          <StrikePricePicker initialStrike={round(price, precision)} />
         )}
       </RowBetween>
     </CurrentPriceBackground>
@@ -76,7 +80,7 @@ const StrikePricePicker: React.FC<any> = ({
         type="number"
         step={1}
         min={0.0000001}
-        className=" bg-[#282B39] !text-right px-3 py-[3px] rounded-sm w-[70%] outline-none"
+        className=" bg-[#282B39] !text-right px-[1px] py-[1px] rounded-sm w-[70%] outline-none"
         value={strike}
         onChange={(e) => {
           setStrike(e.target.value);
