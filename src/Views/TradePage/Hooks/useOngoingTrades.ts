@@ -30,11 +30,8 @@ const useOngoingTrades = () => {
     {
       fetcher: async () => {
         if (!oneCTWallet) return [[], []] as OngoingTradeSchema[][];
-        console.time('generating-signature');
         const signature = await getSingatureCached(oneCTWallet);
-        console.timeEnd('generating-signature');
-        console.log(`signature: `, signature);
-        // console.log(`ssssignature: `, signature);
+
         const res = await axios.get(`${baseUrl}trades/user/active/`, {
           params: {
             user_signature: signature,
