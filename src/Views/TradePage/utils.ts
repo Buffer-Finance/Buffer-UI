@@ -289,3 +289,10 @@ export const addMarketInTrades = (
     };
   });
 };
+
+export const WaitToast = () => {
+  return {
+    msg: 'Please wait(~5sec) while we are fetching data and try again.',
+    type: 'error',
+  };
+};

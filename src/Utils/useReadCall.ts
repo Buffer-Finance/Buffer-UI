@@ -72,18 +72,15 @@ export const useCall2Data = (contracts: any, swrKey: string) => {
   return useSWR(calls && calls.length ? key : null, {
     fetcher: async () => {
       if (!calls) return null;
-      // console.log(`calls: `, calls);
       let returnData = await multicallLinked(
         calls,
         signerOrProvider,
         configContracts.multicall,
         swrKey + activeChain.id + account
       );
-
-      // console.log(returnData, swrKey, cache.get(key), 'returnData');
       return returnData || cache.get(key);
     },
-    // refreshInterval: 500,
+    refreshInterval: 900,
   });
 };
 
