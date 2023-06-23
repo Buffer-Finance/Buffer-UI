@@ -15,6 +15,22 @@ import { useCall2Data } from '@Utils/useReadCall';
 import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
 import useAccountMapping from './useAccountMapping';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
+import { WaitToast } from '@Views/TradePage/utils';
+
+/*
+ * Nonce is zero initially.
+ * User singes a message with nonce 0 and from the signature, we generate PK.
+ * We store the PK in local storage.
+ *
+ * If user uses the same main account on different hardware, the same PK will be generated,
+ * Hence he doesn't have to do register txn again.
+ *
+ * If user deRegesters the trading account,
+ *  Nonce will be incremented by 1.
+ *  Account Mapping will be updated to zero address
+ * Hence all the hardwares with the same main account will have to register 1CT again with the
+ * new PK generated from incremented nonce
+ */
 
 const registerOneCtMethod = 'registerAccount';
 
@@ -47,18 +63,8 @@ const useOneCTWallet = () => {
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
-  const { data } = useCall2Data(
-    [
-      {
-        address: configData.router,
-        abi: RouterABI,
-        name: 'accountMapping',
-        params: [address],
-      },
-    ],
-    'accountMapping'
-  );
-  const pkLocalStorageIdentifier = 'one-ct-wallet-pk' + address;
+
+  const pkLocalStorageIdentifier = 'signer-account-pk:' + address;
 
   const registeredOneCT = useMemo(() => {
     const isEnabled = res?.length
@@ -96,7 +102,10 @@ const useOneCTWallet = () => {
 
   const generatePk = useCallback(async () => {
     setCreateLoading(true);
-    const message = 'I am creating 1 Click Trading account on Buffer Finance';
+    const nonce = res?.[1];
+    if (!nonce) return toastify(WaitToast());
+    const message =
+      'I am creating 1 Click Trading account on Buffer Finance ' + nonce;
     try {
       const signature = await signer!.signMessage(message);
       const privateKey = ethers.utils.keccak256(signature).slice(2);

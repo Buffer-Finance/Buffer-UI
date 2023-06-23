@@ -68,13 +68,6 @@ export const BuyButtons = ({
 
   if (!poolDetails) return <>Error: Pool not found</>;
 
-  console.log(
-    `BuyButtons-!accountMapping.oneCT: `,
-    !accountMapping?.oneCT,
-    registeredOneCT,
-    provider,
-    oneCtPk
-  );
   return (
     <>
       <ApproveModal
