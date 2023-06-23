@@ -22,6 +22,7 @@ import { IconButton } from '@mui/material';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { OneDayChange } from './OneDayChange';
+import styled from '@emotion/styled';
 
 export const AssetSelectorTable: React.FC = () => {
   const {
@@ -210,32 +211,37 @@ export const AssetSelectorTable: React.FC = () => {
     }
   };
   return (
-    <BufferTable
-      widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
-      headerJSX={HeadFormatter}
-      cols={headers.length}
-      shouldShowMobile
-      tableBodyClass=""
-      className="h-[100%]"
-      rows={updatedArr?.length ?? 0}
-      tableClass={'!w-full'}
-      bodyJSX={BodyFormatter}
-      error={
-        <TableErrorMsg
-          msg="No Assets Found."
-          onClick={() => {}}
-          shouldShowWalletMsg={false}
-        />
-      }
-      loading={!updatedArr}
-      v1
-      isBodyTransparent
-      isHeaderTransparent
-      onRowClick={(rowNumber) => {
-        if (!updatedArr) return;
-        const selectedAsset = updatedArr[rowNumber];
-        addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
-      }}
-    />
+    <AssetSelectorDDBackground>
+      <BufferTable
+        widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
+        headerJSX={HeadFormatter}
+        cols={headers.length}
+        shouldShowMobile
+        rows={updatedArr?.length ?? 0}
+        bodyJSX={BodyFormatter}
+        tableClass="assetSelectorTableWidth"
+        error={
+          <TableErrorMsg
+            msg="No Assets Found."
+            onClick={() => {}}
+            shouldShowWalletMsg={false}
+          />
+        }
+        loading={!updatedArr}
+        isBodyTransparent
+        isHeaderTransparent
+        onRowClick={(rowNumber) => {
+          if (!updatedArr) return;
+          const selectedAsset = updatedArr[rowNumber];
+          addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
+        }}
+      />
+    </AssetSelectorDDBackground>
   );
 };
+
+const AssetSelectorDDBackground = styled.div`
+  .assetSelectorTableWidth {
+    width: min(100vw, 720px);
+  }
+`;
