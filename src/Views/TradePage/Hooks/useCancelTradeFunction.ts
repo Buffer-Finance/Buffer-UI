@@ -11,28 +11,22 @@ import { arrayify } from 'ethers/lib/utils.js';
 import axios from 'axios';
 import { baseUrl } from '../config';
 import { useState } from 'react';
+import { useSetAtom } from 'jotai';
+import { closeLoadingAtom } from '../atoms';
 
 export const useCancelTradeFunction = () => {
   const { address } = useAccount();
   const toastify = useToast();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
+  const setLoading = useSetAtom(closeLoadingAtom);
   const [earlyCloseLoading, setEarlyCloseLoading] = useState<{
     [queued_id: number]: boolean;
   }>({});
-  const cancelHandler = async (
-    trade: OngoingTradeSchema,
-    cancelLoading: number | null,
-    setCancelLoading: (newValue: number | null) => void
-  ) => {
+  const cancelHandler = async (trade: OngoingTradeSchema) => {
     if (!address) return;
-    if (cancelLoading)
-      return toastify({
-        msg: 'Please wait for prev transaction.',
-        type: 'error',
-        id: '232',
-      });
-    setCancelLoading(trade.queue_id);
+
+    setLoading((t) => ({ ...t, [trade.queue_id]: 1 }));
     const signature = await getSingatureCached(oneCTWallet);
     if (!signature)
       return toastify({
@@ -67,7 +61,7 @@ export const useCancelTradeFunction = () => {
         id: '231',
       });
     }
-    setCancelLoading(null);
+    setLoading((t) => ({ ...t, [trade.queue_id]: null }));
   };
 
   const earlyCloseHandler = async (
@@ -75,7 +69,7 @@ export const useCancelTradeFunction = () => {
     tradeMarket: marketType
   ) => {
     const ts = Math.round(Date.now() / 1000);
-    setEarlyCloseLoading((l) => ({ ...l, [trade.queue_id]: true }));
+    setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
     console.log(`ec-[tradeMarket.tv_id, ts, trade.option_id]: `, [
       tradeMarket.tv_id,
       ts,
@@ -98,6 +92,7 @@ export const useCancelTradeFunction = () => {
 
     const res = await axios.get(`${baseUrl}trade/close/`, { params });
     console.log(`res-cancel: `, res);
+    // setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
 
     // setEarlyCloseLoading(null);
   };

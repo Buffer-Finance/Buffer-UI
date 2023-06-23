@@ -34,7 +34,11 @@ import {
   marketType,
   poolInfoType,
 } from '@Views/TradePage/type';
-import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
+import {
+  closeLoadingAtom,
+  queuets2priceAtom,
+  visualizeddAtom,
+} from '@Views/TradePage/atoms';
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { toFixed } from '@Utils/NumString';
@@ -89,8 +93,8 @@ export const OngoingTradesTable: React.FC<{
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const { cancelHandler, earlyCloseHandler, earlyCloseLoading } =
-    useCancelTradeFunction();
+  const { earlyCloseHandler } = useCancelTradeFunction();
+  const earlyCloseLoading = useAtomValue(closeLoadingAtom);
   const { getPoolInfo } = usePoolInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
@@ -121,8 +125,6 @@ export const OngoingTradesTable: React.FC<{
       currTradePrice = cachedPrices?.[trade.queue_id];
     }
     const lockedAmmount = getLockedAmount(trade, cachedPrices);
-    earlyCloseLoading?.[trade.queue_id] &&
-      console.log(`OngoingTradesTable-lockedAmmount: `, trade);
     const distanceObject = Variables(
       +tradeExpiryTime! - Math.round(Date.now() / 1000)
     );
@@ -130,17 +132,7 @@ export const OngoingTradesTable: React.FC<{
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
-        return !currTradePrice ? (
-          <GreyBtn
-            className={tableButtonClasses}
-            onClick={() => {
-              cancelHandler(trade, cancelLoading, setCancelLoading);
-            }}
-            isLoading={cancelLoading == trade.queue_id}
-          >
-            Cancel
-          </GreyBtn>
-        ) : distanceObject.distance >= 0 ? (
+        return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
             <ShowIcon
               show={!isVisualized}
@@ -156,10 +148,11 @@ export const OngoingTradesTable: React.FC<{
             />
             <GreyBtn
               className={tableButtonClasses}
+              isDisabled={!trade.option_id}
               onClick={() => {
                 earlyCloseHandler(trade, tradeMarket);
               }}
-              isLoading={earlyCloseLoading?.[trade.queue_id]}
+              isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
             >
               Close
             </GreyBtn>{' '}

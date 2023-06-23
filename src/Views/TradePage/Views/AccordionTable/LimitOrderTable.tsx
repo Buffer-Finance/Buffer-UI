@@ -1,6 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import {
   getDisplayDate,
@@ -25,7 +25,10 @@ import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useToast } from '@Contexts/Toast';
-import { selectedOrderToEditAtom } from '@Views/TradePage/atoms';
+import {
+  closeLoadingAtom,
+  selectedOrderToEditAtom,
+} from '@Views/TradePage/atoms';
 import { cancelQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
 import {
   StrikePriceComponent,
@@ -63,17 +66,14 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
   const [marketPrice] = useAtom(priceAtom);
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const markets = useMarketsConfig();
+  const cancelLoading = useAtomValue(closeLoadingAtom);
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const { activeChain } = useActiveChain();
 
-  const { address } = useAccount();
-  const toastify = useToast();
-  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const { cancelHandler } = useCancelTradeFunction();
   const handleCancel = async (trade: OngoingTradeSchema) => {
-    cancelHandler(trade, cancelLoading, setCancelLoading);
+    cancelHandler(trade);
   };
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -134,7 +134,7 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
             <GreyBtn
               className={tableButtonClasses}
               onClick={() => handleCancel(trade)}
-              isLoading={cancelLoading == trade.queue_id}
+              isLoading={cancelLoading?.[trade.queue_id] == 1}
             >
               Cancel
             </GreyBtn>
