@@ -57,7 +57,10 @@ export const CurrentPrice: React.FC<{
             />
           </BuyTradeDescText>
         ) : (
-          <StrikePricePicker initialStrike={round(price, precision)} />
+          <StrikePricePicker
+            initialStrike={round(price, precision)}
+            precision={precision}
+          />
         )}
       </RowBetween>
     </CurrentPriceBackground>
@@ -66,8 +69,10 @@ export const CurrentPrice: React.FC<{
 
 const StrikePricePicker: React.FC<any> = ({
   initialStrike,
+  precision,
 }: {
   initialStrike: string;
+  precision: number;
 }) => {
   const [strike, setStrike] = useAtom(limitOrderStrikeAtom);
   useEffect(() => {
@@ -78,12 +83,12 @@ const StrikePricePicker: React.FC<any> = ({
     <BuyTradeDescText className=" flex justify-end w-fit">
       <input
         type="number"
-        step={1}
-        min={0.0000001}
+        pattern="^\d*(\.\d{0,2})?$"
+        // min={0.001}
         className=" bg-[#282B39] !text-right px-[1px] py-[1px] rounded-sm w-[70%] outline-none"
         value={strike}
         onChange={(e) => {
-          setStrike(e.target.value);
+          setStrike(round(e.target.value, precision));
         }}
       />
     </BuyTradeDescText>
