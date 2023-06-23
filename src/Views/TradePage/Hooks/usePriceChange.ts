@@ -1,19 +1,17 @@
 import useSWR from 'swr';
 import { marketsForChart, pricePublisherBaseUrl } from '../config';
 import axios from 'axios';
-import { PriceQuerySchema } from 'src/Interfaces/interfaces';
 // 25 - 41
 const usePriceChange = () => {
-  const { data, error } = useSWR('24h-change', {
+  const { data } = useSWR('24h-change', {
     fetcher: async () => {
       const nowEpoch = Math.round(Date.now() / 1000) - 3;
       const yesterdayEpoch = nowEpoch - 60 * 60 * 24;
-      let queries: PriceQuerySchema[] = [];
+      const queries = [];
       for (const marketName in marketsForChart) {
         const market = (marketsForChart as any)[marketName];
-        queries = [
-          ...queries,
-          ...[
+        queries.push(
+          axios.post(pricePublisherBaseUrl, [
             {
               pair: market.tv_id,
               timestamp: nowEpoch,
@@ -22,40 +20,27 @@ const usePriceChange = () => {
               pair: market.tv_id,
               timestamp: yesterdayEpoch,
             },
-          ],
-        ];
+          ])
+        );
       }
-      const response = await axios.post(pricePublisherBaseUrl, queries);
+      console.time('for-fetching-change');
+      const response = await Promise.all(queries);
+      console.timeEnd('for-fetching-change');
       const finalResponse: {
         [key: string]: {
           now: number;
           yesterday: number;
-          change?: number;
+          change: number;
         };
       } = {};
-
-      console.log(`response: `, response);
-      response.data.forEach((res) => {
-        if (!finalResponse?.[res.pair]) {
-          finalResponse[res.pair] = {};
-        }
-        if (res.timestamp == nowEpoch) {
-          finalResponse[res.pair].now = res.price;
-        } else {
-          finalResponse[res.pair].yesterday = res.price;
-        }
+      response.forEach((res) => {
+        finalResponse[res.data[0].pair] = {
+          now: res.data[0].price,
+          yesterday: res.data[1].price,
+          change:
+            ((res.data[0].price - res.data[1].price) / res.data[1].price) * 100,
+        };
       });
-      console.log(`finalResponse: `, finalResponse);
-      for (const key in finalResponse) {
-        if (finalResponse[key].now && finalResponse[key].yesterday) {
-          finalResponse[key].change =
-            ((finalResponse[key].now - finalResponse[key].yesterday) /
-              finalResponse[key].yesterday) *
-            100;
-        }
-      }
-      console.log(`finalResponse: `, finalResponse);
-
       return finalResponse;
     },
     refreshInterval: 1000 * 60 * 5,
@@ -66,7 +51,6 @@ const usePriceChange = () => {
   // for each market, add 2 req, one of now, one of now - 24h.
 
   // when response arrived, calculate the change
-  console.log(`error: `, error);
 
   return data;
 };
