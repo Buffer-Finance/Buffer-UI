@@ -48,6 +48,7 @@ export const TradeActionButton: React.FC<{
 
   const distance = expiration - currentEpoch;
   const isTradeExpired = distance < 0;
+  const isLimitOrderExpired = currentEpoch > trade.limit_order_expiration;
 
   const isCancelLoading = earlyCloseLoading?.[trade.queue_id] === 1;
   const isEarlyCloseLoading = earlyCloseLoading?.[trade.queue_id] === 2;
@@ -66,7 +67,7 @@ export const TradeActionButton: React.FC<{
   if (isLimitOrder && isLimitQueued) {
     return (
       <RowGap gap="4px">
-        {isTradeExpired ? (
+        {isLimitOrderExpired ? (
           <CancelButton
             disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
           >
