@@ -16,12 +16,16 @@ import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
-import { marketType } from '@Views/TradePage/type';
+import { AssetCategory, marketType } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import { IconButton } from '@mui/material';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useMemo } from 'react';
 import { OneDayChange } from './OneDayChange';
+import styled from '@emotion/styled';
+import { ForexTimingsModalAtom } from '@Views/TradePage/atoms';
+import { ColumnGap } from '@Views/TradePage/Components/Column';
+import { CloseTag } from './CloseTag';
 
 export const AssetSelectorTable: React.FC = () => {
   const {
@@ -30,6 +34,8 @@ export const AssetSelectorTable: React.FC = () => {
     removeFavouriteMarket,
     navigateToMarket,
   } = useFavouriteMarkets();
+  const setForexTimingsModal = useSetAtom(ForexTimingsModalAtom);
+
   const { getSelectedPoolNotPol } = useAssetSelectorPool();
   const { getChartMarketData } = useChartMarketData();
   const { getPoolInfo } = usePoolInfo();
@@ -74,7 +80,7 @@ export const AssetSelectorTable: React.FC = () => {
   const { filteredMarkets: updatedArr } = useAssetTableFilters();
 
   const BodyFormatter = (row: number, col: number) => {
-    if (!updatedArr) return <></>;
+    if (!updatedArr) return <>-</>;
     const currentAsset: marketType = updatedArr[row];
     const pairName = joinStrings(currentAsset.token0, currentAsset.token1, '-');
 
@@ -92,7 +98,7 @@ export const AssetSelectorTable: React.FC = () => {
     }
     const price = getPriceFromKlines(marketPrice, chartMarket);
 
-    if (!selectedPool || !readcallData) return <></>;
+    if (!selectedPool || !readcallData) return <>-</>;
 
     const poolInfo = getPoolInfo(selectedPool.pool);
     const payout = readcallData?.settlementFees[selectedPool?.optionContract];
@@ -112,6 +118,18 @@ export const AssetSelectorTable: React.FC = () => {
       assetPrices?.[joinStrings(currentAsset.token0, currentAsset.token1, '')]
         ?.change ?? 0
     ).toFixed(2);
+
+    const isForex =
+      currentAsset.category === AssetCategory[AssetCategory.Forex];
+
+    const isOpen = useMemo(() => {
+      if (!isForex && readcallData && !readcallData.isInCreationWindow)
+        return false;
+      const currentPool = currentAsset.pools.find((pool) => {
+        return pool.pool === selectedPool.pool;
+      });
+      return !currentPool?.isPaused;
+    }, [selectedPool, currentAsset, readcallData]);
 
     switch (col) {
       case 0:
@@ -141,6 +159,19 @@ export const AssetSelectorTable: React.FC = () => {
         );
 
       case 2:
+        if (!isOpen)
+          return (
+            <ColumnGap gap="4px">
+              <CloseTag />
+              {isForex && (
+                <ShowTimingModalButton
+                  onClick={() => setForexTimingsModal(true)}
+                >
+                  Schedule
+                </ShowTimingModalButton>
+              )}
+            </ColumnGap>
+          );
         return (
           <CellContent
             content={[
@@ -159,6 +190,8 @@ export const AssetSelectorTable: React.FC = () => {
           />
         );
       case 3:
+        if (!isOpen) return <>-</>;
+
         return (
           <CellContent
             content={[
@@ -169,6 +202,8 @@ export const AssetSelectorTable: React.FC = () => {
           />
         );
       case 4:
+        if (!isOpen) return <>-</>;
+
         return (
           <CellContent
             content={[
@@ -181,6 +216,8 @@ export const AssetSelectorTable: React.FC = () => {
           />
         );
       case 5:
+        if (!isOpen) return <>-</>;
+
         return (
           <CellContent
             content={[
@@ -193,6 +230,8 @@ export const AssetSelectorTable: React.FC = () => {
           />
         );
       case 6:
+        if (!isOpen) return <>-</>;
+
         return (
           <CellContent
             content={[
@@ -210,32 +249,48 @@ export const AssetSelectorTable: React.FC = () => {
     }
   };
   return (
-    <BufferTable
-      widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
-      headerJSX={HeadFormatter}
-      cols={headers.length}
-      shouldShowMobile
-      tableBodyClass=""
-      className="h-[100%]"
-      rows={updatedArr?.length ?? 0}
-      tableClass={'!w-full'}
-      bodyJSX={BodyFormatter}
-      error={
-        <TableErrorMsg
-          msg="No Assets Found."
-          onClick={() => {}}
-          shouldShowWalletMsg={false}
-        />
-      }
-      loading={!updatedArr}
-      v1
-      isBodyTransparent
-      isHeaderTransparent
-      onRowClick={(rowNumber) => {
-        if (!updatedArr) return;
-        const selectedAsset = updatedArr[rowNumber];
-        addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
-      }}
-    />
+    <AssetSelectorDDBackground>
+      <BufferTable
+        widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
+        headerJSX={HeadFormatter}
+        cols={headers.length}
+        shouldShowMobile
+        rows={updatedArr?.length ?? 0}
+        bodyJSX={BodyFormatter}
+        tableClass="assetSelectorTableWidth"
+        error={
+          <TableErrorMsg
+            msg="No Assets Found."
+            onClick={() => {}}
+            shouldShowWalletMsg={false}
+          />
+        }
+        loading={!updatedArr}
+        isBodyTransparent
+        isHeaderTransparent
+        onRowClick={(rowNumber) => {
+          if (!updatedArr) return;
+          const selectedAsset = updatedArr[rowNumber];
+          addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
+        }}
+      />
+    </AssetSelectorDDBackground>
   );
 };
+
+const AssetSelectorDDBackground = styled.div`
+  .assetSelectorTableWidth {
+    width: min(100vw, 720px);
+  }
+`;
+
+const ShowTimingModalButton = styled.button`
+  color: #808191;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-size: 10px;
+  width: fit-content;
+`;

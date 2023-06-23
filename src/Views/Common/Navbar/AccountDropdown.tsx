@@ -28,9 +28,7 @@ interface IProps {
 import ETHImage from '../../../../public/tokens/ETH.png';
 import DDArrow from '@SVG/Elements/Arrow';
 import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
-import { SettingsIcon } from './SettingsIcon';
 import NFTtier from '../NFTtier';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import WalletIcon from '@SVG/Elements/WalletIcon';
 import { gt } from '@Utils/NumString/stringArithmatics';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
@@ -64,8 +62,6 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   const { address } = useUserAccount();
   const { oneCtPk, disableOneCt, registeredOneCT, accountMapping } =
     useOneCTWallet();
-  console.log(`AccountDropdown-accountMapping: `, accountMapping);
-  console.log(`index-edit-deb-pk: `, oneCtPk);
 
   const provider = useProvider({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
@@ -80,7 +76,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
     if (registeredOneCT) {
       OneCTManager = (
         <BlueBtn
-          className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+          className="!ml-[13px] !text-f12 !bg-[#2C2C41] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
           onClick={disableOneCt}
         >
           Deactivate Acount
@@ -94,7 +90,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
             setOneCTModal(true);
           }}
         >
-          {gt(accountMapping[1], '0') ? 'Reregister' : ' Activate'} Acount
+          {gt(accountMapping[1], '0') ? 'Reactivate' : ' Activate'} Acount
         </BlueBtn>
       );
   }

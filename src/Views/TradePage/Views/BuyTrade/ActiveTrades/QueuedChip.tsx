@@ -8,7 +8,7 @@ const QueuedChipBackground = styled.div`
   padding: 1px 5px;
   border-radius: 3px;
 
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 400;
 `;
 

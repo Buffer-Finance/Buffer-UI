@@ -20,6 +20,8 @@ import {
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
+  getExpiry,
+  getLockedAmount,
   getProbability,
   queuedTradeFallBack,
   tableButtonClasses,
@@ -32,7 +34,11 @@ import {
   marketType,
   poolInfoType,
 } from '@Views/TradePage/type';
-import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
+import {
+  closeLoadingAtom,
+  queuets2priceAtom,
+  visualizeddAtom,
+} from '@Views/TradePage/atoms';
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { toFixed } from '@Utils/NumString';
@@ -87,8 +93,8 @@ export const OngoingTradesTable: React.FC<{
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const { cancelHandler, earlyCloseHandler, earlyCloseLoading } =
-    useCancelTradeFunction();
+  const { earlyCloseHandler } = useCancelTradeFunction();
+  const earlyCloseLoading = useAtomValue(closeLoadingAtom);
   const { getPoolInfo } = usePoolInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
@@ -112,31 +118,21 @@ export const OngoingTradesTable: React.FC<{
     const marketPrecision = tradeMarket?.price_precision.toString().length - 1;
 
     if (!trade || !tradeMarket) return 'Problem';
-    let tradeExpiryTime = trade.expiration_time;
-    if (!tradeExpiryTime) {
-      tradeExpiryTime = trade.queued_timestamp + trade.period;
-    }
+    let tradeExpiryTime = getExpiry(trade);
 
     let currTradePrice = trade.strike;
     if (trade.state == 'QUEUED') {
       currTradePrice = cachedPrices?.[trade.queue_id];
     }
-    const lockedAmmount = cachedPrices?.[tradeMarket.tv_id + trade.trade_size];
-    console.log(`OngoingTradesTable-lockedAmmount: `, lockedAmmount);
+    const lockedAmmount = getLockedAmount(trade, cachedPrices);
+    const distanceObject = Variables(
+      +tradeExpiryTime! - Math.round(Date.now() / 1000)
+    );
+
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
-        return !currTradePrice ? (
-          <GreyBtn
-            className={tableButtonClasses}
-            onClick={() => {
-              cancelHandler(trade, cancelLoading, setCancelLoading);
-            }}
-            isLoading={cancelLoading == trade.queue_id}
-          >
-            Cancel
-          </GreyBtn>
-        ) : (
+        return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
             <ShowIcon
               show={!isVisualized}
@@ -152,14 +148,17 @@ export const OngoingTradesTable: React.FC<{
             />
             <GreyBtn
               className={tableButtonClasses}
+              isDisabled={!trade.option_id}
               onClick={() => {
                 earlyCloseHandler(trade, tradeMarket);
               }}
-              isLoading={earlyCloseLoading?.[trade.queue_id]}
+              isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
             >
               Close
             </GreyBtn>{' '}
           </div>
+        ) : (
+          'Processing...'
         );
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
@@ -193,9 +192,9 @@ export const OngoingTradesTable: React.FC<{
         return (
           // queuedTradeFallBack(trade, true) || (
           <div>
-            {formatDistanceExpanded(
-              Variables(+tradeExpiryTime! - currentEpoch)
-            )}
+            {distanceObject.distance >= 0
+              ? formatDistanceExpanded(distanceObject)
+              : '00h:00m:00s'}
           </div>
           // )
         );

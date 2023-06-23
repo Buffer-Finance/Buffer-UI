@@ -19,3 +19,8 @@ export interface BN {
   eq: (num: Big | string) => boolean;
   toFixed: (num: number) => string;
 }
+
+export interface PriceQuerySchema {
+  pair: string;
+  timestamp: number;
+}

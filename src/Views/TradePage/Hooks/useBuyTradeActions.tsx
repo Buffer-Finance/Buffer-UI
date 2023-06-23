@@ -358,6 +358,8 @@ export const useBuyTradeActions = (userInput: string) => {
           params: apiParams,
         }
       );
+      setLoading(null);
+
       if (!customTrade.limitOrderExpiry) {
         getLockedAmount(
           baseArgs[ArgIndex.Strike],
@@ -419,7 +421,6 @@ export const useBuyTradeActions = (userInput: string) => {
           </div>
         </div>
       );
-      console.log(`useBuyTradeActions-toastify: `, toastify);
       toastify({
         price,
         type: 'success',
@@ -427,11 +428,9 @@ export const useBuyTradeActions = (userInput: string) => {
         body: null,
         msg: content,
       });
-      console.log(`useBuyTradeActions-resp: `, resp);
       // } catch (e) {
       //   con
       // }
-      setLoading(null);
     }
   };
 
@@ -468,7 +467,7 @@ export const useBuyTradeActions = (userInput: string) => {
   };
 };
 
-const getPrice = async (query: any): Promise<number> => {
+export const getPrice = async (query: any): Promise<number> => {
   const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
   const priceObject = priceResponse?.data[0]?.price;
   console.log(`[aug]:: `, priceResponse);

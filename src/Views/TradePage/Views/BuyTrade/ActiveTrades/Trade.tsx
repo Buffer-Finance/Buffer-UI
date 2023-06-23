@@ -15,7 +15,10 @@ import { joinStrings } from '@Views/TradePage/utils';
 import { TradeTimeElapsed } from './TradeTimeElapsed';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { CountDown } from './CountDown';
-import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { OngoingTradeSchema, TradeType } from '@Views/TradePage/type';
+import { getExpiry, getStrike } from '../../AccordionTable/Common';
+import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { useAtomValue } from 'jotai';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -24,17 +27,10 @@ const TradeCardBackground = styled.div`
   margin-top: 8px;
 `;
 
-export const TradeCard = ({ trade }: { trade: OngoingTradeSchema }) => {
-  const markets = useMarketsConfig();
+export const TradeCard = ({ trade }: { trade: TradeType }) => {
+  console.log('tradeTradeCard', trade);
   const { getPoolInfo } = usePoolInfo();
-  const tradeMarket = markets?.find((pair) => {
-    const pool = pair.pools.find(
-      (pool) =>
-        pool.optionContract.toLowerCase() ===
-        trade?.target_contract.toLowerCase()
-    );
-    return !!pool;
-  });
+  const tradeMarket = trade.market;
 
   if (!tradeMarket) return <>Error</>;
   const poolContract = tradeMarket.pools.find(
@@ -68,7 +64,6 @@ export const TradeCard = ({ trade }: { trade: OngoingTradeSchema }) => {
       </div>
 
       <TradeDataView
-        isQueued={isQueued}
         trade={trade}
         poolInfo={poolInfo}
         configData={tradeMarket}
@@ -82,10 +77,15 @@ export const TradeCard = ({ trade }: { trade: OngoingTradeSchema }) => {
   );
 };
 
-const TimerChip = ({ trade }: { trade: OngoingTradeSchema }) => {
-  const isQueued = trade.state === TradeState.Queued;
+const TimerChip = ({ trade }: { trade: TradeType }) => {
   const isLimitOrder = trade.is_limit_order;
-  if (isLimitOrder && isQueued) {
+  const expiry = getExpiry(trade);
+  const cachedPrices = useAtomValue(queuets2priceAtom);
+
+  const { isPriceArrived } = getStrike(trade, cachedPrices);
+  const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
+
+  if (isLimitOrder && trade.state === TradeState.Queued) {
     return (
       <RowGap gap="4px">
         <CountDown expiration={trade.limit_order_expiration} /> <OrderExpiry />
@@ -95,5 +95,5 @@ const TimerChip = ({ trade }: { trade: OngoingTradeSchema }) => {
   if (isQueued) {
     return <QueuedChip />;
   }
-  return <CountDown expiration={trade.expiration_time} />;
+  return <CountDown expiration={expiry} />;
 };

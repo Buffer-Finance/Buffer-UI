@@ -8,7 +8,7 @@ export const StrikePrice: React.FC<{ slippage: number; strike: string }> = ({
   return (
     <RowGap gap="4px">
       <div className="text-1">{strike}</div>
-      <RowGap gap="4px" className="text-[8px]">
+      <RowGap gap="4px" className="text-[10px]">
         <svg
           width="4"
           height="6"

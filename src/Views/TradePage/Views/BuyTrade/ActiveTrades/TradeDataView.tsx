@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { DataCol } from './DataCol';
 import {
   OngoingTradeSchema,
+  TradeType,
   marketType,
   poolInfoType,
 } from '@Views/TradePage/type';
@@ -17,16 +18,29 @@ import { CurrentPrice } from './CurrentPrice';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import React, { useMemo } from 'react';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
-import { getProbability } from '../../AccordionTable/Common';
+import {
+  getExpiry,
+  getLockedAmount,
+  getProbability,
+  getStrike,
+} from '../../AccordionTable/Common';
 import { secondsToHHMM } from '@Views/TradePage/utils';
+import { useAtomValue } from 'jotai';
+import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
 
 export const TradeDataView: React.FC<{
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   configData: marketType;
   poolInfo: poolInfoType;
-  isQueued: boolean;
   className?: string;
-}> = ({ trade, configData, poolInfo, isQueued, className = '' }) => {
+}> = ({ trade, configData, poolInfo, className = '' }) => {
+  const cachedPrices = useAtomValue(queuets2priceAtom);
+  const { isPriceArrived } = getStrike(trade, cachedPrices);
+  const lockedAmmount = getLockedAmount(trade, cachedPrices);
+
+  const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
+
   let TradeData = [
     {
       head: <span>Strike Price</span>,
@@ -63,7 +77,7 @@ export const TradeDataView: React.FC<{
           <RowGap gap="4px">
             <span>Pnl</span>
             <span>|</span>
-            <span className="text-[7px]">probability</span>
+            <span className="text-[10px]">probability</span>
           </RowGap>
         ),
         desc: (
@@ -87,19 +101,16 @@ export const TradeDataView: React.FC<{
         ),
       },
       {
-        head: <span>payout</span>,
+        head: <span>Max Payout</span>,
         desc: (
           <span>
-            {toFixed(
-              divide(trade.locked_amount, poolInfo.decimals) as string,
-              2
-            )}{' '}
+            {toFixed(divide(lockedAmmount, poolInfo.decimals) as string, 2)}{' '}
             {poolInfo.token}
           </span>
         ),
       },
     ];
-  if (trade.is_limit_order && isQueued) {
+  if (trade.is_limit_order && trade.state === TradeState.Queued) {
     TradeData = [
       {
         head: <span>Trigger Price</span>,
@@ -147,23 +158,30 @@ const TradeDataViewBackground = styled.div`
 `;
 
 const Pnl: React.FC<{
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   poolInfo: poolInfoType;
   configData: marketType;
 }> = ({ trade, poolInfo, configData }) => {
+  const cachedPrices = useAtomValue(queuets2priceAtom);
+  const currentEpoch = Math.round(new Date().getTime() / 1000);
+  const expiration = getExpiry(trade);
+  const isExpired = currentEpoch > expiration;
+  const lockedAmmount = getLockedAmount(trade, cachedPrices);
   const { earlycloseAmount, isWin, probability } = useEarlyPnl({
     trade,
     poolInfo,
     configData,
+    lockedAmmount,
   });
   let pnl = <span className="text-red">{toFixed(earlycloseAmount, 2)}</span>;
   if (isWin) {
     pnl = <span className="text-green">+{toFixed(earlycloseAmount, 2)}</span>;
   }
+  if (isExpired) return <>Calculating...</>;
   return (
     <RowGap gap="2px" className="!items-end">
       {pnl}
-      <span className="text-[9px] text-[#6F6E84]">
+      <span className="text-[10px] text-[#6F6E84]">
         {probability.toFixed(2)}%
       </span>
     </RowGap>
@@ -176,7 +194,7 @@ export const useEarlyPnl = ({
   configData,
   lockedAmmount,
 }: {
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   poolInfo: poolInfoType;
   configData: marketType;
   lockedAmmount?: string;

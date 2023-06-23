@@ -166,7 +166,7 @@ const BufferAnimation = () => {
         </g>
         <path
           id="Vector_20"
-          fill="#86E2EA"
+          fill="#3772FF"
           d="M107.896 157.477c.67-.337.941-1.154.605-1.825a1.357 1.357 0 10-2.427 1.219 1.357 1.357 0 001.822.606z"
           opacity="0.59"
         ></path>
@@ -197,14 +197,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -215,14 +215,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -233,14 +233,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -251,14 +251,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -269,14 +269,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -287,14 +287,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -305,14 +305,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -323,14 +323,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -341,14 +341,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -359,14 +359,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -377,14 +377,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -395,14 +395,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -413,14 +413,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -431,14 +431,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.007 185.04) scale(366.608 366.767)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -449,14 +449,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.507 184.133) scale(366.616 366.775)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -467,14 +467,14 @@ const BufferAnimation = () => {
           gradientTransform="matrix(-93.04775 354.60129 -354.75412 -93.08785 238.918 183.943)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -485,14 +485,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.504 184.133) scale(366.601 366.756)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -503,14 +503,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.504 184.134) scale(366.599 366.757)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -521,14 +521,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.508 184.134) scale(366.618 366.776)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -539,14 +539,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.51 184.138) scale(366.631 366.792)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -557,14 +557,14 @@ const BufferAnimation = () => {
           gradientTransform="matrix(-93.03861 354.56647 -354.7193 -93.07872 238.895 183.943)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -575,14 +575,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.496 184.118) scale(366.568 366.727)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -593,14 +593,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.503 184.128) scale(366.601 366.76)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -611,14 +611,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.505 184.129) scale(366.61 366.77)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -629,14 +629,14 @@ const BufferAnimation = () => {
           gradientTransform="matrix(-93.04674 354.59742 -354.75121 -93.0871 238.918 183.94)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -647,14 +647,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.512 184.123) scale(366.586 366.745)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -665,14 +665,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.508 184.128) scale(366.618 366.777)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -683,14 +683,14 @@ const BufferAnimation = () => {
           gradientTransform="matrix(-93.04953 354.60806 -354.75799 -93.08887 238.919 183.943)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -701,14 +701,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.509 184.129) scale(366.603 366.763)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -719,14 +719,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.509 184.129) scale(366.593 366.751)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -737,14 +737,14 @@ const BufferAnimation = () => {
           gradientTransform="matrix(-93.04851 354.6042 -354.75799 -93.08887 238.919 183.942)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <radialGradient
@@ -755,14 +755,14 @@ const BufferAnimation = () => {
           gradientTransform="rotate(104.703 48.514 184.128) scale(366.629 366.786)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.219" stopColor="#00A5FF"></stop>
-          <stop offset="0.311" stopColor="#0081C7"></stop>
-          <stop offset="0.409" stopColor="#005F93"></stop>
-          <stop offset="0.509" stopColor="#004266"></stop>
-          <stop offset="0.608" stopColor="#002A41"></stop>
-          <stop offset="0.707" stopColor="#001825"></stop>
-          <stop offset="0.805" stopColor="#000A10"></stop>
-          <stop offset="0.903" stopColor="#000304"></stop>
+          <stop offset="0.219" stopColor="#3772FF"></stop>
+          <stop offset="0.311" stopColor="#3772FF"></stop>
+          <stop offset="0.409" stopColor="#3772FF"></stop>
+          <stop offset="0.509" stopColor="#3772FF"></stop>
+          <stop offset="0.608" stopColor="#3772FF"></stop>
+          <stop offset="0.707" stopColor="#3772FF"></stop>
+          <stop offset="0.805" stopColor="#3772FF"></stop>
+          <stop offset="0.903" stopColor="#3772FF"></stop>
           <stop offset="1"></stop>
         </radialGradient>
         <linearGradient
@@ -773,9 +773,9 @@ const BufferAnimation = () => {
           y2="179.205"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.27" stopColor="#2AAFCC"></stop>
-          <stop offset="0.391" stopColor="#2AAFCC"></stop>
-          <stop offset="0.592" stopColor="#47C8E4"></stop>
+          <stop offset="0.27" stopColor="#3772FF"></stop>
+          <stop offset="0.391" stopColor="#3772FF"></stop>
+          <stop offset="0.592" stopColor="#3c72f1"></stop>
         </linearGradient>
       </defs>
     </svg>

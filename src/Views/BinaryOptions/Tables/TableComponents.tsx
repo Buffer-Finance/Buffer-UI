@@ -47,6 +47,8 @@ import {
   marketType,
   poolInfoType,
 } from '@Views/TradePage/type';
+import { getExpiry } from '@Views/TradePage/Views/AccordionTable/Common';
+import { getPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
@@ -61,91 +63,78 @@ export const getExpireNotification = async (
   ) => void,
   poolInfo: poolInfoType
 ) => {
-  let response;
-
-  const query = {
-    pair: tradeMarket.tv_id,
-    timestamp: currentRow.expiration_time,
-  };
-  console.log(`TableComponents-query: `, query);
-  response = await axios.post(
-    `https://oracle.buffer-finance-api.link/price/query/`,
-    [query]
-  );
-  console.log(`TableComponents-response: `, response);
-  if (!response.data?.length) {
-    response = await axios.post(
-      `https://oracle.buffer-finance-api.link/price/query/`,
-      [query]
-    );
-  }
-
-  if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
-    return null;
-  }
-
-  const expiryPrice = response.data[0].price.toString();
-  let win = true;
-  if (lt(currentRow.strike + '', expiryPrice)) {
-    if (currentRow.is_above) {
-      win = true;
-    } else {
-      win = false;
-    }
-  } else if (currentRow.strike == expiryPrice) {
-    //to be asked
-    win = false;
-  } else {
-    if (currentRow.is_above) {
+  try {
+    const query = {
+      pair: tradeMarket.tv_id,
+      timestamp: getExpiry(currentRow),
+    };
+    console.log(`TableComponents-query: `, query);
+    const expiryPrice = await getPrice(query);
+    console.log(`TableComponents-expiryPrice: `, expiryPrice);
+    let win = true;
+    if (lt(currentRow.strike + '', expiryPrice)) {
+      if (currentRow.is_above) {
+        win = true;
+      } else {
+        win = false;
+      }
+    } else if (currentRow.strike == expiryPrice) {
+      //to be asked
       win = false;
     } else {
-      win = true;
+      if (currentRow.is_above) {
+        win = false;
+      } else {
+        win = true;
+      }
     }
-  }
-  console.log(`TableComponents-win: `, win);
+    console.log(`TableComponents-win: `, win);
 
-  if (win) {
-    openShareModal(currentRow, expiryPrice.toString(), tradeMarket, poolInfo);
-    return;
-  } else {
-    const openTimeStamp = currentRow.queued_timestamp;
-    const closeTimeStamp = +currentRow.expiration_time!;
-    console.log(
-      `TableComponents-openTimeStamp: `,
-      openTimeStamp,
-      closeTimeStamp
-    );
+    if (win) {
+      openShareModal(currentRow, expiryPrice.toString(), tradeMarket, poolInfo);
+      return;
+    } else {
+      const openTimeStamp = currentRow.queued_timestamp;
+      const closeTimeStamp = +currentRow.expiration_time!;
+      console.log(
+        `TableComponents-openTimeStamp: `,
+        openTimeStamp,
+        closeTimeStamp
+      );
 
-    toastify({
-      type: 'loss',
-      // inf: true,
-      msg: (
-        <div className="flex-col">
-          <div className="flex whitespace-nowrap">
-            {tradeMarket?.token0}-{tradeMarket?.token1}{' '}
-            {currentRow.is_above ? 'Up' : 'Down'} @&nbsp;
-            <Display
-              data={divide(currentRow.strike, 8)}
-              unit={tradeMarket.token1}
-              className="!whitespace-nowrap"
-            />{' '}
-            &nbsp;
-            <span className={`flex !whitespace-nowrap `}>
+      toastify({
+        type: 'loss',
+        // inf: true,
+        msg: (
+          <div className="flex-col">
+            <div className="flex whitespace-nowrap">
+              {tradeMarket?.token0}-{tradeMarket?.token1}{' '}
+              {currentRow.is_above ? 'Up' : 'Down'} @&nbsp;
               <Display
-                className={'text-red !whitespace-nowrap '}
-                data={'-' + divide(currentRow.trade_size, 6)}
-                unit={'USDC'}
-              />
-            </span>
+                data={divide(currentRow.strike, 8)}
+                unit={tradeMarket.token1}
+                className="!whitespace-nowrap"
+              />{' '}
+              &nbsp;
+              <span className={`flex !whitespace-nowrap `}>
+                <Display
+                  className={'text-red !whitespace-nowrap '}
+                  data={'-' + divide(currentRow.trade_size, 6)}
+                  unit={'USDC'}
+                />
+              </span>
+            </div>
+            <div className="nowrap f12 mt5 text-6 @whitespace-nowrap">
+              {getDisplayTime(openTimeStamp)} -&nbsp;
+              {getDisplayTime(closeTimeStamp)}
+            </div>
           </div>
-          <div className="nowrap f12 mt5 text-6 @whitespace-nowrap">
-            {getDisplayTime(openTimeStamp)} -&nbsp;
-            {getDisplayTime(closeTimeStamp)}
-          </div>
-        </div>
-      ),
-      id: currentRow.queue_id,
-    });
+        ),
+        id: currentRow.queue_id,
+      });
+    }
+  } catch (e) {
+    console.log('TableComponents-err', e);
   }
 };
 

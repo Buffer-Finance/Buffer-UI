@@ -5,7 +5,7 @@ const TradeTypeChipBackground = styled.div`
   color: #7f87a7;
 
   border-radius: 3px;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 400;
   padding: 2px 4px;
   line-height: 14px;

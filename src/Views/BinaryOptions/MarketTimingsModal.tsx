@@ -68,6 +68,7 @@ const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
             rows={dataArr[0].length}
             onRowClick={console.log}
             shouldShowMobile
+            highlightIndexs={[2]}
           />
         </div>
       </ShareModalStyles>
