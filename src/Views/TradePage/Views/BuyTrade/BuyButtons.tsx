@@ -8,7 +8,9 @@ import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
 import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
@@ -21,7 +23,6 @@ export const BuyButtons = ({
   allowance,
   activeAssetPrice,
   amount,
-  isAssetActive,
   isForex,
   isMarketOpen,
 }: {
@@ -30,7 +31,6 @@ export const BuyButtons = ({
   allowance: string;
   activeAssetPrice: string;
   amount: string;
-  isAssetActive: boolean;
 }) => {
   const { registeredOneCT, accountMapping, oneCtPk } = useOneCTWallet();
   const { address: account } = useAccount();
@@ -42,6 +42,8 @@ export const BuyButtons = ({
   const expiry = useLimitOrdersExpiry();
   console.log(`BuyButtons-expiry: `, expiry);
   const { activeChain } = useActiveChain();
+  const { activeMarket } = useActiveMarket();
+  const { switchPool } = useSwitchPool();
 
   const provider = useProvider({ chainId: activeChain.id });
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
@@ -65,7 +67,10 @@ export const BuyButtons = ({
       limitOrderExpiry,
     });
   };
-
+  const { isMarketOpen: isAssetActive } = useIsMarketOpen(
+    activeMarket,
+    switchPool?.pool
+  );
   if (!poolDetails) return <>Error: Pool not found</>;
 
   return (
