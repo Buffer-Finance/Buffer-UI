@@ -140,7 +140,7 @@ export const OngoingTradesTable: React.FC<{
           >
             Cancel
           </GreyBtn>
-        ) : (
+        ) : distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
             <ShowIcon
               show={!isVisualized}
@@ -164,6 +164,8 @@ export const OngoingTradesTable: React.FC<{
               Close
             </GreyBtn>{' '}
           </div>
+        ) : (
+          'Processing...'
         );
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;

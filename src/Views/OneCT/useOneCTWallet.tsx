@@ -84,7 +84,7 @@ const useOneCTWallet = () => {
       oneCtPk,
       provider as ethers.providers.StaticJsonRpcProvider
     );
-  }, [oneCtPk, provider]);
+  }, [oneCtPk, provider, registeredOneCT]);
   // console.log(`useOneCTWallet-data: `, oneCTWallet);
 
   const checkStorage = () => {
