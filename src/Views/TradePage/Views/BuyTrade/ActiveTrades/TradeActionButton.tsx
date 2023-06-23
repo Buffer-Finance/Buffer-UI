@@ -3,6 +3,7 @@ import { RowGap } from '@Views/TradePage/Components/Row';
 import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import {
+  closeLoadingAtom,
   queuets2priceAtom,
   selectedOrderToEditAtom,
 } from '@Views/TradePage/atoms';
@@ -10,7 +11,6 @@ import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import styled from '@emotion/styled';
 import { useAtomValue, useSetAtom } from 'jotai';
 import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
-import { useState } from 'react';
 import { useEarlyPnl } from './TradeDataView';
 import {
   getExpiry,
@@ -23,11 +23,10 @@ export const TradeActionButton: React.FC<{
   tradeMarket: marketType;
   poolInfo: poolInfoType;
 }> = ({ trade, tradeMarket, poolInfo }) => {
-  const { cancelHandler, earlyCloseHandler, earlyCloseLoading } =
-    useCancelTradeFunction();
-  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
+  const { cancelHandler, earlyCloseHandler } = useCancelTradeFunction();
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { isPriceArrived } = getStrike(trade, cachedPrices);
+  const earlyCloseLoading = useAtomValue(closeLoadingAtom);
 
   const lockedAmmount = getLockedAmount(trade, cachedPrices);
 
@@ -50,10 +49,10 @@ export const TradeActionButton: React.FC<{
   const distance = expiration - currentEpoch;
   const isTradeExpired = distance < 0;
 
-  const isCancelLoading = cancelLoading === trade.queue_id;
-  const isEarlyCloseLoading = earlyCloseLoading[trade.queue_id];
+  const isCancelLoading = earlyCloseLoading?.[trade.queue_id] === 1;
+  const isEarlyCloseLoading = earlyCloseLoading?.[trade.queue_id] === 2;
   function cancelTrade() {
-    cancelHandler(trade, cancelLoading, setCancelLoading);
+    cancelHandler(trade);
   }
 
   function earlyClose() {
@@ -97,10 +96,10 @@ export const TradeActionButton: React.FC<{
           onClick={cancelTrade}
           disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
         >
-          {isCancelLoading ? (
-            <ButtonLoader />
-          ) : isTradeExpired ? (
+          {isTradeExpired ? (
             'Processing...'
+          ) : isCancelLoading ? (
+            <ButtonLoader />
           ) : (
             'Cancel'
           )}
@@ -120,10 +119,10 @@ export const TradeActionButton: React.FC<{
             trade.option_id === null
           }
         >
-          {isEarlyCloseLoading ? (
-            <ButtonLoader />
-          ) : isTradeExpired ? (
+          {isTradeExpired ? (
             'Processing...'
+          ) : isEarlyCloseLoading ? (
+            <ButtonLoader />
           ) : (
             `Close at +${toFixed(earlycloseAmount, 2)}`
           )}
@@ -142,10 +141,10 @@ export const TradeActionButton: React.FC<{
         trade.option_id === null
       }
     >
-      {isEarlyCloseLoading ? (
-        <ButtonLoader />
-      ) : isTradeExpired ? (
+      {isTradeExpired ? (
         'Processing...'
+      ) : isEarlyCloseLoading ? (
+        <ButtonLoader />
       ) : (
         `Close at ${toFixed(earlycloseAmount, 2)}`
       )}
