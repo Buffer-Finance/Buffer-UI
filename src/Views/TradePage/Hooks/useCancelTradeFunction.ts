@@ -76,7 +76,7 @@ export const useCancelTradeFunction = () => {
   ) => {
     const ts = Math.round(Date.now() / 1000);
     setEarlyCloseLoading((l) => ({ ...l, [trade.queue_id]: true }));
-    console.log(`[tradeMarket.tv_id, ts, trade.option_id]: `, [
+    console.log(`ec-[tradeMarket.tv_id, ts, trade.option_id]: `, [
       tradeMarket.tv_id,
       ts,
       trade.option_id,
@@ -86,7 +86,8 @@ export const useCancelTradeFunction = () => {
       [tradeMarket.tv_id, ts, trade.option_id]
     );
     console.log(`ec-hashedMessage: `, hashedMessage);
-    const signature = await oneCTWallet?.signMessage(arrayify(hashedMessage));
+    console.log(`ec-oneCTWallet: `, oneCTWallet);
+    const signature = await getSingatureCached(oneCTWallet);
     const params = {
       closing_time: ts,
       queue_id: trade.queue_id,
@@ -95,29 +96,8 @@ export const useCancelTradeFunction = () => {
     };
     console.log(`ec-params: `, params);
 
-    try {
-      const res = await axios.get(`${baseUrl}trade/close/`, { params });
-      console.log(`res-cancel: `, res);
-      // if (res.status === 200) {
-      //   toastify({
-      //     msg: 'Trade closed successfully',
-      //     type: 'success',
-      //     id: trade.queue_id + 'earlyClose',
-      //   });
-      // } else {
-      //   toastify({
-      //     msg: 'Something went wrong' + res.data.message,
-      //     type: 'error',
-      //     id: trade.queue_id + 'earlyClose',
-      //   });
-      // }
-    } catch (e) {
-      // toastify({
-      //   msg: 'Something went wrong' + (e as any).message,
-      //   type: 'error',
-      //   id: trade.queue_id + 'earlyClose',
-      // });
-    }
+    const res = await axios.get(`${baseUrl}trade/close/`, { params });
+    console.log(`res-cancel: `, res);
 
     // setEarlyCloseLoading(null);
   };
