@@ -113,7 +113,12 @@ export const TradeActionButton: React.FC<{
       <>
         <CloseAtProfitButton
           onClick={earlyClose}
-          disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
+          disabled={
+            isCancelLoading ||
+            isEarlyCloseLoading ||
+            isTradeExpired ||
+            trade.option_id === null
+          }
         >
           {isEarlyCloseLoading ? (
             <ButtonLoader />
@@ -130,7 +135,12 @@ export const TradeActionButton: React.FC<{
   return (
     <CloseAtLossButton
       onClick={earlyClose}
-      disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
+      disabled={
+        isCancelLoading ||
+        isEarlyCloseLoading ||
+        isTradeExpired ||
+        trade.option_id === null
+      }
     >
       {isEarlyCloseLoading ? (
         <ButtonLoader />
