@@ -13,6 +13,7 @@ export const useMarketsConfig = () => {
     toastify({
       type: 'error',
       msg: 'Error fetching markets. Please try again.' + error,
+      id: 'fetchMarketAPI',
     });
   }
   if (!data?.optionContracts) {
