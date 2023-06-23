@@ -19,6 +19,7 @@ import { RowGap } from '@Views/TradePage/Components/Row';
 import React, { useMemo } from 'react';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import {
+  getExpiry,
   getLockedAmount,
   getProbability,
   getStrike,
@@ -162,7 +163,9 @@ const Pnl: React.FC<{
   configData: marketType;
 }> = ({ trade, poolInfo, configData }) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
-
+  const currentEpoch = Math.round(new Date().getTime() / 1000);
+  const expiration = getExpiry(trade);
+  const isExpired = currentEpoch > expiration;
   const lockedAmmount = getLockedAmount(trade, cachedPrices);
   const { earlycloseAmount, isWin, probability } = useEarlyPnl({
     trade,
@@ -174,6 +177,7 @@ const Pnl: React.FC<{
   if (isWin) {
     pnl = <span className="text-green">+{toFixed(earlycloseAmount, 2)}</span>;
   }
+  if (isExpired) return <>Calculating...</>;
   return (
     <RowGap gap="2px" className="!items-end">
       {pnl}
