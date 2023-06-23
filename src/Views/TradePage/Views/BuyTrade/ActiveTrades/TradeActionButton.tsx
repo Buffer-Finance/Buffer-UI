@@ -48,6 +48,7 @@ export const TradeActionButton: React.FC<{
   const expiration = getExpiry(trade);
 
   const distance = expiration - currentEpoch;
+  const isTradeExpired = distance < 0;
 
   const isCancelLoading = cancelLoading === trade.queue_id;
   const isEarlyCloseLoading = earlyCloseLoading[trade.queue_id];
@@ -66,13 +67,26 @@ export const TradeActionButton: React.FC<{
   if (isLimitOrder && isLimitQueued) {
     return (
       <RowGap gap="4px">
-        <CancelButton
-          onClick={editLimitOrder}
-          disabled={isCancelLoading || isEarlyCloseLoading || distance < 0}
-        >
-          {isCancelLoading ? <ButtonLoader /> : 'Edit'}
-        </CancelButton>
-        <CancelButton onClick={cancelTrade}>Cancel</CancelButton>
+        {isTradeExpired ? (
+          <CancelButton
+            disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
+          >
+            Processing...
+          </CancelButton>
+        ) : (
+          <>
+            {' '}
+            <CancelButton
+              onClick={editLimitOrder}
+              disabled={
+                isCancelLoading || isEarlyCloseLoading || isTradeExpired
+              }
+            >
+              {isCancelLoading ? <ButtonLoader /> : 'Edit'}
+            </CancelButton>
+            <CancelButton onClick={cancelTrade}>Cancel</CancelButton>
+          </>
+        )}
       </RowGap>
     );
   }
@@ -81,9 +95,15 @@ export const TradeActionButton: React.FC<{
       <>
         <CancelButton
           onClick={cancelTrade}
-          disabled={isCancelLoading || isEarlyCloseLoading || distance < 0}
+          disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
         >
-          {isCancelLoading ? <ButtonLoader /> : 'Cancel'}
+          {isCancelLoading ? (
+            <ButtonLoader />
+          ) : isTradeExpired ? (
+            'Processing...'
+          ) : (
+            'Cancel'
+          )}
         </CancelButton>
       </>
     );
@@ -93,10 +113,12 @@ export const TradeActionButton: React.FC<{
       <>
         <CloseAtProfitButton
           onClick={earlyClose}
-          disabled={isCancelLoading || isEarlyCloseLoading || distance < 0}
+          disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
         >
           {isEarlyCloseLoading ? (
             <ButtonLoader />
+          ) : isTradeExpired ? (
+            'Processing...'
           ) : (
             `Close at +${toFixed(earlycloseAmount, 2)}`
           )}
@@ -108,10 +130,12 @@ export const TradeActionButton: React.FC<{
   return (
     <CloseAtLossButton
       onClick={earlyClose}
-      disabled={isCancelLoading || isEarlyCloseLoading || distance < 0}
+      disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
     >
       {isEarlyCloseLoading ? (
         <ButtonLoader />
+      ) : isTradeExpired ? (
+        'Processing...'
       ) : (
         `Close at ${toFixed(earlycloseAmount, 2)}`
       )}
