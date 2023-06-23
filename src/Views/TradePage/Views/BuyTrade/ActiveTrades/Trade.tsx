@@ -64,7 +64,6 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
       </div>
 
       <TradeDataView
-        isQueued={isQueued}
         trade={trade}
         poolInfo={poolInfo}
         configData={tradeMarket}
