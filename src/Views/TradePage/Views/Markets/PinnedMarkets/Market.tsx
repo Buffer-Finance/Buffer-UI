@@ -1,4 +1,3 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import Star from '@Public/ComponentSVGS/Star';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -7,13 +6,12 @@ import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
-import { assetSelectorPoolAtom } from '@Views/TradePage/atoms';
-import { appConfig } from '@Views/TradePage/config';
+import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
+import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { marketType } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { IconButton } from '@mui/material';
-import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 
 const MarketBackground = styled.button<{ isActive: boolean }>`
@@ -34,34 +32,19 @@ const MarketBackground = styled.button<{ isActive: boolean }>`
 export const Market: React.FC<{
   market: marketType;
 }> = ({ market }) => {
-  const selectedPool = useAtomValue(assetSelectorPoolAtom);
-  const { activeChain } = useActiveChain();
   const { activeMarket } = useActiveMarket();
   const { getChartMarketData } = useChartMarketData();
   const { navigateToMarket } = useFavouriteMarkets();
   const chartMarket = getChartMarketData(market.token0, market.token1);
+  const { switchPool } = useSwitchPool();
   const { currentPrice } = useCurrentPrice({
     token0: market.token0,
     token1: market.token1,
   });
+  const { isMarketOpen: isOpen } = useIsMarketOpen(market, switchPool?.pool);
 
-  const pools =
-    appConfig[activeChain.id.toString() as keyof typeof appConfig].poolsInfo;
-
-  const {
-    favouriteMarkets: favourites,
-    addFavouriteMarket,
-    removeFavouriteMarket,
-  } = useFavouriteMarkets();
-
-  const isOpen = useMemo(() => {
-    //TODO: V2.1 - add forex and market timing check
-    const currentPool = market.pools.find((pool) => {
-      const foundPool = pools[pool.pool as keyof typeof pools];
-      return foundPool && foundPool.token === selectedPool && !foundPool.is_pol;
-    });
-    return !currentPool?.isPaused;
-  }, [selectedPool, market]);
+  const { favouriteMarkets: favourites, removeFavouriteMarket } =
+    useFavouriteMarkets();
 
   const isActive = useMemo(() => {
     if (activeMarket === undefined) return false;
@@ -109,7 +92,9 @@ export const Market: React.FC<{
             precision={chartMarket.price_precision.toString().length - 1}
           />
         ) : (
-          <div className="text-[#D34A4A]"> CLOSED</div>
+          <RowGap gap="4px">
+            <div className="text-[#D34A4A]"> CLOSED</div>
+          </RowGap>
         )}
       </RowGap>
     </MarketBackground>
