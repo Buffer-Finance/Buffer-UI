@@ -13,13 +13,11 @@ export const MHdropDown: React.FC<{
   activeFrame: string;
   setFrame: (newFrame: string) => void;
   className?: string;
-}> = ({
-  activeFrame,
-  setFrame,
-
-  className = '',
-}) => {
+  shouldKeepOpen?: boolean;
+}> = ({ activeFrame, setFrame, shouldKeepOpen = false, className = '' }) => {
   function onClick(e: ClickEvent) {
+    e.stopPropagation = true;
+    e.keepOpen = shouldKeepOpen;
     setFrame(e.value);
   }
 

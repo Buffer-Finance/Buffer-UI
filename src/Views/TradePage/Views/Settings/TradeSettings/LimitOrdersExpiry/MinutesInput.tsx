@@ -53,7 +53,11 @@ export const MinutesInput: React.FC<{
           placeholder={defaultSettings.trade.limitOrdersExpiry}
         />
         <span className="absolute right-3">
-          <MHdropDown setFrame={setFrame} activeFrame={activeFrame} />
+          <MHdropDown
+            setFrame={setFrame}
+            activeFrame={activeFrame}
+            shouldKeepOpen
+          />
         </span>
       </div>
 
