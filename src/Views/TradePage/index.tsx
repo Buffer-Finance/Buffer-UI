@@ -5,6 +5,7 @@ import { BuyTrade } from './Views/BuyTrade';
 import { PinnedMarkets } from './Views/Markets/PinnedMarkets';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
+  miscsSettingsAtom,
   selectedOrderToEditAtom,
   tradePanelPositionSettingsAtom,
 } from './atoms';
@@ -19,6 +20,7 @@ import { MarketTimingsModal } from './Components/MarketTimingsModal';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
+  const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
   if (window.innerWidth < 600) return <MobileWarning />;
   return (
     <>
@@ -29,7 +31,7 @@ const TradePage: React.FC<any> = ({}) => {
         }`}
       >
         <div className="flex flex-col w-full mx-3">
-          <PinnedMarkets />
+          {showFavoriteAsset && <PinnedMarkets />}
           <MarketChart />
           <AccordionTable />
         </div>
