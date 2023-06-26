@@ -125,9 +125,9 @@ const AccordionTable: React.FC<any> = ({}) => {
               <div className="flex items-center gap-x-2">
                 {s}
                 {s == 'Trades' && activeTrades.length ? (
-                  <div className="text-[#C3C2D4] bg-[#171722] text-f10 h-[16px] p-2 pt-[0px] pb-[">
-                    <span>{activeTrades.length}</span>
-                  </div>
+                  <CountChip count={activeTrades.length} />
+                ) : s == 'Limit Orders' && limitOrders.length ? (
+                  <CountChip count={limitOrders.length} />
                 ) : null}
               </div>
             </button>
@@ -169,3 +169,9 @@ const AccordionTable: React.FC<any> = ({}) => {
 };
 
 export { AccordionTable };
+
+const CountChip = ({ count }: { count: number }) => (
+  <div className="text-[#C3C2D4] mt-1 bg-[#171722] text-f10 h-[16px] p-2 pt-[0px] pb-[">
+    <span>{count}</span>
+  </div>
+);

@@ -328,7 +328,7 @@ const OneCTModal: React.FC<any> = ({}) => {
         <div className="flex items-center">
           {/* <LightningIcon className=" scale-110" /> */}
           <h3 className="font-[500] text-f20  ml-[20px]">
-            Activate your Trading
+            Activate your Trading Account
           </h3>
         </div>
         <button
