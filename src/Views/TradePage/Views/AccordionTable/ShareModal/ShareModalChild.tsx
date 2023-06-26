@@ -3,7 +3,6 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { ShareBetAtom, shareSettingsAtom } from '@Views/TradePage/atoms';
 import styled from '@emotion/styled';
-import { CloseOutlined } from '@mui/icons-material';
 import { useAtomValue } from 'jotai';
 import { useRef } from 'react';
 import { RedGreenText } from './RedGreenText';
@@ -16,9 +15,7 @@ import { ReferralCode } from './ReferralCode';
 import { ShareButtons } from './ShareButtons';
 import { ShareTradeData } from './ShareTradeData';
 
-export const ModalChild: React.FC<{
-  closeModal: () => void;
-}> = ({ closeModal }) => {
+export const ModalChild: React.FC<{}> = () => {
   const { trade, expiryPrice, market, poolInfo } = useAtomValue(ShareBetAtom);
   const { showTradeSize } = useAtomValue(shareSettingsAtom);
   const ref = useRef(null);
@@ -38,13 +35,7 @@ export const ModalChild: React.FC<{
   }
 
   return (
-    <ShareModalStyles>
-      <div className="flex justify-between items-center mb-4 shareModal:mb-3 shareModal:pl-5 shareModal:pr-3">
-        <div className="text-f20 text-1 pb-2">Share Position</div>
-        <button className="p-3 text-1 rounded-full bg-2" onClick={closeModal}>
-          <CloseOutlined />
-        </button>
-      </div>
+    <>
       <div className="text-[#C3C2D4] w-[380px] h-[199px]">
         <BGImage ref={ref}>
           <div className="flex justify-between items-center">
@@ -119,19 +110,9 @@ export const ModalChild: React.FC<{
       </div>
 
       <ShareButtons imageRef={ref} market={market} trade={trade} />
-    </ShareModalStyles>
+    </>
   );
 };
-
-export const ShareModalStyles = styled.div`
-  padding: 20px;
-  background: #232334;
-  border-radius: 12px;
-
-  @media (max-width: 425px) {
-    padding: 10px 0px;
-  }
-`;
 
 const BGImage = styled.div`
   background-image: url('/shareModal/shareModalBg.png');
