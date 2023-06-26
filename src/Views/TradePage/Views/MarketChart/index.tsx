@@ -59,8 +59,11 @@ const MarketChart: React.FC<any> = ({}) => {
     setContainerDim((currentDim) => {
       if (!currentDim?.top) return {};
       let updatedY: { height: number; top: number } = {};
-
-      updatedY.height = clientY - currentDim.top;
+      const updatedHeight = clientY - currentDim.top;
+      const bound = window.innerHeight - (currentDim.top + 50);
+      console.log(`index-updatedHeight: `, bound, updatedHeight);
+      updatedY.height = Math.min(updatedHeight, bound);
+      // updatedY.height = updatedHeight;
       updatedY.top = currentDim.top;
       return updatedY;
     });
