@@ -20,7 +20,6 @@ import { ActiveTabStyles } from '@Views/BinaryOptions/style';
 import {
   AssetCell,
   PayoutChip,
-  Share,
   SlippageTooltip,
   ExpiryCurrentComponent,
   StrikePriceComponent,

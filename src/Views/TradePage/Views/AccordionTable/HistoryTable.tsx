@@ -1,16 +1,15 @@
 import BufferTable from '@Views/Common/BufferTable';
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, gt, subtract } from '@Utils/NumString/stringArithmatics';
+import { divide, gt } from '@Utils/NumString/stringArithmatics';
 import { priceAtom } from '@Hooks/usePrice';
 
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { getPriceFromKlines } from '@TV/useDataFeed';
 import {
   DisplayTime,
   StrikePriceComponent,
@@ -21,11 +20,10 @@ import {
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import FailedSuccess from '@SVG/Elements/FailedSuccess';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
-import { Share } from '@Views/BinaryOptions/Tables/TableComponents';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
-import { getPendingData } from '@Views/BinaryOptions/Tables/Desktop';
 import { getPayout } from '@Views/BinaryOptions/Components/shareModal';
+import { Share } from './ShareModal/ShareIcon';
 
 export const tradesCount = 10;
 

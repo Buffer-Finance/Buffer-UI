@@ -14,9 +14,9 @@ import { EditModal } from './Views/EditModal';
 import { ModalBase } from 'src/Modals/BaseModal';
 import styled from '@emotion/styled';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
-import { ShareModal } from '@Views/BinaryOptions/Components/shareModal';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { MarketTimingsModal } from './Components/MarketTimingsModal';
+import { ShareModal } from './Views/AccordionTable/ShareModal';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
