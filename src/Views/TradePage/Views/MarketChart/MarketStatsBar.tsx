@@ -172,41 +172,39 @@ const MarketStatsBar: React.FC<any> = ({}) => {
       >
         <FourRectanglesSVG />
       </button>
-      <div>
-        <ControlledMenu
-          {...menuState}
-          anchorRef={ref}
-          onClose={closeDropdown}
-          viewScroll="initial"
-          direction="bottom"
-          position="initial"
-          align="center"
-          menuClassName={
-            '!p-[0] !rounded-[10px] !bg-[#232334] !py-2 hover:!rounded-[10px]'
-          }
-          offsetY={10}
-        >
-          {arr.map((s, idx) => {
-            const Icon = (Idx2icon as any)[idx];
-            return (
-              <MenuItem
-                className={({ hover }) => {
-                  return `  ${
-                    chartTimes == s ? 'text-1' : 'text-2'
-                  } hover:brightness-110 hover:bg-[#232334]  hover:text-1`;
-                }}
-                onClick={(e: ClickEvent) => {
-                  // e.keepOpen = true;
-                  setChartTimes(s);
-                }}
-              >
-                <Icon className="mr-2" /> &nbsp;{Math.floor(s)} Chart
-                {s > 1 ? 's' : ''}
-              </MenuItem>
-            );
-          })}
-        </ControlledMenu>
-      </div>
+      <ControlledMenu
+        {...menuState}
+        anchorRef={ref}
+        onClose={closeDropdown}
+        viewScroll="initial"
+        direction="bottom"
+        position="initial"
+        align="center"
+        menuClassName={
+          '!p-[0] !rounded-[10px] !bg-[#232334] !py-2 hover:!rounded-[10px]'
+        }
+        offsetY={10}
+      >
+        {arr.map((s, idx) => {
+          const Icon = (Idx2icon as any)[idx];
+          return (
+            <MenuItem
+              className={({ hover }) => {
+                return `  ${
+                  chartTimes == s ? 'text-1' : 'text-2'
+                } hover:brightness-110 hover:bg-[#232334]  hover:text-1`;
+              }}
+              onClick={(e: ClickEvent) => {
+                // e.keepOpen = true;
+                setChartTimes(s);
+              }}
+            >
+              <Icon className="mr-2" /> &nbsp;{Math.floor(s)} Chart
+              {s > 1 ? 's' : ''}
+            </MenuItem>
+          );
+        })}
+      </ControlledMenu>
     </div>
   );
 };
