@@ -1,7 +1,7 @@
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import axios from 'axios';
 import useSWR from 'swr';
-import { baseUrl } from '../config';
+import { baseUrl, refreshInterval } from '../config';
 import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Signer } from 'ethers';
@@ -40,10 +40,10 @@ const usePlatformTrades = () => {
             },
           }),
         ]);
-        const [activeTrades, limitOrders] = response.map((r) => r.data);
-        return [activeTrades, limitOrders] as OngoingTradeSchema[];
+        const [activeTrades, historyTrades] = response.map((r) => r.data);
+        return [activeTrades, historyTrades] as OngoingTradeSchema[];
       },
-      refreshInterval: 10,
+      refreshInterval: refreshInterval,
     }
   );
   return data || ([[], []] as OngoingTradeSchema[][]);

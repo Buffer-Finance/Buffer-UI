@@ -1,7 +1,7 @@
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import axios from 'axios';
 import useSWR from 'swr';
-import { baseUrl } from '../config';
+import { baseUrl, refreshInterval } from '../config';
 import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Signer } from 'ethers';
@@ -52,7 +52,7 @@ const useHistoryTrades = (): OngoingTradeSchema[][] => {
         console.log(`activeTrades: `, activeTrades, limitOrders);
         return [res.data] as OngoingTradeSchema[];
       },
-      refreshInterval: 10,
+      refreshInterval: refreshInterval,
     }
   );
   return data || ([[]] as OngoingTradeSchema[][]);

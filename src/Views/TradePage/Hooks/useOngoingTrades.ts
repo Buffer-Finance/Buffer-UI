@@ -1,7 +1,7 @@
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import axios from 'axios';
 import useSWR from 'swr';
-import { baseUrl } from '../config';
+import { baseUrl, refreshInterval } from '../config';
 import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Signer, Wallet } from 'ethers';
@@ -54,7 +54,7 @@ const useOngoingTrades = () => {
           addMarketInTrades(limitOrders, markets),
         ] as TradeType[][];
       },
-      refreshInterval: 10,
+      refreshInterval: refreshInterval,
     }
   );
   return data || ([[], []] as TradeType[][]);
