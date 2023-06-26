@@ -93,3 +93,24 @@ export const ForexTimingsModalAtom = atom<boolean>(false);
 export const showOnboardingAnimationAtom = atom<boolean>(false);
 export const queuets2priceAtom = atomWithLocalStorage('augmentation-h-ji', {});
 export const closeLoadingAtom = atom<{ [key: number]: 1 | 2 | null }>({});
+
+//share modal atoms
+export const ShareStateAtom = atom<{ isOpen: boolean }>({ isOpen: false });
+export const SetShareStateAtom = atom(null, (get, set, update: boolean) =>
+  set(ShareStateAtom, { isOpen: update })
+);
+type ShareBetType = {
+  trade: OngoingTradeSchema | null;
+  expiryPrice: string | null;
+  poolInfo: poolInfoType | null;
+  market: marketType | null;
+};
+export const ShareBetAtom = atom<ShareBetType>({
+  trade: null,
+  expiryPrice: null,
+  poolInfo: null,
+  market: null,
+});
+export const SetShareBetAtom = atom(null, (get, set, update: ShareBetType) =>
+  set(ShareBetAtom, update)
+);

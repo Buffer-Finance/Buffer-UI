@@ -123,7 +123,7 @@ export const AssetSelectorTable: React.FC = () => {
       currentAsset.category === AssetCategory[AssetCategory.Forex];
 
     const isOpen = useMemo(() => {
-      if (!isForex && readcallData && !readcallData.isInCreationWindow)
+      if (isForex && readcallData && !readcallData.isInCreationWindow)
         return false;
       const currentPool = currentAsset.pools.find((pool) => {
         return pool.pool === selectedPool.pool;

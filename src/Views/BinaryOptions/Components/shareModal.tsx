@@ -23,13 +23,11 @@ import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { useToast } from '@Contexts/Toast';
-import { BetState } from '@Hooks/useAheadTrades';
 import { useUserCode } from '@Views/Referral/Hooks/useUserCode';
 import { QRCodeSVG } from 'qrcode.react';
-import { useHostName } from '../Hooks/useHostName';
+import { useHostName } from '../../TradePage/Hooks/useHostName';
 import { BufferLogoComponent } from '@Views/Common/Navbar/BufferLogo';
 import { affilateCode2ReferralLink } from '@Views/Referral';
-import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getImageUrl } from '../PGDrawer/PoolDropDown';
 import styled from '@emotion/styled';
@@ -40,7 +38,6 @@ import {
   poolInfoType,
 } from '@Views/TradePage/type';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
-import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
 
 interface IShareModal {}
 

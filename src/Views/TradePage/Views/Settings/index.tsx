@@ -41,7 +41,7 @@ const Settings: React.FC<{ className?: string; closeDropdown: () => void }> = ({
       <SettingsHeader onClose={closeDropdown} />
       <TradeSettings />
       <ShareSettings />
-      <PremiumSettings />
+      {/* <PremiumSettings /> */}
       <MiscSettings />
       <TradePanelSettings />
       <NotificationPositionSettings />

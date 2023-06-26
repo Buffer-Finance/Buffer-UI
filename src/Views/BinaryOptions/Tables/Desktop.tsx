@@ -21,7 +21,6 @@ import {
   ExpiryCurrentComponent,
   PayoutChip,
   ProbabilityPNL,
-  Share,
   StopWatch,
   StrikePriceComponent,
   TradeSize,

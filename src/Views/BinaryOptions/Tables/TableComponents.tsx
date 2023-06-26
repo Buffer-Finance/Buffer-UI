@@ -671,29 +671,3 @@ export const TradeSize: React.FC<{
     />
   );
 };
-
-export const Share: React.FC<{
-  data: OngoingTradeSchema;
-  market: marketType;
-  poolInfo: poolInfoType;
-}> = ({ data, market, poolInfo }) => {
-  const [, setIsOpen] = useAtom(SetShareStateAtom);
-  const [, setBet] = useAtom(SetShareBetAtom);
-  return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        console.log('dataShare', data, market, poolInfo);
-        setBet({
-          trade: data,
-          expiryPrice: data.expiry_price,
-          market: market,
-          poolInfo: poolInfo,
-        });
-        setIsOpen(true);
-      }}
-    >
-      <ShareIcon />
-    </button>
-  );
-};

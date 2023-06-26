@@ -11,7 +11,7 @@ export const useIsMarketOpen = (
 
   const isOpen = useMemo(() => {
     if (!readcallData || !market) return false;
-    if (!isForex && !readcallData.isInCreationWindow) return false;
+    if (isForex && !readcallData.isInCreationWindow) return false;
     const currentPool = market.pools.find((pool) => {
       return pool.pool === selectedPoolContract;
     });

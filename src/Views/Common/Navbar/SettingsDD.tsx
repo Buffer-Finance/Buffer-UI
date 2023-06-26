@@ -29,8 +29,9 @@ export const SettingsDD: React.FC = () => {
         onClose={closeDropdown}
         viewScroll="initial"
         direction="bottom"
-        position="initial"
+        position="anchor"
         align="end"
+        portal
         menuClassName={'!p-[0] !rounded-[10px] hover:!rounded-[10px]'}
         offsetY={10}
       >
