@@ -1,12 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { useToast } from '@Contexts/Toast';
-import {
-  IGQLHistory,
-  tardesAtom,
-} from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
-import { getExpireNotification } from '@Views/BinaryOptions/Tables/TableComponents';
-import { BetState } from '@Hooks/useAheadTrades';
+import { IGQLHistory } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import {
   OngoingTradeSchema,
   marketType,
@@ -15,10 +10,9 @@ import {
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import {
-  SetShareBetAtom,
-  SetShareStateAtom,
-} from '@Views/BinaryOptions/Components/shareModal';
+
+import { getExpireNotification } from '@Views/TradePage/utils/getExpireNotification';
+import { SetShareBetAtom, SetShareStateAtom } from '@Views/TradePage/atoms';
 
 export const getIdentifier = (a: IGQLHistory) => {
   return +a.queueID;
