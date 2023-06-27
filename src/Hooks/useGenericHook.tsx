@@ -1,21 +1,20 @@
 import { useEffect, useRef } from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useToast } from '@Contexts/Toast';
-import { IGQLHistory } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
-import {
-  OngoingTradeSchema,
-  marketType,
-  poolInfoType,
-} from '@Views/TradePage/type';
+import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 import { getExpireNotification } from '@Views/TradePage/utils/getExpireNotification';
-import { SetShareBetAtom, SetShareStateAtom } from '@Views/TradePage/atoms';
+import {
+  SetShareBetAtom,
+  SetShareStateAtom,
+  shareSettingsAtom,
+} from '@Views/TradePage/atoms';
 
-export const getIdentifier = (a: IGQLHistory) => {
-  return +a.queueID;
+export const getIdentifier = (a: TradeType) => {
+  return +a.queue_id;
 };
 
 const useGenericHooks = () => {
@@ -23,19 +22,21 @@ const useGenericHooks = () => {
   const markets = useMarketsConfig();
 
   const tradeCache = useRef<{
-    [tradeId: string]: { trade: OngoingTradeSchema; visited: boolean };
+    [tradeId: string]: { trade: TradeType; visited: boolean };
   }>({});
   // const binaryData = [];
   const toastify = useToast();
   const [, setIsOpen] = useAtom(SetShareStateAtom);
   const [, setBet] = useAtom(SetShareBetAtom);
+  const { showSharePopup } = useAtomValue(shareSettingsAtom);
   const { getPoolInfo } = usePoolInfo();
   const openShareModal = (
-    trade: OngoingTradeSchema,
+    trade: TradeType,
     expiry: string,
     market: marketType,
     poolInfo: poolInfoType
   ) => {
+    if (!showSharePopup) return;
     setIsOpen(true);
     console.log(
       `TableComponents-, market, poolInfo: `,
@@ -89,10 +90,10 @@ const useGenericHooks = () => {
         setTimeout(() => {
           getExpireNotification(
             { ...currTrade.trade },
-            tradeMarket!,
             toastify,
             openShareModal,
-            poolInfo
+            poolInfo,
+            showSharePopup
           );
         }, delay * 1000);
         delete tradeCache.current[tradeIdentifier];

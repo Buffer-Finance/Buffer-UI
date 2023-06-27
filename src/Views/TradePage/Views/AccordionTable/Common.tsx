@@ -41,23 +41,32 @@ export const DisplayTime = ({ ts }: { ts: number | string }) => {
 export const getProbability = (
   trade: OngoingTradeSchema,
   price: number,
-  expiryTs?: number
+  expiryTs?: string
 ) => {
   let currentEpoch = Math.round(Date.now() / 1000);
   const IV = 1.2;
-  let expiryTime = getExpiry(trade);
+  let expiryTime = getExpiry(trade, expiryTs);
 
+  return getProbabilityByTime(trade, price, currentEpoch, expiryTime);
+};
+
+export const getProbabilityByTime = (
+  trade: OngoingTradeSchema,
+  price: number,
+  currentTime: number,
+  expirationTime: number
+) => {
   const probability =
     BlackScholes(
       true,
       trade.is_above,
       price,
       +trade.strike / 100000000,
-      expiryTime - currentEpoch,
+      expirationTime - currentTime,
       0,
       12000 / 10000
     ) * 100;
-  // console.log('probability', probability);
+
   return probability;
 };
 
@@ -250,7 +259,7 @@ export const TableErrorRow: React.FC<{
 };
 
 export const getExpiry = (trade: OngoingTradeSchema, deb?: string) => {
-  deb && console.log('TableComponents-deb-close', trade);
+  deb && console.log('TableComponents-deb-close' + deb, trade);
   return trade.close_time || trade.queued_timestamp + trade.period;
 };
 export const getStrike = (trade: OngoingTradeSchema, cachedPrice: any) => {

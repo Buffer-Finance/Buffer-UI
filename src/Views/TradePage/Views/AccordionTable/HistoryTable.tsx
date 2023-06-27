@@ -22,8 +22,8 @@ import FailedSuccess from '@SVG/Elements/FailedSuccess';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { OngoingTradeSchema } from '@Views/TradePage/type';
-import { getPayout } from '@Views/BinaryOptions/Components/shareModal';
 import { Share } from './ShareModal/ShareIcon';
+import { getPayout } from './ShareModal/utils';
 
 export const tradesCount = 10;
 
@@ -97,7 +97,11 @@ const HistoryTable: React.FC<{
     const poolInfo = getPoolInfo(poolContract);
 
     if (!tradeMarket) return 'Problem';
-    const { pnl, payout } = getPayout(trade, trade.expiry_price + '');
+    const { pnl, payout } = getPayout(
+      trade,
+      trade.expiry_price + '',
+      poolInfo.decimals
+    );
     const status = gt(pnl?.toString(), '0')
       ? {
           tooltip: 'You won this bet!',

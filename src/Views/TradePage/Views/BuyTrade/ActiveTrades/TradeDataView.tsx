@@ -208,6 +208,25 @@ export const useEarlyPnl = ({
     [trade, currentPrice]
   );
   if (!probability) probability = 0;
+  return calculatePnlForProbability({
+    trade,
+    probability,
+    decimals: poolInfo.decimals,
+    lockedAmmount,
+  });
+};
+
+export const calculatePnlForProbability = ({
+  trade,
+  probability,
+  lockedAmmount,
+  decimals,
+}: {
+  trade: TradeType;
+  probability: number;
+  decimals: number;
+  lockedAmmount?: string;
+}) => {
   const lockedAmount = trade.locked_amount || lockedAmmount;
   const tradeSize = trade.trade_size;
 
@@ -216,7 +235,7 @@ export const useEarlyPnl = ({
       multiply(lockedAmount?.toString() ?? '0', (probability / 100).toString()),
       tradeSize.toString()
     ),
-    poolInfo.decimals
+    decimals
   ) as string;
 
   const isWin = gte(earlycloseAmount, '0');

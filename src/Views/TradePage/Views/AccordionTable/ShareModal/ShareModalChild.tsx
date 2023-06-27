@@ -28,9 +28,9 @@ export const ModalChild: React.FC<{}> = () => {
   const decimals = chartData.price_precision?.toString()?.length - 1;
   const unit = market.token1;
   const token0 = market.token0;
-  const { pnl, payout } = getPayout(trade, expiryPrice);
+  const { pnl } = getPayout(trade, expiryPrice, decimals);
 
-  if (!pnl || !payout || !expiryPrice) {
+  if (!pnl || !expiryPrice) {
     return <div className="text-f20 text-1">Could not fetch data...</div>;
   }
 
