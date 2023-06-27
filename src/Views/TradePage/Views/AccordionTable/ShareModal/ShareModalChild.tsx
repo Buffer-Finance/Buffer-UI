@@ -28,6 +28,7 @@ export const ModalChild: React.FC<{}> = () => {
   const decimals = chartData.price_precision?.toString()?.length - 1;
   const unit = market.token1;
   const token0 = market.token0;
+  const tradeSize = divide(trade.trade_size, decimals) as string;
   const { pnl } = getPayout(trade, expiryPrice, decimals);
 
   if (!pnl || !expiryPrice) {
@@ -73,10 +74,7 @@ export const ModalChild: React.FC<{}> = () => {
                   conditionValue={pnl}
                   displayText={
                     <Display
-                      data={multiply(
-                        divide(pnl, trade.trade_size.toString()) as string,
-                        '100'
-                      )}
+                      data={multiply(divide(pnl, tradeSize) as string, '100')}
                       unit={'%'}
                       label={gt(pnl, '0') ? '+' : ''}
                       className="text-[28px] font-bold"

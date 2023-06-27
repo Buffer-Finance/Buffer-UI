@@ -13,10 +13,16 @@ export const getPayout = (
     return { payout: payout as string, pnl: pnl as string };
   } else
     return {
-      payout: trade?.payout || '0',
-      pnl: trade?.payout
-        ? trade.payout - trade.trade_size
-        : subtract('0', trade.trade_size.toString()),
+      payout: trade.payout || '0',
+      pnl: trade.payout
+        ? (divide(
+            (trade.payout - trade.trade_size).toString(),
+            decimals
+          ) as string)
+        : subtract(
+            '0',
+            divide(trade.trade_size.toString(), decimals) as string
+          ),
     };
 };
 
