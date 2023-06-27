@@ -1,0 +1,53 @@
+{
+  "startTimestamp": 1609459200,
+  "endTimestamp": 1612137600,
+  "1": {
+    "pool": "USDC",
+    "category": "all",
+    "minTradesRequired": 0,
+    "minVolumeRequired": 0,
+    "rulesLink": ""
+  },
+  "2": {
+    "pool": "USDT",
+    "category": "forex",
+    "minTradesRequired": 0,
+    "minVolumeRequired": 0,
+    "rulesLink": ""
+  },
+  "3": {
+    "pool": "ARB",
+    "category": "alt",
+    "minTradesRequired": 0,
+    "minVolumeRequired": 0,
+    "rulesLink": ""
+  },
+  "4": {
+    "pool": "BFR",
+    "category": "all",
+    "minTradesRequired": 0,
+    "minVolumeRequired": 0,
+    "rulesLink": ""
+  },
+  "5": {
+    "pool": "ARB",
+    "category": "forex",
+    "minTradesRequired": 0,
+    "minVolumeRequired": 0,
+    "rulesLink": ""
+  },
+  "6": {
+    "pool": "USDC",
+    "category": "alt",
+    "minTradesRequired": 0,
+    "minVolumeRequired": 0,
+    "rulesLink": ""
+  },
+  "7": {
+    "pool": "BFR",
+    "category": "all",
+    "minTradesRequired": 0,
+    "minVolumeRequired": 0,
+    "rulesLink": ""
+  }
+}
