@@ -145,6 +145,7 @@ export const useBuyTradeActions = (userInput: string) => {
       switchPool.pool,
       'minTradeAmount'
     );
+    const platfromFee = divide(switchPool.platformFee, decimals as number);
 
     if (
       isCustom === undefined ||
@@ -204,7 +205,10 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      const noBalance = gt(userInput || '0', balance ? balance : '0');
+      const noBalance = gt(
+        userInput || '0',
+        add(balance ? balance : '0', platfromFee ?? '0')
+      );
       if (noBalance) {
         return toastify({
           type: 'error',
