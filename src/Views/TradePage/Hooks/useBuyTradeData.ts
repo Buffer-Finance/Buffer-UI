@@ -4,7 +4,6 @@ import { useSwitchPool } from './useSwitchPool';
 import { appConfig } from '../config';
 import { useMemo } from 'react';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { divide } from '@Utils/NumString/stringArithmatics';
 import { useMarketsConfig } from './useMarketsConfig';
 import { getPayout } from '../utils';
 
@@ -15,7 +14,7 @@ export const useBuyTradeData = (deb?: string) => {
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const config = useMarketsConfig();
-
+  console.log('readCallData', readCallData);
   const response = useMemo(() => {
     if (
       !readCallData ||
@@ -25,7 +24,6 @@ export const useBuyTradeData = (deb?: string) => {
     ) {
       return null;
     }
-    // const payout = readCallData[getCallId(poolDetails.meta, 'getPayout')]?.[0];
     const balance =
       readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
     const allowance =
@@ -68,8 +66,6 @@ export const useBuyTradeData = (deb?: string) => {
       readCallData[
         getCallId(configData.creation_window, 'isInCreationWindow')
       ]?.[0];
-    // console.log(`isInCreationWindow: `, isInCreationWindow);
-    // console.log('maxTradeSizes', maxTradeSizes);
 
     return {
       balance,

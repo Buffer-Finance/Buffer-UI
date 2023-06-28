@@ -18,11 +18,12 @@ import { toFixed } from '@Utils/NumString';
 import { priceAtom } from '@Hooks/usePrice';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { divide } from '@Utils/NumString/stringArithmatics';
-import { joinStrings } from '@Views/TradePage/utils';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { getMinimumValue, joinStrings } from '@Views/TradePage/utils';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
 import { CurrentPrice } from '../BuyTrade/ActiveTrades/CurrentPrice';
+import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -101,7 +102,9 @@ const MarketStatsBar: React.FC<any> = ({}) => {
   let maxOI = null;
   let currentOI = null;
   let payout = null;
+  let currentOIinPercent = null;
 
+  const assetPrices = usePriceChange();
   if (readcallData && switchPool && poolDetails) {
     maxFee = divide(
       readcallData?.maxTradeSizes[switchPool?.optionContract] ?? '0',
@@ -117,7 +120,23 @@ const MarketStatsBar: React.FC<any> = ({}) => {
     ) as string;
 
     payout = readcallData?.settlementFees[switchPool?.optionContract];
+
+    currentOIinPercent = Number(
+      getMinimumValue(
+        divide(multiply(currentOI, '100'), maxOI) as string,
+        '100'
+      )
+    );
   }
+
+  if (!activeMarket) {
+    return <></>;
+  }
+
+  const oneDayChange = (
+    assetPrices?.[joinStrings(activeMarket.token0, activeMarket.token1, '')]
+      ?.change ?? 0
+  ).toFixed(2);
 
   function closeDropdown() {
     toggleMenu(false);
@@ -126,28 +145,54 @@ const MarketStatsBar: React.FC<any> = ({}) => {
   const arr = [1, 2.5, 2, 4];
   const data = [
     {
-      header: 'Max Trade Size',
-      data: <Display data={maxFee} unit={poolDetails?.token} precision={2} />,
-    },
-    {
-      header: 'Current OI',
+      header: '24 h Change',
       data: (
-        <Display data={currentOI} unit={poolDetails?.token} precision={2} />
+        <OneDayChange
+          oneDayChange={oneDayChange}
+          className="text-f12"
+          svgClassName="scale-125"
+        />
       ),
     },
     {
-      header: 'Max OI',
-      data: <Display data={maxOI} unit={poolDetails?.token} precision={2} />,
+      header: 'Max Trade Size',
+      data: <Display data={maxFee} unit={poolDetails?.token} precision={0} />,
     },
+    // {
+    //   header: 'Current OI',
+    //   data: (
+    //     <Display data={currentOI} unit={poolDetails?.token} precision={2} />
+    //   ),
+    // },
+    // {
+    //   header: 'Up Payout',
+    //   data: <div>{payout}%</div>,
+    // },
+    // {
+    //   header: 'Down Payout',
+    //   data: <div>{payout}%</div>,
+    // },
     {
       header: 'Payout',
       data: <div>{payout}%</div>,
     },
+    {
+      header: (
+        <div className="flex items-center">
+          Max OI:&nbsp;
+          <Display data={maxOI} unit={poolDetails?.token} precision={2} />
+        </div>
+      ),
+      data: (
+        <div className="min-w-[160px]">
+          <BufferProgressBar
+            fontSize={12}
+            progressPercent={currentOIinPercent ?? 0}
+          />
+        </div>
+      ),
+    },
   ];
-
-  if (!activeMarket) {
-    return <></>;
-  }
 
   return (
     <div className="flex p-3 gap-x-[35px] items-center">
@@ -158,9 +203,9 @@ const MarketStatsBar: React.FC<any> = ({}) => {
       <MarketPrice token0={activeMarket.token0} token1={activeMarket.token1} />
       {data.map((d) => {
         return (
-          <div className="flex flex-col justify-center items-center gap-y-1">
+          <div className="flex flex-col justify-center items-start gap-y-1">
             <span className="text-f12 text-[#82828F]">{d.header}</span>
-            <span className="text-f12">{d.data}</span>
+            <span className="text-f12 w-full">{d.data}</span>
           </div>
         );
       })}
@@ -215,25 +260,11 @@ const MarketPrice: React.FC<{ token0: string; token1: string }> = ({
   token0,
   token1,
 }) => {
-  const marketPrice = useAtomValue(priceAtom);
-  const { getChartMarketData } = useChartMarketData();
-  const chartData = getChartMarketData(token0, token1);
-  const assetPrices = usePriceChange();
-
-  const oneDayChange = (
-    assetPrices?.[joinStrings(token0, token1, '')]?.change ?? 0
-  ).toFixed(2);
-
   return (
     <div className="flex flex-col">
       <span className="text-f18">
         <CurrentPrice token0={token0} token1={token1} />
       </span>
-      <OneDayChange
-        oneDayChange={oneDayChange}
-        className="text-f12"
-        svgClassName="scale-125"
-      />
     </div>
   );
 };
