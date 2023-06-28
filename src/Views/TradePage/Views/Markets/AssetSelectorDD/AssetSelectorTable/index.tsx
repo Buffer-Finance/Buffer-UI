@@ -122,14 +122,12 @@ export const AssetSelectorTable: React.FC = () => {
     const isForex =
       currentAsset.category === AssetCategory[AssetCategory.Forex];
 
-    const isOpen = useMemo(() => {
-      if (isForex && readcallData && !readcallData.isInCreationWindow)
-        return false;
-      const currentPool = currentAsset.pools.find((pool) => {
-        return pool.pool === selectedPool.pool;
-      });
-      return !currentPool?.isPaused;
-    }, [selectedPool, currentAsset, readcallData]);
+    const isOpen = getIsOpen(
+      isForex,
+      readcallData.isInCreationWindow,
+      currentAsset,
+      selectedPool.pool
+    );
 
     switch (col) {
       case 0:
@@ -294,3 +292,16 @@ const ShowTimingModalButton = styled.button`
   font-size: 10px;
   width: fit-content;
 `;
+
+const getIsOpen = (
+  isForex: boolean,
+  isInCreationWindow: boolean,
+  currentAsset: marketType,
+  currentPoolAddress: string
+) => {
+  if (isForex && !isInCreationWindow) return false;
+  const currentPool = currentAsset.pools.find((pool) => {
+    return pool.pool === currentPoolAddress;
+  });
+  return !currentPool?.isPaused;
+};
