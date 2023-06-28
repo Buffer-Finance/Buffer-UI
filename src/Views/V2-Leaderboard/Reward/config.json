@@ -1,0 +1,41 @@
+{
+  "421613": {
+    "startTimestamp": 1687968000,
+    "endTimestamp": 1688054400,
+    "0": {
+      "pool": "USDC",
+      "category": "all",
+      "rulesLink": ""
+    },
+    "1": {
+      "pool": "USDT",
+      "category": "forex",
+      "rulesLink": ""
+    },
+    "2": {
+      "pool": "ARB",
+      "category": "alt",
+      "rulesLink": ""
+    },
+    "3": {
+      "pool": "BFR",
+      "category": "all",
+      "rulesLink": ""
+    },
+    "4": {
+      "pool": "ARB",
+      "category": "forex",
+      "rulesLink": ""
+    },
+    "5": {
+      "pool": "USDC",
+      "category": "alt",
+      "rulesLink": ""
+    },
+    "6": {
+      "pool": "BFR",
+      "category": "all",
+      "rulesLink": ""
+    }
+  }
+}

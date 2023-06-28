@@ -329,6 +329,14 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
+      pathname: '/[chain]/leaderboard/reward',
+      as: `/leaderboard/reward`,
+      name: 'Reward',
+      slug: 'reward',
+      id: 7,
+      subTabs: [],
+    },
+    {
       pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
       as: `/leaderboard/0/weekly/diamond`,
       name: 'diamond',
