@@ -8,13 +8,15 @@ import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
 import styled from '@emotion/styled';
 import { WalletBalance, formatBalance } from './WalletBalance';
 import { TradeSizeInput } from './TradeSizeInput';
-import { add, divide } from '@Utils/NumString/stringArithmatics';
+import { add, divide, gt } from '@Utils/NumString/stringArithmatics';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { PoolDropdown } from './PoolDropdown';
 
 import { toFixed } from '@Utils/NumString';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
+import { useAtomValue } from 'jotai';
+import { tradeSizeAtom } from '@Views/TradePage/atoms';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -58,12 +60,33 @@ export const TradeSizeSelector: React.FC = () => {
           />
           <PoolDropdown />
         </RowGapItemsStretched>
-        <RowGap gap="4px" className="text-[#7F87A7] text-f10">
-          <LightToolTipSVG />
-          {divide(switchPool.platformFee, decimals)} {tradeToken} will be
-          charged as platform fee.
-        </RowGap>
+        <PlatfromFeeError
+          platfromFee={divide(switchPool.platformFee, decimals) as string}
+          tradeToken={tradeToken}
+          balance={balance}
+        />
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );
+};
+
+const PlatfromFeeError = ({
+  platfromFee,
+  tradeToken,
+  balance,
+}: {
+  platfromFee: string;
+  tradeToken: string;
+  balance: string;
+}) => {
+  const tradeSize = useAtomValue(tradeSizeAtom);
+
+  if (gt(add(tradeSize || '0', platfromFee), balance))
+    return (
+      <RowGap gap="4px" className="text-[#7F87A7] text-f10">
+        <LightToolTipSVG />
+        {platfromFee} {tradeToken} will be charged as platform fee.
+      </RowGap>
+    );
+  return <></>;
 };
