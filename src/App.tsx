@@ -46,6 +46,7 @@ import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
 import { isTestnet } from 'config';
+import { Reward } from '@Views/V2-Leaderboard/Reward';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -120,6 +121,7 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
+          <Route path="reward" element={<Reward />}></Route>
           <Route
             path="trades"
             element={
