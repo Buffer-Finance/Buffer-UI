@@ -12,8 +12,9 @@ import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { PoolDropdown } from './PoolDropdown';
-import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
+
 import { toFixed } from '@Utils/NumString';
+import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -44,14 +45,6 @@ export const TradeSizeSelector: React.FC = () => {
         <RowBetween>
           <RowGap gap="4px">
             <BuyTradeHeadText>Trade Size</BuyTradeHeadText>
-            <IconToolTip
-              content={
-                <>
-                  {divide(switchPool.platformFee, decimals)} {tradeToken} will
-                  be charged as platform fee.
-                </>
-              }
-            />
           </RowGap>
 
           <WalletBalance
@@ -68,6 +61,11 @@ export const TradeSizeSelector: React.FC = () => {
           />
           <PoolDropdown />
         </RowGapItemsStretched>
+        <RowGap gap="4px" className="text-[#7F87A7] text-f10">
+          <LightToolTipSVG />
+          {divide(switchPool.platformFee, decimals)} {tradeToken} will be
+          charged as platform fee.
+        </RowGap>
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );

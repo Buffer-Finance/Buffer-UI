@@ -102,7 +102,6 @@ export const BuyTrade: React.FC = () => {
         activeAssetPrice={activeAssetPrice}
         allowance={allowance}
         amount={amount.toString()}
-        isAssetActive={!switchPool.isPaused}
         isForex={isForex}
         isMarketOpen={isMarketOpen}
       />
