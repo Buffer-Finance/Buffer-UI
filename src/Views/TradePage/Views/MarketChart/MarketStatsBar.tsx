@@ -175,7 +175,7 @@ const MarketStatsBar: React.FC<any> = ({}) => {
     // },
     {
       header: 'Payout',
-      data: <div>{payout}%</div>,
+      data: <div>{payout ? payout + '%' : 'Fetching...'}</div>,
     },
     {
       header: (
