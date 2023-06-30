@@ -209,6 +209,19 @@ export const useBuyTradeActions = (userInput: string) => {
         userInput || '0',
         add(balance ? balance : '0', platfromFee ?? '0')
       );
+      const platformFee = divide(switchPool.platformFee, poolDetails?.decimals);
+      console.log(
+        `useBuyTradeActions-add(userInput, platformFee): `,
+        add(userInput, platformFee),
+        balance
+      );
+      if (gt(add(userInput, platformFee), balance)) {
+        return toastify({
+          type: 'error',
+          msg: `Addition ${platformFee} ${poolDetails?.token} are required on top of Trade Size as Platform Fee.`,
+          id: 'binaryBuy',
+        });
+      }
       if (noBalance) {
         return toastify({
           type: 'error',

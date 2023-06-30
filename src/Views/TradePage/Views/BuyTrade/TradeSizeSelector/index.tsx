@@ -37,6 +37,7 @@ export const TradeSizeSelector: React.FC = () => {
     readcallData.maxTradeSizes[switchPool.optionContract] ?? '0',
     decimals
   ) as string;
+  const platformFee = divide(switchPool.platformFee, decimals) as string;
   const maxTradeSize = maxFee;
   return (
     <TradeSizeSelectorBackground>
@@ -56,12 +57,13 @@ export const TradeSizeSelector: React.FC = () => {
             maxTradeSize={maxTradeSize}
             tokenName={tradeToken}
             balance={balance}
+            platformFee={platformFee}
             minTradeSize={minFee}
           />
           <PoolDropdown />
         </RowGapItemsStretched>
         <PlatfromFeeError
-          platfromFee={divide(switchPool.platformFee, decimals) as string}
+          platfromFee={platformFee}
           tradeToken={tradeToken}
           balance={balance}
         />
@@ -81,12 +83,18 @@ const PlatfromFeeError = ({
 }) => {
   const tradeSize = useAtomValue(tradeSizeAtom);
 
-  if (gt(add(tradeSize || '0', platfromFee), balance))
-    return (
-      <RowGap gap="4px" className="text-[#7F87A7] text-f10">
-        <LightToolTipSVG />
-        {platfromFee} {tradeToken} will be charged as platform fee.
-      </RowGap>
-    );
-  return <></>;
+  console.log(
+    `index-add(tradeSize || '0', platfromFee): `,
+    add(tradeSize || '0', platfromFee)
+  );
+  const isError = gt(add(tradeSize || '0', platfromFee), balance);
+  return (
+    <RowGap
+      gap="4px"
+      className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
+    >
+      <LightToolTipSVG />
+      Additional {platfromFee} {tradeToken} will be charged as platform fee.
+    </RowGap>
+  );
 };

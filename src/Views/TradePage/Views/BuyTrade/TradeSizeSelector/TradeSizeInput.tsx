@@ -1,4 +1,4 @@
-import { gt, lt } from '@Utils/NumString/stringArithmatics';
+import { gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { getMinimumValue } from '@Views/V3App/helperFns';
@@ -11,7 +11,8 @@ export const TradeSizeInput: React.FC<{
   tokenName: string;
   balance: string;
   minTradeSize: string;
-}> = ({ maxTradeSize, tokenName, balance, minTradeSize }) => {
+  platformFee: string;
+}> = ({ maxTradeSize, tokenName, balance, minTradeSize, platformFee }) => {
   const [minerr, setminErr] = useState(false);
   const [maxerr, setmaxErr] = useState(false);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
@@ -46,7 +47,9 @@ export const TradeSizeInput: React.FC<{
         <button
           className="absolute right-3 bg-[#141823] rounded-[6px] py-2 px-[6px] text-f12"
           onClick={() => {
-            setTradeSize(getMinimumValue(maxTradeSize, balance));
+            setTradeSize(
+              subtract(getMinimumValue(maxTradeSize, balance), platformFee)
+            );
             setmaxErr(false);
             setminErr(false);
           }}
