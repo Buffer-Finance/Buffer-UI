@@ -12,6 +12,7 @@ import {
   SetShareStateAtom,
   shareSettingsAtom,
 } from '@Views/TradePage/atoms';
+import { useUserAccount } from './useUserAccount';
 
 export const getIdentifier = (a: TradeType) => {
   return +a.queue_id;
@@ -26,6 +27,7 @@ const useGenericHooks = () => {
   }>({});
   // const binaryData = [];
   const toastify = useToast();
+  const { address } = useUserAccount();
   const [, setIsOpen] = useAtom(SetShareStateAtom);
   const [, setBet] = useAtom(SetShareBetAtom);
   const { showSharePopup } = useAtomValue(shareSettingsAtom);
@@ -111,6 +113,9 @@ const useGenericHooks = () => {
     };
     // if some trade left with visited:false - that trade is the one for which we want to show notif
   }, [activeTrades]);
+  useEffect(() => {
+    tradeCache.current = {};
+  }, [address]);
 };
 
 export { useGenericHooks };

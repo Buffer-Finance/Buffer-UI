@@ -17,6 +17,7 @@ import { toFixed } from '@Utils/NumString';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
+import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -94,7 +95,16 @@ const PlatfromFeeError = ({
       className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
     >
       <LightToolTipSVG />
-      Additional {platfromFee} {tradeToken} will be charged as platform fee.
+      {isError ? (
+        <>
+          Insufficient funds for platform fee.{' '}
+          <BuyUSDCLink token={tradeToken} />
+        </>
+      ) : (
+        <>
+          Additional {platfromFee} {tradeToken} will be charged as platform fee.
+        </>
+      )}
     </RowGap>
   );
 };

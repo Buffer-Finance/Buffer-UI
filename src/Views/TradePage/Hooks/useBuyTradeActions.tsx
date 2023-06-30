@@ -53,6 +53,7 @@ import DownIcon from '@SVG/Elements/DownIcon';
 import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
+import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -216,7 +217,13 @@ export const useBuyTradeActions = (userInput: string) => {
       if (gt(add(userInput, platformFee), balance)) {
         return toastify({
           type: 'error',
-          msg: `Addition ${platformFee} ${poolDetails?.token} are required on top of Trade Size as Platform Fee.`,
+          msg: (
+            <>
+              Addition {platformFee} {poolDetails?.token} are required on top of
+              Trade Size as Platform Fee.{' '}
+              <BuyUSDCLink token={poolDetails?.token} />
+            </>
+          ),
           id: 'binaryBuy',
         });
       }
