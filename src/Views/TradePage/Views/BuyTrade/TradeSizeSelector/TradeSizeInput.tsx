@@ -18,6 +18,7 @@ export const TradeSizeInput: React.FC<{
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
 
   useEffect(() => {
+    console.log(`TradeSizeInput-tradeSize: `, tradeSize, minTradeSize);
     if (lt(tradeSize || '0', minTradeSize)) {
       setminErr(true);
     } else {
@@ -50,8 +51,8 @@ export const TradeSizeInput: React.FC<{
             setTradeSize(
               subtract(getMinimumValue(maxTradeSize, balance), platformFee)
             );
-            setmaxErr(false);
-            setminErr(false);
+            // setmaxErr(false);
+            // setminErr(false);
           }}
         >
           Max

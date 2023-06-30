@@ -71,6 +71,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const priceCache = useAtomValue(queuets2priceAtom);
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
+  console.log(`useBuyTradeActions-switchPool: `, poolDetails);
   const readcallData = useBuyTradeData();
   const decimals = poolDetails?.decimals;
   const balance = divide(readcallData?.balance, decimals as number) as string;
@@ -132,10 +133,7 @@ export const useBuyTradeActions = (userInput: string) => {
     }
     const maxdurationInMins = timeToMins(maxDuration);
     const mindurationInMins = timeToMins(minDuration);
-    const minTradeAmount = add(
-      switchPool?.min_fee ?? '0',
-      switchPool?.platformFee ?? '0'
-    );
+    const minTradeAmount = switchPool?.min_fee ?? '0';
     const maxTradeAmount =
       readcallData?.maxTradeSizes[switchPool.optionContract] ?? '0';
     console.log(
