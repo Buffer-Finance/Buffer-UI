@@ -226,20 +226,21 @@ function drawPosition(
     option.expiration_time
   )}`;
   // console.log(`chart: `,chart.createPositionLine);
-  return chart
-    ?.createPositionLine()
-    .setText(text)
-    .setTooltip(tooltip)
-    .setBodyBackgroundColor(defaults.BG)
-    .setBodyBorderColor(defaults.BG)
-    .setBodyFont('normal 17pt Relative Pro')
-    .setQuantityFont('bold 17pt Relative Pro')
-    .setQuantityBackgroundColor(color)
-    .setQuantityBorderColor(color)
-    .setLineColor(color)
-    .setBodyTextColor('rgb(255,255,255)')
-    .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
-    .setPrice(optionPrice);
+  if (Object.hasOwn(chart, 'createPositionLine'))
+    return chart
+      ?.createPositionLine()
+      .setText(text)
+      .setTooltip(tooltip)
+      .setBodyBackgroundColor(defaults.BG)
+      .setBodyBorderColor(defaults.BG)
+      .setBodyFont('normal 17pt Relative Pro')
+      .setQuantityFont('bold 17pt Relative Pro')
+      .setQuantityBackgroundColor(color)
+      .setQuantityBorderColor(color)
+      .setLineColor(color)
+      .setBodyTextColor('rgb(255,255,255)')
+      .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
+      .setPrice(optionPrice);
   // positions.current.push({ line, expiration: option.expirationTime });
 }
 
@@ -582,15 +583,17 @@ export const MultiResolutionChart = ({
             updatedPos.strike = priceCache[pos.queue_id];
             updatedPos.expiration_time = pos.queued_timestamp + pos.period;
           }
-          trade2visualisation.current[+pos.queue_id] = {
-            visited: true,
-            lineRef: drawPosition(
-              updatedPos,
-              visualized,
-              widgetRef.current?.activeChart()!
-            ),
-            option: pos,
-          };
+          const ret = drawPosition(
+            updatedPos,
+            visualized,
+            widgetRef.current?.activeChart()!
+          );
+          if (ret)
+            trade2visualisation.current[+pos.queue_id] = {
+              visited: true,
+              lineRef: ret,
+              option: pos,
+            };
         }
       });
     }
