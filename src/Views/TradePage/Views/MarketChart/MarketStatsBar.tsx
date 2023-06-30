@@ -24,6 +24,7 @@ import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
 import { CurrentPrice } from '../BuyTrade/ActiveTrades/CurrentPrice';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
+import NumberTooltip from '@Views/Common/Tooltips';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -184,12 +185,22 @@ const MarketStatsBar: React.FC<any> = ({}) => {
         </div>
       ),
       data: (
-        <div className="min-w-[160px]">
-          <BufferProgressBar
-            fontSize={12}
-            progressPercent={currentOIinPercent ?? 0}
-          />
-        </div>
+        <NumberTooltip
+          content={
+            currentOI
+              ? `Current OI : ${multiply(currentOI, 2)} ${
+                  poolDetails?.token
+                } / Max OI : ${maxOI} ${poolDetails?.token} `
+              : ''
+          }
+        >
+          <div className="min-w-[160px]">
+            <BufferProgressBar
+              fontSize={12}
+              progressPercent={currentOIinPercent ?? 0}
+            />
+          </div>
+        </NumberTooltip>
       ),
     },
   ];
