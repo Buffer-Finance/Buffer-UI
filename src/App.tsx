@@ -46,6 +46,7 @@ import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
 import { isTestnet } from 'config';
+import { Signer } from './Signer';
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
@@ -102,6 +103,7 @@ const AppRoutes = () => {
       <OpenOcean />
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/signer" element={<Signer />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />
         <Route path="/pyth" element={<PythPoc />}></Route>
