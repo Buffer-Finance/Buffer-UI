@@ -8,7 +8,7 @@ import {
   braveWallet,
   metaMaskWallet,
   coinbaseWallet,
-  // WalletConnectConnector,
+  // walletConnectConnector,
   walletConnectWallet,
   imTokenWallet,
   ledgerWallet,
@@ -16,6 +16,9 @@ import {
   safeWallet,
   tahoWallet,
 } from '@rainbow-me/rainbowkit/wallets';
+const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
+console.log(`projectId: `, projectId);
+
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { inIframe } from '@Utils/isInIframe';
@@ -54,9 +57,9 @@ const getWallets = (chains: Chain[]) => {
           groupName: bothSupported[0].groupName,
           wallets: [
             ...bothSupported[0].wallets,
-            trustWallet({ chains }),
+            trustWallet({ chains, projectId }),
             injectedWallet({ chains }),
-            walletConnectWallet({ chains }),
+            walletConnectWallet({ chains, projectId }),
             safeWallet({ chains }),
           ],
         },
@@ -64,10 +67,10 @@ const getWallets = (chains: Chain[]) => {
           groupName: 'Others',
           wallets: [
             tahoWallet({ chains }),
-            rainbowWallet({ chains }),
-            imTokenWallet({ chains }),
-            ledgerWallet({ chains }),
-            omniWallet({ chains }),
+            rainbowWallet({ chains, projectId }),
+            imTokenWallet({ chains, projectId }),
+            ledgerWallet({ chains, projectId }),
+            omniWallet({ chains, projectId }),
             braveWallet({ chains }),
             // argentWallet({ chains }),
           ],
