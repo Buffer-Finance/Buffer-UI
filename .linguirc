@@ -18,10 +18,5 @@
   "sourceLocale": "en",
   "fallbackLocales": {
     "default": "en"
-  },
-  "extractBabelOptions": {
-    "presets": [
-      "@babel/preset-typescript"
-    ]
   }
 }
