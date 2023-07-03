@@ -4,7 +4,7 @@ export const atomWithLocalStorage = <key, T>(
   key: string,
   initialValue: T
 ): WritableAtom<T, unknown, void> => {
-  if (typeof window == 'undefined') return atom({ dummy: true }) as any;
+  // if (typeof window == 'undefined') return atom({ dummy: true }) as any;
   const getInitialValue = () => {
     const item = localStorage.getItem(key);
     if (item !== null) {
