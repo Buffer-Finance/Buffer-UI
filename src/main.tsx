@@ -8,6 +8,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import 'viem/window';
 
 import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';

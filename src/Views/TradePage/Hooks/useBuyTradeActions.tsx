@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
 import { toFixed } from '@Utils/NumString';
 import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
+import { privateKeyToAccount } from 'viem/accounts';
+import 'viem/window';
+
 import {
   add,
   divide,
@@ -53,6 +56,7 @@ import DownIcon from '@SVG/Elements/DownIcon';
 import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
+import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -309,9 +313,10 @@ export const useBuyTradeActions = (userInput: string) => {
         referralData[2],
         highestTierNFT?.tokenId || '0',
       ];
-      const signatures = await generateTradeSignature(
+      console.time('read-call-dd');
+      const signatures = await generateBuyTradeSignature(
         address,
-        multiply(userInput, decimals),
+        toFixed(multiply(userInput, decimals), 0),
         expirationInMins,
         option_contract,
         price,
@@ -322,7 +327,7 @@ export const useBuyTradeActions = (userInput: string) => {
         currentUTCTimestamp,
         customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
         customTrade.is_up,
-        oneCTWallet
+        oneCtPk
       );
       const apiParams = {
         signature_timestamp: currentUTCTimestamp,
@@ -347,87 +352,92 @@ export const useBuyTradeActions = (userInput: string) => {
         environment: activeChain.id,
       };
       console.log(`useBuyTradeActions-apiParams: `, apiParams);
-      console.time('read-call');
+      console.timeEnd('read-call-dd');
 
-      // const sig = ethers.utils.splitSignature(signature);
-      // const lockedAmount = await Promise.all[,getPrice(query)];
-      const resp: { data: OngoingTradeSchema } = await axios.post(
-        baseUrl + 'trade/create/',
-        null,
-        {
-          params: apiParams,
-        }
-      );
-      setLoading(null);
+      // setSignature(signature)
 
-      if (!customTrade.limitOrderExpiry) {
-        getLockedAmount(
-          baseArgs[ArgIndex.Strike],
-          baseArgs[ArgIndex.Size],
-          baseArgs[ArgIndex.Period],
-          baseArgs[ArgIndex.PartialFill],
-          address as string,
-          baseArgs[ArgIndex.Referral],
-          baseArgs[ArgIndex.NFT],
-          settelmentFee.settlement_fee,
-          baseArgs[ArgIndex.Slippage],
-          baseArgs[ArgIndex.TargetContract],
-          provider,
-          appConfig[activeChain.id].multicall
-        ).then((lockedAmount) => {
-          console.timeEnd('read-call');
+      // console.log(`useBuyTradeActions-account: `, account);
 
-          setPriceCache((t) => ({
-            ...t,
-            [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
-          }));
-        });
-        const queuedPrice = await getPrice({
-          pair: activeAsset.tv_id,
-          timestamp: resp.data.queued_timestamp,
-        });
+      // generate viem walletclient from PK. : 1hour
+      // use that walletclient to sign the messages : 30mins, 4:07
 
-        setPriceCache((t) => ({
-          ...t,
-          [resp.data.queue_id]: queuedPrice,
-        }));
-      }
+      // const resp: { data: OngoingTradeSchema } = await axios.post(
+      //   baseUrl + 'trade/create/',
+      //   null,
+      //   {
+      //     params: apiParams,
+      //   }
+      // );
+      // setLoading(null);
 
-      const content = (
-        <div className="flex flex-col gap-y-2 text-f12 ">
-          <div className="nowrap font-[600]">
-            {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
-            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
-          </div>
-          <div className="flex items-center">
-            {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
-            <span className="!text-3">to go</span>&nbsp;
-            {customTrade.is_up ? (
-              <>
-                <UpIcon className="text-green scale-125" /> &nbsp;Higher
-              </>
-            ) : (
-              <>
-                <DownIcon className="text-red scale-125" />
-                &nbsp; Lower
-              </>
-            )}
-          </div>
-          <div>
-            <span>
-              <span className="!text-3">Total amount:</span>
-              {userInput}&nbsp;USDC
-            </span>
-          </div>
-        </div>
-      );
-      toastify({
-        price,
-        type: 'success',
-        timings: 100,
-        body: null,
-        msg: content,
-      });
+      // if (!customTrade.limitOrderExpiry) {
+      //   getLockedAmount(
+      //     baseArgs[ArgIndex.Strike],
+      //     baseArgs[ArgIndex.Size],
+      //     baseArgs[ArgIndex.Period],
+      //     baseArgs[ArgIndex.PartialFill],
+      //     address as string,
+      //     baseArgs[ArgIndex.Referral],
+      //     baseArgs[ArgIndex.NFT],
+      //     settelmentFee.settlement_fee,
+      //     baseArgs[ArgIndex.Slippage],
+      //     baseArgs[ArgIndex.TargetContract],
+      //     provider,
+      //     appConfig[activeChain.id].multicall
+      //   ).then((lockedAmount) => {
+      //     console.timeEnd('read-call');
+
+      //     setPriceCache((t) => ({
+      //       ...t,
+      //       [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
+      //     }));
+      //   });
+      //   const queuedPrice = await getPrice({
+      //     pair: activeAsset.tv_id,
+      //     timestamp: resp.data.queued_timestamp,
+      //   });
+
+      //   setPriceCache((t) => ({
+      //     ...t,
+      //     [resp.data.queue_id]: queuedPrice,
+      //   }));
+      // }
+
+      // const content = (
+      //   <div className="flex flex-col gap-y-2 text-f12 ">
+      //     <div className="nowrap font-[600]">
+      //       {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
+      //       {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+      //     </div>
+      //     <div className="flex items-center">
+      //       {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
+      //       <span className="!text-3">to go</span>&nbsp;
+      //       {customTrade.is_up ? (
+      //         <>
+      //           <UpIcon className="text-green scale-125" /> &nbsp;Higher
+      //         </>
+      //       ) : (
+      //         <>
+      //           <DownIcon className="text-red scale-125" />
+      //           &nbsp; Lower
+      //         </>
+      //       )}
+      //     </div>
+      //     <div>
+      //       <span>
+      //         <span className="!text-3">Total amount:</span>
+      //         {userInput}&nbsp;USDC
+      //       </span>
+      //     </div>
+      //   </div>
+      // );
+      // toastify({
+      //   price,
+      //   type: 'success',
+      //   timings: 100,
+      //   body: null,
+      //   msg: content,
+      // });
       // } catch (e) {
       //   con
       // }
