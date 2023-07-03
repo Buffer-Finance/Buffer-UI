@@ -75,12 +75,6 @@ const tradeParamTypes = [
   { name: 'traderNFTId', type: 'uint256' },
   { name: 'timestamp', type: 'uint256' },
 ];
-const baseTypes = [
-  { name: 'name', type: 'string' },
-  { name: 'version', type: 'string' },
-  { name: 'chainId', type: 'uint256' },
-  { name: 'verifyingContract', type: 'address' },
-];
 
 const isUpType = { name: 'isAbove', type: 'bool' };
 const settlementFeeType = { name: 'settlementFee', type: 'uint256' };

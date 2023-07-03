@@ -13,12 +13,25 @@ import { baseUrl } from '../config';
 import { useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { closeLoadingAtom } from '../atoms';
+import { privateKeyToAccount } from 'viem/accounts';
+const EIP712Domain = [
+  { name: 'name', type: 'string' },
+  { name: 'version', type: 'string' },
+  { name: 'chainId', type: 'uint256' },
+  { name: 'verifyingContract', type: 'address' },
+];
+const CloseAnytimeSignatureTypes = [
+  { name: 'assetPair', type: 'string' },
+  { name: 'timestamp', type: 'uint256' },
+  { name: 'optionId', type: 'uint256' },
+];
+const closeSignaturePrimaryType = 'CloseAnytimeSignature';
 
 export const useCancelTradeFunction = () => {
   const { address } = useAccount();
   const toastify = useToast();
   const { activeChain } = useActiveChain();
-  const { oneCTWallet } = useOneCTWallet();
+  const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const setLoading = useSetAtom(closeLoadingAtom);
   const [earlyCloseLoading, setEarlyCloseLoading] = useState<{
     [queued_id: number]: boolean;
@@ -69,18 +82,25 @@ export const useCancelTradeFunction = () => {
     tradeMarket: marketType
   ) => {
     const ts = Math.round(Date.now() / 1000);
+    const domain = {
+      name: 'Validator',
+      version: '1',
+      chainId: 1,
+      verifyingContract: '0x0000000000000000000000000000000000000000',
+    };
     setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
     console.log(`ec-[tradeMarket.tv_id, ts, trade.option_id]: `, [
       tradeMarket.tv_id,
       ts,
       trade.option_id,
     ]);
-    const hashedMessage = ethers.utils.solidityKeccak256(
-      ['string', 'uint256', 'uint256'],
-      [tradeMarket.tv_id, ts, trade.option_id]
-    );
-    console.log(`ec-hashedMessage: `, hashedMessage);
-    console.log(`ec-oneCTWallet: `, oneCTWallet);
+    const message = {
+      assetPair: tradeMarket.tv_id,
+      timestamp: ts,
+      optionId: trade.option_id,
+    };
+    const wallet = privateKeyToAccount(`0x${oneCtPk}`);
+
     const signature = await getSingatureCached(oneCTWallet);
     const params = {
       closing_time: ts,
