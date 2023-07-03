@@ -7,10 +7,10 @@ export const appConfig = {
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
-    router: '0x721B0485fC4e86e5CAfa25Be6F182754Ed55f9C5',
+    router: '0x333e36e4877a5C758F5F23e2606E10C26Dd04746',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     poolsInfo: {
-      '0x316aB9885C37350aA7ddD28B05b8357b84FE4545': {
+      '0x773945834Fb4F8E1c3c1541F850A73c61B43480B': {
         tokenAddress: '0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E',
         faucet: '0x51469Ec9B8AE9B3Fbf985e735C2E3758FbD4e408',
         decimals: 6,
