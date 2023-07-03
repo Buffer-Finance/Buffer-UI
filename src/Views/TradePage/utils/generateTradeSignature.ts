@@ -62,38 +62,34 @@ const generateTradeSignature = async (
     hashedMessage.map((s) => wallet?.signMessage(arrayify(s)))
   );
 };
-const normalTradeMeta = {
-  types: {
-    EIP712Domain: [
-      { name: 'name', type: 'string' },
-      { name: 'version', type: 'string' },
-      { name: 'chainId', type: 'uint256' },
-      { name: 'verifyingContract', type: 'address' },
-    ],
-    UserTradeSignatureWithSettlementFee: [
-      { name: 'user', type: 'address' },
-      { name: 'totalFee', type: 'uint256' },
-      { name: 'period', type: 'uint256' },
-      { name: 'targetContract', type: 'address' },
-      { name: 'strike', type: 'uint256' },
-      { name: 'slippage', type: 'uint256' },
-      { name: 'allowPartialFill', type: 'bool' },
-      { name: 'referralCode', type: 'string' },
-      { name: 'traderNFTId', type: 'uint256' },
-      { name: 'timestamp', type: 'uint256' },
-      { name: 'settlementFee', type: 'uint256' },
-    ],
-  },
-  primaryType: 'UserTradeSignatureWithSettlementFee' as const,
-  domain: {
-    name: 'Validator',
-    version: '1',
-    chainId: 421613,
-    verifyingContract: '0x0000000000000000000000000000000000000000',
-  } as const,
-};
-const isUpType = { name: 'isAbove', type: 'bool' };
 
+const tradeParamTypes = [
+  { name: 'user', type: 'address' },
+  { name: 'totalFee', type: 'uint256' },
+  { name: 'period', type: 'uint256' },
+  { name: 'targetContract', type: 'address' },
+  { name: 'strike', type: 'uint256' },
+  { name: 'slippage', type: 'uint256' },
+  { name: 'allowPartialFill', type: 'bool' },
+  { name: 'referralCode', type: 'string' },
+  { name: 'traderNFTId', type: 'uint256' },
+  { name: 'timestamp', type: 'uint256' },
+];
+const baseTypes = [
+  { name: 'name', type: 'string' },
+  { name: 'version', type: 'string' },
+  { name: 'chainId', type: 'uint256' },
+  { name: 'verifyingContract', type: 'address' },
+];
+
+const isUpType = { name: 'isAbove', type: 'bool' };
+const settlementFeeType = { name: 'settlementFee', type: 'uint256' };
+const EIP712Domain = [
+  { name: 'name', type: 'string' },
+  { name: 'version', type: 'string' },
+  { name: 'chainId', type: 'uint256' },
+  { name: 'verifyingContract', type: 'address' },
+];
 const generateBuyTradeSignature = async (
   address: any,
   size: string,
@@ -111,8 +107,10 @@ const generateBuyTradeSignature = async (
 ): Promise<string[]> => {
   const wallet = privateKeyToAccount(`0x${oneCtPk}`);
 
+  console.log(`ddd-settlementFee: `, settlementFee);
   const isLimit = settlementFee == 0;
-  const message = {
+
+  const baseMessage = {
     user: address,
     totalFee: size,
     period: +duration * 60 + '',
@@ -123,27 +121,37 @@ const generateBuyTradeSignature = async (
     referralCode: referral,
     traderNFTId: NFTid,
     timestamp: ts,
-    settlementFee: settlementFee,
   };
   console.log('call-dd');
+  const domain = {
+    name: 'Validator',
+    version: '1',
+    chainId: 421613,
+    verifyingContract: '0x0000000000000000000000000000000000000000',
+  };
+  const key = isLimit
+    ? 'UserTradeSignature'
+    : 'UserTradeSignatureWithSettlementFee';
+  const extraArgTypes = !isLimit ? [settlementFeeType] : [];
+  const extraArgs = !isLimit ? { settlementFee } : {};
+  console.log(`ddd-extraArgs: `, extraArgs);
+  console.log(`ddd-baseMessage: `, baseMessage);
   const res = await Promise.all([
     wallet.signTypedData({
-      types: normalTradeMeta.types,
-      primaryType: normalTradeMeta.primaryType,
-      domain: normalTradeMeta.domain,
-      message,
+      types: { EIP712Domain, [key]: [...tradeParamTypes, ...extraArgTypes] },
+      primaryType: key,
+      domain,
+      message: { ...baseMessage, ...extraArgs },
     }),
+
     wallet.signTypedData({
       types: {
-        ...normalTradeMeta.types,
-        UserTradeSignatureWithSettlementFee: [
-          ...normalTradeMeta.types['UserTradeSignatureWithSettlementFee'],
-          isUpType,
-        ],
+        EIP712Domain,
+        [key]: [...tradeParamTypes, isUpType, ...extraArgTypes],
       },
-      primaryType: normalTradeMeta.primaryType,
-      domain: normalTradeMeta.domain,
-      message: { ...message, isAbove: isUp },
+      primaryType: key,
+      domain,
+      message: { ...baseMessage, isAbove: isUp, ...extraArgs },
     }),
   ]);
   console.log(`call-dd-res: `, res);

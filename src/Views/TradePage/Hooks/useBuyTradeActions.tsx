@@ -314,6 +314,8 @@ export const useBuyTradeActions = (userInput: string) => {
         highestTierNFT?.tokenId || '0',
       ];
       console.time('read-call-dd');
+      console.log(`ddd-limitOrderExpiry: `, customTrade.limitOrderExpiry);
+
       const signatures = await generateBuyTradeSignature(
         address,
         toFixed(multiply(userInput, decimals), 0),
