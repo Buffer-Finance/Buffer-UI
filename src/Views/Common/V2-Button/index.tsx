@@ -2,7 +2,7 @@ import React from 'react';
 import ButtonLoader from './ButtonLoader';
 export const buttonAnimation =
   ' hover:translate-y-[-2.5px] active:translate-y-1 ';
-interface IButton {
+interface IButton extends React.HTMLProps<HTMLButtonElement> {
   isLoading?: boolean;
   children?: any;
   isDisabled?: boolean;
@@ -69,6 +69,7 @@ export const BlueBtn: React.FC<IButton> = ({
   isDisabled,
   className,
   onClick,
+  ...props
 }) => {
   return (
     <CustomButton
@@ -76,6 +77,7 @@ export const BlueBtn: React.FC<IButton> = ({
       isDisabled={isDisabled}
       className={`${className} bg-blue text-1 hover:-translate-y-1`}
       onClick={onClick}
+      {...props}
     >
       {children}
     </CustomButton>

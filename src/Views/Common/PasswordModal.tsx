@@ -21,7 +21,8 @@ export const PasswordModal: React.FC<{}> = ({}) => {
   const toastify = useToast();
 
   const [ip, setip] = useState('');
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (ip === password) {
       setIsAuth(true);
       toastify({
@@ -52,38 +53,42 @@ export const PasswordModal: React.FC<{}> = ({}) => {
             <LightningIcon /> Welcome!
           </div>
         </RowGap>
-        <div className="flex flex-col  gap-y-2">
-          <div className="text-[#C3C2D4] text-f18">
-            Only open for our beta testers
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col  gap-y-2">
+            <div className="text-[#C3C2D4] text-f18">
+              Only open for our beta testers
+            </div>
+
+            <input
+              type="text"
+              className=" my-2  outline-none password-border bg-[#1C1C28] text-f14 p-4 rounded-[5px] w-full text-1            "
+              value={ip}
+              onChange={(e) => setip(e.target.value)}
+              placeholder="Enter the password!"
+            />
+            <div className="text-[#C3C2D4] text-f14">
+              You can check our discord to become beta user
+            </div>
+            <div className="flex items-center mt-2">
+              <BlueBtn
+                className="!w-fit px-3 !h-[25px] !mr- "
+                onClick={null}
+                type="submit"
+              >
+                Submit
+              </BlueBtn>
+              <a
+                className="unset"
+                target="_blank"
+                href={'https://discord.com/invite/Hj4QF92Kdc'}
+              >
+                <div className="flex   items-center underline text-[#C3C2D4] text-f16 cursor-pointer ml-[7px]">
+                  <Discord /> Discord link
+                </div>
+              </a>
+            </div>
           </div>
-          <input
-            type="text"
-            className=" my-2  outline-none password-border bg-[#1C1C28] text-f14 p-4 rounded-[5px] w-full text-1            "
-            value={ip}
-            onChange={(e) => setip(e.target.value)}
-            placeholder="Enter the password!"
-          />
-          <div className="text-[#C3C2D4] text-f14">
-            You can check our discord to become beta user
-          </div>
-          <div className="flex items-center mt-2">
-            <BlueBtn
-              className="!w-fit px-3 !h-[25px] !mr- "
-              onClick={handleSubmit}
-            >
-              Submit
-            </BlueBtn>
-            <a
-              className="unset"
-              target="_blank"
-              href={'https://discord.com/invite/Hj4QF92Kdc'}
-            >
-              <div className="flex   items-center underline text-[#C3C2D4] text-f16 cursor-pointer ml-[7px]">
-                <Discord /> Discord link
-              </div>
-            </a>
-          </div>
-        </div>
+        </form>
       </EditModalBackground>
     </ModalBase>
   );
