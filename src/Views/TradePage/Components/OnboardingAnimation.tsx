@@ -4,11 +4,10 @@ import { Dialog } from '@mui/material';
 import { useEffect, SVGProps } from 'react';
 import BufferLogo from '@Assets/Elements/BufferLogo';
 import BufferAnimation from '@SVG/BufferAnimation';
-
-const duration = 500000;
+const duration = 5000;
 // 37
 const OnboardingAnimation: React.FC<any> = ({}) => {
-  const isOpen = true;
+  const isOpen = useAtomValue(showOnboardingAnimationAtom);
 
   return (
     <Dialog
