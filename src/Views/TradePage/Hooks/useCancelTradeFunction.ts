@@ -109,12 +109,12 @@ export const useCancelTradeFunction = () => {
       domain,
       message,
     });
-    console.log(`actualSignature: `, actualSignature);
+    // console.log(`actualSignature: `, actualSignature);
     const signature = await getSingatureCached(oneCTWallet);
     const params = {
       closing_time: ts,
       queue_id: trade.queue_id,
-      user_signature: signature,
+      user_signature: actualSignature,
       environment: activeChain.id,
     };
     console.log(`ec-params: `, params);
