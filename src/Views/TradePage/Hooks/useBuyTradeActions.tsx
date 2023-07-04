@@ -353,15 +353,7 @@ export const useBuyTradeActions = (userInput: string) => {
         settlement_fee_signature: settelmentFee?.settlement_fee_signature,
         environment: activeChain.id,
       };
-      // console.log(`useBuyTradeActions-apiParams: `, apiParams);
-      // console.timeEnd('read-call-dd');
-
-      // setSignature(signature)
-
-      // console.log(`useBuyTradeActions-account: `, account);
-
-      // generate viem walletclient from PK. : 1hour
-      // use that walletclient to sign the messages : 30mins, 4:07
+      console.log(`useBuyTradeActions-apiParams: `, apiParams);
 
       const resp: { data: OngoingTradeSchema } = await axios.post(
         baseUrl + 'trade/create/',

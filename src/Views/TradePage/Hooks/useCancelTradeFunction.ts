@@ -100,7 +100,16 @@ export const useCancelTradeFunction = () => {
       optionId: trade.option_id,
     };
     const wallet = privateKeyToAccount(`0x${oneCtPk}`);
-
+    const actualSignature = await wallet.signTypedData({
+      types: {
+        EIP712Domain,
+        [closeSignaturePrimaryType]: CloseAnytimeSignatureTypes,
+      },
+      primaryType: closeSignaturePrimaryType,
+      domain,
+      message,
+    });
+    console.log(`actualSignature: `, actualSignature);
     const signature = await getSingatureCached(oneCTWallet);
     const params = {
       closing_time: ts,
