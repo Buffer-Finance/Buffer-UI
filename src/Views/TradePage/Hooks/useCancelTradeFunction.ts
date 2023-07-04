@@ -9,7 +9,7 @@ import { OngoingTradeSchema, marketType } from '../type';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
 import axios from 'axios';
-import { baseUrl } from '../config';
+import { appConfig, baseUrl } from '../config';
 import { useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { closeLoadingAtom } from '../atoms';
@@ -33,6 +33,9 @@ export const useCancelTradeFunction = () => {
   const { activeChain } = useActiveChain();
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const setLoading = useSetAtom(closeLoadingAtom);
+  const configData =
+    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+
   const [earlyCloseLoading, setEarlyCloseLoading] = useState<{
     [queued_id: number]: boolean;
   }>({});
@@ -86,7 +89,7 @@ export const useCancelTradeFunction = () => {
       name: 'Validator',
       version: '1',
       chainId: 1,
-      verifyingContract: '0x0000000000000000000000000000000000000000',
+      verifyingContract: configData.router,
     };
     setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
     const message = {
