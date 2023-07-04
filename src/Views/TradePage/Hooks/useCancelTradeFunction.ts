@@ -89,16 +89,18 @@ export const useCancelTradeFunction = () => {
       verifyingContract: '0x0000000000000000000000000000000000000000',
     };
     setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
-    console.log(`ec-[tradeMarket.tv_id, ts, trade.option_id]: `, [
-      tradeMarket.tv_id,
-      ts,
-      trade.option_id,
-    ]);
     const message = {
       assetPair: tradeMarket.tv_id,
       timestamp: ts,
       optionId: trade.option_id,
     };
+    console.log(
+      `ec-deb: `,
+      message,
+      domain,
+      closeSignaturePrimaryType,
+      CloseAnytimeSignatureTypes
+    );
     const wallet = privateKeyToAccount(`0x${oneCtPk}`);
     const actualSignature = await wallet.signTypedData({
       types: {
