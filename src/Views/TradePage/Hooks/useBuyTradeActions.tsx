@@ -329,7 +329,8 @@ export const useBuyTradeActions = (userInput: string) => {
         currentUTCTimestamp,
         customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
         customTrade.is_up,
-        oneCtPk
+        oneCtPk,
+        configData.router
       );
       const apiParams = {
         signature_timestamp: currentUTCTimestamp,

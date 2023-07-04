@@ -97,7 +97,8 @@ const generateBuyTradeSignature = async (
   ts: number,
   settlementFee: string | number,
   isUp: boolean,
-  oneCtPk: string
+  oneCtPk: string,
+  routerContract: string
 ): Promise<string[]> => {
   const wallet = privateKeyToAccount(`0x${oneCtPk}`);
 
@@ -120,8 +121,8 @@ const generateBuyTradeSignature = async (
   const domain = {
     name: 'Validator',
     version: '1',
-    chainId: 421613,
-    verifyingContract: '0x0000000000000000000000000000000000000000',
+    chainId: 1,
+    verifyingContract: routerContract,
   };
   const key = isLimit
     ? 'UserTradeSignature'
