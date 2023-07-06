@@ -244,9 +244,15 @@ export const ChainSwitchDropdown = ({
 export const tokenAtom = atom<string[]>([]);
 export const TokenDropdown = () => {
   const { activeChain } = useActiveChain();
-  const { poolNames: tabList } = usePoolNames();
+  const { poolNames } = usePoolNames();
   const [activeToken, setActiveToken] = useAtom(tokenAtom);
   const { poolDisplayKeyMapping } = usePoolDisplayNames();
+  const tabList = useMemo(
+    () =>
+      poolNames.filter((poolName) => !poolName.toUpperCase().includes('_POL')),
+    [poolNames]
+  );
+  console.log('tabList', tabList);
 
   useEffect(() => {
     setActiveToken([...tabList]);
