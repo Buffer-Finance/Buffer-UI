@@ -5,7 +5,8 @@ import { ethers } from 'ethers';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import { signTypedData } from '@wagmi/core';
 import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
 import { appConfig } from '@Views/TradePage/config';
@@ -32,6 +33,39 @@ import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
  * Hence all the hardwares with the same main account will have to register 1CT again with the
  * new PK generated from incremented nonce
  */
+
+const domain = {
+  name: 'Ether Mail',
+  version: '1',
+  chainId: 421613,
+  verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+} as const;
+
+// The named list of all type definitions
+const types = {
+  EIP712Domain: [
+    { name: 'name', type: 'string' },
+    { name: 'version', type: 'string' },
+    { name: 'chainId', type: 'uint256' },
+    { name: 'verifyingContract', type: 'address' },
+  ],
+  one_ct: [
+    { name: 'content', type: 'string' },
+    { name: 'nonce', type: 'uint256' },
+  ],
+} as const;
+
+const message = {
+  from: {
+    name: 'Cow',
+    wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+  },
+  to: {
+    name: 'Bob',
+    wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+  },
+  contents: 'Hello, Bob!',
+} as const;
 
 const registerOneCtMethod = 'registerAccount';
 
@@ -64,8 +98,7 @@ const useOneCTWallet = () => {
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
-
-  const pkLocalStorageIdentifier = 'signer-account-pk:' + address;
+  const pkLocalStorageIdentifier = 'signer-account-pk:' + address + ':';
 
   const registeredOneCT = useMemo(() => {
     const isEnabled = res?.length
@@ -105,24 +138,31 @@ const useOneCTWallet = () => {
     setCreateLoading(true);
     const nonce = res?.[1];
     if (!nonce) return toastify(WaitToast());
-    const message =
-      'I am creating 1 Click Trading account on Buffer Finance ' + nonce;
-    try {
-      const signature = await signer!.signMessage(message);
-      const privateKey = ethers.utils.keccak256(signature).slice(2);
-      secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
-      checkStorage();
-      setCreateLoading(false);
-      if (is1CTEnabled(res[0], privateKey, provider)) {
-        toastify({
-          msg: 'You have already registered your 1CT Account. You can start trading now!',
-          type: 'success',
-        });
-      }
-      return privateKey;
-    } catch (e) {
-      setCreateLoading(false);
+    // try {
+    const signature = await signTypedData({
+      types,
+      domain,
+      value: {
+        content: 'I want to create 1ct ',
+        nonce,
+      },
+    });
+    console.log(`useOneCTWallet-signature: `, signature);
+    const privateKey = ethers.utils.keccak256(signature).slice(2);
+    console.log(`useOneCTWallet-privateKey: `, privateKey);
+    secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
+    checkStorage();
+    setCreateLoading(false);
+    if (is1CTEnabled(res[0], privateKey, provider)) {
+      toastify({
+        msg: 'You have already registered your 1CT Account. You can start trading now!',
+        type: 'success',
+      });
     }
+    return privateKey;
+    // } catch (e) {
+    //   setCreateLoading(false);
+    // }
   }, [signer, res?.[0], provider]);
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);

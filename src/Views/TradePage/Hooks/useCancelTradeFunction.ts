@@ -9,17 +9,33 @@ import { OngoingTradeSchema, marketType } from '../type';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
 import axios from 'axios';
-import { baseUrl } from '../config';
+import { appConfig, baseUrl } from '../config';
 import { useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { closeLoadingAtom } from '../atoms';
+import { privateKeyToAccount } from 'viem/accounts';
+const EIP712Domain = [
+  { name: 'name', type: 'string' },
+  { name: 'version', type: 'string' },
+  { name: 'chainId', type: 'uint256' },
+  { name: 'verifyingContract', type: 'address' },
+];
+const CloseAnytimeSignatureTypes = [
+  { name: 'assetPair', type: 'string' },
+  { name: 'timestamp', type: 'uint256' },
+  { name: 'optionId', type: 'uint256' },
+];
+const closeSignaturePrimaryType = 'CloseAnytimeSignature';
 
 export const useCancelTradeFunction = () => {
   const { address } = useAccount();
   const toastify = useToast();
   const { activeChain } = useActiveChain();
-  const { oneCTWallet } = useOneCTWallet();
+  const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const setLoading = useSetAtom(closeLoadingAtom);
+  const configData =
+    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+
   const [earlyCloseLoading, setEarlyCloseLoading] = useState<{
     [queued_id: number]: boolean;
   }>({});
@@ -69,23 +85,41 @@ export const useCancelTradeFunction = () => {
     tradeMarket: marketType
   ) => {
     const ts = Math.round(Date.now() / 1000);
+    const domain = {
+      name: 'Validator',
+      version: '1',
+      chainId: 1,
+      verifyingContract: configData.router,
+    };
     setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
-    console.log(`ec-[tradeMarket.tv_id, ts, trade.option_id]: `, [
-      tradeMarket.tv_id,
-      ts,
-      trade.option_id,
-    ]);
-    const hashedMessage = ethers.utils.solidityKeccak256(
-      ['string', 'uint256', 'uint256'],
-      [tradeMarket.tv_id, ts, trade.option_id]
+    const message = {
+      assetPair: tradeMarket.tv_id,
+      timestamp: ts,
+      optionId: trade.option_id,
+    };
+    console.log(
+      `ec-deb: `,
+      message,
+      domain,
+      closeSignaturePrimaryType,
+      CloseAnytimeSignatureTypes
     );
-    console.log(`ec-hashedMessage: `, hashedMessage);
-    console.log(`ec-oneCTWallet: `, oneCTWallet);
+    const wallet = privateKeyToAccount(`0x${oneCtPk}`);
+    const actualSignature = await wallet.signTypedData({
+      types: {
+        EIP712Domain,
+        [closeSignaturePrimaryType]: CloseAnytimeSignatureTypes,
+      },
+      primaryType: closeSignaturePrimaryType,
+      domain,
+      message,
+    });
+    // console.log(`actualSignature: `, actualSignature);
     const signature = await getSingatureCached(oneCTWallet);
     const params = {
       closing_time: ts,
       queue_id: trade.queue_id,
-      user_signature: signature,
+      user_signature: actualSignature,
       environment: activeChain.id,
     };
     console.log(`ec-params: `, params);

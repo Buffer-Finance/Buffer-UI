@@ -2,6 +2,7 @@ import { toFixed } from '@Utils/NumString';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
+import { privateKeyToAccount } from 'viem/accounts';
 
 const generateTradeSignature = async (
   address: any,
@@ -62,4 +63,95 @@ const generateTradeSignature = async (
   );
 };
 
+const tradeParamTypes = [
+  { name: 'user', type: 'address' },
+  { name: 'totalFee', type: 'uint256' },
+  { name: 'period', type: 'uint256' },
+  { name: 'targetContract', type: 'address' },
+  { name: 'strike', type: 'uint256' },
+  { name: 'slippage', type: 'uint256' },
+  { name: 'allowPartialFill', type: 'bool' },
+  { name: 'referralCode', type: 'string' },
+  { name: 'traderNFTId', type: 'uint256' },
+  { name: 'timestamp', type: 'uint256' },
+];
+
+const isUpType = { name: 'isAbove', type: 'bool' };
+const settlementFeeType = { name: 'settlementFee', type: 'uint256' };
+const EIP712Domain = [
+  { name: 'name', type: 'string' },
+  { name: 'version', type: 'string' },
+  { name: 'chainId', type: 'uint256' },
+  { name: 'verifyingContract', type: 'address' },
+];
+const generateBuyTradeSignature = async (
+  address: any,
+  size: string,
+  duration: string | number,
+  targetContract: string,
+  strike: string,
+  slippage: string,
+  partialFill: boolean,
+  referral: string,
+  NFTid: string,
+  ts: number,
+  settlementFee: string | number,
+  isUp: boolean,
+  oneCtPk: string,
+  routerContract: string
+): Promise<string[]> => {
+  const wallet = privateKeyToAccount(`0x${oneCtPk}`);
+
+  console.log(`ddd-settlementFee: `, settlementFee);
+  const isLimit = settlementFee == 0;
+
+  const baseMessage = {
+    user: address,
+    totalFee: size,
+    period: +duration * 60 + '',
+    targetContract,
+    strike: toFixed(multiply(strike, 8), 0),
+    slippage,
+    allowPartialFill: partialFill,
+    referralCode: referral,
+    traderNFTId: NFTid,
+    timestamp: ts,
+  };
+  console.log('call-dd');
+  const domain = {
+    name: 'Validator',
+    version: '1',
+    chainId: 1,
+    verifyingContract: routerContract,
+  };
+  const key = isLimit
+    ? 'UserTradeSignature'
+    : 'UserTradeSignatureWithSettlementFee';
+  const extraArgTypes = !isLimit ? [settlementFeeType] : [];
+  const extraArgs = !isLimit ? { settlementFee } : {};
+  console.log(`ddd-extraArgs: `, extraArgs);
+  console.log(`ddd-baseMessage: `, baseMessage);
+  const res = await Promise.all([
+    wallet.signTypedData({
+      types: { EIP712Domain, [key]: [...tradeParamTypes, ...extraArgTypes] },
+      primaryType: key,
+      domain,
+      message: { ...baseMessage, ...extraArgs },
+    }),
+
+    wallet.signTypedData({
+      types: {
+        EIP712Domain,
+        [key]: [...tradeParamTypes, isUpType, ...extraArgTypes],
+      },
+      primaryType: key,
+      domain,
+      message: { ...baseMessage, isAbove: isUp, ...extraArgs },
+    }),
+  ]);
+  console.log(`call-dd-res: `, res);
+  return res;
+};
+
 export default generateTradeSignature;
+export { generateBuyTradeSignature };

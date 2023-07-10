@@ -8,6 +8,7 @@ import {
   braveWallet,
   metaMaskWallet,
   coinbaseWallet,
+  // walletConnectConnector,
   walletConnectWallet,
   imTokenWallet,
   ledgerWallet,
@@ -15,6 +16,9 @@ import {
   safeWallet,
   tahoWallet,
 } from '@rainbow-me/rainbowkit/wallets';
+const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
+console.log(`projectId: `, projectId);
+
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { inIframe } from '@Utils/isInIframe';
@@ -41,8 +45,8 @@ const getWallets = (chains: Chain[]) => {
     {
       groupName: 'Recommended',
       wallets: [
-        metaMaskWallet({ chains }),
-        coinbaseWallet({ chains, appName: 'Buffer Finance' }),
+        metaMaskWallet({ chains,projectId }),
+        coinbaseWallet({ chains, appName: 'Buffer Finance',projectId }),
       ],
     },
   ];
@@ -53,21 +57,21 @@ const getWallets = (chains: Chain[]) => {
           groupName: bothSupported[0].groupName,
           wallets: [
             ...bothSupported[0].wallets,
-            trustWallet({ chains }),
-            injectedWallet({ chains }),
-            walletConnectWallet({ chains }),
-            safeWallet({ chains }),
+            trustWallet({ chains, projectId }),
+            injectedWallet({ chains,projectId }),
+            walletConnectWallet({ chains, projectId }),
+            safeWallet({ chains,projectId }),
           ],
         },
         {
           groupName: 'Others',
           wallets: [
-            tahoWallet({ chains }),
-            rainbowWallet({ chains }),
-            imTokenWallet({ chains }),
-            ledgerWallet({ chains }),
-            omniWallet({ chains }),
-            braveWallet({ chains }),
+            tahoWallet({ chains,projectId }),
+            rainbowWallet({ chains, projectId }),
+            imTokenWallet({ chains, projectId }),
+            ledgerWallet({ chains, projectId }),
+            omniWallet({ chains, projectId }),
+            braveWallet({ chains ,projectId}),
             // argentWallet({ chains }),
           ],
         },

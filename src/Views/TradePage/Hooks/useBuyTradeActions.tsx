@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
 import { toFixed } from '@Utils/NumString';
 import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
+import { privateKeyToAccount } from 'viem/accounts';
+import 'viem/window';
+
 import {
   add,
   divide,
@@ -54,6 +57,7 @@ import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
+import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -331,9 +335,10 @@ export const useBuyTradeActions = (userInput: string) => {
         referralData[2],
         highestTierNFT?.tokenId || '0',
       ];
-      const signatures = await generateTradeSignature(
+
+      const signatures = await generateBuyTradeSignature(
         address,
-        multiply(userInput, decimals),
+        toFixed(multiply(userInput, decimals), 0),
         expirationInMins,
         option_contract,
         price,
@@ -344,7 +349,8 @@ export const useBuyTradeActions = (userInput: string) => {
         currentUTCTimestamp,
         customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
         customTrade.is_up,
-        oneCTWallet
+        oneCtPk,
+        configData.router
       );
       const apiParams = {
         signature_timestamp: currentUTCTimestamp,
@@ -368,11 +374,7 @@ export const useBuyTradeActions = (userInput: string) => {
         settlement_fee_signature: settelmentFee?.settlement_fee_signature,
         environment: activeChain.id,
       };
-      console.log(`useBuyTradeActions-apiParams: `, apiParams);
-      console.time('read-call');
 
-      // const sig = ethers.utils.splitSignature(signature);
-      // const lockedAmount = await Promise.all[,getPrice(query)];
       const resp: { data: OngoingTradeSchema } = await axios.post(
         baseUrl + 'trade/create/',
         null,
@@ -415,41 +417,41 @@ export const useBuyTradeActions = (userInput: string) => {
         }));
       }
 
-      const content = (
-        <div className="flex flex-col gap-y-2 text-f12 ">
-          <div className="nowrap font-[600]">
-            {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
-            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
-          </div>
-          <div className="flex items-center">
-            {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
-            <span className="!text-3">to go</span>&nbsp;
-            {customTrade.is_up ? (
-              <>
-                <UpIcon className="text-green scale-125" /> &nbsp;Higher
-              </>
-            ) : (
-              <>
-                <DownIcon className="text-red scale-125" />
-                &nbsp; Lower
-              </>
-            )}
-          </div>
-          <div>
-            <span>
-              <span className="!text-3">Total amount:</span>
-              {userInput}&nbsp;USDC
-            </span>
-          </div>
-        </div>
-      );
-      toastify({
-        price,
-        type: 'success',
-        timings: 100,
-        body: null,
-        msg: content,
-      });
+      // const content = (
+      //   <div className="flex flex-col gap-y-2 text-f12 ">
+      //     <div className="nowrap font-[600]">
+      //       {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
+      //       {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+      //     </div>
+      //     <div className="flex items-center">
+      //       {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
+      //       <span className="!text-3">to go</span>&nbsp;
+      //       {customTrade.is_up ? (
+      //         <>
+      //           <UpIcon className="text-green scale-125" /> &nbsp;Higher
+      //         </>
+      //       ) : (
+      //         <>
+      //           <DownIcon className="text-red scale-125" />
+      //           &nbsp; Lower
+      //         </>
+      //       )}
+      //     </div>
+      //     <div>
+      //       <span>
+      //         <span className="!text-3">Total amount:</span>
+      //         {userInput}&nbsp;USDC
+      //       </span>
+      //     </div>
+      //   </div>
+      // );
+      // toastify({
+      //   price,
+      //   type: 'success',
+      //   timings: 100,
+      //   body: null,
+      //   msg: content,
+      // });
       // } catch (e) {
       //   con
       // }
@@ -532,17 +534,7 @@ const getLockedAmount = async (
       address: optionContract,
       abi: OptionsABI,
       params: [
-        [
-          price,
-          '0',
-          period,
-          allowPartialFill,
-          totalFee,
-          user,
-          referrer,
-          nftId,
-          settlementFee + '',
-        ],
+        [price, '0', period, allowPartialFill, totalFee, user, referrer, nftId],
         slippage + '',
       ],
       name: 'evaluateParams',
