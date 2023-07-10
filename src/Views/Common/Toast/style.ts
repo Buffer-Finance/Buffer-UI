@@ -125,7 +125,7 @@ export const SingleNotification = styled.div`
     --dim: 2.1rem;
     min-width: var(--dim);
     max-width: var(--dim);
-    margin-top: 10px;
+    margin-top: 3px;
     margin-right: 1rem;
     min-height: var(--dim);
     max-height: var(--dim);

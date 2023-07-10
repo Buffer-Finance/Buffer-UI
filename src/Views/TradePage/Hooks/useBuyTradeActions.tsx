@@ -53,6 +53,7 @@ import DownIcon from '@SVG/Elements/DownIcon';
 import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
+import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -71,6 +72,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const priceCache = useAtomValue(queuets2priceAtom);
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
+  console.log(`useBuyTradeActions-switchPool: `, poolDetails);
   const readcallData = useBuyTradeData();
   const decimals = poolDetails?.decimals;
   const balance = divide(readcallData?.balance, decimals as number) as string;
@@ -132,10 +134,7 @@ export const useBuyTradeActions = (userInput: string) => {
     }
     const maxdurationInMins = timeToMins(maxDuration);
     const mindurationInMins = timeToMins(minDuration);
-    const minTradeAmount = add(
-      switchPool?.min_fee ?? '0',
-      switchPool?.platformFee ?? '0'
-    );
+    const minTradeAmount = switchPool?.min_fee ?? '0';
     const maxTradeAmount =
       readcallData?.maxTradeSizes[switchPool.optionContract] ?? '0';
     console.log(
@@ -145,6 +144,7 @@ export const useBuyTradeActions = (userInput: string) => {
       switchPool.pool,
       'minTradeAmount'
     );
+    const platfromFee = divide(switchPool.platformFee, decimals as number);
 
     if (
       isCustom === undefined ||
@@ -204,7 +204,29 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      const noBalance = gt(userInput || '0', balance ? balance : '0');
+      const noBalance = gt(
+        userInput || '0',
+        add(balance ? balance : '0', platfromFee ?? '0')
+      );
+      const platformFee = divide(switchPool.platformFee, poolDetails?.decimals);
+      console.log(
+        `useBuyTradeActions-add(userInput, platformFee): `,
+        add(userInput, platformFee),
+        balance
+      );
+      if (gt(add(userInput, platformFee), balance)) {
+        return toastify({
+          type: 'error',
+          msg: (
+            <>
+              Addition {platformFee} {poolDetails?.token} are required on top of
+              Trade Size as Platform Fee.{' '}
+              <BuyUSDCLink token={poolDetails?.token} />
+            </>
+          ),
+          id: 'binaryBuy',
+        });
+      }
       if (noBalance) {
         return toastify({
           type: 'error',
