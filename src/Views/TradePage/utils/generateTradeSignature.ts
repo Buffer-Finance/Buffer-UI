@@ -142,7 +142,7 @@ const generateBuyTradeSignature = async (
     wallet.signTypedData({
       types: {
         EIP712Domain,
-        [key]: [...tradeParamTypes, isUpType, ...extraArgTypes],
+        [key]: [...tradeParamTypes, ...extraArgTypes, isUpType],
       },
       primaryType: key,
       domain,
