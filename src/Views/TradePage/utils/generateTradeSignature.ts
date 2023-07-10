@@ -123,37 +123,25 @@ const generateBuyTradeSignature = async (
     verifyingContract: routerContract,
   };
   const key = isLimit
-    ? 'UserTradeSignature'
-    : 'UserTradeSignatureWithSettlementFee';
+    ? { partial: 'UserTradeSignature', full: 'MarketDirectionSignature' }
+    : {
+        partial: 'UserTradeSignatureWithSettlementFee',
+        full: 'MarketDirectionSignatureWithSettlementFee',
+      };
   const extraArgTypes = !isLimit
     ? [{ name: 'timestamp', type: 'uint256' }, settlementFeeType]
     : [{ name: 'timestamp', type: 'uint256' }];
   const extraArgs = !isLimit
     ? { settlementFee, timestamp: ts }
     : { timestamp: ts };
-  console.log(`ddd-extraArgs: `, extraArgs);
-  console.log(`ddd-baseMessage: `, baseMessage);
-  console.log(
-    `ddd-full-baseMessage: `,
-    {
-      ...baseMessage,
-      isAbove: isUp,
-      ...extraArgs,
-    },
-    [...tradeParamTypes, isUpType, ...extraArgTypes]
-  );
-  console.log(
-    `ddd-f-baseMessage: `,
-    {
-      ...baseMessage,
-      ...extraArgs,
-    },
-    [...tradeParamTypes, ...extraArgTypes]
-  );
+
   const res = await Promise.all([
     wallet.signTypedData({
-      types: { EIP712Domain, [key]: [...tradeParamTypes, ...extraArgTypes] },
-      primaryType: key,
+      types: {
+        EIP712Domain,
+        [key.partial]: [...tradeParamTypes, ...extraArgTypes],
+      },
+      primaryType: key.partial,
       domain,
       message: { ...baseMessage, ...extraArgs },
     }),
@@ -161,9 +149,9 @@ const generateBuyTradeSignature = async (
     wallet.signTypedData({
       types: {
         EIP712Domain,
-        [key]: [...tradeParamTypes, isUpType, ...extraArgTypes],
+        [key.full]: [...tradeParamTypes, isUpType, ...extraArgTypes],
       },
-      primaryType: key,
+      primaryType: key.full,
       domain,
       message: { ...baseMessage, isAbove: isUp, ...extraArgs },
     }),
