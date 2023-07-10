@@ -73,7 +73,6 @@ const tradeParamTypes = [
   { name: 'allowPartialFill', type: 'bool' },
   { name: 'referralCode', type: 'string' },
   { name: 'traderNFTId', type: 'uint256' },
-  { name: 'timestamp', type: 'uint256' },
 ];
 
 const isUpType = { name: 'isAbove', type: 'bool' };
@@ -115,7 +114,6 @@ const generateBuyTradeSignature = async (
     allowPartialFill: partialFill,
     referralCode: referral,
     traderNFTId: NFTid,
-    timestamp: ts,
   };
   console.log('call-dd');
   const domain = {
@@ -127,10 +125,31 @@ const generateBuyTradeSignature = async (
   const key = isLimit
     ? 'UserTradeSignature'
     : 'UserTradeSignatureWithSettlementFee';
-  const extraArgTypes = !isLimit ? [settlementFeeType] : [];
-  const extraArgs = !isLimit ? { settlementFee } : {};
+  const extraArgTypes = !isLimit
+    ? [{ name: 'timestamp', type: 'uint256' }, settlementFeeType]
+    : [{ name: 'timestamp', type: 'uint256' }];
+  const extraArgs = !isLimit
+    ? { settlementFee, timestamp: ts }
+    : { timestamp: ts };
   console.log(`ddd-extraArgs: `, extraArgs);
   console.log(`ddd-baseMessage: `, baseMessage);
+  console.log(
+    `ddd-full-baseMessage: `,
+    {
+      ...baseMessage,
+      isAbove: isUp,
+      ...extraArgs,
+    },
+    [...tradeParamTypes, isUpType, ...extraArgTypes]
+  );
+  console.log(
+    `ddd-f-baseMessage: `,
+    {
+      ...baseMessage,
+      ...extraArgs,
+    },
+    [...tradeParamTypes, ...extraArgTypes]
+  );
   const res = await Promise.all([
     wallet.signTypedData({
       types: { EIP712Domain, [key]: [...tradeParamTypes, ...extraArgTypes] },
@@ -142,7 +161,7 @@ const generateBuyTradeSignature = async (
     wallet.signTypedData({
       types: {
         EIP712Domain,
-        [key]: [...tradeParamTypes, ...extraArgTypes, isUpType],
+        [key]: [...tradeParamTypes, isUpType, ...extraArgTypes],
       },
       primaryType: key,
       domain,
