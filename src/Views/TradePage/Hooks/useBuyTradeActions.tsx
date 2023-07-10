@@ -417,41 +417,41 @@ export const useBuyTradeActions = (userInput: string) => {
         }));
       }
 
-      // const content = (
-      //   <div className="flex flex-col gap-y-2 text-f12 ">
-      //     <div className="nowrap font-[600]">
-      //       {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
-      //       {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
-      //     </div>
-      //     <div className="flex items-center">
-      //       {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
-      //       <span className="!text-3">to go</span>&nbsp;
-      //       {customTrade.is_up ? (
-      //         <>
-      //           <UpIcon className="text-green scale-125" /> &nbsp;Higher
-      //         </>
-      //       ) : (
-      //         <>
-      //           <DownIcon className="text-red scale-125" />
-      //           &nbsp; Lower
-      //         </>
-      //       )}
-      //     </div>
-      //     <div>
-      //       <span>
-      //         <span className="!text-3">Total amount:</span>
-      //         {userInput}&nbsp;USDC
-      //       </span>
-      //     </div>
-      //   </div>
-      // );
-      // toastify({
-      //   price,
-      //   type: 'success',
-      //   timings: 100,
-      //   body: null,
-      //   msg: content,
-      // });
+      const content = (
+        <div className="flex flex-col gap-y-2 text-f12 ">
+          <div className="nowrap font-[600]">
+            {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
+            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+          </div>
+          <div className="flex items-center">
+            {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
+            <span className="!text-3">to go</span>&nbsp;
+            {customTrade.is_up ? (
+              <>
+                <UpIcon className="text-green scale-125" /> &nbsp;Higher
+              </>
+            ) : (
+              <>
+                <DownIcon className="text-red scale-125" />
+                &nbsp; Lower
+              </>
+            )}
+          </div>
+          <div>
+            <span>
+              <span className="!text-3">Total amount:</span>
+              {userInput}&nbsp;USDC
+            </span>
+          </div>
+        </div>
+      );
+      toastify({
+        price,
+        type: 'success',
+        timings: 100,
+        body: null,
+        msg: content,
+      });
       // } catch (e) {
       //   con
       // }
