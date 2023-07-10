@@ -134,27 +134,29 @@ const generateBuyTradeSignature = async (
   const extraArgs = !isLimit
     ? { settlementFee, timestamp: ts }
     : { timestamp: ts };
-
+  const partialSignatureParams = {
+    types: {
+      EIP712Domain,
+      [key.partial]: [...tradeParamTypes, ...extraArgTypes],
+    },
+    primaryType: key.partial,
+    domain,
+    message: { ...baseMessage, ...extraArgs },
+  };
+  console.log(`partialSignatureParams: `, partialSignatureParams);
+  const fullSignatureParams = {
+    types: {
+      EIP712Domain,
+      [key.full]: [...tradeParamTypes, isUpType, ...extraArgTypes],
+    },
+    primaryType: key.full,
+    domain,
+    message: { ...baseMessage, isAbove: isUp, ...extraArgs },
+  };
+  console.log(`fullSignatureParams: `, fullSignatureParams);
   const res = await Promise.all([
-    wallet.signTypedData({
-      types: {
-        EIP712Domain,
-        [key.partial]: [...tradeParamTypes, ...extraArgTypes],
-      },
-      primaryType: key.partial,
-      domain,
-      message: { ...baseMessage, ...extraArgs },
-    }),
-
-    wallet.signTypedData({
-      types: {
-        EIP712Domain,
-        [key.full]: [...tradeParamTypes, isUpType, ...extraArgTypes],
-      },
-      primaryType: key.full,
-      domain,
-      message: { ...baseMessage, isAbove: isUp, ...extraArgs },
-    }),
+    wallet.signTypedData(partialSignatureParams),
+    wallet.signTypedData(fullSignatureParams),
   ]);
   console.log(`call-dd-res: `, res);
   return res;

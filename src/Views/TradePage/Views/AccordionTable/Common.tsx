@@ -152,6 +152,7 @@ export const StrikePriceComponent = ({
   const cachedPrices = useAtomValue(queuets2priceAtom);
 
   const { isPriceArrived, strikePrice } = getStrike(trade, cachedPrices);
+  console.log(`Common-isPriceArrived: `, isPriceArrived, strikePrice);
   if (!configData) return <></>;
   const decimals = 2;
   return (

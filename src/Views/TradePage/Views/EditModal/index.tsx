@@ -29,6 +29,8 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { secondsToHHMM } from '@Views/V3App/helperFns';
 import { getSingatureCached } from '@Views/TradePage/cahce';
+import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
+import { appConfig } from '@Views/TradePage/config';
 
 export const EditModal: React.FC<{
   trade: OngoingTradeSchema;
@@ -47,6 +49,9 @@ export const EditModal: React.FC<{
     max: '24:00',
   });
   const { activeChain } = useActiveChain();
+  const configData =
+    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+
   console.log(`index-duration-trade: `, trade);
   const pool = useMemo(() => {
     if (!market) return null;
@@ -93,7 +98,7 @@ export const EditModal: React.FC<{
     console.log(`index-edit-deb-pk: `, oneCtPk);
     setEditLoading(trade.queue_id);
     const currentTs = Math.round(Date.now() / 1000);
-    const signs = await generateTradeSignature(
+    const signs = await generateBuyTradeSignature(
       address,
       trade.trade_size + '',
       HHMMToSeconds(currentTime) / 60,
@@ -106,7 +111,8 @@ export const EditModal: React.FC<{
       currentTs,
       0,
       buttonDirection == directionBtn.Up ? true : false,
-      oneCTWallet
+      oneCtPk,
+      configData.router
     );
     const signature = await getSingatureCached(oneCTWallet);
     if (!signature)
