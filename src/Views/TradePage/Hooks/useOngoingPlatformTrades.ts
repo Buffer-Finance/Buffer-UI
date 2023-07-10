@@ -23,7 +23,6 @@ const usePlatformTrades = () => {
     {
       fetcher: async () => {
         const signature = await getSingatureCached(oneCTWallet);
-        console.log(`ssssignature: `, signature);
         const response = await Promise.all([
           axios.get(`${baseUrl}trades/all_active/`, {
             params: {

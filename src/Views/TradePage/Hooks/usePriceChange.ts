@@ -5,8 +5,9 @@ import axios from 'axios';
 const usePriceChange = () => {
   const { data } = useSWR('24h-change', {
     fetcher: async () => {
-      const nowEpoch = Math.round(Date.now() / 1000) - 3;
+      const nowEpoch = Math.round(Date.now() / 1000) - 5 * 60;
       const yesterdayEpoch = nowEpoch - 60 * 60 * 24;
+      console.log(`yesterdayEpoch: `, nowEpoch, yesterdayEpoch);
       const queries = [];
       for (const marketName in marketsForChart) {
         const market = (marketsForChart as any)[marketName];
@@ -34,6 +35,7 @@ const usePriceChange = () => {
         };
       } = {};
       response.forEach((res) => {
+        console.log(`res.data: `, res.data);
         finalResponse[res.data[0].pair] = {
           now: res.data[0].price,
           yesterday: res.data[1].price,

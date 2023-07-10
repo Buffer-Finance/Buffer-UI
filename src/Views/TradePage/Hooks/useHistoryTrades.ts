@@ -12,7 +12,6 @@ const useHistoryTrades = (): OngoingTradeSchema[][] => {
   // const { oneCTWallet } = useOneCTWallet();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
-  console.log(`hhoneCTWallet: `, oneCTWallet);
   const { address } = useAccount();
   const { data, error } = useSWR<OngoingTradeSchema[]>(
     'history-trades-' +
@@ -38,7 +37,6 @@ const useHistoryTrades = (): OngoingTradeSchema[][] => {
             oneCTWallet?.address
         );
         const signature = await getSingatureCached(oneCTWallet);
-        console.log(`ssssignature: `, signature);
         const res = await axios.get(`${baseUrl}trades/user/history/`, {
           params: {
             user_signature: signature,

@@ -7,7 +7,6 @@ import { marketsForChart } from '../config';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
-  console.log(`market-data: `, data);
   const toastify = useToast();
 
   if (error) {

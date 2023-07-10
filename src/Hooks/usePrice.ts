@@ -144,7 +144,6 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
   //     clearInterval(interval);
   //   };
   // }, []);
-  console.log('prices', prices);
 };
 
 export const wsStateAtom = atom<{ state: string }>({

@@ -132,8 +132,6 @@ const MarketChart: React.FC<any> = ({}) => {
     setDragging(true);
   };
 
-  console.log(`index-y: `, containerDim?.height);
-
   return (
     <>
       <div
