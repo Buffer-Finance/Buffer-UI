@@ -29,8 +29,14 @@ export const useBuyTradeData = (deb?: string) => {
     const allowance =
       readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
     const user2signer = {
-      signer: readCallData[getCallId(configData.router, 'accountMapping')]?.[0],
-      nonce: readCallData[getCallId(configData.router, 'accountMapping')]?.[1],
+      signer:
+        readCallData[
+          getCallId(configData.signer_manager, 'accountMapping')
+        ]?.[0],
+      nonce:
+        readCallData[
+          getCallId(configData.signer_manager, 'accountMapping')
+        ]?.[1],
     };
     const maxTradeSizes: { [key: string]: string } = {};
 

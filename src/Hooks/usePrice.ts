@@ -96,7 +96,7 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     pythConnection.start();
   };
   useEffect(() => {
-    console.log(`lastMessage: `, lastMessage, lastJsonMessage);
+    // console.log(`lastMessage: `, lastMessage, lastJsonMessage);
     if (!lastJsonMessage) return;
     if ((lastJsonMessage as WSUPdate).type == 'price_update') {
       const data = {

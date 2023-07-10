@@ -7,7 +7,7 @@ import { CloseOutlined } from '@mui/icons-material';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
 import { activeAssetStateAtom } from '@Views/BinaryOptions';
-import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
+import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
 import { useToast } from '@Contexts/Toast';
 const features = [
   {
@@ -290,8 +290,8 @@ const OneCTModal: React.FC<any> = ({}) => {
       }
       setLaoding(true);
       writeCall(
-        configData.router,
-        RouterAbi,
+        configData.signer_manager,
+        SignerManagerABI,
         (payload) => {
           setLaoding(false);
           if (payload.payload) {

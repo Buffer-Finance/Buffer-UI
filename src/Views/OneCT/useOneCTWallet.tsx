@@ -16,6 +16,7 @@ import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
 import useAccountMapping from './useAccountMapping';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { WaitToast } from '@Views/TradePage/utils';
+import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
 
 /*
  * Nonce is zero initially.
@@ -129,8 +130,8 @@ const useOneCTWallet = () => {
   };
   const disableOneCt = () => {
     writeCall(
-      configData.router,
-      RouterAbi,
+      configData.signer_manager,
+      SignerManagerABI,
       (payload) => {
         if (payload.payload) {
           toastify({

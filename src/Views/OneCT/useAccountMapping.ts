@@ -6,6 +6,7 @@ import RouterABI from '@Views/TradePage/ABIs/RouterABI.json';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useCall2Data } from '@Utils/useReadCall';
 import { getCallId } from '@Utils/Contract/multiContract';
+import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
 
 const useAccountMapping = () => {
   const { activeChain } = useActiveChain();
@@ -16,8 +17,8 @@ const useAccountMapping = () => {
   const calls = address
     ? [
         {
-          address: configData.router,
-          abi: RouterABI,
+          address: configData.signer_manager,
+          abi: SignerManagerABI,
           name: 'accountMapping',
           params: [address],
         },
@@ -25,7 +26,7 @@ const useAccountMapping = () => {
     : [];
 
   const { data } = useCall2Data(calls, address || '');
-  return data?.[getCallId(configData.router, 'accountMapping')] || null;
+  return data?.[getCallId(configData.signer_manager, 'accountMapping')] || null;
 };
 
 export default useAccountMapping;

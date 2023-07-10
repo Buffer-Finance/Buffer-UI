@@ -151,12 +151,6 @@
         "internalType": "enum IBufferBinaryOptions.AssetCategory",
         "name": "category",
         "type": "uint8"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint8[4]",
-        "name": "nftTiersStep",
-        "type": "uint8[4]"
       }
     ],
     "name": "CreateOptionsContract",
@@ -416,13 +410,15 @@
   {
     "inputs": [
       { "internalType": "address", "name": "referrer", "type": "address" },
-      { "internalType": "address", "name": "user", "type": "address" },
-      { "internalType": "uint256", "name": "traderNFTId", "type": "uint256" }
+      { "internalType": "address", "name": "user", "type": "address" }
     ],
-    "name": "_getSettlementFeeDiscount",
+    "name": "_getReferralDiscount",
     "outputs": [
-      { "internalType": "bool", "name": "isReferralValid", "type": "bool" },
-      { "internalType": "uint8", "name": "maxStep", "type": "uint8" }
+      {
+        "internalType": "uint256",
+        "name": "referralDiscount",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -507,11 +503,6 @@
           },
           {
             "internalType": "uint256",
-            "name": "traderNFTId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
             "name": "baseSettlementFeePercentage",
             "type": "uint256"
           }
@@ -520,7 +511,6 @@
         "name": "optionParams",
         "type": "tuple"
       },
-      { "internalType": "bool", "name": "isReferralValid", "type": "bool" },
       { "internalType": "uint256", "name": "queuedTime", "type": "uint256" }
     ],
     "name": "createFromRouter",
@@ -558,11 +548,6 @@
           },
           {
             "internalType": "uint256",
-            "name": "traderNFTId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
             "name": "baseSettlementFeePercentage",
             "type": "uint256"
           }
@@ -576,8 +561,7 @@
     "name": "evaluateParams",
     "outputs": [
       { "internalType": "uint256", "name": "amount", "type": "uint256" },
-      { "internalType": "uint256", "name": "revisedFee", "type": "uint256" },
-      { "internalType": "bool", "name": "isReferralValid", "type": "bool" }
+      { "internalType": "uint256", "name": "revisedFee", "type": "uint256" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -587,7 +571,6 @@
       { "internalType": "uint256", "name": "amount", "type": "uint256" },
       { "internalType": "address", "name": "user", "type": "address" },
       { "internalType": "string", "name": "referralCode", "type": "string" },
-      { "internalType": "uint256", "name": "traderNFTId", "type": "uint256" },
       {
         "internalType": "uint256",
         "name": "baseSettlementFeePercentage",
@@ -639,7 +622,6 @@
     "inputs": [
       { "internalType": "address", "name": "referrer", "type": "address" },
       { "internalType": "address", "name": "user", "type": "address" },
-      { "internalType": "uint256", "name": "traderNFTId", "type": "uint256" },
       {
         "internalType": "uint256",
         "name": "baseSettlementFeePercentage",
@@ -652,8 +634,7 @@
         "internalType": "uint256",
         "name": "settlementFeePercentage",
         "type": "uint256"
-      },
-      { "internalType": "bool", "name": "isReferralValid", "type": "bool" }
+      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -717,13 +698,6 @@
     "inputs": [],
     "name": "nextTokenId",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
-    "name": "nftTierStep",
-    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -831,15 +805,6 @@
       { "internalType": "bool", "name": "approved", "type": "bool" }
     ],
     "name": "setApprovalForAll",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint8[4]", "name": "_nftTierStep", "type": "uint8[4]" }
-    ],
-    "name": "setConfigure",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

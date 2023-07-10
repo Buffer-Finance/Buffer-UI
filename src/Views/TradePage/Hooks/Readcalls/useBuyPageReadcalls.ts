@@ -8,6 +8,7 @@ import { erc20ABI } from 'wagmi';
 import { useCall2Data } from '@Utils/useReadCall';
 import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
 import MetaABI from '../../ABIs/meta.json';
+import SignerABI from '@Views/OneCT/signerManagerABI.json';
 import OptionContractABI from '../../ABIs/OptionContract.json';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useMarketsConfig } from '../useMarketsConfig';
@@ -58,8 +59,8 @@ export function useBuyTradePageReadcalls() {
         params: [address, configData.router],
       },
       {
-        address: configData.router,
-        abi: RouterABI,
+        address: configData.signer_manager,
+        abi: SignerABI,
         name: 'accountMapping',
         params: [address],
       },
@@ -100,8 +101,7 @@ export function useBuyTradePageReadcalls() {
                 params: [
                   '0x0000000000000000000000000000000000000000',
                   address,
-                  highestTierNFT?.tokenId || 0,
-                  baseSettlementFee ?? 1500,
+                  baseSettlementFee?.toString() ?? '1500',
                 ],
               });
             }
