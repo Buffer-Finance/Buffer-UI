@@ -105,7 +105,6 @@ const MarketChart: React.FC<any> = ({}) => {
       />
     );
   }
-  console.log(`index-chartTimes: `, chartTimes);
   if (chartTimes == 2.5) {
     chartLayout = (
       <div className="flex-col w-[100%] h-full">

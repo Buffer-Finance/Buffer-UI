@@ -73,12 +73,5 @@ export const useAssetTableFilters = () => {
     return filteredMarkets;
   }, [filteredBySearch, activePool, favouriteMarkets]);
 
-  console.log(
-    filteredByCategory,
-    filteredBySearch,
-    filteredByActivePool,
-    'filters'
-  );
-
   return { filteredMarkets: filteredByActivePool };
 };

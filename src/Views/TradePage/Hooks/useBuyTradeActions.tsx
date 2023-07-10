@@ -76,7 +76,6 @@ export const useBuyTradeActions = (userInput: string) => {
   const priceCache = useAtomValue(queuets2priceAtom);
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
-  console.log(`useBuyTradeActions-switchPool: `, poolDetails);
   const readcallData = useBuyTradeData();
   const decimals = poolDetails?.decimals;
   const balance = divide(readcallData?.balance, decimals as number) as string;
@@ -115,9 +114,6 @@ export const useBuyTradeActions = (userInput: string) => {
   const knowTill = useAtomValue(knowTillAtom);
   const option_contract = switchPool?.optionContract;
   const { oneCtPk } = useOneCTWallet();
-  useEffect(() => {
-    console.log(`useBuyTradeActions-priceCache: `, priceCache);
-  }, [priceCache]);
   const buyHandler = async (customTrade: {
     is_up: boolean;
     strike: string;
@@ -141,13 +137,7 @@ export const useBuyTradeActions = (userInput: string) => {
     const minTradeAmount = switchPool?.min_fee ?? '0';
     const maxTradeAmount =
       readcallData?.maxTradeSizes[switchPool.optionContract] ?? '0';
-    console.log(
-      minTradeAmount,
-      maxTradeAmount,
-      readcallData?.maxTradeSizes,
-      switchPool.pool,
-      'minTradeAmount'
-    );
+
     const platfromFee = divide(switchPool.platformFee, decimals as number);
 
     if (

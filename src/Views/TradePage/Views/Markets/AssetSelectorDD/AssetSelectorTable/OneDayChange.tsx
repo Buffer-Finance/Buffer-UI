@@ -7,7 +7,6 @@ export const OneDayChange: React.FC<{
 }> = ({ oneDayChange, className = '', svgClassName = '' }) => {
   // if(Number.isNaN(isUp))
 
-  console.log(`OneDayChange-oneDayChange: `, oneDayChange);
   const isUp = '12';
   return (
     <div

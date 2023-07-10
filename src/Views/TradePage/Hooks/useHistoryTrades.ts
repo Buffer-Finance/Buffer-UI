@@ -22,20 +22,6 @@ const useHistoryTrades = (): OngoingTradeSchema[][] => {
       oneCTWallet?.address,
     {
       fetcher: async () => {
-        console.log(
-          `'history-trades-' +
-      address +
-      '-' +
-      activeChain.id +
-      '-' +
-      oneCTWallet?.address: `,
-          'history-trades-' +
-            address +
-            '-' +
-            activeChain.id +
-            '-' +
-            oneCTWallet?.address
-        );
         const signature = await getSingatureCached(oneCTWallet);
         const res = await axios.get(`${baseUrl}trades/user/history/`, {
           params: {
@@ -47,7 +33,6 @@ const useHistoryTrades = (): OngoingTradeSchema[][] => {
         if (!res?.data?.length) return [[]];
         const activeTrades = res.data.filter((t: any) => !t.is_limit_order);
         const limitOrders = res.data.filter((t: any) => t.is_limit_order);
-        console.log(`activeTrades: `, activeTrades, limitOrders);
         return [res.data] as OngoingTradeSchema[];
       },
       refreshInterval: refreshInterval,

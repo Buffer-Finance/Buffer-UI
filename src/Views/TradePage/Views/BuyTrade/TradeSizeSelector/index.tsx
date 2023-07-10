@@ -84,10 +84,6 @@ const PlatfromFeeError = ({
 }) => {
   const tradeSize = useAtomValue(tradeSizeAtom);
 
-  console.log(
-    `index-add(tradeSize || '0', platfromFee): `,
-    add(tradeSize || '0', platfromFee)
-  );
   const isError = gt(add(tradeSize || '0', platfromFee), balance);
   return (
     <RowGap

@@ -40,7 +40,6 @@ export const BuyButtons = ({
   const { handleApproveClick, buyHandler, loading } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
-  console.log(`BuyButtons-expiry: `, expiry);
   const { activeChain } = useActiveChain();
   const { activeMarket } = useActiveMarket();
   const { switchPool } = useSwitchPool();

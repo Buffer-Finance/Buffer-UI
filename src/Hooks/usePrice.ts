@@ -114,8 +114,6 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
           },
         ],
       };
-      console.log(`ws-update-data: `, data);
-
       setPrice((p) => ({ ...p, ...data }));
     }
   }, [lastMessage, lastJsonMessage, setMessageHistory]);

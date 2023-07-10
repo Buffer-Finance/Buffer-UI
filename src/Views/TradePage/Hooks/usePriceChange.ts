@@ -35,7 +35,6 @@ const usePriceChange = () => {
         };
       } = {};
       response.forEach((res) => {
-        console.log(`res.data: `, res.data);
         finalResponse[res.data[0].pair] = {
           now: res.data[0].price,
           yesterday: res.data[1].price,
