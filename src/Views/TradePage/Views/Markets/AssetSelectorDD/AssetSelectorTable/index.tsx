@@ -63,7 +63,7 @@ export const AssetSelectorTable: React.FC = () => {
       removeFavouriteMarket(market);
     } else {
       addFavouriteMarket(market);
-      navigateToMarket(market);
+      // navigateToMarket(market);
     }
   }
 
@@ -269,7 +269,8 @@ export const AssetSelectorTable: React.FC = () => {
         onRowClick={(rowNumber) => {
           if (!updatedArr) return;
           const selectedAsset = updatedArr[rowNumber];
-          addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
+          navigateToMarket(selectedAsset);
+          // addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
         }}
       />
     </AssetSelectorDDBackground>
