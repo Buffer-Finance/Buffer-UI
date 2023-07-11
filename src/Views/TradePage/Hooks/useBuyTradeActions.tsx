@@ -525,7 +525,16 @@ const getLockedAmount = async (
       address: optionContract,
       abi: OptionsABI,
       params: [
-        [price, '0', period, allowPartialFill, totalFee, user, referrer, nftId],
+        [
+          price,
+          '0',
+          period,
+          allowPartialFill,
+          totalFee,
+          user,
+          referrer,
+          settlementFee,
+        ],
         slippage + '',
       ],
       name: 'evaluateParams',
