@@ -21,6 +21,8 @@ export const useMarketsRequest = () => {
                     minFee
                     minPeriod
                     platformFee
+                    earlyCloseThreshold
+                    isEarlyCloseEnabled
                   }
                   address
                   poolContract

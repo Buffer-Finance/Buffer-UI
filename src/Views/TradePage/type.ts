@@ -105,6 +105,8 @@ export type responseObj = {
     minFee: string;
     minPeriod: string;
     platformFee: string;
+    earlyCloseThreshold: string;
+    isEarlyCloseEnabled: boolean;
   };
   address: string;
   poolContract: string;
@@ -140,6 +142,6 @@ export enum directionBtn {
 export type configType = (typeof appConfig)['421613'];
 
 export type poolInfoType =
-  (typeof appConfig)['421613']['poolsInfo']['0x316aB9885C37350aA7ddD28B05b8357b84FE4545'];
+  (typeof appConfig)['421613']['poolsInfo']['0xE1630ecC83da4564300837E994d4AB8cE0995455'];
 
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];
