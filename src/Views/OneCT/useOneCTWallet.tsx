@@ -49,22 +49,10 @@ const types = {
     { name: 'chainId', type: 'uint256' },
     { name: 'verifyingContract', type: 'address' },
   ],
-  one_ct: [
+  Registration: [
     { name: 'content', type: 'string' },
     { name: 'nonce', type: 'uint256' },
   ],
-} as const;
-
-const message = {
-  from: {
-    name: 'Cow',
-    wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
-  },
-  to: {
-    name: 'Bob',
-    wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
-  },
-  contents: 'Hello, Bob!',
 } as const;
 
 const registerOneCtMethod = 'registerAccount';
@@ -149,7 +137,7 @@ const useOneCTWallet = () => {
       types,
       domain,
       value: {
-        content: 'I want to create 1ct ',
+        content: 'I want to create a trading account with Buffer Finance',
         nonce,
       },
     });
