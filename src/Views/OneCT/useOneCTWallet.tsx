@@ -131,7 +131,6 @@ const useOneCTWallet = () => {
     try {
       const nonce = res?.[1];
       if (!nonce) return toastify(WaitToast());
-      // try {
       const signature = await signTypedData({
         types,
         domain,
