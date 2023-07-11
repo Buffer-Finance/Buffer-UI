@@ -164,6 +164,7 @@ const HistoryTable: React.FC<{
           />
         );
       case TableColumn.Payout:
+        console.log(`HistoryTable-pnl: `, pnl);
         return (
           <div>
             <Display
@@ -176,7 +177,7 @@ const HistoryTable: React.FC<{
               <Display
                 label={status.chip == 'Win' ? '+' : ''}
                 className="!justify-start"
-                data={divide(pnl, 6)}
+                data={pnl}
                 unit="USDC"
               />
             </span>
