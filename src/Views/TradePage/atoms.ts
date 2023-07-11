@@ -91,7 +91,7 @@ export const visualizeddAtom = atom<number[]>([]);
 
 export const ForexTimingsModalAtom = atom<boolean>(false);
 export const showOnboardingAnimationAtom = atom<boolean>(false);
-export const queuets2priceAtom = atomWithLocalStorage('augmentation-h-ji', {});
+export const queuets2priceAtom = atomWithLocalStorage('augmentation-v1', {});
 export const closeLoadingAtom = atom<{ [key: number]: 1 | 2 | null }>({});
 
 //share modal atoms
