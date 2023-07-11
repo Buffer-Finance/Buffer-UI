@@ -24,6 +24,7 @@ export function useBuyTradePageReadcalls() {
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const referralData = useReferralCode();
+  // console.log('referralData', referralData);
   const config = useMarketsConfig();
   const baseSettlementFees = useSettlementFee();
 
@@ -99,7 +100,7 @@ export function useBuyTradePageReadcalls() {
                 abi: OptionContractABI,
                 name: 'getSettlementFeePercentage',
                 params: [
-                  '0x0000000000000000000000000000000000000000',
+                  referralData[3],
                   address,
                   baseSettlementFee?.toString() ?? '1500',
                 ],
