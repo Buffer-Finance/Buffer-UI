@@ -46,6 +46,21 @@ import { toFixed } from '@Utils/NumString';
 export const tradesCount = 10;
 
 const priceDecimals = 8;
+const getEarlyCloseStatus = (
+  trade: OngoingTradeSchema
+): [status: boolean, tooltip?: string] => {
+  if (trade.option_id == null) return [true, `Option isn't opened yet!`];
+  if (!trade.market.pools[0].earlyclose.enable)
+    return [true, `Early Close isn't supported`];
+  if (trade.market.pools[0].earlyclose.threshold) {
+    const now = Date.now();
+    const timeElapsed = Math.round(now / 1000) - trade.queued_timestamp;
+    if (timeElapsed < +trade.market.pools[0].earlyclose.threshold) {
+      return [true, `Early close window is not started yet!`];
+    }
+  }
+  return [false, ''];
+};
 
 export const OngoingTradesTable: React.FC<{
   trades: OngoingTradeSchema[];
@@ -132,6 +147,8 @@ export const OngoingTradesTable: React.FC<{
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
+        const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
+        console.log(`OngoingTradesTable-disableTooltip: `, disableTooltip);
         return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
             <ShowIcon
@@ -146,16 +163,20 @@ export const OngoingTradesTable: React.FC<{
                 }
               }}
             />
-            <GreyBtn
-              className={tableButtonClasses}
-              isDisabled={trade.option_id == null}
-              onClick={() => {
-                earlyCloseHandler(trade, tradeMarket);
-              }}
-              isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
-            >
-              Close
-            </GreyBtn>{' '}
+            {/* <NumberTooltip content={disableTooltip}> */}
+            <div title={disableTooltip}>
+              <GreyBtn
+                className={tableButtonClasses}
+                isDisabled={isDisabled}
+                onClick={() => {
+                  earlyCloseHandler(trade, tradeMarket);
+                }}
+                isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
+              >
+                Close
+              </GreyBtn>
+            </div>
+            {/* </NumberTooltip> */}
           </div>
         ) : (
           'Processing...'

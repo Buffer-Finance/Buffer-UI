@@ -22,6 +22,10 @@ export type marketType = {
     optionContract: string;
     openInterest: string;
     platformFee: string;
+    earlyclose: {
+      enable: boolean;
+      threshold: string;
+    };
   }[];
 };
 
@@ -48,6 +52,7 @@ export interface OngoingTradeSchema {
   settlement_fee: number;
   settlement_fee_sign_expiration: number;
   settlement_fee_signature: string;
+  market: marketType;
   expiration_time: null | number;
   is_above: boolean;
   state: 'QUEUED' | 'OPENED' | 'CLOSED';

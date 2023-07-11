@@ -94,7 +94,7 @@ export const queuedTradeFallBack = (
   return null;
 };
 export const tableButtonClasses =
-  '!text-1 !h-auto !py-2 !px-3 !text-f12 !mr-2 !w-fit';
+  'text-1 !h-auto !py-2 !px-3 !text-f12 !mr-2 !w-fit';
 
 export const TableButton = (props: any) => {
   return (
@@ -142,6 +142,9 @@ export const TableHeader: React.FC<ITableHeader> = ({
   );
 };
 
+//  export const earlyCloseStatus = (data:OngoingTradeSchema)=>{
+//    return data.
+//  }
 export const StrikePriceComponent = ({
   trade,
   configData,

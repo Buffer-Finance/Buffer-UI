@@ -8,6 +8,7 @@ interface IButton extends React.HTMLProps<HTMLButtonElement> {
   isDisabled?: boolean;
   className?: string;
   onClick: () => void;
+  title?: string;
 }
 const CustomButton: React.FC<IButton> = ({
   isLoading = false,
@@ -87,6 +88,7 @@ export const BlackBtn: React.FC<IButton> = ({
   isLoading = false,
   children,
   isDisabled,
+  title,
   className,
   onClick,
 }) => {
@@ -94,10 +96,9 @@ export const BlackBtn: React.FC<IButton> = ({
     <CustomButton
       isLoading={isLoading}
       isDisabled={isDisabled}
-      className={`${className} bg-cross-bg ${
-        isDisabled ? 'text-2' : 'text-1'
-      } hover:-translate-y-1 min-w-[70px] min-h-[30px]`}
+      className={`${className} bg-cross-bg text-1 hover:-translate-y-1 min-w-[70px] min-h-[30px]`}
       onClick={onClick}
+      title={title}
     >
       {children}
     </CustomButton>
@@ -116,7 +117,9 @@ export const GreyBtn: React.FC<IButton> = ({
       isLoading={isLoading}
       isDisabled={isDisabled}
       onClick={onClick}
-      className={`bg-[#232334] text-[#8E8E8E] hover:bg-[#2D2D3A] hover:text-[#FFFFFF] hover:translate-y-[-3px] active:translate-y-1 ${className}`}
+      className={`bg-[#232334]  ${
+        isDisabled ? 'text-2' : 'text-1'
+      } text-[#8E8E8E] hover:bg-[#2D2D3A] hover:text-[#FFFFFF] hover:translate-y-[-3px] active:translate-y-1 ${className}`}
     >
       {children}
     </CustomButton>
