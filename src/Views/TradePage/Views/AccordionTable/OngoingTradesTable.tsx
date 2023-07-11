@@ -148,7 +148,7 @@ export const OngoingTradesTable: React.FC<{
             />
             <GreyBtn
               className={tableButtonClasses}
-              isDisabled={!trade.option_id}
+              isDisabled={trade.option_id == null}
               onClick={() => {
                 earlyCloseHandler(trade, tradeMarket);
               }}
