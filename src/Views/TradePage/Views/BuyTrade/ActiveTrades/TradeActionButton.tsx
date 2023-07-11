@@ -13,6 +13,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
 import { useEarlyPnl } from './TradeDataView';
 import {
+  getEarlyCloseStatus,
   getExpiry,
   getLockedAmount,
   getStrike,
@@ -131,25 +132,27 @@ export const TradeActionButton: React.FC<{
       </>
     );
   }
-
+  const [isCloseDisabled, disableTooltip] = getEarlyCloseStatus(trade);
   return (
-    <CloseAtLossButton
-      onClick={earlyClose}
-      disabled={
-        isCancelLoading ||
-        isEarlyCloseLoading ||
-        isTradeExpired ||
-        trade.option_id === null
-      }
-    >
-      {isTradeExpired ? (
-        'Processing...'
-      ) : isEarlyCloseLoading ? (
-        <ButtonLoader />
-      ) : (
-        `Close at ${toFixed(earlycloseAmount, 2)}`
-      )}
-    </CloseAtLossButton>
+    <span title={disableTooltip}>
+      <CloseAtLossButton
+        onClick={earlyClose}
+        disabled={
+          isCancelLoading ||
+          isEarlyCloseLoading ||
+          isTradeExpired ||
+          isCloseDisabled
+        }
+      >
+        {isTradeExpired ? (
+          'Processing...'
+        ) : isEarlyCloseLoading ? (
+          <ButtonLoader />
+        ) : (
+          `Close at ${toFixed(earlycloseAmount, 2)}`
+        )}
+      </CloseAtLossButton>
+    </span>
   );
 };
 

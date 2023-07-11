@@ -20,6 +20,7 @@ import {
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
+  getEarlyCloseStatus,
   getExpiry,
   getLockedAmount,
   getProbability,
@@ -46,21 +47,6 @@ import { toFixed } from '@Utils/NumString';
 export const tradesCount = 10;
 
 const priceDecimals = 8;
-const getEarlyCloseStatus = (
-  trade: OngoingTradeSchema
-): [status: boolean, tooltip?: string] => {
-  if (trade.option_id == null) return [true, `Option isn't opened yet!`];
-  if (!trade.market.pools[0].earlyclose.enable)
-    return [true, `Early Close isn't supported`];
-  if (trade.market.pools[0].earlyclose.threshold) {
-    const now = Date.now();
-    const timeElapsed = Math.round(now / 1000) - trade.queued_timestamp;
-    if (timeElapsed < +trade.market.pools[0].earlyclose.threshold) {
-      return [true, `Early close window is not started yet!`];
-    }
-  }
-  return [false, ''];
-};
 
 export const OngoingTradesTable: React.FC<{
   trades: OngoingTradeSchema[];
