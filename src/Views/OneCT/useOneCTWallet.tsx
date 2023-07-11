@@ -2,7 +2,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
 import { activeAssetStateAtom } from '@Views/BinaryOptions';
 import { ethers } from 'ethers';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { useAccount, useProvider, useSigner, useSignTypedData } from 'wagmi';
@@ -80,37 +80,49 @@ export const is1CTEnabled = (
     pk,
     provider as ethers.providers.StaticJsonRpcProvider
   );
-  // if (deb) console.log(deb, oneCTWallet.address, account);
+  if (deb)
+    console.log(
+      deb,
+      oneCTWallet.address,
+      account,
+      oneCTWallet.address.toLowerCase() === account.toLowerCase()
+    );
 
   return oneCTWallet.address.toLowerCase() === account.toLowerCase();
 };
+export const disableLoadingAtom = atom<boolean>(false);
 
 const useOneCTWallet = () => {
   const { address } = useAccount();
   const { writeCall } = useIndependentWriteCall();
   const toastify = useToast();
   const res = useAccountMapping();
-
+  const [disabelLoading, setDisabelLoading] = useAtom(disableLoadingAtom);
   const [createLoading, setCreateLoading] = useState(false);
 
   const { activeChain } = useActiveChain();
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
-  const [oneCtPk, setPk] = useState<string | null>(null);
   const provider = useProvider({ chainId: activeChain.id });
-  const pkLocalStorageIdentifier = 'signer-account-pk:' + address + ':';
-
+  const pkLocalStorageIdentifier = useMemo(() => {
+    return 'signer-account-pk:' + address + ',nonce' + res?.[1] + ':';
+  }, [address, res?.[1]]);
+  const oneCtPk = useMemo(() => {
+    return secureLocalStorage.getItem(pkLocalStorageIdentifier);
+  }, [pkLocalStorageIdentifier, createLoading]);
+  console.log(`useOneCTWallet-oneCtPk: `, oneCtPk);
   const registeredOneCT = useMemo(() => {
-    const isEnabled = res?.length
-      ? is1CTEnabled(
-          res[0],
-          secureLocalStorage.getItem(pkLocalStorageIdentifier) || '',
-          provider,
-          'debugggging'
-        )
-      : false;
+    const isEnabled =
+      res?.length && pkLocalStorageIdentifier
+        ? is1CTEnabled(
+            res[0],
+            secureLocalStorage.getItem(pkLocalStorageIdentifier) || '',
+            provider,
+            'deb-1ct-1'
+          )
+        : false;
     return isEnabled;
-  }, [res, oneCtPk, provider]);
+  }, [res, res?.[0], res?.[1], provider, oneCtPk]);
   const { data: signer } = useSigner({ chainId: activeChain.id });
   const oneCTWallet = useMemo(() => {
     if (!oneCtPk) return null;
@@ -120,19 +132,12 @@ const useOneCTWallet = () => {
     );
   }, [oneCtPk, provider, registeredOneCT]);
   // console.log(`useOneCTWallet-data: `, oneCTWallet);
-
-  const checkStorage = () => {
-    const pk = secureLocalStorage.getItem(pkLocalStorageIdentifier) as string;
-    setPk(pk);
-  };
   useEffect(() => {
-    const interval = setInterval(() => {
-      checkStorage();
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [address]);
+    const localPk = secureLocalStorage.getItem(
+      pkLocalStorageIdentifier
+    ) as string;
+    console.log(`deb-1ct-1: `, localPk);
+  }, [pkLocalStorageIdentifier]);
 
   const generatePk = useCallback(async () => {
     setCreateLoading(true);
@@ -149,37 +154,33 @@ const useOneCTWallet = () => {
     });
     console.log(`useOneCTWallet-signature: `, signature);
     const privateKey = ethers.utils.keccak256(signature).slice(2);
-    console.log(`useOneCTWallet-privateKey: `, privateKey);
+    console.log(`deb-1ct: `, privateKey, pkLocalStorageIdentifier);
     secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
-    checkStorage();
     setCreateLoading(false);
-    if (is1CTEnabled(res[0], privateKey, provider)) {
+    if (is1CTEnabled(res[0], privateKey, provider, 'one-ct-deb')) {
       toastify({
         msg: 'You have already registered your 1CT Account. You can start trading now!',
         type: 'success',
       });
     }
     return privateKey;
-    // } catch (e) {
-    //   setCreateLoading(false);
-    // }
   }, [signer, res?.[0], provider]);
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
-    checkStorage();
   };
   const disableOneCt = () => {
+    setDisabelLoading(true);
     writeCall(
       configData.signer_manager,
       SignerManagerABI,
       (payload) => {
+        setDisabelLoading(false);
+
         if (payload.payload) {
           toastify({
             msg: '1 Click Trading is now disablted.',
             type: 'success',
           });
-          // deleteOneCTPk();
-          checkStorage();
         }
       },
       'deregisterAccount',
@@ -190,6 +191,7 @@ const useOneCTWallet = () => {
     oneCtPk,
     createLoading,
     generatePk,
+    disabelLoading,
     registeredOneCT,
     registerOneCt: registerOneCtMethod,
     oneCTWallet,

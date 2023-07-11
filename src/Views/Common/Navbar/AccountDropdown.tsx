@@ -60,7 +60,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   }
 
   const { address } = useUserAccount();
-  const { oneCtPk, disableOneCt, registeredOneCT, accountMapping } =
+  const { disabelLoading, disableOneCt, registeredOneCT, accountMapping } =
     useOneCTWallet();
 
   const provider = useProvider({ chainId: activeChain.id });
@@ -78,6 +78,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
         <BlueBtn
           className="!ml-[13px] !text-f12 !bg-[#2C2C41] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
           onClick={disableOneCt}
+          isLoading={disabelLoading}
         >
           Deactivate Acount
         </BlueBtn>
