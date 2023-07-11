@@ -1,4 +1,4 @@
-import { useHighestTierNFT } from '@Hooks/useNFTGraph';
+// import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useSwitchPool } from '../useSwitchPool';
 import { useActiveChain } from '@Hooks/useActiveChain';
@@ -6,8 +6,8 @@ import { appConfig } from '@Views/TradePage/config';
 import { useMemo } from 'react';
 import { erc20ABI } from 'wagmi';
 import { useCall2Data } from '@Utils/useReadCall';
-import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
-import MetaABI from '../../ABIs/meta.json';
+// import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
+// import MetaABI from '../../ABIs/meta.json';
 import SignerABI from '@Views/OneCT/signerManagerABI.json';
 import OptionContractABI from '../../ABIs/OptionContract.json';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
@@ -19,11 +19,12 @@ import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
 export function useBuyTradePageReadcalls() {
   const { address } = useUserAccount();
   const { switchPool, poolDetails } = useSwitchPool();
-  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
+  // const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const { activeChain } = useActiveChain();
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const referralData = useReferralCode();
+  // console.log('referralData', referralData);
   const config = useMarketsConfig();
   const baseSettlementFees = useSettlementFee();
 
@@ -99,7 +100,7 @@ export function useBuyTradePageReadcalls() {
                 abi: OptionContractABI,
                 name: 'getSettlementFeePercentage',
                 params: [
-                  '0x0000000000000000000000000000000000000000',
+                  referralData[3],
                   address,
                   baseSettlementFee?.toString() ?? '1500',
                 ],
@@ -123,7 +124,7 @@ export function useBuyTradePageReadcalls() {
     }
 
     return [...userSpecificCalls, ...optionCalls!];
-  }, [switchPool, poolDetails, address, highestTierNFT]);
+  }, [switchPool, poolDetails, address]);
 
   return useCall2Data(calls, 'V3-app-read-calls');
 }
