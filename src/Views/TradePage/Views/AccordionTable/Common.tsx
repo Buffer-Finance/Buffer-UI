@@ -152,7 +152,7 @@ export const StrikePriceComponent = ({
   const cachedPrices = useAtomValue(queuets2priceAtom);
 
   const { isPriceArrived, strikePrice } = getStrike(trade, cachedPrices);
-  console.log(`Common-isPriceArrived: `, isPriceArrived, strikePrice);
+  console.log(`Common-isPriceArrived: `, isPriceArrived, strikePrice, trade);
   if (!configData) return <></>;
   const decimals = 2;
   return (
@@ -265,7 +265,9 @@ export const getExpiry = (trade: OngoingTradeSchema, deb?: string) => {
 };
 export const getStrike = (trade: OngoingTradeSchema, cachedPrice: any) => {
   let strikePrice = trade.strike;
-  const isPriceArrived = cachedPrice?.[trade.queue_id];
+  const isPriceArrived = trade.is_limit_order
+    ? false
+    : cachedPrice?.[trade.queue_id];
   if (trade.state == 'QUEUED' && isPriceArrived) {
     strikePrice = cachedPrice?.[trade.queue_id];
   }

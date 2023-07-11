@@ -364,6 +364,7 @@ export const useBuyTradeActions = (userInput: string) => {
         settlement_fee_signature: settelmentFee?.settlement_fee_signature,
         environment: activeChain.id,
       };
+      console.log('apiParams', apiParams);
 
       const resp: { data: OngoingTradeSchema } = await axios.post(
         baseUrl + 'trade/create/',
