@@ -28,7 +28,6 @@ const TradeCardBackground = styled.div`
 `;
 
 export const TradeCard = ({ trade }: { trade: TradeType }) => {
-  console.log('tradeTradeCard', trade);
   const { getPoolInfo } = usePoolInfo();
   const tradeMarket = trade.market;
 
