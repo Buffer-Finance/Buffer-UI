@@ -128,27 +128,32 @@ const useOneCTWallet = () => {
 
   const generatePk = useCallback(async () => {
     setCreateLoading(true);
-    const nonce = res?.[1];
-    if (!nonce) return toastify(WaitToast());
-    // try {
-    const signature = await signTypedData({
-      types,
-      domain,
-      value: {
-        content: 'I want to create a trading account with Buffer Finance',
-        nonce,
-      },
-    });
-    const privateKey = ethers.utils.keccak256(signature).slice(2);
-    secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
-    setCreateLoading(false);
-    if (is1CTEnabled(res[0], privateKey, provider, 'one-ct-deb')) {
-      toastify({
-        msg: 'You have already registered your 1CT Account. You can start trading now!',
-        type: 'success',
+    try {
+      const nonce = res?.[1];
+      if (!nonce) return toastify(WaitToast());
+      // try {
+      const signature = await signTypedData({
+        types,
+        domain,
+        value: {
+          content: 'I want to create a trading account with Buffer Finance',
+          nonce,
+        },
       });
+      const privateKey = ethers.utils.keccak256(signature).slice(2);
+      secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
+      setCreateLoading(false);
+      if (is1CTEnabled(res[0], privateKey, provider, 'one-ct-deb')) {
+        toastify({
+          msg: 'You have already registered your 1CT Account. You can start trading now!',
+          type: 'success',
+        });
+        return privateKey;
+      }
+    } catch (e) {
+      setCreateLoading(false);
+      return '';
     }
-    return privateKey;
   }, [signer, res?.[0], provider]);
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
