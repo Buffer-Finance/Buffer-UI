@@ -213,7 +213,7 @@ const EditTime: React.FC<{
         setInputValue(30);
       }
     }
-  }, []);
+  }, [initialValue]);
 
   if (showCustomInput) {
     return (

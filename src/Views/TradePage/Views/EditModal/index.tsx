@@ -71,6 +71,7 @@ export const EditModal: React.FC<{
     setFrame('m');
 
     setCurrentTime(secondsToHHMM(trade.period));
+
     setPeriodValidation({
       min: pool.min_duration,
       max: pool.max_duration,
@@ -94,8 +95,6 @@ export const EditModal: React.FC<{
         type: 'errror',
         id: 'dsfs',
       });
-    console.log(`index-edit-deb-trade: `, trade);
-    console.log(`index-edit-deb-pk: `, oneCtPk);
     setEditLoading(trade.queue_id);
     const currentTs = Math.round(Date.now() / 1000);
     const signs = await generateBuyTradeSignature(
@@ -145,6 +144,9 @@ export const EditModal: React.FC<{
     }
     setEditLoading(null);
   };
+  useEffect(() => {
+    console.log('currentTime', currentTime);
+  }, [currentTime]);
 
   if (!trade) return <></>;
   return (

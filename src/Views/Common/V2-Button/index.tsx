@@ -94,7 +94,9 @@ export const BlackBtn: React.FC<IButton> = ({
     <CustomButton
       isLoading={isLoading}
       isDisabled={isDisabled}
-      className={`${className} bg-cross-bg text-1 hover:-translate-y-1 min-w-[70px] min-h-[30px]`}
+      className={`${className} bg-cross-bg ${
+        isDisabled ? 'text-2' : 'text-1'
+      } hover:-translate-y-1 min-w-[70px] min-h-[30px]`}
       onClick={onClick}
     >
       {children}

@@ -68,13 +68,13 @@ export const is1CTEnabled = (
     pk,
     provider as ethers.providers.StaticJsonRpcProvider
   );
-  if (deb)
-    console.log(
-      deb,
-      oneCTWallet.address,
-      account,
-      oneCTWallet.address.toLowerCase() === account.toLowerCase()
-    );
+  // if (deb)
+  //   console.log(
+  //     deb,
+  //     oneCTWallet.address,
+  //     account,
+  //     oneCTWallet.address.toLowerCase() === account.toLowerCase()
+  //   );
 
   return oneCTWallet.address.toLowerCase() === account.toLowerCase();
 };
@@ -99,7 +99,6 @@ const useOneCTWallet = () => {
   const oneCtPk = useMemo(() => {
     return secureLocalStorage.getItem(pkLocalStorageIdentifier);
   }, [pkLocalStorageIdentifier, createLoading]);
-  console.log(`useOneCTWallet-oneCtPk: `, oneCtPk);
   const registeredOneCT = useMemo(() => {
     const isEnabled =
       res?.length && pkLocalStorageIdentifier
@@ -125,7 +124,6 @@ const useOneCTWallet = () => {
     const localPk = secureLocalStorage.getItem(
       pkLocalStorageIdentifier
     ) as string;
-    console.log(`deb-1ct-1: `, localPk);
   }, [pkLocalStorageIdentifier]);
 
   const generatePk = useCallback(async () => {
@@ -141,9 +139,7 @@ const useOneCTWallet = () => {
         nonce,
       },
     });
-    console.log(`useOneCTWallet-signature: `, signature);
     const privateKey = ethers.utils.keccak256(signature).slice(2);
-    console.log(`deb-1ct: `, privateKey, pkLocalStorageIdentifier);
     secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
     setCreateLoading(false);
     if (is1CTEnabled(res[0], privateKey, provider, 'one-ct-deb')) {
