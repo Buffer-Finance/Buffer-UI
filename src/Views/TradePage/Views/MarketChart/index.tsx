@@ -145,6 +145,7 @@ const MarketChart: React.FC<any> = ({}) => {
         <div
           onMouseDown={onMouseDown}
           onTouchStart={onMouseDown}
+          // onMouseLeave={onMouseDown}
           onMouseUp={onMouseUp}
           onTouchEnd={onMouseUp}
           className={` w-full   cursor-row-resize h-[5px] hover:bg-blue ${
