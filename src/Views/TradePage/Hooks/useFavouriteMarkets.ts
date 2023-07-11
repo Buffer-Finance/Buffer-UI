@@ -45,29 +45,29 @@ export const useFavouriteMarkets = () => {
   }
 
   function removeFavouriteMarket(market: marketType) {
-    if (favouriteMarkets.length === 1) return;
+    // if (favouriteMarkets.length === 1) return;
     const index = favMarkets.indexOf(getMarketPairName(market));
     const newMarkets = [...favMarkets];
     newMarkets.splice(index, 1);
 
-    if (
-      activeMarket &&
-      getMarketPairName(activeMarket) === getMarketPairName(market)
-    ) {
-      if (favouriteMarkets.length >= index + 1) {
-        navigate(
-          `/v2/${favouriteMarkets[index + 1].token0}-${
-            favouriteMarkets[index + 1].token1
-          }`
-        );
-      } else {
-        navigate(
-          `/v2/${favouriteMarkets[index - 1].token0}-${
-            favouriteMarkets[index - 1].token1
-          }`
-        );
-      }
-    }
+    // if (
+    //   activeMarket &&
+    //   getMarketPairName(activeMarket) === getMarketPairName(market)
+    // ) {
+    //   if (favouriteMarkets.length >= index + 1) {
+    //     navigate(
+    //       `/v2/${favouriteMarkets[index + 1].token0}-${
+    //         favouriteMarkets[index + 1].token1
+    //       }`
+    //     );
+    //   } else {
+    //     navigate(
+    //       `/v2/${favouriteMarkets[index - 1].token0}-${
+    //         favouriteMarkets[index - 1].token1
+    //       }`
+    //     );
+    //   }
+    // }
     setFavMarkets(newMarkets);
   }
 
