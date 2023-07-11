@@ -91,6 +91,7 @@ export const is1CTEnabled = (
   return oneCTWallet.address.toLowerCase() === account.toLowerCase();
 };
 export const disableLoadingAtom = atom<boolean>(false);
+export const createLoadingAtom = atom<boolean>(false);
 
 const useOneCTWallet = () => {
   const { address } = useAccount();
@@ -98,7 +99,7 @@ const useOneCTWallet = () => {
   const toastify = useToast();
   const res = useAccountMapping();
   const [disabelLoading, setDisabelLoading] = useAtom(disableLoadingAtom);
-  const [createLoading, setCreateLoading] = useState(false);
+  const [createLoading, setCreateLoading] = useAtom(createLoadingAtom);
 
   const { activeChain } = useActiveChain();
   const configData =

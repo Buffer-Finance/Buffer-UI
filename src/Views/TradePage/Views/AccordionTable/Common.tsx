@@ -64,7 +64,7 @@ export const getProbabilityByTime = (
       +trade.strike / 100000000,
       expirationTime - currentTime,
       0,
-      12000 / 10000
+      1.1
     ) * 100;
 
   return probability;
