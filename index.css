@@ -21,6 +21,7 @@ animation-fill-mode: forwards;
   /* animation: rotate-big 1s ease-in-out forwards; */
 }
 
+
 .loader {
   width: min(40vw,500px);
   /* background: #12131c; */

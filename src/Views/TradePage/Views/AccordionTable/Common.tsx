@@ -225,17 +225,24 @@ export const SlippageTooltip: React.FC<{
 import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
 import { useAtomValue } from 'jotai';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { Variables } from '@Utils/Time';
+import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 export const getEarlyCloseStatus = (
   trade: OngoingTradeSchema
 ): [status: boolean, tooltip?: string] => {
   if (trade.option_id == null) return [true, `Option isn't opened yet!`];
-  if (!trade.market.pools[0].earlyclose.enable)
+  if (!trade.market.pools?.[0]?.earlyclose.enable)
     return [true, `Early Close isn't supported`];
   if (trade.market.pools[0].earlyclose.threshold) {
     const now = Date.now();
     const timeElapsed = Math.round(now / 1000) - trade.queued_timestamp;
     if (timeElapsed < +trade.market.pools[0].earlyclose.threshold) {
-      return [true, `Early close window is not started yet!`];
+      return [
+        true,
+        `You can early close the option in ${formatDistanceExpanded(
+          Variables(+trade.market.pools[0].earlyclose.threshold - timeElapsed)
+        )}`,
+      ];
     }
   }
   return [false, ''];

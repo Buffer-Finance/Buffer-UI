@@ -127,13 +127,17 @@ export const OngoingTradesTable: React.FC<{
     }
     const lockedAmmount = getLockedAmount(trade, cachedPrices);
     const distanceObject = Variables(
-      +tradeExpiryTime! - Math.round(Date.now() / 1000)
+      trade.queued_timestamp +
+        trade.period -
+        (trade.close_time || Math.round(Date.now() / 1000))
     );
 
+    trade.close_time &&
+      console.log(`OngoingTradesTable-distanceObject: `, distanceObject);
+    const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
-        const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
         console.log(`OngoingTradesTable-disableTooltip: `, disableTooltip);
         return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
@@ -149,20 +153,22 @@ export const OngoingTradesTable: React.FC<{
                 }
               }}
             />
-            {/* <NumberTooltip content={disableTooltip}> */}
-            <div title={disableTooltip}>
-              <GreyBtn
-                className={tableButtonClasses}
-                isDisabled={isDisabled}
-                onClick={() => {
-                  earlyCloseHandler(trade, tradeMarket);
-                }}
-                isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
-              >
-                Close
-              </GreyBtn>
-            </div>
-            {/* </NumberTooltip> */}
+            <NumberTooltip content={disableTooltip}>
+              <div>
+                <GreyBtn
+                  className={
+                    tableButtonClasses +
+                    (isDisabled ? ' !text-2 !cursor-not-allowed' : '')
+                  }
+                  onClick={() => {
+                    !isDisabled && earlyCloseHandler(trade, tradeMarket);
+                  }}
+                  isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
+                >
+                  Close
+                </GreyBtn>
+              </div>
+            </NumberTooltip>
           </div>
         ) : (
           'Processing...'
