@@ -14,8 +14,8 @@ export const PayoutProfit = ({
   totalPayout,
   tradeToken,
 }: {
-  amount: string;
-  totalPayout: string;
+  amount: string | undefined | null;
+  totalPayout: string | undefined | null;
   tradeToken: string;
 }) => {
   if (amount && totalPayout) {

@@ -82,7 +82,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const tokenName = poolDetails?.token;
   const res = readcallData?.user2signer;
   const tokenAddress = poolDetails?.tokenAddress;
-  const allSettlementFees = useSettlementFee();
+  const { data: allSettlementFees } = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = useProvider({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
