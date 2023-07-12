@@ -26,7 +26,7 @@ export function useBuyTradePageReadcalls() {
   const referralData = useReferralCode();
   // console.log('referralData', referralData);
   const config = useMarketsConfig();
-  const baseSettlementFees = useSettlementFee();
+  const { data: baseSettlementFees } = useSettlementFee();
 
   const calls = useMemo(() => {
     if (!switchPool || !poolDetails) {

@@ -25,6 +25,7 @@ import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneD
 import { CurrentPrice } from '../BuyTrade/ActiveTrades/CurrentPrice';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import NumberTooltip from '@Views/Common/Tooltips';
+import { Payout } from './Payout';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -175,7 +176,9 @@ const MarketStatsBar: React.FC<any> = ({}) => {
     // },
     {
       header: 'Payout',
-      data: <div>{payout ? payout + '%' : 'Fetching...'}</div>,
+      data: (
+        <Payout token0={activeMarket.token0} token1={activeMarket.token1} />
+      ),
     },
     {
       header: (

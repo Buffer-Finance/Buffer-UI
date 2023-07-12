@@ -19,6 +19,7 @@ import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { ActiveTrades } from './ActiveTrades';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
+import { useSelectedAssetPayout } from '../MarketChart/Payout';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -40,18 +41,13 @@ export const BuyTrade: React.FC = () => {
   const { activeMarket } = useActiveMarket();
   const amount = useAtomValue(tradeSizeAtom);
   const marketPrice = useAtomValue(priceAtom);
-  const allSettlementFees = useSettlementFee();
-
-  if (
-    !switchPool ||
-    !poolDetails ||
-    !readcallData ||
-    !activeMarket ||
-    !allSettlementFees
-  ) {
+  const { payout: totalPayout } = useSelectedAssetPayout({
+    token0: activeMarket?.token0,
+    token1: activeMarket?.token1,
+  });
+  if (!switchPool || !poolDetails || !readcallData || !activeMarket) {
     console.log(
       `index-allSettlementFees: `,
-      allSettlementFees,
       activeMarket,
       poolDetails,
       switchPool,
@@ -73,7 +69,7 @@ export const BuyTrade: React.FC = () => {
   const activeChartMarket =
     marketsForChart[marketId as keyof typeof marketsForChart];
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeChartMarket);
-  const totalPayout = readcallData.settlementFees[switchPool.optionContract];
+  // const totalPayout = readcallData.settlementFees[switchPool.optionContract];
   const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
   // if (
