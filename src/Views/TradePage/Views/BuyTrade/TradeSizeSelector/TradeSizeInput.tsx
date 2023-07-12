@@ -1,10 +1,11 @@
 import { gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
-import { tradeSizeAtom } from '@Views/TradePage/atoms';
+import { tradeSettingsAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
 import { getMinimumValue } from '@Views/V3App/helperFns';
 import { Trans } from '@lingui/macro';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 export const TradeSizeInput: React.FC<{
   maxTradeSize: string;
@@ -16,7 +17,7 @@ export const TradeSizeInput: React.FC<{
   const [minerr, setminErr] = useState(false);
   const [maxerr, setmaxErr] = useState(false);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
-
+  const { address } = useAccount();
   useEffect(() => {
     console.log(`TradeSizeInput-tradeSize: `, tradeSize, minTradeSize);
     if (lt(tradeSize || '0', minTradeSize)) {
@@ -30,6 +31,11 @@ export const TradeSizeInput: React.FC<{
       setmaxErr(false);
     }
   }, [tradeSize]);
+  const settings = useAtomValue(tradeSettingsAtom);
+  console.log(
+    `TradeSizeInput-maxerr && !settings.partialFill: `,
+    maxerr && !settings.partialFill
+  );
 
   return (
     <div className="flex flex-col gap-2">
@@ -59,7 +65,7 @@ export const TradeSizeInput: React.FC<{
         </button>
       </div>
 
-      {minerr && (
+      {address && minerr && (
         <Trans>
           <span className="text-red whitespace-nowrap">
             Min trade size is {minTradeSize} {tokenName}
@@ -67,7 +73,7 @@ export const TradeSizeInput: React.FC<{
         </Trans>
       )}
 
-      {maxerr && (
+      {address && maxerr && !settings.partialFill && (
         <Trans>
           <span className="text-red whitespace-nowrap">
             Max trade size is {maxTradeSize} {tokenName}
@@ -75,7 +81,7 @@ export const TradeSizeInput: React.FC<{
         </Trans>
       )}
 
-      {tradeSize && gt(tradeSize ?? '0', balance ?? '0') && (
+      {address && tradeSize && gt(tradeSize ?? '0', balance ?? '0') && (
         <Trans>
           <span className="text-red whitespace-nowrap flex items-end">
             You don't have enough {tokenName}.&nbsp;

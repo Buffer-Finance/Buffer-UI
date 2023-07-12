@@ -49,14 +49,6 @@ export const BuyTrade: React.FC = () => {
     !activeMarket ||
     !allSettlementFees
   ) {
-    console.log(
-      `index-allSettlementFees: `,
-      allSettlementFees,
-      activeMarket,
-      poolDetails,
-      switchPool,
-      readcallData
-    );
     return (
       <Skeleton
         variant="rectangular"
@@ -74,7 +66,7 @@ export const BuyTrade: React.FC = () => {
     marketsForChart[marketId as keyof typeof marketsForChart];
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeChartMarket);
   const totalPayout = readcallData.settlementFees[switchPool.optionContract];
-  const platformFee = divide(switchPool.platformFee, decimals);
+  // const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
   // if (
   //   amount !== undefined &&
