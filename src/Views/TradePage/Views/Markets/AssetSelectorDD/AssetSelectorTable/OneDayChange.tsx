@@ -9,6 +9,7 @@ export const OneDayChange: React.FC<{
   if (!+oneDayChange || Number.isNaN(+oneDayChange))
     return <div>Fetching...</div>;
   const isUp = gte(oneDayChange.toString(), '0');
+  if (isUp == '-1') return <div>Fetching..</div>;
   return (
     <div
       className={`${className} text-f10 flex gap-1 items-center font-normal w-max ${

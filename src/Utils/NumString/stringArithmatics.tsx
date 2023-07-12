@@ -31,9 +31,13 @@ const round = (from: string, to: number) => {
   return fromBN.toString();
 };
 const gte = (from: string, to: string) => {
-  const fromBN = new Big(from);
-  const toBN = new Big(to);
-  return fromBN.gte(toBN);
+  try {
+    const fromBN = new Big(from);
+    const toBN = new Big(to);
+    return fromBN.gte(toBN);
+  } catch (e) {
+    return '-1';
+  }
 };
 const lte = (from: string, to: string) => {
   const fromBN = new Big(from);
