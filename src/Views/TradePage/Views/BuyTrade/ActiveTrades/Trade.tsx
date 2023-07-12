@@ -78,21 +78,30 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
 
 const TimerChip = ({ trade }: { trade: TradeType }) => {
   const isLimitOrder = trade.is_limit_order;
-  const expiry = getExpiry(trade);
+  // const expiry = getExpiry(trade);
   const cachedPrices = useAtomValue(queuets2priceAtom);
-
+  // console.log('timerTrade', trade, expiry);
   const { isPriceArrived } = getStrike(trade, cachedPrices);
   const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
 
   if (isLimitOrder && trade.state === TradeState.Queued) {
     return (
       <RowGap gap="4px">
-        <CountDown expiration={trade.limit_order_expiration} /> <OrderExpiry />
+        <CountDown
+          expiration={trade.limit_order_expiration}
+          closeTime={trade.close_time}
+        />
+        <OrderExpiry />
       </RowGap>
     );
   }
   if (isQueued) {
     return <QueuedChip />;
   }
-  return <CountDown expiration={expiry} />;
+  return (
+    <CountDown
+      expiration={trade.expiration_time}
+      closeTime={trade.close_time}
+    />
+  );
 };

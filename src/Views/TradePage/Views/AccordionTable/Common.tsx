@@ -22,7 +22,7 @@ import {
   subtract,
   toFixed,
 } from '@Utils/NumString/stringArithmatics';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 export const DisplayTime = ({ ts }: { ts: number | string }) => {
   return (
@@ -275,11 +275,11 @@ export const TableErrorRow: React.FC<{
   );
 };
 
-export const getExpiry = (trade: OngoingTradeSchema, deb?: string) => {
+export const getExpiry = (trade: TradeType, deb?: string) => {
   deb && console.log('TableComponents-deb-close' + deb, trade);
   return trade.close_time || trade.queued_timestamp + trade.period;
 };
-export const getStrike = (trade: OngoingTradeSchema, cachedPrice: any) => {
+export const getStrike = (trade: TradeType, cachedPrice: any) => {
   let strikePrice = trade.strike;
   const isPriceArrived = trade.is_limit_order
     ? false

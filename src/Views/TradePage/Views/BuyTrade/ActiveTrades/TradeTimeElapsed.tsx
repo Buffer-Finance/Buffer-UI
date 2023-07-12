@@ -4,8 +4,12 @@ import { OngoingTradeSchema } from '@Views/TradePage/type';
 export const TradeTimeElapsed: React.FC<{ trade: OngoingTradeSchema }> = ({
   trade,
 }) => {
-  const currentTime = Math.floor(Date.now() / 1000);
+  let currentTime = Math.floor(Date.now() / 1000);
   const expirationTime = trade.expiration_time;
+  const closeTime = trade.close_time;
+  if (closeTime) {
+    currentTime = closeTime;
+  }
   let timeElapsedPercent = 0;
   if (expirationTime) {
     const startTime = expirationTime - trade.period;
