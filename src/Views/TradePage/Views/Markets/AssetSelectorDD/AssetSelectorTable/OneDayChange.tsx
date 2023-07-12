@@ -5,7 +5,8 @@ export const OneDayChange: React.FC<{
   className?: string;
   svgClassName?: string;
 }> = ({ oneDayChange, className = '', svgClassName = '' }) => {
-  if (!+oneDayChange) return <div>Fetching...</div>;
+  if (!+oneDayChange || Number.isNaN(+oneDayChange))
+    return <div>Fetching...</div>;
   const isUp = gte(oneDayChange.toString(), '0');
   return (
     <div

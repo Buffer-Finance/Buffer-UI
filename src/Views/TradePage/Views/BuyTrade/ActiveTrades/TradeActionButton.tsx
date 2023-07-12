@@ -18,6 +18,7 @@ import {
   getLockedAmount,
   getStrike,
 } from '../../AccordionTable/Common';
+import NumberTooltip from '@Views/Common/Tooltips';
 
 export const TradeActionButton: React.FC<{
   trade: TradeType;
@@ -58,6 +59,7 @@ export const TradeActionButton: React.FC<{
   }
 
   function earlyClose() {
+    console.log(`TradeActionButton-trade: `, trade);
     earlyCloseHandler(trade, tradeMarket);
   }
 
@@ -91,24 +93,24 @@ export const TradeActionButton: React.FC<{
       </RowGap>
     );
   }
-  if (isQueued) {
-    return (
-      <>
-        <CancelButton
-          onClick={cancelTrade}
-          disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
-        >
-          {isTradeExpired ? (
-            'Processing...'
-          ) : isCancelLoading ? (
-            <ButtonLoader />
-          ) : (
-            'Cancel'
-          )}
-        </CancelButton>
-      </>
-    );
-  }
+  // if (isQueued) {
+  //   return (
+  //     <>
+  //       <CancelButton
+  //         onClick={cancelTrade}
+  //         disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
+  //       >
+  //         {isTradeExpired ? (
+  //           'Processing...'
+  //         ) : isCancelLoading ? (
+  //           <ButtonLoader />
+  //         ) : (
+  //           'Cancel'
+  //         )}
+  //       </CancelButton>
+  //     </>
+  //   );
+  // }
   if (isWin) {
     return (
       <>
@@ -134,26 +136,42 @@ export const TradeActionButton: React.FC<{
   }
   const [isCloseDisabled, disableTooltip] = getEarlyCloseStatus(trade);
   return (
-    <span title={disableTooltip}>
-      <CloseAtLossButton
-        onClick={earlyClose}
-        disabled={
-          isCancelLoading ||
-          isEarlyCloseLoading ||
-          isTradeExpired ||
-          isCloseDisabled
-        }
-      >
-        {isTradeExpired ? (
-          'Processing...'
-        ) : isEarlyCloseLoading ? (
-          <ButtonLoader />
-        ) : (
-          `Close at ${toFixed(earlycloseAmount, 2)}`
-        )}
-      </CloseAtLossButton>
-    </span>
+    <NumberTooltip content={disableTooltip}>
+      <span>
+        <CloseAtLossButton
+          isDisabled={
+            isCancelLoading ||
+            isEarlyCloseLoading ||
+            isTradeExpired ||
+            isCloseDisabled
+          }
+          onClick={() =>
+            isCancelLoading ||
+            isEarlyCloseLoading ||
+            isTradeExpired ||
+            isCloseDisabled
+              ? console.log()
+              : earlyClose()
+          }
+        >
+          {isTradeExpired ? (
+            'Processing...'
+          ) : isEarlyCloseLoading ? (
+            <ButtonLoader />
+          ) : (
+            `Close at ${toFixed(earlycloseAmount, 2)}`
+          )}
+        </CloseAtLossButton>
+      </span>
+    </NumberTooltip>
   );
+};
+const getDisabledStyles = (props) => {
+  if (props.isDisabled)
+    return ` cursor: not-allowed;
+  background-color: #282b39;
+  color: rgba(255, 255, 255, 0.6);`;
+  else return '';
 };
 
 const buttonStyle = styled.button`
@@ -165,16 +183,8 @@ const buttonStyle = styled.button`
   transition: 0.2s;
   margin-top: 12px;
   min-height: 28px;
-
   :hover {
     scale: 1.05;
-  }
-
-  :disabled {
-    scale: 1;
-    cursor: not-allowed;
-    background-color: #282b39;
-    color: rgba(255, 255, 255, 0.6);
   }
 `;
 
@@ -189,9 +199,11 @@ const CancelButton = styled(buttonStyle)`
 const CloseAtProfitButton = styled(buttonStyle)`
   color: #ffffff;
   background-color: #3fb68b;
+  pointer-events: auto !important;
 `;
 
 const CloseAtLossButton = styled(buttonStyle)`
   color: #ffffff;
   background-color: #ff5353;
+  ${getDisabledStyles}
 `;
