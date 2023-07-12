@@ -230,7 +230,8 @@ import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 export const getEarlyCloseStatus = (
   trade: OngoingTradeSchema
 ): [status: boolean, tooltip?: string] => {
-  if (trade.option_id == null) return [true, `Option isn't opened yet!`];
+  if (trade.option_id == null || !trade.market?.pools)
+    return [true, `Option isn't opened yet!`];
   if (!trade.market.pools?.[0]?.earlyclose.enable)
     return [true, `Early Close isn't supported`];
   if (trade.market.pools[0].earlyclose.threshold) {

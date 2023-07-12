@@ -18,7 +18,7 @@ const SidebySideCharts = ({
 }) => (
   <div className={`flex w-full ${className} `}>
     {indexes.map((id) => (
-      <div className={`${indexes.length == 1 ? 'w-full' : 'w-1/2'}`}>
+      <div key={id} className={`${indexes.length == 1 ? 'w-full' : 'w-1/2'}`}>
         <MultiResolutionChart
           market={id.split(':')[0] as any}
           index={+id.split(':')[1]}
@@ -78,6 +78,7 @@ const MarketChart: React.FC<any> = ({}) => {
   };
 
   const onMouseUp = () => {
+    console.log(`onMouseUp-called: `, false);
     setDragging(false);
   };
 
