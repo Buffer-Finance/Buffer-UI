@@ -43,7 +43,6 @@ const TradePage: React.FC<any> = ({}) => {
 };
 
 export { TradePage };
-
 const MobileWarningBackground = styled.div`
   height: 100%;
   width: 60%;
