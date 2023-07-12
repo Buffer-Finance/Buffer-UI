@@ -473,7 +473,7 @@ export const MultiResolutionChart = ({
       timezone: getOslonTimezone() as Timezone,
       symbol: market,
       theme: defaults.theme as ThemeName,
-      enabled_features: ['header_saveload'],
+      enabled_features: ['header_saveload', 'hide_left_toolbar_by_default'],
       load_last_chart: true,
       time_frames: [
         {
@@ -513,7 +513,11 @@ export const MultiResolutionChart = ({
           ? ['left_toolbar', ...defaults.basicDisabled]
           : [...defaults.basicDisabled],
     });
+
     chart.onChartReady(() => {
+      // chart.activeChart().get;
+      // chart.activeChart?.().executeActionById('drawingToolbarAction');
+
       setChartReady(true);
     });
     widgetRef.current = chart;
