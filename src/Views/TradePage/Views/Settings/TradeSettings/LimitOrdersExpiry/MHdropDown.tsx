@@ -8,18 +8,34 @@ import {
   MenuItem as MenuItemInner,
   MenuItemProps,
 } from '@szhsin/react-menu';
+import { useEffect, useState } from 'react';
 
 export const MHdropDown: React.FC<{
   activeFrame: string;
   setFrame: (newFrame: string) => void;
   className?: string;
   shouldKeepOpen?: boolean;
-}> = ({ activeFrame, setFrame, shouldKeepOpen = false, className = '' }) => {
+  onClickFunction?: (frame: string | undefined) => void;
+}> = ({
+  activeFrame,
+  setFrame,
+  shouldKeepOpen = false,
+  className = '',
+  onClickFunction,
+}) => {
+  const [selectedItem, setSelectedItem] = useState<string | undefined>(
+    undefined
+  );
   function onClick(e: ClickEvent) {
     e.stopPropagation = true;
     e.keepOpen = shouldKeepOpen;
     setFrame(e.value);
+    setSelectedItem(e.value);
   }
+
+  useEffect(() => {
+    if (onClickFunction) onClickFunction(selectedItem);
+  }, [selectedItem]);
 
   return (
     <MenuBackground>
