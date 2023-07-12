@@ -162,7 +162,6 @@ const MarketChart: React.FC<any> = ({}) => {
           onTouchStart={onMouseDown}
           onMouseUp={onMouseUp}
           onTouchEnd={onMouseUp}
-          draggable
           // onMouseLeave={onMouseUp}
           className={` w-full   cursor-row-resize h-[5px] hover:bg-blue ${
             dragging ? ' bg-blue brightness-125' : ''
