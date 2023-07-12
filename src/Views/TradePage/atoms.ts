@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { defaultSelectedTime, defaultSettings } from './config';
 import { HHMMToSeconds } from './utils';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { OngoingTradeSchema, marketType } from './type';
+import { OngoingTradeSchema, marketType, poolInfoType } from './type';
 
 //Share Atoms
 export const shareSettingsAtom = atomWithLocalStorage(
@@ -43,7 +43,7 @@ export const setSettingsAtom = atom(
 );
 
 //BuyTrade Atoms
-export const timeSelectorAtom = atomWithLocalStorage('timeSelectorAtom', {
+export const timeSelectorAtom = atomWithLocalStorage('timeSelectorAtomV2', {
   HHMM: defaultSelectedTime,
   seconds: HHMMToSeconds(defaultSelectedTime),
 });

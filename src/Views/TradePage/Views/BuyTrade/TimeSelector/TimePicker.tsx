@@ -68,6 +68,7 @@ export const TimePicker: React.FC<{
 }) => {
   const [openCustomInput, setOpenCustomInput] = useState(false);
   useEffect(() => {
+    // console.log('currentTime', currentTime);
     if (!openCustomInput) {
       const duration = durations.find((d) => d.time === currentTime);
       if (duration === undefined) {
@@ -168,8 +169,10 @@ const EditTime: React.FC<{
   const [activeFrame, setActiveFrame] = useState('m');
   const [inputValue, setInputValue] = useState<number | ''>(30);
   const MAX = activeFrame === 'm' ? 60 : 24;
+
   function onChange(newInput: number | '') {
     setInputValue(newInput);
+    // console.log('newInput', newInput);
 
     let seconds = 0;
     if (activeFrame === 'm') {
@@ -189,15 +192,6 @@ const EditTime: React.FC<{
   }, [showCustomInput]);
 
   useEffect(() => {
-    if (inputValue === '') return;
-    if (activeFrame.trim() === 'h' && inputValue > 24) {
-      onChange(24);
-    } else {
-      onChange(inputValue);
-    }
-  }, [activeFrame]);
-
-  useEffect(() => {
     if (initialValue !== '00:00') {
       const [hours, minutes] = initialValue.split(':');
       if (hours === '00' && lte(minutes, '60')) {
@@ -213,7 +207,7 @@ const EditTime: React.FC<{
         setInputValue(30);
       }
     }
-  }, [initialValue]);
+  }, []);
 
   if (showCustomInput) {
     return (
@@ -243,6 +237,15 @@ const EditTime: React.FC<{
         <MHdropDown
           activeFrame={activeFrame}
           setFrame={setActiveFrame}
+          onClickFunction={(frame: string | undefined) => {
+            if (frame === undefined) return;
+            if (inputValue === '') return;
+            if (frame.trim() === 'h' && inputValue > 24) {
+              onChange(24);
+            } else {
+              onChange(inputValue);
+            }
+          }}
           className="px-[2px] py-[0] !bg-[#303044] rounded-[2px]"
         />
       </RowGap>

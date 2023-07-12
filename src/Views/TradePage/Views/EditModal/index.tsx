@@ -41,7 +41,7 @@ export const EditModal: React.FC<{
   const [buttonDirection, setButtonDirection] = useState(directionBtn.Up);
   const [frame, setFrame] = useState('m');
   const [minutes, setMinutes] = useState(0);
-  const [currentTime, setCurrentTime] = useState('00:15');
+  const [currentTime, setCurrentTime] = useState(secondsToHHMM(trade?.period));
   const [price, setPrice] = useState('0');
   const [editLoading, setEditLoading] = useState<null | number>(null);
   const [periodValidations, setPeriodValidation] = useState({
@@ -70,7 +70,7 @@ export const EditModal: React.FC<{
     setMinutes(trade.limit_order_duration / 60);
     setFrame('m');
 
-    setCurrentTime(secondsToHHMM(trade.period));
+    // setCurrentTime(secondsToHHMM(trade.period));
 
     setPeriodValidation({
       min: pool.min_duration,
