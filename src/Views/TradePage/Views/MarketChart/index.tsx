@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { chartNumberAtom, isTableShownAtom } from '@Views/TradePage/atoms';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isWideTableEnabled } from '@Views/BinaryOptions/UserTrades';
 import { sleep } from '@TV/useDataFeed';
 
@@ -40,9 +40,11 @@ const MarketChart: React.FC<any> = ({}) => {
     height?: number;
     top?: number;
   }>({});
+  const containerRef = useRef<HTMLDivElement>();
   const onInitialLoad: React.LegacyRef<HTMLDivElement> = useCallback(
     async (ele) => {
       if (!isTableExpanded) return;
+      containerRef.current = ele;
       await sleep(1000);
       const d = ele?.getBoundingClientRect();
       if (!d) return;
@@ -56,16 +58,27 @@ const MarketChart: React.FC<any> = ({}) => {
     if (!containerDim?.height) return;
     if (!dragging) return;
     // y = 4
-    setContainerDim((currentDim) => {
-      if (!currentDim?.top) return {};
-      let updatedY: { height: number; top: number } = {};
-      const updatedHeight = clientY - currentDim.top;
-      const bound = window.innerHeight - (currentDim.top + 50);
-      console.log(`index-updatedHeight: `, bound, updatedHeight);
-      updatedY.height = Math.min(updatedHeight, bound);
-      // updatedY.height = updatedHeight;
-      updatedY.top = currentDim.top;
-      return updatedY;
+    setContainerDim((currentChartContainerDim) => {
+      if (!currentChartContainerDim?.top) return {};
+
+      let updatedChartContainerDim: Partial<{ height: number; top: number }> =
+        {};
+      const updatedHeight = clientY - currentChartContainerDim.top;
+      const bound = window.innerHeight - (currentChartContainerDim.top + 50);
+      updatedChartContainerDim.height = Math.min(updatedHeight, bound);
+      updatedChartContainerDim.top = currentChartContainerDim.top;
+
+      // since doccument.onmouseup doesn't get fired on TV area, we have to
+      // take an offset value while scrolling up
+      if (
+        containerRef.current &&
+        containerRef.current?.getBoundingClientRect().height -
+          updatedChartContainerDim.height >
+          35
+      ) {
+        onMouseUp();
+      }
+      return updatedChartContainerDim;
     });
   };
   const onMouseMove = (e: MouseEvent) => {
@@ -78,7 +91,7 @@ const MarketChart: React.FC<any> = ({}) => {
   };
 
   const onMouseUp = () => {
-    console.log(`onMouseUp-called: `, false);
+    console.log('deb-event-up');
     setDragging(false);
   };
 
@@ -86,7 +99,7 @@ const MarketChart: React.FC<any> = ({}) => {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('touchmove', onTouchMove);
     document.addEventListener('mouseup', onMouseUp);
-
+    document.addEventListener('mouseleave', onMouseUp);
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('touchmove', onTouchMove);
@@ -129,6 +142,7 @@ const MarketChart: React.FC<any> = ({}) => {
     );
   }
   const onMouseDown = () => {
+    console.log('deb-event -down');
     setDragging(true);
   };
 
@@ -148,6 +162,8 @@ const MarketChart: React.FC<any> = ({}) => {
           onTouchStart={onMouseDown}
           onMouseUp={onMouseUp}
           onTouchEnd={onMouseUp}
+          draggable
+          // onMouseLeave={onMouseUp}
           className={` w-full   cursor-row-resize h-[5px] hover:bg-blue ${
             dragging ? ' bg-blue brightness-125' : ''
           }`}
