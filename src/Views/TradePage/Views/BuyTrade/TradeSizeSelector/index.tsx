@@ -18,6 +18,7 @@ import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
+import { useAccount } from 'wagmi';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -27,6 +28,7 @@ const TradeSizeSelectorBackground = styled.div`
 export const TradeSizeSelector: React.FC = () => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
+  const { address } = useAccount();
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
@@ -63,11 +65,13 @@ export const TradeSizeSelector: React.FC = () => {
           />
           <PoolDropdown />
         </RowGapItemsStretched>
-        <PlatfromFeeError
-          platfromFee={platformFee}
-          tradeToken={tradeToken}
-          balance={balance}
-        />
+        {address && (
+          <PlatfromFeeError
+            platfromFee={platformFee}
+            tradeToken={tradeToken}
+            balance={balance}
+          />
+        )}
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );

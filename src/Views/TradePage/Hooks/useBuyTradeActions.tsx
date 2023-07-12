@@ -256,7 +256,10 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      if (gt(userInput, divide(maxTradeAmount, decimals) as string)) {
+      if (
+        gt(userInput, divide(maxTradeAmount, decimals) as string) &&
+        !settings.partialFill
+      ) {
         return toastify({
           type: 'error',
           msg:

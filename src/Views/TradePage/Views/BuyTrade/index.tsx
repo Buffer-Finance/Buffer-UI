@@ -11,14 +11,13 @@ import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { priceAtom } from '@Hooks/usePrice';
-import { divide, subtract } from '@Utils/NumString/stringArithmatics';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { AssetCategory } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import { marketsForChart } from '@Views/TradePage/config';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { ActiveTrades } from './ActiveTrades';
-import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { useSelectedAssetPayout } from '../MarketChart/Payout';
 
 const BuyTradeBackground = styled.div`
