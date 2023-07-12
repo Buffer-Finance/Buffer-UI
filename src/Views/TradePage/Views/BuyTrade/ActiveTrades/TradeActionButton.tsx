@@ -93,30 +93,20 @@ export const TradeActionButton: React.FC<{
       </RowGap>
     );
   }
-  // if (isQueued) {
-  //   return (
-  //     <>
-  //       <CancelButton
-  //         onClick={cancelTrade}
-  //         disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
-  //       >
-  //         {isTradeExpired ? (
-  //           'Processing...'
-  //         ) : isCancelLoading ? (
-  //           <ButtonLoader />
-  //         ) : (
-  //           'Cancel'
-  //         )}
-  //       </CancelButton>
-  //     </>
-  //   );
-  // }
+
   if (isWin) {
     return (
       <>
         <CloseAtProfitButton
-          onClick={earlyClose}
-          disabled={
+          onClick={() =>
+            isCancelLoading ||
+            isEarlyCloseLoading ||
+            isTradeExpired ||
+            isCloseDisabled
+              ? console.log()
+              : earlyClose()
+          }
+          isDisabled={
             isCancelLoading ||
             isEarlyCloseLoading ||
             isTradeExpired ||
@@ -199,7 +189,7 @@ const CancelButton = styled(buttonStyle)`
 const CloseAtProfitButton = styled(buttonStyle)`
   color: #ffffff;
   background-color: #3fb68b;
-  pointer-events: auto !important;
+  ${getDisabledStyles}
 `;
 
 const CloseAtLossButton = styled(buttonStyle)`
