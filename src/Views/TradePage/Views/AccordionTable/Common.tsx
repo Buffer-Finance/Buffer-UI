@@ -239,9 +239,9 @@ export const getEarlyCloseStatus = (
     if (timeElapsed < +trade.market.pools[0].earlyclose.threshold) {
       return [
         true,
-        `You can early close the option in ${formatDistanceExpanded(
+        `${formatDistanceExpanded(
           Variables(+trade.market.pools[0].earlyclose.threshold - timeElapsed)
-        )}`,
+        )} until early close.`,
       ];
     }
   }
