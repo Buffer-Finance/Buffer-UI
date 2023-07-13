@@ -1,12 +1,13 @@
 import { gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
+import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { tradeSettingsAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
 import { getMinimumValue } from '@Views/V3App/helperFns';
 import { Trans } from '@lingui/macro';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-
+const className = 'text-[#FFE200]';
 export const TradeSizeInput: React.FC<{
   maxTradeSize: string;
   tokenName: string;
@@ -73,9 +74,16 @@ export const TradeSizeInput: React.FC<{
         </Trans>
       )}
 
-      {address && maxerr && !settings.partialFill && (
+      {address && maxerr && (
         <Trans>
-          <span className="text-red whitespace-nowrap">
+          <span
+            className={`${
+              settings.partialFill ? className : 'text-red'
+            } whitespace-nowrap flex gap-x-2 items-center`}
+          >
+            <span>
+              <LightToolTipSVG />
+            </span>
             Max trade size is {maxTradeSize} {tokenName}
           </span>
         </Trans>
