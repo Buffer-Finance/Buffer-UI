@@ -1,7 +1,10 @@
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import styled from '@emotion/styled';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
-import { MinutesInput } from '../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
+import {
+  MinutesInput,
+  useMinutesInputError,
+} from '../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
 import { SaveButton } from './SaveButton';
 import { DirectionButtons } from './DirectionButtons';
 import {
@@ -42,7 +45,7 @@ export const EditModal: React.FC<{
   const [frame, setFrame] = useState('m');
   const [minutes, setMinutes] = useState(0);
   const [currentTime, setCurrentTime] = useState(secondsToHHMM(trade?.period));
-  const [price, setPrice] = useState('0');
+  const [price, setPrice] = useState(divide(trade?.strike, 8));
   const [editLoading, setEditLoading] = useState<null | number>(null);
   const [periodValidations, setPeriodValidation] = useState({
     min: '00:05',
@@ -52,7 +55,6 @@ export const EditModal: React.FC<{
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
 
-  console.log(`index-duration-trade: `, trade);
   const pool = useMemo(() => {
     if (!market) return null;
     const pool =
@@ -64,11 +66,36 @@ export const EditModal: React.FC<{
   }, [trade, market]);
   // things to get rom pool
   const poolDecimals = 6;
+
+  const isSaveDisabled = useMemo(() => {
+    console.log('isSaveDisabled', currentTime, price);
+    if (minutes === null || minutes === undefined || minutes.toString() === '')
+      return true;
+    const currentTimeInMinutes = minutes;
+    console.log('currentTimeInMinutes', currentTimeInMinutes);
+    if (frame === 'm' && currentTimeInMinutes < 1) return true;
+    if (frame === 'm' && currentTimeInMinutes > 60) return true;
+    if (frame === 'h' && currentTimeInMinutes > 24) return true;
+    if (frame === 'h' && currentTimeInMinutes < 1) return true;
+    if (price === '') return true;
+    if (price === '0') return true;
+    const betTime = HHMMToSeconds(currentTime) / 60;
+    if (betTime > HHMMToSeconds(periodValidations.max) / 60) return true;
+    if (betTime < HHMMToSeconds(periodValidations.min) / 60) return true;
+    return false;
+  }, [trade, market, currentTime, price, frame, periodValidations, minutes]);
+
   useEffect(() => {
     if (!trade || !market || !pool) return;
-    setPrice(divide(trade.strike, 8)!);
-    setMinutes(trade.limit_order_duration / 60);
-    setFrame('m');
+    console.log('tradeEditModal', trade.limit_order_duration);
+    const limitOrderDurationinMinutes = trade.limit_order_duration / 60;
+    if (limitOrderDurationinMinutes > 60) {
+      setFrame('h');
+      setMinutes(limitOrderDurationinMinutes / 60);
+    } else {
+      setMinutes(limitOrderDurationinMinutes);
+      setFrame('m');
+    }
 
     // setCurrentTime(secondsToHHMM(trade.period));
 
@@ -78,6 +105,7 @@ export const EditModal: React.FC<{
     });
     setButtonDirection(trade.is_above ? directionBtn.Up : directionBtn.Down);
   }, [trade, market, pool]);
+
   function onTimeChange(value: number) {
     setMinutes(value);
     //convert in whatever format needed
@@ -131,7 +159,7 @@ export const EditModal: React.FC<{
       address,
       trade.slippage,
       buttonDirection == directionBtn.Up ? true : false,
-      +minutes * 60,
+      frame === 'm' ? minutes * 60 : minutes * 60 * 60,
       activeChain.id
     );
     if (res) {
@@ -144,9 +172,6 @@ export const EditModal: React.FC<{
     }
     setEditLoading(null);
   };
-  useEffect(() => {
-    console.log('currentTime', currentTime);
-  }, [currentTime]);
 
   if (!trade) return <></>;
   return (
@@ -194,6 +219,7 @@ export const EditModal: React.FC<{
           <SaveButton
             isLoading={editLoading == trade.queue_id}
             onClick={editHandler}
+            isDisabled={isSaveDisabled}
           />
         </ColumnGap>
       </div>
