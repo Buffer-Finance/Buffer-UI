@@ -256,19 +256,29 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      if (
-        gt(userInput, divide(maxTradeAmount, decimals) as string) &&
-        !settings.partialFill
-      ) {
-        return toastify({
-          type: 'error',
-          msg:
-            'Trade Amount must be less than ' +
-            divide(maxTradeAmount, decimals) +
-            ' ' +
-            tokenName,
-          id: 'binaryBuy',
+      if (gt(userInput, divide(maxTradeAmount, decimals) as string)) {
+        const msg = settings.partialFill ? (
+          'Trade will be partially filled according to available utilization.'
+        ) : (
+          <div>
+            Trade Amount must be less than&nbsp;
+            {divide(maxTradeAmount, decimals)}&nbsp;
+            {tokenName}.
+            <div className="text-3 text-f12">
+              If you still want to Buy the trade then turn on the Partial Fill
+              from settings.
+            </div>
+          </div>
+        );
+        const type = settings.partialFill ? 'info' : 'error';
+        toastify({
+          type,
+          msg,
+          id: 'binardsfyBuy',
         });
+        if (!settings.partialFill) {
+          return;
+        }
       }
 
       if (!oneCtPk) {
