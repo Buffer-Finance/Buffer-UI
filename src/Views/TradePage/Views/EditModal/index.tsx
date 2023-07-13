@@ -31,12 +31,15 @@ import { secondsToHHMM } from '@Views/V3App/helperFns';
 import { getSingatureCached } from '@Views/TradePage/cahce';
 import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
 import { appConfig } from '@Views/TradePage/config';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 
 export const EditModal: React.FC<{
   trade: OngoingTradeSchema;
   market: marketType;
   onSave: () => void;
 }> = ({ trade, market, onSave }) => {
+  const [_, limitOrders] = useOngoingTrades();
+
   const { address } = useAccount();
   const [buttonDirection, setButtonDirection] = useState(directionBtn.Up);
   const [frame, setFrame] = useState('m');
@@ -192,6 +195,11 @@ export const EditModal: React.FC<{
             setActiveBtn={setButtonDirection}
           />
           <SaveButton
+            isDisabled={
+              limitOrders.find((lo) => lo.queue_id == trade.queue_id)
+                ? false
+                : true
+            }
             isLoading={editLoading == trade.queue_id}
             onClick={editHandler}
           />
