@@ -127,7 +127,7 @@ export const OngoingTradesTable: React.FC<{
     }
     const lockedAmmount = getLockedAmount(trade, cachedPrices);
     const distanceObject = Variables(
-      trade.queued_timestamp +
+      trade.open_timestamp +
         trade.period -
         (trade.close_time || Math.round(Date.now() / 1000))
     );
@@ -197,7 +197,7 @@ export const OngoingTradesTable: React.FC<{
       case TableColumn.OpenTime:
         return (
           // queuedTradeFallBack(trade) || (
-          <DisplayTime ts={trade.queued_timestamp} />
+          <DisplayTime ts={trade.open_timestamp} />
           // )
         );
       case TableColumn.TimeLeft:

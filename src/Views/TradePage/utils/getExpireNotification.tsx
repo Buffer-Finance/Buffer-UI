@@ -42,7 +42,7 @@ export const getExpireNotification = async (
       openShareModal(currentRow, expiryPrice.toString(), tradeMarket, poolInfo);
       return;
     } else {
-      const openTimeStamp = currentRow.queued_timestamp;
+      const openTimeStamp = currentRow.open_timestamp;
       const closeTimeStamp = +currentRow.expiration_time!;
 
       toastify({

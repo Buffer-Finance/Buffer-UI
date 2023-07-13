@@ -236,7 +236,7 @@ export const getEarlyCloseStatus = (
     return [true, `Early Close isn't supported`];
   if (trade.market.pools[0].earlyclose.threshold) {
     const now = Date.now();
-    const timeElapsed = Math.round(now / 1000) - trade.queued_timestamp;
+    const timeElapsed = Math.round(now / 1000) - trade.open_timestamp;
     if (timeElapsed < +trade.market.pools[0].earlyclose.threshold) {
       return [
         true,
@@ -285,7 +285,7 @@ export const TableErrorRow: React.FC<{
 
 export const getExpiry = (trade: TradeType, deb?: string) => {
   deb && console.log('TableComponents-deb-close' + deb, trade);
-  return trade.close_time || trade.queued_timestamp + trade.period;
+  return trade.close_time || trade.open_timestamp + trade.period;
 };
 export const getStrike = (trade: TradeType, cachedPrice: any) => {
   let strikePrice = trade.strike;

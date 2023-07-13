@@ -72,7 +72,7 @@ export const CancelledTable: React.FC<{
       case TableColumn.QueueTime:
         return (
           // queuedTradeFallBack(trade) || (
-          <DisplayTime ts={trade.queued_timestamp} />
+          <DisplayTime ts={trade.open_timestamp} />
           // )
         );
       case TableColumn.CancellationTime:

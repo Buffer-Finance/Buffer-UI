@@ -402,7 +402,7 @@ export const useBuyTradeActions = (userInput: string) => {
         });
         const queuedPrice = await getPrice({
           pair: activeAsset.tv_id,
-          timestamp: resp.data.queued_timestamp,
+          timestamp: resp.data.open_timestamp,
         });
 
         setPriceCache((t) => ({

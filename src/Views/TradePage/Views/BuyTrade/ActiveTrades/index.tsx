@@ -2,7 +2,7 @@ import { ExpandSVG } from '@Views/TradePage/Components/Expand';
 import { useState } from 'react';
 import { TradeCard } from './Trade';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
 import { NoTrades } from './NoTrades';
 import styled from '@emotion/styled';
@@ -13,6 +13,7 @@ export const ActiveTrades: React.FC = () => {
   const [tableType, setTableType] = useState(tableTypes[0]);
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
   const setIsTableShown = useSetAtom(isTableShownAtom);
+  const isTableShown = useAtomValue(isTableShownAtom);
   const isLimitOrderTable = tableType == 'Limit Orders';
   const trades = !isLimitOrderTable ? activeTrades : limitOrderTrades;
   return (
@@ -31,7 +32,9 @@ export const ActiveTrades: React.FC = () => {
           );
         })}
         <button
-          className="bg-primary w-[22px] h-[22px] rounded-[6px] grid  place-items-center hover:text-1 active:text-3"
+          className={`bg-primary w-[22px] h-[22px] rounded-[6px] grid  place-items-center ${
+            isTableShown ? 'cursor-not-allowed' : 'hover:text-1'
+          }  transition-colors text-3`}
           onClick={() => {
             setIsTableShown(true);
           }}

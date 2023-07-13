@@ -214,7 +214,7 @@ function drawPosition(
   chart: IChartWidgetApi
 ) {
   // const idx = visualized.indexOf(option.queue_id);
-  const openTimeStamp = option.queued_timestamp;
+  const openTimeStamp = option.open_timestamp;
   const optionPrice = +option.strike / PRICE_DECIMALS;
   let color = !option.is_above ? defaults.red : defaults.green;
   const text =
@@ -594,7 +594,7 @@ export const MultiResolutionChart = ({
           let updatedPos = pos;
           if (pos.state === 'QUEUED') {
             updatedPos.strike = priceCache[pos.queue_id];
-            updatedPos.expiration_time = pos.queued_timestamp + pos.period;
+            updatedPos.expiration_time = pos.open_timestamp + pos.period;
           }
           console.log(`MultiResolutionChart-pos1: `, pos);
           trade2visualisation.current[+pos.queue_id] = {

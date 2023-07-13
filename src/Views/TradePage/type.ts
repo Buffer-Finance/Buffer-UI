@@ -54,6 +54,7 @@ export interface OngoingTradeSchema {
   settlement_fee_signature: string;
   market: marketType;
   expiration_time: null | number;
+  open_timestamp: number;
   is_above: boolean;
   state: 'QUEUED' | 'OPENED' | 'CLOSED';
   option_id: null | number;
@@ -75,6 +76,7 @@ export interface TradeType {
   expiry_price: number | null;
   payout: number | null;
   user_partial_signature: string;
+  open_timestamp: number;
   close_time: number;
   user_full_signature: string;
   user_address: string;
