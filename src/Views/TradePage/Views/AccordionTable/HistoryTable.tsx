@@ -164,7 +164,6 @@ const HistoryTable: React.FC<{
           />
         );
       case TableColumn.Payout:
-        console.log(`HistoryTable-pnl: `, pnl);
         return (
           <div>
             <Display

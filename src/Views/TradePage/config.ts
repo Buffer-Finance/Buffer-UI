@@ -57,7 +57,7 @@ export const appConfig = {
   },
 };
 
-export const refreshInterval = 10;
+export const refreshInterval = 500;
 export const defaultSettings = {
   trade: {
     partialFill: true,

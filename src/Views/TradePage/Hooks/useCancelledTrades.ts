@@ -1,12 +1,10 @@
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import axios from 'axios';
 import useSWR from 'swr';
-import { baseUrl } from '../config';
-import { useAccount, useSigner } from 'wagmi';
+import { baseUrl, refreshInterval } from '../config';
+import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { Signer, Wallet } from 'ethers';
 import { OngoingTradeSchema, TradeType } from '../type';
-import { getSingatureCached } from '../cahce';
 import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
 
@@ -32,7 +30,7 @@ const useCancelledTrades = () => {
         // console.log(`activeTrades: `, activeTrades, limitOrders);
         return [addMarketInTrades(res.data, markets)] as TradeType[][];
       },
-      refreshInterval: 10,
+      refreshInterval,
     }
   );
   return data || ([[], []] as TradeType[][]);

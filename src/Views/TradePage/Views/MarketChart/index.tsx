@@ -48,7 +48,6 @@ const MarketChart: React.FC<any> = ({}) => {
       await sleep(1000);
       const d = ele?.getBoundingClientRect();
       if (!d) return;
-      console.log(`index-d: `, d);
       setContainerDim(d);
     },
     [isTableExpanded]
