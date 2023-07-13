@@ -108,7 +108,7 @@ export const TradeActionButton: React.FC<{
               ? console.log()
               : earlyClose()
           }
-          disabled={
+          isDisabled={
             isCancelLoading ||
             isEarlyCloseLoading ||
             isTradeExpired ||
@@ -131,7 +131,7 @@ export const TradeActionButton: React.FC<{
     <NumberTooltip content={disableTooltip}>
       <span>
         <CloseAtLossButton
-          disabled={
+          isDisabled={
             isCancelLoading ||
             isEarlyCloseLoading ||
             isTradeExpired ||
