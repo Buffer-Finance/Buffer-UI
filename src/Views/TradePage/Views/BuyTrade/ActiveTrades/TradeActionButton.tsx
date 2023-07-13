@@ -78,16 +78,17 @@ export const TradeActionButton: React.FC<{
           </CancelButton>
         ) : (
           <>
-            {' '}
             <CancelButton
               onClick={editLimitOrder}
               disabled={
                 isCancelLoading || isEarlyCloseLoading || isTradeExpired
               }
             >
-              {isCancelLoading ? <ButtonLoader /> : 'Edit'}
+              {'Edit'}
             </CancelButton>
-            <CancelButton onClick={cancelTrade}>Cancel</CancelButton>
+            <CancelButton onClick={cancelTrade}>
+              {isCancelLoading ? <ButtonLoader /> : 'Cancel'}
+            </CancelButton>
           </>
         )}
       </RowGap>
@@ -180,10 +181,11 @@ const buttonStyle = styled.button`
 
 const CancelButton = styled(buttonStyle)`
   background-color: #282b39;
-  color: #7f87a7;
+  color: #ffffff;
   :hover {
     color: #ffffff;
   }
+  ${getDisabledStyles}
 `;
 
 const CloseAtProfitButton = styled(buttonStyle)`
