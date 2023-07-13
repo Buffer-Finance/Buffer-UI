@@ -73,8 +73,8 @@ const chartTypes = {
         className="ele"
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M21.1266 5.0127H3.12659V19.0127H21.1266V5.0127ZM13.6267 15.2796L19.1258 9.78046L17.358 8.0127L13.6267 11.744L10.6267 8.74405L5.12659 14.2441L6.89435 16.0119L10.6267 12.2796L13.6267 15.2796Z"
           fill="currentColor"
         ></path>
@@ -143,8 +143,8 @@ const chartTypes = {
         className="ele"
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M16.1266 3.70508H19.1266V7.70508H22.1266V17.7041H19.1266V21.7041H16.1266L16.1266 17.7041H13.1266V7.70508H16.1266L16.1266 3.70508ZM19.1266 10.7051H16.1266V14.7041H19.1266V10.7051Z"
           fill="currentColor"
         ></path>
@@ -165,8 +165,8 @@ const chartTypes = {
   //       className="ele"
   //     >
   //       <path
-  //         fill-rule="evenodd"
-  //         clip-rule="evenodd"
+  //         fillRule="evenodd"
+  //         clipRule="evenodd"
   //         d="M16.1266 3.70508H19.1266V7.70508H22.1266V17.7041H19.1266V21.7041H16.1266L16.1266 17.7041H13.1266V7.70508H16.1266L16.1266 3.70508ZM19.1266 10.7051H16.1266V14.7041H19.1266V10.7051Z"
   //         fill="currentColor"
   //       ></path>
@@ -187,8 +187,8 @@ const chartTypes = {
         className="ele"
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M16.1266 3.70508H19.1266V7.70508H22.1266V17.7041H19.1266V21.7041H16.1266L16.1266 17.7041H13.1266V7.70508H16.1266L16.1266 3.70508ZM19.1266 10.7051H16.1266V14.7041H19.1266V10.7051Z"
           fill="currentColor"
         ></path>
@@ -256,6 +256,7 @@ const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
                 className={`chart-type my-2 ${
                   active == item.value.type ? 'active-chart' : ''
                 }`}
+                key={item.name}
               >
                 {item.value.icon}
                 <span className="ele whitespace-nowrap">

@@ -36,7 +36,7 @@ const BufferCheckbox: React.FC<IBufferCheckbox> = ({
           <path
             d="M3.93555 11.5748L7.69501 13.7231L15.2139 6.74121"
             stroke="white"
-            stroke-width="2"
+            strokeWidth="2"
             className={`checkbox__filled ${checked && 'active'} ${
               isDisabled && 'disabled'
             }`}

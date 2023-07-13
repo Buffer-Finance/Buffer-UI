@@ -7,7 +7,6 @@ const usePriceChange = () => {
     fetcher: async () => {
       const nowEpoch = Math.round(Date.now() / 1000) - 5 * 60;
       const yesterdayEpoch = nowEpoch - 60 * 60 * 24;
-      console.log(`yesterdayEpoch: `, nowEpoch, yesterdayEpoch);
       const queries = [];
       for (const marketName in marketsForChart) {
         const market = (marketsForChart as any)[marketName];

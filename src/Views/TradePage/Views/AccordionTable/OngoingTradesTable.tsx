@@ -132,13 +132,10 @@ export const OngoingTradesTable: React.FC<{
         (trade.close_time || Math.round(Date.now() / 1000))
     );
 
-    trade.close_time &&
-      console.log(`OngoingTradesTable-distanceObject: `, distanceObject);
     const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
     switch (col) {
       case TableColumn.Show:
         const isVisualized = visualized.includes(trade.queue_id);
-        console.log(`OngoingTradesTable-disableTooltip: `, disableTooltip);
         return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
             <ShowIcon

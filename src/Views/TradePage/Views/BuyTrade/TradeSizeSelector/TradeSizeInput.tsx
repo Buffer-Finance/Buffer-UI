@@ -20,7 +20,6 @@ export const TradeSizeInput: React.FC<{
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
   const { address } = useAccount();
   useEffect(() => {
-    console.log(`TradeSizeInput-tradeSize: `, tradeSize, minTradeSize);
     if (lt(tradeSize || '0', minTradeSize)) {
       setminErr(true);
     } else {
@@ -33,10 +32,6 @@ export const TradeSizeInput: React.FC<{
     }
   }, [tradeSize]);
   const settings = useAtomValue(tradeSettingsAtom);
-  console.log(
-    `TradeSizeInput-maxerr && !settings.partialFill: `,
-    maxerr && !settings.partialFill
-  );
 
   return (
     <div className="flex flex-col gap-2">

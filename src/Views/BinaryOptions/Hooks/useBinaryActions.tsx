@@ -173,21 +173,10 @@ const day2Intervals = {
   4: getUsualRoutine(null, true),
   5: [[]],
 };
-console.log(`useBinaryActions-schedule: `, day2Intervals);
-function isTradingOpen(): boolean {
-  const now = new Date();
-  const dayOfWeek = now.getUTCDay();
-  const hour = now.getUTCHours();
-  const min = now.getUTCMinutes();
-  const nowMin = hour * 60 + min;
-  const todaySchedule = day2Intervals[dayOfWeek];
-  console.log(`useBinaryActions-todaySchedule: `, todaySchedule, nowMin);
-}
+
 // Check if it's a weekday (Mon-Fri) and within trading hours
 // | [ ] [ ] [ ]   ||  [ ]|[ ] [ ]     open will be next%7 first arr[0]
 //   [|] [ ] [ ]                       open will be arr[1]
-
-isTradingOpen();
 
 // 0 : 17:00 22::00_23:00 23:59
 // 1 : 00:00 22::00_23:00 23:59

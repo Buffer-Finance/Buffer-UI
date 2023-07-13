@@ -45,7 +45,6 @@ const AccordionTable: React.FC<any> = ({}) => {
     queries: { pair: string; timestamp: number; queueId: number }[],
     lockedAmmountQuery: Call[]
   ) => {
-    console.log('getAugmentedData');
     const priceResponse = await Promise.all(
       queries.map((q) => getCachedPrice(q))
     );
@@ -116,6 +115,7 @@ const AccordionTable: React.FC<any> = ({}) => {
                 setExpanded(true);
                 setActiveTable(s);
               }}
+              key={s}
               className={`text-${s == activeTable ? '1' : '2'} text-f14 ${
                 gap.filter((i) => i == s).length
                   ? ' pr-[13px] accordion-table-strip-right-border'

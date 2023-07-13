@@ -44,7 +44,7 @@ export const PoolDropdown: React.FC = () => {
     >
       {poolNameList ? (
         poolNameList.map((poolName) => (
-          <MenuItem onClick={onClick} value={poolName}>
+          <MenuItem onClick={onClick} value={poolName} key={poolName}>
             {poolName}
           </MenuItem>
         ))

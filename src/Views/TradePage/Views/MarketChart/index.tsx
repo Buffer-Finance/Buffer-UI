@@ -91,7 +91,6 @@ const MarketChart: React.FC<any> = ({}) => {
   };
 
   const onMouseUp = () => {
-    console.log('deb-event-up');
     setDragging(false);
   };
 

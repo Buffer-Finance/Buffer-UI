@@ -17,7 +17,6 @@ import {
   tahoWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
-console.log(`projectId: `, projectId);
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
@@ -36,7 +35,6 @@ function getSupportedChains() {
   }
 }
 const SupprtedChains = getSupportedChains();
-console.log(`SupprtedChains: `, SupprtedChains);
 
 export const getChains = () => SupprtedChains;
 
@@ -45,8 +43,8 @@ const getWallets = (chains: Chain[]) => {
     {
       groupName: 'Recommended',
       wallets: [
-        metaMaskWallet({ chains,projectId }),
-        coinbaseWallet({ chains, appName: 'Buffer Finance',projectId }),
+        metaMaskWallet({ chains, projectId }),
+        coinbaseWallet({ chains, appName: 'Buffer Finance', projectId }),
       ],
     },
   ];
@@ -58,20 +56,20 @@ const getWallets = (chains: Chain[]) => {
           wallets: [
             ...bothSupported[0].wallets,
             trustWallet({ chains, projectId }),
-            injectedWallet({ chains,projectId }),
+            injectedWallet({ chains, projectId }),
             walletConnectWallet({ chains, projectId }),
-            safeWallet({ chains,projectId }),
+            safeWallet({ chains, projectId }),
           ],
         },
         {
           groupName: 'Others',
           wallets: [
-            tahoWallet({ chains,projectId }),
+            tahoWallet({ chains, projectId }),
             rainbowWallet({ chains, projectId }),
             imTokenWallet({ chains, projectId }),
             ledgerWallet({ chains, projectId }),
             omniWallet({ chains, projectId }),
-            braveWallet({ chains ,projectId}),
+            braveWallet({ chains, projectId }),
             // argentWallet({ chains }),
           ],
         },

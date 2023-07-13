@@ -61,13 +61,5 @@ export const useSelectedAssetPayout = ({
     }
   }
 
-  if (payout === null) {
-    console.log(
-      'payoutFetchingError:',
-      readcallData,
-      switchPool,
-      baseSettlementFees
-    );
-  }
   return { payout };
 };

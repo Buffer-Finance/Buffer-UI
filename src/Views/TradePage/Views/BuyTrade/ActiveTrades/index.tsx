@@ -22,6 +22,7 @@ export const ActiveTrades: React.FC = () => {
         {tableTypes.map((s) => {
           return (
             <div
+              key={s}
               className={
                 ' cursor-pointer ' + (tableType == s ? 'text-1' : 'text-2')
               }

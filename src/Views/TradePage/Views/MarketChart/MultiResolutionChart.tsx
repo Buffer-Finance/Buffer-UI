@@ -19,29 +19,18 @@ import {
   IPositionLineAdapter,
   SeriesFormat,
 } from '../../../../../public/static/charting_library';
-const FIRST_TIMESTAMP = 1673239587;
 
 import {
   getDisplayDate,
   getDisplayTime,
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
-import {
-  getAggregatedBarv2,
-  getBlockFromBar,
-  getOHLCfromPrice,
-  getVizIdentifier,
-  timeDeltaMapping,
-} from '@TV/utils';
+import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
 import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
 import { sleep } from '@Utils/JSUtils/sleep';
-import {
-  IGQLHistory,
-  tardesAtom,
-} from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { PRICE_DECIMALS } from '@Views/BinaryOptions/Tables/TableComponents';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
@@ -53,7 +42,6 @@ import {
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
-import { getIdentifier } from '@Hooks/useGenericHook';
 import { marketsForChart } from '@Views/V3App/config';
 import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
@@ -232,7 +220,6 @@ function drawPosition(
   //   chart
   // );
   // if (Object.hasOwn(chart, 'createPositionLine'))
-  console.log(`MultiResolutionChart-optionPrice: `, optionPrice);
 
   return chart
     ?.createPositionLine()
@@ -588,15 +575,12 @@ export const MultiResolutionChart = ({
         if (trade2visualisation.current[+pos.queue_id]) {
           trade2visualisation.current[+pos.queue_id]!.visited = true;
         } else {
-          console.log(`MultiResolutionChart-pos0: `, pos);
-
           if (pos.state === 'QUEUED' && !priceCache?.[pos.queue_id]) return;
           let updatedPos = pos;
           if (pos.state === 'QUEUED') {
             updatedPos.strike = priceCache[pos.queue_id];
             updatedPos.expiration_time = pos.open_timestamp + pos.period;
           }
-          console.log(`MultiResolutionChart-pos1: `, pos);
           trade2visualisation.current[+pos.queue_id] = {
             visited: true,
             lineRef: drawPosition(
@@ -693,6 +677,7 @@ export const MultiResolutionChart = ({
           {supported_resolutions.map((s) => {
             return (
               <div
+                key={s}
                 onClick={async () => {
                   setMarket2resolution((m: any) => ({
                     ...m,

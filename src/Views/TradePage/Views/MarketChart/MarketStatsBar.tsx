@@ -215,9 +215,12 @@ const MarketStatsBar: React.FC<any> = ({}) => {
         token1={activeMarket.token1}
       />
       <MarketPrice token0={activeMarket.token0} token1={activeMarket.token1} />
-      {data.map((d) => {
+      {data.map((d, id) => {
         return (
-          <div className="flex flex-col justify-center items-start gap-y-1">
+          <div
+            key={id}
+            className="flex flex-col justify-center items-start gap-y-1"
+          >
             <span className="text-f12 text-[#82828F]">{d.header}</span>
             <span className="text-f12 w-full">{d.data}</span>
           </div>
@@ -257,6 +260,7 @@ const MarketStatsBar: React.FC<any> = ({}) => {
                 // e.keepOpen = true;
                 setChartTimes(s);
               }}
+              key={idx}
             >
               <Icon className="mr-2" /> &nbsp;{Math.floor(s)} Chart
               {s > 1 ? 's' : ''}
