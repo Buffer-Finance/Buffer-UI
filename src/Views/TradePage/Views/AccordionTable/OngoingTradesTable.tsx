@@ -1,7 +1,10 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { atom, useAtom, useAtomValue } from 'jotai';
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import {
+  formatDistance,
+  formatDistanceExpanded,
+} from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
@@ -199,8 +202,8 @@ export const OngoingTradesTable: React.FC<{
           // queuedTradeFallBack(trade, true) || (
           <div>
             {distanceObject.distance >= 0
-              ? formatDistanceExpanded(distanceObject)
-              : '00h:00m:00s'}
+              ? formatDistance(distanceObject)
+              : '00m:00s'}
           </div>
           // )
         );
