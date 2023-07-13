@@ -54,9 +54,13 @@ export const EditModal: React.FC<{
     min: '00:05',
     max: '24:00',
   });
+  const isMinuteFrame = frame === 'm';
+
   const { activeChain } = useActiveChain();
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const [elapsedMinutes, setElapsedMinutes] = useState<number | null>(null);
+  const queuedTime = trade?.queued_timestamp;
 
   const pool = useMemo(() => {
     if (!market) return null;
@@ -70,16 +74,42 @@ export const EditModal: React.FC<{
   // things to get rom pool
   const poolDecimals = 6;
 
+  useEffect(() => {
+    if (!trade) return;
+    const interval = setInterval(() => {
+      const currentTime = Math.floor(Date.now() / 1000);
+      const minutes = Math.floor((currentTime - queuedTime) / 60);
+      setElapsedMinutes(minutes);
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval); // Cleanup the interval on component unmount
+  }, [queuedTime]);
+
+  useEffect(() => {
+    console.log('elapsedMinutes', elapsedMinutes);
+  }, [elapsedMinutes]);
+
   const isSaveDisabled = useMemo(() => {
     if (minutes === null || minutes === undefined || minutes.toString() === '')
       return true;
     const currentTimeInMinutes = minutes;
-    if (frame === 'm' && currentTimeInMinutes < 1) return true;
-    if (frame === 'm' && currentTimeInMinutes > 60) return true;
-    if (frame === 'h' && currentTimeInMinutes > 24) return true;
-    if (frame === 'h' && currentTimeInMinutes < 1) return true;
+    if (isMinuteFrame && currentTimeInMinutes < 1) return true;
+    if (isMinuteFrame && currentTimeInMinutes > 60) return true;
+    if (!isMinuteFrame && currentTimeInMinutes > 24) return true;
+    if (!isMinuteFrame && currentTimeInMinutes < 1) return true;
     if (price === '') return true;
     if (price === '0') return true;
+    if (elapsedMinutes) {
+      if (elapsedMinutes >= 60) {
+        if (isMinuteFrame && currentTimeInMinutes <= 60) return true;
+        if (!isMinuteFrame && elapsedMinutes / 60 > currentTimeInMinutes)
+          return true;
+      } else {
+        if (isMinuteFrame && currentTimeInMinutes <= elapsedMinutes)
+          return true;
+      }
+    }
+
     const betTime = HHMMToSeconds(currentTime) / 60;
     if (betTime > HHMMToSeconds(periodValidations.max) / 60) return true;
     if (betTime < HHMMToSeconds(periodValidations.min) / 60) return true;
@@ -107,7 +137,7 @@ export const EditModal: React.FC<{
   }, [trade, market, pool]);
 
   useEffect(() => {
-    if (frame === 'm' && minutes > 60) {
+    if (isMinuteFrame && minutes > 60) {
       setMinutes(60);
     }
     if (frame.trim() === 'h' && minutes > 24) {
@@ -117,10 +147,6 @@ export const EditModal: React.FC<{
 
   function onTimeChange(value: number) {
     setMinutes(value);
-    //convert in whatever format needed
-    if (frame === 'm') {
-    } else {
-    }
   }
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const toastify = useToast();
@@ -220,6 +246,7 @@ export const EditModal: React.FC<{
               onChange={onTimeChange}
               setFrame={setFrame}
               inputClassName="border-none bg-[#282b39] text-f12"
+              minMinutes={elapsedMinutes}
             />
           </RowBetween>
           <TriggerPrice price={price} setPrice={setPrice} />
@@ -254,3 +281,7 @@ const EditModalBackground = styled.div`
     padding: 4px;
   }
 `;
+
+const LimitOrderTimeDurationInput = () => {
+  return;
+};

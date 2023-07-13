@@ -11,6 +11,7 @@ export const MinutesInput: React.FC<{
   activeFrame: string;
   className?: string;
   inputClassName?: string;
+  minMinutes?: number;
 }> = ({
   onChange,
   minutes,
@@ -18,10 +19,17 @@ export const MinutesInput: React.FC<{
   activeFrame,
   className = '',
   inputClassName = '',
+  minMinutes = 1,
 }) => {
   const [err, setErr] = useState<null | string>(null);
 
   const MAX = activeFrame === 'm' ? 60 : 24;
+  let minValue = minMinutes;
+  let minFrame = 'm';
+  if (minMinutes / 60 > 1) {
+    minValue = minMinutes / 60;
+    minFrame = 'h';
+  }
 
   return (
     <div className={`${className} relative flex flex-col items-center`}>
@@ -44,6 +52,9 @@ export const MinutesInput: React.FC<{
               onChange('1');
             } else if (e.target.value === '') {
               setErr(`Min ${activeFrame} : 1`);
+              onChange(e.target.value);
+            } else if (lt(e.target.value || '0', minValue.toString())) {
+              setErr(`Min ${minFrame} : ${minValue + 1}`);
               onChange(e.target.value);
             } else {
               setErr(null);
