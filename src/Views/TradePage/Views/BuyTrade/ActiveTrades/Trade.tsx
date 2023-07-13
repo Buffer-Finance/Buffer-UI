@@ -98,10 +98,6 @@ const TimerChip = ({ trade }: { trade: TradeType }) => {
   if (isQueued) {
     return <QueuedChip />;
   }
-  return (
-    <CountDown
-      expiration={trade.expiration_time}
-      closeTime={trade.close_time}
-    />
-  );
+  const expirationTime = trade.queued_timestamp + trade.period;
+  return <CountDown expiration={expirationTime} closeTime={trade.close_time} />;
 };
