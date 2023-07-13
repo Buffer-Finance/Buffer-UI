@@ -15,7 +15,7 @@ export const SaveButton: React.FC<{
           : '!h-[28px]'
       }
     >
-      {props.isDisabled ? 'Limit order Executed!' : 'Save'}
+      {props.isDisabled ? 'Limit order processed!' : 'Save'}
     </BlueBtn>
   );
 };
