@@ -231,7 +231,7 @@ export const getEarlyCloseStatus = (
   trade: OngoingTradeSchema
 ): [status: boolean, tooltip?: string] => {
   if (trade.option_id == null || !trade.market?.pools)
-    return [true, `Option isn't opened yet!`];
+    return [true, `Early close isn't available yet!`];
   if (!trade.market.pools?.[0]?.earlyclose.enable)
     return [true, `Early Close isn't supported for this market.`];
   if (trade.market.pools[0].earlyclose.threshold) {
