@@ -95,6 +95,7 @@ export const TradeActionButton: React.FC<{
       </RowGap>
     );
   }
+  const [isCloseDisabled, disableTooltip] = getEarlyCloseStatus(trade);
 
   if (isWin) {
     return (
@@ -112,7 +113,7 @@ export const TradeActionButton: React.FC<{
             isCancelLoading ||
             isEarlyCloseLoading ||
             isTradeExpired ||
-            trade.option_id === null
+            isCloseDisabled
           }
         >
           {isTradeExpired ? (
@@ -126,7 +127,6 @@ export const TradeActionButton: React.FC<{
       </>
     );
   }
-  const [isCloseDisabled, disableTooltip] = getEarlyCloseStatus(trade);
   return (
     <NumberTooltip content={disableTooltip}>
       <span>
