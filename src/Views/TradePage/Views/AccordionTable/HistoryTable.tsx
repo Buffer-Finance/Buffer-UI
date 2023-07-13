@@ -137,7 +137,7 @@ const HistoryTable: React.FC<{
       case TableColumn.OpenTime:
         return (
           queuedTradeFallBack(trade) || (
-            <DisplayTime ts={trade.queued_timestamp} />
+            <DisplayTime ts={trade.open_timestamp} />
           )
         );
       case TableColumn.TimeLeft:
@@ -146,7 +146,7 @@ const HistoryTable: React.FC<{
           queuedTradeFallBack(trade, true) || (
             <div>
               {formatDistanceExpanded(
-                Variables(minClosingTime - trade.queued_timestamp)
+                Variables(minClosingTime - trade.open_timestamp)
               )}
             </div>
           )

@@ -76,7 +76,7 @@ const AccordionTable: React.FC<any> = ({}) => {
           if (!(trade.queue_id in priceCache))
             priceQueries.push({
               pair: trade.market.tv_id,
-              timestamp: trade.queued_timestamp,
+              timestamp: trade.open_timestamp,
               queueId: trade.queue_id,
             });
           // lockedAmmountQuery.push({
