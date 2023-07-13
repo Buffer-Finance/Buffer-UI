@@ -44,7 +44,7 @@ import {
   marketsForChart,
   pricePublisherBaseUrl,
 } from '../config';
-import { AssetCategory, OngoingTradeSchema } from '../type';
+import { AssetCategory, TradeType } from '../type';
 import {
   queuets2priceAtom,
   timeSelectorAtom,
@@ -379,7 +379,7 @@ export const useBuyTradeActions = (userInput: string) => {
       };
       console.log('apiParams', apiParams);
 
-      const resp: { data: OngoingTradeSchema } = await axios.post(
+      const resp: { data: TradeType } = await axios.post(
         baseUrl + 'trade/create/',
         null,
         {

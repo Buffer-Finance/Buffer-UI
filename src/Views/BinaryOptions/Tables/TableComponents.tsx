@@ -42,21 +42,17 @@ import { PairTokenImage } from '../Components/PairTokenImage';
 import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '@Views/V3App/config';
-import {
-  OngoingTradeSchema,
-  marketType,
-  poolInfoType,
-} from '@Views/TradePage/type';
+import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { getExpiry } from '@Views/TradePage/Views/AccordionTable/Common';
 import { getPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
-  currentRow: OngoingTradeSchema,
+  currentRow: TradeType,
   tradeMarket: marketType,
   toastify: (a: any) => void,
   openShareModal: (
-    trade: OngoingTradeSchema,
+    trade: TradeType,
     expiry: string,
     market: marketType,
     poolInfo: poolInfoType
@@ -139,7 +135,7 @@ export const getExpireNotification = async (
 };
 
 export const SlippageTooltip: React.FC<{
-  option: OngoingTradeSchema;
+  option: TradeType;
   className?: string;
 }> = ({ option, className }) => {
   if (!option?.slippage || option?.strike) return <></>;
@@ -233,7 +229,7 @@ export const StopWatch: React.FC<{
 };
 
 export const PayoutChip: React.FC<{
-  data: OngoingTradeSchema;
+  data: TradeType;
   className?: string;
 }> = ({ data, className = '' }) => {
   const net_pnl = data.payout
@@ -335,7 +331,7 @@ export const PayoutChip: React.FC<{
 };
 
 export const AssetCell: React.FC<{
-  currentRow: OngoingTradeSchema;
+  currentRow: TradeType;
   split?: boolean;
   configData: V3AppConfig | undefined;
 }> = ({ currentRow, split, configData }) => {
@@ -426,7 +422,7 @@ export const StrikePriceComponent = ({
   configData,
   isMobile = false,
 }: {
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   configData: V3AppConfig | undefined;
   isMobile?: boolean;
 }) => {
@@ -462,7 +458,7 @@ export const StrikePriceComponent = ({
 
 export const ExpiryCurrentComponent: React.FC<{
   isHistoryTable: boolean;
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   marketPrice: any;
   configData: V3AppConfig | undefined;
 }> = ({ isHistoryTable, trade, marketPrice, configData }) => {
@@ -532,7 +528,7 @@ export const ProbabilityPNL = ({
   marketPrice,
   onlyPnl = false,
 }: {
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   isHistoryTable: boolean;
   marketPrice: any;
   onlyPnl?: boolean;
@@ -656,7 +652,7 @@ export const ProbabilityPNL = ({
 };
 
 export const TradeSize: React.FC<{
-  trade: OngoingTradeSchema;
+  trade: TradeType;
 }> = ({ trade }) => {
   return (
     <CellInfo

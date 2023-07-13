@@ -8,11 +8,7 @@ import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
 import { GreyBtn } from '@Views/Common/V2-Button';
-import {
-  OngoingTradeSchema,
-  TradeType,
-  marketType,
-} from '@Views/TradePage/type';
+import { TradeType, marketType } from '@Views/TradePage/type';
 import { Display } from '@Views/Common/Tooltips/Display';
 import InfoIcon from '@SVG/Elements/InfoIcon';
 import {
@@ -39,7 +35,7 @@ export const DisplayTime = ({ ts }: { ts: number | string }) => {
 };
 
 export const getProbability = (
-  trade: OngoingTradeSchema,
+  trade: TradeType,
   price: number,
   expiryTs?: string
 ) => {
@@ -51,7 +47,7 @@ export const getProbability = (
 };
 
 export const getProbabilityByTime = (
-  trade: OngoingTradeSchema,
+  trade: TradeType,
   price: number,
   currentTime: number,
   expirationTime: number
@@ -71,7 +67,7 @@ export const getProbabilityByTime = (
 };
 
 export const queuedTradeFallBack = (
-  trade: OngoingTradeSchema,
+  trade: TradeType,
   icon?: boolean,
   custom?: boolean
 ) => {
@@ -142,14 +138,14 @@ export const TableHeader: React.FC<ITableHeader> = ({
   );
 };
 
-//  export const earlyCloseStatus = (data:OngoingTradeSchema)=>{
+//  export const earlyCloseStatus = (data:TradeType)=>{
 //    return data.
 //  }
 export const StrikePriceComponent = ({
   trade,
   configData,
 }: {
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   configData: marketType;
 }) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
@@ -183,7 +179,7 @@ export const StrikePriceComponent = ({
 };
 
 export const SlippageTooltip: React.FC<{
-  option: OngoingTradeSchema;
+  option: TradeType;
   className?: string;
 }> = ({ option, className }) => {
   // if (!option?.slippage || option?.strike) return <></>;
@@ -226,22 +222,25 @@ import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
 import { useAtomValue } from 'jotai';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { Variables } from '@Utils/Time';
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import {
+  formatDistance,
+  formatDistanceExpanded,
+} from '@Hooks/Utilities/useStopWatch';
 export const getEarlyCloseStatus = (
-  trade: OngoingTradeSchema
+  trade: TradeType
 ): [status: boolean, tooltip?: string] => {
-  if (trade.option_id == null || !trade.market?.pools)
-    return [true, `Early close isn't available yet!`];
-  if (!trade.market.pools?.[0]?.earlyclose.enable)
-    return [true, `Early Close isn't supported for this market.`];
-  if (trade.market.pools[0].earlyclose.threshold) {
+  // very edgy case when pool isnot defined.
+  if (!trade.pool) return [true, `Early close isn't available for this trade!`];
+  if (!trade.pool?.earlyclose.enable)
+    return [true, `Early Close isn't supported for this trade!`];
+  if (trade.pool.earlyclose.threshold) {
     const now = Date.now();
     const timeElapsed = Math.round(now / 1000) - trade.open_timestamp;
-    if (timeElapsed < +trade.market.pools[0].earlyclose.threshold) {
+    if (timeElapsed < +trade.pool.earlyclose.threshold) {
       return [
         true,
-        `${formatDistanceExpanded(
-          Variables(+trade.market.pools[0].earlyclose.threshold - timeElapsed)
+        `Wait ${formatDistance(
+          Variables(+trade.pool.earlyclose.threshold - timeElapsed)
         )} until early close.`,
       ];
     }

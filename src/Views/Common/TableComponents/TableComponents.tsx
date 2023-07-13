@@ -2,7 +2,7 @@ import { ReactChild, ReactNode } from 'react';
 import InfoIcon from 'src/SVG/Elements/InfoIcon';
 import VersionChip from '@Views/Common/VersionChip';
 import { AssetCellLayout, CellDescLayout } from './style';
-import { OngoingTradeSchema } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { TradeType } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { marketType } from '@Views/TradePage/type';
 import { Display } from '../Tooltips/Display';
 import { divide } from '@Utils/NumString/stringArithmatics';
@@ -54,7 +54,7 @@ export const StrikePriceComponent = ({
   configData,
   isMobile = false,
 }: {
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   configData: marketType | undefined;
   isMobile?: boolean;
 }) => {
@@ -89,7 +89,7 @@ export const StrikePriceComponent = ({
 };
 
 const AssetCell: React.FC<{
-  currentRow: OngoingTradeSchema;
+  currentRow: TradeType;
   split?: boolean;
   configData: marketType | undefined;
   platform?: boolean;

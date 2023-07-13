@@ -21,7 +21,7 @@ import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import FailedSuccess from '@SVG/Elements/FailedSuccess';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { TradeType } from '@Views/TradePage/type';
 import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
 
@@ -42,7 +42,7 @@ enum TableColumn {
 const priceDecimals = 8;
 
 const HistoryTable: React.FC<{
-  trades: OngoingTradeSchema[];
+  trades: TradeType[];
   platform?: boolean;
 }> = ({ trades, platform }) => {
   const [marketPrice] = useAtom(priceAtom);

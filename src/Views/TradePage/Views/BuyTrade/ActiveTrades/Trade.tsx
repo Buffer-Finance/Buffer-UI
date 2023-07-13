@@ -15,7 +15,7 @@ import { joinStrings } from '@Views/TradePage/utils';
 import { TradeTimeElapsed } from './TradeTimeElapsed';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { CountDown } from './CountDown';
-import { OngoingTradeSchema, TradeType } from '@Views/TradePage/type';
+import { TradeType } from '@Views/TradePage/type';
 import { getExpiry, getStrike } from '../../AccordionTable/Common';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { useAtomValue } from 'jotai';

@@ -1,9 +1,4 @@
-import {
-  OngoingTradeSchema,
-  TradeType,
-  marketType,
-  poolInfoType,
-} from '../type';
+import { TradeType, marketType, poolInfoType } from '../type';
 import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getDisplayTime } from '@Utils/Dates/displayDateTime';
@@ -76,7 +71,7 @@ const TradeResult = ({
   unit,
 }: {
   tradeMarket: marketType;
-  currentRow: OngoingTradeSchema;
+  currentRow: TradeType;
   openTimeStamp: number;
   closeTimeStamp: number;
   isWin: boolean;

@@ -3,7 +3,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { downloadGetLink, getNodeSnapshot, uploadImage } from '@Utils/DOMutils';
 import ButtonLoader from '@Views/Common/V2-Button/ButtonLoader';
 import { useUserCode } from '@Views/Referral/Hooks/useUserCode';
-import { OngoingTradeSchema, marketType } from '@Views/TradePage/type';
+import { TradeType, marketType } from '@Views/TradePage/type';
 import { ContentCopy, FileDownloadOutlined } from '@mui/icons-material';
 import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
@@ -13,7 +13,7 @@ export const apiBaseUrl = 'https://share.buffer.finance';
 export const ShareButtons: React.FC<{
   imageRef: React.RefObject<HTMLDivElement>;
   market: marketType;
-  trade: OngoingTradeSchema;
+  trade: TradeType;
 }> = ({ imageRef, market, trade }) => {
   const [loading, setLoading] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();

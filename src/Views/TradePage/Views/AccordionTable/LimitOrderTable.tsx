@@ -38,7 +38,7 @@ import {
 } from './Common';
 import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { TradeType } from '@Views/TradePage/type';
 
 export const tradesCount = 10;
 const headNameArray = [
@@ -61,7 +61,7 @@ enum TableColumn {
   ActionButtons = 6,
 }
 
-const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
+const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
   // const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
@@ -72,7 +72,7 @@ const LimitOrderTable = ({ trades }: { trades: OngoingTradeSchema[] }) => {
   };
 
   const { cancelHandler } = useCancelTradeFunction();
-  const handleCancel = async (trade: OngoingTradeSchema) => {
+  const handleCancel = async (trade: TradeType) => {
     cancelHandler(trade);
   };
   const BodyFormatter: any = (row: number, col: number) => {

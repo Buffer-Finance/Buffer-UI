@@ -5,7 +5,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { cancelQueueTrade } from '../utils';
 import { getSingatureCached } from '../cahce';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { OngoingTradeSchema, marketType } from '../type';
+import { TradeType, marketType } from '../type';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
 import axios from 'axios';
@@ -39,7 +39,7 @@ export const useCancelTradeFunction = () => {
   const [earlyCloseLoading, setEarlyCloseLoading] = useState<{
     [queued_id: number]: boolean;
   }>({});
-  const cancelHandler = async (trade: OngoingTradeSchema) => {
+  const cancelHandler = async (trade: TradeType) => {
     if (!address) return;
 
     setLoading((t) => ({ ...t, [trade.queue_id]: 1 }));
@@ -81,7 +81,7 @@ export const useCancelTradeFunction = () => {
   };
 
   const earlyCloseHandler = async (
-    trade: OngoingTradeSchema,
+    trade: TradeType,
     tradeMarket: marketType
   ) => {
     const ts = Math.round(Date.now() / 1000);

@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { baseUrl, refreshInterval } from '../config';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { OngoingTradeSchema, TradeType } from '../type';
+import { TradeType } from '../type';
 import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
 
@@ -18,7 +18,7 @@ const useCancelledTrades = () => {
     'cancleed-trades-' + address + '-' + activeChain.id,
     {
       fetcher: async () => {
-        if (!oneCTWallet) return [[], []] as OngoingTradeSchema[][];
+        if (!oneCTWallet) return [[], []] as TradeType[][];
         const res = await axios.get(`${baseUrl}trades/user/cancelled/`, {
           params: {
             user_address: address,

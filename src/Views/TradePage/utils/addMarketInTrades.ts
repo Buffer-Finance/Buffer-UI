@@ -1,9 +1,9 @@
-import { OngoingTradeSchema, marketType } from '../type';
+import { TradeType, marketType } from '../type';
 
 const addMarketInTrades = (
-  trades: OngoingTradeSchema[],
+  trades: TradeType[],
   markets: marketType[] | null
-): OngoingTradeSchema[] => {
+): TradeType[] => {
   if (!markets || !markets?.length) return trades;
   return trades.map((t) => {
     const tradeMarket = markets?.find((pair) => {
@@ -14,14 +14,14 @@ const addMarketInTrades = (
       return !!pool;
     });
 
-    const poolContract = tradeMarket?.pools.find(
+    const pool = tradeMarket?.pools.find(
       (pool) =>
         pool.optionContract.toLowerCase() === t?.target_contract.toLowerCase()
-    )?.pool;
+    );
     return {
       ...t,
       market: tradeMarket,
-      pool: poolContract,
+      pool,
     };
   });
 };

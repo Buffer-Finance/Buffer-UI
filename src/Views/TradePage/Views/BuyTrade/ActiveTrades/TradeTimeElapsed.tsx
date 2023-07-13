@@ -1,9 +1,7 @@
 import { TimeElapsedBar } from '@Views/TradePage/Components/TimeElapsedBar';
-import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { TradeType } from '@Views/TradePage/type';
 
-export const TradeTimeElapsed: React.FC<{ trade: OngoingTradeSchema }> = ({
-  trade,
-}) => {
+export const TradeTimeElapsed: React.FC<{ trade: TradeType }> = ({ trade }) => {
   let currentTime = Math.floor(Date.now() / 1000);
   const expirationTime = trade.expiration_time;
   const closeTime = trade.close_time;

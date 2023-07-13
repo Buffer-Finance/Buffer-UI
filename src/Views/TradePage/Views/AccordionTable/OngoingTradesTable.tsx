@@ -30,11 +30,7 @@ import {
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useState } from 'react';
 import { ShowIcon } from '@SVG/Elements/ShowIcon';
-import {
-  OngoingTradeSchema,
-  marketType,
-  poolInfoType,
-} from '@Views/TradePage/type';
+import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import {
   closeLoadingAtom,
   queuets2priceAtom,
@@ -49,7 +45,7 @@ export const tradesCount = 10;
 const priceDecimals = 8;
 
 export const OngoingTradesTable: React.FC<{
-  trades: OngoingTradeSchema[];
+  trades: TradeType[];
   platform?: boolean;
 }> = ({ trades, platform }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
@@ -277,14 +273,12 @@ export const Pnl = ({
   poolInfo,
   lockedAmmount,
 }: {
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   configData: marketType;
   poolInfo: poolInfoType;
   lockedAmmount?: string;
 }) => {
   const pnl = useEarlyPnl({ trade, configData, poolInfo, lockedAmmount });
-  if (trade.state == 'QUEUED')
-    console.log(`OngoingTradesTable-pnl: `, trade.state, pnl, lockedAmmount);
   const isWin = gt(pnl.earlycloseAmount, '0');
   if (trade.locked_amount || lockedAmmount)
     return (

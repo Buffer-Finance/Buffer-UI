@@ -2,7 +2,7 @@ import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { TradeType } from '@Views/TradePage/type';
 import { useMemo } from 'react';
 
 export const ShareTradeData = ({
@@ -11,7 +11,7 @@ export const ShareTradeData = ({
   decimals,
   expiryPrice,
 }: {
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   unit: string;
   decimals: number;
   expiryPrice: string;

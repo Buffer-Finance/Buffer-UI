@@ -46,7 +46,7 @@ import { marketsForChart } from '@Views/V3App/config';
 import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { OngoingTradeSchema } from '@Views/TradePage/type';
+import { TradeType } from '@Views/TradePage/type';
 import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
@@ -156,7 +156,7 @@ const defaults = {
   green: 'rgb(108, 211, 173)',
   red: 'rgb(255, 104, 104)',
 };
-function getText(option: OngoingTradeSchema) {
+function getText(option: TradeType) {
   const expiration = option.expiration_time!;
   const curr = Math.round(Date.now() / 1000);
   return `${
@@ -197,7 +197,7 @@ const market2resolutionAtom = atomWithLocalStorage(
   null
 );
 function drawPosition(
-  option: OngoingTradeSchema,
+  option: TradeType,
   visualized: any,
   chart: IChartWidgetApi
 ) {
@@ -257,7 +257,7 @@ export const MultiResolutionChart = ({
   let trade2visualisation = useRef<
     Partial<{
       [key: number]: {
-        option: OngoingTradeSchema;
+        option: TradeType;
         visited: boolean;
         lineRef: IPositionLineAdapter;
       };

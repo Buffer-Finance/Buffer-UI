@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { baseUrl, refreshInterval } from '../config';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { OngoingTradeSchema, TradeType } from '../type';
+import { TradeType } from '../type';
 import { getSingatureCached } from '../cahce';
 import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
@@ -28,7 +28,7 @@ const useOngoingTrades = () => {
       oneCTWallet?.address,
     {
       fetcher: async () => {
-        if (!oneCTWallet || !address) return [[], []] as OngoingTradeSchema[][];
+        if (!oneCTWallet || !address) return [[], []] as TradeType[][];
         const signature = await getSingatureCached(oneCTWallet);
 
         const res = await axios.get(`${baseUrl}trades/user/active/`, {

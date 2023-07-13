@@ -14,11 +14,7 @@ import {
 } from '@Views/TradePage/Components/TextWrapper';
 import { TriggerPrice } from './TriggerPrice';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  OngoingTradeSchema,
-  directionBtn,
-  marketType,
-} from '@Views/TradePage/type';
+import { TradeType, directionBtn, marketType } from '@Views/TradePage/type';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
 import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
@@ -37,7 +33,7 @@ import { appConfig } from '@Views/TradePage/config';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 
 export const EditModal: React.FC<{
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   market: marketType;
   onSave: () => void;
 }> = ({ trade, market, onSave }) => {

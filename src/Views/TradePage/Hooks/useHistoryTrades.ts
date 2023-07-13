@@ -5,15 +5,15 @@ import { baseUrl, refreshInterval } from '../config';
 import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Signer } from 'ethers';
-import { OngoingTradeSchema } from '../type';
+import { TradeType } from '../type';
 import { getSingatureCached } from '../cahce';
 
-const useHistoryTrades = (): OngoingTradeSchema[][] => {
+const useHistoryTrades = (): TradeType[][] => {
   // const { oneCTWallet } = useOneCTWallet();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
-  const { data, error } = useSWR<OngoingTradeSchema[]>(
+  const { data, error } = useSWR<TradeType[]>(
     'history-trades-' +
       address +
       '-' +
@@ -32,12 +32,12 @@ const useHistoryTrades = (): OngoingTradeSchema[][] => {
         if (!res?.data?.length) return [[]];
         const activeTrades = res.data.filter((t: any) => !t.is_limit_order);
         const limitOrders = res.data.filter((t: any) => t.is_limit_order);
-        return [res.data] as OngoingTradeSchema[];
+        return [res.data] as TradeType[];
       },
       refreshInterval: refreshInterval,
     }
   );
-  return data || ([[]] as OngoingTradeSchema[][]);
+  return data || ([[]] as TradeType[][]);
 };
 
 export { useHistoryTrades };

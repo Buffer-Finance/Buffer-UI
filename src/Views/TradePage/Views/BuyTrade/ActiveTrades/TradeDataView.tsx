@@ -1,11 +1,6 @@
 import styled from '@emotion/styled';
 import { DataCol } from './DataCol';
-import {
-  OngoingTradeSchema,
-  TradeType,
-  marketType,
-  poolInfoType,
-} from '@Views/TradePage/type';
+import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import {
   divide,
   gte,

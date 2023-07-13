@@ -32,11 +32,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { getImageUrl } from '../PGDrawer/PoolDropDown';
 import styled from '@emotion/styled';
 
-import {
-  OngoingTradeSchema,
-  marketType,
-  poolInfoType,
-} from '@Views/TradePage/type';
+import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 
 interface IShareModal {}
@@ -67,7 +63,7 @@ export const SetShareStateAtom = atom(null, (get, set, update: boolean) =>
   set(ShareStateAtom, { isOpen: update })
 );
 type ShareBetType = {
-  trade: OngoingTradeSchema | null;
+  trade: TradeType | null;
   expiryPrice: string | null;
   poolInfo: poolInfoType | null;
   market: marketType | null;
@@ -337,7 +333,7 @@ const RedGreenText = ({
   );
 };
 
-export const getPayout = (trade: OngoingTradeSchema, expiryPrice) => {
+export const getPayout = (trade: TradeType, expiryPrice) => {
   if (trade.state === 'OPENED') {
     const [pnl, payout] = getPendingData(trade, expiryPrice);
     return { payout: payout as string, pnl: pnl as string };

@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { defaultSelectedTime, defaultSettings } from './config';
 import { HHMMToSeconds } from './utils';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { OngoingTradeSchema, marketType, poolInfoType } from './type';
+import { TradeType, marketType, poolInfoType } from './type';
 
 //Share Atoms
 export const shareSettingsAtom = atomWithLocalStorage(
@@ -83,7 +83,7 @@ export const limitOrderStrikeAtom = atom<null | string>(null);
 export const isTableShownAtom = atom<boolean>(false);
 
 export const selectedOrderToEditAtom = atom<null | {
-  trade: OngoingTradeSchema;
+  trade: TradeType;
   market: marketType;
 }>(null);
 
@@ -100,7 +100,7 @@ export const SetShareStateAtom = atom(null, (get, set, update: boolean) =>
   set(ShareStateAtom, { isOpen: update })
 );
 type ShareBetType = {
-  trade: OngoingTradeSchema | null;
+  trade: TradeType | null;
   expiryPrice: string | null;
   poolInfo: poolInfoType | null;
   market: marketType | null;
