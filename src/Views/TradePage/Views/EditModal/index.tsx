@@ -75,12 +75,15 @@ export const EditModal: React.FC<{
   const poolDecimals = 6;
 
   useEffect(() => {
-    if (!trade) return;
-    const interval = setInterval(() => {
+    const calculateElapsedMinutes = () => {
       const currentTime = Math.floor(Date.now() / 1000);
       const minutes = Math.floor((currentTime - queuedTime) / 60);
       setElapsedMinutes(minutes);
-    }, 60000); // Update every minute
+    };
+
+    calculateElapsedMinutes(); // Execute immediately
+
+    const interval = setInterval(calculateElapsedMinutes, 60000); // Update every minute
 
     return () => clearInterval(interval); // Cleanup the interval on component unmount
   }, [queuedTime]);

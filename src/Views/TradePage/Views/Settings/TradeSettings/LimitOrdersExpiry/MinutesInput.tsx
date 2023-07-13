@@ -1,4 +1,4 @@
-import { gt, lt } from '@Utils/NumString/stringArithmatics';
+import { gt, lt, lte } from '@Utils/NumString/stringArithmatics';
 import { MHdropDown } from './MHdropDown';
 import { useState } from 'react';
 import { Trans } from '@lingui/macro';
@@ -53,7 +53,7 @@ export const MinutesInput: React.FC<{
             } else if (e.target.value === '') {
               setErr(`Min ${activeFrame} : 1`);
               onChange(e.target.value);
-            } else if (lt(e.target.value || '0', minValue.toString())) {
+            } else if (lte(e.target.value || '0', minValue.toString())) {
               setErr(`Min ${minFrame} : ${minValue + 1}`);
               onChange(e.target.value);
             } else {
