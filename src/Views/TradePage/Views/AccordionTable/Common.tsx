@@ -233,7 +233,7 @@ export const getEarlyCloseStatus = (
   if (trade.option_id == null || !trade.market?.pools)
     return [true, `Option isn't opened yet!`];
   if (!trade.market.pools?.[0]?.earlyclose.enable)
-    return [true, `Early Close isn't supported`];
+    return [true, `Early Close isn't supported for this market.`];
   if (trade.market.pools[0].earlyclose.threshold) {
     const now = Date.now();
     const timeElapsed = Math.round(now / 1000) - trade.open_timestamp;
