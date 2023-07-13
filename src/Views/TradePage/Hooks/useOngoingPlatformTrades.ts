@@ -22,18 +22,15 @@ const usePlatformTrades = () => {
       oneCTWallet?.address,
     {
       fetcher: async () => {
-        const signature = await getSingatureCached(oneCTWallet);
         const response = await Promise.all([
           axios.get(`${baseUrl}trades/all_active/`, {
             params: {
-              user_signature: signature,
               user_address: address,
               environment: activeChain.id,
             },
           }),
           axios.get(`${baseUrl}trades/all_history/`, {
             params: {
-              user_signature: signature,
               user_address: address,
               environment: activeChain.id,
             },

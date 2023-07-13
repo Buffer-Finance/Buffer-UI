@@ -22,10 +22,9 @@ const useHistoryTrades = (): OngoingTradeSchema[][] => {
       oneCTWallet?.address,
     {
       fetcher: async () => {
-        const signature = await getSingatureCached(oneCTWallet);
+        if (!address || !activeChain.id) return [[]];
         const res = await axios.get(`${baseUrl}trades/user/history/`, {
           params: {
-            user_signature: signature,
             user_address: address,
             environment: activeChain.id,
           },

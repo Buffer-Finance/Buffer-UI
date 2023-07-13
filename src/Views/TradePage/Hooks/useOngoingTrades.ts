@@ -28,7 +28,7 @@ const useOngoingTrades = () => {
       oneCTWallet?.address,
     {
       fetcher: async () => {
-        if (!oneCTWallet) return [[], []] as OngoingTradeSchema[][];
+        if (!oneCTWallet || !address) return [[], []] as OngoingTradeSchema[][];
         const signature = await getSingatureCached(oneCTWallet);
 
         const res = await axios.get(`${baseUrl}trades/user/active/`, {
