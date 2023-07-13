@@ -46,7 +46,9 @@ export const TradeActionButton: React.FC<{
   const isLimitOrder = trade.is_limit_order;
 
   const currentEpoch = Math.round(new Date().getTime() / 1000);
-  const expiration = getExpiry(trade);
+  let expiration = getExpiry(trade);
+  if (trade.is_limit_order && isQueued)
+    expiration = trade.limit_order_expiration;
 
   const distance = expiration - currentEpoch;
   const isTradeExpired = distance < 0;
@@ -67,6 +69,7 @@ export const TradeActionButton: React.FC<{
     setSelectedTrade({ trade, market: tradeMarket });
   }
 
+  console.log(isCancelLoading, isTradeExpired, 'tradeActionButton');
   if (isLimitOrder && isLimitQueued) {
     return (
       <RowGap gap="4px">
@@ -108,7 +111,7 @@ export const TradeActionButton: React.FC<{
               ? console.log()
               : earlyClose()
           }
-          isDisabled={
+          disabled={
             isCancelLoading ||
             isEarlyCloseLoading ||
             isTradeExpired ||
@@ -131,7 +134,7 @@ export const TradeActionButton: React.FC<{
     <NumberTooltip content={disableTooltip}>
       <span>
         <CloseAtLossButton
-          isDisabled={
+          disabled={
             isCancelLoading ||
             isEarlyCloseLoading ||
             isTradeExpired ||
@@ -177,6 +180,9 @@ const buttonStyle = styled.button`
   min-height: 28px;
   :hover {
     scale: 1.05;
+  }
+  :disabled {
+    cursor: not-allowed;
   }
 `;
 
