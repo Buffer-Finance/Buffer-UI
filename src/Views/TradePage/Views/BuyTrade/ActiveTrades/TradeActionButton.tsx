@@ -181,9 +181,6 @@ const buttonStyle = styled.button`
   :hover {
     scale: 1.05;
   }
-  :disabled {
-    cursor: not-allowed;
-  }
 `;
 
 const CancelButton = styled(buttonStyle)`
