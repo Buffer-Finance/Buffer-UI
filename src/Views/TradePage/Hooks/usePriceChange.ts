@@ -23,9 +23,7 @@ const usePriceChange = () => {
           ])
         );
       }
-      console.time('for-fetching-change');
       const response = await Promise.all(queries);
-      console.timeEnd('for-fetching-change');
       const finalResponse: {
         [key: string]: {
           now: number;
