@@ -80,13 +80,14 @@ export const TradeActionButton: React.FC<{
           <>
             <CancelButton
               onClick={editLimitOrder}
-              disabled={
-                isCancelLoading || isEarlyCloseLoading || isTradeExpired
-              }
+              disabled={isCancelLoading || isTradeExpired}
             >
               {'Edit'}
             </CancelButton>
-            <CancelButton onClick={cancelTrade}>
+            <CancelButton
+              onClick={cancelTrade}
+              disabled={isCancelLoading || isTradeExpired}
+            >
               {isCancelLoading ? <ButtonLoader /> : 'Cancel'}
             </CancelButton>
           </>
