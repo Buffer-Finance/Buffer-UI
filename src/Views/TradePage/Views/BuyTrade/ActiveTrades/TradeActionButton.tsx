@@ -61,15 +61,12 @@ export const TradeActionButton: React.FC<{
   }
 
   function earlyClose() {
-    console.log(`TradeActionButton-trade: `, trade);
     earlyCloseHandler(trade, tradeMarket);
   }
 
   function editLimitOrder() {
     setSelectedTrade({ trade, market: tradeMarket });
   }
-
-  console.log(isCancelLoading, isTradeExpired, 'tradeActionButton');
   if (isLimitOrder && isLimitQueued) {
     return (
       <RowGap gap="4px">
