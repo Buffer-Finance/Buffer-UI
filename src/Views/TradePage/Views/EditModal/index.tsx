@@ -71,11 +71,9 @@ export const EditModal: React.FC<{
   const poolDecimals = 6;
 
   const isSaveDisabled = useMemo(() => {
-    console.log('isSaveDisabled', currentTime, price);
     if (minutes === null || minutes === undefined || minutes.toString() === '')
       return true;
     const currentTimeInMinutes = minutes;
-    console.log('currentTimeInMinutes', currentTimeInMinutes);
     if (frame === 'm' && currentTimeInMinutes < 1) return true;
     if (frame === 'm' && currentTimeInMinutes > 60) return true;
     if (frame === 'h' && currentTimeInMinutes > 24) return true;
@@ -90,7 +88,6 @@ export const EditModal: React.FC<{
 
   useEffect(() => {
     if (!trade || !market || !pool) return;
-    console.log('tradeEditModal', trade.limit_order_duration);
     const limitOrderDurationinMinutes = trade.limit_order_duration / 60;
     if (limitOrderDurationinMinutes > 60) {
       setFrame('h');
@@ -109,6 +106,15 @@ export const EditModal: React.FC<{
     setButtonDirection(trade.is_above ? directionBtn.Up : directionBtn.Down);
   }, [trade, market, pool]);
 
+  useEffect(() => {
+    if (frame === 'm' && minutes > 60) {
+      setMinutes(60);
+    }
+    if (frame.trim() === 'h' && minutes > 24) {
+      setMinutes(24);
+    }
+  }, [frame]);
+
   function onTimeChange(value: number) {
     setMinutes(value);
     //convert in whatever format needed
@@ -119,7 +125,6 @@ export const EditModal: React.FC<{
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const toastify = useToast();
   const editHandler = async () => {
-    // console.log('handle edit');
     if (!trade || !oneCTWallet || !address)
       return toastify({
         msg: 'Something went wrong',
