@@ -4,18 +4,14 @@ export const SaveButton: React.FC<{
   onClick: any;
   isLoading: boolean;
   isDisabled?: boolean;
+  disabledText: string | null;
 }> = (props) => {
   return (
     <BlueBtn
       {...props}
       onClick={props.isDisabled ? console.log : props.onClick}
-      className={
-        props.isDisabled
-          ? '!bg-[#282b39] !text-2 !translate-y-[0px] !cursor-not-allowed '
-          : '!h-[28px]'
-      }
     >
-      {props.isDisabled ? 'Limit order processed!' : 'Save'}
+      {props.disabledText || 'Save'}
     </BlueBtn>
   );
 };

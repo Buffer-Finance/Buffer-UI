@@ -177,6 +177,9 @@ export const EditModal: React.FC<{
   };
 
   if (!trade) return <></>;
+  const isLOProcessed = limitOrders.find((lo) => lo.queue_id == trade.queue_id)
+    ? false
+    : true;
   return (
     <EditModalBackground>
       <RowGap gap="6px" className="mb-3">
@@ -220,14 +223,10 @@ export const EditModal: React.FC<{
             setActiveBtn={setButtonDirection}
           />
           <SaveButton
-            isDisabled={
-              limitOrders.find((lo) => lo.queue_id == trade.queue_id)
-                ? false
-                : true
-            }
+            isDisabled={isLOProcessed || isSaveDisabled}
+            disabledText={isLOProcessed ? 'Limit Order Processed!' : null}
             isLoading={editLoading == trade.queue_id}
             onClick={editHandler}
-            isDisabled={isSaveDisabled}
           />
         </ColumnGap>
       </div>
