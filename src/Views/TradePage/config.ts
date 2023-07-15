@@ -324,4 +324,4 @@ export const baseUrl =
   'https://backend.buffer-finance-api.link/instant-trading/';
 
 export const pricePublisherBaseUrl =
-  'https://oracle.buffer-finance-api.link/price/query/';
+  'https://oracle.buffer.finance/price/query/';

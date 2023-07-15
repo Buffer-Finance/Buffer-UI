@@ -165,7 +165,7 @@ export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
   ) {
     // console.log(`[augexp]currentTrade: `, currentTrade);
     axios
-      .post(`https://oracle.buffer-finance-api.link/price/query/`, [
+      .post(`https://oracle.buffer.finance/price/query/`, [
         {
           pair: currentTrade.chartData.tv_id,
           timestamp: currentTrade.expirationTime,

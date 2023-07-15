@@ -261,7 +261,7 @@ export const useV3BinaryActions = (userInput: string) => {
           inf: 1,
         });
         const instantTradingApiUrl =
-          'https://oracle.buffer-finance-api.link/instant-trading/trade/initiate/';
+          'https://oracle.buffer.finance/instant-trading/trade/initiate/';
         let currentTimestamp = Date.now();
         let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
 

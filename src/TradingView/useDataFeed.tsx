@@ -331,7 +331,7 @@ export default function useDataFeed(chartReady) {
     const activeResolution = realTimeUpdate.current?.resolution || '1m';
     let prevBar =
       lastSyncedKline?.current?.[
-        chartMarket.tv_id + timeDeltaMapping(activeResolution)
+      chartMarket.tv_id + timeDeltaMapping(activeResolution)
       ];
     const activeAssetStream = priceUpdates[chartMarket.tv_id];
     const latestKline = getKlineFromPrice(res);
@@ -527,23 +527,23 @@ export default function useDataFeed(chartReady) {
 
           const req = firstDataRequest
             ? {
-                pair: getBarsFnActiveAsset,
-                interval: timeDeltaMapping(resolution),
-                limit: 1000,
-              }
+              pair: getBarsFnActiveAsset,
+              interval: timeDeltaMapping(resolution),
+              limit: 1000,
+            }
             : {
-                pair: getBarsFnActiveAsset,
-                interval: timeDeltaMapping(resolution),
-                limit: 1000,
-                start_time: from * 1000,
-                end_time: to * 1000,
-              };
+              pair: getBarsFnActiveAsset,
+              interval: timeDeltaMapping(resolution),
+              limit: 1000,
+              start_time: from * 1000,
+              end_time: to * 1000,
+            };
           const bundle = [
             axios.post(
-              `https://oracle.buffer-finance-api.link/multi/uiKlines/`,
+              `https://oracle.buffer.finance/multi/uiKlines/`,
               [req]
             ),
-            axios.get('https://oracle.buffer-finance-api.link/price/latest/'),
+            axios.get('https://oracle.buffer.finance/price/latest/'),
           ];
           const [d, allPrices] = await Promise.all(bundle);
           const allPricesData = allPrices.data.data;
@@ -612,7 +612,7 @@ export default function useDataFeed(chartReady) {
         onResetCacheNeededCallback();
         // updateBar();
       },
-      unsubscribeBars: (subscriberUID) => {},
+      unsubscribeBars: (subscriberUID) => { },
     },
     realTimeUpdate,
   ];
@@ -621,15 +621,15 @@ export default function useDataFeed(chartReady) {
 export const lastTimestampAtom = atom<any>({});
 export const marketPriceAtom = atom<{
   [market: string]:
-    | {
-        close: number;
-        hight: number;
-        low: number;
-        open: number;
-        time: number;
-        '24h_change': number;
-      }
-    | SUpdate[];
+  | {
+    close: number;
+    hight: number;
+    low: number;
+    open: number;
+    time: number;
+    '24h_change': number;
+  }
+  | SUpdate[];
 }>({});
 export const market2dayChangeAtom = atom<{
   [market: string]: {
