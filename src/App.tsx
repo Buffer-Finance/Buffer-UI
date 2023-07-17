@@ -52,6 +52,7 @@ import { i18n } from '@lingui/core';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { PasswordModal } from '@Views/Common/PasswordModal';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
+import { DashboardV2 } from '@Views/DashboardV2';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 if (import.meta.env.VITE_MODE === 'production') {
@@ -109,6 +110,7 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>
+        <Route path="/dashboardV2" element={<DashboardV2 />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />

@@ -7,7 +7,7 @@ import {
   TokensBFR,
   TokensBLP,
 } from './Cards';
-import { Markets } from './Components/Markets';
+// import { Markets } from './Components/Markets';
 import { DashboardContextProvider } from './dashboardAtom';
 import { useDashboardReadCalls } from './Hooks/useDashBoardReadCalls';
 import styled from '@emotion/styled';
@@ -82,12 +82,12 @@ const DashboardPage = () => {
     <DashboardStyles>
       {/* <TokenDataNotIncludedWarning /> */}
       <Boxes />
-      <Section
+      {/* <Section
         Heading={<div className={topStyles}>Markets</div>}
         subHeading={
           <div className={descStyles}>
             Discover new Pairs available on Buffer
-            {/* (Stats since 30th Jan, 2023) */}
+            
           </div>
         }
         other={<Markets />}
@@ -96,7 +96,7 @@ const DashboardPage = () => {
             <TokenDropdown />
           </div>
         }
-      />
+      /> */}
     </DashboardStyles>
   );
 };
