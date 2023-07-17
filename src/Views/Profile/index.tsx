@@ -43,7 +43,7 @@ const Profile = () => {
         </ArbitrumOnly>
         <div className="my-7 flex flex-col ">
           <div className="text-f22 mb-7">Trades</div>
-          <HistoryTables />
+          {/* <HistoryTables /> */}
         </div>
       </div>
     </div>
