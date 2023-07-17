@@ -4,11 +4,11 @@ import { useQTinfo } from '..';
 import { useMemo } from 'react';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { DropDownArrowSm, DropdownArrow } from '@SVG/Elements/DropDownArrow';
-import { atomWithLocalStorage } from '../Components/SlippageModal';
 import { useV3ActivePoolObj } from '@Views/V3App/Utils/useSwitchPoolForTrade';
 import { v3AppConfig } from '@Views/V3App/config';
+import { atomWithStorage } from 'jotai/utils';
 
-const activePoolAtom = atomWithLocalStorage('last-selected-pool-v1', {
+const activePoolAtom = atomWithStorage('last-selected-pool-v1', {
   activePool: null,
 });
 const activePoolALlAtom = atom({

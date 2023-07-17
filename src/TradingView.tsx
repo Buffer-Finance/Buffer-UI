@@ -35,7 +35,6 @@ import {
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import {
   getAggregatedBarv2,
   getBlockFromBar,
@@ -66,6 +65,7 @@ import { getIdentifier } from '@Hooks/useGenericHook';
 import { useV3AppConfig } from '@Views/V3App/useV3AppConfig';
 import { marketsForChart } from '@Views/V3App/config';
 import { joinStrings } from '@Views/V3App/helperFns';
+import { atomWithStorage } from 'jotai/utils';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -206,9 +206,7 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   });
   return rawOhlc;
 };
-const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage-v2', null);
-// uncomment this for persisting user Resolution - but this has some bugs.
-// const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
+const drawingAtom = atomWithStorage('TradingChartDrawingStorage-v2', null);
 const market2resolutionAtom = atom({});
 function drawPosition(
   option: IGQLHistory,

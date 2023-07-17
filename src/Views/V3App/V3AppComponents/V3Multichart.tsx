@@ -12,7 +12,6 @@ import { useToast } from '@Contexts/Toast';
 import { usePastTradeQuery } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { useNavigate, useParams } from 'react-router-dom';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { TradingChart } from 'src/TradingView';
 import { CustomisationWarnModal } from 'src/Modals/CustomisationWarnModal';
 import { ResetWarnModal } from 'src/Modals/ResetWarnModal';

@@ -4,8 +4,8 @@ import { useV3AppActiveMarket } from './useV3AppActiveMarket';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '../config';
 import { useMemo } from 'react';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { lt } from '@Utils/NumString/stringArithmatics';
+import { atomWithStorage } from 'jotai/utils';
 
 export const useSwitchPoolForTrade = () => {
   const { activeMarket: activePair } = useV3AppActiveMarket();
@@ -54,7 +54,7 @@ export const useSwitchPoolForTrade = () => {
   return { switchPool, poolDetails };
 };
 
-const v3ActivePoolAtom = atomWithLocalStorage('v3-last-selected-pool-v1', {
+const v3ActivePoolAtom = atomWithStorage('v3-last-selected-pool-v1', {
   activePool: 'USDC',
 });
 

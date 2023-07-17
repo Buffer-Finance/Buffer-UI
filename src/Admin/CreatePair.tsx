@@ -514,10 +514,10 @@ const RenderForm = ({ form, setForm, id }) => {
 };
 export { CreatePair };
 import FactoryAbi from '@Views/BinaryOptions/ABI/routerABI.json';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
+import { atomWithStorage } from 'jotai/utils';
 const addresses = ['helo', 'there'];
 
-const createdMarketsAtom = atomWithLocalStorage('markets-created-v1', []);
+const createdMarketsAtom = atomWithStorage('markets-created-v1', []);
 export const RenderAdminNavbar = ({ className }) => {
   const navigate = useNavigate();
   const [createdMarkets, setCreatedMarkets] = useAtom(createdMarketsAtom);

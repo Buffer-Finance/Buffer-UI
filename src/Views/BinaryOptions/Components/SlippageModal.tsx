@@ -9,6 +9,7 @@ import BufferSwitch from '@Views/Common/BufferSwitch';
 import { SettingsIcon } from '../PGDrawer/SettingsIcon';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { mobileUpperBound } from '..';
+import { atomWithStorage } from 'jotai/utils';
 
 export const SlippageModalStyles = styled.div`
   background-color: var(--dropdown-hover);
@@ -53,31 +54,8 @@ interface ISlippageModal {
 const defaults = [0.1, 0.5, 1.0];
 const HeadStyles = ' flex flex-row items-center text-3 text-f14 ';
 const MAX_SLIPPAGE = 5;
-export const atomWithLocalStorage = <key, T>(
-  key: string,
-  initialValue: T
-): WritableAtom<T, unknown, void> => {
-  if (typeof window == 'undefined') return atom({ dummy: true });
-  const getInitialValue = () => {
-    const item = localStorage.getItem(key);
-    if (item !== null) {
-      return JSON.parse(item);
-    }
-    return initialValue;
-  };
-  const baseAtom = atom(getInitialValue());
-  const derivedAtom = atom(
-    (get) => get(baseAtom),
-    (get, set, update) => {
-      const nextValue =
-        typeof update === 'function' ? update(get(baseAtom)) : update;
-      set(baseAtom, nextValue);
-      localStorage.setItem(key, JSON.stringify(nextValue));
-    }
-  );
-  return derivedAtom;
-};
-export const slippageAtom = atomWithLocalStorage('slippage-settings', {
+
+export const slippageAtom = atomWithStorage('slippage-settings', {
   slippage: 0.5,
   allowPartial: true,
 });

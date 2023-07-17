@@ -4,7 +4,6 @@ import { Background } from './style';
 import { useNavigate } from 'react-router-dom';
 // import BinaryDrawer from './PGDrawer';
 import Favourites from './Favourites/Favourites';
-import { atomWithLocalStorage } from './Components/SlippageModal';
 import { ShareModal } from './Components/shareModal';
 import { Chain } from 'wagmi';
 import {
@@ -31,6 +30,7 @@ import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { useV3AppActiveMarket } from '@Views/V3App/Utils/useV3AppActiveMarket';
 import { joinStrings } from '@Views/V3App/helperFns';
 import { marketsForChart } from '@Views/V3App/config';
+import { atomWithStorage } from 'jotai/utils';
 export interface IToken {
   address: string;
   decimals: 6;
@@ -58,15 +58,15 @@ export interface IMarket {
   img: string;
   pools: IPool[];
 }
-export const referralCodeAtom = atomWithLocalStorage('referral-code5', '');
+export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export interface IQTrade {
   activeChain?: Chain | null;
   pairs?: IMarket[];
   activePair?: IMarket;
   routerContract?: string;
 }
-export const FavouriteAtom = atomWithLocalStorage('favourites3', []);
-export const DisplayAssetsAtom = atomWithLocalStorage('displayAssetsV8', []);
+export const FavouriteAtom = atomWithStorage('favourites3', []);
+export const DisplayAssetsAtom = atomWithStorage('displayAssetsV8', []);
 
 export const activeAssetStateAtom = atom<{
   balance: string;
@@ -144,12 +144,12 @@ export const ENV =
     ? 'arbitrum-main'
     : 'arbitrum-test';
 
-export const activeMarketFromStorageAtom = atomWithLocalStorage(
+export const activeMarketFromStorageAtom = atomWithStorage(
   'user-active-market',
   ''
 );
 
-export const isHistoryTabActiveAtom = atomWithLocalStorage('isHistory', false);
+export const isHistoryTabActiveAtom = atomWithStorage('isHistory', false);
 
 function QTrade() {
   const { activeMarket } = useV3AppActiveMarket();

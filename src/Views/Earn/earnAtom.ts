@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { ReactNode } from 'react';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
+import { atomWithStorage } from 'jotai/utils';
 interface IEarnAtom {
   isModalOpen: boolean;
   activeModal: string | null;
@@ -20,7 +20,7 @@ export const writeEarnData = atom(null, (get, set, update: IEarn) => {
   set(earnData, update);
 });
 
-export const compoundRewardsAtom = atomWithLocalStorage('compoundrewardsKeys', {
+export const compoundRewardsAtom = atomWithStorage('compoundrewardsKeys', {
   shouldstakemultiplierpoints: true,
   shouldclaimiBFR: true,
   shouldstakeiBFR: true,
@@ -29,24 +29,21 @@ export const compoundRewardsAtom = atomWithLocalStorage('compoundrewardsKeys', {
   shouldclaimeth: true,
   shouldconvertweth: true,
 });
-export const compoundRewardsAtom2 = atomWithLocalStorage(
-  'compoundrewardsKeys2',
-  {
-    shouldclaimiBFR: true,
-    shouldstakeiBFR: true,
-    shouldclaimesBFR: true,
-    shouldstakeesBFR: true,
-    shouldclaimarb: true,
-  }
-);
+export const compoundRewardsAtom2 = atomWithStorage('compoundrewardsKeys2', {
+  shouldclaimiBFR: true,
+  shouldstakeiBFR: true,
+  shouldclaimesBFR: true,
+  shouldstakeesBFR: true,
+  shouldclaimarb: true,
+});
 
-export const claimRewardsAtom2 = atomWithLocalStorage('claimrewardsKeys2', {
+export const claimRewardsAtom2 = atomWithStorage('claimrewardsKeys2', {
   shouldclaimiBFR: true,
   shouldclaimesBFR: true,
   shouldclaimarb: true,
 });
 
-export const claimRewardsAtom = atomWithLocalStorage('claimrewardsKeys', {
+export const claimRewardsAtom = atomWithStorage('claimrewardsKeys', {
   shouldclaimiBFR: true,
   shouldclaimesBFR: true,
   shouldclaimeth: true,

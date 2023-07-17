@@ -26,7 +26,6 @@ import {
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
 import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
@@ -48,6 +47,7 @@ import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { TradeType } from '@Views/TradePage/type';
 import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
+import { atomWithStorage } from 'jotai/utils';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -189,10 +189,8 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   });
   return rawOhlc;
 };
-const drawingAtom = atomWithLocalStorage('TradingChartDrawingStorage-v2', null);
-// uncomment this for persisting user Resolution - but this has some bugs.
-// const market2resolutionAtom = atomWithLocalStorage('market2resolutionAtom', {});
-const market2resolutionAtom = atomWithLocalStorage(
+const drawingAtom = atomWithStorage('TradingChartDrawingStorage-v2', null);
+const market2resolutionAtom = atomWithStorage(
   'TradingChartDrawingStorage-market2resolutionAtom',
   null
 );

@@ -35,12 +35,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import React from 'react';
 import { ResetWarnModal } from './Modals/ResetWarnModal';
 import { CustomisationWarnModal } from './Modals/CustomisationWarnModal';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
-import { Detector } from 'react-detect-offline';
 import isUserPaused, { UserActivityAtom } from '@Utils/isUserPaused';
 import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { DynamicMarketSelector } from '@Views/NoLoss/Favourites/TVMarketSelector';
+import { atomWithStorage } from 'jotai/utils';
 var json = {
   global: {
     tabEnableClose: true,
@@ -78,7 +77,7 @@ var json = {
   },
 };
 
-const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
+const layoutConsentsAtom = atomWithStorage('layout-consents-persisted', {
   layoutCustomization: {
     isModalOpen: false,
     isUserEducated: false,
@@ -88,7 +87,7 @@ const layoutConsentsAtom = atomWithLocalStorage('layout-consents-persisted', {
     isUserEducated: false,
   },
 });
-const layoutAtom = atomWithLocalStorage('layout-persisted-v3', json);
+const layoutAtom = atomWithStorage('layout-persisted-v3', json);
 export interface MarketInterface {
   minPeriod: string;
   maxPeriod: string;

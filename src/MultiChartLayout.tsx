@@ -34,7 +34,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import React from 'react';
 import { ResetWarnModal } from './Modals/ResetWarnModal';
 import { CustomisationWarnModal } from './Modals/CustomisationWarnModal';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { ModalBase } from './Modals/BaseModal';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { UserTrades } from '@Views/BinaryOptions/UserTrades';
@@ -42,6 +41,7 @@ import { ActiveTable, useQTinfo } from '@Views/BinaryOptions';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { WideTableModal } from './WideTableModal';
 import { ShareModal } from '@Views/BinaryOptions/Components/shareModal';
+import { atomWithStorage } from 'jotai/utils';
 export var json = {
   global: {
     tabEnableClose: true,
@@ -168,20 +168,16 @@ const WithIdle = (C: any, duration: number) => {
   };
   return updatedComponent;
 };
-export const layoutConsentsAtom = atomWithLocalStorage(
-  'layout-consents-persisted',
-  {
-    layoutCustomization: {
-      isModalOpen: false,
-      isUserEducated: false,
-    },
-    resetCustomization: {
-      isModalOpen: false,
-      isUserEducated: false,
-    },
-  }
-);
-const layoutAtom = atomWithLocalStorage('layout-persisted-v2', json);
+export const layoutConsentsAtom = atomWithStorage('layout-consents-persisted', {
+  layoutCustomization: {
+    isModalOpen: false,
+    isUserEducated: false,
+  },
+  resetCustomization: {
+    isModalOpen: false,
+    isUserEducated: false,
+  },
+});
 const DesktopTrad = () => {
   const layoutRef = useRef<Layout | null>(null);
   const [forcefullyRerender, setforcefullyRerender] = useState(1);

@@ -1,9 +1,9 @@
 import { Dialog } from '@mui/material';
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { useAtom } from 'jotai';
 import { useState, useEffect, ReactNode } from 'react';
 import styles from 'Styles/TnCModal.module.scss';
 import { SecondaryActionBtn } from './Buttons';
+import { atomWithStorage } from 'jotai/utils';
 
 interface ITnCModal {
   className?: string;
@@ -14,7 +14,7 @@ interface ITnCModal {
 
 // 54
 const TNCOFFSET = 7 * 24 * 60 * 60 * 1000;
-const TermsConditionAtom = atomWithLocalStorage('tncv1', {
+const TermsConditionAtom = atomWithStorage('tncv1', {
   lastSaved: Date.now() - TNCOFFSET,
 });
 const TnCModal: React.FC<ITnCModal> = ({ className, children }) => {

@@ -1,4 +1,3 @@
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';

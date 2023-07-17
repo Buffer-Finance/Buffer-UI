@@ -21,6 +21,8 @@ import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Earn } from '@Views/Earn';
 import { Dashboard } from '@Views/Dashboard';
 import { ReferralPage } from '@Views/Referral';
+import { atomWithStorage } from 'jotai/utils';
+
 import SideBar from '@Views/Common/Sidebar';
 import ConnectionDrawer from '@Views/Common/V2-Drawer/connectionDrawer';
 import { useGraphStatus } from '@Utils/useGraphStatus';
@@ -49,7 +51,6 @@ import { V3AppTradePage } from '@Views/V3App/V3TradePage';
 import { TradePage } from '@Views/TradePage';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { PasswordModal } from '@Views/Common/PasswordModal';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 
@@ -177,10 +178,7 @@ export const snackAtom = atom<{
   message: null,
 });
 
-export const isAutorizedAtom = atomWithLocalStorage(
-  'authorized user or not',
-  false
-);
+export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 function App() {
   useAutoConnect();
   const [snack, setSnack] = useAtom(snackAtom);

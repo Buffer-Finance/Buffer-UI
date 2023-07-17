@@ -1,6 +1,6 @@
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import BufferDropdown from '@Views/Common/BufferDropdown';
 import { isTestnet } from 'config';
+import { atomWithStorage } from 'jotai/utils';
 
 const chartTypes = {
   Bar: {
@@ -221,7 +221,7 @@ const chartTypes = {
   },
 };
 
-export const ChartTypePersistedAtom = atomWithLocalStorage(
+export const ChartTypePersistedAtom = atomWithStorage(
   'persisted-chart-types',
   {}
 );

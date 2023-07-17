@@ -36,7 +36,6 @@ const basicDisabled = [
   'header_symbol_search',
   'header_widget',
 ];
-import { atomWithLocalStorage } from '@Views/BinaryOptions/Components/SlippageModal';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { useQTinfo } from '@Views/BinaryOptions';
@@ -55,7 +54,7 @@ import { ChartTypeSelectionDD } from './ChartTypeSelectionDD';
 import { Dialog } from '@mui/material';
 import { BlueBtn } from '@Views/Common/V2-Button';
 
-const drawingAtom = atomWithLocalStorage('TVL_V2_CONFIG', null);
+const drawingAtom = atomWithStorage('TVL_V2_CONFIG', null);
 
 const getColor = (cp, sp, isAbove) => {
   // let color;
@@ -470,6 +469,7 @@ const useResizeObserver = (refs, cb, delay = 0) => {
 export default TVIntegrated;
 
 import * as React from 'react';
+import { atomWithStorage } from 'jotai/utils';
 
 const ChartElementSVG = (props) => (
   <svg
