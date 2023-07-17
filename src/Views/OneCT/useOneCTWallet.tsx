@@ -160,7 +160,7 @@ const useOneCTWallet = () => {
   const disableOneCt = () => {
     setDisabelLoading(true);
     writeCall(
-      configData.signer_manager,
+      configData?.signer_manager,
       SignerManagerABI,
       (payload) => {
         setDisabelLoading(false);
