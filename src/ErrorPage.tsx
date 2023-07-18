@@ -2,7 +2,7 @@ import { ClickEvent } from '@szhsin/react-menu';
 
 const ErrorPage: React.FC<any> = ({}) => {
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(e.ses.ed);
+    throw new Error('Custom Error');
   };
   return (
     <div className="flex flex-col">
