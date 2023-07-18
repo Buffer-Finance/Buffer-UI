@@ -1,19 +1,17 @@
 import { useGlobal } from '@Contexts/Global';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { useQTinfo } from '@Views/BinaryOptions';
-import MobileTable from '@Views/BinaryOptions/Components/Mobile/historyTab';
 import {
-  tardesPageAtom,
   updateActivePageNumber,
-  updateCancelledPageNumber,
   updateHistoryPageNumber,
-  usePastTradeQuery,
 } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
-import PGTables from '@Views/BinaryOptions/Tables';
 import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
+import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { HistoryTable } from '@Views/TradePage/Views/AccordionTable/HistoryTable';
+import LimitOrderTable from '@Views/TradePage/Views/AccordionTable/LimitOrderTable';
+import { OngoingTradesTable } from '@Views/TradePage/Views/AccordionTable/OngoingTradesTable';
 import { binaryTabs } from 'config';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 
 export const useHistoryTableTabs = () => {
@@ -34,20 +32,18 @@ export const useHistoryTableTabs = () => {
 };
 
 export const HistoryTables = () => {
-  const qtInfo = useQTinfo();
   const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
   const [, setActivePage] = useAtom(updateActivePageNumber);
-  const [, setCancelledPage] = useAtom(updateCancelledPageNumber);
-  const { active, history, cancelled } = useAtomValue(tardesPageAtom);
-  const { viewOnlyMode } = useUserAccount();
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
-  usePastTradeQuery();
 
   useEffect(() => {
     changeActiveTab(null, 1);
     setActivePage(1);
     setHistoryPage(1);
   }, []);
+
+  const [activeTrades, limitOrders] = useOngoingTrades();
+  const [historyTrades] = useHistoryTrades();
 
   return (
     <>
@@ -60,75 +56,19 @@ export const HistoryTables = () => {
         tablist={[
           {
             name: 'Active',
-            // icon: (
-            //   <div className="ml-2 text-f12 border border-1 px-[6px] rounded bg-cross-bg text-3 font-thin translate-y-[1px]">
-            //     Beta
-            //   </div>
-            // ),
           },
+          { name: 'Limit Orders' },
           { name: 'History' },
-          // { name: 'Cancelled' },
         ]}
       />
       <TabSwitch
         value={activeTabIdx}
         childComponents={[
-          <>
-            <PGTables
-              configData={qtInfo}
-              currentPage={active}
-              onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
-              shouldNotDisplayShareVisulise={true}
-            />{' '}
-            <MobileOnly>
-              <MobileTable
-                activePage={active}
-                configData={qtInfo}
-                onPageChange={(e, pageNumber) => setActivePage(pageNumber)}
-                shouldNotDisplayShareVisulise={true}
-              />
-            </MobileOnly>
-          </>,
-          <>
-            <PGTables
-              currentPage={history}
-              isHistoryTable
-              configData={qtInfo}
-              onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
-              shouldNotDisplayShareVisulise={true}
-            />
-            <MobileOnly>
-              <MobileTable
-                activePage={history}
-                configData={qtInfo}
-                isHistoryTab
-                onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
-                shouldNotDisplayShareVisulise={true}
-              />
-            </MobileOnly>
-          </>,
-          // <PGTables
-          //   activePage={cancelled}
-          //   configData={qtInfo}
-          //   onPageChange={(e, pageNumber) => setCancelledPage(pageNumber)}
-          // />,
+          <OngoingTradesTable trades={activeTrades} />,
+          <LimitOrderTable trades={limitOrders} />,
+          <HistoryTable trades={historyTrades} />,
         ]}
       />
-      {/* <PGTables
-        activePage={history}
-        configData={qtInfo}
-        onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
-        shouldNotDisplayShareVisulise={true}
-      />
-      <MobileOnly>
-        <MobileTable
-          activePage={history}
-          configData={qtInfo}
-          isHistoryTab
-          onPageChange={(e, pageNumber) => setHistoryPage(pageNumber)}
-          shouldNotDisplayShareVisulise={true}
-        />
-      </MobileOnly> */}
     </>
   );
 };
