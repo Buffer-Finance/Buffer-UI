@@ -26,8 +26,6 @@ import { atomWithStorage } from 'jotai/utils';
 import SideBar from '@Views/Common/Sidebar';
 import ConnectionDrawer from '@Views/Common/V2-Drawer/connectionDrawer';
 import { useGraphStatus } from '@Utils/useGraphStatus';
-import * as Sentry from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { LeaderBoard, LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { ProfilePage } from '@Views/Profile';
@@ -56,13 +54,6 @@ import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnima
 import { ErrorPage } from './ErrorPage';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
-if (import.meta.env.VITE_MODE === 'production') {
-  Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    integrations: [new Integrations.BrowserTracing()],
-    tracesSampleRate: 0.5,
-  });
-}
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
