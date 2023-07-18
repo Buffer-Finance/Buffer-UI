@@ -47,17 +47,27 @@ if (import.meta.env.VITE_MODE === 'production') {
 import { inject } from '@vercel/analytics';
 inject();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <WagmiConfig client={wagmiClient}>
-    <RainbowKitProvider chains={chains} theme={darkTheme()}>
-      <HashRouter>
-        <SWRConfig value={options}>
-          <JotaiProvider>
-            <ContextProvider>
-              <App />
-            </ContextProvider>
-          </JotaiProvider>
-        </SWRConfig>
-      </HashRouter>
-    </RainbowKitProvider>
-  </WagmiConfig>
+  <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider chains={chains} theme={darkTheme()}>
+        <HashRouter>
+          <SWRConfig value={options}>
+            <JotaiProvider>
+              <ContextProvider>
+                <App />
+              </ContextProvider>
+            </JotaiProvider>
+          </SWRConfig>
+        </HashRouter>
+      </RainbowKitProvider>
+    </WagmiConfig>
+  </Sentry.ErrorBoundary>
 );
+
+const ErrorComponenet = () => {
+  return (
+    <div className="grid items-center text-1 text-f20">
+      Something went wrong.
+    </div>
+  );
+};
