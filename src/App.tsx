@@ -140,8 +140,8 @@ const AppRoutes = () => {
           />
         </Route>
         <Route path="/earn" element={<Earn />} />
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route path=":chain" element={<Dashboard />} />
+        <Route path="/dashboard" element={<DashboardV2 />}>
+          <Route path=":chain" element={<DashboardV2 />} />
         </Route>
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />}>
