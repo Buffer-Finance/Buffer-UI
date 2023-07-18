@@ -17,6 +17,14 @@ import { SWRConfig } from 'swr';
 import { Provider as JotaiProvider } from 'jotai';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 
+const ErrorComponenet = () => {
+  return (
+    <div className="grid items-center text-1 text-f20">
+      Something went wrong.
+    </div>
+  );
+};
+
 const options = {
   fetcher: (url: string) =>
     axios.get('https://api-v2.buffer.finance/' + url).then((res) => res.data),
@@ -63,11 +71,3 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </WagmiConfig>
   </Sentry.ErrorBoundary>
 );
-
-const ErrorComponenet = () => {
-  return (
-    <div className="grid items-center text-1 text-f20">
-      Something went wrong.
-    </div>
-  );
-};
