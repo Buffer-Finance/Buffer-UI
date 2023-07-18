@@ -226,79 +226,79 @@ const useDashboardCalls = () => {
 
   const getCalls = () => {
     const calls = {
-      totalStakedBFR: {
-        address: earnContracts.iBFR,
-        abi: bfrAbi,
-        name: 'balanceOf',
-        params: [earnContracts.StakedBfrTracker],
-        chainID: activeChain?.id,
-      },
-      totalSupplyBFR: {
-        address: earnContracts.iBFR,
-        abi: bfrAbi,
-        name: 'totalSupply',
-        chainID: activeChain?.id,
-      },
-      blpTotalBalance: {
-        address: earnContracts.BLP,
-        abi: BlpAbi,
-        name: 'totalTokenXBalance',
-        chainID: activeChain?.id,
-      },
-      blpSupply: {
-        address: earnContracts.BLP,
-        abi: bfrAbi,
-        name: 'totalSupply',
-        chainID: activeChain?.id,
-      },
-      blpInitialRate: {
-        address: earnContracts.BLP,
-        abi: BlpAbi,
-        name: 'INITIAL_RATE',
-        chainID: activeChain?.id,
-      },
-      totalStakedBLP: {
-        address: earnContracts.BLP,
-        abi: bfrAbi,
-        name: 'balanceOf',
-        params: [earnContracts.FeeBlpTracker],
-      },
-      totalSupplyBLP: {
-        address: earnContracts.BLP,
-        abi: bfrAbi,
-        name: 'totalSupply',
-        chainID: activeChain?.id,
-      },
-      amountUSDCpool: {
-        address: binaryContracts.tokens['USDC'].address,
-        abi: bfrAbi,
-        name: 'balanceOf',
-        params: [binaryContracts.tokens['USDC'].pool_address],
-        chainID: activeChain?.id,
-      },
-      feeBlpTrackerTokensPerInterval: {
-        address: earnContracts.FeeBlpTracker,
-        abi: RewardTrackerAbi,
-        name: 'tokensPerInterval',
-        chainID: activeChain?.id,
-      },
-      stakedBlpTrackerTokensPerInterval: {
-        address: earnContracts.StakedBlpTracker,
-        abi: RewardTrackerAbi,
-        name: 'tokensPerInterval',
-        chainID: activeChain?.id,
-      },
+      // totalStakedBFR: {
+      //   address: earnContracts.iBFR,
+      //   abi: bfrAbi,
+      //   name: 'balanceOf',
+      //   params: [earnContracts.StakedBfrTracker],
+      //   chainID: activeChain?.id,
+      // },
+      // totalSupplyBFR: {
+      //   address: earnContracts.iBFR,
+      //   abi: bfrAbi,
+      //   name: 'totalSupply',
+      //   chainID: activeChain?.id,
+      // },
+      // blpTotalBalance: {
+      //   address: earnContracts.BLP,
+      //   abi: BlpAbi,
+      //   name: 'totalTokenXBalance',
+      //   chainID: activeChain?.id,
+      // },
+      // blpSupply: {
+      //   address: earnContracts.BLP,
+      //   abi: bfrAbi,
+      //   name: 'totalSupply',
+      //   chainID: activeChain?.id,
+      // },
+      // blpInitialRate: {
+      //   address: earnContracts.BLP,
+      //   abi: BlpAbi,
+      //   name: 'INITIAL_RATE',
+      //   chainID: activeChain?.id,
+      // },
+      // totalStakedBLP: {
+      //   address: earnContracts.BLP,
+      //   abi: bfrAbi,
+      //   name: 'balanceOf',
+      //   params: [earnContracts.FeeBlpTracker],
+      // },
+      // totalSupplyBLP: {
+      //   address: earnContracts.BLP,
+      //   abi: bfrAbi,
+      //   name: 'totalSupply',
+      //   chainID: activeChain?.id,
+      // },
+      // amountUSDCpool: {
+      //   address: binaryContracts.tokens['USDC'].address,
+      //   abi: bfrAbi,
+      //   name: 'balanceOf',
+      //   params: [binaryContracts.tokens['USDC'].pool_address],
+      //   chainID: activeChain?.id,
+      // },
+      // feeBlpTrackerTokensPerInterval: {
+      //   address: earnContracts.FeeBlpTracker,
+      //   abi: RewardTrackerAbi,
+      //   name: 'tokensPerInterval',
+      //   chainID: activeChain?.id,
+      // },
+      // stakedBlpTrackerTokensPerInterval: {
+      //   address: earnContracts.StakedBlpTracker,
+      //   abi: RewardTrackerAbi,
+      //   name: 'tokensPerInterval',
+      //   chainID: activeChain?.id,
+      // },
 
-      USDCvaultPOL: {
-        address: earnContracts.StakedBlpTracker,
-        abi: RewardTrackerAbi,
-        name: 'depositBalances',
-        params: [
-          dashboardContracts.usdcLiquidityAddress,
-          earnContracts.FeeBlpTracker,
-        ],
-        chainID: activeChain?.id,
-      },
+      // USDCvaultPOL: {
+      //   address: earnContracts.StakedBlpTracker,
+      //   abi: RewardTrackerAbi,
+      //   name: 'depositBalances',
+      //   params: [
+      //     dashboardContracts.usdcLiquidityAddress,
+      //     earnContracts.FeeBlpTracker,
+      //   ],
+      //   chainID: activeChain?.id,
+      // },
 
       ablpTotalBalance: {
         address: configContracts.tokens['ARB'].pool_address,

@@ -5,6 +5,7 @@ import { numberWithCommas } from '@Utils/display';
 import { getBalance } from '@Views/Common/AccountInfo';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { useBFRdata } from '@Views/DashboardV2/hooks/useReadcalls/useBFRdata';
 import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import {
@@ -15,7 +16,9 @@ import {
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 
-const BFRcard = ({ tokenName }: { tokenName: string }) => {
+const BFRcard = () => {
+  const tokenName = 'BFR';
+  const data = useBFRdata();
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
 

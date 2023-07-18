@@ -30,6 +30,8 @@ export const useMarketsRequest = () => {
                   category
                   asset
                   openInterest
+                  openUp
+                  openDown
                 }
             }`,
     });

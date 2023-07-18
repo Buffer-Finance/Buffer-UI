@@ -30,6 +30,7 @@ import {
 } from './Hooks/useArbitrumOverview';
 import { atom, useAtom } from 'jotai';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
+import { Markets } from './Components/Markets';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -82,12 +83,11 @@ const DashboardPage = () => {
     <DashboardStyles>
       {/* <TokenDataNotIncludedWarning /> */}
       <Boxes />
-      {/* <Section
+      <Section
         Heading={<div className={topStyles}>Markets</div>}
         subHeading={
           <div className={descStyles}>
             Discover new Pairs available on Buffer
-            
           </div>
         }
         other={<Markets />}
@@ -96,7 +96,7 @@ const DashboardPage = () => {
             <TokenDropdown />
           </div>
         }
-      /> */}
+      />
     </DashboardStyles>
   );
 };

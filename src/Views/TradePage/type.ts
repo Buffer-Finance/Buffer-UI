@@ -9,6 +9,8 @@ export type poolType = {
   configContract: string;
   optionContract: string;
   openInterest: string;
+  openUp: string;
+  openDown: string;
   platformFee: string;
   earlyclose: {
     enable: boolean;
@@ -87,6 +89,8 @@ export type responseObj = {
   category: number;
   asset: string;
   openInterest: string;
+  openUp: string;
+  openDown: string;
 };
 
 export enum AssetCategory {
