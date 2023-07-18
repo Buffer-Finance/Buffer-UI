@@ -24,8 +24,6 @@ import { ReferralPage } from '@Views/Referral';
 import SideBar from '@Views/Common/Sidebar';
 import ConnectionDrawer from '@Views/Common/V2-Drawer/connectionDrawer';
 import { useGraphStatus } from '@Utils/useGraphStatus';
-import * as Sentry from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { LeaderBoard, LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { ProfilePage } from '@Views/Profile';
@@ -48,14 +46,6 @@ import { CreatePair } from './Admin/CreatePair';
 import { isTestnet } from 'config';
 import { Signer } from './Signer';
 
-if (import.meta.env.VITE_MODE === 'production') {
-  Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    integrations: [new Integrations.BrowserTracing()],
-    tracesSampleRate: 0.5,
-  });
-}
-
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
   for (let color in urlSettings) {
@@ -64,6 +54,18 @@ if (import.meta.env.VITE_MODE === 'production') {
     }
   }
 })();
+
+const ErrorPage: React.FC<any> = ({}) => {
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    let arr = undefined;
+    arr.map((a) => a);
+  };
+  return (
+    <div className="flex flex-col">
+      I am the errro<button onClick={onClick}>Click me for error</button>
+    </div>
+  );
+};
 
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
@@ -104,6 +106,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/signer" element={<Signer />} />
+        <Route path="/error" element={<ErrorPage />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />
         <Route path="/pyth" element={<PythPoc />}></Route>
