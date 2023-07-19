@@ -55,7 +55,7 @@ if (import.meta.env.VITE_MODE === 'production') {
 
 import { inject } from '@vercel/analytics';
 inject();
-console.log('deb-env import.meta.env.VITE_PROD', import.meta?.env.VITE_PROD);
+console.log('deb-env import.meta.env.VITE_PROD', import.meta?.env?.VITE_DEV);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
