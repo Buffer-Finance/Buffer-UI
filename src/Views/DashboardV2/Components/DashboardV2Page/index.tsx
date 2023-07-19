@@ -2,12 +2,19 @@ import styled from '@emotion/styled';
 import { OverViewSection } from './OverviewSection';
 import TokensSection from './TokensSection';
 import MarketsSection from './MarketsSection';
+import { ChainNotSupported } from '@Views/Common/ChainNotSupported';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 const DashboardV2Page = () => {
   return (
     <DashboardV2Styles>
       <OverViewSection />
-      <TokensSection />
+      <ChainNotSupported
+        hide
+        supportedChainIds={[arbitrum.id, arbitrumGoerli.id]}
+      >
+        <TokensSection />
+      </ChainNotSupported>
       <MarketsSection />
     </DashboardV2Styles>
   );
