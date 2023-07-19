@@ -52,6 +52,9 @@ if (import.meta.env.VITE_MODE === 'production') {
     ],
   });
 }
+console.log('deb-envproductionenv', import.meta.env.Production);
+console.log('deb-envpreviewenv', import.meta.env.Preview);
+
 import { inject } from '@vercel/analytics';
 inject();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
