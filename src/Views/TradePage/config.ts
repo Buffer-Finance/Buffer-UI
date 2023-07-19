@@ -320,8 +320,5 @@ export const marketsForChart = {
   },
 };
 
-export const baseUrl =
-  'https://backend.buffer-finance-api.link/instant-trading/';
-
-export const pricePublisherBaseUrl =
-  'https://oracle.buffer.finance/price/query/';
+export const baseUrl = import.meta.env.VITE_INSTANT_TRADING_HOST;
+export const pricePublisherBaseUrl = import.meta.env.VITE_PRICE_QUERY_HOST;

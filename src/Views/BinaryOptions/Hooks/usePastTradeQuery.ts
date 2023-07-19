@@ -164,21 +164,21 @@ export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
     !expiryPriceCache?.[currentTrade.optionID]
   ) {
     // console.log(`[augexp]currentTrade: `, currentTrade);
-    axios
-      .post(`https://oracle.buffer.finance/price/query/`, [
-        {
-          pair: currentTrade.chartData.tv_id,
-          timestamp: currentTrade.expirationTime,
-        },
-      ])
-      .then((response) => {
-        if (
-          !expiryPriceCache[currentTrade.optionID] &&
-          response?.data?.[0]?.price
-        )
-          expiryPriceCache[currentTrade.optionID] =
-            response?.data?.[0].price.toString();
-      });
+    // axios
+    //   .post(`https://oracle.buffer.finance/price/query/`, [
+    //     {
+    //       pair: currentTrade.chartData.tv_id,
+    //       timestamp: currentTrade.expirationTime,
+    //     },
+    //   ])
+    //   .then((response) => {
+    //     if (
+    //       !expiryPriceCache[currentTrade.optionID] &&
+    //       response?.data?.[0]?.price
+    //     )
+    //       expiryPriceCache[currentTrade.optionID] =
+    //         response?.data?.[0].price.toString();
+    //   });
   }
 };
 
