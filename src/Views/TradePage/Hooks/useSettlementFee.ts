@@ -8,13 +8,13 @@ interface SettlementFee {
   settlement_fee_sign_expiration: number;
   settlement_fee_signature: string;
 }
+export interface IBaseSettlementFees {
+  [key: string]: SettlementFee;
+}
 
 export const useSettlementFee = () => {
   const account = useAccount();
-  return useSWR<
-    { [key: string]: SettlementFee },
-    { [key: string]: SettlementFee }
-  >([account, 'settlementFee'], {
+  return useSWR<IBaseSettlementFees>([account, 'settlementFee'], {
     fetcher: async () => {
       const response = await axios.get(
         baseUrl + 'settlement_fee/?environment=421613'

@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import { getLinuxTimestampBefore24Hours } from '../utils/getLinuxTimestampBefore24Hours';
 import { useMemo } from 'react';
 import { add } from '@Utils/NumString/stringArithmatics';
+import { getAddress } from 'ethers/lib/utils.js';
 
 export const useOneDayVolume = () => {
   const { activeChain } = useActiveChain();
@@ -45,7 +46,7 @@ export const useOneDayVolume = () => {
     if (!data || !data.volumePerContracts) return {};
     const startObject: { [key: string]: string } = {};
     return data.volumePerContracts.reduce((acc, item) => {
-      const address = item.optionContract.address.toLowerCase();
+      const address = getAddress(item.optionContract.address);
       if (item.depositToken !== 'total') {
         if (acc[address]) {
           acc[address] = add(acc[address], item.amount);

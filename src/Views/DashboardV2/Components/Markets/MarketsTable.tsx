@@ -7,6 +7,7 @@ import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import { OpenUpDownIndicator } from '@Views/Dashboard/Components/OpenUpDownIndicator';
 import BufferSortTable from '@Views/Dashboard/Components/BufferSortTable';
+import { getPayout } from '@Views/TradePage/utils';
 
 export const MarketsTable = ({
   dashboardData,
@@ -47,7 +48,7 @@ export const MarketsTable = ({
     switch (col) {
       case 0:
         return (
-          <div className="flex items-center gap-[6px] ">
+          <div className="flex items-center gap-[6px] ml-4">
             <div className="w-[20px] h-[20px]">
               <PairTokenImage pair={currentRow.pair} />
             </div>
@@ -91,42 +92,27 @@ export const MarketsTable = ({
           />
         );
 
-      // case 5:
-      //   return (
-      //     <CellContent
-      //       content={[
-      //         <div className="flex items-center">
-      //           Current&nbsp;:&nbsp;
-      //           <Display data={currentRow.currentUtilization} unit="%" />
-      //         </div>,
-      //         <div className="flex items-center">
-      //           Max&nbsp;:&nbsp;
-      //           <Display data={currentRow.max_utilization} unit="%" />
-      //         </div>,
-      //       ]}
-      //     />
-      //   );
-
       case 5:
         return (
           <>
-            {/* <div className="max-w-[150px]">
+            <div className="max-w-[150px]">
               <BufferProgressBar
                 fontSize={12}
                 progressPercent={
-                  (currentRow.totalTrades * 100) /
-                  (currentRow.max_open_interest + currentRow.totalTrades)
+                  (currentRow.current_open_interest * 100) /
+                  (currentRow.max_open_interest +
+                    currentRow.current_open_interest)
                 }
               />
             </div>
             <div className="whitespace-nowrap mt-2">
               Max:&nbsp;{' '}
               <Display
-                data={currentRow.max_open_interest + currentRow.totalTrades}
+                data={currentRow.max_open_interest}
                 unit={currentRow.poolUnit}
                 className="!inline whitespace-nowrap "
               />
-            </div> */}
+            </div>
           </>
         );
       case 6:
@@ -139,30 +125,28 @@ export const MarketsTable = ({
         );
       case 7:
         return (
-          <></>
-          //   <CellContent
-          //     content={[
-          //       <Display
-          //         data={currentRow.max_trade_size}
-          //         unit={currentRow.poolUnit}
-          //         className="!justify-start"
-          //       />,
-          //     ]}
-          //   />
+          <CellContent
+            content={[
+              <Display
+                data={currentRow.max_trade_size}
+                unit={currentRow.poolUnit}
+                className="!justify-start"
+              />,
+            ]}
+          />
         );
       case 8:
         return (
           <CellContent
             content={[
-              <></>,
-              //   <div className="flex items-center gap-1">
-              //     <UpTriangle className={`scale-75`} />
-              //     <Display data={currentRow.payoutForUp} unit="%" />
-              //   </div>,
-              //   <div className="flex items-center text-3 gap-1">
-              //     <DOwnTriangle className={`scale-75`} />
-              //     <Display data={currentRow.payoutForDown} unit="%" />
-              //   </div>,
+              <div className="flex items-center gap-1">
+                <UpTriangle className={`scale-75`} />
+                <Display data={getPayout(currentRow.payoutForUp)} unit="%" />
+              </div>,
+              <div className="flex items-center text-3 gap-1">
+                <DOwnTriangle className={`scale-75`} />
+                <Display data={getPayout(currentRow.payoutForDown)} unit="%" />
+              </div>,
             ]}
           />
         );
@@ -171,7 +155,7 @@ export const MarketsTable = ({
           <CellContent
             content={[
               <>
-                {/* {currentRow.is_open ? (
+                {currentRow.is_open ? (
                   <div className="text-green flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-green" /> Open
                   </div>
@@ -181,7 +165,7 @@ export const MarketsTable = ({
                     <div className="h-3 w-3 rounded-full bg-red" />
                     Closed
                   </div>
-                )} */}
+                )}
               </>,
             ]}
           />

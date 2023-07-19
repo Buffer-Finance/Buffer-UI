@@ -40,10 +40,8 @@ export const BuyTrade: React.FC = () => {
   const { activeMarket } = useActiveMarket();
   const amount = useAtomValue(tradeSizeAtom);
   const marketPrice = useAtomValue(priceAtom);
-  const { payout: totalPayout } = useSelectedAssetPayout({
-    token0: activeMarket?.token0,
-    token1: activeMarket?.token1,
-  });
+  const { calculatePayout } = useSelectedAssetPayout();
+
   if (!switchPool || !poolDetails || !readcallData || !activeMarket) {
     console.log(
       `index-allSettlementFees: `,
@@ -59,6 +57,9 @@ export const BuyTrade: React.FC = () => {
       />
     );
   }
+  const { payout: totalPayout } = calculatePayout(
+    joinStrings(activeMarket.token0, activeMarket.token1, '')
+  );
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
   const allowance = divide(readcallData.allowance, decimals) as string;
@@ -68,7 +69,6 @@ export const BuyTrade: React.FC = () => {
   const activeChartMarket =
     marketsForChart[marketId as keyof typeof marketsForChart];
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeChartMarket);
-  // const totalPayout = readcallData.settlementFees[switchPool.optionContract];
   const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
   // if (

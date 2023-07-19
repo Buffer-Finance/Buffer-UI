@@ -27,3 +27,7 @@ export type arbitrumOverview = {
 export type total24hrsStatsType = { [key: string]: tokenX24hrsStats };
 
 export type totalStatsType = { [key: string]: toalTokenXstats };
+
+export type keyValueStringType = {
+  [key: string]: string;
+};
