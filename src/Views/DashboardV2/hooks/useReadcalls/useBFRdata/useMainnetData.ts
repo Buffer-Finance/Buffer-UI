@@ -72,7 +72,7 @@ export const useMainnetData = () => {
         }, '0');
 
       return {
-        circulatingSupply: subtract('100000000', sum),
+        amountInPools: sum,
         lpTokens,
       };
     },

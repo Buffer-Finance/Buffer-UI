@@ -18,6 +18,20 @@ export const appConfig = {
         token: 'USDC',
         is_pol: false,
       },
+      '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
+        tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
+        faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
+        decimals: 18,
+        token: 'BFR',
+        is_pol: false,
+      },
+      '0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6': {
+        tokenAddress: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
+        faucet: '0x894Ce84237aCB9985e3c9A930C65D202B633E017',
+        decimals: 18,
+        token: 'ARB',
+        is_pol: false,
+      },
     },
 
     EarnConfig: {
@@ -43,6 +57,7 @@ export const appConfig = {
       BlpVester2: '0x1F74Bec8987f9FffECA4A64b174321d9dc8c0257',
       StakedBlpDistributor2: '0x2F63b39D42ff8d68Aa2DfEBAC541f43D0fa9f883',
       ARB: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
+      burnAddress: '0x000000000000000000000000000000000000dEaD',
     },
 
     DashboardConfig: {
@@ -57,7 +72,7 @@ export const appConfig = {
   },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
@@ -86,6 +101,13 @@ export const appConfig = {
         token: 'ARB',
         is_pol: false,
       },
+      '0xeAbEa290A623a648B3A8ab4B9AD668fb2063f8aB': {
+        tokenAddress: '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',
+        // faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+        decimals: 18,
+        token: 'BFR',
+        is_pol: false,
+      },
     },
 
     EarnConfig: {
@@ -111,6 +133,7 @@ export const appConfig = {
       BlpVester2: '0x405E91Ca914bf3fCC5d45c761dB1E8b034281A18',
       StakedBlpDistributor2: '0xc8bfba986834B6E5c7Ab58BD2A78c196914Aa6E0',
       ARB: '0x912CE59144191C1204E64559FE8253a0e49E6548',
+      burnAddress: '0x000000000000000000000000000000000000dEaD',
     },
 
     DashboardConfig: {
