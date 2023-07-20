@@ -105,7 +105,6 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>
-        <Route path="/dashboardV2" element={<DashboardV2 />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />
