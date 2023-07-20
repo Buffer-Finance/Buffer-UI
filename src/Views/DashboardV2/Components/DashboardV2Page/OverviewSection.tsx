@@ -4,9 +4,8 @@ import { ChainSwitchDropdown } from '../ChainSwitchDropdown';
 import { useMemo } from 'react';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getStatsStartingDate } from '@Views/DashboardV2/utils/getStatsStartingDate';
-import { OverviewArbitrum } from '../Cards/OverViewArbitrum';
+import { OverView } from '../Overview';
 
-//TODO - handle other chains and add openInterest
 export const OverViewSection = () => {
   const { activeChain } = useActiveChain();
   const subHeading = useMemo(
@@ -22,7 +21,7 @@ export const OverViewSection = () => {
         </div>
       }
       subHeading={<div className={descStyles}>{subHeading}</div>}
-      Cards={[<OverviewArbitrum />]}
+      Cards={[<OverView />]}
     />
   );
 };

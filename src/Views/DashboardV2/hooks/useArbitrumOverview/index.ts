@@ -50,8 +50,6 @@ export const useArbitrumOverview = () => {
     return {
       totalTraders: data.totalTraders[0]?.uniqueCountCumulative || 0,
       ...stats,
-      openInterest: null,
-      //TODO - add open interest
     };
   }, [data, stats]);
 
