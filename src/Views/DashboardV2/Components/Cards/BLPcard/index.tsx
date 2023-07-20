@@ -52,7 +52,7 @@ export const BLPcard = ({
             'Exchange Rate',
             'Total Supply',
             `Total ${tokenName} Amount`,
-            shouldDisplayPOL && `POL(${tokenName})`,
+            // shouldDisplayPOL && `POL(${tokenName})`,
             'APR',
           ].filter((key) => key)}
           values={[
@@ -66,34 +66,34 @@ export const BLPcard = ({
             <div className={wrapperClasses}>
               <Display data={data.total_usdc} unit={tokenName} />
             </div>,
-            shouldDisplayPOL && (
-              <div className={wrapperClasses}>
-                {data.usdc_pol ? (
-                  <NumberTooltip
-                    content={
-                      toFixed(
-                        multiply(
-                          divide(data.usdc_pol, data.usdc_total) as string,
-                          2
-                        ),
-                        2
-                      ) + `% of total liquidity in the ${tokenName} vault.`
-                    }
-                  >
-                    <div>
-                      <Display
-                        data={multiply(data.usdc_pol, data.price) || '0'}
-                        unit={tokenName}
-                        disable
-                        className={underLineClass}
-                      />
-                    </div>
-                  </NumberTooltip>
-                ) : (
-                  <>-</>
-                )}
-              </div>
-            ),
+            // shouldDisplayPOL && (
+            //   <div className={wrapperClasses}>
+            //     {data.usdc_pol ? (
+            //       <NumberTooltip
+            //         content={
+            //           toFixed(
+            //             multiply(
+            //               divide(data.usdc_pol, data.usdc_total) as string,
+            //               2
+            //             ),
+            //             2
+            //           ) + `% of total liquidity in the ${tokenName} vault.`
+            //         }
+            //       >
+            //         <div>
+            //           <Display
+            //             data={multiply(data.usdc_pol, data.price) || '0'}
+            //             unit={tokenName}
+            //             disable
+            //             className={underLineClass}
+            //           />
+            //         </div>
+            //       </NumberTooltip>
+            //     ) : (
+            //       <>-</>
+            //     )}
+            //   </div>
+            // ),
             <div className={`${wrapperClasses}`}>
               <Display
                 className="!justify-end"
