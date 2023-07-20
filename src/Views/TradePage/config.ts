@@ -65,11 +65,25 @@ export const appConfig = {
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b',
     poolsInfo: {
-      '0xE1630ecC83da4564300837E994d4AB8cE0995455': {
-        tokenAddress: '0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E',
-        faucet: '0x51469Ec9B8AE9B3Fbf985e735C2E3758FbD4e408',
+      '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
         decimals: 6,
         token: 'USDC',
+        is_pol: false,
+      },
+      '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+        decimals: 6,
+        token: 'USDC',
+        is_pol: true,
+      },
+      '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
+        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
+        // faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+        decimals: 18,
+        token: 'ARB',
         is_pol: false,
       },
     },

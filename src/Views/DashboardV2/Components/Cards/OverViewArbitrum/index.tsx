@@ -21,7 +21,8 @@ export const OverviewArbitrum = () => {
   const poolsByAsset = usePoolByAsset();
   // console.log(data);
 
-  const { poolDisplayKeyMapping } = usePoolDisplayNames();
+  const { poolDisplayKeyMapping, poolDisplayNameMapping } =
+    usePoolDisplayNames();
   const keys = useMemo(() => {
     return Object.values(poolDisplayKeyMapping);
   }, [poolDisplayKeyMapping]);
@@ -64,13 +65,13 @@ export const OverviewArbitrum = () => {
                 <Display
                   data={openInterestByPool?.[poolsByAsset[key]?.poolAddress]}
                   precision={2}
-                  unit={key}
+                  unit={poolDisplayNameMapping[key]}
                   className="!w-fit"
                 />
               </div>
             )),
             <div className={wrapperClasses}>{data.totalTraders}</div>,
-          ]}
+          ].flat(1)}
         />
       }
     />
