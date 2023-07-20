@@ -17,7 +17,8 @@ import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 
 export const OverviewArbitrum = () => {
   const { overView: data } = useArbitrumOverview();
-
+  const { openInterestByPool } = useOpenInterest();
+  const poolsByAsset = usePoolByAsset();
   // console.log(data);
 
   const { poolDisplayKeyMapping } = usePoolDisplayNames();
@@ -58,52 +59,20 @@ export const OverviewArbitrum = () => {
             <AverageVolume data={data.totalStats} keys={keys} />,
             <AverageTradeSize data={data.totalStats} keys={keys} />,
             <TotalTrades data={data.totalStats} keys={keys} />,
-            <OpenInterestEachPool />,
-
+            Object.keys(poolDisplayKeyMapping).map((key) => (
+              <div className={wrapperClasses} key={key}>
+                <Display
+                  data={openInterestByPool?.[poolsByAsset[key]?.poolAddress]}
+                  precision={2}
+                  unit={key}
+                  className="!w-fit"
+                />
+              </div>
+            )),
             <div className={wrapperClasses}>{data.totalTraders}</div>,
           ]}
         />
       }
     />
-  );
-};
-
-const OpenInterestEachPool = () => {
-  const { openInterestByPool } = useOpenInterest();
-  const poolsByAsset = usePoolByAsset();
-  const { poolDisplayKeyMapping } = usePoolDisplayNames();
-
-  return (
-    <div>
-      {Object.keys(poolDisplayKeyMapping).map((key) => (
-        <div className={wrapperClasses} key={key}>
-          <Display
-            data={openInterestByPool?.[poolsByAsset[key]?.poolAddress]}
-            precision={2}
-            unit={key}
-            className="!w-fit"
-          />
-        </div>
-      ))}
-
-      {/* <div className={wrapperClasses}>
-              <Display
-                data={openInterestByPool?.[poolsByAsset['ARB']?.poolAddress]}
-                precision={2}
-                unit="ARB"
-                className="!w-fit"
-              />
-            </div>,
-            <div className={wrapperClasses}>
-              <Display
-                data={
-                  openInterestByPool?.[poolsByAsset['USDC-POL']?.poolAddress]
-                }
-                precision={2}
-                unit="USDC"
-                className="!w-fit"
-              />
-            </div>, */}
-    </div>
   );
 };
