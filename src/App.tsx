@@ -112,12 +112,11 @@ const AppRoutes = () => {
         <Route path="/admin" element={<TradingConfig />}></Route>
         <Route path="/admin/create-pair" element={<CreatePair />}></Route>
         <Route path="/addMarket" element={<AddMarket />} />
-        <Route path="/addMarket" element={<AddMarket />} />
         <Route path="/test/:market" element={<TradePage />} />
-        <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/ref/:code" element={<div>Helo</div>} />
+        {/* <Route path="/referral" element={<ReferralPage />} /> */}
+        {/* <Route path="/ref/:code" element={<div>Helo</div>} /> */}
         <Route path="/history" element={<History />} />
-        <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
+        {/* <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
           </Route>
@@ -132,7 +131,7 @@ const AppRoutes = () => {
               </LeaderBoard>
             }
           />
-        </Route>
+        </Route> */}
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
@@ -141,7 +140,7 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
-        <Route path="/trades/merged" element={<MergedPage />} />
+        {/* <Route path="/trades/merged" element={<MergedPage />} /> */}
         <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<TradePage />} />
         <Route path="/no-loss/:market" element={<NoLoss />} />

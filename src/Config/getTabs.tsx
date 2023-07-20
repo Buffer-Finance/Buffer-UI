@@ -336,12 +336,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-      {
-        to: `/leaderboard/trades`,
-        name: 'All Trades',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/leaderboard/trades`,
+      //   name: 'All Trades',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: `/referral`,
         name: 'Referral',
@@ -406,12 +406,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-      {
-        to: `/leaderboard/trades`,
-        name: 'All Trades',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/leaderboard/trades`,
+      //   name: 'All Trades',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: `/referral`,
         name: 'Referral',
