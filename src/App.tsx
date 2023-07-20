@@ -52,6 +52,8 @@ import { ErrorPage } from './ErrorPage';
 import { DashboardV2 } from '@Views/DashboardV2';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
+import { isTestnet } from 'config';
+import { Signer } from './Signer';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -61,6 +63,18 @@ const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
     }
   }
 })();
+
+// const ErrorPage: React.FC<any> = ({}) => {
+//   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+//     let arr = undefined;
+//     arr.map((a) => a);
+//   };
+//   return (
+//     <div className="flex flex-col">
+//       I am the errro<button onClick={onClick}>Click me for error</button>
+//     </div>
+//   );
+// };
 
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
@@ -101,6 +115,8 @@ const AppRoutes = () => {
       <OnboardingAnimation />
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
+        <Route path="/signer" element={<Signer />} />
+        <Route path="/error" element={<ErrorPage />} />
         <Route path="/transfer" element={<UsdcTransfer />} />
         <Route path="/test" element={<TestComponent />} />
         <Route path="/error" element={<ErrorPage />}></Route>

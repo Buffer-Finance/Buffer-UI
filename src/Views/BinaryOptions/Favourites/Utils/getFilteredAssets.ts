@@ -23,13 +23,17 @@ export function getFilteredAssets(
       (asset) =>
         asset.pair.toLowerCase().includes(searchText.toLowerCase()) &&
         routerPermission &&
-        routerPermission[asset.pools[0].options_contracts.current]
+        !!asset.pools.find(
+          (pool) => routerPermission[pool.options_contracts.current]
+        )
     );
   else {
     filteredAssets = assets.filter(
       (asset) =>
         routerPermission &&
-        routerPermission[asset.pools[0].options_contracts.current]
+        !!asset.pools.find(
+          (pool) => routerPermission[pool.options_contracts.current]
+        )
     );
   }
 

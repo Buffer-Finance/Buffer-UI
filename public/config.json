@@ -229,9 +229,31 @@
         "decimals": 6,
         "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png",
         "name": "USDC",
-        "pool_address": "0xA3769f6E42E1D7936919904E9156527dBc23C1b4",
-        "faucet": "0x51469Ec9B8AE9B3Fbf985e735C2E3758FbD4e408",
-        "min_amount": 5,
+        "pool_address": "0x1CDA6A34D84F444183E89D2D41D920EeaE883439",
+        "faucet": "0xe67EeCfBc9b9f8Fac825DA31cF421FAE3846dA20",
+        "min_amount": 100,
+        "is_pol": false
+      },
+      "ARB": {
+        "address": "0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8",
+        "meta": "0x2e32CDf0AC7a0110f2EfAF97E3a4803a238b607D",
+        "decimals": 18,
+        "img": "/Chains/ARBITRIUM.png",
+        "name": "ARB",
+        "pool_address": "0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6",
+        "faucet": "0x894Ce84237aCB9985e3c9A930C65D202B633E017",
+        "min_amount": 100,
+        "is_pol": false
+      },
+      "BFR": {
+        "address": "0x9132016099CEbb740db64A36da0D3307824Ad159",
+        "meta": "0x0A11b345c5879Bef023e7804c10A86e3245d4471",
+        "decimals": 18,
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/bfr.png",
+        "name": "BFR",
+        "pool_address": "0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0",
+        "faucet": "0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5",
+        "min_amount": 100,
         "is_pol": false
       }
     },
@@ -262,6 +284,13 @@
               "config": "0xf0565425853a27B170AdD5C0e6fFBAc66403f4f5",
               "current": "0x6406d4FB22Ebac283CbdaB0806684da0013615Fb"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0xc060ecf7ff78c097d065b2a20d68177cc3da27b5",
+              "current": "0x654f008e58A72CA409Cd415FA9998Dce07043aC9"
+            }
           }
         ]
       },
@@ -290,6 +319,13 @@
             "options_contracts": {
               "config": "0x90A3A26Ee9B25eb23C1Afcb1b47A18fa98636E45",
               "current": "0x7f8A37f6F03450f2641f56Eff7bb589F65Cc1eD2"
+            }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0xc42636a6af984ca63a71ea15e2603a842c45a476",
+              "current": "0xdd673eC16dd7098fBfBbAEeAb99dD284f22eeAFB"
             }
           }
         ]
@@ -320,6 +356,13 @@
               "config": "0x3d48bF4BbF81150d2630861AE43EB00FDEAdd5cD",
               "current": "0x50025C0b1a2Ce3E1A145BDD1C54cFE297cE3DD38"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0x75d6c5b6fc4a86a68eeb1d84dbc9126da1890123",
+              "current": "0xa348a17Ad61dC2565A6D9c30aa5a029add698cF4"
+            }
           }
         ]
       },
@@ -341,6 +384,13 @@
             "options_contracts": {
               "config": "0x06f96c3c08679642d80878A51F5919dF1B380869",
               "current": "0x105e1f5044e651309F7E2fc1114351Ab8dffBBE9"
+            }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0x15f84752148229c012a79183d6d8456db2d0712a",
+              "current": "0x5b84f49e138Aac234AD7B479e57E6DE1E18c09D6"
             }
           }
         ]
@@ -366,7 +416,7 @@
         "name": "USDC",
         "pool_address": "0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e",
         "faucet": "0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5",
-        "min_amount": 100,
+        "min_amount": 5,
         "is_pol": false
       },
       "USDC_POL": {
@@ -388,6 +438,16 @@
         "name": "ARB",
         "pool_address": "0xaE0628C88EC6C418B3F5C005f804E905f8123833",
         "min_amount": 25,
+        "is_pol": false
+      },
+      "BFR": {
+        "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+        "meta": "0x1CeA788119B9D3038ce3CA05943a6e70243C7057",
+        "decimals": 18,
+        "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/bfr.png",
+        "name": "BFR",
+        "pool_address": "0xeAbEa290A623a648B3A8ab4B9AD668fb2063f8aB",
+        "min_amount": 40,
         "is_pol": false
       }
     },
@@ -425,6 +485,13 @@
               "config": "0xab4D8f4f4F39C4eE76f8d6493876995f5A6e9Fe3",
               "current": "0xbe4e89945DB947ABB4f931F9239BB9dE8F662b27"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "current": "0xDBEdc2A1aa21A87879F4CC062e18190d5525c084",
+              "config": "0x92af4EBCa254e3543d0603785bB1DB9BF16A12E8"
+            }
           }
         ]
       },
@@ -460,6 +527,13 @@
             "options_contracts": {
               "config": "0xF09DAD7E91aEC1F81011819129bAe96E0A12b0Bc",
               "current": "0x5B58cc39360472c908a26b129cF19f533Ff00ACE"
+            }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "current": "0x5fC7b38F1bc237069145AF7AcfBB9Eb0A8e1B4b5",
+              "config": "0x9760d89eBEA17f9DDEf490C37f3FEd6E61A06E0b"
             }
           }
         ]
@@ -497,6 +571,13 @@
               "config": "0x09283F9D0eec02961E61B7b82Cb094619f1Bf2a0",
               "current": "0x37a42a8841ffF3D47351e68a2c31AdD4a1080358"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "current": "0xaC5337D5A53Ff32887BF7829a44AE1F5F3166C4B",
+              "config": "0xEF922235657B845A2632371032Ecb25377aC3305"
+            }
           }
         ]
       },
@@ -532,6 +613,13 @@
             "options_contracts": {
               "config": "0xb96CdF0276a36f9159aB04924f2337110f9288Cb",
               "current": "0x175E5CE07aD6A15e9cbB49E27Ff94EC8E2fc0562"
+            }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "current": "0x12d974E8F0030f002552e0451D750dE0C0Ed6bC3",
+              "config": "0x2ce1E8b4c19E019c486093C338E3f5a76DC9d16f"
             }
           }
         ]
@@ -923,7 +1011,7 @@
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "ARBUSD",
         "pair": "ARB-USD",
@@ -952,12 +1040,19 @@
               "config": "0xFe8f09f42d8D8a01Dea2d54d7beb73A8e60Cb247",
               "current": "0xD9A83FAD6Da740C467aDCb9d443fC846a3fC9660"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0xB4d4a92E84a203BeA742356e7F594c24e8902300",
+              "current": "0xa1568547cA58Ef4C5621e031173e003caBB9B438"
+            }
           }
         ]
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "BNBUSD",
         "pair": "BNB-USD",
@@ -986,12 +1081,19 @@
               "config": "0x563c416bDebeFACa7184Fd5f8163ba4c98c847d9",
               "current": "0xae54094B1AE833E04519B41557697a3b8F262E89"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0x0341f977A2A60D2d88Bf5cF13CBF5389814d3c97",
+              "current": "0xf15055AaB7c8291D0276A85D9Cb34bD23D063600"
+            }
           }
         ]
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "MATICUSD",
         "pair": "MATIC-USD",
@@ -1020,12 +1122,19 @@
               "config": "0xab9e4EF2EF88b989AD9A0871A178a6BF321986E1",
               "current": "0x6d3538826f1707Ab29cee9B16696b3C2Fd817a9c"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0xf07475d3df900827A567C117acbf930e9904A4d4",
+              "current": "0xeEc6D471EF314097C3366196c16B9286858c1A44"
+            }
           }
         ]
       },
       {
         "max_duration": "04:00",
-        "min_duration": "00:15",
+        "min_duration": "00:05",
         "category": "Crypto",
         "tv_id": "OPUSD",
         "pair": "OP-USD",
@@ -1054,14 +1163,21 @@
               "config": "0xc987149dB440F0a382F713B64325A5961F6dB40a",
               "current": "0xc78C4F0Eb182Ab8F5C0C35D2DdCf1A8dA67fcEcf"
             }
+          },
+          {
+            "token": "BFR",
+            "options_contracts": {
+              "config": "0x1B5dcdf5100a76EFFd86709C03Ca94FfD3Cefe64",
+              "current": "0xA7420114839f487A8DC2F0fc83Cc76cC5166E734"
+            }
           }
         ]
       }
     ],
     "graph": {
-"MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api",
-"LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api"
-},
+      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api"
+    },
     "env": "arbitrum-one"
   },
   "80001": {
@@ -1174,9 +1290,9 @@
       }
     ],
     "graph": {
-"MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api",
-"LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api"
-},
+      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api"
+    },
     "env": "polygon-mumbai"
   },
   "137": {
@@ -1552,9 +1668,9 @@
       }
     ],
     "graph": {
-"MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api",
-"LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api"
-},
+      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api"
+    },
     "env": "polygon-mumbai"
   }
 }

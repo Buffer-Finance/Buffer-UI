@@ -9,27 +9,26 @@ export const useFavouritesFns = () => {
   const activeMarket = qtInfo.activePair;
   const { routerPermission } = useAtomValue(activeAssetStateAtom);
 
-  const includesTradeAvailableAsset = useMemo(() => {
-    if (
-      !routerPermission ||
-      routerPermission[qtInfo.pairs[0].pools[0].options_contracts.current] ===
-        undefined
-    )
-      return true;
-    const availablePairs = qtInfo.pairs.filter(
-      (market) => routerPermission?.[market.pools[0].options_contracts.current]
+  function isRouterPermissionTrue(pools: (typeof qtInfo.pairs)[0]['pools']) {
+    if (!routerPermission) return false;
+    return !!pools.find(
+      (pool) => routerPermission[pool.options_contracts.current]
     );
-    return !!availablePairs.find(
-      (market) => routerPermission[market.pools[0].options_contracts.current]
+  }
+
+  const includesTradeAvailableAsset = useMemo(() => {
+    if (isRouterPermissionTrue(qtInfo.pairs[0].pools)) return true;
+
+    const availablePairs = qtInfo.pairs.filter((market) =>
+      isRouterPermissionTrue(market.pools)
+    );
+    return !!availablePairs.find((market) =>
+      isRouterPermissionTrue(market.pools)
     );
   }, [routerPermission, assets]);
 
   const firstTradeAvailableAsset = useMemo(
-    () =>
-      qtInfo.pairs.find(
-        (market) =>
-          routerPermission?.[market.pools[0].options_contracts.current]
-      ),
+    () => qtInfo.pairs.find((market) => isRouterPermissionTrue(market.pools)),
     [includesTradeAvailableAsset]
   );
 
@@ -37,10 +36,7 @@ export const useFavouritesFns = () => {
     if (assets.length === 0)
       setAssets(
         qtInfo.pairs
-          .filter(
-            (market) =>
-              routerPermission?.[market.pools[0].options_contracts.current]
-          )
+          .filter((market) => isRouterPermissionTrue(market.pools))
           .slice(0, 7)
       );
   }, [routerPermission]);

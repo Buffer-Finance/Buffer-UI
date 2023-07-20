@@ -13,6 +13,7 @@ import {
   useProfileGraphQl,
 } from '../Hooks/useProfileGraphQl';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 
 const profileCardClass = 'rounded-lg px-7';
 
@@ -27,6 +28,25 @@ export const ProfileCards = () => {
       Cards={[
         <Trading data={tradingMetricsData} heading={'Trading Metrics'} />,
         <Referral data={data} heading={'Referral Metrics'} />,
+        <Trading
+          data={tradingMetricsData}
+          heading={'USDC Trading Metrics'}
+          tokenName="USDC"
+        />,
+        <ArbitrumOnly hide>
+          <Trading
+            data={tradingMetricsData}
+            heading={'ARB Trading Metrics'}
+            tokenName="ARB"
+          />
+        </ArbitrumOnly>,
+        <ArbitrumOnly hide>
+          <Trading
+            data={tradingMetricsData}
+            heading={'BFR Trading Metrics'}
+            tokenName="BFR"
+          />
+        </ArbitrumOnly>,
       ]}
       className="!mt-7"
     />
@@ -62,27 +82,32 @@ const Trading = ({
           values={[
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.totalPayout, usdcDecimals)}
-                unit={'USDC'}
+                data={divide(data.totalPayouts[tokenName] ?? '0', decimals)}
+                unit={tokenName}
               />
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={(data.tradeWon * 100) / data.totalTrades || '0'}
-                unit={'%'}
-                content={
-                  <>{`Won ${data.tradeWon}/${data.totalTrades} trades.`}</>
+                className={
+                  data && gte(data.net_pnl[tokenName] ?? '0', '0')
+                    ? 'text-green'
+                    : 'text-red'
                 }
+                data={divide(data.net_pnl[tokenName] ?? '0', decimals)}
+                unit={tokenName}
               />
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.openInterest, usdcDecimals)}
-                unit={'USDC'}
+                data={divide(data.openInterest[tokenName] ?? '0', decimals)}
+                unit={tokenName}
               />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={divide(data.volume, usdcDecimals)} unit={'USDC'} />
+              <Display
+                data={divide(data.volume[tokenName] ?? '0', decimals)}
+                unit={tokenName}
+              />
             </div>,
           ]}
         />
@@ -126,6 +151,32 @@ const Referral = ({
               <Display
                 data={divide(data.totalRebateEarned, usdcDecimals)}
                 unit={'USDC'}
+                content={
+                  tokens.length > 1 && (
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map((token) => {
+                        const decimals =
+                          configContracts.tokens[
+                            token as keyof typeof configContracts.tokens
+                          ].decimals;
+                        return (
+                          toFixed(
+                            divide(
+                              data[`totalRebateEarned${token}`],
+                              decimals
+                            ) as string,
+                            2
+                          ) +
+                          ' ' +
+                          token
+                        );
+                      })}
+                    />
+                  )
+                }
               />
             </div>,
             // <div className={wrapperClasses}>
@@ -135,6 +186,33 @@ const Referral = ({
               <Display
                 data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
                 unit={'USDC'}
+                content={
+                  tokens.length > 1 && (
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map((token) => {
+                        const decimals =
+                          configContracts.tokens[
+                            token as keyof typeof configContracts.tokens
+                          ].decimals;
+
+                        return (
+                          toFixed(
+                            divide(
+                              data[`totalVolumeOfReferredTrades${token}`],
+                              decimals
+                            ) as string,
+                            2
+                          ) +
+                          ' ' +
+                          token
+                        );
+                      })}
+                    />
+                  )
+                }
               />
             </div>,
 

@@ -9,116 +9,154 @@ interface ProfileGraphQlResponse {
   userOptionDatas: {
     optionContract: {
       address: string;
+      asset: string;
+      token: string;
     };
     payout: string | null;
     totalFee: string;
   }[];
   activeData: {
+    optionContract: {
+      address: string;
+      token: string;
+    };
     totalFee: string;
   }[];
 }
+
 type metricsData = {
   tradesPerAsset: { [key: string]: number };
-  tradeWon: number;
-  volume: string;
-  totalPayout: string;
-  net_pnl: string;
-  openInterest: string;
+  totalPayouts: { [key: string]: string };
+  tradeWon: 0;
+  volume: { [key: string]: string };
+  net_pnl: { [key: string]: string };
+  openInterest: { [key: string]: string };
 };
+
 export type ItradingMetricsData = metricsData & {
   totalTrades: number;
 };
 
 export const useProfileGraphQl = () => {
   const { address: account } = useUserAccount();
-  const { configContracts } = useActiveChain();
-  const { data } = useSWR(`profile-query-account-${account}`, {
-    fetcher: async () => {
-      const response = await axios.post(configContracts.graph.LITE, {
-        query: `{ 
-            userOptionDatas(  
-              first: 1000 
-              where: {user: "${account}", state_not: 1}) {
-                optionContract {
-                  address
-                }
-                payout
-                totalFee
-              }
-            activeData:userOptionDatas(
-              where: {user: "${account}", state: 1}
-            ) {
-                totalFee
-              }
-          }`,
-      });
+  const { configContracts, activeChain } = useActiveChain();
 
-      // console.log(response, 'response');
-      return response.data?.data as ProfileGraphQlResponse;
-    },
-    refreshInterval: 300,
-  });
+  const fetchData = async (account: string | undefined) => {
+    if (!account) return null;
+    const basicQuery = `
+      userOptionDatas(  
+        first: 10000 
+        where: {user: "${account}", state_not: 1}) {
+          optionContract {
+            address
+            token
+            asset
+          }
+          payout
+          totalFee
+          expirationTime
+        }
+      activeData:userOptionDatas(
+        first: 10000 
+        where: {user: "${account}", state: 1}
+      ) {
+        optionContract {
+          address
+          token
+        }
+        totalFee
+      }
+    `;
+
+    const query = `{${basicQuery}}`;
+
+    const response = await axios.post(configContracts.graph.MAIN, {
+      query,
+    });
+
+    let responseData = response.data?.data;
+
+    return responseData as ProfileGraphQlResponse;
+  };
+
+  const { data } = useSWR(
+    `profile-query-account-${account}-lastSavedTimestamp-activeChain-${activeChain}`,
+    {
+      fetcher: () => fetchData(account),
+      refreshInterval: 300,
+    }
+  );
 
   const tradingMetricsData: ItradingMetricsData | null = useMemo(() => {
     if (!data || !data.userOptionDatas || !data.activeData) return null;
 
-    //counts totalPayout,tradesWon, volume
     const computedData = data.userOptionDatas.reduce(
       (accumulator, currentValue) => {
         let newData = accumulator;
 
-        //increase counter for the asset contract address in tradesPerAsset object
-        const assetAddress = currentValue.optionContract.address;
+        const assetAddress = currentValue.optionContract.asset;
+        const token = currentValue.optionContract.token;
         if (newData.tradesPerAsset[assetAddress] !== undefined) {
           newData.tradesPerAsset[assetAddress] += 1;
         } else {
           newData.tradesPerAsset[assetAddress] = 1;
         }
 
-        // increase the number of trades won and totalPayout if payout is not null -->trade won
         if (currentValue.payout) {
-          newData.totalPayout = add(
-            accumulator.totalPayout,
+          newData.totalPayouts[token] = add(
+            accumulator.totalPayouts[token] || '0',
             currentValue.payout
           );
           newData.tradeWon += 1;
 
-          // net_pnl= payout - fee --> trade won
-          newData.net_pnl = add(
-            accumulator.net_pnl,
+          newData.net_pnl[token] = add(
+            accumulator.net_pnl[token] || '0',
             subtract(currentValue.payout, currentValue.totalFee)
           );
         } else {
-          // net_pnl= 0 - fee --> trade lost
-          newData.net_pnl = add(
-            accumulator.net_pnl,
+          newData.net_pnl[token] = add(
+            accumulator.net_pnl[token] || '0',
             subtract('0', currentValue.totalFee)
           );
         }
-        newData.volume = add(accumulator.volume, currentValue.totalFee);
+
+        newData.volume[token] = add(
+          accumulator.volume[token] || '0',
+          currentValue.totalFee
+        );
+
         return newData;
       },
       {
-        totalPayout: '0',
+        totalPayouts: {},
         tradeWon: 0,
-        volume: '0',
-        net_pnl: '0',
+        volume: {},
+        net_pnl: {},
         tradesPerAsset: {},
       } as metricsData
     );
 
-    //counts openInterest
-    const openInterest = data.activeData.reduce(
-      (accumulator, currentValue) => add(accumulator, currentValue.totalFee),
-      '0'
-    );
+    const openInterest = data.activeData.reduce((accumulator, currentValue) => {
+      const token = currentValue.optionContract.token;
+      return token in accumulator
+        ? {
+            ...accumulator,
+            [token]: add(accumulator[token], currentValue.totalFee),
+          }
+        : {
+            ...accumulator,
+            [token]: currentValue.totalFee,
+          };
+    }, {} as Record<string, string>);
+
+    const totalTrades = data.userOptionDatas.length;
 
     return {
       ...computedData,
-      totalTrades: data.userOptionDatas.length,
+      totalTrades,
       openInterest,
     };
   }, [data?.userOptionDatas, data?.activeData]);
-
+  // console.log(tradingMetricsData, data, 'tradingMetricsData');
   return { tradingMetricsData };
 };

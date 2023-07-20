@@ -11,6 +11,27 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
 import 'viem/window';
 import * as Sentry from '@sentry/react';
 
+if (import.meta.env.VITE_MODE === 'production') {
+  Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+
+    // This sets the sample rate to be 10%. You may want this to be 100% while
+    // in development and sample at a lower rate in production
+    replaysSessionSampleRate: 0.1,
+
+    // If the entire session is not sampled, use the below sample rate to sample
+    // sessions when an error occurs.
+    replaysOnErrorSampleRate: 1.0,
+
+    integrations: [
+      new Sentry.Replay({
+        // Additional SDK configuration goes in here, for example:
+        maskAllText: false,
+        blockAllMedia: false,
+      }),
+    ],
+  });
+}
 import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
 import { SWRConfig } from 'swr';
