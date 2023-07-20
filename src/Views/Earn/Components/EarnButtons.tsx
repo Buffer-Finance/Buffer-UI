@@ -1,12 +1,8 @@
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useContext } from 'react';
-import { gt } from '@Utils/NumString/stringArithmatics';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useNetwork } from 'wagmi';
-import { EarnContext } from '..';
-import { CONTRACTS } from '../Config/Address';
 import { earnAtom, readEarnData } from '../earnAtom';
 import { useEarnWriteCalls } from '../Hooks/useEarnWriteCalls';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
@@ -62,9 +58,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
           )}
           <BlueBtn
             onClick={() =>
-              // wallet_value === "0"
-              //   ? showToast(`Not Enough ${cardNum === 0 ? "BFR" : "esBFR"}.`)
-              //   :
               setPageState({
                 ...state,
                 activeModal: cardNum === 3 ? 'esBFRstake' : 'iBFRstake',
@@ -77,13 +70,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
           </BlueBtn>
           <BlueBtn
             onClick={() =>
-              // staked_value === "0"
-              // ? showToast(
-              //     `You have not staked any ${
-              //       cardNum === 0 ? "BFR" : "esBFR"
-              //     }.`
-              //   )
-              // :
               setPageState({
                 ...state,
                 activeModal: cardNum === 3 ? 'esBFRunstake' : 'iBFRunstake',
@@ -101,33 +87,24 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
       return (
         <div className="flex gap-5">
           <BlueBtn
-            onClick={
-              () =>
-                // isRewardAvailable
-                //   ?
-                setPageState({
-                  ...state,
-                  activeModal: cardNum === 1 ? 'compound' : 'compound2',
-                  isModalOpen: true,
-                })
-              // :
-              // showToast("You don't have any rewards yet.")
+            onClick={() =>
+              setPageState({
+                ...state,
+                activeModal: cardNum === 1 ? 'compound' : 'compound2',
+                isModalOpen: true,
+              })
             }
             className={btnClasses}
           >
             Compound
           </BlueBtn>
           <BlueBtn
-            onClick={
-              () =>
-                // isRewardAvailable
-                //   ?
-                setPageState({
-                  ...state,
-                  activeModal: cardNum === 1 ? 'claim' : 'claim2',
-                  isModalOpen: true,
-                })
-              // : showToast("You don't have any rewards yet.")
+            onClick={() =>
+              setPageState({
+                ...state,
+                activeModal: cardNum === 1 ? 'claim' : 'claim2',
+                isModalOpen: true,
+              })
             }
             className={btnClasses}
           >
@@ -143,9 +120,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
         <div className="flex gap-5">
           <BlueBtn
             onClick={() =>
-              // pageState.earn.usdc.wallet_balance === "0"
-              //   ? showToast(`Not enough USDC.`)
-              //   :
               setPageState({ ...state, activeModal: 'buy', isModalOpen: true })
             }
             className={btnClasses}
@@ -154,9 +128,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
           </BlueBtn>
           <BlueBtn
             onClick={() =>
-              // pageState.earn.blp.user.staked.token_value === "0"
-              //   ? showToast("You don't have any BLP.")
-              //   :
               setPageState({ ...state, activeModal: 'sell', isModalOpen: true })
             }
             className={btnClasses}
@@ -172,13 +143,13 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
       let shouldWithdraw = false;
       if (cardNum === 4) {
         activeModalname = 'iBFRdeposit';
-        shouldWithdraw = pageState.vest.ibfr.vesting_status.vested !== '0';
+        shouldWithdraw = pageState.vest?.ibfr.vesting_status.vested !== '0';
       } else if (cardNum === 5) {
         activeModalname = 'BLPdeposit';
-        shouldWithdraw = pageState.vest.blp.vesting_status.vested !== '0';
+        shouldWithdraw = pageState.vest?.blp.vesting_status.vested !== '0';
       } else if (cardNum === 6) {
         activeModalname = 'ARBBLPdeposit';
-        shouldWithdraw = pageState.vest.arbblp.vesting_status.vested !== '0';
+        shouldWithdraw = pageState.vest?.arbblp.vesting_status.vested !== '0';
       }
 
       return (
@@ -212,9 +183,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
         <div className="flex gap-5">
           <BlueBtn
             onClick={() =>
-              // pageState.earn.usdc.wallet_balance === "0"
-              //   ? showToast(`Not enough USDC.`)
-              //   :
               setPageState({
                 ...state,
                 activeModal: 'buyARB',
@@ -227,9 +195,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
           </BlueBtn>
           <BlueBtn
             onClick={() =>
-              // pageState.earn.blp.user.staked.token_value === "0"
-              //   ? showToast("You don't have any BLP.")
-              //   :
               setPageState({
                 ...state,
                 activeModal: 'sellARB',

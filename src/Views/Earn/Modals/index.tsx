@@ -9,7 +9,6 @@ import { DepositModal } from './deposit';
 import { Sell } from './sell';
 import { StakeModal } from './stake';
 import iBFRABI from '../Config/Abis/BFR.json';
-import { CONTRACTS } from '../Config/Address';
 import { Claim } from './claim';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import {
@@ -18,6 +17,7 @@ import {
 } from '../Hooks/useEarnWriteCalls';
 import { Compound2 } from './Compound2';
 import { Claim2 } from './claim2';
+import { getContract } from '../Config/Address';
 
 export const EarnModals = () => {
   const [pageState, setPageState] = useAtom(earnAtom);
@@ -57,7 +57,7 @@ function ModalChild() {
           isStakeModal
           tokenContract={{
             abi: iBFRABI,
-            contract: CONTRACTS[activeChain?.id].iBFR,
+            contract: getContract(activeChain?.id, 'iBFR'),
           }}
           unit="BFR"
           allowance={pageData.earn?.ibfr.user.allowance}
@@ -82,7 +82,7 @@ function ModalChild() {
           isStakeModal
           tokenContract={{
             abi: iBFRABI,
-            contract: CONTRACTS[activeChain?.id].ES_BFR,
+            contract: getContract(activeChain?.id, 'ES_BFR'),
           }}
           unit="esBFR"
           allowance={pageData.earn?.esBfr.user.allowance}
@@ -103,8 +103,8 @@ function ModalChild() {
       const { buyBLP, validations } = useEarnWriteCalls('Router');
       const { approve } = useGetApprovalAmount(
         USDCABI,
-        CONTRACTS[activeChain.id].USDC,
-        CONTRACTS[activeChain.id].BLP
+        getContract(activeChain.id, 'USDC'),
+        getContract(activeChain.id, 'BLP')
       );
 
       return (
@@ -125,8 +125,8 @@ function ModalChild() {
         useEarnWriteCalls('Router');
       const { approve: approveARB } = useGetApprovalAmount(
         USDCABI,
-        CONTRACTS[activeChain.id].ARB,
-        CONTRACTS[activeChain.id].BLP2
+        getContract(activeChain.id, 'ARB'),
+        getContract(activeChain.id, 'BLP2')
       );
 
       return (

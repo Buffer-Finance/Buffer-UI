@@ -1,15 +1,11 @@
 import { useAtom } from 'jotai';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import BufferInput from '@Views/Common/BufferInput';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { CONTRACTS } from '../Config/Address';
 import { readEarnData } from '../earnAtom';
 import iBFRABI from '../Config/Abis/BFR.json';
-import {
-  useEarnWriteCalls,
-  useGetApprovalAmount,
-} from '../Hooks/useEarnWriteCalls';
+import { useGetApprovalAmount } from '../Hooks/useEarnWriteCalls';
 import {
   add,
   getPosInf,
@@ -29,8 +25,8 @@ import {
   underLineClass,
 } from '../Components/VestCards';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { EarnContext } from '..';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { getContract } from '../Config/Address';
 
 export const DepositModal = ({
   head,
@@ -46,14 +42,13 @@ export const DepositModal = ({
   const [val, setVal] = useState('');
   const [pageState] = useAtom(readEarnData);
   const currentVault = pageState.vest[type];
-
   const { state } = useGlobal();
   const { activeChain } = useActiveChain();
   const vesterContract = currentVault.vesterContract;
   const tokenContract = currentVault.tokenContract;
   const { approve } = useGetApprovalAmount(
     iBFRABI,
-    CONTRACTS[activeChain?.id].ES_BFR,
+    getContract(activeChain.id, 'ES_BFR'),
     tokenContract
   );
   const toastify = useToast();

@@ -8,7 +8,6 @@ import {
   useEarnWriteCalls,
   useGetApprovalAmount,
 } from '../Hooks/useEarnWriteCalls';
-import { CONTRACTS } from '../Config/Address';
 import { toFixed } from '@Utils/NumString';
 import { getPosInf, gt, gte } from '@Utils/NumString/stringArithmatics';
 import { useGlobal } from '@Contexts/Global';
@@ -16,6 +15,7 @@ import { useToast } from '@Contexts/Toast';
 import { Skeleton } from '@mui/material';
 import { EarnContext } from '..';
 import { IContract } from 'src/Interfaces/interfaces';
+import { getContract } from '../Config/Address';
 
 export const StakeModal = ({
   max,
@@ -106,7 +106,7 @@ const Stake = ({ tokenContract, max, head, unit, allowance }) => {
   const { approve } = useGetApprovalAmount(
     tokenContract?.abi,
     tokenContract?.contract,
-    CONTRACTS[activeChain.id]?.StakedBfrTracker
+    getContract(activeChain.id, 'StakedBfrTracker')
   );
   const [pageState] = useAtom(earnAtom);
   const toastify = useToast();

@@ -3,7 +3,6 @@ import VesterAbi from '../Config/Abis/Vester.json';
 import RewardTrackerAbi from '../Config/Abis/RewardTracker.json';
 import BlpAbi from '../Config/Abis/BufferBinaryIBFRPoolBinaryV2.json';
 import TokenAbi from '../Config/Abis/Token.json';
-import { CONTRACTS } from '../Config/Address';
 import useSWR from 'swr';
 import axios from 'axios';
 import { convertBNtoString } from '@Utils/useReadCall';
@@ -18,12 +17,12 @@ import {
 } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { eToWide, toFixed } from '@Utils/NumString';
-import { Chain, useContractReads } from 'wagmi';
-import { EarnContext } from '..';
-import { useContext } from 'react';
+import { useContractReads } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { roundToTwo } from '@Utils/roundOff';
+import { appConfig } from '@Views/TradePage/config';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const BASIS_POINTS_DIVISOR = '10000';
 export const SECONDS_PER_YEAR = '31536000';
@@ -73,12 +72,14 @@ export const fromWei = (value: string, decimals: number = 18) => {
 
 export const useGetTokenomics = () => {
   const { address: account } = useUserAccount();
-  const { activeChain, configContracts } = useActiveChain();
-  const contracts: (typeof CONTRACTS)[421613] = CONTRACTS[activeChain.id];
+  const { activeChain } = useActiveChain();
+  const contracts =
+    appConfig[activeChain.id as unknown as keyof typeof appConfig].EarnConfig;
+  const allDecimals = useDecimalsByAsset();
   const bfrPrice = useIbfrPrice();
   const arbPrice = '1';
-  const usd_decimals = configContracts.tokens.USDC.decimals;
-  const arb_decimals = configContracts.tokens.ARB?.decimals ?? 18;
+  const usd_decimals = allDecimals['USDC'];
+  const arb_decimals = allDecimals['ARB'];
 
   const getUserSpecificCalls = () => {
     if (!activeChain || !contracts) return [];
@@ -1321,7 +1322,7 @@ export const useGetTokenomics = () => {
       },
       vest: {
         ibfr: {
-          tokenContract: CONTRACTS[activeChain?.id].StakedBfrTracker,
+          tokenContract: contracts.StakedBfrTracker,
           staked_tokens: {
             value: fromWei(add(bnBfrInFeeBfr, bonusBfrInFeeBfr)),
             tooltip: [
@@ -1353,7 +1354,7 @@ export const useGetTokenomics = () => {
           ),
         },
         arbblp: {
-          tokenContract: CONTRACTS[activeChain?.id].StakedBlpTracker2,
+          tokenContract: contracts.StakedBlpTracker2,
           staked_tokens: {
             value: fromWei(userStakedArbBlp, arb_decimals),
             tooltip: [],
@@ -1386,7 +1387,7 @@ export const useGetTokenomics = () => {
           ),
         },
         blp: {
-          tokenContract: CONTRACTS[activeChain?.id].StakedBlpTracker,
+          tokenContract: contracts.StakedBlpTracker,
           staked_tokens: {
             value: fromWei(userStakedBlp, usd_decimals),
             tooltip: [],

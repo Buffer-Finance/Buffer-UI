@@ -1,5 +1,4 @@
 import { useContext, useMemo } from 'react';
-import { CONTRACTS } from '@Views/Earn/Config/Address';
 import { CONTRACTS as DASHBOARDCONTRACTS } from '@Views/Dashboard/config/Addresses';
 import { DashboardContext } from '../dashboardAtom';
 import bfrAbi from '@Views/Earn/Config/Abis/BFR.json';
@@ -33,6 +32,7 @@ import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useDashboardTableData } from './useDashboardTableData';
 import { roundToTwo } from '@Utils/roundOff';
+import { appConfig } from '@Views/TradePage/config';
 export const HolderContracts = [
   '0x01fdd6777d10dD72b8dD716AEE05cE67DD2b7D85',
   '0x58b0F2445DfA2808eCB209B7f96EfBc584736b7D',
@@ -229,8 +229,10 @@ export const useDashboardReadCalls = () => {
 const useDashboardCalls = () => {
   const { activeChain } = useContext(DashboardContext);
   const { configContracts } = useActiveChain();
-  const earnContracts = CONTRACTS[activeChain?.id];
-  const earnMainnetContracts = CONTRACTS[chain.arbitrum.id];
+  const config =
+    appConfig[activeChain?.id as unknown as keyof typeof appConfig];
+  const earnContracts = config.EarnConfig;
+  const earnMainnetContracts = appConfig['42161'].EarnConfig;
   const dashboardContracts: (typeof DASHBOARDCONTRACTS)[42161] =
     DASHBOARDCONTRACTS[activeChain?.id];
   const binaryContracts = configContracts;
