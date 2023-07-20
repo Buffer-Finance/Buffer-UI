@@ -3,6 +3,7 @@ import { MarketsTable } from './MarketsTable';
 
 export const Markets = () => {
   const { markets } = useMarketsData();
-  // console.log(markets, 'markets');
-  return <MarketsTable dashboardData={markets} />;
+  return (
+    <MarketsTable dashboardData={markets} activePage={0} loading={!markets} />
+  );
 };

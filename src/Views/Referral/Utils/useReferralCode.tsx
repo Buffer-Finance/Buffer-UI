@@ -50,6 +50,6 @@ export const useReferralCode = () => {
     data?.[0][0],
     verifiedLocalCode,
     data?.[0][0] || verifiedLocalCode || '',
-    !isCodeAvailable ? zeroAddress : isCodeAvailable[0],
+    !isCodeAvailable ? zeroAddress : isCodeAvailable[0][0],
   ];
 };

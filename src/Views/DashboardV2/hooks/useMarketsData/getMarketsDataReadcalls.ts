@@ -6,6 +6,7 @@ import { marketType } from '@Views/TradePage/type';
 import { IBaseSettlementFees } from '@Views/TradePage/Hooks/useSettlementFee';
 import { appConfig } from '@Views/TradePage/config';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
+import { getCallId } from '@Utils/Contract/multiContract';
 
 export const getMarketsDataReadcalls = (
   config: marketType[] | null,
@@ -30,16 +31,19 @@ export const getMarketsDataReadcalls = (
               address: pool.optionContract,
               abi: OptionContractABI,
               name: 'getMaxTradeSize',
+              id: getCallId(pool.optionContract, 'getMaxTradeSize'),
             },
             {
               address: pool.optionContract,
               abi: OptionContractABI,
               name: 'getMaxOI',
+              id: getCallId(pool.optionContract, 'getMaxOI'),
             },
             {
               address: pool.optionContract,
               abi: OptionContractABI,
               name: 'totalMarketOI',
+              id: getCallId(pool.optionContract, 'totalMarketOI'),
             },
           ];
           if (address && baseSettlementFee) {
@@ -52,6 +56,13 @@ export const getMarketsDataReadcalls = (
                 address,
                 baseSettlementFee?.toString() ?? '1500',
               ],
+              id: getCallId(
+                pool.optionContract,
+                'getSettlementFeePercentage',
+                referralData[3],
+                address,
+                baseSettlementFee?.toString() ?? '1500'
+              ),
             });
           }
           return calls;
@@ -64,6 +75,11 @@ export const getMarketsDataReadcalls = (
     abi: CreationWindowABI,
     name: 'isInCreationWindow',
     params: [timeToMins('00:05')],
+    id: getCallId(
+      configData.creation_window,
+      'isInCreationWindow',
+      timeToMins('00:05')
+    ),
   });
 
   return [...optionCalls!];

@@ -8,10 +8,16 @@ export const setReadCallsAtom = atom(
   null,
 
   (get, set, update: { readcalls: any[]; isCleanup: boolean }) => {
-    const { readcalls, isCleanup } = update;
-    const readCallsLength = readcalls.length;
+    const { readcalls: updateCalls, isCleanup } = update;
+    const readCallsLength = updateCalls.length;
     const prvValue = get(readCallsAtom);
     const prvValueLength = prvValue?.length || 0;
+    const readcalls = updateCalls.filter((call) => {
+      if (prvValue) {
+        return !prvValue.find((item) => item.id === call.id);
+      }
+      return true;
+    });
 
     //find the index of the first readcall in the prvValue array
     let startIndex = 0;
@@ -24,7 +30,7 @@ export const setReadCallsAtom = atom(
       }
     }
 
-    if (!isCleanup) {
+    if (!isCleanup && readcalls.length > 0) {
       if (prvValue === null) {
         set(readCallsAtom, readcalls);
       } else {
