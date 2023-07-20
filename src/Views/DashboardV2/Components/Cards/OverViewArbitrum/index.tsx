@@ -19,7 +19,7 @@ export const OverviewArbitrum = () => {
   const { overView: data } = useArbitrumOverview();
   const { openInterestByPool } = useOpenInterest();
   const poolsByAsset = usePoolByAsset();
-  // console.log(data);
+  console.log(data, 'data');
 
   const { poolDisplayKeyMapping, poolDisplayNameMapping } =
     usePoolDisplayNames();
@@ -48,9 +48,6 @@ export const OverviewArbitrum = () => {
             'Average Daily Volume',
             'Average Trade size',
             'Total Trades',
-            // 'Open Interest (USDC)',
-            // 'Open Interest (ARB)',
-            // 'Open Interest (USDC-POL)',
             [...openInterestKeys],
             'Total Traders',
           ].flat(1)}
