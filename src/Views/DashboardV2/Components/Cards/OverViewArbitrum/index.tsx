@@ -1,7 +1,6 @@
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useArbitrumOverview } from '@Views/DashboardV2/hooks/useArbitrumOverview';
 import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
-import { toalTokenXstats } from '@Views/DashboardV2/types';
 import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
@@ -13,14 +12,23 @@ import AverageTradeSize from './AverageTradeSize';
 import AverageVolume from './AverageVolume';
 import LastDayFeesVolume from './LastDayFeesVolume';
 import TotalFeesVolume from './TotalFeesVolume';
+import { useOpenInterest } from '@Views/DashboardV2/hooks/useOpenInterest';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 
 export const OverviewArbitrum = () => {
   const { overView: data } = useArbitrumOverview();
+
   // console.log(data);
 
   const { poolDisplayKeyMapping } = usePoolDisplayNames();
   const keys = useMemo(() => {
     return Object.values(poolDisplayKeyMapping);
+  }, [poolDisplayKeyMapping]);
+
+  const openInterestKeys = useMemo(() => {
+    return Object.values(poolDisplayKeyMapping).map(
+      (key) => `Open Interest (${key})`
+    );
   }, [poolDisplayKeyMapping]);
 
   if (!data)
@@ -38,29 +46,49 @@ export const OverviewArbitrum = () => {
             'Average Daily Volume',
             'Average Trade size',
             'Total Trades',
-            'Open Interest (USDC)',
-            'Open Interest (ARB)',
-            'Open Interest (USDC-POL)',
+            // 'Open Interest (USDC)',
+            // 'Open Interest (ARB)',
+            // 'Open Interest (USDC-POL)',
+            [...openInterestKeys],
             'Total Traders',
-          ]}
+          ].flat(1)}
           values={[
             <TotalFeesVolume data={data.totalStats} keys={keys} />,
             <LastDayFeesVolume data={data.total24hrsStats} keys={keys} />,
             <AverageVolume data={data.totalStats} keys={keys} />,
             <AverageTradeSize data={data.totalStats} keys={keys} />,
             <TotalTrades data={data.totalStats} keys={keys} />,
+            <OpenInterestEachPool />,
 
-            <div className={wrapperClasses}>
+            <div className={wrapperClasses}>{data.totalTraders}</div>,
+          ]}
+        />
+      }
+    />
+  );
+};
+
+const OpenInterestEachPool = () => {
+  const { openInterestByPool } = useOpenInterest();
+  const poolsByAsset = usePoolByAsset();
+  const { poolDisplayKeyMapping } = usePoolDisplayNames();
+
+  return (
+    <div>
+      {Object.keys(poolDisplayKeyMapping).map((key) => (
+        <div className={wrapperClasses} key={key}>
+          <Display
+            data={openInterestByPool?.[poolsByAsset[key]?.poolAddress]}
+            precision={2}
+            unit={key}
+            className="!w-fit"
+          />
+        </div>
+      ))}
+
+      {/* <div className={wrapperClasses}>
               <Display
-                data={(data.USDCopenInterest as toalTokenXstats)?.openInterest}
-                precision={2}
-                unit="USDC"
-                className="!w-fit"
-              />
-            </div>,
-            <div className={wrapperClasses}>
-              <Display
-                data={(data.ARBopenInterest as toalTokenXstats)?.openInterest}
+                data={openInterestByPool?.[poolsByAsset['ARB']?.poolAddress]}
                 precision={2}
                 unit="ARB"
                 className="!w-fit"
@@ -69,17 +97,13 @@ export const OverviewArbitrum = () => {
             <div className={wrapperClasses}>
               <Display
                 data={
-                  (data.USDC_POLopenInterest as toalTokenXstats)?.openInterest
+                  openInterestByPool?.[poolsByAsset['USDC-POL']?.poolAddress]
                 }
                 precision={2}
                 unit="USDC"
                 className="!w-fit"
               />
-            </div>,
-            <div className={wrapperClasses}>{data.totalTraders}</div>,
-          ]}
-        />
-      }
-    />
+            </div>, */}
+    </div>
   );
 };

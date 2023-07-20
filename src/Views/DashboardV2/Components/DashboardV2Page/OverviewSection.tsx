@@ -18,7 +18,7 @@ export const OverViewSection = () => {
       Heading={
         <div className="flex items-center">
           <div className={topStyles}>Dashboard</div>
-          <ChainSwitchDropdown baseUrl="/dashboard" />{' '}
+          <ChainSwitchDropdown baseUrl="/dashboard" />
         </div>
       }
       subHeading={<div className={descStyles}>{subHeading}</div>}

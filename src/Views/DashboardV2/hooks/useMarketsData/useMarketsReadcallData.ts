@@ -8,7 +8,6 @@ import { useEffect, useMemo } from 'react';
 import { readResponseAtom, setReadCallsAtom } from '@Views/DashboardV2/atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { getPayout } from '@Views/TradePage/utils';
 import { appConfig } from '@Views/TradePage/config';
 
 export const useMarketsReadCallData = () => {
