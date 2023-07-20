@@ -15,7 +15,9 @@ const DashboardV2Page = () => {
       >
         <TokensSection />
       </ChainNotSupported>
-      <MarketsSection />
+      <ChainNotSupported hide supportedChainIds={[arbitrumGoerli.id]}>
+        <MarketsSection />
+      </ChainNotSupported>
     </DashboardV2Styles>
   );
 };
