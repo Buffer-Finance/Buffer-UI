@@ -3,7 +3,7 @@ import { OtherChainBLP } from './Cards/OtherChainBLP';
 
 export const OtherChainBLPcard = () => {
   return (
-    <ExceptArbitrum>
+    <ExceptArbitrum hide>
       <OtherChainBLP />
     </ExceptArbitrum>
   );
