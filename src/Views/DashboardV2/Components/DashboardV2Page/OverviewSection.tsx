@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getStatsStartingDate } from '@Views/DashboardV2/utils/getStatsStartingDate';
 import { OverView } from '../Overview';
+import { OtherChainBLPcard } from '../OtherChainBLPcard';
 
 export const OverViewSection = () => {
   const { activeChain } = useActiveChain();
@@ -21,7 +22,7 @@ export const OverViewSection = () => {
         </div>
       }
       subHeading={<div className={descStyles}>{subHeading}</div>}
-      Cards={[<OverView />]}
+      Cards={[<OverView />, <OtherChainBLPcard />]}
     />
   );
 };

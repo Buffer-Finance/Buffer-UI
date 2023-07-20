@@ -41,3 +41,11 @@ export type otherChainsOverviewType = {
   trades: number;
   // openInterest: number;
 };
+
+export type otherBlpType = {
+  price: string | null;
+  supply: string | null;
+  total_usdc: string | null;
+  usdc_pol: string | null;
+  usdc_total: string | null;
+} | null;
