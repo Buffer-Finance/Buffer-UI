@@ -23,43 +23,41 @@ export const Payout: React.FC<{
   token0: string;
   token1: string;
 }> = ({ token0, token1 }) => {
-  const { payout } = useSelectedAssetPayout({ token0, token1 });
+  const { calculatePayout } = useSelectedAssetPayout();
+  const { payout } = calculatePayout(joinStrings(token0, token1, ''));
   if (payout === undefined || payout === null) {
     return <div>fetching...</div>;
   }
   return <div>{payout}%</div>;
 };
 
-export const useSelectedAssetPayout = ({
-  token0,
-  token1,
-}: {
-  token0: string | undefined;
-  token1: string | undefined;
-}) => {
+export const useSelectedAssetPayout = () => {
   const readcallData = useBuyTradeData();
+
   const { switchPool } = useSwitchPool();
   const { data: baseSettlementFees } = useSettlementFee();
 
-  let payout = null;
+  const calculatePayout = (assetName: string | undefined) => {
+    if (assetName === undefined) return { payout: null };
+    let payout = null;
 
-  if (
-    readcallData &&
-    !isObjectEmpty(readcallData.settlementFees) &&
-    switchPool
-  ) {
-    payout = readcallData.settlementFees[switchPool?.optionContract];
-  }
-  if (payout === null) {
-    if (token0 !== undefined && token1 !== undefined) {
-      const baseSettlementFee =
-        baseSettlementFees?.[joinStrings(token0, token1, '')]?.settlement_fee;
+    if (
+      readcallData &&
+      !isObjectEmpty(readcallData.settlementFees) &&
+      switchPool
+    ) {
+      payout = readcallData.settlementFees[switchPool?.optionContract];
+    }
+    if (payout === null) {
+      const baseSettlementFee = baseSettlementFees?.[assetName]?.settlement_fee;
 
       if (baseSettlementFee) {
         payout = getPayout(baseSettlementFee.toString());
       }
     }
-  }
 
-  return { payout };
+    return { payout };
+  };
+
+  return { calculatePayout };
 };

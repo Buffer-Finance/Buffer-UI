@@ -5,7 +5,7 @@ export interface IBFR {
   supply: string;
   total_staked: string;
   market_cap: string;
-  circulatingSupply?: string;
+  circulatingSupply?: string | null;
   liquidity_pools_token: string;
 }
 

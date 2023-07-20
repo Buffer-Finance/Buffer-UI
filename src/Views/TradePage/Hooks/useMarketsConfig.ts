@@ -56,6 +56,8 @@ function createPoolObject(market: responseObj) {
     configContract: getAddress(market.configContract.address),
     optionContract: getAddress(market.address),
     openInterest: market.openInterest,
+    openUp: market.openUp,
+    openDown: market.openDown,
     platformFee: market.configContract.platformFee,
     earlyclose: {
       enable: market.configContract.isEarlyCloseEnabled,

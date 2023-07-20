@@ -19,7 +19,6 @@ import {
 } from '@Views/BinaryOptions';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Earn } from '@Views/Earn';
-import { Dashboard } from '@Views/Dashboard';
 import { ReferralPage } from '@Views/Referral';
 import { atomWithStorage } from 'jotai/utils';
 
@@ -32,7 +31,6 @@ import { ProfilePage } from '@Views/Profile';
 import { useEffect } from 'react';
 import { useToast } from '@Contexts/Toast';
 import { AllTradesPage } from '@Views/AllTrades';
-import { MobileBottomTabs } from '@Views/Common/Navbar/MobileBottomTabs';
 import { History } from '@Views/BinaryOptions/History';
 import TestComponent from './TestComponent';
 import { urlSettings } from './Config/wagmiClient';
@@ -45,13 +43,13 @@ import { UsdcTransfer } from '@Hooks/UsdcTransfer';
 import { AddMarket } from './AddMarket';
 import { CreatePair } from './Admin/CreatePair';
 import { NoLoss } from '@Views/NoLoss/NoLoss';
-import { V3AppTradePage } from '@Views/V3App/V3TradePage';
 import { TradePage } from '@Views/TradePage';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { PasswordModal } from '@Views/Common/PasswordModal';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 import { ErrorPage } from './ErrorPage';
+import { DashboardV2 } from '@Views/DashboardV2';
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 
@@ -110,12 +108,11 @@ const AppRoutes = () => {
         <Route path="/admin" element={<TradingConfig />}></Route>
         <Route path="/admin/create-pair" element={<CreatePair />}></Route>
         <Route path="/addMarket" element={<AddMarket />} />
-        <Route path="/addMarket" element={<AddMarket />} />
         <Route path="/test/:market" element={<TradePage />} />
-        <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/ref/:code" element={<div>Helo</div>} />
+        {/* <Route path="/referral" element={<ReferralPage />} /> */}
+        {/* <Route path="/ref/:code" element={<div>Helo</div>} /> */}
         <Route path="/history" element={<History />} />
-        <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
+        {/* <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
           </Route>
@@ -130,16 +127,16 @@ const AppRoutes = () => {
               </LeaderBoard>
             }
           />
-        </Route>
+        </Route> */}
         <Route path="/earn" element={<Earn />} />
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route path=":chain" element={<Dashboard />} />
+        <Route path="/dashboard" element={<DashboardV2 />}>
+          <Route path=":chain" element={<DashboardV2 />} />
         </Route>
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
-        <Route path="/trades/merged" element={<MergedPage />} />
+        {/* <Route path="/trades/merged" element={<MergedPage />} /> */}
         <Route path="/trades" element={<AllTradesPage />} />
         <Route path="/binary/:market" element={<TradePage />} />
         <Route path="/no-loss/:market" element={<NoLoss />} />

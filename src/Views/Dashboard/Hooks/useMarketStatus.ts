@@ -29,68 +29,68 @@ export function useMarketStatus() {
 
   const { allAssetContracts } = useAllContracts();
   const assetCalls = useMemo(
-    () =>
-      configContracts.pairs
-        .map((pair) =>
-          pair.pools
-            .map((pool) => [
-              {
-                address: configContracts.tokens[pool.token].meta,
-                abi: MaxTradeABI,
-                name: 'calculateMaxAmount',
-                params: [
-                  pool.options_contracts.current,
-                  highestTierNFT?.tokenId || 0,
-                  referralData[2],
-                  account || '0x0000000000000000000000000000000000000000',
-                ],
-              },
-              {
-                address: pool.options_contracts.current,
-                abi: BinaryOptionsABI,
-                name: 'isInCreationWindow',
-                params: [500],
-              },
-              {
-                address: configContracts.tokens[pool.token].meta,
-                abi: MaxTradeABI,
-                name: 'getPayout',
-                params: [
-                  pool.options_contracts.current,
-                  referralData[2],
-                  // 'BJP',
-                  account || '0x0000000000000000000000000000000000000000',
-                  highestTierNFT?.tokenId || 0,
-                  true,
-                ],
-              },
-              {
-                address: configContracts.tokens[pool.token].meta,
-                abi: MaxTradeABI,
-                name: 'getPoolBasedMaxAmount',
-                params: [
-                  pool.options_contracts.current,
-                  0,
-                  '',
-                  '0x0000000000000000000000000000000000000000',
-                ],
-              },
-              // {
-              //   address: pool.options_contracts.config,
-              //   abi: ConfigABI,
-              //   name: 'assetUtilizationLimit',
-              //   params: [],
-              // },
-              // {
-              //   address: pool.options_contracts.current,
-              //   abi: BinaryOptionsABI,
-              //   name: 'totalLockedAmount',
-              //   params: [],
-              // },
-            ])
-            .flat(1)
-        )
-        .flat(1),
+    () => [],
+    // configContracts.pairs
+    //   .map((pair) =>
+    //     pair.pools
+    //       .map((pool) => [
+    //         {
+    //           address: configContracts.tokens[pool.token].meta,
+    //           abi: MaxTradeABI,
+    //           name: 'calculateMaxAmount',
+    //           params: [
+    //             pool.options_contracts.current,
+    //             highestTierNFT?.tokenId || 0,
+    //             referralData[2],
+    //             account || '0x0000000000000000000000000000000000000000',
+    //           ],
+    //         },
+    //         {
+    //           address: pool.options_contracts.current,
+    //           abi: BinaryOptionsABI,
+    //           name: 'isInCreationWindow',
+    //           params: [500],
+    //         },
+    //         {
+    //           address: configContracts.tokens[pool.token].meta,
+    //           abi: MaxTradeABI,
+    //           name: 'getPayout',
+    //           params: [
+    //             pool.options_contracts.current,
+    //             referralData[2],
+    //             // 'BJP',
+    //             account || '0x0000000000000000000000000000000000000000',
+    //             highestTierNFT?.tokenId || 0,
+    //             true,
+    //           ],
+    //         },
+    //         {
+    //           address: configContracts.tokens[pool.token].meta,
+    //           abi: MaxTradeABI,
+    //           name: 'getPoolBasedMaxAmount',
+    //           params: [
+    //             pool.options_contracts.current,
+    //             0,
+    //             '',
+    //             '0x0000000000000000000000000000000000000000',
+    //           ],
+    //         },
+    //         // {
+    //         //   address: pool.options_contracts.config,
+    //         //   abi: ConfigABI,
+    //         //   name: 'assetUtilizationLimit',
+    //         //   params: [],
+    //         // },
+    //         // {
+    //         //   address: pool.options_contracts.current,
+    //         //   abi: BinaryOptionsABI,
+    //         //   name: 'totalLockedAmount',
+    //         //   params: [],
+    //         // },
+    //       ])
+    //       .flat(1)
+    //   )
+    //   .flat(1),
 
     [account, referralData, highestTierNFT]
   );

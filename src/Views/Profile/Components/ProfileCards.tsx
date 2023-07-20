@@ -41,8 +41,8 @@ const Trading = ({
   heading: string;
 }) => {
   const { address: account } = useUserAccount();
-  const usdcDecimals = useDecimalsByAsset('USDC');
-
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
 
@@ -99,8 +99,8 @@ const Referral = ({
   heading: string;
 }) => {
   const { address: account } = useUserAccount();
-  const usdcDecimals = useDecimalsByAsset('USDC');
-
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
   if (data === undefined)

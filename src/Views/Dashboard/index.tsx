@@ -7,7 +7,7 @@ import {
   TokensBFR,
   TokensBLP,
 } from './Cards';
-import { Markets } from './Components/Markets';
+// import { Markets } from './Components/Markets';
 import { DashboardContextProvider } from './dashboardAtom';
 import { useDashboardReadCalls } from './Hooks/useDashBoardReadCalls';
 import styled from '@emotion/styled';
@@ -30,6 +30,7 @@ import {
 } from './Hooks/useArbitrumOverview';
 import { atom, useAtom } from 'jotai';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
+import { Markets } from './Components/Markets';
 
 const DashboardStyles = styled.div`
   width: min(1300px, 100%);
@@ -87,7 +88,6 @@ const DashboardPage = () => {
         subHeading={
           <div className={descStyles}>
             Discover new Pairs available on Buffer
-            {/* (Stats since 30th Jan, 2023) */}
           </div>
         }
         other={<Markets />}
