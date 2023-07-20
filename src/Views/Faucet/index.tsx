@@ -11,20 +11,20 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { usePoolDisplayNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 
 const IbfrFaucet: React.FC = () => {
   useEffect(() => {
     document.title = 'Buffer | Faucet';
   }, []);
   const { activeChain } = useActiveChain();
-  // const tokenChains = {
-  //   '421613': ['USDC', 'ARB', 'BFR'],
-  //   '80001': ['USDC'],
-  // };
+
   const { poolDisplayNameMapping } = usePoolDisplayNames();
   const tokenChains = useMemo(() => {
     return Object.keys(poolDisplayNameMapping).filter(
-      (token) => !token.includes('-POL')
+      (token) => token === 'USDC'
+      //TODO - to get all assets replace the  line above with the commented line below
+      // !token.includes('-POL')
     );
   }, [poolDisplayNameMapping]);
 
@@ -54,7 +54,7 @@ const IbfrFaucet: React.FC = () => {
         <ConnectionRequired>
           <div className="flex items-center justify-center gap-3 flex-wrap">
             {tokenChains.map((token: string) => (
-              <ClaimButton token={token} />
+              <ClaimButton token={token} key={token} />
             ))}
           </div>{' '}
         </ConnectionRequired>
@@ -67,8 +67,8 @@ const IbfrFaucet: React.FC = () => {
       <Background>
         <div className="wrapper">
           {activeChain && content ? (
-            content.map((s) => (
-              <div className="faucet-card bg-1">
+            content.map((s, i) => (
+              <div className="faucet-card bg-1" key={i}>
                 <div className="card-head">{s.top}</div>
                 {s.middle && <div className="card-middle">{s.middle}</div>}
                 <div className="card-action">{s.bottom}</div>
@@ -89,16 +89,10 @@ const IbfrFaucet: React.FC = () => {
 const ClaimButton = ({ token }: { token: string }) => {
   const { state } = useGlobal();
   const [btnLoading, setBtnLoading] = useState(0);
-  const { configContracts } = useActiveChain();
-  console.log(`index-token: `, token);
-  console.log(
-    `index-configContracts.tokens[token]: `,
-    configContracts.tokens[token]
-  );
-  const { writeCall } = useWriteCall(
-    configContracts.tokens[token as keyof typeof configContracts.tokens].faucet,
-    FaucetABI
-  );
+  const poolsByAsset = usePoolByAsset();
+  const pool = poolsByAsset[token];
+
+  const { writeCall } = useWriteCall(pool.faucet, FaucetABI);
   const toastify = useToast();
 
   const claim = () => {
@@ -112,7 +106,7 @@ const ClaimButton = ({ token }: { token: string }) => {
       setBtnLoading(0);
     }
     const overRides = {
-      value: ethers.utils.parseEther('0.01'),
+      value: ethers.utils.parseEther('0.001'),
     };
     const methodName = 'claim';
     setBtnLoading(1);
@@ -177,7 +171,6 @@ const faucetClaimingSteps = {
 
 const TestnetLinks = () => {
   const { activeChain } = useActiveChain();
-  console.log(`activeChain: `, activeChain);
   return (
     <div>
       {faucetClaimingSteps[activeChain.id].faucet.map((s, idx) => {
@@ -195,7 +188,7 @@ const TestnetLinks = () => {
                 {s.options && (
                   <div className="ml-7">
                     {s.options.map((option, index) => (
-                      <div>
+                      <div key={option.url}>
                         {index + 1 + '.'}
                         <a href={option.url} target="_blank">
                           {option.step}
