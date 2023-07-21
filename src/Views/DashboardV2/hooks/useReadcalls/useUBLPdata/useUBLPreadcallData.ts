@@ -19,15 +19,8 @@ export const useUBLPreadcallData = () => {
   useEffect(() => {
     setCalls({
       readcalls: calls,
-      isCleanup: false,
+      activeChainId: activeChain.id,
     });
-
-    return () => {
-      setCalls({
-        readcalls: calls,
-        isCleanup: true,
-      });
-    };
   }, [calls.length, activeChain]);
 
   if (response !== undefined) {

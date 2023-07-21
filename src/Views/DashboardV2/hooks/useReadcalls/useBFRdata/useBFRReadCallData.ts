@@ -20,11 +20,7 @@ export const useBFRReadCallData = () => {
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
 
   useEffect(() => {
-    setCalls({ readcalls, isCleanup: false });
-
-    return () => {
-      setCalls({ readcalls, isCleanup: true });
-    };
+    setCalls({ readcalls, activeChainId: activeChain.id });
   }, [readcalls.length, activeChain]);
 
   if (response !== null && response !== undefined) {

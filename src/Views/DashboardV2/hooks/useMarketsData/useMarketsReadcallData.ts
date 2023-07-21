@@ -32,11 +32,7 @@ export const useMarketsReadCallData = () => {
   );
 
   useEffect(() => {
-    console.log(calls, 'calls');
-    setCalls({ readcalls: calls, isCleanup: false });
-    return () => {
-      setCalls({ readcalls: calls, isCleanup: true });
-    };
+    setCalls({ readcalls: calls, activeChainId: activeChain.id });
   }, [calls.length, activeChain, address]);
 
   const response = useMemo(() => {

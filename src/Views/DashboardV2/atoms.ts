@@ -7,10 +7,13 @@ export const readResponseAtom = atom<null | any>(null);
 export const setReadCallsAtom = atom(
   null,
 
-  (get, set, update: { readcalls: any[]; isCleanup: boolean }) => {
-    const { readcalls: updateCalls, isCleanup } = update;
+  (get, set, update: { readcalls: any[]; activeChainId: number }) => {
+    const { readcalls: updateCalls, activeChainId } = update;
     const readCallsLength = updateCalls.length;
-    const prvValue = get(readCallsAtom);
+    const oldCalls = get(readCallsAtom);
+    const prvValue = oldCalls?.filter((item) =>
+      item.id.includes(activeChainId.toString())
+    );
     const prvValueLength = prvValue?.length || 0;
     const readcalls = updateCalls.filter((call) => {
       if (prvValue) {
@@ -21,21 +24,24 @@ export const setReadCallsAtom = atom(
 
     //find the index of the first readcall in the prvValue array
     let startIndex = 0;
-    if (prvValue !== null && prvValue !== undefined) {
+    if (
+      prvValue !== null &&
+      prvValue !== undefined &&
+      prvValue.length > 0 &&
+      readcalls.length > 0
+    ) {
       startIndex = prvValue.findIndex((item) => {
-        return item[0] === readcalls[0];
+        return item.id === readcalls[0].id;
       });
       if (prvValueLength > 0 && startIndex !== -1) {
         prvValue.splice(startIndex, readCallsLength);
       }
     }
 
-    if (!isCleanup && readcalls.length > 0) {
-      if (prvValue === null) {
-        set(readCallsAtom, readcalls);
-      } else {
-        set(readCallsAtom, [...prvValue, ...readcalls]);
-      }
+    if (prvValue === undefined) {
+      set(readCallsAtom, readcalls);
+    } else {
+      set(readCallsAtom, [...prvValue, ...readcalls]);
     }
   }
 );

@@ -19,7 +19,7 @@ export const OverviewArbitrum = () => {
   const { overView: data } = useArbitrumOverview();
   const { openInterestByPool } = useOpenInterest();
   const poolsByAsset = usePoolByAsset();
-  console.log(data, 'data');
+  // console.log(data, 'data');
 
   const { poolDisplayKeyMapping, poolDisplayNameMapping } =
     usePoolDisplayNames();

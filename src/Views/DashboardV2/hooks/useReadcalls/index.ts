@@ -1,9 +1,9 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
+// import { useActiveChain } from '@Hooks/useActiveChain';
 import { useCall2Data } from '@Utils/useReadCall';
 import {
   readCallsAtom,
   readResponseAtom,
-  setReadCallsAtom,
+  // setReadCallsAtom,
 } from '@Views/DashboardV2/atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
@@ -11,15 +11,8 @@ import { useEffect } from 'react';
 export const useReadcalls = () => {
   const readcalls = useAtomValue(readCallsAtom);
   const setResponse = useSetAtom(readResponseAtom);
-  const setCalls = useSetAtom(setReadCallsAtom);
-  const { activeChain } = useActiveChain();
-
-  useEffect(() => {
-    setCalls({ readcalls: [], isCleanup: true });
-    return () => {
-      setCalls({ readcalls: [], isCleanup: true });
-    };
-  }, [activeChain]);
+  // const setCalls = useSetAtom(setReadCallsAtom);
+  // const { activeChain } = useActiveChain();
 
   useEffect(() => {
     console.log('callsUseReadCallData', readcalls);

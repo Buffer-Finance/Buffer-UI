@@ -31,11 +31,11 @@ export const TableAligner: React.FC<ITableAligner> = ({
         <TableHead></TableHead>
         <TableBody>
           {keysName.map((row, rowIdx) => {
-            console.log(`getClassName: `, getClassName);
+            // console.log(`getClassName: `, getClassName);
             let classes = '';
             if (getClassName) {
               classes = getClassName(row, rowIdx);
-              console.log(`classes:ns `, classes);
+              // console.log(`classes:ns `, classes);
             }
             return (
               <TableRow key={rowIdx} className={classes}>

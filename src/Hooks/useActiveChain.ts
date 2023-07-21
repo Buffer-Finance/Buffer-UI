@@ -17,7 +17,7 @@ export const useActiveChain = () => {
     let activeChain: Chain | undefined = undefined;
     let isWrongChain = false;
     if (chainName !== undefined) {
-      console.log(chainName, 'chainName');
+      // console.log(chainName, 'chainName');
       activeChain = chains.find((chain) =>
         chain.name.toUpperCase().includes(chainName.toUpperCase())
       );

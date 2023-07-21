@@ -15,10 +15,7 @@ export const useReadCallData = () => {
   const response = useAtomValue(readResponseAtom);
 
   useEffect(() => {
-    setCalls({ readcalls: calls, isCleanup: false });
-    return () => {
-      setCalls({ readcalls: calls, isCleanup: true });
-    };
+    setCalls({ readcalls: calls, activeChainId: activeChain.id });
   }, [activeChain, calls.length]);
 
   if (response) {
