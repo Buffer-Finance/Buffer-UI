@@ -19,6 +19,7 @@ import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { ActiveTrades } from './ActiveTrades';
 import { useSelectedAssetPayout } from '../MarketChart/Payout';
+import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -38,6 +39,8 @@ export const BuyTrade: React.FC = () => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
   const { activeMarket } = useActiveMarket();
+  // triggering rerender
+  const _setttlementFee = useSettlementFee();
   const amount = useAtomValue(tradeSizeAtom);
   const marketPrice = useAtomValue(priceAtom);
   const { calculatePayout } = useSelectedAssetPayout();
@@ -57,6 +60,7 @@ export const BuyTrade: React.FC = () => {
       />
     );
   }
+
   const { payout: totalPayout } = calculatePayout(
     joinStrings(activeMarket.token0, activeMarket.token1, '')
   );
