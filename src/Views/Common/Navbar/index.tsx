@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { BufferLogoComponent } from './BufferLogo';
-import { BlueBtn } from '../V2-Button';
 import { getTabs } from 'src/Config/getTabs';
 import { TabsDropdown } from './TabsDropDown';
 import { Tab } from './Tab';
@@ -9,27 +8,16 @@ import { social } from './socialLinks';
 import { useGlobal } from '@Contexts/Global';
 import MenuLogo from '@Assets/Elements/MenuLogo';
 import CloseLogo from '@SVG/Elements/Closelogo';
-import NFTtier from '../NFTtier';
-import LeaderboardTropy from '@Public/LeaderBoard/Trophy';
-import { Link } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
-import { useAccount } from 'wagmi';
-import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { urlSettings } from 'src/Config/wagmiClient';
 import { isTestnet } from 'config';
-import { ClaimLBFRBtn } from '@Views/Profile/LBFR';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { ArbitrumOnly } from '../ChainNotSupported';
-import { SettingsIcon } from './SettingsIcon';
 import { SettingsDD } from './SettingsDD';
 
 interface INavbar {}
 
 export const Navbar: React.FC<INavbar> = () => {
   const { state, dispatch } = useGlobal();
-  const { address } = useAccount();
-  const { address: account, viewOnlyMode } = useUserAccount();
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   const tabs = useMemo(
     () => getTabs(activeMarketFromStorage),

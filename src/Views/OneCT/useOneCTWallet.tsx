@@ -1,23 +1,16 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
-import { activeAssetStateAtom } from '@Views/BinaryOptions';
 import { ethers } from 'ethers';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { atom, useAtom } from 'jotai';
+import { useCallback, useEffect, useMemo } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useAccount, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
 import { signTypedData } from '@wagmi/core';
-import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
 import { appConfig } from '@Views/TradePage/config';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import useSWR from 'swr';
-import { useCall2Data } from '@Utils/useReadCall';
-import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
 import useAccountMapping from './useAccountMapping';
-import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { WaitToast } from '@Views/TradePage/utils';
 import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
+import { getChains } from 'src/Config/wagmiClient';
 
 /*
  * Nonce is zero initially.
@@ -80,6 +73,13 @@ export const is1CTEnabled = (
 };
 export const disableLoadingAtom = atom<boolean>(false);
 export const createLoadingAtom = atom<boolean>(false);
+export const uesOneCtActiveChain = () => {
+  //react-couter cant access in the navbar. Use this hook for accessing activeChain in navbar
+  const { chain } = useNetwork();
+  const chains = getChains();
+
+  return { activeChain: chain ? chain : chains[0] };
+};
 
 const useOneCTWallet = () => {
   const { address } = useAccount();
@@ -89,7 +89,7 @@ const useOneCTWallet = () => {
   const [disabelLoading, setDisabelLoading] = useAtom(disableLoadingAtom);
   const [createLoading, setCreateLoading] = useAtom(createLoadingAtom);
 
-  const { activeChain } = useActiveChain();
+  const { activeChain } = uesOneCtActiveChain();
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const provider = useProvider({ chainId: activeChain.id });

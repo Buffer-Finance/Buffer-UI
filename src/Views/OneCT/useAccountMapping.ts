@@ -1,15 +1,12 @@
-import useSWR from 'swr';
-import { useAccount } from 'wagmi';
 import { appConfig } from '@Views/TradePage/config';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import RouterABI from '@Views/TradePage/ABIs/RouterABI.json';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useCall2Data } from '@Utils/useReadCall';
 import { getCallId } from '@Utils/Contract/multiContract';
 import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
+import { uesOneCtActiveChain } from './useOneCTWallet';
 
 const useAccountMapping = () => {
-  const { activeChain } = useActiveChain();
+  const { activeChain } = uesOneCtActiveChain();
   const { address } = useUserAccount();
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
