@@ -89,7 +89,7 @@ export const multicallLinked = async (
     });
     return resultMap;
   } catch (err) {
-    console.log(err, calls, swrKey, 'multicall err');
+    console.log(err, calls, swrKey, 'multicallLinked err');
     return null;
   }
 };
