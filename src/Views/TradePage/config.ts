@@ -3,15 +3,15 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.25-account-registrar/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.26-account-registrar/api',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
-    router: '0xF3c2C01238831258b29367C84B6521aca37270BE',
+    router: '0xE35B7029086502A10eE8f19fDb64685Ed1EbBfE5',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b',
     poolsInfo: {
-      '0xe53895Ef950C2c9A08Ad27522a777Eb9FFD36303': {
+      '0x8cc31BFc49Fe757140d1b94c5EfD010Dc53D632e': {
         tokenAddress: '0x50E345c95a3c1E5085AE886FF4AF05Efa2403c90',
         faucet: '0x8097Fecbb9081191A81DE5295d1D68344EA783fF',
         decimals: 6,
