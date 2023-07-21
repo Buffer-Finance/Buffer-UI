@@ -18,6 +18,7 @@ import useAccountMapping from './useAccountMapping';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { WaitToast } from '@Views/TradePage/utils';
 import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
+import { useUserOneCTData } from './useOneCTWalletV2';
 
 /*
  * Nonce is zero initially.
@@ -85,7 +86,8 @@ const useOneCTWallet = () => {
   const { address } = useAccount();
   const { writeCall } = useIndependentWriteCall();
   const toastify = useToast();
-  const res = useAccountMapping();
+  // const res = useAccountMapping();
+  const res = useUserOneCTData();
   const [disabelLoading, setDisabelLoading] = useAtom(disableLoadingAtom);
   const [createLoading, setCreateLoading] = useAtom(createLoadingAtom);
 
@@ -94,24 +96,21 @@ const useOneCTWallet = () => {
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const provider = useProvider({ chainId: activeChain.id });
   const pkLocalStorageIdentifier = useMemo(() => {
-    return 'signer-account-pk:' + address + ',nonce' + res?.[1] + ':';
-  }, [address, res?.[1]]);
+    return 'signer-account-pk:' + address + ',nonce' + res?.nonce + ':';
+  }, [address, res?.nonce]);
   const oneCtPk = useMemo(() => {
     return secureLocalStorage.getItem(pkLocalStorageIdentifier);
   }, [pkLocalStorageIdentifier, createLoading]);
+
   const registeredOneCT = useMemo(() => {
-    const isEnabled =
-      res?.length && pkLocalStorageIdentifier
-        ? is1CTEnabled(
-            res[0],
-            secureLocalStorage.getItem(pkLocalStorageIdentifier) || '',
-            provider,
-            'deb-1ct-1'
-          )
-        : false;
-    return isEnabled;
-  }, [res, res?.[0], res?.[1], provider, oneCtPk]);
+    if (!res?.one_ct) return false;
+    return (
+      res.one_ct.toLowerCase() !== ethers.constants.AddressZero.toLowerCase()
+    );
+  }, [res, res?.one_ct, res?.nonce, provider, oneCtPk]);
+
   const { data: signer } = useSigner({ chainId: activeChain.id });
+
   const oneCTWallet = useMemo(() => {
     if (!oneCtPk) return null;
     return new ethers.Wallet(
@@ -129,7 +128,7 @@ const useOneCTWallet = () => {
   const generatePk = useCallback(async () => {
     setCreateLoading(true);
     try {
-      const nonce = res?.[1];
+      const nonce = res?.nonce;
       if (!nonce) return toastify(WaitToast());
       const signature = await signTypedData({
         types,
@@ -142,7 +141,7 @@ const useOneCTWallet = () => {
       const privateKey = ethers.utils.keccak256(signature).slice(2);
       secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
       setCreateLoading(false);
-      if (is1CTEnabled(res[0], privateKey, provider, 'one-ct-deb')) {
+      if (is1CTEnabled(res.one_ct, privateKey, provider, 'one-ct-deb')) {
         toastify({
           msg: 'You have already registered your 1CT Account. You can start trading now!',
           type: 'success',
@@ -153,7 +152,7 @@ const useOneCTWallet = () => {
       setCreateLoading(false);
       return '';
     }
-  }, [signer, res?.[0], provider]);
+  }, [signer, res?.one_ct, provider]);
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
   };
@@ -178,6 +177,7 @@ const useOneCTWallet = () => {
   };
   return {
     oneCtPk,
+    oneCtAddress: res?.one_ct,
     createLoading,
     generatePk,
     disabelLoading,
@@ -186,7 +186,7 @@ const useOneCTWallet = () => {
     oneCTWallet,
     deleteOneCTPk,
     disableOneCt,
-    accountMapping: res,
+    nonce: res?.nonce,
   };
 };
 

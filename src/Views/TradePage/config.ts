@@ -9,7 +9,7 @@ export const appConfig = {
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
     router: '0xE35B7029086502A10eE8f19fDb64685Ed1EbBfE5',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b',
+    signer_manager: '0x4F8ad31226ba412a5A7ccc1ea5DD321a73D3A8c0',
     poolsInfo: {
       '0x8cc31BFc49Fe757140d1b94c5EfD010Dc53D632e': {
         tokenAddress: '0x50E345c95a3c1E5085AE886FF4AF05Efa2403c90',

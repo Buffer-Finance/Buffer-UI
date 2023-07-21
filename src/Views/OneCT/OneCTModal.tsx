@@ -1,14 +1,20 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { ModalBase } from 'src/Modals/BaseModal';
-import { LightningIcon, isOneCTModalOpenAtom } from './OneCTButton';
-import { useEffect, useState } from 'react';
-import { is1CTEnabled, useOneCTWallet } from './useOneCTWallet';
+import { isOneCTModalOpenAtom } from './OneCTButton';
+import { useState } from 'react';
+import { useOneCTWallet } from './useOneCTWallet';
 import { CloseOutlined } from '@mui/icons-material';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
-import { activeAssetStateAtom } from '@Views/BinaryOptions';
-import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
 import { useToast } from '@Contexts/Toast';
+import { SVGProps } from 'react';
+import { useAccount, useProvider } from 'wagmi';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import NumberTooltip from '@Views/Common/Tooltips';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { appConfig } from '@Views/TradePage/config';
+import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
+
 const features = [
   {
     desc: 'Zero gas',
@@ -256,68 +262,117 @@ const features = [
 ];
 const desc = 'text-2';
 const OneCTModal: React.FC<any> = ({}) => {
+  const { address } = useAccount();
   const isModalOpen = useAtomValue(isOneCTModalOpenAtom);
   const setModal = useSetAtom(isOneCTModalOpenAtom);
   const [laoding, setLaoding] = useState(false);
   const { activeChain } = useActiveChain();
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
-  const { generatePk, registeredOneCT, registerOneCt, createLoading, oneCtPk } =
-    useOneCTWallet();
+  const {
+    generatePk,
+    oneCtAddress,
+    nonce,
+    registeredOneCT,
+    registerOneCt,
+    createLoading,
+    oneCtPk,
+  } = useOneCTWallet();
   const { writeCall } = useIndependentWriteCall();
   const buyTradeData = useBuyTradeData();
   const provider = useProvider({ chainId: activeChain.id });
   const toastify = useToast();
   const setOnboardingAnimation = useSetAtom(showOnboardingAnimationAtom);
-  const handleRegister = (privateKey?: string) => {
-    console.log(`OneCTModal-oneCtPk: `, oneCtPk);
-    if (privateKey || oneCtPk) {
-      const oneCTWallet = new ethers.Wallet(
-        privateKey || oneCtPk,
-        provider as ethers.providers.StaticJsonRpcProvider
-      );
-      const isOneCTEnabled = is1CTEnabled(
-        buyTradeData?.user2signer?.signer || ethers.constants.AddressZero,
-        privateKey || oneCtPk,
-        provider
-      );
-      console.log(`OneCTModal-isOneCTEnabled: `, isOneCTEnabled);
-      if (isOneCTEnabled) {
-        return toastify({
-          msg: 'You have already registered your 1CT Account. You can start 1CT now!',
-          type: 'success',
-        });
-      }
-      setLaoding(true);
-      writeCall(
-        configData.signer_manager,
-        SignerManagerABI,
-        (payload) => {
-          setLaoding(false);
-          if (payload.payload) {
-            setOnboardingAnimation(true);
-            setModal(false);
-          }
-        },
-        registerOneCt,
-        [oneCTWallet?.address]
-      );
-    }
-  };
-  const initializers = async () => {
-    if (!isModalOpen) return;
-    console.log(`[flow]OneCTModal-oneCTWallet: `, oneCtPk);
-    if (!oneCtPk) {
-      const pk = await generatePk();
-      console.log(`[flow]pk generated: `, pk);
+  // const handleRegister = (privateKey?: string) => {
+  //   console.log(`OneCTModal-oneCtPk: `, oneCtPk);
+  //   if (privateKey || oneCtPk) {
+  //     const oneCTWallet = new ethers.Wallet(
+  //       privateKey || oneCtPk,
+  //       provider as ethers.providers.StaticJsonRpcProvider
+  //     );
+  //     const isOneCTEnabled = is1CTEnabled(
+  //       buyTradeData?.user2signer?.signer || ethers.constants.AddressZero,
+  //       privateKey || oneCtPk,
+  //       provider
+  //     );
+  //     console.log(`OneCTModal-isOneCTEnabled: `, isOneCTEnabled);
+  // if (isOneCTEnabled) {
+  //   return toastify({
+  //     msg: 'You have already registered your 1CT Account. You can start 1CT now!',
+  //     type: 'success',
+  //   });
+  // }
+  //     setLaoding(true);
+  //     writeCall(
+  //       configData.signer_manager,
+  //       SignerManagerABI,
+  //       (payload) => {
+  //         setLaoding(false);
+  //         if (payload.payload) {
+  //           setOnboardingAnimation(true);
+  //           setModal(false);
+  //         }
+  //       },
+  //       registerOneCt,
+  //       [oneCTWallet?.address]
+  //     );
+  //   }
+  // };
+  // const initializers = async () => {
+  //   if (!isModalOpen) return;
+  //   console.log(`[flow]OneCTModal-oneCTWallet: `, oneCtPk);
+  //   if (!oneCtPk) {
+  //     const pk = await generatePk();
+  //     console.log(`[flow]pk generated: `, pk);
 
-      handleRegister(pk);
-      return;
-    } else if (!registeredOneCT) return handleRegister();
+  //     handleRegister(pk);
+  //     return;
+  //   } else if (!registeredOneCT) return handleRegister();
+  // };
+  // useEffect(() => {
+  //   // initializers();
+  // }, [isModalOpen]);
+
+  const handleRegister = async () => {
+    if (registeredOneCT) {
+      return toastify({
+        msg: 'You have already registered your 1CT Account. You can start 1CT now!',
+        type: 'success',
+      });
+    }
+    const domain = {
+      name: 'Validator',
+      version: '1',
+      chainId: 1,
+      verifyingContract: configData.signer_manager,
+    };
+    const EIP712Domain = [
+      { name: 'name', type: 'string' },
+      { name: 'version', type: 'string' },
+      { name: 'chainId', type: 'uint256' },
+      { name: 'verifyingContract', type: 'address' },
+    ];
+    const msgParams = {
+      types: {
+        EIP712Domain,
+        RegisterAccount: [
+          { name: 'oneCT', type: 'address' },
+          { name: 'user', type: 'address' },
+          { name: 'nonce', type: 'uint256' },
+        ],
+      },
+      primaryType: 'RegisterAccount',
+      domain: domain,
+      message: {
+        oneCT: oneCtAddress,
+        user: address,
+        nonce: nonce,
+      },
+    };
+
+    //  const  signature= wallet.signTypedData(partialSignatureParams),
   };
-  useEffect(() => {
-    // initializers();
-  }, [isModalOpen]);
+
   return (
     <ModalBase
       open={isModalOpen}
@@ -418,15 +473,7 @@ const Card = ({ children }: { children: JSX.Element }) => (
     {children}
   </div>
 );
-import { SVGProps } from 'react';
-import { useProvider } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { ethers } from 'ethers';
-import { v3AppConfig } from '@Views/V3App/config';
-import NumberTooltip from '@Views/Common/Tooltips';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { appConfig } from '@Views/TradePage/config';
-import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
+
 const GreenTickMark = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
