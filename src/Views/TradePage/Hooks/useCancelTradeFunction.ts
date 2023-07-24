@@ -88,7 +88,7 @@ export const useCancelTradeFunction = () => {
     const domain = {
       name: 'Validator',
       version: '1',
-      chainId: 1,
+      chainId: activeChain.id,
       verifyingContract: configData.router,
     };
     setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));

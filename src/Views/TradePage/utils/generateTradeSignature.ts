@@ -99,11 +99,11 @@ const generateBuyTradeSignature = async (
   settlementFee: string | number,
   isUp: boolean,
   oneCtPk: string,
+  activeChainId: any,
   routerContract: string
 ): Promise<string[]> => {
   const wallet = getWalletFromOneCtPk(oneCtPk);
 
-  console.log(`ddd-settlementFee: `, settlementFee);
   const isLimit = settlementFee == 0;
 
   const baseMessage = {
@@ -117,11 +117,10 @@ const generateBuyTradeSignature = async (
     referralCode: referral,
     traderNFTId: NFTid,
   };
-  console.log('call-dd');
   const domain = {
     name: 'Validator',
     version: '1',
-    chainId: 1,
+    chainId: activeChainId,
     verifyingContract: routerContract,
   };
   const key = isLimit
@@ -186,6 +185,7 @@ const generateApprovalSignature = async (
   tokenAddress: string,
   routerAddress: string,
   deadline: string,
+  activeChainId: any,
   signMethod: any
 ): Promise<[string, { r: string; s: string; v: string }]> => {
   const approveMessage = {
@@ -204,7 +204,7 @@ const generateApprovalSignature = async (
     domain: {
       name: 'Token',
       version: '1',
-      chainId: 421613,
+      chainId: activeChainId,
       verifyingContract: tokenAddress,
     },
     value: approveMessage,
