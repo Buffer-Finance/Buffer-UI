@@ -69,14 +69,6 @@ export const is1CTEnabled = (
     pk,
     provider as ethers.providers.StaticJsonRpcProvider
   );
-  // if (deb)
-  //   console.log(
-  //     deb,
-  //     oneCTWallet.address,
-  //     account,
-  //     oneCTWallet.address.toLowerCase() === account.toLowerCase()
-  //   );
-
   return oneCTWallet.address.toLowerCase() === account.toLowerCase();
 };
 export const disableLoadingAtom = atom<boolean>(false);
@@ -84,7 +76,7 @@ export const createLoadingAtom = atom<boolean>(false);
 
 const useOneCTWallet = () => {
   const { address } = useAccount();
-  const { writeCall } = useIndependentWriteCall();
+  // const { writeCall } = useIndependentWriteCall();
   const toastify = useToast();
   // const res = useAccountMapping();
   const res = useUserOneCTData();
@@ -95,9 +87,11 @@ const useOneCTWallet = () => {
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const provider = useProvider({ chainId: activeChain.id });
+
   const pkLocalStorageIdentifier = useMemo(() => {
     return 'signer-account-pk:' + address + ',nonce' + res?.nonce + ':';
   }, [address, res?.nonce]);
+
   const oneCtPk = useMemo(() => {
     return secureLocalStorage.getItem(pkLocalStorageIdentifier);
   }, [pkLocalStorageIdentifier, createLoading]);
@@ -118,18 +112,12 @@ const useOneCTWallet = () => {
       provider as ethers.providers.StaticJsonRpcProvider
     );
   }, [oneCtPk, provider, registeredOneCT]);
-  // console.log(`useOneCTWallet-data: `, oneCTWallet);
-  useEffect(() => {
-    const localPk = secureLocalStorage.getItem(
-      pkLocalStorageIdentifier
-    ) as string;
-  }, [pkLocalStorageIdentifier]);
 
   const generatePk = useCallback(async () => {
     setCreateLoading(true);
     try {
       const nonce = res?.nonce;
-      if (!nonce) return toastify(WaitToast());
+      if (nonce === undefined) return toastify(WaitToast());
       const signature = await signTypedData({
         types,
         domain,
@@ -153,27 +141,28 @@ const useOneCTWallet = () => {
       return '';
     }
   }, [signer, res?.one_ct, provider]);
+
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
   };
   const disableOneCt = () => {
     setDisabelLoading(true);
-    writeCall(
-      configData?.signer_manager,
-      SignerManagerABI,
-      (payload) => {
-        setDisabelLoading(false);
+    // writeCall(
+    //   configData?.signer_manager,
+    //   SignerManagerABI,
+    //   (payload) => {
+    //     setDisabelLoading(false);
 
-        if (payload.payload) {
-          toastify({
-            msg: '1 Click Trading is now disablted.',
-            type: 'success',
-          });
-        }
-      },
-      'deregisterAccount',
-      []
-    );
+    //     if (payload.payload) {
+    //       toastify({
+    //         msg: '1 Click Trading is now disablted.',
+    //         type: 'success',
+    //       });
+    //     }
+    //   },
+    //   'deregisterAccount',
+    //   []
+    // );
   };
   return {
     oneCtPk,

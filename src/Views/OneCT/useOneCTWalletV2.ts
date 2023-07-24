@@ -17,7 +17,7 @@ export const useUserOneCTData = () => {
       try {
         const response = await axios.get(
           baseUrl +
-            `instant-trading/user/onc_ct/?environment=${activeChainId}&user=${userAddress}`
+            `user/onc_ct/?environment=${activeChainId}&user=${userAddress}`
         );
         return response.data;
       } catch (e) {

@@ -60,7 +60,7 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   }
 
   const { address } = useUserAccount();
-  const { disabelLoading, disableOneCt, registeredOneCT, accountMapping } =
+  const { disabelLoading, disableOneCt, registeredOneCT, nonce } =
     useOneCTWallet();
 
   const provider = useProvider({ chainId: activeChain.id });
@@ -72,29 +72,28 @@ export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
   let OneCTManager = (
     <Skeleton variant="rectangular" className="lc sr w-[70px] h-[30px]" />
   );
-  if (accountMapping?.length) {
-    if (registeredOneCT) {
-      OneCTManager = (
-        <BlueBtn
-          className="!ml-[13px] !text-f12 !bg-[#2C2C41] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
-          onClick={disableOneCt}
-          isLoading={disabelLoading}
-        >
-          Deactivate Acount
-        </BlueBtn>
-      );
-    } else
-      OneCTManager = (
-        <BlueBtn
-          className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
-          onClick={() => {
-            setOneCTModal(true);
-          }}
-        >
-          {gt(accountMapping[1], '0') ? 'Reactivate' : ' Activate'} Acount
-        </BlueBtn>
-      );
-  }
+  if (registeredOneCT) {
+    OneCTManager = (
+      <BlueBtn
+        className="!ml-[13px] !text-f12 !bg-[#2C2C41] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
+        onClick={disableOneCt}
+        isLoading={disabelLoading}
+      >
+        Deactivate Acount
+      </BlueBtn>
+    );
+  } else
+    OneCTManager = (
+      <BlueBtn
+        className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+        onClick={() => {
+          setOneCTModal(true);
+        }}
+      >
+        {nonce && nonce > 0 ? 'Reactivate' : ' Activate'} Acount
+      </BlueBtn>
+    );
+
   return (
     <ConnectButton.Custom>
       {({

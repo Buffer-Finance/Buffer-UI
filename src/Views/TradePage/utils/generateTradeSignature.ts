@@ -3,7 +3,9 @@ import { multiply } from '@Utils/NumString/stringArithmatics';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
 import { privateKeyToAccount } from 'viem/accounts';
-
+export const getWalletFromOneCtPk = (oneCtPk: string) => {
+  return privateKeyToAccount(`0x${oneCtPk}`);
+};
 const generateTradeSignature = async (
   address: any,
   size: string,
@@ -99,7 +101,7 @@ const generateBuyTradeSignature = async (
   oneCtPk: string,
   routerContract: string
 ): Promise<string[]> => {
-  const wallet = privateKeyToAccount(`0x${oneCtPk}`);
+  const wallet = getWalletFromOneCtPk(oneCtPk);
 
   console.log(`ddd-settlementFee: `, settlementFee);
   const isLimit = settlementFee == 0;

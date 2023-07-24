@@ -12,8 +12,10 @@ import { useAccount, useProvider } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { appConfig } from '@Views/TradePage/config';
+import { appConfig, baseUrl } from '@Views/TradePage/config';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
+import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
+import axios from 'axios';
 
 const features = [
   {
@@ -278,7 +280,6 @@ const OneCTModal: React.FC<any> = ({}) => {
     createLoading,
     oneCtPk,
   } = useOneCTWallet();
-  const { writeCall } = useIndependentWriteCall();
   const buyTradeData = useBuyTradeData();
   const provider = useProvider({ chainId: activeChain.id });
   const toastify = useToast();
@@ -286,10 +287,10 @@ const OneCTModal: React.FC<any> = ({}) => {
   // const handleRegister = (privateKey?: string) => {
   //   console.log(`OneCTModal-oneCtPk: `, oneCtPk);
   //   if (privateKey || oneCtPk) {
-  //     const oneCTWallet = new ethers.Wallet(
-  //       privateKey || oneCtPk,
-  //       provider as ethers.providers.StaticJsonRpcProvider
-  //     );
+  // const oneCTWallet = new ethers.Wallet(
+  //   privateKey || oneCtPk,
+  //   provider as ethers.providers.StaticJsonRpcProvider
+  // );
   //     const isOneCTEnabled = is1CTEnabled(
   //       buyTradeData?.user2signer?.signer || ethers.constants.AddressZero,
   //       privateKey || oneCtPk,
@@ -338,8 +339,39 @@ const OneCTModal: React.FC<any> = ({}) => {
       return toastify({
         msg: 'You have already registered your 1CT Account. You can start 1CT now!',
         type: 'success',
+        id: 'registeredOneCT',
       });
     }
+    if (typeof oneCtPk !== 'string')
+      return toastify({
+        msg: 'Please create your 1CT Account first',
+        type: 'error',
+        id: 'oneCtPk',
+      });
+
+    // if (
+    //   !oneCtAddress ||
+    //   !address ||
+    //   nonce === undefined ||
+    //   nonce === null ||
+    //   activeChain
+    // )
+    //   return toastify({
+    //     msg: 'Someting went wrong. Please try again later',
+    //     type: 'error',
+    //     id: 'noparams',
+    //   });
+    console.log(
+      'registerOneCt',
+      registerOneCt,
+      oneCtPk,
+      oneCtAddress,
+      address,
+      nonce,
+      activeChain
+    );
+    const wallet = getWalletFromOneCtPk(oneCtPk);
+
     const domain = {
       name: 'Validator',
       version: '1',
@@ -364,13 +396,33 @@ const OneCTModal: React.FC<any> = ({}) => {
       primaryType: 'RegisterAccount',
       domain: domain,
       message: {
-        oneCT: oneCtAddress,
+        oneCT: wallet.address,
         user: address,
         nonce: nonce,
       },
     };
+    const signature = await wallet.signTypedData(msgParams as any);
 
-    //  const  signature= wallet.signTypedData(partialSignatureParams),
+    if (!signature)
+      return toastify({
+        msg: 'Someting went wrong. Please try again later',
+        type: 'error',
+        id: 'signature',
+      });
+
+    const apiParams = {
+      one_ct: wallet.address,
+      account: address,
+      nonce: nonce,
+      registration_signature: signature,
+      environment: activeChain.id,
+    };
+
+    const resp = await axios.post(baseUrl + 'register/', null, {
+      params: apiParams,
+    });
+
+    console.log(resp, 'resp');
   };
 
   return (
@@ -422,11 +474,13 @@ const OneCTModal: React.FC<any> = ({}) => {
               <div className={desc}>Sign using a web 3 wallet</div>
             </div>
             <BlueBtn
-              className={` !w-[120px] px-[15px] ${oneCtPk ? '!bg-green' : ''}`}
-              onClick={oneCtPk ? console.log : generatePk}
+              className={` !w-[120px] px-[15px] ${
+                registeredOneCT ? '!bg-green' : ''
+              }`}
+              onClick={registeredOneCT ? console.log : generatePk}
               isLoading={createLoading}
             >
-              {oneCtPk ? (
+              {registeredOneCT ? (
                 <div className="flex items-center">
                   {' '}
                   <GreenTickMark /> Created
