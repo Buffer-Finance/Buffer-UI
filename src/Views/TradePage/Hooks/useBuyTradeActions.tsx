@@ -359,6 +359,7 @@ export const useBuyTradeActions = (userInput: string) => {
         customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
         customTrade.is_up,
         oneCtPk,
+        activeChain.id,
         configData.router
       );
       const apiParams = {
@@ -504,6 +505,7 @@ export const useBuyTradeActions = (userInput: string) => {
         tokenAddress,
         configData.router,
         deadline,
+        activeChain.id,
         signTypedData
       );
       const user_signature = await getSingatureCached(oneCTWallet);
