@@ -5,17 +5,16 @@ import { useState } from 'react';
 import { useOneCTWallet } from './useOneCTWallet';
 import { CloseOutlined } from '@mui/icons-material';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { useIndependentWriteCall } from '@Hooks/writeCall';
 import { useToast } from '@Contexts/Toast';
 import { SVGProps } from 'react';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { appConfig, baseUrl } from '@Views/TradePage/config';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
 import axios from 'axios';
+import { zeroAddress } from 'viem';
 
 const features = [
   {
@@ -276,63 +275,11 @@ const OneCTModal: React.FC<any> = ({}) => {
     oneCtAddress,
     nonce,
     registeredOneCT,
-    registerOneCt,
     createLoading,
     oneCtPk,
   } = useOneCTWallet();
-  const buyTradeData = useBuyTradeData();
-  const provider = useProvider({ chainId: activeChain.id });
   const toastify = useToast();
   const setOnboardingAnimation = useSetAtom(showOnboardingAnimationAtom);
-  // const handleRegister = (privateKey?: string) => {
-  //   console.log(`OneCTModal-oneCtPk: `, oneCtPk);
-  //   if (privateKey || oneCtPk) {
-  // const oneCTWallet = new ethers.Wallet(
-  //   privateKey || oneCtPk,
-  //   provider as ethers.providers.StaticJsonRpcProvider
-  // );
-  //     const isOneCTEnabled = is1CTEnabled(
-  //       buyTradeData?.user2signer?.signer || ethers.constants.AddressZero,
-  //       privateKey || oneCtPk,
-  //       provider
-  //     );
-  //     console.log(`OneCTModal-isOneCTEnabled: `, isOneCTEnabled);
-  // if (isOneCTEnabled) {
-  //   return toastify({
-  //     msg: 'You have already registered your 1CT Account. You can start 1CT now!',
-  //     type: 'success',
-  //   });
-  // }
-  //     setLaoding(true);
-  //     writeCall(
-  //       configData.signer_manager,
-  //       SignerManagerABI,
-  //       (payload) => {
-  //         setLaoding(false);
-  //         if (payload.payload) {
-  //           setOnboardingAnimation(true);
-  //           setModal(false);
-  //         }
-  //       },
-  //       registerOneCt,
-  //       [oneCTWallet?.address]
-  //     );
-  //   }
-  // };
-  // const initializers = async () => {
-  //   if (!isModalOpen) return;
-  //   console.log(`[flow]OneCTModal-oneCTWallet: `, oneCtPk);
-  //   if (!oneCtPk) {
-  //     const pk = await generatePk();
-  //     console.log(`[flow]pk generated: `, pk);
-
-  //     handleRegister(pk);
-  //     return;
-  //   } else if (!registeredOneCT) return handleRegister();
-  // };
-  // useEffect(() => {
-  //   // initializers();
-  // }, [isModalOpen]);
 
   const handleRegister = async () => {
     if (registeredOneCT) {
@@ -349,27 +296,21 @@ const OneCTModal: React.FC<any> = ({}) => {
         id: 'oneCtPk',
       });
 
-    // if (
-    //   !oneCtAddress ||
-    //   !address ||
-    //   nonce === undefined ||
-    //   nonce === null ||
-    //   activeChain
-    // )
-    //   return toastify({
-    //     msg: 'Someting went wrong. Please try again later',
-    //     type: 'error',
-    //     id: 'noparams',
-    //   });
-    console.log(
-      'registerOneCt',
-      registerOneCt,
-      oneCtPk,
-      oneCtAddress,
-      address,
-      nonce,
-      activeChain
-    );
+    if (
+      !oneCtAddress ||
+      !address ||
+      nonce === undefined ||
+      nonce === null ||
+      !activeChain
+    )
+      return toastify({
+        msg: 'Someting went wrong. Please try again later',
+        type: 'error',
+        id: 'noparams',
+      });
+
+    setLaoding(true);
+
     const wallet = getWalletFromOneCtPk(oneCtPk);
 
     const domain = {
@@ -405,7 +346,7 @@ const OneCTModal: React.FC<any> = ({}) => {
 
     if (!signature)
       return toastify({
-        msg: 'Someting went wrong. Please try again later',
+        msg: 'Error getting signature. Please try again later.',
         type: 'error',
         id: 'signature',
       });
@@ -418,11 +359,24 @@ const OneCTModal: React.FC<any> = ({}) => {
       environment: activeChain.id,
     };
 
-    const resp = await axios.post(baseUrl + 'register/', null, {
-      params: apiParams,
-    });
+    try {
+      const resp = await axios.post(baseUrl + 'register/', null, {
+        params: apiParams,
+      });
 
-    console.log(resp, 'resp');
+      console.log(resp, 'resp');
+      if (resp?.data?.one_ct && resp.data.one_ct !== zeroAddress) {
+        setOnboardingAnimation(true);
+      }
+    } catch (e) {
+      console.log(e, 'register api error');
+      toastify({
+        msg: `Error in register API. please try again later. ${e}`,
+        type: 'error',
+        id: 'registerapi',
+      });
+    }
+    setLaoding(false);
   };
 
   return (
@@ -433,7 +387,6 @@ const OneCTModal: React.FC<any> = ({}) => {
     >
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          {/* <LightningIcon className=" scale-110" /> */}
           <h3 className="font-[500] text-f20  ml-[20px]">
             Activate your Trading Account
           </h3>
@@ -474,13 +427,21 @@ const OneCTModal: React.FC<any> = ({}) => {
               <div className={desc}>Sign using a web 3 wallet</div>
             </div>
             <BlueBtn
-              className={` !w-[120px] px-[15px] ${
-                registeredOneCT ? '!bg-green' : ''
-              }`}
-              onClick={registeredOneCT ? console.log : generatePk}
+              className={` !w-[120px] px-[15px] ${oneCtPk ? '!bg-green' : ''}`}
+              onClick={
+                oneCtPk
+                  ? () => {
+                      toastify({
+                        msg: `Already created `,
+                        type: 'success',
+                        id: 'alreadycreated',
+                      });
+                    }
+                  : generatePk
+              }
               isLoading={createLoading}
             >
-              {registeredOneCT ? (
+              {oneCtPk ? (
                 <div className="flex items-center">
                   {' '}
                   <GreenTickMark /> Created
@@ -501,7 +462,17 @@ const OneCTModal: React.FC<any> = ({}) => {
               className={`${
                 registeredOneCT ? '!bg-green' : ''
               } !w-[120px] px-[15px]`}
-              onClick={() => handleRegister()}
+              onClick={
+                registeredOneCT
+                  ? () => {
+                      toastify({
+                        msg: ` ${oneCtAddress} already registered `,
+                        type: 'success',
+                        id: 'alreadyregistered',
+                      });
+                    }
+                  : handleRegister
+              }
               isLoading={laoding}
             >
               {registeredOneCT ? (

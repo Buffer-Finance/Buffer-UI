@@ -1,23 +1,13 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useIndependentWriteCall } from '@Hooks/writeCall';
-import { activeAssetStateAtom } from '@Views/BinaryOptions';
 import { ethers } from 'ethers';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { atom, useAtom } from 'jotai';
+import { useCallback, useMemo } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useAccount, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 import { signTypedData } from '@wagmi/core';
-import RouterAbi from '@Views/BinaryOptions/ABI/routerABI.json';
 import { useToast } from '@Contexts/Toast';
 import { appConfig } from '@Views/TradePage/config';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import useSWR from 'swr';
-import { useCall2Data } from '@Utils/useReadCall';
-import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
-import useAccountMapping from './useAccountMapping';
-import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { WaitToast } from '@Views/TradePage/utils';
-import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
 import { useUserOneCTData } from './useOneCTWalletV2';
 
 /*
@@ -56,8 +46,6 @@ const types = {
   ],
 } as const;
 
-const registerOneCtMethod = 'registerAccount';
-
 export const is1CTEnabled = (
   account: string,
   pk: string | null,
@@ -76,9 +64,7 @@ export const createLoadingAtom = atom<boolean>(false);
 
 const useOneCTWallet = () => {
   const { address } = useAccount();
-  // const { writeCall } = useIndependentWriteCall();
   const toastify = useToast();
-  // const res = useAccountMapping();
   const res = useUserOneCTData();
   const [disabelLoading, setDisabelLoading] = useAtom(disableLoadingAtom);
   const [createLoading, setCreateLoading] = useAtom(createLoadingAtom);
@@ -99,6 +85,7 @@ const useOneCTWallet = () => {
   const registeredOneCT = useMemo(() => {
     if (!res?.one_ct) return false;
     return (
+      oneCtPk &&
       res.one_ct.toLowerCase() !== ethers.constants.AddressZero.toLowerCase()
     );
   }, [res, res?.one_ct, res?.nonce, provider, oneCtPk]);
@@ -137,6 +124,7 @@ const useOneCTWallet = () => {
         return privateKey;
       }
     } catch (e) {
+      console.log(e, 'error generating signature');
       setCreateLoading(false);
       return '';
     }
@@ -147,22 +135,6 @@ const useOneCTWallet = () => {
   };
   const disableOneCt = () => {
     setDisabelLoading(true);
-    // writeCall(
-    //   configData?.signer_manager,
-    //   SignerManagerABI,
-    //   (payload) => {
-    //     setDisabelLoading(false);
-
-    //     if (payload.payload) {
-    //       toastify({
-    //         msg: '1 Click Trading is now disablted.',
-    //         type: 'success',
-    //       });
-    //     }
-    //   },
-    //   'deregisterAccount',
-    //   []
-    // );
   };
   return {
     oneCtPk,
@@ -171,7 +143,6 @@ const useOneCTWallet = () => {
     generatePk,
     disabelLoading,
     registeredOneCT,
-    registerOneCt: registerOneCtMethod,
     oneCTWallet,
     deleteOneCTPk,
     disableOneCt,
