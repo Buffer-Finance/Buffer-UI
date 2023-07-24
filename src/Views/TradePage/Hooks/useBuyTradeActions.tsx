@@ -468,7 +468,9 @@ export const useBuyTradeActions = (userInput: string) => {
     }
   };
 
-  const handleApproveClick = async (ammount = '100000000000000000000000000l') => {
+  const handleApproveClick = async (
+    ammount = '100000000000000000000000000l'
+  ) => {
     if (state.txnLoading > 1) {
       toastify({
         id: 'dddafsd3',
@@ -508,7 +510,7 @@ export const useBuyTradeActions = (userInput: string) => {
       const apiSignature = {
         user: address,
         nonce: +readcallData.nonces,
-        allowance: +ammount,
+        allowance: ammount,
         deadline: +deadline,
         v: parseInt(RSV.v, 16),
         r: RSV.r,
@@ -541,7 +543,7 @@ export const useBuyTradeActions = (userInput: string) => {
 export const getPrice = async (query: any): Promise<number> => {
   const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
   const priceObject = priceResponse?.data[0]?.price;
-  console.log(`[aug]:: `, priceResponse);
+  // console.log(`[aug]:: `, priceResponse);
   if (!priceObject) return getPrice(query);
   return priceObject;
 };
