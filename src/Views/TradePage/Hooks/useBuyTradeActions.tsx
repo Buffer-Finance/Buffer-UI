@@ -491,7 +491,7 @@ export const useBuyTradeActions = (userInput: string) => {
     //  fetch nonce 7min
     // sign data : 1hr
     // call api :15
-    const deadline = (Math.round(Date.now() / 1000) + 60).toString();
+    const deadline = (Math.round(Date.now() / 1000) + 6000).toString();
     try {
       const [approvalSignature, RSV] = await generateApprovalSignature(
         readcallData.nonces,
@@ -518,8 +518,12 @@ export const useBuyTradeActions = (userInput: string) => {
       const resp = await axios.post(baseUrl + 'approve/', null, {
         params: apiSignature,
       });
+      setLoading(null);
+
       toastify({ type: 'success', msg: 'Approved Successfully.', id: '10231' });
     } catch (e) {
+      setLoading(null);
+
       toastify({ type: 'error', msg: 'Something went wrong.', id: '10231' });
     }
   };
