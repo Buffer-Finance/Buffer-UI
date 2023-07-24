@@ -15,6 +15,7 @@ import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
 import axios from 'axios';
 import { zeroAddress } from 'viem';
+import { EIP712Domain } from './useOneCTWallet';
 
 const features = [
   {
@@ -319,12 +320,7 @@ const OneCTModal: React.FC<any> = ({}) => {
       chainId: 1,
       verifyingContract: configData.signer_manager,
     };
-    const EIP712Domain = [
-      { name: 'name', type: 'string' },
-      { name: 'version', type: 'string' },
-      { name: 'chainId', type: 'uint256' },
-      { name: 'verifyingContract', type: 'address' },
-    ];
+
     const msgParams = {
       types: {
         EIP712Domain,
