@@ -20,6 +20,7 @@ import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { ActiveTrades } from './ActiveTrades';
 import { useSelectedAssetPayout } from '../MarketChart/Payout';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
+import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -45,6 +46,7 @@ export const BuyTrade: React.FC = () => {
   const marketPrice = useAtomValue(priceAtom);
   const { calculatePayout } = useSelectedAssetPayout();
 
+  const approvalExpanded = useApprvalAmount();
   if (!switchPool || !poolDetails || !readcallData || !activeMarket) {
     console.log(
       `index-allSettlementFees: `,
@@ -66,7 +68,7 @@ export const BuyTrade: React.FC = () => {
   );
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
-  const allowance = divide(readcallData.allowance, decimals) as string;
+  const allowance = divide(approvalExpanded, decimals) as string;
   const isForex = activeMarket.category === AssetCategory[0];
   const isMarketOpen = true;
   const marketId = joinStrings(activeMarket.token0, activeMarket.token1, '');

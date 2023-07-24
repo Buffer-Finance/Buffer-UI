@@ -163,6 +163,48 @@ const generateBuyTradeSignature = async (
   console.log(`call-dd-res: `, res);
   return res;
 };
+const approveParamType = [
+  { name: 'owner', type: 'address' },
+  { name: 'spender', type: 'address' },
+  { name: 'value', type: 'uint256' },
+  { name: 'nonce', type: 'uint256' },
+  { name: 'deadline', type: 'uint256' },
+];
 
 export default generateTradeSignature;
-export { generateBuyTradeSignature };
+const generateApprovalSignature = async (
+  nonce: string,
+  amount: string,
+  userMainAccount: string,
+  tokenAddress: string,
+  routerAddress: string,
+  oneCtPk: string
+) => {
+  const wallet = getWalletFromOneCtPk(oneCtPk);
+  const deadline = (Math.round(Date.now() / 1000) + 60).toString();
+  const approveMessage = {
+    nonce,
+    amount,
+    owner: userMainAccount,
+    deadline,
+    spender: routerAddress,
+  };
+  const approveSignatureParams = {
+    types: {
+      EIP712Domain,
+      Permit: approveParamType,
+    },
+    primatyType: 'Permit',
+    domain: {
+      name: 'Token',
+      version: '1',
+      chainId: 1,
+      verifyingContract: tokenAddress,
+    },
+    message: approveMessage,
+  };
+  const res = await wallet.signTypedData(approveSignatureParams);
+  console.log(`res-approve: `, res, approveSignatureParams);
+  return res;
+};
+export { generateBuyTradeSignature, generateApprovalSignature };

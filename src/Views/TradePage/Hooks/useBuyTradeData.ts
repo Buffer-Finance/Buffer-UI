@@ -71,7 +71,8 @@ export const useBuyTradeData = (deb?: string) => {
       readCallData[
         getCallId(configData.creation_window, 'isInCreationWindow')
       ]?.[0];
-
+    const nonces =
+      readCallData[getCallId(poolDetails.tokenAddress, 'nonces')]?.[0];
     return {
       balance,
       allowance,
@@ -80,6 +81,7 @@ export const useBuyTradeData = (deb?: string) => {
       settlementFees,
       maxOIs,
       currentOIs,
+      nonces,
       isInCreationWindow,
     };
   }, [readCallData, poolDetails, switchPool, configData]);

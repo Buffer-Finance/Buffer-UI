@@ -6,6 +6,7 @@ import { appConfig } from '@Views/TradePage/config';
 import { useMemo } from 'react';
 import { erc20ABI } from 'wagmi';
 import { useCall2Data } from '@Utils/useReadCall';
+import CustomERC20ABI from '@ABIs/CustomErc20ABI.json';
 // import RouterABI from '@Views/BinaryOptions/ABI/routerABI.json';
 // import MetaABI from '../../ABIs/meta.json';
 import SignerABI from '@Views/OneCT/signerManagerABI.json';
@@ -51,6 +52,12 @@ export function useBuyTradePageReadcalls() {
         address: poolDetails.tokenAddress,
         abi: erc20ABI,
         name: 'balanceOf',
+        params: [address],
+      },
+      {
+        address: poolDetails.tokenAddress,
+        abi: CustomERC20ABI,
+        name: 'nonces',
         params: [address],
       },
       {

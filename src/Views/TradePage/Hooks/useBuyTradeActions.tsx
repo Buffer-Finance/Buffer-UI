@@ -57,7 +57,10 @@ import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
-import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
+import {
+  generateApprovalSignature,
+  generateBuyTradeSignature,
+} from '../utils/generateTradeSignature';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -81,6 +84,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const balance = divide(readcallData?.balance, decimals as number) as string;
   const tokenName = poolDetails?.token;
   const res = readcallData?.user2signer;
+  const nonces = readcallData?.nonces;
   const tokenAddress = poolDetails?.tokenAddress;
   const { data: allSettlementFees } = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
@@ -471,20 +475,28 @@ export const useBuyTradeActions = (userInput: string) => {
       });
       return true;
     }
+    if (readcallData?.nonces == undefined || readcallData.nonces == null) {
+      toastify({
+        id: 'dddad3',
+        type: 'error',
+        msg: 'Fetching metadata.',
+      });
+      return true;
+    }
     dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
     if (ammount !== '0' && ammount !== toFixed(getPosInf(), 0)) {
       ammount = add(ammount, multiply(ammount, '0.1'));
     }
-    approve(
-      (p) => {
-        if (p.payload) {
-          setIsApproveModalOpen(false);
-        }
-        setLoading(null);
-      },
-      'approve',
-      [configData.router, ammount]
+    //  fetch nonce :32 45
+    // sign data : 45 10 elapsed 17
+    const approvalSignature = await generateApprovalSignature(
+      readcallData.nonces,
+      ammount,
+      address!,
+      tokenAddress,
+      configData.router,
+      oneCtPk
     );
   };
 
