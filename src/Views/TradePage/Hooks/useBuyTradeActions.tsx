@@ -483,7 +483,7 @@ export const useBuyTradeActions = (userInput: string) => {
       });
       return true;
     }
-    dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
+    // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
     if (ammount !== '0' && ammount !== toFixed(getPosInf(), 0)) {
       ammount = add(ammount, multiply(ammount, '0.1'));
