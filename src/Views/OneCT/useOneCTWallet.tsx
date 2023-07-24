@@ -6,9 +6,13 @@ import secureLocalStorage from 'react-secure-storage';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { signTypedData } from '@wagmi/core';
 import { useToast } from '@Contexts/Toast';
-import { appConfig } from '@Views/TradePage/config';
+import { appConfig, baseUrl } from '@Views/TradePage/config';
 import { WaitToast } from '@Views/TradePage/utils';
 import { useUserOneCTData } from './useOneCTWalletV2';
+import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
+import { getSingatureCached } from '@Views/TradePage/cahce';
+import axios from 'axios';
+import { zeroAddress } from 'viem';
 
 /*
  * Nonce is zero initially.
@@ -45,6 +49,13 @@ const types = {
     { name: 'nonce', type: 'uint256' },
   ],
 } as const;
+
+export const EIP712Domain = [
+  { name: 'name', type: 'string' },
+  { name: 'version', type: 'string' },
+  { name: 'chainId', type: 'uint256' },
+  { name: 'verifyingContract', type: 'address' },
+];
 
 export const is1CTEnabled = (
   account: string,
@@ -102,6 +113,14 @@ const useOneCTWallet = () => {
 
   const generatePk = useCallback(async () => {
     setCreateLoading(true);
+
+    if (!res)
+      toastify({
+        msg: 'Unable to fetch data. Please try again later',
+        type: 'error',
+        id: 'unable-to-fetch-data-one_ct',
+      });
+
     try {
       const nonce = res?.nonce;
       if (nonce === undefined) return toastify(WaitToast());
@@ -133,8 +152,82 @@ const useOneCTWallet = () => {
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
   };
-  const disableOneCt = () => {
+  const disableOneCt = async () => {
     setDisabelLoading(true);
+    if (!res)
+      return toastify({
+        msg: 'Unable to fetch data. Please try again later',
+        type: 'error',
+        id: 'unable-to-fetch-data-one_ct',
+      });
+    if (typeof oneCtPk !== 'string')
+      return toastify({
+        msg: 'Please create your 1CT Account first',
+        type: 'error',
+        id: 'oneCtPk',
+      });
+    const domain = {
+      name: 'Validator',
+      version: '1',
+      chainId: 1,
+      verifyingContract: configData.signer_manager,
+    };
+    const msgParams = {
+      types: {
+        EIP712Domain,
+        DeregisterAccount: [
+          { name: 'user', type: 'address' },
+          { name: 'nonce', type: 'uint256' },
+        ],
+      },
+      primaryType: 'DeregisterAccount',
+      domain: domain,
+      message: {
+        user: address,
+        nonce: res?.nonce,
+      },
+    };
+
+    const wallet = getWalletFromOneCtPk(oneCtPk);
+    const signature = await wallet.signTypedData(msgParams as any);
+
+    if (!signature)
+      return toastify({
+        msg: 'Error getting signature. Please try again later.',
+        type: 'error',
+        id: 'signature',
+      });
+
+    const api_signature = await getSingatureCached(oneCTWallet);
+
+    if (!api_signature)
+      return toastify({
+        msg: 'Error getting signature. Please try again later.',
+        type: 'error',
+        id: 'signature',
+      });
+
+    const apiParams = {
+      account: address,
+      registration_signature: signature,
+      environment: activeChain.id,
+      api_signature,
+    };
+    try {
+      const resp = await axios.post(baseUrl + 'deregister/', null, {
+        params: apiParams,
+      });
+
+      console.log(resp, 'resp');
+    } catch (e) {
+      console.log(e, 'deregister api error');
+      toastify({
+        msg: `Error in deregister API. please try again later. ${e}`,
+        type: 'error',
+        id: 'deregisterapi',
+      });
+    }
+    setDisabelLoading(false);
   };
   return {
     oneCtPk,
