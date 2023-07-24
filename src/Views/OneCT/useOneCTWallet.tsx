@@ -168,7 +168,7 @@ const useOneCTWallet = () => {
     const domain = {
       name: 'Validator',
       version: '1',
-      chainId: 1,
+      chainId: activeChain.id,
       verifyingContract: configData.signer_manager,
     };
     const msgParams = {

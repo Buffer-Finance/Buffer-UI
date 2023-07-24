@@ -464,7 +464,7 @@ const OneCTModal: React.FC<any> = ({}) => {
           <>
             <div className="flex flex-col items-start">
               Register your account
-              <div className={desc}>Gas amount required: 0.001 ETH</div>
+              <div className={desc}>No gas required</div>
             </div>
             <BlueBtn
               className={`${
