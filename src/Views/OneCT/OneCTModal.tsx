@@ -310,64 +310,63 @@ const OneCTModal: React.FC<any> = ({}) => {
         type: 'error',
         id: 'noparams',
       });
-
-    setLaoding(true);
-
-    const wallet = getWalletFromOneCtPk(oneCtPk);
-
-    const domain = {
-      name: 'Validator',
-      version: '1',
-      chainId: activeChain.id,
-      verifyingContract: getAddress(configData.signer_manager),
-    } as const;
-
-    const types = {
-      EIP712Domain,
-      RegisterAccount: [
-        { name: 'oneCT', type: 'address' },
-        { name: 'user', type: 'address' },
-        { name: 'nonce', type: 'uint256' },
-      ],
-    };
-    const msgParams = {
-      primaryType: 'RegisterAccount',
-      domain: domain,
-      value: {
-        oneCT: wallet.address,
-        user: address,
-        nonce: nonce,
-      },
-    };
-    const signature = await signTypedData({
-      types,
-      domain,
-      value: {
-        oneCT: wallet.address,
-        user: address,
-        nonce: nonce,
-      },
-    });
-
-    console.log('signature', signature);
-    if (!signature) {
-      setLaoding(false);
-      return toastify({
-        msg: 'User rejected to sign.',
-        type: 'error',
-        id: 'signature',
-      });
-    }
-
-    const apiParams = {
-      one_ct: wallet.address,
-      account: address,
-      nonce: nonce,
-      registration_signature: signature,
-      environment: activeChain.id,
-    };
-
     try {
+      setLaoding(true);
+
+      const wallet = getWalletFromOneCtPk(oneCtPk);
+
+      const domain = {
+        name: 'Validator',
+        version: '1',
+        chainId: activeChain.id,
+        verifyingContract: getAddress(configData.signer_manager),
+      } as const;
+
+      const types = {
+        EIP712Domain,
+        RegisterAccount: [
+          { name: 'oneCT', type: 'address' },
+          { name: 'user', type: 'address' },
+          { name: 'nonce', type: 'uint256' },
+        ],
+      };
+      const msgParams = {
+        primaryType: 'RegisterAccount',
+        domain: domain,
+        value: {
+          oneCT: wallet.address,
+          user: address,
+          nonce: nonce,
+        },
+      };
+      const signature = await signTypedData({
+        types,
+        domain,
+        value: {
+          oneCT: wallet.address,
+          user: address,
+          nonce: nonce,
+        },
+      });
+
+      console.log('signature', signature);
+      if (!signature) {
+        setLaoding(false);
+        return toastify({
+          msg: 'User rejected to sign.',
+          type: 'error',
+          id: 'signature',
+        });
+      }
+
+      const apiParams = {
+        one_ct: wallet.address,
+        account: address,
+        nonce: nonce,
+        registration_signature: signature,
+        environment: activeChain.id,
+      };
+
       const resp = await axios.post(baseUrl + 'register/', null, {
         params: apiParams,
       });
