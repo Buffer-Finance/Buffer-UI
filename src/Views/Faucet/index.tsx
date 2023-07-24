@@ -10,6 +10,8 @@ import Drawer from '@Views/Common/V2-Drawer';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { appConfig } from '@Views/TradePage/config';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 
 const IbfrFaucet: React.FC = () => {
   useEffect(() => {
@@ -82,16 +84,10 @@ const IbfrFaucet: React.FC = () => {
 const ClaimButton = ({ token }: { token: string }) => {
   const { state } = useGlobal();
   const [btnLoading, setBtnLoading] = useState(0);
-  const { configContracts } = useActiveChain();
-  console.log(`index-token: `, token);
-  console.log(
-    `index-configContracts.tokens[token]: `,
-    configContracts.tokens[token]
-  );
-  const { writeCall } = useWriteCall(
-    configContracts.tokens?.[token]?.faucet,
-    FaucetABI
-  );
+  const pools = usePoolByAsset();
+  const faucetContract = pools[token]?.faucet;
+
+  const { writeCall } = useWriteCall(faucetContract, FaucetABI);
   const toastify = useToast();
 
   const claim = () => {
