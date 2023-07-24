@@ -32,7 +32,7 @@ export const BuyButtons = ({
   activeAssetPrice: string;
   amount: string;
 }) => {
-  const { registeredOneCT, accountMapping, oneCtPk } = useOneCTWallet();
+  const { registeredOneCT, oneCtPk } = useOneCTWallet();
   const { address: account } = useAccount();
   const { poolDetails } = useSwitchPool();
   const { openConnectModal } = useConnectModal();
@@ -87,10 +87,7 @@ export const BuyButtons = ({
       />
       <ConnectionRequired>
         <span>
-          {allowance == null ||
-          !activeAssetPrice ||
-          !accountMapping ||
-          !accountMapping.oneCT ? (
+          {allowance == null || !activeAssetPrice ? (
             <Skeleton className="h4 full-width sr lc mb3" />
           ) : !isAssetActive ? (
             <BlueBtn
