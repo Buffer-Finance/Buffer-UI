@@ -15,7 +15,6 @@ import {
   gt,
   multiply,
 } from '@Utils/NumString/stringArithmatics';
-import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
@@ -61,6 +60,7 @@ import {
   generateApprovalSignature,
   generateBuyTradeSignature,
 } from '../utils/generateTradeSignature';
+import { getSingatureCached } from '../cahce';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -117,7 +117,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const toastify = useToast();
   const knowTill = useAtomValue(knowTillAtom);
   const option_contract = switchPool?.optionContract;
-  const { oneCtPk } = useOneCTWallet();
+  const { oneCtPk, oneCTWallet } = useOneCTWallet();
   const buyHandler = async (customTrade: {
     is_up: boolean;
     strike: string;
@@ -466,7 +466,7 @@ export const useBuyTradeActions = (userInput: string) => {
     }
   };
 
-  const handleApproveClick = async (ammount = toFixed(getPosInf(), 0)) => {
+  const handleApproveClick = async (ammount = '100000000000000') => {
     if (state.txnLoading > 1) {
       toastify({
         id: 'dddafsd3',
@@ -488,16 +488,40 @@ export const useBuyTradeActions = (userInput: string) => {
     if (ammount !== '0' && ammount !== toFixed(getPosInf(), 0)) {
       ammount = add(ammount, multiply(ammount, '0.1'));
     }
-    //  fetch nonce :32 45
-    // sign data : 45 10 elapsed 17
-    const approvalSignature = await generateApprovalSignature(
-      readcallData.nonces,
-      ammount,
-      address!,
-      tokenAddress,
-      configData.router,
-      oneCtPk
-    );
+    //  fetch nonce 7min
+    // sign data : 1hr
+    // call api :15
+    const deadline = (Math.round(Date.now() / 1000) + 60).toString();
+    try {
+      const [approvalSignature, RSV] = await generateApprovalSignature(
+        readcallData.nonces,
+        ammount,
+        address!,
+        tokenAddress,
+        configData.router,
+        deadline,
+        oneCtPk
+      );
+      const user_signature = await getSingatureCached(oneCTWallet);
+      const apiSignature = {
+        user: address,
+        nonce: +readcallData.nonces,
+        allowance: +ammount,
+        deadline: +deadline,
+        v: parseInt(RSV.v, 16),
+        r: RSV.r,
+        s: RSV.s,
+        user_signature,
+        environment: activeChain.id,
+        state: 'PENDING',
+      };
+      const resp = await axios.post(baseUrl + 'approve/', null, {
+        params: apiSignature,
+      });
+      toastify({ type: 'success', msg: 'Approved Successfully.', id: '10231' });
+    } catch (e) {
+      toastify({ type: 'error', msg: 'Something went wrong.', id: '10231' });
+    }
   };
 
   return {

@@ -170,6 +170,12 @@ const approveParamType = [
   { name: 'nonce', type: 'uint256' },
   { name: 'deadline', type: 'uint256' },
 ];
+const getRSVFromSignature = (signature: string) => {
+  const r = signature.slice(0, 66);
+  const s = '0x' + signature.slice(66, 130);
+  const v = '0x' + signature.slice(130, 132);
+  return { r, s, v };
+};
 
 export default generateTradeSignature;
 const generateApprovalSignature = async (
@@ -178,13 +184,13 @@ const generateApprovalSignature = async (
   userMainAccount: string,
   tokenAddress: string,
   routerAddress: string,
+  deadline: string,
   oneCtPk: string
-) => {
+): Promise<[string, { r: string; s: string; v: string }]> => {
   const wallet = getWalletFromOneCtPk(oneCtPk);
-  const deadline = (Math.round(Date.now() / 1000) + 60).toString();
   const approveMessage = {
-    nonce,
-    amount,
+    nonce: +nonce,
+    value: amount,
     owner: userMainAccount,
     deadline,
     spender: routerAddress,
@@ -194,7 +200,7 @@ const generateApprovalSignature = async (
       EIP712Domain,
       Permit: approveParamType,
     },
-    primatyType: 'Permit',
+    primaryType: 'Permit',
     domain: {
       name: 'Token',
       version: '1',
@@ -202,9 +208,15 @@ const generateApprovalSignature = async (
       verifyingContract: tokenAddress,
     },
     message: approveMessage,
-  };
+  } as const;
+  // console.log(`wallet: `, wallet);
   const res = await wallet.signTypedData(approveSignatureParams);
-  console.log(`res-approve: `, res, approveSignatureParams);
-  return res;
+
+  return [res, getRSVFromSignature(res)];
 };
-export { generateBuyTradeSignature, generateApprovalSignature };
+
+export {
+  generateBuyTradeSignature,
+  generateApprovalSignature,
+  getRSVFromSignature,
+};
