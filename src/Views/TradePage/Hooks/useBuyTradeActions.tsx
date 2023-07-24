@@ -469,7 +469,7 @@ export const useBuyTradeActions = (userInput: string) => {
   };
 
   const handleApproveClick = async (
-    ammount = '100000000000000000000000000l'
+    ammount = '100000000000000000000000000'
   ) => {
     if (state.txnLoading > 1) {
       toastify({
@@ -489,7 +489,7 @@ export const useBuyTradeActions = (userInput: string) => {
     }
     // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
-    if (ammount !== '0' && ammount !== toFixed(getPosInf(), 0)) {
+    if (ammount !== '0' && ammount !== '100000000000000000000000000') {
       ammount = add(ammount, multiply(ammount, '0.1'));
     }
     //  fetch nonce 7min
