@@ -75,7 +75,7 @@ export const BuyTrade: React.FC = () => {
   const activeChartMarket =
     marketsForChart[marketId as keyof typeof marketsForChart];
   const activeAssetPrice = getPriceFromKlines(marketPrice, activeChartMarket);
-  const platformFee = divide(switchPool.platformFee, decimals);
+  // const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
   // if (
   //   amount !== undefined &&

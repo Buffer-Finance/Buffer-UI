@@ -38,7 +38,7 @@ const useOngoingTrades = () => {
             environment: activeChain.id,
           },
         });
-        if (!res?.data?.length) return [[], []];
+        if (!res?.data?.length || !markets?.length) return [[], []];
         // limitOrders
         const limitOrders = res.data.filter(
           (t: any) => t.is_limit_order && t.state === 'QUEUED'
@@ -48,6 +48,7 @@ const useOngoingTrades = () => {
             !t.is_limit_order || (t.is_limit_order && t.state !== 'QUEUED')
         );
         // console.log(`activeTrades: `, activeTrades, limitOrders);
+        console.log(`markets: `, markets);
         return [
           addMarketInTrades(activeTrades, markets),
           addMarketInTrades(limitOrders, markets),

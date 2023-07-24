@@ -171,6 +171,7 @@ const approveParamType = [
   { name: 'deadline', type: 'uint256' },
 ];
 const getRSVFromSignature = (signature: string) => {
+  console.log(`signature: `, signature);
   const r = signature.slice(0, 66);
   const s = '0x' + signature.slice(66, 130);
   const v = '0x' + signature.slice(130, 132);
@@ -185,9 +186,8 @@ const generateApprovalSignature = async (
   tokenAddress: string,
   routerAddress: string,
   deadline: string,
-  oneCtPk: string
+  signMethod: any
 ): Promise<[string, { r: string; s: string; v: string }]> => {
-  const wallet = getWalletFromOneCtPk(oneCtPk);
   const approveMessage = {
     nonce: +nonce,
     value: amount,
@@ -204,13 +204,13 @@ const generateApprovalSignature = async (
     domain: {
       name: 'Token',
       version: '1',
-      chainId: 1,
+      chainId: 421613,
       verifyingContract: tokenAddress,
     },
-    message: approveMessage,
+    value: approveMessage,
   } as const;
-  // console.log(`wallet: `, wallet);
-  const res = await wallet.signTypedData(approveSignatureParams);
+  console.log(`approveSignatureParams: `, approveSignatureParams);
+  const res = await signMethod(approveSignatureParams);
 
   return [res, getRSVFromSignature(res)];
 };

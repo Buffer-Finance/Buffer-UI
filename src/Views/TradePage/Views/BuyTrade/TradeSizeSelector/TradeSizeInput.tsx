@@ -12,9 +12,17 @@ export const TradeSizeInput: React.FC<{
   maxTradeSize: string;
   tokenName: string;
   balance: string;
+  registeredOneCT: boolean;
   minTradeSize: string;
   platformFee: string;
-}> = ({ maxTradeSize, tokenName, balance, minTradeSize, platformFee }) => {
+}> = ({
+  maxTradeSize,
+  registeredOneCT,
+  tokenName,
+  balance,
+  minTradeSize,
+  platformFee,
+}) => {
   const [minerr, setminErr] = useState(false);
   const [maxerr, setmaxErr] = useState(false);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
@@ -61,7 +69,7 @@ export const TradeSizeInput: React.FC<{
         </button>
       </div>
 
-      {address && minerr && (
+      {registeredOneCT && minerr && (
         <Trans>
           <span className="text-red whitespace-nowrap">
             Min trade size is {minTradeSize} {tokenName}
@@ -69,7 +77,7 @@ export const TradeSizeInput: React.FC<{
         </Trans>
       )}
 
-      {address && maxerr && (
+      {registeredOneCT && maxerr && (
         <Trans>
           <span
             className={`${
@@ -84,7 +92,7 @@ export const TradeSizeInput: React.FC<{
         </Trans>
       )}
 
-      {address && tradeSize && gt(tradeSize ?? '0', balance ?? '0') && (
+      {registeredOneCT && tradeSize && gt(tradeSize ?? '0', balance ?? '0') && (
         <Trans>
           <span className="text-red whitespace-nowrap flex items-end">
             You don't have enough {tokenName}.&nbsp;

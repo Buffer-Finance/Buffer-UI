@@ -19,6 +19,7 @@ import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import { useAccount } from 'wagmi';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -29,6 +30,7 @@ export const TradeSizeSelector: React.FC = () => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
   const { address } = useAccount();
+  const { registeredOneCT } = useOneCTWallet();
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
@@ -58,6 +60,7 @@ export const TradeSizeSelector: React.FC = () => {
         <RowGapItemsStretched gap="0px">
           <TradeSizeInput
             maxTradeSize={maxTradeSize}
+            registeredOneCT={registeredOneCT}
             tokenName={tradeToken}
             balance={balance}
             platformFee={platformFee}
@@ -65,7 +68,7 @@ export const TradeSizeSelector: React.FC = () => {
           />
           <PoolDropdown />
         </RowGapItemsStretched>
-        {address && (
+        {registeredOneCT && (
           <PlatfromFeeError
             platfromFee={platformFee}
             tradeToken={tradeToken}

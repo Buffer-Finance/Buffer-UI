@@ -7,6 +7,7 @@ import { toFixed } from '@Utils/NumString';
 import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import { privateKeyToAccount } from 'viem/accounts';
 import 'viem/window';
+import { signTypedData } from '@wagmi/core';
 
 import {
   add,
@@ -81,6 +82,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
   const decimals = poolDetails?.decimals;
+
   const balance = divide(readcallData?.balance, decimals as number) as string;
   const tokenName = poolDetails?.token;
   const res = readcallData?.user2signer;
@@ -90,7 +92,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = useProvider({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
-  const [, setIsApproveModalOpen] = useAtom(approveModalAtom);
+  const setIsApproveModalOpen = useSetAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
   const { activeMarket: activeAsset } = useActiveMarket();
   const marketId = joinStrings(
@@ -466,7 +468,7 @@ export const useBuyTradeActions = (userInput: string) => {
     }
   };
 
-  const handleApproveClick = async (ammount = '100000000000000') => {
+  const handleApproveClick = async (ammount = '100000000000000000000000000l') => {
     if (state.txnLoading > 1) {
       toastify({
         id: 'dddafsd3',
@@ -493,14 +495,14 @@ export const useBuyTradeActions = (userInput: string) => {
     // call api :15
     const deadline = (Math.round(Date.now() / 1000) + 6000).toString();
     try {
-      const [approvalSignature, RSV] = await generateApprovalSignature(
+      const [_, RSV] = await generateApprovalSignature(
         readcallData.nonces,
         ammount,
         address!,
         tokenAddress,
         configData.router,
         deadline,
-        oneCtPk
+        signTypedData
       );
       const user_signature = await getSingatureCached(oneCTWallet);
       const apiSignature = {
@@ -519,6 +521,7 @@ export const useBuyTradeActions = (userInput: string) => {
         params: apiSignature,
       });
       setLoading(null);
+      setIsApproveModalOpen(false);
 
       toastify({ type: 'success', msg: 'Approved Successfully.', id: '10231' });
     } catch (e) {

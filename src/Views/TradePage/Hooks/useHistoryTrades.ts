@@ -30,8 +30,6 @@ const useHistoryTrades = (): TradeType[][] => {
           },
         });
         if (!res?.data?.length) return [[]];
-        const activeTrades = res.data.filter((t: any) => !t.is_limit_order);
-        const limitOrders = res.data.filter((t: any) => t.is_limit_order);
         return [res.data] as TradeType[];
       },
       refreshInterval: refreshInterval,
