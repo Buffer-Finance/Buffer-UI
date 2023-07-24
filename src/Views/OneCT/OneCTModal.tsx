@@ -14,8 +14,9 @@ import { appConfig, baseUrl } from '@Views/TradePage/config';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
 import axios from 'axios';
-import { zeroAddress } from 'viem';
+import { getAddress, zeroAddress } from 'viem';
 import { EIP712Domain } from './useOneCTWallet';
+import { signTypedData } from '@wagmi/core';
 
 const features = [
   {
@@ -317,35 +318,46 @@ const OneCTModal: React.FC<any> = ({}) => {
     const domain = {
       name: 'Validator',
       version: '1',
-      chainId: 1,
-      verifyingContract: configData.signer_manager,
-    };
+      chainId: activeChain.id,
+      verifyingContract: getAddress(configData.signer_manager),
+    } as const;
 
+    const types = {
+      EIP712Domain,
+      RegisterAccount: [
+        { name: 'oneCT', type: 'address' },
+        { name: 'user', type: 'address' },
+        { name: 'nonce', type: 'uint256' },
+      ],
+    };
     const msgParams = {
-      types: {
-        EIP712Domain,
-        RegisterAccount: [
-          { name: 'oneCT', type: 'address' },
-          { name: 'user', type: 'address' },
-          { name: 'nonce', type: 'uint256' },
-        ],
-      },
       primaryType: 'RegisterAccount',
       domain: domain,
-      message: {
+      value: {
         oneCT: wallet.address,
         user: address,
         nonce: nonce,
       },
     };
-    const signature = await wallet.signTypedData(msgParams as any);
+    const signature = await signTypedData({
+      types,
+      domain,
+      value: {
+        oneCT: wallet.address,
+        user: address,
+        nonce: nonce,
+      },
+    });
 
-    if (!signature)
+    console.log('signature', signature);
+    if (!signature) {
+      setLaoding(false);
       return toastify({
-        msg: 'Error getting signature. Please try again later.',
+        msg: 'User rejected to sign.',
         type: 'error',
         id: 'signature',
       });
+    }
 
     const apiParams = {
       one_ct: wallet.address,
