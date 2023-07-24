@@ -112,10 +112,8 @@ const useOneCTWallet = () => {
   }, [oneCtPk, provider, registeredOneCT]);
 
   const generatePk = useCallback(async () => {
-    setCreateLoading(true);
-
     if (!res)
-      toastify({
+      return toastify({
         msg: 'Unable to fetch data. Please try again later',
         type: 'error',
         id: 'unable-to-fetch-data-one_ct',
@@ -124,6 +122,7 @@ const useOneCTWallet = () => {
     try {
       const nonce = res?.nonce;
       if (nonce === undefined) return toastify(WaitToast());
+      setCreateLoading(true);
       const signature = await signTypedData({
         types,
         domain,
