@@ -32,11 +32,11 @@ const TradePage: React.FC<any> = ({}) => {
       >
         <div className="flex flex-col w-full mx-3">
           {showFavoriteAsset && <PinnedMarkets />}
-          <MarketChart />
-          <AccordionTable />
+          {/* <MarketChart /> */}
+          {/* <AccordionTable /> */}
         </div>
 
-        <BuyTrade />
+        {/* <BuyTrade /> */}
       </div>
     </>
   );
