@@ -162,14 +162,14 @@ export const useBuyTradeActions = (userInput: string) => {
         id: 'PoolNotFound',
       });
     } else {
-      if (state.txnLoading > 1) {
-        toastify({
-          id: '2321123',
-          type: 'error',
-          msg: 'Please confirm your previous pending transactions.',
-        });
-        return true;
-      }
+      // if (state.txnLoading > 1) {
+      //   toastify({
+      //     id: '2321123',
+      //     type: 'error',
+      //     msg: 'Please confirm your previous pending transactions.',
+      //   });
+      //   return true;
+      // }
 
       if (isForex && knowTill === false) {
         return toastify({
