@@ -5,10 +5,11 @@ import { getProbabilityByTime } from '../Common';
 
 export const getPayout = (
   trade: TradeType,
-  expiryPrice: number,
+  expiryPrice: number | null,
   decimals: number
 ) => {
-  if (trade.state === 'OPENED') {
+  if (trade.state === 'OPENED' || trade.payout === null) {
+    if (!expiryPrice) return { payout: '0', pnl: '0' };
     const [pnl, payout] = getPendingData(trade, expiryPrice, decimals);
     return { payout: payout as string, pnl: pnl as string };
   } else
@@ -40,11 +41,13 @@ export function getPendingData(
     if (!!currentRow.close_time) {
       //early close
       pnl = getEarlypnl(currentRow, expiryPrice, decimals);
-      payout = pnl + currentRow.trade_size;
+      payout = pnl * 10 ** decimals + currentRow.trade_size;
+      console.log(`aug-payout-early: `, payout, pnl, currentRow.trade_size);
     } else {
       //end close
       pnl = getEndPnl(currentRow, expiryPrice, decimals);
-      payout = pnl + currentRow.trade_size;
+      payout = pnl * 10 ** decimals + currentRow.trade_size;
+      console.log(`aug-payout-end: `, payout, pnl, currentRow.trade_size);
     }
   }
 
@@ -56,6 +59,11 @@ function getEarlypnl(
   expiryPrice: number,
   decimals: number
 ) {
+  console.log(`ec-aug-currentRow.close_time: `, currentRow.close_time);
+  console.log(
+    `ec-aug-currentRow.expiration_time: `,
+    currentRow.expiration_time
+  );
   const probability = getProbabilityByTime(
     currentRow,
     expiryPrice / 1e8,

@@ -4,16 +4,18 @@ import useSWR from 'swr';
 import { baseUrl, refreshInterval } from '../config';
 import { useAccount, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { Signer } from 'ethers';
 import { TradeType } from '../type';
-import { getSingatureCached } from '../cahce';
+import { addMarketInTrades } from '../utils';
+import { useMarketsConfig } from './useMarketsConfig';
 
 const useHistoryTrades = (): TradeType[][] => {
   // const { oneCTWallet } = useOneCTWallet();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
-  const { data, error } = useSWR<TradeType[]>(
+  const markets = useMarketsConfig();
+
+  const { data, error } = useSWR<TradeType[][]>(
     'history-trades-' +
       address +
       '-' +
@@ -23,14 +25,14 @@ const useHistoryTrades = (): TradeType[][] => {
     {
       fetcher: async () => {
         if (!address || !activeChain.id) return [[]];
-        const res = await axios.get(`${baseUrl}trades/user/history/`, {
+        const res = await axios.get(`${baseUrl}trades/user/temp_history/`, {
           params: {
             user_address: address,
             environment: activeChain.id,
           },
         });
         if (!res?.data?.length) return [[]];
-        return [res.data] as TradeType[];
+        return [addMarketInTrades(res.data, markets)] as TradeType[][];
       },
       refreshInterval: refreshInterval,
     }

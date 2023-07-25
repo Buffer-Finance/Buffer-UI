@@ -44,7 +44,6 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { v3AppConfig } from '@Views/V3App/config';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { getExpiry } from '@Views/TradePage/Views/AccordionTable/Common';
-import { getPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
 export const PRICE_DECIMALS = 1e8;
 
 export const getExpireNotification = async (
@@ -65,7 +64,7 @@ export const getExpireNotification = async (
       timestamp: getExpiry(currentRow),
     };
     console.log(`TableComponents-query: `, query);
-    const expiryPrice = await getPrice(query);
+    const expiryPrice = 3132;
     console.log(`TableComponents-expiryPrice: `, expiryPrice);
     let win = true;
     if (lt(currentRow.strike + '', expiryPrice)) {
