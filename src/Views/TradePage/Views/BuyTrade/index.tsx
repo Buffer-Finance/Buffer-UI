@@ -105,7 +105,7 @@ export const BuyTrade: React.FC = () => {
       <TradeTypeSelector />
       <CurrentPrice price={activeAssetPrice} />
       <PayoutProfit
-        amount={userAmount}
+        amount={userAmount || '0'}
         totalPayout={totalPayout}
         tradeToken={tradeToken}
       />
