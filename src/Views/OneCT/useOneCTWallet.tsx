@@ -12,7 +12,7 @@ import { useUserOneCTData } from './useOneCTWalletV2';
 import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
 import { getSingatureCached } from '@Views/TradePage/cahce';
 import axios from 'axios';
-import { zeroAddress } from 'viem';
+import { getAddress, zeroAddress } from 'viem';
 
 /*
  * Nonce is zero initially.
@@ -152,67 +152,65 @@ const useOneCTWallet = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
   };
   const disableOneCt = async () => {
-    setDisabelLoading(true);
-    if (!res)
-      return toastify({
-        msg: 'Unable to fetch data. Please try again later',
-        type: 'error',
-        id: 'unable-to-fetch-data-one_ct',
-      });
-    if (typeof oneCtPk !== 'string')
-      return toastify({
-        msg: 'Please create your 1CT Account first',
-        type: 'error',
-        id: 'oneCtPk',
-      });
-    const domain = {
-      name: 'Validator',
-      version: '1',
-      chainId: activeChain.id,
-      verifyingContract: configData.signer_manager,
-    };
-    const msgParams = {
-      types: {
+    try {
+      setDisabelLoading(true);
+      if (!res)
+        return toastify({
+          msg: 'Unable to fetch data. Please try again later',
+          type: 'error',
+          id: 'unable-to-fetch-data-one_ct',
+        });
+      if (typeof oneCtPk !== 'string')
+        return toastify({
+          msg: 'Please create your 1CT Account first',
+          type: 'error',
+          id: 'oneCtPk',
+        });
+      const types = {
         EIP712Domain,
         DeregisterAccount: [
           { name: 'user', type: 'address' },
           { name: 'nonce', type: 'uint256' },
         ],
-      },
-      primaryType: 'DeregisterAccount',
-      domain: domain,
-      message: {
-        user: address,
-        nonce: res?.nonce,
-      },
-    };
+      };
+      const domain = {
+        name: 'Validator',
+        version: '1',
+        chainId: activeChain.id,
+        verifyingContract: getAddress(configData.signer_manager),
+      };
 
-    const wallet = getWalletFromOneCtPk(oneCtPk);
-    const signature = await wallet.signTypedData(msgParams as any);
-
-    if (!signature)
-      return toastify({
-        msg: 'Error getting signature. Please try again later.',
-        type: 'error',
-        id: 'signature',
+      const signature = await signTypedData({
+        value: {
+          user: address,
+          nonce: res?.nonce,
+        },
+        types,
+        domain,
       });
 
-    const api_signature = await getSingatureCached(oneCTWallet);
+      if (!signature)
+        return toastify({
+          msg: 'Error getting signature. Please try again later.',
+          type: 'error',
+          id: 'signature',
+        });
 
-    if (!api_signature)
-      return toastify({
-        msg: 'Error getting signature. Please try again later.',
-        type: 'error',
-        id: 'signature',
-      });
+      const api_signature = await getSingatureCached(oneCTWallet);
 
-    const apiParams = {
-      account: address,
-      registration_signature: signature,
-      environment: activeChain.id,
-      api_signature,
-    };
-    try {
+      if (!api_signature)
+        return toastify({
+          msg: 'Error getting signature. Please try again later.',
+          type: 'error',
+          id: 'signature',
+        });
+
+      const apiParams = {
+        account: address,
+        deregistration_signature: signature,
+        environment: activeChain.id,
+        api_signature,
+      };
       const resp = await axios.post(baseUrl + 'deregister/', null, {
         params: apiParams,
       });
