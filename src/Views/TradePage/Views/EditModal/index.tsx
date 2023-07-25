@@ -172,6 +172,7 @@ export const EditModal: React.FC<{
       0,
       buttonDirection == directionBtn.Up ? true : false,
       oneCtPk,
+      activeChain.id,
       configData.router
     );
     const signature = await getSingatureCached(oneCTWallet);
