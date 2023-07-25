@@ -1,26 +1,19 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import Wallet from '@Assets/Elements/wallet';
-import { ArrowDropDownRounded, Settings, Share } from '@mui/icons-material';
+import React, { ReactNode, useEffect, useRef } from 'react';
+import { ArrowDropDownRounded } from '@mui/icons-material';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import * as chain from '@wagmi/core/chains';
 import { BlueBtn } from '../V2-Button';
-import {
-  LightningIcon,
-  OneCTButton,
-  isOneCTModalOpenAtom,
-} from '@Views/OneCT/OneCTButton';
-import BufferDropdown from '../BufferDropdown';
+import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 
 import { SVGProps } from 'react';
 import copyToClipboard from '@Utils/copyToClipBoard';
-import { MenuItem, Skeleton, Tooltip } from '@mui/material';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { MenuItem, Skeleton } from '@mui/material';
+import { useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useDisconnect, useProvider } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { activeAssetStateAtom } from '@Views/BinaryOptions';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { Display } from '../Tooltips/Display';
 interface IProps {
   inDrawer?: boolean;
@@ -30,7 +23,6 @@ import DDArrow from '@SVG/Elements/Arrow';
 import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
 import NFTtier from '../NFTtier';
 import WalletIcon from '@SVG/Elements/WalletIcon';
-import { gt } from '@Utils/NumString/stringArithmatics';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 const token2image = {
   ETH: ETHImage,
