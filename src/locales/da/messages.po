@@ -21,12 +21,16 @@ msgstr ""
 #~ msgid "<0>{0}</0>"
 #~ msgstr ""
 
-#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:61
+#: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:76
 msgid "<0>{err}</0>"
 msgstr ""
 
-#: src/Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker.tsx:157
+#: src/Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker.tsx:158
 msgid "<0>{error}</0>"
+msgstr ""
+
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:81
+msgid "<0><1><2/></1>Max trade size is {maxTradeSize} {tokenName}</0>"
 msgstr ""
 
 #: src/Views/TradePage/Views/Settings/TradeSettings/LimitOrdersExpiry/MinutesInput.tsx:48
@@ -34,10 +38,10 @@ msgstr ""
 #~ msgstr ""
 
 #: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:67
-msgid "<0>Max trade size is {maxTradeSize} {tokenName}</0>"
-msgstr ""
+#~ msgid "<0>Max trade size is {maxTradeSize} {tokenName}</0>"
+#~ msgstr ""
 
-#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:59
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:73
 msgid "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 msgstr ""
 
@@ -45,7 +49,7 @@ msgstr ""
 msgid "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
 msgstr ""
 
-#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:75
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:96
 msgid "<0>You don't have enough {tokenName}. <1/> </0>"
 msgstr ""
 
