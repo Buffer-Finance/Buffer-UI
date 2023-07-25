@@ -1,8 +1,5 @@
-import { toFixed } from '@Utils/NumString';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
-import NumberTooltip from '@Views/Common/Tooltips';
-import { Display, underLineClass } from '@Views/Common/Tooltips/Display';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { IBLP } from '@Views/Dashboard/interface';
 import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
@@ -12,7 +9,7 @@ import {
   tooltipValueClasses,
   valueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { getImageUrl } from '@Views/TradePage/utils';
+import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 
@@ -36,7 +33,7 @@ export const BLPcard = ({
           <div className="w-[28px] h-[28px] mr-[6px]">
             <PairTokenImage
               image2={'/BLPlogo.png'}
-              image1={getImageUrl(tokenName)}
+              image1={getAssetImageUrl(tokenName)}
             />
           </div>
           <div className="flex flex-col ml-2">

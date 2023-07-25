@@ -2,7 +2,7 @@ import { Skeleton } from '@mui/material';
 import BufferLogo from 'public/ComponentSVGS/bufferLogo';
 import { numberWithCommas } from '@Utils/display';
 import { toFixed } from '@Utils/NumString';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { getBalance } from '@Views/Common/AccountInfo';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -121,7 +121,6 @@ export const StatsTotalStats = ({ data }: { data: IOverview | null }) => {
   const totalDays = Math.ceil(
     (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
   );
-  console.log('totalDays', totalDays);
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
@@ -213,6 +212,9 @@ export const OverviewArbitrum = ({
       ARB: Math.ceil(
         (Date.now() - Date.parse('17 Mar 2023 017:15:45 GMT')) / 86400000
       ),
+      BFR: Math.ceil(
+        (Date.now() - Date.parse('14 Jun 2023 019:36:22 GMT')) / 86400000
+      ),
     };
   }, []);
   const { poolNames: tokens } = usePoolNames();
@@ -222,10 +224,11 @@ export const OverviewArbitrum = ({
     return Object.values(poolDisplayKeyMapping);
   }, [poolDisplayKeyMapping]);
 
-  console.log(poolDisplayNameMapping, keys, 'poolDisplayNameMapping');
   function getAverageTradeVolume(volume: string, days: string) {
     return divide(volume, days);
   }
+  const usdcPools = ['USDC', 'USDC_POL'];
+
   if (!data)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
   return (
@@ -243,7 +246,7 @@ export const OverviewArbitrum = ({
             'Total Trades',
             'Open Interest (USDC)',
             'Open Interest (ARB)',
-            'Open Interest (USDC-POL)',
+            'Open Interest (BFR)',
             'Total Traders',
           ]}
           values={[
@@ -276,7 +279,7 @@ export const OverviewArbitrum = ({
                             </div>
                           </div>
                         );
-                      else return <></>;
+                      else return <>-</>;
                     })}
                   />
                 }
@@ -443,42 +446,38 @@ export const OverviewArbitrum = ({
               </div>
             </NumberTooltip>,
 
-            // <NumberTooltip
-            //   content={
-            //     <TableAligner
-            //       keysName={keys}
-            //       keyStyle={tooltipKeyClasses}
-            //       valueStyle={tooltipValueClasses}
-            // values={tokens.map((token) => {
-            //   const stats = data[`${token}openInterest`];
-            //   if (stats) return (stats as toalTokenXstats).openInterest;
-            //   else return '-';
-            // })}
-            //     />
-            //   }
-            // >
-            //   <div className={underLineClass}>
-            //     $
-            //     {tokens.reduce((acc, curr) => {
-            //       return acc + data[`${curr}openInterest`]?.openInterest || 0;
-            //     }, 0)}
-            //   </div>
-            // </NumberTooltip>,
-
-            <div className={wrapperClasses}>
-              {data.openInterest !== null || data.openInterest !== undefined ? (
-                <Display
-                  data={
-                    (data.USDCopenInterest as toalTokenXstats)?.openInterest
-                  }
-                  precision={2}
-                  unit="USDC"
-                  className="!w-fit"
+            <NumberTooltip
+              content={
+                <TableAligner
+                  keysName={usdcPools}
+                  keyStyle={tooltipKeyClasses}
+                  valueStyle={tooltipValueClasses}
+                  values={usdcPools.map((token) => {
+                    const stats = data[`${token}openInterest`];
+                    if (stats)
+                      return toFixed(
+                        (stats as toalTokenXstats).openInterest,
+                        2
+                      );
+                    else return '-';
+                  })}
                 />
-              ) : (
-                'fetching...'
-              )}
-            </div>,
+              }
+            >
+              <div className={underLineClass}>
+                $
+                {toFixed(
+                  usdcPools.reduce((acc, curr) => {
+                    return add(
+                      acc,
+                      data[`${curr}openInterest`]?.openInterest || 0
+                    );
+                  }, '0'),
+                  2
+                )}
+              </div>
+            </NumberTooltip>,
+
             <div className={wrapperClasses}>
               {data.openInterest !== null || data.openInterest !== undefined ? (
                 <Display
@@ -491,15 +490,14 @@ export const OverviewArbitrum = ({
                 'fetching...'
               )}
             </div>,
+
             <div className={wrapperClasses}>
-              {(data.USDC_POLopenInterest as toalTokenXstats)?.openInterest !==
+              {(data.BFRopenInterest as toalTokenXstats)?.openInterest !==
               undefined ? (
                 <Display
-                  data={
-                    (data.USDC_POLopenInterest as toalTokenXstats)?.openInterest
-                  }
+                  data={(data.BFRopenInterest as toalTokenXstats)?.openInterest}
                   precision={2}
-                  unit="USDC"
+                  unit="BFR"
                   className="!w-fit"
                 />
               ) : (
@@ -683,7 +681,7 @@ export const TokensBLP = ({
             'Exchange Rate',
             'Total Supply',
             `Total ${tokenName} Amount`,
-            shouldDisplayPOL && `POL(${tokenName})`,
+            // shouldDisplayPOL && `POL(${tokenName})`,
             'APR',
           ].filter((key) => key)}
           values={[
@@ -697,31 +695,31 @@ export const TokensBLP = ({
             <div className={wrapperClasses}>
               <Display data={data.total_usdc} unit={tokenName} />
             </div>,
-            shouldDisplayPOL && (
-              <div className={wrapperClasses}>
-                {data.usdc_pol ? (
-                  <NumberTooltip
-                    content={
-                      toFixed(
-                        multiply(divide(data.usdc_pol, data.usdc_total), 2),
-                        2
-                      ) + `% of total liquidity in the ${tokenName} vault.`
-                    }
-                  >
-                    <div>
-                      <Display
-                        data={multiply(data.usdc_pol, data.price) || '0'}
-                        unit={tokenName}
-                        disable
-                        className={underLineClass}
-                      />
-                    </div>
-                  </NumberTooltip>
-                ) : (
-                  <>-</>
-                )}
-              </div>
-            ),
+            // shouldDisplayPOL && (
+            //   <div className={wrapperClasses}>
+            //     {data.usdc_pol ? (
+            //       <NumberTooltip
+            //         content={
+            //           toFixed(
+            //             multiply(divide(data.usdc_pol, data.usdc_total), 2),
+            //             2
+            //           ) + `% of total liquidity in the ${tokenName} vault.`
+            //         }
+            //       >
+            //         <div>
+            //           <Display
+            //             data={multiply(data.usdc_pol, data.price) || '0'}
+            //             unit={tokenName}
+            //             disable
+            //             className={underLineClass}
+            //           />
+            //         </div>
+            //       </NumberTooltip>
+            //     ) : (
+            //       <>-</>
+            //     )}
+            //   </div>
+            // ),
             <div className={`${wrapperClasses}`}>
               <Display
                 className="!justify-end"

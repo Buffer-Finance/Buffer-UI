@@ -387,14 +387,15 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           const getBarsFnActiveAsset = symbolInfo.name;
 
           const req = {
-            from,
-            to,
+            from_ts: from,
+            to_ts: to,
             symbol: getBarsFnActiveAsset,
             resolution,
+            pyth_timeout: 5,
           };
 
           const pythOHLC = await axios.get(
-            `https://pyth-api.vintage-orange-muffin.com/v2/history`,
+            `https://oracle.buffer-finance-api.link/price/history/`,
             {
               params: req,
             }

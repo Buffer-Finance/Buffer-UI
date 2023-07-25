@@ -45,7 +45,7 @@ const TotalFeesVolume: React.FC<{ data: totalStatsType; keys: string[] }> = ({
                     </div>
                   </div>
                 );
-              else return <></>;
+              else return <>-</>;
             })}
           />
         }

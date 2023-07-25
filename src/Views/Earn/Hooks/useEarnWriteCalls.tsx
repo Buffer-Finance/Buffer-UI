@@ -3,34 +3,32 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import EarnRouterABI from '../Config/Abis/RewardRouterV2.json';
 import VesterABI from '../Config/Abis/Vester.json';
-import { CONTRACTS } from '../Config/Address';
 import { useAtom } from 'jotai';
 import { writeEarnAtom } from '../earnAtom';
 import { toFixed } from '@Utils/NumString';
-import { useContext } from 'react';
-import { EarnContext } from '..';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { getContract } from '../Config/Address';
 
 export const useEarnWriteCalls = (
   contractType: 'Router' | 'Vester',
   vesterType?: 'BLP' | 'BFR'
 ) => {
   const { activeChain } = useActiveChain();
-  const EarnRouterContract = CONTRACTS[activeChain?.id].RewardRouter;
+  const EarnRouterContract = getContract(activeChain?.id, 'RewardRouter');
   const EarnVesterContract =
     vesterType === 'BFR'
-      ? CONTRACTS[activeChain?.id].BfrVester
-      : CONTRACTS[activeChain?.id].BlpVester;
+      ? getContract(activeChain?.id, 'BfrVester')
+      : getContract(activeChain?.id, 'BlpVester');
   const routerContract = { contract: EarnRouterContract, abi: EarnRouterABI };
   const vesterContract = { contract: EarnVesterContract, abi: VesterABI };
   const contract = contractType === 'Router' ? routerContract : vesterContract;
   const { writeCall } = useWriteCall(contract.contract, contract.abi);
   const { writeCall: RewardRouter2 } = useWriteCall(
-    CONTRACTS[activeChain.id].RewardRouter2,
+    getContract(activeChain.id, 'RewardRouter2'),
     EarnRouterABI
   );
   const { writeCall: Vester2 } = useWriteCall(
-    CONTRACTS[activeChain.id].BlpVester2,
+    getContract(activeChain.id, 'BlpVester2'),
     VesterABI
   );
 

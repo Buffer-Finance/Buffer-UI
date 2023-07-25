@@ -1,5 +1,4 @@
 import { useContext, useMemo } from 'react';
-import { CONTRACTS } from '@Views/Earn/Config/Address';
 import { CONTRACTS as DASHBOARDCONTRACTS } from '@Views/Dashboard/config/Addresses';
 import { DashboardContext } from '../dashboardAtom';
 import bfrAbi from '@Views/Earn/Config/Abis/BFR.json';
@@ -32,6 +31,8 @@ import { ethers } from 'ethers';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useDashboardTableData } from './useDashboardTableData';
+import { roundToTwo } from '@Utils/roundOff';
+import { appConfig } from '@Views/TradePage/config';
 export const HolderContracts = [
   '0x01fdd6777d10dD72b8dD716AEE05cE67DD2b7D85',
   '0x58b0F2445DfA2808eCB209B7f96EfBc584736b7D',
@@ -53,6 +54,7 @@ export const useDashboardReadCalls = () => {
   const { configContracts } = useActiveChain();
   const usd_decimals = configContracts.tokens['USDC'].decimals;
   const arb_decimals = configContracts.tokens['ARB'].decimals;
+  const bfrPool = configContracts.tokens['BFR'];
 
   const { calls, mainnetData } = useDashboardCalls();
 
@@ -92,6 +94,8 @@ export const useDashboardReadCalls = () => {
       stakedArbBlpTrackerTokensPerInterval,
       feeArbBlpTrackerTokensPerInterval,
       ARBvaultPOL,
+      burnBFRAmount,
+      bfrPoolBalance,
     ]: any[] = data;
 
     const blpPrice =
@@ -161,24 +165,31 @@ export const useDashboardReadCalls = () => {
           )
         : '0';
     const ablpAprTotal = add(arbblpAprForRewardToken, arbblpAprForEsBfr);
+    const netSupply = roundToTwo(
+      fromWei(subtract(totalSupplyBFR, burnBFRAmount)),
+      2
+    );
+    const circulatingSupply =
+      mainnetData && netSupply && bfrPoolBalance
+        ? subtract(
+            subtract(netSupply, mainnetData.amountInPools),
+            fromWei(bfrPoolBalance, bfrPool.decimals)
+          )
+        : undefined;
 
     response = {
       total: null,
       BFR: {
         price: bfrPrice,
-        supply: fromWei(TOTALSUPPLY.toString()),
+        supply: netSupply,
         total_staked: fromWei(totalStakedBFR),
-        market_cap: multiply(bfrPrice, fromWei(totalSupplyBFR)),
-        circulatingSupply: mainnetData?.circulatingSupply
-          ? '' + mainnetData.circulatingSupply
-          : null,
+        circulatingSupply: circulatingSupply,
         liquidity_pools_token: mainnetData?.lpTokens,
       },
       BLP: {
         price: blpPrice,
         supply: divide(fromWei(amountUSDCpool, usd_decimals), blpPrice),
         total_staked: totalUSDCstaked,
-        market_cap: multiply(blpPrice, fromWei(totalSupplyBLP, usd_decimals)),
 
         apr: {
           value: fromWei(blpAprTotal, 2),
@@ -218,87 +229,90 @@ export const useDashboardReadCalls = () => {
 const useDashboardCalls = () => {
   const { activeChain } = useContext(DashboardContext);
   const { configContracts } = useActiveChain();
-  const earnContracts = CONTRACTS[activeChain?.id];
-  const earnMainnetContracts = CONTRACTS[chain.arbitrum.id];
+  const config =
+    appConfig[activeChain?.id as unknown as keyof typeof appConfig];
+  const earnContracts = config.EarnConfig;
+  const earnMainnetContracts = appConfig['42161'].EarnConfig;
   const dashboardContracts: (typeof DASHBOARDCONTRACTS)[42161] =
     DASHBOARDCONTRACTS[activeChain?.id];
   const binaryContracts = configContracts;
+  const bfrPoolAddress = configContracts.tokens['BFR'].pool_address;
 
   const getCalls = () => {
     const calls = {
-      // totalStakedBFR: {
-      //   address: earnContracts.iBFR,
-      //   abi: bfrAbi,
-      //   name: 'balanceOf',
-      //   params: [earnContracts.StakedBfrTracker],
-      //   chainID: activeChain?.id,
-      // },
-      // totalSupplyBFR: {
-      //   address: earnContracts.iBFR,
-      //   abi: bfrAbi,
-      //   name: 'totalSupply',
-      //   chainID: activeChain?.id,
-      // },
-      // blpTotalBalance: {
-      //   address: earnContracts.BLP,
-      //   abi: BlpAbi,
-      //   name: 'totalTokenXBalance',
-      //   chainID: activeChain?.id,
-      // },
-      // blpSupply: {
-      //   address: earnContracts.BLP,
-      //   abi: bfrAbi,
-      //   name: 'totalSupply',
-      //   chainID: activeChain?.id,
-      // },
-      // blpInitialRate: {
-      //   address: earnContracts.BLP,
-      //   abi: BlpAbi,
-      //   name: 'INITIAL_RATE',
-      //   chainID: activeChain?.id,
-      // },
-      // totalStakedBLP: {
-      //   address: earnContracts.BLP,
-      //   abi: bfrAbi,
-      //   name: 'balanceOf',
-      //   params: [earnContracts.FeeBlpTracker],
-      // },
-      // totalSupplyBLP: {
-      //   address: earnContracts.BLP,
-      //   abi: bfrAbi,
-      //   name: 'totalSupply',
-      //   chainID: activeChain?.id,
-      // },
-      // amountUSDCpool: {
-      //   address: binaryContracts.tokens['USDC'].address,
-      //   abi: bfrAbi,
-      //   name: 'balanceOf',
-      //   params: [binaryContracts.tokens['USDC'].pool_address],
-      //   chainID: activeChain?.id,
-      // },
-      // feeBlpTrackerTokensPerInterval: {
-      //   address: earnContracts.FeeBlpTracker,
-      //   abi: RewardTrackerAbi,
-      //   name: 'tokensPerInterval',
-      //   chainID: activeChain?.id,
-      // },
-      // stakedBlpTrackerTokensPerInterval: {
-      //   address: earnContracts.StakedBlpTracker,
-      //   abi: RewardTrackerAbi,
-      //   name: 'tokensPerInterval',
-      //   chainID: activeChain?.id,
-      // },
+      totalStakedBFR: {
+        address: earnContracts.iBFR,
+        abi: bfrAbi,
+        name: 'balanceOf',
+        params: [earnContracts.StakedBfrTracker],
+        chainID: activeChain?.id,
+      },
+      totalSupplyBFR: {
+        address: earnContracts.iBFR,
+        abi: bfrAbi,
+        name: 'totalSupply',
+        chainID: activeChain?.id,
+      },
+      blpTotalBalance: {
+        address: earnContracts.BLP,
+        abi: BlpAbi,
+        name: 'totalTokenXBalance',
+        chainID: activeChain?.id,
+      },
+      blpSupply: {
+        address: earnContracts.BLP,
+        abi: bfrAbi,
+        name: 'totalSupply',
+        chainID: activeChain?.id,
+      },
+      blpInitialRate: {
+        address: earnContracts.BLP,
+        abi: BlpAbi,
+        name: 'INITIAL_RATE',
+        chainID: activeChain?.id,
+      },
+      totalStakedBLP: {
+        address: earnContracts.BLP,
+        abi: bfrAbi,
+        name: 'balanceOf',
+        params: [earnContracts.FeeBlpTracker],
+      },
+      totalSupplyBLP: {
+        address: earnContracts.BLP,
+        abi: bfrAbi,
+        name: 'totalSupply',
+        chainID: activeChain?.id,
+      },
+      amountUSDCpool: {
+        address: binaryContracts.tokens['USDC'].address,
+        abi: bfrAbi,
+        name: 'balanceOf',
+        params: [binaryContracts.tokens['USDC'].pool_address],
+        chainID: activeChain?.id,
+      },
+      feeBlpTrackerTokensPerInterval: {
+        address: earnContracts.FeeBlpTracker,
+        abi: RewardTrackerAbi,
+        name: 'tokensPerInterval',
+        chainID: activeChain?.id,
+      },
+      stakedBlpTrackerTokensPerInterval: {
+        address: earnContracts.StakedBlpTracker,
+        abi: RewardTrackerAbi,
+        name: 'tokensPerInterval',
+        chainID: activeChain?.id,
+      },
 
-      // USDCvaultPOL: {
-      //   address: earnContracts.StakedBlpTracker,
-      //   abi: RewardTrackerAbi,
-      //   name: 'depositBalances',
-      //   params: [
-      //     dashboardContracts.usdcLiquidityAddress,
-      //     earnContracts.FeeBlpTracker,
-      //   ],
-      //   chainID: activeChain?.id,
-      // },
+      USDCvaultPOL: {
+        address: earnContracts.StakedBlpTracker,
+        abi: RewardTrackerAbi,
+        name: 'depositBalances',
+        params: [
+          dashboardContracts.usdcLiquidityAddress,
+          earnContracts.FeeBlpTracker,
+        ],
+        chainID: activeChain?.id,
+      },
 
       ablpTotalBalance: {
         address: configContracts.tokens['ARB'].pool_address,
@@ -344,6 +358,18 @@ const useDashboardCalls = () => {
           earnContracts.FeeBlpTracker2,
         ],
         chainID: activeChain?.id,
+      },
+      burnBFRAmount: {
+        address: earnContracts.iBFR,
+        abi: bfrAbi,
+        name: 'balanceOf',
+        params: [earnContracts.burnAddress],
+      },
+      bfrPoolBalance: {
+        address: earnContracts.iBFR,
+        abi: bfrAbi,
+        name: 'balanceOf',
+        params: [bfrPoolAddress],
       },
     };
     return Object.keys(calls).map(function (key) {
@@ -422,7 +448,7 @@ const useDashboardCalls = () => {
       // console.log(`lpTokens: `, sum, lpTokens);
 
       return {
-        circulatingSupply: subtract('100000000', sum),
+        amountInPools: sum,
         lpTokens,
       };
     },

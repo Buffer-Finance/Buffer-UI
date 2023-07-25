@@ -5,21 +5,22 @@ import { useEffect } from 'react';
 import { getArbitrumBFRreadcalls } from './getArbitrumBFRreadcalls';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { appConfig } from '@Views/TradePage/config';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 
 export const useBFRReadCallData = () => {
   const response = useAtomValue(readResponseAtom);
   const setCalls = useSetAtom(setReadCallsAtom);
   const { activeChain } = useActiveChain();
-  const readcalls = getArbitrumBFRreadcalls(activeChain.id);
+  const poolsByAsset = usePoolByAsset();
+  const readcalls = getArbitrumBFRreadcalls(
+    activeChain.id,
+    poolsByAsset['BFR'].poolAddress
+  );
   const { EarnConfig } =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
 
   useEffect(() => {
-    setCalls({ readcalls, isCleanup: false });
-
-    return () => {
-      setCalls({ readcalls, isCleanup: true });
-    };
+    setCalls({ readcalls, activeChainId: activeChain.id });
   }, [readcalls.length, activeChain]);
 
   if (response !== null && response !== undefined) {
@@ -34,10 +35,30 @@ export const useBFRReadCallData = () => {
       ]?.[0];
     const totalSupplyBFR =
       response[getCallId(EarnConfig.iBFR, 'totalSupply', activeChain.id)]?.[0];
+    const burnBFRAmount =
+      response[
+        getCallId(
+          EarnConfig.iBFR,
+          'balanceOf',
+          activeChain.id,
+          EarnConfig.burnAddress
+        )
+      ]?.[0];
+    const bfrPoolBalance =
+      response[
+        getCallId(
+          EarnConfig.iBFR,
+          'balanceOf',
+          activeChain.id,
+          poolsByAsset['BFR'].poolAddress
+        )
+      ]?.[0];
 
     return {
       totalStakedBFR,
       totalSupplyBFR,
+      burnBFRAmount,
+      bfrPoolBalance,
     };
   }
 };

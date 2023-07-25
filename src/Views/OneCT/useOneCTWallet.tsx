@@ -1,18 +1,18 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
+import { baseUrl } from '@Views/TradePage/config';
+import { useUserOneCTData } from './useOneCTWalletV2';
+import { getSingatureCached } from '@Views/TradePage/cahce';
+import axios from 'axios';
+import { getAddress } from 'viem';
 import { ethers } from 'ethers';
 import { atom, useAtom } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
 import { signTypedData } from '@wagmi/core';
 import { useToast } from '@Contexts/Toast';
-import { appConfig, baseUrl } from '@Views/TradePage/config';
+import { appConfig } from '@Views/TradePage/config';
 import { WaitToast } from '@Views/TradePage/utils';
-import { useUserOneCTData } from './useOneCTWalletV2';
-import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
-import { getSingatureCached } from '@Views/TradePage/cahce';
-import axios from 'axios';
-import { getAddress, zeroAddress } from 'viem';
+import { getChains } from 'src/Config/wagmiClient';
 
 /*
  * Nonce is zero initially.
@@ -72,6 +72,13 @@ export const is1CTEnabled = (
 };
 export const disableLoadingAtom = atom<boolean>(false);
 export const createLoadingAtom = atom<boolean>(false);
+export const uesOneCtActiveChain = () => {
+  //react-couter cant access in the navbar. Use this hook for accessing activeChain in navbar
+  const { chain } = useNetwork();
+  const chains = getChains();
+
+  return { activeChain: chain ? chain : chains[0] };
+};
 
 const useOneCTWallet = () => {
   const { address } = useAccount();
@@ -80,7 +87,7 @@ const useOneCTWallet = () => {
   const [disabelLoading, setDisabelLoading] = useAtom(disableLoadingAtom);
   const [createLoading, setCreateLoading] = useAtom(createLoadingAtom);
 
-  const { activeChain } = useActiveChain();
+  const { activeChain } = uesOneCtActiveChain();
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const provider = useProvider({ chainId: activeChain.id });

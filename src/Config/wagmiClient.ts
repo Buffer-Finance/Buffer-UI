@@ -17,6 +17,7 @@ import {
   tahoWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
+console.log(`projectId: `, projectId);
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';

@@ -94,16 +94,12 @@ function createMarketObject(
     pair: chartMarketData.pair,
     pool: poolName,
     currentPrice,
-    totalTrades: Number(
-      fromWei(add(market.openDown, market.openUp), poolInfo.decimals)
-    ),
+
     '24h_volume':
       Number(fromWei(oneDayVolume?.[marketAddress], poolInfo.decimals)) || '0',
     min_duration: secondsToHHMM(Number(market.configContract.minPeriod)),
     max_duration: secondsToHHMM(Number(market.configContract.maxPeriod)),
     poolUnit: poolInfo.token,
-    openUp: Number(fromWei(market.openUp, poolInfo.decimals)),
-    openDown: Number(fromWei(market.openDown, poolInfo.decimals)),
     current_open_interest: Number(
       fromWei(currentOIs[marketAddress], poolInfo.decimals) || '0'
     ),

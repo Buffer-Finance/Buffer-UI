@@ -4,26 +4,24 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import * as chain from '@wagmi/core/chains';
 import { BlueBtn } from '../V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
-
 import { SVGProps } from 'react';
-import copyToClipboard from '@Utils/copyToClipBoard';
 import { MenuItem, Skeleton } from '@mui/material';
 import { useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { useDisconnect, useProvider } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import {
+  uesOneCtActiveChain,
+  useOneCTWallet,
+} from '@Views/OneCT/useOneCTWallet';
 import { Display } from '../Tooltips/Display';
-interface IProps {
-  inDrawer?: boolean;
-}
 import ETHImage from '../../../../public/tokens/ETH.png';
 import DDArrow from '@SVG/Elements/Arrow';
 import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
 import NFTtier from '../NFTtier';
 import WalletIcon from '@SVG/Elements/WalletIcon';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import copyToClipboard from '@Utils/copyToClipboard';
 const token2image = {
   ETH: ETHImage,
 };
@@ -37,10 +35,10 @@ const chainImageMappipng = {
   ['BSC']: '/Chains/BSC.png',
 };
 
-export const AccountDropdown: React.FC<IProps> = ({ inDrawer }) => {
+export const AccountDropdown: React.FC = () => {
   const setSnack = useSetAtom(snackAtom);
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
-  const { activeChain } = useActiveChain();
+  const { activeChain } = uesOneCtActiveChain();
   useOngoingTrades();
   const disconnect = useDisconnect();
   const ref = useRef(null);

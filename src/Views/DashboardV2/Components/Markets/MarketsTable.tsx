@@ -29,7 +29,7 @@ export const MarketsTable = ({
     { id: 'pair', label: 'Pair' },
     { id: 'pool', label: 'Pool' },
     { id: 'currentPrice', label: 'Current Price' },
-    { id: 'totalTrades', label: 'Open Up/Open Down' },
+    { id: 'totalTrades', label: 'Open Interest' },
     { id: '24h_volume', label: '24h Volume' },
     // { id: 'currentUtilization', label: 'Utilization' },
     { id: 'max_open_interest', label: 'Utilization' },
@@ -61,21 +61,11 @@ export const MarketsTable = ({
         return <CellContent content={['$' + currentRow.currentPrice]} />;
       case 3:
         return (
-          <>
-            <OpenUpDownIndicator
-              openDown={Number(currentRow.openDown)}
-              openUp={Number(currentRow.openUp)}
-              unit={currentRow.poolUnit}
-            />
-            <div className="mt-2">
-              Total :{' '}
-              <Display
-                data={currentRow.totalTrades}
-                unit={currentRow.poolUnit}
-                className="inline"
-              />
-            </div>
-          </>
+          <Display
+            data={currentRow.current_open_interest}
+            unit={currentRow.poolUnit}
+            className="inline"
+          />
         );
 
       case 4:
@@ -192,11 +182,11 @@ export const MarketsTable = ({
         '11%',
         '7%',
         '8%',
-        '14%',
         '10%',
-        '14%',
+        '11%',
+        '15%',
         '12%',
-        '10%',
+        '12%',
         '9%',
         '5%',
       ]}

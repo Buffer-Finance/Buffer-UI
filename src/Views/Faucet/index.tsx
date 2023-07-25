@@ -2,7 +2,7 @@ import { Skeleton } from '@mui/material';
 import Background from './style';
 import FaucetABI from './Faucet.json';
 import { ethers } from 'ethers';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { BlueBtn } from '@Views/Common/V2-Button';
@@ -10,7 +10,7 @@ import Drawer from '@Views/Common/V2-Drawer';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
-import { appConfig } from '@Views/TradePage/config';
+import { usePoolDisplayNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 
 const IbfrFaucet: React.FC = () => {
@@ -18,10 +18,15 @@ const IbfrFaucet: React.FC = () => {
     document.title = 'Buffer | Faucet';
   }, []);
   const { activeChain } = useActiveChain();
-  const tokenChains = {
-    '421613': ['USDC'],
-    '80001': ['USDC'],
-  };
+
+  const { poolDisplayNameMapping } = usePoolDisplayNames();
+  const tokenChains = useMemo(() => {
+    return Object.keys(poolDisplayNameMapping).filter(
+      (token) => token === 'USDC'
+      //TODO - to get all assets replace the  line above with the commented line below
+      // !token.includes('-POL')
+    );
+  }, [poolDisplayNameMapping]);
 
   const content = activeChain && [
     {
@@ -48,8 +53,8 @@ const IbfrFaucet: React.FC = () => {
       bottom: (
         <ConnectionRequired>
           <div className="flex items-center justify-center gap-3 flex-wrap">
-            {tokenChains[activeChain.id].map((token: string) => (
-              <ClaimButton token={token} />
+            {tokenChains.map((token: string) => (
+              <ClaimButton token={token} key={token} />
             ))}
           </div>{' '}
         </ConnectionRequired>
@@ -62,8 +67,8 @@ const IbfrFaucet: React.FC = () => {
       <Background>
         <div className="wrapper">
           {activeChain && content ? (
-            content.map((s) => (
-              <div className="faucet-card bg-1">
+            content.map((s, i) => (
+              <div className="faucet-card bg-1" key={i}>
                 <div className="card-head">{s.top}</div>
                 {s.middle && <div className="card-middle">{s.middle}</div>}
                 <div className="card-action">{s.bottom}</div>
@@ -101,7 +106,7 @@ const ClaimButton = ({ token }: { token: string }) => {
       setBtnLoading(0);
     }
     const overRides = {
-      value: ethers.utils.parseEther('0.001').toString(),
+      value: ethers.utils.parseEther('0.001'),
     };
     const methodName = 'claim';
     setBtnLoading(1);
@@ -166,7 +171,6 @@ const faucetClaimingSteps = {
 
 const TestnetLinks = () => {
   const { activeChain } = useActiveChain();
-  console.log(`activeChain: `, activeChain);
   return (
     <div>
       {faucetClaimingSteps[activeChain.id].faucet.map((s, idx) => {
@@ -184,7 +188,7 @@ const TestnetLinks = () => {
                 {s.options && (
                   <div className="ml-7">
                     {s.options.map((option, index) => (
-                      <div>
+                      <div key={option.url}>
                         {index + 1 + '.'}
                         <a href={option.url} target="_blank">
                           {option.step}

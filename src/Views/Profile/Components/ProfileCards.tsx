@@ -1,11 +1,16 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Skeleton } from '@mui/material';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, gte } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import { Section } from '@Views/Earn/Components/Section';
-import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
+import {
+  keyClasses,
+  tooltipKeyClasses,
+  tooltipValueClasses,
+  valueClasses,
+} from '@Views/Earn/Components/VestCards';
 import { IReferralStat, useUserReferralStats } from '@Views/Referral';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import {
@@ -13,6 +18,10 @@ import {
   useProfileGraphQl,
 } from '../Hooks/useProfileGraphQl';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
+import { toFixed } from '@Utils/NumString';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
+import { useMemo } from 'react';
 
 const profileCardClass = 'rounded-lg px-7';
 
@@ -25,8 +34,26 @@ export const ProfileCards = () => {
       Heading={<div className="text-f22">Metrics</div>}
       subHeading={<></>}
       Cards={[
-        <Trading data={tradingMetricsData} heading={'Trading Metrics'} />,
         <Referral data={data} heading={'Referral Metrics'} />,
+        <Trading
+          data={tradingMetricsData}
+          heading={'USDC Trading Metrics'}
+          tokenName="USDC"
+        />,
+        <ArbitrumOnly hide>
+          <Trading
+            data={tradingMetricsData}
+            heading={'ARB Trading Metrics'}
+            tokenName="ARB"
+          />
+        </ArbitrumOnly>,
+        <ArbitrumOnly hide>
+          <Trading
+            data={tradingMetricsData}
+            heading={'BFR Trading Metrics'}
+            tokenName="BFR"
+          />
+        </ArbitrumOnly>,
       ]}
       className="!mt-7"
     />
@@ -36,13 +63,15 @@ export const ProfileCards = () => {
 const Trading = ({
   data,
   heading,
+  tokenName = 'BFR',
 }: {
   data: ItradingMetricsData | null;
   heading: string;
+  tokenName?: string;
 }) => {
   const { address: account } = useUserAccount();
-  const decimals = useDecimalsByAsset();
-  const usdcDecimals = decimals['USDC'];
+  const alldecimals = useDecimalsByAsset();
+  const decimals = alldecimals[tokenName];
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
 
@@ -62,27 +91,32 @@ const Trading = ({
           values={[
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.totalPayout, usdcDecimals)}
-                unit={'USDC'}
+                data={divide(data.totalPayouts[tokenName] ?? '0', decimals)}
+                unit={tokenName}
               />
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={(data.tradeWon * 100) / data.totalTrades || '0'}
-                unit={'%'}
-                content={
-                  <>{`Won ${data.tradeWon}/${data.totalTrades} trades.`}</>
+                className={
+                  data && gte(data.net_pnl[tokenName] ?? '0', '0')
+                    ? 'text-green'
+                    : 'text-red'
                 }
+                data={divide(data.net_pnl[tokenName] ?? '0', decimals)}
+                unit={tokenName}
               />
             </div>,
             <div className={wrapperClasses}>
               <Display
-                data={divide(data.openInterest, usdcDecimals)}
-                unit={'USDC'}
+                data={divide(data.openInterest[tokenName] ?? '0', decimals)}
+                unit={tokenName}
               />
             </div>,
             <div className={wrapperClasses}>
-              <Display data={divide(data.volume, usdcDecimals)} unit={'USDC'} />
+              <Display
+                data={divide(data.volume[tokenName] ?? '0', decimals)}
+                unit={tokenName}
+              />
             </div>,
           ]}
         />
@@ -99,8 +133,13 @@ const Referral = ({
   heading: string;
 }) => {
   const { address: account } = useUserAccount();
-  const decimals = useDecimalsByAsset();
-  const usdcDecimals = decimals['USDC'];
+  const alldecimals = useDecimalsByAsset();
+  const usdcDecimals = alldecimals['USDC'];
+  const poolNames = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;
   if (data === undefined)
@@ -117,7 +156,6 @@ const Referral = ({
           valueStyle={valueClasses}
           keysName={[
             'Total Referral Earnings',
-            // 'Referral Tier',
             'Referred Trading Volume',
             'Referred # of Trades',
           ]}
@@ -126,19 +164,79 @@ const Referral = ({
               <Display
                 data={divide(data.totalRebateEarned, usdcDecimals)}
                 unit={'USDC'}
+                content={
+                  tokens.length > 1 && (
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map((token) => {
+                        const decimals = alldecimals[token];
+                        return (
+                          toFixed(
+                            divide(
+                              data[`totalRebateEarned${token}`],
+                              decimals
+                            ) as string,
+                            2
+                          ) +
+                          ' ' +
+                          token
+                        );
+                      })}
+                    />
+                  )
+                }
               />
             </div>,
-            // <div className={wrapperClasses}>
-            //   <img src={`/LeaderBoard/${'Diamond'}.png`} className="w-5 mr-2" />{' '}
-            // </div>,
             <div className={wrapperClasses}>
               <Display
                 data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
                 unit={'USDC'}
+                content={
+                  tokens.length > 1 && (
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map((token) => {
+                        const decimals = alldecimals[token];
+
+                        return (
+                          toFixed(
+                            divide(
+                              data[`totalVolumeOfReferredTrades${token}`],
+                              decimals
+                            ) as string,
+                            2
+                          ) +
+                          ' ' +
+                          token
+                        );
+                      })}
+                    />
+                  )
+                }
               />
             </div>,
 
-            <div className={wrapperClasses}>{data.totalTradesReferred}</div>,
+            <div className={wrapperClasses}>
+              <Display
+                data={data?.totalTradesReferred}
+                content={
+                  tokens.length > 1 && (
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map(
+                        (token) => data[`totalTradesReferred${token}`]
+                      )}
+                    />
+                  )
+                }
+              />
+            </div>,
           ]}
         />
       }

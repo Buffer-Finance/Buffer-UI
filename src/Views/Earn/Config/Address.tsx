@@ -1,61 +1,13 @@
-export const CONTRACTS = {
-  421613: {
-    RewardRouter: '0x2033f87A0956388C25Ce5A21F97EE78DD37c5D7f',
-    BLP: '0xb2685B520Eb93769755b0B2c96dca1D10459F378',
-    iBFR: '0x89fEF05446aEA764C53a2f09bB763876FB57ea8E',
-    ES_BFR: '0x92faca5302789730b427c04bc9A111b5733C054F',
-    BN_BFR: '0x8d3B227ebf5424f9b324908037bdD1db71F66521',
-    USDC: '0x49932a64C16E8369d73EA9342a97912Cb90e75C2',
-    StakedBfrTracker: '0xe243e72224b9E295551790b2C57638A27b8493af',
-    BonusBfrTracker: '0xd9497B39399149D7572A7D740487F6e016C5D37e',
-    FeeBfrTracker: '0x39bcb63F0F4427CB9A21D4c3D957Bd8695f67B6d',
-    StakedBlpTracker: '0x72423B589367b35024531Dd57172E56524c2233f',
-    FeeBlpTracker: '0x1B128C9456d29032429d69B5630A737D75D65eC0',
-    BfrVester: '0x961F8988962a2A62ae6a189C0Af576eea40A7912',
-    BlpVester: '0xA37089c619A27Ce0C70F5E6CE03fD8955a46098C',
-    StakedBfrDistributor: '0x1CBbff0d3928c35C1A41566e84AB1Efaa28f6770',
-    StakedBlpDistributor: '0xc0d7cde3632fBF84E8A6d7c79FC0948731EC91eb',
-    RewardRouter2: '0x0ED56F7684FA63A1e6bcd1f78608681c23Bd0f6E',
-    BLP2: '0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6',
-    StakedBlpTracker2: '0x6A7330305B47C6019473a7959c88e35e8b46bB93',
-    FeeBlpTracker2: '0x81486d4A96a62CbF7a67D8cDAa5E989c107018a4',
-    BlpVester2: '0x1F74Bec8987f9FffECA4A64b174321d9dc8c0257',
-    StakedBlpDistributor2: '0x2F63b39D42ff8d68Aa2DfEBAC541f43D0fa9f883',
-    ARB: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
-  },
-  42161: {
-    RewardRouter: '0xbD5FBB3b2610d34434E316e1BABb9c3751567B67',
-    BLP: '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e',
-    iBFR: '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',
-    ES_BFR: '0x92914A456EbE5DB6A69905f029d6160CF51d3E6a',
-    BN_BFR: '0xD978595622184c6c64BF0ab7127f3728ca4F1E4a',
-    USDC: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
-    StakedBfrTracker: '0x173817F33f1C09bCb0df436c2f327B9504d6e067',
-    BonusBfrTracker: '0x00B88B6254B51C7b238c4675E6b601a696CC1aC8',
-    FeeBfrTracker: '0xBABF696008DDAde1e17D302b972376B8A7357698',
-    StakedBlpTracker: '0x7d1d610Fe82482412842e8110afF1cB72FA66bc8',
-    FeeBlpTracker: '0xCCFd47cCabbF058Fb5566CC31b552b21279bd89a',
-    BfrVester: '0x92f424a2A65efd48ea57b10D345f4B3f2460F8c8',
-    BlpVester: '0x22499C54cD0F38fE75B2805619Ac8d0e815e3DC7',
-    StakedBfrDistributor: '0x0f9a5Db56d0f895d1d18F0aD89002a14271F7162',
-    StakedBlpDistributor: '0xF3Af375AfCdcEA75F70ECfD6D477Ab1a76A33A01',
+import { appConfig, earnConfigType } from '@Views/TradePage/config';
 
-    RewardRouter2: '0xFb14188402B2dfd50DA78FFC08Acd72110A81b1c',
-    BLP2: '0xaE0628C88EC6C418B3F5C005f804E905f8123833',
-    StakedBlpTracker2: '0xAC5740D18310ec3bd1f35D9040104C359550c19d',
-    FeeBlpTracker2: '0x49aC47Df2C43Ed5970667c40779126f6a6a61fC2',
-    BlpVester2: '0x405E91Ca914bf3fCC5d45c761dB1E8b034281A18',
-    StakedBlpDistributor2: '0xc8bfba986834B6E5c7Ab58BD2A78c196914Aa6E0',
-    ARB: '0x912CE59144191C1204E64559FE8253a0e49E6548',
-  },
-};
-
-export function getContract(chainId, name) {
-  if (!CONTRACTS[chainId]) {
+export function getContract(chainId: number, name: earnConfigType) {
+  const CONTRACTS =
+    appConfig[chainId as unknown as keyof typeof appConfig].EarnConfig;
+  if (!CONTRACTS) {
     throw new Error(`Unknown chainId ${chainId}`);
   }
-  if (!CONTRACTS[chainId][name]) {
+  if (!CONTRACTS[name]) {
     throw new Error(`Unknown contract "${name}" for chainId ${chainId}`);
   }
-  return CONTRACTS[chainId][name];
+  return CONTRACTS[name];
 }

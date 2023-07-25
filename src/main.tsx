@@ -10,7 +10,6 @@ import '@szhsin/react-menu/dist/theme-dark.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import 'viem/window';
 import * as Sentry from '@sentry/react';
-
 import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
 import { SWRConfig } from 'swr';
