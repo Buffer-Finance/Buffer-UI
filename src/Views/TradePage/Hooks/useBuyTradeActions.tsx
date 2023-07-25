@@ -213,7 +213,14 @@ export const useBuyTradeActions = (userInput: string) => {
         add(balance ? balance : '0', platfromFee ?? '0')
       );
       const platformFee = divide(switchPool.platformFee, poolDetails?.decimals);
-
+      if (noBalance) {
+        return toastify({
+          type: 'error',
+          msg:
+            "You don't have enough " + tokenName + ' to make this transaction',
+          id: 'binaryBuy',
+        });
+      }
       if (gt(add(userInput, platformFee), balance)) {
         return toastify({
           type: 'error',
@@ -227,14 +234,7 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      if (noBalance) {
-        return toastify({
-          type: 'error',
-          msg:
-            "You don't have enough " + tokenName + ' to make this transaction',
-          id: 'binaryBuy',
-        });
-      }
+
       if (!userInput) {
         return toastify({
           type: 'error',
