@@ -283,7 +283,6 @@ export const TableErrorRow: React.FC<{
 };
 
 export const getExpiry = (trade: TradeType, deb?: string) => {
-  deb && console.log('TableComponents-deb-close' + deb, trade);
   return trade.close_time || trade.open_timestamp + trade.period;
 };
 export const getStrike = (trade: TradeType, cachedPrice: any) => {
