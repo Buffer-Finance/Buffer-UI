@@ -59,6 +59,7 @@ import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
 import { getExpiry } from '../Views/AccordionTable/Common';
+import { useApprvalAmount } from './useApprovalAmount';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
