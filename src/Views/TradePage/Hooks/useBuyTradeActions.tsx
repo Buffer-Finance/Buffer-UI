@@ -25,7 +25,6 @@ import axios from 'axios';
 import { useAccount, useContractEvent, useProvider, useSigner } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
-import { arrayify, hashMessage } from 'ethers/lib/utils.js';
 import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import secureLocalStorage from 'react-secure-storage';
 import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
@@ -57,9 +56,13 @@ import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
-import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
+import {
+  generateApprovalSignature,
+  generateBuyTradeSignature,
+} from '../utils/generateTradeSignature';
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { useApprvalAmount } from './useApprovalAmount';
+import { getSingatureCached } from '../cahce';
 enum ArgIndex {
   Strike = 4,
   Period = 2,

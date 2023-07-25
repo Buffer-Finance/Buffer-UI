@@ -21,6 +21,7 @@ import { ActiveTrades } from './ActiveTrades';
 import { useSelectedAssetPayout } from '../MarketChart/Payout';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
+import { useAccount } from 'wagmi';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -39,6 +40,7 @@ const BuyTradeBackground = styled.div`
 export const BuyTrade: React.FC = () => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
+  const { address } = useAccount();
   const { activeMarket } = useActiveMarket();
   // triggering rerender
   const _setttlementFee = useSettlementFee();
@@ -52,17 +54,19 @@ export const BuyTrade: React.FC = () => {
     !poolDetails ||
     !readcallData ||
     !activeMarket ||
-    approvalExpanded?.allowance == null ||
-    approvalExpanded?.allowance == undefined
+    (address
+      ? approvalExpanded?.allowance == null ||
+        approvalExpanded?.allowance == undefined
+      : false)
   ) {
-    // console.log(
-    //   `index-allSettlementFees: `,
-    //   activeMarket,
-    //   poolDetails,
-    //   switchPool,
-    //   readcallData,
-    //   approvalExpanded
-    // );
+    console.log(
+      `index-allSettlementFees: `,
+      activeMarket,
+      poolDetails,
+      switchPool,
+      readcallData,
+      approvalExpanded
+    );
     return (
       <Skeleton
         variant="rectangular"
