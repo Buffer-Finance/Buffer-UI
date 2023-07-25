@@ -374,6 +374,7 @@ const OneCTModal: React.FC<any> = ({}) => {
       console.log(resp, 'resp');
       if (resp?.data?.one_ct && resp.data.one_ct !== zeroAddress) {
         setOnboardingAnimation(true);
+        setModal(false);
       }
     } catch (e) {
       console.log(e, 'register api error');
