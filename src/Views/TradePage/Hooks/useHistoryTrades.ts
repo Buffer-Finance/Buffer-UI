@@ -25,7 +25,7 @@ const useHistoryTrades = (): TradeType[][] => {
     {
       fetcher: async () => {
         if (!address || !activeChain.id) return [[]];
-        const res = await axios.get(`${baseUrl}trades/user/temp_history/`, {
+        const res = await axios.get(`${baseUrl}trades/user/history/`, {
           params: {
             user_address: address,
             environment: activeChain.id,
