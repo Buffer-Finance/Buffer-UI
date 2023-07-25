@@ -5,15 +5,22 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { cancelQueueTrade } from '../utils';
 import { getSingatureCached } from '../cahce';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { TradeType, marketType } from '../type';
+import { TradeType, marketType, poolInfoType } from '../type';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
 import axios from 'axios';
 import { appConfig, baseUrl } from '../config';
 import { useState } from 'react';
-import { useSetAtom } from 'jotai';
-import { closeLoadingAtom } from '../atoms';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import {
+  SetShareBetAtom,
+  SetShareStateAtom,
+  closeLoadingAtom,
+  shareSettingsAtom,
+} from '../atoms';
 import { privateKeyToAccount } from 'viem/accounts';
+import { getExpireNotification } from '../utils/getExpireNotification';
+import { usePoolInfo } from './usePoolInfo';
 const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
@@ -32,10 +39,24 @@ export const useCancelTradeFunction = () => {
   const toastify = useToast();
   const { activeChain } = useActiveChain();
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
+  const { showSharePopup } = useAtomValue(shareSettingsAtom);
+  const [, setIsOpen] = useAtom(SetShareStateAtom);
+  const [, setBet] = useAtom(SetShareBetAtom);
+  const { getPoolInfo } = usePoolInfo();
+
   const setLoading = useSetAtom(closeLoadingAtom);
   const configData =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];
-
+  const openShareModal = (
+    trade: TradeType,
+    expiry: string,
+    market: marketType,
+    poolInfo: poolInfoType
+  ) => {
+    if (!showSharePopup) return;
+    setIsOpen(true);
+    setBet({ trade, expiryPrice: expiry, market, poolInfo });
+  };
   const [earlyCloseLoading, setEarlyCloseLoading] = useState<{
     [queued_id: number]: boolean;
   }>({});
@@ -122,9 +143,19 @@ export const useCancelTradeFunction = () => {
       user_signature: actualSignature,
       environment: activeChain.id,
     };
-    console.log(`ec-params: `, params);
 
     const res = await axios.get(`${baseUrl}trade/close/`, { params });
+    const updatedTrade = res.data;
+    const pool = getPoolInfo(trade.pool.pool);
+    await getExpireNotification(
+      { ...updatedTrade, market: trade.market, pool: trade.pool },
+      toastify,
+      openShareModal,
+      pool,
+      showSharePopup,
+      true
+    );
+
     console.log(`res-cancel: `, res);
     // setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
 

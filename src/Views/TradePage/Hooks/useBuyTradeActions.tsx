@@ -57,13 +57,8 @@ import { generateTradeSignature } from '@Views/TradePage/utils';
 import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
-import {
-  generateApprovalSignature,
-  generateBuyTradeSignature,
-} from '../utils/generateTradeSignature';
-import { getSingatureCached } from '../cahce';
-import { useAppliedReferral } from '@Views/Referral/Hooks/useAppliedReferral';
-import { useApprvalAmount } from './useApprovalAmount';
+import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
+import { getExpiry } from '../Views/AccordionTable/Common';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -417,7 +412,7 @@ export const useBuyTradeActions = (userInput: string) => {
             [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
           }));
         });
-        const queuedPrice = await getPrice({
+        const queuedPrice = await getCachedPrice({
           pair: activeAsset.tv_id,
           timestamp: resp.data.open_timestamp,
         });
@@ -568,26 +563,20 @@ export const useBuyTradeActions = (userInput: string) => {
   };
 };
 
-export const getPrice = async (query: any): Promise<number> => {
-  const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
-  const priceObject = priceResponse?.data[0]?.price;
-  // console.log(`[aug]:: `, priceResponse);
-  if (!priceObject) return getPrice(query);
-  return priceObject;
-};
-
-let cache: { [key: string]: number } = {};
+export let expiryPriceCache: { [key: string]: number } = {};
 export const getCachedPrice = async (query: any): Promise<number> => {
   const id = query.pair + ':' + query.timestamp;
-  if (!(id in cache)) {
+  if (!(id in expiryPriceCache)) {
     const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
     const priceObject = priceResponse?.data[0]?.price;
-    console.log(`[aug]:: `, priceResponse);
     if (!priceObject) return getCachedPrice(query);
-    cache[id] = priceObject;
+    expiryPriceCache[id] = priceObject;
   }
-  return cache[id];
+  return expiryPriceCache[id];
 };
+
+export const getPriceCacheId = (trade: TradeType) =>
+  trade.market.token0 + trade.market.token1 + ':' + getExpiry(trade);
 const getLockedAmount = async (
   price: string,
   totalFee: string,

@@ -1,6 +1,9 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { useAtom } from 'jotai';
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import {
+  formatDistance,
+  formatDistanceExpanded,
+} from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
@@ -15,6 +18,7 @@ import {
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
+  getExpiry,
   queuedTradeFallBack,
 } from './Common';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
@@ -24,6 +28,10 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { TradeType } from '@Views/TradePage/type';
 import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
+import {
+  expiryPriceCache,
+  getPriceCacheId,
+} from '@Views/TradePage/Hooks/useBuyTradeActions';
 
 export const tradesCount = 10;
 
@@ -95,13 +103,14 @@ const HistoryTable: React.FC<{
         trade?.target_contract.toLowerCase()
     )?.pool;
     const poolInfo = getPoolInfo(poolContract);
-
+    let expiryPrice: number | null = trade.expiry_price;
+    if (!expiryPrice) {
+      const id = getPriceCacheId(trade);
+      expiryPrice = expiryPriceCache[id] || 0;
+    }
     if (!tradeMarket) return 'Problem';
-    const { pnl, payout } = getPayout(
-      trade,
-      trade.expiry_price + '',
-      poolInfo.decimals
-    );
+    const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
+    console.log(`aug-payout-actual: `, pnl, payout);
     const status = gt(pnl?.toString(), '0')
       ? {
           tooltip: 'You won this bet!',
@@ -115,7 +124,7 @@ const HistoryTable: React.FC<{
           icon: <FailedSuccess width={14} height={14} />,
           textColor: 'text-red',
         };
-    const minClosingTime = Math.min(trade.expiration_time!, trade.close_time);
+    const minClosingTime = getExpiry(trade);
     switch (col) {
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
@@ -128,11 +137,9 @@ const HistoryTable: React.FC<{
           />
         );
       case TableColumn.ExpiryPrice:
+        if (!expiryPrice) return 'Fetching...';
         return (
-          <Display
-            className="!justify-start"
-            data={divide(trade.expiry_price, 8)}
-          />
+          <Display className="!justify-start" data={divide(expiryPrice, 8)} />
         );
       case TableColumn.OpenTime:
         return (
@@ -141,13 +148,10 @@ const HistoryTable: React.FC<{
           )
         );
       case TableColumn.TimeLeft:
-        let currentEpoch = Math.round(new Date().getTime() / 1000);
         return (
           queuedTradeFallBack(trade, true) || (
-            <div>
-              {formatDistanceExpanded(
-                Variables(minClosingTime - trade.open_timestamp)
-              )}
+            <div className={trade.state == 'OPENED' ? 'text-red' : ''}>
+              {formatDistance(Variables(minClosingTime - trade.open_timestamp))}
             </div>
           )
         );
@@ -166,20 +170,27 @@ const HistoryTable: React.FC<{
       case TableColumn.Payout:
         return (
           <div>
-            <Display
-              className="!justify-start"
-              data={divide(payout!, 6)}
-              unit="USDC"
-            />
-            <span className={status.textColor + ' flex '}>
-              Net Pnl :{' '}
-              <Display
-                label={status.chip == 'Win' ? '+' : ''}
-                className="!justify-start"
-                data={pnl}
-                unit="USDC"
-              />
-            </span>
+            {pnl || payout ? (
+              <>
+                {' '}
+                <Display
+                  className="!justify-start"
+                  data={divide(payout!, 6)}
+                  unit="USDC"
+                />
+                <span className={status.textColor + ' flex '}>
+                  Net Pnl :{' '}
+                  <Display
+                    label={status.chip == 'Win' ? '+' : ''}
+                    className="!justify-start"
+                    data={pnl}
+                    unit="USDC"
+                  />
+                </span>
+              </>
+            ) : (
+              'Calculating..'
+            )}
           </div>
         );
       case TableColumn.Status:

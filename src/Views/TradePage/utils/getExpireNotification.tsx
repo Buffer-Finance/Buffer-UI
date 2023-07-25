@@ -2,7 +2,7 @@ import { TradeType, marketType, poolInfoType } from '../type';
 import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getDisplayTime } from '@Utils/Dates/displayDateTime';
-import { getPrice } from '../Hooks/useBuyTradeActions';
+import { getCachedPrice } from '../Hooks/useBuyTradeActions';
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { getPayout } from '../Views/AccordionTable/ShareModal/utils';
 
@@ -24,8 +24,8 @@ export const getExpireNotification = async (
       pair: tradeMarket.tv_id,
       timestamp: getExpiry(currentRow),
     };
+    const expiryPrice = await getCachedPrice(query);
 
-    const expiryPrice = await getPrice(query);
     let win = true;
     const { pnl } = getPayout(currentRow, expiryPrice, poolInfo.decimals);
 
