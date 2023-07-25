@@ -1,4 +1,4 @@
-import { add, gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
+import { add, gt, gte, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { tradeSettingsAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
@@ -95,7 +95,7 @@ export const TradeSizeInput: React.FC<{
       {registeredOneCT &&
         tradeSize &&
         gt(tradeSize ?? '0', balance ?? '0') &&
-        !gt(add(tradeSize ?? '0', platformFee), balance ?? '0') && (
+        gt(add(tradeSize ?? '0', platformFee), balance ?? '0') && (
           <Trans>
             <span className="text-red whitespace-nowrap flex items-end">
               You don't have enough {tokenName}.&nbsp;
