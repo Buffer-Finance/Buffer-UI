@@ -90,24 +90,30 @@ const PlatfromFeeError = ({
   balance: string;
 }) => {
   const tradeSize = useAtomValue(tradeSizeAtom);
-
-  const isError = gt(add(tradeSize || '0', platfromFee), balance);
-  return (
-    <RowGap
-      gap="4px"
-      className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
-    >
-      <LightToolTipSVG />
-      {isError ? (
-        <>
-          Insufficient funds for platform fee.{' '}
-          <BuyUSDCLink token={tradeToken} />
-        </>
-      ) : (
-        <>
-          Additional {platfromFee} {tradeToken} will be charged as platform fee.
-        </>
-      )}
-    </RowGap>
-  );
+  const notEnoughForTrade = gt(tradeSize || '0', balance);
+  const notEnooghForFee = gt(add(tradeSize || '0', platfromFee), balance);
+  const isError = notEnoughForTrade && notEnooghForFee;
+  if (notEnooghForFee && notEnoughForTrade)
+    return (
+      <RowGap
+        gap="4px"
+        className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
+      >
+        <LightToolTipSVG />
+        {isError ? (
+          <>
+            Insufficient funds for platform fee.{' '}
+            <BuyUSDCLink token={tradeToken} />
+          </>
+        ) : (
+          !isError && (
+            <>
+              Additional {platfromFee} {tradeToken} will be charged as platform
+              fee.
+            </>
+          )
+        )}
+      </RowGap>
+    );
+  return <></>;
 };
