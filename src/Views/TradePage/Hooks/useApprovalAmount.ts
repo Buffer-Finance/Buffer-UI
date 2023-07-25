@@ -8,7 +8,7 @@ export const useApprvalAmount = () => {
   const { activeChain } = useActiveChain();
   const activeChainId = activeChain?.id;
   const { address: userAddress } = useAccount();
-  const { data } = useSWR<string>(
+  const { data } = useSWR<{ allowance: number; nonce: number }>(
     `${userAddress}-user-approval-${activeChainId}`,
     {
       fetcher: async () => {
@@ -18,7 +18,7 @@ export const useApprvalAmount = () => {
             baseUrl +
               `user/approval/?environment=${activeChainId}&user=${userAddress}`
           );
-          return response.data + '';
+          return response.data;
         } catch (e) {
           console.log('useApprvalAmount-Error:', e);
           return null;

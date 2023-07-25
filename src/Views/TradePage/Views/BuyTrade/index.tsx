@@ -47,13 +47,21 @@ export const BuyTrade: React.FC = () => {
   const { calculatePayout } = useSelectedAssetPayout();
 
   const approvalExpanded = useApprvalAmount();
-  if (!switchPool || !poolDetails || !readcallData || !activeMarket) {
+  if (
+    !switchPool ||
+    !poolDetails ||
+    !readcallData ||
+    !activeMarket ||
+    approvalExpanded?.allowance == null ||
+    approvalExpanded?.allowance == undefined
+  ) {
     console.log(
       `index-allSettlementFees: `,
       activeMarket,
       poolDetails,
       switchPool,
-      readcallData
+      readcallData,
+      approvalExpanded
     );
     return (
       <Skeleton
@@ -68,7 +76,9 @@ export const BuyTrade: React.FC = () => {
   );
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
-  const allowance = divide(approvalExpanded, decimals) as string;
+  const allowance = approvalExpanded?.allowance
+    ? (divide(approvalExpanded?.allowance, decimals) as string)
+    : '0';
   const isForex = activeMarket.category === AssetCategory[0];
   const isMarketOpen = true;
   const marketId = joinStrings(activeMarket.token0, activeMarket.token1, '');

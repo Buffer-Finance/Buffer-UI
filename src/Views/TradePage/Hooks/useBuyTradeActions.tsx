@@ -62,6 +62,8 @@ import {
   generateBuyTradeSignature,
 } from '../utils/generateTradeSignature';
 import { getSingatureCached } from '../cahce';
+import { useAppliedReferral } from '@Views/Referral/Hooks/useAppliedReferral';
+import { useApprvalAmount } from './useApprovalAmount';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -77,6 +79,8 @@ export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
   const [settings] = useAtom(tradeSettingsAtom);
   const setPriceCache = useSetAtom(queuets2priceAtom);
+  const approvalExpanded = useApprvalAmount();
+
   const priceCache = useAtomValue(queuets2priceAtom);
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
@@ -209,11 +213,7 @@ export const useBuyTradeActions = (userInput: string) => {
         add(balance ? balance : '0', platfromFee ?? '0')
       );
       const platformFee = divide(switchPool.platformFee, poolDetails?.decimals);
-      console.log(
-        `useBuyTradeActions-add(userInput, platformFee): `,
-        add(userInput, platformFee),
-        balance
-      );
+
       if (gt(add(userInput, platformFee), balance)) {
         return toastify({
           type: 'error',
@@ -480,7 +480,10 @@ export const useBuyTradeActions = (userInput: string) => {
       });
       return true;
     }
-    if (readcallData?.nonces == undefined || readcallData.nonces == null) {
+    if (
+      approvalExpanded?.nonce == undefined ||
+      approvalExpanded.nonce == null
+    ) {
       toastify({
         id: 'dddad3',
         type: 'error',
@@ -499,7 +502,7 @@ export const useBuyTradeActions = (userInput: string) => {
     const deadline = (Math.round(Date.now() / 1000) + 6000).toString();
     try {
       const [_, RSV] = await generateApprovalSignature(
-        readcallData.nonces,
+        approvalExpanded?.nonce,
         ammount,
         address!,
         tokenAddress,
@@ -511,7 +514,7 @@ export const useBuyTradeActions = (userInput: string) => {
       const user_signature = await getSingatureCached(oneCTWallet);
       const apiSignature = {
         user: address,
-        nonce: +readcallData.nonces,
+        nonce: +approvalExpanded?.nonce,
         allowance: ammount,
         deadline: +deadline,
         v: parseInt(RSV.v, 16),
