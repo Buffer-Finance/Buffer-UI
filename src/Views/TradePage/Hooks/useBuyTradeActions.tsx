@@ -537,9 +537,32 @@ export const useBuyTradeActions = (userInput: string) => {
       toastify({ type: 'error', msg: 'Something went wrong.', id: '10231' });
     }
   };
+  const revokeApproveClick = async () => {
+    if (state.txnLoading > 1) {
+      toastify({
+        id: 'dddafsd3',
+        type: 'error',
+        msg: 'Please confirm your previous pending transactions.',
+      });
+      return true;
+    }
+    dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
+    setLoading(1);
+    approve(
+      (p) => {
+        if (p.payload) {
+          setIsApproveModalOpen(false);
+        }
+        setLoading(null);
+      },
+      'approve',
+      [configData.router, '0']
+    );
+  };
 
   return {
     handleApproveClick,
+    revokeApproveClick,
     buyHandler,
     loading,
   };
