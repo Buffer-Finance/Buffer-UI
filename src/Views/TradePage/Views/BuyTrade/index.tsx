@@ -59,14 +59,14 @@ export const BuyTrade: React.FC = () => {
         approvalExpanded?.allowance == undefined
       : false)
   ) {
-    console.log(
-      `index-allSettlementFees: `,
-      activeMarket,
-      poolDetails,
-      switchPool,
-      readcallData,
-      approvalExpanded
-    );
+    // console.log(
+    //   `index-allSettlementFees: `,
+    //   activeMarket,
+    //   poolDetails,
+    //   switchPool,
+    //   readcallData,
+    //   approvalExpanded
+    // );
     return (
       <Skeleton
         variant="rectangular"
