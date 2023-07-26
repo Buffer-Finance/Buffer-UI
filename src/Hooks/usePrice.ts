@@ -70,6 +70,7 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
       //   time: +ts,
       //   price: absolutePrice,
       //   volume: volume ? +volume : 0,
+
       // }];
 
       if (p?.description && o?.price && o.timestamp) {
