@@ -28,8 +28,8 @@ import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useDayOffset } from '../Hooks/useDayOffset';
 import { LeaderBoardTabs } from '../Weekly';
-import { ChainSwitchDropdown } from '@Views/Dashboard';
 import { getDisplayDateUTC } from '@Utils/Dates/displayDateTime';
+import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;

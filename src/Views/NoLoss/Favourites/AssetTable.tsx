@@ -10,7 +10,7 @@ import { FavouriteAtom, mobileUpperBound } from '@Views/BinaryOptions';
 import { useFavouritesFns } from '@Views/BinaryOptions/Hooks/useFavouritesFns';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { MarketInterface } from 'src/MultiChart';
 import { getV3AppFilteredAssets } from '@Views/V3App/Utils/getFilteredAssets';
 
@@ -29,7 +29,7 @@ export const AssetTable: React.FC<{
   console.log(`updatedArr: `, updatedArr);
   const { addCardHandler, replaceAssetHandler } = useFavouritesFns();
   const { activeChain } = useActiveChain();
-  const { poolNames } = usePoolNames();
+  const poolNames = usePoolNames();
 
   const headers = useMemo(() => {
     return ['', 'Asset', 'Payout'];

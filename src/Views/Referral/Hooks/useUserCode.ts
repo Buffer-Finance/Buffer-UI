@@ -1,14 +1,15 @@
-import { Chain, useAccount, useContractReads } from 'wagmi';
+import { Chain, useContractReads } from 'wagmi';
 import getDeepCopy from '@Utils/getDeepCopy';
 import { convertBNtoString } from '@Utils/useReadCall';
 import ReferralABI from '../Config/ReferralABI.json';
-import { getContract } from '../Config/Address';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 
 export function useUserCode(activeChain: Chain) {
   const activeChainID = activeChain.id;
   const { address: account } = useUserAccount();
-  const referralAddress = getContract(activeChain.id, 'referral');
+  const configContracts = getConfig(activeChainID);
+  const referralAddress = configContracts.referral_storage;
 
   const calls = referralAddress
     ? [
@@ -23,7 +24,7 @@ export function useUserCode(activeChain: Chain) {
     : [];
 
   const { data } = useContractReads({
-    contracts: calls,
+    contracts: calls as any,
     watch: true,
   });
 

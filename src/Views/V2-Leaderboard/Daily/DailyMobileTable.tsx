@@ -9,7 +9,7 @@ import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
 import { Launch } from '@mui/icons-material';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { TableAligner } from '../Components/TableAligner';
 import {
   tooltipKeyClasses,

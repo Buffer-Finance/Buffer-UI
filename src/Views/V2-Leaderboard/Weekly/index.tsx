@@ -37,7 +37,7 @@ import {
 import { ILeague } from '../interfaces';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
-import { ChainSwitchDropdown } from '@Views/Dashboard';
+import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;

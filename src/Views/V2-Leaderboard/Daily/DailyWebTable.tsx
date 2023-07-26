@@ -23,7 +23,7 @@ import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { toFixed } from '@Utils/NumString';
 
 export const DailyWebTable: React.FC<{
@@ -55,7 +55,7 @@ export const DailyWebTable: React.FC<{
   const { configContracts } = useActiveChain();
   const usdcDecimals = configContracts.tokens['USDC'].decimals;
   const params = useParams();
-  const { poolNames } = usePoolNames();
+  const poolNames = usePoolNames();
 
   const tokens = useMemo(
     () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),

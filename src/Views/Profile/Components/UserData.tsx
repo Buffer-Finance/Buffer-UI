@@ -3,20 +3,16 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { Launch } from '@mui/icons-material';
-import { divide, gte } from '@Utils/NumString/stringArithmatics';
-import { useQTinfo } from '@Views/BinaryOptions';
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
-import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import { Col } from '@Views/Common/ConfirmationModal';
 import NFTtier from '@Views/Common/NFTtier';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { ChainSwitchDropdown } from '@Views/Dashboard';
 import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
 import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 import { useMemo } from 'react';
 import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
 import { getChains } from 'src/Config/wagmiClient';
 import { Chain } from 'wagmi';
+import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
 
 export const UserData = () => {
   const { address, viewOnlyMode } = useUserAccount();
@@ -24,9 +20,7 @@ export const UserData = () => {
   const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
   const { tradingMetricsData } = useProfileGraphQl();
-  const { configContracts, activeChain } = useActiveChain();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
-  const { markets } = useActiveChain();
+  const { activeChain } = useActiveChain();
   const chains: Chain[] = getChains();
   const activeChainExplorer = useMemo(() => {
     const chain: Chain | undefined = chains.find(
@@ -49,11 +43,6 @@ export const UserData = () => {
         )
       : null;
   }, [tradingMetricsData]);
-
-  //fetches the data of the asset from the config
-  // const mostTradedAsset = useGetAssetData({
-  //   assetAddress: mostTradedAssetAddress,
-  // });
 
   return (
     <div className="flex items-center justify-between flex-wrap sm:items-stretch sm:gap-4 gap-7">
@@ -166,12 +155,12 @@ export const UserData = () => {
           className={'winner-card'}
           head={'Most Traded Asset'}
           desc={
-            !!markets[mostTradedAsset] ? (
+            !!mostTradedAsset ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="h-[20px] w-[20px]">
-                  <PairTokenImage pair={markets[mostTradedAsset].pair} />
+                  {/* <PairTokenImage pair={mostTradedAsset} /> */}
                 </div>
-                {markets[mostTradedAsset].pair}
+                {mostTradedAsset}
               </div>
             ) : (
               <>-</>
@@ -191,18 +180,6 @@ export const UserData = () => {
         )}
       </DataWrapper>
     </div>
-  );
-};
-
-const useGetAssetData = ({ assetAddress }: { assetAddress: string | null }) => {
-  const { pairs } = useQTinfo();
-  if (assetAddress === null) return undefined;
-  return pairs.find((pair) =>
-    pair.pools.find(
-      (pool) =>
-        pool.options_contracts.current.toLowerCase() ===
-        assetAddress.toLowerCase()
-    )
   );
 };
 

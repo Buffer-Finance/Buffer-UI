@@ -427,6 +427,7 @@ export const marketsForChart = {
     token0: 'ARB',
     token1: 'USD',
     full_name: 'Arbitrum',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/arb.svg',
     pythId:
       '0x3fa4252848f9f0a1480be62745a4629d9eb1322aebab8a791e344b3b9c1adcf5',
   },
@@ -438,6 +439,7 @@ export const marketsForChart = {
     token0: 'BNB',
     token1: 'USD',
     full_name: 'Binance Coin',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/bnb.svg',
     pythId:
       '0x2f95862b045670cd22bee3114c39763a4a08beeb663b145d283c31d7d1101c4f',
   },
@@ -449,6 +451,7 @@ export const marketsForChart = {
     token0: 'MATIC',
     token1: 'USD',
     full_name: 'Matic',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/matic.svg',
     pythId:
       '0x5de33a9112c2b700b8d30b8a3402c103578ccfa2765696471cc672bd5cf6ac52',
   },
@@ -460,6 +463,7 @@ export const marketsForChart = {
     token0: 'OP',
     token1: 'USD',
     full_name: 'Optimism',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/op.svg',
     pythId:
       '0x385f64d993f7b77d8182ed5003d97c60aa3361f3cecfe711544d2d59165e9bdf',
   },

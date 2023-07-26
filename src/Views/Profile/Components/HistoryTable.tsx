@@ -23,7 +23,7 @@ export const useHistoryTableTabs = () => {
     [state.tabs.activeIdx]
   );
 
-  const changeActiveTab = (e, pageNumber: number) =>
+  const changeActiveTab = (e: any, pageNumber: number) =>
     dispatch({
       type: 'SET_ACIVE_TAB',
       payload: binaryTabs[pageNumber + 2], //Runs only for web. Hence 0 & 1 tab neglected.
@@ -41,9 +41,6 @@ export const HistoryTables = () => {
     setActivePage(1);
     setHistoryPage(1);
   }, []);
-
-  const [activeTrades, limitOrders] = useOngoingTrades();
-  const [historyTrades] = useHistoryTrades();
 
   return (
     <>
@@ -63,17 +60,30 @@ export const HistoryTables = () => {
       />
       <TabSwitch
         value={activeTabIdx}
-        childComponents={[
-          <OngoingTradesTable trades={activeTrades} />,
-          <LimitOrderTable trades={limitOrders} />,
-          <HistoryTable trades={historyTrades} />,
-        ]}
+        childComponents={[<OnGoing />, <LimitOrder />, <History />]}
       />
     </>
   );
 };
+const OnGoing = () => {
+  const [activeTrades] = useOngoingTrades();
 
-function MobileOnly({ children }) {
+  return <OngoingTradesTable trades={activeTrades} />;
+};
+
+const LimitOrder = () => {
+  const [_, limitOrders] = useOngoingTrades();
+
+  return <LimitOrderTable trades={limitOrders} />;
+};
+
+const History = () => {
+  const [historyTrades] = useHistoryTrades();
+
+  return <HistoryTable trades={historyTrades} />;
+};
+
+function MobileOnly({ children }: { children: React.ReactNode }) {
   if (typeof window === 'undefined') return null;
   if (window.innerWidth > 1200) return null;
   return <>{children}</>;

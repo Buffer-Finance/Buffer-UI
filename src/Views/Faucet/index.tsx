@@ -10,8 +10,8 @@ import Drawer from '@Views/Common/V2-Drawer';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
-import { usePoolDisplayNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
 
 const IbfrFaucet: React.FC = () => {
   useEffect(() => {

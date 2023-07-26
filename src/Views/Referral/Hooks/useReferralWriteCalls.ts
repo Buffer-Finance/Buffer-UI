@@ -1,17 +1,19 @@
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { useContext } from 'react';
-import { getContract } from '../Config/Address';
 import ReferralABI from '../Config/ReferralABI.json';
-import { ReferralContext } from '../referralAtom';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 
 type methodName = 'registerCode' | 'setTraderReferralCodeByUser';
 
 export const useReferralWriteCall = () => {
-  const { activeChain } = useContext(ReferralContext);
-  const referralAddress = getContract(activeChain.id, 'referral');
-  const { writeCall } = useWriteCall(referralAddress, ReferralABI);
+  const { activeChain } = useActiveChain();
+  const configContracts = getConfig(activeChain.id);
+  const { writeCall } = useWriteCall(
+    configContracts.referral_storage,
+    ReferralABI
+  );
 
-  function callBack(res): void {
+  function callBack(res: any): void {
     console.log(res);
   }
 

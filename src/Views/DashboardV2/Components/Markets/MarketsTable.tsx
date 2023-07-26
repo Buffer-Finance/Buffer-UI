@@ -5,9 +5,8 @@ import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { useNavigate } from 'react-router-dom';
 import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
-import { OpenUpDownIndicator } from '@Views/Dashboard/Components/OpenUpDownIndicator';
-import BufferSortTable from '@Views/Dashboard/Components/BufferSortTable';
 import { getPayout } from '@Views/TradePage/utils';
+import BufferSortTable from '@Views/Common/BufferSortTable';
 
 export const MarketsTable = ({
   dashboardData,

@@ -6,6 +6,7 @@ import { useAccount, useProvider, useSigner } from 'wagmi';
 import { multicallLinked, multicallv2 } from './Contract/multiContract';
 import getDeepCopy from './getDeepCopy';
 import { useMemo } from 'react';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 
 export const useReadCall = ({
   contracts,
@@ -15,13 +16,13 @@ export const useReadCall = ({
   swrKey: string;
 }) => {
   const calls = contracts;
-  const { activeChain, isWrongChain, configContracts, chainInURL } =
-    useActiveChain();
+  const { activeChain, isWrongChain, chainInURL } = useActiveChain();
   const { address: account } = useUserAccount();
   const { data: signer } = useSigner({ chainId: activeChain.id });
   const { address } = useAccount();
   const { cache } = useSWRConfig();
   const p = useProvider({ chainId: activeChain.id });
+  const configContracts = getConfig(activeChain.id);
   let signerOrProvider = p;
 
   if (signer && !isWrongChain && address) {
@@ -53,13 +54,14 @@ export const useReadCall = ({
 };
 export const useCall2Data = (contracts: any, swrKey: string) => {
   const calls = contracts;
-  const { activeChain, isWrongChain, configContracts, chainInURL } =
-    useActiveChain();
+  const { activeChain, isWrongChain, chainInURL } = useActiveChain();
   const { address: account } = useUserAccount();
   const { data: signer } = useSigner({ chainId: activeChain.id });
   const { address } = useAccount();
   const { cache } = useSWRConfig();
   const p = useProvider({ chainId: activeChain.id });
+  const configContracts = getConfig(activeChain.id);
+
   let signerOrProvider = p;
 
   if (signer && !isWrongChain && address) {
@@ -117,9 +119,8 @@ export const contractRead = async (contract, method, args, debug = false) => {
 
 export const useSignerOrPorvider = () => {
   const { address } = useAccount();
+  const { activeChain, isWrongChain } = useActiveChain();
 
-  const { activeChain, isWrongChain, configContracts, chainInURL } =
-    useActiveChain();
   const { data: signer } = useSigner({ chainId: activeChain.id });
 
   const p = useProvider({ chainId: activeChain.id });

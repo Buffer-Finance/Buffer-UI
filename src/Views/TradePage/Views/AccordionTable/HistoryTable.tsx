@@ -110,7 +110,7 @@ const HistoryTable: React.FC<{
     }
     if (!tradeMarket) return 'Problem';
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
-    console.log(`aug-payout-actual: `, pnl, payout);
+    // console.log(`aug-payout-actual: `, pnl, payout);
     const status = gt(pnl?.toString(), '0')
       ? {
           tooltip: 'You won this bet!',

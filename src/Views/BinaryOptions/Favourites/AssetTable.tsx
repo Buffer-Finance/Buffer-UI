@@ -14,7 +14,7 @@ import {
 } from '..';
 import { PairTokenImage } from '../Components/PairTokenImage';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { useV3AppFavouritesFns } from '@Views/V3App/Utils/useV3AppFavouriteFns';
 import { getV3AppFilteredAssets } from '@Views/V3App/Utils/getFilteredAssets';
 import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
@@ -36,7 +36,7 @@ export const AssetTable: React.FC<{
   const activeAssetStateHookData = useAtomValue(activeAssetStateAtom);
   const { addCardHandler, replaceAssetHandler } = useV3AppFavouritesFns();
   const { activeChain } = useActiveChain();
-  const { poolNames } = usePoolNames();
+  const poolNames = usePoolNames();
   const payoutCols = useMemo(
     () =>
       poolNames
