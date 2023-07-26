@@ -473,3 +473,6 @@ export const baseUrl = import.meta.env.VITE_INSTANT_TRADING_HOST;
 export const pricePublisherBaseUrl = import.meta.env.VITE_PRICE_QUERY_HOST;
 
 export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
+export const defaultMarket = 'BTC-USD';
+export const PRICE_DECIMALS = 1e8;
+export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';

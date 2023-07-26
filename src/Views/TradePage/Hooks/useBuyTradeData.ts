@@ -1,18 +1,17 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useBuyTradePageReadcalls } from './Readcalls/useBuyPageReadcalls';
 import { useSwitchPool } from './useSwitchPool';
-import { appConfig } from '../config';
 import { useMemo } from 'react';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { useMarketsConfig } from './useMarketsConfig';
 import { getPayout } from '../utils';
+import { getConfig } from '../utils/getConfig';
 
 export const useBuyTradeData = (deb?: string) => {
   const { data: readCallData } = useBuyTradePageReadcalls();
   const { switchPool, poolDetails } = useSwitchPool();
   const { activeChain } = useActiveChain();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
   const config = useMarketsConfig();
   const response = useMemo(() => {
     if (

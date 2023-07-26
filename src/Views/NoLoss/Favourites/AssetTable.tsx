@@ -8,7 +8,7 @@ import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
 import { FavouriteAtom, mobileUpperBound } from '@Views/BinaryOptions';
 import { useFavouritesFns } from '@Views/BinaryOptions/Hooks/useFavouritesFns';
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { MarketInterface } from 'src/MultiChart';

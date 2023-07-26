@@ -1,17 +1,11 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { useAtom } from 'jotai';
-import {
-  formatDistance,
-  formatDistanceExpanded,
-} from '@Hooks/Utilities/useStopWatch';
-
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide, gt } from '@Utils/NumString/stringArithmatics';
 import { priceAtom } from '@Hooks/usePrice';
-
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
   DisplayTime,
@@ -32,6 +26,7 @@ import {
   expiryPriceCache,
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { AssetCell } from './AssetCell';
 
 export const tradesCount = 10;
 

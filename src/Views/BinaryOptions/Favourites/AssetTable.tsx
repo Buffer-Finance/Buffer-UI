@@ -12,7 +12,7 @@ import {
   IMarket,
   mobileUpperBound,
 } from '..';
-import { PairTokenImage } from '../Components/PairTokenImage';
+import { PairTokenImage } from '../../TradePage/Views/PairTokenImage';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { useV3AppFavouritesFns } from '@Views/V3App/Utils/useV3AppFavouriteFns';

@@ -5,13 +5,11 @@ import { joinStrings } from '../utils';
 import { useMarketsConfig } from './useMarketsConfig';
 import { marketType } from '../type';
 import { useNavigate } from 'react-router-dom';
-import { useActiveMarket } from './useActiveMarket';
 
 export const useFavouriteMarkets = () => {
   const [favMarkets, setFavMarkets] = useAtom(favouriteMarketsAtom);
   const markets = useMarketsConfig();
   const navigate = useNavigate();
-  const { activeMarket } = useActiveMarket();
 
   const favouriteMarkets = useMemo(() => {
     if (markets === null) {
@@ -71,9 +69,8 @@ export const useFavouriteMarkets = () => {
     setFavMarkets(newMarkets);
   }
 
-  //TODO - V2.1 change this to binary
   function navigateToMarket(market: marketType) {
-    navigate(`/v2/${joinStrings(market.token0, market.token1, '-')}`);
+    navigate(`/binary/${joinStrings(market.token0, market.token1, '-')}`);
   }
   return {
     favouriteMarkets,

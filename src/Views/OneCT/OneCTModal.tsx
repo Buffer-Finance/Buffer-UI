@@ -10,13 +10,14 @@ import { SVGProps } from 'react';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { appConfig, baseUrl } from '@Views/TradePage/config';
+import { baseUrl } from '@Views/TradePage/config';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
 import axios from 'axios';
 import { getAddress, zeroAddress } from 'viem';
 import { EIP712Domain } from './useOneCTWallet';
 import { signTypedData } from '@wagmi/core';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 
 const features = [
   {
@@ -270,8 +271,7 @@ const OneCTModal: React.FC<any> = ({}) => {
   const setModal = useSetAtom(isOneCTModalOpenAtom);
   const [laoding, setLaoding] = useState(false);
   const { activeChain } = useActiveChain();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
   const {
     generatePk,
     oneCtAddress,
@@ -330,15 +330,7 @@ const OneCTModal: React.FC<any> = ({}) => {
           { name: 'nonce', type: 'uint256' },
         ],
       };
-      const msgParams = {
-        primaryType: 'RegisterAccount',
-        domain: domain,
-        value: {
-          oneCT: wallet.address,
-          user: address,
-          nonce: nonce,
-        },
-      };
+
       const signature = await signTypedData({
         types,
         domain,

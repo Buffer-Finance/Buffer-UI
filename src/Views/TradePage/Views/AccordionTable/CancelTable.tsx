@@ -1,9 +1,7 @@
 import BufferTable from '@Views/Common/BufferTable';
-
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
   DisplayTime,
@@ -13,6 +11,7 @@ import {
 } from './Common';
 import { TradeType } from '@Views/TradePage/type';
 import FailureIcon from '@SVG/Elements/FailureIcon';
+import { AssetCell } from './AssetCell';
 
 export const tradesCount = 10;
 

@@ -9,10 +9,10 @@ import { useGlobal } from '@Contexts/Global';
 import MenuLogo from '@Assets/Elements/MenuLogo';
 import CloseLogo from '@SVG/Elements/Closelogo';
 import { useAtomValue } from 'jotai';
-import { activeMarketFromStorageAtom } from '@Views/BinaryOptions';
 import { urlSettings } from 'src/Config/wagmiClient';
 import { isTestnet } from 'config';
 import { SettingsDD } from './SettingsDD';
+import { activeMarketFromStorageAtom } from 'src/globalStore';
 
 interface INavbar {}
 

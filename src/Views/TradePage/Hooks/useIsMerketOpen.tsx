@@ -1,10 +1,4 @@
-import axios from 'axios';
-import { atom, useAtom } from 'jotai';
-import { useEffect } from 'react';
-import useSWR from 'swr';
-import { activeAssetStateAtom } from '..';
-import { QuickTradeExpiry } from '../PGDrawer';
-import { timeToMins } from '../PGDrawer/TimeSelector';
+import { atom } from 'jotai';
 export const knowTillAtom = atom<boolean | null>(null);
 
 export const marketTimingsMessage = (knowTill: {

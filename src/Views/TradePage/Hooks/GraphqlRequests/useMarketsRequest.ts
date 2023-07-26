@@ -1,14 +1,13 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { appConfig } from '@Views/TradePage/config';
 import { response } from '@Views/TradePage/type';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 import axios from 'axios';
 import useSWR from 'swr';
 
 //fetches all markets from graphql
 export const useMarketsRequest = () => {
   const { activeChain } = useActiveChain();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
 
   async function fetcher(): Promise<response> {
     const response = await axios.post(configData.graph.MAIN, {

@@ -1,50 +1,30 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
 import { toFixed } from '@Utils/NumString';
 import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
-import { privateKeyToAccount } from 'viem/accounts';
 import 'viem/window';
 import { signTypedData } from '@wagmi/core';
 
-import {
-  add,
-  divide,
-  getPosInf,
-  gt,
-  multiply,
-} from '@Utils/NumString/stringArithmatics';
+import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import { priceAtom } from '@Hooks/usePrice';
-import { isTestnet } from 'config';
 import axios from 'axios';
-import { useAccount, useContractEvent, useProvider, useSigner } from 'wagmi';
+import { useAccount, useProvider } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
-import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import secureLocalStorage from 'react-secure-storage';
-import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
-import { knowTillAtom } from '@Views/BinaryOptions/Hooks/useIsMerketOpen';
-import {
-  getUserError,
-  timeToMins,
-} from '@Views/BinaryOptions/PGDrawer/TimeSelector';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useSwitchPool } from './useSwitchPool';
 import { useBuyTradeData } from './useBuyTradeData';
 import { useActiveMarket } from './useActiveMarket';
 import { joinStrings } from '../utils';
-import {
-  appConfig,
-  baseUrl,
-  marketsForChart,
-  pricePublisherBaseUrl,
-} from '../config';
+import { appConfig, baseUrl, pricePublisherBaseUrl } from '../config';
 import { AssetCategory, TradeType } from '../type';
 import {
+  approveModalAtom,
   queuets2priceAtom,
   timeSelectorAtom,
   tradeSettingsAtom,
@@ -52,10 +32,7 @@ import {
 import { useSettlementFee } from './useSettlementFee';
 import UpIcon from '@SVG/Elements/UpIcon';
 import DownIcon from '@SVG/Elements/DownIcon';
-import { generateTradeSignature } from '@Views/TradePage/utils';
-import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
-import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import {
   generateApprovalSignature,
   generateBuyTradeSignature,
@@ -63,6 +40,11 @@ import {
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { useApprvalAmount } from './useApprovalAmount';
 import { getSingatureCached } from '../cahce';
+import { getConfig } from '../utils/getConfig';
+import { timeToMins } from '../utils/timeToMins';
+import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
+import { getUserError } from '../utils/getUserError';
+import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -79,8 +61,6 @@ export const useBuyTradeActions = (userInput: string) => {
   const [settings] = useAtom(tradeSettingsAtom);
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const approvalExpanded = useApprvalAmount();
-
-  const priceCache = useAtomValue(queuets2priceAtom);
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
@@ -88,8 +68,7 @@ export const useBuyTradeActions = (userInput: string) => {
 
   const balance = divide(readcallData?.balance, decimals as number) as string;
   const tokenName = poolDetails?.token;
-  const res = readcallData?.user2signer;
-  const nonces = readcallData?.nonces;
+
   const tokenAddress = poolDetails?.tokenAddress;
   const { data: allSettlementFees } = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
@@ -98,22 +77,16 @@ export const useBuyTradeActions = (userInput: string) => {
   const setIsApproveModalOpen = useSetAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
   const { activeMarket: activeAsset } = useActiveMarket();
-  const marketId = joinStrings(
-    activeAsset?.token0 as string,
-    activeAsset?.token1 as string,
-    ''
-  );
+
   const pairName = joinStrings(
     activeAsset?.token0 as string,
     activeAsset?.token1 as string,
     '-'
   );
 
-  const chartMarket = marketsForChart[marketId as keyof typeof marketsForChart];
   const { address } = useAccount();
 
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
   const { writeCall: approve } = useWriteCall(tokenAddress as string, ERC20ABI);
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null

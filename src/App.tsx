@@ -1,4 +1,4 @@
-import { Navbar } from './Views/Common/Navbar';
+import { useEffect } from 'react';
 import {
   Routes,
   Route,
@@ -6,54 +6,31 @@ import {
   useSearchParams,
   useNavigate,
 } from 'react-router-dom';
-import IbfrFaucet from '@Views/Faucet';
-import Background from './AppStyles';
 import { Alert, Snackbar } from '@mui/material';
 import { atom, useAtom, useAtomValue } from 'jotai';
-import { Warning } from '@Views/Common/Notification/warning';
-import TnCModal from '@Views/Common/TnCModal';
-import {
-  activeMarketFromStorageAtom,
-  defaultMarket,
-  referralCodeAtom,
-} from '@Views/BinaryOptions';
-import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
-import { Earn } from '@Views/Earn';
-import { ReferralPage } from '@Views/Referral';
 import { atomWithStorage } from 'jotai/utils';
 
-import SideBar from '@Views/Common/Sidebar';
-import ConnectionDrawer from '@Views/Common/V2-Drawer/connectionDrawer';
-import { useGraphStatus } from '@Utils/useGraphStatus';
-import { Weekly } from '@Views/V2-Leaderboard/Weekly';
-import { LeaderBoard, LeaderBoardOutlet } from '@Views/V2-Leaderboard';
-import { ProfilePage } from '@Views/Profile';
-import { useEffect } from 'react';
-import { useToast } from '@Contexts/Toast';
-import { AllTradesPage } from '@Views/AllTrades';
-import { History } from '@Views/BinaryOptions/History';
-import TestComponent from './TestComponent';
-import { urlSettings } from './Config/wagmiClient';
-import { MergedPage } from '@Views/AllTrades/allTradesMerged';
-import { OpenOcean } from '@Views/Common/OpenOceanWidget';
-import { TradingConfig } from '@Views/TradingConfig';
-import { PythPoc } from '@Views/PythPoc';
-import { useAutoConnect } from './Config/useAutoConnectSafe';
-import { UsdcTransfer } from '@Hooks/UsdcTransfer';
-import { AddMarket } from './AddMarket';
-import { CreatePair } from './Admin/CreatePair';
-import { NoLoss } from '@Views/NoLoss/NoLoss';
 import { TradePage } from '@Views/TradePage';
+import { Navbar } from './Views/Common/Navbar';
+import { Warning } from '@Views/Common/Notification/warning';
+import TnCModal from '@Views/Common/TnCModal';
+import { PasswordModal } from '@Views/Common/PasswordModal';
+import Background from './AppStyles';
+
+import { useGraphStatus } from '@Utils/useGraphStatus';
+import { useToast } from '@Contexts/Toast';
+import { urlSettings } from './Config/wagmiClient';
+import { OpenOcean } from '@Views/Common/OpenOceanWidget';
+import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { PasswordModal } from '@Views/Common/PasswordModal';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
-import { ErrorPage } from './ErrorPage';
-import { DashboardV2 } from '@Views/DashboardV2';
+
+export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
-import { isTestnet } from 'config';
-import { Signer } from './Signer';
+import { defaultMarket } from '@Views/TradePage/config';
+import { activeMarketFromStorageAtom } from './globalStore';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -63,18 +40,6 @@ import { Signer } from './Signer';
     }
   }
 })();
-
-// const ErrorPage: React.FC<any> = ({}) => {
-//   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-//     let arr = undefined;
-//     arr.map((a) => a);
-//   };
-//   return (
-//     <div className="flex flex-col">
-//       I am the errro<button onClick={onClick}>Click me for error</button>
-//     </div>
-//   );
-// };
 
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
@@ -114,36 +79,10 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>
-        <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/signer" element={<Signer />} />
+        {/* <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/error" element={<ErrorPage />} />
-        <Route path="/transfer" element={<UsdcTransfer />} />
-        <Route path="/test" element={<TestComponent />} />
-        <Route path="/error" element={<ErrorPage />}></Route>
-        <Route path="/pyth" element={<PythPoc />}></Route>
         <Route path="/admin" element={<TradingConfig />}></Route>
         <Route path="/admin/create-pair" element={<CreatePair />}></Route>
-        <Route path="/addMarket" element={<AddMarket />} />
-        <Route path="/test/:market" element={<TradePage />} />
-        {/* <Route path="/referral" element={<ReferralPage />} /> */}
-        {/* <Route path="/ref/:code" element={<div>Helo</div>} /> */}
-        <Route path="/history" element={<History />} />
-        {/* <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          <Route path="daily" element={<Incentivised />}>
-            <Route path=":chain" element={<Incentivised />} />
-          </Route>
-          <Route path="weekly" element={<Weekly />}>
-            <Route path=":chain" element={<Weekly />} />
-          </Route>
-          <Route
-            path="trades"
-            element={
-              <LeaderBoard>
-                <AllTradesPage />
-              </LeaderBoard>
-            }
-          />
-        </Route> */}
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
@@ -151,13 +90,8 @@ const AppRoutes = () => {
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
-        </Route>
-        {/* <Route path="/trades/merged" element={<MergedPage />} /> */}
-        <Route path="/trades" element={<AllTradesPage />} />
+        </Route> */}
         <Route path="/binary/:market" element={<TradePage />} />
-        <Route path="/no-loss/:market" element={<NoLoss />} />
-        <Route path="/v2/:market" element={<TradePage />} />
-        {/* referral link handling */}
         <Route
           path="/*"
           element={

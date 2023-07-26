@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
 import { Add, Remove } from '@mui/icons-material';
-import React, { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import ErrorIcon from 'src/SVG/Elements/ErrorIcon';
 import BN from 'bn.js';
 import Big from 'big.js';
 import { useToast } from '@Contexts/Toast';
-import { add, gt, lt, multiply } from '@Utils/NumString/stringArithmatics';
+import { gt } from '@Utils/NumString/stringArithmatics';
 import { PoolDropDown } from './PoolDropDown';
-import { toFixed } from '@Utils/NumString';
 import { MaxButton } from './DynamicCustomOption';
 
 const TimeSelectorStyles = styled.div`
@@ -94,39 +93,6 @@ const TimeSelectorStyles = styled.div`
     padding: 1.1rem 0.7rem;
   }
 `;
-
-export function timeToMins(time: string) {
-  if (!time) return;
-  if (typeof time !== 'string') return;
-  var b = time.split(':');
-
-  return +b[0] * 60 + +b[1];
-}
-
-// Convert minutes to a time in format hh:mm
-// Returned value is in range 00  to 24 hrs
-export function timeFromMins(mins) {
-  function z(n) {
-    return (n < 10 ? '0' : '') + n;
-  }
-  var h = ((mins / 60) | 0) % 24;
-  var m = mins % 60;
-  return z(h) + ':' + z(m);
-}
-
-export function getUserError(maxTimeInHHMM: string) {
-  let hours = maxTimeInHHMM.toString().split(':')[0];
-  let minutes = maxTimeInHHMM.toString().split(':')[1];
-  if (hours.charAt(0) == '0') hours = hours.charAt(1);
-  if (minutes.charAt(0) == '0') minutes = minutes.charAt(1);
-  if (minutes == '0') return `${hours} hour${gt(hours, '1') ? 's' : ''}`;
-  else if (hours == '0')
-    return `${minutes} minute${gt(minutes, '1') ? 's' : ''}`;
-  else
-    return `${hours} hour${gt(hours, '1') ? 's' : ''} ${minutes} minute${
-      gt(minutes, '1') ? 's' : ''
-    }`;
-}
 
 // Add two times in hh:mm format
 function addTimes(t0, t1) {

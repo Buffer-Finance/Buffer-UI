@@ -1,4 +1,4 @@
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import {
   ClickEvent,
   ControlledMenu,

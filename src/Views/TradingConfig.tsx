@@ -1,27 +1,20 @@
-import { ContractInterface, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useEffect, useMemo, useState } from 'react';
 import Config from 'public/config.json';
 import ConfigContract from './ConfigContractAbi.json';
-import { useWriteCall } from '@Hooks/useWriteCall';
 import { Call } from '@Utils/Contract/multiContract';
-import { useDashboardTableData } from './Dashboard/Hooks/useDashboardTableData';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { Markets } from 'src/Types/Market';
 const ifc = new ethers.utils.Interface(ConfigContract);
-import TestAvatarAbi from '@Views/ConfigContractAbi.json';
 import { useReadCall } from '@Utils/useReadCall';
 import { TableAligner } from './V2-Leaderboard/Components/TableAligner';
 import { keyClasses } from './Earn/Components/VestCards';
 import { valueClasses } from './Earn/Components/VestCards';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom } from 'jotai';
 import BufferInput from './Common/BufferInput';
-import { ModalBase } from 'src/Modals/BaseModal';
 import { BlueBtn } from './Common/V2-Button';
 import {
-  PoolDropDown,
   PoolDropDownAll,
   useActivePoolAll,
-  useActivePoolObj,
 } from './BinaryOptions/PGDrawer/PoolDropDown';
 import { useIndependentWriteCall } from '@Hooks/writeCall';
 import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';

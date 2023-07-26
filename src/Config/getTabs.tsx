@@ -1,4 +1,4 @@
-import { defaultMarket } from '@Views/BinaryOptions';
+import { defaultMarket } from '@Views/TradePage/config';
 import { SVGProps } from 'react';
 
 export interface ITab {

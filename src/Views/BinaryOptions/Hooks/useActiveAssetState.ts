@@ -18,7 +18,7 @@ import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useMemo } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { knowTillAtom } from './useIsMerketOpen';
+import { knowTillAtom } from '../../TradePage/Hooks/useIsMerketOpen';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { QuickTradeExpiry } from '../PGDrawer';
 import { timeToMins } from '../PGDrawer/TimeSelector';

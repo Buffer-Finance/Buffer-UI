@@ -1,7 +1,6 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useSwitchPool } from '../useSwitchPool';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { appConfig } from '@Views/TradePage/config';
 import { useMemo } from 'react';
 import { erc20ABI } from 'wagmi';
 import { useCall2Data } from '@Utils/useReadCall';
@@ -12,14 +11,14 @@ import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useMarketsConfig } from '../useMarketsConfig';
 import { useSettlementFee } from '../useSettlementFee';
 import { joinStrings } from '@Views/TradePage/utils';
-import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 export function useBuyTradePageReadcalls() {
   const { address } = useUserAccount();
   const { switchPool, poolDetails } = useSwitchPool();
   const { activeChain } = useActiveChain();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
   const referralData = useReferralCode();
 
   const config = useMarketsConfig();

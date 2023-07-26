@@ -30,7 +30,6 @@ import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
 import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
 import { sleep } from '@Utils/JSUtils/sleep';
-import { PRICE_DECIMALS } from '@Views/BinaryOptions/Tables/TableComponents';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
@@ -41,13 +40,12 @@ import {
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
-import { marketsForChart } from '@Views/V3App/config';
-import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { TradeType } from '@Views/TradePage/type';
 import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
 import { atomWithStorage } from 'jotai/utils';
+import { PRICE_DECIMALS } from '@Views/TradePage/config';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -274,23 +272,15 @@ export const MultiResolutionChart = ({
     let tempSymbols: any[] = [];
     if (v3AppConfig !== null) {
       for (const singleAsset of v3AppConfig) {
-        const marketId = joinStrings(
-          singleAsset.token0,
-          singleAsset.token1,
-          ''
-        );
-        const chartMarket =
-          marketsForChart[marketId as keyof typeof marketsForChart];
-
         tempSymbols = [
           {
-            symbol: chartMarket.tv_id,
-            full_name: chartMarket.tv_id,
-            description: chartMarket.tv_id,
+            symbol: singleAsset.tv_id,
+            full_name: singleAsset.tv_id,
+            description: singleAsset.tv_id,
             exchange: PRICE_PROVIDER,
             type: singleAsset.category,
-            pricescale: chartMarket.price_precision,
-            pair: chartMarket.pair,
+            pricescale: singleAsset.price_precision,
+            pair: singleAsset.pair,
           },
           ...tempSymbols,
         ];

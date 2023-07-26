@@ -10,9 +10,9 @@ import secureLocalStorage from 'react-secure-storage';
 import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
 import { signTypedData } from '@wagmi/core';
 import { useToast } from '@Contexts/Toast';
-import { appConfig } from '@Views/TradePage/config';
 import { WaitToast } from '@Views/TradePage/utils';
 import { getChains } from 'src/Config/wagmiClient';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 
 /*
  * Nonce is zero initially.
@@ -86,10 +86,8 @@ const useOneCTWallet = () => {
   const res = useUserOneCTData();
   const [disabelLoading, setDisabelLoading] = useAtom(disableLoadingAtom);
   const [createLoading, setCreateLoading] = useAtom(createLoadingAtom);
-
   const { activeChain } = uesOneCtActiveChain();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
   const provider = useProvider({ chainId: activeChain.id });
 
   const pkLocalStorageIdentifier = useMemo(() => {
@@ -113,7 +111,7 @@ const useOneCTWallet = () => {
   const oneCTWallet = useMemo(() => {
     if (!oneCtPk) return null;
     return new ethers.Wallet(
-      oneCtPk,
+      oneCtPk as any,
       provider as ethers.providers.StaticJsonRpcProvider
     );
   }, [oneCtPk, provider, registeredOneCT]);

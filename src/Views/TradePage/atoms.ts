@@ -111,3 +111,5 @@ export const ShareBetAtom = atom<ShareBetType>({
 export const SetShareBetAtom = atom(null, (get, set, update: ShareBetType) =>
   set(ShareBetAtom, update)
 );
+
+export const approveModalAtom = atom<boolean>(false);

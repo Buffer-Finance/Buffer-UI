@@ -1,15 +1,12 @@
 import { useToast } from '@Contexts/Toast';
-
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { cancelQueueTrade } from '../utils';
 import { getSingatureCached } from '../cahce';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { TradeType, marketType, poolInfoType } from '../type';
-import { ethers } from 'ethers';
-import { arrayify } from 'ethers/lib/utils.js';
 import axios from 'axios';
-import { appConfig, baseUrl } from '../config';
+import { baseUrl } from '../config';
 import { useState } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
@@ -21,6 +18,7 @@ import {
 import { privateKeyToAccount } from 'viem/accounts';
 import { getExpireNotification } from '../utils/getExpireNotification';
 import { usePoolInfo } from './usePoolInfo';
+import { getConfig } from '../utils/getConfig';
 const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
@@ -45,8 +43,7 @@ export const useCancelTradeFunction = () => {
   const { getPoolInfo } = usePoolInfo();
 
   const setLoading = useSetAtom(closeLoadingAtom);
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
   const openShareModal = (
     trade: TradeType,
     expiry: string,
@@ -152,8 +149,8 @@ export const useCancelTradeFunction = () => {
       toastify,
       openShareModal,
       pool,
-      showSharePopup,
-      true
+      showSharePopup
+      // true
     );
 
     console.log(`res-cancel: `, res);

@@ -18,7 +18,6 @@ export default function BinaryDrawer() {
     </Drawer>
   );
 }
-export const approveModalAtom = atom<boolean>(false);
 
 export const QuickTradeExpiry = atomWithStorage('expiry', '00:05');
 export const ammountAtom = atomWithStorage('ammount-v3', '10');

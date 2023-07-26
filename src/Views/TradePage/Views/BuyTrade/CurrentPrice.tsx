@@ -1,7 +1,5 @@
 import { toFixed } from '@Utils/NumString';
 import { round } from '@Utils/NumString/stringArithmatics';
-import { roundToTwo } from '@Utils/roundOff';
-import { setDoccumentTitle } from '@Views/BinaryOptions/PGDrawer/ActiveAsset';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import {
@@ -11,10 +9,11 @@ import {
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { marketsForChart } from '@Views/TradePage/config';
-import { joinStrings } from '@Views/V3App/helperFns';
+import { joinStrings } from '@Views/TradePage/utils';
+import { setDoccumentTitle } from '@Views/TradePage/utils/setDocumentTitle';
 import styled from '@emotion/styled';
 import { Trans } from '@lingui/macro';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 
 export const CurrentPriceBackground = styled.div`

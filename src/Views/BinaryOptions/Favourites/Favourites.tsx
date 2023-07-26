@@ -11,13 +11,8 @@ import { CloseOutlined } from '@mui/icons-material';
 import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useNavigate } from 'react-router-dom';
-import { PairTokenImage } from '../Components/PairTokenImage';
+import { PairTokenImage } from '../../TradePage/Views/PairTokenImage';
 import { priceAtom } from '@Hooks/usePrice';
-import { useV3AppFavouritesFns } from '@Views/V3App/Utils/useV3AppFavouriteFns';
-import { useV3AppActiveMarket } from '@Views/V3App/Utils/useV3AppActiveMarket';
-import { V3AppConfig, useV3AppConfig } from '@Views/V3App/useV3AppConfig';
-import { joinStrings } from '@Views/V3App/helperFns';
-import { marketsForChart } from '@Views/V3App/config';
 
 export default function Favourites({ className }: { className?: string }) {
   const [toggle, setToggle] = useState(false);

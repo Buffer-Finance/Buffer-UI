@@ -3,7 +3,7 @@ import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { UpTriangle } from 'public/ComponentSVGS/UpTriangle';
 import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { useNavigate } from 'react-router-dom';
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import { getPayout } from '@Views/TradePage/utils';
 import BufferSortTable from '@Views/Common/BufferSortTable';

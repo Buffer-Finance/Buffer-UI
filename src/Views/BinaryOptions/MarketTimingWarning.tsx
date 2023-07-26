@@ -1,7 +1,7 @@
 import useStopWatch from '@Hooks/Utilities/useStopWatch';
 import { useAtom, useAtomValue } from 'jotai';
 import { IconType, LeftBorderedDiv } from '@Views/Common/LeftBorderedDiv';
-import { knowTillAtom } from './Hooks/useIsMerketOpen';
+import { knowTillAtom } from '../TradePage/Hooks/useIsMerketOpen';
 import { useState } from 'react';
 import { ForexTimingsModalAtom } from './PGDrawer/CustomOption';
 import { MarketTimingsModal } from './MarketTimingsModal';

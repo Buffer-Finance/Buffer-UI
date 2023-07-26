@@ -21,7 +21,7 @@ import { SettingsIcon } from './SettingsIcon';
 import { SlippageModal } from '../Components/SlippageModal';
 import YellowWarning from '@SVG/Elements/YellowWarning';
 import { DurationPicker, DynamicDurationPicker } from './DurationPicker';
-import { knowTillAtom } from '../Hooks/useIsMerketOpen';
+import { knowTillAtom } from '../../TradePage/Hooks/useIsMerketOpen';
 import { useActivePoolObj } from './PoolDropDown';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { MarketTimingWarning } from '../MarketTimingWarning';

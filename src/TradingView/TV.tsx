@@ -40,11 +40,6 @@ import { getIdentifier } from '@Hooks/useGenericHook';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { useQTinfo } from '@Views/BinaryOptions';
 import TZ from './TZ.json';
-import {
-  IGQLHistory,
-  tardesAtom,
-} from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
-
 import { toFixed } from '@Utils/NumString';
 import { PRICE_DECIMALS } from '@Views/BinaryOptions/Tables/TableComponents';
 import { BetState } from '@Hooks/useAheadTrades';

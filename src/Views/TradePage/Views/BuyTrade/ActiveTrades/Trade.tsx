@@ -1,4 +1,4 @@
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import { White12pxText } from '@Views/TradePage/Components/TextWrapper';
 import styled from '@emotion/styled';

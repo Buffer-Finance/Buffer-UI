@@ -24,7 +24,7 @@ import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useActivePoolObj } from '../PGDrawer/PoolDropDown';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { priceAtom } from '@Hooks/usePrice';
-import { knowTillAtom } from './useIsMerketOpen';
+import { knowTillAtom } from '../../TradePage/Hooks/useIsMerketOpen';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { useTradePolOrBlpPool } from './useTradePolOrBlpPool';
 import { isTestnet } from 'config';

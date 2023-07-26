@@ -27,8 +27,6 @@ import TableAssetCell from '@Views/Common/BufferTable/TableAssetCell';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlackBtn } from '@Views/Common/V2-Button';
-import { IToken, IV } from '..';
-import { SetShareBetAtom, SetShareStateAtom } from '../Components/shareModal';
 import { expiryPriceCache } from '../Hooks/useTradeHistory';
 import { getPendingData } from './Desktop';
 import { UpTriangle } from '@Public/ComponentSVGS/UpTriangle';
@@ -38,10 +36,8 @@ import { BetState } from '@Hooks/useAheadTrades';
 import { getPriceFromKlines } from 'src/TradingView/useDataFeed';
 import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { PairTokenImage } from '../Components/PairTokenImage';
-import { V3AppConfig } from '@Views/V3App/useV3AppConfig';
+import { PairTokenImage } from '../../TradePage/Views/PairTokenImage';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { v3AppConfig } from '@Views/V3App/config';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { getExpiry } from '@Views/TradePage/Views/AccordionTable/Common';
 export const PRICE_DECIMALS = 1e8;
@@ -353,36 +349,6 @@ export const AssetCell: React.FC<{
       }
       desc={<></>}
     />
-  );
-};
-
-export const UpDownChip: React.FC<{
-  isUp: boolean;
-  className?: string;
-  shouldShowImage?: boolean;
-  upText?: string;
-  downText?: string;
-}> = ({
-  isUp,
-  className = '',
-  shouldShowImage = true,
-  upText = 'Up',
-  downText = 'Down',
-}) => {
-  return (
-    <div
-      className={`px-2 h-[22px] text-f12 flex gap-1 items-center rounded-[5px] font-medium  ml-2 bg-1 brightness-125 w-max ${
-        isUp ? 'green' : 'red'
-      }  ${className}`}
-    >
-      {shouldShowImage &&
-        (isUp ? (
-          <UpTriangle className={`scale-[0.70] mt-1`} />
-        ) : (
-          <DOwnTriangle className={`mt-1 scale-[0.70]`} />
-        ))}
-      {isUp ? upText : downText}
-    </div>
   );
 };
 

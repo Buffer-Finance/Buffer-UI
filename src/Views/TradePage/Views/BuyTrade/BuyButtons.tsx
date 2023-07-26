@@ -2,8 +2,6 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { lt, multiply } from '@Utils/NumString/stringArithmatics';
-import { ApproveModal } from '@Views/BinaryOptions/Components/approveModal';
-import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
@@ -13,11 +11,16 @@ import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
 import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
+import {
+  approveModalAtom,
+  limitOrderStrikeAtom,
+  tradeTypeAtom,
+} from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useAccount, useProvider } from 'wagmi';
+import { ApproveModal } from '../ApproveModal';
 
 export const BuyButtons = ({
   allowance,
@@ -32,12 +35,12 @@ export const BuyButtons = ({
   activeAssetPrice: string;
   amount: string;
 }) => {
-  const { registeredOneCT, oneCtPk } = useOneCTWallet();
+  const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   const { poolDetails } = useSwitchPool();
   const { openConnectModal } = useConnectModal();
   const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
-  const { handleApproveClick, buyHandler, loading, revokeApproveClick } =
+  const { handleApproveClick, buyHandler, loading } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
   const { activeChain } = useActiveChain();

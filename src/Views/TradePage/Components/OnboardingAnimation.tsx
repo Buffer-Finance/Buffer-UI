@@ -1,8 +1,7 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { showOnboardingAnimationAtom } from '../atoms';
 import { Dialog } from '@mui/material';
-import { useEffect, SVGProps } from 'react';
-import BufferLogo from '@Assets/Elements/BufferLogo';
+import { useEffect } from 'react';
 import BufferAnimation from '@SVG/BufferAnimation';
 const duration = 5000;
 // 37

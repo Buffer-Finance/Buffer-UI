@@ -1,10 +1,7 @@
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import styled from '@emotion/styled';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
-import {
-  MinutesInput,
-  useMinutesInputError,
-} from '../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
+import { MinutesInput } from '../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
 import { SaveButton } from './SaveButton';
 import { DirectionButtons } from './DirectionButtons';
 import {
@@ -15,22 +12,20 @@ import {
 import { TriggerPrice } from './TriggerPrice';
 import { useEffect, useMemo, useState } from 'react';
 import { TradeType, directionBtn, marketType } from '@Views/TradePage/type';
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
 import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
-import { editQueueTrade, generateTradeSignature } from '@Views/TradePage/utils';
+import { editQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
 import { useAccount } from 'wagmi';
 import { HHMMToSeconds } from '@Views/TradePage/utils';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
-import { secondsToHHMM } from '@Views/V3App/helperFns';
 import { getSingatureCached } from '@Views/TradePage/cahce';
 import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
-import { appConfig } from '@Views/TradePage/config';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 
 export const EditModal: React.FC<{
   trade: TradeType;
@@ -53,8 +48,7 @@ export const EditModal: React.FC<{
   const isMinuteFrame = frame === 'm';
 
   const { activeChain } = useActiveChain();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
   const [elapsedMinutes, setElapsedMinutes] = useState<number | null>(null);
   const queuedTime = trade?.queued_timestamp;
 
@@ -281,7 +275,3 @@ const EditModalBackground = styled.div`
     padding: 4px;
   }
 `;
-
-const LimitOrderTimeDurationInput = () => {
-  return;
-};

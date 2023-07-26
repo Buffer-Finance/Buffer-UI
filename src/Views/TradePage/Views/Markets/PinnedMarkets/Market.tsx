@@ -1,5 +1,5 @@
 import Star from '@Public/ComponentSVGS/Star';
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';

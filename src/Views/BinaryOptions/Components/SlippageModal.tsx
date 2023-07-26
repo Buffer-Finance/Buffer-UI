@@ -8,7 +8,6 @@ import { gt } from '@Utils/NumString/stringArithmatics';
 import BufferSwitch from '@Views/Common/BufferSwitch';
 import { SettingsIcon } from '../PGDrawer/SettingsIcon';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { mobileUpperBound } from '..';
 import { atomWithStorage } from 'jotai/utils';
 
 export const SlippageModalStyles = styled.div`

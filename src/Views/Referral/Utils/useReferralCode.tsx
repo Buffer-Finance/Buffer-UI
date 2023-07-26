@@ -1,5 +1,4 @@
 import { useAtomValue } from 'jotai';
-import { referralCodeAtom } from '@Views/BinaryOptions';
 import { useAccount } from 'wagmi';
 import { useRefereeCode } from '../Hooks/useUserReferralData';
 import ReferralABI from '../Config/ReferralABI.json';
@@ -9,6 +8,7 @@ import { useMemo } from 'react';
 import { zeroAddress } from 'viem';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { referralCodeAtom } from 'src/App';
 
 export const useReferralCode = () => {
   const { address } = useAccount();

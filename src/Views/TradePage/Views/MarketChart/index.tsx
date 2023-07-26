@@ -6,7 +6,6 @@ import { chartNumberAtom, isTableShownAtom } from '@Views/TradePage/atoms';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { isWideTableEnabled } from '@Views/BinaryOptions/UserTrades';
 import { sleep } from '@TV/useDataFeed';
 
 const SidebySideCharts = ({

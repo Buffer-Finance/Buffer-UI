@@ -1,15 +1,14 @@
-import { appConfig } from '@Views/TradePage/config';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useCall2Data } from '@Utils/useReadCall';
 import { getCallId } from '@Utils/Contract/multiContract';
 import SignerManagerABI from '@Views/OneCT/signerManagerABI.json';
 import { uesOneCtActiveChain } from './useOneCTWallet';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 
 const useAccountMapping = () => {
   const { activeChain } = uesOneCtActiveChain();
   const { address } = useUserAccount();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
 
   const calls = address
     ? [

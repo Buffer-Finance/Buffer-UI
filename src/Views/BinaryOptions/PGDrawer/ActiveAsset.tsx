@@ -9,7 +9,7 @@ import Background from '../Favourites/style';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { toFixed } from '@Utils/NumString';
 import { LastDayChange } from '../Favourites/LastDayChange';
-import { PairTokenImage } from '../Components/PairTokenImage';
+import { PairTokenImage } from '../../TradePage/Views/PairTokenImage';
 import { priceAtom } from '@Hooks/usePrice';
 import { TVMarketSelector } from '../Favourites/TVMarketSelector';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -18,9 +18,6 @@ import { DynamicMarketSelector } from '@Views/NoLoss/Favourites/TVMarketSelector
 import { MarketInterface } from 'src/MultiChart';
 
 export const chartReadyAtom = atom(false);
-export const setDoccumentTitle = (title) => {
-  document.title = title;
-};
 
 export const ActiveAssetv0 = ({ cb }) => {
   const qtInfo = useQTinfo();

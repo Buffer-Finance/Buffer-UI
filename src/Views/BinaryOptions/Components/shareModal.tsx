@@ -29,7 +29,6 @@ import { useHostName } from '../../TradePage/Hooks/useHostName';
 import { BufferLogoComponent } from '@Views/Common/Navbar/BufferLogo';
 import { affilateCode2ReferralLink } from '@Views/Referral';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { getImageUrl } from '../PGDrawer/PoolDropDown';
 import styled from '@emotion/styled';
 
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';

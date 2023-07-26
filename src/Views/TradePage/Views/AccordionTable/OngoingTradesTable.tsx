@@ -14,7 +14,6 @@ import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
@@ -42,6 +41,7 @@ import {
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { toFixed } from '@Utils/NumString';
+import { AssetCell } from './AssetCell';
 
 export const tradesCount = 10;
 
