@@ -4,21 +4,17 @@ import { useEffect, useState } from 'react';
 import LimitOrderTable from './LimitOrderTable';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { isTableShownAtom, queuets2priceAtom } from '@Views/TradePage/atoms';
-import { usePlatformTrades } from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
-import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
+import {
+  usePlatformActiveTrades,
+  usePlatformHistoryTrades,
+} from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import { OngoingTradesTable } from './OngoingTradesTable';
 import { HistoryTable } from './HistoryTable';
-import { useAccount, useProvider } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { getPriceWithRetry } from '@Hooks/usePrice';
-import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
-
-import { Call, multicallLinked } from '@Utils/Contract/multiContract';
-import { appConfig } from '@Views/TradePage/config';
 import { getCachedPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { useCancelledTrades } from '@Views/TradePage/Hooks/useCancelledTrades';
 import { CancelledTable } from './CancelTable';
+
 const tables = {
   Trades: 'h',
   'Limit Orders': 'h',
@@ -31,19 +27,13 @@ const gap = ['Cancelled'];
 
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
-  const [historyTrades] = useHistoryTrades();
   const [activeTrades, limitOrders] = useOngoingTrades();
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const priceCache = useAtomValue(queuets2priceAtom);
-  const [platformActiveTrades, platformHistoryTrades] = usePlatformTrades();
-  const [canclledTrades] = useCancelledTrades();
-  // const { activeChain } = useActiveChain();
-  // const provider = useProvider({ chainId: activeChain.id });
+
   const [activeTable, setActiveTable] = useState('Trades');
-  // const { address } = useAccount();
   const getAugmentedData = async (
-    queries: { pair: string; timestamp: number; queueId: number }[],
-    lockedAmmountQuery: Call[]
+    queries: { pair: string; timestamp: number; queueId: number }[]
   ) => {
     const priceResponse = await Promise.all(
       queries.map((q) => getCachedPrice(q))
@@ -55,20 +45,11 @@ const AccordionTable: React.FC<any> = ({}) => {
       });
       return newP;
     });
-    // console.log(`index-priceResponse: `, priceResponse);
-    // const lockedAmmountResponse = await multicallLinked(
-    //   lockedAmmountQuery,
-    //   provider,
-    //   appConfig[activeChain.id],
-    //   'hellother'
-    // );
-    // console.log(`index-response: `, priceResponse, lockedAmmountResponse);
   };
+
   useEffect(() => {
-    const lockedAmountQueryName = 'evaluateParams';
     const priceQueries: { pair: string; timestamp: number; queueId: number }[] =
       [];
-    const lockedAmmountQuery: Call[] = [];
     activeTrades.forEach((trade) => {
       if (trade.state == 'QUEUED') {
         if (trade.market) {
@@ -78,33 +59,12 @@ const AccordionTable: React.FC<any> = ({}) => {
               timestamp: trade.open_timestamp,
               queueId: trade.queue_id,
             });
-          // lockedAmmountQuery.push({
-          //   address: trade.target_contract,
-          //   abi: OptionsABI,
-          //   name: lockedAmountQueryName,
-          //   params: [
-          //     [
-          //       trade.strike.toString(),
-          //       '0',
-          //       trade.period.toString(),
-          //       trade.allow_partial_fill,
-          //       trade.trade_size.toString(),
-          //       address,
-          //       trade.referral_code,
-          //       trade.trader_nft_id.toString(),
-          //       trade.settlement_fee.toString(),
-          //     ],
-          //     trade.slippage + '',
-          //   ],
-          // });
         }
-
-        // queries.push({pair:trade.});
       }
     });
-    getAugmentedData(priceQueries, lockedAmmountQuery);
-    // console.log(`index-activeTrades: `, activeTrades);
+    getAugmentedData(priceQueries);
   }, [activeTrades.length]);
+
   return (
     <div className="flex flex-col    ">
       <div className="w-full bg-[#282B39] rounded-[2px] flex items-center  justify-between p-3 ">
@@ -155,13 +115,13 @@ const AccordionTable: React.FC<any> = ({}) => {
         ) : activeTable == 'Limit Orders' ? (
           <LimitOrderTable trades={limitOrders} />
         ) : activeTable == 'Platform Trades' ? (
-          <OngoingTradesTable trades={platformActiveTrades} platform />
+          <PlatformOngoing />
         ) : activeTable == 'Platform History' ? (
-          <HistoryTable trades={platformHistoryTrades} platform />
+          <PlatformHistory />
         ) : activeTable == 'Cancelled' ? (
-          <CancelledTable trades={canclledTrades} />
+          <Cancelled />
         ) : (
-          <HistoryTable trades={historyTrades} />
+          <History />
         )}
       </div>
     </div>
@@ -175,3 +135,25 @@ const CountChip = ({ count }: { count: number }) => (
     <span>{count}</span>
   </div>
 );
+
+const History = () => {
+  const [historyTrades] = useHistoryTrades();
+
+  return <HistoryTable trades={historyTrades} />;
+};
+
+const Cancelled = () => {
+  const [canclledTrades] = useCancelledTrades();
+
+  return <CancelledTable trades={canclledTrades} />;
+};
+
+const PlatformHistory = () => {
+  const platformHistoryTrades = usePlatformHistoryTrades();
+  return <HistoryTable trades={platformHistoryTrades} platform />;
+};
+
+const PlatformOngoing = () => {
+  const platformActiveTrades = usePlatformActiveTrades();
+  return <OngoingTradesTable trades={platformActiveTrades} platform />;
+};
