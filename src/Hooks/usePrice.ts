@@ -120,15 +120,7 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
   useEffect(() => {
     if (!sendMessage) return;
     const obj = {
-      ids: [
-        'ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace',
-        'e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43',
-        '84c2dde9633d93d1bcad84e7dc41c9d56578b7ec52fabedc1f335d673df0a7c1',
-        'a995d00bb36a63cef7fd2c287dc105fc8f3d93779f062f09551b0af3e81ec30b',
-        '3fa4252848f9f0a1480be62745a4629d9eb1322aebab8a791e344b3b9c1adcf5',
-        '2f95862b045670cd22bee3114c39763a4a08beeb663b145d283c31d7d1101c4f',
-        '5de33a9112c2b700b8d30b8a3402c103578ccfa2765696471cc672bd5cf6ac52',
-      ],
+      ids: Object.keys(pythIds),
       type: 'subscribe',
     };
     const resp = sendMessage(JSON.stringify(obj));
@@ -158,6 +150,10 @@ export const pythIds = {
   '5de33a9112c2b700b8d30b8a3402c103578ccfa2765696471cc672bd5cf6ac52':
     'MATICUSD',
   '385f64d993f7b77d8182ed5003d97c60aa3361f3cecfe711544d2d59165e9bdf': 'OPUSD',
+  '0x765d2ba906dbc32ca17cc11f5310a89e9ee1f6420508c63861f2f8ba4ee34bb2':
+    'XAUUSD',
+  '0xf2fb02c32b055c805e7238d628e5e9dadef274376114eb1f012337cabe93871e':
+    'XAGUSD',
 };
 export const getPrice = async () => {
   const price = await axios.get(
