@@ -23,11 +23,7 @@ export const BuyButtons = ({
   allowance,
   activeAssetPrice,
   amount,
-  isForex,
-  isMarketOpen,
 }: {
-  isForex: boolean;
-  isMarketOpen: boolean;
   allowance: string;
   activeAssetPrice: string;
   amount: string;
@@ -66,7 +62,7 @@ export const BuyButtons = ({
       limitOrderExpiry,
     });
   };
-  const { isMarketOpen: isAssetActive } = useIsMarketOpen(
+  const { isMarketOpen: isAssetActive, isForex } = useIsMarketOpen(
     activeMarket,
     switchPool?.pool
   );
@@ -114,7 +110,7 @@ export const BuyButtons = ({
               <div className="flex gap-2">
                 <GreenBtn
                   onClick={() => buyTrade(true)}
-                  isDisabled={isForex && !isMarketOpen}
+                  isDisabled={isForex}
                   isLoading={
                     !!loading &&
                     typeof loading !== 'number' &&
@@ -128,7 +124,7 @@ export const BuyButtons = ({
                   </>
                 </GreenBtn>
                 <RedBtn
-                  isDisabled={isForex && !isMarketOpen}
+                  isDisabled={isForex}
                   isLoading={
                     !!loading &&
                     typeof loading !== 'number' &&
