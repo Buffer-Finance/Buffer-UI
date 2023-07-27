@@ -119,7 +119,8 @@ export const AssetSelectorTable: React.FC = () => {
     ).toFixed(2);
 
     const isForex =
-      currentAsset.category === AssetCategory[AssetCategory.Forex];
+      currentAsset.category === AssetCategory[AssetCategory.Forex] ||
+      currentAsset.category === AssetCategory[AssetCategory.Commodities];
 
     const isOpen = getIsOpen(
       isForex,

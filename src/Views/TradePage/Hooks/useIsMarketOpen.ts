@@ -7,7 +7,9 @@ export const useIsMarketOpen = (
   selectedPoolContract: string | undefined
 ) => {
   const readcallData = useBuyTradeData();
-  const isForex = market?.category === AssetCategory[AssetCategory.Forex];
+  const isForex =
+    market?.category === AssetCategory[AssetCategory.Forex] ||
+    market?.category === AssetCategory[AssetCategory.Commodities];
 
   const isOpen = useMemo(() => {
     if (!readcallData || !market) return false;
