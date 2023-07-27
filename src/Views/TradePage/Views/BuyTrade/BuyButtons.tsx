@@ -1,4 +1,3 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { lt, multiply } from '@Utils/NumString/stringArithmatics';
@@ -19,18 +18,14 @@ import {
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { ApproveModal } from '../ApproveModal';
 
 export const BuyButtons = ({
   allowance,
   activeAssetPrice,
   amount,
-  isForex,
-  isMarketOpen,
 }: {
-  isForex: boolean;
-  isMarketOpen: boolean;
   allowance: string;
   activeAssetPrice: string;
   amount: string;
@@ -43,36 +38,37 @@ export const BuyButtons = ({
   const { handleApproveClick, buyHandler, loading } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
-  const { activeChain } = useActiveChain();
   const { activeMarket } = useActiveMarket();
   const { switchPool } = useSwitchPool();
 
-  const provider = useProvider({ chainId: activeChain.id });
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
 
   const tradeType = useAtomValue(tradeTypeAtom);
   const limitStrike = useAtomValue(limitOrderStrikeAtom);
+
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
     if (lt(allowance || '0', amount.toString() || '0'))
       return setIsApproveModalOpen(true);
     let strike = activeAssetPrice;
-    let limitOrderExpiry = 0;
+    let limitOrderExpiry = '0';
     if (tradeType == 'Limit' && limitStrike) {
-      limitOrderExpiry = expiry;
-      console.log(`BuyButtons-limitOrderExpiry: `, limitOrderExpiry);
+      limitOrderExpiry = expiry ?? '0';
+      // console.log(`BuyButtons-limitOrderExpiry: `, limitOrderExpiry);
       strike = limitStrike;
     }
     buyHandler({
       is_up: isUp ? true : false,
       strike,
-      limitOrderExpiry,
+      limitOrderExpiry: Number(limitOrderExpiry),
     });
   };
-  const { isMarketOpen: isAssetActive } = useIsMarketOpen(
+
+  const { isMarketOpen: isAssetActive, isForex } = useIsMarketOpen(
     activeMarket,
     switchPool?.pool
   );
+
   if (!poolDetails) return <>Error: Pool not found</>;
 
   return (
@@ -117,7 +113,7 @@ export const BuyButtons = ({
               <div className="flex gap-2">
                 <GreenBtn
                   onClick={() => buyTrade(true)}
-                  isDisabled={isForex && !isMarketOpen}
+                  isDisabled={isForex}
                   isLoading={
                     !!loading &&
                     typeof loading !== 'number' &&
@@ -131,7 +127,7 @@ export const BuyButtons = ({
                   </>
                 </GreenBtn>
                 <RedBtn
-                  isDisabled={isForex && !isMarketOpen}
+                  isDisabled={isForex}
                   isLoading={
                     !!loading &&
                     typeof loading !== 'number' &&
