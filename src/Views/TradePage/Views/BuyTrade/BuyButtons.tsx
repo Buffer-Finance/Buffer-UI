@@ -110,7 +110,7 @@ export const BuyButtons = ({
               <div className="flex gap-2">
                 <GreenBtn
                   onClick={() => buyTrade(true)}
-                  isDisabled={isForex}
+                  isDisabled={isForex && !isAssetActive}
                   isLoading={
                     !!loading &&
                     typeof loading !== 'number' &&
@@ -124,7 +124,7 @@ export const BuyButtons = ({
                   </>
                 </GreenBtn>
                 <RedBtn
-                  isDisabled={isForex}
+                  isDisabled={isForex && !isAssetActive}
                   isLoading={
                     !!loading &&
                     typeof loading !== 'number' &&
