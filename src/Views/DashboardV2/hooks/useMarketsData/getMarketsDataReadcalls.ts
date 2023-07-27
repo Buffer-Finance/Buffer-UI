@@ -1,12 +1,11 @@
 import OptionContractABI from '@Views/TradePage/ABIs/OptionContract.json';
 import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
-
 import { joinStrings } from '@Views/TradePage/utils';
 import { marketType } from '@Views/TradePage/type';
 import { IBaseSettlementFees } from '@Views/TradePage/Hooks/useSettlementFee';
 import { appConfig } from '@Views/TradePage/config';
-import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { getCallId } from '@Utils/Contract/multiContract';
+import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 
 export const getMarketsDataReadcalls = (
   config: marketType[] | null,

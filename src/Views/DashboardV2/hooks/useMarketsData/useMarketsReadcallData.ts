@@ -9,8 +9,8 @@ import { readResponseAtom, setReadCallsAtom } from '@Views/DashboardV2/atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { appConfig } from '@Views/TradePage/config';
-import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { joinStrings } from '@Views/TradePage/utils';
+import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 
 export const useMarketsReadCallData = () => {
   const readCallData = useAtomValue(readResponseAtom);
@@ -81,7 +81,6 @@ export const useMarketsReadCallData = () => {
           getCallId(
             configData.creation_window,
             'isInCreationWindow',
-
             timeToMins('00:05')
           )
         ]?.[0];

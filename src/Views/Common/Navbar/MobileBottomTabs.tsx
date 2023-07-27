@@ -1,12 +1,9 @@
-import {
-  activeMarketFromStorageAtom,
-  isHistoryTabActiveAtom,
-} from '@Views/BinaryOptions';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import { getMobileTabs, getTabs } from 'src/Config/getTabs';
 import { Link, useLocation } from 'react-router-dom';
 import { useGlobal } from '@Contexts/Global';
+import { activeMarketFromStorageAtom } from 'src/globalStore';
 
 const BaseTab = ({
   tab,
@@ -21,11 +18,6 @@ const BaseTab = ({
   onClick?: () => void;
   className?: string;
 }) => {
-  const isHistoryTab = tab.name?.toLowerCase() == 'activity';
-  const isBinaryTab = tab.name?.toLowerCase() == 'trade';
-  const location = useLocation();
-  const isTrade = location.pathname.includes('binary');
-  const setHistory = useSetAtom(isHistoryTabActiveAtom);
   const Btn = (
     <div
       className={`flex ${
@@ -87,7 +79,6 @@ const MobileBottomTabs: React.FC<any> = ({}) => {
     [activeMarketFromStorage]
   );
   const location = useLocation();
-  const isHistory = useAtomValue(isHistoryTabActiveAtom);
   const isActive = (t: any) => {
     let tabName = t.to.split('/')[1];
     if (tabName == 'trade') {

@@ -31,6 +31,11 @@ export const referralCodeAtom = atomWithStorage('referral-code5', '');
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 import { defaultMarket } from '@Views/TradePage/config';
 import { activeMarketFromStorageAtom } from './globalStore';
+import IbfrFaucet from '@Views/Faucet';
+import { Earn } from '@Views/Earn';
+import { ReferralPage } from '@Views/Referral';
+import { DashboardV2 } from '@Views/DashboardV2';
+import { ProfilePage } from '@Views/Profile';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -79,10 +84,9 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>
-        {/* <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/error" element={<ErrorPage />} />
-        <Route path="/admin" element={<TradingConfig />}></Route>
-        <Route path="/admin/create-pair" element={<CreatePair />}></Route>
+        <Route path="/faucet" element={<IbfrFaucet />} />
+        {/* <Route path="/admin" element={<TradingConfig />}></Route> */}
+        {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
@@ -90,7 +94,7 @@ const AppRoutes = () => {
         <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
-        </Route> */}
+        </Route>
         <Route path="/binary/:market" element={<TradePage />} />
         <Route
           path="/*"
@@ -163,17 +167,9 @@ function App() {
             <Warning
               body={
                 <>
-                  $BFR token{' '}
-                  {/* <a
-                  className=" cursor-pointer"
-                  href="https://app.uniswap.org/#/tokens/arbitrum/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d"
-                  target="_blank"
-                >
-                  &nbsp; */}
-                  0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D &nbsp;
-                  {/* </a>{' '} */}
-                  has been listed on Uniswap V3 Arbitrum. Don't trade $iBFR
-                  token on PancakeSwap or Apeswap on BNB chain.
+                  $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
+                  listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
+                  PancakeSwap or Apeswap on BNB chain.
                 </>
               }
               closeWarning={() => {}}

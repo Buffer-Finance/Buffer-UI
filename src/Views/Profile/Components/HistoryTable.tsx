@@ -1,8 +1,4 @@
 import { useGlobal } from '@Contexts/Global';
-import {
-  updateActivePageNumber,
-  updateHistoryPageNumber,
-} from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
 import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
@@ -11,7 +7,6 @@ import { HistoryTable } from '@Views/TradePage/Views/AccordionTable/HistoryTable
 import LimitOrderTable from '@Views/TradePage/Views/AccordionTable/LimitOrderTable';
 import { OngoingTradesTable } from '@Views/TradePage/Views/AccordionTable/OngoingTradesTable';
 import { binaryTabs } from 'config';
-import { useAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 
 export const useHistoryTableTabs = () => {
@@ -32,14 +27,10 @@ export const useHistoryTableTabs = () => {
 };
 
 export const HistoryTables = () => {
-  const [, setHistoryPage] = useAtom(updateHistoryPageNumber);
-  const [, setActivePage] = useAtom(updateActivePageNumber);
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
 
   useEffect(() => {
     changeActiveTab(null, 1);
-    setActivePage(1);
-    setHistoryPage(1);
   }, []);
 
   return (

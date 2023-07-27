@@ -1,5 +1,5 @@
-import { apiBaseUrl } from "@Views/BinaryOptions/Components/shareModal";
-import {  toPng } from "html-to-image";
+import { apiBaseUrl } from '@Views/TradePage/Views/AccordionTable/ShareModal/ShareButtons';
+import { toPng } from 'html-to-image';
 export interface ICloudanaryRes {
   asset_id: string;
   public_id: string;
@@ -29,8 +29,8 @@ export interface ICloudanaryRes {
 const config = { quality: 0.95, canvasWidth: 600, canvasHeight: 315 };
 
 export async function uploadImage(image): Promise<ICloudanaryRes> {
-  return await fetch(apiBaseUrl+"/api/upload", {
-    method: "POST",
+  return await fetch(apiBaseUrl + '/api/upload', {
+    method: 'POST',
     body: image,
   }).then((res) => res.json());
 }
@@ -41,7 +41,7 @@ export async function getNodeSnapshot(node) {
 }
 
 export const downloadGetLink = (dataUrl, name) => {
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.download = `${name}.jpeg`;
   link.href = dataUrl;
   document.body.appendChild(link);
