@@ -151,10 +151,8 @@ export const pythIds = {
   '5de33a9112c2b700b8d30b8a3402c103578ccfa2765696471cc672bd5cf6ac52':
     'MATICUSD',
   '385f64d993f7b77d8182ed5003d97c60aa3361f3cecfe711544d2d59165e9bdf': 'OPUSD',
-  '0x765d2ba906dbc32ca17cc11f5310a89e9ee1f6420508c63861f2f8ba4ee34bb2':
-    'XAUUSD',
-  '0xf2fb02c32b055c805e7238d628e5e9dadef274376114eb1f012337cabe93871e':
-    'XAGUSD',
+  '765d2ba906dbc32ca17cc11f5310a89e9ee1f6420508c63861f2f8ba4ee34bb2': 'XAUUSD',
+  f2fb02c32b055c805e7238d628e5e9dadef274376114eb1f012337cabe93871e: 'XAGUSD',
 };
 export const getPrice = async () => {
   const price = await axios.get(
