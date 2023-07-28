@@ -28,6 +28,7 @@ const AdminConfig: React.FC<any> = ({}) => {
       ))}
       <ConfigSetter
         configs={adminConfig[activeGroup as keyof typeof adminConfig]}
+        cacheKey={activeGroup}
       />
     </div>
   );

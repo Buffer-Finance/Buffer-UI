@@ -9,7 +9,7 @@ import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
 import RouterAbi from '@Views/TradePage/ABIs/RouterABI.json';
 import { Abi } from 'viem';
 import { appConfig } from '@Views/TradePage/config';
-const group2abi = {
+export const group2abi = {
   router: RouterAbi,
   options: OptionAbi,
   options_config: ConfigAbi,
@@ -68,7 +68,8 @@ export const raw2adminConfig = (
       const getterSignatre = group2abi[group].find(
         (a) =>
           configs[config as keyof typeof configs].getter &&
-          a.name == configs[config as keyof typeof configs].getter
+          a.name == configs[config as keyof typeof configs].getter &&
+          a.inputs.length == 0
       );
 
       const getter = getterSignatre
@@ -96,7 +97,6 @@ export const raw2adminConfig = (
       if (marketDependent.includes(group as keyof typeof rawConfigs)) {
         for (let market of marketConfig) {
           for (const pool of market.pools) {
-            console.log(`pool: `, pool, group2marketAddresesMapping[group]);
             const currObject: Config = {
               contract: pool[group2marketAddresesMapping[group]],
               group,

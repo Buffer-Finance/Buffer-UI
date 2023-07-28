@@ -7,7 +7,6 @@ export interface Call {
   abi?: any[]; // Abi of the contract
   id?: string; //identifier of call
 }
-import bigNumberToString from 'bignumber-to-string';
 import getDeepCopy from '@Utils/getDeepCopy';
 
 export const arbMain = 'https://arb1.arbitrum.io/rpc';
