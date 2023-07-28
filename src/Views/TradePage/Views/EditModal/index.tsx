@@ -22,7 +22,7 @@ import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { getSingatureCached } from '@Views/TradePage/cahce';
+import { getSingatureCached } from '@Views/TradePage/cache';
 import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { getConfig } from '@Views/TradePage/utils/getConfig';

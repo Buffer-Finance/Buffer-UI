@@ -39,12 +39,12 @@ import {
 } from '../utils/generateTradeSignature';
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { useApprvalAmount } from './useApprovalAmount';
-import { getSingatureCached } from '../cahce';
 import { getConfig } from '../utils/getConfig';
 import { timeToMins } from '../utils/timeToMins';
 import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
 import { getUserError } from '../utils/getUserError';
 import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
+import { getSingatureCached } from '../cache';
 enum ArgIndex {
   Strike = 4,
   Period = 2,

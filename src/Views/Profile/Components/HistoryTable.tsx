@@ -33,6 +33,9 @@ export const HistoryTables = () => {
     changeActiveTab(null, 1);
   }, []);
 
+  const [activeTrades, limitOrders] = useOngoingTrades();
+  const { page_data: historyTrades } = useHistoryTrades();
+
   return (
     <>
       <BufferTab
@@ -51,27 +54,14 @@ export const HistoryTables = () => {
       />
       <TabSwitch
         value={activeTabIdx}
-        childComponents={[<OnGoing />, <LimitOrder />, <History />]}
+        childComponents={[
+          <OngoingTradesTable trades={activeTrades} />,
+          <LimitOrderTable trades={limitOrders} />,
+          <HistoryTable trades={historyTrades} totalPages={1} />,
+        ]}
       />
     </>
   );
-};
-const OnGoing = () => {
-  const [activeTrades] = useOngoingTrades();
-
-  return <OngoingTradesTable trades={activeTrades} />;
-};
-
-const LimitOrder = () => {
-  const [_, limitOrders] = useOngoingTrades();
-
-  return <LimitOrderTable trades={limitOrders} />;
-};
-
-const History = () => {
-  const [historyTrades] = useHistoryTrades();
-
-  return <HistoryTable trades={historyTrades} />;
 };
 
 function MobileOnly({ children }: { children: React.ReactNode }) {

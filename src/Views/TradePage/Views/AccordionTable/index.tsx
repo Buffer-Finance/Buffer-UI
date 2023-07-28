@@ -3,7 +3,13 @@ import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useEffect, useState } from 'react';
 import LimitOrderTable from './LimitOrderTable';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { isTableShownAtom, queuets2priceAtom } from '@Views/TradePage/atoms';
+import {
+  historyTableActivePage,
+  isTableShownAtom,
+  platformActiveTableActivePage,
+  platformHistoryTableActivePage,
+  queuets2priceAtom,
+} from '@Views/TradePage/atoms';
 import {
   usePlatformActiveTrades,
   usePlatformHistoryTrades,
@@ -137,23 +143,53 @@ const CountChip = ({ count }: { count: number }) => (
 );
 
 const History = () => {
-  const [historyTrades] = useHistoryTrades();
+  const { page_data: historyTrades, total_pages } = useHistoryTrades();
+  const [activePage, setActivePage] = useAtom(historyTableActivePage);
 
-  return <HistoryTable trades={historyTrades} />;
+  return (
+    <HistoryTable
+      trades={historyTrades}
+      totalPages={total_pages}
+      activePage={activePage}
+      setActivePage={setActivePage}
+    />
+  );
 };
 
 const Cancelled = () => {
-  const [canclledTrades] = useCancelledTrades();
-
-  return <CancelledTable trades={canclledTrades} />;
+  const { page_data: canclledTrades, total_pages } = useCancelledTrades();
+  // console.log(canclledTrades, 'cancelled trades');
+  return <CancelledTable trades={canclledTrades} totalPages={total_pages} />;
 };
 
 const PlatformHistory = () => {
-  const platformHistoryTrades = usePlatformHistoryTrades();
-  return <HistoryTable trades={platformHistoryTrades} platform />;
+  const { page_data: platformHistoryTrades, total_pages } =
+    usePlatformHistoryTrades();
+  const [activePage, setActivePage] = useAtom(platformHistoryTableActivePage);
+
+  return (
+    <HistoryTable
+      trades={platformHistoryTrades}
+      platform
+      totalPages={total_pages}
+      activePage={activePage}
+      setActivePage={setActivePage}
+    />
+  );
 };
 
 const PlatformOngoing = () => {
-  const platformActiveTrades = usePlatformActiveTrades();
-  return <OngoingTradesTable trades={platformActiveTrades} platform />;
+  const { page_data: platformActiveTrades, total_pages } =
+    usePlatformActiveTrades();
+  const [activePage, setActivePage] = useAtom(platformActiveTableActivePage);
+
+  return (
+    <OngoingTradesTable
+      trades={platformActiveTrades}
+      platform
+      activePage={activePage}
+      totalPages={total_pages}
+      setActivePage={setActivePage}
+    />
+  );
 };
