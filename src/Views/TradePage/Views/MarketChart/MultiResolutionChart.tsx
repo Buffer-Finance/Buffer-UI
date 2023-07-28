@@ -41,13 +41,13 @@ import {
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
-import { marketsForChart } from '@Views/V3App/config';
 import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { TradeType } from '@Views/TradePage/type';
 import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
 import { atomWithStorage } from 'jotai/utils';
+import { marketsForChart } from '@Views/TradePage/config';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -243,7 +243,10 @@ export const MultiResolutionChart = ({
   market: Markets;
   index: number;
 }) => {
-  let market = marke.replace('-', '');
+  const market = marke.replace('-', '');
+  const chartData =
+    marketsForChart[market as unknown as keyof typeof marketsForChart];
+
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
@@ -287,9 +290,9 @@ export const MultiResolutionChart = ({
             symbol:
               singleAsset.pythGroup +
               '.' +
-              chartMarket.token1 +
+              chartMarket.token0 +
               '/' +
-              chartMarket.token2,
+              chartMarket.token1,
             full_name: chartMarket.tv_id,
             description: chartMarket.tv_id,
             exchange: PRICE_PROVIDER,
@@ -306,6 +309,7 @@ export const MultiResolutionChart = ({
     return allSymbols;
   }
   const price = useAtomValue(priceAtom);
+  // console.log(price);
 
   const datafeed: IBasicDataFeed = useMemo(() => {
     return {
@@ -405,7 +409,7 @@ export const MultiResolutionChart = ({
           );
           const ohlc = pythOHLC2rawOHLC(pythOHLC.data);
 
-          console.log(`ohlc: `, ohlc);
+          // console.log(`ohlc: `, ohlc);
           // const tempData = rawOHLC;
           // console.log(`tempData: `, tempData);
           // if (!tempData) return;
@@ -527,9 +531,18 @@ export const MultiResolutionChart = ({
     // console.log(`[deb]1activeResolution: `, activeResolution);
 
     const key = market + timeDeltaMapping(activeResolution);
-    console.log(`[deb]2key: `, key);
-    let prevBar = lastSyncedKline?.current?.[key];
-    console.log(`[deb]3prevBar: `, prevBar);
+    const newpythId =
+      chartData.pythGroup + '.' + chartData.token0 + '/' + chartData.token1;
+    const newpythIdKey = newpythId + timeDeltaMapping(activeResolution);
+    // console.log(`[deb]2key: `, key);
+    let prevBar = lastSyncedKline?.current?.[newpythIdKey];
+    // console.log(
+    //   `[deb]3prevBar: `,
+    //   prevBar,
+    //   newpythId,
+    //   lastSyncedKline.current,
+    //   price
+    // );
     if (!prevBar) return;
     const activeAssetStream = (price as any)[market];
     // console.log(`[deb]4price: `, activeAssetStream);
@@ -542,10 +555,15 @@ export const MultiResolutionChart = ({
         currBar,
         realTimeUpdateRef.current?.resolution
       );
+      // console.log(
+      //   `[deb]5aggregatedBar: `,
+      //   aggregatedBar,
+      //   realTimeUpdateRef.current.symbolInfo.name
+      // );
       if (
         aggregatedBar &&
         realTimeUpdateRef.current.symbolInfo &&
-        realTimeUpdateRef.current.symbolInfo.name === market
+        realTimeUpdateRef.current.symbolInfo.name === newpythId
       ) {
         try {
           realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
