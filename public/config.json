@@ -8,6 +8,7 @@
       "token1": "BTC",
       "token2": "USD",
       "full_name": "Bitcoin",
+      "pythGroup": "Crypto",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/btc.svg"
     },
     "ETHUSD": {
@@ -18,6 +19,8 @@
       "token1": "ETH",
       "token2": "USD",
       "full_name": "Ethereum",
+      "pythGroup": "Crypto",
+
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/btc.svg"
     },
     "EURUSD": {
@@ -28,6 +31,8 @@
       "token1": "EUR",
       "token2": "USD",
       "full_name": "Euro",
+      "pythGroup": "FX",
+
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/euro.png"
     },
     "GBPUSD": {
@@ -38,6 +43,7 @@
       "token1": "GBP",
       "token2": "USD",
       "full_name": "Pound",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Media/main/GBP.png"
     },
     "SOLUSD": {
@@ -48,6 +54,8 @@
       "token1": "SOL",
       "token2": "USD",
       "full_name": "Solana",
+      "pythGroup": "Crypto",
+
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/sol.svg"
     },
     "ETHBTC": {
@@ -58,6 +66,8 @@
       "token1": "ETH",
       "token2": "BTC",
       "full_name": "Ethereum",
+      "pythGroup": "Crypto",
+
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eth.svg"
     },
     "LINKUSD": {
@@ -68,6 +78,8 @@
       "token1": "LINK",
       "token2": "USD",
       "full_name": "Chainlink",
+      "pythGroup": "Crypto",
+
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/link.svg"
     },
     "XAUUSD": {
@@ -78,6 +90,7 @@
       "token1": "XAU",
       "token2": "USD",
       "full_name": "Gold",
+      "pythGroup": "Metal",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/xau.svg"
     },
     "XAGUSD": {
@@ -88,6 +101,7 @@
       "token1": "XAG",
       "token2": "USD",
       "full_name": "Silver",
+      "pythGroup": "Metal",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/xag.svg"
     },
     "AUDUSD": {
@@ -98,6 +112,7 @@
       "token1": "AUD",
       "token2": "USD",
       "full_name": "Australian Dollar",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/aud1.svg"
     },
     "USDJPY": {
@@ -108,6 +123,7 @@
       "token1": "USD",
       "token2": "JPY",
       "full_name": "United States Dollar",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg"
     },
     "EURGBP": {
@@ -118,6 +134,7 @@
       "token1": "EUR",
       "token2": "GBP",
       "full_name": "Euro",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eur.svg"
     },
     "EURJPY": {
@@ -128,6 +145,7 @@
       "token1": "EUR",
       "token2": "JPY",
       "full_name": "Euro",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/eur.svg"
     },
     "GBPJPY": {
@@ -138,6 +156,7 @@
       "token1": "GBP",
       "token2": "JPY",
       "full_name": "British Pound",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/GBP.svg"
     },
     "NZDUSD": {
@@ -148,6 +167,7 @@
       "token1": "NZD",
       "token2": "USD",
       "full_name": "New Zealand Dollar",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/nzd.svg"
     },
     "USDCHF": {
@@ -158,6 +178,7 @@
       "token1": "USD",
       "token2": "CHF",
       "full_name": "United States Dollar",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg"
     },
     "GBPCHF": {
@@ -168,6 +189,7 @@
       "token1": "GBP",
       "token2": "CHF",
       "full_name": "British Pound",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/GBP.svg"
     },
     "USDCAD": {
@@ -178,6 +200,7 @@
       "token1": "USD",
       "token2": "CAD",
       "full_name": "United States Dollar",
+      "pythGroup": "FX",
       "img": "https://buffer-images.s3.us-east-2.amazonaws.com/Buffer-Website-Data/main/Assets/USDC.svg"
     },
     "ARBUSD": {
@@ -187,7 +210,8 @@
       "price_precision": 100,
       "token1": "ARB",
       "token2": "USD",
-      "full_name": "Arbitrum"
+      "full_name": "Arbitrum",
+      "pythGroup": "Crypto"
     },
     "BNBUSD": {
       "category": "Crypto",
@@ -196,6 +220,8 @@
       "price_precision": 100,
       "token1": "BNB",
       "token2": "USD",
+      "pythGroup": "Crypto",
+
       "full_name": "Binance Coin"
     },
     "MATICUSD": {
@@ -205,6 +231,8 @@
       "price_precision": 100,
       "token1": "MATIC",
       "token2": "USD",
+      "pythGroup": "Crypto",
+
       "full_name": "Matic"
     },
     "OPUSD": {
@@ -214,18 +242,20 @@
       "price_precision": 100,
       "token1": "OP",
       "token2": "USD",
+      "pythGroup": "Crypto",
+
       "full_name": "Optimism"
     }
   },
   "421613": {
-    "marketFactory": "0x4ffb103F4Cfa8eF4a72227799c325DA53341Da59",
-    "referral_storage": "0x6f4ECcB5d1441854ac130D03Cd83895ad5EB8d04",
-    "router": "0x76c52E83d7dcCc70107a66BAd44D042D22D06be7",
+    "referral_storage": "0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a",
+    "router": "0x2d44Df5d4106C0C62893606E8956443DcA3a4Da2",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
+    "creation_window": "0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1",
     "tokens": {
       "USDC": {
-        "address": "0x658e6B62e7ab1d2B29a08F85f8442edEed562b48",
-        "meta": "0xaB9Babe3A7445333d8c2BAA0A5bF749cF37096b5",
+        "address": "0x4B5ed6b788e22D7bBe4790A4D6bE8f3A3FFC470E",
+        "meta": "0xC33A64475f84C88DfB139fcFF29642a055587fe4",
         "decimals": 6,
         "img": "https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684085945/usdc.png",
         "name": "USDC",
@@ -397,9 +427,10 @@
       }
     ],
     "graph": {
-      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/testnet-dummy/api",
-      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/testnet-dummy/api"
-    }
+      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api"
+    },
+    "env": "arbitrum-testnet"
   },
   "42161": {
     "marketFactory": "0xeb26C551F606A9692c05FE06Af885717db8cDD24",
@@ -1176,10 +1207,12 @@
     "graph": {
       "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api",
       "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api"
-    }
+    },
+    "env": "arbitrum-one"
   },
   "80001": {
     "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
+    "creation_window": "0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1",
     "referral_storage": "0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7",
     "router": "0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4",
     "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
@@ -1289,10 +1322,12 @@
     "graph": {
       "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api",
       "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api"
-    }
+    },
+    "env": "polygon-mumbai"
   },
   "137": {
     "marketFactory": "0xa8d02a2ebAc9A29bb2BFBD7A36ffE1917547D467",
+    "creation_window": "0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1",
     "referral_storage": "0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6",
     "router": "0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7",
     "multicall": "0xcA11bde05977b3631167028862bE2a173976CA11",
@@ -1665,6 +1700,7 @@
     "graph": {
       "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api",
       "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api"
-    }
+    },
+    "env": "polygon-mumbai"
   }
 }

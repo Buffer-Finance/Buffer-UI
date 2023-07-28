@@ -64,6 +64,7 @@ import {
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
 import { getIdentifier } from '@Hooks/useGenericHook';
+import { useActiveChain } from '@Hooks/useActiveChain';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -253,8 +254,9 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
+  const { markets } = useActiveChain();
+  const chartData = markets[market as unknown as keyof typeof markets];
   const qtInfo = useQTinfo();
-
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
@@ -278,9 +280,16 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     let allSymbols: any[] = [];
     let tempSymbols: any[] = [];
     for (const singleAsset of qtInfo.pairs) {
+      const data =
+        markets[singleAsset.tv_id as unknown as keyof typeof markets];
       tempSymbols = [
         {
-          symbol: singleAsset.tv_id,
+          symbol:
+            data.pythGroup +
+            '.' +
+            singleAsset.token1 +
+            '/' +
+            singleAsset.token2,
           full_name: singleAsset.tv_id,
           description: singleAsset.tv_id,
           exchange: PRICE_PROVIDER,
@@ -377,15 +386,15 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           const getBarsFnActiveAsset = symbolInfo.name;
 
           const req = {
-            from_ts: from,
-            to_ts: to,
+            from: from,
+            to: to,
             symbol: getBarsFnActiveAsset,
             resolution,
-            pyth_timeout: 5,
+            // pyth_timeout: 5,
           };
 
           const pythOHLC = await axios.get(
-            `https://oracle.buffer-finance-api.link/price/history/`,
+            `https://benchmarks.pyth.network/v1/shims/tradingview/history`,
             {
               params: req,
             }
@@ -507,9 +516,11 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
     // console.log(`[deb]1activeResolution: `, activeResolution);
 
     const key = market + timeDeltaMapping(activeResolution);
+    const newpythId =
+      chartData.pythGroup + '.' + chartData.token1 + '/' + chartData.token2;
+    const newpythIdKey = newpythId + timeDeltaMapping(activeResolution);
     // console.log(`[deb]2key: `, key);
-    let prevBar = lastSyncedKline?.current?.[key];
-    // console.log(`[deb]3prevBar: `, prevBar);
+    let prevBar = lastSyncedKline?.current?.[newpythIdKey]; // console.log(`[deb]3prevBar: `, prevBar);
     if (!prevBar) return;
     const activeAssetStream = price[market];
     console.log(`[pyth]activeAssetStream: `, activeAssetStream);
@@ -526,7 +537,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
       if (
         aggregatedBar &&
         realTimeUpdateRef.current.symbolInfo &&
-        realTimeUpdateRef.current.symbolInfo.name === market
+        realTimeUpdateRef.current.symbolInfo.name === newpythId
       ) {
         try {
           realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
