@@ -62,7 +62,7 @@ import {
 } from '../utils/generateTradeSignature';
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { useApprvalAmount } from './useApprovalAmount';
-import { getSingatureCached } from '../cahce';
+import { getSingatureCached } from '../cache';
 enum ArgIndex {
   Strike = 4,
   Period = 2,

@@ -27,7 +27,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { timeToMins } from '@Views/BinaryOptions/PGDrawer/TimeSelector';
 import { secondsToHHMM } from '@Views/V3App/helperFns';
-import { getSingatureCached } from '@Views/TradePage/cahce';
+import { getSingatureCached } from '@Views/TradePage/cache';
 import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
 import { appConfig } from '@Views/TradePage/config';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';

@@ -111,3 +111,10 @@ export const ShareBetAtom = atom<ShareBetType>({
 export const SetShareBetAtom = atom(null, (get, set, update: ShareBetType) =>
   set(ShareBetAtom, update)
 );
+
+//Trades tables atoms
+
+export const historyTableActivePage = atom<number>(1);
+export const cancelTableActivePage = atom<number>(1);
+export const platformActiveTableActivePage = atom<number>(1);
+export const platformHistoryTableActivePage = atom<number>(1);

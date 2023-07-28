@@ -1,16 +1,10 @@
 import BufferTable from '@Views/Common/BufferTable';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom, useAtomValue } from 'jotai';
-import {
-  formatDistance,
-  formatDistanceExpanded,
-} from '@Hooks/Utilities/useStopWatch';
+import { useAtom, useAtomValue } from 'jotai';
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
-import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
@@ -27,7 +21,6 @@ import {
   getExpiry,
   getLockedAmount,
   getProbability,
-  queuedTradeFallBack,
   tableButtonClasses,
 } from './Common';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
@@ -43,20 +36,18 @@ import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { toFixed } from '@Utils/NumString';
 
-export const tradesCount = 10;
-
-const priceDecimals = 8;
-
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[];
   platform?: boolean;
-}> = ({ trades, platform }) => {
+  activePage?: number;
+  setActivePage?: (page: number) => void;
+  totalPages?: number;
+}> = ({ trades, platform, activePage, setActivePage, totalPages }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
 
   const markets = useMarketsConfig();
-  const [cancelLoading, setCancelLoading] = useState<null | number>(null);
   const headNameArray = platform
     ? [
         'Asset',
@@ -251,6 +242,15 @@ export const OngoingTradesTable: React.FC<{
 
   return (
     <BufferTable
+      activePage={activePage ?? 1}
+      count={totalPages ?? 0}
+      onPageChange={(e, page) => {
+        if (setActivePage === undefined)
+          return () => {
+            console.log(page);
+          };
+        setActivePage(page);
+      }}
       shouldShowMobile={true}
       headerJSX={HeaderFomatter}
       bodyJSX={BodyFormatter}
@@ -264,12 +264,6 @@ export const OngoingTradesTable: React.FC<{
   );
 };
 
-const UserOngoingTrades = () => {
-  const [ongoingData] = useOngoingTrades();
-  return <OngoingTradesTable trades={ongoingData} />;
-};
-
-export default UserOngoingTrades;
 export const Pnl = ({
   trade,
   configData,

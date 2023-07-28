@@ -5,7 +5,7 @@ import { baseUrl, refreshInterval } from '../config';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { TradeType } from '../type';
-import { getSingatureCached } from '../cahce';
+import { getSingatureCached } from '../cache';
 import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
 export enum TradeState {

@@ -1,6 +1,6 @@
 import { baseUrl } from '@Views/TradePage/config';
 import { useUserOneCTData } from './useOneCTWalletV2';
-import { getSingatureCached } from '@Views/TradePage/cahce';
+import { getSingatureCached } from '@Views/TradePage/cache';
 import axios from 'axios';
 import { getAddress } from 'viem';
 import { ethers } from 'ethers';

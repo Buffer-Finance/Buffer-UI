@@ -43,7 +43,7 @@ export const HistoryTables = () => {
   }, []);
 
   const [activeTrades, limitOrders] = useOngoingTrades();
-  const [historyTrades] = useHistoryTrades();
+  const { page_data: historyTrades } = useHistoryTrades();
 
   return (
     <>
@@ -66,7 +66,7 @@ export const HistoryTables = () => {
         childComponents={[
           <OngoingTradesTable trades={activeTrades} />,
           <LimitOrderTable trades={limitOrders} />,
-          <HistoryTable trades={historyTrades} />,
+          <HistoryTable trades={historyTrades} totalPages={1} />,
         ]}
       />
     </>

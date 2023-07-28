@@ -13,14 +13,17 @@ import {
 } from './Common';
 import { TradeType } from '@Views/TradePage/type';
 import FailureIcon from '@SVG/Elements/FailureIcon';
-
-export const tradesCount = 10;
+import { useAtom } from 'jotai';
+import { cancelTableActivePage } from '@Views/TradePage/atoms';
 
 export const CancelledTable: React.FC<{
   trades: TradeType[];
+  totalPages: number;
   platform?: boolean;
-}> = ({ trades, platform }) => {
+}> = ({ trades, platform, totalPages }) => {
   const markets = useMarketsConfig();
+  const [activePage, setActivePage] = useAtom(cancelTableActivePage);
+
   const headNameArray = [
     'Asset',
     'Strike Price',
@@ -56,7 +59,7 @@ export const CancelledTable: React.FC<{
       return !!pool;
     });
 
-    console.log(`CancelTable-trade: `, trade);
+    // console.log(`CancelTable-trade: `, trade);
     switch (col) {
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
@@ -118,6 +121,11 @@ export const CancelledTable: React.FC<{
 
   return (
     <BufferTable
+      activePage={activePage}
+      count={totalPages}
+      onPageChange={(e, page) => {
+        setActivePage(page);
+      }}
       shouldShowMobile={true}
       headerJSX={HeaderFomatter}
       bodyJSX={BodyFormatter}

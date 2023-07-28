@@ -3,7 +3,7 @@ import { useToast } from '@Contexts/Toast';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { cancelQueueTrade } from '../utils';
-import { getSingatureCached } from '../cahce';
+import { getSingatureCached } from '../cache';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { TradeType, marketType, poolInfoType } from '../type';
 import { ethers } from 'ethers';
