@@ -36,6 +36,7 @@ export const useMarketsConfig = () => {
     const index = response.findIndex(
       (config) => config.token0 === token0 && config.token1 === token1
     );
+    // console.log(`item: `, item/);
     if (index !== -1) {
       response[index].pools.push(createPoolObject(item));
     } else {
@@ -64,6 +65,7 @@ function createPoolObject(market: responseObj) {
     isPaused: market.isPaused,
     configContract: getAddress(market.configContract.address),
     optionContract: getAddress(market.address),
+    marketOiContract: getAddress(market.configContract.marketOIaddress),
     platformFee: market.configContract.platformFee,
     earlyclose: {
       enable: market.configContract.isEarlyCloseEnabled,

@@ -1,0 +1,100 @@
+{
+  "router": {
+    "setContractRegistry": {
+      "getter": "contractRegistry"
+    },
+    "setKeeper": {
+      "getter": "isKeeper"
+    }
+  },
+  "options_config": {
+    "setBoosterContract": {
+      "getter": "boosterContract",
+      "decimal": 8
+    },
+    "setCreationWindowContract": {
+      "getter": "creationWindowContract",
+      "decimal": 8
+    },
+    "setMinFee": {
+      "getter": "minFee",
+      "decimal": 8
+    },
+    "setIV": {
+      "getter": "iv",
+      "decimal": 8
+    },
+    "setPlatformFee": {
+      "getter": "platformFee",
+      "decimal": 8
+    },
+    "setSettlementFeeDisbursalContract": {
+      "getter": "settlementFeeDisbursalContract",
+      "decimal": 8
+    },
+    "setOptionStorageContract": {
+      "getter": "optionStorageContract",
+      "decimal": 8
+    },
+    "setMaxPeriod": {
+      "getter": "maxPeriod",
+      "decimal": 8
+    },
+    "setPoolOIStorageContract": {
+      "getter": "poolOIStorageContract",
+      "decimal": 8
+    },
+    "setPoolOIConfigContract": {
+      "getter": "poolOIConfigContract",
+      "decimal": 8
+    },
+    "setMarketOIConfigContract": {
+      "getter": "marketOIConfigContract",
+      "decimal": 8
+    },
+    "setEarlyCloseThreshold": {
+      "getter": "earlyCloseThreshold",
+      "decimal": 8
+    },
+    "toggleEarlyClose": {
+      "getter": "isEarlyCloseAllowed",
+      "decimal": 8
+    },
+    "setMinPeriod": {
+      "getter": "minPeriod",
+      "decimal": 8
+    }
+  },
+  "pool": {
+    "setMaxLiquidity": {
+      "getter": "maxLiquidity",
+      "decimal": 9
+    }
+  },
+  "options": {
+    "setIsPaused": {
+      "getter": "isPaused"
+    }
+  },
+  "booster": {
+    "configure": {
+      "getter": "nftTierDiscounts"
+    },
+    "setPrice": {
+      "getter": "couponPrice"
+    }
+  },
+  "pooloi": {
+    "setMaxPoolOI": {
+      "decimals": 2
+    }
+  },
+  "marketoi": {
+    "setMaxMarketOI": {
+      "decimals": 2
+    },
+    "setMaxTradeSize": {
+      "decimals": 2
+    }
+  }
+}

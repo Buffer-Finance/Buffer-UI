@@ -8,6 +8,7 @@ export type poolType = {
   isPaused: boolean;
   configContract: string;
   optionContract: string;
+  marketOIaddress: string;
   platformFee: string;
   earlyclose: {
     enable: boolean;
@@ -79,6 +80,7 @@ export type responseObj = {
     platformFee: string;
     earlyCloseThreshold: string;
     isEarlyCloseEnabled: boolean;
+    marketOIaddress: string;
   };
   address: string;
   poolContract: string;
