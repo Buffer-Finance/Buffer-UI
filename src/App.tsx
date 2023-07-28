@@ -36,6 +36,7 @@ import { Earn } from '@Views/Earn';
 import { ReferralPage } from '@Views/Referral';
 import { DashboardV2 } from '@Views/DashboardV2';
 import { ProfilePage } from '@Views/Profile';
+import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -85,7 +86,7 @@ const AppRoutes = () => {
       <OnboardingAnimation />
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
-        {/* <Route path="/admin" element={<TradingConfig />}></Route> */}
+        <Route path="/admin" element={<AdminConfig />}></Route>
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<DashboardV2 />}>
