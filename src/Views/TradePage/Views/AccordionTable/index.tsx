@@ -145,7 +145,7 @@ const CountChip = ({ count }: { count: number }) => (
 const History = () => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
-
+  console.log(historyTrades, total_pages, activePage, 'history trades');
   return (
     <HistoryTable
       trades={historyTrades}

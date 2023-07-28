@@ -47,6 +47,7 @@ const HistoryTable: React.FC<{
   activePage: number;
   setActivePage: (page: number) => void;
 }> = ({ trades, platform, totalPages, activePage, setActivePage }) => {
+  console.log(`HistoryTable-trades: `, trades);
   const markets = useMarketsConfig();
   const { getPoolInfo } = usePoolInfo();
 
