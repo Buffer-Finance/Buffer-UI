@@ -284,7 +284,12 @@ export const MultiResolutionChart = ({
 
         tempSymbols = [
           {
-            symbol: chartMarket.tv_id,
+            symbol:
+              singleAsset.pythGroup +
+              '.' +
+              chartMarket.token1 +
+              '/' +
+              chartMarket.token2,
             full_name: chartMarket.tv_id,
             description: chartMarket.tv_id,
             exchange: PRICE_PROVIDER,
@@ -393,13 +398,14 @@ export const MultiResolutionChart = ({
           };
 
           const pythOHLC = await axios.get(
-            `https://pyth-api.vintage-orange-muffin.com/v2/history`,
+            `https://benchmarks.pyth.network/v1/shims/tradingview/history`,
             {
               params: req,
             }
           );
           const ohlc = pythOHLC2rawOHLC(pythOHLC.data);
-          // console.log(`ohlc: `, ohlc);
+
+          console.log(`ohlc: `, ohlc);
           // const tempData = rawOHLC;
           // console.log(`tempData: `, tempData);
           // if (!tempData) return;

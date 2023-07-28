@@ -26,7 +26,7 @@ export type marketType = {
   img: string;
   pythId: string;
   pools: poolType[];
-};
+} & chartDataType;
 
 export interface TradeType {
   id: number;
