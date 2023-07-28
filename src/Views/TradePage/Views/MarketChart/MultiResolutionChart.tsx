@@ -527,9 +527,9 @@ export const MultiResolutionChart = ({
     // console.log(`[deb]1activeResolution: `, activeResolution);
 
     const key = market + timeDeltaMapping(activeResolution);
-    // console.log(`[deb]2key: `, key);
+    console.log(`[deb]2key: `, key);
     let prevBar = lastSyncedKline?.current?.[key];
-    // console.log(`[deb]3prevBar: `, prevBar);
+    console.log(`[deb]3prevBar: `, prevBar);
     if (!prevBar) return;
     const activeAssetStream = (price as any)[market];
     // console.log(`[deb]4price: `, activeAssetStream);
