@@ -25,12 +25,14 @@ const ConfigSetter: React.FC<any> = ({
   if (!data) return <div>Loading..</div>;
   console.log(`ConfigSetter-data: `, data);
   return (
-    <div className="bg-3 flex flex-col gap-y-2">
-      Configs aisi daalo ki BFR aasmaan paaahunch jaaye
-      {configs.map((c) => (
-        <ConfigRow key={c.contract + c.setter.name} config={c} data={data} />
-      ))}
-    </div>
+    <>
+      <div className="ml-2 text-f14">Here are the configs to edit:</div>
+      <div className="bg-3 flex flex-col gap-y-2 px-4 py-2">
+        {configs.map((c) => (
+          <ConfigRow key={c.contract + c.setter.name} config={c} data={data} />
+        ))}
+      </div>
+    </>
   );
 };
 

@@ -20,13 +20,15 @@ const ConfigRow: React.FC<any> = ({
   const isChanged = data?.[config.contract + config.getter?.name] != value;
 
   return (
-    <div className="flex bg-2 rounded-[5px] p-2 gap-x-4 w-fit">
-      <div>{finalResult}</div>
+    <div className="flex  bg-2 rounded-[5px] p-2 gap-x-4 w-full px-4 py-2">
+      <div className=" whitespace-nowrap">{finalResult}</div>
       {isChanged && (
-        <div className="">{data?.[config.contract + config.getter?.name]}</div>
+        <div className="line-through decoration-[red] decoration-[2px]">
+          {data?.[config.contract + config.getter?.name]}
+        </div>
       )}
       <input
-        className="bg-2 !w-fit"
+        className="bg-2 whitespace-nowrap w-full"
         value={value}
         onChange={(e) => {
           setValue(e.target.value);
