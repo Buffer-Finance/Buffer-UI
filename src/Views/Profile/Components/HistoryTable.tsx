@@ -3,7 +3,7 @@ import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { HistoryTable } from '@Views/TradePage/Views/AccordionTable/HistoryTable';
+import { History } from '@Views/TradePage/Views/AccordionTable';
 import LimitOrderTable from '@Views/TradePage/Views/AccordionTable/LimitOrderTable';
 import { OngoingTradesTable } from '@Views/TradePage/Views/AccordionTable/OngoingTradesTable';
 import { binaryTabs } from 'config';
@@ -34,7 +34,6 @@ export const HistoryTables = () => {
   }, []);
 
   const [activeTrades, limitOrders] = useOngoingTrades();
-  const { page_data: historyTrades } = useHistoryTrades();
 
   return (
     <>
@@ -57,7 +56,7 @@ export const HistoryTables = () => {
         childComponents={[
           <OngoingTradesTable trades={activeTrades} />,
           <LimitOrderTable trades={limitOrders} />,
-          <HistoryTable trades={historyTrades} totalPages={1} />,
+          <History />,
         ]}
       />
     </>
