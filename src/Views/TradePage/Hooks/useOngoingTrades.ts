@@ -48,7 +48,7 @@ const useOngoingTrades = () => {
             !t.is_limit_order || (t.is_limit_order && t.state !== 'QUEUED')
         );
         // console.log(`activeTrades: `, activeTrades, limitOrders);
-        console.log(`markets: `, markets);
+        // console.log(`markets: `, markets);
         return [
           addMarketInTrades(activeTrades, markets),
           addMarketInTrades(limitOrders, markets),
