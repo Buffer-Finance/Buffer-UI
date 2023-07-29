@@ -26,7 +26,7 @@ export const PasswordModal: React.FC<{}> = ({}) => {
     if (ip === password) {
       setIsAuth(true);
       toastify({
-        msg: 'Congrats! You are in. Please note that some features might be broken.',
+        msg: 'Congrats! You are in. Some features may not work perfectly yet.',
         type: 'success',
         id: '123',
       });
