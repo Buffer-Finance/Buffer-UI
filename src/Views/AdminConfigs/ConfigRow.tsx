@@ -25,10 +25,6 @@ const ConfigRow: React.FC<any> = ({
   const result = text.replace(/([A-Z])/g, ' $1');
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1) + ' :';
   const isChanged = data?.[config.contract + config.getter?.name]?.[0] != value;
-  console.log(
-    `ConfigRow-data?.[config.contract + config.getter?.name]: `,
-    data?.[config.contract + config.getter?.name]
-  );
 
   const reset = () => {
     setShowIp(false);
@@ -37,19 +33,22 @@ const ConfigRow: React.FC<any> = ({
   const actualValue = data?.[config.contract + config.getter?.name]?.[0];
   let hint = config?.hint ? `(${config.hint})` : '';
   let dec = config.decimal ? `[${config.decimal} dec]` : '';
+  const poolString = config.pool
+    ? config.pool.token + ' ' + (config.pool.is_pol ? 'POL' : '')
+    : '';
   const isCurrentConfigSearched = () => {
     const str = `${
       config.market ? config.market.pair + ' ' + config.market.tv_id : ''
     } ${finalResult} ${config.getter.name} ${
       config.setter.name
-    } ${hint} ${dec}`;
+    } ${hint} ${dec} ${poolString}`;
     return str.toLowerCase().includes(hideString.toLowerCase());
   };
   const renderValue = () => {
     if (config.decimal) {
       return divide(actualValue, config.decimal);
     }
-    if (config.getter.op?.[0] == 'bool') {
+    if (config.getter.op?.[0].type == 'bool') {
       return actualValue ? 'true' : 'false';
     }
     return actualValue;
@@ -83,7 +82,7 @@ const ConfigRow: React.FC<any> = ({
         }}
       >
         <div className=" whitespace-nowrap">
-          {[finalResult, config?.market?.pair, hint, dec].join(' ')}
+          {[finalResult, config?.market?.pair, hint, dec, poolString].join(' ')}
         </div>
         <div
           className={

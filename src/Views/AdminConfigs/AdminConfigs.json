@@ -61,7 +61,7 @@
   "pool": {
     "setMaxLiquidity": {
       "getter": "maxLiquidity",
-      "decimal": 9
+      "decimal": "token"
     }
   },
   "options": {

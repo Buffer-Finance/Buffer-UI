@@ -29,7 +29,7 @@ const group2marketAddresesMapping = {
 
 const marketDependent = Object.keys(group2marketAddresesMapping);
 
-type ipop = 'string' | 'number';
+type ipop = 'string' | 'number' | 'bool';
 type formaters = { name: string; type: ipop; value: string }[];
 type RPCPayloads = {
   name: string;
@@ -138,15 +138,21 @@ export const raw2adminConfig = (
         // here
 
         const pools = Object.keys(appDefaults.poolsInfo);
-        configObject[group] = pools.map((p) => ({
-          ...configs[config],
-
-          contract: p,
-          getter,
-          setter,
-          group,
-          pool: appDefaults.poolsInfo[p],
-        }));
+        configObject[group] = pools.map((p) => {
+          let decimal = configs[config].decimal;
+          if (decimal && decimal == 'token') {
+            decimal = appDefaults.poolsInfo[p].decimals;
+          }
+          return {
+            ...configs[config],
+            decimal,
+            contract: p,
+            getter,
+            setter,
+            group,
+            pool: appDefaults.poolsInfo[p],
+          };
+        });
 
         // configObject[group] = {
       } else {

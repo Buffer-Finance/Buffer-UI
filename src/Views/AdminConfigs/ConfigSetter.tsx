@@ -23,7 +23,6 @@ const ConfigSetter: React.FC<any> = ({
   }, [configs]);
   const [searchIp, setSearchIp] = useState('');
   const { data } = useCall2Data(calls, 'admin-' + cacheKey);
-  console.log(`ConfigSetter-data: `, data, calls);
 
   if (!data) return <div>Loading..</div>;
   return (
