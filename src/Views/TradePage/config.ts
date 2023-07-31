@@ -13,7 +13,7 @@ export const appConfig = {
     poolsInfo: {
       '0x6EfAbB45b781B62979600444775113516220d992': {
         tokenAddress: '0x943902252597Ca568a6fB076aceCEdcf7eb903C6',
-        faucet: '0x8097Fecbb9081191A81DE5295d1D68344EA783fF',
+        faucet: '0xD2Ce70BAe9f731344b3364206986129e5f2e7437',
         decimals: 6,
         token: 'USDC',
         is_pol: false,
