@@ -15,6 +15,11 @@ const AdminConfig: React.FC<any> = ({}) => {
   console.log(`AdminConfig-adminConfig: `, adminConfig);
   if (!adminConfig?.options_config) return <div>'Loading...'</div>;
 
+  console.log(
+    `AdminConfig-adminConfig[activeGroup as keyof typeof adminConfig]: `,
+    adminConfig,
+    activeGroup
+  );
   return (
     <div className="px-3">
       <div className="flex ml-2 text-f14">

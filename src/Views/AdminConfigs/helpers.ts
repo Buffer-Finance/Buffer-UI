@@ -43,6 +43,8 @@ export type Config = {
   group: keyof typeof group2abi;
   contract: `0x${string}`;
   mapper: () => void;
+  hint?: string;
+  decimal?: number;
   pool?: poolType;
   market?: marketType;
 };
@@ -84,6 +86,11 @@ export const raw2adminConfig = (
               type: ip.type,
               value: '',
             })),
+            op: getterSignatre.outputs.map((ip) => ({
+              name: ip.name,
+              type: ip.type,
+              value: '',
+            })),
           }
         : null;
       const setterSignature = group2abi[group].find((a) => a.name == config);
@@ -92,6 +99,11 @@ export const raw2adminConfig = (
         ? {
             name: setterSignature.name,
             ip: setterSignature.inputs.map((ip) => ({
+              name: ip.name,
+              type: ip.type,
+              value: '',
+            })),
+            op: setterSignature.outputs.map((ip) => ({
               name: ip.name,
               type: ip.type,
               value: '',

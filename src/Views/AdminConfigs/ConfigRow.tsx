@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Config, group2abi } from './helpers';
 import { deepEqual } from 'wagmi';
 import { useWriteCall } from '@Hooks/useWriteCall';
@@ -15,14 +15,19 @@ const ConfigRow: React.FC<any> = ({
   hideString: string;
 }) => {
   const [value, setValue] = useState(
-    data?.[config.contract + config.getter?.name]
+    data?.[config.contract + config.getter?.name]?.[0]
   );
+  // console.log(`ConfigRow-value: `, value);
   const [showIp, setShowIp] = useState(false);
   const { writeCall } = useWriteCall(config.contract, group2abi[config.group]);
   const text = config.getter?.name;
   const result = text.replace(/([A-Z])/g, ' $1');
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1) + ' :';
-  const isChanged = data?.[config.contract + config.getter?.name] != value;
+  const isChanged = data?.[config.contract + config.getter?.name]?.[0] != value;
+  console.log(
+    `ConfigRow-data?.[config.contract + config.getter?.name]: `,
+    data?.[config.contract + config.getter?.name]
+  );
 
   let hint = config?.hint ? `(${config.hint})` : '';
   let dec = config.decimal ? `[${config.decimal} dec]` : '';
@@ -41,9 +46,17 @@ const ConfigRow: React.FC<any> = ({
         config.decimal
       );
     }
+    if (config.getter) {
+      return data?.[config.contract + config.getter?.name] ? 'true' : 'false';
+    }
     return data?.[config.contract + config.getter?.name];
   };
-  console.log(`ConfigRow-config: `, finalResult, config.decimal);
+  useEffect(() => {
+    setValue(data?.[config.contract + config.getter?.name]);
+  }, [data?.[config.contract + config.getter?.name]]);
+  const changeConfig = (value: any) => {
+    writeCall(() => console.log(), config.setter.name, value, null, null, null);
+  };
   return (
     <div
       className={`flex  bg-2 rounded-[5px] p-2 gap-x-4 w-full px-4 py-2 ${
@@ -63,14 +76,7 @@ const ConfigRow: React.FC<any> = ({
       {isChanged ? (
         <button
           onClick={() => {
-            writeCall(
-              () => console.log(),
-              config.setter.name,
-              [value],
-              null,
-              null,
-              null
-            );
+            changeConfig([value]);
           }}
         >
           Change
@@ -78,6 +84,9 @@ const ConfigRow: React.FC<any> = ({
       ) : (
         <button
           onClick={() => {
+            if (config.setter.ip.length == 0) {
+              return changeConfig([]);
+            }
             setShowIp(true);
           }}
         >
