@@ -101,7 +101,14 @@ export const raw2adminConfig = (
       if (marketDependent.includes(group as keyof typeof rawConfigs)) {
         for (let market of marketConfig) {
           for (const pool of market.pools) {
+            let decimal = configs[config].decimal;
+            if (decimal && decimal == 'token') {
+              decimal = appDefaults.poolsInfo[pool.pool].decimals;
+            }
+
             const currObject: Config = {
+              ...configs[config],
+              decimal,
               contract: pool[group2marketAddresesMapping[group]],
               group,
               getter,
@@ -120,6 +127,8 @@ export const raw2adminConfig = (
 
         const pools = Object.keys(appDefaults.poolsInfo);
         configObject[group] = pools.map((p) => ({
+          ...configs[config],
+
           contract: p,
           getter,
           setter,
@@ -131,6 +140,8 @@ export const raw2adminConfig = (
       } else {
         configObject[group] = [
           {
+            ...configs[config],
+
             contract: appDefaults[group],
             getter,
             setter,
