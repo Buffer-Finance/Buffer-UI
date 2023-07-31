@@ -7,13 +7,13 @@ export const appConfig = {
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
-    router: '0x8Fd65D9c94c1cA9ffE48D412Fc2637Ae0176BB03',
+    router: '0x26f3585B2746B0038b5E0cda69F40d7f9D8d8538',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xF93545296A467C50d05eC1A4F356A3415dc20268',
+    signer_manager: '0x36c1D417631EB3D089858A57EF0846C65dB245Da',
     poolsInfo: {
-      '0x55Ded741F9c097A95F117a08334D1fBb70A5B05D': {
-        tokenAddress: '0x50E345c95a3c1E5085AE886FF4AF05Efa2403c90',
-        faucet: '0x8097Fecbb9081191A81DE5295d1D68344EA783fF',
+      '0x6EfAbB45b781B62979600444775113516220d992': {
+        tokenAddress: '0x943902252597Ca568a6fB076aceCEdcf7eb903C6',
+        faucet: '0xD2Ce70BAe9f731344b3364206986129e5f2e7437',
         decimals: 6,
         token: 'USDC',
         is_pol: false,
