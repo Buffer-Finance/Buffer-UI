@@ -48,7 +48,7 @@ export const useSwitchPool = () => {
     }
     return configData.poolsInfo[
       switchPool.pool as keyof typeof configData.poolsInfo
-    ];
+    ] as poolInfoType;
   }, [switchPool]);
 
   // console.log(`switchPool: `, switchPool, poolDetails);

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { AssetCategory, marketType, poolInfoType } from '../type';
+import { AssetCategory, marketType } from '../type';
 import { useBuyTradeData } from './useBuyTradeData';
 
 export const useIsMarketOpen = (

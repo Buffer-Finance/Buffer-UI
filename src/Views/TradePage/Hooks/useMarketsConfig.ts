@@ -10,7 +10,8 @@ export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
   const toastify = useToast();
   const { activeChain } = useActiveChain();
-  const config = appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData =
+    appConfig[activeChain.id as unknown as keyof typeof appConfig];
 
   if (error) {
     toastify({
@@ -26,7 +27,7 @@ export const useMarketsConfig = () => {
   const response: marketType[] = [];
   data.optionContracts.forEach((item) => {
     if (
-      Object.keys(config.poolsInfo).find(
+      Object.keys(configData.poolsInfo).find(
         (poolCOntract) => getAddress(item.poolContract) == poolCOntract
       ) === undefined
     ) {

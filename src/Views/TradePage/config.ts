@@ -3,18 +3,18 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.33-multipool-merge-updates/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.34-multipool-update-contracts/api',
     },
-    router: '0x8eEA8B879D42d0afc1742FaC0f293900ED22A51B',
+    router: '0x697436699F3caDeF294560571362D708f45e3321',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xbC7cF0c1dF236cf3Fb5A312f3f6767AF934a9737',
+    signer_manager: '0x9A6405DA3c5120Cb643f85816da8ae938D27a252',
     pooloi: '0x9b308eabe572D5c9132B035476E2ecD5802319ac',
     marketoi: '0x2B4F035967e0A8e1463D9D829E93AeD376e83A54',
     booster: '0x58E66d360d65Da8d7907768f826D86F411d0f849',
     poolsInfo: {
-      '0xdd40110eA8eA6eea9d55309DdDd82eC4323D542E': {
+      '0x4C5317b35342BF2608B2C9F550e91741F23D129f': {
         tokenAddress: '0x50E345c95a3c1E5085AE886FF4AF05Efa2403c90',
         faucet: '0x8097Fecbb9081191A81DE5295d1D68344EA783fF',
         decimals: 6,
@@ -28,7 +28,7 @@ export const appConfig = {
         token: 'BFR',
         is_pol: false,
       },
-      '0xe4a58950CA783b4106e8962C2350426AbBFA54D3': {
+      '0x54398017e13d3C6b2D3ad56f7bA7304Abf16f080': {
         tokenAddress: '0x74409f389Bb05B6966761D86A96F109b309a3CeF',
         faucet: '0x60e11702FAFBDd0d755d680B11fC28392F9796A5',
         decimals: 18,

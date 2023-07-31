@@ -8,15 +8,15 @@ import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
-import { useAssetSelectorPool } from '@Views/TradePage/Hooks/useAssetSelectorPool';
-import { useAssetTableFilters } from '@Views/TradePage/Hooks/useAssetTableFilters';
+import {
+  marketData,
+  useAssetTableFilters,
+} from '@Views/TradePage/Hooks/useAssetTableFilters';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
-import { AssetCategory, marketType } from '@Views/TradePage/type';
-import { joinStrings } from '@Views/TradePage/utils';
+import { AssetCategory } from '@Views/TradePage/type';
 import { IconButton } from '@mui/material';
 import { useAtom, useSetAtom } from 'jotai';
 import { useMemo } from 'react';
@@ -25,6 +25,7 @@ import styled from '@emotion/styled';
 import { ForexTimingsModalAtom } from '@Views/TradePage/atoms';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { CloseTag } from './CloseTag';
+import { getAddress } from 'viem';
 
 export const AssetSelectorTable: React.FC = () => {
   const {
@@ -34,9 +35,6 @@ export const AssetSelectorTable: React.FC = () => {
     navigateToMarket,
   } = useFavouriteMarkets();
   const setForexTimingsModal = useSetAtom(ForexTimingsModalAtom);
-
-  const { getSelectedPoolNotPol } = useAssetSelectorPool();
-  const { getChartMarketData } = useChartMarketData();
   const { getPoolInfo } = usePoolInfo();
   const readcallData = useBuyTradeData();
 
@@ -55,7 +53,7 @@ export const AssetSelectorTable: React.FC = () => {
     return <TableHeader col={col} headsArr={headers} />;
   };
 
-  function addOrRemoveFavourite(market: marketType, isFavourite: boolean) {
+  function addOrRemoveFavourite(market: marketData, isFavourite: boolean) {
     if (isFavourite) {
       removeFavouriteMarket(market);
     } else {
@@ -64,13 +62,11 @@ export const AssetSelectorTable: React.FC = () => {
     }
   }
 
-  function findFavourite(market: marketType) {
-    const chartMarket = getChartMarketData(market.token0, market.token1);
+  function findFavourite(market: marketData) {
+    const chartMarket = market.marketInfo;
 
     return !!favourites.find(
-      (favourite) =>
-        chartMarket.tv_id ===
-        joinStrings(favourite.token0, favourite.token1, '')
+      (favourite) => chartMarket.tv_id === favourite.marketInfo.tv_id
     );
   }
 
@@ -78,10 +74,8 @@ export const AssetSelectorTable: React.FC = () => {
 
   const BodyFormatter = (row: number, col: number) => {
     if (!updatedArr) return <>-</>;
-    const currentAsset: marketType = updatedArr[row];
-    const pairName = joinStrings(currentAsset.token0, currentAsset.token1, '-');
-
-    const selectedPool = getSelectedPoolNotPol(currentAsset);
+    const currentAsset = updatedArr[row];
+    const pairName = currentAsset.marketInfo.pair;
 
     const isFavourite = findFavourite(currentAsset);
 
@@ -90,32 +84,32 @@ export const AssetSelectorTable: React.FC = () => {
       addOrRemoveFavourite(currentAsset, isFavourite);
     }
 
-    if (!selectedPool || !readcallData) return <>-</>;
+    if (!readcallData) return <>-</>;
 
-    const poolInfo = getPoolInfo(selectedPool.pool);
-    const payout = readcallData?.settlementFees[selectedPool?.optionContract];
+    const poolInfo = getPoolInfo(getAddress(currentAsset.poolContract));
+    const payout =
+      readcallData?.settlementFees[currentAsset.configContract.address];
     const maxFee = divide(
-      readcallData?.maxTradeSizes[selectedPool?.optionContract] ?? '0',
+      readcallData?.maxTradeSizes[currentAsset.configContract.address] ?? '0',
       poolInfo.decimals
     ) as string;
     const maxOI = divide(
-      readcallData.maxOIs[selectedPool?.optionContract] ?? '0',
+      readcallData.maxOIs[currentAsset.configContract.address] ?? '0',
       poolInfo.decimals
     );
     const currentOI = divide(
-      readcallData.currentOIs[selectedPool?.optionContract] ?? '0',
+      readcallData.currentOIs[currentAsset.configContract.address] ?? '0',
       poolInfo.decimals
     );
 
     const isForex =
-      currentAsset.category === AssetCategory[AssetCategory.Forex] ||
-      currentAsset.category === AssetCategory[AssetCategory.Commodities];
+      currentAsset.category === AssetCategory.Forex ||
+      currentAsset.category === AssetCategory.Commodities;
 
     const isOpen = getIsOpen(
       isForex,
       readcallData.isInCreationWindow,
-      currentAsset,
-      selectedPool.pool
+      currentAsset
     );
 
     switch (col) {
@@ -259,14 +253,17 @@ export const AssetSelectorTable: React.FC = () => {
   );
 };
 
-const CurrentPrice = ({ currentAsset }: { currentAsset: marketType }) => {
+const CurrentPrice = ({ currentAsset }: { currentAsset: marketData }) => {
   const [marketPrice] = useAtom(priceAtom);
   const price = getPriceFromKlines(marketPrice, {
-    tv_id: currentAsset.tv_id,
+    tv_id: currentAsset.marketInfo.tv_id,
   });
   return (
     <div className="text-1">
-      {toFixed(price, currentAsset.price_precision.toString().length - 1)}
+      {toFixed(
+        price,
+        currentAsset.marketInfo.price_precision.toString().length - 1
+      )}
     </div>
   );
 };
@@ -274,12 +271,12 @@ const CurrentPrice = ({ currentAsset }: { currentAsset: marketType }) => {
 const OneDayChangeComponent = ({
   currentAsset,
 }: {
-  currentAsset: marketType;
+  currentAsset: marketData;
 }) => {
   const assetPrices = usePriceChange();
-  const oneDayChange = (assetPrices?.[currentAsset.tv_id]?.change ?? 0).toFixed(
-    2
-  );
+  const oneDayChange = (
+    assetPrices?.[currentAsset.marketInfo.tv_id]?.change ?? 0
+  ).toFixed(2);
   return (
     <div>
       <OneDayChange oneDayChange={oneDayChange} />
@@ -307,12 +304,9 @@ const ShowTimingModalButton = styled.button`
 const getIsOpen = (
   isForex: boolean,
   isInCreationWindow: boolean,
-  currentAsset: marketType,
-  currentPoolAddress: string
+  currentAsset: marketData
 ) => {
   if (isForex && !isInCreationWindow) return false;
-  const currentPool = currentAsset.pools.find((pool) => {
-    return pool.pool === currentPoolAddress;
-  });
-  return !currentPool?.isPaused;
+
+  return !currentAsset.isPaused;
 };

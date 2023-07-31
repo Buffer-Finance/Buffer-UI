@@ -115,7 +115,7 @@ export enum directionBtn {
 export type configType = (typeof appConfig)['421613'];
 
 export type poolInfoType =
-  (typeof appConfig)['421613']['poolsInfo']['0x55Ded741F9c097A95F117a08334D1fBb70A5B05D'];
+  (typeof appConfig)['421613']['poolsInfo']['0x4C5317b35342BF2608B2C9F550e91741F23D129f'];
 
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];
 

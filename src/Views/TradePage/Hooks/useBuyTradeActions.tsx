@@ -355,6 +355,7 @@ export const useBuyTradeActions = (userInput: string) => {
           settelmentFee?.settlement_fee_sign_expiration,
         settlement_fee_signature: settelmentFee?.settlement_fee_signature,
         environment: activeChain.id,
+        token: tokenName,
       };
       console.log('apiParams', apiParams);
 
@@ -495,6 +496,7 @@ export const useBuyTradeActions = (userInput: string) => {
         user_signature,
         environment: activeChain.id,
         state: 'PENDING',
+        token: tokenName,
       };
       const resp = await axios.post(baseUrl + 'approve/', null, {
         params: apiSignature,

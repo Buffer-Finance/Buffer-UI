@@ -14,7 +14,7 @@ export const PoolRadio: React.FC = () => {
   }
 
   return (
-    <RowGap gap="8px" onChange={handleChange}>
+    <RowGap gap="8px">
       <RadioTextHead>
         <Trans>Trading Asset</Trans>
       </RadioTextHead>
@@ -22,13 +22,14 @@ export const PoolRadio: React.FC = () => {
       {tradingAssets?.map((asset, index) => {
         const isActive = selectedAsset === asset;
         return (
-          <RowGap gap="4px">
+          <RowGap gap="4px" key={asset}>
             <input
               type="radio"
               id="poolRadio"
               name="age"
               value={asset}
-              checked
+              checked={isActive}
+              onChange={handleChange}
             />
             <label
               htmlFor="poolRadio"
