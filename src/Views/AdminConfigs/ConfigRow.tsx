@@ -21,7 +21,9 @@ const ConfigRow: React.FC<any> = ({
 
   return (
     <div className="flex  bg-2 rounded-[5px] p-2 gap-x-4 w-full px-4 py-2">
-      <div className=" whitespace-nowrap">{finalResult}</div>
+      <div className=" whitespace-nowrap">
+        {finalResult + ' ' + config?.market?.pair}
+      </div>
       {isChanged && (
         <div className="line-through decoration-[red] decoration-[2px]">
           {data?.[config.contract + config.getter?.name]}

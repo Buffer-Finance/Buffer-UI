@@ -11,6 +11,7 @@ const AdminConfig: React.FC<any> = ({}) => {
   const { activeChain } = useActiveChain();
   const adminConfig = raw2adminConfig(marketConfig, activeChain);
   const [activeGroup, setActiveGroup] = useState(groups[1]);
+  // TODO Loading state only depends on option_config, think it again.
   if (!adminConfig?.options_config) return <div>'Loading...'</div>;
 
   return (

@@ -9,7 +9,7 @@ import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
 import RouterAbi from '@Views/TradePage/ABIs/RouterABI.json';
 import { Abi } from 'viem';
 import { appConfig } from '@Views/TradePage/config';
-import { marketType } from '@Views/TradePage/type';
+import { marketType, poolType } from '@Views/TradePage/type';
 import { Chain } from 'wagmi';
 export const group2abi = {
   router: RouterAbi,
@@ -43,6 +43,8 @@ export type Config = {
   group: keyof typeof group2abi;
   contract: `0x${string}`;
   mapper: () => void;
+  pool?: poolType;
+  market?: marketType;
 };
 
 type AdminConfig = {
@@ -122,6 +124,7 @@ export const raw2adminConfig = (
           getter,
           setter,
           group,
+          pool: appDefaults.poolsInfo[p],
         }));
 
         // configObject[group] = {
