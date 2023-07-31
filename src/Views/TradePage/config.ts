@@ -3,7 +3,7 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.31-multipool-usdc/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.33-multipool-merge-updates/api',
     },
     router: '0x8eEA8B879D42d0afc1742FaC0f293900ED22A51B',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
@@ -28,9 +28,9 @@ export const appConfig = {
         token: 'BFR',
         is_pol: false,
       },
-      '0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6': {
-        tokenAddress: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
-        faucet: '0x894Ce84237aCB9985e3c9A930C65D202B633E017',
+      '0xe4a58950CA783b4106e8962C2350426AbBFA54D3': {
+        tokenAddress: '0x74409f389Bb05B6966761D86A96F109b309a3CeF',
+        faucet: '0x60e11702FAFBDd0d755d680B11fC28392F9796A5',
         decimals: 18,
         token: 'ARB',
         is_pol: false,
