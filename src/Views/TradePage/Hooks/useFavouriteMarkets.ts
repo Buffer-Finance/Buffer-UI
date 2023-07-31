@@ -17,6 +17,7 @@ export const useFavouriteMarkets = () => {
     if (favMarkets.length === 0) {
       return [];
     }
+
     const pinnedMarkets = favMarkets
       .map((favMarket) => {
         return markets.find(

@@ -45,7 +45,11 @@ export const useAssetTableFilters = () => {
     }
     if (activeCategory.toLowerCase() === 'favourites') {
       return markets.filter((market) => {
-        if (favouriteMarkets.includes(market.asset)) {
+        if (
+          favouriteMarkets.includes(
+            joinStrings(market.marketInfo.token0, market.marketInfo.token1, '/')
+          )
+        ) {
           return market;
         }
       });
