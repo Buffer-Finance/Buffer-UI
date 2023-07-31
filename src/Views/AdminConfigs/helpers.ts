@@ -156,16 +156,17 @@ export const raw2adminConfig = (
 
         // configObject[group] = {
       } else {
-        configObject[group] = [
-          {
-            ...configs[config],
+        let currConfigObject = {
+          ...configs[config],
 
-            contract: appDefaults[group],
-            getter,
-            setter,
-            group,
-          },
-        ];
+          contract: appDefaults[group],
+          getter,
+          setter,
+          group,
+        };
+        if (group in configObject) {
+          configObject[group].push(currConfigObject);
+        } else configObject[group] = [currConfigObject];
       }
     }
   }

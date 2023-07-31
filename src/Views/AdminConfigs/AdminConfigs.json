@@ -75,6 +75,10 @@
     },
     "setPrice": {
       "getter": "couponPrice"
+    },
+    "setBoostPercentage": {
+      "getter": "boostPercentage",
+      "decimal": 2
     }
   },
   "pooloi": {
