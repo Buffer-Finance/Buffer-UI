@@ -3,7 +3,7 @@ import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useAccount } from 'wagmi';
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { getSingatureCached } from '../cahce';
+import { getSingatureCached } from '../cache';
 import {
   HHMMToSeconds,
   editQueueTrade,

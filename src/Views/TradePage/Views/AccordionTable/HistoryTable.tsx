@@ -1,10 +1,8 @@
 import BufferTable from '@Views/Common/BufferTable';
-import { useAtom } from 'jotai';
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide, gt } from '@Utils/NumString/stringArithmatics';
-import { priceAtom } from '@Hooks/usePrice';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
@@ -15,7 +13,6 @@ import {
   getExpiry,
   queuedTradeFallBack,
 } from './Common';
-import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import FailedSuccess from '@SVG/Elements/FailedSuccess';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
@@ -27,8 +24,6 @@ import {
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { AssetCell } from './AssetCell';
-
-export const tradesCount = 10;
 
 enum TableColumn {
   Asset = 0,
@@ -42,13 +37,14 @@ enum TableColumn {
   Status = 8,
   Share = 9,
 }
-const priceDecimals = 8;
 
 const HistoryTable: React.FC<{
   trades: TradeType[];
+  totalPages: number;
   platform?: boolean;
-}> = ({ trades, platform }) => {
-  const [marketPrice] = useAtom(priceAtom);
+  activePage: number;
+  setActivePage: (page: number) => void;
+}> = ({ trades, platform, totalPages, activePage, setActivePage }) => {
   const markets = useMarketsConfig();
   const { getPoolInfo } = usePoolInfo();
 
@@ -215,6 +211,11 @@ const HistoryTable: React.FC<{
 
   return (
     <BufferTable
+      activePage={activePage}
+      count={totalPages}
+      onPageChange={(e, page) => {
+        setActivePage(page);
+      }}
       shouldShowMobile={true}
       headerJSX={HeaderFomatter}
       bodyJSX={BodyFormatter}
@@ -228,10 +229,3 @@ const HistoryTable: React.FC<{
   );
 };
 export { HistoryTable };
-
-const UserHistory = () => {
-  const [ongoingData] = useHistoryTrades();
-  // console.log(`HistoryTable-ongoingData: `, ongoingData);
-  return <HistoryTable trades={ongoingData} />;
-};
-export default UserHistory;

@@ -5,7 +5,7 @@ export const appConfig = {
     graph: {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.30-marketoi/api',
     },
-    router: '0x8Fd65D9c94c1cA9ffE48D412Fc2637Ae0176BB03',   
+    router: '0x8Fd65D9c94c1cA9ffE48D412Fc2637Ae0176BB03',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
@@ -479,3 +479,5 @@ export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
 export const defaultMarket = 'BTC-USD';
 export const PRICE_DECIMALS = 1e8;
 export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';
+
+export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;

@@ -3,7 +3,7 @@ import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { HistoryTable } from '@Views/TradePage/Views/AccordionTable/HistoryTable';
+import { History } from '@Views/TradePage/Views/AccordionTable';
 import LimitOrderTable from '@Views/TradePage/Views/AccordionTable/LimitOrderTable';
 import { OngoingTradesTable } from '@Views/TradePage/Views/AccordionTable/OngoingTradesTable';
 import { binaryTabs } from 'config';
@@ -33,6 +33,8 @@ export const HistoryTables = () => {
     changeActiveTab(null, 1);
   }, []);
 
+  const [activeTrades, limitOrders] = useOngoingTrades();
+
   return (
     <>
       <BufferTab
@@ -51,27 +53,14 @@ export const HistoryTables = () => {
       />
       <TabSwitch
         value={activeTabIdx}
-        childComponents={[<OnGoing />, <LimitOrder />, <History />]}
+        childComponents={[
+          <OngoingTradesTable trades={activeTrades} />,
+          <LimitOrderTable trades={limitOrders} />,
+          <History />,
+        ]}
       />
     </>
   );
-};
-const OnGoing = () => {
-  const [activeTrades] = useOngoingTrades();
-
-  return <OngoingTradesTable trades={activeTrades} />;
-};
-
-const LimitOrder = () => {
-  const [_, limitOrders] = useOngoingTrades();
-
-  return <LimitOrderTable trades={limitOrders} />;
-};
-
-const History = () => {
-  const [historyTrades] = useHistoryTrades();
-
-  return <HistoryTable trades={historyTrades} />;
 };
 
 function MobileOnly({ children }: { children: React.ReactNode }) {

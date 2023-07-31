@@ -38,9 +38,7 @@ export const AssetSelectorTable: React.FC = () => {
   const { getSelectedPoolNotPol } = useAssetSelectorPool();
   const { getChartMarketData } = useChartMarketData();
   const { getPoolInfo } = usePoolInfo();
-  const [marketPrice] = useAtom(priceAtom);
   const readcallData = useBuyTradeData();
-  const assetPrices = usePriceChange();
 
   const headers = useMemo(() => {
     return [
@@ -86,16 +84,11 @@ export const AssetSelectorTable: React.FC = () => {
     const selectedPool = getSelectedPoolNotPol(currentAsset);
 
     const isFavourite = findFavourite(currentAsset);
-    const chartMarket = getChartMarketData(
-      currentAsset.token0,
-      currentAsset.token1
-    );
 
     function onStarClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
       e.stopPropagation();
       addOrRemoveFavourite(currentAsset, isFavourite);
     }
-    const price = getPriceFromKlines(marketPrice, chartMarket);
 
     if (!selectedPool || !readcallData) return <>-</>;
 
@@ -113,13 +106,10 @@ export const AssetSelectorTable: React.FC = () => {
       readcallData.currentOIs[selectedPool?.optionContract] ?? '0',
       poolInfo.decimals
     );
-    const oneDayChange = (
-      assetPrices?.[joinStrings(currentAsset.token0, currentAsset.token1, '')]
-        ?.change ?? 0
-    ).toFixed(2);
 
     const isForex =
-      currentAsset.category === AssetCategory[AssetCategory.Forex];
+      currentAsset.category === AssetCategory[AssetCategory.Forex] ||
+      currentAsset.category === AssetCategory[AssetCategory.Commodities];
 
     const isOpen = getIsOpen(
       isForex,
@@ -173,15 +163,8 @@ export const AssetSelectorTable: React.FC = () => {
           <CellContent
             content={[
               <div className="flex flex-col items-start">
-                <div className="text-1">
-                  {toFixed(
-                    price,
-                    chartMarket.price_precision.toString().length - 1
-                  )}
-                </div>
-                <div>
-                  <OneDayChange oneDayChange={oneDayChange} />
-                </div>
+                <CurrentPrice currentAsset={currentAsset} />
+                <OneDayChangeComponent currentAsset={currentAsset} />
               </div>,
             ]}
           />
@@ -273,6 +256,34 @@ export const AssetSelectorTable: React.FC = () => {
         }}
       />
     </AssetSelectorDDBackground>
+  );
+};
+
+const CurrentPrice = ({ currentAsset }: { currentAsset: marketType }) => {
+  const [marketPrice] = useAtom(priceAtom);
+  const price = getPriceFromKlines(marketPrice, {
+    tv_id: currentAsset.tv_id,
+  });
+  return (
+    <div className="text-1">
+      {toFixed(price, currentAsset.price_precision.toString().length - 1)}
+    </div>
+  );
+};
+
+const OneDayChangeComponent = ({
+  currentAsset,
+}: {
+  currentAsset: marketType;
+}) => {
+  const assetPrices = usePriceChange();
+  const oneDayChange = (assetPrices?.[currentAsset.tv_id]?.change ?? 0).toFixed(
+    2
+  );
+  return (
+    <div>
+      <OneDayChange oneDayChange={oneDayChange} />
+    </div>
   );
 };
 

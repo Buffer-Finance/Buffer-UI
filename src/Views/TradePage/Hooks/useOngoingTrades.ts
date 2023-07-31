@@ -5,7 +5,7 @@ import { baseUrl, refreshInterval } from '../config';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { TradeType } from '../type';
-import { getSingatureCached } from '../cahce';
+import { getSingatureCached } from '../cache';
 import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
 export enum TradeState {
@@ -48,7 +48,7 @@ const useOngoingTrades = () => {
             !t.is_limit_order || (t.is_limit_order && t.state !== 'QUEUED')
         );
         // console.log(`activeTrades: `, activeTrades, limitOrders);
-        console.log(`markets: `, markets);
+        // console.log(`markets: `, markets);
         return [
           addMarketInTrades(activeTrades, markets),
           addMarketInTrades(limitOrders, markets),
