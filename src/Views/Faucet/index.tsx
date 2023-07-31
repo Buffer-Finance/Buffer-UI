@@ -22,9 +22,7 @@ const IbfrFaucet: React.FC = () => {
   const { poolDisplayNameMapping } = usePoolDisplayNames();
   const tokenChains = useMemo(() => {
     return Object.keys(poolDisplayNameMapping).filter(
-      (token) => token === 'USDC'
-      //TODO - to get all assets replace the  line above with the commented line below
-      // !token.includes('-POL')
+      (token) => !token.includes('-POL') && token !== 'BFR'
     );
   }, [poolDisplayNameMapping]);
 
