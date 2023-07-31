@@ -12,7 +12,7 @@ export const appConfig = {
     signer_manager: '0x36c1D417631EB3D089858A57EF0846C65dB245Da',
     poolsInfo: {
       '0x6EfAbB45b781B62979600444775113516220d992': {
-        tokenAddress: '0x50E345c95a3c1E5085AE886FF4AF05Efa2403c90',
+        tokenAddress: '0x943902252597Ca568a6fB076aceCEdcf7eb903C6',
         faucet: '0x8097Fecbb9081191A81DE5295d1D68344EA783fF',
         decimals: 6,
         token: 'USDC',
