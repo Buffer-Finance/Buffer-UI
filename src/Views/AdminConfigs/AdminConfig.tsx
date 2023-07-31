@@ -12,10 +12,11 @@ const AdminConfig: React.FC<any> = ({}) => {
   const adminConfig = raw2adminConfig(marketConfig, activeChain);
   const [activeGroup, setActiveGroup] = useState(groups[1]);
   // TODO Loading state only depends on option_config, think it again.
+  console.log(`AdminConfig-adminConfig: `, adminConfig);
   if (!adminConfig?.options_config) return <div>'Loading...'</div>;
 
   return (
-    <div>
+    <div className="px-3">
       <div className="flex ml-2 text-f14">
         <div>Select a group of contracts to edit config: </div>
         <div>

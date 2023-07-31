@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Config, group2abi } from './helpers';
 import { useCall2Data } from '@Utils/useReadCall';
 import { ConfigRow } from './ConfigRow';
+import { BlueBtn } from '@Views/Common/V2-Button';
 
 const ConfigSetter: React.FC<any> = ({
   configs,
@@ -20,16 +21,29 @@ const ConfigSetter: React.FC<any> = ({
         abi: group2abi[c.group],
       }));
   }, [configs]);
-
+  const [searchIp, setSearchIp] = useState('');
   const { data } = useCall2Data(calls, 'admin-' + cacheKey);
+
   if (!data) return <div>Loading..</div>;
-  console.log(`ConfigSetter-data: `, data);
   return (
     <>
-      <div className="ml-2 text-f14">Here are the configs to edit:</div>
+      <div className="flex">
+        <div className="text-f14">Search&nbsp;:&nbsp;</div>
+        <input
+          value={searchIp}
+          onChange={(e) => setSearchIp(e.target.value)}
+          type="text"
+          className="text-[black]"
+        />
+      </div>
       <div className="bg-3 flex flex-col gap-y-2 px-4 py-2">
         {configs.map((c) => (
-          <ConfigRow key={c.contract + c.setter.name} config={c} data={data} />
+          <ConfigRow
+            key={c.contract + c.setter.name}
+            config={c}
+            data={data}
+            hideString={searchIp}
+          />
         ))}
       </div>
     </>
