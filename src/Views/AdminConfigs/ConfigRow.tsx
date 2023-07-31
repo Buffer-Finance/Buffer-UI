@@ -4,6 +4,7 @@ import { deepEqual } from 'wagmi';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { ResetButton } from '@Views/TradePage/Components/ResetButton';
+import { ResetSVG } from '@Views/TradePage/Components/ResetSVG';
 
 const ConfigRow: React.FC<any> = ({
   config,
@@ -29,6 +30,11 @@ const ConfigRow: React.FC<any> = ({
     data?.[config.contract + config.getter?.name]
   );
 
+  const reset = () => {
+    setShowIp(false);
+    setValue(data?.[config.contract + config.getter?.name]);
+  };
+  const actualValue = data?.[config.contract + config.getter?.name]?.[0];
   let hint = config?.hint ? `(${config.hint})` : '';
   let dec = config.decimal ? `[${config.decimal} dec]` : '';
   const isCurrentConfigSearched = () => {
@@ -41,75 +47,81 @@ const ConfigRow: React.FC<any> = ({
   };
   const renderValue = () => {
     if (config.decimal) {
-      return divide(
-        data?.[config.contract + config.getter?.name],
-        config.decimal
-      );
+      return divide(actualValue, config.decimal);
     }
-    if (config.getter) {
-      return data?.[config.contract + config.getter?.name] ? 'true' : 'false';
+    if (config.getter.op?.[0] == 'bool') {
+      return actualValue ? 'true' : 'false';
     }
-    return data?.[config.contract + config.getter?.name];
+    return actualValue;
   };
   useEffect(() => {
-    setValue(data?.[config.contract + config.getter?.name]);
-  }, [data?.[config.contract + config.getter?.name]]);
+    setValue(actualValue);
+  }, [actualValue]);
   const changeConfig = (value: any) => {
-    writeCall(() => console.log(), config.setter.name, value, null, null, null);
+    writeCall(
+      (a) => {
+        a && reset();
+      },
+      config.setter.name,
+      value,
+      null,
+      null,
+      null
+    );
   };
   return (
     <div
-      className={`flex  bg-2 rounded-[5px] p-2 gap-x-4 w-full px-4 py-2 ${
+      className={`  bg-2 rounded-[5px] p-2  w-full px-4 py-2 ${
         hideString && (isCurrentConfigSearched() ? '' : 'hidden')
       }`}
     >
-      <div className=" whitespace-nowrap">
-        {[finalResult, config?.market?.pair, hint, dec].join(' ')}
-      </div>
-      <div
-        className={
-          isChanged ? 'line-through decoration-[red] decoration-[2px]' : ''
-        }
+      <form
+        className="flex gap-x-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          changeConfig([value]);
+        }}
       >
-        {renderValue()}
-      </div>
-      {isChanged ? (
-        <button
-          onClick={() => {
-            changeConfig([value]);
-          }}
+        <div className=" whitespace-nowrap">
+          {[finalResult, config?.market?.pair, hint, dec].join(' ')}
+        </div>
+        <div
+          className={
+            isChanged ? 'line-through decoration-[red] decoration-[2px]' : ''
+          }
         >
-          Change
-        </button>
-      ) : (
-        <button
-          onClick={() => {
-            if (config.setter.ip.length == 0) {
-              return changeConfig([]);
-            }
-            setShowIp(true);
-          }}
-        >
-          Edit
-        </button>
-      )}
-      {showIp && (
-        <>
-          <input
-            className="bg-2 whitespace-nowrap w-full"
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-          />
-          <ResetButton
+          {renderValue()}
+        </div>
+        {isChanged ? (
+          <button type="submit">Change</button>
+        ) : (
+          <button
             onClick={() => {
-              setShowIp(false);
-              setValue(data?.[config.contract + config.getter?.name]);
+              if (config.setter.ip.length == 0) {
+                return changeConfig([]);
+              }
+              setShowIp(true);
             }}
-          ></ResetButton>
-        </>
-      )}
+            type="button"
+          >
+            Edit
+          </button>
+        )}
+        {showIp && (
+          <>
+            <input
+              className="bg-2 whitespace-nowrap w-full"
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+            />
+            <button onClick={reset}>
+              <ResetSVG />
+            </button>
+          </>
+        )}
+      </form>
     </div>
   );
 };

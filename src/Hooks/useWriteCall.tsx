@@ -191,7 +191,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       } else {
         toastify({ msg: 'Transaction Failed', type: 'error' });
         dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-        callBack({});
+        callBack();
       }
     } catch (error) {
       console.log(`[blockchain]error: `, error);
@@ -211,7 +211,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
         ),
         type: 'error',
       });
-      callBack({});
+      callBack();
     }
   };
 
