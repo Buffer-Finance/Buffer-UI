@@ -79,7 +79,7 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
     const trade = trades?.[row];
 
     const marketPrecision = trade.market.price_precision.toString().length - 1;
-    const poolInfo = getPoolInfo(trade.market);
+    const poolInfo = getPoolInfo(trade.pool.pool);
     if (!trade) return 'Problem';
 
     switch (col) {
