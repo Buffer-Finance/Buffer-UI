@@ -26,12 +26,12 @@ import { getSingatureCached } from '@Views/TradePage/cache';
 import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 export const EditModal: React.FC<{
   trade: TradeType;
-  market: marketType;
   onSave: () => void;
-}> = ({ trade, market, onSave }) => {
+}> = ({ trade, onSave }) => {
   const [_, limitOrders] = useOngoingTrades();
 
   const { address } = useAccount();
@@ -52,17 +52,7 @@ export const EditModal: React.FC<{
   const [elapsedMinutes, setElapsedMinutes] = useState<number | null>(null);
   const queuedTime = trade?.queued_timestamp;
 
-  const pool = useMemo(() => {
-    if (!market) return null;
-    const pool =
-      market.pools.find(
-        (p) =>
-          p.optionContract.toLowerCase() == trade.target_contract.toLowerCase()
-      ) || market.pools[0];
-    return pool;
-  }, [trade, market]);
-  // things to get rom pool
-  const poolDecimals = 6;
+  const { getPoolInfo } = usePoolInfo();
 
   useEffect(() => {
     const calculateElapsedMinutes = () => {
@@ -107,10 +97,10 @@ export const EditModal: React.FC<{
     if (betTime > HHMMToSeconds(periodValidations.max) / 60) return true;
     if (betTime < HHMMToSeconds(periodValidations.min) / 60) return true;
     return false;
-  }, [trade, market, currentTime, price, frame, periodValidations, minutes]);
+  }, [trade, currentTime, price, frame, periodValidations, minutes]);
 
   useEffect(() => {
-    if (!trade || !market || !pool) return;
+    if (!trade) return;
     const limitOrderDurationinMinutes = trade.limit_order_duration / 60;
     if (limitOrderDurationinMinutes > 60) {
       setFrame('h');
@@ -123,11 +113,11 @@ export const EditModal: React.FC<{
     // setCurrentTime(secondsToHHMM(trade.period));
 
     setPeriodValidation({
-      min: pool.min_duration,
-      max: pool.max_duration,
+      min: trade.pool.min_duration,
+      max: trade.pool.max_duration,
     });
     setButtonDirection(trade.is_above ? directionBtn.Up : directionBtn.Down);
-  }, [trade, market, pool]);
+  }, [trade]);
 
   useEffect(() => {
     if (isMinuteFrame && minutes > 60) {
@@ -202,6 +192,8 @@ export const EditModal: React.FC<{
   };
 
   if (!trade) return <></>;
+  const poolInfo = getPoolInfo(trade.pool.pool);
+
   const isLOProcessed = limitOrders.find((lo) => lo.queue_id == trade.queue_id)
     ? false
     : true;
@@ -209,10 +201,10 @@ export const EditModal: React.FC<{
     <EditModalBackground>
       <RowGap gap="6px" className="mb-3">
         <div className="h-[20] w-[20px]">
-          <PairTokenImage pair={market.pair} />
+          <PairTokenImage pair={trade.market.pair} />
         </div>
         <SettingsComponentHeader fontSize="14px">
-          {market.pair}
+          {trade.market.pair}
         </SettingsComponentHeader>
       </RowGap>
       <div className="data">
@@ -221,7 +213,7 @@ export const EditModal: React.FC<{
             <BuyTradeHeadText>Trade size</BuyTradeHeadText>
             <EditTextValueText>
               <Display
-                data={divide(trade.trade_size, poolDecimals)}
+                data={divide(trade.trade_size, poolInfo.decimals)}
                 unit={'USDC'}
               />
             </EditTextValueText>
