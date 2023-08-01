@@ -83,6 +83,7 @@ const HistoryTable: React.FC<{
     if (!expiryPrice) {
       const id = getPriceCacheId(trade);
       expiryPrice = expiryPriceCache[id] || 0;
+      console.log(`expiryPrice: `, expiryPrice);
     }
     // if (!trade.market) return 'Problem';
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
@@ -144,6 +145,7 @@ const HistoryTable: React.FC<{
           />
         );
       case TableColumn.Payout:
+        if (!expiryPrice) return 'Processing...';
         return (
           <div>
             {pnl || payout ? (
