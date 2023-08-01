@@ -78,12 +78,6 @@ export const useBuyTradeActions = (userInput: string) => {
   const { state, dispatch } = useGlobal();
   const { activeMarket: activeAsset } = useActiveMarket();
 
-  const pairName = joinStrings(
-    activeAsset?.token0 as string,
-    activeAsset?.token1 as string,
-    '-'
-  );
-
   const { address } = useAccount();
 
   const configData = getConfig(activeChain.id);
@@ -380,7 +374,7 @@ export const useBuyTradeActions = (userInput: string) => {
             baseArgs[ArgIndex.Slippage],
             baseArgs[ArgIndex.TargetContract],
             provider,
-            appConfig[activeChain.id].multicall
+            configData.multicall
           ).then((lockedAmount) => {
             console.timeEnd('read-call');
 
@@ -477,7 +471,7 @@ export const useBuyTradeActions = (userInput: string) => {
     // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
     if (ammount !== '0' && ammount !== '100000000000000000000000000') {
-      ammount = add(ammount, multiply(ammount, '0.1'));
+      ammount = toFixed(add(ammount, multiply(ammount, '0.1')), 0);
     }
     //  fetch nonce 7min
     // sign data : 1hr
