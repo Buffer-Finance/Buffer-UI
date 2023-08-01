@@ -40,14 +40,14 @@ export interface TradeType {
   period: number;
   target_contract: string;
   expiry_price: number | null;
-  payout: number | null;
+  payout: string | null;
   user_partial_signature: string;
   open_timestamp: number;
   close_time: number;
   user_full_signature: string;
   user_address: string;
-  trade_size: number;
-  locked_amount: number;
+  trade_size: string;
+  locked_amount: string;
   allow_partial_fill: boolean;
   referral_code: string;
   trader_nft_id: number;

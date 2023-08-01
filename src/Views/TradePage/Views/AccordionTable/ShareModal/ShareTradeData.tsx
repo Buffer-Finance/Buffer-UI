@@ -52,7 +52,7 @@ export const ShareTradeData = ({
     <div className="flex justify-between items-center gap-x-5 mt-3">
       {priceArr.map((p) => {
         return (
-          <div className="flex flex-col whitespace-nowrap">
+          <div className="flex flex-col whitespace-nowrap" key={p.key}>
             <div className="text-[11px] font-medium">{p.key}</div>
             <div className="text-f14 font-medium">{p.value}</div>
           </div>
