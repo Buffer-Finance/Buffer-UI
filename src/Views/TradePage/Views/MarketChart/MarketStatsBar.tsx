@@ -102,7 +102,6 @@ const MarketStatsBar: React.FC<any> = ({}) => {
   let maxFee = null;
   let maxOI = null;
   let currentOI = null;
-  let payout = null;
   let currentOIinPercent = null;
 
   const assetPrices = usePriceChange();
@@ -119,8 +118,6 @@ const MarketStatsBar: React.FC<any> = ({}) => {
       readcallData?.currentOIs[switchPool?.optionContract] ?? '0',
       poolDetails.decimals
     ) as string;
-
-    payout = readcallData?.settlementFees[switchPool?.optionContract];
 
     currentOIinPercent = Number(
       getMinimumValue(

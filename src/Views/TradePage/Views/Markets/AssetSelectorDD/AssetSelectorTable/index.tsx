@@ -26,6 +26,7 @@ import { ForexTimingsModalAtom } from '@Views/TradePage/atoms';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { CloseTag } from './CloseTag';
 import { getAddress } from 'viem';
+import { Payout } from '@Views/TradePage/Views/MarketChart/Payout';
 
 export const AssetSelectorTable: React.FC = () => {
   const {
@@ -87,8 +88,7 @@ export const AssetSelectorTable: React.FC = () => {
     if (!readcallData) return <>-</>;
 
     const poolInfo = getPoolInfo(getAddress(currentAsset.poolContract));
-    const payout =
-      readcallData?.settlementFees[currentAsset.configContract.address];
+
     const maxFee = divide(
       readcallData?.maxTradeSizes[currentAsset.configContract.address] ?? '0',
       poolInfo.decimals
@@ -170,7 +170,12 @@ export const AssetSelectorTable: React.FC = () => {
           <CellContent
             content={[
               <div className="flex items-center">
-                <div className="text-1">{payout}%</div>
+                <div className="text-1">
+                  <Payout
+                    token0={currentAsset.marketInfo.token0}
+                    token1={currentAsset.marketInfo.token1}
+                  />
+                </div>
               </div>,
             ]}
           />
