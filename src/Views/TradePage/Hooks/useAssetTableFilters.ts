@@ -16,7 +16,6 @@ import { getAddress } from 'viem';
 export type marketData = responseObj & { marketInfo: chartDataType };
 export const useMarketsWithChartData = () => {
   const { data: markets } = useMarketsRequest();
-
   if (markets === undefined) {
     return [];
   }

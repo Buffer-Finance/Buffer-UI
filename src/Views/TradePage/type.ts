@@ -8,7 +8,7 @@ export type poolType = {
   isPaused: boolean;
   configContract: string;
   optionContract: string;
-  marketOIaddress: string;
+  marketOiContract: string;
   platformFee: string;
   earlyclose: {
     enable: boolean;

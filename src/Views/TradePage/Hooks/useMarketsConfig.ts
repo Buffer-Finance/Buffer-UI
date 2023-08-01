@@ -3,15 +3,11 @@ import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
 import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
 import { getAddress } from 'ethers/lib/utils.js';
-import { appConfig, marketsForChart } from '../config';
-import { useActiveChain } from '@Hooks/useActiveChain';
+import { marketsForChart } from '../config';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
   const toastify = useToast();
-  const { activeChain } = useActiveChain();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
 
   if (error) {
     toastify({
@@ -26,13 +22,6 @@ export const useMarketsConfig = () => {
 
   const response: marketType[] = [];
   data.optionContracts.forEach((item) => {
-    if (
-      Object.keys(configData.poolsInfo).find(
-        (poolCOntract) => getAddress(item.poolContract) == poolCOntract
-      ) === undefined
-    ) {
-      return;
-    }
     const [token0, token1] = getTokens(item.asset, 'USD');
     const index = response.findIndex(
       (config) => config.token0 === token0 && config.token1 === token1
