@@ -8,7 +8,7 @@ import { SVGProps } from 'react';
 import { MenuItem, Skeleton } from '@mui/material';
 import { useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
-import { useDisconnect, useProvider } from 'wagmi';
+import { useDisconnect, usePublicClient } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import {
   uesOneCtActiveChain,
@@ -53,7 +53,7 @@ export const AccountDropdown: React.FC = () => {
   const { disabelLoading, disableOneCt, registeredOneCT, nonce } =
     useOneCTWallet();
 
-  const provider = useProvider({ chainId: activeChain.id });
+  const provider = usePublicClient({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   useEffect(() => {
     setOneCTModal(false);

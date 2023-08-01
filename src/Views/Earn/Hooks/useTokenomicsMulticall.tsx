@@ -654,6 +654,10 @@ export const useGetTokenomics = () => {
   // if (data)
   convertBNtoString(data);
 
+  const convertDataToRes = (data: any[]) => {
+    return data.map((d) => d.result);
+  };
+
   let response = {};
   if (data && data[0] && bfrPrice && gt(bfrPrice, '0')) {
     let [
@@ -751,9 +755,10 @@ export const useGetTokenomics = () => {
       esbfrStakedArbBlpTrackerAllowance,
       userArbBalance,
     ] = account
-      ? data.flat()
-      : data.concat(new Array(getUserSpecificCalls().length).fill('0')).flat();
-
+      ? convertDataToRes(data.flat())
+      : convertDataToRes(
+          data.concat(new Array(getUserSpecificCalls().length).fill('0')).flat()
+        );
     const blpPrice =
       blpSupply > 0
         ? divide(blpTotalBalance, blpSupply)

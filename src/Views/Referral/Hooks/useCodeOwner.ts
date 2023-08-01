@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import ReferralABI from '@Views/Referral/Config/ReferralABI.json';
 import useDebouncedEffect from '@Hooks/Utilities/useDeboncedEffect';
-import { useContract, useProvider } from 'wagmi';
+import { usePublicClient } from 'wagmi';
 import { contractRead } from '@Utils/useReadCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getContract } from '@wagmi/core';
 
 export function useCodeOwner(code: string) {
   const [owner, setOwner] = useState(null);
   const { activeChain } = useActiveChain();
-  const provider = useProvider({ chainId: activeChain.id });
+  const provider = usePublicClient({ chainId: activeChain.id });
   const configContracts = getConfig(activeChain.id);
   const referralAddress = configContracts.referral_storage;
 
-  const referralContract = useContract({
+  const referralContract = getContract({
     address: referralAddress,
     abi: ReferralABI,
     signerOrProvider: provider,

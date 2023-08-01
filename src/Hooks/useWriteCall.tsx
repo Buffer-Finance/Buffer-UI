@@ -2,11 +2,11 @@ import { ReactNode } from 'react';
 import { CallOverrides } from 'ethers';
 import {
   useBalance,
-  useContract,
   useFeeData,
-  useProvider,
-  useSigner,
+  usePublicClient,
+  useWalletClient,
 } from 'wagmi';
+import { getContract } from '@wagmi/core';
 import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
@@ -45,18 +45,17 @@ export interface IConfirmationModal {
 export function useWriteCall(contractAddress: string, abi: any[]) {
   const { dispatch } = useGlobal();
   const toastify = useToast();
-  const provider = useProvider();
+  const provider = usePublicClient();
   const your_private_key_string =
     '2bb545e93a2b27557e40b54f39def6a190fa3ce56b34bcfc80d8709cf60fe0a2';
   const { address: account, viewOnlyMode } = useUserAccount();
   const { activeChain } = useActiveChain();
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
-  const { data: signer, isError, isLoading } = useSigner();
-  const contract = useContract({
+  const { data: signer, isError, isLoading } = useWalletClient();
+  const contract = getContract({
     address: contractAddress,
     abi: abi,
     signerOrProvider: signer,
-    // signerOrProvider: new ethers.Wallet(your_private_key_string, provider),
   });
   const { data } = useFeeData();
   const { data: balance } = useBalance({ address: account });

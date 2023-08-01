@@ -2,11 +2,18 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { ethers } from 'ethers';
 import useSWR, { useSWRConfig } from 'swr';
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { multicallLinked, multicallv2 } from './Contract/multiContract';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import {
+  arbMulticallABI,
+  multicallLinked,
+  multicallv2,
+} from './Contract/multiContract';
 import getDeepCopy from './getDeepCopy';
 import { useMemo } from 'react';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getContract } from '@wagmi/core';
+import { viemMulticall } from './multicall';
+import { createPublicClient, http } from 'viem';
 
 export const useReadCall = ({
   contracts,
@@ -18,10 +25,10 @@ export const useReadCall = ({
   const calls = contracts;
   const { activeChain, isWrongChain, chainInURL } = useActiveChain();
   const { address: account } = useUserAccount();
-  const { data: signer } = useSigner({ chainId: activeChain.id });
+  const { data: signer } = useWalletClient({ chainId: activeChain.id });
   const { address } = useAccount();
   const { cache } = useSWRConfig();
-  const p = useProvider({ chainId: activeChain.id });
+  const p = usePublicClient({ chainId: activeChain.id });
   const configContracts = getConfig(activeChain.id);
   let signerOrProvider = p;
 
@@ -56,28 +63,23 @@ export const useCall2Data = (contracts: any, swrKey: string) => {
   const calls = contracts;
   const { activeChain, isWrongChain, chainInURL } = useActiveChain();
   const { address: account } = useUserAccount();
-  const { data: signer } = useSigner({ chainId: activeChain.id });
   const { address } = useAccount();
   const { cache } = useSWRConfig();
-  const p = useProvider({ chainId: activeChain.id });
-  const configContracts = getConfig(activeChain.id);
-
-  let signerOrProvider = p;
-
-  if (signer && !isWrongChain && address) {
-    signerOrProvider = signer;
-  }
-  // console.log(signerOrProvider?._network?.chainId, activeChain, 'provider');
   const key = swrKey + activeChain.id + account + chainInURL;
 
-  // console.log(`signerOrProvider: `, signerOrProvider);
+  const client = useMemo(() => {
+    return createPublicClient({
+      chain: activeChain,
+      transport: http(),
+    });
+  }, [activeChain]);
+
   return useSWR(calls && calls.length ? key : null, {
     fetcher: async () => {
       if (!calls) return null;
-      let returnData = await multicallLinked(
+      let returnData = await viemMulticall(
         calls,
-        signerOrProvider,
-        configContracts.multicall,
+        client,
         swrKey + activeChain.id + account
       );
       return returnData || cache.get(key);
@@ -94,8 +96,8 @@ export function convertBNtoString(data) {
       convertBNtoString(data[key]);
     }
 
-    if (data[key] && data[key]?._isBigNumber) {
-      data[key] = ethers.utils.formatUnits(data[key]._hex, 0);
+    if (typeof data[key] == 'bigint') {
+      data[key] = data[key].toString();
     }
   });
 }
@@ -121,9 +123,9 @@ export const useSignerOrPorvider = () => {
   const { address } = useAccount();
   const { activeChain, isWrongChain } = useActiveChain();
 
-  const { data: signer } = useSigner({ chainId: activeChain.id });
+  const { data: signer } = useWalletClient({ chainId: activeChain.id });
 
-  const p = useProvider({ chainId: activeChain.id });
+  const p = usePublicClient({ chainId: activeChain.id });
   const signerOrProvider = useMemo(() => {
     let signerOrProvider = p;
 

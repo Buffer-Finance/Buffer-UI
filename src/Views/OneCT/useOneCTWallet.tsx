@@ -7,12 +7,18 @@ import { ethers } from 'ethers';
 import { atom, useAtom } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
+import {
+  useAccount,
+  useNetwork,
+  usePublicClient,
+  useWalletClient,
+} from 'wagmi';
 import { signTypedData } from '@wagmi/core';
 import { useToast } from '@Contexts/Toast';
 import { WaitToast } from '@Views/TradePage/utils';
 import { getChains } from 'src/Config/wagmiClient';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { privateKeyToAccount } from 'viem/accounts';
 
 /*
  * Nonce is zero initially.
@@ -64,10 +70,7 @@ export const is1CTEnabled = (
   deb?: string
 ) => {
   if (!account || !pk || !provider) return null;
-  const oneCTWallet = new ethers.Wallet(
-    pk,
-    provider as ethers.providers.StaticJsonRpcProvider
-  );
+  const oneCTWallet = privateKeyToAccount(`0x${pk}`);
   return oneCTWallet.address.toLowerCase() === account.toLowerCase();
 };
 export const disableLoadingAtom = atom<boolean>(false);
@@ -88,7 +91,7 @@ const useOneCTWallet = () => {
   const [createLoading, setCreateLoading] = useAtom(createLoadingAtom);
   const { activeChain } = uesOneCtActiveChain();
   const configData = getConfig(activeChain.id);
-  const provider = useProvider({ chainId: activeChain.id });
+  const provider = usePublicClient({ chainId: activeChain.id });
 
   const pkLocalStorageIdentifier = useMemo(() => {
     return 'signer-account-pk:' + address + ',nonce' + res?.nonce + ':';
@@ -106,14 +109,12 @@ const useOneCTWallet = () => {
     );
   }, [res, res?.one_ct, res?.nonce, provider, oneCtPk]);
 
-  const { data: signer } = useSigner({ chainId: activeChain.id });
+  const { data: signer } = useWalletClient({ chainId: activeChain.id });
 
   const oneCTWallet = useMemo(() => {
     if (!oneCtPk) return null;
-    return new ethers.Wallet(
-      oneCtPk as any,
-      provider as ethers.providers.StaticJsonRpcProvider
-    );
+    // console.log(`useOneCTWallet-oneCtPk: `, oneCtPk);
+    return privateKeyToAccount(('0x' + oneCtPk) as any);
   }, [oneCtPk, provider, registeredOneCT]);
 
   const generatePk = useCallback(async () => {

@@ -13,7 +13,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import axios from 'axios';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount, usePublicClient } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
@@ -72,7 +72,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const tokenAddress = poolDetails?.tokenAddress;
   const { data: allSettlementFees } = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
-  const provider = useProvider({ chainId: activeChain.id });
+  const provider = usePublicClient({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const setIsApproveModalOpen = useSetAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
@@ -301,10 +301,7 @@ export const useBuyTradeActions = (userInput: string) => {
       let settelmentFee = allSettlementFees[activeAsset.tv_id];
       let currentTimestamp = Date.now();
       let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
-      const oneCTWallet = new ethers.Wallet(
-        oneCtPk!,
-        provider as ethers.providers.StaticJsonRpcProvider
-      );
+
       let baseArgs = [
         address,
         toFixed(multiply(userInput, decimals), 0),
