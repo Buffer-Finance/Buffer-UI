@@ -1,7 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   getDisplayDate,
   getDisplayDateUTC,
@@ -9,33 +8,25 @@ import {
   getDisplayTimeUTC,
 } from '@Utils/Dates/displayDateTime';
 
-import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide, round } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
-import { useState } from 'react';
-import { useAccount } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { useToast } from '@Contexts/Toast';
 import {
   closeLoadingAtom,
   selectedOrderToEditAtom,
 } from '@Views/TradePage/atoms';
-import { cancelQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
+import { secondsToHHMM } from '@Views/TradePage/utils';
 import {
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
   tableButtonClasses,
 } from './Common';
-import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { TradeType } from '@Views/TradePage/type';
 import { AssetCell } from './AssetCell';
