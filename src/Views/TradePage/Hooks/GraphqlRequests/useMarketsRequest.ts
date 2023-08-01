@@ -40,7 +40,7 @@ export const useMarketsRequest = () => {
 
   const { data, error } = useSWR<response, Error>('v3AppConfig', {
     fetcher: fetcher,
-    refreshInterval: 50000,
+    refreshInterval: 60000,
   });
 
   const response = useMemo(() => {
