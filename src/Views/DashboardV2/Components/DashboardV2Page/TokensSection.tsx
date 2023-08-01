@@ -5,7 +5,7 @@ import { BLPcard } from '../Cards/BLPcard';
 import { useUBLPdata } from '@Views/DashboardV2/hooks/useReadcalls/useUBLPdata';
 import { useABLPdata } from '@Views/DashboardV2/hooks/useReadcalls/useABLPdata';
 import { ChainNotSupported } from '@Views/Common/ChainNotSupported';
-import { arbitrum } from 'wagmi/chains';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 const TokensSection = () => {
   return (
@@ -18,7 +18,7 @@ const TokensSection = () => {
         <BFRcard />,
         <UBLPcard />,
         <ChainNotSupported
-          supportedChainIds={[arbitrum.id]}
+          supportedChainIds={[arbitrum.id, arbitrumGoerli.id]}
           children={<ABLPcard />}
           hide
         />,
