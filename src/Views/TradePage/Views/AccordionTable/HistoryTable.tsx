@@ -3,7 +3,6 @@ import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide, gt } from '@Utils/NumString/stringArithmatics';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
   DisplayTime,
@@ -45,7 +44,6 @@ const HistoryTable: React.FC<{
   activePage: number;
   setActivePage: (page: number) => void;
 }> = ({ trades, platform, totalPages, activePage, setActivePage }) => {
-  const markets = useMarketsConfig();
   const { getPoolInfo } = usePoolInfo();
 
   const headNameArray = platform
@@ -80,26 +78,13 @@ const HistoryTable: React.FC<{
     const trade = trades?.[row];
     // console.log(`BodyFormatter-row: `, trade);
 
-    const tradeMarket = markets?.find((pair) => {
-      const pool = pair.pools.find(
-        (pool) =>
-          pool.optionContract.toLowerCase() ===
-          trade?.target_contract.toLowerCase()
-      );
-      return !!pool;
-    });
-    const poolContract = tradeMarket?.pools.find(
-      (pool) =>
-        pool.optionContract.toLowerCase() ===
-        trade?.target_contract.toLowerCase()
-    )?.pool;
-    const poolInfo = getPoolInfo(poolContract);
+    const poolInfo = getPoolInfo(trade.pool.pool);
     let expiryPrice: number | null = trade.expiry_price;
     if (!expiryPrice) {
       const id = getPriceCacheId(trade);
       expiryPrice = expiryPriceCache[id] || 0;
     }
-    if (!tradeMarket) return 'Problem';
+    // if (!trade.market) return 'Problem';
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
     // console.log(`aug-payout-actual: `, pnl, payout);
     const status = gt(pnl?.toString(), '0')
@@ -118,11 +103,11 @@ const HistoryTable: React.FC<{
     const minClosingTime = getExpiry(trade);
     switch (col) {
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
+        return <StrikePriceComponent trade={trade} configData={trade.market} />;
       case TableColumn.Asset:
         return (
           <AssetCell
-            configData={tradeMarket}
+            configData={trade.market}
             currentRow={trade}
             // platform={platform}
           />
@@ -153,9 +138,9 @@ const HistoryTable: React.FC<{
       case TableColumn.TradeSize:
         return (
           <Display
-            data={divide(trade.trade_size, 6)}
+            data={divide(trade.trade_size, poolInfo.decimals)}
             className="!justify-start"
-            unit={'USDC'}
+            unit={poolInfo.token}
           />
         );
       case TableColumn.Payout:
@@ -166,8 +151,8 @@ const HistoryTable: React.FC<{
                 {' '}
                 <Display
                   className="!justify-start"
-                  data={divide(payout!, 6)}
-                  unit="USDC"
+                  data={divide(payout!, poolInfo.decimals)}
+                  unit={poolInfo.token}
                 />
                 <span className={status.textColor + ' flex '}>
                   Net Pnl :{' '}
@@ -175,7 +160,7 @@ const HistoryTable: React.FC<{
                     label={status.chip == 'Win' ? '+' : ''}
                     className="!justify-start"
                     data={pnl}
-                    unit="USDC"
+                    unit={poolInfo.token}
                   />
                 </span>
               </>
@@ -204,7 +189,7 @@ const HistoryTable: React.FC<{
           </NumberTooltip>
         );
       case TableColumn.Share:
-        return <Share data={trade} market={tradeMarket} poolInfo={poolInfo} />;
+        return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
     }
     return 'Unhandled Body';
   };

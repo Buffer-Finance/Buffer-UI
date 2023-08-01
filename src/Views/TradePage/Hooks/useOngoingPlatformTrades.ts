@@ -14,6 +14,8 @@ import {
   platformActiveTableActivePage,
   platformHistoryTableActivePage,
 } from '../atoms';
+import { addMarketInTrades } from '../utils';
+import { useMarketsConfig } from './useMarketsConfig';
 
 const usePlatformTrades = () => {
   const { activeChain } = useActiveChain();
@@ -57,6 +59,7 @@ export const usePlatformActiveTrades = () => {
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
+  const markets = useMarketsConfig();
   const activePage = useAtomValue(platformActiveTableActivePage);
 
   const { data, error } = useSWR<tradesApiResponseType>(
@@ -82,7 +85,7 @@ export const usePlatformActiveTrades = () => {
           return { page_data: [], total_pages: 1 };
         return {
           ...res.data,
-          page_data: res.data.page_data,
+          page_data: addMarketInTrades(res.data.page_data, markets),
         } as tradesApiResponseType;
       },
       refreshInterval: refreshInterval,
@@ -96,6 +99,7 @@ export const usePlatformHistoryTrades = () => {
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
   const activePage = useAtomValue(platformHistoryTableActivePage);
+  const markets = useMarketsConfig();
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'platform-history-trades-' +
@@ -120,7 +124,7 @@ export const usePlatformHistoryTrades = () => {
           return { page_data: [], total_pages: 1 };
         return {
           ...res.data,
-          page_data: res.data.page_data,
+          page_data: addMarketInTrades(res.data.page_data, markets),
         } as tradesApiResponseType;
       },
       refreshInterval: refreshInterval,

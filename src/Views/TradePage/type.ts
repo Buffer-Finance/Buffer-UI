@@ -65,6 +65,7 @@ export interface TradeType {
   environment: '421613' | '42161';
   market: marketType;
   pool: poolType;
+  token: string;
 }
 //type of data returned from graphql
 export type response = {

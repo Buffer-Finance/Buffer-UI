@@ -1,7 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
   DisplayTime,
@@ -14,14 +13,15 @@ import FailureIcon from '@SVG/Elements/FailureIcon';
 import { AssetCell } from './AssetCell';
 import { useAtom } from 'jotai';
 import { cancelTableActivePage } from '@Views/TradePage/atoms';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 export const CancelledTable: React.FC<{
   trades: TradeType[];
   totalPages: number;
   platform?: boolean;
 }> = ({ trades, platform, totalPages }) => {
-  const markets = useMarketsConfig();
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
+  const { getPoolInfo } = usePoolInfo();
 
   const headNameArray = [
     'Asset',
@@ -48,24 +48,15 @@ export const CancelledTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
+    const poolInfo = getPoolInfo(trade.pool.pool);
 
-    const tradeMarket = markets?.find((pair) => {
-      const pool = pair.pools.find(
-        (pool) =>
-          pool.optionContract.toLowerCase() ===
-          trade?.target_contract.toLowerCase()
-      );
-      return !!pool;
-    });
-
-    // console.log(`CancelTable-trade: `, trade);
     switch (col) {
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
+        return <StrikePriceComponent trade={trade} configData={trade.market} />;
       case TableColumn.Asset:
         return (
           <AssetCell
-            configData={tradeMarket}
+            configData={trade.market}
             currentRow={trade}
             platform={platform}
           />
@@ -92,9 +83,9 @@ export const CancelledTable: React.FC<{
       case TableColumn.TradeSize:
         return (
           <Display
-            data={divide(trade.trade_size, 6)}
+            data={divide(trade.trade_size, poolInfo.decimals)}
             className="!justify-start"
-            unit={'USDC'}
+            unit={poolInfo.token}
           />
         );
       case TableColumn.Status:

@@ -6,8 +6,6 @@ import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
 import { priceAtom } from '@Hooks/usePrice';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
@@ -23,7 +21,6 @@ import {
   tableButtonClasses,
 } from './Common';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { useState } from 'react';
 import { ShowIcon } from '@SVG/Elements/ShowIcon';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import {
@@ -47,7 +44,6 @@ export const OngoingTradesTable: React.FC<{
   const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
 
-  const markets = useMarketsConfig();
   const headNameArray = platform
     ? [
         'Asset',
@@ -90,31 +86,17 @@ export const OngoingTradesTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
+    if (!trade) return 'Problem';
 
-    const tradeMarket = markets?.find((pair) => {
-      const pool = pair.pools.find(
-        (pool) =>
-          pool.optionContract.toLowerCase() ===
-          trade?.target_contract.toLowerCase()
-      );
-      return !!pool;
-    });
+    const poolInfo = getPoolInfo(trade.pool.pool);
+    const marketPrecision = trade.market.price_precision.toString().length - 1;
 
-    const poolContract = tradeMarket?.pools.find(
-      (pool) =>
-        pool.optionContract.toLowerCase() ===
-        trade?.target_contract.toLowerCase()
-    )?.pool;
-    const poolInfo = getPoolInfo(poolContract);
-    const marketPrecision = tradeMarket?.price_precision.toString().length - 1;
-
-    if (!trade || !tradeMarket) return 'Problem';
     let tradeExpiryTime = getExpiry(trade);
 
-    let currTradePrice = trade.strike;
-    if (trade.state == 'QUEUED') {
-      currTradePrice = cachedPrices?.[trade.queue_id];
-    }
+    // let currTradePrice = trade.strike;
+    // if (trade.state == 'QUEUED') {
+    //   currTradePrice = cachedPrices?.[trade.queue_id];
+    // }
     const lockedAmmount = getLockedAmount(trade, cachedPrices);
     const distanceObject = Variables(
       trade.open_timestamp +
@@ -148,7 +130,7 @@ export const OngoingTradesTable: React.FC<{
                     (isDisabled ? ' !text-2 !cursor-not-allowed' : '')
                   }
                   onClick={() => {
-                    !isDisabled && earlyCloseHandler(trade, tradeMarket);
+                    !isDisabled && earlyCloseHandler(trade, trade.market);
                   }}
                   isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
                 >
@@ -161,11 +143,11 @@ export const OngoingTradesTable: React.FC<{
           'Processing...'
         );
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
+        return <StrikePriceComponent trade={trade} configData={trade.market} />;
       case TableColumn.Asset:
         return (
           <AssetCell
-            configData={tradeMarket}
+            configData={trade.market}
             currentRow={trade}
             platform={platform}
           />
@@ -175,7 +157,7 @@ export const OngoingTradesTable: React.FC<{
           <Display
             className="!justify-start"
             data={round(
-              getPriceFromKlines(marketPrice, tradeMarket),
+              getPriceFromKlines(marketPrice, trade.market),
               marketPrecision
             )}
             precision={marketPrecision}
@@ -207,15 +189,15 @@ export const OngoingTradesTable: React.FC<{
       case TableColumn.TradeSize:
         return (
           <Display
-            data={divide(trade.trade_size, 6)}
+            data={divide(trade.trade_size, poolInfo.decimals)}
             className="!justify-start"
-            unit={'USDC'}
+            unit={trade.token}
           />
         );
       case TableColumn.Probability:
         const probabiliyt = getProbability(
           trade,
-          +getPriceFromKlines(marketPrice, tradeMarket)
+          +getPriceFromKlines(marketPrice, trade.market)
         );
         return (
           // queuedTradeFallBack(trade) || (
@@ -223,7 +205,7 @@ export const OngoingTradesTable: React.FC<{
             {probabiliyt ? (
               <>
                 <Pnl
-                  configData={tradeMarket}
+                  configData={trade.market}
                   trade={trade}
                   poolInfo={poolInfo}
                   lockedAmmount={lockedAmmount}
