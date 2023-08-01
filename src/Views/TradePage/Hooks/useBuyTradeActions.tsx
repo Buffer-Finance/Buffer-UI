@@ -287,155 +287,165 @@ export const useBuyTradeActions = (userInput: string) => {
         setLoading(2);
       }
 
-      const confirmationModal = {
-        content: (
-          <div className="nowrap flex">
-            Position opened for&nbsp;
-            <div className={`${customTrade.is_up ? 'green' : 'red'} mr5`}>
-              {pairName}&nbsp; {customTrade.is_up ? 'Up' : 'Down'}
-            </div>
-          </div>
-        ),
-      };
+      // const confirmationModal = {
+      //   content: (
+      //     <div className="nowrap flex">
+      //       Position opened for&nbsp;
+      //       <div className={`${customTrade.is_up ? 'green' : 'red'} mr5`}>
+      //         {pairName}&nbsp; {customTrade.is_up ? 'Up' : 'Down'}
+      //       </div>
+      //     </div>
+      //   ),
+      // };
+      try {
+        let settelmentFee = allSettlementFees[activeAsset.tv_id];
+        let currentTimestamp = Date.now();
+        let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
+        // const oneCTWallet = new ethers.Wallet(
+        //   oneCtPk!,
+        //   provider as ethers.providers.StaticJsonRpcProvider
+        // );
+        let baseArgs = [
+          address,
+          toFixed(multiply(userInput, decimals), 0),
+          expirationInMins * 60 + '',
+          option_contract,
+          toFixed(multiply(('' + price).toString(), 8), 0),
+          toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+          settings.partialFill,
+          referralData[2],
+          highestTierNFT?.tokenId || '0',
+        ];
 
-      let settelmentFee = allSettlementFees[activeAsset.tv_id];
-      let currentTimestamp = Date.now();
-      let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
-      const oneCTWallet = new ethers.Wallet(
-        oneCtPk!,
-        provider as ethers.providers.StaticJsonRpcProvider
-      );
-      let baseArgs = [
-        address,
-        toFixed(multiply(userInput, decimals), 0),
-        expirationInMins * 60 + '',
-        option_contract,
-        toFixed(multiply(('' + price).toString(), 8), 0),
-        toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
-        settings.partialFill,
-        referralData[2],
-        highestTierNFT?.tokenId || '0',
-      ];
+        const signatures = await generateBuyTradeSignature(
+          address,
+          toFixed(multiply(userInput, decimals), 0),
+          expirationInMins,
+          option_contract,
+          price,
+          toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+          settings.partialFill,
+          referralData[2],
+          highestTierNFT?.tokenId || '0',
+          currentUTCTimestamp,
+          customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
+          customTrade.is_up,
+          oneCtPk,
+          activeChain.id,
+          configData.router
+        );
+        const apiParams = {
+          signature_timestamp: currentUTCTimestamp,
+          strike: baseArgs[ArgIndex.Strike],
+          period: baseArgs[ArgIndex.Period],
+          target_contract: baseArgs[ArgIndex.TargetContract],
+          partial_signature: signatures[0],
+          full_signature: signatures[1],
+          user_address: baseArgs[ArgIndex.UserAddress],
+          trade_size: baseArgs[ArgIndex.Size],
+          allow_partial_fill: baseArgs[ArgIndex.PartialFill],
+          referral_code: baseArgs[ArgIndex.Referral],
+          trader_nft_id: baseArgs[ArgIndex.NFT],
+          slippage: baseArgs[ArgIndex.Slippage],
+          is_above: customTrade.is_up,
+          is_limit_order: customTrade.limitOrderExpiry ? true : false,
+          limit_order_duration: customTrade.limitOrderExpiry,
+          settlement_fee: settelmentFee?.settlement_fee,
+          settlement_fee_sign_expiration:
+            settelmentFee?.settlement_fee_sign_expiration,
+          settlement_fee_signature: settelmentFee?.settlement_fee_signature,
+          environment: activeChain.id,
+          token: tokenName,
+        };
+        console.log('apiParams', apiParams);
 
-      const signatures = await generateBuyTradeSignature(
-        address,
-        toFixed(multiply(userInput, decimals), 0),
-        expirationInMins,
-        option_contract,
-        price,
-        toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
-        settings.partialFill,
-        referralData[2],
-        highestTierNFT?.tokenId || '0',
-        currentUTCTimestamp,
-        customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
-        customTrade.is_up,
-        oneCtPk,
-        activeChain.id,
-        configData.router
-      );
-      const apiParams = {
-        signature_timestamp: currentUTCTimestamp,
-        strike: baseArgs[ArgIndex.Strike],
-        period: baseArgs[ArgIndex.Period],
-        target_contract: baseArgs[ArgIndex.TargetContract],
-        partial_signature: signatures[0],
-        full_signature: signatures[1],
-        user_address: baseArgs[ArgIndex.UserAddress],
-        trade_size: baseArgs[ArgIndex.Size],
-        allow_partial_fill: baseArgs[ArgIndex.PartialFill],
-        referral_code: baseArgs[ArgIndex.Referral],
-        trader_nft_id: baseArgs[ArgIndex.NFT],
-        slippage: baseArgs[ArgIndex.Slippage],
-        is_above: customTrade.is_up,
-        is_limit_order: customTrade.limitOrderExpiry ? true : false,
-        limit_order_duration: customTrade.limitOrderExpiry,
-        settlement_fee: settelmentFee?.settlement_fee,
-        settlement_fee_sign_expiration:
-          settelmentFee?.settlement_fee_sign_expiration,
-        settlement_fee_signature: settelmentFee?.settlement_fee_signature,
-        environment: activeChain.id,
-        token: tokenName,
-      };
-      console.log('apiParams', apiParams);
+        const resp: { data: TradeType } = await axios.post(
+          baseUrl + 'trade/create/',
+          null,
+          {
+            params: apiParams,
+          }
+        );
 
-      const resp: { data: TradeType } = await axios.post(
-        baseUrl + 'trade/create/',
-        null,
-        {
-          params: apiParams,
-        }
-      );
-      setLoading(null);
+        if (!customTrade.limitOrderExpiry) {
+          getLockedAmount(
+            baseArgs[ArgIndex.Strike],
+            baseArgs[ArgIndex.Size],
+            baseArgs[ArgIndex.Period],
+            baseArgs[ArgIndex.PartialFill],
+            address as string,
+            baseArgs[ArgIndex.Referral],
+            baseArgs[ArgIndex.NFT],
+            settelmentFee.settlement_fee,
+            baseArgs[ArgIndex.Slippage],
+            baseArgs[ArgIndex.TargetContract],
+            provider,
+            appConfig[activeChain.id].multicall
+          ).then((lockedAmount) => {
+            console.timeEnd('read-call');
 
-      if (!customTrade.limitOrderExpiry) {
-        getLockedAmount(
-          baseArgs[ArgIndex.Strike],
-          baseArgs[ArgIndex.Size],
-          baseArgs[ArgIndex.Period],
-          baseArgs[ArgIndex.PartialFill],
-          address as string,
-          baseArgs[ArgIndex.Referral],
-          baseArgs[ArgIndex.NFT],
-          settelmentFee.settlement_fee,
-          baseArgs[ArgIndex.Slippage],
-          baseArgs[ArgIndex.TargetContract],
-          provider,
-          appConfig[activeChain.id].multicall
-        ).then((lockedAmount) => {
-          console.timeEnd('read-call');
+            setPriceCache((t) => ({
+              ...t,
+              [activeAsset.tv_id + baseArgs[ArgIndex.Size]]:
+                lockedAmount.amount,
+            }));
+          });
+          const queuedPrice = await getCachedPrice({
+            pair: activeAsset.tv_id,
+            timestamp: resp.data.open_timestamp,
+          });
 
           setPriceCache((t) => ({
             ...t,
-            [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
+            [resp.data.queue_id]: queuedPrice,
           }));
-        });
-        const queuedPrice = await getCachedPrice({
-          pair: activeAsset.tv_id,
-          timestamp: resp.data.open_timestamp,
-        });
+        }
 
-        setPriceCache((t) => ({
-          ...t,
-          [resp.data.queue_id]: queuedPrice,
-        }));
+        const content = (
+          <div className="flex flex-col gap-y-2 text-f12 ">
+            <div className="nowrap font-[600]">
+              {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
+              {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+            </div>
+            <div className="flex items-center">
+              {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
+              <span className="!text-3">to go</span>&nbsp;
+              {customTrade.is_up ? (
+                <>
+                  <UpIcon className="text-green scale-125" /> &nbsp;Higher
+                </>
+              ) : (
+                <>
+                  <DownIcon className="text-red scale-125" />
+                  &nbsp; Lower
+                </>
+              )}
+            </div>
+            <div>
+              <span>
+                <span className="!text-3">Total amount:</span>
+                {userInput}&nbsp;USDC
+              </span>
+            </div>
+          </div>
+        );
+        toastify({
+          price,
+          type: 'success',
+          timings: 100,
+          body: null,
+          msg: content,
+        });
+      } catch (e: any) {
+        toastify({
+          id: 'trade/create error',
+          type: 'error',
+          msg: e.message,
+        });
+      } finally {
+        setLoading(null);
       }
 
-      const content = (
-        <div className="flex flex-col gap-y-2 text-f12 ">
-          <div className="nowrap font-[600]">
-            {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
-            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
-          </div>
-          <div className="flex items-center">
-            {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
-            <span className="!text-3">to go</span>&nbsp;
-            {customTrade.is_up ? (
-              <>
-                <UpIcon className="text-green scale-125" /> &nbsp;Higher
-              </>
-            ) : (
-              <>
-                <DownIcon className="text-red scale-125" />
-                &nbsp; Lower
-              </>
-            )}
-          </div>
-          <div>
-            <span>
-              <span className="!text-3">Total amount:</span>
-              {userInput}&nbsp;USDC
-            </span>
-          </div>
-        </div>
-      );
-      toastify({
-        price,
-        type: 'success',
-        timings: 100,
-        body: null,
-        msg: content,
-      });
       // } catch (e) {
       //   con
       // }
