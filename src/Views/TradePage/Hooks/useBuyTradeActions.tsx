@@ -364,77 +364,72 @@ export const useBuyTradeActions = (userInput: string) => {
       );
       setLoading(null);
 
-      if (!customTrade.limitOrderExpiry) {
-        getLockedAmount(
-          baseArgs[ArgIndex.Strike],
-          baseArgs[ArgIndex.Size],
-          baseArgs[ArgIndex.Period],
-          baseArgs[ArgIndex.PartialFill],
-          address as string,
-          baseArgs[ArgIndex.Referral],
-          baseArgs[ArgIndex.NFT],
-          settelmentFee.settlement_fee,
-          baseArgs[ArgIndex.Slippage],
-          baseArgs[ArgIndex.TargetContract],
-          provider,
-          appConfig[activeChain.id].multicall
-        ).then((lockedAmount) => {
-          console.timeEnd('read-call');
+      // if (!customTrade.limitOrderExpiry) {
+      //   getLockedAmount(
+      //     baseArgs[ArgIndex.Strike],
+      //     baseArgs[ArgIndex.Size],
+      //     baseArgs[ArgIndex.Period],
+      //     baseArgs[ArgIndex.PartialFill],
+      //     address as string,
+      //     baseArgs[ArgIndex.Referral],
+      //     baseArgs[ArgIndex.NFT],
+      //     settelmentFee.settlement_fee,
+      //     baseArgs[ArgIndex.Slippage],
+      //     baseArgs[ArgIndex.TargetContract],
+      //     provider,
+      //     appConfig[activeChain.id].multicall
+      //   ).then((lockedAmount) => {
+      //     setPriceCache((t) => ({
+      //       ...t,
+      //       [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
+      //     }));
+      //   });
+      //   const queuedPrice = await getCachedPrice({
+      //     pair: activeAsset.tv_id,
+      //     timestamp: resp.data.open_timestamp,
+      //   });
 
-          setPriceCache((t) => ({
-            ...t,
-            [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
-          }));
-        });
-        const queuedPrice = await getCachedPrice({
-          pair: activeAsset.tv_id,
-          timestamp: resp.data.open_timestamp,
-        });
-
-        setPriceCache((t) => ({
-          ...t,
-          [resp.data.queue_id]: queuedPrice,
-        }));
-      }
-
-      const content = (
-        <div className="flex flex-col gap-y-2 text-f12 ">
-          <div className="nowrap font-[600]">
-            {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
-            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
-          </div>
-          <div className="flex items-center">
-            {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
-            <span className="!text-3">to go</span>&nbsp;
-            {customTrade.is_up ? (
-              <>
-                <UpIcon className="text-green scale-125" /> &nbsp;Higher
-              </>
-            ) : (
-              <>
-                <DownIcon className="text-red scale-125" />
-                &nbsp; Lower
-              </>
-            )}
-          </div>
-          <div>
-            <span>
-              <span className="!text-3">Total amount:</span>
-              {userInput}&nbsp;USDC
-            </span>
-          </div>
-        </div>
-      );
-      toastify({
-        price,
-        type: 'success',
-        timings: 100,
-        body: null,
-        msg: content,
-      });
-      // } catch (e) {
-      //   con
+      //   setPriceCache((t) => ({
+      //     ...t,
+      //     [resp.data.queue_id]: queuedPrice,
+      //   }));
       // }
+
+      // const content = (
+      //   <div className="flex flex-col gap-y-2 text-f12 ">
+      //     <div className="nowrap font-[600]">
+      //       {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
+      //       {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+      //     </div>
+      //     <div className="flex items-center">
+      //       {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
+      //       <span className="!text-3">to go</span>&nbsp;
+      //       {customTrade.is_up ? (
+      //         <>
+      //           <UpIcon className="text-green scale-125" /> &nbsp;Higher
+      //         </>
+      //       ) : (
+      //         <>
+      //           <DownIcon className="text-red scale-125" />
+      //           &nbsp; Lower
+      //         </>
+      //       )}
+      //     </div>
+      //     <div>
+      //       <span>
+      //         <span className="!text-3">Total amount:</span>
+      //         {userInput}&nbsp;USDC
+      //       </span>
+      //     </div>
+      //   </div>
+      // );
+      // toastify({
+      //   price,
+      //   type: 'success',
+      //   timings: 100,
+      //   body: null,
+      //   msg: content,
+      // });
     }
   };
 

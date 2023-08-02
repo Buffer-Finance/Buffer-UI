@@ -6,11 +6,16 @@ export const getSingatureCached = async (
   oneCTWallet: PrivateKeyAccount | null
 ) => {
   if (!oneCTWallet) return null;
+  console.log(
+    `address2SingatureCache[oneCTWallet.address]: `,
+    address2SingatureCache[oneCTWallet.address]
+  );
   if (!address2SingatureCache[oneCTWallet.address]) {
     address2SingatureCache[oneCTWallet.address] = await oneCTWallet.signMessage(
-      import.meta.env.VITE_SIGN_MESSAGE
+      {
+        message: import.meta.env.VITE_SIGN_MESSAGE,
+      }
     );
   }
-  return (address2SingatureCache[oneCTWallet.address] =
-    await oneCTWallet.signMessage(import.meta.env.VITE_SIGN_MESSAGE));
+  return address2SingatureCache[oneCTWallet.address];
 };

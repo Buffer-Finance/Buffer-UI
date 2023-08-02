@@ -17,6 +17,7 @@ const useOngoingTrades = () => {
   // const { oneCTWallet } = useOneCTWallet();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
+
   const { address } = useAccount();
   const markets = useMarketsConfig();
   const { data, error } = useSWR<TradeType[][]>(
@@ -28,8 +29,11 @@ const useOngoingTrades = () => {
       oneCTWallet?.address,
     {
       fetcher: async () => {
+        console.log(`oneCTWallet: `, oneCTWallet);
+        console.log(`address: `, address);
         if (!oneCTWallet || !address) return [[], []] as TradeType[][];
         const signature = await getSingatureCached(oneCTWallet);
+        console.log(`signature: `, signature);
 
         const res = await axios.get(`${baseUrl}trades/user/active/`, {
           params: {

@@ -2,7 +2,7 @@ import { toFixed } from '@Utils/NumString';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
-import { PrivateKeyAccount, privateKeyToAccount } from 'viem/accounts';
+import { privateKeyToAccount } from 'viem/accounts';
 export const getWalletFromOneCtPk = (oneCtPk: string) => {
   return privateKeyToAccount(`0x${oneCtPk}`);
 };
@@ -19,7 +19,7 @@ const generateTradeSignature = async (
   ts: number,
   settlementFee: string | number,
   isUp: boolean,
-  wallet: PrivateKeyAccount
+  wallet: ethers.Wallet
 ): Promise<string[]> => {
   const baseArgTypes = [
     'address',
@@ -61,7 +61,7 @@ const generateTradeSignature = async (
     return ethers.utils.solidityKeccak256(args[idx].types, args[idx].values);
   });
   return await Promise.all(
-    hashedMessage.map((s) => wallet?.signMessage({ message: s }))
+    hashedMessage.map((s) => wallet?.signMessage(arrayify(s)))
   );
 };
 
@@ -121,7 +121,7 @@ const generateBuyTradeSignature = async (
     name: 'Validator',
     version: '1',
     chainId: activeChainId,
-    verifyingContract: routerContract as `0x${string}`,
+    verifyingContract: routerContract,
   };
   const key = isLimit
     ? { partial: 'UserTradeSignature', full: 'MarketDirectionSignature' }
