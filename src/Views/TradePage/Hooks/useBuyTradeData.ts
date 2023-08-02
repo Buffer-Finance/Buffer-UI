@@ -24,6 +24,10 @@ export const useBuyTradeData = (deb?: string) => {
     }
     const balance =
       readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
+    console.log(
+      `readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]: `,
+      readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]
+    );
     const allowance =
       readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
     const user2signer = {

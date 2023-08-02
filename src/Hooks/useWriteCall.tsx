@@ -1,11 +1,6 @@
 import { ReactNode } from 'react';
 import { CallOverrides } from 'ethers';
-import {
-  useBalance,
-  useFeeData,
-  usePublicClient,
-  useWalletClient,
-} from 'wagmi';
+import { useAccount, useBalance, useFeeData } from 'wagmi';
 import { getContract } from '@wagmi/core';
 import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { useGlobal } from '@Contexts/Global';
@@ -16,6 +11,8 @@ import { DEFAULT_GAS_LIMIT } from 'src/Config';
 import { getError } from 'src/Utils/Contract/getError';
 import { convertBNtoString } from '@Utils/useReadCall';
 import { inIframe } from '@Utils/isInIframe';
+import { usePublicClient, useWalletClient, useContractWrite } from 'wagmi';
+import { SimulateContractParameters } from 'viem';
 
 interface ICustomToast {
   body?: JSX.Element;
@@ -45,174 +42,89 @@ export interface IConfirmationModal {
 export function useWriteCall(contractAddress: string, abi: any[]) {
   const { dispatch } = useGlobal();
   const toastify = useToast();
-  const provider = usePublicClient();
-  const your_private_key_string =
-    '2bb545e93a2b27557e40b54f39def6a190fa3ce56b34bcfc80d8709cf60fe0a2';
-  const { address: account, viewOnlyMode } = useUserAccount();
+  const { simulateContract } = usePublicClient();
+  const { data: walletClient } = useWalletClient();
+  const { address } = useAccount();
   const { activeChain } = useActiveChain();
+  const { data, error, isLoading, status, writeAsync } = useContractWrite({});
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
-  const { data: signer, isError, isLoading } = useWalletClient();
-  const contract = getContract({
-    address: contractAddress,
-    abi: abi,
-    signerOrProvider: signer,
-  });
-  const { data } = useFeeData();
-  const { data: balance } = useBalance({ address: account });
-  let gasPrice = data?.formatted?.gasPrice || (1e8).toString();
-  // gasPrice = multiply(gasPrice, '2');
 
-  const writeCall = async (
+  const write = async (
     callBack: (a?: any) => void,
     methodName: string,
     methodArgs: any[] = [],
-    overrides: CallOverrides | null = null,
+    overrides: { value?: string } = {},
     customToast: ICustomToast | null = null,
     confirmationModal: IConfirmationModal | null = null
   ) => {
-    if (viewOnlyMode) {
-      toastify({
-        id: 'view-only',
-        msg: 'You are in view only mode! Please exit by removing user-address from URL.',
-        type: 'error',
-      });
-      return callBack();
-    }
-
-    if (!contractAddress || !abi) {
-      callBack();
-      return toastify({
-        msg: 'Please retry after refreshing the page.',
-        type: 'error',
-      });
-    }
-    if (!account) {
-      return toastify({
-        msg: 'No account detected, please connect your web3 wallet.',
-        type: 'error',
-        id: '009',
-      });
-    }
-
-    const contractArgs = {
-      methodName,
-      methodArgs,
-      overrides,
-      account: account || '',
-      pathname: window && window.location && window.location.pathname,
-    };
     dispatch({ type: 'SET_TXN_LOADING', payload: 1 });
+    toastify({
+      id: contractAddress,
+      msg: 'Transaction confirmation in progress...',
+      type: 'info',
+      inf: 1,
+    });
+
+    let transformedArgs: SimulateContractParameters = {
+      abi,
+      account: address,
+      address,
+      args: methodArgs,
+      contractAddress,
+      functionName: methodName,
+    };
+    if (overrides?.value) {
+      transformedArgs['value'] = overrides.value;
+    }
+
+    if (!walletClient)
+      return console.warn(
+        'walletClient is undefined in useWalletService...',
+        walletClient
+      );
 
     try {
-      const getGasLimit = async () => {
-        try {
-          let res = await contract?.estimateGas[methodName](...methodArgs, {
-            ...overrides,
-          });
-          console.log('res', res);
-          if (res) {
-            res = { res };
-
-            convertBNtoString(res);
-            return res?.res;
-          } else return DEFAULT_GAS_LIMIT;
-        } catch (e) {
-          console.log('egetGasLimit', e);
-          return DEFAULT_GAS_LIMIT;
-        }
-      };
-
-      const gasLimit = await getGasLimit();
-
-      const defaultValues = {
-        ...overrides,
-        from: account,
-        gasLimit,
-      };
-
+      const { request, result } = await simulateContract(transformedArgs);
+      const { hash } = await writeAsync(request);
       toastify({
         id: contractAddress,
-        msg: 'Transaction confirmation in progress...',
-        type: 'info',
-        inf: 1,
+        msg: customToast ? customToast.content : 'Transaction successful!',
+        type: 'success',
+        hash: `${blockExplorer}/tx/${hash}`,
+        body: customToast ? customToast.body : null,
+        confirmationModal: confirmationModal,
+        timings: 100,
       });
-      const totalFee = divide((+gasPrice * gasLimit).toString(), 18);
-
-      console.log(`[blockchain]defaultValues: `, defaultValues);
-      console.log(`[blockchain]contract: `, contractAddress);
-      console.log(`[blockchain]methodArgs: `, methodArgs);
-      console.log(`[blockchain]methodName: `, methodName);
-      console.log(`[blockchain]contract: `, contract?.callStatic);
-      if (!inIframe() && totalFee && balance?.formatted) {
-        console.log(`[blockchain]totalFee: `, totalFee, balance.formatted);
-        if (lt(balance.formatted, totalFee)) {
-          // dispatch({ type: "SET_TXN_LOADING", payload: 0 });
-          throw new Error(
-            `Not enough ${
-              // activeChain?.nativeCurrency?.symbol ||
-
-              activeChain.nativeCurrency.symbol
-            } for Gas Fee!`
-          );
-        }
-      }
-
-      const call = await contract?.callStatic[methodName](...methodArgs, {
-        ...defaultValues,
-      });
-      console.log(`[blockchain]call: `, call);
-      const txn = await contract?.functions[methodName](...methodArgs, {
-        ...defaultValues,
-      });
-
-      dispatch({ type: 'SET_TXN_LOADING', payload: 3 });
-      if (txn)
-        toastify({
-          id: contractAddress,
-          msg: 'Transaction is in process',
-          type: 'info',
-          inf: 1,
-        });
-
-      const res = await txn?.wait();
-      if (res.status) {
-        toastify({
-          id: contractAddress,
-          msg: customToast ? customToast.content : 'Transaction successful!',
-          type: 'success',
-          hash: `${blockExplorer}/tx/${res.transactionHash}`,
-          body: customToast ? customToast.body : null,
-          confirmationModal: confirmationModal,
-          timings: 100,
-        });
-        callBack({ payload: { res } });
-        dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-      } else {
-        toastify({ msg: 'Transaction Failed', type: 'error' });
-        dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-        callBack();
-      }
-    } catch (error) {
-      console.log(`[blockchain]error: `, error);
-      const errReason = error?.reason;
-      console.log(`[blockchain]parsedErr: `, error.reason);
+      callBack({ res: data });
       dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-      let err = errReason || getError(error, contractArgs);
-      console.log('[blockchain]err : ', err);
+
+      return hash;
+    } catch (ex) {
+      dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
+
+      callBack();
       toastify({
         id: contractAddress,
+        duration: 200000,
         msg: (
           <span>
             Oops! There is some error. Can you please try again?
             <br />
-            <span className="!text-3">Error: {err}</span>
+            <span className="!text-3">Error: {ex.message}</span>
           </span>
         ),
         type: 'error',
       });
-      callBack();
+      // console.warn(ex);
     }
   };
 
-  return { writeCall };
+  return { writeCall: write };
 }
+
+/*
+
+
+ write({ abi: usdcABI, account: address, address: usdc_address, functionName: 'claim', value: parseEther('0.0001') } as SimulateContractParameters)
+
+*/

@@ -19,13 +19,14 @@ export const viemMulticall = async (
   }));
   const results = await client.multicall({ contracts: convertedCalls });
   let resultMap = {};
+  console.log(`results: `, results);
   results.forEach((r, i) => {
     const copy = getDeepCopy(r);
     convertBNtoString(copy);
     console.log(`copy: `, copy);
 
     const id = calls[i]?.id || getReadId(calls[i]);
-    resultMap[id] = copy.result;
+    resultMap[id] = [copy.result];
     // }
   });
 
