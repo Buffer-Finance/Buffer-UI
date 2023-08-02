@@ -17,7 +17,7 @@ import axios from 'axios';
 import { getAddress, zeroAddress } from 'viem';
 import { EIP712Domain } from './useOneCTWallet';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { signTypedData } from 'viem/accounts';
+import { signTypedData } from '@wagmi/core';
 
 const features = [
   {
@@ -334,7 +334,8 @@ const OneCTModal: React.FC<any> = ({}) => {
       const signature = await signTypedData({
         types,
         domain,
-        value: {
+        primaryType: 'RegisterAccount',
+        message: {
           oneCT: wallet.address,
           user: address,
           nonce: nonce,

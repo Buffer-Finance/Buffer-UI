@@ -207,7 +207,7 @@ const generateApprovalSignature = async (
       chainId: activeChainId,
       verifyingContract: tokenAddress,
     },
-    value: approveMessage,
+    message: approveMessage,
   } as const;
   console.log(`approveSignatureParams: `, approveSignatureParams);
   const res = await signMethod(approveSignatureParams);

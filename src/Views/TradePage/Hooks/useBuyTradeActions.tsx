@@ -45,7 +45,7 @@ import { getUserError } from '../utils/getUserError';
 import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { getSingatureCached } from '../cache';
 import { viemMulticall } from '@Utils/multicall';
-import { signTypedData } from 'viem/accounts';
+import { signTypedData } from '@wagmi/core';
 enum ArgIndex {
   Strike = 4,
   Period = 2,

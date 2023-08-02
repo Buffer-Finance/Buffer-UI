@@ -188,10 +188,11 @@ const useOneCTWallet = () => {
       };
 
       const signature = await signTypedData({
-        value: {
+        message: {
           user: address,
           nonce: res?.nonce,
         },
+        primaryType: 'DeregisterAccount',
         types,
         domain,
       });
