@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { ArrowDropDownRounded } from '@mui/icons-material';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import * as chain from '@wagmi/core/chains';
+import * as chain from 'wagmi/chains';
 import { BlueBtn } from '../V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { SVGProps } from 'react';
