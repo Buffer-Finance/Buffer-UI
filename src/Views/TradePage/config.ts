@@ -3,7 +3,7 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.30-marketoi/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api',
     },
     router: '0x8Fd65D9c94c1cA9ffE48D412Fc2637Ae0176BB03',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
