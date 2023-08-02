@@ -67,9 +67,9 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     let transformedArgs: SimulateContractParameters = {
       abi,
       account: address,
-      address,
+      address: contractAddress,
+
       args: methodArgs,
-      contractAddress,
       functionName: methodName,
     };
     if (overrides?.value) {
@@ -84,6 +84,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
 
     try {
       const { request, result } = await simulateContract(transformedArgs);
+      console.log(`useWriteCall-request: `, request);
       const { hash } = await writeAsync(request);
       toastify({
         id: contractAddress,
