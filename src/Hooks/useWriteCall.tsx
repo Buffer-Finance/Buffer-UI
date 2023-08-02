@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { CallOverrides } from 'ethers';
 import { useAccount, useBalance, useFeeData } from 'wagmi';
-import { getContract } from '@wagmi/core';
 import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';

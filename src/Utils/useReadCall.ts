@@ -11,7 +11,6 @@ import {
 import getDeepCopy from './getDeepCopy';
 import { useMemo } from 'react';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { getContract } from '@wagmi/core';
 import { viemMulticall } from './multicall';
 import { createPublicClient, http } from 'viem';
 

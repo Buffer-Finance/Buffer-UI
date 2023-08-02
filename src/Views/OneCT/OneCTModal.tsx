@@ -16,8 +16,8 @@ import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignat
 import axios from 'axios';
 import { getAddress, zeroAddress } from 'viem';
 import { EIP712Domain } from './useOneCTWallet';
-import { signTypedData } from '@wagmi/core';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { signTypedData } from 'viem/accounts';
 
 const features = [
   {

@@ -6,7 +6,6 @@ import ERC20ABI from 'src/ABIs/Token.json';
 import { toFixed } from '@Utils/NumString';
 import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import 'viem/window';
-import { signTypedData } from '@wagmi/core';
 
 import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useWriteCall } from '@Hooks/useWriteCall';
@@ -46,6 +45,7 @@ import { getUserError } from '../utils/getUserError';
 import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { getSingatureCached } from '../cache';
 import { viemMulticall } from '@Utils/multicall';
+import { signTypedData } from 'viem/accounts';
 enum ArgIndex {
   Strike = 4,
   Period = 2,

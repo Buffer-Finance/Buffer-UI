@@ -13,12 +13,11 @@ import {
   usePublicClient,
   useWalletClient,
 } from 'wagmi';
-import { signTypedData } from '@wagmi/core';
 import { useToast } from '@Contexts/Toast';
 import { WaitToast } from '@Views/TradePage/utils';
 import { getChains } from 'src/Config/wagmiClient';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { privateKeyToAccount } from 'viem/accounts';
+import { privateKeyToAccount, signTypedData } from 'viem/accounts';
 
 /*
  * Nonce is zero initially.

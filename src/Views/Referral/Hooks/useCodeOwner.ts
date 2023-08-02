@@ -5,7 +5,7 @@ import { usePublicClient } from 'wagmi';
 import { contractRead } from '@Utils/useReadCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { getContract } from '@wagmi/core';
+import { getContract } from 'viem';
 
 export function useCodeOwner(code: string) {
   const [owner, setOwner] = useState(null);
