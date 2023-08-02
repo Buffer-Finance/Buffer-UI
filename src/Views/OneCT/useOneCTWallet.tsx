@@ -17,7 +17,8 @@ import { useToast } from '@Contexts/Toast';
 import { WaitToast } from '@Views/TradePage/utils';
 import { getChains } from 'src/Config/wagmiClient';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { privateKeyToAccount, signTypedData } from 'viem/accounts';
+import { signTypedData } from '@wagmi/core';
+import { privateKeyToAccount } from 'viem/accounts';
 
 /*
  * Nonce is zero initially.
@@ -125,13 +126,14 @@ const useOneCTWallet = () => {
       });
 
     try {
-      const nonce = res?.nonce;
+      const nonce = res?.nonce.toString();
       if (nonce === undefined) return toastify(WaitToast());
       setCreateLoading(true);
       const signature = await signTypedData({
         types,
         domain,
-        value: {
+        primaryType: 'Registration',
+        message: {
           content: 'I want to create a trading account with Buffer Finance',
           nonce,
         },
