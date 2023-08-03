@@ -81,6 +81,7 @@ export type responseObj = {
     earlyCloseThreshold: string;
     isEarlyCloseEnabled: boolean;
     marketOIaddress: string;
+    poolOIaddress: string;
   };
   address: string;
   poolContract: string;

@@ -25,6 +25,7 @@ const group2marketAddresesMapping = {
   marketoi: 'marketOiContract',
   options_config: 'configContract',
   options: 'optionContract',
+  pooloi: 'poolOIContract',
 };
 
 const marketDependent = Object.keys(group2marketAddresesMapping);

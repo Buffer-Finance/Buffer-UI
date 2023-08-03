@@ -23,6 +23,7 @@ export const useMarketsRequest = () => {
                     earlyCloseThreshold
                     isEarlyCloseEnabled
                     marketOIaddress
+                    poolOIaddress
                   }
                   address
                   poolContract
@@ -32,6 +33,7 @@ export const useMarketsRequest = () => {
                 }
             }`,
     });
+    console.log(`response.data?.data: `, response.data?.data);
     // console.log(`thegraphresponse.data: `, response.data);
     return response.data?.data as response;
   }

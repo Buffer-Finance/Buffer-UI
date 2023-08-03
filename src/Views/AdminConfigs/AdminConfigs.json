@@ -74,7 +74,8 @@
   },
   "pooloi": {
     "setMaxPoolOI": {
-      "decimals": 2
+      "getter": "_maxPoolOI",
+      "decimal": "token"
     }
   },
   "marketoi": {
