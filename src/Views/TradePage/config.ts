@@ -21,16 +21,16 @@ export const appConfig = {
         token: 'USDC',
         is_pol: false,
       },
-      '0x70E29D7f07BbB83253dE57F73543f5cb8F3A267A': {
-        tokenAddress: '0xd919075cA1645D93d8C94AddC65b70626AC23d0A',
-        faucet: '0xfBC70D52FC81A561D8eAeB6c3C5b3deab0A0c6D2',
+      '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
+        tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
+        faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
         decimals: 18,
         token: 'BFR',
         is_pol: false,
       },
-      '0x54398017e13d3C6b2D3ad56f7bA7304Abf16f080': {
-        tokenAddress: '0x74409f389Bb05B6966761D86A96F109b309a3CeF',
-        faucet: '0x60e11702FAFBDd0d755d680B11fC28392F9796A5',
+      '0x70E29D7f07BbB83253dE57F73543f5cb8F3A267A': {
+        tokenAddress: '0xd919075cA1645D93d8C94AddC65b70626AC23d0A',
+        faucet: '0xfBC70D52FC81A561D8eAeB6c3C5b3deab0A0c6D2',
         decimals: 18,
         token: 'ARB',
         is_pol: false,
