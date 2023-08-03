@@ -2,22 +2,27 @@ import LockIcon from '@SVG/Elements/LockIcon';
 import TableAssetCell from '@Views/Common/BufferTable/TableAssetCell';
 import { PairTokenImage } from '@Views/Common/PairTokenImage';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { TradeType, marketType } from '@Views/TradePage/type';
+import { TradeType } from '@Views/TradePage/type';
 import { UpDownChip } from './UpDownChip';
 
 export const AssetCell: React.FC<{
   currentRow: TradeType;
   split?: boolean;
-  configData: marketType | undefined;
   platform?: boolean;
-}> = ({ currentRow, split, configData, platform }) => {
+}> = ({ currentRow, split, platform }) => {
   const isUp = currentRow.is_above;
-  if (!configData) return <></>;
+  const token0 = currentRow.market.token0;
+  const token1 = currentRow.market.token1;
   return (
     <TableAssetCell
       img={
         <div className="w-[20px] h-[20px] mr-[6px]">
-          <PairTokenImage pair={configData} />
+          <PairTokenImage
+            pair={{
+              token0,
+              token1,
+            }}
+          />
         </div>
       }
       head={
@@ -30,7 +35,7 @@ export const AssetCell: React.FC<{
         >
           <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
             <span className={`weight-400 text-f15 `}>
-              {configData.token0 + '-' + configData.token1}{' '}
+              {token0 + '-' + token1}{' '}
             </span>
             {platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}
           </div>

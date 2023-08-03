@@ -141,24 +141,16 @@ export const TableHeader: React.FC<ITableHeader> = ({
 //  export const earlyCloseStatus = (data:TradeType)=>{
 //    return data.
 //  }
-export const StrikePriceComponent = ({
-  trade,
-  configData,
-}: {
-  trade: TradeType;
-  configData: marketType;
-}) => {
+export const StrikePriceComponent = ({ trade }: { trade: TradeType }) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
 
   const { isPriceArrived, strikePrice } = getStrike(trade, cachedPrices);
-  if (!configData) return <></>;
-  const decimals = 2;
   return (
     <>
       <Display
         data={divide(strikePrice, 8)}
         // unit={configData.token1}
-        precision={decimals}
+        precision={trade.market.price_precision.toString().length - 1}
         className={`justify-self-start content-start  w-max`}
       />
       {trade.state === 'QUEUED' && !isPriceArrived ? (

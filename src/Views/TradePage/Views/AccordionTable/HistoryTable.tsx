@@ -104,11 +104,10 @@ const HistoryTable: React.FC<{
     const minClosingTime = getExpiry(trade);
     switch (col) {
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} configData={trade.market} />;
+        return <StrikePriceComponent trade={trade} />;
       case TableColumn.Asset:
         return (
           <AssetCell
-            configData={trade.market}
             currentRow={trade}
             // platform={platform}
           />
@@ -116,7 +115,11 @@ const HistoryTable: React.FC<{
       case TableColumn.ExpiryPrice:
         if (!expiryPrice) return 'Fetching...';
         return (
-          <Display className="!justify-start" data={divide(expiryPrice, 8)} />
+          <Display
+            className="!justify-start"
+            data={divide(expiryPrice, 8)}
+            precision={trade.market.price_precision.toString().length - 1}
+          />
         );
       case TableColumn.OpenTime:
         return (

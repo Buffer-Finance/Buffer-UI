@@ -1,11 +1,9 @@
-import { marketType } from '@Views/TradePage/type';
-
 export const PairTokenImage = ({
   pair,
   image1,
   image2,
 }: {
-  pair: marketType;
+  pair: { token0: string; token1: string };
   image1?: string;
   image2?: string;
 }) => {
