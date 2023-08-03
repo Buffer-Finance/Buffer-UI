@@ -3,7 +3,7 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.37-multipool-update-contracts/api
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.37-multipool-update-contracts/api'
     },
     router: '0xfDdE951a9d75a80b8965f9D8639aEC5ee9Cd20cD',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
