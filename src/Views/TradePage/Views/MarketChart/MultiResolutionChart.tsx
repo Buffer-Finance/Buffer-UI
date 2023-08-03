@@ -573,7 +573,7 @@ export const MultiResolutionChart = ({
         // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
 
-        lastSyncedKline.current[key] = prevBar;
+        lastSyncedKline.current[newpythIdKey] = prevBar;
       }
     }
   };
