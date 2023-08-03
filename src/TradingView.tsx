@@ -551,7 +551,7 @@ export const TradingChart = ({ market: marke }: { market: Markets }) => {
           aggregatedBar.close,
           currBar.price
         );
-        lastSyncedKline.current[key] = prevBar;
+        lastSyncedKline.current[newpythIdKey] = prevBar;
       }
     }
   };
