@@ -4,8 +4,7 @@
       "getter": "boosterContract"
     },
     "setCreationWindowContract": {
-      "getter": "creationWindowContract",
-      "decimal": 8
+      "getter": "creationWindowContract"
     },
     "setMinFee": {
       "getter": "minFee",
