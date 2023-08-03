@@ -94,26 +94,26 @@ function createMarketObject(
     pair: chartMarketData.pair,
     pool: poolName,
     currentPrice,
-
-    '24h_volume':
-      Number(fromWei(oneDayVolume?.[marketAddress], poolInfo.decimals)) || '0',
-    min_duration: secondsToHHMM(Number(market.configContract.minPeriod)),
-    max_duration: secondsToHHMM(Number(market.configContract.maxPeriod)),
-    poolUnit: poolInfo.token,
     current_open_interest: Number(
       fromWei(currentOIs[marketAddress], poolInfo.decimals) || '0'
     ),
+    '24h_volume':
+      Number(fromWei(oneDayVolume?.[marketAddress], poolInfo.decimals)) || '0',
     max_open_interest: Number(
       fromWei(maxOIs[marketAddress], poolInfo.decimals) || '0'
     ),
+    min_duration: secondsToHHMM(Number(market.configContract.minPeriod)),
     max_trade_size: Number(
       fromWei(maxTradeSizes[marketAddress], poolInfo.decimals) || '0'
     ),
-    is_open: isForex ? isInCreationWindow && isMarketOpen : isMarketOpen,
     payoutForUp:
       settlementFees[marketAddress] ||
       baseSettlementFees?.[market.asset]?.settlement_fee ||
       '0',
+    is_open: isForex ? isInCreationWindow && isMarketOpen : isMarketOpen,
+
+    max_duration: secondsToHHMM(Number(market.configContract.maxPeriod)),
+    poolUnit: poolInfo.token,
     payoutForDown:
       settlementFees[marketAddress] ||
       baseSettlementFees?.[market.asset]?.settlement_fee ||
