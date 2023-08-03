@@ -3,27 +3,27 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.34-multipool-update-contracts/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.37-multipool-update-contracts/api'
     },
-    router: '0x697436699F3caDeF294560571362D708f45e3321',
+    router: '0xfDdE951a9d75a80b8965f9D8639aEC5ee9Cd20cD',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0x9A6405DA3c5120Cb643f85816da8ae938D27a252',
-    pooloi: '0x9b308eabe572D5c9132B035476E2ecD5802319ac',
-    marketoi: '0x2B4F035967e0A8e1463D9D829E93AeD376e83A54',
+    signer_manager: '0xe3B182017Ed77b90e8bE452E520AA445C0F30825',
+    pooloi: '0x7226318D2584925945ad1904378C69b56B32d7C7',
+    marketoi: '0x0Fa722eFB09CBA2cD383C381c879557111c80CEf',
     booster: '0x58E66d360d65Da8d7907768f826D86F411d0f849',
     poolsInfo: {
-      '0x4C5317b35342BF2608B2C9F550e91741F23D129f': {
-        tokenAddress: '0x50E345c95a3c1E5085AE886FF4AF05Efa2403c90',
-        faucet: '0x8097Fecbb9081191A81DE5295d1D68344EA783fF',
+      '0xB04ABea1152bFCdbb35Edcb3a5c9b1929Cd789d4': {
+        tokenAddress: '0x99af0708E814Ac3Dca4D94a2bDD6E290742843E4',
+        faucet: '0xe373f6aa43563b630eDC13f2B6cb660F7433f225',
         decimals: 6,
         token: 'USDC',
         is_pol: false,
       },
-      '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
-        tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
-        faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
+      '0x70E29D7f07BbB83253dE57F73543f5cb8F3A267A': {
+        tokenAddress: '0xd919075cA1645D93d8C94AddC65b70626AC23d0A',
+        faucet: '0xfBC70D52FC81A561D8eAeB6c3C5b3deab0A0c6D2',
         decimals: 18,
         token: 'BFR',
         is_pol: false,
