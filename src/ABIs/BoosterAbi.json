@@ -239,6 +239,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getNftTierDiscounts",
+    "outputs": [{ "internalType": "uint8[4]", "name": "", "type": "uint8[4]" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "bytes32", "name": "role", "type": "bytes32" }
     ],

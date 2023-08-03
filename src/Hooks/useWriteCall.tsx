@@ -56,6 +56,9 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     customToast: ICustomToast | null = null,
     confirmationModal: IConfirmationModal | null = null
   ) => {
+    if (!address) {
+      return toastify({ type: 'error', msg: 'Please connect your wallet!' });
+    }
     dispatch({ type: 'SET_TXN_LOADING', payload: 1 });
     toastify({
       id: contractAddress,

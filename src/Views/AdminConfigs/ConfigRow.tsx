@@ -22,6 +22,7 @@ const ConfigRow: React.FC<any> = ({
   const [showIp, setShowIp] = useState(false);
   const { writeCall } = useWriteCall(config.contract, group2abi[config.group]);
   const text = config.getter?.name;
+  console.log(`ConfigRow-config: `, config);
   const result = text.replace(/([A-Z])/g, ' $1');
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1) + ' :';
   const isChanged = data?.[config.contract + config.getter?.name]?.[0] != value;
@@ -45,12 +46,19 @@ const ConfigRow: React.FC<any> = ({
     return str.toLowerCase().includes(hideString.toLowerCase());
   };
   const renderValue = () => {
+    // single value but in wei
     if (config.decimal) {
       return divide(actualValue, config.decimal);
     }
+    // bool
     if (config.getter.op?.[0].type == 'bool') {
       return actualValue ? 'true' : 'false';
     }
+    // array
+    if (config.getter.op?.[0].type.includes(['['])) {
+      return actualValue.join(',');
+    }
+    // non decimal value
     return actualValue;
   };
   useEffect(() => {
@@ -78,7 +86,14 @@ const ConfigRow: React.FC<any> = ({
         className="flex gap-x-4"
         onSubmit={(e) => {
           e.preventDefault();
-          changeConfig([value]);
+          // single value
+          let val = [value];
+
+          // array
+          if (value.includes(',')) {
+            val = [value.split(',')];
+          }
+          changeConfig(val);
         }}
       >
         <div className=" whitespace-nowrap">

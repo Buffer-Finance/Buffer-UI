@@ -60,7 +60,18 @@
       "getter": "isPaused"
     }
   },
-
+  "booster": {
+    "setConfigure": {
+      "getter": "getNftTierDiscounts"
+    },
+    "setPrice": {
+      "getter": "couponPrice"
+    },
+    "setBoostPercentage": {
+      "getter": "boostPercentage",
+      "decimal": 2
+    }
+  },
   "pooloi": {
     "setMaxPoolOI": {
       "getter": "_maxPoolOI",
