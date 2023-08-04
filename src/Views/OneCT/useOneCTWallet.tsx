@@ -244,6 +244,7 @@ const useOneCTWallet = () => {
     deleteOneCTPk,
     disableOneCt,
     nonce: res?.nonce,
+    state: res?.state,
   };
 };
 

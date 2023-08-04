@@ -50,7 +50,7 @@ export const AccountDropdown: React.FC = () => {
   }
 
   const { address } = useUserAccount();
-  const { disabelLoading, disableOneCt, registeredOneCT, nonce } =
+  const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
     useOneCTWallet();
 
   const provider = useProvider({ chainId: activeChain.id });
@@ -68,6 +68,7 @@ export const AccountDropdown: React.FC = () => {
         className="!ml-[13px] !text-f12 !bg-[#2C2C41] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
         onClick={disableOneCt}
         isLoading={disabelLoading}
+        isDisabled={state && state === 'PENDING'}
       >
         Deactivate Acount
       </BlueBtn>
