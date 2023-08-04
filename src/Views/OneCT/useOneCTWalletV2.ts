@@ -11,6 +11,7 @@ export const useUserOneCTData = () => {
   const { data } = useSWR<{
     one_ct: string;
     nonce: number;
+    state: 'PROCESSED' | 'PENDING';
   }>(`${userAddress}-one-ct-data-on-${activeChainId}`, {
     fetcher: async () => {
       if (!userAddress || !activeChainId) return null;

@@ -221,8 +221,6 @@ const useOneCTWallet = () => {
       const resp = await axios.post(baseUrl + 'deregister/', null, {
         params: apiParams,
       });
-
-      console.log(resp, 'resp');
     } catch (e) {
       console.log(e, 'deregister api error');
       toastify({
@@ -230,8 +228,9 @@ const useOneCTWallet = () => {
         type: 'error',
         id: 'deregisterapi',
       });
+    } finally {
+      setDisabelLoading(false);
     }
-    setDisabelLoading(false);
   };
   return {
     oneCtPk,
@@ -244,6 +243,7 @@ const useOneCTWallet = () => {
     deleteOneCTPk,
     disableOneCt,
     nonce: res?.nonce,
+    state: res?.state,
   };
 };
 
