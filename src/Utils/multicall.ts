@@ -35,6 +35,33 @@ export const viemMulticall = async (
 
 */
 };
+export const viemMulticallNonLinked = async (
+  calls: Call[],
+  client: PublicClient,
+  key: string
+) => {
+  // convert to multicall expected format
+  const convertedCalls = calls.map((c) => ({
+    functionName: c.name,
+    args: c.params,
+    abi: c.abi,
+    address: c.address,
+    id: c.id,
+  }));
+  const results = await client.multicall({ contracts: convertedCalls });
+  return results.map((r, i) => {
+    const copy = getDeepCopy(r);
+    convertBNtoString(copy);
+    return copy.result;
+    // }
+  });
+
+  /*
+
+  convert result to string & store in a object
+
+*/
+};
 export const arbMulticallABI = [
   {
     inputs: [

@@ -2,13 +2,14 @@ import { useAtomValue } from 'jotai';
 import { useAccount } from 'wagmi';
 import { useRefereeCode } from '../Hooks/useUserReferralData';
 import ReferralABI from '../Config/ReferralABI.json';
-import { useReadCall } from '@Utils/useReadCall';
+import { useCall2Data, useReadCall } from '@Utils/useReadCall';
 import { isZero } from './isZero';
 import { useMemo } from 'react';
 import { zeroAddress } from 'viem';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { referralCodeAtom } from 'src/App';
+import { getCallId } from '@Utils/Contract/multiContract';
 
 export const useReferralCode = () => {
   const { address } = useAccount();
@@ -34,10 +35,16 @@ export const useReferralCode = () => {
           },
         ]
       : [];
-  const { data: isCodeAvailable } = useReadCall({
+  const { data: codewners } = useCall2Data(
     contracts,
-    swrKey: 'useRefferalCode',
-  });
+    'useReferralcode-' + address
+  );
+  console.log(`useReferralCode-contracts: `, contracts);
+  let isCodeAvailable = null;
+  if (contracts.length && codewners) {
+    isCodeAvailable =
+      codewners[getCallId(contracts?.[0]?.address, 'codeOwner')];
+  }
   const isZeroAdds = isCodeAvailable && isZero(isCodeAvailable[0]);
 
   const verifiedLocalCode = isCodeAvailable?.length

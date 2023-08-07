@@ -50,11 +50,13 @@ import { Test } from './test';
 
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
+  console.log(`App-activeMarketFromStorage: `, activeMarketFromStorage);
   const [searchParam] = useSearchParams();
   const [ref, setRef] = useAtom(referralCodeAtom);
   const toastify = useToast();
   const navigate = useNavigate();
   useEffect(() => {
+    console.log(`App-ref: `, ref);
     let referralCode = searchParam.get('ref');
 
     if (!referralCode) {
@@ -89,6 +91,7 @@ const AppRoutes = () => {
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
         <Route path="/admin" element={<AdminConfig />}></Route>
+        <Route path="/ref/:refcode" element={<div>Hello</div>}></Route>
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<DashboardV2 />}>

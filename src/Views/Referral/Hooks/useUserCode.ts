@@ -26,6 +26,7 @@ export function useUserCode(activeChain: Chain) {
   const { data } = useContractReads({
     contracts: calls as any,
     watch: true,
+    select: (d) => d.map((signle) => signle.result?.toString() || null),
   });
 
   let response: { affiliateCode: null | string } = { affiliateCode: null };
