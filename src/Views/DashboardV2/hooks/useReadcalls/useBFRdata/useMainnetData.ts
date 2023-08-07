@@ -3,7 +3,7 @@ import { add, subtract } from '@Utils/NumString/stringArithmatics';
 import { viemMulticall, viemMulticallNonLinked } from '@Utils/multicall';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { HolderContracts, appConfig } from '@Views/TradePage/config';
-import { arbitrum } from '@wagmi/chains';
+import { arbitrum } from 'wagmi/chains';
 import { ethers } from 'ethers';
 import { useMemo } from 'react';
 import useSWR from 'swr';
