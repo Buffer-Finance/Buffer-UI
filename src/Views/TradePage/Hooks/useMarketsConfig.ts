@@ -5,6 +5,7 @@ import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
 import { getAddress } from 'ethers/lib/utils.js';
 import { appConfig, marketsForChart } from '../config';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { divide } from '@Utils/NumString/stringArithmatics';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
@@ -70,5 +71,6 @@ function createPoolObject(market: responseObj) {
       enable: market.configContract.isEarlyCloseEnabled,
       threshold: market.configContract.earlyCloseThreshold,
     },
+    IV: Number((divide(market.configContract.IV, 4) as string) ?? '0'),
   };
 }
