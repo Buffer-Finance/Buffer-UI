@@ -565,6 +565,7 @@ export const MultiResolutionChart = ({
     if (chartReady && activeTrades) {
       activeTrades.forEach((pos) => {
         // if (pos.state == 'QUEUED') return;
+        if (pos.is_above === undefined) return;
         if (!pos?.queue_id) return;
         // if(visualized[pos.])
         // const identifier = getIdentifier(pos);

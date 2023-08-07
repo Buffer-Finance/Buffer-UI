@@ -23,6 +23,18 @@ import NumberTooltip from '@Views/Common/Tooltips';
 export const TradeActionButton: React.FC<{
   trade: TradeType;
   tradeMarket: marketType;
+
+  poolInfo: poolInfoType;
+}> = ({ trade, tradeMarket, poolInfo }) => {
+  if (trade.is_above === undefined) return <></>;
+  return (
+    <TradeButton trade={trade} tradeMarket={tradeMarket} poolInfo={poolInfo} />
+  );
+};
+
+export const TradeButton: React.FC<{
+  trade: TradeType;
+  tradeMarket: marketType;
   poolInfo: poolInfoType;
 }> = ({ trade, tradeMarket, poolInfo }) => {
   const { cancelHandler, earlyCloseHandler } = useCancelTradeFunction();
@@ -56,6 +68,7 @@ export const TradeActionButton: React.FC<{
 
   const isCancelLoading = earlyCloseLoading?.[trade.queue_id] === 1;
   const isEarlyCloseLoading = earlyCloseLoading?.[trade.queue_id] === 2;
+
   function cancelTrade() {
     cancelHandler(trade);
   }

@@ -35,6 +35,7 @@ import {
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { toFixed } from '@Utils/NumString';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[];
@@ -46,29 +47,31 @@ export const OngoingTradesTable: React.FC<{
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
+  const { registeredOneCT } = useOneCTWallet();
 
   const markets = useMarketsConfig();
-  const headNameArray = platform
-    ? [
-        'Asset',
-        'Strike Price',
-        'Current Price',
-        'Open Time',
-        'Time Left',
-        'Close Time',
-        'Trade Size',
-      ]
-    : [
-        'Asset',
-        'Strike Price',
-        'Current Price',
-        'Open Time',
-        'Time Left',
-        'Close Time',
-        'Trade Size',
-        'PnL | Probability',
-        'Display',
-      ];
+  const headNameArray =
+    platform || !registeredOneCT
+      ? [
+          'Asset',
+          'Strike Price',
+          'Current Price',
+          'Open Time',
+          'Time Left',
+          'Close Time',
+          'Trade Size',
+        ]
+      : [
+          'Asset',
+          'Strike Price',
+          'Current Price',
+          'Open Time',
+          'Time Left',
+          'Close Time',
+          'Trade Size',
+          'PnL | Probability',
+          'Display',
+        ];
 
   enum TableColumn {
     Asset = 0,
@@ -163,7 +166,7 @@ export const OngoingTradesTable: React.FC<{
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} />;
       case TableColumn.Asset:
-        return <AssetCell currentRow={trade} platform={platform} />;
+        return <AssetCell currentRow={trade} />;
       case TableColumn.CurrentPrice:
         return (
           <Display

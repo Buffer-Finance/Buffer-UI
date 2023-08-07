@@ -55,7 +55,7 @@ export interface TradeType {
   settlement_fee_sign_expiration: number;
   settlement_fee_signature: string;
   expiration_time: null | number;
-  is_above: boolean;
+  is_above: boolean | undefined;
   state: 'QUEUED' | 'OPENED' | 'CLOSED';
   option_id: null | number;
   is_limit_order: boolean;

@@ -90,11 +90,11 @@ export const StrikePriceComponent = ({
 const AssetCell: React.FC<{
   currentRow: TradeType;
   split?: boolean;
-  platform?: boolean;
-}> = ({ currentRow, split, platform }) => {
+}> = ({ currentRow, split }) => {
   const isUp = currentRow.is_above;
   const token0 = currentRow.market.token0;
   const token1 = currentRow.market.token1;
+  const isHidden = isUp === undefined;
   return (
     <TableAssetCell
       img={
@@ -110,7 +110,7 @@ const AssetCell: React.FC<{
       head={
         <NumberTooltip
           content={
-            platform
+            isHidden
               ? 'Trade directions are hidden.'
               : 'You choosed ' + (isUp ? 'Up' : 'Down')
           }
@@ -119,7 +119,7 @@ const AssetCell: React.FC<{
             <span className={`weight-400 text-f15 `}>
               {token0 + '-' + token1}{' '}
             </span>
-            {platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}
+            {isHidden ? <LockIcon /> : <UpDownChip isUp={isUp} />}
           </div>
         </NumberTooltip>
       }
