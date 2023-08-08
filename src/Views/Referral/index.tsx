@@ -456,7 +456,7 @@ const Referral: React.FC<IReferral> = ({}) => {
                 <BufferInput
                   value={ip}
                   onChange={setip}
-                  className="bg-5 ip-border "
+                  className=""
                   placeholder="Enter your code"
                   // unit={<img className="" src="/EditIcon.svg"></img>}
                 ></BufferInput>

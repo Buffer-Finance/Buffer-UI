@@ -253,8 +253,8 @@ html .MuiDialog-container {
   -webkit-background-clip: text;
 }
 :root {
-  --bg-0: #0D0D15;
-  --bg-1:#1C1C28;
+  --bg-0: #1c1c28;
+  --bg-1:#232334;
   --bg-2:#171722;
   --bg-vertical-gradient:linear-gradient(180deg, #000000 43%,var(--bg-1) 93.44%);
   --text-2:#808191;
