@@ -174,7 +174,7 @@ export const DailyWebTable: React.FC<{
                                   currentStanding[
                                     `${token.toLowerCase()}Volume`
                                   ] as string,
-                                  configContracts.tokens[token].decimals
+                                  decimals[token]
                                 ) as string,
                                 2
                               ) +
@@ -386,7 +386,7 @@ export const DailyWebTable: React.FC<{
                                   currentStanding[
                                     `${token.toLowerCase()}NetPnL`
                                   ] as string,
-                                  configContracts.tokens[token].decimals
+                                  decimals[token]
                                 )}
                                 unit={token}
                                 label={

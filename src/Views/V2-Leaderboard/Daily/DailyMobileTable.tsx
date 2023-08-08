@@ -4,11 +4,10 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { ILeague } from '../interfaces';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
 import { Launch } from '@mui/icons-material';
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { TableAligner } from '../Components/TableAligner';
 import {
@@ -23,7 +22,7 @@ export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
   skip: number;
   userData: ILeague[] | undefined;
-  onpageChange?: (e, page: number) => void;
+  onpageChange?: (e: any, page: number) => void;
   count: number;
   nftWinners?: number;
   activePage: number;
@@ -154,7 +153,6 @@ const MobileRow = ({
               row={index}
               isUser={isUser}
               skip={skip}
-              userData={userData}
               userRank={currentStanding.rank}
               nftWinners={nftWinners}
             />
@@ -348,7 +346,7 @@ const MobileRow = ({
                                 currentStanding[
                                   `${token.toLowerCase()}NetPnL`
                                 ] as string,
-                                configContracts.tokens[token].decimals
+                                decimals[token]
                               )}
                               label={
                                 gte(
@@ -405,7 +403,7 @@ const MobileRow = ({
                             currentStanding[
                               `${token.toLowerCase()}Volume`
                             ] as string,
-                            configContracts.tokens[token].decimals
+                            decimals[token]
                           ) as string,
                           2
                         )
