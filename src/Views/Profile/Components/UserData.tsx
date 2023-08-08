@@ -13,6 +13,11 @@ import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
 import { getChains } from 'src/Config/wagmiClient';
 import { Chain } from 'wagmi';
 import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import { marketsForChart } from '@Views/TradePage/config';
+
+const userDataHeadClass = 'text-f14 text-[#7F87A7]';
+const userDataDescClass = 'text-f16 text-[#C3C2D4]';
 
 export const UserData = () => {
   const { address, viewOnlyMode } = useUserAccount();
@@ -109,22 +114,22 @@ export const UserData = () => {
                 }}
               />
             }
-            headClass={'text-f14'}
-            descClass={'text-f16 text-buffer-blue'}
+            headClass={userDataHeadClass}
+            descClass={userDataDescClass}
           />
           <Col
             className={'winner-card'}
             head={'Daily Rank'}
             desc={dailyRank}
-            headClass={'text-f14'}
-            descClass={'text-f16 text-buffer-blue'}
+            headClass={userDataHeadClass}
+            descClass={userDataDescClass}
           />
           <Col
             className={'winner-card'}
             head={'Weekly Rank'}
             desc={weeklyRank}
-            headClass={'text-f14'}
-            descClass={'text-f16 text-buffer-blue'}
+            headClass={userDataHeadClass}
+            descClass={userDataDescClass}
           />
         </>
         {/* </ArbitrumOnly> */}
@@ -139,7 +144,7 @@ export const UserData = () => {
                     tradingMetricsData.totalTrades || '0'
                 }
                 unit={'%'}
-                className="!w-full"
+                className={userDataDescClass + ' !w-full'}
                 content={
                   <>{`Won ${tradingMetricsData.tradeWon}/${tradingMetricsData.totalTrades} trades.`}</>
                 }
@@ -148,7 +153,7 @@ export const UserData = () => {
               <div className="text-light-blue">-</div>
             )
           }
-          headClass={'text-f14'}
+          headClass={userDataHeadClass}
           descClass={`text-f16 `}
         />
         <Col
@@ -158,24 +163,34 @@ export const UserData = () => {
             !!mostTradedAsset ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="h-[20px] w-[20px]">
-                  {/* <PairTokenImage pair={mostTradedAsset} /> */}
+                  <PairTokenImage
+                    pair={
+                      marketsForChart[
+                        mostTradedAsset as unknown as keyof typeof marketsForChart
+                      ].pair
+                    }
+                  />
                 </div>
-                {mostTradedAsset}
+                {
+                  marketsForChart[
+                    mostTradedAsset as unknown as keyof typeof marketsForChart
+                  ].pair
+                }{' '}
               </div>
             ) : (
               <>-</>
             )
           }
-          headClass={'text-f14'}
-          descClass={'text-f16 text-buffer-blue'}
+          headClass={userDataHeadClass}
+          descClass={userDataDescClass}
         />
         {viewOnlyMode && (
           <Col
             className={'winner-card'}
             head={'NFT Tier'}
             desc={<NFTtier userOnly={false} />}
-            headClass={'text-f14'}
-            descClass={'text-f16 text-buffer-blue'}
+            headClass={userDataHeadClass}
+            descClass={userDataDescClass}
           />
         )}
       </DataWrapper>
