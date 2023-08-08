@@ -251,7 +251,7 @@ const MobileRow = ({
                 <Display
                   data={perc}
                   label={!isNeg ? '+' : ''}
-                  className={`f15 ${!isNeg ? 'green' : 'red'}`}
+                  className={`f15 ${!isNeg ? 'green' : 'red-grey'}`}
                   unit={'%'}
                   content={
                     tokens.length > 1 &&
@@ -280,7 +280,9 @@ const MobileRow = ({
                             <Display
                               data={percentage}
                               label={!isNegative ? '+' : ''}
-                              className={`f15 ${!isNegative ? 'green' : 'red'}`}
+                              className={`f15 ${
+                                !isNegative ? 'green' : 'red-grey'
+                              }`}
                               unit={'%'}
                             />
                           );
@@ -329,7 +331,7 @@ const MobileRow = ({
                   data={divide(currentStanding.netPnL, usdcDecimals)}
                   label={gte(currentStanding.netPnL, '0') ? '+' : ''}
                   className={`f15 ${
-                    gte(currentStanding.netPnL, '0') ? 'green' : 'red'
+                    gte(currentStanding.netPnL, '0') ? 'green' : 'red-grey'
                   }`}
                   unit={'USDC'}
                   content={
@@ -366,7 +368,7 @@ const MobileRow = ({
                                   '0'
                                 )
                                   ? 'green'
-                                  : 'red'
+                                  : 'red-grey'
                               }`}
                             />
                           </div>

@@ -274,7 +274,7 @@ export const DailyWebTable: React.FC<{
                     <Display
                       data={perc}
                       label={!isNeg ? '+' : ''}
-                      className={`f15 ${!isNeg ? 'green' : 'red'}`}
+                      className={`f15 ${!isNeg ? 'green' : 'red-grey'}`}
                       unit={'%'}
                       content={
                         tokens.length > 1 &&
@@ -306,7 +306,7 @@ export const DailyWebTable: React.FC<{
                                   data={percentage}
                                   label={!isNegative ? '+' : ''}
                                   className={`f15 ${
-                                    !isNegative ? 'green' : 'red'
+                                    !isNegative ? 'green' : 'red-grey'
                                   }`}
                                   unit={'%'}
                                 />
@@ -369,7 +369,7 @@ export const DailyWebTable: React.FC<{
                     data={divide(currentStanding.netPnL, usdcDecimals)}
                     label={gte(currentStanding.netPnL, '0') ? '+' : ''}
                     className={`f15 ${
-                      gte(currentStanding.netPnL, '0') ? 'green' : 'red'
+                      gte(currentStanding.netPnL, '0') ? 'green' : 'red-grey'
                     }`}
                     unit={'USDC'}
                     content={
@@ -407,7 +407,7 @@ export const DailyWebTable: React.FC<{
                                     '0'
                                   )
                                     ? 'green'
-                                    : 'red'
+                                    : 'red-grey'
                                 }`}
                               />
                             </div>
