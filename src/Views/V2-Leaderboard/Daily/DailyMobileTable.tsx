@@ -17,6 +17,7 @@ import {
 } from '@Views/Earn/Components/VestCards';
 import { toFixed } from '@Utils/NumString';
 import { gte } from 'lodash';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
@@ -126,10 +127,9 @@ const MobileRow = ({
   isWinrateTable,
   isDailyTable,
 }) => {
-  const { configContracts } = useActiveChain();
-  const { poolNames: tokens } = usePoolNames();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
-
+  const tokens = usePoolNames();
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
   const isUser = user ? true : false;
   const perc = multiply(
     divide(currentStanding.netPnL, currentStanding.volume),

@@ -79,8 +79,8 @@ export const getTournamentEndDateFromWeek = ({
   return startdate;
 };
 
-const headClass = 'text-f14 tab:text-f12 fw5 text-6';
-const descClass = 'text-f16 tab:text-f14 fw4 text-5';
+export const headClass = 'text-f14 tab:text-f12 fw5 text-[#7F87A7]';
+export const descClass = 'text-f16 tab:text-f14 fw4 text-[#C3C2D4]';
 
 export const Incentivised = () => {
   const { activeChain } = useActiveChain();
@@ -325,11 +325,15 @@ export const Incentivised = () => {
                       <ChainSwitchDropdown baseUrl="/leaderboard/daily" />
                     </div>
                     <a
-                      className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
+                      className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
                       href={configValue.contestRules}
                       target={'blank'}
                     >
-                      Contest Rules <FrontArrow className="tml w-fit inline" />
+                      Contest Rules{' '}
+                      <FrontArrow
+                        className="ml-2 w-fit inline scale-125 mt-1"
+                        arrowColor="#7F87A7"
+                      />
                     </a>
                   </div>
                 }
