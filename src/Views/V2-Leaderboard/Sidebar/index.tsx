@@ -227,7 +227,7 @@ export function doesLocationMatch(location: Location, slug: string) {
 }
 
 const CSChip = ({
-  className = 'text-1 bg-2',
+  className = 'bg-2',
   text = 'Coming Soon',
 }: {
   className?: string;
@@ -235,7 +235,7 @@ const CSChip = ({
 }) => {
   return (
     <div
-      className={`py-2 px-3 text-f12 font-medium mr-2 rounded-md ${className}`}
+      className={`py-2 px-3 text-f12 text-3 font-medium mr-2 rounded-md ${className}`}
     >
       {text}
     </div>
