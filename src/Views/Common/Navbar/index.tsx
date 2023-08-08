@@ -23,7 +23,7 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = isTestnet ? 5 : 4;
+  const VISIBLETABS = isTestnet ? 6 : 4;
   const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
