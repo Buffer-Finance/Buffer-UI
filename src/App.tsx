@@ -37,6 +37,9 @@ import { ReferralPage } from '@Views/Referral';
 import { DashboardV2 } from '@Views/DashboardV2';
 import { ProfilePage } from '@Views/Profile';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
+import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
+import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
+import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -105,6 +108,22 @@ const AppRoutes = () => {
             />
           }
         />
+        <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
+          <Route path="daily" element={<Incentivised />}>
+            <Route path=":chain" element={<Incentivised />} />
+          </Route>
+          <Route path="weekly" element={<Weekly />}>
+            <Route path=":chain" element={<Weekly />} />
+          </Route>
+          {/* <Route
+            path="trades"
+            element={
+              <LeaderBoard>
+                <AllTradesPage />
+              </LeaderBoard>
+            }
+          /> */}
+        </Route>
       </Routes>
     </div>
   );

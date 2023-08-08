@@ -82,7 +82,7 @@ export const LeaderBoardSidebar = () => {
           {tabs.slice(0, 2).map((tab, index) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
-              <div className="">
+              <div className="" key={tab.slug}>
                 <LinkButton
                   tab={tab}
                   active={isActive}
@@ -101,14 +101,14 @@ export const LeaderBoardSidebar = () => {
           {tabs.slice(2, -1).map((tab) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
-              <div className="flex-col">
+              <div className="flex-col" key={tab.slug}>
                 <LinkButton tab={tab} active={isActive} isDisabled />
               </div>
             );
           })}
         </div>
 
-        <div className="mt-[24px] full-width relative">
+        {/* <div className="mt-[24px] full-width relative">
           <NavLink
             key={'ALL TRADES'}
             to={'/leaderboard/trades'}
@@ -124,7 +124,7 @@ export const LeaderBoardSidebar = () => {
             <img src="/alltrades.png" alt="icon" className="inline w-7" />
             ALL TRADES
           </NavLink>
-        </div>
+        </div> */}
       </div>
     </LeaderBoardSidebarStyles>
   );

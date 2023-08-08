@@ -3,20 +3,17 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.37-multipool-update-contracts/api'
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api',
     },
-    router: '0xfDdE951a9d75a80b8965f9D8639aEC5ee9Cd20cD',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
+    router: '0x26f3585B2746B0038b5E0cda69F40d7f9D8d8538',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xe3B182017Ed77b90e8bE452E520AA445C0F30825',
-    pooloi: '0x7226318D2584925945ad1904378C69b56B32d7C7',
-    marketoi: '0x0Fa722eFB09CBA2cD383C381c879557111c80CEf',
-    booster: '0x58E66d360d65Da8d7907768f826D86F411d0f849',
+    signer_manager: '0x36c1D417631EB3D089858A57EF0846C65dB245Da',
     poolsInfo: {
-      '0xB04ABea1152bFCdbb35Edcb3a5c9b1929Cd789d4': {
-        tokenAddress: '0x99af0708E814Ac3Dca4D94a2bDD6E290742843E4',
-        faucet: '0xe373f6aa43563b630eDC13f2B6cb660F7433f225',
+      '0x6EfAbB45b781B62979600444775113516220d992': {
+        tokenAddress: '0x943902252597Ca568a6fB076aceCEdcf7eb903C6',
+        faucet: '0xD2Ce70BAe9f731344b3364206986129e5f2e7437',
         decimals: 6,
         token: 'USDC',
         is_pol: false,
@@ -28,9 +25,9 @@ export const appConfig = {
         token: 'BFR',
         is_pol: false,
       },
-      '0x70E29D7f07BbB83253dE57F73543f5cb8F3A267A': {
-        tokenAddress: '0xd919075cA1645D93d8C94AddC65b70626AC23d0A',
-        faucet: '0xfBC70D52FC81A561D8eAeB6c3C5b3deab0A0c6D2',
+      '0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6': {
+        tokenAddress: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
+        faucet: '0x894Ce84237aCB9985e3c9A930C65D202B633E017',
         decimals: 18,
         token: 'ARB',
         is_pol: false,

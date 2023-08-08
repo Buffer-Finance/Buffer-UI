@@ -38,13 +38,15 @@ import { ILeague } from '../interfaces';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
 
 export const Weekly = () => {
-  const { activeChain, configContracts } = useActiveChain();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const { activeChain } = useActiveChain();
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
   const configValue = weeklyTournamentConfig[activeChain.id];
   const { week, nextTimeStamp } = useWeekOfTournament({
     startTimestamp: configValue.startTimestamp,

@@ -25,6 +25,7 @@ import {
 } from '@Views/Earn/Components/VestCards';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { toFixed } from '@Utils/NumString';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const DailyWebTable: React.FC<{
   standings: ILeague[] | IWinrate[] | undefined;
@@ -52,8 +53,8 @@ export const DailyWebTable: React.FC<{
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
   const navigate = useNavigate();
-  const { configContracts } = useActiveChain();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
   const params = useParams();
   const poolNames = usePoolNames();
 
