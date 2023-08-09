@@ -3,20 +3,20 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.37-multipool-update-contracts/api'
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.41-multi-pool-new-contracts-with-v2.5-updates/api',
     },
-    router: '0xfDdE951a9d75a80b8965f9D8639aEC5ee9Cd20cD',
+    router: '0x0e04257f64638Fe742F41060A75CFa76a568203c',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xe3B182017Ed77b90e8bE452E520AA445C0F30825',
-    pooloi: '0x7226318D2584925945ad1904378C69b56B32d7C7',
-    marketoi: '0x0Fa722eFB09CBA2cD383C381c879557111c80CEf',
-    booster: '0x58E66d360d65Da8d7907768f826D86F411d0f849',
+    signer_manager: '0x8982a8C11976348B225100b19f570728c1Fdd449',
+    pooloi: '0x0D3057A12f5bF5AE1fB295Bace09D31505cdb0f6',
+    marketoi: '0xb1e1B2Be3dF75Bd254441aEf53A34e025C09052e',
+    booster: '0x374E20a66836fC3A0357cC6ecD5B12686f81Db84',
     poolsInfo: {
-      '0xB04ABea1152bFCdbb35Edcb3a5c9b1929Cd789d4': {
-        tokenAddress: '0x99af0708E814Ac3Dca4D94a2bDD6E290742843E4',
-        faucet: '0xe373f6aa43563b630eDC13f2B6cb660F7433f225',
+      '0x107aF8B74F52e6936e92D8204D8a80c32039bFd0': {
+        tokenAddress: '0xd28FD8eB6A970d3a120FeF4275aae7cAf8468E88',
+        faucet: '0x3191AAeF42050DC4ec63211B76440B1b035B70f8',
         decimals: 6,
         token: 'USDC',
         is_pol: false,
@@ -28,9 +28,9 @@ export const appConfig = {
         token: 'BFR',
         is_pol: false,
       },
-      '0x70E29D7f07BbB83253dE57F73543f5cb8F3A267A': {
-        tokenAddress: '0xd919075cA1645D93d8C94AddC65b70626AC23d0A',
-        faucet: '0xfBC70D52FC81A561D8eAeB6c3C5b3deab0A0c6D2',
+      '0xceDeb1849465b22C94Ea7Fa88800D45d0475b317': {
+        tokenAddress: '0xf6eA4A60903E06caa1a300226D275fF5c3c11349',
+        faucet: '0xE816d53C3f3fF8E0a57f2eb27061579bCfFe3C8D',
         decimals: 18,
         token: 'ARB',
         is_pol: false,
