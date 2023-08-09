@@ -2,16 +2,14 @@ import { useToast } from '@Contexts/Toast';
 import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
 import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
-import { appConfig, marketsForChart } from '../config';
-import { useActiveChain } from '@Hooks/useActiveChain';
+import { marketsForChart } from '../config';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { getAddress } from 'viem';
+import { useMemo } from 'react';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
   const toastify = useToast();
-  const { activeChain } = useActiveChain();
-  const config = appConfig[activeChain.id as unknown as keyof typeof appConfig];
 
   if (error) {
     toastify({
@@ -20,40 +18,37 @@ export const useMarketsConfig = () => {
       id: 'fetchMarketAPI',
     });
   }
-  if (!data?.optionContracts) {
-    return null;
-  }
 
-  const response: marketType[] = [];
-  data.optionContracts.forEach((item) => {
-    if (
-      Object.keys(config.poolsInfo).find(
-        (poolCOntract) => getAddress(item.poolContract) == poolCOntract
-      ) === undefined
-    ) {
-      return;
+  const res = useMemo(() => {
+    if (!data?.optionContracts) {
+      return null;
     }
-    const [token0, token1] = getTokens(item.asset, 'USD');
-    const index = response.findIndex(
-      (config) => config.token0 === token0 && config.token1 === token1
-    );
-    // console.log(`item: `, item/);
-    if (index !== -1) {
-      response[index].pools.push(createPoolObject(item));
-    } else {
-      const marketInfo: chartDataType =
-        marketsForChart[item.asset as keyof typeof marketsForChart];
-      response.push({
-        ...marketInfo,
-        category: AssetCategory[item.category],
-        pools: [createPoolObject(item)],
-      });
-    }
-  });
 
-  // console.log(`DDDresponse: `, response);
-  console.log(`response: `, response);
-  return response;
+    const response: marketType[] = [];
+    data.optionContracts.forEach((item) => {
+      const [token0, token1] = getTokens(item.asset, 'USD');
+      const index = response.findIndex(
+        (config) => config.token0 === token0 && config.token1 === token1
+      );
+      // console.log(`item: `, item/);
+      if (index !== -1) {
+        response[index].pools.push(createPoolObject(item));
+      } else {
+        const marketInfo: chartDataType =
+          marketsForChart[item.asset as keyof typeof marketsForChart];
+        response.push({
+          ...marketInfo,
+          category: AssetCategory[item.category],
+          pools: [createPoolObject(item)],
+        });
+      }
+    });
+
+    // console.log(`DDDresponse: `, response);
+    // console.log(`response: `, response);
+    return response;
+  }, [data]);
+  return res;
 };
 
 //creates a pool object from the response object

@@ -10,13 +10,12 @@ import { TradeTypeChip } from './TradeTypeChip';
 import { TradeDataView } from './TradeDataView';
 import { TradeActionButton } from './TradeActionButton';
 import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { joinStrings } from '@Views/TradePage/utils';
 import { TradeTimeElapsed } from './TradeTimeElapsed';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { CountDown } from './CountDown';
 import { TradeType } from '@Views/TradePage/type';
-import { getExpiry, getStrike } from '../../AccordionTable/Common';
+import { getStrike } from '../../AccordionTable/Common';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { useAtomValue } from 'jotai';
 
@@ -32,11 +31,8 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const tradeMarket = trade.market;
 
   if (!tradeMarket) return <>Error</>;
-  const poolContract = tradeMarket.pools.find(
-    (pool) =>
-      pool.optionContract.toLowerCase() === trade?.target_contract.toLowerCase()
-  )?.pool;
-  const poolInfo = getPoolInfo(poolContract);
+
+  const poolInfo = getPoolInfo(trade.pool.pool);
   const pairName = joinStrings(tradeMarket.token0, tradeMarket.token1, '-');
   const isUp = trade.is_above;
   const assetName = tradeMarket.token1;

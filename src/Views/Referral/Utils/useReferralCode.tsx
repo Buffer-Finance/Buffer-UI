@@ -39,7 +39,7 @@ export const useReferralCode = () => {
     contracts,
     'useReferralcode-' + address
   );
-  console.log(`useReferralCode-contracts: `, contracts);
+  // console.log(`useReferralCode-contracts: `, contracts);
   let isCodeAvailable = null;
   if (contracts.length && codewners) {
     isCodeAvailable =
