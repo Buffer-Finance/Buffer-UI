@@ -33,8 +33,9 @@ export const OverviewArbitrum = () => {
     );
   }, [poolDisplayKeyMapping]);
 
-  if (!data)
+  if (!data || Object.keys(data.totalStats).length === 0)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
+  console.log(data, 'data');
   return (
     <Card
       top={'Trading Overview'}
