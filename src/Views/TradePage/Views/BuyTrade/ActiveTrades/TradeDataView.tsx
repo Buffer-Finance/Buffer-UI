@@ -207,7 +207,7 @@ export const useEarlyPnl = ({
     token1: configData.token1,
   });
   let probability = useMemo(
-    () => getProbability(trade, +currentPrice),
+    () => getProbability(trade, +currentPrice, trade.pool.IV),
     [trade, currentPrice]
   );
   if (!probability) probability = 0;

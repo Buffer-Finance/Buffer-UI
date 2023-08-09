@@ -37,20 +37,21 @@ export const DisplayTime = ({ ts }: { ts: number | string }) => {
 export const getProbability = (
   trade: TradeType,
   price: number,
+  IV: number,
   expiryTs?: string
 ) => {
   let currentEpoch = Math.round(Date.now() / 1000);
-  const IV = 1.2;
   let expiryTime = getExpiry(trade, expiryTs);
 
-  return getProbabilityByTime(trade, price, currentEpoch, expiryTime);
+  return getProbabilityByTime(trade, price, currentEpoch, expiryTime, IV);
 };
 
 export const getProbabilityByTime = (
   trade: TradeType,
   price: number,
   currentTime: number,
-  expirationTime: number
+  expirationTime: number,
+  IV: number
 ) => {
   const probability =
     BlackScholes(
@@ -60,7 +61,7 @@ export const getProbabilityByTime = (
       +trade.strike / 100000000,
       expirationTime - currentTime,
       0,
-      1.1
+      IV
     ) * 100;
 
   return probability;

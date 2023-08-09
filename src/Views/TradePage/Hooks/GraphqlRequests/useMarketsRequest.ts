@@ -23,6 +23,7 @@ export const useMarketsRequest = () => {
                     platformFee
                     earlyCloseThreshold
                     isEarlyCloseEnabled
+                    IV
                   }
                   address
                   poolContract

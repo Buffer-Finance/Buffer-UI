@@ -13,6 +13,7 @@ export type poolType = {
     enable: boolean;
     threshold: string;
   };
+  IV: number;
 };
 //type of markets needed on trade page
 export type marketType = {
@@ -79,6 +80,7 @@ export type responseObj = {
     platformFee: string;
     earlyCloseThreshold: string;
     isEarlyCloseEnabled: boolean;
+    IV: string;
   };
   address: string;
   poolContract: string;
@@ -113,7 +115,7 @@ export enum directionBtn {
 export type configType = (typeof appConfig)['421613'];
 
 export type poolInfoType =
-  (typeof appConfig)['421613']['poolsInfo']['0x55Ded741F9c097A95F117a08334D1fBb70A5B05D'];
+  (typeof appConfig)['421613']['poolsInfo']['0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0'];
 
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];
 
