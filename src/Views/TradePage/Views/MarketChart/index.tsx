@@ -1,6 +1,4 @@
 import { MultiResolutionChart } from './MultiResolutionChart';
-import { usePrice } from '@Hooks/usePrice';
-import { MarketStatsBar } from './MarketStatsBar';
 import { useAtomValue } from 'jotai';
 import { chartNumberAtom, isTableShownAtom } from '@Views/TradePage/atoms';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
@@ -29,7 +27,6 @@ const SidebySideCharts = ({
 );
 
 const MarketChart: React.FC<any> = ({}) => {
-  usePrice();
   const isTableExpanded = useAtomValue(isTableShownAtom);
   const v3AppConfig = useMarketsConfig();
   const chartTimes = useAtomValue(chartNumberAtom);
@@ -150,7 +147,6 @@ const MarketChart: React.FC<any> = ({}) => {
         style={containerDim?.height ? { height: containerDim.height } : {}}
         ref={onInitialLoad}
       >
-        <MarketStatsBar />
         {chartLayout}
       </div>
       {isTableExpanded && (

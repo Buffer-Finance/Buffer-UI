@@ -41,7 +41,6 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const isUp = trade.is_above;
   const assetName = tradeMarket.token1;
   const tradeType = trade.is_limit_order ? 'Limit order' : 'Market';
-  const isQueued = trade.state === TradeState.Queued;
   return (
     <TradeCardBackground>
       <ColumnGap gap="15px">

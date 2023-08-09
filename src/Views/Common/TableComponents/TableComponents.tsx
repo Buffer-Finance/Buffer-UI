@@ -1,7 +1,7 @@
 import { ReactChild, ReactNode } from 'react';
 import InfoIcon from 'src/SVG/Elements/InfoIcon';
 import { CellDescLayout } from './style';
-import { marketType } from '@Views/TradePage/type';
+import { TradeType, marketType } from '@Views/TradePage/type';
 import { Display } from '../Tooltips/Display';
 import { divide } from '@Utils/NumString/stringArithmatics';
 

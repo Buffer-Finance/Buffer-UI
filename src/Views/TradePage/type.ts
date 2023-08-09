@@ -56,7 +56,7 @@ export interface TradeType {
   settlement_fee_sign_expiration: number;
   settlement_fee_signature: string;
   expiration_time: null | number;
-  is_above: boolean;
+  is_above: boolean | undefined;
   state: 'QUEUED' | 'OPENED' | 'CLOSED';
   option_id: null | number;
   is_limit_order: boolean;
@@ -116,7 +116,7 @@ export enum directionBtn {
 export type configType = (typeof appConfig)['421613'];
 
 export type poolInfoType =
-  (typeof appConfig)['421613']['poolsInfo']['0x4C5317b35342BF2608B2C9F550e91741F23D129f'];
+  (typeof appConfig)['421613']['poolsInfo']['0x107aF8B74F52e6936e92D8204D8a80c32039bFd0'];
 
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];
 

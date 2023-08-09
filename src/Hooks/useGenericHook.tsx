@@ -13,6 +13,7 @@ import {
   shareSettingsAtom,
 } from '@Views/TradePage/atoms';
 import { useUserAccount } from './useUserAccount';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 
 export const getIdentifier = (a: TradeType) => {
   return +a.queue_id;
@@ -32,6 +33,7 @@ const useGenericHooks = () => {
   const [, setBet] = useAtom(SetShareBetAtom);
   const { showSharePopup } = useAtomValue(shareSettingsAtom);
   const { getPoolInfo } = usePoolInfo();
+  const { registeredOneCT } = useOneCTWallet();
   const openShareModal = (
     trade: TradeType,
     expiry: string,
@@ -54,8 +56,8 @@ const useGenericHooks = () => {
     // make all trade as not visited.
     // whenever trades arr changed check all trades & mark them true.
     // trades which remains false even after checking are the trades which are expired.
+    if (!activeTrades || !registeredOneCT) return;
     const delay = 2;
-    if (!activeTrades) return;
     if (typeof activeTrades.forEach !== 'function') return;
     // make all new true
     for (let trade of activeTrades) {

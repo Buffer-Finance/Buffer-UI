@@ -151,8 +151,16 @@ const TradeDataViewBackground = styled.div`
   grid-template-rows: repeat(2, 1fr);
   row-gap: 8px;
 `;
-
 const Pnl: React.FC<{
+  trade: TradeType;
+  poolInfo: poolInfoType;
+  configData: marketType;
+}> = ({ trade, poolInfo, configData }) => {
+  if (trade.is_above === undefined) return <span>-</span>;
+  return <PnlData trade={trade} poolInfo={poolInfo} configData={configData} />;
+};
+
+const PnlData: React.FC<{
   trade: TradeType;
   poolInfo: poolInfoType;
   configData: marketType;

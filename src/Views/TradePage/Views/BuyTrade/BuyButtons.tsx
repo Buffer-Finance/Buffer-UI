@@ -63,7 +63,6 @@ export const BuyButtons = ({
       limitOrderExpiry: Number(limitOrderExpiry),
     });
   };
-
   const { isMarketOpen: isAssetActive, isForex } = useIsMarketOpen(
     activeMarket,
     switchPool?.pool
