@@ -210,7 +210,7 @@ export const AccountDropdown: React.FC = () => {
                     }
                     offsetY={10}
                   >
-                    <MenuItem className={'!bg-[#191b20] text-1 cursor-auto'}>
+                    <MenuItem className={'!bg-[#232334] text-1 cursor-auto'}>
                       <div className="mx-[10px] my-[10px] mb-[14px]">
                         <div className="flex items-center justify-between text-f14 mb-[20px]">
                           <div className="flex flex-col">
