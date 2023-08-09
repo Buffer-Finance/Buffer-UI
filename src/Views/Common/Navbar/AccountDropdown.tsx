@@ -70,7 +70,7 @@ export const AccountDropdown: React.FC = () => {
         isLoading={disabelLoading}
         isDisabled={state && state === 'PENDING'}
       >
-        Deactivate Acount
+        Deactivate Account
       </BlueBtn>
     );
   } else
