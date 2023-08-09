@@ -2,10 +2,10 @@ import { useToast } from '@Contexts/Toast';
 import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
 import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
-import { getAddress } from 'ethers/lib/utils.js';
 import { appConfig, marketsForChart } from '../config';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { getAddress } from 'viem';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();

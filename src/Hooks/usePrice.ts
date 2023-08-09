@@ -12,7 +12,6 @@ import {
 import { Connection } from '@solana/web3.js';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import Big from 'big.js';
-
 type WSUPdate = {
   type: 'price_update';
   price_feed: {
@@ -39,7 +38,8 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
   const { sendMessage, lastJsonMessage, lastMessage, readyState } =
     useWebSocket('wss://xc-mainnet.pyth.network/ws');
   const subscribeToStreamUpdates = async () => {
-    const url = 'https://pyth-api.vintage-orange-muffin.com/v2/streaming';
+    const url =
+      'https://benchmarks.pyth.network/v1/shims/tradingview/streaming';
     const response = await fetch(url);
     const reader = response.body?.getReader();
     console.log('[stream]err', response.body?.locked);
