@@ -11,10 +11,7 @@ import {
 import { useAtomValue, useSetAtom } from 'jotai';
 import { SVGProps, useRef } from 'react';
 import { MarketSelectorDD } from './MarketSelectorDD';
-import { getPriceFromKlines } from '@TV/useDataFeed';
-import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
-import { toFixed } from '@Utils/NumString';
-import { priceAtom } from '@Hooks/usePrice';
+import { usePrice } from '@Hooks/usePrice';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
@@ -91,6 +88,7 @@ const Idx2icon = {
   3: FourCharts,
 };
 const MarketStatsBar: React.FC<any> = ({}) => {
+  usePrice();
   const setChartTimes = useSetAtom(chartNumberAtom);
   const chartTimes = useAtomValue(chartNumberAtom);
   const { activeMarket } = useActiveMarket();

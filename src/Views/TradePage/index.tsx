@@ -17,6 +17,7 @@ import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { MarketTimingsModal } from './Components/MarketTimingsModal';
 import { ShareModal } from './Views/AccordionTable/ShareModal';
+import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -32,6 +33,7 @@ const TradePage: React.FC<any> = ({}) => {
       >
         <div className="flex flex-col w-full mx-3">
           {showFavoriteAsset && <PinnedMarkets />}
+          <MarketStatsBar />
           <MarketChart />
           <AccordionTable />
         </div>

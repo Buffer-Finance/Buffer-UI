@@ -1,3 +1,4 @@
+import LockIcon from '@SVG/Elements/LockIcon';
 import { DownArrowSVG } from '@Views/TradePage/Components/DownArrowSVG';
 import { UpArrowSVG } from '@Views/TradePage/Components/UpArrowSVG';
 import styled from '@emotion/styled';
@@ -21,7 +22,7 @@ const DirectionChipBackground = styled.div<{ isUp: boolean }>`
 `;
 
 export const DirectionChip: React.FC<{
-  isUp: boolean;
+  isUp: boolean | undefined;
   shouldShowArrow: boolean;
   className?: string;
   upText?: string;
@@ -33,6 +34,7 @@ export const DirectionChip: React.FC<{
   downText = 'Down',
   upText = 'Up',
 }) => {
+  if (isUp === undefined) return <LockIcon />;
   return (
     <DirectionChipBackground isUp={isUp} className={className}>
       {shouldShowArrow &&
