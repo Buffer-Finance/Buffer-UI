@@ -56,7 +56,87 @@ const SideBar: React.FC<any> = () => {
     });
   };
 
-  return null;
+  return (
+    <SidebarCss>
+      {state.sidebar_active ? null : (
+        <div className="overlay" onClick={handleClose}></div>
+      )}
+
+      <div
+        className={`bg-1 max-w-[300px] sidebar ${
+          state.sidebar_active ? '' : 'sidebar-closed'
+        } a1400:!hidden`}
+      >
+        <div className="sidebar_container flex-col">
+          <div className="icon_container mb-6">
+            <div
+              className="flex items-center justify-center"
+              role={'button'}
+              onClick={
+                () => {}
+                // router.push({
+                //   pathname: "/",
+                // })
+              }
+            >
+              <BufferLogoComponent />
+            </div>
+            <IconButton className="collapse-icon" onClick={handleClose}>
+              <SidebarCollapseIcon />
+            </IconButton>
+          </div>
+          {options.map((option, key) => {
+            if (key >= newPageNavElements || option.isExternalLink) {
+              return (
+                <button
+                  key={option.name}
+                  className={`item !w-full !ml-[0px] !mr-[0px]`}
+                  onClick={() => {
+                    handleChange(option.to);
+                  }}
+                >
+                  {/* <SidebarIcon id={option.id} active={active} /> */}
+                  <div className="name">{option.name}</div>
+                </button>
+              );
+            }
+            return option.subTabs.length > 0 ? (
+              // active=router.asPath.includes(option.subTab.slug);
+              <SubTabDropDown tab={option} defaultName={'Lol'} key={key} />
+            ) : (
+              <NavLink
+                key={option.name}
+                to={option.to}
+                onClick={handleClose}
+                className={({ isActive }) =>
+                  `item ${isActive ? 'active bg-4' : ''} 
+          `
+                }
+              >
+                <div className="name">{option.name}</div>
+              </NavLink>
+            );
+          })}
+          <div className=" text-2 mb-3 mt-[10vh] text-center text-f13 pl-[2rem]">
+            Connect with us{' '}
+          </div>
+          <div className=" bbborderrr">
+            <div className="flex max-w-[140px] mx-auto flex-row items-center justify-center flex-wrap gap-[11px] px-3">
+              {social.map((S) => {
+                return (
+                  <a className="unset" href={S.link} target="_blank">
+                    <span className="text-2 ">
+                      <S.Img className="" />
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </SidebarCss>
+  );
 };
 export default SideBar;
 

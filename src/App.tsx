@@ -41,6 +41,7 @@ import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { Test } from './test';
+import SideBar from '@Views/Common/Sidebar';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -204,6 +205,7 @@ function App() {
             />
           )}
           <TnCModal />
+          <SideBar />
         </Background>
       </I18nProvider>
     </>
