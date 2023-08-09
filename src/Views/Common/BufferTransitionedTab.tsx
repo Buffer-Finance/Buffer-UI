@@ -21,7 +21,8 @@ let BufferTransitionedTab: {
       <>
         <div
           className={
-            className + ' relative w-fit flex flex-row mx-auto rounded-lg bg-1'
+            className +
+            ' p-2 relative w-fit flex mx-auto rounded-[10px] bg-[#282b39]'
           }
         >
           <>
@@ -42,8 +43,8 @@ let BufferTransitionedTab: {
       <div
         className={
           className +
-          '  text-f15 py-3 px-[30px] rounded-lg pointer z-20  font-bold ' +
-          (active && 'bg-blue')
+          '  text-f15 py-3 px-[30px] rounded-[10px] pointer z-20 font-bold text-[#7F87A7] ' +
+          (active && 'bg-[#141823] text-1')
         }
         onClick={() => {
           onClick('');

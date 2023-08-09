@@ -400,16 +400,16 @@ const Referral: React.FC<IReferral> = ({}) => {
           Referral
         </>
         <Header.Description>
-          <span className="mb-2 block">
+          <div className="mb-2 block text-[#c0b8b8]">
             {' '}
             Get fee discounts and earn rebates.
-          </span>
-          <span className=" block text-[#c0b8b8]">
+          </div>
+          <div className=" block ">
             {' '}
             Note that referral codes are case sensitive and that your code must
             be <br className="sm:hidden" /> created on both Arbitrum as well as
             Polygon to earn rebates on both networks.{' '}
-          </span>
+          </div>
           <br className="sm:hidden" />
           {/* For more information, please read the
           <Header.Link
@@ -456,7 +456,7 @@ const Referral: React.FC<IReferral> = ({}) => {
                 <BufferInput
                   value={ip}
                   onChange={setip}
-                  className="bg-5 ip-border "
+                  className=""
                   placeholder="Enter your code"
                   // unit={<img className="" src="/EditIcon.svg"></img>}
                 ></BufferInput>

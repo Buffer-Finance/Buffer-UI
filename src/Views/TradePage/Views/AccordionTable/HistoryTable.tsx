@@ -77,7 +77,7 @@ const HistoryTable: React.FC<{
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
     // console.log(`BodyFormatter-row: `, trade);
-
+    if (!trade?.pool?.pool) console.log(`trade: `, trade);
     const poolInfo = getPoolInfo(trade.pool.pool);
     let expiryPrice: number | null = trade.expiry_price;
     if (!expiryPrice) {

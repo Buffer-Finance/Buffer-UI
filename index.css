@@ -253,8 +253,8 @@ html .MuiDialog-container {
   -webkit-background-clip: text;
 }
 :root {
-  --bg-0: #0D0D15;
-  --bg-1:#1C1C28;
+  --bg-0: #1c1c28;
+  --bg-1:#232334;
   --bg-2:#171722;
   --bg-vertical-gradient:linear-gradient(180deg, #000000 43%,var(--bg-1) 93.44%);
   --text-2:#808191;
@@ -724,8 +724,9 @@ html {
   --bg-23-table-row: #0e1014;
   --text-8: #2b2557;
   --text-7: rgb(63, 182, 139);
-  --green: #3DECA7;
+  --green: #3FB68B;
   --red: #D34A4A;
+  --red-grey:#7F87A7;
   --text-6: #808191;
   --text-1: #ffffff;
   --primary: rgb(55, 114, 255);
@@ -1124,6 +1125,10 @@ html .xxtpr {
 
 html .red {
   color: var(--red);
+}
+
+html .red-grey {
+  color: var(--red-grey);
 }
 
 html .green {

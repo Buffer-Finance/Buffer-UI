@@ -23,7 +23,7 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = isTestnet ? 5 : 4;
+  const VISIBLETABS = isTestnet ? 6 : 4;
   const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
@@ -33,7 +33,7 @@ export const Navbar: React.FC<INavbar> = () => {
 
   const show = !urlSettings?.hide;
   return (
-    <header className="sticky bg-primary top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 border-b-2 border-solid border-1  z-[102]">
+    <header className="sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102]">
       <div className="flex items-center gap-[24px]">
         <div
           role={'button'}

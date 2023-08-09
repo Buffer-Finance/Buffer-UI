@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const Background = styled.div`
   margin: 0;
@@ -37,7 +37,7 @@ const Background = styled.div`
     width: 100%;
     font-size: 12px;
     text-align: left;
-    color: #c3c2d4;
+    /* color: #c3c2d4; */
     @media (max-width: 600px) {
       font-size: 10px;
     }

@@ -30,6 +30,7 @@ import { useDayOffset } from '../Hooks/useDayOffset';
 import { LeaderBoardTabs } from '../Weekly';
 import { getDisplayDateUTC } from '@Utils/Dates/displayDateTime';
 import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -78,8 +79,11 @@ export const getTournamentEndDateFromWeek = ({
   return startdate;
 };
 
+export const headClass = 'text-f14 tab:text-f12 fw5 text-[#7F87A7]';
+export const descClass = 'text-f16 tab:text-f14 fw4 text-[#C3C2D4]';
+
 export const Incentivised = () => {
-  const { activeChain, configContracts } = useActiveChain();
+  const { activeChain } = useActiveChain();
   const { day, nextTimeStamp } = useDayOfTournament();
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
   const { data, totalTournamentData, loserUserRank, winnerUserRank } =
@@ -95,7 +99,8 @@ export const Incentivised = () => {
   const isTimerEnded = distance <= 0;
   const midnightTimeStamp = nextTimeStamp / 1000;
   const stopwatch = useStopWatch(midnightTimeStamp);
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
 
   const skip = useMemo(
     () => ROWINAPAGE * (activePages.arbitrum - 1),
@@ -176,15 +181,15 @@ export const Incentivised = () => {
                 <div>{rewardPool}</div>
               </NumberTooltip>
             }
-            descClass="text-f16 tab:text-f14 font-medium light-blue-text "
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
             head={`Countdown ${day ? `(#${day})` : ''}`}
             desc={stopwatch}
-            descClass="text-f16 tab:text-f14 fw4 text-5"
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
@@ -194,8 +199,8 @@ export const Incentivised = () => {
                 ? totalTournamentData.allTradesCount
                 : 'Counting...'
             }
-            descClass="text-f16 tab:text-f14 fw4 text-5 "
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
@@ -210,8 +215,8 @@ export const Incentivised = () => {
                   ) + ' USDC'
                 : 'Counting...'
             }
-            descClass="text-f16 tab:text-f14 fw4 "
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
@@ -221,8 +226,8 @@ export const Incentivised = () => {
                 ? totalTournamentData.totalUsers
                 : 'Counting...'
             }
-            descClass="text-f16 tab:text-f14 fw4 text-5"
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
@@ -234,8 +239,8 @@ export const Incentivised = () => {
                 setOffset={setOffset}
               />
             }
-            descClass="text-f16 tab:text-f14 fw4 text-5 "
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
         </div>{' '}
@@ -301,7 +306,7 @@ export const Incentivised = () => {
                   4pm UTC.
                 </>
               }
-              className="!mb-3"
+              className="!mb-3 text-f16"
             />
             <div className="m-auto mb-7">
               <TopData
@@ -320,11 +325,15 @@ export const Incentivised = () => {
                       <ChainSwitchDropdown baseUrl="/leaderboard/daily" />
                     </div>
                     <a
-                      className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
+                      className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
                       href={configValue.contestRules}
                       target={'blank'}
                     >
-                      Contest Rules <FrontArrow className="tml w-fit inline" />
+                      Contest Rules{' '}
+                      <FrontArrow
+                        className="ml-2 w-fit inline scale-125 mt-1"
+                        arrowColor="#7F87A7"
+                      />
                     </a>
                   </div>
                 }

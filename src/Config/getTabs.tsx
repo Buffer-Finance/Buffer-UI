@@ -325,6 +325,12 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
+        to: `/leaderboard/daily`,
+        name: 'Competitions',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
         to: `/dashboard`,
         name: 'Dashboard',
         subTabs: [],
@@ -342,6 +348,7 @@ export const getTabs = (
       //   subTabs: [],
       //   isExternalLink: false,
       // },
+
       {
         to: `/referral`,
         name: 'Referral',
@@ -393,13 +400,19 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-
+      {
+        to: `/leaderboard/daily`,
+        name: 'Competitions',
+        subTabs: [],
+        isExternalLink: false,
+      },
       {
         to: `/dashboard`,
         name: 'Dashboard',
         subTabs: [],
         isExternalLink: false,
       },
+
       {
         to: `https://stats.buffer.finance/`,
         name: 'Stats',
@@ -412,6 +425,7 @@ export const getTabs = (
       //   subTabs: [],
       //   isExternalLink: false,
       // },
+
       {
         to: `/referral`,
         name: 'Referral',

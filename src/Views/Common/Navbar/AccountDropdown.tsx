@@ -60,12 +60,12 @@ export const AccountDropdown: React.FC = () => {
   }, [address]);
 
   let OneCTManager = (
-    <Skeleton variant="rectangular" className="lc sr w-[70px] h-[30px]" />
+    <Skeleton variant="rectangular" className="lc sr w-[70px] h-[31px]" />
   );
   if (registeredOneCT) {
     OneCTManager = (
       <BlueBtn
-        className="!ml-[13px] !text-f12 !bg-[#2C2C41] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
+        className="!ml-[13px] !text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
         onClick={disableOneCt}
         isLoading={disabelLoading}
       >
@@ -120,7 +120,7 @@ export const AccountDropdown: React.FC = () => {
                 return (
                   <div
                     role="button"
-                    className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#232334] hover:brightness-125 hover:bg-1`}
+                    className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] pl-3 pr-1 bg-[#191b20] hover:brightness-125 `}
                     onClick={openConnectModal}
                   >
                     <WalletIcon className="mr-[6px] ml-1 text-blue" />
@@ -137,7 +137,7 @@ export const AccountDropdown: React.FC = () => {
                 return (
                   <div
                     role="button"
-                    className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#232334] hover:brightness-125 hover:bg-1`}
+                    className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-3 bg-[#191b20] hover:brightness-125 `}
                     onClick={openChainModal}
                   >
                     <WalletIcon className="mr-[6px] ml-1" />
@@ -155,7 +155,7 @@ export const AccountDropdown: React.FC = () => {
                   <div
                     onClick={openChainModal}
                     role="button"
-                    className={`bg-[#232334] hover:brightness-125 hover:bg-1cursor-pointer flex items-center justify-center text-f13  h-[30px] w-max rounded-[7px] pl-3 pr-[1px] sm:pr-1 transition-all duration-300 `}
+                    className={`bg-[#191b20] hover:brightness-125 cursor-pointer flex items-center justify-center text-f13  h-[31px] w-max rounded-[7px] px-3 pr-[1px] sm:pr-1 transition-all duration-300 `}
                   >
                     <div className="flex items-center dropdown-value f15 capitalize weight-400">
                       {chain && chain.name && (
@@ -175,7 +175,7 @@ export const AccountDropdown: React.FC = () => {
                   {/* <OneCTButton /> */}
                   <button type="button" ref={ref} {...anchorProps}>
                     <div
-                      className={`flex items-center text-f13 cursor-pointer h-[30px] w-fit rounded-[7px] pl-3 bg-[#191B20]  hover:brightness-125 hover:bg-1`}
+                      className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-[6px] bg-[#191B20] hover:brightness-125 `}
                     >
                       <WalletIcon className="mr-2 ml-1 text-blue" />
                       <div className="flex items-center">
@@ -188,7 +188,7 @@ export const AccountDropdown: React.FC = () => {
                           className="w-[14px] h-[14px] ml-2"
                         />
                       </div>
-                      <div className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] mx-2 pb-1">
+                      <div className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1">
                         {account ? `${account.address.slice(0, 6)}` : 'Connect'}
                         <DDArrow
                           className={` transition-all duration-300 ml-1 ease-out `}
@@ -209,7 +209,7 @@ export const AccountDropdown: React.FC = () => {
                     }
                     offsetY={10}
                   >
-                    <MenuItem className={'!bg-[#232334] text-1 cursor-auto'}>
+                    <MenuItem className={'!bg-[#191b20] text-1 cursor-auto'}>
                       <div className="mx-[10px] my-[10px] mb-[14px]">
                         <div className="flex items-center justify-between text-f14 mb-[20px]">
                           <div className="flex flex-col">
@@ -365,7 +365,7 @@ const IconBG = ({
   onClick: any;
 }) => (
   <div
-    className="p-2 w-[30px] h-[30px] bg-[#2C2C41] hover:brightness-110 grid place-items-center rounded-[4px]"
+    className="p-2 w-[31px] h-[31px] bg-[#2C2C41] hover:brightness-110 grid place-items-center rounded-[4px]"
     onClick={onClick}
   >
     {children}

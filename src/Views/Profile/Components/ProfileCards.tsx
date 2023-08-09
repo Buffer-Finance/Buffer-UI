@@ -23,7 +23,7 @@ import { toFixed } from '@Utils/NumString';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { useMemo } from 'react';
 
-const profileCardClass = 'rounded-lg px-7';
+const profileCardClass = 'rounded-lg px-7 !border-none';
 
 export const ProfileCards = () => {
   const { tradingMetricsData } = useProfileGraphQl();
@@ -85,8 +85,8 @@ const Trading = ({
       middle={
         <TableAligner
           className="mt-3"
-          keyStyle={keyClasses}
-          valueStyle={valueClasses}
+          keyStyle={keyClasses + ' !text-[#7F87A7] !text-f16'}
+          valueStyle={valueClasses + ' !text-f16'}
           keysName={['Total Payout', 'Win Rate', 'Open Interest', 'Volume']}
           values={[
             <div className={wrapperClasses}>
@@ -152,8 +152,8 @@ const Referral = ({
       middle={
         <TableAligner
           className="mt-3"
-          keyStyle={keyClasses}
-          valueStyle={valueClasses}
+          keyStyle={keyClasses + ' !text-[#7F87A7] !text-f16'}
+          valueStyle={valueClasses + ' !text-f16'}
           keysName={[
             'Total Referral Earnings',
             'Referred Trading Volume',
