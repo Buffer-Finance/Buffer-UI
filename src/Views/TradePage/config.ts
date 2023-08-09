@@ -3,17 +3,20 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.41-multi-pool-new-contracts-with-v2.5-updates/api',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
     router: '0x26f3585B2746B0038b5E0cda69F40d7f9D8d8538',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0x36c1D417631EB3D089858A57EF0846C65dB245Da',
+    signer_manager: '0x8982a8C11976348B225100b19f570728c1Fdd449',
+    pooloi: '0x0D3057A12f5bF5AE1fB295Bace09D31505cdb0f6',
+    marketoi: '0xb1e1B2Be3dF75Bd254441aEf53A34e025C09052e',
+    booster: '0x374E20a66836fC3A0357cC6ecD5B12686f81Db84',
     poolsInfo: {
-      '0x6EfAbB45b781B62979600444775113516220d992': {
-        tokenAddress: '0x943902252597Ca568a6fB076aceCEdcf7eb903C6',
-        faucet: '0xD2Ce70BAe9f731344b3364206986129e5f2e7437',
+      '0x107aF8B74F52e6936e92D8204D8a80c32039bFd0': {
+        tokenAddress: '0xd28FD8eB6A970d3a120FeF4275aae7cAf8468E88',
+        faucet: '0x3191AAeF42050DC4ec63211B76440B1b035B70f8',
         decimals: 6,
         token: 'USDC',
         is_pol: false,
@@ -25,9 +28,9 @@ export const appConfig = {
         token: 'BFR',
         is_pol: false,
       },
-      '0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6': {
-        tokenAddress: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
-        faucet: '0x894Ce84237aCB9985e3c9A930C65D202B633E017',
+      '0xceDeb1849465b22C94Ea7Fa88800D45d0475b317': {
+        tokenAddress: '0xf6eA4A60903E06caa1a300226D275fF5c3c11349',
+        faucet: '0xE816d53C3f3fF8E0a57f2eb27061579bCfFe3C8D',
         decimals: 18,
         token: 'ARB',
         is_pol: false,
@@ -469,7 +472,7 @@ export const marketsForChart = {
   },
 };
 
-export const baseUrl = import.meta.env.VITE_INSTANT_TRADING_HOST_SANDBOX;
+export const baseUrl = import.meta.env.VITE_INSTANT_TRADING_HOST_DEVELOPMENT;
 export const pricePublisherBaseUrl = import.meta.env.VITE_PRICE_QUERY_HOST;
 
 export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
