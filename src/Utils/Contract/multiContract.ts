@@ -8,12 +8,13 @@ export interface Call {
   id?: string; //identifier of call
 }
 import getDeepCopy from '@Utils/getDeepCopy';
+import { getContract } from 'viem';
 
 export const arbMain = 'https://arb1.arbitrum.io/rpc';
 
 export const multicallv2 = async (
   calls: Call[],
-  singerOrProvider,
+  contract,
   multicall,
   swrKey
 ) => {
@@ -26,8 +27,6 @@ export const multicallv2 = async (
         itf.encodeFunctionData(call.name, call.params),
       ];
     });
-
-    const contract = new Contract(multicall, arbiAbi, singerOrProvider);
 
     let returnData = await contract['callStatic']['aggregate'](calldata);
     if (typeof returnData === 'undefined') return;
@@ -52,12 +51,7 @@ export const getReadId = (call: Call) => {
 export const getCallId = (address: string, method: string, ...rest) => {
   return address + method + rest.join('');
 };
-export const multicallLinked = async (
-  calls: Call[],
-  singerOrProvider,
-  multicall,
-  swrKey
-) => {
+export const multicallLinked = async (calls: Call[], contract, swrKey) => {
   if (!calls.length) return null;
 
   try {
@@ -68,8 +62,6 @@ export const multicallLinked = async (
         itf.encodeFunctionData(call.name, call.params),
       ];
     });
-
-    const contract = new Contract(multicall, arbiAbi, singerOrProvider);
 
     let returnData = await contract['callStatic']['aggregate'](calldata);
     if (typeof returnData === 'undefined') return;
@@ -92,7 +84,7 @@ export const multicallLinked = async (
     return null;
   }
 };
-const arbiAbi = [
+export const arbMulticallABI = [
   {
     inputs: [
       {

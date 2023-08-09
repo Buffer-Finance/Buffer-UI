@@ -1,74 +1,58 @@
 {
-  "router": {
-    "setContractRegistry": {
-      "getter": "contractRegistry"
-    },
-    "setKeeper": {
-      "getter": "isKeeper"
-    }
-  },
   "options_config": {
     "setBoosterContract": {
-      "getter": "boosterContract",
-      "decimal": 8
+      "getter": "boosterContract"
     },
     "setCreationWindowContract": {
-      "getter": "creationWindowContract",
-      "decimal": 8
+      "getter": "creationWindowContract"
     },
     "setMinFee": {
       "getter": "minFee",
-      "decimal": 8
+      "decimal": "token"
     },
     "setIV": {
       "getter": "iv",
-      "decimal": 8
+      "decimal": 4
     },
     "setPlatformFee": {
       "getter": "platformFee",
-      "decimal": 8
+      "decimal": "token"
     },
     "setSettlementFeeDisbursalContract": {
-      "getter": "settlementFeeDisbursalContract",
-      "decimal": 8
+      "getter": "settlementFeeDisbursalContract"
     },
     "setOptionStorageContract": {
-      "getter": "optionStorageContract",
-      "decimal": 8
+      "getter": "optionStorageContract"
     },
     "setMaxPeriod": {
       "getter": "maxPeriod",
-      "decimal": 8
+      "hint": "in seconds"
     },
     "setPoolOIStorageContract": {
-      "getter": "poolOIStorageContract",
-      "decimal": 8
+      "getter": "poolOIStorageContract"
     },
     "setPoolOIConfigContract": {
-      "getter": "poolOIConfigContract",
-      "decimal": 8
+      "getter": "poolOIConfigContract"
     },
     "setMarketOIConfigContract": {
-      "getter": "marketOIConfigContract",
-      "decimal": 8
+      "getter": "marketOIConfigContract"
     },
     "setEarlyCloseThreshold": {
       "getter": "earlyCloseThreshold",
-      "decimal": 8
+      "hint": "in seconds"
     },
     "toggleEarlyClose": {
-      "getter": "isEarlyCloseAllowed",
-      "decimal": 8
+      "getter": "isEarlyCloseAllowed"
     },
     "setMinPeriod": {
       "getter": "minPeriod",
-      "decimal": 8
+      "hint": "in seconds"
     }
   },
   "pool": {
     "setMaxLiquidity": {
       "getter": "maxLiquidity",
-      "decimal": 9
+      "decimal": "token"
     }
   },
   "options": {
@@ -77,24 +61,31 @@
     }
   },
   "booster": {
-    "configure": {
-      "getter": "nftTierDiscounts"
+    "setConfigure": {
+      "getter": "getNftTierDiscounts"
     },
     "setPrice": {
       "getter": "couponPrice"
+    },
+    "setBoostPercentage": {
+      "getter": "boostPercentage",
+      "decimal": 2
     }
   },
   "pooloi": {
     "setMaxPoolOI": {
-      "decimals": 2
+      "getter": "_maxPoolOI",
+      "decimal": "token"
     }
   },
   "marketoi": {
     "setMaxMarketOI": {
-      "decimals": 2
+      "getter": "_maxMarketOI",
+      "decimal": "token"
     },
     "setMaxTradeSize": {
-      "decimals": 2
+      "getter": "_maxTradeSize",
+      "decimal": "token"
     }
   }
 }

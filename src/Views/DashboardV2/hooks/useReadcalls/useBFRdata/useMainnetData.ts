@@ -1,13 +1,23 @@
 import { multicallv2 } from '@Utils/Contract/multiContract';
 import { add, subtract } from '@Utils/NumString/stringArithmatics';
+import { viemMulticall, viemMulticallNonLinked } from '@Utils/multicall';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { HolderContracts, appConfig } from '@Views/TradePage/config';
+import { arbitrum } from 'wagmi/chains';
 import { ethers } from 'ethers';
+import { useMemo } from 'react';
 import useSWR from 'swr';
+import { createPublicClient, http } from 'viem';
 import { erc20ABI } from 'wagmi';
 
 export const useMainnetData = () => {
   const { DashboardConfig, EarnConfig } = appConfig['42161'];
+  const client = useMemo(() => {
+    return createPublicClient({
+      chain: arbitrum,
+      transport: http(),
+    });
+  }, []);
   const { data: mainnetData, error: cirError } = useSWR('circulatingSupply', {
     fetcher: async () => {
       const lpTokensCalls = [
@@ -52,12 +62,12 @@ export const useMainnetData = () => {
       });
       const contracts = [...calls, ...lpTokensCalls];
 
-      const multicallRes = await multicallv2(
+      const multicallRes = await viemMulticallNonLinked(
         contracts as any,
-        new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc'),
-        appConfig[42161].multicall,
+        client,
         'dashoboard-read-calls'
       );
+      console.log(`multicallRes: `, multicallRes);
       const lpTokensCallLength = lpTokensCalls.length;
       const formattedRes = multicallRes.slice(0, -lpTokensCallLength);
 

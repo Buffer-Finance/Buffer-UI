@@ -1,14 +1,14 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { ArrowDropDownRounded } from '@mui/icons-material';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import * as chain from '@wagmi/core/chains';
+import * as chain from 'wagmi/chains';
 import { BlueBtn } from '../V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { SVGProps } from 'react';
 import { MenuItem, Skeleton } from '@mui/material';
 import { useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
-import { useDisconnect, useProvider } from 'wagmi';
+import { useDisconnect, usePublicClient } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import {
   uesOneCtActiveChain,
@@ -53,7 +53,7 @@ export const AccountDropdown: React.FC = () => {
   const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
     useOneCTWallet();
 
-  const provider = useProvider({ chainId: activeChain.id });
+  const provider = usePublicClient({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   useEffect(() => {
     setOneCTModal(false);

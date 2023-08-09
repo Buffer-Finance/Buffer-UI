@@ -1,4 +1,4 @@
-import { configureChains, createClient, Chain } from 'wagmi';
+import { configureChains, Chain, createConfig } from 'wagmi';
 import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import {
@@ -36,6 +36,7 @@ function getSupportedChains() {
   }
 }
 const SupprtedChains = getSupportedChains();
+console.log(`SupprtedChains: `, SupprtedChains);
 
 export const getChains = () => SupprtedChains;
 
@@ -77,13 +78,15 @@ const getWallets = (chains: Chain[]) => {
       ];
 };
 
-const { chains, provider } = configureChains(getChains(), [publicProvider()]);
+const { chains, publicClient } = configureChains(getChains(), [
+  publicProvider(),
+]);
 const connectors = connectorsForWallets(getWallets(chains));
 export { chains };
-const wagmiClient = createClient({
+const wagmiClient = createConfig({
   autoConnect: inIframe() ? false : true,
   connectors,
-  provider,
+  publicClient,
 });
 
 export default wagmiClient;

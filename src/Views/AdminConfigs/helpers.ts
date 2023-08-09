@@ -9,7 +9,7 @@ import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
 import RouterAbi from '@Views/TradePage/ABIs/RouterABI.json';
 import { Abi } from 'viem';
 import { appConfig } from '@Views/TradePage/config';
-import { marketType } from '@Views/TradePage/type';
+import { marketType, poolType } from '@Views/TradePage/type';
 import { Chain } from 'wagmi';
 export const group2abi = {
   router: RouterAbi,
@@ -25,11 +25,12 @@ const group2marketAddresesMapping = {
   marketoi: 'marketOiContract',
   options_config: 'configContract',
   options: 'optionContract',
+  pooloi: 'poolOIContract',
 };
 
 const marketDependent = Object.keys(group2marketAddresesMapping);
 
-type ipop = 'string' | 'number';
+type ipop = 'string' | 'number' | 'bool';
 type formaters = { name: string; type: ipop; value: string }[];
 type RPCPayloads = {
   name: string;
@@ -43,6 +44,10 @@ export type Config = {
   group: keyof typeof group2abi;
   contract: `0x${string}`;
   mapper: () => void;
+  hint?: string;
+  decimal?: number;
+  pool?: poolType;
+  market?: marketType;
 };
 
 type AdminConfig = {
@@ -82,6 +87,11 @@ export const raw2adminConfig = (
               type: ip.type,
               value: '',
             })),
+            op: getterSignatre.outputs.map((ip) => ({
+              name: ip.name,
+              type: ip.type,
+              value: '',
+            })),
           }
         : null;
       const setterSignature = group2abi[group].find((a) => a.name == config);
@@ -94,12 +104,24 @@ export const raw2adminConfig = (
               type: ip.type,
               value: '',
             })),
+            op: setterSignature.outputs.map((ip) => ({
+              name: ip.name,
+              type: ip.type,
+              value: '',
+            })),
           }
         : null;
       if (marketDependent.includes(group as keyof typeof rawConfigs)) {
         for (let market of marketConfig) {
           for (const pool of market.pools) {
+            let decimal = configs[config].decimal;
+            if (decimal && decimal == 'token') {
+              decimal = appDefaults.poolsInfo[pool.pool].decimals;
+            }
+
             const currObject: Config = {
+              ...configs[config],
+              decimal,
               contract: pool[group2marketAddresesMapping[group]],
               group,
               getter,
@@ -117,23 +139,35 @@ export const raw2adminConfig = (
         // here
 
         const pools = Object.keys(appDefaults.poolsInfo);
-        configObject[group] = pools.map((p) => ({
-          contract: p,
-          getter,
-          setter,
-          group,
-        }));
-
-        // configObject[group] = {
-      } else {
-        configObject[group] = [
-          {
-            contract: appDefaults[group],
+        configObject[group] = pools.map((p) => {
+          let decimal = configs[config].decimal;
+          if (decimal && decimal == 'token') {
+            decimal = appDefaults.poolsInfo[p].decimals;
+          }
+          return {
+            ...configs[config],
+            decimal,
+            contract: p,
             getter,
             setter,
             group,
-          },
-        ];
+            pool: appDefaults.poolsInfo[p],
+          };
+        });
+
+        // configObject[group] = {
+      } else {
+        let currConfigObject = {
+          ...configs[config],
+
+          contract: appDefaults[group],
+          getter,
+          setter,
+          group,
+        };
+        if (group in configObject) {
+          configObject[group].push(currConfigObject);
+        } else configObject[group] = [currConfigObject];
       }
     }
   }

@@ -57,7 +57,7 @@ inject();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={darkTheme()}>
         <HashRouter>
           <SWRConfig value={options}>

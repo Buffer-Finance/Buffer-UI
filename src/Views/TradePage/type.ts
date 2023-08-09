@@ -84,6 +84,7 @@ export type responseObj = {
     isEarlyCloseEnabled: boolean;
     marketOIaddress: string;
     IV: string;
+    poolOIaddress: string;
   };
   address: string;
   poolContract: string;

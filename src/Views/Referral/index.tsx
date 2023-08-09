@@ -526,6 +526,8 @@ const Affilate = ({
     }
   };
 
+  console.log(`index-affiliateCode: `, affiliateCode);
+
   useEffect(() => {
     if (open) {
       setTimeout(() => {

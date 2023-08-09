@@ -6,14 +6,13 @@ import ERC20ABI from 'src/ABIs/Token.json';
 import { toFixed } from '@Utils/NumString';
 import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import 'viem/window';
-import { signTypedData } from '@wagmi/core';
 
 import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import axios from 'axios';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount, usePublicClient } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
@@ -45,6 +44,8 @@ import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
 import { getUserError } from '../utils/getUserError';
 import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { getSingatureCached } from '../cache';
+import { viemMulticall } from '@Utils/multicall';
+import { signTypedData } from '@wagmi/core';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -72,7 +73,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const tokenAddress = poolDetails?.tokenAddress;
   const { data: allSettlementFees } = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
-  const provider = useProvider({ chainId: activeChain.id });
+  const provider = usePublicClient({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const setIsApproveModalOpen = useSetAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
@@ -571,7 +572,7 @@ const getLockedAmount = async (
   settlementFee: number,
   slippage: number,
   optionContract: string,
-  provider: ethers.providers.Provider,
+  provider: PublicClient,
   multicallAddress: string
 ): Promise<{
   amount: string;
@@ -600,12 +601,7 @@ const getLockedAmount = async (
   ];
   console.log(`useBuyTradeActions-optionContract: `, calls);
   // const calls = [];
-  const res = await multicallLinked(
-    calls,
-    provider,
-    multicallAddress,
-    'hellowthere'
-  );
+  const res = await viemMulticall(calls, provider, 'hellowthere');
   const callId = getCallId(optionContract, 'evaluateParams');
   if (!res?.[callId])
     return getLockedAmount(

@@ -52,6 +52,7 @@ export const useMarketsConfig = () => {
   });
 
   // console.log(`DDDresponse: `, response);
+  console.log(`response: `, response);
   return response;
 };
 
@@ -67,6 +68,7 @@ function createPoolObject(market: responseObj) {
     configContract: getAddress(market.configContract.address),
     optionContract: getAddress(market.address),
     marketOiContract: getAddress(market.configContract.marketOIaddress),
+    poolOIContract: getAddress(market.configContract.poolOIaddress),
     platformFee: market.configContract.platformFee,
     earlyclose: {
       enable: market.configContract.isEarlyCloseEnabled,

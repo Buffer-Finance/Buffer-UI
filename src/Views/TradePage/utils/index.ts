@@ -7,7 +7,6 @@ import getMinimumValue from './getMinimumValue';
 import getMinimumValueFromArray from './getMinimumValueFromArray';
 import cancelQueueTrade from './cancelQueueTrade';
 import editQueueTrade from './editQueueTrade';
-import generateTradeSignature from './generateTradeSignature';
 import addMarketInTrades from './addMarketInTrades';
 import WaitToast from './WaitToast';
 import getImageUrl from './getImageUrl';
@@ -24,7 +23,6 @@ export {
   getMinimumValueFromArray,
   cancelQueueTrade,
   editQueueTrade,
-  generateTradeSignature,
   addMarketInTrades,
   WaitToast,
   getImageUrl,
