@@ -43,8 +43,16 @@ const HistoryTable: React.FC<{
   totalPages: number;
   platform?: boolean;
   activePage: number;
+  overflow?: number;
   setActivePage: (page: number) => void;
-}> = ({ trades, platform, totalPages, activePage, setActivePage }) => {
+}> = ({
+  trades,
+  platform,
+  totalPages,
+  activePage,
+  setActivePage,
+  overflow,
+}) => {
   const { getPoolInfo } = usePoolInfo();
 
   const headNameArray = platform
@@ -214,7 +222,7 @@ const HistoryTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow={400}
+      overflow={overflow}
       error={<TableErrorRow msg="No Trade History." />}
     />
   );

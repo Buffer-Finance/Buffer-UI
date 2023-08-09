@@ -40,7 +40,15 @@ export const OngoingTradesTable: React.FC<{
   activePage?: number;
   setActivePage?: (page: number) => void;
   totalPages?: number;
-}> = ({ trades, platform, activePage, setActivePage, totalPages }) => {
+  overflow?: number;
+}> = ({
+  trades,
+  platform,
+  activePage,
+  setActivePage,
+  totalPages,
+  overflow,
+}) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
@@ -238,7 +246,7 @@ export const OngoingTradesTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow={400}
+      overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
     />
   );

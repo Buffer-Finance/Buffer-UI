@@ -19,7 +19,8 @@ export const CancelledTable: React.FC<{
   trades: TradeType[];
   totalPages: number;
   platform?: boolean;
-}> = ({ trades, platform, totalPages }) => {
+  overflow?: number;
+}> = ({ trades, platform, totalPages, overflow }) => {
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
   const { getPoolInfo } = usePoolInfo();
 
@@ -117,7 +118,7 @@ export const CancelledTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow={400}
+      overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
     />
   );

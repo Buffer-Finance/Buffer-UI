@@ -53,7 +53,13 @@ enum TableColumn {
   ActionButtons = 6,
 }
 
-const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
+const LimitOrderTable = ({
+  trades,
+  overflow,
+}: {
+  trades: TradeType[];
+  overflow?: number;
+}) => {
   const [marketPrice] = useAtom(priceAtom);
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const cancelLoading = useAtomValue(closeLoadingAtom);
@@ -75,9 +81,9 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
 
     switch (col) {
       case TableColumn.TriggerPrice:
-        return <StrikePriceComponent trade={trade} configData={trade.market} />;
+        return <StrikePriceComponent trade={trade} />;
       case TableColumn.Asset:
-        return <AssetCell configData={trade.market} currentRow={trade} />;
+        return <AssetCell currentRow={trade} />;
       case TableColumn.CurrentPrice:
         return (
           <Display
@@ -135,7 +141,7 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow={400}
+      overflow={overflow}
       error={<TableErrorRow msg="No active limit orders." />}
     />
   );
