@@ -3,6 +3,7 @@ import {
   RowBetween,
   RowGap,
   RowGapItemsStretched,
+  RowGapItemsTop,
 } from '@Views/TradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
 import styled from '@emotion/styled';
@@ -95,11 +96,11 @@ const PlatfromFeeError = ({
   const isError = notEnooghForFee;
   if (notEnooghForFee && notEnoughForTrade) return <></>;
   return (
-    <RowGap
+    <RowGapItemsTop
       gap="4px"
       className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
     >
-      <LightToolTipSVG />
+      <LightToolTipSVG className="mt-[3px]" />
       {isError ? (
         <>
           Insufficient funds for platform fee.{' '}
@@ -113,6 +114,6 @@ const PlatfromFeeError = ({
           </>
         )
       )}
-    </RowGap>
+    </RowGapItemsTop>
   );
 };
