@@ -10,6 +10,7 @@ export const AssetCell: React.FC<{
   split?: boolean;
   platform?: boolean;
 }> = ({ currentRow, split, platform }) => {
+  const isHidden = currentRow.is_above === undefined;
   const isUp = currentRow.is_above;
   const token0 = currentRow.market.token0;
   const token1 = currentRow.market.token1;
@@ -37,7 +38,7 @@ export const AssetCell: React.FC<{
             <span className={`weight-400 text-f15 `}>
               {token0 + '-' + token1}{' '}
             </span>
-            {platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}
+            {isHidden || platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}
           </div>
         </NumberTooltip>
       }
