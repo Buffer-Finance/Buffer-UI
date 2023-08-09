@@ -14,6 +14,7 @@ export type poolType = {
     enable: boolean;
     threshold: string;
   };
+  IV: number;
 };
 //type of markets needed on trade page
 export type marketType = {
@@ -82,6 +83,7 @@ export type responseObj = {
     earlyCloseThreshold: string;
     isEarlyCloseEnabled: boolean;
     marketOIaddress: string;
+    IV: string;
   };
   address: string;
   poolContract: string;

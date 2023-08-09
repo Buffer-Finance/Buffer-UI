@@ -25,6 +25,7 @@ export const useMarketsRequest = () => {
                     earlyCloseThreshold
                     isEarlyCloseEnabled
                     marketOIaddress
+                    IV
                   }
                   address
                   poolContract

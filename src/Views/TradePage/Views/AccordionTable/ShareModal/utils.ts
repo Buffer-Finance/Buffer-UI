@@ -71,7 +71,8 @@ function getEarlypnl(
     expiryPrice / 1e8,
 
     currentRow.close_time as number,
-    currentRow.expiration_time as number
+    currentRow.expiration_time as number,
+    currentRow.pool.IV
   );
   const { earlycloseAmount } = calculatePnlForProbability({
     decimals,

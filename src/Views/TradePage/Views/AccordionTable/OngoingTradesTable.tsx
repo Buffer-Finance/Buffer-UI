@@ -194,7 +194,8 @@ export const OngoingTradesTable: React.FC<{
       case TableColumn.Probability:
         const probabiliyt = getProbability(
           trade,
-          +getPriceFromKlines(marketPrice, trade.market)
+          +getPriceFromKlines(marketPrice, trade.market),
+          trade.pool.IV
         );
         return (
           // queuedTradeFallBack(trade) || (
