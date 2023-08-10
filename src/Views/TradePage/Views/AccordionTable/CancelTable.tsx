@@ -30,7 +30,7 @@ export const CancelledTable: React.FC<{
     'Trade Size',
     'Queue',
     'Cancellation',
-    'Reason',
+    // 'Reason',
     'Status',
   ];
 
@@ -40,8 +40,8 @@ export const CancelledTable: React.FC<{
     TradeSize = 2,
     QueueTime = 3,
     CancellationTime = 4,
-    Reason = 5,
-    Status = 6,
+    // Reason = 5,
+    Status = 5,
   }
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
@@ -69,12 +69,12 @@ export const CancelledTable: React.FC<{
             ts={trade.cancellation_timestamp || Math.round(Date.now() / 1000)}
           />
         );
-      case TableColumn.Reason:
-        return (
-          <div>{trade.canellation_reason || 'Some server issue'}</div>
-          // queuedTradeFallBack(trade) || (
-          // )
-        );
+      // case TableColumn.Reason:
+      //   return (
+      //     <div>{trade.canellation_reason || 'Some server issue'}</div>
+      //     // queuedTradeFallBack(trade) || (
+      //     // )
+      //   );
       case TableColumn.TradeSize:
         return (
           <Display
