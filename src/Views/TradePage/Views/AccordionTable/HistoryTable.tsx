@@ -184,6 +184,8 @@ const HistoryTable: React.FC<{
           </div>
         );
       case TableColumn.Status:
+        if (!expiryPrice) return 'Processing...';
+
         return (
           <NumberTooltip content={status.tooltip}>
             <div
