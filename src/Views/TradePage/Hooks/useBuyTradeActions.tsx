@@ -477,7 +477,7 @@ export const useBuyTradeActions = (userInput: string) => {
     //  fetch nonce 7min
     // sign data : 1hr
     // call api :15
-    const deadline = (Math.round(Date.now() / 1000) + 6000).toString();
+    const deadline = (Math.round(Date.now() / 1000) + 84600).toString();
     try {
       const [_, RSV] = await generateApprovalSignature(
         approvalExpanded?.nonce,

@@ -14,7 +14,7 @@ export const miscsSettingsAtom = atomWithStorage(
   defaultSettings.miscs
 );
 export const tradeSettingsAtom = atomWithStorage(
-  'tradeSettingsAtomV2',
+  'tradeSettingsAtomV3',
   defaultSettings.trade
 );
 export const notificationPositionSettingsAtom = atomWithStorage(
