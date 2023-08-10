@@ -35,7 +35,6 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const poolInfo = getPoolInfo(trade.pool.pool);
   const pairName = joinStrings(tradeMarket.token0, tradeMarket.token1, '-');
   const isUp = trade.is_above;
-  const assetName = tradeMarket.token1;
   const tradeType = trade.is_limit_order ? 'Limit order' : 'Market';
   return (
     <TradeCardBackground>
@@ -54,7 +53,7 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
       </ColumnGap>
       <TradeTimeElapsed trade={trade} />
       <div className="mb-3">
-        <TradePoolChip assetName={assetName} />
+        <TradePoolChip assetName={poolInfo.token} />
       </div>
 
       <TradeDataView
