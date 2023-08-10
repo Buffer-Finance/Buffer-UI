@@ -238,8 +238,7 @@ function App() {
                   &nbsp; */}
                   0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D &nbsp;
                   {/* </a>{' '} */}
-                  has been listed on Uniswap V3 Arbitrum. Don't trade $iBFR
-                  token on PancakeSwap or Apeswap on BNB chain.
+                  has been listed on Uniswap V3 Arbitrum.
                 </>
               }
               closeWarning={() => {}}
