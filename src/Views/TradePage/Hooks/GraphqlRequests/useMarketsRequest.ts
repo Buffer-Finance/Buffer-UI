@@ -14,7 +14,9 @@ export const useMarketsRequest = () => {
   async function fetcher(): Promise<response> {
     const response = await axios.post(configData.graph.MAIN, {
       query: `{ 
-              optionContracts {
+              optionContracts(
+                where: {poolContract_not: null}
+              )  {
                   configContract {
                     address
                     maxFee
