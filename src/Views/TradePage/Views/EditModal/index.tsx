@@ -68,9 +68,9 @@ export const EditModal: React.FC<{
     return () => clearInterval(interval); // Cleanup the interval on component unmount
   }, [queuedTime]);
 
-  useEffect(() => {
-    console.log('elapsedMinutes', elapsedMinutes);
-  }, [elapsedMinutes]);
+  // useEffect(() => {
+  //   console.log('elapsedMinutes', elapsedMinutes);
+  // }, [elapsedMinutes]);
 
   const isSaveDisabled = useMemo(() => {
     if (minutes === null || minutes === undefined || minutes.toString() === '')
@@ -214,7 +214,7 @@ export const EditModal: React.FC<{
             <EditTextValueText>
               <Display
                 data={divide(trade.trade_size, poolInfo.decimals)}
-                unit={'USDC'}
+                unit={poolInfo.token}
               />
             </EditTextValueText>
           </RowBetween>
