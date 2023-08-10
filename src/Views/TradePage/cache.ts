@@ -6,10 +6,6 @@ export const getSingatureCached = async (
   oneCTWallet: PrivateKeyAccount | null
 ) => {
   if (!oneCTWallet) return null;
-  console.log(
-    `address2SingatureCache[oneCTWallet.address]: `,
-    address2SingatureCache[oneCTWallet.address]
-  );
   if (!address2SingatureCache[oneCTWallet.address]) {
     address2SingatureCache[oneCTWallet.address] = await oneCTWallet.signMessage(
       {
