@@ -1,8 +1,9 @@
-import { useReadCall } from '@Utils/useReadCall';
+import { useCall2Data, useReadCall } from '@Utils/useReadCall';
 import ReferralABI from '../Config/ReferralABI.json';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getCallId, getReadId } from '@Utils/Contract/multiContract';
 
 export function useRefereeCode() {
   const { address: account } = useUserAccount();
@@ -21,8 +22,7 @@ export function useRefereeCode() {
           },
         ]
       : [];
-  return useReadCall({
-    contracts: calls,
-    swrKey: 'traderReferralCodes',
-  });
+  return useCall2Data(calls, 'traderReferralCodes')?.data?.[
+    getReadId(calls?.[0])
+  ];
 }

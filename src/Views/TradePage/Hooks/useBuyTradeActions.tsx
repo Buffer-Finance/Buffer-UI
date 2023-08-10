@@ -46,6 +46,7 @@ import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { getSingatureCached } from '../cache';
 import { viemMulticall } from '@Utils/multicall';
 import { signTypedData } from '@wagmi/core';
+import { PublicClient } from 'viem';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -376,13 +377,12 @@ export const useBuyTradeActions = (userInput: string) => {
             baseArgs[ArgIndex.TargetContract],
             provider,
             configData.multicall
-          ).then((lockedAmount) => {
-            console.timeEnd('read-call');
+          ).then((lockedAmount: string[]) => {
+            console.log(`useBuyTradeActions-lockedAmount: `, lockedAmount);
 
             setPriceCache((t) => ({
               ...t,
-              [activeAsset.tv_id + baseArgs[ArgIndex.Size]]:
-                lockedAmount.amount,
+              [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount[0][0],
             }));
           });
           const queuedPrice = await getCachedPrice({
@@ -602,6 +602,7 @@ const getLockedAmount = async (
   console.log(`useBuyTradeActions-optionContract: `, calls);
   // const calls = [];
   const res = await viemMulticall(calls, provider, 'hellowthere');
+  console.log(`useBuyTradeActions-res: `, res);
   const callId = getCallId(optionContract, 'evaluateParams');
   if (!res?.[callId])
     return getLockedAmount(

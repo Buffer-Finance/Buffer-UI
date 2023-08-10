@@ -14,12 +14,12 @@ import { getCallId } from '@Utils/Contract/multiContract';
 export const useReferralCode = () => {
   const { address } = useAccount();
   const referrerInLocalStorage = useAtomValue(referralCodeAtom);
-  const { data } = useRefereeCode();
+  const data = useRefereeCode();
   const { activeChain } = useActiveChain();
   const configContracts = getConfig(activeChain.id);
 
   const referralCode = useMemo(() => {
-    if (data?.[0][0]) return data?.[0][0];
+    if (data?.[0]) return data?.[0];
     if (referrerInLocalStorage) return referrerInLocalStorage;
     return '';
   }, [referrerInLocalStorage, address, data]);
@@ -54,9 +54,9 @@ export const useReferralCode = () => {
     : '';
   // console.log(data, isZeroAdds, zeroAddress, 'dataUseReferralCode');
   return [
-    data?.[0][0],
+    data?.[0],
     verifiedLocalCode,
-    data?.[0][0] || verifiedLocalCode || '',
-    !isCodeAvailable ? zeroAddress : isCodeAvailable[0][0],
+    data?.[0] || verifiedLocalCode || '',
+    !isCodeAvailable ? zeroAddress : isCodeAvailable[0],
   ];
 };
