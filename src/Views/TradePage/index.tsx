@@ -18,11 +18,12 @@ import { useGenericHooks } from '@Hooks/useGenericHook';
 import { MarketTimingsModal } from './Components/MarketTimingsModal';
 import { ShareModal } from './Views/AccordionTable/ShareModal';
 import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
+import { TradePageMobile } from './Components/MobileView/TradePageMobile';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
-  if (window.innerWidth < 600) return <MobileWarning />;
+  if (window.innerWidth < 600) return <TradePageMobile />;
   return (
     <>
       <EssentialModals />
