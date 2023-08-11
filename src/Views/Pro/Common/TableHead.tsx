@@ -1,4 +1,4 @@
-import { TableHeads } from "@Views/Common/TableComponents/TableComponents.tsx";
+import { TableHeads } from '@Views/Common/TableComponents/TableComponents';
 interface ITableHeader {
   col: number;
   headsArr: (string | JSX.Element)[];
@@ -14,7 +14,7 @@ export const TableHeader: React.FC<ITableHeader> = ({
   if (col > headsArr.length) return <div>Unhandled col of header</div>;
   return (
     <TableHeads
-      style={col === 0 ? firstColClassName + " " + className : className}
+      style={col === 0 ? firstColClassName + ' ' + className : className}
     >
       {headsArr[col]}
     </TableHeads>

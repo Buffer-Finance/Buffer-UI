@@ -99,7 +99,7 @@ const MarketChart: React.FC<any> = ({}) => {
       document.removeEventListener('touchmove', onTouchMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
-  });
+  }, []);
   const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
   if (!v3AppConfig?.length || !marketPrefix) return <div>Loadding...</div>;
   let chartLayout = (

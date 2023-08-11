@@ -14,7 +14,7 @@ export const miscsSettingsAtom = atomWithStorage(
   defaultSettings.miscs
 );
 export const tradeSettingsAtom = atomWithStorage(
-  'tradeSettingsAtomV2',
+  'tradeSettingsAtomV3',
   defaultSettings.trade
 );
 export const notificationPositionSettingsAtom = atomWithStorage(
@@ -112,6 +112,7 @@ export const SetShareBetAtom = atom(null, (get, set, update: ShareBetType) =>
   set(ShareBetAtom, update)
 );
 
+export const approveModalAtom = atom<boolean>(false);
 //Trades tables atoms
 
 export const historyTableActivePage = atom<number>(1);

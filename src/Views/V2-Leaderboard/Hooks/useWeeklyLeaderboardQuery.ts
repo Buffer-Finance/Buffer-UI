@@ -8,9 +8,10 @@ import { useWeekOffset } from './useWeekoffset';
 import { useWeekOfTournament } from './useWeekOfTournament';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { weeklyTournamentConfig } from '../Weekly/config';
-import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { blacklist } from '../blacklist.json';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 export interface IWinrate extends ILeague {
   winrate: string;
   tradesWon: string;
@@ -48,13 +49,14 @@ function getTokenXleaderboardQueryFields(token: string) {
 export const useWeeklyLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
-  const { configContracts, activeChain } = useActiveChain();
+  const { activeChain } = useActiveChain();
+  const graphUrl = getConfig(activeChain.id).graph.MAIN;
   const configValue = weeklyTournamentConfig[activeChain.id];
   const { week } = useWeekOfTournament({
     startTimestamp: configValue.startTimestamp,
   });
 
-  const { poolNames } = usePoolNames();
+  const poolNames = usePoolNames();
   const tokens = useMemo(
     () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
     [poolNames]
@@ -74,9 +76,9 @@ export const useWeeklyLeaderboardQuery = () => {
     {
       fetcher: async () => {
         const timestamp = getWeekId(Number(week - Number(offset ?? week)));
-        const rewardQueryId = [arbitrum.id, arbitrumGoerli.id].includes(
-          activeChain.id
-        )
+        const rewardQueryId = (
+          [arbitrum.id, arbitrumGoerli.id] as number[]
+        ).includes(activeChain.id)
           ? `${timestamp}USDC`
           : timestamp;
         const leaderboardQuery = `
@@ -160,7 +162,7 @@ export const useWeeklyLeaderboardQuery = () => {
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(configContracts.graph.MAIN, {
+        const response = await axios.post(graphUrl, {
           query,
         });
 

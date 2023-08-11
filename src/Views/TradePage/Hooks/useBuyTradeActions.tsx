@@ -1,50 +1,29 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
 import { toFixed } from '@Utils/NumString';
 import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
-import { privateKeyToAccount } from 'viem/accounts';
 import 'viem/window';
-import { signTypedData } from '@wagmi/core';
 
-import {
-  add,
-  divide,
-  getPosInf,
-  gt,
-  multiply,
-} from '@Utils/NumString/stringArithmatics';
+import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import { priceAtom } from '@Hooks/usePrice';
-import { isTestnet } from 'config';
 import axios from 'axios';
-import { useAccount, useContractEvent, useProvider, useSigner } from 'wagmi';
+import { useAccount, usePublicClient } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ethers } from 'ethers';
-import { is1CTEnabled, useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import secureLocalStorage from 'react-secure-storage';
-import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
-import { knowTillAtom } from '@Views/BinaryOptions/Hooks/useIsMerketOpen';
-import {
-  getUserError,
-  timeToMins,
-} from '@Views/BinaryOptions/PGDrawer/TimeSelector';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useSwitchPool } from './useSwitchPool';
 import { useBuyTradeData } from './useBuyTradeData';
 import { useActiveMarket } from './useActiveMarket';
 import { joinStrings } from '../utils';
-import {
-  appConfig,
-  baseUrl,
-  marketsForChart,
-  pricePublisherBaseUrl,
-} from '../config';
+import { appConfig, baseUrl, pricePublisherBaseUrl } from '../config';
 import { AssetCategory, TradeType } from '../type';
 import {
+  approveModalAtom,
   queuets2priceAtom,
   timeSelectorAtom,
   tradeSettingsAtom,
@@ -52,17 +31,22 @@ import {
 import { useSettlementFee } from './useSettlementFee';
 import UpIcon from '@SVG/Elements/UpIcon';
 import DownIcon from '@SVG/Elements/DownIcon';
-import { generateTradeSignature } from '@Views/TradePage/utils';
-import { duration } from '@mui/material';
 import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
-import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import {
   generateApprovalSignature,
   generateBuyTradeSignature,
 } from '../utils/generateTradeSignature';
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { useApprvalAmount } from './useApprovalAmount';
+import { getConfig } from '../utils/getConfig';
+import { timeToMins } from '../utils/timeToMins';
+import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
+import { getUserError } from '../utils/getUserError';
+import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { getSingatureCached } from '../cache';
+import { viemMulticall } from '@Utils/multicall';
+import { signTypedData } from '@wagmi/core';
+import { PublicClient } from 'viem';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -79,8 +63,6 @@ export const useBuyTradeActions = (userInput: string) => {
   const [settings] = useAtom(tradeSettingsAtom);
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const approvalExpanded = useApprvalAmount();
-
-  const priceCache = useAtomValue(queuets2priceAtom);
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
@@ -88,32 +70,19 @@ export const useBuyTradeActions = (userInput: string) => {
 
   const balance = divide(readcallData?.balance, decimals as number) as string;
   const tokenName = poolDetails?.token;
-  const res = readcallData?.user2signer;
-  const nonces = readcallData?.nonces;
+
   const tokenAddress = poolDetails?.tokenAddress;
   const { data: allSettlementFees } = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
-  const provider = useProvider({ chainId: activeChain.id });
+  const provider = usePublicClient({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const setIsApproveModalOpen = useSetAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
   const { activeMarket: activeAsset } = useActiveMarket();
-  const marketId = joinStrings(
-    activeAsset?.token0 as string,
-    activeAsset?.token1 as string,
-    ''
-  );
-  const pairName = joinStrings(
-    activeAsset?.token0 as string,
-    activeAsset?.token1 as string,
-    '-'
-  );
 
-  const chartMarket = marketsForChart[marketId as keyof typeof marketsForChart];
   const { address } = useAccount();
 
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const configData = getConfig(activeChain.id);
   const { writeCall: approve } = useWriteCall(tokenAddress as string, ERC20ABI);
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
@@ -314,154 +283,164 @@ export const useBuyTradeActions = (userInput: string) => {
         setLoading(2);
       }
 
-      const confirmationModal = {
-        content: (
-          <div className="nowrap flex">
-            Position opened for&nbsp;
-            <div className={`${customTrade.is_up ? 'green' : 'red'} mr5`}>
-              {pairName}&nbsp; {customTrade.is_up ? 'Up' : 'Down'}
-            </div>
-          </div>
-        ),
-      };
+      // const confirmationModal = {
+      //   content: (
+      //     <div className="nowrap flex">
+      //       Position opened for&nbsp;
+      //       <div className={`${customTrade.is_up ? 'green' : 'red'} mr5`}>
+      //         {pairName}&nbsp; {customTrade.is_up ? 'Up' : 'Down'}
+      //       </div>
+      //     </div>
+      //   ),
+      // };
+      try {
+        let settelmentFee = allSettlementFees[activeAsset.tv_id];
+        let currentTimestamp = Date.now();
+        let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
+        // const oneCTWallet = new ethers.Wallet(
+        //   oneCtPk!,
+        //   provider as ethers.providers.StaticJsonRpcProvider
+        // );
+        let baseArgs = [
+          address,
+          toFixed(multiply(userInput, decimals), 0),
+          expirationInMins * 60 + '',
+          option_contract,
+          toFixed(multiply(('' + price).toString(), 8), 0),
+          toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+          settings.partialFill,
+          referralData[2],
+          highestTierNFT?.tokenId || '0',
+        ];
 
-      let settelmentFee = allSettlementFees[activeAsset.tv_id];
-      let currentTimestamp = Date.now();
-      let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
-      const oneCTWallet = new ethers.Wallet(
-        oneCtPk!,
-        provider as ethers.providers.StaticJsonRpcProvider
-      );
-      let baseArgs = [
-        address,
-        toFixed(multiply(userInput, decimals), 0),
-        expirationInMins * 60 + '',
-        option_contract,
-        toFixed(multiply(('' + price).toString(), 8), 0),
-        toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
-        settings.partialFill,
-        referralData[2],
-        highestTierNFT?.tokenId || '0',
-      ];
+        const signatures = await generateBuyTradeSignature(
+          address,
+          toFixed(multiply(userInput, decimals), 0),
+          expirationInMins,
+          option_contract,
+          price,
+          toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+          settings.partialFill,
+          referralData[2],
+          highestTierNFT?.tokenId || '0',
+          currentUTCTimestamp,
+          customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
+          customTrade.is_up,
+          oneCtPk,
+          activeChain.id,
+          configData.router
+        );
+        const apiParams = {
+          signature_timestamp: currentUTCTimestamp,
+          strike: baseArgs[ArgIndex.Strike],
+          period: baseArgs[ArgIndex.Period],
+          target_contract: baseArgs[ArgIndex.TargetContract],
+          partial_signature: signatures[0],
+          full_signature: signatures[1],
+          user_address: baseArgs[ArgIndex.UserAddress],
+          trade_size: baseArgs[ArgIndex.Size],
+          allow_partial_fill: baseArgs[ArgIndex.PartialFill],
+          referral_code: baseArgs[ArgIndex.Referral],
+          trader_nft_id: baseArgs[ArgIndex.NFT],
+          slippage: baseArgs[ArgIndex.Slippage],
+          is_above: customTrade.is_up,
+          is_limit_order: customTrade.limitOrderExpiry ? true : false,
+          limit_order_duration: customTrade.limitOrderExpiry,
+          settlement_fee: settelmentFee?.settlement_fee,
+          settlement_fee_sign_expiration:
+            settelmentFee?.settlement_fee_sign_expiration,
+          settlement_fee_signature: settelmentFee?.settlement_fee_signature,
+          environment: activeChain.id,
+          token: tokenName,
+        };
+        console.log('apiParams', apiParams);
 
-      const signatures = await generateBuyTradeSignature(
-        address,
-        toFixed(multiply(userInput, decimals), 0),
-        expirationInMins,
-        option_contract,
-        price,
-        toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
-        settings.partialFill,
-        referralData[2],
-        highestTierNFT?.tokenId || '0',
-        currentUTCTimestamp,
-        customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
-        customTrade.is_up,
-        oneCtPk,
-        activeChain.id,
-        configData.router
-      );
-      const apiParams = {
-        signature_timestamp: currentUTCTimestamp,
-        strike: baseArgs[ArgIndex.Strike],
-        period: baseArgs[ArgIndex.Period],
-        target_contract: baseArgs[ArgIndex.TargetContract],
-        partial_signature: signatures[0],
-        full_signature: signatures[1],
-        user_address: baseArgs[ArgIndex.UserAddress],
-        trade_size: baseArgs[ArgIndex.Size],
-        allow_partial_fill: baseArgs[ArgIndex.PartialFill],
-        referral_code: baseArgs[ArgIndex.Referral],
-        trader_nft_id: baseArgs[ArgIndex.NFT],
-        slippage: baseArgs[ArgIndex.Slippage],
-        is_above: customTrade.is_up,
-        is_limit_order: customTrade.limitOrderExpiry ? true : false,
-        limit_order_duration: customTrade.limitOrderExpiry,
-        settlement_fee: settelmentFee?.settlement_fee,
-        settlement_fee_sign_expiration:
-          settelmentFee?.settlement_fee_sign_expiration,
-        settlement_fee_signature: settelmentFee?.settlement_fee_signature,
-        environment: activeChain.id,
-      };
-      console.log('apiParams', apiParams);
+        const resp: { data: TradeType } = await axios.post(
+          baseUrl + 'trade/create/',
+          null,
+          {
+            params: apiParams,
+          }
+        );
 
-      const resp: { data: TradeType } = await axios.post(
-        baseUrl + 'trade/create/',
-        null,
-        {
-          params: apiParams,
-        }
-      );
-      setLoading(null);
+        if (!customTrade.limitOrderExpiry) {
+          getLockedAmount(
+            baseArgs[ArgIndex.Strike],
+            baseArgs[ArgIndex.Size],
+            baseArgs[ArgIndex.Period],
+            baseArgs[ArgIndex.PartialFill],
+            address as string,
+            baseArgs[ArgIndex.Referral],
+            baseArgs[ArgIndex.NFT],
+            settelmentFee.settlement_fee,
+            baseArgs[ArgIndex.Slippage],
+            baseArgs[ArgIndex.TargetContract],
+            provider,
+            configData.multicall
+          ).then((lockedAmount: string[]) => {
+            console.log(`useBuyTradeActions-lockedAmount: `, lockedAmount);
 
-      if (!customTrade.limitOrderExpiry) {
-        getLockedAmount(
-          baseArgs[ArgIndex.Strike],
-          baseArgs[ArgIndex.Size],
-          baseArgs[ArgIndex.Period],
-          baseArgs[ArgIndex.PartialFill],
-          address as string,
-          baseArgs[ArgIndex.Referral],
-          baseArgs[ArgIndex.NFT],
-          settelmentFee.settlement_fee,
-          baseArgs[ArgIndex.Slippage],
-          baseArgs[ArgIndex.TargetContract],
-          provider,
-          appConfig[activeChain.id].multicall
-        ).then((lockedAmount) => {
-          console.timeEnd('read-call');
+            setPriceCache((t) => ({
+              ...t,
+              [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount[0][0],
+            }));
+          });
+          const queuedPrice = await getCachedPrice({
+            pair: activeAsset.tv_id,
+            timestamp: resp.data.open_timestamp,
+          });
 
           setPriceCache((t) => ({
             ...t,
-            [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount.amount,
+            [resp.data.queue_id]: queuedPrice,
           }));
-        });
-        const queuedPrice = await getCachedPrice({
-          pair: activeAsset.tv_id,
-          timestamp: resp.data.open_timestamp,
-        });
+        }
 
-        setPriceCache((t) => ({
-          ...t,
-          [resp.data.queue_id]: queuedPrice,
-        }));
+        const content = (
+          <div className="flex flex-col gap-y-2 text-f12 ">
+            <div className="nowrap font-[600]">
+              {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
+              {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+            </div>
+            <div className="flex items-center">
+              {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
+              <span className="!text-3">to go</span>&nbsp;
+              {customTrade.is_up ? (
+                <>
+                  <UpIcon className="text-green scale-125" /> &nbsp;Higher
+                </>
+              ) : (
+                <>
+                  <DownIcon className="text-red scale-125" />
+                  &nbsp; Lower
+                </>
+              )}
+            </div>
+            <div>
+              <span>
+                <span className="!text-3">Total amount:</span>
+                {userInput}&nbsp;USDC
+              </span>
+            </div>
+          </div>
+        );
+        toastify({
+          price,
+          type: 'success',
+          timings: 100,
+          body: null,
+          msg: content,
+        });
+      } catch (e: any) {
+        toastify({
+          id: 'trade/create error',
+          type: 'error',
+          msg: e.message,
+        });
+      } finally {
+        setLoading(null);
       }
 
-      const content = (
-        <div className="flex flex-col gap-y-2 text-f12 ">
-          <div className="nowrap font-[600]">
-            {customTrade.limitOrderExpiry ? 'Limit' : 'Trade'} order placed
-            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
-          </div>
-          <div className="flex items-center">
-            {activeAsset.token0 + '-' + activeAsset.token1}&nbsp;&nbsp;
-            <span className="!text-3">to go</span>&nbsp;
-            {customTrade.is_up ? (
-              <>
-                <UpIcon className="text-green scale-125" /> &nbsp;Higher
-              </>
-            ) : (
-              <>
-                <DownIcon className="text-red scale-125" />
-                &nbsp; Lower
-              </>
-            )}
-          </div>
-          <div>
-            <span>
-              <span className="!text-3">Total amount:</span>
-              {userInput}&nbsp;USDC
-            </span>
-          </div>
-        </div>
-      );
-      toastify({
-        price,
-        type: 'success',
-        timings: 100,
-        body: null,
-        msg: content,
-      });
       // } catch (e) {
       //   con
       // }
@@ -493,12 +472,12 @@ export const useBuyTradeActions = (userInput: string) => {
     // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
     if (ammount !== '0' && ammount !== '100000000000000000000000000') {
-      ammount = add(ammount, multiply(ammount, '0.1'));
+      ammount = toFixed(add(ammount, multiply(ammount, '0.1')), 0);
     }
     //  fetch nonce 7min
     // sign data : 1hr
     // call api :15
-    const deadline = (Math.round(Date.now() / 1000) + 6000).toString();
+    const deadline = (Math.round(Date.now() / 1000) + 84600).toString();
     try {
       const [_, RSV] = await generateApprovalSignature(
         approvalExpanded?.nonce,
@@ -522,6 +501,7 @@ export const useBuyTradeActions = (userInput: string) => {
         user_signature,
         environment: activeChain.id,
         state: 'PENDING',
+        token: tokenName,
       };
       const resp = await axios.post(baseUrl + 'approve/', null, {
         params: apiSignature,
@@ -592,7 +572,7 @@ const getLockedAmount = async (
   settlementFee: number,
   slippage: number,
   optionContract: string,
-  provider: ethers.providers.Provider,
+  provider: PublicClient,
   multicallAddress: string
 ): Promise<{
   amount: string;
@@ -621,12 +601,8 @@ const getLockedAmount = async (
   ];
   console.log(`useBuyTradeActions-optionContract: `, calls);
   // const calls = [];
-  const res = await multicallLinked(
-    calls,
-    provider,
-    multicallAddress,
-    'hellowthere'
-  );
+  const res = await viemMulticall(calls, provider, 'hellowthere');
+  console.log(`useBuyTradeActions-res: `, res);
   const callId = getCallId(optionContract, 'evaluateParams');
   if (!res?.[callId])
     return getLockedAmount(

@@ -1,12 +1,12 @@
-import { add, gt, gte, lt, subtract } from '@Utils/NumString/stringArithmatics';
-import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
+import { add, gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { tradeSettingsAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
-import { getMinimumValue } from '@Views/V3App/helperFns';
+import { getMinimumValue } from '@Views/TradePage/utils';
 import { Trans } from '@lingui/macro';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { BuyUSDCLink } from '../BuyUsdcLink';
+
 const className = 'text-[#FFE200]';
 export const TradeSizeInput: React.FC<{
   maxTradeSize: string;
@@ -26,7 +26,6 @@ export const TradeSizeInput: React.FC<{
   const [minerr, setminErr] = useState(false);
   const [maxerr, setmaxErr] = useState(false);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
-  const { address } = useAccount();
   useEffect(() => {
     if (lt(tradeSize || '0', minTradeSize)) {
       setminErr(true);

@@ -1,9 +1,6 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { lt, multiply } from '@Utils/NumString/stringArithmatics';
-import { ApproveModal } from '@Views/BinaryOptions/Components/approveModal';
-import { approveModalAtom } from '@Views/BinaryOptions/PGDrawer';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
@@ -13,11 +10,16 @@ import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
 import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
+import {
+  approveModalAtom,
+  limitOrderStrikeAtom,
+  tradeTypeAtom,
+} from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount } from 'wagmi';
+import { ApproveModal } from '../ApproveModal';
 
 export const BuyButtons = ({
   allowance,
@@ -28,44 +30,44 @@ export const BuyButtons = ({
   activeAssetPrice: string;
   amount: string;
 }) => {
-  const { registeredOneCT, oneCtPk } = useOneCTWallet();
+  const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   const { poolDetails } = useSwitchPool();
   const { openConnectModal } = useConnectModal();
   const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
-  const { handleApproveClick, buyHandler, loading, revokeApproveClick } =
+  const { handleApproveClick, buyHandler, loading } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
-  const { activeChain } = useActiveChain();
   const { activeMarket } = useActiveMarket();
   const { switchPool } = useSwitchPool();
 
-  const provider = useProvider({ chainId: activeChain.id });
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
 
   const tradeType = useAtomValue(tradeTypeAtom);
   const limitStrike = useAtomValue(limitOrderStrikeAtom);
+
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
     if (lt(allowance || '0', amount.toString() || '0'))
       return setIsApproveModalOpen(true);
     let strike = activeAssetPrice;
-    let limitOrderExpiry = 0;
+    let limitOrderExpiry = '0';
     if (tradeType == 'Limit' && limitStrike) {
-      limitOrderExpiry = expiry;
-      console.log(`BuyButtons-limitOrderExpiry: `, limitOrderExpiry);
+      limitOrderExpiry = expiry ?? '0';
+      // console.log(`BuyButtons-limitOrderExpiry: `, limitOrderExpiry);
       strike = limitStrike;
     }
     buyHandler({
       is_up: isUp ? true : false,
       strike,
-      limitOrderExpiry,
+      limitOrderExpiry: Number(limitOrderExpiry),
     });
   };
   const { isMarketOpen: isAssetActive, isForex } = useIsMarketOpen(
     activeMarket,
     switchPool?.pool
   );
+
   if (!poolDetails) return <>Error: Pool not found</>;
 
   return (

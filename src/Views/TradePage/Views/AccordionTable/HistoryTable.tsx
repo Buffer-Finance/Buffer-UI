@@ -1,12 +1,9 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
-
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide, gt } from '@Utils/NumString/stringArithmatics';
 
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
   DisplayTime,
@@ -26,6 +23,7 @@ import {
   expiryPriceCache,
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { AssetCell } from './AssetCell';
 
 enum TableColumn {
   Asset = 0,
@@ -45,10 +43,16 @@ const HistoryTable: React.FC<{
   totalPages: number;
   platform?: boolean;
   activePage: number;
+  overflow?: number;
   setActivePage: (page: number) => void;
-}> = ({ trades, platform, totalPages, activePage, setActivePage }) => {
-  console.log(`HistoryTable-trades: `, trades);
-  const markets = useMarketsConfig();
+}> = ({
+  trades,
+  platform,
+  totalPages,
+  activePage,
+  setActivePage,
+  overflow,
+}) => {
   const { getPoolInfo } = usePoolInfo();
 
   const headNameArray = platform
@@ -82,29 +86,17 @@ const HistoryTable: React.FC<{
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
     // console.log(`BodyFormatter-row: `, trade);
-
-    const tradeMarket = markets?.find((pair) => {
-      const pool = pair.pools.find(
-        (pool) =>
-          pool.optionContract.toLowerCase() ===
-          trade?.target_contract.toLowerCase()
-      );
-      return !!pool;
-    });
-    const poolContract = tradeMarket?.pools.find(
-      (pool) =>
-        pool.optionContract.toLowerCase() ===
-        trade?.target_contract.toLowerCase()
-    )?.pool;
-    const poolInfo = getPoolInfo(poolContract);
+    if (!trade?.pool?.pool) console.log(`trade: `, trade);
+    const poolInfo = getPoolInfo(trade.pool.pool);
     let expiryPrice: number | null = trade.expiry_price;
     if (!expiryPrice) {
       const id = getPriceCacheId(trade);
       expiryPrice = expiryPriceCache[id] || 0;
+      console.log(`expiryPrice: `, expiryPrice);
     }
-    if (!tradeMarket) return 'Problem';
+    // if (!trade.market) return 'Problem';
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
-    console.log(`aug-payout-actual: `, pnl, payout);
+    // console.log(`aug-payout-actual: `, pnl, payout);
     const status = gt(pnl?.toString(), '0')
       ? {
           tooltip: 'You won this bet!',
@@ -159,12 +151,13 @@ const HistoryTable: React.FC<{
       case TableColumn.TradeSize:
         return (
           <Display
-            data={divide(trade.trade_size, 6)}
+            data={divide(trade.trade_size, poolInfo.decimals)}
             className="!justify-start"
-            unit={'USDC'}
+            unit={poolInfo.token}
           />
         );
       case TableColumn.Payout:
+        if (!expiryPrice) return 'Processing...';
         return (
           <div>
             {pnl || payout ? (
@@ -172,8 +165,8 @@ const HistoryTable: React.FC<{
                 {' '}
                 <Display
                   className="!justify-start"
-                  data={divide(payout!, 6)}
-                  unit="USDC"
+                  data={divide(payout!, poolInfo.decimals)}
+                  unit={poolInfo.token}
                 />
                 <span className={status.textColor + ' flex '}>
                   Net Pnl :{' '}
@@ -181,7 +174,7 @@ const HistoryTable: React.FC<{
                     label={status.chip == 'Win' ? '+' : ''}
                     className="!justify-start"
                     data={pnl}
-                    unit="USDC"
+                    unit={poolInfo.token}
                   />
                 </span>
               </>
@@ -191,6 +184,8 @@ const HistoryTable: React.FC<{
           </div>
         );
       case TableColumn.Status:
+        if (!expiryPrice) return 'Processing...';
+
         return (
           <NumberTooltip content={status.tooltip}>
             <div
@@ -210,7 +205,7 @@ const HistoryTable: React.FC<{
           </NumberTooltip>
         );
       case TableColumn.Share:
-        return <Share data={trade} market={tradeMarket} poolInfo={poolInfo} />;
+        return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
     }
     return 'Unhandled Body';
   };
@@ -229,7 +224,7 @@ const HistoryTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow={400}
+      overflow={overflow}
       error={<TableErrorRow msg="No Trade History." />}
     />
   );

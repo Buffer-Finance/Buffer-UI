@@ -4,8 +4,8 @@ import {
   useBalance,
   useContract,
   useFeeData,
-  useProvider,
-  useSigner,
+  usePublicClient,
+  useWalletClient,
 } from 'wagmi';
 import { add, divide, lt } from '@Utils/NumString/stringArithmatics';
 import { useGlobal } from '@Contexts/Global';
@@ -45,19 +45,14 @@ export interface IConfirmationModal {
 export function useIndependentWriteCall() {
   const { dispatch } = useGlobal();
   const toastify = useToast();
-  const provider = useProvider();
+  const provider = usePublicClient();
   const your_private_key_string =
     '2bb545e93a2b27557e40b54f39def6a190fa3ce56b34bcfc80d8709cf60fe0a2';
   const { address: account, viewOnlyMode } = useUserAccount();
   const { activeChain } = useActiveChain();
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
-  const { data: signer, isError, isLoading } = useSigner();
-  // const contract = useContract({
-  //   address: contractAddress,
-  //   abi: abi,
-  //   signerOrProvider: signer,
-  //   // signerOrProvider: new ethers.Wallet(your_private_key_string, provider),
-  // });
+  const { data: signer, isError, isLoading } = useWalletClient();
+
   const { data } = useFeeData();
   const { data: balance } = useBalance({ address: account });
   let gasPrice = data?.formatted?.gasPrice || (1e8).toString();
@@ -73,152 +68,9 @@ export function useIndependentWriteCall() {
     customToast: ICustomToast | null = null,
     confirmationModal: IConfirmationModal | null = null
   ) => {
-    const contract = new ethers.Contract(contractAddress, abi, signer);
-    if (viewOnlyMode) {
-      toastify({
-        id: 'view-only',
-        msg: 'You are in view only mode! Please exit by removing user-address from URL.',
-        type: 'error',
-      });
-      return callBack();
-    }
-
-    if (!contractAddress || !abi) {
-      callBack();
-      return toastify({
-        msg: 'Please retry after refreshing the page.',
-        type: 'error',
-      });
-    }
-    if (!account) {
-      return toastify({
-        msg: 'No account detected, please connect your web3 wallet.',
-        type: 'error',
-        id: '009',
-      });
-    }
-
-    const contractArgs = {
-      methodName,
-      methodArgs,
-      overrides,
-      account: account || '',
-      pathname: window && window.location && window.location.pathname,
-    };
-    dispatch({ type: 'SET_TXN_LOADING', payload: 1 });
-
-    try {
-      const getGasLimit = async () => {
-        try {
-          let res = await contract?.estimateGas[methodName](...methodArgs);
-          console.log(`writeCall-res: `, res);
-          if (res) {
-            res = { res };
-
-            convertBNtoString(res);
-            return res?.res;
-          } else return DEFAULT_GAS_LIMIT;
-        } catch (e) {
-          console.log(`writeCall-e: `, e);
-          return DEFAULT_GAS_LIMIT;
-        }
-      };
-
-      const gasLimit = await getGasLimit();
-      console.log(`writeCall-DEFAULT_GAS_LIMIT: `, gasLimit, DEFAULT_GAS_LIMIT);
-
-      const defaultValues = {
-        ...overrides,
-        from: account,
-        gasLimit,
-      };
-
-      toastify({
-        id: contractAddress + JSON.stringify(methodArgs),
-        msg: "Waiting for user's confirmation",
-        type: 'info',
-        inf: 1,
-      });
-      let totalFee = divide((+gasPrice * gasLimit).toString(), 18);
-
-      if (defaultValues.value) {
-        const value = divide(defaultValues.value.toString(), 18);
-        totalFee = add(totalFee, value);
-      }
-
-      if (!inIframe() && totalFee && balance?.formatted) {
-        if (lt(balance.formatted, totalFee)) {
-          // dispatch({ type: "SET_TXN_LOADING", payload: 0 });
-          throw new Error(
-            `Not enough ${
-              // activeChain?.nativeCurrency?.symbol ||
-
-              activeChain.nativeCurrency.symbol
-            } for Gas Fee!`
-          );
-        }
-      }
-
-      console.log(`[blockchain]defaultValues: `, defaultValues);
-      console.log(`[blockchain]contract: `, contractAddress);
-      console.log(`[blockchain]methodArgs: `, methodArgs);
-      console.log(`[blockchain]methodName: `, methodName);
-      console.log(`[blockchain]contract: `, contract?.callStatic);
-      const call = await contract?.callStatic[methodName](...methodArgs, {
-        ...defaultValues,
-      });
-      // console.log(`[blockchain]call: `, call);
-      const txn = await contract?.functions[methodName](...methodArgs, {
-        ...defaultValues,
-      });
-
-      dispatch({ type: 'SET_TXN_LOADING', payload: 3 });
-      if (txn)
-        toastify({
-          id: contractAddress + JSON.stringify(methodArgs),
-          msg: 'Transaction is in process',
-          type: 'info',
-          inf: 1,
-        });
-
-      const res = await txn?.wait();
-      if (res.status) {
-        toastify({
-          id: contractAddress + JSON.stringify(methodArgs),
-          msg: customToast ? customToast.content : 'Transaction successful!',
-          type: 'success',
-          hash: `${blockExplorer}/tx/${res.transactionHash}`,
-          body: customToast ? customToast.body : null,
-          confirmationModal: confirmationModal,
-          timings: 100,
-        });
-        callBack({ payload: res });
-        dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-      } else {
-        toastify({ msg: 'Transaction Failed', type: 'error' });
-        dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-        callBack({});
-      }
-    } catch (error) {
-      console.log(`[blockchain]error: `, error);
-      const errReason = error?.reason;
-      console.log(`[blockchain]parsedErr: `, error.reason);
-      dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-      let err = errReason || getError(error, contractArgs);
-      console.log('[blockchain]err : ', err);
-      toastify({
-        id: contractAddress + JSON.stringify(methodArgs),
-        msg: (
-          <span>
-            Oops! There is some error. Can you please try again?
-            <br />
-            <span className="!text-3">Error: {err}</span>
-          </span>
-        ),
-        type: 'error',
-      });
-      callBack({});
-    }
+    alert(
+      'We upgrade write calls to use viem instead of wagmi, please inform developers about this'
+    );
   };
 
   return { writeCall };

@@ -1,9 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
-
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
   DisplayTime,
@@ -13,16 +10,19 @@ import {
 } from './Common';
 import { TradeType } from '@Views/TradePage/type';
 import FailureIcon from '@SVG/Elements/FailureIcon';
+import { AssetCell } from './AssetCell';
 import { useAtom } from 'jotai';
 import { cancelTableActivePage } from '@Views/TradePage/atoms';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 export const CancelledTable: React.FC<{
   trades: TradeType[];
   totalPages: number;
   platform?: boolean;
-}> = ({ trades, platform, totalPages }) => {
-  const markets = useMarketsConfig();
+  overflow?: number;
+}> = ({ trades, platform, totalPages, overflow }) => {
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
+  const { getPoolInfo } = usePoolInfo();
 
   const headNameArray = [
     'Asset',
@@ -30,7 +30,7 @@ export const CancelledTable: React.FC<{
     'Trade Size',
     'Queue',
     'Cancellation',
-    'Reason',
+    // 'Reason',
     'Status',
   ];
 
@@ -40,8 +40,8 @@ export const CancelledTable: React.FC<{
     TradeSize = 2,
     QueueTime = 3,
     CancellationTime = 4,
-    Reason = 5,
-    Status = 6,
+    // Reason = 5,
+    Status = 5,
   }
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
@@ -49,28 +49,13 @@ export const CancelledTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
+    const poolInfo = getPoolInfo(trade.pool.pool);
 
-    const tradeMarket = markets?.find((pair) => {
-      const pool = pair.pools.find(
-        (pool) =>
-          pool.optionContract.toLowerCase() ===
-          trade?.target_contract.toLowerCase()
-      );
-      return !!pool;
-    });
-
-    // console.log(`CancelTable-trade: `, trade);
     switch (col) {
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
+        return <StrikePriceComponent trade={trade} />;
       case TableColumn.Asset:
-        return (
-          <AssetCell
-            configData={tradeMarket}
-            currentRow={trade}
-            platform={platform}
-          />
-        );
+        return <AssetCell currentRow={trade} platform={platform} />;
 
       case TableColumn.QueueTime:
         return (
@@ -84,18 +69,18 @@ export const CancelledTable: React.FC<{
             ts={trade.cancellation_timestamp || Math.round(Date.now() / 1000)}
           />
         );
-      case TableColumn.Reason:
-        return (
-          <div>{trade.canellation_reason || 'Some server issue'}</div>
-          // queuedTradeFallBack(trade) || (
-          // )
-        );
+      // case TableColumn.Reason:
+      //   return (
+      //     <div>{trade.canellation_reason || 'Some server issue'}</div>
+      //     // queuedTradeFallBack(trade) || (
+      //     // )
+      //   );
       case TableColumn.TradeSize:
         return (
           <Display
-            data={divide(trade.trade_size, 6)}
+            data={divide(trade.trade_size, poolInfo.decimals)}
             className="!justify-start"
-            unit={'USDC'}
+            unit={poolInfo.token}
           />
         );
       case TableColumn.Status:
@@ -133,7 +118,7 @@ export const CancelledTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow={400}
+      overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
     />
   );

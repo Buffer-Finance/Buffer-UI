@@ -94,8 +94,9 @@ const TableBackground = styled.div`
         font-size: 1.6rem;
         cursor: pointer;
         &:hover {
-          backdrop-filter: brightness(1.25);
-          filter: brightness(1.25);
+          /* backdrop-filter: brightness(1.25);
+          filter: brightness(1.25); */
+          background: #232334;
           color: white;
         }
         &.active {

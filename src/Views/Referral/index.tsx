@@ -29,13 +29,15 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useSearchParams } from 'react-router-dom';
-import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
 import { toFixed } from '@Utils/NumString';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 interface IReferral {}
 
@@ -79,7 +81,6 @@ export const useRefferalTab = () => {
 
 export const tabs = ['Use a Referral', 'Create your Referral'];
 const Referral: React.FC<IReferral> = ({}) => {
-  const { configContracts } = useActiveChain();
   const [showCodeModal, setShowCodeModal] = useAtom(showCodeModalAtom);
   const { writeTXN } = useReferralWriteCall();
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -92,8 +93,9 @@ const Referral: React.FC<IReferral> = ({}) => {
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   const { openConnectModal } = useConnectModal();
   const { setTab, tab } = useRefferalTab();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
-  const { poolNames } = usePoolNames();
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'] || 6;
+  const poolNames = usePoolNames();
   const tokens = useMemo(
     () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
     [poolNames]
@@ -151,178 +153,182 @@ const Referral: React.FC<IReferral> = ({}) => {
     }
   }
 
-  let DataBoxArr = [];
-  let affiliateBoxArr = [];
+  let DataBoxArr: { header: string; desc: JSX.Element }[] = [];
+  let affiliateBoxArr: { header: string; desc: JSX.Element }[] = [];
 
   if (!shouldConnectWallet) {
     if (activeTab === tabs[0]) {
-      DataBoxArr = data && [
-        {
-          header: 'Total Trading Volume',
-          desc: (
-            <Display
-              data={divide(data.totalTradingVolume, usdcDecimals)}
-              unit={'USDC'}
-              className="!w-full"
-              content={
-                tokens.length > 1 && (
-                  <TableAligner
-                    keysName={tokens}
-                    keyStyle={tooltipKeyClasses}
-                    valueStyle={tooltipValueClasses}
-                    values={tokens.map(
-                      (token) =>
-                        toFixed(
-                          divide(
-                            data[`totalTradingVolume${token}`],
-                            configContracts.tokens[token].decimals
-                          ) as string,
-                          2
-                        ) +
-                        ' ' +
-                        token
-                    )}
-                  />
-                )
-              }
-            />
-          ),
-        },
-        {
-          header: 'Total Discount',
-          desc: (
-            <Display
-              data={divide(data.totalDiscountAvailed, usdcDecimals)}
-              unit={'USDC'}
-              className="!w-full"
-              content={
-                tokens.length > 1 && (
-                  <TableAligner
-                    keysName={tokens}
-                    keyStyle={tooltipKeyClasses}
-                    valueStyle={tooltipValueClasses}
-                    values={tokens.map(
-                      (token) =>
-                        toFixed(
-                          divide(
-                            data[`totalDiscountAvailed${token}`],
-                            configContracts.tokens[token].decimals
-                          ) as string,
-                          2
-                        ) +
-                        ' ' +
-                        token
-                    )}
-                  />
-                )
-              }
-            />
-          ),
-        },
-        {
-          header: 'Active Referral Code',
-          desc: (
-            <div className="flex justify-center items-center">
-              <span className="mb-1"> {referralCodes[2]}</span>
+      DataBoxArr = data
+        ? [
+            {
+              header: 'Total Trading Volume',
+              desc: (
+                <Display
+                  data={divide(data.totalTradingVolume, usdcDecimals)}
+                  unit={'USDC'}
+                  className="!w-full"
+                  content={
+                    tokens.length > 1 && (
+                      <TableAligner
+                        keysName={tokens}
+                        keyStyle={tooltipKeyClasses}
+                        valueStyle={tooltipValueClasses}
+                        values={tokens.map(
+                          (token) =>
+                            toFixed(
+                              divide(
+                                data[`totalTradingVolume${token}`],
+                                decimals[token]
+                              ) as string,
+                              2
+                            ) +
+                            ' ' +
+                            token
+                        )}
+                      />
+                    )
+                  }
+                />
+              ),
+            },
+            {
+              header: 'Total Discount',
+              desc: (
+                <Display
+                  data={divide(data.totalDiscountAvailed, usdcDecimals)}
+                  unit={'USDC'}
+                  className="!w-full"
+                  content={
+                    tokens.length > 1 && (
+                      <TableAligner
+                        keysName={tokens}
+                        keyStyle={tooltipKeyClasses}
+                        valueStyle={tooltipValueClasses}
+                        values={tokens.map(
+                          (token) =>
+                            toFixed(
+                              divide(
+                                data[`totalDiscountAvailed${token}`],
+                                decimals[token]
+                              ) as string,
+                              2
+                            ) +
+                            ' ' +
+                            token
+                        )}
+                      />
+                    )
+                  }
+                />
+              ),
+            },
+            {
+              header: 'Active Referral Code',
+              desc: (
+                <div className="flex justify-center items-center">
+                  <span className="mb-1"> {referralCodes[2]}</span>
 
-              <button
-                className="ml-3"
-                onClick={() => {
-                  setShowCodeModal(true);
-                }}
-              >
-                <img src="/EditIcon.svg" />
-              </button>
-            </div>
-          ),
-        },
-      ];
+                  <button
+                    className="ml-3"
+                    onClick={() => {
+                      setShowCodeModal(true);
+                    }}
+                  >
+                    <img src="/EditIcon.svg" />
+                  </button>
+                </div>
+              ),
+            },
+          ]
+        : [];
     }
-    affiliateBoxArr = data && [
-      {
-        header: 'Total Trading Volume',
-        desc: (
-          <Display
-            data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
-            unit={'USDC'}
-            className="!w-full"
-            content={
-              tokens.length > 1 && (
-                <TableAligner
-                  keysName={tokens}
-                  keyStyle={tooltipKeyClasses}
-                  valueStyle={tooltipValueClasses}
-                  values={tokens.map(
-                    (token) =>
-                      toFixed(
-                        divide(
-                          data[`totalVolumeOfReferredTrades${token}`],
-                          configContracts.tokens[token].decimals
-                        ) as string,
-                        2
-                      ) +
-                      ' ' +
-                      token
-                  )}
-                />
-              )
-            }
-          />
-        ),
-      },
-      {
-        header: 'Total Referred trades',
-        desc: (
-          <Display
-            data={data?.totalTradesReferred}
-            className="!w-full"
-            content={
-              tokens.length > 1 && (
-                <TableAligner
-                  keysName={tokens}
-                  keyStyle={tooltipKeyClasses}
-                  valueStyle={tooltipValueClasses}
-                  values={tokens.map(
-                    (token) => data[`totalTradesReferred${token}`]
-                  )}
-                />
-              )
-            }
-          />
-        ),
-      },
-      {
-        header: 'Total Rebate Earned',
-        desc: (
-          <Display
-            data={divide(data.totalRebateEarned, usdcDecimals)}
-            unit={'USDC'}
-            className="!w-full"
-            content={
-              tokens.length > 1 && (
-                <TableAligner
-                  keysName={tokens}
-                  keyStyle={tooltipKeyClasses}
-                  valueStyle={tooltipValueClasses}
-                  values={tokens.map(
-                    (token) =>
-                      toFixed(
-                        divide(
-                          data[`totalRebateEarned${token}`],
-                          configContracts.tokens[token].decimals
-                        ) as string,
-                        2
-                      ) +
-                      ' ' +
-                      token
-                  )}
-                />
-              )
-            }
-          />
-        ),
-      },
-    ];
+    affiliateBoxArr = data
+      ? [
+          {
+            header: 'Total Trading Volume',
+            desc: (
+              <Display
+                data={divide(data.totalVolumeOfReferredTrades, usdcDecimals)}
+                unit={'USDC'}
+                className="!w-full"
+                content={
+                  tokens.length > 1 && (
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map(
+                        (token) =>
+                          toFixed(
+                            divide(
+                              data[`totalVolumeOfReferredTrades${token}`],
+                              decimals[token]
+                            ) as string,
+                            2
+                          ) +
+                          ' ' +
+                          token
+                      )}
+                    />
+                  )
+                }
+              />
+            ),
+          },
+          {
+            header: 'Total Referred trades',
+            desc: (
+              <Display
+                data={data?.totalTradesReferred}
+                className="!w-full"
+                content={
+                  tokens.length > 1 && (
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map(
+                        (token) => data[`totalTradesReferred${token}`]
+                      )}
+                    />
+                  )
+                }
+              />
+            ),
+          },
+          {
+            header: 'Total Rebate Earned',
+            desc: (
+              <Display
+                data={divide(data.totalRebateEarned, usdcDecimals)}
+                unit={'USDC'}
+                className="!w-full"
+                content={
+                  tokens.length > 1 && (
+                    <TableAligner
+                      keysName={tokens}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={tokens.map(
+                        (token) =>
+                          toFixed(
+                            divide(
+                              data[`totalRebateEarned${token}`],
+                              decimals[token]
+                            ) as string,
+                            2
+                          ) +
+                          ' ' +
+                          token
+                      )}
+                    />
+                  )
+                }
+              />
+            ),
+          },
+        ]
+      : [];
   }
 
   const shareHandler = () => {
@@ -359,7 +365,7 @@ const Referral: React.FC<IReferral> = ({}) => {
   const btn = (
     <BlueBtn
       className="w-full !h-[36px] !mt-4"
-      onClick={shouldConnectWallet ? openConnectModal : shareHandler}
+      onClick={shouldConnectWallet ? () => openConnectModal?.() : shareHandler}
       isDisabled={state.txnLoading > 1}
       isLoading={state.txnLoading === 1}
     >
@@ -394,16 +400,16 @@ const Referral: React.FC<IReferral> = ({}) => {
           Referral
         </>
         <Header.Description>
-          <span className="mb-2 block">
+          <div className="mb-2 block text-[#c0b8b8]">
             {' '}
             Get fee discounts and earn rebates.
-          </span>
-          <span className=" block text-[#c0b8b8]">
+          </div>
+          <div className=" block ">
             {' '}
             Note that referral codes are case sensitive and that your code must
             be <br className="sm:hidden" /> created on both Arbitrum as well as
             Polygon to earn rebates on both networks.{' '}
-          </span>
+          </div>
           <br className="sm:hidden" />
           {/* For more information, please read the
           <Header.Link
@@ -450,7 +456,7 @@ const Referral: React.FC<IReferral> = ({}) => {
                 <BufferInput
                   value={ip}
                   onChange={setip}
-                  className="bg-5 ip-border "
+                  className=""
                   placeholder="Enter your code"
                   // unit={<img className="" src="/EditIcon.svg"></img>}
                 ></BufferInput>
@@ -470,14 +476,13 @@ const Referral: React.FC<IReferral> = ({}) => {
           btn={btn}
           inputValue={ip}
           setInput={setip}
-          shouldConnectWallet={shouldConnectWallet}
         />
       </HorizontalTransition>
     </>
   );
 };
 
-const DataCard = ({ header, desc }) => {
+const DataCard = ({ header, desc }: { header: string; desc: JSX.Element }) => {
   return (
     <PlainCard.Container className="w-fit m-[0] py-5 !px-7">
       <PlainCard.Header className="capitalize">{header}</PlainCard.Header>
@@ -488,7 +493,8 @@ const DataCard = ({ header, desc }) => {
   );
 };
 
-export function affilateCode2ReferralLink(affiliateCode: string) {
+export function affilateCode2ReferralLink(affiliateCode: string | null) {
+  if (!affiliateCode) return '#';
   const { hostname } = window.location;
   const link = `https://${hostname}/#/ref/${affiliateCode}/`;
   return link;
@@ -496,10 +502,14 @@ export function affilateCode2ReferralLink(affiliateCode: string) {
 
 const Affilate = ({
   affiliateBoxArr,
-  shouldConnectWallet,
   inputValue,
   setInput,
   btn,
+}: {
+  affiliateBoxArr: { header: string; desc: JSX.Element }[];
+  btn: ReactNode;
+  inputValue: string;
+  setInput: (value: string) => void;
 }) => {
   const { activeChain } = useActiveChain();
   const { affiliateCode } = useUserCode(activeChain);
@@ -516,6 +526,8 @@ const Affilate = ({
     }
   };
 
+  console.log(`index-affiliateCode: `, affiliateCode);
+
   useEffect(() => {
     if (open) {
       setTimeout(() => {
@@ -527,7 +539,7 @@ const Affilate = ({
     <>
       <div className="flex justify-center gap-4 mt-6 sm:flex-wrap">
         {isCodeSet &&
-          affiliateBoxArr?.map((singleData, index) => (
+          affiliateBoxArr?.map((singleData, index: number) => (
             <DataCard
               desc={singleData.desc}
               header={singleData.header}
@@ -598,12 +610,14 @@ function getTokenXleaderboardQueryFields(token: string) {
 
 export const useUserReferralStats = () => {
   const { address } = useUserAccount();
-  const { configContracts } = useActiveChain();
-  const { poolNames } = usePoolNames();
+  const poolNames = usePoolNames();
   const tokens = useMemo(
     () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
     [poolNames]
   );
+  const { activeChain } = useActiveChain();
+  const config = getConfig(activeChain.id);
+  const graphUrl = config.graph.MAIN;
   const queryFields = useMemo(() => {
     if (tokens.length > 1)
       return tokens
@@ -614,7 +628,7 @@ export const useUserReferralStats = () => {
 
   return useSWR(`${address}-referral-stats`, {
     fetcher: async () => {
-      const response = await axios.post(configContracts.graph.MAIN, {
+      const response = await axios.post(graphUrl, {
         query: `{
             referralDatas (where: { id: "${address}"} ) {
               totalTradesReferred

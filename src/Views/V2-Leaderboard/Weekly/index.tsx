@@ -30,21 +30,25 @@ import {
   useWeeklyLeaderboardQuery,
 } from '../Hooks/useWeeklyLeaderboardQuery';
 import {
+  descClass,
   getRewardTooltip,
   getTournamentEndDateFromWeek,
+  headClass,
   TimerBox,
 } from '../Incentivised';
 import { ILeague } from '../interfaces';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
-import { ChainSwitchDropdown } from '@Views/Dashboard';
+import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
 
 export const Weekly = () => {
-  const { activeChain, configContracts } = useActiveChain();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const { activeChain } = useActiveChain();
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
   const configValue = weeklyTournamentConfig[activeChain.id];
   const { week, nextTimeStamp } = useWeekOfTournament({
     startTimestamp: configValue.startTimestamp,
@@ -217,15 +221,15 @@ export const Weekly = () => {
                 <div>{rewardPool}</div>
               </NumberTooltip>
             }
-            descClass="text-f16 tab:text-f14 font-medium light-blue-text "
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
             head={`Countdown ${week ? `(#${week})` : ''}`}
             desc={stopwatch}
-            descClass="text-f16 tab:text-f14 fw4 text-5"
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
@@ -235,8 +239,8 @@ export const Weekly = () => {
                 ? totalTournamentData.allTradesCount
                 : 'Counting...'
             }
-            descClass="text-f16 tab:text-f14 fw4 text-5 "
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
@@ -251,8 +255,8 @@ export const Weekly = () => {
                   ) + ' USDC'
                 : 'Counting...'
             }
-            descClass="text-f16 tab:text-f14 fw4 "
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
@@ -262,8 +266,8 @@ export const Weekly = () => {
                 ? totalTournamentData.totalUsers
                 : 'Counting...'
             }
-            descClass="text-f16 tab:text-f14 fw4 text-5"
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
           <Col
@@ -275,8 +279,8 @@ export const Weekly = () => {
                 setOffset={setOffset}
               />
             }
-            descClass="text-f16 tab:text-f14 fw4 text-5 "
-            headClass="text-f14 tab:text-f12 fw5 text-6"
+            descClass={descClass}
+            headClass={headClass}
             className="winner-card"
           />
         </div>
@@ -386,12 +390,15 @@ export const Weekly = () => {
                         <ChainSwitchDropdown baseUrl="/leaderboard/weekly" />
                       </div>
                       <a
-                        className="whitespace-nowrap flex items-center text-buffer-blue text-f13 hover:underline"
+                        className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
                         href={configValue.contestRules}
                         target={'blank'}
                       >
                         Contest Rules{' '}
-                        <FrontArrow className="tml w-fit inline" />
+                        <FrontArrow
+                          className="ml-2 w-fit inline scale-125 mt-1"
+                          arrowColor="#7F87A7"
+                        />
                       </a>
                     </div>
                   }

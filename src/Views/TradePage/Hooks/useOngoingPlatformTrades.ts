@@ -60,7 +60,6 @@ export const usePlatformActiveTrades = () => {
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
   const markets = useMarketsConfig();
-
   const activePage = useAtomValue(platformActiveTableActivePage);
 
   const { data, error } = useSWR<tradesApiResponseType>(
@@ -99,8 +98,8 @@ export const usePlatformHistoryTrades = () => {
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
-  const markets = useMarketsConfig();
   const activePage = useAtomValue(platformHistoryTableActivePage);
+  const markets = useMarketsConfig();
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'platform-history-trades-' +

@@ -1,27 +1,16 @@
-import { ReactNode, useEffect } from 'react';
-import { PrimaryActionBtn } from '../Buttons';
+import { ReactNode } from 'react';
 import Background from './style';
-import { removeClass, setOpacity } from '@Utils/appControls/removeMargin';
-import { useGlobal } from '@Contexts/Global';
-import Drawer from '../v2-Drawer';
-import Link from 'react-router';
-import { defaultPair } from '@Views/BinaryOptions';
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 interface INetworkDisconnected {
   children?: ReactNode;
-  onClick: (e: any) => void;
   paddingTop?: string;
 }
 
 const NetworkDisconnected: React.FC<INetworkDisconnected> = ({
   children,
-  onClick,
   paddingTop,
 }) => {
-  const { activeChain } = useActiveChain();
-
   return (
     <>
       <main className="content-drawer">

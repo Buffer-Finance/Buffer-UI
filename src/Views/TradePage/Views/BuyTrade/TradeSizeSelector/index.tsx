@@ -13,14 +13,13 @@ import { add, divide, gt } from '@Utils/NumString/stringArithmatics';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { PoolDropdown } from './PoolDropdown';
-
 import { toFixed } from '@Utils/NumString';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
-import { BuyUSDCLink } from '@Views/BinaryOptions/PGDrawer/BuyUsdcLink';
 import { useAccount } from 'wagmi';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { BuyUSDCLink } from '../BuyUsdcLink';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;

@@ -1,15 +1,16 @@
-import styled from "styled-components";
+import styled from '@emotion/styled';
 
 const Background = styled.div`
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   &.ip-border {
     border: 1.14763px solid #2a2a3a;
-    border-radius: 11.4px;  
+    border-radius: 11.4px;
   }
   .background {
     padding: 0.4rem 1.6rem;
     border-radius: 0.8rem;
+    background-color: #2a2a3a;
     /* border: 2px solid var(--bg-8); */
   }
   .bg {

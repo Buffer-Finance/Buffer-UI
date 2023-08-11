@@ -7,7 +7,7 @@ import {
   WSUpdate,
 } from 'src/Types/Market';
 import { ResolutionString } from 'public/static/charting_library';
-import { IGQLHistory } from '@Views/BinaryOptions/Hooks/usePastTradeQuery';
+import { TradeType } from '@Views/TradePage/type';
 export const timeDeltaMapping = (t: string | number) => {
   if (typeof t == 'string') {
     if (
@@ -161,7 +161,7 @@ export const parsewsmsg = (res: string) => {
   return priceObj;
 };
 
-export const getVizIdentifier = (a: IGQLHistory) => {
+export const getVizIdentifier = (a: TradeType) => {
   return +a.optionID! + '-' + a.configPair!.pair;
 };
 

@@ -1,15 +1,9 @@
 import { ReactChild, ReactNode } from 'react';
 import InfoIcon from 'src/SVG/Elements/InfoIcon';
-import VersionChip from '@Views/Common/VersionChip';
-import { AssetCellLayout, CellDescLayout } from './style';
+import { CellDescLayout } from './style';
 import { TradeType, marketType } from '@Views/TradePage/type';
 import { Display } from '../Tooltips/Display';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import TableAssetCell from '../BufferTable/TableAssetCell';
-import { UpDownChip } from '@Views/BinaryOptions/Tables/TableComponents';
-import { PairTokenImage } from '../PairTokenImage';
-import LockIcon from '@SVG/Elements/LockIcon';
-import NumberTooltip from '../Tooltips';
 
 interface ITableCellInfo {
   label: string | ReactChild;
@@ -87,46 +81,6 @@ export const StrikePriceComponent = ({
   );
 };
 
-const AssetCell: React.FC<{
-  currentRow: TradeType;
-  split?: boolean;
-}> = ({ currentRow, split }) => {
-  const isUp = currentRow.is_above;
-  const token0 = currentRow.market.token0;
-  const token1 = currentRow.market.token1;
-  const isHidden = isUp === undefined;
-  return (
-    <TableAssetCell
-      img={
-        <div className="w-[20px] h-[20px] mr-[6px]">
-          <PairTokenImage
-            pair={{
-              token0,
-              token1,
-            }}
-          />
-        </div>
-      }
-      head={
-        <NumberTooltip
-          content={
-            isHidden
-              ? 'Trade directions are hidden.'
-              : 'You choosed ' + (isUp ? 'Up' : 'Down')
-          }
-        >
-          <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
-            <span className={`weight-400 text-f15 `}>
-              {token0 + '-' + token1}{' '}
-            </span>
-            {isHidden ? <LockIcon /> : <UpDownChip isUp={isUp} />}
-          </div>
-        </NumberTooltip>
-      }
-      desc={<></>}
-    />
-  );
-};
 interface IAssetCell {
   version?: number | string;
   tooltip?: string;
@@ -155,4 +109,4 @@ const TableHeads: React.FC<ITableHeads> = ({ children, style, tooltip }) => {
   );
 };
 
-export { CellHeadDesc, AssetCell, TableHeads };
+export { CellHeadDesc, TableHeads };

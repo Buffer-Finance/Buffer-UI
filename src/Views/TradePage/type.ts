@@ -8,6 +8,7 @@ export type poolType = {
   isPaused: boolean;
   configContract: string;
   optionContract: string;
+  marketOiContract: string;
   platformFee: string;
   earlyclose: {
     enable: boolean;
@@ -27,7 +28,7 @@ export type marketType = {
   img: string;
   pythId: string;
   pools: poolType[];
-};
+} & chartDataType;
 
 export interface TradeType {
   id: number;
@@ -40,14 +41,14 @@ export interface TradeType {
   period: number;
   target_contract: string;
   expiry_price: number | null;
-  payout: number | null;
+  payout: string | null;
   user_partial_signature: string;
   open_timestamp: number;
   close_time: number;
   user_full_signature: string;
   user_address: string;
-  trade_size: number;
-  locked_amount: number;
+  trade_size: string;
+  locked_amount: string;
   allow_partial_fill: boolean;
   referral_code: string;
   trader_nft_id: number;
@@ -65,6 +66,7 @@ export interface TradeType {
   environment: '421613' | '42161';
   market: marketType;
   pool: poolType;
+  token: string;
 }
 //type of data returned from graphql
 export type response = {
@@ -80,7 +82,9 @@ export type responseObj = {
     platformFee: string;
     earlyCloseThreshold: string;
     isEarlyCloseEnabled: boolean;
+    marketOIaddress: string;
     IV: string;
+    poolOIaddress: string;
   };
   address: string;
   poolContract: string;
@@ -115,7 +119,7 @@ export enum directionBtn {
 export type configType = (typeof appConfig)['421613'];
 
 export type poolInfoType =
-  (typeof appConfig)['421613']['poolsInfo']['0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0'];
+  (typeof appConfig)['421613']['poolsInfo']['0x107aF8B74F52e6936e92D8204D8a80c32039bFd0'];
 
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];
 

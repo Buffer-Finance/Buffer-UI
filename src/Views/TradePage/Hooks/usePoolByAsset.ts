@@ -19,7 +19,7 @@ export const usePoolByAsset = () => {
       response[tokenName] = { ...pool, poolAddress: key };
     });
     return response;
-  }, []);
+  }, [activeChain]);
 
   return pools;
 };

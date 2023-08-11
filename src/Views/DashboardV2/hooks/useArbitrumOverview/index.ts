@@ -11,6 +11,7 @@ import { get24hrsStats } from './get24hrsStats';
 
 export const useArbitrumOverview = () => {
   const { data, error } = useGraphqlRequest();
+  console.log('data', data);
   const decimalsByName = useDecimalsByAsset();
 
   const stats = useMemo(() => {

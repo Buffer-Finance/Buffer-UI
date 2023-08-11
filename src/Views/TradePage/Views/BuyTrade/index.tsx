@@ -12,9 +12,7 @@ import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { priceAtom } from '@Hooks/usePrice';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { AssetCategory } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
-import { marketsForChart } from '@Views/TradePage/config';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { ActiveTrades } from './ActiveTrades';
@@ -59,14 +57,6 @@ export const BuyTrade: React.FC = () => {
         approvalExpanded?.allowance == undefined
       : false)
   ) {
-    // console.log(
-    //   `index-allSettlementFees: `,
-    //   activeMarket,
-    //   poolDetails,
-    //   switchPool,
-    //   readcallData,
-    //   approvalExpanded
-    // );
     return (
       <Skeleton
         variant="rectangular"
@@ -83,12 +73,10 @@ export const BuyTrade: React.FC = () => {
   const allowance = approvalExpanded?.allowance
     ? (divide(approvalExpanded?.allowance, decimals) as string)
     : '0';
-  const isForex = activeMarket.category === AssetCategory[0];
-  const isMarketOpen = true;
-  const marketId = joinStrings(activeMarket.token0, activeMarket.token1, '');
-  const activeChartMarket =
-    marketsForChart[marketId as keyof typeof marketsForChart];
-  const activeAssetPrice = getPriceFromKlines(marketPrice, activeChartMarket);
+
+  const activeAssetPrice = getPriceFromKlines(marketPrice, {
+    tv_id: activeMarket.tv_id,
+  });
   // const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
   // if (
@@ -117,8 +105,6 @@ export const BuyTrade: React.FC = () => {
         activeAssetPrice={activeAssetPrice}
         allowance={allowance}
         amount={amount.toString()}
-        isForex={isForex}
-        isMarketOpen={isMarketOpen}
       />
       <ActiveTrades />
     </BuyTradeBackground>

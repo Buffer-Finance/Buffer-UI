@@ -1,7 +1,6 @@
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   getDisplayDate,
   getDisplayDateUTC,
@@ -9,36 +8,29 @@ import {
   getDisplayTimeUTC,
 } from '@Utils/Dates/displayDateTime';
 
-import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { divide, round } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { AssetCell } from '@Views/Common/TableComponents/TableComponents';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
-import { useState } from 'react';
-import { useAccount } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { useToast } from '@Contexts/Toast';
 import {
   closeLoadingAtom,
   selectedOrderToEditAtom,
 } from '@Views/TradePage/atoms';
-import { cancelQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
+import { secondsToHHMM } from '@Views/TradePage/utils';
 import {
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
   tableButtonClasses,
 } from './Common';
-import ErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { TradeType } from '@Views/TradePage/type';
+import { AssetCell } from './AssetCell';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 export const tradesCount = 10;
 const headNameArray = [
@@ -61,12 +53,17 @@ enum TableColumn {
   ActionButtons = 6,
 }
 
-const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
-  // const [visualized, setVisualized] = useAtom(visualizeddAtom);
+const LimitOrderTable = ({
+  trades,
+  overflow,
+}: {
+  trades: TradeType[];
+  overflow?: number;
+}) => {
   const [marketPrice] = useAtom(priceAtom);
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
-  const markets = useMarketsConfig();
   const cancelLoading = useAtomValue(closeLoadingAtom);
+  const { getPoolInfo } = usePoolInfo();
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
@@ -78,34 +75,25 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
 
-    const tradeMarket = markets?.find((pair) => {
-      const pool = pair.pools.find(
-        (pool) =>
-          pool.optionContract.toLowerCase() ===
-          trade?.target_contract.toLowerCase()
-      );
-      return !!pool;
-    });
-    const marketPrecision = tradeMarket?.price_precision.toString().length - 1;
-
-    if (!trade || !tradeMarket) return 'Problem';
-    let currentEpoch = Math.round(new Date().getTime() / 1000);
+    const marketPrecision = trade.market.price_precision.toString().length - 1;
+    const poolInfo = getPoolInfo(trade.pool.pool);
+    if (!trade) return 'Problem';
 
     switch (col) {
       case TableColumn.TriggerPrice:
-        return <StrikePriceComponent trade={trade} configData={tradeMarket} />;
+        return <StrikePriceComponent trade={trade} />;
       case TableColumn.Asset:
-        return <AssetCell configData={tradeMarket} currentRow={trade} />;
+        return <AssetCell currentRow={trade} />;
       case TableColumn.CurrentPrice:
         return (
           <Display
             className="!justify-start"
             data={round(
-              getPriceFromKlines(marketPrice, tradeMarket),
+              getPriceFromKlines(marketPrice, trade.market),
               marketPrecision
             )}
             precision={marketPrecision}
-            // unit={tradeMarket.token1}
+            // unit={trade.market.token1}
           />
         );
       case TableColumn.Duration:
@@ -117,9 +105,9 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
       case TableColumn.TradeSize:
         return (
           <Display
-            data={divide(trade.trade_size, 6)}
+            data={divide(trade.trade_size, poolInfo.decimals)}
             className="!justify-start"
-            unit={'USDC'}
+            unit={poolInfo.token}
           />
         );
       case TableColumn.ActionButtons:
@@ -127,7 +115,7 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
           <div className="flex items-center">
             <GreyBtn
               className={tableButtonClasses}
-              onClick={() => setSelectedTrade({ trade, market: tradeMarket })}
+              onClick={() => setSelectedTrade({ trade, market: trade.market })}
             >
               Edit
             </GreyBtn>
@@ -153,7 +141,7 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow={400}
+      overflow={overflow}
       error={<TableErrorRow msg="No active limit orders." />}
     />
   );

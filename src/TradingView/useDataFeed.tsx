@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { atom, useAtom, useSetAtom } from 'jotai';
 import axios from 'axios';
-
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { useV3AppActiveMarket } from '@Views/V3App/Utils/useV3AppActiveMarket';
-import { joinStrings } from '@Views/V3App/helperFns';
-import { marketsForChart } from '@Views/V3App/config';
-import { useV3AppConfig } from '@Views/V3App/useV3AppConfig';
+import { marketsForChart } from '@Views/TradePage/config';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 const FIRST_TIMESTAMP = 1673239587;
 export function getBlockFromBar(bar) {
   if (bar.time) return bar;
@@ -295,17 +292,11 @@ const getMergedBars = (storedBars, newBars, time) => {
 };
 export default function useDataFeed(chartReady) {
   const storedUpdates = useRef({});
-  const v3AppConfig = useV3AppConfig();
   const [marketPrices, setMarketPrices] = useAtom(marketPriceAtom);
   const setLastDayChange = useSetAtom(market2dayChangeAtom);
   const [showPauseModal, setShowPasuseModal] = useState(false);
-  const { activeMarket: activeAsset } = useV3AppActiveMarket();
-  const marketId = joinStrings(
-    activeAsset?.token0 as string,
-    activeAsset?.token1 as string,
-    ''
-  );
-  const chartMarket = marketsForChart[marketId as keyof typeof marketsForChart];
+  const { activeMarket: activeAsset } = useActiveMarket();
+
   const [sync, setSync] = useState<ITVSyncing>({
     state: TVSyncingStates.SyncNeeded,
   });
@@ -331,14 +322,14 @@ export default function useDataFeed(chartReady) {
     const activeResolution = realTimeUpdate.current?.resolution || '1m';
     let prevBar =
       lastSyncedKline?.current?.[
-      chartMarket.tv_id + timeDeltaMapping(activeResolution)
+        activeAsset?.tv_id + timeDeltaMapping(activeResolution)
       ];
-    const activeAssetStream = priceUpdates[chartMarket.tv_id];
+    const activeAssetStream = priceUpdates[activeAsset?.tv_id];
     const latestKline = getKlineFromPrice(res);
 
     if (activeAssetStream?.length && prevBar) {
       let aggregatedBar;
-      const storedBars = storedUpdates.current[chartMarket.tv_id];
+      const storedBars = storedUpdates.current[activeAsset?.tv_id];
       const completeBars = getMergedBars(
         storedBars,
         activeAssetStream,
@@ -355,7 +346,7 @@ export default function useDataFeed(chartReady) {
 
         if (
           aggregatedBar &&
-          realTimeUpdate.current.symbolInfo.name === chartMarket.tv_id &&
+          realTimeUpdate.current.symbolInfo.name === activeAsset?.tv_id &&
           prevBar.time < aggregatedBar.time
         ) {
           realTimeUpdate.current.onRealtimeCallback(aggregatedBar);
@@ -365,7 +356,7 @@ export default function useDataFeed(chartReady) {
       }
       if (aggregatedBar) {
         lastSyncedKline.current[
-          chartMarket.tv_id + timeDeltaMapping(activeResolution)
+          activeAsset?.tv_id + timeDeltaMapping(activeResolution)
         ] = aggregatedBar;
       }
     }
@@ -420,30 +411,20 @@ export default function useDataFeed(chartReady) {
   async function getAllSymbols() {
     let allSymbols = [];
     let tempSymbols = [];
-    if (v3AppConfig !== null) {
-      for (const singleAsset of v3AppConfig) {
-        const marketId = joinStrings(
-          singleAsset.token0,
-          singleAsset.token1,
-          ''
-        );
-        const chartMarket =
-          marketsForChart[marketId as keyof typeof marketsForChart];
-
-        tempSymbols = [
-          {
-            symbol: chartMarket.tv_id,
-            full_name: chartMarket.tv_id,
-            description: chartMarket.tv_id,
-            exchange: PRICE_PROVIDER,
-            type: singleAsset.category,
-            pricescale: chartMarket.price_precision,
-            pair: chartMarket.pair,
-          },
-          ...tempSymbols,
-        ];
-        allSymbols = [...tempSymbols];
-      }
+    for (const singleAsset of Object.values(marketsForChart)) {
+      tempSymbols = [
+        {
+          symbol: singleAsset.tv_id,
+          full_name: singleAsset.tv_id,
+          description: singleAsset.tv_id,
+          exchange: PRICE_PROVIDER,
+          // type: singleAsset.category,
+          pricescale: singleAsset.price_precision,
+          pair: singleAsset.pair,
+        },
+        ...tempSymbols,
+      ];
+      allSymbols = [...tempSymbols];
     }
     return allSymbols;
   }
@@ -527,22 +508,19 @@ export default function useDataFeed(chartReady) {
 
           const req = firstDataRequest
             ? {
-              pair: getBarsFnActiveAsset,
-              interval: timeDeltaMapping(resolution),
-              limit: 1000,
-            }
+                pair: getBarsFnActiveAsset,
+                interval: timeDeltaMapping(resolution),
+                limit: 1000,
+              }
             : {
-              pair: getBarsFnActiveAsset,
-              interval: timeDeltaMapping(resolution),
-              limit: 1000,
-              start_time: from * 1000,
-              end_time: to * 1000,
-            };
+                pair: getBarsFnActiveAsset,
+                interval: timeDeltaMapping(resolution),
+                limit: 1000,
+                start_time: from * 1000,
+                end_time: to * 1000,
+              };
           const bundle = [
-            axios.post(
-              `https://oracle.buffer.finance/multi/uiKlines/`,
-              [req]
-            ),
+            axios.post(`https://oracle.buffer.finance/multi/uiKlines/`, [req]),
             axios.get('https://oracle.buffer.finance/price/latest/'),
           ];
           const [d, allPrices] = await Promise.all(bundle);
@@ -612,7 +590,7 @@ export default function useDataFeed(chartReady) {
         onResetCacheNeededCallback();
         // updateBar();
       },
-      unsubscribeBars: (subscriberUID) => { },
+      unsubscribeBars: (subscriberUID) => {},
     },
     realTimeUpdate,
   ];
@@ -621,15 +599,15 @@ export default function useDataFeed(chartReady) {
 export const lastTimestampAtom = atom<any>({});
 export const marketPriceAtom = atom<{
   [market: string]:
-  | {
-    close: number;
-    hight: number;
-    low: number;
-    open: number;
-    time: number;
-    '24h_change': number;
-  }
-  | SUpdate[];
+    | {
+        close: number;
+        hight: number;
+        low: number;
+        open: number;
+        time: number;
+        '24h_change': number;
+      }
+    | SUpdate[];
 }>({});
 export const market2dayChangeAtom = atom<{
   [market: string]: {

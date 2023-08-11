@@ -83,7 +83,8 @@ export const SingleNotification = styled.div`
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  max-width: 37rem;
+  max-width: 60vw;
+  width: fit-content;
   font-size: 1.3rem;
   margin: 10px;
   &.fade-in {

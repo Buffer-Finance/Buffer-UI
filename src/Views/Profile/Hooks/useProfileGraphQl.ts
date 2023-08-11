@@ -1,6 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { add, subtract } from '@Utils/NumString/stringArithmatics';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';
@@ -39,7 +40,8 @@ export type ItradingMetricsData = metricsData & {
 
 export const useProfileGraphQl = () => {
   const { address: account } = useUserAccount();
-  const { configContracts, activeChain } = useActiveChain();
+  const { activeChain } = useActiveChain();
+  const graphUrl = getConfig(activeChain.id).graph.MAIN;
 
   const fetchData = async (account: string | undefined) => {
     if (!account) return null;
@@ -70,7 +72,7 @@ export const useProfileGraphQl = () => {
 
     const query = `{${basicQuery}}`;
 
-    const response = await axios.post(configContracts.graph.MAIN, {
+    const response = await axios.post(graphUrl, {
       query,
     });
 

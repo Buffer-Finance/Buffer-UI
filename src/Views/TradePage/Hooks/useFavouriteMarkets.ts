@@ -2,16 +2,13 @@ import { useAtom } from 'jotai';
 import { favouriteMarketsAtom } from '../atoms';
 import { useMemo } from 'react';
 import { joinStrings } from '../utils';
-import { useMarketsConfig } from './useMarketsConfig';
-import { marketType } from '../type';
 import { useNavigate } from 'react-router-dom';
-import { useActiveMarket } from './useActiveMarket';
+import { marketData, useMarketsWithChartData } from './useAssetTableFilters';
 
 export const useFavouriteMarkets = () => {
   const [favMarkets, setFavMarkets] = useAtom(favouriteMarketsAtom);
-  const markets = useMarketsConfig();
+  const markets = useMarketsWithChartData();
   const navigate = useNavigate();
-  const { activeMarket } = useActiveMarket();
 
   const favouriteMarkets = useMemo(() => {
     if (markets === null) {
@@ -20,22 +17,27 @@ export const useFavouriteMarkets = () => {
     if (favMarkets.length === 0) {
       return [];
     }
+
     const pinnedMarkets = favMarkets
       .map((favMarket) => {
         return markets.find(
           (market) =>
-            joinStrings(market.token0, market.token1, '/') === favMarket
+            joinStrings(
+              market.marketInfo.token0,
+              market.marketInfo.token1,
+              '/'
+            ) === favMarket
         );
       })
-      .filter((market) => market !== undefined) as marketType[];
+      .filter((market) => market !== undefined) as marketData[];
     return pinnedMarkets;
   }, [favMarkets, markets]);
 
-  function getMarketPairName(market: marketType) {
-    return joinStrings(market.token0, market.token1, '/');
+  function getMarketPairName(market: marketData) {
+    return joinStrings(market.marketInfo.token0, market.marketInfo.token1, '/');
   }
 
-  function addFavouriteMarket(market: marketType) {
+  function addFavouriteMarket(market: marketData) {
     if (favMarkets.includes(getMarketPairName(market))) {
       return;
     }
@@ -44,7 +46,7 @@ export const useFavouriteMarkets = () => {
     setFavMarkets(newMarkets);
   }
 
-  function removeFavouriteMarket(market: marketType) {
+  function removeFavouriteMarket(market: marketData) {
     // if (favouriteMarkets.length === 1) return;
     const index = favMarkets.indexOf(getMarketPairName(market));
     const newMarkets = [...favMarkets];
@@ -71,9 +73,8 @@ export const useFavouriteMarkets = () => {
     setFavMarkets(newMarkets);
   }
 
-  //TODO - V2.1 change this to binary
-  function navigateToMarket(market: marketType) {
-    navigate(`/v2/${joinStrings(market.token0, market.token1, '-')}`);
+  function navigateToMarket(market: marketData) {
+    navigate(`/binary/${market.marketInfo.pair}`);
   }
   return {
     favouriteMarkets,

@@ -1,4 +1,9 @@
-import { divide, subtract } from '@Utils/NumString/stringArithmatics';
+import {
+  add,
+  divide,
+  multiply,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import { TradeType } from '@Views/TradePage/type';
 import { calculatePnlForProbability } from '../../BuyTrade/ActiveTrades/TradeDataView';
 import { getProbabilityByTime } from '../Common';
@@ -16,10 +21,7 @@ export const getPayout = (
     return {
       payout: trade.payout || '0',
       pnl: trade.payout
-        ? (divide(
-            (trade.payout - trade.trade_size).toString(),
-            decimals
-          ) as string)
+        ? (divide(subtract(trade.payout, trade.trade_size), decimals) as string)
         : subtract(
             '0',
             divide(trade.trade_size.toString(), decimals) as string
@@ -34,19 +36,19 @@ export function getPendingData(
 ) {
   if (!currentRow && !expiryPrice) return ['0', '0'];
   let payout = currentRow.payout;
-  let pnl = 0;
+  let pnl = '0';
   if (payout) {
-    pnl = payout - currentRow.trade_size;
+    pnl = subtract(payout, currentRow.trade_size);
   } else {
     if (!!currentRow.close_time) {
       //early close
       pnl = getEarlypnl(currentRow, expiryPrice, decimals);
-      payout = pnl * 10 ** decimals + currentRow.trade_size;
+      payout = add(multiply(pnl, decimals), currentRow.trade_size);
       console.log(`aug-payout-early: `, payout, pnl, currentRow.trade_size);
     } else {
       //end close
       pnl = getEndPnl(currentRow, expiryPrice, decimals);
-      payout = pnl * 10 ** decimals + currentRow.trade_size;
+      payout = add(multiply(pnl, decimals), currentRow.trade_size);
       console.log(`aug-payout-end: `, payout, pnl, currentRow.trade_size);
     }
   }
@@ -77,7 +79,7 @@ function getEarlypnl(
     probability,
     trade: currentRow,
   });
-  return Number(earlycloseAmount);
+  return earlycloseAmount;
 }
 
 function getEndPnl(
@@ -108,5 +110,5 @@ function getEndPnl(
     }
   }
 
-  return Number(pnl);
+  return pnl;
 }

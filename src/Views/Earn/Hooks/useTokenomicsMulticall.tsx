@@ -23,6 +23,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { roundToTwo } from '@Utils/roundOff';
 import { appConfig } from '@Views/TradePage/config';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import getDeepCopy from '@Utils/getDeepCopy';
 
 export const BASIS_POINTS_DIVISOR = '10000';
 export const SECONDS_PER_YEAR = '31536000';
@@ -647,11 +648,12 @@ export const useGetTokenomics = () => {
   const calls = getcalls().map((call) => {
     return { ...call, chainId: activeChain.id };
   });
-  let { data } = useContractReads({
+  let { data: da } = useContractReads({
     contracts: calls,
+    select: (d) => d.map((signle) => signle.result?.toString() || '0'),
     watch: true,
   });
-  // if (data)
+  let data = getDeepCopy(da);
   convertBNtoString(data);
 
   let response = {};
@@ -754,6 +756,12 @@ export const useGetTokenomics = () => {
       ? data.flat()
       : data.concat(new Array(getUserSpecificCalls().length).fill('0')).flat();
 
+    console.log(
+      `useTokenomicsMulticall-convertDataToRes(
+          data.concat(new Array(getUserSpecificCalls().length).fill('0')).flat()
+        ): `,
+      data.concat(new Array(getUserSpecificCalls().length).fill('0'))
+    );
     const blpPrice =
       blpSupply > 0
         ? divide(blpTotalBalance, blpSupply)

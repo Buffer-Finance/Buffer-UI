@@ -1,0 +1,91 @@
+{
+  "options_config": {
+    "setBoosterContract": {
+      "getter": "boosterContract"
+    },
+    "setCreationWindowContract": {
+      "getter": "creationWindowContract"
+    },
+    "setMinFee": {
+      "getter": "minFee",
+      "decimal": "token"
+    },
+    "setIV": {
+      "getter": "iv",
+      "decimal": 4
+    },
+    "setPlatformFee": {
+      "getter": "platformFee",
+      "decimal": "token"
+    },
+    "setSettlementFeeDisbursalContract": {
+      "getter": "settlementFeeDisbursalContract"
+    },
+    "setOptionStorageContract": {
+      "getter": "optionStorageContract"
+    },
+    "setMaxPeriod": {
+      "getter": "maxPeriod",
+      "hint": "in seconds"
+    },
+    "setPoolOIStorageContract": {
+      "getter": "poolOIStorageContract"
+    },
+    "setPoolOIConfigContract": {
+      "getter": "poolOIConfigContract"
+    },
+    "setMarketOIConfigContract": {
+      "getter": "marketOIConfigContract"
+    },
+    "setEarlyCloseThreshold": {
+      "getter": "earlyCloseThreshold",
+      "hint": "in seconds"
+    },
+    "toggleEarlyClose": {
+      "getter": "isEarlyCloseAllowed"
+    },
+    "setMinPeriod": {
+      "getter": "minPeriod",
+      "hint": "in seconds"
+    }
+  },
+  "pool": {
+    "setMaxLiquidity": {
+      "getter": "maxLiquidity",
+      "decimal": "token"
+    }
+  },
+  "options": {
+    "setIsPaused": {
+      "getter": "isPaused"
+    }
+  },
+  "booster": {
+    "setConfigure": {
+      "getter": "getNftTierDiscounts"
+    },
+    "setPrice": {
+      "getter": "couponPrice"
+    },
+    "setBoostPercentage": {
+      "getter": "boostPercentage",
+      "decimal": 2
+    }
+  },
+  "pooloi": {
+    "setMaxPoolOI": {
+      "getter": "_maxPoolOI",
+      "decimal": "token"
+    }
+  },
+  "marketoi": {
+    "setMaxMarketOI": {
+      "getter": "_maxMarketOI",
+      "decimal": "token"
+    },
+    "setMaxTradeSize": {
+      "getter": "_maxTradeSize",
+      "decimal": "token"
+    }
+  }
+}

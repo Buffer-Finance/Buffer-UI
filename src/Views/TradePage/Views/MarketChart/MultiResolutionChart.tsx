@@ -30,7 +30,6 @@ import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
 import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
 import { sleep } from '@Utils/JSUtils/sleep';
-import { PRICE_DECIMALS } from '@Views/BinaryOptions/Tables/TableComponents';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
@@ -41,13 +40,14 @@ import {
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
-import { marketsForChart } from '@Views/V3App/config';
-import { joinStrings } from '@Views/V3App/helperFns';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { TradeType } from '@Views/TradePage/type';
 import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
 import { atomWithStorage } from 'jotai/utils';
+import { PRICE_DECIMALS } from '@Views/TradePage/config';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { marketsForChart } from '@Views/TradePage/config';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -197,15 +197,17 @@ const market2resolutionAtom = atomWithStorage(
 function drawPosition(
   option: TradeType,
   visualized: any,
-  chart: IChartWidgetApi
+  chart: IChartWidgetApi,
+  decimals: number
 ) {
   // const idx = visualized.indexOf(option.queue_id);
   const openTimeStamp = option.open_timestamp;
   const optionPrice = +option.strike / PRICE_DECIMALS;
   let color = !option.is_above ? defaults.red : defaults.green;
   const text =
-    `${toFixed(divide(option.trade_size?.toString(), 6!)!, 2)} USDC | ` +
-    getText(option);
+    `${toFixed(divide(option.trade_size?.toString(), decimals)!, 2)} ${
+      option.token
+    } | ` + getText(option);
   const tooltip = `${getDisplayDate(openTimeStamp as any)}, ${getDisplayTime(
     openTimeStamp
   )} - ${getDisplayDate(option.close_time as any)}, ${getDisplayTime(
@@ -243,10 +245,14 @@ export const MultiResolutionChart = ({
   market: Markets;
   index: number;
 }) => {
-  let market = marke.replace('-', '');
+  const market = marke.replace('-', '');
+  const chartData =
+    marketsForChart[market as unknown as keyof typeof marketsForChart];
+
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
+  const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
   const v3AppConfig = useMarketsConfig();
   const { address } = useUserAccount();
@@ -274,23 +280,20 @@ export const MultiResolutionChart = ({
     let tempSymbols: any[] = [];
     if (v3AppConfig !== null) {
       for (const singleAsset of v3AppConfig) {
-        const marketId = joinStrings(
-          singleAsset.token0,
-          singleAsset.token1,
-          ''
-        );
-        const chartMarket =
-          marketsForChart[marketId as keyof typeof marketsForChart];
-
         tempSymbols = [
           {
-            symbol: chartMarket.tv_id,
-            full_name: chartMarket.tv_id,
-            description: chartMarket.tv_id,
+            symbol:
+              singleAsset.pythGroup +
+              '.' +
+              singleAsset.token0 +
+              '/' +
+              singleAsset.token1,
+            full_name: singleAsset.tv_id,
+            description: singleAsset.tv_id,
             exchange: PRICE_PROVIDER,
             type: singleAsset.category,
-            pricescale: chartMarket.price_precision,
-            pair: chartMarket.pair,
+            pricescale: singleAsset.price_precision,
+            pair: singleAsset.pair,
           },
           ...tempSymbols,
         ];
@@ -301,6 +304,7 @@ export const MultiResolutionChart = ({
     return allSymbols;
   }
   const price = useAtomValue(priceAtom);
+  // console.log(price);
 
   const datafeed: IBasicDataFeed = useMemo(() => {
     return {
@@ -393,12 +397,13 @@ export const MultiResolutionChart = ({
           };
 
           const pythOHLC = await axios.get(
-            `https://pyth-api.vintage-orange-muffin.com/v2/history`,
+            `https://benchmarks.pyth.network/v1/shims/tradingview/history`,
             {
               params: req,
             }
           );
           const ohlc = pythOHLC2rawOHLC(pythOHLC.data);
+
           // console.log(`ohlc: `, ohlc);
           // const tempData = rawOHLC;
           // console.log(`tempData: `, tempData);
@@ -521,9 +526,18 @@ export const MultiResolutionChart = ({
     // console.log(`[deb]1activeResolution: `, activeResolution);
 
     const key = market + timeDeltaMapping(activeResolution);
+    const newpythId =
+      chartData.pythGroup + '.' + chartData.token0 + '/' + chartData.token1;
+    const newpythIdKey = newpythId + timeDeltaMapping(activeResolution);
     // console.log(`[deb]2key: `, key);
-    let prevBar = lastSyncedKline?.current?.[key];
-    // console.log(`[deb]3prevBar: `, prevBar);
+    let prevBar = lastSyncedKline?.current?.[newpythIdKey];
+    // console.log(
+    //   `[deb]3prevBar: `,
+    //   prevBar,
+    //   newpythId,
+    //   lastSyncedKline.current,
+    //   price
+    // );
     if (!prevBar) return;
     const activeAssetStream = (price as any)[market];
     // console.log(`[deb]4price: `, activeAssetStream);
@@ -536,10 +550,15 @@ export const MultiResolutionChart = ({
         currBar,
         realTimeUpdateRef.current?.resolution
       );
+      // console.log(
+      //   `[deb]5aggregatedBar: `,
+      //   aggregatedBar,
+      //   realTimeUpdateRef.current.symbolInfo.name
+      // );
       if (
         aggregatedBar &&
         realTimeUpdateRef.current.symbolInfo &&
-        realTimeUpdateRef.current.symbolInfo.name === market
+        realTimeUpdateRef.current.symbolInfo.name === newpythId
       ) {
         try {
           realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
@@ -549,7 +568,7 @@ export const MultiResolutionChart = ({
         // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
 
-        lastSyncedKline.current[key] = prevBar;
+        lastSyncedKline.current[newpythIdKey] = prevBar;
       }
     }
   };
@@ -585,7 +604,8 @@ export const MultiResolutionChart = ({
             lineRef: drawPosition(
               updatedPos,
               visualized,
-              widgetRef.current?.activeChart()!
+              widgetRef.current?.activeChart()!,
+              getPoolInfo(pos.pool.pool).decimals
             ),
             option: pos,
           };

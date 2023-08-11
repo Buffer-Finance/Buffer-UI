@@ -4,16 +4,12 @@ import { SingleNotification, Bar, Background } from './style';
 import { useToast } from '../../../contexts/Toast';
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import { useGlobal } from '@Contexts/Global';
-import ToastCrossIcon from '@Assets/Elements/ToastCrossIcon';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import ErrorIcon from '@Assets/Elements/ErrorIcon';
 import FailedSuccessIcon from '@Assets/Elements/FailedSuccess';
 import { CLoseSVG } from '@Views/TradePage/Components/CloseSVG';
 import { useAtom } from 'jotai';
-import {
-  notificationPositionSettingsAtom,
-  tradeSettingsAtom,
-} from '@Views/TradePage/atoms';
+import { notificationPositionSettingsAtom } from '@Views/TradePage/atoms';
 
 // import { useWindowSize } from "src/Providers";
 

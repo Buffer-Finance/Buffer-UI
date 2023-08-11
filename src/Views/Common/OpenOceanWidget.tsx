@@ -1,6 +1,4 @@
-import { Dialog } from '@mui/material';
 import BackIcon from '@SVG/buttons/back';
-import { ShareModalStyles } from '@Views/BinaryOptions/Components/shareModal';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { ModalBase } from 'src/Modals/BaseModal';
 

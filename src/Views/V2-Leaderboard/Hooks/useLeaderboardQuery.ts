@@ -12,6 +12,7 @@ import { useDayOffset } from './useDayOffset';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { blacklist } from '../blacklist.json';
 import { DailyTournamentConfig } from '../Incentivised/config';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -40,7 +41,8 @@ export const useLeaderboardQuery = () => {
   const { offset } = useDayOffset();
   const { day } = useDayOfTournament();
   const timestamp = getDayId(Number(day - Number(offset ?? day)));
-  const { configContracts, activeChain } = useActiveChain();
+  const { activeChain } = useActiveChain();
+  const graphUrl = getConfig(activeChain.id).graph.MAIN;
   const configValue = DailyTournamentConfig[activeChain.id];
 
   const { data } = useSWR<ILeaderboardQuery>(
@@ -101,7 +103,7 @@ export const useLeaderboardQuery = () => {
           : '';
 
         const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(configContracts.graph.MAIN, {
+        const response = await axios.post(graphUrl, {
           query,
         });
 

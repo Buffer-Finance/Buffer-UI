@@ -10,8 +10,8 @@ import Drawer from '@Views/Common/V2-Drawer';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
-import { usePoolDisplayNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
 import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
 
 const IbfrFaucet: React.FC = () => {
   useEffect(() => {
@@ -22,9 +22,7 @@ const IbfrFaucet: React.FC = () => {
   const { poolDisplayNameMapping } = usePoolDisplayNames();
   const tokenChains = useMemo(() => {
     return Object.keys(poolDisplayNameMapping).filter(
-      (token) => token === 'USDC'
-      //TODO - to get all assets replace the  line above with the commented line below
-      // !token.includes('-POL')
+      (token) => !token.includes('-POL') && token !== 'BFR'
     );
   }, [poolDisplayNameMapping]);
 
@@ -106,7 +104,7 @@ const ClaimButton = ({ token }: { token: string }) => {
       setBtnLoading(0);
     }
     const overRides = {
-      value: ethers.utils.parseEther('0.001'),
+      value: ethers.utils.parseEther('0.001').toString(),
     };
     const methodName = 'claim';
     setBtnLoading(1);

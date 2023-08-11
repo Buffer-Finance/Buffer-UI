@@ -1,6 +1,4 @@
-import { Dialog } from '@mui/material';
 import { useAtom } from 'jotai';
-import { CloseOutlined } from '@mui/icons-material';
 import BufferTable from '@Views/Common/BufferTable';
 import { ModalBase } from 'src/Modals/BaseModal';
 import { TableHeader } from '../Views/AccordionTable/Common';

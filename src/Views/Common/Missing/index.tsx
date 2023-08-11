@@ -1,11 +1,6 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { PrimaryActionBtn } from '../Buttons';
 import Background from './style';
-import { removeClass, setOpacity } from '@Utils/appControls/removeMargin';
-import { useGlobal } from '@Contexts/Global';
-import Drawer from '../v2-Drawer';
-import Link from 'react-router';
-import { defaultPair } from '@Views/BinaryOptions';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 

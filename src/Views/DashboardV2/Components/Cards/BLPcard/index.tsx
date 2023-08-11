@@ -1,4 +1,4 @@
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { IBLP } from '@Views/Dashboard/interface';
 import { Card } from '@Views/Earn/Components/Card';

@@ -7,17 +7,14 @@ const typeofConfig = Config[421613];
 
 export const useActiveChain = () => {
   const { chain } = useNetwork();
-  const chains = getChains();
+  const chains: Chain[] = getChains();
   const params = useParams();
   const chainName = params.chain;
 
-  const [activeChain, isWrongChain, configContracts] = useMemo<
-    [Chain, boolean, typeof typeofConfig]
-  >(() => {
-    let activeChain: Chain | undefined = undefined;
+  const [activeChain, isWrongChain] = useMemo<[Chain, boolean]>(() => {
+    let activeChain;
     let isWrongChain = false;
     if (chainName !== undefined) {
-      // console.log(chainName, 'chainName');
       activeChain = chains.find((chain) =>
         chain.name.toUpperCase().includes(chainName.toUpperCase())
       );
@@ -29,18 +26,13 @@ export const useActiveChain = () => {
         isWrongChain = true;
       }
     }
-    return [
-      activeChain,
-      isWrongChain,
-      Config[activeChain.id] as typeof typeofConfig,
-    ];
+    return [activeChain, isWrongChain];
   }, [chain, chainName]);
 
   return {
     activeChain,
     isWrongChain,
-    configContracts,
-    markets: Config['markets'],
+
     chainInURL: chainName,
   };
 };

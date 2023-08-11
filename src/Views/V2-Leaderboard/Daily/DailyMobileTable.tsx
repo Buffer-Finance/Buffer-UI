@@ -4,12 +4,11 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { ILeague } from '../interfaces';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
 import { Launch } from '@mui/icons-material';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { TableAligner } from '../Components/TableAligner';
 import {
   tooltipKeyClasses,
@@ -17,12 +16,13 @@ import {
 } from '@Views/Earn/Components/VestCards';
 import { toFixed } from '@Utils/NumString';
 import { gte } from 'lodash';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
   skip: number;
   userData: ILeague[] | undefined;
-  onpageChange?: (e, page: number) => void;
+  onpageChange?: (e: any, page: number) => void;
   count: number;
   nftWinners?: number;
   activePage: number;
@@ -126,10 +126,9 @@ const MobileRow = ({
   isWinrateTable,
   isDailyTable,
 }) => {
-  const { configContracts } = useActiveChain();
-  const { poolNames: tokens } = usePoolNames();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
-
+  const tokens = usePoolNames();
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
   const isUser = user ? true : false;
   const perc = multiply(
     divide(currentStanding.netPnL, currentStanding.volume),
@@ -154,7 +153,6 @@ const MobileRow = ({
               row={index}
               isUser={isUser}
               skip={skip}
-              userData={userData}
               userRank={currentStanding.rank}
               nftWinners={nftWinners}
             />
@@ -253,7 +251,7 @@ const MobileRow = ({
                 <Display
                   data={perc}
                   label={!isNeg ? '+' : ''}
-                  className={`f15 ${!isNeg ? 'green' : 'red'}`}
+                  className={`f15 ${!isNeg ? 'green' : 'red-grey'}`}
                   unit={'%'}
                   content={
                     tokens.length > 1 &&
@@ -282,7 +280,9 @@ const MobileRow = ({
                             <Display
                               data={percentage}
                               label={!isNegative ? '+' : ''}
-                              className={`f15 ${!isNegative ? 'green' : 'red'}`}
+                              className={`f15 ${
+                                !isNegative ? 'green' : 'red-grey'
+                              }`}
                               unit={'%'}
                             />
                           );
@@ -331,7 +331,7 @@ const MobileRow = ({
                   data={divide(currentStanding.netPnL, usdcDecimals)}
                   label={gte(currentStanding.netPnL, '0') ? '+' : ''}
                   className={`f15 ${
-                    gte(currentStanding.netPnL, '0') ? 'green' : 'red'
+                    gte(currentStanding.netPnL, '0') ? 'green' : 'red-grey'
                   }`}
                   unit={'USDC'}
                   content={
@@ -348,7 +348,7 @@ const MobileRow = ({
                                 currentStanding[
                                   `${token.toLowerCase()}NetPnL`
                                 ] as string,
-                                configContracts.tokens[token].decimals
+                                decimals[token]
                               )}
                               label={
                                 gte(
@@ -368,7 +368,7 @@ const MobileRow = ({
                                   '0'
                                 )
                                   ? 'green'
-                                  : 'red'
+                                  : 'red-grey'
                               }`}
                             />
                           </div>
@@ -405,7 +405,7 @@ const MobileRow = ({
                             currentStanding[
                               `${token.toLowerCase()}Volume`
                             ] as string,
-                            configContracts.tokens[token].decimals
+                            decimals[token]
                           ) as string,
                           2
                         )

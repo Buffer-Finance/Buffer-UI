@@ -1,24 +1,25 @@
 import { useAtomValue } from 'jotai';
-import { referralCodeAtom } from '@Views/BinaryOptions';
 import { useAccount } from 'wagmi';
 import { useRefereeCode } from '../Hooks/useUserReferralData';
 import ReferralABI from '../Config/ReferralABI.json';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { useReadCall } from '@Utils/useReadCall';
+import { useCall2Data, useReadCall } from '@Utils/useReadCall';
 import { isZero } from './isZero';
 import { useMemo } from 'react';
 import { zeroAddress } from 'viem';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { referralCodeAtom } from 'src/App';
+import { getCallId } from '@Utils/Contract/multiContract';
 
 export const useReferralCode = () => {
-  // return ["hello", "hello", "hello"];
   const { address } = useAccount();
   const referrerInLocalStorage = useAtomValue(referralCodeAtom);
-  const { data } = useRefereeCode();
-  const { configContracts } = useActiveChain();
+  const data = useRefereeCode();
+  const { activeChain } = useActiveChain();
+  const configContracts = getConfig(activeChain.id);
 
   const referralCode = useMemo(() => {
-    // console.log(data, 'dataUseReferralCode');
-    if (data?.[0][0]) return data?.[0][0];
+    if (data?.[0]) return data?.[0];
     if (referrerInLocalStorage) return referrerInLocalStorage;
     return '';
   }, [referrerInLocalStorage, address, data]);
@@ -34,10 +35,16 @@ export const useReferralCode = () => {
           },
         ]
       : [];
-  const { data: isCodeAvailable } = useReadCall({
+  const { data: codewners } = useCall2Data(
     contracts,
-    swrKey: 'useRefferalCode',
-  });
+    'useReferralcode-' + address
+  );
+  // console.log(`useReferralCode-contracts: `, contracts);
+  let isCodeAvailable = null;
+  if (contracts.length && codewners) {
+    isCodeAvailable =
+      codewners[getCallId(contracts?.[0]?.address, 'codeOwner')];
+  }
   const isZeroAdds = isCodeAvailable && isZero(isCodeAvailable[0]);
 
   const verifiedLocalCode = isCodeAvailable?.length
@@ -47,9 +54,9 @@ export const useReferralCode = () => {
     : '';
   // console.log(data, isZeroAdds, zeroAddress, 'dataUseReferralCode');
   return [
-    data?.[0][0],
+    data?.[0],
     verifiedLocalCode,
-    data?.[0][0] || verifiedLocalCode || '',
-    !isCodeAvailable ? zeroAddress : isCodeAvailable[0][0],
+    data?.[0] || verifiedLocalCode || '',
+    !isCodeAvailable ? zeroAddress : isCodeAvailable[0],
   ];
 };

@@ -23,8 +23,9 @@ import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { usePoolNames } from '@Views/Dashboard/Hooks/useArbitrumOverview';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { toFixed } from '@Utils/NumString';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const DailyWebTable: React.FC<{
   standings: ILeague[] | IWinrate[] | undefined;
@@ -52,10 +53,10 @@ export const DailyWebTable: React.FC<{
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
   const navigate = useNavigate();
-  const { configContracts } = useActiveChain();
-  const usdcDecimals = configContracts.tokens['USDC'].decimals;
+  const decimals = useDecimalsByAsset();
+  const usdcDecimals = decimals['USDC'];
   const params = useParams();
-  const { poolNames } = usePoolNames();
+  const poolNames = usePoolNames();
 
   const tokens = useMemo(
     () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
@@ -173,7 +174,7 @@ export const DailyWebTable: React.FC<{
                                   currentStanding[
                                     `${token.toLowerCase()}Volume`
                                   ] as string,
-                                  configContracts.tokens[token].decimals
+                                  decimals[token]
                                 ) as string,
                                 2
                               ) +
@@ -273,7 +274,7 @@ export const DailyWebTable: React.FC<{
                     <Display
                       data={perc}
                       label={!isNeg ? '+' : ''}
-                      className={`f15 ${!isNeg ? 'green' : 'red'}`}
+                      className={`f15 ${!isNeg ? 'green' : 'red-grey'}`}
                       unit={'%'}
                       content={
                         tokens.length > 1 &&
@@ -305,7 +306,7 @@ export const DailyWebTable: React.FC<{
                                   data={percentage}
                                   label={!isNegative ? '+' : ''}
                                   className={`f15 ${
-                                    !isNegative ? 'green' : 'red'
+                                    !isNegative ? 'green' : 'red-grey'
                                   }`}
                                   unit={'%'}
                                 />
@@ -368,7 +369,7 @@ export const DailyWebTable: React.FC<{
                     data={divide(currentStanding.netPnL, usdcDecimals)}
                     label={gte(currentStanding.netPnL, '0') ? '+' : ''}
                     className={`f15 ${
-                      gte(currentStanding.netPnL, '0') ? 'green' : 'red'
+                      gte(currentStanding.netPnL, '0') ? 'green' : 'red-grey'
                     }`}
                     unit={'USDC'}
                     content={
@@ -385,7 +386,7 @@ export const DailyWebTable: React.FC<{
                                   currentStanding[
                                     `${token.toLowerCase()}NetPnL`
                                   ] as string,
-                                  configContracts.tokens[token].decimals
+                                  decimals[token]
                                 )}
                                 unit={token}
                                 label={
@@ -406,7 +407,7 @@ export const DailyWebTable: React.FC<{
                                     '0'
                                   )
                                     ? 'green'
-                                    : 'red'
+                                    : 'red-grey'
                                 }`}
                               />
                             </div>

@@ -3,11 +3,10 @@ import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { UpTriangle } from 'public/ComponentSVGS/UpTriangle';
 import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { useNavigate } from 'react-router-dom';
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
-import { OpenUpDownIndicator } from '@Views/Dashboard/Components/OpenUpDownIndicator';
-import BufferSortTable from '@Views/Dashboard/Components/BufferSortTable';
 import { getPayout } from '@Views/TradePage/utils';
+import BufferSortTable from '@Views/Common/BufferSortTable';
 
 export const MarketsTable = ({
   dashboardData,
@@ -29,11 +28,11 @@ export const MarketsTable = ({
     { id: 'pair', label: 'Pair' },
     { id: 'pool', label: 'Pool' },
     { id: 'currentPrice', label: 'Current Price' },
-    { id: 'totalTrades', label: 'Open Interest' },
+    { id: 'current_open_interest', label: 'Open Interest' },
     { id: '24h_volume', label: '24h Volume' },
     // { id: 'currentUtilization', label: 'Utilization' },
     { id: 'max_open_interest', label: 'Utilization' },
-    { id: 'sort_duration', label: 'Minimum/Maximum Duration (HH:MM)' },
+    { id: 'min_duration', label: 'Minimum/Maximum Duration (HH:MM)' },
     { id: 'max_trade_size', label: 'Max Trade Size' },
     { id: 'payoutForUp', label: 'Payouts' },
     { id: 'is_open', label: 'Status' },

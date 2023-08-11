@@ -1,16 +1,13 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { useActiveMarket } from './useActiveMarket';
-import { appConfig } from '../config';
 import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { activePoolObjAtom } from '../atoms';
+import { usePoolInfo } from './usePoolInfo';
 
 export const useActivePoolObject = () => {
   const { activeMarket: activePair } = useActiveMarket();
   const { activePool } = useAtomValue(activePoolObjAtom);
-  const { activeChain } = useActiveChain();
-  const configData =
-    appConfig[activeChain.id as unknown as keyof typeof appConfig];
+  const { getPoolInfo } = usePoolInfo();
   const defaultPool = useMemo(() => {
     if (!activePair) {
       return null;
@@ -22,16 +19,14 @@ export const useActivePoolObject = () => {
     if (!activePair) {
       return null;
     }
-    return activePair.pools.filter(
-      (pool) => !configData.poolsInfo[pool.pool].is_pol
-    );
+    return activePair.pools.filter((pool) => !getPoolInfo(pool.pool).is_pol);
   }, [activePair]);
 
   const poolNameList = useMemo(() => {
     if (!poolsNotPOL) {
       return null;
     }
-    return poolsNotPOL.map((pool) => configData.poolsInfo[pool.pool].token);
+    return poolsNotPOL.map((pool) => getPoolInfo(pool.pool).token);
   }, [activePair]);
 
   const activePoolObj = useMemo(() => {
@@ -39,7 +34,7 @@ export const useActivePoolObject = () => {
       return defaultPool;
     }
     const pool = poolsNotPOL.find(
-      (pool) => configData.poolsInfo[pool.pool].token === activePool
+      (pool) => getPoolInfo(pool.pool).token === activePool
     );
     if (!pool) {
       return defaultPool;

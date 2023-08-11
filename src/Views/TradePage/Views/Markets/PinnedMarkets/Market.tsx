@@ -1,18 +1,17 @@
 import Star from '@Public/ComponentSVGS/Star';
-import { PairTokenImage } from '@Views/BinaryOptions/Components/PairTokenImage';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { useChartMarketData } from '@Views/TradePage/Hooks/useChartMarketData';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
-import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
-import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { marketType } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { IconButton } from '@mui/material';
 import { useMemo } from 'react';
+import { marketData } from '@Views/TradePage/Hooks/useAssetTableFilters';
+import { AssetCategory } from '@Views/TradePage/type';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 
 const MarketBackground = styled.button<{ isActive: boolean }>`
   all: unset;
@@ -29,19 +28,37 @@ const MarketBackground = styled.button<{ isActive: boolean }>`
   border-left: none;
 `;
 
+const isMarketOpen = (
+  category: number,
+  isInCreationWindow: { [key: string]: string }
+) => {
+  if (!isMarketForex(category)) {
+    return true;
+  }
+
+  return !!isInCreationWindow;
+};
+
+const isMarketForex = (category: number) => {
+  return (
+    category === AssetCategory.Forex || category === AssetCategory.Commodities
+  );
+};
 export const Market: React.FC<{
-  market: marketType;
+  market: marketData;
 }> = ({ market }) => {
   const { activeMarket } = useActiveMarket();
-  const { getChartMarketData } = useChartMarketData();
   const { navigateToMarket } = useFavouriteMarkets();
-  const chartMarket = getChartMarketData(market.token0, market.token1);
-  const { switchPool } = useSwitchPool();
+  const chartMarket = market.marketInfo;
+  const readcallData = useBuyTradeData();
+
   const { currentPrice } = useCurrentPrice({
-    token0: market.token0,
-    token1: market.token1,
+    token0: market.marketInfo.token0,
+    token1: market.marketInfo.token1,
   });
-  const { isMarketOpen: isOpen } = useIsMarketOpen(market, switchPool?.pool);
+  const isOpen =
+    !market.isPaused &&
+    isMarketOpen(market.category, readcallData?.isInCreationWindow);
 
   const { favouriteMarkets: favourites, removeFavouriteMarket } =
     useFavouriteMarkets();
@@ -50,15 +67,13 @@ export const Market: React.FC<{
     if (activeMarket === undefined) return false;
     return (
       joinStrings(activeMarket?.token0, activeMarket?.token1, '') ===
-      joinStrings(market.token0, market.token1, '')
+      market.marketInfo.tv_id
     );
   }, [activeMarket, market]);
 
   const isFavourite = useMemo(() => {
     return favourites.find(
-      (favourite) =>
-        chartMarket.tv_id ===
-        joinStrings(favourite.token0, favourite.token1, '')
+      (favourite) => chartMarket.tv_id === favourite.marketInfo.tv_id
     );
   }, [favourites, chartMarket]);
 
@@ -69,7 +84,8 @@ export const Market: React.FC<{
     removeFavouriteMarket(market);
   }
 
-  const { token0, token1 } = market;
+  const token0 = market.marketInfo.token0;
+  const token1 = market.marketInfo.token1;
 
   function handleMarketClick() {
     navigateToMarket(market);

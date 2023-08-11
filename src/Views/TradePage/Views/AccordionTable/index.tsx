@@ -117,17 +117,17 @@ const AccordionTable: React.FC<any> = ({}) => {
         } flex flex-col transition-all  overflow-y-hidden `}
       >
         {activeTable == 'Trades' ? (
-          <OngoingTradesTable trades={activeTrades} />
+          <OngoingTradesTable trades={activeTrades} overflow={400} />
         ) : activeTable == 'Limit Orders' ? (
-          <LimitOrderTable trades={limitOrders} />
+          <LimitOrderTable trades={limitOrders} overflow={400} />
         ) : activeTable == 'Platform Trades' ? (
-          <PlatformOngoing />
+          <PlatformOngoing overflow={400} />
         ) : activeTable == 'Platform History' ? (
-          <PlatformHistory />
+          <PlatformHistory overflow={400} />
         ) : activeTable == 'Cancelled' ? (
-          <Cancelled />
+          <Cancelled overflow={400} />
         ) : (
-          <History />
+          <History overflow={400} />
         )}
       </div>
     </div>
@@ -142,27 +142,33 @@ const CountChip = ({ count }: { count: number }) => (
   </div>
 );
 
-export const History = () => {
+export const History = ({ overflow }: { overflow?: number }) => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
-  console.log(historyTrades, total_pages, activePage, 'history trades');
   return (
     <HistoryTable
       trades={historyTrades}
       totalPages={total_pages}
       activePage={activePage}
       setActivePage={setActivePage}
+      overflow={overflow}
     />
   );
 };
 
-const Cancelled = () => {
+const Cancelled = ({ overflow }: { overflow?: number }) => {
   const { page_data: canclledTrades, total_pages } = useCancelledTrades();
   // console.log(canclledTrades, 'cancelled trades');
-  return <CancelledTable trades={canclledTrades} totalPages={total_pages} />;
+  return (
+    <CancelledTable
+      trades={canclledTrades}
+      totalPages={total_pages}
+      overflow={overflow}
+    />
+  );
 };
 
-const PlatformHistory = () => {
+const PlatformHistory = ({ overflow }: { overflow?: number }) => {
   const { page_data: platformHistoryTrades, total_pages } =
     usePlatformHistoryTrades();
   const [activePage, setActivePage] = useAtom(platformHistoryTableActivePage);
@@ -174,11 +180,12 @@ const PlatformHistory = () => {
       totalPages={total_pages}
       activePage={activePage}
       setActivePage={setActivePage}
+      overflow={overflow}
     />
   );
 };
 
-const PlatformOngoing = () => {
+const PlatformOngoing = ({ overflow }: { overflow?: number }) => {
   const { page_data: platformActiveTrades, total_pages } =
     usePlatformActiveTrades();
   const [activePage, setActivePage] = useAtom(platformActiveTableActivePage);
@@ -190,6 +197,7 @@ const PlatformOngoing = () => {
       activePage={activePage}
       totalPages={total_pages}
       setActivePage={setActivePage}
+      overflow={overflow}
     />
   );
 };

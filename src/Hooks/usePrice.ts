@@ -1,9 +1,9 @@
 import { UTF8ArrToStr, getKlineFromPrice } from '@TV/utils';
 import axios from 'axios';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 
 import {
   PythConnection,
@@ -12,7 +12,6 @@ import {
 import { Connection } from '@solana/web3.js';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import Big from 'big.js';
-import useSWR from 'swr';
 type WSUPdate = {
   type: 'price_update';
   price_feed: {
@@ -36,11 +35,11 @@ const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 
 export const usePrice = (fetchInitialPrices?: boolean) => {
   const setPrice = useSetAtom(priceAtom);
-  const prices = useAtomValue(priceAtom);
   const { sendMessage, lastJsonMessage, lastMessage, readyState } =
     useWebSocket('wss://xc-mainnet.pyth.network/ws');
   const subscribeToStreamUpdates = async () => {
-    const url = 'https://pyth-api.vintage-orange-muffin.com/v2/streaming';
+    const url =
+      'https://benchmarks.pyth.network/v1/shims/tradingview/streaming';
     const response = await fetch(url);
     const reader = response.body?.getReader();
     console.log('[stream]err', response.body?.locked);

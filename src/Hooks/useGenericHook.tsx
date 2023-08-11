@@ -3,7 +3,6 @@ import { useAtom, useAtomValue } from 'jotai';
 import { useToast } from '@Contexts/Toast';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 import { getExpireNotification } from '@Views/TradePage/utils/getExpireNotification';
@@ -21,7 +20,6 @@ export const getIdentifier = (a: TradeType) => {
 
 const useGenericHooks = () => {
   const [activeTrades] = useOngoingTrades();
-  const markets = useMarketsConfig();
 
   const tradeCache = useRef<{
     [tradeId: string]: { trade: TradeType; visited: boolean };
@@ -70,27 +68,8 @@ const useGenericHooks = () => {
       const currTrade = tradeCache.current[tradeIdentifier];
       // one which is not getting true, i.e not in newer set of activeTrades i.e got expired
       if (!currTrade.visited) {
-        const tradeMarket = markets?.find((pair) => {
-          const pool = pair.pools.find(
-            (pool) =>
-              pool.optionContract.toLowerCase() ===
-              currTrade.trade?.target_contract.toLowerCase()
-          );
-          return !!pool;
-        });
-        const poolContract = tradeMarket?.pools.find(
-          (pool) =>
-            pool.optionContract.toLowerCase() ===
-            currTrade.trade?.target_contract.toLowerCase()
-        )?.pool;
-        const poolInfo = getPoolInfo(poolContract);
-        if (!tradeMarket) {
-          toastify({
-            msg: 'some wrong config passed in history',
-            type: 'error',
-            id: 'ddxcadf',
-          });
-        }
+        const poolInfo = getPoolInfo(currTrade.trade.pool.pool);
+
         setTimeout(() => {
           getExpireNotification(
             { ...currTrade.trade },
