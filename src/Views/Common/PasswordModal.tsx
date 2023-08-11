@@ -61,6 +61,7 @@ export const PasswordModal: React.FC<{}> = ({}) => {
 
             <input
               type="text"
+              test-id="password-input"
               className=" my-2  outline-none password-border bg-[#1C1C28] text-f14 p-4 rounded-[5px] w-full text-1            "
               value={ip}
               onChange={(e) => setip(e.target.value)}
@@ -72,6 +73,7 @@ export const PasswordModal: React.FC<{}> = ({}) => {
             <div className="flex items-center mt-2">
               <BlueBtn
                 className="!w-fit px-3 !h-[25px] !mr- "
+                test-id="password-submit-button"
                 onClick={null}
                 type="submit"
               >

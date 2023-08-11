@@ -76,6 +76,7 @@ export const AccountDropdown: React.FC = () => {
   } else
     OneCTManager = (
       <BlueBtn
+        test-id="activate-button-bg"
         className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
         onClick={() => {
           setOneCTModal(true);
@@ -156,6 +157,7 @@ export const AccountDropdown: React.FC = () => {
                   <div
                     onClick={openChainModal}
                     role="button"
+                    test-id="chain-modal"
                     className={`bg-[#191b20] hover:brightness-125 cursor-pointer flex items-center justify-center text-f13  h-[31px] w-max rounded-[7px] px-3 pr-[1px] sm:pr-1 transition-all duration-300 `}
                   >
                     <div className="flex items-center dropdown-value f15 capitalize weight-400">
@@ -189,7 +191,10 @@ export const AccountDropdown: React.FC = () => {
                           className="w-[14px] h-[14px] ml-2"
                         />
                       </div>
-                      <div className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1">
+                      <div
+                        className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1"
+                        test-id="account-holder-div"
+                      >
                         {account ? `${account.address.slice(0, 6)}` : 'Connect'}
                         <DDArrow
                           className={` transition-all duration-300 ml-1 ease-out `}

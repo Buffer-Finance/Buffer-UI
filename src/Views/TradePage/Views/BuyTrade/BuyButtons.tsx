@@ -118,6 +118,7 @@ export const BuyButtons = ({
                     typeof loading !== 'number' &&
                     loading?.is_up === true
                   }
+                  test-id="last-up-btn"
                   className=" text-1 bg-green hover:text-1"
                 >
                   <>

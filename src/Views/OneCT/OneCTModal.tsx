@@ -392,6 +392,7 @@ const OneCTModal: React.FC<any> = ({}) => {
         </div>
         <button
           className="p-3 text-1 rounded-full bg-2"
+          test-id="close-button"
           onClick={() => setModal((m) => false)}
         >
           <CloseOutlined className="!scale-125" />
@@ -427,6 +428,7 @@ const OneCTModal: React.FC<any> = ({}) => {
             </div>
             <BlueBtn
               className={` !w-[120px] px-[15px] ${oneCtPk ? '!bg-green' : ''}`}
+              test-id="one-ct-creation-button-god"
               onClick={
                 oneCtPk
                   ? () => {
@@ -461,6 +463,7 @@ const OneCTModal: React.FC<any> = ({}) => {
               className={`${
                 registeredOneCT ? '!bg-green' : ''
               } !w-[120px] px-[15px]`}
+              test-id="one-ct-registration-button-god"
               onClick={
                 registeredOneCT
                   ? () => {
