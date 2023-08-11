@@ -18,10 +18,13 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 console.log(`projectId: `, projectId);
+import { MockConnector } from 'wagmi/connectors/mock';
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { inIframe } from '@Utils/isInIframe';
+import { createPublicClient, createWalletClient, http, custom } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 
 function getSupportedChains() {
@@ -77,11 +80,36 @@ const getWallets = (chains: Chain[]) => {
         },
       ];
 };
+const isTestEnv = import.meta.env.VITE_MODE == 'test';
+const testClient = createPublicClient({
+  transport: http('http://localhost:8545'),
+  chain: arbitrumGoerli, //TODO  - run hardhat chain on this network.
+});
+const mockConnector = [
+  new MockConnector({
+    chains: [arbitrum, arbitrumGoerli],
+    options: {
+      flags: {
+        isAuthorized: true,
+      },
+      walletClient: createWalletClient({
+        transport: custom(testClient),
+        chain: arbitrumGoerli,
+        account: privateKeyToAccount(
+          '0x2bb545e93a2b27557e40b54f39def6a190fa3ce56b34bcfc80d8709cf60fe0a2' //TODO - substitute it with hardhat account pk
+        ),
+      }),
+    },
+  }),
+];
 
 const { chains, publicClient } = configureChains(getChains(), [
   publicProvider(),
 ]);
-const connectors = connectorsForWallets(getWallets(chains));
+const connectors = isTestEnv
+  ? mockConnector
+  : connectorsForWallets(getWallets(chains));
+console.log(`isTestEnv: `, isTestEnv);
 export { chains };
 const wagmiClient = createConfig({
   autoConnect: inIframe() ? false : true,

@@ -16,9 +16,11 @@ const CustomButton: React.FC<IButton> = ({
   isDisabled = false,
   className,
   onClick,
+  ...props
 }) => {
   return (
     <button
+      {...props}
       onClick={onClick}
       disabled={isDisabled || isLoading}
       className={`${buttonAnimation} !pointer-events-auto flex justify-center items-center transition-all duration-300 w-full rounded-[5px] text-f16 disabled:bg-cross-bg disabled:text-3 disabled:cursor-not-allowed h-[36px]  ${className}`}
@@ -34,9 +36,11 @@ export const GreenBtn: React.FC<IButton> = ({
   isDisabled,
   className,
   onClick,
+  ...props
 }) => {
   return (
     <CustomButton
+      {...props}
       isLoading={isLoading}
       isDisabled={isDisabled || isLoading}
       className={`${className}  bg-cross-bg text-green hover:text-1 hover:bg-green hover:translate-y-[-3px] active:translate-y-1`}
