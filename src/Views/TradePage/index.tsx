@@ -19,18 +19,20 @@ import { MarketTimingsModal } from './Components/MarketTimingsModal';
 import { ShareModal } from './Views/AccordionTable/ShareModal';
 import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
 import { useMedia } from 'react-use';
-import { MultiResolutionChart } from './Views/MarketChart/MultiResolutionChart';
 import { TradePageMobile } from './Components/MobileView/TradePageMobile';
+import { usePrice } from '@Hooks/usePrice';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
+  usePrice();
+
   const isNotMobile = useMedia('(min-width:600px)');
   return (
     <>
       <EssentialModals />
       <div
-        className={`flex justify-between w-[100%] bg-[#1C1C28] ${
+        className={`flex sm:h-full justify-between w-[100%] bg-[#1C1C28] ${
           panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
         }`}
       >

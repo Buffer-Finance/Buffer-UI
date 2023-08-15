@@ -33,19 +33,18 @@ const TradePageMobile: React.FC<any> = ({}) => {
     : '0';
 
   if (!marketConfig?.length) return <div>Loading...</div>;
-  console.log(`TradePageMobile-marketConfig: `, marketConfig);
   return (
-    <div className="flex flex-col ">
-      <div className="h-[40vh]">
+    <div className="flex flex-col  h-full">
+      <div className="flex-1">
         <MultiResolutionChart market="BTCUSD" index={1} />
-        <ViewOnlyInputs />
-        <BuyButtons
-          activeAssetPrice={activeAssetPrice}
-          allowance={allowance}
-          amount={amount.toString()}
-        />
-        <ShutterProvider />
       </div>
+      <ViewOnlyInputs />
+      <BuyButtons
+        activeAssetPrice={activeAssetPrice}
+        allowance={allowance}
+        amount={amount.toString()}
+      />
+      <ShutterProvider />
     </div>
   );
 };

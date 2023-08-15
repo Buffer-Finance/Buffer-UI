@@ -1,9 +1,13 @@
 import { useToast } from '@Contexts/Toast';
 import { TradeSizeSelector } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import ShutterDrawer from 'react-bottom-drawer';
+import HorizontalTransition from '../Transitions/Horizontal';
+import { MobileDurationInput } from '@Views/TradePage/Components/MobileView/MobileDurationInput';
 export const shutterModalAtom = atom({ open: false });
+const tabs = ['Amount', 'Duration'];
+export const shutterActiveTabAtom = atom(tabs[0]);
 export function useShutterHandlers() {
   const setShutter = useSetAtom(shutterModalAtom);
   const shutterState = useAtomValue(shutterModalAtom);
@@ -30,16 +34,33 @@ export function useShutterHandlers() {
 }
 
 const ShutterProvider = () => {
+  const [activeTab, setActiveTab] = useState(tabs[0]);
   const { closeShutter, shutterState } = useShutterHandlers();
   return (
     <ShutterDrawer
-      className="bg-1 "
+      className="bg-1 border-none  outline-0 overflow-hidden "
       isVisible={shutterState.open}
       onClose={closeShutter}
-      mountOnEnter
-      unmountOnExit
+      // mountOnEnter
+      // unmountOnExit
     >
-      <TradeSizeSelector />
+      <div className="flex w-full mb-4">
+        {tabs.map((t) => (
+          <div
+            className={`w-full text-f12 border-bottom-${
+              activeTab == t ? 'blue' : 'grey'
+            } text-[#808191]  text-center`}
+            key={t}
+            onClick={() => setActiveTab(t)}
+          >
+            {t}
+          </div>
+        ))}
+      </div>
+      <HorizontalTransition value={tabs.indexOf(activeTab)}>
+        <TradeSizeSelector />
+        <MobileDurationInput />
+      </HorizontalTransition>
     </ShutterDrawer>
   );
 };

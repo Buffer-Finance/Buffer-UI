@@ -191,9 +191,19 @@ animation-fill-mode: forwards;
 .border-bottom{
   border-bottom: 2px solid #2A2A3A;
 }
+.border-bottom-blue{
+  border-bottom: 2px solid var(--primary);
+}
+.border-bottom-grey{
+  border-bottom: 1px solid #616161;
+}
 
 .left-border{
   border-left-width: 3px;
+}
+.__handle-wrapper{
+  border:none;
+  outline: none;
 }
 
 html .flip-y{

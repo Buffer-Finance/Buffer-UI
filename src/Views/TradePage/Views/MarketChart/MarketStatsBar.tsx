@@ -88,7 +88,6 @@ const Idx2icon = {
   3: FourCharts,
 };
 const MarketStatsBar: React.FC<any> = ({}) => {
-  usePrice();
   const setChartTimes = useSetAtom(chartNumberAtom);
   const chartTimes = useAtomValue(chartNumberAtom);
   const { activeMarket } = useActiveMarket();
