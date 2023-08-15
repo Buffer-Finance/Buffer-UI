@@ -448,7 +448,7 @@ export const MultiResolutionChart = ({
   const resolution: ResolutionString =
     market2resolution?.[chartId] || ('1' as ResolutionString);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const chart = new widget({
       datafeed,
       interval: defaults.interval,
@@ -685,9 +685,7 @@ export const MultiResolutionChart = ({
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
-  if (!v3AppConfig?.length) {
-    return <div>Loading...</div>;
-  }
+
   return (
     <div className="flex flex-col w-full h-full">
       <div className="items-center justify-between flex-row flex  bg-2 w-full tv-h px-4 ">

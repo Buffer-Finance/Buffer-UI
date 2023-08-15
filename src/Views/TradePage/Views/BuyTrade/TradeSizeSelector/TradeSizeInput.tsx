@@ -41,7 +41,7 @@ export const TradeSizeInput: React.FC<{
   const settings = useAtomValue(tradeSettingsAtom);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       <div className="relative flex flex-row gap-x-4 items-center">
         <input
           value={tradeSize}
