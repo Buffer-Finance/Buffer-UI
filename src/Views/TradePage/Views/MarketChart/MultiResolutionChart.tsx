@@ -456,7 +456,7 @@ export const MultiResolutionChart = ({
 
       locale: 'en',
 
-      container: containerDivRef.current!,
+      container: 'chart-element-main',
       library_path: defaults.library_path,
       custom_css_url: defaults.cssPath,
       // create_volume_indicator_by_default: false,
@@ -735,7 +735,7 @@ export const MultiResolutionChart = ({
       <div className="w-full  flex-grow">
         <div
           ref={containerDivRef}
-          id="chart-element"
+          id="chart-element-main"
           className="TVChartContainer w-[100%] h-[100%]"
         />
       </div>

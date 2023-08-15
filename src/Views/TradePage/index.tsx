@@ -19,10 +19,13 @@ import { MarketTimingsModal } from './Components/MarketTimingsModal';
 import { ShareModal } from './Views/AccordionTable/ShareModal';
 import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
 import { TradePageMobile } from './Components/MobileView/TradePageMobile';
+import { useMedia } from 'react-use';
+import { MultiResolutionChart } from './Views/MarketChart/MultiResolutionChart';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
+  const isNotMobile = useMedia('(min-width:600px)');
   if (window.innerWidth < 600) return <TradePageMobile />;
   return (
     <>
@@ -32,12 +35,18 @@ const TradePage: React.FC<any> = ({}) => {
           panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
         }`}
       >
-        <div className="flex flex-col w-full mx-3">
-          {showFavoriteAsset && <PinnedMarkets />}
-          <MarketStatsBar />
-          <MarketChart />
-          <AccordionTable />
-        </div>
+        {isNotMobile ? (
+          <div className="flex flex-col w-full mx-3">
+            {showFavoriteAsset && <PinnedMarkets />}
+            <MarketStatsBar />
+            <MarketChart />
+            <AccordionTable />
+          </div>
+        ) : (
+          <div className="h-[40vh]">
+            <MultiResolutionChart market="BTCUSD" index={1} />
+          </div>
+        )}
 
         <BuyTrade />
       </div>
