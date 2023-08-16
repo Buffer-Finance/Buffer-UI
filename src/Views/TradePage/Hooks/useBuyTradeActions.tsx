@@ -47,6 +47,8 @@ import { getSingatureCached } from '../cache';
 import { viemMulticall } from '@Utils/multicall';
 import { signTypedData } from '@wagmi/core';
 import { PublicClient } from 'viem';
+import secureLocalStorage from 'react-secure-storage';
+
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -58,6 +60,10 @@ enum ArgIndex {
   NFT = 8,
   Slippage = 5,
 }
+
+export const getApprovalRequestLocalKey = (address: string | undefined) =>
+  `approvalRequest:${address}`;
+
 export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
   const [settings] = useAtom(tradeSettingsAtom);
@@ -92,6 +98,10 @@ export const useBuyTradeActions = (userInput: string) => {
   const knowTill = useAtomValue(knowTillAtom);
   const option_contract = switchPool?.optionContract;
   const { oneCtPk, oneCTWallet } = useOneCTWallet();
+  const localStoreApprovalRequest = secureLocalStorage.getItem(
+    getApprovalRequestLocalKey(address)
+  );
+
   const buyHandler = async (customTrade: {
     is_up: boolean;
     strike: string;
@@ -330,6 +340,8 @@ export const useBuyTradeActions = (userInput: string) => {
           activeChain.id,
           configData.router
         );
+        const user_signature = await getSingatureCached(oneCTWallet);
+
         const apiParams = {
           signature_timestamp: currentUTCTimestamp,
           strike: baseArgs[ArgIndex.Strike],
@@ -337,7 +349,6 @@ export const useBuyTradeActions = (userInput: string) => {
           target_contract: baseArgs[ArgIndex.TargetContract],
           partial_signature: signatures[0],
           full_signature: signatures[1],
-          user_address: baseArgs[ArgIndex.UserAddress],
           trade_size: baseArgs[ArgIndex.Size],
           allow_partial_fill: baseArgs[ArgIndex.PartialFill],
           referral_code: baseArgs[ArgIndex.Referral],
@@ -350,18 +361,28 @@ export const useBuyTradeActions = (userInput: string) => {
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
-          environment: activeChain.id,
-          token: tokenName,
         };
         console.log('apiParams', apiParams);
 
         const resp: { data: TradeType } = await axios.post(
           baseUrl + 'trade/create/',
-          null,
           {
-            params: apiParams,
+            create_params: apiParams,
+            approval_params: localStoreApprovalRequest ?? {},
+          },
+          {
+            params: {
+              environment: activeChain.id,
+              token: tokenName,
+              user_address: baseArgs[ArgIndex.UserAddress],
+              user_signature,
+            },
           }
         );
+
+        if (resp.data && !resp.detail) {
+          secureLocalStorage.removeItem(getApprovalRequestLocalKey(address));
+        }
 
         if (!customTrade.limitOrderExpiry) {
           getLockedAmount(
@@ -489,23 +510,28 @@ export const useBuyTradeActions = (userInput: string) => {
         activeChain.id,
         signTypedData
       );
-      const user_signature = await getSingatureCached(oneCTWallet);
+      // const user_signature = await getSingatureCached(oneCTWallet);
       const apiSignature = {
-        user: address,
-        nonce: +approvalExpanded?.nonce,
+        // user: address,
+        // nonce: +approvalExpanded?.nonce,
         allowance: ammount,
         deadline: +deadline,
         v: parseInt(RSV.v, 16),
         r: RSV.r,
         s: RSV.s,
-        user_signature,
-        environment: activeChain.id,
-        state: 'PENDING',
-        token: tokenName,
+        // user_signature,
+        // environment: activeChain.id,
+        // state: 'PENDING',
+        // token: tokenName,
       };
-      const resp = await axios.post(baseUrl + 'approve/', null, {
-        params: apiSignature,
-      });
+      // const resp = await axios.post(baseUrl + 'approve/', null, {
+      //   params: apiSignature,
+      // });
+      secureLocalStorage.setItem(
+        getApprovalRequestLocalKey(address),
+        apiSignature
+      );
+
       setLoading(null);
       setIsApproveModalOpen(false);
 

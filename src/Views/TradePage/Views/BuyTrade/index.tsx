@@ -11,7 +11,7 @@ import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { priceAtom } from '@Hooks/usePrice';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { joinStrings } from '@Views/TradePage/utils';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
@@ -20,6 +20,8 @@ import { useSelectedAssetPayout } from '../MarketChart/Payout';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
 import { useAccount } from 'wagmi';
+import secureLocalStorage from 'react-secure-storage';
+import { getApprovalRequestLocalKey } from '@Views/TradePage/Hooks/useBuyTradeActions';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -45,6 +47,9 @@ export const BuyTrade: React.FC = () => {
   const amount = useAtomValue(tradeSizeAtom);
   const marketPrice = useAtomValue(priceAtom);
   const { calculatePayout } = useSelectedAssetPayout();
+  const localStoreApprovalRequest = secureLocalStorage.getItem(
+    getApprovalRequestLocalKey(address)
+  );
 
   const approvalExpanded = useApprvalAmount();
   if (
@@ -70,9 +75,16 @@ export const BuyTrade: React.FC = () => {
   );
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
-  const allowance = approvalExpanded?.allowance
-    ? (divide(approvalExpanded?.allowance, decimals) as string)
-    : '0';
+  const allowance =
+    approvalExpanded?.allowance !== undefined
+      ? (divide(
+          add(
+            approvalExpanded.allowance.toString(),
+            (localStoreApprovalRequest as any)?.allowance || '0'
+          ),
+          decimals
+        ) as string)
+      : '0';
 
   const activeAssetPrice = getPriceFromKlines(marketPrice, {
     tv_id: activeMarket.tv_id,
