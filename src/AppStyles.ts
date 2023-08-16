@@ -15,7 +15,7 @@ const Background = styled.div`
     'Footer' auto / 100%;
   height: 100vh;
   @media (max-width: 800px) {
-    margin-bottom: 50px;
+    /* margin-bottom: 50px; */
   }
   .root {
     grid-area: Main;
