@@ -61,8 +61,16 @@ enum ArgIndex {
   Slippage = 5,
 }
 
-export const getApprovalRequestLocalKey = (address: string | undefined) =>
-  `approvalRequest:${address}`;
+export const getApprovalRequestLocalKey = (
+  address: string | undefined,
+  tokenName: string | undefined,
+  chainId: number
+) => {
+  if (address === null || tokenName === null || chainId === undefined) {
+    return 'undefinaed-address-tokenName-chainId';
+  }
+  return `approvalRequest:${address}+${tokenName}+${chainId}`;
+};
 
 export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
@@ -99,7 +107,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const option_contract = switchPool?.optionContract;
   const { oneCtPk, oneCTWallet } = useOneCTWallet();
   const localStoreApprovalRequest = secureLocalStorage.getItem(
-    getApprovalRequestLocalKey(address)
+    getApprovalRequestLocalKey(address, tokenName, activeChain.id)
   );
 
   const buyHandler = async (customTrade: {
@@ -364,12 +372,20 @@ export const useBuyTradeActions = (userInput: string) => {
         };
         console.log('apiParams', apiParams);
 
+        const body: {
+          approval_params?: any;
+          create_params: any;
+        } = {
+          create_params: apiParams,
+        };
+
+        if (localStoreApprovalRequest !== null) {
+          body['approval_params'] = localStoreApprovalRequest;
+        }
+
         const resp: { data: TradeType } = await axios.post(
           baseUrl + 'trade/create/',
-          {
-            create_params: apiParams,
-            approval_params: localStoreApprovalRequest ?? {},
-          },
+          body,
           {
             params: {
               environment: activeChain.id,
@@ -381,7 +397,9 @@ export const useBuyTradeActions = (userInput: string) => {
         );
 
         if (resp.data && !resp.detail) {
-          secureLocalStorage.removeItem(getApprovalRequestLocalKey(address));
+          secureLocalStorage.removeItem(
+            getApprovalRequestLocalKey(address, tokenName, activeChain.id)
+          );
         }
 
         if (!customTrade.limitOrderExpiry) {
@@ -528,7 +546,7 @@ export const useBuyTradeActions = (userInput: string) => {
       //   params: apiSignature,
       // });
       secureLocalStorage.setItem(
-        getApprovalRequestLocalKey(address),
+        getApprovalRequestLocalKey(address, tokenName, activeChain.id),
         apiSignature
       );
 

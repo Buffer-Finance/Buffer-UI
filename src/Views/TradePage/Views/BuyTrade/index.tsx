@@ -22,6 +22,7 @@ import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
 import { useAccount } from 'wagmi';
 import secureLocalStorage from 'react-secure-storage';
 import { getApprovalRequestLocalKey } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { useActiveChain } from '@Hooks/useActiveChain';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -42,13 +43,14 @@ export const BuyTrade: React.FC = () => {
   const readcallData = useBuyTradeData();
   const { address } = useAccount();
   const { activeMarket } = useActiveMarket();
+  const { activeChain } = useActiveChain();
   // triggering rerender
   const _setttlementFee = useSettlementFee();
   const amount = useAtomValue(tradeSizeAtom);
   const marketPrice = useAtomValue(priceAtom);
   const { calculatePayout } = useSelectedAssetPayout();
   const localStoreApprovalRequest = secureLocalStorage.getItem(
-    getApprovalRequestLocalKey(address)
+    getApprovalRequestLocalKey(address, poolDetails?.token, activeChain.id)
   );
 
   const approvalExpanded = useApprvalAmount();
