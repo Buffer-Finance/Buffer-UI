@@ -1,104 +1,77 @@
-import { useEffect } from 'react';
-import {
-  Routes,
-  Route,
-  Navigate,
-  useSearchParams,
-  useNavigate,
-} from 'react-router-dom';
-import { Alert, Snackbar } from '@mui/material';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { Routes, Route } from 'react-router-dom';
+import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-
-import { TradePage } from '@Views/TradePage';
 import { Navbar } from './Views/Common/Navbar';
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
-import { PasswordModal } from '@Views/Common/PasswordModal';
 import Background from './AppStyles';
-
-import { useGraphStatus } from '@Utils/useGraphStatus';
-import { useToast } from '@Contexts/Toast';
 import { urlSettings } from './Config/wagmiClient';
-import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
-
-export const referralCodeAtom = atomWithStorage('referral-code5', '');
-
-const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
-import { defaultMarket } from '@Views/TradePage/config';
-import { activeMarketFromStorageAtom } from './globalStore';
-import IbfrFaucet from '@Views/Faucet';
 import { Earn } from '@Views/Earn';
-import { ReferralPage } from '@Views/Referral';
-import { DashboardV2 } from '@Views/DashboardV2';
-import { ProfilePage } from '@Views/Profile';
-import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
-import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
-import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
-import { Weekly } from '@Views/V2-Leaderboard/Weekly';
-import { Test } from './test';
-import SideBar from '@Views/Common/Sidebar';
 
-(function () {
-  const r = document.querySelector<HTMLElement>(':root');
-  for (let color in urlSettings) {
-    if (color.includes('-')) {
-      r!.style.setProperty(`--${color}`, '#' + urlSettings[color]);
-    }
-  }
-})();
+// export const referralCodeAtom = atomWithStorage('referral-code5', '');
+
+// const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
+// import { Earn } from '@Views/Earn';
+
+// (function () {
+//   const r = document.querySelector<HTMLElement>(':root');
+//   for (let color in urlSettings) {
+//     if (color.includes('-')) {
+//       r!.style.setProperty(`--${color}`, '#' + urlSettings[color]);
+//     }
+//   }
+// })();
 
 const AppRoutes = () => {
-  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
-  console.log(`App-activeMarketFromStorage: `, activeMarketFromStorage);
-  const [searchParam] = useSearchParams();
-  const [ref, setRef] = useAtom(referralCodeAtom);
-  const toastify = useToast();
-  const navigate = useNavigate();
-  useEffect(() => {
-    console.log(`App-ref: `, ref);
-    let referralCode = searchParam.get('ref');
+  // const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
+  // console.log(`App-activeMarketFromStorage: `, activeMarketFromStorage);
+  // const [searchParam] = useSearchParams();
+  // const [ref, setRef] = useAtom(referralCodeAtom);
+  // const toastify = useToast();
+  // const navigate = useNavigate();
+  // useEffect(() => {
+  //   // console.log(`App-ref: `, ref);
+  //   let referralCode = searchParam.get('ref');
 
-    if (!referralCode) {
-      let code = '';
-      const codes = window.location.href.split('/');
+  //   if (!referralCode) {
+  //     let code = '';
+  //     const codes = window.location.href.split('/');
 
-      for (let i = 0; i < codes.length; i++) {
-        if (codes[i] == 'ref') {
-          code = codes?.[i + 1];
-        }
-      }
-      if (code) referralCode = code;
-    }
+  //     for (let i = 0; i < codes.length; i++) {
+  //       if (codes[i] == 'ref') {
+  //         code = codes?.[i + 1];
+  //       }
+  //     }
+  //     if (code) referralCode = code;
+  //   }
 
-    if (referralCode) {
-      if (ref !== referralCode) {
-        setRef(referralCode);
-        toastify({
-          type: 'success',
-          msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
-          id: 23132,
-        });
-      }
-      navigate('/binary/ETH-USD');
-    }
-  }, [searchParam]);
+  //   if (referralCode) {
+  //     if (ref !== referralCode) {
+  //       setRef(referralCode);
+  //       toastify({
+  //         type: 'success',
+  //         msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
+  //         id: 23132,
+  //       });
+  //     }
+  //     navigate('/binary/ETH-USD');
+  //   }
+  // }, [searchParam]);
   return (
     <div className="relative root w-[100vw]">
-      <OpenOcean />
-      <OnboardingAnimation />
+      {/* <OpenOcean /> */}
+      {/* <OnboardingAnimation /> */}
       <Routes>
-        <Route path="/faucet" element={<IbfrFaucet />} />
+        {/* <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
         <Route path="/admin" element={<AdminConfig />}></Route>
-        <Route path="/ref/:refcode" element={<div>Hello</div>}></Route>
+        <Route path="/ref/:refcode" element={<div>Hello</div>}></Route> */}
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
-        <Route path="/earn" element={<Earn />} />
-        <Route path="/dashboard" element={<DashboardV2 />}>
+        <Route path="/*" element={<Earn />} />
+        {/* <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
         </Route>
         <Route path="/referral" element={<ReferralPage />} />
@@ -113,15 +86,15 @@ const AppRoutes = () => {
               to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
             />
           }
-        />
-        <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          <Route path="daily" element={<Incentivised />}>
+        /> */}
+        {/* <Route path="/leaderboard" element={<LeaderBoardOutlet />}> */}
+        {/* <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
           </Route>
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
-          </Route>
-          {/* <Route
+          </Route> */}
+        {/* <Route
             path="trades"
             element={
               <LeaderBoard>
@@ -129,7 +102,7 @@ const AppRoutes = () => {
               </LeaderBoard>
             }
           /> */}
-        </Route>
+        {/* </Route> */}
       </Routes>
     </div>
   );
@@ -151,14 +124,14 @@ export const snackAtom = atom<{
 export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 function App() {
   useAutoConnect();
-  const [snack, setSnack] = useAtom(snackAtom);
-  const graphStatus = useGraphStatus();
+  // const [snack, setSnack] = useAtom(snackAtom);
+  // const graphStatus = useGraphStatus();
   return (
     <>
-      <PasswordModal />
+      {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
-          {graphStatus && (
+          {/* {graphStatus && (
             <Warning
               body={
                 <>
@@ -171,10 +144,10 @@ function App() {
               state={graphStatus.error}
               className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
             />
-          )}
+          )} */}
           <Navbar />
           <AppRoutes />
-          <Snackbar
+          {/* <Snackbar
             open={snack.message ? true : false}
             autoHideDuration={3500}
             onClose={() => setSnack({ message: null })}
@@ -188,7 +161,7 @@ function App() {
             >
               {snack.message}
             </Alert>
-          </Snackbar>
+          </Snackbar> */}
           {!urlSettings?.hide && (
             <Warning
               body={
@@ -205,7 +178,7 @@ function App() {
             />
           )}
           <TnCModal />
-          <SideBar />
+          {/* <SideBar /> */}
         </Background>
       </I18nProvider>
     </>

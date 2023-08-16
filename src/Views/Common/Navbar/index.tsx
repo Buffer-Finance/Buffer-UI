@@ -1,35 +1,25 @@
-import { useMemo } from 'react';
 import { BufferLogoComponent } from './BufferLogo';
-import { getTabs } from 'src/Config/getTabs';
 import { TabsDropdown } from './TabsDropDown';
-import { Tab } from './Tab';
 import { AccountDropdown } from './AccountDropdown';
 import { social } from './socialLinks';
-import { useGlobal } from '@Contexts/Global';
-import MenuLogo from '@Assets/Elements/MenuLogo';
-import CloseLogo from '@SVG/Elements/Closelogo';
-import { useAtomValue } from 'jotai';
 import { urlSettings } from 'src/Config/wagmiClient';
-import { isTestnet } from 'config';
-import { SettingsDD } from './SettingsDD';
-import { activeMarketFromStorageAtom } from 'src/globalStore';
 
 interface INavbar {}
 
 export const Navbar: React.FC<INavbar> = () => {
-  const { state, dispatch } = useGlobal();
-  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
-  const tabs = useMemo(
-    () => getTabs(activeMarketFromStorage),
-    [activeMarketFromStorage]
-  );
-  const VISIBLETABS = isTestnet ? 6 : 4;
-  const MORETABS = isTestnet ? 2 : 3;
-  const handleClose = () => {
-    dispatch({
-      type: 'UPDATE_SIDEBAR_STATE',
-    });
-  };
+  // const { state, dispatch } = useGlobal();
+  // const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
+  // const tabs = useMemo(
+  //   () => getTabs(activeMarketFromStorage),
+  //   [activeMarketFromStorage]
+  // );
+  // const VISIBLETABS = isTestnet ? 6 : 4;
+  // const MORETABS = isTestnet ? 2 : 3;
+  // const handleClose = () => {
+  //   dispatch({
+  //     type: 'UPDATE_SIDEBAR_STATE',
+  //   });
+  // };
 
   const show = !urlSettings?.hide;
   return (
@@ -47,7 +37,7 @@ export const Navbar: React.FC<INavbar> = () => {
 
         {show && (
           <div className="tab:hidden flex gap-[6px] b1400:!hidden ">
-            {tabs.slice(0, VISIBLETABS).map((tab, index) => {
+            {/* {tabs.slice(0, VISIBLETABS).map((tab, index) => {
               if (tab.isExternalLink) {
                 return (
                   <button
@@ -65,8 +55,8 @@ export const Navbar: React.FC<INavbar> = () => {
                 );
               }
               return <Tab tab={tab} key={tab.name} />;
-            })}
-            {tabs.length > VISIBLETABS && (
+            })} */}
+            {/* {tabs.length > VISIBLETABS && (
               <TabsDropdown
                 tabs={tabs.slice(VISIBLETABS, -MORETABS)}
                 defaultName="Analytics"
@@ -74,7 +64,7 @@ export const Navbar: React.FC<INavbar> = () => {
             )}
             {tabs.length > VISIBLETABS && (
               <TabsDropdown tabs={tabs.slice(-MORETABS)} defaultName="More" />
-            )}
+            )} */}
             <TabsDropdown tabs={social} defaultName="Socials" />
           </div>
         )}
@@ -117,9 +107,9 @@ export const Navbar: React.FC<INavbar> = () => {
           <AccountDropdown />
         </div>
 
-        <SettingsDD />
+        {/* <SettingsDD /> */}
 
-        <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
+        {/* <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
           {state.sidebar_active ? (
             <MenuLogo className="icon menu" onClick={handleClose} />
           ) : (
@@ -129,7 +119,7 @@ export const Navbar: React.FC<INavbar> = () => {
               style={{ transform: 'scale(0.8)' }}
             />
           )}
-        </div>
+        </div> */}
       </div>
     </header>
   );
