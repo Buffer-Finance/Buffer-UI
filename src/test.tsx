@@ -2,8 +2,8 @@ import { useCall2Data } from '@Utils/useReadCall';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useEffect, useState } from 'react';
 import { erc20ABI } from 'wagmi';
-
-const Test: React.FC<any> = ({}) => {
+import DurationPicker from '@Views/Common/DurationPicker/DurationPicker';
+const Test2: React.FC<any> = ({}) => {
   // const d = useOneCTWallet();
   const [string1, setString1] = useState('');
   const string1Clone = string1;
@@ -50,6 +50,35 @@ const Test: React.FC<any> = ({}) => {
         />
       </div>
     </div>
+  );
+};
+
+const Test = () => {
+  const [durationDisplayedOnPicker, setDurationDisplayedOnPicker] =
+    useState(undefined);
+  console.log(`test-durationDisplayedOnPicker: `, durationDisplayedOnPicker);
+  const onChange = (duration) => {
+    setDurationDisplayedOnPicker(duration);
+  };
+  const buttonClickHandler = () => {};
+  return (
+    <>
+      <div>
+        <DurationPicker
+          onChange={onChange}
+          initialDuration={{ hours: 0, minutes: 0, seconds: 0 }}
+          maxHours={10}
+          noSeconds
+        />
+      </div>
+      <button
+        onClick={buttonClickHandler}
+        type="button"
+        style={{ float: 'right' }}
+      >
+        Confirm Selection
+      </button>
+    </>
   );
 };
 

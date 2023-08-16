@@ -16,7 +16,7 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
 
   return (
     <div className="flex items-center gap-x-3">
-      <div className="flex w-[95%] bg-[#282B39] items-center rounded-[5px]">
+      <div className="flex w-full mb-3 bg-[#282B39] items-center rounded-[5px]">
         <button
           className={`w-full h-full text-left px-[10px] text-${
             amount ? '1' : '[#808191]'
