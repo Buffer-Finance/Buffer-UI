@@ -12,7 +12,7 @@ import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { priceAtom } from '@Hooks/usePrice';
 import { add, divide } from '@Utils/NumString/stringArithmatics';
-import { joinStrings } from '@Views/TradePage/utils';
+import { getMaximumValue, joinStrings } from '@Views/TradePage/utils';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { ActiveTrades } from './ActiveTrades';
@@ -80,7 +80,7 @@ export const BuyTrade: React.FC = () => {
   const allowance =
     approvalExpanded?.allowance !== undefined
       ? (divide(
-          add(
+          getMaximumValue(
             approvalExpanded.allowance.toString(),
             (localStoreApprovalRequest as any)?.allowance || '0'
           ),
@@ -91,7 +91,7 @@ export const BuyTrade: React.FC = () => {
   const activeAssetPrice = getPriceFromKlines(marketPrice, {
     tv_id: activeMarket.tv_id,
   });
-  // const platformFee = divide(switchPool.platformFee, decimals);
+  const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
   // if (
   //   amount !== undefined &&
@@ -118,7 +118,7 @@ export const BuyTrade: React.FC = () => {
       <BuyButtons
         activeAssetPrice={activeAssetPrice}
         allowance={allowance}
-        amount={amount.toString()}
+        amount={add(amount || '0', platformFee ?? '0')}
       />
       <ActiveTrades />
     </BuyTradeBackground>
