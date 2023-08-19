@@ -88,7 +88,9 @@ function createMarketObject(
   const poolName = poolInfo.is_pol ? poolInfo.token + '-POL' : poolInfo.token;
   const { currentPrice } = getCurrentPrice(marketPrice, chartMarketData);
   const marketAddress = getAddress(market.address);
-  const isForex = market.category === AssetCategory.Forex;
+  const isForex =
+    market.category === AssetCategory.Forex ||
+    market.category === AssetCategory.Commodities;
   const isMarketOpen = !market.isPaused;
   return {
     pair: chartMarketData.pair,
