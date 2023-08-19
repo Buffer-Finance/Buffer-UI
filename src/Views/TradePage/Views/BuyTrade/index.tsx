@@ -78,10 +78,13 @@ export const BuyTrade: React.FC = () => {
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
   const allowance =
-    approvalExpanded?.allowance !== undefined
+    approvalExpanded !== undefined
       ? (divide(
           getMaximumValue(
-            approvalExpanded.allowance.toString(),
+            add(
+              approvalExpanded.allowance.toString(),
+              approvalExpanded.base_amount.toString()
+            ),
             (localStoreApprovalRequest as any)?.allowance || '0'
           ),
           decimals

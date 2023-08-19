@@ -109,6 +109,10 @@ export const useBuyTradeActions = (userInput: string) => {
   const localStoreApprovalRequest = secureLocalStorage.getItem(
     getApprovalRequestLocalKey(address, tokenName, activeChain.id)
   );
+  // console.log(
+  //   `useBuyTradeActions-localStoreApprovalRequest: `,
+  //   localStoreApprovalRequest
+  // );
 
   const buyHandler = async (customTrade: {
     is_up: boolean;
@@ -511,6 +515,7 @@ export const useBuyTradeActions = (userInput: string) => {
     // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
     if (ammount !== '0' && ammount !== '100000000000000000000000000') {
+      ammount = add(approvalExpanded.base_amount.toString(), ammount);
       ammount = toFixed(add(ammount, multiply(ammount, '0.1')), 0);
     }
     //  fetch nonce 7min
