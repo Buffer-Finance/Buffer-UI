@@ -11,10 +11,10 @@ const OnboardingAnimation: React.FC<any> = ({}) => {
   return (
     <Dialog
       classes={{ paper: 'custom-paper-class' }}
-      open={true}
+      open={isOpen}
       onClose={console.log}
     >
-      {true ? <ModalChild /> : null}
+      {isOpen ? <ModalChild /> : null}
     </Dialog>
   );
 };
@@ -22,12 +22,12 @@ const OnboardingAnimation: React.FC<any> = ({}) => {
 export { OnboardingAnimation };
 
 const ModalChild = () => {
-  // const setIsOpen = useSetAtom(showOnboardingAnimationAtom);
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsOpen(false);
-  //   }, duration);
-  // });
+  const setIsOpen = useSetAtom(showOnboardingAnimationAtom);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsOpen(false);
+    }, duration);
+  });
 
   return (
     <div className="flex w-[100vw] b1200:gap-y-[5vh] h-[100vh] overflow-hidden items-center  justify-center gap-x-[150px] b1200:gap-x-[5vw] mt-[-3vh] b800:flex-col">

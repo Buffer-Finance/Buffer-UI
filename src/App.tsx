@@ -105,7 +105,7 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
-        <Route path="/binary/:market" element={<OnboardingAnimation />} />
+        <Route path="/binary/:market" element={<TradePage />} />
         <Route
           path="/*"
           element={
