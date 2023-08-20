@@ -87,7 +87,7 @@ const Idx2icon = {
   2: TwoChartsvertical,
   3: FourCharts,
 };
-const MarketStatsBar: React.FC<any> = ({}) => {
+const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const setChartTimes = useSetAtom(chartNumberAtom);
   const chartTimes = useAtomValue(chartNumberAtom);
   const { activeMarket } = useActiveMarket();
@@ -190,7 +190,7 @@ const MarketStatsBar: React.FC<any> = ({}) => {
               : ''
           }
         >
-          <div className="min-w-[160px]">
+          <div className="min-w-[160px] b1200:min-w-[120px]">
             <BufferProgressBar
               fontSize={12}
               progressPercent={currentOIinPercent ?? 0}
@@ -202,65 +202,81 @@ const MarketStatsBar: React.FC<any> = ({}) => {
   ];
 
   return (
-    <div className="flex p-3 gap-x-[35px] items-center">
-      <MarketSelectorDD
-        token0={activeMarket.token0}
-        token1={activeMarket.token1}
-      />
-      <MarketPrice token0={activeMarket.token0} token1={activeMarket.token1} />
+    <div className="flex p-3 gap-x-[35px] b1200:gap-x-5 items-center justify-between">
+      {!isMobile && (
+        <MarketSelectorDD
+          token0={activeMarket.token0}
+          token1={activeMarket.token1}
+        />
+      )}
+      <div>
+        <MarketPrice
+          token0={activeMarket.token0}
+          token1={activeMarket.token1}
+        />
+        {data[0].data}
+      </div>
       {data.map((d, id) => {
+        // dont show 24h change in separate section, show it below price
+        if (isMobile && !id) return null;
         return (
           <div
             key={id}
             className="flex flex-col justify-center items-start gap-y-1"
           >
-            <span className="text-f12 text-[#82828F]">{d.header}</span>
-            <span className="text-f12 w-full">{d.data}</span>
+            <span className="text-f12 b1200:text-f10 text-[#82828F]">
+              {d.header}
+            </span>
+            <span className="text-f12 w-full b1200:text-f10">{d.data}</span>
           </div>
         );
       })}
-      <button
-        type="button"
-        ref={ref}
-        {...anchorProps}
-        className="hover:brightness-125 ml-auto"
-      >
-        <FourRectanglesSVG />
-      </button>
-      <ControlledMenu
-        {...menuState}
-        anchorRef={ref}
-        onClose={closeDropdown}
-        viewScroll="initial"
-        direction="bottom"
-        position="initial"
-        align="center"
-        menuClassName={
-          '!p-[0] !rounded-[10px] !bg-[#232334] !py-2 hover:!rounded-[10px]'
-        }
-        offsetY={10}
-      >
-        {arr.map((s, idx) => {
-          const Icon = (Idx2icon as any)[idx];
-          return (
-            <MenuItem
-              className={({ hover }) => {
-                return `  ${
-                  chartTimes == s ? 'text-1' : 'text-2'
-                } hover:brightness-110 hover:bg-[#232334]  hover:text-1`;
-              }}
-              onClick={(e: ClickEvent) => {
-                // e.keepOpen = true;
-                setChartTimes(s);
-              }}
-              key={idx}
-            >
-              <Icon className="mr-2" /> &nbsp;{Math.floor(s)} Chart
-              {s > 1 ? 's' : ''}
-            </MenuItem>
-          );
-        })}
-      </ControlledMenu>
+      {!isMobile && (
+        <>
+          <button
+            type="button"
+            ref={ref}
+            {...anchorProps}
+            className="hover:brightness-125 ml-auto"
+          >
+            <FourRectanglesSVG />
+          </button>
+          <ControlledMenu
+            {...menuState}
+            anchorRef={ref}
+            onClose={closeDropdown}
+            viewScroll="initial"
+            direction="bottom"
+            position="initial"
+            align="center"
+            menuClassName={
+              '!p-[0] !rounded-[10px] !bg-[#232334] !py-2 hover:!rounded-[10px]'
+            }
+            offsetY={10}
+          >
+            {arr.map((s, idx) => {
+              const Icon = (Idx2icon as any)[idx];
+              return (
+                <MenuItem
+                  className={({ hover }) => {
+                    return `  ${
+                      chartTimes == s ? 'text-1' : 'text-2'
+                    } hover:brightness-110 hover:bg-[#232334]  hover:text-1`;
+                  }}
+                  onClick={(e: ClickEvent) => {
+                    // e.keepOpen = true;
+                    setChartTimes(s);
+                  }}
+                  key={idx}
+                >
+                  <Icon className="mr-2" /> &nbsp;{Math.floor(s)} Chart
+                  {s > 1 ? 's' : ''}
+                </MenuItem>
+              );
+            })}
+          </ControlledMenu>
+        </>
+      )}
     </div>
   );
 };
@@ -273,7 +289,7 @@ const MarketPrice: React.FC<{ token0: string; token1: string }> = ({
 }) => {
   return (
     <div className="flex flex-col">
-      <span className="text-f18">
+      <span className="text-f18 b1200:text-f12">
         <CurrentPrice token0={token0} token1={token1} />
       </span>
     </div>

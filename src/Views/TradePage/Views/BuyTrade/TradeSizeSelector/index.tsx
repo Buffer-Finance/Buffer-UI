@@ -26,7 +26,9 @@ const TradeSizeSelectorBackground = styled.div`
   width: 100%;
 `;
 
-export const TradeSizeSelector: React.FC = () => {
+export const TradeSizeSelector: React.FC<{
+  onSubmit?: any;
+}> = ({ onSubmit }) => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
   const { address } = useAccount();
@@ -65,7 +67,9 @@ export const TradeSizeSelector: React.FC = () => {
             balance={balance}
             platformFee={platformFee}
             minTradeSize={minFee}
+            onSubmit={onSubmit}
           />
+
           <PoolDropdown />
         </RowGapItemsStretched>
         {registeredOneCT && (

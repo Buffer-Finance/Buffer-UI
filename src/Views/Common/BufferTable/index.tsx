@@ -110,28 +110,30 @@ const BufferTable: React.FC<IBufferTable> = ({
           } `}
           aria-label="buffer-table"
         >
-          <TableHead
-            className={`${
-              isBodyTransparent ? '!bg-transparent transparent-hover' : ''
-            } table-header ${shouldHideHeader ? 'tab' : ''} `}
-          >
-            <TableRow className={` table-row-head`}>
-              {createArray(cols).map((idx) => {
-                return (
-                  <TableCell
-                    key={idx}
-                    className={`${
-                      isBodyTransparent
-                        ? '!bg-transparent transparent-hover'
-                        : ''
-                    } !z-20`}
-                  >
-                    {headerJSX(idx)}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
+          {headerJSX && (
+            <TableHead
+              className={`${
+                isBodyTransparent ? '!bg-transparent transparent-hover' : ''
+              } table-header ${shouldHideHeader ? 'tab' : ''} `}
+            >
+              <TableRow className={` table-row-head`}>
+                {createArray(cols).map((idx) => {
+                  return (
+                    <TableCell
+                      key={idx}
+                      className={`${
+                        isBodyTransparent
+                          ? '!bg-transparent transparent-hover'
+                          : ''
+                      } !z-20`}
+                    >
+                      {headerJSX(idx)}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            </TableHead>
+          )}
           <TableBody className={'table-body ' + tableBodyClass}>
             {topDecorator}
 

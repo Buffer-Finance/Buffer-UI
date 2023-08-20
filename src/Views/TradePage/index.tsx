@@ -27,12 +27,12 @@ const TradePage: React.FC<any> = ({}) => {
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
   usePrice();
 
-  const isNotMobile = useMedia('(min-width:600px)');
+  const isNotMobile = useMedia('(min-width:1200px)');
   return (
     <>
       <EssentialModals />
       <div
-        className={`flex sm:h-full justify-between w-[100%] bg-[#1C1C28] ${
+        className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
           panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
         }`}
       >

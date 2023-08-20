@@ -14,18 +14,21 @@ export const TradeSizeInput: React.FC<{
   balance: string;
   registeredOneCT: boolean;
   minTradeSize: string;
+  onSubmit?: () => void;
   platformFee: string;
 }> = ({
   maxTradeSize,
   registeredOneCT,
   tokenName,
   balance,
+  onSubmit,
   minTradeSize,
   platformFee,
 }) => {
   const [minerr, setminErr] = useState(false);
   const [maxerr, setmaxErr] = useState(false);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
+  console.log(`TradeSizeInput-tradeSize: `, tradeSize);
   useEffect(() => {
     if (lt(tradeSize || '0', minTradeSize)) {
       setminErr(true);
@@ -45,13 +48,14 @@ export const TradeSizeInput: React.FC<{
       <div className="relative flex flex-row gap-x-4 items-center">
         <input
           value={tradeSize}
-          // max={maxTradeSize}
-          // min={minTradeSize}
+          max={maxTradeSize}
+          min={minTradeSize}
           type="number"
           className={`relative bg-[#282b39] px-5 py-3 rounded-l-[5px] outline-none w-full text-f16 text-1`}
           onChange={(e) => {
             setTradeSize(e.target.value);
           }}
+          onKeyDown={(e) => e.key == 'Enter' && onSubmit?.()}
           placeholder="Enter value"
         />
         <button

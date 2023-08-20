@@ -88,7 +88,7 @@ const AppRoutes = () => {
     }
   }, [searchParam]);
   return (
-    <div className="relative root w-[100vw]">
+    <div className="relative root w-[100vw] ">
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>
@@ -105,7 +105,7 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
-        <Route path="/binary/:market" element={<TradePage />} />
+        <Route path="/binary/:market" element={<OnboardingAnimation />} />
         <Route
           path="/*"
           element={

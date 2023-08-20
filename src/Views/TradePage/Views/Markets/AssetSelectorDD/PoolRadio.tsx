@@ -14,7 +14,7 @@ export const PoolRadio: React.FC = () => {
   }
 
   return (
-    <RowGap gap="8px">
+    <RowGap gap="8px" className="ml-auto">
       <RadioTextHead>
         <Trans>Trading Asset</Trans>
       </RadioTextHead>

@@ -46,13 +46,13 @@ export const Navbar: React.FC<INavbar> = () => {
             hideText
           />
         </div> */}
-        <div className="flex gap-x-4 items-center pl-4">
+        <div className="a1200:hidden flex gap-x-4 items-center pl-4">
           <MemoHamburgerSVG onClick={handleClose} />
           <MemoWalletSVG />
         </div>
 
         {show && (
-          <div className="tab:hidden flex gap-[6px] b1400:!hidden ">
+          <div className="b1200:hidden flex gap-[6px]  ">
             {tabs.slice(0, VISIBLETABS).map((tab, index) => {
               if (tab.isExternalLink) {
                 return (
@@ -93,7 +93,7 @@ export const Navbar: React.FC<INavbar> = () => {
 
         <SettingsDD />
 
-        <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
+        {/* <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
           {state.sidebar_active ? (
             <MenuLogo className="icon menu" onClick={handleClose} />
           ) : (
@@ -103,7 +103,7 @@ export const Navbar: React.FC<INavbar> = () => {
               style={{ transform: 'scale(0.8)' }}
             />
           )}
-        </div>
+        </div> */}
       </div>
     </header>
   );

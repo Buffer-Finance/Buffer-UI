@@ -382,11 +382,11 @@ const OneCTModal: React.FC<any> = ({}) => {
     <ModalBase
       open={isModalOpen}
       onClose={() => setModal((m) => false)}
-      className="max-w-[600px]"
+      className="max-w-[600px] sm:!px-3"
     >
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <h3 className="font-[500] text-f20  ml-[20px]">
+          <h3 className="font-[500] text-f20 sm:text-f16  ml-[20px]">
             Activate your Trading Account
           </h3>
         </div>
@@ -407,10 +407,10 @@ const OneCTModal: React.FC<any> = ({}) => {
                 <div
                   className={`flex  flex-col content-center items-center ${
                     idx == 0
-                      ? 'pr-[30px]'
+                      ? 'pr-[30px] sm:!pr-[12px] b1200:pr-[22px]'
                       : idx + 1 == features.length
-                      ? 'pl-[30px]'
-                      : 'px-[30px]'
+                      ? 'pl-[30px] sm:!pl-[12px] b1200:pl-[22px]'
+                      : 'px-[30px] sm:!px-[12px] b1200:px-[22px]'
                   } ${idx < features.length - 1 ? 'border-right' : ''}`}
                 >
                   {s.img}
@@ -496,7 +496,7 @@ const OneCTModal: React.FC<any> = ({}) => {
 export { OneCTModal };
 
 const Card = ({ children }: { children: JSX.Element }) => (
-  <div className="w-full bg-[#2C2C41] w-[360px] p-[20px] flex items-center justify-between rounded-[10px] mt-[12px] text-1 text-f16 font-[500]">
+  <div className="w-full bg-[#2C2C41] w-[360px] p-[20px] sm:px-[9px] sm:py-[12px] flex items-center justify-between rounded-[10px] mt-[12px] text-1 text-f16 sm:text-f14 font-[500]">
     {children}
   </div>
 );

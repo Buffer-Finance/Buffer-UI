@@ -7,6 +7,9 @@ module.exports = {
       sm: { max: '600px' },
       tb: { max: '900px', min: '600px' },
       tab: { max: '800px' },
+      a600: {
+        min: '600px',
+      },
       a900: {
         min: '900px',
       },

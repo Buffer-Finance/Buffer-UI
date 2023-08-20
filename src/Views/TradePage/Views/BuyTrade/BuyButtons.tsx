@@ -20,15 +20,19 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useAccount } from 'wagmi';
 import { ApproveModal } from '../ApproveModal';
+import { ReactNode } from 'react';
+import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 
 export const BuyButtons = ({
   allowance,
   activeAssetPrice,
   amount,
+  center,
 }: {
   allowance: string;
   activeAssetPrice: string;
   amount: string;
+  center?: ReactNode;
 }) => {
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
@@ -70,7 +74,6 @@ export const BuyButtons = ({
 
   if (!poolDetails) return <>Error: Pool not found</>;
 
-  console.log(`BuyButtons-allowance: `, allowance, activeAssetPrice);
   return (
     <>
       <ApproveModal
@@ -122,11 +125,24 @@ export const BuyButtons = ({
                   test-id="last-up-btn"
                   className=" text-1 bg-green hover:text-1"
                 >
-                  <>
-                    <UpIcon className="mr-[6px] scale-150" />
-                    Up
-                  </>
+                  {center && tradeType == 'Limit' ? (
+                    <div className="flex justify-between items-center w-full px-4 py-2 ">
+                      <div className="flex-col flex items-start">
+                        <span className="text-f14 font-bold">Up</span>
+                        <span className="text-f11">{limitStrike}</span>
+                      </div>
+                      <div>
+                        <MemoTimeIcon />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <UpIcon className="mr-[6px] scale-150" />
+                      Up
+                    </>
+                  )}
                 </GreenBtn>
+                {center ? center : null}
                 <RedBtn
                   isDisabled={isForex && !isAssetActive}
                   isLoading={
@@ -137,10 +153,22 @@ export const BuyButtons = ({
                   className=" text-1 bg-red "
                   onClick={() => buyTrade(false)}
                 >
-                  <>
-                    <DownIcon className="mr-[6px] scale-150" />
-                    Down
-                  </>
+                  {center && tradeType == 'Limit' ? (
+                    <div className="flex justify-between items-center w-full px-5 flex-row-reverse ">
+                      <div className="flex-col flex items-end">
+                        <span className="text-f14 font-bold">Down</span>
+                        <span className="text-f11">{limitStrike}</span>
+                      </div>
+                      <div>
+                        <MemoTimeIcon />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <DownIcon className="mr-[6px] scale-150" />
+                      Down
+                    </>
+                  )}
                 </RedBtn>
               </div>
               {/* <div

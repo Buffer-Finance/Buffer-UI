@@ -5,6 +5,11 @@ import { RowBetween } from '@Views/TradePage/Components/Row';
 import { CategoryTabs } from './CategoryTabs';
 import { PoolRadio } from './PoolRadio';
 import { AssetSelectorTable } from './AssetSelectorTable';
+import { useAtom } from 'jotai';
+import { categoriesAtom } from '@Views/TradePage/atoms';
+import { useCategories } from '@Views/TradePage/Hooks/useCategories';
+import DDArrow from '@SVG/Elements/Arrow';
+import { useEffect } from 'react';
 
 const AssetSelectorDDBackground = styled.div`
   max-height: 420px;
@@ -13,17 +18,66 @@ const AssetSelectorDDBackground = styled.div`
   background-color: #232334;
 `;
 
-export const AssetSelectorDD: React.FC = () => {
+export const AssetSelectorDD: React.FC<{ isMobile: boolean }> = ({
+  isMobile,
+}) => {
   return (
     <AssetSelectorDDBackground>
       <ColumnGap gap="16px">
         <SearchBar />
-        <RowBetween>
-          <CategoryTabs />
-          <PoolRadio />
-        </RowBetween>
-        <AssetSelectorTable />
+        {!isMobile && (
+          <RowBetween>
+            <CategoryTabs />
+            <PoolRadio />
+          </RowBetween>
+        )}
+        {isMobile ? <MobileAccordionTable /> : <AssetSelectorTable />}
       </ColumnGap>
     </AssetSelectorDDBackground>
+  );
+};
+
+const MobileAccordionTable = () => {
+  const { categories: assetTypes } = useCategories();
+  const [activeAsset, setActiveAsset] = useAtom(categoriesAtom);
+  useEffect(() => {
+    setActiveAsset('Crypto');
+    return () => setActiveAsset('Crypto');
+  }, []);
+  return (
+    <ol className="flex flex-col gap-y-[20px]">
+      {assetTypes.map((child, idx) => {
+        return (
+          <li key={idx}>
+            <div className="flex items-center justify-between">
+              <div
+                className={`bg-[#282B39] capitalize  text-f14 py-1 px-3 w-fit ${
+                  child === activeAsset && ' '
+                }`}
+                role="button"
+                onClick={() => {
+                  if (activeAsset === child) {
+                    setActiveAsset('no-select');
+                  } else setActiveAsset(child);
+                }}
+              >
+                <div className="flex gap-x-3 items-center">
+                  {child}
+                  <DDArrow
+                    className={` transition-all duration-300  ease-out scale-125  ${
+                      child === activeAsset && ' rotate-180 '
+                    } `}
+                  />
+                </div>
+              </div>
+              {!idx && <PoolRadio />}
+            </div>
+            {child === activeAsset && (
+              <AssetSelectorTable group={activeAsset} />
+            )}
+          </li>
+        );
+      })}
+    </ol>
   );
 };
