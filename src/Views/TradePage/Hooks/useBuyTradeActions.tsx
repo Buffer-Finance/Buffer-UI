@@ -509,7 +509,11 @@ export const useBuyTradeActions = (userInput: string) => {
       setLoading(null);
       setIsApproveModalOpen(false);
 
-      toastify({ type: 'success', msg: 'Approved Successfully.', id: '10231' });
+      toastify({
+        type: 'success',
+        msg: ammount === '0' ? 'Approval Revoked' : 'Approved Successfully.',
+        id: '10231',
+      });
     } catch (e) {
       setLoading(null);
 
