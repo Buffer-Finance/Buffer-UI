@@ -5,38 +5,41 @@ import axios from 'axios';
 const usePriceChange = () => {
   const { data } = useSWR('24h-change', {
     fetcher: async () => {
-      const nowEpoch = Math.round(Date.now() / 1000) - 5 * 60;
-      const yesterdayEpoch = nowEpoch - 60 * 60 * 24;
+      // const nowEpoch = Math.round(Date.now() / 1000) - 5 * 60;
+      // const yesterdayEpoch = nowEpoch - 60 * 60 * 24;
       const queries = [];
       for (const marketName in marketsForChart) {
         const market = (marketsForChart as any)[marketName];
+        // queries.push(
+        //   axios.post(pricePublisherBaseUrl, [
+        //     {
+        //       pair: market.tv_id,
+        //       timestamp: nowEpoch,
+        //     },
+        //     {
+        //       pair: market.tv_id,
+        //       timestamp: yesterdayEpoch,
+        //     },
+        //   ])
+        // );
         queries.push(
-          axios.post(pricePublisherBaseUrl, [
-            {
-              pair: market.tv_id,
-              timestamp: nowEpoch,
-            },
-            {
-              pair: market.tv_id,
-              timestamp: yesterdayEpoch,
-            },
-          ])
+          axios.get(pricePublisherBaseUrl + `?pair=${market.tv_id}`)
         );
       }
       const response = await Promise.all(queries);
       const finalResponse: {
         [key: string]: {
-          now: number;
-          yesterday: number;
+          pair: string;
           change: number;
         };
       } = {};
+
       response.forEach((res) => {
-        finalResponse[res.data[0].pair] = {
-          now: res.data[0].price,
-          yesterday: res.data[1].price,
-          change:
-            ((res.data[0].price - res.data[1].price) / res.data[1].price) * 100,
+        finalResponse[res.data.pair] = {
+          // now: res.data[0].price,
+          // yesterday: res.data[1].price,
+          pair: res.data.pair,
+          change: res.data.change,
         };
       });
       return finalResponse;
@@ -49,7 +52,7 @@ const usePriceChange = () => {
   // for each market, add 2 req, one of now, one of now - 24h.
 
   // when response arrived, calculate the change
-
+  console.log(data, 'usePriceCHanfedata');
   return data;
 };
 
