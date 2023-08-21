@@ -25,7 +25,6 @@ import { usePrice } from '@Hooks/usePrice';
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
-  // usePrice();
   console.log('price-rerendered');
   const isNotMobile = useMedia('(min-width:1200px)');
   return (

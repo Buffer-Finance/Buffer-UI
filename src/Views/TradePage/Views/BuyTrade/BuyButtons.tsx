@@ -22,6 +22,7 @@ import { useAccount } from 'wagmi';
 import { ApproveModal } from '../ApproveModal';
 import { ReactNode } from 'react';
 import MemoTimeIcon from '@SVG/Elements/TimeIcon';
+import { usePrice } from '@Hooks/usePrice';
 
 export const BuyButtons = ({
   allowance,
@@ -34,6 +35,7 @@ export const BuyButtons = ({
   amount: string;
   center?: ReactNode;
 }) => {
+  usePrice();
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   const { poolDetails } = useSwitchPool();
