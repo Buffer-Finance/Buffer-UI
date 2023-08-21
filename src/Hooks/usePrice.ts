@@ -37,64 +37,6 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
   const setPrice = useSetAtom(priceAtom);
   const { sendMessage, lastJsonMessage, lastMessage, readyState } =
     useWebSocket('wss://xc-mainnet.pyth.network/ws');
-  const subscribeToStreamUpdates = async () => {
-    const url =
-      'https://benchmarks.pyth.network/v1/shims/tradingview/streaming';
-    const response = await fetch(url);
-    const reader = response.body?.getReader();
-    console.log('[stream]err', response.body?.locked);
-    let loop = true;
-    while (true) {
-      try {
-        const { value, done } = await reader.read();
-        if (done) break;
-        const updateStr = UTF8ArrToStr(value);
-        const updatePrices = getKlineFromPrice(updateStr);
-        setPrice((p) => ({ ...p, ...updatePrices }));
-      } catch (err) {
-        console.log('[stream]err', response.body?.locked);
-        loop = false;
-      }
-    }
-  };
-  const [messageHistory, setMessageHistory] = useState([]);
-
-  const subscribeToWSUpdates = async () => {
-    const pythConnection = new PythConnection(
-      new Connection(solanaWeb3Connection),
-      getPythProgramKeyForCluster(solanaClusterName)
-    );
-    pythConnection.onPriceChange((p, o) => {
-      // BTCUSD [{
-      //   time: +ts,
-      //   price: absolutePrice,
-      //   volume: volume ? +volume : 0,
-
-      // }];
-
-      if (p?.description && o?.price && o.timestamp) {
-        if (p.description == 'BTC/USD') {
-          console.log('price-update:BTC', o);
-        }
-        if (p.description == 'ETH/USD') {
-          console.log('price-update:ETH', o);
-        }
-        const marketId = p.description.replace('/', '');
-        const ts = Number(o.timestamp) * 1000;
-        const price = o.price;
-        const priceUpdates = {
-          [marketId]: [
-            {
-              ts,
-              price,
-            },
-          ],
-        };
-        setPrice((p) => ({ ...p, ...priceUpdates }));
-      }
-    });
-    pythConnection.start();
-  };
   useEffect(() => {
     // console.log(`lastMessage: `, lastMessage, lastJsonMessage);
     if (!lastJsonMessage) return;
@@ -114,9 +56,10 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
           },
         ],
       };
+      console.log('new-price-came:', data);
       setPrice((p) => ({ ...p, ...data }));
     }
-  }, [lastMessage, lastJsonMessage, setMessageHistory]);
+  }, [lastMessage, lastJsonMessage]);
   useEffect(() => {
     if (!sendMessage) return;
     const obj = {
@@ -125,15 +68,6 @@ export const usePrice = (fetchInitialPrices?: boolean) => {
     };
     const resp = sendMessage(JSON.stringify(obj));
   }, [sendMessage]);
-  // useEffect(() => {
-  //   const interval = setInterval(async () => {
-  //     const data = await getPrice();
-  //     setPrice((p) => ({ ...p, ...data }));
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, []);
 };
 
 export const wsStateAtom = atom<{ state: string }>({

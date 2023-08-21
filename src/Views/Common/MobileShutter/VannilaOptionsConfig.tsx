@@ -1,7 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 import { TradeSizeSelector } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import HorizontalTransition from '../Transitions/Horizontal';
 import { MobileDurationInput } from '@Views/TradePage/Components/MobileView/MobileDurationInput';
 import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
@@ -20,6 +20,7 @@ export const shutterActiveTabAtom = atom(tabs[0]);
 
 const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
   const { closeShutter } = useShutterHandlers();
+
   const toastify = useToast();
   const [activeTab, setActiveTab] = useAtom(shutterActiveTabAtom);
   const onSubmit = (e: React.FormEvent) => {
