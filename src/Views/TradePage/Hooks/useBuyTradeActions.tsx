@@ -446,10 +446,9 @@ export const useBuyTradeActions = (userInput: string) => {
       // }
     }
   };
-
-  const handleApproveClick = async (
-    ammount = '100000000000000000000000000'
-  ) => {
+  const defaultApprovalAmount = '100000000000000000000000000';
+  const handleApproveClick = async (ammount = defaultApprovalAmount) => {
+    // console.log('goes in here');
     if (state.txnLoading > 1) {
       toastify({
         id: 'dddafsd3',
@@ -471,7 +470,8 @@ export const useBuyTradeActions = (userInput: string) => {
     }
     // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
-    if (ammount !== '0' && ammount !== '100000000000000000000000000') {
+    console.log('goes in here', ammount);
+    if (ammount !== '0' && ammount !== defaultApprovalAmount) {
       ammount = toFixed(add(ammount, multiply(ammount, '0.1')), 0);
     }
     //  fetch nonce 7min

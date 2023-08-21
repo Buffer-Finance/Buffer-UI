@@ -1,6 +1,6 @@
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
-import { lt, multiply } from '@Utils/NumString/stringArithmatics';
+import { lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
@@ -10,16 +10,11 @@ import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
 import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import {
-  approveModalAtom,
-  limitOrderStrikeAtom,
-  tradeTypeAtom,
-} from '@Views/TradePage/atoms';
+import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useAccount } from 'wagmi';
-import { ApproveModal } from '../ApproveModal';
 
 export const BuyButtons = ({
   allowance,
@@ -34,9 +29,9 @@ export const BuyButtons = ({
 }) => {
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
-  const { poolDetails } = useSwitchPool();
+  // const { poolDetails } = useSwitchPool();
   const { openConnectModal } = useConnectModal();
-  const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
+  // const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
   const { handleApproveClick, buyHandler, loading, revokeApproveClick } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
@@ -50,8 +45,8 @@ export const BuyButtons = ({
 
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
-    if (lt(allowance || '0', amount.toString() || '0'))
-      return setIsApproveModalOpen(true);
+    // if (lt(allowance || '0', amount.toString() || '0'))
+    //   return setIsApproveModalOpen(true);
     let strike = activeAssetPrice;
     let limitOrderExpiry = '0';
     if (tradeType == 'Limit' && limitStrike) {
@@ -70,11 +65,11 @@ export const BuyButtons = ({
     switchPool?.pool
   );
 
-  if (!poolDetails) return <>Error: Pool not found</>;
+  // if (!poolDetails) return <>Error: Pool not found</>;
 
   return (
     <>
-      <ApproveModal
+      {/* <ApproveModal
         token={poolDetails.token}
         clickHandler={(isChecked) => {
           handleApproveClick(
@@ -84,7 +79,7 @@ export const BuyButtons = ({
         isOpen={isApproveModalOpen}
         closeModal={() => setIsApproveModalOpen(false)}
         loading={loading as number}
-      />
+      /> */}
       <ConnectionRequired>
         <span>
           {allowance == null || !activeAssetPrice ? (
@@ -102,13 +97,7 @@ export const BuyButtons = ({
               Activate Account
             </BlueBtn>
           ) : lt(allowance, amount.toString() || '0') ? (
-            <BlueBtn
-              onClick={() => {
-                account ? setIsApproveModalOpen(true) : openConnectModal?.();
-              }}
-            >
-              Approve
-            </BlueBtn>
+            <BlueBtn onClick={() => handleApproveClick()}>Approve</BlueBtn>
           ) : (
             <>
               <div className="flex gap-2">
@@ -148,9 +137,7 @@ export const BuyButtons = ({
                 <div
                   className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13 mt-3"
                   role={'button'}
-                  onClick={() =>
-                    !account ? openConnectModal?.() : revokeApproveClick()
-                  }
+                  onClick={() => revokeApproveClick()}
                 >
                   Revoke Approval
                 </div>
