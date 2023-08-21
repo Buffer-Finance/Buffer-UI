@@ -3,20 +3,20 @@ import { notificationPosition, tradePanelPosition } from './type';
 export const appConfig = {
   '421613': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.43-old-data-new-contracts/api',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
-    router: '0x0e04257f64638Fe742F41060A75CFa76a568203c',
+    router: '0xEdEf72afc395582f68e623b4D36f92fC990f0CA9',
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0x8982a8C11976348B225100b19f570728c1Fdd449',
-    pooloi: '0x0D3057A12f5bF5AE1fB295Bace09D31505cdb0f6',
-    marketoi: '0xb1e1B2Be3dF75Bd254441aEf53A34e025C09052e',
+    signer_manager: '0x5b14e54e6F1783A76F3ec55d2cc8A3b0b169e2Dd',
+    pooloi: '0x4ca5a39De60BE7c01FA122E1fdc5a7A9138bE6b4',
+    marketoi: '0x43063917Cc3c783fbe2D884485A2D4885327Aaf3',
     booster: '0x374E20a66836fC3A0357cC6ecD5B12686f81Db84',
     poolsInfo: {
-      '0x107aF8B74F52e6936e92D8204D8a80c32039bFd0': {
-        tokenAddress: '0xd28FD8eB6A970d3a120FeF4275aae7cAf8468E88',
-        faucet: '0x3191AAeF42050DC4ec63211B76440B1b035B70f8',
+      '0xDE6c23A3f8262c9712Ea8eC506E9c2Fbd118a175': {
+        tokenAddress: '0xF3a4b7a7B7AE83350027d50ED1442481A5Bcbfaf',
+        faucet: '0x6147483a050fE43B4f4D5F7e7B88b6A814A2bB06',
         decimals: 6,
         token: 'USDC',
         is_pol: false,
@@ -28,9 +28,9 @@ export const appConfig = {
         token: 'BFR',
         is_pol: false,
       },
-      '0xceDeb1849465b22C94Ea7Fa88800D45d0475b317': {
-        tokenAddress: '0xf6eA4A60903E06caa1a300226D275fF5c3c11349',
-        faucet: '0xE816d53C3f3fF8E0a57f2eb27061579bCfFe3C8D',
+      '0x470dc0ebC3a3840B57070b425d45dEC182c9b920': {
+        tokenAddress: '0x7418Af81b08aa73F5B13201Bf182852851233a7d',
+        faucet: '0x5E028E5b0E054020Db66b240d14d1666d1001950',
         decimals: 18,
         token: 'ARB',
         is_pol: false,
