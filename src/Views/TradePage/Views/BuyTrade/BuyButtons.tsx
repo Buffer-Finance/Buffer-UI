@@ -35,7 +35,7 @@ export const BuyButtons = ({
   const { poolDetails } = useSwitchPool();
   const { openConnectModal } = useConnectModal();
   const [isApproveModalOpen, setIsApproveModalOpen] = useAtom(approveModalAtom);
-  const { handleApproveClick, buyHandler, loading } =
+  const { handleApproveClick, buyHandler, loading, revokeApproveClick } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
   const { activeMarket } = useActiveMarket();
@@ -142,7 +142,7 @@ export const BuyButtons = ({
                   </>
                 </RedBtn>
               </div>
-              {/* <div
+              <div
                 className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13 mt-3"
                 role={'button'}
                 onClick={() =>
@@ -150,7 +150,7 @@ export const BuyButtons = ({
                 }
               >
                 Revoke Approval
-              </div> */}
+              </div>
             </>
           )}
         </span>

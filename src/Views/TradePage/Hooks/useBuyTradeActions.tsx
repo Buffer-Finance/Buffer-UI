@@ -525,18 +525,19 @@ export const useBuyTradeActions = (userInput: string) => {
       });
       return true;
     }
-    dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
-    setLoading(1);
-    approve(
-      (p) => {
-        if (p.payload) {
-          setIsApproveModalOpen(false);
-        }
-        setLoading(null);
-      },
-      'approve',
-      [configData.router, '0']
-    );
+    // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
+    // setLoading(1);
+    // approve(
+    //   (p) => {
+    //     if (p.payload) {
+    //       setIsApproveModalOpen(false);
+    //     }
+    //     setLoading(null);
+    //   },
+    //   'approve',
+    //   [configData.router, '0']
+    // );
+    handleApproveClick('0');
   };
 
   return {
