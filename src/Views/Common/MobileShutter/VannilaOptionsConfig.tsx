@@ -14,6 +14,7 @@ import {
 import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
 import TimePickerSelection from '../IOSTimePicer/components/TimePickerSelection';
 import { IOSTimePicker } from '../IOSTimePicer';
+import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 const tabs = ['Amount', 'Duration'];
 export const shutterActiveTabAtom = atom(tabs[0]);
 
@@ -29,6 +30,7 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
   const onChange = (timeValue) => {
     setDuration((val) => ({ ...val, HHMM: timeValue }));
   };
+  const { switchPool } = useSwitchPool();
 
   return (
     <>
@@ -54,8 +56,10 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
         </div>
         <IOSTimePicker
           onChange={onChange}
-          initialValue={currentTime}
-          minDurationInMinutes={5}
+          initialValue={currentTime.HHMM}
+          minValue={switchPool?.min_duration}
+          maxValue={switchPool?.max_duration}
+          onSave={() => closeShutter()}
         />
       </HorizontalTransition>
     </>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TimePickerSelection from './IOSTimePicker';
 
 function TimePicker({
-  value: initialValue = null,
+  initialValue = null,
   cellHeight = 28,
   placeHolder = 'Select Time',
   pickerDefaultValue = '10:00',
@@ -23,13 +23,19 @@ function TimePicker({
   name = null,
   onOpen = () => {},
   popupClassName = null,
-  minDurationInMinutes = 0,
+  minValue = '00:00',
+  maxValue = '24:00',
 
   inputClassName = null,
 }) {
   const [isOpen, setIsOpen] = useState(initialIsOpenValue);
   const [height, setHeight] = useState(cellHeight);
   const [inputValue, setInputValue] = useState(initialValue);
+
+  useEffect(() => {
+    setInputValue(initialValue);
+  }, [initialValue]);
+  console.log(`initialValue: `, initialValue);
 
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -59,7 +65,8 @@ function TimePicker({
     setInputValue,
     setIsOpen,
     seperator,
-    minValue: minDurationInMinutes * 60,
+    minValue,
+    maxValue,
     use12Hours,
     onAmPmChange,
     initialValue: finalValue,

@@ -8,13 +8,22 @@ import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { Trans } from '@lingui/macro';
 import { HHMMToSeconds, secondsToHHMM } from '@Views/TradePage/utils';
 
-const getValidationError = (value, minValue) => {
+const getValidationError = (value, minValue, maxValue) => {
   const seconds = HHMMToSeconds(value);
-  if (seconds >= minValue) {
-    return false;
+  const minSeconds = HHMMToSeconds(minValue);
+  const maxSeconds = HHMMToSeconds(maxValue);
+
+  if (seconds >= minSeconds) {
+    if (seconds <= maxSeconds) {
+      return false;
+    } else {
+      const maxTime = maxValue.split(':');
+      return `Max time should be ${maxTime[0]}h ${maxTime[1]}m`;
+    }
+  } else {
+    const minTime = minValue.split(':');
+    return `Min time should be ${minTime[0]}h ${minTime[1]}m`;
   }
-  const minTime = secondsToHHMM(minValue).split(':');
-  return `Min time should be ${minTime[0]}h ${minTime[0]}m`;
 };
 
 function TimePickerSelection({
@@ -25,6 +34,7 @@ function TimePickerSelection({
   onSave,
   onCancel,
   minValue,
+  maxValue,
   cancelButtonText,
   saveButtonText,
   controllers,
@@ -75,19 +85,19 @@ function TimePickerSelection({
     const finalSelectedValue = use12Hours
       ? `${value} ${hourFormat.hourFormat}`
       : value;
-    return getValidationError(value, minValue);
-  }, [value, hourFormat.hourFormat, minValue]);
+    return getValidationError(value, minValue, maxValue);
+  }, [value, hourFormat.hourFormat, minValue, maxValue]);
 
   const handleSave = () => {
     const finalSelectedValue = use12Hours
       ? `${value} ${hourFormat.hourFormat}`
       : value;
+    console.log(`IOSTimePicker-validationError: `, validationError);
     if (validationError)
       return toastify({ type: 'error', msg: validationError });
     setInputValue(finalSelectedValue);
     onChange(finalSelectedValue);
     onSave(finalSelectedValue);
-    setIsOpen(false);
   };
 
   return (
