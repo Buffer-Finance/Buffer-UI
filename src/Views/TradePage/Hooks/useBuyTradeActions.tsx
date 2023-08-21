@@ -470,7 +470,6 @@ export const useBuyTradeActions = (userInput: string) => {
     }
     // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
-    console.log('goes in here', ammount);
     if (ammount !== '0' && ammount !== defaultApprovalAmount) {
       ammount = toFixed(add(ammount, multiply(ammount, '0.1')), 0);
     }
