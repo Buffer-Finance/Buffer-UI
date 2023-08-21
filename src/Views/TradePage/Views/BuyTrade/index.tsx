@@ -52,10 +52,7 @@ export const BuyTrade: React.FC = () => {
     !poolDetails ||
     !readcallData ||
     !activeMarket ||
-    (address
-      ? approvalExpanded?.allowance == null ||
-        approvalExpanded?.allowance == undefined
-      : false)
+    (address ? approvalExpanded == undefined : false)
   ) {
     return (
       <Skeleton
@@ -105,6 +102,7 @@ export const BuyTrade: React.FC = () => {
         activeAssetPrice={activeAssetPrice}
         allowance={allowance}
         amount={amount.toString()}
+        isApprovalLocked={approvalExpanded?.is_locked}
       />
       <ActiveTrades />
     </BuyTradeBackground>

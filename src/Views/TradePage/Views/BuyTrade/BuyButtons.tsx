@@ -25,10 +25,12 @@ export const BuyButtons = ({
   allowance,
   activeAssetPrice,
   amount,
+  isApprovalLocked,
 }: {
   allowance: string;
   activeAssetPrice: string;
   amount: string;
+  isApprovalLocked: boolean | undefined;
 }) => {
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
@@ -142,15 +144,17 @@ export const BuyButtons = ({
                   </>
                 </RedBtn>
               </div>
-              <div
-                className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13 mt-3"
-                role={'button'}
-                onClick={() =>
-                  !account ? openConnectModal?.() : revokeApproveClick()
-                }
-              >
-                Revoke Approval
-              </div>
+              {!isApprovalLocked && (
+                <div
+                  className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13 mt-3"
+                  role={'button'}
+                  onClick={() =>
+                    !account ? openConnectModal?.() : revokeApproveClick()
+                  }
+                >
+                  Revoke Approval
+                </div>
+              )}
             </>
           )}
         </span>
