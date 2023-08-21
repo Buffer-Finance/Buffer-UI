@@ -6,7 +6,14 @@ import HorizontalTransition from '../Transitions/Horizontal';
 import { MobileDurationInput } from '@Views/TradePage/Components/MobileView/MobileDurationInput';
 import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
 import { BlueBtn } from '../V2-Button';
-import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
+import {
+  limitOrderStrikeAtom,
+  timeSelectorAtom,
+  tradeTypeAtom,
+} from '@Views/TradePage/atoms';
+import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
+import TimePickerSelection from '../IOSTimePicer/components/TimePickerSelection';
+import { IOSTimePicker } from '../IOSTimePicer';
 const tabs = ['Amount', 'Duration'];
 export const shutterActiveTabAtom = atom(tabs[0]);
 
@@ -17,12 +24,18 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
   const onSubmit = (e: React.FormEvent) => {
     closeShutter();
   };
+  const currentTime = useAtomValue(timeSelectorAtom);
+  const setDuration = useSetAtom(timeSelectorAtom);
+  const onChange = (timeValue) => {
+    setDuration((val) => ({ ...val, HHMM: timeValue }));
+  };
+
   return (
     <>
       <div className="flex w-full mb-4">
         {tabs.map((t) => (
           <div
-            className={`w-full text-f12 border-bottom-${
+            className={`w-full text-f12 py-3 border-bottom-${
               activeTab == t ? 'blue' : 'grey'
             } text-[#808191]  text-center`}
             key={t}
@@ -39,9 +52,11 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
             Continue
           </BlueBtn>
         </div>
-        <form onSubmit={onSubmit}>
-          <MobileDurationInput />
-        </form>
+        <IOSTimePicker
+          onChange={onChange}
+          initialValue={currentTime}
+          minDurationInMinutes={5}
+        />
       </HorizontalTransition>
     </>
   );

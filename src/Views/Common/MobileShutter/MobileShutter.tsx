@@ -5,6 +5,7 @@ import ShutterDrawer from 'react-bottom-drawer';
 import { useToast } from '@Contexts/Toast';
 import { ReactNode, useCallback } from 'react';
 import { MobileMarketPicker } from '@Views/TradePage/Components/MobileView/MarketPicker/MarketPicker';
+import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
 export const shutterModalAtom = atom<{
   open: 'LO' | 'BO' | 'MarketSelector' | false;
 }>({
@@ -58,6 +59,8 @@ export function useShutterHandlers() {
 }
 export interface MobileShutterProps {
   activeAssetPrice: string;
+  onChange: any;
+  value: any;
 }
 const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const { closeShutter, shutterState } = useShutterHandlers();
@@ -72,7 +75,7 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
     >
       {shutterState.open == 'BO' && <VanillaBOConfigs {...props} />}
       {shutterState.open == 'LO' && <LOConfigs {...props} />}
-      {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}
+      {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}
     </ShutterDrawer>
   );
 };

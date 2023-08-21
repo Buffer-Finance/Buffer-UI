@@ -6,6 +6,8 @@ import {
   useSearchParams,
   useNavigate,
 } from 'react-router-dom';
+import { MobileDurationInput } from '@Views/TradePage/Components/MobileView/MobileDurationInput';
+
 import { Alert, Snackbar } from '@mui/material';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';

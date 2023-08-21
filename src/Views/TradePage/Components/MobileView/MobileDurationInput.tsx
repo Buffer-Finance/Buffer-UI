@@ -4,33 +4,21 @@ import { PoolDropdown } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
+import { TimePicker } from 'react-ios-time-picker';
 
 const MobileDurationInput: React.FC<any> = ({}) => {
-  const [durationDisplayedOnPicker, setDurationDisplayedOnPicker] =
-    useState(undefined);
-  console.log(`test-durationDisplayedOnPicker: `, durationDisplayedOnPicker);
-  const onChange = (duration) => {
-    setDurationDisplayedOnPicker(duration);
+  const [value, setValue] = useState('10:00');
+  console.log(`MobileDurationInput-value: `, value);
+
+  const onChange = (timeValue) => {
+    console.log(`MobileDurationInput-timeValue: `, timeValue);
+    setValue(timeValue);
   };
-  const buttonClickHandler = () => {};
+
   return (
-    <>
-      <div>
-        <DurationPicker
-          onChange={onChange}
-          initialDuration={{ hours: 0, minutes: 0, seconds: 0 }}
-          maxHours={10}
-          noSeconds
-        />
-      </div>
-      <button
-        onClick={buttonClickHandler}
-        type="button"
-        style={{ float: 'right' }}
-      >
-        Confirm Selection
-      </button>
-    </>
+    <div>
+      <TimePicker onChange={onChange} value={value} />
+    </div>
   );
 };
 
