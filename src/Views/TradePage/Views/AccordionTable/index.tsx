@@ -152,6 +152,7 @@ export const History = ({ overflow }: { overflow?: number }) => {
       activePage={activePage}
       setActivePage={setActivePage}
       overflow={overflow}
+      isLoading={historyTrades === undefined}
     />
   );
 };
@@ -181,6 +182,7 @@ const PlatformHistory = ({ overflow }: { overflow?: number }) => {
       activePage={activePage}
       setActivePage={setActivePage}
       overflow={overflow}
+      isLoading={platformHistoryTrades === undefined}
     />
   );
 };
