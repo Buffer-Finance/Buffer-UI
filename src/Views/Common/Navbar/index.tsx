@@ -15,6 +15,8 @@ import { SettingsDD } from './SettingsDD';
 import { activeMarketFromStorageAtom } from 'src/globalStore';
 import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
+import { useShutterHandlers } from '../MobileShutter/MobileShutter';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 
 interface INavbar {}
 
@@ -32,6 +34,8 @@ export const Navbar: React.FC<INavbar> = () => {
       type: 'UPDATE_SIDEBAR_STATE',
     });
   };
+  const { openOngoingTradesShutter } = useShutterHandlers();
+  const [activeTrades, limitOrderTrades] = useOngoingTrades();
 
   const show = !urlSettings?.hide;
   return (
@@ -48,7 +52,10 @@ export const Navbar: React.FC<INavbar> = () => {
         </div> */}
         <div className="a1200:hidden flex gap-x-4 items-center pl-4">
           <MemoHamburgerSVG onClick={handleClose} />
-          <MemoWalletSVG />
+          <MemoWalletSVG
+            count={activeTrades.length + limitOrderTrades.length}
+            onClick={openOngoingTradesShutter}
+          />
         </div>
 
         {show && (

@@ -253,6 +253,11 @@ html .flip-y{
     display: none;
   }
 }
+@media (max-width: 1200px)  {
+ html{
+  height: 100vh;
+ }
+}
 html .MuiDialog-container {
   backdrop-filter: blur(10px);
 }

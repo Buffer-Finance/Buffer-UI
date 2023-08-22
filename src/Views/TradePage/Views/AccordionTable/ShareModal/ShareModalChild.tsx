@@ -15,7 +15,7 @@ import { ReferralCode } from './ReferralCode';
 import { ShareButtons } from './ShareButtons';
 import { ShareTradeData } from './ShareTradeData';
 
-export const ModalChild: React.FC<{}> = () => {
+export const ModalChild: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const { trade, expiryPrice, market, poolInfo } = useAtomValue(ShareBetAtom);
   const { showTradeSize } = useAtomValue(shareSettingsAtom);
   const ref = useRef(null);
@@ -29,6 +29,7 @@ export const ModalChild: React.FC<{}> = () => {
   const unit = market.token1;
   const token0 = market.token0;
   const tradeSize = divide(trade.trade_size, decimals) as string;
+  console.log(`ShareModalChild-tradeSize: `, tradeSize);
   const { pnl } = getPayout(trade, Number(expiryPrice), decimals);
 
   if (!pnl || !expiryPrice) {
@@ -37,7 +38,7 @@ export const ModalChild: React.FC<{}> = () => {
 
   return (
     <>
-      <div className="text-[#C3C2D4] w-[380px] h-[199px]">
+      <div className="text-[#C3C2D4] w-[380px] h-[199px]  origin-left sm:m-auto">
         <BGImage ref={ref}>
           <div className="flex justify-between items-center">
             <div className="flex flex-col justify-center">
@@ -118,8 +119,4 @@ const BGImage = styled.div`
   padding: 25px 20px;
   padding-top: 22px;
   height: 100%;
-
-  @media (max-width: 385px) {
-    transform: translateX(-6px);
-  }
 `;

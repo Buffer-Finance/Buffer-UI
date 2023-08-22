@@ -6,15 +6,21 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
 import { NoTrades } from './NoTrades';
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
+import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 
 const tableTypes = ['Trades', 'Limit Orders'];
 
-export const ActiveTrades: React.FC = () => {
+export const ActiveTrades: React.FC<{ isMobile?: boolean }> = ({
+  isMobile,
+}) => {
   const [tableType, setTableType] = useState(tableTypes[0]);
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
   const setIsTableShown = useSetAtom(isTableShownAtom);
   const isTableShown = useAtomValue(isTableShownAtom);
   const isLimitOrderTable = tableType == 'Limit Orders';
+  const navigate = useNavigate();
+  const { closeShutter } = useShutterHandlers();
   const trades = !isLimitOrderTable ? activeTrades : limitOrderTrades;
   return (
     <>
@@ -37,6 +43,10 @@ export const ActiveTrades: React.FC = () => {
             isTableShown ? 'cursor-not-allowed' : 'hover:text-1'
           }  transition-colors text-3`}
           onClick={() => {
+            if (isMobile) {
+              closeShutter();
+              navigate('/history');
+            }
             setIsTableShown(true);
           }}
         >

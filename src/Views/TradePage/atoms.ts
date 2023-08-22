@@ -119,3 +119,5 @@ export const historyTableActivePage = atom<number>(1);
 export const cancelTableActivePage = atom<number>(1);
 export const platformActiveTableActivePage = atom<number>(1);
 export const platformHistoryTableActivePage = atom<number>(1);
+
+export const tradeInspectMobileAtom = atom<{ trade?: TradeType }>({});

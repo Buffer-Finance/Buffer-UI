@@ -158,6 +158,9 @@ const TableBackground = styled.div`
           &.sm {
             padding: 1.7rem 0;
           }
+          @media (max-width: 600px) {
+            font-size: 12px;
+          }
           /* &:first-of-type {
             padding-left: var(--padding-left);
             border-radius: var(--border-radius) 0 0 var(--border-radius);

@@ -6,8 +6,16 @@ import { useToast } from '@Contexts/Toast';
 import { ReactNode, useCallback } from 'react';
 import { MobileMarketPicker } from '@Views/TradePage/Components/MobileView/MarketPicker/MarketPicker';
 import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
+import { ActiveTrades } from '@Views/TradePage/Views/BuyTrade/ActiveTrades';
+import { ModalChild } from '@Views/TradePage/Views/AccordionTable/ShareModal/ShareModalChild';
 export const shutterModalAtom = atom<{
-  open: 'LO' | 'BO' | 'MarketSelector' | false;
+  open:
+    | 'LO'
+    | 'BO'
+    | 'MarketSelector'
+    | 'ActiveOrders'
+    | 'ShareShutter'
+    | false;
 }>({
   open: false,
 });
@@ -49,25 +57,32 @@ export function useShutterHandlers() {
   const openMarketPickerShutter = useCallback(() => {
     setShutter({ open: 'MarketSelector' });
   }, [setShutter]);
+  const openOngoingTradesShutter = useCallback(() => {
+    setShutter({ open: 'ActiveOrders' });
+  }, [setShutter]);
+  const openShareShutter = useCallback(() => {
+    setShutter({ open: 'ShareShutter' });
+  }, [setShutter]);
   return {
     closeShutter,
     shutterState,
     openNormalOrdersShutter,
     openLOShutter,
     openMarketPickerShutter,
+    openOngoingTradesShutter,
+    openShareShutter,
   };
 }
 export interface MobileShutterProps {
   activeAssetPrice: string;
-  onChange: any;
-  value: any;
 }
 const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const { closeShutter, shutterState } = useShutterHandlers();
   const isOpen = typeof shutterState.open == 'string';
+  console.log(`MobileShutter-shutterState: `, shutterState);
   return (
     <ShutterDrawer
-      className="bg-1 border-none  outline-0 overflow-hidden "
+      className="bg-1 border-none  outline-0 overflow-hidden px-[0px] "
       isVisible={isOpen}
       onClose={closeShutter}
       // mountOnEnter
@@ -76,6 +91,12 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
       {shutterState.open == 'BO' && <VanillaBOConfigs {...props} />}
       {shutterState.open == 'LO' && <LOConfigs {...props} />}
       {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}
+      {shutterState.open == 'ActiveOrders' && <ActiveTrades isMobile />}{' '}
+      {shutterState.open == 'ShareShutter' && (
+        <div className="w-full flex flex-col b400:scale-[0.9] origin-left">
+          <ModalChild isMobile />
+        </div>
+      )}{' '}
     </ShutterDrawer>
   );
 };

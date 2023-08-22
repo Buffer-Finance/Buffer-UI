@@ -74,6 +74,7 @@ export const BuyButtons = ({
     switchPool?.pool
   );
 
+  console.log(`BuyButtons-isAssetActive: `, isAssetActive);
   if (!poolDetails) return <>Error: Pool not found</>;
 
   return (

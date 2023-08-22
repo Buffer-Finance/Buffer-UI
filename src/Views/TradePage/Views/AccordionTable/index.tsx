@@ -142,7 +142,13 @@ const CountChip = ({ count }: { count: number }) => (
   </div>
 );
 
-export const History = ({ overflow }: { overflow?: number }) => {
+export const History = ({
+  overflow,
+  onlyView,
+}: {
+  overflow?: number;
+  onlyView?: number[];
+}) => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
   return (
@@ -152,6 +158,7 @@ export const History = ({ overflow }: { overflow?: number }) => {
       activePage={activePage}
       setActivePage={setActivePage}
       overflow={overflow}
+      onlyView={onlyView}
     />
   );
 };

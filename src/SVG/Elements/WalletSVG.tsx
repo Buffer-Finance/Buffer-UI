@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 interface IProp extends React.SVGProps<SVGSVGElement> {
-  count?: number;
+  count: number;
 }
 function WalletSVG(props: IProp) {
   return (
     <div className="relative">
       <div className="absolute top-[-6px] right-[-8px] bg-[#B50909] text-f12 min-w-[16px] h-[16px] text-center rounded-full">
-        <span className="mt-[-2px] block">3</span>
+        {props.count && <span className="mt-[-2px] block">{props.count}</span>}
       </div>
       <svg width={22} height={22} fill="none" {...props}>
         <mask id="prefix__a" fill="#fff">
