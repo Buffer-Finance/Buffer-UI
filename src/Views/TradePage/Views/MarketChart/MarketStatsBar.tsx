@@ -103,6 +103,7 @@ const MarketStatsBar: React.FC<any> = ({}) => {
   let currentOIinPercent = null;
 
   const assetPrices = usePriceChange();
+  console.log('assetPrices', assetPrices);
   if (readcallData && switchPool && poolDetails) {
     maxFee = divide(
       readcallData?.maxTradeSizes[switchPool?.optionContract] ?? '0',
