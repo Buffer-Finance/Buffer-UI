@@ -370,7 +370,7 @@ export const Weekly = () => {
                   4pm UTC.
                 </>
               }
-              className="!mb-3"
+              className="!mb-3 text-f16"
             />
             {
               <div className="m-auto mb-7">
