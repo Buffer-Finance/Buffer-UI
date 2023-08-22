@@ -52,76 +52,75 @@ const TradeLog_sm: React.FC<any> = ({}) => {
     <>
       <ShutterProvider activeAssetPrice="222" />
       <ShareModal />
+      {inspectedTrade.trade && <TradeInspect_sm />}
     </>
   );
-  if (inspectedTrade.trade) {
-    return (
-      <>
-        {essntials}
-        <TradeInspect_sm />
-      </>
-    );
-  }
 
   return (
-    <main>
+    <main className="w-[max(80vw,400px] b400:w-full mx-auto px-3">
       {essntials}
-      <button
-        type="button"
-        className="flex items-center  text-f14 text-1 !bg-[#232334] m-3 rounded-md px-4 py-2"
-        ref={ref}
-        {...anchorProps}
-      >
-        {renderTab(activeTab)} <DDArrow className=" scale-150 ml-4" />
-      </button>
-      <ControlledMenu
-        {...menuState}
-        anchorRef={ref}
-        onClose={closeDropdown}
-        viewScroll="initial"
-        direction="bottom"
-        position="anchor"
-        align="end"
-        portal
-        menuClassName={
-          '!p-3 !rounded-[10px] hover:!rounded-[10px] !bg-[#232334]'
-        }
-        offsetY={10}
-      >
-        {tabs.map((s) => {
-          return (
-            <MenuItem
-              key={s}
-              className={({ hover }) => {
-                return ` text-[#808191] !p-3 !py-2 flex flex-col !items-start ${
-                  hover ? ' !rounded-[10px]' : ' '
-                }`;
-              }}
-              onClick={(e: ClickEvent) => {
-                e.keepOpen = true;
-                setActiveTab(s);
-              }}
-            >
-              <div
-                className={`flex gap-x-3 items-center ${
-                  activeTab == s ? 'text-1' : ''
-                } `}
-              >
-                <MemoCheckMark
-                  className={activeTab == s ? 'text-blue' : 'text-[#808191]'}
-                />
-                {renderTab(s)}
-              </div>
-              {s.includes(':') && (
-                <div className="w-full m-auto bg-[#808191] mt-3 mb-2 opacity-50 max-h-[1px] h-[1px]"></div>
-              )}
-            </MenuItem>
-          );
-        })}
-      </ControlledMenu>
-      {activeTab == 'History' && <History onlyView={[0, 6, 7, 8]} />}
-      {activeTab == 'Platform History' && (
-        <PlatformHistory onlyView={[0, 6, 7, 8]} />
+      {!inspectedTrade.trade && (
+        <>
+          <button
+            type="button"
+            className="flex items-center  text-f14 text-1 !bg-[#232334] m-3 rounded-md px-4 py-2"
+            ref={ref}
+            {...anchorProps}
+          >
+            {renderTab(activeTab)} <DDArrow className=" scale-150 ml-4" />
+          </button>
+          <ControlledMenu
+            {...menuState}
+            anchorRef={ref}
+            onClose={closeDropdown}
+            viewScroll="initial"
+            direction="bottom"
+            position="anchor"
+            align="end"
+            portal
+            menuClassName={
+              '!p-3 !rounded-[10px] hover:!rounded-[10px] !bg-[#232334]'
+            }
+            offsetY={10}
+          >
+            {tabs.map((s) => {
+              return (
+                <MenuItem
+                  key={s}
+                  className={({ hover }) => {
+                    return ` text-[#808191] !p-3 !py-2 flex flex-col !items-start ${
+                      hover ? ' !rounded-[10px]' : ' '
+                    }`;
+                  }}
+                  onClick={(e: ClickEvent) => {
+                    e.keepOpen = true;
+                    setActiveTab(s);
+                  }}
+                >
+                  <div
+                    className={`flex gap-x-3 items-center ${
+                      activeTab == s ? 'text-1' : ''
+                    } `}
+                  >
+                    <MemoCheckMark
+                      className={
+                        activeTab == s ? 'text-blue' : 'text-[#808191]'
+                      }
+                    />
+                    {renderTab(s)}
+                  </div>
+                  {s.includes(':') && (
+                    <div className="w-full m-auto bg-[#808191] mt-3 mb-2 opacity-50 max-h-[1px] h-[1px]"></div>
+                  )}
+                </MenuItem>
+              );
+            })}
+          </ControlledMenu>
+          {activeTab == 'History' && <History onlyView={[0, 6, 7, 8]} />}
+          {activeTab == 'Platform History' && (
+            <PlatformHistory onlyView={[0, 6, 7, 8]} />
+          )}
+        </>
       )}
     </main>
   );

@@ -5,8 +5,8 @@ import { RowBetween } from '@Views/TradePage/Components/Row';
 import { CategoryTabs } from './CategoryTabs';
 import { PoolRadio } from './PoolRadio';
 import { AssetSelectorTable } from './AssetSelectorTable';
-import { useAtom } from 'jotai';
-import { categoriesAtom } from '@Views/TradePage/atoms';
+import { useAtom, useAtomValue } from 'jotai';
+import { categoriesAtom, searchBarAtom } from '@Views/TradePage/atoms';
 import { useCategories } from '@Views/TradePage/Hooks/useCategories';
 import DDArrow from '@SVG/Elements/Arrow';
 import { useEffect } from 'react';
@@ -39,6 +39,8 @@ export const AssetSelectorDD: React.FC<{ isMobile: boolean }> = ({
 
 const MobileAccordionTable = () => {
   const { categories: assetTypes } = useCategories();
+  const searchValue = useAtomValue(searchBarAtom);
+
   const [activeAsset, setActiveAsset] = useAtom(categoriesAtom);
   useEffect(() => {
     setActiveAsset('Crypto');
@@ -47,6 +49,8 @@ const MobileAccordionTable = () => {
   return (
     <ol className="flex flex-col gap-y-[20px]">
       {assetTypes.map((child, idx) => {
+        // while search, favourites are already have star in there respected catagory
+        if (searchValue.length > 0 && child == 'favourites') return null;
         return (
           <li key={idx}>
             <div className="flex items-center justify-between">
@@ -72,9 +76,9 @@ const MobileAccordionTable = () => {
               </div>
               {!idx && <PoolRadio />}
             </div>
-            {child === activeAsset && (
-              <AssetSelectorTable group={activeAsset} />
-            )}
+            {child === activeAsset || searchValue.length > 0 ? (
+              <AssetSelectorTable group={child} />
+            ) : null}
           </li>
         );
       })}

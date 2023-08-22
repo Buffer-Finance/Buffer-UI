@@ -131,7 +131,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
   const table = [ExpiryPrice, OpenTime, Duration, CloseTime, Payout, Status];
   table.filter((t) => t);
   return (
-    <main className="mt-4 mx-4 flex flex-col  gap-y-5">
+    <div className="w-full flex flex-col  gap-y-5 ">
       <div className="flex w-full">
         <button className=" " onClick={() => setInspectedTrade({})}>
           <MemoBackIcon />
@@ -176,7 +176,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
           values={table.map((t) => t.value)}
         />
       </div>
-    </main>
+    </div>
   );
 };
 

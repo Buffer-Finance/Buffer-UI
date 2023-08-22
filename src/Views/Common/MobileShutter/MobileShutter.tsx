@@ -79,7 +79,6 @@ export interface MobileShutterProps {
 const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const { closeShutter, shutterState } = useShutterHandlers();
   const isOpen = typeof shutterState.open == 'string';
-  console.log(`MobileShutter-shutterState: `, shutterState);
   return (
     <ShutterDrawer
       className="bg-1 border-none  outline-0 overflow-hidden px-[0px] "
@@ -88,15 +87,17 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
       // mountOnEnter
       // unmountOnExit
     >
-      {shutterState.open == 'BO' && <VanillaBOConfigs {...props} />}
-      {shutterState.open == 'LO' && <LOConfigs {...props} />}
-      {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}
-      {shutterState.open == 'ActiveOrders' && <ActiveTrades isMobile />}{' '}
-      {shutterState.open == 'ShareShutter' && (
-        <div className="w-full flex flex-col b400:scale-[0.9] origin-left">
-          <ModalChild isMobile />
-        </div>
-      )}{' '}
+      <div className="w-full a600:w-[500px] mx-auto">
+        {shutterState.open == 'BO' && <VanillaBOConfigs {...props} />}
+        {shutterState.open == 'LO' && <LOConfigs {...props} />}
+        {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}
+        {shutterState.open == 'ActiveOrders' && <ActiveTrades isMobile />}{' '}
+        {shutterState.open == 'ShareShutter' && (
+          <div className="w-full flex flex-col b400:scale-[0.9] origin-left">
+            <ModalChild isMobile />
+          </div>
+        )}
+      </div>
     </ShutterDrawer>
   );
 };

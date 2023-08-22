@@ -19,7 +19,7 @@ import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { AssetCategory } from '@Views/TradePage/type';
 import { IconButton } from '@mui/material';
 import { useAtom, useSetAtom } from 'jotai';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { OneDayChange } from './OneDayChange';
 import styled from '@emotion/styled';
 import { ForexTimingsModalAtom } from '@Views/TradePage/atoms';
@@ -72,7 +72,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
     );
   }
 
-  const { filteredMarkets: updatedArr } = useAssetTableFilters();
+  const { filteredMarkets: updatedArr } = useAssetTableFilters(group);
 
   const BodyFormatter = (row: number, col: number) => {
     if (!updatedArr) return <>-</>;
@@ -228,6 +228,8 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
         return <div>Unhandled Column.</div>;
     }
   };
+
+  if (!updatedArr.length && group) return null;
   return (
     <AssetSelectorDDBackground>
       <BufferTable

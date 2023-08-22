@@ -88,6 +88,7 @@ const HistoryTable: React.FC<{
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
   const isNotMobile = useMedia('(min-width:1200px)');
+  const isMobile = useMedia('(max-width:600px)');
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -124,7 +125,7 @@ const HistoryTable: React.FC<{
         return (
           <AssetCell
             currentRow={trade}
-            split={!isNotMobile}
+            split={isMobile}
             // platform={platform}
           />
         );
