@@ -382,7 +382,7 @@ const OneCTModal: React.FC<any> = ({}) => {
     <ModalBase
       open={isModalOpen}
       onClose={() => setModal((m) => false)}
-      className="max-w-[600px] sm:!px-3"
+      className="max-w-[600px] sm:!p-5"
     >
       <div className="flex justify-between items-center">
         <div className="flex items-center">

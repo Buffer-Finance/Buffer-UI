@@ -89,7 +89,7 @@ const AppRoutes = () => {
     }
   }, [searchParam]);
   return (
-    <div className="relative root w-[100vw] ">
+    <div className="relative root w-[100vw] pb-[5px] ">
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>
