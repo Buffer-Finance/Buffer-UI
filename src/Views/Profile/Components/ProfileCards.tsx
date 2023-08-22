@@ -87,7 +87,7 @@ const Trading = ({
           className="mt-3"
           keyStyle={keyClasses + ' !text-[#7F87A7] !text-f16'}
           valueStyle={valueClasses + ' !text-f16'}
-          keysName={['Total Payout', 'Win Rate', 'Open Interest', 'Volume']}
+          keysName={['Total Payout', 'Net PnL', 'Open Interest', 'Volume']}
           values={[
             <div className={wrapperClasses}>
               <Display
