@@ -12,27 +12,28 @@ export const useApprvalAmount = () => {
   const { poolDetails } = useSwitchPool();
   const tokenName = poolDetails?.token;
 
-  const { data } = useSWR<{ allowance: number; nonce: number }>(
-    `${userAddress}-user-approval-${activeChainId}-tokenName-${tokenName}`,
-    {
-      fetcher: async () => {
-        if (!userAddress || !activeChainId || !tokenName) return null;
-        try {
-          const response = await axios.get(
-            baseUrl +
-              `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}`
-          );
-          return response.data;
-        } catch (e) {
-          console.log('useApprvalAmount-Error:', e);
-          return null;
-        }
-      },
-      refreshInterval: 100,
-    }
-  );
+  const { data, mutate } = useSWR<{
+    allowance: number;
+    nonce: number;
+    is_locked: boolean;
+  }>(`${userAddress}-user-approval-${activeChainId}-tokenName-${tokenName}`, {
+    fetcher: async () => {
+      if (!userAddress || !activeChainId || !tokenName) return null;
+      try {
+        const response = await axios.get(
+          baseUrl +
+            `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}`
+        );
+        return response.data;
+      } catch (e) {
+        console.log('useApprvalAmount-Error:', e);
+        return null;
+      }
+    },
+    refreshInterval: 100,
+  });
 
-  return data;
+  return { data, mutate };
 
   // console.log(data, 'useApprvalAmount-response');
 };
