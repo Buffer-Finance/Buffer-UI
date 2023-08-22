@@ -47,6 +47,7 @@ import { getSingatureCached } from '../cache';
 import { viemMulticall } from '@Utils/multicall';
 import { signTypedData } from '@wagmi/core';
 import { PublicClient } from 'viem';
+import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -62,7 +63,8 @@ export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
   const [settings] = useAtom(tradeSettingsAtom);
   const setPriceCache = useSetAtom(queuets2priceAtom);
-  const approvalExpanded = useApprvalAmount();
+  const { data: approvalExpanded, mutate: updateApprovalData } =
+    useApprvalAmount();
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
@@ -478,16 +480,27 @@ export const useBuyTradeActions = (userInput: string) => {
     // call api :15
     const deadline = (Math.round(Date.now() / 1000) + 84600).toString();
     try {
-      const [_, RSV] = await generateApprovalSignature(
+      const { nonce, res } = await generateApprovalSignatureWrapper(
         approvalExpanded?.nonce,
         ammount,
         address!,
-        tokenAddress,
+        tokenAddress as string,
         configData.router,
         deadline,
         activeChain.id,
         signTypedData
       );
+      const updatedApproval = await updateApprovalData();
+
+      if (nonce !== updatedApproval?.nonce) {
+        console.log(`useBuyTradeActions-nonce: `, nonce, updatedApproval);
+        return toastify({
+          id: 'nonce changed in db',
+          type: 'error',
+          msg: 'Please sign again.',
+        });
+      }
+      const [_, RSV] = res;
       const user_signature = await getSingatureCached(oneCTWallet);
       const apiSignature = {
         user: address,
