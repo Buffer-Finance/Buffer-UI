@@ -12,7 +12,7 @@ export const useApprvalAmount = () => {
   const { poolDetails } = useSwitchPool();
   const tokenName = poolDetails?.token;
 
-  const { data } = useSWR<{
+  const { data, mutate } = useSWR<{
     allowance: number;
     nonce: number;
     is_locked: boolean;
@@ -33,7 +33,7 @@ export const useApprvalAmount = () => {
     refreshInterval: 100,
   });
 
-  return data;
+  return { data, mutate };
 
   // console.log(data, 'useApprvalAmount-response');
 };

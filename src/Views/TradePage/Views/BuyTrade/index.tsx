@@ -46,7 +46,7 @@ export const BuyTrade: React.FC = () => {
   const marketPrice = useAtomValue(priceAtom);
   const { calculatePayout } = useSelectedAssetPayout();
 
-  const approvalExpanded = useApprvalAmount();
+  const { data: approvalExpanded } = useApprvalAmount();
   if (
     !switchPool ||
     !poolDetails ||
