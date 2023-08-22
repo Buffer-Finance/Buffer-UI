@@ -175,7 +175,13 @@ const Cancelled = ({ overflow }: { overflow?: number }) => {
   );
 };
 
-const PlatformHistory = ({ overflow }: { overflow?: number }) => {
+export const PlatformHistory = ({
+  overflow,
+  onlyView,
+}: {
+  overflow?: number;
+  onlyView?: number[];
+}) => {
   const { page_data: platformHistoryTrades, total_pages } =
     usePlatformHistoryTrades();
   const [activePage, setActivePage] = useAtom(platformHistoryTableActivePage);
@@ -188,6 +194,7 @@ const PlatformHistory = ({ overflow }: { overflow?: number }) => {
       activePage={activePage}
       setActivePage={setActivePage}
       overflow={overflow}
+      onlyView={onlyView}
     />
   );
 };
