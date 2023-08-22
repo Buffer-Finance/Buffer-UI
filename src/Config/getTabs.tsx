@@ -298,7 +298,7 @@ export const getTabs = (
   isExternalLink: boolean;
 }[] => {
   const market = marketFromStorage || defaultMarket;
-  if (import.meta.env.VITE_ENV === 'MAINNET') {
+  if (import.meta.env.VITE_ENV.toUpperCase() === 'MAINNET') {
     return [
       {
         to: `/binary/` + market,
@@ -306,9 +306,10 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+
       {
-        to: `/earn`,
-        name: 'Earn',
+        to: `/referral`,
+        name: 'Referral',
         subTabs: [],
         isExternalLink: false,
       },
@@ -330,6 +331,7 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+
       {
         to: `/dashboard`,
         name: 'Dashboard',
@@ -342,28 +344,51 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-      // {
-      //   to: `/leaderboard/trades`,
-      //   name: 'All Trades',
-      //   subTabs: [],
-      //   isExternalLink: false,
-      // },
-
       {
-        to: `/referral`,
-        name: 'Referral',
+        to: `https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/`,
+        name: 'Earn',
         subTabs: [],
-        isExternalLink: false,
+        isExternalLink: true,
       },
       {
-        to: `https://testnet.buffer.finance/`,
-        name: 'Practice Trading',
+        to: 'https://twitter.com/Buffer_Finance',
+        name: 'Twitter',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://github.com/Buffer-Finance',
+        name: 'Github',
         subTabs: [],
         isExternalLink: true,
       },
       {
         to: 'https://docs.buffer.finance/introduction/readme',
         name: 'Docs',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: '/#',
+        name: 'YouTube',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://discord.com/invite/Hj4QF92Kdc',
+        name: 'Discord',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://t.me/bufferfinance',
+        name: 'Telegram',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2',
+        name: 'Mirror',
         subTabs: [],
         isExternalLink: true,
       },
@@ -383,11 +408,12 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: `/earn`,
-        name: 'Earn',
+        to: `/referral`,
+        name: 'Referral',
         subTabs: [],
         isExternalLink: false,
       },
+
       {
         to: `/profile`,
         name: 'Profile',
@@ -406,6 +432,7 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+
       {
         to: `/dashboard`,
         name: 'Dashboard',
@@ -419,26 +446,61 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-      // {
-      //   to: `/leaderboard/trades`,
-      //   name: 'All Trades',
-      //   subTabs: [],
-      //   isExternalLink: false,
-      // },
-
       {
-        to: `/referral`,
-        name: 'Referral',
+        to: `https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/`,
+        name: 'Earn',
         subTabs: [],
-        isExternalLink: false,
+        isExternalLink: true,
       },
-
+      {
+        to: 'https://twitter.com/Buffer_Finance',
+        name: 'Twitter',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://github.com/Buffer-Finance',
+        name: 'Github',
+        subTabs: [],
+        isExternalLink: true,
+      },
       {
         to: 'https://docs.buffer.finance/introduction/readme',
         name: 'Docs',
         subTabs: [],
         isExternalLink: true,
       },
+      {
+        to: '/#',
+        name: 'YouTube',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://discord.com/invite/Hj4QF92Kdc',
+        name: 'Discord',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://t.me/bufferfinance',
+        name: 'Telegram',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2',
+        name: 'Mirror',
+        subTabs: [],
+        isExternalLink: true,
+      },
+
+      // {
+      //   to: `/leaderboard/trades`,
+      //   name: 'All Trades',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
     ];
 };
 export const getMobileTabs = (
