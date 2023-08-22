@@ -8,6 +8,7 @@ import { useMemo } from 'react';
 import { getTokenXquery } from './getTokenXquery';
 import { getTokenX24hrsquery } from './getTokenX24hrsquery';
 import { getLinuxTimestampBefore24Hours } from '@Views/DashboardV2/utils/getLinuxTimestampBefore24Hours';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 
 export const useGraphqlRequest = () => {
   const { activeChain } = useActiveChain();
@@ -15,6 +16,8 @@ export const useGraphqlRequest = () => {
   const graphqlURL = config.graph.MAIN;
   const poolNames = usePoolNames();
   const prevDayEpoch = getLinuxTimestampBefore24Hours();
+  const poolsByAsset = usePoolByAsset();
+
   const tokensArray = useMemo(() => {
     const array = [...poolNames];
     array.unshift('total');
@@ -25,8 +28,8 @@ export const useGraphqlRequest = () => {
     return getTokenXquery(tokensArray);
   }, []);
   const stats24hrsQuery = useMemo(() => {
-    return getTokenX24hrsquery(tokensArray, prevDayEpoch);
-  }, [prevDayEpoch]);
+    return getTokenX24hrsquery(tokensArray, prevDayEpoch, poolsByAsset);
+  }, [prevDayEpoch, poolsByAsset]);
   return useSWR('arbitrum-overview', {
     fetcher: async () => {
       const response = await axios.post(graphqlURL, {
