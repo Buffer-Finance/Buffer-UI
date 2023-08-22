@@ -117,7 +117,11 @@ const AccordionTable: React.FC<any> = ({}) => {
         } flex flex-col transition-all  overflow-y-hidden `}
       >
         {activeTable == 'Trades' ? (
-          <OngoingTradesTable trades={activeTrades} overflow={400} />
+          <OngoingTradesTable
+            trades={activeTrades}
+            overflow={400}
+            isLoading={false}
+          />
         ) : activeTable == 'Limit Orders' ? (
           <LimitOrderTable trades={limitOrders} overflow={400} />
         ) : activeTable == 'Platform Trades' ? (
@@ -165,6 +169,7 @@ const Cancelled = ({ overflow }: { overflow?: number }) => {
       trades={canclledTrades}
       totalPages={total_pages}
       overflow={overflow}
+      isLoading={canclledTrades === undefined}
     />
   );
 };
@@ -200,6 +205,7 @@ const PlatformOngoing = ({ overflow }: { overflow?: number }) => {
       totalPages={total_pages}
       setActivePage={setActivePage}
       overflow={overflow}
+      isLoading={platformActiveTrades === undefined}
     />
   );
 };

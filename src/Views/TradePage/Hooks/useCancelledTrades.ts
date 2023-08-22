@@ -45,7 +45,7 @@ const useCancelledTrades = () => {
       refreshInterval,
     }
   );
-  return data || ({ page_data: [], total_pages: 1 } as tradesApiResponseType);
+  return data || { page_data: undefined, total_pages: 1 };
 };
 
 export { useCancelledTrades };

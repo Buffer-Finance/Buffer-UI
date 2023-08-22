@@ -35,12 +35,13 @@ import { AssetCell } from './AssetCell';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 
 export const OngoingTradesTable: React.FC<{
-  trades: TradeType[];
+  trades: TradeType[] | undefined;
   platform?: boolean;
   activePage?: number;
   setActivePage?: (page: number) => void;
   totalPages?: number;
   overflow?: number;
+  isLoading: boolean;
 }> = ({
   trades,
   platform,
@@ -48,6 +49,7 @@ export const OngoingTradesTable: React.FC<{
   setActivePage,
   totalPages,
   overflow,
+  isLoading,
 }) => {
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
@@ -96,6 +98,7 @@ export const OngoingTradesTable: React.FC<{
   const { getPoolInfo } = usePoolInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
+    if (trades === undefined) return <></>;
     const trade = trades?.[row];
     if (!trade) return 'Problem';
 
@@ -248,6 +251,7 @@ export const OngoingTradesTable: React.FC<{
       onRowClick={console.log}
       overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
+      loading={isLoading}
     />
   );
 };

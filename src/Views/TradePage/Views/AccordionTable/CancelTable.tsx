@@ -16,11 +16,12 @@ import { cancelTableActivePage } from '@Views/TradePage/atoms';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 
 export const CancelledTable: React.FC<{
-  trades: TradeType[];
+  trades: TradeType[] | undefined;
   totalPages: number;
   platform?: boolean;
   overflow?: number;
-}> = ({ trades, platform, totalPages, overflow }) => {
+  isLoading: boolean;
+}> = ({ trades, platform, totalPages, overflow, isLoading }) => {
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
   const { getPoolInfo } = usePoolInfo();
 
@@ -48,6 +49,7 @@ export const CancelledTable: React.FC<{
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
+    if (trades === undefined) return <></>;
     const trade = trades?.[row];
     const poolInfo = getPoolInfo(trade.pool.pool);
 
@@ -120,6 +122,7 @@ export const CancelledTable: React.FC<{
       onRowClick={console.log}
       overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
+      loading={isLoading}
     />
   );
 };
