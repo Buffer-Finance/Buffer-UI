@@ -6,7 +6,7 @@ const SidebarCSS = styled.div`
     padding-bottom: 10px;
 
     border-top: 1px solid #4a4646;
-    border-bottom: 1px solid #4a4646;
+    /* border-bottom: 1px solid #4a4646; */
   }
   .collapse-icon {
     color: var(--text-1);

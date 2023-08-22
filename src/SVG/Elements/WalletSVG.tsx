@@ -6,9 +6,11 @@ interface IProp extends React.SVGProps<SVGSVGElement> {
 function WalletSVG(props: IProp) {
   return (
     <div className="relative">
-      <div className="absolute top-[-6px] right-[-8px] bg-[#B50909] text-f12 min-w-[16px] h-[16px] text-center rounded-full">
-        {props.count && <span className="mt-[-2px] block">{props.count}</span>}
-      </div>
+      {props.count ? (
+        <div className="absolute top-[-6px] right-[-8px] bg-[#B50909] text-f12 min-w-[16px] h-[16px] text-center rounded-full">
+          <span className="mt-[-2px] block">{props.count}</span>
+        </div>
+      ) : null}
       <svg width={22} height={22} fill="none" {...props}>
         <mask id="prefix__a" fill="#fff">
           <rect y={5} width={22} height={17} rx={2} />

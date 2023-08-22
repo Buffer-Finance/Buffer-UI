@@ -120,14 +120,14 @@ const SideBar: React.FC<any> = () => {
               </NavLink>
             );
           })}
-          <div className=" text-2 mb-3 mt-[10vh] text-center text-f13 pl-[2rem]">
-            Connect with us{' '}
+          <div className=" text-2 mb-3 mt-[10vh] text-left text-f13 pl-[2rem]">
+            Connect with us on{' '}
           </div>
-          <div className=" bbborderrr">
-            <div className="flex max-w-[140px] mx-auto flex-row items-center justify-center flex-wrap gap-[11px] px-3">
+          <div className=" bbborderrr flex w-full justify-center">
+            <div className="flex max-w-[140px] sm:max-w-full w-full flex-row items-center  flex-wrap gap-[4px] pl-[2rem]">
               {social.map((S) => {
                 return (
-                  <a className="unset" href={S.link} target="_blank">
+                  <a key={S} className="unset" href={S.link} target="_blank">
                     <span className="text-2 ">
                       <S.Img className="" />
                     </span>

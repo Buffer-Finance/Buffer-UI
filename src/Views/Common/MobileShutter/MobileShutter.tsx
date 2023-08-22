@@ -87,7 +87,7 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
       // mountOnEnter
       // unmountOnExit
     >
-      <div className="w-full a600:w-[500px] mx-auto">
+      <div className="w-full a600:w-[500px] mx-auto mb-3 mt-2">
         {shutterState.open == 'BO' && <VanillaBOConfigs {...props} />}
         {shutterState.open == 'LO' && <LOConfigs {...props} />}
         {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}

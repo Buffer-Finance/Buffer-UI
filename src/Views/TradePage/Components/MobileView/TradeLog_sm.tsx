@@ -14,7 +14,7 @@ import {
   useClick,
   useMenuState,
 } from '@szhsin/react-menu';
-import { useAtomValue } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { TradeInspect_sm } from './TradeInspect_sm';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
@@ -25,6 +25,8 @@ import ShutterProvider, {
 import MemoCheckMark from '@SVG/Elements/CheckMark';
 
 const renderTab = (s) => (s.includes(':') ? s.split(':')[0] : s);
+const tabs = ['History', 'Cancelled:b', 'Platform Trades', 'Platform History'];
+const activeTabAtom = atom<string>(tabs[0]);
 const TradeLog_sm: React.FC<any> = ({}) => {
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
@@ -34,14 +36,9 @@ const TradeLog_sm: React.FC<any> = ({}) => {
     toggleMenu(false);
   }
   const inspectedTrade = useAtomValue(tradeInspectMobileAtom);
-  const tabs = [
-    'History',
-    'Cancelled:b',
-    'Platform Trades',
-    'Platform History',
-  ];
+
   const { closeShutter } = useShutterHandlers();
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [activeTab, setActiveTab] = useAtom(activeTabAtom);
   useEffect(() => {
     closeShutter();
     return closeShutter;
@@ -59,13 +56,13 @@ const TradeLog_sm: React.FC<any> = ({}) => {
   );
 
   return (
-    <main className="w-[max(80vw,400px] b400:w-full mx-auto px-3">
+    <main className="w-full a600:w-[500px] mx-auto px-3 mt-4">
       {essntials}
       {!inspectedTrade.trade && (
         <>
           <button
             type="button"
-            className="flex items-center  text-f14 text-1 !bg-[#232334] m-3 rounded-md px-4 py-2"
+            className="flex items-center  text-f14 text-1 !bg-[#232334] mx-3 mb-2 rounded-md px-4 py-2"
             ref={ref}
             {...anchorProps}
           >
@@ -91,7 +88,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
                   key={s}
                   className={({ hover }) => {
                     return ` text-[#808191] !p-3 !py-2 flex flex-col !items-start ${
-                      hover ? ' !rounded-[10px]' : ' '
+                      hover ? ' !rounded-[10px] !bg-[#232334]' : ' '
                     }`;
                   }}
                   onClick={(e: ClickEvent) => {
@@ -123,7 +120,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
             <PlatformHistory onlyView={[0, 6, 7, 8]} />
           )}
           {activeTab == 'Platform Trades' && (
-            <PlatformOngoing onlyView={[0, 1, 2, 3]} />
+            <PlatformOngoing onlyView={[0, 1, 4, 6]} />
           )}
           {activeTab == 'Cancelled:b' && <Cancelled onlyView={[0, 1, 2, 4]} />}
         </>

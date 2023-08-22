@@ -14,6 +14,7 @@ import { AssetCell } from './AssetCell';
 import { useAtom } from 'jotai';
 import { cancelTableActivePage } from '@Views/TradePage/atoms';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useMedia } from 'react-use';
 
 export const CancelledTable: React.FC<{
   trades: TradeType[];
@@ -24,11 +25,18 @@ export const CancelledTable: React.FC<{
 }> = ({ trades, platform, totalPages, overflow, onlyView }) => {
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
   const { getPoolInfo } = usePoolInfo();
+  const isMobile = useMedia('(max-width:600px)');
 
+  let strikePriceHeading = 'Strike Price';
+  let tradeSizeHeading = 'Trade Size';
+  if (isMobile) {
+    strikePriceHeading = 'Strike';
+    tradeSizeHeading = 'Size';
+  }
   const headNameArray = [
     'Asset',
-    'Strike Price',
-    'Trade Size',
+    strikePriceHeading,
+    tradeSizeHeading,
     'Queue',
     'Cancellation',
     // 'Reason',
@@ -56,7 +64,9 @@ export const CancelledTable: React.FC<{
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} />;
       case TableColumn.Asset:
-        return <AssetCell currentRow={trade} platform={platform} />;
+        return (
+          <AssetCell currentRow={trade} platform={platform} split={isMobile} />
+        );
 
       case TableColumn.QueueTime:
         return (

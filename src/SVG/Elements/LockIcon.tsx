@@ -6,7 +6,7 @@ const LockIcon = (props: SVGProps<SVGSVGElement>) => (
     width={34}
     height={20}
     fill="none"
-    className="ml-2"
+    className="ml-2 sm:ml-[0px]"
     {...props}
   >
     <g filter="url(#a)">
