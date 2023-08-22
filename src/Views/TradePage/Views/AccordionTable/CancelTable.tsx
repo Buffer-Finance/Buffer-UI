@@ -18,9 +18,10 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 export const CancelledTable: React.FC<{
   trades: TradeType[];
   totalPages: number;
+  onlyView?: number[];
   platform?: boolean;
   overflow?: number;
-}> = ({ trades, platform, totalPages, overflow }) => {
+}> = ({ trades, platform, totalPages, overflow, onlyView }) => {
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
   const { getPoolInfo } = usePoolInfo();
 
@@ -118,6 +119,7 @@ export const CancelledTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
+      showOnly={onlyView}
       overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
     />

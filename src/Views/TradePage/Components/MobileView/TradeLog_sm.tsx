@@ -1,8 +1,10 @@
 import DDArrow from '@SVG/Elements/Arrow';
 import DDIcon from '@SVG/Elements/DDIcon';
 import {
+  Cancelled,
   History,
   PlatformHistory,
+  PlatformOngoing,
 } from '@Views/TradePage/Views/AccordionTable';
 import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
 import {
@@ -93,7 +95,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
                     }`;
                   }}
                   onClick={(e: ClickEvent) => {
-                    e.keepOpen = true;
+                    e.keepOpen = false;
                     setActiveTab(s);
                   }}
                 >
@@ -120,6 +122,10 @@ const TradeLog_sm: React.FC<any> = ({}) => {
           {activeTab == 'Platform History' && (
             <PlatformHistory onlyView={[0, 6, 7, 8]} />
           )}
+          {activeTab == 'Platform Trades' && (
+            <PlatformOngoing onlyView={[0, 1, 2, 3]} />
+          )}
+          {activeTab == 'Cancelled:b' && <Cancelled onlyView={[0, 1, 2, 4]} />}
         </>
       )}
     </main>

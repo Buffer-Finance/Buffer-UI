@@ -37,6 +37,7 @@ import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[];
   platform?: boolean;
+  onlyView?: number[];
   activePage?: number;
   setActivePage?: (page: number) => void;
   totalPages?: number;
@@ -46,6 +47,7 @@ export const OngoingTradesTable: React.FC<{
   platform,
   activePage,
   setActivePage,
+  onlyView,
   totalPages,
   overflow,
 }) => {
@@ -243,6 +245,7 @@ export const OngoingTradesTable: React.FC<{
       headerJSX={HeaderFomatter}
       bodyJSX={BodyFormatter}
       cols={headNameArray.length}
+      showOnly={onlyView}
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
