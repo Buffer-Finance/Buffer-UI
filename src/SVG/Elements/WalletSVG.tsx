@@ -20,7 +20,7 @@ function WalletSVG(props: IProp) {
           width={22}
           height={17}
           rx={2}
-          stroke="#808191"
+          stroke="currentColor"
           strokeWidth={5}
           mask="url(#prefix__a)"
         />
@@ -32,7 +32,7 @@ function WalletSVG(props: IProp) {
           width={11}
           height={7}
           rx={2}
-          stroke="#808191"
+          stroke="currentColor"
           strokeWidth={5}
           mask="url(#prefix__b)"
         />

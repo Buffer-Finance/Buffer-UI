@@ -56,7 +56,7 @@ export const ActiveTrades: React.FC<{ isMobile?: boolean }> = ({
       {trades && trades.length === 0 ? (
         <NoTrades isLimitOrderTable={isLimitOrderTable} />
       ) : (
-        <TradesBackground>
+        <TradesBackground className="b1200:mb-4">
           {/* <div className="w-full h-[900px] bg-red"></div> */}
           {trades.map((t) => (
             <TradeCard trade={t} key={t.id} />

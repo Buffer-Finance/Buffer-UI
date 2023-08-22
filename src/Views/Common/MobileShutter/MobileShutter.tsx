@@ -81,7 +81,7 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const isOpen = typeof shutterState.open == 'string';
   return (
     <ShutterDrawer
-      className="bg-1 border-none  outline-0 overflow-hidden px-[0px] "
+      className="bg-[#1F2128] border-none  outline-0 overflow-hidden px-[0px] "
       isVisible={isOpen}
       onClose={closeShutter}
       // mountOnEnter

@@ -18,7 +18,7 @@ const AssetSelectorDDBackground = styled.div`
   background-color: #232334;
 `;
 
-export const AssetSelectorDD: React.FC<{ isMobile: boolean }> = ({
+export const AssetSelectorDD: React.FC<{ isMobile?: boolean }> = ({
   isMobile,
 }) => {
   return (

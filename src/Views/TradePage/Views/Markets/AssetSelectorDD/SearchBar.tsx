@@ -10,7 +10,7 @@ export const SearchBar: React.FC = () => {
       <input
         value={searchText}
         type="text"
-        className={`relative bg-[#1c1c28] pl-6 pr-3 py-4 rounded-[10px] outline-none w-full text-f12 text-1`}
+        className={`relative bg-[#1c1c28] b1200:bg-[#282B39] pl-6 pr-3 py-4 rounded-[10px] outline-none w-full text-f12 text-1`}
         onChange={(e) => {
           setSearchText(e.target.value);
         }}

@@ -34,7 +34,7 @@ export const Navbar: React.FC<INavbar> = () => {
       type: 'UPDATE_SIDEBAR_STATE',
     });
   };
-  const { openOngoingTradesShutter } = useShutterHandlers();
+  const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
 
   const show = !urlSettings?.hide;
@@ -54,6 +54,9 @@ export const Navbar: React.FC<INavbar> = () => {
           <MemoHamburgerSVG onClick={handleClose} />
           <MemoWalletSVG
             count={activeTrades.length + limitOrderTrades.length}
+            className={
+              shutterState.open == 'ActiveOrders' ? 'text-1' : 'text-[#808191]'
+            }
             onClick={openOngoingTradesShutter}
           />
         </div>

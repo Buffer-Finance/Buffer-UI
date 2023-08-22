@@ -14,7 +14,7 @@ import {
   useClick,
   useMenuState,
 } from '@szhsin/react-menu';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { TradeInspect_sm } from './TradeInspect_sm';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
@@ -36,7 +36,11 @@ const TradeLog_sm: React.FC<any> = ({}) => {
     toggleMenu(false);
   }
   const inspectedTrade = useAtomValue(tradeInspectMobileAtom);
-
+  const setInspectedTrade = useSetAtom(tradeInspectMobileAtom);
+  useEffect(() => {
+    setInspectedTrade({});
+    return () => setInspectedTrade({});
+  }, []);
   const { closeShutter } = useShutterHandlers();
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
   useEffect(() => {

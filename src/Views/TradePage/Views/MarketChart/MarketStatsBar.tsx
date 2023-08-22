@@ -144,7 +144,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       data: (
         <OneDayChange
           oneDayChange={oneDayChange}
-          className="text-f12"
+          className="text-f12 "
           svgClassName="scale-125"
         />
       ),
@@ -209,7 +209,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
           token1={activeMarket.token1}
         />
       )}
-      <div>
+      <div className="b1200:flex flex-col items-end">
         <MarketPrice
           token0={activeMarket.token0}
           token1={activeMarket.token1}

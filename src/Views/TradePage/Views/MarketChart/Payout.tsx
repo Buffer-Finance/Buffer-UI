@@ -28,7 +28,7 @@ export const Payout: React.FC<{
   if (payout === undefined || payout === null) {
     return <div>fetching...</div>;
   }
-  return <div>{payout}%</div>;
+  return <div className="b1200:text-center">{payout}%</div>;
 };
 
 export const useSelectedAssetPayout = () => {

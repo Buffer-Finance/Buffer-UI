@@ -3228,7 +3228,7 @@ html .pagination-root {
 }
 
 .react-ios-time-picker {
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: none !important;
@@ -3293,7 +3293,7 @@ html .pagination-root {
 .react-ios-time-picker-selected-overlay {
   position: absolute;
   border-radius: 6px;
-  background-color: #2c2c2f;
+  background-color: #282B39;
   pointer-events: none;
   margin: 0 10px;
   left: 0;
@@ -3403,6 +3403,7 @@ html .pagination-root {
 
 .react-ios-time-picker-cell-inner-selected {
   /* font-weight: 500; */
+  background-color: ;
   color: #f7f7f7;
   font-size: 16px;
 }

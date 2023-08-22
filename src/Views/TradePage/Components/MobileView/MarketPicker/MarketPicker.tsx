@@ -26,9 +26,11 @@ const MarketPicker: React.FC<any> = ({}) => {
         <PairTokenImage pair={activeMarket} />
       </div>
       {activeMarket?.pair}
-      <DDArrow
-        className={` transition-all duration-300 ml-4 ease-out scale-125 `}
-      />{' '}
+      <div className="ml-4 bg-[#232334] w-[23px] h-[23px] rounded-[4px] grid place-items-center">
+        <DDArrow
+          className={` transition-all duration-300  ease-out scale-125 `}
+        />
+      </div>{' '}
     </button>
   );
 };
