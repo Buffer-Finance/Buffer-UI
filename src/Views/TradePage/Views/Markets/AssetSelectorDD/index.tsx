@@ -67,11 +67,13 @@ const MobileAccordionTable = () => {
               >
                 <div className="flex gap-x-3 items-center">
                   {child}
-                  <DDArrow
-                    className={` transition-all duration-300  ease-out scale-125  ${
-                      child === activeAsset && ' rotate-180 '
-                    } `}
-                  />
+                  {searchValue.length > 0 ? null : (
+                    <DDArrow
+                      className={` transition-all duration-300  ease-out scale-125  ${
+                        child === activeAsset && ' rotate-180 '
+                      } `}
+                    />
+                  )}
                 </div>
               </div>
               {!idx && <PoolRadio />}

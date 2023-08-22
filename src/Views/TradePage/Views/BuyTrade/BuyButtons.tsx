@@ -116,7 +116,7 @@ export const BuyButtons = ({
             </BlueBtn>
           ) : (
             <>
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <GreenBtn
                   onClick={() => buyTrade(true)}
                   isDisabled={isForex && !isAssetActive}
@@ -126,12 +126,18 @@ export const BuyButtons = ({
                     loading?.is_up === true
                   }
                   test-id="last-up-btn"
-                  className=" text-1 bg-green hover:text-1"
+                  className={` text-1 bg-green hover:text-1 ${
+                    center
+                      ? tradeType != 'Limit'
+                        ? 'min-h-full'
+                        : '!h-fit'
+                      : ''
+                  }`}
                 >
                   {center && tradeType == 'Limit' ? (
-                    <div className="flex justify-between items-center w-full px-4 py-2 ">
+                    <div className="flex justify-between items-center w-full px-[13px] py-[3px] pt-[2px] ">
                       <div className="flex-col flex items-start">
-                        <span className="text-f14 font-bold">Up</span>
+                        <span className="text-f14 font-bold mb-[-2px]">Up</span>
                         <span className="text-f11">{limitStrike}</span>
                       </div>
                       <div>
@@ -153,13 +159,21 @@ export const BuyButtons = ({
                     typeof loading !== 'number' &&
                     loading?.is_up === false
                   }
-                  className=" text-1 bg-red "
+                  className={` text-1 bg-red ${
+                    center
+                      ? tradeType != 'Limit'
+                        ? 'min-h-full'
+                        : '!h-fit'
+                      : ''
+                  }`}
                   onClick={() => buyTrade(false)}
                 >
                   {center && tradeType == 'Limit' ? (
-                    <div className="flex justify-between items-center w-full px-5 flex-row-reverse ">
+                    <div className="flex justify-between items-center w-full px-[13px] py-[3px] pt-[2px] flex-row-reverse ">
                       <div className="flex-col flex items-end">
-                        <span className="text-f14 font-bold">Down</span>
+                        <span className="text-f14 font-bold mb-[-2px]">
+                          Down
+                        </span>
                         <span className="text-f11">{limitStrike}</span>
                       </div>
                       <div>

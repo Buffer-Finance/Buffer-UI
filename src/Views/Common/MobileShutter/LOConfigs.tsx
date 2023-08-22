@@ -31,7 +31,7 @@ const LOConfigs: React.FC<MobileShutterProps> = ({ activeAssetPrice }) => {
         <span className="text-f12 text-[#808191] my-3 flex">
           Place an order on&nbsp;
           {activeMarket?.pair ? (
-            <div className="w-[20px] text-1">
+            <div className="w-[20px] text-1 h-[20px]">
               <PairTokenImage pair={activeMarket}></PairTokenImage>
             </div>
           ) : null}
@@ -41,13 +41,13 @@ const LOConfigs: React.FC<MobileShutterProps> = ({ activeAssetPrice }) => {
           </span>
         </span>
         <span className="text-f12 text-[#808191] my-3 mb-6">Payout Limit</span>
-        <div className="flex gap-x-4  my-3">
+        <div className="flex gap-x-1  my-3 mb-4">
           {LOPayoutPresets.map((s) => {
             return (
               <button
                 key={s}
                 onClick={() => setMinLOPayout(s)}
-                className={`text-f12 px-3 py-1 rounded-[3px] ${
+                className={`text-f12 px-3 py-1  rounded-[3px] ${
                   s == minLOPayout
                     ? 'bg-blue text-1'
                     : 'bg-[#282B39] text-[#C3C2D4]'
@@ -68,7 +68,7 @@ const LOConfigs: React.FC<MobileShutterProps> = ({ activeAssetPrice }) => {
         <div>
           <span className="text-f12 text-[#808191] my-3">Trigger Price</span>
           <StrikePricePicker
-            className="w-full text-left p-2 px-3"
+            className="w-full text-left p-2 px-3 !mb-3"
             initialStrike={activeAssetPrice}
             precision={2}
           />

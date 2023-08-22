@@ -38,7 +38,7 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
       <div className="flex w-full mb-4">
         {tabs.map((t) => (
           <div
-            className={`w-full text-f12 py-3 border-bottom-${
+            className={`w-full text-f12 pb-3 border-bottom-${
               activeTab == t ? 'blue' : 'grey'
             } text-[#808191]  text-center`}
             key={t}
@@ -51,7 +51,7 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
       <HorizontalTransition value={tabs.indexOf(activeTab)}>
         <div>
           <TradeSizeSelector onSubmit={onSubmit} />
-          <BlueBtn onClick={onSubmit} className="mt-3">
+          <BlueBtn onClick={onSubmit} className="mt-4">
             Continue
           </BlueBtn>
         </div>

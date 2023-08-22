@@ -173,7 +173,7 @@ export const AccountDropdown: React.FC = () => {
                       <span className="sm:hidden">{chain.name}</span>
                     </div>
                     <DDArrow
-                      className={` transition-all duration-300 ml-1 ease-out mr-2`}
+                      className={` transition-all duration-300 ml-2 ease-out mr-2`}
                     />
                   </div>
                   {/* Accound DD */}

@@ -12,7 +12,7 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
   const currentTime = useAtomValue(timeSelectorAtom);
 
   return (
-    <div className="flex items-center gap-x-3">
+    <div className="flex items-center gap-x-3 font-semibold">
       <div className="flex w-full  bg-[#282B39] items-center rounded-[5px]">
         <button
           className={`w-full h-full text-left px-[10px] text-${

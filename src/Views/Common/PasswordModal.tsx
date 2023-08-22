@@ -72,7 +72,7 @@ export const PasswordModal: React.FC<{}> = ({}) => {
             </div>
             <div className="flex items-center mt-2">
               <BlueBtn
-                className="!w-fit px-3 !h-[25px] !mr- "
+                className="!w-fit px-3 !h-[25px] !bg-blue"
                 test-id="password-submit-button"
                 onClick={null}
                 type="submit"

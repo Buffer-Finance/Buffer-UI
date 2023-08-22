@@ -66,7 +66,7 @@ const SideBar: React.FC<any> = () => {
       )}
 
       <div
-        className={`bg-1 max-w-[300px] sidebar ${
+        className={`bg-1 max-w-[300px] sidebar  ${
           state.sidebar_active ? '' : 'sidebar-closed'
         } a1400:!hidden`}
       >

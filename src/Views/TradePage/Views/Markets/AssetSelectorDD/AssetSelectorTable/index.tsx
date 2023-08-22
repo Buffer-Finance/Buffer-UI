@@ -18,11 +18,11 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { AssetCategory } from '@Views/TradePage/type';
 import { IconButton } from '@mui/material';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 import { OneDayChange } from './OneDayChange';
 import styled from '@emotion/styled';
-import { ForexTimingsModalAtom } from '@Views/TradePage/atoms';
+import { ForexTimingsModalAtom, searchBarAtom } from '@Views/TradePage/atoms';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { CloseTag } from './CloseTag';
 import { getAddress } from 'viem';
@@ -74,6 +74,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
 
   const { filteredMarkets: updatedArr } = useAssetTableFilters(group);
 
+  const searchValue = useAtomValue(searchBarAtom);
   const BodyFormatter = (row: number, col: number) => {
     if (!updatedArr) return <>-</>;
     const currentAsset = updatedArr[row];
@@ -229,7 +230,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
     }
   };
 
-  if (!updatedArr.length && group) return null;
+  if (!updatedArr.length && group && searchValue.length > 0) return null;
   return (
     <AssetSelectorDDBackground>
       <BufferTable
