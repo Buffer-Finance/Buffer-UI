@@ -568,7 +568,9 @@ export let expiryPriceCache: { [key: string]: number } = {};
 export const getCachedPrice = async (query: any): Promise<number> => {
   const id = query.pair + ':' + query.timestamp;
   if (!(id in expiryPriceCache)) {
-    const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
+    const priceResponse = await axios.post(pricePublisherBaseUrl + 'query/', [
+      query,
+    ]);
     const priceObject = priceResponse?.data[0]?.price;
     if (!priceObject) return getCachedPrice(query);
     expiryPriceCache[id] = priceObject;

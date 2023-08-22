@@ -23,7 +23,9 @@ const usePriceChange = () => {
         //   ])
         // );
         queries.push(
-          axios.get(pricePublisherBaseUrl + `?pair=${market.tv_id}`)
+          axios.get(
+            pricePublisherBaseUrl + '24h_change/' + `?pair=${market.tv_id}`
+          )
         );
       }
       const response = await Promise.all(queries);
