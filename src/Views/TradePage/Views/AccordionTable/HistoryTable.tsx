@@ -39,12 +39,13 @@ enum TableColumn {
 }
 
 const HistoryTable: React.FC<{
-  trades: TradeType[];
+  trades: TradeType[] | undefined;
   totalPages: number;
   platform?: boolean;
   activePage: number;
   overflow?: number;
   setActivePage: (page: number) => void;
+  isLoading: boolean;
 }> = ({
   trades,
   platform,
@@ -52,6 +53,7 @@ const HistoryTable: React.FC<{
   activePage,
   setActivePage,
   overflow,
+  isLoading,
 }) => {
   const { getPoolInfo } = usePoolInfo();
 
@@ -85,7 +87,7 @@ const HistoryTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
-    // console.log(`BodyFormatter-row: `, trade);
+    if (trade === undefined) return <></>;
     if (!trade?.pool?.pool) console.log(`trade: `, trade);
     const poolInfo = getPoolInfo(trade.pool.pool);
     let expiryPrice: number | null = trade.expiry_price;
@@ -94,9 +96,8 @@ const HistoryTable: React.FC<{
       expiryPrice = expiryPriceCache[id] || 0;
       console.log(`expiryPrice: `, expiryPrice);
     }
-    // if (!trade.market) return 'Problem';
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
-    // console.log(`aug-payout-actual: `, pnl, payout);
+
     const status = gt(pnl?.toString(), '0')
       ? {
           tooltip: 'You won this bet!',
@@ -226,6 +227,7 @@ const HistoryTable: React.FC<{
       onRowClick={console.log}
       overflow={overflow}
       error={<TableErrorRow msg="No Trade History." />}
+      loading={isLoading}
     />
   );
 };
