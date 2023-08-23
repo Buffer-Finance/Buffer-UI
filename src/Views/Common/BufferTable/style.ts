@@ -25,6 +25,9 @@ const TableBackground = styled.div`
     width: 3px !important;
   }
 
+  @media (max-width: 1000px) {
+    height: auto;
+  }
   table {
     width: 100%;
     border-collapse: separate;
