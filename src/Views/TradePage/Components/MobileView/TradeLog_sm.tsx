@@ -6,7 +6,10 @@ import {
   PlatformHistory,
   PlatformOngoing,
 } from '@Views/TradePage/Views/AccordionTable';
-import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
+import {
+  selectedOrderToEditAtom,
+  tradeInspectMobileAtom,
+} from '@Views/TradePage/atoms';
 import {
   ClickEvent,
   ControlledMenu,
@@ -23,11 +26,15 @@ import ShutterProvider, {
   useShutterHandlers,
 } from '@Views/Common/MobileShutter/MobileShutter';
 import MemoCheckMark from '@SVG/Elements/CheckMark';
+import { EditModal } from '@Views/TradePage/Views/EditModal';
+import { EssentialModals } from '@Views/TradePage';
 
 const renderTab = (s) => (s.includes(':') ? s.split(':')[0] : s);
 const tabs = ['History', 'Cancelled:b', 'Platform Trades', 'Platform History'];
-const activeTabAtom = atom<string>(tabs[0]);
+export const activeTabAtom = atom<string>(tabs[0]);
 const TradeLog_sm: React.FC<any> = ({}) => {
+  const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
+  const selectedTrade = useAtomValue(selectedOrderToEditAtom);
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
@@ -53,8 +60,8 @@ const TradeLog_sm: React.FC<any> = ({}) => {
 
   const essntials = (
     <>
-      <ShutterProvider activeAssetPrice="222" />
-      <ShareModal />
+      <EssentialModals />
+      <ShutterProvider />
       {inspectedTrade.trade && <TradeInspect_sm />}
     </>
   );

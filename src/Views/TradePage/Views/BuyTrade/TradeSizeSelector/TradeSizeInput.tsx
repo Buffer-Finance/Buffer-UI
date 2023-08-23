@@ -45,13 +45,13 @@ export const TradeSizeInput: React.FC<{
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <div className="relative flex flex-row gap-x-4 items-center min-h-full">
+      <div className="relative flex flex-row gap-x-4 items-center">
         <input
           value={tradeSize}
           max={maxTradeSize}
           min={minTradeSize}
           type="number"
-          className={`relative h-full bg-[#282b39] px-5 py-3 rounded-l-[5px] outline-none w-full text-f16 text-1`}
+          className={`relative h-[40px] bg-[#282b39] px-5 py-3 rounded-l-[5px] outline-none w-full text-f16 text-1 sm:h-[35px]`}
           onChange={(e) => {
             setTradeSize(e.target.value);
           }}

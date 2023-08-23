@@ -71,7 +71,7 @@ const SideBar: React.FC<any> = () => {
         } a1400:!hidden`}
       >
         <div className="sidebar_container flex-col items-start">
-          <div className="icon_container mb-6">
+          <div className="icon_container mb-6 ml-3">
             <div
               className="flex items-center justify-between w-full"
               role={'button'}
@@ -120,7 +120,7 @@ const SideBar: React.FC<any> = () => {
               </NavLink>
             );
           })}
-          <div className=" text-2 mb-3 mt-[10vh] text-left text-f13 pl-[2rem]">
+          {/* <div className=" text-2 mb-3 mt-[10vh] text-left text-f13 pl-[2rem]">
             Connect with us on{' '}
           </div>
           <div className=" bbborderrr flex w-full justify-center">
@@ -135,7 +135,7 @@ const SideBar: React.FC<any> = () => {
                 );
               })}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </SidebarCss>

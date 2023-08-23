@@ -8,7 +8,7 @@ export const SlippageModalStyles = styled.div`
   padding: 3rem;
   padding-bottom: 2rem;
   position: relative;
-  width: max-content;
+  width: fit-content;
   margin: auto;
 
   & * {
@@ -43,7 +43,7 @@ const ModalBase = ({
 }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <SlippageModalStyles className={'text-1  max-w-[520px]  ' + className}>
+      <SlippageModalStyles className={'text-1  w-full ' + className}>
         {children}
       </SlippageModalStyles>
     </Dialog>
