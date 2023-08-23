@@ -69,7 +69,6 @@ function TimePickerSelection({
       onAmPmChange(hourFormat.hourFormat);
     }
   }, [hourFormat]);
-
   const params = {
     height,
     value,
@@ -92,7 +91,6 @@ function TimePickerSelection({
     const finalSelectedValue = use12Hours
       ? `${value} ${hourFormat.hourFormat}`
       : value;
-    console.log(`IOSTimePicker-validationError: `, validationError);
     if (validationError)
       return toastify({ type: 'error', msg: validationError });
     setInputValue(finalSelectedValue);

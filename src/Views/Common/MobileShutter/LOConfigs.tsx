@@ -2,11 +2,14 @@ import { StrikePricePicker } from '@Views/TradePage/Views/BuyTrade/CurrentPrice'
 import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
 import { useToast } from '@Contexts/Toast';
 import { BlueBtn } from '../V2-Button';
-import { atom, useAtom, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { tradeTypeAtom } from '@Views/TradePage/atoms';
 import { atomWithStorage } from 'jotai/utils';
 import { PairTokenImage } from '../PairTokenImage';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { getPriceFromKlines, marketPriceAtom } from '@TV/useDataFeed';
+import { useEffect, useState } from 'react';
+import { priceAtom } from '@Hooks/usePrice';
 
 type SetAtom<Args extends any[], Result> = (...args: Args) => Result;
 
@@ -17,13 +20,15 @@ export const useLOPayout = (): [number, SetAtom<any[], void>, number[]] => {
   return [minPayout, setMinPayout, presets];
 };
 
-const LOConfigs: React.FC<MobileShutterProps> = ({ activeAssetPrice }) => {
-  const toastify = useToast();
+const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
   const { activeMarket } = useActiveMarket();
+  const marketPrice = useAtomValue(priceAtom);
+  const activeAssetPrice = getPriceFromKlines(marketPrice, {
+    tv_id: activeMarket.tv_id,
+  });
 
   const setShutterType = useSetAtom(tradeTypeAtom);
   const { closeShutter } = useShutterHandlers();
-  const [minLOPayout, setMinLOPayout, LOPayoutPresets] = useLOPayout();
   return (
     <div className="flex flex-col px-[5px] w-full mb-3">
       <div>
@@ -40,7 +45,7 @@ const LOConfigs: React.FC<MobileShutterProps> = ({ activeAssetPrice }) => {
             {activeMarket.token0}-{activeMarket.token1}
           </span>
         </span>
-        <span className="text-f12 text-[#808191] my-3 mb-6">Payout Limit</span>
+        {/* <span className="text-f12 text-[#808191] my-3 mb-6">Payout Limit</span>
         <div className="flex gap-x-1  my-3 mb-4">
           {LOPayoutPresets.map((s) => {
             return (
@@ -57,7 +62,7 @@ const LOConfigs: React.FC<MobileShutterProps> = ({ activeAssetPrice }) => {
               </button>
             );
           })}
-        </div>
+        </div> */}
       </div>
       <form
         onSubmit={() => {

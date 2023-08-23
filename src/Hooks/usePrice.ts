@@ -1,7 +1,7 @@
 import { UTF8ArrToStr, getKlineFromPrice } from '@TV/utils';
 import axios from 'axios';
 import { atom, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import useWebSocket from 'react-use-websocket';
 
@@ -33,41 +33,58 @@ type WSUPdate = {
 const solanaClusterName = 'pythnet';
 const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 
-export const usePrice = (fetchInitialPrices?: boolean) => {
+export const usePrice = () => {
   const setPrice = useSetAtom(priceAtom);
-  const { sendMessage, lastJsonMessage, lastMessage, readyState } =
-    useWebSocket('wss://xc-mainnet.pyth.network/ws');
-  useEffect(() => {
-    // console.log(`lastMessage: `, lastMessage, lastJsonMessage);
-    if (!lastJsonMessage) return;
-    if ((lastJsonMessage as WSUPdate).type == 'price_update') {
-      const data = {
-        [pythIds[(lastJsonMessage as WSUPdate).price_feed.id]]: [
-          {
-            price: multiply(
-              (lastJsonMessage as WSUPdate).price_feed.price.price,
-              new Big('10')
-                .pow((lastJsonMessage as WSUPdate).price_feed.price.expo)
-                .toString()
-            ),
-            time:
-              (lastJsonMessage as WSUPdate).price_feed.price.publish_time *
-              1000,
-          },
-        ],
+  const loadNewPriceData = useCallback(
+    (ws: WebSocket) => {
+      ws.onopen = () => {
+        ws.send(
+          JSON.stringify({
+            ids: Object.keys(pythIds),
+            type: 'subscribe',
+          })
+        );
       };
-      console.log('new-price-came:', data);
-      setPrice((p) => ({ ...p, ...data }));
-    }
-  }, [lastMessage, lastJsonMessage]);
+
+      ws.onmessage = (event) => {
+        const wsData = JSON.parse(event.data);
+        const lastJsonMessage = wsData;
+        if (!lastJsonMessage) return;
+        if ((lastJsonMessage as WSUPdate).type == 'price_update') {
+          const priceUpdatePacked = [
+            {
+              price: multiply(
+                (lastJsonMessage as WSUPdate).price_feed.price.price,
+                new Big('10')
+                  .pow((lastJsonMessage as WSUPdate).price_feed.price.expo)
+                  .toString()
+              ),
+              time:
+                (lastJsonMessage as WSUPdate).price_feed.price.publish_time *
+                1000,
+            },
+          ];
+          const data = {
+            [pythIds[(lastJsonMessage as WSUPdate).price_feed.id]]:
+              priceUpdatePacked,
+          };
+          setPrice((p) => ({ ...p, ...data }));
+        }
+      };
+
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    },
+    [setPrice]
+  );
   useEffect(() => {
-    if (!sendMessage) return;
-    const obj = {
-      ids: Object.keys(pythIds),
-      type: 'subscribe',
+    const ws = new WebSocket('wss://xc-mainnet.pyth.network/ws');
+    loadNewPriceData(ws);
+    return () => {
+      ws.close();
     };
-    const resp = sendMessage(JSON.stringify(obj));
-  }, [sendMessage]);
+  }, []);
 };
 
 export const wsStateAtom = atom<{ state: string }>({

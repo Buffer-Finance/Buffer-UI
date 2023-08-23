@@ -100,7 +100,6 @@ const TradePageMobile: React.FC<any> = ({}) => {
           </button>
         }
       />
-      <ShutterProvider activeAssetPrice={activeAssetPrice} />
     </div>
   );
 };

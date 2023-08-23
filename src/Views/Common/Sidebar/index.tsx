@@ -66,7 +66,7 @@ const SideBar: React.FC<any> = () => {
       )}
 
       <div
-        className={`bg-1 max-w-[300px] sidebar  ${
+        className={`bg-1 sidebar  ${
           state.sidebar_active ? '' : 'sidebar-closed'
         } a1400:!hidden`}
       >
@@ -124,7 +124,7 @@ const SideBar: React.FC<any> = () => {
             Connect with us on{' '}
           </div>
           <div className=" bbborderrr flex w-full justify-center">
-            <div className="flex max-w-[140px] sm:max-w-full w-full flex-row items-center  flex-wrap gap-[4px] pl-[2rem]">
+            <div className="flex  w-full flex-row items-center  flex-wrap gap-[4px] pl-[2rem]">
               {social.map((S) => {
                 return (
                   <a key={S} className="unset" href={S.link} target="_blank">
