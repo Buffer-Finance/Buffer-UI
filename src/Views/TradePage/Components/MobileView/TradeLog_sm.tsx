@@ -82,7 +82,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
             align="end"
             portal
             menuClassName={
-              '!p-3 !rounded-[10px] hover:!rounded-[10px] !bg-[#232334]'
+              '!p-3  !ml-3 !rounded-[10px] hover:!rounded-[10px] !bg-[#232334]'
             }
             offsetY={10}
           >
@@ -101,7 +101,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
                   }}
                 >
                   <div
-                    className={`flex gap-x-3 items-center ${
+                    className={`flex gap-x-3 items-center text-f12 ${
                       activeTab == s ? 'text-1' : ''
                     } `}
                   >

@@ -2323,7 +2323,7 @@ html .secondary-btn:hover {
     grid-template-areas: 'Content';
     grid-template-columns: 100vw 0px;
     grid-template-rows: max-content max-content;
-    background-color: var(--bg-2);
+    /* background-color: var(--bg-2); */
     overflow-x: hidden;
   }
   .portal-drawer {
@@ -2420,11 +2420,12 @@ html .MuiDialog-paperWidthSm {
   max-width: max-content;
 }
 
-/* @media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   html .MuiDialog-paperWidthSm {
-    width: 80%;
+    max-width: 100%;
+    width: 90%;
   }
-} */
+}
 
 html .MuiPagination-ul {
   flex-wrap: nowrap;

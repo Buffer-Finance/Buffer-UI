@@ -132,7 +132,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
   table.filter((t) => t);
   return (
     <div className="w-full flex flex-col  gap-y-5 ">
-      <div className="flex w-full">
+      <div className="flex mt-2 mx-3">
         <button className=" " onClick={() => setInspectedTrade({})}>
           <MemoBackIcon />
         </button>
@@ -140,7 +140,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
           <AssetCell currentRow={trade} />
         </div>
       </div>
-      <div>
+      <div className="mx-3">
         <Head>Net PnL</Head>
         <Display
           label={status.chip == 'Win' ? '+' : ''}
@@ -151,7 +151,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
           unit={poolInfo.token}
         />{' '}
       </div>
-      <div className="flex gap-x-6">
+      <div className="flex gap-x-6 mx-3">
         <div>
           <Head className="!text-f12">Trade Size</Head>
           <Display
@@ -168,10 +168,10 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
           />
         </div>
       </div>
-      <div className="bg-[#17171F] rounded-[5px]">
+      <div className="bg-[#17171F] rounded-[5px] p-4">
         <TableAligner
-          keyStyle={` !p-2 ${keyClassName} !text-left `}
-          valueStyle={` !p-2 ${valueClasssName} !text-right !w-fit`}
+          keyStyle={` !py-[10px] ${keyClassName} !text-left `}
+          valueStyle={` !py-[10px] ${valueClasssName} !text-right !w-fit`}
           keysName={table.map((t) => t.key)}
           values={table.map((t) => t.value)}
         />
