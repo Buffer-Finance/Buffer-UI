@@ -69,7 +69,6 @@ function TimePickerSelection({
       onAmPmChange(hourFormat.hourFormat);
     }
   }, [hourFormat]);
-  console.log('rerendered-tp');
   const params = {
     height,
     value,
