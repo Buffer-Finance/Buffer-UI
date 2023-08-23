@@ -49,6 +49,12 @@ export const DailyMobileTable: React.FC<{
     return (
       <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
     );
+  if (options.length === 0)
+    return (
+      <div className="text-center text-f14 text-1 mt-4 bg-1 rounded-lg p-5 table-width">
+        No data found.
+      </div>
+    );
   let user = Number(userRank);
   const UserRow =
     userData?.length && options?.length ? (
@@ -83,6 +89,7 @@ export const DailyMobileTable: React.FC<{
 
             return (
               <MobileRow
+                key={currentStanding.id}
                 {...{
                   index,
                   currentStanding,

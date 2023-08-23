@@ -18,27 +18,50 @@ import { useGenericHooks } from '@Hooks/useGenericHook';
 import { MarketTimingsModal } from './Components/MarketTimingsModal';
 import { ShareModal } from './Views/AccordionTable/ShareModal';
 import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
+import { useMedia } from 'react-use';
+import { TradePageMobile } from './Components/MobileView/TradePageMobile';
+import { usePrice } from '@Hooks/usePrice';
+import ShutterProvider, {
+  useShutterHandlers,
+} from '@Views/Common/MobileShutter/MobileShutter';
+import { useEffect } from 'react';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
-  if (window.innerWidth < 600) return <MobileWarning />;
+  usePrice();
+  console.log('root-rerendered');
+  const { closeShutter } = useShutterHandlers();
+  const isNotMobile = useMedia('(min-width:1200px)');
+  useEffect(() => {
+    closeShutter();
+    return closeShutter;
+  }, []);
   return (
     <>
       <EssentialModals />
       <div
-        className={`flex justify-between w-[100%] bg-[#1C1C28] ${
+        className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
           panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
         }`}
       >
-        <div className="flex flex-col w-full mx-3">
-          {showFavoriteAsset && <PinnedMarkets />}
-          <MarketStatsBar />
-          <MarketChart />
-          <AccordionTable />
-        </div>
+        {isNotMobile ? (
+          <>
+            <div className="flex flex-col w-full mx-3">
+              {showFavoriteAsset && <PinnedMarkets />}
+              <MarketStatsBar />
+              <MarketChart />
+              <AccordionTable />
+            </div>
+            <BuyTrade />
+          </>
+        ) : (
+          <>
+            <ShutterProvider />
 
-        <BuyTrade />
+            <TradePageMobile />
+          </>
+        )}
       </div>
     </>
   );

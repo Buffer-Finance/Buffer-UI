@@ -2,8 +2,11 @@ import { useCall2Data } from '@Utils/useReadCall';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useEffect, useState } from 'react';
 import { erc20ABI } from 'wagmi';
-
-const Test: React.FC<any> = ({}) => {
+import DurationPicker from '@Views/Common/DurationPicker/DurationPicker';
+import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { usePrice } from '@Hooks/usePrice';
+const Test2: React.FC<any> = ({}) => {
   // const d = useOneCTWallet();
   const [string1, setString1] = useState('');
   const string1Clone = string1;
@@ -52,5 +55,17 @@ const Test: React.FC<any> = ({}) => {
     </div>
   );
 };
+const timeAtom = atom(0);
+const Test = () => {
+  const setTime = useSetAtom(timeAtom);
 
+  usePrice();
+  return (
+    <>
+      <button type="button" style={{ float: 'right' }}>
+        Confirm Selection
+      </button>
+    </>
+  );
+};
 export { Test };

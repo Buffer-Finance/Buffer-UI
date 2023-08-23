@@ -1,7 +1,7 @@
 import { BuyTradeTabList } from '@Views/TradePage/Components/BuyTradeTabList';
 import { tradeTypeAtom } from '@Views/TradePage/atoms';
 import styled from '@emotion/styled';
-import { useAtom } from 'jotai';
+import { atom, useAtom } from 'jotai';
 import { useState } from 'react';
 
 const TradeTypeSelectorBackground = styled.div`

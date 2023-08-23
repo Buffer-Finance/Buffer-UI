@@ -77,8 +77,9 @@ export const ChainDropdown: React.FC<INavbar> = ({ className }) => {
         dropdownBox={(activeItem, isOpen, disabled) => {
           return (
             <div
-              className={`flex items-center justify-center text-f13  h-[30px] w-max rounded-[7px] pl-3 pr-[1px] sm:pr-1 transition-all duration-300 ${isOpen ? 'bg-3' : 'bg-4 hover:brightness-125 hover:bg-1'
-                }`}
+              className={`flex items-center justify-center text-f13  h-[30px] w-max rounded-[7px] pl-3 pr-[1px] sm:pr-1 transition-all duration-300 ${
+                isOpen ? 'bg-3' : 'bg-4 hover:brightness-125 hover:bg-1'
+              }`}
             >
               <div className="flex items-center dropdown-value f15 capitalize weight-400">
                 <img
@@ -93,8 +94,9 @@ export const ChainDropdown: React.FC<INavbar> = ({ className }) => {
               </div>
               {!disabled && (
                 <ArrowDropDownRounded
-                  className={`dropdown-arrow transition-all duration-300 w-6 h-6 ease-out ${isOpen ? 'origin rotate-180' : ''
-                    }`}
+                  className={`dropdown-arrow transition-all duration-300 w-6 h-6 ease-out ${
+                    isOpen ? 'origin rotate-180' : ''
+                  }`}
                 />
               )}
             </div>
@@ -108,8 +110,9 @@ export const ChainDropdown: React.FC<INavbar> = ({ className }) => {
             onClick={() => {
               handleClose();
             }}
-            className={`${singleItem.name === activeChainName && 'active text-1'
-              } chain-row flex min-w-max justify-between items-center py-3 text-4 hover:text-1 text-f15 font-normal transition-all duration-150 ease-in-out`}
+            className={`${
+              singleItem.name === activeChainName && 'active text-1'
+            } chain-row flex min-w-max justify-between items-center py-3 text-4 hover:text-1 text-f15 font-normal transition-all duration-150 ease-in-out`}
           >
             <span className="flex items-center mr-4 capitalize">
               <img
@@ -119,7 +122,7 @@ export const ChainDropdown: React.FC<INavbar> = ({ className }) => {
               />
               {singleItem.displayName}
             </span>
-            <FiberManualRecordIcon className={`dot justify-self-end`} />
+            {/* <FiberManualRecordIcon className={`dot justify-self-end`} /> */}
           </div>
         )}
       />

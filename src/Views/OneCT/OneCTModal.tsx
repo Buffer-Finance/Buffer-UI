@@ -264,7 +264,7 @@ const features = [
     tooltip: `Trade with full custody of your funds. No deposit or signups required.`,
   },
 ];
-const desc = 'text-2';
+const desc = 'text-[#C2C1D3] font-normal sm:text-f10';
 const OneCTModal: React.FC<any> = ({}) => {
   const { address } = useAccount();
   const isModalOpen = useAtomValue(isOneCTModalOpenAtom);
@@ -382,39 +382,35 @@ const OneCTModal: React.FC<any> = ({}) => {
     <ModalBase
       open={isModalOpen}
       onClose={() => setModal((m) => false)}
-      className="max-w-[600px]"
+      className="max-w-[600px] sm:max-w-full sm:!p-5 !bg-[#232334]"
     >
       <div className="flex justify-between items-center">
-        <div className="flex items-center">
-          <h3 className="font-[500] text-f20  ml-[20px]">
-            Activate your Trading Account
-          </h3>
-        </div>
+        <h3 className="font-[500] text-f20 sm:text-f14">
+          Activate your Trading Account
+        </h3>
         <button
-          className="p-3 text-1 rounded-full bg-2"
+          className="p-3 sm:p-2 text-1 rounded-full bg-2"
           test-id="close-button"
           onClick={() => setModal((m) => false)}
         >
-          <CloseOutlined className="!scale-125" />
+          <CloseOutlined className="!scale-125 sm:!scale-100" />
         </button>
       </div>
 
-      <div className="flex-col mt-[25px] text-3 text-f14 font-[500]">
-        <div className="flex  justify-between mb-4 ">
+      <div className="flex-col mt-[25px] text-3 text-f14 sm:text-f11 font-[500] ">
+        <div className="flex justify-between mb-4 ">
           {features.map((s, idx) => {
             return (
               <NumberTooltip key={s.tooltip} content={s.tooltip}>
                 <div
-                  className={`flex  flex-col content-center items-center ${
-                    idx == 0
-                      ? 'pr-[30px]'
-                      : idx + 1 == features.length
-                      ? 'pl-[30px]'
-                      : 'px-[30px]'
-                  } ${idx < features.length - 1 ? 'border-right' : ''}`}
+                  className={`flex w-1/4 flex-col content-center items-center ${
+                    idx < features.length - 1 ? 'border-right' : ''
+                  }`}
                 >
                   {s.img}
-                  <div className="mt-3">{s.desc}</div>
+                  <div className="mt-3 whitespace-nowrap text-[#C2C1D3]">
+                    {s.desc}
+                  </div>
                 </div>
               </NumberTooltip>
             );
@@ -422,12 +418,14 @@ const OneCTModal: React.FC<any> = ({}) => {
         </div>
         <Card>
           <>
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-start sm:text-f13">
               Create your account
               <div className={desc}>Sign using a web 3 wallet</div>
             </div>
             <BlueBtn
-              className={` !w-[120px] px-[15px] ${oneCtPk ? '!bg-green' : ''}`}
+              className={` !w-[120px] px-[15px] sm:px-3 sm:text-f12 ${
+                oneCtPk ? '!bg-green' : ''
+              }`}
               test-id="one-ct-creation-button-god"
               onClick={
                 oneCtPk
@@ -455,14 +453,14 @@ const OneCTModal: React.FC<any> = ({}) => {
         </Card>
         <Card>
           <>
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-start sm:text-f12">
               Register your account
               <div className={desc}>No gas required</div>
             </div>
             <BlueBtn
               className={`${
                 registeredOneCT ? '!bg-green' : ''
-              } !w-[120px] px-[15px]`}
+              } !w-[120px] px-[15px] sm:px-3 sm:text-f13`}
               test-id="one-ct-registration-button-god"
               onClick={
                 registeredOneCT
@@ -496,7 +494,7 @@ const OneCTModal: React.FC<any> = ({}) => {
 export { OneCTModal };
 
 const Card = ({ children }: { children: JSX.Element }) => (
-  <div className="w-full bg-[#2C2C41] w-[360px] p-[20px] flex items-center justify-between rounded-[10px] mt-[12px] text-1 text-f16 font-[500]">
+  <div className="w-full bg-[#2C2C41] w-[360px] p-[20px] sm:px-[12px] sm:py-[12px] flex items-center justify-between rounded-[10px] mt-[12px] text-1 text-f16 sm:text-f14 font-[500]">
     {children}
   </div>
 );

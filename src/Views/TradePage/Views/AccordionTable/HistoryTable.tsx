@@ -24,6 +24,9 @@ import {
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { AssetCell } from './AssetCell';
+import { useMedia } from 'react-use';
+import { useSetAtom } from 'jotai';
+import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
 
 enum TableColumn {
   Asset = 0,
@@ -43,6 +46,7 @@ const HistoryTable: React.FC<{
   totalPages: number;
   platform?: boolean;
   activePage: number;
+  onlyView?: number[];
   overflow?: number;
   setActivePage: (page: number) => void;
   isLoading: boolean;
@@ -51,12 +55,13 @@ const HistoryTable: React.FC<{
   platform,
   totalPages,
   activePage,
+  onlyView,
   setActivePage,
   overflow,
   isLoading,
 }) => {
   const { getPoolInfo } = usePoolInfo();
-
+  const setInspectTrade = useSetAtom(tradeInspectMobileAtom);
   const headNameArray = platform
     ? [
         'Asset',
@@ -84,6 +89,8 @@ const HistoryTable: React.FC<{
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
+  const isNotMobile = useMedia('(min-width:1200px)');
+  const isMobile = useMedia('(max-width:600px)');
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -119,6 +126,7 @@ const HistoryTable: React.FC<{
         return (
           <AssetCell
             currentRow={trade}
+            split={isMobile}
             // platform={platform}
           />
         );
@@ -159,31 +167,41 @@ const HistoryTable: React.FC<{
         );
       case TableColumn.Payout:
         if (!expiryPrice) return 'Processing...';
-        return (
-          <div>
-            {pnl || payout ? (
-              <>
-                {' '}
-                <Display
-                  className="!justify-start"
-                  data={divide(payout!, poolInfo.decimals)}
-                  unit={poolInfo.token}
-                />
-                <span className={status.textColor + ' flex '}>
-                  Net Pnl :{' '}
+        if (isNotMobile)
+          return (
+            <div>
+              {pnl || payout ? (
+                <>
+                  {' '}
                   <Display
-                    label={status.chip == 'Win' ? '+' : ''}
                     className="!justify-start"
-                    data={pnl}
+                    data={divide(payout!, poolInfo.decimals)}
                     unit={poolInfo.token}
                   />
-                </span>
-              </>
-            ) : (
-              'Calculating..'
-            )}
-          </div>
-        );
+                  <span className={status.textColor + ' flex '}>
+                    Net Pnl :{' '}
+                    <Display
+                      label={status.chip == 'Win' ? '+' : ''}
+                      className="!justify-start"
+                      data={pnl}
+                      unit={poolInfo.token}
+                    />
+                  </span>
+                </>
+              ) : (
+                'Calculating..'
+              )}
+            </div>
+          );
+        else
+          return (
+            <Display
+              label={status.chip == 'Win' ? '+' : ''}
+              className="!justify-start"
+              data={pnl}
+              unit={poolInfo.token}
+            />
+          );
       case TableColumn.Status:
         if (!expiryPrice) return 'Processing...';
 
@@ -224,7 +242,11 @@ const HistoryTable: React.FC<{
       cols={headNameArray.length}
       rows={trades ? trades.length : 0}
       widths={['auto']}
-      onRowClick={console.log}
+      onRowClick={(idx) => {
+        if (isNotMobile) return null;
+        else setInspectTrade({ trade: trades?.[idx] });
+      }}
+      showOnly={onlyView}
       overflow={overflow}
       error={<TableErrorRow msg="No Trade History." />}
       loading={isLoading}

@@ -30,7 +30,7 @@ export const useMarketsWithChartData = () => {
   });
 };
 
-export const useAssetTableFilters = () => {
+export const useAssetTableFilters = (group?: string) => {
   const activePool = useAtomValue(radioValueAtom);
   const activeCategory = useAtomValue(categoriesAtom);
   const searchValue = useAtomValue(searchBarAtom);
@@ -54,9 +54,11 @@ export const useAssetTableFilters = () => {
       });
     } else {
       return markets.filter((market) => {
+        // in mobile, we need search results for all catagories at once so we pass group of all catagories
+        const activeGroup = group || activeCategory;
         return (
           AssetCategory[market.category].toUpperCase() ===
-          activeCategory.toUpperCase()
+          activeGroup.toUpperCase()
         );
       });
     }

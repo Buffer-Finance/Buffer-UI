@@ -26,7 +26,9 @@ const TradeSizeSelectorBackground = styled.div`
   width: 100%;
 `;
 
-export const TradeSizeSelector: React.FC = () => {
+export const TradeSizeSelector: React.FC<{
+  onSubmit?: any;
+}> = ({ onSubmit }) => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
   const { address } = useAccount();
@@ -46,7 +48,7 @@ export const TradeSizeSelector: React.FC = () => {
   const maxTradeSize = maxFee;
   return (
     <TradeSizeSelectorBackground>
-      <ColumnGap gap="7px">
+      <ColumnGap gap="7px" className="w-full">
         <RowBetween>
           <RowGap gap="4px">
             <BuyTradeHeadText>Trade Size</BuyTradeHeadText>
@@ -57,7 +59,7 @@ export const TradeSizeSelector: React.FC = () => {
             unit={tradeToken}
           />
         </RowBetween>
-        <RowGapItemsStretched gap="0px">
+        <RowGapItemsStretched gap="0px" className="w-full">
           <TradeSizeInput
             maxTradeSize={maxTradeSize}
             registeredOneCT={registeredOneCT}
@@ -65,7 +67,9 @@ export const TradeSizeSelector: React.FC = () => {
             balance={balance}
             platformFee={platformFee}
             minTradeSize={minFee}
+            onSubmit={onSubmit}
           />
+
           <PoolDropdown />
         </RowGapItemsStretched>
         {registeredOneCT && (

@@ -21,11 +21,13 @@ export const PayoutProfit = ({
   if (amount && totalPayout) {
     return (
       <div className="flex-sbw text-f14 my-3 mb-4">
-        <div className="text-f12 sm:text-f14 items-start flex-col flex-start flex wrap text-2 sm:flex-row">
-          <span className="nowrap mb-1">Payout</span>
+        <div className="text-f12 b1200:text-f14 items-center flex-col flex-start flex wrap text-2 b1200:flex-row">
+          <span className="nowrap mb-1">
+            Payout <span className="text-1 a1200:hidden">{'>'}&nbsp;</span>
+          </span>
           <RowGap gap="4px">
             <Display
-              className="text-1 text-f16 sm:text-f14 !whitespace-nowrap"
+              className="text-1 text-f16 b1200:text-f14 !whitespace-nowrap"
               data={multiply(
                 add('1', divide(totalPayout, 2) as string),
                 amount
@@ -35,8 +37,9 @@ export const PayoutProfit = ({
             {totalPayout + '%'}
           </RowGap>
         </div>
-        <div className="text-f12 sm:text-f14 items-start flex-col flex-start wrap flex text-2  gap-y-1 sm:flex-row">
-          Profit
+        <div className="text-f12 b1200:text-f14 items-center flex-col flex-start wrap flex text-2  gap-y-1 b1200:flex-row">
+          Profit&nbsp;{' '}
+          <span className="text-green a1200:hidden">{'>'}&nbsp;</span>
           <Display
             className=" text-f16 text-green sm:text-f14 !whitespace-nowrap"
             data={subtract(

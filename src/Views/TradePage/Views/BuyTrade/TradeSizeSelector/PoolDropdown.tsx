@@ -27,7 +27,7 @@ export const PoolDropdown: React.FC = () => {
         return (
           <MenuButton
             className={
-              '!bg-[#303044] rounded-r-[5px] py-2 text-f14 text-1 px-3 font-medium h-[40px]'
+              '!bg-[#303044] rounded-r-[5px] py-2 text-f14 text-1 px-3 font-medium h-[40px] sm:h-[35px]'
             }
           >
             <RowGap gap="8px">

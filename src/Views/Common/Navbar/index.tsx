@@ -13,6 +13,10 @@ import { urlSettings } from 'src/Config/wagmiClient';
 import { isTestnet } from 'config';
 import { SettingsDD } from './SettingsDD';
 import { activeMarketFromStorageAtom } from 'src/globalStore';
+import MemoWalletSVG from '@SVG/Elements/WalletSVG';
+import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
+import { useShutterHandlers } from '../MobileShutter/MobileShutter';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 
 interface INavbar {}
 
@@ -30,12 +34,14 @@ export const Navbar: React.FC<INavbar> = () => {
       type: 'UPDATE_SIDEBAR_STATE',
     });
   };
+  const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
+  const [activeTrades, limitOrderTrades] = useOngoingTrades();
 
   const show = !urlSettings?.hide;
   return (
     <header className="sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102]">
       <div className="flex items-center gap-[24px]">
-        <div
+        {/* <div
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
         >
@@ -43,10 +49,20 @@ export const Navbar: React.FC<INavbar> = () => {
             className="h-[30px] ml-[8px] sm:mx-[2px]"
             hideText
           />
+        </div> */}
+        <div className="a1200:hidden flex gap-x-4 items-center pl-4">
+          <MemoHamburgerSVG onClick={handleClose} />
+          <MemoWalletSVG
+            count={activeTrades.length + limitOrderTrades.length}
+            className={
+              shutterState.open == 'ActiveOrders' ? 'text-1' : 'text-[#808191]'
+            }
+            onClick={openOngoingTradesShutter}
+          />
         </div>
 
         {show && (
-          <div className="tab:hidden flex gap-[6px] b1400:!hidden ">
+          <div className="b1200:hidden flex gap-[6px]  ">
             {tabs.slice(0, VISIBLETABS).map((tab, index) => {
               if (tab.isExternalLink) {
                 return (
@@ -81,45 +97,13 @@ export const Navbar: React.FC<INavbar> = () => {
       </div>
 
       <div className="flex items-center gap-[3px] whitespace-nowrap">
-        {/* {import.meta.env.VITE_ENV === 'TESTNET' && (
-          <BlueBtn
-            onClick={() => {
-              window.open('https://app.buffer.finance', '_blank');
-            }}
-            className="!h-[30px] rounded-[6px] !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] px-5 sm:hidden"
-          >
-            Mainnet
-          </BlueBtn>
-        )} */}
-
-        {/* {!viewOnlyMode && (
-          <ArbitrumOnly hide>
-            <ClaimLBFRBtn
-              shouldShowValue
-              shouldShowIcon
-              shouldNotShowForZero
-              className="!h-[30px] !bg-[#232334] hover:!bg-blue !rounded-[7px] !w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] px-4 sm:px-3"
-            />
-          </ArbitrumOnly>
-        )} */}
-        {/* <BlueBtn
-          onClick={() => {}}
-          className="!h-[30px] rounded-[6px] !w-fit !text-f13 font-medium hover:brightness-125 hover:!translate-y-[0px] pl-4 pr-5 sm:pl-1 sm:pr-1"
-        >
-          <Link to="/leaderboard/weekly" className="flex items-center gap-1">
-            <LeaderboardTropy height={23} />
-            <span className="sm:hidden">Contest</span>
-          </Link>
-        </BlueBtn> */}
-
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
-          {/* <ChainDropdown /> */}
           <AccountDropdown />
         </div>
 
         <SettingsDD />
 
-        <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
+        {/* <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
           {state.sidebar_active ? (
             <MenuLogo className="icon menu" onClick={handleClose} />
           ) : (
@@ -129,7 +113,7 @@ export const Navbar: React.FC<INavbar> = () => {
               style={{ transform: 'scale(0.8)' }}
             />
           )}
-        </div>
+        </div> */}
       </div>
     </header>
   );

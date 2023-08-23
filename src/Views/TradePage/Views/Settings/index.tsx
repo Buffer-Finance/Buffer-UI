@@ -20,6 +20,9 @@ const SettingsBackground = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  @media (max-width: 600px) {
+    padding: 15px 10px 20px 10px;
+  }
 
   ::-webkit-scrollbar {
     width: 2px;

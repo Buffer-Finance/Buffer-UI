@@ -36,7 +36,6 @@ export const appConfig = {
         is_pol: false,
       },
     },
-
     EarnConfig: {
       RewardRouter: '0x2033f87A0956388C25Ce5A21F97EE78DD37c5D7f',
       BLP: '0xb2685B520Eb93769755b0B2c96dca1D10459F378',
