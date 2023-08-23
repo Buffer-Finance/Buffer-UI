@@ -423,7 +423,7 @@ const OneCTModal: React.FC<any> = ({}) => {
               <div className={desc}>Sign using a web 3 wallet</div>
             </div>
             <BlueBtn
-              className={` !w-[120px] sm:!w-[80px] px-[15px] sm:px-3 sm:text-f12 ${
+              className={` !w-[120px] px-[15px] sm:px-3 sm:text-f12 ${
                 oneCtPk ? '!bg-green' : ''
               }`}
               test-id="one-ct-creation-button-god"
@@ -460,7 +460,7 @@ const OneCTModal: React.FC<any> = ({}) => {
             <BlueBtn
               className={`${
                 registeredOneCT ? '!bg-green' : ''
-              } !w-[120px] sm:!w-[80px] px-[15px] sm:px-3 sm:text-f13`}
+              } !w-[120px] px-[15px] sm:px-3 sm:text-f13`}
               test-id="one-ct-registration-button-god"
               onClick={
                 registeredOneCT
