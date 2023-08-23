@@ -45,7 +45,7 @@ export const TradeSizeInput: React.FC<{
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <div className="relative flex flex-row gap-x-4 items-center min-h-full">
+      <div className="relative flex flex-row gap-x-4 items-center b1200:min-h-full">
         <input
           value={tradeSize}
           max={maxTradeSize}
