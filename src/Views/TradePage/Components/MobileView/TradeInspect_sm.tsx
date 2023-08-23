@@ -10,7 +10,7 @@ import {
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { AssetCell } from '@Views/TradePage/Views/AccordionTable/AssetCell';
 import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode } from 'react';
 import { getPayout } from '../../Views/AccordionTable/ShareModal/utils';
 import {
@@ -23,10 +23,13 @@ import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Variables } from '@Utils/Time';
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { Share } from '@Views/TradePage/Views/AccordionTable/ShareModal/ShareIcon';
+import { activeTabAtom } from './TradeLog_sm';
 const className = 'text-green text-red text-[#C3C2D4] text-[#808191] text-f14 ';
 const valueClasssName = '!text-[#C3C2D4] !text-f14 !ml-auto !justify-end';
 const keyClassName = '!text-[#808191] !text-f14';
 const TradeInspect_sm: React.FC<any> = ({}) => {
+  const [activeTab, setActiveTab] = useAtom(activeTabAtom);
+
   const { trade } = useAtomValue(tradeInspectMobileAtom);
   const setInspectedTrade = useSetAtom(tradeInspectMobileAtom);
   const { getPoolInfo } = usePoolInfo();
@@ -36,7 +39,6 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
   if (!expiryPrice) {
     const id = getPriceCacheId(trade);
     expiryPrice = expiryPriceCache[id] || 0;
-    console.log(`expiryPrice: `, expiryPrice);
   }
   const tradeExpiry = getExpiry(trade);
   const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
@@ -107,7 +109,9 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
           key: 'Status',
           value: (
             <div className={valueClasssName + ' flex'}>
-              <Share data={trade} market={trade.market} poolInfo={poolInfo} />
+              {activeTab == 'History' ? (
+                <Share data={trade} market={trade.market} poolInfo={poolInfo} />
+              ) : null}
 
               <div
                 className={`flex ${status.textColor}  sm:flex-row-reverse items-center justify-between w-max px-2   rounded-[5px] bg-[#282B39]`}

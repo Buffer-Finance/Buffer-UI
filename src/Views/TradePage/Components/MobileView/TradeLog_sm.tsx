@@ -26,7 +26,7 @@ import MemoCheckMark from '@SVG/Elements/CheckMark';
 
 const renderTab = (s) => (s.includes(':') ? s.split(':')[0] : s);
 const tabs = ['History', 'Cancelled:b', 'Platform Trades', 'Platform History'];
-const activeTabAtom = atom<string>(tabs[0]);
+export const activeTabAtom = atom<string>(tabs[0]);
 const TradeLog_sm: React.FC<any> = ({}) => {
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
@@ -53,7 +53,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
 
   const essntials = (
     <>
-      <ShutterProvider activeAssetPrice="222" />
+      <ShutterProvider />
       <ShareModal />
       {inspectedTrade.trade && <TradeInspect_sm />}
     </>
