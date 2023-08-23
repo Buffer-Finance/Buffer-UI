@@ -28,7 +28,7 @@ export const TradeSizeInput: React.FC<{
   const [minerr, setminErr] = useState(false);
   const [maxerr, setmaxErr] = useState(false);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
-  console.log(`TradeSizeInput-tradeSize: `, tradeSize);
+  // console.log(`TradeSizeInput-tradeSize: `, tradeSize);
   useEffect(() => {
     if (lt(tradeSize || '0', minTradeSize)) {
       setminErr(true);
