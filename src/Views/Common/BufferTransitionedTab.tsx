@@ -43,7 +43,7 @@ let BufferTransitionedTab: {
       <div
         className={
           className +
-          '  text-f15 py-3 px-[30px] rounded-[10px] pointer z-20 font-bold text-[#7F87A7] ' +
+          '  text-f15 py-3 px-[30px] sm:px-[20px] rounded-[10px] pointer z-20 font-bold text-[#7F87A7] ' +
           (active && 'bg-[#141823] text-1')
         }
         onClick={() => {

@@ -29,7 +29,11 @@ msgstr ""
 msgid "<0>{error}</0>"
 msgstr ""
 
-#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:81
+#: src/Views/Common/IOSTimePicer/components/IOSTimePicker.tsx:123
+msgid "<0><1><2/></1>{validationError}</0>"
+msgstr ""
+
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:84
 msgid "<0><1><2/></1>Max trade size is {maxTradeSize} {tokenName}</0>"
 msgstr ""
 
@@ -41,7 +45,7 @@ msgstr ""
 #~ msgid "<0>Max trade size is {maxTradeSize} {tokenName}</0>"
 #~ msgstr ""
 
-#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:73
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:76
 msgid "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 msgstr ""
 
@@ -49,7 +53,7 @@ msgstr ""
 msgid "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
 msgstr ""
 
-#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:96
+#: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:102
 msgid "<0>You don't have enough {tokenName}. <1/> </0>"
 msgstr ""
 
@@ -97,7 +101,7 @@ msgstr ""
 msgid "Premium Features"
 msgstr ""
 
-#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:49
+#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:48
 msgid "Price"
 msgstr ""
 

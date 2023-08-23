@@ -25,6 +25,7 @@ export const TableAligner: React.FC<ITableAligner> = ({
   className,
   getClassName,
 }) => {
+  console.log(`index-keyStyle: `, keyStyle);
   return (
     <TableAlignerStyles className={className}>
       <Table>

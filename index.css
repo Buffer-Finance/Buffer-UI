@@ -46,8 +46,8 @@ animation-fill-mode: forwards;
   left: 0;
   bottom: 0 !important;
   right: 0px !important;
-  
 }
+
 
 #Man {
   animation: shake 2s infinite ease-in-out alternate;
@@ -191,9 +191,19 @@ animation-fill-mode: forwards;
 .border-bottom{
   border-bottom: 2px solid #2A2A3A;
 }
+.border-bottom-blue{
+  border-bottom: 2px solid var(--primary);
+}
+.border-bottom-grey{
+  border-bottom: 1px solid #616161;
+}
 
 .left-border{
   border-left-width: 3px;
+}
+.__handle-wrapper{
+  border:none;
+  outline: none;
 }
 
 html .flip-y{
@@ -242,6 +252,11 @@ html .flip-y{
   .custom-view {
     display: none;
   }
+}
+@media (max-width: 1200px)  {
+ html{
+  height: 100vh;
+ }
 }
 html .MuiDialog-container {
   backdrop-filter: blur(10px);
@@ -2308,7 +2323,7 @@ html .secondary-btn:hover {
     grid-template-areas: 'Content';
     grid-template-columns: 100vw 0px;
     grid-template-rows: max-content max-content;
-    background-color: var(--bg-2);
+    /* background-color: var(--bg-2); */
     overflow-x: hidden;
   }
   .portal-drawer {
@@ -2405,11 +2420,12 @@ html .MuiDialog-paperWidthSm {
   max-width: max-content;
 }
 
-/* @media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   html .MuiDialog-paperWidthSm {
-    width: 80%;
+    max-width: 100%;
+    width: 90%;
   }
-} */
+}
 
 html .MuiPagination-ul {
   flex-wrap: nowrap;
@@ -3113,3 +3129,362 @@ html .pagination-root {
 }
 
 
+
+
+.rdp-picker {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  display: flex;
+  user-select: none;
+  height: 105px;
+  width: 330px;
+  background-color: white;
+}
+
+@media (max-width: 400px) {
+  .rdp-picker {
+    width: 250px;
+  }
+}
+
+.rdp-masked-div {
+  color: black;
+  overflow: hidden;
+  height: 105px;
+  position: relative;
+  mask-image: linear-gradient(
+    transparent,
+    10%,
+    rgba(0, 0, 0, 1),
+    90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    transparent,
+    10%,
+    rgba(0, 0, 0, 1),
+    90%,
+    transparent
+  );
+}
+
+.rdp-column-container {
+  flex-grow: 1;
+  display: inline-block;
+  touch-action: none;
+}
+
+.rdp-column {
+  position: absolute;
+  pointer-events: none;
+  touch-action: none;
+  z-index: 0;
+  width: 100%;
+}
+
+.rdp-reticule {
+  border: 0;
+  border-top: 2px solid rgba(109, 202, 236, 1);
+  height: 2px;
+  position: absolute;
+  width: 80%;
+  margin: 0;
+  z-index: 100;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.rdp-text-overlay {
+  position: absolute;
+  /* font-style: italic; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  font-size: 20px;
+  color: white;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.rdp-text-overlay div {
+  font-size: 17px;
+  position: relative;
+  top: 1px;
+  left: 1px;
+  color: gray;
+  width: 0px;
+  font-style: italic;
+}
+
+.rdp-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  font-size: 20px;
+}
+
+.react-ios-time-picker {
+  margin-bottom: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: none !important;
+}
+
+.react-ios-time-picker-transition {
+  animation: fade-in 150ms ease-out;
+}
+
+@keyframes fade-in {
+  0% {
+     transform: translateY(150px);
+     opacity: 0;
+  }
+  100% {
+     transform: translateY(0);
+     opacity: 1;
+  }
+}
+
+.react-ios-time-picker-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  background-color: transparent !important;
+  width: 100% !important;
+  overflow: hidden;
+  padding: 20px 0;
+}
+
+.react-ios-time-picker-hour {
+  position: relative;
+  width: 50px;
+  overflow: hidden;
+  z-index: 100;
+  margin-right: 5px;
+}
+
+.react-ios-time-picker-minute {
+  position: relative;
+  width: 50px;
+  overflow: hidden;
+  z-index: 100;
+  margin-left: 5px;
+}
+
+.react-ios-time-picker-hour-format {
+  position: relative;
+  width: 40px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.react-ios-time-picker-fast {
+  transition: transform 700ms cubic-bezier(0.13, 0.67, 0.01, 0.94);
+}
+
+.react-ios-time-picker-slow {
+  transition: transform 600ms cubic-bezier(0.13, 0.67, 0.01, 0.94);
+}
+
+.react-ios-time-picker-selected-overlay {
+  position: absolute;
+  border-radius: 6px;
+  background-color: #282B39;
+  pointer-events: none;
+  margin: 0 10px;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  /* box-shadow: inset 0px 0px 2px 0px rgba(255, 159, 10, 0.3); */
+}
+
+.react-ios-time-picker-top-shadow {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: #0009;
+  background: linear-gradient(180deg, #0009 0%, #1c1c1c 100%);
+}
+
+.react-ios-time-picker-bottom-shadow {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #0009;
+  background: linear-gradient(0deg, #0009 0%, hsla(0, 0%, 11%, 1) 100%);
+}
+
+.react-ios-time-picker-cell-hour {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  user-select: none;
+  transition: all 100ms linear;
+}
+.react-ios-time-picker-cell-minute {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  user-select: none;
+  transition: all 100ms linear;
+}
+.react-ios-time-picker-cell-hour-format {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  user-select: none;
+  transition: all 100ms linear;
+}
+
+.react-ios-time-picker-cell-inner-hour {
+  width: fit-content;
+  height: 100%;
+  transition: all 100ms linear;
+  cursor: pointer;
+  border-radius: 7px;
+  line-height: 35px;
+  text-align: center;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+  padding: 0 10px;
+}
+
+.react-ios-time-picker-cell-inner-hour-format {
+  width: fit-content;
+  height: 100%;
+  transition: all 100ms linear;
+  cursor: pointer;
+  border-radius: 7px;
+  line-height: 35px;
+  text-align: center;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  font-size: 14px;
+  color: #6a6a6b;
+  padding: 0 10px;
+}
+
+.react-ios-time-picker-cell-inner-minute {
+  width: fit-content;
+  height: 100%;
+  transition: all 100ms linear;
+  cursor: pointer;
+  border-radius: 7px;
+  line-height: 35px;
+  text-align: center;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 14px;
+  color: #6a6a6b;
+  padding: 0 10px;
+}
+
+/* .react-ios-time-picker-cell-inner-hour:hover,
+.react-ios-time-picker-cell-inner-minute:hover,
+.react-ios-time-picker-cell-inner-hour-format:hover {
+  background-color: #ff9d0ac9;
+  color: white;
+} */
+
+.react-ios-time-picker-cell-inner-selected {
+  /* font-weight: 500; */
+  background-color: ;
+  color: #f7f7f7;
+  font-size: 16px;
+}
+
+.react-ios-time-picker-cell-inner-hour-format-selected {
+  font-weight: 400;
+  color: #f7f7f7;
+}
+
+.react-ios-time-picker-btn-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  background-color: #292929;
+  border-bottom: 1px solid #333;
+  z-index: 100;
+}
+
+.react-ios-time-picker-btn {
+  padding: 10px 15px;
+  font-size: 13px;
+  color: #fe9f06;
+  transition: all 150ms linear;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.react-ios-time-picker-btn:hover {
+  opacity: 0.6;
+}
+
+.react-ios-time-picker-btn-cancel {
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.react-ios-time-picker-popup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 99998;
+}
+
+.react-ios-time-picker-popup-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.react-ios-time-picker-input {
+  cursor: text;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #0005;
+}
+
+.react-ios-time-picker-colon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #f7f7f7;
+  position: relative;
+  z-index: 100;
+  font-weight: 600;
+}
+
+.react-ios-time-picker-cell-inner-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.react-ios-time-picker-hour-format-transition {
+  transition: transform 100ms ease-out;
+}

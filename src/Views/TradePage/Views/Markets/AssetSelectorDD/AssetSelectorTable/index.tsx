@@ -18,23 +18,24 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { AssetCategory } from '@Views/TradePage/type';
 import { IconButton } from '@mui/material';
-import { useAtom, useSetAtom } from 'jotai';
-import { useMemo } from 'react';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useMemo } from 'react';
 import { OneDayChange } from './OneDayChange';
 import styled from '@emotion/styled';
-import { ForexTimingsModalAtom } from '@Views/TradePage/atoms';
+import { ForexTimingsModalAtom, searchBarAtom } from '@Views/TradePage/atoms';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { CloseTag } from './CloseTag';
 import { getAddress } from 'viem';
 import { Payout } from '@Views/TradePage/Views/MarketChart/Payout';
 
-export const AssetSelectorTable: React.FC = () => {
+export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
   const {
     favouriteMarkets: favourites,
     addFavouriteMarket,
     removeFavouriteMarket,
     navigateToMarket,
   } = useFavouriteMarkets();
+  const isMobile = typeof group == 'string';
   const setForexTimingsModal = useSetAtom(ForexTimingsModalAtom);
   const { getPoolInfo } = usePoolInfo();
   const readcallData = useBuyTradeData();
@@ -49,7 +50,7 @@ export const AssetSelectorTable: React.FC = () => {
       'Current OI',
       'Max OI',
     ];
-  }, []);
+  }, [isMobile]);
   const HeadFormatter = (col: number) => {
     return <TableHeader col={col} headsArr={headers} />;
   };
@@ -71,8 +72,9 @@ export const AssetSelectorTable: React.FC = () => {
     );
   }
 
-  const { filteredMarkets: updatedArr } = useAssetTableFilters();
+  const { filteredMarkets: updatedArr } = useAssetTableFilters(group);
 
+  const searchValue = useAtomValue(searchBarAtom);
   const BodyFormatter = (row: number, col: number) => {
     if (!updatedArr) return <>-</>;
     const currentAsset = updatedArr[row];
@@ -129,7 +131,7 @@ export const AssetSelectorTable: React.FC = () => {
         return (
           <CellContent
             content={[
-              <div className="flex">
+              <div className="flex ">
                 <div className="w-[20px] h-[20px]">
                   <PairTokenImage pair={pairName} />
                 </div>
@@ -142,7 +144,7 @@ export const AssetSelectorTable: React.FC = () => {
       case 2:
         if (!isOpen)
           return (
-            <ColumnGap gap="4px">
+            <ColumnGap gap="4px " className="b1200:items-end">
               <CloseTag />
               {isForex && (
                 <ShowTimingModalButton
@@ -156,7 +158,7 @@ export const AssetSelectorTable: React.FC = () => {
         return (
           <CellContent
             content={[
-              <div className="flex flex-col items-start">
+              <div className="flex flex-col items-start b1200:items-end">
                 <CurrentPrice currentAsset={currentAsset} />
                 <OneDayChangeComponent currentAsset={currentAsset} />
               </div>,
@@ -227,16 +229,18 @@ export const AssetSelectorTable: React.FC = () => {
         return <div>Unhandled Column.</div>;
     }
   };
+
+  if (!updatedArr.length && group && searchValue.length > 0) return null;
   return (
     <AssetSelectorDDBackground>
       <BufferTable
         widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
-        headerJSX={HeadFormatter}
-        cols={headers.length}
+        headerJSX={isMobile ? null : HeadFormatter}
+        cols={isMobile ? 3 : headers.length}
         shouldShowMobile
         rows={updatedArr?.length ?? 0}
         bodyJSX={BodyFormatter}
-        tableClass="assetSelectorTableWidth"
+        tableClass="b1200:!w-full assetSelectorTableWidth"
         error={
           <TableErrorMsg
             msg="No Assets Found."

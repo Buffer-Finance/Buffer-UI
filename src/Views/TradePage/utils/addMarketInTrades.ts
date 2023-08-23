@@ -18,6 +18,7 @@ const addMarketInTrades = (
       (pool) =>
         pool.optionContract.toLowerCase() === t?.target_contract.toLowerCase()
     );
+    // console.log(`pool: `, pool);
     return {
       ...t,
       market: tradeMarket,

@@ -2,7 +2,6 @@ import { ClickAwayListener, IconButton } from '@mui/material';
 import { useState } from 'react';
 import SidebarCss from './styles';
 import { useGlobal } from '@Contexts/Global';
-import SidebarCollapseIcon from 'src/SVG/Elements/sidebarCollpaseIcon';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Fade from 'react-reveal/Fade';
 import { getTabs, ITab } from 'src/Config/getTabs';
@@ -13,6 +12,10 @@ import Discord from 'public/Social/discord';
 import Medium from 'public/Social/medium';
 import GitHub from 'public/Social/github';
 import Telegram from 'public/Social/telegram';
+import CloseLogo from '@SVG/Elements/Closelogo';
+import { CloseButton } from '@Views/TradePage/Components/CloseButton';
+import BackIcon from '@SVG/buttons/back';
+import MemoHamburgerBack from '@SVG/Elements/sidebarCollpaseIcon';
 const social = [
   {
     Img: Twitter,
@@ -63,14 +66,14 @@ const SideBar: React.FC<any> = () => {
       )}
 
       <div
-        className={`bg-1 max-w-[300px] sidebar ${
+        className={`bg-1 sidebar  ${
           state.sidebar_active ? '' : 'sidebar-closed'
         } a1400:!hidden`}
       >
-        <div className="sidebar_container flex-col">
+        <div className="sidebar_container flex-col items-start">
           <div className="icon_container mb-6">
             <div
-              className="flex items-center justify-center"
+              className="flex items-center justify-between w-full"
               role={'button'}
               onClick={
                 () => {}
@@ -80,10 +83,10 @@ const SideBar: React.FC<any> = () => {
               }
             >
               <BufferLogoComponent />
+              <IconButton className="collapse-icon" onClick={handleClose}>
+                <MemoHamburgerBack />
+              </IconButton>
             </div>
-            <IconButton className="collapse-icon" onClick={handleClose}>
-              <SidebarCollapseIcon />
-            </IconButton>
           </div>
           {options.map((option, key) => {
             if (key >= newPageNavElements || option.isExternalLink) {
@@ -109,7 +112,7 @@ const SideBar: React.FC<any> = () => {
                 to={option.to}
                 onClick={handleClose}
                 className={({ isActive }) =>
-                  `item ${isActive ? 'active bg-4' : ''} 
+                  `item ${isActive ? 'active ' : ''} 
           `
                 }
               >
@@ -117,14 +120,14 @@ const SideBar: React.FC<any> = () => {
               </NavLink>
             );
           })}
-          <div className=" text-2 mb-3 mt-[10vh] text-center text-f13 pl-[2rem]">
-            Connect with us{' '}
+          <div className=" text-2 mb-3 mt-[10vh] text-left text-f13 pl-[2rem]">
+            Connect with us on{' '}
           </div>
-          <div className=" bbborderrr">
-            <div className="flex max-w-[140px] mx-auto flex-row items-center justify-center flex-wrap gap-[11px] px-3">
+          <div className=" bbborderrr flex w-full justify-center">
+            <div className="flex  w-full flex-row items-center  flex-wrap gap-[4px] pl-[2rem]">
               {social.map((S) => {
                 return (
-                  <a className="unset" href={S.link} target="_blank">
+                  <a key={S} className="unset" href={S.link} target="_blank">
                     <span className="text-2 ">
                       <S.Img className="" />
                     </span>

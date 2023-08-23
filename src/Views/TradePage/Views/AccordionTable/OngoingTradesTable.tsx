@@ -1,5 +1,5 @@
 import BufferTable from '@Views/Common/BufferTable';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 
 import { Variables } from '@Utils/Time';
@@ -26,6 +26,7 @@ import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import {
   closeLoadingAtom,
   queuets2priceAtom,
+  tradeInspectMobileAtom,
   visualizeddAtom,
 } from '@Views/TradePage/atoms';
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
@@ -33,10 +34,12 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { toFixed } from '@Utils/NumString';
 import { AssetCell } from './AssetCell';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useMedia } from 'react-use';
 
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[] | undefined;
   platform?: boolean;
+  onlyView?: number[];
   activePage?: number;
   setActivePage?: (page: number) => void;
   totalPages?: number;
@@ -47,20 +50,28 @@ export const OngoingTradesTable: React.FC<{
   platform,
   activePage,
   setActivePage,
+  onlyView,
   totalPages,
   overflow,
   isLoading,
 }) => {
+  const isNotMobile = useMedia('(min-width:1200px)');
+  const isMobile = useMedia('(max-width:600px)');
+
   const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { registeredOneCT } = useOneCTWallet();
-
+  const setInspectTrade = useSetAtom(tradeInspectMobileAtom);
+  let strikePriceHeading = 'Strike Price';
+  if (isMobile) {
+    strikePriceHeading = 'Strike';
+  }
   const headNameArray =
     platform || !registeredOneCT
       ? [
           'Asset',
-          'Strike Price',
+          strikePriceHeading,
           'Current Price',
           'Open Time',
           'Time Left',
@@ -69,7 +80,7 @@ export const OngoingTradesTable: React.FC<{
         ]
       : [
           'Asset',
-          'Strike Price',
+          strikePriceHeading,
           'Current Price',
           'Open Time',
           'Time Left',
@@ -159,7 +170,9 @@ export const OngoingTradesTable: React.FC<{
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} />;
       case TableColumn.Asset:
-        return <AssetCell currentRow={trade} platform={platform} />;
+        return (
+          <AssetCell currentRow={trade} platform={platform} split={isMobile} />
+        );
       case TableColumn.CurrentPrice:
         return (
           <Display
@@ -246,9 +259,13 @@ export const OngoingTradesTable: React.FC<{
       headerJSX={HeaderFomatter}
       bodyJSX={BodyFormatter}
       cols={headNameArray.length}
+      showOnly={onlyView}
       rows={trades ? trades.length : 0}
       widths={['auto']}
-      onRowClick={console.log}
+      onRowClick={(idx) => {
+        if (isNotMobile) return null;
+        else setInspectTrade({ trade: trades?.[idx] });
+      }}
       overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
       loading={isLoading}

@@ -146,7 +146,13 @@ const CountChip = ({ count }: { count: number }) => (
   </div>
 );
 
-export const History = ({ overflow }: { overflow?: number }) => {
+export const History = ({
+  overflow,
+  onlyView,
+}: {
+  overflow?: number;
+  onlyView?: number[];
+}) => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
   return (
@@ -156,12 +162,19 @@ export const History = ({ overflow }: { overflow?: number }) => {
       activePage={activePage}
       setActivePage={setActivePage}
       overflow={overflow}
+      onlyView={onlyView}
       isLoading={historyTrades === undefined}
     />
   );
 };
 
-const Cancelled = ({ overflow }: { overflow?: number }) => {
+export const Cancelled = ({
+  overflow,
+  onlyView,
+}: {
+  overflow?: number;
+  onlyView?: number[];
+}) => {
   const { page_data: canclledTrades, total_pages } = useCancelledTrades();
   // console.log(canclledTrades, 'cancelled trades');
   return (
@@ -169,12 +182,19 @@ const Cancelled = ({ overflow }: { overflow?: number }) => {
       trades={canclledTrades}
       totalPages={total_pages}
       overflow={overflow}
+      onlyView={onlyView}
       isLoading={canclledTrades === undefined}
     />
   );
 };
 
-const PlatformHistory = ({ overflow }: { overflow?: number }) => {
+export const PlatformHistory = ({
+  overflow,
+  onlyView,
+}: {
+  overflow?: number;
+  onlyView?: number[];
+}) => {
   const { page_data: platformHistoryTrades, total_pages } =
     usePlatformHistoryTrades();
   const [activePage, setActivePage] = useAtom(platformHistoryTableActivePage);
@@ -187,12 +207,19 @@ const PlatformHistory = ({ overflow }: { overflow?: number }) => {
       activePage={activePage}
       setActivePage={setActivePage}
       overflow={overflow}
+      onlyView={onlyView}
       isLoading={platformHistoryTrades === undefined}
     />
   );
 };
 
-const PlatformOngoing = ({ overflow }: { overflow?: number }) => {
+export const PlatformOngoing = ({
+  overflow,
+  onlyView,
+}: {
+  overflow?: number;
+  onlyView?: number[];
+}) => {
   const { page_data: platformActiveTrades, total_pages } =
     usePlatformActiveTrades();
   const [activePage, setActivePage] = useAtom(platformActiveTableActivePage);
@@ -205,6 +232,7 @@ const PlatformOngoing = ({ overflow }: { overflow?: number }) => {
       totalPages={total_pages}
       setActivePage={setActivePage}
       overflow={overflow}
+      onlyView={onlyView}
       isLoading={platformActiveTrades === undefined}
     />
   );

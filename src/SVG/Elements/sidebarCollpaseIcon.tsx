@@ -1,26 +1,40 @@
-import * as React from "react";
-import { SVGProps } from "react";
+import * as React from 'react';
 
-const SidebarCollapseIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg width={25} height={23} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <path d="M22.259 11.558h-19" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M22.259 3.982h-9" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-    <path
-      // opacity={0.301}
-      d="M22.259 19.134h-9"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="m7.259 6.823-5 4.735 5 4.735"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+function HamburgerBack(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width={25} height={25} fill="none" {...props}>
+      <path
+        d="M22.259 12.434h-19"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M22.259 4.26h-9"
+        stroke="#808191"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        opacity={0.301}
+        d="M22.259 20.608h-9"
+        stroke="#808191"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.259 7.325l-5 5.109 5 5.108"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
-export default SidebarCollapseIcon;
+const MemoHamburgerBack = React.memo(HamburgerBack);
+export default MemoHamburgerBack;

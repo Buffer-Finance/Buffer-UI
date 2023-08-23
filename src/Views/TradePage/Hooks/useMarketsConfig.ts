@@ -11,14 +11,6 @@ export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
   const toastify = useToast();
 
-  if (error) {
-    toastify({
-      type: 'error',
-      msg: 'Error fetching markets. Please try again.' + error,
-      id: 'fetchMarketAPI',
-    });
-  }
-
   const res = useMemo(() => {
     if (!data?.optionContracts) {
       return null;

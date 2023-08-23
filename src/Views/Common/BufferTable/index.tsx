@@ -43,6 +43,7 @@ interface IBufferTable {
   smHeight?: boolean;
   count?: number;
   tableBodyClass?: string;
+  showOnly?: number[];
   shouldShowMobile?: boolean;
   shouldHideHeader?: boolean;
   shouldHideBody?: boolean;
@@ -68,6 +69,7 @@ const BufferTable: React.FC<IBufferTable> = ({
   smHeight,
   selectedIndex,
   onRowClick,
+  showOnly,
   error,
   tableClass,
   loading,
@@ -110,28 +112,32 @@ const BufferTable: React.FC<IBufferTable> = ({
           } `}
           aria-label="buffer-table"
         >
-          <TableHead
-            className={`${
-              isBodyTransparent ? '!bg-transparent transparent-hover' : ''
-            } table-header ${shouldHideHeader ? 'tab' : ''} `}
-          >
-            <TableRow className={` table-row-head`}>
-              {createArray(cols).map((idx) => {
-                return (
-                  <TableCell
-                    key={idx}
-                    className={`${
-                      isBodyTransparent
-                        ? '!bg-transparent transparent-hover'
-                        : ''
-                    } !z-20`}
-                  >
-                    {headerJSX(idx)}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
+          {headerJSX && (
+            <TableHead
+              className={`${
+                isBodyTransparent ? '!bg-transparent transparent-hover' : ''
+              } table-header ${shouldHideHeader ? 'tab' : ''} `}
+            >
+              <TableRow className={` table-row-head`}>
+                {createArray(cols).map((idx) => {
+                  let show = true;
+                  if (showOnly) show = showOnly.includes(idx);
+                  return (
+                    <TableCell
+                      key={idx}
+                      className={` ${show ? '' : '!hidden'}  ${
+                        isBodyTransparent
+                          ? '!bg-transparent transparent-hover'
+                          : ''
+                      } !z-20`}
+                    >
+                      {headerJSX(idx)}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            </TableHead>
+          )}
           <TableBody className={'table-body ' + tableBodyClass}>
             {topDecorator}
 
@@ -172,10 +178,11 @@ const BufferTable: React.FC<IBufferTable> = ({
                     }
                   }
                 }
+
                 return (
                   <TableRow
                     key={row}
-                    className={`group table-row ${rowClass} ${
+                    className={`group table-row  ${rowClass} ${
                       isBodyTransparent ? 'transparent transparent-hover' : ''
                     }`}
                     onClick={() => onRowClick(row)}
@@ -183,7 +190,16 @@ const BufferTable: React.FC<IBufferTable> = ({
                     {createArray(cols).map((col, colIdx) => (
                       <TableCell
                         key={row.toString() + colIdx}
-                        className={tableCellCls}
+                        className={
+                          tableCellCls +
+                          ` ${
+                            showOnly
+                              ? showOnly.includes(colIdx)
+                                ? ''
+                                : '!hidden'
+                              : ''
+                          }`
+                        }
                         width={
                           widths && colIdx < widths.length ? widths[colIdx] : ''
                         }

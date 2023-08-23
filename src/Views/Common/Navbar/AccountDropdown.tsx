@@ -157,6 +157,7 @@ export const AccountDropdown: React.FC = () => {
 
               return (
                 <div style={{ display: 'flex', gap: 3 }}>
+                  {/* chain dd */}
                   <div
                     onClick={openChainModal}
                     role="button"
@@ -174,11 +175,11 @@ export const AccountDropdown: React.FC = () => {
 
                       <span className="sm:hidden">{chain.name}</span>
                     </div>
-                    <ArrowDropDownRounded
-                      className={`dropdown-arrow transition-all duration-300 w-6 h-6 ease-out `}
+                    <DDArrow
+                      className={` transition-all duration-300 ml-2 ease-out mr-2`}
                     />
                   </div>
-                  {/* <OneCTButton /> */}
+                  {/* Accound DD */}
                   <button type="button" ref={ref} {...anchorProps}>
                     <div
                       className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-[6px] bg-[#191B20] hover:brightness-125 `}

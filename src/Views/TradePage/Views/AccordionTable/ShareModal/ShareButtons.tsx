@@ -50,7 +50,7 @@ export const ShareButtons: React.FC<{
   };
 
   return (
-    <div className="flex items-stretch mt-4 gap-3 sm:justify-center">
+    <div className="flex sm:justify-start items-stretch mt-4 gap-3 ">
       <button
         className={`text-f16 text-3 bg-2 pb-[3px] pr-4 pl-[10px] rounded-sm h-[30px] whitespace-nowrap w-[80px] transition-all duration-300 hover:text-1`}
         onClick={uploadToServer}
@@ -65,7 +65,7 @@ export const ShareButtons: React.FC<{
         )}
       </button>
       <button
-        className={`text-f16 text-3 bg-2 pb-[3px] pr-4 pl-[10px] h-[30px] rounded-sm whitespace-nowrap transition-all duration-300 hover:text-1 sm:hidden`}
+        className={`text-f16 text-3 bg-2 pb-[3px] pr-4 pl-[10px] h-[30px] rounded-sm whitespace-nowrap transition-all duration-300 hover:text-1 `}
         onClick={downloadImage}
       >
         <FileDownloadOutlined />

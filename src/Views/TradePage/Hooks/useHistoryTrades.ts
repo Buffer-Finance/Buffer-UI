@@ -18,6 +18,7 @@ const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
   const { address } = useAccount();
   const markets = useMarketsConfig();
+  // console.log(`markets: `, markets);
   const activePage = useAtomValue(historyTableActivePage);
   // const [isLoading, setIsLoading] = useState(false);
 
@@ -36,8 +37,13 @@ const useHistoryTrades = () => {
             page: activePage - 1,
           },
         });
+        console.log(
+          `addMarketInTrades(res.data.page_data, markets): `,
+          addMarketInTrades(res.data.page_data, markets)
+        );
+        // if (!res?.data?.page_data?.length)
         // setIsLoading(false);
-        console.log(res, 'history');
+        // console.log(res, 'history');
         // if (!res?.data?.page_data === undefined)
         //   return { page_data: null, total_pages: 1 };
         if (res.data.page_data.length === 0)
