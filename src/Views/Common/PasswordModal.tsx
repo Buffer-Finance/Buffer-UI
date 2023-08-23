@@ -46,7 +46,7 @@ export const PasswordModal: React.FC<{}> = ({}) => {
         });
       }}
     >
-      <EditModalBackground>
+      <EditModalBackground className=" !w-full ">
         <RowGap gap="6px" className="mb-3">
           <div className="flex items-center text-1 text-f22 gap-x-[12px]">
             {' '}
