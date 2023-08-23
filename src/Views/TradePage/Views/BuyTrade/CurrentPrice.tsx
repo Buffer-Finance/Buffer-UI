@@ -59,7 +59,7 @@ export const CurrentPrice: React.FC<{
           <StrikePricePicker
             initialStrike={round(price, precision)}
             precision={precision}
-            className="w-fit"
+            className="w-[127px] text-right"
           />
         )}
       </RowBetween>
