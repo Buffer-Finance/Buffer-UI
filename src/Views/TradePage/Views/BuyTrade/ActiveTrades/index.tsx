@@ -24,7 +24,7 @@ export const ActiveTrades: React.FC<{ isMobile?: boolean }> = ({
   const trades = !isLimitOrderTable ? activeTrades : limitOrderTrades;
   return (
     <>
-      <div className="w-full bg-[#282b39] flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  mt-3">
+      <div className="w-full b1200:sticky b1200:top-[0px] b1200:z-50 bg-[#282b39] flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  mt-3">
         {tableTypes.map((s) => {
           return (
             <div
