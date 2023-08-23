@@ -2420,11 +2420,12 @@ html .MuiDialog-paperWidthSm {
   max-width: max-content;
 }
 
-/* @media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   html .MuiDialog-paperWidthSm {
-    width: 80%;
+    max-width: 100%;
+    width: 90%;
   }
-} */
+}
 
 html .MuiPagination-ul {
   flex-wrap: nowrap;
