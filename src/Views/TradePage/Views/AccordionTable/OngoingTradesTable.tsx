@@ -266,7 +266,7 @@ export const OngoingTradesTable: React.FC<{
         if (isNotMobile) return null;
         else setInspectTrade({ trade: trades?.[idx] });
       }}
-      overflow={overflow}
+      overflow
       error={<TableErrorRow msg="No active trades present." />}
       loading={isLoading}
     />

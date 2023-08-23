@@ -161,7 +161,7 @@ export const History = ({
       totalPages={total_pages}
       activePage={activePage}
       setActivePage={setActivePage}
-      overflow={overflow}
+      overflow
       onlyView={onlyView}
       isLoading={historyTrades === undefined}
     />
@@ -181,7 +181,7 @@ export const Cancelled = ({
     <CancelledTable
       trades={canclledTrades}
       totalPages={total_pages}
-      overflow={overflow}
+      overflow
       onlyView={onlyView}
       isLoading={canclledTrades === undefined}
     />
@@ -206,7 +206,7 @@ export const PlatformHistory = ({
       totalPages={total_pages}
       activePage={activePage}
       setActivePage={setActivePage}
-      overflow={overflow}
+      overflow
       onlyView={onlyView}
       isLoading={platformHistoryTrades === undefined}
     />
@@ -231,7 +231,7 @@ export const PlatformOngoing = ({
       activePage={activePage}
       totalPages={total_pages}
       setActivePage={setActivePage}
-      overflow={overflow}
+      overflow
       onlyView={onlyView}
       isLoading={platformActiveTrades === undefined}
     />

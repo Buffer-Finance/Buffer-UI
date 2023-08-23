@@ -247,7 +247,7 @@ const HistoryTable: React.FC<{
         else setInspectTrade({ trade: trades?.[idx] });
       }}
       showOnly={onlyView}
-      overflow={overflow}
+      overflow
       error={<TableErrorRow msg="No Trade History." />}
       loading={isLoading}
     />

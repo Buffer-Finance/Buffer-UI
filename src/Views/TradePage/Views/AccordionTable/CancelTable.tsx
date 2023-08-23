@@ -132,7 +132,7 @@ export const CancelledTable: React.FC<{
       widths={['auto']}
       onRowClick={console.log}
       showOnly={onlyView}
-      overflow={overflow}
+      overflow
       error={<TableErrorRow msg="No active trades present." />}
       loading={isLoading}
     />

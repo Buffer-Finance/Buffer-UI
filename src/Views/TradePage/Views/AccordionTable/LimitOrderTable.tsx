@@ -141,7 +141,7 @@ const LimitOrderTable = ({
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow={overflow}
+      overflow
       error={<TableErrorRow msg="No active limit orders." />}
     />
   );

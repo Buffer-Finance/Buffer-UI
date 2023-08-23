@@ -33,7 +33,7 @@ const TableBackground = styled.div`
     font-size: 1.6rem;
 
     .table-header {
-      height: ${(props) => (props?.overflow ? 'sticky' : 'static')};
+      /* height: ${(props) => (props?.overflow ? 'sticky' : 'static')}; */
       background: #171722;
 
       .table-head {

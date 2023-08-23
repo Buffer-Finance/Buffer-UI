@@ -257,6 +257,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
           navigateToMarket(selectedAsset);
           // addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
         }}
+        overflow
       />
     </AssetSelectorDDBackground>
   );
