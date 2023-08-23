@@ -8,7 +8,9 @@ export const SlippageModalStyles = styled.div`
   padding: 3rem;
   padding-bottom: 2rem;
   position: relative;
-  width: 500px;
+  width: max-content;
+  margin: auto;
+
   & * {
     font-family: 'Relative Pro' !important;
   }
