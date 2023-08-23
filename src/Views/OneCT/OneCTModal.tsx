@@ -382,7 +382,7 @@ const OneCTModal: React.FC<any> = ({}) => {
     <ModalBase
       open={isModalOpen}
       onClose={() => setModal((m) => false)}
-      className="max-w-[600px] sm:max-w-full sm:!p-5 !bg-[#232334]"
+      className="max-w-[600px] !w-[500px] sm:max-w-full sm:!p-5 !bg-[#232334]"
     >
       <div className="flex justify-between items-center">
         <h3 className="font-[500] text-f20 sm:text-f14">

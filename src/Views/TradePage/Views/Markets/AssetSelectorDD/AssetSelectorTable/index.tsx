@@ -44,7 +44,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
     return [
       '',
       'Asset',
-      '24H Change',
+      '24h Change',
       'Payout',
       'Max Trade Size',
       'Current OI',

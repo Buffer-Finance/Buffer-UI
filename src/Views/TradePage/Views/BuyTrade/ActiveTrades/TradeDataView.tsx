@@ -23,6 +23,7 @@ import { secondsToHHMM } from '@Views/TradePage/utils';
 import { useAtomValue } from 'jotai';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { Display } from '@Views/Common/Tooltips/Display';
 
 export const TradeDataView: React.FC<{
   trade: TradeType;
@@ -55,9 +56,11 @@ export const TradeDataView: React.FC<{
     {
       head: <span>Trade Size</span>,
       desc: (
-        <span>
-          {divide(trade.trade_size, poolInfo.decimals)} {poolInfo.token}
-        </span>
+        <Display
+          data={divide(trade.trade_size, poolInfo.decimals)}
+          unit={poolInfo.token}
+          precision={2}
+        />
       ),
     },
     {
@@ -90,9 +93,11 @@ export const TradeDataView: React.FC<{
       {
         head: <span>Trade Size</span>,
         desc: (
-          <span>
-            {divide(trade.trade_size, poolInfo.decimals)} {poolInfo.token}
-          </span>
+          <Display
+            data={divide(trade.trade_size, poolInfo.decimals)}
+            unit={poolInfo.token}
+            precision={2}
+          />
         ),
       },
       {
@@ -123,9 +128,11 @@ export const TradeDataView: React.FC<{
       {
         head: <span>Trade Size</span>,
         desc: (
-          <span>
-            {divide(trade.trade_size, poolInfo.decimals)} {poolInfo.token}
-          </span>
+          <Display
+            data={divide(trade.trade_size, poolInfo.decimals)}
+            unit={poolInfo.token}
+            precision={2}
+          />
         ),
       },
       {
