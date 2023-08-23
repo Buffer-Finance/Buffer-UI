@@ -47,6 +47,7 @@ import { getSingatureCached } from '../cache';
 import { viemMulticall } from '@Utils/multicall';
 import { signTypedData } from '@wagmi/core';
 import { PublicClient } from 'viem';
+import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -62,7 +63,8 @@ export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
   const [settings] = useAtom(tradeSettingsAtom);
   const setPriceCache = useSetAtom(queuets2priceAtom);
-  const approvalExpanded = useApprvalAmount();
+  const { data: approvalExpanded, mutate: updateApprovalData } =
+    useApprvalAmount();
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
@@ -446,10 +448,9 @@ export const useBuyTradeActions = (userInput: string) => {
       // }
     }
   };
-
-  const handleApproveClick = async (
-    ammount = '100000000000000000000000000'
-  ) => {
+  const defaultApprovalAmount = '100000000000000000000000000';
+  const handleApproveClick = async (ammount = defaultApprovalAmount) => {
+    // console.log('goes in here');
     if (state.txnLoading > 1) {
       toastify({
         id: 'dddafsd3',
@@ -471,7 +472,7 @@ export const useBuyTradeActions = (userInput: string) => {
     }
     // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
     setLoading(1);
-    if (ammount !== '0' && ammount !== '100000000000000000000000000') {
+    if (ammount !== '0' && ammount !== defaultApprovalAmount) {
       ammount = toFixed(add(ammount, multiply(ammount, '0.1')), 0);
     }
     //  fetch nonce 7min
@@ -479,16 +480,27 @@ export const useBuyTradeActions = (userInput: string) => {
     // call api :15
     const deadline = (Math.round(Date.now() / 1000) + 84600).toString();
     try {
-      const [_, RSV] = await generateApprovalSignature(
+      const { nonce, res } = await generateApprovalSignatureWrapper(
         approvalExpanded?.nonce,
         ammount,
         address!,
-        tokenAddress,
+        tokenAddress as string,
         configData.router,
         deadline,
         activeChain.id,
         signTypedData
       );
+      const updatedApproval = await updateApprovalData();
+
+      if (nonce !== updatedApproval?.nonce) {
+        console.log(`useBuyTradeActions-nonce: `, nonce, updatedApproval);
+        return toastify({
+          id: 'nonce changed in db',
+          type: 'error',
+          msg: 'Please sign again.',
+        });
+      }
+      const [_, RSV] = res;
       const user_signature = await getSingatureCached(oneCTWallet);
       const apiSignature = {
         user: address,
@@ -509,7 +521,11 @@ export const useBuyTradeActions = (userInput: string) => {
       setLoading(null);
       setIsApproveModalOpen(false);
 
-      toastify({ type: 'success', msg: 'Approved Successfully.', id: '10231' });
+      toastify({
+        type: 'success',
+        msg: ammount === '0' ? 'Approval Revoked' : 'Approved Successfully.',
+        id: '10231',
+      });
     } catch (e) {
       setLoading(null);
 
@@ -525,18 +541,19 @@ export const useBuyTradeActions = (userInput: string) => {
       });
       return true;
     }
-    dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
-    setLoading(1);
-    approve(
-      (p) => {
-        if (p.payload) {
-          setIsApproveModalOpen(false);
-        }
-        setLoading(null);
-      },
-      'approve',
-      [configData.router, '0']
-    );
+    // dispatch({ type: 'SET_TXN_LOADING', payload: 2 });
+    // setLoading(1);
+    // approve(
+    //   (p) => {
+    //     if (p.payload) {
+    //       setIsApproveModalOpen(false);
+    //     }
+    //     setLoading(null);
+    //   },
+    //   'approve',
+    //   [configData.router, '0']
+    // );
+    handleApproveClick('0');
   };
 
   return {
@@ -551,7 +568,9 @@ export let expiryPriceCache: { [key: string]: number } = {};
 export const getCachedPrice = async (query: any): Promise<number> => {
   const id = query.pair + ':' + query.timestamp;
   if (!(id in expiryPriceCache)) {
-    const priceResponse = await axios.post(pricePublisherBaseUrl, [query]);
+    const priceResponse = await axios.post(pricePublisherBaseUrl + 'query/', [
+      query,
+    ]);
     const priceObject = priceResponse?.data[0]?.price;
     if (!priceObject) return getCachedPrice(query);
     expiryPriceCache[id] = priceObject;

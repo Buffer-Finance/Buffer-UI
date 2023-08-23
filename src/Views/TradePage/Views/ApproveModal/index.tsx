@@ -85,13 +85,13 @@ export const ApproveModal: React.FC<IApproveModal> = ({
           when the transaction is signed from your wallet for a fair and
           accurate trading experience.
         </div>
-        <div
+        {/* <div
           className="flex text-1 pointer mx-auto"
           onClick={() => setIsChecked((prvState) => !prvState)}
         >
           <BufferCheckbox checked={isChecked} onCheckChange={console.log} />
           <div className="text-f14 fw5 ml5">Approve All</div>
-        </div>
+        </div> */}
         <div className="flex items-center content-center nowrap full-width">
           <BlueBtn
             isLoading={!!loading && loading === 1 && loadingState === 1}

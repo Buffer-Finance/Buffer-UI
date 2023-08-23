@@ -281,6 +281,7 @@ const Referral: React.FC<IReferral> = ({}) => {
               <Display
                 data={data?.totalTradesReferred}
                 className="!w-full"
+                precision={0}
                 content={
                   tokens.length > 1 && (
                     <TableAligner

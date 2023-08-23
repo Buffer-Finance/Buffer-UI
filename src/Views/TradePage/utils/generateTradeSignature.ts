@@ -179,7 +179,7 @@ const getRSVFromSignature = (signature: string) => {
 
 export default generateTradeSignature;
 const generateApprovalSignature = async (
-  nonce: string,
+  nonce: number,
   amount: string,
   userMainAccount: string,
   tokenAddress: string,

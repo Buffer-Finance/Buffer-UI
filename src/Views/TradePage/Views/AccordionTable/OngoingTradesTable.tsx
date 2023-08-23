@@ -37,13 +37,14 @@ import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useMedia } from 'react-use';
 
 export const OngoingTradesTable: React.FC<{
-  trades: TradeType[];
+  trades: TradeType[] | undefined;
   platform?: boolean;
   onlyView?: number[];
   activePage?: number;
   setActivePage?: (page: number) => void;
   totalPages?: number;
   overflow?: number;
+  isLoading: boolean;
 }> = ({
   trades,
   platform,
@@ -52,6 +53,7 @@ export const OngoingTradesTable: React.FC<{
   onlyView,
   totalPages,
   overflow,
+  isLoading,
 }) => {
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
@@ -107,6 +109,7 @@ export const OngoingTradesTable: React.FC<{
   const { getPoolInfo } = usePoolInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
+    if (trades === undefined) return <></>;
     const trade = trades?.[row];
     if (!trade) return 'Problem';
 
@@ -265,6 +268,7 @@ export const OngoingTradesTable: React.FC<{
       }}
       overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
+      loading={isLoading}
     />
   );
 };

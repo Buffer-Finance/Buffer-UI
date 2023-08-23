@@ -28,7 +28,7 @@ export const Navbar: React.FC<INavbar> = () => {
     [activeMarketFromStorage]
   );
   const VISIBLETABS = isTestnet ? 6 : 4;
-  const MORETABS = isTestnet ? 2 : 3;
+  // const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',
@@ -82,16 +82,16 @@ export const Navbar: React.FC<INavbar> = () => {
               }
               return <Tab tab={tab} key={tab.name} />;
             })}
-            {tabs.length > VISIBLETABS && (
+            {/* {tabs.length > VISIBLETABS && (
               <TabsDropdown
                 tabs={tabs.slice(VISIBLETABS, -MORETABS)}
                 defaultName="Analytics"
               />
-            )}
+            )} */}
             {tabs.length > VISIBLETABS && (
-              <TabsDropdown tabs={tabs.slice(-MORETABS)} defaultName="More" />
+              <TabsDropdown tabs={tabs.slice(VISIBLETABS)} defaultName="More" />
             )}
-            <TabsDropdown tabs={social} defaultName="Socials" />
+            {/* <TabsDropdown tabs={social} defaultName="Socials" /> */}
           </div>
         )}
       </div>

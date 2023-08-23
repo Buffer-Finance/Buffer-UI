@@ -102,6 +102,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   let currentOIinPercent = null;
 
   const assetPrices = usePriceChange();
+  console.log('assetPrices', assetPrices);
   if (readcallData && switchPool && poolDetails) {
     maxFee = divide(
       readcallData?.maxTradeSizes[switchPool?.optionContract] ?? '0',

@@ -117,7 +117,11 @@ const AccordionTable: React.FC<any> = ({}) => {
         } flex flex-col transition-all  overflow-y-hidden `}
       >
         {activeTable == 'Trades' ? (
-          <OngoingTradesTable trades={activeTrades} overflow={400} />
+          <OngoingTradesTable
+            trades={activeTrades}
+            overflow={400}
+            isLoading={false}
+          />
         ) : activeTable == 'Limit Orders' ? (
           <LimitOrderTable trades={limitOrders} overflow={400} />
         ) : activeTable == 'Platform Trades' ? (
@@ -159,6 +163,7 @@ export const History = ({
       setActivePage={setActivePage}
       overflow={overflow}
       onlyView={onlyView}
+      isLoading={historyTrades === undefined}
     />
   );
 };
@@ -178,6 +183,7 @@ export const Cancelled = ({
       totalPages={total_pages}
       overflow={overflow}
       onlyView={onlyView}
+      isLoading={canclledTrades === undefined}
     />
   );
 };
@@ -202,6 +208,7 @@ export const PlatformHistory = ({
       setActivePage={setActivePage}
       overflow={overflow}
       onlyView={onlyView}
+      isLoading={platformHistoryTrades === undefined}
     />
   );
 };
@@ -226,6 +233,7 @@ export const PlatformOngoing = ({
       setActivePage={setActivePage}
       overflow={overflow}
       onlyView={onlyView}
+      isLoading={platformActiveTrades === undefined}
     />
   );
 };

@@ -91,7 +91,7 @@ export const usePlatformActiveTrades = () => {
       refreshInterval: refreshInterval,
     }
   );
-  return data || ({ page_data: [], total_pages: 1 } as tradesApiResponseType);
+  return data || { page_data: undefined, total_pages: 1 };
 };
 
 export const usePlatformHistoryTrades = () => {
@@ -130,5 +130,5 @@ export const usePlatformHistoryTrades = () => {
       refreshInterval: refreshInterval,
     }
   );
-  return data || ({ page_data: [], total_pages: 1 } as tradesApiResponseType);
+  return data || { page_data: undefined, total_pages: 1 };
 };
