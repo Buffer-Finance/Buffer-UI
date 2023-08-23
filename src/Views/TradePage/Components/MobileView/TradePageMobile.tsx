@@ -20,6 +20,7 @@ import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 import { MarketSelectorDD } from '@Views/TradePage/Views/MarketChart/MarketSelectorDD';
 import { MarketPicker } from './MarketPicker/MarketPicker';
 import { MarketStatsBar } from '@Views/TradePage/Views/MarketChart/MarketStatsBar';
+import { Skeleton } from '@mui/material';
 
 const TradePageMobile: React.FC<any> = ({}) => {
   const marketConfig = useMarketsConfig();
@@ -35,7 +36,13 @@ const TradePageMobile: React.FC<any> = ({}) => {
   const approvalExpanded = useApprvalAmount();
   const { calculatePayout } = useSelectedAssetPayout();
 
-  if (!poolDetails || !activeMarket) return <div>Loadding...</div>;
+  if (!poolDetails || !activeMarket)
+    return (
+      <Skeleton
+        variant="rectangular"
+        className="!w-full !h-[100px] rounded-lg lc"
+      />
+    );
   const decimals = poolDetails.decimals;
 
   const activeAssetPrice = getPriceFromKlines(marketPrice, {
@@ -50,7 +57,13 @@ const TradePageMobile: React.FC<any> = ({}) => {
     joinStrings(activeMarket.token0, activeMarket.token1, '')
   );
 
-  if (!marketConfig?.length) return <div>Loading...</div>;
+  if (!marketConfig?.length)
+    return (
+      <Skeleton
+        variant="rectangular"
+        className="!w-full !h-[100px] rounded-lg lc"
+      />
+    );
   return (
     <div className="flex flex-col  h-full w-full m-auto px-3 a600:w-[500px]">
       <MarketPicker />
