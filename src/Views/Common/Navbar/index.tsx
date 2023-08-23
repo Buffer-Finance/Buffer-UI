@@ -41,15 +41,16 @@ export const Navbar: React.FC<INavbar> = () => {
   return (
     <header className="sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102]">
       <div className="flex items-center gap-[24px]">
-        {/* <div
+        <div
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
+          className="sm:hidden"
         >
           <BufferLogoComponent
             className="h-[30px] ml-[8px] sm:mx-[2px]"
             hideText
           />
-        </div> */}
+        </div>
         <div className="a1200:hidden flex gap-x-4 items-center pl-4">
           <MemoHamburgerSVG onClick={handleClose} />
           <MemoWalletSVG
