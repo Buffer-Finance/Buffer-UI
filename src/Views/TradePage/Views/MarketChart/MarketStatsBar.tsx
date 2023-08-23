@@ -146,7 +146,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
         <OneDayChange
           oneDayChange={oneDayChange}
           className="text-f12 "
-          svgClassName="scale-125"
+          svgClassName="scale-125 mt-2 mr-1"
         />
       ),
     },
@@ -215,7 +215,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
           token0={activeMarket.token0}
           token1={activeMarket.token1}
         />
-        {data[0].data}
+        {isMobile ? data[0].data : null}
       </div>
       {data.map((d, id) => {
         // dont show 24h change in separate section, show it below price
