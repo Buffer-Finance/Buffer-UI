@@ -26,6 +26,7 @@ export const PoolRadio: React.FC = () => {
             <input
               type="radio"
               id="poolRadio"
+              className="bg-transperent"
               name="age"
               value={asset}
               checked={isActive}
