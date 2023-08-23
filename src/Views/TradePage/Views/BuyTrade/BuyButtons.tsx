@@ -120,7 +120,7 @@ export const BuyButtons = ({
                     center
                       ? tradeType != 'Limit'
                         ? 'min-h-full'
-                        : '!h-fit'
+                        : '!h-fit  !min-h-[30px]'
                       : ''
                   }`}
                 >
@@ -153,7 +153,7 @@ export const BuyButtons = ({
                     center
                       ? tradeType != 'Limit'
                         ? 'min-h-full'
-                        : '!h-fit'
+                        : '!h-fit !min-h-[30px]'
                       : ''
                   }`}
                   onClick={() => buyTrade(false)}

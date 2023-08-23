@@ -28,7 +28,7 @@ export const LimitOrderTradeSize: React.FC<{
         value={size}
         type="number"
         onChange={(e) => setSize(e.target.value)}
-        className="!w-full  text-right border-none bg-[#282b39] text-f14 px-2 outline-none  text-1 rounded-sm "
+        className="!w-1/2  text-right border-none bg-[#282b39] text-f14 px-2 outline-none  text-1 rounded-sm "
       />
     </RowBetween>
   );
