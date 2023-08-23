@@ -66,7 +66,10 @@ export const AccountDropdown: React.FC = () => {
     OneCTManager = (
       <BlueBtn
         className="!ml-[13px] !text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
-        onClick={disableOneCt}
+        onClick={() => {
+          disableOneCt();
+          closeDropdown();
+        }}
         isLoading={disabelLoading}
         isDisabled={state && state === 'PENDING'}
       >
