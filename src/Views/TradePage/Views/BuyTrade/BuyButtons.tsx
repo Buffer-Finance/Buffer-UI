@@ -72,7 +72,7 @@ export const BuyButtons = ({
   );
 
   // if (!poolDetails) return <>Error: Pool not found</>;
-
+  console.log('approval', allowance, amount);
   return (
     <>
       {/* <ApproveModal

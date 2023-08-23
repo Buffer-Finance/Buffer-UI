@@ -33,7 +33,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
   const marketPrice = useAtomValue(priceAtom);
   const amount = useAtomValue(tradeSizeAtom);
   const { activeMarket } = useActiveMarket();
-  const approvalExpanded = useApprvalAmount();
+  const { data: approvalExpanded } = useApprvalAmount();
   const { calculatePayout } = useSelectedAssetPayout();
 
   if (!poolDetails || !activeMarket)
@@ -53,6 +53,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
   const allowance = approvalExpanded?.allowance
     ? (divide(approvalExpanded?.allowance, decimals) as string)
     : '0';
+
   const { payout: totalPayout } = calculatePayout(
     joinStrings(activeMarket.token0, activeMarket.token1, '')
   );
@@ -78,6 +79,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
         tradeToken={tradeToken}
       />
       <BuyButtons
+        isApprovalLocked={approvalExpanded?.is_locked}
         activeAssetPrice={activeAssetPrice}
         allowance={allowance}
         amount={amount.toString()}
