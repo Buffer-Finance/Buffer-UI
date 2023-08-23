@@ -73,9 +73,7 @@ export function useShutterHandlers() {
     openShareShutter,
   };
 }
-export interface MobileShutterProps {
-  activeAssetPrice: string;
-}
+export interface MobileShutterProps {}
 const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const { closeShutter, shutterState } = useShutterHandlers();
   const isOpen = typeof shutterState.open == 'string';
@@ -88,8 +86,8 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
       // unmountOnExit
     >
       <div className="w-full a600:w-[500px] mx-auto mb-3 mt-2">
-        {shutterState.open == 'BO' && <VanillaBOConfigs {...props} />}
-        {shutterState.open == 'LO' && <LOConfigs {...props} />}
+        {shutterState.open == 'BO' && <VanillaBOConfigs />}
+        {shutterState.open == 'LO' && <LOConfigs />}
         {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}
         {shutterState.open == 'ActiveOrders' && <ActiveTrades isMobile />}{' '}
         {shutterState.open == 'ShareShutter' && (

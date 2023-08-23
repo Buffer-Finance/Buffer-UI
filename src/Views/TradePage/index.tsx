@@ -21,13 +21,16 @@ import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
 import { useMedia } from 'react-use';
 import { TradePageMobile } from './Components/MobileView/TradePageMobile';
 import { usePrice } from '@Hooks/usePrice';
-import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
+import ShutterProvider, {
+  useShutterHandlers,
+} from '@Views/Common/MobileShutter/MobileShutter';
 import { useEffect } from 'react';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
   usePrice();
+  console.log('root-rerendered');
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
   useEffect(() => {
@@ -53,7 +56,11 @@ const TradePage: React.FC<any> = ({}) => {
             <BuyTrade />
           </>
         ) : (
-          <TradePageMobile />
+          <>
+            <ShutterProvider />
+
+            <TradePageMobile />
+          </>
         )}
       </div>
     </>

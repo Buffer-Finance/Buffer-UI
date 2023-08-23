@@ -35,7 +35,6 @@ const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 
 export const usePrice = () => {
   const setPrice = useSetAtom(priceAtom);
-  console.log('rerendered');
   const loadNewPriceData = useCallback(
     (ws: WebSocket) => {
       ws.onopen = () => {
@@ -66,7 +65,6 @@ export const usePrice = () => {
                 1000,
             },
           ];
-          console.log(`priceUpdatePacked: `, priceUpdatePacked);
           const data = {
             [pythIds[(lastJsonMessage as WSUPdate).price_feed.id]]:
               priceUpdatePacked,

@@ -2,11 +2,12 @@ import { StrikePricePicker } from '@Views/TradePage/Views/BuyTrade/CurrentPrice'
 import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
 import { useToast } from '@Contexts/Toast';
 import { BlueBtn } from '../V2-Button';
-import { atom, useAtom, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { tradeTypeAtom } from '@Views/TradePage/atoms';
 import { atomWithStorage } from 'jotai/utils';
 import { PairTokenImage } from '../PairTokenImage';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { getPriceFromKlines, marketPriceAtom } from '@TV/useDataFeed';
 
 type SetAtom<Args extends any[], Result> = (...args: Args) => Result;
 
@@ -17,10 +18,13 @@ export const useLOPayout = (): [number, SetAtom<any[], void>, number[]] => {
   return [minPayout, setMinPayout, presets];
 };
 
-const LOConfigs: React.FC<MobileShutterProps> = ({ activeAssetPrice }) => {
+const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
   const toastify = useToast();
   const { activeMarket } = useActiveMarket();
-
+  const marketPrice = useAtomValue(marketPriceAtom);
+  const activeAssetPrice = getPriceFromKlines(marketPrice, {
+    tv_id: activeMarket.tv_id,
+  });
   const setShutterType = useSetAtom(tradeTypeAtom);
   const { closeShutter } = useShutterHandlers();
   const [minLOPayout, setMinLOPayout, LOPayoutPresets] = useLOPayout();
