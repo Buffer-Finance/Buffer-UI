@@ -3395,12 +3395,12 @@ html .pagination-root {
   padding: 0 10px;
 }
 
-.react-ios-time-picker-cell-inner-hour:hover,
+/* .react-ios-time-picker-cell-inner-hour:hover,
 .react-ios-time-picker-cell-inner-minute:hover,
 .react-ios-time-picker-cell-inner-hour-format:hover {
   background-color: #ff9d0ac9;
   color: white;
-}
+} */
 
 .react-ios-time-picker-cell-inner-selected {
   /* font-weight: 500; */
