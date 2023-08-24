@@ -53,13 +53,7 @@ enum TableColumn {
   ActionButtons = 6,
 }
 
-const LimitOrderTable = ({
-  trades,
-  overflow,
-}: {
-  trades: TradeType[];
-  overflow?: number;
-}) => {
+const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
   const [marketPrice] = useAtom(priceAtom);
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const cancelLoading = useAtomValue(closeLoadingAtom);

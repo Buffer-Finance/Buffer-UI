@@ -47,7 +47,6 @@ const HistoryTable: React.FC<{
   platform?: boolean;
   activePage: number;
   onlyView?: number[];
-  overflow?: number;
   setActivePage: (page: number) => void;
   isLoading: boolean;
 }> = ({
@@ -57,7 +56,6 @@ const HistoryTable: React.FC<{
   activePage,
   onlyView,
   setActivePage,
-  overflow,
   isLoading,
 }) => {
   const { getPoolInfo } = usePoolInfo();

@@ -43,7 +43,6 @@ export const OngoingTradesTable: React.FC<{
   activePage?: number;
   setActivePage?: (page: number) => void;
   totalPages?: number;
-  overflow?: number;
   isLoading: boolean;
 }> = ({
   trades,
@@ -52,7 +51,6 @@ export const OngoingTradesTable: React.FC<{
   setActivePage,
   onlyView,
   totalPages,
-  overflow,
   isLoading,
 }) => {
   const isNotMobile = useMedia('(min-width:1200px)');
