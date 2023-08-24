@@ -35,6 +35,7 @@ import { toFixed } from '@Utils/NumString';
 import { AssetCell } from './AssetCell';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useMedia } from 'react-use';
+import { Visualized } from './Visualized';
 
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[] | undefined;
@@ -56,7 +57,6 @@ export const OngoingTradesTable: React.FC<{
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
 
-  const [visualized, setVisualized] = useAtom(visualizeddAtom);
   const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { registeredOneCT } = useOneCTWallet();
@@ -130,21 +130,9 @@ export const OngoingTradesTable: React.FC<{
     const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
     switch (col) {
       case TableColumn.Show:
-        const isVisualized = visualized.includes(trade.queue_id);
         return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
-            <ShowIcon
-              show={!isVisualized}
-              onToggle={() => {
-                if (isVisualized) {
-                  let temp = [...visualized];
-                  temp.splice(visualized.indexOf(trade.queue_id as any), 1);
-                  setVisualized(temp);
-                } else {
-                  setVisualized([...visualized, trade.queue_id]);
-                }
-              }}
-            />
+            <Visualized queue_id={trade.queue_id} />
             <NumberTooltip content={disableTooltip}>
               <div>
                 <GreyBtn

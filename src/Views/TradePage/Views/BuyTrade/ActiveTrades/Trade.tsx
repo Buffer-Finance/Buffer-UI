@@ -18,6 +18,7 @@ import { TradeType } from '@Views/TradePage/type';
 import { getStrike } from '../../AccordionTable/Common';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { useAtomValue } from 'jotai';
+import { Visualized } from '../../AccordionTable/Visualized';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -46,6 +47,7 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
             </div>
             <White12pxText>{pairName}</White12pxText>
             <DirectionChip isUp={isUp} shouldShowArrow />
+            <Visualized queue_id={trade.queue_id} className="hidden sm:block" />
           </RowGap>
           <TradeTypeChip tradeType={tradeType} />
         </RowBetween>
