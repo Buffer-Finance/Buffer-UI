@@ -45,7 +45,7 @@ const AccordionTable: React.FC<any> = ({}) => {
       queries.map((q) => getCachedPrice(q))
     );
     setPriceCache((p) => {
-      let newP = { ...p };
+      let newP: { [key: number]: number } = { ...p };
       queries.forEach((q, i) => {
         newP[q.queueId] = priceResponse[i];
       });
