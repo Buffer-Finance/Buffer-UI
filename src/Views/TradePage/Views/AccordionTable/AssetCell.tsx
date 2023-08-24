@@ -29,7 +29,7 @@ export const AssetCell: React.FC<{
       head={
         <NumberTooltip
           content={
-            platform
+            platform || isHidden
               ? 'Trade directions are hidden.'
               : 'You choosed ' + (isUp ? 'Up' : 'Down')
           }
