@@ -54,7 +54,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
         tooltip: 'You lost this trade!',
         chip: 'Loss',
         icon: <FailedSuccess width={14} height={14} />,
-        textColor: 'text-red',
+        textColor: '',
       };
 
   const ExpiryPrice = {
@@ -149,7 +149,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
         <Display
           label={status.chip == 'Win' ? '+' : ''}
           className={
-            '!justify-start !text-[22px]  text-[#C3C2D4] !' + status.textColor
+            '!justify-start !text-[22px]  text-[#C3C2D4] ' + status.textColor
           }
           data={pnl}
           unit={poolInfo.token}

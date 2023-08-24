@@ -210,7 +210,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
           token1={activeMarket.token1}
         />
       )}
-      <div className="b1200:flex flex-col items-end">
+      <div className="b1200:flex flex-col items-center">
         <MarketPrice
           token0={activeMarket.token0}
           token1={activeMarket.token1}

@@ -10,17 +10,17 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     marginTop: '1rem',
     '& .MuiPaginationItem-root': {
-      color: '#fff',
+      color: '#c3c2d4',
       fontSize: '1.4rem',
     },
     '&.MuiPagination-ul ': {
       flexWrap: 'nowrap',
     },
     '& button.Mui-selected': {
-      background: 'var(--primary)',
+      background: '#282B39',
       fontWeight: '600',
       '&:hover': {
-        background: 'var(--primary)',
+        background: '#282B39',
       },
     },
   },

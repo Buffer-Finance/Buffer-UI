@@ -31,7 +31,6 @@ export const TradeSizeSelector: React.FC<{
 }> = ({ onSubmit }) => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useBuyTradeData();
-  const { address } = useAccount();
   const { registeredOneCT } = useOneCTWallet();
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;
@@ -62,7 +61,7 @@ export const TradeSizeSelector: React.FC<{
         <RowGapItemsStretched gap="0px" className="w-full">
           <TradeSizeInput
             maxTradeSize={maxTradeSize}
-            registeredOneCT={registeredOneCT}
+            registeredOneCT={!!registeredOneCT}
             tokenName={tradeToken}
             balance={balance}
             platformFee={platformFee}
@@ -107,7 +106,7 @@ const PlatfromFeeError = ({
       {isError ? (
         <>
           Insufficient funds for platform fee.{' '}
-          <BuyUSDCLink token={tradeToken} />
+          <BuyUSDCLink token={tradeToken as 'ARB'} />
         </>
       ) : (
         !isError && (

@@ -60,7 +60,6 @@ export const useCancelTradeFunction = () => {
   const cancelHandler = async (trade: TradeType) => {
     if (!address) return;
 
-    setLoading((t) => ({ ...t, [trade.queue_id]: 1 }));
     const signature = await getSingatureCached(oneCTWallet);
     if (!signature)
       return toastify({
@@ -68,13 +67,14 @@ export const useCancelTradeFunction = () => {
         type: 'error',
         id: '2311',
       });
-    const res = await cancelQueueTrade({
-      user_signature: signature,
-      user_address: address,
-      environment: activeChain.id,
-      queue_id: trade.queue_id,
-    });
     try {
+      setLoading((t) => ({ ...t, [trade.queue_id]: 1 }));
+      const res = await cancelQueueTrade({
+        user_signature: signature,
+        user_address: address,
+        environment: activeChain.id,
+        queue_id: trade.queue_id,
+      });
       if (res.status === 200) {
         toastify({
           msg: 'Trade cancelled successfully',
@@ -94,8 +94,9 @@ export const useCancelTradeFunction = () => {
         type: 'error',
         id: '231',
       });
+    } finally {
+      setLoading((t) => ({ ...t, [trade.queue_id]: null }));
     }
-    setLoading((t) => ({ ...t, [trade.queue_id]: null }));
   };
 
   const earlyCloseHandler = async (
@@ -115,13 +116,7 @@ export const useCancelTradeFunction = () => {
       timestamp: ts,
       optionId: trade.option_id,
     };
-    console.log(
-      `ec-deb: `,
-      message,
-      domain,
-      closeSignaturePrimaryType,
-      CloseAnytimeSignatureTypes
-    );
+
     const wallet = privateKeyToAccount(`0x${oneCtPk}`);
     const actualSignature = await wallet.signTypedData({
       types: {
@@ -132,8 +127,7 @@ export const useCancelTradeFunction = () => {
       domain,
       message,
     });
-    // console.log(`actualSignature: `, actualSignature);
-    const signature = await getSingatureCached(oneCTWallet);
+
     const params = {
       closing_time: ts,
       queue_id: trade.queue_id,
@@ -152,11 +146,6 @@ export const useCancelTradeFunction = () => {
       showSharePopup
       // true
     );
-
-    console.log(`res-cancel: `, res);
-    // setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
-
-    // setEarlyCloseLoading(null);
   };
 
   return { cancelHandler, earlyCloseHandler, earlyCloseLoading };
