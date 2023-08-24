@@ -31,17 +31,9 @@ import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFun
 import { TradeType } from '@Views/TradePage/type';
 import { AssetCell } from './AssetCell';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 
 export const tradesCount = 10;
-const headNameArray = [
-  'Asset',
-  'TriggerPrice',
-  'Current Price',
-  'Duration',
-  'Order Expiry',
-  'Trade Size',
-  '',
-];
 
 enum TableColumn {
   Asset = 0,
@@ -58,6 +50,22 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const cancelLoading = useAtomValue(closeLoadingAtom);
   const { getPoolInfo } = usePoolInfo();
+  const { registeredOneCT } = useOneCTWallet();
+
+  const headNameArray = [
+    'Asset',
+    'TriggerPrice',
+    'Current Price',
+    'Duration',
+    'Order Expiry',
+    'Trade Size',
+    '',
+  ];
+  //if !registeredOneCT, remove last column
+  if (!registeredOneCT) {
+    headNameArray.pop();
+  }
+
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
