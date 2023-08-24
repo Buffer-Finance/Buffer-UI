@@ -73,6 +73,7 @@ const Test3 = () => {
     fetcher: async () => {
       const query = `{
         deregisteredAccounts(
+          first: 10000
           where: {
           updatedAt_gte: "0",
           }) {
