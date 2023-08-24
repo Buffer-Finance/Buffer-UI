@@ -79,7 +79,6 @@ const Test3 = () => {
                 eoa
                 nonce
                 updatedAt
-                oneCT
             }
           }`;
 
