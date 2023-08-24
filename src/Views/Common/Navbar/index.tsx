@@ -40,11 +40,11 @@ export const Navbar: React.FC<INavbar> = () => {
   const show = !urlSettings?.hide;
   return (
     <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102]">
-      <div className="flex items-center gap-[24px]">
+      <div className="flex items-center ">
         <div
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
-          className="sm:hidden"
+          // className="sm:hidden"
         >
           <BufferLogoComponent
             className="h-[30px] ml-[8px] sm:mx-[2px]"

@@ -77,6 +77,8 @@ export interface MobileShutterProps {}
 const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const { closeShutter, shutterState } = useShutterHandlers();
   const isOpen = typeof shutterState.open == 'string';
+  console.log(`MobileShutter-shutterState.open: `, shutterState.open);
+
   return (
     <ShutterDrawer
       className="bg-[#1F2128] border-none  outline-0 overflow-hidden px-[0px] "
@@ -91,8 +93,8 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
         {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}
         {shutterState.open == 'ActiveOrders' && <ActiveTrades isMobile />}{' '}
         {shutterState.open == 'ShareShutter' && (
-          <div className="w-full flex flex-col b400:scale-[0.9] origin-left">
-            <ModalChild isMobile />
+          <div className="w-full flex flex-col b400:scale-[0.9] origin-left my-3">
+            <ModalChild />
           </div>
         )}
       </div>

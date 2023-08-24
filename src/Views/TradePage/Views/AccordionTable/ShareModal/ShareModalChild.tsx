@@ -38,7 +38,7 @@ export const ModalChild: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
 
   return (
     <>
-      <div className="text-[#C3C2D4] w-[380px] h-[199px]  origin-left sm:m-auto">
+      <div className="text-[#C3C2D4] w-[380px] h-[199px]  origin-left ">
         <BGImage ref={ref}>
           <div className="flex justify-between items-center">
             <div className="flex flex-col justify-center">

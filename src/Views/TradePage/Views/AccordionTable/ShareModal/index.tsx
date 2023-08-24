@@ -21,7 +21,8 @@ export const ShareModal: React.FC<IShareModal> = () => {
     setIsOpen({ isOpen: false });
     setBet({ expiryPrice: null, trade: null, poolInfo: null, market: null });
   };
-
+  const isMobile = useMedia('(max-width:1200px)');
+  if (isMobile) return null;
   return (
     <Dialog open={isOpen} onClose={closeModal}>
       <ShareModalStyles>
