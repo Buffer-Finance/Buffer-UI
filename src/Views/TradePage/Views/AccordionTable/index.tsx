@@ -45,7 +45,7 @@ const AccordionTable: React.FC<any> = ({}) => {
       queries.map((q) => getCachedPrice(q))
     );
     setPriceCache((p) => {
-      let newP = { ...p };
+      let newP: { [key: number]: number } = { ...p };
       queries.forEach((q, i) => {
         newP[q.queueId] = priceResponse[i];
       });
@@ -117,21 +117,17 @@ const AccordionTable: React.FC<any> = ({}) => {
         } flex flex-col transition-all  overflow-y-hidden `}
       >
         {activeTable == 'Trades' ? (
-          <OngoingTradesTable
-            trades={activeTrades}
-            overflow={400}
-            isLoading={false}
-          />
+          <OngoingTradesTable trades={activeTrades} isLoading={false} />
         ) : activeTable == 'Limit Orders' ? (
-          <LimitOrderTable trades={limitOrders} overflow={400} />
+          <LimitOrderTable trades={limitOrders} />
         ) : activeTable == 'Platform Trades' ? (
-          <PlatformOngoing overflow={400} />
+          <PlatformOngoing />
         ) : activeTable == 'Platform History' ? (
-          <PlatformHistory overflow={400} />
+          <PlatformHistory />
         ) : activeTable == 'Cancelled' ? (
-          <Cancelled overflow={400} />
+          <Cancelled />
         ) : (
-          <History overflow={400} />
+          <History />
         )}
       </div>
     </div>
@@ -146,7 +142,7 @@ const CountChip = ({ count }: { count: number }) => (
   </div>
 );
 
-export const History = ({ overflow }: { overflow?: number }) => {
+export const History = ({ onlyView }: { onlyView?: number[] }) => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
   return (
@@ -155,26 +151,26 @@ export const History = ({ overflow }: { overflow?: number }) => {
       totalPages={total_pages}
       activePage={activePage}
       setActivePage={setActivePage}
-      overflow={overflow}
+      onlyView={onlyView}
       isLoading={historyTrades === undefined}
     />
   );
 };
 
-const Cancelled = ({ overflow }: { overflow?: number }) => {
+export const Cancelled = ({ onlyView }: { onlyView?: number[] }) => {
   const { page_data: canclledTrades, total_pages } = useCancelledTrades();
   // console.log(canclledTrades, 'cancelled trades');
   return (
     <CancelledTable
       trades={canclledTrades}
       totalPages={total_pages}
-      overflow={overflow}
+      onlyView={onlyView}
       isLoading={canclledTrades === undefined}
     />
   );
 };
 
-const PlatformHistory = ({ overflow }: { overflow?: number }) => {
+export const PlatformHistory = ({ onlyView }: { onlyView?: number[] }) => {
   const { page_data: platformHistoryTrades, total_pages } =
     usePlatformHistoryTrades();
   const [activePage, setActivePage] = useAtom(platformHistoryTableActivePage);
@@ -186,13 +182,13 @@ const PlatformHistory = ({ overflow }: { overflow?: number }) => {
       totalPages={total_pages}
       activePage={activePage}
       setActivePage={setActivePage}
-      overflow={overflow}
+      onlyView={onlyView}
       isLoading={platformHistoryTrades === undefined}
     />
   );
 };
 
-const PlatformOngoing = ({ overflow }: { overflow?: number }) => {
+export const PlatformOngoing = ({ onlyView }: { onlyView?: number[] }) => {
   const { page_data: platformActiveTrades, total_pages } =
     usePlatformActiveTrades();
   const [activePage, setActivePage] = useAtom(platformActiveTableActivePage);
@@ -204,7 +200,7 @@ const PlatformOngoing = ({ overflow }: { overflow?: number }) => {
       activePage={activePage}
       totalPages={total_pages}
       setActivePage={setActivePage}
-      overflow={overflow}
+      onlyView={onlyView}
       isLoading={platformActiveTrades === undefined}
     />
   );

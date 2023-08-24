@@ -20,12 +20,18 @@ import {
 } from '@Utils/NumString/stringArithmatics';
 import styled from '@emotion/styled';
 
-export const DisplayTime = ({ ts }: { ts: number | string }) => {
+export const DisplayTime = ({
+  ts,
+  className,
+}: {
+  ts: number | string;
+  className?: string;
+}) => {
   return (
     <NumberTooltip
       content={`${getDisplayTimeUTC(+ts)} ${getDisplayDateUTC(+ts)} UTC`}
     >
-      <div className="w-max">
+      <div className={`w-max ${className}`}>
         <CellContent
           content={[`${getDisplayTime(+ts)}`, `${getDisplayDate(+ts)}`]}
         />
@@ -142,8 +148,15 @@ export const TableHeader: React.FC<ITableHeader> = ({
 //  export const earlyCloseStatus = (data:TradeType)=>{
 //    return data.
 //  }
-export const StrikePriceComponent = ({ trade }: { trade: TradeType }) => {
+export const StrikePriceComponent = ({
+  trade,
+  className,
+}: {
+  trade: TradeType;
+  className?: string;
+}) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
+  // console.log(`Common-className: `, className);
 
   const { isPriceArrived, strikePrice } = getStrike(trade, cachedPrices);
   return (
@@ -152,7 +165,7 @@ export const StrikePriceComponent = ({ trade }: { trade: TradeType }) => {
         data={divide(strikePrice, 8)}
         // unit={configData.token1}
         precision={trade.market.price_precision.toString().length - 1}
-        className={`justify-self-start content-start  w-max`}
+        className={`justify-self-start content-start  w-max ${className}`}
       />
       {trade.state === 'QUEUED' && !isPriceArrived ? (
         <div className="flex gap-2 align-center">

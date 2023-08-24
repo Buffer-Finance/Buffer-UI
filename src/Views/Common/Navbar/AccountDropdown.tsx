@@ -66,7 +66,10 @@ export const AccountDropdown: React.FC = () => {
     OneCTManager = (
       <BlueBtn
         className="!ml-[13px] !text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
-        onClick={disableOneCt}
+        onClick={() => {
+          disableOneCt();
+          closeDropdown();
+        }}
         isLoading={disabelLoading}
         isDisabled={state && state === 'PENDING'}
       >
@@ -154,6 +157,7 @@ export const AccountDropdown: React.FC = () => {
 
               return (
                 <div style={{ display: 'flex', gap: 3 }}>
+                  {/* chain dd */}
                   <div
                     onClick={openChainModal}
                     role="button"
@@ -171,11 +175,11 @@ export const AccountDropdown: React.FC = () => {
 
                       <span className="sm:hidden">{chain.name}</span>
                     </div>
-                    <ArrowDropDownRounded
-                      className={`dropdown-arrow transition-all duration-300 w-6 h-6 ease-out `}
+                    <DDArrow
+                      className={` transition-all duration-300 ml-2 ease-out mr-2`}
                     />
                   </div>
-                  {/* <OneCTButton /> */}
+                  {/* Accound DD */}
                   <button type="button" ref={ref} {...anchorProps}>
                     <div
                       className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-[6px] bg-[#191B20] hover:brightness-125 `}
@@ -225,9 +229,7 @@ export const AccountDropdown: React.FC = () => {
                                   4
                                 )}...${account.address.slice(-4)}`
                               : 'Connect'}
-                            <div>
-                              <NFTtier userOnly />
-                            </div>
+                            {/* <div className="text-2">Wallet Address</div> */}
                           </div>
                           <div className="flex items-center gap-x-3 text-[#C3C2D4]">
                             <IconBG

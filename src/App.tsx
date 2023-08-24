@@ -42,6 +42,7 @@ import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { Test } from './test';
 import SideBar from '@Views/Common/Sidebar';
+import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -54,13 +55,11 @@ import SideBar from '@Views/Common/Sidebar';
 
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
-  console.log(`App-activeMarketFromStorage: `, activeMarketFromStorage);
   const [searchParam] = useSearchParams();
   const [ref, setRef] = useAtom(referralCodeAtom);
   const toastify = useToast();
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(`App-ref: `, ref);
     let referralCode = searchParam.get('ref');
 
     if (!referralCode) {
@@ -88,14 +87,18 @@ const AppRoutes = () => {
     }
   }, [searchParam]);
   return (
-    <div className="relative root w-[100vw]">
+    <div className="relative root w-[100vw] pb-[5px] ">
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/history" element={<TradeLog_sm />} />
         <Route path="/admin" element={<AdminConfig />}></Route>
-        <Route path="/ref/:refcode" element={<div>Hello</div>}></Route>
+        <Route
+          path="/ref/:refcode"
+          element={<div>Processing your referral request...</div>}
+        ></Route>
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
         <Route path="/earn" element={<Earn />} />
         <Route path="/dashboard" element={<DashboardV2 />}>

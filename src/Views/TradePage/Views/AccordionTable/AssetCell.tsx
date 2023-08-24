@@ -17,7 +17,7 @@ export const AssetCell: React.FC<{
   return (
     <TableAssetCell
       img={
-        <div className="w-[20px] h-[20px] mr-[6px]">
+        <div className="w-[20px] h-[20px] mr-[6px] sm:w-[15px] sm:h-[15px] sm:mt-1 sm:mr-2">
           <PairTokenImage
             pair={{
               token0,
@@ -29,13 +29,13 @@ export const AssetCell: React.FC<{
       head={
         <NumberTooltip
           content={
-            platform
+            platform || isHidden
               ? 'Trade directions are hidden.'
               : 'You choosed ' + (isUp ? 'Up' : 'Down')
           }
         >
           <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
-            <span className={`weight-400 text-f15 `}>
+            <span className={`weight-400 text-f15 sm:text-f12 `}>
               {token0 + '-' + token1}{' '}
             </span>
             {isHidden || platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}

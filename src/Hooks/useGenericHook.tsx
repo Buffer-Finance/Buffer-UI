@@ -13,6 +13,8 @@ import {
 } from '@Views/TradePage/atoms';
 import { useUserAccount } from './useUserAccount';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useMedia } from 'react-use';
+import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 
 export const getIdentifier = (a: TradeType) => {
   return +a.queue_id;
@@ -32,6 +34,8 @@ const useGenericHooks = () => {
   const { showSharePopup } = useAtomValue(shareSettingsAtom);
   const { getPoolInfo } = usePoolInfo();
   const { registeredOneCT } = useOneCTWallet();
+  const isMobile = useMedia('(max-width:1200px)');
+  const { openShareShutter } = useShutterHandlers();
   const openShareModal = (
     trade: TradeType,
     expiry: string,
@@ -39,15 +43,13 @@ const useGenericHooks = () => {
     poolInfo: poolInfoType
   ) => {
     if (!showSharePopup) return;
-    setIsOpen(true);
-    console.log(
-      `TableComponents-, market, poolInfo: `,
-      trade,
-      expiry,
-      market,
-      poolInfo
-    );
     setBet({ trade, expiryPrice: expiry, market, poolInfo });
+    console.log('MobileShutter-shutterState.open', isMobile);
+    if (isMobile) {
+      openShareShutter();
+    } else {
+      setIsOpen(true);
+    }
   };
 
   useEffect(() => {

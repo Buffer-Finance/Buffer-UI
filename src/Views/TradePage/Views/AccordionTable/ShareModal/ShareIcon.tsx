@@ -1,7 +1,9 @@
 import ShareIcon from '@Public/shareModal/ShareIcon';
+import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { SetShareBetAtom, SetShareStateAtom } from '@Views/TradePage/atoms';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { useAtom } from 'jotai';
+import { useMedia } from 'react-use';
 
 export const Share: React.FC<{
   data: TradeType;
@@ -9,6 +11,8 @@ export const Share: React.FC<{
   poolInfo: poolInfoType;
 }> = ({ data, market, poolInfo }) => {
   const [, setIsOpen] = useAtom(SetShareStateAtom);
+  const isMobile = useMedia('(max-width:600px)');
+  const { openShareShutter } = useShutterHandlers();
   const [, setBet] = useAtom(SetShareBetAtom);
   return (
     <button
@@ -20,7 +24,9 @@ export const Share: React.FC<{
           market: market,
           poolInfo: poolInfo,
         });
-        setIsOpen(true);
+        if (isMobile) {
+          openShareShutter();
+        } else setIsOpen(true);
       }}
     >
       <ShareIcon />

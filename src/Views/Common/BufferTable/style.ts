@@ -25,6 +25,9 @@ const TableBackground = styled.div`
     width: 3px !important;
   }
 
+  @media (max-width: 1000px) {
+    height: auto;
+  }
   table {
     width: 100%;
     border-collapse: separate;
@@ -33,7 +36,7 @@ const TableBackground = styled.div`
     font-size: 1.6rem;
 
     .table-header {
-      height: ${(props) => (props?.overflow ? 'sticky' : 'static')};
+      /* height: ${(props) => (props?.overflow ? 'sticky' : 'static')}; */
       background: #171722;
 
       .table-head {
@@ -157,6 +160,9 @@ const TableBackground = styled.div`
           }
           &.sm {
             padding: 1.7rem 0;
+          }
+          @media (max-width: 600px) {
+            font-size: 12px;
           }
           /* &:first-of-type {
             padding-left: var(--padding-left);

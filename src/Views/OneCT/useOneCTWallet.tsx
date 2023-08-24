@@ -222,6 +222,11 @@ const useOneCTWallet = () => {
       const resp = await axios.post(baseUrl + 'deregister/', null, {
         params: apiParams,
       });
+      toastify({
+        msg: 'Account Deregistered!',
+        type: 'success',
+        id: '232213',
+      });
     } catch (e) {
       console.log(e, 'deregister api error');
       toastify({

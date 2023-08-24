@@ -448,69 +448,74 @@ export const MultiResolutionChart = ({
   const resolution: ResolutionString =
     market2resolution?.[chartId] || ('1' as ResolutionString);
 
-  useLayoutEffect(() => {
-    const chart = new widget({
-      datafeed,
-      interval: defaults.interval,
-      timeframe: '200',
+  useEffect(() => {
+    console.log(`[chart-deb]: `, marke, index);
+    try {
+      const chart = new widget({
+        datafeed,
+        interval: defaults.interval,
+        timeframe: '200',
 
-      locale: 'en',
+        locale: 'en',
 
-      container: containerDivRef.current!,
-      library_path: defaults.library_path,
-      custom_css_url: defaults.cssPath,
-      // create_volume_indicator_by_default: false,
-      timezone: getOslonTimezone() as Timezone,
-      symbol: market,
-      theme: defaults.theme as ThemeName,
-      enabled_features: ['header_saveload', 'hide_left_toolbar_by_default'],
-      load_last_chart: true,
-      time_frames: [
-        {
-          text: '1D',
-          resolution: '30' as ResolutionString,
-          description: '1 Day look back',
-          title: '1D',
-        },
-        {
-          text: '4H',
-          resolution: '5' as ResolutionString,
-          description: '4 Hour look back',
-          title: '4H',
-        },
-        {
-          text: '1H',
-          resolution: '1' as ResolutionString,
-          description: '1 Hour look back',
-          title: '1H',
-        },
-        {
-          text: '30',
-          resolution: '1' as ResolutionString,
-          description: '30 Minute look back',
-          title: '30Min',
-        },
-        {
-          text: '10',
-          resolution: '1S' as ResolutionString,
-          description: '10 Minute look back',
-          title: '10Min',
-        },
-      ],
-      saved_data: drawing?.[chartId],
-      disabled_features:
-        window.innerWidth < 600
-          ? ['left_toolbar', ...defaults.basicDisabled]
-          : [...defaults.basicDisabled],
-    });
+        container: containerDivRef.current!,
+        library_path: defaults.library_path,
+        custom_css_url: defaults.cssPath,
+        // create_volume_indicator_by_default: false,
+        timezone: getOslonTimezone() as Timezone,
+        symbol: market,
+        theme: defaults.theme as ThemeName,
+        enabled_features: ['header_saveload', 'hide_left_toolbar_by_default'],
+        load_last_chart: true,
+        time_frames: [
+          {
+            text: '1D',
+            resolution: '30' as ResolutionString,
+            description: '1 Day look back',
+            title: '1D',
+          },
+          {
+            text: '4H',
+            resolution: '5' as ResolutionString,
+            description: '4 Hour look back',
+            title: '4H',
+          },
+          {
+            text: '1H',
+            resolution: '1' as ResolutionString,
+            description: '1 Hour look back',
+            title: '1H',
+          },
+          {
+            text: '30',
+            resolution: '1' as ResolutionString,
+            description: '30 Minute look back',
+            title: '30Min',
+          },
+          {
+            text: '10',
+            resolution: '1S' as ResolutionString,
+            description: '10 Minute look back',
+            title: '10Min',
+          },
+        ],
+        saved_data: drawing?.[chartId],
+        disabled_features:
+          window.innerWidth < 600
+            ? ['left_toolbar', ...defaults.basicDisabled]
+            : [...defaults.basicDisabled],
+      });
 
-    chart.onChartReady(() => {
-      // chart.activeChart().get;
-      // chart.activeChart?.().executeActionById('drawingToolbarAction');
+      chart.onChartReady(() => {
+        // chart.activeChart().get;
+        // chart.activeChart?.().executeActionById('drawingToolbarAction');
 
-      setChartReady(true);
-    });
-    widgetRef.current = chart;
+        setChartReady(true);
+      });
+      widgetRef.current = chart;
+    } catch (e) {
+      console.log('[chart-deb]-err', e);
+    }
 
     return () => {
       widgetRef.current?.remove();
@@ -685,9 +690,7 @@ export const MultiResolutionChart = ({
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
-  if (!v3AppConfig?.length) {
-    return <div>Loading...</div>;
-  }
+
   return (
     <div className="flex flex-col w-full h-full">
       <div className="items-center justify-between flex-row flex  bg-2 w-full tv-h px-4 ">
@@ -735,7 +738,7 @@ export const MultiResolutionChart = ({
       <div className="w-full  flex-grow">
         <div
           ref={containerDivRef}
-          id="chart-element"
+          id="chart-element-main"
           className="TVChartContainer w-[100%] h-[100%]"
         />
       </div>

@@ -15,18 +15,24 @@ import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useAccount } from 'wagmi';
+import { ReactNode } from 'react';
+import MemoTimeIcon from '@SVG/Elements/TimeIcon';
+import { usePrice } from '@Hooks/usePrice';
 
 export const BuyButtons = ({
   allowance,
   activeAssetPrice,
   amount,
+  center,
   isApprovalLocked,
 }: {
   allowance: string;
   activeAssetPrice: string;
   amount: string;
+  center?: ReactNode;
   isApprovalLocked: boolean | undefined;
 }) => {
+  usePrice();
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   // const { poolDetails } = useSwitchPool();
@@ -66,7 +72,7 @@ export const BuyButtons = ({
   );
 
   // if (!poolDetails) return <>Error: Pool not found</>;
-
+  // console.log('approval', allowance, amount);
   return (
     <>
       {/* <ApproveModal
@@ -100,7 +106,7 @@ export const BuyButtons = ({
             <BlueBtn onClick={() => handleApproveClick()}>Approve</BlueBtn>
           ) : (
             <>
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <GreenBtn
                   onClick={() => buyTrade(true)}
                   isDisabled={isForex && !isAssetActive}
@@ -110,13 +116,32 @@ export const BuyButtons = ({
                     loading?.is_up === true
                   }
                   test-id="last-up-btn"
-                  className=" text-1 bg-green hover:text-1"
+                  className={` text-1 bg-green hover:text-1 ${
+                    center
+                      ? tradeType != 'Limit'
+                        ? 'min-h-full'
+                        : '!h-fit  !min-h-[30px]'
+                      : ''
+                  }`}
                 >
-                  <>
-                    <UpIcon className="mr-[6px] scale-150" />
-                    Up
-                  </>
+                  {center && tradeType == 'Limit' ? (
+                    <div className="flex justify-between items-center w-full px-[13px] py-[3px] pt-[2px] ">
+                      <div className="flex-col flex items-start">
+                        <span className="text-f14 font-bold mb-[-2px]">Up</span>
+                        <span className="text-f11">{limitStrike}</span>
+                      </div>
+                      <div>
+                        <MemoTimeIcon />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <UpIcon className="mr-[6px] scale-150" />
+                      Up
+                    </>
+                  )}
                 </GreenBtn>
+                {center ? center : null}
                 <RedBtn
                   isDisabled={isForex && !isAssetActive}
                   isLoading={
@@ -124,13 +149,33 @@ export const BuyButtons = ({
                     typeof loading !== 'number' &&
                     loading?.is_up === false
                   }
-                  className=" text-1 bg-red "
+                  className={` text-1 bg-red ${
+                    center
+                      ? tradeType != 'Limit'
+                        ? 'min-h-full'
+                        : '!h-fit !min-h-[30px]'
+                      : ''
+                  }`}
                   onClick={() => buyTrade(false)}
                 >
-                  <>
-                    <DownIcon className="mr-[6px] scale-150" />
-                    Down
-                  </>
+                  {center && tradeType == 'Limit' ? (
+                    <div className="flex justify-between items-center w-full px-[13px] py-[3px] pt-[2px] flex-row-reverse ">
+                      <div className="flex-col flex items-end">
+                        <span className="text-f14 font-bold mb-[-2px]">
+                          Down
+                        </span>
+                        <span className="text-f11">{limitStrike}</span>
+                      </div>
+                      <div>
+                        <MemoTimeIcon />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <DownIcon className="mr-[6px] scale-150" />
+                      Down
+                    </>
+                  )}
                 </RedBtn>
               </div>
               {!isApprovalLocked && (

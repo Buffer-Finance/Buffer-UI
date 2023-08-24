@@ -54,7 +54,7 @@ const usePriceChange = () => {
   // for each market, add 2 req, one of now, one of now - 24h.
 
   // when response arrived, calculate the change
-  console.log(data, 'usePriceCHanfedata');
+  // console.log(data, 'usePriceCHanfedata');
   return data;
 };
 

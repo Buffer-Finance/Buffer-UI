@@ -11,20 +11,24 @@ const SidebySideCharts = ({
   className,
 }: {
   indexes: string[];
+
   className?: string;
-}) => (
-  <div className={`flex w-full ${className} `}>
-    {indexes.map((id) => (
-      <div key={id} className={`${indexes.length == 1 ? 'w-full' : 'w-1/2'}`}>
-        <MultiResolutionChart
-          market={id.split(':')[0] as any}
-          index={+id.split(':')[1]}
-          key={id}
-        />
-      </div>
-    ))}
-  </div>
-);
+}) => {
+  console.log(`index-indexes: `, indexes);
+  return (
+    <div className={`flex w-full ${className} `}>
+      {indexes.map((id) => (
+        <div key={id} className={`${indexes.length == 1 ? 'w-full' : 'w-1/2'}`}>
+          <MultiResolutionChart
+            market={id.split(':')[0] as any}
+            index={+id.split(':')[1]}
+            key={id}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const MarketChart: React.FC<any> = ({}) => {
   const isTableExpanded = useAtomValue(isTableShownAtom);

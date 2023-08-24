@@ -18,6 +18,7 @@ import { TradeType } from '@Views/TradePage/type';
 import { getStrike } from '../../AccordionTable/Common';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { useAtomValue } from 'jotai';
+import { Visualized } from '../../AccordionTable/Visualized';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -36,6 +37,8 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const pairName = joinStrings(tradeMarket.token0, tradeMarket.token1, '-');
   const isUp = trade.is_above;
   const tradeType = trade.is_limit_order ? 'Limit order' : 'Market';
+  const isLimitorder =
+    trade.is_limit_order && trade.state === TradeState.Queued;
   return (
     <TradeCardBackground>
       <ColumnGap gap="15px">
@@ -46,6 +49,12 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
             </div>
             <White12pxText>{pairName}</White12pxText>
             <DirectionChip isUp={isUp} shouldShowArrow />
+            {!isLimitorder && (
+              <Visualized
+                queue_id={trade.queue_id}
+                className="hidden sm:block"
+              />
+            )}
           </RowGap>
           <TradeTypeChip tradeType={tradeType} />
         </RowBetween>

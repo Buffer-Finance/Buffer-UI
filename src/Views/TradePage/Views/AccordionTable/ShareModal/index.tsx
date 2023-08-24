@@ -1,10 +1,15 @@
 import { Dialog } from '@mui/material';
 import React from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { SetShareBetAtom, ShareStateAtom } from '@Views/TradePage/atoms';
 import { ModalChild } from './ShareModalChild';
 import styled from '@emotion/styled';
 import { CloseOutlined } from '@mui/icons-material';
+import ShutterProvider, {
+  shutterModalAtom,
+  useShutterHandlers,
+} from '@Views/Common/MobileShutter/MobileShutter';
+import { useMedia } from 'react-use';
 
 interface IShareModal {}
 
@@ -16,7 +21,8 @@ export const ShareModal: React.FC<IShareModal> = () => {
     setIsOpen({ isOpen: false });
     setBet({ expiryPrice: null, trade: null, poolInfo: null, market: null });
   };
-
+  const isMobile = useMedia('(max-width:1200px)');
+  if (isMobile) return null;
   return (
     <Dialog open={isOpen} onClose={closeModal}>
       <ShareModalStyles>

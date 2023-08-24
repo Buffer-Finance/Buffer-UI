@@ -7,6 +7,9 @@ module.exports = {
       sm: { max: '600px' },
       tb: { max: '900px', min: '600px' },
       tab: { max: '800px' },
+      a600: {
+        min: '600px',
+      },
       a900: {
         min: '900px',
       },
@@ -23,6 +26,9 @@ module.exports = {
         min: '1000px',
       },
       b800: {
+        max: '800px',
+      },
+      b400: {
         max: '800px',
       },
       tabDispay: { max: '1200px', min: '800px' },

@@ -16,15 +16,17 @@ export const UpDownChip: React.FC<{
 }) => {
   return (
     <div
-      className={`px-2 h-[22px] text-f12 flex gap-1 items-center rounded-[5px] font-medium  ml-2 bg-1 brightness-125 w-max ${
+      className={`px-2 h-[22px] text-f12 sm:text-f10 sm:pl-1 sm:pr-2 sm:h-[17px] flex gap-1 sm:gap-[0px] items-center rounded-[5px] font-medium  ml-2 bg-1 brightness-125 w-max ${
         isUp ? 'green' : 'red'
       }  ${className}`}
     >
       {shouldShowImage &&
         (isUp ? (
-          <UpTriangle className={`scale-[0.70] mt-1`} />
+          <UpTriangle className={`scale-[0.70] mt-1 sm:scale-50`} />
         ) : (
-          <DOwnTriangle className={`mt-1 scale-[0.70]`} />
+          <DOwnTriangle
+            className={`mt-1 scale-[0.70] sm:scale-50 sm:mt-[0px]`}
+          />
         ))}
       {isUp ? upText : downText}
     </div>
