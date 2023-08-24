@@ -1,11 +1,8 @@
-import { useCall2Data } from '@Utils/useReadCall';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useEffect, useState } from 'react';
-import { erc20ABI } from 'wagmi';
-import DurationPicker from '@Views/Common/DurationPicker/DurationPicker';
-import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useSetAtom } from 'jotai';
 import { usePrice } from '@Hooks/usePrice';
+import useSWR from 'swr';
+import axios from 'axios';
 const Test2: React.FC<any> = ({}) => {
   // const d = useOneCTWallet();
   const [string1, setString1] = useState('');
@@ -57,15 +54,39 @@ const Test2: React.FC<any> = ({}) => {
 };
 const timeAtom = atom(0);
 const Test = () => {
-  const setTime = useSetAtom(timeAtom);
+  return <Test3 />;
+  // const setTime = useSetAtom(timeAtom);
 
-  usePrice();
-  return (
-    <>
-      <button type="button" style={{ float: 'right' }}>
-        Confirm Selection
-      </button>
-    </>
-  );
+  // usePrice();
+  // return (
+  //   <>
+  //     <button type="button" style={{ float: 'right' }}>
+  //       Confirm Selection
+  //     </button>
+  //   </>
+  // );
 };
 export { Test };
+
+const Test3 = () => {
+  const { data } = useSWR('test', {
+    fetcher: async () => {
+      const query = `{eoatoOneCTs {
+      eoa
+      nonce
+      updatedAt
+      oneCT
+    }}`;
+
+      const res = await axios.post(
+        `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.46-deregister-event/api`,
+        {
+          query,
+        }
+      );
+      return res;
+    },
+  });
+  console.log(data);
+  return <></>;
+};
