@@ -29,7 +29,7 @@ export const ModalChild: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const unit = market.token1;
   const token0 = market.token0;
   const tradeSize = divide(trade.trade_size, decimals) as string;
-  console.log(`ShareModalChild-tradeSize: `, tradeSize);
+  // console.log(`ShareModalChild-tradeSize: `, tradeSize);
   const { pnl } = getPayout(trade, Number(expiryPrice), decimals);
 
   if (!pnl || !expiryPrice) {
