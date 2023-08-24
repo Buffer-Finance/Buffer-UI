@@ -13,6 +13,9 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { blacklist } from '../blacklist.json';
 import { DailyTournamentConfig } from '../Incentivised/config';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
+import { getTokenXleaderboardQueryFields } from './useWeeklyLeaderboardQuery';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -39,16 +42,36 @@ export const useLeaderboardQuery = () => {
   const setTablePages = useSetAtom(updateLeaderboardTotalPageAtom);
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
-  const { day } = useDayOfTournament();
-  const timestamp = getDayId(Number(day - Number(offset ?? day)));
   const { activeChain } = useActiveChain();
   const graphUrl = getConfig(activeChain.id).graph.MAIN;
   const configValue = DailyTournamentConfig[activeChain.id];
+  const { day } = useDayOfTournament();
+
+  const poolNames = usePoolNames();
+  const tokens = useMemo(
+    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    [poolNames]
+  );
+  const queryFields = useMemo(() => {
+    if (tokens.length > 1)
+      return tokens
+        .map((poolName) =>
+          getTokenXleaderboardQueryFields(poolName.toLowerCase())
+        )
+        .join(' ');
+    else return '';
+  }, [tokens]);
 
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-offset-${offset}-account-${account}-daily-chainId-${activeChain.id}`,
     {
       fetcher: async () => {
+        const timestamp = getDayId(Number(day - Number(offset ?? day)));
+        const rewardQueryId = (
+          [arbitrum.id, arbitrumGoerli.id] as number[]
+        ).includes(activeChain.id)
+          ? `${timestamp}USDC`
+          : timestamp;
         const leaderboardQuery = `
           userStats: leaderboards(
             orderBy: netPnL
@@ -62,6 +85,7 @@ export const useLeaderboardQuery = () => {
             totalTrades
             netPnL
             volume
+            ${queryFields}
           }
           loserStats: leaderboards(
             orderBy: netPnL
@@ -75,6 +99,7 @@ export const useLeaderboardQuery = () => {
             totalTrades
             netPnL
             volume
+            ${queryFields}
           }
           totalData: leaderboards(
             orderBy: netPnL
@@ -83,9 +108,8 @@ export const useLeaderboardQuery = () => {
           ) {
             totalTrades
             volume
-            user
           }
-          reward:dailyRevenueAndFees(where: {id: "${timestamp}"}) {
+          reward:dailyRevenueAndFees(where: {id: "${rewardQueryId}"}) {
             settlementFee
             totalFee
           }
@@ -99,6 +123,9 @@ export const useLeaderboardQuery = () => {
           netPnL
           volume
           user
+          winRate
+          tradesWon
+          ${queryFields}
         }`
           : '';
 

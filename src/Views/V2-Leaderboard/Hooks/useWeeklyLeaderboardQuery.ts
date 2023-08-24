@@ -41,7 +41,7 @@ export function getWeekId(offset: number): number {
   return dayTimestamp;
 }
 
-function getTokenXleaderboardQueryFields(token: string) {
+export function getTokenXleaderboardQueryFields(token: string) {
   const fields = ['NetPnL', 'TotalTrades', 'TradesWon', 'Volume', 'WinRate'];
   return fields.map((field) => token + field).join(' ');
 }
