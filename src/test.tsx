@@ -79,7 +79,7 @@ const Test3 = () => {
     }}`;
 
       const res = await axios.post(
-        `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.46-deregister-event/api`,
+        `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.46-deregister-event-3/api`,
         {
           query,
         }
