@@ -47,7 +47,7 @@ export const Navbar: React.FC<INavbar> = () => {
           // className="sm:hidden"
         >
           <BufferLogoComponent
-            className="h-[30px] ml-[8px] sm:mx-[2px]"
+            className="h-[30px] ml-[8px] sm:mx-[0px]"
             hideText
           />
         </div>
