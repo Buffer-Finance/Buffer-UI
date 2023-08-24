@@ -123,6 +123,9 @@ const SidebarCSS = styled.div`
       text-transform: capitalize;
       border-radius: 1.2rem;
       height: 4.2rem;
+      @media (max-width: 600px) {
+        height: 3.6rem;
+      }
       align-items: center;
       /* font-family: "Inter", sans-serif; */
       font-weight: 400;
