@@ -70,7 +70,9 @@ const TradePageMobile: React.FC<any> = ({}) => {
       <MarketPicker />
       <MarketStatsBar isMobile />
       <div className="flex-1">
-        <MultiResolutionChart market={activeMarket.tv_id} index={1} />
+        {[activeMarket.tv_id].map((s) => (
+          <MultiResolutionChart key={s} market={s} index={1} />
+        ))}
       </div>
       <ViewOnlyInputs />
       <PayoutProfit
