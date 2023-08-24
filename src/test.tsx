@@ -71,7 +71,10 @@ export { Test };
 const Test3 = () => {
   const { data } = useSWR('test', {
     fetcher: async () => {
-      const query = `{eoatoOneCTs {
+      const query = `{eoatoOneCTs(where: {
+        updatedAt_gte: "0",
+        oneCT: "0x0000000000000000000000000000000000000000"
+      }) {
       eoa
       nonce
       updatedAt
