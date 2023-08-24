@@ -64,28 +64,23 @@ const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
           })}
         </div> */}
       </div>
-      <form
-        onSubmit={() => {
-          setShutterType('Limit');
-          closeShutter();
-        }}
-      >
-        <div>
-          <span className="text-f12 text-[#808191] my-3">Trigger Price</span>
-          <StrikePricePicker
-            className="w-full text-left p-2 px-3 !mb-3"
-            initialStrike={activeAssetPrice}
-            precision={2}
-          />
-          <BlueBtn
-            type="submit"
-            onClick={console.log}
-            className="!bg-blue mt-4"
-          >
-            Continue
-          </BlueBtn>
-        </div>
-      </form>
+      <div>
+        <span className="text-f12 text-[#808191] my-3">Trigger Price</span>
+        <StrikePricePicker
+          className="w-full text-left p-2 px-3 !mb-3"
+          initialStrike={activeAssetPrice}
+          precision={2}
+        />
+        <BlueBtn
+          onClick={() => {
+            setShutterType('Limit');
+            closeShutter();
+          }}
+          className="!bg-blue mt-4"
+        >
+          Continue
+        </BlueBtn>
+      </div>
     </div>
   );
 };
