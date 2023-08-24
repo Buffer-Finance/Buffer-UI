@@ -44,7 +44,7 @@ export const Navbar: React.FC<INavbar> = () => {
         <div
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
-          // className="sm:hidden"
+          className="b1200:hidden"
         >
           <BufferLogoComponent
             className="h-[30px] ml-[8px] sm:mx-[0px]"
