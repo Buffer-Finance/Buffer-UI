@@ -54,7 +54,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
         tooltip: 'You lost this trade!',
         chip: 'Loss',
         icon: <FailedSuccess width={14} height={14} />,
-        textColor: 'text-red',
+        textColor: '',
       };
 
   const ExpiryPrice = {
