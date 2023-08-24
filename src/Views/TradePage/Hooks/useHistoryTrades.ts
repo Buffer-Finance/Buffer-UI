@@ -37,10 +37,10 @@ const useHistoryTrades = () => {
             page: activePage - 1,
           },
         });
-        console.log(
-          `addMarketInTrades(res.data.page_data, markets): `,
-          addMarketInTrades(res.data.page_data, markets)
-        );
+        // console.log(
+        //   `addMarketInTrades(res.data.page_data, markets): `,
+        //   addMarketInTrades(res.data.page_data, markets)
+        // );
         // if (!res?.data?.page_data?.length)
         // setIsLoading(false);
         // console.log(res, 'history');

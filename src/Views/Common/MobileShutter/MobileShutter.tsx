@@ -77,7 +77,7 @@ export interface MobileShutterProps {}
 const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const { closeShutter, shutterState } = useShutterHandlers();
   const isOpen = typeof shutterState.open == 'string';
-  console.log(`MobileShutter-shutterState.open: `, shutterState.open);
+  // console.log(`MobileShutter-shutterState.open: `, shutterState.open);
 
   return (
     <ShutterDrawer

@@ -156,7 +156,7 @@ export const StrikePriceComponent = ({
   className?: string;
 }) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
-  console.log(`Common-className: `, className);
+  // console.log(`Common-className: `, className);
 
   const { isPriceArrived, strikePrice } = getStrike(trade, cachedPrices);
   return (
