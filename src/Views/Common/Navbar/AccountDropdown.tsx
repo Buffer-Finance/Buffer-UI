@@ -229,9 +229,7 @@ export const AccountDropdown: React.FC = () => {
                                   4
                                 )}...${account.address.slice(-4)}`
                               : 'Connect'}
-                            <div>
-                              <NFTtier userOnly />
-                            </div>
+                            {/* <div className="text-2">Wallet Address</div> */}
                           </div>
                           <div className="flex items-center gap-x-3 text-[#C3C2D4]">
                             <IconBG
