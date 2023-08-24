@@ -37,6 +37,8 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const pairName = joinStrings(tradeMarket.token0, tradeMarket.token1, '-');
   const isUp = trade.is_above;
   const tradeType = trade.is_limit_order ? 'Limit order' : 'Market';
+  const isLimitorder =
+    trade.is_limit_order && trade.state === TradeState.Queued;
   return (
     <TradeCardBackground>
       <ColumnGap gap="15px">
@@ -47,7 +49,12 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
             </div>
             <White12pxText>{pairName}</White12pxText>
             <DirectionChip isUp={isUp} shouldShowArrow />
-            <Visualized queue_id={trade.queue_id} className="hidden sm:block" />
+            {!isLimitorder && (
+              <Visualized
+                queue_id={trade.queue_id}
+                className="hidden sm:block"
+              />
+            )}
           </RowGap>
           <TradeTypeChip tradeType={tradeType} />
         </RowBetween>
