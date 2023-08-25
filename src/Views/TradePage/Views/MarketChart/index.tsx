@@ -14,7 +14,7 @@ const SidebySideCharts = ({
 
   className?: string;
 }) => {
-  console.log(`index-indexes: `, indexes);
+  // console.log(`index-indexes: `, indexes);
   return (
     <div className={`flex w-full ${className} `}>
       {indexes.map((id) => (
@@ -103,7 +103,8 @@ const MarketChart: React.FC<any> = ({}) => {
       document.removeEventListener('touchmove', onTouchMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
-  }, []);
+  });
+
   const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
   if (!v3AppConfig?.length || !marketPrefix) return <div>Loadding...</div>;
   let chartLayout = (
@@ -140,7 +141,7 @@ const MarketChart: React.FC<any> = ({}) => {
     );
   }
   const onMouseDown = () => {
-    console.log('deb-event -down');
+    // console.log('deb-event -down');
     setDragging(true);
   };
 
