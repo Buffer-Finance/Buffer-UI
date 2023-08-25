@@ -30,7 +30,7 @@ const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
   usePrice();
-  console.log('root-rerendered');
+  // console.log('root-rerendered');
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
   useEffect(() => {
@@ -47,12 +47,12 @@ const TradePage: React.FC<any> = ({}) => {
       >
         {isNotMobile ? (
           <>
-            <div className="flex flex-col w-full mx-3">
+            <RightPanelBackground>
               {showFavoriteAsset && <PinnedMarkets />}
               <MarketStatsBar />
               <MarketChart />
               <AccordionTable />
-            </div>
+            </RightPanelBackground>
             <BuyTrade />
           </>
         ) : (
@@ -68,6 +68,16 @@ const TradePage: React.FC<any> = ({}) => {
 };
 
 export { TradePage };
+
+const RightPanelBackground = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px;
+  width: 100%;
+  border-left: 1px solid #2a2a3a;
+  border-right: 1px solid #2a2a3a;
+`;
+
 const MobileWarningBackground = styled.div`
   height: 100%;
   width: 60%;

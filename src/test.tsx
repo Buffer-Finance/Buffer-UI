@@ -71,15 +71,21 @@ export { Test };
 const Test3 = () => {
   const { data } = useSWR('test', {
     fetcher: async () => {
-      const query = `{eoatoOneCTs {
-      eoa
-      nonce
-      updatedAt
-      oneCT
-    }}`;
+      const query = `{
+        deregisteredAccounts(
+          first: 10000
+          where: {
+          updatedAt_gte: "0",
+          }) {
+                eoa
+                nonce
+                updatedAt
+            }
+          }`;
 
       const res = await axios.post(
-        `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/version/v0.0.46-deregister-event-3/api`,
+        `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api
+        `,
         {
           query,
         }
