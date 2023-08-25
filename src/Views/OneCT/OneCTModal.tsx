@@ -21,7 +21,7 @@ import { signTypedData } from '@wagmi/core';
 
 const features = [
   {
-    desc: 'Zero gas',
+    desc: 'Zero Gas',
     img: (
       <svg
         width="34"
