@@ -23,7 +23,7 @@ animation-fill-mode: forwards;
 
 
 .loader {
-  width: min(40vw,500px);
+  width: min(40vw,250px);
   /* background: #12131c; */
 }
 .container {

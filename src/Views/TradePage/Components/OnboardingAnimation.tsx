@@ -3,6 +3,7 @@ import { showOnboardingAnimationAtom } from '../atoms';
 import { Dialog } from '@mui/material';
 import { useEffect } from 'react';
 import BufferAnimation from '@SVG/BufferAnimation';
+import styled from '@emotion/styled';
 const duration = 2500;
 // 37
 const OnboardingAnimation: React.FC<any> = ({}) => {
@@ -10,11 +11,20 @@ const OnboardingAnimation: React.FC<any> = ({}) => {
 
   return (
     <Dialog
+      sx={{
+        '& .MuiDialog-container': {
+          backgroundColor: '#1c1c28',
+          backdropFilter: 'blur(0px)',
+        },
+        '& .MuiDialog-paper': {
+          boxShadow: 'none',
+        },
+      }}
       classes={{ paper: 'custom-paper-class' }}
-      open={isOpen}
+      open={!isOpen}
       onClose={console.log}
     >
-      {isOpen ? <ModalChild /> : null}
+      {!isOpen ? <ModalChild /> : null}
     </Dialog>
   );
 };
