@@ -27,9 +27,9 @@ const NumberTooltip: React.FC<Itooltip> = ({
       arrow
       followCursor={!followCursor ? false : true}
       classes={tooltipStyles}
-      enterTouchDelay={0}
+      // enterTouchDelay={0}
       // open
-      leaveTouchDelay={10000}
+      // leaveTouchDelay={10000}
 
       // disableHoverListener={window.innerWidth < 600}
     >
