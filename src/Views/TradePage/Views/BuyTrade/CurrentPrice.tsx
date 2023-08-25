@@ -88,10 +88,10 @@ export const StrikePricePicker: React.FC<{
         }  rounded-sm w-[70%] outline-none`}
         value={strike ?? '0'}
         onChange={(e) => {
-          const decimals = e.target.value.split('.')[1];
-          if (decimals && decimals.length > precision) {
-            return;
-          }
+          // const decimals = e.target.value.split('.')[1];
+          // if (decimals && decimals.length > precision) {
+          //   return;
+          // }
           setStrike(e.target.value);
         }}
       />
