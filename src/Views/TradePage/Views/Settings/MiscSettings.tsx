@@ -25,7 +25,7 @@ export const MiscSettings: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="sm:hidden">
       <RowGapItemsTop gap="4px">
         <SettingsHeaderText>
           <Trans>Miscellaneous</Trans>
