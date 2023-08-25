@@ -18,7 +18,7 @@ export const TradePanelSettings: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="sm:hidden">
       <RowGapItemsTop gap="4px">
         <SettingsHeaderText>
           <Trans>Trading Panel Side</Trans>

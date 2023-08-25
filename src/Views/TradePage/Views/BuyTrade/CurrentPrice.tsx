@@ -57,9 +57,10 @@ export const CurrentPrice: React.FC<{
           </BuyTradeDescText>
         ) : (
           <StrikePricePicker
-            initialStrike={round(price, precision)}
+            initialStrike={round(price, precision) as string}
             precision={precision}
             className="w-[127px] text-right"
+            activeAsset={activeMarket?.pair ?? ''}
           />
         )}
       </RowBetween>
@@ -71,23 +72,27 @@ export const StrikePricePicker: React.FC<{
   initialStrike: string;
   precision: number;
   className: string;
-}> = ({ initialStrike, precision, className }) => {
+  activeAsset: string;
+}> = ({ initialStrike, precision, className, activeAsset }) => {
   const [strike, setStrike] = useAtom(limitOrderStrikeAtom);
   useEffect(() => {
     setStrike(round(initialStrike, precision));
-  }, []);
+  }, [activeAsset]);
   return (
     <BuyTradeDescText className={` ${className} flex justify-end w-fit`}>
       <input
         type="number"
         pattern="^\d*(\.\d{0,2})?$"
-        // min={0.001}
         className={` bg-[#282B39] ${
           className ? className : '!text-right py-[1px] px-[1px] '
         }  rounded-sm w-[70%] outline-none`}
-        value={strike}
+        value={strike ?? '0'}
         onChange={(e) => {
-          setStrike(round(e.target.value, precision));
+          const decimals = e.target.value.split('.')[1];
+          if (decimals && decimals.length > precision) {
+            return;
+          }
+          setStrike(e.target.value);
         }}
       />
     </BuyTradeDescText>
