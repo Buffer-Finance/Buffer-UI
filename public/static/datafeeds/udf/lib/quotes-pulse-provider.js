@@ -3,9 +3,8 @@ export class QuotesPulseProvider {
     constructor(quotesProvider) {
         this._subscribers = {};
         this._requestsPending = 0;
+        this._timers = null;
         this._quotesProvider = quotesProvider;
-        setInterval(this._updateQuotes.bind(this, 1 /* Fast */), 10000 /* Fast */);
-        setInterval(this._updateQuotes.bind(this, 0 /* General */), 60000 /* General */);
     }
     subscribeQuotes(symbols, fastSymbols, onRealtimeCallback, listenerGuid) {
         this._subscribers[listenerGuid] = {
@@ -13,20 +12,39 @@ export class QuotesPulseProvider {
             fastSymbols: fastSymbols,
             listener: onRealtimeCallback,
         };
+        this._createTimersIfRequired();
         logMessage(`QuotesPulseProvider: subscribed quotes with #${listenerGuid}`);
     }
     unsubscribeQuotes(listenerGuid) {
         delete this._subscribers[listenerGuid];
+        if (Object.keys(this._subscribers).length === 0) {
+            this._destroyTimers();
+        }
         logMessage(`QuotesPulseProvider: unsubscribed quotes with #${listenerGuid}`);
+    }
+    _createTimersIfRequired() {
+        if (this._timers === null) {
+            const fastTimer = window.setInterval(this._updateQuotes.bind(this, 1 /* SymbolsType.Fast */), 10000 /* UpdateTimeouts.Fast */);
+            const generalTimer = window.setInterval(this._updateQuotes.bind(this, 0 /* SymbolsType.General */), 60000 /* UpdateTimeouts.General */);
+            this._timers = { fastTimer, generalTimer };
+        }
+    }
+    _destroyTimers() {
+        if (this._timers !== null) {
+            clearInterval(this._timers.fastTimer);
+            clearInterval(this._timers.generalTimer);
+            this._timers = null;
+        }
     }
     _updateQuotes(updateType) {
         if (this._requestsPending > 0) {
             return;
         }
-        for (const listenerGuid in this._subscribers) { // tslint:disable-line:forin
+        // eslint-disable-next-line guard-for-in
+        for (const listenerGuid in this._subscribers) {
             this._requestsPending++;
             const subscriptionRecord = this._subscribers[listenerGuid];
-            this._quotesProvider.getQuotes(updateType === 1 /* Fast */ ? subscriptionRecord.fastSymbols : subscriptionRecord.symbols)
+            this._quotesProvider.getQuotes(updateType === 1 /* SymbolsType.Fast */ ? subscriptionRecord.fastSymbols : subscriptionRecord.symbols)
                 .then((data) => {
                 this._requestsPending--;
                 if (!this._subscribers.hasOwnProperty(listenerGuid)) {
