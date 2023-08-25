@@ -40,12 +40,12 @@ const ModalChild = () => {
   });
 
   return (
-    <div className="flex w-[100vw] b1200:gap-y-[5vh] h-[100vh] overflow-hidden items-center  justify-center gap-x-[150px] b1200:gap-x-[5vw] mt-[-3vh] b800:flex-col">
+    <div className="flex w-[100vw] b1200:gap-y-[5vh] h-[100vh] overflow-hidden items-center  justify-center gap-x-[37px] b1200:gap-x-[5vw] mt-[-3vh] b800:flex-col">
       <div className="text-1 font-[700]">
-        <div className="text-[85px]  b1200:text-[75px] sm:!text-[62px]">
+        <div className="text-[22px]  b1200:text-[75px] sm:!text-[62px]">
           Welcome to
         </div>
-        <div className="text-[150px] b1200:text-[140px] sm:!text-[110px] mt-[-44px]">
+        <div className="text-[37px] b1200:text-[140px] sm:!text-[110px] mt-[-11px]">
           Buffer
         </div>
       </div>

@@ -176,7 +176,7 @@ const BufferAnimation = () => {
               id="Ellipse 53"
               cx="142.499"
               cy="141.625"
-              fill="#0D0E15"
+              fill="transparent"
               rx="104.499"
               ry="103.625"
             ></ellipse>
