@@ -79,7 +79,7 @@ export const usePrice = () => {
     [setPrice]
   );
   useEffect(() => {
-    const ws = new WebSocket('wss://xc-mainnet.pyth.network/ws');
+    const ws = new WebSocket('wss://hermes.pyth.network/ws');
     loadNewPriceData(ws);
     return () => {
       ws.close();
