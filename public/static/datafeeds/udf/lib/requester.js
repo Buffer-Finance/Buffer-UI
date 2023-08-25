@@ -21,6 +21,7 @@ export class Requester {
         if (this._headers !== undefined) {
             options.headers = this._headers;
         }
+        // eslint-disable-next-line no-restricted-globals
         return fetch(`${datafeedUrl}/${urlPath}`, options)
             .then((response) => response.text())
             .then((responseTest) => JSON.parse(responseTest));

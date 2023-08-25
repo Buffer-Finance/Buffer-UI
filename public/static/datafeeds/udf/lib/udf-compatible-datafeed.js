@@ -2,9 +2,9 @@ import { UDFCompatibleDatafeedBase } from './udf-compatible-datafeed-base';
 import { QuotesProvider } from './quotes-provider';
 import { Requester } from './requester';
 export class UDFCompatibleDatafeed extends UDFCompatibleDatafeedBase {
-    constructor(datafeedURL, updateFrequency = 10 * 1000) {
+    constructor(datafeedURL, updateFrequency = 10 * 1000, limitedServerResponse) {
         const requester = new Requester();
         const quotesProvider = new QuotesProvider(datafeedURL, requester);
-        super(datafeedURL, quotesProvider, requester, updateFrequency);
+        super(datafeedURL, quotesProvider, requester, updateFrequency, limitedServerResponse);
     }
 }

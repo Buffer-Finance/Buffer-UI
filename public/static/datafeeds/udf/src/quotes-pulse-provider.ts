@@ -30,16 +30,20 @@ const enum UpdateTimeouts {
 	General = 60 * 1000,
 }
 
+interface Timers {
+	fastTimer: number;
+	generalTimer: number;
+}
+
 export class QuotesPulseProvider {
 	private readonly _quotesProvider: IQuotesProvider;
 	private readonly _subscribers: QuoteSubscribers = {};
 	private _requestsPending: number = 0;
 
+	private _timers: Timers | null = null;
+
 	public constructor(quotesProvider: IQuotesProvider) {
 		this._quotesProvider = quotesProvider;
-
-		setInterval(this._updateQuotes.bind(this, SymbolsType.Fast), UpdateTimeouts.Fast);
-		setInterval(this._updateQuotes.bind(this, SymbolsType.General), UpdateTimeouts.General);
 	}
 
 	public subscribeQuotes(symbols: string[], fastSymbols: string[], onRealtimeCallback: QuotesCallback, listenerGuid: string): void {
@@ -48,13 +52,32 @@ export class QuotesPulseProvider {
 			fastSymbols: fastSymbols,
 			listener: onRealtimeCallback,
 		};
-
+		this._createTimersIfRequired();
 		logMessage(`QuotesPulseProvider: subscribed quotes with #${listenerGuid}`);
 	}
 
 	public unsubscribeQuotes(listenerGuid: string): void {
 		delete this._subscribers[listenerGuid];
+		if (Object.keys(this._subscribers).length === 0) {
+			this._destroyTimers();
+		}
 		logMessage(`QuotesPulseProvider: unsubscribed quotes with #${listenerGuid}`);
+	}
+
+	private _createTimersIfRequired(): void {
+		if (this._timers === null) {
+			const fastTimer = window.setInterval(this._updateQuotes.bind(this, SymbolsType.Fast), UpdateTimeouts.Fast);
+			const generalTimer = window.setInterval(this._updateQuotes.bind(this, SymbolsType.General), UpdateTimeouts.General);
+			this._timers = { fastTimer, generalTimer };
+		}
+	}
+
+	private _destroyTimers(): void {
+		if (this._timers !== null) {
+			clearInterval(this._timers.fastTimer);
+			clearInterval(this._timers.generalTimer);
+			this._timers = null;
+		}
 	}
 
 	private _updateQuotes(updateType: SymbolsType): void {
@@ -62,7 +85,8 @@ export class QuotesPulseProvider {
 			return;
 		}
 
-		for (const listenerGuid in this._subscribers) { // tslint:disable-line:forin
+		// eslint-disable-next-line guard-for-in
+		for (const listenerGuid in this._subscribers) {
 			this._requestsPending++;
 
 			const subscriptionRecord = this._subscribers[listenerGuid];
