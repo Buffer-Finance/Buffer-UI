@@ -1,17 +1,14 @@
 import { ReactNode } from 'react';
-import { CallOverrides } from 'ethers';
-import { useAccount, useBalance, useFeeData } from 'wagmi';
-import { divide, lt } from '@Utils/NumString/stringArithmatics';
+import { useAccount } from 'wagmi';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
-import { useUserAccount } from './useUserAccount';
 import { useActiveChain } from './useActiveChain';
-import { DEFAULT_GAS_LIMIT } from 'src/Config';
-import { getError } from 'src/Utils/Contract/getError';
-import { convertBNtoString } from '@Utils/useReadCall';
-import { inIframe } from '@Utils/isInIframe';
 import { usePublicClient, useWalletClient, useContractWrite } from 'wagmi';
-import { SimulateContractParameters } from 'viem';
+import {
+  ContractFunctionExecutionError,
+  SimulateContractParameters,
+  getAddress,
+} from 'viem';
 
 interface ICustomToast {
   body?: JSX.Element;
@@ -70,7 +67,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     let transformedArgs: SimulateContractParameters = {
       abi,
       account: address,
-      address: contractAddress,
+      address: getAddress(contractAddress),
 
       args: methodArgs,
       functionName: methodName,
@@ -102,8 +99,11 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
 
       return hash;
-    } catch (ex) {
+    } catch (ex: unknown) {
       dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
+      const shortMessage = (
+        ex as ContractFunctionExecutionError
+      ).shortMessage.split('the following reason:')[1];
 
       callBack();
       toastify({
@@ -111,9 +111,12 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
         duration: 200000,
         msg: (
           <span>
-            Oops! There is some error. Can you please try again?
+            Oops! There is some error!
             <br />
-            <span className="!text-3">Error: {ex.message}</span>
+            <span className="!text-3">
+              {shortMessage ||
+                (ex as ContractFunctionExecutionError).shortMessage}
+            </span>
           </span>
         ),
         type: 'error',
