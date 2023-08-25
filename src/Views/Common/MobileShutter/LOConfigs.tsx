@@ -34,7 +34,7 @@ const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
       <div>
         <div></div>
         <span className="text-f12 text-[#808191] my-3 flex">
-          Place an order on&nbsp;
+          Place a limit order on&nbsp;
           {activeMarket?.pair ? (
             <div className="w-[20px] text-1 h-[20px]">
               <PairTokenImage pair={activeMarket}></PairTokenImage>
