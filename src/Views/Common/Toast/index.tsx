@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { SingleNotification, Bar, Background } from './style';
 import { useToast } from '../../../contexts/Toast';
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
-import { useGlobal } from '@Contexts/Global';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import ErrorIcon from '@Assets/Elements/ErrorIcon';
 import FailedSuccessIcon from '@Assets/Elements/FailedSuccess';
@@ -11,17 +10,15 @@ import { CLoseSVG } from '@Views/TradePage/Components/CloseSVG';
 import { useAtom } from 'jotai';
 import { notificationPositionSettingsAtom } from '@Views/TradePage/atoms';
 
-// import { useWindowSize } from "src/Providers";
-
 export const NotificationContext = React.createContext('d');
+
 function Layout(props) {
   const [exit, setExit] = useState(false);
   const [width, setWidth] = useState(0);
   const interval = useRef<any>();
   const dispatch = useToast();
-  const { state } = useGlobal();
-  const dur = props.toast.inf ? 1000000 : props.toast.timings || 80;
-  // const dimensions = useWindowSize();
+  const dur = props.toast.inf ? 1000000 : props.toast.timings || 20;
+
   function set() {
     interval.current = setInterval(() => {
       setWidth((width) => width + 1);
@@ -62,20 +59,20 @@ function Layout(props) {
     color = '#4FBF67';
   }
   const notifRef = useRef<HTMLDivElement>();
-  if (props.toast.confirmationModal && window.innerWidth > 600) {
-    const data = props.toast.confirmationModal;
-    return (
-      <SingleNotification
-        onMouseEnter={entered}
-        onMouseLeave={exited}
-        className={'bg-1' + (exit ? 'fade-out' : 'fade-in')}
-        color={color}
-      >
-        <></>
-        {/* <FinalConfirmationModal data={data} hash={props.toast.hash} /> */}
-      </SingleNotification>
-    );
-  }
+  // if (props.toast.confirmationModal && window.innerWidth > 600) {
+  //   const data = props.toast.confirmationModal;
+  //   return (
+  //     <SingleNotification
+  //       onMouseEnter={entered}
+  //       onMouseLeave={exited}
+  //       className={'bg-1' + (exit ? 'fade-out' : 'fade-in')}
+  //       color={color}
+  //     >
+  //       <></>
+  //       {/* <FinalConfirmationModal data={data} hash={props.toast.hash} /> */}
+  //     </SingleNotification>
+  //   );
+  // }
   return (
     <SingleNotification
       onMouseEnter={entered}
