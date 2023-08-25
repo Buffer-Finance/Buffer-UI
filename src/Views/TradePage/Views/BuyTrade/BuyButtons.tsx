@@ -18,6 +18,7 @@ import { useAccount } from 'wagmi';
 import { ReactNode } from 'react';
 import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 import { usePrice } from '@Hooks/usePrice';
+import { useToast } from '@Contexts/Toast';
 
 export const BuyButtons = ({
   allowance,
@@ -45,9 +46,13 @@ export const BuyButtons = ({
   const { switchPool } = useSwitchPool();
 
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
-
+  const toastify = useToast();
   const tradeType = useAtomValue(tradeTypeAtom);
   const limitStrike = useAtomValue(limitOrderStrikeAtom);
+  const { isMarketOpen: isAssetActive, isForex } = useIsMarketOpen(
+    activeMarket,
+    switchPool?.pool
+  );
 
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
@@ -55,7 +60,13 @@ export const BuyButtons = ({
     //   return setIsApproveModalOpen(true);
     let strike = activeAssetPrice;
     let limitOrderExpiry = '0';
-    if (tradeType == 'Limit' && limitStrike) {
+    if (tradeType == 'Limit') {
+      if (!limitStrike)
+        return toastify({
+          type: 'error',
+          msg: 'Please select a strike price',
+          id: 'lo no strike',
+        });
       limitOrderExpiry = expiry ?? '0';
       // console.log(`BuyButtons-limitOrderExpiry: `, limitOrderExpiry);
       strike = limitStrike;
@@ -66,10 +77,6 @@ export const BuyButtons = ({
       limitOrderExpiry: Number(limitOrderExpiry),
     });
   };
-  const { isMarketOpen: isAssetActive, isForex } = useIsMarketOpen(
-    activeMarket,
-    switchPool?.pool
-  );
 
   // if (!poolDetails) return <>Error: Pool not found</>;
   // console.log('approval', allowance, amount);
