@@ -21,10 +21,10 @@ const OnboardingAnimation: React.FC<any> = ({}) => {
         },
       }}
       classes={{ paper: 'custom-paper-class' }}
-      open={!isOpen}
+      open={isOpen}
       onClose={console.log}
     >
-      {!isOpen ? <ModalChild /> : null}
+      {isOpen ? <ModalChild /> : null}
     </Dialog>
   );
 };
