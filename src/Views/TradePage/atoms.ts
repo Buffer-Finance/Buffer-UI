@@ -67,7 +67,7 @@ export const favouriteMarketsAtom = atomWithStorage('favouriteMarketsAtom', [
   '',
 ]);
 
-export const categoriesAtom = atom<string>('favourites');
+export const categoriesAtom = atom<string>('all');
 
 export const searchBarAtom = atom('');
 

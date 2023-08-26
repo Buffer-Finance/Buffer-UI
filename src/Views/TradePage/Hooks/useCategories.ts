@@ -9,7 +9,7 @@ export const useCategories = () => {
       return [];
     }
     const categories = markets.map((market) => market.category);
-    return ['favourites', ...new Set(categories)];
+    return ['favourites', 'all', ...new Set(categories)];
   }, [markets]);
   return { categories };
 };
