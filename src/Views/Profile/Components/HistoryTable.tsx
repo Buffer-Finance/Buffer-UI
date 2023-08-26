@@ -58,9 +58,10 @@ export const HistoryTables = () => {
             trades={activeTrades}
             isLoading={false}
             className="sm:min-w-[800px]"
+            overflow={false}
           />,
-          <LimitOrderTable trades={limitOrders} />,
-          <History className="sm:min-w-[800px]" />,
+          <LimitOrderTable trades={limitOrders} overflow={false} />,
+          <History className="sm:min-w-[800px]" overflow={false} />,
         ]}
       />
     </>

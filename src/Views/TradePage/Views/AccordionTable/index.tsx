@@ -117,9 +117,13 @@ const AccordionTable: React.FC<any> = ({}) => {
         } flex flex-col transition-all  overflow-y-hidden `}
       >
         {activeTable == 'Trades' ? (
-          <OngoingTradesTable trades={activeTrades} isLoading={false} />
+          <OngoingTradesTable
+            trades={activeTrades}
+            isLoading={false}
+            overflow
+          />
         ) : activeTable == 'Limit Orders' ? (
-          <LimitOrderTable trades={limitOrders} />
+          <LimitOrderTable trades={limitOrders} overflow />
         ) : activeTable == 'Platform Trades' ? (
           <PlatformOngoing />
         ) : activeTable == 'Platform History' ? (
@@ -127,7 +131,7 @@ const AccordionTable: React.FC<any> = ({}) => {
         ) : activeTable == 'Cancelled' ? (
           <Cancelled />
         ) : (
-          <History />
+          <History overflow />
         )}
       </div>
     </div>
@@ -145,9 +149,11 @@ const CountChip = ({ count }: { count: number }) => (
 export const History = ({
   onlyView,
   className = '',
+  overflow,
 }: {
   onlyView?: number[];
   className?: string;
+  overflow: boolean;
 }) => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
@@ -160,6 +166,7 @@ export const History = ({
       onlyView={onlyView}
       isLoading={historyTrades === undefined}
       className={className}
+      overflow={overflow}
     />
   );
 };
@@ -198,6 +205,7 @@ export const PlatformHistory = ({ onlyView }: { onlyView?: number[] }) => {
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={platformHistoryTrades === undefined}
+      overflow
     />
   );
 };
@@ -216,6 +224,7 @@ export const PlatformOngoing = ({ onlyView }: { onlyView?: number[] }) => {
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={platformActiveTrades === undefined}
+      overflow
     />
   );
 };

@@ -46,6 +46,7 @@ export const OngoingTradesTable: React.FC<{
   totalPages?: number;
   isLoading: boolean;
   className?: string;
+  overflow: boolean;
 }> = ({
   trades,
   platform,
@@ -55,6 +56,7 @@ export const OngoingTradesTable: React.FC<{
   totalPages,
   isLoading,
   className = '',
+  overflow,
 }) => {
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
@@ -254,7 +256,7 @@ export const OngoingTradesTable: React.FC<{
         if (isNotMobile) return null;
         else setInspectTrade({ trade: trades?.[idx] });
       }}
-      overflow
+      overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
       loading={isLoading}
       className={className}
