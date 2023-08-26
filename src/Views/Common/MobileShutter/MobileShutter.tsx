@@ -91,11 +91,6 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
         {shutterState.open == 'BO' && <VanillaBOConfigs />}
         {shutterState.open == 'LO' && <LOConfigs />}
         {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}
-        {shutterState.open == 'ActiveOrders' && (
-          <div className="h-screen">
-            <ActiveTrades isMobile />{' '}
-          </div>
-        )}{' '}
         {shutterState.open == 'ShareShutter' && (
           <div className="w-full flex flex-col b400:scale-[0.9] origin-left my-3">
             <ModalChild />
@@ -106,3 +101,24 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   );
 };
 export default ShutterProvider;
+
+export const TradesShutter = () => {
+  const { closeShutter, shutterState } = useShutterHandlers();
+  const isOpen = typeof shutterState.open == 'string';
+
+  return (
+    <ShutterDrawer
+      className="bg-[#1F2128] border-none  outline-0 overflow-hidden px-[0px] "
+      isVisible={isOpen}
+      onClose={closeShutter}
+    >
+      <div className="w-full a600:w-[500px] mx-auto mb-3 mt-2">
+        {shutterState.open == 'ActiveOrders' && (
+          <div className="h-screen">
+            <ActiveTrades isMobile />
+          </div>
+        )}
+      </div>
+    </ShutterDrawer>
+  );
+};
