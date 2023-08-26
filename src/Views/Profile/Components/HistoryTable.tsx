@@ -54,9 +54,13 @@ export const HistoryTables = () => {
       <TabSwitch
         value={activeTabIdx}
         childComponents={[
-          <OngoingTradesTable trades={activeTrades} />,
+          <OngoingTradesTable
+            trades={activeTrades}
+            isLoading={false}
+            className="sm:min-w-[800px]"
+          />,
           <LimitOrderTable trades={limitOrders} />,
-          <History />,
+          <History className="sm:min-w-[800px]" />,
         ]}
       />
     </>

@@ -145,6 +145,7 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
       onRowClick={console.log}
       overflow
       error={<TableErrorRow msg="No active limit orders." />}
+      className="sm:min-w-[800px]"
     />
   );
 };

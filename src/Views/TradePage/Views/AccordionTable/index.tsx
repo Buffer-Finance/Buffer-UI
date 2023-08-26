@@ -142,7 +142,13 @@ const CountChip = ({ count }: { count: number }) => (
   </div>
 );
 
-export const History = ({ onlyView }: { onlyView?: number[] }) => {
+export const History = ({
+  onlyView,
+  className = '',
+}: {
+  onlyView?: number[];
+  className?: string;
+}) => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
   return (
@@ -153,11 +159,18 @@ export const History = ({ onlyView }: { onlyView?: number[] }) => {
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={historyTrades === undefined}
+      className={className}
     />
   );
 };
 
-export const Cancelled = ({ onlyView }: { onlyView?: number[] }) => {
+export const Cancelled = ({
+  onlyView,
+  className = '',
+}: {
+  onlyView?: number[];
+  className?: string;
+}) => {
   const { page_data: canclledTrades, total_pages } = useCancelledTrades();
   // console.log(canclledTrades, 'cancelled trades');
   return (
@@ -166,6 +179,7 @@ export const Cancelled = ({ onlyView }: { onlyView?: number[] }) => {
       totalPages={total_pages}
       onlyView={onlyView}
       isLoading={canclledTrades === undefined}
+      className={className}
     />
   );
 };
