@@ -30,7 +30,7 @@ export const HistoryTables = () => {
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
 
   useEffect(() => {
-    changeActiveTab(null, 1);
+    changeActiveTab(null, 2);
   }, []);
 
   const [activeTrades, limitOrders] = useOngoingTrades();
