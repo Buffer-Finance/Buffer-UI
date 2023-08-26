@@ -111,8 +111,7 @@ const PlatfromFeeError = ({
       ) : (
         !isError && (
           <>
-            Additional {platfromFee} {tradeToken} will be charged as platform
-            fee.
+            Platform fee : + {platfromFee} {tradeToken}
           </>
         )
       )}
