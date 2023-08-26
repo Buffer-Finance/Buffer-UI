@@ -43,6 +43,7 @@ import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { Test } from './test';
 import SideBar from '@Views/Common/Sidebar';
 import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
+import ShutterProvider from '@Views/Common/MobileShutter/MobileShutter';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -88,6 +89,7 @@ const AppRoutes = () => {
   }, [searchParam]);
   return (
     <div className="relative root w-[100vw] pb-[5px] ">
+      <ShutterProvider />
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>
