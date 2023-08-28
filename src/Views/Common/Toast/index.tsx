@@ -20,7 +20,7 @@ function Layout(props) {
   const interval = useRef<any>();
   const dispatch = useToast();
   const { state } = useGlobal();
-  const dur = props.toast.inf ? 1000000 : props.toast.timings || 80;
+  const dur = props.toast.inf ? 1000000 : props.toast.timings || 9999;
   // const dimensions = useWindowSize();
   function set() {
     interval.current = setInterval(() => {

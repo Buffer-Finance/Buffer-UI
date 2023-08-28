@@ -31,7 +31,7 @@ import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
 import { sleep } from '@Utils/JSUtils/sleep';
 import { toFixed } from '@Utils/NumString';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, round } from '@Utils/NumString/stringArithmatics';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -43,7 +43,12 @@ import {
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { TradeType } from '@Views/TradePage/type';
-import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
+import {
+  limitOrderStrikeAtom,
+  queuets2priceAtom,
+  tradeTypeAtom,
+  visualizeddAtom,
+} from '@Views/TradePage/atoms';
 import { atomWithStorage } from 'jotai/utils';
 import { PRICE_DECIMALS } from '@Views/TradePage/config';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
@@ -220,21 +225,43 @@ function drawPosition(
   //   chart
   // );
   // if (Object.hasOwn(chart, 'createPositionLine'))
-
   return chart
-    ?.createPositionLine()
+    ?.createOrderLine()
     .setText(text)
     .setTooltip(tooltip)
     .setBodyBackgroundColor(defaults.BG)
     .setBodyBorderColor(defaults.BG)
     .setBodyFont('normal 17pt Relative Pro')
     .setQuantityFont('bold 17pt Relative Pro')
-    .setQuantityBackgroundColor(color)
-    .setQuantityBorderColor(color)
     .setLineColor(color)
     .setBodyTextColor('rgb(255,255,255)')
     .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
-    .setPrice(optionPrice);
+    .setPrice(optionPrice)
+    .onMove(function () {
+      const updatedPrice = this.getPrice();
+      this.setText('onMove called');
+    })
+    .onModify('onModify called', function (text) {
+      this.setText(text);
+    });
+
+  // return chart
+  //   ?.createPositionLine()
+  //   .setText(text)
+  //   .setTooltip(tooltip)
+  //   .setBodyBackgroundColor(defaults.BG)
+  //   .setBodyBorderColor(defaults.BG)
+  //   .setBodyFont('normal 17pt Relative Pro')
+  //   .setQuantityFont('bold 17pt Relative Pro')
+  //   .setQuantityBackgroundColor(color)
+  //   .setQuantityBorderColor(color)
+  //   .setLineColor(color)
+  //   .setBodyTextColor('rgb(255,255,255)')
+  //   .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
+  //   .setPrice(optionPrice)
+  //   .onClose('onClose called', function (text) {
+  //     this.setText(text);
+  //   });
   // positions.current.push({ line, expiration: option.expirationTime });
 }
 
@@ -248,6 +275,8 @@ export const MultiResolutionChart = ({
   const market = marke.replace('-', '');
   const chartData =
     marketsForChart[market as unknown as keyof typeof marketsForChart];
+  const setStrike = useSetAtom(limitOrderStrikeAtom);
+  const setActiveTab = useSetAtom(tradeTypeAtom);
 
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
@@ -318,7 +347,6 @@ export const MultiResolutionChart = ({
         onResultReadyCallback
       ) => {
         const symbols = await getAllSymbols();
-        console.log(`TradingView-newSymbols: `, symbols, userInput);
 
         const newSymbols = symbols.filter((symbol) => {
           return (
@@ -327,7 +355,6 @@ export const MultiResolutionChart = ({
             symbol.type.toLowerCase() == symbolType.toLowerCase()
           );
         });
-        console.log(`TradingView-newSymbols: `, newSymbols);
         onResultReadyCallback(newSymbols);
       },
       resolveSymbol: async (
@@ -508,8 +535,20 @@ export const MultiResolutionChart = ({
 
       chart.onChartReady(() => {
         // chart.activeChart().get;
+        let packedPrice: { price: null | number } = { price: null };
         // chart.activeChart?.().executeActionById('drawingToolbarAction');
-
+        chart
+          .activeChart?.()
+          .crossHairMoved()
+          .subscribe(null, (p) => {
+            packedPrice = p;
+          });
+        // @ts-ignore
+        document.getElementById(chart._id).contentWindow.document.body.onclick =
+          () => {
+            setActiveTab('Limit');
+            setStrike(round(packedPrice.price, 2));
+          };
         setChartReady(true);
       });
       widgetRef.current = chart;
