@@ -561,18 +561,17 @@ export const MultiResolutionChart = ({
         // chart.activeChart().get;
         let packedPrice: { price: null | number } = { price: null };
         // chart.activeChart?.().executeActionById('drawingToolbarAction');
-        chart
-          .activeChart?.()
-          .crossHairMoved()
-          .subscribe(null, (p) => {
-            packedPrice = p;
-          });
-        // @ts-ignore
-        document.getElementById(chart._id).contentWindow.document.body.onclick =
-          () => {
-            setActiveTab('Limit');
-            setStrike(round(packedPrice.price, 2));
-          };
+        // chart
+        //   .activeChart?.()
+        //   .crossHairMoved()
+        //   .subscribe(null, (p) => {
+        //     packedPrice = p;
+        //   });
+        // document.getElementById(chart._id).contentWindow.document.body.onclick =
+        //   () => {
+        //     setActiveTab('Limit');
+        //     setStrike(round(packedPrice.price, 2));
+        //   };
         setChartReady(true);
       });
       widgetRef.current = chart;
