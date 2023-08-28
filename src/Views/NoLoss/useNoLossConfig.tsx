@@ -151,7 +151,6 @@ const useNoLossConfig = () => {
 
         return appConfig;
       },
-      // TODO see if there is retrying machanism on swr than only do this req one time
       refreshInterval: 100000,
     }
   );

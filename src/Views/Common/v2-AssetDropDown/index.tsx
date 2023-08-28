@@ -1,18 +1,18 @@
-import { ClickAwayListener, Skeleton } from "@mui/material";
-import { useGlobal } from "@Contexts/Global";
-import React, { useEffect, useState } from "react";
-import { replaceAsset } from "@Utils/appControls/replaceAsset";
-import { Background } from "./style";
-import { closeDrawer } from "@Utils/appControls/mobileDrawerHandlers";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import V2BufferInput from "../v2-BufferInput";
-import useSWR from "swr";
-import { divide } from "@Utils/NumString/stringArithmatics";
-import { Display } from "../Tooltips/Display";
-import { IBinaryMarket } from "@Contexts/Global/reducer";
+import { ClickAwayListener, Skeleton } from '@mui/material';
+import { useGlobal } from '@Contexts/Global';
+import React, { useEffect, useState } from 'react';
+import { replaceAsset } from '@Utils/appControls/replaceAsset';
+import { Background } from './style';
+import { closeDrawer } from '@Utils/appControls/mobileDrawerHandlers';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import V2BufferInput from '../v2-BufferInput';
+import useSWR from 'swr';
+import { divide } from '@Utils/NumString/stringArithmatics';
+import { Display } from '../Tooltips/Display';
+import { IBinaryMarket } from '@Contexts/Global/reducer';
 
 export default function AssetDropDown({ isDropdown }) {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const { state } = useGlobal();
   const [currentAsset, setCurrentAsset] = useState<IBinaryMarket>(null);
   const [open, setOpen] = useState(false);
@@ -34,10 +34,7 @@ export default function AssetDropDown({ isDropdown }) {
         )
       : res?.data;
   };
-  const assetChangeHandler = (asset: string) => {
-    // TODO see this, nex/router removed
-    // replaceAsset(router, asset);
-  };
+  const assetChangeHandler = (asset: string) => {};
 
   useEffect(() => {
     if (!state.settings.activeAsset) return;
@@ -134,11 +131,11 @@ const AssetBtn: React.FC<IAssetBtn> = ({
   return (
     <div
       className={`flex items-center content-sbw ${
-        isDropdown ? "pr" : ""
+        isDropdown ? 'pr' : ''
       } assets pointer 
       ${
         singleAsset?.underlying_asset.name?.toUpperCase() ==
-          activeAsset?.toUpperCase() && "active"
+          activeAsset?.toUpperCase() && 'active'
       }
        `}
       role="button"

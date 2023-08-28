@@ -25,6 +25,7 @@ import ShutterProvider, {
   useShutterHandlers,
 } from '@Views/Common/MobileShutter/MobileShutter';
 import { useEffect } from 'react';
+import { CloseConfirmationModal } from './CloseConfirmationModal';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -48,6 +49,7 @@ const TradePage: React.FC<any> = ({}) => {
         {isNotMobile ? (
           <>
             <RightPanelBackground>
+              <CloseConfirmationModal />
               {showFavoriteAsset && <PinnedMarkets />}
               <MarketStatsBar />
               <MarketChart />

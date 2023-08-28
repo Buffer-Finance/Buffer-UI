@@ -205,6 +205,7 @@ export const HolderContracts = [
 ];
 
 export const refreshInterval = 500;
+// TODO Confirm from faraday that it works.
 export const defaultSettings = {
   trade: {
     partialFill: true,
@@ -221,6 +222,7 @@ export const defaultSettings = {
   },
   miscs: {
     showFavoriteAsset: true,
+    earlyCloseConfirmation: false,
   },
   tradePanelPosition: tradePanelPosition.Right,
   notificationPosition: notificationPosition.TopLeft,
