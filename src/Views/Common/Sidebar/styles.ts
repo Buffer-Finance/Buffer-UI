@@ -6,11 +6,11 @@ const SidebarCSS = styled.div`
     padding-bottom: 10px;
 
     border-top: 1px solid #4a4646;
-    border-bottom: 1px solid #4a4646;
+    /* border-bottom: 1px solid #4a4646; */
   }
   .collapse-icon {
     color: var(--text-1);
-    display: none;
+    /* display: none; */
     padding: 0;
   }
   .bufferlogotext {
@@ -117,20 +117,22 @@ const SidebarCSS = styled.div`
       display: flex;
       /* background: var(--bg-17); */
       color: var(--text-6);
-      justify-content: center;
       margin: auto;
       width: auto;
       padding: 1em 2rem;
       text-transform: capitalize;
       border-radius: 1.2rem;
       height: 4.2rem;
+      @media (max-width: 600px) {
+        height: 3.6rem;
+      }
       align-items: center;
       /* font-family: "Inter", sans-serif; */
       font-weight: 400;
       font-size: 16px;
       transition: 80ms ease;
       /* margin-bottom: 0.3rem; */
-      margin: 0 8px 3px 8px;
+      margin: 3px 0px;
       &:hover {
         color: var(--text-blue);
       }
@@ -274,7 +276,6 @@ const SidebarCSS = styled.div`
       top: 0;
       padding-top: 2rem;
       margin-top: 0 !important;
-      justify-content: center !important;
       /* padding-left: 3rem !important; */
       transform: translateX(-1rem);
       .buffer-logo {
@@ -284,7 +285,8 @@ const SidebarCSS = styled.div`
       }
     }
     .sidebar {
-      transform: translateX(500%) !important;
+      transform: translateX(-500%) !important;
+      left: 0;
       top: 0;
     }
     .sidebar-closed {

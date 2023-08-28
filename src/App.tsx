@@ -10,6 +10,7 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { Earn } from '@Views/Earn';
+import SideBar from '@Views/Common/Sidebar';
 
 // export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
@@ -178,7 +179,7 @@ function App() {
             />
           )}
           <TnCModal />
-          {/* <SideBar /> */}
+          <SideBar />
         </Background>
       </I18nProvider>
     </>
