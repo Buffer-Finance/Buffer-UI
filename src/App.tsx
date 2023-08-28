@@ -162,7 +162,7 @@ function App() {
   const graphStatus = useGraphStatus();
   return (
     <>
-      <PasswordModal />
+      {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
           {graphStatus && (
