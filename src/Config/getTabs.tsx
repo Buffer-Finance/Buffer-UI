@@ -306,7 +306,6 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-
       {
         to: `https://app.buffer.finance/#/referral`,
         name: 'Referral',
@@ -331,7 +330,6 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-
       {
         to: `https://app.buffer.finance/#/dashboard`,
         name: 'Dashboard',
@@ -413,7 +411,6 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-
       {
         to: `https://testnet.buffer.finance/#/profile`,
         name: 'Profile',
@@ -432,7 +429,6 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-
       {
         to: `https://testnet.buffer.finance/#/dashboard`,
         name: 'Dashboard',
