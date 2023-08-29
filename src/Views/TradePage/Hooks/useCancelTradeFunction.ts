@@ -103,6 +103,7 @@ export const useCancelTradeFunction = () => {
     trade: TradeType,
     tradeMarket: marketType
   ) => {
+    console.log(`[chart-deb]tradeMarket: `, tradeMarket);
     const ts = Math.round(Date.now() / 1000);
     const domain = {
       name: 'Validator',
@@ -134,6 +135,7 @@ export const useCancelTradeFunction = () => {
       user_signature: actualSignature,
       environment: activeChain.id,
     };
+    console.log(`[chart-deb]params: `, params);
 
     const res = await axios.get(`${baseUrl}trade/close/`, { params });
     const updatedTrade = res.data;

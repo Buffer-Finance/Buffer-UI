@@ -292,22 +292,6 @@ export const MultiResolutionChart = ({
   );
   const settings = useAtomValue(miscsSettingsAtom);
   const setCloseConfirmationModal = useSetAtom(closeConfirmationModalAtom);
-  const chartCloseOperation = useCallback(
-    (trade: TradeType) => {
-      console.log(
-        `MultiResolutionChart-settings.earlyCloseConfirmation: `,
-        settings.earlyCloseConfirmation,
-        trade,
-        trade.market
-      );
-      if (settings.earlyCloseConfirmation) {
-        earlyCloseHandler(trade, trade.market);
-      } else {
-        setCloseConfirmationModal(trade);
-      }
-    },
-    [settings, earlyCloseHandler, setCloseConfirmationModal]
-  );
 
   const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
@@ -504,7 +488,6 @@ export const MultiResolutionChart = ({
     market2resolution?.[chartId] || ('1' as ResolutionString);
 
   useEffect(() => {
-    console.log(`[chart-deb]: `, marke, index);
     try {
       const chart = new widget({
         datafeed,
@@ -674,7 +657,7 @@ export const MultiResolutionChart = ({
             visited: true,
             lineRef: drawPosition(
               updatedPos,
-              chartCloseOperation,
+              null,
               widgetRef.current?.activeChart()!,
               getPoolInfo(pos.pool.pool).decimals
             ),
@@ -732,8 +715,18 @@ export const MultiResolutionChart = ({
         if (!isDisabled) {
           trade2visualisation.current[+trade]?.lineRef.onCancel(
             'onCancel',
-            () =>
-              chartCloseOperation(trade2visualisation.current[+trade]?.option)
+            () => {
+              console.log(
+                `[chart-deb]confirmation: `,
+                settings.earlyCloseConfirmation
+              );
+              const actualTrade = trade2visualisation.current[+trade]?.option;
+              if (settings.earlyCloseConfirmation) {
+                earlyCloseHandler(actualTrade, actualTrade.market);
+              } else {
+                setCloseConfirmationModal(actualTrade);
+              }
+            }
           );
         }
       }

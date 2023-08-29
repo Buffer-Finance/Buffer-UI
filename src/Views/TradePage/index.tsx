@@ -26,7 +26,6 @@ import ShutterProvider, {
 } from '@Views/Common/MobileShutter/MobileShutter';
 import { useEffect } from 'react';
 import { CloseConfirmationModal } from './CloseConfirmationModal';
-import { particle } from 'src/Config/wagmiClient';
 import { useAccount } from 'wagmi';
 
 const TradePage: React.FC<any> = ({}) => {

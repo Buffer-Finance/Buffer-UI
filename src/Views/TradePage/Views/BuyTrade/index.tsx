@@ -20,7 +20,7 @@ import { useSelectedAssetPayout } from '../MarketChart/Payout';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
 import { useAccount } from 'wagmi';
-import { particle } from 'src/Config/wagmiClient';
+// import { particle } from 'src/Config/wagmiClient';
 import { BlueBtn } from '@Views/Common/V2-Button';
 
 const BuyTradeBackground = styled.div`
@@ -77,22 +77,22 @@ export const BuyTrade: React.FC = () => {
   });
   // const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
-  const buyLink = () => {
-    particle.openBuy({
-      fiatCoin: 'USD',
-      cryptoCoin: 'USDC',
-      network: 'Arbitrum One',
-      walletAddress: address,
-    });
-  };
-  const openWallet = () => {
-    particle.openWallet();
-  };
+  // const buyLink = () => {
+  //   particle.openBuy({
+  //     fiatCoin: 'USD',
+  //     cryptoCoin: 'USDC',
+  //     network: 'Arbitrum One',
+  //     walletAddress: address,
+  //   });
+  // };
+  // const openWallet = () => {
+  //   particle.openWallet();
+  // };
 
   return (
     <BuyTradeBackground>
-      <BlueBtn onClick={buyLink}>Onramp USDC </BlueBtn>
-      <BlueBtn onClick={openWallet}>Open wallet </BlueBtn>
+      {/* <BlueBtn onClick={buyLink}>Onramp USDC </BlueBtn>
+      <BlueBtn onClick={openWallet}>Open wallet </BlueBtn> */}
 
       <TimeSelector />
       <TradeSizeSelector />
