@@ -85,9 +85,9 @@ const formatResolution = (s: string) => {
   if (s.toLowerCase() == '5') {
     return '5m';
   }
-  if (s.toLowerCase() == '3') {
-    return '3m';
-  }
+  // if (s.toLowerCase() == '3') {
+  //   return '3m';
+  // }
 
   if (s.toLowerCase() == '15') {
     return '15m';
