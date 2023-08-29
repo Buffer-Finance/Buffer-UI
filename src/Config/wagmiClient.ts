@@ -28,7 +28,7 @@ import { inIframe } from '@Utils/isInIframe';
 import { createPublicClient, createWalletClient, http, custom } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
-new ParticleNetwork({
+export const particle = new ParticleNetwork({
   projectId: import.meta.env.VITE_PARTICLE_PROJECT_ID,
   clientKey: import.meta.env.VITE_PARTICLE_CLIENT_KEY,
   appId: import.meta.env.VITE_pARTICLE_APP_ID,

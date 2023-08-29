@@ -291,20 +291,23 @@ export const MultiResolutionChart = ({
     market2resolutionAtom
   );
   const settings = useAtomValue(miscsSettingsAtom);
-  const chartCloseOperation = (trade: TradeType) => {
-    console.log(
-      `MultiResolutionChart-settings.earlyCloseConfirmation: `,
-      settings.earlyCloseConfirmation,
-      trade,
-      trade.market
-    );
-    if (settings.earlyCloseConfirmation) {
-      earlyCloseHandler(trade, trade.market);
-    } else {
-      setCloseConfirmationModal(trade);
-    }
-  };
   const setCloseConfirmationModal = useSetAtom(closeConfirmationModalAtom);
+  const chartCloseOperation = useCallback(
+    (trade: TradeType) => {
+      console.log(
+        `MultiResolutionChart-settings.earlyCloseConfirmation: `,
+        settings.earlyCloseConfirmation,
+        trade,
+        trade.market
+      );
+      if (settings.earlyCloseConfirmation) {
+        earlyCloseHandler(trade, trade.market);
+      } else {
+        setCloseConfirmationModal(trade);
+      }
+    },
+    [settings, earlyCloseHandler, setCloseConfirmationModal]
+  );
 
   const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
@@ -716,7 +719,6 @@ export const MultiResolutionChart = ({
         const [isDisabled, disableTooltip] = getEarlyCloseStatus(
           trade2visualisation.current[+trade]?.option
         );
-        console.log(`MultiResolutionChart-isDisabled: `, isDisabled);
 
         const inv = trade2visualisation.current[+trade]?.lineRef
           ?.getText()
