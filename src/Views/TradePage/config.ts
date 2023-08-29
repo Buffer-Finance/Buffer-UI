@@ -488,12 +488,15 @@ export const marketsForChart = {
   },
 };
 
-export const baseUrl = import.meta.env.VITE_INSTANT_TRADING_HOST_TESTNET;
 export const pricePublisherBaseUrl = import.meta.env.VITE_PRICE_QUERY_HOST;
 
 export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
 export const defaultMarket = 'BTC-USD';
 export const PRICE_DECIMALS = 1e8;
 export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';
+const baseURLString = isTestnet
+  ? `VITE_INSTANT_TRADING_HOST_TESTNET`
+  : `VITE_INSTANT_TRADING_HOST`;
+export const baseUrl = import.meta.env[baseURLString];
 
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
