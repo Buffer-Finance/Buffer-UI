@@ -27,6 +27,7 @@ export type marketType = {
   full_name: string;
   img: string;
   pythId: string;
+  creation_window_contract: string | undefined;
   pools: poolType[];
 } & chartDataType;
 
@@ -116,10 +117,10 @@ export enum directionBtn {
   Down,
 }
 
-export type configType = (typeof appConfig)['421613'];
+export type configType = (typeof appConfig)['42161'];
 
 export type poolInfoType =
-  (typeof appConfig)['421613']['poolsInfo']['0x470dc0ebC3a3840B57070b425d45dEC182c9b920'];
+  (typeof appConfig)['42161']['poolsInfo']['0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e'];
 
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];
 

@@ -41,10 +41,11 @@ export const useMarketsData = () => {
         .poolsInfo[getAddress(item.poolContract)];
       const {
         currentOIs,
-        isInCreationWindow,
+
         maxOIs,
         maxTradeSizes,
         settlementFees,
+        creationWindows,
       } = readCallData;
       return createMarketObject(
         poolInfo,
@@ -53,7 +54,7 @@ export const useMarketsData = () => {
         marketPrice,
         oneDayVolume,
         currentOIs,
-        isInCreationWindow,
+        creationWindows,
         maxOIs,
         maxTradeSizes,
         settlementFees,
@@ -79,7 +80,7 @@ function createMarketObject(
   marketPrice: Partial<Market2Prices>,
   oneDayVolume: keyValueStringType,
   currentOIs: keyValueStringType,
-  isInCreationWindow: boolean,
+  creationWindows: { [key: string]: boolean },
   maxOIs: keyValueStringType,
   maxTradeSizes: keyValueStringType,
   settlementFees: keyValueStringType,
@@ -92,6 +93,7 @@ function createMarketObject(
     market.category === AssetCategory.Forex ||
     market.category === AssetCategory.Commodities;
   const isMarketOpen = !market.isPaused;
+  const isInCreationWindow = creationWindows[marketAddress];
   return {
     pair: chartMarketData.pair,
     pool: poolName,

@@ -109,7 +109,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
 
     const isOpen = getIsOpen(
       isForex,
-      readcallData.isInCreationWindow,
+      readcallData.creationWindows[getAddress(currentAsset.address)] ?? false,
       currentAsset
     );
 

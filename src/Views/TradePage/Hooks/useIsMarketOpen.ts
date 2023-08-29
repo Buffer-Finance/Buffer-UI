@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { AssetCategory, marketType } from '../type';
 import { useBuyTradeData } from './useBuyTradeData';
+import { getAddress } from 'viem';
 
 export const useIsMarketOpen = (
   market: marketType | undefined,
@@ -13,8 +14,12 @@ export const useIsMarketOpen = (
 
   const isOpen = useMemo(() => {
     if (!readcallData || !market) return false;
-    if (isForex && !readcallData.isInCreationWindow) return false;
     const currentPool = market.pools.find((pool) => {
+      if (
+        isForex &&
+        !readcallData.creationWindows[getAddress(pool.optionContract)]
+      )
+        return false;
       return pool.pool === selectedPoolContract;
     });
     return !currentPool?.isPaused;
