@@ -78,13 +78,13 @@ export const appConfig = {
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
-    router: '0x7aB579436c6cf932e3cDe1E2cd68C074747BE69C',
+    router: '0x3890F9664188a2A7292319Ce67320037BE634D3a',
     creation_window: {
-      '0': '0x32Ac7D9d602526E5D8Bd38996963610e2Fc4ec02',
-      '2': '0x035BA0d31F4Be2B450918EaBB606C96ceDC89424',
+      '0': '0x234c1FEA4b46031B879eEf086587eA7688302b86',
+      '2': '0xf486d4A21598ca287FaAA6eBFF4C9e32d82c9401',
     },
-    signer_manager: '0xC2fa406F8149Eb2c5a0bA9Cc9b7eD0339792c7c4',
-    booster: '0x1Fc40c3A08fcb0c107884132D1C16EE3AFDf7E20',
+    signer_manager: '0x983adc3d8853C4792Da5581C5e711d25BAC19042',
+    booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
         decimals: 6,
