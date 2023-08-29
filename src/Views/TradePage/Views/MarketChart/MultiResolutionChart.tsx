@@ -249,7 +249,7 @@ function drawPosition(
       .setLineColor(color)
       .setBodyTextColor('rgb(255,255,255)')
       .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
-      .setCancelTooltip('Early Close will be available once threshold passes.')
+      .setCancelTooltip('Early Close at market price')
       // .setCancelButtonBackgroundColor(defaults.red)
       .setPrice(optionPrice)
   );
@@ -286,13 +286,24 @@ export const MultiResolutionChart = ({
   const market = marke.replace('-', '');
   const chartData =
     marketsForChart[market as unknown as keyof typeof marketsForChart];
-  const setStrike = useSetAtom(limitOrderStrikeAtom);
-  const setActiveTab = useSetAtom(tradeTypeAtom);
 
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
   const settings = useAtomValue(miscsSettingsAtom);
+  const chartCloseOperation = (trade: TradeType) => {
+    console.log(
+      `MultiResolutionChart-settings.earlyCloseConfirmation: `,
+      settings.earlyCloseConfirmation,
+      trade,
+      trade.market
+    );
+    if (settings.earlyCloseConfirmation) {
+      earlyCloseHandler(trade, trade.market);
+    } else {
+      setCloseConfirmationModal(trade);
+    }
+  };
   const setCloseConfirmationModal = useSetAtom(closeConfirmationModalAtom);
 
   const { getPoolInfo } = usePoolInfo();
@@ -488,17 +499,7 @@ export const MultiResolutionChart = ({
   const [visualized] = useAtom(visualizeddAtom);
   const resolution: ResolutionString =
     market2resolution?.[chartId] || ('1' as ResolutionString);
-  const chartCloseOperation = (trade: TradeType) => {
-    console.log(
-      `MultiResolutionChart-settings.earlyCloseConfirmation: `,
-      settings.earlyCloseConfirmation
-    );
-    if (settings.earlyCloseConfirmation) {
-      earlyCloseHandler(trade, trade.market);
-    } else {
-      setCloseConfirmationModal(trade);
-    }
-  };
+
   useEffect(() => {
     console.log(`[chart-deb]: `, marke, index);
     try {
@@ -729,15 +730,13 @@ export const MultiResolutionChart = ({
         if (!isDisabled) {
           trade2visualisation.current[+trade]?.lineRef.onCancel(
             'onCancel',
-            function (text) {
-              console.log('cancel called');
-              chartCloseOperation(trade2visualisation.current[+trade]?.option);
-            }
+            () =>
+              chartCloseOperation(trade2visualisation.current[+trade]?.option)
           );
         }
       }
     }
-  }, [setDrawing]);
+  }, [setDrawing, settings.earlyCloseConfirmation]);
 
   useEffect(() => {
     if (!chartReady) return;

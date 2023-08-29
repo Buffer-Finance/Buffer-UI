@@ -19,6 +19,8 @@ import {
 const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 console.log(`projectId: `, projectId);
 import { MockConnector } from 'wagmi/connectors/mock';
+import { ParticleNetwork } from '@particle-network/auth';
+import { particleWallet } from '@particle-network/rainbowkit-ext';
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
@@ -26,6 +28,11 @@ import { inIframe } from '@Utils/isInIframe';
 import { createPublicClient, createWalletClient, http, custom } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
+new ParticleNetwork({
+  projectId: import.meta.env.VITE_PARTICLE_PROJECT_ID,
+  clientKey: import.meta.env.VITE_PARTICLE_CLIENT_KEY,
+  appId: import.meta.env.VITE_pARTICLE_APP_ID,
+});
 
 function getSupportedChains() {
   const isTestnet = import.meta.env.VITE_ENV.toLowerCase() == 'testnet';
@@ -38,16 +45,21 @@ function getSupportedChains() {
       return isTestnet ? [arbitrumGoerli, polygonMumbai] : [arbitrum, polygon];
   }
 }
-const SupprtedChains = getSupportedChains();
-console.log(`SupprtedChains: `, SupprtedChains);
+const supportedChains = getSupportedChains();
+export const getChains = () => supportedChains;
 
-export const getChains = () => SupprtedChains;
-
+const particleWallets = [
+  particleWallet({ chains: supportedChains, authType: 'google' }),
+  particleWallet({ chains: supportedChains, authType: 'facebook' }),
+  particleWallet({ chains: supportedChains, authType: 'apple' }),
+  particleWallet({ chains: supportedChains }),
+];
 const getWallets = (chains: Chain[]) => {
   const bothSupported = [
     {
       groupName: 'Recommended',
       wallets: [
+        ...particleWallets,
         metaMaskWallet({ chains, projectId }),
         coinbaseWallet({ chains, appName: 'Buffer Finance', projectId }),
       ],
@@ -103,7 +115,7 @@ const mockConnector = [
   }),
 ];
 
-const { chains, publicClient } = configureChains(getChains(), [
+const { chains, publicClient } = configureChains(supportedChains, [
   publicProvider(),
 ]);
 const connectors = isTestEnv
