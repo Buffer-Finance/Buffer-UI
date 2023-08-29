@@ -488,7 +488,8 @@ export const useBuyTradeActions = (userInput: string) => {
         configData.router,
         deadline,
         activeChain.id,
-        signTypedData
+        signTypedData,
+        poolDetails?.permitName
       );
       const updatedApproval = await updateApprovalData();
 

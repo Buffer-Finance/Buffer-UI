@@ -92,6 +92,7 @@ export const appConfig = {
         is_pol: false,
         token: 'USDC',
         tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        permitName: 'USD Coin (Arb1)',
       },
       '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
         tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
@@ -106,6 +107,7 @@ export const appConfig = {
         is_pol: false,
         token: 'ARB',
         tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
+        permitName: 'Arbitrum',
       },
       '0xeAbEa290A623a648B3A8ab4B9AD668fb2063f8aB': {
         tokenAddress: '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',

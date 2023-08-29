@@ -2,6 +2,7 @@ import { toFixed } from '@Utils/NumString';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
+import { getAddress } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 export const getWalletFromOneCtPk = (oneCtPk: string) => {
   return privateKeyToAccount(`0x${oneCtPk}`);
@@ -186,14 +187,15 @@ const generateApprovalSignature = async (
   routerAddress: string,
   deadline: string,
   activeChainId: any,
-  signMethod: any
+  signMethod: any,
+  domainName: string
 ): Promise<[string, { r: string; s: string; v: string }]> => {
   const approveMessage = {
     nonce: +nonce,
-    value: amount,
-    owner: userMainAccount,
+    value: +amount,
+    owner: getAddress(userMainAccount),
     deadline,
-    spender: routerAddress,
+    spender: getAddress(routerAddress),
   };
   const approveSignatureParams = {
     types: {
@@ -202,10 +204,10 @@ const generateApprovalSignature = async (
     },
     primaryType: 'Permit',
     domain: {
-      name: 'Token',
+      name: domainName,
       version: '1',
       chainId: activeChainId,
-      verifyingContract: tokenAddress,
+      verifyingContract: getAddress(tokenAddress),
     },
     message: approveMessage,
   } as const;
