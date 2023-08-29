@@ -77,17 +77,21 @@ export const appConfig = {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.2-uniswap-abi-3/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
-    referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
-    router: '0x4fdc32a6588612589020F1dd7F106f0Ac8F8Fe6e',
-    creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b',
+    referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
+    router: '0x7aB579436c6cf932e3cDe1E2cd68C074747BE69C',
+    creation_window: {
+      '0': '0x32Ac7D9d602526E5D8Bd38996963610e2Fc4ec02',
+      '2': '0x035BA0d31F4Be2B450918EaBB606C96ceDC89424',
+    },
+    signer_manager: '0xC2fa406F8149Eb2c5a0bA9Cc9b7eD0339792c7c4',
+    booster: '0x1Fc40c3A08fcb0c107884132D1C16EE3AFDf7E20',
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
-        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
-        faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
         decimals: 6,
-        token: 'USDC',
+        faucet: null,
         is_pol: false,
+        token: 'USDC',
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
       },
       '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
         tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
@@ -97,11 +101,11 @@ export const appConfig = {
         is_pol: true,
       },
       '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
-        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
-        // faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
         decimals: 18,
-        token: 'ARB',
+        faucet: null,
         is_pol: false,
+        token: 'ARB',
+        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
       },
       '0xeAbEa290A623a648B3A8ab4B9AD668fb2063f8aB': {
         tokenAddress: '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',
