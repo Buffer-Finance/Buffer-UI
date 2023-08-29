@@ -85,10 +85,14 @@ export const BuyTrade: React.FC = () => {
       walletAddress: address,
     });
   };
+  const openWallet = () => {
+    particle.openWallet();
+  };
 
   return (
     <BuyTradeBackground>
       <BlueBtn onClick={buyLink}>Onramp USDC </BlueBtn>
+      <BlueBtn onClick={openWallet}>Open wallet </BlueBtn>
 
       <TimeSelector />
       <TradeSizeSelector />
