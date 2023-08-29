@@ -103,7 +103,7 @@ export default function BufferSortTable({
   return (
     <Background shouldShowMobile={shouldShowMobile && window.innerWidth < 1200}>
       <TableContainer>
-        <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+        <Table sx={{ minWidth: 1100 }} aria-labelledby="tableTitle">
           <TableHead className={`table-header`}>
             <TableRow className={`table-row-head`}>
               {headerJSX.map((headCell) => (

@@ -30,7 +30,7 @@ export const HistoryTables = () => {
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
 
   useEffect(() => {
-    changeActiveTab(null, 1);
+    changeActiveTab(null, 2);
   }, []);
 
   const [activeTrades, limitOrders] = useOngoingTrades();
@@ -54,9 +54,14 @@ export const HistoryTables = () => {
       <TabSwitch
         value={activeTabIdx}
         childComponents={[
-          <OngoingTradesTable trades={activeTrades} />,
-          <LimitOrderTable trades={limitOrders} />,
-          <History />,
+          <OngoingTradesTable
+            trades={activeTrades}
+            isLoading={false}
+            className="sm:min-w-[800px]"
+            overflow={false}
+          />,
+          <LimitOrderTable trades={limitOrders} overflow={false} />,
+          <History className="sm:min-w-[800px]" overflow={false} />,
         ]}
       />
     </>

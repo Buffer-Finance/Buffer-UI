@@ -129,7 +129,7 @@ const BufferTable: React.FC<IBufferTable> = ({
                         isHeaderTransparent
                           ? '!bg-[#232334] transparent-hover'
                           : ''
-                      } !z-20`}
+                      } !z-10`}
                     >
                       {headerJSX(idx)}
                     </TableCell>

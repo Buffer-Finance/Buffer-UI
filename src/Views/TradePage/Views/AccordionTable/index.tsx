@@ -117,9 +117,13 @@ const AccordionTable: React.FC<any> = ({}) => {
         } flex flex-col transition-all  overflow-y-hidden `}
       >
         {activeTable == 'Trades' ? (
-          <OngoingTradesTable trades={activeTrades} isLoading={false} />
+          <OngoingTradesTable
+            trades={activeTrades}
+            isLoading={false}
+            overflow
+          />
         ) : activeTable == 'Limit Orders' ? (
-          <LimitOrderTable trades={limitOrders} />
+          <LimitOrderTable trades={limitOrders} overflow />
         ) : activeTable == 'Platform Trades' ? (
           <PlatformOngoing />
         ) : activeTable == 'Platform History' ? (
@@ -127,7 +131,7 @@ const AccordionTable: React.FC<any> = ({}) => {
         ) : activeTable == 'Cancelled' ? (
           <Cancelled />
         ) : (
-          <History />
+          <History overflow />
         )}
       </div>
     </div>
@@ -142,7 +146,15 @@ const CountChip = ({ count }: { count: number }) => (
   </div>
 );
 
-export const History = ({ onlyView }: { onlyView?: number[] }) => {
+export const History = ({
+  onlyView,
+  className = '',
+  overflow,
+}: {
+  onlyView?: number[];
+  className?: string;
+  overflow: boolean;
+}) => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
   return (
@@ -153,11 +165,19 @@ export const History = ({ onlyView }: { onlyView?: number[] }) => {
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={historyTrades === undefined}
+      className={className}
+      overflow={overflow}
     />
   );
 };
 
-export const Cancelled = ({ onlyView }: { onlyView?: number[] }) => {
+export const Cancelled = ({
+  onlyView,
+  className = '',
+}: {
+  onlyView?: number[];
+  className?: string;
+}) => {
   const { page_data: canclledTrades, total_pages } = useCancelledTrades();
   // console.log(canclledTrades, 'cancelled trades');
   return (
@@ -166,6 +186,7 @@ export const Cancelled = ({ onlyView }: { onlyView?: number[] }) => {
       totalPages={total_pages}
       onlyView={onlyView}
       isLoading={canclledTrades === undefined}
+      className={className}
     />
   );
 };
@@ -184,6 +205,7 @@ export const PlatformHistory = ({ onlyView }: { onlyView?: number[] }) => {
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={platformHistoryTrades === undefined}
+      overflow
     />
   );
 };
@@ -202,6 +224,7 @@ export const PlatformOngoing = ({ onlyView }: { onlyView?: number[] }) => {
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={platformActiveTrades === undefined}
+      overflow
     />
   );
 };

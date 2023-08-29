@@ -59,7 +59,7 @@ export const CurrentPrice: React.FC<{
           <StrikePricePicker
             initialStrike={round(price, precision) as string}
             precision={precision}
-            className="w-[127px] text-right"
+            className="w-[127px] text-right px-3 py-1"
             activeAsset={activeMarket?.pair ?? ''}
           />
         )}
@@ -67,6 +67,10 @@ export const CurrentPrice: React.FC<{
     </CurrentPriceBackground>
   );
 };
+const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
+function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 
 export const StrikePricePicker: React.FC<{
   initialStrike: string;
@@ -81,18 +85,26 @@ export const StrikePricePicker: React.FC<{
   return (
     <BuyTradeDescText className={` ${className} flex justify-end w-fit`}>
       <input
-        type="number"
-        pattern="^\d*(\.\d{0,2})?$"
+        type="text"
+        pattern="^[0-9]*[.,]?[0-9]*$"
+        inputMode="decimal"
+        autoCorrect="off"
         className={` bg-[#282B39] ${
           className ? className : '!text-right py-[1px] px-[1px] '
         }  rounded-sm w-[70%] outline-none`}
         value={strike ?? '0'}
         onChange={(e) => {
-          const decimals = e.target.value.split('.')[1];
-          if (decimals && decimals.length > precision) {
-            return;
-          }
-          setStrike(e.target.value);
+          // const decimals = e.target.value.split('.')[1];
+          // if (decimals && decimals.length > precision) {
+          //   return;
+          // }
+          // restrict the user from entering negative values
+          // console.log(e.target.value, 'e.target.value');
+          // if (e.target.value.includes('-')) {
+          //   setStrike(e.target.value.replace('-', ''));
+          // }
+          if (inputRegex.test(escapeRegExp(e.target.value)))
+            setStrike(e.target.value);
         }}
       />
     </BuyTradeDescText>

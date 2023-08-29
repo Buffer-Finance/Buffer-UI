@@ -15,7 +15,7 @@ export const PairTokenImage = ({
       >
         <img
           src={image1}
-          className="absolute z-10 -left-[1px] bottom-[0] w-[75%] h-[75%]"
+          className="absolute z-1 -left-[1px] bottom-[0] w-[75%] h-[75%]"
         />
         <img
           src={image2}
@@ -31,7 +31,7 @@ export const PairTokenImage = ({
     return (
       <img
         src={imageSrc + token1.toLowerCase() + '.png'}
-        className="relative z-10 w-full h-full"
+        className="relative z-1 w-full h-full"
       />
     );
   return (
@@ -41,7 +41,7 @@ export const PairTokenImage = ({
     >
       <img
         src={imageSrc + token1.toLowerCase() + '.png'}
-        className="absolute z-10 -left-[1px] bottom-[0] w-[75%] h-[75%]"
+        className="absolute z-1 -left-[1px] bottom-[0] w-[75%] h-[75%]"
       />
       <img
         src={imageSrc + token2.toLowerCase() + '.png'}

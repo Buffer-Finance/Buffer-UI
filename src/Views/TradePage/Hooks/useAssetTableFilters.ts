@@ -52,6 +52,8 @@ export const useAssetTableFilters = (group?: string) => {
           return market;
         }
       });
+    } else if (activeCategory.toLowerCase() === 'all') {
+      return markets;
     } else {
       return markets.filter((market) => {
         // in mobile, we need search results for all catagories at once so we pass group of all catagories

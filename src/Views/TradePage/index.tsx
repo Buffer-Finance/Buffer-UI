@@ -60,7 +60,6 @@ const TradePage: React.FC<any> = ({}) => {
         ) : (
           <>
             <ShutterProvider />
-
             <TradePageMobile />
           </>
         )}

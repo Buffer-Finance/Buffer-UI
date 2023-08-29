@@ -16,6 +16,10 @@ const AssetSelectorDDBackground = styled.div`
   width: 100%;
   padding: 16px;
   background-color: #232334;
+
+  @media (max-width: 1200px) {
+    background-color: transparent;
+  }
 `;
 
 export const AssetSelectorDD: React.FC<{ isMobile?: boolean }> = ({
@@ -42,10 +46,10 @@ const MobileAccordionTable = () => {
   const searchValue = useAtomValue(searchBarAtom);
 
   const [activeAsset, setActiveAsset] = useAtom(categoriesAtom);
-  useEffect(() => {
-    setActiveAsset('Crypto');
-    return () => setActiveAsset('Crypto');
-  }, []);
+  // useEffect(() => {
+  //   setActiveAsset('Crypto');
+  //   return () => setActiveAsset('Crypto');
+  // }, []);
   return (
     <ol className="flex flex-col gap-y-[20px]">
       {assetTypes.map((child, idx) => {

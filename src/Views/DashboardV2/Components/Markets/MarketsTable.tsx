@@ -177,18 +177,7 @@ export const MarketsTable = ({
       onRowClick={(idx) => {
         navigate(`/binary/${dashboardData[idx].pair}`);
       }}
-      widths={[
-        '11%',
-        '7%',
-        '8%',
-        '10%',
-        '11%',
-        '15%',
-        '12%',
-        '12%',
-        '9%',
-        '5%',
-      ]}
+      widths={['13%', '7%', '8%', '9%', '11%', '14%', '12%', '12%', '9%', '5%']}
       shouldShowMobile={true}
       activePage={activePage}
       count={count}

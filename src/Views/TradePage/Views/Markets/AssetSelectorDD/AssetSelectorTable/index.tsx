@@ -90,17 +90,16 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
     if (!readcallData) return <>-</>;
 
     const poolInfo = getPoolInfo(getAddress(currentAsset.poolContract));
-
     const maxFee = divide(
-      readcallData?.maxTradeSizes[currentAsset.configContract.address] ?? '0',
+      readcallData?.maxTradeSizes[getAddress(currentAsset.address)] ?? '0',
       poolInfo.decimals
     ) as string;
     const maxOI = divide(
-      readcallData.maxOIs[currentAsset.configContract.address] ?? '0',
+      readcallData.maxOIs[getAddress(currentAsset.address)] ?? '0',
       poolInfo.decimals
     );
     const currentOI = divide(
-      readcallData.currentOIs[currentAsset.configContract.address] ?? '0',
+      readcallData.currentOIs[getAddress(currentAsset.address)] ?? '0',
       poolInfo.decimals
     );
 

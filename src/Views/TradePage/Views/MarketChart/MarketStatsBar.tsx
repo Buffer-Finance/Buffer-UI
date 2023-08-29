@@ -178,7 +178,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       header: (
         <div className="flex items-center">
           Max OI:&nbsp;
-          <Display data={maxOI} unit={poolDetails?.token} precision={2} />
+          <Display data={maxOI} unit={poolDetails?.token} precision={0} />
         </div>
       ),
       data: (

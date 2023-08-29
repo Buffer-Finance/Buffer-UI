@@ -49,6 +49,8 @@ const HistoryTable: React.FC<{
   onlyView?: number[];
   setActivePage: (page: number) => void;
   isLoading: boolean;
+  className?: string;
+  overflow: boolean;
 }> = ({
   trades,
   platform,
@@ -57,6 +59,8 @@ const HistoryTable: React.FC<{
   onlyView,
   setActivePage,
   isLoading,
+  className = '',
+  overflow = true,
 }) => {
   const { getPoolInfo } = usePoolInfo();
   const setInspectTrade = useSetAtom(tradeInspectMobileAtom);
@@ -245,9 +249,10 @@ const HistoryTable: React.FC<{
         else setInspectTrade({ trade: trades?.[idx] });
       }}
       showOnly={onlyView}
-      overflow
       error={<TableErrorRow msg="No Trade History." />}
       loading={isLoading}
+      className={className}
+      overflow={overflow}
     />
   );
 };

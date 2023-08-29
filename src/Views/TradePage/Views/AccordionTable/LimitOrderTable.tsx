@@ -45,7 +45,13 @@ enum TableColumn {
   ActionButtons = 6,
 }
 
-const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
+const LimitOrderTable = ({
+  trades,
+  overflow,
+}: {
+  trades: TradeType[];
+  overflow: boolean;
+}) => {
   const [marketPrice] = useAtom(priceAtom);
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const cancelLoading = useAtomValue(closeLoadingAtom);
@@ -143,8 +149,9 @@ const LimitOrderTable = ({ trades }: { trades: TradeType[] }) => {
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={console.log}
-      overflow
+      overflow={overflow}
       error={<TableErrorRow msg="No active limit orders." />}
+      className="sm:min-w-[800px]"
     />
   );
 };
