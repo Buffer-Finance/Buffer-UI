@@ -192,7 +192,7 @@ const generateApprovalSignature = async (
 ): Promise<[string, { r: string; s: string; v: string }]> => {
   const approveMessage = {
     nonce: +nonce,
-    value: +amount,
+    value: amount,
     owner: getAddress(userMainAccount),
     deadline,
     spender: getAddress(routerAddress),

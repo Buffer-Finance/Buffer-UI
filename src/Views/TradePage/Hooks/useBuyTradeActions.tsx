@@ -448,7 +448,8 @@ export const useBuyTradeActions = (userInput: string) => {
       // }
     }
   };
-  const defaultApprovalAmount = '100000000000000000000000000';
+  const defaultApprovalAmount =
+    '115792089237316195423570985008687907853269984665640564039457584007913129639935';
   const handleApproveClick = async (ammount = defaultApprovalAmount) => {
     // console.log('goes in here');
     if (state.txnLoading > 1) {
