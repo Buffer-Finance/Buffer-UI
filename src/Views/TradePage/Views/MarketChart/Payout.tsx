@@ -3,6 +3,8 @@ import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { getPayout, joinStrings } from '@Views/TradePage/utils';
 import { isObjectEmpty } from '@Views/TradePage/utils/isObjectEmpty';
+import { useCallback } from 'react';
+import { getAddress } from 'viem';
 
 export const BasePayout: React.FC<{
   token0: string;
@@ -22,9 +24,13 @@ export const BasePayout: React.FC<{
 export const Payout: React.FC<{
   token0: string;
   token1: string;
-}> = ({ token0, token1 }) => {
+  optionContract: string;
+}> = ({ token0, token1, optionContract }) => {
   const { calculatePayout } = useSelectedAssetPayout();
-  const { payout } = calculatePayout(joinStrings(token0, token1, ''));
+  const { payout } = calculatePayout(
+    joinStrings(token0, token1, ''),
+    optionContract
+  );
   if (payout === undefined || payout === null) {
     return <div>fetching...</div>;
   }
@@ -33,31 +39,29 @@ export const Payout: React.FC<{
 
 export const useSelectedAssetPayout = () => {
   const readcallData = useBuyTradeData();
-
-  const { switchPool } = useSwitchPool();
   const { data: baseSettlementFees } = useSettlementFee();
 
-  const calculatePayout = (assetName: string | undefined) => {
-    if (assetName === undefined) return { payout: null };
-    let payout = null;
+  const calculatePayout = useCallback(
+    (assetName: string | undefined, optionContract: string) => {
+      if (assetName === undefined) return { payout: null };
+      let payout = null;
 
-    if (
-      readcallData &&
-      !isObjectEmpty(readcallData.settlementFees) &&
-      switchPool
-    ) {
-      payout = readcallData.settlementFees[switchPool?.optionContract];
-    }
-    if (payout === null) {
-      const baseSettlementFee = baseSettlementFees?.[assetName]?.settlement_fee;
-
-      if (baseSettlementFee) {
-        payout = getPayout(baseSettlementFee.toString());
+      if (readcallData && !isObjectEmpty(readcallData.settlementFees)) {
+        payout = readcallData.settlementFees[getAddress(optionContract)];
       }
-    }
+      if (payout === null) {
+        const baseSettlementFee =
+          baseSettlementFees?.[assetName]?.settlement_fee;
 
-    return { payout };
-  };
+        if (baseSettlementFee) {
+          payout = getPayout(baseSettlementFee.toString());
+        }
+      }
+
+      return { payout };
+    },
+    [readcallData, baseSettlementFees]
+  );
 
   return { calculatePayout };
 };

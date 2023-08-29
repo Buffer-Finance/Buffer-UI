@@ -175,6 +175,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
                   <Payout
                     token0={currentAsset.marketInfo.token0}
                     token1={currentAsset.marketInfo.token1}
+                    optionContract={currentAsset.address}
                   />
                 </div>
               </div>,
