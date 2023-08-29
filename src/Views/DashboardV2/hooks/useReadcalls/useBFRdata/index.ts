@@ -24,6 +24,14 @@ export const useBFRdata = () => {
     const { totalStakedBFR, totalSupplyBFR, bfrPoolBalance, burnBFRAmount } =
       readCallResponse;
 
+    if (
+      totalStakedBFR === undefined ||
+      totalSupplyBFR === undefined ||
+      bfrPoolBalance === undefined ||
+      burnBFRAmount === undefined
+    )
+      return null;
+
     const netSupply = roundToTwo(
       fromWei(subtract(totalSupplyBFR, burnBFRAmount)),
       2

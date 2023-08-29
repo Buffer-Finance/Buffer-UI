@@ -30,6 +30,17 @@ export const useABLPdata = () => {
       stakedArbBlpTrackerTokensPerInterval,
     } = readcalldata;
 
+    if (
+      ablpInitialRate === undefined ||
+      ablpSupply === undefined ||
+      ablpTotalBalance === undefined ||
+      amountARBpool === undefined ||
+      feeArbBlpTrackerTokensPerInterval === undefined ||
+      stakedArbBlpTrackerTokensPerInterval === undefined ||
+      ARBvaultPOL === undefined
+    )
+      return null;
+
     const ablpPrice =
       ablpSupply > 0
         ? (divide(ablpTotalBalance, ablpSupply) as string)
