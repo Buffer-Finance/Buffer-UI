@@ -97,10 +97,14 @@ const useOneCTWallet = () => {
     return 'signer-account-pk:' + address + ',nonce' + res?.nonce + ':';
   }, [address, res?.nonce]);
 
+  console.log(
+    `[chart1-deb]-pkLocalStorageIdentifier: `,
+    pkLocalStorageIdentifier
+  );
   const oneCtPk = useMemo(() => {
     return secureLocalStorage.getItem(pkLocalStorageIdentifier);
   }, [pkLocalStorageIdentifier, createLoading]);
-
+  console.log(`[chart1-deb]-oneCtPk: `, oneCtPk);
   const registeredOneCT = useMemo(() => {
     if (!res?.one_ct) return false;
     return (

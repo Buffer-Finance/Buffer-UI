@@ -19,6 +19,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { getExpireNotification } from '../utils/getExpireNotification';
 import { usePoolInfo } from './usePoolInfo';
 import { getConfig } from '../utils/getConfig';
+import { getWalletFromOneCtPk } from '../utils/generateTradeSignature';
 const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
@@ -103,7 +104,7 @@ export const useCancelTradeFunction = () => {
     trade: TradeType,
     tradeMarket: marketType
   ) => {
-    console.log(`[chart-deb]tradeMarket: `, tradeMarket);
+    console.log(`[chart-deb]tradeMarket: `, trade);
     const ts = Math.round(Date.now() / 1000);
     const domain = {
       name: 'Validator',
@@ -118,7 +119,8 @@ export const useCancelTradeFunction = () => {
       optionId: trade.option_id,
     };
 
-    const wallet = privateKeyToAccount(`0x${oneCtPk}`);
+    console.log(`[chart-deb]oneCtPk: `, oneCtPk, message);
+    const wallet = getWalletFromOneCtPk(oneCtPk);
     const actualSignature = await wallet.signTypedData({
       types: {
         EIP712Domain,
@@ -128,6 +130,7 @@ export const useCancelTradeFunction = () => {
       domain,
       message,
     });
+    console.log(`[chart-deb]actualSignature: `, actualSignature);
 
     const params = {
       closing_time: ts,

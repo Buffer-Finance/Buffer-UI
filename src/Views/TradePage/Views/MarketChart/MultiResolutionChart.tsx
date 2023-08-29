@@ -682,56 +682,6 @@ export const MultiResolutionChart = ({
       }
     };
   }, [visualized, activeTrades, chartReady, priceCache]);
-  const updatePositionTimeLeft = useCallback(() => {
-    // save drawings
-    try {
-      widgetRef.current?.save((d) => {
-        setDrawing((drawing: any) => {
-          return {
-            ...drawing,
-            [chartId]: d,
-          };
-        });
-      });
-    } catch (e) {
-      console.log('major-bug', e);
-    }
-
-    for (const trade in trade2visualisation.current) {
-      if (trade2visualisation.current[+trade]?.visited) {
-        const [isDisabled, disableTooltip] = getEarlyCloseStatus(
-          trade2visualisation.current[+trade]?.option
-        );
-
-        const inv = trade2visualisation.current[+trade]?.lineRef
-          ?.getText()
-          ?.split('|')[0];
-        const text =
-          inv +
-          '| ' +
-          getText((trade2visualisation.current as any)[+trade]?.option);
-
-        trade2visualisation.current[+trade]?.lineRef.setText(text);
-        if (!isDisabled) {
-          trade2visualisation.current[+trade]?.lineRef.onCancel(
-            'onCancel',
-            () => {
-              console.log(
-                `[chart-deb]confirmation: `,
-                settings.earlyCloseConfirmation
-              );
-              const actualTrade = trade2visualisation.current[+trade]?.option;
-              if (settings.earlyCloseConfirmation) {
-                earlyCloseHandler(actualTrade, actualTrade.market);
-              } else {
-                setCloseConfirmationModal(actualTrade);
-              }
-            }
-          );
-        }
-      }
-    }
-  }, [setDrawing, settings.earlyCloseConfirmation]);
 
   useEffect(() => {
     if (!chartReady) return;
@@ -750,11 +700,58 @@ export const MultiResolutionChart = ({
     }
   }, [market2resolution, chartReady]);
   useEffect(() => {
-    const interval = setInterval(updatePositionTimeLeft, 1000);
+    const interval = setInterval(() => {
+      try {
+        widgetRef.current?.save((d) => {
+          setDrawing((drawing: any) => {
+            return {
+              ...drawing,
+              [chartId]: d,
+            };
+          });
+        });
+      } catch (e) {
+        console.log('major-bug', e);
+      }
+
+      for (const trade in trade2visualisation.current) {
+        if (trade2visualisation.current[+trade]?.visited) {
+          const [isDisabled, disableTooltip] = getEarlyCloseStatus(
+            trade2visualisation.current[+trade]?.option
+          );
+
+          const inv = trade2visualisation.current[+trade]?.lineRef
+            ?.getText()
+            ?.split('|')[0];
+          const text =
+            inv +
+            '| ' +
+            getText((trade2visualisation.current as any)[+trade]?.option);
+
+          trade2visualisation.current[+trade]?.lineRef.setText(text);
+          if (!isDisabled) {
+            trade2visualisation.current[+trade]?.lineRef.onCancel(
+              'onCancel',
+              () => {
+                const actualTrade = trade2visualisation.current[+trade]?.option;
+                const updatedTrade = activeTrades.find(
+                  (t) => t.queue_id == actualTrade?.queue_id
+                );
+                if (settings.earlyCloseConfirmation) {
+                  earlyCloseHandler(updatedTrade, updatedTrade.market);
+                } else {
+                  setCloseConfirmationModal(updatedTrade);
+                }
+              }
+            );
+          }
+        }
+      }
+    }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, [address]);
+  }, [address, settings.earlyCloseConfirmation, activeTrades]);
 
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');

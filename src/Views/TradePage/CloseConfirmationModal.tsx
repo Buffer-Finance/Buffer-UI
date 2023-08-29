@@ -15,6 +15,7 @@ import { useOngoingTrades } from './Hooks/useOngoingTrades';
 const CloseConfirmationModal: React.FC<any> = ({}) => {
   const trade = useAtomValue(closeConfirmationModalAtom);
   const setSetting = useSetAtom(miscsSettingsAtom);
+  const settings = useAtomValue(miscsSettingsAtom);
   const setConfirmationTrade = useSetAtom(closeConfirmationModalAtom);
   const earlyCloseLoading = useAtomValue(closeLoadingAtom);
   const [activeTrades] = useOngoingTrades();
@@ -27,6 +28,13 @@ const CloseConfirmationModal: React.FC<any> = ({}) => {
       setConfirmationTrade(false);
     }
   }, [activeTrades, trade]);
+  useEffect(() => {
+    if (settings.earlyCloseConfirmation) {
+      if (trade) {
+        earlyCloseHandler(trade, trade.market);
+      }
+    }
+  }, [settings.earlyCloseConfirmation]);
   return (
     <ModalBase
       open={trade ? true : false}
