@@ -52,7 +52,6 @@ const TradePage: React.FC<any> = ({}) => {
         {isNotMobile ? (
           <>
             <RightPanelBackground>
-              <CloseConfirmationModal />
               {showFavoriteAsset && <PinnedMarkets />}
               <MarketStatsBar />
               <MarketChart />
@@ -187,6 +186,8 @@ export const EssentialModals = () => {
   useGenericHooks();
   return (
     <>
+      <CloseConfirmationModal />
+
       <MarketTimingsModal />
       <ShareModal />
       <ModalBase
