@@ -62,7 +62,8 @@ export const BuyTrade: React.FC = () => {
   }
 
   const { payout: totalPayout } = calculatePayout(
-    joinStrings(activeMarket.token0, activeMarket.token1, '')
+    joinStrings(activeMarket.token0, activeMarket.token1, ''),
+    switchPool.optionContract
   );
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
