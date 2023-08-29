@@ -488,7 +488,7 @@ export const marketsForChart = {
   },
 };
 
-export const baseUrl = import.meta.env.VITE_INSTANT_TRADING_HOST;
+export const baseUrl = import.meta.env.VITE_INSTANT_TRADING_HOST_TESTNET;
 export const pricePublisherBaseUrl = import.meta.env.VITE_PRICE_QUERY_HOST;
 
 export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
