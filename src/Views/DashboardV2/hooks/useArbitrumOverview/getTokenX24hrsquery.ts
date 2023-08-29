@@ -7,7 +7,12 @@ export function getTokenX24hrsquery(
 ) {
   return tokensArray
     .map((token) => {
-      const poolContract = token !== 'total' && poolsByToken[token].poolAddress;
+      // console.log('token', token, poolsByToken);
+      const tokenName = token.toLocaleLowerCase().includes('_pol')
+        ? token.toUpperCase().replace('_POL', '-POL')
+        : token.toUpperCase();
+      const poolContract =
+        token !== 'total' && poolsByToken[tokenName].poolAddress;
       const condition =
         token === 'total'
           ? `depositToken: "${token}"`
