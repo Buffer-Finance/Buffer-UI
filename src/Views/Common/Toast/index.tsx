@@ -1,4 +1,4 @@
-Eimport { IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react';
 import { SingleNotification, Bar, Background } from './style';
 import { useToast } from '../../../contexts/Toast';
