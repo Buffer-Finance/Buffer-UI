@@ -40,7 +40,7 @@ export const AccountDropdown: React.FC = () => {
   const { address } = useUserAccount();
   const { data, isError, isLoading, error } = useBalance({
     address,
-    token: '0xd094794d3f73C5B6fCF4245513297ce1304C3b39',
+    token: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
   });
   console.log(`AccountDropdown-data: `, data, error);
   const setSnack = useSetAtom(snackAtom);
