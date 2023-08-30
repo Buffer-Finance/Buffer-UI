@@ -8,7 +8,9 @@ export const appConfig = {
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x38653C1d41b8aC02b2Ca2753452E1ad90E12A270',
     router: '0xeacA681888D0BDA1D055785596e00FDD2d7e0F4F',
-    creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
+    creation_window: {
+      '0': '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
+    },
     signer_manager: '0x03eA2B7eb5147981Ea12d8101A3fDd59fc02262F',
     pooloi: '0xE9746eB05Df20cDFc231b0eAde1BDD41b25EcC1B',
     marketoi: '0xAA7A4E91D4345bC58423A04C9e87514205B7EdD4',
