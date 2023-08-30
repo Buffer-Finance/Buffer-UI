@@ -74,15 +74,11 @@ export const appConfig = {
   },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.4-track-creation-window-2/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
     router: '0x3890F9664188a2A7292319Ce67320037BE634D3a',
-    creation_window: {
-      '0': '0x234c1FEA4b46031B879eEf086587eA7688302b86',
-      '2': '0xf486d4A21598ca287FaAA6eBFF4C9e32d82c9401',
-    },
     signer_manager: '0x983adc3d8853C4792Da5581C5e711d25BAC19042',
     booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
     poolsInfo: {
@@ -96,7 +92,7 @@ export const appConfig = {
       },
       '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
         tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
-        faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+        faucet: null,
         decimals: 6,
         token: 'USDC',
         is_pol: true,
@@ -111,7 +107,7 @@ export const appConfig = {
       },
       '0xeAbEa290A623a648B3A8ab4B9AD668fb2063f8aB': {
         tokenAddress: '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',
-        // faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+        faucet: null,
         decimals: 18,
         token: 'BFR',
         is_pol: false,

@@ -29,6 +29,8 @@ export const useMarketsRequest = () => {
                     marketOIaddress
                     IV
                     poolOIaddress
+                    creationWindowAddress
+                    creationWindowTimestamp
                   }
                   address
                   poolContract
