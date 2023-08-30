@@ -37,7 +37,7 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
         className="h-full border-box  py-[1px]  w-full flex items-center justify-between  bg-[#282B39] rounded-[5px]"
       >
         <div
-          className="mr-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
+          className="ml-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
           role="button"
           onClick={(e) => {
             e.stopPropagation();
@@ -59,7 +59,7 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
           min
         </span>
         <div
-          className="ml-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
+          className="mr-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
           role="button"
           onClick={(e) => {
             e.stopPropagation();
