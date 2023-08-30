@@ -308,7 +308,7 @@ export const MultiResolutionChart = ({
       };
     }>
   >({});
-  const [activeTrades] = useOngoingTrades();
+  const activeTrades = useOngoingTrades();
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
@@ -636,35 +636,33 @@ export const MultiResolutionChart = ({
   useEffect(() => {
     // if()
     if (chartReady && activeTrades) {
-      activeTrades.forEach((pos) => {
-        // if (pos.state == 'QUEUED') return;
-        if (pos.is_above === undefined) return;
-        if (!pos?.queue_id) return;
-        // if(visualized[pos.])
-        // const identifier = getIdentifier(pos);
-        // @ts-ignore
-        if (visualized.includes(pos.queue_id)) return;
-        if (trade2visualisation.current[+pos.queue_id]) {
-          trade2visualisation.current[+pos.queue_id]!.visited = true;
-        } else {
-          if (pos.state === 'QUEUED' && !priceCache?.[pos.queue_id]) return;
-          let updatedPos = pos;
-          if (pos.state === 'QUEUED') {
-            updatedPos.strike = priceCache[pos.queue_id];
-            updatedPos.expiration_time = pos.open_timestamp + pos.period;
+      activeTrades.forEach((trades) =>
+        trades.forEach((pos) => {
+          if (pos.is_above === undefined) return;
+          if (!pos?.queue_id) return;
+          if (visualized.includes(pos.queue_id)) return;
+          if (trade2visualisation.current[+pos.queue_id]) {
+            trade2visualisation.current[+pos.queue_id]!.visited = true;
+          } else {
+            if (pos.state === 'QUEUED' && !priceCache?.[pos.queue_id]) return;
+            let updatedPos = pos;
+            if (pos.state === 'QUEUED') {
+              updatedPos.strike = priceCache[pos.queue_id];
+              updatedPos.expiration_time = pos.open_timestamp + pos.period;
+            }
+            trade2visualisation.current[+pos.queue_id] = {
+              visited: true,
+              lineRef: drawPosition(
+                updatedPos,
+                null,
+                widgetRef.current?.activeChart()!,
+                getPoolInfo(pos.pool.pool).decimals
+              ),
+              option: pos,
+            };
           }
-          trade2visualisation.current[+pos.queue_id] = {
-            visited: true,
-            lineRef: drawPosition(
-              updatedPos,
-              null,
-              widgetRef.current?.activeChart()!,
-              getPoolInfo(pos.pool.pool).decimals
-            ),
-            option: pos,
-          };
-        }
-      });
+        })
+      );
     }
     for (const trade in trade2visualisation.current) {
       // mark all them
