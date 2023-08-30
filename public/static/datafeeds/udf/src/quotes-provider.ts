@@ -6,13 +6,13 @@ import {
 	logMessage,
 	UdfErrorResponse,
 } from './helpers';
-import { IRequester } from './irequester';
+import { Requester } from './requester';
 
 export class QuotesProvider implements IQuotesProvider {
 	private readonly _datafeedUrl: string;
-	private readonly _requester: IRequester;
+	private readonly _requester: Requester;
 
-	public constructor(datafeedUrl: string, requester: IRequester) {
+	public constructor(datafeedUrl: string, requester: Requester) {
 		this._datafeedUrl = datafeedUrl;
 		this._requester = requester;
 	}

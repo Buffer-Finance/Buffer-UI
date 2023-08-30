@@ -1,14 +1,21 @@
-import { LibrarySymbolInfo, ResolutionString, SubscribeBarsCallback } from '../../../charting_library/datafeed-api';
+import {
+	LibrarySymbolInfo,
+	SubscribeBarsCallback,
+} from '../../../charting_library/datafeed-api';
+
+import {
+	GetBarsResult,
+	HistoryProvider,
+} from './history-provider';
 
 import {
 	getErrorMessage,
 	logMessage,
 } from './helpers';
-import { IDataPulseProvider, IHistoryProvider, GetBarsResult } from './provider-interfaces';
 
 interface DataSubscriber {
 	symbolInfo: LibrarySymbolInfo;
-	resolution: ResolutionString;
+	resolution: string;
 	lastBarTime: number | null;
 	listener: SubscribeBarsCallback;
 }
@@ -17,17 +24,17 @@ interface DataSubscribers {
 	[guid: string]: DataSubscriber;
 }
 
-export class DataPulseProvider implements IDataPulseProvider {
+export class DataPulseProvider {
 	private readonly _subscribers: DataSubscribers = {};
 	private _requestsPending: number = 0;
-	private readonly _historyProvider: IHistoryProvider;
+	private readonly _historyProvider: HistoryProvider;
 
-	public constructor(historyProvider: IHistoryProvider, updateFrequency: number) {
+	public constructor(historyProvider: HistoryProvider, updateFrequency: number) {
 		this._historyProvider = historyProvider;
 		setInterval(this._updateData.bind(this), updateFrequency);
 	}
 
-	public subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, newDataCallback: SubscribeBarsCallback, listenerGuid: string): void {
+	public subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: string, newDataCallback: SubscribeBarsCallback, listenerGuid: string): void {
 		if (this._subscribers.hasOwnProperty(listenerGuid)) {
 			logMessage(`DataPulseProvider: already has subscriber with id=${listenerGuid}`);
 			return;
@@ -54,8 +61,7 @@ export class DataPulseProvider implements IDataPulseProvider {
 		}
 
 		this._requestsPending = 0;
-		// eslint-disable-next-line guard-for-in
-		for (const listenerGuid in this._subscribers) {
+		for (const listenerGuid in this._subscribers) { // tslint:disable-line:forin
 			this._requestsPending += 1;
 			this._updateDataForSubscriber(listenerGuid)
 				.then(() => {
