@@ -37,27 +37,6 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
         className="h-full border-box  py-[1px]  w-full flex items-center justify-between  bg-[#282B39] rounded-[5px]"
       >
         <div
-          className="ml-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
-          role="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setDuration((d) => {
-              let secs = HHMMToSeconds(d.HHMM);
-              secs += 60;
-              return {
-                HHMM: secondsToHHMM(secs),
-                seconds: secs,
-              };
-            });
-          }}
-        >
-          <span>+</span>
-        </div>
-        <span className="text-1 text-f13">
-          {currentTime.HHMM.split(':')[0]} h {currentTime.HHMM.split(':')[1]}{' '}
-          min
-        </span>
-        <div
           className="mr-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
           role="button"
           onClick={(e) => {
@@ -73,6 +52,28 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
           }}
         >
           <span>-</span>
+        </div>
+
+        <span className="text-1 text-f13">
+          {currentTime.HHMM.split(':')[0]} h {currentTime.HHMM.split(':')[1]}{' '}
+          min
+        </span>
+        <div
+          className="ml-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
+          role="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setDuration((d) => {
+              let secs = HHMMToSeconds(d.HHMM);
+              secs += 60;
+              return {
+                HHMM: secondsToHHMM(secs),
+                seconds: secs,
+              };
+            });
+          }}
+        >
+          <span>+</span>
         </div>
       </button>
     </div>

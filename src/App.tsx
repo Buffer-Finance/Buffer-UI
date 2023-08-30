@@ -199,11 +199,13 @@ function App() {
           {!urlSettings?.hide && (
             <Warning
               body={
-                <>
-                  $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
-                  listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
-                  PancakeSwap or Apeswap on BNB chain.
-                </>
+                <div>
+                  Buffer{' '}
+                  <a href="https://app.buffer.finance/" target="_blank">
+                    <span className="underline">V2.5</span>
+                  </a>{' '}
+                  is live on Mainnet. Learn More
+                </div>
               }
               closeWarning={() => {}}
               shouldAllowClose={false}
