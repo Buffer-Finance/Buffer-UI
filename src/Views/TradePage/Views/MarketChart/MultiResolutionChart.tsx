@@ -647,7 +647,6 @@ export const MultiResolutionChart = ({
     } catch (e) {
       console.log('major-bug', e);
     }
-
     for (const trade in trade2visualisation.current) {
       if (trade2visualisation.current[+trade]?.visited) {
         const inv = trade2visualisation.current[+trade]?.lineRef
