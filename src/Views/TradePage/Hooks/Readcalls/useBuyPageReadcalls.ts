@@ -117,6 +117,5 @@ export function useBuyTradePageReadcalls() {
 
     return [...userSpecificCalls, ...optionCalls!];
   }, [switchPool, poolDetails, address]);
-
-  return useCall2Data(calls, 'V3-app-read-calls');
+  return useCall2Data(calls, 'trade-page-callls' + address);
 }

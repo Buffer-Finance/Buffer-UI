@@ -8,7 +8,7 @@ import { SVGProps } from 'react';
 import { MenuItem, Skeleton } from '@mui/material';
 import { useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
-import { useDisconnect, usePublicClient } from 'wagmi';
+import { useBalance, useDisconnect, usePublicClient } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import {
   uesOneCtActiveChain,
@@ -22,6 +22,7 @@ import NFTtier from '../NFTtier';
 import WalletIcon from '@SVG/Elements/WalletIcon';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import copyToClipboard from '@Utils/copyToClipboard';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 const token2image = {
   ETH: ETHImage,
 };
@@ -36,6 +37,12 @@ const chainImageMappipng = {
 };
 
 export const AccountDropdown: React.FC = () => {
+  const { address } = useUserAccount();
+  const { data, isError, isLoading, error } = useBalance({
+    address,
+    token: '0xd094794d3f73C5B6fCF4245513297ce1304C3b39',
+  });
+  console.log(`AccountDropdown-data: `, data, error);
   const setSnack = useSetAtom(snackAtom);
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
   const { activeChain } = uesOneCtActiveChain();
@@ -49,7 +56,6 @@ export const AccountDropdown: React.FC = () => {
     toggleMenu(false);
   }
 
-  const { address } = useUserAccount();
   const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
     useOneCTWallet();
 
@@ -186,13 +192,12 @@ export const AccountDropdown: React.FC = () => {
                     >
                       <WalletIcon className="mr-2 ml-1 text-blue" />
                       <div className="flex items-center">
-                        <Display
-                          data={account.balanceFormatted}
-                          className="text-f14"
-                        />
+                        <Display data={data?.formatted} className="text-f14" />
                         <img
-                          src={token2image[account.balanceSymbol]}
-                          className="w-[14px] h-[14px] ml-2"
+                          src={
+                            'https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/usdc.png'
+                          }
+                          className="w-[16px] h-[16px] ml-2"
                         />
                       </div>
                       <div
