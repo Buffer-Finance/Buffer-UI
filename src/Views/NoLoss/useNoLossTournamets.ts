@@ -79,7 +79,6 @@ const useNoLossTournaments = () => {
 
       return tids;
     },
-    // TODO see if there is retrying machanism on swr than only do this req one time
     refreshInterval: 1000,
   });
   return data;

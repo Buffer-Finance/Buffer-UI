@@ -86,7 +86,6 @@ const useOneCTWallet = () => {
   const oneCtPk = useMemo(() => {
     return secureLocalStorage.getItem(pkLocalStorageIdentifier);
   }, [pkLocalStorageIdentifier, createLoading]);
-
   const registeredOneCT = useMemo(() => {
     if (!res?.one_ct) return false;
     return (

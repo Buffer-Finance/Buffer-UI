@@ -18,6 +18,7 @@ import {
   IChartWidgetApi,
   IPositionLineAdapter,
   SeriesFormat,
+  IOrderLineAdapter,
 } from '../../../../../public/static/charting_library';
 
 import {
@@ -31,7 +32,7 @@ import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
 import { sleep } from '@Utils/JSUtils/sleep';
 import { toFixed } from '@Utils/NumString';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, round } from '@Utils/NumString/stringArithmatics';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -43,11 +44,21 @@ import {
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { TradeType } from '@Views/TradePage/type';
-import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
+import {
+  closeConfirmationModalAtom,
+  limitOrderStrikeAtom,
+  miscsSettingsAtom,
+  queuets2priceAtom,
+  tradeSettingsAtom,
+  tradeTypeAtom,
+  visualizeddAtom,
+} from '@Views/TradePage/atoms';
 import { atomWithStorage } from 'jotai/utils';
 import { PRICE_DECIMALS } from '@Views/TradePage/config';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { marketsForChart } from '@Views/TradePage/config';
+import { getEarlyCloseStatus } from '../AccordionTable/Common';
+import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -196,7 +207,7 @@ const market2resolutionAtom = atomWithStorage(
 );
 function drawPosition(
   option: TradeType,
-  visualized: any,
+  onCancel: any,
   chart: IChartWidgetApi,
   decimals: number
 ) {
@@ -213,28 +224,53 @@ function drawPosition(
   )} - ${getDisplayDate(option.close_time as any)}, ${getDisplayTime(
     option.expiration_time
   )}`;
-  // console.log(`chart: `,chart.createPositionLine);
-  // console.log(
-  //   `MultiResolutionChart-Object.hasOwn(chart, 'createPositionLine'): `,
-  //   Object.hasOwn(chart, 'createPositionLine'),
-  //   chart
-  // );
-  // if (Object.hasOwn(chart, 'createPositionLine'))
 
-  return chart
-    ?.createPositionLine()
-    .setText(text)
-    .setTooltip(tooltip)
-    .setBodyBackgroundColor(defaults.BG)
-    .setBodyBorderColor(defaults.BG)
-    .setBodyFont('normal 17pt Relative Pro')
-    .setQuantityFont('bold 17pt Relative Pro')
-    .setQuantityBackgroundColor(color)
-    .setQuantityBorderColor(color)
-    .setLineColor(color)
-    .setBodyTextColor('rgb(255,255,255)')
-    .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
-    .setPrice(optionPrice);
+  /*
+    const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
+    setCancellable(!isDisabled)
+
+
+
+    tooltip cancellable ? close the order 
+
+
+  */
+
+  return (
+    chart
+      ?.createOrderLine()
+      .setText(text)
+      .setTooltip(tooltip)
+      .setBodyBackgroundColor(defaults.BG)
+      .setQuantityBackgroundColor(color)
+      .setBodyBorderColor(defaults.BG)
+      .setBodyFont('normal 17pt Relative Pro')
+      .setQuantityFont('bold 17pt Relative Pro')
+      .setLineColor(color)
+      .setBodyTextColor('rgb(255,255,255)')
+      .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
+      .setCancelTooltip('Early Close at market price')
+      // .setCancelButtonBackgroundColor(defaults.red)
+      .setPrice(optionPrice)
+  );
+
+  // return chart
+  //   ?.createPositionLine()
+  //   .setText(text)
+  //   .setTooltip(tooltip)
+  //   .setBodyBackgroundColor(defaults.BG)
+  //   .setBodyBorderColor(defaults.BG)
+  //   .setBodyFont('normal 17pt Relative Pro')
+  //   .setQuantityFont('bold 17pt Relative Pro')
+  //   .setQuantityBackgroundColor(color)
+  //   .setQuantityBorderColor(color)
+  //   .setLineColor(color)
+  //   .setBodyTextColor('rgb(255,255,255)')
+  //   .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
+  //   .setPrice(optionPrice)
+  //   .onClose('onClose called', function (text) {
+  //     this.setText(text);
+  //   });
   // positions.current.push({ line, expiration: option.expirationTime });
 }
 
@@ -245,6 +281,8 @@ export const MultiResolutionChart = ({
   market: Markets;
   index: number;
 }) => {
+  const { earlyCloseHandler } = useCancelTradeFunction();
+
   const market = marke.replace('-', '');
   const chartData =
     marketsForChart[market as unknown as keyof typeof marketsForChart];
@@ -252,6 +290,9 @@ export const MultiResolutionChart = ({
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
+  const settings = useAtomValue(miscsSettingsAtom);
+  const setCloseConfirmationModal = useSetAtom(closeConfirmationModalAtom);
+
   const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
   const v3AppConfig = useMarketsConfig();
@@ -263,7 +304,7 @@ export const MultiResolutionChart = ({
       [key: number]: {
         option: TradeType;
         visited: boolean;
-        lineRef: IPositionLineAdapter;
+        lineRef: IOrderLineAdapter;
       };
     }>
   >({});
@@ -318,7 +359,6 @@ export const MultiResolutionChart = ({
         onResultReadyCallback
       ) => {
         const symbols = await getAllSymbols();
-        console.log(`TradingView-newSymbols: `, symbols, userInput);
 
         const newSymbols = symbols.filter((symbol) => {
           return (
@@ -327,7 +367,6 @@ export const MultiResolutionChart = ({
             symbol.type.toLowerCase() == symbolType.toLowerCase()
           );
         });
-        console.log(`TradingView-newSymbols: `, newSymbols);
         onResultReadyCallback(newSymbols);
       },
       resolveSymbol: async (
@@ -449,7 +488,6 @@ export const MultiResolutionChart = ({
     market2resolution?.[chartId] || ('1' as ResolutionString);
 
   useEffect(() => {
-    console.log(`[chart-deb]: `, marke, index);
     try {
       const chart = new widget({
         datafeed,
@@ -508,8 +546,19 @@ export const MultiResolutionChart = ({
 
       chart.onChartReady(() => {
         // chart.activeChart().get;
+        let packedPrice: { price: null | number } = { price: null };
         // chart.activeChart?.().executeActionById('drawingToolbarAction');
-
+        // chart
+        //   .activeChart?.()
+        //   .crossHairMoved()
+        //   .subscribe(null, (p) => {
+        //     packedPrice = p;
+        //   });
+        // document.getElementById(chart._id).contentWindow.document.body.onclick =
+        //   () => {
+        //     setActiveTab('Limit');
+        //     setStrike(round(packedPrice.price, 2));
+        //   };
         setChartReady(true);
       });
       widgetRef.current = chart;
@@ -608,7 +657,7 @@ export const MultiResolutionChart = ({
             visited: true,
             lineRef: drawPosition(
               updatedPos,
-              visualized,
+              null,
               widgetRef.current?.activeChart()!,
               getPoolInfo(pos.pool.pool).decimals
             ),
@@ -633,36 +682,6 @@ export const MultiResolutionChart = ({
       }
     };
   }, [visualized, activeTrades, chartReady, priceCache]);
-  const updatePositionTimeLeft = useCallback(() => {
-    // save drawings
-    try {
-      widgetRef.current?.save((d) => {
-        setDrawing((drawing: any) => {
-          return {
-            ...drawing,
-            [chartId]: d,
-          };
-        });
-      });
-    } catch (e) {
-      console.log('major-bug', e);
-    }
-
-    for (const trade in trade2visualisation.current) {
-      if (trade2visualisation.current[+trade]?.visited) {
-        const inv = trade2visualisation.current[+trade]?.lineRef
-          ?.getText()
-          ?.split('|')[0];
-        const strikePrice =
-          trade2visualisation.current[+trade]?.lineRef?.getPrice();
-        const text =
-          inv +
-          '| ' +
-          getText((trade2visualisation.current as any)[+trade]?.option);
-        trade2visualisation.current[+trade]?.lineRef.setText(text);
-      }
-    }
-  }, [setDrawing]);
 
   useEffect(() => {
     if (!chartReady) return;
@@ -681,11 +700,58 @@ export const MultiResolutionChart = ({
     }
   }, [market2resolution, chartReady]);
   useEffect(() => {
-    const interval = setInterval(updatePositionTimeLeft, 1000);
+    const interval = setInterval(() => {
+      try {
+        widgetRef.current?.save((d) => {
+          setDrawing((drawing: any) => {
+            return {
+              ...drawing,
+              [chartId]: d,
+            };
+          });
+        });
+      } catch (e) {
+        console.log('major-bug', e);
+      }
+
+      for (const trade in trade2visualisation.current) {
+        if (trade2visualisation.current[+trade]?.visited) {
+          const [isDisabled, disableTooltip] = getEarlyCloseStatus(
+            trade2visualisation.current[+trade]?.option
+          );
+
+          const inv = trade2visualisation.current[+trade]?.lineRef
+            ?.getText()
+            ?.split('|')[0];
+          const text =
+            inv +
+            '| ' +
+            getText((trade2visualisation.current as any)[+trade]?.option);
+
+          trade2visualisation.current[+trade]?.lineRef.setText(text);
+          if (!isDisabled) {
+            trade2visualisation.current[+trade]?.lineRef.onCancel(
+              'onCancel',
+              () => {
+                const actualTrade = trade2visualisation.current[+trade]?.option;
+                const updatedTrade = activeTrades.find(
+                  (t) => t.queue_id == actualTrade?.queue_id
+                );
+                if (settings.earlyCloseConfirmation) {
+                  earlyCloseHandler(updatedTrade, updatedTrade.market);
+                } else {
+                  setCloseConfirmationModal(updatedTrade);
+                }
+              }
+            );
+          }
+        }
+      }
+    }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, [address]);
+  }, [address, settings.earlyCloseConfirmation, activeTrades]);
 
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
