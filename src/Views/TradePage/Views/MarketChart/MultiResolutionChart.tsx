@@ -53,7 +53,7 @@ export let supported_resolutions = [
   // '1S' as ResolutionString,
   // '10S' as ResolutionString,
   '1' as ResolutionString,
-  '3' as ResolutionString,
+  // '3' as ResolutionString,
   '5' as ResolutionString,
   // '10' as ResolutionString,
   '15' as ResolutionString,
