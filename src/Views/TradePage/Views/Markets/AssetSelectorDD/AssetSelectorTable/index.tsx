@@ -44,8 +44,8 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
     return [
       '',
       'Asset',
-      '24h Change',
       'Payout',
+      '24h Change',
       'Max Trade Size',
       'Current OI',
       'Max OI',
@@ -140,7 +140,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
           />
         );
 
-      case 2:
+      case 3:
         if (!isOpen)
           return (
             <ColumnGap gap="4px " className="b1200:items-end">
@@ -164,7 +164,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
             ]}
           />
         );
-      case 3:
+      case 2:
         if (!isOpen) return <>-</>;
 
         return (
@@ -236,7 +236,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
       <BufferTable
         widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
         headerJSX={isMobile ? null : HeadFormatter}
-        cols={isMobile ? 3 : headers.length}
+        cols={isMobile ? 4 : headers.length}
         shouldShowMobile
         rows={updatedArr?.length ?? 0}
         bodyJSX={BodyFormatter}
