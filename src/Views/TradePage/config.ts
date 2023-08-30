@@ -21,6 +21,7 @@ export const appConfig = {
         faucet: '0x01eDE83Dbb03268D643313863255306d3e5B52D2',
         decimals: 6,
         token: 'USDC',
+        permitName: 'Token',
         is_pol: false,
       },
       '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
@@ -28,6 +29,8 @@ export const appConfig = {
         faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
         decimals: 18,
         token: 'BFR',
+        permitName: 'Token',
+
         is_pol: false,
       },
       '0x776a60A72B10b83F11d1a66ac02c554613f8A151': {
@@ -35,6 +38,8 @@ export const appConfig = {
         faucet: '0xb2C360aa9387c4f295e8066bc18dEAfFb72Ea14F',
         decimals: 18,
         token: 'ARB',
+        permitName: 'Token',
+
         is_pol: false,
       },
     },
