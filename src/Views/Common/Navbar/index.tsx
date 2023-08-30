@@ -60,7 +60,7 @@ export const Navbar: React.FC<INavbar> = () => {
         </div>
 
         {show && (
-          <div className="b1200:hidden flex gap-[6px]  ">
+          <div className="b1200:hidden flex gap-[6px] ml-4 ">
             {tabs.slice(0, VISIBLETABS).map((tab, index) => {
               if (tab.isExternalLink) {
                 return (
