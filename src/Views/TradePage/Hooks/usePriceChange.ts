@@ -22,13 +22,19 @@ const usePriceChange = () => {
         //     },
         //   ])
         // );
-        queries.push(
-          axios.get(
-            pricePublisherBaseUrl + '24h_change/' + `?pair=${market.tv_id}`
-          )
-        );
+
+        // queries.push(
+        //   axios.get(
+        //     pricePublisherBaseUrl + '24h_change/' + `?pair=${market.tv_id}`
+        //   )
+        // );
+
+        queries.push(market.tv_id);
       }
-      const response = await Promise.all(queries);
+      const { data: response } = await axios.post(
+        pricePublisherBaseUrl + 'bulk_24h_change/',
+        queries
+      );
       const finalResponse: {
         [key: string]: {
           pair: string;
@@ -36,12 +42,12 @@ const usePriceChange = () => {
         };
       } = {};
 
-      response.forEach((res) => {
-        finalResponse[res.data.pair] = {
+      response.forEach((res: { pair: string; change: number }) => {
+        finalResponse[res.pair] = {
           // now: res.data[0].price,
           // yesterday: res.data[1].price,
-          pair: res.data.pair,
-          change: res.data.change,
+          pair: res.pair,
+          change: res.change,
         };
       });
       return finalResponse;
