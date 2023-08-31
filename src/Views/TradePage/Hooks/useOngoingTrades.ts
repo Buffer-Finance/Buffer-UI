@@ -18,7 +18,6 @@ const useOngoingTrades = () => {
   // const { oneCTWallet } = useOneCTWallet();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
-  console.log(`oneCTWallet: `, oneCTWallet);
   const { address: userAddress } = useUserAccount();
   const { address } = useAccount();
   const markets = useMarketsConfig();
