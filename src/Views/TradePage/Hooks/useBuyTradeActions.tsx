@@ -421,7 +421,7 @@ export const useBuyTradeActions = (userInput: string) => {
             <div>
               <span>
                 <span className="!text-3">Total amount:</span>
-                {userInput}&nbsp;USDC
+                {userInput}&nbsp;{tokenName}
               </span>
             </div>
           </div>
