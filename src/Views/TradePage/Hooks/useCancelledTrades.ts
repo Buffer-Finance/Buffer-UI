@@ -12,6 +12,7 @@ import { addMarketInTrades } from '../utils';
 import { useAtomValue } from 'jotai';
 import { cancelTableActivePage } from '../atoms';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { getAddress } from 'viem';
 
 const useCancelledTrades = () => {
   const { activeChain } = useActiveChain();
@@ -27,7 +28,7 @@ const useCancelledTrades = () => {
           return { page_data: [], total_pages: 1 } as tradesApiResponseType;
         const res = await axios.get(`${baseUrl}trades/user/cancelled/`, {
           params: {
-            user_address: address,
+            user_address: getAddress(address),
             environment: activeChain.id,
             limit: TRADE_IN_A_PAGE_TRADES_TABLES,
             page: activePage - 1,

@@ -9,6 +9,7 @@ import { getSingatureCached } from '../cache';
 import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { getAddress } from 'viem';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
@@ -39,7 +40,7 @@ const useOngoingTrades = () => {
         const res = await axios.get(`${baseUrl}trades/user/active/`, {
           params: {
             user_signature: currentUserSignature,
-            user_address: userAddress,
+            user_address: getAddress(userAddress),
             environment: activeChain.id,
           },
         });
