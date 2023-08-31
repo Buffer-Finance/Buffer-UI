@@ -4,31 +4,64 @@ import { ModalBase } from 'src/Modals/BaseModal';
 import { TableHeader } from '../Views/AccordionTable/Common';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { ForexTimingsModalAtom } from '../atoms';
+import { AssetCategory } from '../type';
 interface IMarketTimingsModal {}
 const headNameArray = ['Day of the week', 'Market open/close'];
-const dataArr = [
-  [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ],
-  [
-    'Closed from 10:00PM - 11:00PM UTC',
-    'Closed from 10:00PM - 11:00PM UTC',
-    'Closed from 10:00PM - 11:00PM UTC',
-    'Closed from 10:00PM - 11:00PM UTC',
-    'Closed from 17:00PM UTC',
-    'Closed all day',
-    'Open from 17:00 UTC',
-  ],
-];
+
+const getDataArr = (marketType: number) => {
+  if (marketType === AssetCategory.Commodities) {
+    return [
+      [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ],
+      [
+        'Closed from 09:00PM - 10:00PM UTC',
+        'Closed from 09:00PM - 10:00PM UTC',
+        'Closed from 09:00PM - 10:00PM UTC',
+        'Closed from 09:00PM - 10:00PM UTC',
+        'Closed from 08:00PM UTC',
+        'Closed all day',
+        'Open from 11:00PM ET',
+      ],
+    ];
+  } else {
+    return [
+      [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ],
+      [
+        'Open all day',
+        'Open all day',
+        'Open all day',
+        'Open all day',
+        'Closed from 08:00PM UTC',
+        'Closed all day',
+        'Open from 10:00PM UTC',
+      ],
+    ];
+  }
+};
 const MarketTimingsModal: React.FC<IMarketTimingsModal> = ({}) => {
-  const [show, setShow] = useAtom(ForexTimingsModalAtom);
-  const closeModal = () => setShow(false);
+  const [{ isOpen: show, marketType }, setShow] = useAtom(
+    ForexTimingsModalAtom
+  );
+  const dataArr = getDataArr(marketType);
+  const closeModal = () =>
+    setShow((prv) => {
+      return { ...prv, isOpen: false };
+    });
 
   const HeaderFomatter = (col: number) => {
     return (
