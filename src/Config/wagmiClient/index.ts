@@ -8,7 +8,7 @@ import { getAllChains, getSupportedChains } from './getConfigChains';
 import { mockConnector } from './mockConnector';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 
-export const getChains = () => getSupportedChains();
+export const getChains = () => getAllChains();
 
 const isTestEnv = import.meta.env.VITE_MODE == 'test';
 
