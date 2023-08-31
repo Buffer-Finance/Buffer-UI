@@ -67,7 +67,7 @@ export const AccountDropdown: React.FC = () => {
   if (registeredOneCT) {
     OneCTManager = (
       <BlueBtn
-        className="!ml-[13px] !text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
+        className="!text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
         onClick={() => {
           disableOneCt();
           closeDropdown();
@@ -217,7 +217,7 @@ export const AccountDropdown: React.FC = () => {
                     <MenuItem className={'!bg-[#232334] text-1 cursor-auto'}>
                       <div className="mx-[10px] my-[10px] mb-[14px]">
                         <div className="flex items-center justify-between text-f14 mb-[20px]">
-                          <div className="flex flex-col">
+                          <div className="flex flex-col mr-4">
                             {account
                               ? `${account.address.slice(
                                   0,
@@ -264,18 +264,18 @@ export const AccountDropdown: React.FC = () => {
                             </IconBG>
                           </div>
                         </div>
-                        <div className="flex items-center gap-x-3 text-f14">
+                        <div className="flex items-center text-f14 justify-center">
                           {OneCTManager}
-                          <a
+                          {/*  <a
                             className="unset"
                             href="https://www.google.com/"
                             target="_blank"
                           >
-                            <div className="text-f12 underline flex items-center ">
+                          <div className="text-f12 underline flex items-center ">
                               Learn More{' '}
                               <ShareIcon className=" scale-[0.65] ml-[1px] mb-[-2px]" />
                             </div>
-                          </a>
+                          </a> */}
                         </div>
                       </div>{' '}
                     </MenuItem>

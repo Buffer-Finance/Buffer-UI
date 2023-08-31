@@ -206,12 +206,12 @@ function App() {
                     <span className="underline underline-offset-2">V2.5 </span>
                   </a>
                   is live on Mainnet.{' '}
-                  <a href="https://app.buffer.finance/" target="_blank">
+                  {/* <a href="https://app.buffer.finance/" target="_blank">
                     <span className="underline underline-offset-2">
                       Learn More
                     </span>{' '}
                     <ShareIcon className=" scale-[0.65] w-fit inline" />
-                  </a>
+                  </a> */}
                 </div>
               }
               closeWarning={() => {}}
