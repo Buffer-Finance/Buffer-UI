@@ -11,6 +11,7 @@ import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { Earn } from '@Views/Earn';
 import SideBar from '@Views/Common/Sidebar';
+import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
 
 // export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
@@ -166,11 +167,19 @@ function App() {
           {!urlSettings?.hide && (
             <Warning
               body={
-                <>
-                  $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
-                  listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
-                  PancakeSwap or Apeswap on BNB chain.
-                </>
+                <div>
+                  Buffer{' '}
+                  <a href="https://app.buffer.finance/" target="_blank">
+                    <span className="underline underline-offset-2">V2.5</span>
+                  </a>
+                  is live on Mainnet.{' '}
+                  <a href="https://app.buffer.finance/" target="_blank">
+                    <span className="underline underline-offset-2">
+                      Learn More
+                    </span>{' '}
+                    <ShareIcon className=" scale-[0.65] w-fit inline" />
+                  </a>
+                </div>
               }
               closeWarning={() => {}}
               shouldAllowClose={false}
