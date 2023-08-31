@@ -233,7 +233,7 @@ export const defaultSettings = {
     showFavoriteAsset: true,
   },
   tradePanelPosition: tradePanelPosition.Right,
-  notificationPosition: notificationPosition.TopLeft,
+  notificationPosition: notificationPosition.BottomLeft,
 };
 
 export const defaultSelectedTime = '00:15';
