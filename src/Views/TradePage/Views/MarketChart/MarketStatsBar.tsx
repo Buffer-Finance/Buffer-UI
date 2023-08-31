@@ -171,7 +171,11 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
     {
       header: 'Payout',
       data: (
-        <Payout token0={activeMarket.token0} token1={activeMarket.token1} />
+        <Payout
+          token0={activeMarket.token0}
+          token1={activeMarket.token1}
+          optionContract={switchPool?.optionContract}
+        />
       ),
     },
     {

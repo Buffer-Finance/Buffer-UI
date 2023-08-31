@@ -26,7 +26,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
   const marketConfig = useMarketsConfig();
   const { openLOShutter } = useShutterHandlers();
 
-  const { poolDetails } = useSwitchPool();
+  const { poolDetails, switchPool } = useSwitchPool();
   const tradeType = useAtomValue(tradeTypeAtom);
   const setTradeType = useSetAtom(tradeTypeAtom);
 
@@ -36,7 +36,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
   const { data: approvalExpanded } = useApprvalAmount();
   const { calculatePayout } = useSelectedAssetPayout();
 
-  if (!poolDetails || !activeMarket)
+  if (!poolDetails || !activeMarket || !switchPool)
     return (
       <Skeleton
         variant="rectangular"
@@ -55,7 +55,8 @@ const TradePageMobile: React.FC<any> = ({}) => {
     : '0';
 
   const { payout: totalPayout } = calculatePayout(
-    joinStrings(activeMarket.token0, activeMarket.token1, '')
+    joinStrings(activeMarket.token0, activeMarket.token1, ''),
+    switchPool.optionContract
   );
 
   if (!marketConfig?.length)

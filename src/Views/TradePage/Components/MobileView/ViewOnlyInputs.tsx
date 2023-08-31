@@ -43,7 +43,7 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
             e.stopPropagation();
             setDuration((d) => {
               let secs = HHMMToSeconds(d.HHMM);
-              secs += 60;
+              secs -= 60;
               return {
                 HHMM: secondsToHHMM(secs),
                 seconds: secs,
@@ -51,8 +51,9 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
             });
           }}
         >
-          <span>+</span>
+          <span>-</span>
         </div>
+
         <span className="text-1 text-f13">
           {currentTime.HHMM.split(':')[0]} h {currentTime.HHMM.split(':')[1]}{' '}
           min
@@ -64,7 +65,7 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
             e.stopPropagation();
             setDuration((d) => {
               let secs = HHMMToSeconds(d.HHMM);
-              secs -= 60;
+              secs += 60;
               return {
                 HHMM: secondsToHHMM(secs),
                 seconds: secs,
@@ -72,7 +73,7 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
             });
           }}
         >
-          <span>-</span>
+          <span>+</span>
         </div>
       </button>
     </div>

@@ -35,34 +35,12 @@ import { privateKeyToAccount } from 'viem/accounts';
  * new PK generated from incremented nonce
  */
 
-const domain = {
-  name: 'Ether Mail',
-  version: '1',
-  chainId: 421613,
-  verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
-} as const;
-
-// The named list of all type definitions
-const types = {
-  EIP712Domain: [
-    { name: 'name', type: 'string' },
-    { name: 'version', type: 'string' },
-    { name: 'chainId', type: 'uint256' },
-    { name: 'verifyingContract', type: 'address' },
-  ],
-  Registration: [
-    { name: 'content', type: 'string' },
-    { name: 'nonce', type: 'uint256' },
-  ],
-} as const;
-
 export const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
   { name: 'chainId', type: 'uint256' },
   { name: 'verifyingContract', type: 'address' },
 ];
-
 export const is1CTEnabled = (
   account: string,
   pk: string | null,
@@ -94,7 +72,15 @@ const useOneCTWallet = () => {
   const provider = usePublicClient({ chainId: activeChain.id });
 
   const pkLocalStorageIdentifier = useMemo(() => {
-    return 'signer-account-pk:' + address + ',nonce' + res?.nonce + ':';
+    return (
+      'signer-account-pk:' +
+      address +
+      ',nonce' +
+      res?.nonce +
+      ',activeChain' +
+      activeChain.id +
+      ':'
+    );
   }, [address, res?.nonce]);
 
   const oneCtPk = useMemo(() => {
@@ -129,6 +115,28 @@ const useOneCTWallet = () => {
       const nonce = res?.nonce.toString();
       if (nonce === undefined) return toastify(WaitToast());
       setCreateLoading(true);
+      const domain = {
+        name: 'Ether Mail',
+        version: '1',
+        chainId: activeChain.id,
+        verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+      } as const;
+
+      // The named list of all type definitions
+      const types = {
+        EIP712Domain: [
+          { name: 'name', type: 'string' },
+          { name: 'version', type: 'string' },
+          { name: 'chainId', type: 'uint256' },
+          { name: 'verifyingContract', type: 'address' },
+        ],
+        Registration: [
+          { name: 'content', type: 'string' },
+          { name: 'nonce', type: 'uint256' },
+          { name: 'chainId', type: 'uint256' },
+        ],
+      } as const;
+
       const signature = await signTypedData({
         types,
         domain,
@@ -136,6 +144,7 @@ const useOneCTWallet = () => {
         message: {
           content: 'I want to create a trading account with Buffer Finance',
           nonce,
+          chainId: activeChain.id,
         },
       });
       const privateKey = ethers.utils.keccak256(signature).slice(2);

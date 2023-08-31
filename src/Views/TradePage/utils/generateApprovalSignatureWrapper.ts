@@ -8,7 +8,8 @@ export async function generateApprovalSignatureWrapper(
   routerAddress: string,
   deadline: string,
   activeChainId: any,
-  signMethod: any
+  signMethod: any,
+  domainName: string
 ) {
   const res = await generateApprovalSignature(
     nonce,
@@ -18,7 +19,8 @@ export async function generateApprovalSignatureWrapper(
     routerAddress,
     deadline,
     activeChainId,
-    signMethod
+    signMethod,
+    domainName
   );
   return { res, nonce };
 }

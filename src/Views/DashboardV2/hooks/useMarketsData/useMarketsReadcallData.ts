@@ -8,9 +8,7 @@ import { useEffect, useMemo } from 'react';
 import { readResponseAtom, setReadCallsAtom } from '@Views/DashboardV2/atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { appConfig } from '@Views/TradePage/config';
 import { joinStrings } from '@Views/TradePage/utils';
-import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 
 export const useMarketsReadCallData = () => {
   const readCallData = useAtomValue(readResponseAtom);
@@ -20,9 +18,6 @@ export const useMarketsReadCallData = () => {
   const referralData = useReferralCode();
   const { address } = useUserAccount();
   const { activeChain } = useActiveChain();
-  const configData =
-    appConfig[activeChain?.id as unknown as keyof typeof appConfig];
-
   const calls = getMarketsDataReadcalls(
     config,
     baseSettlementFees,
@@ -47,6 +42,10 @@ export const useMarketsReadCallData = () => {
     const currentOIs: {
       [key: string]: string;
     } = {};
+    const creationWindows: {
+      [key: string]: boolean;
+    } = {};
+
     if (readCallData !== null && readCallData !== undefined) {
       config?.forEach((item) => {
         item.pools.forEach((pool) => {
@@ -74,22 +73,21 @@ export const useMarketsReadCallData = () => {
           if (settlement_fee) {
             settlementFees[pool.optionContract] = settlement_fee;
           }
+
+          creationWindows[pool.optionContract] = item.creation_window_contract
+            ? readCallData[
+                getCallId(item.creation_window_contract, 'isInCreationWindow')
+              ]?.[0]
+            : 'true';
         });
       });
-      const isInCreationWindow =
-        readCallData[
-          getCallId(
-            configData.creation_window,
-            'isInCreationWindow',
-            timeToMins('00:05')
-          )
-        ]?.[0];
+
       return {
         maxTradeSizes,
         settlementFees,
         maxOIs,
         currentOIs,
-        isInCreationWindow,
+        creationWindows,
       };
     }
     return {
@@ -97,7 +95,7 @@ export const useMarketsReadCallData = () => {
       settlementFees,
       maxOIs,
       currentOIs,
-      isInCreationWindow: false,
+      creationWindows,
     };
   }, [readCallData]);
 

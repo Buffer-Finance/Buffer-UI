@@ -345,7 +345,7 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
-        to: `https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/`,
+        to: `https://earn.buffer.finance/`,
         name: 'Earn',
         subTabs: [],
         isExternalLink: true,
@@ -369,7 +369,7 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
-        to: '/#',
+        to: 'https://www.youtube.com/@BufferFinance/',
         name: 'YouTube',
         subTabs: [],
         isExternalLink: true,
@@ -471,7 +471,7 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
-        to: '/#',
+        to: 'https://www.youtube.com/@BufferFinance/',
         name: 'YouTube',
         subTabs: [],
         isExternalLink: true,

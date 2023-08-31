@@ -28,8 +28,7 @@ export class DataPulseProvider {
             return;
         }
         this._requestsPending = 0;
-        // eslint-disable-next-line guard-for-in
-        for (const listenerGuid in this._subscribers) {
+        for (const listenerGuid in this._subscribers) { // tslint:disable-line:forin
             this._requestsPending += 1;
             this._updateDataForSubscriber(listenerGuid)
                 .then(() => {

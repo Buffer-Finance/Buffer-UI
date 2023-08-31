@@ -253,8 +253,8 @@ export const OngoingTradesTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={(idx) => {
-        if (isNotMobile) return null;
-        else setInspectTrade({ trade: trades?.[idx] });
+        // if (isNotMobile) return null;
+        // else setInspectTrade({ trade: trades?.[idx] });
       }}
       overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}

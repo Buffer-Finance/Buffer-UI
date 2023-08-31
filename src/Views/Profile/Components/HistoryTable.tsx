@@ -1,12 +1,16 @@
 import { useGlobal } from '@Contexts/Global';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import InfoIcon from '@SVG/Elements/InfoIcon';
 import BufferTab from '@Views/Common/BufferTab';
+import InfoTooltip from '@Views/Common/InfoTooltip';
 import TabSwitch from '@Views/Common/TabSwitch';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { History } from '@Views/TradePage/Views/AccordionTable';
 import LimitOrderTable from '@Views/TradePage/Views/AccordionTable/LimitOrderTable';
 import { OngoingTradesTable } from '@Views/TradePage/Views/AccordionTable/OngoingTradesTable';
-import { binaryTabs } from 'config';
+import { OpenInNew } from '@mui/icons-material';
+import { binaryTabs, isTestnet } from 'config';
 import { useEffect, useMemo } from 'react';
 
 export const useHistoryTableTabs = () => {
@@ -34,23 +38,40 @@ export const HistoryTables = () => {
   }, []);
 
   const [activeTrades, limitOrders] = useOngoingTrades();
+  const { address } = useUserAccount();
 
   return (
     <>
-      <BufferTab
-        value={activeTabIdx}
-        handleChange={(e, t) => {
-          changeActiveTab(e, t);
-        }}
-        className="mb-5"
-        tablist={[
-          {
-            name: 'Active',
-          },
-          { name: 'Limit Orders' },
-          { name: 'History' },
-        ]}
-      />
+      <div className="flex items-center justify-between mb-5">
+        <BufferTab
+          value={activeTabIdx}
+          handleChange={(e, t) => {
+            changeActiveTab(e, t);
+          }}
+          tablist={[
+            {
+              name: 'Active',
+            },
+            { name: 'Limit Orders' },
+            { name: 'History' },
+          ]}
+        />
+        <button
+          className="flex text-f15 text-2 items-center gap-2 hover:text-1"
+          onClick={() => {
+            const domain = isTestnet
+              ? 'testnet-buffer-finance.vercel.app'
+              : 'app.buffer.finance';
+            window.open(
+              `https://${domain}/#/profile?user_address=${address}`,
+              '_blank'
+            );
+          }}
+        >
+          <InfoIcon tooltip="Click here to see the older version trades." />
+          Old Version Trades <OpenInNew className="mt-2" />{' '}
+        </button>
+      </div>
       <TabSwitch
         value={activeTabIdx}
         childComponents={[

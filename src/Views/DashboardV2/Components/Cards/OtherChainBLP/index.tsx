@@ -2,7 +2,6 @@ import { toFixed } from '@Utils/NumString';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { otherBlpType } from '@Views/DashboardV2/types';
 import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import {
@@ -19,7 +18,7 @@ export const OtherChainBLP = () => {
   const data = useOtherChainBLPdata();
   console.log(data, 'otherChainBLPData');
   const tokenName = 'BLP';
-  if (!data)
+  if (!data || !data?.price)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
 
   return (
@@ -44,7 +43,7 @@ export const OtherChainBLP = () => {
           ]}
           values={[
             <div className={wrapperClasses}>
-              <Display data={data.price} unit={'USDC'} precision={4} />
+              <Display data={data.price || '0'} unit={'USDC'} precision={4} />
             </div>,
             <div className={wrapperClasses}>
               <Display data={data.supply} unit={tokenName} />
@@ -59,10 +58,8 @@ export const OtherChainBLP = () => {
                   content={
                     toFixed(
                       multiply(
-                        divide(
-                          data.usdc_pol,
-                          data.usdc_total as string
-                        ) as string,
+                        divide(data.usdc_pol, data.usdc_total as string) ??
+                          ('0' as string),
                         2
                       ),
                       2

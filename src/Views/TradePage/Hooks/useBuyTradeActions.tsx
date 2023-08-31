@@ -448,7 +448,8 @@ export const useBuyTradeActions = (userInput: string) => {
       // }
     }
   };
-  const defaultApprovalAmount = '100000000000000000000000000';
+  const defaultApprovalAmount =
+    '115792089237316195423570985008687907853269984665640564039457584007913129639935';
   const handleApproveClick = async (ammount = defaultApprovalAmount) => {
     // console.log('goes in here');
     if (state.txnLoading > 1) {
@@ -478,7 +479,7 @@ export const useBuyTradeActions = (userInput: string) => {
     //  fetch nonce 7min
     // sign data : 1hr
     // call api :15
-    const deadline = (Math.round(Date.now() / 1000) + 84600).toString();
+    const deadline = (Math.round(Date.now() / 1000) + 86400).toString();
     try {
       const { nonce, res } = await generateApprovalSignatureWrapper(
         approvalExpanded?.nonce,
@@ -488,7 +489,8 @@ export const useBuyTradeActions = (userInput: string) => {
         configData.router,
         deadline,
         activeChain.id,
-        signTypedData
+        signTypedData,
+        poolDetails?.permitName
       );
       const updatedApproval = await updateApprovalData();
 

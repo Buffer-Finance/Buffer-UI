@@ -12,6 +12,7 @@ import { useMemo } from 'react';
 import { marketData } from '@Views/TradePage/Hooks/useAssetTableFilters';
 import { AssetCategory } from '@Views/TradePage/type';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { getAddress } from 'viem';
 
 const MarketBackground = styled.button<{ isActive: boolean }>`
   all: unset;
@@ -30,7 +31,7 @@ const MarketBackground = styled.button<{ isActive: boolean }>`
 
 const isMarketOpen = (
   category: number,
-  isInCreationWindow: { [key: string]: string }
+  isInCreationWindow: boolean | undefined
 ) => {
   if (!isMarketForex(category)) {
     return true;
@@ -58,7 +59,10 @@ export const Market: React.FC<{
   });
   const isOpen =
     !market.isPaused &&
-    isMarketOpen(market.category, readcallData?.isInCreationWindow);
+    isMarketOpen(
+      market.category,
+      readcallData?.creationWindows[getAddress(market.address)]
+    );
 
   const { favouriteMarkets: favourites, removeFavouriteMarket } =
     useFavouriteMarkets();

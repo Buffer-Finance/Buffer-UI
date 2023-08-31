@@ -53,7 +53,7 @@ export let supported_resolutions = [
   // '1S' as ResolutionString,
   // '10S' as ResolutionString,
   '1' as ResolutionString,
-  '3' as ResolutionString,
+  // '3' as ResolutionString,
   '5' as ResolutionString,
   // '10' as ResolutionString,
   '15' as ResolutionString,
@@ -85,9 +85,9 @@ const formatResolution = (s: string) => {
   if (s.toLowerCase() == '5') {
     return '5m';
   }
-  if (s.toLowerCase() == '3') {
-    return '3m';
-  }
+  // if (s.toLowerCase() == '3') {
+  //   return '3m';
+  // }
 
   if (s.toLowerCase() == '15') {
     return '15m';
@@ -647,7 +647,6 @@ export const MultiResolutionChart = ({
     } catch (e) {
       console.log('major-bug', e);
     }
-
     for (const trade in trade2visualisation.current) {
       if (trade2visualisation.current[+trade]?.visited) {
         const inv = trade2visualisation.current[+trade]?.lineRef
