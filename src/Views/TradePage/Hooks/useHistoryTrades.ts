@@ -5,18 +5,17 @@ import {
   baseUrl,
   refreshInterval,
 } from '../config';
-import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { tradesApiResponseType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useMarketsConfig } from './useMarketsConfig';
 import { historyTableActivePage } from '../atoms';
 import { useAtomValue } from 'jotai';
-import { useState } from 'react';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
-  const { address } = useAccount();
+  const { address } = useUserAccount();
   const markets = useMarketsConfig();
   // console.log(`markets: `, markets);
   const activePage = useAtomValue(historyTableActivePage);
