@@ -16,7 +16,6 @@ import { useOtherChainBLPdata } from '@Views/DashboardV2/hooks/useReadcalls/useO
 
 export const OtherChainBLP = () => {
   const data = useOtherChainBLPdata();
-  console.log(data, 'otherChainBLPData');
   const tokenName = 'BLP';
   if (!data || !data?.price)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
