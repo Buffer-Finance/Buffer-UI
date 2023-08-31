@@ -207,7 +207,7 @@ function App() {
                       Mainnet
                     </span>
                   </a>
-                  &nbsp; | 📜 Learn more about v2&nbsp;
+                  &nbsp; | 📜 Learn more about v2.5&nbsp;
                   <a
                     href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
                     target="_blank"
