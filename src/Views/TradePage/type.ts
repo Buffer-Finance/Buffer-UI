@@ -86,7 +86,6 @@ export type responseObj = {
     marketOIaddress: string;
     IV: string;
     poolOIaddress: string;
-    creationWindowAddress: string;
   };
   address: string;
   poolContract: string;
