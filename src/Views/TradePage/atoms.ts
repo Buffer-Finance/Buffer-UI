@@ -89,7 +89,10 @@ export const selectedOrderToEditAtom = atom<null | {
 
 export const visualizeddAtom = atom<number[]>([]);
 
-export const ForexTimingsModalAtom = atom<boolean>(false);
+export const ForexTimingsModalAtom = atom<{
+  isOpen: boolean;
+  marketType: number;
+}>({ isOpen: false, marketType: 0 });
 export const showOnboardingAnimationAtom = atom<boolean>(false);
 export const queuets2priceAtom = atomWithStorage('augmentation-v1', {});
 export const closeLoadingAtom = atom<{ [key: number]: 1 | 2 | null }>({});

@@ -6,6 +6,7 @@ import { Trans } from '@lingui/macro';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { BuyUSDCLink } from '../BuyUsdcLink';
+import { toFixed } from '@Utils/NumString';
 
 const className = 'text-[#FFE200]';
 export const TradeSizeInput: React.FC<{
@@ -62,7 +63,10 @@ export const TradeSizeInput: React.FC<{
           className="absolute right-3 bg-[#141823] rounded-[6px] py-2 px-[6px] text-f12"
           onClick={() => {
             setTradeSize(
-              subtract(getMinimumValue(maxTradeSize, balance), platformFee)
+              toFixed(
+                subtract(getMinimumValue(maxTradeSize, balance), platformFee),
+                2
+              )
             );
             // setmaxErr(false);
             // setminErr(false);

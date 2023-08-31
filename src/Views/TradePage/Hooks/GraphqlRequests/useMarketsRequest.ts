@@ -43,10 +43,13 @@ export const useMarketsRequest = () => {
     return response.data?.data as response;
   }
 
-  const { data, error } = useSWR<response, Error>('v3AppConfig', {
-    fetcher: fetcher,
-    refreshInterval: 60000,
-  });
+  const { data, error } = useSWR<response, Error>(
+    `v3AppConfig-activeChain-${activeChain.id}`,
+    {
+      fetcher: fetcher,
+      refreshInterval: 60000,
+    }
+  );
 
   const response = useMemo(() => {
     if (!data) return { data, error };
