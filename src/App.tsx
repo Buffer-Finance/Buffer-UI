@@ -46,6 +46,7 @@ import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm'
 import ShutterProvider, {
   TradesShutter,
 } from '@Views/Common/MobileShutter/MobileShutter';
+import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -202,9 +203,15 @@ function App() {
                 <div>
                   Buffer{' '}
                   <a href="https://app.buffer.finance/" target="_blank">
-                    <span className="underline">V2.5</span>
-                  </a>{' '}
-                  is live on Mainnet. Learn More
+                    <span className="underline underline-offset-2">V2.5</span>
+                  </a>
+                  is live on Mainnet.{' '}
+                  <a href="https://app.buffer.finance/" target="_blank">
+                    <span className="underline underline-offset-2">
+                      Learn More
+                    </span>{' '}
+                    <ShareIcon className=" scale-[0.65] w-fit inline" />
+                  </a>
                 </div>
               }
               closeWarning={() => {}}
