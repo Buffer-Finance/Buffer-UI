@@ -29,6 +29,12 @@ export const MiscSettings: React.FC = () => {
       earlyCloseConfirmation: !prev.earlyCloseConfirmation,
     }));
   }
+  function toggleLODragging(event: React.ChangeEvent<HTMLInputElement>) {
+    setSettings((prev) => ({
+      ...prev,
+      loDragging: !prev.loDragging,
+    }));
+  }
 
   return (
     <div className="sm:hidden">
@@ -55,6 +61,12 @@ export const MiscSettings: React.FC = () => {
           isOn={settings.earlyCloseConfirmation}
           onChange={toggleCloseConfirmation}
         />
+      </RowBetween>
+      <RowBetween className="mt-4">
+        <SettingsText>
+          <Trans>Limit Order Dragging</Trans>
+        </SettingsText>
+        <Switch isOn={settings.loDragging} onChange={toggleLODragging} />
       </RowBetween>
     </div>
   );

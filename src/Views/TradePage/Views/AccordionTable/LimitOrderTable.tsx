@@ -9,7 +9,7 @@ import {
 } from '@Utils/Dates/displayDateTime';
 
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, round } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
@@ -20,7 +20,11 @@ import {
   closeLoadingAtom,
   selectedOrderToEditAtom,
 } from '@Views/TradePage/atoms';
-import { secondsToHHMM } from '@Views/TradePage/utils';
+import {
+  HHMMToSeconds,
+  editQueueTrade,
+  secondsToHHMM,
+} from '@Views/TradePage/utils';
 import {
   StrikePriceComponent,
   TableErrorRow,
@@ -32,6 +36,14 @@ import { TradeType } from '@Views/TradePage/type';
 import { AssetCell } from './AssetCell';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { Visualized } from './Visualized';
+import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
+import { useAccount } from 'wagmi';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { getSingatureCached } from '@Views/TradePage/cache';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { useToast } from '@Contexts/Toast';
+import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
 
 export const tradesCount = 10;
 
@@ -57,7 +69,7 @@ const LimitOrderTable = ({
   const cancelLoading = useAtomValue(closeLoadingAtom);
   const { getPoolInfo } = usePoolInfo();
   const { registeredOneCT } = useOneCTWallet();
-
+  // const { changeStrike } = useLimitOrderHandlers();
   const headNameArray = [
     'Asset',
     'TriggerPrice',
@@ -80,13 +92,13 @@ const LimitOrderTable = ({
   const handleCancel = async (trade: TradeType) => {
     cancelHandler(trade);
   };
+
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
 
     const marketPrecision = trade.market.price_precision.toString().length - 1;
     const poolInfo = getPoolInfo(trade.pool.pool);
     if (!trade) return 'Problem';
-
     switch (col) {
       case TableColumn.TriggerPrice:
         return <StrikePriceComponent trade={trade} />;
@@ -121,12 +133,24 @@ const LimitOrderTable = ({
       case TableColumn.ActionButtons:
         return (
           <div className="flex items-center">
+            <Visualized queue_id={trade.queue_id} />
             <GreyBtn
               className={tableButtonClasses}
-              onClick={() => setSelectedTrade({ trade, market: trade.market })}
+              onClick={() =>
+                setSelectedTrade({
+                  trade,
+                  market: trade.market,
+                })
+              }
             >
               Edit
             </GreyBtn>
+            {/* <GreyBtn
+              className={tableButtonClasses}
+              onClick={() => changeStrike(trade, '21112.22')}
+            >
+              Change Strike
+            </GreyBtn> */}
             <GreyBtn
               className={tableButtonClasses}
               onClick={() => handleCancel(trade)}

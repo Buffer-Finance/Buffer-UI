@@ -236,6 +236,7 @@ export const defaultSettings = {
   miscs: {
     showFavoriteAsset: true,
     earlyCloseConfirmation: false,
+    loDragging: false,
   },
   tradePanelPosition: tradePanelPosition.Right,
   notificationPosition: notificationPosition.TopLeft,

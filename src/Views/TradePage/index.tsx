@@ -6,6 +6,7 @@ import { PinnedMarkets } from './Views/Markets/PinnedMarkets';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   miscsSettingsAtom,
+  rerenderPositionAtom,
   selectedOrderToEditAtom,
   tradePanelPositionSettingsAtom,
 } from './atoms';
@@ -183,7 +184,15 @@ const MobileWarning = () => {
 export const EssentialModals = () => {
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const selectedTrade = useAtomValue(selectedOrderToEditAtom);
+  const setPositionRerender = useSetAtom(rerenderPositionAtom);
+  const closeEditModal = () => {
+    if (selectedTrade?.default) {
+      setPositionRerender((d) => d + 1);
+    }
+    setSelectedTrade(null);
+  };
   useGenericHooks();
+
   return (
     <>
       <CloseConfirmationModal />
@@ -193,9 +202,10 @@ export const EssentialModals = () => {
       <ModalBase
         className="!p-[0px]"
         open={selectedTrade ? true : false}
-        onClose={() => setSelectedTrade(null)}
+        onClose={closeEditModal}
       >
         <EditModal
+          defaults={selectedTrade?.default}
           trade={selectedTrade?.trade!}
           onSave={() => {
             console.log(`index-setSelectedTrade: `, setSelectedTrade);

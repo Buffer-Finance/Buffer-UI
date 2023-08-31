@@ -32,7 +32,7 @@ import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
 import { sleep } from '@Utils/JSUtils/sleep';
 import { toFixed } from '@Utils/NumString';
-import { divide, round } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -46,9 +46,10 @@ import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { TradeType } from '@Views/TradePage/type';
 import {
   closeConfirmationModalAtom,
-  limitOrderStrikeAtom,
   miscsSettingsAtom,
   queuets2priceAtom,
+  rerenderPositionAtom,
+  selectedOrderToEditAtom,
   tradeSettingsAtom,
   tradeTypeAtom,
   visualizeddAtom,
@@ -59,6 +60,7 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { marketsForChart } from '@Views/TradePage/config';
 import { getEarlyCloseStatus } from '../AccordionTable/Common';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
+import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -207,7 +209,11 @@ const market2resolutionAtom = atomWithStorage(
 );
 function drawPosition(
   option: TradeType,
-  onCancel: any,
+  loHandlers: {
+    onEdit: () => void;
+    onCancel: () => void;
+    onMove: (trade: TradeType, strike: string) => void;
+  },
   chart: IChartWidgetApi,
   decimals: number
 ) {
@@ -215,6 +221,42 @@ function drawPosition(
   const openTimeStamp = option.open_timestamp;
   const optionPrice = +option.strike / PRICE_DECIMALS;
   let color = !option.is_above ? defaults.red : defaults.green;
+
+  if (option.is_limit_order && option.state == 'QUEUED') {
+    const text = `${toFixed(
+      divide(option.trade_size?.toString(), decimals)!,
+      2
+    )} ${option.token} | ${
+      option.is_above ? defaults.upIcon : defaults.downIcon
+    }`;
+
+    return chart
+      ?.createOrderLine()
+      .setText('Limit | ' + text)
+      .setTooltip('Drag to change Strike')
+      .setBodyBackgroundColor(defaults.BG)
+      .setQuantityBackgroundColor(color)
+      .setBodyFont('normal 17pt Relative Pro')
+      .setQuantityFont('bold 27pt Relative Pro')
+      .setBodyTextColor('rgb(255,255,255)')
+      .setCancelTooltip('Cancel Limit Order')
+      .setQuantity('↕')
+      .setBodyBorderColor(defaults.BG)
+      .setLineColor(color)
+      .onMove('move', function () {
+        console.log(this.getPrice());
+        loHandlers.onMove(option, this.getPrice());
+      })
+      .onModify('modify', function () {
+        loHandlers.onEdit({ trade: option, market: option.market });
+      })
+      .onCancel('modify', function () {
+        loHandlers.onCancel(option);
+      })
+
+      .setPrice(optionPrice);
+  }
+
   const text =
     `${toFixed(divide(option.trade_size?.toString(), decimals)!, 2)} ${
       option.token
@@ -225,34 +267,20 @@ function drawPosition(
     option.expiration_time
   )}`;
 
-  /*
-    const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
-    setCancellable(!isDisabled)
-
-
-
-    tooltip cancellable ? close the order 
-
-
-  */
-
-  return (
-    chart
-      ?.createOrderLine()
-      .setText(text)
-      .setTooltip(tooltip)
-      .setBodyBackgroundColor(defaults.BG)
-      .setQuantityBackgroundColor(color)
-      .setBodyBorderColor(defaults.BG)
-      .setBodyFont('normal 17pt Relative Pro')
-      .setQuantityFont('bold 17pt Relative Pro')
-      .setLineColor(color)
-      .setBodyTextColor('rgb(255,255,255)')
-      .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
-      .setCancelTooltip('Early Close at market price')
-      // .setCancelButtonBackgroundColor(defaults.red)
-      .setPrice(optionPrice)
-  );
+  return chart
+    ?.createOrderLine()
+    .setText(text)
+    .setTooltip(tooltip)
+    .setBodyBackgroundColor(defaults.BG)
+    .setQuantityBackgroundColor(color)
+    .setBodyBorderColor(defaults.BG)
+    .setBodyFont('normal 17pt Relative Pro')
+    .setQuantityFont('bold 17pt Relative Pro')
+    .setLineColor(color)
+    .setBodyTextColor('rgb(255,255,255)')
+    .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
+    .setCancelTooltip('Early Close at market price')
+    .setPrice(optionPrice);
 
   // return chart
   //   ?.createPositionLine()
@@ -301,7 +329,7 @@ export const MultiResolutionChart = ({
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
   let trade2visualisation = useRef<
     Partial<{
-      [key: number]: {
+      [key: string]: {
         option: TradeType;
         visited: boolean;
         lineRef: IOrderLineAdapter;
@@ -315,6 +343,7 @@ export const MultiResolutionChart = ({
   const [drawing, setDrawing] = useAtom(drawingAtom);
   const chartType = useAtomValue(ChartTypePersistedAtom);
   const setChartType = useSetAtom(ChartTypePersistedAtom);
+  const setSelectedTradeToEdit = useSetAtom(selectedOrderToEditAtom);
 
   async function getAllSymbols() {
     let allSymbols: any[] = [];
@@ -345,6 +374,8 @@ export const MultiResolutionChart = ({
     return allSymbols;
   }
   const price = useAtomValue(priceAtom);
+  const { cancelHandler } = useCancelTradeFunction();
+
   // console.log(price);
 
   const datafeed: IBasicDataFeed = useMemo(() => {
@@ -626,13 +657,36 @@ export const MultiResolutionChart = ({
       }
     }
   };
-
+  const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
+  const rerenderPostion = useAtomValue(rerenderPositionAtom);
+  const { changeStrike } = useLimitOrderHandlers();
+  const changeStrikeSafe = (trade: TradeType, strike: string) => {
+    if (settings.loDragging) {
+      changeStrike(trade, strike);
+    } else {
+      setSelectedTrade({
+        trade,
+        market: trade.market,
+        default: { strike: round(multiply(strike, 8), 0)! },
+      });
+    }
+  };
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
   }, [(price as any)?.[market]]);
-
+  const getTradeToDrawingId = (trade: TradeType) =>
+    trade.queue_id + ':' + trade.strike;
   // draw positions.
+  useEffect(() => {
+    // trade2visualisation.current = {};
+    for (const trade in trade2visualisation.current) {
+      // mark all them
+      trade2visualisation.current[trade]!.lineRef.remove();
+
+      delete trade2visualisation.current[trade];
+    }
+  }, [rerenderPostion]);
   useEffect(() => {
     // if()
     if (chartReady && activeTrades) {
@@ -641,20 +695,31 @@ export const MultiResolutionChart = ({
           if (pos.is_above === undefined) return;
           if (!pos?.queue_id) return;
           if (visualized.includes(pos.queue_id)) return;
-          if (trade2visualisation.current[+pos.queue_id]) {
-            trade2visualisation.current[+pos.queue_id]!.visited = true;
+          if (trade2visualisation.current[getTradeToDrawingId(pos)]) {
+            trade2visualisation.current[getTradeToDrawingId(pos)]!.visited =
+              true;
           } else {
-            if (pos.state === 'QUEUED' && !priceCache?.[pos.queue_id]) return;
+            if (
+              pos.state === 'QUEUED' &&
+              !pos.is_limit_order &&
+              !priceCache?.[pos.queue_id]
+            )
+              return;
             let updatedPos = pos;
-            if (pos.state === 'QUEUED') {
+            if (pos.state === 'QUEUED' && !pos.is_limit_order) {
               updatedPos.strike = priceCache[pos.queue_id];
               updatedPos.expiration_time = pos.open_timestamp + pos.period;
             }
-            trade2visualisation.current[+pos.queue_id] = {
+            console.log('drawing-deb', updatedPos);
+            trade2visualisation.current[getTradeToDrawingId(pos)] = {
               visited: true,
               lineRef: drawPosition(
                 updatedPos,
-                null,
+                {
+                  onEdit: setSelectedTradeToEdit,
+                  onCancel: cancelHandler,
+                  onMove: changeStrikeSafe,
+                },
                 widgetRef.current?.activeChart()!,
                 getPoolInfo(pos.pool.pool).decimals
               ),
@@ -666,20 +731,31 @@ export const MultiResolutionChart = ({
     }
     for (const trade in trade2visualisation.current) {
       // mark all them
-      if (!trade2visualisation.current[+trade]?.visited) {
-        trade2visualisation.current[+trade]!.lineRef.remove();
+      if (!trade2visualisation.current[trade]?.visited) {
+        trade2visualisation.current[trade]!.lineRef.remove();
 
-        delete trade2visualisation.current[+trade];
+        delete trade2visualisation.current[trade];
       }
     }
 
     return () => {
       // mark all them not visited.
       for (const trade in trade2visualisation.current) {
-        trade2visualisation.current[+trade]!.visited = false;
+        trade2visualisation.current[trade]!.visited = false;
       }
     };
-  }, [visualized, activeTrades, chartReady, priceCache]);
+  }, [
+    visualized,
+    activeTrades,
+    chartReady,
+    priceCache,
+    rerenderPostion,
+    settings.earlyCloseConfirmation,
+    settings.loDragging,
+  ]);
+  useEffect(() => {
+    console.log(`drawing-deb-changed${activeTrades}`);
+  }, [activeTrades]);
 
   useEffect(() => {
     if (!chartReady) return;
@@ -713,28 +789,32 @@ export const MultiResolutionChart = ({
       }
 
       for (const trade in trade2visualisation.current) {
-        if (trade2visualisation.current[+trade]?.visited) {
+        if (trade2visualisation.current[trade]?.visited) {
           const [isDisabled, disableTooltip] = getEarlyCloseStatus(
-            trade2visualisation.current[+trade]?.option
+            trade2visualisation.current[trade]?.option
           );
+          // skip limit orderes
+          if (trade2visualisation.current[trade]?.option.is_limit_order) return;
 
-          const inv = trade2visualisation.current[+trade]?.lineRef
+          const inv = trade2visualisation.current[trade]?.lineRef
             ?.getText()
             ?.split('|')[0];
           const text =
             inv +
             '| ' +
-            getText((trade2visualisation.current as any)[+trade]?.option);
+            getText((trade2visualisation.current as any)[trade]?.option);
 
-          trade2visualisation.current[+trade]?.lineRef.setText(text);
+          trade2visualisation.current[trade]?.lineRef.setText(text);
           if (!isDisabled) {
-            trade2visualisation.current[+trade]?.lineRef.onCancel(
+            trade2visualisation.current[trade]?.lineRef.onCancel(
               'onCancel',
               () => {
-                const actualTrade = trade2visualisation.current[+trade]?.option;
-                const updatedTrade = activeTrades.find(
-                  (t) => t.queue_id == actualTrade?.queue_id
-                );
+                const actualTrade = trade2visualisation.current[trade]?.option;
+                const updatedTrade = activeTrades.find((trades) => {
+                  return trades.find(
+                    (t) => t.queue_id == actualTrade?.queue_id
+                  );
+                });
                 if (settings.earlyCloseConfirmation) {
                   earlyCloseHandler(updatedTrade, updatedTrade.market);
                 } else {

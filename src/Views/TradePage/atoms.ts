@@ -82,6 +82,9 @@ export const isTableShownAtom = atom<boolean>(false);
 export const selectedOrderToEditAtom = atom<null | {
   trade: TradeType;
   market: marketType;
+  default?: {
+    strike: string;
+  };
 }>(null);
 
 export const visualizeddAtom = atom<number[]>([]);
@@ -123,3 +126,4 @@ export const platformHistoryTableActivePage = atom<number>(1);
 export const tradeInspectMobileAtom = atom<{ trade?: TradeType }>({});
 
 export const closeConfirmationModalAtom = atom<TradeType | false>(false);
+export const rerenderPositionAtom = atom<number>(0);
