@@ -147,7 +147,12 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
               <CloseTag />
               {isForex && (
                 <ShowTimingModalButton
-                  onClick={() => setForexTimingsModal(true)}
+                  onClick={() =>
+                    setForexTimingsModal({
+                      isOpen: true,
+                      marketType: currentAsset.category,
+                    })
+                  }
                 >
                   Schedule
                 </ShowTimingModalButton>
