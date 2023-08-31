@@ -308,9 +308,11 @@ function drawPosition(
 export const MultiResolutionChart = ({
   market: marke,
   index,
+  isMobile,
 }: {
   market: Markets;
   index: number;
+  isMobile?: boolean;
 }) => {
   const { earlyCloseHandler } = useCancelTradeFunction();
 
@@ -796,11 +798,22 @@ export const MultiResolutionChart = ({
 
       for (const trade in trade2visualisation.current) {
         if (trade2visualisation.current[trade]?.visited) {
+          console.log(`[ec-deb]t: `, trade);
           const [isDisabled, disableTooltip] = getEarlyCloseStatus(
             trade2visualisation.current[trade]?.option
           );
+          const actualTrade = trade2visualisation.current[trade]?.option;
+          let updatedTrade = actualTrade;
+          activeTrades.forEach((catagory) => {
+            catagory.forEach((t) => {
+              if (t.queue_id == actualTrade?.queue_id) {
+                updatedTrade = t;
+              }
+            });
+          });
+
           // skip limit orderes
-          if (trade2visualisation.current[trade]?.option.is_limit_order) return;
+          if (updatedTrade?.state == 'QUEUED') return;
 
           const inv = trade2visualisation.current[trade]?.lineRef
             ?.getText()
@@ -815,12 +828,8 @@ export const MultiResolutionChart = ({
             trade2visualisation.current[trade]?.lineRef.onCancel(
               'onCancel',
               () => {
-                const actualTrade = trade2visualisation.current[trade]?.option;
-                const updatedTrade = activeTrades.find((trades) => {
-                  return trades.find(
-                    (t) => t.queue_id == actualTrade?.queue_id
-                  );
-                });
+                console.log(`[ec-deb]k: `, updatedTrade);
+
                 if (settings.earlyCloseConfirmation) {
                   earlyCloseHandler(updatedTrade, updatedTrade.market);
                 } else {
