@@ -22,7 +22,7 @@ export function BuyUSDCLink({ token }: { token: 'USDC' | 'BFR' | 'ARB' }) {
   return (
     <div
       className="text-f10 mb-[1.5px] text-3 underline underline-offset-1 font-bold cursor-pointer"
-      onClick={() => setSwapAtom('USDC')}
+      onClick={() => setSwapAtom(token)}
     >
       {/* <EnterIcon /> */}
       Buy {token}
