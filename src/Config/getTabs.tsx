@@ -331,7 +331,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
-
+      {
+        to: `https://testnet.buffer.finance/`,
+        name: 'Practice Trading',
+        subTabs: [],
+        isExternalLink: true,
+      },
       {
         to: `/dashboard`,
         name: 'Dashboard',
