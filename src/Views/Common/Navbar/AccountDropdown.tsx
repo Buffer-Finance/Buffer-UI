@@ -6,9 +6,9 @@ import { BlueBtn } from '../V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { SVGProps } from 'react';
 import { MenuItem, Skeleton } from '@mui/material';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
-import { useBalance, useDisconnect, usePublicClient } from 'wagmi';
+import { useAccount, useBalance, useDisconnect, usePublicClient } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import {
   uesOneCtActiveChain,
@@ -18,11 +18,12 @@ import { Display } from '../Tooltips/Display';
 import ETHImage from '../../../../public/tokens/ETH.png';
 import DDArrow from '@SVG/Elements/Arrow';
 import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
-import NFTtier from '../NFTtier';
 import WalletIcon from '@SVG/Elements/WalletIcon';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import copyToClipboard from '@Utils/copyToClipboard';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { getAddress } from 'viem';
 const token2image = {
   ETH: ETHImage,
 };
@@ -38,11 +39,6 @@ const chainImageMappipng = {
 
 export const AccountDropdown: React.FC = () => {
   const { address } = useUserAccount();
-  const { data, isError, isLoading, error } = useBalance({
-    address,
-    token: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
-  });
-  console.log(`AccountDropdown-data: `, data, error);
   const setSnack = useSetAtom(snackAtom);
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
   const { activeChain } = uesOneCtActiveChain();
@@ -191,15 +187,9 @@ export const AccountDropdown: React.FC = () => {
                       className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-[6px] bg-[#191B20] hover:brightness-125 `}
                     >
                       <WalletIcon className="mr-2 ml-1 text-blue" />
-                      <div className="flex items-center">
-                        <Display data={data?.formatted} className="text-f14" />
-                        <img
-                          src={
-                            'https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/usdc.png'
-                          }
-                          className="w-[16px] h-[16px] ml-2"
-                        />
-                      </div>
+
+                      <TokenAccountBalance />
+
                       <div
                         className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1"
                         test-id="account-holder-div"
@@ -427,3 +417,27 @@ export const PowerIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
+const TokenAccountBalance = () => {
+  const { activePool } = useAtomValue(activePoolObjAtom);
+  const pools = usePoolByAsset();
+  const activePoolDetails = pools[activePool];
+  const { address } = useAccount();
+  const { data, isError, isLoading, error } = useBalance({
+    address,
+    token: getAddress(activePoolDetails.tokenAddress),
+    watch: true,
+  });
+  console.log('data', data);
+
+  return (
+    <div className="flex items-center">
+      {' '}
+      <Display data={data?.formatted} className="text-f14" />{' '}
+      <img
+        src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePool.toLowerCase()}.png`}
+        className="w-[16px] h-[16px] ml-2"
+      />
+    </div>
+  );
+};
