@@ -33,7 +33,7 @@ export type marketType = {
 
 export interface TradeType {
   id: number;
-  canellation_reason: string | null;
+  cancellation_reason: string | null;
   cancellation_timestamp: number | null;
   signature_timestamp: number;
   queued_timestamp: number;

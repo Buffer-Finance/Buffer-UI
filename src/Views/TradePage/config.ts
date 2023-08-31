@@ -6,19 +6,17 @@ export const appConfig = {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/version/v2.5.3-update-contracts-2/api',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
-    referral_storage: '0x38653C1d41b8aC02b2Ca2753452E1ad90E12A270',
-    router: '0xeacA681888D0BDA1D055785596e00FDD2d7e0F4F',
-    signer_manager: '0x03eA2B7eb5147981Ea12d8101A3fDd59fc02262F',
-    pooloi: '0xE9746eB05Df20cDFc231b0eAde1BDD41b25EcC1B',
-    marketoi: '0xAA7A4E91D4345bC58423A04C9e87514205B7EdD4',
-    booster: '0x5F26ABFC8049728A95eDCA2e29Af62385166Cf56',
+    referral_storage: '0xff37eCD6cD32ce9caC75D3EFb434CAc6d63300B1',
+    router: '0xffA2ad9fDaCECC15BE8C41009f61F7760a299092',
+    signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
+    booster: '0x59a73017E755c13037914a4D95Ec5E7b09879631',
     poolsInfo: {
-      '0x3279bD67722D95f977f25b4061CfB1cb0bc55175': {
-        tokenAddress: '0xd094794d3f73C5B6fCF4245513297ce1304C3b39',
-        faucet: '0x01eDE83Dbb03268D643313863255306d3e5B52D2',
+      '0x6F9929BF96cfeFe2a4E1e05bB2CBD918678aEC5F': {
+        tokenAddress: '0xda11D2c3b026561cCE889Ff5A020Eae21308058C',
+        faucet: '0x6442f44b940aAD814A8e75C915f8997e94F191aE',
         decimals: 6,
         token: 'USDC',
-        permitName: 'Token',
+        permitName: 'USDC',
         is_pol: false,
       },
       '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
@@ -27,16 +25,14 @@ export const appConfig = {
         decimals: 18,
         token: 'BFR',
         permitName: 'Token',
-
         is_pol: false,
       },
-      '0x776a60A72B10b83F11d1a66ac02c554613f8A151': {
-        tokenAddress: '0x34ceA3599c4F96A1d27759fb96b656EaC129F31D',
-        faucet: '0xb2C360aa9387c4f295e8066bc18dEAfFb72Ea14F',
+      '0x7fad31E46fcD1B121664EC4ade3Be36cEEDE7164': {
+        tokenAddress: '0x653F5CbAfd87EE9055e4d99d6159dBa20510FcBB',
+        faucet: '0x3Fa55Ff25950e7e52A7A445e251459b033950301',
         decimals: 18,
         token: 'ARB',
-        permitName: 'Token',
-
+        permitName: 'ARB',
         is_pol: false,
       },
     },
@@ -229,7 +225,7 @@ export const defaultSettings = {
     showFavoriteAsset: true,
   },
   tradePanelPosition: tradePanelPosition.Right,
-  notificationPosition: notificationPosition.TopLeft,
+  notificationPosition: notificationPosition.BottomLeft,
 };
 
 export const defaultSelectedTime = '00:15';

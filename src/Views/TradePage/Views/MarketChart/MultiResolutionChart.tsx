@@ -19,6 +19,7 @@ import {
   IPositionLineAdapter,
   SeriesFormat,
 } from '../../../../../public/static/charting_library';
+import axiosRetry from 'axios-retry';
 
 import {
   getDisplayDate,
@@ -63,6 +64,8 @@ export let supported_resolutions = [
   '4H' as ResolutionString,
   // "1D",
 ];
+const pythClient = axios.create({ baseURL: 'https://benchmarks.pyth.network' });
+axiosRetry(pythClient, { retries: 3 });
 
 const isntAvailable = (s: string | null) => {
   return (
@@ -395,13 +398,15 @@ export const MultiResolutionChart = ({
             symbol: getBarsFnActiveAsset,
             resolution,
           };
-
-          const pythOHLC = await axios.get(
-            `https://benchmarks.pyth.network/v1/shims/tradingview/history`,
+          console.log('pyth-deb', req);
+          console.time('pyth-deb');
+          const pythOHLC = await pythClient.get(
+            `v1/shims/tradingview/history`,
             {
               params: req,
             }
           );
+          console.timeEnd('pyth-deb');
           const ohlc = pythOHLC2rawOHLC(pythOHLC.data);
 
           // console.log(`ohlc: `, ohlc);
@@ -424,6 +429,7 @@ export const MultiResolutionChart = ({
             noData: false,
           });
         } catch (error) {
+          console.log('pyth-deb:error-thrown', error);
           onErrorCallback(error as string);
         }
       },
@@ -744,3 +750,26 @@ export const MultiResolutionChart = ({
     </div>
   );
 };
+
+// async function callApi(req) {
+//   let retry = 1;
+//   const getRes = async () => {
+//     try {
+//       const res = await axios.get(
+//         `https://benchmarks.pyth.network/v1/shims/tradingview/history`,
+//         {
+//           params: req,
+//         }
+//       );
+//     } catch (err) {
+//       if (retry < 5) {
+//         await sleep(22);
+//         retry++;
+//         getRes();
+//       } else {
+//         return null;
+//       }
+//     }
+//   };
+//   return getRes;
+// }

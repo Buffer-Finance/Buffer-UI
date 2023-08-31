@@ -63,7 +63,7 @@ export const HistoryTables = () => {
               ? 'testnet-buffer-finance.vercel.app'
               : 'app.buffer.finance';
             window.open(
-              `https://${domain}/#/profile?user_address=${address}`,
+              `https://classic.app.buffer.finance/#/profile?user_address=${address}`,
               '_blank'
             );
           }}
