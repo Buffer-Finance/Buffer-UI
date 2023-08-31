@@ -1,4 +1,3 @@
-import { useToast } from '@Contexts/Toast';
 import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
 import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
@@ -6,14 +5,9 @@ import { marketsForChart } from '../config';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { getAddress } from 'viem';
 import { useMemo } from 'react';
-import { getConfig } from '../utils/getConfig';
-import { useActiveChain } from '@Hooks/useActiveChain';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
-  const toastify = useToast();
-  const { activeChain } = useActiveChain();
-  const config = getConfig(activeChain.id);
 
   const res = useMemo(() => {
     if (!data?.optionContracts) {
@@ -35,7 +29,7 @@ export const useMarketsConfig = () => {
         response.push({
           ...marketInfo,
           category: AssetCategory[item.category],
-          creation_window_contract: config.creation_window[item.category as 0],
+          creation_window_contract: item.configContract.creationWindowAddress,
           pools: [createPoolObject(item)],
         });
       }
