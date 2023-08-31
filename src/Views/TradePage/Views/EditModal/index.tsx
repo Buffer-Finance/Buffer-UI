@@ -28,12 +28,15 @@ import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { miscsSettingsAtom } from '@Views/TradePage/atoms';
+import {
+  miscsSettingsAtom,
+  rerenderPositionAtom,
+} from '@Views/TradePage/atoms';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
 export const EditModal: React.FC<{
   trade: TradeType;
-  onSave: () => void;
+  onSave: (a: boolean) => void;
   defaults: Partial<{ strike: string }>;
 }> = ({ trade, onSave, defaults }) => {
   const [_, limitOrders] = useOngoingTrades();
@@ -136,9 +139,8 @@ export const EditModal: React.FC<{
   function onTimeChange(value: number) {
     setMinutes(value);
   }
-  const [val, setVal] = useState(false);
-  const setSettings = useSetAtom(miscsSettingsAtom);
   const settings = useAtomValue(miscsSettingsAtom);
+  const [val, setVal] = useState(settings.loDragging);
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const toastify = useToast();
   const editHandler = async () => {
@@ -189,7 +191,10 @@ export const EditModal: React.FC<{
       activeChain.id
     );
     if (res) {
-      onSave();
+      onSave(val);
+      if (val) {
+        setTimeout(() => rerenderPositionAtom);
+      }
       return toastify({
         msg: 'Limit order updated successfully',
         type: 'success',
@@ -252,11 +257,9 @@ export const EditModal: React.FC<{
               }}
             >
               <BufferCheckbox
-                checked={settings.loDragging}
+                checked={val}
                 onCheckChange={() => {
-                  setSettings((s) => {
-                    return { ...s, loDragging: !s.loDragging };
-                  });
+                  setVal(!val);
                 }}
                 className="scale-75"
               />{' '}

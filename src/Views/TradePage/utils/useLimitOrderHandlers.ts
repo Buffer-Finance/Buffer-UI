@@ -19,6 +19,7 @@ const useLimitOrderHandlers = () => {
   const toastify = useToast();
   const setPositionRerender = useSetAtom(rerenderPositionAtom);
   const revokeGraphChange = () => {
+    // if api fails
     setPositionRerender((p) => p + 1);
   };
   const changeStrike = async (trade: TradeType, strike: string) => {

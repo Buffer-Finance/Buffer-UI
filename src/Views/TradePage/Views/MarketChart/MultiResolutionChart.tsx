@@ -694,7 +694,7 @@ export const MultiResolutionChart = ({
 
       delete trade2visualisation.current[trade];
     }
-  }, [rerenderPostion]);
+  }, [rerenderPostion, settings.loDragging]);
   useEffect(() => {
     // if()
     if (chartReady && activeTrades) {

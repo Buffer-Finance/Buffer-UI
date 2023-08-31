@@ -183,9 +183,11 @@ const MobileWarning = () => {
 
 export const EssentialModals = () => {
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
+  const setSettings = useSetAtom(miscsSettingsAtom);
   const selectedTrade = useAtomValue(selectedOrderToEditAtom);
   const setPositionRerender = useSetAtom(rerenderPositionAtom);
   const closeEditModal = () => {
+    // on leaving edit modal
     if (selectedTrade?.default) {
       setPositionRerender((d) => d + 1);
     }
@@ -207,8 +209,15 @@ export const EssentialModals = () => {
         <EditModal
           defaults={selectedTrade?.default}
           trade={selectedTrade?.trade!}
-          onSave={() => {
-            console.log(`index-setSelectedTrade: `, setSelectedTrade);
+          onSave={(val: boolean) => {
+            setTimeout(() => {
+              setSettings((s) => {
+                return {
+                  ...s,
+                  loDragging: val,
+                };
+              });
+            }, 3000);
             setSelectedTrade(null);
           }}
           market={selectedTrade?.market!}
