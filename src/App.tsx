@@ -220,24 +220,24 @@ function App() {
         {!urlSettings?.hide && (
           <Warning
             body={
-              <>
-                $BFR token{' '}
-                {/* <a
-                  className=" cursor-pointer"
-                  href="https://app.uniswap.org/#/tokens/arbitrum/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d"
-                  target="_blank"
-                >
-                  &nbsp; */}
-                0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D &nbsp;
-                {/* </a>{' '} */}
-                has been listed on Uniswap V3 Arbitrum. Don't trade $iBFR token
-                on PancakeSwap or Apeswap on BNB chain.
-              </>
+              <div>
+                You are on V2. Buffer{' '}
+                <a href="https://app.buffer.finance/" target="_blank">
+                  <span className="underline underline-offset-2">V2.5</span>
+                </a>
+                &nbsp; is live on Mainnet.
+                {/* <a href="https://app.buffer.finance/" target="_blank">
+            <span className="underline underline-offset-2">
+              Learn More
+            </span>{' '}
+            <ShareIcon className=" scale-[0.65] w-fit inline" />
+          </a> */}
+              </div>
             }
             closeWarning={() => {}}
             shouldAllowClose={false}
             state={true}
-            className="disclaimer sm:hidden"
+            className="disclaimer !text-f16 !p-2 !text-semibold hover:!brightness-100 bg-[#f3cf34] !text-[black]"
           />
         )}
         <ConnectionDrawer className="open" />
