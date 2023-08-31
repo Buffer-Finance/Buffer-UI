@@ -84,7 +84,7 @@ export const CancelledTable: React.FC<{
         );
       case TableColumn.Reason:
         return (
-          <div>{trade.canellation_reason || '-'}</div>
+          <div>{trade.cancellation_reason || '-'}</div>
           // queuedTradeFallBack(trade) || (
           // )
         );
