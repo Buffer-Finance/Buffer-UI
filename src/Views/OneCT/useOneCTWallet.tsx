@@ -159,6 +159,7 @@ const useOneCTWallet = () => {
       }
     } catch (e) {
       console.log(e, 'error generating signature');
+      toastify({ msg: JSON.stringify(e), type: 'error', id: '321321' });
       setCreateLoading(false);
       return '';
     }
