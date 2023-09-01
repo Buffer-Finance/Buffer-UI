@@ -29,7 +29,11 @@ const options = {
     axios.get('https://api-v2.buffer.finance/' + url).then((res) => res.data),
   refreshInterval: 1000,
 };
-
+console.log(
+  import.meta.env.VITE_SENTRY_DSN,
+  import.meta.env.VITE_MODE,
+  'sentry'
+);
 if (import.meta.env.VITE_MODE === 'production') {
   console.log(
     'sentry works',
