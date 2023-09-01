@@ -150,7 +150,7 @@ const HistoryTable: React.FC<{
       case TableColumn.TimeLeft:
         return (
           queuedTradeFallBack(trade, true) || (
-            <div className={trade.state == 'OPENED' ? 'text-red' : ''}>
+            <div>
               {formatDistance(Variables(minClosingTime - trade.open_timestamp))}
             </div>
           )
