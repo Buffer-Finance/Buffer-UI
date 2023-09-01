@@ -18,7 +18,7 @@ const { chains, publicClient } = configureChains(getAllChains(), [
 
 const connectors = isTestEnv
   ? mockConnector
-  : connectorsForWallets(getWallets(getSupportedChains()));
+  : connectorsForWallets(getWallets(getAllChains()));
 
 const wagmiClient = createConfig({
   autoConnect: inIframe() ? false : true,
