@@ -97,13 +97,13 @@ const useOneCTWallet = () => {
 
   const { data: signer } = useWalletClient({ chainId: activeChain.id });
 
-  const oneCTWallet = () => {
+  const oneCTWallet = useMemo(() => {
     if (!oneCtPk) return null;
     // console.log(`useOneCTWallet-oneCtPk: `, oneCtPk);
     return privateKeyToAccount(('0x' + oneCtPk) as any);
   }, [oneCtPk, provider, registeredOneCT]);
 
-  const generatePk = useCallback(async () => {
+  const generatePk = async () => {
     if (!res)
       return toastify({
         msg: 'Unable to fetch data. Please try again later',
