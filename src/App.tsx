@@ -201,23 +201,31 @@ function App() {
             <Warning
               body={
                 <div>
-                  Buffer{' '}
+                  🚀 Buffer v2.5 is live on&nbsp;
                   <a href="https://app.buffer.finance/" target="_blank">
-                    <span className="underline underline-offset-2">V2.5 </span>
-                  </a>
-                  is live on Mainnet.{' '}
-                  {/* <a href="https://app.buffer.finance/" target="_blank">
                     <span className="underline underline-offset-2">
-                      Learn More
-                    </span>{' '}
-                    <ShareIcon className=" scale-[0.65] w-fit inline" />
-                  </a> */}
+                      Mainnet
+                    </span>
+                  </a>
+                  &nbsp; | 📜 Learn more about v2.5&nbsp;
+                  <a
+                    href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
+                    target="_blank"
+                  >
+                    <span className="underline underline-offset-2">here</span>
+                  </a>
+                  &nbsp; | ✨ To trade with $BFR as collateral visit the&nbsp;
+                  <a href="https://classic.app.buffer.finance/" target="_blank">
+                    <span className="underline underline-offset-2">
+                      classic version
+                    </span>
+                  </a>
                 </div>
               }
               closeWarning={() => {}}
               shouldAllowClose={false}
               state={true}
-              className="disclaimer sm:hidden"
+              className="disclaimer"
             />
           )}
           <TnCModal />

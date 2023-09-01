@@ -12,6 +12,7 @@ import { useMarketsConfig } from './useMarketsConfig';
 import { historyTableActivePage } from '../atoms';
 import { useAtomValue } from 'jotai';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { getAddress } from 'viem';
 
 const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
@@ -30,7 +31,7 @@ const useHistoryTrades = () => {
         // setIsLoading(true);
         const res = await axios.get(`${baseUrl}trades/user/history/`, {
           params: {
-            user_address: address,
+            user_address: getAddress(address),
             environment: activeChain.id,
             limit: TRADE_IN_A_PAGE_TRADES_TABLES,
             page: activePage - 1,
