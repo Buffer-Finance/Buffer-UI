@@ -103,7 +103,7 @@ const useOneCTWallet = () => {
     return privateKeyToAccount(('0x' + oneCtPk) as any);
   }, [oneCtPk, provider, registeredOneCT]);
 
-  const generatePk = async () => {
+  const generatePk = useCallback(async () => {
     if (!res)
       return toastify({
         msg: 'Unable to fetch data. Please try again later',
@@ -159,11 +159,11 @@ const useOneCTWallet = () => {
       }
     } catch (e) {
       console.log(e, 'error generating signature');
-      alert('error');
+      toastify({ msg: JSON.stringify(e), type: 'error', id: '321321' });
       setCreateLoading(false);
       return '';
     }
-  };
+  }, [signer, res?.one_ct, provider]);
 
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
