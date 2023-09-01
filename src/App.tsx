@@ -47,6 +47,7 @@ import ShutterProvider, {
   TradesShutter,
 } from '@Views/Common/MobileShutter/MobileShutter';
 import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
+import { isTestnet } from 'config';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -57,12 +58,24 @@ import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
   }
 })();
 
+const Redirect = ({ url }: { url: string }) => {
+  useEffect(() => {
+    window.location.href = url;
+  }, [url]);
+
+  return <h5 className="p-4 m-auto text-f20">Redirecting...</h5>;
+};
+
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   const [searchParam] = useSearchParams();
   const [ref, setRef] = useAtom(referralCodeAtom);
   const toastify = useToast();
   const navigate = useNavigate();
+  const earnUrl = isTestnet
+    ? 'https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/'
+    : 'https://earn.buffer.finance/';
+
   useEffect(() => {
     let referralCode = searchParam.get('ref');
 
@@ -105,7 +118,8 @@ const AppRoutes = () => {
           element={<div>Processing your referral request...</div>}
         ></Route>
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
-        <Route path="/earn" element={<Earn />} />
+        <Route path="/earn" element={<Redirect url={earnUrl} />} />
+
         <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
         </Route>
