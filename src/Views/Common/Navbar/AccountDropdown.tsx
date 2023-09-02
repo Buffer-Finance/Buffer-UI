@@ -428,7 +428,6 @@ const TokenAccountBalance = () => {
     token: getAddress(activePoolDetails.tokenAddress),
     watch: true,
   });
-  console.log('data', data);
 
   return (
     <div className="flex items-center">
