@@ -54,7 +54,14 @@ export const TradeSizeInput: React.FC<{
           type="number"
           className={`relative h-[40px] bg-[#282b39] px-5 py-3 rounded-l-[5px] outline-none w-full text-f16 text-1 sm:h-[35px]`}
           onChange={(e) => {
-            setTradeSize(e.target.value);
+            let newValue = e.target.value;
+            // Check if newValue has more than 3 decimal places
+            const decimalPart = newValue.split('.')[1];
+            if (decimalPart && decimalPart.length > 3) {
+              // If yes, limit it to 3 decimal places
+              newValue = parseFloat(newValue).toFixed(3);
+            }
+            setTradeSize(newValue);
           }}
           onKeyDown={(e) => e.key == 'Enter' && onSubmit?.()}
           placeholder="Enter value"
