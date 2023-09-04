@@ -126,7 +126,7 @@ export const raw2adminConfig = (
               group,
               getter,
               setter,
-              pool,
+              pool: appDefaults.poolsInfo[pool.pool],
 
               market,
             };
