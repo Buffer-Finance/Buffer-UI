@@ -242,7 +242,7 @@ function drawPosition(
       .setBodyFont('normal 17pt Relative Pro')
       .setQuantityFont('bold 27pt Relative Pro')
       .setBodyTextColor('rgb(255,255,255)')
-      .setCancelTooltip('Cancel Limit Order')
+      .setCancelTooltip('Click to cancel this Limit Order')
       .setQuantity('↕')
       .setBodyBorderColor(defaults.BG)
       .setLineColor(color)
@@ -250,6 +250,7 @@ function drawPosition(
         console.log(this.getPrice());
         loHandlers.onMove(option, this.getPrice());
       })
+      .setModifyTooltip('Click to Edit Order')
       .onModify('modify', function () {
         loHandlers.onEdit({ trade: option, market: option.market });
       })
@@ -282,7 +283,7 @@ function drawPosition(
     .setLineColor(color)
     .setBodyTextColor('rgb(255,255,255)')
     .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
-    .setCancelTooltip('Early Close at market price')
+    .setCancelTooltip('Click to Early Close at Market Price')
     .setPrice(optionPrice);
 
   // return chart
