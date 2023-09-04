@@ -1,12 +1,12 @@
+import { toFixed } from '@Utils/NumString';
 import { add, gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { tradeSettingsAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
-import { getMinimumValue } from '@Views/TradePage/utils';
+import { getMaximumValue, getMinimumValue } from '@Views/TradePage/utils';
 import { Trans } from '@lingui/macro';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { BuyUSDCLink } from '../BuyUsdcLink';
-import { toFixed } from '@Utils/NumString';
 
 const className = 'text-[#FFE200]';
 export const TradeSizeInput: React.FC<{
@@ -63,11 +63,11 @@ export const TradeSizeInput: React.FC<{
           className="absolute right-3 bg-[#141823] rounded-[6px] py-2 px-[6px] text-f12"
           onClick={() => {
             setTradeSize(
-              toFixed(
-                subtract(getMinimumValue(maxTradeSize, balance), platformFee),
-                2
-              )
-            );
+            getMaximumValue(  toFixed(
+              subtract(getMinimumValue(maxTradeSize, balance), platformFee),
+              2
+            ),'0'
+          ))
             // setmaxErr(false);
             // setminErr(false);
           }}
