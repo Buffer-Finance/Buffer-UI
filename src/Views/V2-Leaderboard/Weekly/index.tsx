@@ -235,9 +235,11 @@ export const Weekly = () => {
           <Col
             head={'Trades'}
             desc={
-              totalTournamentData!==null&& totalTournamentData.allTradesCount!==null&& totalTournamentData.allTradesCount!==undefined
-                ? totalTournamentData.allTradesCount
-                : 'Counting...'
+              totalTournamentData !== null &&
+              totalTournamentData.allTradesCount !== null &&
+              totalTournamentData.allTradesCount !== undefined
+                ? totalTournamentData.allTradesCount || 0
+                : 0
             }
             descClass={descClass}
             headClass={headClass}
@@ -246,14 +248,20 @@ export const Weekly = () => {
           <Col
             head={'Volume'}
             desc={
-              data !==null&& data!==undefined&&data.reward!==null&& data.reward[0]!==null&& data.reward[0].totalFee!==null&& data.reward[0].totalFee!==undefined
+              data !== null &&
+              data !== undefined &&
+              data.reward !== null &&
+              data.reward[0] !== null &&
+              data.reward[0] !== undefined &&
+              data.reward[0].totalFee !== null &&
+              data.reward[0].totalFee !== undefined
                 ? numberWithCommas(
                     toFixed(
                       divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
                       0
                     )
                   ) + ' USDC'
-                : 'Counting...'
+                : 0
             }
             descClass={descClass}
             headClass={headClass}
@@ -262,14 +270,17 @@ export const Weekly = () => {
           <Col
             head={'Participants'}
             desc={
-              totalTournamentData!==null&& totalTournamentData!==undefined &&totalTournamentData.totalUsers!==null&& totalTournamentData.totalUsers!==undefined
+              totalTournamentData !== null &&
+              totalTournamentData !== undefined &&
+              totalTournamentData.totalUsers !== null &&
+              totalTournamentData.totalUsers !== undefined
                 ? totalTournamentData.totalUsers
-                : 'Counting...'
+                : 0
             }
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
-          />
+          />{' '}
           <Col
             head={'Week'}
             desc={
