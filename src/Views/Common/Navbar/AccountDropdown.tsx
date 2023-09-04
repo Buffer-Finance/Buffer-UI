@@ -24,6 +24,11 @@ import copyToClipboard from '@Utils/copyToClipboard';
 import { activePoolObjAtom } from '@Views/TradePage/atoms';
 import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 import { getAddress } from 'viem';
+import {
+  ChainSwitchingModal,
+  useChainTutorial,
+} from '@Views/TradePage/Views/ChainSwitchingModal';
+import { useMedia } from 'react-use';
 const token2image = {
   ETH: ETHImage,
 };
@@ -54,7 +59,8 @@ export const AccountDropdown: React.FC = () => {
 
   const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
     useOneCTWallet();
-
+  const isMobile = useMedia('(max-width:1200px)');
+  const { isUserEducated, openTutorial } = useChainTutorial();
   const provider = usePublicClient({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   useEffect(() => {
@@ -122,13 +128,19 @@ export const AccountDropdown: React.FC = () => {
               },
             })}
           >
+            <ChainSwitchingModal openConnectModal={openConnectModal} />
+
             {(() => {
               if (!connected) {
                 return (
                   <div
                     role="button"
                     className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] pl-3 pr-1 bg-[#191b20] hover:brightness-125 `}
-                    onClick={openConnectModal}
+                    onClick={
+                      isMobile && !isUserEducated.mobileChainSwitchingIssue
+                        ? openTutorial
+                        : openConnectModal
+                    }
                   >
                     <WalletIcon className="mr-[6px] ml-1 text-blue" />
 
@@ -145,7 +157,11 @@ export const AccountDropdown: React.FC = () => {
                   <div
                     role="button"
                     className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-3 bg-[#191b20] hover:brightness-125 `}
-                    onClick={openChainModal}
+                    onClick={
+                      isMobile && !isUserEducated.mobileChainSwitchingIssue
+                        ? openTutorial
+                        : openChainModal
+                    }
                   >
                     <WalletIcon className="mr-[6px] ml-1" />
 
@@ -170,7 +186,7 @@ export const AccountDropdown: React.FC = () => {
                       {chain && chain.name && (
                         <img
                           className="h-[18px] w-[18px] mr-[6px] sm:mr-[0px] rounded-full"
-                          src={chain.iconUrl ?? chainImageMappipng[chain.name]}
+                          src={chain.iconUrl}
                           alt={chain.name ?? 'Chain icon'}
                         />
                       )}
@@ -292,11 +308,15 @@ export const AccountDropdown: React.FC = () => {
 
 export const ConnectionRequired = ({
   children,
+  mobileTutorial,
   className = '',
 }: {
   children: ReactNode;
   className?: string;
+  mobileTutorial?: boolean;
 }) => {
+  const isMobile = useMedia('(max-width:1200px)');
+  const { isUserEducated, openTutorial } = useChainTutorial();
   return (
     <ConnectButton.Custom>
       {({
@@ -331,19 +351,29 @@ export const ConnectionRequired = ({
             {(() => {
               if (!connected) {
                 return (
-                  <BlueBtn
-                    onClick={openConnectModal}
-                    className={'px-5 py-[5px] !h-fit ' + className}
-                  >
-                    Connect Wallet
-                  </BlueBtn>
+                  <>
+                    <BlueBtn
+                      onClick={
+                        isMobile && !isUserEducated.mobileChainSwitchingIssue
+                          ? openTutorial
+                          : openConnectModal
+                      }
+                      className={'px-5 py-[5px] !h-fit ' + className}
+                    >
+                      Connect Wallet
+                    </BlueBtn>
+                  </>
                 );
               }
 
               if (chain.unsupported) {
                 return (
                   <BlueBtn
-                    onClick={openChainModal}
+                    onClick={
+                      isMobile && !isUserEducated.mobileChainSwitchingIssue
+                        ? openTutorial
+                        : openChainModal
+                    }
                     className={'px-5 py-[5px] !h-fit ' + className}
                   >
                     {/* <Wallet className="" /> */}

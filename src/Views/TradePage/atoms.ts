@@ -130,3 +130,4 @@ export const tradeInspectMobileAtom = atom<{ trade?: TradeType }>({});
 
 export const closeConfirmationModalAtom = atom<TradeType | false>(false);
 export const rerenderPositionAtom = atom<number>(0);
+export const isUserEducatedAtom = atom({ mobileChainSwitchingIssue: false });
