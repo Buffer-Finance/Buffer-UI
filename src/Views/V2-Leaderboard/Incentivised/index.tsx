@@ -1,36 +1,36 @@
 import useStopWatch, { useTimer } from '@Hooks/Utilities/useStopWatch';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import FrontArrow from '@SVG/frontArrow';
-import { getDisplayDateUTC } from '@Utils/Dates/displayDateTime';
-import { toFixed } from '@Utils/NumString';
-import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
-import { getDistance } from '@Utils/Staking/utils';
-import { numberWithCommas } from '@Utils/display';
-import { Col } from '@Views/Common/ConfirmationModal';
-import { Warning } from '@Views/Common/Notification/warning';
-import { social } from '@Views/Common/SocialMedia';
-import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
-import TabSwitch from '@Views/Common/TabSwitch';
-import NumberTooltip from '@Views/Common/Tooltips';
-import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { numberWithCommas } from '@Utils/display';
+import { toFixed } from '@Utils/NumString';
+import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import { Col } from '@Views/Common/ConfirmationModal';
+import { getDistance } from '@Utils/Staking/utils';
 import { LeaderBoard } from '..';
-import { ContestFilterDD } from '../Components/ContestFilterDD';
-import { TopData } from '../Components/TopData';
-import { DailyWebTable } from '../Daily/DailyWebTable';
-import { DailyStyles } from '../Daily/stlye';
-import { useDayOfTournament } from '../Hooks/useDayOfTournament';
-import { useDayOffset } from '../Hooks/useDayOffset';
-import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
-import { LeaderBoardTabs } from '../Weekly';
 import {
   readLeaderboardPageActivePageAtom,
   readLeaderboardPageTotalPageAtom,
   updateLeaderboardActivePageAtom,
 } from '../atom';
+import { ContestFilterDD } from '../Components/ContestFilterDD';
+import { TopData } from '../Components/TopData';
+import { DailyWebTable } from '../Daily/DailyWebTable';
+import { DailyStyles } from '../Daily/stlye';
+import { useDayOfTournament } from '../Hooks/useDayOfTournament';
+import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
+import { Warning } from '@Views/Common/Notification/warning';
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { DailyTournamentConfig } from './config';
+import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
+import { social } from '@Views/Common/SocialMedia';
+import TabSwitch from '@Views/Common/TabSwitch';
+import FrontArrow from '@SVG/frontArrow';
+import NumberTooltip from '@Views/Common/Tooltips';
+import { useDayOffset } from '../Hooks/useDayOffset';
+import { LeaderBoardTabs } from '../Weekly';
+import { getDisplayDateUTC } from '@Utils/Dates/displayDateTime';
+import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -195,7 +195,7 @@ export const Incentivised = () => {
           <Col
             head={'Trades'}
             desc={
-              totalTournamentData!==null&& totalTournamentData.allTradesCount!==null&& totalTournamentData.allTradesCount!==undefined
+              totalTournamentData?.allTradesCount
                 ? totalTournamentData.allTradesCount
                 : 'Counting...'
             }
@@ -206,7 +206,7 @@ export const Incentivised = () => {
           <Col
             head={'Volume'}
             desc={
-              data !==null&& data!==undefined&&data.reward!==null&& data.reward[0]!==null&& data.reward[0].totalFee!==null&& data.reward[0].totalFee!==undefined
+              data && data.reward && data.reward[0] && data.reward[0].totalFee
                 ? numberWithCommas(
                     toFixed(
                       divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
@@ -222,7 +222,7 @@ export const Incentivised = () => {
           <Col
             head={'Participants'}
             desc={
-              totalTournamentData!==null&& totalTournamentData!==undefined &&totalTournamentData.totalUsers!==null&& totalTournamentData.totalUsers!==undefined
+              totalTournamentData?.totalUsers
                 ? totalTournamentData.totalUsers
                 : 'Counting...'
             }

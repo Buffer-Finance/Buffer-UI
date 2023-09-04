@@ -1,46 +1,46 @@
 import useStopWatch from '@Hooks/Utilities/useStopWatch';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { toFixed } from '@Utils/NumString';
-import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
-import { getDistance } from '@Utils/Staking/utils';
-import { numberWithCommas } from '@Utils/display';
-import { Col } from '@Views/Common/ConfirmationModal';
-import { Warning } from '@Views/Common/Notification/warning';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
+import { numberWithCommas } from '@Utils/display';
+import { toFixed } from '@Utils/NumString';
+import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { Col } from '@Views/Common/ConfirmationModal';
+import { getDistance } from '@Utils/Staking/utils';
 import { LeaderBoard } from '..';
+import {
+  readLeaderboardPageActivePageAtom,
+  updateLeaderboardActivePageAtom,
+} from '../atom';
 import { ContestFilterDD } from '../Components/ContestFilterDD';
 import { TopData } from '../Components/TopData';
 import { DailyWebTable } from '../Daily/DailyWebTable';
 import { DailyStyles } from '../Daily/stlye';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
-import {
-  readLeaderboardPageActivePageAtom,
-  updateLeaderboardActivePageAtom,
-} from '../atom';
+import { Warning } from '@Views/Common/Notification/warning';
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { weeklyTournamentConfig } from './config';
 
-import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
-import FrontArrow from '@SVG/frontArrow';
-import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
-import BufferTab, { ITab } from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
+import BufferTab, { ITab } from '@Views/Common/BufferTab';
+import FrontArrow from '@SVG/frontArrow';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useWeekOffset } from '../Hooks/useWeekoffset';
 import {
   IWinrate,
   useWeeklyLeaderboardQuery,
 } from '../Hooks/useWeeklyLeaderboardQuery';
-import { useWeekOffset } from '../Hooks/useWeekoffset';
 import {
-  TimerBox,
   descClass,
   getRewardTooltip,
   getTournamentEndDateFromWeek,
   headClass,
+  TimerBox,
 } from '../Incentivised';
 import { ILeague } from '../interfaces';
+import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
+import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
+import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -235,7 +235,7 @@ export const Weekly = () => {
           <Col
             head={'Trades'}
             desc={
-              totalTournamentData!==null&& totalTournamentData.allTradesCount!==null&& totalTournamentData.allTradesCount!==undefined
+              totalTournamentData?.allTradesCount
                 ? totalTournamentData.allTradesCount
                 : 'Counting...'
             }
@@ -246,7 +246,7 @@ export const Weekly = () => {
           <Col
             head={'Volume'}
             desc={
-              data !==null&& data!==undefined&&data.reward!==null&& data.reward[0]!==null&& data.reward[0].totalFee!==null&& data.reward[0].totalFee!==undefined
+              data && data.reward && data.reward[0] && data.reward[0].totalFee
                 ? numberWithCommas(
                     toFixed(
                       divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
@@ -262,7 +262,7 @@ export const Weekly = () => {
           <Col
             head={'Participants'}
             desc={
-              totalTournamentData!==null&& totalTournamentData!==undefined &&totalTournamentData.totalUsers!==null&& totalTournamentData.totalUsers!==undefined
+              totalTournamentData?.totalUsers
                 ? totalTournamentData.totalUsers
                 : 'Counting...'
             }
