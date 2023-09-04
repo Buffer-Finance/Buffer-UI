@@ -24,7 +24,8 @@ export const appConfig = {
             faucet: '0xd40254B4524E7f587Ef5E65676BE2700388783DE',
             is_pol: false,
             token: 'USDC',
-            tokenAddress: '0x1A2BD639F4E113242f9e75ce39FE3eD7D42C9e2e',
+            tokenAddress: '0x1A2BD639F4E113242f9e75ce39FE3eD7D42C9e2e',            permitName: 'USDC',
+
           },
           '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
             tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
@@ -40,6 +41,8 @@ export const appConfig = {
             is_pol: false,
             token: 'ARB',
             tokenAddress: '0xEB87e637B00E73395667F177D09caBB0CF3e9609',
+            permitName: 'ARB',
+
           },
         },
         EarnConfig: {
