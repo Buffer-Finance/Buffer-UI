@@ -27,7 +27,7 @@ import {
   getDisplayTime,
   getOslonTimezone,
 } from '@Utils/Dates/displayDateTime';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
 import axios from 'axios';
 import { priceAtom } from '@Hooks/usePrice';
@@ -62,6 +62,7 @@ import { marketsForChart } from '@Views/TradePage/config';
 import { getEarlyCloseStatus } from '../AccordionTable/Common';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
+import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -205,7 +206,8 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   });
   return rawOhlc;
 };
-const drawingAtom = atomWithStorage('TradingChartDrawingStorage-v2', null);
+
+const drawingAtom = atomWithLocalStorage('Tradingview-data', null);
 const market2resolutionAtom = atomWithStorage(
   'TradingChartDrawingStorage-market2resolutionAtom',
   null

@@ -44,10 +44,12 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
             setDuration((d) => {
               let secs = HHMMToSeconds(d.HHMM);
               secs -= 60;
-              return {
-                HHMM: secondsToHHMM(secs),
-                seconds: secs,
-              };
+              if (secs > 0)
+                return {
+                  HHMM: secondsToHHMM(secs),
+                  seconds: secs,
+                };
+              else return d;
             });
           }}
         >
@@ -66,10 +68,12 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
             setDuration((d) => {
               let secs = HHMMToSeconds(d.HHMM);
               secs += 60;
-              return {
-                HHMM: secondsToHHMM(secs),
-                seconds: secs,
-              };
+              if (secs < 24 * 60 * 60)
+                return {
+                  HHMM: secondsToHHMM(secs),
+                  seconds: secs,
+                };
+              else return d;
             });
           }}
         >

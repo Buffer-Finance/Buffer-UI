@@ -51,7 +51,8 @@ export const BuyButtons = ({
   const limitStrike = useAtomValue(limitOrderStrikeAtom);
   const { isMarketOpen: isAssetActive, isForex } = useIsMarketOpen(
     activeMarket,
-    switchPool?.pool
+    switchPool?.pool,
+    switchPool?.optionContract
   );
 
   const buyTrade = (isUp?: boolean) => {

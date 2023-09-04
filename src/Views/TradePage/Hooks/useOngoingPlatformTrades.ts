@@ -8,7 +8,7 @@ import {
 } from '../config';
 import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { TradeType, tradesApiResponseType } from '../type';
+import { tradesApiResponseType } from '../type';
 import { useAtomValue } from 'jotai';
 import {
   platformActiveTableActivePage,
@@ -16,44 +16,7 @@ import {
 } from '../atoms';
 import { addMarketInTrades } from '../utils';
 import { useMarketsConfig } from './useMarketsConfig';
-
-const usePlatformTrades = () => {
-  const { activeChain } = useActiveChain();
-  const { oneCTWallet } = useOneCTWallet();
-  const { address } = useAccount();
-  const { data, error } = useSWR<TradeType[][]>(
-    'platform-trades-' +
-      address +
-      '-' +
-      activeChain.id +
-      '-' +
-      oneCTWallet?.address,
-    {
-      fetcher: async () => {
-        const response = await Promise.all([
-          axios.get(`${baseUrl}trades/all_active/`, {
-            params: {
-              user_address: address,
-              environment: activeChain.id,
-            },
-          }),
-          axios.get(`${baseUrl}trades/all_history/`, {
-            params: {
-              user_address: address,
-              environment: activeChain.id,
-            },
-          }),
-        ]);
-        const [activeTrades, historyTrades] = response.map((r) => r.data);
-        return [activeTrades, historyTrades] as TradeType[][];
-      },
-      refreshInterval: refreshInterval,
-    }
-  );
-  return data || ([[], []] as TradeType[][]);
-};
-
-export { usePlatformTrades };
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 export const usePlatformActiveTrades = () => {
   const { activeChain } = useActiveChain();
@@ -73,6 +36,8 @@ export const usePlatformActiveTrades = () => {
       activePage,
     {
       fetcher: async () => {
+        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+          return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/all_active/`, {
           params: {
             user_address: address,
@@ -112,6 +77,8 @@ export const usePlatformHistoryTrades = () => {
       activePage,
     {
       fetcher: async () => {
+        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+          return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/all_history/`, {
           params: {
             user_address: address,

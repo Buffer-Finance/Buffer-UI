@@ -31,7 +31,7 @@ export const AssetCell: React.FC<{
           content={
             platform || isHidden
               ? 'Trade directions are hidden.'
-              : 'You choosed ' + (isUp ? 'Up' : 'Down')
+              : 'You chose ' + (isUp ? 'Up' : 'Down')
           }
         >
           <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>

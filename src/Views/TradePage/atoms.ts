@@ -43,7 +43,7 @@ export const setSettingsAtom = atom(
 );
 
 //BuyTrade Atoms
-export const timeSelectorAtom = atomWithStorage('timeSelectorAtomV2', {
+export const timeSelectorAtom = atomWithStorage('timeSelectorAtomV3', {
   HHMM: defaultSelectedTime,
   seconds: HHMMToSeconds(defaultSelectedTime),
 });
