@@ -126,6 +126,8 @@ export const raw2adminConfig = (
               group,
               getter,
               setter,
+              pool,
+
               market,
             };
             if (configObject?.[group]) {

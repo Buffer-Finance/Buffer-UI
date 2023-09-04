@@ -22,7 +22,6 @@ const ConfigRow: React.FC<any> = ({
   const [showIp, setShowIp] = useState(false);
   const { writeCall } = useWriteCall(config.contract, group2abi[config.group]);
   const text = config.getter?.name;
-  console.log(`ConfigRow-config: `, config);
   const result = text.replace(/([A-Z])/g, ' $1');
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1) + ' :';
   const isChanged = data?.[config.contract + config.getter?.name]?.[0] != value;
@@ -33,10 +32,10 @@ const ConfigRow: React.FC<any> = ({
   };
   const actualValue = data?.[config.contract + config.getter?.name]?.[0];
   let hint = config?.hint ? `(${config.hint})` : '';
-  let dec = config.decimal ? `[${config.decimal} dec]` : '';
   const poolString = config.pool
     ? config.pool.token + ' ' + (config.pool.is_pol ? 'POL' : '')
     : '';
+  let dec = config.decimal ? `${poolString}(${config.decimal} dec)` : '';
   const isCurrentConfigSearched = () => {
     const str = `${
       config.market ? config.market.pair + ' ' + config.market.tv_id : ''
