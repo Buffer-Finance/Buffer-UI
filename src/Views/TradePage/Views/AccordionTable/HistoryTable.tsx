@@ -169,6 +169,7 @@ const HistoryTable: React.FC<{
         );
       case TableColumn.Payout:
         if (!expiryPrice) return 'Processing...';
+        if (trade.is_above == null) return '-';
         if (isNotMobile)
           return (
             <div>
