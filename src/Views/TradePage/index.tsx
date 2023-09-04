@@ -27,7 +27,6 @@ import ShutterProvider, {
 } from '@Views/Common/MobileShutter/MobileShutter';
 import { useEffect } from 'react';
 import { CloseConfirmationModal } from './CloseConfirmationModal';
-import { useAccount } from 'wagmi';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -40,8 +39,6 @@ const TradePage: React.FC<any> = ({}) => {
     closeShutter();
     return closeShutter;
   }, []);
-  const { address } = useAccount();
-
   return (
     <>
       <EssentialModals />

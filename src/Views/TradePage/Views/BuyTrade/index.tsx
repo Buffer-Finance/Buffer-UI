@@ -20,8 +20,6 @@ import { useSelectedAssetPayout } from '../MarketChart/Payout';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
 import { useAccount } from 'wagmi';
-// import { particle } from 'src/Config/wagmiClient';
-import { BlueBtn } from '@Views/Common/V2-Button';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -92,9 +90,6 @@ export const BuyTrade: React.FC = () => {
 
   return (
     <BuyTradeBackground>
-      {/* <BlueBtn onClick={buyLink}>Onramp USDC </BlueBtn>
-      <BlueBtn onClick={openWallet}>Open wallet </BlueBtn> */}
-
       <TimeSelector />
       <TradeSizeSelector />
       <TradeTypeSelector />

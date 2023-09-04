@@ -20,11 +20,7 @@ import {
   closeLoadingAtom,
   selectedOrderToEditAtom,
 } from '@Views/TradePage/atoms';
-import {
-  HHMMToSeconds,
-  editQueueTrade,
-  secondsToHHMM,
-} from '@Views/TradePage/utils';
+import { secondsToHHMM } from '@Views/TradePage/utils';
 import {
   StrikePriceComponent,
   TableErrorRow,
@@ -37,13 +33,6 @@ import { AssetCell } from './AssetCell';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { Visualized } from './Visualized';
-import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
-import { useAccount } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { getSingatureCached } from '@Views/TradePage/cache';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { useToast } from '@Contexts/Toast';
-import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
 
 export const tradesCount = 10;
 
@@ -69,7 +58,7 @@ const LimitOrderTable = ({
   const cancelLoading = useAtomValue(closeLoadingAtom);
   const { getPoolInfo } = usePoolInfo();
   const { registeredOneCT } = useOneCTWallet();
-  // const { changeStrike } = useLimitOrderHandlers();
+
   const headNameArray = [
     'Asset',
     'TriggerPrice',
@@ -92,13 +81,13 @@ const LimitOrderTable = ({
   const handleCancel = async (trade: TradeType) => {
     cancelHandler(trade);
   };
-
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
 
     const marketPrecision = trade.market.price_precision.toString().length - 1;
     const poolInfo = getPoolInfo(trade.pool.pool);
     if (!trade) return 'Problem';
+
     switch (col) {
       case TableColumn.TriggerPrice:
         return <StrikePriceComponent trade={trade} />;
@@ -145,12 +134,6 @@ const LimitOrderTable = ({
             >
               Edit
             </GreyBtn>
-            {/* <GreyBtn
-              className={tableButtonClasses}
-              onClick={() => changeStrike(trade, '21112.22')}
-            >
-              Change Strike
-            </GreyBtn> */}
             <GreyBtn
               className={tableButtonClasses}
               onClick={() => handleCancel(trade)}
