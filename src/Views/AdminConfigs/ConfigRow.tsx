@@ -28,7 +28,11 @@ const ConfigRow: React.FC<any> = ({
 
   const reset = () => {
     setShowIp(false);
-    setValue(data?.[config.contract + config.getter?.name]);
+    let initialData = data?.[config.contract + config.getter?.name];
+    if (config.getter.op?.[0].type.includes(['['])) {
+      initialData = data?.[config.contract + config.getter?.name].join(',');
+    }
+    setValue(initialData);
   };
   const actualValue = data?.[config.contract + config.getter?.name]?.[0];
   let hint = config?.hint ? `(${config.hint})` : '';
