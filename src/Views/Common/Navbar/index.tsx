@@ -14,6 +14,7 @@ import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
 import { useShutterHandlers } from '../MobileShutter/MobileShutter';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
 
 interface INavbar {}
 
@@ -37,6 +38,8 @@ export const Navbar: React.FC<INavbar> = () => {
   const show = !urlSettings?.hide;
   return (
     <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102]">
+      <OneCTModal />
+
       <div className="flex items-center ">
         <div
           role={'button'}

@@ -220,7 +220,6 @@ export const EssentialModals = () => {
           market={selectedTrade?.market!}
         />
       </ModalBase>
-      <OneCTModal />
     </>
   );
 };
