@@ -151,7 +151,14 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
     },
     {
       header: 'Max Trade Size',
-      data: <Display data={maxFee} unit={poolDetails?.token} precision={0} />,
+      data: (
+        <Display
+          className="b1200:!justify-start"
+          data={maxFee}
+          unit={poolDetails?.token}
+          precision={0}
+        />
+      ),
     },
     // {
     //   header: 'Current OI',
@@ -179,7 +186,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
     },
     {
       header: (
-        <div className="flex items-center">
+        <div className="flex items-center ">
           Max OI:&nbsp;
           <Display data={maxOI} unit={poolDetails?.token} precision={0} />
         </div>
@@ -204,7 +211,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   ];
 
   return (
-    <div className="flex p-3 gap-x-[35px] b1200:gap-x-5 items-center justify-between b1200:justify-evenly">
+    <div className="flex p-3 gap-x-[35px] b1200:gap-x-5 items-center justify-between  b1200:p-[0px] b1200:justify-between">
       {!isMobile && (
         <>
           <MarketSelectorDD
@@ -227,12 +234,17 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
         return (
           <div
             key={id}
-            className="flex flex-col justify-center items-start gap-y-1"
+            className={`flex flex-col justify-center items-start gap-y-1 ${
+              id == 3 ? 'b1200:items-end' : ''
+            }
+            b1200:w-1/2
+            
+            ${id == 1 ? 'special-border-b' : ''}`}
           >
             <span className="text-f12 b1200:text-f10 text-[#82828F]">
               {d.header}
             </span>
-            <span className="text-f12 w-full b1200:text-f10">{d.data}</span>
+            <span className="text-f12 w-fit b1200:text-f10">{d.data}</span>
           </div>
         );
       })}

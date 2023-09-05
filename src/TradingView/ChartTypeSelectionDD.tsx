@@ -236,7 +236,7 @@ const ChartTypeSelectionDD: React.FC<{
   );
   if (isMobile)
     return (
-      <div className="flex flex-wrap ">
+      <div className="flex flex-wrap items-center justify-center ">
         {Object.entries(chartTypes).map(([key, value]) => (
           <div
             onClick={(e) => {

@@ -72,7 +72,7 @@ const MobileChartControllsEditable: React.FC<any> = ({}) => {
     <div>
       <div className=" ">
         {' '}
-        <div className="flex items-center justify-between">
+        <div className="flex my-4 items-center justify-between">
           {supported_resolutions.map((s) => {
             return (
               <div

@@ -123,7 +123,13 @@ const defaults = {
   library_path: '/static/charting_library/',
   theme: 'Dark',
   interval: '1' as ResolutionString,
-  basicDisabled: ['header_compare', 'header_symbol_search', 'header_widget'],
+  basicDisabled: [
+    'header_compare',
+    'header_symbol_search',
+    'header_widget',
+    'go_to_date',
+    'display_market_status',
+  ],
   confgis: {
     supported_resolutions,
     exchanges: [
@@ -194,7 +200,7 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   return rawOhlc;
 };
 
-const drawingAtom = atomWithLocalStorage('Tradingview-data', null);
+const drawingAtom = atom(null);
 export const market2resolutionAtom = atomWithStorage(
   'TradingChartDrawingStorage-market2resolutionAtom',
   null
