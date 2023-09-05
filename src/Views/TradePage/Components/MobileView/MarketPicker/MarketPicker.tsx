@@ -37,7 +37,7 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
         {activeMarket?.pair}
       </button>
 
-      <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[3px] pb-[1px]">
+      <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
         {payout || '-'}%
       </div>
     </div>
