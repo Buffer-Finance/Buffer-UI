@@ -702,6 +702,7 @@ export const MultiResolutionChart = ({
     if (chartReady && activeTrades) {
       activeTrades.forEach((trades) =>
         trades.forEach((pos) => {
+          console.log('drawing-deb-for', pos.strike);
           if (pos.is_above === undefined) return;
           if (!pos?.queue_id) return;
           if (visualized.includes(pos.queue_id)) return;
@@ -720,11 +721,8 @@ export const MultiResolutionChart = ({
               updatedPos.strike = priceCache[pos.queue_id];
               updatedPos.expiration_time = pos.open_timestamp + pos.period;
             }
-            console.log(
-              'drawing-deb',
-              updatedPos,
-              Object.keys(trade2visualisation.current)
-            );
+            console.log('drawing-deb-for-done', pos.strike);
+
             trade2visualisation.current[getTradeToDrawingId(pos)] = {
               visited: true,
               lineRef: drawPosition(
@@ -739,29 +737,28 @@ export const MultiResolutionChart = ({
               ),
               option: pos,
             };
-            console.log(
-              'drawing-debafter',
-              updatedPos,
-              Object.keys(trade2visualisation.current)
-            );
           }
         })
       );
     }
     for (const trade in trade2visualisation.current) {
-      // mark all them
+      // delete all unvisited
       if (!trade2visualisation.current[trade]?.visited) {
+        console.log('deleting-deb', trade);
         trade2visualisation.current[trade]!.lineRef.remove();
 
         delete trade2visualisation.current[trade];
+        console.log('deleting-deb-done', trade2visualisation.current);
       }
     }
 
     return () => {
       // mark all them not visited.
+      console.log('false-mark');
       for (const trade in trade2visualisation.current) {
         trade2visualisation.current[trade]!.visited = false;
       }
+      console.log('false-marked', trade2visualisation.current);
     };
   }, [
     visualized,
