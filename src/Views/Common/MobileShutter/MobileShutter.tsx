@@ -38,15 +38,6 @@ export function useShutterHandlers() {
   const toastify = useToast();
   const closeShutter = useCallback(
     (err?: ReactNode[]) => {
-      if (!err) return setShutter({ open: false });
-
-      if (err.length) {
-        toastify({
-          msg: err[err.length - 1],
-          type: 'error',
-          id: err[err.length - 1],
-        });
-      }
       setShutter({ open: false });
     },
     [setShutter]
