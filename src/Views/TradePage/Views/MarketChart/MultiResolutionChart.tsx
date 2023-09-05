@@ -767,7 +767,6 @@ export const MultiResolutionChart = ({
 };
 
 // async function callApi(req) {
-//   let retry = 1;
 //   const getRes = async () => {
 //     try {
 //       const res = await axios.get(
