@@ -48,6 +48,10 @@ import ShutterProvider, {
 } from '@Views/Common/MobileShutter/MobileShutter';
 import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
 import { isTestnet } from 'config';
+import { CloseOutlined } from '@mui/icons-material';
+import { CloseButton } from '@Views/TradePage/Components/CloseButton';
+import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
+import { useMedia } from 'react-use';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -169,12 +173,16 @@ export const snackAtom = atom<{
 }>({
   message: null,
 });
-
+const mobileWarningAtom = atomWithLocalStorage('warnign-suer', false);
 export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 function App() {
   useAutoConnect();
   const [snack, setSnack] = useAtom(snackAtom);
+  const [mobileWarningClosed, setWarningCloseOnMobile] =
+    useAtom(mobileWarningAtom);
   const graphStatus = useGraphStatus();
+  const isMobile = useMedia('(max-width:1200px)');
+
   return (
     <>
       {/* <PasswordModal /> */}
@@ -183,10 +191,10 @@ function App() {
           {graphStatus && (
             <Warning
               body={
-                <>
+                <div>
                   We are facing some issues with the theGraph API. Trading
                   experience on the platform may be hindered temporarily.
-                </>
+                </div>
               }
               closeWarning={() => {}}
               shouldAllowClose={false}
@@ -211,37 +219,47 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          {!urlSettings?.hide && (
-            <Warning
-              body={
-                <div>
-                  🚀 Buffer v2.5 is live on&nbsp;
-                  <a href="https://app.buffer.finance/" target="_blank">
-                    <span className="underline underline-offset-2">
-                      Mainnet
-                    </span>
-                  </a>
-                  &nbsp; | 📜 Learn more about v2.5&nbsp;
-                  <a
-                    href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
-                    target="_blank"
-                  >
-                    <span className="underline underline-offset-2">here</span>
-                  </a>
-                  &nbsp; | ✨ To trade with $BFR as collateral visit the&nbsp;
-                  <a href="https://classic.app.buffer.finance/" target="_blank">
-                    <span className="underline underline-offset-2">
-                      classic version
-                    </span>
-                  </a>
-                </div>
-              }
-              closeWarning={() => {}}
-              shouldAllowClose={false}
-              state={true}
-              className="disclaimer"
-            />
-          )}
+          {!urlSettings?.hide &&
+            (isMobile && mobileWarningClosed ? false : true) && (
+              <Warning
+                body={
+                  <div className="relative">
+                    🚀 Buffer v2.5 is live on&nbsp;
+                    <a href="https://app.buffer.finance/" target="_blank">
+                      <span className="underline underline-offset-2">
+                        Mainnet
+                      </span>
+                    </a>
+                    &nbsp; | 📜 Learn more about v2.5&nbsp;
+                    <a
+                      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
+                      target="_blank"
+                    >
+                      <span className="underline underline-offset-2">here</span>
+                    </a>
+                    &nbsp; | ✨ To trade with $BFR as collateral visit the&nbsp;
+                    <a
+                      href="https://classic.app.buffer.finance/"
+                      target="_blank"
+                    >
+                      <span className="underline underline-offset-2">
+                        classic version
+                      </span>
+                    </a>
+                    <CloseOutlined
+                      className="a1200:!hidden a1200:!pointer-events-none absolute bottom-[0px] right-[3px]"
+                      onClick={() => {
+                        setWarningCloseOnMobile(true);
+                      }}
+                    />
+                  </div>
+                }
+                closeWarning={() => {}}
+                shouldAllowClose={false}
+                state={true}
+                className="disclaimer"
+              />
+            )}
           <TnCModal />
           <SideBar />
         </Background>
