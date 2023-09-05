@@ -124,7 +124,7 @@ const LimitOrderTable = ({
           <div className="flex items-center">
             <Visualized queue_id={trade.queue_id} />
             <GreyBtn
-              className={tableButtonClasses}
+              className={tableButtonClasses + ' !ml-2'}
               onClick={() =>
                 setSelectedTrade({
                   trade,
