@@ -7,7 +7,7 @@ import { signTypedData } from '@wagmi/core';
 import axios from 'axios';
 import { ethers } from 'ethers';
 import { atom, useAtom } from 'jotai';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { getChains } from 'src/Config/wagmiClient';
 import { getAddress } from 'viem';
@@ -103,7 +103,7 @@ const useOneCTWallet = () => {
     return privateKeyToAccount(('0x' + oneCtPk) as any);
   }, [oneCtPk, provider, registeredOneCT]);
 
-  const generatePk = useCallback(async () => {
+  const generatePk = async () => {
     if (!res)
       return toastify({
         msg: 'Unable to fetch data. Please try again later',
@@ -158,12 +158,11 @@ const useOneCTWallet = () => {
         return privateKey;
       }
     } catch (e) {
-      // console.log(e, 'error generating signature');
-      // toastify({ msg: JSON.stringify(e), type: 'error', id: '321321' });
+      console.log(e, 'error generating signature');
+      toastify({ msg: JSON.stringify(e), type: 'error', id: '321321' });
       setCreateLoading(false);
       return '';
     }
-  }, [signer, res?.one_ct, provider]);
 
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
