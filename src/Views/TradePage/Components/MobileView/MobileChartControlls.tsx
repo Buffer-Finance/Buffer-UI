@@ -11,6 +11,7 @@ import {
 } from '@Views/Common/MobileShutter/MobileShutter';
 import {
   formatResolution,
+  indicatorCoutAtom,
   isntAvailable,
   market2resolutionAtom,
 } from '@Views/TradePage/Views/MarketChart/MultiResolutionChart';
@@ -29,8 +30,10 @@ const MobileChartControlls: React.FC<{ activeMarket: string }> = ({
   const find = Object.keys(chartTypes).find(
     (c) => chartTypes[c].type == activeChartType
   );
-
-  const openIndicators = () => {};
+  const setIndicatorAtom = useSetAtom(indicatorCoutAtom);
+  const openIndicators = () => {
+    setIndicatorAtom((a) => a + 1);
+  };
 
   return (
     <div className="flex items-center gap-x-[5px]">

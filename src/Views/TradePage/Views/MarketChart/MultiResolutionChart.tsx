@@ -199,6 +199,7 @@ export const market2resolutionAtom = atomWithStorage(
   'TradingChartDrawingStorage-market2resolutionAtom',
   null
 );
+export const indicatorCoutAtom = atom(0);
 function drawPosition(
   option: TradeType,
   visualized: any,
@@ -275,6 +276,7 @@ export const MultiResolutionChart = ({
       };
     }>
   >({});
+  const indicatorCount = useAtomValue(indicatorCoutAtom);
   const [activeTrades] = useOngoingTrades();
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
@@ -697,6 +699,9 @@ export const MultiResolutionChart = ({
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
+  useEffect(() => {
+    if (indicatorCount) toggleIndicatorDD('d');
+  }, [indicatorCount]);
 
   return (
     <div className="flex flex-col w-full h-full">
