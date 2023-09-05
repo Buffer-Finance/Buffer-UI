@@ -38,7 +38,7 @@ const MobileChartControlls: React.FC<{ activeMarket: string }> = ({
   return (
     <div className="flex items-center gap-x-[5px]">
       <button
-        className="bg-[#282B39] text-f13 h-[28px] w-[28px] rounded-[5px]"
+        className="bg-[#282B39] text-f13 h-[28px] px-2 min-w-[28px] rounded-[5px]"
         onClick={openChartCotrollShutter}
       >
         {formatResolution(activeResolution)}

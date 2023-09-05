@@ -200,7 +200,7 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   return rawOhlc;
 };
 
-const drawingAtom = atom(null);
+const drawingAtom = atomWithLocalStorage('drawing-v1', null);
 export const market2resolutionAtom = atomWithStorage(
   'TradingChartDrawingStorage-market2resolutionAtom',
   null
