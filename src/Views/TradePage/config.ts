@@ -209,7 +209,7 @@ export const HolderContracts = [
 export const refreshInterval = 500;
 export const defaultSettings = {
   trade: {
-    partialFill: true,
+    partialFill: false,
     slippageTolerance: 0.05,
     limitOrdersExpiry: '24',
     selectedTimeFrame: 'h',
@@ -233,16 +233,16 @@ export const defaultSettings = {
 export const defaultSelectedTime = '00:15';
 export const oneSec = 1000;
 export const durations = [
-  {
-    duration: 1 * 60,
-    time: '00:01',
-    name: ['1m'],
-  },
   // {
-  //   duration: 3 * 60 * oneSec,
-  //   time: '00:03',
-  //   name: ['3m'],
+  //   duration: 1 * 60,
+  //   time: '00:01',
+  //   name: ['1m'],
   // },
+  {
+    duration: 3 * 60,
+    time: '00:03',
+    name: ['3m'],
+  },
   {
     duration: 5 * 60,
     time: '00:05',

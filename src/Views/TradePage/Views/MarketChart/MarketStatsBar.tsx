@@ -1,6 +1,13 @@
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
+import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
+import { chartNumberAtom } from '@Views/TradePage/atoms';
+import { getMinimumValue, joinStrings } from '@Views/TradePage/utils';
 import {
   ClickEvent,
   ControlledMenu,
@@ -10,17 +17,9 @@ import {
 } from '@szhsin/react-menu';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { SVGProps, useRef } from 'react';
-import { MarketSelectorDD } from './MarketSelectorDD';
-import { usePrice } from '@Hooks/usePrice';
-import { chartNumberAtom } from '@Views/TradePage/atoms';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
-import { getMinimumValue, joinStrings } from '@Views/TradePage/utils';
-import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
-import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
 import { CurrentPrice } from '../BuyTrade/ActiveTrades/CurrentPrice';
-import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
-import NumberTooltip from '@Views/Common/Tooltips';
+import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
+import { MarketSelectorDD } from './MarketSelectorDD';
 import { Payout } from './Payout';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
@@ -189,9 +188,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
         <NumberTooltip
           content={
             currentOI
-              ? `Current OI : ${multiply(currentOI, 2)} ${
-                  poolDetails?.token
-                } / Max OI : ${maxOI} ${poolDetails?.token} `
+              ? `Current OI : ${currentOI} ${poolDetails?.token} / Max OI : ${maxOI} ${poolDetails?.token} `
               : ''
           }
         >
