@@ -4,11 +4,10 @@ import { RowGapItemsTop } from '@Views/TradePage/Components/Row';
 import { SettingsHeaderText } from '@Views/TradePage/Components/TextWrapper';
 import { tradeSettingsAtom } from '@Views/TradePage/atoms';
 import { defaultSettings } from '@Views/TradePage/config';
-import { useAtom } from 'jotai';
-import { PartialFill } from './PartialFill';
-import { Slippage } from './Slippage';
-import { LimitOrdersExpiry } from './LimitOrdersExpiry';
 import { Trans } from '@lingui/macro';
+import { useAtom } from 'jotai';
+import { LimitOrdersExpiry } from './LimitOrdersExpiry';
+import { Slippage } from './Slippage';
 
 export const TradeSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(tradeSettingsAtom);
@@ -40,7 +39,7 @@ export const TradeSettings: React.FC = () => {
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
       <ColumnGap gap="12px">
-        <PartialFill onToggle={togglePartialFill} isOn={settings.partialFill} />
+        {/* <PartialFill onToggle={togglePartialFill} isOn={settings.partialFill} /> */}
         <Slippage
           currentSlippage={settings.slippageTolerance}
           setSlippage={setSlippage}
