@@ -690,12 +690,12 @@ export const MultiResolutionChart = ({
   // draw positions.
   useEffect(() => {
     // trade2visualisation.current = {};
-    for (const trade in trade2visualisation.current) {
+    Object.keys(trade2visualisation.current).forEach((trade) => {
       // mark all them
       trade2visualisation.current[trade]!.lineRef.remove();
 
       delete trade2visualisation.current[trade];
-    }
+    });
   }, [rerenderPostion, settings.loDragging]);
   useEffect(() => {
     // if()
@@ -741,7 +741,7 @@ export const MultiResolutionChart = ({
         })
       );
     }
-    for (const trade in trade2visualisation.current) {
+    Object.keys(trade2visualisation.current).forEach((trade) => {
       // delete all unvisited
       if (!trade2visualisation.current[trade]?.visited) {
         console.log('deleting-deb', trade);
@@ -750,14 +750,14 @@ export const MultiResolutionChart = ({
         delete trade2visualisation.current[trade];
         console.log('deleting-deb-done', trade2visualisation.current);
       }
-    }
+    });
 
     return () => {
       // mark all them not visited.
       console.log('false-mark');
-      for (const trade in trade2visualisation.current) {
+      Object.keys(trade2visualisation.current).forEach((trade) => {
         trade2visualisation.current[trade]!.visited = false;
-      }
+      });
       console.log('false-marked', trade2visualisation.current);
     };
   }, [
@@ -808,52 +808,65 @@ export const MultiResolutionChart = ({
         `MultiResolutionChart-trade2visualisation.current: `,
         trade2visualisation.current
       );
-      for (const trade in trade2visualisation.current) {
-        if (trade2visualisation.current[trade]?.visited) {
-          const [isDisabled, disableTooltip] = getEarlyCloseStatus(
-            trade2visualisation.current[trade]?.option
+      try {
+        console.log(
+          `MultiResolutionChart-trade2visualisation.current1: `,
+          trade2visualisation.current
+        );
+        Object.keys(trade2visualisation.current).forEach((trade) => {
+          console.log(
+            `MultiResolutionChart-trade2visualisation.current[trade]: `,
+            trade,
+            Object.keys(trade2visualisation.current)
           );
-          const actualTrade = trade2visualisation.current[trade]?.option;
-          let updatedTrade = actualTrade;
-          activeTrades.forEach((catagory) => {
-            catagory.forEach((t) => {
-              if (t.queue_id == actualTrade?.queue_id) {
-                updatedTrade = t;
-              }
-            });
-          });
-          console.log(`[ec-deb]t: `, actualTrade, updatedTrade);
-
-          // skip limit orderes
-          if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order)
-            return;
-
-          const inv = trade2visualisation.current[trade]?.lineRef
-            ?.getText()
-            ?.split('|')[0];
-          console.log(`[ec-deb]-inv: `, inv);
-          const text =
-            inv +
-            '| ' +
-            getText((trade2visualisation.current as any)[trade]?.option);
-          console.log(`[ec-deb]-text: `, text, isDisabled);
-
-          trade2visualisation.current[trade]?.lineRef.setText(text);
-          if (!isDisabled) {
-            trade2visualisation.current[trade]?.lineRef.onCancel(
-              'onCancel',
-              () => {
-                console.log(`[ec-deb]k: `, updatedTrade);
-
-                if (settings.earlyCloseConfirmation) {
-                  earlyCloseHandler(updatedTrade, updatedTrade.market);
-                } else {
-                  setCloseConfirmationModal(updatedTrade);
-                }
-              }
+          if (trade2visualisation.current[trade]?.visited) {
+            const [isDisabled, disableTooltip] = getEarlyCloseStatus(
+              trade2visualisation.current[trade]?.option
             );
+            const actualTrade = trade2visualisation.current[trade]?.option;
+            let updatedTrade = actualTrade;
+            activeTrades.forEach((catagory) => {
+              catagory.forEach((t) => {
+                if (t.queue_id == actualTrade?.queue_id) {
+                  updatedTrade = t;
+                }
+              });
+            });
+            console.log(`[ec-deb]t: `, actualTrade, updatedTrade);
+
+            // skip limit orderes
+            if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order)
+              return;
+
+            const inv = trade2visualisation.current[trade]?.lineRef
+              ?.getText()
+              ?.split('|')[0];
+            console.log(`[ec-deb]-inv: `, inv);
+            const text =
+              inv +
+              '| ' +
+              getText((trade2visualisation.current as any)[trade]?.option);
+            console.log(`[ec-deb]-text: `, text, isDisabled);
+
+            trade2visualisation.current[trade]?.lineRef.setText(text);
+            if (!isDisabled) {
+              trade2visualisation.current[trade]?.lineRef.onCancel(
+                'onCancel',
+                () => {
+                  console.log(`[ec-deb]k: `, updatedTrade);
+
+                  if (settings.earlyCloseConfirmation) {
+                    earlyCloseHandler(updatedTrade, updatedTrade.market);
+                  } else {
+                    setCloseConfirmationModal(updatedTrade);
+                  }
+                }
+              );
+            }
           }
-        }
+        });
+      } catch (e) {
+        console.log('god gave me the bug', e);
       }
     }, 1000);
     return () => {
