@@ -237,7 +237,7 @@ export const durations = [
   //   name: ['1m'],
   // },
   {
-    duration: 3 * 60 ,
+    duration: 3 * 60,
     time: '00:03',
     name: ['3m'],
   },
