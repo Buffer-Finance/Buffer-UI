@@ -54,18 +54,14 @@ export const MiscSettings: React.FC = () => {
         />
       </RowBetween>
       <RowBetween className="mt-4">
-        <SettingsText>
-          <Trans>Early close confirmation</Trans>
-        </SettingsText>
+        <SettingsText>Early close confirmation</SettingsText>
         <Switch
           isOn={settings.earlyCloseConfirmation}
           onChange={toggleCloseConfirmation}
         />
       </RowBetween>
       <RowBetween className="mt-4">
-        <SettingsText>
-          <Trans>Limit Order Dragging</Trans>
-        </SettingsText>
+        <SettingsText>Limit Order Dragging</SettingsText>
         <Switch isOn={settings.loDragging} onChange={toggleLODragging} />
       </RowBetween>
     </div>
