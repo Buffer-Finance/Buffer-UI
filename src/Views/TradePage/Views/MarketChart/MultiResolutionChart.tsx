@@ -192,7 +192,6 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   t: number[];
   v: number[];
 }) => {
-  // console.log(`pythOHLC: `, pythOHLC);
   const rawOhlc: any[] = [];
   pythOHLC.c.forEach((element, idx) => {
     rawOhlc.push({
