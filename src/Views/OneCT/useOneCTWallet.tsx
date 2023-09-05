@@ -163,7 +163,7 @@ const useOneCTWallet = () => {
       setCreateLoading(false);
       return '';
     }
-
+  };
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
   };
