@@ -720,7 +720,11 @@ export const MultiResolutionChart = ({
               updatedPos.strike = priceCache[pos.queue_id];
               updatedPos.expiration_time = pos.open_timestamp + pos.period;
             }
-            console.log('drawing-deb', updatedPos);
+            console.log(
+              'drawing-deb',
+              updatedPos,
+              Object.keys(trade2visualisation.current)
+            );
             trade2visualisation.current[getTradeToDrawingId(pos)] = {
               visited: true,
               lineRef: drawPosition(
@@ -735,6 +739,11 @@ export const MultiResolutionChart = ({
               ),
               option: pos,
             };
+            console.log(
+              'drawing-debafter',
+              updatedPos,
+              Object.keys(trade2visualisation.current)
+            );
           }
         })
       );
@@ -798,9 +807,12 @@ export const MultiResolutionChart = ({
         console.log('major-bug', e);
       }
 
+      console.log(
+        `MultiResolutionChart-trade2visualisation.current: `,
+        trade2visualisation.current
+      );
       for (const trade in trade2visualisation.current) {
         if (trade2visualisation.current[trade]?.visited) {
-          console.log(`[ec-deb]t: `, trade);
           const [isDisabled, disableTooltip] = getEarlyCloseStatus(
             trade2visualisation.current[trade]?.option
           );
@@ -813,17 +825,21 @@ export const MultiResolutionChart = ({
               }
             });
           });
+          console.log(`[ec-deb]t: `, actualTrade, updatedTrade);
 
           // skip limit orderes
-          if (updatedTrade?.state == 'QUEUED') return;
+          if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order)
+            return;
 
           const inv = trade2visualisation.current[trade]?.lineRef
             ?.getText()
             ?.split('|')[0];
+          console.log(`[ec-deb]-inv: `, inv);
           const text =
             inv +
             '| ' +
             getText((trade2visualisation.current as any)[trade]?.option);
+          console.log(`[ec-deb]-text: `, text, isDisabled);
 
           trade2visualisation.current[trade]?.lineRef.setText(text);
           if (!isDisabled) {
