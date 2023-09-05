@@ -8,6 +8,7 @@ import { MobileMarketPicker } from '@Views/TradePage/Components/MobileView/Marke
 import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
 import { ActiveTrades } from '@Views/TradePage/Views/BuyTrade/ActiveTrades';
 import { ModalChild } from '@Views/TradePage/Views/AccordionTable/ShareModal/ShareModalChild';
+import { MobileChartControllsEditable } from '@Views/TradePage/Components/MobileView/MobileChartControlls';
 export const shutterModalAtom = atom<{
   open:
     | 'LO'
@@ -15,7 +16,9 @@ export const shutterModalAtom = atom<{
     | 'MarketSelector'
     | 'ActiveOrders'
     | 'ShareShutter'
+    | 'ChartControlls'
     | false;
+  payload?: any;
 }>({
   open: false,
 });
@@ -63,6 +66,12 @@ export function useShutterHandlers() {
   const openShareShutter = useCallback(() => {
     setShutter({ open: 'ShareShutter' });
   }, [setShutter]);
+  const openChartCotrollShutter = useCallback(
+    (chartId: string) => {
+      setShutter({ open: 'ChartControlls', payload: chartId });
+    },
+    [setShutter]
+  );
   return {
     closeShutter,
     shutterState,
@@ -71,6 +80,7 @@ export function useShutterHandlers() {
     openMarketPickerShutter,
     openOngoingTradesShutter,
     openShareShutter,
+    openChartCotrollShutter,
   };
 }
 export interface MobileShutterProps {}
@@ -78,6 +88,7 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const { closeShutter, shutterState } = useShutterHandlers();
   const isOpen = typeof shutterState.open == 'string';
   // console.log(`MobileShutter-shutterState.open: `, shutterState.open);
+  console.log(`MobileShutter-shutterState.open : `, shutterState.open);
 
   return (
     <ShutterDrawer
@@ -95,6 +106,9 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
           <div className="w-full flex flex-col b400:scale-[0.9] origin-left my-3">
             <ModalChild />
           </div>
+        )}
+        {shutterState.open == 'ChartControlls' && (
+          <MobileChartControllsEditable />
         )}
       </div>
     </ShutterDrawer>

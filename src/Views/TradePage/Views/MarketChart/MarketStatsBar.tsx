@@ -204,23 +204,26 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   ];
 
   return (
-    <div className="flex p-3 gap-x-[35px] b1200:gap-x-5 items-center justify-between">
+    <div className="flex p-3 gap-x-[35px] b1200:gap-x-5 items-center justify-between b1200:justify-evenly">
       {!isMobile && (
-        <MarketSelectorDD
-          token0={activeMarket.token0}
-          token1={activeMarket.token1}
-        />
+        <>
+          <MarketSelectorDD
+            token0={activeMarket.token0}
+            token1={activeMarket.token1}
+          />
+          <div className="b1200:flex flex-col items-end">
+            <MarketPrice
+              token0={activeMarket.token0}
+              token1={activeMarket.token1}
+            />
+            {isMobile ? data[0].data : null}
+          </div>
+        </>
       )}
-      <div className="b1200:flex flex-col items-end">
-        <MarketPrice
-          token0={activeMarket.token0}
-          token1={activeMarket.token1}
-        />
-        {isMobile ? data[0].data : null}
-      </div>
       {data.map((d, id) => {
         // dont show 24h change in separate section, show it below price
         if (isMobile && !id) return null;
+        if (isMobile && id == 2) return null;
         return (
           <div
             key={id}

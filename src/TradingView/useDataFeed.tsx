@@ -178,7 +178,7 @@ export let supported_resolutions = [
   '15',
   '30',
   '1H',
-  // "2H",
+  '2H',
   '4H',
   // "1D",
 ];

@@ -2,7 +2,7 @@ import BufferDropdown from '@Views/Common/BufferDropdown';
 import { isTestnet } from 'config';
 import { atomWithStorage } from 'jotai/utils';
 
-const chartTypes = {
+export const chartTypes = {
   Bar: {
     type: 0,
     icon: (
@@ -10,7 +10,7 @@ const chartTypes = {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
         fill="none"
-        className="chart-type ele"
+        className="chart-type w-4/5 ele m-auto"
       >
         <path
           d="M6.13171 3.39618V16.3996H3.12659V19.3996H6.13171V21.3647H9.13171V13.3974H12.1266V10.3974L9.13171 10.3974V3.39618H6.13171Z"
@@ -30,7 +30,7 @@ const chartTypes = {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
         fill="none"
-        className="chart-type ele"
+        className="chart-type w-4/5 ele m-auto"
       >
         <path
           d="M19.1266 3.55127H16.1266V7.55127H13.1266V17.5513H16.1266V21.5513H19.1266V17.5513H22.1266V7.55127H19.1266V3.55127Z"
@@ -50,7 +50,7 @@ const chartTypes = {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
         fill="none"
-        className="ele"
+        className="w-4/5 ele m-auto"
       >
         <path
           d="M19.0035 1.04468L10.0963 9.95175L6.59593 6.46205L0.988159 12.0698L3.10948 14.1911L6.59917 10.7015L10.0995 14.1911L21.1248 3.16601L19.0035 1.04468Z"
@@ -70,7 +70,7 @@ const chartTypes = {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
         fill="none"
-        className="ele"
+        className="w-4/5 ele m-auto"
       >
         <path
           fillRule="evenodd"
@@ -88,7 +88,7 @@ const chartTypes = {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
         fill="none"
-        className="ele"
+        className="w-4/5 ele m-auto"
       >
         <path
           d="M21.1267 4.09009L14.6266 10.5902L10.1468 6.13251L2.07397 14.2053L4.1953 16.3266L10.152 10.3699L14.6318 14.8276L23.248 6.21141L21.1267 4.09009Z"
@@ -120,7 +120,7 @@ const chartTypes = {
   //       xmlns="http://www.w3.org/2000/svg"
   //       viewBox="0 0 25 25"
   //       fill="none"
-  //       className="ele"
+  //       className="w-4/5 ele m-auto"
   //     >
   //       <path
   //         d="M8.12659 6.63989H11.1266V15.6239H2.12659V6.63989H5.12659V2.63989H8.12659V6.63989Z"
@@ -140,7 +140,7 @@ const chartTypes = {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
         fill="none"
-        className="ele"
+        className="w-4/5 ele m-auto"
       >
         <path
           fillRule="evenodd"
@@ -162,7 +162,7 @@ const chartTypes = {
   //       xmlns="http://www.w3.org/2000/svg"
   //       viewBox="0 0 25 25"
   //       fill="none"
-  //       className="ele"
+  //       className="w-4/5 ele m-auto"
   //     >
   //       <path
   //         fillRule="evenodd"
@@ -184,7 +184,7 @@ const chartTypes = {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
         fill="none"
-        className="ele"
+        className="w-4/5 ele m-auto"
       >
         <path
           fillRule="evenodd"
@@ -206,7 +206,7 @@ const chartTypes = {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
         fill="none"
-        className="ele"
+        className="w-4/5 ele m-auto"
       >
         <path
           d="M8.12659 6.63989H11.1266V15.6239H2.12659V6.63989H5.12659V2.63989H8.12659V6.63989Z"
@@ -226,10 +226,34 @@ export const ChartTypePersistedAtom = atomWithStorage(
   {}
 );
 
-const ChartTypeSelectionDD: React.FC<any> = ({ active, setActive }) => {
+const ChartTypeSelectionDD: React.FC<{
+  active: string;
+  setActive: any;
+  isMobile?: boolean;
+}> = ({ active, setActive, isMobile }) => {
   const find = Object.keys(chartTypes).find(
     (c) => chartTypes[c].type == active
   );
+  if (isMobile)
+    return (
+      <div className="flex flex-wrap ">
+        {Object.entries(chartTypes).map(([key, value]) => (
+          <div
+            onClick={(e) => {
+              setActive(value.type);
+            }}
+            className={`flex my-3 flex-col w-[80px] items-center  ${
+              value.type == active ? 'text-1' : 'text-2'
+            }`}
+            key={value.type}
+          >
+            <div className="w-[30px] h-[30px]">{value.icon}</div>
+            <div className={`text-center `}>{key.replace('_', ' ')}</div>
+          </div>
+        ))}
+      </div>
+    );
+
   return (
     <div>
       <>
