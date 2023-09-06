@@ -440,10 +440,8 @@ export const useBuyTradeActions = (userInput: string) => {
           type: 'error',
           msg: e.message,
         });
-      } finally {
         setLoading(null);
       }
-
       // } catch (e) {
       //   con
       // }
