@@ -279,7 +279,7 @@ function drawPosition(
       .setCancelButtonBackgroundColor(defaults.BG)
       .setBodyFont('semibold 17pt Arial')
       .setQuantityFont('bold 17pt Arial')
-      .setBodyTextColor('rgb(255,255,255)')
+      .setBodyTextColor('rgb(195,194,212)')
       .setCancelTooltip('Click to cancel this Limit Order')
       .setQuantity('↕')
       .setBodyBorderColor(defaults.BG)
@@ -323,7 +323,7 @@ function drawPosition(
     .setBodyFont('semibold 17pt Arial')
     .setQuantityFont('bold 17pt Arial')
     .setLineColor(color)
-    .setBodyTextColor(winning ? defaults.green : 'rgb(255,255,255)')
+    .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)')
     .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
     .setCancelTooltip('Click to Early Close at Market Price')
     .setPrice(optionPrice);
@@ -830,7 +830,7 @@ export const MultiResolutionChart = ({
               earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
             trade2visualisation.current[trade]?.lineRef
               .setText(text)
-              .setBodyTextColor(winning ? defaults.green : 'rgb(255,255,255)');
+              .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
 
             if (!isDisabled) {
               trade2visualisation.current[trade]?.lineRef.onCancel(
