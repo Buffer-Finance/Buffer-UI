@@ -89,7 +89,9 @@ const MobileChartControllsEditable: React.FC<any> = ({}) => {
                 className={`${
                   s.toLowerCase() == activeResolution.toLowerCase() &&
                   'scale-125 text-1'
-                } ${isntAvailable(s) && 'tb'} text-2 text-f13 font-[500]`}
+                } ${
+                  isntAvailable(s) && 'tb'
+                } text-2 text-f13 font-[500] lowercase`}
               >
                 {formatResolution(s)}
               </div>
