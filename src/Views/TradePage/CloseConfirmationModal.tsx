@@ -44,7 +44,7 @@ const CloseConfirmationModal: React.FC<any> = ({}) => {
       className=""
     >
       <div className="flex flex-col gap-y-[10px]">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <h2 className="text-f18 font-[500]">Close Postion</h2>
           <button
             className="p-3 sm:p-2 text-1 rounded-full bg-2"
