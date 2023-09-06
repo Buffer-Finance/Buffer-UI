@@ -61,7 +61,7 @@ const CloseConfirmationModal: React.FC<any> = ({}) => {
           You can close your position at market price
         </div>
         <div
-          className="flex items-center my-2 gap-x-[7px] text-f13 !w-fit  text-[#C3C2D4]"
+          className="flex items-center my-2 gap-x-[7px] text-f10 !w-fit  text-[#C3C2D4]"
           onClick={() => {
             setVal(!val);
           }}
@@ -71,7 +71,7 @@ const CloseConfirmationModal: React.FC<any> = ({}) => {
             onCheckChange={() => {
               setVal(!val);
             }}
-            className="scale-75"
+            className="scale-[0.6]"
           />{' '}
           Allow Closing from chart without confirmation
         </div>
