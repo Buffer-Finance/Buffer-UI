@@ -175,7 +175,7 @@ const defaults = {
   BG: 'rgb(48, 48, 68)',
   upIcon: '▲',
   downIcon: '▼',
-  green: 'rgb(55,232,168)',
+  green: 'rgb(108, 211, 173)',
   red: 'rgb(255, 104, 104)',
 };
 function getText(option: TradeType) {

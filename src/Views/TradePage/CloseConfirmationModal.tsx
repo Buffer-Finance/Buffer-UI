@@ -54,14 +54,14 @@ const CloseConfirmationModal: React.FC<any> = ({}) => {
             <CloseOutlined className="!scale-125 sm:!scale-100" />
           </button>{' '}
         </div>
-        <div className="text-f18 text-[#C3C2D4]">
+        <div className="text-f16 text-[#C3C2D4]">
           Are you sure you want to close position?
         </div>
-        <div className="text-f14 text-[#C3C2D4]">
+        <div className="text-f13 text-[#C3C2D4]">
           You can close your position at market price
         </div>
         <div
-          className="flex items-center my-2 gap-x-[7px] text-f12 !w-fit  text-[#C3C2D4]"
+          className="flex items-center my-2 gap-x-[7px] text-f13 !w-fit  text-[#C3C2D4]"
           onClick={() => {
             setVal(!val);
           }}
