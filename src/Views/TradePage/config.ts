@@ -74,7 +74,7 @@ export const appConfig = {
   },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.-13-fix-user-net-pnl-3/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.-14-fix-early-close-leaderboard/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
