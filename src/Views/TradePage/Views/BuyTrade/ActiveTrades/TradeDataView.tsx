@@ -226,6 +226,25 @@ export const useEarlyPnl = ({
   });
 };
 
+export const getPnlForTrade = ({
+  trade,
+  poolInfo,
+  probability,
+  lockedAmmount,
+}: {
+  trade: TradeType;
+  poolInfo: poolInfoType;
+  probability: number;
+  lockedAmmount?: string;
+}) => {
+  return calculatePnlForProbability({
+    trade,
+    probability,
+    decimals: poolInfo.decimals,
+    lockedAmmount,
+  });
+};
+
 export const calculatePnlForProbability = ({
   trade,
   probability,
