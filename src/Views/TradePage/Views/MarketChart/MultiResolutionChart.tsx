@@ -175,7 +175,7 @@ const defaults = {
   BG: 'rgb(48, 48, 68)',
   upIcon: '▲',
   downIcon: '▼',
-  green: 'rgb(108, 211, 173)',
+  green: 'rgb(55,232,168)',
   red: 'rgb(255, 104, 104)',
 };
 function getText(option: TradeType) {
@@ -274,8 +274,11 @@ function drawPosition(
       .setTooltip('Drag to change Strike')
       .setBodyBackgroundColor(defaults.BG)
       .setQuantityBackgroundColor(color)
-      .setBodyFont('normal 17pt Relative Pro')
-      .setQuantityFont('bold 27pt Relative Pro')
+      .setCancelButtonBorderColor(defaults.BG)
+      .setCancelButtonIconColor('rgb(255,255,255)')
+      .setCancelButtonBackgroundColor(defaults.BG)
+      .setBodyFont('semibold 17pt Arial')
+      .setQuantityFont('bold 17pt Arial')
       .setBodyTextColor('rgb(255,255,255)')
       .setCancelTooltip('Click to cancel this Limit Order')
       .setQuantity('↕')
@@ -314,8 +317,11 @@ function drawPosition(
     .setBodyBackgroundColor(defaults.BG)
     .setQuantityBackgroundColor(color)
     .setBodyBorderColor(defaults.BG)
-    .setBodyFont('normal 17pt Relative Pro')
-    .setQuantityFont('bold 17pt Relative Pro')
+    .setCancelButtonBorderColor(defaults.BG)
+    .setCancelButtonIconColor('rgb(255,255,255)')
+    .setCancelButtonBackgroundColor(defaults.BG)
+    .setBodyFont('semibold 17pt Arial')
+    .setQuantityFont('bold 17pt Arial')
     .setLineColor(color)
     .setBodyTextColor(winning ? defaults.green : 'rgb(255,255,255)')
     .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
