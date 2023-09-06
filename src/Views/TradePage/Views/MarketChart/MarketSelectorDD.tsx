@@ -54,7 +54,7 @@ export const MarketSelectorDD: React.FC<{ token0: string; token1: string }> = ({
             e.keepOpen = true;
           }}
         >
-          <AssetSelectorDD />
+          <AssetSelectorDD onMarketSelect={closeDropdown} />
         </MenuItem>
       </ControlledMenu>
     </>

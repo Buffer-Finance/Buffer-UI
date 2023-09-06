@@ -22,9 +22,10 @@ const AssetSelectorDDBackground = styled.div`
   }
 `;
 
-export const AssetSelectorDD: React.FC<{ isMobile?: boolean }> = ({
-  isMobile,
-}) => {
+export const AssetSelectorDD: React.FC<{
+  isMobile?: boolean;
+  onMarketSelect?: () => void;
+}> = ({ isMobile, onMarketSelect }) => {
   return (
     <AssetSelectorDDBackground>
       <ColumnGap gap="16px">
@@ -35,7 +36,11 @@ export const AssetSelectorDD: React.FC<{ isMobile?: boolean }> = ({
             <PoolRadio />
           </RowBetween>
         )}
-        {isMobile ? <MobileAccordionTable /> : <AssetSelectorTable />}
+        {isMobile ? (
+          <MobileAccordionTable />
+        ) : (
+          <AssetSelectorTable onMarketSelect={onMarketSelect} />
+        )}
       </ColumnGap>
     </AssetSelectorDDBackground>
   );
