@@ -364,6 +364,7 @@ export const useBuyTradeActions = (userInput: string) => {
             params: apiParams,
           }
         );
+        setLoading(null);
 
         if (!customTrade.limitOrderExpiry) {
           getLockedAmount(
