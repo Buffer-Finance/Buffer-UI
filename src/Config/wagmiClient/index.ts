@@ -3,7 +3,7 @@ import { inIframe } from '@Utils/isInIframe';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-import { getAllChains } from './getConfigChains';
+import { getAllChains, getSupportedChains } from './getConfigChains';
 import { getWallets } from './getWallets';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 
@@ -14,7 +14,7 @@ const { chains, publicClient } = configureChains(getAllChains(), [
   publicProvider(),
 ]);
 
-const connectors = connectorsForWallets(getWallets(getAllChains()));
+const connectors = connectorsForWallets(getWallets(getSupportedChains()));
 
 const wagmiClient = createConfig({
   autoConnect: inIframe() ? false : true,
