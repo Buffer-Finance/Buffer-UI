@@ -332,7 +332,6 @@ function drawPosition(
 export const MultiResolutionChart = ({
   market: marke,
   index,
-  isMobile,
 }: {
   market: Markets;
   index: number;

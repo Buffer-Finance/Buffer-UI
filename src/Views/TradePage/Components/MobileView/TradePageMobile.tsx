@@ -72,7 +72,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
       <MarketStatsBar isMobile />
       <div className="flex-1">
         {[activeMarket.tv_id].map((s) => (
-          <MultiResolutionChart key={s} market={s} index={1} isMobile />
+          <MultiResolutionChart key={s} market={s} index={1} />
         ))}
       </div>
       <ViewOnlyInputs />
