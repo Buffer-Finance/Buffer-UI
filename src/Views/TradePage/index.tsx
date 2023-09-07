@@ -1,30 +1,29 @@
-import { MarketChart } from './Views/MarketChart';
-import { AccordionTable } from './Views/AccordionTable';
-import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { BuyTrade } from './Views/BuyTrade';
-import { PinnedMarkets } from './Views/Markets/PinnedMarkets';
+import { useGenericHooks } from '@Hooks/useGenericHook';
+import { usePrice } from '@Hooks/usePrice';
+import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
+import ShutterProvider, {
+  useShutterHandlers,
+} from '@Views/Common/MobileShutter/MobileShutter';
+import styled from '@emotion/styled';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect } from 'react';
+import { useMedia } from 'react-use';
+import { ModalBase } from 'src/Modals/BaseModal';
+import { MarketTimingsModal } from './Components/MarketTimingsModal';
+import { TradePageMobile } from './Components/MobileView/TradePageMobile';
+import { AccordionTable } from './Views/AccordionTable';
+import { ShareModal } from './Views/AccordionTable/ShareModal';
+import { BuyTrade } from './Views/BuyTrade';
+import { EditModal } from './Views/EditModal';
+import { MarketChart } from './Views/MarketChart';
+import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
+import { PinnedMarkets } from './Views/Markets/PinnedMarkets';
 import {
   miscsSettingsAtom,
   selectedOrderToEditAtom,
   tradePanelPositionSettingsAtom,
 } from './atoms';
 import { tradePanelPosition } from './type';
-import { EditModal } from './Views/EditModal';
-import { ModalBase } from 'src/Modals/BaseModal';
-import styled from '@emotion/styled';
-import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
-import { useGenericHooks } from '@Hooks/useGenericHook';
-import { MarketTimingsModal } from './Components/MarketTimingsModal';
-import { ShareModal } from './Views/AccordionTable/ShareModal';
-import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
-import { useMedia } from 'react-use';
-import { TradePageMobile } from './Components/MobileView/TradePageMobile';
-import { usePrice } from '@Hooks/usePrice';
-import ShutterProvider, {
-  useShutterHandlers,
-} from '@Views/Common/MobileShutter/MobileShutter';
-import { useEffect } from 'react';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -198,7 +197,6 @@ export const EssentialModals = () => {
           market={selectedTrade?.market!}
         />
       </ModalBase>
-      <OneCTModal />
     </>
   );
 };
