@@ -263,7 +263,7 @@ export const EditModal: React.FC<{
                 }}
                 className="scale-75"
               />{' '}
-              Don't Show this again on Drag.
+              Allow closing from chart without confirmation
             </div>
           ) : null}
           <DirectionButtons

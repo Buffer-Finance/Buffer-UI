@@ -73,7 +73,7 @@ const CloseConfirmationModal: React.FC<any> = ({}) => {
             }}
             className="scale-[0.6]"
           />{' '}
-          Allow Closing from chart without confirmation
+          Allow closing from chart without confirmation
         </div>
         <div className="flex gap-x-[15px] ">
           <BlueBtn
