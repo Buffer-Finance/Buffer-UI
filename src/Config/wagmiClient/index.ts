@@ -10,7 +10,7 @@ export const urlSettings = getHashUrlQueryParam(window.location.href);
 export const getChains = () => getAllChains();
 const isTestEnv = import.meta.env.VITE_MODE == 'test';
 
-const { chains, publicClient } = configureChains(getAllChains(), [
+const { chains, publicClient } = configureChains(getSupportedChains(), [
   publicProvider(),
 ]);
 
