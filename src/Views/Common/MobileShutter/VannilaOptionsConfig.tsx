@@ -16,6 +16,7 @@ import TimePickerSelection from '../IOSTimePicer/components/TimePickerSelection'
 import { IOSTimePicker } from '../IOSTimePicer';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { HHMMToSeconds } from '@Views/TradePage/utils';
+import { MarketStatsBar } from '@Views/TradePage/Views/MarketChart/MarketStatsBar';
 const tabs = ['Amount', 'Duration'];
 export const shutterActiveTabAtom = atom(tabs[0]);
 
@@ -53,6 +54,7 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
       </div>
       <HorizontalTransition value={tabs.indexOf(activeTab)}>
         <div>
+          <MarketStatsBar isMobile />
           <TradeSizeSelector onSubmit={onSubmit} />
           <BlueBtn onClick={onSubmit} className="mt-4">
             Continue

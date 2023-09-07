@@ -13,25 +13,34 @@ import { MarketSelectorDD } from '@Views/TradePage/Views/MarketChart/MarketSelec
 import { AssetSelectorDD } from '@Views/TradePage/Views/Markets/AssetSelectorDD';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 
-const MarketPicker: React.FC<any> = ({}) => {
+const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
   const { activeMarket } = useActiveMarket();
   const { openMarketPickerShutter } = useShutterHandlers();
   return (
-    <button
-      type="button"
-      className="flex w-fit text-f14 items-center  !bg-[#282B39] rounded-[5px] px-3 py-2 my-3"
+    <div
+      className="w-full flex justify-between  items-center my-3 p-[3px] bg-[#282B39] rounded-[5px] "
+      role="button"
       onClick={openMarketPickerShutter}
     >
-      <div className="w-[18px] h-[18px] mr-2 ">
-        <PairTokenImage pair={activeMarket} />
+      <button
+        type="button"
+        className="flex w-fit text-f14 items-center   px-3  "
+        role="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          openMarketPickerShutter();
+        }}
+      >
+        <div className="w-[18px] h-[18px] mr-2 ">
+          <PairTokenImage pair={activeMarket} />
+        </div>
+        {activeMarket?.pair}
+      </button>
+
+      <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
+        {payout || '-'}%
       </div>
-      {activeMarket?.pair}
-      <div className="ml-4 bg-[#232334] w-[23px] h-[23px] rounded-[4px] grid place-items-center">
-        <DDArrow
-          className={` transition-all duration-300  ease-out scale-125 `}
-        />
-      </div>{' '}
-    </button>
+    </div>
   );
 };
 

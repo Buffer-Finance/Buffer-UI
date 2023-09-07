@@ -86,12 +86,12 @@ export let supported_resolutions = [
 const pythClient = axios.create({ baseURL: 'https://benchmarks.pyth.network' });
 axiosRetry(pythClient, { retries: 3 });
 
-const isntAvailable = (s: string | null) => {
+export const isntAvailable = (s: string | null) => {
   return (
     s && ['1s', '10s', '5m', '60', '120', '240', '1d'].includes(s.toLowerCase())
   );
 };
-const formatResolution = (s: string) => {
+export const formatResolution = (s: string) => {
   if (s.toLowerCase() == '1s') {
     return '1s';
   }
@@ -141,7 +141,13 @@ const defaults = {
   library_path: '/static/charting_library/',
   theme: 'Dark',
   interval: '1' as ResolutionString,
-  basicDisabled: ['header_compare', 'header_symbol_search', 'header_widget'],
+  basicDisabled: [
+    'header_compare',
+    'header_symbol_search',
+    'header_widget',
+    'go_to_date',
+    'display_market_status',
+  ],
   confgis: {
     supported_resolutions,
     exchanges: [
@@ -211,8 +217,8 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   return rawOhlc;
 };
 
-const drawingAtom = atomWithLocalStorage('Tradingview-data', null);
-const market2resolutionAtom = atomWithStorage(
+const drawingAtom = atomWithLocalStorage('drawing-v1', null);
+export const market2resolutionAtom = atomWithStorage(
   'TradingChartDrawingStorage-market2resolutionAtom',
   null
 );
@@ -242,6 +248,7 @@ const formatMarketOrder = (option: TradeType, earlyCloseData: any) => {
     } ${option.token} | ` + getText(option)
   );
 };
+export const indicatorCoutAtom = atom(0);
 function drawPosition(
   option: TradeType,
   loHandlers: {
@@ -331,6 +338,7 @@ function drawPosition(
 
 export const MultiResolutionChart = ({
   market: marke,
+  isMobile,
   index,
 }: {
   market: Markets;
@@ -351,6 +359,7 @@ export const MultiResolutionChart = ({
 
   const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
+  console.log(`MultiResolutionChart-chartId: `, chartId);
   const v3AppConfig = useMarketsConfig();
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
@@ -365,6 +374,7 @@ export const MultiResolutionChart = ({
     }>
   >({});
   const activeTrades = useOngoingTrades();
+  const indicatorCount = useAtomValue(indicatorCoutAtom);
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
@@ -552,13 +562,10 @@ export const MultiResolutionChart = ({
         datafeed,
         interval: defaults.interval,
         timeframe: '200',
-
         locale: 'en',
-
         container: containerDivRef.current!,
         library_path: defaults.library_path,
         custom_css_url: defaults.cssPath,
-        // create_volume_indicator_by_default: false,
         timezone: getOslonTimezone() as Timezone,
         symbol: market,
         theme: defaults.theme as ThemeName,
@@ -857,51 +864,56 @@ export const MultiResolutionChart = ({
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
+  useEffect(() => {
+    if (indicatorCount) toggleIndicatorDD('d');
+  }, [indicatorCount]);
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="items-center justify-between flex-row flex  bg-2 w-full tv-h px-4 ">
-        <div className="flex flex-row justify-start font-[500]">
-          <div className="ele cursor-pointer">Time</div>
-          {supported_resolutions.map((s) => {
-            return (
-              <div
-                key={s}
-                onClick={async () => {
-                  setMarket2resolution((m: any) => ({
-                    ...m,
-                    [chartId]: s,
-                  }));
-                  await sleep(100);
-                  realTimeUpdateRef.current?.onResetCacheNeededCallback();
+      {!isMobile ? (
+        <div className="items-center justify-between flex-row flex  bg-2 w-full tv-h px-4 ">
+          <div className="flex flex-row justify-start font-[500]">
+            <div className="ele cursor-pointer">Time</div>
+            {supported_resolutions.map((s) => {
+              return (
+                <div
+                  key={s}
+                  onClick={async () => {
+                    setMarket2resolution((m: any) => ({
+                      ...m,
+                      [chartId]: s,
+                    }));
+                    await sleep(100);
+                    realTimeUpdateRef.current?.onResetCacheNeededCallback();
 
-                  widgetRef.current?.activeChart().resetData();
-                }}
-                className={`${
-                  s.toLowerCase() == resolution.toLowerCase() && 'active'
-                } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
-              >
-                {formatResolution(s)}
-              </div>
-            );
-          })}
+                    widgetRef.current?.activeChart().resetData();
+                  }}
+                  className={`${
+                    s.toLowerCase() == resolution.toLowerCase() && 'active'
+                  } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
+                >
+                  {formatResolution(s)}
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex">
+            <ChartTypeSelectionDD
+              setActive={(updatedType: number) => {
+                // console.log(`updatedType: `, updatedType);
+                setChartType((ct: any) => ({ ...ct, [chartId]: updatedType }));
+              }}
+              active={(chartType as any)[chartId] ?? 1}
+            />
+            <button
+              onClick={toggleIndicatorDD}
+              className="flex flex-row mr-3 ele text-f12  font-[500] "
+            >
+              <ChartElementSVG className="mr-[3px]" /> Indicators
+            </button>
+          </div>
         </div>
-        <div className="flex">
-          <ChartTypeSelectionDD
-            setActive={(updatedType: number) => {
-              // console.log(`updatedType: `, updatedType);
-              setChartType((ct: any) => ({ ...ct, [chartId]: updatedType }));
-            }}
-            active={(chartType as any)[chartId] ?? 1}
-          />
-          <button
-            onClick={toggleIndicatorDD}
-            className="flex flex-row mr-3 ele text-f12  font-[500] "
-          >
-            <ChartElementSVG className="mr-[3px]" /> Indicators
-          </button>
-        </div>
-      </div>
+      ) : null}
       <div className="w-full  flex-grow">
         <div
           ref={containerDivRef}

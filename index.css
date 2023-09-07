@@ -257,6 +257,10 @@ html .flip-y{
  html{
   height: 100vh;
  }
+ .special-border-b{
+  border-right-width: 1px;
+  border-right-color: #303044;
+}
 }
 html .MuiDialog-container {
   backdrop-filter: blur(10px);

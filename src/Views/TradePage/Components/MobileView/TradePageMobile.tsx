@@ -21,6 +21,7 @@ import { MarketSelectorDD } from '@Views/TradePage/Views/MarketChart/MarketSelec
 import { MarketPicker } from './MarketPicker/MarketPicker';
 import { MarketStatsBar } from '@Views/TradePage/Views/MarketChart/MarketStatsBar';
 import { Skeleton } from '@mui/material';
+import { MobileChartControlls } from './MobileChartControlls';
 
 const TradePageMobile: React.FC<any> = ({}) => {
   const marketConfig = useMarketsConfig();
@@ -68,11 +69,14 @@ const TradePageMobile: React.FC<any> = ({}) => {
     );
   return (
     <div className="flex flex-col  h-full w-full m-auto px-3 a600:w-[500px]">
-      <MarketPicker />
-      <MarketStatsBar isMobile />
+      <div className="flex w-full items-center justify-between gap-x-[5px]">
+        <MarketPicker payout={totalPayout} />
+        <MobileChartControlls activeMarket={activeMarket.tv_id} />
+      </div>
+      {/* <MarketStatsBar isMobile /> */}
       <div className="flex-1">
         {[activeMarket.tv_id].map((s) => (
-          <MultiResolutionChart key={s} market={s} index={1} />
+          <MultiResolutionChart key={s} market={s} index={1} isMobile />
         ))}
       </div>
       <ViewOnlyInputs />

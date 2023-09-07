@@ -27,8 +27,12 @@ import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { CloseTag } from './CloseTag';
 import { getAddress } from 'viem';
 import { Payout } from '@Views/TradePage/Views/MarketChart/Payout';
+import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 
-export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
+export const AssetSelectorTable: React.FC<{
+  group?: string;
+  onMarketSelect?: () => void;
+}> = ({ group, onMarketSelect }) => {
   const {
     favouriteMarkets: favourites,
     addFavouriteMarket,
@@ -73,6 +77,7 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
   }
 
   const { filteredMarkets: updatedArr } = useAssetTableFilters(group);
+  const { closeShutter } = useShutterHandlers();
 
   const searchValue = useAtomValue(searchBarAtom);
   const BodyFormatter = (row: number, col: number) => {
@@ -260,6 +265,12 @@ export const AssetSelectorTable: React.FC<{ group?: string }> = ({ group }) => {
           if (!updatedArr) return;
           const selectedAsset = updatedArr[rowNumber];
           navigateToMarket(selectedAsset);
+          if (group) {
+            // mobile
+            closeShutter();
+          } else {
+            onMarketSelect?.();
+          }
           // addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
         }}
         overflow
