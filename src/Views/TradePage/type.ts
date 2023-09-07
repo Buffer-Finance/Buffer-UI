@@ -27,12 +27,13 @@ export type marketType = {
   full_name: string;
   img: string;
   pythId: string;
+  creation_window_contract: string | undefined;
   pools: poolType[];
 } & chartDataType;
 
 export interface TradeType {
   id: number;
-  canellation_reason: string | null;
+  cancellation_reason: string | null;
   cancellation_timestamp: number | null;
   signature_timestamp: number;
   queued_timestamp: number;
@@ -85,6 +86,7 @@ export type responseObj = {
     marketOIaddress: string;
     IV: string;
     poolOIaddress: string;
+    creationWindowAddress: string;
   };
   address: string;
   poolContract: string;
@@ -116,10 +118,10 @@ export enum directionBtn {
   Down,
 }
 
-export type configType = (typeof appConfig)['421613'];
+export type configType = (typeof appConfig)['42161'];
 
 export type poolInfoType =
-  (typeof appConfig)['421613']['poolsInfo']['0x470dc0ebC3a3840B57070b425d45dEC182c9b920'];
+  (typeof appConfig)['42161']['poolsInfo']['0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e'];
 
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];
 

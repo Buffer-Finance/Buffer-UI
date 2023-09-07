@@ -39,13 +39,6 @@ export const useChains = () => {
 
 const ChainAccountDropdowns: React.FC<INavbar> = ({ className }) => {
   const { activeChain } = useChains();
-  const activeChainName = activeChain?.name;
-  const chains = getChains();
-  // const router = useRouter();
-  const activeIndex = 1;
-  function switchChain() {
-    // FIXME Multichain
-  }
 
   let disabled = false;
   if (typeof window !== 'undefined') {

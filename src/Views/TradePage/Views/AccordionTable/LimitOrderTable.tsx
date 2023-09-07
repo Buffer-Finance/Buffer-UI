@@ -9,7 +9,7 @@ import {
 } from '@Utils/Dates/displayDateTime';
 
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, round } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Launch } from '@mui/icons-material';
 import { priceAtom } from '@Hooks/usePrice';
@@ -32,6 +32,7 @@ import { TradeType } from '@Views/TradePage/type';
 import { AssetCell } from './AssetCell';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { Visualized } from './Visualized';
 
 export const tradesCount = 10;
 
@@ -121,9 +122,15 @@ const LimitOrderTable = ({
       case TableColumn.ActionButtons:
         return (
           <div className="flex items-center">
+            <Visualized queue_id={trade.queue_id} />
             <GreyBtn
-              className={tableButtonClasses}
-              onClick={() => setSelectedTrade({ trade, market: trade.market })}
+              className={tableButtonClasses + ' !ml-2'}
+              onClick={() =>
+                setSelectedTrade({
+                  trade,
+                  market: trade.market,
+                })
+              }
             >
               Edit
             </GreyBtn>

@@ -1,8 +1,8 @@
 import { atom } from 'jotai';
-import { defaultSelectedTime, defaultSettings } from './config';
-import { HHMMToSeconds } from './utils';
-import { TradeType, marketType, poolInfoType } from './type';
 import { atomWithStorage } from 'jotai/utils';
+import { defaultSelectedTime, defaultSettings } from './config';
+import { TradeType, marketType, poolInfoType } from './type';
+import { HHMMToSeconds } from './utils';
 
 //Share Atoms
 export const shareSettingsAtom = atomWithStorage(
@@ -14,7 +14,7 @@ export const miscsSettingsAtom = atomWithStorage(
   defaultSettings.miscs
 );
 export const tradeSettingsAtom = atomWithStorage(
-  'tradeSettingsAtomV3',
+  'tradeSettingsAtomV4',
   defaultSettings.trade
 );
 export const notificationPositionSettingsAtom = atomWithStorage(
@@ -43,7 +43,7 @@ export const setSettingsAtom = atom(
 );
 
 //BuyTrade Atoms
-export const timeSelectorAtom = atomWithStorage('timeSelectorAtomV2', {
+export const timeSelectorAtom = atomWithStorage('timeSelectorAtomV3', {
   HHMM: defaultSelectedTime,
   seconds: HHMMToSeconds(defaultSelectedTime),
 });
@@ -82,11 +82,17 @@ export const isTableShownAtom = atom<boolean>(false);
 export const selectedOrderToEditAtom = atom<null | {
   trade: TradeType;
   market: marketType;
+  default?: {
+    strike: string;
+  };
 }>(null);
 
 export const visualizeddAtom = atom<number[]>([]);
 
-export const ForexTimingsModalAtom = atom<boolean>(false);
+export const ForexTimingsModalAtom = atom<{
+  isOpen: boolean;
+  marketType: number;
+}>({ isOpen: false, marketType: 0 });
 export const showOnboardingAnimationAtom = atom<boolean>(false);
 export const queuets2priceAtom = atomWithStorage('augmentation-v1', {});
 export const closeLoadingAtom = atom<{ [key: number]: 1 | 2 | null }>({});
@@ -121,3 +127,7 @@ export const platformActiveTableActivePage = atom<number>(1);
 export const platformHistoryTableActivePage = atom<number>(1);
 
 export const tradeInspectMobileAtom = atom<{ trade?: TradeType }>({});
+
+export const closeConfirmationModalAtom = atom<TradeType | false>(false);
+export const rerenderPositionAtom = atom<number>(0);
+export const isUserEducatedAtom = atom({ mobileChainSwitchingIssue: false });

@@ -6,19 +6,17 @@ export const appConfig = {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
-    referral_storage: '0x38653C1d41b8aC02b2Ca2753452E1ad90E12A270',
-    router: '0xeacA681888D0BDA1D055785596e00FDD2d7e0F4F',
-    creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0x03eA2B7eb5147981Ea12d8101A3fDd59fc02262F',
-    pooloi: '0xE9746eB05Df20cDFc231b0eAde1BDD41b25EcC1B',
-    marketoi: '0xAA7A4E91D4345bC58423A04C9e87514205B7EdD4',
-    booster: '0x5F26ABFC8049728A95eDCA2e29Af62385166Cf56',
+    referral_storage: '0xff37eCD6cD32ce9caC75D3EFb434CAc6d63300B1',
+    router: '0xffA2ad9fDaCECC15BE8C41009f61F7760a299092',
+    signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
+    booster: '0x59a73017E755c13037914a4D95Ec5E7b09879631',
     poolsInfo: {
-      '0x3279bD67722D95f977f25b4061CfB1cb0bc55175': {
-        tokenAddress: '0xd094794d3f73C5B6fCF4245513297ce1304C3b39',
-        faucet: '0x01eDE83Dbb03268D643313863255306d3e5B52D2',
+      '0x6F9929BF96cfeFe2a4E1e05bB2CBD918678aEC5F': {
+        tokenAddress: '0xda11D2c3b026561cCE889Ff5A020Eae21308058C',
+        faucet: '0x6442f44b940aAD814A8e75C915f8997e94F191aE',
         decimals: 6,
         token: 'USDC',
+        permitName: 'USDC',
         is_pol: false,
       },
       '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
@@ -26,13 +24,15 @@ export const appConfig = {
         faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
         decimals: 18,
         token: 'BFR',
+        permitName: 'Token',
         is_pol: false,
       },
-      '0x776a60A72B10b83F11d1a66ac02c554613f8A151': {
-        tokenAddress: '0x34ceA3599c4F96A1d27759fb96b656EaC129F31D',
-        faucet: '0xb2C360aa9387c4f295e8066bc18dEAfFb72Ea14F',
+      '0x7fad31E46fcD1B121664EC4ade3Be36cEEDE7164': {
+        tokenAddress: '0x653F5CbAfd87EE9055e4d99d6159dBa20510FcBB',
+        faucet: '0x3Fa55Ff25950e7e52A7A445e251459b033950301',
         decimals: 18,
         token: 'ARB',
+        permitName: 'ARB',
         is_pol: false,
       },
     },
@@ -74,38 +74,40 @@ export const appConfig = {
   },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
-    referral_storage: '0x7Fd89bE6309Dcb7E147D172E73F04b52cee6313a',
-    router: '0x4fdc32a6588612589020F1dd7F106f0Ac8F8Fe6e',
-    creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b',
+    referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
+    router: '0x3890F9664188a2A7292319Ce67320037BE634D3a',
+    signer_manager: '0x983adc3d8853C4792Da5581C5e711d25BAC19042',
+    booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
-        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
-        faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
         decimals: 6,
-        token: 'USDC',
+        faucet: null,
         is_pol: false,
+        token: 'USDC',
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        permitName: 'USD Coin (Arb1)',
       },
       '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
         tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
-        faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+        faucet: null,
         decimals: 6,
         token: 'USDC',
         is_pol: true,
       },
       '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
-        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
-        // faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
         decimals: 18,
-        token: 'ARB',
+        faucet: null,
         is_pol: false,
+        token: 'ARB',
+        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
+        permitName: 'Arbitrum',
       },
       '0xeAbEa290A623a648B3A8ab4B9AD668fb2063f8aB': {
         tokenAddress: '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',
-        // faucet: '0x44B5aF6DFB239A24Aa0Eb0A82c168F961881b7d5',
+        faucet: null,
         decimals: 18,
         token: 'BFR',
         is_pol: false,
@@ -207,7 +209,7 @@ export const HolderContracts = [
 export const refreshInterval = 500;
 export const defaultSettings = {
   trade: {
-    partialFill: true,
+    partialFill: false,
     slippageTolerance: 0.05,
     limitOrdersExpiry: '24',
     selectedTimeFrame: 'h',
@@ -221,24 +223,26 @@ export const defaultSettings = {
   },
   miscs: {
     showFavoriteAsset: true,
+    earlyCloseConfirmation: false,
+    loDragging: false,
   },
   tradePanelPosition: tradePanelPosition.Right,
-  notificationPosition: notificationPosition.TopLeft,
+  notificationPosition: notificationPosition.BottomLeft,
 };
 
 export const defaultSelectedTime = '00:15';
 export const oneSec = 1000;
 export const durations = [
-  {
-    duration: 1 * 60,
-    time: '00:01',
-    name: ['1m'],
-  },
   // {
-  //   duration: 3 * 60 * oneSec,
-  //   time: '00:03',
-  //   name: ['3m'],
+  //   duration: 1 * 60,
+  //   time: '00:01',
+  //   name: ['1m'],
   // },
+  {
+    duration: 3 * 60,
+    time: '00:03',
+    name: ['3m'],
+  },
   {
     duration: 5 * 60,
     time: '00:05',

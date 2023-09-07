@@ -52,8 +52,6 @@ export const getOHLCfromPrice = (
 };
 
 export function getBlockFromBar(bar: number[]): OHLCBlock {
-  // FIXME
-  // if (typeof bar == 'number' && bar?.time) return bar;
   return {
     time: +bar[0],
     open: +bar[1],
@@ -227,24 +225,6 @@ export const getKlineFromPrice = (asset) => {
                 ];
             }
           } catch (err) {}
-          // try {
-          //   const [assetName, decimalTs, numPrice] = assetString.split(':');
-          //   const ts = (decimalTs as string).replace('.', '');
-          //   const absolutePrice = numPrice;
-          //   priceObj[assetName] = [
-          //     {
-          //       time: +ts,
-          //       close: absolutePrice,
-          //       open: absolutePrice,
-          //       high: absolutePrice,
-          //       low: absolutePrice,
-          //     },
-          //   ];
-          // } catch (err) {
-          //   console.log(`[getKlineFromPrice]err: `, assetString);
-          //   // TODO remove throwing error
-          //   throw new Error('it is that');
-          // }
         }
       });
     }

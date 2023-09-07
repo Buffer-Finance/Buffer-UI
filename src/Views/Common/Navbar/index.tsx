@@ -4,10 +4,7 @@ import { getTabs } from 'src/Config/getTabs';
 import { TabsDropdown } from './TabsDropDown';
 import { Tab } from './Tab';
 import { AccountDropdown } from './AccountDropdown';
-import { social } from './socialLinks';
 import { useGlobal } from '@Contexts/Global';
-import MenuLogo from '@Assets/Elements/MenuLogo';
-import CloseLogo from '@SVG/Elements/Closelogo';
 import { useAtomValue } from 'jotai';
 import { urlSettings } from 'src/Config/wagmiClient';
 import { isTestnet } from 'config';
@@ -17,17 +14,18 @@ import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
 import { useShutterHandlers } from '../MobileShutter/MobileShutter';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
 
 interface INavbar {}
 
 export const Navbar: React.FC<INavbar> = () => {
-  const { state, dispatch } = useGlobal();
+  const { dispatch } = useGlobal();
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   const tabs = useMemo(
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = isTestnet ? 6 : 4;
+  const VISIBLETABS = isTestnet ? 6 : 6;
   // const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
@@ -40,6 +38,8 @@ export const Navbar: React.FC<INavbar> = () => {
   const show = !urlSettings?.hide;
   return (
     <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102]">
+      <OneCTModal />
+
       <div className="flex items-center ">
         <div
           role={'button'}
@@ -63,7 +63,7 @@ export const Navbar: React.FC<INavbar> = () => {
         </div>
 
         {show && (
-          <div className="b1200:hidden flex gap-[6px]  ">
+          <div className="b1200:hidden flex gap-[6px] ml-4 ">
             {tabs.slice(0, VISIBLETABS).map((tab, index) => {
               if (tab.isExternalLink) {
                 return (

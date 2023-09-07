@@ -1,4 +1,3 @@
-import { useToast } from '@Contexts/Toast';
 import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
 import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
@@ -9,7 +8,6 @@ import { useMemo } from 'react';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
-  const toastify = useToast();
 
   const res = useMemo(() => {
     if (!data?.optionContracts) {
@@ -31,6 +29,7 @@ export const useMarketsConfig = () => {
         response.push({
           ...marketInfo,
           category: AssetCategory[item.category],
+          creation_window_contract: item.configContract.creationWindowAddress,
           pools: [createPoolObject(item)],
         });
       }

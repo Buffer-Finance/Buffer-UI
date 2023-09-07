@@ -6,9 +6,9 @@ import { BlueBtn } from '../V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { SVGProps } from 'react';
 import { MenuItem, Skeleton } from '@mui/material';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { snackAtom } from 'src/App';
-import { useDisconnect, usePublicClient } from 'wagmi';
+import { useAccount, useBalance, useDisconnect, usePublicClient } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import {
   uesOneCtActiveChain,
@@ -18,10 +18,17 @@ import { Display } from '../Tooltips/Display';
 import ETHImage from '../../../../public/tokens/ETH.png';
 import DDArrow from '@SVG/Elements/Arrow';
 import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
-import NFTtier from '../NFTtier';
 import WalletIcon from '@SVG/Elements/WalletIcon';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import copyToClipboard from '@Utils/copyToClipboard';
+import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { getAddress } from 'viem';
+import {
+  ChainSwitchingModal,
+  useChainTutorial,
+} from '@Views/TradePage/Views/ChainSwitchingModal';
+import { useMedia } from 'react-use';
 const token2image = {
   ETH: ETHImage,
 };
@@ -36,6 +43,7 @@ const chainImageMappipng = {
 };
 
 export const AccountDropdown: React.FC = () => {
+  const { address } = useUserAccount();
   const setSnack = useSetAtom(snackAtom);
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
   const { activeChain } = uesOneCtActiveChain();
@@ -49,10 +57,10 @@ export const AccountDropdown: React.FC = () => {
     toggleMenu(false);
   }
 
-  const { address } = useUserAccount();
   const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
     useOneCTWallet();
-
+  const isMobile = useMedia('(max-width:1200px)');
+  const { isUserEducated, openTutorial } = useChainTutorial();
   const provider = usePublicClient({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   useEffect(() => {
@@ -65,7 +73,7 @@ export const AccountDropdown: React.FC = () => {
   if (registeredOneCT) {
     OneCTManager = (
       <BlueBtn
-        className="!ml-[13px] !text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
+        className="!text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
         onClick={() => {
           disableOneCt();
           closeDropdown();
@@ -120,13 +128,19 @@ export const AccountDropdown: React.FC = () => {
               },
             })}
           >
+            <ChainSwitchingModal openConnectModal={openConnectModal} />
+
             {(() => {
               if (!connected) {
                 return (
                   <div
                     role="button"
                     className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] pl-3 pr-1 bg-[#191b20] hover:brightness-125 `}
-                    onClick={openConnectModal}
+                    onClick={
+                      isMobile && !isUserEducated.mobileChainSwitchingIssue
+                        ? openTutorial
+                        : openConnectModal
+                    }
                   >
                     <WalletIcon className="mr-[6px] ml-1 text-blue" />
 
@@ -143,7 +157,11 @@ export const AccountDropdown: React.FC = () => {
                   <div
                     role="button"
                     className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-3 bg-[#191b20] hover:brightness-125 `}
-                    onClick={openChainModal}
+                    onClick={
+                      isMobile && !isUserEducated.mobileChainSwitchingIssue
+                        ? openTutorial
+                        : openChainModal
+                    }
                   >
                     <WalletIcon className="mr-[6px] ml-1" />
 
@@ -168,7 +186,7 @@ export const AccountDropdown: React.FC = () => {
                       {chain && chain.name && (
                         <img
                           className="h-[18px] w-[18px] mr-[6px] sm:mr-[0px] rounded-full"
-                          src={chain.iconUrl ?? chainImageMappipng[chain.name]}
+                          src={chain.iconUrl}
                           alt={chain.name ?? 'Chain icon'}
                         />
                       )}
@@ -185,16 +203,9 @@ export const AccountDropdown: React.FC = () => {
                       className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-[6px] bg-[#191B20] hover:brightness-125 `}
                     >
                       <WalletIcon className="mr-2 ml-1 text-blue" />
-                      <div className="flex items-center">
-                        <Display
-                          data={account.balanceFormatted}
-                          className="text-f14"
-                        />
-                        <img
-                          src={token2image[account.balanceSymbol]}
-                          className="w-[14px] h-[14px] ml-2"
-                        />
-                      </div>
+
+                      <TokenAccountBalance />
+
                       <div
                         className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1"
                         test-id="account-holder-div"
@@ -222,7 +233,7 @@ export const AccountDropdown: React.FC = () => {
                     <MenuItem className={'!bg-[#232334] text-1 cursor-auto'}>
                       <div className="mx-[10px] my-[10px] mb-[14px]">
                         <div className="flex items-center justify-between text-f14 mb-[20px]">
-                          <div className="flex flex-col">
+                          <div className="flex flex-col mr-4">
                             {account
                               ? `${account.address.slice(
                                   0,
@@ -269,18 +280,18 @@ export const AccountDropdown: React.FC = () => {
                             </IconBG>
                           </div>
                         </div>
-                        <div className="flex items-center gap-x-3 text-f14">
+                        <div className="flex items-center text-f14 justify-center">
                           {OneCTManager}
-                          <a
+                          {/*  <a
                             className="unset"
                             href="https://www.google.com/"
                             target="_blank"
                           >
-                            <div className="text-f12 underline flex items-center ">
+                          <div className="text-f12 underline flex items-center ">
                               Learn More{' '}
                               <ShareIcon className=" scale-[0.65] ml-[1px] mb-[-2px]" />
                             </div>
-                          </a>
+                          </a> */}
                         </div>
                       </div>{' '}
                     </MenuItem>
@@ -297,11 +308,15 @@ export const AccountDropdown: React.FC = () => {
 
 export const ConnectionRequired = ({
   children,
+  mobileTutorial,
   className = '',
 }: {
   children: ReactNode;
   className?: string;
+  mobileTutorial?: boolean;
 }) => {
+  const isMobile = useMedia('(max-width:1200px)');
+  const { isUserEducated, openTutorial } = useChainTutorial();
   return (
     <ConnectButton.Custom>
       {({
@@ -336,19 +351,29 @@ export const ConnectionRequired = ({
             {(() => {
               if (!connected) {
                 return (
-                  <BlueBtn
-                    onClick={openConnectModal}
-                    className={'px-5 py-[5px] !h-fit ' + className}
-                  >
-                    Connect Wallet
-                  </BlueBtn>
+                  <>
+                    <BlueBtn
+                      onClick={
+                        isMobile && !isUserEducated.mobileChainSwitchingIssue
+                          ? openTutorial
+                          : openConnectModal
+                      }
+                      className={'px-5 py-[5px] !h-fit ' + className}
+                    >
+                      Connect Wallet
+                    </BlueBtn>
+                  </>
                 );
               }
 
               if (chain.unsupported) {
                 return (
                   <BlueBtn
-                    onClick={openChainModal}
+                    onClick={
+                      isMobile && !isUserEducated.mobileChainSwitchingIssue
+                        ? openTutorial
+                        : openChainModal
+                    }
                     className={'px-5 py-[5px] !h-fit ' + className}
                   >
                     {/* <Wallet className="" /> */}
@@ -422,3 +447,27 @@ export const PowerIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
+const TokenAccountBalance = () => {
+  const { activePool } = useAtomValue(activePoolObjAtom);
+  const pools = usePoolByAsset();
+  let activePoolDetails = pools[activePool];
+  if (activePoolDetails === undefined) activePoolDetails = pools['USDC'];
+  const { address } = useAccount();
+  const { data, isError, isLoading, error } = useBalance({
+    address,
+    token: getAddress(activePoolDetails.tokenAddress),
+    watch: true,
+  });
+
+  return (
+    <div className="flex items-center">
+      {' '}
+      <Display data={data?.formatted} className="text-f14" />{' '}
+      <img
+        src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePoolDetails.token.toLowerCase()}.png`}
+        className="w-[16px] h-[16px] ml-2"
+      />
+    </div>
+  );
+};

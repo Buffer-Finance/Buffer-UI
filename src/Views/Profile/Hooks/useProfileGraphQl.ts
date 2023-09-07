@@ -109,11 +109,15 @@ export const useProfileGraphQl = () => {
             accumulator.totalPayouts[token] || '0',
             currentValue.payout
           );
-          newData.tradeWon += 1;
+
+          const netPnl = subtract(currentValue.payout, currentValue.totalFee);
+          if (parseFloat(netPnl) > 0) {
+            newData.tradeWon += 1;
+          }
 
           newData.net_pnl[token] = add(
             accumulator.net_pnl[token] || '0',
-            subtract(currentValue.payout, currentValue.totalFee)
+            netPnl
           );
         } else {
           newData.net_pnl[token] = add(
@@ -137,7 +141,6 @@ export const useProfileGraphQl = () => {
         tradesPerAsset: {},
       } as metricsData
     );
-
     const openInterest = data.activeData.reduce((accumulator, currentValue) => {
       const token = currentValue.optionContract.token;
       return token in accumulator

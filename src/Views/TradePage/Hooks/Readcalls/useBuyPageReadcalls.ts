@@ -61,6 +61,8 @@ export function useBuyTradePageReadcalls() {
         const baseSettlementFee =
           baseSettlementFees?.[joinStrings(market.token0, market.token1, '')]
             ?.settlement_fee;
+        const creation_window = market.creation_window_contract;
+
         return market.pools
           .map((pool) => {
             const calls = [
@@ -92,7 +94,15 @@ export function useBuyTradePageReadcalls() {
                   referralData[3],
                   address,
                   baseSettlementFee?.toString() ?? '1500',
-                ],
+                ] as never,
+              });
+            }
+            if (creation_window !== undefined) {
+              calls.push({
+                address: creation_window,
+                abi: CreationWindowABI,
+                name: 'isInCreationWindow',
+                params: [timeToMins('00:05') as never],
               });
             }
             return calls;
@@ -100,13 +110,6 @@ export function useBuyTradePageReadcalls() {
           .flat(1);
       })
       .flat(1);
-    optionCalls?.push({
-      address: configData.creation_window,
-      abi: CreationWindowABI,
-      name: 'isInCreationWindow',
-      params: [timeToMins('00:05')],
-    });
-    // console.log('optionCalls', optionCalls);
 
     if (!address) {
       return [...optionCalls!];
@@ -114,6 +117,5 @@ export function useBuyTradePageReadcalls() {
 
     return [...userSpecificCalls, ...optionCalls!];
   }, [switchPool, poolDetails, address]);
-
-  return useCall2Data(calls, 'V3-app-read-calls');
+  return useCall2Data(calls, 'trade-page-callls' + address);
 }

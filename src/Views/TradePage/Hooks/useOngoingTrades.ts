@@ -8,6 +8,9 @@ import { TradeType } from '../type';
 import { getSingatureCached } from '../cache';
 import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { getAddress } from 'viem';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
@@ -17,7 +20,7 @@ const useOngoingTrades = () => {
   // const { oneCTWallet } = useOneCTWallet();
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
-
+  const { address: userAddress } = useUserAccount();
   const { address } = useAccount();
   const markets = useMarketsConfig();
   const { data, error } = useSWR<TradeType[][]>(
@@ -29,14 +32,18 @@ const useOngoingTrades = () => {
       oneCTWallet?.address,
     {
       fetcher: async () => {
-        if (!address) return [[], []] as TradeType[][];
-        const signature = await getSingatureCached(oneCTWallet);
+        if (!userAddress) return [[], []] as TradeType[][];
+        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+          return [[], []];
+        let currentUserSignature = null;
+        if (userAddress === address)
+          currentUserSignature = await getSingatureCached(oneCTWallet);
         // console.log(`signature: `, signature);
 
         const res = await axios.get(`${baseUrl}trades/user/active/`, {
           params: {
-            user_signature: signature,
-            user_address: address,
+            user_signature: currentUserSignature,
+            user_address: getAddress(userAddress),
             environment: activeChain.id,
           },
         });

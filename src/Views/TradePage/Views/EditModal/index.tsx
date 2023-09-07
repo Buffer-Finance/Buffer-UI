@@ -27,19 +27,27 @@ import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeS
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useAtomValue, useSetAtom } from 'jotai';
+import {
+  miscsSettingsAtom,
+  rerenderPositionAtom,
+} from '@Views/TradePage/atoms';
+import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
 export const EditModal: React.FC<{
   trade: TradeType;
-  onSave: () => void;
-}> = ({ trade, onSave }) => {
+  onSave: (a: boolean) => void;
+  defaults: Partial<{ strike: string }>;
+}> = ({ trade, onSave, defaults }) => {
   const [_, limitOrders] = useOngoingTrades();
-
   const { address } = useAccount();
   const [buttonDirection, setButtonDirection] = useState(directionBtn.Up);
   const [frame, setFrame] = useState('m');
   const [minutes, setMinutes] = useState(0);
   const [currentTime, setCurrentTime] = useState(secondsToHHMM(trade?.period));
-  const [price, setPrice] = useState(divide(trade?.strike, 8));
+  const [price, setPrice] = useState(
+    divide(defaults?.strike || trade?.strike, 8)
+  );
   const [editLoading, setEditLoading] = useState<null | number>(null);
   const [periodValidations, setPeriodValidation] = useState({
     min: '00:05',
@@ -131,6 +139,8 @@ export const EditModal: React.FC<{
   function onTimeChange(value: number) {
     setMinutes(value);
   }
+  const settings = useAtomValue(miscsSettingsAtom);
+  const [val, setVal] = useState(settings.loDragging);
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const toastify = useToast();
   const editHandler = async () => {
@@ -181,7 +191,10 @@ export const EditModal: React.FC<{
       activeChain.id
     );
     if (res) {
-      onSave();
+      onSave(val);
+      if (val) {
+        setTimeout(() => rerenderPositionAtom);
+      }
       return toastify({
         msg: 'Limit order updated successfully',
         type: 'success',
@@ -236,6 +249,23 @@ export const EditModal: React.FC<{
             />
           </RowBetween>
           <TriggerPrice price={price} setPrice={setPrice} />
+          {defaults?.strike ? (
+            <div
+              className="flex items-center mt-2 gap-x-[7px] text-f14 text-[ !text-f14 !w-fit  text-[#C3C2D4]"
+              onClick={() => {
+                setVal(!val);
+              }}
+            >
+              <BufferCheckbox
+                checked={val}
+                onCheckChange={() => {
+                  setVal(!val);
+                }}
+                className="scale-75"
+              />{' '}
+              Don't Show this again on Drag.
+            </div>
+          ) : null}
           <DirectionButtons
             activeBtn={buttonDirection}
             setActiveBtn={setButtonDirection}

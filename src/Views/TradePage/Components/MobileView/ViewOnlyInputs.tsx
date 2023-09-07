@@ -43,16 +43,19 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
             e.stopPropagation();
             setDuration((d) => {
               let secs = HHMMToSeconds(d.HHMM);
-              secs += 60;
-              return {
-                HHMM: secondsToHHMM(secs),
-                seconds: secs,
-              };
+              secs -= 60;
+              if (secs > 0)
+                return {
+                  HHMM: secondsToHHMM(secs),
+                  seconds: secs,
+                };
+              else return d;
             });
           }}
         >
-          <span>+</span>
+          <span>-</span>
         </div>
+
         <span className="text-1 text-f13">
           {currentTime.HHMM.split(':')[0]} h {currentTime.HHMM.split(':')[1]}{' '}
           min
@@ -64,15 +67,17 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
             e.stopPropagation();
             setDuration((d) => {
               let secs = HHMMToSeconds(d.HHMM);
-              secs -= 60;
-              return {
-                HHMM: secondsToHHMM(secs),
-                seconds: secs,
-              };
+              secs += 60;
+              if (secs < 24 * 60 * 60)
+                return {
+                  HHMM: secondsToHHMM(secs),
+                  seconds: secs,
+                };
+              else return d;
             });
           }}
         >
-          <span>-</span>
+          <span>+</span>
         </div>
       </button>
     </div>

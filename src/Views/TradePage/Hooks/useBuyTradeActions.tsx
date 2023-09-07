@@ -364,6 +364,7 @@ export const useBuyTradeActions = (userInput: string) => {
             params: apiParams,
           }
         );
+        setLoading(null);
 
         if (!customTrade.limitOrderExpiry) {
           getLockedAmount(
@@ -421,7 +422,7 @@ export const useBuyTradeActions = (userInput: string) => {
             <div>
               <span>
                 <span className="!text-3">Total amount:</span>
-                {userInput}&nbsp;USDC
+                {userInput}&nbsp;{tokenName}
               </span>
             </div>
           </div>
@@ -439,16 +440,15 @@ export const useBuyTradeActions = (userInput: string) => {
           type: 'error',
           msg: e.message,
         });
-      } finally {
         setLoading(null);
       }
-
       // } catch (e) {
       //   con
       // }
     }
   };
-  const defaultApprovalAmount = '100000000000000000000000000';
+  const defaultApprovalAmount =
+    '115792089237316195423570985008687907853269984665640564039457584007913129639935';
   const handleApproveClick = async (ammount = defaultApprovalAmount) => {
     // console.log('goes in here');
     if (state.txnLoading > 1) {
@@ -488,7 +488,8 @@ export const useBuyTradeActions = (userInput: string) => {
         configData.router,
         deadline,
         activeChain.id,
-        signTypedData
+        signTypedData,
+        poolDetails?.permitName
       );
       const updatedApproval = await updateApprovalData();
 

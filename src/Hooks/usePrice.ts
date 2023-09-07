@@ -32,7 +32,7 @@ type WSUPdate = {
 };
 const solanaClusterName = 'pythnet';
 const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
-
+export const silentPriceCache = {};
 export const usePrice = () => {
   const setPrice = useSetAtom(priceAtom);
   const loadNewPriceData = useCallback(
@@ -68,6 +68,9 @@ export const usePrice = () => {
             [pythIds[(lastJsonMessage as WSUPdate).price_feed.id]]:
               priceUpdatePacked,
           };
+          silentPriceCache[
+            pythIds[(lastJsonMessage as WSUPdate).price_feed.id]
+          ] = priceUpdatePacked;
           setPrice((p) => ({ ...p, ...data }));
         }
       };

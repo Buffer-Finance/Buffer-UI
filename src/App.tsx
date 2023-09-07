@@ -46,6 +46,8 @@ import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm'
 import ShutterProvider, {
   TradesShutter,
 } from '@Views/Common/MobileShutter/MobileShutter';
+import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
+import { isTestnet } from 'config';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -56,12 +58,24 @@ import ShutterProvider, {
   }
 })();
 
+const Redirect = ({ url }: { url: string }) => {
+  useEffect(() => {
+    window.location.href = url;
+  }, [url]);
+
+  return <h5 className="p-4 m-auto text-f20">Redirecting...</h5>;
+};
+
 const AppRoutes = () => {
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   const [searchParam] = useSearchParams();
   const [ref, setRef] = useAtom(referralCodeAtom);
   const toastify = useToast();
   const navigate = useNavigate();
+  const earnUrl = isTestnet
+    ? 'https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/'
+    : 'https://earn.buffer.finance/';
+
   useEffect(() => {
     let referralCode = searchParam.get('ref');
 
@@ -104,7 +118,8 @@ const AppRoutes = () => {
           element={<div>Processing your referral request...</div>}
         ></Route>
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
-        <Route path="/earn" element={<Earn />} />
+        <Route path="/earn" element={<Redirect url={earnUrl} />} />
+
         <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
         </Route>
@@ -199,16 +214,32 @@ function App() {
           {!urlSettings?.hide && (
             <Warning
               body={
-                <>
-                  $BFR token 0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D has been
-                  listed on Uniswap V3 Arbitrum. Don't trade $iBFR token on
-                  PancakeSwap or Apeswap on BNB chain.
-                </>
+                <div>
+                  🚀 Buffer v2.5 is live on&nbsp;
+                  <a href="https://app.buffer.finance/" target="_blank">
+                    <span className="underline underline-offset-2">
+                      Mainnet
+                    </span>
+                  </a>
+                  &nbsp; | 📜 Learn more about v2.5&nbsp;
+                  <a
+                    href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
+                    target="_blank"
+                  >
+                    <span className="underline underline-offset-2">here</span>
+                  </a>
+                  &nbsp; | ✨ To trade with $BFR as collateral visit the&nbsp;
+                  <a href="https://classic.app.buffer.finance/" target="_blank">
+                    <span className="underline underline-offset-2">
+                      classic version
+                    </span>
+                  </a>
+                </div>
               }
               closeWarning={() => {}}
               shouldAllowClose={false}
               state={true}
-              className="disclaimer sm:hidden"
+              className="disclaimer"
             />
           )}
           <TnCModal />

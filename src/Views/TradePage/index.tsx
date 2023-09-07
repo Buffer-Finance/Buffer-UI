@@ -6,6 +6,7 @@ import { PinnedMarkets } from './Views/Markets/PinnedMarkets';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   miscsSettingsAtom,
+  rerenderPositionAtom,
   selectedOrderToEditAtom,
   tradePanelPositionSettingsAtom,
 } from './atoms';
@@ -25,6 +26,7 @@ import ShutterProvider, {
   useShutterHandlers,
 } from '@Views/Common/MobileShutter/MobileShutter';
 import { useEffect } from 'react';
+import { CloseConfirmationModal } from './CloseConfirmationModal';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -178,27 +180,46 @@ const MobileWarning = () => {
 
 export const EssentialModals = () => {
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
+  const setSettings = useSetAtom(miscsSettingsAtom);
   const selectedTrade = useAtomValue(selectedOrderToEditAtom);
+  const setPositionRerender = useSetAtom(rerenderPositionAtom);
+  const closeEditModal = () => {
+    // on leaving edit modal
+    if (selectedTrade?.default) {
+      setPositionRerender((d) => d + 1);
+    }
+    setSelectedTrade(null);
+  };
   useGenericHooks();
+
   return (
     <>
+      <CloseConfirmationModal />
+
       <MarketTimingsModal />
       <ShareModal />
       <ModalBase
         className="!p-[0px]"
         open={selectedTrade ? true : false}
-        onClose={() => setSelectedTrade(null)}
+        onClose={closeEditModal}
       >
         <EditModal
+          defaults={selectedTrade?.default}
           trade={selectedTrade?.trade!}
-          onSave={() => {
-            console.log(`index-setSelectedTrade: `, setSelectedTrade);
+          onSave={(val: boolean) => {
+            setTimeout(() => {
+              setSettings((s) => {
+                return {
+                  ...s,
+                  loDragging: val,
+                };
+              });
+            }, 3000);
             setSelectedTrade(null);
           }}
           market={selectedTrade?.market!}
         />
       </ModalBase>
-      <OneCTModal />
     </>
   );
 };

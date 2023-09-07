@@ -76,16 +76,17 @@ export const BuyTrade: React.FC = () => {
   });
   // const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
-  // if (
-  //   amount !== undefined &&
-  //   amount !== null &&
-  //   amount !== '' &&
-  //   amount !== '0'
-  // ) {
-  //   userAmount = subtract(userAmount, platformFee ?? '0');
-  // } else {
-  //   userAmount = '0';
-  // }
+  // const buyLink = () => {
+  //   particle.openBuy({
+  //     fiatCoin: 'USD',
+  //     cryptoCoin: 'USDC',
+  //     network: 'Arbitrum One',
+  //     walletAddress: address,
+  //   });
+  // };
+  // const openWallet = () => {
+  //   particle.openWallet();
+  // };
 
   return (
     <BuyTradeBackground>

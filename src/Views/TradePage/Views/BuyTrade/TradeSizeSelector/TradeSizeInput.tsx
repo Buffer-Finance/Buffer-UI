@@ -1,11 +1,13 @@
+import { toFixed } from '@Utils/NumString';
 import { add, gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import { tradeSettingsAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
-import { getMinimumValue } from '@Views/TradePage/utils';
+import { getMaximumValue, getMinimumValue } from '@Views/TradePage/utils';
 import { Trans } from '@lingui/macro';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { BuyUSDCLink } from '../BuyUsdcLink';
+import { escapeRegExp, inputRegex } from '../CurrentPrice';
 
 const className = 'text-[#FFE200]';
 export const TradeSizeInput: React.FC<{
@@ -50,10 +52,20 @@ export const TradeSizeInput: React.FC<{
           value={tradeSize}
           max={maxTradeSize}
           min={minTradeSize}
-          type="number"
+          pattern="^[0-9]*[.,]?[0-9]*$"
+          type="text"
           className={`relative h-[40px] bg-[#282b39] px-5 py-3 rounded-l-[5px] outline-none w-full text-f16 text-1 sm:h-[35px]`}
           onChange={(e) => {
-            setTradeSize(e.target.value);
+            if (inputRegex.test(escapeRegExp(e.target.value))) {
+              let newValue = e.target.value;
+              // Check if newValue has more than 3 decimal places
+              const decimalPart = newValue.split('.')[1];
+              if (decimalPart && decimalPart.length > 3) {
+                // If yes, limit it to 3 decimal places
+                newValue = parseFloat(newValue).toFixed(3);
+              }
+              setTradeSize(newValue);
+            }
           }}
           onKeyDown={(e) => e.key == 'Enter' && onSubmit?.()}
           placeholder="Enter value"
@@ -62,7 +74,13 @@ export const TradeSizeInput: React.FC<{
           className="absolute right-3 bg-[#141823] rounded-[6px] py-2 px-[6px] text-f12"
           onClick={() => {
             setTradeSize(
-              subtract(getMinimumValue(maxTradeSize, balance), platformFee)
+              getMaximumValue(
+                toFixed(
+                  subtract(getMinimumValue(maxTradeSize, balance), platformFee),
+                  2
+                ),
+                '0'
+              )
             );
             // setmaxErr(false);
             // setminErr(false);

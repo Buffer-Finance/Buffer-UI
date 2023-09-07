@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { getDistance, Variables } from "@Utils/Time";
+import { useEffect, useState } from 'react';
+import { getDistance, Variables } from '@Utils/Time';
 
 function getUnit(d, m) {
-  if (d && d !== "" && d !== "0") {
+  if (d && d !== '' && d !== '0') {
     return d + m;
   }
-  return "";
+  return '';
 }
 export const formatDistance = (stopWatch: {
   days: number;
@@ -18,16 +18,16 @@ export const formatDistance = (stopWatch: {
   const withinAnHour = DaysHours <= 0;
   const withinADay = Days <= 0;
   return stopWatch
-    ? `${getUnit(stopWatch.days, "d ")}${getUnit(stopWatch.hours, "h ")}${
-        withinADay ? getUnit(stopWatch.minutes, "m ") : ""
-      }${withinAnHour ? getUnit(stopWatch.seconds, "s") : ""}`
+    ? `${getUnit(stopWatch.days, 'd ')}${getUnit(stopWatch.hours, 'h ')}${
+        withinADay ? getUnit(stopWatch.minutes, 'm ') : ''
+      }${withinAnHour ? getUnit(stopWatch.seconds, 's') : ''}`
     : null;
 };
 function addBoth(c: string, b) {
-  if (!c && !b.includes("m") && !b.includes("h")) return "";
+  if (!c && !b.includes('m') && !b.includes('h')) return '';
 
   let a = c.toString();
-  return a.padStart(2, "0") + b;
+  return a.padStart(2, '0') + b;
 }
 export const formatDistanceExpanded = (stopWatch: {
   days: number;
@@ -36,10 +36,31 @@ export const formatDistanceExpanded = (stopWatch: {
   seconds: number;
 }) => {
   return stopWatch
-    ? `${addBoth(stopWatch.days, "d ")}${addBoth(
+    ? `${addBoth(stopWatch.days, 'd ')}${addBoth(
         stopWatch.hours,
-        "h "
-      )}${addBoth(stopWatch.minutes, "m ")}${addBoth(stopWatch.seconds, "s")}`
+        'h '
+      )}${addBoth(stopWatch.minutes, 'm ')}${addBoth(stopWatch.seconds, 's')}`
+    : null;
+};
+
+export const formatDistanceCompact = (stopWatch: {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}) => {
+  return stopWatch
+    ? `${
+        stopWatch.days > 0
+          ? addBoth(stopWatch.days, 'd')
+          : stopWatch.hours > 0
+          ? addBoth(stopwatch.hours, 'h')
+          : stopWatch.minutes > 0
+          ? addBoth(stopWatch.minutes, 'm')
+          : stopWatch.seconds > 0
+          ? addBoth(stopWatch.seconds, 's')
+          : '-'
+      }`
     : null;
 };
 export default function useStopWatch(timer: number) {

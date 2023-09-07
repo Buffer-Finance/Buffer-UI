@@ -27,16 +27,16 @@ export const useBuyTradeData = (deb?: string) => {
 
     const allowance =
       readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
-    const user2signer = {
-      signer:
-        readCallData[
-          getCallId(configData.signer_manager, 'accountMapping')
-        ]?.[0],
-      nonce:
-        readCallData[
-          getCallId(configData.signer_manager, 'accountMapping')
-        ]?.[1],
-    };
+    // const user2signer = {
+    //   signer:
+    //     readCallData[
+    //       getCallId(configData.signer_manager, 'accountMapping')
+    //     ]?.[0],
+    //   nonce:
+    //     readCallData[
+    //       getCallId(configData.signer_manager, 'accountMapping')
+    //     ]?.[1],
+    // };
     const maxTradeSizes: { [key: string]: string } = {};
 
     const settlementFees: {
@@ -47,6 +47,9 @@ export const useBuyTradeData = (deb?: string) => {
     } = {};
     const currentOIs: {
       [key: string]: string;
+    } = {};
+    const creationWindows: {
+      [key: string]: boolean;
     } = {};
 
     config?.forEach((item) => {
@@ -65,24 +68,30 @@ export const useBuyTradeData = (deb?: string) => {
         if (settlement_fee) {
           settlementFees[pool.optionContract] = getPayout(settlement_fee);
         }
+
+        creationWindows[pool.optionContract] = item.creation_window_contract
+          ? readCallData[
+              getCallId(item.creation_window_contract, 'isInCreationWindow')
+            ]?.[0]
+          : 'true';
       });
     });
-    const isInCreationWindow =
-      readCallData[
-        getCallId(configData.creation_window, 'isInCreationWindow')
-      ]?.[0];
+    // const isInCreationWindow =
+    //   readCallData[
+    //     getCallId(configData.creation_window, 'isInCreationWindow')
+    //   ]?.[0];
     const nonces =
       readCallData[getCallId(poolDetails.tokenAddress, 'nonces')]?.[0];
     return {
       balance,
       allowance,
-      user2signer,
+      // user2signer,
       maxTradeSizes,
       settlementFees,
       maxOIs,
       currentOIs,
       nonces,
-      isInCreationWindow,
+      creationWindows,
     };
   }, [readCallData, poolDetails, switchPool, configData]);
 

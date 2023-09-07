@@ -15,7 +15,10 @@ const DashboardV2Page = () => {
       >
         <TokensSection />
       </ChainNotSupported>
-      <ChainNotSupported hide supportedChainIds={[arbitrumGoerli.id]}>
+      <ChainNotSupported
+        hide
+        supportedChainIds={[arbitrumGoerli.id, arbitrum.id]}
+      >
         <MarketsSection />
       </ChainNotSupported>
     </DashboardV2Styles>

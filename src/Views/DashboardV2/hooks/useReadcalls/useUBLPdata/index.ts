@@ -16,7 +16,6 @@ export const useUBLPdata = () => {
   const usd_decimals = usdcPool?.decimals || 6;
   const bfrPrice = useIbfrPrice();
 
-  //   console.log('readcalldata', readcalldata);
   let responseObj: IBLP | null = null;
 
   if (readcalldata !== null) {
@@ -31,6 +30,16 @@ export const useUBLPdata = () => {
       totalStakedBLP,
       totalSupplyBLP,
     } = readcalldata;
+    if (
+      blpTotalBalance === undefined ||
+      blpSupply === undefined ||
+      blpInitialRate === undefined ||
+      totalStakedBLP === undefined ||
+      totalSupplyBLP === undefined ||
+      feeBlpTrackerTokensPerInterval === undefined ||
+      stakedBlpTrackerTokensPerInterval === undefined
+    )
+      return null;
 
     const blpPrice =
       blpSupply > 0
