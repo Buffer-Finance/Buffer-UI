@@ -6,7 +6,7 @@ import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { signTypedData } from '@wagmi/core';
 import axios from 'axios';
 import { ethers } from 'ethers';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useSetAtom } from 'jotai';
 import { useMemo } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { getChains } from 'src/Config/wagmiClient';
@@ -18,6 +18,7 @@ import {
   usePublicClient,
   useWalletClient,
 } from 'wagmi';
+import { isOneCTModalOpenAtom } from './OneCTButton';
 import { useUserOneCTData } from './useOneCTWalletV2';
 
 /*
@@ -70,6 +71,7 @@ const useOneCTWallet = () => {
   const { activeChain } = uesOneCtActiveChain();
   const configData = getConfig(activeChain.id);
   const provider = usePublicClient({ chainId: activeChain.id });
+  const setModal = useSetAtom(isOneCTModalOpenAtom);
 
   const pkLocalStorageIdentifier = useMemo(() => {
     return (
@@ -151,6 +153,10 @@ const useOneCTWallet = () => {
       secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
       setCreateLoading(false);
       if (is1CTEnabled(res.one_ct, privateKey, provider, 'one-ct-deb')) {
+        //close the modal after3 seconds
+        setTimeout(() => {
+          setModal(false);
+        }, 1000);
         toastify({
           msg: 'You have already registered your 1CT Account. You can start trading now!',
           type: 'success',
