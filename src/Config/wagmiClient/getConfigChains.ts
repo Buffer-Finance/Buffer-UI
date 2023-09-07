@@ -1,6 +1,6 @@
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { isTestnet } from 'config';
-import { arbitrumGoerli, arbitrum, polygonMumbai, polygon } from 'viem/chains';
+import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'viem/chains';
 
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 

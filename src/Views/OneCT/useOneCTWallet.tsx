@@ -1,24 +1,24 @@
-import { baseUrl } from '@Views/TradePage/config';
-import { useUserOneCTData } from './useOneCTWalletV2';
+import { useToast } from '@Contexts/Toast';
 import { getSingatureCached } from '@Views/TradePage/cache';
+import { baseUrl } from '@Views/TradePage/config';
+import { WaitToast } from '@Views/TradePage/utils';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { signTypedData } from '@wagmi/core';
 import axios from 'axios';
-import { getAddress } from 'viem';
 import { ethers } from 'ethers';
 import { atom, useAtom } from 'jotai';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import secureLocalStorage from 'react-secure-storage';
+import { getChains } from 'src/Config/wagmiClient';
+import { getAddress } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
 import {
   useAccount,
   useNetwork,
   usePublicClient,
   useWalletClient,
 } from 'wagmi';
-import { useToast } from '@Contexts/Toast';
-import { WaitToast } from '@Views/TradePage/utils';
-import { getChains } from 'src/Config/wagmiClient';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { signTypedData } from '@wagmi/core';
-import { privateKeyToAccount } from 'viem/accounts';
+import { useUserOneCTData } from './useOneCTWalletV2';
 
 /*
  * Nonce is zero initially.
@@ -103,7 +103,7 @@ const useOneCTWallet = () => {
     return privateKeyToAccount(('0x' + oneCtPk) as any);
   }, [oneCtPk, provider, registeredOneCT]);
 
-  const generatePk = useCallback(async () => {
+  const generatePk = async () => {
     if (!res)
       return toastify({
         msg: 'Unable to fetch data. Please try again later',
@@ -163,8 +163,7 @@ const useOneCTWallet = () => {
       setCreateLoading(false);
       return '';
     }
-  }, [signer, res?.one_ct, provider]);
-
+  };
   const deleteOneCTPk = () => {
     secureLocalStorage.removeItem(pkLocalStorageIdentifier);
   };

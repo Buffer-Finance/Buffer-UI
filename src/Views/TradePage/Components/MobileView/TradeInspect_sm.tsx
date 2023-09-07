@@ -165,7 +165,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
           />
         </div>
         <div>
-          <Head className="!text-f12">Trade Size</Head>
+          <Head className="!text-f12">Trade Strike</Head>
           <StrikePriceComponent
             trade={trade}
             className={'!text-f14  text-[#C3C2D4]'}
