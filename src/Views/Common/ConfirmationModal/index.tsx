@@ -1,17 +1,15 @@
-import React from 'react';
-import { SocialStyles } from './style';
-import Twitter from 'public/Social/twitter';
-import Discord from 'public/Social/discord';
-import Medium from 'public/Social/medium';
-import Telegram from 'public/Social/telegram';
-import { ConfirmationModalStyles } from './style';
-import SuccessIcon from 'src/SVG/Elements/SuccessIcon';
+import { useGlobal } from '@Contexts/Global';
 import { IConfirmationModal } from '@Hooks/useWriteCall';
 import { getDisplayDate } from '@Utils/Dates/displayDateTime';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { useGlobal } from '@Contexts/Global';
-import { Display } from '../Tooltips/Display';
 import { Skeleton } from '@mui/material';
+import Discord from 'public/Social/discord';
+import Medium from 'public/Social/medium';
+import Telegram from 'public/Social/telegram';
+import Twitter from 'public/Social/twitter';
+import SuccessIcon from 'src/SVG/Elements/SuccessIcon';
+import { Display } from '../Tooltips/Display';
+import { ConfirmationModalStyles, SocialStyles } from './style';
 interface IConfirmationModalProps extends IConfirmationModal {
   scannerLink: string;
   duration: string;
@@ -96,7 +94,7 @@ export function Col({ head, desc, ...props }) {
           props.descClass ? props.descClass : ''
         }`}
       >
-        {desc ? (
+        {desc !== undefined && desc !== null ? (
           desc
         ) : (
           <Skeleton className="!transform-none w-full !bg-cross-bg" />
