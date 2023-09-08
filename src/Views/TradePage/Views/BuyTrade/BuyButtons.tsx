@@ -33,7 +33,6 @@ export const BuyButtons = ({
   center?: ReactNode;
   isApprovalLocked: boolean | undefined;
 }) => {
-  usePrice();
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   // const { poolDetails } = useSwitchPool();
