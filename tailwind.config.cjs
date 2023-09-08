@@ -65,6 +65,8 @@ module.exports = {
       4: 'var(--text-4)',
       5: 'F7F7F7',
       6: 'var(--text-4)',
+      'gf': '#7F87A7',
+      'wc': '#C4C7D3',
       'blue-1': '#5973fe',
       'blue-2': '#0788e6',
       'light-blue': '#99D5EF',

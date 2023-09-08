@@ -48,6 +48,7 @@ import ShutterProvider, {
 } from '@Views/Common/MobileShutter/MobileShutter';
 import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
 import { isTestnet } from 'config';
+import { BoostModal } from '@Views/TradePage/Components/BoostModal';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -106,6 +107,7 @@ const AppRoutes = () => {
   return (
     <div className="relative root w-[100vw] pb-[5px] ">
       <TradesShutter />
+      <BoostModal />
       <OpenOcean />
       <OnboardingAnimation />
       <Routes>

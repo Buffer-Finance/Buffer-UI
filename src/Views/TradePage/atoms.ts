@@ -124,3 +124,4 @@ export const platformActiveTableActivePage = atom<number>(1);
 export const platformHistoryTableActivePage = atom<number>(1);
 
 export const tradeInspectMobileAtom = atom<{ trade?: TradeType }>({});
+export const boostModalAtom = atom<boolean>(false);

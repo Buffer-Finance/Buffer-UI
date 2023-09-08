@@ -8,6 +8,10 @@ import { MobileMarketPicker } from '@Views/TradePage/Components/MobileView/Marke
 import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
 import { ActiveTrades } from '@Views/TradePage/Views/BuyTrade/ActiveTrades';
 import { ModalChild } from '@Views/TradePage/Views/AccordionTable/ShareModal/ShareModalChild';
+import {
+  BoostBuyingUI,
+  BoostModal,
+} from '@Views/TradePage/Components/BoostModal';
 export const shutterModalAtom = atom<{
   open:
     | 'LO'
@@ -15,6 +19,7 @@ export const shutterModalAtom = atom<{
     | 'MarketSelector'
     | 'ActiveOrders'
     | 'ShareShutter'
+    | 'BoosterShutter'
     | false;
 }>({
   open: false,
@@ -60,6 +65,9 @@ export function useShutterHandlers() {
   const openOngoingTradesShutter = useCallback(() => {
     setShutter({ open: 'ActiveOrders' });
   }, [setShutter]);
+  const openBoosterShutter = useCallback(() => {
+    setShutter({ open: 'BoosterShutter' });
+  }, [setShutter]);
   const openShareShutter = useCallback(() => {
     setShutter({ open: 'ShareShutter' });
   }, [setShutter]);
@@ -70,6 +78,7 @@ export function useShutterHandlers() {
     openLOShutter,
     openMarketPickerShutter,
     openOngoingTradesShutter,
+    openBoosterShutter,
     openShareShutter,
   };
 }
@@ -91,6 +100,7 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
         {shutterState.open == 'BO' && <VanillaBOConfigs />}
         {shutterState.open == 'LO' && <LOConfigs />}
         {shutterState.open == 'MarketSelector' && <MobileMarketPicker />}{' '}
+        {shutterState.open == 'BoosterShutter' && <BoostBuyingUI />}{' '}
         {shutterState.open == 'ShareShutter' && (
           <div className="w-full flex flex-col b400:scale-[0.9] origin-left my-3">
             <ModalChild />

@@ -11,12 +11,20 @@ const TimeElapsedBarBackground = styled.div<{ barWidth: string }>`
   }
 `;
 
-const TimeElapsedBar = ({ progressPercent }: { progressPercent: number }) => {
+const TimeElapsedBar = ({
+  progressPercent,
+  className,
+}: {
+  progressPercent: number;
+  className?: string;
+}) => {
   return (
     <TimeElapsedBarBackground barWidth={`${progressPercent}%`}>
       <div className="w-full relative h-[2px]">
         <div className="relative rounded-full h-full w-full bg-[#393D4D]"></div>
-        <div className="absolute top-[0] left-[0] rounded-full bg-[#3FB68B] h-full bar-width"></div>
+        <div
+          className={`absolute top-[0] left-[0] rounded-full bg-[#3FB68B] h-full bar-width ${className}`}
+        ></div>
       </div>{' '}
     </TimeElapsedBarBackground>
   );

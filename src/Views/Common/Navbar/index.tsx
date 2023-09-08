@@ -5,7 +5,7 @@ import { TabsDropdown } from './TabsDropDown';
 import { Tab } from './Tab';
 import { AccountDropdown } from './AccountDropdown';
 import { useGlobal } from '@Contexts/Global';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { urlSettings } from 'src/Config/wagmiClient';
 import { isTestnet } from 'config';
 import { SettingsDD } from './SettingsDD';
@@ -14,6 +14,11 @@ import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
 import { useShutterHandlers } from '../MobileShutter/MobileShutter';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { BlueBtn } from '../V2-Button';
+import MemoBlueFire from '@SVG/Elements/BlueFire';
+import { boostModalAtom } from '@Views/TradePage/atoms';
+import { useMedia } from 'react-use';
+import { useBoostBuyingUIHandlers } from '@Views/TradePage/Components/BoostModal';
 
 interface INavbar {}
 
@@ -33,6 +38,8 @@ export const Navbar: React.FC<INavbar> = () => {
   };
   const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
+  const setIsModalOpen = useSetAtom(boostModalAtom);
+  const { openModal } = useBoostBuyingUIHandlers();
 
   const show = !urlSettings?.hide;
   return (
@@ -93,8 +100,14 @@ export const Navbar: React.FC<INavbar> = () => {
           </div>
         )}
       </div>
-
       <div className="flex items-center gap-[3px] whitespace-nowrap">
+        <button
+          onClick={openModal}
+          className="flex items-center h-[31px] gap-x-[4px] bg-[#191B20] px-[7px] py[3px] rounded-[5px] text-f14"
+        >
+          <MemoBlueFire className="scale-[0.9]" />{' '}
+          <span className="b1200:hidden">Buy Boost</span>
+        </button>
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
           <AccountDropdown />
         </div>
