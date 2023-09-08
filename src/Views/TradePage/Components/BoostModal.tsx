@@ -109,7 +109,7 @@ export const BoostBuyingUI = () => {
           value={ip}
           type="number"
           onChange={(e) => setip(e.target.value)}
-          className="text-1 text-f13 bg-transparent text-center"
+          className="text-1 text-f13 bg-transparent outline-none text-center"
         />
         <div
           className="mr-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
