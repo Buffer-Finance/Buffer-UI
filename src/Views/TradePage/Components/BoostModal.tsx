@@ -31,20 +31,15 @@ export const useBoostBuyingUIHandlers = () => {
   const setIsModalOpen = useSetAtom(boostModalAtom);
   const isModalOpen = useAtomValue(boostModalAtom);
   const { openBoosterShutter, closeShutter } = useShutterHandlers();
-  const openModal = !isMobile
-    ? () => {
-        setIsModalOpen(true);
-      }
-    : () => {
-        openBoosterShutter();
-      };
-  const closeModal = !isMobile
-    ? () => {
-        setIsModalOpen(false);
-      }
-    : () => {
-        closeShutter();
-      };
+  const openModal = () => {
+    if (!isMobile) setIsModalOpen(true);
+    else openBoosterShutter();
+  };
+
+  const closeModal = () => {
+    if (!isMobile) setIsModalOpen(false);
+    else closeShutter();
+  };
 
   return {
     openModal,
@@ -104,19 +99,24 @@ export const BoostBuyingUI = () => {
           role="button"
           onClick={(e) => {
             e.stopPropagation();
-            setip((i) => i - 1);
+            setip((i) => +i - 1);
           }}
         >
           <span>-</span>
         </div>
 
-        <span className="text-1 text-f13">{ip}</span>
+        <input
+          value={ip}
+          type="number"
+          onChange={(e) => setip(e.target.value)}
+          className="text-1 text-f13 bg-transparent text-center"
+        />
         <div
           className="mr-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
           role="button"
           onClick={(e) => {
             e.stopPropagation();
-            setip((i) => i + 1);
+            setip((i) => +i + 1);
           }}
         >
           <span>+</span>
