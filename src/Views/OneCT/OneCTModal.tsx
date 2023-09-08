@@ -1,137 +1,27 @@
 import { useToast } from '@Contexts/Toast';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
-import { baseUrl } from '@Views/TradePage/config';
-import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { CloseOutlined } from '@mui/icons-material';
-import { signTypedData } from '@wagmi/core';
-import axios from 'axios';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { useState } from 'react';
+import { useAtom } from 'jotai';
 import { ModalBase } from 'src/Modals/BaseModal';
-import { getAddress, zeroAddress } from 'viem';
-import { useAccount } from 'wagmi';
 import { Features } from './Features';
 import { isOneCTModalOpenAtom } from './OneCTButton';
 import { RegistrationStageCard } from './RegistrationStageCard';
 import { TimingBar } from './TimingBar';
-import { EIP712Domain, useOneCTWallet } from './useOneCTWallet';
+import { useOneCTWallet } from './useOneCTWallet';
 
 const OneCTModal: React.FC<any> = ({}) => {
-  const { address } = useAccount();
-  const isModalOpen = useAtomValue(isOneCTModalOpenAtom);
-  const setModal = useSetAtom(isOneCTModalOpenAtom);
-  const [laoding, setLaoding] = useState(false);
-  const { activeChain } = useActiveChain();
-  const configData = getConfig(activeChain.id);
+  const [isModalOpen, setModal] = useAtom(isOneCTModalOpenAtom);
   const {
     generatePk,
     oneCtAddress,
-    nonce,
     registeredOneCT,
     createLoading,
     oneCtPk,
     shouldStartTimer,
     toatlMiliseconds,
+    registrationLaoding,
+    handleRegister,
   } = useOneCTWallet();
   const toastify = useToast();
-  const setOnboardingAnimation = useSetAtom(showOnboardingAnimationAtom);
-
-  const handleRegister = async () => {
-    if (registeredOneCT) {
-      return toastify({
-        msg: 'You have already registered your 1CT Account. You can start 1CT now!',
-        type: 'success',
-        id: 'registeredOneCT',
-      });
-    }
-    if (typeof oneCtPk !== 'string')
-      return toastify({
-        msg: 'Please create your 1CT Account first',
-        type: 'error',
-        id: 'oneCtPk',
-      });
-
-    if (
-      !oneCtAddress ||
-      !address ||
-      nonce === undefined ||
-      nonce === null ||
-      !activeChain
-    )
-      return toastify({
-        msg: 'Someting went wrong. Please try again later',
-        type: 'error',
-        id: 'noparams',
-      });
-    try {
-      setLaoding(true);
-
-      const wallet = getWalletFromOneCtPk(oneCtPk);
-
-      const domain = {
-        name: 'Validator',
-        version: '1',
-        chainId: activeChain.id,
-        verifyingContract: getAddress(configData.signer_manager),
-      } as const;
-
-      const types = {
-        EIP712Domain,
-        RegisterAccount: [
-          { name: 'oneCT', type: 'address' },
-          { name: 'user', type: 'address' },
-          { name: 'nonce', type: 'uint256' },
-        ],
-      };
-
-      const signature = await signTypedData({
-        types,
-        domain,
-        primaryType: 'RegisterAccount',
-        message: {
-          oneCT: wallet.address,
-          user: address,
-          nonce: nonce,
-        },
-      });
-
-      if (!signature) {
-        setLaoding(false);
-        return toastify({
-          msg: 'User rejected to sign.',
-          type: 'error',
-          id: 'signature',
-        });
-      }
-
-      const apiParams = {
-        one_ct: wallet.address,
-        account: address,
-        nonce: nonce,
-        registration_signature: signature,
-        environment: activeChain.id,
-      };
-
-      const resp = await axios.post(baseUrl + 'register/', null, {
-        params: apiParams,
-      });
-
-      if (resp?.data?.one_ct && resp.data.one_ct !== zeroAddress) {
-        setOnboardingAnimation(true);
-        setModal(false);
-      }
-    } catch (e) {
-      toastify({
-        msg: `Error in register API. please try again later. ${e}`,
-        type: 'error',
-        id: 'registerapi',
-      });
-    } finally {
-      setLaoding(false);
-    }
-  };
 
   return (
     <>
@@ -177,7 +67,7 @@ const OneCTModal: React.FC<any> = ({}) => {
           <RegistrationStageCard
             completeName="Registered"
             initialName="Register"
-            isLoading={laoding}
+            isLoading={registrationLaoding}
             isStepComplete={!!registeredOneCT}
             onCLick={
               registeredOneCT
