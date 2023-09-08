@@ -7,7 +7,7 @@ import { signTypedData } from '@wagmi/core';
 import axios from 'axios';
 import { ethers } from 'ethers';
 import { atom, useAtom, useSetAtom } from 'jotai';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { getChains } from 'src/Config/wagmiClient';
 import { getAddress } from 'viem';
@@ -72,6 +72,8 @@ const useOneCTWallet = () => {
   const configData = getConfig(activeChain.id);
   const provider = usePublicClient({ chainId: activeChain.id });
   const setModal = useSetAtom(isOneCTModalOpenAtom);
+  const [shouldStartTimer, setShouldStartTimer] = useState(false);
+  const toatlMiliseconds = 3000;
 
   const pkLocalStorageIdentifier = useMemo(() => {
     return (
@@ -153,10 +155,11 @@ const useOneCTWallet = () => {
       secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
       setCreateLoading(false);
       if (is1CTEnabled(res.one_ct, privateKey, provider, 'one-ct-deb')) {
+        setShouldStartTimer(true);
         //close the modal after3 seconds
         setTimeout(() => {
           setModal(false);
-        }, 1000);
+        }, toatlMiliseconds);
         toastify({
           msg: 'You have already registered your 1CT Account. You can start trading now!',
           type: 'success',
@@ -265,6 +268,8 @@ const useOneCTWallet = () => {
     disableOneCt,
     nonce: res?.nonce,
     state: res?.state,
+    shouldStartTimer,
+    toatlMiliseconds,
   };
 };
 
