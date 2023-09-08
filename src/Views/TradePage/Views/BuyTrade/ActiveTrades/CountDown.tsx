@@ -1,5 +1,6 @@
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
+import { useEffect, useState } from 'react';
 
 export const CountDown = ({
   expiration,
@@ -8,6 +9,14 @@ export const CountDown = ({
   expiration: number | null;
   closeTime: number | null;
 }) => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [count]);
+
   // console.log('CountDown', expiration, closeTime);
   if (closeTime && expiration) {
     const distance = expiration - closeTime;
