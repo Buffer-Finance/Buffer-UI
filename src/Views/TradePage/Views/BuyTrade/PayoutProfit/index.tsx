@@ -43,7 +43,7 @@ export const PayoutProfit = ({
       <div
         className={` my-3 mb-4 ${
           boost
-            ? 'bg-[#282B39] relative rounded-[8px] pt-[11px] pb-[8px] px-[10px] overflow-hidden'
+            ? 'bg-[#282B39] relative rounded-[8px] pt-[18px] pb-[8px] px-[10px] overflow-hidden '
             : ''
         }`}
       >
