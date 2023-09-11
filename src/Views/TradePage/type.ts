@@ -39,6 +39,7 @@ export interface TradeType {
   queued_timestamp: number;
   queue_id: number;
   strike: number;
+  pending_operation: null | 'Processing EDIT' | 'Processing CANCEL';
   period: number;
   target_contract: string;
   expiry_price: number | null;

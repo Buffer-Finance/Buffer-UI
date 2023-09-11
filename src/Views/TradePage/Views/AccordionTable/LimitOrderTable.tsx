@@ -32,6 +32,7 @@ import { TradeType } from '@Views/TradePage/type';
 import { AssetCell } from './AssetCell';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useToast } from '@Contexts/Toast';
 
 export const tradesCount = 10;
 
@@ -80,13 +81,14 @@ const LimitOrderTable = ({
   const handleCancel = async (trade: TradeType) => {
     cancelHandler(trade);
   };
+  const toastify = useToast();
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
 
     const marketPrecision = trade.market.price_precision.toString().length - 1;
     const poolInfo = getPoolInfo(trade.pool.pool);
     if (!trade) return 'Problem';
-
+    const isModificationPending = trade.pending_operation == 'Processing EDIT';
     switch (col) {
       case TableColumn.TriggerPrice:
         return <StrikePriceComponent trade={trade} />;
@@ -120,11 +122,34 @@ const LimitOrderTable = ({
         );
       case TableColumn.ActionButtons:
         return (
-          <div className="flex items-center">
+          <div className="flex items-center ">
             <GreyBtn
-              className={tableButtonClasses}
-              onClick={() => setSelectedTrade({ trade, market: trade.market })}
+              className={
+                tableButtonClasses + (isModificationPending ? ' !text-2 ' : '')
+              }
+              onClick={() => {
+                if (isModificationPending) {
+                  return toastify({
+                    msg: "Can't edit while processing",
+                    type: 'error',
+                    id: 1212,
+                  });
+                }
+                setSelectedTrade({ trade, market: trade.market });
+              }}
             >
+              {isModificationPending && (
+                <NumberTooltip
+                  content={'Processing the Limit Order modification...'}
+                >
+                  <div className="scale-90">
+                    <img
+                      src="/Gear.png"
+                      className="w-[16px]  h-[16px] animate-spin mr-[4px]"
+                    />
+                  </div>
+                </NumberTooltip>
+              )}
               Edit
             </GreyBtn>
             <GreyBtn
