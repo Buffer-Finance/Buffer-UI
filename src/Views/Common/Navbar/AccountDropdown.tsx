@@ -1,27 +1,19 @@
-import React, { ReactNode, useEffect, useRef } from 'react';
-import { ArrowDropDownRounded } from '@mui/icons-material';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import * as chain from 'wagmi/chains';
-import { BlueBtn } from '../V2-Button';
-import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
-import { SVGProps } from 'react';
-import { MenuItem, Skeleton } from '@mui/material';
-import { useSetAtom } from 'jotai';
-import { snackAtom } from 'src/App';
-import { useDisconnect, usePublicClient } from 'wagmi';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import {
-  uesOneCtActiveChain,
-  useOneCTWallet,
-} from '@Views/OneCT/useOneCTWallet';
-import { Display } from '../Tooltips/Display';
-import ETHImage from '../../../../public/tokens/ETH.png';
 import DDArrow from '@SVG/Elements/Arrow';
-import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
-import NFTtier from '../NFTtier';
 import WalletIcon from '@SVG/Elements/WalletIcon';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import copyToClipboard from '@Utils/copyToClipboard';
+import { uesOneCtActiveChain } from '@Views/OneCT/useOneCTWallet';
+import { ArrowDropDownRounded } from '@mui/icons-material';
+import { MenuItem, Skeleton } from '@mui/material';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
+import { useSetAtom } from 'jotai';
+import React, { ReactNode, SVGProps, useRef } from 'react';
+import { snackAtom } from 'src/App';
+import { useDisconnect } from 'wagmi';
+import * as chain from 'wagmi/chains';
+import ETHImage from '../../../../public/tokens/ETH.png';
+import { Display } from '../Tooltips/Display';
+import { BlueBtn } from '../V2-Button';
 const token2image = {
   ETH: ETHImage,
 };
@@ -37,9 +29,9 @@ const chainImageMappipng = {
 
 export const AccountDropdown: React.FC = () => {
   const setSnack = useSetAtom(snackAtom);
-  const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
+  // const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
   const { activeChain } = uesOneCtActiveChain();
-  useOngoingTrades();
+  // useOngoingTrades();
   const disconnect = useDisconnect();
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
@@ -49,42 +41,42 @@ export const AccountDropdown: React.FC = () => {
     toggleMenu(false);
   }
 
-  const { address } = useUserAccount();
-  const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
-    useOneCTWallet();
+  // const { address } = useUserAccount();
+  // const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
+  //   useOneCTWallet();
 
-  const provider = usePublicClient({ chainId: activeChain.id });
+  // const provider = usePublicClient({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
-  useEffect(() => {
-    setOneCTModal(false);
-  }, [address]);
+  // useEffect(() => {
+  //   setOneCTModal(false);
+  // }, [address]);
 
   let OneCTManager = (
     <Skeleton variant="rectangular" className="lc sr w-[70px] h-[31px]" />
   );
-  if (registeredOneCT) {
-    OneCTManager = (
-      <BlueBtn
-        className="!ml-[13px] !text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
-        onClick={disableOneCt}
-        isLoading={disabelLoading}
-        isDisabled={state && state === 'PENDING'}
-      >
-        Deactivate Account
-      </BlueBtn>
-    );
-  } else
-    OneCTManager = (
-      <BlueBtn
-        test-id="activate-button-bg"
-        className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
-        onClick={() => {
-          setOneCTModal(true);
-        }}
-      >
-        {nonce && nonce > 0 ? 'Reactivate' : ' Activate'} Acount
-      </BlueBtn>
-    );
+  // if (registeredOneCT) {
+  //   OneCTManager = (
+  //     <BlueBtn
+  //       className="!ml-[13px] !text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
+  //       onClick={disableOneCt}
+  //       isLoading={disabelLoading}
+  //       isDisabled={state && state === 'PENDING'}
+  //     >
+  //       Deactivate Account
+  //     </BlueBtn>
+  //   );
+  // } else
+  //   OneCTManager = (
+  //     <BlueBtn
+  //       test-id="activate-button-bg"
+  //       className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+  //       onClick={() => {
+  //         setOneCTModal(true);
+  //       }}
+  //     >
+  //       {nonce && nonce > 0 ? 'Reactivate' : ' Activate'} Acount
+  //     </BlueBtn>
+  //   );
 
   return (
     <ConnectButton.Custom>
@@ -217,7 +209,7 @@ export const AccountDropdown: React.FC = () => {
                   >
                     <MenuItem className={'!bg-[#232334] text-1 cursor-auto'}>
                       <div className="mx-[10px] my-[10px] mb-[14px]">
-                        <div className="flex items-center justify-between text-f14 mb-[20px]">
+                        <div className="flex items-center justify-between text-f14">
                           <div className="flex flex-col">
                             {account
                               ? `${account.address.slice(
@@ -225,11 +217,11 @@ export const AccountDropdown: React.FC = () => {
                                   4
                                 )}...${account.address.slice(-4)}`
                               : 'Connect'}
-                            <div>
+                            {/* <div>
                               <NFTtier userOnly />
-                            </div>
+                            </div> */}
                           </div>
-                          <div className="flex items-center gap-x-3 text-[#C3C2D4]">
+                          <div className="flex items-center gap-x-3 text-[#C3C2D4] ml-6">
                             <IconBG
                               onClick={(e) => {
                                 e.preventDefault();
@@ -267,7 +259,7 @@ export const AccountDropdown: React.FC = () => {
                             </IconBG>
                           </div>
                         </div>
-                        <div className="flex items-center gap-x-3 text-f14">
+                        {/* <div className="flex items-center gap-x-3 text-f14">
                           {OneCTManager}
                           <a
                             className="unset"
@@ -279,7 +271,7 @@ export const AccountDropdown: React.FC = () => {
                               <ShareIcon className=" scale-[0.65] ml-[1px] mb-[-2px]" />
                             </div>
                           </a>
-                        </div>
+                        </div> */}
                       </div>{' '}
                     </MenuItem>
                   </ControlledMenu>
