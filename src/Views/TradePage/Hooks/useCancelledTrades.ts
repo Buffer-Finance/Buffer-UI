@@ -13,6 +13,7 @@ import { useAtomValue } from 'jotai';
 import { cancelTableActivePage } from '../atoms';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getAddress } from 'viem';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 const useCancelledTrades = () => {
   const { activeChain } = useActiveChain();
@@ -26,6 +27,8 @@ const useCancelledTrades = () => {
       fetcher: async () => {
         if (!address)
           return { page_data: [], total_pages: 1 } as tradesApiResponseType;
+        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+          return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/user/cancelled/`, {
           params: {
             user_address: getAddress(address),

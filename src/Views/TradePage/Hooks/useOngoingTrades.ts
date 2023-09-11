@@ -10,6 +10,7 @@ import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getAddress } from 'viem';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
@@ -32,6 +33,8 @@ const useOngoingTrades = () => {
     {
       fetcher: async () => {
         if (!userAddress) return [[], []] as TradeType[][];
+        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+          return [[], []];
         let currentUserSignature = null;
         if (userAddress === address)
           currentUserSignature = await getSingatureCached(oneCTWallet);

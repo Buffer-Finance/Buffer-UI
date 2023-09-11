@@ -33,7 +33,6 @@ export const BuyButtons = ({
   center?: ReactNode;
   isApprovalLocked: boolean | undefined;
 }) => {
-  usePrice();
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   // const { poolDetails } = useSwitchPool();
@@ -51,7 +50,8 @@ export const BuyButtons = ({
   const limitStrike = useAtomValue(limitOrderStrikeAtom);
   const { isMarketOpen: isAssetActive, isForex } = useIsMarketOpen(
     activeMarket,
-    switchPool?.pool
+    switchPool?.pool,
+    switchPool?.optionContract
   );
 
   const buyTrade = (isUp?: boolean) => {

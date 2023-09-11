@@ -1,7 +1,15 @@
 import { TimeElapsedBar } from '@Views/TradePage/Components/TimeElapsedBar';
 import { TradeType } from '@Views/TradePage/type';
+import { useEffect, useState } from 'react';
 
 export const TradeTimeElapsed: React.FC<{ trade: TradeType }> = ({ trade }) => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [count]);
   let currentTime = Math.floor(Date.now() / 1000);
   const expirationTime = trade.expiration_time;
   const closeTime = trade.close_time;

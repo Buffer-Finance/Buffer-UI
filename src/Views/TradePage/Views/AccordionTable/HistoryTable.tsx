@@ -27,6 +27,8 @@ import { AssetCell } from './AssetCell';
 import { useMedia } from 'react-use';
 import { useSetAtom } from 'jotai';
 import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
+import { getSlicedUserAddress } from '@Utils/getUserAddress';
+import { useNavigate } from 'react-router-dom';
 
 enum TableColumn {
   Asset = 0,
@@ -38,7 +40,7 @@ enum TableColumn {
   TradeSize = 6,
   Payout = 7,
   Status = 8,
-  Share = 9,
+  ShareOrAddress = 9,
 }
 
 const HistoryTable: React.FC<{
@@ -64,6 +66,7 @@ const HistoryTable: React.FC<{
 }) => {
   const { getPoolInfo } = usePoolInfo();
   const setInspectTrade = useSetAtom(tradeInspectMobileAtom);
+  const navigate = useNavigate();
   const headNameArray = platform
     ? [
         'Asset',
@@ -75,6 +78,7 @@ const HistoryTable: React.FC<{
         'Trade Size',
         'Payout',
         'Status',
+        'User',
       ]
     : [
         'Asset',
@@ -225,10 +229,15 @@ const HistoryTable: React.FC<{
             </div>
           </NumberTooltip>
         );
-      case TableColumn.Share:
+      case TableColumn.ShareOrAddress:
+        if (platform) return getSlicedUserAddress(trade.user_address, 4);
         return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
     }
     return 'Unhandled Body';
+  };
+
+  const navigateToProfile = (userAddress: string) => {
+    navigate(`/profile/?user_address=${userAddress}`);
   };
 
   return (
@@ -245,8 +254,11 @@ const HistoryTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={(idx) => {
-        if (isNotMobile) return null;
-        else setInspectTrade({ trade: trades?.[idx] });
+        if (isNotMobile) {
+          const userAddress = trades?.[idx].user_address;
+          if (!userAddress) return;
+          navigateToProfile(trades?.[idx].user_address);
+        } else setInspectTrade({ trade: trades?.[idx] });
       }}
       showOnly={onlyView}
       error={<TableErrorRow msg="No Trade History." />}

@@ -1,20 +1,19 @@
-import axios from 'axios';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
-import { WagmiConfig } from 'wagmi';
-import App from './App';
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import * as Sentry from '@sentry/react';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import axios from 'axios';
+import { Provider as JotaiProvider } from 'jotai';
+import ReactDOM from 'react-dom/client';
+import { HashRouter } from 'react-router-dom';
+import { SWRConfig } from 'swr';
 import 'viem/window';
-import * as Sentry from '@sentry/react';
+import { WagmiConfig } from 'wagmi';
+import App from './App';
 import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
-import { SWRConfig } from 'swr';
-import { Provider as JotaiProvider } from 'jotai';
-import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 
 const ErrorComponenet = () => {
   return (
@@ -39,7 +38,6 @@ if (import.meta.env.VITE_MODE === 'production') {
     replaysSessionSampleRate: 0.1,
 
     // If the entire session is not sampled, use the below sample rate to sample
-    // sessions when an error occurs.
     replaysOnErrorSampleRate: 1.0,
 
     integrations: [
@@ -54,7 +52,7 @@ if (import.meta.env.VITE_MODE === 'production') {
 
 import { inject } from '@vercel/analytics';
 inject();
-
+console.log('wagmiCLient', wagmiClient);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
     <WagmiConfig config={wagmiClient}>

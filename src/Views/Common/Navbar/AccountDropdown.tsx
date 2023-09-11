@@ -421,21 +421,21 @@ export const PowerIcon = (props: SVGProps<SVGSVGElement>) => (
 const TokenAccountBalance = () => {
   const { activePool } = useAtomValue(activePoolObjAtom);
   const pools = usePoolByAsset();
-  const activePoolDetails = pools[activePool];
+  let activePoolDetails = pools[activePool];
+  if (activePoolDetails === undefined) activePoolDetails = pools['USDC'];
   const { address } = useAccount();
   const { data, isError, isLoading, error } = useBalance({
     address,
     token: getAddress(activePoolDetails.tokenAddress),
     watch: true,
   });
-  console.log('data', data);
 
   return (
     <div className="flex items-center">
       {' '}
       <Display data={data?.formatted} className="text-f14" />{' '}
       <img
-        src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePool.toLowerCase()}.png`}
+        src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePoolDetails.token.toLowerCase()}.png`}
         className="w-[16px] h-[16px] ml-2"
       />
     </div>

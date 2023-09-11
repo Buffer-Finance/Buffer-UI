@@ -36,6 +36,7 @@ import { AssetCell } from './AssetCell';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useMedia } from 'react-use';
 import { Visualized } from './Visualized';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[] | undefined;
@@ -58,6 +59,7 @@ export const OngoingTradesTable: React.FC<{
   className = '',
   overflow,
 }) => {
+  const { viewOnlyMode } = useUserAccount();
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
 
@@ -70,7 +72,7 @@ export const OngoingTradesTable: React.FC<{
     strikePriceHeading = 'Strike';
   }
   const headNameArray =
-    platform || !registeredOneCT
+    platform || !registeredOneCT || viewOnlyMode
       ? [
           'Asset',
           strikePriceHeading,
