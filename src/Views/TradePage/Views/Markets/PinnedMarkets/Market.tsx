@@ -33,7 +33,7 @@ const isMarketOpen = (
   category: number,
   isInCreationWindow: boolean | undefined
 ) => {
-  if (isMarketForex(category)) {
+  if (!isMarketForex(category)) {
     return true;
   }
 
