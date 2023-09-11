@@ -1,4 +1,7 @@
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import {
+  formatDistance,
+  formatDistanceExpanded,
+} from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { useEffect, useState } from 'react';
 
@@ -30,7 +33,8 @@ export const CountDown = ({
   if (!expiration) return <>null</>;
   let currentEpoch = Math.round(new Date().getTime() / 1000);
   if (queuedTime && currentEpoch < queuedTime) {
-    currentEpoch = queuedTime;
+    const startingDistance = queuedTime - currentEpoch;
+    return <div>Starts in {formatDistance(Variables(startingDistance))}</div>;
   }
   const distance = expiration - currentEpoch;
   if (distance < 0) return <div>00h 00m 00s</div>;
