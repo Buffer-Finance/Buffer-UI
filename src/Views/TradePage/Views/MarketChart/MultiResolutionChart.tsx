@@ -68,6 +68,7 @@ import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFun
 import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
+import { loeditLoadingAtom } from '../EditModal';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -379,6 +380,7 @@ export const MultiResolutionChart = ({
   >({});
   const activeTrades = useOngoingTrades();
   const indicatorCount = useAtomValue(indicatorCoutAtom);
+  const editLoading = useAtomValue(loeditLoadingAtom);
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
@@ -839,7 +841,10 @@ export const MultiResolutionChart = ({
               let text = formatLOText(updatedTrade, decimals);
 
               // Limit order updation space
-              if (updatedTrade.pending_operation) {
+              if (
+                editLoading == updatedTrade.queue_id ||
+                updatedTrade.pending_operation == 'Processing EDIT'
+              ) {
                 text = updatedTrade.pending_operation;
                 trade2visualisation.current[trade]?.lineRef
                   .onMove('', function () {
@@ -854,8 +859,6 @@ export const MultiResolutionChart = ({
               } else {
                 trade2visualisation.current[trade]?.lineRef
                   .onMove('move', function () {
-                    this.setText('Processing EDIT');
-
                     changeStrikeSafe(updatedTrade, this.getPrice());
                   })
                   .setModifyTooltip('Click to Edit Order')
@@ -904,7 +907,7 @@ export const MultiResolutionChart = ({
     return () => {
       clearInterval(interval);
     };
-  }, [address, settings.earlyCloseConfirmation, activeTrades]);
+  }, [address, settings.earlyCloseConfirmation, activeTrades, editLoading]);
 
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
