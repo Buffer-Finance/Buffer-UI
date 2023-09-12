@@ -838,14 +838,11 @@ export const MultiResolutionChart = ({
             ) {
               if (!updatedTrade) return;
               const decimals = getPoolInfo(updatedTrade.pool.pool).decimals;
-              let text = formatLOText(updatedTrade, decimals);
-
               // Limit order updation space
               if (
                 editLoading == updatedTrade.queue_id ||
                 updatedTrade.pending_operation == 'Processing EDIT'
               ) {
-                text = updatedTrade.pending_operation;
                 trade2visualisation.current[trade]?.lineRef
                   .onMove('', function () {
                     return null;
@@ -855,7 +852,8 @@ export const MultiResolutionChart = ({
                   })
                   .onCancel('modify', function () {
                     return null;
-                  });
+                  })
+                  .setText('Modifying Limit Order');
               } else {
                 trade2visualisation.current[trade]?.lineRef
                   .onMove('move', function () {
@@ -870,9 +868,9 @@ export const MultiResolutionChart = ({
                   })
                   .onCancel('modify', function () {
                     cancelHandler(updatedTrade);
-                  });
+                  })
+                  .setText(formatLOText(updatedTrade, decimals));
               }
-              trade2visualisation.current[trade]?.lineRef.setText(text);
 
               return;
             }
