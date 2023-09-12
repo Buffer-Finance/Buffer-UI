@@ -34,6 +34,7 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { Visualized } from './Visualized';
 import { useToast } from '@Contexts/Toast';
+import { loeditLoadingAtom } from '../EditModal';
 
 export const tradesCount = 10;
 
@@ -59,6 +60,7 @@ const LimitOrderTable = ({
   const cancelLoading = useAtomValue(closeLoadingAtom);
   const { getPoolInfo } = usePoolInfo();
   const { registeredOneCT } = useOneCTWallet();
+  const editLoading = useAtomValue(loeditLoadingAtom);
 
   const headNameArray = [
     'Asset',
@@ -126,7 +128,10 @@ const LimitOrderTable = ({
           <div className="flex items-center ">
             <GreyBtn
               className={
-                tableButtonClasses + (isModificationPending ? ' !text-2 ' : '')
+                tableButtonClasses +
+                (isModificationPending || editLoading == trade.queue_id
+                  ? ' !text-2 '
+                  : '')
               }
               onClick={() => {
                 if (isModificationPending) {
@@ -139,7 +144,7 @@ const LimitOrderTable = ({
                 setSelectedTrade({ trade, market: trade.market });
               }}
             >
-              {isModificationPending && (
+              {isModificationPending || editLoading == trade.queue_id ? (
                 <NumberTooltip
                   content={'Processing the Limit Order modification...'}
                 >
@@ -150,7 +155,7 @@ const LimitOrderTable = ({
                     />
                   </div>
                 </NumberTooltip>
-              )}
+              ) : null}
               Edit
             </GreyBtn>
             <GreyBtn

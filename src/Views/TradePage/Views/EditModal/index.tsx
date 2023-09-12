@@ -27,13 +27,14 @@ import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeS
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   miscsSettingsAtom,
   rerenderPositionAtom,
 } from '@Views/TradePage/atoms';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-
+import { sleep } from '@TV/useDataFeed';
+export const loeditLoadingAtom = atom<number | null>(null);
 export const EditModal: React.FC<{
   trade: TradeType;
   onSave: (a: boolean) => void;
@@ -48,7 +49,7 @@ export const EditModal: React.FC<{
   const [price, setPrice] = useState(
     divide(defaults?.strike || trade?.strike, 8)
   );
-  const [editLoading, setEditLoading] = useState<null | number>(null);
+  const [editLoading, setEditLoading] = useAtom(loeditLoadingAtom);
   const [periodValidations, setPeriodValidation] = useState({
     min: '00:05',
     max: '24:00',
@@ -201,6 +202,7 @@ export const EditModal: React.FC<{
         id: '211',
       });
     }
+    await sleep(2000);
     setEditLoading(null);
   };
 

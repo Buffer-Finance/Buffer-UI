@@ -19,6 +19,7 @@ import {
   getStrike,
 } from '../../AccordionTable/Common';
 import NumberTooltip from '@Views/Common/Tooltips';
+import { loeditLoadingAtom } from '../../EditModal';
 
 export const TradeActionButton: React.FC<{
   trade: TradeType;
@@ -43,7 +44,7 @@ export const TradeButton: React.FC<{
   const earlyCloseLoading = useAtomValue(closeLoadingAtom);
 
   const lockedAmmount = getLockedAmount(trade, cachedPrices);
-
+  const editLoading = useAtomValue(loeditLoadingAtom);
   const { earlycloseAmount, isWin } = useEarlyPnl({
     trade,
     configData: tradeMarket,
@@ -94,14 +95,33 @@ export const TradeButton: React.FC<{
             <CancelButton
               onClick={editLimitOrder}
               disabled={isCancelLoading || isTradeExpired}
+              className="flex items-center justify-center"
             >
+              {trade.pending_operation == 'Processing EDIT' ||
+              editLoading == trade.queue_id ? (
+                <NumberTooltip
+                  content={'Processing the Limit Order modification...'}
+                >
+                  <div className="scale-90">
+                    <img
+                      src="/Gear.png"
+                      className="w-[16px]  h-[16px] animate-spin mr-[4px]"
+                    />
+                  </div>
+                </NumberTooltip>
+              ) : null}{' '}
               {'Edit'}
             </CancelButton>
             <CancelButton
               onClick={cancelTrade}
               disabled={isCancelLoading || isTradeExpired}
             >
-              {isCancelLoading ? <ButtonLoader /> : 'Cancel'}
+              {isCancelLoading ||
+              trade.pending_operation == 'Processing CANCEL' ? (
+                <ButtonLoader />
+              ) : (
+                'Cancel'
+              )}
             </CancelButton>
           </>
         )}
