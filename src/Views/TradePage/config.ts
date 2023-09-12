@@ -93,7 +93,7 @@ export const appConfig = {
         },
         signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
         booster: '0x59a73017E755c13037914a4D95Ec5E7b09879631',
-        config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
+        config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
         poolsInfo: {
           '0x6F9929BF96cfeFe2a4E1e05bB2CBD918678aEC5F': {
             tokenAddress: '0xda11D2c3b026561cCE889Ff5A020Eae21308058C',
