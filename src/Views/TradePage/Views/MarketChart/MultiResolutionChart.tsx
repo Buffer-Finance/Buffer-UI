@@ -248,6 +248,14 @@ const formatMarketOrder = (option: TradeType, earlyCloseData: any) => {
     } ${option.token} | ` + getText(option)
   );
 };
+const formatLOText = (option: TradeType, decimals) => {
+  return `Limit | ${toFixed(
+    divide(option.trade_size?.toString(), decimals)!,
+    2
+  )} ${option.token} | ${
+    option.is_above ? defaults.upIcon : defaults.downIcon
+  }`;
+};
 export const indicatorCoutAtom = atom(0);
 function drawPosition(
   option: TradeType,
@@ -260,24 +268,17 @@ function drawPosition(
   decimals: number,
   priceCache: any
 ) {
-  const lockedAmmount = getLockedAmount(option, priceCache);
-
   // const idx = visualized.indexOf(option.queue_id);
   const openTimeStamp = option.open_timestamp;
   const optionPrice = +option.strike / PRICE_DECIMALS;
   let color = !option.is_above ? defaults.red : defaults.green;
 
   if (option.is_limit_order && option.state == 'QUEUED') {
-    const text = `${toFixed(
-      divide(option.trade_size?.toString(), decimals)!,
-      2
-    )} ${option.token} | ${
-      option.is_above ? defaults.upIcon : defaults.downIcon
-    }`;
+    const text = ``;
 
     return chart
       ?.createOrderLine()
-      .setText('Limit | ' + text)
+      .setText(formatLOText(option, decimals))
       .setTooltip('Drag to change Strike')
       .setBodyBackgroundColor(defaults.BG)
       .setQuantityBackgroundColor(color)
@@ -359,7 +360,6 @@ export const MultiResolutionChart = ({
 
   const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
-  console.log(`MultiResolutionChart-chartId: `, chartId);
   const v3AppConfig = useMarketsConfig();
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
@@ -813,7 +813,7 @@ export const MultiResolutionChart = ({
       try {
         Object.keys(trade2visualisation.current).forEach((trade) => {
           if (trade2visualisation.current[trade]?.visited) {
-            const [isDisabled, disableTooltip] = getEarlyCloseStatus(
+            const [isClosingDisabled, disableTooltip] = getEarlyCloseStatus(
               trade2visualisation.current[trade]?.option
             );
             const actualTrade = trade2visualisation.current[trade]?.option;
@@ -826,9 +826,48 @@ export const MultiResolutionChart = ({
               });
             });
 
-            if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order)
-              return;
+            if (
+              updatedTrade?.state == 'QUEUED' &&
+              updatedTrade.is_limit_order
+            ) {
+              if (!updatedTrade) return;
+              const decimals = getPoolInfo(updatedTrade.pool.pool).decimals;
+              let text = formatLOText(updatedTrade, decimals);
 
+              // Limit order updation space
+              if (updatedTrade.pending_operation) {
+                text = updatedTrade.pending_operation;
+                trade2visualisation.current[trade]?.lineRef
+                  .onMove(function () {
+                    return null;
+                  })
+                  .onModify(function () {
+                    return null;
+                  })
+                  .onCancel('modify', function () {
+                    return null;
+                  });
+              } else {
+                trade2visualisation.current[trade]?.lineRef
+                  .onMove('move', function () {
+                    changeStrikeSafe(updatedTrade, this.getPrice());
+                  })
+                  .setModifyTooltip('Click to Edit Order')
+                  .onModify('modify', function () {
+                    setSelectedTradeToEdit({
+                      trade: updatedTrade,
+                      market: updatedTrade.market,
+                    });
+                  })
+                  .onCancel('modify', function () {
+                    cancelHandler(updatedTrade);
+                  });
+              }
+              trade2visualisation.current[trade]?.lineRef.setText(text);
+
+              return;
+            }
+            // Market order updation state
             const earlyCloseData = getPnl(updatedTrade, priceCache);
 
             const text = formatMarketOrder(updatedTrade, earlyCloseData);
@@ -838,7 +877,7 @@ export const MultiResolutionChart = ({
               .setText(text)
               .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
 
-            if (!isDisabled) {
+            if (!isClosingDisabled) {
               trade2visualisation.current[trade]?.lineRef.onCancel(
                 'onCancel',
                 () => {
