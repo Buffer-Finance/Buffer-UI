@@ -19,6 +19,7 @@ import { getStrike } from '../../AccordionTable/Common';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { useAtomValue } from 'jotai';
 import { Visualized } from '../../AccordionTable/Visualized';
+import NumberTooltip from '@Views/Common/Tooltips';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -30,7 +31,10 @@ const TradeCardBackground = styled.div`
 export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const { getPoolInfo } = usePoolInfo();
   const tradeMarket = trade.market;
-
+  const cachedPrices = useAtomValue(queuets2priceAtom);
+  // console.log('timerTrade', trade, expiry);
+  const { isPriceArrived } = getStrike(trade, cachedPrices);
+  const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
   if (!tradeMarket) return <>Error</>;
 
   const poolInfo = getPoolInfo(trade.pool.pool);
@@ -50,10 +54,20 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
             <White12pxText>{pairName}</White12pxText>
             <DirectionChip isUp={isUp} shouldShowArrow />
             {!isLimitorder && (
-              <Visualized
-                queue_id={trade.queue_id}
-                className="hidden sm:block"
-              />
+              <>
+                <Visualized
+                  queue_id={trade.queue_id}
+                  className="hidden sm:block"
+                />
+                {isQueued ? (
+                  <NumberTooltip content={'Fetching latest states...'}>
+                    <img
+                      src="/Gear.png"
+                      className="w-[16px] h-[16px] animate-spin"
+                    />
+                  </NumberTooltip>
+                ) : null}
+              </>
             )}
           </RowGap>
           <TradeTypeChip tradeType={tradeType} />
@@ -82,10 +96,6 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
 const TimerChip = ({ trade }: { trade: TradeType }) => {
   const isLimitOrder = trade.is_limit_order;
   // const expiry = getExpiry(trade);
-  const cachedPrices = useAtomValue(queuets2priceAtom);
-  // console.log('timerTrade', trade, expiry);
-  const { isPriceArrived } = getStrike(trade, cachedPrices);
-  const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
 
   if (isLimitOrder && trade.state === TradeState.Queued) {
     return (
@@ -98,9 +108,16 @@ const TimerChip = ({ trade }: { trade: TradeType }) => {
       </RowGap>
     );
   }
-  if (isQueued) {
-    return <QueuedChip />;
-  }
+  // if (isQueued) {
+  //   return <QueuedChip />;
+  // }
+
   const expirationTime = trade.open_timestamp + trade.period;
-  return <CountDown expiration={expirationTime} closeTime={trade.close_time} />;
+  return (
+    <CountDown
+      expiration={expirationTime}
+      closeTime={trade.close_time}
+      queuedTime={trade.state === 'QUEUED' ? trade.queued_timestamp : null}
+    />
+  );
 };
