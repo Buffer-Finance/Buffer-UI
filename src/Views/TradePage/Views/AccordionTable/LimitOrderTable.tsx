@@ -155,7 +155,10 @@ const LimitOrderTable = ({
             <GreyBtn
               className={tableButtonClasses}
               onClick={() => handleCancel(trade)}
-              isLoading={cancelLoading?.[trade.queue_id] == 1}
+              isLoading={
+                cancelLoading?.[trade.queue_id] == 1 ||
+                trade.pending_operation == 'Processing CANCEL'
+              }
             >
               Cancel
             </GreyBtn>
