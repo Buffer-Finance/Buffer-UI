@@ -126,6 +126,19 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "maxSafeStrikePercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateMaxSafeStrikePercent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "value",
         "type": "uint256"
       }
@@ -144,6 +157,19 @@
       }
     ],
     "name": "UpdateMinPeriod",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minSafeStrikePercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateMinSafeStrikePercent",
     "type": "event"
   },
   {
@@ -275,6 +301,13 @@
   },
   {
     "inputs": [],
+    "name": "maxSafeStrikePercent",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "minFee",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
@@ -284,6 +317,13 @@
     "inputs": [],
     "name": "minPeriod",
     "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minSafeStrikePercent",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -412,6 +452,19 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_maxSafeStrikePercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMaxSafeStrikePercent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "_minFee", "type": "uint256" }
     ],
     "name": "setMinFee",
@@ -424,6 +477,19 @@
       { "internalType": "uint32", "name": "_minPeriod", "type": "uint32" }
     ],
     "name": "setMinPeriod",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_minSafeStrikePercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMinSafeStrikePercent",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -47,6 +47,14 @@
     "setMinPeriod": {
       "getter": "minPeriod",
       "hint": "in seconds"
+    },
+    "setMinSafeStrikePercent": {
+      "getter": "minSafeStrikePercent",
+      "decimal": 2
+    },
+    "setMaxSafeStrikePercent": {
+      "getter": "maxSafeStrikePercent",
+      "decimal": 2
     }
   },
   "pool": {
