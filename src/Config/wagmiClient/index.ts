@@ -3,7 +3,7 @@ import { inIframe } from '@Utils/isInIframe';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-import { getAllChains } from './getConfigChains';
+import { getAllChains, getSupportedChains } from './getConfigChains';
 import { getWallets } from './getWallets';
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 

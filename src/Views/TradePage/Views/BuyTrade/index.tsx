@@ -53,6 +53,14 @@ export const BuyTrade: React.FC = () => {
     !activeMarket ||
     (address ? approvalExpanded == undefined : false)
   ) {
+    console.log(
+      'inf-loading-due-to',
+      switchPool,
+      poolDetails,
+      readcallData,
+      activeMarket,
+      approvalExpanded
+    );
     return (
       <Skeleton
         variant="rectangular"
@@ -65,6 +73,7 @@ export const BuyTrade: React.FC = () => {
     joinStrings(activeMarket.token0, activeMarket.token1, ''),
     switchPool.optionContract
   );
+  console.log(`index-totalPayout: `, totalPayout);
   const tradeToken = poolDetails.token;
   const decimals = poolDetails.decimals;
   const allowance = approvalExpanded?.allowance

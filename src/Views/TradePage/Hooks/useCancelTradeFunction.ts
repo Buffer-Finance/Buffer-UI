@@ -19,6 +19,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { getExpireNotification } from '../utils/getExpireNotification';
 import { usePoolInfo } from './usePoolInfo';
 import { getConfig } from '../utils/getConfig';
+import { sleep } from '@TV/useDataFeed';
 import { getWalletFromOneCtPk } from '../utils/generateTradeSignature';
 const EIP712Domain = [
   { name: 'name', type: 'string' },
@@ -96,6 +97,7 @@ export const useCancelTradeFunction = () => {
         id: '231',
       });
     } finally {
+      await sleep(3000);
       setLoading((t) => ({ ...t, [trade.queue_id]: null }));
     }
   };

@@ -1,19 +1,19 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import axios from 'axios';
+import { useAtomValue } from 'jotai';
 import useSWR from 'swr';
+import { getAddress } from 'viem';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { historyTableActivePage } from '../atoms';
 import {
   TRADE_IN_A_PAGE_TRADES_TABLES,
   baseUrl,
   refreshInterval,
 } from '../config';
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { tradesApiResponseType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useMarketsConfig } from './useMarketsConfig';
-import { historyTableActivePage } from '../atoms';
-import { useAtomValue } from 'jotai';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { getAddress } from 'viem';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
@@ -27,7 +27,7 @@ const useHistoryTrades = () => {
     'history-trades-' + address + '-' + activeChain.id + '-' + activePage,
     {
       fetcher: async () => {
-        if (!address || !activeChain.id)
+        if (!address || !activeChain.id || !markets)
           return { page_data: [], total_pages: 1 };
         if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
           return { page_data: [], total_pages: 1 };

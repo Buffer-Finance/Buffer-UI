@@ -62,6 +62,7 @@ export const PayoutProfit = ({
       </div>
     );
   } else {
+    console.log('dd-dd', amount, totalPayout);
     return (
       <Skeleton
         className="custom-h full-width sr lc my-3 !h-6"

@@ -2,7 +2,7 @@ import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
-import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
+import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
@@ -33,7 +33,6 @@ export const BuyButtons = ({
   center?: ReactNode;
   isApprovalLocked: boolean | undefined;
 }) => {
-  usePrice();
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   // const { poolDetails } = useSwitchPool();
@@ -115,7 +114,7 @@ export const BuyButtons = ({
           ) : (
             <>
               <div className="flex gap-2 items-center">
-                <GreenBtn
+                <BufferButton
                   onClick={() => buyTrade(true)}
                   isDisabled={isForex && !isAssetActive}
                   isLoading={
@@ -148,9 +147,9 @@ export const BuyButtons = ({
                       Up
                     </>
                   )}
-                </GreenBtn>
+                </BufferButton>
                 {center ? center : null}
-                <RedBtn
+                <BufferButton
                   isDisabled={isForex && !isAssetActive}
                   isLoading={
                     !!loading &&
@@ -184,7 +183,7 @@ export const BuyButtons = ({
                       Down
                     </>
                   )}
-                </RedBtn>
+                </BufferButton>
               </div>
               {!isApprovalLocked && (
                 <div

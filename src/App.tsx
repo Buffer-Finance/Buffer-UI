@@ -1,57 +1,51 @@
-import { useEffect } from 'react';
-import {
-  Routes,
-  Route,
-  Navigate,
-  useSearchParams,
-  useNavigate,
-} from 'react-router-dom';
 import { Alert, Snackbar } from '@mui/material';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
+import { useEffect } from 'react';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 
-import { TradePage } from '@Views/TradePage';
-import { Navbar } from './Views/Common/Navbar';
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
-import { PasswordModal } from '@Views/Common/PasswordModal';
+import { TradePage } from '@Views/TradePage';
 import Background from './AppStyles';
+import { Navbar } from './Views/Common/Navbar';
 
-import { useGraphStatus } from '@Utils/useGraphStatus';
 import { useToast } from '@Contexts/Toast';
-import { urlSettings } from './Config/wagmiClient';
-import { OpenOcean } from '@Views/Common/OpenOceanWidget';
-import { useAutoConnect } from './Config/useAutoConnectSafe';
-import { I18nProvider } from '@lingui/react';
-import { i18n } from '@lingui/core';
-import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
-
-export const referralCodeAtom = atomWithStorage('referral-code5', '');
-
-const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
-import { defaultMarket } from '@Views/TradePage/config';
-import { activeMarketFromStorageAtom } from './globalStore';
-import IbfrFaucet from '@Views/Faucet';
-import { Earn } from '@Views/Earn';
-import { ReferralPage } from '@Views/Referral';
-import { DashboardV2 } from '@Views/DashboardV2';
-import { ProfilePage } from '@Views/Profile';
+import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
+import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
+import { OpenOcean } from '@Views/Common/OpenOceanWidget';
+import SideBar from '@Views/Common/Sidebar';
+import { DashboardV2 } from '@Views/DashboardV2';
+import IbfrFaucet from '@Views/Faucet';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { ProfilePage } from '@Views/Profile';
+import { ReferralPage } from '@Views/Referral';
+import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
+import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
+import { defaultMarket } from '@Views/TradePage/config';
 import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
-import { Test } from './test';
-import SideBar from '@Views/Common/Sidebar';
-import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
-import ShutterProvider, {
-  TradesShutter,
-} from '@Views/Common/MobileShutter/MobileShutter';
-import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
+import { i18n } from '@lingui/core';
+import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
+import { useAutoConnect } from './Config/useAutoConnectSafe';
+import { urlSettings } from './Config/wagmiClient';
+import { activeMarketFromStorageAtom } from './globalStore';
+import { Test } from './test';
 import { CloseOutlined } from '@mui/icons-material';
-import { CloseButton } from '@Views/TradePage/Components/CloseButton';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useMedia } from 'react-use';
+export const referralCodeAtom = atomWithStorage('referral-code5', '');
+
+const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -112,6 +106,8 @@ const AppRoutes = () => {
       <TradesShutter />
       <OpenOcean />
       <OnboardingAnimation />
+      <OneCTModal />
+
       <Routes>
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
