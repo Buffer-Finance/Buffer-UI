@@ -82,6 +82,7 @@ export const appConfig = {
     router: '0x3890F9664188a2A7292319Ce67320037BE634D3a',
     signer_manager: '0x983adc3d8853C4792Da5581C5e711d25BAC19042',
     booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
+    config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
         decimals: 6,
