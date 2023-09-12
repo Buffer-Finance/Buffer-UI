@@ -1,13 +1,12 @@
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import OptionAbi from '@Views/TradePage/ABIs/OptionContract.json';
 import ConfigAbi from '@ABIs/ABI/configABI.json';
 import PoolAbi from '@ABIs/ABI/poolABI.json';
-import PoolOiAbi from '@ABIs/PoolOiAbi.json';
 import BoosterAbi from '@ABIs/BoosterAbi.json';
+import ConfigSetterABI from '@ABIs/ConfigSetterABI.json';
 import MarketOiAbi from '@ABIs/MarketOiAbi.json';
+import PoolOiAbi from '@ABIs/PoolOiAbi.json';
 import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
+import OptionAbi from '@Views/TradePage/ABIs/OptionContract.json';
 import RouterAbi from '@Views/TradePage/ABIs/RouterABI.json';
-import { Abi } from 'viem';
 import { appConfig } from '@Views/TradePage/config';
 import { marketType, poolType } from '@Views/TradePage/type';
 import { Chain } from 'wagmi';
@@ -19,6 +18,7 @@ export const group2abi = {
   booster: BoosterAbi,
   pooloi: PoolOiAbi,
   pool: PoolAbi,
+  config_setter: ConfigSetterABI,
 };
 
 const group2marketAddresesMapping = {

@@ -6,17 +6,39 @@ import { useMemo } from 'react';
 import useSWR from 'swr';
 import { getAddress } from 'viem';
 
-//fetches all markets from graphql
 export const useMarketsRequest = () => {
+  const { data: bothVersionMrkets, error } = useBothVersionsMarkets();
+  return {
+    data: {
+      optionContracts: bothVersionMrkets?.optionContracts.filter(
+        (optionContract) => optionContract.poolContract !== null
+      ),
+    },
+    error,
+  };
+};
+
+export const useV2Markets = () => {
+  const { data: bothVersionMrkets, error } = useBothVersionsMarkets();
+  return {
+    data: {
+      optionContracts: bothVersionMrkets?.optionContracts.filter(
+        (optionContract) => optionContract.poolContract === null
+      ),
+    },
+    error,
+  };
+};
+
+//fetches all markets from graphql
+export const useBothVersionsMarkets = () => {
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
 
   async function fetcher(): Promise<response> {
     const response = await axios.post(configData.graph.MAIN, {
       query: `{ 
-        optionContracts(
-          where: {poolContract_not: null}
-        )  {
+        optionContracts{
                   configContract {
                     address
                     maxFee
@@ -36,6 +58,7 @@ export const useMarketsRequest = () => {
                   isPaused
                   category
                   asset
+                  pool
                 }
             }`,
     });
@@ -58,6 +81,7 @@ export const useMarketsRequest = () => {
       error,
       data: {
         optionContracts: data.optionContracts.filter((option) => {
+          if (option.poolContract === null) return true;
           return (
             configData.poolsInfo[
               getAddress(

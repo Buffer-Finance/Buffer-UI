@@ -10,6 +10,7 @@ export const appConfig = {
     router: '0xffA2ad9fDaCECC15BE8C41009f61F7760a299092',
     signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
     booster: '0x59a73017E755c13037914a4D95Ec5E7b09879631',
+    config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
     poolsInfo: {
       '0x6F9929BF96cfeFe2a4E1e05bB2CBD918678aEC5F': {
         tokenAddress: '0xda11D2c3b026561cCE889Ff5A020Eae21308058C',
@@ -74,7 +75,7 @@ export const appConfig = {
   },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.-16-payout_usd-userOptionData/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',

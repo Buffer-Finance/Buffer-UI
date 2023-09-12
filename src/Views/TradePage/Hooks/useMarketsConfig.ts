@@ -1,10 +1,10 @@
+import { divide } from '@Utils/NumString/stringArithmatics';
+import { useMemo } from 'react';
+import { getAddress } from 'viem';
+import { marketsForChart } from '../config';
 import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
 import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
-import { marketsForChart } from '../config';
-import { divide } from '@Utils/NumString/stringArithmatics';
-import { getAddress } from 'viem';
-import { useMemo } from 'react';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();

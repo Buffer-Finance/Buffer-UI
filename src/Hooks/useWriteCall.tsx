@@ -1,14 +1,18 @@
-import { ReactNode } from 'react';
-import { useAccount } from 'wagmi';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
-import { useActiveChain } from './useActiveChain';
-import { usePublicClient, useWalletClient, useContractWrite } from 'wagmi';
+import { ReactNode } from 'react';
 import {
   ContractFunctionExecutionError,
   SimulateContractParameters,
   getAddress,
 } from 'viem';
+import {
+  useAccount,
+  useContractWrite,
+  usePublicClient,
+  useWalletClient,
+} from 'wagmi';
+import { useActiveChain } from './useActiveChain';
 
 interface ICustomToast {
   body?: JSX.Element;
@@ -53,6 +57,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     customToast: ICustomToast | null = null,
     confirmationModal: IConfirmationModal | null = null
   ) => {
+    console.log(methodArgs, methodName, 'methodArgs');
     if (!address) {
       return toastify({ type: 'error', msg: 'Please connect your wallet!' });
     }

@@ -1,15 +1,16 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { raw2adminConfig } from './helpers';
 import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useState } from 'react';
 import { ConfigSetter } from './ConfigSetter';
+import { raw2adminConfig } from './helpers';
 const groups = Object.keys(rawConfigs);
 const className = 'bg-blue bg-4';
 const AdminConfig: React.FC<any> = ({}) => {
   const marketConfig = useMarketsConfig();
   const { activeChain } = useActiveChain();
   const adminConfig = raw2adminConfig(marketConfig, activeChain);
+  console.log(adminConfig, 'adminConfig');
   const [activeGroup, setActiveGroup] = useState(groups[1]);
   // TODO Loading state only depends on option_config, think it again.
   if (!adminConfig?.options_config) return <div>Loading...</div>;
