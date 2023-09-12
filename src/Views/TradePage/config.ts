@@ -10,14 +10,14 @@ export const appConfig = {
           MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/api',
         },
 
-        booster: '0xF4afd135C5506706CC0DbBB7E2EEA19aFad4F7Ce',
-        creation_window: {
-          '0': '0x995D50aF014230b24Bd9278900942ec9beB1280a',
-          '2': '0xb5f47783c42212c3970637E36DC077796f503Ab2',
-        },
+        booster: '0xFB5312B503f2aF623e564Dce87f0D90d586a631D',
+        // creation_window: {
+        //   '0': '0x995D50aF014230b24Bd9278900942ec9beB1280a',
+        //   '2': '0xb5f47783c42212c3970637E36DC077796f503Ab2',
+        // },
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
-        router: '0x5aB93573B2153bC954B7bcA7281021b0F73DFbe2',
-        signer_manager: '0x812e21Cc74F89EF18DE89810908380A95Dd13807',
+        router: '0x5C5C3a4BC8612361FCf052A1fe8D427fE37ef6e6',
+        signer_manager: '0xaBcAaf7Cfa61713D201de2d80d7054543A3dB041',
         poolsInfo: {
           '0x4A53c47051FA44FE3A5D6d5cBCb1b7Bf8307E598': {
             decimals: 6,
