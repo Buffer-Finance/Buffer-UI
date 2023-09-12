@@ -94,6 +94,7 @@ export type responseObj = {
   isPaused: boolean;
   category: number;
   asset: string;
+  pool: string;
 };
 
 export enum AssetCategory {

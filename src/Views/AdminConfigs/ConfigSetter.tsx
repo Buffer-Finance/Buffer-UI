@@ -1,8 +1,8 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { Config, group2abi } from './helpers';
 import { useCall2Data } from '@Utils/useReadCall';
+import { useEffect, useMemo, useState } from 'react';
+import { AssetDDRow } from './AssetDDRow';
 import { ConfigRow } from './ConfigRow';
-import { BlueBtn } from '@Views/Common/V2-Button';
+import { Config, group2abi } from './helpers';
 
 const ConfigSetter: React.FC<any> = ({
   configs,
@@ -24,7 +24,10 @@ const ConfigSetter: React.FC<any> = ({
   const [searchIp, setSearchIp] = useState('');
   const { data } = useCall2Data(calls, 'admin-' + cacheKey);
   useEffect(() => setSearchIp(''), [configs]);
-  if (!data) return <div>Loading..</div>;
+  console.log(configs, 'data');
+  if (calls.length > 0 && !data) return <div>Loading..</div>;
+  console.log(data, configs, 'data');
+
   return (
     <>
       <div className="flex">
@@ -38,14 +41,18 @@ const ConfigSetter: React.FC<any> = ({
         />
       </div>
       <div className="bg-3 flex flex-col gap-y-2 px-4 py-2">
-        {configs.map((c) => (
-          <ConfigRow
-            key={c.contract + c.setter.name}
-            config={c}
-            data={data}
-            hideString={searchIp}
-          />
-        ))}
+        {configs.map((c) =>
+          c.type && c.type.toLowerCase() === 'assetdd' ? (
+            <AssetDDRow config={c} />
+          ) : (
+            <ConfigRow
+              key={c.contract + c.setter.name}
+              config={c}
+              data={data}
+              hideString={searchIp}
+            />
+          )
+        )}
       </div>
     </>
   );
