@@ -8,11 +8,15 @@ import { multiply, round } from '@Utils/NumString/stringArithmatics';
 import { generateBuyTradeSignature } from './generateTradeSignature';
 import { getSingatureCached } from '../cache';
 import editQueueTrade from './editQueueTrade';
-import { useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { rerenderPositionAtom } from '../atoms';
+import { loeditLoadingAtom } from '../Views/EditModal';
+import { sleep } from '@TV/useDataFeed';
 
 const useLimitOrderHandlers = () => {
   const { activeChain } = useActiveChain();
+  const [editLoading, setEditLoading] = useAtom(loeditLoadingAtom);
+
   const { oneCtPk, oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
   const configData = getConfig(activeChain.id);
@@ -24,6 +28,7 @@ const useLimitOrderHandlers = () => {
   };
   const changeStrike = async (trade: TradeType, strike: string) => {
     try {
+      setEditLoading(trade.queue_id);
       const currentTs = Math.round(Date.now() / 1000);
       const expandedStrike = round(multiply(strike, 8), 0)!;
       const signs = await generateBuyTradeSignature(
@@ -65,14 +70,16 @@ const useLimitOrderHandlers = () => {
         activeChain.id
       );
       if (res) {
-        toastify({
-          msg: 'Limit order strike updated successfully!',
-          type: 'success',
-          id: '132132123',
-        });
+        // toastify({
+        //   msg: 'Limit order strike updated successfully!',
+        //   type: 'success',
+        //   id: '132132123',
+        // });
       } else {
         revokeGraphChange();
       }
+      await sleep(1000);
+      setEditLoading(null);
     } catch (e) {
       revokeGraphChange();
       console.log('lo-edit::erro', e);

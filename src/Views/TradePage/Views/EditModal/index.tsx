@@ -196,11 +196,11 @@ export const EditModal: React.FC<{
       if (val) {
         setTimeout(() => rerenderPositionAtom);
       }
-      return toastify({
-        msg: 'Limit order updated successfully',
-        type: 'success',
-        id: '211',
-      });
+      // return toastify({
+      //   msg: 'Limit order updated successfully',
+      //   type: 'success',
+      //   id: '211',
+      // });
     }
     await sleep(2000);
     setEditLoading(null);
