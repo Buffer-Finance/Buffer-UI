@@ -53,12 +53,9 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
             </div>
             <White12pxText>{pairName}</White12pxText>
             <DirectionChip isUp={isUp} shouldShowArrow />
+            <Visualized queue_id={trade.queue_id} className="hidden sm:block" />
             {!isLimitorder && (
               <>
-                <Visualized
-                  queue_id={trade.queue_id}
-                  className="hidden sm:block"
-                />
                 {isQueued ? (
                   <NumberTooltip content={'Fetching latest states...'}>
                     <img
