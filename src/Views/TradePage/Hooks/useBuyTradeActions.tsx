@@ -51,7 +51,7 @@ enum ArgIndex {
   Size = 1,
   PartialFill = 6,
   Referral = 7,
-  // NFT = 8,
+  NFT = 8,
   Slippage = 5,
 }
 export const useBuyTradeActions = (userInput: string) => {
@@ -338,7 +338,7 @@ export const useBuyTradeActions = (userInput: string) => {
           trade_size: baseArgs[ArgIndex.Size],
           allow_partial_fill: baseArgs[ArgIndex.PartialFill],
           referral_code: baseArgs[ArgIndex.Referral],
-          // trader_nft_id: baseArgs[ArgIndex.NFT],
+          trader_nft_id: baseArgs[ArgIndex.NFT],
           slippage: baseArgs[ArgIndex.Slippage],
           is_above: customTrade.is_up,
           is_limit_order: customTrade.limitOrderExpiry ? true : false,
