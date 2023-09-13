@@ -292,6 +292,7 @@ function drawPosition(
       .setText(processing || formatLOText(option, decimals))
       .setTooltip('Drag to change Strike')
       .setBodyBackgroundColor(defaults.BG)
+      .setQuantityBorderColor(defaults.BG)
       .setQuantityBackgroundColor(color)
       .setCancelButtonBorderColor(defaults.BG)
       .setCancelButtonIconColor('rgb(255,255,255)')
@@ -340,6 +341,8 @@ function drawPosition(
     .setBodyBackgroundColor(defaults.BG)
     .setQuantityBackgroundColor(color)
     .setBodyBorderColor(defaults.BG)
+    .setQuantityBorderColor(defaults.BG)
+
     .setCancelButtonBorderColor(defaults.BG)
     .setCancelButtonIconColor('rgb(255,255,255)')
     .setCancelButtonBackgroundColor(defaults.BG)
