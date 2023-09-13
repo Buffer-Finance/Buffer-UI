@@ -48,6 +48,7 @@ export type Config = {
   decimal?: number;
   pool?: poolType;
   market?: marketType;
+  type?: string;
 };
 
 type AdminConfig = {
