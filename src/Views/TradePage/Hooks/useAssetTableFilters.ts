@@ -1,22 +1,22 @@
 import { useAtomValue } from 'jotai';
+import { useMemo } from 'react';
+import { getAddress } from 'viem';
 import {
   categoriesAtom,
   favouriteMarketsAtom,
   radioValueAtom,
   searchBarAtom,
 } from '../atoms';
-import { useMemo } from 'react';
-import { joinStrings } from '../utils';
-import { usePoolInfo } from './usePoolInfo';
-import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
-import { AssetCategory, chartDataType, responseObj } from '../type';
 import { marketsForChart } from '../config';
-import { getAddress } from 'viem';
+import { AssetCategory, chartDataType, responseObj } from '../type';
+import { joinStrings } from '../utils';
+import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
+import { usePoolInfo } from './usePoolInfo';
 
 export type marketData = responseObj & { marketInfo: chartDataType };
 export const useMarketsWithChartData = () => {
   const { data: markets } = useMarketsRequest();
-  if (markets === undefined) {
+  if (markets.optionContracts === undefined) {
     return [];
   }
 
