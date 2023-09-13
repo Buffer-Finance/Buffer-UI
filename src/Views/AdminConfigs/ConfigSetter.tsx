@@ -1,6 +1,6 @@
 import { useCall2Data } from '@Utils/useReadCall';
 import { useEffect, useMemo, useState } from 'react';
-import { AssetDDRow } from './AssetDDRow';
+import { AssetChechBoxesRow } from './AssetCheckBoxesRow';
 import { ConfigRow } from './ConfigRow';
 import { Config, group2abi } from './helpers';
 
@@ -43,7 +43,7 @@ const ConfigSetter: React.FC<any> = ({
       <div className="bg-3 flex flex-col gap-y-2 px-4 py-2">
         {configs.map((c) =>
           c.type && c.type.toLowerCase() === 'assetdd' ? (
-            <AssetDDRow config={c} />
+            <AssetChechBoxesRow config={c} />
           ) : (
             <ConfigRow
               key={c.contract + c.setter.name}
