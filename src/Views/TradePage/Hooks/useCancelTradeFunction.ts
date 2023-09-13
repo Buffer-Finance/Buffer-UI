@@ -78,11 +78,6 @@ export const useCancelTradeFunction = () => {
         queue_id: trade.queue_id,
       });
       if (res.status === 200) {
-        // toastify({
-        //   msg: 'Trade cancelled successfully',
-        //   type: 'success',
-        //   id: trade.queue_id,
-        // });
       } else {
         toastify({
           msg: 'Something went wrong' + res.data.message,
