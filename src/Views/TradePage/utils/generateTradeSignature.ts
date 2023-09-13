@@ -16,7 +16,7 @@ const generateTradeSignature = async (
   slippage: string,
   partialFill: boolean,
   referral: string,
-  NFTid: string,
+  // NFTid: string,
   ts: number,
   settlementFee: string | number,
   isUp: boolean,
@@ -75,7 +75,7 @@ const tradeParamTypes = [
   { name: 'slippage', type: 'uint256' },
   { name: 'allowPartialFill', type: 'bool' },
   { name: 'referralCode', type: 'string' },
-  { name: 'traderNFTId', type: 'uint256' },
+  // { name: 'traderNFTId', type: 'uint256' },
 ];
 
 const isUpType = { name: 'isAbove', type: 'bool' };
@@ -95,7 +95,7 @@ const generateBuyTradeSignature = async (
   slippage: string,
   partialFill: boolean,
   referral: string,
-  NFTid: string,
+  // NFTid: string,
   ts: number,
   settlementFee: string | number,
   isUp: boolean,
@@ -116,7 +116,7 @@ const generateBuyTradeSignature = async (
     slippage,
     allowPartialFill: partialFill,
     referralCode: referral,
-    traderNFTId: NFTid,
+    // traderNFTId: NFTid,
   };
   const domain = {
     name: 'Validator',
@@ -218,7 +218,7 @@ const generateApprovalSignature = async (
 };
 
 export {
-  generateBuyTradeSignature,
   generateApprovalSignature,
+  generateBuyTradeSignature,
   getRSVFromSignature,
 };
