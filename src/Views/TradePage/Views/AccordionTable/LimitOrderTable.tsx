@@ -126,6 +126,8 @@ const LimitOrderTable = ({
       case TableColumn.ActionButtons:
         return (
           <div className="flex items-center ">
+            <Visualized queue_id={trade.queue_id} />
+
             <GreyBtn
               className={
                 tableButtonClasses +

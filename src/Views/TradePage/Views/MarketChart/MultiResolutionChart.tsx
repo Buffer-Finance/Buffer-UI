@@ -370,14 +370,11 @@ export const MultiResolutionChart = ({
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
   let trade2visualisation = useRef<
-    Partial<{
-      [key: string]: {
-        option: TradeType;
-        visited: boolean;
-        lineRef: IOrderLineAdapter;
-      };
-    }>
-  >({});
+    {
+      positionRef: IOrderLineAdapter;
+      option: TradeType;
+    }[]
+  >([]);
   const activeTrades = useOngoingTrades();
   const indicatorCount = useAtomValue(indicatorCoutAtom);
   const editLoading = useAtomValue(loeditLoadingAtom);
@@ -558,7 +555,7 @@ export const MultiResolutionChart = ({
       unsubscribeBars: () => console.log,
     };
   }, []);
-  const [visualized] = useAtom(visualizeddAtom);
+  const [hideVisulizations] = useAtom(visualizeddAtom);
   const resolution: ResolutionString =
     market2resolution?.[chartId] || ('1' as ResolutionString);
 
@@ -706,77 +703,83 @@ export const MultiResolutionChart = ({
   const getTradeToDrawingId = (trade: TradeType) =>
     trade.queue_id + ':' + trade.strike;
   // draw positions.
-  useEffect(() => {
-    // trade2visualisation.current = {};
-    Object.keys(trade2visualisation.current).forEach((trade) => {
-      // mark all them
-      trade2visualisation.current[trade]!.lineRef.remove();
+  // useEffect(() => {
+  //   // trade2visualisation.current = {};
+  //   Object.keys(trade2visualisation.current).forEach((trade) => {
+  //     // mark all them
+  //     trade2visualisation.current[trade]!.lineRef.remove();
 
-      delete trade2visualisation.current[trade];
+  //     delete trade2visualisation.current[trade];
+  //   });
+  // }, [rerenderPostion, settings.loDragging]);
+  const deleteAllPostions = () => {
+    trade2visualisation.current.forEach((t) => {
+      t.positionRef.remove();
     });
-  }, [rerenderPostion, settings.loDragging]);
-  useEffect(() => {
-    // if()
+  };
+  const syncDelay = 100;
+  const drawPostions = () => {
     if (chartReady && activeTrades) {
       activeTrades.forEach((trades) =>
         trades.forEach((pos) => {
+          // if private, do nothing.
           if (pos.is_above === undefined) return;
+
+          // filter valid positions
           if (!pos?.queue_id) return;
+
+          // check if we can render or not
           if (typeof widgetRef.current?.activeChart == 'undefined') return;
-          if (visualized.includes(pos.queue_id)) return;
-          if (trade2visualisation.current[getTradeToDrawingId(pos)]) {
-            trade2visualisation.current[getTradeToDrawingId(pos)]!.visited =
-              true;
-          } else {
-            if (
-              pos.state === 'QUEUED' &&
-              !pos.is_limit_order &&
-              !priceCache?.[pos.queue_id]
-            )
-              return;
-            let updatedPos = pos;
-            if (pos.state === 'QUEUED' && !pos.is_limit_order) {
-              updatedPos.strike = priceCache[pos.queue_id];
 
-              updatedPos.expiration_time = pos.open_timestamp + pos.period;
-            }
+          // if hidden
+          if (hideVisulizations.includes(pos.queue_id)) return;
 
-            trade2visualisation.current[getTradeToDrawingId(pos)] = {
-              visited: true,
-              lineRef: drawPosition(
-                updatedPos,
-                {
-                  onEdit: setSelectedTradeToEdit,
-                  onCancel: cancelHandler,
-                  onMove: changeStrikeSafe,
-                },
-                widgetRef.current?.activeChart()!,
-                getPoolInfo(pos.pool.pool).decimals,
-                priceCache
-              ),
-              option: pos,
-            };
+          // if market order but price not arrived
+          if (
+            pos.state === 'QUEUED' &&
+            !pos.is_limit_order &&
+            !priceCache?.[pos.queue_id]
+          )
+            return;
+
+          let updatedPos = pos;
+
+          // add cached strike if price is not arrived
+          if (pos.state === 'QUEUED' && !pos.is_limit_order) {
+            updatedPos.strike = priceCache[pos.queue_id];
+            updatedPos.expiration_time = pos.open_timestamp + pos.period;
           }
+
+          const currPositionsPacked = {
+            positionRef: drawPosition(
+              updatedPos,
+              {
+                onEdit: setSelectedTradeToEdit,
+                onCancel: cancelHandler,
+                onMove: changeStrikeSafe,
+              },
+              widgetRef.current?.activeChart()!,
+              getPoolInfo(pos.pool.pool).decimals,
+              priceCache
+            ),
+            option: pos,
+          };
+          trade2visualisation.current.push(currPositionsPacked);
         })
       );
     }
-    Object.keys(trade2visualisation.current).forEach((trade) => {
-      // delete all unvisited
-      if (!trade2visualisation.current[trade]?.visited) {
-        trade2visualisation.current[trade]!.lineRef.remove();
+  };
 
-        delete trade2visualisation.current[trade];
-      }
-    });
-
-    return () => {
-      // mark all them not visited.
-      Object.keys(trade2visualisation.current).forEach((trade) => {
-        trade2visualisation.current[trade]!.visited = false;
-      });
-    };
+  const renderPositions = async () => {
+    deleteAllPostions();
+    trade2visualisation.current = [];
+    await sleep(syncDelay);
+    drawPostions();
+  };
+  useEffect(() => {
+    renderPositions();
   }, [
-    visualized,
+    hideVisulizations,
     activeTrades,
     chartReady,
     priceCache,
@@ -817,85 +820,77 @@ export const MultiResolutionChart = ({
       }
 
       try {
-        Object.keys(trade2visualisation.current).forEach((trade) => {
-          if (trade2visualisation.current[trade]?.visited) {
-            const [isClosingDisabled, disableTooltip] = getEarlyCloseStatus(
-              trade2visualisation.current[trade]?.option
-            );
-            const actualTrade = trade2visualisation.current[trade]?.option;
-            let updatedTrade = actualTrade;
-            activeTrades.forEach((catagory) => {
-              catagory.forEach((t) => {
-                if (t.queue_id == actualTrade?.queue_id) {
-                  updatedTrade = t;
-                }
-              });
-            });
-
-            if (
-              updatedTrade?.state == 'QUEUED' &&
-              updatedTrade.is_limit_order
-            ) {
-              if (!updatedTrade) return;
-              const decimals = getPoolInfo(updatedTrade.pool.pool).decimals;
-              // Limit order updation space
-              if (
-                editLoading == updatedTrade.queue_id ||
-                updatedTrade.pending_operation == 'Processing EDIT'
-              ) {
-                trade2visualisation.current[trade]?.lineRef
-                  .onMove('', function () {
-                    return null;
-                  })
-                  .onModify('', function () {
-                    return null;
-                  })
-                  .onCancel('modify', function () {
-                    return null;
-                  })
-                  .setText('Modifying Limit Order');
-              } else {
-                trade2visualisation.current[trade]?.lineRef
-                  .onMove('move', function () {
-                    changeStrikeSafe(updatedTrade, this.getPrice());
-                  })
-                  .setModifyTooltip('Click to Edit Order')
-                  .onModify('modify', function () {
-                    setSelectedTradeToEdit({
-                      trade: updatedTrade,
-                      market: updatedTrade.market,
-                    });
-                  })
-                  .onCancel('modify', function () {
-                    cancelHandler(updatedTrade);
-                  })
-                  .setText(formatLOText(updatedTrade, decimals));
+        trade2visualisation.current.forEach((trade) => {
+          const [isClosingDisabled, disableTooltip] = getEarlyCloseStatus(
+            trade.option
+          );
+          const actualTrade = trade.option;
+          let updatedTrade = actualTrade;
+          activeTrades.forEach((catagory) => {
+            catagory.forEach((t) => {
+              if (t.queue_id == actualTrade?.queue_id) {
+                updatedTrade = t;
               }
+            });
+          });
 
-              return;
+          if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order) {
+            if (!updatedTrade) return;
+            const decimals = getPoolInfo(updatedTrade.pool.pool).decimals;
+            // Limit order updation space
+            if (
+              editLoading == updatedTrade.queue_id ||
+              updatedTrade.pending_operation == 'Processing EDIT'
+            ) {
+              trade.positionRef
+                .onMove('', function () {
+                  return null;
+                })
+                .onModify('', function () {
+                  return null;
+                })
+                .onCancel('modify', function () {
+                  return null;
+                })
+                .setText('Modifying Limit Order');
+            } else {
+              trade.positionRef
+                .onMove('move', function () {
+                  changeStrikeSafe(updatedTrade, this.getPrice());
+                })
+                .setModifyTooltip('Click to Edit Order')
+                .onModify('modify', function () {
+                  setSelectedTradeToEdit({
+                    trade: updatedTrade,
+                    market: updatedTrade.market,
+                  });
+                })
+                .onCancel('modify', function () {
+                  cancelHandler(updatedTrade);
+                })
+                .setText(formatLOText(updatedTrade, decimals));
             }
-            // Market order updation state
-            const earlyCloseData = getPnl(updatedTrade, priceCache);
 
-            const text = formatMarketOrder(updatedTrade, earlyCloseData);
-            const winning =
-              earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
-            trade2visualisation.current[trade]?.lineRef
-              .setText(text)
-              .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
+            return;
+          }
+          // Market order updation state
+          const earlyCloseData = getPnl(updatedTrade, priceCache);
 
-            if (!isClosingDisabled) {
-              trade2visualisation.current[trade]?.lineRef.onCancel(
-                'onCancel',
-                () => {
-                  if (settings.earlyCloseConfirmation) {
-                    earlyCloseHandler(updatedTrade, updatedTrade.market);
-                  } else {
-                    setCloseConfirmationModal(updatedTrade);
-                  }
-                }
-              );
-            }
+          const text = formatMarketOrder(updatedTrade, earlyCloseData);
+          const winning =
+            earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
+          trade.positionRef
+            .setText(text)
+            .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
+
+          if (!isClosingDisabled) {
+            trade.positionRef.onCancel('onCancel', () => {
+              if (settings.earlyCloseConfirmation) {
+                earlyCloseHandler(updatedTrade, updatedTrade.market);
+              } else {
+                setCloseConfirmationModal(updatedTrade);
+              }
+            });
           }
         });
       } catch (e) {
