@@ -1,53 +1,48 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
+import { toFixed } from '@Utils/NumString';
+import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
-import { toFixed } from '@Utils/NumString';
-import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import 'viem/window';
 
-import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
-import { useWriteCall } from '@Hooks/useWriteCall';
-import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
-import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import axios from 'axios';
-import { useAccount, usePublicClient } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { ethers } from 'ethers';
+import { useHighestTierNFT } from '@Hooks/useNFTGraph';
+import { useWriteCall } from '@Hooks/useWriteCall';
+import DownIcon from '@SVG/Elements/DownIcon';
+import UpIcon from '@SVG/Elements/UpIcon';
+import { getCallId } from '@Utils/Contract/multiContract';
+import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import { viemMulticall } from '@Utils/multicall';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { useSwitchPool } from './useSwitchPool';
-import { useBuyTradeData } from './useBuyTradeData';
-import { useActiveMarket } from './useActiveMarket';
-import { joinStrings } from '../utils';
-import { appConfig, baseUrl, pricePublisherBaseUrl } from '../config';
-import { AssetCategory, TradeType } from '../type';
+import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
+import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
+import { signTypedData } from '@wagmi/core';
+import axios from 'axios';
+import { PublicClient } from 'viem';
+import { useAccount, usePublicClient } from 'wagmi';
+import { getExpiry } from '../Views/AccordionTable/Common';
+import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import {
   approveModalAtom,
   queuets2priceAtom,
   timeSelectorAtom,
   tradeSettingsAtom,
 } from '../atoms';
-import { useSettlementFee } from './useSettlementFee';
-import UpIcon from '@SVG/Elements/UpIcon';
-import DownIcon from '@SVG/Elements/DownIcon';
-import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
-import {
-  generateApprovalSignature,
-  generateBuyTradeSignature,
-} from '../utils/generateTradeSignature';
-import { getExpiry } from '../Views/AccordionTable/Common';
-import { useApprvalAmount } from './useApprovalAmount';
-import { getConfig } from '../utils/getConfig';
-import { timeToMins } from '../utils/timeToMins';
-import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
-import { getUserError } from '../utils/getUserError';
-import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { getSingatureCached } from '../cache';
-import { viemMulticall } from '@Utils/multicall';
-import { signTypedData } from '@wagmi/core';
-import { PublicClient } from 'viem';
+import { baseUrl, pricePublisherBaseUrl } from '../config';
+import { AssetCategory, TradeType } from '../type';
 import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
+import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
+import { getConfig } from '../utils/getConfig';
+import { getUserError } from '../utils/getUserError';
+import { timeToMins } from '../utils/timeToMins';
+import { useActiveMarket } from './useActiveMarket';
+import { useApprvalAmount } from './useApprovalAmount';
+import { useBuyTradeData } from './useBuyTradeData';
+import { useSettlementFee } from './useSettlementFee';
+import { useSwitchPool } from './useSwitchPool';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -56,7 +51,7 @@ enum ArgIndex {
   Size = 1,
   PartialFill = 6,
   Referral = 7,
-  NFT = 8,
+  // NFT = 8,
   Slippage = 5,
 }
 export const useBuyTradeActions = (userInput: string) => {
@@ -324,7 +319,7 @@ export const useBuyTradeActions = (userInput: string) => {
           toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
           settings.partialFill,
           referralData[2],
-          highestTierNFT?.tokenId || '0',
+          // highestTierNFT?.tokenId || '0',
           currentUTCTimestamp,
           customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
           customTrade.is_up,
@@ -343,7 +338,7 @@ export const useBuyTradeActions = (userInput: string) => {
           trade_size: baseArgs[ArgIndex.Size],
           allow_partial_fill: baseArgs[ArgIndex.PartialFill],
           referral_code: baseArgs[ArgIndex.Referral],
-          trader_nft_id: baseArgs[ArgIndex.NFT],
+          // trader_nft_id: baseArgs[ArgIndex.NFT],
           slippage: baseArgs[ArgIndex.Slippage],
           is_above: customTrade.is_up,
           is_limit_order: customTrade.limitOrderExpiry ? true : false,
@@ -374,7 +369,7 @@ export const useBuyTradeActions = (userInput: string) => {
             baseArgs[ArgIndex.PartialFill],
             address as string,
             baseArgs[ArgIndex.Referral],
-            baseArgs[ArgIndex.NFT],
+            // baseArgs[ArgIndex.NFT],
             settelmentFee.settlement_fee,
             baseArgs[ArgIndex.Slippage],
             baseArgs[ArgIndex.TargetContract],
@@ -588,7 +583,7 @@ const getLockedAmount = async (
   allowPartialFill: boolean,
   user: string,
   referrer: string,
-  nftId: string,
+  // nftId: string,
   settlementFee: number,
   slippage: number,
   optionContract: string,
@@ -632,7 +627,7 @@ const getLockedAmount = async (
       allowPartialFill,
       user,
       referrer,
-      nftId,
+      // nftId,
       settlementFee,
       slippage,
       optionContract,
