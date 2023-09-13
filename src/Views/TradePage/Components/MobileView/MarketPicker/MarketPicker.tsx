@@ -12,6 +12,7 @@ import DDArrow from '@SVG/Elements/Arrow';
 import { MarketSelectorDD } from '@Views/TradePage/Views/MarketChart/MarketSelectorDD';
 import { AssetSelectorDD } from '@Views/TradePage/Views/Markets/AssetSelectorDD';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
+import { CurrentPrice } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/CurrentPrice';
 
 const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
   const { activeMarket } = useActiveMarket();
@@ -36,9 +37,16 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
         </div>
         {activeMarket?.pair}
       </button>
-
-      <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
-        {payout || '-'}%
+      <div className="items-center flex gap-x-[6px]">
+        <div className="text-[#C3C2D4] ml-2 text-f12">
+          <CurrentPrice
+            token0={activeMarket?.token0}
+            token1={activeMarket?.token1}
+          />
+        </div>
+        <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
+          {payout || '-'}%
+        </div>
       </div>
     </div>
   );
