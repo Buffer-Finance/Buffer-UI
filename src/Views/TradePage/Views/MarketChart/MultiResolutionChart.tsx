@@ -276,10 +276,20 @@ function drawPosition(
 
   if (option.is_limit_order && option.state == 'QUEUED') {
     const text = ``;
+    const processing =
+      option.pending_operation == 'Processing EDIT'
+        ? 'Modifying Limit Order'
+        : null;
+    console.log(
+      `MultiResolutionChart-processing: `,
+      processing,
+      option.queue_id,
+      option.pending_operation
+    );
 
     return chart
       ?.createOrderLine()
-      .setText(formatLOText(option, decimals))
+      .setText(processing || formatLOText(option, decimals))
       .setTooltip('Drag to change Strike')
       .setBodyBackgroundColor(defaults.BG)
       .setQuantityBackgroundColor(color)
