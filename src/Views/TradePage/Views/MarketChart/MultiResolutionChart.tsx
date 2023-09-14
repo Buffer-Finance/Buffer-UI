@@ -863,7 +863,7 @@ export const MultiResolutionChart = ({
                 .onMove('move', function () {
                   changeStrikeSafe(updatedTrade, this.getPrice());
                 })
-                .setModifyTooltip('Click to Edit Order')
+                .setModifyTooltip('click to edit order')
                 .onModify('modify', function () {
                   setSelectedTradeToEdit({
                     trade: updatedTrade,
