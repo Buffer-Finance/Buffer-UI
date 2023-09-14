@@ -11,7 +11,7 @@ export const BufferCheckBoxes = ({
 }) => {
   //   if (tabList.length < 2) return <></>;
   return (
-    <div className="flex items-center gap-5 flex-wrap">
+    <div className="flex items-center gap-x-5 flex-wrap">
       {' '}
       {tabList.map((tab) => {
         const isActive = activeTabs.includes(tab);
