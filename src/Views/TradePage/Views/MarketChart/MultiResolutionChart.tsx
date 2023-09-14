@@ -906,7 +906,15 @@ export const MultiResolutionChart = ({
     return () => {
       clearInterval(interval);
     };
-  }, [address, settings.earlyCloseConfirmation, activeTrades, editLoading]);
+  }, [
+    address,
+    settings.earlyCloseConfirmation,
+    activeTrades,
+    editLoading,
+    settings.loDragging,
+    changeStrike,
+    setSelectedTrade,
+  ]);
 
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
