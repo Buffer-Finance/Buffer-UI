@@ -253,7 +253,7 @@ export const EditModal: React.FC<{
           <TriggerPrice price={price} setPrice={setPrice} />
           {defaults?.strike ? (
             <div
-              className="flex items-center mt-2 gap-x-[7px] text-f14 text-[ !text-f14 !w-fit  text-[#C3C2D4]"
+              className="flex  mt-2 gap-x-[7px] text-f14 text-[ !text-f14 !w-fit  text-[#C3C2D4]"
               onClick={() => {
                 setVal(!val);
               }}
@@ -265,7 +265,10 @@ export const EditModal: React.FC<{
                 }}
                 className="scale-75"
               />{' '}
-              Allow closing from chart without confirmation
+              <div>
+                Allow <b>drag-n-edit </b>limit orders from chart <br />
+                without confirmation{' '}
+              </div>
             </div>
           ) : null}
           <DirectionButtons
