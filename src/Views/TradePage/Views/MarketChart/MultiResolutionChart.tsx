@@ -1,11 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Markets, OHLCBlock, RealtimeUpdate } from './MakrketTypes';
 import {
   widget,
@@ -16,7 +9,6 @@ import {
   ThemeName,
   LibrarySymbolInfo,
   IChartWidgetApi,
-  IPositionLineAdapter,
   SeriesFormat,
   IOrderLineAdapter,
 } from '../../../../../public/static/charting_library';
@@ -290,7 +282,7 @@ function drawPosition(
     return chart
       ?.createOrderLine()
       .setText(processing || formatLOText(option, decimals))
-      .setTooltip('Drag to change Strike')
+      .setTooltip('drag to change strike')
       .setBodyBackgroundColor(defaults.BG)
       .setQuantityBorderColor(defaults.BG)
       .setQuantityBackgroundColor(color)
@@ -300,7 +292,7 @@ function drawPosition(
       .setBodyFont('semibold 17pt Arial')
       .setQuantityFont('bold 17pt Arial')
       .setBodyTextColor('rgb(195,194,212)')
-      .setCancelTooltip('Click to cancel this Limit Order')
+      .setCancelTooltip('click to cancel this limit order')
       .setQuantity('↕')
       .setBodyBorderColor(defaults.BG)
       .setLineColor(color)
@@ -309,7 +301,7 @@ function drawPosition(
         console.log(`MultiResolutionChart-Processing EDIT: `);
         loHandlers.onMove(option, this.getPrice());
       })
-      .setModifyTooltip('Click to Edit Order')
+      .setModifyTooltip('click to edit order')
       .onModify('modify', function () {
         loHandlers.onEdit({ trade: option, market: option.market });
       })
@@ -351,7 +343,7 @@ function drawPosition(
     .setLineColor(color)
     .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)')
     .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
-    .setCancelTooltip('Click to Early Close at Market Price')
+    .setCancelTooltip('click to early close at market price')
     .setPrice(optionPrice);
 }
 
