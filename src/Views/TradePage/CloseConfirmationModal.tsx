@@ -1,21 +1,21 @@
-import { ModalBase } from 'src/Modals/BaseModal';
-import {
-  closeConfirmationModalAtom,
-  closeLoadingAtom,
-  miscsSettingsAtom,
-} from './atoms';
-import { useAtomValue, useSetAtom } from 'jotai';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { useEffect, useState } from 'react';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { CloseOutlined } from '@mui/icons-material';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useState } from 'react';
+import { ModalBase } from 'src/Modals/BaseModal';
 import { useCancelTradeFunction } from './Hooks/useCancelTradeFunction';
 import { useOngoingTrades } from './Hooks/useOngoingTrades';
+import {
+  chartControlsSettingsAtom,
+  closeConfirmationModalAtom,
+  closeLoadingAtom,
+} from './atoms';
 
 const CloseConfirmationModal: React.FC<any> = ({}) => {
   const trade = useAtomValue(closeConfirmationModalAtom);
-  const setSetting = useSetAtom(miscsSettingsAtom);
-  const settings = useAtomValue(miscsSettingsAtom);
+  const setSetting = useSetAtom(chartControlsSettingsAtom);
+  const settings = useAtomValue(chartControlsSettingsAtom);
   const setConfirmationTrade = useSetAtom(closeConfirmationModalAtom);
   const earlyCloseLoading = useAtomValue(closeLoadingAtom);
   const [activeTrades] = useOngoingTrades();
@@ -88,7 +88,7 @@ const CloseConfirmationModal: React.FC<any> = ({}) => {
             className=" !text-f16 !w-fit !px-6 !h-[34px]  "
             onClick={() => {
               if (val) {
-                setSetting((s) => ({ ...s, earlyCloseConfirmation: true }));
+                setSetting((s) => ({ ...s, earlyCloseConfirmation: false }));
               }
               earlyCloseHandler(trade, trade.market);
             }}

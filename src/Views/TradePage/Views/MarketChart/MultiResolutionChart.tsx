@@ -1,64 +1,65 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Markets, OHLCBlock, RealtimeUpdate } from './MakrketTypes';
 import {
-  widget,
-  IChartingLibraryWidget,
   IBasicDataFeed,
-  ResolutionString,
-  Timezone,
-  ThemeName,
-  LibrarySymbolInfo,
   IChartWidgetApi,
-  SeriesFormat,
+  IChartingLibraryWidget,
   IOrderLineAdapter,
+  LibrarySymbolInfo,
+  ResolutionString,
+  SeriesFormat,
+  ThemeName,
+  Timezone,
+  widget,
 } from '../../../../../public/static/charting_library';
-import axiosRetry from 'axios-retry';
+import { Markets, OHLCBlock, RealtimeUpdate } from './MakrketTypes';
 
-import {
-  getDisplayDate,
-  getDisplayTime,
-  getOslonTimezone,
-} from '@Utils/Dates/displayDateTime';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
-import axios from 'axios';
-import { priceAtom, silentPriceCache } from '@Hooks/usePrice';
-import { sleep } from '@Utils/JSUtils/sleep';
-import { toFixed } from '@Utils/NumString';
-import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
 import { formatDistanceCompact } from '@Hooks/Utilities/useStopWatch';
-import { Variables } from '@Utils/Time';
+import { priceAtom, silentPriceCache } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import {
   ChartElementSVG,
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
+import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
+import {
+  getDisplayDate,
+  getDisplayTime,
+  getOslonTimezone,
+} from '@Utils/Dates/displayDateTime';
+import { sleep } from '@Utils/JSUtils/sleep';
+import { toFixed } from '@Utils/NumString';
+import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
+import { Variables } from '@Utils/Time';
+import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
+import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { TradeType } from '@Views/TradePage/type';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import {
+  chartControlsSettingsAtom,
   closeConfirmationModalAtom,
-  miscsSettingsAtom,
   queuets2priceAtom,
   rerenderPositionAtom,
   selectedOrderToEditAtom,
-  tradeSettingsAtom,
-  tradeTypeAtom,
   visualizeddAtom,
 } from '@Views/TradePage/atoms';
+import {
+  PRICE_DECIMALS,
+  appConfig,
+  marketsForChart,
+} from '@Views/TradePage/config';
+import { TradeType } from '@Views/TradePage/type';
+import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
+import axios from 'axios';
+import axiosRetry from 'axios-retry';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { PRICE_DECIMALS, appConfig } from '@Views/TradePage/config';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { marketsForChart } from '@Views/TradePage/config';
 import {
   getEarlyCloseStatus,
   getLockedAmount,
   getProbability,
 } from '../AccordionTable/Common';
-import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
-import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { loeditLoadingAtom } from '../EditModal';
 const PRICE_PROVIDER = 'Buffer Finance';
@@ -365,7 +366,7 @@ export const MultiResolutionChart = ({
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
-  const settings = useAtomValue(miscsSettingsAtom);
+  const settings = useAtomValue(chartControlsSettingsAtom);
   const setCloseConfirmationModal = useSetAtom(closeConfirmationModalAtom);
 
   const { getPoolInfo } = usePoolInfo();
@@ -691,7 +692,7 @@ export const MultiResolutionChart = ({
   const rerenderPostion = useAtomValue(rerenderPositionAtom);
   const { changeStrike } = useLimitOrderHandlers();
   const changeStrikeSafe = (trade: TradeType, strike: string) => {
-    if (settings.loDragging) {
+    if (!settings.loDragging) {
       changeStrike(trade, strike);
     } else {
       setSelectedTrade({
@@ -890,7 +891,7 @@ export const MultiResolutionChart = ({
 
           if (!isClosingDisabled) {
             trade.positionRef.onCancel('onCancel', () => {
-              if (settings.earlyCloseConfirmation) {
+              if (!settings.earlyCloseConfirmation) {
                 earlyCloseHandler(updatedTrade, updatedTrade.market);
               } else {
                 setCloseConfirmationModal(updatedTrade);

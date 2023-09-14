@@ -1,39 +1,42 @@
+import { useToast } from '@Contexts/Toast';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { sleep } from '@TV/useDataFeed';
+import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
+import BufferCheckbox from '@Views/Common/BufferCheckbox';
+import { Display } from '@Views/Common/Tooltips/Display';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
-import styled from '@emotion/styled';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
-import { MinutesInput } from '../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
-import { SaveButton } from './SaveButton';
-import { DirectionButtons } from './DirectionButtons';
 import {
   BuyTradeHeadText,
   EditTextValueText,
   SettingsComponentHeader,
 } from '@Views/TradePage/Components/TextWrapper';
-import { TriggerPrice } from './TriggerPrice';
-import { useEffect, useMemo, useState } from 'react';
-import { TradeType, directionBtn, marketType } from '@Views/TradePage/type';
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
-import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
-import { divide, multiply, toFixed } from '@Utils/NumString/stringArithmatics';
-import { editQueueTrade, secondsToHHMM } from '@Views/TradePage/utils';
-import { useAccount } from 'wagmi';
-import { HHMMToSeconds } from '@Views/TradePage/utils';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { useToast } from '@Contexts/Toast';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { Display } from '@Views/Common/Tooltips/Display';
-import { getSingatureCached } from '@Views/TradePage/cache';
-import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import {
-  miscsSettingsAtom,
+  chartControlsSettingsAtom,
   rerenderPositionAtom,
 } from '@Views/TradePage/atoms';
-import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { sleep } from '@TV/useDataFeed';
+import { getSingatureCached } from '@Views/TradePage/cache';
+import { TradeType, directionBtn } from '@Views/TradePage/type';
+import {
+  HHMMToSeconds,
+  editQueueTrade,
+  secondsToHHMM,
+} from '@Views/TradePage/utils';
+import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import styled from '@emotion/styled';
+import { atom, useAtom, useAtomValue } from 'jotai';
+import { useEffect, useMemo, useState } from 'react';
+import { useAccount } from 'wagmi';
+import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
+import { MinutesInput } from '../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
+import { DirectionButtons } from './DirectionButtons';
+import { SaveButton } from './SaveButton';
+import { TriggerPrice } from './TriggerPrice';
 export const loeditLoadingAtom = atom<number | null>(null);
 export const EditModal: React.FC<{
   trade: TradeType;
@@ -140,7 +143,7 @@ export const EditModal: React.FC<{
   function onTimeChange(value: number) {
     setMinutes(value);
   }
-  const settings = useAtomValue(miscsSettingsAtom);
+  const settings = useAtomValue(chartControlsSettingsAtom);
   const [val, setVal] = useState(settings.loDragging);
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const toastify = useToast();
