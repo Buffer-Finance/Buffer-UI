@@ -39,7 +39,7 @@ export const ConfirmationModalsSettings: React.FC = () => {
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
 
-      <RowBetween className="mt-4">
+      <RowBetween className="">
         <SettingsText>Show early close confirmations</SettingsText>
         <Switch
           isOn={settings.earlyCloseConfirmation}
