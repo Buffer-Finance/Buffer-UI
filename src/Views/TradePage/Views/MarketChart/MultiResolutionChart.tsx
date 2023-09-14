@@ -331,7 +331,7 @@ function drawPosition(
 
   const tooltip = `${getDisplayDate(openTimeStamp as any)}, ${getDisplayTime(
     openTimeStamp
-  )} - ${getDisplayDate(option.close_time as any)}, ${getDisplayTime(
+  )} - ${getDisplayDate(option.expiration_time as any)}, ${getDisplayTime(
     option.expiration_time
   )}`;
   return chart
