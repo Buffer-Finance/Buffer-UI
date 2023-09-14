@@ -18,12 +18,21 @@ export const AssetChechBoxesRow = ({ config }: { config: Config }) => {
   const [selectedV2_5Assets, setSelectedV2_5Assets] = useState<{
     [key: string]: responseObj[];
   }>({});
-
+  console.log(selectedV2Assets, selectedV2_5Assets, 'selectedV2Assets');
   if (
     marketsV2_5.optionContracts === undefined ||
     marketsV2.optionContracts === undefined
   )
     return <div>Loading...</div>;
+
+  //button should be disabled if markets array is empty for every pool in selectedV2Assets and selectedV2_5Assets
+  const isButtonDisabld =
+    Object.keys(selectedV2Assets).every((pool) => {
+      return selectedV2Assets[pool].length === 0;
+    }) &&
+    Object.keys(selectedV2_5Assets).every((pool) => {
+      return selectedV2_5Assets[pool].length === 0;
+    });
 
   function filter(market: responseObj) {
     if (config.setter.name.toLowerCase() === 'pause') return !market.isPaused;
@@ -125,46 +134,66 @@ export const AssetChechBoxesRow = ({ config }: { config: Config }) => {
           filteredData = marketsV2.optionContracts?.filter(filter) ?? [];
         } else filteredData = marketsV2_5.optionContracts?.filter(filter) ?? [];
         const poolWiseData = convertToPoolWiseData(filteredData);
+        console.log(poolWiseData, 'poolWiseData[pool]');
+        const pools = Object.keys(poolWiseData);
         return (
-          <div className="flex flex-col bg-[#232334] p-4 rounded-md">
+          <div className="flex flex-col gap-3 bg-[#232334] p-4 rounded-md">
             <div>{ip.name}:</div>
+            {pools.length === 0 ? (
+              <div>No markets found.</div>
+            ) : (
+              pools.map((pool) => {
+                return (
+                  <div className="flex gap-3">
+                    <div>{pool}:</div>
 
-            {Object.keys(poolWiseData).map((pool) => {
-              return (
-                <div className="flex gap-3">
-                  <div>{pool}:</div>
-                  <BufferCheckBoxes
-                    activeTabs={
-                      isV2
-                        ? (selectedV2Assets[pool] ?? []).map(mapToAssetName)
-                        : (selectedV2_5Assets[pool] ?? []).map(mapToAssetName)
-                    }
-                    tabList={poolWiseData[pool]}
-                    onCheckBoxClick={(selectedTab) =>
-                      handleCheckBoxClick(selectedTab, isV2, pool)
-                    }
-                  />
-                </div>
-              );
-            })}
-            {/* 
-            <BufferCheckBoxes
-              activeTabs={isV2 ? selectedV2Assets : selectedV2_5Assets}
-              tabList={filteredData.map((market) => market.asset)}
-              onCheckBoxClick={(selectedTab) =>
-                handleCheckBoxClick(selectedTab, isV2)
-              }
-            /> */}
+                    <BufferCheckBoxes
+                      activeTabs={
+                        isV2
+                          ? (selectedV2Assets[pool] ?? []).map(mapToAssetName)
+                          : (selectedV2_5Assets[pool] ?? []).map(mapToAssetName)
+                      }
+                      tabList={poolWiseData[pool]}
+                      onCheckBoxClick={(selectedTab) =>
+                        handleCheckBoxClick(selectedTab, isV2, pool)
+                      }
+                    />
+                  </div>
+                );
+              })
+            )}
           </div>
         );
       })}
 
-      <button
+      <ChangeButton
         onClick={handleChange}
         className="bg-[#232334] h-fit p-3 rounded-md"
-      >
-        Change
-      </button>
+        isDisabled={isButtonDisabld}
+      />
     </div>
+  );
+};
+
+const ChangeButton = ({
+  onClick,
+  isDisabled,
+  className,
+}: {
+  onClick: () => void;
+  className?: string;
+  isDisabled: boolean;
+}) => {
+  const disabledClassName = isDisabled
+    ? 'text-[#4d4d4d] cursor-not-allowed'
+    : '';
+  return (
+    <button
+      onClick={onClick}
+      className={` ${disabledClassName} ${className}`}
+      disabled={isDisabled}
+    >
+      Change
+    </button>
   );
 };
