@@ -29,6 +29,10 @@ export const tradePanelPositionSettingsAtom = atomWithStorage(
   'tradePanelPositionSettingsAtom',
   defaultSettings.tradePanelPosition
 );
+export const chartControlsSettingsAtom = atomWithStorage(
+  'confirmationModalsSettingsAtom',
+  defaultSettings.chartControls
+);
 
 export const setSettingsAtom = atom(
   null,

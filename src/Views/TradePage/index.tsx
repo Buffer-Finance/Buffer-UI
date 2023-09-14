@@ -9,6 +9,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useMedia } from 'react-use';
 import { ModalBase } from 'src/Modals/BaseModal';
+import { CloseConfirmationModal } from './CloseConfirmationModal';
 import { MarketTimingsModal } from './Components/MarketTimingsModal';
 import { TradePageMobile } from './Components/MobileView/TradePageMobile';
 import { AccordionTable } from './Views/AccordionTable';
@@ -19,13 +20,13 @@ import { MarketChart } from './Views/MarketChart';
 import { MarketStatsBar } from './Views/MarketChart/MarketStatsBar';
 import { PinnedMarkets } from './Views/Markets/PinnedMarkets';
 import {
+  chartControlsSettingsAtom,
   miscsSettingsAtom,
   rerenderPositionAtom,
   selectedOrderToEditAtom,
   tradePanelPositionSettingsAtom,
 } from './atoms';
 import { tradePanelPosition } from './type';
-import { CloseConfirmationModal } from './CloseConfirmationModal';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -179,7 +180,7 @@ const MobileWarning = () => {
 
 export const EssentialModals = () => {
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
-  const setSettings = useSetAtom(miscsSettingsAtom);
+  const setSettings = useSetAtom(chartControlsSettingsAtom);
   const selectedTrade = useAtomValue(selectedOrderToEditAtom);
   const setPositionRerender = useSetAtom(rerenderPositionAtom);
   const closeEditModal = () => {

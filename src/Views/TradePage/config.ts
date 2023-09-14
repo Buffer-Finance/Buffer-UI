@@ -306,9 +306,8 @@ export const defaultSettings = {
   },
   miscs: {
     showFavoriteAsset: true,
-    earlyCloseConfirmation: false,
-    loDragging: false,
   },
+  chartControls: { earlyCloseConfirmation: true, loDragging: true },
   tradePanelPosition: tradePanelPosition.Right,
   notificationPosition: notificationPosition.BottomLeft,
 };

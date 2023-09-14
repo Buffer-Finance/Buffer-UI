@@ -1,12 +1,12 @@
-import { PremiumSettings } from './PremiumSettings';
+import styled from '@emotion/styled';
+import { ConfirmationModalsSettings } from './ConfirmationModalsSettings';
 import { MiscSettings } from './MiscSettings';
 import { NotificationPositionSettings } from './NotificationPositionSettings';
-import { TradePanelSettings } from './TradePanelSettings';
-import { ShareSettings } from './ShareSettings';
 import { ResetAllButton } from './ResetAllButton';
 import { SettingsHeader } from './SettingsHeader';
+import { ShareSettings } from './ShareSettings';
+import { TradePanelSettings } from './TradePanelSettings';
 import { TradeSettings } from './TradeSettings';
-import styled from '@emotion/styled';
 
 const SettingsBackground = styled.div`
   background-color: #232334;
@@ -46,6 +46,7 @@ const Settings: React.FC<{ className?: string; closeDropdown: () => void }> = ({
       <ShareSettings />
       {/* <PremiumSettings /> */}
       <MiscSettings />
+      <ConfirmationModalsSettings />
       <TradePanelSettings />
       <NotificationPositionSettings />
       <ResetAllButton />
