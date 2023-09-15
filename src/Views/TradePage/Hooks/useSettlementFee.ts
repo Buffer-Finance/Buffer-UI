@@ -1,8 +1,7 @@
-import { useAccount } from 'wagmi';
-import { baseUrl } from '../config';
+import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import useSWR from 'swr';
-import { useActiveChain } from '@Hooks/useActiveChain';
+import { baseUrl } from '../config';
 
 interface SettlementFee {
   settlement_fee: number;
@@ -14,10 +13,10 @@ export interface IBaseSettlementFees {
 }
 
 export const useSettlementFee = () => {
-  const account = useAccount();
   const { activeChain } = useActiveChain();
-  return useSWR<IBaseSettlementFees>([account, 'settlementFee'], {
+  return useSWR<IBaseSettlementFees>([activeChain, 'settlementFee'], {
     fetcher: async () => {
+      if (!activeChain) return null;
       const response = await axios.get(
         baseUrl + `settlement_fee/?environment=${activeChain.id}`
       );
@@ -26,7 +25,7 @@ export const useSettlementFee = () => {
       }
       return null;
     },
-    refreshInterval: 1000000,
+    refreshInterval: 5000,
   });
   // return data || null;
 };
