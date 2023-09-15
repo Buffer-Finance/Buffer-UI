@@ -422,7 +422,12 @@ export const MultiResolutionChart = ({
   }
   const price = useAtomValue(priceAtom);
   const { cancelHandler } = useCancelTradeFunction();
-
+  const [visualizedTrades, setVisualizedTrades] = useState<
+    {
+      positionRef: IOrderLineAdapter;
+      option: TradeType;
+    }[]
+  >([]);
   // console.log(price);
 
   const datafeed: IBasicDataFeed = useMemo(() => {
@@ -725,6 +730,10 @@ export const MultiResolutionChart = ({
   };
   const syncDelay = 100;
   const drawPostions = () => {
+    let po: {
+      positionRef: IOrderLineAdapter;
+      option: TradeType;
+    }[] = [];
     if (chartReady && activeTrades) {
       activeTrades.forEach((trades) =>
         trades.forEach((pos) => {
@@ -770,25 +779,31 @@ export const MultiResolutionChart = ({
             ),
             option: pos,
           };
-          trade2visualisation.current.push(currPositionsPacked);
+          po.push(currPositionsPacked);
         })
       );
     }
+    trade2visualisation.current = po;
+    return po;
   };
 
   const renderPositions = async () => {
     deleteAllPostions();
     trade2visualisation.current = [];
-    await sleep(syncDelay);
-    drawPostions();
+    // await sleep(syncDelay);
+    setVisualizedTrades(drawPostions());
   };
   useEffect(() => {
-    renderPositions();
+    const timeout = setTimeout(async () => {
+      await renderPositions();
+    });
+    return () => clearTimeout(timeout);
   }, [
     hideVisulizations,
     activeTrades,
     chartReady,
     priceCache,
+
     rerenderPostion,
     settings.earlyCloseConfirmation,
     settings.loDragging,
@@ -811,7 +826,9 @@ export const MultiResolutionChart = ({
     }
   }, [market2resolution, chartReady]);
   useEffect(() => {
+    console.log('[chart-useffect');
     const interval = setInterval(() => {
+      console.log('[chart-0 intervalcalled');
       try {
         widgetRef.current?.save((d) => {
           setDrawing((drawing: any) => {
@@ -822,10 +839,11 @@ export const MultiResolutionChart = ({
           });
         });
       } catch (e) {
-        console.log('major-bug', e);
+        console.log('[chart-bug]', e);
       }
 
       try {
+        console.log('[chart-1', trade2visualisation.current);
         trade2visualisation.current.forEach((trade) => {
           const [isClosingDisabled, disableTooltip] = getEarlyCloseStatus(
             trade.option
@@ -839,6 +857,7 @@ export const MultiResolutionChart = ({
               }
             });
           });
+          console.log('[chart-2', updatedTrade, isClosingDisabled);
 
           if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order) {
             if (!updatedTrade) return;
@@ -848,35 +867,10 @@ export const MultiResolutionChart = ({
               editLoading == updatedTrade.queue_id ||
               updatedTrade.pending_operation == 'Processing EDIT'
             ) {
-              trade.positionRef
-                .onMove('', function () {
-                  return null;
-                })
-                .onModify('', function () {
-                  return null;
-                })
-                .onCancel('modify', function () {
-                  return null;
-                })
-                .setText('Modifying Limit Order');
+              trade.positionRef.setText('Modifying Limit Order');
             } else {
-              trade.positionRef
-                .onMove('move', function () {
-                  changeStrikeSafe(updatedTrade, this.getPrice());
-                })
-                .setModifyTooltip('click to edit order')
-                .onModify('modify', function () {
-                  setSelectedTradeToEdit({
-                    trade: updatedTrade,
-                    market: updatedTrade.market,
-                  });
-                })
-                .onCancel('modify', function () {
-                  cancelHandler(updatedTrade);
-                })
-                .setText(formatLOText(updatedTrade, decimals));
+              trade.positionRef.setText(formatLOText(updatedTrade, decimals));
             }
-
             return;
           }
           // Market order updation state
@@ -888,9 +882,12 @@ export const MultiResolutionChart = ({
           trade.positionRef
             .setText(text)
             .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
+          console.log('[chart-3', trade.positionRef);
 
           if (!isClosingDisabled) {
             trade.positionRef.onCancel('onCancel', () => {
+              console.log('[chart-4', settings.earlyCloseConfirmation);
+
               if (!settings.earlyCloseConfirmation) {
                 earlyCloseHandler(updatedTrade, updatedTrade.market);
               } else {
@@ -900,21 +897,13 @@ export const MultiResolutionChart = ({
           }
         });
       } catch (e) {
-        console.log(' bug', e);
+        console.log('[chart-bug]', e);
       }
     }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, [
-    address,
-    settings.earlyCloseConfirmation,
-    activeTrades,
-    editLoading,
-    settings.loDragging,
-    changeStrike,
-    setSelectedTrade,
-  ]);
+  }, [visualizedTrades]);
 
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
