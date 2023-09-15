@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { BufferLogoComponent } from './BufferLogo';
 import { getTabs } from 'src/Config/getTabs';
 import { TabsDropdown } from './TabsDropDown';
@@ -15,6 +15,8 @@ import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
 import { useShutterHandlers } from '../MobileShutter/MobileShutter';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { useNavigate } from 'react-router-dom';
+import { inIframe } from '@Utils/isInIframe';
 
 interface INavbar {}
 
@@ -34,7 +36,16 @@ export const Navbar: React.FC<INavbar> = () => {
   };
   const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
-
+  const navigate = useNavigate();
+  const [click, setClick] = useState(0);
+  const openAdmin = () => {
+    setClick((click) => {
+      if (click > 5) {
+        navigate('/admin');
+      }
+      return click + 1;
+    });
+  };
   const show = !urlSettings?.hide;
   return (
     <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102] b1200:z-10">
@@ -95,8 +106,13 @@ export const Navbar: React.FC<INavbar> = () => {
           </div>
         )}
       </div>
-
       <div className="flex items-center gap-[3px] whitespace-nowrap">
+        {inIframe() && (
+          <button
+            onClick={openAdmin}
+            className="bg-red w-[100px] h-[35px]"
+          ></button>
+        )}
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
           <AccountDropdown />
         </div>
