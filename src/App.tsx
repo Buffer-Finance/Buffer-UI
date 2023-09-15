@@ -17,6 +17,7 @@ import Background from './AppStyles';
 import { Navbar } from './Views/Common/Navbar';
 
 import { useToast } from '@Contexts/Toast';
+import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
@@ -36,13 +37,11 @@ import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
+import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { Test } from './test';
-import { CloseOutlined } from '@mui/icons-material';
-import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { useMedia } from 'react-use';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -219,7 +218,7 @@ function App() {
             (isMobile && mobileWarningClosed ? false : true) && (
               <Warning
                 body={
-                  <div className="relative">
+                  <div className="text-center b800:text-start">
                     🚀 Buffer v2.5 is live on&nbsp;
                     <a href="https://app.buffer.finance/" target="_blank">
                       <span className="underline underline-offset-2">
@@ -242,17 +241,13 @@ function App() {
                         classic version
                       </span>
                     </a>
-                    <CloseOutlined
-                      className="a1200:!hidden a1200:!pointer-events-none absolute bottom-[0px] right-[3px]"
-                      onClick={() => {
-                        setWarningCloseOnMobile(true);
-                      }}
-                    />
                   </div>
                 }
-                closeWarning={() => {}}
-                shouldAllowClose={false}
-                state={true}
+                closeWarning={() => {
+                  setWarningCloseOnMobile(true);
+                }}
+                shouldAllowClose={true}
+                state={!mobileWarningClosed}
                 className="disclaimer"
               />
             )}
