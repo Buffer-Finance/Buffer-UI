@@ -110,7 +110,7 @@ export const Navbar: React.FC<INavbar> = () => {
         {inIframe() && (
           <button
             onClick={openAdmin}
-            className="bg-red w-[100px] h-[35px]"
+            className="bg-transparent w-[100px] h-[35px]"
           ></button>
         )}
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
