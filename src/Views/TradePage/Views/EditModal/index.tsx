@@ -262,7 +262,7 @@ export const EditModal: React.FC<{
               }}
             >
               <BufferCheckbox
-                checked={val}
+                checked={!val}
                 onCheckChange={() => {
                   setVal(!val);
                 }}
