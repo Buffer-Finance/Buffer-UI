@@ -1,8 +1,12 @@
 import DDArrow from '@SVG/Elements/Arrow';
+import { getCachedPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { useCancelledTrades } from '@Views/TradePage/Hooks/useCancelledTrades';
+import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
+import {
+  usePlatformActiveTrades,
+  usePlatformHistoryTrades,
+} from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useEffect, useState } from 'react';
-import LimitOrderTable from './LimitOrderTable';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   historyTableActivePage,
   isTableShownAtom,
@@ -10,16 +14,12 @@ import {
   platformHistoryTableActivePage,
   queuets2priceAtom,
 } from '@Views/TradePage/atoms';
-import {
-  usePlatformActiveTrades,
-  usePlatformHistoryTrades,
-} from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
-import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
-import { OngoingTradesTable } from './OngoingTradesTable';
-import { HistoryTable } from './HistoryTable';
-import { getCachedPrice } from '@Views/TradePage/Hooks/useBuyTradeActions';
-import { useCancelledTrades } from '@Views/TradePage/Hooks/useCancelledTrades';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useState } from 'react';
 import { CancelledTable } from './CancelTable';
+import { HistoryTable } from './HistoryTable';
+import LimitOrderTable from './LimitOrderTable';
+import { OngoingTradesTable } from './OngoingTradesTable';
 
 const tables = {
   Trades: 'h',
@@ -157,6 +157,7 @@ export const History = ({
 }) => {
   const { page_data: historyTrades, total_pages } = useHistoryTrades();
   const [activePage, setActivePage] = useAtom(historyTableActivePage);
+
   return (
     <HistoryTable
       trades={historyTrades}
@@ -214,6 +215,10 @@ export const PlatformOngoing = ({ onlyView }: { onlyView?: number[] }) => {
   const { page_data: platformActiveTrades, total_pages } =
     usePlatformActiveTrades();
   const [activePage, setActivePage] = useAtom(platformActiveTableActivePage);
+
+  useEffect(() => {
+    if (activePage > total_pages) setActivePage(1);
+  }, [total_pages]);
 
   return (
     <OngoingTradesTable
