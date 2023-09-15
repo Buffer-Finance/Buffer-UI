@@ -16,7 +16,7 @@ export function getTokenX24hrsquery(
       const condition =
         token === 'total'
           ? `depositToken: "${token}"`
-          : `optionContract_: {poolContract: "${poolContract}"}, depositToken_not: "total"`;
+          : `optionContract_: {pool: "${token}"}, depositToken_not: "total"`;
 
       return `${token}24stats:volumePerContracts(
             orderBy: timestamp
