@@ -26,7 +26,11 @@ const CustomButton: React.FC<IButton> = ({
       disabled={isDisabled || isLoading}
       className={`${buttonAnimation} !pointer-events-auto flex justify-center items-center transition-all duration-300 w-full rounded-[5px] text-f16 disabled:bg-cross-bg disabled:text-3 disabled:cursor-not-allowed h-[36px]  ${className}`}
     >
-      {isLoading ? <ButtonLoader className="min-w-[50px]" /> : children}
+      {isLoading ? (
+        <CircularProgress className="!w-[20px] !h-[20px]" color="inherit" />
+      ) : (
+        children
+      )}
     </button>
   );
 };
