@@ -67,7 +67,7 @@ const CloseConfirmationModal: React.FC<any> = ({}) => {
           }}
         >
           <BufferCheckbox
-            checked={!val}
+            checked={val}
             onCheckChange={() => {
               setVal(!val);
             }}
