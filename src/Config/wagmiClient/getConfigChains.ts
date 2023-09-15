@@ -3,9 +3,9 @@ import { isTestnet } from 'config';
 import {
   arbitrum,
   arbitrumGoerli,
+  goerli,
   polygon,
   polygonMumbai,
-  goerli,
 } from 'viem/chains';
 
 export const urlSettings = getHashUrlQueryParam(window.location.href);
@@ -21,6 +21,8 @@ export const getAllChains = () => {
     case 'polygon':
       return isTestnet ? [polygonMumbai, arbitrumGoerli] : [polygon, arbitrum];
     default:
-      return isTestnet ? [goerli] : [arbitrum, polygon];
+      return isTestnet
+        ? [polygonMumbai, arbitrumGoerli, goerli]
+        : [arbitrum, polygon];
   }
 };

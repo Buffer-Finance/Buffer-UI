@@ -1,8 +1,4 @@
-import {
-  ConnectButton,
-  RainbowKitProvider,
-  darkTheme,
-} from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
@@ -33,8 +29,6 @@ const options = {
 };
 
 import { inject } from '@vercel/analytics';
-import { SafeApp } from '@Views/Safe/SafeApp';
-import SafeProvider from '@safe-global/safe-apps-react-sdk';
 inject();
 console.log('wagmiCLient', wagmiClient);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -44,20 +38,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <SWRConfig value={options}>
           <JotaiProvider>
             <ContextProvider>
-              <SafeProvider
-                opts={{
-                  allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
-                  debug: false,
-                }}
-                loader={
-                  <div className="bg-[white]">
-                    waiting for connection
-                    <ConnectButton />
-                  </div>
-                }
-              >
-                <SafeApp />
-              </SafeProvider>
+              <App />
             </ContextProvider>
           </JotaiProvider>
         </SWRConfig>
