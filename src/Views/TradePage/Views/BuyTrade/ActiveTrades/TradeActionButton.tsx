@@ -20,6 +20,7 @@ import {
 } from '../../AccordionTable/Common';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { loeditLoadingAtom } from '../../EditModal';
+import { CircularProgress } from '@mui/material';
 
 export const TradeActionButton: React.FC<{
   trade: TradeType;
@@ -118,7 +119,10 @@ export const TradeButton: React.FC<{
             >
               {isCancelLoading ||
               trade.pending_operation == 'Processing CANCEL' ? (
-                <ButtonLoader />
+                <CircularProgress
+                  className="!w-[15px] !h-[15px] mx-[20px]"
+                  color="inherit"
+                />
               ) : (
                 'Cancel'
               )}
@@ -152,7 +156,10 @@ export const TradeButton: React.FC<{
           {isTradeExpired ? (
             'Processing...'
           ) : isEarlyCloseLoading ? (
-            <ButtonLoader />
+            <CircularProgress
+              className="!w-[15px] !h-[15px] mx-[20px]"
+              color="inherit"
+            />
           ) : (
             `Close at +${toFixed(earlycloseAmount, 2)}`
           )}
@@ -182,7 +189,10 @@ export const TradeButton: React.FC<{
           {isTradeExpired ? (
             'Processing...'
           ) : isEarlyCloseLoading ? (
-            <ButtonLoader />
+            <CircularProgress
+              className="!w-[15px] !h-[15px] mx-[20px]"
+              color="inherit"
+            />
           ) : (
             `Close at ${toFixed(earlycloseAmount, 2)}`
           )}

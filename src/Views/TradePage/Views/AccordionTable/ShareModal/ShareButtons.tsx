@@ -5,6 +5,7 @@ import ButtonLoader from '@Views/Common/V2-Button/ButtonLoader';
 import { useUserCode } from '@Views/Referral/Hooks/useUserCode';
 import { TradeType, marketType } from '@Views/TradePage/type';
 import { ContentCopy, FileDownloadOutlined } from '@mui/icons-material';
+import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
@@ -56,7 +57,10 @@ export const ShareButtons: React.FC<{
         onClick={uploadToServer}
       >
         {loading ? (
-          <ButtonLoader className="" />
+          <CircularProgress
+            className="!w-[15px] mt-[5px] !h-[15px] mx-[15px]  origin-center"
+            color="inherit"
+          />
         ) : (
           <>
             <ContentCopy />
