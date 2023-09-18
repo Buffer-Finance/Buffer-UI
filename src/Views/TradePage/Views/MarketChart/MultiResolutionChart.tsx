@@ -50,6 +50,7 @@ import {
   marketsForChart,
 } from '@Views/TradePage/config';
 import { TradeType } from '@Views/TradePage/type';
+import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
 import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
@@ -223,7 +224,18 @@ function getPnl(trade: TradeType, lockedAmountCache: any) {
   const lockedAmmount = getLockedAmount(trade, lockedAmountCache);
   const poolInfo = appConfig[trade.environment]?.poolsInfo?.[trade.pool.pool];
   if (!price || !lockedAmmount || !poolInfo) return null;
-  const probability = getProbability(trade, price, trade.pool.IV);
+  const probability = getProbability(
+    trade,
+    price,
+    calculateOptionIV(
+      trade.is_above ?? false,
+      trade.strike / 1e8,
+      +price,
+      trade.pool.IV,
+      trade.pool.IVFactorITM,
+      trade.pool.IVFactorOTM
+    )
+  );
   if (!probability) return null;
   const res = getPnlForTrade({ trade, poolInfo, probability, lockedAmmount });
   if (!res || !res.earlycloseAmount) return null;

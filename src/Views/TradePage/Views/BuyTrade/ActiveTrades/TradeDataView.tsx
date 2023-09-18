@@ -1,29 +1,30 @@
-import styled from '@emotion/styled';
-import { DataCol } from './DataCol';
-import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
+import { toFixed } from '@Utils/NumString';
 import {
   divide,
   gte,
   multiply,
   subtract,
 } from '@Utils/NumString/stringArithmatics';
-import { toFixed } from '@Utils/NumString';
-import { StrikePrice } from './StrikePrice';
-import { CurrentPrice } from './CurrentPrice';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { RowGap } from '@Views/TradePage/Components/Row';
-import React, { useMemo } from 'react';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
+import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
+import { secondsToHHMM } from '@Views/TradePage/utils';
+import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
+import styled from '@emotion/styled';
+import { useAtomValue } from 'jotai';
+import React, { useMemo } from 'react';
 import {
   getExpiry,
   getLockedAmount,
   getProbability,
   getStrike,
 } from '../../AccordionTable/Common';
-import { secondsToHHMM } from '@Views/TradePage/utils';
-import { useAtomValue } from 'jotai';
-import { queuets2priceAtom } from '@Views/TradePage/atoms';
-import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { Display } from '@Views/Common/Tooltips/Display';
+import { CurrentPrice } from './CurrentPrice';
+import { DataCol } from './DataCol';
+import { StrikePrice } from './StrikePrice';
 
 export const TradeDataView: React.FC<{
   trade: TradeType;
@@ -214,7 +215,19 @@ export const useEarlyPnl = ({
     token1: configData.token1,
   });
   let probability = useMemo(
-    () => getProbability(trade, +currentPrice, trade.pool.IV),
+    () =>
+      getProbability(
+        trade,
+        +currentPrice,
+        calculateOptionIV(
+          trade.is_above ?? false,
+          trade.strike / 1e8,
+          +currentPrice,
+          trade.pool.IV,
+          trade.pool.IVFactorITM,
+          trade.pool.IVFactorOTM
+        )
+      ),
     [trade, currentPrice]
   );
   if (!probability) probability = 0;

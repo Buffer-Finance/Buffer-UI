@@ -1,14 +1,29 @@
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import BufferTable from '@Views/Common/BufferTable';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 
+import { priceAtom } from '@Hooks/usePrice';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { getPriceFromKlines } from '@TV/useDataFeed';
+import { toFixed } from '@Utils/NumString';
+import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
-import { priceAtom } from '@Hooks/usePrice';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { getPriceFromKlines } from '@TV/useDataFeed';
 import { GreyBtn } from '@Views/Common/V2-Button';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import {
+  closeLoadingAtom,
+  queuets2priceAtom,
+  tradeInspectMobileAtom,
+} from '@Views/TradePage/atoms';
+import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
+import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
+import { useMedia } from 'react-use';
+import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
+import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
   StrikePriceComponent,
@@ -20,23 +35,7 @@ import {
   getProbability,
   tableButtonClasses,
 } from './Common';
-import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { ShowIcon } from '@SVG/Elements/ShowIcon';
-import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
-import {
-  closeLoadingAtom,
-  queuets2priceAtom,
-  tradeInspectMobileAtom,
-  visualizeddAtom,
-} from '@Views/TradePage/atoms';
-import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { toFixed } from '@Utils/NumString';
-import { AssetCell } from './AssetCell';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { useMedia } from 'react-use';
 import { Visualized } from './Visualized';
-import { useUserAccount } from '@Hooks/useUserAccount';
 
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[] | undefined;
@@ -211,7 +210,15 @@ export const OngoingTradesTable: React.FC<{
         const probabiliyt = getProbability(
           trade,
           +getPriceFromKlines(marketPrice, trade.market),
-          trade.pool.IV
+
+          calculateOptionIV(
+            trade.is_above ?? false,
+            trade.strike / 1e8,
+            +getPriceFromKlines(marketPrice, trade.market),
+            trade.pool.IV,
+            trade.pool.IVFactorITM,
+            trade.pool.IVFactorOTM
+          )
         );
         return (
           // queuedTradeFallBack(trade) || (
