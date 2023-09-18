@@ -1,53 +1,49 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
+import { toFixed } from '@Utils/NumString';
+import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
-import { toFixed } from '@Utils/NumString';
-import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import 'viem/window';
 
-import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
-import { useWriteCall } from '@Hooks/useWriteCall';
-import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
-import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import axios from 'axios';
-import { useAccount, usePublicClient } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { ethers } from 'ethers';
+import { useHighestTierNFT } from '@Hooks/useNFTGraph';
+import { useWriteCall } from '@Hooks/useWriteCall';
+import DownIcon from '@SVG/Elements/DownIcon';
+import UpIcon from '@SVG/Elements/UpIcon';
+import { getCallId } from '@Utils/Contract/multiContract';
+import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import { viemMulticall } from '@Utils/multicall';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { useSwitchPool } from './useSwitchPool';
-import { useBuyTradeData } from './useBuyTradeData';
-import { useActiveMarket } from './useActiveMarket';
-import { joinStrings } from '../utils';
-import { appConfig, baseUrl, pricePublisherBaseUrl } from '../config';
-import { AssetCategory, TradeType } from '../type';
+import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
+import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
+import { signTypedData } from '@wagmi/core';
+import axios from 'axios';
+import { PublicClient } from 'viem';
+import { useAccount, usePublicClient } from 'wagmi';
+import { getExpiry } from '../Views/AccordionTable/Common';
+import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import {
   approveModalAtom,
   queuets2priceAtom,
   timeSelectorAtom,
   tradeSettingsAtom,
 } from '../atoms';
-import { useSettlementFee } from './useSettlementFee';
-import UpIcon from '@SVG/Elements/UpIcon';
-import DownIcon from '@SVG/Elements/DownIcon';
-import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
-import {
-  generateApprovalSignature,
-  generateBuyTradeSignature,
-} from '../utils/generateTradeSignature';
-import { getExpiry } from '../Views/AccordionTable/Common';
-import { useApprvalAmount } from './useApprovalAmount';
-import { getConfig } from '../utils/getConfig';
-import { timeToMins } from '../utils/timeToMins';
-import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
-import { getUserError } from '../utils/getUserError';
-import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { getSingatureCached } from '../cache';
-import { viemMulticall } from '@Utils/multicall';
-import { signTypedData } from '@wagmi/core';
-import { PublicClient } from 'viem';
+import { baseUrl, pricePublisherBaseUrl } from '../config';
+import { AssetCategory, TradeType } from '../type';
 import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
+import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
+import { getConfig } from '../utils/getConfig';
+import { getSafeStrike } from '../utils/getSafeStrike';
+import { getUserError } from '../utils/getUserError';
+import { timeToMins } from '../utils/timeToMins';
+import { useActiveMarket } from './useActiveMarket';
+import { useApprvalAmount } from './useApprovalAmount';
+import { useBuyTradeData } from './useBuyTradeData';
+import { useSettlementFee } from './useSettlementFee';
+import { useSwitchPool } from './useSwitchPool';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -171,6 +167,31 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
+
+      const safeStrike = getSafeStrike(
+        Number(customTrade.strike),
+        customTrade.is_up,
+        switchPool.SpreadConfig1,
+        switchPool.SpreadConfig2,
+        switchPool.IV
+      );
+      //calculate the difference between the strike and safe strike in percentage in positive
+      const difference = Math.abs(
+        ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
+      );
+
+      if (difference > settings.slippageTolerance) {
+        return toastify({
+          type: 'error',
+          msg: `Slippage tolerance should be greater than ${difference.toFixed(
+            4
+          )}%`,
+          id: 'binaryBuy',
+        });
+      }
+
+      console.log(`useBuyTradeActions-safeStrike: `, safeStrike, difference);
+
       if (!userInput || userInput === '0' || userInput === '') {
         return toastify({
           type: 'error',
