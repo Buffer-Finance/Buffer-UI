@@ -7,7 +7,7 @@ export const appConfig = {
   '421613': isSandbox
     ? {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/version/v0.0.10-track-iv-related-events/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/api',
         },
 
         booster: '0xc478Ff4A49af13E65046a3786e61128151D033e7',
