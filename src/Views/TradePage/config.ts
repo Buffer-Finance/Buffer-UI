@@ -7,17 +7,17 @@ export const appConfig = {
   '421613': isSandbox
     ? {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/version/v0.0.10-track-iv-related-events/api',
         },
 
-        booster: '0xFB5312B503f2aF623e564Dce87f0D90d586a631D',
+        booster: '0xc478Ff4A49af13E65046a3786e61128151D033e7',
         // creation_window: {
         //   '0': '0x995D50aF014230b24Bd9278900942ec9beB1280a',
         //   '2': '0xb5f47783c42212c3970637E36DC077796f503Ab2',
         // },
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
-        router: '0x5C5C3a4BC8612361FCf052A1fe8D427fE37ef6e6',
-        signer_manager: '0xaBcAaf7Cfa61713D201de2d80d7054543A3dB041',
+        router: '0xeCd09Fd889E1Dd16AAB913Df3d640F4D69E4Cf8a',
+        signer_manager: '0xaBA5B187851830706F389BA7D0313988Ac8B1702',
         poolsInfo: {
           '0x4A53c47051FA44FE3A5D6d5cBCb1b7Bf8307E598': {
             decimals: 6,
