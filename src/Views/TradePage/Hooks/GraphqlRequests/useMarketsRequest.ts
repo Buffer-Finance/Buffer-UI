@@ -30,6 +30,10 @@ export const useMarketsRequest = () => {
                     IV
                     poolOIaddress
                     creationWindowAddress
+                    IVFactorOTM
+                    IVFactorITM
+                    SpreadConfig1
+                    SpreadConfig2
                   }
                   address
                   poolContract

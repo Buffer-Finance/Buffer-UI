@@ -15,6 +15,10 @@ export type poolType = {
     threshold: string;
   };
   IV: number;
+  IVFactorOTM: number;
+  IVFactorITM: number;
+  SpreadConfig1: number;
+  SpreadConfig2: number;
 };
 //type of markets needed on trade page
 export type marketType = {
@@ -88,6 +92,10 @@ export type responseObj = {
     IV: string;
     poolOIaddress: string;
     creationWindowAddress: string;
+    IVFactorOTM: string;
+    IVFactorITM: string;
+    SpreadConfig1: string;
+    SpreadConfig2: string;
   };
   address: string;
   poolContract: string;

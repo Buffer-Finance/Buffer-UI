@@ -1,10 +1,9 @@
+import { useMemo } from 'react';
+import { getAddress } from 'viem';
+import { marketsForChart } from '../config';
 import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
 import { getTokens, secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
-import { marketsForChart } from '../config';
-import { divide } from '@Utils/NumString/stringArithmatics';
-import { getAddress } from 'viem';
-import { useMemo } from 'react';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
@@ -60,6 +59,10 @@ function createPoolObject(market: responseObj) {
       enable: market.configContract.isEarlyCloseEnabled,
       threshold: market.configContract.earlyCloseThreshold,
     },
-    IV: Number((divide(market.configContract.IV, 4) as string) ?? '0'),
+    IV: Number(market.configContract.IV),
+    IVFactorOTM: Number(market.configContract.IVFactorOTM),
+    IVFactorITM: Number(market.configContract.IVFactorITM),
+    SpreadConfig1: Number(market.configContract.SpreadConfig1),
+    SpreadConfig2: Number(market.configContract.SpreadConfig2),
   };
 }
