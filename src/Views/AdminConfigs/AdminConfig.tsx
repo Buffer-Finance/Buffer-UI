@@ -10,6 +10,8 @@ import { SendToSafe } from './sendToSafe';
 
 export const safeTxnsAtom = atom<
   {
+    setter: string;
+    prevvalue: any;
     id: string;
     to: string;
     value: string;
@@ -64,25 +66,33 @@ const AdminConfig: React.FC<any> = ({}) => {
           cacheKey={activeGroup}
         />
       </div>
-      <SafeProvider
-        opts={{
-          allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
-          debug: false,
-        }}
-        loader={
-          <div className="bg-[white] text-blue-1">waiting for connection</div>
-        }
-      >
-        <SendToSafe />
-      </SafeProvider>
-
-      {txnBatch.map((txn) => (
-        <div key={txn.id}>
-          {txn.to}
-          {txn.value}
-          {txn.data}
-        </div>
-      ))}
+      <div className="mx-[20px] mt-[10px]">
+        {' '}
+        {txnBatch.length ? (
+          <>
+            <SafeProvider
+              opts={{
+                allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
+                debug: false,
+              }}
+              loader={
+                <div className="bg-2 !w-fit text-f14 p-3 rounded-sm mb-4 text-blue-1">
+                  Note: Please visit from Gnosis App to do multi-send
+                </div>
+              }
+            >
+              <SendToSafe />
+            </SafeProvider>
+            <h2 className="text-2 text-f12 mb-[20px]">Batched Txns:</h2>{' '}
+          </>
+        ) : null}
+        {txnBatch.map((txn) => (
+          <div key={txn.id} className="flex gap-x-[5px]">
+            <div>{txn.setter}</div>
+            <div>{txn.prevvalue ? JSON.stringify(txn.prevvalue) : ''}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

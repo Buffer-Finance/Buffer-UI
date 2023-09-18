@@ -7,9 +7,11 @@ import { Config, group2abi } from './helpers';
 const ConfigSetter: React.FC<any> = ({
   configs,
   cacheKey,
+  visible,
 }: {
   configs: Config[];
   cacheKey: string;
+  visible: boolean;
 }) => {
   const calls = useMemo(() => {
     return configs
@@ -27,7 +29,7 @@ const ConfigSetter: React.FC<any> = ({
   console.log(configs, 'data');
   if (calls.length > 0 && !data) return <div>Loading..</div>;
   console.log(data, configs, 'data');
-
+  // if (!visible) return null;
   return (
     <>
       <div className="flex">
