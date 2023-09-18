@@ -1,9 +1,22 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import SafeProvider from '@safe-global/safe-apps-react-sdk';
+import { atom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { ConfigSetter } from './ConfigSetter';
 import { raw2adminConfig } from './helpers';
+import { SendToSafe } from './sendToSafe';
+
+export const safeTxnsAtom = atom<
+  {
+    id: string;
+    to: string;
+    value: string;
+    data: string;
+  }[]
+>([]);
+
 const groups = Object.keys(rawConfigs);
 const className = 'bg-blue bg-4';
 const AdminConfig: React.FC<any> = ({}) => {
@@ -12,6 +25,8 @@ const AdminConfig: React.FC<any> = ({}) => {
   const adminConfig = raw2adminConfig(marketConfig, activeChain);
   console.log(adminConfig, 'adminConfig');
   const [activeGroup, setActiveGroup] = useState(groups[1]);
+  const txnBatch = useAtomValue(safeTxnsAtom);
+
   if (!adminConfig?.options_config) return <div>Loading...</div>;
 
   return (
@@ -49,6 +64,25 @@ const AdminConfig: React.FC<any> = ({}) => {
           cacheKey={activeGroup}
         />
       </div>
+      <SafeProvider
+        opts={{
+          allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
+          debug: false,
+        }}
+        loader={
+          <div className="bg-[white] text-blue-1">waiting for connection</div>
+        }
+      >
+        <SendToSafe />
+      </SafeProvider>
+
+      {txnBatch.map((txn) => (
+        <div key={txn.id}>
+          {txn.to}
+          {txn.value}
+          {txn.data}
+        </div>
+      ))}
     </div>
   );
 };

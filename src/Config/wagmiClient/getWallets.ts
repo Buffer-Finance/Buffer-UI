@@ -24,6 +24,12 @@ export const getWallets = (chains: Chain[]) => {
       wallets: [
         metaMaskWallet({ chains, projectId }),
         coinbaseWallet({ chains, appName: 'Buffer Finance' }),
+        walletConnectWallet({ chains, projectId }),
+        safeWallet({
+          chains,
+          allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
+          debug: false,
+        }),
       ],
     },
   ];
@@ -36,8 +42,6 @@ export const getWallets = (chains: Chain[]) => {
             ...bothSupported[0].wallets,
             trustWallet({ chains, projectId }),
             injectedWallet({ chains }),
-            walletConnectWallet({ chains, projectId }),
-            safeWallet({ chains }),
           ],
         },
         {

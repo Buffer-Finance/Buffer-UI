@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Config, group2abi } from './helpers';
-import { deepEqual } from 'wagmi';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { ResetButton } from '@Views/TradePage/Components/ResetButton';
+import { generateTransactionData } from '@Views/Safe/SafeApp';
 import { ResetSVG } from '@Views/TradePage/Components/ResetSVG';
+import { useAtom } from 'jotai';
+import { useEffect, useState } from 'react';
+import { safeTxnsAtom } from './AdminConfig';
+import { Config, group2abi } from './helpers';
 
 const ConfigRow: React.FC<any> = ({
   config,
@@ -25,6 +26,33 @@ const ConfigRow: React.FC<any> = ({
   const result = text.replace(/([A-Z])/g, ' $1');
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1) + ' :';
   const isChanged = data?.[config.contract + config.getter?.name]?.[0] != value;
+  const [safeTxnBatch, editSafeTxnsBatch] = useAtom(safeTxnsAtom);
+  const isInBatch = safeTxnBatch.find(
+    (a) => a.id == config.contract + config.setter.name
+  );
+
+  function addToBatch() {
+    editSafeTxnsBatch((a) => [
+      ...a,
+      {
+        id: config.contract + config.setter.name,
+        to: config.contract,
+        value: '0',
+        data: generateTransactionData(
+          config.contract,
+          group2abi[config.group],
+          config.setter.name,
+          [value]
+        ),
+      },
+    ]);
+  }
+
+  function removeFromBatch() {
+    editSafeTxnsBatch((a) =>
+      a.filter((b) => b.id != config.contract + config.setter.name)
+    );
+  }
 
   const reset = () => {
     setShowIp(false);
@@ -110,7 +138,9 @@ const ConfigRow: React.FC<any> = ({
           {renderValue()}
         </div>
         {isChanged ? (
-          <button type="submit">Change</button>
+          <div>
+            <button type="submit">Change</button>
+          </div>
         ) : (
           <button
             onClick={() => {
@@ -139,6 +169,13 @@ const ConfigRow: React.FC<any> = ({
           </>
         )}
       </form>
+      {!isChanged ? (
+        <></>
+      ) : isInBatch ? (
+        <button onClick={removeFromBatch}>Remove From Batch</button>
+      ) : (
+        <button onClick={addToBatch}>Add To Batch</button>
+      )}
     </div>
   );
 };
