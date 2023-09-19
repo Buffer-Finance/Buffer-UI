@@ -7,7 +7,7 @@ export function getSafeStrike(
 ): number {
   const m = (spreadConfig2 - spreadConfig1) / 1350;
   const c = (22 * spreadConfig1 - 5 * spreadConfig2) / 27;
-  const spread = m * iv + c;
+  const spread = m * (iv / 1e4) + c;
 
   if (isAbove) {
     return (strike * (1e8 + spread)) / 1e8;
