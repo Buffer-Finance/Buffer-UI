@@ -7,7 +7,7 @@ import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
-
+  // console.log(`data: `, data);
   const res = useMemo(() => {
     if (!data?.optionContracts) {
       return null;
@@ -38,11 +38,12 @@ export const useMarketsConfig = () => {
     // console.log(`response: `, response);
     return response;
   }, [data]);
+  // console.log(`res: `, res);
   return res;
 };
 
 //creates a pool object from the response object
-function createPoolObject(market: responseObj) {
+export function createPoolObject(market: responseObj) {
   return {
     pool: getAddress(market.poolContract),
     max_fee: market.configContract.maxFee,

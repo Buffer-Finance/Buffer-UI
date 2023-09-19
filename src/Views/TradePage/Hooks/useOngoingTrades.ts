@@ -1,16 +1,16 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import axios from 'axios';
 import useSWR from 'swr';
-import { baseUrl, refreshInterval } from '../config';
-import { useAccount } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { TradeType } from '../type';
-import { getSingatureCached } from '../cache';
-import { useMarketsConfig } from './useMarketsConfig';
-import { addMarketInTrades } from '../utils';
-import { useUserAccount } from '@Hooks/useUserAccount';
 import { getAddress } from 'viem';
+import { useAccount } from 'wagmi';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { getSingatureCached } from '../cache';
+import { baseUrl, refreshInterval } from '../config';
+import { TradeType } from '../type';
+import { addMarketInTrades } from '../utils';
+import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
@@ -22,7 +22,7 @@ const useOngoingTrades = () => {
   const { oneCTWallet } = useOneCTWallet();
   const { address: userAddress } = useUserAccount();
   const { address } = useAccount();
-  const markets = useMarketsConfig();
+  const markets = useAllV2_5MarketsConfig();
   const { data, error } = useSWR<TradeType[][]>(
     'active-trades-' +
       address +

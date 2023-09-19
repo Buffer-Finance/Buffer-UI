@@ -97,11 +97,13 @@ export type responseObj = {
     SpreadConfig1: string;
     SpreadConfig2: string;
   };
+  routerContract: string;
   address: string;
   poolContract: string;
   isPaused: boolean;
   category: number;
   asset: string;
+  pool: string;
 };
 
 export enum AssetCategory {

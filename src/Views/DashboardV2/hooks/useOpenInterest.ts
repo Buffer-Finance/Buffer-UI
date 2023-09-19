@@ -1,12 +1,12 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useMarketsReadCallData } from './useMarketsData/useMarketsReadcallData';
-import { appConfig } from '@Views/TradePage/config';
-import { useMarketsRequest } from '@Views/TradePage/Hooks/GraphqlRequests/useMarketsRequest';
-import { useMemo } from 'react';
-import { getAddress } from 'ethers/lib/utils.js';
-import { poolInfoType, responseObj } from '@Views/TradePage/type';
 import { add } from '@Utils/NumString/stringArithmatics';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
+import { useMarketsRequest } from '@Views/TradePage/Hooks/GraphqlRequests/useMarketsRequest';
+import { appConfig } from '@Views/TradePage/config';
+import { responseObj } from '@Views/TradePage/type';
+import { getAddress } from 'ethers/lib/utils.js';
+import { useMemo } from 'react';
+import { useMarketsReadCallData } from './useMarketsData/useMarketsReadcallData';
 
 export const useOpenInterest = () => {
   const { currentOIs } = useMarketsReadCallData();
@@ -50,7 +50,7 @@ export const useMarketContractsByPool = () => {
   const { data } = useMarketsRequest();
 
   const marketContractsByPool = useMemo(() => {
-    if (!data) return null;
+    if (!data.optionContracts) return null;
     const result: {
       [key: string]: responseObj[];
     } = {};

@@ -347,7 +347,7 @@ export const useBuyTradeActions = (userInput: string) => {
           referralData[2],
           // highestTierNFT?.tokenId || '0',
           currentUTCTimestamp,
-          customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
+          settelmentFee?.settlement_fee!,
           customTrade.is_up,
           oneCtPk,
           activeChain.id,
