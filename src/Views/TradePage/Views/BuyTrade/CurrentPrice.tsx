@@ -120,7 +120,7 @@ export const StrikePricePicker: React.FC<{
   );
 };
 
-const LimitOrderPayoutPicker: React.FC<{ className?: string }> = ({
+export const LimitOrderPayoutPicker: React.FC<{ className?: string }> = ({
   className,
 }) => {
   const [activePayout, setActivePayout] = useAtom(LimitOrderPayoutAtom);

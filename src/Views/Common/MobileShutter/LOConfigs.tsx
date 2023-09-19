@@ -1,7 +1,10 @@
 import { priceAtom } from '@Hooks/usePrice';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { StrikePricePicker } from '@Views/TradePage/Views/BuyTrade/CurrentPrice';
+import {
+  LimitOrderPayoutPicker,
+  StrikePricePicker,
+} from '@Views/TradePage/Views/BuyTrade/CurrentPrice';
 import { LimitOrderPayoutAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
@@ -44,9 +47,9 @@ const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
             {activeMarket.token0}-{activeMarket.token1}
           </span>
         </span>
-        <span className="text-f12 text-[#808191] my-3 mb-6">Payout Limit</span>
+        {/* <span className="text-f12 text-[#808191] my-3 mb-6">Payout Limit</span> */}
         <div className="flex gap-x-1  my-3 mb-4">
-          {presets.map((s) => {
+          {/* {presets.map((s) => {
             return (
               <button
                 key={s}
@@ -60,7 +63,8 @@ const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
                 {s == 0 ? 'Any Payout' : 'Above ' + s + '%'}
               </button>
             );
-          })}
+          })} */}
+          <LimitOrderPayoutPicker />
         </div>
       </div>
       <div>
