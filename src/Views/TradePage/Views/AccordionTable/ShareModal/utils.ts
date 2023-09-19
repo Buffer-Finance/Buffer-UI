@@ -80,7 +80,7 @@ function getEarlypnl(
       currentRow.pool.IV,
       currentRow.pool.IVFactorITM,
       currentRow.pool.IVFactorOTM
-    )
+    ) / 1e4
   );
   const { earlycloseAmount } = calculatePnlForProbability({
     decimals,

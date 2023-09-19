@@ -226,7 +226,7 @@ export const useEarlyPnl = ({
           trade.pool.IV,
           trade.pool.IVFactorITM,
           trade.pool.IVFactorOTM
-        )
+        ) / 1e4
       ),
     [trade, currentPrice]
   );

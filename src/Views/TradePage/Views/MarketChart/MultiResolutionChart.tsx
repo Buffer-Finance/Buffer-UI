@@ -234,7 +234,7 @@ function getPnl(trade: TradeType, lockedAmountCache: any) {
       trade.pool.IV,
       trade.pool.IVFactorITM,
       trade.pool.IVFactorOTM
-    )
+    ) / 1e4
   );
   if (!probability) return null;
   const res = getPnlForTrade({ trade, poolInfo, probability, lockedAmmount });

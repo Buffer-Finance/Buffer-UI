@@ -207,10 +207,7 @@ export const OngoingTradesTable: React.FC<{
           />
         );
       case TableColumn.Probability:
-        const probabiliyt = getProbability(
-          trade,
-          +getPriceFromKlines(marketPrice, trade.market),
-
+        const IV =
           calculateOptionIV(
             trade.is_above ?? false,
             trade.strike / 1e8,
@@ -218,7 +215,12 @@ export const OngoingTradesTable: React.FC<{
             trade.pool.IV,
             trade.pool.IVFactorITM,
             trade.pool.IVFactorOTM
-          )
+          ) / 1e4;
+        console.log(IV, 'IV');
+        const probabiliyt = getProbability(
+          trade,
+          +getPriceFromKlines(marketPrice, trade.market),
+          IV
         );
         return (
           // queuedTradeFallBack(trade) || (
