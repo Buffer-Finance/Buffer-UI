@@ -1,20 +1,25 @@
 import { toFixed } from '@Utils/NumString';
-import { round } from '@Utils/NumString/stringArithmatics';
+import { gt, round } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { EditIconSVG } from '@Views/TradePage/Components/EditIconSVG';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import {
   BuyTradeDescText,
   BuyTradeHeadText,
 } from '@Views/TradePage/Components/TextWrapper';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
+import {
+  LimitOrderPayoutAtom,
+  limitOrderStrikeAtom,
+  tradeTypeAtom,
+} from '@Views/TradePage/atoms';
 import { marketsForChart } from '@Views/TradePage/config';
 import { joinStrings } from '@Views/TradePage/utils';
 import { setDoccumentTitle } from '@Views/TradePage/utils/setDocumentTitle';
 import styled from '@emotion/styled';
 import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const CurrentPriceBackground = styled.div`
   margin-top: 7px;
@@ -41,30 +46,34 @@ export const CurrentPrice: React.FC<{
   const title = price ? precisePrice + ' | ' + chartMarket.tv_id : '';
   setDoccumentTitle(title);
   const precision = chartMarket.price_precision.toString().length - 1;
+  const isMarket = tradeType == 'Market';
   return (
-    <CurrentPriceBackground>
-      <RowBetween>
-        <BuyTradeHeadText>
-          <Trans>Price</Trans>
-        </BuyTradeHeadText>
-        {tradeType == 'Market' ? (
-          <BuyTradeDescText>
-            <Display
-              data={round(price, precision)}
+    <>
+      {!isMarket && <LimitOrderPayoutPicker />}
+      <CurrentPriceBackground>
+        <RowBetween>
+          <BuyTradeHeadText>
+            <Trans>Price</Trans>
+          </BuyTradeHeadText>
+          {isMarket ? (
+            <BuyTradeDescText>
+              <Display
+                data={round(price, precision)}
+                precision={precision}
+                className="!py-[1px]"
+              />
+            </BuyTradeDescText>
+          ) : (
+            <StrikePricePicker
+              initialStrike={round(price, precision) as string}
               precision={precision}
-              className="!py-[1px]"
+              className="w-[127px] text-right px-3 py-1"
+              activeAsset={activeMarket?.pair ?? ''}
             />
-          </BuyTradeDescText>
-        ) : (
-          <StrikePricePicker
-            initialStrike={round(price, precision) as string}
-            precision={precision}
-            className="w-[127px] text-right px-3 py-1"
-            activeAsset={activeMarket?.pair ?? ''}
-          />
-        )}
-      </RowBetween>
-    </CurrentPriceBackground>
+          )}
+        </RowBetween>
+      </CurrentPriceBackground>
+    </>
   );
 };
 export const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
@@ -108,5 +117,83 @@ export const StrikePricePicker: React.FC<{
         }}
       />
     </BuyTradeDescText>
+  );
+};
+
+const LimitOrderPayoutPicker: React.FC<{ className?: string }> = ({
+  className,
+}) => {
+  const [activePayout, setActivePayout] = useAtom(LimitOrderPayoutAtom);
+  const [shouldShowEdit, setShouldShowEdit] = useState(false);
+  const payouts = ['60', '70'];
+
+  function handlePayoutClick(payout: string) {
+    setActivePayout(payout);
+    setShouldShowEdit(false);
+  }
+
+  function handleShouldShowEditClick() {
+    setShouldShowEdit(true);
+  }
+  console.log(activePayout, 'activePayout');
+
+  useEffect(() => {
+    if (!payouts.includes(activePayout)) setShouldShowEdit(true);
+  }, []);
+
+  return (
+    <div className="flex gap-4 mt-3">
+      <div className="text-[#808191] text-f12">Payout</div>
+      <div className="flex gap-2 items-stretch">
+        {payouts.map((payout) => {
+          const isActive = activePayout == payout;
+          return (
+            <button
+              onClick={() => handlePayoutClick(payout)}
+              key={payout}
+              className={`text-f10 px-[6px] py-[3px] rounded-[2px] ${
+                isActive ? 'bg-[#3772FF] text-1' : 'bg-[#282B39] text-[#C3C2D4]'
+              }`}
+            >
+              Above {payout}%
+            </button>
+          );
+        })}
+        {shouldShowEdit ? (
+          <div className="relative w-[30%]">
+            <input
+              type="text"
+              pattern="^[0-9]*[.,]?[0-9]*$"
+              inputMode="decimal"
+              autoCorrect="off"
+              className={`${
+                shouldShowEdit ? 'border border-[#3772FF]' : ''
+              } bg-[#282B39] w-full h-full ${
+                className ? className : '!text-left px-2 '
+              }  rounded-[2px] outline-none`}
+              value={activePayout}
+              placeholder="Enter "
+              onChange={(e) => {
+                // console.log(e.target.value, 'e.target.value');
+                if (gt(e.target.value || '0', '100')) {
+                  return;
+                }
+
+                if (inputRegex.test(escapeRegExp(e.target.value)))
+                  setActivePayout(e.target.value);
+              }}
+            />
+            <EditIconSVG className="absolute right-1 top-[0] bottom-[0] scale-[70%]" />
+          </div>
+        ) : (
+          <button
+            className="rounded-[2px] bg-[#282B39]"
+            onClick={handleShouldShowEditClick}
+          >
+            <EditIconSVG />
+          </button>
+        )}
+      </div>
+    </div>
   );
 };

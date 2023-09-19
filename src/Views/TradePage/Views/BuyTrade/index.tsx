@@ -1,25 +1,29 @@
+import { priceAtom } from '@Hooks/usePrice';
+import { getPriceFromKlines } from '@TV/useDataFeed';
+import { divide } from '@Utils/NumString/stringArithmatics';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
+import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
+import {
+  LimitOrderPayoutAtom,
+  tradeSizeAtom,
+  tradeTypeAtom,
+} from '@Views/TradePage/atoms';
+import { joinStrings } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
+import { Skeleton } from '@mui/material';
+import { useAtomValue } from 'jotai';
+import { useAccount } from 'wagmi';
+import { useSelectedAssetPayout } from '../MarketChart/Payout';
+import { ActiveTrades } from './ActiveTrades';
+import { BuyButtons } from './BuyButtons';
+import { CurrentPrice } from './CurrentPrice';
+import { PayoutProfit } from './PayoutProfit';
 import { TimeSelector } from './TimeSelector';
 import { TradeSizeSelector } from './TradeSizeSelector';
 import { TradeTypeSelector } from './TradeTypeSelector';
-import { CurrentPrice } from './CurrentPrice';
-import { PayoutProfit } from './PayoutProfit';
-import { BuyButtons } from './BuyButtons';
-import { Skeleton } from '@mui/material';
-import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { useAtomValue } from 'jotai';
-import { tradeSizeAtom } from '@Views/TradePage/atoms';
-import { priceAtom } from '@Hooks/usePrice';
-import { divide } from '@Utils/NumString/stringArithmatics';
-import { joinStrings } from '@Views/TradePage/utils';
-import { getPriceFromKlines } from '@TV/useDataFeed';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { ActiveTrades } from './ActiveTrades';
-import { useSelectedAssetPayout } from '../MarketChart/Payout';
-import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
-import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
-import { useAccount } from 'wagmi';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -44,7 +48,9 @@ export const BuyTrade: React.FC = () => {
   const amount = useAtomValue(tradeSizeAtom);
   const marketPrice = useAtomValue(priceAtom);
   const { calculatePayout } = useSelectedAssetPayout();
-
+  const limitprderPayout = useAtomValue(LimitOrderPayoutAtom);
+  const tradeTypeTab = useAtomValue(tradeTypeAtom);
+  const isLimitOrderTab = tradeTypeTab == 'Limit';
   const { data: approvalExpanded } = useApprvalAmount();
   if (
     !switchPool ||
@@ -69,6 +75,16 @@ export const BuyTrade: React.FC = () => {
     );
   }
 
+  let payout: string | null = '';
+  if (isLimitOrderTab) {
+    payout = limitprderPayout;
+  } else {
+    const { payout: totalPayout } = calculatePayout(
+      joinStrings(activeMarket.token0, activeMarket.token1, ''),
+      switchPool.optionContract
+    );
+    payout = totalPayout;
+  }
   const { payout: totalPayout } = calculatePayout(
     joinStrings(activeMarket.token0, activeMarket.token1, ''),
     switchPool.optionContract
@@ -83,6 +99,7 @@ export const BuyTrade: React.FC = () => {
   const activeAssetPrice = getPriceFromKlines(marketPrice, {
     tv_id: activeMarket.tv_id,
   });
+
   // const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
   // const buyLink = () => {
@@ -105,7 +122,7 @@ export const BuyTrade: React.FC = () => {
       <CurrentPrice price={activeAssetPrice} />
       <PayoutProfit
         amount={userAmount || '0'}
-        totalPayout={totalPayout}
+        totalPayout={payout}
         tradeToken={tradeToken}
       />
       <BuyButtons

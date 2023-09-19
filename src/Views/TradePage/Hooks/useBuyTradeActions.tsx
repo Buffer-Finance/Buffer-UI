@@ -25,6 +25,7 @@ import { useAccount, usePublicClient } from 'wagmi';
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import {
+  LimitOrderPayoutAtom,
   approveModalAtom,
   queuets2priceAtom,
   timeSelectorAtom,
@@ -36,6 +37,7 @@ import { AssetCategory, TradeType } from '../type';
 import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
 import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
 import { getConfig } from '../utils/getConfig';
+import { getSettlementFee } from '../utils/getPayout';
 import { getSafeStrike } from '../utils/getSafeStrike';
 import { getUserError } from '../utils/getUserError';
 import { timeToMins } from '../utils/timeToMins';
@@ -77,6 +79,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const setIsApproveModalOpen = useSetAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
   const { activeMarket: activeAsset } = useActiveMarket();
+  const limitOrderPayout = useAtomValue(LimitOrderPayoutAtom);
 
   const { address } = useAccount();
 
@@ -299,6 +302,14 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'ddd',
         });
       }
+      console.log(`useBuyTradeActions-price: `, limitOrderPayout);
+      if (customTrade.limitOrderExpiry && !limitOrderPayout) {
+        return toastify({
+          type: 'error',
+          msg: 'Please select payout for limit order.',
+          id: 'ddd',
+        });
+      }
 
       if (customTrade && isCustom) {
         setLoading({ is_up: customTrade.is_up });
@@ -347,7 +358,9 @@ export const useBuyTradeActions = (userInput: string) => {
           referralData[2],
           // highestTierNFT?.tokenId || '0',
           currentUTCTimestamp,
-          settelmentFee?.settlement_fee!,
+          customTrade.limitOrderExpiry
+            ? getSettlementFee(limitOrderPayout)
+            : settelmentFee?.settlement_fee!,
           customTrade.is_up,
           oneCtPk,
           activeChain.id,

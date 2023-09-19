@@ -311,7 +311,7 @@ export const defaultSettings = {
   tradePanelPosition: tradePanelPosition.Right,
   notificationPosition: notificationPosition.BottomLeft,
 };
-
+export const limitOrderDefaultPayout = '60';
 export const defaultSelectedTime = '00:15';
 export const oneSec = 1000;
 export const durations = [
