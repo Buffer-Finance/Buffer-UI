@@ -21,8 +21,6 @@ export const getAllChains = () => {
     case 'polygon':
       return isTestnet ? [polygonMumbai, arbitrumGoerli] : [polygon, arbitrum];
     default:
-      return isTestnet
-        ? [polygonMumbai, arbitrumGoerli, goerli]
-        : [arbitrum, polygon];
+      return isTestnet ? [arbitrumGoerli, polygonMumbai] : [arbitrum, polygon];
   }
 };
