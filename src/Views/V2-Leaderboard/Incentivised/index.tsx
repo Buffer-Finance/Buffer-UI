@@ -303,7 +303,7 @@ export const Incentivised = () => {
               state={configValue.endDay ? day >= configValue.endDay : false}
               shouldAllowClose={false}
               body={
-                <>
+                <div className="flex gap-3 items-start">
                   <img
                     src="/lightning.png"
                     alt="lightning"
@@ -315,7 +315,7 @@ export const Incentivised = () => {
                     endDay: configValue.endDay,
                   })}{' '}
                   4pm UTC.
-                </>
+                </div>
               }
               className="!mb-3 text-f16"
             />

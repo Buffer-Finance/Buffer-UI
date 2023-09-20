@@ -367,7 +367,7 @@ export const Weekly = () => {
               }
               shouldAllowClose={false}
               body={
-                <>
+                <div className="flex gap-3 items-start">
                   <img
                     src="/lightning.png"
                     alt="lightning"
@@ -379,7 +379,7 @@ export const Weekly = () => {
                     endWeek: configValue.endDay,
                   })}{' '}
                   4pm UTC.
-                </>
+                </div>
               }
               className="!mb-3 text-f16"
             />

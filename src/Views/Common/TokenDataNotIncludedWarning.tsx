@@ -11,7 +11,7 @@ export const TokenDataNotIncludedWarning = ({
       state={true}
       shouldAllowClose={false}
       body={
-        <>
+        <div className="flex gap-3 items-start">
           <img
             src="/lightning.png"
             alt="lightning"
@@ -19,7 +19,7 @@ export const TokenDataNotIncludedWarning = ({
           />
           Data for trades under 100 USDC is currently not being accounted for.
           This will be fixed shortly.
-        </>
+        </div>
       }
       className="!mb-3"
     />
