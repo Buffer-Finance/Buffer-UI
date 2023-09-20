@@ -17,7 +17,7 @@ export const SlippageInput: React.FC<{
 }> = ({ onChange, slippage }) => {
   const [err, setErr] = useState(false);
   const [minErr, setMinErr] = useState(false);
-  console.log('slippageErr', minErr, err);
+  // console.log('slippageErr', minErr, err);
 
   useEffect(() => {
     if (gt(slippage.toString(), MAX_SLIPPAGE.toString())) {
