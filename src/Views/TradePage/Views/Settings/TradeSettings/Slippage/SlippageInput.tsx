@@ -17,7 +17,7 @@ export const SlippageInput: React.FC<{
 }> = ({ onChange, slippage }) => {
   const [err, setErr] = useState(false);
   const [minErr, setMinErr] = useState(false);
-
+  console.log('slippageErr', minErr, err);
   return (
     <div className="relative flex flex-row gap-x-4 items-center">
       <input
