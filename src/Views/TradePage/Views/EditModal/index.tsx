@@ -14,6 +14,7 @@ import {
 } from '@Views/TradePage/Components/TextWrapper';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import {
   chartControlsSettingsAtom,
@@ -28,10 +29,12 @@ import {
 } from '@Views/TradePage/utils';
 import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import getPayout, { getSettlementFee } from '@Views/TradePage/utils/getPayout';
 import styled from '@emotion/styled';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { LimitOrderPayoutPicker } from '../BuyTrade/CurrentPrice';
 import { TimePicker } from '../BuyTrade/TimeSelector/TimePicker';
 import { MinutesInput } from '../Settings/TradeSettings/LimitOrdersExpiry/MinutesInput';
 import { DirectionButtons } from './DirectionButtons';
@@ -49,6 +52,9 @@ export const EditModal: React.FC<{
   const [frame, setFrame] = useState('m');
   const [minutes, setMinutes] = useState(0);
   const [currentTime, setCurrentTime] = useState(secondsToHHMM(trade?.period));
+  const [payout, setPayout] = useState(
+    getPayout(trade?.settlement_fee?.toString() ?? '1500')
+  );
   const [price, setPrice] = useState(
     divide(defaults?.strike || trade?.strike, 8)
   );
@@ -146,6 +152,8 @@ export const EditModal: React.FC<{
   const settings = useAtomValue(chartControlsSettingsAtom);
   const [val, setVal] = useState(settings.loDragging);
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
+  const { data: allSettlementFees } = useSettlementFee();
+
   const toastify = useToast();
   const editHandler = async () => {
     if (!trade || !oneCTWallet || !address)
@@ -154,8 +162,26 @@ export const EditModal: React.FC<{
         type: 'errror',
         id: 'dsfs',
       });
+
+    if (!allSettlementFees) {
+      return toastify({
+        type: 'error',
+        msg: 'There is some error while fetching the data!',
+        id: 'binaryBuy',
+      });
+    }
+    if (price === null) {
+      return toastify({
+        type: 'error',
+        msg: 'Please enter the price!',
+        id: 'binaryBuy',
+      });
+    }
     setEditLoading(trade.queue_id);
     const currentTs = Math.round(Date.now() / 1000);
+    const settlement_fee = getSettlementFee(payout);
+    const bsesettelmentFeeObj = allSettlementFees[trade.market.tv_id];
+
     const signs = await generateBuyTradeSignature(
       address,
       trade.trade_size + '',
@@ -165,9 +191,10 @@ export const EditModal: React.FC<{
       trade.slippage + '',
       trade.allow_partial_fill,
       trade.referral_code,
-      trade.trader_nft_id + '',
+      // trade.trader_nft_id + '',
       currentTs,
-      0,
+
+      settlement_fee,
       buttonDirection == directionBtn.Up ? true : false,
       oneCtPk,
       activeChain.id,
@@ -192,7 +219,10 @@ export const EditModal: React.FC<{
       trade.slippage,
       buttonDirection == directionBtn.Up ? true : false,
       frame === 'm' ? minutes * 60 : minutes * 60 * 60,
-      activeChain.id
+      activeChain.id,
+      settlement_fee,
+      bsesettelmentFeeObj.settlement_fee_sign_expiration,
+      bsesettelmentFeeObj.settlement_fee_signature
     );
     if (res) {
       onSave(val);
@@ -254,6 +284,11 @@ export const EditModal: React.FC<{
             />
           </RowBetween>
           <TriggerPrice price={price} setPrice={setPrice} />
+          <LimitOrderPayoutPicker
+            activePayout={payout}
+            setActivePayout={setPayout}
+            className="max-w-[59px]"
+          />
           {defaults?.strike ? (
             <div
               className="flex  mt-2 gap-x-[7px] text-f14 text-[ !text-f14 !w-fit  text-[#C3C2D4]"

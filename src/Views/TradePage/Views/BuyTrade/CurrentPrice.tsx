@@ -30,6 +30,7 @@ export const CurrentPrice: React.FC<{
 }> = ({ price }) => {
   const { activeMarket } = useActiveMarket();
   const [tradeType] = useAtom(tradeTypeAtom);
+  const [activePayout, setActivePayout] = useAtom(LimitOrderPayoutAtom);
 
   const chartMarket =
     marketsForChart[
@@ -49,7 +50,12 @@ export const CurrentPrice: React.FC<{
   const isMarket = tradeType == 'Market';
   return (
     <>
-      {!isMarket && <LimitOrderPayoutPicker />}
+      {!isMarket && (
+        <LimitOrderPayoutPicker
+          activePayout={activePayout}
+          setActivePayout={setActivePayout}
+        />
+      )}
       <CurrentPriceBackground>
         <RowBetween>
           <BuyTradeHeadText>
@@ -120,10 +126,11 @@ export const StrikePricePicker: React.FC<{
   );
 };
 
-export const LimitOrderPayoutPicker: React.FC<{ className?: string }> = ({
-  className,
-}) => {
-  const [activePayout, setActivePayout] = useAtom(LimitOrderPayoutAtom);
+export const LimitOrderPayoutPicker: React.FC<{
+  className?: string;
+  activePayout: string;
+  setActivePayout: (newPayout: string) => void;
+}> = ({ className = '', activePayout, setActivePayout }) => {
   const [shouldShowEdit, setShouldShowEdit] = useState(false);
   const payouts = ['60', '70'];
 
@@ -168,9 +175,7 @@ export const LimitOrderPayoutPicker: React.FC<{ className?: string }> = ({
               autoCorrect="off"
               className={`${
                 shouldShowEdit ? 'border border-[#3772FF]' : ''
-              } bg-[#282B39] w-full h-full ${
-                className ? className : '!text-left px-2 '
-              }  rounded-[2px] outline-none`}
+              } bg-[#282B39] w-full h-full ${className} !text-left px-2 rounded-[2px] outline-none`}
               value={activePayout}
               placeholder="Enter "
               onChange={(e) => {

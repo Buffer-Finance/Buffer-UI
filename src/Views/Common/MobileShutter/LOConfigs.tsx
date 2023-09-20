@@ -7,14 +7,13 @@ import {
 } from '@Views/TradePage/Views/BuyTrade/CurrentPrice';
 import { LimitOrderPayoutAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
 import { PairTokenImage } from '../PairTokenImage';
 import { BlueBtn } from '../V2-Button';
 import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
 
 type SetAtom<Args extends any[], Result> = (...args: Args) => Result;
 
-const LOPayoutAtom = atomWithStorage<number>('LOPayout', 0);
+// const LOPayoutAtom = atomWithStorage<number>('LOPayout', 0);
 export const useLOPayout = (): [string, SetAtom<any[], void>, string[]] => {
   const [minPayout, setMinPayout] = useAtom(LimitOrderPayoutAtom);
   const presets = ['60', '70', '80', '90'];
@@ -64,7 +63,10 @@ const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
               </button>
             );
           })} */}
-          <LimitOrderPayoutPicker />
+          <LimitOrderPayoutPicker
+            activePayout={minLOPayout}
+            setActivePayout={setMinLOPayout}
+          />
         </div>
       </div>
       <div>
