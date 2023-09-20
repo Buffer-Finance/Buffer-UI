@@ -13,7 +13,13 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import {
+  add,
+  divide,
+  gt,
+  lt,
+  multiply,
+} from '@Utils/NumString/stringArithmatics';
 import { viemMulticall } from '@Utils/multicall';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
@@ -32,7 +38,12 @@ import {
   tradeSettingsAtom,
 } from '../atoms';
 import { getSingatureCached } from '../cache';
-import { baseUrl, pricePublisherBaseUrl } from '../config';
+import {
+  MAX_SLIPPAGE,
+  MIN_SLIPPAGE,
+  baseUrl,
+  pricePublisherBaseUrl,
+} from '../config';
 import { AssetCategory, TradeType } from '../type';
 import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
 import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
@@ -145,6 +156,30 @@ export const useBuyTradeActions = (userInput: string) => {
       //   });
       //   return true;
       // }
+      if (
+        gt(
+          settings.slippageTolerance.toString() || '0',
+          MAX_SLIPPAGE.toString()
+        )
+      ) {
+        return toastify({
+          type: 'error',
+          msg: `Slippage tolerance should be less than ${MAX_SLIPPAGE}%`,
+          id: 'binaryBuy',
+        });
+      }
+      if (
+        lt(
+          settings.slippageTolerance.toString() || '0',
+          MIN_SLIPPAGE.toString()
+        )
+      ) {
+        return toastify({
+          type: 'error',
+          msg: `Slippage tolerance should be greater than ${MIN_SLIPPAGE}%`,
+          id: 'binaryBuy',
+        });
+      }
 
       if (isForex && knowTill === false) {
         return toastify({

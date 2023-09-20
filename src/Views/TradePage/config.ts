@@ -345,6 +345,7 @@ export const durations = [
 
 export const SLIPPAGE_DEFAULTS = [0.1, 0.25, 0.5];
 export const MAX_SLIPPAGE = 5;
+export const MIN_SLIPPAGE = 0.1;
 
 export const marketsForChart = {
   BTCUSD: {
