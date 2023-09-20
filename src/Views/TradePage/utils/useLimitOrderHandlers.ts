@@ -1,21 +1,23 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { useAccount } from 'wagmi';
-import { getConfig } from './getConfig';
 import { useToast } from '@Contexts/Toast';
-import { TradeType } from '../type';
-import { multiply, round } from '@Utils/NumString/stringArithmatics';
-import { generateBuyTradeSignature } from './generateTradeSignature';
-import { getSingatureCached } from '../cache';
-import editQueueTrade from './editQueueTrade';
-import { useAtom, useSetAtom } from 'jotai';
-import { rerenderPositionAtom } from '../atoms';
-import { loeditLoadingAtom } from '../Views/EditModal';
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { sleep } from '@TV/useDataFeed';
+import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useAtom, useSetAtom } from 'jotai';
+import { useAccount } from 'wagmi';
+import { useSettlementFee } from '../Hooks/useSettlementFee';
+import { loeditLoadingAtom } from '../Views/EditModal';
+import { rerenderPositionAtom } from '../atoms';
+import { getSingatureCached } from '../cache';
+import { TradeType } from '../type';
+import editQueueTrade from './editQueueTrade';
+import { generateBuyTradeSignature } from './generateTradeSignature';
+import { getConfig } from './getConfig';
 
 const useLimitOrderHandlers = () => {
   const { activeChain } = useActiveChain();
   const [editLoading, setEditLoading] = useAtom(loeditLoadingAtom);
+  const { data: allSettlementFees } = useSettlementFee();
 
   const { oneCtPk, oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
@@ -27,24 +29,42 @@ const useLimitOrderHandlers = () => {
     setPositionRerender((p) => p + 1);
   };
   const changeStrike = async (trade: TradeType, strike: string) => {
+    if (!trade || !oneCTWallet || !address)
+      return toastify({
+        msg: 'Something went wrong',
+        type: 'errror',
+        id: 'dsfs',
+      });
+
+    if (!allSettlementFees) {
+      return toastify({
+        type: 'error',
+        msg: 'There is some error while fetching the data!',
+        id: 'binaryBuy',
+      });
+    }
     try {
       setEditLoading(trade.queue_id);
       const currentTs = Math.round(Date.now() / 1000);
+      const settlement_fee = trade.settlement_fee.toString();
+      const bsesettelmentFeeObj = allSettlementFees[trade.market.tv_id];
       const expandedStrike = round(multiply(strike, 8), 0)!;
+
       const signs = await generateBuyTradeSignature(
         address,
         trade.trade_size + '',
-        +trade.period / 60,
+        divide(trade.period.toString(), '60') as string,
         trade.target_contract,
         strike,
         trade.slippage + '',
         trade.allow_partial_fill,
         trade.referral_code,
-        trade.trader_nft_id + '',
+        // trade.trader_nft_id + '',
         currentTs,
-        0,
-        trade.is_above,
-        oneCtPk,
+
+        settlement_fee,
+        trade.is_above!,
+        oneCtPk!,
         activeChain.id,
         configData.router
       );
@@ -65,9 +85,12 @@ const useLimitOrderHandlers = () => {
         signs[1],
         address,
         trade.slippage,
-        trade.is_above,
+        trade.is_above!,
         trade.limit_order_duration,
-        activeChain.id
+        activeChain.id,
+        settlement_fee,
+        bsesettelmentFeeObj.settlement_fee_sign_expiration,
+        bsesettelmentFeeObj.settlement_fee_signature
       );
       if (res) {
         // toastify({
@@ -79,10 +102,16 @@ const useLimitOrderHandlers = () => {
         revokeGraphChange();
       }
       await sleep(1000);
-      setEditLoading(null);
     } catch (e) {
       revokeGraphChange();
+      toastify({
+        msg: 'Something went wrong!',
+        type: 'error',
+        id: '132132123',
+      });
       console.log('lo-edit::erro', e);
+    } finally {
+      setEditLoading(null);
     }
   };
   return { changeStrike };
