@@ -80,6 +80,7 @@ export const OngoingTradesTable: React.FC<{
           'Time Left',
           'Close Time',
           'Trade Size',
+          'PnL | Probability',
         ]
       : [
           'Asset',
