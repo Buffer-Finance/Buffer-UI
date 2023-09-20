@@ -9,7 +9,7 @@ import {
   SLIPPAGE_DEFAULTS,
 } from '@Views/TradePage/config';
 import { Trans } from '@lingui/macro';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const SlippageInput: React.FC<{
   onChange: (newSlippage: number) => void;
@@ -18,6 +18,16 @@ export const SlippageInput: React.FC<{
   const [err, setErr] = useState(false);
   const [minErr, setMinErr] = useState(false);
   console.log('slippageErr', minErr, err);
+
+  useEffect(() => {
+    if (gt(slippage.toString(), MAX_SLIPPAGE.toString())) {
+      setErr(true);
+    }
+    if (lt(slippage.toString(), MIN_SLIPPAGE.toString())) {
+      setMinErr(true);
+    }
+  }, []);
+
   return (
     <div className="relative flex flex-row gap-x-4 items-center">
       <input
