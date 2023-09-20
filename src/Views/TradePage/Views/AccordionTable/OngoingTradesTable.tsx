@@ -162,7 +162,7 @@ export const OngoingTradesTable: React.FC<{
         return <StrikePriceComponent trade={trade} />;
       case TableColumn.Asset:
         return (
-          <AssetCell currentRow={trade} platform={platform} split={isMobile} />
+          <AssetCell currentRow={trade} platform={false} split={isMobile} />
         );
       case TableColumn.CurrentPrice:
         return (
