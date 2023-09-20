@@ -382,7 +382,9 @@ export const useBuyTradeActions = (userInput: string) => {
           is_above: customTrade.is_up,
           is_limit_order: customTrade.limitOrderExpiry ? true : false,
           limit_order_duration: customTrade.limitOrderExpiry,
-          settlement_fee: settelmentFee?.settlement_fee,
+          settlement_fee: customTrade.limitOrderExpiry
+            ? getSettlementFee(limitOrderPayout)
+            : settelmentFee?.settlement_fee!,
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
