@@ -29,7 +29,9 @@ export const useAllV2_5MarketsRequest = () => {
   return {
     data: {
       optionContracts: bothVersionMrkets?.optionContracts.filter(
-        (optionContract) => optionContract.poolContract !== null
+        (optionContract) =>
+          optionContract.poolContract !== null &&
+          optionContract.configContract !== null
       ),
     },
     error,
