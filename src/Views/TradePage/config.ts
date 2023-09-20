@@ -293,7 +293,7 @@ export const refreshInterval = 500;
 export const defaultSettings = {
   trade: {
     partialFill: false,
-    slippageTolerance: 0.05,
+    slippageTolerance: 0.1,
     limitOrdersExpiry: '24',
     selectedTimeFrame: 'h',
   },
@@ -347,7 +347,7 @@ export const durations = [
   },
 ];
 
-export const SLIPPAGE_DEFAULTS = [0.05, 0.1, 0.5];
+export const SLIPPAGE_DEFAULTS = [0.1, 0.25, 0.5];
 export const MAX_SLIPPAGE = 5;
 
 export const marketsForChart = {
