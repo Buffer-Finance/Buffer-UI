@@ -60,6 +60,7 @@ import {
   getEarlyCloseStatus,
   getLockedAmount,
   getProbability,
+  getStrike,
 } from '../AccordionTable/Common';
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { loeditLoadingAtom } from '../EditModal';
@@ -274,9 +275,11 @@ function drawPosition(
   decimals: number,
   priceCache: any
 ) {
+  const strike = getStrike(option, priceCache).strikePrice;
   // const idx = visualized.indexOf(option.queue_id);
+  console.log(strike, 'drawStrike');
   const openTimeStamp = option.open_timestamp;
-  const optionPrice = +option.strike / PRICE_DECIMALS;
+  const optionPrice = +strike / PRICE_DECIMALS;
   let color = !option.is_above ? defaults.red : defaults.green;
 
   if (option.is_limit_order && option.state == 'QUEUED') {
