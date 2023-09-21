@@ -14,6 +14,7 @@ export const appConfig = {
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
         router: '0xca287b27fc1CD6B4a2B0d21788F3d5Ab4f2A9149',
         signer_manager: '0xAAcAf779fdc0A7d8749Aa1FDc260a1C5Da5517B1',
+        config_setter: '0xaCB5591B331A38D01a415Ed78D58923a542ABd7b',
         v2_router: null,
         poolsInfo: {
           '0x4A53c47051FA44FE3A5D6d5cBCb1b7Bf8307E598': {
