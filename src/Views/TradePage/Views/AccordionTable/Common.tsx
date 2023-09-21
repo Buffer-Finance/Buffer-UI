@@ -1,16 +1,11 @@
+import InfoIcon from '@SVG/Elements/InfoIcon';
 import {
   getDisplayDate,
   getDisplayDateUTC,
   getDisplayTime,
   getDisplayTimeUTC,
 } from '@Utils/Dates/displayDateTime';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import NumberTooltip from '@Views/Common/Tooltips';
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
-import { GreyBtn } from '@Views/Common/V2-Button';
-import { TradeType, marketType } from '@Views/TradePage/type';
-import { Display } from '@Views/Common/Tooltips/Display';
-import InfoIcon from '@SVG/Elements/InfoIcon';
 import {
   add,
   divide,
@@ -18,6 +13,11 @@ import {
   subtract,
   toFixed,
 } from '@Utils/NumString/stringArithmatics';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import NumberTooltip from '@Views/Common/Tooltips';
+import { Display } from '@Views/Common/Tooltips/Display';
+import { GreyBtn } from '@Views/Common/V2-Button';
+import { TradeType } from '@Views/TradePage/type';
 import styled from '@emotion/styled';
 
 export const DisplayTime = ({
@@ -224,14 +224,12 @@ export const SlippageTooltip: React.FC<{
   );
 };
 
-import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
-import { useAtomValue } from 'jotai';
-import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
-import {
-  formatDistance,
-  formatDistanceExpanded,
-} from '@Hooks/Utilities/useStopWatch';
+import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { getSafeStrike } from '@Views/TradePage/utils/getSafeStrike';
+import { useAtomValue } from 'jotai';
+import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
 export const getEarlyCloseStatus = (
   trade: TradeType
 ): [status: boolean, tooltip?: string] => {
@@ -297,7 +295,13 @@ export const getStrike = (trade: TradeType, cachedPrice: any) => {
     ? false
     : cachedPrice?.[trade.queue_id];
   if (trade.state == 'QUEUED' && isPriceArrived) {
-    strikePrice = cachedPrice?.[trade.queue_id];
+    strikePrice = getSafeStrike(
+      cachedPrice?.[trade.queue_id],
+      trade.is_above!,
+      trade.pool.SpreadConfig1,
+      trade.pool.SpreadConfig2,
+      trade.pool.IV
+    );
   }
 
   return { isPriceArrived, strikePrice };

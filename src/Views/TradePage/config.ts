@@ -10,14 +10,10 @@ export const appConfig = {
           MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/api',
         },
 
-        booster: '0xFB5312B503f2aF623e564Dce87f0D90d586a631D',
-        // creation_window: {
-        //   '0': '0x995D50aF014230b24Bd9278900942ec9beB1280a',
-        //   '2': '0xb5f47783c42212c3970637E36DC077796f503Ab2',
-        // },
+        booster: '0xBC2AC0ec1e6Fa9caA8789A72d273c3AeB2c1025b',
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
-        router: '0x5C5C3a4BC8612361FCf052A1fe8D427fE37ef6e6',
-        signer_manager: '0xaBcAaf7Cfa61713D201de2d80d7054543A3dB041',
+        router: '0xca287b27fc1CD6B4a2B0d21788F3d5Ab4f2A9149',
+        signer_manager: '0xAAcAf779fdc0A7d8749Aa1FDc260a1C5Da5517B1',
         poolsInfo: {
           '0x4A53c47051FA44FE3A5D6d5cBCb1b7Bf8307E598': {
             decimals: 6,
@@ -295,7 +291,7 @@ export const refreshInterval = 500;
 export const defaultSettings = {
   trade: {
     partialFill: false,
-    slippageTolerance: 0.05,
+    slippageTolerance: 0.1,
     limitOrdersExpiry: '24',
     selectedTimeFrame: 'h',
   },
@@ -313,7 +309,7 @@ export const defaultSettings = {
   tradePanelPosition: tradePanelPosition.Right,
   notificationPosition: notificationPosition.BottomLeft,
 };
-
+export const limitOrderDefaultPayout = '60';
 export const defaultSelectedTime = '00:15';
 export const oneSec = 1000;
 export const durations = [
@@ -349,8 +345,9 @@ export const durations = [
   },
 ];
 
-export const SLIPPAGE_DEFAULTS = [0.05, 0.1, 0.5];
+export const SLIPPAGE_DEFAULTS = [0.1, 0.25, 0.5];
 export const MAX_SLIPPAGE = 5;
+export const MIN_SLIPPAGE = 0.1;
 
 export const marketsForChart = {
   BTCUSD: {

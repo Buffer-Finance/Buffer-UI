@@ -5,6 +5,7 @@ import {
   subtract,
 } from '@Utils/NumString/stringArithmatics';
 import { TradeType } from '@Views/TradePage/type';
+import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
 import { calculatePnlForProbability } from '../../BuyTrade/ActiveTrades/TradeDataView';
 import { getProbabilityByTime } from '../Common';
 
@@ -72,7 +73,14 @@ function getEarlypnl(
 
     currentRow.close_time as number,
     currentRow.expiration_time as number,
-    currentRow.pool.IV
+    calculateOptionIV(
+      currentRow.is_above ?? false,
+      currentRow.strike / 1e8,
+      expiryPrice / 1e8,
+      currentRow.pool.IV,
+      currentRow.pool.IVFactorITM,
+      currentRow.pool.IVFactorOTM
+    ) / 1e4
   );
   const { earlycloseAmount } = calculatePnlForProbability({
     decimals,

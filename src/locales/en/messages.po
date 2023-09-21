@@ -49,9 +49,13 @@ msgstr "<0><1><2/></1>Max trade size is {maxTradeSize} {tokenName}</0>"
 msgid "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 msgstr "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 
-#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:38
+#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:54
 msgid "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
 msgstr "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
+
+#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:61
+msgid "<0>Slippage rate must be less then {MIN_SLIPPAGE}%</0>"
+msgstr "<0>Slippage rate must be less then {MIN_SLIPPAGE}%</0>"
 
 #: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:120
 msgid "<0>You don't have enough {tokenName}. <1/> </0>"
@@ -105,7 +109,7 @@ msgstr "Partial fill"
 msgid "Premium Features"
 msgstr "Premium Features"
 
-#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:48
+#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:62
 msgid "Price"
 msgstr "Price"
 

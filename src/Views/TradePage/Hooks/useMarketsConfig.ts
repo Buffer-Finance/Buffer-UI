@@ -1,4 +1,3 @@
-import { divide } from '@Utils/NumString/stringArithmatics';
 import { useMemo } from 'react';
 import { getAddress } from 'viem';
 import { marketsForChart } from '../config';
@@ -8,7 +7,7 @@ import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
 
 export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
-
+  // console.log(`data: `, data);
   const res = useMemo(() => {
     if (!data?.optionContracts) {
       return null;
@@ -39,11 +38,12 @@ export const useMarketsConfig = () => {
     // console.log(`response: `, response);
     return response;
   }, [data]);
+  // console.log(`res: `, res);
   return res;
 };
 
 //creates a pool object from the response object
-function createPoolObject(market: responseObj) {
+export function createPoolObject(market: responseObj) {
   return {
     pool: getAddress(market.poolContract),
     max_fee: market.configContract.maxFee,
@@ -60,6 +60,10 @@ function createPoolObject(market: responseObj) {
       enable: market.configContract.isEarlyCloseEnabled,
       threshold: market.configContract.earlyCloseThreshold,
     },
-    IV: Number((divide(market.configContract.IV, 4) as string) ?? '0'),
+    IV: Number(market.configContract.IV),
+    IVFactorOTM: Number(market.configContract.IVFactorOTM),
+    IVFactorITM: Number(market.configContract.IVFactorITM),
+    SpreadConfig1: Number(market.configContract.SpreadConfig1),
+    SpreadConfig2: Number(market.configContract.SpreadConfig2),
   };
 }

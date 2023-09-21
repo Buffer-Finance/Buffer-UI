@@ -13,7 +13,10 @@ const editQueueTrade = async (
   slippage: number,
   is_above: boolean,
   limit_order_duration: number,
-  environment: number
+  environment: number,
+  settlement_fee: string,
+  settlement_fee_sign_expiration: number,
+  settlement_fee_signature: string
 ) => {
   const params = {
     user_signature,
@@ -28,6 +31,9 @@ const editQueueTrade = async (
     is_above,
     limit_order_duration,
     environment,
+    settlement_fee,
+    settlement_fee_sign_expiration,
+    settlement_fee_signature,
   };
   console.log(`index-edit-deb: `, params);
 

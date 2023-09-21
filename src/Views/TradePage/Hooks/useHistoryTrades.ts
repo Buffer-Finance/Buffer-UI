@@ -13,12 +13,12 @@ import {
 } from '../config';
 import { tradesApiResponseType } from '../type';
 import { addMarketInTrades } from '../utils';
-import { useMarketsConfig } from './useMarketsConfig';
+import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
 
 const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
   const { address } = useUserAccount();
-  const markets = useMarketsConfig();
+  const markets = useAllV2_5MarketsConfig();
   // console.log(`markets: `, markets);
   const activePage = useAtomValue(historyTableActivePage);
   // const [isLoading, setIsLoading] = useState(false);

@@ -1,6 +1,10 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { defaultSelectedTime, defaultSettings } from './config';
+import {
+  defaultSelectedTime,
+  defaultSettings,
+  limitOrderDefaultPayout,
+} from './config';
 import { TradeType, marketType, poolInfoType } from './type';
 import { HHMMToSeconds } from './utils';
 
@@ -14,7 +18,7 @@ export const miscsSettingsAtom = atomWithStorage(
   defaultSettings.miscs
 );
 export const tradeSettingsAtom = atomWithStorage(
-  'tradeSettingsAtomV4',
+  'tradeSettingsAtomV5',
   defaultSettings.trade
 );
 export const notificationPositionSettingsAtom = atomWithStorage(
@@ -80,6 +84,10 @@ export const radioValueAtom = atom('USDC');
 export const chartNumberAtom = atomWithStorage('hello', 1);
 export const tradeTypeAtom = atom<'Market' | 'Limit'>('Market');
 export const limitOrderStrikeAtom = atom<null | string>(null);
+export const LimitOrderPayoutAtom = atomWithStorage(
+  'limitorderpayout',
+  limitOrderDefaultPayout
+);
 
 export const isTableShownAtom = atom<boolean>(false);
 

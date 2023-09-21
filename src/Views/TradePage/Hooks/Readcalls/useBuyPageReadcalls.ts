@@ -1,19 +1,18 @@
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { useSwitchPool } from '../useSwitchPool';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { useMemo } from 'react';
-import { erc20ABI } from 'wagmi';
-import { useCall2Data } from '@Utils/useReadCall';
 import CustomERC20ABI from '@ABIs/CustomErc20ABI.json';
-import SignerABI from '@Views/OneCT/signerManagerABI.json';
-import OptionContractABI from '../../ABIs/OptionContract.json';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { useCall2Data } from '@Utils/useReadCall';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
-import { useMarketsConfig } from '../useMarketsConfig';
-import { useSettlementFee } from '../useSettlementFee';
-import { joinStrings } from '@Views/TradePage/utils';
 import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
+import { joinStrings } from '@Views/TradePage/utils';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { timeToMins } from '@Views/TradePage/utils/timeToMins';
+import { useMemo } from 'react';
+import { erc20ABI } from 'wagmi';
+import OptionContractABI from '../../ABIs/OptionContract.json';
+import { useMarketsConfig } from '../useMarketsConfig';
+import { useSettlementFee } from '../useSettlementFee';
+import { useSwitchPool } from '../useSwitchPool';
 export function useBuyTradePageReadcalls() {
   const { address } = useUserAccount();
   const { switchPool, poolDetails } = useSwitchPool();
@@ -48,12 +47,12 @@ export function useBuyTradePageReadcalls() {
         name: 'allowance',
         params: [address, configData.router],
       },
-      {
-        address: configData.signer_manager,
-        abi: SignerABI,
-        name: 'accountMapping',
-        params: [address],
-      },
+      // {
+      //   address: configData.signer_manager,
+      //   abi: SignerABI,
+      //   name: 'accountMapping',
+      //   params: [address],
+      // },
     ];
 
     let optionCalls = config

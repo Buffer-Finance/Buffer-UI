@@ -1,24 +1,24 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import axios from 'axios';
+import { useAtomValue } from 'jotai';
 import useSWR from 'swr';
+import { getAddress } from 'viem';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { cancelTableActivePage } from '../atoms';
 import {
   TRADE_IN_A_PAGE_TRADES_TABLES,
   baseUrl,
   refreshInterval,
 } from '../config';
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { tradesApiResponseType } from '../type';
-import { useMarketsConfig } from './useMarketsConfig';
 import { addMarketInTrades } from '../utils';
-import { useAtomValue } from 'jotai';
-import { cancelTableActivePage } from '../atoms';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { getAddress } from 'viem';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
 
 const useCancelledTrades = () => {
   const { activeChain } = useActiveChain();
   const { address } = useUserAccount();
-  const markets = useMarketsConfig();
+  const markets = useAllV2_5MarketsConfig();
   const activePage = useAtomValue(cancelTableActivePage);
 
   const { data, error } = useSWR<tradesApiResponseType>(

@@ -7,11 +7,31 @@ import useSWR from 'swr';
 import { getAddress } from 'viem';
 
 export const useMarketsRequest = () => {
+  const { activeChain } = useActiveChain();
+  const configData = getConfig(activeChain.id);
   const { data: bothVersionMrkets, error } = useBothVersionsMarkets();
   return {
     data: {
       optionContracts: bothVersionMrkets?.optionContracts.filter(
-        (optionContract) => optionContract.poolContract !== null
+        (optionContract) =>
+          optionContract.poolContract !== null &&
+          getAddress(configData.router) ===
+            getAddress(optionContract.routerContract) &&
+          optionContract.configContract !== null
+      ),
+    },
+    error,
+  };
+};
+
+export const useAllV2_5MarketsRequest = () => {
+  const { data: bothVersionMrkets, error } = useBothVersionsMarkets();
+  return {
+    data: {
+      optionContracts: bothVersionMrkets?.optionContracts.filter(
+        (optionContract) =>
+          optionContract.poolContract !== null &&
+          optionContract.configContract !== null
       ),
     },
     error,
@@ -52,7 +72,12 @@ export const useBothVersionsMarkets = () => {
                     IV
                     poolOIaddress
                     creationWindowAddress
+                    IVFactorOTM
+                    IVFactorITM
+                    SpreadConfig1
+                    SpreadConfig2
                   }
+                  routerContract
                   address
                   poolContract
                   isPaused

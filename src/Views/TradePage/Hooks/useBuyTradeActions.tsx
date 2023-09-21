@@ -1,53 +1,62 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
+import { toFixed } from '@Utils/NumString';
+import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
 import ERC20ABI from 'src/ABIs/Token.json';
-import { toFixed } from '@Utils/NumString';
-import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import 'viem/window';
 
-import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
-import { useWriteCall } from '@Hooks/useWriteCall';
-import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
-import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import axios from 'axios';
-import { useAccount, usePublicClient } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { ethers } from 'ethers';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { useSwitchPool } from './useSwitchPool';
-import { useBuyTradeData } from './useBuyTradeData';
-import { useActiveMarket } from './useActiveMarket';
-import { joinStrings } from '../utils';
-import { appConfig, baseUrl, pricePublisherBaseUrl } from '../config';
-import { AssetCategory, TradeType } from '../type';
+import { useHighestTierNFT } from '@Hooks/useNFTGraph';
+import { useWriteCall } from '@Hooks/useWriteCall';
+import DownIcon from '@SVG/Elements/DownIcon';
+import UpIcon from '@SVG/Elements/UpIcon';
+import { getCallId } from '@Utils/Contract/multiContract';
 import {
+  add,
+  divide,
+  gt,
+  lt,
+  multiply,
+} from '@Utils/NumString/stringArithmatics';
+import { viemMulticall } from '@Utils/multicall';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
+import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
+import { signTypedData } from '@wagmi/core';
+import axios from 'axios';
+import { PublicClient } from 'viem';
+import { useAccount, usePublicClient } from 'wagmi';
+import { getExpiry } from '../Views/AccordionTable/Common';
+import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
+import {
+  LimitOrderPayoutAtom,
   approveModalAtom,
   queuets2priceAtom,
   timeSelectorAtom,
   tradeSettingsAtom,
 } from '../atoms';
-import { useSettlementFee } from './useSettlementFee';
-import UpIcon from '@SVG/Elements/UpIcon';
-import DownIcon from '@SVG/Elements/DownIcon';
-import { getCallId, multicallLinked } from '@Utils/Contract/multiContract';
-import {
-  generateApprovalSignature,
-  generateBuyTradeSignature,
-} from '../utils/generateTradeSignature';
-import { getExpiry } from '../Views/AccordionTable/Common';
-import { useApprvalAmount } from './useApprovalAmount';
-import { getConfig } from '../utils/getConfig';
-import { timeToMins } from '../utils/timeToMins';
-import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
-import { getUserError } from '../utils/getUserError';
-import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { getSingatureCached } from '../cache';
-import { viemMulticall } from '@Utils/multicall';
-import { signTypedData } from '@wagmi/core';
-import { PublicClient } from 'viem';
+import {
+  MAX_SLIPPAGE,
+  MIN_SLIPPAGE,
+  baseUrl,
+  pricePublisherBaseUrl,
+} from '../config';
+import { AssetCategory, TradeType } from '../type';
 import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
+import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
+import { getConfig } from '../utils/getConfig';
+import { getSettlementFee } from '../utils/getPayout';
+import { getSafeStrike } from '../utils/getSafeStrike';
+import { getUserError } from '../utils/getUserError';
+import { timeToMins } from '../utils/timeToMins';
+import { useActiveMarket } from './useActiveMarket';
+import { useApprvalAmount } from './useApprovalAmount';
+import { useBuyTradeData } from './useBuyTradeData';
+import { useSettlementFee } from './useSettlementFee';
+import { useSwitchPool } from './useSwitchPool';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -81,6 +90,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const setIsApproveModalOpen = useSetAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
   const { activeMarket: activeAsset } = useActiveMarket();
+  const limitOrderPayout = useAtomValue(LimitOrderPayoutAtom);
 
   const { address } = useAccount();
 
@@ -146,6 +156,30 @@ export const useBuyTradeActions = (userInput: string) => {
       //   });
       //   return true;
       // }
+      if (
+        gt(
+          settings.slippageTolerance.toString() || '0',
+          MAX_SLIPPAGE.toString()
+        )
+      ) {
+        return toastify({
+          type: 'error',
+          msg: `Slippage tolerance should be less than ${MAX_SLIPPAGE}%`,
+          id: 'binaryBuy',
+        });
+      }
+      if (
+        lt(
+          settings.slippageTolerance.toString() || '0',
+          MIN_SLIPPAGE.toString()
+        )
+      ) {
+        return toastify({
+          type: 'error',
+          msg: `Slippage tolerance should be greater than ${MIN_SLIPPAGE}%`,
+          id: 'binaryBuy',
+        });
+      }
 
       if (isForex && knowTill === false) {
         return toastify({
@@ -171,6 +205,31 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
+
+      const safeStrike = getSafeStrike(
+        Number(customTrade.strike),
+        customTrade.is_up,
+        switchPool.SpreadConfig1,
+        switchPool.SpreadConfig2,
+        switchPool.IV
+      );
+      //calculate the difference between the strike and safe strike in percentage in positive
+      const difference = Math.abs(
+        ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
+      );
+
+      if (difference > settings.slippageTolerance) {
+        return toastify({
+          type: 'error',
+          msg: `Slippage tolerance should be greater than ${difference.toFixed(
+            4
+          )}%`,
+          id: 'binaryBuy',
+        });
+      }
+
+      console.log(`useBuyTradeActions-safeStrike: `, safeStrike, difference);
+
       if (!userInput || userInput === '0' || userInput === '') {
         return toastify({
           type: 'error',
@@ -278,6 +337,14 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'ddd',
         });
       }
+      console.log(`useBuyTradeActions-price: `, limitOrderPayout);
+      if (customTrade.limitOrderExpiry && !limitOrderPayout) {
+        return toastify({
+          type: 'error',
+          msg: 'Please select payout for limit order.',
+          id: 'ddd',
+        });
+      }
 
       if (customTrade && isCustom) {
         setLoading({ is_up: customTrade.is_up });
@@ -324,9 +391,11 @@ export const useBuyTradeActions = (userInput: string) => {
           toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
           settings.partialFill,
           referralData[2],
-          highestTierNFT?.tokenId || '0',
+          // highestTierNFT?.tokenId || '0',
           currentUTCTimestamp,
-          customTrade.limitOrderExpiry ? 0 : settelmentFee?.settlement_fee!,
+          customTrade.limitOrderExpiry
+            ? getSettlementFee(limitOrderPayout)
+            : settelmentFee?.settlement_fee!,
           customTrade.is_up,
           oneCtPk,
           activeChain.id,
@@ -348,7 +417,9 @@ export const useBuyTradeActions = (userInput: string) => {
           is_above: customTrade.is_up,
           is_limit_order: customTrade.limitOrderExpiry ? true : false,
           limit_order_duration: customTrade.limitOrderExpiry,
-          settlement_fee: settelmentFee?.settlement_fee,
+          settlement_fee: customTrade.limitOrderExpiry
+            ? getSettlementFee(limitOrderPayout)
+            : settelmentFee?.settlement_fee!,
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
@@ -374,7 +445,7 @@ export const useBuyTradeActions = (userInput: string) => {
             baseArgs[ArgIndex.PartialFill],
             address as string,
             baseArgs[ArgIndex.Referral],
-            baseArgs[ArgIndex.NFT],
+            // baseArgs[ArgIndex.NFT],
             settelmentFee.settlement_fee,
             baseArgs[ArgIndex.Slippage],
             baseArgs[ArgIndex.TargetContract],
@@ -588,7 +659,7 @@ const getLockedAmount = async (
   allowPartialFill: boolean,
   user: string,
   referrer: string,
-  nftId: string,
+  // nftId: string,
   settlementFee: number,
   slippage: number,
   optionContract: string,
@@ -632,7 +703,7 @@ const getLockedAmount = async (
       allowPartialFill,
       user,
       referrer,
-      nftId,
+      // nftId,
       settlementFee,
       slippage,
       optionContract,

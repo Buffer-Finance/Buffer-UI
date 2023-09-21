@@ -1,28 +1,28 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import axios from 'axios';
+import { useAtomValue } from 'jotai';
 import useSWR from 'swr';
+import { useAccount } from 'wagmi';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import {
+  platformActiveTableActivePage,
+  platformHistoryTableActivePage,
+} from '../atoms';
 import {
   TRADE_IN_A_PAGE_TRADES_TABLES,
   baseUrl,
   refreshInterval,
 } from '../config';
-import { useAccount } from 'wagmi';
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { tradesApiResponseType } from '../type';
-import { useAtomValue } from 'jotai';
-import {
-  platformActiveTableActivePage,
-  platformHistoryTableActivePage,
-} from '../atoms';
 import { addMarketInTrades } from '../utils';
-import { useMarketsConfig } from './useMarketsConfig';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
 
 export const usePlatformActiveTrades = () => {
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
-  const markets = useMarketsConfig();
+  const markets = useAllV2_5MarketsConfig();
   const activePage = useAtomValue(platformActiveTableActivePage);
 
   const { data, error } = useSWR<tradesApiResponseType>(
@@ -64,7 +64,7 @@ export const usePlatformHistoryTrades = () => {
   const { oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
   const activePage = useAtomValue(platformHistoryTableActivePage);
-  const markets = useMarketsConfig();
+  const markets = useAllV2_5MarketsConfig();
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'platform-history-trades-' +

@@ -1,22 +1,22 @@
-import { StrikePricePicker } from '@Views/TradePage/Views/BuyTrade/CurrentPrice';
-import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
-import { useToast } from '@Contexts/Toast';
-import { BlueBtn } from '../V2-Button';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { tradeTypeAtom } from '@Views/TradePage/atoms';
-import { atomWithStorage } from 'jotai/utils';
-import { PairTokenImage } from '../PairTokenImage';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { getPriceFromKlines, marketPriceAtom } from '@TV/useDataFeed';
-import { useEffect, useState } from 'react';
 import { priceAtom } from '@Hooks/usePrice';
+import { getPriceFromKlines } from '@TV/useDataFeed';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import {
+  LimitOrderPayoutPicker,
+  StrikePricePicker,
+} from '@Views/TradePage/Views/BuyTrade/CurrentPrice';
+import { LimitOrderPayoutAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { PairTokenImage } from '../PairTokenImage';
+import { BlueBtn } from '../V2-Button';
+import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
 
 type SetAtom<Args extends any[], Result> = (...args: Args) => Result;
 
-const LOPayoutAtom = atomWithStorage<number>('LOPayout', 0);
-export const useLOPayout = (): [number, SetAtom<any[], void>, number[]] => {
-  const [minPayout, setMinPayout] = useAtom(LOPayoutAtom);
-  const presets = [0, 70, 80, 90];
+// const LOPayoutAtom = atomWithStorage<number>('LOPayout', 0);
+export const useLOPayout = (): [string, SetAtom<any[], void>, string[]] => {
+  const [minPayout, setMinPayout] = useAtom(LimitOrderPayoutAtom);
+  const presets = ['60', '70', '80', '90'];
   return [minPayout, setMinPayout, presets];
 };
 
@@ -26,6 +26,7 @@ const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
   const activeAssetPrice = getPriceFromKlines(marketPrice, {
     tv_id: activeMarket.tv_id,
   });
+  const [minLOPayout, setMinLOPayout, presets] = useLOPayout();
 
   const setShutterType = useSetAtom(tradeTypeAtom);
   const { closeShutter } = useShutterHandlers();
@@ -45,9 +46,9 @@ const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
             {activeMarket.token0}-{activeMarket.token1}
           </span>
         </span>
-        {/* <span className="text-f12 text-[#808191] my-3 mb-6">Payout Limit</span>
+        {/* <span className="text-f12 text-[#808191] my-3 mb-6">Payout Limit</span> */}
         <div className="flex gap-x-1  my-3 mb-4">
-          {LOPayoutPresets.map((s) => {
+          {/* {presets.map((s) => {
             return (
               <button
                 key={s}
@@ -61,8 +62,12 @@ const LOConfigs: React.FC<MobileShutterProps> = ({}) => {
                 {s == 0 ? 'Any Payout' : 'Above ' + s + '%'}
               </button>
             );
-          })}
-        </div> */}
+          })} */}
+          <LimitOrderPayoutPicker
+            activePayout={minLOPayout}
+            setActivePayout={setMinLOPayout}
+          />
+        </div>
       </div>
       <div>
         <span className="text-f12 text-[#808191] my-3">Trigger Price</span>

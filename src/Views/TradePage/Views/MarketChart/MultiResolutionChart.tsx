@@ -50,6 +50,7 @@ import {
   marketsForChart,
 } from '@Views/TradePage/config';
 import { TradeType } from '@Views/TradePage/type';
+import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
 import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
@@ -59,6 +60,7 @@ import {
   getEarlyCloseStatus,
   getLockedAmount,
   getProbability,
+  getStrike,
 } from '../AccordionTable/Common';
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { loeditLoadingAtom } from '../EditModal';
@@ -223,7 +225,18 @@ function getPnl(trade: TradeType, lockedAmountCache: any) {
   const lockedAmmount = getLockedAmount(trade, lockedAmountCache);
   const poolInfo = appConfig[trade.environment]?.poolsInfo?.[trade.pool.pool];
   if (!price || !lockedAmmount || !poolInfo) return null;
-  const probability = getProbability(trade, price, trade.pool.IV);
+  const probability = getProbability(
+    trade,
+    price,
+    calculateOptionIV(
+      trade.is_above ?? false,
+      trade.strike / 1e8,
+      +price,
+      trade.pool.IV,
+      trade.pool.IVFactorITM,
+      trade.pool.IVFactorOTM
+    ) / 1e4
+  );
   if (!probability) return null;
   const res = getPnlForTrade({ trade, poolInfo, probability, lockedAmmount });
   if (!res || !res.earlycloseAmount) return null;
@@ -262,9 +275,11 @@ function drawPosition(
   decimals: number,
   priceCache: any
 ) {
+  const strike = getStrike(option, priceCache).strikePrice;
   // const idx = visualized.indexOf(option.queue_id);
+  console.log(strike, 'drawStrike');
   const openTimeStamp = option.open_timestamp;
-  const optionPrice = +option.strike / PRICE_DECIMALS;
+  const optionPrice = +strike / PRICE_DECIMALS;
   let color = !option.is_above ? defaults.red : defaults.green;
 
   if (option.is_limit_order && option.state == 'QUEUED') {

@@ -1,7 +1,9 @@
 import { toFixed } from '@Utils/NumString';
+import NumberTooltip from '@Views/Common/Tooltips';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { RowGap } from '@Views/TradePage/Components/Row';
-import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
+import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
 import {
   closeLoadingAtom,
   queuets2priceAtom,
@@ -9,18 +11,16 @@ import {
 } from '@Views/TradePage/atoms';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import styled from '@emotion/styled';
+import { CircularProgress } from '@mui/material';
 import { useAtomValue, useSetAtom } from 'jotai';
-import ButtonLoader from '@Views/Common/ButtonLoader/ButtonLoader';
-import { useEarlyPnl } from './TradeDataView';
 import {
   getEarlyCloseStatus,
   getExpiry,
   getLockedAmount,
   getStrike,
 } from '../../AccordionTable/Common';
-import NumberTooltip from '@Views/Common/Tooltips';
 import { loeditLoadingAtom } from '../../EditModal';
-import { CircularProgress } from '@mui/material';
+import { useEarlyPnl } from './TradeDataView';
 
 export const TradeActionButton: React.FC<{
   trade: TradeType;
@@ -28,7 +28,8 @@ export const TradeActionButton: React.FC<{
 
   poolInfo: poolInfoType;
 }> = ({ trade, tradeMarket, poolInfo }) => {
-  if (trade.is_above === undefined) return <></>;
+  const { registeredOneCT } = useOneCTWallet();
+  if (!registeredOneCT) return <></>;
   return (
     <TradeButton trade={trade} tradeMarket={tradeMarket} poolInfo={poolInfo} />
   );
