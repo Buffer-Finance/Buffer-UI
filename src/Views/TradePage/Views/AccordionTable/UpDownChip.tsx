@@ -5,18 +5,21 @@ export const UpDownChip: React.FC<{
   isUp: boolean;
   className?: string;
   shouldShowImage?: boolean;
+  shouldShowText?: boolean;
   upText?: string;
   downText?: string;
 }> = ({
   isUp,
   className = '',
   shouldShowImage = true,
+  shouldShowText = true,
   upText = 'Up',
   downText = 'Down',
 }) => {
+  console.log('updown chip', shouldShowText);
   return (
     <div
-      className={`px-2 h-[22px] text-f12 sm:text-f10 sm:pl-1 sm:pr-2 sm:h-[17px] flex gap-1 sm:gap-[0px] items-center rounded-[5px] font-medium  ml-2 bg-1 brightness-125 w-max ${
+      className={`px-2 h-[22px] text-f12 sm:text-f10 sm:pl-1 sm:h-[17px] flex gap-1 sm:gap-[0px] items-center rounded-[5px] font-medium  ml-2 bg-1 brightness-125 w-max ${
         isUp ? 'green' : 'red'
       }  ${className}`}
     >
@@ -28,7 +31,7 @@ export const UpDownChip: React.FC<{
             className={`mt-1 scale-[0.70] sm:scale-50 sm:mt-[0px]`}
           />
         ))}
-      {isUp ? upText : downText}
+      {shouldShowText ? (isUp ? upText : downText) : ''}
     </div>
   );
 };

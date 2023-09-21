@@ -1,10 +1,30 @@
-import BufferTable from '@Views/Common/BufferTable';
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
+import { divide, gt, gte } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
+import BufferTable from '@Views/Common/BufferTable';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, gt } from '@Utils/NumString/stringArithmatics';
 
+import SuccessIcon from '@Assets/Elements/SuccessIcon';
+import FailedSuccess from '@SVG/Elements/FailedSuccess';
+import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
+import { toFixed } from '@Utils/NumString';
+import { numberWithCommas } from '@Utils/display';
+import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { ColumnGap } from '@Views/TradePage/Components/Column';
+import { RowBetween } from '@Views/TradePage/Components/Row';
+import {
+  expiryPriceCache,
+  getPriceCacheId,
+} from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
+import { TradeType } from '@Views/TradePage/type';
+import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import { useSetAtom } from 'jotai';
+import { useNavigate } from 'react-router-dom';
+import { useMedia } from 'react-use';
+import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
   StrikePriceComponent,
@@ -13,22 +33,8 @@ import {
   getExpiry,
   queuedTradeFallBack,
 } from './Common';
-import FailedSuccess from '@SVG/Elements/FailedSuccess';
-import SuccessIcon from '@Assets/Elements/SuccessIcon';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { TradeType } from '@Views/TradePage/type';
 import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
-import {
-  expiryPriceCache,
-  getPriceCacheId,
-} from '@Views/TradePage/Hooks/useBuyTradeActions';
-import { AssetCell } from './AssetCell';
-import { useMedia } from 'react-use';
-import { useSetAtom } from 'jotai';
-import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
-import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import { useNavigate } from 'react-router-dom';
 
 enum TableColumn {
   Asset = 0,
@@ -164,6 +170,23 @@ const HistoryTable: React.FC<{
           queuedTradeFallBack(trade) || <DisplayTime ts={minClosingTime} />
         );
       case TableColumn.TradeSize:
+        if (!isNotMobile) {
+          return (
+            <div className="flex items-center">
+              <Display
+                data={divide(trade.trade_size, poolInfo.decimals)}
+                className="!justify-start"
+                // unit={poolInfo.token}
+              />{' '}
+              <img
+                src={getAssetImageUrl(trade.token)}
+                width={13}
+                height={13}
+                className="inline ml-2"
+              />
+            </div>
+          );
+        }
         return (
           <Display
             data={divide(trade.trade_size, poolInfo.decimals)}
@@ -201,12 +224,22 @@ const HistoryTable: React.FC<{
           );
         else
           return (
-            <Display
-              label={status.chip == 'Win' ? '+' : ''}
-              className="!justify-start"
-              data={pnl}
-              unit={poolInfo.token}
-            />
+            <div className="flex items-center">
+              <Display
+                label={status.chip == 'Win' ? '+' : ''}
+                className={`!justify-start ${
+                  gte(pnl?.toString(), '0') ? 'green' : 'red'
+                }`}
+                data={pnl}
+                // unit={poolInfo.token}
+              />
+              <img
+                src={getAssetImageUrl(trade.token)}
+                width={13}
+                height={13}
+                className="inline ml-2"
+              />
+            </div>
           );
       case TableColumn.Status:
         if (!expiryPrice) return 'Processing...';
@@ -240,6 +273,124 @@ const HistoryTable: React.FC<{
     navigate(`/profile/?user_address=${userAddress}`);
   };
 
+  const Accordian = (row: number) => {
+    const trade = trades?.[row];
+
+    if (!trade) return <>Something went wrong.</>;
+    const poolInfo = getPoolInfo(trade?.pool?.pool);
+    if (!poolInfo) return <>Something went wrong.</>;
+    const minClosingTime = getExpiry(trade);
+    let expiryPrice: number | null = trade.expiry_price;
+    if (!expiryPrice) {
+      const id = getPriceCacheId(trade);
+      expiryPrice = expiryPriceCache[id] || 0;
+      console.log(`expiryPrice: `, expiryPrice);
+    }
+    const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
+    const headerClass = 'text-[#808191] text-f12';
+    const descClass = 'text-[#C3C2D4] text-f2';
+    const dateClass = 'text-[#6F6E84] text-f10';
+    const durationClass = 'text-[#7F87A7] text-f12';
+    const timeClass = 'text-[#C3C2D4] text-f12';
+    return (
+      <div className="px-3 py-2">
+        <RowBetween>
+          <div className={timeClass}>
+            {getDisplayTime(trade.open_timestamp)}
+          </div>
+          <div className={durationClass}>
+            {formatDistance(Variables(minClosingTime - trade.open_timestamp))}
+          </div>
+          <div className={timeClass}>{getDisplayTime(minClosingTime)}</div>
+        </RowBetween>
+        <div className="h-1 w-full bg-[#393D4D] mt-3" />
+        <RowBetween className="mt-3">
+          <div className={dateClass}>
+            {getDisplayDate(trade.open_timestamp)}
+          </div>
+          <div className={dateClass}>{getDisplayDate(minClosingTime)}</div>
+        </RowBetween>
+
+        {platform ? (
+          <RowBetween className="mt-5">
+            <ColumnGap gap="3px">
+              <div className={headerClass}>Strike</div>
+              <StrikePriceComponent trade={trade} className={descClass} />
+            </ColumnGap>
+            <ColumnGap gap="3px">
+              <div className={headerClass}>Expiry</div>
+              <div className={descClass}>
+                {expiryPrice
+                  ? numberWithCommas(
+                      toFixed(
+                        divide(expiryPrice, 8) as string,
+                        trade.market.price_precision.toString().length - 1
+                      )
+                    )
+                  : 'Processing...'}
+              </div>
+            </ColumnGap>
+            <ColumnGap gap="3px">
+              <div className={headerClass}>Payout</div>
+              <div className={descClass}>
+                {expiryPrice
+                  ? numberWithCommas(
+                      toFixed(divide(payout, poolInfo.decimals) as string, 2)
+                    )
+                  : 'Calculating...'}
+                <img
+                  src={getAssetImageUrl(trade.token)}
+                  width={13}
+                  height={13}
+                  className="inline ml-1"
+                />
+              </div>
+            </ColumnGap>
+          </RowBetween>
+        ) : (
+          <RowBetween className="mt-5">
+            <div>
+              <span className={headerClass + ' mr-3'}>Expiry</span>
+              <span className={descClass}>
+                {expiryPrice
+                  ? numberWithCommas(
+                      toFixed(
+                        divide(expiryPrice, 8) as string,
+                        trade.market.price_precision.toString().length - 1
+                      )
+                    )
+                  : 'Processing...'}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className={headerClass + ' mr-3'}>Payout</span>
+              <span className={descClass}>
+                {expiryPrice
+                  ? numberWithCommas(
+                      toFixed(divide(payout, poolInfo.decimals) as string, 2)
+                    )
+                  : 'Calculating...'}
+              </span>
+              <img
+                src={getAssetImageUrl(trade.token)}
+                width={13}
+                height={13}
+                className="inline ml-1"
+              />
+              <Share
+                data={trade}
+                market={trade.market}
+                poolInfo={poolInfo}
+                iconBgColor="#282B39"
+                className="scale-75 ml-3"
+              />
+            </div>
+          </RowBetween>
+        )}
+      </div>
+    );
+  };
+
   return (
     <BufferTable
       activePage={activePage}
@@ -265,6 +416,8 @@ const HistoryTable: React.FC<{
       loading={isLoading}
       className={className}
       overflow={overflow}
+      accordianJSX={isNotMobile ? undefined : Accordian}
+      doubleHeight={!isNotMobile}
     />
   );
 };

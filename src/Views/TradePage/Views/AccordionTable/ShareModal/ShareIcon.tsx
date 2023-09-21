@@ -9,7 +9,9 @@ export const Share: React.FC<{
   data: TradeType;
   market: marketType;
   poolInfo: poolInfoType;
-}> = ({ data, market, poolInfo }) => {
+  iconBgColor?: string;
+  className?: string;
+}> = ({ data, market, poolInfo, iconBgColor, className = '' }) => {
   const [, setIsOpen] = useAtom(SetShareStateAtom);
   const isMobile = useMedia('(max-width:600px)');
   const { openShareShutter } = useShutterHandlers();
@@ -29,7 +31,7 @@ export const Share: React.FC<{
         } else setIsOpen(true);
       }}
     >
-      <ShareIcon />
+      <ShareIcon bgColor={iconBgColor} className={className} />
     </button>
   );
 };

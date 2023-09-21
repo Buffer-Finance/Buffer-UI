@@ -34,11 +34,15 @@ export const AssetCell: React.FC<{
               : 'You chose ' + (isUp ? 'Up' : 'Down')
           }
         >
-          <div className={`flex ${split ? 'flex-col' : 'flex-row'} -ml-[6px]`}>
+          <div className={`flex  -ml-[6px]`}>
             <span className={`weight-400 text-f15 sm:text-f12 `}>
               {token0 + '-' + token1}{' '}
             </span>
-            {isHidden || platform ? <LockIcon /> : <UpDownChip isUp={isUp} />}
+            {isHidden || platform ? (
+              <LockIcon />
+            ) : (
+              <UpDownChip isUp={isUp} shouldShowText={!split} />
+            )}
           </div>
         </NumberTooltip>
       }

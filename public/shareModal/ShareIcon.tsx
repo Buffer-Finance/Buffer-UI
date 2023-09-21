@@ -1,5 +1,3 @@
-import * as React from "react";
-
 const ShareIcon = (props) => (
   <svg
     width={27}
@@ -8,7 +6,13 @@ const ShareIcon = (props) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <ellipse cx={13.48} cy={13.314} rx={12.757} ry={12.726} fill="#171722" />
+    <ellipse
+      cx={13.48}
+      cy={13.314}
+      rx={12.757}
+      ry={12.726}
+      fill={props.bgColor ? props.bgColor : '#171722'}
+    />
     <path
       fillRule="evenodd"
       clipRule="evenodd"
