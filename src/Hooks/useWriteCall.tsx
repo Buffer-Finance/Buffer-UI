@@ -57,7 +57,6 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     customToast: ICustomToast | null = null,
     confirmationModal: IConfirmationModal | null = null
   ) => {
-    console.log(methodArgs, methodName, 'methodArgs');
     if (!address) {
       return toastify({ type: 'error', msg: 'Please connect your wallet!' });
     }

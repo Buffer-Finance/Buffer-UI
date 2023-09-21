@@ -25,7 +25,6 @@ const AdminConfig: React.FC<any> = ({}) => {
   const marketConfig = useMarketsConfig();
   const { activeChain } = useActiveChain();
   const adminConfig = raw2adminConfig(marketConfig, activeChain);
-  console.log(adminConfig, 'adminConfig');
   const [activeGroup, setActiveGroup] = useState(groups[1]);
   const txnBatch = useAtomValue(safeTxnsAtom);
 

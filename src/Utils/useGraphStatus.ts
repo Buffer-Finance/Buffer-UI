@@ -5,7 +5,6 @@ import useSWR from 'swr';
 
 const useGraphStatus = () => {
   const { activeChain } = useActiveChain();
-  console.log('activeChain', activeChain);
   const graphUrlMain = getConfig(activeChain.id).graph.MAIN;
   const { data } = useSWR('graph-status', {
     fetcher: async () => {
