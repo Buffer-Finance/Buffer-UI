@@ -40,10 +40,16 @@ export const useAllV2_5MarketsRequest = () => {
 
 export const useV2Markets = () => {
   const { data: bothVersionMrkets, error } = useBothVersionsMarkets();
+  const { activeChain } = useActiveChain();
+  const configData = getConfig(activeChain.id);
   return {
     data: {
       optionContracts: bothVersionMrkets?.optionContracts.filter(
-        (optionContract) => optionContract.poolContract === null
+        (optionContract) =>
+          optionContract.poolContract === null &&
+          configData['v2_router'] &&
+          getAddress(configData['v2_router']) ===
+            getAddress(optionContract.routerContract)
       ),
     },
     error,
