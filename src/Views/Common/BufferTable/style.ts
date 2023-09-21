@@ -25,6 +25,22 @@ const TableBackground = styled.div`
     width: 3px !important;
   }
 
+  .rotate {
+    transition: transform 0.3s ease; /* You can adjust the duration and easing as needed */
+  }
+
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 10s ease-in-out; /* Adjust the duration and easing as needed */
+  }
+
+  .open {
+    max-height: 1000px; /* Set a maximum height that suits your content */
+  }
   @media (max-width: 1000px) {
     height: auto;
   }
@@ -147,6 +163,7 @@ const TableBackground = styled.div`
             margin-top: -3.8rem;
           }
         }
+
         .table-cell {
           color: rgb(195, 194, 212);
           border-top: none;

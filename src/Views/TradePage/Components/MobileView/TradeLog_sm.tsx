@@ -1,5 +1,11 @@
+import { usePrice } from '@Hooks/usePrice';
 import DDArrow from '@SVG/Elements/Arrow';
-import DDIcon from '@SVG/Elements/DDIcon';
+import MemoCheckMark from '@SVG/Elements/CheckMark';
+import ShutterProvider, {
+  useShutterHandlers,
+} from '@Views/Common/MobileShutter/MobileShutter';
+import { EssentialModals } from '@Views/TradePage';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import {
   Cancelled,
   History,
@@ -18,16 +24,8 @@ import {
   useMenuState,
 } from '@szhsin/react-menu';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { TradeInspect_sm } from './TradeInspect_sm';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { ShareModal } from '@Views/TradePage/Views/AccordionTable/ShareModal';
-import ShutterProvider, {
-  useShutterHandlers,
-} from '@Views/Common/MobileShutter/MobileShutter';
-import MemoCheckMark from '@SVG/Elements/CheckMark';
-import { EditModal } from '@Views/TradePage/Views/EditModal';
-import { EssentialModals } from '@Views/TradePage';
 
 const renderTab = (s) => (s.includes(':') ? s.split(':')[0] : s);
 const tabs = ['History', 'Cancelled:b', 'Platform Trades', 'Platform History'];
@@ -50,6 +48,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
   }, []);
   const { closeShutter } = useShutterHandlers();
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
+  usePrice();
   useEffect(() => {
     closeShutter();
     return closeShutter;
@@ -126,12 +125,12 @@ const TradeLog_sm: React.FC<any> = ({}) => {
               );
             })}
           </ControlledMenu>
-          {activeTab == 'History' && <History onlyView={[0, 6, 7, 8]} />}
+          {activeTab == 'History' && <History onlyView={[0, 1, 6, 7]} />}
           {activeTab == 'Platform History' && (
-            <PlatformHistory onlyView={[0, 6, 7, 8]} />
+            <PlatformHistory onlyView={[0, 9, 6, 7]} />
           )}
           {activeTab == 'Platform Trades' && (
-            <PlatformOngoing onlyView={[0, 1, 4, 6]} />
+            <PlatformOngoing onlyView={[0, 1, 2, 6]} />
           )}
           {activeTab == 'Cancelled:b' && <Cancelled onlyView={[0, 1, 2, 4]} />}
         </>
