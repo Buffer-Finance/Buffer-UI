@@ -29,6 +29,9 @@ const options = {
   refreshInterval: 1000,
 };
 
+import { inject } from '@vercel/analytics';
+inject();
+
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -50,9 +53,6 @@ if (import.meta.env.VITE_MODE === 'production') {
   });
 }
 
-import { inject } from '@vercel/analytics';
-inject();
-console.log('wagmiCLient', wagmiClient);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
     <WagmiConfig config={wagmiClient}>

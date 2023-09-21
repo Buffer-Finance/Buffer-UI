@@ -68,6 +68,12 @@
       "getter": "isPaused"
     }
   },
+  "config_setter": {
+    "pause": {
+      "type": "assetDD"
+    },
+    "unpause": { "type": "assetDD" }
+  },
   "booster": {
     "setConfigure": {
       "getter": "getNftTierDiscounts"

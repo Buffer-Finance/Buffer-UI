@@ -1,3 +1,4 @@
+import { Settings } from '@Views/TradePage/Views/Settings';
 import {
   ClickEvent,
   ControlledMenu,
@@ -5,9 +6,8 @@ import {
   useClick,
   useMenuState,
 } from '@szhsin/react-menu';
-import { SettingsIcon } from './SettingsIcon';
-import { Settings } from '@Views/TradePage/Views/Settings';
 import { useRef } from 'react';
+import { SettingsIcon } from './SettingsIcon';
 
 export const SettingsDD: React.FC = () => {
   const ref = useRef(null);

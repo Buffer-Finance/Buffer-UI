@@ -1,9 +1,24 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { raw2adminConfig } from './helpers';
 import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import SafeProvider from '@safe-global/safe-apps-react-sdk';
+import { atom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { ConfigSetter } from './ConfigSetter';
+import { raw2adminConfig } from './helpers';
+import { SendToSafe } from './sendToSafe';
+
+export const safeTxnsAtom = atom<
+  {
+    setter: string;
+    prevvalue: any;
+    id: string;
+    to: string;
+    value: string;
+    data: string;
+  }[]
+>([]);
+
 const groups = Object.keys(rawConfigs);
 const className = 'bg-blue bg-4';
 const AdminConfig: React.FC<any> = ({}) => {
@@ -11,6 +26,8 @@ const AdminConfig: React.FC<any> = ({}) => {
   const { activeChain } = useActiveChain();
   const adminConfig = raw2adminConfig(marketConfig, activeChain);
   const [activeGroup, setActiveGroup] = useState(groups[1]);
+  const txnBatch = useAtomValue(safeTxnsAtom);
+
   if (!adminConfig?.options_config) return <div>Loading...</div>;
 
   return (
@@ -47,6 +64,33 @@ const AdminConfig: React.FC<any> = ({}) => {
           configs={adminConfig[activeGroup as keyof typeof adminConfig]}
           cacheKey={activeGroup}
         />
+      </div>
+      <div className="mx-[20px] mt-[10px]">
+        {' '}
+        {txnBatch.length ? (
+          <>
+            <SafeProvider
+              opts={{
+                allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
+                debug: false,
+              }}
+              loader={
+                <div className="bg-2 !w-fit text-f14 p-3 rounded-sm mb-4 text-blue-1">
+                  Note: Please visit from Gnosis App to do multi-send
+                </div>
+              }
+            >
+              <SendToSafe />
+            </SafeProvider>
+            <h2 className="text-2 text-f12 mb-[20px]">Batched Txns:</h2>{' '}
+          </>
+        ) : null}
+        {txnBatch.map((txn) => (
+          <div key={txn.id} className="flex gap-x-[5px]">
+            <div>{txn.setter}</div>
+            <div>{txn.prevvalue ? JSON.stringify(txn.prevvalue) : ''}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

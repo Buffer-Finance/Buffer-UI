@@ -14,6 +14,8 @@ export const appConfig = {
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
         router: '0xca287b27fc1CD6B4a2B0d21788F3d5Ab4f2A9149',
         signer_manager: '0xAAcAf779fdc0A7d8749Aa1FDc260a1C5Da5517B1',
+        config_setter: '0xaCB5591B331A38D01a415Ed78D58923a542ABd7b',
+        v2_router: null,
         poolsInfo: {
           '0x4A53c47051FA44FE3A5D6d5cBCb1b7Bf8307E598': {
             decimals: 6,
@@ -89,6 +91,8 @@ export const appConfig = {
         },
         signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
         booster: '0x59a73017E755c13037914a4D95Ec5E7b09879631',
+        config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
+        v2_router: '0x76c52E83d7dcCc70107a66BAd44D042D22D06be7',
         poolsInfo: {
           '0x6F9929BF96cfeFe2a4E1e05bB2CBD918678aEC5F': {
             tokenAddress: '0xda11D2c3b026561cCE889Ff5A020Eae21308058C',
@@ -153,13 +157,15 @@ export const appConfig = {
       },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.-16-payout_usd-userOptionData/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
     router: '0x3890F9664188a2A7292319Ce67320037BE634D3a',
     signer_manager: '0x983adc3d8853C4792Da5581C5e711d25BAC19042',
     booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
+    config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
+    v2_router: '0x0e0A1241C9cE6649d5D30134a194BA3E24130305',
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
         decimals: 6,

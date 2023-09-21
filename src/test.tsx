@@ -3,6 +3,7 @@ import { atom, useSetAtom } from 'jotai';
 import { usePrice } from '@Hooks/usePrice';
 import useSWR from 'swr';
 import axios from 'axios';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 const Test2: React.FC<any> = ({}) => {
   // const d = useOneCTWallet();
   const [string1, setString1] = useState('');
@@ -54,7 +55,11 @@ const Test2: React.FC<any> = ({}) => {
 };
 const timeAtom = atom(0);
 const Test = () => {
-  return <Test3 />;
+  return (
+    <div>
+      <ConnectButton />
+    </div>
+  );
   // const setTime = useSetAtom(timeAtom);
 
   // usePrice();
