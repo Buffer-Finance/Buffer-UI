@@ -17,14 +17,16 @@ import {
   expiryPriceCache,
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
 import { TradeType } from '@Views/TradePage/type';
 import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { useMedia } from 'react-use';
+import { getAddress } from 'viem';
 import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
@@ -74,6 +76,8 @@ const HistoryTable: React.FC<{
   const { getPoolInfo } = usePoolInfo();
   const setInspectTrade = useSetAtom(tradeInspectMobileAtom);
   const navigate = useNavigate();
+  const readcallData = useAtomValue(buyTradeDataAtom);
+
   const headNameArray = platform
     ? [
         'Asset',
@@ -108,6 +112,11 @@ const HistoryTable: React.FC<{
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
     if (trade === undefined) return <></>;
+    if (!readcallData) return <></>;
+
+    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
+    const currentOi =
+      readcallData.currentOIs[getAddress(trade.target_contract)];
     if (!trade?.pool?.pool) console.log(`trade: `, trade);
     const poolInfo = getPoolInfo(trade.pool.pool);
     let expiryPrice: number | null = trade.expiry_price;
@@ -134,7 +143,13 @@ const HistoryTable: React.FC<{
     const minClosingTime = getExpiry(trade);
     switch (col) {
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} />;
+        return (
+          <StrikePriceComponent
+            trade={trade}
+            currentOI={currentOi}
+            maXOI={maxOi}
+          />
+        );
       case TableColumn.Asset:
         return (
           <AssetCell
@@ -295,6 +310,8 @@ const HistoryTable: React.FC<{
     const trade = trades?.[row];
 
     if (!trade) return <>Something went wrong.</>;
+    if (!readcallData) return <></>;
+
     const poolInfo = getPoolInfo(trade?.pool?.pool);
     if (!poolInfo) return <>Something went wrong.</>;
     const minClosingTime = getExpiry(trade);
@@ -304,6 +321,9 @@ const HistoryTable: React.FC<{
       expiryPrice = expiryPriceCache[id] || 0;
       console.log(`expiryPrice: `, expiryPrice);
     }
+    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
+    const currentOi =
+      readcallData.currentOIs[getAddress(trade.target_contract)];
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
     const headerClass = 'text-[#808191] text-f12';
     const descClass = 'text-[#C3C2D4] text-f2';
@@ -333,7 +353,12 @@ const HistoryTable: React.FC<{
           <RowBetween className="mt-5">
             <ColumnGap gap="3px">
               <div className={headerClass}>Strike</div>
-              <StrikePriceComponent trade={trade} className={descClass} />
+              <StrikePriceComponent
+                trade={trade}
+                currentOI={currentOi}
+                maXOI={maxOi}
+                className={descClass}
+              />
             </ColumnGap>
             <ColumnGap gap="3px">
               <div className={headerClass}>Expiry</div>

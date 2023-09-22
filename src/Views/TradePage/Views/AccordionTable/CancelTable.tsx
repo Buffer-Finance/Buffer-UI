@@ -1,20 +1,22 @@
+import FailureIcon from '@SVG/Elements/FailureIcon';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import BufferTable from '@Views/Common/BufferTable';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { divide } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { cancelTableActivePage } from '@Views/TradePage/atoms';
+import { TradeType } from '@Views/TradePage/type';
+import { useAtom, useAtomValue } from 'jotai';
+import { useMedia } from 'react-use';
+import { getAddress } from 'viem';
+import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
 } from './Common';
-import { TradeType } from '@Views/TradePage/type';
-import FailureIcon from '@SVG/Elements/FailureIcon';
-import { AssetCell } from './AssetCell';
-import { useAtom } from 'jotai';
-import { cancelTableActivePage } from '@Views/TradePage/atoms';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { useMedia } from 'react-use';
 
 export const CancelledTable: React.FC<{
   trades: TradeType[] | undefined;
@@ -27,6 +29,7 @@ export const CancelledTable: React.FC<{
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
   const { getPoolInfo } = usePoolInfo();
   const isMobile = useMedia('(max-width:600px)');
+  const readcallData = useAtomValue(buyTradeDataAtom);
 
   let strikePriceHeading = 'Strike Price';
   let tradeSizeHeading = 'Trade Size';
@@ -59,12 +62,23 @@ export const CancelledTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     if (trades === undefined) return <></>;
+    if (!readcallData) return <></>;
+
     const trade = trades?.[row];
     const poolInfo = getPoolInfo(trade.pool.pool);
+    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
+    const currentOi =
+      readcallData.currentOIs[getAddress(trade.target_contract)];
 
     switch (col) {
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} />;
+        return (
+          <StrikePriceComponent
+            trade={trade}
+            currentOI={currentOi}
+            maXOI={maxOi}
+          />
+        );
       case TableColumn.Asset:
         return (
           <AssetCell currentRow={trade} platform={platform} split={isMobile} />

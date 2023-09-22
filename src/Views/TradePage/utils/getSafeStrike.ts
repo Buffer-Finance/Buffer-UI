@@ -13,9 +13,8 @@ export function getSafeStrike(
   let spread = m * iv + c;
 
   spread =
-    spread *
-    spreadFactor *
-    Math.floor(totalMarketOI / (1e3 * getMaxOI + spread));
+    spread * spreadFactor * Math.floor(totalMarketOI / (1e3 * getMaxOI)) +
+    spread;
 
   if (isAbove) {
     return (strike * (1e8 + spread)) / 1e8;

@@ -14,6 +14,7 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { GreyBtn } from '@Views/Common/V2-Button';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { RowBetween } from '@Views/TradePage/Components/Row';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import {
@@ -25,6 +26,7 @@ import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
 import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { useMedia } from 'react-use';
+import { getAddress } from 'viem';
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { AssetCell } from './AssetCell';
 import {
@@ -68,6 +70,7 @@ export const OngoingTradesTable: React.FC<{
   const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { registeredOneCT } = useOneCTWallet();
+  const readcallData = useAtomValue(buyTradeDataAtom);
   const setInspectTrade = useSetAtom(tradeInspectMobileAtom);
   let strikePriceHeading = 'Strike Price';
   if (isMobile) {
@@ -117,8 +120,12 @@ export const OngoingTradesTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     if (trades === undefined) return <></>;
+    if (!readcallData) return <></>;
     const trade = trades?.[row];
     if (!trade) return 'Problem';
+    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
+    const currentOi =
+      readcallData.currentOIs[getAddress(trade.target_contract)];
 
     const poolInfo = getPoolInfo(trade.pool.pool);
     const marketPrecision = trade.market.price_precision.toString().length - 1;
@@ -163,7 +170,13 @@ export const OngoingTradesTable: React.FC<{
           'Processing...'
         );
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} />;
+        return (
+          <StrikePriceComponent
+            trade={trade}
+            currentOI={currentOi}
+            maXOI={maxOi}
+          />
+        );
       case TableColumn.Asset:
         return (
           <AssetCell currentRow={trade} platform={false} split={isMobile} />

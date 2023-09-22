@@ -1,39 +1,46 @@
 import FailedSuccess from '@Assets/Elements/FailedSuccess';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import MemoBackIcon from '@SVG/Elements/BackIcon';
 import { divide, gt } from '@Utils/NumString/stringArithmatics';
+import { Variables } from '@Utils/Time';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
   expiryPriceCache,
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { AssetCell } from '@Views/TradePage/Views/AccordionTable/AssetCell';
-import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode } from 'react';
-import { getPayout } from '../../Views/AccordionTable/ShareModal/utils';
 import {
   DisplayTime,
   StrikePriceComponent,
   getExpiry,
   queuedTradeFallBack,
 } from '@Views/TradePage/Views/AccordionTable/Common';
-import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
-import { Variables } from '@Utils/Time';
-import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { Share } from '@Views/TradePage/Views/AccordionTable/ShareModal/ShareIcon';
+import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
+import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { ReactNode } from 'react';
+import { getAddress } from 'viem';
+import { getPayout } from '../../Views/AccordionTable/ShareModal/utils';
 import { activeTabAtom } from './TradeLog_sm';
 const className = 'text-green text-red text-[#C3C2D4] text-[#808191] text-f14 ';
 const valueClasssName = '!text-[#C3C2D4] !text-f14 !ml-auto !justify-end';
 const keyClassName = '!text-[#808191] !text-f14';
 const TradeInspect_sm: React.FC<any> = ({}) => {
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
-
+  const readcallData = useAtomValue(buyTradeDataAtom);
   const { trade } = useAtomValue(tradeInspectMobileAtom);
   const setInspectedTrade = useSetAtom(tradeInspectMobileAtom);
   const { getPoolInfo } = usePoolInfo();
   if (!trade) return <div>Error loading data</div>;
+  if (!readcallData) return <div>Error loading data</div>;
+
+  const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
+  const currentOi = readcallData.currentOIs[getAddress(trade.target_contract)];
+
   const poolInfo = getPoolInfo(trade.pool.pool);
   let expiryPrice: number | null = trade.expiry_price;
   if (!expiryPrice) {
@@ -167,9 +174,12 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
         <div>
           <Head className="!text-f12">Trade Strike</Head>
           <StrikePriceComponent
-            trade={trade}
             className={'!text-f14  text-[#C3C2D4]'}
+            trade={trade}
+            currentOI={currentOi}
+            maXOI={maxOi}
           />
+          ;
         </div>
       </div>
       <div className="bg-[#17171F] rounded-[5px] p-4">

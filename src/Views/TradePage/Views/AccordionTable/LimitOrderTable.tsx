@@ -1,40 +1,42 @@
-import BufferTable from '@Views/Common/BufferTable';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   getDisplayDate,
   getDisplayDateUTC,
   getDisplayTime,
   getDisplayTimeUTC,
 } from '@Utils/Dates/displayDateTime';
+import BufferTable from '@Views/Common/BufferTable';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import NumberTooltip from '@Views/Common/Tooltips';
-import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
-import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import { Launch } from '@mui/icons-material';
+import { useToast } from '@Contexts/Toast';
 import { priceAtom } from '@Hooks/usePrice';
-import { Display } from '@Views/Common/Tooltips/Display';
 import { getPriceFromKlines } from '@TV/useDataFeed';
+import { divide, round } from '@Utils/NumString/stringArithmatics';
+import { getSlicedUserAddress } from '@Utils/getUserAddress';
+import NumberTooltip from '@Views/Common/Tooltips';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { GreyBtn } from '@Views/Common/V2-Button';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
+import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import {
   closeLoadingAtom,
   selectedOrderToEditAtom,
 } from '@Views/TradePage/atoms';
+import { TradeType } from '@Views/TradePage/type';
 import { secondsToHHMM } from '@Views/TradePage/utils';
+import { Launch } from '@mui/icons-material';
+import { getAddress } from 'viem';
+import { loeditLoadingAtom } from '../EditModal';
+import { AssetCell } from './AssetCell';
 import {
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
   tableButtonClasses,
 } from './Common';
-import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { TradeType } from '@Views/TradePage/type';
-import { AssetCell } from './AssetCell';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { Visualized } from './Visualized';
-import { useToast } from '@Contexts/Toast';
-import { loeditLoadingAtom } from '../EditModal';
 
 export const tradesCount = 10;
 
@@ -61,6 +63,7 @@ const LimitOrderTable = ({
   const { getPoolInfo } = usePoolInfo();
   const { registeredOneCT } = useOneCTWallet();
   const editLoading = useAtomValue(loeditLoadingAtom);
+  const readcallData = useAtomValue(buyTradeDataAtom);
 
   const headNameArray = [
     'Asset',
@@ -87,6 +90,11 @@ const LimitOrderTable = ({
   const toastify = useToast();
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
+    if (!readcallData) return <></>;
+
+    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
+    const currentOi =
+      readcallData.currentOIs[getAddress(trade.target_contract)];
 
     const marketPrecision = trade.market.price_precision.toString().length - 1;
     const poolInfo = getPoolInfo(trade.pool.pool);
@@ -94,7 +102,13 @@ const LimitOrderTable = ({
     const isModificationPending = trade.pending_operation == 'Processing EDIT';
     switch (col) {
       case TableColumn.TriggerPrice:
-        return <StrikePriceComponent trade={trade} />;
+        return (
+          <StrikePriceComponent
+            trade={trade}
+            currentOI={currentOi}
+            maXOI={maxOi}
+          />
+        );
       case TableColumn.Asset:
         return <AssetCell currentRow={trade} />;
       case TableColumn.CurrentPrice:
