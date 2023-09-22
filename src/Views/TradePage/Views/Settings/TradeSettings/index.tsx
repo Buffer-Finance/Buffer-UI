@@ -7,6 +7,7 @@ import { defaultSettings } from '@Views/TradePage/config';
 import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { LimitOrdersExpiry } from './LimitOrdersExpiry';
+import { PartialFill } from './PartialFill';
 import { Slippage } from './Slippage';
 
 export const TradeSettings: React.FC = () => {
@@ -39,7 +40,7 @@ export const TradeSettings: React.FC = () => {
         <ResetButton onClick={resetToDefault} className="mt-1" />
       </RowGapItemsTop>
       <ColumnGap gap="12px">
-        {/* <PartialFill onToggle={togglePartialFill} isOn={settings.partialFill} /> */}
+        <PartialFill onToggle={togglePartialFill} isOn={settings.partialFill} />
         <Slippage
           currentSlippage={settings.slippageTolerance}
           setSlippage={setSlippage}

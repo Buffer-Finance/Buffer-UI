@@ -296,7 +296,7 @@ export const HolderContracts = [
 export const refreshInterval = 500;
 export const defaultSettings = {
   trade: {
-    partialFill: false,
+    partialFill: true,
     slippageTolerance: 0.1,
     limitOrdersExpiry: '24',
     selectedTimeFrame: 'h',
