@@ -17,10 +17,12 @@ export const useIsMarketOpen = (
 
   const isOpen = useMemo(() => {
     if (!readcallData || !market) return false;
+    // console.log('useIsMarketOpen', readcallData, market);
     const currentPool = market.pools.find((pool) => {
       return pool.pool === selectedPoolContract;
     });
-    if (!isForex && currentPool?.isPaused) return false;
+    console.log('currentPool', currentPool);
+    if (currentPool?.isPaused) return false;
 
     if (
       isForex &&
