@@ -1,6 +1,4 @@
 import { usePrice } from '@Hooks/usePrice';
-import DDArrow from '@SVG/Elements/Arrow';
-import MemoCheckMark from '@SVG/Elements/CheckMark';
 import ShutterProvider, {
   useShutterHandlers,
 } from '@Views/Common/MobileShutter/MobileShutter';
@@ -16,13 +14,7 @@ import {
   selectedOrderToEditAtom,
   tradeInspectMobileAtom,
 } from '@Views/TradePage/atoms';
-import {
-  ClickEvent,
-  ControlledMenu,
-  MenuItem,
-  useClick,
-  useMenuState,
-} from '@szhsin/react-menu';
+import { useClick, useMenuState } from '@szhsin/react-menu';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useRef } from 'react';
 import { TradeInspect_sm } from './TradeInspect_sm';
@@ -70,7 +62,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
       {essntials}
       {!inspectedTrade.trade && (
         <>
-          <button
+          {/* <button
             type="button"
             className="flex items-center  text-f14 text-1 !bg-[#232334] mx-3 mb-2 rounded-md px-4 py-2"
             ref={ref}
@@ -124,7 +116,40 @@ const TradeLog_sm: React.FC<any> = ({}) => {
                 </MenuItem>
               );
             })}
-          </ControlledMenu>
+          </ControlledMenu> */}
+          <div className="flex items-center gap-4 my-4">
+            {tabs
+              .filter((tab) => !tab.toLowerCase().includes('platform'))
+              .map((tab) => {
+                const isTabActive = activeTab == tab;
+                return (
+                  <button
+                    onClick={() => setActiveTab(tab)}
+                    className={`text-f12 ${
+                      isTabActive ? 'text-1' : 'text-[#808191]'
+                    }`}
+                  >
+                    {renderTab(tab)}
+                  </button>
+                );
+              })}
+            <div className="text-[#808191] ">|</div>
+            {tabs
+              .filter((tab) => tab.toLowerCase().includes('platform'))
+              .map((tab) => {
+                const isTabActive = activeTab == tab;
+                return (
+                  <button
+                    onClick={() => setActiveTab(tab)}
+                    className={`text-f12 ${
+                      isTabActive ? 'text-1' : 'text-[#808191]'
+                    }`}
+                  >
+                    {renderTab(tab)}
+                  </button>
+                );
+              })}
+          </div>
           {activeTab == 'History' && <History onlyView={[0, 1, 6, 7]} />}
           {activeTab == 'Platform History' && (
             <PlatformHistory onlyView={[0, 9, 6, 7]} />
