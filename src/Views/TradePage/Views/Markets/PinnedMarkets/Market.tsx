@@ -3,7 +3,7 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { marketData } from '@Views/TradePage/Hooks/useAssetTableFilters';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
@@ -11,6 +11,7 @@ import { AssetCategory } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { IconButton } from '@mui/material';
+import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import { getAddress } from 'viem';
 
@@ -51,7 +52,7 @@ export const Market: React.FC<{
   const { activeMarket } = useActiveMarket();
   const { navigateToMarket } = useFavouriteMarkets();
   const chartMarket = market.marketInfo;
-  const readcallData = useBuyTradeData();
+  const readcallData = useAtomValue(buyTradeDataAtom);
 
   const { currentPrice } = useCurrentPrice({
     token0: market.marketInfo.token0,

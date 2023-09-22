@@ -12,6 +12,7 @@ import { ModalBase } from 'src/Modals/BaseModal';
 import { CloseConfirmationModal } from './CloseConfirmationModal';
 import { MarketTimingsModal } from './Components/MarketTimingsModal';
 import { TradePageMobile } from './Components/MobileView/TradePageMobile';
+import { useBuyTradeData } from './Hooks/useBuyTradeData';
 import { AccordionTable } from './Views/AccordionTable';
 import { ShareModal } from './Views/AccordionTable/ShareModal';
 import { BuyTrade } from './Views/BuyTrade';
@@ -32,7 +33,7 @@ const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
   usePrice();
-  // console.log('root-rerendered');
+  useBuyTradeData();
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
   useEffect(() => {

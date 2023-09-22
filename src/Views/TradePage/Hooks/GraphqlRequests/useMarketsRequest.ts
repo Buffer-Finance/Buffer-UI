@@ -82,6 +82,7 @@ export const useBothVersionsMarkets = () => {
                     IVFactorITM
                     SpreadConfig1
                     SpreadConfig2
+                    SpreadFactor
                   }
                   routerContract
                   address

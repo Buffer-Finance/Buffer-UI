@@ -1,11 +1,24 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useBuyTradePageReadcalls } from './Readcalls/useBuyPageReadcalls';
-import { useSwitchPool } from './useSwitchPool';
-import { useMemo } from 'react';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { useMarketsConfig } from './useMarketsConfig';
+import { atom, useSetAtom } from 'jotai';
+import { useMemo } from 'react';
 import { getPayout } from '../utils';
 import { getConfig } from '../utils/getConfig';
+import { useBuyTradePageReadcalls } from './Readcalls/useBuyPageReadcalls';
+import { useMarketsConfig } from './useMarketsConfig';
+import { useSwitchPool } from './useSwitchPool';
+
+export const buyTradeDataAtom = atom<{
+  balance: string;
+  allowance: string;
+  // user2signer: { signer: string; nonce: string };
+  maxTradeSizes: { [key: string]: string };
+  settlementFees: { [key: string]: string };
+  maxOIs: { [key: string]: string };
+  currentOIs: { [key: string]: string };
+  nonces: string;
+  creationWindows: { [key: string]: boolean };
+} | null>(null);
 
 export const useBuyTradeData = (deb?: string) => {
   const { data: readCallData } = useBuyTradePageReadcalls();
@@ -13,6 +26,7 @@ export const useBuyTradeData = (deb?: string) => {
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
   const config = useMarketsConfig();
+  const setBuyTradeData = useSetAtom(buyTradeDataAtom);
   const response = useMemo(() => {
     if (
       !readCallData ||
@@ -82,7 +96,8 @@ export const useBuyTradeData = (deb?: string) => {
     //   ]?.[0];
     const nonces =
       readCallData[getCallId(poolDetails.tokenAddress, 'nonces')]?.[0];
-    return {
+
+    setBuyTradeData({
       balance,
       allowance,
       // user2signer,
@@ -92,8 +107,6 @@ export const useBuyTradeData = (deb?: string) => {
       currentOIs,
       nonces,
       creationWindows,
-    };
+    });
   }, [readCallData, poolDetails, switchPool, configData]);
-
-  return response;
 };

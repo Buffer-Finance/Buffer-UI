@@ -1,8 +1,8 @@
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
-import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { getPayout, joinStrings } from '@Views/TradePage/utils';
 import { isObjectEmpty } from '@Views/TradePage/utils/isObjectEmpty';
+import { useAtomValue } from 'jotai';
 import { useCallback } from 'react';
 import { getAddress } from 'viem';
 
@@ -38,7 +38,7 @@ export const Payout: React.FC<{
 };
 
 export const useSelectedAssetPayout = () => {
-  const readcallData = useBuyTradeData();
+  const readcallData = useAtomValue(buyTradeDataAtom);
   const { data: baseSettlementFees } = useSettlementFee();
 
   const calculatePayout = useCallback(

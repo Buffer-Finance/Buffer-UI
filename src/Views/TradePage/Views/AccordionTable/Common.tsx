@@ -151,14 +151,23 @@ export const TableHeader: React.FC<ITableHeader> = ({
 export const StrikePriceComponent = ({
   trade,
   className,
+  currentOI,
+  maXOI,
 }: {
   trade: TradeType;
   className?: string;
+  maXOI: string;
+  currentOI: string;
 }) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
   // console.log(`Common-className: `, className);
 
-  const { isPriceArrived, strikePrice } = getStrike(trade, cachedPrices);
+  const { isPriceArrived, strikePrice } = getStrike(
+    trade,
+    cachedPrices,
+    currentOI,
+    maXOI
+  );
   return (
     <>
       <Display
@@ -289,7 +298,12 @@ export const TableErrorRow: React.FC<{
 export const getExpiry = (trade: TradeType, deb?: string) => {
   return trade.close_time || trade.open_timestamp + trade.period;
 };
-export const getStrike = (trade: TradeType, cachedPrice: any) => {
+export const getStrike = (
+  trade: TradeType,
+  cachedPrice: any,
+  currentOI: string,
+  maxOI: string
+) => {
   let strikePrice = trade.strike;
   const isPriceArrived = trade.is_limit_order
     ? false
@@ -300,6 +314,9 @@ export const getStrike = (trade: TradeType, cachedPrice: any) => {
       trade.is_above!,
       trade.pool.SpreadConfig1,
       trade.pool.SpreadConfig2,
+      trade.pool.SpreadFactor,
+      +currentOI,
+      +maxOI,
       trade.pool.IV
     );
   }

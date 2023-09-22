@@ -1,25 +1,27 @@
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import NumberTooltip from '@Views/Common/Tooltips';
+import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import { White12pxText } from '@Views/TradePage/Components/TextWrapper';
-import styled from '@emotion/styled';
-import { DirectionChip } from './DirectionChip';
-import { ColumnGap } from '@Views/TradePage/Components/Column';
-import { OrderExpiry, QueuedChip } from './QueuedChip';
-import { TradePoolChip } from './TradePoolChip';
-import { TradeTypeChip } from './TradeTypeChip';
-import { TradeDataView } from './TradeDataView';
-import { TradeActionButton } from './TradeActionButton';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { joinStrings } from '@Views/TradePage/utils';
-import { TradeTimeElapsed } from './TradeTimeElapsed';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { CountDown } from './CountDown';
-import { TradeType } from '@Views/TradePage/type';
-import { getStrike } from '../../AccordionTable/Common';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { TradeType } from '@Views/TradePage/type';
+import { joinStrings } from '@Views/TradePage/utils';
+import styled from '@emotion/styled';
 import { useAtomValue } from 'jotai';
+import { getAddress } from 'viem';
+import { getStrike } from '../../AccordionTable/Common';
 import { Visualized } from '../../AccordionTable/Visualized';
-import NumberTooltip from '@Views/Common/Tooltips';
+import { CountDown } from './CountDown';
+import { DirectionChip } from './DirectionChip';
+import { OrderExpiry } from './QueuedChip';
+import { TradeActionButton } from './TradeActionButton';
+import { TradeDataView } from './TradeDataView';
+import { TradePoolChip } from './TradePoolChip';
+import { TradeTimeElapsed } from './TradeTimeElapsed';
+import { TradeTypeChip } from './TradeTypeChip';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -32,8 +34,11 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const { getPoolInfo } = usePoolInfo();
   const tradeMarket = trade.market;
   const cachedPrices = useAtomValue(queuets2priceAtom);
+  const readcalldata = useAtomValue(buyTradeDataAtom);
+  const maxOI = readcalldata.maxOIs[getAddress(trade.target_contract)];
+  const currentOI = readcalldata.currentOIs[getAddress(trade.target_contract)];
+  const { isPriceArrived } = getStrike(trade, cachedPrices, currentOI, maxOI);
   // console.log('timerTrade', trade, expiry);
-  const { isPriceArrived } = getStrike(trade, cachedPrices);
   const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
   if (!tradeMarket) return <>Error</>;
 

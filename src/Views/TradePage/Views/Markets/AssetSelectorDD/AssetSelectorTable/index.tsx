@@ -3,31 +3,31 @@ import Star from '@Public/ComponentSVGS/Star';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
+import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { TableHeader } from '@Views/Pro/Common/TableHead';
+import { ColumnGap } from '@Views/TradePage/Components/Column';
 import {
   marketData,
   useAssetTableFilters,
 } from '@Views/TradePage/Hooks/useAssetTableFilters';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useFavouriteMarkets } from '@Views/TradePage/Hooks/useFavouriteMarkets';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
+import { Payout } from '@Views/TradePage/Views/MarketChart/Payout';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import { ForexTimingsModalAtom, searchBarAtom } from '@Views/TradePage/atoms';
 import { AssetCategory } from '@Views/TradePage/type';
+import styled from '@emotion/styled';
 import { IconButton } from '@mui/material';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useMemo } from 'react';
-import { OneDayChange } from './OneDayChange';
-import styled from '@emotion/styled';
-import { ForexTimingsModalAtom, searchBarAtom } from '@Views/TradePage/atoms';
-import { ColumnGap } from '@Views/TradePage/Components/Column';
-import { CloseTag } from './CloseTag';
+import { useMemo } from 'react';
 import { getAddress } from 'viem';
-import { Payout } from '@Views/TradePage/Views/MarketChart/Payout';
-import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
+import { CloseTag } from './CloseTag';
+import { OneDayChange } from './OneDayChange';
 
 export const AssetSelectorTable: React.FC<{
   group?: string;
@@ -42,7 +42,7 @@ export const AssetSelectorTable: React.FC<{
   const isMobile = typeof group == 'string';
   const setForexTimingsModal = useSetAtom(ForexTimingsModalAtom);
   const { getPoolInfo } = usePoolInfo();
-  const readcallData = useBuyTradeData();
+  const readcallData = useAtomValue(buyTradeDataAtom);
 
   const headers = useMemo(() => {
     return [

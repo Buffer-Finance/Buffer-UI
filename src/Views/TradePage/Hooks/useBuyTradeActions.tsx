@@ -54,7 +54,7 @@ import { getUserError } from '../utils/getUserError';
 import { timeToMins } from '../utils/timeToMins';
 import { useActiveMarket } from './useActiveMarket';
 import { useApprvalAmount } from './useApprovalAmount';
-import { useBuyTradeData } from './useBuyTradeData';
+import { buyTradeDataAtom } from './useBuyTradeData';
 import { useSettlementFee } from './useSettlementFee';
 import { useSwitchPool } from './useSwitchPool';
 enum ArgIndex {
@@ -76,7 +76,7 @@ export const useBuyTradeActions = (userInput: string) => {
     useApprvalAmount();
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
-  const readcallData = useBuyTradeData();
+  const readcallData = useAtomValue(buyTradeDataAtom);
   const decimals = poolDetails?.decimals;
 
   const balance = divide(readcallData?.balance, decimals as number) as string;
@@ -127,6 +127,8 @@ export const useBuyTradeActions = (userInput: string) => {
     const minTradeAmount = switchPool?.min_fee ?? '0';
     const maxTradeAmount =
       readcallData?.maxTradeSizes[switchPool.optionContract] ?? '0';
+    const maxOI = readcallData?.maxOIs[switchPool.optionContract];
+    const currentOI = readcallData?.currentOIs[switchPool.optionContract];
 
     const platfromFee = divide(switchPool.platformFee, decimals as number);
 
@@ -140,7 +142,9 @@ export const useBuyTradeActions = (userInput: string) => {
       mindurationInMins === undefined ||
       minTradeAmount === undefined ||
       decimals === undefined ||
-      option_contract === undefined
+      option_contract === undefined ||
+      maxOI === undefined ||
+      currentOI === undefined
     ) {
       return toastify({
         type: 'error',
@@ -148,14 +152,7 @@ export const useBuyTradeActions = (userInput: string) => {
         id: 'PoolNotFound',
       });
     } else {
-      // if (state.txnLoading > 1) {
-      //   toastify({
-      //     id: '2321123',
-      //     type: 'error',
-      //     msg: 'Please confirm your previous pending transactions.',
-      //   });
-      //   return true;
-      // }
+      console.log('safeStrike execution starts');
       if (
         gt(
           settings.slippageTolerance.toString() || '0',
@@ -205,14 +202,18 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-
+      console.log('goes till here safeStrike');
       const safeStrike = getSafeStrike(
         Number(customTrade.strike),
         customTrade.is_up,
         switchPool.SpreadConfig1,
         switchPool.SpreadConfig2,
+        switchPool.SpreadFactor,
+        +currentOI,
+        +maxOI,
         switchPool.IV
       );
+      console.log(safeStrike, 'safeStrike');
       //calculate the difference between the strike and safe strike in percentage in positive
       const difference = Math.abs(
         ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100

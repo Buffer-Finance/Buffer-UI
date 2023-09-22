@@ -1,7 +1,8 @@
+import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
-import { AssetCategory, marketType } from '../type';
-import { useBuyTradeData } from './useBuyTradeData';
 import { getAddress } from 'viem';
+import { AssetCategory, marketType } from '../type';
+import { buyTradeDataAtom } from './useBuyTradeData';
 
 export const useIsMarketOpen = (
   market: marketType | undefined,
@@ -9,7 +10,7 @@ export const useIsMarketOpen = (
   selectedMarketContract: string | undefined
 ) => {
   // console.log('useIsMarketOpen', market, selectedMarketContract || '');
-  const readcallData = useBuyTradeData();
+  const readcallData = useAtomValue(buyTradeDataAtom);
   const isForex =
     market?.category === AssetCategory[AssetCategory.Forex] ||
     market?.category === AssetCategory[AssetCategory.Commodities];

@@ -32,6 +32,7 @@ import { toFixed } from '@Utils/NumString';
 import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
@@ -56,6 +57,7 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
+import { getAddress } from 'viem';
 import {
   getEarlyCloseStatus,
   getLockedAmount,
@@ -273,9 +275,11 @@ function drawPosition(
   },
   chart: IChartWidgetApi,
   decimals: number,
-  priceCache: any
+  priceCache: any,
+  currentOI: string,
+  maXOI: string
 ) {
-  const strike = getStrike(option, priceCache).strikePrice;
+  const strike = getStrike(option, priceCache, currentOI, maXOI).strikePrice;
   // const idx = visualized.indexOf(option.queue_id);
   console.log(strike, 'drawStrike');
   const openTimeStamp = option.open_timestamp;
@@ -710,6 +714,8 @@ export const MultiResolutionChart = ({
   };
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const rerenderPostion = useAtomValue(rerenderPositionAtom);
+  const readcalldata = useAtomValue(buyTradeDataAtom);
+
   const { changeStrike } = useLimitOrderHandlers();
   const changeStrikeSafe = (trade: TradeType, strike: string) => {
     if (!settings.loDragging) {
@@ -790,7 +796,9 @@ export const MultiResolutionChart = ({
               },
               widgetRef.current?.activeChart()!,
               getPoolInfo(pos.pool.pool).decimals,
-              priceCache
+              priceCache,
+              readcalldata.currentOIs[getAddress(pos.target_contract)],
+              readcalldata.maxOIs[getAddress(pos.target_contract)]
             ),
             option: pos,
           };

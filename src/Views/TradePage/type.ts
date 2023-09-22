@@ -19,6 +19,7 @@ export type poolType = {
   IVFactorITM: number;
   SpreadConfig1: number;
   SpreadConfig2: number;
+  SpreadFactor: number;
 };
 //type of markets needed on trade page
 export type marketType = {
@@ -96,6 +97,7 @@ export type responseObj = {
     IVFactorITM: string;
     SpreadConfig1: string;
     SpreadConfig2: string;
+    SpreadFactor: string;
   };
   routerContract: string;
   address: string;

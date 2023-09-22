@@ -3,7 +3,7 @@ import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
@@ -94,7 +94,8 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
-  const readcallData = useBuyTradeData();
+  const readcallData = useAtomValue(buyTradeDataAtom);
+  console.log('readcallData', readcallData);
   let maxFee = null;
   let maxOI = null;
   let currentOI = null;

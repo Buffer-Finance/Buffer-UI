@@ -1,4 +1,8 @@
+import { toFixed } from '@Utils/NumString';
+import { add, divide, gt } from '@Utils/NumString/stringArithmatics';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
+import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import {
   RowBetween,
   RowGap,
@@ -6,20 +10,15 @@ import {
   RowGapItemsTop,
 } from '@Views/TradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
-import styled from '@emotion/styled';
-import { WalletBalance, formatBalance } from './WalletBalance';
-import { TradeSizeInput } from './TradeSizeInput';
-import { add, divide, gt } from '@Utils/NumString/stringArithmatics';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { PoolDropdown } from './PoolDropdown';
-import { toFixed } from '@Utils/NumString';
-import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
-import { useAtomValue } from 'jotai';
 import { tradeSizeAtom } from '@Views/TradePage/atoms';
-import { useAccount } from 'wagmi';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import styled from '@emotion/styled';
+import { useAtomValue } from 'jotai';
 import { BuyUSDCLink } from '../BuyUsdcLink';
+import { PoolDropdown } from './PoolDropdown';
+import { TradeSizeInput } from './TradeSizeInput';
+import { WalletBalance, formatBalance } from './WalletBalance';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -30,7 +29,7 @@ export const TradeSizeSelector: React.FC<{
   onSubmit?: any;
 }> = ({ onSubmit }) => {
   const { switchPool, poolDetails } = useSwitchPool();
-  const readcallData = useBuyTradeData();
+  const readcallData = useAtomValue(buyTradeDataAtom);
   const { registeredOneCT } = useOneCTWallet();
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;

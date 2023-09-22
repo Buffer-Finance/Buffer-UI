@@ -3,7 +3,7 @@ import { getPriceFromKlines } from '@TV/useDataFeed';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import {
@@ -40,7 +40,7 @@ const BuyTradeBackground = styled.div`
 
 export const BuyTrade: React.FC = () => {
   const { switchPool, poolDetails } = useSwitchPool();
-  const readcallData = useBuyTradeData();
+  const readcallData = useAtomValue(buyTradeDataAtom);
   const { address } = useAccount();
   const { activeMarket } = useActiveMarket();
   // triggering rerender

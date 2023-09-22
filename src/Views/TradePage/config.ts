@@ -10,11 +10,11 @@ export const appConfig = {
           MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/api',
         },
 
-        booster: '0xBC2AC0ec1e6Fa9caA8789A72d273c3AeB2c1025b',
+        booster: '0x29952C608Bf41A8a36AFD937471691932055E7b5',
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
-        router: '0xca287b27fc1CD6B4a2B0d21788F3d5Ab4f2A9149',
+        router: '0x18d50aC65CED5F60Aa63eb358DB7BCF081529Ad5',
         signer_manager: '0xAAcAf779fdc0A7d8749Aa1FDc260a1C5Da5517B1',
-        config_setter: '0xaCB5591B331A38D01a415Ed78D58923a542ABd7b',
+        config_setter: '0x5C00a53A13F4c2818ce2D0f8759AcB07D0eB350b',
         v2_router: null,
         poolsInfo: {
           '0x4A53c47051FA44FE3A5D6d5cBCb1b7Bf8307E598': {
@@ -242,6 +242,7 @@ export const appConfig = {
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
     router: '0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4',
+    v2_router: null,
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
     poolsInfo: {
@@ -261,6 +262,7 @@ export const appConfig = {
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',
     router: '0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7',
+    v2_router: null,
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
     poolsInfo: {
