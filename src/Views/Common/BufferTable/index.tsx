@@ -178,9 +178,9 @@ const BufferTable: React.FC<IBufferTable> = ({
                     }`}
                     onClick={() => {
                       onRowClick(rowIdx);
-                      // if (!!accordianJSX) {
-                      //   toggleRowExpansion(rowIdx);
-                      // }
+                      if (!!accordianJSX) {
+                        toggleRowExpansion(rowIdx);
+                      }
                     }}
                   >
                     {createArray(cols).map((col, colIdx) => (
