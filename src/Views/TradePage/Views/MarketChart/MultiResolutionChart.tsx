@@ -851,7 +851,7 @@ export const MultiResolutionChart = ({
   useEffect(() => {
     console.log('[chart-useffect');
     const interval = setInterval(() => {
-      console.log('[chart-0 intervalcalled');
+      // console.log('[chart-0 intervalcalled');
       try {
         widgetRef.current?.save((d) => {
           setDrawing((drawing: any) => {
@@ -866,7 +866,7 @@ export const MultiResolutionChart = ({
       }
 
       try {
-        console.log('[chart-1', trade2visualisation.current);
+        // console.log('[chart-1', trade2visualisation.current);
         trade2visualisation.current.forEach((trade) => {
           const [isClosingDisabled, disableTooltip] = getEarlyCloseStatus(
             trade.option

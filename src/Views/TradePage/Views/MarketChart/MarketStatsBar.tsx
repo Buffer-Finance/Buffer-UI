@@ -95,7 +95,6 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
   const readcallData = useAtomValue(buyTradeDataAtom);
-  console.log('readcallData', readcallData);
   let maxFee = null;
   let maxOI = null;
   let currentOI = null;
