@@ -48,13 +48,14 @@
       "getter": "minPeriod",
       "hint": "in seconds"
     },
-    "setMinSafeStrikePercent": {
-      "getter": "minSafeStrikePercent",
-      "decimal": 2
+    "setSpreadConfig1": {
+      "getter": "spreadConfig1"
     },
-    "setMaxSafeStrikePercent": {
-      "getter": "maxSafeStrikePercent",
-      "decimal": 2
+    "setSpreadConfig2": {
+      "getter": "spreadConfig2"
+    },
+    "setSpreadFactor": {
+      "getter": "spreadFactor"
     }
   },
   "pool": {
