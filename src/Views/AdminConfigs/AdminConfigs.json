@@ -56,6 +56,12 @@
     },
     "setSpreadFactor": {
       "getter": "spreadFactor"
+    },
+    "setIVFactorITM": {
+      "getter": "ivFactorITM"
+    },
+    "setIVFactorOTM": {
+      "getter": "ivFactorOTM"
     }
   },
   "pool": {
