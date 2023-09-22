@@ -21,6 +21,7 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
 import { TradeType } from '@Views/TradePage/type';
 import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import { Launch } from '@mui/icons-material';
 import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { useMedia } from 'react-use';
@@ -263,7 +264,24 @@ const HistoryTable: React.FC<{
           </NumberTooltip>
         );
       case TableColumn.ShareOrAddress:
-        if (platform) return getSlicedUserAddress(trade.user_address, 4);
+        if (platform)
+          return (
+            <div className="flex items-center">
+              {getSlicedUserAddress(trade.user_address, 4)}
+              {!isNotMobile && (
+                <div
+                  role="button"
+                  onClick={() => {
+                    const userAddress = trade.user_address;
+                    if (!userAddress) return;
+                    navigateToProfile(userAddress);
+                  }}
+                >
+                  <Launch className="scale-75 mb-1" />
+                </div>
+              )}
+            </div>
+          );
         return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
     }
     return 'Unhandled Body';
@@ -408,8 +426,9 @@ const HistoryTable: React.FC<{
         if (isNotMobile) {
           const userAddress = trades?.[idx].user_address;
           if (!userAddress) return;
-          navigateToProfile(trades?.[idx].user_address);
-        } else setInspectTrade({ trade: trades?.[idx] });
+          navigateToProfile(userAddress);
+        }
+        // else setInspectTrade({ trade: trades?.[idx] });
       }}
       showOnly={onlyView}
       error={<TableErrorRow msg="No Trade History." />}
