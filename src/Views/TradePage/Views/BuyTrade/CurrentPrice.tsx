@@ -133,6 +133,7 @@ export const LimitOrderPayoutPicker: React.FC<{
 }> = ({ className = '', activePayout, setActivePayout }) => {
   const [shouldShowEdit, setShouldShowEdit] = useState(false);
   const payouts = ['60', '70'];
+  const error = limitOrderPayoutError(activePayout);
 
   function handlePayoutClick(payout: string) {
     setActivePayout(payout);
@@ -149,56 +150,66 @@ export const LimitOrderPayoutPicker: React.FC<{
   }, []);
 
   return (
-    <div className="flex gap-4 mt-3">
-      <div className="text-[#808191] text-f12">Payout</div>
-      <div className="flex gap-2 items-stretch">
-        {payouts.map((payout) => {
-          const isActive = activePayout == payout;
-          return (
+    <div>
+      <div className="flex gap-4 mt-3">
+        <div className="text-[#808191] text-f12">Payout</div>
+        <div className="flex gap-2 items-stretch">
+          {payouts.map((payout) => {
+            const isActive = activePayout == payout;
+            return (
+              <button
+                onClick={() => handlePayoutClick(payout)}
+                key={payout}
+                className={`text-f10 px-[6px] py-[3px] rounded-[2px] ${
+                  isActive
+                    ? 'bg-[#3772FF] text-1'
+                    : 'bg-[#282B39] text-[#C3C2D4]'
+                }`}
+              >
+                Above {payout}%
+              </button>
+            );
+          })}
+          {shouldShowEdit ? (
+            <div className="relative w-[30%]">
+              <input
+                type="text"
+                pattern="^[0-9]*[.,]?[0-9]*$"
+                inputMode="decimal"
+                autoCorrect="off"
+                className={`${
+                  shouldShowEdit ? 'border border-[#3772FF]' : ''
+                } bg-[#282B39] w-full h-full ${className} !text-left px-2 rounded-[2px] outline-none`}
+                value={activePayout}
+                placeholder="Enter "
+                onChange={(e) => {
+                  if (inputRegex.test(escapeRegExp(e.target.value)))
+                    setActivePayout(e.target.value);
+                }}
+              />
+              <EditIconSVG className="absolute right-1 top-[0] bottom-[0] scale-[70%]" />
+            </div>
+          ) : (
             <button
-              onClick={() => handlePayoutClick(payout)}
-              key={payout}
-              className={`text-f10 px-[6px] py-[3px] rounded-[2px] ${
-                isActive ? 'bg-[#3772FF] text-1' : 'bg-[#282B39] text-[#C3C2D4]'
-              }`}
+              className="rounded-[2px] bg-[#282B39]"
+              onClick={handleShouldShowEditClick}
             >
-              Above {payout}%
+              <EditIconSVG />
             </button>
-          );
-        })}
-        {shouldShowEdit ? (
-          <div className="relative w-[30%]">
-            <input
-              type="text"
-              pattern="^[0-9]*[.,]?[0-9]*$"
-              inputMode="decimal"
-              autoCorrect="off"
-              className={`${
-                shouldShowEdit ? 'border border-[#3772FF]' : ''
-              } bg-[#282B39] w-full h-full ${className} !text-left px-2 rounded-[2px] outline-none`}
-              value={activePayout}
-              placeholder="Enter "
-              onChange={(e) => {
-                // console.log(e.target.value, 'e.target.value');
-                if (gt(e.target.value || '0', '100')) {
-                  return;
-                }
-
-                if (inputRegex.test(escapeRegExp(e.target.value)))
-                  setActivePayout(e.target.value);
-              }}
-            />
-            <EditIconSVG className="absolute right-1 top-[0] bottom-[0] scale-[70%]" />
-          </div>
-        ) : (
-          <button
-            className="rounded-[2px] bg-[#282B39]"
-            onClick={handleShouldShowEditClick}
-          >
-            <EditIconSVG />
-          </button>
-        )}
+          )}
+        </div>
       </div>
+      {error !== null && <div className="text-red mt-1">{error}</div>}
     </div>
   );
 };
+
+export function limitOrderPayoutError(activePayout: string): string | null {
+  if (activePayout.includes('-')) {
+    return 'Payout cannot be negative';
+  }
+  if (gt(activePayout || '0', '90')) {
+    return 'Payout cannot be greater than 90%';
+  }
+  return null;
+}

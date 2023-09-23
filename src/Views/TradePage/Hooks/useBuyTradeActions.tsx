@@ -30,6 +30,7 @@ import { PublicClient } from 'viem';
 import { useAccount, usePublicClient } from 'wagmi';
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
+import { limitOrderPayoutError } from '../Views/BuyTrade/CurrentPrice';
 import {
   LimitOrderPayoutAtom,
   approveModalAtom,
@@ -152,7 +153,17 @@ export const useBuyTradeActions = (userInput: string) => {
         id: 'PoolNotFound',
       });
     } else {
-      console.log('safeStrike execution starts');
+      if (customTrade.limitOrderExpiry) {
+        const error = limitOrderPayoutError(limitOrderPayout);
+        if (error !== null) {
+          return toastify({
+            type: 'error',
+            msg: error,
+            id: 'binaryBuy',
+          });
+        }
+      }
+
       if (
         gt(
           settings.slippageTolerance.toString() || '0',
@@ -202,7 +213,6 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      console.log('goes till here safeStrike');
       const safeStrike = getSafeStrike(
         Number(customTrade.strike),
         customTrade.is_up,
@@ -213,8 +223,6 @@ export const useBuyTradeActions = (userInput: string) => {
         +maxOI,
         switchPool.IV
       );
-      console.log(safeStrike, 'safeStrike');
-      //calculate the difference between the strike and safe strike in percentage in positive
       const difference = Math.abs(
         ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
       );
