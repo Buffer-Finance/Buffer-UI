@@ -11,10 +11,13 @@ export const useCurrentPrice = ({
   token0,
   token1,
 }: {
-  token0: string;
-  token1: string;
+  token0?: string;
+  token1?: string;
 }) => {
   const marketPrice = useAtomValue(priceAtom);
+  if (!token0 || !token1) {
+    return { currentPrice: 0, precision: 0 };
+  }
   const marketId = joinStrings(token0, token1, '');
   const activeChartMarket =
     marketsForChart[marketId as keyof typeof marketsForChart];

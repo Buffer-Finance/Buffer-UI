@@ -4,10 +4,12 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
+import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
 import { getMinimumValue, joinStrings } from '@Views/TradePage/utils';
+import { getMaxSpread } from '@Views/TradePage/utils/getSafeStrike';
 import {
   ClickEvent,
   ControlledMenu,
@@ -16,7 +18,7 @@ import {
   useMenuState,
 } from '@szhsin/react-menu';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { SVGProps, useRef } from 'react';
+import React, { SVGProps, useRef } from 'react';
 import { CurrentPrice } from '../BuyTrade/ActiveTrades/CurrentPrice';
 import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
 import { MarketSelectorDD } from './MarketSelectorDD';
@@ -95,14 +97,19 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
   const readcallData = useAtomValue(buyTradeDataAtom);
+  const { currentPrice } = useCurrentPrice({
+    token0: activeMarket?.token0,
+    token1: activeMarket?.token1,
+  });
   let maxFee = null;
   let maxOI = null;
   let currentOI = null;
   let currentOIinPercent = null;
+  let spread = null;
 
   const assetPrices = usePriceChange();
   // console.log('assetPrices', assetPrices);
-  if (readcallData && switchPool && poolDetails) {
+  if (readcallData && switchPool && poolDetails && activeMarket) {
     maxFee = divide(
       readcallData?.maxTradeSizes[switchPool?.optionContract] ?? '0',
       poolDetails.decimals
@@ -122,9 +129,19 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
         '100'
       )
     );
+
+    spread =
+      (currentPrice *
+        getMaxSpread(
+          switchPool.SpreadConfig1,
+          switchPool.SpreadConfig2,
+          switchPool.SpreadFactor,
+          switchPool.IV
+        )) /
+      1e8;
   }
 
-  if (!activeMarket) {
+  if (!activeMarket || !switchPool) {
     return <></>;
   }
 
@@ -160,20 +177,16 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
         />
       ),
     },
-    // {
-    //   header: 'Current OI',
-    //   data: (
-    //     <Display data={currentOI} unit={poolDetails?.token} precision={2} />
-    //   ),
-    // },
-    // {
-    //   header: 'Up Payout',
-    //   data: <div>{payout}%</div>,
-    // },
-    // {
-    //   header: 'Down Payout',
-    //   data: <div>{payout}%</div>,
-    // },
+
+    {
+      header: 'Max Spread',
+      data: (
+        <div className="flex items-center gap-1">
+          <PlusMinus svgProps={{ fill: '#ffffff' }} className="scale-75 mt-1" />
+          <Display data={spread} precision={2} />
+        </div>
+      ),
+    },
     {
       header: 'Payout',
       data: (
@@ -328,3 +341,24 @@ const FourRectanglesSVG = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 export default FourRectanglesSVG;
+
+export const PlusMinus = ({
+  className = '',
+  svgProps,
+}: {
+  svgProps: React.SVGProps<SVGSVGElement>;
+  className?: string;
+}) => {
+  console.log(className, 'svgProps');
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="1em"
+      viewBox="0 0 384 512"
+      {...svgProps}
+      className={className}
+    >
+      <path d="M224 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H160V320c0 17.7 14.3 32 32 32s32-14.3 32-32V208H336c17.7 0 32-14.3 32-32s-14.3-32-32-32H224V32zM0 480c0 17.7 14.3 32 32 32H352c17.7 0 32-14.3 32-32s-14.3-32-32-32H32c-17.7 0-32 14.3-32 32z" />
+    </svg>
+  );
+};
