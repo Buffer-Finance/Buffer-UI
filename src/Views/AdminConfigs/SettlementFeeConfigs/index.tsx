@@ -1,0 +1,86 @@
+import { useToast } from '@Contexts/Toast';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { getSingatureCached } from '@Views/TradePage/cache';
+import { baseUrl } from '@Views/TradePage/config';
+import axios from 'axios';
+import { useAtomValue } from 'jotai';
+import { useAccount } from 'wagmi';
+import { AddMarket } from './AddMarket';
+import { Market } from './Market';
+import { SettlementFeesChangedConfigAtom } from './store';
+import { IMarketConstant } from './types';
+import { useAdminMarketConstants } from './useAdminMarketConstants';
+
+export const SettlementFeeConfigs: React.FC<any> = ({}) => {
+  const { data, error } = useAdminMarketConstants();
+  const editedValues = useAtomValue(SettlementFeesChangedConfigAtom);
+  const { activeChain } = useActiveChain();
+  const toastify = useToast();
+  const { address } = useAccount();
+  const { address: userAddress } = useUserAccount();
+  const { oneCTWallet } = useOneCTWallet();
+
+  async function submitConfig() {
+    try {
+      if (data === undefined) throw new Error('No data found');
+      if (!activeChain) throw new Error('Chain not found');
+      if (!address) throw new Error('Wallet not connected.');
+      if (editedValues === null) throw new Error('No changes made');
+      if (!oneCTWallet) throw new Error('One CT Wallet not found');
+
+      let api_signature = null;
+      if (userAddress === address)
+        api_signature = await getSingatureCached(oneCTWallet);
+
+      const updatedConfig = data.markets;
+      Object.entries(editedValues).map(([marketName, changedData]) => {
+        Object.entries(changedData).map(([key, value]) => {
+          if (updatedConfig[marketName] === undefined)
+            updatedConfig[marketName] = {} as IMarketConstant;
+          updatedConfig[marketName][key as keyof IMarketConstant] = value;
+        });
+      });
+
+      const res = await axios.post(
+        baseUrl + 'admin/update/market_constants',
+        updatedConfig,
+        { params: { enviroment: activeChain.id, api_signature } }
+      );
+
+      console.log(res, 'res');
+      toastify({
+        msg: 'Market updated successfully',
+        type: 'success',
+        id: 'market-updated',
+      });
+    } catch (e) {
+      toastify({
+        msg: 'Error in updating market. ' + (e as Error).message,
+        type: 'error',
+        id: 'error-updating-market',
+      });
+    }
+  }
+
+  if (data === undefined) return <div>Fetching Markets...</div>;
+  if (error) return <div>Error Fetching Markets</div>;
+
+  return (
+    <div className="mx-[20px]">
+      <AddMarket />
+      <div className="flex flex-col gap-4  mt-4">
+        {Object.entries(data.markets).map(([name, market]) => (
+          <Market market={market} name={name} />
+        ))}
+      </div>
+      <button
+        onClick={submitConfig}
+        className="text-f14 mt-4 px-3 py-2 rounded bg-3"
+      >
+        Submit
+      </button>
+    </div>
+  );
+};

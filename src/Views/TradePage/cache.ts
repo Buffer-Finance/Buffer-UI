@@ -1,4 +1,3 @@
-import { Wallet } from 'ethers';
 import { PrivateKeyAccount } from 'viem';
 var address2SingatureCache: { [key: string]: string } = {};
 

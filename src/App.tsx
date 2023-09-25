@@ -42,7 +42,6 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { Test } from './test';
-import { GrantRole } from './Admin/GrantRole';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -112,8 +111,7 @@ const AppRoutes = () => {
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
         <Route path="/history" element={<TradeLog_sm />} />
-        <Route path="/admin" element={<AdminConfig />}></Route>
-        <Route path="/role-management" element={<GrantRole />} />
+        <Route path="/admin" element={<AdminConfig />} />
 
         <Route
           path="/ref/:refcode"
