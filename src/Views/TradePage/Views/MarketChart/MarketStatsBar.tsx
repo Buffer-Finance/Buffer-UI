@@ -108,7 +108,6 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   let spread = null;
 
   const assetPrices = usePriceChange();
-  // console.log('assetPrices', assetPrices);
   if (readcallData && switchPool && poolDetails && activeMarket) {
     maxFee = divide(
       readcallData?.maxTradeSizes[switchPool?.optionContract] ?? '0',
@@ -349,7 +348,6 @@ export const PlusMinus = ({
   svgProps: React.SVGProps<SVGSVGElement>;
   className?: string;
 }) => {
-  console.log(className, 'svgProps');
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
