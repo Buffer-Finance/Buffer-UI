@@ -34,7 +34,6 @@ function getSpread(
   const m = Math.floor((spreadConfig2 - spreadConfig1) / 1350);
   const c = Math.floor((22 * spreadConfig1 - 5 * spreadConfig2) / 27);
   let spread = m * iv + c;
-  console.log(spread, 'getMaxSpread');
   spread =
     Math.floor((spread * spreadFactor * totalMarketOI) / (1e3 * getMaxOI)) +
     spread;
@@ -48,13 +47,5 @@ export function getMaxSpread(
   spreadFactor: number,
   iv: number
 ) {
-  console.log(
-    'getMaxSpread',
-    spreadConfig1,
-    spreadConfig2,
-    spreadFactor,
-    iv,
-    getSpread(spreadConfig1, spreadConfig2, spreadFactor, iv)
-  );
   return getSpread(spreadConfig1, spreadConfig2, spreadFactor, iv);
 }
