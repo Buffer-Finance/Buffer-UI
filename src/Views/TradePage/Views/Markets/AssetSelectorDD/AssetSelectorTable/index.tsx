@@ -7,7 +7,7 @@ import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
-import { TableHeader } from '@Views/Pro/Common/TableHead';
+import { TableHeader } from '@Views/Common/TableHead';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import {
   marketData,

@@ -1,18 +1,18 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { FavouriteAtom, mobileUpperBound } from '@Views/BinaryOptions';
+import { useFavouritesFns } from '@Views/BinaryOptions/Hooks/useFavouritesFns';
+import BufferTable from '@Views/Common/BufferTable';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
+import { TableHeader } from '@Views/Common/TableHead';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import { getV3AppFilteredAssets } from '@Views/V3App/Utils/getFilteredAssets';
 import { IconButton } from '@mui/material';
 import { useAtom } from 'jotai';
 import Star from 'public/ComponentSVGS/Star';
 import { useMemo } from 'react';
-import BufferTable from '@Views/Common/BufferTable';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
-import { TableHeader } from '@Views/Pro/Common/TableHead';
-import { FavouriteAtom, mobileUpperBound } from '@Views/BinaryOptions';
-import { useFavouritesFns } from '@Views/BinaryOptions/Hooks/useFavouritesFns';
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { MarketInterface } from 'src/MultiChart';
-import { getV3AppFilteredAssets } from '@Views/V3App/Utils/getFilteredAssets';
 
 export const AssetTable: React.FC<{
   assetsArray: MarketInterface[];

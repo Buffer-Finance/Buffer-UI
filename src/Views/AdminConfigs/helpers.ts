@@ -9,6 +9,7 @@ import OptionAbi from '@Views/TradePage/ABIs/OptionContract.json';
 import RouterAbi from '@Views/TradePage/ABIs/RouterABI.json';
 import { appConfig } from '@Views/TradePage/config';
 import { marketType, poolType } from '@Views/TradePage/type';
+import { ethers } from 'ethers';
 import { Chain } from 'wagmi';
 export const group2abi = {
   router: RouterAbi,
@@ -61,6 +62,23 @@ type RawConfig = {
   getter: string;
   decimal?: number;
 };
+
+export function generateTransactionData(
+  contractAddress: string,
+  contractABI: any[],
+  functionName: string,
+  functionParameters: any[]
+) {
+  const providerUrl =
+    'https://eth-goerli.g.alchemy.com/v2/Dn8U2J-wzWwQM3EqLryCVFloK9H8OY5q';
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  const contract = new ethers.Contract(contractAddress, contractABI, provider);
+
+  return contract.interface.encodeFunctionData(
+    functionName,
+    functionParameters
+  );
+}
 
 export const raw2adminConfig = (
   marketConfig: marketType[] | null,

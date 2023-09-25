@@ -1,31 +1,30 @@
-import React, { useMemo } from 'react';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { toFixed } from '@Utils/NumString';
+import { divide, gte, multiply } from '@Utils/NumString/stringArithmatics';
 import BufferTable, {
   BufferTableCell,
   BufferTableRow,
 } from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
+import { TableHeader } from '@Views/Common/TableHead';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { TableHeader } from '@Views/Pro/Common/TableHead';
-import { ILeague } from '../interfaces';
-import { LeaderBoardTableStyles } from './stlye';
-import { DailyMobileTable } from './DailyMobileTable';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { divide, gt, gte, multiply } from '@Utils/NumString/stringArithmatics';
-import { Rank } from '../Components/Rank';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Launch } from '@mui/icons-material';
-import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { TableAligner } from '../Components/TableAligner';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { toFixed } from '@Utils/NumString';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { Launch } from '@mui/icons-material';
+import React, { useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Rank } from '../Components/Rank';
+import { TableAligner } from '../Components/TableAligner';
+import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
+import { ILeague } from '../interfaces';
+import { DailyMobileTable } from './DailyMobileTable';
+import { LeaderBoardTableStyles } from './stlye';
 
 export const DailyWebTable: React.FC<{
   standings: ILeague[] | IWinrate[] | undefined;

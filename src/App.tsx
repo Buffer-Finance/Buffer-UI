@@ -28,6 +28,7 @@ import IbfrFaucet from '@Views/Faucet';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { ProfilePage } from '@Views/Profile';
 import { ReferralPage } from '@Views/Referral';
+import { Test } from '@Views/Test';
 import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 import { defaultMarket } from '@Views/TradePage/config';
@@ -41,7 +42,6 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
-import { Test } from './test';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';

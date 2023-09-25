@@ -1,12 +1,11 @@
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
-import { generateTransactionData } from '@Views/Safe/SafeApp';
 import { ResetSVG } from '@Views/TradePage/Components/ResetSVG';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { safeTxnsAtom } from './AdminConfig';
-import { Config, group2abi } from './helpers';
+import { Config, generateTransactionData, group2abi } from './helpers';
 
 const ConfigRow: React.FC<any> = ({
   config,
@@ -20,7 +19,6 @@ const ConfigRow: React.FC<any> = ({
   const [value, setValue] = useState(
     data?.[config.contract + config.getter?.name]?.[0]
   );
-  // console.log(`ConfigRow-value: `, value);
   const [showIp, setShowIp] = useState(false);
   const { writeCall } = useWriteCall(config.contract, group2abi[config.group]);
   const text = config.getter?.name;
@@ -28,28 +26,23 @@ const ConfigRow: React.FC<any> = ({
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1) + ' :';
   const isChanged = data?.[config.contract + config.getter?.name]?.[0] != value;
   const [safeTxnBatch, editSafeTxnsBatch] = useAtom(safeTxnsAtom);
-  console.log(`ConfigRow-safeTxnBatch: `, safeTxnBatch);
+
   const isInBatch = safeTxnBatch.find(
     (a) => a.id == config.contract + config.setter.name
   );
-  console.log(`ConfigRow-isInBatche-p: `, isInBatch);
 
   useEffect(() => {
-    console.log(`ConfigRow-isInBatche: `, isInBatch);
-
     if (isInBatch) {
       setShowIp(true);
       setTimeout(() => {
-        setValue((v) => isInBatch.prevvalue);
+        setValue(isInBatch.prevvalue);
       });
-      console.log(`ConfigRow-isInBatch.prevvalue: `, isInBatch.prevvalue);
     }
   }, []);
   function addToBatch() {
-    console.log('to-add', value);
     let valueArr = [value];
+    console.log(config.setter.op);
     if (config.getter.op?.[0].type.includes(['['])) {
-      console.log('to-add-array');
       valueArr = [value.split(',')];
     }
     if (config.setter.ip.length == 0) {
@@ -128,7 +121,7 @@ const ConfigRow: React.FC<any> = ({
       },
       config.setter.name,
       value,
-      null,
+      undefined,
       null,
       null
     );
@@ -161,7 +154,6 @@ const ConfigRow: React.FC<any> = ({
               className="scale-50"
               checked={isInBatch ? true : false}
               onCheckChange={() => {
-                console.log(isInBatch);
                 if (isInBatch) {
                   removeFromBatch();
                 } else {
@@ -192,7 +184,6 @@ const ConfigRow: React.FC<any> = ({
           e.preventDefault();
           // single value
           let val = [value];
-          console.log(`ConfigRow-value: `, value);
 
           // array
           if (value.includes(',')) {
@@ -242,7 +233,6 @@ const ConfigRow: React.FC<any> = ({
             className="scale-50"
             checked={isInBatch ? true : false}
             onCheckChange={() => {
-              console.log(isInBatch);
               if (isInBatch) {
                 removeFromBatch();
               } else {

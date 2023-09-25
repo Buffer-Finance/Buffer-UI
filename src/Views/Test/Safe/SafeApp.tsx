@@ -1,28 +1,9 @@
+import { generateTransactionData } from '@Views/AdminConfigs/helpers';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useSafeAppsSDK } from '@safe-global/safe-apps-react-sdk';
-import { ethers } from 'ethers';
 import { useCallback } from 'react';
 import counterABI from './TestABis/counter.json';
 import messageABI from './TestABis/message.json';
-
-export function generateTransactionData(
-  contractAddress: string,
-  contractABI: any[],
-  functionName: string,
-  functionParameters: any[]
-) {
-  const providerUrl =
-    'https://eth-goerli.g.alchemy.com/v2/Dn8U2J-wzWwQM3EqLryCVFloK9H8OY5q';
-  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
-  const contract = new ethers.Contract(contractAddress, contractABI, provider);
-
-  return contract.interface.encodeFunctionData(
-    functionName,
-    functionParameters
-  );
-
-  // Encode the function call with the provided parameters
-}
 
 const SafeApp = () => {
   const { sdk, safe } = useSafeAppsSDK();
