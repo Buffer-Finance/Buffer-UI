@@ -80,17 +80,13 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/version/v2.5.8-new-contracts-2/api',
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0xff37eCD6cD32ce9caC75D3EFb434CAc6d63300B1',
-        router: '0xffA2ad9fDaCECC15BE8C41009f61F7760a299092',
-        creation_window: {
-          '0': '0x4A24CecEa9Ca0781293e772bcA486d58912110b3',
-          '2': '0x856c2e996d2bE8EdebEE2fA4DABEE62299bc84a2',
-        },
+        router: '0xB52b89281Bff5D1d79Bc4F4181d08A6989201531',
         signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
-        booster: '0x59a73017E755c13037914a4D95Ec5E7b09879631',
+        booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
         v2_router: '0x76c52E83d7dcCc70107a66BAd44D042D22D06be7',
         poolsInfo: {
