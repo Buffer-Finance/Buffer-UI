@@ -47,6 +47,8 @@ const OneCTModal: React.FC<any> = ({}) => {
           <Features />
 
           <RegistrationStageCard
+            heading="Create your account"
+            description="Sign using a web 3 wallet"
             completeName="Created"
             initialName="Create"
             isLoading={createLoading}
@@ -65,6 +67,8 @@ const OneCTModal: React.FC<any> = ({}) => {
           />
 
           <RegistrationStageCard
+            description="No gas required "
+            heading="Register your account"
             completeName="Registered"
             initialName="Register"
             isLoading={registrationLaoding}
