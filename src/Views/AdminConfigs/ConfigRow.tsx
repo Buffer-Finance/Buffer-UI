@@ -1,12 +1,12 @@
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import BufferCheckbox from '@Views/Common/BufferCheckbox';
 import { generateTransactionData } from '@Views/Safe/SafeApp';
 import { ResetSVG } from '@Views/TradePage/Components/ResetSVG';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { safeTxnsAtom } from './AdminConfig';
 import { Config, group2abi } from './helpers';
-import BufferCheckbox from '@Views/Common/BufferCheckbox';
 
 const ConfigRow: React.FC<any> = ({
   config,
@@ -182,7 +182,7 @@ const ConfigRow: React.FC<any> = ({
   }, [value]);
   return (
     <div
-      className={`flex items-center  bg-2 rounded-[5px] p-2  w-full px-4 py-2 ${
+      className={`flex items-center text-f14 bg-2 rounded-[5px] p-2  w-full px-4 py-2 ${
         hideString && (isCurrentConfigSearched() ? '' : 'hidden')
       }`}
     >
