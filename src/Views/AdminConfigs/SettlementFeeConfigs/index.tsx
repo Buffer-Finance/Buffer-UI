@@ -2,7 +2,7 @@ import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { getSingatureCached } from '@Views/TradePage/cache';
+import { getSignatureFromAddress } from '@Views/TradePage/cache';
 import { baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
 import { useAtomValue } from 'jotai';
@@ -14,7 +14,7 @@ import { IMarketConstant } from './types';
 import { useAdminMarketConstants } from './useAdminMarketConstants';
 
 export const SettlementFeeConfigs: React.FC<any> = ({}) => {
-  const { data, error } = useAdminMarketConstants();
+  const { data, error, mutate } = useAdminMarketConstants();
   const editedValues = useAtomValue(SettlementFeesChangedConfigAtom);
   const { activeChain } = useActiveChain();
   const toastify = useToast();
@@ -32,7 +32,9 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
 
       let api_signature = null;
       if (userAddress === address)
-        api_signature = await getSingatureCached(oneCTWallet);
+        api_signature = await getSignatureFromAddress(activeChain, address);
+
+      if (api_signature === null) throw new Error('Error generating signature');
 
       const updatedConfig = data.markets;
       Object.entries(editedValues).map(([marketName, changedData]) => {
@@ -44,11 +46,18 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
       });
 
       const res = await axios.post(
-        baseUrl + 'admin/update/market_constants',
+        baseUrl + 'admin/update/market_constants/',
         updatedConfig,
-        { params: { enviroment: activeChain.id, api_signature } }
+        {
+          params: {
+            environment: activeChain.id,
+            api_signature,
+            start_time: data.start_time,
+          },
+        }
       );
 
+      await mutate();
       console.log(res, 'res');
       toastify({
         msg: 'Market updated successfully',

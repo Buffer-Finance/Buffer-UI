@@ -1,4 +1,6 @@
-import { PrivateKeyAccount } from 'viem';
+import { PrivateKeyAccount, createWalletClient, custom } from 'viem';
+import { Chain } from 'wagmi';
+
 var address2SingatureCache: { [key: string]: string } = {};
 
 export const getSingatureCached = async (
@@ -13,4 +15,24 @@ export const getSingatureCached = async (
     );
   }
   return address2SingatureCache[oneCTWallet.address];
+};
+
+export const getSignatureFromAddress = async (
+  activeChain: Chain,
+  userAddress: `0x${string}`
+) => {
+  if (!address2SingatureCache[userAddress]) {
+    if (!window.ethereum) return null;
+    const walletClient = createWalletClient({
+      chain: activeChain,
+      transport: custom(window.ethereum),
+    });
+
+    address2SingatureCache[userAddress] = await walletClient.signMessage({
+      account: userAddress,
+
+      message: import.meta.env.VITE_SIGN_MESSAGE,
+    });
+  }
+  return address2SingatureCache[userAddress];
 };

@@ -2,11 +2,12 @@ import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { getSingatureCached } from '@Views/TradePage/cache';
+import { getSignatureFromAddress } from '@Views/TradePage/cache';
 import { baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
 import { useAccount } from 'wagmi';
 import { IMarketConstant } from '../types';
+import { useAdminMarketConstants } from '../useAdminMarketConstants';
 import { EditField } from './EditField';
 
 export const Market: React.FC<{ market: IMarketConstant; name: string }> = ({
@@ -18,6 +19,7 @@ export const Market: React.FC<{ market: IMarketConstant; name: string }> = ({
   const { address: userAddress } = useUserAccount();
   const { oneCTWallet } = useOneCTWallet();
   const toastify = useToast();
+  const { mutate } = useAdminMarketConstants();
 
   async function deleteMarket() {
     try {
@@ -26,17 +28,21 @@ export const Market: React.FC<{ market: IMarketConstant; name: string }> = ({
 
       let api_signature = null;
       if (userAddress === address)
-        api_signature = await getSingatureCached(oneCTWallet);
+        api_signature = await getSignatureFromAddress(activeChain, address);
+
+      if (api_signature === null) throw new Error('Error generating signature');
+
       const res = await axios.post(
-        baseUrl + 'admin/remove/market_constant_pair',
+        baseUrl + 'admin/remove/market_constant_pair/',
         [name],
         {
           params: {
-            enviroment: activeChain.id,
+            environment: activeChain.id,
             api_signature,
           },
         }
       );
+      await mutate();
       console.log(res, 'res');
       toastify({
         msg: 'Market deleted successfully',
