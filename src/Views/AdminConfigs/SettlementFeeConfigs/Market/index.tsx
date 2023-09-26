@@ -42,7 +42,7 @@ export const Market: React.FC<{ market: IMarketConstant; name: string }> = ({
       await mutate();
       console.log(res, 'res');
       toastify({
-        msg: 'Market deleted successfully',
+        msg: 'Market deleted successfully. ' + res.data.message,
         type: 'success',
         id: 'market-deleted',
       });

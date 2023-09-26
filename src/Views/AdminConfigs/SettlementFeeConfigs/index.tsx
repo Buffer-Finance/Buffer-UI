@@ -62,7 +62,7 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
       await mutate();
       console.log(res, 'res');
       toastify({
-        msg: 'Market updated successfully',
+        msg: 'Market updated successfully ' + res.data.message,
         type: 'success',
         id: 'market-updated',
       });
