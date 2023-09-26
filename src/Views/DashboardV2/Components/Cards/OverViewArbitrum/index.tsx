@@ -1,25 +1,24 @@
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useArbitrumOverview } from '@Views/DashboardV2/hooks/useArbitrumOverview';
+import { useOpenInterest } from '@Views/DashboardV2/hooks/useOpenInterest';
 import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
 import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 import { useMemo } from 'react';
-import TotalTrades from './TotalTrades';
 import AverageTradeSize from './AverageTradeSize';
 import AverageVolume from './AverageVolume';
 import LastDayFeesVolume from './LastDayFeesVolume';
 import TotalFeesVolume from './TotalFeesVolume';
-import { useOpenInterest } from '@Views/DashboardV2/hooks/useOpenInterest';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import TotalTrades from './TotalTrades';
 
 export const OverviewArbitrum = () => {
   const { overView: data } = useArbitrumOverview();
   const { openInterestByPool } = useOpenInterest();
   const poolsByAsset = usePoolByAsset();
-  // console.log(data, 'data');
 
   const { poolDisplayKeyMapping, poolDisplayNameMapping } =
     usePoolDisplayNames();
@@ -35,7 +34,6 @@ export const OverviewArbitrum = () => {
 
   if (!data || Object.keys(data.totalStats).length === 0)
     return <Skeleton className="!transform-none !h-full min-h-[190px] !bg-1" />;
-  console.log(data, 'data');
   return (
     <Card
       top={'Trading Overview'}

@@ -250,7 +250,6 @@ export const OngoingTradesTable: React.FC<{
             trade.pool.IVFactorITM,
             trade.pool.IVFactorOTM
           ) / 1e4;
-        console.log(IV, 'IV');
         const probabiliyt = getProbability(
           trade,
           +getPriceFromKlines(marketPrice, trade.market),

@@ -1,17 +1,16 @@
-import { useMemo } from 'react';
-import { useGraphqlRequest } from './useGraphqlRequest';
 import {
   arbitrumOverview,
   toalTokenXstats,
   tokenX24hrsStats,
 } from '@Views/DashboardV2/types';
-import { getTotalStats } from './getTotalStats';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useMemo } from 'react';
 import { get24hrsStats } from './get24hrsStats';
+import { getTotalStats } from './getTotalStats';
+import { useGraphqlRequest } from './useGraphqlRequest';
 
 export const useArbitrumOverview = () => {
   const { data, error } = useGraphqlRequest();
-  console.log('data', data);
   const decimalsByName = useDecimalsByAsset();
 
   const stats = useMemo(() => {

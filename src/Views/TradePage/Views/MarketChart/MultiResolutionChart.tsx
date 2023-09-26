@@ -281,7 +281,7 @@ function drawPosition(
 ) {
   const strike = getStrike(option, priceCache, currentOI, maXOI).strikePrice;
   // const idx = visualized.indexOf(option.queue_id);
-  console.log(strike, 'drawStrike');
+  // console.log(strike, 'drawStrike');
   const openTimeStamp = option.open_timestamp;
   const optionPrice = +strike / PRICE_DECIMALS;
   let color = !option.is_above ? defaults.red : defaults.green;
@@ -292,12 +292,12 @@ function drawPosition(
       option.pending_operation == 'Processing EDIT'
         ? 'Modifying Limit Order'
         : null;
-    console.log(
-      `MultiResolutionChart-processing: `,
-      processing,
-      option.queue_id,
-      option.pending_operation
-    );
+    // console.log(
+    //   `MultiResolutionChart-processing: `,
+    //   processing,
+    //   option.queue_id,
+    //   option.pending_operation
+    // );
 
     return chart
       ?.createOrderLine()
@@ -318,7 +318,7 @@ function drawPosition(
       .setLineColor(color)
       .onMove('move', function () {
         this.setText('Processing EDIT');
-        console.log(`MultiResolutionChart-Processing EDIT: `);
+        // console.log(`MultiResolutionChart-Processing EDIT: `);
         loHandlers.onMove(option, this.getPrice());
       })
       .setModifyTooltip('click to edit order')
@@ -849,7 +849,6 @@ export const MultiResolutionChart = ({
     }
   }, [market2resolution, chartReady]);
   useEffect(() => {
-    console.log('[chart-useffect');
     const interval = setInterval(() => {
       // console.log('[chart-0 intervalcalled');
       try {
@@ -880,7 +879,7 @@ export const MultiResolutionChart = ({
               }
             });
           });
-          console.log('[chart-2', updatedTrade, isClosingDisabled);
+          // console.log('[chart-2', updatedTrade, isClosingDisabled);
 
           if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order) {
             if (!updatedTrade) return;
@@ -905,11 +904,11 @@ export const MultiResolutionChart = ({
           trade.positionRef
             .setText(text)
             .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
-          console.log('[chart-3', trade.positionRef);
+          // console.log('[chart-3', trade.positionRef);
 
           if (!isClosingDisabled) {
             trade.positionRef.onCancel('onCancel', () => {
-              console.log('[chart-4', settings.earlyCloseConfirmation);
+              // console.log('[chart-4', settings.earlyCloseConfirmation);
 
               if (!settings.earlyCloseConfirmation) {
                 earlyCloseHandler(updatedTrade, updatedTrade.market);

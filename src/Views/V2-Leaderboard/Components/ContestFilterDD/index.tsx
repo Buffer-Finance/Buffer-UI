@@ -1,7 +1,7 @@
 import { createArray } from '@Utils/JSUtils/createArray';
 import BufferDropdown from '@Views/Common/BufferDropdown';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styled from '@emotion/styled';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Background = styled.div`
   .scrollbar {
@@ -24,8 +24,6 @@ export function ContestFilterDD({
 }) {
   const isDD = count > 1;
   const itemsArray = isDD ? createArray(count) : [];
-
-  console.log(offset, count, 'offset in dd');
 
   if (!isDD) return <div className="text-buffer-blue">#1</div>;
   return (

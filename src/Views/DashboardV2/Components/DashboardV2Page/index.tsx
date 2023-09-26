@@ -1,11 +1,14 @@
+import { ChainNotSupported } from '@Views/Common/ChainNotSupported';
+import { useReadcalls } from '@Views/DashboardV2/hooks/useReadcalls';
 import styled from '@emotion/styled';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
+import MarketsSection from './MarketsSection';
 import { OverViewSection } from './OverviewSection';
 import TokensSection from './TokensSection';
-import MarketsSection from './MarketsSection';
-import { ChainNotSupported } from '@Views/Common/ChainNotSupported';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 const DashboardV2Page = () => {
+  useReadcalls();
+
   return (
     <DashboardV2Styles>
       <OverViewSection />

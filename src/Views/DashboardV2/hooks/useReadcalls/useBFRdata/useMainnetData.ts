@@ -1,14 +1,12 @@
-import { multicallv2 } from '@Utils/Contract/multiContract';
-import { add, subtract } from '@Utils/NumString/stringArithmatics';
-import { viemMulticall, viemMulticallNonLinked } from '@Utils/multicall';
+import { add } from '@Utils/NumString/stringArithmatics';
+import { viemMulticallNonLinked } from '@Utils/multicall';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { HolderContracts, appConfig } from '@Views/TradePage/config';
-import { arbitrum } from 'wagmi/chains';
-import { ethers } from 'ethers';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { createPublicClient, http } from 'viem';
 import { erc20ABI } from 'wagmi';
+import { arbitrum } from 'wagmi/chains';
 
 export const useMainnetData = () => {
   const { DashboardConfig, EarnConfig } = appConfig['42161'];
@@ -67,7 +65,6 @@ export const useMainnetData = () => {
         client,
         'dashoboard-read-calls'
       );
-      console.log(`multicallRes: `, multicallRes);
       const lpTokensCallLength = lpTokensCalls.length;
       const formattedRes = multicallRes.slice(0, -lpTokensCallLength);
 

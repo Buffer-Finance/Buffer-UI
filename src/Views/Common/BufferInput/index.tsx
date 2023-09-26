@@ -1,8 +1,8 @@
-import { useCallback, ReactNode } from "react";
-import Big from "big.js";
-import BufferTextInputRoot, { IBufferInputBase } from "../BufferTextInputRoot";
-import { BN } from "src/Interfaces/interfaces";
-import { useToast } from "@Contexts/Toast";
+import { useToast } from '@Contexts/Toast';
+import Big from 'big.js';
+import { ReactNode, useCallback } from 'react';
+import { BN } from 'src/Interfaces/interfaces';
+import BufferTextInputRoot, { IBufferInputBase } from '../BufferTextInputRoot';
 
 interface IError {
   val: string | number | boolean;
@@ -29,9 +29,9 @@ export interface IBufferInput extends IBufferInputBase {
   type?: boolean;
   addsValidations?: boolean;
   hideSearchBar?: boolean;
-  label?:ReactNode;
-  
-  id?:string;
+  label?: ReactNode;
+
+  id?: string;
   remark?: ReactNode;
   isDisabled?: boolean;
 }
@@ -45,7 +45,8 @@ const BufferInput: React.FC<IBufferInput> = ({
   onChange,
   className,
   inputType,
-  id,autoFocus,
+  id,
+  autoFocus,
   onError,
   label,
   bgClass,
@@ -56,36 +57,36 @@ const BufferInput: React.FC<IBufferInput> = ({
   title,
   onClick,
 }) => {
-  console.log('id,autofocus',id,autoFocus)
-  if(id == 'amount-inner')
-    console.log(`autoFocus: `,autoFocus);
-  if (!numericValidations)
-    return (
-      <BufferTextInputRoot
-        {
-          ...{
-          placeholder,
-          unit,
-          header,
-          bgClass,
-          label,
-          inputType,
-          value,
-          onChange,
-          onError,
-          className,
-          numeric: false,
-          ipClass,autoFocus,
-          validations: [],
-          isGrey,
-          type,
-          id,
-          isDisabled,
-          title,
-          onClick
-        }}
-      />
-    );
+  // console.log('id,autofocus',id,autoFocus)
+  if (id == 'amount-inner')
+    if (!numericValidations)
+      // console.log(`autoFocus: `,autoFocus);
+      return (
+        <BufferTextInputRoot
+          {...{
+            placeholder,
+            unit,
+            header,
+            bgClass,
+            label,
+            inputType,
+            value,
+            onChange,
+            onError,
+            className,
+            numeric: false,
+            ipClass,
+            autoFocus,
+            validations: [],
+            isGrey,
+            type,
+            id,
+            isDisabled,
+            title,
+            onClick,
+          }}
+        />
+      );
   const getErr = (isError: boolean, error: ReactNode, value: string) => {
     if (isError) {
       return [value, error];
@@ -131,15 +132,15 @@ const BufferInput: React.FC<IBufferInput> = ({
         /^\d*(\.)?(\d{0,6})?$/,
       ];
       val = valBN.toString();
-      console.log(`val: `, val);
+      // console.log(`val: `, val);
 
       if (!regexArr[decimals.val].test(val)) {
         toastify({
-          type: "error",
+          type: 'error',
           msg: !decimals.val
             ? "Decimal values aren't allowed"
-            : "Only " + decimals.val + " decimals are allowed!",
-          id: "decimals",
+            : 'Only ' + decimals.val + ' decimals are allowed!',
+          id: 'decimals',
         });
         return [false, false, true];
       }
@@ -164,12 +165,14 @@ const BufferInput: React.FC<IBufferInput> = ({
         numeric: numericValidations ? true : false,
         ipClass,
         validations: [minValidation, maxValidation, decimalValidation],
-        isGrey,autoFocus,
+        isGrey,
+        autoFocus,
         type,
         inputType,
         isDisabled,
         title,
-        onClick      }}
+        onClick,
+      }}
     />
   );
 };

@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Button from "@mui/material/Button";
+import styled from '@emotion/styled';
+import Button from '@mui/material/Button';
 
 const StyledButton = styled(Button)`
   /* background-color: var(--primary); */

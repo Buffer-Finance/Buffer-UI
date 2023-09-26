@@ -16,7 +16,6 @@ export const UpDownChip: React.FC<{
   upText = 'Up',
   downText = 'Down',
 }) => {
-  console.log('updown chip', shouldShowText);
   return (
     <div
       className={`px-2 h-[22px] text-f12 sm:text-f10 sm:pl-1 sm:h-[17px] flex gap-1 sm:gap-[0px] items-center rounded-[5px] font-medium  ml-2 bg-1 brightness-125 w-max ${

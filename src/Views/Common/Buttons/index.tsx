@@ -1,17 +1,11 @@
-import Button from "@mui/material/Button";
-import StyledButton from "./style";
-import { StylesProvider } from "@mui/styles";
-import EnterIcon from "src/SVG/buttons/enter";
-import EnterDisabledIcon from "src/SVG/buttons/enterDisabled";
-import InIcon from "src/SVG/buttons/exit";
+import { StylesProvider } from '@mui/styles';
+import StyledButton from './style';
 interface IBufferButton {
   children: any;
   className?: string;
   disabled?: boolean;
   onClick?: (a: any) => void;
   style?: any;
-  isDisabled?: boolean;
-  hideIcon?: boolean;
   icon?: JSX.Element;
   title?: string;
 }
@@ -21,12 +15,10 @@ const Gradientbtn: React.FC<IBufferButton> = (props) => {
     <StylesProvider injectFirst>
       <StyledButton
         {...props}
-        className={`${props.className ? props.className : ""} `}
+        className={`${props.className ? props.className : ''} `}
         disabled={props.disabled}
         onClick={props.onClick}
         style={props.style}
-        isDisabled={props.isDisabled}
-        hideIcon={props.hideIcon}
       >
         {props.children}
       </StyledButton>
@@ -38,23 +30,12 @@ export default Gradientbtn;
 
 const PrimaryBtn: React.FC<IBufferButton> = ({
   className,
-  isDisabled,
-  hideIcon = false,
+
   ...props
 }) => {
   return (
     <Gradientbtn className={`primary-btn ${className}`} {...props}>
-      <div className="flex flex-center">
-        {/* {!hideIcon ? (
-          !isDisabled ? (
-            <EnterIcon className="smr" />
-          ) : (
-            <EnterDisabledIcon className="smr" />
-          )
-        ) : (
-          <></>
-        )} */}
-      </div>
+      <div className="flex flex-center"></div>
       {props.children}
     </Gradientbtn>
   );
@@ -102,9 +83,9 @@ interface IBufferButton {
 }
 
 export {
-  PrimaryBtn,
-  SecondaryBtn,
-  PrimaryActionBtn,
-  SecondaryActionBtn,
   Gradientbtn,
+  PrimaryActionBtn,
+  PrimaryBtn,
+  SecondaryActionBtn,
+  SecondaryBtn,
 };

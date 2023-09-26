@@ -1,11 +1,11 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { getCallId } from '@Utils/Contract/multiContract';
 import { readResponseAtom, setReadCallsAtom } from '@Views/DashboardV2/atoms';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { appConfig } from '@Views/TradePage/config';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { getUBLPreadcalls } from './getUBLPreadcalls';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
-import { appConfig } from '@Views/TradePage/config';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { getCallId } from '@Utils/Contract/multiContract';
 
 export const useUBLPreadcallData = () => {
   const { activeChain } = useActiveChain();
@@ -23,7 +23,7 @@ export const useUBLPreadcallData = () => {
     });
   }, [calls.length, activeChain]);
 
-  if (response !== undefined) {
+  if (!!response) {
     const blpTotalBalance =
       response[
         getCallId('totalTokenXBalance', config.EarnConfig.BLP, activeChain.id)

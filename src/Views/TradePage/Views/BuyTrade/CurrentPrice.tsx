@@ -143,7 +143,6 @@ export const LimitOrderPayoutPicker: React.FC<{
   function handleShouldShowEditClick() {
     setShouldShowEdit(true);
   }
-  console.log(activePayout, 'activePayout');
 
   useEffect(() => {
     if (!payouts.includes(activePayout)) setShouldShowEdit(true);

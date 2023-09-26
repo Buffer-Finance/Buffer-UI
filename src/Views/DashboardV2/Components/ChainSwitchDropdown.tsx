@@ -57,6 +57,7 @@ export const ChainSwitchDropdown = ({
         }
         return (
           <div
+            key={tab.name}
             className={`${classes.itemFontSize} whitespace-nowrap ${
               index === tabList.length - 1 ? '' : 'pb-[6px]'
             } ${index === 0 ? '' : 'pt-[6px]'} ${
