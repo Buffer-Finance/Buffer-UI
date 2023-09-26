@@ -1,7 +1,6 @@
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { getSignatureFromAddress } from '@Views/TradePage/cache';
 import { baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
@@ -21,7 +20,6 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
   const toastify = useToast();
   const { address } = useAccount();
   const { address: userAddress } = useUserAccount();
-  const { oneCTWallet } = useOneCTWallet();
   const startTime = useAtomValue(StartTimeAtom);
 
   async function submitConfig() {
@@ -31,7 +29,6 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
       if (!address) throw new Error('Wallet not connected.');
       if (editedValues === null && startTime === data.start_time)
         throw new Error('No changes made');
-      if (!oneCTWallet) throw new Error('One CT Wallet not found');
 
       let api_signature = null;
       if (userAddress === address)

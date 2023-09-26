@@ -1,7 +1,6 @@
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { getSignatureFromAddress } from '@Views/TradePage/cache';
 import { baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
@@ -17,14 +16,12 @@ export const Market: React.FC<{ market: IMarketConstant; name: string }> = ({
   const { activeChain } = useActiveChain();
   const { address } = useAccount();
   const { address: userAddress } = useUserAccount();
-  const { oneCTWallet } = useOneCTWallet();
   const toastify = useToast();
   const { mutate } = useAdminMarketConstants();
 
   async function deleteMarket() {
     try {
       if (!address) throw new Error('Wallet not connected.');
-      if (!oneCTWallet) throw new Error('One CT Wallet not found');
 
       let api_signature = null;
       if (userAddress === address)
