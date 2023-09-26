@@ -510,7 +510,7 @@ export const useBuyTradeActions = (userInput: string) => {
         toastify({
           price,
           type: 'success',
-          timings: 100,
+          timings: 20,
           body: null,
           msg: content,
         });
