@@ -12,7 +12,7 @@ import { getMaxSpread } from '@Views/TradePage/utils/getSafeStrike';
 const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
   const { activeMarket } = useActiveMarket();
   const { openMarketPickerShutter } = useShutterHandlers();
-  const { currentPrice } = useCurrentPrice({
+  const { currentPrice, precision } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
   });
@@ -54,12 +54,12 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
             token0={activeMarket?.token0}
             token1={activeMarket?.token1}
           />
-          <div className="flex items-center ml-1">
+          <div className="flex items-center ml-1 text-[#808191]">
             <PlusMinus
-              svgProps={{ fill: '#ffffff' }}
-              className="scale-75 mt-1"
+              svgProps={{ fill: '#808191' }}
+              className="scale-[65%] mt-1"
             />
-            {toFixed(spread, 2)}
+            {toFixed(spread, precision)}
           </div>
         </div>
         <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">

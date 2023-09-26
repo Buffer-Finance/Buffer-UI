@@ -97,7 +97,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
   const readcallData = useAtomValue(buyTradeDataAtom);
-  const { currentPrice } = useCurrentPrice({
+  const { currentPrice, precision } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
   });
@@ -182,7 +182,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       data: (
         <div className="flex items-center gap-1">
           <PlusMinus svgProps={{ fill: '#ffffff' }} className="scale-75 mt-1" />
-          <Display data={spread} precision={2} />
+          <Display data={spread} precision={precision} disable />
         </div>
       ),
     },
