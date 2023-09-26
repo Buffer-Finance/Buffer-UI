@@ -16,18 +16,10 @@ export const AddMarket = () => {
 
   function addMarket() {
     try {
-      if (!marketName) {
-        throw new Error('Market name is required');
-      }
-      if (!c) {
-        throw new Error('C is required');
-      }
-      if (!maxPayout) {
-        throw new Error('maxPayout is required');
-      }
-      if (!initialPayout) {
-        throw new Error('initialPayout is required');
-      }
+      if (!marketName) throw new Error('Market name is required');
+      if (!c) throw new Error('C is required');
+      if (!maxPayout) throw new Error('maxPayout is required');
+      if (!initialPayout) throw new Error('initialPayout is required');
 
       const newMarket = {
         [marketName]: {

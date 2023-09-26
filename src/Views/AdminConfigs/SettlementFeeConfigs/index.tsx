@@ -9,7 +9,8 @@ import { useAtomValue } from 'jotai';
 import { useAccount } from 'wagmi';
 import { AddMarket } from './AddMarket';
 import { Market } from './Market';
-import { SettlementFeesChangedConfigAtom } from './store';
+import { StartTimeEdit } from './StartTimeEdit';
+import { SettlementFeesChangedConfigAtom, StartTimeAtom } from './store';
 import { IMarketConstant } from './types';
 import { useAdminMarketConstants } from './useAdminMarketConstants';
 
@@ -21,13 +22,15 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
   const { address } = useAccount();
   const { address: userAddress } = useUserAccount();
   const { oneCTWallet } = useOneCTWallet();
+  const startTime = useAtomValue(StartTimeAtom);
 
   async function submitConfig() {
     try {
       if (data === undefined) throw new Error('No data found');
       if (!activeChain) throw new Error('Chain not found');
       if (!address) throw new Error('Wallet not connected.');
-      if (editedValues === null) throw new Error('No changes made');
+      if (editedValues === null && startTime === data.start_time)
+        throw new Error('No changes made');
       if (!oneCTWallet) throw new Error('One CT Wallet not found');
 
       let api_signature = null;
@@ -37,13 +40,15 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
       if (api_signature === null) throw new Error('Error generating signature');
 
       const updatedConfig = data.markets;
-      Object.entries(editedValues).map(([marketName, changedData]) => {
-        Object.entries(changedData).map(([key, value]) => {
-          if (updatedConfig[marketName] === undefined)
-            updatedConfig[marketName] = {} as IMarketConstant;
-          updatedConfig[marketName][key as keyof IMarketConstant] = value;
+      if (editedValues !== null) {
+        Object.entries(editedValues).map(([marketName, changedData]) => {
+          Object.entries(changedData).map(([key, value]) => {
+            if (updatedConfig[marketName] === undefined)
+              updatedConfig[marketName] = {} as IMarketConstant;
+            updatedConfig[marketName][key as keyof IMarketConstant] = value;
+          });
         });
-      });
+      }
 
       const res = await axios.post(
         baseUrl + 'admin/update/market_constants/',
@@ -52,7 +57,7 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
           params: {
             environment: activeChain.id,
             api_signature,
-            start_time: data.start_time,
+            start_time: startTime,
           },
         }
       );
@@ -79,6 +84,7 @@ export const SettlementFeeConfigs: React.FC<any> = ({}) => {
   return (
     <div className="mx-[20px]">
       <AddMarket />
+      <StartTimeEdit />
       <div className="flex flex-col gap-4  mt-4">
         {Object.entries(data.markets).map(([name, market]) => (
           <Market market={market} name={name} />
