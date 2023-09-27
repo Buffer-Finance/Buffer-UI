@@ -2,6 +2,7 @@ import { toFixed } from '@Utils/NumString';
 import { gt, round } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { EditIconSVG } from '@Views/TradePage/Components/EditIconSVG';
+import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import {
   BuyTradeDescText,
@@ -151,7 +152,20 @@ export const LimitOrderPayoutPicker: React.FC<{
   return (
     <div>
       <div className="flex gap-4 mt-3">
-        <div className="text-[#808191] text-f12">Payout</div>
+        <div className="flex gap-2 items-center">
+          <div className="text-[#808191] text-f12">Payout</div>
+          <div className="mt-1">
+            <IconToolTip
+              content={
+                <>
+                  Allows you to secure your trade by defining the least
+                  acceptable payout. Even if the dynamic payout fluctuates, your
+                  trade will only execute if it meets your set minimum.
+                </>
+              }
+            />
+          </div>
+        </div>
         <div className="flex gap-2 items-stretch">
           {payouts.map((payout) => {
             const isActive = activePayout == payout;
