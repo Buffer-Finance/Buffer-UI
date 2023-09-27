@@ -130,14 +130,18 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
     );
 
     spread =
-      (currentPrice *
-        getMaxSpread(
-          switchPool.SpreadConfig1,
-          switchPool.SpreadConfig2,
-          switchPool.SpreadFactor,
-          switchPool.IV
-        )) /
-      1e8;
+      getMaxSpread(
+        switchPool.SpreadConfig1,
+        switchPool.SpreadConfig2,
+        switchPool.SpreadFactor,
+        switchPool.IV
+      ) / 1e4;
+
+    //convert the spread into percentage
+    // spread = multiply(
+    //   divide(spread, currentPrice.toString()) ?? '0',
+    //   2
+    // ) as string;
   }
 
   if (!activeMarket || !switchPool) {
@@ -182,7 +186,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       data: (
         <div className="flex items-center gap-1">
           <PlusMinus svgProps={{ fill: '#ffffff' }} className="scale-75 mt-1" />
-          <Display data={spread} precision={precision} disable />
+          <Display data={spread} precision={2} unit="%" />
         </div>
       ),
     },
