@@ -2,7 +2,6 @@ import { toFixed } from '@Utils/NumString';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { PairTokenImage } from '@Views/Common/PairTokenImage';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { CurrentPrice } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/CurrentPrice';
 import { PlusMinus } from '@Views/TradePage/Views/MarketChart/MarketStatsBar';
@@ -12,10 +11,10 @@ import { getMaxSpread } from '@Views/TradePage/utils/getSafeStrike';
 const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
   const { activeMarket } = useActiveMarket();
   const { openMarketPickerShutter } = useShutterHandlers();
-  const { currentPrice, precision } = useCurrentPrice({
-    token0: activeMarket?.token0,
-    token1: activeMarket?.token1,
-  });
+  // const { currentPrice, precision } = useCurrentPrice({
+  //   token0: activeMarket?.token0,
+  //   token1: activeMarket?.token1,
+  // });
   const { poolDetails, switchPool } = useSwitchPool();
 
   if (!activeMarket || !switchPool) return <></>;

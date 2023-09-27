@@ -4,7 +4,6 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
@@ -97,10 +96,10 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
   const readcallData = useAtomValue(buyTradeDataAtom);
-  const { currentPrice, precision } = useCurrentPrice({
-    token0: activeMarket?.token0,
-    token1: activeMarket?.token1,
-  });
+  // const { currentPrice, precision } = useCurrentPrice({
+  //   token0: activeMarket?.token0,
+  //   token1: activeMarket?.token1,
+  // });
   let maxFee = null;
   let maxOI = null;
   let currentOI = null;
