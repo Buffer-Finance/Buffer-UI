@@ -25,7 +25,7 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
       switchPool.SpreadConfig2,
       switchPool.SpreadFactor,
       switchPool.IV
-    ) / 1e4;
+    ) / 1e6;
   return (
     <div
       className="w-full flex justify-between  items-center my-3 p-[3px] bg-[#282B39] rounded-[5px] "
