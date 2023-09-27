@@ -70,7 +70,7 @@ export const SlippageInput: React.FC<{
       {minErr && (
         <Trans>
           <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
-            Slippage rate must be less then {MIN_SLIPPAGE}%
+            Slippage rate must be more then {MIN_SLIPPAGE}%
           </span>
         </Trans>
       )}

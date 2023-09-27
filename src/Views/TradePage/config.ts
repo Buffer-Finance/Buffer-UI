@@ -293,7 +293,7 @@ export const refreshInterval = 500;
 export const defaultSettings = {
   trade: {
     partialFill: true,
-    slippageTolerance: 0.1,
+    slippageTolerance: 0.01,
     limitOrdersExpiry: '24',
     selectedTimeFrame: 'h',
   },
@@ -347,9 +347,9 @@ export const durations = [
   },
 ];
 
-export const SLIPPAGE_DEFAULTS = [0.1, 0.25, 0.5];
+export const SLIPPAGE_DEFAULTS = [0.01, 0.25, 0.5];
 export const MAX_SLIPPAGE = 5;
-export const MIN_SLIPPAGE = 0.1;
+export const MIN_SLIPPAGE = 0.005;
 
 export const marketsForChart = {
   BTCUSD: {
