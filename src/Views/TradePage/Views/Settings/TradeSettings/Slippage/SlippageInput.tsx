@@ -8,7 +8,6 @@ import {
   MIN_SLIPPAGE,
   SLIPPAGE_DEFAULTS,
 } from '@Views/TradePage/config';
-import { Trans } from '@lingui/macro';
 import { useEffect, useState } from 'react';
 
 export const SlippageInput: React.FC<{
@@ -50,7 +49,7 @@ export const SlippageInput: React.FC<{
           }
           if (
             e.target.value.split('.')[1] &&
-            e.target.value.split('.')[1].length > 2
+            e.target.value.split('.')[1].length > 4
           )
             return;
           if (inputRegex.test(escapeRegExp(e.target.value))) {
@@ -61,18 +60,14 @@ export const SlippageInput: React.FC<{
       />
       <span className="absolute right-5">%</span>
       {err && (
-        <Trans>
-          <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
-            Slippage rate must be less then {MAX_SLIPPAGE}%
-          </span>
-        </Trans>
+        <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
+          Slippage rate must be less then {MAX_SLIPPAGE}%
+        </span>
       )}
       {minErr && (
-        <Trans>
-          <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
-            Slippage rate must be more then {MIN_SLIPPAGE}%
-          </span>
-        </Trans>
+        <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
+          Slippage rate must be more then {MIN_SLIPPAGE}%
+        </span>
       )}
     </div>
   );
