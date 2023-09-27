@@ -20,14 +20,12 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
 
   if (!activeMarket || !switchPool) return <></>;
   const spread =
-    (currentPrice *
-      getMaxSpread(
-        switchPool.SpreadConfig1,
-        switchPool.SpreadConfig2,
-        switchPool.SpreadFactor,
-        switchPool.IV
-      )) /
-    1e8;
+    getMaxSpread(
+      switchPool.SpreadConfig1,
+      switchPool.SpreadConfig2,
+      switchPool.SpreadFactor,
+      switchPool.IV
+    ) / 1e4;
   return (
     <div
       className="w-full flex justify-between  items-center my-3 p-[3px] bg-[#282B39] rounded-[5px] "
@@ -59,7 +57,7 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
               svgProps={{ fill: '#808191' }}
               className="scale-[65%] mt-1"
             />
-            {toFixed(spread, precision)}
+            {toFixed(spread, 2)}%
           </div>
         </div>
         <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
