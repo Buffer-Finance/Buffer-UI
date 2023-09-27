@@ -135,7 +135,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
         switchPool.SpreadConfig2,
         switchPool.SpreadFactor,
         switchPool.IV
-      ) / 1e4;
+      ) / 1e6;
 
     //convert the spread into percentage
     // spread = multiply(
@@ -186,7 +186,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       data: (
         <div className="flex items-center gap-1">
           <PlusMinus svgProps={{ fill: '#ffffff' }} className="scale-75 mt-1" />
-          <Display data={spread} precision={2} unit="%" />
+          <Display data={spread} precision={4} unit="%" />
         </div>
       ),
     },
