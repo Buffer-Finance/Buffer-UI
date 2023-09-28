@@ -1,3 +1,4 @@
+import { usePrice } from '@Hooks/usePrice';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import {
   PlatformHistory,
@@ -9,6 +10,7 @@ import { useAllTradesTab } from './useAlltradesTab';
 export const AllTrades = () => {
   const { setTab, tab } = useAllTradesTab();
   useBuyTradeData();
+  usePrice();
 
   const tabs = ['active', 'history'];
   const currentTab = useMemo(() => {
