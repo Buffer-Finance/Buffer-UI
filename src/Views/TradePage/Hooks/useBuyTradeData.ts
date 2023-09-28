@@ -22,35 +22,28 @@ export const buyTradeDataAtom = atom<{
 
 export const useBuyTradeData = (deb?: string) => {
   const { data: readCallData } = useBuyTradePageReadcalls();
-  const { switchPool, poolDetails } = useSwitchPool();
+  const { poolDetails } = useSwitchPool();
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
   const config = useMarketsConfig();
   const setBuyTradeData = useSetAtom(buyTradeDataAtom);
   const response = useMemo(() => {
-    if (
-      !readCallData ||
-      !poolDetails ||
-      !switchPool ||
-      Object.entries(readCallData).length === 0
-    ) {
+    if (!readCallData || Object.entries(readCallData).length === 0) {
       return null;
     }
-    const balance =
-      readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
+    let balance = null;
+    let allowance = null;
+    let nonces = null;
+    if (poolDetails) {
+      balance =
+        readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
 
-    const allowance =
-      readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
-    // const user2signer = {
-    //   signer:
-    //     readCallData[
-    //       getCallId(configData.signer_manager, 'accountMapping')
-    //     ]?.[0],
-    //   nonce:
-    //     readCallData[
-    //       getCallId(configData.signer_manager, 'accountMapping')
-    //     ]?.[1],
-    // };
+      allowance =
+        readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
+
+      nonces = readCallData[getCallId(poolDetails.tokenAddress, 'nonces')]?.[0];
+    }
+
     const maxTradeSizes: { [key: string]: string } = {};
 
     const settlementFees: {
@@ -94,8 +87,6 @@ export const useBuyTradeData = (deb?: string) => {
     //   readCallData[
     //     getCallId(configData.creation_window, 'isInCreationWindow')
     //   ]?.[0];
-    const nonces =
-      readCallData[getCallId(poolDetails.tokenAddress, 'nonces')]?.[0];
 
     setBuyTradeData({
       balance,
@@ -108,5 +99,5 @@ export const useBuyTradeData = (deb?: string) => {
       nonces,
       creationWindows,
     });
-  }, [readCallData, poolDetails, switchPool, configData]);
+  }, [readCallData, poolDetails, configData]);
 };

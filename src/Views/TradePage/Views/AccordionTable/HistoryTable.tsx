@@ -112,7 +112,7 @@ const HistoryTable: React.FC<{
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
     if (trade === undefined) return <></>;
-    if (!readcallData) return <></>;
+    if (!readcallData) return <>no readcall data</>;
 
     const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
     const currentOi =
@@ -123,7 +123,6 @@ const HistoryTable: React.FC<{
     if (!expiryPrice) {
       const id = getPriceCacheId(trade);
       expiryPrice = expiryPriceCache[id] || 0;
-      console.log(`expiryPrice: `, expiryPrice);
     }
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
 
@@ -319,7 +318,6 @@ const HistoryTable: React.FC<{
     if (!expiryPrice) {
       const id = getPriceCacheId(trade);
       expiryPrice = expiryPriceCache[id] || 0;
-      console.log(`expiryPrice: `, expiryPrice);
     }
     const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
     const currentOi =

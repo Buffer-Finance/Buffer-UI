@@ -36,6 +36,8 @@ export const usePlatformActiveTrades = () => {
       activePage,
     {
       fetcher: async () => {
+        if (!markets) return { page_data: undefined, total_pages: 1 };
+
         if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
           return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/all_active/`, {
@@ -65,6 +67,7 @@ export const usePlatformHistoryTrades = () => {
   const { address } = useAccount();
   const activePage = useAtomValue(platformHistoryTableActivePage);
   const markets = useAllV2_5MarketsConfig();
+  console.log('markets', markets);
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'platform-history-trades-' +
@@ -77,6 +80,7 @@ export const usePlatformHistoryTrades = () => {
       activePage,
     {
       fetcher: async () => {
+        if (!markets) return { page_data: undefined, total_pages: 1 };
         if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
           return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/all_history/`, {

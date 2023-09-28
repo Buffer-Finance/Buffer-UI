@@ -192,7 +192,15 @@ export const Cancelled = ({
   );
 };
 
-export const PlatformHistory = ({ onlyView }: { onlyView?: number[] }) => {
+export const PlatformHistory = ({
+  onlyView,
+  className = '',
+  overflow,
+}: {
+  onlyView?: number[];
+  className?: string;
+  overflow: boolean;
+}) => {
   const { page_data: platformHistoryTrades, total_pages } =
     usePlatformHistoryTrades();
   const [activePage, setActivePage] = useAtom(platformHistoryTableActivePage);
@@ -206,12 +214,19 @@ export const PlatformHistory = ({ onlyView }: { onlyView?: number[] }) => {
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={platformHistoryTrades === undefined}
-      overflow
+      overflow={overflow}
+      className={className}
     />
   );
 };
 
-export const PlatformOngoing = ({ onlyView }: { onlyView?: number[] }) => {
+export const PlatformOngoing = ({
+  onlyView,
+  className = '',
+}: {
+  onlyView?: number[];
+  className?: string;
+}) => {
   const { page_data: platformActiveTrades, total_pages } =
     usePlatformActiveTrades();
   const [activePage, setActivePage] = useAtom(platformActiveTableActivePage);
@@ -230,6 +245,7 @@ export const PlatformOngoing = ({ onlyView }: { onlyView?: number[] }) => {
       onlyView={onlyView}
       isLoading={platformActiveTrades === undefined}
       overflow
+      className={className}
     />
   );
 };

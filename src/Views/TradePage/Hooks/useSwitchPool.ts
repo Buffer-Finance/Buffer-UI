@@ -1,13 +1,13 @@
-import { useAtomValue } from 'jotai';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useMemo } from 'react';
 import { lt } from '@Utils/NumString/stringArithmatics';
-import { useActiveMarket } from './useActiveMarket';
-import { useActivePoolObject } from './useActivePoolObject';
+import { useAtomValue } from 'jotai';
+import { useMemo } from 'react';
 import { activePoolObjAtom, tradeSizeAtom } from '../atoms';
-import { usePoolInfo } from './usePoolInfo';
 import { poolInfoType } from '../type';
 import { getConfig } from '../utils/getConfig';
+import { useActiveMarket } from './useActiveMarket';
+import { useActivePoolObject } from './useActivePoolObject';
+import { usePoolInfo } from './usePoolInfo';
 
 export const useSwitchPool = () => {
   const { activeMarket: activePair } = useActiveMarket();
@@ -50,8 +50,6 @@ export const useSwitchPool = () => {
       switchPool.pool as keyof typeof configData.poolsInfo
     ] as poolInfoType;
   }, [switchPool]);
-
-  // console.log(`switchPool: `, switchPool, poolDetails);
 
   return { switchPool, poolDetails };
 };

@@ -20,6 +20,7 @@ import { useToast } from '@Contexts/Toast';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
+import { AllTrades } from '@Views/AllTrades';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
@@ -108,6 +109,7 @@ const AppRoutes = () => {
       <OneCTModal />
 
       <Routes>
+        <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
         <Route path="/history" element={<TradeLog_sm />} />
@@ -143,14 +145,6 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
-          {/* <Route
-            path="trades"
-            element={
-              <LeaderBoard>
-                <AllTradesPage />
-              </LeaderBoard>
-            }
-          /> */}
         </Route>
       </Routes>
     </div>

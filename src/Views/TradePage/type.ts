@@ -139,6 +139,6 @@ export type poolInfoType =
 export type chartDataType = (typeof marketsForChart)['BTCUSD'];
 
 export type tradesApiResponseType = {
-  page_data: TradeType[];
+  page_data: TradeType[] | undefined;
   total_pages: number;
 };
