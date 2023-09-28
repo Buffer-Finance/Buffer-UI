@@ -10,15 +10,15 @@ import { Config, group2abi } from './helpers';
 
 export const AssetChechBoxesRow = ({ config }: { config: Config }) => {
   const { writeCall } = useWriteCall(config.contract, group2abi[config.group]);
-  const { data: marketsV2 } = useV2Markets();
+  const { data: marketsV2, mutate: refetchMarkets } = useV2Markets();
   const { data: marketsV2_5 } = useMarketsRequest();
+  console.log(marketsV2_5, 'marketsV2_5');
   const [selectedV2Assets, setSelectedV2Assets] = useState<{
     [key: string]: responseObj[];
   }>({});
   const [selectedV2_5Assets, setSelectedV2_5Assets] = useState<{
     [key: string]: responseObj[];
   }>({});
-  console.log(selectedV2Assets, selectedV2_5Assets, 'selectedV2Assets');
   if (
     marketsV2_5.optionContracts === undefined ||
     marketsV2.optionContracts === undefined
@@ -51,6 +51,10 @@ export const AssetChechBoxesRow = ({ config }: { config: Config }) => {
         console.log(a);
         setSelectedV2Assets({});
         setSelectedV2_5Assets({});
+        //call refetchmarkets afeter 5 seconds
+        setTimeout(() => {
+          refetchMarkets();
+        }, 5000);
       },
       config.setter.name,
       [v2Addresses, v2_5Addresses],

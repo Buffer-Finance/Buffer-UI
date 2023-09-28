@@ -9,7 +9,7 @@ import { getAddress } from 'viem';
 export const useMarketsRequest = () => {
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
-  const { data: bothVersionMrkets, error } = useBothVersionsMarkets();
+  const { data: bothVersionMrkets, error, mutate } = useBothVersionsMarkets();
   return {
     data: {
       optionContracts: bothVersionMrkets?.optionContracts.filter(
@@ -21,11 +21,12 @@ export const useMarketsRequest = () => {
       ),
     },
     error,
+    mutate,
   };
 };
 
 export const useAllV2_5MarketsRequest = () => {
-  const { data: bothVersionMrkets, error } = useBothVersionsMarkets();
+  const { data: bothVersionMrkets, error, mutate } = useBothVersionsMarkets();
   return {
     data: {
       optionContracts: bothVersionMrkets?.optionContracts.filter(
@@ -35,11 +36,12 @@ export const useAllV2_5MarketsRequest = () => {
       ),
     },
     error,
+    mutate,
   };
 };
 
 export const useV2Markets = () => {
-  const { data: bothVersionMrkets, error } = useBothVersionsMarkets();
+  const { data: bothVersionMrkets, error, mutate } = useBothVersionsMarkets();
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
   return {
@@ -53,6 +55,7 @@ export const useV2Markets = () => {
       ),
     },
     error,
+    mutate,
   };
 };
 
@@ -99,7 +102,7 @@ export const useBothVersionsMarkets = () => {
     return response.data?.data as response;
   }
 
-  const { data, error } = useSWR<response, Error>(
+  const { data, error, mutate } = useSWR<response, Error>(
     `v3AppConfig-activeChain-${activeChain.id}`,
     {
       fetcher: fetcher,
@@ -108,8 +111,9 @@ export const useBothVersionsMarkets = () => {
   );
 
   const response = useMemo(() => {
-    if (!data) return { data, error };
+    if (!data) return { data, error, mutate };
     return {
+      mutate,
       error,
       data: {
         optionContracts: data.optionContracts.filter((option) => {
