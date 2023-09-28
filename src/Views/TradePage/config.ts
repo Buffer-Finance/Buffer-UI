@@ -153,11 +153,11 @@ export const appConfig = {
       },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.-16-payout_usd-userOptionData/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
-    router: '0x3890F9664188a2A7292319Ce67320037BE634D3a',
+    router: '0x075EEA84D1122A0c2F2A6C9265F8126F64087d44',
     signer_manager: '0x983adc3d8853C4792Da5581C5e711d25BAC19042',
     booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
     config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
