@@ -56,7 +56,7 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
               svgProps={{ fill: '#808191' }}
               className="scale-[65%] mt-1"
             />
-            {toFixed(spread, 2)}%
+            {toFixed(spread, 4)}%
           </div>
         </div>
         <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
