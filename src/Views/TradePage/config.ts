@@ -315,16 +315,16 @@ export const limitOrderDefaultPayout = '60';
 export const defaultSelectedTime = '00:15';
 export const oneSec = 1000;
 export const durations = [
-  // {
-  //   duration: 1 * 60,
-  //   time: '00:01',
-  //   name: ['1m'],
-  // },
   {
-    duration: 3 * 60,
-    time: '00:03',
-    name: ['3m'],
+    duration: 1 * 60,
+    time: '00:01',
+    name: ['1m'],
   },
+  // {
+  //   duration: 3 * 60,
+  //   time: '00:03',
+  //   name: ['3m'],
+  // },
   {
     duration: 5 * 60,
     time: '00:05',
