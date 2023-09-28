@@ -10,7 +10,7 @@ export const getSingatureCached = async (
   if (!address2SingatureCache[oneCTWallet.address]) {
     address2SingatureCache[oneCTWallet.address] = await oneCTWallet.signMessage(
       {
-        message: import.meta.env.VITE_SIGN_MESSAGE,
+        message: import.meta.env.VITE_SIGN_MESSAGE_2,
       }
     );
   }
@@ -31,7 +31,7 @@ export const getSignatureFromAddress = async (
     address2SingatureCache[userAddress] = await walletClient.signMessage({
       account: userAddress,
 
-      message: import.meta.env.VITE_SIGN_MESSAGE,
+      message: import.meta.env.VITE_SIGN_MESSAGE_2,
     });
   }
   return address2SingatureCache[userAddress];
