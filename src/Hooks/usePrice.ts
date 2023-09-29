@@ -72,7 +72,7 @@ export const usePrice = () => {
         console.error('[ws-deb]error:', error);
       };
       ws.onclose = (closeEvent) => {
-        setRetry((r) => r + 1);
+        // setRetry((r) => r + 1);
         console.error('[ws-deb]close:', closeEvent);
       };
     },
@@ -82,7 +82,7 @@ export const usePrice = () => {
     const ws = new WebSocket('wss://hermes.pyth.network/ws');
     loadNewPriceData(ws);
     return () => {
-      ws.close();
+      // ws.close();
     };
   }, [retry]);
 };
