@@ -1,4 +1,4 @@
-import { usePrice } from '@Hooks/usePrice';
+import { usePrice, usePriceRetriable } from '@Hooks/usePrice';
 import ShutterProvider, {
   useShutterHandlers,
 } from '@Views/Common/MobileShutter/MobileShutter';
@@ -40,7 +40,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
   }, []);
   const { closeShutter } = useShutterHandlers();
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
-  usePrice();
+  usePriceRetriable();
   useEffect(() => {
     closeShutter();
     return closeShutter;

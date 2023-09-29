@@ -2,10 +2,10 @@ import { Section } from '@Views/Earn/Components/Section';
 import { descStyles, topStyles } from '.';
 import { PoolSelectorRadio } from '../Markets/PoolSelectorRadio';
 import { Markets } from '../Markets';
-import { usePrice } from '@Hooks/usePrice';
+import { usePrice, usePriceRetriable } from '@Hooks/usePrice';
 
 const MarketsSection = () => {
-  usePrice();
+  usePriceRetriable();
 
   return (
     <Section
