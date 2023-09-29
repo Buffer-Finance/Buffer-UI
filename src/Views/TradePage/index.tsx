@@ -1,5 +1,5 @@
 import { useGenericHooks } from '@Hooks/useGenericHook';
-import { usePrice } from '@Hooks/usePrice';
+import { usePrice, usePriceRetriable } from '@Hooks/usePrice';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import ShutterProvider, {
   useShutterHandlers,
@@ -32,7 +32,7 @@ import { tradePanelPosition } from './type';
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
-  usePrice();
+  usePriceRetriable();
   useBuyTradeData();
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');

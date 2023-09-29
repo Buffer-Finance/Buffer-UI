@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import Big from 'big.js';
+import { reconnectingSocket } from './wsclient';
 type WSUPdate = {
   type: 'price_update';
   price_feed: {
@@ -23,68 +24,59 @@ type WSUPdate = {
     };
   };
 };
+const client = reconnectingSocket('wss://hermes.pyth.network/ws');
+
 export const silentPriceCache = {};
-export const usePrice = () => {
+export const usePrice = () => {};
+export const usePriceRetriable = () => {
   const setPrice = useSetAtom(priceAtom);
-  const [retry, setRetry] = useState(1);
-  const loadNewPriceData = useCallback(
-    (ws: WebSocket) => {
-      ws.onopen = () => {
-        ws.send(
-          JSON.stringify({
-            ids: Object.keys(pythIds),
-            type: 'subscribe',
-          })
-        );
-      };
+  const [isConnected, setIsConnected] = useState(client.isConnected());
 
-      ws.onmessage = (event) => {
-        const wsData = JSON.parse(event.data);
-        const lastJsonMessage = wsData;
-        if (!lastJsonMessage) return;
-        if ((lastJsonMessage as WSUPdate).type == 'price_update') {
-          const priceUpdatePacked = [
-            {
-              price: multiply(
-                (lastJsonMessage as WSUPdate).price_feed.price.price,
-                new Big('10')
-                  .pow((lastJsonMessage as WSUPdate).price_feed.price.expo)
-                  .toString()
-              ),
-              time:
-                (lastJsonMessage as WSUPdate).price_feed.price.publish_time *
-                1000,
-            },
-          ];
-          const data = {
-            [pythIds[(lastJsonMessage as WSUPdate).price_feed.id]]:
-              priceUpdatePacked,
-          };
-          silentPriceCache[
-            pythIds[(lastJsonMessage as WSUPdate).price_feed.id]
-          ] = priceUpdatePacked;
-          setPrice((p) => ({ ...p, ...data }));
-        }
-      };
-
-      ws.onerror = (error) => {
-        setRetry((r) => r + 1);
-        console.error('[ws-deb]error:', error);
-      };
-      ws.onclose = (closeEvent) => {
-        // setRetry((r) => r + 1);
-        console.error('[ws-deb]close:', closeEvent);
-      };
-    },
-    [setPrice]
-  );
   useEffect(() => {
-    const ws = new WebSocket('wss://hermes.pyth.network/ws');
-    loadNewPriceData(ws);
-    return () => {
-      // ws.close();
-    };
-  }, [retry]);
+    return client.onStateChange(setIsConnected);
+  }, [setIsConnected]);
+  useEffect(() => {
+    function handleMessage(message: string) {
+      const lastJsonMessage = JSON.parse(message);
+      if (!lastJsonMessage) return;
+      if ((lastJsonMessage as WSUPdate).type == 'price_update') {
+        const priceUpdatePacked = [
+          {
+            price: multiply(
+              (lastJsonMessage as WSUPdate).price_feed.price.price,
+              new Big('10')
+                .pow((lastJsonMessage as WSUPdate).price_feed.price.expo)
+                .toString()
+            ),
+            time:
+              (lastJsonMessage as WSUPdate).price_feed.price.publish_time *
+              1000,
+          },
+        ];
+        const data = {
+          [pythIds[(lastJsonMessage as WSUPdate).price_feed.id]]:
+            priceUpdatePacked,
+        };
+        silentPriceCache[pythIds[(lastJsonMessage as WSUPdate).price_feed.id]] =
+          priceUpdatePacked;
+        console.log(`setting: `, message);
+
+        setPrice((p) => ({ ...p, ...data }));
+      }
+    }
+    client.on(handleMessage);
+    return () => client.off(handleMessage);
+  }, [setPrice]);
+  useEffect(() => {
+    if (isConnected) {
+      client.getClient()!.send(
+        JSON.stringify({
+          ids: Object.keys(pythIds),
+          type: 'subscribe',
+        })
+      );
+    }
+  }, [isConnected]);
 };
 
 export const wsStateAtom = atom<{ state: string }>({
