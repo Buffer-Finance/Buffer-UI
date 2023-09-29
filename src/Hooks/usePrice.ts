@@ -3,13 +3,6 @@ import axios from 'axios';
 import { atom, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
-import useWebSocket from 'react-use-websocket';
-
-import {
-  PythConnection,
-  getPythProgramKeyForCluster,
-} from '@pythnetwork/client';
-import { Connection } from '@solana/web3.js';
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import Big from 'big.js';
 type WSUPdate = {
@@ -30,11 +23,10 @@ type WSUPdate = {
     };
   };
 };
-const solanaClusterName = 'pythnet';
-const solanaWeb3Connection = 'https://pythnet.rpcpool.com/';
 export const silentPriceCache = {};
 export const usePrice = () => {
   const setPrice = useSetAtom(priceAtom);
+  const [retry, setRetry] = useState(1);
   const loadNewPriceData = useCallback(
     (ws: WebSocket) => {
       ws.onopen = () => {
@@ -76,7 +68,12 @@ export const usePrice = () => {
       };
 
       ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
+        setRetry((r) => r + 1);
+        console.error('[ws-deb]error:', error);
+      };
+      ws.onclose = (closeEvent) => {
+        setRetry((r) => r + 1);
+        console.error('[ws-deb]close:', closeEvent);
       };
     },
     [setPrice]
@@ -87,7 +84,7 @@ export const usePrice = () => {
     return () => {
       ws.close();
     };
-  }, []);
+  }, [retry]);
 };
 
 export const wsStateAtom = atom<{ state: string }>({
