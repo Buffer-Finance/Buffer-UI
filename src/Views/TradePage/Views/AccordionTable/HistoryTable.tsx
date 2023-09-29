@@ -26,7 +26,6 @@ import { Launch } from '@mui/icons-material';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { useMedia } from 'react-use';
-import { getAddress } from 'viem';
 import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
@@ -112,11 +111,10 @@ const HistoryTable: React.FC<{
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
     if (trade === undefined) return <></>;
-    if (!readcallData) return <>no readcall data</>;
+    // if (!readcallData) return <>no readcall data</>;
 
-    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
-    const currentOi =
-      readcallData.currentOIs[getAddress(trade.target_contract)];
+    // const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
+
     if (!trade?.pool?.pool) console.log(`trade: `, trade);
     const poolInfo = getPoolInfo(trade.pool.pool);
     let expiryPrice: number | null = trade.expiry_price;
@@ -143,11 +141,7 @@ const HistoryTable: React.FC<{
     switch (col) {
       case TableColumn.Strike:
         return (
-          <StrikePriceComponent
-            trade={trade}
-            currentOI={currentOi}
-            maXOI={maxOi}
-          />
+          <StrikePriceComponent trade={trade} currentOI={'0'} maXOI={'0'} />
         );
       case TableColumn.Asset:
         return (
@@ -309,7 +303,7 @@ const HistoryTable: React.FC<{
     const trade = trades?.[row];
 
     if (!trade) return <>Something went wrong.</>;
-    if (!readcallData) return <></>;
+    // if (!readcallData) return <></>;
 
     const poolInfo = getPoolInfo(trade?.pool?.pool);
     if (!poolInfo) return <>Something went wrong.</>;
@@ -319,9 +313,9 @@ const HistoryTable: React.FC<{
       const id = getPriceCacheId(trade);
       expiryPrice = expiryPriceCache[id] || 0;
     }
-    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
-    const currentOi =
-      readcallData.currentOIs[getAddress(trade.target_contract)];
+    // const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
+    // const currentOi =
+    //   readcallData.currentOIs[getAddress(trade.target_contract)];
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
     const headerClass = 'text-[#808191] text-f12';
     const descClass = 'text-[#C3C2D4] text-f2';
@@ -353,8 +347,8 @@ const HistoryTable: React.FC<{
               <div className={headerClass}>Strike</div>
               <StrikePriceComponent
                 trade={trade}
-                currentOI={currentOi}
-                maXOI={maxOi}
+                currentOI={'0'}
+                maXOI={'0'}
                 className={descClass}
               />
             </ColumnGap>
