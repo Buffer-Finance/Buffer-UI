@@ -1,10 +1,9 @@
-import { UTF8ArrToStr, getKlineFromPrice } from '@TV/utils';
-import axios from 'axios';
-import { atom, useSetAtom } from 'jotai';
-import { useCallback, useEffect, useState } from 'react';
-import { Market2Prices } from 'src/Types/Market';
 import { multiply } from '@Utils/NumString/stringArithmatics';
+import axios from 'axios';
 import Big from 'big.js';
+import { atom, useSetAtom } from 'jotai';
+import { useEffect, useState } from 'react';
+import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
 type WSUPdate = {
   type: 'price_update';
@@ -59,7 +58,7 @@ export const usePriceRetriable = () => {
         };
         silentPriceCache[pythIds[(lastJsonMessage as WSUPdate).price_feed.id]] =
           priceUpdatePacked;
-        console.log(`setting: `, message);
+        // console.log(`setting: `, message);
 
         setPrice((p) => ({ ...p, ...data }));
       }

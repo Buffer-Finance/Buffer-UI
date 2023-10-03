@@ -67,7 +67,7 @@ export const usePlatformHistoryTrades = () => {
   const { address } = useAccount();
   const activePage = useAtomValue(platformHistoryTableActivePage);
   const markets = useAllV2_5MarketsConfig();
-  console.log('markets', markets);
+  // console.log('markets', markets);
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'platform-history-trades-' +

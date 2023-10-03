@@ -1,43 +1,43 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
-import { useAtom } from 'jotai';
-import { useState, useEffect, ReactNode, useMemo } from 'react';
-import { useCodeOwner } from './Hooks/useCodeOwner';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import YellowWarning from '@SVG/Elements/YellowWarning';
+import { toFixed } from '@Utils/NumString';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import BufferInput from '@Views/Common/BufferInput';
 import BufferTransitionedTab from '@Views/Common/BufferTransitionedTab';
 import Header from '@Views/Common/Header';
-import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
-import Drawer from '@Views/Common/V2-Drawer';
-import PlainCard from '@Views/Referral/Components/PlainCard';
-import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
-import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { ReferralContextProvider, showCodeModalAtom } from './referralAtom';
-import { isNullAdds } from './Utils/isNullAds';
-import { Display } from '@Views/Common/Tooltips/Display';
-import { useReferralCode } from './Utils/useReferralCode';
-import YellowWarning from '@SVG/Elements/YellowWarning';
-import { BlueBtn } from '@Views/Common/V2-Button';
-import { useUserCode } from './Hooks/useUserCode';
-import { ContentCopy } from '@mui/icons-material';
-import { useCopyToClipboard } from 'react-use';
-import useSWR from 'swr';
-import axios from 'axios';
-import { divide } from '@Utils/NumString/stringArithmatics';
-import { Tooltip } from '@mui/material';
-import { useUserAccount } from '@Hooks/useUserAccount';
 import { HeadTitle } from '@Views/Common/TitleHead';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { useSearchParams } from 'react-router-dom';
-import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
+import { Display } from '@Views/Common/Tooltips/Display';
+import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
+import { BlueBtn } from '@Views/Common/V2-Button';
+import Drawer from '@Views/Common/V2-Drawer';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { toFixed } from '@Utils/NumString';
-import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import PlainCard from '@Views/Referral/Components/PlainCard';
+import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
+import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
+import { ContentCopy } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import axios from 'axios';
+import { useAtom } from 'jotai';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useCopyToClipboard } from 'react-use';
+import useSWR from 'swr';
+import { useCodeOwner } from './Hooks/useCodeOwner';
+import { useUserCode } from './Hooks/useUserCode';
+import { isNullAdds } from './Utils/isNullAds';
+import { useReferralCode } from './Utils/useReferralCode';
+import { ReferralContextProvider, showCodeModalAtom } from './referralAtom';
 
 interface IReferral {}
 
@@ -527,7 +527,7 @@ const Affilate = ({
     }
   };
 
-  console.log(`index-affiliateCode: `, affiliateCode);
+  // console.log(`index-affiliateCode: `, affiliateCode);
 
   useEffect(() => {
     if (open) {

@@ -1,8 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
-import Background from './style';
 import Fade from 'react-reveal/Fade';
 import ErrorIcon from 'src/SVG/Elements/ErrorIcon';
-import { twMerge } from 'tailwind-merge';
+import Background from './style';
 export interface IBufferInputBase {
   placeholder?: string;
   unit?: React.ReactChild;
@@ -83,7 +82,7 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
   const err = errs.length && errs[0];
   // useEffect(() => {
   //   onError(errs);
-  console.log(`autoFocus: `, autoFocus);
+  // console.log(`autoFocus: `, autoFocus);
   // }, [errs]);
   return (
     <Background className={className} onClick={onClick}>
