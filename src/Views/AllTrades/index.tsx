@@ -1,4 +1,4 @@
-import { usePrice, usePriceRetriable } from '@Hooks/usePrice';
+import { usePriceRetriable } from '@Hooks/usePrice';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import {
   PlatformHistory,
@@ -22,7 +22,7 @@ export const AllTrades = () => {
 
   const table = useMemo(() => {
     if (currentTab.toLowerCase() === 'active') {
-      return <PlatformOngoing />;
+      return <PlatformOngoing overflow={false} />;
     }
     if (currentTab.toLowerCase() === 'history') {
       return <PlatformHistory className="sm:min-w-[800px]" overflow={false} />;

@@ -223,9 +223,11 @@ export const PlatformHistory = ({
 export const PlatformOngoing = ({
   onlyView,
   className = '',
+  overflow = true,
 }: {
   onlyView?: number[];
   className?: string;
+  overflow?: boolean;
 }) => {
   const { page_data: platformActiveTrades, total_pages } =
     usePlatformActiveTrades();
@@ -244,7 +246,7 @@ export const PlatformOngoing = ({
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={platformActiveTrades === undefined}
-      overflow
+      overflow={overflow}
       className={className}
     />
   );
