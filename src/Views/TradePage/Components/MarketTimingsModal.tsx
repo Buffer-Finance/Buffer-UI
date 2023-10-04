@@ -1,8 +1,8 @@
-import { useAtom } from 'jotai';
 import BufferTable from '@Views/Common/BufferTable';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import { useAtom } from 'jotai';
 import { ModalBase } from 'src/Modals/BaseModal';
 import { TableHeader } from '../Views/AccordionTable/Common';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { ForexTimingsModalAtom } from '../atoms';
 import { AssetCategory } from '../type';
 interface IMarketTimingsModal {}
@@ -42,13 +42,13 @@ const getDataArr = (marketType: number) => {
         'Sunday',
       ],
       [
-        'Open all day',
-        'Open all day',
-        'Open all day',
-        'Open all day',
-        'Closed from 08:00PM UTC',
+        'Opened from 06:00AM - 4:00PM UTC',
+        'Opened from 06:00AM - 4:00PM UTC',
+        'Opened from 06:00AM - 4:00PM UTC',
+        'Opened from 06:00AM - 4:00PM UTC',
+        'Opened from 06:00AM - 4:00PM UTC',
         'Closed all day',
-        'Open from 10:00PM UTC',
+        'Closed all day',
       ],
     ];
   }
