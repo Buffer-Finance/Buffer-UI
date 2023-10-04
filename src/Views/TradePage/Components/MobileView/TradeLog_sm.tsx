@@ -3,6 +3,7 @@ import ShutterProvider, {
   useShutterHandlers,
 } from '@Views/Common/MobileShutter/MobileShutter';
 import { EssentialModals } from '@Views/TradePage';
+import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import {
   Cancelled,
@@ -41,6 +42,8 @@ const TradeLog_sm: React.FC<any> = ({}) => {
   const { closeShutter } = useShutterHandlers();
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
   usePriceRetriable();
+  useBuyTradeData();
+
   useEffect(() => {
     closeShutter();
     return closeShutter;
