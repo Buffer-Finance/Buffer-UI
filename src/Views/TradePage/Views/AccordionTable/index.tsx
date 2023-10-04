@@ -234,7 +234,10 @@ export const PlatformOngoing = ({
   const [activePage, setActivePage] = useAtom(platformActiveTableActivePage);
 
   useEffect(() => {
-    if (activePage > total_pages) setActivePage(1);
+    if (platformActiveTrades !== undefined && activePage > total_pages) {
+      console.log(activePage, total_pages, 'this ran');
+      setActivePage(1);
+    }
   }, [total_pages]);
 
   return (
