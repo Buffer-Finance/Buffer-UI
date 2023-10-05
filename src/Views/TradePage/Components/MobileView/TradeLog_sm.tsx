@@ -165,10 +165,10 @@ export { TradeLog_sm };
 export const MobileHistoryTable = () => {
   return <History onlyView={[0, 1, 6, 7]} overflow={false} />;
 };
-const MobilePlatformHistoryTable = () => {
+export const MobilePlatformHistoryTable = () => {
   return <PlatformHistory onlyView={[0, 9, 6, 7]} overflow={false} />;
 };
-const MobilePlatformOngoingTable = () => {
+export const MobilePlatformOngoingTable = () => {
   return <PlatformOngoing onlyView={[0, 1, 2, 6]} />;
 };
 const MobileCancelledTable = () => {
