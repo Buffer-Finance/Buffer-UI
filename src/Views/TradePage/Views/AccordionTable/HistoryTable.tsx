@@ -23,6 +23,7 @@ import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useMedia } from 'react-use';
+import { TradeTimeElapsed } from '../BuyTrade/ActiveTrades/TradeTimeElapsed';
 import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
@@ -324,7 +325,7 @@ const HistoryTable: React.FC<{
           </div>
           <div className={timeClass}>{getDisplayTime(minClosingTime)}</div>
         </RowBetween>
-        <div className="h-1 w-full bg-[#393D4D] mt-3" />
+        <TradeTimeElapsed trade={trade} stopTime={minClosingTime} />
         <RowBetween className="mt-3">
           <div className={dateClass}>
             {getDisplayDate(trade.open_timestamp)}
