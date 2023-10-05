@@ -84,7 +84,6 @@ export const HistoryTables = () => {
             isLoading={false}
             className="sm:min-w-[800px]"
             overflow={false}
-            isAccordianTable={true}
           />,
           <LimitOrderTable trades={limitOrders} overflow={false} />,
           isNotMobile ? (
