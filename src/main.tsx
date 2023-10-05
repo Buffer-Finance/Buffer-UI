@@ -33,7 +33,6 @@ import { inject } from '@vercel/analytics';
 inject();
 
 if (import.meta.env.VITE_MODE === 'production') {
-  console.log('sentry init');
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
 
