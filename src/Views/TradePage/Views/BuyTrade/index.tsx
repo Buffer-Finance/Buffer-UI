@@ -1,5 +1,5 @@
 import { priceAtom } from '@Hooks/usePrice';
-import { getPriceFromKlines } from '@TV/useDataFeed';
+import { getLastbar } from '@TV/useDataFeed';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
@@ -96,7 +96,7 @@ export const BuyTrade: React.FC = () => {
     ? (divide(approvalExpanded?.allowance, decimals) as string)
     : '0';
 
-  const activeAssetPrice = getPriceFromKlines(marketPrice, {
+  const activeAssetPrice = getLastbar(marketPrice, {
     tv_id: activeMarket.tv_id,
   });
 
@@ -119,7 +119,7 @@ export const BuyTrade: React.FC = () => {
       <TimeSelector />
       <TradeSizeSelector />
       <TradeTypeSelector />
-      <CurrentPrice price={activeAssetPrice} />
+      <CurrentPrice price={activeAssetPrice?.price ?? '0'} />
       <PayoutProfit
         amount={userAmount || '0'}
         totalPayout={payout}

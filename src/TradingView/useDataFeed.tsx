@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { atom, useAtom, useSetAtom } from 'jotai';
-import axios from 'axios';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { marketsForChart } from '@Views/TradePage/config';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { marketsForChart } from '@Views/TradePage/config';
+import axios from 'axios';
+import { atom, useAtom, useSetAtom } from 'jotai';
+import { useEffect, useRef, useState } from 'react';
 const FIRST_TIMESTAMP = 1673239587;
 export function getBlockFromBar(bar) {
   if (bar.time) return bar;
@@ -628,7 +628,10 @@ export const get24hChange = (marketPrice, asset: { tv_id: string }) => {
   return marketPrice[asset.tv_id] ?? 'N/A';
 };
 
-export const getLastbar = (marketPrice, asset): Ikline | null => {
+export const getLastbar = (
+  marketPrice,
+  asset
+): { price: string; time: number } | null => {
   if (!asset?.tv_id) return null;
   const kline = marketPrice?.[asset.tv_id];
 
