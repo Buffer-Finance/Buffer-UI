@@ -1,14 +1,21 @@
 import { usePriceRetriable } from '@Hooks/usePrice';
+import {
+  MobilePlatformHistoryTable,
+  MobilePlatformOngoingTable,
+} from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import {
   PlatformHistory,
   PlatformOngoing,
 } from '@Views/TradePage/Views/AccordionTable';
 import { useMemo } from 'react';
+import { useMedia } from 'react-use';
 import { useAllTradesTab } from './useAlltradesTab';
 
 export const AllTrades = () => {
   const { setTab, tab } = useAllTradesTab();
+  const isNotMobile = useMedia('(min-width:1200px)');
+
   useBuyTradeData();
   usePriceRetriable();
 
@@ -22,10 +29,18 @@ export const AllTrades = () => {
 
   const table = useMemo(() => {
     if (currentTab.toLowerCase() === 'active') {
-      return <PlatformOngoing overflow={false} />;
+      return isNotMobile ? (
+        <PlatformOngoing overflow={false} />
+      ) : (
+        <MobilePlatformOngoingTable />
+      );
     }
     if (currentTab.toLowerCase() === 'history') {
-      return <PlatformHistory className="sm:min-w-[800px]" overflow={false} />;
+      return isNotMobile ? (
+        <PlatformHistory className="sm:min-w-[800px]" overflow={false} />
+      ) : (
+        <MobilePlatformHistoryTable />
+      );
     }
     return <>select a tab</>;
   }, [currentTab]);
