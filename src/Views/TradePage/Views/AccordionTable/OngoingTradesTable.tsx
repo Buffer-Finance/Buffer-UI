@@ -22,10 +22,13 @@ import { closeLoadingAtom, queuets2priceAtom } from '@Views/TradePage/atoms';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
 import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 import { Launch } from '@mui/icons-material';
 import { useMedia } from 'react-use';
 import { getAddress } from 'viem';
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
+import { TradeTimeElapsed } from '../BuyTrade/ActiveTrades/TradeTimeElapsed';
 import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
@@ -310,18 +313,20 @@ export const OngoingTradesTable: React.FC<{
     const dateClass = 'text-[#6F6E84] text-f10';
     const durationClass = 'text-[#7F87A7] text-f12';
     const timeClass = 'text-[#C3C2D4] text-f12';
+    const duration = formatDistance(
+      Variables(minClosingTime - trade.open_timestamp)
+    );
     return (
       <div className="px-3 py-2">
         <RowBetween>
           <div className={timeClass}>
             {getDisplayTime(trade.open_timestamp)}
           </div>
-          <div className={durationClass}>
-            {formatDistance(Variables(minClosingTime - trade.open_timestamp))}
-          </div>
+          <div className={durationClass}>{duration}</div>
           <div className={timeClass}>{getDisplayTime(minClosingTime)}</div>
         </RowBetween>
-        <div className="h-1 w-full bg-[#393D4D] mt-3" />
+        {/* <div className="h-1 w-full bg-[#393D4D] mt-3" /> */}
+        <TradeTimeElapsed trade={trade} />
         <RowBetween className="mt-3">
           <div className={dateClass}>
             {getDisplayDate(trade.open_timestamp)}
@@ -390,4 +395,59 @@ export const Pnl = ({
       />
     );
   return <div>Calculating..</div>;
+};
+
+const progressAnimation = keyframes`
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+`;
+
+const ProgressLineWrapper = styled.div<{ duration: number; delay: number }>`
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background-color: #393d4d;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #3772ff;
+    height: 100%;
+    animation: ${progressAnimation} ${(props) => props.duration}s linear;
+    animation-delay: ${(props) => -props.delay}s;
+  }
+`;
+
+const ProgressLine = ({
+  startTime,
+  endTime,
+  duration,
+  className,
+}: {
+  startTime: number;
+  endTime: number;
+  duration: number;
+  className?: string;
+}) => {
+  const now = Math.floor(Date.now() / 1000);
+  const elapsedTime = now - startTime;
+  const totalDuration = endTime - startTime;
+  const initialProgress = (elapsedTime / totalDuration) * 100;
+
+  // Ensure progress does not go beyond 100%
+  const clampedProgress = Math.min(100, initialProgress);
+  return (
+    <ProgressLineWrapper
+      duration={duration}
+      delay={(clampedProgress / 100) * duration}
+      className={className}
+    />
+  );
 };
