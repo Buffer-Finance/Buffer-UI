@@ -26,6 +26,7 @@ import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
 import { signTypedData } from '@wagmi/core';
 import axios from 'axios';
+import { isTestnet } from 'config';
 import { PublicClient } from 'viem';
 import { useAccount, usePublicClient } from 'wagmi';
 import { getExpiry } from '../Views/AccordionTable/Common';
@@ -43,6 +44,7 @@ import {
   MAX_SLIPPAGE,
   MIN_SLIPPAGE,
   baseUrl,
+  isSandbox,
   pricePublisherBaseUrl,
 } from '../config';
 import { AssetCategory, TradeType } from '../type';
@@ -108,6 +110,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const buyHandler = async (customTrade: {
     is_up: boolean;
     strike: string;
+    strikeTimestamp: number;
     limitOrderExpiry: number;
   }) => {
     const price = customTrade?.strike;
@@ -410,7 +413,7 @@ export const useBuyTradeActions = (userInput: string) => {
           activeChain.id,
           configData.router
         );
-        const apiParams = {
+        let apiParams = {
           signature_timestamp: currentUTCTimestamp,
           strike: baseArgs[ArgIndex.Strike],
           period: baseArgs[ArgIndex.Period],
@@ -435,10 +438,21 @@ export const useBuyTradeActions = (userInput: string) => {
           environment: activeChain.id,
           token: tokenName,
         };
+        if (isTestnet && !isSandbox) {
+          apiParams = {
+            ...apiParams,
+            strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
+          };
+        }
         console.log('apiParams', apiParams);
 
+        const trailingUrl = baseUrl.includes('testnet')
+          ? 'trade/temp/create/'
+          : 'trade/create/';
+        console.log('trailingUrl', trailingUrl);
+
         const resp: { data: TradeType } = await axios.post(
-          baseUrl + 'trade/create/',
+          baseUrl + trailingUrl,
           null,
           {
             params: apiParams,
@@ -459,7 +473,7 @@ export const useBuyTradeActions = (userInput: string) => {
             baseArgs[ArgIndex.Slippage],
             baseArgs[ArgIndex.TargetContract],
             provider,
-            configData.multicall
+            configData.multicall as string
           ).then((lockedAmount: string[]) => {
             console.log(`useBuyTradeActions-lockedAmount: `, lockedAmount);
 
@@ -674,11 +688,7 @@ const getLockedAmount = async (
   optionContract: string,
   provider: PublicClient,
   multicallAddress: string
-): Promise<{
-  amount: string;
-  isReferralValid: boolean;
-  revisedFee: string;
-}> => {
+): Promise<string[]> => {
   const calls = [
     {
       address: optionContract,

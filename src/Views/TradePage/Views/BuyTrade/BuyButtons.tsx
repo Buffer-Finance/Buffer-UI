@@ -1,4 +1,6 @@
+import { useToast } from '@Contexts/Toast';
 import DownIcon from '@SVG/Elements/DownIcon';
+import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
@@ -14,11 +16,8 @@ import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useAccount } from 'wagmi';
 import { ReactNode } from 'react';
-import MemoTimeIcon from '@SVG/Elements/TimeIcon';
-import { usePrice } from '@Hooks/usePrice';
-import { useToast } from '@Contexts/Toast';
+import { useAccount } from 'wagmi';
 
 export const BuyButtons = ({
   allowance,
@@ -28,7 +27,7 @@ export const BuyButtons = ({
   isApprovalLocked,
 }: {
   allowance: string;
-  activeAssetPrice: string;
+  activeAssetPrice: { price: string; time: number } | null;
   amount: string;
   center?: ReactNode;
   isApprovalLocked: boolean | undefined;
@@ -56,9 +55,16 @@ export const BuyButtons = ({
 
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
+    if (activeAssetPrice == null)
+      return toastify({
+        type: 'error',
+        msg: 'Price not found',
+        id: 'lo no strike',
+      });
+
     // if (lt(allowance || '0', amount.toString() || '0'))
     //   return setIsApproveModalOpen(true);
-    let strike = activeAssetPrice;
+    let strike = activeAssetPrice.price;
     let limitOrderExpiry = '0';
     if (tradeType == 'Limit') {
       if (!limitStrike)
@@ -75,6 +81,7 @@ export const BuyButtons = ({
       is_up: isUp ? true : false,
       strike,
       limitOrderExpiry: Number(limitOrderExpiry),
+      strikeTimestamp: activeAssetPrice.time,
     });
   };
 

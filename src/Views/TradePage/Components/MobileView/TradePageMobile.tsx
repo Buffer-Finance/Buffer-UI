@@ -1,27 +1,23 @@
-import ShutterProvider, {
-  useShutterHandlers,
-} from '@Views/Common/MobileShutter/MobileShutter';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { MultiResolutionChart } from '@Views/TradePage/Views/MarketChart/MultiResolutionChart';
-import { ViewOnlyInputs } from './ViewOnlyInputs';
-import { BuyButtons } from '@Views/TradePage/Views/BuyTrade/BuyButtons';
-import { useAtomValue, useSetAtom } from 'jotai';
 import { priceAtom } from '@Hooks/usePrice';
-import { tradeSizeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
-import { getPriceFromKlines } from '@TV/useDataFeed';
+import MemoTimeIcon from '@SVG/Elements/TimeIcon';
+import { getLastbar } from '@TV/useDataFeed';
+import { divide } from '@Utils/NumString/stringArithmatics';
+import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
+import { BuyButtons } from '@Views/TradePage/Views/BuyTrade/BuyButtons';
 import { PayoutProfit } from '@Views/TradePage/Views/BuyTrade/PayoutProfit';
-import { joinStrings } from '@Views/TradePage/utils';
+import { MultiResolutionChart } from '@Views/TradePage/Views/MarketChart/MultiResolutionChart';
 import { useSelectedAssetPayout } from '@Views/TradePage/Views/MarketChart/Payout';
-import MemoTimeIcon from '@SVG/Elements/TimeIcon';
-import { MarketSelectorDD } from '@Views/TradePage/Views/MarketChart/MarketSelectorDD';
-import { MarketPicker } from './MarketPicker/MarketPicker';
-import { MarketStatsBar } from '@Views/TradePage/Views/MarketChart/MarketStatsBar';
+import { tradeSizeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
+import { joinStrings } from '@Views/TradePage/utils';
 import { Skeleton } from '@mui/material';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { MarketPicker } from './MarketPicker/MarketPicker';
 import { MobileChartControlls } from './MobileChartControlls';
+import { ViewOnlyInputs } from './ViewOnlyInputs';
 
 const TradePageMobile: React.FC<any> = ({}) => {
   const marketConfig = useMarketsConfig();
@@ -46,7 +42,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
     );
   const decimals = poolDetails.decimals;
 
-  const activeAssetPrice = getPriceFromKlines(marketPrice, {
+  const activeAssetPrice = getLastbar(marketPrice, {
     tv_id: activeMarket.tv_id,
   });
   const tradeToken = poolDetails.token;
