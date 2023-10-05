@@ -35,7 +35,7 @@ import {
   tradeSettingsAtom,
 } from '../atoms';
 import { getSingatureCached } from '../cache';
-import { baseUrl, isSandbox, pricePublisherBaseUrl } from '../config';
+import { baseUrl, pricePublisherBaseUrl } from '../config';
 import { AssetCategory, TradeType } from '../type';
 import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
 import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
@@ -410,7 +410,7 @@ export const useBuyTradeActions = (userInput: string) => {
           environment: activeChain.id,
           token: tokenName,
         };
-        if (isTestnet && isSandbox) {
+        if (isTestnet) {
           apiParams = {
             ...apiParams,
             strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
@@ -418,9 +418,7 @@ export const useBuyTradeActions = (userInput: string) => {
         }
         console.log('apiParams', apiParams);
 
-        const trailingUrl = baseUrl.includes('development')
-          ? 'trade/temp/create/'
-          : 'trade/create/';
+        const trailingUrl = isTestnet ? 'trade/temp/create/' : 'trade/create/';
         console.log('trailingUrl', trailingUrl);
 
         const resp: { data: TradeType } = await axios.post(
