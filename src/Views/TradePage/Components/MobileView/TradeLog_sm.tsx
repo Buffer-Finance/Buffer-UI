@@ -153,14 +153,10 @@ const TradeLog_sm: React.FC<any> = ({}) => {
                 );
               })}
           </div>
-          {activeTab == 'History' && <History onlyView={[0, 1, 6, 7]} />}
-          {activeTab == 'Platform History' && (
-            <PlatformHistory onlyView={[0, 9, 6, 7]} />
-          )}
-          {activeTab == 'Platform Trades' && (
-            <PlatformOngoing onlyView={[0, 1, 2, 6]} />
-          )}
-          {activeTab == 'Cancelled:b' && <Cancelled onlyView={[0, 1, 2, 4]} />}
+          {activeTab == 'History' && <MobileHistoryTable />}
+          {activeTab == 'Platform History' && <MobilePlatformHistoryTable />}
+          {activeTab == 'Platform Trades' && <MobilePlatformOngoingTable />}
+          {activeTab == 'Cancelled:b' && <MobileCancelledTable />}
         </>
       )}
     </main>
@@ -168,3 +164,16 @@ const TradeLog_sm: React.FC<any> = ({}) => {
 };
 
 export { TradeLog_sm };
+
+export const MobileHistoryTable = () => {
+  return <History onlyView={[0, 1, 6, 7]} overflow={false} />;
+};
+const MobilePlatformHistoryTable = () => {
+  return <PlatformHistory onlyView={[0, 9, 6, 7]} overflow={false} />;
+};
+const MobilePlatformOngoingTable = () => {
+  return <PlatformOngoing onlyView={[0, 1, 2, 6]} />;
+};
+const MobileCancelledTable = () => {
+  return <Cancelled onlyView={[0, 1, 2, 4]} />;
+};
