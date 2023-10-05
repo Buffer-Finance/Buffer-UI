@@ -1,6 +1,6 @@
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import BufferTable from '@Views/Common/BufferTable';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -9,6 +9,7 @@ import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { toFixed } from '@Utils/NumString';
 import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
+import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { GreyBtn } from '@Views/Common/V2-Button';
@@ -17,14 +18,11 @@ import { RowBetween } from '@Views/TradePage/Components/Row';
 import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import {
-  closeLoadingAtom,
-  queuets2priceAtom,
-  tradeInspectMobileAtom,
-} from '@Views/TradePage/atoms';
+import { closeLoadingAtom, queuets2priceAtom } from '@Views/TradePage/atoms';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
 import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import { Launch } from '@mui/icons-material';
 import { useMedia } from 'react-use';
 import { getAddress } from 'viem';
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
@@ -40,6 +38,7 @@ import {
   getProbability,
   tableButtonClasses,
 } from './Common';
+import { useNavigateToProfile } from './HistoryTable';
 import { Visualized } from './Visualized';
 
 export const OngoingTradesTable: React.FC<{
@@ -71,7 +70,8 @@ export const OngoingTradesTable: React.FC<{
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { registeredOneCT } = useOneCTWallet();
   const readcallData = useAtomValue(buyTradeDataAtom);
-  const setInspectTrade = useSetAtom(tradeInspectMobileAtom);
+  const navigateToProfile = useNavigateToProfile();
+
   let strikePriceHeading = 'Strike Price';
   if (isMobile) {
     strikePriceHeading = 'Strike';
@@ -87,6 +87,7 @@ export const OngoingTradesTable: React.FC<{
           'Close Time',
           'Trade Size',
           'PnL | Probability',
+          'User',
         ]
       : [
           'Asset',
@@ -146,6 +147,24 @@ export const OngoingTradesTable: React.FC<{
     const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
     switch (col) {
       case TableColumn.Show:
+        if (platform)
+          return (
+            <div className="flex items-center">
+              {getSlicedUserAddress(trade.user_address, 4)}
+              {!isNotMobile && (
+                <div
+                  role="button"
+                  onClick={() => {
+                    const userAddress = trade.user_address;
+                    if (!userAddress) return;
+                    navigateToProfile(userAddress);
+                  }}
+                >
+                  <Launch className="scale-75 mb-1" />
+                </div>
+              )}
+            </div>
+          );
         return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
             <Visualized queue_id={trade.queue_id} />
@@ -332,8 +351,11 @@ export const OngoingTradesTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={(idx) => {
-        // if (isNotMobile) return null;
-        // else setInspectTrade({ trade: trades?.[idx] });
+        if (isNotMobile) {
+          const userAddress = trades?.[idx].user_address;
+          if (!userAddress) return;
+          navigateToProfile(userAddress);
+        }
       }}
       overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}

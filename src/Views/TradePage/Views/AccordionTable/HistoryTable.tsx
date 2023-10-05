@@ -17,13 +17,10 @@ import {
   expiryPriceCache,
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
 import { TradeType } from '@Views/TradePage/type';
 import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
-import { useAtomValue, useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { useMedia } from 'react-use';
 import { AssetCell } from './AssetCell';
@@ -73,9 +70,6 @@ const HistoryTable: React.FC<{
   overflow = true,
 }) => {
   const { getPoolInfo } = usePoolInfo();
-  const setInspectTrade = useSetAtom(tradeInspectMobileAtom);
-  const navigate = useNavigate();
-  const readcallData = useAtomValue(buyTradeDataAtom);
 
   const headNameArray = platform
     ? [
@@ -107,6 +101,7 @@ const HistoryTable: React.FC<{
   };
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
+  const navigateToProfile = useNavigateToProfile();
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -295,10 +290,6 @@ const HistoryTable: React.FC<{
     return 'Unhandled Body';
   };
 
-  const navigateToProfile = (userAddress: string) => {
-    navigate(`/profile/?user_address=${userAddress}`);
-  };
-
   const Accordian = (row: number) => {
     const trade = trades?.[row];
 
@@ -458,3 +449,10 @@ const HistoryTable: React.FC<{
   );
 };
 export { HistoryTable };
+
+export const useNavigateToProfile = () => {
+  const navigate = useNavigate();
+  return (userAddress: string) => {
+    navigate(`/profile/?user_address=${userAddress}`);
+  };
+};
