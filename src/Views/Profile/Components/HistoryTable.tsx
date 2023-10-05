@@ -46,7 +46,7 @@ export const HistoryTables = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-5 sm:flex-col sm:items-start sm:gap-3">
+      <div className="flex items-center justify-between mb-5 sm:flex-col sm:items-start sm:gap-3 sm:mb-[0]">
         <BufferTab
           value={activeTabIdx}
           handleChange={(e, t) => {
