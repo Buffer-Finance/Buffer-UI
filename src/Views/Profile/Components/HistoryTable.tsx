@@ -3,6 +3,7 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import InfoIcon from '@SVG/Elements/InfoIcon';
 import BufferTab from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
+import { MobileHistoryTable } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { History } from '@Views/TradePage/Views/AccordionTable';
@@ -11,10 +12,12 @@ import { OngoingTradesTable } from '@Views/TradePage/Views/AccordionTable/Ongoin
 import { OpenInNew } from '@mui/icons-material';
 import { binaryTabs, isTestnet } from 'config';
 import { useEffect, useMemo } from 'react';
+import { useMedia } from 'react-use';
 
 export const useHistoryTableTabs = () => {
   const { state, dispatch } = useGlobal();
   const activeTab = state.tabs.activeIdx;
+
   useBuyTradeData();
 
   const activeTabIdx = useMemo(
@@ -32,6 +35,7 @@ export const useHistoryTableTabs = () => {
 
 export const HistoryTables = () => {
   const { activeTabIdx, changeActiveTab } = useHistoryTableTabs();
+  const isNotMobile = useMedia('(min-width:1200px)');
 
   useEffect(() => {
     changeActiveTab(null, 2);
@@ -42,7 +46,7 @@ export const HistoryTables = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-5 sm:flex-col sm:items-start sm:gap-3">
         <BufferTab
           value={activeTabIdx}
           handleChange={(e, t) => {
@@ -80,17 +84,16 @@ export const HistoryTables = () => {
             isLoading={false}
             className="sm:min-w-[800px]"
             overflow={false}
+            isAccordianTable={true}
           />,
           <LimitOrderTable trades={limitOrders} overflow={false} />,
-          <History className="sm:min-w-[800px]" overflow={false} />,
+          isNotMobile ? (
+            <History className="sm:min-w-[800px]" overflow={false} />
+          ) : (
+            <MobileHistoryTable />
+          ),
         ]}
       />
     </>
   );
 };
-
-function MobileOnly({ children }: { children: React.ReactNode }) {
-  if (typeof window === 'undefined') return null;
-  if (window.innerWidth > 1200) return null;
-  return <>{children}</>;
-}
