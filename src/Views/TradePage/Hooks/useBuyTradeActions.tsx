@@ -98,6 +98,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const buyHandler = async (customTrade: {
     is_up: boolean;
     strike: string;
+    strikeTimestamp: number;
     limitOrderExpiry: number;
   }) => {
     const price = customTrade?.strike;
@@ -383,7 +384,7 @@ export const useBuyTradeActions = (userInput: string) => {
           activeChain.id,
           configData.router
         );
-        const apiParams = {
+        let apiParams = {
           signature_timestamp: currentUTCTimestamp,
           strike: baseArgs[ArgIndex.Strike],
           period: baseArgs[ArgIndex.Period],
@@ -407,11 +408,13 @@ export const useBuyTradeActions = (userInput: string) => {
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
           environment: activeChain.id,
           token: tokenName,
+          strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
         };
-        console.log('apiParams', apiParams);
+
+        const trailingUrl = 'trade/v2/create/';
 
         const resp: { data: TradeType } = await axios.post(
-          baseUrl + 'trade/create/',
+          baseUrl + trailingUrl,
           null,
           {
             params: apiParams,
@@ -432,7 +435,7 @@ export const useBuyTradeActions = (userInput: string) => {
             baseArgs[ArgIndex.Slippage],
             baseArgs[ArgIndex.TargetContract],
             provider,
-            configData.multicall
+            configData.multicall as string
           ).then((lockedAmount: string[]) => {
             console.log(`useBuyTradeActions-lockedAmount: `, lockedAmount);
 
@@ -647,11 +650,7 @@ const getLockedAmount = async (
   optionContract: string,
   provider: PublicClient,
   multicallAddress: string
-): Promise<{
-  amount: string;
-  isReferralValid: boolean;
-  revisedFee: string;
-}> => {
+): Promise<string[]> => {
   const calls = [
     {
       address: optionContract,
