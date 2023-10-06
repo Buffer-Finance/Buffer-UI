@@ -127,7 +127,7 @@ const AccordionTable: React.FC<any> = ({}) => {
         ) : activeTable == 'Platform Trades' ? (
           <PlatformOngoing />
         ) : activeTable == 'Platform History' ? (
-          <PlatformHistory />
+          <PlatformHistory overflow />
         ) : activeTable == 'Cancelled' ? (
           <Cancelled />
         ) : (
