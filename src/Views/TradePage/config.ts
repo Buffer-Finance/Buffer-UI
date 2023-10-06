@@ -80,7 +80,7 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/version/v2.5.9-leaderboard-win-trades-2/api',
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0xff37eCD6cD32ce9caC75D3EFb434CAc6d63300B1',
