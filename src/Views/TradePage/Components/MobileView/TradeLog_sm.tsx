@@ -172,7 +172,7 @@ export const MobilePlatformHistoryTable = () => {
   return <PlatformHistory onlyView={[0, 9, 6, 7]} overflow={false} />;
 };
 export const MobilePlatformOngoingTable = () => {
-  return <PlatformOngoing onlyView={[0, 1, 2, 6]} />;
+  return <PlatformOngoing onlyView={[0, 1, 6, 8]} />;
 };
 const MobileCancelledTable = () => {
   return <Cancelled onlyView={[0, 1, 2, 4]} />;
