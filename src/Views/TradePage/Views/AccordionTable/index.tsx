@@ -9,9 +9,11 @@ import {
 } from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import {
+  cancelTableActivePage,
   historyTableActivePage,
   isTableShownAtom,
   platformActiveTableActivePage,
+  platformCancelTableActivePage,
   platformHistoryTableActivePage,
   queuets2priceAtom,
 } from '@Views/TradePage/atoms';
@@ -181,7 +183,8 @@ export const Cancelled = ({
   className?: string;
 }) => {
   const { page_data: canclledTrades, total_pages } = useCancelledTrades();
-  // console.log(canclledTrades, 'cancelled trades');
+  const [activePage, setActivePage] = useAtom(cancelTableActivePage);
+
   return (
     <CancelledTable
       trades={canclledTrades}
@@ -189,6 +192,8 @@ export const Cancelled = ({
       onlyView={onlyView}
       isLoading={canclledTrades === undefined}
       className={className}
+      activePage={activePage}
+      setActivePage={setActivePage}
     />
   );
 };
@@ -267,10 +272,13 @@ export const PlatfromCancelled = ({
 }) => {
   const { page_data: canclledTrades, total_pages } =
     usePlatformCancelledTrades();
-  // console.log(canclledTrades, 'cancelled trades');
+  const [activePage, setActivePage] = useAtom(platformCancelTableActivePage);
+
   return (
     <CancelledTable
       trades={canclledTrades}
+      activePage={activePage}
+      setActivePage={setActivePage}
       totalPages={total_pages}
       onlyView={onlyView}
       isLoading={canclledTrades === undefined}

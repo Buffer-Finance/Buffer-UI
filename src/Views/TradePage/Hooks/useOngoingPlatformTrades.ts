@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import {
   platformActiveTableActivePage,
+  platformCancelTableActivePage,
   platformHistoryTableActivePage,
 } from '../atoms';
 import {
@@ -100,7 +101,7 @@ export const usePlatformHistoryTrades = () => {
 export const usePlatformCancelledTrades = () => {
   const { activeChain } = useActiveChain();
   const { address } = useAccount();
-  const activePage = useAtomValue(platformHistoryTableActivePage);
+  const activePage = useAtomValue(platformCancelTableActivePage);
   const markets = useAllV2_5MarketsConfig();
   // console.log('markets', markets);
 
