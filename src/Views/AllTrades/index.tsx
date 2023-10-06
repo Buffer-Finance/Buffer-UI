@@ -19,7 +19,7 @@ export const AllTrades = () => {
   useBuyTradeData();
   usePriceRetriable();
 
-  const tabs = ['active', 'history'];
+  const tabs = ['active', 'history', 'cancelled'];
   const currentTab = useMemo(() => {
     if (tab !== null) {
       return tab;
