@@ -261,13 +261,14 @@ export default App;
 
 const ViewOnlyModeTradePageWarning = () => {
   const { viewOnlyMode, address } = useUserAccount();
+  const navigate = useNavigate();
   if (!window?.location?.href) return <></>;
   const url = window.location.href.split('#/')[1];
+  if (!url) return <></>;
   const pagename = url.split('/')[0].toLowerCase();
   const isBinaryPage = pagename == 'binary';
   if (!isBinaryPage) return <></>;
   const activeAsset = url.split('/')[1].toUpperCase();
-  const navigate = useNavigate();
   return (
     <Warning
       body={
