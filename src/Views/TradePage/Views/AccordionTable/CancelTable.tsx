@@ -25,7 +25,16 @@ export const CancelledTable: React.FC<{
   platform?: boolean;
   isLoading: boolean;
   className?: string;
-}> = ({ trades, platform, totalPages, isLoading, onlyView, className }) => {
+  overflow?: boolean;
+}> = ({
+  trades,
+  platform,
+  totalPages,
+  isLoading,
+  onlyView,
+  className,
+  overflow = true,
+}) => {
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
   const { getPoolInfo } = usePoolInfo();
   const isMobile = useMedia('(max-width:600px)');
@@ -146,7 +155,7 @@ export const CancelledTable: React.FC<{
       widths={['auto']}
       onRowClick={console.log}
       showOnly={onlyView}
-      overflow
+      overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
       loading={isLoading}
       className={className}

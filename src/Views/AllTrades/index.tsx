@@ -7,6 +7,7 @@ import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import {
   PlatformHistory,
   PlatformOngoing,
+  PlatfromCancelled,
 } from '@Views/TradePage/Views/AccordionTable';
 import { useMemo } from 'react';
 import { useMedia } from 'react-use';
@@ -41,6 +42,9 @@ export const AllTrades = () => {
       ) : (
         <MobilePlatformHistoryTable />
       );
+    }
+    if (currentTab.toLowerCase() === 'cancelled') {
+      return <PlatfromCancelled overflow={false} />;
     }
     return <>select a tab</>;
   }, [currentTab]);
