@@ -2,6 +2,7 @@ import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { getPayout, joinStrings } from '@Views/TradePage/utils';
 import { isObjectEmpty } from '@Views/TradePage/utils/isObjectEmpty';
+import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useCallback } from 'react';
 import { getAddress } from 'viem';
@@ -32,7 +33,7 @@ export const Payout: React.FC<{
     optionContract
   );
   if (payout === undefined || payout === null) {
-    return <div>fetching...</div>;
+    return <Skeleton className="w-[30px] !h-5 lc " />;
   }
   return <div className="b1200:text-center">{payout}%</div>;
 };

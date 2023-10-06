@@ -1,9 +1,10 @@
 import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { SettingsText } from '@Views/TradePage/Components/TextWrapper';
-import { SlippageSelector } from './SlippageSelector';
-import { SlippageInput } from './SlippageInput';
 import { Trans } from '@lingui/macro';
+import { SlippageError } from './SlippageError';
+import { SlippageInput } from './SlippageInput';
+import { SlippageSelector } from './SlippageSelector';
 
 export const Slippage: React.FC<{
   setSlippage: (newSlippage: number) => void;
@@ -31,6 +32,7 @@ export const Slippage: React.FC<{
         />
         <SlippageInput onChange={setSlippage} slippage={currentSlippage} />
       </RowGap>
+      <SlippageError slippage={currentSlippage} />
     </div>
   );
 };

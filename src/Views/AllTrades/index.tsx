@@ -1,18 +1,26 @@
-import { usePrice, usePriceRetriable } from '@Hooks/usePrice';
+import { usePriceRetriable } from '@Hooks/usePrice';
+import {
+  MobilePlatformHistoryTable,
+  MobilePlatformOngoingTable,
+} from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import {
   PlatformHistory,
   PlatformOngoing,
+  PlatfromCancelled,
 } from '@Views/TradePage/Views/AccordionTable';
 import { useMemo } from 'react';
+import { useMedia } from 'react-use';
 import { useAllTradesTab } from './useAlltradesTab';
 
 export const AllTrades = () => {
   const { setTab, tab } = useAllTradesTab();
+  const isNotMobile = useMedia('(min-width:1200px)');
+
   useBuyTradeData();
   usePriceRetriable();
 
-  const tabs = ['active', 'history'];
+  const tabs = ['active', 'history', 'cancelled'];
   const currentTab = useMemo(() => {
     if (tab !== null) {
       return tab;
@@ -22,10 +30,21 @@ export const AllTrades = () => {
 
   const table = useMemo(() => {
     if (currentTab.toLowerCase() === 'active') {
-      return <PlatformOngoing />;
+      return isNotMobile ? (
+        <PlatformOngoing overflow={false} />
+      ) : (
+        <MobilePlatformOngoingTable />
+      );
     }
     if (currentTab.toLowerCase() === 'history') {
-      return <PlatformHistory className="sm:min-w-[800px]" overflow={false} />;
+      return isNotMobile ? (
+        <PlatformHistory className="sm:min-w-[800px]" overflow={false} />
+      ) : (
+        <MobilePlatformHistoryTable />
+      );
+    }
+    if (currentTab.toLowerCase() === 'cancelled') {
+      return <PlatfromCancelled overflow={false} />;
     }
     return <>select a tab</>;
   }, [currentTab]);

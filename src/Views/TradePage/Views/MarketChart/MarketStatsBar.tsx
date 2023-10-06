@@ -9,6 +9,7 @@ import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
 import { getMinimumValue, joinStrings } from '@Views/TradePage/utils';
 import { getMaxSpread } from '@Views/TradePage/utils/getSafeStrike';
+import { Skeleton } from '@mui/material';
 import {
   ClickEvent,
   ControlledMenu,
@@ -147,10 +148,9 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
     return <></>;
   }
 
-  const oneDayChange = (
+  const oneDayChange =
     assetPrices?.[joinStrings(activeMarket.token0, activeMarket.token1, '')]
-      ?.change ?? 0
-  ).toFixed(2);
+      ?.change;
 
   function closeDropdown() {
     toggleMenu(false);
@@ -160,34 +160,46 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const data = [
     {
       header: '24h Change',
-      data: (
-        <OneDayChange
-          oneDayChange={oneDayChange}
-          className="text-f12 "
-          svgClassName="scale-125 mt-2 mr-1"
-        />
-      ),
+      data:
+        oneDayChange === undefined ? (
+          <Skeleton className="w-[50px] !h-5 lc " />
+        ) : (
+          <OneDayChange
+            oneDayChange={oneDayChange.toFixed(2)}
+            className="text-f12 "
+            svgClassName="scale-125 mt-2 mr-1"
+          />
+        ),
     },
     {
       header: 'Max Trade Size',
-      data: (
-        <Display
-          className="b1200:!justify-start"
-          data={maxFee}
-          unit={poolDetails?.token}
-          precision={0}
-        />
-      ),
+      data:
+        maxFee === null ? (
+          <Skeleton className="w-[80px] !h-5 lc " />
+        ) : (
+          <Display
+            className="b1200:!justify-start"
+            data={maxFee}
+            unit={poolDetails?.token}
+            precision={0}
+          />
+        ),
     },
 
     {
       header: 'Max Spread',
-      data: (
-        <div className="flex items-center gap-1">
-          <PlusMinus svgProps={{ fill: '#ffffff' }} className="scale-75 mt-1" />
-          <Display data={spread} precision={4} unit="%" />
-        </div>
-      ),
+      data:
+        spread === null ? (
+          <Skeleton className="w-[60px] !h-5 lc " />
+        ) : (
+          <div className="flex items-center gap-1">
+            <PlusMinus
+              svgProps={{ fill: '#ffffff' }}
+              className="scale-75 mt-1"
+            />
+            <Display data={spread} precision={4} unit="%" />
+          </div>
+        ),
     },
     {
       header: 'Payout',
@@ -203,25 +215,32 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       header: (
         <div className="flex items-center ">
           Max OI:&nbsp;
-          <Display data={maxOI} unit={poolDetails?.token} precision={0} />
+          {maxOI === null ? (
+            <Skeleton className="w-[40px] !h-5 lc " />
+          ) : (
+            <Display data={maxOI} unit={poolDetails?.token} precision={0} />
+          )}
         </div>
       ),
-      data: (
-        <NumberTooltip
-          content={
-            currentOI
-              ? `Current OI : ${currentOI} ${poolDetails?.token} / Max OI : ${maxOI} ${poolDetails?.token} `
-              : ''
-          }
-        >
-          <div className="min-w-[160px] b1200:min-w-[120px]">
-            <BufferProgressBar
-              fontSize={12}
-              progressPercent={currentOIinPercent ?? 0}
-            />
-          </div>
-        </NumberTooltip>
-      ),
+      data:
+        currentOI === null || maxOI === null || currentOIinPercent === null ? (
+          <Skeleton className="w-[100px] !h-5 lc " />
+        ) : (
+          <NumberTooltip
+            content={
+              currentOI
+                ? `Current OI : ${currentOI} ${poolDetails?.token} / Max OI : ${maxOI} ${poolDetails?.token} `
+                : ''
+            }
+          >
+            <div className="min-w-[160px] b1200:min-w-[120px]">
+              <BufferProgressBar
+                fontSize={12}
+                progressPercent={currentOIinPercent ?? 0}
+              />
+            </div>
+          </NumberTooltip>
+        ),
     },
   ];
 

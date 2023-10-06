@@ -1,20 +1,21 @@
-import styled from '@emotion/styled';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { Launch } from '@mui/icons-material';
 import { Col } from '@Views/Common/ConfirmationModal';
 import NFTtier from '@Views/Common/NFTtier';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
-import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
-import { useMemo } from 'react';
-import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
-import { getChains } from 'src/Config/wagmiClient';
-import { Chain } from 'wagmi';
 import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { marketsForChart } from '@Views/TradePage/config';
+import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
+import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
+import styled from '@emotion/styled';
+import { Launch } from '@mui/icons-material';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getChains } from 'src/Config/wagmiClient';
+import { Chain } from 'wagmi';
+import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
 
 const userDataHeadClass = 'text-f14 text-[#7F87A7]';
 const userDataDescClass = 'text-f16 text-[#C3C2D4]';
@@ -27,6 +28,8 @@ export const UserData = () => {
   const { tradingMetricsData } = useProfileGraphQl();
   const { activeChain } = useActiveChain();
   const chains: Chain[] = getChains();
+  const navigateToTrade = useNavigateToTrade();
+
   const activeChainExplorer = useMemo(() => {
     const chain: Chain | undefined = chains.find(
       (chain) => chain.id === activeChain.id
@@ -80,18 +83,36 @@ export const UserData = () => {
             />
           )}
         </div>
-        <div className="text-[25px] text-buffer-blue sm:text-f18">
-          {address ? (
-            <a
-              href={`${activeChainExplorer}/address/${address}`}
-              target="_blank"
-              className="flex items-center gap-3"
+        <div>
+          <div className="text-[25px] text-buffer-blue sm:text-f18">
+            {address ? (
+              <a
+                href={`${activeChainExplorer}/address/${address}`}
+                target="_blank"
+                className="flex items-center gap-3"
+              >
+                {address.slice(0, 7) + '...' + address.slice(-7)}
+                <Launch className="scale-125 mt-1" />
+              </a>
+            ) : (
+              <>Wallet Not Connected.</>
+            )}
+          </div>
+          {viewOnlyMode && (
+            <button
+              className="text-f13 text-2 flex items-center hover:text-1"
+              onClick={() => {
+                if (address) {
+                  navigateToTrade(address);
+                }
+              }}
             >
-              {address.slice(0, 7) + '...' + address.slice(-7)}
-              <Launch className="scale-125 mt-1" />
-            </a>
-          ) : (
-            <>Wallet Not Connected.</>
+              <span>See Live Trades</span>
+              <img
+                src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-medium/1f4fa.png"
+                className="scale-75 mb-2"
+              />
+            </button>
           )}
         </div>
       </div>
@@ -188,7 +209,7 @@ export const UserData = () => {
           <Col
             className={'winner-card'}
             head={'NFT Tier'}
-            desc={<NFTtier userOnly={false} />}
+            desc={<NFTtier userOnly={false} className="justify-center" />}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}
           />
@@ -251,3 +272,10 @@ const DataWrapper = styled.div`
     }
   }
 `;
+
+export const useNavigateToTrade = () => {
+  const navigate = useNavigate();
+  return (userAddress: string) => {
+    navigate(`/binary/BTC-USD/?user_address=${userAddress}`);
+  };
+};

@@ -4,13 +4,16 @@ import { useCancelledTrades } from '@Views/TradePage/Hooks/useCancelledTrades';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import {
   usePlatformActiveTrades,
+  usePlatformCancelledTrades,
   usePlatformHistoryTrades,
 } from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import {
+  cancelTableActivePage,
   historyTableActivePage,
   isTableShownAtom,
   platformActiveTableActivePage,
+  platformCancelTableActivePage,
   platformHistoryTableActivePage,
   queuets2priceAtom,
 } from '@Views/TradePage/atoms';
@@ -127,7 +130,7 @@ const AccordionTable: React.FC<any> = ({}) => {
         ) : activeTable == 'Platform Trades' ? (
           <PlatformOngoing />
         ) : activeTable == 'Platform History' ? (
-          <PlatformHistory />
+          <PlatformHistory overflow />
         ) : activeTable == 'Cancelled' ? (
           <Cancelled />
         ) : (
@@ -180,7 +183,8 @@ export const Cancelled = ({
   className?: string;
 }) => {
   const { page_data: canclledTrades, total_pages } = useCancelledTrades();
-  // console.log(canclledTrades, 'cancelled trades');
+  const [activePage, setActivePage] = useAtom(cancelTableActivePage);
+
   return (
     <CancelledTable
       trades={canclledTrades}
@@ -188,6 +192,8 @@ export const Cancelled = ({
       onlyView={onlyView}
       isLoading={canclledTrades === undefined}
       className={className}
+      activePage={activePage}
+      setActivePage={setActivePage}
     />
   );
 };
@@ -223,16 +229,21 @@ export const PlatformHistory = ({
 export const PlatformOngoing = ({
   onlyView,
   className = '',
+  overflow = true,
 }: {
   onlyView?: number[];
   className?: string;
+  overflow?: boolean;
 }) => {
   const { page_data: platformActiveTrades, total_pages } =
     usePlatformActiveTrades();
   const [activePage, setActivePage] = useAtom(platformActiveTableActivePage);
 
   useEffect(() => {
-    if (activePage > total_pages) setActivePage(1);
+    if (platformActiveTrades !== undefined && activePage > total_pages) {
+      console.log(activePage, total_pages, 'this ran');
+      setActivePage(1);
+    }
   }, [total_pages]);
 
   return (
@@ -244,8 +255,36 @@ export const PlatformOngoing = ({
       setActivePage={setActivePage}
       onlyView={onlyView}
       isLoading={platformActiveTrades === undefined}
-      overflow
+      overflow={overflow}
       className={className}
+    />
+  );
+};
+
+export const PlatfromCancelled = ({
+  onlyView,
+  className = '',
+  overflow,
+}: {
+  onlyView?: number[];
+  className?: string;
+  overflow: boolean;
+}) => {
+  const { page_data: canclledTrades, total_pages } =
+    usePlatformCancelledTrades();
+  const [activePage, setActivePage] = useAtom(platformCancelTableActivePage);
+
+  return (
+    <CancelledTable
+      trades={canclledTrades}
+      activePage={activePage}
+      setActivePage={setActivePage}
+      totalPages={total_pages}
+      onlyView={onlyView}
+      isLoading={canclledTrades === undefined}
+      className={className}
+      overflow={overflow}
+      platform
     />
   );
 };

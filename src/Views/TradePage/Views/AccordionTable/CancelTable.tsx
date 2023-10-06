@@ -1,13 +1,14 @@
 import FailureIcon from '@SVG/Elements/FailureIcon';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import BufferTable from '@Views/Common/BufferTable';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { cancelTableActivePage } from '@Views/TradePage/atoms';
 import { TradeType } from '@Views/TradePage/type';
-import { useAtom, useAtomValue } from 'jotai';
+import { Launch } from '@mui/icons-material';
+import { useAtomValue } from 'jotai';
 import { useMedia } from 'react-use';
 import { getAddress } from 'viem';
 import { AssetCell } from './AssetCell';
@@ -17,18 +18,33 @@ import {
   TableErrorRow,
   TableHeader,
 } from './Common';
+import { useNavigateToProfile } from './HistoryTable';
 
 export const CancelledTable: React.FC<{
   trades: TradeType[] | undefined;
-  totalPages: number;
   onlyView?: number[];
+  activePage: number;
+  setActivePage: (page: number) => void;
+  totalPages?: number;
   platform?: boolean;
   isLoading: boolean;
   className?: string;
-}> = ({ trades, platform, totalPages, isLoading, onlyView, className }) => {
-  const [activePage, setActivePage] = useAtom(cancelTableActivePage);
+  overflow?: boolean;
+}> = ({
+  trades,
+  platform,
+  totalPages,
+  isLoading,
+  onlyView,
+  className,
+  overflow = true,
+  activePage,
+  setActivePage,
+}) => {
   const { getPoolInfo } = usePoolInfo();
   const isMobile = useMedia('(max-width:600px)');
+  const isNotMobile = useMedia('(min-width:1200px)');
+  const navigateToProfile = useNavigateToProfile();
   const readcallData = useAtomValue(buyTradeDataAtom);
 
   let strikePriceHeading = 'Strike Price';
@@ -37,15 +53,26 @@ export const CancelledTable: React.FC<{
     strikePriceHeading = 'Strike';
     tradeSizeHeading = 'Size';
   }
-  const headNameArray = [
-    'Asset',
-    strikePriceHeading,
-    tradeSizeHeading,
-    'Queue',
-    'Cancellation',
-    'Reason',
-    'Status',
-  ];
+  const headNameArray = platform
+    ? [
+        'Asset',
+        strikePriceHeading,
+        tradeSizeHeading,
+        'Queue',
+        'Cancellation',
+        'Reason',
+        'Status',
+        'User',
+      ]
+    : [
+        'Asset',
+        strikePriceHeading,
+        tradeSizeHeading,
+        'Queue',
+        'Cancellation',
+        'Reason',
+        'Status',
+      ];
 
   enum TableColumn {
     Asset = 0,
@@ -55,6 +82,7 @@ export const CancelledTable: React.FC<{
     CancellationTime = 4,
     Reason = 5,
     Status = 6,
+    User = 7,
   }
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
@@ -71,6 +99,25 @@ export const CancelledTable: React.FC<{
       readcallData.currentOIs[getAddress(trade.target_contract)];
 
     switch (col) {
+      case TableColumn.User:
+        if (platform)
+          return (
+            <div className="flex items-center">
+              {getSlicedUserAddress(trade.user_address, 4)}
+              {!isNotMobile && (
+                <div
+                  role="button"
+                  onClick={() => {
+                    const userAddress = trade.user_address;
+                    if (!userAddress) return;
+                    navigateToProfile(userAddress);
+                  }}
+                >
+                  <Launch className="scale-75 mb-1" />
+                </div>
+              )}
+            </div>
+          );
       case TableColumn.Strike:
         return (
           <StrikePriceComponent
@@ -80,9 +127,7 @@ export const CancelledTable: React.FC<{
           />
         );
       case TableColumn.Asset:
-        return (
-          <AssetCell currentRow={trade} platform={platform} split={isMobile} />
-        );
+        return <AssetCell currentRow={trade} split={isMobile} />;
 
       case TableColumn.QueueTime:
         return (
@@ -144,9 +189,15 @@ export const CancelledTable: React.FC<{
       cols={headNameArray.length}
       rows={trades ? trades.length : 0}
       widths={['auto']}
-      onRowClick={console.log}
+      onRowClick={(idx) => {
+        if (isNotMobile && platform) {
+          const userAddress = trades?.[idx].user_address;
+          if (!userAddress) return;
+          navigateToProfile(userAddress);
+        }
+      }}
       showOnly={onlyView}
-      overflow
+      overflow={overflow}
       error={<TableErrorRow msg="No active trades present." />}
       loading={isLoading}
       className={className}

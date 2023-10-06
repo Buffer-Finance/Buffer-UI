@@ -1,6 +1,6 @@
-import { useState, useEffect, ReactNode } from "react";
-import { SwitchTransition, CSSTransition } from "react-transition-group";
-import Background from "./style";
+import { ReactNode } from 'react';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import Background from './style';
 interface ITabSwitch {
   value: number;
   childComponents?: ReactNode[];
@@ -10,15 +10,14 @@ interface ITabSwitch {
 const TabSwitch: React.FC<ITabSwitch> = ({
   value,
   childComponents,
-  children,
-  className,
+  className = '',
 }) => {
   return (
     <Background>
       <SwitchTransition>
-        <CSSTransition key={value} classNames={"tab-pannel-"} timeout={200}>
+        <CSSTransition key={value} classNames={'tab-pannel-'} timeout={200}>
           <div className={`tab-pannel ${className}`}>
-            {childComponents[value]}
+            {childComponents && childComponents[value]}
           </div>
         </CSSTransition>
       </SwitchTransition>

@@ -1,3 +1,4 @@
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { toFixed } from '@Utils/NumString';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
@@ -44,6 +45,7 @@ export const TradeButton: React.FC<{
 }> = ({ trade, tradeMarket, poolInfo }) => {
   const { cancelHandler, earlyCloseHandler } = useCancelTradeFunction();
   const cachedPrices = useAtomValue(queuets2priceAtom);
+  const { viewOnlyMode } = useUserAccount();
 
   const readcalldata = useAtomValue(buyTradeDataAtom);
   const maxOI = readcalldata.maxOIs[getAddress(trade.target_contract)];
@@ -89,6 +91,7 @@ export const TradeButton: React.FC<{
   function editLimitOrder() {
     setSelectedTrade({ trade, market: tradeMarket });
   }
+  if (viewOnlyMode) return <></>;
   if (isLimitOrder && isLimitQueued) {
     return (
       <RowGap gap="4px">

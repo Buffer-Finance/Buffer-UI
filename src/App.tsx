@@ -17,6 +17,7 @@ import Background from './AppStyles';
 import { Navbar } from './Views/Common/Navbar';
 
 import { useToast } from '@Contexts/Toast';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
@@ -165,6 +166,7 @@ export const snackAtom = atom<{
 });
 const mobileWarningAtom = atomWithLocalStorage('warnign-suer', false);
 export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
+
 function App() {
   useAutoConnect();
   const [snack, setSnack] = useAtom(snackAtom);
@@ -178,10 +180,11 @@ function App() {
       {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
+          <ViewOnlyModeTradePageWarning />
           {graphStatus && (
             <Warning
               body={
-                <div>
+                <div className="text-center">
                   We are facing some issues with the theGraph API. Trading
                   experience on the platform may be hindered temporarily.
                 </div>
@@ -255,3 +258,36 @@ function App() {
 }
 
 export default App;
+
+const ViewOnlyModeTradePageWarning = () => {
+  const { viewOnlyMode, address } = useUserAccount();
+  const navigate = useNavigate();
+  if (!window?.location?.href) return <></>;
+  const url = window.location.href.split('#/')[1];
+  if (!url) return <></>;
+  const pagename = url.split('/')[0].toLowerCase();
+  const isBinaryPage = pagename == 'binary';
+  if (!isBinaryPage) return <></>;
+  const activeAsset = url.split('/')[1].toUpperCase();
+  return (
+    <Warning
+      body={
+        <div className="text-center">
+          You are watching the trades for {address}.&nbsp;
+          <button
+            onClick={() => {
+              navigate('/binary/' + activeAsset);
+            }}
+            className="underline underline-offset-4"
+          >
+            Go back to regular trading.
+          </button>
+        </div>
+      }
+      closeWarning={() => {}}
+      shouldAllowClose={false}
+      state={viewOnlyMode && isBinaryPage}
+      className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100 sm:!text-f14"
+    />
+  );
+};
