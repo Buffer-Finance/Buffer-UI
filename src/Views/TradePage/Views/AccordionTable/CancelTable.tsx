@@ -5,9 +5,8 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { cancelTableActivePage } from '@Views/TradePage/atoms';
 import { TradeType } from '@Views/TradePage/type';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { useMedia } from 'react-use';
 import { getAddress } from 'viem';
 import { AssetCell } from './AssetCell';
@@ -20,8 +19,10 @@ import {
 
 export const CancelledTable: React.FC<{
   trades: TradeType[] | undefined;
-  totalPages: number;
   onlyView?: number[];
+  activePage?: number;
+  setActivePage?: (page: number) => void;
+  totalPages?: number;
   platform?: boolean;
   isLoading: boolean;
   className?: string;
@@ -34,8 +35,9 @@ export const CancelledTable: React.FC<{
   onlyView,
   className,
   overflow = true,
+  activePage,
+  setActivePage,
 }) => {
-  const [activePage, setActivePage] = useAtom(cancelTableActivePage);
   const { getPoolInfo } = usePoolInfo();
   const isMobile = useMedia('(max-width:600px)');
   const readcallData = useAtomValue(buyTradeDataAtom);
