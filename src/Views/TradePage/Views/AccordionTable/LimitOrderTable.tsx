@@ -10,6 +10,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useToast } from '@Contexts/Toast';
 import { priceAtom } from '@Hooks/usePrice';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { getPriceFromKlines } from '@TV/useDataFeed';
 import { divide, round } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
@@ -64,6 +65,7 @@ const LimitOrderTable = ({
   const { registeredOneCT } = useOneCTWallet();
   const editLoading = useAtomValue(loeditLoadingAtom);
   const readcallData = useAtomValue(buyTradeDataAtom);
+  const { viewOnlyMode } = useUserAccount();
 
   const headNameArray = [
     'Asset',
@@ -142,48 +144,52 @@ const LimitOrderTable = ({
           <div className="flex items-center ">
             <Visualized queue_id={trade.queue_id} className="mr-[5px]" />
 
-            <GreyBtn
-              className={
-                tableButtonClasses +
-                (isModificationPending || editLoading == trade.queue_id
-                  ? ' !text-2 '
-                  : '')
-              }
-              onClick={() => {
-                if (isModificationPending) {
-                  return toastify({
-                    msg: "Can't edit while processing",
-                    type: 'error',
-                    id: 1212,
-                  });
-                }
-                setSelectedTrade({ trade, market: trade.market });
-              }}
-            >
-              {isModificationPending || editLoading == trade.queue_id ? (
-                <NumberTooltip
-                  content={'Processing the Limit Order modification...'}
+            {!viewOnlyMode && (
+              <>
+                <GreyBtn
+                  className={
+                    tableButtonClasses +
+                    (isModificationPending || editLoading == trade.queue_id
+                      ? ' !text-2 '
+                      : '')
+                  }
+                  onClick={() => {
+                    if (isModificationPending) {
+                      return toastify({
+                        msg: "Can't edit while processing",
+                        type: 'error',
+                        id: 1212,
+                      });
+                    }
+                    setSelectedTrade({ trade, market: trade.market });
+                  }}
                 >
-                  <div className="scale-90">
-                    <img
-                      src="/Gear.png"
-                      className="w-[16px]  h-[16px] animate-spin mr-[4px]"
-                    />
-                  </div>
-                </NumberTooltip>
-              ) : null}
-              Edit
-            </GreyBtn>
-            <GreyBtn
-              className={tableButtonClasses}
-              onClick={() => handleCancel(trade)}
-              isLoading={
-                cancelLoading?.[trade.queue_id] == 1 ||
-                trade.pending_operation == 'Processing CANCEL'
-              }
-            >
-              Cancel
-            </GreyBtn>
+                  {isModificationPending || editLoading == trade.queue_id ? (
+                    <NumberTooltip
+                      content={'Processing the Limit Order modification...'}
+                    >
+                      <div className="scale-90">
+                        <img
+                          src="/Gear.png"
+                          className="w-[16px]  h-[16px] animate-spin mr-[4px]"
+                        />
+                      </div>
+                    </NumberTooltip>
+                  ) : null}
+                  Edit
+                </GreyBtn>
+                <GreyBtn
+                  className={tableButtonClasses}
+                  onClick={() => handleCancel(trade)}
+                  isLoading={
+                    cancelLoading?.[trade.queue_id] == 1 ||
+                    trade.pending_operation == 'Processing CANCEL'
+                  }
+                >
+                  Cancel
+                </GreyBtn>
+              </>
+            )}
           </div>
         );
     }

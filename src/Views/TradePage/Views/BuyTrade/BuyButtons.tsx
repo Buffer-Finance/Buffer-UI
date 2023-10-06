@@ -1,4 +1,5 @@
 import { useToast } from '@Contexts/Toast';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import DownIcon from '@SVG/Elements/DownIcon';
 import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
@@ -52,6 +53,7 @@ export const BuyButtons = ({
     switchPool?.pool,
     switchPool?.optionContract
   );
+  const { viewOnlyMode } = useUserAccount();
 
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
@@ -85,6 +87,12 @@ export const BuyButtons = ({
     });
   };
 
+  if (viewOnlyMode)
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        View Only Mode
+      </BlueBtn>
+    );
   // if (!poolDetails) return <>Error: Pool not found</>;
   // console.log('approval', allowance, amount);
   return (
