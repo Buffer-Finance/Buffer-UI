@@ -13,13 +13,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { getCallId } from '@Utils/Contract/multiContract';
-import {
-  add,
-  divide,
-  gt,
-  lt,
-  multiply,
-} from '@Utils/NumString/stringArithmatics';
+import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { viemMulticall } from '@Utils/multicall';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
@@ -31,6 +25,7 @@ import { useAccount, usePublicClient } from 'wagmi';
 import { getExpiry } from '../Views/AccordionTable/Common';
 import { BuyUSDCLink } from '../Views/BuyTrade/BuyUsdcLink';
 import { limitOrderPayoutError } from '../Views/BuyTrade/CurrentPrice';
+import { getSlippageError } from '../Views/Settings/TradeSettings/Slippage/SlippageError';
 import {
   LimitOrderPayoutAtom,
   approveModalAtom,
@@ -39,12 +34,7 @@ import {
   tradeSettingsAtom,
 } from '../atoms';
 import { getSingatureCached } from '../cache';
-import {
-  MAX_SLIPPAGE,
-  MIN_SLIPPAGE,
-  baseUrl,
-  pricePublisherBaseUrl,
-} from '../config';
+import { baseUrl, pricePublisherBaseUrl } from '../config';
 import { AssetCategory, TradeType } from '../type';
 import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
 import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
@@ -163,29 +153,12 @@ export const useBuyTradeActions = (userInput: string) => {
           });
         }
       }
-
-      if (
-        gt(
-          settings.slippageTolerance.toString() || '0',
-          MAX_SLIPPAGE.toString()
-        )
-      ) {
+      const slippageError = getSlippageError(settings.slippageTolerance);
+      if (slippageError !== null) {
         return toastify({
           type: 'error',
-          msg: `Slippage tolerance should be less than ${MAX_SLIPPAGE}%`,
-          id: 'binaryBuy',
-        });
-      }
-      if (
-        lt(
-          settings.slippageTolerance.toString() || '0',
-          MIN_SLIPPAGE.toString()
-        )
-      ) {
-        return toastify({
-          type: 'error',
-          msg: `Slippage tolerance should be greater than ${MIN_SLIPPAGE}%`,
-          id: 'binaryBuy',
+          msg: slippageError,
+          id: 'slippage error',
         });
       }
 
