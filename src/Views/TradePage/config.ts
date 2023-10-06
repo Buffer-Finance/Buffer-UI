@@ -293,7 +293,7 @@ export const refreshInterval = 500;
 export const defaultSettings = {
   trade: {
     partialFill: true,
-    slippageTolerance: 0.03,
+    slippageTolerance: 0.05,
     limitOrdersExpiry: '24',
     selectedTimeFrame: 'h',
   },
