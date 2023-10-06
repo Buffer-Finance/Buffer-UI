@@ -14,6 +14,7 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { GreyBtn } from '@Views/Common/V2-Button';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
@@ -265,36 +266,18 @@ export const OngoingTradesTable: React.FC<{
           />
         );
       case TableColumn.Probability:
-        const IV =
-          calculateOptionIV(
-            trade.is_above ?? false,
-            trade.strike / 1e8,
-            +getPriceFromKlines(marketPrice, trade.market),
-            trade.pool.IV,
-            trade.pool.IVFactorITM,
-            trade.pool.IVFactorOTM
-          ) / 1e4;
-        const probabiliyt = getProbability(
-          trade,
-          +getPriceFromKlines(marketPrice, trade.market),
-          IV
-        );
         return (
           // queuedTradeFallBack(trade) || (
           <div>
-            {probabiliyt ? (
-              <>
-                <Pnl
-                  configData={trade.market}
-                  trade={trade}
-                  poolInfo={poolInfo}
-                  lockedAmmount={lockedAmmount}
-                />
-                {toFixed(probabiliyt, 2) + '%'}
-              </>
-            ) : (
-              'Calculating...'
-            )}
+            <>
+              <Pnl
+                configData={trade.market}
+                trade={trade}
+                poolInfo={poolInfo}
+                lockedAmmount={lockedAmmount}
+              />
+              <Probability trade={trade} marketPrice={marketPrice} />{' '}
+            </>
           </div>
           // )
         );
@@ -318,6 +301,9 @@ export const OngoingTradesTable: React.FC<{
     const duration = formatDistance(
       Variables(minClosingTime - trade.open_timestamp)
     );
+    const marketPrecision = trade.market.price_precision.toString().length - 1;
+    const lockedAmmount = getLockedAmount(trade, cachedPrices);
+
     return (
       <div className="px-3 py-2">
         <RowBetween>
@@ -327,13 +313,52 @@ export const OngoingTradesTable: React.FC<{
           <div className={durationClass}>{duration}</div>
           <div className={timeClass}>{getDisplayTime(minClosingTime)}</div>
         </RowBetween>
-        {/* <div className="h-1 w-full bg-[#393D4D] mt-3" /> */}
         <TradeTimeElapsed trade={trade} />
         <RowBetween className="mt-3">
           <div className={dateClass}>
             {getDisplayDate(trade.open_timestamp)}
           </div>
           <div className={dateClass}>{getDisplayDate(minClosingTime)}</div>
+        </RowBetween>
+
+        <RowBetween className="mt-5">
+          <ColumnGap gap="3px">
+            <div className={headerClass}>Current Price</div>
+            <Display
+              className="!justify-start"
+              data={round(
+                getPriceFromKlines(marketPrice, trade.market),
+                marketPrecision
+              )}
+              precision={marketPrecision}
+            />
+          </ColumnGap>
+
+          <ColumnGap gap="3px">
+            <div className={headerClass}>Pnl</div>
+            <div className={descClass + ' flex items-center gap-1'}>
+              <Pnl
+                configData={trade.market}
+                trade={trade}
+                poolInfo={poolInfo}
+                lockedAmmount={lockedAmmount}
+                shouldShowUnit={false}
+              />
+              <img
+                src={getAssetImageUrl(trade.token)}
+                width={13}
+                height={13}
+                className="inline ml-1"
+              />
+            </div>
+          </ColumnGap>
+
+          <ColumnGap gap="3px">
+            <div className={headerClass}>Probability</div>
+            <div className={descClass}>
+              <Probability trade={trade} marketPrice={marketPrice} />
+            </div>
+          </ColumnGap>
         </RowBetween>
       </div>
     );
@@ -379,13 +404,16 @@ export const Pnl = ({
   configData,
   poolInfo,
   lockedAmmount,
+  shouldShowUnit = true,
 }: {
   trade: TradeType;
   configData: marketType;
   poolInfo: poolInfoType;
   lockedAmmount?: string;
+  shouldShowUnit?: boolean;
 }) => {
   const pnl = useEarlyPnl({ trade, configData, poolInfo, lockedAmmount });
+  if (!pnl?.earlycloseAmount) return <div>Calculating..</div>;
   const isWin = gt(pnl.earlycloseAmount, '0');
   if (trade.locked_amount || lockedAmmount)
     return (
@@ -393,7 +421,7 @@ export const Pnl = ({
         data={pnl.earlycloseAmount}
         label={isWin ? '+' : ''}
         className={`!justify-start ${isWin ? 'text-green' : 'text-red'}`}
-        unit={poolInfo.token}
+        unit={shouldShowUnit ? poolInfo.token : undefined}
       />
     );
   return <div>Calculating..</div>;
@@ -452,4 +480,26 @@ const ProgressLine = ({
       className={className}
     />
   );
+};
+
+const Probability: React.FC<{
+  trade: TradeType;
+  marketPrice: any;
+}> = ({ marketPrice, trade }) => {
+  const IV =
+    calculateOptionIV(
+      trade.is_above ?? false,
+      trade.strike / 1e8,
+      +getPriceFromKlines(marketPrice, trade.market),
+      trade.pool.IV,
+      trade.pool.IVFactorITM,
+      trade.pool.IVFactorOTM
+    ) / 1e4;
+  const probabiliyt = getProbability(
+    trade,
+    +getPriceFromKlines(marketPrice, trade.market),
+    IV
+  );
+  if (!probabiliyt) return <div>Calculating..</div>;
+  return <div> {toFixed(probabiliyt, 2) + '%'}</div>;
 };
