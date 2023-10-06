@@ -4,6 +4,7 @@ import { useCancelledTrades } from '@Views/TradePage/Hooks/useCancelledTrades';
 import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import {
   usePlatformActiveTrades,
+  usePlatformCancelledTrades,
   usePlatformHistoryTrades,
 } from '@Views/TradePage/Hooks/useOngoingPlatformTrades';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
@@ -251,6 +252,30 @@ export const PlatformOngoing = ({
       isLoading={platformActiveTrades === undefined}
       overflow={overflow}
       className={className}
+    />
+  );
+};
+
+export const PlatfromCancelled = ({
+  onlyView,
+  className = '',
+  overflow,
+}: {
+  onlyView?: number[];
+  className?: string;
+  overflow: boolean;
+}) => {
+  const { page_data: canclledTrades, total_pages } =
+    usePlatformCancelledTrades();
+  // console.log(canclledTrades, 'cancelled trades');
+  return (
+    <CancelledTable
+      trades={canclledTrades}
+      totalPages={total_pages}
+      onlyView={onlyView}
+      isLoading={canclledTrades === undefined}
+      className={className}
+      overflow={overflow}
     />
   );
 };
