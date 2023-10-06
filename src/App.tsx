@@ -287,7 +287,7 @@ const ViewOnlyModeTradePageWarning = () => {
       closeWarning={() => {}}
       shouldAllowClose={false}
       state={viewOnlyMode && isBinaryPage}
-      className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+      className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100 sm:!text-f14"
     />
   );
 };
