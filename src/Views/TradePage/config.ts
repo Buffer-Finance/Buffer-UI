@@ -347,7 +347,7 @@ export const durations = [
   },
 ];
 
-export const SLIPPAGE_DEFAULTS = [0.03, 0.25, 0.5];
+export const SLIPPAGE_DEFAULTS = [0.05, 0.25, 0.5];
 export const MAX_SLIPPAGE = 5;
 export const MIN_SLIPPAGE = 0.005;
 
