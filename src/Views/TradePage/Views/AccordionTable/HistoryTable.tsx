@@ -432,7 +432,7 @@ const HistoryTable: React.FC<{
       rows={trades ? trades.length : 0}
       widths={['auto']}
       onRowClick={(idx) => {
-        if (isNotMobile) {
+        if (isNotMobile && platform) {
           const userAddress = trades?.[idx].user_address;
           if (!userAddress) return;
           navigateToProfile(userAddress);
