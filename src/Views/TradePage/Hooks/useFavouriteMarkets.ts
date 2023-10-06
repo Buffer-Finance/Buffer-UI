@@ -1,14 +1,29 @@
 import { useAtom } from 'jotai';
-import { favouriteMarketsAtom } from '../atoms';
 import { useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { favouriteMarketsAtom } from '../atoms';
 import { joinStrings } from '../utils';
-import { useNavigate } from 'react-router-dom';
 import { marketData, useMarketsWithChartData } from './useAssetTableFilters';
+
+export const useUserAddressParam = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userAddress = useMemo(
+    () => searchParams.get('user_address'),
+    [searchParams]
+  );
+
+  function setUserAddress(user_address: string) {
+    setSearchParams({ ...searchParams, user_address: user_address });
+  }
+
+  return { userAddress, setUserAddress };
+};
 
 export const useFavouriteMarkets = () => {
   const [favMarkets, setFavMarkets] = useAtom(favouriteMarketsAtom);
   const markets = useMarketsWithChartData();
   const navigate = useNavigate();
+  const { userAddress: userAddressParam } = useUserAddressParam();
 
   const favouriteMarkets = useMemo(() => {
     if (markets === null) {
@@ -74,7 +89,11 @@ export const useFavouriteMarkets = () => {
   }
 
   function navigateToMarket(market: marketData) {
-    navigate(`/binary/${market.marketInfo.pair}`);
+    if (userAddressParam) {
+      navigate(
+        `/binary/${market.marketInfo.pair}?user_address=${userAddressParam}`
+      );
+    } else navigate(`/binary/${market.marketInfo.pair}`);
   }
   return {
     favouriteMarkets,
