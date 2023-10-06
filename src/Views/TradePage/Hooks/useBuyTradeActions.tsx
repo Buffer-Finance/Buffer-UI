@@ -438,7 +438,7 @@ export const useBuyTradeActions = (userInput: string) => {
           environment: activeChain.id,
           token: tokenName,
         };
-        if (isTestnet && !isSandbox) {
+        if (!isTestnet && isSandbox) {
           apiParams = {
             ...apiParams,
             strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
@@ -446,7 +446,7 @@ export const useBuyTradeActions = (userInput: string) => {
         }
         console.log('apiParams', apiParams);
 
-        const trailingUrl = baseUrl.includes('testnet')
+        const trailingUrl = baseUrl.includes('development')
           ? 'trade/temp/create/'
           : 'trade/create/';
         console.log('trailingUrl', trailingUrl);
