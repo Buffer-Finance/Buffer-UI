@@ -171,22 +171,24 @@ export const OngoingTradesTable: React.FC<{
         return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
             <Visualized queue_id={trade.queue_id} />
-            <NumberTooltip content={disableTooltip}>
-              <div>
-                <GreyBtn
-                  className={
-                    tableButtonClasses +
-                    (isDisabled ? ' !text-2 !cursor-not-allowed' : '')
-                  }
-                  onClick={() => {
-                    !isDisabled && earlyCloseHandler(trade, trade.market);
-                  }}
-                  isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
-                >
-                  Close
-                </GreyBtn>
-              </div>
-            </NumberTooltip>
+            {!viewOnlyMode && (
+              <NumberTooltip content={disableTooltip}>
+                <div>
+                  <GreyBtn
+                    className={
+                      tableButtonClasses +
+                      (isDisabled ? ' !text-2 !cursor-not-allowed' : '')
+                    }
+                    onClick={() => {
+                      !isDisabled && earlyCloseHandler(trade, trade.market);
+                    }}
+                    isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
+                  >
+                    Close
+                  </GreyBtn>
+                </div>
+              </NumberTooltip>
+            )}
           </div>
         ) : (
           'Processing...'

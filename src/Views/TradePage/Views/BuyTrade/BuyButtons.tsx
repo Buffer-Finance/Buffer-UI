@@ -1,4 +1,7 @@
+import { useToast } from '@Contexts/Toast';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import DownIcon from '@SVG/Elements/DownIcon';
+import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
@@ -14,11 +17,8 @@ import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useAccount } from 'wagmi';
 import { ReactNode } from 'react';
-import MemoTimeIcon from '@SVG/Elements/TimeIcon';
-import { usePrice } from '@Hooks/usePrice';
-import { useToast } from '@Contexts/Toast';
+import { useAccount } from 'wagmi';
 
 export const BuyButtons = ({
   allowance,
@@ -53,6 +53,7 @@ export const BuyButtons = ({
     switchPool?.pool,
     switchPool?.optionContract
   );
+  const { viewOnlyMode } = useUserAccount();
 
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
@@ -78,6 +79,12 @@ export const BuyButtons = ({
     });
   };
 
+  if (viewOnlyMode)
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        View Only Mode
+      </BlueBtn>
+    );
   // if (!poolDetails) return <>Error: Pool not found</>;
   // console.log('approval', allowance, amount);
   return (
