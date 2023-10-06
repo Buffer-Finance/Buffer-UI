@@ -1,32 +1,13 @@
-import { gt, lt } from '@Utils/NumString/stringArithmatics';
 import {
   escapeRegExp,
   inputRegex,
 } from '@Views/TradePage/Views/BuyTrade/CurrentPrice';
-import {
-  MAX_SLIPPAGE,
-  MIN_SLIPPAGE,
-  SLIPPAGE_DEFAULTS,
-} from '@Views/TradePage/config';
-import { useEffect, useState } from 'react';
+import { MAX_SLIPPAGE, SLIPPAGE_DEFAULTS } from '@Views/TradePage/config';
 
 export const SlippageInput: React.FC<{
   onChange: (newSlippage: number) => void;
   slippage: number;
 }> = ({ onChange, slippage }) => {
-  const [err, setErr] = useState(false);
-  const [minErr, setMinErr] = useState(false);
-  // console.log('slippageErr', minErr, err);
-
-  useEffect(() => {
-    if (gt(slippage.toString(), MAX_SLIPPAGE.toString())) {
-      setErr(true);
-    }
-    if (lt(slippage.toString(), MIN_SLIPPAGE.toString())) {
-      setMinErr(true);
-    }
-  }, []);
-
   return (
     <div className="relative flex flex-row gap-x-4 items-center">
       <input
@@ -37,16 +18,6 @@ export const SlippageInput: React.FC<{
           SLIPPAGE_DEFAULTS.includes(slippage) ? 'text-[#c3c2d4]' : 'text-1'
         }`}
         onChange={(e) => {
-          if (gt(e.target.value || '0', MAX_SLIPPAGE.toString())) {
-            setErr(true);
-          } else {
-            setErr(false);
-          }
-          if (lt(e.target.value || '0', MIN_SLIPPAGE.toString())) {
-            setMinErr(true);
-          } else {
-            setMinErr(false);
-          }
           if (
             e.target.value.split('.')[1] &&
             e.target.value.split('.')[1].length > 4
@@ -59,16 +30,6 @@ export const SlippageInput: React.FC<{
         placeholder="Enter value"
       />
       <span className="absolute right-5">%</span>
-      {err && (
-        <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
-          Slippage rate must be less then {MAX_SLIPPAGE}%
-        </span>
-      )}
-      {minErr && (
-        <span className="absolute top-full left-[-20px] text-red whitespace-nowrap">
-          Slippage rate must be more then {MIN_SLIPPAGE}%
-        </span>
-      )}
     </div>
   );
 };
