@@ -1,20 +1,20 @@
-import styled from '@emotion/styled';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { Launch } from '@mui/icons-material';
 import { Col } from '@Views/Common/ConfirmationModal';
 import NFTtier from '@Views/Common/NFTtier';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
-import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
-import { useMemo } from 'react';
-import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
-import { getChains } from 'src/Config/wagmiClient';
-import { Chain } from 'wagmi';
 import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { marketsForChart } from '@Views/TradePage/config';
+import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
+import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
+import styled from '@emotion/styled';
+import { Launch } from '@mui/icons-material';
+import { useMemo } from 'react';
+import { getChains } from 'src/Config/wagmiClient';
+import { Chain } from 'wagmi';
+import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
 
 const userDataHeadClass = 'text-f14 text-[#7F87A7]';
 const userDataDescClass = 'text-f16 text-[#C3C2D4]';
@@ -188,7 +188,7 @@ export const UserData = () => {
           <Col
             className={'winner-card'}
             head={'NFT Tier'}
-            desc={<NFTtier userOnly={false} />}
+            desc={<NFTtier userOnly={false} className="justify-center" />}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}
           />
