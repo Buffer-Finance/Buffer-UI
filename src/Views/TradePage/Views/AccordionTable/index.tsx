@@ -284,6 +284,7 @@ export const PlatfromCancelled = ({
       isLoading={canclledTrades === undefined}
       className={className}
       overflow={overflow}
+      platform
     />
   );
 };
