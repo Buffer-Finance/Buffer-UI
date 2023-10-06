@@ -127,9 +127,7 @@ export const CancelledTable: React.FC<{
           />
         );
       case TableColumn.Asset:
-        return (
-          <AssetCell currentRow={trade} platform={platform} split={isMobile} />
-        );
+        return <AssetCell currentRow={trade} split={isMobile} />;
 
       case TableColumn.QueueTime:
         return (
