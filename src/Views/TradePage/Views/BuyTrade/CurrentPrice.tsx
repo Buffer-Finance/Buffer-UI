@@ -184,7 +184,7 @@ export const LimitOrderPayoutPicker: React.FC<{
             );
           })}
           {shouldShowEdit ? (
-            <div className="relative w-[30%]">
+            <div className="relative w-[29%]">
               <input
                 type="text"
                 pattern="^[0-9]*[.,]?[0-9]*$"
