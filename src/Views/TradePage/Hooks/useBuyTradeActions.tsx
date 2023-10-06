@@ -438,7 +438,7 @@ export const useBuyTradeActions = (userInput: string) => {
           environment: activeChain.id,
           token: tokenName,
         };
-        if (!isTestnet && isSandbox) {
+        if (isTestnet && isSandbox) {
           apiParams = {
             ...apiParams,
             strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
