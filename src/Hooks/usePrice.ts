@@ -1,8 +1,8 @@
 import { multiply } from '@Utils/NumString/stringArithmatics';
 import axios from 'axios';
 import Big from 'big.js';
-import { atom, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { useCallback, useEffect, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
 type WSUPdate = {
@@ -24,16 +24,31 @@ type WSUPdate = {
   };
 };
 const client = reconnectingSocket('wss://hermes.pyth.network/ws');
-
+export const wsStatusAtom = atom({
+  isConnected: client.isConnected(),
+  retry: 0,
+});
 export const silentPriceCache = {};
 export const usePrice = () => {};
 export const usePriceRetriable = () => {
   const setPrice = useSetAtom(priceAtom);
-  const [isConnected, setIsConnected] = useState(client.isConnected());
+  const wsState = useAtomValue(wsStatusAtom);
+  const setWSStatus = useSetAtom(wsStatusAtom);
+  const [isConnected] = useState(client.isConnected());
+  const updateLoadingState = useCallback(
+    (state) => {
+      if (!state) {
+        setWSStatus((d) => ({ retry: d.retry + 1, isConnected: false }));
+      } else {
+        setWSStatus((d) => ({ ...d, isConnected: true }));
+      }
+    },
+    [setWSStatus]
+  );
 
   useEffect(() => {
-    return client.onStateChange(setIsConnected);
-  }, [setIsConnected]);
+    return client.onStateChange(updateLoadingState);
+  }, [updateLoadingState]);
   useEffect(() => {
     function handleMessage(message: string) {
       const lastJsonMessage = JSON.parse(message);
@@ -60,14 +75,14 @@ export const usePriceRetriable = () => {
           priceUpdatePacked;
         // console.log(`setting: `, message);
 
-        setPrice((p) => ({ ...p, ...data }));
+        setPrice((p) => ({ ...p, ...data, ts: priceUpdatePacked[0].time }));
       }
     }
     client.on(handleMessage);
     return () => client.off(handleMessage);
   }, [setPrice]);
   useEffect(() => {
-    if (isConnected) {
+    if (wsState.isConnected) {
       client.getClient()!.send(
         JSON.stringify({
           ids: Object.keys(pythIds),
@@ -75,13 +90,13 @@ export const usePriceRetriable = () => {
         })
       );
     }
-  }, [isConnected]);
+  }, [wsState]);
 };
 
 export const wsStateAtom = atom<{ state: string }>({
   state: 'need-connection',
 });
-export const priceAtom = atom<Partial<Market2Prices>>({});
+export const priceAtom = atom<Partial<Market2Prices & { ts: number }>>({});
 export const pythIds = {
   ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace: 'ETHUSD',
   e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43: 'BTCUSD',

@@ -51,7 +51,7 @@ export function reconnectingSocket(url: string) {
       }
       console.log('[ws-deb]closed by server');
 
-      setTimeout(start, 3000);
+      setTimeout(start, 2000);
     };
   }
 
@@ -66,3 +66,6 @@ export function reconnectingSocket(url: string) {
     isConnected: () => isConnected,
   };
 }
+
+// whenever state become false, increase counter.
+//

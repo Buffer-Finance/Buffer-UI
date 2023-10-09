@@ -23,6 +23,7 @@ import { CurrentPrice } from '../BuyTrade/ActiveTrades/CurrentPrice';
 import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
 import { MarketSelectorDD } from './MarketSelectorDD';
 import { Payout } from './Payout';
+import { wsStateAtom, wsStatusAtom } from '@Hooks/usePrice';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -122,12 +123,16 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       poolDetails.decimals
     ) as string;
 
-    currentOIinPercent = Number(
-      getMinimumValue(
-        divide(multiply(currentOI, '100'), maxOI) as string,
-        '100'
-      )
-    );
+    console.log(`MarketStatsBar-currentOI && maxOI: `, currentOI && maxOI);
+    currentOIinPercent =
+      currentOI && maxOI
+        ? Number(
+            getMinimumValue(
+              divide(multiply(currentOI, '100'), maxOI) as string,
+              '100'
+            )
+          )
+        : '';
 
     spread =
       getMaxSpread(
@@ -338,10 +343,15 @@ const MarketPrice: React.FC<{ token0: string; token1: string }> = ({
   token0,
   token1,
 }) => {
+  const wsStatus = useAtomValue(wsStatusAtom);
   return (
     <div className="flex flex-col">
       <span className="text-f18 b1200:text-f12">
-        <CurrentPrice token0={token0} token1={token1} />
+        {wsStatus.isConnected ? (
+          <CurrentPrice token0={token0} token1={token1} />
+        ) : (
+          'connecting ' + wsStatus.retry + ' times'
+        )}
       </span>
     </div>
   );
