@@ -45,7 +45,7 @@ export const CurrentPrice: React.FC<{
           'Fetching...'
         ) : (
           <>
-            ~{lagg}s (Retry:{wsStatus.retry})
+            ~{lagg}s (Retry:{wsStatus.retry - 1})
           </>
         )}
       </span>
