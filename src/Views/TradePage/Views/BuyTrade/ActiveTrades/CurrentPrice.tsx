@@ -29,6 +29,7 @@ export const CurrentPrice: React.FC<{
   const wsStatus = useAtomValue(wsStatusAtom);
 
   const lagg = getLag(marketPrice.ts);
+  const danger = lagg > 15 || (wsStatus.retry > 1 && !wsStatus.isConnected);
   return (
     <>
       <Display
@@ -37,8 +38,8 @@ export const CurrentPrice: React.FC<{
         precision={marketPrecision}
       />
 
-      <span className={`text-f12 ${lagg > 15 ? 'text-red' : ''}`}>
-        {lagg > 15 ? (
+      <span className={`text-f12 ${danger ? 'text-red' : ''}`}>
+        {danger ? (
           'Danger!! Price is too stale'
         ) : !lagg ? (
           'Fetching...'

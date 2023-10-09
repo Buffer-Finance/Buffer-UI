@@ -123,9 +123,14 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       poolDetails.decimals
     ) as string;
 
-    console.log(`MarketStatsBar-currentOI && maxOI: `, currentOI && maxOI);
-    currentOIinPercent =
+    console.log(
+      `MarketStatsBar-currentOI && maxOI: `,
+      typeof currentOI,
+      typeof maxOI,
       currentOI && maxOI
+    );
+    currentOIinPercent =
+      currentOI != '' && maxOI != ''
         ? Number(
             getMinimumValue(
               divide(multiply(currentOI, '100'), maxOI) as string,
@@ -347,11 +352,7 @@ const MarketPrice: React.FC<{ token0: string; token1: string }> = ({
   return (
     <div className="flex flex-col">
       <span className="text-f18 b1200:text-f12">
-        {wsStatus.isConnected ? (
-          <CurrentPrice token0={token0} token1={token1} />
-        ) : (
-          'connecting ' + wsStatus.retry + ' times'
-        )}
+        <CurrentPrice token0={token0} token1={token1} />
       </span>
     </div>
   );
