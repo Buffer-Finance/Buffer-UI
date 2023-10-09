@@ -1,4 +1,4 @@
-import { priceAtom } from '@Hooks/usePrice';
+import { priceAtom, wsStatusAtom } from '@Hooks/usePrice';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useAtomValue } from 'jotai';
@@ -26,6 +26,8 @@ export const CurrentPrice: React.FC<{
     const interval = setInterval(() => setCount((cnt) => cnt + 1), 1000);
     return () => clearInterval(interval);
   }, []);
+  const wsStatus = useAtomValue(wsStatusAtom);
+
   const lagg = getLag(marketPrice.ts);
   return (
     <>
@@ -41,7 +43,9 @@ export const CurrentPrice: React.FC<{
         ) : !lagg ? (
           'Fetching...'
         ) : (
-          <>~{lagg}s</>
+          <>
+            ~{lagg}s (Retry:{wsStatus.retry})
+          </>
         )}
       </span>
     </>
