@@ -573,6 +573,32 @@ export const marketsForChart = {
       '0x385f64d993f7b77d8182ed5003d97c60aa3361f3cecfe711544d2d59165e9bdf',
     pythGroup: 'Crypto',
   },
+  XRPUSD: {
+    category: 'Crypto',
+    tv_id: 'XRPUSD',
+    pair: 'XRP-USD',
+    price_precision: 100,
+    token0: 'XRP',
+    token1: 'USD',
+    full_name: 'Ripple',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/xrp.svg',
+    pythId:
+      '0x5de33a9112c2b700b8d30b8a3402c103578ccfa2765696471cc672bd5cf6ac52',
+    pythGroup: 'Crypto',
+  },
+  DOGEUSD: {
+    category: 'Crypto',
+    tv_id: 'DOGEUSD',
+    pair: 'DOGE-USD',
+    price_precision: 100,
+    token0: 'DOGE',
+    token1: 'USD',
+    full_name: 'Dogecoin',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/doge.svg',
+    pythId:
+      '0x5de33a9112c2b700b8d30b8a3402c103578ccfa2765696471cc672bd5cf6ac52',
+    pythGroup: 'Crypto',
+  },
 };
 
 export const pricePublisherBaseUrl = import.meta.env.VITE_PRICE_QUERY_HOST;
