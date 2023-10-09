@@ -101,7 +101,7 @@ export function useBuyTradePageReadcalls() {
                     address: creation_window,
                     abi: CreationWindowABI,
                     name: 'isInCreationWindow',
-                    params: [timeToMins('00:05') as never],
+                    params: [timeToMins('00:60') as never],
                   });
                 }
                 return calls;
