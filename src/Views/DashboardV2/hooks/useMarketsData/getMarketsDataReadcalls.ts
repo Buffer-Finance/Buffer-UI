@@ -1,10 +1,9 @@
-import OptionContractABI from '@Views/TradePage/ABIs/OptionContract.json';
-import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
-import { joinStrings } from '@Views/TradePage/utils';
-import { marketType } from '@Views/TradePage/type';
-import { IBaseSettlementFees } from '@Views/TradePage/Hooks/useSettlementFee';
-import { appConfig } from '@Views/TradePage/config';
 import { getCallId } from '@Utils/Contract/multiContract';
+import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
+import OptionContractABI from '@Views/TradePage/ABIs/OptionContract.json';
+import { IBaseSettlementFees } from '@Views/TradePage/Hooks/useSettlementFee';
+import { marketType } from '@Views/TradePage/type';
+import { joinStrings } from '@Views/TradePage/utils';
 import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 
 export const getMarketsDataReadcalls = (
@@ -72,7 +71,7 @@ export const getMarketsDataReadcalls = (
               address: creation_window,
               abi: CreationWindowABI,
               name: 'isInCreationWindow',
-              params: [timeToMins('00:05') as never],
+              params: [timeToMins('00:60') as never],
               id: getCallId(creation_window, 'isInCreationWindow'),
             });
           }

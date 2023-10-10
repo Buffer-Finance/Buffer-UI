@@ -28,7 +28,7 @@ export const BuyButtons = ({
   isApprovalLocked,
 }: {
   allowance: string;
-  activeAssetPrice: string;
+  activeAssetPrice: { price: string; time: number } | null;
   amount: string;
   center?: ReactNode;
   isApprovalLocked: boolean | undefined;
@@ -57,9 +57,16 @@ export const BuyButtons = ({
 
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
+    if (activeAssetPrice == null)
+      return toastify({
+        type: 'error',
+        msg: 'Price not found',
+        id: 'lo no strike',
+      });
+
     // if (lt(allowance || '0', amount.toString() || '0'))
     //   return setIsApproveModalOpen(true);
-    let strike = activeAssetPrice;
+    let strike = activeAssetPrice.price;
     let limitOrderExpiry = '0';
     if (tradeType == 'Limit') {
       if (!limitStrike)
@@ -76,6 +83,7 @@ export const BuyButtons = ({
       is_up: isUp ? true : false,
       strike,
       limitOrderExpiry: Number(limitOrderExpiry),
+      strikeTimestamp: activeAssetPrice.time,
     });
   };
 
