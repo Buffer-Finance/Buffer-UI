@@ -4,6 +4,7 @@ import { GrantRole } from 'src/Admin/GrantRole';
 import { AdminActiveTabAtom, AdminTabs } from './AdminTabs';
 import { Options } from './Options';
 import { SettlementFeeConfigs } from './SettlementFeeConfigs';
+import { UpdateDB } from './UpdateDB';
 import { SendToSafe } from './sendToSafe';
 
 export const safeTxnsAtom = atom<
@@ -30,7 +31,9 @@ const AdminConfig: React.FC<any> = ({}) => {
     tab = <div>Circuit Breaker</div>;
   } else if (activeTab.toLowerCase() === 'role manager') {
     tab = <GrantRole />;
-  }
+  } else if (activeTab.toLowerCase() === 'update db') {
+    tab = <UpdateDB />;
+  } else tab = <>Select A Tab</>;
 
   return (
     <div>
