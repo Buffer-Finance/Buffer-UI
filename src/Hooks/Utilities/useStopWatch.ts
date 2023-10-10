@@ -1,5 +1,5 @@
+import { Variables, getDistance } from '@Utils/Time';
 import { useEffect, useState } from 'react';
-import { getDistance, Variables } from '@Utils/Time';
 
 function getUnit(d, m) {
   if (d && d !== '' && d !== '0') {
@@ -36,10 +36,13 @@ export const formatDistanceExpanded = (stopWatch: {
   seconds: number;
 }) => {
   return stopWatch
-    ? `${addBoth(stopWatch.days, 'd ')}${addBoth(
-        stopWatch.hours,
+    ? `${addBoth(stopWatch.days.toString(), 'd ')}${addBoth(
+        stopWatch.hours.toString(),
         'h '
-      )}${addBoth(stopWatch.minutes, 'm ')}${addBoth(stopWatch.seconds, 's')}`
+      )}${addBoth(stopWatch.minutes.toString(), 'm ')}${addBoth(
+        stopWatch.seconds.toString(),
+        's'
+      )}`
     : null;
 };
 
@@ -52,13 +55,13 @@ export const formatDistanceCompact = (stopWatch: {
   return stopWatch
     ? `${
         stopWatch.days > 0
-          ? addBoth(stopWatch.days, 'd')
+          ? addBoth(stopWatch.days.toString(), 'd')
           : stopWatch.hours > 0
-          ? addBoth(stopwatch.hours, 'h')
+          ? addBoth(stopWatch.hours.toString(), 'h')
           : stopWatch.minutes > 0
-          ? addBoth(stopWatch.minutes, 'm')
+          ? addBoth(stopWatch.minutes.toString(), 'm')
           : stopWatch.seconds > 0
-          ? addBoth(stopWatch.seconds, 's')
+          ? addBoth(stopWatch.seconds.toString(), 's')
           : '-'
       }`
     : null;
