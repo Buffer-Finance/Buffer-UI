@@ -183,12 +183,14 @@ const PnlData: React.FC<{
   const expiration = getExpiry(trade);
   const isExpired = currentEpoch > expiration;
   const lockedAmmount = getLockedAmount(trade, cachedPrices);
-  const { earlycloseAmount, isWin, probability } = useEarlyPnl({
+  const { pnl: earlyPnl } = useEarlyPnl({
     trade,
     poolInfo,
     configData,
     lockedAmmount,
   });
+  const { earlycloseAmount, isWin, probability } = earlyPnl;
+  if (!probability) return <span>Calculating...</span>;
   let pnl = <span className="text-red">{toFixed(earlycloseAmount, 2)}</span>;
   if (isWin) {
     pnl = <span className="text-green">+{toFixed(earlycloseAmount, 2)}</span>;
@@ -236,12 +238,15 @@ export const useEarlyPnl = ({
     [trade, currentPrice]
   );
   if (!probability) probability = 0;
-  return calculatePnlForProbability({
-    trade,
+  return {
+    pnl: calculatePnlForProbability({
+      trade,
+      probability,
+      decimals: poolInfo.decimals,
+      lockedAmmount,
+    }),
     probability,
-    decimals: poolInfo.decimals,
-    lockedAmmount,
-  });
+  };
 };
 
 export const getPnlForTrade = ({
