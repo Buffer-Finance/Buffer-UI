@@ -20,7 +20,6 @@ import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
 import { signTypedData } from '@wagmi/core';
 import axios from 'axios';
-import { isTestnet } from 'config';
 import { PublicClient } from 'viem';
 import { useAccount, usePublicClient } from 'wagmi';
 import { getExpiry } from '../Views/AccordionTable/Common';
@@ -409,16 +408,10 @@ export const useBuyTradeActions = (userInput: string) => {
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
           environment: activeChain.id,
           token: tokenName,
+          strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
         };
-        if (isTestnet) {
-          apiParams = {
-            ...apiParams,
-            strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
-          };
-        }
-        console.log('apiParams', apiParams);
 
-        const trailingUrl = isTestnet ? 'trade/temp/create/' : 'trade/create/';
+        const trailingUrl = 'trade/v2/create/';
         console.log('trailingUrl', trailingUrl);
 
         const resp: { data: TradeType } = await axios.post(
