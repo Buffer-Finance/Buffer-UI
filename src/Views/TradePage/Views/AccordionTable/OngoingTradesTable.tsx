@@ -343,6 +343,7 @@ export const OngoingTradesTable: React.FC<{
                 poolInfo={poolInfo}
                 lockedAmmount={lockedAmmount}
                 shouldShowUnit={false}
+                shouldShowCalculating
               />
               <img
                 src={getAssetImageUrl(trade.token)}
@@ -405,15 +406,24 @@ export const Pnl = ({
   poolInfo,
   lockedAmmount,
   shouldShowUnit = true,
+  shouldShowCalculating = false,
 }: {
   trade: TradeType;
   configData: marketType;
   poolInfo: poolInfoType;
   lockedAmmount?: string;
   shouldShowUnit?: boolean;
+  shouldShowCalculating?: boolean;
 }) => {
-  const pnl = useEarlyPnl({ trade, configData, poolInfo, lockedAmmount });
-  if (!pnl?.earlycloseAmount) return <div>Calculating..</div>;
+  const { pnl, probability } = useEarlyPnl({
+    trade,
+    configData,
+    poolInfo,
+    lockedAmmount,
+  });
+  // console.log(pnl, probability, 'pnl');
+  if (!probability)
+    return shouldShowCalculating ? <div>Calculating..</div> : <></>;
   const isWin = gt(pnl.earlycloseAmount, '0');
   if (trade.locked_amount || lockedAmmount)
     return (

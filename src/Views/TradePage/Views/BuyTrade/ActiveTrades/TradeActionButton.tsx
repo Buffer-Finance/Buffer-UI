@@ -55,12 +55,13 @@ export const TradeButton: React.FC<{
 
   const lockedAmmount = getLockedAmount(trade, cachedPrices);
   const editLoading = useAtomValue(loeditLoadingAtom);
-  const { earlycloseAmount, isWin } = useEarlyPnl({
+  const { pnl } = useEarlyPnl({
     trade,
     configData: tradeMarket,
     poolInfo,
     lockedAmmount,
   });
+  const { earlycloseAmount, isWin } = pnl;
 
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
 
