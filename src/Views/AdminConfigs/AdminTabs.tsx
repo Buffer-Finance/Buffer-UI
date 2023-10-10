@@ -2,7 +2,13 @@ import { atom, useAtom } from 'jotai';
 
 export const AdminTabs = () => {
   const [activeTab, setActiveTab] = useAtom(AdminActiveTabAtom);
-  const tabs = ['Options', 'Settlement Fee', 'Circuit Breaker', 'Role Manager'];
+  const tabs = [
+    'Options',
+    'Settlement Fee',
+    'Circuit Breaker',
+    'Role Manager',
+    'Update DB',
+  ];
 
   return (
     <div className="flex gap-4 items-center my-3 ml-3">
