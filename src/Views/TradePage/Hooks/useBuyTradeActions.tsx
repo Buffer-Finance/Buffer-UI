@@ -74,7 +74,8 @@ export const useBuyTradeActions = (userInput: string) => {
   const tokenName = poolDetails?.token;
 
   const tokenAddress = poolDetails?.tokenAddress;
-  const { data: allSettlementFees } = useSettlementFee();
+  const { data: allSettlementFees, mutate: refethSettlemetFee } =
+    useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = usePublicClient({ chainId: activeChain.id });
   const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
@@ -346,7 +347,10 @@ export const useBuyTradeActions = (userInput: string) => {
       //   ),
       // };
       try {
-        let settelmentFee = allSettlementFees[activeAsset.tv_id];
+        const UpdatedSettlementFees = await refethSettlemetFee();
+        if (UpdatedSettlementFees === undefined)
+          throw new Error('Settlement fee not found');
+        let settelmentFee = UpdatedSettlementFees[activeAsset.tv_id];
         let currentTimestamp = Date.now();
         let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
         // const oneCTWallet = new ethers.Wallet(
