@@ -48,7 +48,7 @@ export const useProfileGraphQl = () => {
     const basicQuery = `
       userOptionDatas(  
         first: 10000 
-        where: {user: "${account}", state_not: 1}) {
+        where: {user: "${account.toLowerCase()}", state_not: 1}) {
           optionContract {
             address
             token
@@ -60,7 +60,7 @@ export const useProfileGraphQl = () => {
         }
       activeData:userOptionDatas(
         first: 10000 
-        where: {user: "${account}", state: 1}
+        where: {user: "${account.toLowerCase()}", state: 1}
       ) {
         optionContract {
           address
