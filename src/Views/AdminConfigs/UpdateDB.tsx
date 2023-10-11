@@ -10,7 +10,7 @@ export const UpdateDB = () => {
   const toastify = useToast();
   const { activeChain } = useActiveChain();
 
-  async function handleUpdateDB() {
+  async function handleGraphQl() {
     try {
       if (!address) throw new Error('No address found');
       if (!activeChain) throw new Error('No chain found');
@@ -45,7 +45,7 @@ export const UpdateDB = () => {
     }
   }
 
-  async function handleGraphQl() {
+  async function handleUpdateDB() {
     try {
       if (!address) throw new Error('No address found');
       if (!activeChain) throw new Error('No chain found');
