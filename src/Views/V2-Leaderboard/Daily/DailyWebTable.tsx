@@ -437,7 +437,9 @@ export const DailyWebTable: React.FC<{
     standings?.length && userData?.length && Number(userRank) !== skip + 1 ? (
       <BufferTableRow onClick={console.log} className="highlight group ">
         {new Array(DailyCols.length).fill(9).map((_, i) => (
-          <BufferTableCell onClick={() => navigateToProfile(account)}>
+          <BufferTableCell
+            onClick={() => navigateToProfile(account?.toLowerCase())}
+          >
             {BodyFormatter(0, i, {
               ...userData[0],
               rank: userRank,

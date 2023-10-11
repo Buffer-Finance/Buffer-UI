@@ -278,7 +278,7 @@ const HistoryTable: React.FC<{
                   onClick={() => {
                     const userAddress = trade.user_address;
                     if (!userAddress) return;
-                    navigateToProfile(userAddress);
+                    navigateToProfile(userAddress.toLowerCase());
                   }}
                 >
                   <Launch className="scale-75 mb-1" />
@@ -435,7 +435,7 @@ const HistoryTable: React.FC<{
         if (isNotMobile && platform) {
           const userAddress = trades?.[idx].user_address;
           if (!userAddress) return;
-          navigateToProfile(userAddress);
+          navigateToProfile(userAddress.toLowerCase());
         }
         // else setInspectTrade({ trade: trades?.[idx] });
       }}
