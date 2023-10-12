@@ -1,13 +1,10 @@
-import { usePrice } from '@Hooks/usePrice';
 import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
-import { TokenDataNotIncludedWarning } from '@Views/Common/TokenDataNotIncludedWarning';
 import { ClaimedNFT } from '@Views/NFTView/Claimed';
-import { HistoryTables } from './Components/HistoryTable';
-import { ProfileCards } from './Components/ProfileCards';
-import { ReferralLink } from './Components/ReferralLink';
-import { UserData } from './Components/UserData';
-import { LBFR } from './LBFR';
 import { useEffect } from 'react';
+import { HistoryTables } from './Components/HistoryTable';
+import { ProfileCardsComponent } from './Components/ProfileCardsComponent';
+import { ReferralLink } from './Components/ReferralLink';
+import { UserDataComponent } from './Components/UserDataComponent';
 
 export const ProfilePage = () => {
   useEffect(() => {
@@ -20,18 +17,16 @@ export const ProfilePage = () => {
   );
 };
 const Profile = () => {
-  usePrice(true);
-
   return (
     <div>
       {/* <TokenDataNotIncludedWarning /> */}
       <div className="px-7 my-8 sm:px-3">
-        <UserData />
+        <UserDataComponent />
         <ReferralLink />
         {/* <ArbitrumOnly hide>
           <LBFR />
         </ArbitrumOnly> */}
-        <ProfileCards />
+        <ProfileCardsComponent />
         <ArbitrumOnly hide>
           <ClaimedNFT />
         </ArbitrumOnly>
