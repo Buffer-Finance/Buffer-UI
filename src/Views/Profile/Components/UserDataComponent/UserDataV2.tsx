@@ -5,6 +5,7 @@ import { Col } from '@Views/Common/ConfirmationModal';
 import NFTtier from '@Views/Common/NFTtier';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
+import { useProfileGraphQl2 } from '@Views/Profile/Hooks/useProfileGraphQl2';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { marketsForChart } from '@Views/TradePage/config';
 import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQuery';
@@ -15,17 +16,16 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getChains } from 'src/Config/wagmiClient';
 import { Chain } from 'wagmi';
-import { useProfileGraphQl } from '../Hooks/useProfileGraphQl';
 
 const userDataHeadClass = 'text-f14 text-[#7F87A7]';
 const userDataDescClass = 'text-f16 text-[#C3C2D4]';
 
-export const UserData = () => {
+export const UserDataV2 = () => {
   const { address, viewOnlyMode } = useUserAccount();
   const { winnerUserRank: dailyRank } = useLeaderboardQuery();
   const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
-  const { tradingMetricsData } = useProfileGraphQl();
+  const metrics = useProfileGraphQl2();
   const { activeChain } = useActiveChain();
   const chains: Chain[] = getChains();
   const navigateToTrade = useNavigateToTrade();
@@ -38,19 +38,21 @@ export const UserData = () => {
     return chain.blockExplorers?.default.url;
   }, [chains, activeChain.id]);
 
-  //finds the address with the highest number from the tradingMetricsData.tradesPerAsset object
   const mostTradedAsset = useMemo(() => {
-    if (!tradingMetricsData || !tradingMetricsData.tradesPerAsset) return null;
-    const keysArray = Object.keys(tradingMetricsData.tradesPerAsset);
-    return keysArray.length > 0
-      ? keysArray.reduce((a, b) =>
-          tradingMetricsData.tradesPerAsset[a] >
-          tradingMetricsData.tradesPerAsset[b]
-            ? a
-            : b
-        )
-      : null;
-  }, [tradingMetricsData]);
+    if (!metrics) return null;
+    return Object.entries(metrics.tradesByasset).reduce((acc, curr) => {
+      if (acc[1] > curr[1]) {
+        return acc;
+      } else {
+        return curr;
+      }
+    });
+  }, [metrics]);
+
+  const winrate = useMemo(() => {
+    if (!metrics) return null;
+    return (metrics.totalTradesWon * 100) / metrics.totalNonActiveTrades || 0;
+  }, [metrics]);
 
   return (
     <div className="flex items-center justify-between flex-wrap sm:items-stretch sm:gap-4 gap-7">
@@ -158,16 +160,13 @@ export const UserData = () => {
           className={'winner-card'}
           head={'Win Rate'}
           desc={
-            tradingMetricsData ? (
+            winrate ? (
               <Display
-                data={
-                  (tradingMetricsData.tradeWon * 100) /
-                    tradingMetricsData.totalTrades || '0'
-                }
+                data={winrate}
                 unit={'%'}
                 className={userDataDescClass + ' !w-full'}
                 content={
-                  <>{`Won ${tradingMetricsData.tradeWon}/${tradingMetricsData.totalTrades} trades.`}</>
+                  <>{`Won ${metrics?.totalTradesWon}/${metrics?.totalNonActiveTrades} trades.`}</>
                 }
               />
             ) : (
@@ -187,14 +186,14 @@ export const UserData = () => {
                   <PairTokenImage
                     pair={
                       marketsForChart[
-                        mostTradedAsset as unknown as keyof typeof marketsForChart
+                        mostTradedAsset[0] as unknown as keyof typeof marketsForChart
                       ].pair
                     }
                   />
                 </div>
                 {
                   marketsForChart[
-                    mostTradedAsset as unknown as keyof typeof marketsForChart
+                    mostTradedAsset[0] as unknown as keyof typeof marketsForChart
                   ].pair
                 }{' '}
               </div>

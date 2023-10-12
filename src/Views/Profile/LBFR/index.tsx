@@ -1,27 +1,11 @@
-import { Section } from '@Views/Earn/Components/Section';
-import {
-  keyClasses,
-  tooltipKeyClasses,
-  tooltipValueClasses,
-  valueClasses,
-} from '@Views/Earn/Components/VestCards';
-import { profileCardClass } from '../Components/ProfileCards';
-import { Card } from '@Views/Earn/Components/Card';
-import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
-import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
-import { Display } from '@Views/Common/Tooltips/Display';
-import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
-import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { useMemo, useState } from 'react';
-import { BlueBtn } from '@Views/Common/V2-Button';
-import { btnClasses } from '@Views/Earn/Components/EarnButtons';
-import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
-import { LBFRmodals } from './modals';
-import { useSetAtom } from 'jotai';
-import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
+import { useGlobal } from '@Contexts/Global';
+import { useToast } from '@Contexts/Toast';
+import useStopWatch from '@Hooks/Utilities/useStopWatch';
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { stakedType, useLBFRreadCalls } from './Hooks/useReadCalls';
-import { LBFRGraphqlType, useLBFRGraphql } from './Hooks/useGraphql';
+import { useWriteCall } from '@Hooks/useWriteCall';
+import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
+import { toFixed } from '@Utils/NumString';
 import {
   divide,
   gt,
@@ -29,25 +13,42 @@ import {
   lte,
   multiply,
 } from '@Utils/NumString/stringArithmatics';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { toFixed } from '@Utils/NumString';
-import { Skeleton } from '@mui/material';
-import { WalletNotConnectedCard } from '../Components/ProfileCards';
-import { useWriteCall } from '@Hooks/useWriteCall';
-import { getContract } from './Config/Addresses';
-import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
-import { useToast } from '@Contexts/Toast';
-import { SomethingWentWrongModal } from '@Views/Common/Modals/SomethingWentWrong';
-import axios from 'axios';
-import LBFRabi from './Config/FaucetLBFR.json';
-import useStopWatch from '@Hooks/Utilities/useStopWatch';
-import { useWeekOfTournament } from '@Views/V2-Leaderboard/Hooks/useWeekOfTournament';
-import { LBFRconfig } from './config';
-import { TimerBox } from '@Views/V2-Leaderboard/Incentivised';
 import { getDistance } from '@Utils/Time';
 import { getBalance } from '@Views/Common/AccountInfo';
+import { SomethingWentWrongModal } from '@Views/Common/Modals/SomethingWentWrong';
+import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { Display } from '@Views/Common/Tooltips/Display';
+import { BlueBtn } from '@Views/Common/V2-Button';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
+import { Card } from '@Views/Earn/Components/Card';
+import { btnClasses } from '@Views/Earn/Components/EarnButtons';
+import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
+import { Section } from '@Views/Earn/Components/Section';
+import {
+  keyClasses,
+  tooltipKeyClasses,
+  tooltipValueClasses,
+  valueClasses,
+} from '@Views/Earn/Components/VestCards';
+import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
+import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
+import { useWeekOfTournament } from '@Views/V2-Leaderboard/Hooks/useWeekOfTournament';
 import styled from '@emotion/styled';
-import { useGlobal } from '@Contexts/Global';
+import { Skeleton } from '@mui/material';
+import axios from 'axios';
+import { useSetAtom } from 'jotai';
+import { useMemo, useState } from 'react';
+import {
+  WalletNotConnectedCard,
+  profileCardClass,
+} from '../Components/ProfileCardsComponent/ProfileCards';
+import { getContract } from './Config/Addresses';
+import LBFRabi from './Config/FaucetLBFR.json';
+import { LBFRGraphqlType, useLBFRGraphql } from './Hooks/useGraphql';
+import { stakedType, useLBFRreadCalls } from './Hooks/useReadCalls';
+import { LBFRModalAtom, LBFRModalNumberAtom } from './atom';
+import { LBFRconfig } from './config';
+import { LBFRmodals } from './modals';
 
 export const LBFR = () => {
   return (
