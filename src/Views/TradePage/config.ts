@@ -7,7 +7,7 @@ export const appConfig = {
   '421613': isSandbox
     ? {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/version/v0.0.22-add-user-total-stats-4/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/version/v0.0.23-user-cum-stats-by-contract/api',
         },
 
         booster: '0x29952C608Bf41A8a36AFD937471691932055E7b5',
@@ -80,7 +80,7 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/version/v2.5.9-leaderboard-win-trades-3/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/version/v2.5.10-id-bytes-cum-user-contract-data/api',
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0xff37eCD6cD32ce9caC75D3EFb434CAc6d63300B1',
@@ -153,7 +153,7 @@ export const appConfig = {
       },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.24-user-cum-stats-by-contract/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
