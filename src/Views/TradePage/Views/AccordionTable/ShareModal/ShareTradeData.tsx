@@ -1,4 +1,4 @@
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -42,7 +42,9 @@ export const ShareTradeData = ({
       },
       {
         key: 'Duration',
-        value: formatDistanceExpanded(Variables(+trade.period)),
+        value: formatDistance(
+          Variables(+trade.close_time - +trade.queued_timestamp)
+        ),
       },
     ],
     [trade]
