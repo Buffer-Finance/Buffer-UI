@@ -244,9 +244,8 @@ function getPnl(trade: TradeType, lockedAmountCache: any) {
   if (!res || !res.earlycloseAmount) return null;
   return [toFixed(res.earlycloseAmount, 2), res.isWin];
 }
+
 const formatMarketOrder = (option: TradeType, earlyCloseData: any) => {
-  const winning =
-    earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
   return (
     `${
       !earlyCloseData
@@ -391,7 +390,7 @@ export const MultiResolutionChart = ({
   const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
   const v3AppConfig = useMarketsConfig();
-  const { address } = useUserAccount();
+  const { viewOnlyMode } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
   let trade2visualisation = useRef<
@@ -906,7 +905,7 @@ export const MultiResolutionChart = ({
             .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
           // console.log('[chart-3', trade.positionRef);
 
-          if (!isClosingDisabled) {
+          if (!isClosingDisabled && !viewOnlyMode) {
             trade.positionRef.onCancel('onCancel', () => {
               // console.log('[chart-4', settings.earlyCloseConfirmation);
 
