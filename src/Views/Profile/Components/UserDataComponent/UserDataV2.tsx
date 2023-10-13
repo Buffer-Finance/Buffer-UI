@@ -40,13 +40,18 @@ export const UserDataV2 = () => {
 
   const mostTradedAsset = useMemo(() => {
     if (!metrics) return null;
-    return Object.entries(metrics.tradesByasset).reduce((acc, curr) => {
-      if (acc[1] > curr[1]) {
-        return acc;
-      } else {
-        return curr;
-      }
-    });
+    const tradesByassetArray = Object.entries(metrics.tradesByasset);
+    if (tradesByassetArray.length === 0) return null;
+    return tradesByassetArray.reduce(
+      (acc, curr) => {
+        if (acc[1] > curr[1]) {
+          return acc;
+        } else {
+          return curr;
+        }
+      },
+      ['-', 0]
+    );
   }, [metrics]);
 
   const winrate = useMemo(() => {
