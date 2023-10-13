@@ -55,7 +55,6 @@ export const UserDataV2 = () => {
   }, [metrics]);
 
   const winrate = useMemo(() => {
-    console.log(metrics);
     if (!metrics) return null;
     return (metrics.totalTradesWon * 100) / metrics.totalNonActiveTrades || 0;
   }, [metrics]);
