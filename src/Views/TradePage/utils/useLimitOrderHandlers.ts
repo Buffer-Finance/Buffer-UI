@@ -6,6 +6,7 @@ import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useAtom, useSetAtom } from 'jotai';
 import { useAccount } from 'wagmi';
 import { useSettlementFee } from '../Hooks/useSettlementFee';
+import { useSpread } from '../Hooks/useSpread';
 import { loeditLoadingAtom } from '../Views/EditModal';
 import { rerenderPositionAtom } from '../atoms';
 import { getSingatureCached } from '../cache';
@@ -24,6 +25,8 @@ const useLimitOrderHandlers = () => {
   const configData = getConfig(activeChain.id);
   const toastify = useToast();
   const setPositionRerender = useSetAtom(rerenderPositionAtom);
+  const { data: allSpreads } = useSpread();
+
   const revokeGraphChange = () => {
     // if api fails
     setPositionRerender((p) => p + 1);
@@ -44,6 +47,10 @@ const useLimitOrderHandlers = () => {
       });
     }
     try {
+      const spread = allSpreads?.[trade.market.tv_id];
+      if (spread === undefined || spread === null) {
+        throw new Error('Spread not found');
+      }
       setEditLoading(trade.queue_id);
       const currentTs = Math.round(Date.now() / 1000);
       const settlement_fee = trade.settlement_fee.toString();
@@ -66,7 +73,8 @@ const useLimitOrderHandlers = () => {
         trade.is_above!,
         oneCtPk!,
         activeChain.id,
-        configData.router
+        configData.router,
+        spread.spread
       );
       const signature = await getSingatureCached(oneCTWallet);
       if (!signature)
@@ -90,7 +98,10 @@ const useLimitOrderHandlers = () => {
         activeChain.id,
         settlement_fee,
         bsesettelmentFeeObj.settlement_fee_sign_expiration,
-        bsesettelmentFeeObj.settlement_fee_signature
+        bsesettelmentFeeObj.settlement_fee_signature,
+        spread.spread.toString(),
+        spread.spread_sign_expiration,
+        spread.spread_signature
       );
       if (res) {
         // toastify({
@@ -105,7 +116,7 @@ const useLimitOrderHandlers = () => {
     } catch (e) {
       revokeGraphChange();
       toastify({
-        msg: 'Something went wrong!',
+        msg: 'Something went wrong!' + (e as Error).message,
         type: 'error',
         id: '132132123',
       });
