@@ -315,19 +315,9 @@ function drawPosition(
       .setQuantity('↕')
       .setBodyBorderColor(defaults.BG)
       .setLineColor(color)
-      .onMove('move', function () {
-        this.setText('Processing EDIT');
-        // console.log(`MultiResolutionChart-Processing EDIT: `);
-        loHandlers.onMove(option, this.getPrice());
-      })
       .setModifyTooltip('click to edit order')
       .onModify('modify', function () {
         loHandlers.onEdit({ trade: option, market: option.market });
-      })
-      .onCancel('modify', function () {
-        this.setText('Processing CANCEL');
-
-        loHandlers.onCancel(option);
       })
 
       .setPrice(optionPrice);
@@ -884,6 +874,20 @@ export const MultiResolutionChart = ({
             if (!updatedTrade) return;
             const decimals = getPoolInfo(updatedTrade.pool.pool).decimals;
             // Limit order updation space
+            if (!viewOnlyMode) {
+              trade.positionRef.onCancel('modify', function () {
+                this.setText('Processing CANCEL');
+
+                cancelHandler(trade.option);
+              });
+
+              trade.positionRef.onMove('move', function () {
+                this.setText('Processing EDIT');
+                // console.log(`MultiResolutionChart-Processing EDIT: `);
+                changeStrikeSafe(trade.option, this.getPrice());
+              });
+            }
+
             if (
               editLoading == updatedTrade.queue_id ||
               updatedTrade.pending_operation == 'Processing EDIT'
