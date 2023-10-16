@@ -359,10 +359,7 @@ export const useBuyTradeActions = (userInput: string) => {
 
         let currentTimestamp = Date.now();
         let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
-        // const oneCTWallet = new ethers.Wallet(
-        //   oneCtPk!,
-        //   provider as ethers.providers.StaticJsonRpcProvider
-        // );
+
         let baseArgs = [
           address,
           toFixed(multiply(userInput, decimals), 0),
@@ -392,8 +389,11 @@ export const useBuyTradeActions = (userInput: string) => {
           customTrade.is_up,
           oneCtPk,
           activeChain.id,
-          configData.router
+          configData.router,
+          spread.spread
         );
+
+        console.log(`useBuyTradeActions-signatures: `, signatures);
 
         let apiParams = {
           signature_timestamp: currentUTCTimestamp,
@@ -417,7 +417,7 @@ export const useBuyTradeActions = (userInput: string) => {
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
-          spread: spread,
+          spread: spread.spread,
           spread_sign_expiration: spread.spread_sign_expiration,
           spread_signature: spread.spread_signature,
           environment: activeChain.id,

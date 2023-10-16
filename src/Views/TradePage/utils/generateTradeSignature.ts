@@ -42,7 +42,6 @@ const generateTradeSignature = async (
     slippage,
     partialFill,
     referral,
-    NFTid,
   ];
   const isLimit = settlementFee == 0;
   const baseArgsEnding = isLimit ? [ts] : [ts, settlementFee];
@@ -80,6 +79,7 @@ const tradeParamTypes = [
 
 const isUpType = { name: 'isAbove', type: 'bool' };
 const settlementFeeType = { name: 'settlementFee', type: 'uint256' };
+const spreadType = { name: 'spread', type: 'uint256' };
 const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
@@ -95,14 +95,15 @@ const generateBuyTradeSignature = async (
   slippage: string,
   partialFill: boolean,
   referral: string,
-  // NFTid: string,
   ts: number,
   settlementFee: string | number,
   isUp: boolean,
   oneCtPk: string,
   activeChainId: any,
-  routerContract: string
+  routerContract: string,
+  spread: string | number
 ): Promise<string[]> => {
+  console.log(spread, 'spread');
   const wallet = getWalletFromOneCtPk(oneCtPk);
 
   const isLimit = settlementFee == 0;
@@ -116,7 +117,6 @@ const generateBuyTradeSignature = async (
     slippage,
     allowPartialFill: partialFill,
     referralCode: referral,
-    // traderNFTId: NFTid,
   };
   const domain = {
     name: 'Validator',
@@ -136,16 +136,17 @@ const generateBuyTradeSignature = async (
   const extraArgs = !isLimit
     ? { settlementFee, timestamp: ts }
     : { timestamp: ts };
+  const spreadArgs = { spread: spread };
   const partialSignatureParams = {
     types: {
       EIP712Domain,
-      [key.partial]: [...tradeParamTypes, ...extraArgTypes],
+      [key.partial]: [...tradeParamTypes, ...extraArgTypes, spreadType],
     },
     primaryType: key.partial,
     domain,
-    message: { ...baseMessage, ...extraArgs },
+    message: { ...baseMessage, ...extraArgs, ...spreadArgs },
   };
-  // console.log(`partialSignatureParams: `, partialSignatureParams);
+  console.log(`partialSignatureParams: `, partialSignatureParams);
   const fullSignatureParams = {
     types: {
       EIP712Domain,
