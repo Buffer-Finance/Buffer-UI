@@ -41,7 +41,6 @@ const editQueueTrade = async (
     spread_sign_expiration,
     spread_signature,
   };
-  console.log(`index-edit-deb: `, params);
 
   return await axios.get(`${baseUrl}trade/edit/`, {
     params,

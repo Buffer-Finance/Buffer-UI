@@ -56,7 +56,6 @@ const generateTradeSignature = async (
       types: [...baseArgTypes, 'bool', ...baseArgsEndingTypes],
     },
   ];
-  // console.log(`index-edit-deb-args: `, args[0], args[1]);
   const hashedMessage: string[] = ['partial', 'full'].map((s, idx) => {
     return ethers.utils.solidityKeccak256(args[idx].types, args[idx].values);
   });
@@ -103,7 +102,6 @@ const generateBuyTradeSignature = async (
   routerContract: string,
   spread: string | number
 ): Promise<string[]> => {
-  console.log(spread, 'spread');
   const wallet = getWalletFromOneCtPk(oneCtPk);
 
   const isLimit = settlementFee == 0;
@@ -146,7 +144,6 @@ const generateBuyTradeSignature = async (
     domain,
     message: { ...baseMessage, ...extraArgs, ...spreadArgs },
   };
-  console.log(`partialSignatureParams: `, partialSignatureParams);
   const fullSignatureParams = {
     types: {
       EIP712Domain,
@@ -156,12 +153,10 @@ const generateBuyTradeSignature = async (
     domain,
     message: { ...baseMessage, isAbove: isUp, ...extraArgs },
   };
-  console.log(`fullSignatureParams: `, fullSignatureParams);
   const res = await Promise.all([
     wallet.signTypedData(partialSignatureParams),
     wallet.signTypedData(fullSignatureParams),
   ]);
-  // console.log(`call-dd-res: `, res);
   return res;
 };
 const approveParamType = [
@@ -172,7 +167,6 @@ const approveParamType = [
   { name: 'deadline', type: 'uint256' },
 ];
 const getRSVFromSignature = (signature: string) => {
-  // console.log(`signature: `, signature);
   const r = signature.slice(0, 66);
   const s = '0x' + signature.slice(66, 130);
   const v = '0x' + signature.slice(130, 132);
@@ -212,7 +206,6 @@ const generateApprovalSignature = async (
     },
     message: approveMessage,
   } as const;
-  // console.log(`approveSignatureParams: `, approveSignatureParams);
   const res = await signMethod(approveSignatureParams);
 
   return [res, getRSVFromSignature(res)];

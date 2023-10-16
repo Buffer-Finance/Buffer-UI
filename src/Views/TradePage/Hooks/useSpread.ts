@@ -26,7 +26,6 @@ export const useSpread = () => {
           environment: activeChainId,
         },
       });
-      console.log(data, 'spread response');
       if (status !== 200) {
         throw new Error('Could not fetch spread');
       }
