@@ -16,8 +16,10 @@ export const ShareTradeData = ({
   decimals: number;
   expiryPrice: string;
 }) => {
-  const priceArr = useMemo(
-    () => [
+  const priceArr = useMemo(() => {
+    let duration = +trade.close_time - +trade.queued_timestamp;
+    if (!trade.close_time) duration = trade.period;
+    return [
       {
         key: 'Strike Price',
         value: (
@@ -42,13 +44,10 @@ export const ShareTradeData = ({
       },
       {
         key: 'Duration',
-        value: formatDistance(
-          Variables(+trade.close_time - +trade.queued_timestamp)
-        ),
+        value: formatDistance(Variables(duration)),
       },
-    ],
-    [trade]
-  );
+    ];
+  }, [trade]);
 
   return (
     <div className="flex justify-between items-center gap-x-5 mt-3">
