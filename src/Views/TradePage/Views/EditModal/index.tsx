@@ -213,7 +213,10 @@ export const EditModal: React.FC<{
         activeChain.id,
         settlement_fee,
         bsesettelmentFeeObj.settlement_fee_sign_expiration,
-        bsesettelmentFeeObj.settlement_fee_signature
+        bsesettelmentFeeObj.settlement_fee_signature,
+        spread.spread.toString(),
+        spread.spread_sign_expiration,
+        spread.spread_signature
       );
       if (res) {
         onSave(val);
