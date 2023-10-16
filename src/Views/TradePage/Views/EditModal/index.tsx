@@ -15,6 +15,7 @@ import {
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import {
   chartControlsSettingsAtom,
@@ -69,6 +70,7 @@ export const EditModal: React.FC<{
   const configData = getConfig(activeChain.id);
   const [elapsedMinutes, setElapsedMinutes] = useState<number | null>(null);
   const queuedTime = trade?.queued_timestamp;
+  const { data: allSpreads } = useSpread();
 
   const { getPoolInfo } = usePoolInfo();
 
@@ -156,87 +158,79 @@ export const EditModal: React.FC<{
 
   const toastify = useToast();
   const editHandler = async () => {
-    if (!trade || !oneCTWallet || !address)
-      return toastify({
-        msg: 'Something went wrong',
+    try {
+      if (!trade || !oneCTWallet || !address)
+        throw new Error('Please connect your wallet first');
+
+      if (!allSettlementFees) {
+        throw new Error('There is some error while fetching the data!');
+      }
+      if (price === null) {
+        throw new Error('Please enter the price!');
+      }
+      const spread = allSpreads?.[trade.market.tv_id];
+      if (spread === undefined || spread === null) {
+        throw new Error('Spread not found');
+      }
+
+      setEditLoading(trade.queue_id);
+      const currentTs = Math.round(Date.now() / 1000);
+      const settlement_fee = getSettlementFee(payout);
+      const bsesettelmentFeeObj = allSettlementFees[trade.market.tv_id];
+
+      const signs = await generateBuyTradeSignature(
+        address,
+        trade.trade_size + '',
+        HHMMToSeconds(currentTime) / 60,
+        trade.target_contract,
+        price,
+        trade.slippage + '',
+        trade.allow_partial_fill,
+        trade.referral_code,
+        currentTs,
+        settlement_fee,
+        buttonDirection == directionBtn.Up ? true : false,
+        oneCtPk as string,
+        activeChain.id,
+        configData.router,
+        spread.spread
+      );
+      const signature = await getSingatureCached(oneCTWallet);
+      if (!signature) throw new Error('Please activate your account first');
+
+      const res = await editQueueTrade(
+        signature,
+        trade.queue_id,
+        currentTs,
+        toFixed(multiply(price, 8), 0),
+        HHMMToSeconds(currentTime),
+        signs[0],
+        signs[1],
+        address,
+        trade.slippage,
+        buttonDirection == directionBtn.Up ? true : false,
+        frame === 'm' ? minutes * 60 : minutes * 60 * 60,
+        activeChain.id,
+        settlement_fee,
+        bsesettelmentFeeObj.settlement_fee_sign_expiration,
+        bsesettelmentFeeObj.settlement_fee_signature
+      );
+      if (res) {
+        onSave(val);
+        if (val) {
+          setTimeout(() => rerenderPositionAtom);
+        }
+      }
+    } catch (e) {
+      toastify({
+        msg: 'Something went wrong ' + (e as Error).message,
         type: 'errror',
         id: 'dsfs',
       });
-
-    if (!allSettlementFees) {
-      return toastify({
-        type: 'error',
-        msg: 'There is some error while fetching the data!',
-        id: 'binaryBuy',
-      });
+    } finally {
+      await sleep(2000);
+      setEditLoading(null);
     }
-    if (price === null) {
-      return toastify({
-        type: 'error',
-        msg: 'Please enter the price!',
-        id: 'binaryBuy',
-      });
-    }
-    setEditLoading(trade.queue_id);
-    const currentTs = Math.round(Date.now() / 1000);
-    const settlement_fee = getSettlementFee(payout);
-    const bsesettelmentFeeObj = allSettlementFees[trade.market.tv_id];
-
-    const signs = await generateBuyTradeSignature(
-      address,
-      trade.trade_size + '',
-      HHMMToSeconds(currentTime) / 60,
-      trade.target_contract,
-      price,
-      trade.slippage + '',
-      trade.allow_partial_fill,
-      trade.referral_code,
-      // trade.trader_nft_id + '',
-      currentTs,
-
-      settlement_fee,
-      buttonDirection == directionBtn.Up ? true : false,
-      oneCtPk,
-      activeChain.id,
-      configData.router
-    );
-    const signature = await getSingatureCached(oneCTWallet);
-    if (!signature)
-      return toastify({
-        msg: 'Please activate your account first!',
-        type: 'error',
-        id: '1231',
-      });
-    const res = await editQueueTrade(
-      signature,
-      trade.queue_id,
-      currentTs,
-      toFixed(multiply(price, 8), 0),
-      HHMMToSeconds(currentTime),
-      signs[0],
-      signs[1],
-      address,
-      trade.slippage,
-      buttonDirection == directionBtn.Up ? true : false,
-      frame === 'm' ? minutes * 60 : minutes * 60 * 60,
-      activeChain.id,
-      settlement_fee,
-      bsesettelmentFeeObj.settlement_fee_sign_expiration,
-      bsesettelmentFeeObj.settlement_fee_signature
-    );
-    if (res) {
-      onSave(val);
-      if (val) {
-        setTimeout(() => rerenderPositionAtom);
-      }
-      // return toastify({
-      //   msg: 'Limit order updated successfully',
-      //   type: 'success',
-      //   id: '211',
-      // });
-    }
-    await sleep(2000);
-    setEditLoading(null);
   };
 
   if (!trade) return <></>;
