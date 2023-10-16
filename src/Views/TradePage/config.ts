@@ -7,12 +7,12 @@ export const appConfig = {
   '421613': isSandbox
     ? {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-sandbox-testnet/version/v0.0.25-update-contracts/api',
         },
 
         booster: '0x29952C608Bf41A8a36AFD937471691932055E7b5',
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
-        router: '0x18d50aC65CED5F60Aa63eb358DB7BCF081529Ad5',
+        router: '0x81C11F3Dc3Cd768467a1466155Aa19587a82Be10',
         signer_manager: '0xAAcAf779fdc0A7d8749Aa1FDc260a1C5Da5517B1',
         config_setter: '0x5C00a53A13F4c2818ce2D0f8759AcB07D0eB350b',
         v2_router: null,
