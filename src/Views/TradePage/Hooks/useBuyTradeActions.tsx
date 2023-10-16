@@ -47,6 +47,7 @@ import { useActiveMarket } from './useActiveMarket';
 import { useApprvalAmount } from './useApprovalAmount';
 import { buyTradeDataAtom } from './useBuyTradeData';
 import { useSettlementFee } from './useSettlementFee';
+import { useSpread } from './useSpread';
 import { useSwitchPool } from './useSwitchPool';
 enum ArgIndex {
   Strike = 4,
@@ -61,6 +62,7 @@ enum ArgIndex {
 }
 export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
+  const { data: allSpreads } = useSpread();
   const [settings] = useAtom(tradeSettingsAtom);
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const { data: approvalExpanded, mutate: updateApprovalData } =
@@ -347,6 +349,14 @@ export const useBuyTradeActions = (userInput: string) => {
       // };
       try {
         let settelmentFee = allSettlementFees[activeAsset.tv_id];
+        const spread = allSpreads?.[activeAsset.tv_id];
+        if (spread === undefined || spread === null) {
+          throw new Error('Spread not found');
+        }
+        if (settelmentFee === undefined || settelmentFee === null) {
+          throw new Error('settlement fee not found');
+        }
+
         let currentTimestamp = Date.now();
         let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
         // const oneCTWallet = new ethers.Wallet(
@@ -384,6 +394,7 @@ export const useBuyTradeActions = (userInput: string) => {
           activeChain.id,
           configData.router
         );
+
         let apiParams = {
           signature_timestamp: currentUTCTimestamp,
           strike: baseArgs[ArgIndex.Strike],
@@ -406,6 +417,9 @@ export const useBuyTradeActions = (userInput: string) => {
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
+          spread: spread,
+          spread_sign_expiration: spread.spread_sign_expiration,
+          spread_signature: spread.spread_signature,
           environment: activeChain.id,
           token: tokenName,
           strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
