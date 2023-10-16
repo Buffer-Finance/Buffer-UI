@@ -189,31 +189,42 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      const safeStrike = getSafeStrike(
-        Number(customTrade.strike),
-        customTrade.is_up,
-        switchPool.SpreadConfig1,
-        switchPool.SpreadConfig2,
-        switchPool.SpreadFactor,
-        +currentOI,
-        +maxOI,
-        switchPool.IV
-      );
-      const difference = Math.abs(
-        ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
-      );
+      if (activeAsset && allSpreads) {
+        const spread = allSpreads?.[activeAsset.tv_id];
+        if (spread === undefined || spread === null) {
+          return toastify({
+            type: 'error',
+            msg: `Spread not found for ${activeAsset.pair}!`,
+            id: 'binaryBuy',
+          });
+        }
+        const safeStrike = getSafeStrike(
+          Number(customTrade.strike),
+          customTrade.is_up,
+          spread.spread
+        );
+        const difference = Math.abs(
+          ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
+        );
 
-      if (difference > settings.slippageTolerance) {
+        if (difference > settings.slippageTolerance) {
+          return toastify({
+            type: 'error',
+            msg: `Slippage tolerance should be greater than ${difference.toFixed(
+              4
+            )}%`,
+            id: 'binaryBuy',
+          });
+        }
+
+        console.log(`useBuyTradeActions-safeStrike: `, safeStrike, difference);
+      } else {
         return toastify({
           type: 'error',
-          msg: `Slippage tolerance should be greater than ${difference.toFixed(
-            4
-          )}%`,
+          msg: 'There is some error while fetching the data!',
           id: 'binaryBuy',
         });
       }
-
-      console.log(`useBuyTradeActions-safeStrike: `, safeStrike, difference);
 
       if (!userInput || userInput === '0' || userInput === '') {
         return toastify({

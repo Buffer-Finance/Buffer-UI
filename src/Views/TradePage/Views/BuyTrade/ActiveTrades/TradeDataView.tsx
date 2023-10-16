@@ -7,9 +7,9 @@ import {
 } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { RowGap } from '@Views/TradePage/Components/Row';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { secondsToHHMM } from '@Views/TradePage/utils';
@@ -17,7 +17,6 @@ import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
 import styled from '@emotion/styled';
 import { useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
-import { getAddress } from 'viem';
 import {
   getExpiry,
   getLockedAmount,
@@ -35,10 +34,10 @@ export const TradeDataView: React.FC<{
   className?: string;
 }> = ({ trade, configData, poolInfo, className = '' }) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
-  const readcalldata = useAtomValue(buyTradeDataAtom);
-  const maxOI = readcalldata.maxOIs[getAddress(trade.target_contract)];
-  const currentOI = readcalldata.currentOIs[getAddress(trade.target_contract)];
-  const { isPriceArrived } = getStrike(trade, cachedPrices, currentOI, maxOI);
+  const { data: allSpreads } = useSpread();
+  const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
+
+  const { isPriceArrived } = getStrike(trade, cachedPrices, spread);
   const lockedAmmount = getLockedAmount(trade, cachedPrices);
 
   const isQueued = trade.state === TradeState.Queued && !isPriceArrived;

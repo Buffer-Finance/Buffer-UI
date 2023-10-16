@@ -16,9 +16,9 @@ import { GreyBtn } from '@Views/Common/V2-Button';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween } from '@Views/TradePage/Components/Row';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import { closeLoadingAtom, queuets2priceAtom } from '@Views/TradePage/atoms';
 import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
@@ -27,7 +27,6 @@ import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Launch } from '@mui/icons-material';
 import { useMedia } from 'react-use';
-import { getAddress } from 'viem';
 import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { TradeTimeElapsed } from '../BuyTrade/ActiveTrades/TradeTimeElapsed';
 import { AssetCell } from './AssetCell';
@@ -73,7 +72,7 @@ export const OngoingTradesTable: React.FC<{
   const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { registeredOneCT } = useOneCTWallet();
-  const readcallData = useAtomValue(buyTradeDataAtom);
+  const { data: allSpreads } = useSpread();
   const navigateToProfile = useNavigateToProfile();
 
   let strikePriceHeading = 'Strike Price';
@@ -125,12 +124,10 @@ export const OngoingTradesTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     if (trades === undefined) return <></>;
-    if (!readcallData) return <></>;
     const trade = trades?.[row];
     if (!trade) return 'Problem';
-    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
-    const currentOi =
-      readcallData.currentOIs[getAddress(trade.target_contract)];
+
+    const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
 
     const poolInfo = getPoolInfo(trade.pool.pool);
     const marketPrecision = trade.market.price_precision.toString().length - 1;
@@ -195,13 +192,7 @@ export const OngoingTradesTable: React.FC<{
           'Processing...'
         );
       case TableColumn.Strike:
-        return (
-          <StrikePriceComponent
-            trade={trade}
-            currentOI={currentOi}
-            maXOI={maxOi}
-          />
-        );
+        return <StrikePriceComponent trade={trade} spread={spread} />;
       case TableColumn.Asset:
         return (
           <AssetCell currentRow={trade} platform={false} split={isMobile} />

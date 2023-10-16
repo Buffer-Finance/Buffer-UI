@@ -9,8 +9,8 @@ import {
   expiryPriceCache,
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import { AssetCell } from '@Views/TradePage/Views/AccordionTable/AssetCell';
 import {
   DisplayTime,
@@ -23,23 +23,20 @@ import { tradeInspectMobileAtom } from '@Views/TradePage/atoms';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode } from 'react';
-import { getAddress } from 'viem';
 import { getPayout } from '../../Views/AccordionTable/ShareModal/utils';
 import { activeTabAtom } from './TradeLog_sm';
-const className = 'text-green text-red text-[#C3C2D4] text-[#808191] text-f14 ';
+
 const valueClasssName = '!text-[#C3C2D4] !text-f14 !ml-auto !justify-end';
 const keyClassName = '!text-[#808191] !text-f14';
 const TradeInspect_sm: React.FC<any> = ({}) => {
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
-  const readcallData = useAtomValue(buyTradeDataAtom);
   const { trade } = useAtomValue(tradeInspectMobileAtom);
   const setInspectedTrade = useSetAtom(tradeInspectMobileAtom);
   const { getPoolInfo } = usePoolInfo();
+  const { data: allSpreads } = useSpread();
   if (!trade) return <div>Error loading data</div>;
-  if (!readcallData) return <div>Error loading data</div>;
 
-  const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
-  const currentOi = readcallData.currentOIs[getAddress(trade.target_contract)];
+  const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
 
   const poolInfo = getPoolInfo(trade.pool.pool);
   let expiryPrice: number | null = trade.expiry_price;
@@ -176,8 +173,7 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
           <StrikePriceComponent
             className={'!text-f14  text-[#C3C2D4]'}
             trade={trade}
-            currentOI={currentOi}
-            maXOI={maxOi}
+            spread={spread}
           />
           ;
         </div>
@@ -186,8 +182,12 @@ const TradeInspect_sm: React.FC<any> = ({}) => {
         <TableAligner
           keyStyle={` !py-[10px] ${keyClassName} !text-left `}
           valueStyle={` !py-[10px] ${valueClasssName} !text-right !w-fit`}
-          keysName={table.map((t) => t.key)}
-          values={table.map((t) => t.value)}
+          keysName={table.map((t) => {
+            if (t) return t.key;
+          })}
+          values={table.map((t) => {
+            if (t) return t.value;
+          })}
         />
       </div>
     </div>
