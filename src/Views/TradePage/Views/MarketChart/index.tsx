@@ -1,10 +1,11 @@
-import { MultiResolutionChart } from './MultiResolutionChart';
-import { useAtomValue } from 'jotai';
-import { chartNumberAtom, isTableShownAtom } from '@Views/TradePage/atoms';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { sleep } from '@TV/useDataFeed';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import { chartNumberAtom, isTableShownAtom } from '@Views/TradePage/atoms';
+import { Skeleton } from '@mui/material';
+import { useAtomValue } from 'jotai';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { MultiResolutionChart } from './MultiResolutionChart';
 
 const SidebySideCharts = ({
   indexes,
@@ -106,7 +107,10 @@ const MarketChart: React.FC<any> = ({}) => {
   });
 
   const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
-  if (!v3AppConfig?.length || !marketPrefix) return <div>Loadding...</div>;
+  if (!v3AppConfig?.length || !marketPrefix)
+    return (
+      <Skeleton className="flex w-full !h-full lc !transform-none !mb-3" />
+    );
   let chartLayout = (
     <SidebySideCharts indexes={[marketPrefix + 1]} className="h-full" />
   );
