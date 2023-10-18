@@ -1,6 +1,7 @@
 import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import { Section } from '@Views/Earn/Components/Section';
-import { IReferralStat, useUserReferralStats } from '@Views/Referral';
+import { IReferralStat } from '@Views/Referral';
+import { useUserReferralStats } from '@Views/Referral/Hooks/useUserReferralStats';
 import { useProfileGraphQl2 } from '../../Hooks/useProfileGraphQl2';
 import { Referral } from './ReferralCard';
 import { TradingCardV2 } from './TradingCardV2';

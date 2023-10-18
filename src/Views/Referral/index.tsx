@@ -22,19 +22,15 @@ import PlainCard from '@Views/Referral/Components/PlainCard';
 import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
 import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
-import { ContentCopy } from '@mui/icons-material';
-import { Tooltip } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import axios from 'axios';
 import { useAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { useCopyToClipboard } from 'react-use';
-import useSWR from 'swr';
+import { Affilate } from './Components/Affilate';
+import { DataCard } from './Components/DataCard';
 import { useCodeOwner } from './Hooks/useCodeOwner';
-import { useUserCode } from './Hooks/useUserCode';
+import { useRefferalTab } from './Hooks/useReferralTab';
+import { useUserReferralStats } from './Hooks/useUserReferralStats';
 import { isNullAdds } from './Utils/isNullAds';
 import { useReferralCode } from './Utils/useReferralCode';
 import { ReferralContextProvider, showCodeModalAtom } from './referralAtom';
@@ -68,23 +64,13 @@ export const ReferralPage = () => {
   );
 };
 
-export const useRefferalTab = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const tab = useMemo(() => searchParams.get('tab'), [searchParams]);
-
-  function setTab(tab: string) {
-    setSearchParams({ tab });
-  }
-
-  return { tab, setTab };
-};
-
 export const tabs = ['Use a Referral', 'Create your Referral'];
 const Referral: React.FC<IReferral> = ({}) => {
   const [showCodeModal, setShowCodeModal] = useAtom(showCodeModalAtom);
   const { writeTXN } = useReferralWriteCall();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [ip, setip] = useState('');
+  console.log(`index-ip: `, ip);
   const toastify = useToast();
   const owner = useCodeOwner(ip);
   const { state } = useGlobal();
@@ -101,6 +87,7 @@ const Referral: React.FC<IReferral> = ({}) => {
     [poolNames]
   );
   const shouldConnectWallet = !account;
+
   useEffect(() => {
     setip('');
   }, [activeTab]);
@@ -412,14 +399,6 @@ const Referral: React.FC<IReferral> = ({}) => {
             Polygon to earn rebates on both networks.{' '}
           </div>
           <br className="sm:hidden" />
-          {/* For more information, please read the
-          <Header.Link
-            link={
-              "https://app.slack.com/client/TLS7ZNBBP/C02LVG11QBT/thread/C020XKKUT9D-1662701403.671479"
-            }
-          >
-            Buffer referral system
-          </Header.Link> */}
         </Header.Description>
       </Header.Container>
       <BufferTransitionedTab.Container className="mt-7">
@@ -459,7 +438,6 @@ const Referral: React.FC<IReferral> = ({}) => {
                   onChange={setip}
                   className=""
                   placeholder="Enter your code"
-                  // unit={<img className="" src="/EditIcon.svg"></img>}
                 ></BufferInput>
                 {!referralCodes[0] && referralCodes[1] && (
                   <PlainCard.Description className="my-3 flex items-center gap-2">
@@ -481,177 +459,4 @@ const Referral: React.FC<IReferral> = ({}) => {
       </HorizontalTransition>
     </>
   );
-};
-
-const DataCard = ({ header, desc }: { header: string; desc: JSX.Element }) => {
-  return (
-    <PlainCard.Container className="w-fit m-[0] py-5 !px-7">
-      <PlainCard.Header className="capitalize">{header}</PlainCard.Header>
-      <PlainCard.Description className="text-center text-buffer-blue text-f22">
-        {desc}
-      </PlainCard.Description>
-    </PlainCard.Container>
-  );
-};
-
-export function affilateCode2ReferralLink(affiliateCode: string | null) {
-  if (!affiliateCode) return '#';
-  const { hostname } = window.location;
-  const link = `https://${hostname}/#/ref/${affiliateCode}/`;
-  return link;
-}
-
-const Affilate = ({
-  affiliateBoxArr,
-  inputValue,
-  setInput,
-  btn,
-}: {
-  affiliateBoxArr: { header: string; desc: JSX.Element }[];
-  btn: ReactNode;
-  inputValue: string;
-  setInput: (value: string) => void;
-}) => {
-  const { activeChain } = useActiveChain();
-  const { affiliateCode } = useUserCode(activeChain);
-  const isCodeSet = !!affiliateCode;
-  const [state, copyToClipboard] = useCopyToClipboard();
-  const [open, setOpen] = useState(false);
-  const link = affilateCode2ReferralLink(affiliateCode);
-  const copyLink = () => {
-    try {
-      copyToClipboard(link);
-      setOpen(true);
-    } catch (err) {
-      setOpen(false);
-    }
-  };
-
-  // console.log(`index-affiliateCode: `, affiliateCode);
-
-  useEffect(() => {
-    if (open) {
-      setTimeout(() => {
-        setOpen(false);
-      }, 4000);
-    }
-  }, [open]);
-  return (
-    <>
-      <div className="flex justify-center gap-4 mt-6 sm:flex-wrap">
-        {isCodeSet &&
-          affiliateBoxArr?.map((singleData, index: number) => (
-            <DataCard
-              desc={singleData.desc}
-              header={singleData.header}
-              key={index}
-            />
-          ))}
-      </div>
-
-      <PlainCard.Container className="w-[440px] mt-6 nsm:py-6 tb:px-8 m-auto sm:mt-4">
-        <PlainCard.Header>
-          {isCodeSet ? 'Copy your Referral Link' : 'Share your Referral Code'}
-        </PlainCard.Header>
-        {!isCodeSet && (
-          <PlainCard.Description className="mb-3">
-            Looks like you dont have any referral to share. Create one now and
-            start earning.
-          </PlainCard.Description>
-        )}
-        <BufferInput
-          value={isCodeSet ? affiliateCode : inputValue}
-          isDisabled={isCodeSet}
-          bgClass={'!pr-[6px]'}
-          unit={
-            isCodeSet ? (
-              <Tooltip
-                open={open}
-                onClose={() => {
-                  setOpen(false);
-                }}
-                title="Copied"
-                placement="top"
-                disableFocusListener
-                disableHoverListener
-                disableTouchListener
-                classes={{
-                  tooltip: 'tooltip',
-                  arrow: 'arrow',
-                }}
-              >
-                <button onClick={copyLink} className="bg-blue p-3 rounded">
-                  <ContentCopy />
-                </button>
-              </Tooltip>
-            ) : (
-              <></>
-            )
-          }
-          onChange={setInput}
-          className="bg-5 ip-border "
-          placeholder="Enter your code"
-        />
-        {!isCodeSet && btn}
-      </PlainCard.Container>
-    </>
-  );
-};
-
-function getTokenXleaderboardQueryFields(token: string) {
-  const fields = [
-    'totalTradesReferred',
-    'totalVolumeOfReferredTrades',
-    'totalRebateEarned',
-    'totalTradingVolume',
-    'totalDiscountAvailed',
-  ];
-  return fields.map((field) => field + token).join(' ');
-}
-
-export const useUserReferralStats = () => {
-  const { address } = useUserAccount();
-  const poolNames = usePoolNames();
-  const tokens = useMemo(
-    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
-    [poolNames]
-  );
-  const { activeChain } = useActiveChain();
-  const config = getConfig(activeChain.id);
-  const graphUrl = config.graph.MAIN;
-  const queryFields = useMemo(() => {
-    if (tokens.length > 1)
-      return tokens
-        .map((poolName) => getTokenXleaderboardQueryFields(poolName))
-        .join(' ');
-    else return '';
-  }, [tokens]);
-
-  return useSWR(`${address}-referral-stats`, {
-    fetcher: async () => {
-      const response = await axios.post(graphUrl, {
-        query: `{
-            referralDatas (where: { id: "${address}"} ) {
-              totalTradesReferred
-              totalVolumeOfReferredTrades
-              totalRebateEarned
-              totalTradingVolume
-              totalDiscountAvailed
-              ${queryFields}
-            }
-          }
-          `,
-      });
-      return (
-        response.data?.data?.referralDatas?.[0] || {
-          totalTradesReferred: '0',
-          totalVolumeOfReferredTrades: '0',
-          totalRebateEarned: '0',
-          totalTradingVolume: '0',
-          totalDiscountAvailed: '0',
-        }
-      );
-    },
-    refreshInterval: 400,
-  });
 };
