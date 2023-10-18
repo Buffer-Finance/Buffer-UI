@@ -298,29 +298,30 @@ function drawPosition(
     //   option.pending_operation
     // );
 
-    return chart
-      ?.createOrderLine()
-      .setText(processing || formatLOText(option, decimals))
-      .setTooltip('drag to change strike')
-      .setBodyBackgroundColor(defaults.BG)
-      .setQuantityBorderColor(defaults.BG)
-      .setQuantityBackgroundColor(color)
-      .setCancelButtonBorderColor(defaults.BG)
-      .setCancelButtonIconColor('rgb(255,255,255)')
-      .setCancelButtonBackgroundColor(defaults.BG)
-      .setBodyFont('semibold 17pt Arial')
-      .setQuantityFont('bold 17pt Arial')
-      .setBodyTextColor('rgb(195,194,212)')
-      .setCancelTooltip('click to cancel this limit order')
-      .setQuantity('↕')
-      .setBodyBorderColor(defaults.BG)
-      .setLineColor(color)
-      .setModifyTooltip('click to edit order')
-      .onModify('modify', function () {
-        loHandlers.onEdit({ trade: option, market: option.market });
-      })
+    return (
+      chart
+        ?.createOrderLine()
+        .setText(processing || formatLOText(option, decimals))
+        .setBodyBackgroundColor(defaults.BG)
+        .setQuantityBorderColor(defaults.BG)
+        .setQuantityBackgroundColor(color)
+        .setCancelButtonBorderColor(defaults.BG)
+        .setCancelButtonIconColor('rgb(255,255,255)')
+        .setCancelButtonBackgroundColor(defaults.BG)
+        .setBodyFont('semibold 17pt Arial')
+        .setQuantityFont('bold 17pt Arial')
+        .setBodyTextColor('rgb(195,194,212)')
+        .setCancelTooltip('click to cancel this limit order')
+        .setQuantity('↕')
+        .setBodyBorderColor(defaults.BG)
+        .setLineColor(color)
+        // .setModifyTooltip('click to edit order')
+        // .onModify('modify', function () {
+        //   loHandlers.onEdit({ trade: option, market: option.market });
+        // })
 
-      .setPrice(optionPrice);
+        .setPrice(optionPrice)
+    );
   }
   // render trade-size
   // render PnL
@@ -885,6 +886,14 @@ export const MultiResolutionChart = ({
                 this.setText('Processing EDIT');
                 // console.log(`MultiResolutionChart-Processing EDIT: `);
                 changeStrikeSafe(trade.option, this.getPrice());
+              });
+              trade.positionRef.setTooltip('drag to change strike');
+              trade.positionRef.setModifyTooltip('click to edit order');
+              trade.positionRef.onModify('modify', function () {
+                setSelectedTradeToEdit({
+                  trade: trade.option,
+                  market: trade.option.market,
+                });
               });
             }
 
