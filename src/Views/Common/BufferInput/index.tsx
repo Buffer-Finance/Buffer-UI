@@ -57,36 +57,33 @@ const BufferInput: React.FC<IBufferInput> = ({
   title,
   onClick,
 }) => {
-  // console.log('id,autofocus',id,autoFocus)
-  if (id == 'amount-inner')
-    if (!numericValidations)
-      // console.log(`autoFocus: `,autoFocus);
-      return (
-        <BufferTextInputRoot
-          {...{
-            placeholder,
-            unit,
-            header,
-            bgClass,
-            label,
-            inputType,
-            value,
-            onChange,
-            onError,
-            className,
-            numeric: false,
-            ipClass,
-            autoFocus,
-            validations: [],
-            isGrey,
-            type,
-            id,
-            isDisabled,
-            title,
-            onClick,
-          }}
-        />
-      );
+  if (!numericValidations)
+    return (
+      <BufferTextInputRoot
+        {...{
+          placeholder,
+          unit,
+          header,
+          bgClass,
+          label,
+          inputType,
+          value,
+          onChange,
+          onError,
+          className,
+          numeric: false,
+          ipClass,
+          autoFocus,
+          validations: [],
+          isGrey,
+          type,
+          id,
+          isDisabled,
+          title,
+          onClick,
+        }}
+      />
+    );
   const getErr = (isError: boolean, error: ReactNode, value: string) => {
     if (isError) {
       return [value, error];

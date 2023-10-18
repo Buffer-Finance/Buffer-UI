@@ -33,7 +33,7 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
   header,
   value,
   onChange,
-  onError,
+
   className,
   inputType,
   ipClass,
@@ -43,7 +43,7 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
   label,
   numeric,
   isGrey,
-  autoFocus,
+
   type,
   title,
   onClick,
@@ -53,7 +53,7 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
   const validate = (value: string) => {
     let currentErrors: string[] = [];
     let goAhead = true;
-    validations.map((singleValidation, idx) => {
+    validations.forEach((singleValidation, idx) => {
       // set the errors if any
       const [val, err, donGoAhead] = singleValidation(value);
       if (err) {
@@ -64,26 +64,27 @@ const BufferTextInputRoot: React.FC<IBufferTextInputRoot> = ({
       }
     });
     setErrs([...currentErrors]);
-
     return goAhead;
   };
+
   const textChangeHandler = (e: any) => {
     let currValue = e.target.value;
     if (currValue === '') {
       setErrs([]);
       return onChange('');
     }
-    validate(currValue) && onChange(currValue);
+    if (validate(currValue)) {
+      onChange(currValue);
+    }
   };
+
   useEffect(() => {
     if (value === '') return setErrs([]);
     validate(value);
   }, [validations]);
+
   const err = errs.length && errs[0];
-  // useEffect(() => {
-  //   onError(errs);
-  // console.log(`autoFocus: `, autoFocus);
-  // }, [errs]);
+
   return (
     <Background className={className} onClick={onClick}>
       <div

@@ -1,6 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { affilateCode2ReferralLink } from '@Views/Referral';
 import { useUserCode } from '@Views/Referral/Hooks/useUserCode';
+import { affilateCode2ReferralLink } from '@Views/Referral/Utils/affiliateCode2RederralLink';
 import { useHostName } from '@Views/TradePage/Hooks/useHostName';
 import { QRCodeSVG } from 'qrcode.react';
 
