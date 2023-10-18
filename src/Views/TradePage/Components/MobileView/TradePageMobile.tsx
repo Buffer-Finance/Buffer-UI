@@ -69,55 +69,11 @@ const TradePageMobile: React.FC<any> = ({}) => {
         <MarketPicker payout={totalPayout} />
         <MobileChartControlls activeMarket={activeMarket.tv_id} />
       </div>
-      {/* <MarketStatsBar isMobile /> */}
       <div className="flex-1">
         {[activeMarket.tv_id].map((s) => (
           <MultiResolutionChart key={s} market={s} index={1} isMobile />
         ))}
       </div>
-      <ViewOnlyInputs />
-      <PayoutProfit
-        amount={amount || '0'}
-        totalPayout={totalPayout}
-        tradeToken={tradeToken}
-      />
-      <BuyButtons
-        isApprovalLocked={approvalExpanded?.is_locked}
-        activeAssetPrice={activeAssetPrice}
-        allowance={allowance}
-        amount={amount.toString()}
-        center={
-          <button
-            className="bg-[#303044] w-[86px] grid place-items-center h-[36px] rounded-sm"
-            onClick={() => {
-              if (tradeType == 'Market') {
-                openLOShutter();
-              } else {
-                setTradeType('Market');
-              }
-            }}
-          >
-            {tradeType == 'Market' ? (
-              <MemoTimeIcon />
-            ) : (
-              <div className="text-f22">
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 13 13"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M13 1.30929L11.6907 0L6.5 5.19071L1.30929 0L0 1.30929L5.19071 6.5L0 11.6907L1.30929 13L6.5 7.80929L11.6907 13L13 11.6907L7.80929 6.5L13 1.30929Z"
-                    fill="#C3C2D4"
-                  />
-                </svg>
-              </div>
-            )}
-          </button>
-        }
-      />
     </div>
   );
 };
