@@ -109,7 +109,7 @@ const MarketChart: React.FC<any> = ({}) => {
   const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
   if (!v3AppConfig?.length || !marketPrefix)
     return (
-      <Skeleton className="flex w-full !h-full lc !transform-none !mb-3" />
+      <Skeleton className="flex w-full !h-full lc !transform-none !my-3" />
     );
   let chartLayout = (
     <SidebySideCharts indexes={[marketPrefix + 1]} className="h-full" />
