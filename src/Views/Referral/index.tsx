@@ -8,6 +8,7 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import BufferInput from '@Views/Common/BufferInput';
 import BufferTransitionedTab from '@Views/Common/BufferTransitionedTab';
 import Header from '@Views/Common/Header';
+import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { HeadTitle } from '@Views/Common/TitleHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
@@ -70,7 +71,6 @@ const Referral: React.FC<IReferral> = ({}) => {
   const { writeTXN } = useReferralWriteCall();
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [ip, setip] = useState('');
-  console.log(`index-ip: `, ip);
   const toastify = useToast();
   const owner = useCodeOwner(ip);
   const { state } = useGlobal();
@@ -351,18 +351,22 @@ const Referral: React.FC<IReferral> = ({}) => {
   };
 
   const btn = (
-    <BlueBtn
-      className="w-full !h-[36px] !mt-4"
-      onClick={shouldConnectWallet ? () => openConnectModal?.() : shareHandler}
-      isDisabled={state.txnLoading > 1}
-      isLoading={state.txnLoading === 1}
-    >
-      {shouldConnectWallet
-        ? 'Connect Wallet'
-        : checking
-        ? 'Checking...'
-        : btnText}
-    </BlueBtn>
+    <ConnectionRequired className="w-full !h-[36px] !mt-4">
+      <BlueBtn
+        className="w-full !h-[36px] !mt-4"
+        onClick={
+          shouldConnectWallet ? () => openConnectModal?.() : shareHandler
+        }
+        isDisabled={state.txnLoading > 1}
+        isLoading={state.txnLoading === 1}
+      >
+        {shouldConnectWallet
+          ? 'Connect Wallet'
+          : checking
+          ? 'Checking...'
+          : btnText}
+      </BlueBtn>
+    </ConnectionRequired>
   );
   useEffect(() => {
     document.title = 'Buffer | Referrals';
