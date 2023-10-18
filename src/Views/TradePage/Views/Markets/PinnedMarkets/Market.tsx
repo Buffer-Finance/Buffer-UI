@@ -10,7 +10,7 @@ import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { AssetCategory } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
-import { IconButton } from '@mui/material';
+import { IconButton, Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import { getAddress } from 'viem';
@@ -58,6 +58,7 @@ export const Market: React.FC<{
     token0: market.marketInfo.token0,
     token1: market.marketInfo.token1,
   });
+  const isReadCallDataLoading = readcallData === null;
   const isOpen =
     !market.isPaused &&
     isMarketOpen(
@@ -106,7 +107,9 @@ export const Market: React.FC<{
           <PairTokenImage pair={joinStrings(token0, token1, '-')} />
         </div>
         {token0}/{token1}
-        {isOpen ? (
+        {isReadCallDataLoading ? (
+          <Skeleton className="w-[60px] !h-[20px] lc " />
+        ) : isOpen ? (
           <Display
             data={currentPrice}
             colored
