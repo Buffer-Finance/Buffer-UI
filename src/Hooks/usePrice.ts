@@ -145,7 +145,7 @@ export const usePriceRetriable = () => {
         const dat = { ...p, ...data };
         return dat;
       });
-    }, 250);
+    }, 125);
     // client.on(handleMessage);
     return () => clearInterval(interval);
   }, [setPrice]);
