@@ -217,7 +217,7 @@ function App() {
               <Warning
                 body={
                   <div className="text-center b800:text-start">
-                    on&nbsp;
+                    oddn&nbsp;
                     <a href="https://app.buffer.finance/" target="_blank">
                       <span className="underline underline-offset-2">
                         Mainnet
