@@ -35,36 +35,119 @@ export const usePriceRetriable = () => {
     return client.onStateChange(setIsConnected);
   }, [setIsConnected]);
   useEffect(() => {
-    function handleMessage(message: string) {
-      const lastJsonMessage = JSON.parse(message);
-      if (!lastJsonMessage) return;
-      if ((lastJsonMessage as WSUPdate).type == 'price_update') {
-        const priceUpdatePacked = [
+    const interval = setInterval(() => {
+      let data = {
+        XRPUSD: [
           {
-            price: multiply(
-              (lastJsonMessage as WSUPdate).price_feed.price.price,
-              new Big('10')
-                .pow((lastJsonMessage as WSUPdate).price_feed.price.expo)
-                .toString()
-            ),
-            time:
-              (lastJsonMessage as WSUPdate).price_feed.price.publish_time *
-              1000,
+            price: '0.48870772',
+            time: 1697646151000,
           },
-        ];
-        const data = {
-          [pythIds[(lastJsonMessage as WSUPdate).price_feed.id]]:
-            priceUpdatePacked,
-        };
-        silentPriceCache[pythIds[(lastJsonMessage as WSUPdate).price_feed.id]] =
-          priceUpdatePacked;
-        // console.log(`setting: `, message);
-
-        setPrice((p) => ({ ...p, ...data }));
-      }
-    }
-    client.on(handleMessage);
-    return () => client.off(handleMessage);
+        ],
+        TONUSD: [
+          {
+            price: '2.03845289',
+            time: 1697646151000,
+          },
+        ],
+        BTCUSD: [
+          {
+            price: '28348.91497661',
+            time: 1697646151000,
+          },
+        ],
+        XAUUSD: [
+          {
+            price: '1947.517',
+            time: 1697646151000,
+          },
+        ],
+        GBPUSD: [
+          {
+            price: '1.21403',
+            time: 1697646151000,
+          },
+        ],
+        DOGEUSD: [
+          {
+            price: '0.058643',
+            time: 1697646151000,
+          },
+        ],
+        SHIBUSD: [
+          {
+            price: '0.0000068397',
+            time: 1697646151000,
+          },
+        ],
+        MATICUSD: [
+          {
+            price: '0.51597266',
+            time: 1697646151000,
+          },
+        ],
+        XAGUSD: [
+          {
+            price: '22.83475',
+            time: 1697646149000,
+          },
+        ],
+        EURUSD: [
+          {
+            price: '1.05258',
+            time: 1697646151000,
+          },
+        ],
+        SOLUSD: [
+          {
+            price: '23.74890171',
+            time: 1697646151000,
+          },
+        ],
+        OPUSD: [
+          {
+            price: '1.19700949',
+            time: 1697646151000,
+          },
+        ],
+        ETHUSD: [
+          {
+            price: '1573.87929167',
+            time: 1697646151000,
+          },
+        ],
+        ARBUSD: [
+          {
+            price: '0.7854553',
+            time: 1697646151000,
+          },
+        ],
+        BNBUSD: [
+          {
+            price: '211.808805',
+            time: 1697646151000,
+          },
+        ],
+        LINKUSD: [
+          {
+            price: '7.42650175',
+            time: 1697646151000,
+          },
+        ],
+      };
+      const rando = 2000 + Math.random() * 1000;
+      data.BTCUSD = [
+        {
+          time: Date.now(),
+          price: '' + rando,
+        },
+      ];
+      setPrice((p) => {
+        const dat = { ...p, ...data };
+        return dat;
+      });
+    }, 30);
+    // client.on(handleMessage);
+    return () => clearInterval(interval);
   }, [setPrice]);
   useEffect(() => {
     if (isConnected) {
