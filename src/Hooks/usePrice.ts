@@ -136,7 +136,7 @@ export const usePriceRetriable = () => {
       // };
       const rando = 2000 + Math.random() * 1000;
       const data = {
-        LINKUSD: [
+        BTCUSD: [
           {
             time: Date.now(),
             price: '' + rando,
