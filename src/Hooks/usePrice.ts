@@ -5,6 +5,7 @@ import { atom, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
+import { random } from '@Utils/Time';
 type WSUPdate = {
   type: 'price_update';
   price_feed: {
@@ -23,6 +24,10 @@ type WSUPdate = {
     };
   };
 };
+function randomNumber(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
 const client = reconnectingSocket('wss://hermes.pyth.network/ws');
 
 export const silentPriceCache = {};
@@ -135,8 +140,38 @@ export const usePriceRetriable = () => {
       //   ],
       // };
       const rando = 2000 + Math.random() * 1000;
+      const arr = [
+        'BTCUSD',
+        'BTCUSD',
+        'BTCUSD',
+        'BTCUSD',
+        'ETHUSD',
+        'ETHUSD',
+        'ETHUSD',
+        'LINKUSD',
+        'ARBUSD',
+        'ETHUSD',
+        'ETHUSD',
+        'LINKUSD',
+        'ARBUSD',
+        'ETHUSD',
+        'ETHUSD',
+        'LINKUSD',
+        'ARBUSD',
+        'ETHUSD',
+        'ETHUSD',
+        'LINKUSD',
+        'ARBUSD',
+        'ETHUSD',
+        'ETHUSD',
+        'LINKUSD',
+        'ARBUSD',
+      ];
+      const randomNu = random(0, arr.length - 1);
+      const ele = arr[randomNu];
+      console.log('updating', ele);
       const data = {
-        BTCUSD: [
+        [ele]: [
           {
             time: Date.now(),
             price: '' + rando,
@@ -147,7 +182,7 @@ export const usePriceRetriable = () => {
         const dat = { ...p, ...data };
         return dat;
       });
-    }, 125);
+    }, 20);
     // client.on(handleMessage);
     return () => clearInterval(interval);
   }, [setPrice]);
