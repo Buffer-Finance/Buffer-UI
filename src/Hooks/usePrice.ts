@@ -41,121 +41,113 @@ export const usePriceRetriable = () => {
   }, [setIsConnected]);
   useEffect(() => {
     const interval = setInterval(() => {
-      // let data = {
-      //   XRPUSD: [
-      //     {
-      //       price: '0.48870772',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   TONUSD: [
-      //     {
-      //       price: '2.03845289',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   BTCUSD: [
-      //     {
-      //       price: '28348.91497661',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   XAUUSD: [
-      //     {
-      //       price: '1947.517',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   GBPUSD: [
-      //     {
-      //       price: '1.21403',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   DOGEUSD: [
-      //     {
-      //       price: '0.058643',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   SHIBUSD: [
-      //     {
-      //       price: '0.0000068397',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   MATICUSD: [
-      //     {
-      //       price: '0.51597266',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   XAGUSD: [
-      //     {
-      //       price: '22.83475',
-      //       time: 1697646149000,
-      //     },
-      //   ],
-      //   EURUSD: [
-      //     {
-      //       price: '1.05258',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   SOLUSD: [
-      //     {
-      //       price: '23.74890171',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   OPUSD: [
-      //     {
-      //       price: '1.19700949',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   ETHUSD: [
-      //     {
-      //       price: '1573.87929167',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   ARBUSD: [
-      //     {
-      //       price: '0.7854553',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   BNBUSD: [
-      //     {
-      //       price: '211.808805',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      //   LINKUSD: [
-      //     {
-      //       price: '7.42650175',
-      //       time: 1697646151000,
-      //     },
-      //   ],
-      // };
+      let data = {
+        XRPUSD: [
+          {
+            price: '0.48870772',
+            time: 1697646151000,
+          },
+        ],
+        TONUSD: [
+          {
+            price: '2.03845289',
+            time: 1697646151000,
+          },
+        ],
+        BTCUSD: [
+          {
+            price: '28348.91497661',
+            time: 1697646151000,
+          },
+        ],
+        XAUUSD: [
+          {
+            price: '1947.517',
+            time: 1697646151000,
+          },
+        ],
+        GBPUSD: [
+          {
+            price: '1.21403',
+            time: 1697646151000,
+          },
+        ],
+        DOGEUSD: [
+          {
+            price: '0.058643',
+            time: 1697646151000,
+          },
+        ],
+        SHIBUSD: [
+          {
+            price: '0.0000068397',
+            time: 1697646151000,
+          },
+        ],
+        MATICUSD: [
+          {
+            price: '0.51597266',
+            time: 1697646151000,
+          },
+        ],
+        XAGUSD: [
+          {
+            price: '22.83475',
+            time: 1697646149000,
+          },
+        ],
+        EURUSD: [
+          {
+            price: '1.05258',
+            time: 1697646151000,
+          },
+        ],
+        SOLUSD: [
+          {
+            price: '23.74890171',
+            time: 1697646151000,
+          },
+        ],
+        OPUSD: [
+          {
+            price: '1.19700949',
+            time: 1697646151000,
+          },
+        ],
+        ETHUSD: [
+          {
+            price: '1573.87929167',
+            time: 1697646151000,
+          },
+        ],
+        ARBUSD: [
+          {
+            price: '0.7854553',
+            time: 1697646151000,
+          },
+        ],
+        BNBUSD: [
+          {
+            price: '211.808805',
+            time: 1697646151000,
+          },
+        ],
+        LINKUSD: [
+          {
+            price: '7.42650175',
+            time: 1697646151000,
+          },
+        ],
+      };
       const rando = 2000 + Math.random() * 1000;
       const arr = [
-        'BTCUSD',
-        'BTCUSD',
-        'BTCUSD',
-        'BTCUSD',
-        'ETHUSD',
-        'ETHUSD',
-        'ETHUSD',
+        'ABMDA',
+        'ABCSD',
         'LINKUSD',
         'ARBUSD',
-        'ETHUSD',
-        'ETHUSD',
+        'SOLUSD',
         'LINKUSD',
         'ARBUSD',
-        'ETHUSD',
-        'ETHUSD',
         'LINKUSD',
         'ARBUSD',
         'ETHUSD',
@@ -169,20 +161,27 @@ export const usePriceRetriable = () => {
       ];
       const randomNu = random(0, arr.length - 1);
       const ele = arr[randomNu];
-      console.log('updating', ele);
-      const data = {
-        [ele]: [
-          {
-            time: Date.now(),
-            price: '' + rando,
-          },
-        ],
-      };
+      const time = Math.floor(Date.now() / 1000);
+      console.log('updating', ele, time);
+      // const data = {
+      //   [ele]: [
+      //     {
+      //       time: Date.now(),
+      //       price: '' + rando,
+      //     },
+      //   ],
+      // };
+      data[ele] = [
+        {
+          time: Date.now(),
+          price: '' + rando,
+        },
+      ];
       setPrice((p) => {
         const dat = { ...p, ...data };
         return dat;
       });
-    }, 20);
+    }, 200);
     // client.on(handleMessage);
     return () => clearInterval(interval);
   }, [setPrice]);
