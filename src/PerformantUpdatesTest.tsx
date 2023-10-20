@@ -16,6 +16,28 @@ const PerformantUpdatesTest: React.FC<any> = ({}) => {
       `PerformantUpdatesTest-ts2asset2updatecnt: `,
       ts2asset2updatecnt
     );
+    // display min max avg
+    let tsstats = {};
+    for (let ts in ts2asset2updatecnt) {
+      let individualMin = 1000000000;
+      let inidvidulaMax = -1;
+      let total = 0;
+      let avg;
+      for (let asset in ts2asset2updatecnt[ts]) {
+        individualMin = Math.min(ts2asset2updatecnt[ts][asset], individualMin);
+        inidvidulaMax = Math.max(inidvidulaMax, ts2asset2updatecnt[ts][asset]);
+        total += ts2asset2updatecnt[ts][asset];
+      }
+      avg = total / Object.keys(ts2asset2updatecnt[ts]).length;
+      tsstats[ts] = {
+        individualMin,
+        inidvidulaMax,
+        avg,
+        total,
+      };
+    }
+    console.log(tsstats, 'here are your stats');
+    console.log('here is actual : ', ts2asset2updatecnt);
   };
   return (
     <div className="flex flex-col ">

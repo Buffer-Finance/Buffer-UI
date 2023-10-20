@@ -63,23 +63,18 @@ export const usePriceRetriable = () => {
         // console.log(`setting: `, message);
         const ts = Math.floor(Date.now() / 1000);
         const asset = Object.keys(data)[0];
-        console.log(ts, 'dddd', asset);
         if (ts in ts2asset2updatecnt) {
           let asset2updatecnt = ts2asset2updatecnt[ts];
           if (asset in asset2updatecnt) {
             asset2updatecnt[asset]++;
           } else {
             // replace asset2updatecnt with ts2asset2updatecnt in below line
-            asset2updatecnt = { ...asset2updatecnt, [asset]: 1 };
+            ts2asset2updatecnt[ts] = { ...ts2asset2updatecnt[ts], [asset]: 1 };
           }
         } else {
           const assetUpdated = { [asset]: 1 };
           ts2asset2updatecnt = { ...ts2asset2updatecnt, [ts]: assetUpdated };
         }
-        console.log(
-          `PerformantUpdatesTest-ts2asset2updatecnt: `,
-          ts2asset2updatecnt
-        );
         setPrice((p) => ({ ...p, ...data }));
       }
     }
