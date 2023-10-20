@@ -12,74 +12,20 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
-
+import { sleep } from '@TV/useDataFeed';
+let i = 1;
 const IbfrFaucet: React.FC = () => {
-  useEffect(() => {
-    document.title = 'Buffer | Faucet';
-  }, []);
-  const { activeChain } = useActiveChain();
-
-  const { poolDisplayNameMapping } = usePoolDisplayNames();
-  const tokenChains = useMemo(() => {
-    return Object.keys(poolDisplayNameMapping).filter(
-      (token) => !token.includes('-POL') && token !== 'BFR'
-    );
-  }, [poolDisplayNameMapping]);
-
-  const content = activeChain && [
-    {
-      top: `Claim ${import.meta.env.VITE_ENV} ${
-        activeChain.nativeCurrency.symbol
-      }`,
-      middle: (
-        <>
-          You will have to claim{' '}
-          <span className="text-1 w500">
-            {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
-          </span>{' '}
-          for gas fee.
-        </>
-      ),
-      bottom: (
-        <div className="flex flex-col">
-          <TestnetLinks />
-        </div>
-      ),
-    },
-    {
-      top: `Claim TESTNET Tokens`,
-      bottom: (
-        <ConnectionRequired>
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            {tokenChains.map((token: string) => (
-              <ClaimButton token={token} key={token} />
-            ))}
-          </div>{' '}
-        </ConnectionRequired>
-      ),
-    },
-  ];
-
+  const [c, setc] = useState(0);
+  const inc = async () => {
+    setc(c + 1);
+    setInterval(() => {
+      i++;
+      setc(i);
+    }, 1);
+  };
   return (
     <main className="content-drawer">
-      <Background>
-        <div className="wrapper">
-          {activeChain && content ? (
-            content.map((s, i) => (
-              <div className="faucet-card bg-1" key={i}>
-                <div className="card-head">{s.top}</div>
-                {s.middle && <div className="card-middle">{s.middle}</div>}
-                <div className="card-action">{s.bottom}</div>
-              </div>
-            ))
-          ) : (
-            <Skeleton className="custom-loader lc sr" variant="rectangular" />
-          )}
-        </div>
-      </Background>
-      <Drawer open={false}>
-        <></>
-      </Drawer>
+      <button onClick={inc}>{c}</button>
     </main>
   );
 };

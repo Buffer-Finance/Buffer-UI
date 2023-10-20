@@ -1,3 +1,4 @@
+// Adds 700-800ms to loadtime
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import * as Sentry from '@sentry/react';
@@ -30,6 +31,8 @@ const options = {
 };
 
 import { inject } from '@vercel/analytics';
+import IbfrFaucet from '@Views/Faucet';
+import { NewComponent } from './NewComponent';
 inject();
 
 if (import.meta.env.VITE_MODE === 'production') {
@@ -61,7 +64,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <SWRConfig value={options}>
             <JotaiProvider>
               <ContextProvider>
-                <App />
+                <NewComponent />
               </ContextProvider>
             </JotaiProvider>
           </SWRConfig>
