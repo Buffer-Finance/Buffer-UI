@@ -32,13 +32,13 @@ export const usePrice = () => {};
 export const usePriceRetriable = () => {
   const setPrice = useSetAtom(priceAtom);
   const [isConnected, setIsConnected] = useState(client.isConnected());
-  const { activeMarket } = useActiveMarket();
-  const activeMarketRef = useRef('');
-  useEffect(() => {
-    activeMarketRef.current = activeMarket?.token0
-      ? activeMarket?.token0 + activeMarket?.token1
-      : '';
-  }, [activeMarket]);
+  // const { activeMarket } = useActiveMarket();
+  // const activeMarketRef = useRef('');
+  // useEffect(() => {
+  //   activeMarketRef.current = activeMarket?.token0
+  //     ? activeMarket?.token0 + activeMarket?.token1
+  //     : '';
+  // }, [activeMarket]);
 
   useEffect(() => {
     console.log(`client: `, client);
@@ -83,9 +83,9 @@ export const usePriceRetriable = () => {
         //   const assetUpdated = { [asset]: 1 };
         //   ts2asset2updatecnt = { ...ts2asset2updatecnt, [ts]: assetUpdated };
         // }
-        if (activeMarketRef.current && asset == activeMarketRef.current) {
-          setPrice((p) => ({ ...p, ...data }));
-        }
+        // if (activeMarketRef.current && asset == activeMarketRef.current) {
+        //   setPrice((p) => ({ ...p, ...data }));
+        // }
       }
     }
     client.on(handleMessage);
