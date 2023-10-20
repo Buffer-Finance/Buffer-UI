@@ -223,6 +223,7 @@ export const market2resolutionAtom = atomWithStorage(
 function getPnl(trade: TradeType, lockedAmountCache: any) {
   const market = trade.market?.tv_id;
   if (!market) return null;
+
   const price = +silentPriceCache[market]?.[0]?.price;
   const lockedAmmount = getLockedAmount(trade, lockedAmountCache);
   const poolInfo = appConfig[trade.environment]?.poolsInfo?.[trade.pool.pool];
@@ -374,10 +375,10 @@ export const MultiResolutionChart = ({
 }: {
   market: Markets;
   index: number;
+
   isMobile?: boolean;
 }) => {
   const { earlyCloseHandler } = useCancelTradeFunction();
-
   const market = marke.replace('-', '');
   const chartData =
     marketsForChart[market as unknown as keyof typeof marketsForChart];
@@ -410,7 +411,7 @@ export const MultiResolutionChart = ({
   const chartType = useAtomValue(ChartTypePersistedAtom);
   const setChartType = useSetAtom(ChartTypePersistedAtom);
   const setSelectedTradeToEdit = useSetAtom(selectedOrderToEditAtom);
-
+  const positionUpdateTimerRef = useRef(null);
   async function getAllSymbols() {
     let allSymbols: any[] = [];
     let tempSymbols: any[] = [];
@@ -730,6 +731,7 @@ export const MultiResolutionChart = ({
   };
   // sync to ws updates
   useEffect(() => {
+    console.log('syncing');
     syncTVwithWS();
   }, [(price as any)?.[market]]);
   const getTradeToDrawingId = (trade: TradeType) =>
@@ -814,9 +816,13 @@ export const MultiResolutionChart = ({
     deleteAllPostions();
     trade2visualisation.current = [];
     // await sleep(syncDelay);
+    console.log('renderingpos');
+
     setVisualizedTrades(drawPostions());
   };
   useEffect(() => {
+    console.log('changed!');
+
     const timeout = setTimeout(async () => {
       await renderPositions();
     });
@@ -826,7 +832,6 @@ export const MultiResolutionChart = ({
     activeTrades,
     chartReady,
     priceCache,
-
     rerenderPostion,
     settings.earlyCloseConfirmation,
     settings.loDragging,
@@ -849,7 +854,10 @@ export const MultiResolutionChart = ({
     }
   }, [market2resolution, chartReady]);
   useEffect(() => {
-    const interval = setInterval(() => {
+    clearInterval(positionUpdateTimerRef.current);
+    if (!visualizedTrades.length) return;
+    positionUpdateTimerRef.current = setInterval(() => {
+      console.log('interval ran');
       // console.log('[chart-0 intervalcalled');
       try {
         widgetRef.current?.save((d) => {
@@ -860,9 +868,7 @@ export const MultiResolutionChart = ({
             };
           });
         });
-      } catch (e) {
-        console.log('[chart-bug]', e);
-      }
+      } catch (e) {}
 
       try {
         // console.log('[chart-1', trade2visualisation.current);
@@ -922,9 +928,6 @@ export const MultiResolutionChart = ({
         console.log('[chart-bug]', e);
       }
     }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
   }, [visualizedTrades]);
 
   const toggleIndicatorDD = (_: any) => {

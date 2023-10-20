@@ -2,9 +2,10 @@ import { multiply } from '@Utils/NumString/stringArithmatics';
 import axios from 'axios';
 import Big from 'big.js';
 import { atom, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 type WSUPdate = {
   type: 'price_update';
   price_feed: {
@@ -31,6 +32,13 @@ export const usePrice = () => {};
 export const usePriceRetriable = () => {
   const setPrice = useSetAtom(priceAtom);
   const [isConnected, setIsConnected] = useState(client.isConnected());
+  const { activeMarket } = useActiveMarket();
+  const activeMarketRef = useRef('');
+  useEffect(() => {
+    activeMarketRef.current = activeMarket?.token0
+      ? activeMarket?.token0 + activeMarket?.token1
+      : '';
+  }, [activeMarket]);
 
   useEffect(() => {
     console.log(`client: `, client);
@@ -61,21 +69,23 @@ export const usePriceRetriable = () => {
         silentPriceCache[pythIds[(lastJsonMessage as WSUPdate).price_feed.id]] =
           priceUpdatePacked;
         // console.log(`setting: `, message);
-        const ts = Math.floor(Date.now() / 1000);
+        // const ts = Math.floor(Date.now() / 1000);
         const asset = Object.keys(data)[0];
-        if (ts in ts2asset2updatecnt) {
-          let asset2updatecnt = ts2asset2updatecnt[ts];
-          if (asset in asset2updatecnt) {
-            asset2updatecnt[asset]++;
-          } else {
-            // replace asset2updatecnt with ts2asset2updatecnt in below line
-            ts2asset2updatecnt[ts] = { ...ts2asset2updatecnt[ts], [asset]: 1 };
-          }
-        } else {
-          const assetUpdated = { [asset]: 1 };
-          ts2asset2updatecnt = { ...ts2asset2updatecnt, [ts]: assetUpdated };
+        // if (ts in ts2asset2updatecnt) {
+        //   let asset2updatecnt = ts2asset2updatecnt[ts];
+        //   if (asset in asset2updatecnt) {
+        //     asset2updatecnt[asset]++;
+        //   } else {
+        //     // replace asset2updatecnt with ts2asset2updatecnt in below line
+        //     ts2asset2updatecnt[ts] = { ...ts2asset2updatecnt[ts], [asset]: 1 };
+        //   }
+        // } else {
+        //   const assetUpdated = { [asset]: 1 };
+        //   ts2asset2updatecnt = { ...ts2asset2updatecnt, [ts]: assetUpdated };
+        // }
+        if (activeMarketRef.current && asset == activeMarketRef.current) {
+          setPrice((p) => ({ ...p, ...data }));
         }
-        setPrice((p) => ({ ...p, ...data }));
       }
     }
     client.on(handleMessage);
@@ -97,7 +107,104 @@ export const usePriceRetriable = () => {
 export const wsStateAtom = atom<{ state: string }>({
   state: 'need-connection',
 });
-export const priceAtom = atom<Partial<Market2Prices>>({});
+export const priceAtom = atom<Partial<Market2Prices>>({
+  SOLUSD: [
+    {
+      price: '26.81724126',
+      time: 1697794840000,
+    },
+  ],
+  GBPUSD: [
+    {
+      price: '1.21172',
+      time: 1697794840000,
+    },
+  ],
+  OPUSD: [
+    {
+      price: '1.24101615',
+      time: 1697794840000,
+    },
+  ],
+  XAGUSD: [
+    {
+      price: '23.19825',
+      time: 1697794840000,
+    },
+  ],
+  DOGEUSD: [
+    {
+      price: '0.06016139',
+      time: 1697794840000,
+    },
+  ],
+  TONUSD: [
+    {
+      price: '2.12998876',
+      time: 1697794840000,
+    },
+  ],
+  SHIBUSD: [
+    {
+      price: '0.0000069862',
+      time: 1697794840000,
+    },
+  ],
+  BTCUSD: [
+    {
+      price: '29808',
+      time: 1697794840000,
+    },
+  ],
+  ARBUSD: [
+    {
+      price: '0.80466939',
+      time: 1697794840000,
+    },
+  ],
+  LINKUSD: [
+    {
+      price: '7.64793935',
+      time: 1697794840000,
+    },
+  ],
+  XAUUSD: [
+    {
+      price: '1983.055',
+      time: 1697794840000,
+    },
+  ],
+  XRPUSD: [
+    {
+      price: '0.5192449',
+      time: 1697794840000,
+    },
+  ],
+  EURUSD: [
+    {
+      price: '1.05827',
+      time: 1697794840000,
+    },
+  ],
+  BNBUSD: [
+    {
+      price: '215.22853748',
+      time: 1697794840000,
+    },
+  ],
+  ETHUSD: [
+    {
+      price: '1612.10926492',
+      time: 1697794840000,
+    },
+  ],
+  MATICUSD: [
+    {
+      price: '0.5304',
+      time: 1697794840000,
+    },
+  ],
+});
 export const pythIds = {
   ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace: 'ETHUSD',
   e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43: 'BTCUSD',

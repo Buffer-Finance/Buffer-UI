@@ -11,6 +11,7 @@ import { baseUrl, refreshInterval } from '../config';
 import { TradeType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
+import { useState } from 'react';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
@@ -22,6 +23,7 @@ const useOngoingTrades = () => {
   const { oneCTWallet } = useOneCTWallet();
   const { address: userAddress } = useUserAccount();
   const { address } = useAccount();
+  const [empty, setEmpty] = useState([[], []]);
   const markets = useAllV2_5MarketsConfig();
   const { data, error } = useSWR<TradeType[][]>(
     'active-trades-' +
@@ -66,7 +68,7 @@ const useOngoingTrades = () => {
       refreshInterval: refreshInterval,
     }
   );
-  return data || ([[], []] as TradeType[][]);
+  return data || empty;
 };
 
 export { useOngoingTrades };
