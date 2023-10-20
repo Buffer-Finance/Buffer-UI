@@ -24,6 +24,7 @@ type WSUPdate = {
   };
 };
 const client = reconnectingSocket('wss://hermes.pyth.network/ws');
+export let ts2asset2updatecnt = {};
 
 export const silentPriceCache = {};
 export const usePrice = () => {};
@@ -32,6 +33,7 @@ export const usePriceRetriable = () => {
   const [isConnected, setIsConnected] = useState(client.isConnected());
 
   useEffect(() => {
+    console.log(`client: `, client);
     return client.onStateChange(setIsConnected);
   }, [setIsConnected]);
   useEffect(() => {
@@ -59,7 +61,25 @@ export const usePriceRetriable = () => {
         silentPriceCache[pythIds[(lastJsonMessage as WSUPdate).price_feed.id]] =
           priceUpdatePacked;
         // console.log(`setting: `, message);
-
+        const ts = Math.floor(Date.now() / 1000);
+        const asset = Object.keys(data)[0];
+        console.log(ts, 'dddd', asset);
+        if (ts in ts2asset2updatecnt) {
+          let asset2updatecnt = ts2asset2updatecnt[ts];
+          if (asset in asset2updatecnt) {
+            asset2updatecnt[asset]++;
+          } else {
+            // replace asset2updatecnt with ts2asset2updatecnt in below line
+            asset2updatecnt = { ...asset2updatecnt, [asset]: 1 };
+          }
+        } else {
+          const assetUpdated = { [asset]: 1 };
+          ts2asset2updatecnt = { ...ts2asset2updatecnt, [ts]: assetUpdated };
+        }
+        console.log(
+          `PerformantUpdatesTest-ts2asset2updatecnt: `,
+          ts2asset2updatecnt
+        );
         setPrice((p) => ({ ...p, ...data }));
       }
     }
@@ -68,6 +88,7 @@ export const usePriceRetriable = () => {
   }, [setPrice]);
   useEffect(() => {
     if (isConnected) {
+      console.log('connected!');
       client.getClient()!.send(
         JSON.stringify({
           ids: Object.keys(pythIds),

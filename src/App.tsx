@@ -44,6 +44,7 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
+import { PerformantUpdatesTest } from './PerformantUpdatesTest';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -108,46 +109,7 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <OneCTModal />
-
-      <Routes>
-        <Route path="trades" element={<AllTrades />} />
-        <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/test" element={<Test />} />
-        <Route path="/history" element={<TradeLog_sm />} />
-        <Route path="/admin" element={<AdminConfig />} />
-
-        <Route
-          path="/ref/:refcode"
-          element={<div>Processing your referral request...</div>}
-        ></Route>
-        {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
-        <Route path="/earn" element={<Redirect url={earnUrl} />} />
-
-        <Route path="/dashboard" element={<DashboardV2 />}>
-          <Route path=":chain" element={<DashboardV2 />} />
-        </Route>
-        <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/profile" element={<ProfilePage />}>
-          <Route path=":chain" element={<ProfilePage />} />
-        </Route>
-        <Route path="/binary/:market" element={<TradePage />} />
-        <Route
-          path="/*"
-          element={
-            <Navigate
-              to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
-            />
-          }
-        />
-        <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          <Route path="daily" element={<Incentivised />}>
-            <Route path=":chain" element={<Incentivised />} />
-          </Route>
-          <Route path="weekly" element={<Weekly />}>
-            <Route path=":chain" element={<Weekly />} />
-          </Route>
-        </Route>
-      </Routes>
+      <PerformantUpdatesTest />
     </div>
   );
 };
