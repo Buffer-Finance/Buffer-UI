@@ -33,11 +33,11 @@ export const usePriceRetriable = () => {
   const setPrice = useSetAtom(priceAtom);
   const [isConnected, setIsConnected] = useState(client.isConnected());
   const { activeMarket } = useActiveMarket();
-  const activeMarketRef = useRef('');
+  const activeMarketRef = useRef('BTCUSD');
   useEffect(() => {
     activeMarketRef.current = activeMarket?.token0
       ? activeMarket?.token0 + activeMarket?.token1
-      : '';
+      : 'BTCUSD';
   }, [activeMarket]);
 
   useEffect(() => {
