@@ -41,7 +41,6 @@ export const usePriceRetriable = () => {
   }, [activeMarket]);
 
   useEffect(() => {
-    console.log(`client: `, client);
     return client.onStateChange(setIsConnected);
   }, [setIsConnected]);
   useEffect(() => {
@@ -93,7 +92,6 @@ export const usePriceRetriable = () => {
   }, [setPrice]);
   useEffect(() => {
     if (isConnected) {
-      console.log('connected!');
       client.getClient()!.send(
         JSON.stringify({
           ids: Object.keys(pythIds),
@@ -107,104 +105,7 @@ export const usePriceRetriable = () => {
 export const wsStateAtom = atom<{ state: string }>({
   state: 'need-connection',
 });
-export const priceAtom = atom<Partial<Market2Prices>>({
-  SOLUSD: [
-    {
-      price: '26.81724126',
-      time: 1697794840000,
-    },
-  ],
-  GBPUSD: [
-    {
-      price: '1.21172',
-      time: 1697794840000,
-    },
-  ],
-  OPUSD: [
-    {
-      price: '1.24101615',
-      time: 1697794840000,
-    },
-  ],
-  XAGUSD: [
-    {
-      price: '23.19825',
-      time: 1697794840000,
-    },
-  ],
-  DOGEUSD: [
-    {
-      price: '0.06016139',
-      time: 1697794840000,
-    },
-  ],
-  TONUSD: [
-    {
-      price: '2.12998876',
-      time: 1697794840000,
-    },
-  ],
-  SHIBUSD: [
-    {
-      price: '0.0000069862',
-      time: 1697794840000,
-    },
-  ],
-  BTCUSD: [
-    {
-      price: '29808',
-      time: 1697794840000,
-    },
-  ],
-  ARBUSD: [
-    {
-      price: '0.80466939',
-      time: 1697794840000,
-    },
-  ],
-  LINKUSD: [
-    {
-      price: '7.64793935',
-      time: 1697794840000,
-    },
-  ],
-  XAUUSD: [
-    {
-      price: '1983.055',
-      time: 1697794840000,
-    },
-  ],
-  XRPUSD: [
-    {
-      price: '0.5192449',
-      time: 1697794840000,
-    },
-  ],
-  EURUSD: [
-    {
-      price: '1.05827',
-      time: 1697794840000,
-    },
-  ],
-  BNBUSD: [
-    {
-      price: '215.22853748',
-      time: 1697794840000,
-    },
-  ],
-  ETHUSD: [
-    {
-      price: '1612.10926492',
-      time: 1697794840000,
-    },
-  ],
-  MATICUSD: [
-    {
-      price: '0.5304',
-      time: 1697794840000,
-    },
-  ],
-});
+export const priceAtom = atom<Partial<Market2Prices>>({});
 export const pythIds = {
   ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace: 'ETHUSD',
   e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43: 'BTCUSD',

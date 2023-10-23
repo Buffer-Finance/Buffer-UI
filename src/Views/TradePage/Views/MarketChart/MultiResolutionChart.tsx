@@ -731,7 +731,6 @@ export const MultiResolutionChart = ({
   };
   // sync to ws updates
   useEffect(() => {
-    console.log('syncing');
     syncTVwithWS();
   }, [(price as any)?.[market]]);
   const getTradeToDrawingId = (trade: TradeType) =>

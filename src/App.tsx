@@ -44,7 +44,6 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
-import { PerformantUpdatesTest } from './PerformantUpdatesTest';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -109,7 +108,6 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <OneCTModal />
-      {/* <PerformantUpdatesTest /> */}
       <Routes>
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
