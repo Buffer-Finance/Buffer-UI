@@ -1,5 +1,5 @@
 import { priceAtom } from '@Hooks/usePrice';
-import { getPriceFromKlines } from '@TV/useDataFeed';
+import { getCachedPriceFromKlines } from '@TV/useDataFeed';
 import { round } from '@Utils/NumString/stringArithmatics';
 import { marketsForChart } from '@Views/TradePage/config';
 import { joinStrings } from '@Views/TradePage/utils';
@@ -29,7 +29,7 @@ export const getCurrentPrice = (
   marketPrice: Partial<Market2Prices>,
   activeChartMarket: chartDataType
 ) => {
-  const price = getPriceFromKlines(marketPrice, activeChartMarket);
+  const price = getCachedPriceFromKlines(activeChartMarket);
   const precision = activeChartMarket.price_precision.toString().length - 1;
   return { currentPrice: Number(round(price, precision)), precision };
 };
