@@ -1,3 +1,4 @@
+import { silentPriceCache } from '@Hooks/usePrice';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { marketsForChart } from '@Views/TradePage/config';
@@ -622,6 +623,11 @@ export const TVStateAtom = atom<{ type: 'active' | 'stale'; ts?: number }>({
 export const getPriceFromKlines = (marketPrice, asset: { tv_id: string }) => {
   const lastBar = getLastbar(marketPrice, asset);
   if (!lastBar) return null;
+  return lastBar.price;
+};
+export const getCachedPriceFromKlines = (asset: { tv_id: string }) => {
+  const lastBar = getLastbar(silentPriceCache, asset);
+  if (!lastBar) return '';
   return lastBar.price;
 };
 export const get24hChange = (marketPrice, asset: { tv_id: string }) => {
