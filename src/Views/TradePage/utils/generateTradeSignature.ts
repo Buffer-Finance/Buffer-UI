@@ -78,7 +78,6 @@ const tradeParamTypes = [
 
 const isUpType = { name: 'isAbove', type: 'bool' };
 const settlementFeeType = { name: 'settlementFee', type: 'uint256' };
-const spreadType = { name: 'spread', type: 'uint256' };
 const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
@@ -99,8 +98,7 @@ const generateBuyTradeSignature = async (
   isUp: boolean,
   oneCtPk: string,
   activeChainId: any,
-  routerContract: string,
-  spread: string | number
+  routerContract: string
 ): Promise<string[]> => {
   const wallet = getWalletFromOneCtPk(oneCtPk);
 
@@ -134,15 +132,14 @@ const generateBuyTradeSignature = async (
   const extraArgs = !isLimit
     ? { settlementFee, timestamp: ts }
     : { timestamp: ts };
-  const spreadArgs = { spread: spread };
   const partialSignatureParams = {
     types: {
       EIP712Domain,
-      [key.partial]: [...tradeParamTypes, ...extraArgTypes, spreadType],
+      [key.partial]: [...tradeParamTypes, ...extraArgTypes],
     },
     primaryType: key.partial,
     domain,
-    message: { ...baseMessage, ...extraArgs, ...spreadArgs },
+    message: { ...baseMessage, ...extraArgs },
   };
   const fullSignatureParams = {
     types: {

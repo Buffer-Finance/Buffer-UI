@@ -16,10 +16,7 @@ const editQueueTrade = async (
   environment: number,
   settlement_fee: string,
   settlement_fee_sign_expiration: number,
-  settlement_fee_signature: string,
-  spread: string,
-  spread_sign_expiration: number,
-  spread_signature: string
+  settlement_fee_signature: string
 ) => {
   const params = {
     user_signature,
@@ -37,9 +34,6 @@ const editQueueTrade = async (
     settlement_fee,
     settlement_fee_sign_expiration,
     settlement_fee_signature,
-    spread,
-    spread_sign_expiration,
-    spread_signature,
   };
 
   return await axios.get(`${baseUrl}trade/edit/`, {

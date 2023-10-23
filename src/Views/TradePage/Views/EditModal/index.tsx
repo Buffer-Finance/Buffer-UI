@@ -15,7 +15,6 @@ import {
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
-import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import {
   chartControlsSettingsAtom,
@@ -70,7 +69,7 @@ export const EditModal: React.FC<{
   const configData = getConfig(activeChain.id);
   const [elapsedMinutes, setElapsedMinutes] = useState<number | null>(null);
   const queuedTime = trade?.queued_timestamp;
-  const { data: allSpreads } = useSpread();
+  // const { data: allSpreads } = useSpread();
 
   const { getPoolInfo } = usePoolInfo();
 
@@ -168,10 +167,10 @@ export const EditModal: React.FC<{
       if (price === null) {
         throw new Error('Please enter the price!');
       }
-      const spread = allSpreads?.[trade.market.tv_id];
-      if (spread === undefined || spread === null) {
-        throw new Error('Spread not found');
-      }
+      // const spread = allSpreads?.[trade.market.tv_id];
+      // if (spread === undefined || spread === null) {
+      //   throw new Error('Spread not found');
+      // }
 
       setEditLoading(trade.queue_id);
       const currentTs = Math.round(Date.now() / 1000);
@@ -192,8 +191,8 @@ export const EditModal: React.FC<{
         buttonDirection == directionBtn.Up ? true : false,
         oneCtPk as string,
         activeChain.id,
-        configData.router,
-        spread.spread
+        configData.router
+        // spread.spread
       );
       const signature = await getSingatureCached(oneCTWallet);
       if (!signature) throw new Error('Please activate your account first');
@@ -213,10 +212,10 @@ export const EditModal: React.FC<{
         activeChain.id,
         settlement_fee,
         bsesettelmentFeeObj.settlement_fee_sign_expiration,
-        bsesettelmentFeeObj.settlement_fee_signature,
-        spread.spread.toString(),
-        spread.spread_sign_expiration,
-        spread.spread_signature
+        bsesettelmentFeeObj.settlement_fee_signature
+        // spread.spread.toString(),
+        // spread.spread_sign_expiration,
+        // spread.spread_signature
       );
       if (res) {
         onSave(val);

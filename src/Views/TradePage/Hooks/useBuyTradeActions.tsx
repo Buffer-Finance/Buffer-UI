@@ -396,8 +396,8 @@ export const useBuyTradeActions = (userInput: string) => {
           customTrade.is_up,
           oneCtPk,
           activeChain.id,
-          configData.router,
-          spread.spread
+          configData.router
+          // spread.spread
         );
 
         let apiParams = {
@@ -422,9 +422,9 @@ export const useBuyTradeActions = (userInput: string) => {
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
-          spread: spread.spread,
-          spread_sign_expiration: spread.spread_sign_expiration,
-          spread_signature: spread.spread_signature,
+          // spread: spread.spread,
+          // spread_sign_expiration: spread.spread_sign_expiration,
+          // spread_signature: spread.spread_signature,
           environment: activeChain.id,
           token: tokenName,
           strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
