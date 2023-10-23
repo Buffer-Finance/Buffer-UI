@@ -2,10 +2,10 @@ import axios from 'axios';
 import useSWR from 'swr';
 import { pricePublisherBaseUrl } from '../config';
 import { useMarketsConfig } from './useMarketsConfig';
-// 25 - 41
+
 const usePriceChange = () => {
   const markets = useMarketsConfig();
-  const { data } = useSWR('24h-change', {
+  const { data } = useSWR(`4h-change-${markets?.length}`, {
     fetcher: async () => {
       if (!markets) return;
 
