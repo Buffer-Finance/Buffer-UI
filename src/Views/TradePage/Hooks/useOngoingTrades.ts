@@ -38,7 +38,6 @@ const useOngoingTrades = () => {
         if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
           return [[], []];
         let currentUserSignature = null;
-        console.log(`userAddress: `, userAddress, address);
         if (userAddress === address)
           currentUserSignature = await getSingatureCached(oneCTWallet);
 
@@ -48,7 +47,6 @@ const useOngoingTrades = () => {
             environment: activeChain.id,
           },
         });
-        console.log(`markets: `, markets);
         if (!res?.data?.length || !markets?.length) return [[], []];
         // limitOrders
         const limitOrders = res.data.filter(

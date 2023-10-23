@@ -815,13 +815,10 @@ export const MultiResolutionChart = ({
     deleteAllPostions();
     trade2visualisation.current = [];
     // await sleep(syncDelay);
-    console.log('renderingpos');
 
     setVisualizedTrades(drawPostions());
   };
   useEffect(() => {
-    console.log('changed!');
-
     const timeout = setTimeout(async () => {
       await renderPositions();
     });
