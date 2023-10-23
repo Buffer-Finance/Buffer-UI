@@ -84,7 +84,7 @@ export const appConfig = {
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0xff37eCD6cD32ce9caC75D3EFb434CAc6d63300B1',
-        router: '0xB52b89281Bff5D1d79Bc4F4181d08A6989201531',
+        router: '0x2430E4aD865423Ed994daD297D66b77F3ec2B008',
         signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
