@@ -98,6 +98,9 @@ export const TradeButton: React.FC<{
       <RowGap gap="4px">
         {isLimitOrderExpired ? (
           <CancelButton
+            isDisabled={
+              isCancelLoading || isEarlyCloseLoading || isTradeExpired
+            }
             disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
           >
             Processing...
@@ -106,7 +109,18 @@ export const TradeButton: React.FC<{
           <>
             <CancelButton
               onClick={editLimitOrder}
-              disabled={isCancelLoading || isTradeExpired}
+              isDisabled={
+                isCancelLoading ||
+                isTradeExpired ||
+                trade.pending_operation == 'Processing EDIT' ||
+                editLoading == trade.queue_id
+              }
+              disabled={
+                isCancelLoading ||
+                isTradeExpired ||
+                trade.pending_operation == 'Processing EDIT' ||
+                editLoading == trade.queue_id
+              }
               className="flex items-center justify-center"
             >
               {trade.pending_operation == 'Processing EDIT' ||
@@ -126,6 +140,7 @@ export const TradeButton: React.FC<{
             </CancelButton>
             <CancelButton
               onClick={cancelTrade}
+              isDisabled={isCancelLoading || isTradeExpired}
               disabled={isCancelLoading || isTradeExpired}
             >
               {isCancelLoading ||
