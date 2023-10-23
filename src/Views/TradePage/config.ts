@@ -289,7 +289,7 @@ export const HolderContracts = [
   '0x3A3DA6464bEe25a1d98526402a12241B0787b84C',
 ];
 
-export const refreshInterval = 500;
+export const refreshInterval = 1000;
 export const defaultSettings = {
   trade: {
     partialFill: true,

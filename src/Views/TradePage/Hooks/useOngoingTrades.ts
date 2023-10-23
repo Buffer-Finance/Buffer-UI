@@ -38,17 +38,17 @@ const useOngoingTrades = () => {
         if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
           return [[], []];
         let currentUserSignature = null;
+        console.log(`userAddress: `, userAddress, address);
         if (userAddress === address)
           currentUserSignature = await getSingatureCached(oneCTWallet);
-        // console.log(`signature: `, signature);
 
         const res = await axios.get(`${baseUrl}trades/user/active/`, {
           params: {
-            user_signature: currentUserSignature,
             user_address: getAddress(userAddress),
             environment: activeChain.id,
           },
         });
+        console.log(`markets: `, markets);
         if (!res?.data?.length || !markets?.length) return [[], []];
         // limitOrders
         const limitOrders = res.data.filter(
