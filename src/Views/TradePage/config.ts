@@ -12,7 +12,7 @@ export const appConfig = {
 
         booster: '0x29952C608Bf41A8a36AFD937471691932055E7b5',
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
-        router: '0x81C11F3Dc3Cd768467a1466155Aa19587a82Be10',
+        router: '0x6d65d507e1d2A8128E37203C84A45cDC1abE1Be0',
         signer_manager: '0xAAcAf779fdc0A7d8749Aa1FDc260a1C5Da5517B1',
         config_setter: '0x5C00a53A13F4c2818ce2D0f8759AcB07D0eB350b',
         v2_router: null,
