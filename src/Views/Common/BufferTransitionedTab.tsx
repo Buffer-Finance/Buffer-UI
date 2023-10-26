@@ -27,11 +27,7 @@ let BufferTransitionedTab: {
         >
           <>
             {children.map((t, idx) => {
-              return (
-                <span key={idx} className="unset">
-                  {t}
-                </span>
-              );
+              return t;
             })}
           </>
         </div>

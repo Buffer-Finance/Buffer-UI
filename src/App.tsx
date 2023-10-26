@@ -44,6 +44,7 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
+import { PerpsTrader } from '@Views/Perps';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -112,6 +113,7 @@ const AppRoutes = () => {
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/perps/:market" element={<PerpsTrader />} />
         <Route path="/history" element={<TradeLog_sm />} />
         <Route path="/admin" element={<AdminConfig />} />
 
