@@ -25,18 +25,11 @@ import { AllTrades } from '@Views/AllTrades';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
-import { DashboardV2 } from '@Views/DashboardV2';
 import IbfrFaucet from '@Views/Faucet';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { ProfilePage } from '@Views/Profile';
-import { ReferralPage } from '@Views/Referral';
-import { Test } from '@Views/Test';
 import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 import { defaultMarket } from '@Views/TradePage/config';
-import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
-import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
-import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
@@ -45,8 +38,6 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
-
-const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
@@ -112,24 +103,24 @@ const AppRoutes = () => {
       <Routes>
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/test" element={<Test />} />
+        {/* <Route path="/test" element={<Test />} /> */}
         <Route path="/history" element={<TradeLog_sm />} />
         <Route path="/admin" element={<AdminConfig />} />
 
-        <Route
+        {/* <Route
           path="/ref/:refcode"
           element={<div>Processing your referral request...</div>}
-        ></Route>
+        ></Route> */}
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
         <Route path="/earn" element={<Redirect url={earnUrl} />} />
 
-        <Route path="/dashboard" element={<DashboardV2 />}>
+        {/* <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
-        </Route>
-        <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/profile" element={<ProfilePage />}>
+        </Route> */}
+        {/* <Route path="/referral" element={<ReferralPage />} /> */}
+        {/* <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
-        </Route>
+        </Route> */}
         <Route path="/binary/:market" element={<TradePage />} />
         <Route
           path="/*"
@@ -139,14 +130,14 @@ const AppRoutes = () => {
             />
           }
         />
-        <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
+        {/* <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
           </Route>
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
-        </Route>
+        </Route> */}
       </Routes>
     </div>
   );
