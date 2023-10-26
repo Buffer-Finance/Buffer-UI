@@ -1,14 +1,5 @@
-import { priceAtom, usePrice, usePriceRetriable } from '@Hooks/usePrice';
-import { CustomHookUseMemoTest } from './CustomHookUseMemoTest';
-import { useAtomValue } from 'jotai';
-import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { RenderGraphTestResults } from './GraphTests/RenderGraphTestResults';
 
 export const Test = () => {
-  // return <CustomHookUseMemoTest />;
-  const price = useAtomValue(priceAtom);
-  const activeAssetStream = (price as any)['BTCUSD'];
-
-  usePriceRetriable();
-
-  return <div>{JSON.stringify(activeAssetStream)}</div>;
+  return <RenderGraphTestResults />;
 };
