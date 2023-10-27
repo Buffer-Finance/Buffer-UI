@@ -625,6 +625,19 @@ export const marketsForChart = {
       '0xf0d57deca57b3da2fe63a493f4c25925fdfd8edf834b20f93e1f84dbd1504d4a',
     pythGroup: 'Crypto',
   },
+  USDSGD: {
+    category: 'Forex',
+    tv_id: 'USDSGD',
+    pair: 'USD-SGD',
+    price_precision: 1000000,
+    token0: 'USD',
+    token1: 'SGD',
+    full_name: 'United States Dollar',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg',
+    pythGroup: 'FX',
+    pythId:
+      '0x396a969a9c1480fa15ed50bc59149e2c0075a72fe8f458ed941ddec48bdb4918',
+  },
 };
 
 export const pricePublisherBaseUrl = import.meta.env.VITE_PRICE_QUERY_HOST;
