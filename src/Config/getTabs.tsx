@@ -412,6 +412,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+      {
+        to: '/no-loss',
+        name: 'No Loss',
+        subTabs: [],
+        isExternalLink: false,
+      },
       // {
       //   to: `/referral`,
       //   name: 'Referral',

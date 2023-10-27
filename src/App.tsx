@@ -2,13 +2,7 @@ import { Alert, Snackbar } from '@mui/material';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useEffect } from 'react';
-import {
-  Navigate,
-  Route,
-  Routes,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
@@ -26,10 +20,10 @@ import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
+import { NoLossV3 } from '@Views/NoLoss-V3';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
-import { defaultMarket } from '@Views/TradePage/config';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
@@ -122,14 +116,15 @@ const AppRoutes = () => {
           <Route path=":chain" element={<ProfilePage />} />
         </Route> */}
         <Route path="/binary/:market" element={<TradePage />} />
-        <Route
+        <Route path="/no-loss" element={<NoLossV3 />} />
+        {/* <Route
           path="/*"
           element={
             <Navigate
               to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
             />
           }
-        />
+        /> */}
         {/* <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
