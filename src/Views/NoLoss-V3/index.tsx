@@ -1,10 +1,12 @@
 import { useAtomValue } from 'jotai';
 import { useTournamentIds } from './Hooks/useTournamentIds';
-import { tournamentIdsAtom } from './atoms';
+import { useNoLossMarkets } from './Hooks/usenoLossMarkets';
+import { nolossmarketsAtom, tournamentIdsAtom } from './atoms';
 
 export const NoLossV3 = () => {
   const tournamentIds = useAtomValue(tournamentIdsAtom);
-  console.log(tournamentIds);
   useTournamentIds();
+  const markets = useAtomValue(nolossmarketsAtom);
+  useNoLossMarkets();
   return <>NoLoss</>;
 };
