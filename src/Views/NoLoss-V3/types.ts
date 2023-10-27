@@ -21,3 +21,44 @@ export interface InoLossMarket {
   isPaused: boolean;
   config: InoLossConfigContract;
 }
+
+export interface IreadCall {
+  address: string;
+  abi: any;
+  name: string;
+  params: any[];
+}
+
+export interface TournamentMeta {
+  name: string;
+  start: string;
+  close: string;
+  ticketCost: string;
+  playTokenMintAmount: string;
+  isClosed: boolean;
+  isVerified: boolean;
+  tradingStarted: boolean;
+  shouldRefundTickets: boolean;
+  tournamentType: number;
+  buyinToken: string;
+  rewardToken: string;
+  creator: string;
+}
+
+export interface TournamentConditions {
+  maxBuyinsPerWallet: string;
+  minParticipants: string;
+  maxParticipants: string;
+  guaranteedWinningAmount: string;
+  startPriceMoney: string;
+  rakePercent: string;
+}
+
+export interface ItournamentData {
+  tournamentMeta: TournamentMeta;
+  tournamentConditions: TournamentConditions;
+  buyinTokenSymbol: string;
+  buyinTokenDecimals: number;
+  rewardTokenSymbol: string;
+  rewardTokenDecimals: number;
+}
