@@ -1,3 +1,5 @@
+import { priceAtom } from '@Hooks/usePrice';
+import { getLastbar } from '@TV/useDataFeed';
 import { toFixed } from '@Utils/NumString';
 import { gt, round } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -19,17 +21,21 @@ import { joinStrings } from '@Views/TradePage/utils';
 import { setDoccumentTitle } from '@Views/TradePage/utils/setDocumentTitle';
 import styled from '@emotion/styled';
 import { Trans } from '@lingui/macro';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 
 export const CurrentPriceBackground = styled.div`
   margin-top: 7px;
 `;
 
-export const CurrentPrice: React.FC<{
-  price: string;
-}> = ({ price }) => {
+export const CurrentPrice: React.FC<{}> = ({}) => {
+  const marketPrice = useAtomValue(priceAtom);
+
   const { activeMarket } = useActiveMarket();
+  const price =
+    getLastbar(marketPrice, {
+      tv_id: activeMarket.tv_id,
+    })?.price ?? '0';
   const [tradeType] = useAtom(tradeTypeAtom);
   const [activePayout, setActivePayout] = useAtom(LimitOrderPayoutAtom);
 

@@ -1,8 +1,10 @@
 import { useToast } from '@Contexts/Toast';
+import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import DownIcon from '@SVG/Elements/DownIcon';
 import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
+import { getLastbar } from '@TV/useDataFeed';
 import { lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
@@ -22,17 +24,21 @@ import { useAccount } from 'wagmi';
 
 export const BuyButtons = ({
   allowance,
-  activeAssetPrice,
   amount,
   center,
   isApprovalLocked,
 }: {
   allowance: string;
-  activeAssetPrice: { price: string; time: number } | null;
   amount: string;
   center?: ReactNode;
   isApprovalLocked: boolean | undefined;
 }) => {
+  const marketPrice = useAtomValue(priceAtom);
+
+  const { activeMarket } = useActiveMarket();
+  const activeAssetPrice = getLastbar(marketPrice, {
+    tv_id: activeMarket.tv_id,
+  });
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   // const { poolDetails } = useSwitchPool();
@@ -41,7 +47,6 @@ export const BuyButtons = ({
   const { handleApproveClick, buyHandler, loading, revokeApproveClick } =
     useBuyTradeActions(amount);
   const expiry = useLimitOrdersExpiry();
-  const { activeMarket } = useActiveMarket();
   const { switchPool } = useSwitchPool();
 
   const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);

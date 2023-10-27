@@ -1,6 +1,6 @@
 import { priceAtom } from '@Hooks/usePrice';
 import Star from '@Public/ComponentSVGS/Star';
-import { getPriceFromKlines } from '@TV/useDataFeed';
+import { getCachedPriceFromKlines, getPriceFromKlines } from '@TV/useDataFeed';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import BufferTable from '@Views/Common/BufferTable';
@@ -281,7 +281,7 @@ export const AssetSelectorTable: React.FC<{
 
 const CurrentPrice = ({ currentAsset }: { currentAsset: marketData }) => {
   const [marketPrice] = useAtom(priceAtom);
-  const price = getPriceFromKlines(marketPrice, {
+  const price = getCachedPriceFromKlines({
     tv_id: currentAsset.marketInfo.tv_id,
   });
   return (

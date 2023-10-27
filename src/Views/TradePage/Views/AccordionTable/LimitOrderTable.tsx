@@ -11,7 +11,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useToast } from '@Contexts/Toast';
 import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { getPriceFromKlines } from '@TV/useDataFeed';
+import { getCachedPriceFromKlines, getPriceFromKlines } from '@TV/useDataFeed';
 import { divide, round } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import NumberTooltip from '@Views/Common/Tooltips';
@@ -118,7 +118,7 @@ const LimitOrderTable = ({
           <Display
             className="!justify-start"
             data={round(
-              getPriceFromKlines(marketPrice, trade.market),
+              getCachedPriceFromKlines(trade.market),
               marketPrecision
             )}
             precision={marketPrecision}

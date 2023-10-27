@@ -1,4 +1,5 @@
 import { useGlobal } from '@Contexts/Global';
+import { usePriceRetriable } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import InfoIcon from '@SVG/Elements/InfoIcon';
 import BufferTab from '@Views/Common/BufferTab';
@@ -43,7 +44,7 @@ export const HistoryTables = () => {
 
   const [activeTrades, limitOrders] = useOngoingTrades();
   const { address } = useUserAccount();
-
+  usePriceRetriable();
   return (
     <>
       <div className="flex items-center justify-between mb-5 sm:flex-col sm:items-start sm:gap-3 sm:mb-[0]">

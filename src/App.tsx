@@ -108,7 +108,6 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <OneCTModal />
-
       <Routes>
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />

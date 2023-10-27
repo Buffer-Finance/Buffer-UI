@@ -4,7 +4,7 @@ import { useAtom, useAtomValue } from 'jotai';
 
 import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { getPriceFromKlines } from '@TV/useDataFeed';
+import { getCachedPriceFromKlines, getPriceFromKlines } from '@TV/useDataFeed';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { toFixed } from '@Utils/NumString';
 import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
@@ -211,7 +211,7 @@ export const OngoingTradesTable: React.FC<{
           <Display
             className="!justify-start"
             data={round(
-              getPriceFromKlines(marketPrice, trade.market),
+              getCachedPriceFromKlines(trade.market),
               marketPrecision
             )}
             precision={marketPrecision}
@@ -465,33 +465,6 @@ const ProgressLineWrapper = styled.div<{ duration: number; delay: number }>`
   }
 `;
 
-const ProgressLine = ({
-  startTime,
-  endTime,
-  duration,
-  className,
-}: {
-  startTime: number;
-  endTime: number;
-  duration: number;
-  className?: string;
-}) => {
-  const now = Math.floor(Date.now() / 1000);
-  const elapsedTime = now - startTime;
-  const totalDuration = endTime - startTime;
-  const initialProgress = (elapsedTime / totalDuration) * 100;
-
-  // Ensure progress does not go beyond 100%
-  const clampedProgress = Math.min(100, initialProgress);
-  return (
-    <ProgressLineWrapper
-      duration={duration}
-      delay={(clampedProgress / 100) * duration}
-      className={className}
-    />
-  );
-};
-
 const Probability: React.FC<{
   trade: TradeType;
   marketPrice: any;
@@ -500,14 +473,14 @@ const Probability: React.FC<{
     calculateOptionIV(
       trade.is_above ?? false,
       trade.strike / 1e8,
-      +getPriceFromKlines(marketPrice, trade.market),
+      +getCachedPriceFromKlines(trade.market),
       trade.pool.IV,
       trade.pool.IVFactorITM,
       trade.pool.IVFactorOTM
     ) / 1e4;
   const probabiliyt = getProbability(
     trade,
-    +getPriceFromKlines(marketPrice, trade.market),
+    +getCachedPriceFromKlines(trade.market),
     IV
   );
   if (!probabiliyt) return <div>Calculating..</div>;

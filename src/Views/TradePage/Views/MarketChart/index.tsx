@@ -15,7 +15,6 @@ const SidebySideCharts = ({
 
   className?: string;
 }) => {
-  // console.log(`index-indexes: `, indexes);
   return (
     <div className={`flex w-full ${className} `}>
       {indexes.map((id) => (

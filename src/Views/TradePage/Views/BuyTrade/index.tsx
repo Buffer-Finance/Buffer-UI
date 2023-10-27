@@ -46,7 +46,6 @@ export const BuyTrade: React.FC = () => {
   // triggering rerender
   const _setttlementFee = useSettlementFee();
   const amount = useAtomValue(tradeSizeAtom);
-  const marketPrice = useAtomValue(priceAtom);
   const { calculatePayout } = useSelectedAssetPayout();
   const limitprderPayout = useAtomValue(LimitOrderPayoutAtom);
   const tradeTypeTab = useAtomValue(tradeTypeAtom);
@@ -96,10 +95,6 @@ export const BuyTrade: React.FC = () => {
     ? (divide(approvalExpanded?.allowance, decimals) as string)
     : '0';
 
-  const activeAssetPrice = getLastbar(marketPrice, {
-    tv_id: activeMarket.tv_id,
-  });
-
   // const platformFee = divide(switchPool.platformFee, decimals);
   let userAmount = amount;
   // const buyLink = () => {
@@ -119,14 +114,13 @@ export const BuyTrade: React.FC = () => {
       <TimeSelector />
       <TradeSizeSelector />
       <TradeTypeSelector />
-      <CurrentPrice price={activeAssetPrice?.price ?? '0'} />
+      <CurrentPrice />
       <PayoutProfit
         amount={userAmount || '0'}
         totalPayout={payout}
         tradeToken={tradeToken}
       />
       <BuyButtons
-        activeAssetPrice={activeAssetPrice}
         allowance={allowance}
         amount={amount.toString()}
         isApprovalLocked={approvalExpanded?.is_locked}

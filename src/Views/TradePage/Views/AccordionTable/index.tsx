@@ -18,12 +18,12 @@ import {
   queuets2priceAtom,
 } from '@Views/TradePage/atoms';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CancelledTable } from './CancelTable';
 import { HistoryTable } from './HistoryTable';
 import LimitOrderTable from './LimitOrderTable';
 import { OngoingTradesTable } from './OngoingTradesTable';
-
+const OngoingTradesTableMemo = React.memo(OngoingTradesTable);
 const tables = {
   Trades: 'h',
   'Limit Orders': 'h',
@@ -120,7 +120,7 @@ const AccordionTable: React.FC<any> = ({}) => {
         } flex flex-col transition-all  overflow-y-hidden `}
       >
         {activeTable == 'Trades' ? (
-          <OngoingTradesTable
+          <OngoingTradesTableMemo
             trades={activeTrades}
             isLoading={false}
             overflow
