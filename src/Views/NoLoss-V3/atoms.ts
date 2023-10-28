@@ -35,6 +35,7 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
   const activeTournamentId = get(activeTournamentIdAtom);
   const user = get(userAtom);
 
+  console.log('tournaments', tournaments);
   const response: {
     calls: IreadCall[] | null;
     result:

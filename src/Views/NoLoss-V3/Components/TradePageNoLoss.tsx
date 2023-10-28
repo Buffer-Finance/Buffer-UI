@@ -10,7 +10,7 @@ const TradePageNoLossBackground = styled.div`
   margin: 0 6px;
 `;
 
-export const TradePageNoLoss = () => {
+export const NoLossSection = () => {
   return (
     <TradePageNoLossBackground>
       <TournamentStateTabs />
