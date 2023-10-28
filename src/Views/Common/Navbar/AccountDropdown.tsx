@@ -1,5 +1,6 @@
 import DDArrow from '@SVG/Elements/Arrow';
 import WalletIcon from '@SVG/Elements/WalletIcon';
+import { userAtom } from '@Views/NoLoss-V3/atoms';
 import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 import {
   ChainSwitchingModal,
@@ -12,7 +13,7 @@ import { useAtomValue } from 'jotai';
 import React, { ReactNode, SVGProps } from 'react';
 import { useMedia } from 'react-use';
 import { getAddress } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useBalance } from 'wagmi';
 import { Display } from '../Tooltips/Display';
 import { BlueBtn } from '../V2-Button';
 
@@ -126,7 +127,7 @@ export const AccountDropdown: React.FC = () => {
                   >
                     <WalletIcon className="mr-2 ml-1 text-blue" />
 
-                    <TokenAccountBalance />
+                    {/* <TokenAccountBalance /> */}
 
                     <button
                       className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1"
@@ -292,25 +293,30 @@ export const PowerIcon = (props: SVGProps<SVGSVGElement>) => (
 );
 
 const TokenAccountBalance = () => {
-  const { activePool } = useAtomValue(activePoolObjAtom);
-  const pools = usePoolByAsset();
-  let activePoolDetails = pools[activePool];
-  if (activePoolDetails === undefined) activePoolDetails = pools['USDC'];
-  const { address } = useAccount();
-  const { data, isError, isLoading, error } = useBalance({
-    address,
-    token: getAddress(activePoolDetails.tokenAddress),
-    watch: true,
-  });
-
+  const balance = useAccountBalance();
   return (
     <div className="flex items-center">
       {' '}
-      <Display data={data?.formatted} className="text-f14" />{' '}
+      <Display data={balance} className="text-f14" />{' '}
       <img
         src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePoolDetails.token.toLowerCase()}.png`}
         className="w-[16px] h-[16px] ml-2"
       />
     </div>
   );
+};
+
+const useAccountBalance = () => {
+  const { activePool } = useAtomValue(activePoolObjAtom);
+  const user = useAtomValue(userAtom);
+  const pools = usePoolByAsset();
+  let activePoolDetails = pools[activePool];
+  if (activePoolDetails === undefined) activePoolDetails = pools['USDC'];
+  if (user === undefined || user.userAddress === undefined) return 0;
+  const { data, isError, isLoading, error } = useBalance({
+    address: getAddress(user.userAddress),
+    token: getAddress(activePoolDetails.tokenAddress),
+    watch: true,
+  });
+  return data?.formatted;
 };

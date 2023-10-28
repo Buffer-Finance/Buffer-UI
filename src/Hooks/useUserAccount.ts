@@ -14,6 +14,7 @@ export const useUserAccount = () => {
       userAddress: urlAddress || account,
       viewOnlyAddress: urlAddress,
       isViewOnlyMode: urlAddress ? true : false,
+      connectedWalletAddress: account,
     });
   }, [account, query]);
   return {

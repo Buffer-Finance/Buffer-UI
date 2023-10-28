@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
-import { allTournamentsDataReadOnlyAtom } from '../atoms';
+import { filteredTournamentsDataReadOnlyAtom } from '../atoms';
+import { AllMyTab } from './AllMyTab';
+import { TournamentStateTabs } from './TournamentStateTabs';
 import { TradepageTournamentCard } from './TradePageTournamentCard';
 
 const TradePageNoLossBackground = styled.div`
@@ -11,13 +13,15 @@ const TradePageNoLossBackground = styled.div`
 export const TradePageNoLoss = () => {
   return (
     <TradePageNoLossBackground>
+      <TournamentStateTabs />
+      <AllMyTab />
       <NoLoss />
     </TradePageNoLossBackground>
   );
 };
 
 const NoLoss = () => {
-  const allTournaments = useAtomValue(allTournamentsDataReadOnlyAtom);
+  const allTournaments = useAtomValue(filteredTournamentsDataReadOnlyAtom);
 
   if (allTournaments === undefined)
     return <Skeleton className="w-[100px] !h-8 lc " />;

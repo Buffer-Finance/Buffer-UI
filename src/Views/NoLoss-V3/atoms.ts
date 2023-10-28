@@ -21,6 +21,7 @@ export const userAtom = atom<
   | {
       userAddress: string | undefined;
       viewOnlyAddress: string | null;
+      connectedWalletAddress: string | undefined;
       isViewOnlyMode: boolean;
     }
   | undefined
@@ -139,4 +140,33 @@ export const activeTournamentDataReadOnlyAtom = atom((get) => {
     data: activeTournamentData,
     id: activeTournamentId,
   };
+});
+
+export const activeMyAllTabAtom = atom<string>('my');
+export const tournamentStateTabAtom = atom<string>('live');
+
+export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
+  const allTournamentsData = get(allTournamentsDataReadOnlyAtom);
+  const activeMyAllTab = get(activeMyAllTabAtom);
+  const tournamentStateTab = get(tournamentStateTabAtom);
+
+  if (allTournamentsData === undefined) return undefined;
+
+  const filteredTournamentsData = allTournamentsData.filter((tournament) => {
+    if (activeMyAllTab === 'my') {
+      return false;
+    } else {
+      return true;
+    }
+  });
+
+  return filteredTournamentsData.filter((tournament) => {
+    if (tournamentStateTab === 'live') {
+      return tournament.state === 'Live';
+    } else if (tournamentStateTab === 'upcoming') {
+      return tournament.state === 'Upcoming';
+    } else {
+      return tournament.state === 'Completed';
+    }
+  });
 });
