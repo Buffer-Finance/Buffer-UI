@@ -7,5 +7,6 @@ export const NoLossV3 = () => {
   useTournamentIds();
   useNoLossMarkets();
   useTournamentDataFetch();
+
   return <TradePageNoLoss />;
 };

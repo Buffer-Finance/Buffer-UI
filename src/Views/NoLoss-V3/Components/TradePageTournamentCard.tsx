@@ -1,7 +1,9 @@
 import { divide } from '@Utils/NumString/stringArithmatics';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { BlueBtn } from '@Views/Common/V2-Button';
 import { useAtomValue } from 'jotai';
+import { useUpdateActiveTournament } from '../Hooks/useUpdateActiveTournament';
 import { activeTournamentIdAtom } from '../atoms';
 import { ItournamentData } from '../types';
 import { NoLossV3Timer } from './NoLossV3Timer';
@@ -17,6 +19,7 @@ export const TradepageTournamentCard: React.FC<{
   tournament: ItournamentData;
 }> = ({ tournament }) => {
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
+  const { setActiveTournament } = useUpdateActiveTournament();
   function buyPlayTokens() {}
   return (
     <div
@@ -99,15 +102,16 @@ export const TradepageTournamentCard: React.FC<{
       </div>
       <div className="flex items-center justify-center gap-x-[5px] mt-4">
         {tournament.state.toLowerCase() == 'live' && (
-          <button
+          <BlueBtn
             className={tournamentButtonStyles}
+            isDisabled={tournament.id === activeTournamentId}
             onClick={() => {
-              // setactiveTid(tournament.id);
+              setActiveTournament(tournament.id);
             }}
           >
             <TradeIcon />
             Trade
-          </button>
+          </BlueBtn>
         )}
         <button className={tournamentButtonStyles} onClick={buyPlayTokens}>
           Entry

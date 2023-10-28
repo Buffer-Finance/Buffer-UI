@@ -413,7 +413,7 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: '/no-loss',
+        to: '/no-loss/2/BTC-USD',
         name: 'No Loss',
         subTabs: [],
         isExternalLink: false,

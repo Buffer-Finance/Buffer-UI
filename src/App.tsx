@@ -116,7 +116,7 @@ const AppRoutes = () => {
           <Route path=":chain" element={<ProfilePage />} />
         </Route> */}
         <Route path="/binary/:market" element={<TradePage />} />
-        <Route path="/no-loss" element={<NoLossV3 />} />
+        <Route path="/no-loss/:id/:market" element={<NoLossV3 />} />
         {/* <Route
           path="/*"
           element={
