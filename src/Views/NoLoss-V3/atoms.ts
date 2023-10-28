@@ -2,6 +2,7 @@ import { getCallId } from '@Utils/Contract/multiContract';
 import { atom } from 'jotai';
 import { Chain } from 'viem';
 import TournamentLeaderboardABI from './ABIs/TournamentLeaderboard.json';
+import TournamentManagerABI from './ABIs/TournamentManager.json';
 import TournamentReaderABI from './ABIs/TournamentReader.json';
 import { getNoLossV3Config } from './helpers/getNolossV3Config';
 import {
@@ -59,6 +60,17 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
       },
     ];
 
+    const rewardPoolCalls = tournamentIds.map((tournamentId) => {
+      return {
+        address: config.manager,
+        abi: TournamentManagerABI,
+        name: 'tournamentRewardPools',
+        params: [tournamentId],
+        id: `${config.manager}tournamentRewardPools${tournamentId}`,
+      };
+    });
+    readcalls.push(...rewardPoolCalls);
+
     if (
       activeTournamentId !== undefined &&
       user !== undefined &&
@@ -80,9 +92,21 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
         'bulkFetchTournaments'
       );
       const userRankId = getCallId(config.leaderboard, 'userTournamentRank');
-
+      const rewardPoolsIds = tournamentIds.map((tournamentId) =>
+        getCallId(config.manager, 'tournamentRewardPools', [tournamentId])
+      );
+      const rewardPools = rewardPoolsIds.map((id) => readcallResponse[id]?.[0]);
       response.result = {
-        tournamentData: readcallResponse[tournamentDataId]?.[0],
+        tournamentData: readcallResponse[tournamentDataId][0].map(
+          (data: ItournamentData, index: number) => {
+            return {
+              ...data,
+              id: tournaments[index].id,
+              state: tournaments[index].state,
+              rewardPool: rewardPools[index],
+            };
+          }
+        ),
         userRank: readcallResponse[userRankId]?.[0],
       };
     }
@@ -100,4 +124,19 @@ export const noLossReadcallResponseReadOnlyAtom = atom<
 export const allTournamentsDataReadOnlyAtom = atom((get) => {
   const { result } = get(noLossReadCallsReadOnlyAtom);
   return result?.tournamentData;
+});
+
+export const activeTournamentDataReadOnlyAtom = atom((get) => {
+  const allTournamentsData = get(allTournamentsDataReadOnlyAtom);
+  const activeTournamentId = get(activeTournamentIdAtom);
+
+  if (allTournamentsData === undefined || activeTournamentId === undefined)
+    return undefined;
+  const activeTournamentData = allTournamentsData?.find(
+    (tournament) => tournament.id === activeTournamentId
+  );
+  return {
+    data: activeTournamentData,
+    id: activeTournamentId,
+  };
 });

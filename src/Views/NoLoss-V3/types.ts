@@ -61,4 +61,7 @@ export interface ItournamentData {
   buyinTokenDecimals: number;
   rewardTokenSymbol: string;
   rewardTokenDecimals: number;
+  id: number;
+  state: string;
+  rewardPool: string;
 }
