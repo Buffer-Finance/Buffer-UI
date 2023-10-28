@@ -13,7 +13,7 @@ import { Star } from './SVGs/Star';
 import { TradeIcon } from './SVGs/TradeIcon';
 
 export const tournamentButtonStyles =
-  'bg-blue flex gap-x-2 px-[8px] py-[2px] text-f12 items-center rounded-[4px] ';
+  '!text-f12 flex items-center gap-x-2 !h-fit !w-fit px-4 py-2';
 
 export const TradepageTournamentCard: React.FC<{
   tournament: ItournamentData;
@@ -113,7 +113,7 @@ export const TradepageTournamentCard: React.FC<{
             Trade
           </BlueBtn>
         )}
-        <button className={tournamentButtonStyles} onClick={buyPlayTokens}>
+        <BlueBtn className={tournamentButtonStyles} onClick={buyPlayTokens}>
           Entry
           <Display
             data={divide(
@@ -123,7 +123,7 @@ export const TradepageTournamentCard: React.FC<{
             unit={tournament.buyinTokenSymbol}
             precision={0}
           />
-        </button>
+        </BlueBtn>
       </div>
     </div>
   );
