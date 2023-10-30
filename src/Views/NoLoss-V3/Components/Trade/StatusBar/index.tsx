@@ -20,8 +20,10 @@ export const StatusBar: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         </>
       )}
       <MarketData activeMarket={activeMarket} />
-      <TournamentData />
-      <MultiChartSelectorMenu isMobile={isMobile} />
+      <>
+        <TournamentData />
+        <MultiChartSelectorMenu isMobile={isMobile} />
+      </>
     </div>
   );
 };

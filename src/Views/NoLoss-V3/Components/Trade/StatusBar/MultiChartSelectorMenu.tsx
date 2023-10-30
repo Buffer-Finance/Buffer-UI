@@ -40,7 +40,7 @@ export const MultiChartSelectorMenu: React.FC<{ isMobile: boolean }> = ({
         type="button"
         ref={ref}
         {...anchorProps}
-        className="hover:brightness-125 ml-auto"
+        className="hover:brightness-125"
       >
         <FourRectanglesSVG />
       </button>

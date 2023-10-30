@@ -14,7 +14,7 @@ export const TournamentData = () => {
     },
   ];
   return (
-    <div className="flex items-center gap-[17px]">
+    <div className="flex items-center gap-[17px] ml-auto">
       {dataArray.map((data, index) => {
         return (
           <>
