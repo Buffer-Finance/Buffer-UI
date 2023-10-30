@@ -1,5 +1,6 @@
 import { getCallId } from '@Utils/Contract/multiContract';
 import { atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 import { Chain } from 'viem';
 import TournamentLeaderboardABI from './ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from './ABIs/TournamentManager.json';
@@ -177,3 +178,6 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
     }
   });
 });
+
+export const isTableShownAtom = atom<boolean>(false);
+export const chartNumberAtom = atomWithStorage('chartNumber', 1);

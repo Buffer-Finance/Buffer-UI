@@ -1,4 +1,4 @@
-import { chartNumberAtom } from '@Views/TradePage/atoms';
+import { chartNumberAtom } from '@Views/NoLoss-V3/atoms';
 import {
   ClickEvent,
   ControlledMenu,
