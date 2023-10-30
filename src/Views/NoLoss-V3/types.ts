@@ -20,6 +20,8 @@ export interface InoLossMarketResponse {
   asset: string;
   isPaused: boolean;
   config: InoLossConfigContract;
+  payoutForUp: string;
+  payoutForDown: string;
 }
 
 export interface InoLossMarket extends InoLossMarketResponse {

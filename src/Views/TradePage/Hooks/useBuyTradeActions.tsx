@@ -59,7 +59,7 @@ enum ArgIndex {
   NFT = 8,
   Slippage = 5,
 }
-export const useBuyTradeActions = (userInput: string) => {
+export const useBuyTradeActions = () => {
   const { activeChain } = useActiveChain();
   const [settings] = useAtom(tradeSettingsAtom);
   const setPriceCache = useSetAtom(queuets2priceAtom);

@@ -1,10 +1,12 @@
 import { getCallId } from '@Utils/Contract/multiContract';
+import { HHMMToSeconds } from '@Views/TradePage/utils';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { Chain } from 'viem';
 import TournamentLeaderboardABI from './ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from './ABIs/TournamentManager.json';
 import TournamentReaderABI from './ABIs/TournamentReader.json';
+import { defaultSelectedTime } from './config';
 import { getNoLossV3Config } from './helpers/getNolossV3Config';
 import {
   InoLossMarket,
@@ -181,3 +183,24 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
 
 export const isTableShownAtom = atom<boolean>(false);
 export const chartNumberAtom = atomWithStorage('chartNumber', 1);
+
+//buy trade atoms
+export const noLossTimeSelectorAtom = atomWithStorage(
+  'noLossTimeSelectorAtomV1',
+  {
+    HHMM: defaultSelectedTime,
+    seconds: HHMMToSeconds(defaultSelectedTime),
+  }
+);
+
+export const setnoLossTimeSelectorAtom = atom(
+  null,
+  (get, set, update: string) => {
+    set(noLossTimeSelectorAtom, {
+      HHMM: update,
+      seconds: HHMMToSeconds(update),
+    });
+  }
+);
+
+export const noLossTradeSizeAtom = atomWithStorage('noLossTradeSizeAtom', '5');

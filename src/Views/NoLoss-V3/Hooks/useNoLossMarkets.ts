@@ -18,6 +18,8 @@ export const useNoLossMarkets = () => {
             address
             asset
             isPaused
+            payoutForUp
+            payoutForDown
             config {
               address
               minFee

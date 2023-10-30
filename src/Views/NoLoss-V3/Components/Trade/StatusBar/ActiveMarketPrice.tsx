@@ -1,3 +1,4 @@
+import { round } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useMarketPrice } from '@Views/NoLoss-V3/Hooks/useMarketPrice';
 import { InoLossMarket } from '@Views/NoLoss-V3/types';
@@ -13,7 +14,11 @@ export const ActiveMarketPrice: React.FC<{
 
   return (
     <div className="text-f18 b1200:text-f12">
-      <Display className="!justify-start" data={price} precision={precision} />
+      <Display
+        className="!justify-start"
+        data={round(price, precision)}
+        precision={precision}
+      />
     </div>
   );
 };
