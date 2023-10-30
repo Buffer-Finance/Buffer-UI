@@ -204,3 +204,41 @@ export const setnoLossTimeSelectorAtom = atom(
 );
 
 export const noLossTradeSizeAtom = atomWithStorage('noLossTradeSizeAtom', '5');
+
+// asset selection atoms
+export const noLossActiveCategoyAtom = atom<string>('all');
+export const noLossSearchBarAtom = atom<string>('');
+
+export const filteredMarketsSelectAtom = atom((get) => {
+  const markets = get(nolossmarketsAtom);
+  const activeCategory = get(noLossActiveCategoyAtom);
+  const searchBar = get(noLossSearchBarAtom);
+  const favouriteMarkets = get(noLossFavouriteMarketsAtom);
+
+  if (markets === undefined) return undefined;
+
+  const filteredMarkets = markets.filter((market) => {
+    if (activeCategory === 'all') {
+      return true;
+    } else if (activeCategory === 'favourites') {
+      return favouriteMarkets.includes(market.chartData.tv_id);
+    } else {
+      return (
+        market.chartData.category.toLowerCase() === activeCategory.toLowerCase()
+      );
+    }
+  });
+
+  return filteredMarkets.filter((market) => {
+    if (searchBar === '') {
+      return true;
+    } else {
+      return market.asset.includes(searchBar);
+    }
+  });
+});
+
+export const noLossFavouriteMarketsAtom = atomWithStorage<string[]>(
+  'noLossFavouriteMarkets',
+  []
+);

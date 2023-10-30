@@ -10,6 +10,7 @@ import {
   useMenuState,
 } from '@szhsin/react-menu';
 import { useRef } from 'react';
+import { DropDown } from './DropDown';
 
 export const AssetSelector: React.FC<{
   token0: string | undefined;
@@ -22,7 +23,6 @@ export const AssetSelector: React.FC<{
   function closeDropdown() {
     toggleMenu(false);
   }
-  console.log(token0, token1);
 
   if (!token0 || !token1) return <Skeleton className="w-[100px] !h-7 lc " />;
 
@@ -56,8 +56,7 @@ export const AssetSelector: React.FC<{
             e.keepOpen = true;
           }}
         >
-          {/* <AssetSelectorDD onMarketSelect={closeDropdown} /> */}
-          <>lol</>
+          <DropDown onMarketSelect={closeDropdown} />
         </MenuItem>
       </ControlledMenu>
     </>

@@ -1,10 +1,12 @@
 import { MarketChart } from '@Views/TradePage/Views/MarketChart';
 import styled from '@emotion/styled';
+import { PinnedMarkets } from '../PinnedMarkets';
 import { StatusBar } from '../StatusBar';
 
 export const MiddleSection = () => {
   return (
     <MiddleSectionBackground>
+      <PinnedMarkets />
       <StatusBar isMobile={false} />
       <MarketChart />
     </MiddleSectionBackground>

@@ -23,10 +23,11 @@ export const useUpdateActiveMarket = () => {
   }, [activeMarketId]);
 
   const setActiveMarket = useCallback(
-    (newMarket) => {
-      if (market && newMarket === market) return;
-      setActiveMarketId(newMarket);
-      navigate(`/no-loss/${id}/${newMarket}`);
+    (newMarketPairName: string) => {
+      const tvId = newMarketPairName.replace('-', '');
+      if (market && tvId === market) return;
+      setActiveMarketId(tvId);
+      navigate(`/no-loss/${id}/${newMarketPairName}`);
     },
     [market, id]
   );
