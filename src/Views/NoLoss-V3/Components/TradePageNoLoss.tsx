@@ -8,6 +8,7 @@ import { TradepageTournamentCard } from './TradePageTournamentCard';
 
 const TradePageNoLossBackground = styled.div`
   margin: 0 6px;
+  width: 300px;
 `;
 
 export const NoLossSection = () => {
