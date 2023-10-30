@@ -4,7 +4,9 @@ import axios from 'axios';
 import { useSetAtom } from 'jotai';
 import useSWR from 'swr';
 import { nolossmarketsAtom } from '../atoms';
+import { marketsForChart } from '../config';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
+import { InoLossMarketResponse } from '../types';
 
 export const useNoLossMarkets = () => {
   const { activeChain } = useActiveChain();
@@ -30,9 +32,18 @@ export const useNoLossMarkets = () => {
     try {
       const config = getNoLossV3Config(activeChain.id);
 
-      const { data, status } = await axios.post(config.graph, { query });
+      const { data, status } = await axios.post<{
+        data: { optionContracts: InoLossMarketResponse[] };
+      }>(config.graph, { query });
       if (status !== 200) throw new Error('Error fetching tournament ids');
-      setMarkets(data.data.optionContracts);
+      const markets = data.data.optionContracts.map((market) => {
+        return {
+          ...market,
+          chartData:
+            marketsForChart[market.asset as keyof typeof marketsForChart],
+        };
+      });
+      setMarkets(markets);
     } catch (e) {
       toastify({
         type: 'error',

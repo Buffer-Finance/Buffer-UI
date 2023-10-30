@@ -1,4 +1,4 @@
-import { config } from './config';
+import { config, marketsForChart } from './config';
 
 export interface ItournamentId {
   id: string;
@@ -6,7 +6,7 @@ export interface ItournamentId {
 }
 
 export type noLossConfigType = (typeof config)['421613'];
-
+export type marketsForChartType = (typeof marketsForChart)['ARBUSD'];
 export interface InoLossConfigContract {
   address: string;
   minFee: string;
@@ -15,11 +15,15 @@ export interface InoLossConfigContract {
   maxPeriod: string;
 }
 
-export interface InoLossMarket {
+export interface InoLossMarketResponse {
   address: string;
   asset: string;
   isPaused: boolean;
   config: InoLossConfigContract;
+}
+
+export interface InoLossMarket extends InoLossMarketResponse {
+  chartData: marketsForChartType;
 }
 
 export interface IreadCall {

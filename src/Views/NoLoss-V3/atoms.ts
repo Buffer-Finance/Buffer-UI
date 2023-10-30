@@ -28,6 +28,13 @@ export const userAtom = atom<
 >(undefined);
 
 export const nolossmarketsAtom = atom<InoLossMarket[] | undefined>(undefined);
+export const activeMarketIdAtom = atom<string | undefined>(undefined);
+export const activeMarketDataAtom = atom<InoLossMarket | undefined>((get) => {
+  const markets = get(nolossmarketsAtom);
+  const activeMarketId = get(activeMarketIdAtom);
+  if (markets === undefined || activeMarketId === undefined) return undefined;
+  return markets.find((market) => market.asset === activeMarketId);
+});
 
 export const noLossReadCallsReadOnlyAtom = atom((get) => {
   const tournaments = get(tournamentIdsAtom);
@@ -35,7 +42,6 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
   const activeTournamentId = get(activeTournamentIdAtom);
   const user = get(userAtom);
 
-  console.log('tournaments', tournaments);
   const response: {
     calls: IreadCall[] | null;
     result:
