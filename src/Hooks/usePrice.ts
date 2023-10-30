@@ -1,8 +1,9 @@
 import { multiply } from '@Utils/NumString/stringArithmatics';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import axios from 'axios';
 import Big from 'big.js';
 import { atom, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
 type WSUPdate = {
@@ -24,12 +25,20 @@ type WSUPdate = {
   };
 };
 const client = reconnectingSocket('wss://hermes.pyth.network/ws');
+export let ts2asset2updatecnt = {};
 
 export const silentPriceCache = {};
 export const usePrice = () => {};
 export const usePriceRetriable = () => {
   const setPrice = useSetAtom(priceAtom);
   const [isConnected, setIsConnected] = useState(client.isConnected());
+  const { activeMarket } = useActiveMarket();
+  const activeMarketRef = useRef('BTCUSD');
+  useEffect(() => {
+    activeMarketRef.current = activeMarket?.token0
+      ? activeMarket?.token0 + activeMarket?.token1
+      : 'BTCUSD';
+  }, [activeMarket]);
 
   useEffect(() => {
     return client.onStateChange(setIsConnected);
@@ -59,8 +68,23 @@ export const usePriceRetriable = () => {
         silentPriceCache[pythIds[(lastJsonMessage as WSUPdate).price_feed.id]] =
           priceUpdatePacked;
         // console.log(`setting: `, message);
-
-        setPrice((p) => ({ ...p, ...data }));
+        // const ts = Math.floor(Date.now() / 1000);
+        const asset = Object.keys(data)[0];
+        // if (ts in ts2asset2updatecnt) {
+        //   let asset2updatecnt = ts2asset2updatecnt[ts];
+        //   if (asset in asset2updatecnt) {
+        //     asset2updatecnt[asset]++;
+        //   } else {
+        //     // replace asset2updatecnt with ts2asset2updatecnt in below line
+        //     ts2asset2updatecnt[ts] = { ...ts2asset2updatecnt[ts], [asset]: 1 };
+        //   }
+        // } else {
+        //   const assetUpdated = { [asset]: 1 };
+        //   ts2asset2updatecnt = { ...ts2asset2updatecnt, [ts]: assetUpdated };
+        // }
+        if (activeMarketRef.current && asset == activeMarketRef.current) {
+          setPrice((p) => ({ ...p, ...data }));
+        }
       }
     }
     client.on(handleMessage);

@@ -1,3 +1,4 @@
+import { usePriceRetriable } from '@Hooks/usePrice';
 import { TradePageNoLoss } from './Components/Trade';
 import { useNoLossMarkets } from './Hooks/useNoLossMarkets';
 import { useTournamentDataFetch } from './Hooks/useTournamentDataFetch';
@@ -9,6 +10,7 @@ export const NoLossV3 = () => {
   useNoLossMarkets();
   useTournamentDataFetch();
   useUpdateActiveMarket();
+  usePriceRetriable();
 
   return <TradePageNoLoss />;
 };
