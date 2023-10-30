@@ -60,17 +60,18 @@ export const TradepageTournamentCard: React.FC<{
           </div>
         </div>
         <div className="flex-col text-f12 items-end">
-          <div className="text-3">Play Tokens</div>
-          {/* <div>
-        {balance ? (
-          <Display
-            data={divide(balance, playTokenDecimals)}
-            className="text-1 content-end"
-          />
-        ) : (
+          <div className="text-3">Mint Amount</div>
+          <div>
+            {/* {balance ? ( */}
+            <Display
+              data={divide(tournament.tournamentMeta.playTokenMintAmount, 18)}
+              className="text-1 content-end"
+              precision={2}
+            />
+            {/* ) : (
           <Skeleton className="lc sr !w-[20px] !h-[14px]" />
-        )}
-      </div> */}
+        )} */}
+          </div>
         </div>
       </div>
       <div className="flex items-center justify-between mt-3">
