@@ -1,12 +1,16 @@
 import { MarketChart } from '@Views/TradePage/Views/MarketChart';
+import { miscsSettingsAtom } from '@Views/TradePage/atoms';
 import styled from '@emotion/styled';
+import { useAtomValue } from 'jotai';
 import { PinnedMarkets } from '../PinnedMarkets';
 import { StatusBar } from '../StatusBar';
 
 export const MiddleSection = () => {
+  const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
+
   return (
     <MiddleSectionBackground>
-      <PinnedMarkets />
+      {showFavoriteAsset && <PinnedMarkets />}
       <StatusBar isMobile={false} />
       <MarketChart />
     </MiddleSectionBackground>

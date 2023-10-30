@@ -6,7 +6,6 @@ import { tradeSettingsAtom } from '@Views/TradePage/atoms';
 import { defaultSettings } from '@Views/TradePage/config';
 import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
-import { LimitOrdersExpiry } from './LimitOrdersExpiry';
 import { PartialFill } from './PartialFill';
 import { Slippage } from './Slippage';
 
@@ -45,7 +44,7 @@ export const TradeSettings: React.FC = () => {
           currentSlippage={settings.slippageTolerance}
           setSlippage={setSlippage}
         />
-        <LimitOrdersExpiry />
+        {/* <LimitOrdersExpiry /> */}
       </ColumnGap>
     </div>
   );
