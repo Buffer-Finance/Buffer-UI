@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { getAddress } from 'viem';
 import { marketsForChart } from '../config';
 import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
-import { getTokens, secondsToHHMM } from '../utils';
+import { secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
 
 export const useMarketsConfig = () => {
@@ -15,10 +15,7 @@ export const useMarketsConfig = () => {
 
     const response: marketType[] = [];
     data.optionContracts.forEach((item) => {
-      const [token0, token1] = getTokens(item.asset, 'USD');
-      const index = response.findIndex(
-        (config) => config.token0 === token0 && config.token1 === token1
-      );
+      const index = response.findIndex((config) => config.tv_id === item.asset);
       // console.log(`item: `, item/);
       if (index !== -1) {
         response[index].pools.push(createPoolObject(item));
@@ -38,7 +35,7 @@ export const useMarketsConfig = () => {
     // console.log(`response: `, response);
     return response;
   }, [data]);
-  // console.log(`res: `, res);
+  console.log(`res: `, res);
   return res;
 };
 
