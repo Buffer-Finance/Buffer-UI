@@ -3,9 +3,9 @@ import { toFixed } from '@Utils/NumString';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { RowGap } from '@Views/TradePage/Components/Row';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { TradeState } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import {
   closeLoadingAtom,
   queuets2priceAtom,
@@ -15,7 +15,6 @@ import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { getAddress } from 'viem';
 import {
   getEarlyCloseStatus,
   getExpiry,
@@ -46,11 +45,10 @@ export const TradeButton: React.FC<{
   const { cancelHandler, earlyCloseHandler } = useCancelTradeFunction();
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { viewOnlyMode } = useUserAccount();
+  const { data: allSpreads } = useSpread();
+  const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
 
-  const readcalldata = useAtomValue(buyTradeDataAtom);
-  const maxOI = readcalldata.maxOIs[getAddress(trade.target_contract)];
-  const currentOI = readcalldata.currentOIs[getAddress(trade.target_contract)];
-  const { isPriceArrived } = getStrike(trade, cachedPrices, currentOI, maxOI);
+  const { isPriceArrived } = getStrike(trade, cachedPrices, spread);
   const earlyCloseLoading = useAtomValue(closeLoadingAtom);
 
   const lockedAmmount = getLockedAmount(trade, cachedPrices);

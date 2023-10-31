@@ -124,6 +124,11 @@ export const pythIds = {
   f0d57deca57b3da2fe63a493f4c25925fdfd8edf834b20f93e1f84dbd1504d4a: 'SHIBUSD',
   '8ac0c70fff57e9aefdf5edf44b51d62c2d433653cbb2cf5cc06bb115af04d221': 'LINKUSD',
   ef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d: 'SOLUSD',
+  '3112b03a41c910ed446852aacf67118cb1bec67b2cd0b9a214c58cc0eaa2ecca': 'USDCAD',
+  '0b1e3297e69f162877b577b0d6a47a0d63b2392bc8499e6540da4187a63e28f8': 'USDCHF',
+  '67a6f93030420c1c9e3fe37c1ab6b77966af82f995944a9fefce357a22854a80': 'AUDUSD',
+  '396a969a9c1480fa15ed50bc59149e2c0075a72fe8f458ed941ddec48bdb4918': 'USDSGD',
+  '92eea8ba1b00078cdc2ef6f64f091f262e8c7d0576ee4677572f314ebfafa4c7': 'NZDUSD',
 };
 export const getPrice = async () => {
   const price = await axios.get(

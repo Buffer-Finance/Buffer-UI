@@ -47,6 +47,7 @@ import { useActiveMarket } from './useActiveMarket';
 import { useApprvalAmount } from './useApprovalAmount';
 import { buyTradeDataAtom } from './useBuyTradeData';
 import { useSettlementFee } from './useSettlementFee';
+import { useSpread } from './useSpread';
 import { useSwitchPool } from './useSwitchPool';
 enum ArgIndex {
   Strike = 4,
@@ -61,6 +62,7 @@ enum ArgIndex {
 }
 export const useBuyTradeActions = (userInput: string) => {
   const { activeChain } = useActiveChain();
+  const { data: allSpreads } = useSpread();
   const [settings] = useAtom(tradeSettingsAtom);
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const { data: approvalExpanded, mutate: updateApprovalData } =
@@ -187,31 +189,40 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      const safeStrike = getSafeStrike(
-        Number(customTrade.strike),
-        customTrade.is_up,
-        switchPool.SpreadConfig1,
-        switchPool.SpreadConfig2,
-        switchPool.SpreadFactor,
-        +currentOI,
-        +maxOI,
-        switchPool.IV
-      );
-      const difference = Math.abs(
-        ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
-      );
+      if (activeAsset && allSpreads) {
+        const spread = allSpreads?.[activeAsset.tv_id];
+        if (spread === undefined || spread === null) {
+          return toastify({
+            type: 'error',
+            msg: `Spread not found for ${activeAsset.pair}!`,
+            id: 'binaryBuy',
+          });
+        }
+        const safeStrike = getSafeStrike(
+          Number(customTrade.strike),
+          customTrade.is_up,
+          spread.spread
+        );
+        const difference = Math.abs(
+          ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
+        );
 
-      if (difference > settings.slippageTolerance) {
+        if (difference > settings.slippageTolerance) {
+          return toastify({
+            type: 'error',
+            msg: `Slippage tolerance should be greater than ${difference.toFixed(
+              4
+            )}%`,
+            id: 'binaryBuy',
+          });
+        }
+      } else {
         return toastify({
           type: 'error',
-          msg: `Slippage tolerance should be greater than ${difference.toFixed(
-            4
-          )}%`,
+          msg: 'There is some error while fetching the data!',
           id: 'binaryBuy',
         });
       }
-
-      console.log(`useBuyTradeActions-safeStrike: `, safeStrike, difference);
 
       if (!userInput || userInput === '0' || userInput === '') {
         return toastify({
@@ -254,7 +265,6 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      console.log(`useBuyTradeActions-userInput: `, userInput);
 
       if (!allSettlementFees || !activeAsset) {
         return toastify({
@@ -320,7 +330,6 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'ddd',
         });
       }
-      console.log(`useBuyTradeActions-price: `, limitOrderPayout);
       if (customTrade.limitOrderExpiry && !limitOrderPayout) {
         return toastify({
           type: 'error',
@@ -347,12 +356,17 @@ export const useBuyTradeActions = (userInput: string) => {
       // };
       try {
         let settelmentFee = allSettlementFees[activeAsset.tv_id];
+        const spread = allSpreads?.[activeAsset.tv_id];
+        if (spread === undefined || spread === null) {
+          throw new Error('Spread not found');
+        }
+        if (settelmentFee === undefined || settelmentFee === null) {
+          throw new Error('settlement fee not found');
+        }
+
         let currentTimestamp = Date.now();
         let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
-        // const oneCTWallet = new ethers.Wallet(
-        //   oneCtPk!,
-        //   provider as ethers.providers.StaticJsonRpcProvider
-        // );
+
         let baseArgs = [
           address,
           toFixed(multiply(userInput, decimals), 0),
@@ -383,7 +397,9 @@ export const useBuyTradeActions = (userInput: string) => {
           oneCtPk,
           activeChain.id,
           configData.router
+          // spread.spread
         );
+
         let apiParams = {
           signature_timestamp: currentUTCTimestamp,
           strike: baseArgs[ArgIndex.Strike],
@@ -406,6 +422,9 @@ export const useBuyTradeActions = (userInput: string) => {
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
+          // spread: spread.spread,
+          // spread_sign_expiration: spread.spread_sign_expiration,
+          // spread_signature: spread.spread_signature,
           environment: activeChain.id,
           token: tokenName,
           strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
@@ -437,8 +456,6 @@ export const useBuyTradeActions = (userInput: string) => {
             provider,
             configData.multicall as string
           ).then((lockedAmount: string[]) => {
-            console.log(`useBuyTradeActions-lockedAmount: `, lockedAmount);
-
             setPriceCache((t) => ({
               ...t,
               [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount[0][0],
@@ -506,7 +523,6 @@ export const useBuyTradeActions = (userInput: string) => {
   const defaultApprovalAmount =
     '115792089237316195423570985008687907853269984665640564039457584007913129639935';
   const handleApproveClick = async (ammount = defaultApprovalAmount) => {
-    // console.log('goes in here');
     if (state.txnLoading > 1) {
       toastify({
         id: 'dddafsd3',
@@ -550,7 +566,6 @@ export const useBuyTradeActions = (userInput: string) => {
       const updatedApproval = await updateApprovalData();
 
       if (nonce !== updatedApproval?.nonce) {
-        console.log(`useBuyTradeActions-nonce: `, nonce, updatedApproval);
         return toastify({
           id: 'nonce changed in db',
           type: 'error',
@@ -671,10 +686,8 @@ const getLockedAmount = async (
       name: 'evaluateParams',
     },
   ];
-  console.log(`useBuyTradeActions-optionContract: `, calls);
   // const calls = [];
   const res = await viemMulticall(calls, provider, 'hellowthere');
-  console.log(`useBuyTradeActions-res: `, res);
   const callId = getCallId(optionContract, 'evaluateParams');
   if (!res?.[callId])
     return getLockedAmount(

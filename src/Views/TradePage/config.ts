@@ -12,7 +12,7 @@ export const appConfig = {
 
         booster: '0x29952C608Bf41A8a36AFD937471691932055E7b5',
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
-        router: '0x18d50aC65CED5F60Aa63eb358DB7BCF081529Ad5',
+        router: '0x6d65d507e1d2A8128E37203C84A45cDC1abE1Be0',
         signer_manager: '0xAAcAf779fdc0A7d8749Aa1FDc260a1C5Da5517B1',
         config_setter: '0x5C00a53A13F4c2818ce2D0f8759AcB07D0eB350b',
         v2_router: null,
@@ -153,11 +153,11 @@ export const appConfig = {
       },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.30-add-router/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
-    router: '0x075EEA84D1122A0c2F2A6C9265F8126F64087d44',
+    router: '0xFd1EDa553d25448383FBD72bBE4530182266ed8D',
     signer_manager: '0x983adc3d8853C4792Da5581C5e711d25BAC19042',
     booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
     config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
@@ -624,6 +624,19 @@ export const marketsForChart = {
     pythId:
       '0xf0d57deca57b3da2fe63a493f4c25925fdfd8edf834b20f93e1f84dbd1504d4a',
     pythGroup: 'Crypto',
+  },
+  USDSGD: {
+    category: 'Forex',
+    tv_id: 'USDSGD',
+    pair: 'USD-SGD',
+    price_precision: 1000000,
+    token0: 'USD',
+    token1: 'SGD',
+    full_name: 'United States Dollar',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/USDC.svg',
+    pythGroup: 'FX',
+    pythId:
+      '0x396a969a9c1480fa15ed50bc59149e2c0075a72fe8f458ed941ddec48bdb4918',
   },
 };
 

@@ -32,11 +32,11 @@ import { toFixed } from '@Utils/NumString';
 import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import {
   chartControlsSettingsAtom,
   closeConfirmationModalAtom,
@@ -57,7 +57,6 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { getAddress } from 'viem';
 import {
   getEarlyCloseStatus,
   getLockedAmount,
@@ -277,10 +276,9 @@ function drawPosition(
   chart: IChartWidgetApi,
   decimals: number,
   priceCache: any,
-  currentOI: string,
-  maXOI: string
+  spread: number
 ) {
-  const strike = getStrike(option, priceCache, currentOI, maXOI).strikePrice;
+  const strike = getStrike(option, priceCache, spread).strikePrice;
   // const idx = visualized.indexOf(option.queue_id);
   // console.log(strike, 'drawStrike');
   const openTimeStamp = option.open_timestamp;
@@ -715,7 +713,7 @@ export const MultiResolutionChart = ({
   };
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const rerenderPostion = useAtomValue(rerenderPositionAtom);
-  const readcalldata = useAtomValue(buyTradeDataAtom);
+  const { data: allSpreads } = useSpread();
 
   const { changeStrike } = useLimitOrderHandlers();
   const changeStrikeSafe = (trade: TradeType, strike: string) => {
@@ -787,6 +785,8 @@ export const MultiResolutionChart = ({
             updatedPos.expiration_time = pos.open_timestamp + pos.period;
           }
 
+          const spread = allSpreads?.[pos.market.tv_id].spread ?? 0;
+
           const currPositionsPacked = {
             positionRef: drawPosition(
               updatedPos,
@@ -798,8 +798,7 @@ export const MultiResolutionChart = ({
               widgetRef.current?.activeChart()!,
               getPoolInfo(pos.pool.pool).decimals,
               priceCache,
-              readcalldata.currentOIs[getAddress(pos.target_contract)],
-              readcalldata.maxOIs[getAddress(pos.target_contract)]
+              spread
             ),
             option: pos,
           };

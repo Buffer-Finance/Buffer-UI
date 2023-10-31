@@ -4,13 +4,11 @@ import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import BufferTable from '@Views/Common/BufferTable';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import { TradeType } from '@Views/TradePage/type';
 import { Launch } from '@mui/icons-material';
-import { useAtomValue } from 'jotai';
 import { useMedia } from 'react-use';
-import { getAddress } from 'viem';
 import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
@@ -45,8 +43,7 @@ export const CancelledTable: React.FC<{
   const isMobile = useMedia('(max-width:600px)');
   const isNotMobile = useMedia('(min-width:1200px)');
   const navigateToProfile = useNavigateToProfile();
-  const readcallData = useAtomValue(buyTradeDataAtom);
-
+  const { data: allSpreads } = useSpread();
   let strikePriceHeading = 'Strike Price';
   let tradeSizeHeading = 'Trade Size';
   if (isMobile) {
@@ -90,13 +87,10 @@ export const CancelledTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     if (trades === undefined) return <></>;
-    if (!readcallData) return <></>;
 
     const trade = trades?.[row];
     const poolInfo = getPoolInfo(trade.pool.pool);
-    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
-    const currentOi =
-      readcallData.currentOIs[getAddress(trade.target_contract)];
+    const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
 
     switch (col) {
       case TableColumn.User:
@@ -119,13 +113,7 @@ export const CancelledTable: React.FC<{
             </div>
           );
       case TableColumn.Strike:
-        return (
-          <StrikePriceComponent
-            trade={trade}
-            currentOI={currentOi}
-            maXOI={maxOi}
-          />
-        );
+        return <StrikePriceComponent trade={trade} spread={spread} />;
       case TableColumn.Asset:
         return <AssetCell currentRow={trade} split={isMobile} />;
 

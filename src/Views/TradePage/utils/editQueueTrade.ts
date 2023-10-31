@@ -35,7 +35,6 @@ const editQueueTrade = async (
     settlement_fee_sign_expiration,
     settlement_fee_signature,
   };
-  console.log(`index-edit-deb: `, params);
 
   return await axios.get(`${baseUrl}trade/edit/`, {
     params,

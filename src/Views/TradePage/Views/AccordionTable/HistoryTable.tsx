@@ -136,9 +136,7 @@ const HistoryTable: React.FC<{
     const minClosingTime = getExpiry(trade);
     switch (col) {
       case TableColumn.Strike:
-        return (
-          <StrikePriceComponent trade={trade} currentOI={'0'} maXOI={'0'} />
-        );
+        return <StrikePriceComponent trade={trade} spread={0} />;
       case TableColumn.Asset:
         return (
           <AssetCell
@@ -339,8 +337,7 @@ const HistoryTable: React.FC<{
               <div className={headerClass}>Strike</div>
               <StrikePriceComponent
                 trade={trade}
-                currentOI={'0'}
-                maXOI={'0'}
+                spread={0}
                 className={descClass}
               />
             </ColumnGap>

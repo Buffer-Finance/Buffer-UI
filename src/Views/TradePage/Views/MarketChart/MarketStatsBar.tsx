@@ -5,10 +5,10 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { usePriceChange } from '@Views/TradePage/Hooks/usePriceChange';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { chartNumberAtom } from '@Views/TradePage/atoms';
 import { getMinimumValue, joinStrings } from '@Views/TradePage/utils';
-import { getMaxSpread } from '@Views/TradePage/utils/getSafeStrike';
 import { Skeleton } from '@mui/material';
 import {
   ClickEvent,
@@ -97,10 +97,8 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
   const [menuState, toggleMenu] = useMenuState({ transition: true });
   const anchorProps = useClick(menuState.state, toggleMenu);
   const readcallData = useAtomValue(buyTradeDataAtom);
-  // const { currentPrice, precision } = useCurrentPrice({
-  //   token0: activeMarket?.token0,
-  //   token1: activeMarket?.token1,
-  // });
+  const { data: allSpreads } = useSpread();
+
   let maxFee = null;
   let maxOI = null;
   let currentOI = null;
@@ -128,21 +126,9 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
         '100'
       )
     );
-
-    spread =
-      getMaxSpread(
-        switchPool.SpreadConfig1,
-        switchPool.SpreadConfig2,
-        switchPool.SpreadFactor,
-        switchPool.IV
-      ) / 1e6;
-
-    //convert the spread into percentage
-    // spread = multiply(
-    //   divide(spread, currentPrice.toString()) ?? '0',
-    //   2
-    // ) as string;
   }
+  if (allSpreads && activeMarket)
+    spread = allSpreads?.[activeMarket.tv_id].spread;
 
   if (!activeMarket || !switchPool) {
     return <></>;
@@ -197,7 +183,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
               svgProps={{ fill: '#ffffff' }}
               className="scale-75 mt-1"
             />
-            <Display data={spread} precision={4} unit="%" />
+            <Display data={spread / 1e6} precision={4} unit="%" />
           </div>
         ),
     },

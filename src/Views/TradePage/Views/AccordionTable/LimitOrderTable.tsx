@@ -18,9 +18,9 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { GreyBtn } from '@Views/Common/V2-Button';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import {
   closeLoadingAtom,
   selectedOrderToEditAtom,
@@ -28,7 +28,6 @@ import {
 import { TradeType } from '@Views/TradePage/type';
 import { secondsToHHMM } from '@Views/TradePage/utils';
 import { Launch } from '@mui/icons-material';
-import { getAddress } from 'viem';
 import { loeditLoadingAtom } from '../EditModal';
 import { AssetCell } from './AssetCell';
 import {
@@ -64,7 +63,6 @@ const LimitOrderTable = ({
   const { getPoolInfo } = usePoolInfo();
   const { registeredOneCT } = useOneCTWallet();
   const editLoading = useAtomValue(loeditLoadingAtom);
-  const readcallData = useAtomValue(buyTradeDataAtom);
   const { viewOnlyMode } = useUserAccount();
 
   const headNameArray = [
@@ -89,14 +87,11 @@ const LimitOrderTable = ({
   const handleCancel = async (trade: TradeType) => {
     cancelHandler(trade);
   };
+  const { data: allSpreads } = useSpread();
   const toastify = useToast();
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
-    if (!readcallData) return <></>;
-
-    const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
-    const currentOi =
-      readcallData.currentOIs[getAddress(trade.target_contract)];
+    const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
 
     const marketPrecision = trade.market.price_precision.toString().length - 1;
     const poolInfo = getPoolInfo(trade.pool.pool);
@@ -104,13 +99,7 @@ const LimitOrderTable = ({
     const isModificationPending = trade.pending_operation == 'Processing EDIT';
     switch (col) {
       case TableColumn.TriggerPrice:
-        return (
-          <StrikePriceComponent
-            trade={trade}
-            currentOI={currentOi}
-            maXOI={maxOi}
-          />
-        );
+        return <StrikePriceComponent trade={trade} spread={spread} />;
       case TableColumn.Asset:
         return <AssetCell currentRow={trade} />;
       case TableColumn.CurrentPrice:
