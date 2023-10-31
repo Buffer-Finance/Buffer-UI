@@ -33,6 +33,7 @@ export interface IreadCall {
   abi: any;
   name: string;
   params: any[];
+  id: string;
 }
 
 export interface TournamentMeta {
@@ -70,4 +71,5 @@ export interface ItournamentData {
   id: number;
   state: string;
   rewardPool: string;
+  isUserEligible: boolean;
 }

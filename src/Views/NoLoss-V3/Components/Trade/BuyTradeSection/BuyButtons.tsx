@@ -7,6 +7,7 @@ import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
 import { useMarketPrice } from '@Views/NoLoss-V3/Hooks/useMarketPrice';
 import {
   activeMarketDataAtom,
+  activeTournamentDataReadOnlyAtom,
   noLossTradeSizeAtom,
   userAtom,
 } from '@Views/NoLoss-V3/atoms';
@@ -23,12 +24,36 @@ export const BuyButtons = () => {
   const allowance = '15';
   const user = useAtomValue(userAtom);
   const userInput = useAtomValue(noLossTradeSizeAtom);
+  const activeTournamentData = useAtomValue(activeTournamentDataReadOnlyAtom);
+
   if (!user)
     return (
       <ConnectionRequired>
         <></>
       </ConnectionRequired>
     );
+  if (!activeTournamentData)
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        No Active Tournament
+      </BlueBtn>
+    );
+
+  if (activeTournamentData.data?.state.toLowerCase() === 'completed') {
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        Tournament is ended.
+      </BlueBtn>
+    );
+  }
+
+  if (activeTournamentData.data?.state.toLowerCase() === 'upcoming') {
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        Tournament is not started yet.
+      </BlueBtn>
+    );
+  }
 
   if (!activeMarket || !price)
     return <Skeleton className="h4 full-width sr lc mb3" />;

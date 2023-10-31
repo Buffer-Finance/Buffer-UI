@@ -1,26 +1,21 @@
 import { divide } from '@Utils/NumString/stringArithmatics';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { BlueBtn } from '@Views/Common/V2-Button';
 import { useAtomValue } from 'jotai';
-import { useUpdateActiveTournament } from '../Hooks/useUpdateActiveTournament';
-import { activeTournamentIdAtom } from '../atoms';
-import { ItournamentData } from '../types';
-import { NoLossV3Timer } from './NoLossV3Timer';
-import { MIcon } from './SVGs/Micon';
-import { RankOne } from './SVGs/RankOneIcon';
-import { Star } from './SVGs/Star';
-import { TradeIcon } from './SVGs/TradeIcon';
-
-export const tournamentButtonStyles =
-  '!text-f12 flex items-center gap-x-2 !h-fit !w-fit px-4 py-2';
+import { activeTournamentIdAtom } from '../../atoms';
+import { ItournamentData } from '../../types';
+import { NoLossV3Timer } from '../NoLossV3Timer';
+import { MIcon } from '../SVGs/Micon';
+import { RankOne } from '../SVGs/RankOneIcon';
+import { Star } from '../SVGs/Star';
+import { TotalWinnersTrophy } from '../SVGs/TotalWinnersTrophy';
+import { TournamentCardButtons } from './TournamentCardButtons';
 
 export const TradepageTournamentCard: React.FC<{
   tournament: ItournamentData;
 }> = ({ tournament }) => {
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
-  const { setActiveTournament } = useUpdateActiveTournament();
-  function buyPlayTokens() {}
+
   return (
     <div
       className={`w-[100%]  background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
@@ -28,10 +23,6 @@ export const TradepageTournamentCard: React.FC<{
           ? 'border-[var(--bg-signature)] '
           : 'border-[transparent]'
       }`}
-      role="button"
-      onClick={() => {
-        // if (activeTournament.state == 'Live') setactiveTid(tournament.id);
-      }}
     >
       <div className="flex items-center justify-between">
         <div className="text-3 font-semibold text-f12">
@@ -74,7 +65,7 @@ export const TradepageTournamentCard: React.FC<{
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-between mt-3">
+      <div className="flex items-center justify-start mt-3 gap-4">
         <div className="flex items-center text-f12 ">
           <RankOne />
           <div className="mt-1  text-1 ml-2">
@@ -100,32 +91,16 @@ export const TradepageTournamentCard: React.FC<{
             Upto {tournament.tournamentConditions.maxParticipants}
           </div>
         </NumberTooltip>
+
+        <div className="flex items-center gap-2">
+          <TotalWinnersTrophy />
+          <div className="text-f12">?</div>
+        </div>
       </div>
-      <div className="flex items-center justify-center gap-x-[5px] mt-4">
-        {tournament.state.toLowerCase() == 'live' && (
-          <BlueBtn
-            className={tournamentButtonStyles}
-            isDisabled={tournament.id === activeTournamentId}
-            onClick={() => {
-              setActiveTournament(tournament.id);
-            }}
-          >
-            <TradeIcon />
-            Trade
-          </BlueBtn>
-        )}
-        <BlueBtn className={tournamentButtonStyles} onClick={buyPlayTokens}>
-          Entry
-          <Display
-            data={divide(
-              tournament.tournamentMeta.ticketCost,
-              tournament.buyinTokenDecimals
-            )}
-            unit={tournament.buyinTokenSymbol}
-            precision={0}
-          />
-        </BlueBtn>
-      </div>
+      <TournamentCardButtons
+        tournament={tournament}
+        activeTournamentId={activeTournamentId}
+      />
     </div>
   );
 };

@@ -39,7 +39,7 @@ export interface IConfirmationModal {
  * @param overrides An overrides object to pass to the method. gasPrice passed in here will take priority over the price returned by useGasPrice
  * @returns https://docs.ethers.io/v5/api/providers/types/#providers-TransactionReceipt
  */
-export function useWriteCall(contractAddress: string, abi: any[]) {
+export function useWriteCall() {
   const { dispatch } = useGlobal();
   const toastify = useToast();
   const { simulateContract } = usePublicClient();
@@ -50,6 +50,8 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
 
   const write = async (
+    contractAddress: string,
+    abi: any[],
     callBack: (a?: any) => void,
     methodName: string,
     methodArgs: any[] = [],

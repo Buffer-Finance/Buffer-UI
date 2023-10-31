@@ -3,6 +3,7 @@ import { HHMMToSeconds } from '@Views/TradePage/utils';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { Chain } from 'viem';
+import { erc20ABI } from 'wagmi';
 import TournamentLeaderboardABI from './ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from './ABIs/TournamentManager.json';
 import TournamentReaderABI from './ABIs/TournamentReader.json';
@@ -39,6 +40,84 @@ export const activeMarketDataAtom = atom<InoLossMarket | undefined>((get) => {
   return markets.find((market) => market.asset === activeMarketId);
 });
 
+export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
+  const tournamentsData = get(allTournamentsDataReadOnlyAtom);
+  const activeChain = get(activeChainAtom);
+  const user = get(userAtom);
+
+  const response: {
+    calls: IreadCall[] | null;
+    result:
+      | {
+          buyInTokenToManagerAllowance:
+            | {
+                id: string;
+                allowance: string | undefined;
+              }[]
+            | undefined;
+        }
+      | undefined;
+  } = { calls: null, result: undefined };
+
+  if (!tournamentsData || !activeChain || !user) return response;
+  if (user.userAddress === undefined) return response;
+  const config = getNoLossV3Config(activeChain.id);
+
+  const filteredTournamentsData: ItournamentData[] = [];
+  tournamentsData.forEach((tournament) => {
+    if (
+      tournament.state.toLowerCase() !== 'completed' &&
+      tournament.state.toLowerCase() !== 'created' &&
+      !filteredTournamentsData.find(
+        (filteredTournament) =>
+          filteredTournament.tournamentMeta.buyinToken ===
+          tournament.tournamentMeta.buyinToken
+      )
+    )
+      filteredTournamentsData.push(tournament);
+  });
+
+  response.calls = filteredTournamentsData.map((tournament) => {
+    return {
+      address: tournament.tournamentMeta.buyinToken,
+      abi: erc20ABI,
+      name: 'allowance',
+      params: [user.userAddress, config.manager],
+      id: getCallId(tournament.tournamentMeta.buyinToken, 'allowance', [
+        user.userAddress,
+        config.manager,
+      ]),
+    };
+  });
+
+  const readcallResponse = get(noLossReadcallResponseReadOnlyAtom);
+
+  if (
+    readcallResponse !== undefined &&
+    tournamentsData !== undefined &&
+    activeChain !== undefined &&
+    user !== undefined &&
+    response.calls !== null
+  ) {
+    const buyInTokenToManagerAllowanceIds = tournamentsData.map((tournament) =>
+      getCallId(tournament.tournamentMeta.buyinToken, 'allowance', [
+        user.userAddress,
+        config.manager,
+      ])
+    );
+
+    response.result = {
+      buyInTokenToManagerAllowance: buyInTokenToManagerAllowanceIds.map(
+        (id) => {
+          return { allowance: readcallResponse[id]?.[0], id };
+        }
+      ),
+    };
+  }
+
+  return response;
+});
+
 export const noLossReadCallsReadOnlyAtom = atom((get) => {
   const tournaments = get(tournamentIdsAtom);
   const activeChain = get(activeChainAtom);
@@ -68,6 +147,7 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
         abi: TournamentReaderABI,
         name: 'bulkFetchTournaments',
         params: [tournamentIds],
+        id: getCallId(config.tournament_reader, 'bulkFetchTournaments'),
       },
     ];
 
@@ -82,17 +162,29 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
     });
     readcalls.push(...rewardPoolCalls);
 
-    if (
-      activeTournamentId !== undefined &&
-      user !== undefined &&
-      user.userAddress !== undefined
-    ) {
-      readcalls.push({
-        address: config.leaderboard,
-        abi: TournamentLeaderboardABI,
-        name: 'userTournamentRank',
-        params: [activeTournamentId, user.userAddress],
-      });
+    if (user !== undefined && user.userAddress !== undefined) {
+      readcalls.push(
+        ...tournamentIds.map((tournamentId) => {
+          return {
+            address: config.manager,
+            abi: TournamentManagerABI,
+            name: 'tournamentUsers',
+            params: [tournamentId, user.userAddress],
+            id: `${config.manager}tournamentUsers${tournamentId}`,
+          };
+        })
+      );
+      if (activeTournamentId !== undefined)
+        readcalls.push({
+          address: config.leaderboard,
+          abi: TournamentLeaderboardABI,
+          name: 'userTournamentRank',
+          params: [activeTournamentId, user.userAddress],
+          id: getCallId(config.leaderboard, 'userTournamentRank', [
+            activeTournamentId,
+            user.userAddress,
+          ]),
+        });
     }
     response.calls = readcalls;
 
@@ -107,14 +199,21 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
         getCallId(config.manager, 'tournamentRewardPools', [tournamentId])
       );
       const rewardPools = rewardPoolsIds.map((id) => readcallResponse[id]?.[0]);
+      const userEligibilityIds = tournamentIds.map((tournamentId) =>
+        getCallId(config.manager, 'tournamentUsers', [tournamentId])
+      );
+      const userEligibility = userEligibilityIds.map(
+        (id) => readcallResponse[id]?.[0]
+      );
       response.result = {
         tournamentData: readcallResponse[tournamentDataId][0].map(
           (data: ItournamentData, index: number) => {
             return {
               ...data,
-              id: tournaments[index].id,
+              id: +tournaments[index].id,
               state: tournaments[index].state,
               rewardPool: rewardPools[index],
+              isUserEligible: userEligibility[index],
             };
           }
         ),
@@ -164,7 +263,7 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
 
   const filteredTournamentsData = allTournamentsData.filter((tournament) => {
     if (activeMyAllTab === 'my') {
-      return false;
+      return tournament.isUserEligible;
     } else {
       return true;
     }
