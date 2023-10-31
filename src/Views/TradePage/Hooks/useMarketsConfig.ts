@@ -35,7 +35,7 @@ export const useMarketsConfig = () => {
     // console.log(`response: `, response);
     return response;
   }, [data]);
-  console.log(`res: `, res);
+  // console.log(`res: `, res);
   return res;
 };
 

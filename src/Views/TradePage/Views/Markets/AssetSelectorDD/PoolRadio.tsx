@@ -1,13 +1,36 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { RadioTextHead } from '@Views/TradePage/Components/TextWrapper';
-import { useActivePoolObject } from '@Views/TradePage/Hooks/useActivePoolObject';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { radioValueAtom } from '@Views/TradePage/atoms';
+import { poolInfoType } from '@Views/TradePage/type';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 import styled from '@emotion/styled';
 import { Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
+import { useMemo } from 'react';
 
 export const PoolRadio: React.FC = () => {
-  const { poolNameList: tradingAssets } = useActivePoolObject();
+  const { activeChain } = useActiveChain();
+  const config = getConfig(activeChain.id);
+  const markets = useMarketsConfig();
+  const tradingAssets = useMemo(() => {
+    if (!markets) return [];
+    const assetsSet = new Set<string>();
+    markets.forEach((market) => {
+      market.pools.forEach((pool) => {
+        assetsSet.add(
+          (
+            config.poolsInfo[
+              pool.pool as keyof typeof config.poolsInfo
+            ] as poolInfoType
+          ).token
+        );
+      });
+    });
+    return Array.from(assetsSet);
+  }, [markets]);
+
   const [selectedAsset, setSelectedAsset] = useAtom(radioValueAtom);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
