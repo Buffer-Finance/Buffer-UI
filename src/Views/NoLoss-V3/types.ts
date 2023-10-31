@@ -72,4 +72,5 @@ export interface ItournamentData {
   state: string;
   rewardPool: string;
   isUserEligible: boolean;
+  isTradingApproved?: boolean;
 }

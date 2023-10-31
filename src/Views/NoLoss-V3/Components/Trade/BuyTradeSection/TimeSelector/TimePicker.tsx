@@ -138,22 +138,26 @@ export const TimePicker: React.FC<{
   );
 };
 
+export function getDurationError(
+  currentTime: string,
+  maxDuration: string,
+  minDuration: string
+) {
+  if (HHMMToSeconds(currentTime) > HHMMToSeconds(maxDuration)) {
+    return `Maximum duration is ${maxDuration}`;
+  } else if (HHMMToSeconds(currentTime) < HHMMToSeconds(minDuration)) {
+    return `Minimum duration is ${minDuration}`;
+  } else {
+    return null;
+  }
+}
+
 const TimerError: React.FC<{
   currentTime: string;
   minDuration: string;
   maxDuration: string;
 }> = ({ currentTime, maxDuration, minDuration }) => {
-  const [error, setError] = useState<null | string>(null);
-
-  useEffect(() => {
-    if (HHMMToSeconds(currentTime) > HHMMToSeconds(maxDuration)) {
-      setError(`Maximum duration is ${maxDuration}`);
-    } else if (HHMMToSeconds(currentTime) < HHMMToSeconds(minDuration)) {
-      setError(`Minimum duration is ${minDuration}`);
-    } else {
-      setError(null);
-    }
-  }, [currentTime, maxDuration, minDuration]);
+  const error = getDurationError(currentTime, maxDuration, minDuration);
   return (
     <Trans>
       <span className="text-red whitespace-nowrap">{error}</span>

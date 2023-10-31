@@ -2,7 +2,6 @@ import { escapeRegExp, inputRegex } from '@Views/NoLoss-V3/helpers/inputRegex';
 
 export const TradeSizeInput: React.FC<{
   maxTradeSize: string;
-  balance: string;
   minTradeSize: string;
   onSubmit?: () => void;
   tradeSize: string;
@@ -10,7 +9,6 @@ export const TradeSizeInput: React.FC<{
   setMaxValue: () => void;
 }> = ({
   maxTradeSize,
-  balance,
   onSubmit,
   minTradeSize,
   setTradeSize,

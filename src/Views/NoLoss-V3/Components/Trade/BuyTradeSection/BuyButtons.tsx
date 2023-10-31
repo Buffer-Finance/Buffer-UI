@@ -1,38 +1,63 @@
 import { useToast } from '@Contexts/Toast';
+import { useWriteCall } from '@Hooks/useWriteCall';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
-import { lt } from '@Utils/NumString/stringArithmatics';
+import { toFixed } from '@Utils/NumString';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
 import { useMarketPrice } from '@Views/NoLoss-V3/Hooks/useMarketPrice';
 import {
-  activeMarketDataAtom,
+  activeChainAtom,
   activeTournamentDataReadOnlyAtom,
+  noLossReadCallsReadOnlyAtom,
   noLossTradeSizeAtom,
   userAtom,
 } from '@Views/NoLoss-V3/atoms';
-import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { getNoLossV3Config } from '@Views/NoLoss-V3/helpers/getNolossV3Config';
+import { InoLossMarket } from '@Views/NoLoss-V3/types';
+import { getSlippageError } from '@Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
+import { timeSelectorAtom, tradeSettingsAtom } from '@Views/TradePage/atoms';
+import { secondsToHHMM } from '@Views/TradePage/utils';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
+import { useState } from 'react';
+import RouterABI from '../../../ABIs/NoLossRouter.json';
+import TournamentManagerABI from '../../../ABIs/TournamentManager.json';
+import { getDurationError } from './TimeSelector/TimePicker';
+import { getTradeSizeError } from './TradeSizeSelector';
 
-export const BuyButtons = () => {
-  const { handleApproveClick, buyHandler, loading, revokeApproveClick } =
-    useBuyTradeActions();
+export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
+  activeMarket,
+}) => {
   const toastify = useToast();
-  const activeMarket = useAtomValue(activeMarketDataAtom);
   const { price } = useMarketPrice(activeMarket?.chartData.tv_id);
-  const allowance = '15';
+  const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
   const user = useAtomValue(userAtom);
   const userInput = useAtomValue(noLossTradeSizeAtom);
   const activeTournamentData = useAtomValue(activeTournamentDataReadOnlyAtom);
+  const currentTime = useAtomValue(timeSelectorAtom);
+  const activeChain = useAtomValue(activeChainAtom);
+  const { writeCall } = useWriteCall();
+  const settings = useAtomValue(tradeSettingsAtom);
+  const [loadingState, setLoadingState] = useState<
+    'up' | 'down' | 'approve' | 'none'
+  >('none');
 
+  if (!activeChain)
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        No Active Chain
+      </BlueBtn>
+    );
   if (!user)
     return (
       <ConnectionRequired>
         <></>
       </ConnectionRequired>
     );
-  if (!activeTournamentData)
+
+  if (activeTournamentData === undefined)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
         No Active Tournament
@@ -66,60 +91,162 @@ export const BuyButtons = () => {
       </BlueBtn>
     );
 
-  if (lt(allowance, userInput || '0')) {
-    return <BlueBtn onClick={() => handleApproveClick()}>Approve</BlueBtn>;
+  if (readCallResults === undefined)
+    return <Skeleton className="h4 full-width sr lc mb3" />;
+  const { isTradingApproved } = readCallResults;
+  if (isTradingApproved === undefined)
+    return <Skeleton className="h4 full-width sr lc mb3" />;
+
+  const config = getNoLossV3Config(activeChain.id);
+
+  async function handleApproveClick(revoke: boolean) {
+    try {
+      setLoadingState('approve');
+      await writeCall(
+        config.manager,
+        TournamentManagerABI,
+        (response) => {
+          console.log(response);
+        },
+        'setApprovalForAll',
+        [config.router, !revoke]
+      );
+    } catch (e) {
+      toastify({
+        msg: 'Error while approving ' + (e as Error).message,
+        type: 'error',
+        id: 'approve-error-no-loss',
+      });
+    } finally {
+      setLoadingState('none');
+    }
   }
 
-  const buyTrade = (isUp?: boolean) => {
-    // if (!account) return openConnectModal?.();
-    // if (activeAssetPrice == null)
-    //   return toastify({
-    //     type: 'error',
-    //     msg: 'Price not found',
-    //     id: 'lo no strike',
-    //   });
-    // // if (lt(allowance || '0', amount.toString() || '0'))
-    // //   return setIsApproveModalOpen(true);
-    // let strike = activeAssetPrice.price;
-    // let limitOrderExpiry = '0';
-    // if (tradeType == 'Limit') {
-    //   if (!limitStrike)
-    //     return toastify({
-    //       type: 'error',
-    //       msg: 'Please select a strike price',
-    //       id: 'lo no strike',
-    //     });
-    //   limitOrderExpiry = expiry ?? '0';
-    //   // console.log(`BuyButtons-limitOrderExpiry: `, limitOrderExpiry);
-    //   strike = limitStrike;
-    // }
-    // buyHandler({
-    //   is_up: isUp ? true : false,
-    //   strike,
-    //   limitOrderExpiry: Number(limitOrderExpiry),
-    //   strikeTimestamp: activeAssetPrice.time,
-    // });
-  };
+  if (isTradingApproved === false) {
+    return (
+      <BufferButton
+        onClick={() => {
+          handleApproveClick(false);
+        }}
+        isLoading={loadingState === 'approve'}
+        className="bg-blue"
+        isDisabled={loadingState !== 'none'}
+      >
+        Approve
+      </BufferButton>
+    );
+  }
+
+  async function buyTrade(isAbove: boolean) {
+    try {
+      const userBalance = readCallResults?.activeTournamentBalance;
+      if (userBalance === undefined)
+        throw new Error('User balance is undefined');
+      const tradeSizeError = getTradeSizeError(
+        divide(activeMarket.config.minFee, 18) as string,
+        divide(activeMarket.config.maxFee, 18) as string,
+        userBalance,
+        userInput
+      );
+      if (tradeSizeError) throw new Error(tradeSizeError);
+
+      const durationError = getDurationError(
+        currentTime.HHMM,
+        secondsToHHMM(+activeMarket.config.maxPeriod),
+        secondsToHHMM(+activeMarket.config.minPeriod)
+      );
+      if (durationError) throw new Error(durationError);
+
+      const slippageError = getSlippageError(settings.slippageTolerance);
+      if (slippageError !== null) throw new Error(slippageError);
+
+      if (!activeTournamentData)
+        throw new Error('No active tournament data found');
+
+      setLoadingState(isAbove ? 'up' : 'down');
+      await writeCall(
+        config.router,
+        RouterABI,
+        (response) => {
+          if (response !== undefined) {
+            const content = (
+              <div className="flex flex-col gap-y-2 text-f12 ">
+                <div className="nowrap font-[600]">Trade order placed</div>
+                <div className="flex items-center">
+                  {activeMarket.chartData.token0 +
+                    '-' +
+                    activeMarket.chartData.token1}
+                  &nbsp;&nbsp;
+                  <span className="!text-3">to go</span>&nbsp;
+                  {isAbove ? (
+                    <>
+                      <UpIcon className="text-green scale-125" /> &nbsp;Higher
+                    </>
+                  ) : (
+                    <>
+                      <DownIcon className="text-red scale-125" />
+                      &nbsp; Lower
+                    </>
+                  )}
+                </div>
+                <div>
+                  <span>
+                    <span className="!text-3">Total amount:</span>
+                    {userInput}&nbsp;
+                  </span>
+                </div>
+              </div>
+            );
+            toastify({
+              price,
+              type: 'success',
+              timings: 20,
+              body: null,
+              msg: content,
+            });
+          }
+          console.log(response);
+        },
+        'initiateTrade',
+        [
+          toFixed(multiply(userInput, 18), 0),
+          currentTime.seconds,
+          isAbove,
+          activeMarket.address,
+          toFixed(multiply(('' + price).toString(), 8), 0),
+          toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+          0,
+          activeTournamentData.id,
+        ]
+      );
+    } catch (e) {
+      toastify({
+        msg: (e as Error).message,
+        type: 'error',
+        id: 'buy-error-no-loss',
+      });
+    } finally {
+      setLoadingState('none');
+    }
+  }
 
   return (
     <>
       <div className="flex gap-2 items-center">
         <BufferButton
           onClick={() => buyTrade(true)}
-          isLoading={
-            !!loading && typeof loading !== 'number' && loading?.is_up === true
-          }
+          isLoading={loadingState === 'up'}
+          isDisabled={loadingState !== 'none'}
           className={`bg-green`}
         >
           <UpIcon className="mr-[6px] scale-150" />
           Up
         </BufferButton>
         <BufferButton
-          isLoading={
-            !!loading && typeof loading !== 'number' && loading?.is_up === false
-          }
+          isLoading={loadingState === 'down'}
           className={`bg-red`}
           onClick={() => buyTrade(false)}
+          isDisabled={loadingState !== 'none'}
         >
           <>
             <DownIcon className="mr-[6px] scale-150" />
@@ -130,7 +257,9 @@ export const BuyButtons = () => {
       <div
         className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13 mt-3"
         role={'button'}
-        onClick={() => revokeApproveClick()}
+        onClick={() => {
+          handleApproveClick(true);
+        }}
       >
         Revoke Approval
       </div>

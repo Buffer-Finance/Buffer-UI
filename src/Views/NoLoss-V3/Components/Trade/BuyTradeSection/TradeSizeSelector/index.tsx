@@ -1,6 +1,9 @@
 import { toFixed } from '@Utils/NumString';
 import { divide, gt, lt } from '@Utils/NumString/stringArithmatics';
-import { noLossTradeSizeAtom } from '@Views/NoLoss-V3/atoms';
+import {
+  noLossReadCallsReadOnlyAtom,
+  noLossTradeSizeAtom,
+} from '@Views/NoLoss-V3/atoms';
 import { InoLossMarket } from '@Views/NoLoss-V3/types';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import {
@@ -11,7 +14,7 @@ import {
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
 import { getMaximumValue, getMinimumValue } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useCallback } from 'react';
 import { TradeSizeInput } from './TradeSizeInput';
 import { WalletBalance } from './WalletBalance';
@@ -29,13 +32,17 @@ export const TradeSizeSelector: React.FC<{
   const decimals = 18;
   const minFee = divide(activeMarket.config.minFee, decimals) as string;
   const maxFee = divide(activeMarket.config.maxFee, decimals) as string;
-  const balance = '0';
+  const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
+  const balance = readCallResults?.activeTournamentBalance;
   const error = getTradeSizeError(minFee, maxFee, balance, tradeSize);
 
   const setMaxValue = useCallback(
     () =>
       setTradeSize(
-        getMaximumValue(toFixed(getMinimumValue(maxFee, balance), 2), '0')
+        getMaximumValue(
+          toFixed(getMinimumValue(maxFee, balance ?? '0'), 2),
+          '0'
+        )
       ),
     [maxFee, balance]
   );
@@ -48,14 +55,13 @@ export const TradeSizeSelector: React.FC<{
             <BuyTradeHeadText>Trade Size</BuyTradeHeadText>
           </RowGap>
 
-          <WalletBalance balance={'dummy'} unit={''} />
+          <WalletBalance balance={balance} unit={''} decimals={18} />
         </RowBetween>
         <RowGapItemsStretched gap="0px" className="w-full">
           <TradeSizeInput
             maxTradeSize={maxFee}
             minTradeSize={minFee}
             onSubmit={onSubmit}
-            balance={balance}
             setMaxValue={setMaxValue}
             setTradeSize={setTradeSize}
             tradeSize={tradeSize}
@@ -72,7 +78,7 @@ export const TradeSizeSelector: React.FC<{
 export function getTradeSizeError(
   minTradeSize: string,
   maxTradeSize: string,
-  balance: string,
+  balanceWithDecimals: string | undefined,
   tradeSize: string
 ) {
   let error = '';
@@ -80,7 +86,10 @@ export function getTradeSizeError(
     error = `Min trade size is ${minTradeSize}`;
   } else if (gt(tradeSize || '0', maxTradeSize)) {
     error = `Max trade size is ${maxTradeSize}`;
-  } else if (gt(tradeSize || '0', balance)) {
+  } else if (
+    balanceWithDecimals &&
+    gt(tradeSize || '0', divide(balanceWithDecimals, 18) as string)
+  ) {
     error = 'Insufficient balance';
   }
 

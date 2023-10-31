@@ -23,7 +23,7 @@ export const BuyTradeSection = () => {
       <TradeSizeSelector activeMarket={activeMarket} />
       <CurrentPrice activeMarket={activeMarket} />
       <PayoutProfit activeMarket={activeMarket} />
-      <BuyButtons />
+      <BuyButtons activeMarket={activeMarket} />
     </BuyTradeSectionBackground>
   );
 };

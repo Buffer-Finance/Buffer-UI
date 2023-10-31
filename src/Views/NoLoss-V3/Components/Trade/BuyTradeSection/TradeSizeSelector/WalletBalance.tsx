@@ -1,10 +1,13 @@
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { SettingsText } from '@Views/TradePage/Components/TextWrapper';
+import { Skeleton } from '@mui/material';
 
 export const WalletBalance: React.FC<{
-  balance: string | number;
+  balance: string | number | undefined;
   unit: string;
-}> = ({ balance, unit }) => {
+  decimals: number;
+}> = ({ balance, unit, decimals }) => {
   return (
     <RowGap gap="4px">
       <svg
@@ -30,10 +33,13 @@ export const WalletBalance: React.FC<{
           </clipPath>
         </defs>
       </svg>
-
-      <SettingsText>
-        {balance}&nbsp;{unit}
-      </SettingsText>
+      {balance === undefined ? (
+        <Skeleton className="w-[40px] !h-5 lc " />
+      ) : (
+        <SettingsText>
+          {divide(balance, decimals)}&nbsp;{unit}
+        </SettingsText>
+      )}
     </RowGap>
   );
 };

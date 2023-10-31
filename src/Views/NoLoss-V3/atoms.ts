@@ -130,6 +130,8 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
       | {
           tournamentData: ItournamentData[] | undefined;
           userRank: string | undefined;
+          isTradingApproved?: boolean;
+          activeTournamentBalance?: string | undefined;
         }
       | undefined;
   } = { calls: null, result: undefined };
@@ -163,6 +165,16 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
     readcalls.push(...rewardPoolCalls);
 
     if (user !== undefined && user.userAddress !== undefined) {
+      readcalls.push({
+        address: config.manager,
+        abi: TournamentManagerABI,
+        name: 'isApprovedForAll',
+        params: [user.userAddress, config.router],
+        id: getCallId(config.manager, 'isApprovedForAll', [
+          user.userAddress,
+          config.router,
+        ]),
+      });
       readcalls.push(
         ...tournamentIds.map((tournamentId) => {
           return {
@@ -175,16 +187,24 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
         })
       );
       if (activeTournamentId !== undefined)
-        readcalls.push({
-          address: config.leaderboard,
-          abi: TournamentLeaderboardABI,
-          name: 'userTournamentRank',
-          params: [activeTournamentId, user.userAddress],
-          id: getCallId(config.leaderboard, 'userTournamentRank', [
-            activeTournamentId,
-            user.userAddress,
-          ]),
-        });
+        readcalls.push(
+          ...[
+            {
+              address: config.leaderboard,
+              abi: TournamentLeaderboardABI,
+              name: 'userTournamentRank',
+              params: [activeTournamentId, user.userAddress],
+              id: getCallId(config.leaderboard, 'userTournamentRank'),
+            },
+            {
+              address: config.manager,
+              abi: TournamentManagerABI,
+              name: 'balanceOf',
+              params: [user.userAddress, activeTournamentId],
+              id: getCallId(config.manager, 'balanceOf'),
+            },
+          ]
+        );
     }
     response.calls = readcalls;
 
@@ -195,6 +215,7 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
         'bulkFetchTournaments'
       );
       const userRankId = getCallId(config.leaderboard, 'userTournamentRank');
+      const activeTournamentBalanceId = getCallId(config.manager, 'balanceOf');
       const rewardPoolsIds = tournamentIds.map((tournamentId) =>
         getCallId(config.manager, 'tournamentRewardPools', [tournamentId])
       );
@@ -205,6 +226,7 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
       const userEligibility = userEligibilityIds.map(
         (id) => readcallResponse[id]?.[0]
       );
+
       response.result = {
         tournamentData: readcallResponse[tournamentDataId][0].map(
           (data: ItournamentData, index: number) => {
@@ -218,7 +240,21 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
           }
         ),
         userRank: readcallResponse[userRankId]?.[0],
+        activeTournamentBalance:
+          readcallResponse[activeTournamentBalanceId]?.[0],
       };
+
+      if (user !== undefined && user.userAddress !== undefined) {
+        const isTradingApprovedId = getCallId(
+          config.manager,
+          'isApprovedForAll',
+          [user.userAddress, config.router]
+        );
+        response.result = {
+          ...response.result,
+          isTradingApproved: readcallResponse[isTradingApprovedId]?.[0],
+        };
+      }
     }
   }
   return response;
