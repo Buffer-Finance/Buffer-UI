@@ -2,18 +2,18 @@ import LockIcon from '@SVG/Elements/LockIcon';
 import TableAssetCell from '@Views/Common/BufferTable/TableAssetCell';
 import { PairTokenImage } from '@Views/Common/PairTokenImage';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { TradeType } from '@Views/TradePage/type';
+import { IGQLHistory } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
 import { UpDownChip } from './UpDownChip';
 
 export const AssetCell: React.FC<{
-  currentRow: TradeType;
+  currentRow: IGQLHistory;
   split?: boolean;
   platform?: boolean;
 }> = ({ currentRow, split, platform }) => {
-  const isHidden = currentRow.is_above === undefined;
-  const isUp = currentRow.is_above;
-  const token0 = currentRow.market.token0;
-  const token1 = currentRow.market.token1;
+  const isHidden = currentRow.isAbove === undefined;
+  const isUp = currentRow.isAbove;
+  const token0 = currentRow.chartData.token0;
+  const token1 = currentRow.chartData.token1;
   return (
     <TableAssetCell
       img={

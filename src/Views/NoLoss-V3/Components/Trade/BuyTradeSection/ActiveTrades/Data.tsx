@@ -1,10 +1,12 @@
 import { divide, toFixed } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { BetState } from '@Views/NoLoss-V3/Hooks/useAheadTrades';
 import { IGQLHistory } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
 import { DataCol } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/DataCol';
 import { StrikePrice } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/StrikePrice';
 import styled from '@emotion/styled';
 import { Price } from './Price';
+import { Probability } from './Probability';
 
 export const Data: React.FC<{
   trade: IGQLHistory;
@@ -16,7 +18,11 @@ export const Data: React.FC<{
       desc: (
         <StrikePrice
           slippage={+trade.slippage! ?? 0}
-          strike={toFixed(divide(trade.strike, 8) as string, 2)}
+          strike={toFixed(
+            divide(trade.strike, 8) as string,
+            trade.chartData.price_precision.toString().length - 1
+          )}
+          isQueued={trade.state === BetState.queued}
         />
       ),
     },
@@ -36,7 +42,7 @@ export const Data: React.FC<{
     },
     {
       head: <span>Probability</span>,
-      desc: <span>-</span>,
+      desc: <Probability trade={trade} />,
     },
   ];
 

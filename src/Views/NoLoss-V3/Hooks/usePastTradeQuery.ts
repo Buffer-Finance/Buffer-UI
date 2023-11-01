@@ -96,6 +96,8 @@ export interface IGQLHistory {
   user: {
     address: string;
   };
+  queueTimestamp?: string;
+  cancelTimestamp?: string;
   slippage?: string;
   //added on FE
   blockNumber?: number;

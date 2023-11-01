@@ -1,4 +1,6 @@
 import { accordianTableType } from '@Views/NoLoss-V3/types';
+import { CancelledTable } from './Cancelled';
+import { HistoryTable } from './History';
 import { LeaderboardTable } from './LeaderboardTable';
 
 export const TableSelector: React.FC<{
@@ -8,9 +10,9 @@ export const TableSelector: React.FC<{
     case 'leaderboard':
       return <LeaderboardTable />;
     case 'history':
-      return <>history</>;
+      return <HistoryTable />;
     case 'cancelled':
-      return <>cancelled</>;
+      return <CancelledTable />;
     default:
       return <>default</>;
   }

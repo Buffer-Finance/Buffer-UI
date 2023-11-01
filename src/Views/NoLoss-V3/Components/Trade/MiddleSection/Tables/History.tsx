@@ -1,13 +1,23 @@
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
+import { divide, lt, subtract } from '@Utils/NumString/stringArithmatics';
+import { Variables } from '@Utils/Time';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
+import { Display } from '@Views/Common/Tooltips/Display';
+import { BetState } from '@Views/NoLoss-V3/Hooks/useAheadTrades';
 import {
   tardesAtom,
   tardesPageAtom,
   tardesTotalPageAtom,
   updateHistoryPageNumber,
 } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
-import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
+import { AssetCell } from '@Views/TradePage/Views/AccordionTable/AssetCell';
+import {
+  DisplayTime,
+  TableErrorRow,
+} from '@Views/TradePage/Views/AccordionTable/Common';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { PayoutChip } from './PayoutChip';
 
 enum TableColumn {
   Asset = 0,
@@ -15,8 +25,9 @@ enum TableColumn {
   Expiry = 2,
   OpenTime = 3,
   Duration = 4,
-  TradeSize = 5,
-  Payout = 6,
+  CloseTime = 5,
+  TradeSize = 6,
+  Payout = 7,
 }
 
 export const HistoryTable = () => {
@@ -31,6 +42,7 @@ export const HistoryTable = () => {
     'Expiry',
     'Open Time',
     'Duration',
+    'Close Time',
     'Trade Size',
     'Payout',
   ];
@@ -43,29 +55,79 @@ export const HistoryTable = () => {
     const trade = history[row];
     switch (col) {
       case TableColumn.Asset:
-      // return (
-      //   <AssetCell
-      //     currentRow={trade}
-      //     split={isMobile}
-      //   />
-      // );
+        return (
+          <div className="pl-[1.6rem]">
+            {' '}
+            <AssetCell currentRow={trade} split={false} />{' '}
+          </div>
+        );
+      case TableColumn.Strike:
+        return (
+          <Display
+            data={divide(trade.strike, 8)}
+            precision={trade.chartData.price_precision.toString().length - 1}
+            className="!justify-start"
+          />
+        );
+      case TableColumn.Expiry:
+        return (
+          <Display
+            data={divide(trade.expirationPrice ?? '0', 8)}
+            precision={trade.chartData.price_precision.toString().length - 1}
+            className="!justify-start"
+          />
+        );
+      case TableColumn.OpenTime:
+        return <DisplayTime ts={trade.creationTime as string} />;
+      case TableColumn.Duration:
+        return formatDistance(
+          Variables(trade.expirationTime - trade.creationTime)
+        );
+      case TableColumn.CloseTime:
+        return <DisplayTime ts={trade.expirationTime as string} />;
+      case TableColumn.TradeSize:
+        return divide(trade.totalFee, 18);
+      case TableColumn.Payout:
+        if (trade.state === BetState.queued) return <PayoutChip data={trade} />;
+        const pnl = subtract(trade.payout ?? '0', trade.totalFee);
+        return (
+          <div className="flex flex-col gap-1">
+            <Display
+              data={divide(trade.payout ?? '0', 18)}
+              precision={2}
+              className="!justify-start"
+            />
+            <div
+              className={`flex gap-2 items-center ${
+                lt(pnl, '0') ? 'red' : 'green'
+              }`}
+            >
+              Net Pnl :-
+              <Display data={divide(pnl, 18)} className={``} precision={2} />
+            </div>
+          </div>
+        );
+      default:
+        return <></>;
     }
   };
 
-  <BufferTable
-    bodyJSX={BodyFormatter}
-    headerJSX={HeaderFomatter}
-    loading={history.length === 0}
-    rows={history.length}
-    cols={headNameArray.length}
-    onRowClick={() => {}}
-    widths={['auto']}
-    activePage={activePage}
-    count={totalPages}
-    onPageChange={(e, page) => {
-      setHistoryPage(page);
-    }}
-    error={<TableErrorRow msg="No trades found." />}
-    shouldOnlyRenderActivePageAndArrows
-  />;
+  return (
+    <BufferTable
+      bodyJSX={BodyFormatter}
+      headerJSX={HeaderFomatter}
+      loading={history.length === 0}
+      rows={history.length}
+      cols={headNameArray.length}
+      onRowClick={() => {}}
+      widths={['auto']}
+      activePage={activePage}
+      count={totalPages}
+      onPageChange={(e, page) => {
+        setHistoryPage(page);
+      }}
+      error={<TableErrorRow msg="No trades found." />}
+      shouldOnlyRenderActivePageAndArrows
+    />
+  );
 };

@@ -1,6 +1,8 @@
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
+import { Display } from '@Views/Common/Tooltips/Display';
 import {
   leaderboardDataAtom,
   leaderboardPaginationAtom,
@@ -51,13 +53,30 @@ export const LeaderboardTable = () => {
       case TableColumn.User:
         return getSlicedUserAddress(userData.stats.user, 4);
       case TableColumn.Volume:
-        return userData.stats.totalFee;
+        return (
+          <Display
+            data={divide(userData.stats.totalFee, 18)}
+            precision={2}
+            className="!justify-start"
+          />
+        );
       case TableColumn.Trades:
         return userData.stats.trades;
       case TableColumn.Score:
         return userData.stats.score;
       case TableColumn.NetPnl:
-        return userData.stats.netPnl;
+        const percentageNetPnl = divide(
+          userData.stats.netPnl,
+          userData.stats.totalFee
+        );
+        return (
+          <Display
+            data={multiply(percentageNetPnl as string, 2)}
+            precision={2}
+            className="!justify-start"
+            unit="%"
+          />
+        );
       default:
         return 'Unhandle Column';
     }
