@@ -14,6 +14,8 @@ import {
   IreadCall,
   ItournamentData,
   ItournamentId,
+  ItournamentStats,
+  LeaderboardData,
   accordianTableType,
 } from './types';
 
@@ -131,8 +133,9 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
       | {
           tournamentData: ItournamentData[] | undefined;
           userRank: string | undefined;
-          isTradingApproved?: boolean;
-          activeTournamentBalance?: string | undefined;
+          isTradingApproved: boolean | undefined;
+          activeTournamentBalance: string | undefined;
+          activeTournamentLeaderboardStats: ItournamentStats | undefined;
         }
       | undefined;
   } = { calls: null, result: undefined };
@@ -187,7 +190,8 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
           };
         })
       );
-      if (activeTournamentId !== undefined)
+      if (activeTournamentId !== undefined) {
+        const nextRankId = get(nextRankIdAtom);
         readcalls.push(
           ...[
             {
@@ -204,8 +208,26 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
               params: [user.userAddress, activeTournamentId],
               id: getCallId(config.manager, 'balanceOf'),
             },
+            {
+              address: config.tournament_reader,
+              abi: TournamentReaderABI,
+              name: 'leaderboard',
+              params: [activeTournamentId],
+              id: getCallId(config.tournament_reader, 'leaderboard'),
+            },
+            {
+              address: config.leaderboard,
+              abi: TournamentLeaderboardABI,
+              name: 'getTournamentLeaderboard',
+              params: [activeTournamentId, nextRankId, 10],
+              id: getCallId(config.leaderboard, 'getTournamentLeaderboard', [
+                activeTournamentId,
+                nextRankId,
+              ]),
+            },
           ]
         );
+      }
     }
     response.calls = readcalls;
 
@@ -217,6 +239,10 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
       );
       const userRankId = getCallId(config.leaderboard, 'userTournamentRank');
       const activeTournamentBalanceId = getCallId(config.manager, 'balanceOf');
+      const activeTournamentLeaderboardStatsId = getCallId(
+        config.tournament_reader,
+        'leaderboard'
+      );
       const rewardPoolsIds = tournamentIds.map((tournamentId) =>
         getCallId(config.manager, 'tournamentRewardPools', [tournamentId])
       );
@@ -243,6 +269,9 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
         userRank: readcallResponse[userRankId]?.[0],
         activeTournamentBalance:
           readcallResponse[activeTournamentBalanceId]?.[0],
+        activeTournamentLeaderboardStats:
+          readcallResponse[activeTournamentLeaderboardStatsId]?.[0],
+        isTradingApproved: undefined,
       };
 
       if (user !== undefined && user.userAddress !== undefined) {
@@ -381,3 +410,59 @@ export const noLossFavouriteMarketsAtom = atomWithStorage<string[]>(
 
 // tables atoms
 export const accordianTableTypeAtom = atom<accordianTableType>('leaderboard');
+
+//leaderbaord table atoms
+const leaderboardActivePageAtom = atom<number>(1);
+export const leaderboardPaginationAtom = atom(
+  (get) => {
+    const leaderboardStatsLength =
+      get(noLossReadCallsReadOnlyAtom).result?.activeTournamentLeaderboardStats
+        ?.userCount ?? '0';
+    const activePage = get(leaderboardActivePageAtom);
+    const pageSize = 10;
+    const totalPages = Math.ceil(+leaderboardStatsLength / pageSize);
+    return {
+      totalPages,
+      activePage,
+    };
+  },
+  (_, set, update: number) => {
+    set(leaderboardActivePageAtom, update);
+  }
+);
+
+export const leaderboardDataAtom = atom<undefined | LeaderboardData[]>(
+  (get) => {
+    const activeTournamentId = get(activeTournamentIdAtom);
+    const readcallResponse = get(noLossReadcallResponseReadOnlyAtom);
+    const activeChain = get(activeChainAtom);
+    const nextRankId = get(nextRankIdAtom);
+
+    if (activeChain === undefined || activeTournamentId === undefined)
+      return undefined;
+    const config = getNoLossV3Config(activeChain.id);
+    const leaderboardDataId = getCallId(
+      config.leaderboard,
+      'getTournamentLeaderboard',
+      [activeTournamentId, nextRankId]
+    );
+    return readcallResponse?.[leaderboardDataId]?.[0];
+  }
+);
+
+// const nextRankIdAtom = atom((get) => {
+//   const leaderboardData = get(leaderboardDataAtom);
+//   if (leaderboardData === undefined)
+//     return '0x0000000000000000000000000000000000000000000000000000000000000000';
+//   else return leaderboardData[9].stats.next;
+// });
+
+export const nextRankIdAtom = atom(
+  '0x0000000000000000000000000000000000000000000000000000000000000000',
+  (get, set, update: string) => {
+    const previosValue = get(nextRankIdAtom);
+    if (previosValue !== update) {
+      set(nextRankIdAtom, update);
+    }
+  }
+);

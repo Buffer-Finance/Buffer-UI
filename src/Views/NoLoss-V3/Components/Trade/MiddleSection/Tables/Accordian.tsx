@@ -1,15 +1,13 @@
 import DDArrow from '@SVG/Elements/Arrow';
-import {
-  accordianTableTypeAtom,
-  isTableShownAtom,
-} from '@Views/NoLoss-V3/atoms';
+import { accordianTableTypeAtom } from '@Views/NoLoss-V3/atoms';
 import { accordianTableType } from '@Views/NoLoss-V3/types';
-import { useAtom, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 
-export const Accordian: React.FC<{ activeTableName: accordianTableType }> = ({
-  activeTableName,
-}) => {
-  const [expanded, setExpanded] = useAtom(isTableShownAtom);
+export const Accordian: React.FC<{
+  activeTableName: accordianTableType;
+  expanded: boolean;
+  setExpanded: (isExpended: boolean) => void;
+}> = ({ activeTableName, expanded, setExpanded }) => {
   const setActiveTable = useSetAtom(accordianTableTypeAtom);
   const gap = [''];
 
@@ -43,7 +41,7 @@ export const Accordian: React.FC<{ activeTableName: accordianTableType }> = ({
       </div>
       <button
         className="flex items-center gap-x-2 px-4 text-f14 transition group"
-        onClick={() => setExpanded((p) => !p)}
+        onClick={() => setExpanded(!expanded)}
       >
         {expanded ? 'Hide ' : 'Show '} Positions
         <DDArrow

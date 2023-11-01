@@ -76,3 +76,30 @@ export interface ItournamentData {
 }
 
 export type accordianTableType = 'leaderboard' | 'history' | 'cancelled';
+
+export interface ItournamentStats {
+  rankFirst: string;
+  rankLast: string;
+  userCount: string;
+  totalBuyins: string;
+  rakeCollected: string;
+  totalWinners: string;
+}
+
+export interface LeaderboardData {
+  rank: string;
+  stats: Stats;
+  rebuys: string;
+}
+
+export interface Stats {
+  next: string;
+  previous: string;
+  user: string;
+  score: string;
+  trades: string;
+  netPnl: string;
+  totalFee: string;
+  hasClaimed: boolean;
+  exists: boolean;
+}
