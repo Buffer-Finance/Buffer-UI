@@ -14,6 +14,9 @@ export const Probability: React.FC<{
   if (trade.expirationTime === undefined) {
     return <>-</>;
   }
+  if (price === undefined) {
+    return <>No Price</>;
+  }
   const currentEpoch = Math.round(new Date().getTime() / 1000);
   if (currentEpoch > +trade.expirationTime) {
     return <>processing...</>;
@@ -24,7 +27,7 @@ export const Probability: React.FC<{
       true,
       trade.isAbove,
       price,
-      +trade.strike / 8,
+      +trade.strike / 1e8,
       +trade.expirationTime - currentEpoch,
       0,
       12000 / 1e4

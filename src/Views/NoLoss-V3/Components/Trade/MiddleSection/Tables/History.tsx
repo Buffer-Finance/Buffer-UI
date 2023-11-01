@@ -70,6 +70,7 @@ export const HistoryTable = () => {
           />
         );
       case TableColumn.Expiry:
+        if (trade.state === BetState.queued) return <>processing...</>;
         return (
           <Display
             data={divide(trade.expirationPrice ?? '0', 8)}
@@ -81,7 +82,12 @@ export const HistoryTable = () => {
         return <DisplayTime ts={trade.creationTime as string} />;
       case TableColumn.Duration:
         return formatDistance(
-          Variables(trade.expirationTime - trade.creationTime)
+          Variables(
+            +subtract(
+              trade.expirationTime as string,
+              trade.creationTime as string
+            )
+          )
         );
       case TableColumn.CloseTime:
         return <DisplayTime ts={trade.expirationTime as string} />;

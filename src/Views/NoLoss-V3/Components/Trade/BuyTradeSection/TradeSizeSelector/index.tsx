@@ -17,7 +17,7 @@ import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback } from 'react';
 import { TradeSizeInput } from './TradeSizeInput';
-import { WalletBalance } from './WalletBalance';
+import { WalletBalance, formatBalance } from './WalletBalance';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -40,7 +40,10 @@ export const TradeSizeSelector: React.FC<{
     () =>
       setTradeSize(
         getMaximumValue(
-          toFixed(getMinimumValue(maxFee, balance ?? '0'), 2),
+          toFixed(
+            getMinimumValue(maxFee, divide(balance ?? '0', 18) as string),
+            2
+          ),
           '0'
         )
       ),
@@ -55,7 +58,11 @@ export const TradeSizeSelector: React.FC<{
             <BuyTradeHeadText>Trade Size</BuyTradeHeadText>
           </RowGap>
 
-          <WalletBalance balance={balance} unit={''} decimals={18} />
+          <WalletBalance
+            balance={formatBalance(divide(balance ?? '0', 18) as string)}
+            unit={''}
+            decimals={18}
+          />
         </RowBetween>
         <RowGapItemsStretched gap="0px" className="w-full">
           <TradeSizeInput
