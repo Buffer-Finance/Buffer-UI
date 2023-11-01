@@ -82,6 +82,7 @@ export const LeaderboardTable = () => {
         setPages(page);
       }}
       error={<TableErrorRow msg="No user found." />}
+      shouldOnlyRenderActivePageAndArrows
     />
   );
 };

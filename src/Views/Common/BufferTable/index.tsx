@@ -58,6 +58,7 @@ interface IBufferTable {
     | ((event: React.ChangeEvent<unknown>, page: number) => void)
     | undefined;
   activePage?: number;
+  shouldOnlyRenderActivePageAndArrows?: boolean;
 }
 
 const BufferTable: React.FC<IBufferTable> = ({
@@ -90,6 +91,7 @@ const BufferTable: React.FC<IBufferTable> = ({
   highlightIndexs,
   activePage = 1,
   accordianJSX,
+  shouldOnlyRenderActivePageAndArrows,
 }) => {
   let rowClass = '';
   let tableCellCls = 'table-cell';
@@ -271,6 +273,9 @@ const BufferTable: React.FC<IBufferTable> = ({
             onChange={onPageChange}
             count={count}
             page={activePage}
+            shouldOnlyRenderActivePageAndArrows={
+              shouldOnlyRenderActivePageAndArrows
+            }
           />
         ) : null}
       </TableContainer>

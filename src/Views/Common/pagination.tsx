@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { PaginationItem } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { makeStyles } from '@mui/styles';
-import { PaginationItem } from '@mui/material';
+import * as React from 'react';
 
 const useStyles = makeStyles(() => ({
   ul: {
@@ -31,6 +31,7 @@ export default function BasicPagination({
   onChange,
   page,
   size,
+  shouldOnlyRenderActivePageAndArrows = false,
 }: {
   page: number;
   count: number;
@@ -38,6 +39,7 @@ export default function BasicPagination({
   onChange:
     | ((event: React.ChangeEvent<unknown>, page: number) => void)
     | undefined;
+  shouldOnlyRenderActivePageAndArrows?: boolean;
 }) {
   const cs = useStyles();
 
@@ -53,7 +55,14 @@ export default function BasicPagination({
         onChange={onChange}
         size={size}
         defaultPage={1}
-        renderItem={(item) => <PaginationItem {...item} />}
+        renderItem={(item) => {
+          if (shouldOnlyRenderActivePageAndArrows) {
+            if (item.type === 'start-ellipsis' || item.type === 'end-ellipsis')
+              return <></>;
+            if (item.type === 'page' && !item.selected) return <></>;
+          }
+          return <PaginationItem {...item} />;
+        }}
       />
     </Stack>
   );
