@@ -127,7 +127,7 @@ export const OngoingTradesTable: React.FC<{
     const trade = trades?.[row];
     if (!trade) return 'Problem';
 
-    const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
+    const spread = allSpreads?.[trade.market.tv_id]?.spread ?? 0;
 
     const poolInfo = getPoolInfo(trade.pool.pool);
     const marketPrecision = trade.market.price_precision.toString().length - 1;

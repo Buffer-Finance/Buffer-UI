@@ -90,7 +90,8 @@ export const CancelledTable: React.FC<{
 
     const trade = trades?.[row];
     const poolInfo = getPoolInfo(trade.pool.pool);
-    const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
+
+    const spread = allSpreads?.[trade.market.tv_id]?.spread ?? 0;
 
     switch (col) {
       case TableColumn.User:
