@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { userAtom } from '../atoms';
 import { marketsForChart } from '../config';
 import { BetState, TradeInputs } from './useAheadTrades';
@@ -105,61 +105,64 @@ export interface IGQLHistory {
 }
 
 export const useProcessedTrades = () => {
-  const getProcessedTrades = (
-    trades: (IGQLHistory | null)[] | undefined,
-    block: number,
-    tradesToBeDeleted?: TradeInputs[],
-    shouldAddHistoryPrice = false
-  ) => {
-    const tempTrades = trades?.map((singleTrade: IGQLHistory | null) => {
-      if (singleTrade === null) {
-        return null;
-      }
-      // console.log(singleTrade, 'singleTrade');
-      if (singleTrade.blockNumber) {
-        if (block >= singleTrade.blockNumber) {
-          // if graph scanned this block.
+  const getProcessedTrades = useCallback(
+    (
+      trades: (IGQLHistory | null)[] | undefined,
+      block: number,
+      tradesToBeDeleted?: TradeInputs[],
+      shouldAddHistoryPrice = false
+    ) => {
+      const tempTrades = trades?.map((singleTrade: IGQLHistory | null) => {
+        if (singleTrade === null) {
           return null;
         }
-      }
-      if (tradesToBeDeleted?.length) {
-        if (
-          tradesToBeDeleted.find(
-            (singleRawTrade) =>
-              singleTrade.queueID &&
-              singleRawTrade.id == +singleTrade.queueID &&
-              singleTrade.state === BetState.queued
-          )
-        ) {
-          return null;
+        // console.log(singleTrade, 'singleTrade');
+        if (singleTrade.blockNumber) {
+          if (block >= singleTrade.blockNumber) {
+            // if graph scanned this block.
+            return null;
+          }
         }
-      }
+        if (tradesToBeDeleted?.length) {
+          if (
+            tradesToBeDeleted.find(
+              (singleRawTrade) =>
+                singleTrade.queueID &&
+                singleRawTrade.id == +singleTrade.queueID &&
+                singleTrade.state === BetState.queued
+            )
+          ) {
+            return null;
+          }
+        }
 
-      if (shouldAddHistoryPrice) {
-        addExpiryPrice(singleTrade);
-      }
+        if (shouldAddHistoryPrice) {
+          addExpiryPrice(singleTrade);
+        }
 
-      return singleTrade;
-    });
+        return singleTrade;
+      });
 
-    const updatedTrade = tempTrades?.map((trade) => {
-      if (trade === null) return null;
-      return {
-        ...trade,
-        chartData:
-          marketsForChart[
-            trade.optionContract.asset as keyof typeof marketsForChart
-          ],
-      };
-    });
+      const updatedTrade = tempTrades?.map((trade) => {
+        if (trade === null) return null;
+        return {
+          ...trade,
+          chartData:
+            marketsForChart[
+              trade.optionContract.asset as keyof typeof marketsForChart
+            ],
+        };
+      });
 
-    return updatedTrade;
-  };
+      return updatedTrade;
+    },
+    []
+  );
+
   return { getProcessedTrades };
 };
 
 export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
-  console.log('addExpiryPrice', currentTrade);
   if (currentTrade.state === BetState.active) {
     const assets = currentTrade.optionContract.asset;
     axios

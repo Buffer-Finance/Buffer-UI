@@ -5,9 +5,7 @@ import { Skeleton } from '@mui/material';
 export const WalletBalance: React.FC<{
   balance: string | number | undefined;
   unit: string;
-  decimals: number;
-}> = ({ balance, unit, decimals }) => {
-  console.log('balance', balance);
+}> = ({ balance, unit }) => {
   return (
     <RowGap gap="4px">
       <svg

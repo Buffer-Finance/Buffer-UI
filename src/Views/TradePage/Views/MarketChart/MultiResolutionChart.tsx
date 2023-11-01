@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   IBasicDataFeed,
-  IChartWidgetApi,
   IChartingLibraryWidget,
   IOrderLineAdapter,
   LibrarySymbolInfo,
@@ -13,9 +12,9 @@ import {
 } from '../../../../../public/static/charting_library';
 import { Markets, OHLCBlock, RealtimeUpdate } from './MakrketTypes';
 
-import { formatDistanceCompact } from '@Hooks/Utilities/useStopWatch';
-import { priceAtom, silentPriceCache } from '@Hooks/usePrice';
-import { useUserAccount } from '@Hooks/useUserAccount';
+import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import { getIdentifier } from '@Hooks/useGenericHook';
+import { priceAtom } from '@Hooks/usePrice';
 import {
   ChartElementSVG,
   ChartTypePersistedAtom,
@@ -29,43 +28,26 @@ import {
 } from '@Utils/Dates/displayDateTime';
 import { sleep } from '@Utils/JSUtils/sleep';
 import { toFixed } from '@Utils/NumString';
-import { divide, multiply, round } from '@Utils/NumString/stringArithmatics';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
-import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { BetState } from '@Views/NoLoss-V3/Hooks/useAheadTrades';
+import {
+  IGQLHistory,
+  tardesAtom,
+} from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
+import { nolossmarketsAtom } from '@Views/NoLoss-V3/atoms';
 import {
   chartControlsSettingsAtom,
-  closeConfirmationModalAtom,
   queuets2priceAtom,
   rerenderPositionAtom,
-  selectedOrderToEditAtom,
   visualizeddAtom,
 } from '@Views/TradePage/atoms';
-import {
-  PRICE_DECIMALS,
-  appConfig,
-  marketsForChart,
-} from '@Views/TradePage/config';
-import { TradeType } from '@Views/TradePage/type';
-import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
-import { useLimitOrderHandlers } from '@Views/TradePage/utils/useLimitOrderHandlers';
+import { PRICE_DECIMALS, marketsForChart } from '@Views/TradePage/config';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { getAddress } from 'viem';
-import {
-  getEarlyCloseStatus,
-  getLockedAmount,
-  getProbability,
-  getStrike,
-} from '../AccordionTable/Common';
-import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
-import { loeditLoadingAtom } from '../EditModal';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -182,13 +164,12 @@ const defaults = {
   green: 'rgb(108, 211, 173)',
   red: 'rgb(255, 104, 104)',
 };
-function getText(option: TradeType) {
-  const expiration = option.expiration_time!;
+function getText(expiration: number) {
   const curr = Math.round(Date.now() / 1000);
   return `${
     expiration <= curr
       ? 'Processing...'
-      : `${formatDistanceCompact(
+      : `${formatDistanceExpanded(
           Variables(expiration - Math.round(Date.now() / 1000))
         )}`
   }`;
@@ -220,153 +201,57 @@ export const market2resolutionAtom = atomWithStorage(
   'TradingChartDrawingStorage-market2resolutionAtom',
   null
 );
-function getPnl(trade: TradeType, lockedAmountCache: any) {
-  const market = trade.market?.tv_id;
-  if (!market) return null;
-  const price = +silentPriceCache[market]?.[0]?.price;
-  const lockedAmmount = getLockedAmount(trade, lockedAmountCache);
-  const poolInfo = appConfig[trade.environment]?.poolsInfo?.[trade.pool.pool];
-  if (!price || !lockedAmmount || !poolInfo) return null;
-  const probability = getProbability(
-    trade,
-    price,
-    calculateOptionIV(
-      trade.is_above ?? false,
-      trade.strike / 1e8,
-      +price,
-      trade.pool.IV,
-      trade.pool.IVFactorITM,
-      trade.pool.IVFactorOTM
-    ) / 1e4
-  );
-  if (!probability) return null;
-  const res = getPnlForTrade({ trade, poolInfo, probability, lockedAmmount });
-  if (!res || !res.earlycloseAmount) return null;
-  return [toFixed(res.earlycloseAmount, 2), res.isWin];
-}
-const formatMarketOrder = (option: TradeType, earlyCloseData: any) => {
-  const winning =
-    earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
-  return (
-    `${
-      !earlyCloseData
-        ? ''
-        : earlyCloseData[1]
-        ? '+' + earlyCloseData[0]
-        : earlyCloseData[0]
-    } ${option.token} | ` + getText(option)
-  );
-};
-const formatLOText = (option: TradeType, decimals) => {
-  return `Limit | ${toFixed(
-    divide(option.trade_size?.toString(), decimals)!,
-    2
-  )} ${option.token} | ${
-    option.is_above ? defaults.upIcon : defaults.downIcon
-  }`;
-};
-export const indicatorCoutAtom = atom(0);
-function drawPosition(
-  option: TradeType,
-  loHandlers: {
-    onEdit: () => void;
-    onCancel: () => void;
-    onMove: (trade: TradeType, strike: string) => void;
-  },
-  chart: IChartWidgetApi,
-  decimals: number,
-  priceCache: any,
-  currentOI: string,
-  maXOI: string
-) {
-  const strike = getStrike(option, priceCache, currentOI, maXOI).strikePrice;
-  // const idx = visualized.indexOf(option.queue_id);
-  // console.log(strike, 'drawStrike');
-  const openTimeStamp = option.open_timestamp;
-  const optionPrice = +strike / PRICE_DECIMALS;
-  let color = !option.is_above ? defaults.red : defaults.green;
 
-  if (option.is_limit_order && option.state == 'QUEUED') {
-    const text = ``;
-    const processing =
-      option.pending_operation == 'Processing EDIT'
-        ? 'Modifying Limit Order'
-        : null;
-    // console.log(
-    //   `MultiResolutionChart-processing: `,
-    //   processing,
-    //   option.queue_id,
-    //   option.pending_operation
-    // );
+export const indicatorCoutAtom = atom(0);
+
+const getColor = (isAbove: boolean) => {
+  // let color;
+  // if (cp < sp) {
+  //   color = isAbove ? red : green;
+  // } else {
+  //   color = !isAbove ? red : green;
+  // }
+  return !isAbove ? red : green;
+};
+const BG = 'rgb(48, 48, 68)';
+const Up = '▲';
+const Down = '▼';
+const green = 'rgb(108, 211, 173)';
+const red = 'rgb(255, 104, 104)';
+function drawPosition(option, visualized, chart, positions) {
+  let vizIdentifiers = getIdentifier(option);
+  const idx = visualized.indexOf(vizIdentifiers);
+  const openTimeStamp = option.creationTime;
+  const optionPrice = +option.strike / PRICE_DECIMALS;
+  if (idx === -1 && option.state === BetState.active && optionPrice) {
+    let color = getColor(option.isAbove);
 
     return chart
-      ?.createOrderLine()
-      .setText(processing || formatLOText(option, decimals))
-      .setTooltip('drag to change strike')
-      .setBodyBackgroundColor(defaults.BG)
-      .setQuantityBorderColor(defaults.BG)
+      ?.createPositionLine()
+      .setText(
+        `${toFixed(divide(option.totalFee, 18) as string, 2)} | ` +
+          getText(option.expirationTime)
+      )
+      .setTooltip(
+        `${getDisplayDate(openTimeStamp)}, ${getDisplayTime(
+          openTimeStamp
+        )} - ${getDisplayDate(option.expirationTime)}, ${getDisplayTime(
+          option.expirationTime
+        )}`
+      )
+      .setBodyBackgroundColor(BG)
+      .setBodyBorderColor(BG)
+      .setBodyFont('normal 17pt Relative Pro')
+      .setQuantityFont('bold 17pt Relative Pro')
       .setQuantityBackgroundColor(color)
-      .setCancelButtonBorderColor(defaults.BG)
-      .setCancelButtonIconColor('rgb(255,255,255)')
-      .setCancelButtonBackgroundColor(defaults.BG)
-      .setBodyFont('semibold 17pt Arial')
-      .setQuantityFont('bold 17pt Arial')
-      .setBodyTextColor('rgb(195,194,212)')
-      .setCancelTooltip('click to cancel this limit order')
-      .setQuantity('↕')
-      .setBodyBorderColor(defaults.BG)
+      .setQuantityBorderColor(color)
       .setLineColor(color)
-      .onMove('move', function () {
-        this.setText('Processing EDIT');
-        // console.log(`MultiResolutionChart-Processing EDIT: `);
-        loHandlers.onMove(option, this.getPrice());
-      })
-      .setModifyTooltip('click to edit order')
-      .onModify('modify', function () {
-        loHandlers.onEdit({ trade: option, market: option.market });
-      })
-      .onCancel('modify', function () {
-        this.setText('Processing CANCEL');
-
-        loHandlers.onCancel(option);
-      })
-
+      .setBodyTextColor('rgb(255,255,255)')
+      .setQuantity(option.isAbove ? Up : Down)
       .setPrice(optionPrice);
+    // positions.current.push({ line, expiration: option.expirationTime });
   }
-  // render trade-size
-  // render PnL
-  const earlyCloseData = getPnl(option, priceCache);
-
-  const text = formatMarketOrder(option, earlyCloseData);
-  const winning =
-    earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
-
-  const tooltip = `${getDisplayDate(openTimeStamp as any)}, ${getDisplayTime(
-    openTimeStamp
-  )} - ${getDisplayDate(option.expiration_time as any)}, ${getDisplayTime(
-    option.expiration_time
-  )}`;
-  return chart
-    ?.createOrderLine()
-    .setText(text)
-    .setTooltip(tooltip)
-    .setBodyBackgroundColor(defaults.BG)
-    .setQuantityBackgroundColor(color)
-    .setBodyBorderColor(defaults.BG)
-    .setQuantityBorderColor(defaults.BG)
-
-    .setCancelButtonBorderColor(defaults.BG)
-    .setCancelButtonIconColor('rgb(255,255,255)')
-    .setCancelButtonBackgroundColor(defaults.BG)
-    .setBodyFont('semibold 17pt Arial')
-    .setQuantityFont('bold 17pt Arial')
-    .setLineColor(color)
-    .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)')
-    .setQuantity(option.is_above ? defaults.upIcon : defaults.downIcon)
-    .setCancelTooltip('click to early close at market price')
-    .setPrice(optionPrice);
 }
-
 export const MultiResolutionChart = ({
   market: marke,
   isMobile,
@@ -376,8 +261,6 @@ export const MultiResolutionChart = ({
   index: number;
   isMobile?: boolean;
 }) => {
-  const { earlyCloseHandler } = useCancelTradeFunction();
-
   const market = marke.replace('-', '');
   const chartData =
     marketsForChart[market as unknown as keyof typeof marketsForChart];
@@ -386,50 +269,45 @@ export const MultiResolutionChart = ({
     market2resolutionAtom
   );
   const settings = useAtomValue(chartControlsSettingsAtom);
-  const setCloseConfirmationModal = useSetAtom(closeConfirmationModalAtom);
 
-  const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
-  const v3AppConfig = useMarketsConfig();
-  const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
   let trade2visualisation = useRef<
     {
       positionRef: IOrderLineAdapter;
-      option: TradeType;
+      option: IGQLHistory;
     }[]
   >([]);
-  const activeTrades = useOngoingTrades();
   const indicatorCount = useAtomValue(indicatorCoutAtom);
-  const editLoading = useAtomValue(loeditLoadingAtom);
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const containerDivRef = useRef<HTMLDivElement>(null);
   const [drawing, setDrawing] = useAtom(drawingAtom);
   const chartType = useAtomValue(ChartTypePersistedAtom);
   const setChartType = useSetAtom(ChartTypePersistedAtom);
-  const setSelectedTradeToEdit = useSetAtom(selectedOrderToEditAtom);
+  const v3AppConfig = useAtomValue(nolossmarketsAtom);
+  const { active: activeTrades } = useAtomValue(tardesAtom);
 
   async function getAllSymbols() {
     let allSymbols: any[] = [];
     let tempSymbols: any[] = [];
-    if (v3AppConfig !== null) {
+    if (v3AppConfig !== undefined) {
       for (const singleAsset of v3AppConfig) {
         tempSymbols = [
           {
             symbol:
-              singleAsset.pythGroup +
+              singleAsset.chartData.pythGroup +
               '.' +
-              singleAsset.token0 +
+              singleAsset.chartData.token0 +
               '/' +
-              singleAsset.token1,
-            full_name: singleAsset.tv_id,
-            description: singleAsset.tv_id,
+              singleAsset.chartData.token1,
+            full_name: singleAsset.chartData.tv_id,
+            description: singleAsset.chartData.tv_id,
             exchange: PRICE_PROVIDER,
-            type: singleAsset.category,
-            pricescale: singleAsset.price_precision,
-            pair: singleAsset.pair,
+            type: singleAsset.chartData.category,
+            pricescale: singleAsset.chartData.price_precision,
+            pair: singleAsset.chartData.pair,
           },
           ...tempSymbols,
         ];
@@ -440,11 +318,10 @@ export const MultiResolutionChart = ({
     return allSymbols;
   }
   const price = useAtomValue(priceAtom);
-  const { cancelHandler } = useCancelTradeFunction();
   const [visualizedTrades, setVisualizedTrades] = useState<
     {
       positionRef: IOrderLineAdapter;
-      option: TradeType;
+      option: IGQLHistory;
     }[]
   >([]);
   // console.log(price);
@@ -712,28 +589,14 @@ export const MultiResolutionChart = ({
       }
     }
   };
-  const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const rerenderPostion = useAtomValue(rerenderPositionAtom);
-  const readcalldata = useAtomValue(buyTradeDataAtom);
 
-  const { changeStrike } = useLimitOrderHandlers();
-  const changeStrikeSafe = (trade: TradeType, strike: string) => {
-    if (!settings.loDragging) {
-      changeStrike(trade, strike);
-    } else {
-      setSelectedTrade({
-        trade,
-        market: trade.market,
-        default: { strike: round(multiply(strike, 8), 0)! },
-      });
-    }
-  };
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
   }, [(price as any)?.[market]]);
-  const getTradeToDrawingId = (trade: TradeType) =>
-    trade.queue_id + ':' + trade.strike;
+  const getTradeToDrawingId = (trade: IGQLHistory) =>
+    trade.queueID + ':' + trade.strike;
   // draw positions.
   // useEffect(() => {
   //   // trade2visualisation.current = {};
@@ -753,58 +616,30 @@ export const MultiResolutionChart = ({
   const drawPostions = () => {
     let po: {
       positionRef: IOrderLineAdapter;
-      option: TradeType;
+      option: IGQLHistory;
     }[] = [];
     if (chartReady && activeTrades) {
-      activeTrades.forEach((trades) =>
-        trades.forEach((pos) => {
-          // if private, do nothing.
-          if (pos.is_above === undefined) return;
+      activeTrades.forEach((trade) => {
+        if (trade === null) return;
+        if (trade.queueID === undefined) return;
 
-          // filter valid positions
-          if (!pos?.queue_id) return;
+        // check if we can render or not
+        if (typeof widgetRef.current?.activeChart == 'undefined') return;
 
-          // check if we can render or not
-          if (typeof widgetRef.current?.activeChart == 'undefined') return;
+        // if hidden
+        if (hideVisulizations.includes(+trade.queueID)) return;
 
-          // if hidden
-          if (hideVisulizations.includes(pos.queue_id)) return;
-
-          // if market order but price not arrived
-          if (
-            pos.state === 'QUEUED' &&
-            !pos.is_limit_order &&
-            !priceCache?.[pos.queue_id]
-          )
-            return;
-
-          let updatedPos = pos;
-
-          // add cached strike if price is not arrived
-          if (pos.state === 'QUEUED' && !pos.is_limit_order) {
-            updatedPos.strike = priceCache[pos.queue_id];
-            updatedPos.expiration_time = pos.open_timestamp + pos.period;
-          }
-
-          const currPositionsPacked = {
-            positionRef: drawPosition(
-              updatedPos,
-              {
-                onEdit: setSelectedTradeToEdit,
-                onCancel: cancelHandler,
-                onMove: changeStrikeSafe,
-              },
-              widgetRef.current?.activeChart()!,
-              getPoolInfo(pos.pool.pool).decimals,
-              priceCache,
-              readcalldata.currentOIs[getAddress(pos.target_contract)],
-              readcalldata.maxOIs[getAddress(pos.target_contract)]
-            ),
-            option: pos,
-          };
-          po.push(currPositionsPacked);
-        })
-      );
+        const currPositionsPacked = {
+          positionRef: drawPosition(
+            trade,
+            hideVisulizations,
+            widgetRef.current?.activeChart?.(),
+            trade2visualisation
+          ),
+          option: trade,
+        };
+        po.push(currPositionsPacked);
+      });
     }
     trade2visualisation.current = po;
     return po;
@@ -867,56 +702,14 @@ export const MultiResolutionChart = ({
       try {
         // console.log('[chart-1', trade2visualisation.current);
         trade2visualisation.current.forEach((trade) => {
-          const [isClosingDisabled, disableTooltip] = getEarlyCloseStatus(
-            trade.option
-          );
           const actualTrade = trade.option;
           let updatedTrade = actualTrade;
           activeTrades.forEach((catagory) => {
-            catagory.forEach((t) => {
-              if (t.queue_id == actualTrade?.queue_id) {
-                updatedTrade = t;
-              }
-            });
-          });
-          // console.log('[chart-2', updatedTrade, isClosingDisabled);
-
-          if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order) {
-            if (!updatedTrade) return;
-            const decimals = getPoolInfo(updatedTrade.pool.pool).decimals;
-            // Limit order updation space
-            if (
-              editLoading == updatedTrade.queue_id ||
-              updatedTrade.pending_operation == 'Processing EDIT'
-            ) {
-              trade.positionRef.setText('Modifying Limit Order');
-            } else {
-              trade.positionRef.setText(formatLOText(updatedTrade, decimals));
+            if (catagory === null) return;
+            if (catagory.queueID && catagory.queueID === actualTrade.queueID) {
+              updatedTrade = catagory;
             }
-            return;
-          }
-          // Market order updation state
-          const earlyCloseData = getPnl(updatedTrade, priceCache);
-
-          const text = formatMarketOrder(updatedTrade, earlyCloseData);
-          const winning =
-            earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
-          trade.positionRef
-            .setText(text)
-            .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
-          // console.log('[chart-3', trade.positionRef);
-
-          if (!isClosingDisabled) {
-            trade.positionRef.onCancel('onCancel', () => {
-              // console.log('[chart-4', settings.earlyCloseConfirmation);
-
-              if (!settings.earlyCloseConfirmation) {
-                earlyCloseHandler(updatedTrade, updatedTrade.market);
-              } else {
-                setCloseConfirmationModal(updatedTrade);
-              }
-            });
-          }
+          });
         });
       } catch (e) {
         console.log('[chart-bug]', e);
@@ -926,6 +719,45 @@ export const MultiResolutionChart = ({
       clearInterval(interval);
     };
   }, [visualizedTrades]);
+
+  // const updateTimeLeft = () => {
+  //   positions.current.map((pos) => {
+  //     const inv = pos?.line?.getText()?.split('|')[0];
+  //     const strikePrice = pos?.line?.getPrice();
+  //     const text = inv + '| ' + getText(pos.expiration);
+  //     pos.line?.setText(text);
+  //     const marketPrice = getPriceFromKlines(marketPrices, activeMarket);
+  //     if (marketPrice && strikePrice) {
+  //       const isAbove = pos.line.getQuantity() == Up;
+  //       let color = getColor(marketPrice, strikePrice, isAbove);
+
+  //       pos.line?.setQuantityBackgroundColor(color);
+  //       pos.line?.setQuantityBorderColor(color);
+  //       pos.line.setLineColor(color);
+  //       // pos.line?.setBodyBorderColor(color);
+
+  //       // pos.line?.setQuantityTextColor(color);
+  //       // pos.line.setBodyTextColor(color);
+  //     }
+  //   });
+  // };
+
+  // // position updation
+  // useEffect(() => {
+  //   let timeout;
+  //   if (
+  //     chartReady &&
+  //     data &&
+  //     activeMarket &&
+  //     widgetRef.current &&
+  //     typeof widgetRef.current.activeChart === 'function'
+  //   ) {
+  //     timeout = setInterval(() => {
+  //       updateTimeLeft();
+  //     }, 1000);
+  //   }
+  //   return () => clearInterval(timeout);
+  // }, [chartReady]);
 
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
@@ -990,25 +822,3 @@ export const MultiResolutionChart = ({
     </div>
   );
 };
-
-// async function callApi(req) {
-//   const getRes = async () => {
-//     try {
-//       const res = await axios.get(
-//         `https://benchmarks.pyth.network/v1/shims/tradingview/history`,
-//         {
-//           params: req,
-//         }
-//       );
-//     } catch (err) {
-//       if (retry < 5) {
-//         await sleep(22);
-//         retry++;
-//         getRes();
-//       } else {
-//         return null;
-//       }
-//     }
-//   };
-//   return getRes;
-// }

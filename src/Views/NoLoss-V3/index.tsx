@@ -1,7 +1,6 @@
 import { usePriceRetriable } from '@Hooks/usePrice';
 import { TradePageNoLoss } from './Components/Trade';
 import { useNoLossMarkets } from './Hooks/useNoLossMarkets';
-import { usePastTradeQuery } from './Hooks/usePastTradeQuery';
 import { useTournamentDataFetch } from './Hooks/useTournamentDataFetch';
 import { useTournamentIds } from './Hooks/useTournamentIds';
 import { useUpdateActiveMarket } from './Hooks/useUpdateActiveMarket';
@@ -14,7 +13,8 @@ export const NoLossV3 = () => {
   useUpdateActiveMarket();
   usePriceRetriable();
   useUpdateActiveTournament();
-  usePastTradeQuery();
+  // usePastTradeQuery();
+  // useGenericHooks();
 
   return <TradePageNoLoss />;
 };

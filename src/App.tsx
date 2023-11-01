@@ -1,36 +1,26 @@
 import { Alert, Snackbar } from '@mui/material';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { atom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useEffect } from 'react';
-import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
-import { TradePage } from '@Views/TradePage';
 import Background from './AppStyles';
 import { Navbar } from './Views/Common/Navbar';
 
-import { useToast } from '@Contexts/Toast';
-import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
-import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
-import { AllTrades } from '@Views/AllTrades';
-import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
 import { NoLossV3 } from '@Views/NoLoss-V3';
-import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
-import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
 import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
-import { activeMarketFromStorageAtom } from './globalStore';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 (function () {
@@ -51,55 +41,55 @@ const Redirect = ({ url }: { url: string }) => {
 };
 
 const AppRoutes = () => {
-  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
-  const [searchParam] = useSearchParams();
-  const [ref, setRef] = useAtom(referralCodeAtom);
-  const toastify = useToast();
-  const navigate = useNavigate();
+  // const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
+  // const [searchParam] = useSearchParams();
+  // const [ref, setRef] = useAtom(referralCodeAtom);
+  // const toastify = useToast();
+  // const navigate = useNavigate();
   const earnUrl = isTestnet
     ? 'https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/'
     : 'https://earn.buffer.finance/';
 
-  useEffect(() => {
-    let referralCode = searchParam.get('ref');
+  // useEffect(() => {
+  //   let referralCode = searchParam.get('ref');
 
-    if (!referralCode) {
-      let code = '';
-      const codes = window.location.href.split('/');
+  //   if (!referralCode) {
+  //     let code = '';
+  //     const codes = window.location.href.split('/');
 
-      for (let i = 0; i < codes.length; i++) {
-        if (codes[i] == 'ref') {
-          code = codes?.[i + 1];
-        }
-      }
-      if (code) referralCode = code;
-    }
+  //     for (let i = 0; i < codes.length; i++) {
+  //       if (codes[i] == 'ref') {
+  //         code = codes?.[i + 1];
+  //       }
+  //     }
+  //     if (code) referralCode = code;
+  //   }
 
-    if (referralCode) {
-      if (ref !== referralCode) {
-        setRef(referralCode);
-        toastify({
-          type: 'success',
-          msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
-          id: 23132,
-        });
-      }
-      navigate('/binary/ETH-USD');
-    }
-  }, [searchParam]);
+  //   if (referralCode) {
+  //     if (ref !== referralCode) {
+  //       setRef(referralCode);
+  //       toastify({
+  //         type: 'success',
+  //         msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
+  //         id: 23132,
+  //       });
+  //     }
+  //     navigate('/binary/ETH-USD');
+  //   }
+  // }, [searchParam]);
   return (
     <div className="relative root w-[100vw] pb-[5px] ">
-      <TradesShutter />
+      {/* <TradesShutter /> */}
       <OpenOcean />
-      <OnboardingAnimation />
-      <OneCTModal />
+      {/* <OnboardingAnimation /> */}
+      {/* <OneCTModal /> */}
 
       <Routes>
-        <Route path="trades" element={<AllTrades />} />
+        {/* <Route path="trades" element={<AllTrades />} /> */}
         <Route path="/faucet" element={<IbfrFaucet />} />
         {/* <Route path="/test" element={<Test />} /> */}
-        <Route path="/history" element={<TradeLog_sm />} />
-        <Route path="/admin" element={<AdminConfig />} />
+        {/* <Route path="/history" element={<TradeLog_sm />} /> */}
+        {/* <Route path="/admin" element={<AdminConfig />} /> */}
 
         {/* <Route
           path="/ref/:refcode"
@@ -115,7 +105,7 @@ const AppRoutes = () => {
         {/* <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route> */}
-        <Route path="/binary/:market" element={<TradePage />} />
+        {/* <Route path="/binary/:market" element={<TradePage />} /> */}
         <Route path="/no-loss/:id/:market" element={<NoLossV3 />} />
         {/* <Route
           path="/*"
@@ -166,7 +156,7 @@ function App() {
       {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
-          <ViewOnlyModeTradePageWarning />
+          {/* <ViewOnlyModeTradePageWarning /> */}
           {graphStatus && (
             <Warning
               body={
@@ -245,35 +235,35 @@ function App() {
 
 export default App;
 
-const ViewOnlyModeTradePageWarning = () => {
-  const { viewOnlyMode, address } = useUserAccount();
-  const navigate = useNavigate();
-  if (!window?.location?.href) return <></>;
-  const url = window.location.href.split('#/')[1];
-  if (!url) return <></>;
-  const pagename = url.split('/')[0].toLowerCase();
-  const isBinaryPage = pagename == 'binary';
-  if (!isBinaryPage) return <></>;
-  const activeAsset = url.split('/')[1].toUpperCase();
-  return (
-    <Warning
-      body={
-        <div className="text-center">
-          You are watching the trades for {address}.&nbsp;
-          <button
-            onClick={() => {
-              navigate('/binary/' + activeAsset);
-            }}
-            className="underline underline-offset-4"
-          >
-            Go back to regular trading.
-          </button>
-        </div>
-      }
-      closeWarning={() => {}}
-      shouldAllowClose={false}
-      state={viewOnlyMode && isBinaryPage}
-      className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100 sm:!text-f14"
-    />
-  );
-};
+// const ViewOnlyModeTradePageWarning = () => {
+//   const { viewOnlyMode, address } = useUserAccount();
+//   const navigate = useNavigate();
+//   if (!window?.location?.href) return <></>;
+//   const url = window.location.href.split('#/')[1];
+//   if (!url) return <></>;
+//   const pagename = url.split('/')[0].toLowerCase();
+//   const isBinaryPage = pagename == 'binary';
+//   if (!isBinaryPage) return <></>;
+//   const activeAsset = url.split('/')[1].toUpperCase();
+//   return (
+//     <Warning
+//       body={
+//         <div className="text-center">
+//           You are watching the trades for {address}.&nbsp;
+//           <button
+//             onClick={() => {
+//               navigate('/binary/' + activeAsset);
+//             }}
+//             className="underline underline-offset-4"
+//           >
+//             Go back to regular trading.
+//           </button>
+//         </div>
+//       }
+//       closeWarning={() => {}}
+//       shouldAllowClose={false}
+//       state={viewOnlyMode && isBinaryPage}
+//       className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100 sm:!text-f14"
+//     />
+//   );
+// };

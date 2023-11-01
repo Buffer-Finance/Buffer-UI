@@ -1,92 +1,48 @@
-import { useEffect, useRef } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
 import { useToast } from '@Contexts/Toast';
-import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { getDisplayTime } from '@Utils/Dates/displayDateTime';
+import { divide, lt, subtract } from '@Utils/NumString/stringArithmatics';
+import { Display } from '@Views/Common/Tooltips/Display';
+import { BetState } from '@Views/NoLoss-V3/Hooks/useAheadTrades';
+import { IGQLHistory } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
+import axios from 'axios';
+import { useEffect, useRef } from 'react';
 
-import { getExpireNotification } from '@Views/TradePage/utils/getExpireNotification';
-import {
-  SetShareBetAtom,
-  SetShareStateAtom,
-  shareSettingsAtom,
-} from '@Views/TradePage/atoms';
-import { useUserAccount } from './useUserAccount';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { useMedia } from 'react-use';
-import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
-
-export const getIdentifier = (a: TradeType) => {
-  return +a.queue_id;
+export const getIdentifier = (a: IGQLHistory) => {
+  return +a.optionID + '-' + a.chartData.pair;
 };
 
-const useGenericHooks = () => {
-  const [activeTrades] = useOngoingTrades();
-
+const useGenericHooks = (binaryData: (IGQLHistory | null)[]) => {
   const tradeCache = useRef<{
-    [tradeId: string]: { trade: TradeType; visited: boolean };
+    [tradeId: string]: { trade: IGQLHistory; visited: boolean };
   }>({});
   // const binaryData = [];
   const toastify = useToast();
-  const { address } = useUserAccount();
-  const [, setIsOpen] = useAtom(SetShareStateAtom);
-  const [, setBet] = useAtom(SetShareBetAtom);
-  const { showSharePopup } = useAtomValue(shareSettingsAtom);
-  const { getPoolInfo } = usePoolInfo();
-  const { registeredOneCT } = useOneCTWallet();
-  const isMobile = useMedia('(max-width:1200px)');
-  const { openShareShutter } = useShutterHandlers();
-  const openShareModal = (
-    trade: TradeType,
-    expiry: string,
-    market: marketType,
-    poolInfo: poolInfoType
-  ) => {
-    if (!showSharePopup) return;
-    setBet({ trade, expiryPrice: expiry, market, poolInfo });
-    console.log('MobileShutter-shutterState.open', isMobile);
-    if (isMobile) {
-      openShareShutter();
-    } else {
-      setIsOpen(true);
-    }
-  };
 
   useEffect(() => {
-    // make all trade as not visited.
-    // whenever trades arr changed check all trades & mark them true.
-    // trades which remains false even after checking are the trades which are expired.
-    if (!activeTrades || !registeredOneCT) return;
     const delay = 2;
-    if (typeof activeTrades.forEach !== 'function') return;
-    // make all new true
-    for (let trade of activeTrades) {
-      if (trade.state == 'OPENED') {
-        let tradeIdentifier = trade.queue_id;
+    if (!binaryData) return;
+    if (typeof binaryData.forEach !== 'function') return;
+    for (let trade of binaryData) {
+      if (!trade) return;
+
+      if (trade.state == BetState.active) {
+        let tradeIdentifier = getIdentifier(trade);
         tradeCache.current[tradeIdentifier] = { trade, visited: true };
       }
     }
     for (let tradeIdentifier in tradeCache.current) {
       const currTrade = tradeCache.current[tradeIdentifier];
-      // one which is not getting true, i.e not in newer set of activeTrades i.e got expired
       if (!currTrade.visited) {
-        const poolInfo = getPoolInfo(currTrade.trade.pool.pool);
-
+        console.log(`notif-called-on-currTrade: `, currTrade);
         setTimeout(() => {
-          getExpireNotification(
-            { ...currTrade.trade },
-            toastify,
-            openShareModal,
-            poolInfo,
-            showSharePopup
-          );
+          getExpireNotification({ ...currTrade.trade }, toastify);
         }, delay * 1000);
         delete tradeCache.current[tradeIdentifier];
       }
     }
 
     return () => {
-      // make all prev false
+      // make all false
       for (let tradeIdentifier in tradeCache.current) {
         tradeCache.current[tradeIdentifier] = {
           ...tradeCache.current[tradeIdentifier],
@@ -95,10 +51,100 @@ const useGenericHooks = () => {
       }
     };
     // if some trade left with visited:false - that trade is the one for which we want to show notif
-  }, [activeTrades]);
-  useEffect(() => {
-    tradeCache.current = {};
-  }, [address]);
+  }, [binaryData]);
 };
 
 export { useGenericHooks };
+
+const getExpireNotification = async (
+  currentRow: IGQLHistory,
+  toastify: any
+) => {
+  let response;
+  const query = {
+    pair: currentRow.chartData.tv_id,
+    timestamp: currentRow.expirationTime,
+  };
+  response = await axios.post(
+    `https://oracle.buffer-finance-api.link/price/query/`,
+    [query]
+  );
+  if (!response.data?.length) {
+    response = await axios.post(
+      `https://oracle.buffer-finance-api.link/price/query/`,
+      [query]
+    );
+  }
+
+  if (!Array.isArray(response.data) || !response.data?.[0]?.price) {
+    return null;
+  }
+
+  const expiryPrice = response.data[0].price.toString();
+  console.log(`getExpireNotification: `, currentRow, expiryPrice);
+
+  let win = true;
+  if (lt(currentRow.strike, expiryPrice)) {
+    if (currentRow.isAbove) {
+      win = true;
+    } else {
+      win = false;
+    }
+  } else if (currentRow.strike == expiryPrice) {
+    //to be asked
+    win = false;
+  } else {
+    if (currentRow.isAbove) {
+      win = false;
+    } else {
+      win = true;
+    }
+  }
+
+  const openTimeStamp = currentRow.creationTime;
+  const closeTimeStamp = +currentRow.expirationTime;
+  toastify({
+    type: 'loss',
+    // inf: true,
+    msg: (
+      <div className="flex-col">
+        <div className="flex whitespace-nowrap">
+          {currentRow.chartData.token0}-{currentRow.chartData.token1}{' '}
+          {currentRow.isAbove ? 'Up' : 'Down'} @&nbsp;
+          <Display
+            data={divide(currentRow.strike, 8)}
+            unit={currentRow.chartData.token1}
+            className="!whitespace-nowrap"
+          />
+          &nbsp;
+          <span
+            className={`flex !whitespace-nowrap `}
+            style={{ color: win ? 'var(--green)' : 'text-1' }}
+          >
+            (+{' '}
+            <Display
+              className={'text-1 !whitespace-nowrap ' + win && 'green'}
+              data={
+                win
+                  ? divide(
+                      subtract(
+                        currentRow.amount as string,
+                        currentRow.totalFee
+                      ),
+                      18
+                    )
+                  : 0
+              }
+              // unit={(currentRow.depositToken as IToken).name}
+            />
+            )
+          </span>
+        </div>
+        <div className="nowrap f12 mt5 text-6 @whitespace-nowrap">
+          {getDisplayTime(openTimeStamp)} -&nbsp;
+          {getDisplayTime(closeTimeStamp)}
+        </div>
+      </div>
+    ),
+  });
+};

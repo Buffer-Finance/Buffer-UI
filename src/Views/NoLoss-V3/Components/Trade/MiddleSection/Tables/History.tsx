@@ -96,6 +96,7 @@ export const HistoryTable = () => {
       case TableColumn.Payout:
         if (trade.state === BetState.queued) return <PayoutChip data={trade} />;
         const pnl = subtract(trade.payout ?? '0', trade.totalFee);
+        const isTradeLost = lt(pnl, '0');
         return (
           <div className="flex flex-col gap-1">
             <Display
@@ -104,12 +105,10 @@ export const HistoryTable = () => {
               className="!justify-start"
             />
             <div
-              className={`flex gap-2 items-center ${
-                lt(pnl, '0') ? 'red' : 'green'
-              }`}
+              className={`flex items-center ${isTradeLost ? 'red' : 'green'}`}
             >
-              Net Pnl :-
-              <Display data={divide(pnl, 18)} className={``} precision={2} />
+              Net Pnl : {isTradeLost ? '' : '+ '}
+              <Display data={divide(pnl, 18)} precision={2} />
             </div>
           </div>
         );

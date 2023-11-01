@@ -1,3 +1,4 @@
+import { useGenericHooks } from '@Hooks/useGenericHook';
 import { tardesAtom } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
 import styled from '@emotion/styled';
 import { useAtomValue } from 'jotai';
@@ -5,6 +6,7 @@ import { Trade } from './Trade';
 
 export const ActiveTrades = () => {
   const { active } = useAtomValue(tardesAtom);
+  useGenericHooks(active);
 
   return (
     <TradesBackground className="b1200:mb-4">
