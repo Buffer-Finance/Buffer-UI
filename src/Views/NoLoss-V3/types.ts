@@ -74,3 +74,5 @@ export interface ItournamentData {
   isUserEligible: boolean;
   isTradingApproved?: boolean;
 }
+
+export type accordianTableType = 'leaderboard' | 'history' | 'cancelled';

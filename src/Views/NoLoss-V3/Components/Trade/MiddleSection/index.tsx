@@ -2,8 +2,9 @@ import { MarketChart } from '@Views/TradePage/Views/MarketChart';
 import { miscsSettingsAtom } from '@Views/TradePage/atoms';
 import styled from '@emotion/styled';
 import { useAtomValue } from 'jotai';
-import { PinnedMarkets } from '../PinnedMarkets';
-import { StatusBar } from '../StatusBar';
+import { PinnedMarkets } from './PinnedMarkets';
+import { StatusBar } from './StatusBar';
+import { Tables } from './Tables';
 
 export const MiddleSection = () => {
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
@@ -13,6 +14,7 @@ export const MiddleSection = () => {
       {showFavoriteAsset && <PinnedMarkets />}
       <StatusBar isMobile={false} />
       <MarketChart />
+      <Tables />
     </MiddleSectionBackground>
   );
 };

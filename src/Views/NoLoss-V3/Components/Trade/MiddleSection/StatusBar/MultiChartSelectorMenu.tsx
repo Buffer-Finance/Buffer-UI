@@ -1,3 +1,8 @@
+import { FourCharts } from '@Views/NoLoss-V3/Components/SVGs/ChartSelectors/FourCharts';
+import { OneChart } from '@Views/NoLoss-V3/Components/SVGs/ChartSelectors/OneChart';
+import { TwoChartHorizontal } from '@Views/NoLoss-V3/Components/SVGs/ChartSelectors/TwoChartHorizontal';
+import { TwoChartsvertical } from '@Views/NoLoss-V3/Components/SVGs/ChartSelectors/TwoChartsvertical';
+import { FourRectanglesSVG } from '@Views/NoLoss-V3/Components/SVGs/FourRectangle';
 import { chartNumberAtom } from '@Views/NoLoss-V3/atoms';
 import {
   ClickEvent,
@@ -8,11 +13,6 @@ import {
 } from '@szhsin/react-menu';
 import { useAtom } from 'jotai';
 import { useRef } from 'react';
-import { FourCharts } from '../../SVGs/ChartSelectors/FourCharts';
-import { OneChart } from '../../SVGs/ChartSelectors/OneChart';
-import { TwoChartHorizontal } from '../../SVGs/ChartSelectors/TwoChartHorizontal';
-import { TwoChartsvertical } from '../../SVGs/ChartSelectors/TwoChartsvertical';
-import { FourRectanglesSVG } from '../../SVGs/FourRectangle';
 
 const Idx2icon = {
   0: OneChart,

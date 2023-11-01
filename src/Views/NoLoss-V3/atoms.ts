@@ -14,6 +14,7 @@ import {
   IreadCall,
   ItournamentData,
   ItournamentId,
+  accordianTableType,
 } from './types';
 
 export const tournamentIdsAtom = atom<ItournamentId[] | undefined>(undefined);
@@ -377,3 +378,6 @@ export const noLossFavouriteMarketsAtom = atomWithStorage<string[]>(
   'noLossFavouriteMarkets',
   []
 );
+
+// tables atoms
+export const accordianTableTypeAtom = atom<accordianTableType>('leaderboard');
