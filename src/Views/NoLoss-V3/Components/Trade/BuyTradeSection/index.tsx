@@ -2,6 +2,7 @@ import { activeMarketDataAtom } from '@Views/NoLoss-V3/atoms';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
+import { ActiveTrades } from './ActiveTrades';
 import { BuyButtons } from './BuyButtons';
 import { CurrentPrice } from './CurrentPrice';
 import { PayoutProfit } from './PayoutProfit';
@@ -24,6 +25,7 @@ export const BuyTradeSection = () => {
       <CurrentPrice activeMarket={activeMarket} />
       <PayoutProfit activeMarket={activeMarket} />
       <BuyButtons activeMarket={activeMarket} />
+      <ActiveTrades />
     </BuyTradeSectionBackground>
   );
 };

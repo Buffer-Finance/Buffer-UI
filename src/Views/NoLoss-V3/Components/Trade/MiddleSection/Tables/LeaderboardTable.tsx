@@ -63,7 +63,6 @@ export const LeaderboardTable = () => {
     }
   };
 
-  console.log(data, 'leaderboardDataAtom');
   return (
     <BufferTable
       bodyJSX={BodyFormatter}

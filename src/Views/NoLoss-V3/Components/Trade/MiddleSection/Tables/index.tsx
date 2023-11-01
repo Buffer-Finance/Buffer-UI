@@ -7,7 +7,6 @@ import { TableSelector } from './TableSelector';
 export const Tables = () => {
   const activeTable = useAtomValue(accordianTableTypeAtom);
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
-
   return (
     <div className="flex flex-col">
       <Accordian

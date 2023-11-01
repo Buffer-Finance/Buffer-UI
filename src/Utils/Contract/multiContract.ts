@@ -1,5 +1,6 @@
+import getDeepCopy from '@Utils/getDeepCopy';
 import { convertBNtoString } from '@Utils/useReadCall';
-import { Contract, ethers } from 'ethers';
+import { ethers } from 'ethers';
 export interface Call {
   address: string; // Address of the contract
   name: string; // Function name on the contract (example: balanceOf)
@@ -7,17 +8,10 @@ export interface Call {
   abi?: any[]; // Abi of the contract
   id?: string; //identifier of call
 }
-import getDeepCopy from '@Utils/getDeepCopy';
-import { getContract } from 'viem';
 
 export const arbMain = 'https://arb1.arbitrum.io/rpc';
 
-export const multicallv2 = async (
-  calls: Call[],
-  contract,
-  multicall,
-  swrKey
-) => {
+export const multicallv2 = async (calls: Call[], contract) => {
   if (!calls?.length) return null;
   try {
     const calldata = calls.map((call) => {
@@ -39,7 +33,7 @@ export const multicallv2 = async (
     });
     return res;
   } catch (err) {
-    console.log(err, calls, swrKey, 'multicall err');
+    console.log(err, calls, 'multicall err');
     return null;
   }
 };

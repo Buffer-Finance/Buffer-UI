@@ -10,10 +10,22 @@ const TradeTypeChipBackground = styled.div`
   padding: 2px 4px;
   line-height: 14px;
   text-transform: capitalize;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  margin-bottom: 10px;
 `;
 
 export const TradeTypeChip: React.FC<{ tradeType: string }> = ({
   tradeType,
 }) => {
-  return <TradeTypeChipBackground>{tradeType}</TradeTypeChipBackground>;
+  return (
+    <TradeTypeChipBackground>
+      {' '}
+      <img src="/Gear.png" className="w-[10px] h-[10px] animate-spin" />
+      {tradeType}
+    </TradeTypeChipBackground>
+  );
 };
