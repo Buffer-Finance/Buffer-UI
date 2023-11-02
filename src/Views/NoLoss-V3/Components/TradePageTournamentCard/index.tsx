@@ -1,8 +1,8 @@
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { useAtomValue } from 'jotai';
-import { activeTournamentIdAtom } from '../../atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { WinningPirzeModalAtom, activeTournamentIdAtom } from '../../atoms';
 import { ItournamentData } from '../../types';
 import { NoLossV3Timer } from '../NoLossV3Timer';
 import { MIcon } from '../SVGs/Micon';
@@ -16,7 +16,12 @@ export const TradepageTournamentCard: React.FC<{
   isTradePage?: boolean;
 }> = ({ tournament, isTradePage = true }) => {
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
+  console.log('touenamentcard', tournament);
+  const setWinPrizeModal = useSetAtom(WinningPirzeModalAtom);
 
+  function openWinPrizeModal() {
+    setWinPrizeModal(tournament);
+  }
   return (
     <div
       className={`w-[250px] background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
@@ -48,7 +53,12 @@ export const TradepageTournamentCard: React.FC<{
         <div className="flex-col text-f12 items-center">
           <div className="text-3">Prize Pool</div>
           <div>
-            {divide(tournament.rewardPool, tournament.rewardTokenDecimals)}
+            {divide(
+              tournament.tournamentRewardPools.toString(),
+              tournament.rewardTokenDecimals
+            )}
+            &nbsp;
+            {tournament.rewardTokenSymbol}
           </div>
         </div>
         <div className="flex-col text-f12 items-end">
@@ -69,33 +79,43 @@ export const TradepageTournamentCard: React.FC<{
       <div className="flex items-center justify-start mt-3 gap-4">
         <div className="flex items-center text-f12 ">
           <RankOne />
-          <div className="mt-1  text-1 ml-2">
-            {/* <Display
-          data={divide(
-            tournament.rewards[0],
-            tournament.rewardTokenDecimals
-          )}
-          unit={tournament.rewardTokenSymbol}
-        /> */}
-          </div>
+          <button
+            className="ml-2 text-buffer-blue underline underline-offset-2"
+            onClick={openWinPrizeModal}
+          >
+            {getValueOfPercentage(
+              divide(
+                tournament.tournamentRewardPools.toString(),
+                tournament.rewardTokenDecimals
+              ) as string,
+              divide(
+                tournament.tournamentLeaderboard.rewardPercentages[0].toString(),
+                2
+              ) as string
+            )}
+            &nbsp;
+            {tournament.rewardTokenSymbol}
+          </button>
         </div>
 
         <NumberTooltip
           content={
             'Only upto ' +
-            tournament.tournamentConditions.maxParticipants +
+            parseInt(tournament.tournamentConditions.maxParticipants) +
             ' patricipants are allowed for this tournament'
           }
         >
           <div className="flex items-center gap-x-2 text-f12">
             <MIcon />
-            Upto {tournament.tournamentConditions.maxParticipants}
+            Upto {parseInt(tournament.tournamentConditions.maxParticipants)}
           </div>
         </NumberTooltip>
 
         <div className="flex items-center gap-2">
           <TotalWinnersTrophy />
-          <div className="text-f12">?</div>
+          <div className="text-f12">
+            {parseInt(tournament.tournamentLeaderboard.totalWinners)}
+          </div>
         </div>
       </div>
       <TournamentCardButtons
@@ -105,3 +125,7 @@ export const TradepageTournamentCard: React.FC<{
     </div>
   );
 };
+
+export function getValueOfPercentage(totalValue: string, percentage: string) {
+  return divide(multiply(totalValue, percentage), 2) as string;
+}

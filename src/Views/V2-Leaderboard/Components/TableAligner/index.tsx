@@ -1,5 +1,3 @@
-import React from 'react';
-import { TableAlignerStyles } from './style';
 import {
   Table,
   TableBody,
@@ -7,6 +5,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import React from 'react';
+import { TableAlignerStyles } from './style';
 
 interface ITableAligner {
   keysName: any[];
@@ -14,7 +14,7 @@ interface ITableAligner {
   keyStyle?: string;
   valueStyle?: string;
   className?: string;
-  getClassName?: (a: string, b: number) => string;
+  getClassName?: (row: string, b: number) => string;
 }
 
 export const TableAligner: React.FC<ITableAligner> = ({

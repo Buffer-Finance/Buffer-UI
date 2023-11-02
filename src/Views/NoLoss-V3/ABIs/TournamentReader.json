@@ -112,6 +112,48 @@
             "type": "tuple"
           },
           {
+            "components": [
+              {
+                "internalType": "bytes32",
+                "name": "rankFirst",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "rankLast",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "uint256",
+                "name": "userCount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalBuyins",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "rakeCollected",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalWinners",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "rewardPercentages",
+                "type": "uint256[]"
+              }
+            ],
+            "internalType": "struct ITournamentLeaderboard.TournamentLeaderBoard",
+            "name": "tournamentLeaderboard",
+            "type": "tuple"
+          },
+          {
             "internalType": "string",
             "name": "buyinTokenSymbol",
             "type": "string"
@@ -130,6 +172,11 @@
             "internalType": "uint8",
             "name": "rewardTokenDecimals",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tournamentRewardPools",
+            "type": "uint256"
           }
         ],
         "internalType": "struct ITournamentReader.TournamentWithTokens[]",
@@ -137,6 +184,20 @@
         "type": "tuple[]"
       }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" },
+      {
+        "internalType": "uint256[]",
+        "name": "tournamentIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "bulkFetchUserTournaments",
+    "outputs": [{ "internalType": "bool[]", "name": "", "type": "bool[]" }],
     "stateMutability": "view",
     "type": "function"
   },

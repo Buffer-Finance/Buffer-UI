@@ -16,6 +16,7 @@ import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { erc20ABI } from 'wagmi';
+import TournamentLeaderboardABI from '../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../ABIs/TournamentManager.json';
 import { TradeIcon } from '../SVGs/TradeIcon';
 
@@ -69,6 +70,31 @@ export const TournamentCardButtons: React.FC<{
       <Skeleton className="!h-[26px] full-width sr lc !mt-4 !transform-none" />
     );
 
+  async function handleClaim() {
+    setBtnLoading(true);
+    await writeCall(
+      config.leaderboard,
+      TournamentLeaderboardABI,
+      (response) => {
+        setBtnLoading(false);
+        console.log(response);
+      },
+      'claimReward',
+      [tournament.id]
+    );
+  }
+
+  if (tournament.state.toLowerCase() === 'closed')
+    return (
+      <BufferButton
+        onClick={handleClaim}
+        isLoading={btnLoading}
+        className={'!text-f12 h-fit bg-blue mt-4 py-2'}
+      >
+        Claim
+      </BufferButton>
+    );
+
   if (lt(allowance, ticketCost)) {
     const approveTournamentManager = () => {
       setBtnLoading(true);
@@ -80,7 +106,7 @@ export const TournamentCardButtons: React.FC<{
           console.log(response);
         },
         'approve',
-        [config.manager, tournament.tournamentMeta.ticketCost]
+        [config.manager, parseInt(tournament.tournamentMeta.ticketCost)]
       );
     };
 

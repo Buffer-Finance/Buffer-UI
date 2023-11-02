@@ -1,10 +1,10 @@
 import { getCallId } from '@Utils/Contract/multiContract';
+import { add } from '@Utils/NumString/stringArithmatics';
 import { HHMMToSeconds } from '@Views/TradePage/utils';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { Chain, getAddress } from 'viem';
 import { erc20ABI } from 'wagmi';
-import TournamentLeaderboardABI from './ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from './ABIs/TournamentManager.json';
 import TournamentReaderABI from './ABIs/TournamentReader.json';
 import { defaultSelectedTime } from './config';
@@ -44,7 +44,7 @@ export const activeMarketDataAtom = atom<InoLossMarket | undefined>((get) => {
 });
 
 export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
-  const tournamentsData = get(allTournamentsDataReadOnlyAtom);
+  const tournamentsData = get(tournaments);
   const activeChain = get(activeChainAtom);
   const user = get(userAtom);
 
@@ -69,7 +69,7 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
   const filteredTournamentsData: ItournamentData[] = [];
   tournamentsData.forEach((tournament) => {
     if (
-      tournament.state.toLowerCase() !== 'completed' &&
+      tournament.state.toLowerCase() !== 'closed' &&
       tournament.state.toLowerCase() !== 'created' &&
       !filteredTournamentsData.find(
         (filteredTournament) =>
@@ -131,8 +131,6 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
     calls: IreadCall[] | null;
     result:
       | {
-          tournamentData: ItournamentData[] | undefined;
-          userRank: string | undefined;
           isTradingApproved: boolean | undefined;
           activeTournamentBalance: string | undefined;
           activeTournamentLeaderboardStats: ItournamentStats | undefined;
@@ -145,28 +143,7 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
   else {
     const config = getNoLossV3Config(activeChain.id);
 
-    const tournamentIds = tournaments.map((tournament) => +tournament.id);
-
-    const readcalls: IreadCall[] = [
-      {
-        address: config.tournament_reader,
-        abi: TournamentReaderABI,
-        name: 'bulkFetchTournaments',
-        params: [tournamentIds],
-        id: getCallId(config.tournament_reader, 'bulkFetchTournaments'),
-      },
-    ];
-
-    const rewardPoolCalls = tournamentIds.map((tournamentId) => {
-      return {
-        address: config.manager,
-        abi: TournamentManagerABI,
-        name: 'tournamentRewardPools',
-        params: [tournamentId],
-        id: `${config.manager}tournamentRewardPools${tournamentId}`,
-      };
-    });
-    readcalls.push(...rewardPoolCalls);
+    const readcalls: IreadCall[] = [];
 
     if (user !== undefined && user.userAddress !== undefined) {
       readcalls.push({
@@ -179,27 +156,9 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
           config.router,
         ]),
       });
-      readcalls.push(
-        ...tournamentIds.map((tournamentId) => {
-          return {
-            address: config.manager,
-            abi: TournamentManagerABI,
-            name: 'tournamentUsers',
-            params: [tournamentId, user.userAddress],
-            id: `${config.manager}tournamentUsers${tournamentId}`,
-          };
-        })
-      );
       if (activeTournamentId !== undefined) {
         readcalls.push(
           ...[
-            {
-              address: config.leaderboard,
-              abi: TournamentLeaderboardABI,
-              name: 'userTournamentRank',
-              params: [activeTournamentId, user.userAddress],
-              id: getCallId(config.leaderboard, 'userTournamentRank'),
-            },
             {
               address: config.manager,
               abi: TournamentManagerABI,
@@ -222,40 +181,12 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
 
     const readcallResponse = get(noLossReadcallResponseReadOnlyAtom);
     if (readcallResponse !== undefined) {
-      const tournamentDataId = getCallId(
-        config.tournament_reader,
-        'bulkFetchTournaments'
-      );
-      const userRankId = getCallId(config.leaderboard, 'userTournamentRank');
       const activeTournamentBalanceId = getCallId(config.manager, 'balanceOf');
       const activeTournamentLeaderboardStatsId = getCallId(
         config.tournament_reader,
         'leaderboard'
       );
-      const rewardPoolsIds = tournamentIds.map((tournamentId) =>
-        getCallId(config.manager, 'tournamentRewardPools', [tournamentId])
-      );
-      const rewardPools = rewardPoolsIds.map((id) => readcallResponse[id]?.[0]);
-      const userEligibilityIds = tournamentIds.map((tournamentId) =>
-        getCallId(config.manager, 'tournamentUsers', [tournamentId])
-      );
-      const userEligibility = userEligibilityIds.map(
-        (id) => readcallResponse[id]?.[0]
-      );
-
       response.result = {
-        tournamentData: readcallResponse[tournamentDataId][0].map(
-          (data: ItournamentData, index: number) => {
-            return {
-              ...data,
-              id: +tournaments[index].id,
-              state: tournaments[index].state,
-              rewardPool: rewardPools[index],
-              isUserEligible: userEligibility[index],
-            };
-          }
-        ),
-        userRank: readcallResponse[userRankId]?.[0],
         activeTournamentBalance:
           readcallResponse[activeTournamentBalanceId]?.[0],
         activeTournamentLeaderboardStats:
@@ -287,12 +218,12 @@ export const noLossReadcallResponseReadOnlyAtom = atom<
 >(undefined);
 
 export const allTournamentsDataReadOnlyAtom = atom((get) => {
-  const { result } = get(noLossReadCallsReadOnlyAtom);
-  return result?.tournamentData;
+  const result = get(tournaments);
+  return undefined;
 });
 
 export const activeTournamentDataReadOnlyAtom = atom((get) => {
-  const allTournamentsData = get(allTournamentsDataReadOnlyAtom);
+  const allTournamentsData = get(tournaments);
   const activeTournamentId = get(activeTournamentIdAtom);
 
   if (allTournamentsData === undefined || activeTournamentId === undefined)
@@ -310,7 +241,7 @@ export const activeMyAllTabAtom = atom<string>('my');
 export const tournamentStateTabAtom = atom<string>('live');
 
 export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
-  const allTournamentsData = get(allTournamentsDataReadOnlyAtom);
+  const allTournamentsData = get(tournaments);
   const activeMyAllTab = get(activeMyAllTabAtom);
   const tournamentStateTab = get(tournamentStateTabAtom);
 
@@ -325,12 +256,12 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
   });
 
   return filteredTournamentsData.filter((tournament) => {
-    if (tournamentStateTab === 'live') {
-      return tournament.state === 'Live';
-    } else if (tournamentStateTab === 'upcoming') {
-      return tournament.state === 'Upcoming';
+    if (tournamentStateTab.toLowerCase() === 'live') {
+      return tournament.state.toLowerCase() === 'live';
+    } else if (tournamentStateTab.toLowerCase() === 'upcoming') {
+      return tournament.state.toLowerCase() === 'upcoming';
     } else {
-      return tournament.state === 'Completed';
+      return tournament.state.toLowerCase() === 'closed';
     }
   });
 });
@@ -451,3 +382,40 @@ export const userLeaderboardDataAtom = atom<
   });
   return { data: userData, rank };
 });
+
+export const allTournamentDataAtom = atom<
+  undefined | { [nextId: number]: ItournamentData[] | undefined }
+>(undefined);
+export const userTournamentsBooleanAtom = atom<
+  undefined | { [nextId: number]: boolean[] | undefined }
+>(undefined);
+
+export const tournaments = atom<ItournamentData[] | undefined>((get) => {
+  const allTournamentsData = get(allTournamentDataAtom);
+  const allBooleans = get(userTournamentsBooleanAtom);
+  const states = get(tournamentIdsAtom);
+
+  if (
+    allTournamentsData === undefined ||
+    allBooleans === undefined ||
+    states === undefined
+  )
+    return undefined;
+  return Object.entries(allTournamentsData)
+    .map(([nextId, tournametsbatch]) => {
+      if (tournametsbatch === undefined) return;
+      console.log('goes inhere');
+      return tournametsbatch.map((tournament, index) => {
+        const id = parseInt(add(nextId, index.toString()));
+        return {
+          ...tournament,
+          id,
+          isUserEligible: allBooleans[nextId]?.[index],
+          state: states.find((state) => +state.id === id)?.state,
+        };
+      });
+    })
+    .flat();
+});
+
+export const WinningPirzeModalAtom = atom<null | ItournamentData>(null);

@@ -37,42 +37,51 @@ export interface IreadCall {
 }
 
 export interface TournamentMeta {
-  name: string;
-  start: string;
+  buyinToken: string;
   close: string;
-  ticketCost: string;
-  playTokenMintAmount: string;
+  creator: string;
   isClosed: boolean;
   isVerified: boolean;
-  tradingStarted: boolean;
-  shouldRefundTickets: boolean;
-  tournamentType: number;
-  buyinToken: string;
+  name: string;
+  playTokenMintAmount: string;
   rewardToken: string;
-  creator: string;
+  shouldRefundTickets: boolean;
+  start: string;
+  ticketCost: string;
+  tournamentType: number;
+  tradingStarted: boolean;
 }
 
 export interface TournamentConditions {
-  maxBuyinsPerWallet: string;
-  minParticipants: string;
-  maxParticipants: string;
   guaranteedWinningAmount: string;
-  startPriceMoney: string;
+  maxBuyinsPerWallet: string;
+  maxParticipants: string;
+  minParticipants: string;
   rakePercent: string;
+  startPriceMoney: string;
 }
 
+export interface TournamentLeaderboard {
+  rakeCollected: string;
+  rankFirst: string;
+  rankLast: string;
+  rewardPercentages: string[];
+  totalBuyins: string;
+  totalWinners: string;
+  userCount: string;
+}
 export interface ItournamentData {
-  tournamentMeta: TournamentMeta;
-  tournamentConditions: TournamentConditions;
-  buyinTokenSymbol: string;
   buyinTokenDecimals: number;
-  rewardTokenSymbol: string;
-  rewardTokenDecimals: number;
+  buyinTokenSymbol: string;
   id: number;
-  state: string;
-  rewardPool: string;
   isUserEligible: boolean;
-  isTradingApproved?: boolean;
+  rewardTokenDecimals: number;
+  rewardTokenSymbol: string;
+  state: string;
+  tournamentConditions: TournamentConditions;
+  tournamentLeaderboard: TournamentLeaderboard;
+  tournamentMeta: TournamentMeta;
+  tournamentRewardPools: string;
 }
 
 export type accordianTableType = 'leaderboard' | 'history' | 'cancelled';

@@ -2,7 +2,7 @@ import { useTimer } from '@Hooks/Utilities/useStopWatch';
 import { Timer } from './Timer';
 
 export const NoLossV3Timer = ({ close }: { close: string }) => {
-  const timer = useTimer(close);
+  const timer = useTimer(close.toString());
   if (timer.seconds < 0)
     return (
       <div className="text-f14 text-3 my-3">

@@ -10,7 +10,7 @@ import {
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
 import { LeaderboardData } from '../types';
 
-export const useTournamentData = () => {
+export const useLeaderboardData = () => {
   const activeChain = useAtomValue(activeChainAtom);
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
   const [nextRankId, setNextRankId] = useState(
@@ -37,14 +37,12 @@ export const useTournamentData = () => {
       cacheTime: 5000,
     };
   }
-  console.log(readcall, 'readcall');
   try {
     const { data: leaderboardData, error } = useContractRead<
       unknown[],
       string,
       LeaderboardData[]
     >(readcall);
-    console.log(leaderboardData, 'leaderboardData');
     if (error) {
       throw error;
     }
