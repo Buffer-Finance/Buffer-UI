@@ -118,15 +118,14 @@ export const contractRead = async (contract, method, args, debug = false) => {
 
 export const useSignerOrPorvider = () => {
   const { address } = useAccount();
-  const { activeChain, isWrongChain } = useActiveChain();
+  const activeChain = useAtomValue(activeChainAtom);
+  const { data: signer } = useWalletClient({ chainId: activeChain?.id });
 
-  const { data: signer } = useWalletClient({ chainId: activeChain.id });
-
-  const p = usePublicClient({ chainId: activeChain.id });
+  const p = usePublicClient({ chainId: activeChain?.id });
   const signerOrProvider = useMemo(() => {
     let signerOrProvider = p;
 
-    if (signer && !isWrongChain && address) {
+    if (signer && address) {
       signerOrProvider = signer;
     }
     return signerOrProvider;

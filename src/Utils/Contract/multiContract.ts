@@ -11,8 +11,15 @@ export interface Call {
 
 export const arbMain = 'https://arb1.arbitrum.io/rpc';
 
-export const multicallv2 = async (calls: Call[], contract) => {
-  if (!calls?.length) return null;
+import { Contract } from 'ethers';
+
+export const multicallv2 = async (
+  calls: Call[],
+  singerOrProvider,
+  multicall,
+  swrKey
+) => {
+  if (!calls.length) return null;
   try {
     const calldata = calls.map((call) => {
       const itf = ethers.utils && new ethers.utils.Interface(call.abi);
@@ -22,6 +29,8 @@ export const multicallv2 = async (calls: Call[], contract) => {
       ];
     });
 
+    const contract = new Contract(multicall, arbMulticallABI, singerOrProvider);
+
     let returnData = await contract['callStatic']['aggregate'](calldata);
     if (typeof returnData === 'undefined') return;
     const res = returnData.returnData.map((call, i) => {
@@ -29,11 +38,12 @@ export const multicallv2 = async (calls: Call[], contract) => {
       if (!call) return null;
       const itf = new ethers.utils.Interface(calls[i].abi);
       const tempRes = itf.decodeFunctionResult(calls[i].name, call);
+
       return tempRes;
     });
     return res;
   } catch (err) {
-    console.log(err, calls, 'multicall err');
+    console.log(err, calls, swrKey, 'multicall err');
     return null;
   }
 };

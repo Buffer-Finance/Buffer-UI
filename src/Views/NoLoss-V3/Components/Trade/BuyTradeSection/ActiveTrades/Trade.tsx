@@ -21,7 +21,11 @@ export const Trade: React.FC<{ trade: IGQLHistory }> = ({ trade }) => {
             <div className="h-[15px] w-[15px]">
               <PairTokenImage pair={trade.chartData.pair} />
             </div>
-            <White12pxText>{trade.chartData.pair}</White12pxText>
+            <White12pxText
+              className={`${trade.blockNumber ? '!text-red' : ''}`}
+            >
+              {trade.chartData.pair}
+            </White12pxText>
             <DirectionChip isUp={trade.isAbove} shouldShowArrow />
             <Visualized queue_id={trade.queueID} />
           </RowGap>

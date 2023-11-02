@@ -1,11 +1,15 @@
-import { multicallv2 } from '@Utils/Contract/multiContract';
-import getDeepCopy from '@Utils/getDeepCopy';
-import { convertBNtoString, useSignerOrPorvider } from '@Utils/useReadCall';
+import { getCallId } from '@Utils/Contract/multiContract';
+import { useCall2Data } from '@Utils/useReadCall';
 import { ethers } from 'ethers';
+import { useAtomValue } from 'jotai';
+import { useMemo } from 'react';
 import useSWR from 'swr';
+import { createPublicClient, http } from 'viem';
 import routerAbi from '../ABIs/NoLossRouter.json';
 import optionsAbi from '../ABIs/OptionsABI.json';
+import { activeChainAtom } from '../atoms';
 import { getLogs } from '../helpers/getLogs';
+import { getNoLossV3Config } from '../helpers/getNolossV3Config';
 import { IGQLHistory } from './usePastTradeQuery';
 const routerIfc = new ethers.utils.Interface(routerAbi);
 
@@ -80,30 +84,40 @@ const optionsIfc = new ethers.utils.Interface(optionsAbi);
 // TODO = Make these topics dynamic
 // For 7.5k blocks  it is taking 1.5s to scan
 const openTrade =
-  '0x46961a5320eafc3fb71b3051774237104d4cec1687a31eed0c32262f0be47902';
+  '0x277b2c03e846b9440fc7acc69bbc99c7e9ff528bc2317b61bc7aacc92923005e';
 const createTopic =
-  '0xe3a07e2ac405f9c908f600ba464ed28dd28f04e308ccc0610a33ca7ed1c59abb';
+  '0x1bbfc9eb113af4226de738bd6f2c94b98c4618014c7d65650e0b5d179697bf27';
 const initiateTrade =
-  '0xa058ea17deb3dad493dcf014f030710e90240e4bf900bace442ac371365ac3ec';
+  '0xf1a94b570b334fe3f40ce034179ad1035f6e2e25fa052bddecfc3df9daf6fa89';
 
 const cancelTrade =
-  '0xc804e178cb25d48cffff5de67dd01d385e72784ce35bbc52affad3e13dfa269a';
+  '0x4fd0b12c63928d90d39e46144c6b88f9ff4c5bcfef779a67d9fd98649b381307';
 
 const useAheadTrades = (
   startBlock: number,
   account: string,
   shouldNotFilterAccount?: boolean
 ) => {
-  const signer = useSignerOrPorvider();
-  const multicall = '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2';
-  // const { data: recentBlock } = useBlockNumber();
+  // const signer = useSignerOrPorvider();
+  const activeChain = useAtomValue(activeChainAtom);
+
+  const client = createPublicClient({
+    batch: {
+      multicall: true,
+    },
+    chain: activeChain,
+    transport: http(),
+  });
+
   const recentBlock = null;
-  return useSWR(
-    `${account}-augmentatio-v1-alltrades-${shouldNotFilterAccount}`,
+  const { data } = useSWR(
+    `${account}-augmentatio-v1-alltrades-${shouldNotFilterAccount}-activeChain-${activeChain?.id}`,
     {
       fetcher: async (args) => {
+        if (!activeChain) return -1;
+        const config = getNoLossV3Config(activeChain?.id);
         let splittedArgs = args.split('-');
-        let restTopics = [];
+        let restTopics = -1;
         if (!shouldNotFilterAccount) {
           const account = splittedArgs[0];
           if (!account) return -1;
@@ -114,8 +128,7 @@ const useAheadTrades = (
           )}`;
           restTopics = [adds64];
         }
-        if (!startBlock) return -1;
-        // if (recentBlock <= startBlock) return baseState;
+        if (!startBlock) return [];
 
         const decodedLogs = await getLogs({
           ifcs: [routerIfc, optionsIfc],
@@ -125,10 +138,11 @@ const useAheadTrades = (
             [cancelTrade]: 0,
             [openTrade]: 0,
           },
-          provider: signer,
+          client: client,
           restTopics,
           fromBlock: startBlock,
           toBlock: recentBlock,
+          routerAddress: config.router,
         });
         const qid2status: { [id: number]: TradeInputs } = {};
         const toFetchIdData: TradeInputs[] = [];
@@ -195,119 +209,140 @@ const useAheadTrades = (
           };
           toFetchIdData.push(tradeEvent);
         });
-        // TODO Update multicall address
-        const calls = toFetchIdData.map((data) => ({
-          address: data.address,
-          name: CallConfig[data.link].functionName,
-          params: [data.id.toString()],
-          abi: CallConfig[data.link].abi,
-        }));
-        let tempRes = await multicallv2(
-          calls,
-          signer,
-          multicall,
-          `augmentation-${startBlock}`
-        );
-        let resCopy = getDeepCopy(tempRes);
 
-        convertBNtoString(resCopy);
-        const maliciousResponse = calls.filter((c, i) => {
-          const res = resCopy?.[i];
-          if (
-            res.targetContract ===
-              '0x0000000000000000000000000000000000000000' ||
-            res?.expiration == '0' ||
-            res?.expiration == 0
-          ) {
-            console.log('[bug:aug]culprit-found 1', res, calls?.[i]);
-            return true;
-          }
-          return false;
-        });
-        if (maliciousResponse.length > 0) {
-          tempRes = await multicallv2(calls, signer);
-          resCopy = getDeepCopy(tempRes);
-          convertBNtoString(resCopy);
-        }
-        let tempOptions: IGQLHistory[] = calls.map((c, i) => {
-          const ip = toFetchIdData[i];
-
-          let res: ILogTrade = resCopy?.[i];
-
-          if (
-            res.targetContract ===
-              '0x0000000000000000000000000000000000000000' ||
-            res?.expiration == '0' ||
-            res?.expiration == 0
-          ) {
-            console.log('[bug:aug]culprit-found 2', res, ip);
-            return null;
-          }
-          if (ip.link == Link.Option) {
-            return {
-              strike: res[1],
-              totalFee: res.totalFee,
-              state: BetState.active,
-              depositToken: 'USDC',
-              isAbove: res.isAbove,
-              optionContract: {
-                address: ip.address,
-              },
-              amount: res[2],
-              blockNumber: ip.blockNumber,
-              creationTime: res.createdAt,
-              expirationTime: res.expiration,
-              user: {
-                address: account,
-              },
-              optionID: ip.id?.toString(),
-
-              isQueued: false,
-            };
-          } else {
-            return {
-              strike: res.expectedStrike,
-              totalFee: res.totalFee,
-              state: ip.state,
-              depositToken: 'USDC',
-              isAbove: res.isAbove,
-              optionContract: {
-                address: res.targetContract,
-                // asset: "ETH",
-              },
-              user: {
-                address: account,
-              },
-              blockNumber: ip.blockNumber,
-              slippage: res.slippage,
-              queueID: res.queueId,
-              isQueued: res.isQueued,
-            };
-          }
-        });
-        // filter out null values
-        tempOptions = tempOptions.filter((x) => x);
-        let tempState = {
-          [BetState.cancelled]: tempOptions.filter(
-            (single) => single.state === BetState.cancelled
-          ),
-          [BetState.queued]: tempOptions.filter(
-            (single) => single.state === BetState.queued
-          ),
-          [BetState.active]: tempOptions.filter(
-            (single) => single.state === BetState.active
-          ),
-          ['del']: toDeleteData,
-          fromBlock: startBlock,
-          toBlock: recentBlock,
+        return {
+          calls: toFetchIdData.map((data) => ({
+            address: data.address,
+            name: CallConfig[data.link].functionName,
+            params: [data.id.toString()],
+            abi: CallConfig[data.link].abi,
+            id: getCallId(
+              data.address,
+              CallConfig[data.link].functionName,
+              data.id.toString()
+            ),
+          })),
+          toFetchIdData,
+          toDeleteData,
         };
-
-        return tempState;
       },
       refreshInterval: 300,
     }
   );
-  // return data || baseState;
+
+  // let tempRes = await multicallv2(
+  //   calls,
+  //   signer,
+  //   multicall,
+  //   `augmentation-${startBlock}`
+  // );
+  // let resCopy = getDeepCopy(tempRes);
+  // console.log(resCopy, 'resCopy');
+  // convertBNtoString(resCopy);
+
+  const { data: resCopy } = useCall2Data(
+    data !== undefined && data !== -1 ? data.calls : undefined,
+    `augmentation-${startBlock}`
+  );
+
+  const response = useMemo(() => {
+    // const maliciousResponse = calls.filter((c, i) => {
+    //   const res = resCopy?.[i];
+    //   if (
+    //     res.targetContract ===
+    //       '0x0000000000000000000000000000000000000000' ||
+    //     res?.expiration == '0' ||
+    //     res?.expiration == 0
+    //   ) {
+    //     console.log('[bug:aug]culprit-found 1', res, calls?.[i]);
+    //     return true;
+    //   }
+    //   return false;
+    // });
+    // if (maliciousResponse.length > 0) {
+    //   tempRes = await multicallv2(calls, signer);
+    //   resCopy = getDeepCopy(tempRes);
+    //   convertBNtoString(resCopy);
+    // }
+    if (!resCopy) return -1;
+    if (data === undefined) return -1;
+    if (data === -1) return -1;
+
+    let tempOptions: IGQLHistory[] = data.calls.map((c, i) => {
+      const ip = data.toFetchIdData[i];
+
+      let res: ILogTrade = resCopy?.[c.id]?.[0];
+      if (!res) return null;
+      console.log(res, resCopy, c.id, ip.link, 'res');
+      // if (
+      //   res.targetContract ===
+      //     '0x0000000000000000000000000000000000000000' ||
+      //   res?.expiration == '0' ||
+      //   res?.expiration == 0
+      // ) {
+      //   console.log('[bug:aug]culprit-found 2', res, ip);
+      //   return null;
+      // }
+      if (ip.link == Link.Option) {
+        return {
+          strike: res[1],
+          totalFee: res[7],
+          state: BetState.active,
+          isAbove: res[6],
+          optionContract: {
+            address: ip.address,
+          },
+          amount: res[2],
+          blockNumber: ip.blockNumber,
+          creationTime: res[8],
+          expirationTime: res[5],
+          user: {
+            address: account,
+          },
+          optionID: ip.id?.toString(),
+
+          isQueued: false,
+        };
+      } else {
+        return {
+          strike: res[7],
+          totalFee: res[3],
+          state: ip.state,
+          isAbove: res[5],
+          optionContract: {
+            address: res[6],
+            // asset: "ETH",
+          },
+          user: {
+            address: account,
+          },
+          blockNumber: ip.blockNumber,
+          slippage: res[8],
+          queueID: res[0],
+          isQueued: res[10],
+        };
+      }
+    });
+    // filter out null values
+    tempOptions = tempOptions.filter((x) => x);
+    let tempState = {
+      [BetState.cancelled]: tempOptions.filter(
+        (single) => single.state === BetState.cancelled
+      ),
+      [BetState.queued]: tempOptions.filter(
+        (single) => single.state === BetState.queued
+      ),
+      [BetState.active]: tempOptions.filter(
+        (single) => single.state === BetState.active
+      ),
+      ['del']: data.toDeleteData,
+      fromBlock: startBlock,
+      toBlock: recentBlock,
+    };
+
+    return tempState;
+  }, [resCopy]);
+  return response;
 };
 
 export { useAheadTrades };

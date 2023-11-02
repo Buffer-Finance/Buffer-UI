@@ -70,7 +70,7 @@ export const HistoryTable = () => {
           />
         );
       case TableColumn.Expiry:
-        if (trade.state === BetState.queued) return <>processing...</>;
+        if (trade.state === BetState.active) return <>processing...</>;
         return (
           <Display
             data={divide(trade.expirationPrice ?? '0', 8)}

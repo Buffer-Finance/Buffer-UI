@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo } from 'react';
-import { userAtom } from '../atoms';
+import { getAddress } from 'viem';
+import { nolossmarketsAtom, userAtom } from '../atoms';
 import { marketsForChart } from '../config';
-import { BetState, TradeInputs } from './useAheadTrades';
+import { BetState, TradeInputs, useAheadTrades } from './useAheadTrades';
 import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
 export const expiryPriceCache: {
   [key: string]: string;
@@ -105,6 +106,7 @@ export interface IGQLHistory {
 }
 
 export const useProcessedTrades = () => {
+  const markets = useAtomValue(nolossmarketsAtom);
   const getProcessedTrades = useCallback(
     (
       trades: (IGQLHistory | null)[] | undefined,
@@ -143,20 +145,27 @@ export const useProcessedTrades = () => {
         return singleTrade;
       });
 
-      const updatedTrade = tempTrades?.map((trade) => {
-        if (trade === null) return null;
-        return {
-          ...trade,
-          chartData:
-            marketsForChart[
-              trade.optionContract.asset as keyof typeof marketsForChart
-            ],
-        };
-      });
+      const updatedTrade = tempTrades
+        ?.map((trade) => {
+          if (trade === null) return null;
+          if (!markets) return null;
+
+          const market = markets.find(
+            (market) =>
+              getAddress(market.address) ===
+              getAddress(trade.optionContract.address)
+          );
+          if (!market) return null;
+          return {
+            ...trade,
+            chartData: market.chartData,
+          };
+        })
+        .filter((trade) => trade !== null);
 
       return updatedTrade;
     },
-    []
+    [markets]
   );
 
   return { getProcessedTrades };
@@ -212,13 +221,9 @@ export const usePastTradeQuery = () => {
   });
 
   const blockNumber = data?._meta?.block.number;
-  const {
-    data: trades,
-    del,
-    fromBlock,
-    toBlock,
-  } = { data: [], del: [], fromBlock: 0, toBlock: null };
-  //    useAheadTrades(blockNumber, account, false);
+  const trades = useAheadTrades(blockNumber, user?.userAddress, false);
+  console.log(`trades: `, trades);
+  //  { data: [], del: [], fromBlock: 0, toBlock: null };
   useEffect(() => {
     let activeResponseArr: (IGQLHistory | null)[] = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])

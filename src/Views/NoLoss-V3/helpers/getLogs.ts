@@ -1,5 +1,5 @@
 import { Interface } from 'ethers/lib/utils';
-import { PublicClient } from 'viem';
+import { PublicClient, getAddress, parseAbiItem } from 'viem';
 export interface RawLog {
   topics: Array<string>;
   data: string;
@@ -33,8 +33,9 @@ export const getLogs = async (passedFilters: {
   events: { [eventName: string]: number };
   restTopics: string[];
   fromBlock: number;
-  provider: PublicClient;
+  client: PublicClient;
   toBlock?: number;
+  routerAddress: string;
 }) => {
   let topics = Object.keys(passedFilters.events);
   let filters: any = {
@@ -44,9 +45,22 @@ export const getLogs = async (passedFilters: {
   if (passedFilters.toBlock) {
     filters.toBlock = passedFilters.toBlock;
   }
-  const encodedData: RawLog[] = await passedFilters.provider.getLogs(filters);
+
+  const createLogs = await passedFilters.client.getLogs({
+    event: parseAbiItem(
+      'event Create(address indexed account, uint256 id, uint256 tournamentId, uint256 settlementFee, uint256 totalFee)'
+    ),
+    fromBlock: BigInt(passedFilters.fromBlock),
+  });
+  const routerLogs = await passedFilters.client.getLogs({
+    address: getAddress(passedFilters.routerAddress),
+    fromBlock: BigInt(passedFilters.fromBlock),
+  });
+  const encodedData = [...createLogs, ...routerLogs];
+
   let decodedLogs: { [eventName: string]: Log[] } = {};
   encodedData.forEach((log) => {
+    log.topics[0];
     const ifcIdx = passedFilters.events[log.topics[0]];
 
     const ifc = passedFilters.ifcs[ifcIdx];
