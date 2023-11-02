@@ -19,7 +19,7 @@ export const Tables = () => {
           expanded ? 'h-[355px]' : 'h-[0px]'
         } flex flex-col transition-all  overflow-y-hidden `}
       >
-        <TableSelector activeTableName={activeTable} />
+        {expanded && <TableSelector activeTableName={activeTable} />}
       </div>
     </div>
   );

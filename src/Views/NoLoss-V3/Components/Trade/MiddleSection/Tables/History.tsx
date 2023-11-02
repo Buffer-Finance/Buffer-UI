@@ -121,8 +121,8 @@ export const HistoryTable = () => {
     <BufferTable
       bodyJSX={BodyFormatter}
       headerJSX={HeaderFomatter}
-      loading={history.length === 0}
-      rows={history.length}
+      loading={history === undefined}
+      rows={history?.length ?? 0}
       cols={headNameArray.length}
       onRowClick={() => {}}
       widths={['auto']}
@@ -132,7 +132,6 @@ export const HistoryTable = () => {
         setHistoryPage(page);
       }}
       error={<TableErrorRow msg="No trades found." />}
-      shouldOnlyRenderActivePageAndArrows
     />
   );
 };

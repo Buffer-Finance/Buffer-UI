@@ -83,8 +83,8 @@ export const CancelledTable = () => {
     <BufferTable
       bodyJSX={BodyFormatter}
       headerJSX={HeaderFomatter}
-      loading={cancelled.length === 0}
-      rows={cancelled.length}
+      loading={cancelled === undefined}
+      rows={cancelled?.length ?? 0}
       cols={headNameArray.length}
       onRowClick={() => {}}
       widths={['auto']}
@@ -94,7 +94,6 @@ export const CancelledTable = () => {
         setCancelledPage(page);
       }}
       error={<TableErrorRow msg="No trades found." />}
-      shouldOnlyRenderActivePageAndArrows
     />
   );
 };
