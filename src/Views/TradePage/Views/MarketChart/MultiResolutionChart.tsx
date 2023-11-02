@@ -26,7 +26,6 @@ import { nolossmarketsAtom } from '@Views/NoLoss-V3/atoms';
 import {
   chartControlsSettingsAtom,
   queuets2priceAtom,
-  rerenderPositionAtom,
   visualizeddAtom,
 } from '@Views/TradePage/atoms';
 import { PRICE_DECIMALS, marketsForChart } from '@Views/TradePage/config';
@@ -553,7 +552,6 @@ export const MultiResolutionChart = ({
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
     const activeResolution = realTimeUpdateRef.current?.resolution || '1m';
-    // console.log(`[deb]1activeResolution: `, activeResolution);
 
     const key = market + timeDeltaMapping(activeResolution);
     const newpythId =
@@ -579,9 +577,7 @@ export const MultiResolutionChart = ({
       ) {
         try {
           realTimeUpdateRef.current.onRealtimeCallback(aggregatedBar);
-        } catch (err) {
-          // console.log('[sync]error white updating', err);
-        }
+        } catch (err) {}
         // await sleep(document.hidden ? 1 : 30);
         prevBar = aggregatedBar;
 
@@ -589,31 +585,19 @@ export const MultiResolutionChart = ({
       }
     }
   };
-  const rerenderPostion = useAtomValue(rerenderPositionAtom);
 
   // sync to ws updates
   useEffect(() => {
     syncTVwithWS();
   }, [(price as any)?.[market]]);
-  const getTradeToDrawingId = (trade: IGQLHistory) =>
-    trade.queueID + ':' + trade.strike;
-  // draw positions.
-  // useEffect(() => {
-  //   // trade2visualisation.current = {};
-  //   Object.keys(trade2visualisation.current).forEach((trade) => {
-  //     // mark all them
-  //     trade2visualisation.current[trade]!.lineRef.remove();
 
-  //     delete trade2visualisation.current[trade];
-  //   });
-  // }, [rerenderPostion, settings.loDragging]);
   const deleteAllPostions = () => {
     trade2visualisation.current.forEach((t) => {
-      t.positionRef.remove();
+      t.positionRef?.remove();
     });
   };
-  const syncDelay = 100;
-  const drawPostions = () => {
+
+  const drawPositions = () => {
     let po: {
       positionRef: IOrderLineAdapter;
       option: IGQLHistory;
@@ -648,24 +632,15 @@ export const MultiResolutionChart = ({
   const renderPositions = async () => {
     deleteAllPostions();
     trade2visualisation.current = [];
-    // await sleep(syncDelay);
-    setVisualizedTrades(drawPostions());
+    setVisualizedTrades(drawPositions());
   };
+
   useEffect(() => {
     const timeout = setTimeout(async () => {
       await renderPositions();
     });
     return () => clearTimeout(timeout);
-  }, [
-    hideVisulizations,
-    activeTrades,
-    chartReady,
-    priceCache,
-
-    rerenderPostion,
-    settings.earlyCloseConfirmation,
-    settings.loDragging,
-  ]);
+  }, [hideVisulizations, activeTrades, chartReady, priceCache]);
 
   useEffect(() => {
     if (!chartReady) return;
@@ -683,6 +658,7 @@ export const MultiResolutionChart = ({
       widgetRef.current.activeChart?.().setResolution(resolution);
     }
   }, [market2resolution, chartReady]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       // console.log('[chart-0 intervalcalled');

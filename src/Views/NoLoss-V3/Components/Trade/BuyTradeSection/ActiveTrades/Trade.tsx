@@ -3,6 +3,7 @@ import { IGQLHistory } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import { White12pxText } from '@Views/TradePage/Components/TextWrapper';
+import { Visualized } from '@Views/TradePage/Views/AccordionTable/Visualized';
 import { DirectionChip } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/DirectionChip';
 import { TradeTypeChip } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/TradeTypeChip';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
@@ -22,7 +23,7 @@ export const Trade: React.FC<{ trade: IGQLHistory }> = ({ trade }) => {
             </div>
             <White12pxText>{trade.chartData.pair}</White12pxText>
             <DirectionChip isUp={trade.isAbove} shouldShowArrow />
-            {/* <Visualized queue_id={trade.queueID} className="hidden sm:block" /> */}
+            <Visualized queue_id={trade.queueID} />
           </RowGap>
         </RowBetween>
         {trade.state === BetState.queued ? (
