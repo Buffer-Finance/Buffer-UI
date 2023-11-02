@@ -1,16 +1,19 @@
 import { AllMyTab } from '@Views/NoLoss-V3/Components/AllMyTab';
 import { TournamentStateTabs } from '@Views/NoLoss-V3/Components/TournamentStateTabs';
-import { useTournamentDataFetch } from '@Views/NoLoss-V3/Hooks/useTournamentDataFetch';
+import { WinningPrizeModal } from '@Views/NoLoss-V3/Components/WinningPrizeModal';
+import { useAllTournamentData } from '@Views/NoLoss-V3/Hooks/useAllTournamentdata';
 import { useTournamentIds } from '@Views/NoLoss-V3/Hooks/useTournamentIds';
 import styled from '@emotion/styled';
 import { TournamentsList } from './TournamentsList';
 
 export const Tournaments: React.FC = () => {
   useTournamentIds();
-  useTournamentDataFetch();
+
+  useAllTournamentData();
 
   return (
     <TournamentsBackground>
+      <WinningPrizeModal />
       <TournamentStateTabs />
       <AllMyTab />
       <TournamentsList />

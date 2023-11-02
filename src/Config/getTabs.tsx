@@ -400,12 +400,12 @@ export const getTabs = (
     ];
   } else
     return [
-      {
-        to: `/faucet`,
-        name: 'Faucet',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/faucet`,
+      //   name: 'Faucet',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: '/no-loss/0/BTC-USD',
         name: 'No Loss',

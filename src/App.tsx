@@ -15,7 +15,6 @@ import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
-import IbfrFaucet from '@Views/Faucet';
 import { NoLossV3 } from '@Views/NoLoss-V3';
 import { Tournaments } from '@Views/Tournaments';
 import { i18n } from '@lingui/core';
@@ -89,7 +88,7 @@ const AppRoutes = () => {
 
       <Routes>
         {/* <Route path="trades" element={<AllTrades />} /> */}
-        <Route path="/faucet" element={<IbfrFaucet />} />
+        {/* <Route path="/faucet" element={<IbfrFaucet />} /> */}
         {/* <Route path="/test" element={<Test />} /> */}
         {/* <Route path="/history" element={<TradeLog_sm />} /> */}
         {/* <Route path="/admin" element={<AdminConfig />} /> */}

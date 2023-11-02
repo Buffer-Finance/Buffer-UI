@@ -1,9 +1,11 @@
 import { TradepageTournamentCard } from '@Views/NoLoss-V3/Components/TradePageTournamentCard';
+import { useTournamentDataFetch } from '@Views/NoLoss-V3/Hooks/useTournamentDataFetch';
 import { filteredTournamentsDataReadOnlyAtom } from '@Views/NoLoss-V3/atoms';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 
 export const TournamentsList: React.FC = () => {
+  useTournamentDataFetch();
   const allTournaments = useAtomValue(filteredTournamentsDataReadOnlyAtom);
 
   if (allTournaments === undefined)
