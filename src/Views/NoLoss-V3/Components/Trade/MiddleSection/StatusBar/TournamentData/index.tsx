@@ -1,16 +1,28 @@
+import { userLeaderboardDataAtom } from '@Views/NoLoss-V3/atoms';
+import { Skeleton } from '@mui/material';
+import { useAtomValue } from 'jotai';
+import { Balance } from './Balance';
+import { Rank } from './Rank';
+import { Score } from './Score';
+
 export const TournamentData = () => {
+  const userTournamentData = useAtomValue(userLeaderboardDataAtom);
+  console.log('allLeaderboardData', userTournamentData);
+  if (userTournamentData === undefined)
+    return <Skeleton className="w-[140px] !h-5 lc " />;
+
   const dataArray = [
     {
       head: 'score',
-      data: 'dummy',
+      data: <Score data={userTournamentData.data} />,
     },
     {
       head: 'rank',
-      data: 'dummy',
+      data: <Rank rank={userTournamentData.rank} />,
     },
     {
       head: 'play tokens',
-      data: 'dummy',
+      data: <Balance />,
     },
   ];
   return (

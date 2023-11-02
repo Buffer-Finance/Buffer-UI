@@ -2,7 +2,7 @@ import { getCallId } from '@Utils/Contract/multiContract';
 import { HHMMToSeconds } from '@Views/TradePage/utils';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { Chain } from 'viem';
+import { Chain, getAddress } from 'viem';
 import { erc20ABI } from 'wagmi';
 import TournamentLeaderboardABI from './ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from './ABIs/TournamentManager.json';
@@ -450,6 +450,9 @@ export const leaderboardDataAtom = atom<undefined | LeaderboardData[]>(
   }
 );
 
+export const allLeaderboardDataAtom = atom<
+  undefined | { [nextId: string]: LeaderboardData[] }
+>(undefined);
 // const nextRankIdAtom = atom((get) => {
 //   const leaderboardData = get(leaderboardDataAtom);
 //   if (leaderboardData === undefined)
@@ -466,3 +469,28 @@ export const nextRankIdAtom = atom(
     }
   }
 );
+
+export const userLeaderboardDataAtom = atom<
+  | undefined
+  | { data: LeaderboardData | undefined | undefined; rank: number | null }
+>((get) => {
+  const leaderboardData = get(allLeaderboardDataAtom);
+  const user = get(userAtom);
+  if (leaderboardData === undefined || user === undefined) return undefined;
+  if (user.userAddress === undefined) return undefined;
+  let userData = undefined;
+  let rank = null;
+  Object.values(leaderboardData).forEach((leaderboardArray, index) => {
+    const userDataIndex = leaderboardArray.findIndex((leaderboardData) => {
+      return (
+        getAddress(leaderboardData.stats.user) === getAddress(user.userAddress!)
+      );
+    });
+    if (userDataIndex !== -1) userData = leaderboardArray[userDataIndex];
+
+    if (userDataIndex !== -1) {
+      rank = index * 10 + userDataIndex + 1;
+    }
+  });
+  return { data: userData, rank };
+});
