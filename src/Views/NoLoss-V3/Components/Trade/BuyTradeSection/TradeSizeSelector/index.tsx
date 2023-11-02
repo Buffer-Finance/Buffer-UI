@@ -61,7 +61,6 @@ export const TradeSizeSelector: React.FC<{
           <WalletBalance
             balance={formatBalance(divide(balance ?? '0', 18) as string)}
             unit={''}
-            decimals={18}
           />
         </RowBetween>
         <RowGapItemsStretched gap="0px" className="w-full">

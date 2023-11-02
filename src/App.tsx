@@ -9,6 +9,7 @@ import TnCModal from '@Views/Common/TnCModal';
 import Background from './AppStyles';
 import { Navbar } from './Views/Common/Navbar';
 
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
@@ -144,6 +145,7 @@ const mobileWarningAtom = atomWithLocalStorage('warnign-suer', false);
 export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 
 function App() {
+  useActiveChain();
   useAutoConnect();
   const [snack, setSnack] = useAtom(snackAtom);
   const [mobileWarningClosed, setWarningCloseOnMobile] =

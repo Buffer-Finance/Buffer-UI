@@ -1,13 +1,15 @@
-import { useActiveChain } from '@Hooks/useActiveChain';
+import { activeChainAtom } from '@Views/NoLoss-V3/atoms';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import axios from 'axios';
+import { useAtomValue } from 'jotai';
 import useSWR from 'swr';
 
 const useGraphStatus = () => {
-  const { activeChain } = useActiveChain();
-  const graphUrlMain = getConfig(activeChain.id).graph.MAIN;
+  const activeChain = useAtomValue(activeChainAtom);
   const { data } = useSWR('graph-status', {
     fetcher: async () => {
+      if (!activeChain) return undefined;
+      const graphUrlMain = getConfig(activeChain?.id).graph.MAIN;
       // const liteQuery = axios.post(graphUrlLite, {
       //   query: `{
       //       _meta {

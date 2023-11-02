@@ -1,17 +1,18 @@
+import { nolossmarketsAtom } from '@Views/NoLoss-V3/atoms';
 import axios from 'axios';
+import { useAtomValue } from 'jotai';
 import useSWR from 'swr';
 import { pricePublisherBaseUrl } from '../config';
-import { useMarketsConfig } from './useMarketsConfig';
 
 const usePriceChange = () => {
-  const markets = useMarketsConfig();
+  const markets = useAtomValue(nolossmarketsAtom);
   const { data } = useSWR(`4h-change-${markets?.length}`, {
     fetcher: async () => {
       if (!markets) return;
 
       const queries: string[] = [];
 
-      markets?.forEach((market) => queries.push(market.tv_id));
+      markets?.forEach((market) => queries.push(market.chartData.tv_id));
 
       const { data: response } = await axios.post(
         pricePublisherBaseUrl + 'bulk_24h_change/',

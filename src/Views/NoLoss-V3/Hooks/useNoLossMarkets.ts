@@ -1,15 +1,15 @@
 import { useToast } from '@Contexts/Toast';
-import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import useSWR from 'swr';
-import { nolossmarketsAtom } from '../atoms';
+import { activeChainAtom, nolossmarketsAtom } from '../atoms';
 import { marketsForChart } from '../config';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
 import { InoLossMarketResponse } from '../types';
 
 export const useNoLossMarkets = () => {
-  const { activeChain } = useActiveChain();
+  const activeChain = useAtomValue(activeChainAtom);
+
   const toastify = useToast();
   const setMarkets = useSetAtom(nolossmarketsAtom);
 
@@ -32,6 +32,8 @@ export const useNoLossMarkets = () => {
 
   async function fetchData() {
     try {
+      if (!activeChain) throw new Error('activeChain not found');
+
       const config = getNoLossV3Config(activeChain.id);
 
       const { data, status } = await axios.post<{

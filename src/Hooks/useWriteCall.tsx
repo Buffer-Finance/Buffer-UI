@@ -1,5 +1,7 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
+import { activeChainAtom } from '@Views/NoLoss-V3/atoms';
+import { useAtomValue } from 'jotai';
 import { ReactNode } from 'react';
 import {
   ContractFunctionExecutionError,
@@ -12,7 +14,6 @@ import {
   usePublicClient,
   useWalletClient,
 } from 'wagmi';
-import { useActiveChain } from './useActiveChain';
 
 interface ICustomToast {
   body?: JSX.Element;
@@ -45,7 +46,7 @@ export function useWriteCall() {
   const { simulateContract } = usePublicClient();
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount();
-  const { activeChain } = useActiveChain();
+  const activeChain = useAtomValue(activeChainAtom);
   const { data, error, isLoading, status, writeAsync } = useContractWrite({});
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
 

@@ -1,18 +1,15 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { ethers } from 'ethers';
-import useSWR, { useSWRConfig } from 'swr';
-import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
-import {
-  arbMulticallABI,
-  multicallLinked,
-  multicallv2,
-} from './Contract/multiContract';
-import getDeepCopy from './getDeepCopy';
-import { useMemo } from 'react';
+import { activeChainAtom, userAtom } from '@Views/NoLoss-V3/atoms';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { viemMulticall } from './multicall';
+import { useAtomValue } from 'jotai';
+import { useMemo } from 'react';
+import useSWR, { useSWRConfig } from 'swr';
 import { createPublicClient, http } from 'viem';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import { multicallv2 } from './Contract/multiContract';
+import getDeepCopy from './getDeepCopy';
+import { viemMulticall } from './multicall';
 
 export const useReadCall = ({
   contracts,
@@ -60,11 +57,12 @@ export const useReadCall = ({
 };
 export const useCall2Data = (contracts: any, swrKey: string) => {
   const calls = contracts;
-  const { activeChain, isWrongChain, chainInURL } = useActiveChain();
-  const { address: account } = useUserAccount();
-  const { address } = useAccount();
+  // const { activeChain, isWrongChain, chainInURL } = useActiveChain();
+  // const { address: account } = useUserAccount();
+  const user = useAtomValue(userAtom);
+  const activeChain = useAtomValue(activeChainAtom);
   const { cache } = useSWRConfig();
-  const key = swrKey + activeChain.id + account + chainInURL;
+  const key = swrKey + activeChain?.id + user?.userAddress;
 
   const client = useMemo(() => {
     return createPublicClient({
@@ -79,7 +77,7 @@ export const useCall2Data = (contracts: any, swrKey: string) => {
       let returnData = await viemMulticall(
         calls,
         client,
-        swrKey + activeChain.id + account
+        swrKey + activeChain?.id + user?.userAddress
       );
       return returnData || cache.get(key);
     },

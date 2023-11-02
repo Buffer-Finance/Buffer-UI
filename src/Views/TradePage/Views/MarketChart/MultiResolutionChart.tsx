@@ -1,17 +1,3 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  IBasicDataFeed,
-  IChartingLibraryWidget,
-  IOrderLineAdapter,
-  LibrarySymbolInfo,
-  ResolutionString,
-  SeriesFormat,
-  ThemeName,
-  Timezone,
-  widget,
-} from '../../../../../public/static/charting_library';
-import { Markets, OHLCBlock, RealtimeUpdate } from './MakrketTypes';
-
 import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import { priceAtom } from '@Hooks/usePrice';
@@ -48,6 +34,20 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  IBasicDataFeed,
+  IChartingLibraryWidget,
+  IOrderLineAdapter,
+  LibrarySymbolInfo,
+  ResolutionString,
+  SeriesFormat,
+  ThemeName,
+  Timezone,
+  widget,
+} from '../../../../../public/static/charting_library';
+import { Markets, OHLCBlock, RealtimeUpdate } from './MakrketTypes';
+
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,

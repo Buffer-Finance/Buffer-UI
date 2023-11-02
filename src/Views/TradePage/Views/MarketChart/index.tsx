@@ -1,6 +1,8 @@
 import { sleep } from '@TV/useDataFeed';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import {
+  activeMarketDataAtom,
+  nolossmarketsAtom,
+} from '@Views/NoLoss-V3/atoms';
 import { chartNumberAtom, isTableShownAtom } from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
@@ -33,10 +35,10 @@ const SidebySideCharts = ({
 
 const MarketChart: React.FC<any> = ({}) => {
   const isTableExpanded = useAtomValue(isTableShownAtom);
-  const v3AppConfig = useMarketsConfig();
   const chartTimes = useAtomValue(chartNumberAtom);
-  const { activeMarket } = useActiveMarket();
   const [dragging, setDragging] = useState(false);
+  const activeMarket = useAtomValue(activeMarketDataAtom);
+  const v3AppConfig = useAtomValue(nolossmarketsAtom);
   const [containerDim, setContainerDim] = useState<{
     height?: number;
     top?: number;
@@ -106,7 +108,10 @@ const MarketChart: React.FC<any> = ({}) => {
     };
   });
 
-  const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
+  const marketPrefix = useMemo(
+    () => activeMarket?.chartData.tv_id + ':',
+    [activeMarket]
+  );
   if (!v3AppConfig?.length || !marketPrefix)
     return (
       <Skeleton className="flex w-full !h-full lc !transform-none !my-3" />
