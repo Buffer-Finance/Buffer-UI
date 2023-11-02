@@ -23,6 +23,7 @@ export const AllMyTab: React.FC = () => {
           <button
             className={`flex items-center text-f12 gap-2 capitalize px-2 ${tabClasses}`}
             onClick={() => setActiveTab(tab.title)}
+            key={tab.title}
           >
             <div>{tab.title}</div>
             {tab.icon}

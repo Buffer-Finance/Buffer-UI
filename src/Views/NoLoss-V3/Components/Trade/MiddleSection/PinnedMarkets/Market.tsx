@@ -13,7 +13,7 @@ import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { AssetCategory } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
-import { IconButton, Skeleton } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useMemo } from 'react';
 
@@ -82,9 +82,9 @@ export const Market: React.FC<{
   return (
     <MarketBackground isActive={isActive} onClick={handleMarketClick}>
       <RowGap gap="6px">
-        <IconButton onClick={handleFavourite} className="!p-2">
+        <div type="button" onClick={handleFavourite} className="!p-2">
           <Star active={true} />
-        </IconButton>
+        </div>
         <div className="h-[16px] w-[16px]">
           <PairTokenImage pair={joinStrings(token0, token1, '-')} />
         </div>

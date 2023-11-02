@@ -17,7 +17,7 @@ export const TournamentData = () => {
     <div className="flex items-center gap-[17px] ml-auto">
       {dataArray.map((data, index) => {
         return (
-          <>
+          <div key={data.head}>
             <div className="flex flex-col justify-center items-start gap-y-1 b1200:w-1/2 ">
               <span className="capitalize text-f12 b1200:text-f10 text-[#82828F]">
                 {data.head}
@@ -27,7 +27,7 @@ export const TournamentData = () => {
             {index !== dataArray.length - 1 && (
               <div className="w-[1px] h-7 bg-[#2D2D3D]" />
             )}
-          </>
+          </div>
         );
       })}
     </div>

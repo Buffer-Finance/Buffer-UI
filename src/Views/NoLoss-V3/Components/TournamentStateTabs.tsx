@@ -15,6 +15,7 @@ export const TournamentStateTabs = () => {
           <button
             className={`${className} text-f12 font-medium capitalize`}
             onClick={() => setActiveState(state)}
+            key={state}
           >
             {state}
           </button>
