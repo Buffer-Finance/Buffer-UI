@@ -10,7 +10,7 @@ export const useUpdateActiveTournament = () => {
     activeTournamentIdAtom
   );
   const id = params.id;
-  const market = params.market;
+  let market = params.market;
 
   useEffect(() => {
     if (activeTournamentId === undefined && id) {
@@ -28,6 +28,7 @@ export const useUpdateActiveTournament = () => {
     (newId: number) => {
       if (id && newId === +id) return;
       setActiveTournamentId(newId);
+      if (market === undefined) market = 'BTC-USD';
       navigate(`/no-loss/${newId}/${market}`);
     },
     [market, id]

@@ -13,13 +13,14 @@ import { TournamentCardButtons } from './TournamentCardButtons';
 
 export const TradepageTournamentCard: React.FC<{
   tournament: ItournamentData;
-}> = ({ tournament }) => {
+  isTradePage?: boolean;
+}> = ({ tournament, isTradePage = true }) => {
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
 
   return (
     <div
-      className={`w-[100%]  background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
-        tournament.id == activeTournamentId
+      className={`w-[250px] background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
+        isTradePage && tournament.id == activeTournamentId
           ? 'border-[var(--bg-signature)] '
           : 'border-[transparent]'
       }`}
@@ -99,7 +100,7 @@ export const TradepageTournamentCard: React.FC<{
       </div>
       <TournamentCardButtons
         tournament={tournament}
-        activeTournamentId={activeTournamentId}
+        activeTournamentId={isTradePage ? activeTournamentId : undefined}
       />
     </div>
   );

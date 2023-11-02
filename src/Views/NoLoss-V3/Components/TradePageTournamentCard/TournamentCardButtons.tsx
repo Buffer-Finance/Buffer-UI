@@ -37,7 +37,9 @@ export const TournamentCardButtons: React.FC<{
   );
 
   if (tournamentBasedData.result === undefined || user === undefined)
-    return <Skeleton className="h-4 full-width sr lc mb3" />;
+    return (
+      <Skeleton className="!h-[26px] full-width sr lc !mt-4 !transform-none" />
+    );
   if (user.userAddress === undefined)
     return (
       <ConnectionRequired>
@@ -63,7 +65,9 @@ export const TournamentCardButtons: React.FC<{
   ) as string;
 
   if (allowance === undefined)
-    return <Skeleton className="h-4 full-width sr lc mb3" />;
+    return (
+      <Skeleton className="!h-[26px] full-width sr lc !mt-4 !transform-none" />
+    );
 
   if (lt(allowance, ticketCost)) {
     const approveTournamentManager = () => {

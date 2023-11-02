@@ -18,7 +18,6 @@ export const PayoutProfit = ({
   activeMarket: InoLossMarket;
 }) => {
   const amount = useAtomValue(noLossTradeSizeAtom);
-
   const totalPayout = getMaximumValue(
     divide(activeMarket.payoutForDown, 16) as string,
     divide(activeMarket.payoutForUp, 16) as string
@@ -53,12 +52,6 @@ export const PayoutProfit = ({
       </div>
     );
   } else {
-    console.log('dd-dd', amount, totalPayout);
-    return (
-      <Skeleton
-        className="custom-h full-width sr lc my-3 !h-6"
-        variant="rectangular"
-      />
-    );
+    return <Skeleton className="sr lc !h-[44px] !transform-none !my-3 !mb-4" />;
   }
 };

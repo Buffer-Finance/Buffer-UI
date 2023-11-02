@@ -81,7 +81,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   }
 
   if (!activeMarket || !price)
-    return <Skeleton className="h4 full-width sr lc mb3" />;
+    return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
 
   const { isViewOnlyMode } = user;
   if (isViewOnlyMode)
@@ -92,10 +92,10 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
     );
 
   if (readCallResults === undefined)
-    return <Skeleton className="h4 full-width sr lc mb3" />;
+    return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
   const { isTradingApproved } = readCallResults;
   if (isTradingApproved === undefined)
-    return <Skeleton className="h4 full-width sr lc mb3" />;
+    return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
 
   const config = getNoLossV3Config(activeChain.id);
 

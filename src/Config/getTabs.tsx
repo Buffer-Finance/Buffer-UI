@@ -401,20 +401,20 @@ export const getTabs = (
   } else
     return [
       {
-        to: `/binary/` + market,
-        name: 'Trade',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
         to: `/faucet`,
         name: 'Faucet',
         subTabs: [],
         isExternalLink: false,
       },
       {
-        to: '/no-loss/2/BTC-USD',
+        to: '/no-loss/0/BTC-USD',
         name: 'No Loss',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: '/tournaments',
+        name: 'Tournaments',
         subTabs: [],
         isExternalLink: false,
       },

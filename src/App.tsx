@@ -10,12 +10,14 @@ import Background from './AppStyles';
 import { Navbar } from './Views/Common/Navbar';
 
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
 import { NoLossV3 } from '@Views/NoLoss-V3';
+import { Tournaments } from '@Views/Tournaments';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
@@ -108,6 +110,8 @@ const AppRoutes = () => {
         </Route> */}
         {/* <Route path="/binary/:market" element={<TradePage />} /> */}
         <Route path="/no-loss/:id/:market" element={<NoLossV3 />} />
+        <Route path="tournaments" element={<Tournaments />} />
+        <Route path="/*" element={<Tournaments />} />
         {/* <Route
           path="/*"
           element={
@@ -146,6 +150,7 @@ export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 
 function App() {
   useActiveChain();
+  useUserAccount();
   useAutoConnect();
   const [snack, setSnack] = useAtom(snackAtom);
   const [mobileWarningClosed, setWarningCloseOnMobile] =

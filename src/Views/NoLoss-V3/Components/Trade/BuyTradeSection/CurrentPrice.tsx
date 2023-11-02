@@ -28,7 +28,7 @@ export const CurrentPrice: React.FC<{
           </BuyTradeHeadText>
           <BuyTradeDescText>
             {!price ? (
-              <Skeleton className="w-[80px] !h-5 lc " />
+              <Skeleton className="w-[80px] !h-[26px] lc !transform-none" />
             ) : (
               <Display
                 data={round(price, precision)}
