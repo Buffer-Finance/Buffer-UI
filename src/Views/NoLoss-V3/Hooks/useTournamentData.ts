@@ -1,12 +1,11 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useState } from 'react';
 import { useContractRead } from 'wagmi';
 import TournamentLeaderboardABI from '../ABIs/TournamentLeaderboard.json';
 import {
   activeChainAtom,
   activeTournamentIdAtom,
   allLeaderboardDataAtom,
-  nextRankIdAtom,
 } from '../atoms';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
 import { LeaderboardData } from '../types';
@@ -14,11 +13,13 @@ import { LeaderboardData } from '../types';
 export const useTournamentData = () => {
   const activeChain = useAtomValue(activeChainAtom);
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
-  const [nextRankId, setNextRankId] = useAtom(nextRankIdAtom);
+  const [nextRankId, setNextRankId] = useState(
+    '0x0000000000000000000000000000000000000000000000000000000000000000'
+  );
   const setAllleaderboardData = useSetAtom(allLeaderboardDataAtom);
   let readcall = {};
+  console.log(nextRankId, 'nextRankId');
   useEffect(() => {
-    // set nextRankId to 0x0000000000000000000000000000000000000000000000000000000000000000 after 30 seconds
     const timer = setTimeout(() => {
       setNextRankId(
         '0x0000000000000000000000000000000000000000000000000000000000000000'
@@ -32,30 +33,31 @@ export const useTournamentData = () => {
       address: config.leaderboard,
       abi: TournamentLeaderboardABI,
       functionName: 'getTournamentLeaderboard',
-      args: [activeTournamentId, nextRankId, 2],
-      cacheTime: 10_000,
+      args: [activeTournamentId, nextRankId, 10],
+      cacheTime: 5000,
     };
   }
+  console.log(readcall, 'readcall');
   try {
     const { data: leaderboardData, error } = useContractRead<
       unknown[],
       string,
       LeaderboardData[]
     >(readcall);
-    // console.log(leaderboardData, 'leaderboardData');
+    console.log(leaderboardData, 'leaderboardData');
     if (error) {
       throw error;
     }
     if (leaderboardData !== undefined) {
       setAllleaderboardData((prvData) => {
-        return { [nextRankId]: leaderboardData };
+        return { ...prvData, [nextRankId]: leaderboardData };
       });
-      const nextId = leaderboardData[0].stats.next;
+      const nextId = leaderboardData[9].stats.next;
       if (
         nextId !==
         '0x0000000000000000000000000000000000000000000000000000000000000000'
       )
-        setNextRankId(leaderboardData[1].stats.next);
+        setNextRankId(leaderboardData[9].stats.next);
     }
   } catch (e) {
     console.log(e);

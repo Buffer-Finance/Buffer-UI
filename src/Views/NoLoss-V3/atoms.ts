@@ -191,7 +191,6 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
         })
       );
       if (activeTournamentId !== undefined) {
-        const nextRankId = get(nextRankIdAtom);
         readcalls.push(
           ...[
             {
@@ -214,16 +213,6 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
               name: 'leaderboard',
               params: [activeTournamentId],
               id: getCallId(config.tournament_reader, 'leaderboard'),
-            },
-            {
-              address: config.leaderboard,
-              abi: TournamentLeaderboardABI,
-              name: 'getTournamentLeaderboard',
-              params: [activeTournamentId, nextRankId, 10],
-              id: getCallId(config.leaderboard, 'getTournamentLeaderboard', [
-                activeTournamentId,
-                nextRankId,
-              ]),
             },
           ]
         );
@@ -413,6 +402,9 @@ export const accordianTableTypeAtom = atom<accordianTableType>('leaderboard');
 
 //leaderbaord table atoms
 const leaderboardActivePageAtom = atom<number>(1);
+export const leaderboardActivePgaeIdAtom = atom<string>(
+  '0x0000000000000000000000000000000000000000000000000000000000000000'
+);
 export const leaderboardPaginationAtom = atom(
   (get) => {
     const leaderboardStatsLength =
@@ -431,44 +423,9 @@ export const leaderboardPaginationAtom = atom(
   }
 );
 
-export const leaderboardDataAtom = atom<undefined | LeaderboardData[]>(
-  (get) => {
-    const activeTournamentId = get(activeTournamentIdAtom);
-    const readcallResponse = get(noLossReadcallResponseReadOnlyAtom);
-    const activeChain = get(activeChainAtom);
-    const nextRankId = get(nextRankIdAtom);
-
-    if (activeChain === undefined || activeTournamentId === undefined)
-      return undefined;
-    const config = getNoLossV3Config(activeChain.id);
-    const leaderboardDataId = getCallId(
-      config.leaderboard,
-      'getTournamentLeaderboard',
-      [activeTournamentId, nextRankId]
-    );
-    return readcallResponse?.[leaderboardDataId]?.[0];
-  }
-);
-
 export const allLeaderboardDataAtom = atom<
   undefined | { [nextId: string]: LeaderboardData[] }
 >(undefined);
-// const nextRankIdAtom = atom((get) => {
-//   const leaderboardData = get(leaderboardDataAtom);
-//   if (leaderboardData === undefined)
-//     return '0x0000000000000000000000000000000000000000000000000000000000000000';
-//   else return leaderboardData[9].stats.next;
-// });
-
-export const nextRankIdAtom = atom(
-  '0x0000000000000000000000000000000000000000000000000000000000000000',
-  (get, set, update: string) => {
-    const previosValue = get(nextRankIdAtom);
-    if (previosValue !== update) {
-      set(nextRankIdAtom, update);
-    }
-  }
-);
 
 export const userLeaderboardDataAtom = atom<
   | undefined

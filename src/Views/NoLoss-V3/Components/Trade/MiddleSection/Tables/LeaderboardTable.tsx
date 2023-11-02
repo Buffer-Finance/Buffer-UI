@@ -1,15 +1,15 @@
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
-  leaderboardDataAtom,
+  allLeaderboardDataAtom,
+  leaderboardActivePgaeIdAtom,
   leaderboardPaginationAtom,
-  nextRankIdAtom,
 } from '@Views/NoLoss-V3/atoms';
 import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 
 enum TableColumn {
@@ -22,9 +22,9 @@ enum TableColumn {
 }
 
 export const LeaderboardTable = () => {
-  const data = useAtomValue(leaderboardDataAtom);
-  const setNextRankId = useSetAtom(nextRankIdAtom);
+  const leaderboardData = useAtomValue(allLeaderboardDataAtom);
   const [pages, setPages] = useAtom(leaderboardPaginationAtom);
+  const [activePageId, setActivePageId] = useAtom(leaderboardActivePgaeIdAtom);
 
   const headNameArray = [
     'Rank',
@@ -39,17 +39,22 @@ export const LeaderboardTable = () => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
   const filteredData = useMemo(() => {
-    if (data === undefined) return undefined;
+    if (leaderboardData === undefined) return undefined;
+    const data = leaderboardData[activePageId];
     if (data.length === 0) return [];
     return data.filter((item) => parseInt(item.rank) !== 0);
-  }, [data]);
+  }, [leaderboardData]);
 
   const BodyFormatter: any = (row: number, col: number) => {
     if (filteredData === undefined) return 'Loading';
     const userData = filteredData[row];
     switch (col) {
       case TableColumn.Rank:
-        return <div className="pl-[1.6rem]">{parseInt(userData.rank)}</div>;
+        return (
+          <div className="pl-[1.6rem]">
+            {10 * (pages.activePage - 1) + row + 1}
+          </div>
+        );
       case TableColumn.User:
         return getSlicedUserAddress(userData.stats.user, 4);
       case TableColumn.Volume:
@@ -61,21 +66,25 @@ export const LeaderboardTable = () => {
           />
         );
       case TableColumn.Trades:
-        return userData.stats.trades;
+        return parseInt(userData.stats.trades);
       case TableColumn.Score:
-        return userData.stats.score;
+        return parseInt(userData.stats.score);
       case TableColumn.NetPnl:
         const percentageNetPnl = divide(
           userData.stats.netPnl,
           userData.stats.totalFee
-        );
+        ) as string;
+        const isNegative = lt(percentageNetPnl, '0');
         return (
-          <Display
-            data={multiply(percentageNetPnl as string, 2)}
-            precision={2}
-            className="!justify-start"
-            unit="%"
-          />
+          <div className="flex items-center">
+            {!isNegative && '+ '}
+            <Display
+              data={multiply(percentageNetPnl, 2)}
+              precision={2}
+              className={`!justify-start ${isNegative ? 'red' : 'green'}`}
+              unit="%"
+            />
+          </div>
         );
       default:
         return 'Unhandle Column';
@@ -96,7 +105,8 @@ export const LeaderboardTable = () => {
       onPageChange={(e, page) => {
         console.log(e, page, 'e,page');
         if (!filteredData) return;
-        setNextRankId(filteredData[9].stats.next);
+        // setNextRankId(filteredData[9].stats.next);
+        setActivePageId(filteredData[filteredData.length - 1].stats.next);
         setPages(page);
       }}
       error={<TableErrorRow msg="No user found." />}
