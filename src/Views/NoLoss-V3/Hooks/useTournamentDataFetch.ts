@@ -14,11 +14,6 @@ export const useTournamentDataFetch = () => {
   );
   const setResponse = useSetAtom(noLossReadcallResponseReadOnlyAtom);
   const toastify = useToast();
-  console.log(
-    'tournamentReadCalls',
-    tournamentReadCalls,
-    tournamentResponseBasedReadCalls
-  );
 
   try {
     let calls = null;

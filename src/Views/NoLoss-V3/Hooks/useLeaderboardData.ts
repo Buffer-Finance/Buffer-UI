@@ -18,7 +18,6 @@ export const useLeaderboardData = () => {
   );
   const setAllleaderboardData = useSetAtom(allLeaderboardDataAtom);
   let readcall = {};
-  console.log(nextRankId, 'nextRankId');
   useEffect(() => {
     const timer = setTimeout(() => {
       setNextRankId(

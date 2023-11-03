@@ -222,7 +222,7 @@ export const usePastTradeQuery = () => {
 
   const blockNumber = data?._meta?.block.number;
   const trades = useAheadTrades(blockNumber, user?.userAddress, false);
-  console.log(`trades: `, trades);
+  // console.log(`trades: `, trades);
   //  { data: [], del: [], fromBlock: 0, toBlock: null };
   useEffect(() => {
     let activeResponseArr: (IGQLHistory | null)[] = [];

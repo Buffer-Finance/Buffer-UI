@@ -400,7 +400,6 @@ export const tournaments = atom<ItournamentData[] | undefined>((get) => {
   return Object.entries(allTournamentsData)
     .map(([nextId, tournametsbatch]) => {
       if (tournametsbatch === undefined) return;
-      console.log('goes inhere');
       return tournametsbatch.map((tournament, index) => {
         const id = parseInt(add(nextId, index.toString()));
         const isUserEligible = allBooleans?.[nextId]?.[index];

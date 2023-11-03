@@ -16,7 +16,6 @@ export const TradepageTournamentCard: React.FC<{
   isTradePage?: boolean;
 }> = ({ tournament, isTradePage = true }) => {
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
-  console.log('touenamentcard', tournament);
   const setWinPrizeModal = useSetAtom(WinningPirzeModalAtom);
 
   function openWinPrizeModal() {
