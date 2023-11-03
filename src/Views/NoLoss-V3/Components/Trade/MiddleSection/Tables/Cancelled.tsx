@@ -8,6 +8,7 @@ import {
   tardesTotalPageAtom,
   updateCancelledPageNumber,
 } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
+import { getTradeTableError } from '@Views/NoLoss-V3/helpers/getTradeTableError';
 import { AssetCell } from '@Views/TradePage/Views/AccordionTable/AssetCell';
 import {
   DisplayTime,
@@ -24,7 +25,9 @@ enum TableColumn {
   Reason = 5,
 }
 
-export const CancelledTable = () => {
+export const CancelledTable: React.FC<{ userAddress: string | undefined }> = ({
+  userAddress,
+}) => {
   const { cancelled } = useAtomValue(tardesAtom);
   const { cancelled: totalPages } = useAtomValue(tardesTotalPageAtom);
   const { cancelled: activePage } = useAtomValue(tardesPageAtom);
@@ -83,7 +86,7 @@ export const CancelledTable = () => {
     <BufferTable
       bodyJSX={BodyFormatter}
       headerJSX={HeaderFomatter}
-      loading={cancelled === undefined}
+      loading={userAddress !== undefined && history === undefined}
       rows={cancelled?.length ?? 0}
       cols={headNameArray.length}
       onRowClick={() => {}}
@@ -93,7 +96,7 @@ export const CancelledTable = () => {
       onPageChange={(e, page) => {
         setCancelledPage(page);
       }}
-      error={<TableErrorRow msg="No trades found." />}
+      error={<TableErrorRow msg={getTradeTableError(userAddress)} />}
     />
   );
 };

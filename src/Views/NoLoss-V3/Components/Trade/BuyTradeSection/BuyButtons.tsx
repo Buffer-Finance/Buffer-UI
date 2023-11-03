@@ -50,7 +50,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         No Active Chain
       </BlueBtn>
     );
-  if (!user)
+  if (!user || !user.userAddress)
     return (
       <ConnectionRequired>
         <></>

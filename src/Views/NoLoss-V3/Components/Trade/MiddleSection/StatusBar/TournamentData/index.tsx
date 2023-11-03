@@ -1,4 +1,4 @@
-import { userLeaderboardDataAtom } from '@Views/NoLoss-V3/atoms';
+import { userAtom, userLeaderboardDataAtom } from '@Views/NoLoss-V3/atoms';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { Balance } from './Balance';
@@ -7,9 +7,13 @@ import { Score } from './Score';
 
 export const TournamentData = () => {
   const userTournamentData = useAtomValue(userLeaderboardDataAtom);
-  console.log('allLeaderboardData', userTournamentData);
+  const user = useAtomValue(userAtom);
+
+  if (user === undefined || user.userAddress === undefined)
+    return <div className="ml-auto"></div>;
+
   if (userTournamentData === undefined)
-    return <Skeleton className="w-[140px] !h-5 lc " />;
+    return <Skeleton className="w-[140px] !h-7 lc !transform-none ml-auto" />;
 
   const dataArray = [
     {

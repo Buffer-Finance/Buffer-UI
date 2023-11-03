@@ -11,6 +11,7 @@ import {
   tardesTotalPageAtom,
   updateHistoryPageNumber,
 } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
+import { getTradeTableError } from '@Views/NoLoss-V3/helpers/getTradeTableError';
 import { AssetCell } from '@Views/TradePage/Views/AccordionTable/AssetCell';
 import {
   DisplayTime,
@@ -30,7 +31,9 @@ enum TableColumn {
   Payout = 7,
 }
 
-export const HistoryTable = () => {
+export const HistoryTable: React.FC<{ userAddress: string | undefined }> = ({
+  userAddress,
+}) => {
   const { history } = useAtomValue(tardesAtom);
   const { history: totalPages } = useAtomValue(tardesTotalPageAtom);
   const { history: activePage } = useAtomValue(tardesPageAtom);
@@ -121,7 +124,7 @@ export const HistoryTable = () => {
     <BufferTable
       bodyJSX={BodyFormatter}
       headerJSX={HeaderFomatter}
-      loading={history === undefined}
+      loading={userAddress !== undefined && history === undefined}
       rows={history?.length ?? 0}
       cols={headNameArray.length}
       onRowClick={() => {}}
@@ -131,7 +134,7 @@ export const HistoryTable = () => {
       onPageChange={(e, page) => {
         setHistoryPage(page);
       }}
-      error={<TableErrorRow msg="No trades found." />}
+      error={<TableErrorRow msg={getTradeTableError(userAddress)} />}
     />
   );
 };
