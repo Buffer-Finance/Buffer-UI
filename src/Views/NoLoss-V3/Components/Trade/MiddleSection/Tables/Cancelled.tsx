@@ -25,9 +25,12 @@ enum TableColumn {
   Reason = 5,
 }
 
-export const CancelledTable: React.FC<{ userAddress: string | undefined }> = ({
-  userAddress,
-}) => {
+export const CancelledTable: React.FC<{
+  userAddress: string | undefined;
+  onlyView?: number[];
+  overflow?: boolean;
+  isMobile?: boolean;
+}> = ({ userAddress, onlyView, overflow, isMobile }) => {
   const { cancelled } = useAtomValue(tardesAtom);
   const { cancelled: totalPages } = useAtomValue(tardesTotalPageAtom);
   const { cancelled: activePage } = useAtomValue(tardesPageAtom);
@@ -51,8 +54,8 @@ export const CancelledTable: React.FC<{ userAddress: string | undefined }> = ({
     switch (col) {
       case TableColumn.Asset:
         return (
-          <div className="pl-[1.6rem]">
-            <AssetCell currentRow={trade} split={false} />
+          <div className={`${isMobile ? '' : 'pl-[1.6rem]'}`}>
+            <AssetCell currentRow={trade} split={isMobile} />
           </div>
         );
       case TableColumn.Strike:
@@ -97,6 +100,9 @@ export const CancelledTable: React.FC<{ userAddress: string | undefined }> = ({
         setCancelledPage(page);
       }}
       error={<TableErrorRow msg={getTradeTableError(userAddress)} />}
+      showOnly={onlyView}
+      overflow={overflow}
+      shouldShowMobile
     />
   );
 };

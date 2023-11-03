@@ -1,19 +1,20 @@
-import { useGenericHooks } from '@Hooks/useGenericHook';
-import {
-  tardesAtom,
-  usePastTradeQuery,
-} from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
+import { tardesAtom } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
+import { NoTrades } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/NoTrades';
 import styled from '@emotion/styled';
 import { useAtomValue } from 'jotai';
 import { Trade } from './Trade';
 
 export const ActiveTrades = () => {
   const { active } = useAtomValue(tardesAtom);
-  useGenericHooks(active);
-  usePastTradeQuery();
 
   return (
     <TradesBackground className="b1200:mb-4">
+      {active.length === 0 && (
+        <div className="hidden b1200:block">
+          {' '}
+          <NoTrades isLimitOrderTable={false} />
+        </div>
+      )}
       {active.map((t) => {
         if (!t) return <></>;
         return <Trade trade={t} key={t?.queueID} />;
@@ -22,7 +23,7 @@ export const ActiveTrades = () => {
   );
 };
 
-const TradesBackground = styled.div`
+export const TradesBackground = styled.div`
   flex-grow: 1;
   flex-basis: 0;
   overflow-y: auto;

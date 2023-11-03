@@ -8,7 +8,7 @@ import { CategoryTabs } from './CategoryTabs';
 import { SearchBar } from './SearchBar';
 import { Table } from './Table';
 
-const AssetSelectorDDBackground = styled.div`
+export const AssetSelectorDDBackground = styled.div`
   max-height: 420px;
   width: 100%;
   padding: 16px;

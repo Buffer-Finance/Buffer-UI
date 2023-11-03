@@ -43,7 +43,7 @@ export const Trade: React.FC<{ trade: IGQLHistory }> = ({ trade }) => {
   );
 };
 
-const TradeCardBackground = styled.div`
+export const TradeCardBackground = styled.div`
   padding: 12px 16px;
   background-color: #141823;
   border-radius: 5px;

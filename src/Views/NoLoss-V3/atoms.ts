@@ -402,7 +402,7 @@ export const tournaments = atom<ItournamentData[] | undefined>((get) => {
       if (tournametsbatch === undefined) return;
       return tournametsbatch.map((tournament, index) => {
         const id = parseInt(add(nextId, index.toString()));
-        const isUserEligible = allBooleans?.[nextId]?.[index];
+        const isUserEligible = allBooleans?.[+nextId]?.[index];
         return {
           ...tournament,
           id,
@@ -411,7 +411,8 @@ export const tournaments = atom<ItournamentData[] | undefined>((get) => {
         };
       });
     })
-    .flat();
+    .flat()
+    .filter((tournament) => tournament !== undefined) as ItournamentData[];
 });
 
 export const WinningPirzeModalAtom = atom<null | ItournamentData>(null);

@@ -25,6 +25,7 @@ export const Table: React.FC<{
   group?: string;
   onMarketSelect?: () => void;
 }> = ({ onMarketSelect, group }) => {
+  const isMobile = typeof group == 'string';
   const filteredMarkets = useAtomValue(filteredMarketsSelectAtom);
   const [favouriteMarkets, setFavouriteMarkets] = useAtom(
     noLossFavouriteMarketsAtom
@@ -37,6 +38,7 @@ export const Table: React.FC<{
   }, []);
 
   const HeadFormatter = (col: number) => {
+    if (isMobile) return <></>;
     return <TableHeader col={col} headsArr={headers} />;
   };
 
@@ -156,7 +158,7 @@ export const Table: React.FC<{
       <BufferTable
         widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
         headerJSX={HeadFormatter}
-        cols={headers.length}
+        cols={isMobile ? 4 : headers.length}
         shouldShowMobile
         rows={filteredMarkets?.length || 0}
         bodyJSX={BodyFormatter}
@@ -183,6 +185,7 @@ export const Table: React.FC<{
           }
         }}
         overflow
+        shouldHideHeader={isMobile}
       />
     </AssetSelectorDDBackground>
   );

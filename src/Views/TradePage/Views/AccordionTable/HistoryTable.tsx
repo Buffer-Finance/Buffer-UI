@@ -437,7 +437,6 @@ const HistoryTable: React.FC<{
           if (!userAddress) return;
           navigateToProfile(userAddress.toLowerCase());
         }
-        // else setInspectTrade({ trade: trades?.[idx] });
       }}
       showOnly={onlyView}
       error={<TableErrorRow msg="No Trade History." />}

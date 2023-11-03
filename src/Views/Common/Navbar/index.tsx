@@ -1,6 +1,7 @@
 import { useGlobal } from '@Contexts/Global';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
 import MemoWalletSVG from '@SVG/Elements/WalletSVG';
+import { useShutterHandlers } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
 import { tardesAtom } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
 import { isTestnet } from 'config';
 import { useAtomValue } from 'jotai';
@@ -8,7 +9,6 @@ import { useMemo } from 'react';
 import { getTabs } from 'src/Config/getTabs';
 import { urlSettings } from 'src/Config/wagmiClient';
 import { activeMarketFromStorageAtom } from 'src/globalStore';
-import { useShutterHandlers } from '../MobileShutter/MobileShutter';
 import { AccountDropdown } from './AccountDropdown';
 import { BufferLogoComponent } from './BufferLogo';
 import { SettingsDD } from './SettingsDD';

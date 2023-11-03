@@ -16,6 +16,8 @@ import { useGraphStatus } from '@Utils/useGraphStatus';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import { NoLossV3 } from '@Views/NoLoss-V3';
+import { MobileHistory } from '@Views/NoLoss-V3/Components/Trade/MobileHistory';
+import { TradesShutter } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
 import { Tournaments } from '@Views/Tournaments';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
@@ -81,7 +83,7 @@ const AppRoutes = () => {
   // }, [searchParam]);
   return (
     <div className="relative root w-[100vw] pb-[5px] ">
-      {/* <TradesShutter /> */}
+      <TradesShutter />
       <OpenOcean />
       {/* <OnboardingAnimation /> */}
       {/* <OneCTModal /> */}
@@ -90,7 +92,7 @@ const AppRoutes = () => {
         {/* <Route path="trades" element={<AllTrades />} /> */}
         {/* <Route path="/faucet" element={<IbfrFaucet />} /> */}
         {/* <Route path="/test" element={<Test />} /> */}
-        {/* <Route path="/history" element={<TradeLog_sm />} /> */}
+        <Route path="/history/:id" element={<MobileHistory />} />
         {/* <Route path="/admin" element={<AdminConfig />} /> */}
 
         {/* <Route

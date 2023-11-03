@@ -6,15 +6,17 @@ import { PinnedMarkets } from './PinnedMarkets';
 import { StatusBar } from './StatusBar';
 import { Tables } from './Tables';
 
-export const MiddleSection = () => {
+export const MiddleSection: React.FC<{ isMobile: boolean }> = ({
+  isMobile,
+}) => {
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
 
   return (
     <MiddleSectionBackground>
-      {showFavoriteAsset && <PinnedMarkets />}
-      <StatusBar isMobile={false} />
+      {!isMobile && showFavoriteAsset && <PinnedMarkets />}
+      <StatusBar isMobile={isMobile} />
       <MarketChart />
-      <Tables />
+      {!isMobile && <Tables />}
     </MiddleSectionBackground>
   );
 };

@@ -1,21 +1,20 @@
-import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
-import { shutterActiveTabAtom } from '@Views/Common/MobileShutter/VannilaOptionsConfig';
-import { PoolDropdown } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/PoolDropdown';
-import { timeSelectorAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
+import { shutterActiveTabAtom } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/EditTradeConfigShutter';
+import { useShutterHandlers } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
+import { noLossTradeSizeAtom } from '@Views/NoLoss-V3/atoms';
+import { timeSelectorAtom } from '@Views/TradePage/atoms';
 import { HHMMToSeconds, secondsToHHMM } from '@Views/TradePage/utils';
-import { PlusOne } from '@mui/icons-material';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 const ViewOnlyInputs: React.FC<any> = ({}) => {
   const { openNormalOrdersShutter } = useShutterHandlers();
   const setActiveTab = useSetAtom(shutterActiveTabAtom);
-  const amount = useAtomValue(tradeSizeAtom);
+  const amount = useAtomValue(noLossTradeSizeAtom);
   const currentTime = useAtomValue(timeSelectorAtom);
   const setDuration = useSetAtom(timeSelectorAtom);
 
   return (
     <div className="flex items-center gap-x-3 font-[500]">
-      <div className="flex w-full  bg-[#282B39] items-center rounded-[5px]">
+      <div className="flex w-full h-full bg-[#282B39] items-center rounded-[5px]">
         <button
           className={`w-full h-full text-left px-[10px] text-${
             amount ? '1' : '[#808191]'
@@ -27,7 +26,6 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
         >
           {amount ? amount : ' Enter'}
         </button>
-        <PoolDropdown />
       </div>
       <button
         onClick={() => {
