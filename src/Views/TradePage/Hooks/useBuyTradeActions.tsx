@@ -4,12 +4,9 @@ import { toFixed } from '@Utils/NumString';
 import OptionsABI from '@Views/TradePage/ABIs/OptionContract.json';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
-import ERC20ABI from 'src/ABIs/Token.json';
 import 'viem/window';
 
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useHighestTierNFT } from '@Hooks/useNFTGraph';
-import { useWriteCall } from '@Hooks/useWriteCall';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { getCallId } from '@Utils/Contract/multiContract';
@@ -79,7 +76,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const { data: allSettlementFees } = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = usePublicClient({ chainId: activeChain.id });
-  const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
+  // const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
   const setIsApproveModalOpen = useSetAtom(approveModalAtom);
   const { state, dispatch } = useGlobal();
   const { activeMarket: activeAsset } = useActiveMarket();
@@ -88,7 +85,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const { address } = useAccount();
 
   const configData = getConfig(activeChain.id);
-  const { writeCall: approve } = useWriteCall(tokenAddress as string, ERC20ABI);
+  // const { writeCall: approve } = useWriteCall(tokenAddress as string, ERC20ABI);
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
   );
@@ -376,7 +373,7 @@ export const useBuyTradeActions = (userInput: string) => {
           toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
           settings.partialFill,
           referralData[2],
-          highestTierNFT?.tokenId || '0',
+          '0',
         ];
 
         const signatures = await generateBuyTradeSignature(

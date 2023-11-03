@@ -1,4 +1,3 @@
-import { useActiveChain } from './useActiveChain';
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
@@ -16,11 +15,12 @@ interface IGraphNFT {
 export const useNFTGraph = (userOnly = false) => {
   const { address: account } = useUserAccount();
   const { cache } = useSWRConfig();
-  const { configContracts } = useActiveChain();
   const { data } = useSWR(`nfts-the-graph-account-${account}`, {
     fetcher: async () => {
-      const response = await axios.post(configContracts.graph.LITE, {
-        query: `{ 
+      const response = await axios.post(
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api',
+        {
+          query: `{ 
           nfts(orderBy: tokenId, orderDirection: desc,where: {owner: "${account}"}) {
             batchId
             nftImage
@@ -30,7 +30,8 @@ export const useNFTGraph = (userOnly = false) => {
             phaseId
           }
         }`,
-      });
+        }
+      );
       // console.log(response.data, "response");
       return response.data?.data as {
         nfts: IGraphNFT[];
