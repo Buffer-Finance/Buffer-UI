@@ -1,12 +1,11 @@
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import styled from '@emotion/styled';
-import { IconButton, Skeleton } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { useTournamentDataFetch } from '../Hooks/useTournamentDataFetch';
 import { filteredTournamentsDataReadOnlyAtom } from '../atoms';
 import { AllMyTab } from './AllMyTab';
-import { BackIcon } from './SVGs/BackIcon';
 import { TournamentStateTabs } from './TournamentStateTabs';
 import { TradepageTournamentCard } from './TradePageTournamentCard';
 
@@ -24,14 +23,14 @@ export const NoLossSection: React.FC<{ isMobile: boolean }> = ({
     <TradePageNoLossBackground>
       <RowBetween>
         <TournamentStateTabs />
-        <IconButton
+        {/* <IconButton
           onClick={() => {
             navigate('/tournaments');
           }}
           className="!p-[0]"
         >
           <BackIcon />
-        </IconButton>
+        </IconButton> */}
       </RowBetween>
       <AllMyTab />
       <NoLoss isMobile={isMobile} />
