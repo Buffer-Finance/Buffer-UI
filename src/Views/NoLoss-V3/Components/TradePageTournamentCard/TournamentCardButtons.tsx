@@ -105,18 +105,36 @@ export const TournamentCardButtons: React.FC<{
           console.log(response);
         },
         'approve',
-        [config.manager, parseInt(tournament.tournamentMeta.ticketCost)]
+        [
+          config.manager,
+          '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+        ]
       );
     };
 
     return (
-      <BufferButton
-        onClick={approveTournamentManager}
-        isLoading={btnLoading}
-        className={'!text-f12 h-fit bg-blue mt-4 py-2'}
-      >
-        Approve
-      </BufferButton>
+      <div className="flex items-center justify-center gap-x-[5px] mt-4">
+        <BufferButton
+          className={tournamentButtonStyles}
+          isDisabled={
+            tournament.id === activeTournamentId ||
+            tournament.state.toLowerCase() !== 'live'
+          }
+          onClick={() => {
+            setActiveTournament(tournament.id);
+          }}
+        >
+          <TradeIcon />
+          Trade
+        </BufferButton>
+        <BufferButton
+          onClick={approveTournamentManager}
+          isLoading={btnLoading}
+          className={tournamentButtonStyles}
+        >
+          Approve
+        </BufferButton>
+      </div>
     );
   }
 
@@ -136,18 +154,19 @@ export const TournamentCardButtons: React.FC<{
 
   return (
     <div className="flex items-center justify-center gap-x-[5px] mt-4">
-      {tournament.state.toLowerCase() == 'live' && (
-        <BufferButton
-          className={tournamentButtonStyles}
-          isDisabled={tournament.id === activeTournamentId}
-          onClick={() => {
-            setActiveTournament(tournament.id);
-          }}
-        >
-          <TradeIcon />
-          Trade
-        </BufferButton>
-      )}
+      <BufferButton
+        className={tournamentButtonStyles}
+        isDisabled={
+          tournament.id === activeTournamentId ||
+          tournament.state.toLowerCase() !== 'live'
+        }
+        onClick={() => {
+          setActiveTournament(tournament.id);
+        }}
+      >
+        <TradeIcon />
+        Trade
+      </BufferButton>
       <BufferButton
         className={tournamentButtonStyles}
         onClick={buyPlayTokens}
