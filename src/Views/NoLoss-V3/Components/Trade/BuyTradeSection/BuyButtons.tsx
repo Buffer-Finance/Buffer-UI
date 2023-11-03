@@ -67,7 +67,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   if (activeTournamentData.data?.state.toLowerCase() === 'closed') {
     return (
       <BlueBtn isDisabled onClick={() => {}}>
-        Tournament is ended.
+        Tournament has ended.
       </BlueBtn>
     );
   }
