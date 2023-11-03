@@ -15,7 +15,9 @@ const TradePageNoLossBackground = styled.div`
   width: 300px;
 `;
 
-export const NoLossSection = () => {
+export const NoLossSection: React.FC<{ isMobile: boolean }> = ({
+  isMobile,
+}) => {
   const navigate = useNavigate();
   useTournamentDataFetch();
   return (
@@ -32,12 +34,12 @@ export const NoLossSection = () => {
         </IconButton>
       </RowBetween>
       <AllMyTab />
-      <NoLoss />
+      <NoLoss isMobile={isMobile} />
     </TradePageNoLossBackground>
   );
 };
 
-const NoLoss = () => {
+const NoLoss: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const allTournaments = useAtomValue(filteredTournamentsDataReadOnlyAtom);
   if (allTournaments === undefined)
     return <Skeleton className="w-[250px] !h-[200px] lc !transform-none" />;
@@ -46,6 +48,7 @@ const NoLoss = () => {
     <div className="flex flex-col gap-3">
       {allTournaments.map((tournament) => (
         <TradepageTournamentCard
+          isMobile={isMobile}
           tournament={tournament}
           key={tournament.id + tournament.tournamentMeta.name}
         />

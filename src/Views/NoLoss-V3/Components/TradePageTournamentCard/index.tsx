@@ -14,7 +14,8 @@ import { TournamentCardButtons } from './TournamentCardButtons';
 export const TradepageTournamentCard: React.FC<{
   tournament: ItournamentData;
   isTradePage?: boolean;
-}> = ({ tournament, isTradePage = true }) => {
+  isMobile: boolean;
+}> = ({ tournament, isTradePage = true, isMobile }) => {
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
   const setWinPrizeModal = useSetAtom(WinningPirzeModalAtom);
 
@@ -23,7 +24,9 @@ export const TradepageTournamentCard: React.FC<{
   }
   return (
     <div
-      className={`w-[250px] background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
+      className={`${
+        isMobile ? 'w-full' : 'w-[250px]'
+      } background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
         isTradePage && tournament.id == activeTournamentId
           ? 'border-[var(--bg-signature)] '
           : 'border-[transparent]'
