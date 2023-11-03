@@ -395,11 +395,7 @@ export const tournaments = atom<ItournamentData[] | undefined>((get) => {
   const allBooleans = get(userTournamentsBooleanAtom);
   const states = get(tournamentIdsAtom);
 
-  if (
-    allTournamentsData === undefined ||
-    allBooleans === undefined ||
-    states === undefined
-  )
+  if (allTournamentsData === undefined || states === undefined)
     return undefined;
   return Object.entries(allTournamentsData)
     .map(([nextId, tournametsbatch]) => {
@@ -407,10 +403,11 @@ export const tournaments = atom<ItournamentData[] | undefined>((get) => {
       console.log('goes inhere');
       return tournametsbatch.map((tournament, index) => {
         const id = parseInt(add(nextId, index.toString()));
+        const isUserEligible = allBooleans?.[nextId]?.[index];
         return {
           ...tournament,
           id,
-          isUserEligible: allBooleans[nextId]?.[index],
+          isUserEligible,
           state: states.find((state) => +state.id === id)?.state,
         };
       });

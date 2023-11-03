@@ -36,16 +36,15 @@ export const TournamentCardButtons: React.FC<{
   const tournamentBasedData = useAtomValue(
     tournamentBasedReadCallsReadOnlyAtom
   );
-
-  if (tournamentBasedData.result === undefined || user === undefined)
+  if (user === undefined || user.userAddress === undefined)
     return (
-      <Skeleton className="!h-[26px] full-width sr lc !mt-4 !transform-none" />
-    );
-  if (user.userAddress === undefined)
-    return (
-      <ConnectionRequired>
+      <ConnectionRequired className="!text-f12 h-fit bg-blue mt-4 py-2">
         <></>
       </ConnectionRequired>
+    );
+  if (tournamentBasedData.result === undefined)
+    return (
+      <Skeleton className="!h-[26px] full-width sr lc !mt-4 !transform-none" />
     );
 
   if (!activeChain) return <></>;

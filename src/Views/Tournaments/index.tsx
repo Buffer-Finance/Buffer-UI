@@ -8,7 +8,6 @@ import { TournamentsList } from './TournamentsList';
 
 export const Tournaments: React.FC = () => {
   useTournamentIds();
-
   useAllTournamentData();
 
   return (
