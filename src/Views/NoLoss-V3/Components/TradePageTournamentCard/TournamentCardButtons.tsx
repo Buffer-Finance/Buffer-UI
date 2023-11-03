@@ -68,7 +68,7 @@ export const TournamentCardButtons: React.FC<{
     return (
       <Skeleton className="!h-[26px] full-width sr lc !mt-4 !transform-none" />
     );
-
+  let secondButton = null;
   async function handleClaim() {
     setBtnLoading(true);
     await writeCall(
@@ -84,17 +84,17 @@ export const TournamentCardButtons: React.FC<{
   }
 
   if (tournament.state.toLowerCase() === 'closed')
-    return (
+    secondButton = (
       <BufferButton
         onClick={handleClaim}
         isLoading={btnLoading}
-        className={'!text-f12 h-fit bg-blue mt-4 py-2'}
+        className={tournamentButtonStyles}
       >
         Claim
       </BufferButton>
     );
 
-  if (lt(allowance, ticketCost)) {
+  if (lt(allowance, ticketCost) && secondButton === null) {
     const approveTournamentManager = () => {
       setBtnLoading(true);
       writeCall(
@@ -112,29 +112,14 @@ export const TournamentCardButtons: React.FC<{
       );
     };
 
-    return (
-      <div className="flex items-center justify-center gap-x-[5px] mt-4">
-        <BufferButton
-          className={tournamentButtonStyles}
-          isDisabled={
-            tournament.id === activeTournamentId ||
-            tournament.state.toLowerCase() !== 'live'
-          }
-          onClick={() => {
-            setActiveTournament(tournament.id);
-          }}
-        >
-          <TradeIcon />
-          Trade
-        </BufferButton>
-        <BufferButton
-          onClick={approveTournamentManager}
-          isLoading={btnLoading}
-          className={tournamentButtonStyles}
-        >
-          Approve
-        </BufferButton>
-      </div>
+    secondButton = (
+      <BufferButton
+        onClick={approveTournamentManager}
+        isLoading={btnLoading}
+        className={tournamentButtonStyles}
+      >
+        Approve
+      </BufferButton>
     );
   }
 
@@ -151,22 +136,8 @@ export const TournamentCardButtons: React.FC<{
       [tournament.id]
     );
   };
-
-  return (
-    <div className="flex items-center justify-center gap-x-[5px] mt-4">
-      <BufferButton
-        className={tournamentButtonStyles}
-        isDisabled={
-          tournament.id === activeTournamentId ||
-          tournament.state.toLowerCase() !== 'live'
-        }
-        onClick={() => {
-          setActiveTournament(tournament.id);
-        }}
-      >
-        <TradeIcon />
-        Trade
-      </BufferButton>
+  if (secondButton === null)
+    secondButton = (
       <BufferButton
         className={tournamentButtonStyles}
         onClick={buyPlayTokens}
@@ -179,6 +150,24 @@ export const TournamentCardButtons: React.FC<{
           precision={0}
         />
       </BufferButton>
+    );
+
+  return (
+    <div className="flex items-center justify-center gap-x-[5px] mt-4">
+      <BufferButton
+        className={tournamentButtonStyles}
+        isDisabled={
+          tournament.id === activeTournamentId ||
+          tournament.state.toLowerCase() === 'upcoming'
+        }
+        onClick={() => {
+          setActiveTournament(tournament.id);
+        }}
+      >
+        <TradeIcon />
+        Trade
+      </BufferButton>
+      {secondButton}
     </div>
   );
 };
