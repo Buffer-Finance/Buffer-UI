@@ -331,15 +331,20 @@ export const durations = [
     name: ['5m'],
   },
   {
+    duration: 10 * 60,
+    time: '00:10',
+    name: ['10m'],
+  },
+  {
     duration: 15 * 60,
     time: '00:15',
     name: ['15m'],
   },
-  {
-    duration: 60 * 60,
-    time: '01:00',
-    name: ['1h'],
-  },
+  // {
+  //   duration: 60 * 60,
+  //   time: '01:00',
+  //   name: ['1h'],
+  // },
   {
     duration: 4 * 60 * 60,
     time: '04:00',

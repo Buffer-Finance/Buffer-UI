@@ -1,12 +1,12 @@
+import { lt, lte } from '@Utils/NumString/stringArithmatics';
 import { EditIconSVG } from '@Views/TradePage/Components/EditIconSVG';
+import { RowGap } from '@Views/TradePage/Components/Row';
 import { durations } from '@Views/TradePage/config';
 import { HHMMToSeconds, secondsToHHMM } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
+import { Trans } from '@lingui/macro';
 import { useEffect, useState } from 'react';
 import { MHdropDown } from '../../Settings/TradeSettings/LimitOrdersExpiry/MHdropDown';
-import { RowGap } from '@Views/TradePage/Components/Row';
-import { lt, lte } from '@Utils/NumString/stringArithmatics';
-import { Trans } from '@lingui/macro';
 
 const TimePickerBackground = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ const TimePickerBackground = styled.div`
       font-size: 14px;
       text-align: center;
       border-radius: 6px;
-      padding: 6px 8.55px;
+      padding: 6px 7px;
       border: 1px solid transparent;
       background: #2b2b39;
 
