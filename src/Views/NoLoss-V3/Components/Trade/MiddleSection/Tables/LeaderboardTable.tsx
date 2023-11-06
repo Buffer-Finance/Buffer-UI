@@ -87,12 +87,12 @@ export const LeaderboardTable: React.FC<{
         ) as string;
         const isNegative = lt(percentageNetPnl, '0');
         return (
-          <div className="flex items-center">
+          <div className={`flex items-center ${isNegative ? 'red' : 'green'}`}>
             {!isNegative && '+ '}
             <Display
               data={multiply(percentageNetPnl, 2)}
               precision={2}
-              className={`!justify-start ${isNegative ? 'red' : 'green'}`}
+              className={`!justify-start `}
               unit="%"
             />
           </div>
