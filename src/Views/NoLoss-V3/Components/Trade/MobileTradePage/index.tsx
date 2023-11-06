@@ -7,6 +7,8 @@ import { useAtomValue } from 'jotai';
 import { BuyButtons } from '../BuyTradeSection/BuyButtons';
 import { PayoutProfit } from '../BuyTradeSection/PayoutProfit';
 import { MarketPicker } from './MarketPicker';
+import { Tabs } from './Tabs';
+import { TournamentDataMobile } from './TournamentData';
 
 const TradePageMobile: React.FC<any> = ({}) => {
   const activeMarket = useAtomValue(activeMarketDataAtom);
@@ -21,6 +23,8 @@ const TradePageMobile: React.FC<any> = ({}) => {
 
   return (
     <div className="flex flex-col  h-full w-full m-auto px-3 a600:w-[500px]">
+      <Tabs />
+      <TournamentDataMobile />
       <div className="flex w-full items-center justify-between gap-x-[5px]">
         <MarketPicker activeMarket={activeMarket} />
         <MobileChartControlls activeMarket={activeMarket.chartData.tv_id} />
