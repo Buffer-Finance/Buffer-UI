@@ -1,4 +1,5 @@
 import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
+import { useTournamentDataFetch } from '@Views/NoLoss-V3/Hooks/useTournamentDataFetch';
 import { activeMarketDataAtom } from '@Views/NoLoss-V3/atoms';
 import { InoLossMarket } from '@Views/NoLoss-V3/types';
 import { MobileChartControlls } from '@Views/TradePage/Components/MobileView/MobileChartControlls';
@@ -14,6 +15,8 @@ import { Tabs, mobileTradePageTabs } from './Tabs';
 import { TournamentDataMobile } from './TournamentData';
 
 const TradePageMobile: React.FC<any> = ({}) => {
+  useTournamentDataFetch();
+
   const activeMarket = useAtomValue(activeMarketDataAtom);
   const activeTab = useAtomValue(mobileTradePageTabs);
 

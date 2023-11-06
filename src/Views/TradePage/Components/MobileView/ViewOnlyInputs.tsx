@@ -14,9 +14,9 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
 
   return (
     <div className="flex items-center gap-x-3 font-[500]">
-      <div className="flex w-full h-full bg-[#282B39] items-center rounded-[5px]">
+      <div className="flex w-full h-[35px] bg-[#282B39] items-stretch rounded-[5px]">
         <button
-          className={`w-full h-full text-left px-[10px] text-${
+          className={`w-full h-[35px] text-left px-[10px] text-${
             amount ? '1' : '[#808191]'
           } text-f13`}
           onClick={() => {
@@ -32,7 +32,7 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
           setActiveTab('Duration');
           openNormalOrdersShutter();
         }}
-        className="h-full border-box  py-[1px]  w-full flex items-center justify-between  bg-[#282B39] rounded-[5px]"
+        className=" h-[35px] border-box  py-[1px]  w-full flex items-center justify-between  bg-[#282B39] rounded-[5px]"
       >
         <div
           className="ml-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
