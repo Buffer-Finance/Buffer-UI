@@ -23,6 +23,7 @@ import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import RouterABI from '../../../ABIs/NoLossRouter.json';
+import TournamentLeaderboardABI from '../../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../../ABIs/TournamentManager.json';
 import { getDurationError } from './TimeSelector/TimePicker';
 import { getTradeSizeError } from './TradeSizeSelector';
@@ -41,7 +42,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   const { writeCall } = useWriteCall();
   const settings = useAtomValue(tradeSettingsAtom);
   const [loadingState, setLoadingState] = useState<
-    'up' | 'down' | 'approve' | 'none'
+    'up' | 'down' | 'approve' | 'none' | 'claim'
   >('none');
 
   if (!activeChain)
@@ -57,7 +58,10 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       </ConnectionRequired>
     );
 
-  if (activeTournamentData === undefined)
+  if (
+    activeTournamentData === undefined ||
+    activeTournamentData.data === undefined
+  )
     return (
       <BlueBtn isDisabled onClick={() => {}}>
         No Active Tournament
@@ -65,10 +69,29 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
     );
 
   if (activeTournamentData.data?.state.toLowerCase() === 'closed') {
+    async function handleClaim() {
+      setLoadingState('claim');
+      await writeCall(
+        config.leaderboard,
+        TournamentLeaderboardABI,
+        (response) => {
+          setLoadingState('none');
+          console.log(response);
+        },
+        'claimReward',
+        [activeTournamentData!.id]
+      );
+    }
+    const alreadClaimed = activeTournamentData.data.hasUserClaimed;
     return (
-      <BlueBtn isDisabled onClick={() => {}}>
-        Tournament has ended.
-      </BlueBtn>
+      <BufferButton
+        onClick={handleClaim}
+        isLoading={loadingState === 'claim'}
+        isDisabled={loadingState !== 'none' || alreadClaimed}
+        className={'bg-blue'}
+      >
+        {alreadClaimed ? 'Already Claimed' : 'Claim'}
+      </BufferButton>
     );
   }
 

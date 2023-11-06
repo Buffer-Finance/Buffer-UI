@@ -83,16 +83,20 @@ export const TournamentCardButtons: React.FC<{
     );
   }
 
-  if (tournament.state.toLowerCase() === 'closed')
+  if (tournament.state.toLowerCase() === 'closed') {
+    const alreadClaimed = tournament.hasUserClaimed;
+
     secondButton = (
       <BufferButton
         onClick={handleClaim}
         isLoading={btnLoading}
         className={tournamentButtonStyles}
+        isDisabled={tournament.hasUserClaimed === true}
       >
-        Claim
+        {alreadClaimed ? 'Already Claimed' : 'Claim'}
       </BufferButton>
     );
+  }
 
   if (lt(allowance, ticketCost) && secondButton === null) {
     const approveTournamentManager = () => {
