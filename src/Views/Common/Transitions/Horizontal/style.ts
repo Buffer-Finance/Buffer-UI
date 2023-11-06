@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 const Background = styled.div`
   /* overflow-x: hidden; */
@@ -22,7 +22,7 @@ const Background = styled.div`
     min-height: 100%;
 
     @media only screen and (max-width: 1200px) {
-      height: calc(100vh - 200px);
+      height: calc(100vh - 300px);
     }
   }
 `;

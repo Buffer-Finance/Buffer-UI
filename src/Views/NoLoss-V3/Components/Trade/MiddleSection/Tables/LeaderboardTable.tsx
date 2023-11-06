@@ -21,7 +21,10 @@ enum TableColumn {
   NetPnl = 5,
 }
 
-export const LeaderboardTable = () => {
+export const LeaderboardTable: React.FC<{
+  onlyShow?: number[];
+  isMobile?: boolean;
+}> = ({ onlyShow, isMobile = false }) => {
   const leaderboardData = useAtomValue(allLeaderboardDataAtom);
   const [pages, setPages] = useAtom(leaderboardPaginationAtom);
   const [activePageId, setActivePageId] = useAtom(leaderboardActivePgaeIdAtom);
@@ -111,6 +114,9 @@ export const LeaderboardTable = () => {
       }}
       error={<TableErrorRow msg="No user found." />}
       shouldOnlyRenderActivePageAndArrows
+      shouldShowMobile
+      showOnly={onlyShow}
+      doubleHeight={isMobile}
     />
   );
 };
