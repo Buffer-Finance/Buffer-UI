@@ -57,7 +57,7 @@ export const getLogs = async (passedFilters: {
     fromBlock: BigInt(passedFilters.fromBlock),
   });
   const encodedData = [...createLogs, ...routerLogs];
-  console.log(`encodedData: `, encodedData);
+  // console.log(`encodedData: `, encodedData);
   let decodedLogs: { [eventName: string]: Log[] } = {};
   encodedData.forEach((log) => {
     if (

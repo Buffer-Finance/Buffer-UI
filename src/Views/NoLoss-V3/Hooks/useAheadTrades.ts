@@ -127,7 +127,7 @@ const useAheadTrades = (
             '0'
           )}`;
           restTopics = [adds64];
-          console.log(restTopics, 'restTopics');
+          // console.log(restTopics, 'restTopics');
         }
         if (!startBlock) return [];
 
@@ -274,7 +274,7 @@ const useAheadTrades = (
 
       let res: ILogTrade = resCopy?.[c.id]?.[0];
       if (!res) return null;
-      console.log(res, resCopy, c.id, ip.link, 'res');
+      // console.log(res, resCopy, c.id, ip.link, 'res');
       // if (
       //   res.targetContract ===
       //     '0x0000000000000000000000000000000000000000' ||
