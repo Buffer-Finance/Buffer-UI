@@ -19,12 +19,12 @@ export const useLeaderboardData = () => {
   const setAllleaderboardData = useSetAtom(allLeaderboardDataAtom);
   let readcall = {};
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer = setInterval(() => {
       setNextRankId(
         '0x0000000000000000000000000000000000000000000000000000000000000000'
       );
     }, 30000);
-    return () => clearTimeout(timer);
+    return () => clearInterval(timer);
   }, []);
   if (activeChain !== undefined && activeTournamentId !== undefined) {
     const config = getNoLossV3Config(activeChain.id);
@@ -33,7 +33,6 @@ export const useLeaderboardData = () => {
       abi: TournamentLeaderboardABI,
       functionName: 'getTournamentLeaderboard',
       args: [activeTournamentId, nextRankId, 10],
-      cacheTime: 5000,
     };
   }
   try {
