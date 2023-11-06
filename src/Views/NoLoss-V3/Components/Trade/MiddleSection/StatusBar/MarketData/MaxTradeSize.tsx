@@ -12,7 +12,7 @@ export const MaxTradeSize = ({
   return (
     <Display
       data={divide(activeMarket.config.maxFee, 18)}
-      unit="Play Tokens"
+      // unit="Play Tokens"
       disable
     />
   );
