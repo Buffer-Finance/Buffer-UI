@@ -1,9 +1,10 @@
 import { sleep } from '@TV/useDataFeed';
 import {
   activeMarketDataAtom,
+  chartNumberAtom,
   nolossmarketsAtom,
 } from '@Views/NoLoss-V3/atoms';
-import { chartNumberAtom, isTableShownAtom } from '@Views/TradePage/atoms';
+import { isTableShownAtom } from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
