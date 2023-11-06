@@ -278,7 +278,7 @@ export const OngoingTradesTable: React.FC<{
 
   const Accordian = (row: number) => {
     const trade = trades?.[row];
-    const [marketPrice] = useAtom(priceAtom);
+    // const [marketPrice] = useAtom(priceAtom);
 
     if (!trade) return <>Something went wrong.</>;
     const poolInfo = getPoolInfo(trade?.pool?.pool);
