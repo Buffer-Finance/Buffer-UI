@@ -387,7 +387,7 @@ export const allTournamentDataAtom = atom<
   undefined | { [nextId: number]: ItournamentData[] | undefined }
 >(undefined);
 export const userTournamentsBooleanAtom = atom<
-  undefined | { [nextId: number]: boolean[] | undefined }
+  undefined | { [nextId: number]: [boolean[], boolean[]] | undefined }
 >(undefined);
 
 export const tournaments = atom<ItournamentData[] | undefined>((get) => {
@@ -402,12 +402,14 @@ export const tournaments = atom<ItournamentData[] | undefined>((get) => {
       if (tournametsbatch === undefined) return;
       return tournametsbatch.map((tournament, index) => {
         const id = parseInt(add(nextId, index.toString()));
-        const isUserEligible = allBooleans?.[+nextId]?.[index];
+        const isUserEligible = allBooleans?.[+nextId]?.[0]?.[index];
+        const hasUserClaimed = allBooleans?.[+nextId]?.[1]?.[index];
         return {
           ...tournament,
           id,
           isUserEligible,
           state: states.find((state) => +state.id === id)?.state,
+          hasUserClaimed,
         };
       });
     })

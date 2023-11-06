@@ -75,6 +75,7 @@ export interface ItournamentData {
   buyinTokenSymbol: string;
   id: number;
   isUserEligible: boolean;
+  hasUserClaimed: boolean;
   rewardTokenDecimals: number;
   rewardTokenSymbol: string;
   state: string;
