@@ -4,7 +4,7 @@ import { useAtom, useAtomValue } from 'jotai';
 
 import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { getCachedPriceFromKlines, getPriceFromKlines } from '@TV/useDataFeed';
+import { getCachedPriceFromKlines } from '@TV/useDataFeed';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { toFixed } from '@Utils/NumString';
 import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
@@ -278,6 +278,7 @@ export const OngoingTradesTable: React.FC<{
 
   const Accordian = (row: number) => {
     const trade = trades?.[row];
+    const [marketPrice] = useAtom(priceAtom);
 
     if (!trade) return <>Something went wrong.</>;
     const poolInfo = getPoolInfo(trade?.pool?.pool);
@@ -318,7 +319,7 @@ export const OngoingTradesTable: React.FC<{
             <Display
               className="!justify-start"
               data={round(
-                getPriceFromKlines(marketPrice, trade.market),
+                getCachedPriceFromKlines(trade.market),
                 marketPrecision
               )}
               precision={marketPrecision}
