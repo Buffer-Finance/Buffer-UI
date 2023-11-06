@@ -15,6 +15,7 @@ import {
   ItournamentData,
   ItournamentId,
   ItournamentStats,
+  IuserTournamentData,
   LeaderboardData,
   accordianTableType,
 } from './types';
@@ -256,6 +257,12 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
   });
 
   return filteredTournamentsData.filter((tournament) => {
+    if (
+      +tournament.tournamentMeta.close <
+        Math.floor(new Date().getTime() / 1000) &&
+      tournament.state.toLowerCase() !== 'closed'
+    )
+      return false;
     if (tournamentStateTab.toLowerCase() === 'live') {
       return tournament.state.toLowerCase() === 'live';
     } else if (tournamentStateTab.toLowerCase() === 'upcoming') {
@@ -387,7 +394,7 @@ export const allTournamentDataAtom = atom<
   undefined | { [nextId: number]: ItournamentData[] | undefined }
 >(undefined);
 export const userTournamentsBooleanAtom = atom<
-  undefined | { [nextId: number]: [boolean[], boolean[]] | undefined }
+  undefined | { [nextId: number]: IuserTournamentData | undefined }
 >(undefined);
 
 export const tournaments = atom<ItournamentData[] | undefined>((get) => {
@@ -402,14 +409,18 @@ export const tournaments = atom<ItournamentData[] | undefined>((get) => {
       if (tournametsbatch === undefined) return;
       return tournametsbatch.map((tournament, index) => {
         const id = parseInt(add(nextId, index.toString()));
-        const isUserEligible = allBooleans?.[+nextId]?.[0]?.[index];
-        const hasUserClaimed = allBooleans?.[+nextId]?.[1]?.[index];
+        const isUserEligible =
+          allBooleans?.[+nextId]?.hasUserParticipated?.[index];
+        const hasUserClaimed = allBooleans?.[+nextId]?.hasUserClaimed?.[index];
+        const userBoughtTickets =
+          allBooleans?.[+nextId]?.userTicketCount?.[index];
         return {
           ...tournament,
           id,
           isUserEligible,
           state: states.find((state) => +state.id === id)?.state,
           hasUserClaimed,
+          userBoughtTickets,
         };
       });
     })

@@ -198,8 +198,28 @@
     ],
     "name": "bulkFetchUserTournaments",
     "outputs": [
-      { "internalType": "bool[]", "name": "", "type": "bool[]" },
-      { "internalType": "bool[]", "name": "", "type": "bool[]" }
+      {
+        "components": [
+          {
+            "internalType": "bool[]",
+            "name": "hasUserParticipated",
+            "type": "bool[]"
+          },
+          {
+            "internalType": "bool[]",
+            "name": "hasUserClaimed",
+            "type": "bool[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "userTicketCount",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct ITournamentReader.UserTournamentData",
+        "name": "",
+        "type": "tuple"
+      }
     ],
     "stateMutability": "view",
     "type": "function"

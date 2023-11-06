@@ -1,8 +1,16 @@
 import { useTimer } from '@Hooks/Utilities/useStopWatch';
 import { Timer } from './Timer';
 
-export const NoLossV3Timer = ({ close }: { close: string }) => {
+export const NoLossV3Timer = ({
+  close,
+  isClosed,
+}: {
+  close: string;
+  isClosed: boolean;
+}) => {
   const timer = useTimer(close.toString());
+  if (isClosed)
+    return <div className="text-f14 text-3 my-3">This contest has ended.</div>;
   if (timer.seconds < 0)
     return (
       <div className="text-f14 text-3 my-3">

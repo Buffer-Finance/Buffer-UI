@@ -11,7 +11,7 @@ import {
   userTournamentsBooleanAtom,
 } from '../atoms';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
-import { ItournamentData } from '../types';
+import { ItournamentData, IuserTournamentData } from '../types';
 
 export const useAllTournamentData = () => {
   const activeChain = useAtomValue(activeChainAtom);
@@ -93,7 +93,7 @@ export const useAllTournamentData = () => {
         return {
           ...prvData,
           [nextId]: data[userTournamentId]?.[0] as
-            | [boolean[], boolean[]]
+            | IuserTournamentData
             | undefined,
         };
       });

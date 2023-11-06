@@ -127,6 +127,7 @@ const useAheadTrades = (
             '0'
           )}`;
           restTopics = [adds64];
+          console.log(restTopics, 'restTopics');
         }
         if (!startBlock) return [];
 

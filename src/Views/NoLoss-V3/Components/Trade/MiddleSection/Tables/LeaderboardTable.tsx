@@ -1,9 +1,11 @@
+import LeaderboardTropy from '@Public/LeaderBoard/Trophy';
 import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
+  activeTournamentDataReadOnlyAtom,
   allLeaderboardDataAtom,
   leaderboardActivePgaeIdAtom,
   leaderboardPaginationAtom,
@@ -28,6 +30,7 @@ export const LeaderboardTable: React.FC<{
   const leaderboardData = useAtomValue(allLeaderboardDataAtom);
   const [pages, setPages] = useAtom(leaderboardPaginationAtom);
   const [activePageId, setActivePageId] = useAtom(leaderboardActivePgaeIdAtom);
+  const tournament = useAtomValue(activeTournamentDataReadOnlyAtom);
 
   const headNameArray = [
     'Rank',
@@ -51,11 +54,16 @@ export const LeaderboardTable: React.FC<{
   const BodyFormatter: any = (row: number, col: number) => {
     if (filteredData === undefined) return 'Loading';
     const userData = filteredData[row];
+    const rank = 10 * (pages.activePage - 1) + row + 1;
+    if (tournament === undefined || tournament.data === undefined) return <></>;
+    const shouldShowTrophy =
+      rank <= +tournament.data.tournamentLeaderboard.totalWinners;
     switch (col) {
       case TableColumn.Rank:
         return (
-          <div className="pl-[1.6rem]">
-            {10 * (pages.activePage - 1) + row + 1}
+          <div className="pl-[1.6rem] flex items-center">
+            #{rank}{' '}
+            {shouldShowTrophy && <LeaderboardTropy className="!scale-50" />}
           </div>
         );
       case TableColumn.User:

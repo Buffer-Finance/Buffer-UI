@@ -140,21 +140,32 @@ export const TournamentCardButtons: React.FC<{
       [tournament.id]
     );
   };
-  if (secondButton === null)
+  if (secondButton === null) {
+    const hasUserBoughtMaxTickets =
+      tournament.userBoughtTickets >=
+      tournament.tournamentConditions.maxBuyinsPerWallet;
     secondButton = (
       <BufferButton
         className={tournamentButtonStyles}
         onClick={buyPlayTokens}
         isLoading={btnLoading}
+        isDisabled={hasUserBoughtMaxTickets}
       >
-        Entry
-        <Display
-          data={ticketCost}
-          unit={tournament.buyinTokenSymbol}
-          precision={0}
-        />
+        {hasUserBoughtMaxTickets ? (
+          'Max bought'
+        ) : (
+          <>
+            Entry
+            <Display
+              data={ticketCost}
+              unit={tournament.buyinTokenSymbol}
+              precision={0}
+            />
+          </>
+        )}
       </BufferButton>
     );
+  }
 
   return (
     <div className="flex items-center justify-center gap-x-[5px] mt-4">

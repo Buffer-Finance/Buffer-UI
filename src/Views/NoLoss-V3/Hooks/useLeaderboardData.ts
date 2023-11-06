@@ -23,7 +23,7 @@ export const useLeaderboardData = () => {
       setNextRankId(
         '0x0000000000000000000000000000000000000000000000000000000000000000'
       );
-    }, 30000);
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
   if (activeChain !== undefined && activeTournamentId !== undefined) {

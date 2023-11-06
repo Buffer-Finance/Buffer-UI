@@ -76,6 +76,7 @@ export interface ItournamentData {
   id: number;
   isUserEligible: boolean;
   hasUserClaimed: boolean;
+  userBoughtTickets: string;
   rewardTokenDecimals: number;
   rewardTokenSymbol: string;
   state: string;
@@ -112,4 +113,10 @@ export interface Stats {
   totalFee: string;
   hasClaimed: boolean;
   exists: boolean;
+}
+
+export interface IuserTournamentData {
+  hasUserParticipated: boolean[];
+  hasUserClaimed: boolean[];
+  userTicketCount: string[];
 }

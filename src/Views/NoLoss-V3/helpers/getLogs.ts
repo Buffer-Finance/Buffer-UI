@@ -57,10 +57,13 @@ export const getLogs = async (passedFilters: {
     fromBlock: BigInt(passedFilters.fromBlock),
   });
   const encodedData = [...createLogs, ...routerLogs];
-
+  console.log(`encodedData: `, encodedData);
   let decodedLogs: { [eventName: string]: Log[] } = {};
   encodedData.forEach((log) => {
-    log.topics[0];
+    if (
+      log.topics[1]?.toLowerCase() != passedFilters.restTopics[0].toLowerCase()
+    )
+      return;
     const ifcIdx = passedFilters.events[log.topics[0]];
 
     const ifc = passedFilters.ifcs[ifcIdx];

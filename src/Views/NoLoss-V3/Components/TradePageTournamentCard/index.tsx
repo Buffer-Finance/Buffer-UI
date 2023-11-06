@@ -48,7 +48,10 @@ export const TradepageTournamentCard: React.FC<{
         )}
       </div>
       <div className="flex items-center">
-        <NoLossV3Timer close={tournament.tournamentMeta.close} />
+        <NoLossV3Timer
+          close={tournament.tournamentMeta.close}
+          isClosed={tournament.state.toLowerCase() === 'closed'}
+        />
       </div>
 
       <div className="flex justify-between items-center">

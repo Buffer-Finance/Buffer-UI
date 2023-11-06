@@ -11,7 +11,9 @@ export const Tab = ({ tab }: { tab: ITab }) => {
         return `transition-all duration-300 text-4 text-f15  px-4 py-[4px] rounded-[8px] ${
           isActive ||
           (location.pathname.includes('binary') &&
-            tab.name.toLowerCase() == 'trade')
+            tab.name.toLowerCase() == 'trade') ||
+          (location.pathname.includes('no-loss') &&
+            tab.name.toLowerCase() == 'no loss')
             ? 'text-1 bg-3'
             : 'hover:bg-1 hover:text-1 hover:brightness-125'
         } 
