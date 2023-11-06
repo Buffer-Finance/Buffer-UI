@@ -325,7 +325,7 @@ export const filteredMarketsSelectAtom = atom((get) => {
     if (searchBar === '') {
       return true;
     } else {
-      return market.asset.includes(searchBar);
+      return market.asset.toLowerCase().includes(searchBar.toLowerCase());
     }
   });
 });

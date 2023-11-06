@@ -2,7 +2,6 @@ import Star from '@Public/ComponentSVGS/Star';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { TableHeader } from '@Views/Common/TableHead';
 import { useUpdateActiveMarket } from '@Views/NoLoss-V3/Hooks/useUpdateActiveMarket';
@@ -11,6 +10,7 @@ import {
   noLossFavouriteMarketsAtom,
 } from '@Views/NoLoss-V3/atoms';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
+import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { getMaximumValue } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
@@ -163,13 +163,7 @@ export const Table: React.FC<{
         rows={filteredMarkets?.length || 0}
         bodyJSX={BodyFormatter}
         tableClass="b1200:!w-full assetSelectorTableWidth"
-        error={
-          <TableErrorMsg
-            msg="No Assets Found."
-            onClick={() => {}}
-            shouldShowWalletMsg={false}
-          />
-        }
+        error={<TableErrorRow msg="No Assets found." />}
         loading={!filteredMarkets}
         isBodyTransparent
         isHeaderTransparent
