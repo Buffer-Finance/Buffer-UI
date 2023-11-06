@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import {
   Navigate,
   Route,
-  Routes,
+Routes,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
