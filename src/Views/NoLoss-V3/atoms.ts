@@ -278,7 +278,7 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
     if (activeMyAllTab === 'my') {
       return tournament.isUserEligible;
     } else {
-      return !tournament.isUserEligible;
+      return true;
     }
   });
 
