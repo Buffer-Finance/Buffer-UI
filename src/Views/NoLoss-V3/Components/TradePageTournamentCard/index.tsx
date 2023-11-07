@@ -47,13 +47,18 @@ export const TradepageTournamentCard: React.FC<{
         </div>
         <div className="flex gap-1 items-center">
           {activeMyAllTab === 'my' && <Star />}
-          {tournament.state.toLowerCase() == 'live' && (
-            <div
-              className={`text-[8px] font-medium ${'bg-green chip-green-border text-green'}  bg-opacity-20 px-[6px] py-[1px]`}
-            >
-              {tournament.state}
-            </div>
-          )}
+
+          <div
+            className={`text-[8px] font-medium ${
+              tournament.state.toLowerCase() === 'live'
+                ? 'bg-green chip-green-border text-green'
+                : tournament.state.toLowerCase() === 'upcoming'
+                ? 'bg-[#00C4FF] chip-blue-border text-[#00C4FF]'
+                : 'bg-[#C3C2D4] chip-gray-border text-[#C3C2D4]'
+            }  bg-opacity-20 px-[6px] py-[1px]`}
+          >
+            {tournament.state}
+          </div>
         </div>
       </div>
       <div className="flex items-center">

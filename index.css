@@ -292,9 +292,14 @@ border-radius: 4.07018px;
 
 }
 .chip-blue-border {
-  border: 0.381579px solid var(--bg-signature);
+  border: 0.381579px solid #00C4FF;
 border-radius: 4.07018px;
 
+}
+
+.chip-gray-border{
+  border: 0.381579px solid #C3C2D4;
+border-radius: 4.07018px;
 }
 .background-vertical-gradient{
   background:var(--bg-vertical-gradient);
