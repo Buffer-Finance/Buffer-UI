@@ -1,5 +1,11 @@
 import { toFixed } from '@Utils/NumString';
-import { divide, gt, lt } from '@Utils/NumString/stringArithmatics';
+import {
+  divide,
+  gt,
+  gte,
+  lt,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import {
   noLossReadCallsReadOnlyAtom,
   noLossTradeSizeAtom,
@@ -41,7 +47,10 @@ export const TradeSizeSelector: React.FC<{
       setTradeSize(
         getMaximumValue(
           toFixed(
-            getMinimumValue(maxFee, divide(balance ?? '0', 18) as string),
+            getMinimumValue(
+              subtract(maxFee, '1'),
+              divide(balance ?? '0', 18) as string
+            ),
             2
           ),
           '0'
@@ -90,7 +99,7 @@ export function getTradeSizeError(
   let error = '';
   if (lt(tradeSize || '0', minTradeSize)) {
     error = `Min trade size is ${minTradeSize}`;
-  } else if (gt(tradeSize || '0', maxTradeSize)) {
+  } else if (gte(tradeSize || '0', maxTradeSize)) {
     error = `Max trade size is ${maxTradeSize}`;
   } else if (
     balanceWithDecimals &&
