@@ -1,15 +1,14 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
-import { useActiveChain } from '@Hooks/useActiveChain';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import Drawer from '@Views/Common/V2-Drawer';
-import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { activeChainAtom } from '@Views/NoLoss-V3/atoms';
 import { Skeleton } from '@mui/material';
 import { ethers } from 'ethers';
-import { useEffect, useMemo, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { useEffect, useState } from 'react';
 import FaucetABI from './Faucet.json';
 import Background from './style';
 
@@ -17,14 +16,15 @@ const IbfrFaucet: React.FC = () => {
   useEffect(() => {
     document.title = 'Buffer | Faucet';
   }, []);
-  const { activeChain } = useActiveChain();
+  const activeChain = useAtomValue(activeChainAtom);
 
-  const { poolDisplayNameMapping } = usePoolDisplayNames();
-  const tokenChains = useMemo(() => {
-    return Object.keys(poolDisplayNameMapping).filter(
-      (token) => !token.includes('-POL') && token !== 'BFR'
-    );
-  }, [poolDisplayNameMapping]);
+  // const { poolDisplayNameMapping } = usePoolDisplayNames();
+  const tokenChains = ['USDC'];
+  // useMemo(() => {
+  //   return Object.keys(poolDisplayNameMapping).filter(
+  //     (token) => !token.includes('-POL') && token !== 'BFR'
+  //   );
+  // }, [poolDisplayNameMapping]);
 
   const content = activeChain && [
     {
@@ -87,8 +87,9 @@ const IbfrFaucet: React.FC = () => {
 const ClaimButton = ({ token }: { token: string }) => {
   const { state } = useGlobal();
   const [btnLoading, setBtnLoading] = useState(0);
-  const pools = usePoolByAsset();
-  const faucetContract = pools[token]?.faucet;
+  // const pools = usePoolByAsset();
+  const faucetContract = '0x6442f44b940aAD814A8e75C915f8997e94F191aE';
+  //  pools[token]?.faucet;
 
   const { writeCall } = useWriteCall();
   const toastify = useToast();
@@ -168,7 +169,8 @@ const faucetClaimingSteps = {
 };
 
 const TestnetLinks = () => {
-  const { activeChain } = useActiveChain();
+  const activeChain = useAtomValue(activeChainAtom);
+  if (activeChain === undefined) return <></>;
   return (
     <div>
       {faucetClaimingSteps[activeChain.id].faucet.map((s, idx) => {

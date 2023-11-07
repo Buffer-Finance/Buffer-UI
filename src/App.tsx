@@ -15,6 +15,7 @@ import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
+import IbfrFaucet from '@Views/Faucet';
 import { NoLossV3 } from '@Views/NoLoss-V3';
 import { MobileHistory } from '@Views/NoLoss-V3/Components/Trade/MobileHistory';
 import { TradesShutter } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
@@ -90,7 +91,7 @@ const AppRoutes = () => {
 
       <Routes>
         {/* <Route path="trades" element={<AllTrades />} /> */}
-        {/* <Route path="/faucet" element={<IbfrFaucet />} /> */}
+        <Route path="/faucet" element={<IbfrFaucet />} />
         {/* <Route path="/test" element={<Test />} /> */}
         <Route path="/history/:id" element={<MobileHistory />} />
         {/* <Route path="/admin" element={<AdminConfig />} /> */}
