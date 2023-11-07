@@ -65,8 +65,8 @@ export const LeaderboardTable: React.FC<{
       case TableColumn.Rank:
         return (
           <div className="pl-[1rem] flex items-center">
-            #{rank}{' '}
-            {shouldShowTrophy && <LeaderboardTropy className="!scale-50" />}
+            {shouldShowTrophy && <LeaderboardTropy className="!scale-50" />} #
+            {rank}
           </div>
         );
       case TableColumn.User:
