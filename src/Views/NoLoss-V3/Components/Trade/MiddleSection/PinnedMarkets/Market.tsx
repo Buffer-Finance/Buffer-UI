@@ -1,6 +1,7 @@
 import Star from '@Public/ComponentSVGS/Star';
 import { round } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { useIsMarketInCreationWindow } from '@Views/NoLoss-V3/Hooks/useIsMarketInCreationWindow';
 import { useMarketPrice } from '@Views/NoLoss-V3/Hooks/useMarketPrice';
 import { useUpdateActiveMarket } from '@Views/NoLoss-V3/Hooks/useUpdateActiveMarket';
 import {
@@ -10,7 +11,6 @@ import {
 import { InoLossMarket } from '@Views/NoLoss-V3/types';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
-import { AssetCategory } from '@Views/TradePage/type';
 import { joinStrings } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
@@ -32,22 +32,6 @@ const MarketBackground = styled.button<{ isActive: boolean }>`
   border-left: none;
 `;
 
-const isMarketOpen = (
-  category: number,
-  isInCreationWindow: boolean | undefined
-) => {
-  if (!isMarketForex(category)) {
-    return true;
-  }
-
-  return !!isInCreationWindow;
-};
-
-const isMarketForex = (category: number) => {
-  return (
-    category === AssetCategory.Forex || category === AssetCategory.Commodities
-  );
-};
 export const Market: React.FC<{
   market: InoLossMarket;
 }> = ({ market }) => {
@@ -55,8 +39,15 @@ export const Market: React.FC<{
   const { price, precision } = useMarketPrice(market.chartData.tv_id);
   const { setActiveMarket } = useUpdateActiveMarket();
   const setFavouriteMarket = useSetAtom(noLossFavouriteMarketsAtom);
-  const isReadCallDataLoading = false;
-  const isOpen = !market.isPaused;
+  const isIncreationWindow = useIsMarketInCreationWindow();
+  const isOpen =
+    !market.isPaused &&
+    isIncreationWindow[
+      market.chartData.category.toLowerCase() as
+        | 'crypto'
+        | 'forex'
+        | 'commodity'
+    ];
 
   const isActive = useMemo(() => {
     if (activeMarketId === undefined) return false;
@@ -89,7 +80,7 @@ export const Market: React.FC<{
           <PairTokenImage pair={joinStrings(token0, token1, '-')} />
         </div>
         {token0}/{token1}
-        {isReadCallDataLoading ? (
+        {isOpen === undefined ? (
           <Skeleton className="w-[60px] !h-[20px] lc " />
         ) : isOpen ? (
           !price ? (

@@ -26,6 +26,7 @@ export const useNoLossMarkets = () => {
               maxFee
               minPeriod
               maxPeriod
+              creationWindowContract
             }
           }
     }`;

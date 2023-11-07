@@ -13,6 +13,7 @@ export interface InoLossConfigContract {
   maxFee: string;
   minPeriod: string;
   maxPeriod: string;
+  creationWindowContract: string | undefined;
 }
 
 export interface InoLossMarketResponse {

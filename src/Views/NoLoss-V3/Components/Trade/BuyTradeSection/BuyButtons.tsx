@@ -6,9 +6,11 @@ import { toFixed } from '@Utils/NumString';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
+import { useIsMarketInCreationWindow } from '@Views/NoLoss-V3/Hooks/useIsMarketInCreationWindow';
 import { useMarketPrice } from '@Views/NoLoss-V3/Hooks/useMarketPrice';
 import {
   activeChainAtom,
+  activeMarketDataAtom,
   activeTournamentDataReadOnlyAtom,
   noLossReadCallsReadOnlyAtom,
   noLossTradeSizeAtom,
@@ -44,6 +46,8 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   const [loadingState, setLoadingState] = useState<
     'up' | 'down' | 'approve' | 'none' | 'claim'
   >('none');
+  const activeMarketData = useAtomValue(activeMarketDataAtom);
+  const isIncreationWindow = useIsMarketInCreationWindow();
 
   if (!activeChain)
     return (
@@ -57,6 +61,30 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         <></>
       </ConnectionRequired>
     );
+  if (activeMarketData === undefined)
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        No Active Market
+      </BlueBtn>
+    );
+  const isOpen =
+    !activeMarket.isPaused &&
+    isIncreationWindow[
+      activeMarket.chartData.category.toLowerCase() as
+        | 'crypto'
+        | 'forex'
+        | 'commodity'
+    ];
+  if (isOpen === undefined) {
+    return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
+  }
+  if (!isOpen) {
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        Market is closed
+      </BlueBtn>
+    );
+  }
 
   if (
     activeTournamentData === undefined ||

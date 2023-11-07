@@ -1,6 +1,8 @@
 import { getCallId } from '@Utils/Contract/multiContract';
 import { add } from '@Utils/NumString/stringArithmatics';
+import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
 import { HHMMToSeconds } from '@Views/TradePage/utils';
+import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { Chain, getAddress } from 'viem';
@@ -135,6 +137,10 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
           isTradingApproved: boolean | undefined;
           activeTournamentBalance: string | undefined;
           activeTournamentLeaderboardStats: ItournamentStats | undefined;
+          isInCreationWindow: {
+            Forex: boolean | undefined;
+            Commodity: boolean | undefined;
+          };
         }
       | undefined;
   } = { calls: null, result: undefined };
@@ -177,7 +183,23 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
           ]
         );
       }
+      const markets = get(nolossmarketsAtom);
+      if (markets !== undefined) {
+        markets.forEach((market) => {
+          const creationWindowContract = market.config.creationWindowContract;
+          if (!!creationWindowContract) {
+            readcalls.push({
+              address: creationWindowContract,
+              abi: CreationWindowABI,
+              name: 'isInCreationWindow',
+              params: [timeToMins('00:60') as never],
+              id: `${market.chartData.category}-IsInCreationWindow`,
+            });
+          }
+        });
+      }
     }
+
     response.calls = readcalls;
 
     const readcallResponse = get(noLossReadcallResponseReadOnlyAtom);
@@ -193,6 +215,10 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
         activeTournamentLeaderboardStats:
           readcallResponse[activeTournamentLeaderboardStatsId]?.[0],
         isTradingApproved: undefined,
+        isInCreationWindow: {
+          Forex: readcallResponse['Forex-IsInCreationWindow']?.[0],
+          Commodity: readcallResponse['Commodity-IsInCreationWindow']?.[0],
+        },
       };
 
       if (user !== undefined && user.userAddress !== undefined) {

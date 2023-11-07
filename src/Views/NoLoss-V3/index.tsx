@@ -1,5 +1,6 @@
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { usePriceRetriable } from '@Hooks/usePrice';
+import { MarketTimingsModal } from '@Views/TradePage/Components/MarketTimingsModal';
 import { useAtomValue } from 'jotai';
 import { useMedia } from 'react-use';
 import { TradePageNoLoss } from './Components/Trade';
@@ -28,7 +29,10 @@ export const NoLossV3 = () => {
   const isNotMobile = useMedia('(min-width:1200px)');
 
   return isNotMobile ? (
-    <TradePageNoLoss isMobile={!isNotMobile} />
+    <>
+      <TradePageNoLoss isMobile={!isNotMobile} />
+      <MarketTimingsModal />
+    </>
   ) : (
     <>
       <Shutters />

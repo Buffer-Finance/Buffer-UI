@@ -4,6 +4,7 @@ import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { TableHeader } from '@Views/Common/TableHead';
+import { useIsMarketInCreationWindow } from '@Views/NoLoss-V3/Hooks/useIsMarketInCreationWindow';
 import { useUpdateActiveMarket } from '@Views/NoLoss-V3/Hooks/useUpdateActiveMarket';
 import {
   filteredMarketsSelectAtom,
@@ -12,10 +13,12 @@ import {
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import { ForexTimingsModalAtom } from '@Views/TradePage/atoms';
+import { AssetCategory } from '@Views/TradePage/type';
 import { getMaximumValue } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
-import { IconButton } from '@mui/material';
-import { useAtom, useAtomValue } from 'jotai';
+import { IconButton, Skeleton } from '@mui/material';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useMemo } from 'react';
 import { OneDayChange } from '../MarketData/OneDayChange';
 import { CloseTag } from './CloseTag';
@@ -32,6 +35,8 @@ export const Table: React.FC<{
   );
   const { closeShutter } = useShutterHandlers();
   const { setActiveMarket } = useUpdateActiveMarket();
+  const isIncreationWindow = useIsMarketInCreationWindow();
+  const setForexTimingsModal = useSetAtom(ForexTimingsModalAtom);
 
   const headers = useMemo(() => {
     return ['', 'Asset', 'Payout', '24h Change', 'Max Trade Size'];
@@ -46,7 +51,14 @@ export const Table: React.FC<{
     if (!filteredMarkets) return <></>;
     const market = filteredMarkets[row];
     const pairName = market.chartData.pair;
-    const isOpen = !market.isPaused;
+    const isOpen =
+      !market.isPaused &&
+      isIncreationWindow[
+        market.chartData.category.toLowerCase() as
+          | 'crypto'
+          | 'forex'
+          | 'commodity'
+      ];
     const isForex = market.chartData.category.toLowerCase() === 'forex';
     const payout = getMaximumValue(
       divide(market.payoutForDown, 16) as string,
@@ -93,6 +105,8 @@ export const Table: React.FC<{
           />
         );
       case 2:
+        if (isOpen === undefined)
+          return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
         if (!isOpen) return <>-</>;
 
         return (
@@ -105,19 +119,28 @@ export const Table: React.FC<{
           />
         );
       case 3:
+        if (isOpen === undefined)
+          return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
+
         if (!isOpen)
           return (
             <ColumnGap gap="4px " className="b1200:items-end">
               <CloseTag />
               {isForex && (
                 <ShowTimingModalButton
-                  onClick={
-                    () => {}
-                    //   setForexTimingsModal({
-                    //     isOpen: true,
-                    //     marketType: market.chartData.category,
-                    //   })
-                  }
+                  onClick={() => {
+                    const category = market.chartData.category as
+                      | 'Forex'
+                      | 'Crypto'
+                      | 'Commodity';
+                    setForexTimingsModal({
+                      isOpen: true,
+                      marketType:
+                        AssetCategory[
+                          category === 'Commodity' ? 'Commodities' : category
+                        ],
+                    });
+                  }}
                 >
                   Schedule
                 </ShowTimingModalButton>
@@ -136,6 +159,9 @@ export const Table: React.FC<{
         );
 
       case 4:
+        if (isOpen === undefined)
+          return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
+
         if (!isOpen) return <>-</>;
 
         return (
