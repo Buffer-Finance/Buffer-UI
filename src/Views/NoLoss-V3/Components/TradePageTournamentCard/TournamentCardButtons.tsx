@@ -45,7 +45,7 @@ export const TournamentCardButtons: React.FC<{
     );
   if (tournamentBasedData.result === undefined)
     return (
-      <Skeleton className="!h-[26px] full-width sr lc !mt-4 !transform-none" />
+      <Skeleton className="!h-[26px] full-width b1200:!w-[100px] sr lc !mt-4 !transform-none" />
     );
 
   if (!activeChain) return <></>;
@@ -67,7 +67,7 @@ export const TournamentCardButtons: React.FC<{
 
   if (allowance === undefined)
     return (
-      <Skeleton className="!h-[26px] full-width sr lc !mt-4 !transform-none" />
+      <Skeleton className="!h-[26px] full-width b1200:!w-[100px] sr lc !mt-4 !transform-none" />
     );
   let secondButton = null;
   async function handleClaim() {
