@@ -4,5 +4,5 @@ export const Score: React.FC<{ data: LeaderboardData | undefined }> = ({
   data,
 }) => {
   if (data === undefined) return <>-</>;
-  return <>{parseInt(data.stats.score)}</>;
+  return <>{parseInt(data.stats.score) / 1e5}</>;
 };

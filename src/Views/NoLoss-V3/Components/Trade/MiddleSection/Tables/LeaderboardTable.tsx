@@ -87,7 +87,7 @@ export const LeaderboardTable: React.FC<{
       case TableColumn.Trades:
         return parseInt(userData.stats.trades);
       case TableColumn.Score:
-        return parseInt(userData.stats.score);
+        return parseInt(userData.stats.score) / 1e5;
       case TableColumn.NetPnl:
         const percentageNetPnl = divide(
           userData.stats.netPnl,
