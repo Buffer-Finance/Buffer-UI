@@ -103,6 +103,7 @@ const TableBackground = styled.div`
     }
     .table-body {
       .table-row {
+        font-family: 'Relative Mono', 'Relative Pro' !important;
         margin-top: 2px;
         background: ${(props) =>
           props?.isBodyTransparent ? 'transparent' : '#171722'};
@@ -165,6 +166,7 @@ const TableBackground = styled.div`
         }
 
         .table-cell {
+          font-family: 'Relative Mono', 'Relative Pro' !important;
           color: rgb(195, 194, 212);
           border-top: none;
           font-size: 13px;
