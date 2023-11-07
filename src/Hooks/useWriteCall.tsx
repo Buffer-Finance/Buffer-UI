@@ -130,6 +130,9 @@ export function useWriteCall() {
         type: 'error',
       });
       // console.warn(ex);
+    } finally {
+      dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
+      callBack();
     }
   };
 

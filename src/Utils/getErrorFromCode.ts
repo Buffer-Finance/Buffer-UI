@@ -1,4 +1,5 @@
 export const getErrorFromCode = (errorcode: string) => {
+  if (errorcode === undefined || errorcode === null) return errorcode;
   const error = {
     O1: 'Option creation is not allowed currently',
     O2: "The option's price is too low",
