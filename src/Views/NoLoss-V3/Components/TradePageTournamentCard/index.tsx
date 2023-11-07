@@ -32,7 +32,7 @@ export const TradepageTournamentCard: React.FC<{
   }
   return (
     <div
-      className={`mt-4 ${
+      className={`mt-4 relative ${
         isMobile ? 'w-full' : 'w-[250px]'
       } background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
         isTradePage && tournament.id == activeTournamentId
@@ -40,6 +40,7 @@ export const TradepageTournamentCard: React.FC<{
           : 'border-[transparent]'
       }`}
     >
+      {/* <TradeCardBG className="absolute bottom-[10px0] right-[100px]" /> */}
       <div className="flex items-center justify-between">
         <div className="text-3 font-semibold text-f12">
           {tournament.tournamentMeta.name}

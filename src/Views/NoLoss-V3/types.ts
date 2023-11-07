@@ -74,7 +74,7 @@ export interface TournamentLeaderboard {
 export interface ItournamentData {
   buyinTokenDecimals: number;
   buyinTokenSymbol: string;
-  id: number;
+  id: string;
   isUserEligible: boolean;
   hasUserClaimed: boolean;
   userBoughtTickets: string;

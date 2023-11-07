@@ -25,7 +25,7 @@ export const tournamentButtonStyles =
 
 export const TournamentCardButtons: React.FC<{
   tournament: ItournamentData;
-  activeTournamentId: number | undefined;
+  activeTournamentId: string | undefined;
   activeAllMyTab: 'my' | 'all';
 }> = ({ tournament, activeTournamentId, activeAllMyTab }) => {
   const { setActiveTournament } = useUpdateActiveTournament();

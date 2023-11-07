@@ -16,14 +16,14 @@ export const useUpdateActiveTournament = () => {
     if (activeTournamentId === undefined && id) {
       setActiveTournamentId(id);
     }
-    if (id && activeTournamentId != undefined && activeTournamentId != +id) {
+    if (id && activeTournamentId != undefined && activeTournamentId != id) {
       setActiveTournamentId(id);
     }
   }, [id, activeTournamentId]);
 
   const setActiveTournament = useCallback(
-    (newId: number) => {
-      if (id && newId == +id) return;
+    (newId: string) => {
+      if (id && newId == id) return;
       setActiveTournamentId(newId);
       if (market === undefined) market = 'BTC-USD';
       navigate(`/no-loss/${newId}/${market}`);
