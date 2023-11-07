@@ -1,5 +1,6 @@
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
+import { getErrorFromCode } from '@Utils/getErrorFromCode';
 import { activeChainAtom } from '@Views/NoLoss-V3/atoms';
 import { useAtomValue } from 'jotai';
 import { ReactNode } from 'react';
@@ -111,6 +112,8 @@ export function useWriteCall() {
       const shortMessage = (
         ex as ContractFunctionExecutionError
       ).shortMessage.split('the following reason:')[1];
+      console.log(`useWriteCall-error: `, shortMessage);
+      const error = getErrorFromCode(shortMessage);
 
       callBack();
       toastify({
@@ -121,8 +124,7 @@ export function useWriteCall() {
             Oops! There is some error!
             <br />
             <span className="!text-3">
-              {shortMessage ||
-                (ex as ContractFunctionExecutionError).shortMessage}
+              {error || (ex as ContractFunctionExecutionError).shortMessage}
             </span>
           </span>
         ),
