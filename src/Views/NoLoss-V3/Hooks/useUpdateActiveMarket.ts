@@ -14,7 +14,10 @@ export const useUpdateActiveMarket = () => {
     if (activeMarketId === undefined && market) {
       setActiveMarketId(market);
     }
-  }, []);
+    if (market && activeMarketId !== undefined && activeMarketId !== market) {
+      setActiveMarketId(market);
+    }
+  }, [market]);
 
   useEffect(() => {
     if (market && activeMarketId !== undefined && activeMarketId !== market) {

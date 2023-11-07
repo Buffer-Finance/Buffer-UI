@@ -16,7 +16,10 @@ export const useUpdateActiveTournament = () => {
     if (activeTournamentId === undefined && id) {
       setActiveTournamentId(+id);
     }
-  }, []);
+    if (id && activeTournamentId !== undefined && activeTournamentId !== +id) {
+      setActiveTournamentId(+id);
+    }
+  }, [id]);
 
   //   useEffect(() => {
   //     if (id && activeTournamentId !== undefined && activeTournamentId !== +id) {
