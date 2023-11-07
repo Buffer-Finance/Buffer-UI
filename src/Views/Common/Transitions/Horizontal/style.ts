@@ -22,7 +22,7 @@ const Background = styled.div`
     min-height: 100%;
 
     @media only screen and (max-width: 1200px) {
-      height: calc(100vh - 300px);
+      height: calc(100vh - 350px);
     }
   }
 `;
