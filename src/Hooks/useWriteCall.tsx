@@ -112,7 +112,6 @@ export function useWriteCall() {
       const shortMessage = (
         ex as ContractFunctionExecutionError
       ).shortMessage.split('the following reason:')[1];
-      console.log(`useWriteCall-error: `, shortMessage);
       const error = getErrorFromCode(shortMessage);
 
       callBack();
