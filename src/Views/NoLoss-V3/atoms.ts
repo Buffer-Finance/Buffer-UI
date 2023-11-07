@@ -278,17 +278,17 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
     if (activeMyAllTab === 'my') {
       return tournament.isUserEligible;
     } else {
-      return true;
+      return !tournament.isUserEligible;
     }
   });
 
   return filteredTournamentsData.filter((tournament) => {
-    // if (
-    //   +tournament.tournamentMeta.close <
-    //     Math.floor(new Date().getTime() / 1000) &&
-    //   tournament.state.toLowerCase() !== 'closed'
-    // )
-    //   return false;
+    if (
+      +tournament.tournamentMeta.close <
+        Math.floor(new Date().getTime() / 1000) &&
+      tournament.state.toLowerCase() !== 'closed'
+    )
+      return false;
     if (tournamentStateTab.toLowerCase() === 'live') {
       return tournament.state.toLowerCase() === 'live';
     } else if (tournamentStateTab.toLowerCase() === 'upcoming') {
