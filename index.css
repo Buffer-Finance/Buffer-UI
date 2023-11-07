@@ -275,7 +275,7 @@ html .MuiDialog-container {
   --bg-0: #1c1c28;
   --bg-1:#232334;
   --bg-2:#171722;
-  --bg-vertical-gradient:linear-gradient(180deg, #000000 43%,var(--bg-1) 93.44%);
+  --bg-vertical-gradient:#191b20;
   --text-2:#808191;
   --text-3:#6B728E;
   --text-1:#ffffff;

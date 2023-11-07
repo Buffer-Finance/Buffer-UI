@@ -41,11 +41,27 @@ export const NoLossSection: React.FC<{ isMobile: boolean }> = ({
   );
 };
 
+export const NoTournamentsFoundCard: React.FC<{ isMobile?: boolean }> = ({
+  isMobile,
+}) => {
+  return (
+    <div
+      className={`mt-4 ${
+        isMobile ? 'w-full' : 'w-[250px]'
+      } background-vertical-gradient rounded-[4px] px-[12px] py-[10px] text-f13`}
+    >
+      No Tournaments Found.
+    </div>
+  );
+};
+
 const NoLoss: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const allTournaments = useAtomValue(filteredTournamentsDataReadOnlyAtom);
   if (allTournaments === undefined)
     return <Skeleton className="w-[250px] !h-[200px] lc !transform-none" />;
-
+  if (allTournaments.length === 0) {
+    return <NoTournamentsFoundCard isMobile={isMobile} />;
+  }
   return (
     <TournamentListWrapper>
       {allTournaments.map((tournament) => (

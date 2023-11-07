@@ -1,3 +1,4 @@
+import { NoTournamentsFoundCard } from '@Views/NoLoss-V3/Components/TradePageNoLoss';
 import { TradepageTournamentCard } from '@Views/NoLoss-V3/Components/TradePageTournamentCard';
 import { useTournamentDataFetch } from '@Views/NoLoss-V3/Hooks/useTournamentDataFetch';
 import { filteredTournamentsDataReadOnlyAtom } from '@Views/NoLoss-V3/atoms';
@@ -12,7 +13,9 @@ export const TournamentsList: React.FC = () => {
 
   if (allTournaments === undefined)
     return <Skeleton className="w-[100px] !h-8 lc " />;
-
+  if (allTournaments.length === 0) {
+    return <NoTournamentsFoundCard isMobile={!isNotMobile} />;
+  }
   return (
     <div className={`flex gap-3 ${!isNotMobile ? 'flex-col' : ''}`}>
       {allTournaments.map((tournament) => (
