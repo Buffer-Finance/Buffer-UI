@@ -5,12 +5,14 @@ import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
+  activeChainAtom,
   activeTournamentDataReadOnlyAtom,
   allLeaderboardDataAtom,
   leaderboardActivePgaeIdAtom,
   leaderboardPaginationAtom,
 } from '@Views/NoLoss-V3/atoms';
 import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
+import { Launch } from '@mui/icons-material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 
@@ -31,6 +33,7 @@ export const LeaderboardTable: React.FC<{
   const [pages, setPages] = useAtom(leaderboardPaginationAtom);
   const [activePageId, setActivePageId] = useAtom(leaderboardActivePgaeIdAtom);
   const tournament = useAtomValue(activeTournamentDataReadOnlyAtom);
+  const activeChain = useAtomValue(activeChainAtom);
 
   const headNameArray = [
     'Rank',
@@ -61,13 +64,18 @@ export const LeaderboardTable: React.FC<{
     switch (col) {
       case TableColumn.Rank:
         return (
-          <div className="pl-[1.6rem] flex items-center">
+          <div className="pl-[1rem] flex items-center">
             #{rank}{' '}
             {shouldShowTrophy && <LeaderboardTropy className="!scale-50" />}
           </div>
         );
       case TableColumn.User:
-        return getSlicedUserAddress(userData.stats.user, 4);
+        return (
+          <div className="flex gap-2">
+            {getSlicedUserAddress(userData.stats.user, 4)}
+            <Launch className="invisible b1200:visible group-hover:visible mt-[1px]" />
+          </div>
+        );
       case TableColumn.Volume:
         return (
           <Display
@@ -92,7 +100,7 @@ export const LeaderboardTable: React.FC<{
             <Display
               data={multiply(percentageNetPnl, 2)}
               precision={2}
-              className={`!justify-start `}
+              className={`!whitespace-nowrap !justify-start `}
               unit="%"
             />
           </div>
@@ -109,7 +117,15 @@ export const LeaderboardTable: React.FC<{
       loading={!filteredData}
       rows={filteredData?.length || 0}
       cols={headNameArray.length}
-      onRowClick={() => {}}
+      onRowClick={(row) => {
+        if (activeChain !== undefined && filteredData !== undefined) {
+          const userData = filteredData[row];
+          const address = userData.stats.user;
+          const activeChainExplorer = activeChain.blockExplorers?.default?.url;
+          if (activeChainExplorer === undefined) return;
+          window.open(`${activeChainExplorer}/address/${address}`);
+        }
+      }}
       widths={['auto']}
       activePage={pages.activePage}
       count={pages.totalPages}

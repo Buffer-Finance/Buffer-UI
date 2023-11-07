@@ -21,12 +21,13 @@ import TournamentManagerABI from '../../ABIs/TournamentManager.json';
 import { TradeIcon } from '../SVGs/TradeIcon';
 
 export const tournamentButtonStyles =
-  '!text-f12 flex items-center gap-x-2 !h-fit py-2 bg-blue';
+  '!text-f12 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2';
 
 export const TournamentCardButtons: React.FC<{
   tournament: ItournamentData;
   activeTournamentId: number | undefined;
-}> = ({ tournament, activeTournamentId }) => {
+  activeAllMyTab: 'my' | 'all';
+}> = ({ tournament, activeTournamentId, activeAllMyTab }) => {
   const { setActiveTournament } = useUpdateActiveTournament();
   const activeChain = useAtomValue(activeChainAtom);
   const user = useAtomValue(userAtom);
@@ -83,7 +84,7 @@ export const TournamentCardButtons: React.FC<{
     );
   }
 
-  if (tournament.state.toLowerCase() === 'closed') {
+  if (tournament.state.toLowerCase() === 'closed' && activeAllMyTab === 'my') {
     const alreadClaimed = tournament.hasUserClaimed;
 
     secondButton = (
@@ -140,7 +141,7 @@ export const TournamentCardButtons: React.FC<{
       [tournament.id]
     );
   };
-  if (secondButton === null) {
+  if (secondButton === null && tournament.state.toLowerCase() !== 'closed') {
     const hasUserBoughtMaxTickets =
       tournament.userBoughtTickets >=
       tournament.tournamentConditions.maxBuyinsPerWallet;
@@ -168,7 +169,7 @@ export const TournamentCardButtons: React.FC<{
   }
 
   return (
-    <div className="flex items-center justify-center gap-x-[5px] mt-4">
+    <div className="flex b1200:flex-col items-center justify-center gap-[5px] mt-4">
       <BufferButton
         className={tournamentButtonStyles}
         isDisabled={

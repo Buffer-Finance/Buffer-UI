@@ -238,7 +238,7 @@ export const activeTournamentDataReadOnlyAtom = atom((get) => {
   };
 });
 
-export const activeMyAllTabAtom = atom<string>('my');
+export const activeMyAllTabAtom = atom<'my' | 'all'>('my');
 export const tournamentStateTabAtom = atom<string>('live');
 
 export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
@@ -257,12 +257,12 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
   });
 
   return filteredTournamentsData.filter((tournament) => {
-    if (
-      +tournament.tournamentMeta.close <
-        Math.floor(new Date().getTime() / 1000) &&
-      tournament.state.toLowerCase() !== 'closed'
-    )
-      return false;
+    // if (
+    //   +tournament.tournamentMeta.close <
+    //     Math.floor(new Date().getTime() / 1000) &&
+    //   tournament.state.toLowerCase() !== 'closed'
+    // )
+    //   return false;
     if (tournamentStateTab.toLowerCase() === 'live') {
       return tournament.state.toLowerCase() === 'live';
     } else if (tournamentStateTab.toLowerCase() === 'upcoming') {

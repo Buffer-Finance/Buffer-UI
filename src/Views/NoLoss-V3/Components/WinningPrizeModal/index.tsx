@@ -66,7 +66,7 @@ export const WinningPrizeModal = () => {
   );
 };
 
-const WinnigPrizeModalBackground = styled.div`
+export const WinnigPrizeModalBackground = styled.div`
   border-radius: 7px;
   padding: 12px;
   background: #12121a;

@@ -67,16 +67,19 @@ export const useAllTournamentData = () => {
     if (error) {
       throw error;
     }
+    if (!data) return;
     const allTournamentId = getCallId(
       readcalls[0].address,
       readcalls[0].name,
       readcalls[0].params
     );
-    const userTournamentId = getCallId(
-      readcalls[1].address,
-      readcalls[1].name,
-      readcalls[1].params
-    );
+    let userTournamentId = '';
+    if (readcalls[1])
+      userTournamentId = getCallId(
+        readcalls[1].address,
+        readcalls[1].name,
+        readcalls[1].params
+      );
 
     if (data[allTournamentId] !== undefined) {
       setAllTournamentData((prvData) => {
@@ -98,29 +101,6 @@ export const useAllTournamentData = () => {
         };
       });
     }
-
-    // if (data !== undefined) {
-    //   data.forEach((response, index) => {
-    //     if (index === 0) {
-    //       setAllTournamentData((prvData) => {
-    //         return {
-    //           ...prvData,
-    //           [nextId]: response.result as ItournamentData[] | undefined,
-    //         };
-    //       });
-    //     }
-    //     if (index === 1) {
-    //       console.log(response.result, 'response');
-    //       setUsetTournamentBooleans((prvData) => {
-    //         return {
-    //           ...prvData,
-    //           [nextId]: response.result as [boolean[], boolean[]] | undefined,
-    //         };
-    //       });
-    //     }
-    //   });
-    //   if (nextId + 4 < (tournaments?.length || 0)) setNextId(nextId + 4);
-    // }
   } catch (e) {
     console.log(e);
   }

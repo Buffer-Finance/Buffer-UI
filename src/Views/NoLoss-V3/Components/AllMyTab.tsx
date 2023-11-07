@@ -15,7 +15,7 @@ const tabs = [
 export const AllMyTab: React.FC = () => {
   const [activeTab, setActiveTab] = useAtom(activeMyAllTabAtom);
   return (
-    <div className="flex items-center gap-2 bg-[#282B39] rounded-[3px] w-fit p-2 mb-3">
+    <div className="flex items-center gap-2 bg-[#282B39] rounded-[3px] w-fit p-2">
       {tabs.map((tab) => {
         const tabClasses =
           activeTab.toLowerCase() === tab.title ? 'bg-[#141823]' : '';

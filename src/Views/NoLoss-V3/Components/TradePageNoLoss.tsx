@@ -10,8 +10,11 @@ import { TournamentStateTabs } from './TournamentStateTabs';
 import { TradepageTournamentCard } from './TradePageTournamentCard';
 
 const TradePageNoLossBackground = styled.div`
+  position: sticky;
+  top: 45px;
   margin: 0 6px;
   width: 300px;
+  height: calc(100vh - 80px);
 `;
 
 export const NoLossSection: React.FC<{ isMobile: boolean }> = ({
@@ -44,7 +47,7 @@ const NoLoss: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     return <Skeleton className="w-[250px] !h-[200px] lc !transform-none" />;
 
   return (
-    <div className="flex flex-col gap-3">
+    <TournamentListWrapper>
       {allTournaments.map((tournament) => (
         <TradepageTournamentCard
           isMobile={isMobile}
@@ -52,6 +55,21 @@ const NoLoss: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           key={tournament.id + tournament.tournamentMeta.name}
         />
       ))}
-    </div>
+    </TournamentListWrapper>
   );
 };
+
+const TournamentListWrapper = styled.div`
+  height: 100%;
+  padding: 0 0 48px 0;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 24px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 24px;
+  }
+`;
