@@ -1,58 +1,72 @@
 import { getCallId } from '@Utils/Contract/multiContract';
 import { useCall2Data } from '@Utils/useReadCall';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
 import TournamentReaderABI from '../ABIs/TournamentReader.json';
 import {
   activeChainAtom,
   allTournamentDataAtom,
   tournamentIdsAtom,
   userAtom,
-  userTournamentsBooleanAtom,
 } from '../atoms';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
-import { ItournamentData, IuserTournamentData } from '../types';
-
+import { ItournamentId } from '../types';
+function groupArrayElements(arr: any[], chunkSize: number) {
+  const result = [];
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    result.push(arr.slice(i, i + chunkSize));
+  }
+  return result;
+}
 export const useAllTournamentData = () => {
   const activeChain = useAtomValue(activeChainAtom);
   const user = useAtomValue(userAtom);
-  const tournaments = useAtomValue(tournamentIdsAtom);
-  const setAllTournamentData = useSetAtom(allTournamentDataAtom);
-  const setUsetTournamentBooleans = useSetAtom(userTournamentsBooleanAtom);
+  const tournamentsIds = useAtomValue(tournamentIdsAtom);
+  const setTournaments = useSetAtom(allTournamentDataAtom);
 
-  const [nextId, setNextId] = useState(0);
   let readcalls = [];
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setNextId(0);
-    }, 10000);
-    return () => clearInterval(timer);
-  }, []);
+
   //make an array of numbers from nextId to nextId + 4
 
-  if (activeChain !== undefined && tournaments !== undefined) {
-    const length =
-      tournaments.length - nextId < 4 ? tournaments.length - nextId : 4;
-    const ids = Array.from({ length: length }, (_, index) => nextId + index);
+  if (activeChain !== undefined && tournamentsIds !== undefined) {
     const config = getNoLossV3Config(activeChain.id);
-    readcalls.push({
-      address: config.tournament_reader,
-      abi: TournamentReaderABI,
-      name: 'bulkFetchTournaments',
-      params: [ids],
-      id: getCallId(config.tournament_reader, 'bulkFetchTournaments', [ids]),
-    });
+
+    const groupedTournamentsIds: ItournamentId[][] = groupArrayElements(
+      tournamentsIds,
+      4
+    );
+
+    readcalls.push(
+      ...groupedTournamentsIds.map((group) => {
+        const ids = group.map((tournament) => tournament.id);
+        return {
+          address: config.tournament_reader,
+          abi: TournamentReaderABI,
+          name: 'bulkFetchTournaments',
+          params: [ids],
+          id: getCallId(config.tournament_reader, 'bulkFetchTournaments', [
+            ids,
+          ]),
+        };
+      })
+    );
+
     if (user && user.userAddress !== undefined) {
-      readcalls.push({
-        address: config.tournament_reader,
-        abi: TournamentReaderABI,
-        name: 'bulkFetchUserTournaments',
-        params: [user.userAddress, ids],
-        id: getCallId(config.tournament_reader, 'bulkFetchUserTournaments', [
-          user.userAddress,
-          ids,
-        ]),
-      });
+      readcalls.push(
+        ...groupedTournamentsIds.map((group) => {
+          const ids = group.map((tournament) => tournament.id);
+          return {
+            address: config.tournament_reader,
+            abi: TournamentReaderABI,
+            name: 'bulkFetchUserTournaments',
+            params: [user.userAddress, ids],
+            id: getCallId(
+              config.tournament_reader,
+              'bulkFetchUserTournaments',
+              [ids]
+            ),
+          };
+        })
+      );
     }
   }
 
@@ -60,47 +74,44 @@ export const useAllTournamentData = () => {
     const { data, error } = useCall2Data(
       readcalls as any,
       'bulkFetchTournaments'
-      //   {
-      //   contracts: readcalls as any,
-      // }
     );
     if (error) {
       throw error;
     }
+
     if (!data) return;
-    const allTournamentId = getCallId(
-      readcalls[0].address,
-      readcalls[0].name,
-      readcalls[0].params
-    );
-    let userTournamentId = '';
-    if (readcalls[1])
-      userTournamentId = getCallId(
-        readcalls[1].address,
-        readcalls[1].name,
-        readcalls[1].params
-      );
 
-    if (data[allTournamentId] !== undefined) {
-      setAllTournamentData((prvData) => {
-        return {
-          ...prvData,
-          [nextId]: data[allTournamentId]?.[0] as ItournamentData[] | undefined,
-        };
-      });
-      if (nextId + 4 < (tournaments?.length || 0)) setNextId(nextId + 4);
-    }
-
-    if (data[userTournamentId] !== undefined) {
-      setUsetTournamentBooleans((prvData) => {
-        return {
-          ...prvData,
-          [nextId]: data[userTournamentId]?.[0] as
-            | IuserTournamentData
-            | undefined,
-        };
-      });
-    }
+    Object.entries(data).forEach(([key, value]) => {
+      if (key.includes('bulkFetchTournaments')) {
+        if (value[0] !== undefined) {
+          const tournamentIds = key.split('bulkFetchTournaments')[1].split(',');
+          tournamentIds.forEach((tournamentId, index) => {
+            setTournaments((prvData) => {
+              return { ...prvData, [tournamentId]: value[0][index] };
+            });
+          });
+        }
+      } else if (key.includes('bulkFetchUserTournaments')) {
+        if (value[0] !== undefined) {
+          const tournamentIds = key
+            .split('bulkFetchUserTournaments')[1]
+            .split(',');
+          tournamentIds.forEach((tournamentId, index) => {
+            setTournaments((prvData) => {
+              return {
+                ...prvData,
+                [tournamentId]: {
+                  ...prvData[tournamentId],
+                  hasUserClaimed: value[0].hasUserClaimed[index],
+                  isUserEligible: value[0].hasUserParticipated[index],
+                  userBoughtTickets: value[0].userTicketCount[index],
+                },
+              };
+            });
+          });
+        }
+      }
+    });
   } catch (e) {
     console.log(e);
   }

@@ -53,7 +53,6 @@ export const useLeaderboardData = () => {
     if (error) {
       throw error;
     }
-    console.log(data, 'data');
     if (data !== undefined) {
       const id = readcall[0].id;
       const leaderboardData = data[id]?.[0];

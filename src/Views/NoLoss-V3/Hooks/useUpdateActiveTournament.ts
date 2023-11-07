@@ -14,22 +14,16 @@ export const useUpdateActiveTournament = () => {
 
   useEffect(() => {
     if (activeTournamentId === undefined && id) {
-      setActiveTournamentId(+id);
+      setActiveTournamentId(id);
     }
-    if (id && activeTournamentId !== undefined && activeTournamentId !== +id) {
-      setActiveTournamentId(+id);
+    if (id && activeTournamentId != undefined && activeTournamentId != +id) {
+      setActiveTournamentId(id);
     }
-  }, [id]);
-
-  //   useEffect(() => {
-  //     if (id && activeTournamentId !== undefined && activeTournamentId !== +id) {
-  //       navigate(`/tournament/${activeTournamentId}/${market}`);
-  //     }
-  //   }, [activeTournamentId]);
+  }, [id, activeTournamentId]);
 
   const setActiveTournament = useCallback(
     (newId: number) => {
-      if (id && newId === +id) return;
+      if (id && newId == +id) return;
       setActiveTournamentId(newId);
       if (market === undefined) market = 'BTC-USD';
       navigate(`/no-loss/${newId}/${market}`);

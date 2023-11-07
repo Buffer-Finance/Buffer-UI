@@ -1,5 +1,4 @@
 import { getCallId } from '@Utils/Contract/multiContract';
-import { add } from '@Utils/NumString/stringArithmatics';
 import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
 import { HHMMToSeconds } from '@Views/TradePage/utils';
 import { timeToMins } from '@Views/TradePage/utils/timeToMins';
@@ -17,13 +16,12 @@ import {
   ItournamentData,
   ItournamentId,
   ItournamentStats,
-  IuserTournamentData,
   LeaderboardData,
   accordianTableType,
 } from './types';
 
 export const tournamentIdsAtom = atom<ItournamentId[] | undefined>(undefined);
-export const activeTournamentIdAtom = atom<number | undefined>(undefined);
+export const activeTournamentIdAtom = atom<string | undefined>(undefined);
 
 //currently hooks that should be atoms
 export const activeChainAtom = atom<Chain | undefined>(undefined);
@@ -417,41 +415,23 @@ export const userLeaderboardDataAtom = atom<
 });
 
 export const allTournamentDataAtom = atom<
-  undefined | { [nextId: number]: ItournamentData[] | undefined }
->(undefined);
-export const userTournamentsBooleanAtom = atom<
-  undefined | { [nextId: number]: IuserTournamentData | undefined }
+  undefined | { [tournaMentId: string]: ItournamentData | undefined }
 >(undefined);
 
 export const tournaments = atom<ItournamentData[] | undefined>((get) => {
-  const allTournamentsData = get(allTournamentDataAtom);
-  const allBooleans = get(userTournamentsBooleanAtom);
-  const states = get(tournamentIdsAtom);
-
-  if (allTournamentsData === undefined || states === undefined)
-    return undefined;
-  return Object.entries(allTournamentsData)
-    .map(([nextId, tournametsbatch]) => {
-      if (tournametsbatch === undefined) return;
-      return tournametsbatch.map((tournament, index) => {
-        const id = parseInt(add(nextId, index.toString()));
-        const isUserEligible =
-          allBooleans?.[+nextId]?.hasUserParticipated?.[index];
-        const hasUserClaimed = allBooleans?.[+nextId]?.hasUserClaimed?.[index];
-        const userBoughtTickets =
-          allBooleans?.[+nextId]?.userTicketCount?.[index];
-        return {
-          ...tournament,
-          id,
-          isUserEligible,
-          state: states.find((state) => +state.id === id)?.state,
-          hasUserClaimed,
-          userBoughtTickets,
-        };
-      });
-    })
-    .flat()
-    .filter((tournament) => tournament !== undefined) as ItournamentData[];
+  const allTournamentData = get(allTournamentDataAtom);
+  const tournamentsIds = get(tournamentIdsAtom);
+  if (allTournamentData === undefined) return undefined;
+  return Object.entries(allTournamentData).map(([key, value]) => {
+    const state = tournamentsIds?.find(
+      (tournament) => tournament.id === key
+    )?.state;
+    return {
+      ...value,
+      id: key,
+      state,
+    };
+  });
 });
 
 export const WinningPirzeModalAtom = atom<null | ItournamentData>(null);
