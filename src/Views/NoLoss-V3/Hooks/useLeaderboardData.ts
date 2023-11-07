@@ -1,6 +1,7 @@
+import { getCallId } from '@Utils/Contract/multiContract';
+import { useCall2Data } from '@Utils/useReadCall';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
-import { useContractRead } from 'wagmi';
 import TournamentLeaderboardABI from '../ABIs/TournamentLeaderboard.json';
 import {
   activeChainAtom,
@@ -8,7 +9,6 @@ import {
   allLeaderboardDataAtom,
 } from '../atoms';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
-import { LeaderboardData } from '../types';
 
 export const useLeaderboardData = () => {
   const activeChain = useAtomValue(activeChainAtom);
@@ -17,7 +17,7 @@ export const useLeaderboardData = () => {
     '0x0000000000000000000000000000000000000000000000000000000000000000'
   );
   const setAllleaderboardData = useSetAtom(allLeaderboardDataAtom);
-  let readcall = {};
+  let readcall = [];
   useEffect(() => {
     const timer = setInterval(() => {
       setNextRankId(
@@ -28,23 +28,35 @@ export const useLeaderboardData = () => {
   }, []);
   if (activeChain !== undefined && activeTournamentId !== undefined) {
     const config = getNoLossV3Config(activeChain.id);
-    readcall = {
+    readcall.push({
       address: config.leaderboard,
       abi: TournamentLeaderboardABI,
-      functionName: 'getTournamentLeaderboard',
-      args: [activeTournamentId, nextRankId, 10],
-    };
+      name: 'getTournamentLeaderboard',
+      params: [activeTournamentId, nextRankId, 10],
+      id: getCallId(config.leaderboard, 'getTournamentLeaderboard', [
+        activeTournamentId,
+        nextRankId,
+        10,
+      ]),
+    });
   }
   try {
-    const { data: leaderboardData, error } = useContractRead<
-      unknown[],
-      string,
-      LeaderboardData[]
-    >(readcall);
+    const { data, error } = useCall2Data(
+      readcall as any,
+      `getTournamentLeaderboard-${activeTournamentId}}`
+    );
+    // useContractRead<
+    //   unknown[],
+    //   string,
+    //   LeaderboardData[]
+    // >(readcall);
     if (error) {
       throw error;
     }
-    if (leaderboardData !== undefined) {
+    console.log(data, 'data');
+    if (data !== undefined) {
+      const id = readcall[0].id;
+      const leaderboardData = data[id]?.[0];
       setAllleaderboardData((prvData) => {
         return { ...prvData, [nextRankId]: leaderboardData };
       });

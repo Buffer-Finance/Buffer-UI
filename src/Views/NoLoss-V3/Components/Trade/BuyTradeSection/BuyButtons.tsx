@@ -211,8 +211,18 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       const slippageError = getSlippageError(settings.slippageTolerance);
       if (slippageError !== null) throw new Error(slippageError);
 
-      if (!activeTournamentData)
+      if (activeTournamentData === undefined)
         throw new Error('No active tournament data found');
+
+      if (activeTournamentData.data === undefined)
+        throw new Error('No active tournament data found');
+
+      const currentEpoch = Math.floor(Date.now() / 1000);
+      if (
+        currentEpoch + currentTime.seconds >
+        +activeTournamentData.data?.tournamentMeta.close
+      )
+        throw new Error('Trade time exceeds tournament ending time');
 
       setLoadingState(isAbove ? 'up' : 'down');
       await writeCall(
