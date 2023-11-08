@@ -1,7 +1,8 @@
-import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react';
-import viteTsconfigPaths from 'vite-tsconfig-paths';
 import { lingui } from '@lingui/vite-plugin';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
+import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from 'vite';
+import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -29,6 +30,7 @@ export default defineConfig(({ command, mode }) => {
 
     build: {
       target: ['esnext'], // 👈 build.target
+      sourcemap: true, // Source map generation must be turned on
     },
     plugins: [
       react({
@@ -38,6 +40,11 @@ export default defineConfig(({ command, mode }) => {
       }),
       viteTsconfigPaths(),
       lingui(),
+      sentryVitePlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        org: 'buffer',
+        project: 'nextjs',
+      }),
     ],
 
     define: {

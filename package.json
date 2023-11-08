@@ -30,6 +30,7 @@
     "@rainbow-me/rainbowkit": "^1.0.7",
     "@safe-global/safe-apps-react-sdk": "^4.7.0",
     "@sentry/react": "^7.58.1",
+    "@sentry/vite-plugin": "^2.9.0",
     "@synthetixio/synpress": "^1.2.0",
     "@szhsin/react-menu": "^3.5.3",
     "@thirdweb-dev/react": "^3.6.9",
