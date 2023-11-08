@@ -122,6 +122,7 @@ const AppRoutes = ({ isMobile }: { isMobile: boolean }) => {
             isMobile ? <Tournaments /> : <Navigate to={'no-loss/0/BTC-USD'} />
           }
         />
+        <Route path="/tournaments-admin" element={<NoLossAdmin />} />
         {/* <Route
           path="/*"
           element={
