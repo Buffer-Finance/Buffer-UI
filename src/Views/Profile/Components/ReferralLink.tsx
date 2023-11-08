@@ -5,6 +5,7 @@ import { Tooltip } from '@mui/material';
 import BufferLogo from '@Public/ComponentSVGS/bufferLogo';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import { tabs } from '@Views/Referral';
 import { useUserCode } from '@Views/Referral/Hooks/useUserCode';
 import { affilateCode2ReferralLink } from '@Views/Referral/Utils/affiliateCode2RederralLink';
 import { useEffect, useState } from 'react';
