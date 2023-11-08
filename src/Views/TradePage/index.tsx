@@ -1,6 +1,7 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useGenericHooks } from '@Hooks/useGenericHook';
-import { usePrice, usePriceRetriable } from '@Hooks/usePrice';
-import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
+import { usePriceRetriable } from '@Hooks/usePrice';
+import FrontArrow from '@SVG/frontArrow';
 import ShutterProvider, {
   useShutterHandlers,
 } from '@Views/Common/MobileShutter/MobileShutter';
@@ -9,6 +10,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useMedia } from 'react-use';
 import { ModalBase } from 'src/Modals/BaseModal';
+import { polygon, polygonMumbai } from 'viem/chains';
 import { CloseConfirmationModal } from './CloseConfirmationModal';
 import { MarketTimingsModal } from './Components/MarketTimingsModal';
 import { TradePageMobile } from './Components/MobileView/TradePageMobile';
@@ -40,6 +42,10 @@ const TradePage: React.FC<any> = ({}) => {
     closeShutter();
     return closeShutter;
   }, []);
+  const { activeChain } = useActiveChain();
+  if ([polygon.id, polygonMumbai.id].includes(activeChain.id as 80001)) {
+    return <MobileWarning />;
+  }
   return (
     <>
       <EssentialModals />
@@ -170,11 +176,20 @@ const MobileWarning = () => {
           strokeWidth="0.453174"
         />
       </svg>
-      <div className="heading">You are early </div>
+      <div className="heading">V2.5 is not live on Polygon yet.</div>
       <div className="desc">
-        we are yet to support mobile, please try again on desktop.
-      </div>{' '}
-      <BufferProgressBar progressPercent={40} />
+        <a
+          href="
+          https://classic.app.buffer.finance
+        "
+          target="_blank"
+          className="underline text-buffer-blue underline-offset-2"
+        >
+          Click here to trade on older version
+          <FrontArrow className="inline ml-[6px]" />
+        </a>
+      </div>
+      {/* <BufferProgressBar progressPercent={40} /> */}
     </MobileWarningBackground>
   );
 };
