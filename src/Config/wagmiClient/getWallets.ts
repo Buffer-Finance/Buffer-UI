@@ -1,17 +1,17 @@
 import {
-  trustWallet,
-  injectedWallet,
-  rainbowWallet,
   braveWallet,
-  metaMaskWallet,
   coinbaseWallet,
-  // walletConnectConnector,
-  walletConnectWallet,
   imTokenWallet,
+  injectedWallet,
   ledgerWallet,
+  metaMaskWallet,
   omniWallet,
+  rainbowWallet,
   safeWallet,
   tahoWallet,
+  trustWallet,
+  // walletConnectConnector,
+  walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { Chain } from 'viem';
 
@@ -24,7 +24,6 @@ export const getWallets = (chains: Chain[]) => {
       wallets: [
         metaMaskWallet({ chains, projectId }),
         coinbaseWallet({ chains, appName: 'Buffer Finance' }),
-        walletConnectWallet({ chains, projectId }),
         safeWallet({
           chains,
           allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
@@ -47,6 +46,7 @@ export const getWallets = (chains: Chain[]) => {
         {
           groupName: 'Others',
           wallets: [
+            walletConnectWallet({ chains, projectId }),
             tahoWallet({ chains }),
             rainbowWallet({ chains, projectId }),
             imTokenWallet({ chains, projectId }),
