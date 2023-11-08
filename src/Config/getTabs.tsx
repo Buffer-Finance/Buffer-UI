@@ -418,6 +418,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+      {
+        to: '/tournaments-admin',
+        name: 'No Loss Admin',
+        subTabs: [],
+        isExternalLink: false,
+      },
       // {
       //   to: `/referral`,
       //   name: 'Referral',
