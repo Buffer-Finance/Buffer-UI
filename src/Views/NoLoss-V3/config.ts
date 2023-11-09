@@ -11,6 +11,8 @@ export const config = {
   },
 };
 
+export const ZEROADDRESS =
+  '0x0000000000000000000000000000000000000000000000000000000000000000';
 export const defaultSelectedTime = '00:15';
 export const oneSec = 1000;
 export const durations = [
