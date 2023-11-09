@@ -11,7 +11,7 @@ import {
 } from '../../atoms';
 import { ItournamentData } from '../../types';
 import { NoLossV3Timer } from '../NoLossV3Timer';
-import { MIcon } from '../SVGs/Micon';
+import { Person } from '../SVGs/Person';
 import { RankOne } from '../SVGs/RankOneIcon';
 import { Star } from '../SVGs/Star';
 import { TotalWinnersTrophy } from '../SVGs/TotalWinnersTrophy';
@@ -171,15 +171,18 @@ export const TradepageTournamentCard: React.FC<{
             </NumberTooltip>
 
             <NumberTooltip
-              content={
-                'Only upto ' +
-                parseInt(tournament.tournamentConditions.maxParticipants) +
-                ' patricipants are allowed for this tournament'
-              }
+              content={`
+                ${parseInt(
+                  tournament.tournamentLeaderboard.userCount
+                )}/${parseInt(
+                tournament.tournamentConditions.maxParticipants
+              )} have participated in the tournament.
+                `}
             >
               <div className="flex items-center gap-x-2 text-f12">
-                <MIcon />
-                Upto {parseInt(tournament.tournamentConditions.maxParticipants)}
+                <Person className="mt-1" />
+                {parseInt(tournament.tournamentLeaderboard.userCount)}/
+                {parseInt(tournament.tournamentConditions.maxParticipants)}
               </div>
             </NumberTooltip>
 
