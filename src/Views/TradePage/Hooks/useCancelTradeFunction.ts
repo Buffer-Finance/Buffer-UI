@@ -1,26 +1,25 @@
 import { useToast } from '@Contexts/Toast';
-import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { cancelQueueTrade } from '../utils';
-import { getSingatureCached } from '../cache';
+import { sleep } from '@TV/useDataFeed';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { TradeType, marketType, poolInfoType } from '../type';
 import axios from 'axios';
-import { baseUrl } from '../config';
-import { useState } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
 import {
   SetShareBetAtom,
   SetShareStateAtom,
   closeLoadingAtom,
   shareSettingsAtom,
 } from '../atoms';
-import { privateKeyToAccount } from 'viem/accounts';
+import { getSingatureCached } from '../cache';
+import { baseUrl } from '../config';
+import { TradeType, marketType, poolInfoType } from '../type';
+import { cancelQueueTrade } from '../utils';
+import { getWalletFromOneCtPk } from '../utils/generateTradeSignature';
+import { getConfig } from '../utils/getConfig';
 import { getExpireNotification } from '../utils/getExpireNotification';
 import { usePoolInfo } from './usePoolInfo';
-import { getConfig } from '../utils/getConfig';
-import { sleep } from '@TV/useDataFeed';
-import { getWalletFromOneCtPk } from '../utils/generateTradeSignature';
 const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
@@ -101,53 +100,66 @@ export const useCancelTradeFunction = () => {
     trade: TradeType,
     tradeMarket: marketType
   ) => {
-    console.log(`[chart-deb]tradeMarket: `, trade);
-    const ts = Math.round(Date.now() / 1000);
-    const domain = {
-      name: 'Validator',
-      version: '1',
-      chainId: activeChain.id,
-      verifyingContract: configData.router,
-    };
-    setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
-    const message = {
-      assetPair: tradeMarket.tv_id,
-      timestamp: ts,
-      optionId: trade.option_id,
-    };
+    try {
+      console.log(`[chart-deb]tradeMarket: `, trade);
 
-    console.log(`[chart-deb]oneCtPk: `, oneCtPk, message);
-    const wallet = getWalletFromOneCtPk(oneCtPk);
-    const actualSignature = await wallet.signTypedData({
-      types: {
-        EIP712Domain,
-        [closeSignaturePrimaryType]: CloseAnytimeSignatureTypes,
-      },
-      primaryType: closeSignaturePrimaryType,
-      domain,
-      message,
-    });
-    console.log(`[chart-deb]actualSignature: `, actualSignature);
+      if (trade.state.toLowerCase() === 'queued')
+        throw new Error('Trade is not open yet.');
+      if (trade.option_id === null) throw new Error('Option id not found.');
+      if (oneCtPk === null) throw new Error('Onect wallet not found.');
+      const ts = Math.round(Date.now() / 1000);
+      const domain = {
+        name: 'Validator',
+        version: '1',
+        chainId: activeChain.id,
+        verifyingContract: configData.router,
+      };
+      setLoading((t) => ({ ...t, [trade.queue_id]: 2 }));
+      const message = {
+        assetPair: tradeMarket.tv_id,
+        timestamp: ts,
+        optionId: trade.option_id,
+      };
 
-    const params = {
-      closing_time: ts,
-      queue_id: trade.queue_id,
-      user_signature: actualSignature,
-      environment: activeChain.id,
-    };
-    console.log(`[chart-deb]params: `, params);
+      console.log(`[chart-deb]oneCtPk: `, oneCtPk, message);
+      const wallet = getWalletFromOneCtPk(oneCtPk);
+      const actualSignature = await wallet.signTypedData({
+        types: {
+          EIP712Domain,
+          [closeSignaturePrimaryType]: CloseAnytimeSignatureTypes,
+        },
+        primaryType: closeSignaturePrimaryType,
+        domain,
+        message,
+      });
+      console.log(`[chart-deb]actualSignature: `, actualSignature);
 
-    const res = await axios.get(`${baseUrl}trade/close/`, { params });
-    const updatedTrade = res.data;
-    const pool = getPoolInfo(trade.pool.pool);
-    await getExpireNotification(
-      { ...updatedTrade, market: trade.market, pool: trade.pool },
-      toastify,
-      openShareModal,
-      pool,
-      showSharePopup
-      // true
-    );
+      const params = {
+        closing_time: ts,
+        queue_id: trade.queue_id,
+        user_signature: actualSignature,
+        environment: activeChain.id,
+      };
+      console.log(`[chart-deb]params: `, params);
+
+      const res = await axios.get(`${baseUrl}trade/close/`, { params });
+      const updatedTrade = res.data;
+      const pool = getPoolInfo(trade.pool.pool);
+      await getExpireNotification(
+        { ...updatedTrade, market: trade.market, pool: trade.pool },
+        toastify,
+        openShareModal,
+        pool,
+        showSharePopup
+        // true
+      );
+    } catch (e) {
+      toastify({
+        msg: (e as any).message,
+        type: 'error',
+        id: '231',
+      });
+    }
   };
 
   return { cancelHandler, earlyCloseHandler, earlyCloseLoading };
