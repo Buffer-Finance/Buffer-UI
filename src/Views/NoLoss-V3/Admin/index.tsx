@@ -1,5 +1,8 @@
-import { TournamentMeta } from './Components/Form/TournamentMeta';
+import { useAtomValue } from 'jotai';
+import { FromStateAtom } from './Atoms/Form';
+import { Form } from './Components/Form';
 
 export const NoLossAdmin = () => {
-  return <TournamentMeta />;
+  const { currentFormStep } = useAtomValue(FromStateAtom);
+  return <Form currentStep={currentFormStep} />;
 };
