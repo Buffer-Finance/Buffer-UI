@@ -254,6 +254,8 @@ export const getEarlyCloseStatus = (
         )} until early close.`,
       ];
     }
+    //when trade stuck in queued state
+    if (trade.state == 'QUEUED') return [true, `Trade is not open yet!`];
   }
   return [false, ''];
 };
