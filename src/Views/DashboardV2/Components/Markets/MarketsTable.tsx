@@ -1,12 +1,11 @@
-import { Display } from '@Views/Common/Tooltips/Display';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import { UpTriangle } from 'public/ComponentSVGS/UpTriangle';
-import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
-import { useNavigate } from 'react-router-dom';
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
-import { getPayout } from '@Views/TradePage/utils';
 import BufferSortTable from '@Views/Common/BufferSortTable';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import { Display } from '@Views/Common/Tooltips/Display';
+import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
+import { UpTriangle } from 'public/ComponentSVGS/UpTriangle';
+import { useNavigate } from 'react-router-dom';
 
 export const MarketsTable = ({
   dashboardData,
@@ -130,11 +129,11 @@ export const MarketsTable = ({
             content={[
               <div className="flex items-center gap-1">
                 <UpTriangle className={`scale-75`} />
-                <Display data={getPayout(currentRow.payoutForUp)} unit="%" />
+                <Display data={currentRow.payoutForUp} unit="%" />
               </div>,
               <div className="flex items-center text-3 gap-1">
                 <DOwnTriangle className={`scale-75`} />
-                <Display data={getPayout(currentRow.payoutForDown)} unit="%" />
+                <Display data={currentRow.payoutForDown} unit="%" />
               </div>,
             ]}
           />

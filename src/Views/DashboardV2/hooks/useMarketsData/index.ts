@@ -1,9 +1,13 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { priceAtom } from '@Hooks/usePrice';
-import { add } from '@Utils/NumString/stringArithmatics';
+import { keyValueStringType } from '@Views/DashboardV2/types';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { useMarketsRequest } from '@Views/TradePage/Hooks/GraphqlRequests/useMarketsRequest';
 import { getCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
+import {
+  IBaseSettlementFees,
+  useSettlementFee,
+} from '@Views/TradePage/Hooks/useSettlementFee';
 import { appConfig, marketsForChart } from '@Views/TradePage/config';
 import {
   AssetCategory,
@@ -11,18 +15,13 @@ import {
   poolInfoType,
   responseObj,
 } from '@Views/TradePage/type';
+import { getPayout, secondsToHHMM } from '@Views/TradePage/utils';
+import { getAddress } from 'ethers/lib/utils.js';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import { Market2Prices } from 'src/Types/Market';
-import { getAddress } from 'ethers/lib/utils.js';
-import { secondsToHHMM } from '@Views/TradePage/utils';
 import { useOneDayVolume } from '../useOneDayVolume';
 import { useMarketsReadCallData } from './useMarketsReadcallData';
-import { keyValueStringType } from '@Views/DashboardV2/types';
-import {
-  IBaseSettlementFees,
-  useSettlementFee,
-} from '@Views/TradePage/Hooks/useSettlementFee';
 
 export const useMarketsData = () => {
   const { data } = useMarketsRequest();
@@ -94,6 +93,10 @@ function createMarketObject(
     market.category === AssetCategory.Commodities;
   const isMarketOpen = !market.isPaused;
   const isInCreationWindow = creationWindows[marketAddress];
+  const payout =
+    settlementFees[marketAddress] ||
+    baseSettlementFees?.[market.asset]?.settlement_fee?.toString() ||
+    '0';
   return {
     pair: chartMarketData.pair,
     pool: poolName,
@@ -110,18 +113,12 @@ function createMarketObject(
     max_trade_size: Number(
       fromWei(maxTradeSizes[marketAddress], poolInfo.decimals) || '0'
     ),
-    payoutForUp:
-      settlementFees[marketAddress] ||
-      baseSettlementFees?.[market.asset]?.settlement_fee ||
-      '0',
+    payoutForUp: Number(getPayout(payout)),
     is_open: isForex ? isInCreationWindow && isMarketOpen : isMarketOpen,
 
     max_duration: secondsToHHMM(Number(market.configContract.maxPeriod)),
     poolUnit: poolInfo.token,
-    payoutForDown:
-      settlementFees[marketAddress] ||
-      baseSettlementFees?.[market.asset]?.settlement_fee ||
-      '0',
+    payoutForDown: Number(getPayout(payout)),
     sort_duration: Number(market.configContract.minPeriod),
   };
 }
