@@ -25,7 +25,7 @@ export const useSettlementFee = () => {
       }
       return null;
     },
-    refreshInterval: 5000,
+    refreshInterval: 2500,
   });
   // return data || null;
 };
