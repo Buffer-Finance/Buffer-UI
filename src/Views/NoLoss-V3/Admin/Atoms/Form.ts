@@ -1,8 +1,12 @@
 import { ZEROADDRESS } from '@Views/NoLoss-V3/config';
 import { atom } from 'jotai';
 
-export const FromStateAtom = atom<{ currentFormStep: number }>({
+export const FromStateAtom = atom<{
+  currentFormStep: number;
+  completedSteps: number[] | null;
+}>({
   currentFormStep: 2,
+  completedSteps: [],
 });
 
 export const TournamentMetaDataAtom = atom<{
