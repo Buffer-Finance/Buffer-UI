@@ -59,6 +59,12 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
                 allowance: string | undefined;
               }[]
             | undefined;
+          buyInTokenBalances:
+            | {
+                id: string;
+                balance: string | undefined;
+              }[]
+            | undefined;
         }
       | undefined;
   } = { calls: null, result: undefined };
@@ -93,7 +99,24 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
       ]),
     };
   });
+  const userTournaments = tournamentsData.filter(
+    (tournament) => tournament.isUserEligible
+  );
 
+  const balanceCalls = userTournaments.map((tournament) => {
+    return {
+      address: config.manager,
+      abi: TournamentManagerABI,
+      name: 'balanceOf',
+      params: [user.userAddress, tournament.id],
+      id: getCallId(config.manager, 'balanceOf', [
+        user.userAddress,
+        tournament.id,
+      ]),
+    };
+  });
+
+  response.calls.push(...balanceCalls);
   const readcallResponse = get(noLossReadcallResponseReadOnlyAtom);
 
   if (
@@ -110,12 +133,19 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
       ])
     );
 
+    const balanceOfIds = userTournaments.map((tournament) =>
+      getCallId(config.manager, 'balanceOf', [user.userAddress, tournament.id])
+    );
+
     response.result = {
       buyInTokenToManagerAllowance: buyInTokenToManagerAllowanceIds.map(
         (id) => {
           return { allowance: readcallResponse[id]?.[0], id };
         }
       ),
+      buyInTokenBalances: balanceOfIds.map((id) => {
+        return { balance: readcallResponse[id]?.[0], id };
+      }),
     };
   }
 
