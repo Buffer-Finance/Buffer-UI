@@ -15,7 +15,7 @@ import TournamentLeaderboardABI from '../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../ABIs/TournamentManager.json';
 
 export const tournamentButtonStyles =
-  '!text-f12 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2';
+  '!text-f14 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2';
 
 export const TournamentCardButtons: React.FC<{
   tournament: ItournamentData;
@@ -45,7 +45,7 @@ export const TournamentCardButtons: React.FC<{
 
   if (user === undefined || user.userAddress === undefined)
     return (
-      <ConnectionRequired className="!text-f12 h-fit bg-blue mt-4 py-2">
+      <ConnectionRequired className="!text-f14 h-fit bg-blue mt-4 py-2">
         <></>
       </ConnectionRequired>
     );

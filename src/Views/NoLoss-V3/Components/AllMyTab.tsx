@@ -2,7 +2,10 @@ import { useAtom } from 'jotai';
 import { activeMyAllTabAtom } from '../atoms';
 import { Star } from './SVGs/Star';
 import { Trophy } from './SVGs/Trophy';
-const tabs = [
+const tabs: {
+  title: 'all' | 'my';
+  icon: JSX.Element;
+}[] = [
   {
     title: 'my',
     icon: <Star />,
@@ -21,7 +24,7 @@ export const AllMyTab: React.FC = () => {
           activeTab.toLowerCase() === tab.title ? 'bg-[#141823]' : '';
         return (
           <button
-            className={`flex items-center text-f12 gap-2 capitalize px-2 ${tabClasses}`}
+            className={`flex items-center text-f14 gap-2 capitalize px-2 ${tabClasses}`}
             onClick={() => setActiveTab(tab.title)}
             key={tab.title}
           >

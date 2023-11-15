@@ -51,14 +51,14 @@ export const TradepageTournamentCard: React.FC<{
     >
       {/* <TradeCardBG className="absolute bottom-[10px0] right-[100px]" /> */}
       <div className="flex items-center justify-between">
-        <div className="text-3 font-semibold text-f12">
+        <div className="text-3 font-semibold text-f14">
           {tournament.tournamentMeta.name}
         </div>
         <div className="flex gap-1 items-center">
           {activeMyAllTab === 'my' && <Star />}
 
           <div
-            className={`text-[8px] font-medium ${
+            className={`text-[10px] font-medium ${
               tournament.state.toLowerCase() === 'live'
                 ? 'bg-green chip-green-border text-green'
                 : tournament.state.toLowerCase() === 'upcoming'
@@ -79,7 +79,7 @@ export const TradepageTournamentCard: React.FC<{
       <div className="flex flex-col b1200:flex-row b1200:justify-between">
         <div className="">
           <div className="flex justify-start items-center gap-8">
-            <div className="flex-col text-f12 items-start">
+            <div className="flex-col text-f14 items-start">
               <div className="text-3">Prize Pool</div>
               <div>
                 {divide(
@@ -90,7 +90,7 @@ export const TradepageTournamentCard: React.FC<{
                 {tournament.rewardTokenSymbol}
               </div>
             </div>
-            <div className="flex-col text-f12 items-start">
+            <div className="flex-col text-f14 items-start">
               {activeMyAllTab === 'all' ? (
                 <>
                   <div className="text-3">Mint Amount</div>
@@ -141,8 +141,8 @@ export const TradepageTournamentCard: React.FC<{
                       }
                       return 'bg-[#1d1d28]';
                     }}
-                    keyStyle="text-1 !text-f12 !p-[8px] "
-                    valueStyle="text-1 !text-f12 !p-[8px] "
+                    keyStyle="text-1 !text-f14 !p-[8px] "
+                    valueStyle="text-1 !text-f14 !p-[8px] "
                     keysName={[
                       'Position',
                       ...createArray(
@@ -172,7 +172,7 @@ export const TradepageTournamentCard: React.FC<{
                 </WinnigPrizeModalBackground>
               }
             >
-              <div className="flex items-center text-f12 ">
+              <div className="flex items-center text-f14 ">
                 <RankOne />
                 <div
                   className="ml-2 text-buffer-blue underline underline-offset-2"
@@ -203,7 +203,7 @@ export const TradepageTournamentCard: React.FC<{
               )} have participated in the tournament.
                 `}
             >
-              <div className="flex items-center gap-x-2 text-f12">
+              <div className="flex items-center gap-x-2 text-f14">
                 <Person className="mt-1" />
                 {parseInt(tournament.tournamentLeaderboard.userCount)}/
                 {parseInt(tournament.tournamentConditions.maxParticipants)}
@@ -217,7 +217,7 @@ export const TradepageTournamentCard: React.FC<{
             >
               <div className="flex items-center gap-2">
                 <TotalWinnersTrophy />
-                <div className="text-f12">
+                <div className="text-f14">
                   {parseInt(tournament.tournamentLeaderboard.totalWinners)}
                 </div>
               </div>
