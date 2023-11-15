@@ -290,7 +290,8 @@ export const TabIcon = {
 };
 
 export const getTabs = (
-  marketFromStorage: string
+  marketFromStorage: string,
+  isMobile: boolean
 ): {
   to: string;
   name: string;
@@ -412,12 +413,14 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
-      // {
-      //   to: '/tournaments',
-      //   name: 'Tournaments',
-      //   subTabs: [],
-      //   isExternalLink: false,
-      // },
+      isMobile
+        ? {
+            to: '/tournaments',
+            name: 'Tournaments',
+            subTabs: [],
+            isExternalLink: false,
+          }
+        : null,
       // {
       //   to: `/referral`,
       //   name: 'Referral',
@@ -505,7 +508,7 @@ export const getTabs = (
       //   subTabs: [],
       //   isExternalLink: true,
       // },
-    ];
+    ].filter((tab) => tab !== null);
 };
 export const getMobileTabs = (
   marketFromStorage: string

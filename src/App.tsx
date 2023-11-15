@@ -19,6 +19,7 @@ import IbfrFaucet from '@Views/Faucet';
 import { NoLossV3 } from '@Views/NoLoss-V3';
 import { MobileHistory } from '@Views/NoLoss-V3/Components/Trade/MobileHistory';
 import { TradesShutter } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
+import { Tournaments } from '@Views/Tournaments';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
@@ -44,7 +45,7 @@ const Redirect = ({ url }: { url: string }) => {
   return <h5 className="p-4 m-auto text-f20">Redirecting...</h5>;
 };
 
-const AppRoutes = () => {
+const AppRoutes = ({ isMobile }: { isMobile: boolean }) => {
   // const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   // const [searchParam] = useSearchParams();
   // const [ref, setRef] = useAtom(referralCodeAtom);
@@ -111,8 +112,13 @@ const AppRoutes = () => {
         </Route> */}
         {/* <Route path="/binary/:market" element={<TradePage />} /> */}
         <Route path="/no-loss/:id/:market" element={<NoLossV3 />} />
-        {/* <Route path="tournaments" element={<Tournaments />} /> */}
-        <Route path="/*" element={<Navigate to={'no-loss/0/BTC-USD'} />} />
+        <Route path="tournaments" element={<Tournaments />} />
+        <Route
+          path="/*"
+          element={
+            isMobile ? <Tournaments /> : <Navigate to={'no-loss/0/BTC-USD'} />
+          }
+        />
         {/* <Route
           path="/*"
           element={
@@ -180,7 +186,7 @@ function App() {
             />
           )}
           <Navbar />
-          <AppRoutes />
+          <AppRoutes isMobile={isMobile} />
           <Snackbar
             open={snack.message ? true : false}
             autoHideDuration={3500}

@@ -58,7 +58,9 @@ export const NoTournamentsFoundCard: React.FC<{ isMobile?: boolean }> = ({
 const NoLoss: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const allTournaments = useAtomValue(filteredTournamentsDataReadOnlyAtom);
   if (allTournaments === undefined)
-    return <Skeleton className="w-[250px] !h-[200px] lc !transform-none" />;
+    return (
+      <Skeleton className="w-[250px] !h-[200px] lc !transform-none !mt-4" />
+    );
   if (allTournaments.length === 0) {
     return <NoTournamentsFoundCard isMobile={isMobile} />;
   }
