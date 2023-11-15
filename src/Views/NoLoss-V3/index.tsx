@@ -26,6 +26,9 @@ export const NoLossV3 = () => {
   useAllTournamentData();
   useGenericHooks(active);
   usePastTradeQuery();
+
+  console.log('Rerendered');
+
   const isNotMobile = useMedia('(min-width:1200px)');
 
   return isNotMobile ? (

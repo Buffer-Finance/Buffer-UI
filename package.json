@@ -26,6 +26,7 @@
     "@particle-network/auth": "^1.0.2",
     "@particle-network/rainbowkit-ext": "^1.0.2",
     "@polyjuice-provider/web3": "^0.1.2",
+    "@preact/signals": "^1.2.1",
     "@pythnetwork/client": "^2.17.0",
     "@rainbow-me/rainbowkit": "^1.0.7",
     "@safe-global/safe-apps-react-sdk": "^4.7.0",
