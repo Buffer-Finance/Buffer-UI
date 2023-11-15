@@ -4,11 +4,12 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useUpdateActiveTournament } from '@Views/NoLoss-V3/Hooks/useUpdateActiveTournament';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { Skeleton } from '@mui/material';
+import { useAtomValue } from 'jotai';
 import {
-  WinningPirzeModalAtom,
   activeMyAllTabAtom,
   activeTournamentIdAtom,
+  tournamentBasedReadCallsReadOnlyAtom,
 } from '../../atoms';
 import { ItournamentData } from '../../types';
 import { NoLossV3Timer } from '../NoLossV3Timer';
@@ -26,12 +27,15 @@ export const TradepageTournamentCard: React.FC<{
 }> = ({ tournament, isTradePage = true, isMobile }) => {
   const activeMyAllTab = useAtomValue(activeMyAllTabAtom);
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
-  const setWinPrizeModal = useSetAtom(WinningPirzeModalAtom);
+  // const setWinPrizeModal = useSetAtom(WinningPirzeModalAtom);
   const { setActiveTournament } = useUpdateActiveTournament();
+  const tournamentBasedData = useAtomValue(
+    tournamentBasedReadCallsReadOnlyAtom
+  );
+  const balance = tournamentBasedData.result?.buyInTokenBalances?.find(
+    (item) => item.id.split(',')[1] === tournament.id
+  )?.balance;
 
-  function openWinPrizeModal() {
-    setWinPrizeModal(tournament);
-  }
   return (
     <div
       onClick={() => {
@@ -87,21 +91,36 @@ export const TradepageTournamentCard: React.FC<{
               </div>
             </div>
             <div className="flex-col text-f12 items-start">
-              <div className="text-3">Mint Amount</div>
-              <div>
-                {/* {balance ? ( */}
-                <Display
-                  data={divide(
-                    tournament.tournamentMeta.playTokenMintAmount,
-                    18
+              {activeMyAllTab === 'all' ? (
+                <>
+                  <div className="text-3">Mint Amount</div>
+                  <div>
+                    <Display
+                      data={divide(
+                        tournament.tournamentMeta.playTokenMintAmount,
+                        18
+                      )}
+                      className="text-1 content-start"
+                      precision={2}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-3">Balance</div>
+                  {balance ? (
+                    <div>
+                      <Display
+                        data={divide(balance, 18)}
+                        className="text-1 content-start"
+                        precision={2}
+                      />
+                    </div>
+                  ) : (
+                    <Skeleton className="!h-[16px] full-width b1200:!w-[100px] lc !transform-none" />
                   )}
-                  className="text-1 content-start"
-                  precision={2}
-                />
-                {/* ) : (
-          <Skeleton className="lc sr !w-[20px] !h-[14px]" />
-        )} */}
-              </div>
+                </>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-start mt-4 gap-4">
@@ -208,7 +227,8 @@ export const TradepageTournamentCard: React.FC<{
         <TournamentCardButtons
           activeAllMyTab={activeMyAllTab}
           tournament={tournament}
-          activeTournamentId={isTradePage ? activeTournamentId : undefined}
+          tournamentBasedData={tournamentBasedData.result}
+          // activeTournamentId={isTradePage ? activeTournamentId : undefined}
         />
       </div>
     </div>
