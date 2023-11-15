@@ -20,6 +20,7 @@ import { NoLossV3 } from '@Views/NoLoss-V3';
 import { NoLossAdmin } from '@Views/NoLoss-V3/Admin';
 import { MobileHistory } from '@Views/NoLoss-V3/Components/Trade/MobileHistory';
 import { TradesShutter } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
+import { Tournaments } from '@Views/Tournaments';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
@@ -45,7 +46,7 @@ const Redirect = ({ url }: { url: string }) => {
   return <h5 className="p-4 m-auto text-f20">Redirecting...</h5>;
 };
 
-const AppRoutes = () => {
+const AppRoutes = ({ isMobile }: { isMobile: boolean }) => {
   // const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   // const [searchParam] = useSearchParams();
   // const [ref, setRef] = useAtom(referralCodeAtom);
@@ -115,7 +116,12 @@ const AppRoutes = () => {
         <Route path="tournaments" element={<Tournaments />} />
         <Route path="/tournaments-admin" element={<NoLossAdmin />} />
         {/* <Route path="tournaments" element={<Tournaments />} /> */}
-        <Route path="/*" element={<Navigate to={'no-loss/0/BTC-USD'} />} />
+        <Route
+          path="/*"
+          element={
+            isMobile ? <Tournaments /> : <Navigate to={'no-loss/0/BTC-USD'} />
+          }
+        />
         {/* <Route
           path="/*"
           element={
@@ -183,7 +189,7 @@ function App() {
             />
           )}
           <Navbar />
-          <AppRoutes />
+          <AppRoutes isMobile={isMobile} />
           <Snackbar
             open={snack.message ? true : false}
             autoHideDuration={3500}

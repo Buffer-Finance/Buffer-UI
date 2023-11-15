@@ -19,7 +19,7 @@ export const Navbar: React.FC = () => {
   const { dispatch } = useGlobal();
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   const tabs = useMemo(
-    () => getTabs(activeMarketFromStorage),
+    () => getTabs(activeMarketFromStorage, false),
     [activeMarketFromStorage]
   );
   const VISIBLETABS = isTestnet ? 6 : 6;
