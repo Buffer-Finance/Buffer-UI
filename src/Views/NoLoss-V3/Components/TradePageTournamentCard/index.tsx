@@ -91,7 +91,7 @@ export const TradepageTournamentCard: React.FC<{
               </div>
             </div>
             <div className="flex-col text-f14 items-start">
-              {activeMyAllTab === 'all' ? (
+              {/* {activeMyAllTab === 'all' ? (
                 <>
                   <div className="text-3">Mint Amount</div>
                   <div>
@@ -105,22 +105,22 @@ export const TradepageTournamentCard: React.FC<{
                     />
                   </div>
                 </>
-              ) : (
-                <>
-                  <div className="text-3">Balance</div>
-                  {balance ? (
-                    <div>
-                      <Display
-                        data={divide(balance, 18)}
-                        className="text-1 content-start"
-                        precision={2}
-                      />
-                    </div>
-                  ) : (
-                    <Skeleton className="!h-[16px] full-width b1200:!w-[100px] lc !transform-none" />
-                  )}
-                </>
-              )}
+              ) : ( */}
+              <>
+                <div className="text-3">Balance</div>
+                {balance ? (
+                  <div>
+                    <Display
+                      data={divide(balance, 18)}
+                      className="text-1 content-start"
+                      precision={2}
+                    />
+                  </div>
+                ) : (
+                  <Skeleton className="!h-[16px] full-width b1200:!w-[100px] lc !transform-none" />
+                )}
+              </>
+              {/* )} */}
             </div>
           </div>
           <div className="flex items-center justify-start mt-4 gap-4">

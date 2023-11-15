@@ -99,11 +99,11 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
       ]),
     };
   });
-  const userTournaments = tournamentsData.filter(
-    (tournament) => tournament.isUserEligible
-  );
+  // const userTournaments = tournamentsData.filter(
+  //   (tournament) => tournament.isUserEligible
+  // );
 
-  const balanceCalls = userTournaments.map((tournament) => {
+  const balanceCalls = tournamentsData.map((tournament) => {
     return {
       address: config.manager,
       abi: TournamentManagerABI,
@@ -133,7 +133,7 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
       ])
     );
 
-    const balanceOfIds = userTournaments.map((tournament) =>
+    const balanceOfIds = tournamentsData.map((tournament) =>
       getCallId(config.manager, 'balanceOf', [user.userAddress, tournament.id])
     );
 
