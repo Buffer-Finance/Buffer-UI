@@ -1,21 +1,20 @@
-import { ClickAwayListener, IconButton } from '@mui/material';
-import { useState } from 'react';
-import SidebarCss from './styles';
 import { useGlobal } from '@Contexts/Global';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Fade from 'react-reveal/Fade';
-import { getTabs, ITab } from 'src/Config/getTabs';
-import { BufferLogoComponent } from '../Navbar/BufferLogo';
-import { NavLink } from 'react-router-dom';
-import Twitter from 'public/Social/twitter';
-import Discord from 'public/Social/discord';
-import Medium from 'public/Social/medium';
-import GitHub from 'public/Social/github';
-import Telegram from 'public/Social/telegram';
-import CloseLogo from '@SVG/Elements/Closelogo';
-import { CloseButton } from '@Views/TradePage/Components/CloseButton';
-import BackIcon from '@SVG/buttons/back';
 import MemoHamburgerBack from '@SVG/Elements/sidebarCollpaseIcon';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { ClickAwayListener, IconButton } from '@mui/material';
+import { useAtomValue } from 'jotai';
+import Discord from 'public/Social/discord';
+import GitHub from 'public/Social/github';
+import Medium from 'public/Social/medium';
+import Telegram from 'public/Social/telegram';
+import Twitter from 'public/Social/twitter';
+import { useState } from 'react';
+import Fade from 'react-reveal/Fade';
+import { NavLink } from 'react-router-dom';
+import { ITab, getTabs } from 'src/Config/getTabs';
+import { activeMarketFromStorageAtom } from 'src/globalStore';
+import { BufferLogoComponent } from '../Navbar/BufferLogo';
+import SidebarCss from './styles';
 const social = [
   {
     Img: Twitter,
@@ -46,7 +45,9 @@ const social = [
 const SideBar: React.FC<any> = () => {
   const newPageNavElements = 9;
   const { state, dispatch } = useGlobal();
-  const options = getTabs();
+  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
+
+  const options = getTabs(activeMarketFromStorage, true);
 
   const handleChange = (link: string) => {
     handleClose();

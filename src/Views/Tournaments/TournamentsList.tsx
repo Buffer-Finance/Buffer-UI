@@ -12,7 +12,9 @@ export const TournamentsList: React.FC = () => {
   const isNotMobile = useMedia('(min-width:1200px)');
 
   if (allTournaments === undefined)
-    return <Skeleton className="w-[100px] !h-8 lc " />;
+    return (
+      <Skeleton className="w-[250px] b1200:w-full !h-[200px] lc !transform-none !mt-4" />
+    );
   if (allTournaments.length === 0) {
     return <NoTournamentsFoundCard isMobile={!isNotMobile} />;
   }
