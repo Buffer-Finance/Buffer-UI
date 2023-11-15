@@ -2,7 +2,7 @@ import { Alert, Snackbar } from '@mui/material';
 import { atom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
@@ -20,7 +20,6 @@ import { NoLossV3 } from '@Views/NoLoss-V3';
 import { NoLossAdmin } from '@Views/NoLoss-V3/Admin';
 import { MobileHistory } from '@Views/NoLoss-V3/Components/Trade/MobileHistory';
 import { TradesShutter } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
-import { Tournaments } from '@Views/Tournaments';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
@@ -114,8 +113,9 @@ const AppRoutes = () => {
         {/* <Route path="/binary/:market" element={<TradePage />} /> */}
         <Route path="/no-loss/:id/:market" element={<NoLossV3 />} />
         <Route path="tournaments" element={<Tournaments />} />
-        <Route path="/*" element={<Tournaments />} />
         <Route path="/tournaments-admin" element={<NoLossAdmin />} />
+        {/* <Route path="tournaments" element={<Tournaments />} /> */}
+        <Route path="/*" element={<Navigate to={'no-loss/0/BTC-USD'} />} />
         {/* <Route
           path="/*"
           element={
