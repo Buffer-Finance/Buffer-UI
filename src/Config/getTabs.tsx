@@ -412,12 +412,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
-      {
-        to: '/tournaments',
-        name: 'Tournaments',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: '/tournaments',
+      //   name: 'Tournaments',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       // {
       //   to: `/referral`,
       //   name: 'Referral',
