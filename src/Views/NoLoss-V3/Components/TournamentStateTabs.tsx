@@ -13,7 +13,7 @@ export const TournamentStateTabs = () => {
             : 'text-[#808191]';
         return (
           <button
-            className={`${className} text-f14 font-medium capitalize`}
+            className={`${className} text-f16 font-medium capitalize`}
             onClick={() => setActiveState(state)}
             key={state}
           >
