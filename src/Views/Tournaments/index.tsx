@@ -1,7 +1,6 @@
 import { AllMyTab } from '@Views/NoLoss-V3/Components/AllMyTab';
 import { TournamentsPageBGImage } from '@Views/NoLoss-V3/Components/SVGs/TournamentsPageBGImage';
 import { TournamentStateTabs } from '@Views/NoLoss-V3/Components/TournamentStateTabs';
-import { WinningPrizeModal } from '@Views/NoLoss-V3/Components/WinningPrizeModal';
 import { useAllTournamentData } from '@Views/NoLoss-V3/Hooks/useAllTournamentdata';
 import { useTournamentIds } from '@Views/NoLoss-V3/Hooks/useTournamentIds';
 import styled from '@emotion/styled';
@@ -14,7 +13,7 @@ export const Tournaments: React.FC = () => {
   return (
     <TournamentsBackground>
       <TournamentsPageBGImage className="fixed bottom-[0] right-[0]" />
-      <WinningPrizeModal />
+      {/* <WinningPrizeModal /> */}
       <TournamentStateTabs />
       <AllMyTab />
       <TournamentsList />
