@@ -4,7 +4,6 @@ import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BufferButton } from '@Views/Common/V2-Button';
-import { useUpdateActiveTournament } from '@Views/NoLoss-V3/Hooks/useUpdateActiveTournament';
 import {
   activeChainAtom,
   tournamentBasedReadCallsReadOnlyAtom,
@@ -18,7 +17,6 @@ import { useState } from 'react';
 import { erc20ABI } from 'wagmi';
 import TournamentLeaderboardABI from '../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../ABIs/TournamentManager.json';
-import { TradeIcon } from '../SVGs/TradeIcon';
 
 export const tournamentButtonStyles =
   '!text-f12 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2';
@@ -28,7 +26,6 @@ export const TournamentCardButtons: React.FC<{
   activeTournamentId: string | undefined;
   activeAllMyTab: 'my' | 'all';
 }> = ({ tournament, activeTournamentId, activeAllMyTab }) => {
-  const { setActiveTournament } = useUpdateActiveTournament();
   const activeChain = useAtomValue(activeChainAtom);
   const user = useAtomValue(userAtom);
   const [btnLoading, setBtnLoading] = useState(false);
@@ -170,7 +167,7 @@ export const TournamentCardButtons: React.FC<{
 
   return (
     <div className="flex b1200:flex-col items-center justify-center gap-[5px] mt-4">
-      <BufferButton
+      {/* <BufferButton
         className={tournamentButtonStyles}
         isDisabled={
           tournament.id === activeTournamentId ||
@@ -182,7 +179,7 @@ export const TournamentCardButtons: React.FC<{
       >
         <TradeIcon />
         Trade
-      </BufferButton>
+      </BufferButton> */}
       {secondButton}
     </div>
   );
