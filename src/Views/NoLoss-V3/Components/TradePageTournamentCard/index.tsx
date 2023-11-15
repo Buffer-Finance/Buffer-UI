@@ -2,6 +2,7 @@ import { createArray } from '@Utils/JSUtils/createArray';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { useUpdateActiveTournament } from '@Views/NoLoss-V3/Hooks/useUpdateActiveTournament';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
@@ -26,13 +27,17 @@ export const TradepageTournamentCard: React.FC<{
   const activeMyAllTab = useAtomValue(activeMyAllTabAtom);
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
   const setWinPrizeModal = useSetAtom(WinningPirzeModalAtom);
+  const { setActiveTournament } = useUpdateActiveTournament();
 
   function openWinPrizeModal() {
     setWinPrizeModal(tournament);
   }
   return (
     <div
-      className={`mt-4 relative ${
+      onClick={() => {
+        setActiveTournament(tournament.id);
+      }}
+      className={`cursor-pointer mt-4 relative ${
         isMobile ? 'w-full' : 'w-[250px]'
       } background-vertical-gradient rounded-[4px] left-border px-[12px] py-[10px] pb-[20px] ${
         isTradePage && tournament.id == activeTournamentId
