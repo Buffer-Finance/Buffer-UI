@@ -1,10 +1,14 @@
+import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { useTournamentDataFetch } from '../Hooks/useTournamentDataFetch';
-import { filteredTournamentsDataReadOnlyAtom } from '../atoms';
+import {
+  activeMyAllTabAtom,
+  filteredTournamentsDataReadOnlyAtom,
+} from '../atoms';
 import { AllMyTab } from './AllMyTab';
 import { TournamentStateTabs } from './TournamentStateTabs';
 import { TradepageTournamentCard } from './TradePageTournamentCard';
@@ -44,7 +48,9 @@ export const NoLossSection: React.FC<{ isMobile: boolean }> = ({
 export const NoTournamentsFoundCard: React.FC<{ isMobile?: boolean }> = ({
   isMobile,
 }) => {
-  return (
+  const activeMyAllTab = useAtomValue(activeMyAllTabAtom);
+
+  const Component = (
     <div
       className={`mt-4 ${
         isMobile ? 'w-full' : 'w-[250px]'
@@ -53,6 +59,15 @@ export const NoTournamentsFoundCard: React.FC<{ isMobile?: boolean }> = ({
       No Tournaments Found.
     </div>
   );
+  if (activeMyAllTab === 'my')
+    return (
+      <ConnectionRequired className="mt-4 !w-[250px]">
+        {' '}
+        {Component}
+      </ConnectionRequired>
+    );
+
+  return Component;
 };
 
 const NoLoss: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
