@@ -48,7 +48,7 @@ export const NoTournamentsFoundCard: React.FC<{ isMobile?: boolean }> = ({
     <div
       className={`mt-4 ${
         isMobile ? 'w-full' : 'w-[250px]'
-      } background-vertical-gradient rounded-[4px] px-[12px] py-[10px] text-f13`}
+      } background-vertical-gradient rounded-[4px] px-[12px] py-[10px] text-f14`}
     >
       No Tournaments Found.
     </div>
