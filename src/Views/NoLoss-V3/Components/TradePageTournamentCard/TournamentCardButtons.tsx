@@ -4,11 +4,7 @@ import { divide, lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BufferButton } from '@Views/Common/V2-Button';
-import {
-  activeChainAtom,
-  tournamentBasedReadCallsReadOnlyAtom,
-  userAtom,
-} from '@Views/NoLoss-V3/atoms';
+import { activeChainAtom, userAtom } from '@Views/NoLoss-V3/atoms';
 import { getNoLossV3Config } from '@Views/NoLoss-V3/helpers/getNolossV3Config';
 import { ItournamentData } from '@Views/NoLoss-V3/types';
 import { Skeleton } from '@mui/material';
@@ -23,24 +19,37 @@ export const tournamentButtonStyles =
 
 export const TournamentCardButtons: React.FC<{
   tournament: ItournamentData;
-  activeTournamentId: string | undefined;
   activeAllMyTab: 'my' | 'all';
-}> = ({ tournament, activeTournamentId, activeAllMyTab }) => {
+  tournamentBasedData:
+    | {
+        buyInTokenToManagerAllowance:
+          | {
+              id: string;
+              allowance: string | undefined;
+            }[]
+          | undefined;
+        buyInTokenBalances:
+          | {
+              id: string;
+              balance: string | undefined;
+            }[]
+          | undefined;
+      }
+    | undefined;
+}> = ({ tournament, activeAllMyTab, tournamentBasedData }) => {
   const activeChain = useAtomValue(activeChainAtom);
   const user = useAtomValue(userAtom);
   const [btnLoading, setBtnLoading] = useState(false);
 
   const { writeCall } = useWriteCall();
-  const tournamentBasedData = useAtomValue(
-    tournamentBasedReadCallsReadOnlyAtom
-  );
+
   if (user === undefined || user.userAddress === undefined)
     return (
       <ConnectionRequired className="!text-f12 h-fit bg-blue mt-4 py-2">
         <></>
       </ConnectionRequired>
     );
-  if (tournamentBasedData.result === undefined)
+  if (tournamentBasedData === undefined)
     return (
       <Skeleton className="!h-[26px] full-width b1200:!w-[100px] sr lc !mt-4 !transform-none" />
     );
@@ -53,10 +62,9 @@ export const TournamentCardButtons: React.FC<{
     'allowance',
     [user.userAddress, config.manager]
   );
-  const allowance =
-    tournamentBasedData.result?.buyInTokenToManagerAllowance?.find(
-      (allowanceObj) => allowanceObj.id === allowanceId
-    )?.allowance;
+  const allowance = tournamentBasedData?.buyInTokenToManagerAllowance?.find(
+    (allowanceObj) => allowanceObj.id === allowanceId
+  )?.allowance;
   const ticketCost = divide(
     tournament.tournamentMeta.ticketCost,
     tournament.buyinTokenDecimals
