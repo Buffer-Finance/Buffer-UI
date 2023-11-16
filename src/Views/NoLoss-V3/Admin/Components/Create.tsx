@@ -1,3 +1,4 @@
+import { useNoLossMarkets } from '@Views/NoLoss-V3/Hooks/useNoLossMarkets';
 import { useAtom } from 'jotai';
 import { FromStateAtom } from '../Atoms/Form';
 import { Form } from './Form';
@@ -5,6 +6,8 @@ import { Form } from './Form';
 export const Create = () => {
   const [{ currentFormStep, completedSteps }, setCurrentStep] =
     useAtom(FromStateAtom);
+  useNoLossMarkets();
+
   return (
     <Form
       currentStep={currentFormStep}
