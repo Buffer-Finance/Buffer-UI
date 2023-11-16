@@ -17,6 +17,7 @@ import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
 import { NoLossV3 } from '@Views/NoLoss-V3';
+import { NoLossAdmin } from '@Views/NoLoss-V3/Admin';
 import { MobileHistory } from '@Views/NoLoss-V3/Components/Trade/MobileHistory';
 import { TradesShutter } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
 import { Tournaments } from '@Views/Tournaments';
@@ -113,6 +114,8 @@ const AppRoutes = ({ isMobile }: { isMobile: boolean }) => {
         {/* <Route path="/binary/:market" element={<TradePage />} /> */}
         <Route path="/no-loss/:id/:market" element={<NoLossV3 />} />
         <Route path="tournaments" element={<Tournaments />} />
+        <Route path="/tournaments-admin" element={<NoLossAdmin />} />
+        {/* <Route path="tournaments" element={<Tournaments />} /> */}
         <Route
           path="/*"
           element={
