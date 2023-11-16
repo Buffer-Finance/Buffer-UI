@@ -350,6 +350,12 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
+        to: 'https://perps.buffer.finance/trade',
+        name: 'Perps',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
         to: `https://earn.buffer.finance/`,
         name: 'Earn',
         subTabs: [],
@@ -448,6 +454,12 @@ export const getTabs = (
       {
         to: `https://stats.buffer.finance/`,
         name: 'Stats',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://testnet.perps.buffer.finance/trade',
+        name: 'Perps',
         subTabs: [],
         isExternalLink: true,
       },
