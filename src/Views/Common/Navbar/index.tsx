@@ -20,6 +20,15 @@ import { inIframe } from '@Utils/isInIframe';
 
 interface INavbar {}
 
+export function NewChip() {
+  return (
+    <div className="text-light-blue text-f12 px-2 py-1 rounded-[5px] bg-[#18181f]">
+      New
+    </div>
+  );
+}
+export const newTabs = ['Perps'];
+
 export const Navbar: React.FC<INavbar> = () => {
   const { dispatch } = useGlobal();
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
@@ -46,7 +55,6 @@ export const Navbar: React.FC<INavbar> = () => {
       return click + 1;
     });
   };
-  const newTabs = ['Perps'];
   const show = !urlSettings?.hide;
   return (
     <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102] b1200:z-10">
@@ -89,11 +97,7 @@ export const Navbar: React.FC<INavbar> = () => {
                     }}
                   >
                     {tab.name}
-                    {newTabs.includes(tab.name) && (
-                      <div className="text-light-blue text-f12 px-2 py-1 rounded-[5px] bg-[#18181f]">
-                        New
-                      </div>
-                    )}
+                    {newTabs.includes(tab.name) && <NewChip />}
                   </button>
                 );
               }
