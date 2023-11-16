@@ -58,6 +58,7 @@ export const TournamentConditionsAtom = atom<{
 export const LeaderboardRulesAtom = atom<{
   rankFirst: '0x0000000000000000000000000000000000000000000000000000000000000000';
   rankLast: '0x0000000000000000000000000000000000000000000000000000000000000000';
+  userCount: string;
   totalBuyins: string;
   rakeCollected: string;
   totalWinners: string;
@@ -67,6 +68,7 @@ export const LeaderboardRulesAtom = atom<{
     '0x0000000000000000000000000000000000000000000000000000000000000000',
   rankLast:
     '0x0000000000000000000000000000000000000000000000000000000000000000',
+  userCount: '',
   totalBuyins: '',
   rakeCollected: '',
   totalWinners: '',

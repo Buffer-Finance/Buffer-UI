@@ -1,36 +1,23 @@
-import { useAtom } from 'jotai';
-import { FromStateAtom } from './Atoms/Form';
-import { Form } from './Components/Form';
+import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
+import { useAtomValue } from 'jotai';
+import { activeTabAtom } from './Atoms/Admin';
+import { Create } from './Components/Create';
+import { End } from './Components/End';
+import { Start } from './Components/Start';
+import { Tabs } from './Components/Tabs';
+import { Verify } from './Components/Verify';
 
 export const NoLossAdmin = () => {
-  const [{ currentFormStep, completedSteps }, setCurrentStep] =
-    useAtom(FromStateAtom);
+  const { activeTab, allTabs } = useAtomValue(activeTabAtom);
   return (
-    <Form
-      currentStep={currentFormStep}
-      setActiveStep={(newIndex) =>
-        setCurrentStep((prvState) => ({
-          ...prvState,
-          currentFormStep: newIndex,
-        }))
-      }
-      completed={completedSteps}
-      setCompleted={(newIndex) => {
-        if (newIndex === null) {
-          setCurrentStep((prvState) => ({
-            ...prvState,
-            completedSteps: null,
-          }));
-        } else {
-          setCurrentStep((prvState) => ({
-            ...prvState,
-            completedSteps:
-              prvState.completedSteps !== null
-                ? [...prvState.completedSteps, newIndex]
-                : [newIndex],
-          }));
-        }
-      }}
-    />
+    <div className="m-auto mt-3">
+      <Tabs />
+      <HorizontalTransition value={allTabs.indexOf(activeTab)}>
+        <Create />
+        <Verify />
+        <Start />
+        <End />
+      </HorizontalTransition>
+    </div>
   );
 };
