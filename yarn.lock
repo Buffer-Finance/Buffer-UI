@@ -3234,6 +3234,14 @@
   resolved "https://registry.yarnpkg.com/@preact/signals-core/-/signals-core-1.5.0.tgz#5d34db4d3c242c93e1cefb7ce8b2d10ecbdbfa79"
   integrity sha512-U2diO1Z4i1n2IoFgMYmRdHWGObNrcuTRxyNEn7deSq2cru0vj0583HYQZHsAqcs7FE+hQyX3mjIV7LAfHCvy8w==
 
+"@preact/signals-react@^1.3.6":
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/@preact/signals-react/-/signals-react-1.3.6.tgz#aa91b690669a1a7537df689cd0c69f9661f766e4"
+  integrity sha512-jr/4lhcRo5W3hfieCJGDPbxq3YjfZDvpmTcisJ+lRhjWvnoYrgMKBoTiLsFPACO8VIEATaIBZXYiGAV08YvnfQ==
+  dependencies:
+    "@preact/signals-core" "^1.4.0"
+    use-sync-external-store "^1.2.0"
+
 "@preact/signals@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@preact/signals/-/signals-1.2.1.tgz#e593036a4d2acc3b23578418af1fd002fc19cb25"

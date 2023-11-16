@@ -1,5 +1,4 @@
-import { activeChainAtom } from '@Views/NoLoss-V3/atoms';
-import { useSetAtom } from 'jotai';
+import { activeChainSignal } from '@Views/NoLoss-V3/atoms';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getChains } from 'src/Config/wagmiClient';
@@ -9,7 +8,7 @@ export const useActiveChain = () => {
   const { chain } = useNetwork();
   const params = useParams();
   const chainName = params.chain;
-  const setActivrChain = useSetAtom(activeChainAtom);
+  // const setActivrChain = useSetAtom(activeChainAtom);
 
   useEffect(() => {
     const chains: Chain[] = getChains();
@@ -26,6 +25,6 @@ export const useActiveChain = () => {
         activeChain = chains[0];
       }
     }
-    setActivrChain(activeChain);
+    activeChainSignal.value = activeChain;
   }, [chain, chainName]);
 };

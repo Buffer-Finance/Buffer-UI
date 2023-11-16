@@ -3,9 +3,9 @@ import { useCall2Data } from '@Utils/useReadCall';
 import { useAtomValue, useSetAtom } from 'jotai';
 import TournamentReaderABI from '../ABIs/TournamentReader.json';
 import {
-  activeChainAtom,
+  activeChainSignal,
   allTournamentDataAtom,
-  tournamentIdsAtom,
+  tournamentIdsSignal,
   userAtom,
 } from '../atoms';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
@@ -18,9 +18,9 @@ function groupArrayElements(arr: any[], chunkSize: number) {
   return result;
 }
 export const useAllTournamentData = () => {
-  const activeChain = useAtomValue(activeChainAtom);
+  const activeChain = activeChainSignal.value;
   const user = useAtomValue(userAtom);
-  const tournamentsIds = useAtomValue(tournamentIdsAtom);
+  const tournamentsIds = tournamentIdsSignal.value;
   const setTournaments = useSetAtom(allTournamentDataAtom);
 
   let readcalls = [];

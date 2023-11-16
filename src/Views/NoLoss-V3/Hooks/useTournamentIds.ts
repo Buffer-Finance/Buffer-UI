@@ -1,15 +1,13 @@
 import { useToast } from '@Contexts/Toast';
 import axios from 'axios';
 import { isTestnet } from 'config';
-import { useAtomValue, useSetAtom } from 'jotai';
 import useSWR from 'swr';
-import { activeChainAtom, tournamentIdsAtom } from '../atoms';
+import { activeChainSignal, tournamentIdsSignal } from '../atoms';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
 
 export const useTournamentIds = () => {
-  const activeChain = useAtomValue(activeChainAtom);
+  const activeChain = activeChainSignal.value;
   const toastify = useToast();
-  const setTournamentIds = useSetAtom(tournamentIdsAtom);
   const query = isTestnet
     ? `{
     tournaments(where: {id_not: "16"}) {
@@ -32,7 +30,7 @@ export const useTournamentIds = () => {
 
       const { data, status } = await axios.post(config.graph, { query });
       if (status !== 200) throw new Error('Error fetching tournament ids');
-      setTournamentIds(data.data.tournaments);
+      tournamentIdsSignal.value = data.data.tournaments;
     } catch (e) {
       toastify({
         type: 'error',

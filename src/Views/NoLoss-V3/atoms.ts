@@ -2,6 +2,7 @@ import { getCallId } from '@Utils/Contract/multiContract';
 import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
 import { HHMMToSeconds } from '@Views/TradePage/utils';
 import { timeToMins } from '@Views/TradePage/utils/timeToMins';
+import { signal } from '@preact/signals-react';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { Chain, getAddress } from 'viem';
@@ -20,11 +21,16 @@ import {
   accordianTableType,
 } from './types';
 
-export const tournamentIdsAtom = atom<ItournamentId[] | undefined>(undefined);
+export const tournamentIdsSignal = signal<ItournamentId[] | undefined>(
+  undefined
+);
+export const activeChainSignal = signal<Chain | undefined>(undefined);
+
+// export const tournamentIdsAtom = atom<ItournamentId[] | undefined>(undefined);
 export const activeTournamentIdAtom = atom<string | undefined>(undefined);
 
 //currently hooks that should be atoms
-export const activeChainAtom = atom<Chain | undefined>(undefined);
+// export const activeChainAtom = atom<Chain | undefined>(undefined);
 export const userAtom = atom<
   | {
       userAddress: string | undefined;
@@ -153,7 +159,7 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
 });
 
 export const noLossReadCallsReadOnlyAtom = atom((get) => {
-  const tournaments = get(tournamentIdsAtom);
+  const tournaments = tournamentIdsSignal.value;
   const activeChain = get(activeChainAtom);
   const activeTournamentId = get(activeTournamentIdAtom);
   const user = get(userAtom);
@@ -450,7 +456,7 @@ export const allTournamentDataAtom = atom<
 
 export const tournaments = atom<ItournamentData[] | undefined>((get) => {
   const allTournamentData = get(allTournamentDataAtom);
-  const tournamentsIds = get(tournamentIdsAtom);
+  const tournamentsIds = tournamentIdsSignal.value;
   if (allTournamentData === undefined) return undefined;
   return Object.entries(allTournamentData).map(([key, value]) => {
     const state = tournamentsIds?.find(
