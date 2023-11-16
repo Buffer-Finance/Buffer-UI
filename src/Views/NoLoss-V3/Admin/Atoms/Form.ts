@@ -5,7 +5,7 @@ export const FromStateAtom = atom<{
   currentFormStep: number;
   completedSteps: number[] | null;
 }>({
-  currentFormStep: 2,
+  currentFormStep: 0,
   completedSteps: [],
 });
 
