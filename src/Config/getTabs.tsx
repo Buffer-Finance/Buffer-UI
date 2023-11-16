@@ -320,6 +320,12 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
+        to: 'https://perps.buffer.finance/trade',
+        name: 'Perps',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
         to: `https://optopi.buffer.finance/`,
         name: 'Optopi NFT',
         subTabs: [],
@@ -349,6 +355,7 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
+
       {
         to: `https://earn.buffer.finance/`,
         name: 'Earn',
@@ -426,6 +433,12 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
+        to: 'https://testnet.perps.buffer.finance/trade',
+        name: 'Perps',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
         to: `https://optopi.buffer.finance/`,
         name: 'Optopi NFT',
         subTabs: [],
@@ -451,6 +464,7 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
+
       {
         to: `https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/`,
         name: 'Earn',

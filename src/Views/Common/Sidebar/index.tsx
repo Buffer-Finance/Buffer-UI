@@ -16,6 +16,7 @@ import CloseLogo from '@SVG/Elements/Closelogo';
 import { CloseButton } from '@Views/TradePage/Components/CloseButton';
 import BackIcon from '@SVG/buttons/back';
 import MemoHamburgerBack from '@SVG/Elements/sidebarCollpaseIcon';
+import { NewChip, newTabs } from '../Navbar';
 const social = [
   {
     Img: Twitter,
@@ -99,7 +100,9 @@ const SideBar: React.FC<any> = () => {
                   }}
                 >
                   {/* <SidebarIcon id={option.id} active={active} /> */}
-                  <div className="name">{option.name}</div>
+                  <div className="name flex items-center gap-2">
+                    {option.name} {newTabs.includes(option.name) && <NewChip />}
+                  </div>{' '}
                 </button>
               );
             }
@@ -116,7 +119,9 @@ const SideBar: React.FC<any> = () => {
           `
                 }
               >
-                <div className="name">{option.name}</div>
+                <div className="name flex items-center gap-2">
+                  {option.name} {newTabs.includes(option.name) && <NewChip />}
+                </div>
               </NavLink>
             );
           })}

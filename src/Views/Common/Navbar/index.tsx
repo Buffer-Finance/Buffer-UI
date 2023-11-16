@@ -20,6 +20,15 @@ import { inIframe } from '@Utils/isInIframe';
 
 interface INavbar {}
 
+export function NewChip() {
+  return (
+    <div className="text-light-blue text-f12 px-2 py-1 rounded-[5px] bg-[#18181f]">
+      New
+    </div>
+  );
+}
+export const newTabs = ['Perps'];
+
 export const Navbar: React.FC<INavbar> = () => {
   const { dispatch } = useGlobal();
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
@@ -27,7 +36,7 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = isTestnet ? 6 : 6;
+  const VISIBLETABS = 7;
   // const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
@@ -79,7 +88,7 @@ export const Navbar: React.FC<INavbar> = () => {
                 return (
                   <button
                     key={tab.name}
-                    className={`font-normal text-4 text-f15  px-4 py-[4px] rounded-md hover:bg-1 hover:text-1 hover:brightness-125 transition-colors 
+                    className={`flex gap-2 items-center font-normal text-4 text-f15  px-4 py-[4px] rounded-md hover:bg-1 hover:text-1 hover:brightness-125 transition-colors 
                  
                       : "hover:bg-1 hover:brightness-125"
                   `}
@@ -88,6 +97,7 @@ export const Navbar: React.FC<INavbar> = () => {
                     }}
                   >
                     {tab.name}
+                    {newTabs.includes(tab.name) && <NewChip />}
                   </button>
                 );
               }
