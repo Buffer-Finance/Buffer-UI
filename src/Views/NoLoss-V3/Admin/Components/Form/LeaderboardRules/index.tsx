@@ -17,6 +17,21 @@ export const LeaderboardRules = () => {
         label="rankSecond"
       />
       <LabelWrapper
+        label="User Count (Number)"
+        input={
+          <InputField
+            value={leaderboardRules.userCount}
+            placeholder="User Count"
+            onChange={(event) => {
+              setLeaderboardRules({
+                ...leaderboardRules,
+                userCount: event.target.value,
+              });
+            }}
+          />
+        }
+      />
+      <LabelWrapper
         label="Total Buyins (Number)"
         input={
           <InputField
@@ -65,7 +80,7 @@ export const LeaderboardRules = () => {
       />
 
       <LabelWrapper
-        label="Reward Percentages (Numbers)"
+        label="Reward Percentages (Numbers*e2)"
         input={
           leaderboardRules.totalWinners &&
           +leaderboardRules.totalWinners > 0 ? (

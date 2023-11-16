@@ -134,6 +134,14 @@ export const useFormConditions = () => {
   }
 
   function validateLeaderboardRules() {
+    if (!leaderboardRules.userCount) {
+      toastify({
+        type: 'error',
+        msg: 'Tournament user count is required',
+        id: 'leaderboard-rules-validations',
+      });
+      return false;
+    }
     if (!leaderboardRules.totalBuyins) {
       toastify({
         type: 'error',
