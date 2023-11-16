@@ -150,14 +150,19 @@ export const TournamentCardButtons: React.FC<{
     const hasUserBoughtMaxTickets =
       tournament.userBoughtTickets >=
       tournament.tournamentConditions.maxBuyinsPerWallet;
+    const maximumparticipantsReached =
+      parseInt(tournament.tournamentLeaderboard.userCount) >=
+      parseInt(tournament.tournamentConditions.maxParticipants);
     secondButton = (
       <BufferButton
         className={tournamentButtonStyles}
         onClick={buyPlayTokens}
         isLoading={btnLoading}
-        isDisabled={hasUserBoughtMaxTickets}
+        isDisabled={hasUserBoughtMaxTickets || maximumparticipantsReached}
       >
-        {hasUserBoughtMaxTickets ? (
+        {maximumparticipantsReached ? (
+          'Sold Out'
+        ) : hasUserBoughtMaxTickets ? (
           'Max bought'
         ) : (
           <>
