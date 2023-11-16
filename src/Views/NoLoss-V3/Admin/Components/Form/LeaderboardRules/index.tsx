@@ -8,15 +8,15 @@ export const LeaderboardRules = () => {
   const [leaderboardRules, setLeaderboardRules] = useAtom(LeaderboardRulesAtom);
   return (
     <div className="flex flex-col gap-4 text-f14 p-4">
-      <LabelWrapper
+      {/* <LabelWrapper
         input={<div>{leaderboardRules.rankFirst}</div>}
         label="rankFirst"
       />
       <LabelWrapper
         input={<div>{leaderboardRules.rankLast}</div>}
         label="rankSecond"
-      />
-      <LabelWrapper
+      /> */}
+      {/* <LabelWrapper
         label="User Count (Number)"
         input={
           <InputField
@@ -61,7 +61,7 @@ export const LeaderboardRules = () => {
             }}
           />
         }
-      />
+      /> */}
 
       <LabelWrapper
         label="Total Winners (Number)"
@@ -80,7 +80,7 @@ export const LeaderboardRules = () => {
       />
 
       <LabelWrapper
-        label="Reward Percentages (Numbers*e2)"
+        label="Reward Percentages (Numbers)"
         input={
           leaderboardRules.totalWinners &&
           +leaderboardRules.totalWinners > 0 ? (

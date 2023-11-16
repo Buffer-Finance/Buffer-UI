@@ -1,17 +1,38 @@
 import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { toFixed } from '@Utils/NumString';
+import { gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { activeChainAtom, nolossmarketsAtom } from '@Views/NoLoss-V3/atoms';
+import {
+  activeChainAtom,
+  nolossmarketsAtom,
+  userAtom,
+} from '@Views/NoLoss-V3/atoms';
 import { getNoLossV3Config } from '@Views/NoLoss-V3/helpers/getNolossV3Config';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
+import { getAddress } from 'viem';
 import TournamentManagerABI from '../../../ABIs/TournamentManager.json';
 import {
   LeaderboardRulesAtom,
   TournamentConditionsAtom,
   TournamentMetaDataAtom,
 } from '../../Atoms/Form';
+
+export function getTournamentType(
+  buyInTokenAddress: string,
+  rewardTokenAddress: string,
+  guaranteedWinningAmount: string
+) {
+  if (getAddress(buyInTokenAddress) !== getAddress(rewardTokenAddress)) {
+    return 0;
+  } else {
+    if (gt(guaranteedWinningAmount, '0')) {
+      return 1;
+    }
+  }
+  return 2;
+}
 
 export const SubmitButton = () => {
   const { writeCall } = useWriteCall();
@@ -22,6 +43,7 @@ export const SubmitButton = () => {
   const leaderboardRules = useAtomValue(LeaderboardRulesAtom);
   const tournamentConditions = useAtomValue(TournamentConditionsAtom);
   const tournamentMetaData = useAtomValue(TournamentMetaDataAtom);
+  const user = useAtomValue(userAtom);
 
   async function handleSubmit() {
     try {
@@ -29,6 +51,10 @@ export const SubmitButton = () => {
       const config = getNoLossV3Config(activeChain.id);
       if (config === undefined) throw new Error('No config for active chain');
       if (markets === undefined) throw new Error('No markets');
+      if (user === undefined) throw new Error('No user');
+      if (user.connectedWalletAddress === undefined)
+        throw new Error('Connect Wallet');
+
       const marketsArray = Object.values(markets).map((market) => market.asset);
       setLoading(true);
       const params = [
@@ -39,14 +65,18 @@ export const SubmitButton = () => {
           tournamentMetaData.closeTime,
           toFixed(tournamentMetaData.ticketCost, 0),
           toFixed(tournamentMetaData.playTokenMintAmount, 0),
-          tournamentMetaData.isClosed,
-          tournamentMetaData.isVerified,
-          tournamentMetaData.hasTradingStarted,
-          tournamentMetaData.shouldRefundTickets,
-          tournamentMetaData.tournamentType,
+          false,
+          false,
+          false,
+          false,
+          getTournamentType(
+            tournamentMetaData.buyInToken,
+            tournamentMetaData.rewardToken,
+            tournamentConditions.guaranteedWinningAmount
+          ),
           tournamentMetaData.buyInToken,
           tournamentMetaData.rewardToken,
-          tournamentMetaData.creator,
+          user.connectedWalletAddress,
         ],
         [
           tournamentConditions.maxBuyinsPerWallet,
@@ -54,17 +84,17 @@ export const SubmitButton = () => {
           tournamentConditions.maxParticipants,
           toFixed(tournamentConditions.guaranteedWinningAmount, 0),
           toFixed(tournamentConditions.startPriceMoney, 0),
-          toFixed(tournamentConditions.rakePercent, 0),
+          toFixed(multiply(tournamentConditions.rakePercent, 2), 0),
         ],
         [
-          leaderboardRules.rankFirst,
-          leaderboardRules.rankLast,
-          leaderboardRules.userCount,
-          leaderboardRules.totalBuyins,
-          leaderboardRules.rakeCollected,
+          '0x0000000000000000000000000000000000000000000000000000000000000000',
+          '0x0000000000000000000000000000000000000000000000000000000000000000',
+          0,
+          0,
+          0,
           leaderboardRules.totalWinners,
           leaderboardRules.rewardPercentages.map((reward) =>
-            toFixed(reward, 0)
+            toFixed(multiply(reward, 2), 0)
           ),
         ],
       ];

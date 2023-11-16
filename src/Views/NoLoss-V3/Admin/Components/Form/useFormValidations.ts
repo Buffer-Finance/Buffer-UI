@@ -1,4 +1,5 @@
 import { useToast } from '@Contexts/Toast';
+import { gt, lt } from '@Utils/NumString/stringArithmatics';
 import { useAtomValue } from 'jotai';
 import { useCallback } from 'react';
 import {
@@ -6,6 +7,7 @@ import {
   TournamentConditionsAtom,
   TournamentMetaDataAtom,
 } from '../../Atoms/Form';
+import { getTournamentType } from './SubmitButton';
 
 export const useFormConditions = () => {
   const leaderboardRules = useAtomValue(LeaderboardRulesAtom);
@@ -70,14 +72,14 @@ export const useFormConditions = () => {
       });
       return false;
     }
-    if (!tournamentMetaData.creator) {
-      toastify({
-        type: 'error',
-        msg: 'Tournament creator is required',
-        id: 'tournament-metadata-validations',
-      });
-      return false;
-    }
+    // if (!tournamentMetaData.creator) {
+    //   toastify({
+    //     type: 'error',
+    //     msg: 'Tournament creator is required',
+    //     id: 'tournament-metadata-validations',
+    //   });
+    //   return false;
+    // }
     return true;
   }
 
@@ -122,6 +124,28 @@ export const useFormConditions = () => {
       });
       return false;
     }
+
+    if (!tournamentMetaData.buyInToken) {
+      toastify({
+        type: 'error',
+        msg: 'Fill in Tournament buy token in token in the step 1',
+        id: 'tournament-metadata-validations',
+      });
+      return false;
+    }
+    if (!tournamentMetaData.rewardToken) {
+      toastify({
+        type: 'error',
+        msg: 'Fill inTournament reward token in the step 2',
+        id: 'tournament-metadata-validations',
+      });
+      return false;
+    }
+    const tournamenttype = getTournamentType(
+      tournamentMetaData.buyInToken,
+      tournamentMetaData.rewardToken,
+      tournamentConditions.guaranteedWinningAmount
+    );
     if (!tournamentConditions.rakePercent) {
       toastify({
         type: 'error',
@@ -130,34 +154,76 @@ export const useFormConditions = () => {
       });
       return false;
     }
+    if (isNaN(+tournamentConditions.rakePercent)) {
+      toastify({
+        type: 'error',
+        msg: 'Tournament rake percent should be a number',
+        id: 'tournament-conditions-validations',
+      });
+      return false;
+    }
+    if (lt(tournamentConditions.rakePercent, '0')) {
+      toastify({
+        type: 'error',
+        msg: 'Tournament rake percent should be greater than 0',
+        id: 'tournament-conditions-validations',
+      });
+      return false;
+    }
+    if (gt(tournamentConditions.rakePercent, '100')) {
+      toastify({
+        type: 'error',
+        msg: 'Tournament rake percent should be less than 100',
+        id: 'tournament-conditions-validations',
+      });
+      return false;
+    }
+    if (tournamenttype === 0 && tournamentConditions.rakePercent !== '100') {
+      toastify({
+        type: 'error',
+        msg: 'Tournament rake percent should be 100',
+        id: 'tournament-conditions-validations',
+      });
+      return false;
+    }
+    console.log(tournamenttype, 'tournamenttype');
+    if (tournamenttype === 2 && tournamentConditions.rakePercent === '100') {
+      toastify({
+        type: 'error',
+        msg: 'Tournament rake percent should be less than 100',
+        id: 'tournament-conditions-validations',
+      });
+      return false;
+    }
+
     return true;
   }
 
   function validateLeaderboardRules() {
-    if (!leaderboardRules.userCount) {
-      toastify({
-        type: 'error',
-        msg: 'Tournament user count is required',
-        id: 'leaderboard-rules-validations',
-      });
-      return false;
-    }
-    if (!leaderboardRules.totalBuyins) {
-      toastify({
-        type: 'error',
-        msg: 'Tournament total buyins is required',
-        id: 'leaderboard-rules-validations',
-      });
-      return false;
-    }
-    if (!leaderboardRules.rakeCollected) {
-      toastify({
-        type: 'error',
-        msg: 'Tournament rake collected is required',
-        id: 'leaderboard-rules-validations',
-      });
-      return false;
-    }
+    // if (!leaderboardRules.userCount) {
+    //   toastify({
+    //     type: 'error',
+    //     msg: 'Tournament user count is required',
+    //     id: 'leaderboard-rules-validations',
+    //   });
+    //   return false;
+    // }
+    // if (!leaderboardRules.totalBuyins) {
+    //   toastify({
+    //     type: 'error',
+    //     msg: 'Tournament total buyins is required',
+    //     id: 'leaderboard-rules-validations',
+    //   });
+    //   return false;
+    // }
+    // if (!leaderboardRules.rakeCollected) {
+    //   toastify({
+    //     type: 'error',
+    //     msg: 'Tournament rake collected is required',
+    //     id: 'leaderboard-rules-validations',
+    //   });
+    //   return false;
+    // }
     if (!leaderboardRules.totalWinners) {
       toastify({
         type: 'error',

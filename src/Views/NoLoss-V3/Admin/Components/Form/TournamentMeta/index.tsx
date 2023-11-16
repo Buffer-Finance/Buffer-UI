@@ -2,7 +2,6 @@ import { TournamentMetaDataAtom } from '@Views/NoLoss-V3/Admin/Atoms/Form';
 import { useAtom } from 'jotai';
 import { InputField } from '../Common/InputField';
 import { LabelWrapper } from '../Common/LabelWrapper';
-import { MultiOption } from '../Common/MultiOption';
 
 const booleanOptions = [true, false];
 const typesOfTournament = [0, 1, 2];
@@ -92,7 +91,7 @@ export const TournamentMeta = () => {
         }
       />
 
-      <LabelWrapper
+      {/* <LabelWrapper
         label="Is Tournament Closed"
         input={
           <MultiOption
@@ -190,7 +189,7 @@ export const TournamentMeta = () => {
             ]}
           />
         }
-      />
+      /> */}
 
       <LabelWrapper
         label="Buyin Token (Address)"
@@ -224,7 +223,7 @@ export const TournamentMeta = () => {
         }
       />
 
-      <LabelWrapper
+      {/* <LabelWrapper
         label="Creator (Address)"
         input={
           <InputField
@@ -238,7 +237,7 @@ export const TournamentMeta = () => {
             }}
           />
         }
-      />
+      /> */}
     </div>
   );
 };
