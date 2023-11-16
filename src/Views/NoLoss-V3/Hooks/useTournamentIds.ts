@@ -1,5 +1,6 @@
 import { useToast } from '@Contexts/Toast';
 import axios from 'axios';
+import { isTestnet } from 'config';
 import { useAtomValue, useSetAtom } from 'jotai';
 import useSWR from 'swr';
 import { activeChainAtom, tournamentIdsAtom } from '../atoms';
@@ -9,11 +10,19 @@ export const useTournamentIds = () => {
   const activeChain = useAtomValue(activeChainAtom);
   const toastify = useToast();
   const setTournamentIds = useSetAtom(tournamentIdsAtom);
-  const query = `{
-        tournaments {
-            id
-            state
-          }
+  const query = isTestnet
+    ? `{
+    tournaments(where: {id_not: "16"}) {
+      id
+      state
+    }
+    }`
+    : `{
+      tournaments {
+        id
+        state
+      }
+      
     }`;
 
   async function fetchData() {
