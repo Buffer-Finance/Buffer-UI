@@ -166,7 +166,7 @@ export const TournamentCardButtons: React.FC<{
           'Max bought'
         ) : (
           <>
-            {+tournament.userBoughtTickets > 1 ? 'Re-Buy' : 'Entry'}
+            {+tournament.userBoughtTickets > 0 ? 'Re-Buy' : 'Entry'}
             <Display
               data={ticketCost}
               unit={tournament.buyinTokenSymbol}
