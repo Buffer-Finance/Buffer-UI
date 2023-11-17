@@ -640,7 +640,7 @@ export const MultiResolutionChart = ({
       await renderPositions();
     }, 1000);
     return () => clearInterval(timeout);
-  }, [hideVisulizations, chartReady]);
+  }, [hideVisulizations, activeTrades, chartReady]);
 
   useEffect(() => {
     if (!chartReady) return;
