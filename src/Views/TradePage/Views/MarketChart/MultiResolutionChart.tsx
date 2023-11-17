@@ -636,11 +636,11 @@ export const MultiResolutionChart = ({
   };
 
   useEffect(() => {
-    const timeout = setTimeout(async () => {
+    const timeout = setInterval(async () => {
       await renderPositions();
-    });
-    return () => clearTimeout(timeout);
-  }, [hideVisulizations, activeTrades, chartReady, priceCache]);
+    }, 1000);
+    return () => clearInterval(timeout);
+  }, [hideVisulizations, chartReady]);
 
   useEffect(() => {
     if (!chartReady) return;

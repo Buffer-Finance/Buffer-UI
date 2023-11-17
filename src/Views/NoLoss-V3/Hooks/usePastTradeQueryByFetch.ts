@@ -200,7 +200,7 @@ export const usePastTradeQueryByFetch = ({
         });
         return response.data?.data;
       },
-      refreshInterval: 1000,
+      refreshInterval: 300,
     }
   );
 };
