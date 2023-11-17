@@ -101,7 +101,7 @@ export function useWriteCall() {
         hash: `${blockExplorer}/tx/${hash}`,
         body: customToast ? customToast.body : null,
         confirmationModal: confirmationModal,
-        timings: 100,
+        timings: 50,
       });
       callBack({ res: data });
       dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
