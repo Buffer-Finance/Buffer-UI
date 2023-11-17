@@ -42,7 +42,7 @@ export const TradeSizeSelector: React.FC<{
         getMaximumValue(
           toFixed(
             getMinimumValue(
-              subtract(maxFee, '1'),
+              subtract(maxFee, '0'),
               divide(balance ?? '0', 18) as string
             ),
             2
