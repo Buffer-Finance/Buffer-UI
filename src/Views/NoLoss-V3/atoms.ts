@@ -313,17 +313,17 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
   let sortedTournamentsData = filteredTournamentsData;
   if (tournamentStateTab === 'upcoming')
     sortedTournamentsData = filteredTournamentsData.sort(
-      //sort in the order of start time
-      (a, b) => +b.tournamentMeta.start - +a.tournamentMeta.start
+      //sort in asc order of start time
+      (a, b) => +a.tournamentMeta.start - +b.tournamentMeta.start
     );
   if (tournamentStateTab === 'live') {
-    //sort in order of end time
+    //sort in asc order of end time
     sortedTournamentsData = filteredTournamentsData.sort(
-      (a, b) => +b.tournamentMeta.close - +a.tournamentMeta.close
+      (a, b) => +a.tournamentMeta.close - +b.tournamentMeta.close
     );
   }
   if (tournamentStateTab === 'closed') {
-    //sort in order of end time
+    //sort in asc order of end time
     sortedTournamentsData = filteredTournamentsData.sort(
       (a, b) => +b.tournamentMeta.close - +a.tournamentMeta.close
     );
