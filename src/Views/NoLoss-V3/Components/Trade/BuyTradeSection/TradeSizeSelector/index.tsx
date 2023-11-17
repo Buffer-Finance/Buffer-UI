@@ -1,11 +1,5 @@
 import { toFixed } from '@Utils/NumString';
-import {
-  divide,
-  gt,
-  gte,
-  lt,
-  subtract,
-} from '@Utils/NumString/stringArithmatics';
+import { divide, gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import {
   noLossReadCallsReadOnlyAtom,
   noLossTradeSizeAtom,
@@ -99,7 +93,7 @@ export function getTradeSizeError(
   let error = '';
   if (lt(tradeSize || '0', minTradeSize)) {
     error = `Min trade size is ${minTradeSize}`;
-  } else if (gte(tradeSize || '0', maxTradeSize)) {
+  } else if (gt(tradeSize || '0', maxTradeSize)) {
     error = `Max trade size is ${maxTradeSize}`;
   } else if (
     balanceWithDecimals &&

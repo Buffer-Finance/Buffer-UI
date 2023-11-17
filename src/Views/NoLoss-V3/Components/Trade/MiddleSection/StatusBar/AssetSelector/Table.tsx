@@ -1,5 +1,5 @@
 import Star from '@Public/ComponentSVGS/Star';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, toFixed } from '@Utils/NumString/stringArithmatics';
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
@@ -168,7 +168,7 @@ export const Table: React.FC<{
           <CellContent
             content={[
               <div className="flex items-center">
-                <div className="text-1">{maxFee}</div>
+                <div className="text-1">{toFixed(maxFee, 0)}</div>
               </div>,
             ]}
           />
