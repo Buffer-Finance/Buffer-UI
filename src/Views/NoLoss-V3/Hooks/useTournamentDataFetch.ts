@@ -37,10 +37,11 @@ export const useTournamentDataFetch = () => {
     }
     setResponse(data);
   } catch (e) {
-    toastify({
-      type: 'error',
-      msg: (e as Error).message,
-      id: 'tournamentReadcallDataError',
-    });
+    console.log(e, 'readcall data fetch error');
+    // toastify({
+    //   type: 'error',
+    //   msg: 'error fetching tournament data: ' + (e as Error).message,
+    //   id: 'tournamentReadcallDataError',
+    // });
   }
 };
