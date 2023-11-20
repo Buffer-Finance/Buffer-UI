@@ -4,6 +4,7 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useUpdateActiveTournament } from '@Views/NoLoss-V3/Hooks/useUpdateActiveTournament';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
+import { LocalActivityOutlined } from '@mui/icons-material';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import {
@@ -14,7 +15,6 @@ import {
 import { ItournamentData } from '../../types';
 import { NoLossV3Timer } from '../NoLossV3Timer';
 import { Person } from '../SVGs/Person';
-import { RankOne } from '../SVGs/RankOneIcon';
 import { Star } from '../SVGs/Star';
 import { TotalWinnersTrophy } from '../SVGs/TotalWinnersTrophy';
 import { WinnigPrizeModalBackground } from '../WinningPrizeModal';
@@ -81,14 +81,63 @@ export const TradepageTournamentCard: React.FC<{
           <div className="flex justify-start items-center gap-8">
             <div className="flex-col text-f14 items-start">
               <div className="text-3">Prize Pool</div>
-              <div>
-                {divide(
-                  tournament.tournamentRewardPools.toString(),
-                  tournament.rewardTokenDecimals
-                )}
-                &nbsp;
-                {tournament.rewardTokenSymbol}
-              </div>
+              <NumberTooltip
+                className="!p-[0]"
+                content={
+                  <WinnigPrizeModalBackground>
+                    <div className="capitalize text-f14 m-auto text-center mb-4">
+                      reward distribution
+                    </div>
+                    <TableAligner
+                      getClassName={(row, rowIndex) => {
+                        if (rowIndex === 0) {
+                          return 'bg-[#13131a]';
+                        }
+                        if (rowIndex % 2 === 0) {
+                          return 'bg-[#303044]';
+                        }
+                        return 'bg-[#1d1d28]';
+                      }}
+                      keyStyle="text-1 !text-f14 !p-[8px] "
+                      valueStyle="text-1 !text-f14 !p-[8px] "
+                      keysName={[
+                        'Position',
+                        ...createArray(
+                          tournament.tournamentLeaderboard.rewardPercentages
+                            .length
+                        ).map((_, idx) => idx + 1),
+                      ]}
+                      values={[
+                        'Prize',
+                        ...tournament.tournamentLeaderboard.rewardPercentages.map(
+                          (percentage) => (
+                            <Display
+                              data={getValueOfPercentage(
+                                divide(
+                                  tournament.tournamentRewardPools.toString(),
+                                  tournament.rewardTokenDecimals
+                                ) as string,
+                                divide(percentage.toString(), 2) as string
+                              )}
+                              unit={tournament.rewardTokenSymbol}
+                              precision={2}
+                            />
+                          )
+                        ),
+                      ]}
+                    />
+                  </WinnigPrizeModalBackground>
+                }
+              >
+                <div className="text-buffer-blue underline underline-offset-2">
+                  {divide(
+                    tournament.tournamentRewardPools.toString(),
+                    tournament.rewardTokenDecimals
+                  )}
+                  &nbsp;
+                  {tournament.rewardTokenSymbol}
+                </div>
+              </NumberTooltip>
             </div>
             <div className="flex-col text-f14 items-start">
               {/* {activeMyAllTab === 'all' ? (
@@ -124,76 +173,39 @@ export const TradepageTournamentCard: React.FC<{
             </div>
           </div>
           <div className="flex items-center justify-start mt-4 gap-4">
-            <NumberTooltip
-              className="!p-[0]"
-              content={
-                <WinnigPrizeModalBackground>
-                  <div className="capitalize text-f14 m-auto text-center mb-4">
-                    reward distribution
-                  </div>
-                  <TableAligner
-                    getClassName={(row, rowIndex) => {
-                      if (rowIndex === 0) {
-                        return 'bg-[#13131a]';
-                      }
-                      if (rowIndex % 2 === 0) {
-                        return 'bg-[#303044]';
-                      }
-                      return 'bg-[#1d1d28]';
-                    }}
-                    keyStyle="text-1 !text-f14 !p-[8px] "
-                    valueStyle="text-1 !text-f14 !p-[8px] "
-                    keysName={[
-                      'Position',
-                      ...createArray(
-                        tournament.tournamentLeaderboard.rewardPercentages
-                          .length
-                      ).map((_, idx) => idx + 1),
-                    ]}
-                    values={[
-                      'Prize',
-                      ...tournament.tournamentLeaderboard.rewardPercentages.map(
-                        (percentage) => (
-                          <Display
-                            data={getValueOfPercentage(
-                              divide(
-                                tournament.tournamentRewardPools.toString(),
-                                tournament.rewardTokenDecimals
-                              ) as string,
-                              divide(percentage.toString(), 2) as string
-                            )}
-                            unit={tournament.rewardTokenSymbol}
-                            precision={2}
-                          />
-                        )
-                      ),
-                    ]}
-                  />
-                </WinnigPrizeModalBackground>
-              }
-            >
-              <div className="flex items-center text-f14 ">
-                <RankOne />
-                <div
-                  className="ml-2 text-buffer-blue underline underline-offset-2"
-                  // onClick={openWinPrizeModal}
-                >
-                  {getValueOfPercentage(
-                    divide(
-                      tournament.tournamentRewardPools.toString(),
-                      tournament.rewardTokenDecimals
-                    ) as string,
-                    divide(
-                      tournament.tournamentLeaderboard.rewardPercentages[0].toString(),
-                      2
-                    ) as string
-                  )}
-                  &nbsp;
-                  {tournament.rewardTokenSymbol}
+            <div className="flex items-center text-f14 ">
+              {/* <RankOne />
+              <div
+                className="ml-2"
+                // onClick={openWinPrizeModal}
+              >
+                {getValueOfPercentage(
+                  divide(
+                    tournament.tournamentRewardPools.toString(),
+                    tournament.rewardTokenDecimals
+                  ) as string,
+                  divide(
+                    tournament.tournamentLeaderboard.rewardPercentages[0].toString(),
+                    2
+                  ) as string
+                )}
+                &nbsp;
+                {tournament.rewardTokenSymbol}
+              </div> */}
+              <LocalActivityOutlined />
+              <NumberTooltip
+                content={`You have bought
+                ${parseInt(tournament.userBoughtTickets)}/${parseInt(
+                  tournament.tournamentConditions.maxBuyinsPerWallet
+                )} tickets.
+                `}
+              >
+                <div className="ml-2">
+                  {tournament.userBoughtTickets}/
+                  {tournament.tournamentConditions.maxBuyinsPerWallet}
                 </div>
-              </div>
-            </NumberTooltip>
-
+              </NumberTooltip>
+            </div>
             <NumberTooltip
               content={`
                 ${parseInt(
