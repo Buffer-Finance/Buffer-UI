@@ -4,11 +4,14 @@ import { Timer } from './Timer';
 export const NoLossV3Timer = ({
   close,
   isClosed,
+  header,
 }: {
   close: string;
   isClosed: boolean;
+  header?: string;
 }) => {
   const timer = useTimer(close.toString());
+
   if (isClosed)
     return <div className="text-f14 text-3 my-3">This contest has ended.</div>;
   if (timer.seconds < 0)
@@ -17,12 +20,27 @@ export const NoLossV3Timer = ({
         This contest has expired. Admin will close it shortly
       </div>
     );
+  let timerComponents = [];
+  if (timer.days > 0) {
+    timerComponents.push(<Timer header={timer.days} bottom="Days" />);
+  }
+  if (timerComponents.length > 0 || timer.hours > 0) {
+    timerComponents.push(<Timer header={timer.hours} bottom="Hrs" />);
+  }
+  if (timerComponents.length > 0 || timer.minutes > 0) {
+    timerComponents.push(<Timer header={timer.minutes} bottom="Mins" />);
+  }
+  if (timerComponents.length !== 2) {
+    timerComponents.push(<Timer header={timer.seconds} bottom="Secs" />);
+  }
   return (
-    <div className="text-1 flex gap-x-[8px] mt-[8px] mb-[10px]">
-      <Timer header={timer.days} bottom="Days" />
-      <Timer header={timer.hours} bottom="Hrs" />
-      <Timer header={timer.minutes} bottom="Mins" />
-      <Timer header={timer.seconds} bottom="Secs" />
+    <div className="text-1 text-f14 font-medium flex items-center gap-2 mt-[8px] mb-[10px]">
+      <div className="text-f13 mt-1 text-[#808191]">{header}</div>
+      <div className="flex gap-2">
+        {timerComponents.map((component, index) => (
+          <div key={component.props.header}>{component}</div>
+        ))}
+      </div>
     </div>
   );
 };

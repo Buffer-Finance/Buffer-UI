@@ -74,6 +74,11 @@ export const TradepageTournamentCard: React.FC<{
         <NoLossV3Timer
           close={tournament.tournamentMeta.close}
           isClosed={tournament.state.toLowerCase() === 'closed'}
+          header={
+            tournament.state.toLowerCase() === 'upcoming'
+              ? 'Starts in'
+              : 'Ending in'
+          }
         />
       </div>
       <div className="flex flex-col b1200:flex-row b1200:justify-between">
