@@ -55,7 +55,7 @@ export const TradepageTournamentCard: React.FC<{
           {tournament.tournamentMeta.name}
         </div>
         <div className="flex gap-1 items-center">
-          {activeMyAllTab === 'my' && <Star />}
+          {tournament.isUserEligible && <Star />}
 
           <div
             className={`text-[10px] font-medium ${
