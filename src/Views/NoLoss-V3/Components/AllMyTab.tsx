@@ -7,12 +7,13 @@ const tabs: {
   icon: JSX.Element;
 }[] = [
   {
-    title: 'my',
-    icon: <Star />,
-  },
-  {
     title: 'all',
     icon: <Trophy />,
+  },
+
+  {
+    title: 'my',
+    icon: <Star />,
   },
 ];
 export const AllMyTab: React.FC = () => {

@@ -292,7 +292,7 @@ export const activeTournamentDataReadOnlyAtom = atom((get) => {
   };
 });
 
-export const activeMyAllTabAtom = atom<'my' | 'all'>('my');
+export const activeMyAllTabAtom = atom<'my' | 'all'>('all');
 export const tournamentStateTabAtom = atom<string>('live');
 
 export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
