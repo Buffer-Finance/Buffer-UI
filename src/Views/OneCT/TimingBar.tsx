@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 export const TimingBar = ({
   totalMiliSeconds,
   startTimer,
+  color = '#4FBF67',
 }: {
   totalMiliSeconds: number;
   startTimer: boolean;
+  color?: string;
 }) => {
   //calculate width of bar based on total seconds. it should fill to 100% in given miliseconds after the timer starts
   const [width, setWidth] = useState(0);
@@ -19,5 +21,5 @@ export const TimingBar = ({
     }
   }, [startTimer]);
 
-  return <Bar width={width + '%'} color={'#4FBF67'} className="left-[0]" />;
+  return <Bar width={width + '%'} color={color} className="left-[0]" />;
 };
