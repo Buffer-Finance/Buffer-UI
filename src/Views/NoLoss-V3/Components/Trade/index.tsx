@@ -87,7 +87,12 @@ export const TradePageNoLoss: React.FC<{ isMobile: boolean }> = ({
             isTournamentClosed={isTournamentClosed}
             tournament={activeTournamentData?.data}
           />
-          {!isMobile && !isTournamentClosed && <BuyTradeSection />}
+          {!isMobile && !isTournamentClosed && (
+            <BuyTradeSection
+              activeTournament={activeTournamentData.data}
+              isTournamentUpcoming={isTournamentUpcoming}
+            />
+          )}
         </div>
       )}
     </div>
