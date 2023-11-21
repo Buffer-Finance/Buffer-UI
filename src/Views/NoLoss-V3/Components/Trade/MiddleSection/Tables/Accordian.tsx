@@ -7,7 +7,8 @@ export const Accordian: React.FC<{
   activeTableName: accordianTableType;
   expanded: boolean;
   setExpanded: (isExpended: boolean) => void;
-}> = ({ activeTableName, expanded, setExpanded }) => {
+  shouldHideExpandBtn: boolean;
+}> = ({ activeTableName, expanded, setExpanded, shouldHideExpandBtn }) => {
   const setActiveTable = useSetAtom(accordianTableTypeAtom);
   const gap = [''];
 
@@ -39,17 +40,19 @@ export const Accordian: React.FC<{
           )
         )}
       </div>
-      <button
-        className="flex items-center gap-x-2 px-4 text-f14 transition group"
-        onClick={() => setExpanded(!expanded)}
-      >
-        {expanded ? 'Hide ' : 'Show '} Positions
-        <DDArrow
-          className={`transition scale group-hover:scale-150  ${
-            expanded ? ' rotate-0' : 'rotate-180'
-          }`}
-        />
-      </button>
+      {!shouldHideExpandBtn && (
+        <button
+          className="flex items-center gap-x-2 px-4 text-f14 transition group"
+          onClick={() => setExpanded(!expanded)}
+        >
+          {expanded ? 'Hide ' : 'Show '} Positions
+          <DDArrow
+            className={`transition scale group-hover:scale-150  ${
+              expanded ? ' rotate-0' : 'rotate-180'
+            }`}
+          />
+        </button>
+      )}
     </div>
   );
 };

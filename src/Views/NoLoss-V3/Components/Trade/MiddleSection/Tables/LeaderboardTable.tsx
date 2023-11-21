@@ -1,7 +1,11 @@
 import LeaderboardTropy from '@Public/LeaderBoard/Trophy';
+import { createArray } from '@Utils/JSUtils/createArray';
 import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import BufferTable from '@Views/Common/BufferTable';
+import BufferTable, {
+  BufferTableCell,
+  BufferTableRow,
+} from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import {
@@ -10,11 +14,14 @@ import {
   allLeaderboardDataAtom,
   leaderboardActivePgaeIdAtom,
   leaderboardPaginationAtom,
+  userAtom,
 } from '@Views/NoLoss-V3/atoms';
+import { LeaderboardData } from '@Views/NoLoss-V3/types';
 import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
 import { Launch } from '@mui/icons-material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useMemo } from 'react';
+import { Reward } from './Reward';
 
 enum TableColumn {
   Rank = 0,
@@ -23,17 +30,20 @@ enum TableColumn {
   Trades = 3,
   Score = 4,
   NetPnl = 5,
+  Rewards = 6,
 }
 
 export const LeaderboardTable: React.FC<{
   onlyShow?: number[];
   isMobile?: boolean;
-}> = ({ onlyShow, isMobile = false }) => {
+  isTournamentClosed: boolean;
+}> = ({ onlyShow, isMobile = false, isTournamentClosed }) => {
   const leaderboardData = useAtomValue(allLeaderboardDataAtom);
   const [pages, setPages] = useAtom(leaderboardPaginationAtom);
   const [activePageId, setActivePageId] = useAtom(leaderboardActivePgaeIdAtom);
   const tournament = useAtomValue(activeTournamentDataReadOnlyAtom);
   const activeChain = useAtomValue(activeChainAtom);
+  const user = useAtomValue(userAtom);
 
   const headNameArray = [
     'Rank',
@@ -42,7 +52,8 @@ export const LeaderboardTable: React.FC<{
     'Trades',
     'Score',
     'Net PnL(%)',
-  ];
+    isTournamentClosed && 'Rewards',
+  ].filter((item) => item !== false) as string[];
 
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
@@ -52,15 +63,43 @@ export const LeaderboardTable: React.FC<{
     const data = leaderboardData[activePageId];
     if (data.length === 0) return [];
     return data.filter((item) => parseInt(item.rank) !== 0);
-  }, [leaderboardData]);
+  }, [leaderboardData, activePageId]);
 
-  const BodyFormatter: any = (row: number, col: number) => {
+  const userData = useMemo(() => {
+    if (leaderboardData === undefined) return undefined;
+    const data = Object.values(leaderboardData).flat();
+    if (data.length === 0) undefined;
+    let userRank = 0;
+    const userLeaderboardData = data.find((item) => {
+      console.log(user?.userAddress, 'userData');
+      if (item.stats.user === user?.userAddress) {
+        return true;
+      }
+      userRank++;
+      return false;
+    });
+    return { data: userLeaderboardData, rank: userRank };
+  }, [user, leaderboardData]);
+
+  console.log(userData, 'userData');
+
+  const BodyFormatter: any = (
+    row: number,
+    col: number,
+    data: (LeaderboardData & { rank: number }) | undefined
+  ) => {
     if (filteredData === undefined) return 'Loading';
-    const userData = filteredData[row];
-    const rank = 10 * (pages.activePage - 1) + row + 1;
+    let userData = filteredData[row];
+    let rank = 10 * (pages.activePage - 1) + row + 1;
+    if (data) {
+      userData = data;
+      rank = data.rank + 1;
+    }
+    const isUser = userData.stats.user === user?.userAddress;
     if (tournament === undefined || tournament.data === undefined) return <></>;
     const shouldShowTrophy =
       rank <= +tournament.data.tournamentLeaderboard.totalWinners;
+
     switch (col) {
       case TableColumn.Rank:
         return (
@@ -72,7 +111,9 @@ export const LeaderboardTable: React.FC<{
       case TableColumn.User:
         return (
           <div className="flex gap-2">
-            {getSlicedUserAddress(userData.stats.user, 4)}
+            {isUser
+              ? 'Your Account'
+              : getSlicedUserAddress(userData.stats.user, 4)}
             <Launch className="invisible b1200:visible group-hover:visible mt-[1px]" />
           </div>
         );
@@ -119,25 +160,56 @@ export const LeaderboardTable: React.FC<{
             />
           </div>
         );
+      case TableColumn.Rewards:
+        return (
+          <Reward tournament={tournament.data} rank={rank} isUser={isUser} />
+        );
       default:
         return 'Unhandle Column';
     }
   };
 
+  const UserData = userData && userData.data && userData.rank !== 0 && (
+    <BufferTableRow onClick={() => {}} className="highlight group ">
+      {createArray(headNameArray.length).map((_, i) => (
+        <BufferTableCell
+          onClick={() => {
+            if (userData.data) {
+              const address = userData.data.stats.user;
+              openBlockExplorer(address);
+            }
+          }}
+        >
+          {BodyFormatter(0, i, {
+            ...userData.data,
+            rank: userData.rank,
+          })}
+        </BufferTableCell>
+      ))}
+    </BufferTableRow>
+  );
+
+  function openBlockExplorer(address: string) {
+    if (activeChain !== undefined) {
+      const activeChainExplorer = activeChain.blockExplorers?.default?.url;
+      if (activeChainExplorer === undefined) return;
+      window.open(`${activeChainExplorer}/address/${address}`);
+    }
+  }
+
   return (
     <BufferTable
+      topDecorator={UserData}
       bodyJSX={BodyFormatter}
       headerJSX={HeaderFomatter}
       loading={!filteredData}
       rows={filteredData?.length || 0}
       cols={headNameArray.length}
       onRowClick={(row) => {
-        if (activeChain !== undefined && filteredData !== undefined) {
+        if (filteredData !== undefined) {
           const userData = filteredData[row];
           const address = userData.stats.user;
-          const activeChainExplorer = activeChain.blockExplorers?.default?.url;
-          if (activeChainExplorer === undefined) return;
-          window.open(`${activeChainExplorer}/address/${address}`);
+          openBlockExplorer(address);
         }
       }}
       widths={['auto']}
@@ -155,6 +227,10 @@ export const LeaderboardTable: React.FC<{
       shouldShowMobile
       showOnly={onlyShow}
       doubleHeight={isMobile}
+      overflow={false}
+      selectedIndex={filteredData?.findIndex(
+        (item) => item.stats.user === user?.userAddress
+      )}
     />
   );
 };

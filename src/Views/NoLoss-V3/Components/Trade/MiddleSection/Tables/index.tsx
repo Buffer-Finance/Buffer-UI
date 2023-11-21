@@ -1,25 +1,38 @@
-import { accordianTableTypeAtom } from '@Views/NoLoss-V3/atoms';
-import { isTableShownAtom } from '@Views/TradePage/atoms';
-import { useAtom, useAtomValue } from 'jotai';
+import {
+  accordianTableTypeAtom,
+  isTableShownAtom,
+} from '@Views/NoLoss-V3/atoms';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { Accordian } from './Accordian';
 import { TableSelector } from './TableSelector';
 
-export const Tables = () => {
+export const Tables: React.FC<{
+  isExpanded: boolean;
+  shouldHideExpandBtn: boolean;
+  isTournamentClosed: boolean;
+}> = ({ isExpanded, shouldHideExpandBtn, isTournamentClosed }) => {
   const activeTable = useAtomValue(accordianTableTypeAtom);
-  const [expanded, setExpanded] = useAtom(isTableShownAtom);
+  const setExpanded = useSetAtom(isTableShownAtom);
   return (
     <div className="flex flex-col">
       <Accordian
         activeTableName={activeTable}
-        expanded={expanded}
+        expanded={isExpanded}
         setExpanded={setExpanded}
+        shouldHideExpandBtn={shouldHideExpandBtn}
       />
+
       <div
         className={` ${
-          expanded ? 'h-[355px]' : 'h-[0px]'
+          isTournamentClosed ? 'h-full' : isExpanded ? 'h-[355px]' : 'h-[0px]'
         } flex flex-col transition-all  overflow-y-hidden `}
       >
-        {expanded && <TableSelector activeTableName={activeTable} />}
+        {isExpanded && (
+          <TableSelector
+            activeTableName={activeTable}
+            isTournamentClosed={isTournamentClosed}
+          />
+        )}
       </div>
     </div>
   );

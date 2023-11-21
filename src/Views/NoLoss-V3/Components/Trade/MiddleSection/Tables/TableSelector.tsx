@@ -7,11 +7,12 @@ import { LeaderboardTable } from './LeaderboardTable';
 
 export const TableSelector: React.FC<{
   activeTableName: accordianTableType;
-}> = ({ activeTableName }) => {
+  isTournamentClosed: boolean;
+}> = ({ activeTableName, isTournamentClosed }) => {
   const user = useAtomValue(userAtom);
   switch (activeTableName.toLowerCase()) {
     case 'leaderboard':
-      return <LeaderboardTable />;
+      return <LeaderboardTable isTournamentClosed={isTournamentClosed} />;
     case 'history':
       return <HistoryTable userAddress={user?.userAddress} />;
     case 'cancelled':

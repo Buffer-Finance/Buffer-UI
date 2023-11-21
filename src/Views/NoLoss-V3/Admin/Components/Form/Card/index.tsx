@@ -63,7 +63,11 @@ export const AdminTournamentCard: React.FC<{
       </div>
       <div className="flex items-center">
         <NoLossV3Timer
-          close={tournament.tournamentMeta.close}
+          close={
+            tournament.state.toLowerCase() === 'live'
+              ? tournament.tournamentMeta.close
+              : tournament.tournamentMeta.start
+          }
           isClosed={tournament.state.toLowerCase() === 'closed'}
         />
       </div>
