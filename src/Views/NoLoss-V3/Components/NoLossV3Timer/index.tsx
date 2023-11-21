@@ -27,7 +27,10 @@ export const NoLossV3Timer = ({
   if (timerComponents.length > 0 || timer.hours > 0) {
     timerComponents.push(<Timer header={timer.hours} bottom="Hrs" />);
   }
-  if (timerComponents.length > 0 || timer.minutes > 0) {
+  if (
+    (timerComponents.length > 0 || timer.minutes > 0) &&
+    timerComponents.length !== 2
+  ) {
     timerComponents.push(<Timer header={timer.minutes} bottom="Mins" />);
   }
   if (timerComponents.length !== 2) {
