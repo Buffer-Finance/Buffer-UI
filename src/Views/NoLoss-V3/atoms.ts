@@ -333,7 +333,7 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
     if (
       +tournament.tournamentMeta.close <
         Math.floor(new Date().getTime() / 1000) &&
-      tournament.state.toLowerCase() !== 'closed'
+      tournament.state.toLowerCase() === 'upcoming'
     )
       return false;
     if (tournamentStateTab.toLowerCase() === 'live') {
