@@ -26,6 +26,14 @@ export const useLeaderboardData = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    setAllleaderboardData(undefined);
+    setNextRankId(
+      '0x0000000000000000000000000000000000000000000000000000000000000000'
+    );
+  }, [activeTournamentId]);
+
   if (activeChain !== undefined && activeTournamentId !== undefined) {
     const config = getNoLossV3Config(activeChain.id);
     readcall.push({
