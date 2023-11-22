@@ -166,25 +166,27 @@ export const LeaderboardTable: React.FC<{
     }
   };
 
-  const UserData = userData && userData.data && userData.rank !== 0 && (
-    <BufferTableRow onClick={() => {}} className="highlight group ">
-      {createArray(headNameArray.length).map((_, i) => (
-        <BufferTableCell
-          onClick={() => {
-            if (userData.data) {
-              const address = userData.data.stats.user;
-              openBlockExplorer(address);
-            }
-          }}
-        >
-          {BodyFormatter(0, i, {
-            ...userData.data,
-            rank: userData.rank,
-          })}
-        </BufferTableCell>
-      ))}
-    </BufferTableRow>
-  );
+  const UserData = userData &&
+    userData.data &&
+    userData.rank !== (pages.activePage - 1) * 10 && (
+      <BufferTableRow onClick={() => {}} className="highlight group ">
+        {createArray(headNameArray.length).map((_, i) => (
+          <BufferTableCell
+            onClick={() => {
+              if (userData.data) {
+                const address = userData.data.stats.user;
+                openBlockExplorer(address);
+              }
+            }}
+          >
+            {BodyFormatter(0, i, {
+              ...userData.data,
+              rank: userData.rank,
+            })}
+          </BufferTableCell>
+        ))}
+      </BufferTableRow>
+    );
 
   function openBlockExplorer(address: string) {
     if (activeChain !== undefined) {
