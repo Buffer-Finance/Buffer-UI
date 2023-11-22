@@ -53,7 +53,6 @@ export const TournamentCardButtons: React.FC<{
     return (
       <Skeleton className="!h-[26px] full-width b1200:!w-[100px] sr lc !mt-4 !transform-none" />
     );
-
   if (!activeChain) return <></>;
   const config = getNoLossV3Config(activeChain.id);
 

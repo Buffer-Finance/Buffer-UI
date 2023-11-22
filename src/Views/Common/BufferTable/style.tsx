@@ -1,23 +1,16 @@
 import styled from '@emotion/styled';
 
-const getBorderType = (props) => {
-  if (props?.v1) return 'collapse';
-  return 'none';
-};
-const getBorder = (props) => {
-  if (props?.v1) {
-    return 'none';
-  } else {
-    return '1px solid #2d2d3d';
-  }
-};
-const TableBackground = styled.div`
+export const TableBackground = styled.div<{
+  overflow?: boolean;
+  isBodyTransparent: boolean;
+  shouldShowMobile: boolean;
+}>`
   --border-radius: 3px;
   --padding-left: 15px;
   overflow-x: hidden;
   flex-grow: 1;
-  height: ${(props) => (props?.overflow ? '300px' : 'auto')};
-  padding-bottom: ${(props) => (props?.overflow ? '10px' : 'auto')};
+  height: ${(props) => (props.overflow ? '300px' : 'auto')};
+  padding-bottom: ${(props) => (props.overflow ? '10px' : 'auto')};
   border-radius: 12px 12px 0px 0px;
   & ::-webkit-scrollbar {
     background: var(--bg-grey);
@@ -26,7 +19,7 @@ const TableBackground = styled.div`
   }
 
   .rotate {
-    transition: transform 0.3s ease; /* You can adjust the duration and easing as needed */
+    transition: transform 0.3s ease;
   }
 
   .rotate-180 {
@@ -35,11 +28,11 @@ const TableBackground = styled.div`
   .accordion-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 10s ease-in-out; /* Adjust the duration and easing as needed */
+    transition: max-height 10s ease-in-out;
   }
 
   .open {
-    max-height: 1000px; /* Set a maximum height that suits your content */
+    max-height: 1000px;
   }
   @media (max-width: 1000px) {
     height: auto;
@@ -52,7 +45,6 @@ const TableBackground = styled.div`
     font-size: 1.6rem;
 
     .table-header {
-      /* height: ${(props) => (props?.overflow ? 'sticky' : 'static')}; */
       background: #171722;
 
       .table-head {
@@ -79,9 +71,9 @@ const TableBackground = styled.div`
         text-transform: capitalize;
         font-size: 1.4rem;
         font-weight: 400;
-        color: ${(props) => (props?.v1 ? '#C3C2D4' : 'var(--text-6)')};
+        color: var(--text-6);
         border: none;
-        background: ${(props) => (props?.v1 ? 'var(--bg-0)' : 'var(--bg-2)')};
+        background: var(--bg-2);
         padding: ${({ shouldShowMobile }: { shouldShowMobile: boolean }) =>
           shouldShowMobile ? '12px 10px' : '12px 0px'};
 
@@ -106,16 +98,14 @@ const TableBackground = styled.div`
         font-family: 'Relative Mono', 'Relative Pro' !important;
         margin-top: 2px;
         background: ${(props) =>
-          props?.isBodyTransparent ? 'transparent' : '#171722'};
+          props.isBodyTransparent ? 'transparent' : '#171722'};
 
         --selected-row-border: none;
-        /* border-top: ${getBorder}; */
+        border-left: var(--selected-row-border);
         transition: 200ms;
         font-size: 1.6rem;
         cursor: pointer;
         &:hover {
-          /* backdrop-filter: brightness(1.25);
-          filter: brightness(1.25); */
           background: #232334;
           color: white;
         }
@@ -183,14 +173,6 @@ const TableBackground = styled.div`
           @media (max-width: 600px) {
             font-size: 12px;
           }
-          /* &:first-of-type {
-            padding-left: var(--padding-left);
-            border-radius: var(--border-radius) 0 0 var(--border-radius);
-          } */
-          /* &:last-of-type {
-            padding-right: calc(var(--padding-left) - 1rem);
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
-          } */
         }
         &:hover {
           .table-cell {
@@ -217,4 +199,3 @@ const TableBackground = styled.div`
     }
   }
 `;
-export default TableBackground;

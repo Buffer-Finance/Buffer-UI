@@ -84,7 +84,7 @@ const AppRoutes = ({ isMobile }: { isMobile: boolean }) => {
   //   }
   // }, [searchParam]);
   return (
-    <div className="relative root w-[100vw] pb-[5px] ">
+    <div className="relative root w-[100vw]">
       <TradesShutter />
       <OpenOcean />
       {/* <OnboardingAnimation /> */}

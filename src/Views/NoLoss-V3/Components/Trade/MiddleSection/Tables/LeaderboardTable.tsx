@@ -217,7 +217,6 @@ export const LeaderboardTable: React.FC<{
       onPageChange={(e, page) => {
         console.log(e, page, 'e,page');
         if (!filteredData) return;
-        // setNextRankId(filteredData[9].stats.next);
         setActivePageId(filteredData[filteredData.length - 1].stats.next);
         setPages(page);
       }}
@@ -227,9 +226,6 @@ export const LeaderboardTable: React.FC<{
       showOnly={onlyShow}
       doubleHeight={isMobile}
       overflow={false}
-      selectedIndex={filteredData?.findIndex(
-        (item) => item.stats.user === user?.userAddress
-      )}
     />
   );
 };

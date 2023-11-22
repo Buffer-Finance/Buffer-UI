@@ -93,7 +93,7 @@ const NoLoss: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
 };
 
 const TournamentListWrapper = styled.div`
-  height: 100%;
+  height: calc(100% - 40px);
   padding: 0 0 48px 0;
   overflow-y: auto;
   ::-webkit-scrollbar {

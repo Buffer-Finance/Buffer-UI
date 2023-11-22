@@ -10,15 +10,29 @@ import {
 } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import BasicPagination from '../pagination';
-import Background from './style';
+import { TableBackground as Background } from './style';
 
-const BufferTableRow = ({ children, onClick, className }) => (
+const BufferTableRow = ({
+  children,
+  onClick,
+  className,
+}: {
+  children: ReactNode;
+  onClick?: () => void;
+  className?: string;
+}) => (
   <TableRow className={'table-row ' + className} onClick={onClick}>
     {children}
   </TableRow>
 );
 
-const BufferTableCell = ({ children, onClick }) => (
+const BufferTableCell = ({
+  children,
+  onClick,
+}: {
+  children: ReactNode;
+  onClick?: () => void;
+}) => (
   <TableCell className="table-cell " onClick={onClick}>
     {children}
   </TableCell>
@@ -31,15 +45,9 @@ interface IBufferTable {
   headerJSX: (idx: number) => React.ReactChild;
   bodyJSX: (row: number, col: number) => React.ReactChild;
   accordianJSX?: (row: number) => React.ReactChild;
-  interactive?: boolean;
-  v1?: boolean;
-  lastColWidth?: string;
-  selectedIndex?: number;
   widths?: string[];
   onRowClick: (idx: number) => void;
   error?: ReactNode;
-  bluredIndexes?: number[];
-  highlightIndexs?: number[];
   loading?: boolean;
   smHeight?: boolean;
   count?: number;
@@ -69,17 +77,14 @@ const BufferTable: React.FC<IBufferTable> = ({
   topDecorator,
   widths,
   smHeight,
-  selectedIndex,
   onRowClick,
   showOnly,
   error,
   tableClass,
   loading,
   count,
-  bluredIndexes,
   tableBodyClass,
   overflow,
-  v1 = false,
   onPageChange = undefined,
   shouldShowMobile = false,
   shouldHideHeader = false,
@@ -88,7 +93,6 @@ const BufferTable: React.FC<IBufferTable> = ({
   isHeaderTransparent = false,
   className,
   doubleHeight = false,
-  highlightIndexs,
   activePage = 1,
   accordianJSX,
   shouldOnlyRenderActivePageAndArrows,
@@ -175,7 +179,7 @@ const BufferTable: React.FC<IBufferTable> = ({
                   {/* Data Row */}
                   <TableRow
                     key={rowIdx}
-                    className={`group table-row  ${rowClass} ${
+                    className={`group active table-row  ${rowClass} ${
                       isBodyTransparent ? 'transparent transparent-hover' : ''
                     }`}
                     onClick={() => {
