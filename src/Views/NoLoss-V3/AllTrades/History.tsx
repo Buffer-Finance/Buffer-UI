@@ -1,0 +1,97 @@
+import axios from 'axios';
+import { useAtom, useAtomValue } from 'jotai';
+import { useMemo } from 'react';
+import useSWR from 'swr';
+import { useProcessedTrades } from '../Hooks/usePastTradeQuery';
+import { History } from '../Tables/History';
+import { activeChainAtom } from '../atoms';
+import { getNoLossV3Config } from '../helpers/getNolossV3Config';
+import { historyActivePageAtom } from './atoms';
+
+export const AllHistory: React.FC<{}> = () => {
+  const [activePage, setActivePage] = useAtom(historyActivePageAtom);
+  const activeChain = useAtomValue(activeChainAtom);
+  const { getProcessedTrades } = useProcessedTrades();
+
+  const { data: totalHistory } = useSWR(`total-history`, {
+    fetcher: async () => {
+      if (activeChain === undefined) return;
+      const config = getNoLossV3Config(activeChain?.id);
+      const response = await axios.post(config.graph, {
+        query: `{
+            historyLength: userOptionDatas(
+                orderBy: expirationTime
+                orderDirection: desc
+                first: 10000
+                where: {
+                  state_in: [1,2,3],
+                  expirationTime_lt: ${Math.floor(Date.now() / 1000)}
+                }
+              ){ 
+                  id
+              }
+        }`,
+      });
+      return response.data?.data.historyLength;
+    },
+  });
+
+  const { data } = useSWR(`all-history-${activePage}`, {
+    fetcher: async () => {
+      if (activeChain === undefined) return;
+      const config = getNoLossV3Config(activeChain?.id);
+      const response = await axios.post(config.graph, {
+        query: `{
+                historyTrades: userOptionDatas(
+                    orderBy: expirationTime
+                    orderDirection: desc
+                    first: ${10}
+                    skip: ${(activePage - 1) * 10}
+                    where: {
+                      state_in: [1,2,3],
+                      expirationTime_lt: ${Math.floor(Date.now() / 1000)}
+                    }
+                  ){
+                      amount
+                      creationTime
+                      expirationPrice
+                      expirationTime
+                      isAbove
+                      payout
+                      queueID
+                      optionID
+                      state
+                      strike
+                      totalFee
+                      user 
+                      optionContract {
+                        asset
+                        address
+                      }
+                      tournament {
+                        id
+                      }
+                  }
+            }`,
+      });
+      return response.data?.data.historyTrades;
+    },
+    refreshInterval: 1000,
+  });
+  console.log(data);
+
+  const historyTrades = useMemo(() => {
+    return getProcessedTrades(data, 0, undefined, false);
+  }, [data]);
+
+  return (
+    <History
+      activePage={activePage}
+      setHistoryPage={setActivePage}
+      totalPages={totalHistory ? Math.ceil(totalHistory.length / 10) : 1}
+      isLoading={false}
+      history={historyTrades ?? []}
+      inGlobalContext
+    />
+  );
+};

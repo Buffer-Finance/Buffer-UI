@@ -18,6 +18,7 @@ import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
 import { NoLossV3 } from '@Views/NoLoss-V3';
 import { NoLossAdmin } from '@Views/NoLoss-V3/Admin';
+import { AllTrades as TournamentsAllTrades } from '@Views/NoLoss-V3/AllTrades';
 import { MobileHistory } from '@Views/NoLoss-V3/Components/Trade/MobileHistory';
 import { TradesShutter } from '@Views/NoLoss-V3/Components/Trade/MobileTradePage/Shutters';
 import { Tournaments } from '@Views/Tournaments';
@@ -138,6 +139,7 @@ const AppRoutes = ({ isMobile }: { isMobile: boolean }) => {
             <Route path=":chain" element={<Weekly />} />
           </Route>
         </Route> */}
+        <Route path="/tournaments-trades" element={<TournamentsAllTrades />} />
       </Routes>
     </div>
   );

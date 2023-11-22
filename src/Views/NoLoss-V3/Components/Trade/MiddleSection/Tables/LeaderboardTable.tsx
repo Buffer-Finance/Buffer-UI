@@ -21,6 +21,7 @@ import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
 import { Launch } from '@mui/icons-material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useMemo } from 'react';
+import { Chain } from 'viem';
 import { Reward } from './Reward';
 
 enum TableColumn {
@@ -32,7 +33,16 @@ enum TableColumn {
   NetPnl = 5,
   Rewards = 6,
 }
-
+export function openBlockExplorer(
+  address: string,
+  activeChain: Chain | undefined
+) {
+  if (activeChain !== undefined) {
+    const activeChainExplorer = activeChain.blockExplorers?.default?.url;
+    if (activeChainExplorer === undefined) return;
+    window.open(`${activeChainExplorer}/address/${address}`);
+  }
+}
 export const LeaderboardTable: React.FC<{
   onlyShow?: number[];
   isMobile?: boolean;
@@ -189,13 +199,6 @@ export const LeaderboardTable: React.FC<{
       </BufferTableRow>
     );
 
-  function openBlockExplorer(address: string) {
-    if (activeChain !== undefined) {
-      const activeChainExplorer = activeChain.blockExplorers?.default?.url;
-      if (activeChainExplorer === undefined) return;
-      window.open(`${activeChainExplorer}/address/${address}`);
-    }
-  }
   const highlightedRows = useMemo(() => {
     const activePage = pages.activePage;
     if (userData === undefined) return [];

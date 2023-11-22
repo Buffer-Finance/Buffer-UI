@@ -94,12 +94,13 @@ export interface IGQLHistory {
   queueID?: string;
   optionID?: string;
   reason?: string;
-  user: {
-    address: string;
-  };
+  user: string;
   queueTimestamp?: string;
   cancelTimestamp?: string;
   slippage?: string;
+  tournament: {
+    id: string;
+  };
   //added on FE
   blockNumber?: number;
   chartData: (typeof marketsForChart)[keyof typeof marketsForChart];
@@ -114,6 +115,7 @@ export const useProcessedTrades = () => {
       tradesToBeDeleted?: TradeInputs[],
       shouldAddHistoryPrice = false
     ) => {
+      console.log(`trades: `, trades);
       const tempTrades = trades?.map((singleTrade: IGQLHistory | null) => {
         if (singleTrade === null) {
           return null;
@@ -144,6 +146,7 @@ export const useProcessedTrades = () => {
 
         return singleTrade;
       });
+      console.log(`tempTrades: `, tempTrades);
 
       const updatedTrade = tempTrades
         ?.map((trade) => {
