@@ -54,6 +54,12 @@ export const TournamentCardButtons: React.FC<{
       <Skeleton className="!h-[26px] full-width b1200:!w-[100px] sr lc !mt-4 !transform-none" />
     );
   if (!activeChain) return <></>;
+  if (
+    tournament.state.toLowerCase() !== 'closed' &&
+    +tournament.tournamentMeta.close < Math.floor(Date.now() / 1000)
+  ) {
+    return <></>;
+  }
   const config = getNoLossV3Config(activeChain.id);
 
   const allowanceId = getCallId(
