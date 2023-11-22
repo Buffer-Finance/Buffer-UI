@@ -74,7 +74,7 @@ export const Cancelled: React.FC<{
     switch (col) {
       case TableColumn.Asset:
         return (
-          <div className={`${isMobile ? '' : 'pl-[1.6rem]'}`}>
+          <div>
             <AssetCell currentRow={trade} split={isMobile} />
           </div>
         );

@@ -6,7 +6,9 @@ import { IGQLHistory } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
 
 export const Probability: React.FC<{
   trade: IGQLHistory;
-}> = ({ trade }) => {
+  className?: string;
+  isColored?: boolean;
+}> = ({ trade, className = '', isColored = false }) => {
   const { price } = useMarketPrice(trade.chartData.tv_id);
   if (trade.state === BetState.queued) {
     return <>-</>;
@@ -33,5 +35,16 @@ export const Probability: React.FC<{
       12000 / 1e4
     ) * 100;
 
-  return <Display data={probability} unit={'%'} precision={2} />;
+  return (
+    <Display
+      data={probability}
+      unit={'%'}
+      precision={2}
+      className={
+        className +
+        ' ' +
+        (isColored ? (probability > 50 ? 'text-green' : 'text-red') : '')
+      }
+    />
+  );
 };

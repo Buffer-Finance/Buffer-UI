@@ -5,7 +5,8 @@ import { Skeleton } from '@mui/material';
 
 export const Price: React.FC<{
   tv_id: string;
-}> = ({ tv_id }) => {
+  className?: string;
+}> = ({ tv_id, className = '' }) => {
   const { price, precision } = useMarketPrice(tv_id);
   return !price ? (
     <Skeleton className="w-[80px] !h-5 lc " />
@@ -13,7 +14,7 @@ export const Price: React.FC<{
     <Display
       data={round(price, precision)}
       precision={precision}
-      className="!py-[1px]"
+      className={`!py-[1px] ${className}`}
     />
   );
 };
