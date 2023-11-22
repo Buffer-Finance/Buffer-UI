@@ -115,7 +115,6 @@ export const useProcessedTrades = () => {
       tradesToBeDeleted?: TradeInputs[],
       shouldAddHistoryPrice = false
     ) => {
-      console.log(`trades: `, trades);
       const tempTrades = trades?.map((singleTrade: IGQLHistory | null) => {
         if (singleTrade === null) {
           return null;
@@ -146,7 +145,6 @@ export const useProcessedTrades = () => {
 
         return singleTrade;
       });
-      console.log(`tempTrades: `, tempTrades);
 
       const updatedTrade = tempTrades
         ?.map((trade) => {

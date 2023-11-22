@@ -25,7 +25,6 @@ export const TradepageTournamentCard: React.FC<{
   isTradePage?: boolean;
   isMobile: boolean;
 }> = ({ tournament, isTradePage = true, isMobile }) => {
-  console.log('tournament', tournament);
   const activeMyAllTab = useAtomValue(activeMyAllTabAtom);
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
   // const setWinPrizeModal = useSetAtom(WinningPirzeModalAtom);

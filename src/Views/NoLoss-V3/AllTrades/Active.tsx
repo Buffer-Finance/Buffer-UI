@@ -78,7 +78,6 @@ export const AllActive = () => {
     },
     refreshInterval: 1000,
   });
-  console.log(data);
 
   const activeTrades = useMemo(() => {
     return getProcessedTrades(data, 0, undefined, false);

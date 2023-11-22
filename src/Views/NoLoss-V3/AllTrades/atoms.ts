@@ -7,7 +7,7 @@ export enum tabsNames {
   cancelled,
 }
 
-export const tabsAtom = atom<tabsNames>(tabsNames.active);
+export const tabsAtom = atom<tabsNames>(tabsNames.queued);
 
 export const historyActivePageAtom = atom<number>(1);
 export const cancelledActivePageAtom = atom<number>(1);

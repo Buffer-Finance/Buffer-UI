@@ -118,7 +118,6 @@ const BufferTable: React.FC<IBufferTable> = ({
       setExpandedRows([...expandedRows, rowIdx]);
     }
   };
-  console.log('highlightedRows', highlightedRows);
   return (
     <Background
       overflow={overflow}
