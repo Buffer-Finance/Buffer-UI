@@ -45,26 +45,24 @@ export const useLeaderboardData = () => {
       readcall as any,
       `getTournamentLeaderboard-${activeTournamentId}}`
     );
-    // useContractRead<
-    //   unknown[],
-    //   string,
-    //   LeaderboardData[]
-    // >(readcall);
+    console.log(data, 'data');
     if (error) {
       throw error;
     }
     if (data !== undefined) {
       const id = readcall[0].id;
       const leaderboardData = data[id]?.[0];
-      setAllleaderboardData((prvData) => {
-        return { ...prvData, [nextRankId]: leaderboardData };
-      });
-      const nextId = leaderboardData[9].stats.next;
-      if (
-        nextId !==
-        '0x0000000000000000000000000000000000000000000000000000000000000000'
-      )
-        setNextRankId(leaderboardData[9].stats.next);
+      if (leaderboardData !== undefined) {
+        setAllleaderboardData((prvData) => {
+          return { ...prvData, [nextRankId]: leaderboardData };
+        });
+        const nextId = leaderboardData[9].stats.next;
+        if (
+          nextId !==
+          '0x0000000000000000000000000000000000000000000000000000000000000000'
+        )
+          setNextRankId(leaderboardData[9].stats.next);
+      }
     }
   } catch (e) {
     console.log(e);
