@@ -7,22 +7,29 @@ export const NoLossV3Timer = ({
   header,
   className = '',
   isUpcoming = false,
+  shouldShowShortMsg = false,
 }: {
   close: string;
   isClosed: boolean;
   header?: string;
   className?: string;
   isUpcoming?: boolean;
+  shouldShowShortMsg?: boolean;
 }) => {
   const timer = useTimer(close.toString());
 
-  if (isClosed)
+  if (isClosed) {
+    if (shouldShowShortMsg)
+      return <div className={`text-f14 text-3 my-3 ${className}`}>Ended</div>;
     return (
       <div className={`text-f14 text-3 my-3 ${className}`}>
         This contest has ended.
       </div>
     );
-  if (timer.seconds < 0)
+  }
+  if (timer.seconds < 0) {
+    if (shouldShowShortMsg)
+      return <div className={`text-f14 text-3 my-3 ${className}`}>Expired</div>;
     return (
       <div className={`text-f14 text-3 my-3 ${className}`}>
         This contest has expired.{' '}
@@ -31,6 +38,7 @@ export const NoLossV3Timer = ({
           : 'Admin will close it shortly'}
       </div>
     );
+  }
   let timerComponents = [];
   if (timer.days > 0) {
     timerComponents.push(<Timer header={timer.days} bottom="Days" />);

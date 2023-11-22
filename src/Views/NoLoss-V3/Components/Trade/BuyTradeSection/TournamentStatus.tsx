@@ -19,6 +19,7 @@ export const TournamentStatus: React.FC<{
               : tournament.tournamentMeta.close
           }
           isClosed={tournament.state.toLowerCase() === 'closed'}
+          shouldShowShortMsg
         />
       </div>
     </div>
