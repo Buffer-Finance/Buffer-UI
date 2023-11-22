@@ -22,6 +22,7 @@ export const AllActive = () => {
             activeLength: userOptionDatas(
                 orderBy: creationTime
                 orderDirection: desc
+                first: 10000
                 where: {
                   state_in: [1],
                   expirationTime_gt: ${Math.floor(Date.now() / 1000)}

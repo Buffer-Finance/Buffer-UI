@@ -22,6 +22,7 @@ export const AllCancelled: React.FC<{}> = () => {
             cancelledLength: queuedOptionDatas(
                 orderBy: queueID
                 orderDirection: desc
+                first: 10000
                 where: {
                   state_in: [5],
                 }
