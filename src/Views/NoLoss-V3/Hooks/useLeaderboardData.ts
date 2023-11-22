@@ -45,7 +45,6 @@ export const useLeaderboardData = () => {
       readcall as any,
       `getTournamentLeaderboard-${activeTournamentId}}`
     );
-    console.log(data, 'data');
     if (error) {
       throw error;
     }

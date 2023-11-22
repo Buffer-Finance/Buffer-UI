@@ -71,7 +71,6 @@ export const LeaderboardTable: React.FC<{
     if (data.length === 0) undefined;
     let userRank = 0;
     const userLeaderboardData = data.find((item) => {
-      console.log(user?.userAddress, 'userData');
       if (item.stats.user === user?.userAddress) {
         return true;
       }
@@ -80,8 +79,6 @@ export const LeaderboardTable: React.FC<{
     });
     return { data: userLeaderboardData, rank: userRank };
   }, [user, leaderboardData]);
-
-  console.log(userData, 'userData');
 
   const BodyFormatter: any = (
     row: number,
@@ -223,7 +220,7 @@ export const LeaderboardTable: React.FC<{
         setPages(page);
       }}
       error={<TableErrorRow msg="No user found." />}
-      shouldOnlyRenderActivePageAndArrows
+      // shouldOnlyRenderActivePageAndArrows
       shouldShowMobile
       showOnly={onlyShow}
       doubleHeight={isMobile}

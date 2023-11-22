@@ -418,12 +418,12 @@ export const leaderboardActivePgaeIdAtom = atom<string>(
 );
 export const leaderboardPaginationAtom = atom(
   (get) => {
-    const leaderboardStatsLength =
-      get(noLossReadCallsReadOnlyAtom).result?.activeTournamentLeaderboardStats
-        ?.userCount ?? '0';
+    const allLeaderbaordData = get(allLeaderboardDataAtom);
+
     const activePage = get(leaderboardActivePageAtom);
-    const pageSize = 10;
-    const totalPages = Math.ceil(+leaderboardStatsLength / pageSize);
+    const totalPages = allLeaderbaordData
+      ? Object.keys(allLeaderbaordData).length
+      : 0;
     return {
       totalPages,
       activePage,
