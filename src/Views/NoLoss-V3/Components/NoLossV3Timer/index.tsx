@@ -6,11 +6,13 @@ export const NoLossV3Timer = ({
   isClosed,
   header,
   className = '',
+  isUpcoming = false,
 }: {
   close: string;
   isClosed: boolean;
   header?: string;
   className?: string;
+  isUpcoming?: boolean;
 }) => {
   const timer = useTimer(close.toString());
 
@@ -23,7 +25,10 @@ export const NoLossV3Timer = ({
   if (timer.seconds < 0)
     return (
       <div className={`text-f14 text-3 my-3 ${className}`}>
-        This contest has expired. Admin will close it shortly
+        This contest has expired.{' '}
+        {isUpcoming
+          ? 'Admin will remove it shortly.'
+          : 'Admin will close it shortly'}
       </div>
     );
   let timerComponents = [];
