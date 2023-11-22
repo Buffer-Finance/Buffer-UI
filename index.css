@@ -1561,9 +1561,6 @@ html .xsmr {
   margin-right: var(--xs);
 }
 
-.highlight {
-  background: var(--bg-4);
-}
 html .xxsmt {
   margin-top: var(--xxs);
 }

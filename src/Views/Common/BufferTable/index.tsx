@@ -15,7 +15,7 @@ import { TableBackground as Background } from './style';
 const BufferTableRow = ({
   children,
   onClick,
-  className,
+  className = '',
 }: {
   children: ReactNode;
   onClick?: () => void;
@@ -29,11 +29,13 @@ const BufferTableRow = ({
 const BufferTableCell = ({
   children,
   onClick,
+  className = '',
 }: {
   children: ReactNode;
   onClick?: () => void;
+  className?: string;
 }) => (
-  <TableCell className="table-cell " onClick={onClick}>
+  <TableCell className={`table-cell ${className}`} onClick={onClick}>
     {children}
   </TableCell>
 );
@@ -67,6 +69,7 @@ interface IBufferTable {
     | undefined;
   activePage?: number;
   shouldOnlyRenderActivePageAndArrows?: boolean;
+  highlightedRows?: number[];
 }
 
 const BufferTable: React.FC<IBufferTable> = ({
@@ -96,8 +99,8 @@ const BufferTable: React.FC<IBufferTable> = ({
   activePage = 1,
   accordianJSX,
   shouldOnlyRenderActivePageAndArrows,
+  highlightedRows = [],
 }) => {
-  let rowClass = '';
   let tableCellCls = 'table-cell';
   if (smHeight) tableCellCls += ' sm';
   if (doubleHeight) tableCellCls += ' double-height';
@@ -115,7 +118,7 @@ const BufferTable: React.FC<IBufferTable> = ({
       setExpandedRows([...expandedRows, rowIdx]);
     }
   };
-
+  console.log('highlightedRows', highlightedRows);
   return (
     <Background
       overflow={overflow}
@@ -163,7 +166,7 @@ const BufferTable: React.FC<IBufferTable> = ({
             {topDecorator}
             {loading ? (
               <TableRow
-                className={`table-row skel ${rowClass} ${
+                className={`table-row skel ${
                   isBodyTransparent ? 'transparent transparent-hover' : ''
                 }`}
               >
@@ -174,94 +177,104 @@ const BufferTable: React.FC<IBufferTable> = ({
             ) : shouldHideBody ? (
               <></>
             ) : rows ? (
-              createArray(rows).map((rowIdx) => (
-                <>
-                  {/* Data Row */}
-                  <TableRow
-                    key={rowIdx}
-                    className={`group active table-row  ${rowClass} ${
-                      isBodyTransparent ? 'transparent transparent-hover' : ''
-                    }`}
-                    onClick={() => {
-                      onRowClick(rowIdx);
-                      if (!!accordianJSX) {
-                        toggleRowExpansion(rowIdx);
-                      }
-                    }}
-                  >
-                    {createArray(cols).map((col, colIdx) => (
-                      <TableCell
-                        key={rowIdx.toString() + colIdx}
-                        className={
-                          tableCellCls +
-                          ` ${
-                            showOnly
-                              ? showOnly.includes(colIdx)
-                                ? ''
-                                : '!hidden'
+              createArray(rows).map((rowIdx) => {
+                let rowClass = '';
+
+                if (highlightedRows.includes(rowIdx)) {
+                  rowClass += ' highlight';
+                }
+
+                return (
+                  <>
+                    {/* Data Row */}
+                    <TableRow
+                      key={rowIdx}
+                      className={`group table-row  ${rowClass} ${
+                        isBodyTransparent ? 'transparent transparent-hover' : ''
+                      }`}
+                      onClick={() => {
+                        onRowClick(rowIdx);
+                        if (!!accordianJSX) {
+                          toggleRowExpansion(rowIdx);
+                        }
+                      }}
+                    >
+                      {createArray(cols).map((col, colIdx) => (
+                        <TableCell
+                          key={rowIdx.toString() + colIdx}
+                          className={
+                            tableCellCls +
+                            ` ${
+                              showOnly
+                                ? showOnly.includes(colIdx)
+                                  ? ''
+                                  : '!hidden'
+                                : ''
+                            }`
+                          }
+                          width={
+                            widths && colIdx < widths.length
+                              ? widths[colIdx]
                               : ''
-                          }`
-                        }
-                        width={
-                          widths && colIdx < widths.length ? widths[colIdx] : ''
-                        }
-                      >
-                        {bodyJSX(rowIdx, col)}
-                      </TableCell>
-                    ))}
-
-                    {accordianJSX && (
-                      <TableCell className={tableCellCls}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="23"
-                          viewBox="0 0 20 23"
-                          fill="none"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleRowExpansion(rowIdx);
-                          }} // Toggle the row when SVG is clicked
-                          style={{ cursor: 'pointer' }}
-                          // className={`rotate ${
-                          //   expandedRows.includes(rowIdx) ? 'rotate-180' : ''
-                          // }`}
+                          }
                         >
-                          <path
-                            d="M0 4.9141C0 2.20012 2.20012 0 4.9141 0H14.8206C17.5346 0 19.7347 2.20012 19.7347 4.9141V17.1888C19.7347 19.9027 17.5346 22.1029 14.8206 22.1029H4.9141C2.20012 22.1029 0 19.9027 0 17.1888V4.9141Z"
-                            fill="#141823"
-                          />
-                          <path
-                            d="M12.2139 8.96231L9.76607 11.3694L7.38332 8.89784L6.63134 9.63891L9.74596 12.8767L11.3459 11.2999L12.9459 9.72318L12.2139 8.96231Z"
-                            fill="#94A3B8"
-                            stroke="#94A3B8"
-                            strokeWidth="0.907097"
-                          />
-                        </svg>
-                      </TableCell>
-                    )}
-                  </TableRow>
+                          {bodyJSX(rowIdx, col)}
+                        </TableCell>
+                      ))}
 
-                  {/* Accordion Row */}
-                  {accordianJSX && expandedRows.includes(rowIdx) && (
-                    <TableRow className="table-row rounded-lg mt-2">
-                      <TableCell colSpan={100} className={tableCellCls}>
-                        {/* Render your accordion content here */}
-                        <div
-                          className={`accordion-content ${
-                            expandedRows.includes(rowIdx) ? 'open' : ''
-                          }`}
-                        >
-                          {accordianJSX(rowIdx)}
-                        </div>
-                      </TableCell>
+                      {accordianJSX && (
+                        <TableCell className={tableCellCls}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="23"
+                            viewBox="0 0 20 23"
+                            fill="none"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleRowExpansion(rowIdx);
+                            }} // Toggle the row when SVG is clicked
+                            style={{ cursor: 'pointer' }}
+                            // className={`rotate ${
+                            //   expandedRows.includes(rowIdx) ? 'rotate-180' : ''
+                            // }`}
+                          >
+                            <path
+                              d="M0 4.9141C0 2.20012 2.20012 0 4.9141 0H14.8206C17.5346 0 19.7347 2.20012 19.7347 4.9141V17.1888C19.7347 19.9027 17.5346 22.1029 14.8206 22.1029H4.9141C2.20012 22.1029 0 19.9027 0 17.1888V4.9141Z"
+                              fill="#141823"
+                            />
+                            <path
+                              d="M12.2139 8.96231L9.76607 11.3694L7.38332 8.89784L6.63134 9.63891L9.74596 12.8767L11.3459 11.2999L12.9459 9.72318L12.2139 8.96231Z"
+                              fill="#94A3B8"
+                              stroke="#94A3B8"
+                              strokeWidth="0.907097"
+                            />
+                          </svg>
+                        </TableCell>
+                      )}
                     </TableRow>
-                  )}
-                </>
-              ))
+
+                    {/* Accordion Row */}
+                    {accordianJSX && expandedRows.includes(rowIdx) && (
+                      <TableRow className="table-row rounded-lg mt-2">
+                        <TableCell colSpan={100} className={tableCellCls}>
+                          {/* Render your accordion content here */}
+                          <div
+                            className={`accordion-content ${
+                              expandedRows.includes(rowIdx) ? 'open' : ''
+                            }`}
+                          >
+                            {accordianJSX(rowIdx)}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </>
+                );
+              })
             ) : (
               <TableRow
-                className={`table-row ${rowClass}  disable-animation ${
+                className={`table-row disable-animation ${
                   isBodyTransparent ? 'transparent' : ''
                 }`}
               >

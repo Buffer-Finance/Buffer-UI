@@ -116,7 +116,12 @@ export const TableBackground = styled.div<{
           opacity: 0.46;
         }
         &.highlight {
-          background: var(--bg-4);
+          .table-cell {
+            background: var(--bg-4);
+            &:first-of-type {
+              border-left: 3px solid var(--primary);
+            }
+          }
         }
 
         &.skel {
@@ -164,6 +169,12 @@ export const TableBackground = styled.div<{
           padding: ${({ shouldShowMobile }: { shouldShowMobile: boolean }) =>
             shouldShowMobile ? '6px 10px' : '6px 0px'};
 
+          &.highlight {
+            background: var(--bg-4);
+            &:first-of-type {
+              border-left: 3px solid var(--primary);
+            }
+          }
           &.double-height {
             height: 50px;
           }

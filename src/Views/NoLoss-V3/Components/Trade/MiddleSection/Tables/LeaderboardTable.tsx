@@ -169,9 +169,10 @@ export const LeaderboardTable: React.FC<{
   const UserData = userData &&
     userData.data &&
     userData.rank !== (pages.activePage - 1) * 10 && (
-      <BufferTableRow onClick={() => {}} className="highlight group ">
+      <BufferTableRow onClick={() => {}} className="">
         {createArray(headNameArray.length).map((_, i) => (
           <BufferTableCell
+            className="highlight"
             onClick={() => {
               if (userData.data) {
                 const address = userData.data.stats.user;
@@ -195,6 +196,17 @@ export const LeaderboardTable: React.FC<{
       window.open(`${activeChainExplorer}/address/${address}`);
     }
   }
+  const highlightedRows = useMemo(() => {
+    const activePage = pages.activePage;
+    if (userData === undefined) return [];
+    if (userData.data === undefined) return [];
+    const isUserOnActivePage =
+      userData.rank >= (activePage - 1) * 10 && userData.rank < activePage * 10;
+    if (isUserOnActivePage) {
+      return [userData.rank % 10];
+    }
+    return [];
+  }, [userData, pages.activePage]);
 
   return (
     <BufferTable
@@ -226,6 +238,7 @@ export const LeaderboardTable: React.FC<{
       showOnly={onlyShow}
       doubleHeight={isMobile}
       overflow={false}
+      highlightedRows={highlightedRows}
     />
   );
 };
