@@ -94,7 +94,7 @@ export function getTradeSizeError(
   if (lt(tradeSize || '0', minTradeSize)) {
     error = `Min trade size is ${minTradeSize}`;
   } else if (gt(tradeSize || '0', maxTradeSize)) {
-    error = `Max trade size is ${maxTradeSize}`;
+    error = `Max trade size is ${toFixed(maxTradeSize, 2)}`;
   } else if (
     balanceWithDecimals &&
     gt(tradeSize || '0', divide(balanceWithDecimals, 18) as string)
