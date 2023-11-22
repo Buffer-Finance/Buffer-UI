@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Style = styled.div`
   height: 4rem;
@@ -193,7 +193,7 @@ const Style = styled.div`
   }
   .fullWidth {
     .dropdown_item {
-      justify-content: start !important;
+      justify-content: flex-start !important;
       font-size: 1.4rem;
       padding: 0rem;
       padding: 0.6rem 1rem !important;

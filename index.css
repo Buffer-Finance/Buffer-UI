@@ -3329,7 +3329,7 @@ html .pagination-root {
   width: 100%;
   text-align: center;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   user-select: none;
   transition: all 100ms linear;
@@ -3338,7 +3338,7 @@ html .pagination-root {
   width: 100%;
   text-align: center;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   user-select: none;
   transition: all 100ms linear;
@@ -3347,7 +3347,7 @@ html .pagination-root {
   width: 100%;
   text-align: center;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   user-select: none;
   transition: all 100ms linear;
@@ -3362,7 +3362,7 @@ html .pagination-root {
   line-height: 35px;
   text-align: center;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   font-size: 14px;
   color: #666;
@@ -3378,7 +3378,7 @@ html .pagination-root {
   line-height: 35px;
   text-align: center;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   font-size: 14px;
   color: #6a6a6b;
@@ -3394,7 +3394,7 @@ html .pagination-root {
   line-height: 35px;
   text-align: center;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   font-size: 14px;
   color: #6a6a6b;

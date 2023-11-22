@@ -1,10 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Background = styled.div`
   display: grid;
-  grid-template-areas: "image head" "image desc" "chip chip";
+  grid-template-areas: 'image head' 'image desc' 'chip chip';
   grid-template-rows: repeat(3, fit-content);
-  justify-content: start;
+  justify-content: flex-start;
   width: fit-content;
   /* color: var(--text-1); */
   column-gap: 0.7rem;
