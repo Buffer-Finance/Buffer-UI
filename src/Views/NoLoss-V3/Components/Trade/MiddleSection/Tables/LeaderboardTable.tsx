@@ -117,7 +117,7 @@ export const LeaderboardTable: React.FC<{
         );
       case TableColumn.User:
         return (
-          <div className="flex gap-2">
+          <div className="flex gap-2 whitespace-nowrap">
             {isUser
               ? 'Your Account'
               : getSlicedUserAddress(userData.stats.user, 4)}
@@ -177,25 +177,28 @@ export const LeaderboardTable: React.FC<{
   };
 
   const UserData = userData &&
-    userData.data &&
+    userData.data !== undefined &&
     userData.rank !== (pages.activePage - 1) * 10 && (
       <BufferTableRow onClick={() => {}} className="">
-        {createArray(headNameArray.length).map((_, i) => (
-          <BufferTableCell
-            className="highlight"
-            onClick={() => {
-              if (userData.data) {
-                const address = userData.data.stats.user;
-                openBlockExplorer(address);
-              }
-            }}
-          >
-            {BodyFormatter(0, i, {
-              ...userData.data,
-              rank: userData.rank,
-            })}
-          </BufferTableCell>
-        ))}
+        {isMobile && onlyShow
+          ? onlyShow.map((index) => (
+              <TopDecoratorCell
+                BodyFormatter={BodyFormatter}
+                activeChain={activeChain}
+                index={index}
+                userData={userData}
+                isMobile={isMobile}
+              />
+            ))
+          : createArray(headNameArray.length).map((_, i) => (
+              <TopDecoratorCell
+                BodyFormatter={BodyFormatter}
+                activeChain={activeChain}
+                index={i}
+                userData={userData}
+                isMobile={isMobile}
+              />
+            ))}
       </BufferTableRow>
     );
 
@@ -223,7 +226,7 @@ export const LeaderboardTable: React.FC<{
         if (filteredData !== undefined) {
           const userData = filteredData[row];
           const address = userData.stats.user;
-          openBlockExplorer(address);
+          openBlockExplorer(address, activeChain);
         }
       }}
       widths={['auto']}
@@ -243,5 +246,33 @@ export const LeaderboardTable: React.FC<{
       overflow={false}
       highlightedRows={highlightedRows}
     />
+  );
+};
+
+const TopDecoratorCell: React.FC<{
+  userData: {
+    data: LeaderboardData | undefined;
+    rank: number;
+  };
+  activeChain: Chain | undefined;
+  BodyFormatter: any;
+  index: number;
+  isMobile: boolean;
+}> = ({ userData, activeChain, BodyFormatter, index, isMobile }) => {
+  return (
+    <BufferTableCell
+      className={`highlight ${isMobile ? 'double-height' : ''}`}
+      onClick={() => {
+        if (userData.data) {
+          const address = userData.data.stats.user;
+          openBlockExplorer(address, activeChain);
+        }
+      }}
+    >
+      {BodyFormatter(0, index, {
+        ...userData.data,
+        rank: userData.rank,
+      })}
+    </BufferTableCell>
   );
 };
