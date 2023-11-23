@@ -53,7 +53,7 @@ export const TournamentCardButtons: React.FC<{
 
   // smartAccount.getAccountAddress();
 
-  if (user === undefined || user.userAddress === undefined)
+  if (user === undefined || user.connectedWalletAddress === undefined)
     return (
       <ConnectionRequired className="!text-f14 h-fit bg-blue mt-4 py-2">
         <></>

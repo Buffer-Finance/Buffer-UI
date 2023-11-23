@@ -59,7 +59,13 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       </BlueBtn>
     );
   const config = getNoLossV3Config(activeChain?.id);
-  if (!user || !user.userAddress)
+  if (user && user.isViewOnlyMode)
+    return (
+      <BlueBtn isDisabled onClick={() => {}}>
+        View Only Mode
+      </BlueBtn>
+    );
+  if (!user || !user.connectedWalletAddress)
     return (
       <ConnectionRequired>
         <></>

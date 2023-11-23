@@ -11,6 +11,7 @@ import {
   activeMyAllTabAtom,
   activeTournamentIdAtom,
   tournamentBasedReadCallsReadOnlyAtom,
+  userAtom,
 } from '../../atoms';
 import { ItournamentData } from '../../types';
 import { NoLossV3Timer } from '../NoLossV3Timer';
@@ -28,6 +29,7 @@ export const TradepageTournamentCard: React.FC<{
   const activeMyAllTab = useAtomValue(activeMyAllTabAtom);
   const activeTournamentId = useAtomValue(activeTournamentIdAtom);
   // const setWinPrizeModal = useSetAtom(WinningPirzeModalAtom);
+  const user = useAtomValue(userAtom);
   const { setActiveTournament } = useUpdateActiveTournament();
   const tournamentBasedData = useAtomValue(
     tournamentBasedReadCallsReadOnlyAtom
@@ -165,16 +167,20 @@ export const TradepageTournamentCard: React.FC<{
               ) : (
                 <>
                   <div className="text-3">Balance</div>
-                  {balance ? (
-                    <div>
-                      <Display
-                        data={divide(balance, 18)}
-                        className="text-1 content-start"
-                        precision={2}
-                      />
-                    </div>
+                  {user && user.connectedWalletAddress ? (
+                    balance ? (
+                      <div>
+                        <Display
+                          data={divide(balance, 18)}
+                          className="text-1 content-start"
+                          precision={2}
+                        />
+                      </div>
+                    ) : (
+                      <Skeleton className="!h-[16px] full-width b1200:!w-[100px] lc !transform-none" />
+                    )
                   ) : (
-                    <Skeleton className="!h-[16px] full-width b1200:!w-[100px] lc !transform-none" />
+                    '-'
                   )}
                 </>
               )}
