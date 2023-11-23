@@ -9,6 +9,12 @@
     "compile": "lingui compile --typescript"
   },
   "dependencies": {
+    "@biconomy/account": "^3.1.1",
+    "@biconomy/bundler": "^3.1.1",
+    "@biconomy/common": "^3.1.1",
+    "@biconomy/core-types": "^3.1.1",
+    "@biconomy/modules": "^3.1.1",
+    "@biconomy/paymaster": "^3.1.1",
     "@binance-chain/bsc-connector": "^1.0.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",

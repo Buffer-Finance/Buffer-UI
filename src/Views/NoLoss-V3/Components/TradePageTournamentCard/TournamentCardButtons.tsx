@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { erc20ABI } from 'wagmi';
 import TournamentLeaderboardABI from '../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../ABIs/TournamentManager.json';
+import { useSmartWallet } from '@Hooks/AA/useSmartWallet';
+import { encodeAbiParameters, encodeFunctionData } from 'viem';
 
 export const tournamentButtonStyles =
   '!text-f14 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2';
@@ -39,6 +41,8 @@ export const TournamentCardButtons: React.FC<{
 }> = ({ tournament, activeAllMyTab, tournamentBasedData }) => {
   const activeChain = useAtomValue(activeChainAtom);
   const user = useAtomValue(userAtom);
+  const { smartWallet } = useSmartWallet();
+  console.log(`TournamentCardButtons-user: `, user?.userAddress);
   const [btnLoading, setBtnLoading] = useState(false);
 
   const { writeCall } = useWriteCall();
@@ -109,8 +113,60 @@ export const TournamentCardButtons: React.FC<{
     );
   }
 
-  if (lt(allowance, ticketCost) && secondButton === null) {
-    const approveTournamentManager = () => {
+  if (true) {
+    const approveTournamentManager = async () => {
+      if (!smartWallet) return;
+      console.log(smartWallet);
+      const allowanceTxn = {
+        data: encodeFunctionData({
+          abi: erc20ABI,
+          functionName: 'approve',
+          args: [
+            config.manager,
+            115792089237316195423570985008687907853269984665640564039457584007913129639935n,
+          ],
+        }),
+        to: tournament.tournamentMeta.buyinToken,
+      };
+      const buyPlayTokensTxn = {
+        data: encodeFunctionData({
+          abi: TournamentManagerABI,
+          functionName: 'buyTournamentTokens',
+          args: [tournament.id],
+        }),
+        to: config.manager,
+      };
+      const approveForAllTxn = {
+        data: encodeFunctionData({
+          abi: TournamentManagerABI,
+          functionName: 'setApprovalForAll',
+          args: [config.router, true],
+        }),
+        to: config.manager,
+      };
+
+      const transactions = [allowanceTxn, buyPlayTokensTxn, approveForAllTxn];
+      console.log(`deb 1, TournamentCardButtons-transactions: `, transactions);
+      const userOps = await smartWallet?.buildUserOp(transactions);
+      console.log(`deb 2, TournamentCardButtons-transactions: `, userOps);
+      const userOpResponse = await smartWallet.sendUserOp(userOps);
+
+      console.log(' deb 3 send-txnuserOpHash', userOpResponse);
+      const { receipt } = await userOpResponse.wait(1);
+      console.log(` deb 4  send-txn reciept: `, receipt);
+      // const sessionBuildTxn;
+
+      /*
+ writeCall(
+            config.tournament.manager,
+            tmAbi,
+            () => console.log,
+            'setApprovalForAll',
+            [config.router, true]
+          );
+
+
+
       setBtnLoading(true);
       writeCall(
         tournament.tournamentMeta.buyinToken,
@@ -125,6 +181,7 @@ export const TournamentCardButtons: React.FC<{
           '115792089237316195423570985008687907853269984665640564039457584007913129639935',
         ]
       );
+      */
     };
 
     secondButton = (
@@ -133,25 +190,26 @@ export const TournamentCardButtons: React.FC<{
         isLoading={btnLoading}
         className={tournamentButtonStyles}
       >
-        Approve
+        Hello
       </BufferButton>
     );
-  }
-
-  const buyPlayTokens = () => {
-    setBtnLoading(true);
-    writeCall(
-      config.manager,
-      TournamentManagerABI,
-      (response) => {
-        setBtnLoading(false);
-        console.log(response);
-      },
-      'buyTournamentTokens',
-      [tournament.id]
-    );
-  };
-  if (secondButton === null && tournament.state.toLowerCase() !== 'closed') {
+  } else if (
+    secondButton === null &&
+    tournament.state.toLowerCase() !== 'closed'
+  ) {
+    const buyPlayTokens = () => {
+      setBtnLoading(true);
+      writeCall(
+        config.manager,
+        TournamentManagerABI,
+        (response) => {
+          setBtnLoading(false);
+          console.log(response);
+        },
+        'buyTournamentTokens',
+        [tournament.id]
+      );
+    };
     const hasUserBoughtMaxTickets =
       tournament.userBoughtTickets >=
       tournament.tournamentConditions.maxBuyinsPerWallet;
