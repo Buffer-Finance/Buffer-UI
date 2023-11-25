@@ -25,6 +25,7 @@ import { AllTrades } from '@Views/AllTrades';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
+import { ContractList } from '@Views/ContractList';
 import { DashboardV2 } from '@Views/DashboardV2';
 import IbfrFaucet from '@Views/Faucet';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
@@ -138,6 +139,7 @@ const AppRoutes = () => {
             />
           }
         />
+        <Route path="contracts" element={<ContractList />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
