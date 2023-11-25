@@ -2,6 +2,7 @@ import SafeProvider from '@safe-global/safe-apps-react-sdk';
 import { atom, useAtomValue } from 'jotai';
 import { GrantRole } from 'src/Admin/GrantRole';
 import { AdminActiveTabAtom, AdminTabs } from './AdminTabs';
+import { CircuitBreaker } from './CircuitBreaker';
 import { Options } from './Options';
 import { SettlementFeeConfigs } from './SettlementFeeConfigs';
 import { UpdateDB } from './UpdateDB';
@@ -28,7 +29,7 @@ const AdminConfig: React.FC<any> = ({}) => {
   } else if (activeTab.toLowerCase() === 'settlement fee') {
     tab = <SettlementFeeConfigs />;
   } else if (activeTab.toLowerCase() === 'circuit breaker') {
-    tab = <div>Circuit Breaker</div>;
+    tab = <CircuitBreaker />;
   } else if (activeTab.toLowerCase() === 'role manager') {
     tab = <GrantRole />;
   } else if (activeTab.toLowerCase() === 'update db') {
