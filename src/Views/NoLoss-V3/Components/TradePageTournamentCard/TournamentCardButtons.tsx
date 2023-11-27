@@ -192,7 +192,7 @@ export const TournamentCardButtons: React.FC<{
         console.log('sessionKeyEOA', sessionKeyEOA);
         // BREWARE JUST FOR DEMO: update local storage with session key
         setSessionSigner(smartWalletAddress, sessionSigner.privateKey);
-
+        console.log('setting-pk', sessionSigner.privateKey);
         // generate sessionModule
         const sessionModule = await SessionKeyManagerModule.create({
           moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
@@ -201,12 +201,10 @@ export const TournamentCardButtons: React.FC<{
 
         // cretae session key data
         const sessionKeyData = defaultAbiCoder.encode(
-          ['address', 'address', 'address', 'uint256'],
+          ['address', 'address'],
           [
             sessionKeyEOA,
-            '0xdA5289fCAAF71d52a80A254da614a192b693e977', // erc20 token address
-            '0x0CB8D067bb7bA1D44edc95F96A86196C6C7adFA6', // receiver address
-            ethers.utils.parseUnits('5'.toString(), 6).toHexString(), // 50 usdc amount
+            SessionValidationModuleAddress, // erc20 token address
           ]
         );
         console.log(`1Session-sessionKeyData: `, sessionKeyData);
@@ -232,12 +230,18 @@ export const TournamentCardButtons: React.FC<{
         const transactionArray = [];
 
         // -----> enableModule session manager module
-        const enableModuleTrx = await smartWallet?.getEnableModuleData(
-          DEFAULT_SESSION_KEY_MANAGER_MODULE
-        );
-        transactionArray.push(enableModuleTrx);
+        if (!isSessionKeyModuleEnabled) {
+          const enableModuleTrx = await smartWallet?.getEnableModuleData(
+            DEFAULT_SESSION_KEY_MANAGER_MODULE
+          );
+          transactionArray.push(enableModuleTrx);
+        }
 
         transactionArray.push(setSessiontrx);
+        console.log(
+          `TournamentCardButtons-transactionArray: `,
+          transactionArray
+        );
         return transactionArray;
       }
       const sessionCreationTxns = await createSessionTxnGiver();
@@ -256,14 +260,6 @@ export const TournamentCardButtons: React.FC<{
       const { receipt } = await userOpResponse.wait(1);
       console.log(` deb 4  send-txn reciept: `, receipt);
     };
-    const buySessionedTrade = () => {
-      if (!smartWalletAddress) return;
-      const sessionSignerFromStorage = getSessionSigner(smartWalletAddress);
-      console.log(
-        `TournamentCardButtons-sessionSignerFromStorage: `,
-        sessionSignerFromStorage
-      );
-    };
 
     secondButton = (
       <>
@@ -272,15 +268,7 @@ export const TournamentCardButtons: React.FC<{
           isLoading={btnLoading}
           className={tournamentButtonStyles}
         >
-          {isSessionKeyModuleEnabled
-            ? 'Session Enabled'
-            : 'session not enabled'}
-        </BufferButton>
-        <BufferButton
-          onClick={buySessionedTrade}
-          className={tournamentButtonStyles}
-        >
-          Transfer
+          Buy Tickets
         </BufferButton>
       </>
     );

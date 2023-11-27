@@ -36,7 +36,7 @@ export const setSessionSigner = (
 
 // yet to deploy
 export const SessionValidationModuleAddress =
-  '0x903cf4aE3e26003D2f2c463897D6d3407ad7fC6e';
+  '0x6140708e157f695c77a00a47Ef112aA0913F76B5';
 const useSmartWallet = () => {
   const setSmartWallet = useSetAtom(smartWalletAtom);
   const smartWallet = useAtomValue(smartWalletAtom);
