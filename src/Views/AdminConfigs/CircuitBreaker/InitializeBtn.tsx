@@ -4,9 +4,9 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import CircuitBreakerABI from '@Views/TradePage/ABIs/CircuitBreakerABI.json';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
-import { poolAPRsAtom, thresholdsAtom } from './atoms';
+import { poolAPRsAtom, thresholdsAtom, txnSuccessAtom } from './atoms';
 
 export const InitializeBtn: React.FC<{}> = ({}) => {
   const { activeChain } = useActiveChain();
@@ -16,10 +16,12 @@ export const InitializeBtn: React.FC<{}> = ({}) => {
   const [loading, setLoading] = useState(false);
   const thresholds = useAtomValue(thresholdsAtom);
   const poolAprs = useAtomValue(poolAPRsAtom);
+  const setTxnStatus = useSetAtom(txnSuccessAtom);
 
   async function handleInitialize() {
     try {
       await writeCall(() => {}, 'initialize', [[], poolAprs, thresholds]);
+      setTxnStatus(true);
     } catch (e) {
       toastify({
         type: 'error',

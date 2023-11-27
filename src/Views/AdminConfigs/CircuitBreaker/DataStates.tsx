@@ -1,6 +1,8 @@
 import BufferCheckbox from '@Views/Common/BufferCheckbox';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
+import { txnSuccessAtom } from './atoms';
 
 export const DataStates: React.FC<{
   onSelectCheckBox: (newState: string) => void;
@@ -11,7 +13,13 @@ export const DataStates: React.FC<{
   const [edit, setEdit] = useState(false);
   const [threshold, setThreshold] = useState(defaultState);
   const [add, setAdd] = useState(false);
-  //   const setThresholds = useSetAtom(thresholdsAtom);
+  const txnStatus = useAtomValue(txnSuccessAtom);
+
+  useEffect(() => {
+    if (txnStatus) {
+      handleReset();
+    }
+  }, [txnStatus]);
 
   function handleReset() {
     setThreshold(defaultState);
