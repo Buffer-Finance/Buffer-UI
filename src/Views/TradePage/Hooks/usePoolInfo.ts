@@ -1,7 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useCallback } from 'react';
 import { appConfig } from '../config';
 import { poolInfoType } from '../type';
-import { useCallback } from 'react';
 
 export const usePoolInfo = () => {
   const { activeChain } = useActiveChain();
@@ -12,7 +12,7 @@ export const usePoolInfo = () => {
     (pool: string): poolInfoType => {
       return pools[pool as keyof typeof pools];
     },
-    [pools]
+    [pools, activeChain]
   );
 
   return { getPoolInfo };

@@ -60,6 +60,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     if (!address) {
       return toastify({ type: 'error', msg: 'Please connect your wallet!' });
     }
+    console.log(`useWriteCall: `, methodName, methodArgs);
     dispatch({ type: 'SET_TXN_LOADING', payload: 1 });
     toastify({
       id: contractAddress,
