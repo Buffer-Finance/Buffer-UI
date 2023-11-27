@@ -10,6 +10,7 @@ import { useAccount, useWalletClient } from 'wagmi';
 import { useEffect } from 'react';
 import { MultiChainValidationModule } from '@biconomy/modules';
 import { walletClientToSigner } from '@Utils/Web3/walletClientToProvider';
+import { arbitrumGoerli } from '@wagmi/chains';
 const smartWalletAtom = atom<BiconomySmartAccountV2 | null>(null);
 const smartWalletAddressAtom = atom<`0x${string}` | null>(null);
 const bundler: IBundler = new Bundler({
@@ -22,6 +23,20 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/80001/pKLSky7Jb.9370f1ef-de34-4a90-afcf-65c962f34ada',
 });
+
+export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
+  return window.localStorage.getItem(smartWalletAddress + 'buffer-signer');
+};
+export const setSessionSigner = (
+  smartWalletAddress: `0x${string}`,
+  pk: string
+) => {
+  return window.localStorage.setItem(smartWalletAddress + 'buffer-signer', pk);
+};
+
+// yet to deploy
+export const SessionValidationModuleAddress =
+  '0x903cf4aE3e26003D2f2c463897D6d3407ad7fC6e';
 const useSmartWallet = () => {
   const setSmartWallet = useSetAtom(smartWalletAtom);
   const smartWallet = useAtomValue(smartWalletAtom);

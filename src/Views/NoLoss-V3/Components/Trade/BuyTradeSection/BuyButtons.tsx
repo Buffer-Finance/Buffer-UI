@@ -29,7 +29,17 @@ import TournamentLeaderboardABI from '../../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../../ABIs/TournamentManager.json';
 import { getDurationError } from './TimeSelector/TimePicker';
 import { getTradeSizeError } from './TradeSizeSelector';
-
+import { encodeFunctionData } from 'viem';
+import {
+  SessionValidationModuleAddress,
+  getSessionSigner,
+  useSmartWallet,
+} from '@Hooks/AA/useSmartWallet';
+import { ethers } from 'ethers';
+import {
+  SessionKeyManagerModule,
+  DEFAULT_SESSION_KEY_MANAGER_MODULE,
+} from '@biconomy/modules';
 export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   activeMarket,
 }) => {
@@ -48,7 +58,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   >('none');
   const activeMarketData = useAtomValue(activeMarketDataAtom);
   const isIncreationWindow = useIsMarketInCreationWindow();
-
+  let { smartWallet, smartWalletAddress } = useSmartWallet();
   if (!activeChain)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
@@ -191,6 +201,10 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   async function buyTrade(isAbove: boolean) {
     try {
       const userBalance = readCallResults?.activeTournamentBalance;
+      if (!smartWalletAddress) return;
+      const sessionSingerKey = getSessionSigner(smartWalletAddress);
+      if (!sessionSingerKey || !smartWalletAddress || !smartWallet) return;
+
       if (userBalance === undefined)
         throw new Error('User balance is undefined');
       const tradeSizeError = getTradeSizeError(
@@ -225,61 +239,115 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         throw new Error('Trade time exceeds tournament ending time');
 
       setLoadingState(isAbove ? 'up' : 'down');
-      await writeCall(
-        config.router,
-        RouterABI,
-        (response) => {
-          if (response !== undefined) {
-            const content = (
-              <div className="flex flex-col gap-y-2 text-f12 ">
-                <div className="nowrap font-[600]">Trade order placed</div>
-                <div className="flex items-center">
-                  {activeMarket.chartData.token0 +
-                    '-' +
-                    activeMarket.chartData.token1}
-                  &nbsp;&nbsp;
-                  <span className="!text-3">to go</span>&nbsp;
-                  {isAbove ? (
-                    <>
-                      <UpIcon className="text-green scale-125" /> &nbsp;Higher
-                    </>
-                  ) : (
-                    <>
-                      <DownIcon className="text-red scale-125" />
-                      &nbsp; Lower
-                    </>
-                  )}
-                </div>
-                <div>
-                  <span>
-                    <span className="!text-3">Total amount:</span>
-                    {userInput}&nbsp;
-                  </span>
-                </div>
-              </div>
-            );
-            toastify({
-              price,
-              type: 'success',
-              timings: 20,
-              body: null,
-              msg: content,
-            });
-          }
-          console.log(response);
+      if (!smartWalletAddress) return;
+      const args = [
+        toFixed(multiply(userInput, 18), 0),
+        currentTime.seconds,
+        isAbove,
+        activeMarket.address,
+        toFixed(multiply(('' + price).toString(), 8), 0),
+        toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+        0,
+        activeTournamentData.id,
+      ];
+      const encodedFunctionData = encodeFunctionData({
+        abi: RouterABI,
+        functionName: 'initiateTrade',
+        args,
+      });
+      console.log(`BuyButtons-sessionSingerKey: `, sessionSingerKey);
+      console.log('no loss option buying args', encodedFunctionData);
+      const sessionSigner = new ethers.Wallet(sessionSingerKey);
+      const sessionModule = await SessionKeyManagerModule.create({
+        moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
+        smartAccountAddress: smartWalletAddress,
+      });
+      console.log(`deb1 sesionmodule created: `, sessionModule);
+      smartWallet = smartWallet.setActiveValidationModule(sessionModule);
+      const tx1 = {
+        to: config.router,
+        data: encodedFunctionData,
+      };
+      console.log(`tx1: `, tx1);
+
+      let userOp = await smartWallet?.buildUserOp([tx1], {
+        overrides: {
+          // signature: "0x0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000456b395c4e107e0302553b90d1ef4a32e9000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000db3d753a1da5a6074a9f74f39a0a779d3300000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000000001800000000000000000000000000000000000000000000000000000000000000080000000000000000000000000bfe121a6dcf92c49f6c2ebd4f306ba0ba0ab6f1c000000000000000000000000da5289fcaaf71d52a80a254da614a192b693e97700000000000000000000000042138576848e839827585a3539305774d36b96020000000000000000000000000000000000000000000000000000000002faf08000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041feefc797ef9e9d8a6a41266a85ddf5f85c8f2a3d2654b10b415d348b150dabe82d34002240162ed7f6b7ffbc40162b10e62c3e35175975e43659654697caebfe1c00000000000000000000000000000000000000000000000000000000000000"
+          // callGasLimit: 2000000, // only if undeployed account
+          // verificationGasLimit: 700000
         },
-        'initiateTrade',
-        [
-          toFixed(multiply(userInput, 18), 0),
-          currentTime.seconds,
-          isAbove,
-          activeMarket.address,
-          toFixed(multiply(('' + price).toString(), 8), 0),
-          toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
-          0,
-          activeTournamentData.id,
-        ]
-      );
+        skipBundlerGasEstimation: false,
+        params: {
+          sessionSigner: sessionSigner,
+          sessionValidationModule: SessionValidationModuleAddress,
+        },
+      });
+      console.log('UserOp', { userOp });
+
+      const userOpResponse = await smartWallet?.sendUserOp(userOp, {
+        sessionSigner: sessionSigner,
+        sessionValidationModule: SessionValidationModuleAddress,
+      });
+      console.log('userOpHash', { userOpResponse });
+      //@ts-ignore
+      const { receipt } = await userOpResponse.wait(1);
+      console.log('txHash', receipt.transactionHash);
+
+      // await writeCall(
+      //   config.router,
+      //   RouterABI,
+      //   (response) => {
+      //     if (response !== undefined) {
+      //       const content = (
+      //         <div className="flex flex-col gap-y-2 text-f12 ">
+      //           <div className="nowrap font-[600]">Trade order placed</div>
+      //           <div className="flex items-center">
+      //             {activeMarket.chartData.token0 +
+      //               '-' +
+      //               activeMarket.chartData.token1}
+      //             &nbsp;&nbsp;
+      //             <span className="!text-3">to go</span>&nbsp;
+      //             {isAbove ? (
+      //               <>
+      //                 <UpIcon className="text-green scale-125" /> &nbsp;Higher
+      //               </>
+      //             ) : (
+      //               <>
+      //                 <DownIcon className="text-red scale-125" />
+      //                 &nbsp; Lower
+      //               </>
+      //             )}
+      //           </div>
+      //           <div>
+      //             <span>
+      //               <span className="!text-3">Total amount:</span>
+      //               {userInput}&nbsp;
+      //             </span>
+      //           </div>
+      //         </div>
+      //       );
+      //       toastify({
+      //         price,
+      //         type: 'success',
+      //         timings: 20,
+      //         body: null,
+      //         msg: content,
+      //       });
+      //     }
+      //     console.log(response);
+      //   },
+      //   'initiateTrade',
+      //   [
+      //     toFixed(multiply(userInput, 18), 0),
+      //     currentTime.seconds,
+      //     isAbove,
+      //     activeMarket.address,
+      //     toFixed(multiply(('' + price).toString(), 8), 0),
+      //     toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+      //     0,
+      //     activeTournamentData.id,
+      //   ]
+      // );
     } catch (e) {
       toastify({
         msg: (e as Error).message,
