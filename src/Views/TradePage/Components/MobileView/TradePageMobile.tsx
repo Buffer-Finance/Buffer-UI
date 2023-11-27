@@ -1,6 +1,4 @@
-import { priceAtom } from '@Hooks/usePrice';
 import MemoTimeIcon from '@SVG/Elements/TimeIcon';
-import { getLastbar } from '@TV/useDataFeed';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
@@ -26,8 +24,6 @@ const TradePageMobile: React.FC<any> = ({}) => {
   const { poolDetails, switchPool } = useSwitchPool();
   const tradeType = useAtomValue(tradeTypeAtom);
   const setTradeType = useSetAtom(tradeTypeAtom);
-
-  const marketPrice = useAtomValue(priceAtom);
   const amount = useAtomValue(tradeSizeAtom);
   const { activeMarket } = useActiveMarket();
   const { data: approvalExpanded } = useApprvalAmount();
@@ -41,10 +37,6 @@ const TradePageMobile: React.FC<any> = ({}) => {
       />
     );
   const decimals = poolDetails.decimals;
-
-  const activeAssetPrice = getLastbar(marketPrice, {
-    tv_id: activeMarket.tv_id,
-  });
   const tradeToken = poolDetails.token;
 
   const allowance = approvalExpanded?.allowance
@@ -83,7 +75,6 @@ const TradePageMobile: React.FC<any> = ({}) => {
       />
       <BuyButtons
         isApprovalLocked={approvalExpanded?.is_locked}
-        activeAssetPrice={activeAssetPrice}
         allowance={allowance}
         amount={amount.toString()}
         center={

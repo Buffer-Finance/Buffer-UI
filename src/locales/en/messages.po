@@ -50,12 +50,12 @@ msgid "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 msgstr "<0>Min trade size is {minTradeSize} {tokenName}</0>"
 
 #: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:54
-msgid "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
-msgstr "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
+#~ msgid "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
+#~ msgstr "<0>Slippage rate must be less then {MAX_SLIPPAGE}%</0>"
 
 #: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageInput.tsx:61
-msgid "<0>Slippage rate must be less then {MIN_SLIPPAGE}%</0>"
-msgstr "<0>Slippage rate must be less then {MIN_SLIPPAGE}%</0>"
+#~ msgid "<0>Slippage rate must be less then {MIN_SLIPPAGE}%</0>"
+#~ msgstr "<0>Slippage rate must be less then {MIN_SLIPPAGE}%</0>"
 
 #: src/Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput.tsx:120
 msgid "<0>You don't have enough {tokenName}. <1/> </0>"
@@ -109,7 +109,7 @@ msgstr "Partial fill"
 msgid "Premium Features"
 msgstr "Premium Features"
 
-#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:62
+#: src/Views/TradePage/Views/BuyTrade/CurrentPrice.tsx:69
 msgid "Price"
 msgstr "Price"
 
@@ -137,11 +137,11 @@ msgstr "Show share pop up"
 msgid "Show trade size"
 msgstr "Show trade size"
 
-#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/index.tsx:16
+#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/index.tsx:17
 msgid "Slippage tolerance"
 msgstr "Slippage tolerance"
 
-#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/index.tsx:20
+#: src/Views/TradePage/Views/Settings/TradeSettings/Slippage/index.tsx:21
 msgid "Slippage tolerance is the %age of price fluctuation you can tolerate before your trade is opened"
 msgstr "Slippage tolerance is the %age of price fluctuation you can tolerate before your trade is opened"
 
@@ -149,11 +149,11 @@ msgstr "Slippage tolerance is the %age of price fluctuation you can tolerate bef
 msgid "Time"
 msgstr "Time"
 
-#: src/Views/TradePage/Views/Settings/TradeSettings/index.tsx:37
+#: src/Views/TradePage/Views/Settings/TradeSettings/index.tsx:38
 msgid "Trade Settings"
 msgstr "Trade Settings"
 
-#: src/Views/TradePage/Views/Markets/AssetSelectorDD/PoolRadio.tsx:20
+#: src/Views/TradePage/Views/Markets/AssetSelectorDD/PoolRadio.tsx:43
 msgid "Trading Asset"
 msgstr "Trading Asset"
 

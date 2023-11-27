@@ -37,7 +37,7 @@ export const BuyButtons = ({
 
   const { activeMarket } = useActiveMarket();
   const activeAssetPrice = getLastbar(marketPrice, {
-    tv_id: activeMarket.tv_id,
+    tv_id: activeMarket?.tv_id,
   });
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
