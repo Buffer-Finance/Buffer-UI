@@ -1,31 +1,30 @@
+import {
+  SessionValidationModuleAddress,
+  setSessionSigner,
+  useSmartWallet,
+} from '@Hooks/AA/useSmartWallet';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { divide, lt } from '@Utils/NumString/stringArithmatics';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BufferButton } from '@Views/Common/V2-Button';
 import { activeChainAtom, userAtom } from '@Views/NoLoss-V3/atoms';
 import { getNoLossV3Config } from '@Views/NoLoss-V3/helpers/getNolossV3Config';
 import { ItournamentData } from '@Views/NoLoss-V3/types';
+import {
+  DEFAULT_SESSION_KEY_MANAGER_MODULE,
+  SessionKeyManagerModule,
+} from '@biconomy/modules';
 import { Skeleton } from '@mui/material';
+import { ethers } from 'ethers';
+import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
+import { encodeFunctionData } from 'viem';
 import { erc20ABI } from 'wagmi';
 import TournamentLeaderboardABI from '../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../ABIs/TournamentManager.json';
-import {
-  SessionValidationModuleAddress,
-  getSessionSigner,
-  setSessionSigner,
-  useSmartWallet,
-} from '@Hooks/AA/useSmartWallet';
-import { encodeAbiParameters, encodeFunctionData } from 'viem';
-import {
-  SessionKeyManagerModule,
-  DEFAULT_SESSION_KEY_MANAGER_MODULE,
-} from '@biconomy/modules';
-import { ethers } from 'ethers';
-import { defaultAbiCoder } from 'ethers/lib/utils';
 export const tournamentButtonStyles =
   '!text-f14 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2';
 
@@ -150,9 +149,7 @@ export const TournamentCardButtons: React.FC<{
         {alreadClaimed ? 'Already Claimed' : 'Claim'}
       </BufferButton>
     );
-  }
-
-  if (true) {
+  } else {
     const approveTournamentManager = async () => {
       if (!smartWallet) return;
       console.log(smartWallet);
@@ -261,6 +258,13 @@ export const TournamentCardButtons: React.FC<{
       console.log(` deb 4  send-txn reciept: `, receipt);
     };
 
+    const hasUserBoughtMaxTickets =
+      tournament.userBoughtTickets >=
+      tournament.tournamentConditions.maxBuyinsPerWallet;
+    const maximumparticipantsReached =
+      parseInt(tournament.tournamentLeaderboard.userCount) >=
+      parseInt(tournament.tournamentConditions.maxParticipants);
+
     secondButton = (
       <>
         <BufferButton
@@ -268,57 +272,71 @@ export const TournamentCardButtons: React.FC<{
           isLoading={btnLoading}
           className={tournamentButtonStyles}
         >
-          Buy Tickets
+          {maximumparticipantsReached ? (
+            'Sold Out'
+          ) : hasUserBoughtMaxTickets ? (
+            'Max bought'
+          ) : (
+            <>
+              {+tournament.userBoughtTickets > 0 ? 'Re-Buy' : 'Entry'}
+              <Display
+                data={ticketCost}
+                unit={tournament.buyinTokenSymbol}
+                precision={0}
+              />
+            </>
+          )}
         </BufferButton>
       </>
     );
-  } else if (
-    secondButton === null &&
-    tournament.state.toLowerCase() !== 'closed'
-  ) {
-    const buyPlayTokens = () => {
-      setBtnLoading(true);
-      writeCall(
-        config.manager,
-        TournamentManagerABI,
-        (response) => {
-          setBtnLoading(false);
-          console.log(response);
-        },
-        'buyTournamentTokens',
-        [tournament.id]
-      );
-    };
-    const hasUserBoughtMaxTickets =
-      tournament.userBoughtTickets >=
-      tournament.tournamentConditions.maxBuyinsPerWallet;
-    const maximumparticipantsReached =
-      parseInt(tournament.tournamentLeaderboard.userCount) >=
-      parseInt(tournament.tournamentConditions.maxParticipants);
-    secondButton = (
-      <BufferButton
-        className={tournamentButtonStyles}
-        onClick={buyPlayTokens}
-        isLoading={btnLoading}
-        isDisabled={hasUserBoughtMaxTickets || maximumparticipantsReached}
-      >
-        {maximumparticipantsReached ? (
-          'Sold Out'
-        ) : hasUserBoughtMaxTickets ? (
-          'Max bought'
-        ) : (
-          <>
-            {+tournament.userBoughtTickets > 0 ? 'Re-Buy' : 'Entry'}
-            <Display
-              data={ticketCost}
-              unit={tournament.buyinTokenSymbol}
-              precision={0}
-            />
-          </>
-        )}
-      </BufferButton>
-    );
   }
+  // else if (
+  //   secondButton === null &&
+  //   tournament.state.toLowerCase() !== 'closed'
+  // ) {
+  //   const buyPlayTokens = () => {
+  //     setBtnLoading(true);
+  //     writeCall(
+  //       config.manager,
+  //       TournamentManagerABI,
+  //       (response) => {
+  //         setBtnLoading(false);
+  //         console.log(response);
+  //       },
+  //       'buyTournamentTokens',
+  //       [tournament.id]
+  //     );
+  //   };
+  // const hasUserBoughtMaxTickets =
+  //   tournament.userBoughtTickets >=
+  //   tournament.tournamentConditions.maxBuyinsPerWallet;
+  // const maximumparticipantsReached =
+  //   parseInt(tournament.tournamentLeaderboard.userCount) >=
+  //   parseInt(tournament.tournamentConditions.maxParticipants);
+  //   secondButton = (
+  //     <BufferButton
+  //       className={tournamentButtonStyles}
+  //       onClick={buyPlayTokens}
+  //       isLoading={btnLoading}
+  //       isDisabled={hasUserBoughtMaxTickets || maximumparticipantsReached}
+  //     >
+  // {maximumparticipantsReached ? (
+  //   'Sold Out'
+  // ) : hasUserBoughtMaxTickets ? (
+  //   'Max bought'
+  // ) : (
+  //   <>
+  //     {+tournament.userBoughtTickets > 0 ? 'Re-Buy' : 'Entry'}
+  //     <Display
+  //       data={ticketCost}
+  //       unit={tournament.buyinTokenSymbol}
+  //       precision={0}
+  //     />
+  //   </>
+  // )}
+  //     </BufferButton>
+  //   );
+  // }
 
   return (
     <div className="flex b1200:flex-col items-center justify-center gap-[5px] mt-4">
