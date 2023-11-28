@@ -6,7 +6,7 @@ export const config = {
     router: '0xEE4FfF95FcBc7e7DcfF5DE21b8a6AA4C13322e00',
     leaderboard: '0x1DFf6109BCB68a2D020530aE5eA1b4CfD0562CFB',
     manager: '0xbe2781CcB9099E2D7797Da51c2F51B56436A7c07',
-    tournament_reader: '0xa6De8DbF4001644784dd9640f08f8027fF3CFa6E',
+    tournament_reader: '0x4BC8a8550F410d2eA38F5bf135e5b0F3Dfc4aC68',
     creation_window: '0xFd9B6b168b60A31b75b15C7d26eA26d5721Bb862',
   },
 };

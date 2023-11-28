@@ -214,6 +214,11 @@
             "internalType": "uint256[]",
             "name": "userTicketCount",
             "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "userReward",
+            "type": "uint256[]"
           }
         ],
         "internalType": "struct ITournamentReader.UserTournamentData",

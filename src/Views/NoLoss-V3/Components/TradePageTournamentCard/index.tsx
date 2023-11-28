@@ -35,7 +35,7 @@ export const TradepageTournamentCard: React.FC<{
   const balance = tournamentBasedData.result?.buyInTokenBalances?.find(
     (item) => item.id.split(',')[1] === tournament.id
   )?.balance;
-
+  const isTournamentClosed = tournament.state.toLowerCase() === 'closed';
   return (
     <div
       onClick={() => {
@@ -77,7 +77,7 @@ export const TradepageTournamentCard: React.FC<{
               ? tournament.tournamentMeta.close
               : tournament.tournamentMeta.start
           }
-          isClosed={tournament.state.toLowerCase() === 'closed'}
+          isClosed={isTournamentClosed}
           header={
             tournament.state.toLowerCase() === 'upcoming'
               ? 'Starts in'
@@ -149,36 +149,35 @@ export const TradepageTournamentCard: React.FC<{
               </NumberTooltip>
             </div>
             <div className="flex-col text-f14 items-start">
-              {/* {activeMyAllTab === 'all' ? (
+              {isTournamentClosed ? (
                 <>
-                  <div className="text-3">Mint Amount</div>
+                  <div className="text-3">Reward</div>
+
                   <div>
                     <Display
-                      data={divide(
-                        tournament.tournamentMeta.playTokenMintAmount,
-                        18
-                      )}
+                      data={divide(tournament.userReward, 6)}
+                      unit={tournament.rewardTokenSymbol}
                       className="text-1 content-start"
                       precision={2}
                     />
                   </div>
                 </>
-              ) : ( */}
-              <>
-                <div className="text-3">Balance</div>
-                {balance ? (
-                  <div>
-                    <Display
-                      data={divide(balance, 18)}
-                      className="text-1 content-start"
-                      precision={2}
-                    />
-                  </div>
-                ) : (
-                  <Skeleton className="!h-[16px] full-width b1200:!w-[100px] lc !transform-none" />
-                )}
-              </>
-              {/* )} */}
+              ) : (
+                <>
+                  <div className="text-3">Balance</div>
+                  {balance ? (
+                    <div>
+                      <Display
+                        data={divide(balance, 18)}
+                        className="text-1 content-start"
+                        precision={2}
+                      />
+                    </div>
+                  ) : (
+                    <Skeleton className="!h-[16px] full-width b1200:!w-[100px] lc !transform-none" />
+                  )}
+                </>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-start mt-4 gap-4">

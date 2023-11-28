@@ -1,6 +1,6 @@
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { divide, lt } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BufferButton } from '@Views/Common/V2-Button';
@@ -94,7 +94,11 @@ export const TournamentCardButtons: React.FC<{
     );
   }
 
-  if (tournament.state.toLowerCase() === 'closed' && activeAllMyTab === 'my') {
+  if (
+    tournament.state.toLowerCase() === 'closed' &&
+    activeAllMyTab === 'my' &&
+    gt(tournament.userReward, '0')
+  ) {
     const alreadClaimed = tournament.hasUserClaimed;
 
     secondButton = (

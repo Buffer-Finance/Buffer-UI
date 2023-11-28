@@ -3,7 +3,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { toFixed } from '@Utils/NumString';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
 import { useIsMarketInCreationWindow } from '@Views/NoLoss-V3/Hooks/useIsMarketInCreationWindow';
@@ -97,6 +97,9 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
     );
 
   if (activeTournamentData.data?.state.toLowerCase() === 'closed') {
+    if (gt(activeTournamentData.data.userReward, '0')) {
+      return <></>;
+    }
     async function handleClaim() {
       setLoadingState('claim');
       await writeCall(
