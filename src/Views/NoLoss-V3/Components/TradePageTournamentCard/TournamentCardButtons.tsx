@@ -12,27 +12,13 @@ import {
 } from '@Views/NoLoss-V3/atoms';
 import { getNoLossV3Config } from '@Views/NoLoss-V3/helpers/getNolossV3Config';
 import { ItournamentData } from '@Views/NoLoss-V3/types';
-import {
-  IHybridPaymaster,
-  PaymasterMode,
-  SponsorUserOperationDto,
-} from '@biconomy/paymaster';
-import {
-  BatchedSessionRouterModule,
-  DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
-  DEFAULT_SESSION_KEY_MANAGER_MODULE,
-  SessionKeyManagerModule,
-} from '@biconomy/modules';
 import { Skeleton } from '@mui/material';
-import { ethers } from 'ethers';
-import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useAtomValue } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { encodeFunctionData } from 'viem';
 import { erc20ABI, useAccount } from 'wagmi';
 import TournamentLeaderboardABI from '../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../ABIs/TournamentManager.json';
-import { useUserAccount } from '@Hooks/useUserAccount';
 export const tournamentButtonStyles =
   '!text-f14 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2 ';
 
@@ -123,7 +109,11 @@ export const TournamentCardButtons: React.FC<{
     divide(allowance, tournament.buyinTokenDecimals)!,
     ticketCost
   );
-  if (tournament.state.toLowerCase() === 'closed' && activeAllMyTab === 'my') {
+  if (
+    tournament.state.toLowerCase() === 'closed' &&
+    activeAllMyTab === 'my' &&
+    gt(tournament.userReward, '0')
+  ) {
     const alreadClaimed = tournament.hasUserClaimed;
 
     secondButton = (

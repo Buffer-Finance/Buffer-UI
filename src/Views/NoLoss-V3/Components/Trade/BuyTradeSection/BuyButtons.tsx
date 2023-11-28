@@ -101,6 +101,9 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
     );
 
   if (activeTournamentData.data?.state.toLowerCase() === 'closed') {
+    if (gt(activeTournamentData.data.userReward, '0')) {
+      return <></>;
+    }
     async function handleClaim() {
       setLoadingState('claim');
       await writeCall(

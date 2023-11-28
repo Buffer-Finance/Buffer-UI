@@ -1,6 +1,7 @@
 import { getCallId } from '@Utils/Contract/multiContract';
 import { useCall2Data } from '@Utils/useReadCall';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect } from 'react';
 import TournamentReaderABI from '../ABIs/TournamentReader.json';
 import {
   activeChainAtom,
@@ -79,39 +80,43 @@ export const useAllTournamentData = () => {
       throw error;
     }
 
-    if (!data) return;
-
-    Object.entries(data).forEach(([key, value]) => {
-      if (key.includes('bulkFetchTournaments')) {
-        if (value[0] !== undefined) {
-          const tournamentIds = key.split('bulkFetchTournaments')[1].split(',');
-          tournamentIds.forEach((tournamentId, index) => {
-            setTournaments((prvData) => {
-              return { ...prvData, [tournamentId]: value[0][index] };
+    useEffect(() => {
+      if (!data) return;
+      Object.entries(data).forEach(([key, value]) => {
+        if (key.includes('bulkFetchTournaments')) {
+          if (value[0] !== undefined) {
+            const tournamentIds = key
+              .split('bulkFetchTournaments')[1]
+              .split(',');
+            tournamentIds.forEach((tournamentId, index) => {
+              setTournaments((prvData) => {
+                return { ...prvData, [tournamentId]: value[0][index] };
+              });
             });
-          });
-        }
-      } else if (key.includes('bulkFetchUserTournaments')) {
-        if (value[0] !== undefined) {
-          const tournamentIds = key
-            .split('bulkFetchUserTournaments')[1]
-            .split(',');
-          tournamentIds.forEach((tournamentId, index) => {
-            setTournaments((prvData) => {
-              return {
-                ...prvData,
-                [tournamentId]: {
-                  ...prvData[tournamentId],
-                  hasUserClaimed: value[0].hasUserClaimed[index],
-                  isUserEligible: value[0].hasUserParticipated[index],
-                  userBoughtTickets: value[0].userTicketCount[index],
-                },
-              };
+          }
+        } else if (key.includes('bulkFetchUserTournaments')) {
+          if (value[0] !== undefined) {
+            const tournamentIds = key
+              .split('bulkFetchUserTournaments')[1]
+              .split(',');
+            tournamentIds.forEach((tournamentId, index) => {
+              setTournaments((prvData) => {
+                return {
+                  ...prvData,
+                  [tournamentId]: {
+                    ...prvData[tournamentId],
+                    hasUserClaimed: value[0].hasUserClaimed[index],
+                    isUserEligible: value[0].hasUserParticipated[index],
+                    userBoughtTickets: value[0].userTicketCount[index],
+                    userReward: value[0].userReward[index],
+                  },
+                };
+              });
             });
-          });
+          }
         }
-      }
-    });
+      });
+    }, [data]);
   } catch (e) {
     console.log(e);
   }
