@@ -65,37 +65,9 @@ export const TournamentCardButtons: React.FC<{
   const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
 
   const { writeCall } = useWriteCall();
-  const [isSessionKeyModuleEnabled, setIsSessionKeyModuleEnabled] = useState<
-    boolean | null
-  >(null);
+
   // smartAccount.getAccountAddress();
 
-  useEffect(() => {
-    let checkSessionModuleEnabled = async () => {
-      if (!smartWallet) {
-        setIsSessionKeyModuleEnabled(false);
-        return;
-      }
-      try {
-        // ATTENTION, isModuleEnabled  - a very important function is not available on smartAccount
-        console.log(
-          'isSessionKeyModuleEnabled',
-          await smartWallet.getAccountAddress()
-        );
-        const isEnabled = await smartWallet?.isModuleEnabled(
-          DEFAULT_SESSION_KEY_MANAGER_MODULE
-        );
-
-        setIsSessionKeyModuleEnabled(isEnabled);
-        return;
-      } catch (err: any) {
-        console.log('error whilegettingdefault ', err);
-        setIsSessionKeyModuleEnabled(false);
-        return;
-      }
-    };
-    checkSessionModuleEnabled();
-  }, [smartWallet]);
   if (user === undefined || user.userAddress === undefined)
     return (
       <ConnectionRequired className="!text-f14 h-fit bg-blue mt-4 py-2">
@@ -212,12 +184,12 @@ export const TournamentCardButtons: React.FC<{
         const sessionSignerFromStorage = getSessionSigner(smartWalletAddress);
 
         // if user tries to buy tokens again.
-        console.log(
-          `TournamentCardButtons-sessionSignerFromStorage: `,
-          sessionSignerFromStorage,
-          isSessionKeyModuleEnabled
+
+        const isEnabled = await smartWallet?.isModuleEnabled(
+          DEFAULT_SESSION_KEY_MANAGER_MODULE
         );
-        if (sessionSignerFromStorage && isSessionKeyModuleEnabled) return [];
+        console.log(`tm-deb: `, sessionSignerFromStorage, isEnabled);
+        if (sessionSignerFromStorage && isEnabled) return [];
         // -----> setMerkle tree tx flow
         // create dapp side session key
         const sessionSigner = ethers.Wallet.createRandom();
@@ -263,7 +235,7 @@ export const TournamentCardButtons: React.FC<{
         const transactionArray = [];
 
         // -----> enableModule session manager module
-        if (!isSessionKeyModuleEnabled) {
+        if (!isEnabled) {
           const enableModuleTrx = await smartWallet?.getEnableModuleData(
             DEFAULT_SESSION_KEY_MANAGER_MODULE
           );

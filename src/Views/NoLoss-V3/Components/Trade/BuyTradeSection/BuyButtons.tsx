@@ -265,6 +265,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       });
       console.log(`deb1 sesionmodule created: `, sessionModule);
       smartWallet = smartWallet.setActiveValidationModule(sessionModule);
+
       const tx1 = {
         to: config.router,
         data: encodedFunctionData,
@@ -290,7 +291,9 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       //@ts-ignore
       const { receipt } = await userOpResponse.wait(1);
       console.log('txHash', receipt.transactionHash);
-
+      smartWallet = smartWallet.setActiveValidationModule(
+        smartWallet.defaultValidationModule
+      );
       // await writeCall(
       //   config.router,
       //   RouterABI,
