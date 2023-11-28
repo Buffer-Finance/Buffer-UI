@@ -21,7 +21,7 @@ const bundler: IBundler = new Bundler({
 
 const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
-    'https://paymaster.biconomy.io/api/v1/80001/pKLSky7Jb.9370f1ef-de34-4a90-afcf-65c962f34ada',
+    'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
@@ -42,6 +42,7 @@ const useSmartWallet = () => {
   const smartWallet = useAtomValue(smartWalletAtom);
   const setSmartWalletAddress = useSetAtom(smartWalletAddressAtom);
   const smartWalletAddress = useAtomValue(smartWalletAddressAtom);
+  console.log(`useSmartWallet-smartWalletAddress: `, smartWalletAddress);
   const { data: walletClient } = useWalletClient();
   useEffect(() => {
     const generateWalletClient = async () => {

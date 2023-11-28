@@ -13,6 +13,11 @@ import { activeChainAtom, userAtom } from '@Views/NoLoss-V3/atoms';
 import { getNoLossV3Config } from '@Views/NoLoss-V3/helpers/getNolossV3Config';
 import { ItournamentData } from '@Views/NoLoss-V3/types';
 import {
+  IHybridPaymaster,
+  PaymasterMode,
+  SponsorUserOperationDto,
+} from '@biconomy/paymaster';
+import {
   DEFAULT_SESSION_KEY_MANAGER_MODULE,
   SessionKeyManagerModule,
 } from '@biconomy/modules';
@@ -248,8 +253,29 @@ export const TournamentCardButtons: React.FC<{
         approveForAllTxn,
         ...sessionCreationTxns,
       ];
-      console.log(`deb 1, TournamentCardButtons-transactions: `, transactions);
-      const userOps = await smartWallet?.buildUserOp(transactions);
+      const userOps = await smartWallet?.buildUserOp(transactions, {
+        paymasterServiceData: {
+          mode: PaymasterMode.SPONSORED,
+        },
+      });
+
+      // let paymasterServiceData: SponsorUserOperationDto = {
+      //   mode: PaymasterMode.SPONSORED,
+      //   smartAccountInfo: {
+      //     name: 'BICONOMY',
+      //     version: '2.0.0',
+      //   },
+      // };
+      // const biconomyPaymaster =
+      //   smartWallet?.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
+      // const paymasterAndDataResponse =
+      //   await biconomyPaymaster.getPaymasterAndData(
+      //     userOps,
+      //     paymasterServiceData
+      //   );
+      // console.log(`deb 1, TournamentCardButtons-transactions: `, transactions);
+      // userOps.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
+
       console.log(`deb 2, TournamentCardButtons-transactions: `, userOps);
       const userOpResponse = await smartWallet.sendUserOp(userOps);
 
