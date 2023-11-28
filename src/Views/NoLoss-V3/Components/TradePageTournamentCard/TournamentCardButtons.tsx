@@ -148,6 +148,7 @@ export const TournamentCardButtons: React.FC<{
     );
   }
 
+  //
   if (tournament.state.toLowerCase() === 'closed' && activeAllMyTab === 'my') {
     const alreadClaimed = tournament.hasUserClaimed;
 
