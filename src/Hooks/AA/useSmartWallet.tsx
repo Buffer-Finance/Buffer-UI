@@ -42,7 +42,6 @@ const useSmartWallet = () => {
   const smartWallet = useAtomValue(smartWalletAtom);
   const setSmartWalletAddress = useSetAtom(smartWalletAddressAtom);
   const smartWalletAddress = useAtomValue(smartWalletAddressAtom);
-  console.log(`useSmartWallet-smartWalletAddress: `, smartWalletAddress);
   const { data: walletClient } = useWalletClient();
   useEffect(() => {
     const generateWalletClient = async () => {

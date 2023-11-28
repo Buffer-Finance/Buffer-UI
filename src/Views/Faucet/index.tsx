@@ -11,13 +11,17 @@ import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import FaucetABI from './Faucet.json';
 import Background from './style';
+import { encodeFunctionData } from 'viem';
+import { erc20ABI, useBalance } from 'wagmi';
+import { useSmartWallet } from '@Hooks/AA/useSmartWallet';
+import { PaymasterMode } from '@biconomy/paymaster';
 
 const IbfrFaucet: React.FC = () => {
   useEffect(() => {
     document.title = 'Buffer | Faucet';
   }, []);
   const activeChain = useAtomValue(activeChainAtom);
-
+  const { smartWalletAddress } = useSmartWallet();
   // const { poolDisplayNameMapping } = usePoolDisplayNames();
   const tokenChains = ['USDC'];
   // useMemo(() => {
@@ -25,7 +29,15 @@ const IbfrFaucet: React.FC = () => {
   //     (token) => !token.includes('-POL') && token !== 'BFR'
   //   );
   // }, [poolDisplayNameMapping]);
-
+  const { data: usdcBalance } = useBalance({
+    address: smartWalletAddress,
+    token: '0xda11d2c3b026561cce889ff5a020eae21308058c',
+    watch: true,
+  });
+  const { data: aethBalance } = useBalance({
+    address: smartWalletAddress,
+    watch: true,
+  });
   const content = activeChain && [
     {
       top: `Claim ${import.meta.env.VITE_ENV} ${
@@ -47,9 +59,26 @@ const IbfrFaucet: React.FC = () => {
       ),
     },
     {
+      top: `Fund your Smart Wallet`,
+      bottom: (
+        <ConnectionRequired>
+          <div className="flex items-center justify-center gap-3 text-2 flex-wrap">
+            Transfer <b className="text-1">0.001</b> AETH to you Smart Wallet{' '}
+            <b className="text-1">{smartWalletAddress}</b>
+          </div>
+          <div className="flex items-center justify-center gap-3 text-1 flex-wrap">
+            Smart Wallet AETH Balance : {aethBalance?.formatted} AETH
+          </div>
+        </ConnectionRequired>
+      ),
+    },
+    {
       top: `Claim TESTNET Tokens`,
       bottom: (
         <ConnectionRequired>
+          <div className="flex items-center justify-center gap-3 text-1 flex-wrap">
+            Smart Wallet USDC Balance : {usdcBalance?.formatted} USDC
+          </div>
           <div className="flex items-center justify-center gap-3 flex-wrap">
             {tokenChains.map((token: string) => (
               <ClaimButton token={token} key={token} />
@@ -90,36 +119,52 @@ const ClaimButton = ({ token }: { token: string }) => {
   // const pools = usePoolByAsset();
   const faucetContract = '0x6442f44b940aAD814A8e75C915f8997e94F191aE';
   //  pools[token]?.faucet;
-
+  const { smartWallet, smartWalletAddress } = useSmartWallet();
   const { writeCall } = useWriteCall();
   const toastify = useToast();
 
-  const claim = () => {
-    if (state.txnLoading > 1) {
-      return toastify({
-        type: 'error',
-        msg: 'Please Confirm your pending txns.',
-      });
-    }
-    function cb(res: any) {
-      setBtnLoading(0);
-    }
-    const overRides = {
-      value: ethers.utils.parseEther('0.001').toString(),
+  const claim = async () => {
+    // claim from main account
+    // transfer to sw
+    if (!smartWalletAddress) return;
+    const claimTxn = {
+      to: faucetContract,
+      data: encodeFunctionData({
+        abi: FaucetABI,
+        functionName: 'claim',
+      }),
+      value: ethers.utils.parseEther('0.001'),
     };
-    const methodName = 'claim';
-    setBtnLoading(1);
-    return writeCall(faucetContract, FaucetABI, cb, methodName, [], overRides);
+    // const fundSWTxn = {
+    //   to: '0xda11d2c3b026561cce889ff5a020eae21308058c',
+    //   data: encodeFunctionData({
+    //     abi: erc20ABI,
+    //     functionName: 'transfer',
+    //     args: [smartWalletAddress, 1000000n],
+    //   }),
+    // };
+    console.log(`index-smartWalletAddress: `, smartWalletAddress);
+
+    const userOps = await smartWallet?.buildUserOp([claimTxn], {
+      paymasterServiceData: {
+        mode: PaymasterMode.SPONSORED,
+      },
+    });
+    if (!userOps) return;
+    const userOpResponse = await smartWallet?.sendUserOp(userOps);
+    const reciept = await userOpResponse?.wait(1);
+    console.log(`index-reciept: `, reciept);
+    setBtnLoading(0);
   };
 
   return (
     <BlueBtn
       isLoading={state.txnLoading === 1 && btnLoading === 1}
       isDisabled={state.txnLoading === 1}
-      className="btn nowrap"
+      className="btn nowrap mt-1"
       onClick={claim}
     >
-      Claim 500 {token}
+      Claim 500 USDC
     </BlueBtn>
   );
 };
