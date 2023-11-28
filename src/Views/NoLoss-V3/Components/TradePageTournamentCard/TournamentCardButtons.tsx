@@ -1,15 +1,20 @@
 import {
   SessionValidationModuleAddress,
+  getSessionSigner,
   setSessionSigner,
   useSmartWallet,
 } from '@Hooks/AA/useSmartWallet';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, gt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BufferButton } from '@Views/Common/V2-Button';
-import { activeChainAtom, userAtom } from '@Views/NoLoss-V3/atoms';
+import {
+  activeChainAtom,
+  noLossReadCallsReadOnlyAtom,
+  userAtom,
+} from '@Views/NoLoss-V3/atoms';
 import { getNoLossV3Config } from '@Views/NoLoss-V3/helpers/getNolossV3Config';
 import { ItournamentData } from '@Views/NoLoss-V3/types';
 import {
@@ -57,6 +62,7 @@ export const TournamentCardButtons: React.FC<{
   const user = useAtomValue(userAtom);
   const { smartWallet, smartWalletAddress } = useSmartWallet();
   const [btnLoading, setBtnLoading] = useState(false);
+  const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
 
   const { writeCall } = useWriteCall();
   const [isSessionKeyModuleEnabled, setIsSessionKeyModuleEnabled] = useState<
@@ -117,6 +123,7 @@ export const TournamentCardButtons: React.FC<{
   const allowance = tournamentBasedData?.buyInTokenToManagerAllowance?.find(
     (allowanceObj) => allowanceObj.id === allowanceId
   )?.allowance;
+
   const ticketCost = divide(
     tournament.tournamentMeta.ticketCost,
     tournament.buyinTokenDecimals
@@ -158,35 +165,59 @@ export const TournamentCardButtons: React.FC<{
     const approveTournamentManager = async () => {
       if (!smartWallet) return;
       console.log(smartWallet);
-      const allowanceTxn = {
-        data: encodeFunctionData({
-          abi: erc20ABI,
-          functionName: 'approve',
-          args: [
-            config.manager,
-            115792089237316195423570985008687907853269984665640564039457584007913129639935n,
-          ],
-        }),
-        to: tournament.tournamentMeta.buyinToken,
-      };
-      const buyPlayTokensTxn = {
-        data: encodeFunctionData({
-          abi: TournamentManagerABI,
-          functionName: 'buyTournamentTokens',
-          args: [tournament.id],
-        }),
-        to: config.manager,
-      };
-      const approveForAllTxn = {
-        data: encodeFunctionData({
-          abi: TournamentManagerABI,
-          functionName: 'setApprovalForAll',
-          args: [config.router, true],
-        }),
-        to: config.manager,
-      };
+      let isAllowed = gt(
+        divide(allowance, tournament.buyinTokenDecimals)!,
+        ticketCost
+      );
+      let isBufferRouterApproved = readCallResults?.isTradingApproved;
+      const allowanceTxn = isAllowed
+        ? []
+        : [
+            {
+              data: encodeFunctionData({
+                abi: erc20ABI,
+                functionName: 'approve',
+                args: [
+                  config.manager,
+                  115792089237316195423570985008687907853269984665640564039457584007913129639935n,
+                ],
+              }),
+              to: tournament.tournamentMeta.buyinToken,
+            },
+          ];
+      const buyPlayTokensTxn = [
+        {
+          data: encodeFunctionData({
+            abi: TournamentManagerABI,
+            functionName: 'buyTournamentTokens',
+            args: [tournament.id],
+          }),
+          to: config.manager,
+        },
+      ];
+      const approveForAllTxn = readCallResults?.isTradingApproved
+        ? []
+        : [
+            {
+              data: encodeFunctionData({
+                abi: TournamentManagerABI,
+                functionName: 'setApprovalForAll',
+                args: [config.router, true],
+              }),
+              to: config.manager,
+            },
+          ];
       async function createSessionTxnGiver() {
         if (!smartWallet || !smartWalletAddress) return [];
+        const sessionSignerFromStorage = getSessionSigner(smartWalletAddress);
+
+        // if user tries to buy tokens again.
+        console.log(
+          `TournamentCardButtons-sessionSignerFromStorage: `,
+          sessionSignerFromStorage,
+          isSessionKeyModuleEnabled
+        );
+        if (sessionSignerFromStorage && isSessionKeyModuleEnabled) return [];
         // -----> setMerkle tree tx flow
         // create dapp side session key
         const sessionSigner = ethers.Wallet.createRandom();
@@ -248,33 +279,26 @@ export const TournamentCardButtons: React.FC<{
       }
       const sessionCreationTxns = await createSessionTxnGiver();
       const transactions = [
-        allowanceTxn,
-        buyPlayTokensTxn,
-        approveForAllTxn,
+        ...allowanceTxn,
+        ...buyPlayTokensTxn,
+        ...approveForAllTxn,
         ...sessionCreationTxns,
       ];
+      console.log(`TournamentCardButtons-approveForAllTxn: `, approveForAllTxn);
+      console.log(`TournamentCardButtons-buyPlayTokensTxn: `, buyPlayTokensTxn);
+      console.log(`TournamentCardButtons-allowanceTxn: `, allowanceTxn);
+      console.log(
+        `TournamentCardButtons-sessionCreationTxns: `,
+        sessionCreationTxns
+      );
+
+      console.log(`TournamentCardButtons-transactions: `, transactions);
+
       const userOps = await smartWallet?.buildUserOp(transactions, {
         paymasterServiceData: {
           mode: PaymasterMode.SPONSORED,
         },
       });
-
-      // let paymasterServiceData: SponsorUserOperationDto = {
-      //   mode: PaymasterMode.SPONSORED,
-      //   smartAccountInfo: {
-      //     name: 'BICONOMY',
-      //     version: '2.0.0',
-      //   },
-      // };
-      // const biconomyPaymaster =
-      //   smartWallet?.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
-      // const paymasterAndDataResponse =
-      //   await biconomyPaymaster.getPaymasterAndData(
-      //     userOps,
-      //     paymasterServiceData
-      //   );
-      // console.log(`deb 1, TournamentCardButtons-transactions: `, transactions);
-      // userOps.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
 
       console.log(`deb 2, TournamentCardButtons-transactions: `, userOps);
       const userOpResponse = await smartWallet.sendUserOp(userOps);
@@ -296,6 +320,7 @@ export const TournamentCardButtons: React.FC<{
         <BufferButton
           onClick={approveTournamentManager}
           isLoading={btnLoading}
+          disabled={maximumparticipantsReached || hasUserBoughtMaxTickets}
           className={tournamentButtonStyles}
         >
           {maximumparticipantsReached ? (
