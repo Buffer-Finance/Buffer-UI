@@ -77,7 +77,7 @@ const TradePage: React.FC<any> = ({}) => {
 
 export { TradePage };
 
-export const RightPanelBackground = styled.div`
+const RightPanelBackground = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 8px;
@@ -112,7 +112,7 @@ const MobileWarningBackground = styled.div`
   }
 `;
 
-export const MobileWarning = () => {
+const MobileWarning = () => {
   return (
     <MobileWarningBackground>
       <svg

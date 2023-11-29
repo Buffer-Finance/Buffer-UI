@@ -20,7 +20,6 @@ import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
-import { AboveBelow } from '@Views/AboveBelow';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
 import { AllTrades } from '@Views/AllTrades';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
@@ -132,7 +131,6 @@ const AppRoutes = () => {
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
         <Route path="/binary/:market" element={<TradePage />} />
-        <Route path="/above-below/:market" element={<AboveBelow />} />
         <Route
           path="/*"
           element={
