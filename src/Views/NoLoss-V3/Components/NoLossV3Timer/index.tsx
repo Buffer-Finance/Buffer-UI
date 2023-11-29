@@ -62,7 +62,7 @@ export const NoLossV3Timer = ({
       <div className="mt-1 text-[#808191]">{header}</div>
       <div className="flex gap-2">
         {timerComponents.map((component, index) => (
-          <div key={component.props.header}>{component}</div>
+          <div key={index}>{component}</div>
         ))}
       </div>
     </div>
