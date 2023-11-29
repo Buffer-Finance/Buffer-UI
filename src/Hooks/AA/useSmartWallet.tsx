@@ -125,7 +125,7 @@ const useSmartWallet = () => {
         sessionKeyManagerModule: sessionModule,
         smartAccountAddress: smartWalletAddress,
       });
-      const buildParams: BuildUserOpOptions = {
+      let buildParams: BuildUserOpOptions = {
         paymasterServiceData: {
           mode: PaymasterMode.SPONSORED,
         },
@@ -141,18 +141,29 @@ const useSmartWallet = () => {
         // batched sessions transaction
 
         const sessionSigner = new ethers.Wallet(localSigner);
-
-        smartWallet =
-          smartWallet.setActiveValidationModule(batchedSessionModule);
-        const sessionparams = transactions.map((d) => {
-          return {
-            sessionSigner: sessionSigner,
+        if (transactionArray.length == 1) {
+          // Single txn sessions
+          smartWallet = smartWallet.setActiveValidationModule(sessionModule);
+          const sessionParams = {
+            sessionSigner,
             sessionValidationModule: SessionValidationModuleAddress,
           };
-        });
-        const batchSessionParams = { batchSessionParams: sessionparams };
-        buildParams['params'] = batchSessionParams;
-        sendUserParams = batchSessionParams;
+          buildParams = { ...buildParams, ...sessionParams };
+          sendUserParams = sessionParams;
+        } else {
+          // Batched Sesions
+          smartWallet =
+            smartWallet.setActiveValidationModule(batchedSessionModule);
+          const sessionparams = transactions.map((d) => {
+            return {
+              sessionSigner: sessionSigner,
+              sessionValidationModule: SessionValidationModuleAddress,
+            };
+          });
+          const batchSessionParams = { batchSessionParams: sessionparams };
+          buildParams['params'] = batchSessionParams;
+          sendUserParams = batchSessionParams;
+        }
       } else {
         // non batched sessions transaction where mainEOA needs to sign
 
@@ -169,6 +180,9 @@ const useSmartWallet = () => {
               sessionKeyEOA,
               SessionValidationModuleAddress, // erc20 token address
             ]
+          );
+          smartWallet = smartWallet.setActiveValidationModule(
+            smartWallet.defaultValidationModule
           );
           const sessionTxData = await batchedSessionModule.createSessionData([
             {

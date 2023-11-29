@@ -258,12 +258,11 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         functionName: 'initiateTrade',
         args,
       });
-      await sendTxn([
-        {
-          to: config.router,
-          data: encodedFunctionData,
-        },
-      ]);
+      const tx1 = {
+        to: config.router,
+        data: encodedFunctionData,
+      };
+      await sendTxn([tx1, tx1]);
     } catch (e) {
       toastify({
         msg: (e as Error).message,
