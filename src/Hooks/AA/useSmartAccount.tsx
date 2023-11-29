@@ -26,8 +26,11 @@ import {
 } from '@biconomy/modules';
 import { walletClientToSigner } from '@Utils/Web3/walletClientToProvider';
 import { arbitrumGoerli } from '@wagmi/chains';
-const smartWalletAtom = atom<BiconomySmartAccountV2 | null>(null);
-const smartWalletAddressAtom = atom<`0x${string}` | null>(null);
+export type SmartAccount = {
+  library: BiconomySmartAccountV2;
+  address: `0x${string}`;
+};
+const smartAccountAtom = atom<SmartAccount | null>(null);
 const bundler: IBundler = new Bundler({
   bundlerUrl: `https://bundler.biconomy.io/api/v2/${ChainId.ARBITRUM_GOERLI_TESTNET}/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44`,
   chainId: ChainId.ARBITRUM_GOERLI_TESTNET,
@@ -38,15 +41,16 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
+const signerStorageKey = 'buffer-signer-v1';
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
-  return window.localStorage.getItem(smartWalletAddress + 'buffer-signer');
+  return window.localStorage.getItem(smartWalletAddress + signerStorageKey);
 };
 export const setSessionSigner = (
   smartWalletAddress: `0x${string}`,
   pk: string
 ) => {
-  return window.localStorage.setItem(smartWalletAddress + 'buffer-signer', pk);
+  return window.localStorage.setItem(smartWalletAddress + signerStorageKey, pk);
 };
 
 // error handled, took around 2 second to finish
@@ -69,11 +73,9 @@ const getSessionState = async (smartWallet: BiconomySmartAccountV2) => {
 // yet to deploy
 export const SessionValidationModuleAddress =
   '0x6140708e157f695c77a00a47Ef112aA0913F76B5';
-const useSmartWallet = () => {
-  const setSmartWallet = useSetAtom(smartWalletAtom);
-  let smartWallet = useAtomValue(smartWalletAtom);
-  const setSmartWalletAddress = useSetAtom(smartWalletAddressAtom);
-  const smartWalletAddress = useAtomValue(smartWalletAddressAtom);
+const useSmartAccount = () => {
+  const setSmartWallet = useSetAtom(smartAccountAtom);
+  let smartAccount = useAtomValue(smartAccountAtom);
   const { data: walletClient } = useWalletClient();
   useEffect(() => {
     const generateWalletClient = async () => {
@@ -90,9 +92,9 @@ const useSmartWallet = () => {
         defaultValidationModule: multiChainModule,
         activeValidationModule: multiChainModule,
       });
-      setSmartWallet(biconomySmartAccount);
-      const swAddress = await biconomySmartAccount.getAccountAddress();
-      setSmartWalletAddress(swAddress as `0x${string}`);
+      const swAddress =
+        (await biconomySmartAccount.getAccountAddress()) as `0x${string}`;
+      setSmartWallet({ library: biconomySmartAccount, address: swAddress });
     };
     generateWalletClient();
   }, [walletClient]);
@@ -102,28 +104,28 @@ const useSmartWallet = () => {
       transactions: Transaction[],
       config?: { sponsored?: 'Native' | `0x${string}` }
     ) => {
-      if (!smartWallet || !smartWalletAddress) return;
+      if (!smartAccount) return;
       console.time('SessionStart');
       const [isSessionEnabled, isBSMEnabled] = await getSessionState(
-        smartWallet
+        smartAccount.library
       );
       let transactionArray = [...transactions];
 
       console.timeEnd('SessionStart');
       console.log(
-        `useSmartWallet-isSessionEnabled, isBSMEnabled: `,
+        `useSmartAccount-isSessionEnabled, isBSMEnabled: `,
         isSessionEnabled,
         isBSMEnabled
       );
-      const localSigner = await getSessionSigner(smartWalletAddress);
+      const localSigner = await getSessionSigner(smartAccount.address);
       const sessionModule = await SessionKeyManagerModule.create({
         moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
-        smartAccountAddress: smartWalletAddress,
+        smartAccountAddress: smartAccount.address,
       });
       const batchedSessionModule = await BatchedSessionRouterModule.create({
         moduleAddress: DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
         sessionKeyManagerModule: sessionModule,
-        smartAccountAddress: smartWalletAddress,
+        smartAccountAddress: smartAccount.address,
       });
       let buildParams: BuildUserOpOptions = {
         paymasterServiceData: {
@@ -132,7 +134,7 @@ const useSmartWallet = () => {
       };
       let sendUserParams: SendUserOpParams | undefined = undefined;
       console.log(
-        `1 useSmartWallet-prereq: `,
+        `1 useSmartAccount-prereq: `,
         localSigner,
         isSessionEnabled,
         isBSMEnabled
@@ -143,23 +145,28 @@ const useSmartWallet = () => {
         const sessionSigner = new ethers.Wallet(localSigner);
         if (transactionArray.length == 1) {
           // Single txn sessions
-          smartWallet = smartWallet.setActiveValidationModule(sessionModule);
+          smartAccount.library =
+            smartAccount.library.setActiveValidationModule(sessionModule);
           const sessionParams = {
             sessionSigner,
             sessionValidationModule: SessionValidationModuleAddress,
           };
+          console.log(`Sigle Session txn `);
           buildParams['params'] = sessionParams;
           sendUserParams = sessionParams;
         } else {
           // Batched Sesions
-          smartWallet =
-            smartWallet.setActiveValidationModule(batchedSessionModule);
+          smartAccount.library =
+            smartAccount.library.setActiveValidationModule(
+              batchedSessionModule
+            );
           const sessionparams = transactions.map((d) => {
             return {
               sessionSigner: sessionSigner,
               sessionValidationModule: SessionValidationModuleAddress,
             };
           });
+          console.log(`Batched Session txn `);
           const batchSessionParams = { batchSessionParams: sessionparams };
           buildParams['params'] = batchSessionParams;
           sendUserParams = batchSessionParams;
@@ -167,67 +174,70 @@ const useSmartWallet = () => {
       } else {
         // non batched sessions transaction where mainEOA needs to sign
 
-        if (!localSigner) {
-          const sessionSigner = ethers.Wallet.createRandom();
-          const sessionKeyEOA = await sessionSigner.getAddress();
-          console.log('sessionKeyEOA', sessionKeyEOA);
-          // BREWARE JUST FOR DEMO: update local storage with session key
-          setSessionSigner(smartWalletAddress, sessionSigner.privateKey);
-          // cretae session key data
-          const sessionKeyData = defaultAbiCoder.encode(
-            ['address', 'address'],
-            [
-              sessionKeyEOA,
-              SessionValidationModuleAddress, // erc20 token address
-            ]
-          );
-          smartWallet = smartWallet.setActiveValidationModule(
-            smartWallet.defaultValidationModule
-          );
-          const sessionTxData = await batchedSessionModule.createSessionData([
-            {
-              validUntil: 0,
-              validAfter: 0,
-              sessionValidationModule: SessionValidationModuleAddress,
-              sessionPublicKey: sessionKeyEOA,
-              sessionKeyData: sessionKeyData,
-            },
-          ]);
-          const setSessiontrx = {
-            to: DEFAULT_SESSION_KEY_MANAGER_MODULE, // session manager module address
-            data: sessionTxData.data,
-          };
-          transactionArray.push(setSessiontrx);
-        }
+        const sessionSigner = ethers.Wallet.createRandom();
+        const sessionKeyEOA = await sessionSigner.getAddress();
+        console.log('sessionKeyEOA', sessionKeyEOA);
+        // BREWARE JUST FOR DEMO: update local storage with session key
+        setSessionSigner(smartAccount.address, sessionSigner.privateKey);
+        // cretae session key data
+        const sessionKeyData = defaultAbiCoder.encode(
+          ['address', 'address'],
+          [
+            sessionKeyEOA,
+            SessionValidationModuleAddress, // erc20 token address
+          ]
+        );
+        smartAccount.library = smartAccount.library.setActiveValidationModule(
+          smartAccount.library.defaultValidationModule
+        );
+        let sessionTransactionArray = [];
+        const sessionTxData = await batchedSessionModule.createSessionData([
+          {
+            validUntil: 0,
+            validAfter: 0,
+            sessionValidationModule: SessionValidationModuleAddress,
+            sessionPublicKey: sessionKeyEOA,
+            sessionKeyData: sessionKeyData,
+          },
+        ]);
+        const setSessiontrx = {
+          to: DEFAULT_SESSION_KEY_MANAGER_MODULE, // session manager module address
+          data: sessionTxData.data,
+        };
+        sessionTransactionArray.push(setSessiontrx);
         if (!isSessionEnabled) {
-          const enableModuleTrx = await smartWallet?.getEnableModuleData(
-            DEFAULT_SESSION_KEY_MANAGER_MODULE
-          );
-          transactionArray.push(enableModuleTrx);
+          const enableModuleTrx =
+            await smartAccount.library.getEnableModuleData(
+              DEFAULT_SESSION_KEY_MANAGER_MODULE
+            );
+          sessionTransactionArray.push(enableModuleTrx);
         }
         if (!isBSMEnabled) {
-          const enableModuleTrx = await smartWallet?.getEnableModuleData(
-            DEFAULT_BATCHED_SESSION_ROUTER_MODULE
-          );
-          transactionArray.push(enableModuleTrx);
+          const enableModuleTrx =
+            await smartAccount.library.getEnableModuleData(
+              DEFAULT_BATCHED_SESSION_ROUTER_MODULE
+            );
+          sessionTransactionArray.push(enableModuleTrx);
         }
+        console.log(`Sesion Creation Txn `, sessionTransactionArray);
+        transactionArray = [...transactionArray, ...sessionTransactionArray];
       }
       console.log(
-        `2 useSmartWallet-transactionArray: `,
+        `2 useSmartAccount-transactionArray: `,
         transactionArray,
         buildParams
       );
 
-      let userOps = await smartWallet?.buildUserOp(
+      let userOps = await smartAccount.library.buildUserOp(
         transactionArray,
         buildParams
       );
 
-      const userOpsResponse = await smartWallet?.sendUserOp(
+      const userOpsResponse = await smartAccount.library.sendUserOp(
         userOps,
         sendUserParams
       );
-      console.log(`3 useSmartWallet-userOpsResponse: `, userOpsResponse);
+      console.log(`3 useSmartAccount-userOpsResponse: `, userOpsResponse);
       // if (buildParams.params?.batchSessionParams?.length) {
 
       //   smartWallet = smartWallet.setActiveValidationModule(
@@ -235,13 +245,13 @@ const useSmartWallet = () => {
       //   );
       // }
       const fulfiledOrRejected = await userOpsResponse.wait(1);
-      console.log(`4 useSmartWallet-fulfiledOrRejected: `, fulfiledOrRejected);
+      console.log(`4 useSmartAccount-fulfiledOrRejected: `, fulfiledOrRejected);
 
       return fulfiledOrRejected;
     },
-    [smartWallet, smartWalletAddress]
+    [smartAccount]
   );
-  return { smartWallet, smartWalletAddress, sendTxn };
+  return { smartAccount, sendTxn };
 };
 
-export { useSmartWallet };
+export { useSmartAccount };

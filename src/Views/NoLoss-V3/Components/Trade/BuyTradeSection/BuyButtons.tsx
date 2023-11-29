@@ -30,11 +30,7 @@ import TournamentManagerABI from '../../../ABIs/TournamentManager.json';
 import { getDurationError } from './TimeSelector/TimePicker';
 import { getTradeSizeError } from './TradeSizeSelector';
 import { encodeFunctionData } from 'viem';
-import {
-  SessionValidationModuleAddress,
-  getSessionSigner,
-  useSmartWallet,
-} from '@Hooks/AA/useSmartWallet';
+import { useSmartAccount } from '@Hooks/AA/useSmartAccount';
 import { ethers } from 'ethers';
 import {
   SessionKeyManagerModule,
@@ -61,7 +57,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   >('none');
   const activeMarketData = useAtomValue(activeMarketDataAtom);
   const isIncreationWindow = useIsMarketInCreationWindow();
-  let { smartWallet, smartWalletAddress, sendTxn } = useSmartWallet();
+  let { sendTxn } = useSmartAccount();
   if (!activeChain)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
@@ -204,9 +200,6 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   async function buyTrade(isAbove: boolean) {
     try {
       const userBalance = readCallResults?.activeTournamentBalance;
-      if (!smartWalletAddress) return;
-      const sessionSingerKey = getSessionSigner(smartWalletAddress);
-      if (!sessionSingerKey || !smartWalletAddress || !smartWallet) return;
 
       if (userBalance === undefined)
         throw new Error('User balance is undefined');
@@ -242,7 +235,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         throw new Error('Trade time exceeds tournament ending time');
 
       setLoadingState(isAbove ? 'up' : 'down');
-      if (!smartWalletAddress) return;
+
       const args = [
         toFixed(multiply(userInput, 18), 0),
         currentTime.seconds,

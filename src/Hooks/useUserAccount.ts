@@ -3,21 +3,21 @@ import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { useQuery } from './useQuery';
-import { useSmartWallet } from './AA/useSmartWallet';
+import { useSmartAccount } from './AA/useSmartAccount';
 
 export const useUserAccount = () => {
   const { address: account } = useAccount();
   const query = useQuery();
   const [user, setUser] = useAtom(userAtom);
-  const { smartWalletAddress } = useSmartWallet();
+  const { smartAccount } = useSmartAccount();
   // console.log(`smartWalletAddress: `, smartWalletAddress);
   useEffect(() => {
     const urlAddress = query.get('user_address');
     setUser({
-      userAddress: urlAddress || smartWalletAddress || account,
+      userAddress: urlAddress || smartAccount?.address || account,
       viewOnlyAddress: urlAddress,
       isViewOnlyMode: urlAddress ? true : false,
       connectedWalletAddress: account,
     });
-  }, [account, query, smartWalletAddress]);
+  }, [account, query, smartAccount]);
 };

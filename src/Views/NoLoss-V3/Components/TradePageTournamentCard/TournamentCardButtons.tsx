@@ -1,9 +1,4 @@
-import {
-  SessionValidationModuleAddress,
-  getSessionSigner,
-  setSessionSigner,
-  useSmartWallet,
-} from '@Hooks/AA/useSmartWallet';
+import { useSmartAccount } from '@Hooks/AA/useSmartAccount';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { divide, gt } from '@Utils/NumString/stringArithmatics';
@@ -62,32 +57,12 @@ export const TournamentCardButtons: React.FC<{
 }> = ({ tournament, activeAllMyTab, tournamentBasedData }) => {
   const activeChain = useAtomValue(activeChainAtom);
   const user = useAtomValue(userAtom);
-  const { smartWallet, smartWalletAddress, sendTxn } = useSmartWallet();
+  const { sendTxn } = useSmartAccount();
   const [btnLoading, setBtnLoading] = useState(false);
   const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
-  const config = getNoLossV3Config(activeChain.id);
 
   const { writeCall } = useWriteCall();
-  return (
-    <button
-      onClick={() => {
-        const txn = {
-          data: encodeFunctionData({
-            abi: erc20ABI,
-            functionName: 'approve',
-            args: [
-              config.manager,
-              115792089237316195423570985008687907853269984665640564039457584007913129639935n,
-            ],
-          }),
-          to: tournament.tournamentMeta.buyinToken,
-        };
-        sendTxn([txn], { sponsored: 'Native' });
-      }}
-    >
-      Hllo
-    </button>
-  );
+
   // smartAccount.getAccountAddress();
 
   if (user === undefined || user.userAddress === undefined)
@@ -107,6 +82,7 @@ export const TournamentCardButtons: React.FC<{
   ) {
     return <></>;
   }
+  const config = getNoLossV3Config(activeChain?.id);
 
   const allowanceId = getCallId(
     tournament.tournamentMeta.buyinToken,
@@ -129,16 +105,16 @@ export const TournamentCardButtons: React.FC<{
   let secondButton = null;
   async function handleClaim() {
     setBtnLoading(true);
-    await writeCall(
-      config.leaderboard,
-      TournamentLeaderboardABI,
-      (response) => {
-        setBtnLoading(false);
-        console.log(response);
-      },
-      'claimReward',
-      [tournament.id]
-    );
+    const txn = {
+      data: encodeFunctionData({
+        abi: TournamentLeaderboardABI,
+        args: [tournament.id],
+        functionName: 'claimReward',
+      }),
+      to: config.leaderboard,
+    };
+    await sendTxn([txn]);
+    setBtnLoading(false);
   }
 
   if (tournament.state.toLowerCase() === 'closed' && activeAllMyTab === 'my') {
@@ -156,8 +132,6 @@ export const TournamentCardButtons: React.FC<{
     );
   } else {
     const approveTournamentManager = async () => {
-      if (!smartWallet) return;
-      console.log(smartWallet);
       let isAllowed = gt(
         divide(allowance, tournament.buyinTokenDecimals)!,
         ticketCost
@@ -200,128 +174,12 @@ export const TournamentCardButtons: React.FC<{
               to: config.manager,
             },
           ];
-      async function createSessionTxnGiver() {
-        if (!smartWallet || !smartWalletAddress) return [];
-        const sessionSignerFromStorage = getSessionSigner(smartWalletAddress);
-
-        // if user tries to buy tokens again.
-
-        const isEnabled = await smartWallet?.isModuleEnabled(
-          DEFAULT_SESSION_KEY_MANAGER_MODULE
-        );
-        const isBSMEnabled = await smartWallet?.isModuleEnabled(
-          DEFAULT_BATCHED_SESSION_ROUTER_MODULE
-        );
-        console.log(`tm-deb: `, sessionSignerFromStorage, isEnabled);
-        if (sessionSignerFromStorage && isEnabled && isBSMEnabled) return [];
-        // -----> setMerkle tree tx flow
-        // create dapp side session key
-        const sessionSigner = ethers.Wallet.createRandom();
-        const sessionKeyEOA = await sessionSigner.getAddress();
-        console.log('sessionKeyEOA', sessionKeyEOA);
-        // BREWARE JUST FOR DEMO: update local storage with session key
-        setSessionSigner(smartWalletAddress, sessionSigner.privateKey);
-        console.log('setting-pk', sessionSigner.privateKey);
-        // generate sessionModule
-        const sessionModule = await SessionKeyManagerModule.create({
-          moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
-          smartAccountAddress: smartWalletAddress,
-        });
-        const batchedSessionModule = await BatchedSessionRouterModule.create({
-          moduleAddress: DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
-          sessionKeyManagerModule: sessionModule,
-          smartAccountAddress: smartWalletAddress,
-        });
-
-        // cretae session key data
-        const sessionKeyData = defaultAbiCoder.encode(
-          ['address', 'address'],
-          [
-            sessionKeyEOA,
-            SessionValidationModuleAddress, // erc20 token address
-          ]
-        );
-        console.log(`1Session-sessionKeyData: `, sessionKeyData);
-
-        // const sessionTxData = await sessionModule.createSessionData([
-        //   {
-        //     validUntil: 0,
-        //     validAfter: 0,
-        //     sessionValidationModule: SessionValidationModuleAddress,
-        //     sessionPublicKey: sessionKeyEOA,
-        //     sessionKeyData: sessionKeyData,
-        //   },
-        // ]);
-        const sessionTxData = await batchedSessionModule.createSessionData([
-          {
-            validUntil: 0,
-            validAfter: 0,
-            sessionValidationModule: SessionValidationModuleAddress,
-            sessionPublicKey: sessionKeyEOA,
-            sessionKeyData: sessionKeyData,
-          },
-        ]);
-        console.log('2sessionTxData', sessionTxData);
-
-        // write a programe using wagmi hooks to send some erc20 tokens
-        // tx to set session key
-        const setSessiontrx = {
-          to: DEFAULT_SESSION_KEY_MANAGER_MODULE, // session manager module address
-          data: sessionTxData.data,
-        };
-
-        const transactionArray = [];
-
-        // -----> enableModule session manager module
-        if (!isEnabled) {
-          const enableModuleTrx = await smartWallet?.getEnableModuleData(
-            DEFAULT_SESSION_KEY_MANAGER_MODULE
-          );
-          transactionArray.push(enableModuleTrx);
-        }
-        if (!isBSMEnabled) {
-          const enableModuleTrx = await smartWallet?.getEnableModuleData(
-            DEFAULT_BATCHED_SESSION_ROUTER_MODULE
-          );
-          transactionArray.push(enableModuleTrx);
-        }
-
-        transactionArray.push(setSessiontrx);
-        console.log(
-          `TournamentCardButtons-transactionArray: `,
-          transactionArray
-        );
-        return transactionArray;
-      }
-      const sessionCreationTxns = await createSessionTxnGiver();
       const transactions = [
         ...allowanceTxn,
         ...buyPlayTokensTxn,
         ...approveForAllTxn,
-        ...sessionCreationTxns,
       ];
-      console.log(`TournamentCardButtons-approveForAllTxn: `, approveForAllTxn);
-      console.log(`TournamentCardButtons-buyPlayTokensTxn: `, buyPlayTokensTxn);
-      console.log(`TournamentCardButtons-allowanceTxn: `, allowanceTxn);
-      console.log(
-        `TournamentCardButtons-sessionCreationTxns: `,
-        sessionCreationTxns
-      );
-
-      console.log(`TournamentCardButtons-transactions: `, transactions);
-
-      const userOps = await smartWallet?.buildUserOp(transactions, {
-        paymasterServiceData: {
-          mode: PaymasterMode.SPONSORED,
-        },
-      });
-
-      console.log(`deb 2, TournamentCardButtons-transactions: `, userOps);
-      const userOpResponse = await smartWallet.sendUserOp(userOps);
-
-      console.log(' deb 3 send-txnuserOpHash', userOpResponse);
-      const { receipt } = await userOpResponse.wait(1);
-      console.log(` deb 4  send-txn reciept: `, receipt);
+      await sendTxn(transactions);
     };
 
     const hasUserBoughtMaxTickets =

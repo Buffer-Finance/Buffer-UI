@@ -13,7 +13,7 @@ import FaucetABI from './Faucet.json';
 import Background from './style';
 import { encodeFunctionData } from 'viem';
 import { erc20ABI, useBalance } from 'wagmi';
-import { useSmartWallet } from '@Hooks/AA/useSmartWallet';
+import { useSmartAccount } from '@Hooks/AA/useSmartAccount';
 import { PaymasterMode } from '@biconomy/paymaster';
 
 const IbfrFaucet: React.FC = () => {
@@ -21,7 +21,8 @@ const IbfrFaucet: React.FC = () => {
     document.title = 'Buffer | Faucet';
   }, []);
   const activeChain = useAtomValue(activeChainAtom);
-  const { smartWalletAddress } = useSmartWallet();
+  const { smartAccount } = useSmartAccount();
+  const smartWalletAddress = smartAccount?.address;
   // const { poolDisplayNameMapping } = usePoolDisplayNames();
   const tokenChains = ['USDC'];
   // useMemo(() => {
@@ -119,7 +120,10 @@ const ClaimButton = ({ token }: { token: string }) => {
   // const pools = usePoolByAsset();
   const faucetContract = '0x6442f44b940aAD814A8e75C915f8997e94F191aE';
   //  pools[token]?.faucet;
-  const { smartWallet, smartWalletAddress } = useSmartWallet();
+  const { smartAccount } = useSmartAccount();
+  const smartWallet = smartAccount?.library;
+  const smartWalletAddress = smartAccount?.address;
+
   const { writeCall } = useWriteCall();
   const toastify = useToast();
 
