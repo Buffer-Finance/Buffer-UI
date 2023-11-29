@@ -148,7 +148,7 @@ const useSmartWallet = () => {
             sessionSigner,
             sessionValidationModule: SessionValidationModuleAddress,
           };
-          buildParams = { ...buildParams, ...sessionParams };
+          buildParams['params'] = sessionParams;
           sendUserParams = sessionParams;
         } else {
           // Batched Sesions
