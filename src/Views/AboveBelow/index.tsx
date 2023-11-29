@@ -1,7 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { usePriceRetriable } from '@Hooks/usePrice';
 import { MobileWarning, RightPanelBackground } from '@Views/TradePage';
-import { MarketChart } from '@Views/TradePage/Views/MarketChart';
 import {
   miscsSettingsAtom,
   tradePanelPositionSettingsAtom,
@@ -9,6 +8,7 @@ import {
 import { tradePanelPosition } from '@Views/TradePage/type';
 import { useAtomValue } from 'jotai';
 import { polygon, polygonMumbai } from 'viem/chains';
+import { BuyTrade } from './Components/BuyTrade';
 
 export const AboveBelow = () => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -29,10 +29,10 @@ export const AboveBelow = () => {
         <RightPanelBackground>
           {/* {showFavoriteAsset && <PinnedMarkets />} */}
           {/* <MarketStatsBar /> */}
-          <MarketChart />
+          {/* <MarketChart /> */}
           {/* <AccordionTable /> */}
         </RightPanelBackground>
-        {/* <BuyTrade /> */}
+        <BuyTrade />
       </>
     </div>
   );

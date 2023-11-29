@@ -1,5 +1,3 @@
-import { priceAtom } from '@Hooks/usePrice';
-import { getLastbar } from '@TV/useDataFeed';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
@@ -25,7 +23,7 @@ import { TimeSelector } from './TimeSelector';
 import { TradeSizeSelector } from './TradeSizeSelector';
 import { TradeTypeSelector } from './TradeTypeSelector';
 
-const BuyTradeBackground = styled.div`
+export const BuyTradeBackground = styled.div`
   position: sticky;
   top: 45px;
   max-width: 275px;

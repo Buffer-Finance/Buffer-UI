@@ -129,7 +129,7 @@ const BufferTable: React.FC<IBufferTable> = ({
           {headerJSX && (
             <TableHead
               className={`${
-                isHeaderTransparent ? '!bg-[#232334] transparent-hover' : ''
+                isHeaderTransparent ? '!bg-[transparent] transparent-hover' : ''
               } table-header ${shouldHideHeader ? 'tab' : ''} `}
             >
               <TableRow className={` table-row-head`}>
@@ -141,7 +141,7 @@ const BufferTable: React.FC<IBufferTable> = ({
                       key={idx}
                       className={` ${show ? '' : '!hidden'}  ${
                         isHeaderTransparent
-                          ? '!bg-[#232334] transparent-hover'
+                          ? '!bg-[transparent] transparent-hover'
                           : ''
                       } !z-10`}
                     >
