@@ -56,9 +56,9 @@ const TableBackground = styled.div`
       background: #171722;
 
       .table-head {
-        &:first-of-type {
+        /* &:first-of-type {
           padding-left: var(--padding-left);
-        }
+        } */
         .MuiTableSortLabel-root:hover,
         .MuiTableSortLabel-icon:hover {
           color: white;
@@ -86,7 +86,7 @@ const TableBackground = styled.div`
           shouldShowMobile ? '12px 10px' : '12px 0px'};
 
         &:first-of-type {
-          padding-left: 1.6rem;
+          /* padding-left: 1.6rem; */
           border-radius: var(--border-radius) 0 0 var(--border-radius);
         }
         &:last-of-type {

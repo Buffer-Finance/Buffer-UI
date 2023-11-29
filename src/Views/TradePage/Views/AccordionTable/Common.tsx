@@ -132,7 +132,7 @@ interface ITableHeader {
 export const TableHeader: React.FC<ITableHeader> = ({
   col,
   headsArr,
-  className,
+  className = '',
   firstColClassName,
 }) => {
   if (col > headsArr.length) return <div>Unhandled col of header</div>;

@@ -12,22 +12,29 @@ enum Columns {
 export const PriceTable = () => {
   const headsArray = useMemo(() => ['Strike Price', 'Above', 'Below'], []);
   const HeaderFomatter = (col: number) => {
-    return <TableHeader col={col} headsArr={headsArray} />;
+    return (
+      <TableHeader
+        col={col}
+        headsArr={headsArray}
+        className="text-center"
+        firstColClassName="!text-start !pl-[0]"
+      />
+    );
   };
 
   const BodyFormatter: any = (row: number, col: number) => {
     switch (col) {
       case Columns.StrikePrice:
-        return <div className="text-1 ml-[12px]">1.00</div>;
+        return <div className="text-1">1.00</div>;
       case Columns.Above:
         return (
-          <div className="text-1 bg-[#4D81FF] rounded-l-sm px-3 py-1 w-fit whitespace-nowrap">
+          <div className="text-1 bg-[#4D81FF] rounded-l-sm px-3 py-1 w-fit whitespace-nowrap font-medium">
             0.2 (25%)
           </div>
         );
       case Columns.Below:
         return (
-          <div className="text-1 bg-[#FF5353] rounded-r-sm px-3 py-1 w-fit whitespace-nowrap">
+          <div className="text-1 bg-[#FF5353] rounded-r-sm px-3 py-1 w-fit whitespace-nowrap font-medium">
             0.2 (25%)
           </div>
         );
@@ -36,7 +43,7 @@ export const PriceTable = () => {
     }
   };
   return (
-    <div>
+    <div className="px-3">
       <BufferTable
         headerJSX={HeaderFomatter}
         bodyJSX={BodyFormatter}
