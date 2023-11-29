@@ -3,12 +3,16 @@ import {
   BiconomySmartAccountV2,
   DEFAULT_ENTRYPOINT_ADDRESS,
 } from '@biconomy/account';
-import { ChainId } from '@biconomy/core-types';
+import { ChainId, Transaction } from '@biconomy/core-types';
 import { Bundler, IBundler } from '@biconomy/bundler';
 import { IPaymaster, BiconomyPaymaster } from '@biconomy/paymaster';
 import { useAccount, useWalletClient } from 'wagmi';
-import { useEffect } from 'react';
-import { MultiChainValidationModule } from '@biconomy/modules';
+import { useCallback, useEffect } from 'react';
+import {
+  DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
+  DEFAULT_SESSION_KEY_MANAGER_MODULE,
+  MultiChainValidationModule,
+} from '@biconomy/modules';
 import { walletClientToSigner } from '@Utils/Web3/walletClientToProvider';
 import { arbitrumGoerli } from '@wagmi/chains';
 const smartWalletAtom = atom<BiconomySmartAccountV2 | null>(null);
@@ -33,7 +37,17 @@ export const setSessionSigner = (
 ) => {
   return window.localStorage.setItem(smartWalletAddress + 'buffer-signer', pk);
 };
-
+const getSessionState = async (smartWallet: BiconomySmartAccountV2) => {
+  const [isSessionModuleEnabled, isBSMEnabled] = await Promise.all(
+    [
+      DEFAULT_SESSION_KEY_MANAGER_MODULE,
+      DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
+    ].map((module) => {
+      return smartWallet.isModuleEnabled(module);
+    })
+  );
+  return [isSessionModuleEnabled, isBSMEnabled];
+};
 // yet to deploy
 export const SessionValidationModuleAddress =
   '0x6140708e157f695c77a00a47Ef112aA0913F76B5';
@@ -64,6 +78,24 @@ const useSmartWallet = () => {
     };
     generateWalletClient();
   }, [walletClient]);
+
+  const sendTxn = useCallback(
+    async (
+      transactions: Transaction[],
+      config: { sponsored?: 'Native' | `0x${string}` }
+    ) => {
+      if (!smartWallet) return;
+      const [isSessionEnabled, isBSMEnabled] = await getSessionState(
+        smartWallet
+      );
+      console.log(
+        `useSmartWallet-isSessionEnabled, isBSMEnabled: `,
+        isSessionEnabled,
+        isBSMEnabled
+      );
+    },
+    [smartWallet]
+  );
   return { smartWallet, smartWalletAddress };
 };
 

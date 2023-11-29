@@ -23,6 +23,8 @@ import {
   SponsorUserOperationDto,
 } from '@biconomy/paymaster';
 import {
+  BatchedSessionRouterModule,
+  DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
   DEFAULT_SESSION_KEY_MANAGER_MODULE,
   SessionKeyManagerModule,
 } from '@biconomy/modules';
@@ -188,8 +190,11 @@ export const TournamentCardButtons: React.FC<{
         const isEnabled = await smartWallet?.isModuleEnabled(
           DEFAULT_SESSION_KEY_MANAGER_MODULE
         );
+        const isBSMEnabled = await smartWallet?.isModuleEnabled(
+          DEFAULT_BATCHED_SESSION_ROUTER_MODULE
+        );
         console.log(`tm-deb: `, sessionSignerFromStorage, isEnabled);
-        if (sessionSignerFromStorage && isEnabled) return [];
+        if (sessionSignerFromStorage && isEnabled && isBSMEnabled) return [];
         // -----> setMerkle tree tx flow
         // create dapp side session key
         const sessionSigner = ethers.Wallet.createRandom();
@@ -203,6 +208,11 @@ export const TournamentCardButtons: React.FC<{
           moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
           smartAccountAddress: smartWalletAddress,
         });
+        const batchedSessionModule = await BatchedSessionRouterModule.create({
+          moduleAddress: DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
+          sessionKeyManagerModule: sessionModule,
+          smartAccountAddress: smartWalletAddress,
+        });
 
         // cretae session key data
         const sessionKeyData = defaultAbiCoder.encode(
@@ -214,7 +224,16 @@ export const TournamentCardButtons: React.FC<{
         );
         console.log(`1Session-sessionKeyData: `, sessionKeyData);
 
-        const sessionTxData = await sessionModule.createSessionData([
+        // const sessionTxData = await sessionModule.createSessionData([
+        //   {
+        //     validUntil: 0,
+        //     validAfter: 0,
+        //     sessionValidationModule: SessionValidationModuleAddress,
+        //     sessionPublicKey: sessionKeyEOA,
+        //     sessionKeyData: sessionKeyData,
+        //   },
+        // ]);
+        const sessionTxData = await batchedSessionModule.createSessionData([
           {
             validUntil: 0,
             validAfter: 0,
@@ -238,6 +257,12 @@ export const TournamentCardButtons: React.FC<{
         if (!isEnabled) {
           const enableModuleTrx = await smartWallet?.getEnableModuleData(
             DEFAULT_SESSION_KEY_MANAGER_MODULE
+          );
+          transactionArray.push(enableModuleTrx);
+        }
+        if (!isBSMEnabled) {
+          const enableModuleTrx = await smartWallet?.getEnableModuleData(
+            DEFAULT_BATCHED_SESSION_ROUTER_MODULE
           );
           transactionArray.push(enableModuleTrx);
         }

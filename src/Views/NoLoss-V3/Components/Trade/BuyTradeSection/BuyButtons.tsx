@@ -39,6 +39,8 @@ import { ethers } from 'ethers';
 import {
   SessionKeyManagerModule,
   DEFAULT_SESSION_KEY_MANAGER_MODULE,
+  BatchedSessionRouterModule,
+  DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
 } from '@biconomy/modules';
 import { PaymasterMode } from '@biconomy/paymaster';
 export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
@@ -263,8 +265,13 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
         smartAccountAddress: smartWalletAddress,
       });
-      console.log(`deb1 sesionmodule created: `, sessionModule);
-      smartWallet = smartWallet.setActiveValidationModule(sessionModule);
+      const batchedSessionModule = await BatchedSessionRouterModule.create({
+        moduleAddress: DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
+        sessionKeyManagerModule: sessionModule,
+        smartAccountAddress: smartWalletAddress,
+      });
+      // console.log(`deb1 sesionmodule created: `, sessionModule);
+      smartWallet = smartWallet.setActiveValidationModule(batchedSessionModule);
 
       const tx1 = {
         to: config.router,
@@ -272,10 +279,18 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       };
       console.log(`tx1: `, tx1);
 
-      let userOp = await smartWallet?.buildUserOp([tx1], {
+      let userOp = await smartWallet?.buildUserOp([tx1, tx1], {
         params: {
-          sessionSigner: sessionSigner,
-          sessionValidationModule: SessionValidationModuleAddress,
+          batchSessionParams: [
+            {
+              sessionSigner: sessionSigner,
+              sessionValidationModule: SessionValidationModuleAddress,
+            },
+            {
+              sessionSigner: sessionSigner,
+              sessionValidationModule: SessionValidationModuleAddress,
+            },
+          ],
         },
         paymasterServiceData: {
           mode: PaymasterMode.SPONSORED,
@@ -284,8 +299,16 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       console.log('UserOp', { userOp });
 
       const userOpResponse = await smartWallet?.sendUserOp(userOp, {
-        sessionSigner: sessionSigner,
-        sessionValidationModule: SessionValidationModuleAddress,
+        batchSessionParams: [
+          {
+            sessionSigner: sessionSigner,
+            sessionValidationModule: SessionValidationModuleAddress,
+          },
+          {
+            sessionSigner: sessionSigner,
+            sessionValidationModule: SessionValidationModuleAddress,
+          },
+        ],
       });
       console.log('userOpHash', { userOpResponse });
       //@ts-ignore
