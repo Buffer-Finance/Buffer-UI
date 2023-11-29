@@ -79,6 +79,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     if (overrides?.value) {
       transformedArgs['value'] = overrides.value;
     }
+    console.log(`useWriteCall-transformedArgs: `, transformedArgs);
 
     if (!walletClient)
       return console.warn(
