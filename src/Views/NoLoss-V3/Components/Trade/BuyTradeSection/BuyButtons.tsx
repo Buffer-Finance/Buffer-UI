@@ -61,7 +61,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   >('none');
   const activeMarketData = useAtomValue(activeMarketDataAtom);
   const isIncreationWindow = useIsMarketInCreationWindow();
-  let { smartWallet, smartWalletAddress } = useSmartWallet();
+  let { smartWallet, smartWalletAddress, sendTxn } = useSmartWallet();
   if (!activeChain)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
@@ -258,120 +258,12 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         functionName: 'initiateTrade',
         args,
       });
-      console.log(`BuyButtons-sessionSingerKey: `, sessionSingerKey);
-      console.log('no loss option buying args', encodedFunctionData);
-      const sessionSigner = new ethers.Wallet(sessionSingerKey);
-      const sessionModule = await SessionKeyManagerModule.create({
-        moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
-        smartAccountAddress: smartWalletAddress,
-      });
-      const batchedSessionModule = await BatchedSessionRouterModule.create({
-        moduleAddress: DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
-        sessionKeyManagerModule: sessionModule,
-        smartAccountAddress: smartWalletAddress,
-      });
-      // console.log(`deb1 sesionmodule created: `, sessionModule);
-      smartWallet = smartWallet.setActiveValidationModule(batchedSessionModule);
-
-      const tx1 = {
-        to: config.router,
-        data: encodedFunctionData,
-      };
-      console.log(`tx1: `, tx1);
-
-      let userOp = await smartWallet?.buildUserOp([tx1, tx1], {
-        params: {
-          batchSessionParams: [
-            {
-              sessionSigner: sessionSigner,
-              sessionValidationModule: SessionValidationModuleAddress,
-            },
-            {
-              sessionSigner: sessionSigner,
-              sessionValidationModule: SessionValidationModuleAddress,
-            },
-          ],
+      await sendTxn([
+        {
+          to: config.router,
+          data: encodedFunctionData,
         },
-        paymasterServiceData: {
-          mode: PaymasterMode.SPONSORED,
-        },
-      });
-      console.log('UserOp', { userOp });
-
-      const userOpResponse = await smartWallet?.sendUserOp(userOp, {
-        batchSessionParams: [
-          {
-            sessionSigner: sessionSigner,
-            sessionValidationModule: SessionValidationModuleAddress,
-          },
-          {
-            sessionSigner: sessionSigner,
-            sessionValidationModule: SessionValidationModuleAddress,
-          },
-        ],
-      });
-      console.log('userOpHash', { userOpResponse });
-      //@ts-ignore
-      const { receipt } = await userOpResponse.wait(1);
-      console.log('txHash', receipt.transactionHash);
-      smartWallet = smartWallet.setActiveValidationModule(
-        smartWallet.defaultValidationModule
-      );
-      // await writeCall(
-      //   config.router,
-      //   RouterABI,
-      //   (response) => {
-      //     if (response !== undefined) {
-      //       const content = (
-      //         <div className="flex flex-col gap-y-2 text-f12 ">
-      //           <div className="nowrap font-[600]">Trade order placed</div>
-      //           <div className="flex items-center">
-      //             {activeMarket.chartData.token0 +
-      //               '-' +
-      //               activeMarket.chartData.token1}
-      //             &nbsp;&nbsp;
-      //             <span className="!text-3">to go</span>&nbsp;
-      //             {isAbove ? (
-      //               <>
-      //                 <UpIcon className="text-green scale-125" /> &nbsp;Higher
-      //               </>
-      //             ) : (
-      //               <>
-      //                 <DownIcon className="text-red scale-125" />
-      //                 &nbsp; Lower
-      //               </>
-      //             )}
-      //           </div>
-      //           <div>
-      //             <span>
-      //               <span className="!text-3">Total amount:</span>
-      //               {userInput}&nbsp;
-      //             </span>
-      //           </div>
-      //         </div>
-      //       );
-      //       toastify({
-      //         price,
-      //         type: 'success',
-      //         timings: 20,
-      //         body: null,
-      //         msg: content,
-      //       });
-      //     }
-      //     console.log(response);
-      //   },
-      //   'initiateTrade',
-      //   [
-      //     toFixed(multiply(userInput, 18), 0),
-      //     currentTime.seconds,
-      //     isAbove,
-      //     activeMarket.address,
-      //     toFixed(multiply(('' + price).toString(), 8), 0),
-      //     toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
-      //     0,
-      //     activeTournamentData.id,
-      //   ]
-      // );
+      ]);
     } catch (e) {
       toastify({
         msg: (e as Error).message,

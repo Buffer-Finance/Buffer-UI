@@ -62,12 +62,32 @@ export const TournamentCardButtons: React.FC<{
 }> = ({ tournament, activeAllMyTab, tournamentBasedData }) => {
   const activeChain = useAtomValue(activeChainAtom);
   const user = useAtomValue(userAtom);
-  const { smartWallet, smartWalletAddress } = useSmartWallet();
+  const { smartWallet, smartWalletAddress, sendTxn } = useSmartWallet();
   const [btnLoading, setBtnLoading] = useState(false);
   const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
+  const config = getNoLossV3Config(activeChain.id);
 
   const { writeCall } = useWriteCall();
-
+  return (
+    <button
+      onClick={() => {
+        const txn = {
+          data: encodeFunctionData({
+            abi: erc20ABI,
+            functionName: 'approve',
+            args: [
+              config.manager,
+              115792089237316195423570985008687907853269984665640564039457584007913129639935n,
+            ],
+          }),
+          to: tournament.tournamentMeta.buyinToken,
+        };
+        sendTxn([txn], { sponsored: 'Native' });
+      }}
+    >
+      Hllo
+    </button>
+  );
   // smartAccount.getAccountAddress();
 
   if (user === undefined || user.userAddress === undefined)
@@ -87,7 +107,6 @@ export const TournamentCardButtons: React.FC<{
   ) {
     return <></>;
   }
-  const config = getNoLossV3Config(activeChain.id);
 
   const allowanceId = getCallId(
     tournament.tournamentMeta.buyinToken,
