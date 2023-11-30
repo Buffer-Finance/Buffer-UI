@@ -34,7 +34,7 @@ export const Buy = () => {
       setLoading(above ? 'Above' : 'Below');
       await writeCall(() => {}, 'initiateTrade', [
         [
-          '0xbc767eeB80bd906c515adE0bAB7237d117588758',
+          '0x1D76Fa23be51816588eBCd36DF466bB51D3ad084',
           settings.partialFill,
           '',
           above,
