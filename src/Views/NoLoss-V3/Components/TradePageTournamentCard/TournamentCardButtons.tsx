@@ -136,6 +136,8 @@ export const TournamentCardButtons: React.FC<{
         divide(allowance, tournament.buyinTokenDecimals)!,
         ticketCost
       );
+      setBtnLoading(true);
+
       let isBufferRouterApproved = readCallResults?.isTradingApproved;
       const allowanceTxn = isAllowed
         ? []
@@ -188,7 +190,7 @@ export const TournamentCardButtons: React.FC<{
     const maximumparticipantsReached =
       parseInt(tournament.tournamentLeaderboard.userCount) >=
       parseInt(tournament.tournamentConditions.maxParticipants);
-
+    setBtnLoading(false);
     secondButton = (
       <>
         <BufferButton
