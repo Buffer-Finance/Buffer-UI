@@ -132,6 +132,7 @@ export const TournamentCardButtons: React.FC<{
     );
   } else {
     const approveTournamentManager = async () => {
+      setBtnLoading(true);
       let isAllowed = gt(
         divide(allowance, tournament.buyinTokenDecimals)!,
         ticketCost
@@ -181,6 +182,7 @@ export const TournamentCardButtons: React.FC<{
         ...approveForAllTxn,
       ];
       await sendTxn(transactions);
+      setBtnLoading(false);
     };
 
     const hasUserBoughtMaxTickets =

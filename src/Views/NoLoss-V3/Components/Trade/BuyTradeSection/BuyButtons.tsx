@@ -255,7 +255,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         to: config.router,
         data: encodedFunctionData,
       };
-      await sendTxn([tx1, tx1]);
+      await sendTxn([tx1]);
     } catch (e) {
       toastify({
         msg: (e as Error).message,
