@@ -9,21 +9,23 @@ import { tradePanelPosition } from '@Views/TradePage/type';
 import { useAtomValue } from 'jotai';
 import { polygon, polygonMumbai } from 'viem/chains';
 import { BuyTrade } from './Components/BuyTrade';
+import { MarketChart } from './Components/MarketChart';
 import { PinnedMarkets } from './Components/PinnedMarkets';
 import { StatusBar } from './Components/StatusBar';
+import { Tables } from './Components/Tables';
 import { useAboveBelowMarketsSetter } from './Hooks/useAboveBelowMarketsSetter';
 import { useActiveMarketSetter } from './Hooks/useActiveMarketSetter';
 
 export const AboveBelow = () => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
-  usePriceRetriable();
   const { activeChain } = useActiveChain();
+  usePriceRetriable();
+  useAboveBelowMarketsSetter();
+  useActiveMarketSetter();
   if ([polygon.id, polygonMumbai.id].includes(activeChain.id as 80001)) {
     return <MobileWarning />;
   }
-  useAboveBelowMarketsSetter();
-  useActiveMarketSetter();
 
   return (
     <div
@@ -35,8 +37,8 @@ export const AboveBelow = () => {
         <RightPanelBackground>
           {showFavoriteAsset && <PinnedMarkets />}
           <StatusBar isMobile={false} />
-          {/* <MarketChart /> */}
-          {/* <AccordionTable /> */}
+          <MarketChart />
+          <Tables />
         </RightPanelBackground>
         <BuyTrade />
       </>

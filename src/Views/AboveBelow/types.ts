@@ -29,3 +29,5 @@ export interface marketTypeAB
     chartDataType {
   poolInfo: poolInfoType;
 }
+
+export type accordianTableType = 'active' | 'history' | 'cancelled';

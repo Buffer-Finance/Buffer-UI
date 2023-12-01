@@ -1,7 +1,7 @@
 import { poolInfoType } from '@Views/TradePage/type';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { marketTypeAB } from './types';
+import { accordianTableType, marketTypeAB } from './types';
 
 export const selectedExpiry = atom<number | undefined>(undefined);
 
@@ -28,6 +28,8 @@ export const aboveBelowActiveMarketAtom = atom<marketTypeAB | undefined>(
   }
 );
 export const chartNumberAtom = atomWithStorage('above-below-chartNumber', 1);
+export const isTableShownAtom = atom<boolean>(false);
+
 export const activeCategoryAtom = atom<string>('all');
 export const searchBarAtom = atom<string>('');
 export const favouriteMarketsAtom = atomWithStorage<string[]>(
@@ -74,3 +76,5 @@ export const filteredMarketsAtom = atom((get) => {
     }
   });
 });
+
+export const accordianTableTypeAtom = atom<accordianTableType>('active');
