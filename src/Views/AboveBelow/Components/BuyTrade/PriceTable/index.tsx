@@ -1,6 +1,8 @@
+import { useStrikePriceArray } from '@Views/AboveBelow/Hooks/useStrikePriceArray';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/TradePage/Views/AccordionTable/Common';
-import { useMemo } from 'react';
+import { Skeleton } from '@mui/material';
+import { useCallback, useMemo } from 'react';
 import { CurrentPriceLine } from './CurrentPriceLine';
 
 enum Columns {
@@ -10,8 +12,14 @@ enum Columns {
 }
 
 export const PriceTable = () => {
+  const {
+    currentPrice,
+    decreasingPriceArray,
+    increasingPriceArray,
+    precision,
+  } = useStrikePriceArray();
   const headsArray = useMemo(() => ['Strike Price', 'Above', 'Below'], []);
-  const HeaderFomatter = (col: number) => {
+  const HeaderFomatter = useCallback((col: number) => {
     return (
       <TableHeader
         col={col}
@@ -20,12 +28,19 @@ export const PriceTable = () => {
         firstColClassName="!text-start !pl-[0]"
       />
     );
-  };
+  }, []);
 
-  const BodyFormatter: any = (row: number, col: number) => {
+  const BodyFormatter: any = (
+    row: number,
+    col: number,
+    isAboveTable: boolean
+  ) => {
+    const strikePrice = isAboveTable
+      ? increasingPriceArray[row]
+      : decreasingPriceArray[row];
     switch (col) {
       case Columns.StrikePrice:
-        return <div className="text-1">1.00</div>;
+        return <div className="text-1">{strikePrice}</div>;
       case Columns.Above:
         return (
           <div className="text-1 bg-[#4D81FF] rounded-l-sm px-3 py-1 w-fit whitespace-nowrap font-medium">
@@ -42,11 +57,15 @@ export const PriceTable = () => {
         return <div className=""></div>;
     }
   };
+  if (!currentPrice)
+    return (
+      <Skeleton className="w-[1005] !h-[300px] lc !transform-none !mt-3" />
+    );
   return (
     <div className="px-3">
       <BufferTable
         headerJSX={HeaderFomatter}
-        bodyJSX={BodyFormatter}
+        bodyJSX={(row: number, col: number) => BodyFormatter(row, col, false)}
         widths={['100%', '0%', '0%']}
         cols={headsArray.length}
         onRowClick={() => {}}
@@ -54,10 +73,10 @@ export const PriceTable = () => {
         isBodyTransparent
         isHeaderTransparent
       />
-      <CurrentPriceLine price="37,380" />
+      <CurrentPriceLine currentPrice={currentPrice} precision={precision} />
       <BufferTable
         headerJSX={HeaderFomatter}
-        bodyJSX={BodyFormatter}
+        bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}
         widths={['100%', '0%', '0%']}
         cols={headsArray.length}
         onRowClick={() => {}}

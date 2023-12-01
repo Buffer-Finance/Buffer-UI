@@ -39,6 +39,7 @@ export const useAboveBelowMarketsSetter = () => {
               optionStorageContract
               ivFactorITM
               ivFactorOTM
+              stepSize
             }
           }
         }`,

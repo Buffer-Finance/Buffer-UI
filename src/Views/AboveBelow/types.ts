@@ -21,6 +21,7 @@ export interface responseAB {
     optionStorageContract: string;
     ivFactorITM: string;
     ivFactorOTM: string;
+    stepSize: string;
   };
 }
 

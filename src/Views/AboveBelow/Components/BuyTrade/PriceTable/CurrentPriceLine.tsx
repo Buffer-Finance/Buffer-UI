@@ -1,8 +1,16 @@
-export const CurrentPriceLine = ({ price }: { price: string }) => {
+import { Display } from '@Views/Common/Tooltips/Display';
+
+export const CurrentPriceLine = ({
+  precision,
+  currentPrice,
+}: {
+  currentPrice: string | number;
+  precision: number;
+}) => {
   return (
     <div className="border-dashed border-[1px] border-[#A3E3FF] w-full relative my-5">
       <div className="rounded-lg border-[1px] border-[#A3E3FF] py-1 px-5 text-buffer-blue font-bold text-f12 bg-[#181A20] w-fit absolute -top-4 right-[0px] left-[0px] m-auto">
-        {price}
+        <Display data={currentPrice} precision={precision} disable />
       </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
