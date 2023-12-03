@@ -1,5 +1,10 @@
 import { toFixed } from '@Utils/NumString';
-import { add, gt } from '@Utils/NumString/stringArithmatics';
+import { add, divide, gt } from '@Utils/NumString/stringArithmatics';
+import {
+  readCallDataAtom,
+  selectedPoolActiveMarketAtom,
+  tradeSizeAtom,
+} from '@Views/AboveBelow/atoms';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
 import {
@@ -10,15 +15,14 @@ import {
 } from '@Views/TradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
 import { BuyUSDCLink } from '@Views/TradePage/Views/BuyTrade/BuyUsdcLink';
-import { PoolDropdown } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/PoolDropdown';
 import { TradeSizeInput } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput';
 import {
   WalletBalance,
   formatBalance,
 } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
-import { tradeSizeAtom } from '@Views/TradePage/atoms';
 import styled from '@emotion/styled';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
+import { PoolDropdown } from './PoolDropDown';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -28,6 +32,14 @@ const TradeSizeSelectorBackground = styled.div`
 export const TradeSize: React.FC<{
   onSubmit?: any;
 }> = ({ onSubmit }) => {
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
+  const readCallData = useAtomValue(readCallDataAtom);
+
+  if (activeMarket === undefined || readCallData === undefined) return <></>;
+  const token = activeMarket.poolInfo.token.toUpperCase();
+  const decimals = activeMarket.poolInfo.decimals;
+  const balance = divide(readCallData.balances[token], decimals) as string;
   return (
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
@@ -37,27 +49,33 @@ export const TradeSize: React.FC<{
           </RowGap>
 
           <WalletBalance
-            balance={formatBalance(toFixed('0', 2))}
-            unit={'ARB'}
+            balance={formatBalance(toFixed(balance, 2))}
+            unit={token}
           />
         </RowBetween>
         <RowGapItemsStretched gap="0px" className="w-full">
           <TradeSizeInput
-            maxTradeSize={'0'}
-            registeredOneCT={true}
-            tokenName={'ARB'}
-            balance={'0'}
-            platformFee={'0.1'}
-            minTradeSize={'0'}
+            maxTradeSize="0"
+            minTradeSize="0"
+            tradeSize={tradeSize}
+            setTradeSize={setTradeSize}
             onSubmit={onSubmit}
+            setMaxValue={() => {
+              setTradeSize('0');
+            }}
           />
 
           <PoolDropdown />
         </RowGapItemsStretched>
         <PlatfromFeeError
-          platfromFee={'0.1'}
-          tradeToken={'ARB'}
-          balance={'0'}
+          platfromFee={
+            divide(
+              activeMarket.config.platformFee,
+              activeMarket.poolInfo.decimals
+            ) as string
+          }
+          tradeToken={activeMarket.poolInfo.token}
+          balance={balance}
         />
       </ColumnGap>
     </TradeSizeSelectorBackground>

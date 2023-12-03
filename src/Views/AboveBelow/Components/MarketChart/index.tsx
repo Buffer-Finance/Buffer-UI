@@ -1,9 +1,9 @@
 import { sleep } from '@TV/useDataFeed';
 import {
-  aboveBelowActiveMarketAtom,
   aboveBelowMarketsAtom,
   chartNumberAtom,
   isTableShownAtom,
+  selectedPoolActiveMarketAtom,
 } from '@Views/AboveBelow/atoms';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
@@ -37,7 +37,7 @@ const MarketChart: React.FC<any> = ({}) => {
   const isTableExpanded = useAtomValue(isTableShownAtom);
   const v3AppConfig = useAtomValue(aboveBelowMarketsAtom);
   const chartTimes = useAtomValue(chartNumberAtom);
-  const activeMarket = useAtomValue(aboveBelowActiveMarketAtom);
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const [dragging, setDragging] = useState(false);
   const [containerDim, setContainerDim] = useState<{
     height?: number;

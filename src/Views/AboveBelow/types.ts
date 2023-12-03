@@ -32,3 +32,15 @@ export interface marketTypeAB
 }
 
 export type accordianTableType = 'active' | 'history' | 'cancelled';
+
+export interface IreadCallData {
+  balances: {
+    [tokenName: string]: string;
+  };
+  allowances: {
+    [tokenName: string]: string;
+  };
+  isInCreationWindow: {
+    [category: string]: boolean;
+  };
+}

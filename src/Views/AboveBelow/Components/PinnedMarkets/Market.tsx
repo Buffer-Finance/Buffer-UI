@@ -3,8 +3,8 @@ import { round } from '@Utils/NumString/stringArithmatics';
 import { navigateToarket } from '@Views/AboveBelow/Helpers/navigateToMarket';
 import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
 import {
-  aboveBelowActiveMarketAtom,
   favouriteMarketsAtom,
+  selectedPoolActiveMarketAtom,
 } from '@Views/AboveBelow/atoms';
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -36,7 +36,7 @@ const MarketBackground = styled.button<{ isActive: boolean }>`
 export const Market: React.FC<{
   market: marketTypeAB;
 }> = ({ market }) => {
-  const activeMarket = useAtomValue(aboveBelowActiveMarketAtom);
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const { price, precision } = useMarketPrice(market.tv_id);
   const navigate = useNavigate();
 

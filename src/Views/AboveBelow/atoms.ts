@@ -1,7 +1,7 @@
 import { poolInfoType } from '@Views/TradePage/type';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { accordianTableType, marketTypeAB } from './types';
+import { IreadCallData, accordianTableType, marketTypeAB } from './types';
 
 export const selectedExpiry = atom<number | undefined>(undefined);
 
@@ -15,15 +15,25 @@ export const aboveBelowmarketsSetterAtom = atom(
 
 export const urlMarketAtom = atom<string | null>(null);
 
-export const aboveBelowActiveMarketAtom = atom<marketTypeAB | undefined>(
+export const aboveBelowActiveMarketsAtom = atom<marketTypeAB[]>((get) => {
+  const markets = get(aboveBelowMarketsAtom);
+  const urlMarket = get(urlMarketAtom);
+  if (!markets) return [];
+  if (!urlMarket) return [];
+  return markets.filter((market) => {
+    const [token0, token1] = urlMarket.split('-');
+    if (market.token0 === token0 && market.token1 === token1) return true;
+  });
+});
+export const setSelectedPoolForTradeAtom = atom<string>('USDC');
+export const selectedPoolActiveMarketAtom = atom<marketTypeAB | undefined>(
   (get) => {
-    const markets = get(aboveBelowMarketsAtom);
-    const urlMarket = get(urlMarketAtom);
+    const markets = get(aboveBelowActiveMarketsAtom);
+    const selectedPool = get(setSelectedPoolForTradeAtom);
     if (!markets) return undefined;
-    if (!urlMarket) return undefined;
     return markets.find((market) => {
-      const [token0, token1] = urlMarket.split('-');
-      if (market.token0 === token0 && market.token1 === token1) return true;
+      if (market.poolInfo.token.toUpperCase() === selectedPool.toUpperCase())
+        return true;
     });
   }
 );
@@ -78,3 +88,25 @@ export const filteredMarketsAtom = atom((get) => {
 });
 
 export const accordianTableTypeAtom = atom<accordianTableType>('active');
+export const tradeSizeAtom = atom<string>('0');
+export const readCallResponseAtom = atom(
+  null,
+  (get, set, update: { [callId: string]: [string | boolean | undefined] }) => {
+    if (!update) return;
+    const balances: { [tokenName: string]: string } = {};
+    const allowances: { [tokenName: string]: string } = {};
+    const isInCreationWindow: { [category: string]: boolean } = {};
+    for (const callId in update) {
+      const [data] = update[callId];
+      if (callId.includes('-balance')) {
+        balances[callId.split('-')[0]] = (data ?? '0') as string;
+      } else if (callId.includes('-allowance')) {
+        allowances[callId.split('-')[0]] = (data ?? '0') as string;
+      } else if (callId.includes('-creationWindow')) {
+        isInCreationWindow[callId.split('-')[2]] = (data ?? false) as boolean;
+      }
+    }
+    set(readCallDataAtom, { balances, allowances, isInCreationWindow });
+  }
+);
+export const readCallDataAtom = atom<IreadCallData | undefined>(undefined);

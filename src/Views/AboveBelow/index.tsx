@@ -6,7 +6,8 @@ import {
   tradePanelPositionSettingsAtom,
 } from '@Views/TradePage/atoms';
 import { tradePanelPosition } from '@Views/TradePage/type';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect } from 'react';
 import { polygon, polygonMumbai } from 'viem/chains';
 import { BuyTrade } from './Components/BuyTrade';
 import { MarketChart } from './Components/MarketChart';
@@ -15,6 +16,12 @@ import { StatusBar } from './Components/StatusBar';
 import { Tables } from './Components/Tables';
 import { useAboveBelowMarketsSetter } from './Hooks/useAboveBelowMarketsSetter';
 import { useActiveMarketSetter } from './Hooks/useActiveMarketSetter';
+import { useReacallDataSetter } from './Hooks/useReadcallDataSetter';
+import {
+  aboveBelowActiveMarketsAtom,
+  selectedPoolActiveMarketAtom,
+  setSelectedPoolForTradeAtom,
+} from './atoms';
 
 export const AboveBelow = () => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -23,9 +30,22 @@ export const AboveBelow = () => {
   usePriceRetriable();
   useAboveBelowMarketsSetter();
   useActiveMarketSetter();
+  useReacallDataSetter();
+  const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
+  const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const markets = useAtomValue(aboveBelowActiveMarketsAtom);
+
   if ([polygon.id, polygonMumbai.id].includes(activeChain.id as 80001)) {
     return <MobileWarning />;
   }
+
+  useEffect(() => {
+    if (markets.length > 0) {
+      if (!selectedPoolMarket) {
+        setActivePoolMarket(markets[0].poolInfo.token.toUpperCase());
+      }
+    }
+  }, [markets.length]);
 
   return (
     <div

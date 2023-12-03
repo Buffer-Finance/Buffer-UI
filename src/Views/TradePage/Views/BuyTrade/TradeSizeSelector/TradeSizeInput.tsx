@@ -1,50 +1,20 @@
-import { toFixed } from '@Utils/NumString';
-import { add, gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
-import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
-import { tradeSettingsAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
-import { getMaximumValue, getMinimumValue } from '@Views/TradePage/utils';
-import { Trans } from '@lingui/macro';
-import { useAtom, useAtomValue } from 'jotai';
-import { useEffect, useState } from 'react';
-import { BuyUSDCLink } from '../BuyUsdcLink';
 import { escapeRegExp, inputRegex } from '../CurrentPrice';
 
-const className = 'text-[#FFE200]';
 export const TradeSizeInput: React.FC<{
   maxTradeSize: string;
-  tokenName: string;
-  balance: string;
-  registeredOneCT: boolean;
   minTradeSize: string;
   onSubmit?: () => void;
-  platformFee: string;
+  tradeSize: string;
+  setTradeSize: (value: string) => void;
+  setMaxValue: () => void;
 }> = ({
   maxTradeSize,
-  registeredOneCT,
-  tokenName,
-  balance,
   onSubmit,
   minTradeSize,
-  platformFee,
+  setTradeSize,
+  tradeSize,
+  setMaxValue,
 }) => {
-  const [minerr, setminErr] = useState(false);
-  const [maxerr, setmaxErr] = useState(false);
-  const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
-  // console.log(`TradeSizeInput-tradeSize: `, tradeSize);
-  useEffect(() => {
-    if (lt(tradeSize || '0', minTradeSize)) {
-      setminErr(true);
-    } else {
-      setminErr(false);
-    }
-    if (gt(tradeSize || '0', maxTradeSize)) {
-      setmaxErr(true);
-    } else {
-      setmaxErr(false);
-    }
-  }, [tradeSize]);
-  const settings = useAtomValue(tradeSettingsAtom);
-
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="relative flex flex-row gap-x-4 items-center">
@@ -72,58 +42,11 @@ export const TradeSizeInput: React.FC<{
         />
         <button
           className="absolute right-3 bg-[#141823] rounded-[6px] py-2 px-[6px] text-f12"
-          onClick={() => {
-            setTradeSize(
-              getMaximumValue(
-                toFixed(
-                  subtract(getMinimumValue(maxTradeSize, balance), platformFee),
-                  2
-                ),
-                '0'
-              )
-            );
-            // setmaxErr(false);
-            // setminErr(false);
-          }}
+          onClick={setMaxValue}
         >
           Max
         </button>
       </div>
-
-      {registeredOneCT && minerr && (
-        <Trans>
-          <span className="text-red whitespace-nowrap">
-            Min trade size is {minTradeSize} {tokenName}
-          </span>
-        </Trans>
-      )}
-
-      {registeredOneCT && maxerr && (
-        <Trans>
-          <span
-            className={`${
-              settings.partialFill ? className : 'text-red'
-            } whitespace-nowrap flex gap-x-2 items-center`}
-          >
-            <span>
-              <LightToolTipSVG />
-            </span>
-            Max trade size is {maxTradeSize} {tokenName}
-          </span>
-        </Trans>
-      )}
-
-      {registeredOneCT &&
-        tradeSize &&
-        gt(tradeSize ?? '0', balance ?? '0') &&
-        gt(add(tradeSize ?? '0', platformFee), balance ?? '0') && (
-          <Trans>
-            <span className="text-red whitespace-nowrap flex items-end">
-              You don't have enough {tokenName}.&nbsp;
-              <BuyUSDCLink token={tokenName} />{' '}
-            </span>
-          </Trans>
-        )}
     </div>
   );
 };

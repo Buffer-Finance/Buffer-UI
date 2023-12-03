@@ -1,10 +1,10 @@
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useAtomValue } from 'jotai';
 import { getRoundedPrice } from '../Components/BuyTrade/PriceTable/helpers';
-import { aboveBelowActiveMarketAtom } from '../atoms';
+import { selectedPoolActiveMarketAtom } from '../atoms';
 
 export const useStrikePriceArray = () => {
-  const activeMarket = useAtomValue(aboveBelowActiveMarketAtom);
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const { currentPrice, precision } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,

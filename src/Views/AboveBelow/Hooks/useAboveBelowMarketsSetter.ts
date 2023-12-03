@@ -55,7 +55,6 @@ export const useAboveBelowMarketsSetter = () => {
       refreshInterval: 60000,
     }
   );
-  console.log('data', data);
   useEffect(() => {
     if (data)
       setMarkets(
