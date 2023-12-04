@@ -1,4 +1,5 @@
 import { useToast } from '@Contexts/Toast';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { useStrikePriceArray } from '@Views/AboveBelow/Hooks/useStrikePriceArray';
 import {
   selectedPoolActiveMarketAtom,
@@ -10,6 +11,7 @@ import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import { CurrentPriceLine } from './CurrentPriceLine';
+import { Fee } from './Fee';
 
 enum Columns {
   StrikePrice,
@@ -28,6 +30,7 @@ export const PriceTable = () => {
   const headsArray = useMemo(() => ['Strike Price', 'Above', 'Below'], []);
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
+  const { data: ivs } = useIV();
   const HeaderFomatter = useCallback((col: number) => {
     return (
       <TableHeader
@@ -92,6 +95,7 @@ export const PriceTable = () => {
         const isAboveSelected =
           selectedStrike === undefined ||
           (selectedStrike?.[tvId]?.isAbove && isSelected);
+
         return (
           <button
             className={`text-1 bg-[#4D81FF] rounded-l-sm px-3 py-1 w-fit whitespace-nowrap font-medium ${
@@ -99,7 +103,7 @@ export const PriceTable = () => {
             }`}
             onClick={() => setStrikePrice(true, strikePrice.toString())}
           >
-            0.2 (25%)
+            <Fee />
           </button>
         );
       case Columns.Below:
@@ -113,7 +117,7 @@ export const PriceTable = () => {
             }`}
             onClick={() => setStrikePrice(false, strikePrice.toString())}
           >
-            0.2 (25%)
+            <Fee />
           </button>
         );
       default:

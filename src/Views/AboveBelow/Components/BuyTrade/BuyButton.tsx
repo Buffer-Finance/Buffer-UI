@@ -2,19 +2,23 @@ import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { toFixed } from '@Utils/NumString';
-import { multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import {
+  readCallDataAtom,
   selectedExpiry,
   selectedPoolActiveMarketAtom,
   selectedPriceAtom,
+  tradeSizeAtom,
 } from '@Views/AboveBelow/atoms';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { tradeSettingsAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
+import { tradeSettingsAtom } from '@Views/TradePage/atoms';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import RouterABI from '../../abis/Router.json';
+import { ApproveBtn } from './ApproveBtn';
 
 export const Buy = () => {
   const { activeChain } = useActiveChain();
@@ -27,7 +31,39 @@ export const Buy = () => {
   const amount = useAtomValue(tradeSizeAtom);
   const selectedPrice = useAtomValue(selectedPriceAtom);
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const readCallData = useAtomValue(readCallDataAtom);
 
+  if (activeMarket === undefined)
+    return (
+      <ConnectionRequired>
+        <BlueBtn onClick={() => {}} isDisabled={true}>
+          Select a Market
+        </BlueBtn>
+      </ConnectionRequired>
+    );
+
+  if (readCallData === undefined) return <Skeleton />;
+  const token = activeMarket.poolInfo.token.toUpperCase();
+  const decimals = activeMarket.poolInfo.decimals;
+  const allowance = divide(readCallData.allowances[token], decimals);
+
+  if (allowance === undefined || allowance === null)
+    return (
+      <ConnectionRequired>
+        <BlueBtn onClick={() => {}} isDisabled={true}>
+          Allowance not found{' '}
+        </BlueBtn>
+      </ConnectionRequired>
+    );
+
+  if (lt(allowance, amount ?? '0')) {
+    return (
+      <ApproveBtn
+        tokenAddress={activeMarket.poolInfo.tokenAddress}
+        routerAddress={config.above_below_router}
+      />
+    );
+  }
   async function buyTrade() {
     try {
       if (!selectedTimestamp) throw new Error('Please select expiry date');
@@ -52,7 +88,7 @@ export const Buy = () => {
       toastify({
         type: 'error',
         msg: (e as Error).message,
-        id: 'buyTrade',
+        id: 'buyTrade-above-below',
       });
     } finally {
       setLoading('None');

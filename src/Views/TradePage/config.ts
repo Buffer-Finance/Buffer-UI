@@ -672,6 +672,11 @@ const baseURLString = isTestnet
     ? 'VITE_INSTANT_TRADING_HOST_DEVELOPMENT'
     : `VITE_INSTANT_TRADING_HOST_TESTNET`
   : `VITE_INSTANT_TRADING_HOST`;
+
+const aboveBelowURLString = isTestnet
+  ? 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET'
+  : 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET';
 export const baseUrl = import.meta.env[baseURLString];
+export const aboveBelowBaseUrl = import.meta.env[aboveBelowURLString];
 
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;

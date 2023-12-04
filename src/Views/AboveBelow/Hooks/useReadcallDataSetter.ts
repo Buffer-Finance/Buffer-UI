@@ -59,7 +59,7 @@ export const useReacallDataSetter = () => {
               address: market.poolInfo.tokenAddress,
               abi: erc20ABI,
               name: 'allowance',
-              params: [address, configData.router],
+              params: [address, configData.above_below_router],
               id: getCallId(market.poolInfo.token, '-allowance'),
             },
           ])
