@@ -29,9 +29,10 @@ import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { encodeFunctionData } from 'viem';
-import { erc20ABI } from 'wagmi';
+import { erc20ABI, useAccount } from 'wagmi';
 import TournamentLeaderboardABI from '../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../ABIs/TournamentManager.json';
+import { useUserAccount } from '@Hooks/useUserAccount';
 export const tournamentButtonStyles =
   '!text-f14 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2';
 
@@ -57,6 +58,7 @@ export const TournamentCardButtons: React.FC<{
 }> = ({ tournament, activeAllMyTab, tournamentBasedData }) => {
   const activeChain = useAtomValue(activeChainAtom);
   const user = useAtomValue(userAtom);
+  const { address } = useAccount();
   const { sendTxn } = useSmartAccount();
   const [btnLoading, setBtnLoading] = useState(false);
   const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
@@ -108,7 +110,7 @@ export const TournamentCardButtons: React.FC<{
     const txn = {
       data: encodeFunctionData({
         abi: TournamentLeaderboardABI,
-        args: [tournament.id],
+        args: [tournament.id, address],
         functionName: 'claimReward',
       }),
       to: config.leaderboard,
@@ -218,69 +220,9 @@ export const TournamentCardButtons: React.FC<{
       </>
     );
   }
-  // else if (
-  //   secondButton === null &&
-  //   tournament.state.toLowerCase() !== 'closed'
-  // ) {
-  //   const buyPlayTokens = () => {
-  //     setBtnLoading(true);
-  //     writeCall(
-  //       config.manager,
-  //       TournamentManagerABI,
-  //       (response) => {
-  //         setBtnLoading(false);
-  //         console.log(response);
-  //       },
-  //       'buyTournamentTokens',
-  //       [tournament.id]
-  //     );
-  //   };
-  // const hasUserBoughtMaxTickets =
-  //   tournament.userBoughtTickets >=
-  //   tournament.tournamentConditions.maxBuyinsPerWallet;
-  // const maximumparticipantsReached =
-  //   parseInt(tournament.tournamentLeaderboard.userCount) >=
-  //   parseInt(tournament.tournamentConditions.maxParticipants);
-  //   secondButton = (
-  //     <BufferButton
-  //       className={tournamentButtonStyles}
-  //       onClick={buyPlayTokens}
-  //       isLoading={btnLoading}
-  //       isDisabled={hasUserBoughtMaxTickets || maximumparticipantsReached}
-  //     >
-  // {maximumparticipantsReached ? (
-  //   'Sold Out'
-  // ) : hasUserBoughtMaxTickets ? (
-  //   'Max bought'
-  // ) : (
-  //   <>
-  //     {+tournament.userBoughtTickets > 0 ? 'Re-Buy' : 'Entry'}
-  //     <Display
-  //       data={ticketCost}
-  //       unit={tournament.buyinTokenSymbol}
-  //       precision={0}
-  //     />
-  //   </>
-  // )}
-  //     </BufferButton>
-  //   );
-  // }
 
   return (
     <div className="flex b1200:flex-col items-center justify-center gap-[5px] mt-4">
-      {/* <BufferButton
-        className={tournamentButtonStyles}
-        isDisabled={
-          tournament.id === activeTournamentId ||
-          tournament.state.toLowerCase() === 'upcoming'
-        }
-        onClick={() => {
-          setActiveTournament(tournament.id);
-        }}
-      >
-        <TradeIcon />
-        Trade
-      </BufferButton> */}
       {secondButton}
     </div>
   );
