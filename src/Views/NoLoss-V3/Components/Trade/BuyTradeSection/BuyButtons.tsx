@@ -3,7 +3,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { toFixed } from '@Utils/NumString';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
 import { useIsMarketInCreationWindow } from '@Views/NoLoss-V3/Hooks/useIsMarketInCreationWindow';
@@ -182,21 +182,24 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       setLoadingState('none');
     }
   }
+  console.log(
+    `BuyButtons-readCallResults.activeTournamentBalance: `,
+    readCallResults.activeTournamentBalance
+  );
 
-  // if (isTradingApproved === false) {
-  //   return (
-  //     <BufferButton
-  //       onClick={() => {
-  //         handleApproveClick(false);
-  //       }}
-  //       isLoading={loadingState === 'approve'}
-  //       className="bg-blue"
-  //       isDisabled={loadingState !== 'none'}
-  //     >
-  //       Approve
-  //     </BufferButton>
-  //   );
-  // }
+  if (gt(multiply(userInput, 18), readCallResults.activeTournamentBalance)) {
+    return (
+      <BufferButton
+        onClick={() => {
+          handleApproveClick(false);
+        }}
+        className="bg-blue"
+        isDisabled={true}
+      >
+        Insufficient Balance!
+      </BufferButton>
+    );
+  }
 
   async function buyTrade(isAbove: boolean) {
     try {

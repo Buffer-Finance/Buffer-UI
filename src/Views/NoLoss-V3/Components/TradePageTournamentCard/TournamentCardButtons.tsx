@@ -34,7 +34,7 @@ import TournamentLeaderboardABI from '../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../ABIs/TournamentManager.json';
 import { useUserAccount } from '@Hooks/useUserAccount';
 export const tournamentButtonStyles =
-  '!text-f14 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2';
+  '!text-f14 flex items-center gap-x-2 !h-fit py-2 bg-blue b1200:px-2 mt-2';
 
 export const TournamentCardButtons: React.FC<{
   tournament: ItournamentData;
