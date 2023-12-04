@@ -105,18 +105,11 @@ const useSmartAccount = () => {
       config?: { sponsored?: 'Native' | `0x${string}` }
     ) => {
       if (!smartAccount) return;
-      console.time('SessionStart');
       const [isSessionEnabled, isBSMEnabled] = await getSessionState(
         smartAccount.library
       );
       let transactionArray = [...transactions];
 
-      console.timeEnd('SessionStart');
-      console.log(
-        `useSmartAccount-isSessionEnabled, isBSMEnabled: `,
-        isSessionEnabled,
-        isBSMEnabled
-      );
       const localSigner = await getSessionSigner(smartAccount.address);
       const sessionModule = await SessionKeyManagerModule.create({
         moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
@@ -134,7 +127,8 @@ const useSmartAccount = () => {
       };
       let sendUserParams: SendUserOpParams | undefined = undefined;
       console.log(
-        `1 useSmartAccount-prereq: `,
+        `1 useSmartAccount-initial-transactionArray: `,
+        transactionArray,
         localSigner,
         isSessionEnabled,
         isBSMEnabled

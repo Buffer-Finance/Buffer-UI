@@ -158,7 +158,7 @@ export const TournamentCardButtons: React.FC<{
         <BufferButton
           onClick={approveTournamentManager}
           isLoading={btnLoading}
-          className={tournamentButtonStyles + ' mt-2 '}
+          className={tournamentButtonStyles + ' mt-3 '}
         >
           Approve
         </BufferButton>
