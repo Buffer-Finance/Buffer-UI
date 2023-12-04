@@ -39,7 +39,8 @@ export const TradeSize: React.FC<{
   if (activeMarket === undefined || readCallData === undefined) return <></>;
   const token = activeMarket.poolInfo.token.toUpperCase();
   const decimals = activeMarket.poolInfo.decimals;
-  const balance = divide(readCallData.balances[token], decimals) as string;
+  const balance =
+    divide(readCallData.balances[token], decimals) ?? ('0' as string);
   return (
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">

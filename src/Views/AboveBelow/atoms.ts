@@ -110,3 +110,13 @@ export const readCallResponseAtom = atom(
   }
 );
 export const readCallDataAtom = atom<IreadCallData | undefined>(undefined);
+
+export const selectedPriceAtom = atom<
+  | {
+      [marketTVid: string]: {
+        price: string;
+        isAbove: boolean;
+      };
+    }
+  | undefined
+>(undefined);

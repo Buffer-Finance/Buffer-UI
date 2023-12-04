@@ -1,7 +1,13 @@
+import { useToast } from '@Contexts/Toast';
 import { useStrikePriceArray } from '@Views/AboveBelow/Hooks/useStrikePriceArray';
+import {
+  selectedPoolActiveMarketAtom,
+  selectedPriceAtom,
+} from '@Views/AboveBelow/atoms';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/TradePage/Views/AccordionTable/Common';
 import { Skeleton } from '@mui/material';
+import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import { CurrentPriceLine } from './CurrentPriceLine';
 
@@ -18,7 +24,10 @@ export const PriceTable = () => {
     increasingPriceArray,
     precision,
   } = useStrikePriceArray();
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const headsArray = useMemo(() => ['Strike Price', 'Above', 'Below'], []);
+  const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
+  const toastify = useToast();
   const HeaderFomatter = useCallback((col: number) => {
     return (
       <TableHeader
@@ -30,6 +39,35 @@ export const PriceTable = () => {
     );
   }, []);
 
+  function setStrikePrice(isAbove: boolean, price: string) {
+    try {
+      if (!activeMarket) return;
+      const marketTVid = activeMarket?.tv_id;
+      if (!marketTVid) throw new Error('Trading View Id Not Found.');
+      if (!price) throw new Error('Price Not Found.');
+      if (selectedStrike === undefined) {
+        setSelectedStrike({
+          [marketTVid]: {
+            price,
+            isAbove,
+          },
+        });
+      } else {
+        setSelectedStrike((prvStrikes) => ({
+          ...prvStrikes,
+          [marketTVid]: {
+            price,
+            isAbove,
+          },
+        }));
+      }
+    } catch (e) {
+      toastify({
+        message: 'Error Setting Strike Price.' + (e as Error).message,
+        type: 'error',
+      });
+    }
+  }
   const BodyFormatter: any = (
     row: number,
     col: number,
@@ -38,26 +76,51 @@ export const PriceTable = () => {
     const strikePrice = isAboveTable
       ? increasingPriceArray[row]
       : decreasingPriceArray[row];
+    const tvId = activeMarket?.tv_id;
+    if (!tvId) return <></>;
+    const isSelected =
+      selectedStrike === undefined ||
+      selectedStrike?.[tvId]?.price === strikePrice.toString();
     switch (col) {
       case Columns.StrikePrice:
-        return <div className="text-1">{strikePrice}</div>;
-      case Columns.Above:
         return (
-          <div className="text-1 bg-[#4D81FF] rounded-l-sm px-3 py-1 w-fit whitespace-nowrap font-medium">
-            0.2 (25%)
+          <div className={`text-1 ${isSelected ? '' : 'opacity-20'}`}>
+            {strikePrice}
           </div>
         );
-      case Columns.Below:
+      case Columns.Above:
+        const isAboveSelected =
+          selectedStrike === undefined ||
+          (selectedStrike?.[tvId]?.isAbove && isSelected);
         return (
-          <div className="text-1 bg-[#FF5353] rounded-r-sm px-3 py-1 w-fit whitespace-nowrap font-medium">
+          <button
+            className={`text-1 bg-[#4D81FF] rounded-l-sm px-3 py-1 w-fit whitespace-nowrap font-medium ${
+              !isAboveSelected ? 'opacity-20' : ''
+            }`}
+            onClick={() => setStrikePrice(true, strikePrice.toString())}
+          >
             0.2 (25%)
-          </div>
+          </button>
+        );
+      case Columns.Below:
+        const isBelowSelected =
+          selectedStrike === undefined ||
+          (!selectedStrike?.[tvId]?.isAbove && isSelected);
+        return (
+          <button
+            className={`text-1 bg-[#FF5353] rounded-r-sm px-3 py-1 w-fit whitespace-nowrap font-medium ${
+              !isBelowSelected ? 'opacity-20' : ''
+            }`}
+            onClick={() => setStrikePrice(false, strikePrice.toString())}
+          >
+            0.2 (25%)
+          </button>
         );
       default:
         return <div className=""></div>;
     }
   };
-  if (!currentPrice)
+  if (!currentPrice || !activeMarket)
     return (
       <Skeleton className="w-[1005] !h-[300px] lc !transform-none !mt-3" />
     );
