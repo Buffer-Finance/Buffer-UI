@@ -58,7 +58,7 @@ export const useAllTournamentData = () => {
             address: config.tournament_reader,
             abi: TournamentReaderABI,
             name: 'bulkFetchUserTournaments',
-            params: [user.mainEOA, ids],
+            params: [user.userAddress, ids],
             id: getCallId(
               config.tournament_reader,
               'bulkFetchUserTournaments',

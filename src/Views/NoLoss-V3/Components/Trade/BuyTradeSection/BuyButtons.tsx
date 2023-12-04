@@ -182,10 +182,6 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       setLoadingState('none');
     }
   }
-  console.log(
-    `BuyButtons-readCallResults.activeTournamentBalance: `,
-    readCallResults.activeTournamentBalance
-  );
 
   if (gt(multiply(userInput, 18), readCallResults.activeTournamentBalance)) {
     return (
