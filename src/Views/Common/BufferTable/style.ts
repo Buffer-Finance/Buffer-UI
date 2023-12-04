@@ -96,6 +96,10 @@ const TableBackground = styled.div`
         &:hover {
           color: white;
         }
+
+        &.th-head {
+          padding: 8px 0px;
+        }
         @media (max-width: 1300px) {
           border-radius: none;
         }
@@ -134,6 +138,14 @@ const TableBackground = styled.div`
         &.disable-animation {
           &:hover {
             transform: scaleX(1);
+          }
+        }
+
+        &.no-hover {
+          cursor: default;
+          &:hover {
+            background: ${(props) =>
+              props?.isBodyTransparent ? 'transparent' : '#171722'};
           }
         }
 
@@ -176,7 +188,7 @@ const TableBackground = styled.div`
             height: 50px;
           }
           &.sm {
-            padding: 1.7rem 0;
+            padding: 4px 0;
           }
           @media (max-width: 600px) {
             font-size: 12px;

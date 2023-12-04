@@ -27,14 +27,14 @@ export const useStrikePriceArray = () => {
       startPrice = roundedPrice - +stepsize;
     }
     return startPrice - i * +stepsize;
-  }).reverse();
+  });
   const increasingPriceArray = Array.from({ length: 5 }, (_, i) => {
     let startPrice = roundedPrice;
     if (startPrice < currentPrice) {
       startPrice = roundedPrice + +stepsize;
     }
     return startPrice + i * +stepsize;
-  });
+  }).reverse();
 
   return {
     currentPrice,

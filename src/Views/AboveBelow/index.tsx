@@ -16,6 +16,7 @@ import { StatusBar } from './Components/StatusBar';
 import { Tables } from './Components/Tables';
 import { useAboveBelowMarketsSetter } from './Hooks/useAboveBelowMarketsSetter';
 import { useActiveMarketSetter } from './Hooks/useActiveMarketSetter';
+import { usePastTradeQuery } from './Hooks/usePastTradeQuery';
 import { useReacallDataSetter } from './Hooks/useReadcallDataSetter';
 import {
   aboveBelowActiveMarketsAtom,
@@ -31,6 +32,7 @@ export const AboveBelow = () => {
   useAboveBelowMarketsSetter();
   useActiveMarketSetter();
   useReacallDataSetter();
+  usePastTradeQuery();
   const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
   const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);

@@ -14,7 +14,7 @@ export const Accordian: React.FC<{
   return (
     <div className="w-full bg-[#282B39] rounded-[2px] flex items-center  justify-between p-3 ">
       <div className="flex gap-x-[15px]">
-        {(['leaderBoard', 'history', 'cancelled'] as accordianTableType[]).map(
+        {(['active', 'history', 'cancelled'] as accordianTableType[]).map(
           (tableName) => (
             <button
               onClick={() => {

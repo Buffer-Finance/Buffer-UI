@@ -1,11 +1,12 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { marketsForChart } from '@Views/TradePage/config';
+
 import axios from 'axios';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo } from 'react';
 import { getAddress } from 'viem';
 import { aboveBelowMarketsAtom } from '../atoms';
-import { BetState, TradeInputs, useAheadTrades } from './useAheadTrades';
+import { marketTypeAB } from '../types';
+import { BetState, TradeInputs } from './useAheadTrades';
 import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
 export const expiryPriceCache: {
   [key: string]: string;
@@ -79,16 +80,15 @@ export const updateCancelledPageNumber = atom(
 const TRADESINAPAGE = 10;
 export interface IGQLHistory {
   strike: string;
-  totalFee: string;
   state: BetState;
   isAbove: boolean;
   optionContract: {
-    asset: string;
     address: string;
+    token0: string;
+    token1: string;
   };
   amount?: string;
   creationTime?: string;
-
   expirationPrice?: string;
   expirationTime?: string;
   payout?: string;
@@ -98,13 +98,9 @@ export interface IGQLHistory {
   user: string;
   queueTimestamp?: string;
   cancelTimestamp?: string;
-  slippage?: string;
-  tournament: {
-    id: string;
-  };
   //added on FE
   blockNumber?: number;
-  chartData: (typeof marketsForChart)[keyof typeof marketsForChart];
+  market: marketTypeAB;
 }
 
 export const useProcessedTrades = () => {
@@ -147,7 +143,7 @@ export const useProcessedTrades = () => {
         return singleTrade;
       });
 
-      const updatedTrade = tempTrades
+      return tempTrades
         ?.map((trade) => {
           if (trade === null) return null;
           if (!markets) return null;
@@ -160,12 +156,10 @@ export const useProcessedTrades = () => {
           if (!market) return null;
           return {
             ...trade,
-            chartData: marketsForChart[market.tv_id],
+            market,
           };
         })
         .filter((trade) => trade !== null);
-
-      return updatedTrade;
     },
     [markets]
   );
@@ -175,7 +169,10 @@ export const useProcessedTrades = () => {
 
 export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
   if (currentTrade.state === BetState.active) {
-    const assets = currentTrade.optionContract.asset;
+    const assets =
+      currentTrade.optionContract.token0 +
+      '-' +
+      currentTrade.optionContract.token1;
     axios
       .post(`https://oracle.buffer-finance-api.link/price/query/`, [
         {
@@ -223,9 +220,9 @@ export const usePastTradeQuery = () => {
   });
 
   const blockNumber = data?._meta?.block.number;
-  const trades = useAheadTrades(blockNumber, user, false);
+  const trades = { data: [], del: [], fromBlock: 0, toBlock: null };
+  // useAheadTrades(blockNumber, user, false);
   // console.log(`trades: `, trades);
-  //  { data: [], del: [], fromBlock: 0, toBlock: null };
   useEffect(() => {
     let activeResponseArr: (IGQLHistory | null)[] = [];
     if (trades?.[BetState.queued] || trades?.[BetState.active])

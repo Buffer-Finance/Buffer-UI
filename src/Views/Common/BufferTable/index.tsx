@@ -42,6 +42,7 @@ interface IBufferTable {
   highlightIndexs?: number[];
   loading?: boolean;
   smHeight?: boolean;
+  smThHeight?: boolean;
   count?: number;
   tableBodyClass?: string;
   showOnly?: number[];
@@ -58,6 +59,7 @@ interface IBufferTable {
     | ((event: React.ChangeEvent<unknown>, page: number) => void)
     | undefined;
   activePage?: number;
+  noHover?: boolean;
 }
 
 const BufferTable: React.FC<IBufferTable> = ({
@@ -67,7 +69,8 @@ const BufferTable: React.FC<IBufferTable> = ({
   bodyJSX,
   topDecorator,
   widths,
-  smHeight,
+  smHeight = false,
+  smThHeight = false,
   selectedIndex,
   onRowClick,
   showOnly,
@@ -90,6 +93,7 @@ const BufferTable: React.FC<IBufferTable> = ({
   highlightIndexs,
   activePage = 1,
   accordianJSX,
+  noHover = false,
 }) => {
   let rowClass = '';
   let tableCellCls = 'table-cell';
@@ -128,8 +132,8 @@ const BufferTable: React.FC<IBufferTable> = ({
         >
           {headerJSX && (
             <TableHead
-              className={`${
-                isHeaderTransparent ? '!bg-[transparent] transparent-hover' : ''
+              className={` ${noHover ? 'no-hover' : 'transparent-hover'} ${
+                isHeaderTransparent ? '!bg-[transparent]' : ''
               } table-header ${shouldHideHeader ? 'tab' : ''} `}
             >
               <TableRow className={` table-row-head`}>
@@ -140,9 +144,9 @@ const BufferTable: React.FC<IBufferTable> = ({
                     <TableCell
                       key={idx}
                       className={` ${show ? '' : '!hidden'}  ${
-                        isHeaderTransparent
-                          ? '!bg-[transparent] transparent-hover'
-                          : ''
+                        smThHeight ? 'th-head ' : ''
+                      }  ${noHover ? 'no-hover' : 'transparent-hover'}  ${
+                        isHeaderTransparent ? '!bg-[transparent]' : ''
                       } !z-10`}
                     >
                       {headerJSX(idx)}
@@ -157,9 +161,9 @@ const BufferTable: React.FC<IBufferTable> = ({
             {topDecorator}
             {loading ? (
               <TableRow
-                className={`table-row skel ${rowClass} ${
-                  isBodyTransparent ? 'transparent transparent-hover' : ''
-                }`}
+                className={`table-row skel ${rowClass}  ${
+                  noHover ? 'no-hover' : 'transparent-hover'
+                } ${isBodyTransparent ? 'transparent' : ''}`}
               >
                 <TableCell className="skel-cell" colSpan={100}>
                   <Skeleton className="skel" />
@@ -174,8 +178,8 @@ const BufferTable: React.FC<IBufferTable> = ({
                   <TableRow
                     key={rowIdx}
                     className={`group table-row  ${rowClass} ${
-                      isBodyTransparent ? 'transparent transparent-hover' : ''
-                    }`}
+                      noHover ? 'no-hover' : 'transparent-hover'
+                    } ${isBodyTransparent ? 'transparent' : ''}`}
                     onClick={() => {
                       onRowClick(rowIdx);
                       if (!!accordianJSX) {

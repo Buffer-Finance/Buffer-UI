@@ -63,7 +63,8 @@ export const usePastTradeQueryByFetch = ({
                 totalFee
                 user
                 optionContract {
-                  asset
+                  token0
+                  token1
                   address
                 }
             }
@@ -91,7 +92,8 @@ export const usePastTradeQueryByFetch = ({
                 totalFee
                 user
                 optionContract {
-                  asset
+                  token0
+                  token1
                   address
                 }
             }
@@ -106,12 +108,11 @@ export const usePastTradeQueryByFetch = ({
                 isAbove
                 queueID
                 state
-                slippage
                 strike
-                totalFee
                 user
                 optionContract {
-                  asset
+                  token0
+                  token1
                   address
                 }
             }
@@ -129,14 +130,13 @@ export const usePastTradeQueryByFetch = ({
                 queueID
                 reason
                 state
-                slippage
                 strike
-                totalFee
                 queueTimestamp
                 cancelTimestamp
                 user
                 optionContract {
-                  asset
+                  token0
+                  token1
                   address
                 }
             }
