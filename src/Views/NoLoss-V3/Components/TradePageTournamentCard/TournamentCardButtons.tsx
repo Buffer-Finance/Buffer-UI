@@ -118,7 +118,10 @@ export const TournamentCardButtons: React.FC<{
     await sendTxn([txn]);
     setBtnLoading(false);
   }
-
+  let isAllowed = gt(
+    divide(allowance, tournament.buyinTokenDecimals)!,
+    ticketCost
+  );
   if (tournament.state.toLowerCase() === 'closed' && activeAllMyTab === 'my') {
     const alreadClaimed = tournament.hasUserClaimed;
 
@@ -133,60 +136,47 @@ export const TournamentCardButtons: React.FC<{
       </BufferButton>
     );
   } else {
-    const approveTournamentManager = async () => {
-      setBtnLoading(true);
-      let isAllowed = gt(
-        divide(allowance, tournament.buyinTokenDecimals)!,
-        ticketCost
+    if (!isAllowed) {
+      const approveTournamentManager = () => {
+        setBtnLoading(true);
+        writeCall(
+          tournament.tournamentMeta.buyinToken,
+          erc20ABI as any,
+          (response) => {
+            setBtnLoading(false);
+            console.log(response);
+          },
+          'approve',
+          [
+            config.manager,
+            '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+          ]
+        );
+      };
+      return (
+        <BufferButton
+          onClick={approveTournamentManager}
+          isLoading={btnLoading}
+          className={tournamentButtonStyles}
+        >
+          Approve
+        </BufferButton>
       );
+    }
 
-      let isBufferRouterApproved = readCallResults?.isTradingApproved;
-      const allowanceTxn = isAllowed
-        ? []
-        : [
-            {
-              data: encodeFunctionData({
-                abi: erc20ABI,
-                functionName: 'approve',
-                args: [
-                  config.manager,
-                  115792089237316195423570985008687907853269984665640564039457584007913129639935n,
-                ],
-              }),
-              to: tournament.tournamentMeta.buyinToken,
-            },
-          ];
-      const buyPlayTokensTxn = [
-        {
-          data: encodeFunctionData({
-            abi: TournamentManagerABI,
-            functionName: 'buyTournamentTokens',
-            args: [tournament.id],
-          }),
-          to: config.manager,
+    const buyPlayTokens = () => {
+      setBtnLoading(true);
+      writeCall(
+        config.manager,
+        TournamentManagerABI,
+        (response) => {
+          setBtnLoading(false);
+          console.log(response);
         },
-      ];
-      const approveForAllTxn = readCallResults?.isTradingApproved
-        ? []
-        : [
-            {
-              data: encodeFunctionData({
-                abi: TournamentManagerABI,
-                functionName: 'setApprovalForAll',
-                args: [config.router, true],
-              }),
-              to: config.manager,
-            },
-          ];
-      const transactions = [
-        ...allowanceTxn,
-        ...buyPlayTokensTxn,
-        ...approveForAllTxn,
-      ];
-      await sendTxn(transactions);
-      setBtnLoading(false);
+        'buyTournamentTokens',
+        [tournament.id]
+      );
     };
-
     const hasUserBoughtMaxTickets =
       tournament.userBoughtTickets >=
       tournament.tournamentConditions.maxBuyinsPerWallet;
@@ -197,7 +187,7 @@ export const TournamentCardButtons: React.FC<{
     secondButton = (
       <>
         <BufferButton
-          onClick={approveTournamentManager}
+          onClick={buyPlayTokens}
           isLoading={btnLoading}
           disabled={maximumparticipantsReached || hasUserBoughtMaxTickets}
           className={tournamentButtonStyles}

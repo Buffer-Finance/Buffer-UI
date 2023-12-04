@@ -31,6 +31,7 @@ export const userAtom = atom<
       viewOnlyAddress: string | null;
       connectedWalletAddress: string | undefined;
       isViewOnlyMode: boolean;
+      mainEOA: string | undefined;
     }
   | undefined
 >(undefined);

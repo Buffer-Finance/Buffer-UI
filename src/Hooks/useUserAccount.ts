@@ -18,6 +18,7 @@ export const useUserAccount = () => {
       viewOnlyAddress: urlAddress,
       isViewOnlyMode: urlAddress ? true : false,
       connectedWalletAddress: account,
+      mainEOA: account,
     });
   }, [account, query, smartAccount]);
 };
