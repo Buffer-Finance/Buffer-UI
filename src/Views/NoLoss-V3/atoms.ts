@@ -89,13 +89,17 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
   });
 
   response.calls = filteredTournamentsData.map((tournament) => {
+    // console.log(
+    //   `tournament.tournamentMeta.buyinToken: `,
+    //   tournament?.tournamentMeta?.buyinToken
+    // );
     return {
       address: tournament.tournamentMeta.buyinToken,
       abi: erc20ABI,
       name: 'allowance',
-      params: [user.userAddress, config.manager],
+      params: [user.mainEOA, config.manager],
       id: getCallId(tournament.tournamentMeta.buyinToken, 'allowance', [
-        user.userAddress,
+        user.mainEOA,
         config.manager,
       ]),
     };
@@ -129,7 +133,7 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
   ) {
     const buyInTokenToManagerAllowanceIds = tournamentsData.map((tournament) =>
       getCallId(tournament.tournamentMeta.buyinToken, 'allowance', [
-        user.userAddress,
+        user.mainEOA,
         config.manager,
       ])
     );

@@ -90,6 +90,7 @@ export function useWriteCall() {
         walletClient
       );
 
+    console.log(`useWriteCall-transformedArgs: `, transformedArgs);
     try {
       const { request, result } = await simulateContract(transformedArgs);
       console.log(`useWriteCall-request: `, request);
@@ -108,6 +109,8 @@ export function useWriteCall() {
 
       return hash;
     } catch (ex: unknown) {
+      console.log(`useWriteCall-error: `, ex);
+
       dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
       const shortMessage = (
         ex as ContractFunctionExecutionError

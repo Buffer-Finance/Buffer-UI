@@ -454,7 +454,8 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tournamentId", "type": "uint256" }
+      { "internalType": "uint256", "name": "tournamentId", "type": "uint256" },
+      { "internalType": "address", "name": "to", "type": "address" }
     ],
     "name": "buyTournamentTokens",
     "outputs": [],

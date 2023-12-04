@@ -89,7 +89,7 @@ export const TournamentCardButtons: React.FC<{
   const allowanceId = getCallId(
     tournament.tournamentMeta.buyinToken,
     'allowance',
-    [user.userAddress, config.manager]
+    [user.mainEOA, config.manager]
   );
   const allowance = tournamentBasedData?.buyInTokenToManagerAllowance?.find(
     (allowanceObj) => allowanceObj.id === allowanceId
@@ -118,6 +118,7 @@ export const TournamentCardButtons: React.FC<{
     await sendTxn([txn]);
     setBtnLoading(false);
   }
+
   let isAllowed = gt(
     divide(allowance, tournament.buyinTokenDecimals)!,
     ticketCost
@@ -163,7 +164,6 @@ export const TournamentCardButtons: React.FC<{
         </BufferButton>
       );
     }
-
     const buyPlayTokens = () => {
       setBtnLoading(true);
       writeCall(
@@ -174,7 +174,7 @@ export const TournamentCardButtons: React.FC<{
           console.log(response);
         },
         'buyTournamentTokens',
-        [tournament.id]
+        [tournament.id, user.userAddress]
       );
     };
     const hasUserBoughtMaxTickets =

@@ -39,6 +39,7 @@ import {
   DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
 } from '@biconomy/modules';
 import { PaymasterMode } from '@biconomy/paymaster';
+import { erc20ABI } from 'wagmi';
 export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   activeMarket,
 }) => {
@@ -58,12 +59,14 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   const activeMarketData = useAtomValue(activeMarketDataAtom);
   const isIncreationWindow = useIsMarketInCreationWindow();
   let { sendTxn } = useSmartAccount();
+
   if (!activeChain)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
         No Active Chain
       </BlueBtn>
     );
+  const config = getNoLossV3Config(activeChain?.id);
   if (!user || !user.userAddress)
     return (
       <ConnectionRequired>
@@ -157,8 +160,6 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   if (isTradingApproved === undefined)
     return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
 
-  const config = getNoLossV3Config(activeChain.id);
-
   async function handleApproveClick(revoke: boolean) {
     try {
       setLoadingState('approve');
@@ -182,20 +183,20 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
     }
   }
 
-  if (isTradingApproved === false) {
-    return (
-      <BufferButton
-        onClick={() => {
-          handleApproveClick(false);
-        }}
-        isLoading={loadingState === 'approve'}
-        className="bg-blue"
-        isDisabled={loadingState !== 'none'}
-      >
-        Approve
-      </BufferButton>
-    );
-  }
+  // if (isTradingApproved === false) {
+  //   return (
+  //     <BufferButton
+  //       onClick={() => {
+  //         handleApproveClick(false);
+  //       }}
+  //       isLoading={loadingState === 'approve'}
+  //       className="bg-blue"
+  //       isDisabled={loadingState !== 'none'}
+  //     >
+  //       Approve
+  //     </BufferButton>
+  //   );
+  // }
 
   async function buyTrade(isAbove: boolean) {
     try {
@@ -251,11 +252,26 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         functionName: 'initiateTrade',
         args,
       });
-      const tx1 = {
-        to: config.router,
-        data: encodedFunctionData,
-      };
-      await sendTxn([tx1]);
+
+      const buyTradeTxn = [
+        {
+          to: config.router,
+          data: encodedFunctionData,
+        },
+      ];
+      const approveTxn = isTradingApproved
+        ? []
+        : [
+            {
+              data: encodeFunctionData({
+                abi: TournamentManagerABI,
+                functionName: 'setApprovalForAll',
+                args: [config.router, true],
+              }),
+              to: config.manager,
+            },
+          ];
+      await sendTxn([...approveTxn, ...buyTradeTxn]);
     } catch (e) {
       toastify({
         msg: (e as Error).message,
