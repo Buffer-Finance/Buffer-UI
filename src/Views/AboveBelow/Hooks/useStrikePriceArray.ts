@@ -1,3 +1,4 @@
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useAtomValue } from 'jotai';
 import { getRoundedPrice } from '../Components/BuyTrade/PriceTable/helpers';
@@ -18,23 +19,21 @@ export const useStrikePriceArray = () => {
       increasingPriceArray: [],
     };
 
-  const roundedPrice = getRoundedPrice(
-    +currentPrice,
-    +activeMarket.config.stepSize
-  );
+  const stepsize = divide(activeMarket.config.stepSize, 8) ?? '0';
+  const roundedPrice = getRoundedPrice(+currentPrice, +stepsize);
   const decreasingPriceArray = Array.from({ length: 5 }, (_, i) => {
     let startPrice = roundedPrice;
     if (startPrice > currentPrice) {
-      startPrice = roundedPrice - +activeMarket.config.stepSize;
+      startPrice = roundedPrice - +stepsize;
     }
-    return startPrice - i * +activeMarket.config.stepSize;
+    return startPrice - i * +stepsize;
   }).reverse();
   const increasingPriceArray = Array.from({ length: 5 }, (_, i) => {
     let startPrice = roundedPrice;
     if (startPrice < currentPrice) {
-      startPrice = roundedPrice + +activeMarket.config.stepSize;
+      startPrice = roundedPrice + +stepsize;
     }
-    return startPrice + i * +activeMarket.config.stepSize;
+    return startPrice + i * +stepsize;
   });
 
   return {
