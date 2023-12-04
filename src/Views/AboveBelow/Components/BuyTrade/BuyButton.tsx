@@ -74,7 +74,7 @@ export const Buy = () => {
       setLoading('buy');
       await writeCall(() => {}, 'initiateTrade', [
         [
-          '0x1D76Fa23be51816588eBCd36DF466bB51D3ad084',
+          activeMarket.address,
           settings.partialFill,
           '',
           priceObj.isAbove,
