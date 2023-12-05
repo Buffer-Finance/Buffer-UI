@@ -76,6 +76,7 @@ export const History: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = history[row];
+    const decimals = trade.market.poolInfo.decimals;
     switch (col) {
       case TableColumn.Asset:
         return (
@@ -87,7 +88,7 @@ export const History: React.FC<{
         return (
           <Display
             data={divide(trade.strike, 8)}
-            precision={trade.chartData.price_precision.toString().length - 1}
+            precision={trade.market.price_precision.toString().length - 1}
             className="!justify-start"
           />
         );
@@ -96,7 +97,7 @@ export const History: React.FC<{
         return (
           <Display
             data={divide(trade.expirationPrice ?? '0', 8)}
-            precision={trade.chartData.price_precision.toString().length - 1}
+            precision={trade.market.price_precision.toString().length - 1}
             className="!justify-start"
           />
         );
@@ -114,7 +115,14 @@ export const History: React.FC<{
       case TableColumn.CloseTime:
         return <DisplayTime ts={trade.expirationTime as string} />;
       case TableColumn.TradeSize:
-        return divide(trade.amount, 18);
+        return (
+          <Display
+            data={divide(trade.amount, decimals)}
+            precision={2}
+            unit={trade.market.poolInfo.token}
+            className="!justify-start"
+          />
+        );
       case TableColumn.Payout:
         if (trade.state === BetState.active) return <PayoutChip data={trade} />;
         const pnl = subtract(trade.payout ?? '0', trade.amount);
@@ -126,13 +134,16 @@ export const History: React.FC<{
               className={`flex items-center ${isTradeLost ? 'red' : 'green'}`}
             >
               {isTradeLost ? '' : '+ '}
-              <Display data={divide(pnl, 18)} precision={2} />
+              <Display
+                data={divide(pnl, trade.market.poolInfo.decimals)}
+                precision={2}
+              />
             </div>
           );
         return (
           <div className="flex flex-col gap-1">
             <Display
-              data={divide(trade.payout ?? '0', 18)}
+              data={divide(trade.payout ?? '0', trade.market.poolInfo.decimals)}
               precision={2}
               className="!justify-start"
             />
@@ -140,7 +151,10 @@ export const History: React.FC<{
               className={`flex items-center ${isTradeLost ? 'red' : 'green'}`}
             >
               Net Pnl : {isTradeLost ? '' : '+ '}
-              <Display data={divide(pnl, 18)} precision={2} />
+              <Display
+                data={divide(pnl, trade.market.poolInfo.decimals)}
+                precision={2}
+              />
             </div>
           </div>
         );
@@ -204,7 +218,7 @@ export const History: React.FC<{
                 ? numberWithCommas(
                     toFixed(
                       divide(expiryPrice, 8) as string,
-                      trade.chartData.price_precision.toString().length - 1
+                      trade.market.price_precision.toString().length - 1
                     )
                   )
                 : 'Processing...'}
@@ -215,7 +229,13 @@ export const History: React.FC<{
             <span className={descClass}>
               {expiryPrice
                 ? numberWithCommas(
-                    toFixed(divide(trade.payout as string, 18) as string, 2)
+                    toFixed(
+                      divide(
+                        trade.payout as string,
+                        trade.market.poolInfo.decimals
+                      ) as string,
+                      2
+                    )
                   )
                 : 'Calculating...'}
             </span>

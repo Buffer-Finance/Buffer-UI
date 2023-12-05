@@ -66,7 +66,7 @@ export const Buy = () => {
       </ConnectionRequired>
     );
 
-  if (lt(allowance, amount ?? '0')) {
+  if (lt(allowance, amount || '0')) {
     return (
       <ApproveBtn
         tokenAddress={activeMarket.poolInfo.tokenAddress}
@@ -85,7 +85,7 @@ export const Buy = () => {
       const priceObj = selectedPrice[activeMarket.tv_id];
       const price = priceObj.price;
       if (!price) throw new Error('Please select strike price');
-      const expiration = Math.floor(selectedTimestamp / 1000) + 1;
+      const expiration = Math.floor(selectedTimestamp / 1000);
       const currentEpoch = Math.floor(Date.now() / 1000);
       const marketHash = solidityKeccak256(
         ['uint256', 'uint256'],
@@ -108,7 +108,7 @@ export const Buy = () => {
       const totalFee =
         probability +
         (settlementFee?.sf_above || settlementFees['Base'] / 1e4) * probability;
-
+      console.log('totalFee', totalFee);
       setLoading('buy');
       await writeCall(() => {}, 'initiateTrade', [
         [
@@ -116,7 +116,7 @@ export const Buy = () => {
           settings.partialFill,
           '',
           priceObj.isAbove,
-          divide(amount, totalFee),
+          toFixed(divide(amount, totalFee.toString()) as string, 0),
           toFixed(multiply(price, 8), 0),
           expiration,
           '950000',

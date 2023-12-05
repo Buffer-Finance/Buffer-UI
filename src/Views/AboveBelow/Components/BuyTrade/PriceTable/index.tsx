@@ -101,7 +101,7 @@ export const PriceTable = () => {
       ['uint256', 'uint256'],
       [
         toFixed(multiply(strikePrice.toString(), 8), 0),
-        Math.floor(selectedTimestamp / 1000) + 1,
+        Math.floor(selectedTimestamp / 1000),
       ]
     );
     const settlementFee =
