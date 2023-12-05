@@ -13,7 +13,7 @@ export const Selector = () => {
           <button
             key={timestamp}
             onClick={() => setSelectedTimestamp(timestamp)}
-            className={`p-3 text-f14 font-normal rounded-[6px] ${
+            className={`px-3 py-[3px] text-f14 font-normal rounded-[6px] ${
               isSelected
                 ? 'border-[1px] border-[#A3E3FF] bg-[#141823] text-1'
                 : 'bg-[#282B39] text-[#C3C2D4]'
