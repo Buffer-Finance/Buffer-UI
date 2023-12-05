@@ -44,8 +44,8 @@ export const AssetCell: React.FC<{
               <UpDownChip
                 isUp={isUp}
                 shouldShowText={!split}
-                upText="ABOVE"
-                downText="BELOW"
+                upText="Above"
+                downText="Below"
                 shouldShowImage={false}
               />
             )}
