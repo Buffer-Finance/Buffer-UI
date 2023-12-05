@@ -12,7 +12,6 @@ import {
 
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
-import { TradePage } from '@Views/TradePage';
 import Background from './AppStyles';
 import { Navbar } from './Views/Common/Navbar';
 
@@ -21,24 +20,13 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AboveBelow } from '@Views/AboveBelow';
-import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
-import { AllTrades } from '@Views/AllTrades';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
-import { ContractList } from '@Views/ContractList';
-import { DashboardV2 } from '@Views/DashboardV2';
 import IbfrFaucet from '@Views/Faucet';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { ProfilePage } from '@Views/Profile';
-import { ReferralPage } from '@Views/Referral';
-import { Test } from '@Views/Test';
-import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 import { defaultMarket } from '@Views/TradePage/config';
-import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
-import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
-import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
@@ -111,18 +99,17 @@ const AppRoutes = () => {
       <OnboardingAnimation />
       <OneCTModal />
       <Routes>
-        <Route path="trades" element={<AllTrades />} />
+        {/* <Route path="trades" element={<AllTrades />} /> */}
         <Route path="/faucet" element={<IbfrFaucet />} />
-        <Route path="/test" element={<Test />} />
+        {/* <Route path="/test" element={<Test />} />
         <Route path="/history" element={<TradeLog_sm />} />
         <Route path="/admin" element={<AdminConfig />} />
 
         <Route
           path="/ref/:refcode"
           element={<div>Processing your referral request...</div>}
-        ></Route>
-        {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
-        <Route path="/earn" element={<Redirect url={earnUrl} />} />
+        ></Route> */}
+        {/* <Route path="/earn" element={<Redirect url={earnUrl} />} />
 
         <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
@@ -131,17 +118,17 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
-        <Route path="/binary/:market" element={<TradePage />} />
+        <Route path="/binary/:market" element={<TradePage />} /> */}
         <Route path="/above-below/:market" element={<AboveBelow />} />
         <Route
           path="/*"
           element={
             <Navigate
-              to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
+              to={'/above-below/' + (activeMarketFromStorage || defaultMarket)}
             />
           }
         />
-        <Route path="contracts" element={<ContractList />} />
+        {/* <Route path="contracts" element={<ContractList />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
@@ -149,7 +136,7 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
-        </Route>
+        </Route> */}
       </Routes>
     </div>
   );
