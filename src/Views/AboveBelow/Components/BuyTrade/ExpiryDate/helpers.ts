@@ -10,7 +10,7 @@ export function getTimestamps(date = Date.now()) {
   const currentTimestamp = new Date(date).getTime();
   // Start of Day (8 PM current day or next day)
   const startOfDay = new Date(date);
-  startOfDay.setUTCHours(20, 0, 0, 0);
+  startOfDay.setUTCHours(8, 0, 0, 0);
 
   // Check if the current time has passed 8 PM
   if (startOfDay.getTime() <= date) {
@@ -26,7 +26,7 @@ export function getTimestamps(date = Date.now()) {
   const endOfWeek = new Date(date);
   const daysUntilFriday = (5 - endOfWeek.getUTCDay() + 7) % 7; // Calculate days until Friday
   endOfWeek.setUTCDate(endOfWeek.getUTCDate() + daysUntilFriday);
-  endOfWeek.setUTCHours(20, 0, 0, 0);
+  endOfWeek.setUTCHours(8, 0, 0, 0);
   const endOfWeekTimestamp = endOfWeek.getTime();
   timestamps.push(endOfWeekTimestamp);
 
@@ -34,7 +34,7 @@ export function getTimestamps(date = Date.now()) {
   if (endOfWeekTimestamp - currentTimestamp < 129600000) {
     const nextWeek = new Date(date);
     nextWeek.setUTCDate(nextWeek.getUTCDate() + 7);
-    nextWeek.setUTCHours(20, 0, 0, 0);
+    nextWeek.setUTCHours(8, 0, 0, 0);
     const nextWeekTimestamp = nextWeek.getTime();
     timestamps.push(nextWeekTimestamp);
   }
