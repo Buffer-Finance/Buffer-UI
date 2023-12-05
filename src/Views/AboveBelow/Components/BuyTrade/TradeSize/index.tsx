@@ -1,5 +1,12 @@
 import { toFixed } from '@Utils/NumString';
-import { add, divide, gt } from '@Utils/NumString/stringArithmatics';
+import {
+  add,
+  divide,
+  gt,
+  gte,
+  lt,
+  lte,
+} from '@Utils/NumString/stringArithmatics';
 import {
   readCallDataAtom,
   selectedPoolActiveMarketAtom,
@@ -41,6 +48,7 @@ export const TradeSize: React.FC<{
   const decimals = activeMarket.poolInfo.decimals;
   const balance =
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
+  const error = getTradeSizeError('0', balance, tradeSize);
   return (
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
@@ -78,6 +86,7 @@ export const TradeSize: React.FC<{
           tradeToken={activeMarket.poolInfo.token}
           balance={balance}
         />
+        <span className="text-red whitespace-nowrap">{error}</span>
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );
@@ -93,23 +102,24 @@ const PlatfromFeeError = ({
   balance: string;
 }) => {
   const tradeSize = useAtomValue(tradeSizeAtom);
-  const notEnoughForTrade = gt(tradeSize || '0', balance);
-  const notEnooghForFee = gt(add(tradeSize || '0', platfromFee), balance);
-  const isError = notEnooghForFee;
-  if (notEnooghForFee && notEnoughForTrade) return <></>;
+  const error = getPlatformError({
+    platfromFee,
+    tradeSize: tradeSize || '0',
+    balance,
+  });
+
   return (
     <RowGapItemsTop
       gap="4px"
-      className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
+      className={`text-${error ? 'red' : '[#7F87A7]'} text-f10`}
     >
       <LightToolTipSVG className="mt-[3px]" />
-      {isError ? (
+      {error ? (
         <>
-          Insufficient funds for platform fee.{' '}
-          <BuyUSDCLink token={tradeToken as 'ARB'} />
+          {error} <BuyUSDCLink token={tradeToken as 'ARB'} />
         </>
       ) : (
-        !isError && (
+        !error && (
           <>
             Platform fee : + {platfromFee} {tradeToken}
           </>
@@ -118,3 +128,43 @@ const PlatfromFeeError = ({
     </RowGapItemsTop>
   );
 };
+
+export function getTradeSizeError(
+  minTradeSize: string,
+  // maxTradeSize: string,
+  balance: string | undefined,
+  tradeSize: string
+) {
+  let error = '';
+  if (lte(tradeSize || '0', minTradeSize)) {
+    error = `Trade size must be higher than ${minTradeSize}`;
+  }
+  // else if (gt(tradeSize || '0', maxTradeSize)) {
+  //   error = `Max trade size is ${toFixed(maxTradeSize, 2)}`;
+  // }
+  else if (balance && gt(tradeSize || '0', balance)) {
+    error = 'Insufficient balance';
+  }
+
+  return error;
+}
+
+export function getPlatformError({
+  platfromFee,
+  tradeSize,
+  balance,
+}: {
+  platfromFee: string;
+  balance: string;
+  tradeSize: string;
+}) {
+  let error = '';
+
+  if (
+    gte(balance, tradeSize || '0') &&
+    lt(balance, add(tradeSize || '0', platfromFee))
+  ) {
+    error = 'Insufficient funds for platform fee.';
+  }
+  return error;
+}
