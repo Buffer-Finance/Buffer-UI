@@ -134,7 +134,7 @@ export const History: React.FC<{
       case TableColumn.TradeSize:
         return (
           <Display
-            data={divide(trade.amount, decimals)}
+            data={divide(trade.totalFee as string, decimals)}
             precision={2}
             unit={trade.market.poolInfo.token}
             className="!justify-start"
@@ -142,7 +142,7 @@ export const History: React.FC<{
         );
       case TableColumn.Payout:
         if (trade.state === BetState.active) return <PayoutChip data={trade} />;
-        const pnl = subtract(trade.payout ?? '0', trade.amount);
+        const pnl = subtract(trade.payout ?? '0', trade.totalFee as string);
         const isTradeLost = lt(pnl, '0');
 
         if (isMobile)

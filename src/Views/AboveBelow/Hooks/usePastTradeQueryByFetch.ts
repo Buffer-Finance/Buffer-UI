@@ -110,6 +110,10 @@ export const usePastTradeQueryByFetch = ({
                 state
                 strike
                 user
+                queueTimestamp
+                maxFeePerContract
+                expirationTime
+                numberOfContracts
                 optionContract {
                   token0
                   token1
@@ -133,6 +137,9 @@ export const usePastTradeQueryByFetch = ({
                 strike
                 queueTimestamp
                 cancelTimestamp
+                maxFeePerContract
+                expirationTime
+                numberOfContracts
                 user
                 optionContract {
                   token0

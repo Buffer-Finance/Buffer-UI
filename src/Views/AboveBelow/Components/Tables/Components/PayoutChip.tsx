@@ -14,8 +14,8 @@ export const PayoutChip: React.FC<{
   className?: string;
 }> = ({ data, className = '' }) => {
   const net_pnl = data.payout
-    ? divide(subtract(data.payout, data.amount), 18)
-    : divide(subtract('0', data.amount), 18);
+    ? divide(subtract(data.payout, (data.totalFee ?? '0') as string), 18)
+    : divide(subtract('0', (data.totalFee ?? '0') as string), 18);
 
   const isPending = data.state === BetState.active;
   let isWin = gt(net_pnl as string, '0');

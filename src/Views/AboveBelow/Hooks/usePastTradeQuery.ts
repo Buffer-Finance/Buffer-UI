@@ -90,12 +90,15 @@ export interface IGQLHistory {
   amount?: string;
   creationTime?: string;
   expirationPrice?: string;
-  expirationTime?: string;
+  expirationTime: string;
   payout?: string;
   queueID?: string;
   optionID?: string;
   reason?: string;
   user: string;
+  maxFeePerContract?: string;
+  numberOfContracts?: string;
+  totalFee?: string;
   queueTimestamp?: string;
   cancelTimestamp?: string;
   //added on FE

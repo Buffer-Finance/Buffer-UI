@@ -1,5 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import InfoIcon from '@SVG/Elements/InfoIcon';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { openBlockExplorer } from '@Views/AboveBelow/Helpers/openBlockExplorer';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
@@ -80,12 +81,25 @@ export const Cancelled: React.FC<{
         );
       case TableColumn.TradeSize:
         return (
-          <Display
-            data={divide(trade.amount, trade.market.poolInfo.decimals)}
-            precision={2}
-            className="!justify-start"
-            unit={trade.market.poolInfo.token}
-          />
+          <div className="flex gap-2 items-center">
+            <InfoIcon
+              tooltip="The max amount of trade considering the slippage"
+              sm
+            />
+            <Display
+              data={divide(
+                multiply(
+                  trade.maxFeePerContract as string,
+                  trade.numberOfContracts as string
+                ) as string,
+                trade.market.poolInfo.decimals
+              )}
+              precision={2}
+              className="!justify-start"
+              unit={trade.market.poolInfo.token}
+              label={'>'}
+            />
+          </div>
         );
       case TableColumn.QueueTimestamp:
         return <DisplayTime ts={trade.queueTimestamp as string} />;

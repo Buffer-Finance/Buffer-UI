@@ -1,7 +1,9 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import InfoIcon from '@SVG/Elements/InfoIcon';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { openBlockExplorer } from '@Views/AboveBelow/Helpers/openBlockExplorer';
+import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
@@ -9,6 +11,7 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
 import { Launch } from '@mui/icons-material';
 import { AssetCell } from './Components/AssetCell';
+import { PayoutChip } from './Components/PayoutChip';
 import { Price } from './Components/Price';
 import { Probability } from './Components/Probability';
 import { Timer } from './Components/Timer';
@@ -87,6 +90,16 @@ export const Active: React.FC<{
       case TableColumn.Current:
         return <Price tv_id={trade.market.tv_id} className="!justify-start" />;
       case TableColumn.OpenTime:
+        if (trade.state === BetState.queued)
+          return (
+            <>
+              <PayoutChip data={trade} />
+              {/* <DisplayTime
+                ts={trade.queueTimestamp as string}
+                className="!justify-start"
+              /> */}
+            </>
+          );
         return (
           <DisplayTime
             ts={trade.creationTime as string}
@@ -108,9 +121,35 @@ export const Active: React.FC<{
         );
 
       case TableColumn.TradeSize:
+        if (trade.state === BetState.queued) {
+          return (
+            <div className="flex gap-2 items-center">
+              <InfoIcon
+                tooltip="The max amount of trade considering the slippage"
+                sm
+              />
+              <Display
+                data={divide(
+                  multiply(
+                    trade.maxFeePerContract as string,
+                    trade.numberOfContracts as string
+                  ) as string,
+                  trade.market.poolInfo.decimals
+                )}
+                precision={2}
+                className="!justify-start"
+                unit={trade.market.poolInfo.token}
+                label={'>'}
+              />
+            </div>
+          );
+        }
         return (
           <Display
-            data={divide(trade.amount, trade.market.poolInfo.decimals)}
+            data={divide(
+              trade.totalFee as string,
+              trade.market.poolInfo.decimals
+            )}
             precision={2}
             className="!justify-start"
             unit={trade.market.poolInfo.token}
