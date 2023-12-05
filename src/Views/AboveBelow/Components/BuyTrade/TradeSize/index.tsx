@@ -61,31 +61,33 @@ export const TradeSize: React.FC<{
             unit={token}
           />
         </RowBetween>
-        <RowGapItemsStretched gap="0px" className="w-full">
-          <TradeSizeInput
-            maxTradeSize="0"
-            minTradeSize="0"
-            tradeSize={tradeSize}
-            setTradeSize={setTradeSize}
-            onSubmit={onSubmit}
-            setMaxValue={() => {
-              setTradeSize('0');
-            }}
-          />
+        <ColumnGap gap="0px" className="mb-3">
+          <RowGapItemsStretched gap="0px" className="w-full">
+            <TradeSizeInput
+              maxTradeSize="0"
+              minTradeSize="0"
+              tradeSize={tradeSize}
+              setTradeSize={setTradeSize}
+              onSubmit={onSubmit}
+              setMaxValue={() => {
+                setTradeSize('0');
+              }}
+            />
 
-          <PoolDropdown />
-        </RowGapItemsStretched>
-        <PlatfromFeeError
-          platfromFee={
-            divide(
-              activeMarket.config.platformFee,
-              activeMarket.poolInfo.decimals
-            ) as string
-          }
-          tradeToken={activeMarket.poolInfo.token}
-          balance={balance}
-        />
-        <Error balance={balance} tradeSize={tradeSize} />
+            <PoolDropdown />
+          </RowGapItemsStretched>
+          <PlatfromFeeError
+            platfromFee={
+              divide(
+                activeMarket.config.platformFee,
+                activeMarket.poolInfo.decimals
+              ) as string
+            }
+            tradeToken={activeMarket.poolInfo.token}
+            balance={balance}
+          />
+          <Error balance={balance} tradeSize={tradeSize} />
+        </ColumnGap>
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );
