@@ -46,8 +46,8 @@ export const PriceTable = () => {
       <TableHeader
         col={col}
         headsArr={headsArray}
-        className="text-start !mr-3 text-f13"
-        firstColClassName="!text-start !ml-3 !mr-[0]"
+        className="text-start ml-4 text-f13"
+        firstColClassName="!ml-3"
       />
     );
   }, []);
@@ -166,17 +166,18 @@ export const PriceTable = () => {
     <div>
       <BufferTable
         headerJSX={HeaderFomatter}
+        widths={['50%', '25%', '25%']}
         bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}
         cols={headsArray.length}
         onRowClick={() => {}}
-        rows={1}
+        rows={0}
         isHeaderTransparent
         shouldHideBody
         smHeight
         smThHeight
         noHover
       />
-      <PriceTableBackground className="pr-4 pl-3 max-h-[35vh] overflow-auto">
+      <PriceTableBackground className="pr-4 pl-3 max-h-[30vh] overflow-auto">
         <BufferTable
           headerJSX={HeaderFomatter}
           bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}

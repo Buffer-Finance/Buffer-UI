@@ -142,6 +142,7 @@ const BufferTable: React.FC<IBufferTable> = ({
                   if (showOnly) show = showOnly.includes(idx);
                   return (
                     <TableCell
+                      width={widths && idx < widths.length ? widths[idx] : ''}
                       key={idx}
                       className={` ${show ? '' : '!hidden'}  ${
                         smThHeight ? 'th-head ' : ''

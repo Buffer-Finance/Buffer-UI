@@ -17,7 +17,7 @@ export const SelectedTradeData = () => {
   if (!selectedPriceValue) return <></>;
   const expiryDateTimeStamp = Math.floor(selectedTimestamp / 1000);
   return (
-    <span className="text-[#7F87A7] text-f14 mt-3">
+    <span className="text-[#7F87A7] text-f13 mt-3">
       {activeMarket.token0}/{activeMarket.token1} will be{' '}
       {selectedPrice[activeMarket.tv_id].isAbove ? 'above' : 'below'}{' '}
       <span className="text-1">
