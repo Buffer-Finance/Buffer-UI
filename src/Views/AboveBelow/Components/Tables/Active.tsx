@@ -15,6 +15,7 @@ import { PayoutChip } from './Components/PayoutChip';
 import { Price } from './Components/Price';
 import { Probability } from './Components/Probability';
 import { Timer } from './Components/Timer';
+import { Visualized } from './Components/Visualized';
 
 enum TableColumn {
   Asset = 0,
@@ -25,7 +26,8 @@ enum TableColumn {
   CloseTime = 5,
   TradeSize = 6,
   PnlProbability = 7,
-  User = 8,
+  Visualization = 8,
+  User = 9,
 }
 
 export const Active: React.FC<{
@@ -62,6 +64,7 @@ export const Active: React.FC<{
     'Close Time',
     'Trade Size',
     'Pnl | Probability',
+    'Visualization',
   ];
   if (inGlobalContext) {
     headNameArray.push('user');
@@ -165,6 +168,9 @@ export const Active: React.FC<{
             <Launch />
           </button>
         );
+      case TableColumn.Visualization:
+        if (trade.state === BetState.queued) return <></>;
+        return <Visualized queue_id={trade.optionID} />;
       default:
         return <></>;
     }
