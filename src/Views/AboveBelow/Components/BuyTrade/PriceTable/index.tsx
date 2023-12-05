@@ -46,7 +46,7 @@ export const PriceTable = () => {
       <TableHeader
         col={col}
         headsArr={headsArray}
-        className="text-start ml-4 text-f13"
+        className="text-start text-f13"
         firstColClassName="!ml-3"
       />
     );
