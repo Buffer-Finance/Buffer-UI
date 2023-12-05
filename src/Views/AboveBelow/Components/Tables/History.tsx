@@ -8,7 +8,10 @@ import { numberWithCommas } from '@Utils/display';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { openBlockExplorer } from '@Views/AboveBelow/Helpers/openBlockExplorer';
 import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
-import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+import {
+  IGQLHistory,
+  expiryPriceCache,
+} from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -93,7 +96,21 @@ export const History: React.FC<{
           />
         );
       case TableColumn.Expiry:
-        if (trade.state === BetState.active) return <>processing...</>;
+        if (trade.state === BetState.active) {
+          if (trade.optionID !== undefined) {
+            const expiry = expiryPriceCache[trade.optionID];
+            if (expiry !== undefined) {
+              return (
+                <Display
+                  data={divide(expiry, 8)}
+                  precision={trade.market.price_precision.toString().length - 1}
+                  className="!justify-start"
+                />
+              );
+            }
+          }
+          return <>fetching...</>;
+        }
         return (
           <Display
             data={divide(trade.expirationPrice ?? '0', 8)}

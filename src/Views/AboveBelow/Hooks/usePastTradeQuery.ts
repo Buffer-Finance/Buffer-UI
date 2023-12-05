@@ -168,11 +168,13 @@ export const useProcessedTrades = () => {
 };
 
 export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
-  if (currentTrade.state === BetState.active) {
+  if (
+    currentTrade.state === BetState.active &&
+    currentTrade.optionID &&
+    expiryPriceCache[currentTrade.optionID] === undefined
+  ) {
     const assets =
-      currentTrade.optionContract.token0 +
-      '-' +
-      currentTrade.optionContract.token1;
+      currentTrade.optionContract.token0 + currentTrade.optionContract.token1;
     axios
       .post(`https://oracle.buffer-finance-api.link/price/query/`, [
         {
