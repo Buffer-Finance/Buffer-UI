@@ -1,6 +1,7 @@
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import { OneDayChange } from './OneDayChange';
 import { OneDayVolume } from './OneDayVolume';
+import { OpenInterest } from './OpenInterest';
 
 export const MarketData: React.FC<{
   activeMarket: marketTypeAB | undefined;
@@ -10,6 +11,10 @@ export const MarketData: React.FC<{
     {
       head: 'Volume 24 hrs',
       data: <OneDayVolume activeMarket={activeMarket} />,
+    },
+    {
+      head: 'Open Above/Below',
+      data: <OpenInterest activeMarket={activeMarket} />,
     },
   ];
   return (

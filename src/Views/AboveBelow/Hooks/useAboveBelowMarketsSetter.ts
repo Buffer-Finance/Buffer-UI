@@ -25,6 +25,10 @@ export const useAboveBelowMarketsSetter = () => {
             isPaused
             routerContract
             poolContract
+            openUp
+            openDown
+            openInterestUp
+            openInterestDown
             config {
               address
               maxSkew

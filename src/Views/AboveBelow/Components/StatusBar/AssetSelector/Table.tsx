@@ -32,6 +32,8 @@ enum TableColumns {
   Asset,
   OneDayChange,
   OneDayVolume,
+  OpenUp,
+  OpenDown,
 }
 
 export const Table: React.FC<{
@@ -57,7 +59,7 @@ export const Table: React.FC<{
   const setForexTimingsModal = useSetAtom(ForexTimingsModalAtom);
 
   const headers = useMemo(() => {
-    return ['', 'Asset', '24h Change', '24h Volume'];
+    return ['', 'Asset', '24h Change', '24h Volume', 'Open Up', 'Open Down'];
   }, []);
 
   const HeadFormatter = (col: number) => {
@@ -82,7 +84,7 @@ export const Table: React.FC<{
     // const maxFee = divide(market.config.maxFee, 18) as string;
 
     const isFavourite = favouriteMarkets.includes(market.tv_id);
-
+    const decimals = market.poolInfo.decimals;
     const onStarClick = () => {
       if (isFavourite) {
         setFavouriteMarkets(
@@ -180,9 +182,28 @@ export const Table: React.FC<{
         const volume = oneDayVolume?.[getAddress(market.address)];
         return (
           <Display
-            data={formatBalance(
-              divide(volume ?? '0', market.poolInfo.decimals) as string
-            )}
+            data={formatBalance(divide(volume ?? '0', decimals) as string)}
+            precision={2}
+            unit={market.poolInfo.token}
+            disable
+            className="!justify-start"
+          />
+        );
+
+      case TableColumns.OpenUp:
+        return (
+          <Display
+            data={divide(market.openInterestUp, decimals)}
+            precision={2}
+            unit={market.poolInfo.token}
+            disable
+            className="!justify-start"
+          />
+        );
+      case TableColumns.OpenDown:
+        return (
+          <Display
+            data={divide(market.openInterestDown, decimals)}
             precision={2}
             unit={market.poolInfo.token}
             disable

@@ -7,6 +7,10 @@ export interface responseAB {
   isPaused: boolean;
   routerContract: string;
   poolContract: string;
+  openUp: string;
+  openDown: string;
+  openInterestUp: string;
+  openInterestDown: string;
   config: {
     address: string;
     maxSkew: string;
