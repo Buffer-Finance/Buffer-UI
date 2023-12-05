@@ -32,7 +32,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { PoolDropdown } from './PoolDropDown';
 
 const TradeSizeSelectorBackground = styled.div`
-  margin-top: 15px;
+  margin-top: 8px;
   width: 100%;
 `;
 
