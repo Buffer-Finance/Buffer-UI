@@ -11,6 +11,7 @@ import {
 import BufferTable from '@Views/Common/BufferTable';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { TableHeader } from '@Views/TradePage/Views/AccordionTable/Common';
+import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { solidityKeccak256 } from 'ethers/lib/utils';
 import { useAtom, useAtomValue } from 'jotai';
@@ -45,8 +46,8 @@ export const PriceTable = () => {
       <TableHeader
         col={col}
         headsArr={headsArray}
-        className="text-center"
-        firstColClassName="!text-start !pl-[0]"
+        className="text-start !mr-3 text-f13"
+        firstColClassName="!text-start !ml-3 !mr-[0]"
       />
     );
   }, []);
@@ -162,35 +163,62 @@ export const PriceTable = () => {
       <Skeleton className="w-[1005] !h-[300px] lc !transform-none !mt-3" />
     );
   return (
-    <div className="px-3">
+    <div>
       <BufferTable
         headerJSX={HeaderFomatter}
         bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}
-        widths={['100%', '0%', '0%']}
         cols={headsArray.length}
         onRowClick={() => {}}
-        rows={5}
+        rows={1}
         isHeaderTransparent
-        isBodyTransparent
+        shouldHideBody
         smHeight
         smThHeight
         noHover
       />
+      <PriceTableBackground className="pr-4 pl-3 max-h-[35vh] overflow-auto">
+        <BufferTable
+          headerJSX={HeaderFomatter}
+          bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}
+          widths={['100%', '0%', '0%']}
+          cols={headsArray.length}
+          onRowClick={() => {}}
+          rows={5}
+          isHeaderTransparent
+          isBodyTransparent
+          shouldHideHeader
+          smHeight
+          smThHeight
+          noHover
+        />
 
-      <CurrentPriceLine currentPrice={currentPrice} precision={precision} />
-      <BufferTable
-        headerJSX={HeaderFomatter}
-        bodyJSX={(row: number, col: number) => BodyFormatter(row, col, false)}
-        widths={['100%', '0%', '0%']}
-        cols={headsArray.length}
-        onRowClick={() => {}}
-        rows={5}
-        isBodyTransparent
-        shouldHideHeader
-        smThHeight
-        smHeight
-        noHover
-      />
+        <CurrentPriceLine currentPrice={currentPrice} precision={precision} />
+        <BufferTable
+          headerJSX={HeaderFomatter}
+          bodyJSX={(row: number, col: number) => BodyFormatter(row, col, false)}
+          widths={['100%', '0%', '0%']}
+          cols={headsArray.length}
+          onRowClick={() => {}}
+          rows={5}
+          isBodyTransparent
+          shouldHideHeader
+          smThHeight
+          smHeight
+          noHover
+        />
+      </PriceTableBackground>
     </div>
   );
 };
+
+const PriceTableBackground = styled.div`
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 24px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 24px;
+  }
+`;
