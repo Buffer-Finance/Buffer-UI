@@ -52,7 +52,8 @@ export const Buy = () => {
       </ConnectionRequired>
     );
 
-  if (readCallData === undefined) return <Skeleton />;
+  if (readCallData === undefined)
+    return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
   const token = activeMarket.poolInfo.token.toUpperCase();
   const decimals = activeMarket.poolInfo.decimals;
   const allowance = divide(readCallData.allowances[token], decimals);
