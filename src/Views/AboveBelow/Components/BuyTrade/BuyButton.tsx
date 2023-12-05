@@ -83,22 +83,10 @@ export const Buy = () => {
   async function buyTrade() {
     try {
       if (!selectedTimestamp) throw new Error('Please select expiry date');
+      if (!selectedPrice) throw new Error('Please select strike price');
       if (!readCallData) throw new Error('Error fetching data');
       if (!activeMarket) throw new Error('active market not found');
-      const balance =
-        divide(readCallData.balances[token], decimals) ?? ('0' as string);
-      const tradeSizeError = getTradeSizeError('0', balance, amount);
-      if (!!tradeSizeError) throw new Error(tradeSizeError);
-      const platformFeeError = getPlatformError({
-        platfromFee: divide(
-          activeMarket.config.platformFee,
-          activeMarket.poolInfo.decimals
-        ) as string,
-        tradeSize: amount || '0',
-        balance,
-      });
-      if (!!platformFeeError) throw new Error(platformFeeError);
-      if (!selectedPrice) throw new Error('Please select strike price');
+
       if (!activeMarket) throw new Error('active market not found');
       if (!currentPrice) throw new Error('current price not found');
       if (!settlementFees) throw new Error('settlement fees not found');
@@ -133,6 +121,23 @@ export const Buy = () => {
           ? settlementFee?.sf_above
           : settlementFee?.sf_below) || settlementFees['Base'] / 1e4) *
           probability;
+      const balance =
+        divide(readCallData.balances[token], decimals) ?? ('0' as string);
+      const tradeSizeError = getTradeSizeError(
+        toFixed(totalFee.toString(), 2),
+        balance,
+        amount
+      );
+      if (!!tradeSizeError) throw new Error(tradeSizeError);
+      const platformFeeError = getPlatformError({
+        platfromFee: divide(
+          activeMarket.config.platformFee,
+          activeMarket.poolInfo.decimals
+        ) as string,
+        tradeSize: amount || '0',
+        balance,
+      });
+      if (!!platformFeeError) throw new Error(platformFeeError);
       const maxFeePerContracts =
         totalFee + (settings.slippageTolerance / 100) * totalFee;
       setLoading('buy');
