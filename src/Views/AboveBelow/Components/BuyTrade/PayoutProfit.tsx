@@ -1,3 +1,4 @@
+import { toFixed } from '@Utils/NumString';
 import {
   divide,
   gt,
@@ -39,7 +40,7 @@ export const PayoutProfit = ({}: {}) => {
               data={contracts}
               unit={tradeToken}
             />
-            {totalPayout + '%'}
+            {toFixed(totalPayout, 0) + '%'}
           </RowGap>
         </div>
         <div className="text-f12 b1200:text-f14 items-end flex-col flex-start wrap flex text-2  gap-y-1 b1200:items-center b1200:flex-row">
