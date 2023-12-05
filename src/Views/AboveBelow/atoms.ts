@@ -92,7 +92,10 @@ export const filteredMarketsAtom = atom((get) => {
 });
 
 export const accordianTableTypeAtom = atom<accordianTableType>('active');
-export const tradeSizeAtom = atom<string>('0');
+export const tradeSizeAtom = atomWithStorage<string>(
+  'above-below-trade-size',
+  '0'
+);
 export const readCallResponseAtom = atom(
   null,
   (get, set, update: { [callId: string]: [string | boolean | undefined] }) => {
