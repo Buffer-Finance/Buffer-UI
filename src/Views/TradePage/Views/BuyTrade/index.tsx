@@ -26,7 +26,7 @@ import { TradeTypeSelector } from './TradeTypeSelector';
 export const BuyTradeBackground = styled.div`
   position: sticky;
   top: 45px;
-  min-width: 350px;
+  min-width: 300px;
   background-color: #1c1c28;
   padding: 8px;
   display: flex;
