@@ -1,11 +1,16 @@
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import { OneDayChange } from './OneDayChange';
+import { OneDayVolume } from './OneDayVolume';
 
 export const MarketData: React.FC<{
   activeMarket: marketTypeAB | undefined;
 }> = ({ activeMarket }) => {
   const dataArray = [
     { head: '24h change', data: <OneDayChange activeMarket={activeMarket} /> },
+    {
+      head: 'Volume 24 hrs',
+      data: <OneDayVolume activeMarket={activeMarket} />,
+    },
   ];
   return (
     <>

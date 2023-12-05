@@ -1,5 +1,7 @@
 import Star from '@Public/ComponentSVGS/Star';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { navigateToarket } from '@Views/AboveBelow/Helpers/navigateToMarket';
+import { useOneDayVolume } from '@Views/AboveBelow/Hooks/useOneDayVolume';
 import {
   favouriteMarketsAtom,
   filteredMarketsAtom,
@@ -8,8 +10,10 @@ import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { TableHeader } from '@Views/Common/TableHead';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
+import { formatBalance } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { ForexTimingsModalAtom } from '@Views/TradePage/atoms';
 import { AssetCategory } from '@Views/TradePage/type';
@@ -18,9 +22,17 @@ import { IconButton, Skeleton } from '@mui/material';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAddress } from 'viem';
 import { OneDayChange } from '../MarketData/OneDayChange';
 import { CloseTag } from './CloseTag';
 import { CurrentPrice } from './CurrentPrice';
+
+enum TableColumns {
+  Star,
+  Asset,
+  OneDayChange,
+  OneDayVolume,
+}
 
 export const Table: React.FC<{
   group?: string;
@@ -31,6 +43,8 @@ export const Table: React.FC<{
   const [favouriteMarkets, setFavouriteMarkets] = useAtom(favouriteMarketsAtom);
   const navigate = useNavigate();
   const { closeShutter } = useShutterHandlers();
+  const { oneDayVolume } = useOneDayVolume();
+
   const setActiveMarket = (token0: string, token1: string) => {
     navigateToarket(navigate, token0 + '-' + token1, '/above-below');
   };
@@ -43,7 +57,7 @@ export const Table: React.FC<{
   const setForexTimingsModal = useSetAtom(ForexTimingsModalAtom);
 
   const headers = useMemo(() => {
-    return ['', 'Asset', '24h Change'];
+    return ['', 'Asset', '24h Change', '24h Volume'];
   }, []);
 
   const HeadFormatter = (col: number) => {
@@ -66,6 +80,7 @@ export const Table: React.FC<{
     //   divide(market.payoutForUp, 16) as string
     // );
     // const maxFee = divide(market.config.maxFee, 18) as string;
+
     const isFavourite = favouriteMarkets.includes(market.tv_id);
 
     const onStarClick = () => {
@@ -80,7 +95,7 @@ export const Table: React.FC<{
       }
     };
     switch (col) {
-      case 0:
+      case TableColumns.Star:
         return (
           <CellContent
             content={[
@@ -92,7 +107,7 @@ export const Table: React.FC<{
             ]}
           />
         );
-      case 1:
+      case TableColumns.Asset:
         return (
           <CellContent
             content={[
@@ -119,7 +134,7 @@ export const Table: React.FC<{
       //         ]}
       //       />
       //     );
-      case 2:
+      case TableColumns.OneDayChange:
         if (isOpen === undefined)
           return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
 
@@ -159,6 +174,21 @@ export const Table: React.FC<{
           />
         );
 
+      case TableColumns.OneDayVolume:
+        if (oneDayVolume === undefined)
+          return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
+        const volume = oneDayVolume?.[getAddress(market.address)];
+        return (
+          <Display
+            data={formatBalance(
+              divide(volume ?? '0', market.poolInfo.decimals) as string
+            )}
+            precision={2}
+            unit={market.poolInfo.token}
+            disable
+            className="!justify-start"
+          />
+        );
       //   case 4:
       //     if (isOpen === undefined)
       //       return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
