@@ -129,7 +129,10 @@ export const Buy = () => {
       );
       const totalFee =
         probability +
-        (settlementFee?.sf_above || settlementFees['Base'] / 1e4) * probability;
+        ((priceObj.isAbove
+          ? settlementFee?.sf_above
+          : settlementFee?.sf_below) || settlementFees['Base'] / 1e4) *
+          probability;
       const maxFeePerContracts =
         totalFee + (settings.slippageTolerance / 100) * totalFee;
       setLoading('buy');

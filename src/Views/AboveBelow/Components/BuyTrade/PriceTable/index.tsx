@@ -92,6 +92,7 @@ export const PriceTable = () => {
     if (!tvId) return <></>;
     const isSelected =
       selectedStrike === undefined ||
+      selectedStrike?.[tvId] === undefined ||
       selectedStrike?.[tvId]?.price === strikePrice.toString();
     // const iv = ivs?.[activeMarket.tv_id];
     // if (iv === undefined) return <></>;

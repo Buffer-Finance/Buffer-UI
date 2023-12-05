@@ -63,7 +63,7 @@ export const Active: React.FC<{
     'Time Left',
     'Close Time',
     'Trade Size',
-    'Pnl | Probability',
+    'Probability',
     'Visualization',
   ];
   if (inGlobalContext) {

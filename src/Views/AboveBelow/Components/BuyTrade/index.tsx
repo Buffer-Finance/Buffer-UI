@@ -13,7 +13,7 @@ export const BuyTrade = () => {
       <PriceTable />
       <SelectedTradeData />
       <TradeSize />
-      <PayoutProfit amount={'0'} totalPayout={'80'} tradeToken="USDC" />
+      <PayoutProfit />
       <Buy />
     </BuyTradeBackground>
   );

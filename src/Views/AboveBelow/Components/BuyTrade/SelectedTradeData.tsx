@@ -4,6 +4,7 @@ import {
   selectedPoolActiveMarketAtom,
   selectedPriceAtom,
 } from '@Views/AboveBelow/atoms';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { useAtomValue } from 'jotai';
 
 export const SelectedTradeData = () => {
@@ -19,7 +20,14 @@ export const SelectedTradeData = () => {
     <span className="text-[#7F87A7] text-f14 mt-3">
       {activeMarket.token0}/{activeMarket.token1} will be{' '}
       {selectedPrice[activeMarket.tv_id].isAbove ? 'above' : 'below'}{' '}
-      <span className="text-1">{selectedPrice[activeMarket.tv_id].price}</span>{' '}
+      <span className="text-1">
+        <Display
+          data={selectedPrice[activeMarket.tv_id].price}
+          precision={activeMarket.price_precision.toString().length - 1}
+          disable
+          className="!inline"
+        />
+      </span>{' '}
       at <span className="text-1">{getDisplayDate(expiryDateTimeStamp)}</span>{' '}
       {getDisplayTime(expiryDateTimeStamp)}.
     </span>
