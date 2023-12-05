@@ -28,8 +28,8 @@ export const SelectedTradeData = () => {
           className="!inline"
         />
       </span>{' '}
-      at <span className="text-1">{getDisplayDate(expiryDateTimeStamp)}</span>{' '}
-      {getDisplayTime(expiryDateTimeStamp)}.
+      on <span className="text-1">{getDisplayDate(expiryDateTimeStamp)}</span>{' '}
+      at <span className="text-1">{getDisplayTime(expiryDateTimeStamp)}</span>
     </span>
   );
 };
