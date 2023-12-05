@@ -47,7 +47,7 @@ export const Cancelled: React.FC<{
 
   const headNameArray = [
     'Asset',
-    'Strike',
+    'Strike Price',
     'Trade Size',
     'Queue Timestamp',
     'Cancel Timestamp',

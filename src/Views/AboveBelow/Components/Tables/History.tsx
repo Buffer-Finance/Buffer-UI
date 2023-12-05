@@ -60,8 +60,8 @@ export const History: React.FC<{
 
   const headNameArray = [
     'Asset',
-    'Strike',
-    'Expiry',
+    'Strike Price',
+    'Expiry Price',
     'Open Time',
     'Duration',
     'Close Time',

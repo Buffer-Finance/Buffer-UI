@@ -52,8 +52,8 @@ export const Active: React.FC<{
 
   const headNameArray = [
     'Asset',
-    'Strike',
-    'Current',
+    'Strike Price',
+    'Current Price',
     'Open Time',
     'Time Left',
     'Close Time',
