@@ -25,9 +25,11 @@ export const PayoutProfit = ({}: {}) => {
     tradeData !== null
   ) {
     const tradeToken = activeMarket.poolInfo.token.toUpperCase();
-    const { contracts } = tradeData;
+    const { contracts, totalFee } = tradeData;
+    const paidAmount = multiply(contracts, totalFee.toString());
+    console.log('paidAmount', paidAmount);
     const totalPayout = multiply(
-      divide(subtract(contracts, amount), amount) as string,
+      divide(subtract(contracts, paidAmount), paidAmount) as string,
       2
     );
     return (
@@ -51,7 +53,7 @@ export const PayoutProfit = ({}: {}) => {
             </span> */}
           <Display
             className=" text-f16 text-green sm:text-f14 !whitespace-nowrap"
-            data={subtract(contracts, amount)}
+            data={subtract(contracts, paidAmount)}
             unit={tradeToken}
           />
         </div>

@@ -181,7 +181,7 @@ export const PriceTable = () => {
         <BufferTable
           headerJSX={HeaderFomatter}
           bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}
-          widths={['100%', '0%', '0%']}
+          widths={['50%', '25%', '25%']}
           cols={headsArray.length}
           onRowClick={() => {}}
           rows={5}
@@ -197,7 +197,7 @@ export const PriceTable = () => {
         <BufferTable
           headerJSX={HeaderFomatter}
           bodyJSX={(row: number, col: number) => BodyFormatter(row, col, false)}
-          widths={['100%', '0%', '0%']}
+          widths={['50%', '25%', '25%']}
           cols={headsArray.length}
           onRowClick={() => {}}
           rows={5}
