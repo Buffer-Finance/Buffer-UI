@@ -14,7 +14,9 @@ import {
 } from '@Views/AboveBelow/atoms';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
+import { getSlippageError } from '@Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
 import { tradeSettingsAtom } from '@Views/TradePage/atoms';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { Skeleton } from '@mui/material';
@@ -37,6 +39,8 @@ export const Buy = () => {
   const selectedPrice = useAtomValue(selectedPriceAtom);
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const readCallData = useAtomValue(readCallDataAtom);
+  const referralData = useReferralCode();
+
   const { currentPrice, precision } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
@@ -83,6 +87,8 @@ export const Buy = () => {
       if (!activeMarket) throw new Error('active market not found');
       if (!currentPrice) throw new Error('current price not found');
       if (!settlementFees) throw new Error('settlement fees not found');
+      const slippageError = getSlippageError(settings.slippageTolerance);
+      if (slippageError !== null) throw new Error(slippageError);
       const priceObj = selectedPrice[activeMarket.tv_id];
       const price = priceObj.price;
       if (!price) throw new Error('Please select strike price');
@@ -109,18 +115,20 @@ export const Buy = () => {
       const totalFee =
         probability +
         (settlementFee?.sf_above || settlementFees['Base'] / 1e4) * probability;
-      console.log('totalFee', totalFee);
+      const maxFeePerContracts =
+        totalFee + (settings.slippageTolerance / 100) * totalFee;
       setLoading('buy');
       await writeCall(() => {}, 'initiateTrade', [
         [
           activeMarket.address,
           settings.partialFill,
-          '',
+          referralData[2],
           priceObj.isAbove,
           toFixed(divide(amount, totalFee.toString()) as string, 0),
           toFixed(multiply(price, 8), 0),
           expiration,
-          '950000',
+          toFixed(multiply(maxFeePerContracts.toString(), decimals), 0),
+          ,
         ],
       ]);
     } catch (e) {
