@@ -37,7 +37,7 @@ export const Fee: React.FC<{
       }`}
       onClick={() => setStrikePrice(isAbove, strikePrice.toString())}
     >
-      {totalFee.toFixed(2)} ({(100 - totalFee * 100).toFixed(0)}%)
+      {totalFee.toFixed(2)} ({(((1 - totalFee) / totalFee) * 100).toFixed(0)}%)
     </button>
   );
 };
