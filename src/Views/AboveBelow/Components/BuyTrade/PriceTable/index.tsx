@@ -122,6 +122,7 @@ export const PriceTable = () => {
       case Columns.Above:
         const isAboveSelected =
           selectedStrike === undefined ||
+          selectedStrike?.[tvId] === undefined ||
           (selectedStrike?.[tvId]?.isAbove && isSelected);
 
         return (
@@ -138,6 +139,7 @@ export const PriceTable = () => {
       case Columns.Below:
         const isBelowSelected =
           selectedStrike === undefined ||
+          selectedStrike?.[tvId] === undefined ||
           (!selectedStrike?.[tvId]?.isAbove && isSelected);
         return (
           <Fee
