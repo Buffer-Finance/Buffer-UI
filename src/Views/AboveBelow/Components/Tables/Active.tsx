@@ -127,10 +127,6 @@ export const Active: React.FC<{
         if (trade.state === BetState.queued) {
           return (
             <div className="flex gap-2 items-center">
-              <InfoIcon
-                tooltip="The max amount of trade considering the slippage"
-                sm
-              />
               <Display
                 data={divide(
                   multiply(
@@ -142,7 +138,11 @@ export const Active: React.FC<{
                 precision={2}
                 className="!justify-start"
                 unit={trade.market.poolInfo.token}
-                label={'>'}
+                label={'<'}
+              />
+              <InfoIcon
+                tooltip="The max amount of trade considering the slippage"
+                sm
               />
             </div>
           );

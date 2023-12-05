@@ -82,10 +82,6 @@ export const Cancelled: React.FC<{
       case TableColumn.TradeSize:
         return (
           <div className="flex gap-2 items-center">
-            <InfoIcon
-              tooltip="The max amount of trade considering the slippage"
-              sm
-            />
             <Display
               data={divide(
                 multiply(
@@ -97,7 +93,11 @@ export const Cancelled: React.FC<{
               precision={2}
               className="!justify-start"
               unit={trade.market.poolInfo.token}
-              label={'>'}
+              label={'<'}
+            />
+            <InfoIcon
+              tooltip="The max amount of trade considering the slippage"
+              sm
             />
           </div>
         );
