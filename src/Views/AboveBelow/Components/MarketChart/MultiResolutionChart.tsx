@@ -229,8 +229,10 @@ function drawPosition(option, visualized, chart) {
     return chart
       ?.createPositionLine()
       .setText(
-        `${toFixed(divide(option.totalFee, 18) as string, 2)} | ` +
-          getText(option.expirationTime)
+        `${toFixed(
+          divide(option.totalFee, option.market.poolInfo.decimals) as string,
+          2
+        )} | ` + getText(option.expirationTime)
       )
       .setTooltip(
         `${getDisplayDate(openTimeStamp)}, ${getDisplayTime(
