@@ -7,6 +7,7 @@ import {
   lt,
   lte,
 } from '@Utils/NumString/stringArithmatics';
+import { useNumberOfContracts } from '@Views/AboveBelow/Hooks/useNumberOfContracts';
 import {
   readCallDataAtom,
   selectedPoolActiveMarketAtom,
@@ -18,7 +19,6 @@ import {
   RowBetween,
   RowGap,
   RowGapItemsStretched,
-  RowGapItemsTop,
 } from '@Views/TradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
 import { BuyUSDCLink } from '@Views/TradePage/Views/BuyTrade/BuyUsdcLink';
@@ -48,7 +48,6 @@ export const TradeSize: React.FC<{
   const decimals = activeMarket.poolInfo.decimals;
   const balance =
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
-  const error = getTradeSizeError('0', balance, tradeSize);
   return (
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
@@ -86,10 +85,19 @@ export const TradeSize: React.FC<{
           tradeToken={activeMarket.poolInfo.token}
           balance={balance}
         />
-        <span className="text-red whitespace-nowrap">{error}</span>
+        <Error balance={balance} tradeSize={tradeSize} />
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );
+};
+const Error: React.FC<{ balance: string; tradeSize: string }> = ({
+  balance,
+  tradeSize,
+}) => {
+  const contracts = useNumberOfContracts();
+  const minTradeSize = contracts === null ? '0' : contracts.totalFee.toFixed(2);
+  const error = getTradeSizeError(minTradeSize, balance, tradeSize);
+  return <span className="text-red whitespace-nowrap text-f12">{error}</span>;
 };
 
 const PlatfromFeeError = ({
@@ -109,9 +117,9 @@ const PlatfromFeeError = ({
   });
 
   return (
-    <RowGapItemsTop
+    <RowGap
       gap="4px"
-      className={`text-${error ? 'red' : '[#7F87A7]'} text-f10`}
+      className={`text-${error ? 'red' : '[#7F87A7]'} items-center text-f12`}
     >
       <LightToolTipSVG className="mt-[3px]" />
       {error ? (
@@ -125,7 +133,7 @@ const PlatfromFeeError = ({
           </>
         )
       )}
-    </RowGapItemsTop>
+    </RowGap>
   );
 };
 
