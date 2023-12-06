@@ -33,7 +33,7 @@ export const PriceTable = () => {
   const headsArray = useMemo(() => ['Strike Price', 'Above', 'Below'], []);
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
-  const strikes = strikePrices[activeMarket?.tv_id];
+  const strikes = strikePrices[activeMarket?.tv_id as string];
   let increasingPriceArray = strikes?.increasingPriceArray ?? [];
   let decreasingPriceArray = strikes?.decreasingPriceArray ?? [];
   const HeaderFomatter = useCallback((col: number) => {
@@ -115,14 +115,25 @@ export const PriceTable = () => {
 
         return (
           <button
-            className={`text-1 bg-[#4D81FF] rounded-l-sm
-       px-3 py-1 w-full whitespace-nowrap font-medium ${
+            className={`text-1 w-[90px] bg-[#4D81FF] ${
+              totalFee === null ? 'cursor-not-allowed' : ''
+            } rounded-l-sm
+       px-3 py-1 whitespace-nowrap font-medium ${
          !isAboveSelected ? 'opacity-50' : ''
        }`}
-            onClick={() => setStrikePrice(true, strikePrice.toString())}
+            onClick={() => {
+              if (totalFee !== null)
+                setStrikePrice(true, strikePrice.toString());
+            }}
           >
-            {totalFee.toFixed(2)} (
-            {(((1 - totalFee) / totalFee) * 100).toFixed(0)}%)
+            {totalFee === null ? (
+              '-'
+            ) : (
+              <>
+                {totalFee.toFixed(2)} (
+                {(((1 - totalFee) / totalFee) * 100).toFixed(0)}%)
+              </>
+            )}
           </button>
         );
 
@@ -135,13 +146,24 @@ export const PriceTable = () => {
 
         return (
           <button
-            className={`text-1 bg-[#FF5353] rounded-r-sm
-       px-3 py-1 w-full whitespace-nowrap font-medium ${
+            className={`text-1 w-[90px] bg-[#FF5353] ${
+              fee === null ? 'cursor-not-allowed' : ''
+            } rounded-r-sm
+       px-3 py-1 whitespace-nowrap font-medium ${
          !isBelowSelected ? 'opacity-50' : ''
        }`}
-            onClick={() => setStrikePrice(false, strikePrice.toString())}
+            onClick={() => {
+              if (fee !== null) setStrikePrice(false, strikePrice.toString());
+            }}
           >
-            {fee.toFixed(2)} ({(((1 - fee) / fee) * 100).toFixed(0)}%)
+            {fee === null ? (
+              '-'
+            ) : (
+              <>
+                {' '}
+                {fee.toFixed(2)} ({(((1 - fee) / fee) * 100).toFixed(0)}%)
+              </>
+            )}
           </button>
         );
 

@@ -15,13 +15,13 @@ export const strikePrices: {
   [activeAsset: string]: {
     decreasingPriceArray: {
       strike: number;
-      totalFeeAbove: number;
-      totalFeeBelow: number;
+      totalFeeAbove: number | null;
+      totalFeeBelow: number | null;
     }[];
     increasingPriceArray: {
       strike: number;
-      totalFeeAbove: number;
-      totalFeeBelow: number;
+      totalFeeAbove: number | null;
+      totalFeeBelow: number | null;
     }[];
   };
 } = {};
@@ -68,13 +68,13 @@ export const useLimitedStrikeArrays = () => {
     const currentEpoch = Math.floor(Date.now() / 1000);
     const decreasingPriceArray: {
       strike: number;
-      totalFeeAbove: number;
-      totalFeeBelow: number;
+      totalFeeAbove: number | null;
+      totalFeeBelow: number | null;
     }[] = [];
     const increasingPriceArray: {
       strike: number;
-      totalFeeAbove: number;
-      totalFeeBelow: number;
+      totalFeeAbove: number | null;
+      totalFeeBelow: number | null;
     }[] = [];
     let i = 0;
     let j = 0;
@@ -101,10 +101,10 @@ export const useLimitedStrikeArrays = () => {
         0,
         iv / 1e4
       );
-      const totalFeeAbove =
+      let totalFeeAbove: number | null =
         aboveProbability + (settlementFeeAbove / 1e4) * aboveProbability;
 
-      if (totalFeeAbove > 0.95) break;
+      if (totalFeeAbove > 0.95) totalFeeAbove = null;
       const belowProbability = BlackScholes(
         true,
         false,
@@ -117,9 +117,10 @@ export const useLimitedStrikeArrays = () => {
       const settlementFeeBelow =
         settlementFees[marketHash + '-' + getAddress(activeMarket.address)]
           ?.sf_below ?? settlementFees['Base'];
-      const totalFeeBelow =
+      let totalFeeBelow: number | null =
         belowProbability + (settlementFeeBelow / 1e4) * belowProbability;
-      if (totalFeeBelow < 0.05) break;
+      if (totalFeeBelow < 0.05) totalFeeBelow = null;
+      if (totalFeeAbove === null && totalFeeBelow === null) break;
       decreasingPriceArray.push({
         strike: strikePrice,
         totalFeeAbove,
@@ -151,11 +152,11 @@ export const useLimitedStrikeArrays = () => {
         0,
         iv / 1e4
       );
-      const totalFeeAbove =
+      let totalFeeAbove: number | null =
         aboveProbability + (settlementFeeAbove / 1e4) * aboveProbability;
       i++;
 
-      if (totalFeeAbove < 0.05) break;
+      if (totalFeeAbove < 0.05) totalFeeAbove = null;
       const belowProbability = BlackScholes(
         true,
         false,
@@ -168,9 +169,10 @@ export const useLimitedStrikeArrays = () => {
       const settlementFeeBelow =
         settlementFees[marketHash + '-' + getAddress(activeMarket.address)]
           ?.sf_below ?? settlementFees['Base'];
-      const totalFeeBelow =
+      let totalFeeBelow: number | null =
         belowProbability + (settlementFeeBelow / 1e4) * belowProbability;
-      if (totalFeeBelow > 0.95) break;
+      if (totalFeeBelow > 0.95) totalFeeBelow = null;
+      if (totalFeeAbove === null && totalFeeBelow === null) break;
       increasingPriceArray.push({
         strike: strikePrice,
         totalFeeAbove,
@@ -187,6 +189,6 @@ export const useLimitedStrikeArrays = () => {
     strikePrices[activeMarket.tv_id].decreasingPriceArray =
       decreasingPriceArray;
     strikePrices[activeMarket.tv_id].increasingPriceArray =
-      increasingPriceArray;
+      increasingPriceArray.reverse();
   }, [roundedPrice, timestamp, activeMarket, expiration, settlementFees, ivs]);
 };
