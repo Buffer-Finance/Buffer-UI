@@ -30,7 +30,6 @@ export const Fee: React.FC<{
     iv / 1e4
   );
   const totalFee = probability + (settlementFee / 1e4) * probability;
-  console.log(iv, probability, totalFee);
   return (
     <button
       className={`text-1 ${

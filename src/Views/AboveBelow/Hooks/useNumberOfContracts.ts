@@ -53,7 +53,7 @@ export const useNumberOfContracts = () => {
     price,
     expiration - currentEpoch,
     0,
-    iv
+    iv / 1e4
   );
   const sfAbove = settlementFee?.sf_above || settlementFees['Base'] / 1e4;
   const sfBelow = settlementFee?.sf_below || settlementFees['Base'] / 1e4;

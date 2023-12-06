@@ -117,7 +117,7 @@ export const Buy = () => {
         price,
         expiration - currentEpoch,
         0,
-        iv
+        iv / 1e4
       );
       const totalFee =
         probability +
