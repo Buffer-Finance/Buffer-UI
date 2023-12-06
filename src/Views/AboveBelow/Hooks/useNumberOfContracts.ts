@@ -11,6 +11,7 @@ import {
   selectedPriceAtom,
   tradeSizeAtom,
 } from '../atoms';
+import { useIV } from './useIV';
 import { useSettlementFee } from './useSettlementFee';
 
 export const useNumberOfContracts = () => {
@@ -23,13 +24,15 @@ export const useNumberOfContracts = () => {
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
   });
-
+  const { data: ivs } = useIV();
   if (!amount) return null;
   if (!selectedTimestamp) return null;
   if (!selectedPrice) return null;
   if (!activeMarket) return null;
   if (!currentPrice) return null;
   if (!settlementFees) return null;
+  const iv = ivs?.[activeMarket.tv_id];
+  if (iv === undefined) return null;
 
   const priceObj = selectedPrice[activeMarket.tv_id];
   if (!priceObj) return null;
@@ -50,7 +53,7 @@ export const useNumberOfContracts = () => {
     price,
     expiration - currentEpoch,
     0,
-    1.2
+    iv
   );
   const sfAbove = settlementFee?.sf_above || settlementFees['Base'] / 1e4;
   const sfBelow = settlementFee?.sf_below || settlementFees['Base'] / 1e4;

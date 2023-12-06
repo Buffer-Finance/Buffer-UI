@@ -4,6 +4,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
 import { toFixed } from '@Utils/NumString';
 import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { useSettlementFee } from '@Views/AboveBelow/Hooks/useSettlementFee';
 import {
   readCallDataAtom,
@@ -41,6 +42,7 @@ export const Buy = () => {
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const readCallData = useAtomValue(readCallDataAtom);
   const referralData = useReferralCode();
+  const { data: ivs } = useIV();
 
   const { currentPrice, precision } = useCurrentPrice({
     token0: activeMarket?.token0,
@@ -90,6 +92,8 @@ export const Buy = () => {
       if (!activeMarket) throw new Error('active market not found');
       if (!currentPrice) throw new Error('current price not found');
       if (!settlementFees) throw new Error('settlement fees not found');
+      const iv = ivs?.[activeMarket.tv_id];
+      if (iv === undefined) throw new Error('iv not found');
       const slippageError = getSlippageError(settings.slippageTolerance);
       if (slippageError !== null) throw new Error(slippageError);
       const priceObj = selectedPrice[activeMarket.tv_id];
@@ -113,7 +117,7 @@ export const Buy = () => {
         price,
         expiration - currentEpoch,
         0,
-        1.2
+        iv
       );
       const totalFee =
         probability +
