@@ -40,6 +40,7 @@ import {
 } from '@biconomy/modules';
 import { PaymasterMode } from '@biconomy/paymaster';
 import { erc20ABI } from 'wagmi';
+import { useUserOp } from '@Hooks/AA/useUserOp';
 export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   activeMarket,
 }) => {
@@ -52,21 +53,25 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   const currentTime = useAtomValue(timeSelectorAtom);
   const activeChain = useAtomValue(activeChainAtom);
   const { writeCall } = useWriteCall();
+  const config = getNoLossV3Config(activeChain?.id);
+
   const settings = useAtomValue(tradeSettingsAtom);
   const [loadingState, setLoadingState] = useState<
     'up' | 'down' | 'approve' | 'none' | 'claim'
   >('none');
   const activeMarketData = useAtomValue(activeMarketDataAtom);
   const isIncreationWindow = useIsMarketInCreationWindow();
-  let { sendTxn } = useSmartAccount();
-
+  // let { sendTxn } = useSmartAccount();
+  const { sendTxn } = useUserOp({
+    to: config.router,
+    data: '0xd883496300000000000000000000000000000000000000000000000098a7d9b8314c000000000000000000000000000000000000000000000000000000000000000003840000000000000000000000000000000000000000000000000000000000000001000000000000000000000000df860a06e2c52b33f5e7307e50e280c785b0ecd8000000000000000000000000000000000000000000000000000004026e2eb34000000000000000000000000000000000000000000000000000000000000001f400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+  });
   if (!activeChain)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
         No Active Chain
       </BlueBtn>
     );
-  const config = getNoLossV3Config(activeChain?.id);
   if (!user || !user.userAddress)
     return (
       <ConnectionRequired>
@@ -234,6 +239,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       )
         throw new Error('Trade time exceeds tournament ending time');
 
+      console.log(`BuyButtons-setLoadingState: `, setLoadingState);
       setLoadingState(isAbove ? 'up' : 'down');
 
       const args = [
@@ -246,31 +252,9 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         0,
         activeTournamentData.id,
       ];
-      const encodedFunctionData = encodeFunctionData({
-        abi: RouterABI,
-        functionName: 'initiateTrade',
-        args,
-      });
-
-      const buyTradeTxn = [
-        {
-          to: config.router,
-          data: encodedFunctionData,
-        },
-      ];
-      const approveTxn = isTradingApproved
-        ? []
-        : [
-            {
-              data: encodeFunctionData({
-                abi: TournamentManagerABI,
-                functionName: 'setApprovalForAll',
-                args: [config.router, true],
-              }),
-              to: config.manager,
-            },
-          ];
-      await sendTxn([...approveTxn, ...buyTradeTxn]);
+      console.time('new-req');
+      await sendTxn();
+      console.timeEnd('new-req');
     } catch (e) {
       toastify({
         msg: (e as Error).message,

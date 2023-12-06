@@ -30,7 +30,7 @@ export type SmartAccount = {
   library: BiconomySmartAccountV2;
   address: `0x${string}`;
 };
-const smartAccountAtom = atom<SmartAccount | null>(null);
+export const smartAccountAtom = atom<SmartAccount | null>(null);
 const bundler: IBundler = new Bundler({
   bundlerUrl: `https://bundler.biconomy.io/api/v2/${ChainId.ARBITRUM_GOERLI_TESTNET}/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44`,
   chainId: ChainId.ARBITRUM_GOERLI_TESTNET,
@@ -105,9 +105,12 @@ const useSmartAccount = () => {
       config?: { sponsored?: 'Native' | `0x${string}` }
     ) => {
       if (!smartAccount) return;
+      console.time('useSmartAccount prereq');
       const [isSessionEnabled, isBSMEnabled] = await getSessionState(
         smartAccount.library
       );
+      console.timeEnd('useSmartAccount prereq');
+
       let transactionArray = [...transactions];
 
       const localSigner = await getSessionSigner(smartAccount.address);
@@ -221,16 +224,21 @@ const useSmartAccount = () => {
         transactionArray,
         buildParams
       );
+      console.time('useSmartAccount building-time');
 
       let userOps = await smartAccount.library.buildUserOp(
         transactionArray,
         buildParams
       );
+      console.timeEnd('useSmartAccount building-time');
+      console.time('useSmartAccount sending-time');
 
       const userOpsResponse = await smartAccount.library.sendUserOp(
         userOps,
         sendUserParams
       );
+      console.timeEnd('useSmartAccount sending-time');
+
       console.log(`3 useSmartAccount-userOpsResponse: `, userOpsResponse);
       // if (buildParams.params?.batchSessionParams?.length) {
 
@@ -238,7 +246,11 @@ const useSmartAccount = () => {
       //     smartWallet.defaultValidationModule
       //   );
       // }
+      console.time('useSmartAccount waiting-time');
+
       const fulfiledOrRejected = await userOpsResponse.wait(1);
+      console.timeEnd('useSmartAccount waiting-time');
+
       console.log(`4 useSmartAccount-fulfiledOrRejected: `, fulfiledOrRejected);
 
       return fulfiledOrRejected;
