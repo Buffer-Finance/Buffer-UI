@@ -1,11 +1,10 @@
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { BlackScholes } from '@Utils/Formulas/blackscholes';
 import { toFixed } from '@Utils/NumString';
 import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useIV } from '@Views/AboveBelow/Hooks/useIV';
-import { useSettlementFee } from '@Views/AboveBelow/Hooks/useSettlementFee';
+import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
 import {
   readCallDataAtom,
   selectedExpiry,
@@ -21,10 +20,8 @@ import { getSlippageError } from '@Views/TradePage/Views/Settings/TradeSettings/
 import { tradeSettingsAtom } from '@Views/TradePage/atoms';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { Skeleton } from '@mui/material';
-import { solidityKeccak256 } from 'ethers/lib/utils';
 import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
-import { getAddress } from 'viem';
 import RouterABI from '../../abis/Router.json';
 import { ApproveBtn } from './ApproveBtn';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
@@ -44,11 +41,10 @@ export const Buy = () => {
   const referralData = useReferralCode();
   const { data: ivs } = useIV();
 
-  const { currentPrice, precision } = useCurrentPrice({
+  const { currentPrice } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
   });
-  const { data: settlementFees } = useSettlementFee();
 
   if (activeMarket === undefined)
     return (
@@ -88,43 +84,33 @@ export const Buy = () => {
       if (!selectedPrice) throw new Error('Please select strike price');
       if (!readCallData) throw new Error('Error fetching data');
       if (!activeMarket) throw new Error('active market not found');
-
-      if (!activeMarket) throw new Error('active market not found');
       if (!currentPrice) throw new Error('current price not found');
-      if (!settlementFees) throw new Error('settlement fees not found');
+      const strikes = strikePrices;
+      const activeAssetStrikes = strikes[activeMarket.tv_id];
+      if (!activeAssetStrikes)
+        throw new Error('active asset strikes not found');
       const iv = ivs?.[activeMarket.tv_id];
       if (iv === undefined) throw new Error('iv not found');
       const slippageError = getSlippageError(settings.slippageTolerance);
       if (slippageError !== null) throw new Error(slippageError);
       const priceObj = selectedPrice[activeMarket.tv_id];
+      if (!priceObj) throw new Error('price obj not found');
       const price = priceObj.price;
-      if (!price) throw new Error('Please select strike price');
+      let strikePriceObject = activeAssetStrikes.increasingPriceArray.find(
+        (obj) => obj.strike.toString() == priceObj.price
+      );
+      if (!strikePriceObject) {
+        strikePriceObject = activeAssetStrikes.decreasingPriceArray.find(
+          (obj) => obj.strike.toString() == priceObj.price
+        );
+      }
+      if (!strikePriceObject) throw new Error('Please select a strike price');
+      const totalFee = priceObj.isAbove
+        ? strikePriceObject.totalFeeAbove
+        : strikePriceObject.totalFeeBelow;
+      if (!totalFee) throw new Error('total fee not found');
       const expiration = Math.floor(selectedTimestamp / 1000);
-      const currentEpoch = Math.floor(Date.now() / 1000);
-      const marketHash = solidityKeccak256(
-        ['uint256', 'uint256'],
-        [
-          toFixed(multiply(price, 8), 0),
-          Math.floor(selectedTimestamp / 1000) + 1,
-        ]
-      );
-      const settlementFee =
-        settlementFees[marketHash + '-' + getAddress(activeMarket.address)];
-      const probability = BlackScholes(
-        true,
-        priceObj.isAbove,
-        currentPrice,
-        price,
-        expiration - currentEpoch,
-        0,
-        iv / 1e4
-      );
-      const totalFee =
-        probability +
-        ((priceObj.isAbove
-          ? settlementFee?.sf_above
-          : settlementFee?.sf_below) || settlementFees['Base'] / 1e4) *
-          probability;
+
       const balance =
         divide(readCallData.balances[token], decimals) ?? ('0' as string);
       const tradeSizeError = getTradeSizeError(
