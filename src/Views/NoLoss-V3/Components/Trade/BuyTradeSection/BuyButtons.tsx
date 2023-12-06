@@ -183,7 +183,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
     }
   }
 
-  if (gt(multiply(userInput, 18), readCallResults.activeTournamentBalance)) {
+  if (gt(multiply(userInput, 18), readCallResults?.activeTournamentBalance)) {
     return (
       <BufferButton
         onClick={() => {
