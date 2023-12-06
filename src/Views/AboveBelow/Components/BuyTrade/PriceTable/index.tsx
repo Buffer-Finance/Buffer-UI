@@ -1,25 +1,21 @@
 import { useToast } from '@Contexts/Toast';
-import { toFixed } from '@Utils/NumString';
-import { multiply } from '@Utils/NumString/stringArithmatics';
-import { useIV } from '@Views/AboveBelow/Hooks/useIV';
-import { useSettlementFee } from '@Views/AboveBelow/Hooks/useSettlementFee';
-import { useStrikePriceArray } from '@Views/AboveBelow/Hooks/useStrikePriceArray';
 import {
-  selectedExpiry,
+  strikePrices,
+  useLimitedStrikeArrays,
+} from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
+import {
   selectedPoolActiveMarketAtom,
   selectedPriceAtom,
 } from '@Views/AboveBelow/atoms';
 import BufferTable from '@Views/Common/BufferTable';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { TableHeader } from '@Views/TradePage/Views/AccordionTable/Common';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
-import { solidityKeccak256 } from 'ethers/lib/utils';
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
-import { getAddress } from 'viem';
 import { CurrentPriceLine } from './CurrentPriceLine';
-import { Fee } from './Fee';
 
 enum Columns {
   StrikePrice,
@@ -28,20 +24,18 @@ enum Columns {
 }
 
 export const PriceTable = () => {
-  const {
-    currentPrice,
-    decreasingPriceArray,
-    increasingPriceArray,
-    precision,
-  } = useStrikePriceArray();
+  useLimitedStrikeArrays();
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const { currentPrice, precision } = useCurrentPrice({
+    token0: activeMarket?.token0,
+    token1: activeMarket?.token1,
+  });
   const headsArray = useMemo(() => ['Strike Price', 'Above', 'Below'], []);
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
-  const { data: ivs } = useIV();
-  const { data: settlementFees } = useSettlementFee();
-  const selectedTimestamp = useAtomValue(selectedExpiry);
-
+  const strikes = strikePrices[activeMarket?.tv_id];
+  let increasingPriceArray = strikes?.increasingPriceArray ?? [];
+  let decreasingPriceArray = strikes?.decreasingPriceArray ?? [];
   const HeaderFomatter = useCallback((col: number) => {
     return (
       <TableHeader
@@ -87,28 +81,18 @@ export const PriceTable = () => {
     col: number,
     isAboveTable: boolean
   ) => {
-    const strikePrice = isAboveTable
-      ? increasingPriceArray[row]
-      : decreasingPriceArray[row];
     const tvId = activeMarket?.tv_id;
     if (!tvId) return <></>;
+
+    const tablerow = isAboveTable
+      ? increasingPriceArray[row]
+      : decreasingPriceArray[row];
+    const strikePrice = tablerow?.strike;
+
     const isSelected =
       selectedStrike === undefined ||
       selectedStrike?.[tvId] === undefined ||
       selectedStrike?.[tvId]?.price === strikePrice.toString();
-    const iv = ivs?.[activeMarket.tv_id];
-    if (iv === undefined) return <></>;
-    if (selectedTimestamp === undefined) return <></>;
-    if (settlementFees === undefined) return <></>;
-    const marketHash = solidityKeccak256(
-      ['uint256', 'uint256'],
-      [
-        toFixed(multiply(strikePrice.toString(), 8), 0),
-        Math.floor(selectedTimestamp / 1000),
-      ]
-    );
-    const settlementFee =
-      settlementFees[marketHash + '-' + getAddress(activeMarket.address)];
 
     switch (col) {
       case Columns.StrikePrice:
@@ -127,41 +111,45 @@ export const PriceTable = () => {
           selectedStrike === undefined ||
           selectedStrike?.[tvId] === undefined ||
           (selectedStrike?.[tvId]?.isAbove && isSelected);
+        const totalFee = tablerow.totalFeeAbove;
 
         return (
-          <Fee
-            isAbove
-            currentPrice={currentPrice}
-            expiration={selectedTimestamp}
-            strikePrice={strikePrice}
-            settlementFee={settlementFee?.sf_above || settlementFees['Base']}
-            isSelected={isAboveSelected}
-            setStrikePrice={setStrikePrice}
-            iv={iv}
-          />
+          <button
+            className={`text-1 bg-[#4D81FF] rounded-l-sm
+       px-3 py-1 w-full whitespace-nowrap font-medium ${
+         !isAboveSelected ? 'opacity-50' : ''
+       }`}
+            onClick={() => setStrikePrice(true, strikePrice.toString())}
+          >
+            {totalFee.toFixed(2)} (
+            {(((1 - totalFee) / totalFee) * 100).toFixed(0)}%)
+          </button>
         );
+
       case Columns.Below:
         const isBelowSelected =
           selectedStrike === undefined ||
           selectedStrike?.[tvId] === undefined ||
           (!selectedStrike?.[tvId]?.isAbove && isSelected);
+        const fee = tablerow.totalFeeBelow;
+
         return (
-          <Fee
-            isAbove={false}
-            currentPrice={currentPrice}
-            expiration={selectedTimestamp}
-            strikePrice={strikePrice}
-            settlementFee={settlementFee?.sf_above || settlementFees['Base']}
-            isSelected={isBelowSelected}
-            setStrikePrice={setStrikePrice}
-            iv={iv}
-          />
+          <button
+            className={`text-1 bg-[#FF5353] rounded-r-sm
+       px-3 py-1 w-full whitespace-nowrap font-medium ${
+         !isBelowSelected ? 'opacity-50' : ''
+       }`}
+            onClick={() => setStrikePrice(false, strikePrice.toString())}
+          >
+            {fee.toFixed(2)} ({(((1 - fee) / fee) * 100).toFixed(0)}%)
+          </button>
         );
+
       default:
         return <div className=""></div>;
     }
   };
-  if (!currentPrice || !activeMarket)
+  if (!currentPrice || !activeMarket || !strikes)
     return (
       <Skeleton className="w-[1005] !h-[300px] lc !transform-none !mt-3" />
     );
@@ -187,13 +175,14 @@ export const PriceTable = () => {
           widths={['50%', '25%', '25%']}
           cols={headsArray.length}
           onRowClick={() => {}}
-          rows={5}
+          rows={increasingPriceArray.length}
           isHeaderTransparent
           isBodyTransparent
           shouldHideHeader
           smHeight
           smThHeight
           noHover
+          loading={increasingPriceArray.length === 0}
         />
 
         <CurrentPriceLine currentPrice={currentPrice} precision={precision} />
@@ -203,12 +192,13 @@ export const PriceTable = () => {
           widths={['50%', '25%', '25%']}
           cols={headsArray.length}
           onRowClick={() => {}}
-          rows={5}
+          rows={decreasingPriceArray.length}
           isBodyTransparent
           shouldHideHeader
           smThHeight
           smHeight
           noHover
+          loading={decreasingPriceArray.length === 0}
         />
       </PriceTableBackground>
     </div>
