@@ -7,6 +7,7 @@ export const Fee: React.FC<{
   expiration: number;
   settlementFee: number;
   isSelected: boolean;
+  iv: number;
   setStrikePrice: (isAbove: boolean, strikePrice: string) => void;
 }> = ({
   isAbove,
@@ -16,6 +17,7 @@ export const Fee: React.FC<{
   settlementFee,
   isSelected,
   setStrikePrice,
+  iv,
 }) => {
   const currentEpoch = Math.floor(Date.now() / 1000);
   const probability = BlackScholes(
@@ -25,9 +27,10 @@ export const Fee: React.FC<{
     strikePrice,
     Math.floor(expiration / 1000) - currentEpoch,
     0,
-    1.2
+    iv / 1e4
   );
   const totalFee = probability + (settlementFee / 1e4) * probability;
+  console.log(iv, probability, totalFee);
   return (
     <button
       className={`text-1 ${

@@ -1,6 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 import { toFixed } from '@Utils/NumString';
 import { multiply } from '@Utils/NumString/stringArithmatics';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { useSettlementFee } from '@Views/AboveBelow/Hooks/useSettlementFee';
 import { useStrikePriceArray } from '@Views/AboveBelow/Hooks/useStrikePriceArray';
 import {
@@ -37,7 +38,7 @@ export const PriceTable = () => {
   const headsArray = useMemo(() => ['Strike Price', 'Above', 'Below'], []);
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
-  // const { data: ivs } = useIV();
+  const { data: ivs } = useIV();
   const { data: settlementFees } = useSettlementFee();
   const selectedTimestamp = useAtomValue(selectedExpiry);
 
@@ -95,8 +96,8 @@ export const PriceTable = () => {
       selectedStrike === undefined ||
       selectedStrike?.[tvId] === undefined ||
       selectedStrike?.[tvId]?.price === strikePrice.toString();
-    // const iv = ivs?.[activeMarket.tv_id];
-    // if (iv === undefined) return <></>;
+    const iv = ivs?.[activeMarket.tv_id];
+    if (iv === undefined) return <></>;
     if (selectedTimestamp === undefined) return <></>;
     if (settlementFees === undefined) return <></>;
     const marketHash = solidityKeccak256(
@@ -136,6 +137,7 @@ export const PriceTable = () => {
             settlementFee={settlementFee?.sf_above || settlementFees['Base']}
             isSelected={isAboveSelected}
             setStrikePrice={setStrikePrice}
+            iv={iv}
           />
         );
       case Columns.Below:
@@ -152,6 +154,7 @@ export const PriceTable = () => {
             settlementFee={settlementFee?.sf_above || settlementFees['Base']}
             isSelected={isBelowSelected}
             setStrikePrice={setStrikePrice}
+            iv={iv}
           />
         );
       default:
