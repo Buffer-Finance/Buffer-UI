@@ -1,7 +1,10 @@
+import { ExpandSVG } from '@Views/TradePage/Components/Expand';
 import { MobileChartControllsEditable } from '@Views/TradePage/Components/MobileView/MobileChartControlls';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useCallback } from 'react';
 import ShutterDrawer from 'react-bottom-drawer';
+import { useNavigate } from 'react-router-dom';
+import { ActiveTrades } from '../ActiveTrades';
 import { MobileAccordionTable } from './MobileTable';
 
 export const shutterModalAtom = atom<{
@@ -88,12 +91,24 @@ export const TradesShutter = () => {
 const Trades: React.FC<{ closeShutter: (err?: ReactNode[]) => void }> = ({
   closeShutter,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <>
-      <div className="w-full b1200:sticky b1200:top-[0px] b1200:z-50 bg-[#282b39] flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  mt-3">
-        <div className={' cursor-pointer  text-1'}>Active</div>
+      <div className="w-full b1200:sticky b1200:top-[0px] b1200:z-50 bg-[#282b39] flex justify-between px-5 text-f14 rounded-t-[8px] py-[8px]  mt-3">
+        <div className={' cursor-pointer  text-1'}>Active Trades</div>
+
+        <button
+          className={`bg-primary w-[22px] h-[22px] rounded-[6px] grid  place-items-center hover:text-1 transition-colors text-3`}
+          onClick={() => {
+            closeShutter();
+            navigate(`/history`);
+          }}
+        >
+          <ExpandSVG />
+        </button>
       </div>
-      {/* <ActiveTrades /> */}
+      <ActiveTrades />
     </>
   );
 };

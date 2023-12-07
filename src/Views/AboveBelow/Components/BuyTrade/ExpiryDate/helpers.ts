@@ -33,9 +33,13 @@ export function getTimestamps(date = Date.now()) {
   //add next week if the end of week is less than 36 hours away
   if (endOfWeekTimestamp - currentTimestamp < 129600000) {
     const nextWeek = new Date(date);
-    nextWeek.setUTCDate(nextWeek.getUTCDate() + 7);
+
+    nextWeek.setUTCDate(
+      nextWeek.getUTCDate() + ((5 - nextWeek.getUTCDay() + 7) % 7) + 7
+    );
     nextWeek.setUTCHours(8, 0, 0, 0);
     const nextWeekTimestamp = nextWeek.getTime();
+    console.log(nextWeekTimestamp);
     timestamps.push(nextWeekTimestamp);
   }
   // return unique timestamps

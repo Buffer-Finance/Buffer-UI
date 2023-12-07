@@ -1,22 +1,21 @@
-import { useMemo, useState } from 'react';
-import { BufferLogoComponent } from './BufferLogo';
-import { getTabs } from 'src/Config/getTabs';
-import { TabsDropdown } from './TabsDropDown';
-import { Tab } from './Tab';
-import { AccountDropdown } from './AccountDropdown';
 import { useGlobal } from '@Contexts/Global';
-import { useAtomValue } from 'jotai';
-import { urlSettings } from 'src/Config/wagmiClient';
-import { isTestnet } from 'config';
-import { SettingsDD } from './SettingsDD';
-import { activeMarketFromStorageAtom } from 'src/globalStore';
-import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
-import { useShutterHandlers } from '../MobileShutter/MobileShutter';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { useNavigate } from 'react-router-dom';
+import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import { inIframe } from '@Utils/isInIframe';
+import { useShutterHandlers } from '@Views/AboveBelow/Components/MobileView/Shutters';
+import { tardesAtom } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { useAtomValue } from 'jotai';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getTabs } from 'src/Config/getTabs';
+import { urlSettings } from 'src/Config/wagmiClient';
+import { activeMarketFromStorageAtom } from 'src/globalStore';
+import { AccountDropdown } from './AccountDropdown';
+import { BufferLogoComponent } from './BufferLogo';
+import { SettingsDD } from './SettingsDD';
+import { Tab } from './Tab';
+import { TabsDropdown } from './TabsDropDown';
 
 interface INavbar {}
 
@@ -44,7 +43,7 @@ export const Navbar: React.FC<INavbar> = () => {
     });
   };
   const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
-  const [activeTrades, limitOrderTrades] = useOngoingTrades();
+  const { active } = useAtomValue(tardesAtom);
   const navigate = useNavigate();
   const [click, setClick] = useState(0);
   const openAdmin = () => {
@@ -73,7 +72,7 @@ export const Navbar: React.FC<INavbar> = () => {
         <div className="a1200:hidden flex gap-x-4 items-center pl-4">
           <MemoHamburgerSVG onClick={handleClose} />
           <MemoWalletSVG
-            count={activeTrades.length + limitOrderTrades.length}
+            count={active.length}
             className={
               shutterState.open == 'ActiveOrders' ? 'text-1' : 'text-[#808191]'
             }

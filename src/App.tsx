@@ -20,12 +20,10 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AboveBelow } from '@Views/AboveBelow';
-import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
+import { TradesShutter } from '@Views/AboveBelow/Components/MobileView/Shutters';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
-import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 import { defaultMarket } from '@Views/TradePage/config';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
@@ -96,8 +94,8 @@ const AppRoutes = () => {
     <div className="relative root w-[100vw] pb-[5px] ">
       <TradesShutter />
       <OpenOcean />
-      <OnboardingAnimation />
-      <OneCTModal />
+      {/* <OnboardingAnimation /> */}
+      {/* <OneCTModal /> */}
       <Routes>
         {/* <Route path="trades" element={<AllTrades />} /> */}
         <Route path="/faucet" element={<IbfrFaucet />} />
