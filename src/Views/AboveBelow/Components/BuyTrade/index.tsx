@@ -9,7 +9,7 @@ import { TradeSize } from './TradeSize';
 export const BuyTrade: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   return (
     <BuyTradeBackground>
-      <ExpiryDate />
+      <ExpiryDate isMobile={isMobile} />
       <PriceTable isMobile={isMobile} />
       <SelectedTradeData />
       <TradeSize />

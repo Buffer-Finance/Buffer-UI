@@ -6,7 +6,7 @@ import { formatDateShort, getTimestamps } from './helpers';
 export const Selector = () => {
   const [selectedTimestamp, setSelectedTimestamp] = useAtom(selectedExpiry);
   return (
-    <RowGap gap="3px">
+    <RowGap gap="6px">
       {getTimestamps().map((timestamp) => {
         const isSelected = selectedTimestamp === timestamp;
         return (
