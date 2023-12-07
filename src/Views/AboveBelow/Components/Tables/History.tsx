@@ -15,8 +15,10 @@ import {
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
+import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
 import { AssetCell } from './Components/AssetCell';
 import { PayoutChip } from './Components/PayoutChip';
@@ -132,6 +134,23 @@ export const History: React.FC<{
       case TableColumn.CloseTime:
         return <DisplayTime ts={trade.expirationTime as string} />;
       case TableColumn.TradeSize:
+        if (isMobile) {
+          return (
+            <div className={`flex items-center`}>
+              <Display
+                data={divide(trade.totalFee as string, decimals)}
+                precision={2}
+                className="!justify-start"
+              />
+              <img
+                src={getAssetImageUrl(trade.market.poolInfo.token)}
+                width={13}
+                height={13}
+                className="inline ml-1 mb-1"
+              />
+            </div>
+          );
+        }
         return (
           <Display
             data={divide(trade.totalFee as string, decimals)}
@@ -155,6 +174,12 @@ export const History: React.FC<{
                 data={divide(pnl, trade.market.poolInfo.decimals)}
                 precision={2}
               />
+              <img
+                src={getAssetImageUrl(trade.market.poolInfo.token)}
+                width={13}
+                height={13}
+                className="inline ml-2 mb-1"
+              />
             </div>
           );
         return (
@@ -162,6 +187,7 @@ export const History: React.FC<{
             <Display
               data={divide(trade.payout ?? '0', trade.market.poolInfo.decimals)}
               precision={2}
+              unit={trade.market.poolInfo.token}
               className="!justify-start"
             />
             <div
@@ -170,6 +196,7 @@ export const History: React.FC<{
               Net Pnl : {isTradeLost ? '' : '+ '}
               <Display
                 data={divide(pnl, trade.market.poolInfo.decimals)}
+                unit={trade.market.poolInfo.token}
                 precision={2}
               />
             </div>
@@ -228,8 +255,8 @@ export const History: React.FC<{
         </RowBetween>
 
         <RowBetween className="mt-5">
-          <div>
-            <span className={headerClass + ' mr-3'}>Expiry</span>
+          <ColumnGap gap="3px">
+            <span className={headerClass}>Expiry</span>
             <span className={descClass}>
               {expiryPrice
                 ? numberWithCommas(
@@ -240,9 +267,9 @@ export const History: React.FC<{
                   )
                 : 'Processing...'}
             </span>
-          </div>
-          <div className="flex items-center">
-            <span className={headerClass + ' mr-3'}>Payout</span>
+          </ColumnGap>
+          <ColumnGap gap="3px">
+            <span className={headerClass}>Payout</span>
             <span className={descClass}>
               {expiryPrice
                 ? numberWithCommas(
@@ -255,8 +282,14 @@ export const History: React.FC<{
                     )
                   )
                 : 'Calculating...'}
+              <img
+                src={getAssetImageUrl(trade.market.poolInfo.token)}
+                width={13}
+                height={13}
+                className="inline ml-1"
+              />
             </span>
-          </div>
+          </ColumnGap>
         </RowBetween>
       </div>
     );

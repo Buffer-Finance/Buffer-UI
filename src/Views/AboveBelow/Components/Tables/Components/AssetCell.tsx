@@ -46,7 +46,7 @@ export const AssetCell: React.FC<{
                 shouldShowText={!split}
                 upText="Above"
                 downText="Below"
-                shouldShowImage={false}
+                shouldShowImage={split}
               />
             )}
           </div>

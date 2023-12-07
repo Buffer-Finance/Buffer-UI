@@ -20,6 +20,7 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AboveBelow } from '@Views/AboveBelow';
+import { MobileHistory } from '@Views/AboveBelow/Components/MobileView/MobileHistory';
 import { TradesShutter } from '@Views/AboveBelow/Components/MobileView/Shutters';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
@@ -99,9 +100,9 @@ const AppRoutes = () => {
       <Routes>
         {/* <Route path="trades" element={<AllTrades />} /> */}
         <Route path="/faucet" element={<IbfrFaucet />} />
-        {/* <Route path="/test" element={<Test />} />
-        <Route path="/history" element={<TradeLog_sm />} />
-        <Route path="/admin" element={<AdminConfig />} />
+        {/* <Route path="/test" element={<Test />} /> */}
+        <Route path="/history" element={<MobileHistory />} />
+        {/*  <Route path="/admin" element={<AdminConfig />} />
 
         <Route
           path="/ref/:refcode"

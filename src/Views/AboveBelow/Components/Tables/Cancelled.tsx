@@ -8,6 +8,7 @@ import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
+import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
 import { AssetCell } from './Components/AssetCell';
 
@@ -80,6 +81,35 @@ export const Cancelled: React.FC<{
           />
         );
       case TableColumn.TradeSize:
+        if (isMobile) {
+          return (
+            <div className={`flex items-center`}>
+              <Display
+                data={divide(
+                  multiply(
+                    trade.maxFeePerContract as string,
+                    trade.numberOfContracts as string
+                  ) as string,
+                  trade.market.poolInfo.decimals
+                )}
+                precision={2}
+                className="!justify-start"
+                // unit={trade.market.poolInfo.token}
+                label={'<'}
+              />
+              <img
+                src={getAssetImageUrl(trade.market.poolInfo.token)}
+                width={13}
+                height={13}
+                className="inline ml-1"
+              />
+              <InfoIcon
+                tooltip="The max amount of trade considering the slippage"
+                sm
+              />
+            </div>
+          );
+        }
         return (
           <div className="flex gap-2 items-center">
             <Display
