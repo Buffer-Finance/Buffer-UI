@@ -236,7 +236,7 @@ export const Table: React.FC<{
       <BufferTable
         widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
         headerJSX={HeadFormatter}
-        cols={isMobile ? 4 : headers.length}
+        cols={isMobile ? 3 : headers.length}
         shouldShowMobile
         rows={filteredMarkets?.length || 0}
         bodyJSX={BodyFormatter}

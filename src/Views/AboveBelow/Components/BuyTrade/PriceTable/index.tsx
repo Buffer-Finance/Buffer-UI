@@ -36,6 +36,7 @@ export const PriceTable = () => {
   const strikes = strikePrices[activeMarket?.tv_id as string];
   let increasingPriceArray = strikes?.increasingPriceArray ?? [];
   let decreasingPriceArray = strikes?.decreasingPriceArray ?? [];
+  // console.log(increasingPriceArray, decreasingPriceArray);
   const HeaderFomatter = useCallback((col: number) => {
     return (
       <TableHeader
@@ -189,6 +190,7 @@ export const PriceTable = () => {
         smHeight
         smThHeight
         noHover
+        shouldShowMobile
       />
       <PriceTableBackground className="pr-4 pl-3 max-h-[30vh] overflow-auto">
         <BufferTable
@@ -205,6 +207,7 @@ export const PriceTable = () => {
           smThHeight
           noHover
           loading={increasingPriceArray.length === 0}
+          shouldShowMobile
         />
 
         <CurrentPriceLine currentPrice={currentPrice} precision={precision} />
@@ -221,6 +224,7 @@ export const PriceTable = () => {
           smHeight
           noHover
           loading={decreasingPriceArray.length === 0}
+          shouldShowMobile
         />
       </PriceTableBackground>
     </div>

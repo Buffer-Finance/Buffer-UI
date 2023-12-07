@@ -34,6 +34,10 @@ export const BuyTradeBackground = styled.div`
   justify-content: flex-start;
   align-items: stretch;
   height: calc(100vh - 80px);
+
+  @media (max-width: 1200px) {
+    gap: 12px;
+  }
 `;
 
 export const BuyTrade: React.FC = () => {

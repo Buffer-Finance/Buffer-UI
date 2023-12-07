@@ -8,9 +8,13 @@ import {
 import { tradePanelPosition } from '@Views/TradePage/type';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
+import { useMedia } from 'react-use';
 import { polygon, polygonMumbai } from 'viem/chains';
 import { BuyTrade } from './Components/BuyTrade';
 import { MarketChart } from './Components/MarketChart';
+import { MarketPicker } from './Components/MobileView/MarketPicker';
+import { Shutters } from './Components/MobileView/Shutters';
+import { Tabs } from './Components/MobileView/Tabs';
 import { PinnedMarkets } from './Components/PinnedMarkets';
 import { StatusBar } from './Components/StatusBar';
 import { Tables } from './Components/Tables';
@@ -36,6 +40,7 @@ export const AboveBelow = () => {
   const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
   const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);
+  const isNotMobile = useMedia('(min-width:1200px)');
 
   if ([polygon.id, polygonMumbai.id].includes(activeChain.id as 80001)) {
     return <MobileWarning />;
@@ -48,22 +53,31 @@ export const AboveBelow = () => {
       }
     }
   }, [markets.length]);
-
-  return (
-    <div
-      className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
-        panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
-      }`}
-    >
-      <>
-        <RightPanelBackground>
-          {showFavoriteAsset && <PinnedMarkets />}
-          <StatusBar isMobile={false} />
-          <MarketChart />
-          <Tables />
-        </RightPanelBackground>
-        <BuyTrade />
-      </>
-    </div>
-  );
+  if (isNotMobile)
+    return (
+      <div
+        className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
+          panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
+        }`}
+      >
+        <>
+          <RightPanelBackground>
+            {showFavoriteAsset && <PinnedMarkets />}
+            <StatusBar isMobile={false} />
+            <MarketChart />
+            <Tables />
+          </RightPanelBackground>
+          <BuyTrade />
+        </>
+      </div>
+    );
+  else {
+    return (
+      <div className="px-3">
+        <Shutters />
+        <MarketPicker />
+        <Tabs />
+      </div>
+    );
+  }
 };
