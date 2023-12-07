@@ -8,7 +8,7 @@ import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
-import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import { getAssetMonochromeImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
 import { AssetCell } from './Components/AssetCell';
 
@@ -98,7 +98,7 @@ export const Cancelled: React.FC<{
                 label={'<'}
               />
               <img
-                src={getAssetImageUrl(trade.market.poolInfo.token)}
+                src={getAssetMonochromeImageUrl(trade.market.poolInfo.token)}
                 width={13}
                 height={13}
                 className="inline ml-1"

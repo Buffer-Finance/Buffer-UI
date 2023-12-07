@@ -18,7 +18,7 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
-import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import { getAssetMonochromeImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
 import { AssetCell } from './Components/AssetCell';
 import { PayoutChip } from './Components/PayoutChip';
@@ -143,10 +143,10 @@ export const History: React.FC<{
                 className="!justify-start"
               />
               <img
-                src={getAssetImageUrl(trade.market.poolInfo.token)}
+                src={getAssetMonochromeImageUrl(trade.market.poolInfo.token)}
                 width={13}
                 height={13}
-                className="inline ml-1 mb-1"
+                className="inline ml-1 mb-[0px]"
               />
             </div>
           );
@@ -175,10 +175,10 @@ export const History: React.FC<{
                 precision={2}
               />
               <img
-                src={getAssetImageUrl(trade.market.poolInfo.token)}
+                src={getAssetMonochromeImageUrl(trade.market.poolInfo.token)}
                 width={13}
                 height={13}
-                className="inline ml-2 mb-1"
+                className="inline ml-2 mb-[0px]"
               />
             </div>
           );
@@ -283,7 +283,7 @@ export const History: React.FC<{
                   )
                 : 'Calculating...'}
               <img
-                src={getAssetImageUrl(trade.market.poolInfo.token)}
+                src={getAssetMonochromeImageUrl(trade.market.poolInfo.token)}
                 width={13}
                 height={13}
                 className="inline ml-1"
