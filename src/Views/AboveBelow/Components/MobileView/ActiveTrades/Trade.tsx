@@ -27,7 +27,7 @@ export const Trade: React.FC<{ trade: IGQLHistory }> = ({ trade }) => {
               {trade.market.pair}
             </White12pxText>
             <DirectionChip isUp={trade.isAbove} shouldShowArrow />
-            <Visualized queue_id={trade.queueID} />
+            <Visualized queue_id={+(trade.queueID as string)} />
           </RowGap>
         </RowBetween>
         {trade.state === BetState.queued ? (
