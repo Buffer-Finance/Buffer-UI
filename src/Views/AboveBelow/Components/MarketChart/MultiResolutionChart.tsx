@@ -23,11 +23,7 @@ import {
   OHLCBlock,
   RealtimeUpdate,
 } from '@Views/TradePage/Views/MarketChart/MakrketTypes';
-import {
-  chartControlsSettingsAtom,
-  queuets2priceAtom,
-  visualizeddAtom,
-} from '@Views/TradePage/atoms';
+import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
 import { PRICE_DECIMALS, marketsForChart } from '@Views/TradePage/config';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
@@ -270,8 +266,6 @@ export const MultiResolutionChart = ({
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
-  const settings = useAtomValue(chartControlsSettingsAtom);
-
   const chartId = market + index;
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});

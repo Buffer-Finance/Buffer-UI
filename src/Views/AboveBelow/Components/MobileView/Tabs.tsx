@@ -39,7 +39,7 @@ export const mobileTradePageTabs = atom<'trade' | 'chart'>('trade');
 function Chart({ navigateToTrade }: { navigateToTrade: () => void }) {
   return (
     <div>
-      <MarketChart />
+      <MarketChart isMobile />
       <BlueBtn onClick={navigateToTrade} className="mt-3">
         Place Trade
       </BlueBtn>

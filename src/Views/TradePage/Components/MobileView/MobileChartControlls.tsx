@@ -6,15 +6,16 @@ import {
 } from '@TV/ChartTypeSelectionDD';
 import { sleep, supported_resolutions } from '@TV/useDataFeed';
 import {
-  shutterModalAtom,
-  useShutterHandlers,
-} from '@Views/Common/MobileShutter/MobileShutter';
-import {
   formatResolution,
   indicatorCoutAtom,
   isntAvailable,
   market2resolutionAtom,
-} from '@Views/TradePage/Views/MarketChart/MultiResolutionChart';
+} from '@Views/AboveBelow/Components/MarketChart/MultiResolutionChart';
+import {
+  shutterModalAtom,
+  useShutterHandlers,
+} from '@Views/AboveBelow/Components/MobileView/Shutters';
+
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 const MobileChartControlls: React.FC<{ activeMarket: string }> = ({

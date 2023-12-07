@@ -13,9 +13,10 @@ import { MultiResolutionChart } from './MultiResolutionChart';
 const SidebySideCharts = ({
   indexes,
   className,
+  isMobile,
 }: {
   indexes: string[];
-
+  isMobile: boolean;
   className?: string;
 }) => {
   return (
@@ -26,6 +27,7 @@ const SidebySideCharts = ({
             market={id.split(':')[0] as any}
             index={+id.split(':')[1]}
             key={id}
+            isMobile={isMobile}
           />
         </div>
       ))}
@@ -33,7 +35,7 @@ const SidebySideCharts = ({
   );
 };
 
-const MarketChart: React.FC<any> = ({}) => {
+const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const isTableExpanded = useAtomValue(isTableShownAtom);
   const v3AppConfig = useAtomValue(aboveBelowMarketsAtom);
   const chartTimes = useAtomValue(chartNumberAtom);
@@ -114,21 +116,34 @@ const MarketChart: React.FC<any> = ({}) => {
       <Skeleton className="flex w-full !h-full lc !transform-none !my-3" />
     );
   let chartLayout = (
-    <SidebySideCharts indexes={[marketPrefix + 1]} className="h-full" />
+    <SidebySideCharts
+      indexes={[marketPrefix + 1]}
+      className="h-full"
+      isMobile={isMobile}
+    />
   );
   if (chartTimes == 2) {
     chartLayout = (
       <SidebySideCharts
         indexes={[marketPrefix + 1, marketPrefix + 2]}
         className="h-full"
+        isMobile={isMobile}
       />
     );
   }
   if (chartTimes == 2.5) {
     chartLayout = (
       <div className="flex-col w-[100%] h-full">
-        <SidebySideCharts indexes={[marketPrefix + 1]} className="h-1/2" />
-        <SidebySideCharts indexes={[marketPrefix + 2]} className="h-1/2" />
+        <SidebySideCharts
+          indexes={[marketPrefix + 1]}
+          className="h-1/2"
+          isMobile={isMobile}
+        />
+        <SidebySideCharts
+          indexes={[marketPrefix + 2]}
+          className="h-1/2"
+          isMobile={isMobile}
+        />
       </div>
     );
   }
@@ -138,10 +153,12 @@ const MarketChart: React.FC<any> = ({}) => {
         <SidebySideCharts
           indexes={[marketPrefix + 1, marketPrefix + 2]}
           className="  h-1/2"
+          isMobile={isMobile}
         />
         <SidebySideCharts
           indexes={[marketPrefix + 3, marketPrefix + 4]}
           className="  h-1/2"
+          isMobile={isMobile}
         />
       </div>
     );
