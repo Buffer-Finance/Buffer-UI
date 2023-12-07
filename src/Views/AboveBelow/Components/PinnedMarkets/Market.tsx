@@ -1,6 +1,7 @@
 import Star from '@Public/ComponentSVGS/Star';
 import { round } from '@Utils/NumString/stringArithmatics';
 import { navigateToarket } from '@Views/AboveBelow/Helpers/navigateToMarket';
+import { useIsInCreationWindow } from '@Views/AboveBelow/Hooks/useIsInCreationWIndow';
 import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
 import {
   favouriteMarketsAtom,
@@ -8,7 +9,6 @@ import {
 } from '@Views/AboveBelow/atoms';
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import { Display } from '@Views/Common/Tooltips/Display';
-// import { useIsMarketInCreationWindow } from '@Views/NoLoss-V3/Hooks/useIsMarketInCreationWindow';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
 import { joinStrings } from '@Views/TradePage/utils';
@@ -41,15 +41,15 @@ export const Market: React.FC<{
   const navigate = useNavigate();
 
   const setFavouriteMarket = useSetAtom(favouriteMarketsAtom);
-  //   const isIncreationWindow = useIsMarketInCreationWindow();
+  const isIncreationWindow = useIsInCreationWindow();
   const setActiveMarket = (token0: string, token1: string) => {
     navigateToarket(navigate, token0 + '-' + token1, '/above-below');
   };
-  const isIncreationWindow = {
-    crypto: true,
-    forex: true,
-    commodity: true,
-  };
+  // const isIncreationWindow = {
+  //   crypto: true,
+  //   forex: true,
+  //   commodity: true,
+  // };
   const isOpen =
     !market.isPaused &&
     isIncreationWindow[

@@ -4,6 +4,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { toFixed } from '@Utils/NumString';
 import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useIV } from '@Views/AboveBelow/Hooks/useIV';
+import { useIsInCreationWindow } from '@Views/AboveBelow/Hooks/useIsInCreationWIndow';
 import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
 import {
   readCallDataAtom,
@@ -25,8 +26,37 @@ import { useState } from 'react';
 import RouterABI from '../../abis/Router.json';
 import { ApproveBtn } from './ApproveBtn';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
-
 export const Buy = () => {
+  const isIncreationWindow = useIsInCreationWindow();
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
+
+  if (activeMarket === undefined)
+    return (
+      <ConnectionRequired>
+        <BlueBtn onClick={() => {}} isDisabled={true}>
+          Select a Market
+        </BlueBtn>
+      </ConnectionRequired>
+    );
+
+  const isOpen =
+    !activeMarket.isPaused &&
+    isIncreationWindow[
+      activeMarket.category.toLowerCase() as 'crypto' | 'forex' | 'commodity'
+    ];
+
+  if (!isOpen) {
+    return (
+      <BlueBtn onClick={() => {}} isDisabled={true}>
+        Market is closed
+      </BlueBtn>
+    );
+  }
+
+  return <TradeButton />;
+};
+
+const TradeButton = () => {
   const { activeChain } = useActiveChain();
   const config = getConfig(activeChain.id);
   const { writeCall } = useWriteCall(config.above_below_router, RouterABI);

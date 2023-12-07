@@ -1,6 +1,7 @@
 import Star from '@Public/ComponentSVGS/Star';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { navigateToarket } from '@Views/AboveBelow/Helpers/navigateToMarket';
+import { useIsInCreationWindow } from '@Views/AboveBelow/Hooks/useIsInCreationWIndow';
 import { useOneDayVolume } from '@Views/AboveBelow/Hooks/useOneDayVolume';
 import {
   favouriteMarketsAtom,
@@ -50,12 +51,12 @@ export const Table: React.FC<{
   const setActiveMarket = (token0: string, token1: string) => {
     navigateToarket(navigate, token0 + '-' + token1, '/above-below');
   };
-  //   const isIncreationWindow = useIsMarketInCreationWindow();
-  const isIncreationWindow = {
-    crypto: true,
-    forex: true,
-    commodity: true,
-  };
+  const isIncreationWindow = useIsInCreationWindow();
+  // const isIncreationWindow = {
+  //   crypto: true,
+  //   forex: true,
+  //   commodity: true,
+  // };
   const setForexTimingsModal = useSetAtom(ForexTimingsModalAtom);
 
   const headers = useMemo(() => {
@@ -77,11 +78,6 @@ export const Table: React.FC<{
         market.category.toLowerCase() as 'crypto' | 'forex' | 'commodity'
       ];
     const isForex = market.category.toLowerCase() === 'forex';
-    // const payout = getMaximumValue(
-    //   divide(market.payoutForDown, 16) as string,
-    //   divide(market.payoutForUp, 16) as string
-    // );
-    // const maxFee = divide(market.config.maxFee, 18) as string;
 
     const isFavourite = favouriteMarkets.includes(market.tv_id);
     const decimals = market.poolInfo.decimals;
@@ -122,20 +118,6 @@ export const Table: React.FC<{
             ]}
           />
         );
-      //   case 2:
-      //     if (isOpen === undefined)
-      //       return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
-      //     if (!isOpen) return <>-</>;
-
-      //     return (
-      //       <CellContent
-      //         content={[
-      //           <div className="flex items-center">
-      //             <div className="text-1">{payout}%</div>
-      //           </div>,
-      //         ]}
-      //       />
-      //     );
       case TableColumns.OneDayChange:
         if (isOpen === undefined)
           return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
@@ -210,21 +192,6 @@ export const Table: React.FC<{
             className="!justify-start"
           />
         );
-      //   case 4:
-      //     if (isOpen === undefined)
-      //       return <Skeleton className="w-[80px] !h-5 lc !transform-none" />;
-
-      //     if (!isOpen) return <>-</>;
-
-      //     return (
-      //       <CellContent
-      //         content={[
-      //           <div className="flex items-center">
-      //             <div className="text-1">{toFixed(maxFee, 0)}</div>
-      //           </div>,
-      //         ]}
-      //       />
-      //     );
 
       default:
         return <div>Unhandled Column.</div>;
