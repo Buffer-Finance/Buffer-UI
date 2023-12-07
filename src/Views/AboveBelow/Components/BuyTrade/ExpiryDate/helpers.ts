@@ -38,5 +38,6 @@ export function getTimestamps(date = Date.now()) {
     const nextWeekTimestamp = nextWeek.getTime();
     timestamps.push(nextWeekTimestamp);
   }
-  return timestamps;
+  // return unique timestamps
+  return [...new Set(timestamps)];
 }
