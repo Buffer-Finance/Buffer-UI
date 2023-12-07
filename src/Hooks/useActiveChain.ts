@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
-import { Chain, useNetwork } from 'wagmi';
 import Config from 'public/config.json';
-import { getChains } from 'src/Config/wagmiClient';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { getChains } from 'src/Config/wagmiClient';
+import { Chain, useNetwork } from 'wagmi';
 const typeofConfig = Config[421613];
 
 export const useActiveChain = () => {
@@ -20,11 +20,25 @@ export const useActiveChain = () => {
       );
     }
     if (activeChain === undefined) {
-      activeChain = chain;
-      if (!chains.filter((c) => c.name == chain?.name)?.length) {
+      if (chain === undefined) {
         activeChain = chains[0];
         isWrongChain = true;
+      } else {
+        const connectedChain = chains.find(
+          (fromAllchain) => fromAllchain.name === chain.name
+        );
+        if (connectedChain === undefined) {
+          activeChain = chains[0];
+          isWrongChain = true;
+        } else {
+          activeChain = connectedChain;
+        }
       }
+      // activeChain = chain;
+      // if (!chains.filter((c) => c.name == chain?.name)?.length) {
+      //   activeChain = chains[0];
+      //   isWrongChain = true;
+      // }
     }
     return [activeChain, isWrongChain];
   }, [chain, chainName]);
