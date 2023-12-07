@@ -6,11 +6,11 @@ import { PriceTable } from './PriceTable';
 import { SelectedTradeData } from './SelectedTradeData';
 import { TradeSize } from './TradeSize';
 
-export const BuyTrade = () => {
+export const BuyTrade: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   return (
     <BuyTradeBackground>
       <ExpiryDate />
-      <PriceTable />
+      <PriceTable isMobile={isMobile} />
       <SelectedTradeData />
       <TradeSize />
       <PayoutProfit />

@@ -23,7 +23,7 @@ enum Columns {
   Below,
 }
 
-export const PriceTable = () => {
+export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   useLimitedStrikeArrays();
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const { currentPrice, precision } = useCurrentPrice({
@@ -192,7 +192,11 @@ export const PriceTable = () => {
         noHover
         shouldShowMobile
       />
-      <PriceTableBackground className="pr-4 pl-3 max-h-[30vh] overflow-auto">
+      <PriceTableBackground
+        className={`pr-4 pl-3 ${
+          isMobile ? 'max-h-[50vh]' : 'max-h-[30vh]'
+        } overflow-auto`}
+      >
         <BufferTable
           headerJSX={HeaderFomatter}
           bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}

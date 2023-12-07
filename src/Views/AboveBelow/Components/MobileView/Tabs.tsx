@@ -28,7 +28,7 @@ export const Tabs = () => {
         })}
       </div>
       <HorizontalTransition value={activeTab === 'trade' ? 0 : 1}>
-        <BuyTrade />
+        <BuyTrade isMobile />
         <Chart navigateToTrade={() => setActiveTab('trade')} />
       </HorizontalTransition>
     </div>

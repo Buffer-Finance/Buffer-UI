@@ -67,7 +67,7 @@ export const AboveBelow = () => {
             <MarketChart />
             <Tables />
           </RightPanelBackground>
-          <BuyTrade />
+          <BuyTrade isMobile={false} />
         </>
       </div>
     );

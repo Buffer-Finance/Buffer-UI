@@ -39,7 +39,6 @@ export function getTimestamps(date = Date.now()) {
     );
     nextWeek.setUTCHours(8, 0, 0, 0);
     const nextWeekTimestamp = nextWeek.getTime();
-    console.log(nextWeekTimestamp);
     timestamps.push(nextWeekTimestamp);
   }
   // return unique timestamps
