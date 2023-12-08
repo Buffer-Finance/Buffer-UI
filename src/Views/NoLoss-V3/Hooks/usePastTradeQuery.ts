@@ -175,6 +175,7 @@ export const useProcessedTrades = () => {
 export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
   if (
     currentTrade.state === BetState.active &&
+    currentTrade.optionID &&
     !expiryPriceCache[currentTrade.optionID]
   ) {
     const assets = currentTrade.optionContract.asset;
