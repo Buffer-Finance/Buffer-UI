@@ -48,4 +48,8 @@ export const TradeCardBackground = styled.div`
   background-color: #141823;
   border-radius: 5px;
   margin-top: 8px;
+
+  :first-of-type {
+    margin-top: 0px;
+  }
 `;

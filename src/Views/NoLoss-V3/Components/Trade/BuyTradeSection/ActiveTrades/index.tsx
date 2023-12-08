@@ -24,6 +24,7 @@ export const ActiveTrades = () => {
 };
 
 export const TradesBackground = styled.div`
+  margin-top: 12px;
   flex-grow: 1;
   flex-basis: 0;
   overflow-y: auto;

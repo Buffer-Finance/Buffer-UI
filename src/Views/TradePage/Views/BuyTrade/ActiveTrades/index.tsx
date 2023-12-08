@@ -1,13 +1,13 @@
-import { ExpandSVG } from '@Views/TradePage/Components/Expand';
-import { useState } from 'react';
-import { TradeCard } from './Trade';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { isTableShownAtom } from '@Views/TradePage/atoms';
-import { NoTrades } from './NoTrades';
-import styled from '@emotion/styled';
-import { useNavigate } from 'react-router-dom';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
+import { ExpandSVG } from '@Views/TradePage/Components/Expand';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { isTableShownAtom } from '@Views/TradePage/atoms';
+import styled from '@emotion/styled';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { NoTrades } from './NoTrades';
+import { TradeCard } from './Trade';
 
 const tableTypes = ['Trades', 'Limit Orders'];
 
