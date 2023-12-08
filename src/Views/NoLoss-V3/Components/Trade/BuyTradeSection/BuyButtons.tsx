@@ -1,4 +1,5 @@
 import { useToast } from '@Contexts/Toast';
+import { useSmartAccount } from '@Hooks/AA/useSmartAccount';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
@@ -24,22 +25,12 @@ import { secondsToHHMM } from '@Views/TradePage/utils';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
+import { encodeFunctionData } from 'viem';
 import RouterABI from '../../../ABIs/NoLossRouter.json';
 import TournamentLeaderboardABI from '../../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../../ABIs/TournamentManager.json';
 import { getDurationError } from './TimeSelector/TimePicker';
 import { getTradeSizeError } from './TradeSizeSelector';
-import { encodeFunctionData } from 'viem';
-import { useSmartAccount } from '@Hooks/AA/useSmartAccount';
-import { ethers } from 'ethers';
-import {
-  SessionKeyManagerModule,
-  DEFAULT_SESSION_KEY_MANAGER_MODULE,
-  BatchedSessionRouterModule,
-  DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
-} from '@biconomy/modules';
-import { PaymasterMode } from '@biconomy/paymaster';
-import { erc20ABI } from 'wagmi';
 export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   activeMarket,
 }) => {
@@ -47,7 +38,8 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   const { price } = useMarketPrice(activeMarket?.chartData.tv_id);
   const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
   const user = useAtomValue(userAtom);
-  const userInput = useAtomValue(noLossTradeSizeAtom);
+  const input = useAtomValue(noLossTradeSizeAtom);
+  const userInput = input || '0';
   const activeTournamentData = useAtomValue(activeTournamentDataReadOnlyAtom);
   const currentTime = useAtomValue(timeSelectorAtom);
   const activeChain = useAtomValue(activeChainAtom);
