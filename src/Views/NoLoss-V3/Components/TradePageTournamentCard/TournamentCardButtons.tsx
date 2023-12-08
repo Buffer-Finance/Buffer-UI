@@ -5,11 +5,7 @@ import { divide, gt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BufferButton } from '@Views/Common/V2-Button';
-import {
-  activeChainAtom,
-  noLossReadCallsReadOnlyAtom,
-  userAtom,
-} from '@Views/NoLoss-V3/atoms';
+import { activeChainAtom, userAtom } from '@Views/NoLoss-V3/atoms';
 import { getNoLossV3Config } from '@Views/NoLoss-V3/helpers/getNolossV3Config';
 import { ItournamentData } from '@Views/NoLoss-V3/types';
 import { Skeleton } from '@mui/material';
@@ -47,7 +43,7 @@ export const TournamentCardButtons: React.FC<{
   const { address } = useAccount();
   const { sendTxn } = useSmartAccount();
   const [btnLoading, setBtnLoading] = useState(false);
-  const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
+  // const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
 
   const { writeCall } = useWriteCall();
 
@@ -72,61 +68,59 @@ export const TournamentCardButtons: React.FC<{
   }
   const config = getNoLossV3Config(activeChain?.id);
 
-  const allowanceId = getCallId(
-    tournament.tournamentMeta.buyinToken,
-    'allowance',
-    [user.mainEOA, config.manager]
-  );
-  const allowance = tournamentBasedData?.buyInTokenToManagerAllowance?.find(
-    (allowanceObj) => allowanceObj.id === allowanceId
-  )?.allowance;
+  let secondButton = <></>;
 
-  const ticketCost = divide(
-    tournament.tournamentMeta.ticketCost,
-    tournament.buyinTokenDecimals
-  ) as string;
+  if (tournament.state.toLowerCase() === 'closed') {
+    if (activeAllMyTab === 'my' && gt(tournament.userReward, '0')) {
+      async function handleClaim() {
+        setBtnLoading(true);
+        const txn = {
+          data: encodeFunctionData({
+            abi: TournamentLeaderboardABI,
+            args: [tournament.id, address],
+            functionName: 'claimReward',
+          }),
+          to: config.leaderboard,
+        };
+        await sendTxn([txn]);
+        setBtnLoading(false);
+      }
+      const alreadClaimed = tournament.hasUserClaimed;
 
-  if (allowance === undefined)
-    return (
-      <Skeleton className="!h-[26px] full-width b1200:!w-[100px] sr lc !mt-4 !transform-none" />
-    );
-  let secondButton = null;
-  async function handleClaim() {
-    setBtnLoading(true);
-    const txn = {
-      data: encodeFunctionData({
-        abi: TournamentLeaderboardABI,
-        args: [tournament.id, address],
-        functionName: 'claimReward',
-      }),
-      to: config.leaderboard,
-    };
-    await sendTxn([txn]);
-    setBtnLoading(false);
-  }
-
-  let isAllowed = gt(
-    divide(allowance, tournament.buyinTokenDecimals)!,
-    ticketCost
-  );
-  if (
-    tournament.state.toLowerCase() === 'closed' &&
-    activeAllMyTab === 'my' &&
-    gt(tournament.userReward, '0')
-  ) {
-    const alreadClaimed = tournament.hasUserClaimed;
-
-    secondButton = (
-      <BufferButton
-        onClick={handleClaim}
-        isLoading={btnLoading}
-        className={tournamentButtonStyles}
-        isDisabled={tournament.hasUserClaimed === true}
-      >
-        {alreadClaimed ? 'Already Claimed' : 'Claim'}
-      </BufferButton>
-    );
+      secondButton = (
+        <BufferButton
+          onClick={handleClaim}
+          isLoading={btnLoading}
+          className={tournamentButtonStyles}
+          isDisabled={tournament.hasUserClaimed === true}
+        >
+          {alreadClaimed ? 'Already Claimed' : 'Claim'}
+        </BufferButton>
+      );
+    }
   } else {
+    const allowanceId = getCallId(
+      tournament.tournamentMeta.buyinToken,
+      'allowance',
+      [user.mainEOA, config.manager]
+    );
+    const allowance = tournamentBasedData?.buyInTokenToManagerAllowance?.find(
+      (allowanceObj) => allowanceObj.id === allowanceId
+    )?.allowance;
+
+    const ticketCost = divide(
+      tournament.tournamentMeta.ticketCost,
+      tournament.buyinTokenDecimals
+    ) as string;
+
+    if (allowance === undefined)
+      return (
+        <Skeleton className="!h-[26px] full-width b1200:!w-[100px] sr lc !mt-4 !transform-none" />
+      );
+    let isAllowed = gt(
+      divide(allowance, tournament.buyinTokenDecimals)!,
+      ticketCost
+    );
     if (!isAllowed) {
       const approveTournamentManager = () => {
         setBtnLoading(true);
