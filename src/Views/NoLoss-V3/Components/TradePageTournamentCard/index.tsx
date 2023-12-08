@@ -157,7 +157,10 @@ export const TradepageTournamentCard: React.FC<{
 
                   <div>
                     <Display
-                      data={divide(tournament.userReward, 6)}
+                      data={divide(
+                        tournament.userReward,
+                        tournament.rewardTokenDecimals
+                      )}
                       unit={tournament.rewardTokenSymbol}
                       className="text-1 content-start"
                       precision={2}
