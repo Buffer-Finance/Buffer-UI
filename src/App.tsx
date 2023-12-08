@@ -20,6 +20,7 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AboveBelow } from '@Views/AboveBelow';
+import { AllTrades } from '@Views/AboveBelow/Components/AllTrades';
 import { MobileHistory } from '@Views/AboveBelow/Components/MobileView/MobileHistory';
 import { TradesShutter } from '@Views/AboveBelow/Components/MobileView/Shutters';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
@@ -118,6 +119,7 @@ const AppRoutes = () => {
           <Route path=":chain" element={<ProfilePage />} />
         </Route>
         <Route path="/binary/:market" element={<TradePage />} /> */}
+        <Route path="/above-below/trades" element={<AllTrades />} />
         <Route path="/above-below/:market" element={<AboveBelow />} />
         <Route
           path="/*"
