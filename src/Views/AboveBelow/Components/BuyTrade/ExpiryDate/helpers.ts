@@ -38,7 +38,8 @@ export function getTimestamps(date = Date.now()) {
   endOfWeek.setUTCDate(endOfWeek.getUTCDate() + daysUntilFriday);
   endOfWeek.setUTCHours(8, 0, 0, 0);
   const endOfWeekTimestamp = endOfWeek.getTime();
-  if (startOfDayTimestamp - currentTimestamp > 43200000)
+
+  if (endOfWeekTimestamp - currentTimestamp > 43200000)
     timestamps.push(endOfWeekTimestamp);
 
   //add next week if the end of week is less than 36 hours away
