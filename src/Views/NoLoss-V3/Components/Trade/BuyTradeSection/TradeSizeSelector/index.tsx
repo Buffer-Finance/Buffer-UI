@@ -3,6 +3,7 @@ import { divide, gt, lt, subtract } from '@Utils/NumString/stringArithmatics';
 import {
   noLossReadCallsReadOnlyAtom,
   noLossTradeSizeAtom,
+  userAtom,
 } from '@Views/NoLoss-V3/atoms';
 import { InoLossMarket } from '@Views/NoLoss-V3/types';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
@@ -35,7 +36,7 @@ export const TradeSizeSelector: React.FC<{
   const { result: readCallResults } = useAtomValue(noLossReadCallsReadOnlyAtom);
   const balance = readCallResults?.activeTournamentBalance;
   const error = getTradeSizeError(minFee, maxFee, balance, tradeSize);
-
+  const user = useAtomValue(userAtom);
   const setMaxValue = useCallback(
     () =>
       setTradeSize(
@@ -75,10 +76,10 @@ export const TradeSizeSelector: React.FC<{
             setTradeSize={setTradeSize}
             tradeSize={tradeSize}
           />
-
-          {/* <PoolDropdown /> */}
         </RowGapItemsStretched>
-        <span className="text-red whitespace-nowrap">{error}</span>
+        {user && user.userAddress && (
+          <span className="text-red whitespace-nowrap">{error}</span>
+        )}
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );
