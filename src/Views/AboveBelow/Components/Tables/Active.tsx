@@ -170,7 +170,7 @@ export const Active: React.FC<{
         );
       case TableColumn.Visualization:
         if (trade.state === BetState.queued) return <></>;
-        return <Visualized queue_id={trade.optionID} />;
+        return <Visualized queue_id={trade.queueID} />;
       default:
         return <></>;
     }
