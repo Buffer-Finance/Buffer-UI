@@ -35,7 +35,12 @@ export interface marketTypeAB
   poolInfo: poolInfoType;
 }
 
-export type accordianTableType = 'active' | 'history' | 'cancelled';
+export type accordianTableType =
+  | 'active'
+  | 'history'
+  | 'cancelled'
+  | 'platform_active'
+  | 'platform_history';
 
 export interface IreadCallData {
   balances: {
