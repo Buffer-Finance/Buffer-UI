@@ -9,7 +9,10 @@ import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BetState } from '@Views/NoLoss-V3/Hooks/useAheadTrades';
-import { IGQLHistory } from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
+import {
+  IGQLHistory,
+  expiryPriceCache,
+} from '@Views/NoLoss-V3/Hooks/usePastTradeQuery';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import { AssetCell } from '@Views/TradePage/Views/AccordionTable/AssetCell';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
@@ -101,14 +104,23 @@ export const History: React.FC<{
           />
         );
       case TableColumn.Expiry:
-        if (trade.state === BetState.active) return <>processing...</>;
-        return (
-          <Display
-            data={divide(trade.expirationPrice ?? '0', 8)}
-            precision={trade.chartData.price_precision.toString().length - 1}
-            className="!justify-start"
-          />
-        );
+        if (trade.optionID !== undefined) {
+          const expiry =
+            trade.expirationPrice ?? expiryPriceCache[trade.optionID];
+          if (expiry !== undefined) {
+            return (
+              <Display
+                data={divide(expiry, 8)}
+                precision={
+                  trade.chartData.price_precision.toString().length - 1
+                }
+                className="!justify-start"
+              />
+            );
+          }
+        }
+        return <>Processing...</>;
+
       case TableColumn.OpenTime:
         return <DisplayTime ts={trade.creationTime as string} />;
       case TableColumn.Duration:
