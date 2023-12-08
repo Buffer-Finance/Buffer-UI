@@ -31,6 +31,7 @@ import TournamentLeaderboardABI from '../../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../../ABIs/TournamentManager.json';
 import { getDurationError } from './TimeSelector/TimePicker';
 import { getTradeSizeError } from './TradeSizeSelector';
+
 export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   activeMarket,
 }) => {

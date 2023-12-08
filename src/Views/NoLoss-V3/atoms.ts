@@ -374,7 +374,7 @@ export const setnoLossTimeSelectorAtom = atom(
   }
 );
 
-export const noLossTradeSizeAtom = atomWithStorage('noLossTradeSizeAtom', '5');
+export const noLossTradeSizeAtom = atomWithStorage('noLossTradeSizeAtom', '10');
 
 // asset selection atoms
 export const noLossActiveCategoyAtom = atom<string>('all');
