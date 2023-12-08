@@ -12,7 +12,7 @@ export const useTournamentIds = () => {
   const setTournamentIds = useSetAtom(tournamentIdsAtom);
   const query = isTestnet
     ? `{
-    tournaments(where: {id_not: "16"}) {
+    tournaments {
       id
       state
     }

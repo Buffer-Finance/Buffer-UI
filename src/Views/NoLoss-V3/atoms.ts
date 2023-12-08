@@ -335,7 +335,6 @@ export const filteredTournamentsDataReadOnlyAtom = atom((get) => {
   }
 
   return sortedTournamentsData.filter((tournament) => {
-    if (tournament.buyinTokenSymbol == 'ARB') return false;
     if (
       +tournament.tournamentMeta.close <
         Math.floor(new Date().getTime() / 1000) &&
