@@ -51,22 +51,35 @@ export const useAllTournamentData = () => {
       })
     );
 
-    if (user && user.userAddress !== undefined) {
+    if (user && user.userAddress !== undefined && user.mainEOA !== undefined) {
       readcalls.push(
-        ...groupedTournamentsIds.map((group) => {
-          const ids = group.map((tournament) => tournament.id);
-          return {
-            address: config.tournament_reader,
-            abi: TournamentReaderABI,
-            name: 'bulkFetchUserTournaments',
-            params: [user.userAddress, ids],
-            id: getCallId(
-              config.tournament_reader,
-              'bulkFetchUserTournaments',
-              [ids]
-            ),
-          };
-        })
+        ...groupedTournamentsIds
+          .map((group) => {
+            const ids = group.map((tournament) => tournament.id);
+            return [
+              {
+                address: config.tournament_reader,
+                abi: TournamentReaderABI,
+                name: 'bulkFetchUserTournaments',
+                params: [user.userAddress, ids],
+                id: getCallId(
+                  config.tournament_reader,
+                  'bulkFetchUserTournaments',
+                  [ids]
+                ),
+              },
+              {
+                address: config.tournament_reader,
+                abi: TournamentReaderABI,
+                name: 'bulkFetchUserTournaments',
+                params: [user.mainEOA, ids],
+                id: getCallId(config.tournament_reader, 'hasUserParticipated', [
+                  ids,
+                ]),
+              },
+            ];
+          })
+          .flat()
       );
     }
   }
@@ -94,25 +107,45 @@ export const useAllTournamentData = () => {
               });
             });
           }
-        } else if (key.includes('bulkFetchUserTournaments')) {
-          if (value[0] !== undefined) {
-            const tournamentIds = key
-              .split('bulkFetchUserTournaments')[1]
-              .split(',');
-            tournamentIds.forEach((tournamentId, index) => {
-              setTournaments((prvData) => {
-                return {
-                  ...prvData,
-                  [tournamentId]: {
-                    ...prvData[tournamentId],
-                    hasUserClaimed: value[0].hasUserClaimed[index],
-                    isUserEligible: value[0].hasUserParticipated[index],
-                    userBoughtTickets: value[0].userTicketCount[index],
-                    userReward: value[0].userReward[index],
-                  },
-                };
+        } else {
+          const userTournamentDataKey = 'bulkFetchUserTournaments';
+          const userEligibilityKey = 'hasUserParticipated';
+          if (
+            key.includes(userTournamentDataKey) ||
+            key.includes(userEligibilityKey)
+          ) {
+            if (value[0] !== undefined) {
+              const tournamentIdskey =
+                key.split(userTournamentDataKey)[1] ??
+                key.split(userEligibilityKey)[1];
+              const tournamentIds = tournamentIdskey.split(',');
+              tournamentIds.forEach((tournamentId, index) => {
+                if (key.includes(userEligibilityKey)) {
+                  setTournaments((prvData) => {
+                    return {
+                      ...prvData,
+                      [tournamentId]: {
+                        ...prvData[tournamentId],
+                        isUserEligible: value[0].hasUserParticipated[index],
+                      },
+                    };
+                  });
+                  return;
+                }
+                setTournaments((prvData) => {
+                  return {
+                    ...prvData,
+                    [tournamentId]: {
+                      ...prvData[tournamentId],
+                      hasUserClaimed: value[0].hasUserClaimed[index],
+                      isUserEligible: value[0].hasUserParticipated[index],
+                      userBoughtTickets: value[0].userTicketCount[index],
+                      userReward: value[0].userReward[index],
+                    },
+                  };
+                });
               });
-            });
+            }
           }
         }
       });

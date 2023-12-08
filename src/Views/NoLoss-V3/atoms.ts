@@ -7,7 +7,6 @@ import { atomWithStorage } from 'jotai/utils';
 import { Chain, getAddress } from 'viem';
 import { erc20ABI } from 'wagmi';
 import TournamentManagerABI from './ABIs/TournamentManager.json';
-import TournamentReaderABI from './ABIs/TournamentReader.json';
 import { defaultSelectedTime } from './config';
 import { getNoLossV3Config } from './helpers/getNolossV3Config';
 import {
@@ -15,7 +14,6 @@ import {
   IreadCall,
   ItournamentData,
   ItournamentId,
-  ItournamentStats,
   LeaderboardData,
   accordianTableType,
 } from './types';
@@ -169,7 +167,6 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
       | {
           isTradingApproved: boolean | undefined;
           activeTournamentBalance: string | undefined;
-          activeTournamentLeaderboardStats: ItournamentStats | undefined;
           isInCreationWindow: {
             Forex: boolean | undefined;
             Commodity: boolean | undefined;
@@ -206,13 +203,6 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
               params: [user.userAddress, activeTournamentId],
               id: getCallId(config.manager, 'balanceOf'),
             },
-            {
-              address: config.tournament_reader,
-              abi: TournamentReaderABI,
-              name: 'leaderboard',
-              params: [activeTournamentId],
-              id: getCallId(config.tournament_reader, 'leaderboard'),
-            },
           ]
         );
       }
@@ -238,15 +228,10 @@ export const noLossReadCallsReadOnlyAtom = atom((get) => {
     const readcallResponse = get(noLossReadcallResponseReadOnlyAtom);
     if (readcallResponse !== undefined) {
       const activeTournamentBalanceId = getCallId(config.manager, 'balanceOf');
-      const activeTournamentLeaderboardStatsId = getCallId(
-        config.tournament_reader,
-        'leaderboard'
-      );
+
       response.result = {
         activeTournamentBalance:
           readcallResponse[activeTournamentBalanceId]?.[0],
-        activeTournamentLeaderboardStats:
-          readcallResponse[activeTournamentLeaderboardStatsId]?.[0],
         isTradingApproved: undefined,
         isInCreationWindow: {
           Forex: readcallResponse['Forex-IsInCreationWindow']?.[0],
