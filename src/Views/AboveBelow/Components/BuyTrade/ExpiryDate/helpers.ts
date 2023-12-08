@@ -22,13 +22,24 @@ export function getTimestamps(date = Date.now()) {
   if (startOfDayTimestamp - currentTimestamp > 43200000) {
     timestamps.push(startOfDayTimestamp);
   }
+
+  //add next day if the start of day is less than 36 hours away
+  if (startOfDayTimestamp - currentTimestamp < 129600000) {
+    const nextDay = new Date(date);
+    nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+    nextDay.setUTCHours(8, 0, 0, 0);
+    const nextDayTimestamp = nextDay.getTime();
+    timestamps.push(nextDayTimestamp);
+  }
+
   // End of Week (Friday) at 8 PM
   const endOfWeek = new Date(date);
   const daysUntilFriday = (5 - endOfWeek.getUTCDay() + 7) % 7; // Calculate days until Friday
   endOfWeek.setUTCDate(endOfWeek.getUTCDate() + daysUntilFriday);
   endOfWeek.setUTCHours(8, 0, 0, 0);
   const endOfWeekTimestamp = endOfWeek.getTime();
-  timestamps.push(endOfWeekTimestamp);
+  if (startOfDayTimestamp - currentTimestamp > 43200000)
+    timestamps.push(endOfWeekTimestamp);
 
   //add next week if the end of week is less than 36 hours away
   if (endOfWeekTimestamp - currentTimestamp < 129600000) {
