@@ -74,7 +74,7 @@ export const AllCancelled: React.FC<{}> = () => {
     },
     refreshInterval: 1000,
   });
-  console.log(data);
+  // console.log(data);
 
   const cancelledTrades = useMemo(() => {
     return getProcessedTrades(data, 0, undefined, false);

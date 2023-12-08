@@ -8,7 +8,11 @@ import useSWR from 'swr';
 import { History } from '../Tables/History';
 import { historyActivePageAtom } from './atoms';
 
-export const AllHistory: React.FC<{}> = () => {
+export const AllHistory: React.FC<{
+  onlyView?: number[];
+  overflow?: boolean;
+  isMobile?: boolean;
+}> = ({ onlyView, overflow, isMobile }) => {
   const [activePage, setActivePage] = useAtom(historyActivePageAtom);
   const { activeChain } = useActiveChain();
   const { getProcessedTrades } = useProcessedTrades();
@@ -76,7 +80,7 @@ export const AllHistory: React.FC<{}> = () => {
     },
     refreshInterval: 1000,
   });
-  console.log(data);
+  // console.log(data);
 
   const historyTrades = useMemo(() => {
     return getProcessedTrades(data, 0, undefined, false);
@@ -84,6 +88,9 @@ export const AllHistory: React.FC<{}> = () => {
 
   return (
     <History
+      onlyView={onlyView}
+      overflow={overflow}
+      isMobile={isMobile}
       activePage={activePage}
       setHistoryPage={setActivePage}
       totalPages={totalHistory ? Math.ceil(totalHistory.length / 10) : 1}

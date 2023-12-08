@@ -8,7 +8,11 @@ import useSWR from 'swr';
 import { Active } from '../Tables/Active';
 import { activeActivePageAtom } from './atoms';
 
-export const AllActive = () => {
+export const AllActive: React.FC<{
+  onlyView?: number[];
+  overflow?: boolean;
+  isMobile?: boolean;
+}> = ({ onlyView, overflow, isMobile }) => {
   const [activePage, setActivePage] = useAtom(activeActivePageAtom);
   const { activeChain } = useActiveChain();
   const { getProcessedTrades } = useProcessedTrades();
@@ -83,6 +87,9 @@ export const AllActive = () => {
 
   return (
     <Active
+      onlyView={onlyView}
+      overflow={overflow}
+      isMobile={isMobile}
       activePage={activePage}
       setActivePage={setActivePage}
       totalPages={totalActive ? Math.ceil(totalActive.length / 10) : 1}

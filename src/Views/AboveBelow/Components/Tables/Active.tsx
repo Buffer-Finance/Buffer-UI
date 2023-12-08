@@ -1,6 +1,9 @@
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import InfoIcon from '@SVG/Elements/InfoIcon';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
+import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
+import { Variables } from '@Utils/Time';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { openBlockExplorer } from '@Views/AboveBelow/Helpers/openBlockExplorer';
 import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
@@ -8,13 +11,18 @@ import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { ColumnGap } from '@Views/TradePage/Components/Column';
+import { RowBetween } from '@Views/TradePage/Components/Row';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
+import { getAssetMonochromeImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
+import { CurrentPrice } from '../StatusBar/AssetSelector/CurrentPrice';
 import { AssetCell } from './Components/AssetCell';
 import { PayoutChip } from './Components/PayoutChip';
 import { Price } from './Components/Price';
 import { Probability } from './Components/Probability';
 import { Timer } from './Components/Timer';
+import { TradeTimeElapsed } from './Components/TradeTimeElapsed';
 import { Visualized } from './Components/Visualized';
 
 enum TableColumn {
@@ -124,6 +132,26 @@ export const Active: React.FC<{
         );
 
       case TableColumn.TradeSize:
+        if (isMobile) {
+          return (
+            <div className={`flex items-center`}>
+              <Display
+                data={divide(
+                  trade.totalFee as string,
+                  trade.market.poolInfo.decimals
+                )}
+                precision={2}
+                className="!justify-start"
+              />
+              <img
+                src={getAssetMonochromeImageUrl(trade.market.poolInfo.token)}
+                width={13}
+                height={13}
+                className="inline ml-1 mb-[0px]"
+              />
+            </div>
+          );
+        }
         if (trade.state === BetState.queued) {
           return (
             <div className="flex gap-2 items-center">
@@ -176,6 +204,61 @@ export const Active: React.FC<{
     }
   };
 
+  const Accordian = (row: number) => {
+    if (!isMobile) return <></>;
+    const trade = active[row];
+
+    const headerClass = 'text-[#808191] text-f12';
+    const descClass = 'text-[#C3C2D4] text-f2';
+    const dateClass = 'text-[#6F6E84] text-f10';
+    const durationClass = 'text-[#7F87A7] text-f12';
+    const timeClass = 'text-[#C3C2D4] text-f12';
+
+    return (
+      <div className="px-3 py-2">
+        <RowBetween>
+          <div className={timeClass}>{getDisplayTime(trade.creationTime)}</div>
+          <div className={durationClass}>
+            {formatDistance(
+              Variables(
+                +subtract(
+                  trade.expirationTime as string,
+                  trade.creationTime as string
+                )
+              )
+            )}
+          </div>
+          <div className={timeClass}>
+            {getDisplayTime(trade.expirationTime)}
+          </div>
+        </RowBetween>
+        <TradeTimeElapsed trade={trade} />
+        <RowBetween className="mt-3">
+          <div className={dateClass}>
+            {getDisplayDate(+(trade.creationTime as string))}
+          </div>
+          <div className={dateClass}>
+            {getDisplayDate(+(trade.expirationTime as string))}
+          </div>{' '}
+        </RowBetween>
+
+        <RowBetween className="mt-5">
+          <ColumnGap gap="3px">
+            <div className={headerClass}>Current Price</div>
+            <CurrentPrice market={trade.market} />
+          </ColumnGap>
+
+          <ColumnGap gap="3px">
+            <div className={headerClass}>Probability</div>
+            <div className={descClass + ' flex items-center gap-1'}>
+              <Probability trade={trade} className="!justify-start" isColored />
+            </div>
+          </ColumnGap>
+        </RowBetween>
+      </div>
+    );
+  };
+
   return (
     <BufferTable
       bodyJSX={BodyFormatter}
@@ -194,6 +277,8 @@ export const Active: React.FC<{
       showOnly={onlyView}
       overflow={overflow}
       shouldShowMobile
+      doubleHeight={isMobile}
+      accordianJSX={!isMobile ? undefined : Accordian}
     />
   );
 };

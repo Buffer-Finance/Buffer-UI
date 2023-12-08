@@ -220,7 +220,7 @@ export const History: React.FC<{
   const Accordian = (row: number) => {
     if (!isMobile) return <></>;
     const trade = history[row];
-    let expiryPrice: string = trade.expirationPrice ?? '0';
+    const expiryPrice = trade.expirationPrice;
     const headerClass = 'text-[#808191] text-f12';
     const descClass = 'text-[#C3C2D4] text-f2';
     const dateClass = 'text-[#6F6E84] text-f10';
@@ -269,7 +269,7 @@ export const History: React.FC<{
             </span>
           </ColumnGap>
           <ColumnGap gap="3px">
-            <span className={headerClass}>Payout</span>
+            <span className={headerClass}>Profit</span>
             <span className={descClass}>
               {expiryPrice
                 ? numberWithCommas(
