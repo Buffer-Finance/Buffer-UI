@@ -31,7 +31,7 @@ import {
   tradeSettingsAtom,
 } from '../atoms';
 import { getSingatureCached } from '../cache';
-import { baseUrl, pricePublisherBaseUrl } from '../config';
+import { MAX_APPROVAL_VALUE, baseUrl, pricePublisherBaseUrl } from '../config';
 import { AssetCategory, TradeType } from '../type';
 import { generateApprovalSignatureWrapper } from '../utils/generateApprovalSignatureWrapper';
 import { generateBuyTradeSignature } from '../utils/generateTradeSignature';
@@ -517,8 +517,7 @@ export const useBuyTradeActions = (userInput: string) => {
       // }
     }
   };
-  const defaultApprovalAmount =
-    '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+  const defaultApprovalAmount = MAX_APPROVAL_VALUE;
   const handleApproveClick = async (ammount = defaultApprovalAmount) => {
     if (state.txnLoading > 1) {
       toastify({

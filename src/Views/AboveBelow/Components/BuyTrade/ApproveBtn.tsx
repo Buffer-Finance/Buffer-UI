@@ -2,6 +2,7 @@ import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
 import { useState } from 'react';
 import { erc20ABI } from 'wagmi';
 
@@ -21,7 +22,7 @@ export const ApproveBtn: React.FC<{
       setLoading(true);
       await approveCall(() => {}, 'approve', [
         routerAddress,
-        '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+        MAX_APPROVAL_VALUE,
       ]);
     } catch (e) {
       toastify({

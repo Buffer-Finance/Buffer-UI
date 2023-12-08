@@ -39,5 +39,7 @@ export const useNumberOfContracts = () => {
   return {
     contracts: toFixed(divide(amount, totalFee.toString()) as string, 0),
     totalFee,
+    selectedStrikeData: strikePriceObject,
+    isAbove: priceObj.isAbove,
   };
 };

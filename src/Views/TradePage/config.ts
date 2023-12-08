@@ -680,3 +680,5 @@ export const baseUrl = import.meta.env[baseURLString];
 export const aboveBelowBaseUrl = import.meta.env[aboveBelowURLString];
 
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
+export const MAX_APPROVAL_VALUE =
+  '115792089237316195423570985008687907853269984665640564039457584007913129639935';

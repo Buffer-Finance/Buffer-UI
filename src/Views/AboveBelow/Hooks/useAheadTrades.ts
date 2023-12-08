@@ -83,11 +83,11 @@ const optionsIfc = new ethers.utils.Interface(optionsAbi);
 // TODO = Make these topics dynamic
 // For 7.5k blocks  it is taking 1.5s to scan
 const openTrade =
-  '0x277b2c03e846b9440fc7acc69bbc99c7e9ff528bc2317b61bc7aacc92923005e';
+  '0x2a1e49e7b1b7c4b8c18b286d0308d76c8f509c04830f53f5500340ecf7faea73';
 const createTopic =
-  '0x1bbfc9eb113af4226de738bd6f2c94b98c4618014c7d65650e0b5d179697bf27';
+  '0xfa6101f13be10247a3f27ba031321ca444c4bf1eb56aade9f1c96f5e621164aa';
 const initiateTrade =
-  '0xf1a94b570b334fe3f40ce034179ad1035f6e2e25fa052bddecfc3df9daf6fa89';
+  '0xa058ea17deb3dad493dcf014f030710e90240e4bf900bace442ac371365ac3ec';
 
 const cancelTrade =
   '0x4fd0b12c63928d90d39e46144c6b88f9ff4c5bcfef779a67d9fd98649b381307';

@@ -1,6 +1,6 @@
+import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { marketTypeAB } from '@Views/AboveBelow/types';
-import { Display } from '@Views/Common/Tooltips/Display';
 import { formatBalance } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { Skeleton } from '@mui/material';
 
@@ -12,29 +12,29 @@ export const OpenInterest: React.FC<{
 
   return (
     <>
-      <Display
-        data={formatBalance(
-          divide(
-            activeMarket.openInterestUp ?? '0',
-            activeMarket.poolInfo.decimals
-          ) as string
+      <span>
+        {toFixed(
+          formatBalance(
+            divide(
+              activeMarket.openInterestUp ?? '0',
+              activeMarket.poolInfo.decimals
+            ) as string
+          ),
+          2
         )}
-        precision={2}
-        disable
-        className="!justify-start !inline"
-      />
+      </span>
       /
-      <Display
-        data={formatBalance(
-          divide(
-            activeMarket.openInterestDown ?? '0',
-            activeMarket.poolInfo.decimals
-          ) as string
+      <span>
+        {toFixed(
+          formatBalance(
+            divide(
+              activeMarket.openInterestDown ?? '0',
+              activeMarket.poolInfo.decimals
+            ) as string
+          ),
+          2
         )}
-        precision={2}
-        disable
-        className="!justify-start !inline"
-      />{' '}
+      </span>
       {activeMarket.poolInfo.token}
     </>
   );

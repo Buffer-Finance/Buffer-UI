@@ -19,10 +19,12 @@ import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { getSlippageError } from '@Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
 import { tradeSettingsAtom } from '@Views/TradePage/atoms';
+import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
+import { getAddress } from 'viem';
 import RouterABI from '../../abis/Router.json';
 import { ApproveBtn } from './ApproveBtn';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
@@ -143,8 +145,21 @@ const TradeButton = () => {
 
       const balance =
         divide(readCallData.balances[token], decimals) ?? ('0' as string);
+
+      let maxTradeSize = MAX_APPROVAL_VALUE;
+      const maxPermissibleMarket =
+        readCallData.maxPermissibleContracts[
+          getAddress(activeMarket.address) + price
+        ];
+      if (maxPermissibleMarket !== undefined) {
+        const maxPermissibleContracts =
+          maxPermissibleMarket.maxPermissibleContracts;
+        if (maxPermissibleContracts !== undefined)
+          maxTradeSize = multiply(maxPermissibleContracts, totalFee.toString());
+      }
       const tradeSizeError = getTradeSizeError(
         toFixed(totalFee.toString(), 2),
+        maxTradeSize,
         balance,
         amount
       );

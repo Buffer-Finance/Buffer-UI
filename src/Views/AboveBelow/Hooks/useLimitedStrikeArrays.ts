@@ -10,19 +10,18 @@ import { getRoundedPrice } from '../Components/BuyTrade/PriceTable/helpers';
 import { selectedExpiry, selectedPoolActiveMarketAtom } from '../atoms';
 import { useIV } from './useIV';
 import { useSettlementFee } from './useSettlementFee';
-
+export type strikePriceObjectType = {
+  strike: number;
+  totalFeeAbove: number | null;
+  totalFeeBelow: number | null;
+  baseFeeAbove: number;
+  baseFeeBelow: number;
+  marketID: string;
+};
 export const strikePrices: {
   [activeAsset: string]: {
-    decreasingPriceArray: {
-      strike: number;
-      totalFeeAbove: number | null;
-      totalFeeBelow: number | null;
-    }[];
-    increasingPriceArray: {
-      strike: number;
-      totalFeeAbove: number | null;
-      totalFeeBelow: number | null;
-    }[];
+    decreasingPriceArray: strikePriceObjectType[];
+    increasingPriceArray: strikePriceObjectType[];
   };
 } = {};
 
@@ -66,16 +65,8 @@ export const useLimitedStrikeArrays = () => {
     if (iv === undefined) return;
 
     const currentEpoch = Math.floor(Date.now() / 1000);
-    const decreasingPriceArray: {
-      strike: number;
-      totalFeeAbove: number | null;
-      totalFeeBelow: number | null;
-    }[] = [];
-    const increasingPriceArray: {
-      strike: number;
-      totalFeeAbove: number | null;
-      totalFeeBelow: number | null;
-    }[] = [];
+    const decreasingPriceArray: strikePriceObjectType[] = [];
+    const increasingPriceArray: strikePriceObjectType[] = [];
     let i = 0;
     let j = 0;
     while (true) {
@@ -125,6 +116,9 @@ export const useLimitedStrikeArrays = () => {
         strike: strikePrice,
         totalFeeAbove,
         totalFeeBelow,
+        baseFeeAbove: aboveProbability,
+        baseFeeBelow: belowProbability,
+        marketID: marketHash,
       });
       i++;
     }
@@ -177,6 +171,9 @@ export const useLimitedStrikeArrays = () => {
         strike: strikePrice,
         totalFeeAbove,
         totalFeeBelow,
+        baseFeeAbove: aboveProbability,
+        baseFeeBelow: belowProbability,
+        marketID: marketHash,
       });
       j++;
     }

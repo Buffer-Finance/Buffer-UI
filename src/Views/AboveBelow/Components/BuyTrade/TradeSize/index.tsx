@@ -6,11 +6,14 @@ import {
   gte,
   lt,
   lte,
+  multiply,
+  subtract,
 } from '@Utils/NumString/stringArithmatics';
 import { useNumberOfContracts } from '@Views/AboveBelow/Hooks/useNumberOfContracts';
 import {
   readCallDataAtom,
   selectedPoolActiveMarketAtom,
+  selectedPriceAtom,
   tradeSizeAtom,
 } from '@Views/AboveBelow/atoms';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
@@ -27,8 +30,11 @@ import {
   WalletBalance,
   formatBalance,
 } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
+import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
+import { getMinimumValue } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
+import { getAddress } from 'viem';
 import { PoolDropdown } from './PoolDropDown';
 
 const TradeSizeSelectorBackground = styled.div`
@@ -42,12 +48,36 @@ export const TradeSize: React.FC<{
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
   const readCallData = useAtomValue(readCallDataAtom);
+  const selectedStrike = useAtomValue(selectedPriceAtom);
+  const contracts = useNumberOfContracts();
 
   if (activeMarket === undefined || readCallData === undefined) return <></>;
   const token = activeMarket.poolInfo.token.toUpperCase();
   const decimals = activeMarket.poolInfo.decimals;
   const balance =
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
+
+  let maxTradeSize = MAX_APPROVAL_VALUE;
+  if (
+    contracts &&
+    selectedStrike !== undefined &&
+    selectedStrike[activeMarket.tv_id] !== undefined
+  ) {
+    const { strike } = contracts.selectedStrikeData;
+    const maxPermissibleMarket =
+      readCallData.maxPermissibleContracts[
+        getAddress(activeMarket.address) + strike
+      ];
+    if (maxPermissibleMarket !== undefined) {
+      const maxPermissibleContracts =
+        maxPermissibleMarket.maxPermissibleContracts;
+      if (maxPermissibleContracts !== undefined)
+        maxTradeSize = multiply(
+          maxPermissibleContracts,
+          contracts.totalFee.toString()
+        );
+    }
+  }
   return (
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
@@ -70,7 +100,21 @@ export const TradeSize: React.FC<{
               setTradeSize={setTradeSize}
               onSubmit={onSubmit}
               setMaxValue={() => {
-                setTradeSize('0');
+                setTradeSize(
+                  toFixed(
+                    getMinimumValue(
+                      subtract(
+                        balance,
+                        divide(
+                          activeMarket.config.platformFee,
+                          activeMarket.poolInfo.decimals
+                        ) as string
+                      ),
+                      maxTradeSize
+                    ),
+                    2
+                  )
+                );
               }}
             />
 
@@ -86,19 +130,29 @@ export const TradeSize: React.FC<{
             tradeToken={activeMarket.poolInfo.token}
             balance={balance}
           />
-          <Error balance={balance} tradeSize={tradeSize} />
+          <Error
+            balance={balance}
+            tradeSize={tradeSize}
+            maxTradeSize={maxTradeSize}
+          />
         </ColumnGap>
       </ColumnGap>
     </TradeSizeSelectorBackground>
   );
 };
-const Error: React.FC<{ balance: string; tradeSize: string }> = ({
-  balance,
-  tradeSize,
-}) => {
+const Error: React.FC<{
+  balance: string;
+  tradeSize: string;
+  maxTradeSize: string;
+}> = ({ balance, tradeSize, maxTradeSize }) => {
   const contracts = useNumberOfContracts();
   const minTradeSize = contracts === null ? '0' : contracts.totalFee.toFixed(2);
-  const error = getTradeSizeError(minTradeSize, balance, tradeSize);
+  const error = getTradeSizeError(
+    minTradeSize,
+    maxTradeSize,
+    balance,
+    tradeSize
+  );
   return <span className="text-red whitespace-nowrap text-f12">{error}</span>;
 };
 
@@ -141,18 +195,16 @@ const PlatfromFeeError = ({
 
 export function getTradeSizeError(
   minTradeSize: string,
-  // maxTradeSize: string,
+  maxTradeSize: string,
   balance: string | undefined,
   tradeSize: string
 ) {
   let error = '';
   if (lte(tradeSize || '0', minTradeSize)) {
     error = `Trade size must be higher than ${minTradeSize}`;
-  }
-  // else if (gt(tradeSize || '0', maxTradeSize)) {
-  //   error = `Max trade size is ${toFixed(maxTradeSize, 2)}`;
-  // }
-  else if (balance && gt(tradeSize || '0', balance)) {
+  } else if (gt(tradeSize || '0', maxTradeSize)) {
+    error = `Max trade size is ${toFixed(maxTradeSize, 2)}`;
+  } else if (balance && gt(tradeSize || '0', balance)) {
     error = 'Insufficient balance';
   }
 

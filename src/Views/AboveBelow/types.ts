@@ -47,4 +47,11 @@ export interface IreadCallData {
   isInCreationWindow: {
     [category: string]: boolean;
   };
+  maxPermissibleContracts: {
+    [contractAddressstrike: string]: {
+      isAbove: boolean;
+      maxPermissibleContracts: string | undefined;
+      strike: string;
+    };
+  };
 }

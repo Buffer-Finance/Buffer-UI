@@ -1,17 +1,21 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getCallId } from '@Utils/Contract/multiContract';
+import { toFixed } from '@Utils/NumString';
+import { multiply } from '@Utils/NumString/stringArithmatics';
 import { useCall2Data } from '@Utils/useReadCall';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { erc20ABI } from 'wagmi';
 import CreationWindowABI from '../abis/CreationWindow.json';
+import OptionABI from '../abis/Options.json';
 import {
   aboveBelowActiveMarketsAtom,
   aboveBelowMarketsAtom,
   readCallResponseAtom,
 } from '../atoms';
+import { useNumberOfContracts } from './useNumberOfContracts';
 
 export const useReacallDataSetter = () => {
   const activeMarkets = useAtomValue(aboveBelowActiveMarketsAtom);
@@ -19,6 +23,7 @@ export const useReacallDataSetter = () => {
   const { activeChain } = useActiveChain();
   const { address } = useUserAccount();
   const setResponse = useSetAtom(readCallResponseAtom);
+  const tradeData = useNumberOfContracts();
 
   const readCalls = [];
   if (activeChain) {
@@ -65,6 +70,26 @@ export const useReacallDataSetter = () => {
           ])
           .flat()
       );
+
+      if (tradeData !== null) {
+        const marketId = tradeData.selectedStrikeData.marketID;
+        const fee = tradeData.isAbove
+          ? tradeData.selectedStrikeData.baseFeeAbove
+          : tradeData.selectedStrikeData.baseFeeBelow;
+        readCalls.push(
+          ...activeMarkets.map((market) => ({
+            address: market.address,
+            abi: OptionABI,
+            name: 'getMaxPermissibleContracts',
+            params: [marketId, toFixed(multiply(fee.toString(), 8), 0)],
+            id: getCallId(
+              market.address,
+              'getMaxPermissibleContracts',
+              tradeData.selectedStrikeData.strike
+            ),
+          }))
+        );
+      }
     }
   }
 
