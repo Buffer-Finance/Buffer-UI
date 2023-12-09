@@ -14,9 +14,14 @@ import React, { ReactNode, SVGProps } from 'react';
 import { useMedia } from 'react-use';
 import { getAddress } from 'viem';
 import { useBalance } from 'wagmi';
-import { Display } from '../Tooltips/Display';
 import { BlueBtn } from '../V2-Button';
 
+const chaintoIcon: {
+  [chainId: number]: string;
+} = {
+  421614:
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1634668056/Assets/arbitrum.png',
+};
 export const AccountDropdown: React.FC = () => {
   const isMobile = useMedia('(max-width:1200px)');
   const { isUserEducated, openTutorial } = useChainTutorial();
@@ -110,7 +115,7 @@ export const AccountDropdown: React.FC = () => {
                       {chain && chain.name && (
                         <img
                           className="h-[18px] w-[18px] mr-[6px] sm:mr-[0px] rounded-full"
-                          src={chain.iconUrl}
+                          src={chain.iconUrl ?? chaintoIcon[chain.id]}
                           alt={chain.name ?? 'Chain icon'}
                         />
                       )}
@@ -292,19 +297,19 @@ export const PowerIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const TokenAccountBalance = () => {
-  const balance = useAccountBalance();
-  return (
-    <div className="flex items-center">
-      {' '}
-      <Display data={balance} className="text-f14" />{' '}
-      <img
-        src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePoolDetails.token.toLowerCase()}.png`}
-        className="w-[16px] h-[16px] ml-2"
-      />
-    </div>
-  );
-};
+// const TokenAccountBalance = () => {
+//   const balance = useAccountBalance();
+//   return (
+//     <div className="flex items-center">
+//       {' '}
+//       <Display data={balance} className="text-f14" />{' '}
+//       <img
+//         src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePoolDetails.token.toLowerCase()}.png`}
+//         className="w-[16px] h-[16px] ml-2"
+//       />
+//     </div>
+//   );
+// };
 
 const useAccountBalance = () => {
   const { activePool } = useAtomValue(activePoolObjAtom);
