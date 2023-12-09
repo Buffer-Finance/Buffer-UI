@@ -138,10 +138,6 @@ const faucetClaimingSteps = {
             url: 'https://goerlifaucet.com/',
           },
           {
-            step: 'Using the Goerli Mudit faucet',
-            url: 'https://goerli-faucet.mudit.blog/',
-          },
-          {
             step: 'Using the Paradigm Multifaucet',
             url: 'https://faucet.paradigm.xyz/',
           },
