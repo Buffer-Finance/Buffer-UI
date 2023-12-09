@@ -10,11 +10,9 @@ export const OneDayVolume: React.FC<{
   activeMarket: marketTypeAB | undefined;
 }> = ({ activeMarket }) => {
   const { oneDayVolume } = useOneDayVolume();
-  console.log(oneDayVolume);
-  if (activeMarket === undefined)
+  if (activeMarket === undefined || oneDayVolume === undefined)
     return <Skeleton className="w-[50px] !h-5 lc " />;
-  const volume = oneDayVolume?.[getAddress(activeMarket.address)];
-  if (volume === undefined) return <Skeleton className="w-[50px] !h-5 lc " />;
+  const volume = oneDayVolume[getAddress(activeMarket.address)];
   return (
     <div>
       {toFixed(
@@ -23,6 +21,7 @@ export const OneDayVolume: React.FC<{
         ),
         2
       )}
+      &nbsp;
       {activeMarket.poolInfo.token}
     </div>
   );

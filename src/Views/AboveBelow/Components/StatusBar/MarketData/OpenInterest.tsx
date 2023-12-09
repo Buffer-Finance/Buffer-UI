@@ -35,6 +35,7 @@ export const OpenInterest: React.FC<{
           2
         )}
       </span>
+      &nbsp;
       {activeMarket.poolInfo.token}
     </>
   );
