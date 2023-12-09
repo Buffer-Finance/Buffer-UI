@@ -123,7 +123,7 @@ export const OngoingTradesTable: React.FC<{
   const { getPoolInfo } = usePoolInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
-    if (trades === undefined) return <></>;
+    if (trades === undefined) return <span></span>;
     const trade = trades?.[row];
     if (!trade) return 'Problem';
 
@@ -260,15 +260,13 @@ export const OngoingTradesTable: React.FC<{
         return (
           // queuedTradeFallBack(trade) || (
           <div>
-            <>
-              <Pnl
-                configData={trade.market}
-                trade={trade}
-                poolInfo={poolInfo}
-                lockedAmmount={lockedAmmount}
-              />
-              <Probability trade={trade} marketPrice={marketPrice} />{' '}
-            </>
+            <Pnl
+              configData={trade.market}
+              trade={trade}
+              poolInfo={poolInfo}
+              lockedAmmount={lockedAmmount}
+            />
+            <Probability trade={trade} marketPrice={marketPrice} />{' '}
           </div>
           // )
         );
@@ -280,9 +278,9 @@ export const OngoingTradesTable: React.FC<{
     const trade = trades?.[row];
     // const [marketPrice] = useAtom(priceAtom);
 
-    if (!trade) return <>Something went wrong.</>;
+    if (!trade) return <span>Something went wrong.</span>;
     const poolInfo = getPoolInfo(trade?.pool?.pool);
-    if (!poolInfo) return <>Something went wrong.</>;
+    if (!poolInfo) return <span>Something went wrong.</span>;
     const minClosingTime = getExpiry(trade);
 
     const headerClass = 'text-[#808191] text-f12';
@@ -415,7 +413,7 @@ export const Pnl = ({
   });
   // console.log(pnl, probability, 'pnl');
   if (!probability)
-    return shouldShowCalculating ? <div>Calculating..</div> : <></>;
+    return shouldShowCalculating ? <div>Calculating..</div> : <span></span>;
   const isWin = gt(pnl.earlycloseAmount, '0');
   if (trade.locked_amount || lockedAmmount)
     return (

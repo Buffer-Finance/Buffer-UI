@@ -33,7 +33,7 @@ const NumberTooltip: React.FC<Itooltip> = ({
 
       // disableHoverListener={window.innerWidth < 600}
     >
-      {children}
+      <span>{children}</span>
     </Tooltip>
   );
 };

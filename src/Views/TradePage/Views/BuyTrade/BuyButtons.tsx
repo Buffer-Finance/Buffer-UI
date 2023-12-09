@@ -98,8 +98,6 @@ export const BuyButtons = ({
         View Only Mode
       </BlueBtn>
     );
-  // if (!poolDetails) return <>Error: Pool not found</>;
-  // console.log('approval', allowance, amount);
   return (
     <>
       {/* <ApproveModal
@@ -123,14 +121,16 @@ export const BuyButtons = ({
               isDisabled={true}
               onClick={() => {}}
             >
-              Trading is halted for this asset
+              <span>Trading is halted for this asset</span>
             </BlueBtn>
           ) : !registeredOneCT ? (
             <BlueBtn onClick={() => setOneCTModal(true)}>
-              Activate Account
+              <span>Activate Account</span>
             </BlueBtn>
           ) : lt(allowance, amount.toString() || '0') ? (
-            <BlueBtn onClick={() => handleApproveClick()}>Approve</BlueBtn>
+            <BlueBtn onClick={() => handleApproveClick()}>
+              <span>Approve</span>
+            </BlueBtn>
           ) : (
             <>
               <div className="flex gap-2 items-center">
@@ -164,7 +164,7 @@ export const BuyButtons = ({
                   ) : (
                     <>
                       <UpIcon className="mr-[6px] scale-150" />
-                      Up
+                      <span>Up</span>
                     </>
                   )}
                 </BufferButton>
@@ -200,7 +200,7 @@ export const BuyButtons = ({
                   ) : (
                     <>
                       <DownIcon className="mr-[6px] scale-150" />
-                      Down
+                      <span>Down</span>
                     </>
                   )}
                 </BufferButton>
@@ -211,7 +211,7 @@ export const BuyButtons = ({
                   role={'button'}
                   onClick={() => revokeApproveClick()}
                 >
-                  Revoke Approval
+                  <span>Revoke Approval</span>
                 </div>
               )}
             </>

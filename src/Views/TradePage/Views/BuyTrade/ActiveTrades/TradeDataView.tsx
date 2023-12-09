@@ -128,7 +128,7 @@ export const TradeDataView: React.FC<{
       },
       {
         head: <span>Duration</span>,
-        desc: <>{secondsToHHMM(trade.period)}</>,
+        desc: <span>{secondsToHHMM(trade.period)}</span>,
       },
       {
         head: <span>Trade Size</span>,
@@ -189,15 +189,23 @@ const PnlData: React.FC<{
     lockedAmmount,
   });
   const { earlycloseAmount, isWin, probability } = earlyPnl;
-  if (!probability) return <span>Calculating...</span>;
-  let pnl = <span className="text-red">{toFixed(earlycloseAmount, 2)}</span>;
+  if (!probability) return <span key={'calculating'}>Calculating...</span>;
+  let pnl = (
+    <span className="text-red" key={'lose-pnl'}>
+      {toFixed(earlycloseAmount, 2)}
+    </span>
+  );
   if (isWin) {
-    pnl = <span className="text-green">+{toFixed(earlycloseAmount, 2)}</span>;
+    pnl = (
+      <span className="text-green" key={'win-pnl'}>
+        +{toFixed(earlycloseAmount, 2)}
+      </span>
+    );
   }
-  if (isExpired) return <>Calculating...</>;
+  if (isExpired) return <span key={'expired'}>Calculating...</span>;
   return (
-    <RowGap gap="2px" className="!items-end">
-      {pnl}
+    <RowGap gap="2px" className="!items-end" key={'pnl'}>
+      <span>{pnl}</span>
       <span className="text-[10px] text-[#6F6E84]">
         {probability.toFixed(2)}%
       </span>

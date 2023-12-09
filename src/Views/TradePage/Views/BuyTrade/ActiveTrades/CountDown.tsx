@@ -25,14 +25,18 @@ export const CountDown = ({
 
     return <div>{formatDistance(Variables(distance))}</div>;
   }
-  if (!expiration) return <>null</>;
+  if (!expiration) return <div></div>;
   let currentEpoch = Math.round(new Date().getTime() / 1000);
   if (queuedTime && currentEpoch < queuedTime) {
     const startingDistance = queuedTime - currentEpoch;
-    return <div>Starts in {formatDistance(Variables(startingDistance))}</div>;
+    return (
+      <div key={'queued'}>
+        Starts in {formatDistance(Variables(startingDistance))}
+      </div>
+    );
   }
   const distance = expiration - currentEpoch;
-  if (distance < 0) return <div>00h 00m 00s</div>;
+  if (distance < 0) return <div key={'time over'}>00h 00m 00s</div>;
 
-  return <div>{formatDistance(Variables(distance))}</div>;
+  return <div key={'started'}>{formatDistance(Variables(distance))}</div>;
 };

@@ -102,6 +102,7 @@ const TimerChip = ({ trade }: { trade: TradeType }) => {
     return (
       <RowGap gap="4px">
         <CountDown
+          key={'limit'}
           expiration={trade.limit_order_expiration}
           closeTime={trade.close_time}
         />
@@ -109,13 +110,10 @@ const TimerChip = ({ trade }: { trade: TradeType }) => {
       </RowGap>
     );
   }
-  // if (isQueued) {
-  //   return <QueuedChip />;
-  // }
-
   const expirationTime = trade.open_timestamp + trade.period;
   return (
     <CountDown
+      key={'timer'}
       expiration={expirationTime}
       closeTime={trade.close_time}
       queuedTime={trade.state === 'QUEUED' ? trade.queued_timestamp : null}

@@ -1,6 +1,5 @@
-import React from 'react';
-import ButtonLoader from './ButtonLoader';
 import { CircularProgress } from '@mui/material';
+import React from 'react';
 export const buttonAnimation =
   ' hover:translate-y-[-2.5px] active:translate-y-1 ';
 interface IButton extends React.HTMLProps<HTMLButtonElement> {
@@ -32,7 +31,7 @@ const CustomButton: React.FC<IButton> = ({
           color="inherit"
         />
       ) : (
-        children
+        <span>{children}</span>
       )}
     </button>
   );
