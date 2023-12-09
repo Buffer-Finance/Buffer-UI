@@ -1,34 +1,33 @@
-import React, { ReactNode, useEffect, useRef } from 'react';
-import { ArrowDropDownRounded } from '@mui/icons-material';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import * as chain from 'wagmi/chains';
-import { BlueBtn } from '../V2-Button';
-import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
-import { SVGProps } from 'react';
-import { MenuItem, Skeleton } from '@mui/material';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { snackAtom } from 'src/App';
-import { useAccount, useBalance, useDisconnect, usePublicClient } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import DDArrow from '@SVG/Elements/Arrow';
+import WalletIcon from '@SVG/Elements/WalletIcon';
+import copyToClipboard from '@Utils/copyToClipboard';
+import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import {
   uesOneCtActiveChain,
   useOneCTWallet,
 } from '@Views/OneCT/useOneCTWallet';
-import { Display } from '../Tooltips/Display';
-import ETHImage from '../../../../public/tokens/ETH.png';
-import DDArrow from '@SVG/Elements/Arrow';
-import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
-import WalletIcon from '@SVG/Elements/WalletIcon';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import copyToClipboard from '@Utils/copyToClipboard';
-import { activePoolObjAtom } from '@Views/TradePage/atoms';
 import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
-import { getAddress } from 'viem';
 import {
   ChainSwitchingModal,
   useChainTutorial,
 } from '@Views/TradePage/Views/ChainSwitchingModal';
+import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import { ArrowDropDownRounded } from '@mui/icons-material';
+import { MenuItem, Skeleton } from '@mui/material';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
+import { useAtomValue, useSetAtom } from 'jotai';
+import React, { ReactNode, SVGProps, useEffect, useRef } from 'react';
 import { useMedia } from 'react-use';
+import { snackAtom } from 'src/App';
+import { getAddress } from 'viem';
+import { useAccount, useBalance, useDisconnect, usePublicClient } from 'wagmi';
+import * as chain from 'wagmi/chains';
+import ETHImage from '../../../../public/tokens/ETH.png';
+import { Display } from '../Tooltips/Display';
+import { BlueBtn } from '../V2-Button';
 const token2image = {
   ETH: ETHImage,
 };
@@ -42,6 +41,12 @@ const chainImageMappipng = {
   ['BSC']: '/Chains/BSC.png',
 };
 
+const chaintoIcon: {
+  [chainId: number]: string;
+} = {
+  421614:
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1634668056/Assets/arbitrum.png',
+};
 export const AccountDropdown: React.FC = () => {
   const { address } = useUserAccount();
   const setSnack = useSetAtom(snackAtom);
@@ -186,7 +191,7 @@ export const AccountDropdown: React.FC = () => {
                       {chain && chain.name && (
                         <img
                           className="h-[18px] w-[18px] mr-[6px] sm:mr-[0px] rounded-full"
-                          src={chain.iconUrl}
+                          src={chain.iconUrl ?? chaintoIcon[chain.id]}
                           alt={chain.name ?? 'Chain icon'}
                         />
                       )}
