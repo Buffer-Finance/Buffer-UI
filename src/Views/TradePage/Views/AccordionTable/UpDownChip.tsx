@@ -30,7 +30,15 @@ export const UpDownChip: React.FC<{
             className={`mt-1 scale-[0.70] sm:scale-50 sm:mt-[0px]`}
           />
         ))}
-      {shouldShowText ? (isUp ? upText : downText) : ''}
+      {shouldShowText ? (
+        isUp ? (
+          <span key={'upText'}>{upText}</span>
+        ) : (
+          <span key={'downText'}>{downText}</span>
+        )
+      ) : (
+        <span></span>
+      )}
     </div>
   );
 };
