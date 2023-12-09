@@ -125,7 +125,7 @@ const ClaimButton = ({ token }: { token: string }) => {
 };
 
 const faucetClaimingSteps = {
-  421613: {
+  421614: {
     name: 'AETH',
     symbol: 'AETH',
     faucet: [
