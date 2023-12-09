@@ -7,7 +7,7 @@ export const urlSettings = getHashUrlQueryParam(window.location.href);
 const arbitrumSepolia = defineChain({
   id: 421614,
   name: 'Arbitrum Sepolia',
-  network: 'arbitrum-sepolia',
+  network: 'arb-sepolia',
   nativeCurrency: {
     decimals: 18,
     name: 'Ether',
@@ -30,6 +30,7 @@ const arbitrumSepolia = defineChain({
       blockCreated: 81930,
     },
   },
+  testnet: true,
 });
 
 export function getSupportedChains() {
