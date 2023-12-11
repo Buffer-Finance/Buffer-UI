@@ -1,5 +1,5 @@
 import { useToast } from '@Contexts/Toast';
-import { useSmartAccount } from '@Hooks/AA/useSmartAccount';
+import { getGasFeeValue, useSmartAccount } from '@Hooks/AA/useSmartAccount';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
@@ -31,6 +31,8 @@ import TournamentLeaderboardABI from '../../../ABIs/TournamentLeaderboard.json';
 import TournamentManagerABI from '../../../ABIs/TournamentManager.json';
 import { getDurationError } from './TimeSelector/TimePicker';
 import { getTradeSizeError } from './TradeSizeSelector';
+import { useTradeBuyingOps } from '@Hooks/Precomputations/tradeBuying';
+import { ZEROADDRESS } from '@Views/NoLoss-V3/config';
 
 export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   activeMarket,
@@ -51,15 +53,28 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   >('none');
   const activeMarketData = useAtomValue(activeMarketDataAtom);
   const isIncreationWindow = useIsMarketInCreationWindow();
-  let { sendTxn } = useSmartAccount();
+  let { sendTxn, customUserOp, smartAccount } = useSmartAccount();
+  const config = getNoLossV3Config(activeChain?.id);
 
+  const _ = useTradeBuyingOps(
+    [
+      toFixed(multiply(userInput, 18), 0),
+      currentTime.seconds,
+      false,
+      activeMarket.address,
+      toFixed(multiply(('' + price || '2222').toString(), 8), 0),
+      toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+      0,
+      activeTournamentData?.id || '2',
+    ],
+    config.router || ZEROADDRESS
+  );
   if (!activeChain)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
         No Active Chain
       </BlueBtn>
     );
-  const config = getNoLossV3Config(activeChain?.id);
   if (user && user.isViewOnlyMode)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
@@ -272,8 +287,17 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
               to: config.manager,
             },
           ];
+      console.time('full-txn');
       await sendTxn([...approveTxn, ...buyTradeTxn]);
+      console.timeEnd('full-txn');
+
+      // const gasFee = await getGasFeeValue();
+      // console.log(`BuyButtons-gasFee: `, gasFee);
+      // const nonce = await smartAccount?.library.getNonce();
+      // console.log(`BuyButtons-nonce: `, nonce);
+      // await customUserOp({ gasFeeValues: gasFee, nonce: nonce });
     } catch (e) {
+      console.error(e);
       toastify({
         msg: (e as Error).message,
         type: 'error',

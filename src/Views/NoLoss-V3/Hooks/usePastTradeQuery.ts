@@ -6,6 +6,7 @@ import { nolossmarketsAtom, userAtom } from '../atoms';
 import { marketsForChart } from '../config';
 import { BetState, TradeInputs, useAheadTrades } from './useAheadTrades';
 import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
+import { getSAProxyContract } from '@biconomy/common';
 export const expiryPriceCache: {
   [key: string]: string;
 } = {};
@@ -183,7 +184,7 @@ export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
         },
       ])
       .then((response) => {
-        console.log(`response[fetch]: `, response);
+        // console.log(`response[fetch]: `, response);
         if (currentTrade.optionID !== undefined) {
           if (
             !expiryPriceCache[currentTrade.optionID] &&
@@ -196,6 +197,7 @@ export const addExpiryPrice = async (currentTrade: IGQLHistory) => {
   }
 };
 
+// getSAProxyContract
 export const usePastTradeQuery = () => {
   //   const { address: account } = useUserAccount();
   const user = useAtomValue(userAtom);
