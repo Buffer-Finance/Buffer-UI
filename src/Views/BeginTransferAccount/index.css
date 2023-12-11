@@ -1,0 +1,132 @@
+.ValidationRow {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    font-size: 1.5rem;
+  }
+  
+  .ValidationRow-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ValidationRow-icon {
+    margin-right: 1.5rem;
+    scale: 1.5;
+  }
+  
+  .BeginAccountTransfer .ValidationRow {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .BeginAccountTransfer-validations {
+    margin-bottom: 2.325rem;
+  }
+  
+  .BeginAccountTransfer .Modal .App-cta {
+    display: block;
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+
+  .Page-title-section {
+    padding-left: 4.65rem;
+    padding-right: 1.5rem;
+    margin-top: 1.5rem;
+    position: relative;
+  }
+  
+  .Page-title-section:first-child {
+    margin-top: 0rem;
+  }
+  
+  .Page-title {
+    font-size: 3.4rem;
+    margin-bottom: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 1;
+    .Page-title-icon {
+      width: 24px;
+      vertical-align: baseline;
+    }
+  }
+
+
+  .Page-description {
+    color: #b7b7bd;
+    line-height: 2.15rem;
+    font-size: 1.5rem;
+  }
+  
+  .Page-description span,
+  .Page-description a {
+    text-decoration: underline;
+    cursor: pointer;
+    display: inline-flex;
+    color: inherit;
+  }
+  
+  .Page-description span:hover {
+    color: #fff;
+    opacity: 0.9;
+  }
+  
+  .Page-description span img,
+  .Page-description a img {
+    margin-left: 0.4rem;
+  }
+
+  .Page-content {
+    padding: 4.65rem;
+    padding-top: 1.5rem;
+  }
+
+  .input-form {
+    max-width: 38.75rem;
+  }
+  
+  .input-row {
+    margin-bottom: 1.5rem;
+  }
+  
+  .input-label {
+    display: block;
+    margin-bottom: 0.8rem;
+    font-size: 1.5rem;
+  }
+  
+  .text-input {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .Page {
+    max-width: 108.5rem;
+    margin: auto;
+    padding-top: 4.65rem;
+    font-family: 'Relative Mono', 'Relative Pro';
+  }
+  .page-layout {
+    min-height: calc(100vh - 62px);
+    display: flex;
+    flex-direction: column;
+    padding-bottom: calc(4.65rem + 20rem);
+    padding-top: 4.65rem;
+  }
+  
+  input {
+    font-size: 2rem;
+    color: white;
+    outline: none;
+    background: none;
+    border: none;
+    padding: 1.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }

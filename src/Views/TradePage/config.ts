@@ -231,46 +231,46 @@ export const appConfig = {
       LBTPoolAddress: '0x3A3DA6464bEe25a1d98526402a12241B0787b84C',
     },
   },
-  '80001': {
-    graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api',
-    },
-    multicall: '0xca11bde05977b3631167028862be2a173976ca11',
-    referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
-    router: '0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4',
-    v2_router: null,
-    creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
-    poolsInfo: {
-      '0xcE5467a403eb433391F72007E151DBb8119728E0': {
-        tokenAddress: '0x6f9FE619b6BF88028ac57cD665D527A507a6d2Ef',
-        faucet: '0x4fccf1139FcA44EF716534bae9D3f87a01583338',
-        decimals: 6,
-        token: 'USDC',
-        is_pol: false,
-      },
-    },
-  },
-  '137': {
-    graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api',
-    },
-    multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
-    referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',
-    router: '0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7',
-    v2_router: null,
-    creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
-    signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
-    poolsInfo: {
-      '0x6FD5B386d8bed29b3b62C0856250cdD849b3564d': {
-        tokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-        // faucet: '0x4fccf1139FcA44EF716534bae9D3f87a01583338',
-        decimals: 6,
-        token: 'USDC',
-        is_pol: false,
-      },
-    },
-  },
+  // '80001': {
+  //   graph: {
+  //     MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api',
+  //   },
+  //   multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+  //   referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
+  //   router: '0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4',
+  //   v2_router: null,
+  //   creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
+  //   signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
+  //   poolsInfo: {
+  //     '0xcE5467a403eb433391F72007E151DBb8119728E0': {
+  //       tokenAddress: '0x6f9FE619b6BF88028ac57cD665D527A507a6d2Ef',
+  //       faucet: '0x4fccf1139FcA44EF716534bae9D3f87a01583338',
+  //       decimals: 6,
+  //       token: 'USDC',
+  //       is_pol: false,
+  //     },
+  //   },
+  // },
+  // '137': {
+  //   graph: {
+  //     MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api',
+  //   },
+  //   multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
+  //   referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',
+  //   router: '0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7',
+  //   v2_router: null,
+  //   creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
+  //   signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
+  //   poolsInfo: {
+  //     '0x6FD5B386d8bed29b3b62C0856250cdD849b3564d': {
+  //       tokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+  //       // faucet: '0x4fccf1139FcA44EF716534bae9D3f87a01583338',
+  //       decimals: 6,
+  //       token: 'USDC',
+  //       is_pol: false,
+  //     },
+  //   },
+  // },
 };
 
 export const HolderContracts = [

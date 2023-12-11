@@ -22,6 +22,7 @@ import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
 import { AllTrades } from '@Views/AllTrades';
+import { BeginTransferAccount } from '@Views/BeginTransferAccount';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
@@ -110,6 +111,10 @@ const AppRoutes = () => {
       <OnboardingAnimation />
       <OneCTModal />
       <Routes>
+        <Route
+          path="/begin-account-transfer"
+          element={<BeginTransferAccount />}
+        />
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
