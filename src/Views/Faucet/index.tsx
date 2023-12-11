@@ -130,22 +130,26 @@ const faucetClaimingSteps = {
     symbol: 'AETH',
     faucet: [
       {
-        step: 'Claim goerliETH from goerli faucet',
-        url: 'https://goerlifaucet.com/',
-        options: [
-          {
-            step: 'Using the Goerli faucet',
-            url: 'https://goerlifaucet.com/',
-          },
-          {
-            step: 'Using the Paradigm Multifaucet',
-            url: 'https://faucet.paradigm.xyz/',
-          },
-        ],
+        step: 'Claim AETH from sepolia faucet',
+        url: 'https://sepoliafaucet.com/',
+        // options: [
+        //   {
+        //     step: 'Using the Goerli faucet',
+        //     url: 'https://goerlifaucet.com/',
+        //   },
+        //   {
+        //     step: 'Using the Paradigm Multifaucet',
+        //     url: 'https://faucet.paradigm.xyz/',
+        //   },
+        // ],
       },
       {
         step: 'Bridge GoerliETH to AETH',
         url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
+      },
+      {
+        step: 'Directly claim AETH from here',
+        url: 'https://bwarelabs.com/faucets/arbitrum-sepolia',
       },
     ],
     img: '/Chains/ARBITRIUM.png',
