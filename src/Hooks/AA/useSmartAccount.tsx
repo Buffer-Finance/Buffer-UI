@@ -41,7 +41,7 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
-const signerStorageKey = 'buffer-signer-stable-v1';
+const signerStorageKey = 'buffer-signer-stable-v3';
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
   return window.localStorage.getItem(smartWalletAddress + signerStorageKey);
