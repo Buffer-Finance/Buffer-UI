@@ -1,4 +1,4 @@
-import { formatDistanceExpanded } from '@Hooks/Utilities/useStopWatch';
+import { formatDistanceCompact } from '@Hooks/Utilities/useStopWatch';
 import { getIdentifier } from '@Hooks/useGenericHook';
 import { priceAtom } from '@Hooks/usePrice';
 import {
@@ -168,7 +168,7 @@ function getText(expiration: number) {
   return `${
     expiration <= curr
       ? 'Processing...'
-      : `${formatDistanceExpanded(
+      : `${formatDistanceCompact(
           Variables(expiration - Math.round(Date.now() / 1000))
         )}`
   }`;
