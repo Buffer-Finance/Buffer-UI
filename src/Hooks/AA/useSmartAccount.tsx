@@ -51,7 +51,7 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
-const signerStorageKey = 'buffer-signer-stable-v2';
+const signerStorageKey = 'inititate-trade-signer-1';
 let sa2sm: Partial<{ [key: string]: any }> = {};
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
