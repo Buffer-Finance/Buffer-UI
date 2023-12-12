@@ -41,7 +41,7 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
-const signerStorageKey = 'buffer-signer-stable-v9';
+const signerStorageKey = 'buffer-signer-dev';
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
   return window.localStorage.getItem(smartWalletAddress + signerStorageKey);
@@ -237,12 +237,12 @@ const useSmartAccount = () => {
         buildParams
       );
 
-      console.timeEnd('time-monitoring-pre-calculations');
-      console.time('time-monitoring-transaction-sending');
       let userOps = await smartAccount.library.buildUserOp(
         transactionArray,
         buildParams
       );
+      console.timeEnd('time-monitoring-pre-calculations');
+      console.time('time-monitoring-transaction-sending');
 
       const userOpsResponse = await smartAccount.library.sendUserOp(
         userOps,
