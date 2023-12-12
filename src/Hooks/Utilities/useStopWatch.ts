@@ -52,19 +52,27 @@ export const formatDistanceCompact = (stopWatch: {
   minutes: number;
   seconds: number;
 }) => {
-  return stopWatch
-    ? `${
-        stopWatch.days > 0
-          ? addBoth(stopWatch.days.toString(), 'd')
-          : stopWatch.hours > 0
-          ? addBoth(stopWatch.hours.toString(), 'h')
-          : stopWatch.minutes > 0
-          ? addBoth(stopWatch.minutes.toString(), 'm')
-          : stopWatch.seconds > 0
-          ? addBoth(stopWatch.seconds.toString(), 's')
-          : '-'
-      }`
-    : null;
+  if (stopWatch) {
+    let time: string = '';
+    if (stopWatch.days > 0) {
+      time += addBoth(stopWatch.days.toString(), 'd');
+      time += ' ';
+    }
+    if (stopWatch.hours > 0) {
+      time += addBoth(stopWatch.hours.toString(), 'h');
+      time += ' ';
+    }
+    if (stopWatch.minutes > 0) {
+      time += addBoth(stopWatch.minutes.toString(), 'm');
+      time += ' ';
+    }
+    if (stopWatch.seconds > 0) {
+      time += addBoth(stopWatch.seconds.toString(), 's');
+    }
+    console.log(time);
+    return time;
+  }
+  return null;
 };
 export default function useStopWatch(timer: number) {
   const [distance, setdistance] = useState(getDistance(timer));
