@@ -56,7 +56,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   let { sendTxn, customUserOp, smartAccount } = useSmartAccount();
   const config = getNoLossV3Config(activeChain?.id);
 
-  const _ = useTradeBuyingOps(
+  const { data: interMediateTxn, error } = useTradeBuyingOps(
     [
       toFixed(multiply(userInput, 18), 0),
       currentTime.seconds,
@@ -288,7 +288,11 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
             },
           ];
       console.time('full-txn');
-      await sendTxn([...approveTxn, ...buyTradeTxn]);
+      if (!approveTxn.length && interMediateTxn) {
+        await sendTxn([...buyTradeTxn], interMediateTxn);
+      } else {
+        await sendTxn([...approveTxn, ...buyTradeTxn]);
+      }
       console.timeEnd('full-txn');
 
       // const gasFee = await getGasFeeValue();

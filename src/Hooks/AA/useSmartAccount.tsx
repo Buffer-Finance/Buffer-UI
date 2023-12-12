@@ -53,8 +53,6 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
 });
 const signerStorageKey = 'buffer-signer-stable-v2';
 
-const sessionSignerStatusCache: Partial<{ [key: string]: any[] }> = {};
-
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
   return window.localStorage.getItem(smartWalletAddress + signerStorageKey);
 };
@@ -64,6 +62,7 @@ export const setSessionSigner = (
 ) => {
   return window.localStorage.setItem(smartWalletAddress + signerStorageKey, pk);
 };
+const sessionSignerStatusCache: Partial<{ [key: string]: any[] }> = {};
 
 // error handled, took around 2 second to finish
 const getSessionState = async (smartWallet: SmartAccount) => {
@@ -147,6 +146,7 @@ const useSmartAccount = () => {
         paymasterServiceData: {
           mode: PaymasterMode.SPONSORED,
         },
+        skipBundlerGasEstimation: true,
       };
       let sendUserParams: SendUserOpParams | undefined = undefined;
       console.log(
@@ -244,23 +244,20 @@ const useSmartAccount = () => {
         transactionArray,
         buildParams
       );
-      const econdedCallData = encodeFunctionData({
-        abi: SCAbi,
-        functionName: 'execute_ncC',
-        args: [
-          transactions[0].to,
-          0n,
-          '0xd88349630000000000000000000000000000000000000000000000008ac7230489e8000000000000000000000000000000000000000000000000000000000000000003840000000000000000000000000000000000000000000000000000000000000001000000000000000000000000df860a06e2c52b33f5e7307e50e280c785b0ecd8000000000000000000000000000000000000000000000000000003d786525e6f000000000000000000000000000000000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008',
-        ],
-      });
+
       console.timeEnd('first-line');
       let userOp;
-      if (!buildOps) {
+      if (!buildOps || transactionArray.length > 1) {
         userOp = await smartAccount.library.buildUserOp(
           transactionArray,
           buildParams
         );
       } else {
+        const econdedCallData = encodeFunctionData({
+          abi: SCAbi,
+          functionName: 'execute_ncC',
+          args: [transactions[0].to, 0n, transactionArray[0].data],
+        });
         userOp = buildOps;
 
         const finalUserOp = { ...userOp };
@@ -347,4 +344,35 @@ const useSmartAccount = () => {
 const getGasFeeValue = async (): Promise<GasFeeValues> => {
   return await bundler.getGasFeeValues();
 };
-export { useSmartAccount, getGasFeeValue };
+
+const sa2sm: Partial<{ [key: string]: any }> = {};
+const getSessionModule = async (
+  smartAccount: SmartAccount
+): Promise<SessionKeyManagerModule> => {
+  if (!(smartAccount.address in sa2sm)) {
+    sa2sm[smartAccount.address] = await SessionKeyManagerModule.create({
+      moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
+      smartAccountAddress: smartAccount.address,
+    });
+  }
+  return sa2sm[smartAccount.address];
+};
+const getSessionParams = async (smartAccount: SmartAccount): any => {
+  const localSigner = await getSessionSigner(smartAccount.address);
+  if (!localSigner) return null;
+  const sessionSigner = new ethers.Wallet(localSigner);
+  const sessionModule = await getSessionModule(smartAccount);
+  const activeModule = smartAccount.library.activeValidationModule;
+  console.log(`useSmartAccount-activeModule: `, activeModule);
+  // Single txn sessions
+  smartAccount.library =
+    smartAccount.library.setActiveValidationModule(sessionModule);
+  const activeModule2 = smartAccount.library.activeValidationModule;
+  console.log(`useSmartAccount-activeModule: `, activeModule2);
+  const sessionParams = {
+    sessionSigner,
+    sessionValidationModule: SessionValidationModuleAddress,
+  };
+  return { params: sessionParams };
+};
+export { useSmartAccount, getGasFeeValue, getSessionParams };

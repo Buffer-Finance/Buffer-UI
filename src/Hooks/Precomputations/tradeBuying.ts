@@ -1,4 +1,8 @@
-import { SmartAccount, useSmartAccount } from '@Hooks/AA/useSmartAccount';
+import {
+  SmartAccount,
+  getSessionParams,
+  useSmartAccount,
+} from '@Hooks/AA/useSmartAccount';
 import useSWR from 'swr';
 import RouterABI from '../../Views/NoLoss-V3/ABIs/NoLossRouter.json';
 import { encodeFunctionData } from 'viem';
@@ -15,14 +19,29 @@ const useTradeBuyingOps = (args: any[], to: string) => {
           args,
         }),
       };
-      const userOps = await smartAccount.library.buildUserOp([txns], {
-        mode: PaymasterMode.SPONSORED,
-      });
-      console.log(`arg: `, userOps);
-      return userOps;
+      const sessionParams = await getSessionParams(smartAccount);
+      console.log(`sessionParams: `, sessionParams);
+      console.log(
+        `smartAccount: `,
+        smartAccount.library.activeValidationModule
+      );
+      try {
+        const userOps = await smartAccount.library.buildUserOp([txns], {
+          paymasterServiceData: {
+            mode: PaymasterMode.SPONSORED,
+          },
+          skipBundlerGasEstimation: true,
+          ...sessionParams,
+        });
+        console.log(`arg: `, userOps);
+        return userOps;
+      } catch (error) {
+        error && console.error(error);
+      }
+      return null;
     },
 
-    refreshInterval: 2000,
+    refreshInterval: 20000,
   });
 };
 
