@@ -92,7 +92,7 @@ export const TournamentCardButtons: React.FC<{
           onClick={handleClaim}
           isLoading={btnLoading}
           className={tournamentButtonStyles}
-          isDisabled={tournament.hasUserClaimed === true}
+          isDisabled={alreadClaimed}
         >
           {alreadClaimed ? 'Already Claimed' : 'Claim'}
         </BufferButton>
@@ -173,7 +173,7 @@ export const TournamentCardButtons: React.FC<{
         <BufferButton
           onClick={buyPlayTokens}
           isLoading={btnLoading}
-          disabled={maximumparticipantsReached || hasUserBoughtMaxTickets}
+          isDisabled={maximumparticipantsReached || hasUserBoughtMaxTickets}
           className={tournamentButtonStyles}
         >
           {maximumparticipantsReached ? (
