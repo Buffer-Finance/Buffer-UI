@@ -81,7 +81,7 @@ export const useCall2Data = (contracts: any, swrKey: string) => {
       );
       return returnData || cache.get(key);
     },
-    refreshInterval: 900,
+    refreshInterval: 100,
   });
 };
 
