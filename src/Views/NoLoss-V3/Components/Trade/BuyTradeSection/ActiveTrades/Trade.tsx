@@ -22,7 +22,7 @@ export const Trade: React.FC<{ trade: IGQLHistory }> = ({ trade }) => {
               <PairTokenImage pair={trade.chartData.pair} />
             </div>
             <White12pxText
-              className={`${trade.blockNumber ? '!text-red' : ''}`}
+            // className={`${trade.blockNumber ? '!text-red' : ''}`}
             >
               {trade.chartData.pair}
             </White12pxText>
