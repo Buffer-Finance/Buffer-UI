@@ -117,6 +117,8 @@ const useSmartAccount = () => {
       transactions: Transaction[],
       config?: { sponsored?: 'Native' | `0x${string}` }
     ) => {
+      console.time('time-monitoring-pre-calculations');
+
       if (!smartAccount) return;
       const sessionResponse = await getSessionState(smartAccount);
       if (!sessionResponse) return;
@@ -235,6 +237,8 @@ const useSmartAccount = () => {
         buildParams
       );
 
+      console.timeEnd('time-monitoring-pre-calculations');
+      console.time('time-monitoring-transaction-sending');
       let userOps = await smartAccount.library.buildUserOp(
         transactionArray,
         buildParams
@@ -253,6 +257,7 @@ const useSmartAccount = () => {
       // }
       const fulfiledOrRejected = await userOpsResponse.wait(1);
       console.log(`4 useSmartAccount-fulfiledOrRejected: `, fulfiledOrRejected);
+      console.timeEnd('time-monitoring-transaction-sending');
 
       return fulfiledOrRejected;
     },
