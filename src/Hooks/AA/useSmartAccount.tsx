@@ -54,21 +54,27 @@ export const setSessionSigner = (
 };
 
 // error handled, took around 2 second to finish
-const getSessionState = async (smartWallet: BiconomySmartAccountV2) => {
-  const [isSessionModuleEnabledResult, isBSMEnabledResult] =
-    await Promise.allSettled(
-      [
-        DEFAULT_SESSION_KEY_MANAGER_MODULE,
-        DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
-      ].map((module) => {
-        return smartWallet.isModuleEnabled(module);
-      })
-    );
-  return [
-    isSessionModuleEnabledResult.status == 'fulfilled' &&
-      isSessionModuleEnabledResult.value,
-    isBSMEnabledResult.status == 'fulfilled' && isBSMEnabledResult.value,
-  ];
+const sessionSignerStatusCache: Partial<{ [key: string]: any[] }> = {};
+
+// error handled, took around 2 second to finish
+const getSessionState = async (smartWallet: SmartAccount) => {
+  if (!(smartWallet.address in sessionSignerStatusCache)) {
+    const [isSessionModuleEnabledResult, isBSMEnabledResult] =
+      await Promise.allSettled(
+        [
+          DEFAULT_SESSION_KEY_MANAGER_MODULE,
+          DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
+        ].map((module) => {
+          return smartWallet.library.isModuleEnabled(module);
+        })
+      );
+    sessionSignerStatusCache[smartWallet.address] = [
+      isSessionModuleEnabledResult.status == 'fulfilled' &&
+        isSessionModuleEnabledResult.value,
+      isBSMEnabledResult.status == 'fulfilled' && isBSMEnabledResult.value,
+    ];
+  }
+  return sessionSignerStatusCache[smartWallet.address];
 };
 // yet to deploy
 export const SessionValidationModuleAddress =
