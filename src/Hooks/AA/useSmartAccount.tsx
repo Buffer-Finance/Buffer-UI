@@ -36,6 +36,7 @@ import { arbitrumGoerli } from '@wagmi/chains';
 import { encodeFunctionData } from 'viem';
 import { GetContractInstanceDto, getSAProxyContract } from '@biconomy/common';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { useNoLossTxnOnboardModal } from 'src/Modals/NoLossAAEducator';
 export type SmartAccount = {
   library: BiconomySmartAccountV2;
   address: `0x${string}`;
@@ -102,6 +103,7 @@ const useSmartAccount = () => {
     sa2sm = {};
     getSessionState(sa);
   };
+  const onboardTxnManager = useNoLossTxnOnboardModal();
   useEffect(() => {
     const generateWalletClient = async () => {
       if (!walletClient) return;
@@ -133,6 +135,9 @@ const useSmartAccount = () => {
       const sessionResponse = await getSessionState(smartAccount);
       if (!sessionResponse) {
         return;
+      }
+      if (!buildOps || transactions.length > 1) {
+        onboardTxnManager.openModal();
       }
       let newlyCreatedSessionSigner: undefined | string;
       const [isSessionEnabled, isBSMEnabled] = sessionResponse;
@@ -258,6 +263,7 @@ const useSmartAccount = () => {
           transactionArray,
           buildParams
         );
+        onboardTxnManager.updateModal();
       } else {
         console.log('deb-wc-else');
         const econdedCallData = encodeFunctionData({
@@ -304,6 +310,7 @@ const useSmartAccount = () => {
           console.log('setting sessionsigner', newlyCreatedSessionSigner);
           setSessionSigner(smartAccount.address, newlyCreatedSessionSigner);
           updateCache(smartAccount);
+          onboardTxnManager.successModal();
         }
       }
       return fulfiledOrRejected;

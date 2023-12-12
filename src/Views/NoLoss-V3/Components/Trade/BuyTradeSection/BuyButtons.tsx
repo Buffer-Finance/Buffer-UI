@@ -33,6 +33,7 @@ import { getDurationError } from './TimeSelector/TimePicker';
 import { getTradeSizeError } from './TradeSizeSelector';
 import { useTradeBuyingOps } from '@Hooks/Precomputations/tradeBuying';
 import { ZEROADDRESS } from '@Views/NoLoss-V3/config';
+import { useNoLossTxnOnboardModal } from 'src/Modals/NoLossAAEducator';
 
 export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   activeMarket,
@@ -55,6 +56,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   const isIncreationWindow = useIsMarketInCreationWindow();
   let { sendTxn, customUserOp, smartAccount } = useSmartAccount();
   const config = getNoLossV3Config(activeChain?.id);
+  const onboardTxnManager = useNoLossTxnOnboardModal();
 
   const { data: interMediateTxn, error } = useTradeBuyingOps(
     [
@@ -304,6 +306,8 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       // await customUserOp({ gasFeeValues: gasFee, nonce: nonce });
     } catch (e) {
       console.error(e);
+      onboardTxnManager.closeModal();
+
       toastify({
         msg: (e as Error).message,
         type: 'error',

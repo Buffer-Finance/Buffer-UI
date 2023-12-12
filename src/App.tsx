@@ -28,6 +28,7 @@ import { isTestnet } from 'config';
 import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
+import { NoLossAAEducator } from './Modals/NoLossAAEducator';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 (function () {
@@ -207,6 +208,7 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
+          <NoLossAAEducator />
           {!urlSettings?.hide &&
             (isMobile && mobileWarningClosed ? false : true) && (
               <Warning
