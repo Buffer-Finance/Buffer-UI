@@ -41,7 +41,7 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
-const signerStorageKey = 'buffer-signer-stable-v7';
+const signerStorageKey = 'buffer-signer-stable-v9';
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
   return window.localStorage.getItem(smartWalletAddress + signerStorageKey);
@@ -68,6 +68,11 @@ const getSessionState = async (smartWallet: SmartAccount) => {
           return smartWallet.library.isModuleEnabled(module);
         })
       );
+    console.log(
+      `useSmartAccount-isSessionModuleEnabledResult, isBSMEnabledResult: `,
+      isSessionModuleEnabledResult,
+      isBSMEnabledResult
+    );
     sessionSignerStatusCache[smartWallet.address] = [
       isSessionModuleEnabledResult.status == 'fulfilled' &&
         isSessionModuleEnabledResult.value,
@@ -100,6 +105,8 @@ const useSmartAccount = () => {
       });
       const swAddress =
         (await biconomySmartAccount.getAccountAddress()) as `0x${string}`;
+      const sa = { library: biconomySmartAccount, address: swAddress };
+      getSessionState(sa);
       setSmartWallet({ library: biconomySmartAccount, address: swAddress });
     };
     generateWalletClient();

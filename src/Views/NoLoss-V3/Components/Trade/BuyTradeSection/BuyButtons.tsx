@@ -272,7 +272,9 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
               to: config.manager,
             },
           ];
+      console.time('trade-buying');
       await sendTxn([...approveTxn, ...buyTradeTxn]);
+      console.timeEnd('trade-buying');
     } catch (e) {
       toastify({
         msg: (e as Error).message,
