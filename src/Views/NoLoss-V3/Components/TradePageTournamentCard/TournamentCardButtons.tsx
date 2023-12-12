@@ -86,46 +86,17 @@ export const TournamentCardButtons: React.FC<{
     tournament.buyinTokenDecimals
   ) as string;
 
-  if (allowance === undefined)
-    return (
-      <Skeleton className="!h-[26px] full-width b1200:!w-[100px] sr lc !mt-4 !transform-none" />
-    );
-  let secondButton = null;
-  async function handleClaim() {
-    setBtnLoading(true);
-    const txn = {
-      data: encodeFunctionData({
-        abi: TournamentLeaderboardABI,
-        args: [tournament.id, address],
-        functionName: 'claimReward',
-      }),
-      to: config.leaderboard,
-    };
-    await sendTxn([txn]);
-    setBtnLoading(false);
-  }
-
-  let isAllowed = gt(
-    divide(allowance, tournament.buyinTokenDecimals)!,
-    ticketCost
-  );
-  if (
-    tournament.state.toLowerCase() === 'closed' &&
-    activeAllMyTab === 'my' &&
-    gt(tournament.userReward, '0')
-  ) {
-    const alreadClaimed = tournament.hasUserClaimed;
-
-    secondButton = (
-      <BufferButton
-        onClick={handleClaim}
-        isLoading={btnLoading}
-        className={tournamentButtonStyles}
-        isDisabled={tournament.hasUserClaimed === true}
-      >
-        {alreadClaimed ? 'Already Claimed' : 'Claim'}
-      </BufferButton>
-    );
+      secondButton = (
+        <BufferButton
+          onClick={handleClaim}
+          isLoading={btnLoading}
+          className={tournamentButtonStyles}
+          isDisabled={alreadClaimed}
+        >
+          {alreadClaimed ? 'Already Claimed' : 'Claim'}
+        </BufferButton>
+      );
+    }
   } else {
     if (!isAllowed) {
       const approveTournamentManager = () => {
@@ -179,7 +150,7 @@ export const TournamentCardButtons: React.FC<{
         <BufferButton
           onClick={buyPlayTokens}
           isLoading={btnLoading}
-          disabled={maximumparticipantsReached || hasUserBoughtMaxTickets}
+          isDisabled={maximumparticipantsReached || hasUserBoughtMaxTickets}
           className={tournamentButtonStyles}
         >
           {maximumparticipantsReached ? (
