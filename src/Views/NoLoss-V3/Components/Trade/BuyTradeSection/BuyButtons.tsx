@@ -289,8 +289,10 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
           ];
       console.time('full-txn');
       if (!approveTxn.length && interMediateTxn) {
+        console.log('deb-call-cached-txn');
         await sendTxn([...buyTradeTxn], interMediateTxn);
       } else {
+        console.log('deb-call-normal-txn');
         await sendTxn([...approveTxn, ...buyTradeTxn]);
       }
       console.timeEnd('full-txn');

@@ -20,6 +20,7 @@ const useTradeBuyingOps = (args: any[], to: string) => {
         }),
       };
       const sessionParams = await getSessionParams(smartAccount);
+      if (!sessionParams) return null;
       console.log(`sessionParams: `, sessionParams);
       console.log(
         `smartAccount: `,
@@ -41,7 +42,7 @@ const useTradeBuyingOps = (args: any[], to: string) => {
       return null;
     },
 
-    refreshInterval: 20000,
+    refreshInterval: 2000,
   });
 };
 

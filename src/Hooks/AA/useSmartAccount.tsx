@@ -52,6 +52,7 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
 const signerStorageKey = 'buffer-signer-stable-v2';
+let sa2sm: Partial<{ [key: string]: any }> = {};
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
   return window.localStorage.getItem(smartWalletAddress + signerStorageKey);
@@ -62,10 +63,14 @@ export const setSessionSigner = (
 ) => {
   return window.localStorage.setItem(smartWalletAddress + signerStorageKey, pk);
 };
-const sessionSignerStatusCache: Partial<{ [key: string]: any[] }> = {};
+let sessionSignerStatusCache: Partial<{ [key: string]: any[] }> = {};
 
 // error handled, took around 2 second to finish
 const getSessionState = async (smartWallet: SmartAccount) => {
+  console.log(
+    `useSmartAccount-sessionSignerStatusCache: `,
+    sessionSignerStatusCache
+  );
   if (!(smartWallet.address in sessionSignerStatusCache)) {
     const [isSessionModuleEnabledResult, isBSMEnabledResult] =
       await Promise.allSettled(
@@ -93,6 +98,8 @@ const useSmartAccount = () => {
   // console.log(`useSmartAccount-smartAccount: `, smartAccount?.address);
   const { data: walletClient } = useWalletClient();
   const updateCache = (sa: SmartAccount) => {
+    sessionSignerStatusCache = {};
+    sa2sm = {};
     getSessionState(sa);
   };
   useEffect(() => {
@@ -121,18 +128,17 @@ const useSmartAccount = () => {
 
   const sendTxn = useCallback(
     async (transactions: Transaction[], buildOps?: Partial<UserOperation>) => {
-      console.time('session');
-      console.time('first-line');
+      console.time('time-monitoring-pre-calculations');
       if (!smartAccount) return;
       const sessionResponse = await getSessionState(smartAccount);
       if (!sessionResponse) {
         return;
       }
+      let newlyCreatedSessionSigner: undefined | string;
       const [isSessionEnabled, isBSMEnabled] = sessionResponse;
       let transactionArray = [...transactions];
-      console.timeEnd('session');
 
-      const localSigner = await getSessionSigner(smartAccount.address);
+      const localSigner = getSessionSigner(smartAccount.address);
       const sessionModule = await SessionKeyManagerModule.create({
         moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
         smartAccountAddress: smartAccount.address,
@@ -146,7 +152,6 @@ const useSmartAccount = () => {
         paymasterServiceData: {
           mode: PaymasterMode.SPONSORED,
         },
-        skipBundlerGasEstimation: true,
       };
       let sendUserParams: SendUserOpParams | undefined = undefined;
       console.log(
@@ -162,8 +167,6 @@ const useSmartAccount = () => {
         const sessionSigner = new ethers.Wallet(localSigner);
         if (transactionArray.length == 1) {
           // Single txn sessions
-          smartAccount.library =
-            smartAccount.library.setActiveValidationModule(sessionModule);
           const sessionParams = {
             sessionSigner,
             sessionValidationModule: SessionValidationModuleAddress,
@@ -195,7 +198,8 @@ const useSmartAccount = () => {
         const sessionKeyEOA = await sessionSigner.getAddress();
         console.log('sessionKeyEOA', sessionKeyEOA);
         // BREWARE JUST FOR DEMO: update local storage with session key
-        setSessionSigner(smartAccount.address, sessionSigner.privateKey);
+        newlyCreatedSessionSigner = sessionSigner.privateKey;
+        // setSessionSigner(smartAccount.address, sessionSigner.privateKey);
         // cretae session key data
         const sessionKeyData = defaultAbiCoder.encode(
           ['address', 'address'],
@@ -223,6 +227,8 @@ const useSmartAccount = () => {
         };
         sessionTransactionArray.push(setSessiontrx);
         if (!isSessionEnabled) {
+          console.log('adding session transaction');
+
           const enableModuleTrx =
             await smartAccount.library.getEnableModuleData(
               DEFAULT_SESSION_KEY_MANAGER_MODULE
@@ -230,6 +236,7 @@ const useSmartAccount = () => {
           sessionTransactionArray.push(enableModuleTrx);
         }
         if (!isBSMEnabled) {
+          console.log('adding batch transaction');
           const enableModuleTrx =
             await smartAccount.library.getEnableModuleData(
               DEFAULT_BATCHED_SESSION_ROUTER_MODULE
@@ -244,8 +251,7 @@ const useSmartAccount = () => {
         transactionArray,
         buildParams
       );
-
-      console.timeEnd('first-line');
+      console.time('deb-wc-time');
       let userOp;
       if (!buildOps || transactionArray.length > 1) {
         userOp = await smartAccount.library.buildUserOp(
@@ -253,6 +259,7 @@ const useSmartAccount = () => {
           buildParams
         );
       } else {
+        console.log('deb-wc-else');
         const econdedCallData = encodeFunctionData({
           abi: SCAbi,
           functionName: 'execute_ncC',
@@ -278,8 +285,11 @@ const useSmartAccount = () => {
           preVerificationGas ?? userOp.preVerificationGas;
         finalUserOp.paymasterAndData =
           paymasterAndData ?? userOp.paymasterAndData;
+        userOp = finalUserOp;
       }
 
+      console.timeEnd('time-monitoring-pre-calculations');
+      console.time('time-monitoring-transaction-sending');
       const userOpsResponse = await smartAccount.library.sendUserOp(
         userOp,
         sendUserParams
@@ -288,8 +298,14 @@ const useSmartAccount = () => {
 
       const fulfiledOrRejected = await userOpsResponse.wait(1);
       console.log(`4 useSmartAccount-fulfiledOrRejected: `, fulfiledOrRejected);
-      console.timeEnd('actual-time');
-
+      console.timeEnd('time-monitoring-transaction-sending');
+      if (fulfiledOrRejected.success) {
+        if (newlyCreatedSessionSigner) {
+          console.log('setting sessionsigner', newlyCreatedSessionSigner);
+          setSessionSigner(smartAccount.address, newlyCreatedSessionSigner);
+          updateCache(smartAccount);
+        }
+      }
       return fulfiledOrRejected;
     },
     [smartAccount]
@@ -345,7 +361,6 @@ const getGasFeeValue = async (): Promise<GasFeeValues> => {
   return await bundler.getGasFeeValues();
 };
 
-const sa2sm: Partial<{ [key: string]: any }> = {};
 const getSessionModule = async (
   smartAccount: SmartAccount
 ): Promise<SessionKeyManagerModule> => {
@@ -358,7 +373,8 @@ const getSessionModule = async (
   return sa2sm[smartAccount.address];
 };
 const getSessionParams = async (smartAccount: SmartAccount): any => {
-  const localSigner = await getSessionSigner(smartAccount.address);
+  const localSigner = getSessionSigner(smartAccount.address);
+  console.log(`useSmartAccount-localSigner: `, localSigner);
   if (!localSigner) return null;
   const sessionSigner = new ethers.Wallet(localSigner);
   const sessionModule = await getSessionModule(smartAccount);
