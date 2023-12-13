@@ -21,7 +21,7 @@ export const Variables = (distance: number) => {
   let adjustedDays = days;
 
   // Adjust the display if hours are exactly 24
-  if (hours === 0 && minutes < 59) {
+  if (days !== 0 && hours === 0 && minutes < 59) {
     adjustedHours = 24;
     adjustedDays = days - 1;
   }
