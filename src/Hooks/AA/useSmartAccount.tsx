@@ -17,7 +17,7 @@ import {
   PaymasterMode,
 } from '@biconomy/paymaster';
 import SCAbi from './SA.json';
-import { useAccount, useWalletClient } from 'wagmi';
+import { useAccount, useSignMessage, useWalletClient } from 'wagmi';
 import { useCallback, useEffect } from 'react';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { BigNumber, ethers } from 'ethers';
@@ -53,7 +53,7 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
-const signerStorageKey = 'v1-sidgner';
+const signerStorageKey = 'sss';
 let sa2sm: Partial<{ [key: string]: any }> = {};
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
@@ -93,6 +93,7 @@ export const SessionValidationModuleAddress =
 const useSmartAccount = () => {
   const setSmartWallet = useSetAtom(smartAccountAtom);
   let smartAccount = useAtomValue(smartAccountAtom);
+  const { signMessageAsync } = useSignMessage();
   // console.log(`useSmartAccount-smartAccount: `, smartAccount?.address);
   const { data: walletClient } = useWalletClient();
   const updateCache = (sa: SmartAccount) => {
@@ -133,14 +134,15 @@ const useSmartAccount = () => {
       if (!sessionResponse) {
         return;
       }
-      if (!buildOps && transactions.length > 1) {
-        onboardTxnManager.openModal();
-      }
+
       let newlyCreatedSessionSigner: undefined | string;
       const [isSessionEnabled, isBSMEnabled] = sessionResponse;
       let transactionArray = [...transactions];
 
       const localSigner = getSessionSigner(smartAccount.address);
+      if (!buildOps && !localSigner) {
+        onboardTxnManager.openModal();
+      }
       const sessionModule = await SessionKeyManagerModule.create({
         moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
         smartAccountAddress: smartAccount.address,
@@ -155,7 +157,6 @@ const useSmartAccount = () => {
           mode: PaymasterMode.SPONSORED,
         },
       };
-      console.log('main-deb 1 ', sessionModule.merkleTree.getHexRoot());
       let sendUserParams: SendUserOpParams | undefined = undefined;
       console.log(
         `1 useSmartAccount-initial-transactionArray: `,
@@ -196,8 +197,8 @@ const useSmartAccount = () => {
         }
       } else {
         // non batched sessions transaction where mainEOA needs to sign
-
-        const sessionSigner = await getLocalSigner(smartAccount.address);
+        // onboardTxnManager.awaitingSessionModal();
+        const sessionSigner = await getLocalSigner(signMessageAsync);
         const sessionKeyEOA = await sessionSigner.getAddress();
         console.log('sessionKeyEOA', sessionKeyEOA);
         // BREWARE JUST FOR DEMO: update local storage with session key
