@@ -1,18 +1,13 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { ethers } from 'ethers';
-import useSWR, { useSWRConfig } from 'swr';
-import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
-import {
-  arbMulticallABI,
-  multicallLinked,
-  multicallv2,
-} from './Contract/multiContract';
-import getDeepCopy from './getDeepCopy';
-import { useMemo } from 'react';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { viemMulticall } from './multicall';
+import { useMemo } from 'react';
+import useSWR, { useSWRConfig } from 'swr';
 import { createPublicClient, http } from 'viem';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import { multicallv2 } from './Contract/multiContract';
+import getDeepCopy from './getDeepCopy';
+import { viemMulticall } from './multicall';
 
 export const useReadCall = ({
   contracts,

@@ -1,8 +1,7 @@
-import { call } from 'viem/dist/types/actions/public/call';
+import { PublicClient } from 'viem';
 import { Call, getReadId } from './Contract/multiContract';
 import getDeepCopy from './getDeepCopy';
 import { convertBNtoString } from './useReadCall';
-import { PublicClient } from 'viem';
 
 export const viemMulticall = async (
   calls: Call[],

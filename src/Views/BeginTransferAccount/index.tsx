@@ -1,7 +1,15 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useWriteCall } from '@Hooks/useWriteCall';
+import { gt } from '@Utils/NumString/stringArithmatics';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import RewardRouterAbi from '@Views/Earn/Config/Abis/RewardRouterV2.json';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { ethers } from 'ethers';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ModalBase } from 'src/Modals/BaseModal';
+import { erc20ABI } from 'wagmi';
 import { ValidationRow } from './ValidationRow';
 import './index.css';
 import { useBeginTransferData } from './useBeginTransferData';
@@ -13,6 +21,16 @@ export const BeginTransferAccount = () => {
   const [isTransferSubmittedModalVisible, setIsTransferSubmittedModalVisible] =
     useState(false);
   const { address: account } = useUserAccount();
+  const { activeChain } = useActiveChain();
+  const config = getConfig(activeChain.id);
+  const { writeCall: approve } = useWriteCall(
+    config.EarnConfig.iBFR,
+    erc20ABI as any
+  );
+  const { writeCall: transfer1 } = useWriteCall(
+    config.EarnConfig.RewardRouter,
+    RewardRouterAbi
+  );
   let parsedReceiver = ethers.constants.AddressZero;
   if (ethers.utils.isAddress(receiver)) {
     parsedReceiver = receiver;
@@ -40,16 +58,18 @@ export const BeginTransferAccount = () => {
     transferredCumulativeBlpRewards2,
   } = data;
 
-  const needApproval = bfrAllowance && bfrStaked && bfrStaked.gt(bfrAllowance);
+  const needApproval = bfrAllowance && bfrStaked && gt(bfrStaked, bfrAllowance);
 
-  const hasVestedBfr = bfrVesterBalance && bfrVesterBalance.gt(0);
-  const hasVestedBlp = blpVesterBalance && blpVesterBalance.gt(0);
+  const hasVestedBfr = bfrVesterBalance && gt(bfrVesterBalance, '0');
+  const hasVestedBlp = blpVesterBalance && gt(blpVesterBalance, '0');
   const hasStakedBfr =
-    (cumulativeBfrRewards && cumulativeBfrRewards.gt(0)) ||
-    (transferredCumulativeBfrRewards && transferredCumulativeBfrRewards.gt(0));
+    (cumulativeBfrRewards && gt(cumulativeBfrRewards, '0')) ||
+    (transferredCumulativeBfrRewards &&
+      gt(transferredCumulativeBfrRewards, '0'));
   const hasStakedBlp =
-    (cumulativeBlpRewards && cumulativeBlpRewards.gt(0)) ||
-    (transferredCumulativeBlpRewards && transferredCumulativeBlpRewards.gt(0));
+    (cumulativeBlpRewards && gt(cumulativeBlpRewards, '0')) ||
+    (transferredCumulativeBlpRewards &&
+      gt(transferredCumulativeBlpRewards, '0'));
   const hasPendingReceiver =
     pendingReceiver && pendingReceiver !== ethers.constants.AddressZero;
 
@@ -88,7 +108,42 @@ export const BeginTransferAccount = () => {
     }
   };
 
-  function onClickPrimary() {}
+  async function onClickPrimary() {
+    if (needApproval) {
+      setIsApproving(true);
+      // approveTokens({
+      //   setIsApproving,
+      //   signer,
+      //   tokenAddress: gmxAddress,
+      //   spender: stakedGmxTrackerAddress,
+      //   chainId,
+      // });
+      await approve(() => {}, 'approve', [
+        config.EarnConfig.StakedBfrTracker,
+        '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+      ]);
+      setIsApproving(false);
+      return;
+    }
+
+    setIsTransferring(true);
+    // const contract = new ethers.Contract(rewardRouterAddress, RewardRouter.abi, signer);
+
+    // callContract(chainId, contract, "signalTransfer", [parsedReceiver], {
+    //   sentMsg: t`Transfer submitted!`,
+    //   failMsg: t`Transfer failed.`,
+    //   setPendingTxns,
+    // })
+    //   .then(async (res) => {
+    //     setIsTransferSubmittedModalVisible(true);
+    //   })
+    //   .finally(() => {
+    //     setIsTransferring(false);
+    //   });
+    await transfer1(() => {}, 'signalTransfer', [parsedReceiver]);
+    setIsTransferSubmittedModalVisible(true);
+    setIsTransferring(false);
+  }
 
   const isPrimaryEnabled = () => {
     const error = getError();
@@ -121,20 +176,21 @@ export const BeginTransferAccount = () => {
 
     return `Begin Transfer`;
   };
+  const completeTransferLink = `/complete_account_transfer/${account}/${parsedReceiver}`;
+  const pendingTransferLink = `/complete_account_transfer/${account}/${pendingReceiver}`;
   return (
     <div className="BeginAccountTransfer Page page-layout">
-      {/* <Modal
-    isVisible={istransferSubmittedModalVisible}
-    setIsVisible={setIstransferSubmittedModalVisible}
-    label={`transfer Submitted`}
-  >
-    <div>Your transfer has been initiated.</div>
-    <br />
-    <br />
-    <Link className="App-cta" to={completetransferLink}>
-      <div>Continue</div>
-    </Link>
-  </Modal> */}
+      <ModalBase
+        open={isTransferSubmittedModalVisible}
+        onClose={() => setIsTransferSubmittedModalVisible(false)}
+      >
+        <div>Your transfer has been initiated.</div>
+        <br />
+        <br />
+        <Link className="App-cta" to={completeTransferLink}>
+          <div>Continue</div>
+        </Link>
+      </ModalBase>
       <div className="Page-title-section">
         <div className="Page-title">
           <div>Transfer Account</div>
@@ -193,7 +249,7 @@ export const BeginTransferAccount = () => {
           <div className="input-row">
             <BlueBtn
               className="w-full"
-              isDisabled={isPrimaryEnabled()}
+              isDisabled={!isPrimaryEnabled()}
               onClick={onClickPrimary}
             >
               {getPrimaryText()}

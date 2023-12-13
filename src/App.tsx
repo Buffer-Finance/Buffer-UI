@@ -26,8 +26,10 @@ import { BeginTransferAccount } from '@Views/BeginTransferAccount';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
+import CompleteAccountTransfer from '@Views/CompleteAccountTransfer';
 import { ContractList } from '@Views/ContractList';
 import { DashboardV2 } from '@Views/DashboardV2';
+import { Earn } from '@Views/Earn';
 import IbfrFaucet from '@Views/Faucet';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { ProfilePage } from '@Views/Profile';
@@ -115,6 +117,10 @@ const AppRoutes = () => {
           path="/begin-account-transfer"
           element={<BeginTransferAccount />}
         />
+        <Route
+          path="/complete_account_transfer/:sender/:receiver"
+          element={<CompleteAccountTransfer />}
+        />
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
@@ -126,7 +132,7 @@ const AppRoutes = () => {
           element={<div>Processing your referral request...</div>}
         ></Route>
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
-        <Route path="/earn" element={<Redirect url={earnUrl} />} />
+        <Route path="/earn" element={<Earn />} />
 
         <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
