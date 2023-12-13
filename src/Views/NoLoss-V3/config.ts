@@ -1,12 +1,12 @@
 export const config = {
   '421614': {
     graph:
-      'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/no-loss-arbitrum-testnet/api',
-    multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
-    router: '0x0eD7264c2607535B9293d35cbfb17aaB7Db6E29a',
-    leaderboard: '0xC60119B417Bc0f189d39210896e7cB45eaCaF4a1',
-    manager: '0x0D9206Cd4f7Cc70d424A661057fee2EF91E7003A',
-    tournament_reader: '0x7277533Dcc461fb967Ad4FafC140Dc19dB6f04d1',
+      'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/no-loss-sepolia/api',
+    multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+    router: '0x0A380A5500e3F65079ca2e94aD276FdFBaF016eC',
+    leaderboard: '0x43dB5D803D86bD573ea3b653C2e1c825BD697D85',
+    manager: '0xD8052260f911B51223e0aB25EcD05302149625ec',
+    tournament_reader: '0x1EeEb3Dc32dE7FdB1e4fB7ACe6Ea34C6e91032D1',
     // creation_window: '0xFd9B6b168b60A31b75b15C7d26eA26d5721Bb862',
   },
 };
