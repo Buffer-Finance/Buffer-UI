@@ -53,7 +53,7 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
-const signerStorageKey = 'v1-signer';
+const signerStorageKey = 'v1-sidgner';
 let sa2sm: Partial<{ [key: string]: any }> = {};
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
@@ -159,6 +159,7 @@ const useSmartAccount = () => {
           mode: PaymasterMode.SPONSORED,
         },
       };
+      console.log('main-deb 1 ', sessionModule.merkleTree.getHexRoot());
       let sendUserParams: SendUserOpParams | undefined = undefined;
       console.log(
         `1 useSmartAccount-initial-transactionArray: `,
@@ -314,6 +315,8 @@ const useSmartAccount = () => {
           onboardTxnManager.successModal();
         }
       }
+      console.log('main-deb 2', sessionModule.merkleTree.getHexRoot());
+
       return fulfiledOrRejected;
     },
     [smartAccount]
