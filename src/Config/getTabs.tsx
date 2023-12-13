@@ -420,6 +420,12 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
+        to: `/earn`,
+        name: 'Earn',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
         to: `/referral`,
         name: 'Referral',
         subTabs: [],
