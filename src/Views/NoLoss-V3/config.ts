@@ -3,10 +3,10 @@ export const config = {
     graph:
       'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/no-loss-arbitrum-testnet/api',
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
-    router: '0x0eD7264c2607535B9293d35cbfb17aaB7Db6E29a',
-    leaderboard: '0xC60119B417Bc0f189d39210896e7cB45eaCaF4a1',
-    manager: '0x0D9206Cd4f7Cc70d424A661057fee2EF91E7003A',
-    tournament_reader: '0x7277533Dcc461fb967Ad4FafC140Dc19dB6f04d1',
+    router: '0xF7760095561259e9c52A62A7743d3451d010E97b',
+    leaderboard: '0xca709e7db37eEE8d8d9B18E80156Fb767Ba16eFB',
+    manager: '0x8a5e09Cab3CF3C12645E41C9563EA25BFbD1FD5C',
+    tournament_reader: '0xDddf36335D23a22407975E8877F638438C11A5F4',
     // creation_window: '0xFd9B6b168b60A31b75b15C7d26eA26d5721Bb862',
   },
 };
