@@ -150,7 +150,7 @@ export const TournamentCardButtons: React.FC<{
           isLoading={btnLoading}
           className={tournamentButtonStyles + ' mt-3 '}
         >
-          Approve
+          Approve {tournament.buyinTokenSymbol}
         </BufferButton>
       );
     }
