@@ -15,8 +15,11 @@ import { useUpdateActiveMarket } from './Hooks/useUpdateActiveMarket';
 import { useUpdateActiveTournament } from './Hooks/useUpdateActiveTournament';
 import { useSmartWallet } from '@Hooks/AA/useSmartAccount';
 import { useEffect } from 'react';
+import { useAccount } from 'wagmi';
+import { getLocalSigner } from '@Hooks/AA/getLocalSigner';
 
 export const NoLossV3 = () => {
+  const { address } = useAccount();
   const { active } = useAtomValue(tardesAtom);
   useTournamentIds();
   useNoLossMarkets();
@@ -28,9 +31,14 @@ export const NoLossV3 = () => {
   useGenericHooks(active);
   usePastTradeQuery();
   const isNotMobile = useMedia('(min-width:1200px)');
-
+  const localSigner = () => {
+    if (!address) return;
+    const signer = getLocalSigner(address);
+    console.log(`index-signer: `, signer);
+  };
   return isNotMobile ? (
     <>
+      <button onClick={localSigner}>Click</button>
       <TradePageNoLoss isMobile={!isNotMobile} />
       <MarketTimingsModal />
     </>

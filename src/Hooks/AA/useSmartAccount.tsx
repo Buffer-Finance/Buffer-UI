@@ -37,6 +37,7 @@ import { encodeFunctionData } from 'viem';
 import { GetContractInstanceDto, getSAProxyContract } from '@biconomy/common';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { useNoLossTxnOnboardModal } from 'src/Modals/NoLossAAEducator';
+import { getLocalSigner } from './getLocalSigner';
 export type SmartAccount = {
   library: BiconomySmartAccountV2;
   address: `0x${string}`;
@@ -52,7 +53,7 @@ const paymaster: IPaymaster = new BiconomyPaymaster({
   paymasterUrl:
     'https://paymaster.biconomy.io/api/v1/421613/fKY3jOUvS.506cdd32-bd07-441b-963b-c6d44a8e12ff',
 });
-const signerStorageKey = 'inititate-trade-signer-1';
+const signerStorageKey = 'v1-signer';
 let sa2sm: Partial<{ [key: string]: any }> = {};
 
 export const getSessionSigner = (smartWalletAddress: `0x${string}`) => {
@@ -136,7 +137,7 @@ const useSmartAccount = () => {
       if (!sessionResponse) {
         return;
       }
-      if (!buildOps || transactions.length > 1) {
+      if (!buildOps && transactions.length > 1) {
         onboardTxnManager.openModal();
       }
       let newlyCreatedSessionSigner: undefined | string;
@@ -199,7 +200,7 @@ const useSmartAccount = () => {
       } else {
         // non batched sessions transaction where mainEOA needs to sign
 
-        const sessionSigner = ethers.Wallet.createRandom();
+        const sessionSigner = getLocalSigner(smartAccount.address);
         const sessionKeyEOA = await sessionSigner.getAddress();
         console.log('sessionKeyEOA', sessionKeyEOA);
         // BREWARE JUST FOR DEMO: update local storage with session key
