@@ -69,10 +69,6 @@ let sessionSignerStatusCache: Partial<{ [key: string]: any[] }> = {};
 
 // error handled, took around 2 second to finish
 const getSessionState = async (smartWallet: SmartAccount) => {
-  console.log(
-    `useSmartAccount-sessionSignerStatusCache: `,
-    sessionSignerStatusCache
-  );
   if (!(smartWallet.address in sessionSignerStatusCache)) {
     const [isSessionModuleEnabledResult, isBSMEnabledResult] =
       await Promise.allSettled(
