@@ -6,9 +6,10 @@ import { BlueBtn } from '@Views/Common/V2-Button';
 import RewardRouterAbi from '@Views/Earn/Config/Abis/RewardRouterV2.json';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { ethers } from 'ethers';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useCopyToClipboard } from 'react-use';
+import { ModalBase } from 'src/Modals/BaseModal';
 
 export default function CompleteAccountTransfer() {
   const [, copyToClipboard] = useCopyToClipboard();
@@ -25,10 +26,15 @@ export default function CompleteAccountTransfer() {
     (receiver || '').toString().toLowerCase();
   const { activeChain } = useActiveChain();
   const config = getConfig(activeChain.id);
-  const { writeCall } = useWriteCall(
+  const { writeCall: claim1 } = useWriteCall(
     config.EarnConfig.RewardRouter,
     RewardRouterAbi
   );
+  const { writeCall: claim2 } = useWriteCall(
+    config.EarnConfig.RewardRouter2,
+    RewardRouterAbi
+  );
+  const navigate = useNavigate();
   const toastify = useToast();
 
   const getError = () => {
@@ -62,27 +68,22 @@ export default function CompleteAccountTransfer() {
   const onClickPrimary = async () => {
     setIsConfirming(true);
     try {
-      await writeCall(() => {}, 'acceptTransfer', [sender]);
+      // await claim1(() => {}, 'acceptTransfer', [sender]);
+      await claim2(() => {}, 'acceptTransfer', [sender]);
+      setIsTransferSubmittedModalVisible(true);
     } catch (e) {
       console.log(e);
     } finally {
       setIsConfirming(false);
     }
-    // const contract = new ethers.Contract(rewardRouterAddress, RewardRouterAbi, signer);
-
-    // callContract(chainId, contract, "acceptTransfer", [sender], {
-    //   sentMsg: t`Transfer submitted!`,
-    //   failMsg: t`Transfer failed.`,
-    //   setPendingTxns,
-    // })
-    //   .then(async (res) => {
-    //     setIsTransferSubmittedModalVisible(true);
-    //   })
-    //   .finally(() => {
-    //     setIsConfirming(false);
-    //   });
   };
 
+  const navigateToEarn = () => {
+    navigate('/earn');
+  };
+  useEffect(() => {
+    document.title = 'Account Transfer | Buffer';
+  }, []);
   if (!isSenderAndReceiverValid) {
     return (
       <div className="CompleteAccountTransfer Page page-layout">
@@ -100,18 +101,17 @@ export default function CompleteAccountTransfer() {
 
   return (
     <div className="CompleteAccountTransfer Page page-layout">
-      {/* <Modal
-        isVisible={isTransferSubmittedModalVisible}
-        setIsVisible={setIsTransferSubmittedModalVisible}
-        label="Transfer Completed"
+      <ModalBase
+        open={isTransferSubmittedModalVisible}
+        onClose={() => setIsTransferSubmittedModalVisible(false)}
       >
-        <div>Your transfer has been completed.</div>
+        <div className="text-f15">Your transfer has been completed.</div>
         <br />
         <br />
-        <Link className="App-cta" to="/earn">
+        <BlueBtn onClick={navigateToEarn}>
           <div>Continue</div>
-        </Link>
-      </Modal> */}
+        </BlueBtn>
+      </ModalBase>
       <div className="Page-title-section">
         <div className="Page-title">
           <div>Complete Account Transfer</div>
