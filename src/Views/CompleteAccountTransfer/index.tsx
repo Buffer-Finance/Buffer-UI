@@ -68,7 +68,7 @@ export default function CompleteAccountTransfer() {
   const onClickPrimary = async () => {
     setIsConfirming(true);
     try {
-      // await claim1(() => {}, 'acceptTransfer', [sender]);
+      await claim1(() => {}, 'acceptTransfer', [sender]);
       await claim2(() => {}, 'acceptTransfer', [sender]);
       setIsTransferSubmittedModalVisible(true);
     } catch (e) {
