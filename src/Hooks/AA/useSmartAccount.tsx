@@ -197,7 +197,7 @@ const useSmartAccount = () => {
       } else {
         // non batched sessions transaction where mainEOA needs to sign
 
-        const sessionSigner = getLocalSigner(smartAccount.address);
+        const sessionSigner = await getLocalSigner(smartAccount.address);
         const sessionKeyEOA = await sessionSigner.getAddress();
         console.log('sessionKeyEOA', sessionKeyEOA);
         // BREWARE JUST FOR DEMO: update local storage with session key
