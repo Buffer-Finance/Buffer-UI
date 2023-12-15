@@ -186,7 +186,6 @@ const TradeButton = () => {
           toFixed(multiply(price, 8), 0),
           expiration,
           toFixed(multiply(maxFeePerContracts.toString(), decimals), 0),
-          ,
         ],
       ]);
     } catch (e) {
