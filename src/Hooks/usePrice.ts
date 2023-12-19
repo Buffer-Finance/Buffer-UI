@@ -1,11 +1,11 @@
 import { multiply } from '@Utils/NumString/stringArithmatics';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import axios from 'axios';
 import Big from 'big.js';
 import { atom, useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 type WSUPdate = {
   type: 'price_update';
   price_feed: {
@@ -24,7 +24,9 @@ type WSUPdate = {
     };
   };
 };
-const client = reconnectingSocket('wss://hermes.pyth.network/ws');
+const client = reconnectingSocket(
+  'wss://bufferf-pythnet-4e5a.mainnet.pythnet.rpcpool.com/hermes/ws'
+);
 export let ts2asset2updatecnt = {};
 
 export const silentPriceCache = {};
