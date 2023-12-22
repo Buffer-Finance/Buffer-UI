@@ -1,4 +1,4 @@
-export type weeklyTournamentConfigType = {
+export interface weeklyTournamentConfigType {
   startTimestamp: number;
   endDay: number | undefined;
   winnersNFT: number;
@@ -11,7 +11,7 @@ export type weeklyTournamentConfigType = {
   winrateStartWeek: number | undefined;
   minVolumeToQualifyWinrate: string | undefined;
   winrateNFT: number;
-};
+}
 
 export const weeklyTournamentConfig: {
   [key: number]: weeklyTournamentConfigType;

@@ -24,7 +24,7 @@ import { TableAligner } from '../Components/TableAligner';
 import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
 import { ILeague } from '../interfaces';
 import { DailyMobileTable } from './DailyMobileTable';
-import { LeaderBoardTableStyles } from './stlye';
+import { LeaderBoardTableStyles } from './style';
 
 export const DailyWebTable: React.FC<{
   standings: ILeague[] | IWinrate[] | undefined;

@@ -329,8 +329,8 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/diamond`,
+      pathname: '/[chain]/leaderboard/diamond',
+      as: `/leaderboard/diamond`,
       name: 'diamond',
       slug: 'diamond',
       id: 2,
@@ -338,8 +338,8 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/platinum`,
+      pathname: '/[chain]/leaderboard/platinum',
+      as: `/leaderboard/platinum`,
       name: 'platinum',
       slug: 'platinum',
       id: 3,
@@ -347,8 +347,8 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/gold`,
+      pathname: '/[chain]/leaderboard/gold',
+      as: `/leaderboard/gold`,
       name: 'gold',
       slug: 'gold',
       id: 4,
@@ -356,8 +356,8 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/silver`,
+      pathname: '/[chain]/leaderboard/silver',
+      as: `/leaderboard/silver`,
       name: 'silver',
       slug: 'silver',
       id: 5,
@@ -365,22 +365,22 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/bronze`,
+      pathname: '/[chain]/leaderboard/bronze',
+      as: `/leaderboard/bronze`,
       name: 'bronze',
       slug: 'bronze',
       id: 6,
       img: '/LeaderBoard/Bronze.png',
       subTabs: [],
     },
-    {
-      pathname: '/[chain]/leaderboard/[offset]/pnl',
-      as: `/leaderboard/0/pnl`,
-      name: 'Profit & Loss',
-      slug: 'pnl',
-      id: 7,
-      subTabs: [],
-    },
+    // {
+    //   pathname: '/[chain]/leaderboard/[offset]/pnl',
+    //   as: `/leaderboard/0/pnl`,
+    //   name: 'Profit & Loss',
+    //   slug: 'pnl',
+    //   id: 7,
+    //   subTabs: [],
+    // },
   ];
 };
 export const getProTabs = (chain: string, asset: string) => {

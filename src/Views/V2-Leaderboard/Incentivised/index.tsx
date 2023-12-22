@@ -20,7 +20,7 @@ import { LeaderBoard } from '..';
 import { ContestFilterDD } from '../Components/ContestFilterDD';
 import { TopData } from '../Components/TopData';
 import { DailyWebTable } from '../Daily/DailyWebTable';
-import { DailyStyles } from '../Daily/stlye';
+import { DailyStyles } from '../Daily/style';
 import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useDayOffset } from '../Hooks/useDayOffset';
 import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';

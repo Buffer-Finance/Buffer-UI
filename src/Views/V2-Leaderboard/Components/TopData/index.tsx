@@ -6,7 +6,7 @@ export function TopData({
 }: {
   pageImage: JSX.Element;
   heading: string | JSX.Element;
-  DataCom: JSX.Element;
+  DataCom?: JSX.Element;
   desc?: JSX.Element;
 }) {
   return (
@@ -18,7 +18,7 @@ export function TopData({
           {desc && <p className="text-f16 fw5 text-6 tab:text-f13">{desc}</p>}
         </div>
       </div>
-      {DataCom}
+      {DataCom && <div className="mt-5">{DataCom}</div>}
     </div>
   );
 }

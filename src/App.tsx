@@ -37,6 +37,7 @@ import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnima
 import { defaultMarket } from '@Views/TradePage/config';
 import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
+import { Leagues } from '@Views/V2-Leaderboard/Leagues';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
@@ -147,6 +148,18 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
+          <Route path=":league" element={<Leagues />}>
+            <Route path=":chain" element={<Leagues />} />
+          </Route>
+          {/* <Route path="gold" element={<Gold />}>
+            <Route path=":chain" element={<Gold />} />
+          </Route>
+          <Route path="platinum" element={<Platinum />}>
+            <Route path=":chain" element={<Platinum />} />
+          </Route>
+          <Route path="diamond" element={<Diamond />}>
+            <Route path=":chain" element={<Diamond />} />
+          </Route> */}
         </Route>
       </Routes>
     </div>

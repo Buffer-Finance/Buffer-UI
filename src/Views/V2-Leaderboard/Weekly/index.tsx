@@ -12,7 +12,7 @@ import { LeaderBoard } from '..';
 import { ContestFilterDD } from '../Components/ContestFilterDD';
 import { TopData } from '../Components/TopData';
 import { DailyWebTable } from '../Daily/DailyWebTable';
-import { DailyStyles } from '../Daily/stlye';
+import { DailyStyles } from '../Daily/style';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import {
   readLeaderboardPageActivePageAtom,
