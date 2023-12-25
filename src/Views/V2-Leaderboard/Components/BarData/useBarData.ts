@@ -2,9 +2,8 @@ import { getWeekId } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId'
 import { leaguesConfig } from '@Views/V2-Leaderboard/Leagues/config';
 import { ILeague } from '@Views/V2-Leaderboard/interfaces';
 import axios from 'axios';
-import { useAtomValue } from 'jotai';
 import useSWR from 'swr';
-import { leagueType, leagueUsersAtom } from '../../Leagues/atom';
+import { leagueType } from '../../Leagues/atom';
 
 const queryFields = 'totalTrades';
 
@@ -26,15 +25,10 @@ export const useBarData = ({
   week: number;
   config: leaguesConfig;
 }) => {
-  const leagueUsers = useAtomValue(leagueUsersAtom);
-
   return useSWR<IbarDataResponse>(
-    `${league}-leaderboard-arbi-offset-${offset}-weekly-chainId-${activeChainId}-leagueUsers-${leagueUsers[league].length}`,
+    `${league}-leaderboard-arbi-offset-${offset}-weekly-chainId-${activeChainId}}`,
     {
       fetcher: async () => {
-        if (leagueUsers[league].length === 0) {
-          return;
-        }
         const timestamp = getWeekId(Number(week - Number(offset ?? week)));
         const leaderboardQuery = `
               weeklyLeaderboards(

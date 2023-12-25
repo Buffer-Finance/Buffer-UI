@@ -174,3 +174,42 @@ export const silverTournamentConfig: {
     maxVolumeToqualifyPNL: '1000000000',
   },
 };
+
+export const bronzeTournamentConfig: {
+  [key: number]: leaguesConfig;
+} = {
+  421613: {
+    winnersNFT: 0,
+    losersNFT: 0,
+    winrateNFT: 0,
+    endDay: undefined,
+    contestRules:
+      ' https://zinc-atlasaurus-c98.notion.site/Buffer-Arbitrum-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
+    rewardFixedAmount: '0',
+    poolPercent: '0',
+    winrateStartWeek: undefined,
+    minTradesToQualifyPNL: 2,
+    minVolumeToqualifyPNL: '100000000',
+    minTradesToQualifyWinrate: 2,
+    minVolumeToQualifyWinrate: '100000000',
+    maxTradesToqualifyPNL: '10',
+    maxVolumeToqualifyPNL: '500000000',
+  },
+  42161: {
+    winnersNFT: 0,
+    losersNFT: 0,
+    winrateNFT: 0,
+    endDay: undefined,
+    contestRules:
+      ' https://zinc-atlasaurus-c98.notion.site/Buffer-Arbitrum-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
+    rewardFixedAmount: '1000',
+    poolPercent: '5',
+    winrateStartWeek: undefined,
+    minTradesToQualifyPNL: 2,
+    minVolumeToqualifyPNL: '100000000',
+    minTradesToQualifyWinrate: 2,
+    minVolumeToQualifyWinrate: '100000000',
+    maxTradesToqualifyPNL: '10',
+    maxVolumeToqualifyPNL: '500000000',
+  },
+};

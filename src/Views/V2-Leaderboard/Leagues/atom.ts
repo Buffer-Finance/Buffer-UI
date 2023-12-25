@@ -1,11 +1,12 @@
 import { atom } from 'jotai';
 
-export type leagueType = 'silver' | 'gold' | 'platinum' | 'diamond';
+export type leagueType = 'silver' | 'gold' | 'platinum' | 'diamond' | 'bronze';
 export const leagueUsersAtom = atom<Record<leagueType, string[]>>({
   silver: [],
   gold: [],
   platinum: [],
   diamond: [],
+  bronze: [],
 });
 
 export const setLeagueUsersAtom = atom(

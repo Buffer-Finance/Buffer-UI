@@ -13,6 +13,7 @@ import { getTournamentEndDateFromWeek } from '../Incentivised';
 import { WinnersByPnl } from './WinnersByPnl';
 import { leagueType } from './atom';
 import {
+  bronzeTournamentConfig,
   diamondTournamentConfig,
   goldTournamentConfig,
   leagueConfig,
@@ -32,13 +33,15 @@ function getConfig(league: string, activeChainId: number) {
       return diamondTournamentConfig[activeChainId];
     case 'silver':
       return silverTournamentConfig[activeChainId];
+    case 'bronze':
+      return bronzeTournamentConfig[activeChainId];
     default:
       return undefined;
   }
 }
 
 function isLeagueType(str: string) {
-  const validLeagueTypes = ['silver', 'gold', 'platinum', 'diamond'];
+  const validLeagueTypes = ['silver', 'gold', 'platinum', 'diamond', 'bronze'];
   return validLeagueTypes.includes(str.toLowerCase());
 }
 

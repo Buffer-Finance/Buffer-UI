@@ -92,7 +92,7 @@ export const LeaderBoardSidebar = () => {
             <Head name="LEAGUES" />
             {/* <CSChip /> */}
           </div>
-          {tabs.slice(2, -1).map((tab) => {
+          {tabs.slice(2).map((tab) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
               <div className="flex-col" key={tab.slug}>

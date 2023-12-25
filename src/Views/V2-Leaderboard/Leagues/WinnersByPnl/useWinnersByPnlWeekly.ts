@@ -15,6 +15,45 @@ export interface IleaderboardQueryResponse {
   userData: ILeague[];
 }
 
+function getUsersNotInThisLeague(
+  leagueUsers: Record<leagueType, string[]>,
+  league: leagueType
+) {
+  switch (league) {
+    case 'silver':
+      return leagueUsers.gold.concat(
+        leagueUsers.platinum,
+        leagueUsers.diamond,
+        blacklist
+      );
+    case 'gold':
+      return leagueUsers.silver.concat(
+        leagueUsers.platinum,
+        leagueUsers.diamond,
+        blacklist
+      );
+    case 'platinum':
+      return leagueUsers.silver.concat(
+        leagueUsers.gold,
+        leagueUsers.diamond,
+        blacklist
+      );
+    case 'diamond':
+      return leagueUsers.silver.concat(
+        leagueUsers.gold,
+        leagueUsers.platinum,
+        blacklist
+      );
+    case 'bronze':
+      return leagueUsers.silver.concat(
+        leagueUsers.gold,
+        leagueUsers.platinum,
+        leagueUsers.diamond,
+        blacklist
+      );
+  }
+}
+
 export const useWinnersByPnlWeekly = ({
   league,
   account,
@@ -31,14 +70,17 @@ export const useWinnersByPnlWeekly = ({
   config: leaguesConfig;
 }) => {
   const leagueUsers = useAtomValue(leagueUsersAtom);
-  console.log(config);
   return useSWR<IleaderboardQueryResponse>(
     `${league}-leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChainId}-leagueUsers-${leagueUsers[league].length}`,
     {
       fetcher: async () => {
-        if (leagueUsers[league].length === 0) {
+        if (league !== 'bronze' && leagueUsers[league].length === 0) {
           return;
         }
+        const usersNotInThisLeague = getUsersNotInThisLeague(
+          leagueUsers,
+          league
+        );
         const timestamp = getWeekId(Number(week - Number(offset ?? week)));
         const leaderboardQuery = `
               weeklyLeaderboards(
@@ -51,7 +93,9 @@ export const useWinnersByPnlWeekly = ({
           config.maxTradesToqualifyPNL
         }, totalTrades_gte: ${
           config.minTradesToQualifyPNL
-        }, user_not_in: [${blacklist.map((address) => `"${address}"`)}]},{
+        }, user_not_in: [${usersNotInThisLeague.map(
+          (address) => `"${address}"`
+        )}]},{
           timestamp: "${timestamp}"
           user_in: [${leagueUsers[league].map((address) => `"${address}"`)}]
         }]}
@@ -67,7 +111,6 @@ export const useWinnersByPnlWeekly = ({
               ${queryFields}
             }`
           : '';
-        console.log(leaderboardQuery);
         const query = `{${leaderboardQuery}${userQuery}}`;
         const response = await axios.post(
           'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.5-wed-week-leaderboards/api',
