@@ -65,6 +65,7 @@ import {
 } from '../AccordionTable/Common';
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { loeditLoadingAtom } from '../EditModal';
+import PYTHLOGO from './pyth_logo.png';
 
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
@@ -976,6 +977,7 @@ export const MultiResolutionChart = ({
             >
               <ChartElementSVG className="mr-[3px]" /> Indicators
             </button>
+            <img src={PYTHLOGO} width={60} height={10} />
           </div>
         </div>
       ) : null}
