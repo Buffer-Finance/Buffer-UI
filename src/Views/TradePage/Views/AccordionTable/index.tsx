@@ -19,10 +19,12 @@ import {
 } from '@Views/TradePage/atoms';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
+import PYTHLOGO from '../MarketChart/pyth_logo.png';
 import { CancelledTable } from './CancelTable';
 import { HistoryTable } from './HistoryTable';
 import LimitOrderTable from './LimitOrderTable';
 import { OngoingTradesTable } from './OngoingTradesTable';
+
 const OngoingTradesTableMemo = React.memo(OngoingTradesTable);
 const tables = {
   Trades: 'h',
@@ -102,17 +104,20 @@ const AccordionTable: React.FC<any> = ({}) => {
             </button>
           ))}
         </div>
-        <button
-          className="flex items-center gap-x-2 px-4 text-f14 transition group"
-          onClick={() => setExpanded((p) => !p)}
-        >
-          {expanded ? 'Hide ' : 'Show '} Positions{' '}
-          <DDArrow
-            className={`transition scale group-hover:scale-150  ${
-              expanded ? ' rotate-0' : 'rotate-180'
-            }`}
-          />
-        </button>
+        <div className="flex gap-3">
+          <button
+            className="flex items-center gap-x-2 px-4 text-f14 transition group"
+            onClick={() => setExpanded((p) => !p)}
+          >
+            {expanded ? 'Hide ' : 'Show '} Positions{' '}
+            <DDArrow
+              className={`transition scale group-hover:scale-150  ${
+                expanded ? ' rotate-0' : 'rotate-180'
+              }`}
+            />
+          </button>
+          <img src={PYTHLOGO} width={60} height={10} />
+        </div>
       </div>
       <div
         className={` ${
