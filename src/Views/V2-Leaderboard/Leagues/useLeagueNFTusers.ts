@@ -83,7 +83,10 @@ export const useLeagueNFTusers = () => {
           ];
           setLeagueUsers({ league: 'platinum', users: platinumUniqueUsers });
           fetchLeagueNFTusers(
-            getLeagueQuery('gold', platinumUniqueUsers),
+            getLeagueQuery(
+              'gold',
+              platinumUniqueUsers.concat(diamondUniqueUsers)
+            ),
             'gold'
           ).then((response) => {
             if (response === undefined || response?.data?.data === undefined) {
@@ -99,7 +102,10 @@ export const useLeagueNFTusers = () => {
             ];
             setLeagueUsers({ league: 'gold', users: goldUniqueUsers });
             fetchLeagueNFTusers(
-              getLeagueQuery('silver', goldUniqueUsers),
+              getLeagueQuery(
+                'silver',
+                goldUniqueUsers.concat(platinumUniqueUsers, diamondUniqueUsers)
+              ),
               'silver'
             ).then((response) => {
               if (
