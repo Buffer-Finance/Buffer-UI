@@ -116,7 +116,7 @@ const AccordionTable: React.FC<any> = ({}) => {
               }`}
             />
           </button>
-          <img src={PYTHLOGO} width={60} height={10} />
+          <img src={PYTHLOGO} width={60} height={10} className="scale-90" />
         </div>
       </div>
       <div
