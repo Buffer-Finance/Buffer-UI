@@ -73,7 +73,7 @@ export const LeaderBoardSidebar = () => {
         <div className="mt-[16px] full-width">
           <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
 
-          {tabs.slice(0, 2).map((tab, index) => {
+          {tabs.slice(0, 1).map((tab, index) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
               <div className="" key={tab.slug}>
