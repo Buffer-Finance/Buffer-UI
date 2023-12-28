@@ -36,6 +36,7 @@ import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm'
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 import { defaultMarket } from '@Views/TradePage/config';
 import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
+import { AllTime } from '@Views/V2-Leaderboard/Components/AllTime';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Leagues } from '@Views/V2-Leaderboard/Leagues';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
@@ -142,6 +143,9 @@ const AppRoutes = () => {
         />
         <Route path="contracts" element={<ContractList />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
+          <Route path="all-time" element={<AllTime />}>
+            <Route path=":chain" element={<AllTime />} />
+          </Route>
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
           </Route>
