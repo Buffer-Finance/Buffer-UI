@@ -75,6 +75,8 @@ export const Active: React.FC<{
     'Visualization',
   ];
   if (inGlobalContext) {
+    //remove visualization
+    headNameArray.splice(TableColumn.Visualization, 1);
     headNameArray.push('user');
   }
   const HeaderFomatter = (col: number) => {
