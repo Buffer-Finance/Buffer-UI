@@ -188,7 +188,7 @@ export const Active: React.FC<{
             unit={trade.market.poolInfo.token}
           />
         );
-      case TableColumn.User:
+      case inGlobalContext ? TableColumn.Visualization : TableColumn.User:
         return (
           <button
             onClick={() => openBlockExplorer(trade.user, activeChain)}
