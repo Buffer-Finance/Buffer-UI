@@ -2,7 +2,7 @@
   {
     "inputs": [
       { "internalType": "address", "name": "_publisher", "type": "address" },
-      { "internalType": "address", "name": "_sfPublisher", "type": "address" },
+      { "internalType": "address", "name": "_admin", "type": "address" },
       { "internalType": "contract IPyth", "name": "_pyth", "type": "address" }
     ],
     "stateMutability": "nonpayable",
@@ -266,6 +266,27 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "MAXIMUM_PRICE_DELAY_FOR_RESOLVING",
+    "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_WAIT_TIME",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "uint256", "name": "queueId", "type": "uint256" }
     ],
@@ -309,7 +330,7 @@
     ],
     "name": "executeOptions",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -377,12 +398,8 @@
           },
           { "internalType": "bool", "name": "isAbove", "type": "bool" },
           { "internalType": "uint256", "name": "contracts", "type": "uint256" },
-          { "internalType": "uint256", "name": "strike", "type": "uint256" },
-          {
-            "internalType": "uint256",
-            "name": "expiration",
-            "type": "uint256"
-          },
+          { "internalType": "uint128", "name": "strike", "type": "uint128" },
+          { "internalType": "uint32", "name": "expiration", "type": "uint32" },
           {
             "internalType": "uint256",
             "name": "maxFeePerContract",
@@ -402,23 +419,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "isInPrivateKeeperMode",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "isKeeper",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maximumPriceDelayForResolving",
-    "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -465,14 +468,14 @@
         "name": "targetContract",
         "type": "address"
       },
-      { "internalType": "uint256", "name": "strike", "type": "uint256" },
-      { "internalType": "uint256", "name": "expiration", "type": "uint256" },
+      { "internalType": "uint128", "name": "strike", "type": "uint128" },
+      { "internalType": "uint32", "name": "expiration", "type": "uint32" },
       { "internalType": "uint256", "name": "contracts", "type": "uint256" },
       { "internalType": "bool", "name": "allowPartialFill", "type": "bool" },
       { "internalType": "bool", "name": "isQueued", "type": "bool" },
       { "internalType": "uint256", "name": "optionId", "type": "uint256" },
       { "internalType": "bool", "name": "isAbove", "type": "bool" },
-      { "internalType": "uint256", "name": "queuedTime", "type": "uint256" },
+      { "internalType": "uint32", "name": "queuedTime", "type": "uint32" },
       {
         "internalType": "uint256",
         "name": "maxFeePerContract",
@@ -504,9 +507,9 @@
             "components": [
               { "internalType": "bytes", "name": "signature", "type": "bytes" },
               {
-                "internalType": "uint256",
+                "internalType": "uint32",
                 "name": "timestamp",
-                "type": "uint256"
+                "type": "uint32"
               }
             ],
             "internalType": "struct IBufferRouter.SignInfo",
@@ -517,9 +520,9 @@
             "components": [
               { "internalType": "bytes", "name": "signature", "type": "bytes" },
               {
-                "internalType": "uint256",
+                "internalType": "uint32",
                 "name": "timestamp",
-                "type": "uint256"
+                "type": "uint32"
               }
             ],
             "internalType": "struct IBufferRouter.SignInfo",
@@ -572,13 +575,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "setInPrivateKeeperMode",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
       { "internalType": "address", "name": "_keeper", "type": "address" },
       { "internalType": "bool", "name": "_isActive", "type": "bool" }
@@ -589,56 +585,11 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "sfPublisher",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
     ],
     "name": "supportsInterface",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" }
-    ],
-    "name": "userCancelledQueueCount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "userCancelledQueuedIds",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" }
-    ],
-    "name": "userQueueCount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "userQueuedIds",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   }

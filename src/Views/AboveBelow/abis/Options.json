@@ -98,15 +98,15 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint128",
         "name": "strike",
-        "type": "uint256"
+        "type": "uint128"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "expiration",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "indexed": false,
@@ -578,12 +578,8 @@
           },
           { "internalType": "bool", "name": "isAbove", "type": "bool" },
           { "internalType": "uint256", "name": "contracts", "type": "uint256" },
-          { "internalType": "uint256", "name": "strike", "type": "uint256" },
-          {
-            "internalType": "uint256",
-            "name": "expiration",
-            "type": "uint256"
-          },
+          { "internalType": "uint128", "name": "strike", "type": "uint128" },
+          { "internalType": "uint32", "name": "expiration", "type": "uint32" },
           { "internalType": "uint256", "name": "amount", "type": "uint256" },
           { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
           {
@@ -597,7 +593,7 @@
         "name": "optionParams",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "queuedTime", "type": "uint256" }
+      { "internalType": "uint32", "name": "queuedTime", "type": "uint32" }
     ],
     "name": "createFromRouter",
     "outputs": [
@@ -627,12 +623,8 @@
           },
           { "internalType": "bool", "name": "isAbove", "type": "bool" },
           { "internalType": "uint256", "name": "contracts", "type": "uint256" },
-          { "internalType": "uint256", "name": "strike", "type": "uint256" },
-          {
-            "internalType": "uint256",
-            "name": "expiration",
-            "type": "uint256"
-          },
+          { "internalType": "uint128", "name": "strike", "type": "uint128" },
+          { "internalType": "uint32", "name": "expiration", "type": "uint32" },
           { "internalType": "uint256", "name": "amount", "type": "uint256" },
           { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
           {
@@ -871,13 +863,13 @@
         "name": "state",
         "type": "uint8"
       },
-      { "internalType": "uint256", "name": "strike", "type": "uint256" },
+      { "internalType": "uint128", "name": "strike", "type": "uint128" },
       { "internalType": "uint256", "name": "amount", "type": "uint256" },
       { "internalType": "uint256", "name": "lockedAmount", "type": "uint256" },
       { "internalType": "uint256", "name": "premium", "type": "uint256" },
-      { "internalType": "uint256", "name": "expiration", "type": "uint256" },
+      { "internalType": "uint32", "name": "expiration", "type": "uint32" },
       { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-      { "internalType": "uint256", "name": "createdAt", "type": "uint256" },
+      { "internalType": "uint32", "name": "createdAt", "type": "uint32" },
       { "internalType": "bool", "name": "isAbove", "type": "bool" }
     ],
     "stateMutability": "view",
@@ -940,8 +932,8 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "strike", "type": "uint256" },
-      { "internalType": "uint256", "name": "expiration", "type": "uint256" }
+      { "internalType": "uint128", "name": "strike", "type": "uint128" },
+      { "internalType": "uint32", "name": "expiration", "type": "uint32" }
     ],
     "name": "runInitialChecks",
     "outputs": [],
