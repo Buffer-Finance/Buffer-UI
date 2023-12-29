@@ -26,6 +26,7 @@ import { TradesShutter } from '@Views/AboveBelow/Components/MobileView/Shutters'
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
+import { ReferralPage } from '@Views/Referral';
 import { defaultMarket } from '@Views/TradePage/config';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
@@ -103,6 +104,7 @@ const AppRoutes = () => {
         <Route path="/faucet" element={<IbfrFaucet />} />
         {/* <Route path="/test" element={<Test />} /> */}
         <Route path="/history" element={<MobileHistory />} />
+        <Route path="/referral" element={<ReferralPage />} />
         {/*  <Route path="/admin" element={<AdminConfig />} />
 
         <Route
@@ -114,7 +116,6 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<DashboardV2 />}>
           <Route path=":chain" element={<DashboardV2 />} />
         </Route>
-        <Route path="/referral" element={<ReferralPage />} />
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>

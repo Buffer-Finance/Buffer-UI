@@ -300,25 +300,36 @@ export const getTabs = (
   const market = marketFromStorage || defaultMarket;
   if (import.meta.env.VITE_ENV.toUpperCase() === 'MAINNET') {
     return [
+      // {
+      //   to: `/binary/` + market,
+      //   name: 'Trade',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
-        to: `/binary/` + market,
+        to: `/above-below/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
       },
-
+      {
+        to: 'https://app.buffer.finance/',
+        name: 'Up/Down',
+        subTabs: [],
+        isExternalLink: true,
+      },
       {
         to: `/referral`,
         name: 'Referral',
         subTabs: [],
         isExternalLink: false,
       },
-      {
-        to: `/profile`,
-        name: 'Profile',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/profile`,
+      //   name: 'Profile',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: 'https://perps.buffer.finance/trade',
         name: 'Perps',
@@ -331,24 +342,24 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-      {
-        to: `/leaderboard/daily`,
-        name: 'Competitions',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/leaderboard/daily`,
+      //   name: 'Competitions',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: `https://testnet.buffer.finance/`,
         name: 'Practice Trading',
         subTabs: [],
         isExternalLink: true,
       },
-      {
-        to: `/dashboard`,
-        name: 'Dashboard',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/dashboard`,
+      //   name: 'Dashboard',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: `https://stats.buffer.finance/`,
         name: 'Stats',
@@ -541,11 +552,25 @@ export const getMobileTabs = (
   const market = marketFromStorage || defaultMarket;
   if (import.meta.env.VITE_ENV === 'MAINNET') {
     return [
+      // {
+      //   to: `/binary/` + market,
+      //   name: 'Trade',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      //   icon: TabIcon.Trade,
+      // },
       {
-        to: `/binary/` + market,
+        to: `/above-below/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
+        icon: TabIcon.Trade,
+      },
+      {
+        to: 'https://app.buffer.finance/',
+        name: 'Up/Down',
+        subTabs: [],
+        isExternalLink: true,
         icon: TabIcon.Trade,
       },
       {
@@ -573,13 +598,13 @@ export const getMobileTabs = (
         icon: TabIcon.NFT,
       },
 
-      {
-        to: `/dashboard`,
-        name: 'Dashboard',
-        subTabs: [],
-        isExternalLink: false,
-        icon: TabIcon.Dashboard,
-      },
+      // {
+      //   to: `/dashboard`,
+      //   name: 'Dashboard',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      //   icon: TabIcon.Dashboard,
+      // },
       {
         to: `/referral`,
         name: 'Referral',
