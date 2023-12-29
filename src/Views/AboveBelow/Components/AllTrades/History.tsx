@@ -1,5 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useProcessedTrades } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import axios from 'axios';
 import { useAtom } from 'jotai';
@@ -97,6 +98,7 @@ export const AllHistory: React.FC<{
       isLoading={false}
       history={historyTrades ?? []}
       inGlobalContext
+      error={<TableErrorRow msg={'No Trades Found.'} />}
     />
   );
 };
