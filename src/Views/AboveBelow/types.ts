@@ -23,8 +23,6 @@ export interface responseAB {
     payout: string;
     platformFee: string;
     optionStorageContract: string;
-    ivFactorITM: string;
-    ivFactorOTM: string;
     stepSize: string;
   };
 }

@@ -41,8 +41,6 @@ export const useAboveBelowMarketsSetter = () => {
               payout
               platformFee
               optionStorageContract
-              ivFactorITM
-              ivFactorOTM
               stepSize
             }
           }
