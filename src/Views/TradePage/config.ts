@@ -675,7 +675,7 @@ const baseURLString = isTestnet
 
 const aboveBelowURLString = isTestnet
   ? 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET'
-  : 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET';
+  : 'VITE_ABOVE_BEWLOW_API_HOST_DEVELOPMENT';
 export const baseUrl = import.meta.env[baseURLString];
 export const aboveBelowBaseUrl = import.meta.env[aboveBelowURLString];
 
