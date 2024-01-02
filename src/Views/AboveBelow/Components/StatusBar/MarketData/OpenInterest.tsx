@@ -1,3 +1,4 @@
+import { toFixed } from '@Utils/NumString';
 import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import NumberTooltip from '@Views/Common/Tooltips';
@@ -45,13 +46,13 @@ export const OpenInterest: React.FC<{
             values={[
               <div className="flex flex-col">
                 <span>
-                  {openInterestUp} {unit}
+                  {toFixed(openInterestUp, 2)} {unit}
                 </span>
                 <span>({openInterestUpPercent ?? 0}%)</span>
               </div>,
               <div className="flex flex-col">
                 <span>
-                  {openInterestDown} {unit}
+                  {toFixed(openInterestDown, 2)} {unit}
                 </span>
                 <span>({openInterestDownPercent ?? 0}%)</span>
               </div>,
