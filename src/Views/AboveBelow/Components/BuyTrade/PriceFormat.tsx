@@ -57,6 +57,10 @@ const RadioInput = styled.input`
   /* Unchecked state styles */
   background: transparent;
 
+  :hover {
+    cursor: pointer;
+  }
+
   /* Checked state styles */
   &:checked {
     background-color: transparent; /* Example color */
