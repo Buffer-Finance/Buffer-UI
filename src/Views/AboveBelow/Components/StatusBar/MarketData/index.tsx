@@ -13,7 +13,7 @@ export const MarketData: React.FC<{
       data: <OneDayVolume activeMarket={activeMarket} />,
     },
     {
-      head: 'Open Above/Below',
+      head: 'Bullish/Bearish',
       data: <OpenInterest activeMarket={activeMarket} />,
     },
   ];
