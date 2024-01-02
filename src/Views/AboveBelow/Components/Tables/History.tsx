@@ -29,7 +29,7 @@ enum TableColumn {
   Expiry = 2,
   OpenTime = 3,
   Duration = 4,
-  CloseTime = 5,
+  ExpiryTime = 5,
   TradeSize = 6,
   Payout = 7,
   User = 8,
@@ -66,7 +66,7 @@ export const History: React.FC<{
     'Expiry Price',
     'Open Time',
     'Duration',
-    'Close Time',
+    'Expiry',
     'Trade Size',
     'Payout',
   ];
@@ -131,7 +131,7 @@ export const History: React.FC<{
             )
           )
         );
-      case TableColumn.CloseTime:
+      case TableColumn.ExpiryTime:
         return <DisplayTime ts={trade.expirationTime as string} />;
       case TableColumn.TradeSize:
         if (isMobile) {

@@ -31,7 +31,7 @@ enum TableColumn {
   Current = 2,
   OpenTime = 3,
   TimeLeft = 4,
-  CloseTime = 5,
+  Expiry = 5,
   TradeSize = 6,
   PnlProbability = 7,
   Visualization = 8,
@@ -69,7 +69,7 @@ export const Active: React.FC<{
     'Current Price',
     'Open Time',
     'Time Left',
-    'Close Time',
+    'Expiry',
     'Trade Size',
     'Probability',
     'Visualization',
@@ -117,13 +117,15 @@ export const Active: React.FC<{
           <DisplayTime
             ts={trade.creationTime as string}
             className="!justify-start"
+            reverse
           />
         );
-      case TableColumn.CloseTime:
+      case TableColumn.Expiry:
         return (
           <DisplayTime
             ts={trade.expirationTime as string}
             className="!justify-start"
+            reverse
           />
         );
       case TableColumn.TimeLeft:

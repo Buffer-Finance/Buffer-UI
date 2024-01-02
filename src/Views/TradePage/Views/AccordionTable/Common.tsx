@@ -23,18 +23,21 @@ import styled from '@emotion/styled';
 export const DisplayTime = ({
   ts,
   className,
+  reverse = false,
 }: {
   ts: number | string;
   className?: string;
+  reverse?: boolean;
 }) => {
+  const content = reverse
+    ? [`${getDisplayDate(+ts)}`, `${getDisplayTime(+ts)}`]
+    : [`${getDisplayTime(+ts)}`, `${getDisplayDate(+ts)}`];
   return (
     <NumberTooltip
       content={`${getDisplayTimeUTC(+ts)} ${getDisplayDateUTC(+ts)} UTC`}
     >
       <div className={`w-max ${className}`}>
-        <CellContent
-          content={[`${getDisplayTime(+ts)}`, `${getDisplayDate(+ts)}`]}
-        />
+        <CellContent content={content} />
       </div>
     </NumberTooltip>
   );
