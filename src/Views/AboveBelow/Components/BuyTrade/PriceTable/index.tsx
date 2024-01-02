@@ -15,6 +15,7 @@ import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
+import { priceFormatAtom } from '../PriceFormat';
 import { CurrentPriceLine } from './CurrentPriceLine';
 
 enum Columns {
@@ -25,6 +26,8 @@ enum Columns {
 
 export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   useLimitedStrikeArrays();
+  const [priceFormat, setPriceFormat] = useAtom(priceFormatAtom);
+
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const { currentPrice, precision } = useCurrentPrice({
     token0: activeMarket?.token0,
@@ -131,8 +134,9 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               '-'
             ) : (
               <>
-                {totalFee.toFixed(2)} (
-                {(((1 - totalFee) / totalFee) * 100).toFixed(0)}%)
+                {priceFormat === 'Asset'
+                  ? totalFee.toFixed(2)
+                  : (((1 - totalFee) / totalFee) * 100).toFixed(0) + '%'}
               </>
             )}
           </button>
@@ -161,8 +165,9 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               '-'
             ) : (
               <>
-                {' '}
-                {fee.toFixed(2)} ({(((1 - fee) / fee) * 100).toFixed(0)}%)
+                {priceFormat === 'Asset'
+                  ? fee.toFixed(2)
+                  : (((1 - fee) / fee) * 100).toFixed(0) + '%'}
               </>
             )}
           </button>
