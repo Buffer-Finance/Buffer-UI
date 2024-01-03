@@ -161,7 +161,7 @@ export const appConfig = {
     graph: {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
       ABOVE_BELOW:
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.2-ab-fix-sync-error/api',
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.3-ab-fix-contracts/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
