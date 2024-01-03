@@ -45,7 +45,7 @@ export const TableByPNL: React.FC<{ activeChainId: number }> = ({
           : '';
         const query = `{${leaderboardQuery}${userQuery}}`;
         const response = await axios.post(
-          'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.5.9-all-time-leaderboard/api',
+          'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.4-nfr-all-time-leaderboard/api',
           {
             query,
           }
