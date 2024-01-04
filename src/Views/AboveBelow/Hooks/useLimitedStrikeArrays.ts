@@ -48,7 +48,7 @@ export const useLimitedStrikeArrays = () => {
     //rereun after every 10 seconds
     const interval = setInterval(() => {
       setTimestamp(Date.now());
-    }, 5000);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -137,6 +137,7 @@ export const useLimitedStrikeArrays = () => {
       const settlementFeeAbove =
         settlementFees[marketHash + '-' + getAddress(activeMarket.address)]
           ?.sf_above ?? settlementFees['Base'];
+      console.log(settlementFeeAbove, 'settlementFeeAbove');
       const aboveProbability = BlackScholes(
         true,
         true,
