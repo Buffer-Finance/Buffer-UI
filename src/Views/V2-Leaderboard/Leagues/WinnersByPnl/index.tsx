@@ -2,6 +2,7 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { DailyWebTable } from '@Views/V2-Leaderboard/Daily/DailyWebTable';
 import { ROWINAPAGE } from '@Views/V2-Leaderboard/Weekly';
 import { useMemo, useState } from 'react';
+import { Winners } from '../Winners';
 import { leagueType } from '../atom';
 import { leaguesConfig } from '../config';
 import { useWinnersByPnlWeekly } from './useWinnersByPnlWeekly';
@@ -44,16 +45,32 @@ export const WinnersByPnl = ({
     else return (rank + 1).toString();
   }, [data?.userData, account]);
 
+  const participants = useMemo(() => {
+    if (!data?.weeklyLeaderboards)
+      return {
+        winners: undefined,
+        others: undefined,
+      };
+
+    return {
+      winners: data?.weeklyLeaderboards.slice(0, 3),
+      others: data?.weeklyLeaderboards.slice(3),
+    };
+  }, [data?.weeklyLeaderboards]);
+
   return (
-    <DailyWebTable
-      standings={data?.weeklyLeaderboards}
-      count={totalPages}
-      onpageChange={setActivePage}
-      activePage={activePage}
-      userData={data?.userData}
-      skip={skip}
-      nftWinners={config.winnersNFT}
-      userRank={winnerUserRank}
-    />
+    <>
+      <Winners winners={participants.winners} />
+      <DailyWebTable
+        standings={participants.others}
+        count={totalPages}
+        onpageChange={setActivePage}
+        activePage={activePage}
+        userData={data?.userData}
+        skip={skip}
+        nftWinners={config.winnersNFT}
+        userRank={winnerUserRank}
+      />
+    </>
   );
 };

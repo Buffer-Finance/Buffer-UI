@@ -9,7 +9,7 @@ export const Rank: React.FC<{
   firstColPadding?: string;
   nftWinners?: number;
 }> = ({ userRank, row, skip, isUser, nftWinners, firstColPadding = '' }) => {
-  const rank = userRank || skip + row + 1;
+  const rank = userRank || skip + row + 4;
 
   return (
     <CellContent
