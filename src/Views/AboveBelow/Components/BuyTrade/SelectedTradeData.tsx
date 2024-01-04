@@ -1,4 +1,6 @@
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
+import { Variables } from '@Utils/Time';
 import {
   selectedExpiry,
   selectedPoolActiveMarketAtom,
@@ -7,6 +9,7 @@ import {
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useAtomValue } from 'jotai';
+import { useEffect, useState } from 'react';
 
 export const SelectedTradeData = () => {
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
@@ -18,8 +21,24 @@ export const SelectedTradeData = () => {
       <PriceData activeMarket={activeMarket} />
       &nbsp;on&nbsp;
       <DateData />
+      <Timer />
     </span>
   );
+};
+
+export const Timer: React.FC = () => {
+  const expiration = useAtomValue(selectedExpiry);
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [count]);
+  if (!expiration) return <></>;
+  const currentTime = Math.floor(Date.now() / 1000);
+  const distance = formatDistance(Variables(expiration / 1000 - currentTime));
+  return <span className="text-f13"> | Time till expiry : {distance}</span>;
 };
 
 const PriceData: React.FC<{ activeMarket: marketTypeAB }> = ({
