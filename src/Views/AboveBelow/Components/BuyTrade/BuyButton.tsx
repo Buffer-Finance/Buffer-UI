@@ -158,7 +158,7 @@ const TradeButton = () => {
           maxTradeSize = multiply(maxPermissibleContracts, totalFee.toString());
       }
       const tradeSizeError = getTradeSizeError(
-        toFixed(totalFee.toString(), 2),
+        // toFixed(totalFee.toString(), 2),
         maxTradeSize,
         balance,
         amount
