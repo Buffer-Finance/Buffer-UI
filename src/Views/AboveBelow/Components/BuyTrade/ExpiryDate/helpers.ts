@@ -5,6 +5,16 @@ export function formatDateShort(timestamp: number) {
   return `${month} ${day}`;
 }
 
+export const formatDateWithTime = (timestamp: number) => {
+  const date = new Date(timestamp);
+  const month = date.toLocaleString('en-us', { month: 'short' });
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const year = date.getFullYear();
+  return `${day} ${month} ${year} , ${hours}:${minutes}`;
+};
+
 export function getTimestamps(date = Date.now()) {
   const timestamps = [];
   const currentTimestamp = new Date(date).getTime();

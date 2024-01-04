@@ -2,6 +2,7 @@ import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import InfoIcon from '@SVG/Elements/InfoIcon';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
+import { toFixed } from '@Utils/NumString';
 import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
@@ -9,6 +10,7 @@ import { openBlockExplorer } from '@Views/AboveBelow/Helpers/openBlockExplorer';
 import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import BufferTable from '@Views/Common/BufferTable';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
@@ -31,11 +33,12 @@ enum TableColumn {
   Current = 2,
   OpenTime = 3,
   TimeLeft = 4,
-  CloseTime = 5,
+  Expiry = 5,
   TradeSize = 6,
-  PnlProbability = 7,
-  Visualization = 8,
-  User = 9,
+  payout = 7,
+  PnlProbability = 8,
+  Visualization = 9,
+  User = 10,
 }
 
 export const Active: React.FC<{
@@ -69,12 +72,15 @@ export const Active: React.FC<{
     'Current Price',
     'Open Time',
     'Time Left',
-    'Close Time',
+    'Expiry',
     'Trade Size',
+    'Payout',
     'Probability',
     'Visualization',
   ];
   if (inGlobalContext) {
+    //remove visualization
+    headNameArray.splice(TableColumn.Visualization, 1);
     headNameArray.push('user');
   }
   const HeaderFomatter = (col: number) => {
@@ -84,6 +90,38 @@ export const Active: React.FC<{
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = active[row];
     switch (col) {
+      case TableColumn.payout:
+        return (
+          <CellContent
+            content={[
+              <Display
+                data={divide(
+                  trade.amount ?? '0',
+                  trade.market.poolInfo.decimals
+                )}
+                precision={2}
+                className="!justify-start"
+                unit={trade.market.poolInfo.token}
+              />,
+              <div className="flex">
+                ROI :{' '}
+                {toFixed(
+                  multiply(
+                    divide(
+                      subtract(
+                        trade.amount ?? '0',
+                        trade.totalFee ?? '0'
+                      ) as string,
+                      trade.totalFee ?? '0'
+                    ) as string,
+                    '100'
+                  ),
+                  0
+                ) + '%'}
+              </div>,
+            ]}
+          />
+        );
       case TableColumn.Asset:
         return (
           <div>
@@ -115,13 +153,15 @@ export const Active: React.FC<{
           <DisplayTime
             ts={trade.creationTime as string}
             className="!justify-start"
+            reverse
           />
         );
-      case TableColumn.CloseTime:
+      case TableColumn.Expiry:
         return (
           <DisplayTime
             ts={trade.expirationTime as string}
             className="!justify-start"
+            reverse
           />
         );
       case TableColumn.TimeLeft:
@@ -186,7 +226,7 @@ export const Active: React.FC<{
             unit={trade.market.poolInfo.token}
           />
         );
-      case TableColumn.User:
+      case inGlobalContext ? TableColumn.Visualization : TableColumn.User:
         return (
           <button
             onClick={() => openBlockExplorer(trade.user, activeChain)}
