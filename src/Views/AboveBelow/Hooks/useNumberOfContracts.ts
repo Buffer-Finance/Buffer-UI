@@ -1,4 +1,3 @@
-import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { useAtomValue } from 'jotai';
 import {
@@ -37,7 +36,7 @@ export const useNumberOfContracts = () => {
   if (!totalFee) return null;
 
   return {
-    contracts: toFixed(divide(amount, totalFee.toString()) as string, 0),
+    contracts: divide(amount, totalFee.toString()) as string,
     totalFee,
     selectedStrikeData: strikePriceObject,
     isAbove: priceObj.isAbove,
