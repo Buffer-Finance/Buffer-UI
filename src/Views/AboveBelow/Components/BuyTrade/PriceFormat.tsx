@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { atom, useAtom, useAtomValue } from 'jotai';
 
-export const priceFormatAtom = atom<'Asset' | 'ROI'>('Asset');
+export const priceFormatAtom = atom<'Asset' | 'ROI'>('ROI');
 
 export const PriceFormat = () => {
   const [priceFormat, setPriceFormat] = useAtom(priceFormatAtom);
@@ -17,7 +17,7 @@ export const PriceFormat = () => {
     return <Skeleton variant="rectangular" width="100%" height="10px" />;
   return (
     <RowBetween className="text-[#7F87A7] text-f12 font-normal mt-[10px] mb-[6px]">
-      Show Price As Per
+      Show price as
       <RowGap gap="12px">
         {['Asset', 'ROI'].map((asset, index) => {
           const isActive = priceFormat === asset;
