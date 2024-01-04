@@ -1,6 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import InfoIcon from '@SVG/Elements/InfoIcon';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import { openBlockExplorer } from '@Views/AboveBelow/Helpers/openBlockExplorer';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
@@ -86,51 +85,56 @@ export const Cancelled: React.FC<{
             <div className={`flex items-center`}>
               <Display
                 data={divide(
-                  multiply(
-                    trade.maxFeePerContract as string,
-                    trade.numberOfContracts as string
-                  ) as string,
+                  trade.totalFee as string,
                   trade.market.poolInfo.decimals
                 )}
                 precision={2}
                 className="!justify-start"
-                // unit={trade.market.poolInfo.token}
-                label={'<'}
               />
               <img
                 src={getAssetMonochromeImageUrl(trade.market.poolInfo.token)}
                 width={13}
                 height={13}
-                className="inline ml-1"
-              />
-              <InfoIcon
-                tooltip="The max amount of trade considering the slippage"
-                sm
+                className="inline ml-1 mb-[0px]"
               />
             </div>
           );
         }
+        // if (trade.state === BetState.queued) {
+        //   return (
+        //     <div className="flex gap-2 items-center">
+        //       <Display
+        //         data={divide(
+        //           multiply(
+        //             trade.maxFeePerContract as string,
+        //             trade.numberOfContracts as string
+        //           ) as string,
+        //           trade.market.poolInfo.decimals
+        //         )}
+        //         precision={2}
+        //         className="!justify-start"
+        //         unit={trade.market.poolInfo.token}
+        //         label={'<'}
+        //       />
+        //       <InfoIcon
+        //         tooltip="The max amount of trade considering the slippage"
+        //         sm
+        //       />
+        //     </div>
+        //   );
+        // }
         return (
-          <div className="flex gap-2 items-center">
-            <Display
-              data={divide(
-                multiply(
-                  trade.maxFeePerContract as string,
-                  trade.numberOfContracts as string
-                ) as string,
-                trade.market.poolInfo.decimals
-              )}
-              precision={2}
-              className="!justify-start"
-              unit={trade.market.poolInfo.token}
-              label={'<'}
-            />
-            <InfoIcon
-              tooltip="The max amount of trade considering the slippage"
-              sm
-            />
-          </div>
+          <Display
+            data={divide(
+              trade.totalFee as string,
+              trade.market.poolInfo.decimals
+            )}
+            precision={2}
+            className="!justify-start"
+            unit={trade.market.poolInfo.token}
+          />
         );
+
       case TableColumn.QueueTimestamp:
         return <DisplayTime ts={trade.queueTimestamp as string} />;
       case TableColumn.CancelTimestamp:
