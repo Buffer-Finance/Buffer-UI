@@ -7,9 +7,11 @@ import {
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { ILeague } from '@Views/V2-Leaderboard/interfaces';
 
-export const NetPnl: React.FC<{ currentStanding: ILeague }> = ({
-  currentStanding,
-}) => {
+export const NetPnl: React.FC<{
+  currentStanding: ILeague;
+  tokens: any[];
+  className?: string;
+}> = ({ currentStanding, tokens, className }) => {
   const perc = multiply(
     divide(currentStanding.netPnL, currentStanding.volume) as string,
     2
@@ -17,14 +19,14 @@ export const NetPnl: React.FC<{ currentStanding: ILeague }> = ({
   const isNeg =
     typeof perc === 'string' ? (perc[0] == '-' ? true : false) : perc < 0;
   return (
-    <div className="flex items-center">
+    <div className="flex items-center text-f15">
       {currentStanding.netPnL === null ? (
         '-'
       ) : (
         <Display
           data={perc}
           label={!isNeg ? '+' : ''}
-          className={`f15 ${!isNeg ? 'green' : 'red-grey'}`}
+          className={`${!isNeg ? 'green' : 'red-grey'} ${className}`}
           unit={'%'}
           content={
             tokens.length > 1 && (

@@ -22,6 +22,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Rank } from '../Components/Rank';
 import { TableAligner } from '../Components/TableAligner';
 import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
+import { NetPnl } from '../Leagues/WinnersByPnl/NetPnl';
 import { ILeague } from '../interfaces';
 import { DailyMobileTable } from './DailyMobileTable';
 import { LeaderBoardTableStyles } from './style';
@@ -255,11 +256,9 @@ export const DailyWebTable: React.FC<{
         try {
           return (
             <CellContent
-              content={
-                [
-                  //FIXME - Fix here - leagues -wip
-                ]
-              }
+              content={[
+                <NetPnl currentStanding={currentStanding} tokens={tokens} />,
+              ]}
             />
           );
         } catch (err) {
