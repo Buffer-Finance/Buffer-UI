@@ -320,6 +320,12 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
+        to: 'https://ab.buffer.finance',
+        name: 'Above/Below',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
         to: 'https://perps.buffer.finance/trade',
         name: 'Perps',
         subTabs: [],
@@ -431,6 +437,12 @@ export const getTabs = (
         name: 'Profile',
         subTabs: [],
         isExternalLink: false,
+      },
+      {
+        to: 'https://testnet.ab.buffer.finance',
+        name: 'Above/Below',
+        subTabs: [],
+        isExternalLink: true,
       },
       {
         to: 'https://testnet.perps.buffer.finance/trade',

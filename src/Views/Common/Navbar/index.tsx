@@ -26,7 +26,7 @@ export function NewChip() {
     </div>
   );
 }
-export const newTabs = ['Perps'];
+export const newTabs = ['Above/Below'];
 
 export const Navbar: React.FC<INavbar> = () => {
   const { dispatch } = useGlobal();
@@ -35,7 +35,7 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = 7;
+  const VISIBLETABS = 8;
   // const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
