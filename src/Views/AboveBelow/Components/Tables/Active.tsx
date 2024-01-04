@@ -1,6 +1,5 @@
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import InfoIcon from '@SVG/Elements/InfoIcon';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { toFixed } from '@Utils/NumString';
 import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
@@ -91,6 +90,7 @@ export const Active: React.FC<{
     const trade = active[row];
     switch (col) {
       case TableColumn.payout:
+        if (trade.state === BetState.queued) return <>-</>;
         return (
           <CellContent
             content={[
@@ -192,29 +192,29 @@ export const Active: React.FC<{
             </div>
           );
         }
-        if (trade.state === BetState.queued) {
-          return (
-            <div className="flex gap-2 items-center">
-              <Display
-                data={divide(
-                  multiply(
-                    trade.maxFeePerContract as string,
-                    trade.numberOfContracts as string
-                  ) as string,
-                  trade.market.poolInfo.decimals
-                )}
-                precision={2}
-                className="!justify-start"
-                unit={trade.market.poolInfo.token}
-                label={'<'}
-              />
-              <InfoIcon
-                tooltip="The max amount of trade considering the slippage"
-                sm
-              />
-            </div>
-          );
-        }
+        // if (trade.state === BetState.queued) {
+        //   return (
+        //     <div className="flex gap-2 items-center">
+        //       <Display
+        //         data={divide(
+        //           multiply(
+        //             trade.maxFeePerContract as string,
+        //             trade.numberOfContracts as string
+        //           ) as string,
+        //           trade.market.poolInfo.decimals
+        //         )}
+        //         precision={2}
+        //         className="!justify-start"
+        //         unit={trade.market.poolInfo.token}
+        //         label={'<'}
+        //       />
+        //       <InfoIcon
+        //         tooltip="The max amount of trade considering the slippage"
+        //         sm
+        //       />
+        //     </div>
+        //   );
+        // }
         return (
           <Display
             data={divide(

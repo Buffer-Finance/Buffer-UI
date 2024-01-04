@@ -94,7 +94,7 @@ export const appConfig = {
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
         v2_router: '0x76c52E83d7dcCc70107a66BAd44D042D22D06be7',
-        above_below_router: '0x9bE7abE78A8fc78eDc763fDB864B50c6e98ACB97',
+        above_below_router: '0x636D2D526073bF03024D716DbE781a37C840Bce0',
         poolsInfo: {
           '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
             tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',

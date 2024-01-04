@@ -182,7 +182,7 @@ const TradeButton = () => {
           settings.partialFill,
           referralData[2],
           priceObj.isAbove,
-          toFixed(divide(amount, totalFee.toString()) as string, 0),
+          toFixed(multiply(amount, decimals), 0),
           toFixed(multiply(price, 8), 0),
           expiration,
           toFixed(multiply(maxFeePerContracts.toString(), decimals), 0),
