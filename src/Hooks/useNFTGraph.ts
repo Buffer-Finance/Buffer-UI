@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { useUserAccount } from './useUserAccount';
 
-interface IGraphNFT {
+export interface IGraphNFT {
   batchId: string;
   nftImage: string;
   owner: string;

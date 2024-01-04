@@ -57,7 +57,6 @@ export const WinnersByPnl = ({
       others: data?.weeklyLeaderboards.slice(3),
     };
   }, [data?.weeklyLeaderboards]);
-
   return (
     <>
       <Winners winners={participants.winners} />
