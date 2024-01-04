@@ -397,7 +397,7 @@
             "type": "string"
           },
           { "internalType": "bool", "name": "isAbove", "type": "bool" },
-          { "internalType": "uint256", "name": "contracts", "type": "uint256" },
+          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
           { "internalType": "uint128", "name": "strike", "type": "uint128" },
           { "internalType": "uint32", "name": "expiration", "type": "uint32" },
           {
@@ -481,7 +481,8 @@
         "name": "maxFeePerContract",
         "type": "uint256"
       },
-      { "internalType": "string", "name": "referralCode", "type": "string" }
+      { "internalType": "string", "name": "referralCode", "type": "string" },
+      { "internalType": "uint256", "name": "totalFee", "type": "uint256" }
     ],
     "stateMutability": "view",
     "type": "function"
