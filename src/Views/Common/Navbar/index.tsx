@@ -26,7 +26,7 @@ export function NewChip() {
     </div>
   );
 }
-export const newTabs = ['Perps'];
+export const newTabs = [];
 
 export const Navbar: React.FC<INavbar> = () => {
   const { dispatch } = useGlobal();
