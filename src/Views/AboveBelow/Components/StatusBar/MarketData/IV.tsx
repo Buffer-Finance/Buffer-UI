@@ -11,5 +11,5 @@ export const IV: React.FC<{ activeMarket: marketTypeAB | undefined }> = ({
     return <Skeleton className="w-[20px] !h-5 lc " />;
   const iv = ivs[activeMarket.tv_id];
   if (iv === undefined) return <Skeleton className="w-[20px] !h-5 lc " />;
-  return <>{iv / 1e4}%</>;
+  return <>{iv / 1e2}%</>;
 };
