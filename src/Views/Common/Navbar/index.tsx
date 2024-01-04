@@ -1,22 +1,21 @@
-import { useMemo, useState } from 'react';
-import { BufferLogoComponent } from './BufferLogo';
-import { getTabs } from 'src/Config/getTabs';
-import { TabsDropdown } from './TabsDropDown';
-import { Tab } from './Tab';
-import { AccountDropdown } from './AccountDropdown';
 import { useGlobal } from '@Contexts/Global';
-import { useAtomValue } from 'jotai';
-import { urlSettings } from 'src/Config/wagmiClient';
-import { isTestnet } from 'config';
-import { SettingsDD } from './SettingsDD';
-import { activeMarketFromStorageAtom } from 'src/globalStore';
-import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
-import { useShutterHandlers } from '../MobileShutter/MobileShutter';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { useNavigate } from 'react-router-dom';
+import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import { inIframe } from '@Utils/isInIframe';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { useAtomValue } from 'jotai';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getTabs } from 'src/Config/getTabs';
+import { urlSettings } from 'src/Config/wagmiClient';
+import { activeMarketFromStorageAtom } from 'src/globalStore';
+import { useShutterHandlers } from '../MobileShutter/MobileShutter';
+import { AccountDropdown } from './AccountDropdown';
+import { BufferLogoComponent } from './BufferLogo';
+import { SettingsDD } from './SettingsDD';
+import { Tab } from './Tab';
+import { TabsDropdown } from './TabsDropDown';
 
 interface INavbar {}
 
@@ -27,7 +26,7 @@ export function NewChip() {
     </div>
   );
 }
-export const newTabs = ['Perps'];
+export const newTabs = ['Above/Below'];
 
 export const Navbar: React.FC<INavbar> = () => {
   const { dispatch } = useGlobal();
@@ -36,7 +35,7 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = 7;
+  const VISIBLETABS = 8;
   // const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
