@@ -1,6 +1,6 @@
 import { selectedExpiry } from '@Views/AboveBelow/atoms';
 import { DDarrow } from '@Views/TradePage/Components/DDarrow';
-import { RowBetween } from '@Views/TradePage/Components/Row';
+import { RowGap } from '@Views/TradePage/Components/Row';
 import styled from '@emotion/styled';
 import {
   ClickEvent,
@@ -28,18 +28,18 @@ export const DropDown = () => {
             <MenuButton
               className={`!bg-[#282B39] !w-full rounded-[2px] py-2 text-f14 text-[#C3C2D4] px-3 font-medium`}
             >
-              <RowBetween className="w-full">
+              <RowGap gap="8px" className="w-full">
                 {selectedTimestamp
                   ? formatDateWithTime(selectedTimestamp)
                   : 'Select Expiry'}
-                <DDarrow open={open} />
-              </RowBetween>
+                <DDarrow open={open} className="scale-125" />
+              </RowGap>
             </MenuButton>
           );
         }}
         position="auto"
         align="center"
-        menuClassName={'!w-full !bg-[#282B39] '}
+        menuClassName={'!w-fit !bg-[#282B39] '}
         offsetY={5}
       >
         {timestamps.map((timestamp) => {
