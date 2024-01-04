@@ -5,7 +5,6 @@ import {
   gt,
   gte,
   lt,
-  lte,
   multiply,
   subtract,
 } from '@Utils/NumString/stringArithmatics';
@@ -148,7 +147,7 @@ const Error: React.FC<{
   const contracts = useNumberOfContracts();
   const minTradeSize = contracts === null ? '0' : contracts.totalFee.toFixed(2);
   const error = getTradeSizeError(
-    minTradeSize,
+    // minTradeSize,
     maxTradeSize,
     balance,
     tradeSize
@@ -194,13 +193,14 @@ const PlatfromFeeError = ({
 };
 
 export function getTradeSizeError(
-  minTradeSize: string,
+  // minTradeSize: string,
   maxTradeSize: string,
   balance: string | undefined,
   tradeSize: string
 ) {
+  const minTradeSize = '0';
   let error = '';
-  if (lte(tradeSize || '0', minTradeSize)) {
+  if (lt(tradeSize || '0', '0')) {
     error = `Trade size must be higher than ${minTradeSize}`;
   } else if (gt(tradeSize || '0', maxTradeSize)) {
     error = `Max trade size is ${toFixed(maxTradeSize, 2)}`;
