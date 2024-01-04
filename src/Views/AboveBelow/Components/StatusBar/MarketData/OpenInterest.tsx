@@ -48,13 +48,13 @@ export const OpenInterest: React.FC<{
                 <span>
                   {toFixed(openInterestUp, 2)} {unit}
                 </span>
-                <span>({openInterestUpPercent ?? 0}%)</span>
+                <span>({openInterestUpPercent?.toFixed(2) ?? 0}%)</span>
               </div>,
               <div className="flex flex-col">
                 <span>
                   {toFixed(openInterestDown, 2)} {unit}
                 </span>
-                <span>({openInterestDownPercent ?? 0}%)</span>
+                <span>({openInterestDownPercent?.toFixed(2) ?? 0}%)</span>
               </div>,
             ]}
           />
