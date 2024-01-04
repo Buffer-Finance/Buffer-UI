@@ -1,3 +1,4 @@
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { toFixed } from '@Utils/NumString';
 import {
   add,
@@ -48,6 +49,7 @@ export const TradeSize: React.FC<{
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
   const readCallData = useAtomValue(readCallDataAtom);
   const selectedStrike = useAtomValue(selectedPriceAtom);
+  const { address: userAddress } = useUserAccount();
   const contracts = useNumberOfContracts();
 
   if (activeMarket === undefined || readCallData === undefined) return <></>;
@@ -119,21 +121,25 @@ export const TradeSize: React.FC<{
 
             <PoolDropdown />
           </RowGapItemsStretched>
-          <PlatfromFeeError
-            platfromFee={
-              divide(
-                activeMarket.config.platformFee,
-                activeMarket.poolInfo.decimals
-              ) as string
-            }
-            tradeToken={activeMarket.poolInfo.token}
-            balance={balance}
-          />
-          <Error
-            balance={balance}
-            tradeSize={tradeSize}
-            maxTradeSize={maxTradeSize}
-          />
+          {userAddress && (
+            <PlatfromFeeError
+              platfromFee={
+                divide(
+                  activeMarket.config.platformFee,
+                  activeMarket.poolInfo.decimals
+                ) as string
+              }
+              tradeToken={activeMarket.poolInfo.token}
+              balance={balance}
+            />
+          )}
+          {userAddress && (
+            <Error
+              balance={balance}
+              tradeSize={tradeSize}
+              maxTradeSize={maxTradeSize}
+            />
+          )}
         </ColumnGap>
       </ColumnGap>
     </TradeSizeSelectorBackground>
@@ -144,8 +150,8 @@ const Error: React.FC<{
   tradeSize: string;
   maxTradeSize: string;
 }> = ({ balance, tradeSize, maxTradeSize }) => {
-  const contracts = useNumberOfContracts();
-  const minTradeSize = contracts === null ? '0' : contracts.totalFee.toFixed(2);
+  // const contracts = useNumberOfContracts();
+  // const minTradeSize = contracts === null ? '0' : contracts.totalFee.toFixed(2);
   const error = getTradeSizeError(
     // minTradeSize,
     maxTradeSize,
