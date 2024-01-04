@@ -16,7 +16,7 @@ export const useIV = () => {
         }
         return null;
       },
-      refreshInterval: 2500,
+      refreshInterval: 100,
     }
   );
 };
