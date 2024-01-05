@@ -8,12 +8,15 @@ import styled from '@emotion/styled';
 import { Launch } from '@mui/icons-material';
 import { Skeleton } from '@mui/material';
 import { useMemo } from 'react';
+import { useMedia } from 'react-use';
 import { NetPnl } from '../WinnersByPnl/NetPnl';
 import { Confetti } from './Confetti';
 
 export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
   winners,
 }) => {
+  const isMobile = useMedia('(max-width:1200px)');
+
   if (winners === undefined)
     return (
       <div className="flex gap-6 b1200:flex-col b1200:gap-2">
@@ -37,17 +40,25 @@ export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
         />
       </div>
     );
+  if (isMobile)
+    return (
+      <div className="b1200:flex-col b1200:gap-2">
+        {winners.map((item, index) => {
+          return <Data participant={item} rank={index + 1} />;
+        })}
+      </div>
+    );
   if (winners.length === 0) return <></>;
   if (winners.length === 1) return <Data participant={winners[0]} rank={1} />;
   if (winners.length === 2)
     return (
-      <div className="flex gap-6 b1200:flex-col b1200:gap-2">
+      <div className="flex gap-6">
         <Data participant={winners[1]} rank={2} />
         <Data participant={winners[0]} rank={1} />
       </div>
     );
   return (
-    <div className="flex gap-6 b1200:flex-col b1200:gap-2">
+    <div className="flex gap-6">
       <Data participant={winners[1]} rank={2} />
       <Data participant={winners[0]} rank={1} />
       <Data participant={winners[2]} rank={3} />
