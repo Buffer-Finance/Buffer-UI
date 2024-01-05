@@ -210,7 +210,11 @@ const SidebarIcon: React.FC<IProp> = ({ id, ...props }) => {
       return <Daily {...props} width={20} height={20} color={'#8B67C7'} />;
     case 2:
       return (
-        <img src="/LeaderBoard/Diamond.png" alt="Icon" className="w2 h2" />
+        <img
+          src="/LeaderBoard/Diamond.png"
+          alt="Icon"
+          className="w-[2.7rem] h2"
+        />
       );
     case 3:
       return (

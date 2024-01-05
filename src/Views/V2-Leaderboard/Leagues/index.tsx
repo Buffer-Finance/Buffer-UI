@@ -88,7 +88,11 @@ export const Leagues = () => {
                     <img
                       src={`/LeaderBoard/${capitalizeString(league)}.png`}
                       alt="Icon"
-                      className="w-8 h-8 mr-3"
+                      className={`${
+                        capitalizeString(league) === 'Diamond'
+                          ? 'w-[65px] h-8'
+                          : 'w-8 h-8'
+                      } mr-3`}
                     />
                   }
                   heading={
