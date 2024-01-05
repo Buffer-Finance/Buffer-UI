@@ -328,14 +328,6 @@ export const getLeaderBoardTabs = (chain: string) => {
     //   subTabs: [],
     // },
     {
-      pathname: '/[chain]/leaderboard/[offset]/all-time',
-      as: `/leaderboard/all-time`,
-      name: 'All Time',
-      slug: 'all-time',
-      id: 7,
-      subTabs: [],
-    },
-    {
       pathname: '/[chain]/leaderboard/diamond',
       as: `/leaderboard/diamond`,
       name: 'diamond',
@@ -378,6 +370,14 @@ export const getLeaderBoardTabs = (chain: string) => {
       slug: 'bronze',
       id: 6,
       img: '/LeaderBoard/Bronze.png',
+      subTabs: [],
+    },
+    {
+      pathname: '/[chain]/leaderboard/[offset]/all-time',
+      as: `/leaderboard/all-time`,
+      name: 'All Time',
+      slug: 'all-time',
+      id: 7,
       subTabs: [],
     },
     // {
