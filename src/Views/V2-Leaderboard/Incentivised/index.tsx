@@ -24,6 +24,7 @@ import { DailyStyles } from '../Daily/style';
 import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useDayOffset } from '../Hooks/useDayOffset';
 import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
+import { Winners } from '../Leagues/Winners';
 import { LeaderBoardTabs } from '../Weekly';
 import {
   readLeaderboardPageActivePageAtom,
@@ -108,13 +109,33 @@ export const Incentivised = () => {
   );
   const tableData = useMemo(() => {
     if (data && data.userStats) {
-      return data.userStats.slice(skip, skip + ROWINAPAGE);
-    } else return [];
+      return {
+        winners: data?.userStats.slice(0, 3),
+        others:
+          activePages.arbitrum === 1
+            ? data?.userStats.slice(3, skip + ROWINAPAGE)
+            : data?.userStats.slice(skip, skip + ROWINAPAGE),
+      };
+    } else
+      return {
+        winners: undefined,
+        others: [],
+      };
   }, [data, skip]);
   const loserStats = useMemo(() => {
     if (data && data.loserStats) {
-      return data.loserStats.slice(skip, skip + ROWINAPAGE);
-    } else return [];
+      return {
+        winners: data?.loserStats.slice(0, 3),
+        others:
+          activePages.arbitrum === 1
+            ? data?.loserStats.slice(3, skip + ROWINAPAGE)
+            : data?.loserStats.slice(skip, skip + ROWINAPAGE),
+      };
+    } else
+      return {
+        winners: undefined,
+        others: [],
+      };
   }, [data, skip]);
   const rewardPool = useMemo(() => {
     if (configValue.endDay !== undefined) {
@@ -263,29 +284,37 @@ export const Incentivised = () => {
           />
           <TabSwitch
             value={activeTab}
+            className="pt-4"
             childComponents={[
-              <DailyWebTable
-                standings={tableData}
-                count={totalPages.arbitrum}
-                activePage={activePages.arbitrum}
-                onpageChange={setActivePageNumber}
-                userData={data?.userData}
-                skip={skip}
-                nftWinners={configValue.winnersNFT}
-                userRank={winnerUserRank}
-                // isDailyTable
-              />,
-              <DailyWebTable
-                standings={loserStats}
-                count={totalPages.arbitrum}
-                activePage={activePages.arbitrum}
-                onpageChange={setActivePageNumber}
-                userData={data?.userData}
-                skip={skip}
-                nftWinners={configValue.losersNFT}
-                userRank={loserUserRank}
-                // isDailyTable
-              />,
+              <>
+                <Winners winners={tableData.winners} />
+
+                <DailyWebTable
+                  standings={tableData.others}
+                  count={totalPages.arbitrum}
+                  activePage={activePages.arbitrum}
+                  onpageChange={setActivePageNumber}
+                  userData={data?.userData}
+                  skip={skip}
+                  nftWinners={configValue.winnersNFT}
+                  userRank={winnerUserRank}
+                  // isDailyTable
+                />
+              </>,
+              <>
+                <Winners winners={loserStats.winners} />
+                <DailyWebTable
+                  standings={loserStats.others}
+                  count={totalPages.arbitrum}
+                  activePage={activePages.arbitrum}
+                  onpageChange={setActivePageNumber}
+                  userData={data?.userData}
+                  skip={skip}
+                  nftWinners={configValue.losersNFT}
+                  userRank={loserUserRank}
+                  // isDailyTable
+                />
+              </>,
             ]}
           />
         </div>
