@@ -1,5 +1,6 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { DailyWebTable } from '@Views/V2-Leaderboard/Daily/DailyWebTable';
+import { Winners } from '@Views/V2-Leaderboard/Leagues/Winners';
 import { ROWINAPAGE } from '@Views/V2-Leaderboard/Weekly';
 import { ILeague } from '@Views/V2-Leaderboard/interfaces';
 import axios from 'axios';
@@ -57,10 +58,6 @@ export const TableByPNL: React.FC<{ activeChainId: number }> = ({
     }
   );
 
-  const currentPagedata = useMemo(() => {
-    if (!data?.leaderboards) return undefined;
-    return data.leaderboards.slice(skip, skip + ROWINAPAGE);
-  }, [data?.leaderboards, skip]);
   const winnerUserRank = useMemo(() => {
     if (!data || !data.leaderboards || !account) return '-';
     const rank = data.leaderboards.findIndex(
@@ -70,16 +67,36 @@ export const TableByPNL: React.FC<{ activeChainId: number }> = ({
     if (rank === -1) return '-';
     else return (rank + 1).toString();
   }, [data?.userData, account]);
+
+  const participants = useMemo(() => {
+    if (!data?.leaderboards)
+      return {
+        winners: undefined,
+        others: undefined,
+      };
+
+    return {
+      winners: data?.leaderboards.slice(0, 3),
+      others:
+        activePage === 1
+          ? data?.leaderboards.slice(3, skip + ROWINAPAGE)
+          : data.leaderboards.slice(skip, skip + ROWINAPAGE),
+    };
+  }, [data?.leaderboards, skip]);
+
   return (
-    <DailyWebTable
-      standings={currentPagedata}
-      count={100}
-      onpageChange={setActivePage}
-      activePage={activePage}
-      userData={data?.userData}
-      skip={skip}
-      nftWinners={0}
-      userRank={winnerUserRank}
-    />
+    <>
+      <Winners winners={participants.winners} />
+      <DailyWebTable
+        standings={participants.others}
+        count={100}
+        onpageChange={setActivePage}
+        activePage={activePage}
+        userData={data?.userData}
+        skip={skip}
+        nftWinners={0}
+        userRank={winnerUserRank}
+      />
+    </>
   );
 };
