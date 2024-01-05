@@ -1,22 +1,22 @@
-import { Skeleton } from '@mui/material';
-import React from 'react';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { toFixed } from '@Utils/NumString';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { ILeague } from '../interfaces';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
-import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
-import { Launch } from '@mui/icons-material';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { TableAligner } from '../Components/TableAligner';
 import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { toFixed } from '@Utils/NumString';
-import { gte } from 'lodash';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { Launch } from '@mui/icons-material';
+import { Skeleton } from '@mui/material';
+import { gte } from 'lodash';
+import React from 'react';
+import { Rank } from '../Components/Rank';
+import { TableAligner } from '../Components/TableAligner';
+import { ILeague } from '../interfaces';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
@@ -51,7 +51,7 @@ export const DailyMobileTable: React.FC<{
     );
   if (options.length === 0)
     return (
-      <div className="text-center text-f14 text-1 mt-4 bg-1 rounded-lg p-5 table-width">
+      <div className="text-center text-f14 text-1 mx-auto mt-4 bg-1 rounded-lg p-5 table-width">
         No data found.
       </div>
     );

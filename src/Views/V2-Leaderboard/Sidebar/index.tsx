@@ -39,7 +39,9 @@ export const MobileLeaderboardDropdwon = () => {
           const isSubTabActive = doesLocationMatch(location, tab.slug);
           return (
             <button
-              className={`scale-[200%] ${isSubTabActive ? '' : 'opacity-20'}`}
+              className={`sm:!scale-[200%] b1200:scale-[275%] ${
+                isSubTabActive ? '' : 'opacity-20'
+              }`}
               onClick={() => {
                 navigate(tab.as);
               }}
