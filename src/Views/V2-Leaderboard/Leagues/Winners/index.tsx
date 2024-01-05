@@ -41,13 +41,13 @@ export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
   if (winners.length === 1) return <Data participant={winners[0]} rank={1} />;
   if (winners.length === 2)
     return (
-      <div className="flex gap-6">
+      <div className="flex gap-6 b1200:flex-col b1200:gap-2">
         <Data participant={winners[1]} rank={2} />
         <Data participant={winners[0]} rank={1} />
       </div>
     );
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-6 b1200:flex-col b1200:gap-2">
       <Data participant={winners[1]} rank={2} />
       <Data participant={winners[0]} rank={1} />
       <Data participant={winners[2]} rank={3} />
@@ -128,5 +128,9 @@ const DataWrapper = styled.button<{ isFirst: boolean }>`
 
   :hover {
     transform: scale(1.05);
+  }
+
+  @media (max-width: 1200px) {
+    width: 100%;
   }
 `;
