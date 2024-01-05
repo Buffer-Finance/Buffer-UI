@@ -46,7 +46,7 @@ export const UserImage: React.FC<{ address: string; isFirst?: boolean }> = ({
     <div className="absolute -top-[20%] m-auto">
       <CircleAroundPicture isFirst={isFirst} />
       {highestTierNFT !== null ? (
-        <div className="absolute top-[0] ml-[6px]">
+        <div className="absolute top-[3px] left-[1px] ml-[6px]">
           <img
             src={
               'https://gateway.pinata.cloud/ipfs/' +
@@ -55,7 +55,7 @@ export const UserImage: React.FC<{ address: string; isFirst?: boolean }> = ({
             alt=""
             width={isFirst ? 40 : 35}
             height={isFirst ? 40 : 35}
-            className={'mt-2 m-auto'}
+            className={'mt-2 m-auto rounded-full'}
           />
         </div>
       ) : (
