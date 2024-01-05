@@ -137,7 +137,6 @@ export const useLimitedStrikeArrays = () => {
       const settlementFeeAbove =
         settlementFees[marketHash + '-' + getAddress(activeMarket.address)]
           ?.sf_above ?? settlementFees['Base'];
-      console.log(settlementFeeAbove, 'settlementFeeAbove');
       const aboveProbability = BlackScholes(
         true,
         true,

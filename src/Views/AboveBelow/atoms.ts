@@ -14,6 +14,13 @@ export const aboveBelowmarketsSetterAtom = atom(
     set(aboveBelowMarketsAtom, update);
   }
 );
+export const aboveBelowAllMarketsAtom = atom<marketTypeAB[] | null>(null);
+export const aboveBelowAllMarketsSetterAtom = atom(
+  null,
+  (_get, set, update: marketTypeAB[] | null) => {
+    set(aboveBelowAllMarketsAtom, update);
+  }
+);
 
 export const urlMarketAtom = atom<string | null>(null);
 

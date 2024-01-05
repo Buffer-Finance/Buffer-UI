@@ -4,7 +4,7 @@ import axios from 'axios';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo } from 'react';
 import { getAddress } from 'viem';
-import { aboveBelowMarketsAtom } from '../atoms';
+import { aboveBelowAllMarketsAtom } from '../atoms';
 import { marketTypeAB } from '../types';
 import { BetState, TradeInputs } from './useAheadTrades';
 import { usePastTradeQueryByFetch } from './usePastTradeQueryByFetch';
@@ -107,7 +107,7 @@ export interface IGQLHistory {
 }
 
 export const useProcessedTrades = () => {
-  const markets = useAtomValue(aboveBelowMarketsAtom);
+  const markets = useAtomValue(aboveBelowAllMarketsAtom);
   const getProcessedTrades = useCallback(
     (
       trades: (IGQLHistory | null)[] | undefined,
