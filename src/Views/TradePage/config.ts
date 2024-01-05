@@ -161,7 +161,7 @@ export const appConfig = {
     graph: {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
       ABOVE_BELOW:
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.3-ab-fix-contracts/api',
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.5-ab-fix-create-contract/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
@@ -170,7 +170,7 @@ export const appConfig = {
     booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
     config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
     v2_router: '0x0e0A1241C9cE6649d5D30134a194BA3E24130305',
-    above_below_router: '0xE450A00351A59AFc3cde65bA846AE561C584eDaC',
+    above_below_router: '0x256b403E6973737DfdafbFAcEB2A2f4065265981',
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
         decimals: 6,
