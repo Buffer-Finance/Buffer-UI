@@ -34,27 +34,29 @@ export const MobileLeaderboardDropdwon = () => {
         }}
         tablist={[{ name: 'Daily' }, { name: 'Leagues' }, { name: 'Metrics' }]}
       />
-      <div className="flex justify-between mt-6 max-w-[300px] mx-auto">
-        {tabs[activeTab].subTabs.map((tab) => {
-          const isSubTabActive = doesLocationMatch(location, tab.slug);
-          return (
-            <button
-              className={`sm:!scale-[200%] b1200:scale-[275%] ${
-                isSubTabActive ? '' : 'opacity-20'
-              }`}
-              onClick={() => {
-                navigate(tab.as);
-              }}
-            >
-              <SidebarIcon
-                id={tab.id}
-                active={false}
-                name={tab.slug.split('/')[0]}
-              />
-            </button>
-          );
-        })}
-      </div>
+      {tabs[activeTab].subTabs.length > 0 && (
+        <div className="flex justify-between mt-6 max-w-[300px] mx-auto b1200:mt-7">
+          {tabs[activeTab].subTabs.map((tab) => {
+            const isSubTabActive = doesLocationMatch(location, tab.slug);
+            return (
+              <button
+                className={`sm:!scale-[200%] b1200:scale-[275%] ${
+                  isSubTabActive ? '' : 'opacity-20'
+                }`}
+                onClick={() => {
+                  navigate(tab.as);
+                }}
+              >
+                <SidebarIcon
+                  id={tab.id}
+                  active={false}
+                  name={tab.slug.split('/')[0]}
+                />
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
