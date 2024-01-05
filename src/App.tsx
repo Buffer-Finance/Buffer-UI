@@ -39,7 +39,6 @@ import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { AllTime } from '@Views/V2-Leaderboard/Components/AllTime';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Leagues } from '@Views/V2-Leaderboard/Leagues';
-import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { isTestnet } from 'config';
@@ -143,26 +142,22 @@ const AppRoutes = () => {
         />
         <Route path="contracts" element={<ContractList />} />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          <Route path="all-time" element={<AllTime />}>
-            <Route path=":chain" element={<AllTime />} />
+          <Route path="leagues" element={<LeaderBoardOutlet />}>
+            <Route path=":league" element={<Leagues />}>
+              <Route path=":chain" element={<Leagues />} />
+            </Route>
           </Route>
+          <Route path="metrics" element={<LeaderBoardOutlet />}>
+            <Route path="all-time" element={<AllTime />}>
+              <Route path=":chain" element={<AllTime />} />
+            </Route>
+          </Route>
+
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
           </Route>
-          <Route path="weekly" element={<Weekly />}>
+          {/* <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
-          </Route>
-          <Route path=":league" element={<Leagues />}>
-            <Route path=":chain" element={<Leagues />} />
-          </Route>
-          {/* <Route path="gold" element={<Gold />}>
-            <Route path=":chain" element={<Gold />} />
-          </Route>
-          <Route path="platinum" element={<Platinum />}>
-            <Route path=":chain" element={<Platinum />} />
-          </Route>
-          <Route path="diamond" element={<Diamond />}>
-            <Route path=":chain" element={<Diamond />} />
           </Route> */}
         </Route>
       </Routes>

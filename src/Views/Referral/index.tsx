@@ -13,7 +13,6 @@ import { HeadTitle } from '@Views/Common/TitleHead';
 import { Display } from '@Views/Common/Tooltips/Display';
 import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import Drawer from '@Views/Common/V2-Drawer';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import {
   tooltipKeyClasses,
@@ -57,10 +56,6 @@ export const ReferralPage = () => {
         <HeadTitle title={'Buffer Finance | Referral'} />
         <Referral />
       </main>
-
-      <Drawer open={false} className="sm:hidden tb:hidden">
-        <></>
-      </Drawer>
     </ReferralContextProvider>
   );
 };

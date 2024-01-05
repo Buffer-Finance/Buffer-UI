@@ -16,24 +16,24 @@ export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
 }) => {
   if (winners === undefined)
     return (
-      <div className="flex gap-6">
+      <div className="flex gap-6 b1200:flex-col b1200:gap-2">
         <Skeleton
           variant="rectangular"
           width={225}
           height={120}
-          className="lc rounded-md"
+          className="lc rounded-md b1200:mx-auto"
         />
         <Skeleton
           variant="rectangular"
           width={250}
           height={135}
-          className="lc rounded-md"
+          className="lc rounded-md b1200:mx-auto"
         />
         <Skeleton
           variant="rectangular"
           width={225}
           height={120}
-          className="lc rounded-md"
+          className="lc rounded-md b1200:mx-auto"
         />
       </div>
     );
@@ -82,7 +82,9 @@ const Data: React.FC<{ participant: ILeague; rank: number }> = ({
         <RowGap gap="8px">
           <NumberTooltip content={participant.user || ''}>
             <div
-              className={`text-[#c3c2d4] ${isFirst ? 'text-f15' : 'text-f17'}`}
+              className={`text-[#c3c2d4] ${
+                isFirst ? 'text-f15 b1200:text-f12' : 'text-f17 b1200:text-f13'
+              }`}
             >
               {isUser
                 ? 'Your Account'
@@ -95,20 +97,28 @@ const Data: React.FC<{ participant: ILeague; rank: number }> = ({
           </NumberTooltip>
           <Launch className="invisible group-hover:visible text-[#c3c2d4]" />
         </RowGap>
-        <span className={`text-1 ${!isFirst ? 'text-f17' : 'text-f19'}`}>
+        <span
+          className={`text-1 ${
+            !isFirst ? 'text-f17 b1200:text-f13' : 'text-f19 b1200:text-f14'
+          }`}
+        >
           #{rank}
         </span>
       </RowBetween>
       <RowBetween className="w-full">
         <span
-          className={`text-[#c3c2d4] ${!isFirst ? 'text-f13' : 'text-f14'}`}
+          className={`text-[#c3c2d4] ${
+            !isFirst ? 'text-f13 b1200:text-f11' : 'text-f14 b1200:text-f12'
+          }`}
         >
           {participant.totalTrades} Trades
         </span>
         <NetPnl
           currentStanding={participant}
           tokens={tokens}
-          className={!isFirst ? 'text-f17' : 'text-f19'}
+          className={
+            !isFirst ? 'text-f17 b1200:text-f13' : 'text-f19 b1200:text-f14'
+          }
         />
       </RowBetween>
     </DataWrapper>
@@ -131,6 +141,8 @@ const DataWrapper = styled.button<{ isFirst: boolean }>`
   }
 
   @media (max-width: 1200px) {
-    width: 100%;
+    width: fit-content;
+    margin: 16px auto;
+    min-width: 250px;
   }
 `;

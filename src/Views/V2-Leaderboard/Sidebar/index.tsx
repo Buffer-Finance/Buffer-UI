@@ -1,7 +1,12 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import Daily from '@Public/LeaderBoard/Daily';
 import BufferTab from '@Views/Common/BufferTab';
-import { CHAIN_CONFIGS, getTabs, isTestnet } from 'config';
+import {
+  CHAIN_CONFIGS,
+  getLeaderBoardTabs,
+  getMobileLeaderboardTabs,
+  isTestnet,
+} from 'config';
 import React, { useMemo } from 'react';
 import { Link, Location, useLocation, useNavigate } from 'react-router-dom';
 import SmPnl from 'src/SVG/Elements/PNLL';
@@ -12,8 +17,7 @@ import { weeklyTournamentConfig } from '../Weekly/config';
 import { LeaderBoardSidebarStyles } from './style';
 
 export const MobileLeaderboardDropdwon = () => {
-  const { activeChain } = useActiveChain();
-  const tabs = getTabs(activeChain.name, true);
+  const tabs = getMobileLeaderboardTabs();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -28,8 +32,27 @@ export const MobileLeaderboardDropdwon = () => {
         handleChange={(e, t) => {
           navigate(tabs[t].as);
         }}
-        tablist={[{ name: 'Daily' }, { name: 'Weekly' }]}
+        tablist={[{ name: 'Daily' }, { name: 'Leagues' }, { name: 'Metrics' }]}
       />
+      <div className="flex justify-between mt-6 max-w-[300px] mx-auto">
+        {tabs[activeTab].subTabs.map((tab) => {
+          const isSubTabActive = doesLocationMatch(location, tab.slug);
+          return (
+            <button
+              className={`scale-[200%] ${isSubTabActive ? '' : 'opacity-20'}`}
+              onClick={() => {
+                navigate(tab.as);
+              }}
+            >
+              <SidebarIcon
+                id={tab.id}
+                active={false}
+                name={tab.slug.split('/')[0]}
+              />
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -46,7 +69,7 @@ const EndedChip = () => {
 };
 export const LeaderBoardSidebar = () => {
   const { activeChain } = useActiveChain();
-  const tabs = getTabs(activeChain.name, true);
+  const tabs = getLeaderBoardTabs();
   const location = useLocation();
   const { day } = useDayOfTournament();
   const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];

@@ -1,17 +1,16 @@
-import { Skeleton } from '@mui/material';
-import Background from './style';
-import FaucetABI from './Faucet.json';
-import { ethers } from 'ethers';
-import { useEffect, useMemo, useState } from 'react';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
-import { BlueBtn } from '@Views/Common/V2-Button';
-import Drawer from '@Views/Common/V2-Drawer';
-import { useWriteCall } from '@Hooks/useWriteCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useWriteCall } from '@Hooks/useWriteCall';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { BlueBtn } from '@Views/Common/V2-Button';
 import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { Skeleton } from '@mui/material';
+import { ethers } from 'ethers';
+import { useEffect, useMemo, useState } from 'react';
+import FaucetABI from './Faucet.json';
+import Background from './style';
 
 const IbfrFaucet: React.FC = () => {
   useEffect(() => {
@@ -77,9 +76,6 @@ const IbfrFaucet: React.FC = () => {
           )}
         </div>
       </Background>
-      <Drawer open={false}>
-        <></>
-      </Drawer>
     </main>
   );
 };

@@ -1,18 +1,17 @@
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import styled from '@emotion/styled';
 import { useAtom } from 'jotai';
 import React, { useEffect } from 'react';
 import EarnIcon from 'src/SVG/Elements/EarnIcon';
 import FrontArrow from 'src/SVG/frontArrow';
-import Drawer from '@Views/Common/V2-Drawer';
 import { Chain } from 'wagmi';
 import { getEarnCards } from './Components/EarnCards';
 import { Section } from './Components/Section';
 import { getVestCards } from './Components/VestCards';
-import { IEarn, writeEarnData } from './earnAtom';
 import { useGetTokenomics } from './Hooks/useTokenomicsMulticall';
 import { EarnModals } from './Modals';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
+import { IEarn, writeEarnData } from './earnAtom';
 
 const EarnStyles = styled.div`
   width: min(1200px, 100%);
@@ -39,9 +38,6 @@ export const Earn = () => {
         <main className="content-drawer">
           <EarnPage />
         </main>
-        <Drawer open={false}>
-          <></>
-        </Drawer>
       </EarnContextProvider>
     </ArbitrumOnly>
   );
