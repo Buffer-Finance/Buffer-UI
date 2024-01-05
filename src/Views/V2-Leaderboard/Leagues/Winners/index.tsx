@@ -53,14 +53,14 @@ export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
   if (winners.length === 2)
     return (
       <div className="flex gap-6">
-        <Data participant={winners[1]} rank={2} />
         <Data participant={winners[0]} rank={1} />
+        <Data participant={winners[1]} rank={2} />
       </div>
     );
   return (
     <div className="flex gap-6">
-      <Data participant={winners[1]} rank={2} />
       <Data participant={winners[0]} rank={1} />
+      <Data participant={winners[1]} rank={2} />
       <Data participant={winners[2]} rank={3} />
     </div>
   );
