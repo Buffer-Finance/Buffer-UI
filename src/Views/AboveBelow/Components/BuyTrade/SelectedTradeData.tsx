@@ -16,7 +16,7 @@ export const SelectedTradeData = () => {
 
   if (!activeMarket) return <></>;
   return (
-    <span className="text-[#7F87A7] text-f13 mt-3">
+    <span className="text-[#7F87A7] text-f13 mt-3 max-w-[300px] b1200:max-w-full">
       {activeMarket.token0}/{activeMarket.token1} will be&nbsp;
       <PriceData activeMarket={activeMarket} />
       &nbsp;on&nbsp;
