@@ -4,7 +4,7 @@ export const Confetti = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="249"
+      width="227"
       height="92"
       viewBox="0 0 249 92"
       fill="none"

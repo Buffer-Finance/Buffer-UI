@@ -20,24 +20,17 @@ export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
   if (winners === undefined)
     return (
       <div className="flex gap-6 b1200:flex-col b1200:gap-2">
-        <Skeleton
-          variant="rectangular"
-          width={225}
-          height={120}
-          className="lc rounded-md b1200:mx-auto"
-        />
-        <Skeleton
-          variant="rectangular"
-          width={250}
-          height={135}
-          className="lc rounded-md b1200:mx-auto"
-        />
-        <Skeleton
-          variant="rectangular"
-          width={225}
-          height={120}
-          className="lc rounded-md b1200:mx-auto"
-        />
+        {[0, 1, 2].map((index) => {
+          return (
+            <Skeleton
+              key={index}
+              variant="rectangular"
+              width={225}
+              height={135}
+              className="lc rounded-md b1200:mx-auto"
+            />
+          );
+        })}
       </div>
     );
   if (isMobile)
@@ -87,16 +80,12 @@ const Data: React.FC<{ participant: ILeague; rank: number }> = ({
         navigatwToProfile(participant.user);
       }}
     >
-      {isFirst && <Confetti className="absolute z-9 top-[0]" />}
+      {isFirst && <Confetti className="absolute z-9 -top-[6px]" />}
       <UserImage address={participant.user} isFirst={isFirst} />
       <RowBetween className="w-full">
         <RowGap gap="8px">
           <NumberTooltip content={participant.user || ''}>
-            <div
-              className={`text-[#c3c2d4] ${
-                isFirst ? 'text-f15 b1200:text-f12' : 'text-f17 b1200:text-f13'
-              }`}
-            >
+            <div className={`text-[#c3c2d4] text-f15 b1200:text-f13`}>
               {isUser
                 ? 'Your Account'
                 : !participant.user
@@ -109,27 +98,21 @@ const Data: React.FC<{ participant: ILeague; rank: number }> = ({
           <Launch className="invisible group-hover:visible text-[#c3c2d4]" />
         </RowGap>
         <span
-          className={`text-1 ${
-            !isFirst ? 'text-f17 b1200:text-f13' : 'text-f19 b1200:text-f14'
-          }`}
+          className={`${
+            isFirst ? 'text-buffer-blue' : 'text-1'
+          } text-f17 b1200:text-f14`}
         >
           #{rank}
         </span>
       </RowBetween>
       <RowBetween className="w-full">
-        <span
-          className={`text-[#c3c2d4] ${
-            !isFirst ? 'text-f13 b1200:text-f11' : 'text-f14 b1200:text-f12'
-          }`}
-        >
+        <span className={`text-[#c3c2d4] text-f13 b1200:text-f12`}>
           {participant.totalTrades} Trades
         </span>
         <NetPnl
           currentStanding={participant}
           tokens={tokens}
-          className={
-            !isFirst ? 'text-f17 b1200:text-f13' : 'text-f19 b1200:text-f14'
-          }
+          className="text-f17 b1200:text-f14"
         />
       </RowBetween>
     </DataWrapper>
@@ -141,8 +124,8 @@ const DataWrapper = styled.button<{ isFirst: boolean }>`
   border-radius: 15px;
   background-color: ${(props) => (props.isFirst ? '#171722' : '#161a27')};
   padding: 48px 32px 24px;
-  width: ${(props) => (props.isFirst ? '250px' : '225px')};
-  height: ${(props) => (props.isFirst ? '135px' : '120px')};
+  width: 225px;
+  height: 135px;
   margin: 24px 0;
 
   transition: all 0.2s ease-in-out;

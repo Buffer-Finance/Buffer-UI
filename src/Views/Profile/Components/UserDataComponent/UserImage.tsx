@@ -44,27 +44,32 @@ export const UserImage: React.FC<{ address: string; isFirst?: boolean }> = ({
   }, [nfts]);
   return (
     <div className="absolute -top-[20%] m-auto">
-      <CircleAroundPicture isFirst={isFirst} />
+      <CircleAroundPicture />
+      <div
+        className={`w-[90%] h-[90%] rounded-full ${
+          isFirst ? 'bg-[#171722]' : 'bg-[#161a27]'
+        } absolute top-[0] right-[0] left-[0] bottom-[0] m-auto z-[9]`}
+      />
       {highestTierNFT !== null ? (
-        <div className="absolute top-[3px] left-[1px] ml-[6px]">
+        <div className="absolute top-[0px] left-[0px] right-[0] bottom-[0] m-auto z-[10]">
           <img
             src={
               'https://gateway.pinata.cloud/ipfs/' +
               highestTierNFT?.nftImage.split('://')[1]
             }
             alt=""
-            width={isFirst ? 40 : 35}
-            height={isFirst ? 40 : 35}
+            width={40}
+            height={40}
             className={'mt-2 m-auto rounded-full'}
           />
         </div>
       ) : (
-        <div className="absolute top-[0] ml-[6px]">
+        <div className="absolute top-[0px] left-[0px] right-[0] bottom-[0] z-[10]">
           <img
             src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-large/1f419@2x.png"
-            width={isFirst ? 40 : 35}
-            height={isFirst ? 40 : 35}
-            className={'mt-2 mx-auto'}
+            width={35}
+            height={35}
+            className={'mt-[5px] mx-auto'}
           />
         </div>
       )}
@@ -72,14 +77,12 @@ export const UserImage: React.FC<{ address: string; isFirst?: boolean }> = ({
   );
 };
 
-const CircleAroundPicture: React.FC<{ isFirst?: boolean }> = ({
-  isFirst = false,
-}) => {
+const CircleAroundPicture: React.FC<{}> = ({}) => {
   return (
     <svg
       className="relative"
-      width={isFirst ? 55 : 50}
-      height={isFirst ? 55 : 50}
+      width={50}
+      height={50}
       viewBox="0 0 113 113"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
