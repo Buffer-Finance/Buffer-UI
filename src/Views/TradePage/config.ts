@@ -308,7 +308,7 @@ export const refreshInterval = 1000;
 export const defaultSettings = {
   trade: {
     partialFill: true,
-    slippageTolerance: 0.05,
+    slippageTolerance: 0.5,
     limitOrdersExpiry: '24',
     selectedTimeFrame: 'h',
   },
