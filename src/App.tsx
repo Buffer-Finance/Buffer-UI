@@ -225,7 +225,7 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          {!urlSettings?.hide &&
+          {/* {!urlSettings?.hide &&
             (isMobile && mobileWarningClosed ? false : true) && (
               <Warning
                 body={
@@ -261,7 +261,7 @@ function App() {
                 state={!mobileWarningClosed}
                 className="disclaimer"
               />
-            )}
+            )} */}
           <TnCModal />
           <SideBar />
         </Background>
