@@ -1,6 +1,5 @@
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { useOneDayVolume } from '@Views/AboveBelow/Hooks/useOneDayVolume';
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import { formatBalance } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { Skeleton } from '@mui/material';
@@ -8,8 +7,10 @@ import { getAddress } from 'viem';
 
 export const OneDayVolume: React.FC<{
   activeMarket: marketTypeAB | undefined;
-}> = ({ activeMarket }) => {
-  const { oneDayVolume } = useOneDayVolume();
+  oneDayVolume: {
+    [key: string]: string;
+  };
+}> = ({ activeMarket, oneDayVolume }) => {
   if (activeMarket === undefined || oneDayVolume === undefined)
     return <Skeleton className="w-[50px] !h-5 lc " />;
   const volume = oneDayVolume[getAddress(activeMarket.address)];
