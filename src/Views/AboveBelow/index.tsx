@@ -42,10 +42,6 @@ export const AboveBelow = () => {
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);
   const isNotMobile = useMedia('(min-width:1200px)');
 
-  if ([polygon.id, polygonMumbai.id].includes(activeChain.id as 80001)) {
-    return <MobileWarning />;
-  }
-
   useEffect(() => {
     if (markets.length > 0) {
       if (!selectedPoolMarket) {
@@ -53,6 +49,10 @@ export const AboveBelow = () => {
       }
     }
   }, [markets.length]);
+
+  if ([polygon.id, polygonMumbai.id].includes(activeChain.id as 80001)) {
+    return <MobileWarning />;
+  }
   if (isNotMobile)
     return (
       <div

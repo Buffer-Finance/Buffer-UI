@@ -1,7 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useGenericHooks } from '@Hooks/useGenericHook';
 import { usePriceRetriable } from '@Hooks/usePrice';
-import FrontArrow from '@SVG/frontArrow';
 import ShutterProvider, {
   useShutterHandlers,
 } from '@Views/Common/MobileShutter/MobileShutter';
@@ -176,8 +175,10 @@ export const MobileWarning = () => {
           strokeWidth="0.453174"
         />
       </svg>
-      <div className="heading">V2.5 is not live on Polygon yet.</div>
-      <div className="desc">
+      <div className="heading">
+        We are not live on Polygon yet. Please switch back to Arbitrum.
+      </div>
+      {/* <div className="desc">
         <a
           href="
           https://classic.app.buffer.finance
@@ -188,7 +189,7 @@ export const MobileWarning = () => {
           Click here to trade on older version
           <FrontArrow className="inline ml-[6px]" />
         </a>
-      </div>
+      </div> */}
       {/* <BufferProgressBar progressPercent={40} /> */}
     </MobileWarningBackground>
   );
