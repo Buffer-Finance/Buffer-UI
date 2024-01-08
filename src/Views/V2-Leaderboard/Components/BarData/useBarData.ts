@@ -47,7 +47,7 @@ export const useBarData = ({
 
         const query = `{${leaderboardQuery}}`;
         const response = await axios.post(
-          'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.7.6-merge-6/api',
+          'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.7.7-merge-7-abovebelow-v2/api',
           {
             query,
           }
