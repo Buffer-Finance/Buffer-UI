@@ -37,7 +37,7 @@ export const useLeagueNFTusers = () => {
           }[];
         };
       }>(
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.4-nfr-all-time-leaderboard/api',
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.7.8-merge-9-nfts-merge/api',
         { query: `{${query}}` }
       );
 
