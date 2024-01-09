@@ -86,7 +86,7 @@ export const useWinnersByPnlWeekly = ({
               weeklyLeaderboards(
                 orderBy: netPnL
                 orderDirection: desc
-                first: 100
+                first: 10000
                 where: {or:[{timestamp: "${timestamp}",volume_gte: ${
           config.minVolumeToqualifyPNL
         } ,volume_lte: ${config.maxVolumeToqualifyPNL} ,totalTrades_lte: ${

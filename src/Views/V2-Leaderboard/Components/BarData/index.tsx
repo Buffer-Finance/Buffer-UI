@@ -1,7 +1,9 @@
 import useStopWatch from '@Hooks/Utilities/useStopWatch';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { toFixed } from '@Utils/NumString';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { Col } from '@Views/Common/ConfirmationModal';
+import { useWinnersByPnlWeekly } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/useWinnersByPnlWeekly';
 import { leagueType } from '@Views/V2-Leaderboard/Leagues/atom';
 import { leaguesConfig } from '@Views/V2-Leaderboard/Leagues/config';
 import { ILeague } from '@Views/V2-Leaderboard/interfaces';
@@ -9,7 +11,6 @@ import { Skeleton } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { descClass, headClass } from '../../Incentivised';
 import { ContestFilterDD } from '../ContestFilterDD';
-import { useBarData } from './useBarData';
 
 export const BarData: React.FC<{
   RewardPool: ReactNode;
@@ -30,17 +31,18 @@ export const BarData: React.FC<{
   config,
   league,
 }) => {
-  const { data, error, isValidating } = useBarData({
+  const { address: account } = useUserAccount();
+  const { data, error, isValidating } = useWinnersByPnlWeekly({
+    activeChainId,
+    config,
+    league,
     offset,
     week,
-    activeChainId,
-    league,
-    config,
+    account,
   });
 
   if (error) return <div>error</div>;
   const numOfParticipants = data?.weeklyLeaderboards?.length;
-  const volume = data?.reward?.[0]?.totalFee;
   return (
     <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
       <Col
@@ -66,13 +68,7 @@ export const BarData: React.FC<{
       />
       <Col
         head={'Volume'}
-        desc={
-          volume ? (
-            toFixed(divide(volume, 6) as string, 2)
-          ) : (
-            <Skeleton className="w-[50px] !h-6 lc " />
-          )
-        }
+        desc={<TotalVolume weeklyLeaderboards={data?.weeklyLeaderboards} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
@@ -80,7 +76,7 @@ export const BarData: React.FC<{
       <Col
         head={'Participants'}
         desc={
-          numOfParticipants ? (
+          numOfParticipants !== undefined ? (
             numOfParticipants
           ) : (
             <Skeleton className="w-[50px] !h-6 lc " />
@@ -127,5 +123,18 @@ const TotalTrades: React.FC<{ weeklyLeaderboards: ILeague[] | undefined }> = ({
   }, [weeklyLeaderboards]);
   if (totalTrades === undefined)
     return <Skeleton className="w-[50px] !h-6 lc " />;
+  console.log(totalTrades);
   return <div>{totalTrades}</div>;
+};
+
+const TotalVolume: React.FC<{ weeklyLeaderboards: ILeague[] | undefined }> = ({
+  weeklyLeaderboards,
+}) => {
+  const totalVolume = useMemo(() => {
+    if (weeklyLeaderboards === undefined) return undefined;
+    return weeklyLeaderboards.reduce((acc, curr) => add(acc, curr.volume), '0');
+  }, [weeklyLeaderboards]);
+  if (totalVolume === undefined)
+    return <Skeleton className="w-[50px] !h-6 lc " />;
+  return <div>{toFixed(divide(totalVolume, 6) as string, 2)} USDC</div>;
 };
