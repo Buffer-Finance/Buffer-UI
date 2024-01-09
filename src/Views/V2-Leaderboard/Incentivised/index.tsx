@@ -12,7 +12,6 @@ import { social } from '@Views/Common/SocialMedia';
 import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import TabSwitch from '@Views/Common/TabSwitch';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
@@ -276,7 +275,7 @@ export const Incentivised = () => {
             className="winner-card"
           />
         </div>{' '}
-        <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
+        <div className="flex flex-col justify-center b1200:items-center b1200:max-w-[590px] m-auto">
           <LeaderBoardTabs
             activeTab={activeTab}
             setActiveTab={setActiveTab}
@@ -362,7 +361,7 @@ export const Incentivised = () => {
                   <div className="flex flex-col items-start">
                     <div className="flex items-center gap-3">
                       <div>Daily Leaderboard </div>
-                      <ChainSwitchDropdown baseUrl="/leaderboard/daily" />
+                      {/* <ChainSwitchDropdown baseUrl="/leaderboard/daily" /> */}
                     </div>
                     <a
                       className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"

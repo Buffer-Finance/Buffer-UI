@@ -436,7 +436,7 @@ export const LeaderBoardTabs = ({
   if (window.innerWidth < 1200) {
     return (
       <BufferDropdown
-        rootClass="w-[200px]"
+        rootClass="w-[200px] m-auto"
         className="py-4 px-4 bg-2"
         dropdownBox={(a, open, disabled) => (
           <div className="flex items-center justify-between text-f15 bg-1 px-4 pt-2 pb-[6px] rounded-md">

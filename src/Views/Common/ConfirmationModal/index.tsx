@@ -90,7 +90,7 @@ export function Col({ head, desc, ...props }) {
         )}
       </div>
       <div
-        className={`desc w-full text-center ${
+        className={`desc b1200:w-fit w-full text-center ${
           props.descClass ? props.descClass : ''
         }`}
       >

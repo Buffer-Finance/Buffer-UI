@@ -35,7 +35,7 @@ export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
     );
   if (isMobile)
     return (
-      <div className="b1200:flex-col b1200:gap-2">
+      <div className="b1200:flex-col b1200:flex b1200:gap-1">
         {winners.map((item, index) => {
           return <Data participant={item} rank={index + 1} />;
         })}
@@ -83,7 +83,7 @@ const Data: React.FC<{ participant: ILeague; rank: number }> = ({
       {isFirst && <Confetti className="absolute z-9 -top-[6px]" />}
       <UserImage address={participant.user} isFirst={isFirst} />
       <RowBetween className="w-full">
-        <RowGap gap="8px">
+        <RowGap gap="4px">
           <NumberTooltip content={participant.user || ''}>
             <div className={`text-[#c3c2d4] text-f15 b1200:text-f13`}>
               {isUser
@@ -95,7 +95,7 @@ const Data: React.FC<{ participant: ILeague; rank: number }> = ({
                   participant.user.slice(-3)}
             </div>
           </NumberTooltip>
-          <Launch className="invisible group-hover:visible text-[#c3c2d4]" />
+          <Launch className="invisible b1200:visible group-hover:visible text-[#c3c2d4]" />
         </RowGap>
         <span
           className={`${
@@ -138,5 +138,7 @@ const DataWrapper = styled.button<{ isFirst: boolean }>`
     width: fit-content;
     margin: 16px auto;
     min-width: 250px;
+    padding: 24px 32px 12px;
+    height: 100px;
   }
 `;

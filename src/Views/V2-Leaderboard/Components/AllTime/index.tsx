@@ -36,7 +36,7 @@ export const AllTime = () => {
                     // />
                   }
                   heading={
-                    <div className="flex flex-col items-start">
+                    <div className="flex flex-col items-start mb-4">
                       <div className="flex items-center gap-3 flex-wrap">
                         <div className="capitalize">All time leaderboard</div>
                       </div>

@@ -1,22 +1,21 @@
-import { useMemo, useState } from 'react';
-import { BufferLogoComponent } from './BufferLogo';
-import { getTabs } from 'src/Config/getTabs';
-import { TabsDropdown } from './TabsDropDown';
-import { Tab } from './Tab';
-import { AccountDropdown } from './AccountDropdown';
 import { useGlobal } from '@Contexts/Global';
-import { useAtomValue } from 'jotai';
-import { urlSettings } from 'src/Config/wagmiClient';
-import { isTestnet } from 'config';
-import { SettingsDD } from './SettingsDD';
-import { activeMarketFromStorageAtom } from 'src/globalStore';
-import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
-import { useShutterHandlers } from '../MobileShutter/MobileShutter';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { useNavigate } from 'react-router-dom';
+import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import { inIframe } from '@Utils/isInIframe';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { useAtomValue } from 'jotai';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getTabs } from 'src/Config/getTabs';
+import { urlSettings } from 'src/Config/wagmiClient';
+import { activeMarketFromStorageAtom } from 'src/globalStore';
+import { useShutterHandlers } from '../MobileShutter/MobileShutter';
+import { AccountDropdown } from './AccountDropdown';
+import { BufferLogoComponent } from './BufferLogo';
+import { SettingsDD } from './SettingsDD';
+import { Tab } from './Tab';
+import { TabsDropdown } from './TabsDropDown';
 
 interface INavbar {}
 
@@ -57,7 +56,7 @@ export const Navbar: React.FC<INavbar> = () => {
   };
   const show = !urlSettings?.hide;
   return (
-    <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102] b1200:z-10">
+    <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102] b1200:z-100">
       <OneCTModal />
       <div className="flex items-center ">
         <div

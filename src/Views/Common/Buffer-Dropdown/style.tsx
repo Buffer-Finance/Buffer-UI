@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 const Background = styled.div`
   height: 100%;
+  width: fit-content;
   .message {
     color: var(--text-6);
     font-size: 1.2rem;
