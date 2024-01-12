@@ -45,7 +45,7 @@ export const AllActive: React.FC<{
     fetcher: async () => {
       if (activeChain === undefined) return;
       const config = getConfig(activeChain?.id);
-      const response = await axios.post(config.graph.ABOVE_BELOW, {
+      const response = await axios.post(config.graph.MAIN, {
         query: `{
             activeTrades: userOptionDatas(
                 orderBy: creationTime

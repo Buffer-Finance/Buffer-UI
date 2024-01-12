@@ -45,7 +45,6 @@ export function generateTimestamps(): {
 
 export const formatTimestampToHHMM = (timestamp: number) => {
   const date = new Date(timestamp);
-  console.log(date, timestamp);
   const hours = date.getHours();
   const minutes = date.getMinutes();
   return `${hours}:${minutes}`;

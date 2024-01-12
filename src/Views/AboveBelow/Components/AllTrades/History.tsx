@@ -45,7 +45,7 @@ export const AllHistory: React.FC<{
     fetcher: async () => {
       if (activeChain === undefined) return;
       const config = getConfig(activeChain?.id);
-      const response = await axios.post(config.graph.ABOVE_BELOW, {
+      const response = await axios.post(config.graph.MAIN, {
         query: `{
                 historyTrades: userOptionDatas(
                     orderBy: expirationTime
@@ -86,7 +86,7 @@ export const AllHistory: React.FC<{
   const historyTrades = useMemo(() => {
     return getProcessedTrades(data, 0, undefined, false);
   }, [data]);
-
+  console.log(data);
   return (
     <History
       onlyView={onlyView}

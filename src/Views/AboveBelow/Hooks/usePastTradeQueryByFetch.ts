@@ -28,12 +28,6 @@ export const usePastTradeQueryByFetch = ({
     `history-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledPage-${cancelledskip}-account-${account}-activeChain-${activeChain?.id}-up-down-v3`,
     {
       fetcher: async () => {
-        // console.log(
-        //   activeChain?.id,
-        //   account,
-        //   activeTournamentId,
-        //   'trades-fetch'
-        // );
         if (activeChain === undefined) return;
         if (account === undefined) return;
         const config = getConfig(activeChain?.id);
