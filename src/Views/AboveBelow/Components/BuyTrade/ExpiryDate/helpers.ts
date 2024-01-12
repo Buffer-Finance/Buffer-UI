@@ -5,6 +5,52 @@ export function formatDateShort(timestamp: number) {
   return `${month} ${day}`;
 }
 
+export function generateTimestamps(): {
+  oneMinuteTimestamps: number[];
+  fifteenMinuteTimestamps: number[];
+  currentTimeStamp: number;
+} {
+  const oneMinuteTimestamps: number[] = [];
+  const fifteenMinuteTimestamps: number[] = [];
+  const now = new Date();
+  const currentSeconds = now.getSeconds();
+  const secondsUntilNextMinute = (60 - currentSeconds) % 60;
+  const startTimestamp = Math.floor(
+    (now.getTime() + secondsUntilNextMinute * 1000) / 1000
+  );
+
+  for (let i = 1; i <= 15; i++) {
+    const nextOneMinuteTimestamp = startTimestamp + i * 60;
+    oneMinuteTimestamps.push(nextOneMinuteTimestamp * 1000);
+  }
+
+  const lastOneMinuteTimestamp =
+    oneMinuteTimestamps[oneMinuteTimestamps.length - 1];
+
+  // Find the next quarter-hour boundary
+  const nextQuarterHour =
+    Math.ceil(lastOneMinuteTimestamp / (15 * 60000)) * (15 * 60000);
+
+  for (let i = 0; i < 4 * 60; i += 15) {
+    const nextFifteenMinuteTimestamp = nextQuarterHour + i * 60000;
+    fifteenMinuteTimestamps.push(nextFifteenMinuteTimestamp);
+  }
+
+  return {
+    oneMinuteTimestamps,
+    fifteenMinuteTimestamps,
+    currentTimeStamp: now.getTime(),
+  };
+}
+
+export const formatTimestampToHHMM = (timestamp: number) => {
+  const date = new Date(timestamp);
+  console.log(date, timestamp);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  return `${hours}:${minutes}`;
+};
+
 export const formatDateWithTime = (timestamp: number) => {
   const date = new Date(timestamp);
   const month = date.toLocaleString('en-us', { month: 'short' });

@@ -16,34 +16,33 @@ export const useAboveBelowMarketsSetter = () => {
   const setMarkets = useSetAtom(aboveBelowmarketsSetterAtom);
 
   async function fetcher(): Promise<responseAB[]> {
-    const response = await axios.post(configData.graph.ABOVE_BELOW, {
+    const response = await axios.post(configData.graph.MAIN, {
       query: `{ 
-        optionContracts(first:10000) {
+        optionContracts(first: 10000) {
+          address
+          token0
+          token1
+          isPaused
+          poolContract
+          routerContract
+          openUp
+          openDown
+          openInterestUp
+          openInterestDown
+          pool
+          config {
             address
-            token1
-            token0
-            isPaused
-            routerContract
-            poolContract
-            openUp
-            openDown
-            openInterestUp
-            openInterestDown
-            config {
-              address
-              maxSkew
-              creationWindowContract
-              circuitBreakerContract
-              iv
-              traderNFTContract
-              sf
-              sfdContract
-              payout
-              platformFee
-              optionStorageContract
-              stepSize
-            }
+            minFee
+            creationWindowContract
+            circuitBreakerContract
+            optionStorageContract
+            platformFee
+            sfdContract
+            sf
+            traderNFTContract
+            stepSize
           }
+        }
         }`,
     });
 
@@ -51,7 +50,7 @@ export const useAboveBelowMarketsSetter = () => {
   }
 
   const { data, error, mutate } = useSWR<responseAB[], Error>(
-    `above-below-activeChain-${activeChain.id}`,
+    `up-down-v3-activeChain-${activeChain.id}`,
     {
       fetcher: fetcher,
       refreshInterval: 60000,

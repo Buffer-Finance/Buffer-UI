@@ -83,7 +83,7 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/api',
           ABOVE_BELOW:
             'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
         },
@@ -94,7 +94,7 @@ export const appConfig = {
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
         v2_router: '0x76c52E83d7dcCc70107a66BAd44D042D22D06be7',
-        above_below_router: '0x912B29A5efeA11d7994970799E82C3A7FB54a434',
+        above_below_router: '0x62fAc96f91D943aD52A972FEebD631E39161eABc',
         poolsInfo: {
           '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
             tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',

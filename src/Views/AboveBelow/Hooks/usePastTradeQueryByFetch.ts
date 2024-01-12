@@ -25,7 +25,7 @@ export const usePastTradeQueryByFetch = ({
   const { activeChain } = useActiveChain();
 
   return useSWR(
-    `history-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledPage-${cancelledskip}-account-${account}-activeChain-${activeChain?.id}-above-below`,
+    `history-thegraph-activePage-${activeskip}-historyPage${historyskip}-cancelledPage-${cancelledskip}-account-${account}-activeChain-${activeChain?.id}-up-down-v3`,
     {
       fetcher: async () => {
         // console.log(
@@ -37,7 +37,7 @@ export const usePastTradeQueryByFetch = ({
         if (activeChain === undefined) return;
         if (account === undefined) return;
         const config = getConfig(activeChain?.id);
-        const response = await axios.post(config.graph.ABOVE_BELOW, {
+        const response = await axios.post(config.graph.MAIN, {
           query: `{ 
             historyTrades: userOptionDatas(
               orderBy: expirationTime
@@ -112,9 +112,7 @@ export const usePastTradeQueryByFetch = ({
                 user
                 queueTimestamp
                 totalFee
-                maxFeePerContract
                 expirationTime
-                numberOfContracts
                 optionContract {
                   token0
                   token1
@@ -139,9 +137,7 @@ export const usePastTradeQueryByFetch = ({
                 queueTimestamp
                 totalFee
                 cancelTimestamp
-                maxFeePerContract
                 expirationTime
-                numberOfContracts
                 user
                 optionContract {
                   token0

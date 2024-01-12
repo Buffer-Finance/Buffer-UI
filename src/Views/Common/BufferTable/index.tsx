@@ -60,6 +60,8 @@ interface IBufferTable {
     | undefined;
   activePage?: number;
   noHover?: boolean;
+  headClassName?: string;
+  headCellClassName?: string;
 }
 
 const BufferTable: React.FC<IBufferTable> = ({
@@ -94,6 +96,8 @@ const BufferTable: React.FC<IBufferTable> = ({
   activePage = 1,
   accordianJSX,
   noHover = false,
+  headCellClassName,
+  headClassName,
 }) => {
   let rowClass = '';
   let tableCellCls = 'table-cell';
@@ -132,11 +136,13 @@ const BufferTable: React.FC<IBufferTable> = ({
         >
           {headerJSX && (
             <TableHead
-              className={` ${noHover ? 'no-hover' : 'transparent-hover'} ${
-                isHeaderTransparent ? '!bg-[transparent]' : ''
-              } table-header ${shouldHideHeader ? 'tab' : ''} `}
+              className={`${headClassName ? headClassName : 'table-header'}  ${
+                noHover ? 'no-hover' : 'transparent-hover'
+              } ${isHeaderTransparent ? '!bg-[transparent]' : ''}  ${
+                shouldHideHeader ? 'tab' : ''
+              } `}
             >
-              <TableRow className={` table-row-head`}>
+              <TableRow className={`${'table-row-head'} `}>
                 {createArray(cols).map((idx) => {
                   let show = true;
                   if (showOnly) show = showOnly.includes(idx);
@@ -144,7 +150,9 @@ const BufferTable: React.FC<IBufferTable> = ({
                     <TableCell
                       width={widths && idx < widths.length ? widths[idx] : ''}
                       key={idx}
-                      className={` ${show ? '' : '!hidden'}  ${
+                      className={`${
+                        headCellClassName ? headCellClassName : ''
+                      } ${show ? '' : '!hidden'}  ${
                         smThHeight ? 'th-head ' : ''
                       }  ${noHover ? 'no-hover' : 'transparent-hover'}  ${
                         isHeaderTransparent ? '!bg-[transparent]' : ''

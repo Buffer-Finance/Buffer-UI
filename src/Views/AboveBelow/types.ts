@@ -2,27 +2,26 @@ import { chartDataType, poolInfoType } from '@Views/TradePage/type';
 
 export interface responseAB {
   address: string;
-  token1: string;
   token0: string;
+  token1: string;
   isPaused: boolean;
-  routerContract: string;
   poolContract: string;
+  routerContract: string;
   openUp: string;
   openDown: string;
   openInterestUp: string;
   openInterestDown: string;
+  pool: string;
   config: {
     address: string;
-    maxSkew: string;
+    minFee: string;
     creationWindowContract: string;
     circuitBreakerContract: string;
-    iv: string;
-    traderNFTContract: string;
-    sf: string;
-    sfdContract: string;
-    payout: string;
-    platformFee: string;
     optionStorageContract: string;
+    platformFee: string;
+    sfdContract: string;
+    sf: string;
+    traderNFTContract: string;
     stepSize: string;
   };
 }

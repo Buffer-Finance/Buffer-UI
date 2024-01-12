@@ -172,12 +172,6 @@
         "internalType": "address",
         "name": "targetContract",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "contracts",
-        "type": "uint256"
       }
     ],
     "name": "OpenTrade",
@@ -335,7 +329,7 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+      { "internalType": "uint32", "name": "timestamp", "type": "uint32" },
       {
         "internalType": "bytes[]",
         "name": "priceUpdateData",
@@ -344,7 +338,7 @@
       { "internalType": "bytes32[]", "name": "priceId", "type": "bytes32[]" }
     ],
     "name": "getPrice",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [{ "internalType": "uint128", "name": "", "type": "uint128" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -391,20 +385,10 @@
             "name": "allowPartialFill",
             "type": "bool"
           },
-          {
-            "internalType": "string",
-            "name": "referralCode",
-            "type": "string"
-          },
           { "internalType": "bool", "name": "isAbove", "type": "bool" },
-          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-          { "internalType": "uint128", "name": "strike", "type": "uint128" },
           { "internalType": "uint32", "name": "expiration", "type": "uint32" },
-          {
-            "internalType": "uint256",
-            "name": "maxFeePerContract",
-            "type": "uint256"
-          }
+          { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
+          { "internalType": "string", "name": "referralCode", "type": "string" }
         ],
         "internalType": "struct IBufferRouter.TradeInitiationParamas",
         "name": "params",
@@ -463,25 +447,18 @@
     "name": "queuedTrades",
     "outputs": [
       { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "bool", "name": "allowPartialFill", "type": "bool" },
+      { "internalType": "uint32", "name": "expiration", "type": "uint32" },
+      { "internalType": "bool", "name": "isQueued", "type": "bool" },
+      { "internalType": "bool", "name": "isAbove", "type": "bool" },
+      { "internalType": "uint32", "name": "queuedTime", "type": "uint32" },
       {
         "internalType": "address",
         "name": "targetContract",
         "type": "address"
       },
-      { "internalType": "uint128", "name": "strike", "type": "uint128" },
-      { "internalType": "uint32", "name": "expiration", "type": "uint32" },
-      { "internalType": "uint256", "name": "contracts", "type": "uint256" },
-      { "internalType": "bool", "name": "allowPartialFill", "type": "bool" },
-      { "internalType": "bool", "name": "isQueued", "type": "bool" },
-      { "internalType": "uint256", "name": "optionId", "type": "uint256" },
-      { "internalType": "bool", "name": "isAbove", "type": "bool" },
-      { "internalType": "uint32", "name": "queuedTime", "type": "uint32" },
-      {
-        "internalType": "uint256",
-        "name": "maxFeePerContract",
-        "type": "uint256"
-      },
       { "internalType": "string", "name": "referralCode", "type": "string" },
+      { "internalType": "uint256", "name": "optionId", "type": "uint256" },
       { "internalType": "uint256", "name": "totalFee", "type": "uint256" }
     ],
     "stateMutability": "view",
@@ -502,28 +479,19 @@
       {
         "components": [
           { "internalType": "uint256", "name": "queueId", "type": "uint256" },
-          { "internalType": "uint256", "name": "iv", "type": "uint256" },
           { "internalType": "uint256", "name": "sf", "type": "uint256" },
           {
-            "components": [
-              { "internalType": "bytes", "name": "signature", "type": "bytes" },
-              {
-                "internalType": "uint32",
-                "name": "timestamp",
-                "type": "uint32"
-              }
-            ],
-            "internalType": "struct IBufferRouter.SignInfo",
-            "name": "publisherSignInfo",
-            "type": "tuple"
+            "internalType": "uint256",
+            "name": "revisedFee",
+            "type": "uint256"
           },
           {
             "components": [
               { "internalType": "bytes", "name": "signature", "type": "bytes" },
               {
-                "internalType": "uint32",
+                "internalType": "uint256",
                 "name": "timestamp",
-                "type": "uint32"
+                "type": "uint256"
               }
             ],
             "internalType": "struct IBufferRouter.SignInfo",

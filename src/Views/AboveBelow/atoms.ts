@@ -2,10 +2,9 @@ import { poolInfoType } from '@Views/TradePage/type';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { getAddress } from 'viem';
-import { getTimestamps } from './Components/BuyTrade/ExpiryDate/helpers';
 import { IreadCallData, accordianTableType, marketTypeAB } from './types';
 
-export const selectedExpiry = atom<number | undefined>(getTimestamps()[0]);
+export const selectedExpiry = atom<number | undefined>(undefined);
 
 export const aboveBelowMarketsAtom = atom<marketTypeAB[] | null>(null);
 export const aboveBelowmarketsSetterAtom = atom(

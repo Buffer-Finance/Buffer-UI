@@ -2,7 +2,6 @@ import { selectedPoolActiveMarketAtom } from '@Views/AboveBelow/atoms';
 import { useAtomValue } from 'jotai';
 import { ActiveMarketPrice } from './ActiveMarketPrice';
 import { AssetSelector } from './AssetSelector';
-import { MarketData } from './MarketData';
 import { MultiChartSelectorMenu } from './MultiChartSelectorMenu';
 
 export const StatusBar: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
@@ -19,7 +18,7 @@ export const StatusBar: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <ActiveMarketPrice market={activeMarket} />
         </>
       )}
-      <MarketData activeMarket={activeMarket} />
+      {/* <MarketData activeMarket={activeMarket} /> */}
       <div className="ml-auto" />
       <>
         <MultiChartSelectorMenu isMobile={isMobile} />
