@@ -90,13 +90,17 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   const timestamp = oneMinuteArray[row];
                   switch (col) {
                     case 0:
-                      return <div>{formatTimestampToHHMM(timestamp)}</div>;
+                      return (
+                        <div className="ml-5">
+                          {formatTimestampToHHMM(timestamp)}
+                        </div>
+                      );
                     case 1:
                       const distance = timestamp - currentTimeStamp;
 
                       return (
-                        <div className="flex items-center gap-1">
-                          <CLockSVG color="#fff" className="mt-1" />
+                        <div className="flex items-center gap-2">
+                          <CLockSVG color="#fff" className="" />
                           {formatDistance(Variables(distance / 1000))}
                         </div>
                       );
@@ -112,7 +116,7 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   setSelectedTimestamp(oneMinuteArray[row]);
                   closeDropdown();
                 }}
-                rows={15}
+                rows={oneMinuteArray.length}
                 isBodyTransparent
                 headClassName="headClassName"
                 headCellClassName="leftHeadCellClassName"
@@ -123,13 +127,17 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   const timestamp = fifteenMinuteTimestamps[row];
                   switch (col) {
                     case 0:
-                      return <div>{formatTimestampToHHMM(timestamp)}</div>;
+                      return (
+                        <div className="ml-8">
+                          {formatTimestampToHHMM(timestamp)}
+                        </div>
+                      );
                     case 1:
                       const distance = timestamp - currentTimeStamp;
 
                       return (
-                        <div className="flex items-center gap-1">
-                          <CLockSVG color="#fff" className="mt-1" />
+                        <div className="flex items-center gap-2">
+                          <CLockSVG color="#fff" className="" />
                           {formatDistance(Variables(distance / 1000))}
                         </div>
                       );
@@ -139,13 +147,17 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                 }}
                 cols={2}
                 headerJSX={(col) => {
-                  return col === 0 ? <div>Time</div> : <div>Remaining</div>;
+                  return col === 0 ? (
+                    <div className="ml-8">Time</div>
+                  ) : (
+                    <div>Remaining</div>
+                  );
                 }}
                 onRowClick={(row) => {
                   setSelectedTimestamp(fifteenMinuteTimestamps[row]);
                   closeDropdown();
                 }}
-                rows={16}
+                rows={fifteenMinuteTimestamps.length}
                 isBodyTransparent
                 headClassName="headClassName"
                 headCellClassName="rightHeadCellClassName"

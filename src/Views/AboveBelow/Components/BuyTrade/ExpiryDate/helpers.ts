@@ -33,6 +33,8 @@ export function generateTimestamps(): {
 
   for (let i = 0; i < 4 * 60; i += 15) {
     const nextFifteenMinuteTimestamp = nextQuarterHour + i * 60000;
+    // if the timestamp is greater than the current time + 4 hours then break
+    if (nextFifteenMinuteTimestamp > now.getTime() + 4 * 60 * 60000) break;
     fifteenMinuteTimestamps.push(nextFifteenMinuteTimestamp);
   }
 
@@ -43,11 +45,15 @@ export function generateTimestamps(): {
   };
 }
 
+function formatTwoDigitNumber(number: number) {
+  return String(number).padStart(2, '0');
+}
+
 export const formatTimestampToHHMM = (timestamp: number) => {
   const date = new Date(timestamp);
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  return `${hours}:${minutes}`;
+  return `${formatTwoDigitNumber(hours)}:${formatTwoDigitNumber(minutes)}`;
 };
 
 export const formatDateWithTime = (timestamp: number) => {
