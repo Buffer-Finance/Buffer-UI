@@ -1,6 +1,8 @@
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useWriteCall } from '@Hooks/useWriteCall';
+import DownIcon from '@SVG/Elements/DownIcon';
+import UpIcon from '@SVG/Elements/UpIcon';
 import { toFixed } from '@Utils/NumString';
 import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useIsInCreationWindow } from '@Views/AboveBelow/Hooks/useIsInCreationWIndow';
@@ -11,7 +13,7 @@ import {
   tradeSizeAtom,
 } from '@Views/AboveBelow/atoms';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
-import { BlueBtn, GreenBtn, RedBtn } from '@Views/Common/V2-Button';
+import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { tradeSettingsAtom } from '@Views/TradePage/atoms';
@@ -191,20 +193,29 @@ const TradeButton = () => {
   return (
     <ConnectionRequired>
       <div className="flex gap-2 items-center">
-        <GreenBtn
+        <BufferButton
           onClick={() => buyTrade(true)}
+          isDisabled={loading !== 'None'}
           isLoading={loading === 'Up'}
-          isDisabled={loading !== 'None'}
+          test-id="last-up-btn"
+          className={` text-1 bg-green hover:text-1`}
         >
-          Up
-        </GreenBtn>
-        <RedBtn
-          onClick={() => buyTrade(false)}
+          <>
+            <UpIcon className="mr-[6px] scale-150" />
+            <span>Up</span>
+          </>
+        </BufferButton>
+        <BufferButton
+          isDisabled={loading !== 'None'}
           isLoading={loading === 'Down'}
-          isDisabled={loading !== 'None'}
+          className={` text-1 bg-red`}
+          onClick={() => buyTrade(false)}
         >
-          Down
-        </RedBtn>
+          <>
+            <DownIcon className="mr-[6px] scale-150" />
+            <span>Down</span>
+          </>
+        </BufferButton>
       </div>
     </ConnectionRequired>
   );
