@@ -2,7 +2,7 @@ import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { toFixed } from '@Utils/NumString';
-import { divide, lt, subtract } from '@Utils/NumString/stringArithmatics';
+import { divide, lte, subtract } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { numberWithCommas } from '@Utils/display';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
@@ -162,7 +162,7 @@ export const History: React.FC<{
       case TableColumn.Payout:
         if (trade.state === BetState.active) return <PayoutChip data={trade} />;
         const pnl = subtract(trade.payout ?? '0', trade.totalFee as string);
-        const isTradeLost = lt(pnl, '0');
+        const isTradeLost = lte(pnl, '0');
 
         if (isMobile)
           return (
@@ -171,7 +171,10 @@ export const History: React.FC<{
             >
               {isTradeLost ? '' : '+ '}
               <Display
-                data={divide(pnl, trade.market.poolInfo.decimals)}
+                data={divide(
+                  trade.payout as string,
+                  trade.market.poolInfo.decimals
+                )}
                 precision={2}
               />
               <img
@@ -275,7 +278,10 @@ export const History: React.FC<{
                 ? numberWithCommas(
                     toFixed(
                       divide(
-                        trade.payout as string,
+                        subtract(
+                          (trade.payout as string) ?? '0',
+                          trade.totalFee as string
+                        ),
                         trade.market.poolInfo.decimals
                       ) as string,
                       2
