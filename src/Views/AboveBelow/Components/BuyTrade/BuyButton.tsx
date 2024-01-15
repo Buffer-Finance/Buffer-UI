@@ -111,63 +111,7 @@ const TradeButton = () => {
       if (!readCallData) throw new Error('Error fetching data');
       if (!activeMarket) throw new Error('active market not found');
       if (!currentPrice) throw new Error('current price not found');
-      // const strikes = strikePrices;
-      // const activeAssetStrikes = strikes[activeMarket.tv_id];
-      // if (!activeAssetStrikes)
-      //   throw new Error('active asset strikes not found');
-      // const iv = ivs?.[activeMarket.tv_id];
-      // if (iv === undefined) throw new Error('iv not found');
-      // const slippageError = getSlippageError(settings.slippageTolerance);
-      // if (slippageError !== null) throw new Error(slippageError);
-      // const priceObj = selectedPrice[activeMarket.tv_id];
-      // if (!priceObj) throw new Error('price obj not found');
-      // const price = priceObj.price;
-      // let strikePriceObject = activeAssetStrikes.increasingPriceArray.find(
-      //   (obj) => obj.strike.toString() == priceObj.price
-      // );
-      // if (!strikePriceObject) {
-      //   strikePriceObject = activeAssetStrikes.decreasingPriceArray.find(
-      //     (obj) => obj.strike.toString() == priceObj.price
-      //   );
-      // }
-      // if (!strikePriceObject) throw new Error('Please select a strike price');
-      // const totalFee = priceObj.isAbove
-      //   ? strikePriceObject.totalFeeAbove
-      //   : strikePriceObject.totalFeeBelow;
-      // if (!totalFee) throw new Error('total fee not found');
-      // const expiration = Math.floor(selectedTimestamp / 1000);
 
-      // const balance =
-      //   divide(readCallData.balances[token], decimals) ?? ('0' as string);
-
-      // let maxTradeSize = MAX_APPROVAL_VALUE;
-      // const maxPermissibleMarket =
-      //   readCallData.maxPermissibleContracts[
-      //     getAddress(activeMarket.address) + price
-      //   ];
-      // if (maxPermissibleMarket !== undefined) {
-      //   const maxPermissibleContracts =
-      //     maxPermissibleMarket.maxPermissibleContracts;
-      //   if (maxPermissibleContracts !== undefined)
-      //     maxTradeSize = multiply(maxPermissibleContracts, totalFee.toString());
-      // }
-      // const tradeSizeError = getTradeSizeError(
-      //   maxTradeSize,
-      //   balance,
-      //   amount
-      // );
-      // if (!!tradeSizeError) throw new Error(tradeSizeError);
-      // const platformFeeError = getPlatformError({
-      //   platfromFee: divide(
-      //     activeMarket.config.platformFee,
-      //     activeMarket.poolInfo.decimals
-      //   ) as string,
-      //   tradeSize: amount || '0',
-      //   balance,
-      // });
-      // if (!!platformFeeError) throw new Error(platformFeeError);
-      // const maxFeePerContracts =
-      //   totalFee + (settings.slippageTolerance / 100) * totalFee;
       setLoading(isAbove ? 'Up' : 'Down');
       await writeCall(() => {}, 'initiateTrade', [
         [
@@ -179,6 +123,41 @@ const TradeButton = () => {
           referralData[2],
         ],
       ]);
+
+      const content = (
+        <div className="flex flex-col gap-y-2 text-f12 ">
+          <div className="nowrap font-[600]">
+            Trade placed
+            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+          </div>
+          <div className="flex items-center">
+            {activeMarket.token0 + '-' + activeMarket.token1}&nbsp;&nbsp;
+            <span className="!text-3">to go</span>&nbsp;
+            {isAbove ? (
+              <>
+                <UpIcon className="text-green scale-125" /> &nbsp;Higher
+              </>
+            ) : (
+              <>
+                <DownIcon className="text-red scale-125" />
+                &nbsp; Lower
+              </>
+            )}
+          </div>
+          <div>
+            <span>
+              <span className="!text-3">Total amount:</span>
+              {amount}&nbsp;{activeMarket.poolInfo.token.toUpperCase()}
+            </span>
+          </div>
+        </div>
+      );
+      toastify({
+        type: 'success',
+        timings: 20,
+        body: null,
+        msg: content,
+      });
     } catch (e) {
       toastify({
         type: 'error',

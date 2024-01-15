@@ -1,4 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useGenericHooks } from '@Hooks/useGenericHook';
 import { usePriceRetriable } from '@Hooks/usePrice';
 import { MobileWarning, RightPanelBackground } from '@Views/TradePage';
 import {
@@ -20,7 +21,7 @@ import { StatusBar } from './Components/StatusBar';
 import { Tables } from './Components/Tables';
 import { useAboveBelowMarketsSetter } from './Hooks/useAboveBelowMarketsSetter';
 import { useActiveMarketSetter } from './Hooks/useActiveMarketSetter';
-import { usePastTradeQuery } from './Hooks/usePastTradeQuery';
+import { tardesAtom, usePastTradeQuery } from './Hooks/usePastTradeQuery';
 import { useReacallDataSetter } from './Hooks/useReadcallDataSetter';
 import {
   aboveBelowActiveMarketsAtom,
@@ -29,6 +30,8 @@ import {
 } from './atoms';
 
 export const AboveBelow = () => {
+  const { active } = useAtomValue(tardesAtom);
+
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
   const { activeChain } = useActiveChain();
@@ -37,6 +40,8 @@ export const AboveBelow = () => {
   useActiveMarketSetter();
   useReacallDataSetter();
   usePastTradeQuery();
+  useGenericHooks(active);
+
   const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
   const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);
