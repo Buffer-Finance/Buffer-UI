@@ -49,11 +49,14 @@ export interface IreadCallData {
   isInCreationWindow: {
     [category: string]: boolean;
   };
-  maxPermissibleContracts: {
-    [contractAddressstrike: string]: {
-      isAbove: boolean;
-      maxPermissibleContracts: string | undefined;
-      strike: string;
-    };
+  settlementFees: {
+    [contractAddress: string]: string;
   };
+  // maxPermissibleContracts: {
+  //   [contractAddressstrike: string]: {
+  //     isAbove: boolean;
+  //     maxPermissibleContracts: string | undefined;
+  //     strike: string;
+  //   };
+  // };
 }

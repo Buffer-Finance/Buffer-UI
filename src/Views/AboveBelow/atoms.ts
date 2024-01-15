@@ -1,7 +1,6 @@
 import { poolInfoType } from '@Views/TradePage/type';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { getAddress } from 'viem';
 import { IreadCallData, accordianTableType, marketTypeAB } from './types';
 
 export const selectedExpiry = atom<number | undefined>(undefined);
@@ -100,13 +99,16 @@ export const readCallResponseAtom = atom(
     const balances: { [tokenName: string]: string } = {};
     const allowances: { [tokenName: string]: string } = {};
     const isInCreationWindow: { [category: string]: boolean } = {};
-    const maxPermissibleContracts: {
-      [contractAddress: string]: {
-        isAbove: boolean;
-        maxPermissibleContracts: string | undefined;
-        strike: string;
-      };
+    const settlementFees: {
+      [contractAddress: string]: string;
     } = {};
+    // const maxPermissibleContracts: {
+    //   [contractAddress: string]: {
+    //     isAbove: boolean;
+    //     maxPermissibleContracts: string | undefined;
+    //     strike: string;
+    //   };
+    // } = {};
     for (const callId in update) {
       const [data] = update[callId];
       if (callId.includes('-balance')) {
@@ -115,20 +117,24 @@ export const readCallResponseAtom = atom(
         allowances[callId.split('-')[0]] = (data ?? '0') as string;
       } else if (callId.includes('-creationWindow')) {
         isInCreationWindow[callId.split('-')[2]] = (data ?? false) as boolean;
-      } else if (callId.includes('getMaxPermissibleContracts')) {
-        const [contract, strike] = callId.split('getMaxPermissibleContracts');
-        maxPermissibleContracts[getAddress(contract) + strike] = {
-          isAbove: callId.includes('Above'),
-          maxPermissibleContracts: data as string | undefined,
-          strike,
-        };
+      } else if (callId.includes('-settlementFee')) {
+        settlementFees[callId.split('-')[0]] = (data ?? '0') as string;
       }
+      //  else if (callId.includes('getMaxPermissibleContracts')) {
+      //   const [contract, strike] = callId.split('getMaxPermissibleContracts');
+      //   maxPermissibleContracts[getAddress(contract) + strike] = {
+      //     isAbove: callId.includes('Above'),
+      //     maxPermissibleContracts: data as string | undefined,
+      //     strike,
+      //   };
+      // }
     }
     set(readCallDataAtom, {
       balances,
       allowances,
       isInCreationWindow,
-      maxPermissibleContracts,
+      settlementFees,
+      // maxPermissibleContracts,
     });
   }
 );

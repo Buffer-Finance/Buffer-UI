@@ -76,52 +76,9 @@
         "internalType": "uint256",
         "name": "totalFee",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "int256",
-        "name": "skew",
-        "type": "int256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "marketId",
-        "type": "bytes32"
       }
     ],
     "name": "Create",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint128",
-        "name": "strike",
-        "type": "uint128"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "expiration",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "marketId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "optionsContract",
-        "type": "address"
-      }
-    ],
-    "name": "CreateMarket",
     "type": "event"
   },
   {
@@ -190,9 +147,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint128",
         "name": "priceAtExpiration",
-        "type": "uint256"
+        "type": "uint128"
       },
       {
         "indexed": false,
@@ -221,9 +178,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint128",
         "name": "priceAtExpiration",
-        "type": "uint256"
+        "type": "uint128"
       },
       {
         "indexed": false,
@@ -458,22 +415,6 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "referrer", "type": "address" },
-      { "internalType": "address", "name": "user", "type": "address" }
-    ],
-    "name": "_getReferralDiscount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "referralDiscount",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "address", "name": "to", "type": "address" },
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
     ],
@@ -539,19 +480,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "bool", "name": "isAbove", "type": "bool" },
-      { "internalType": "uint256", "name": "currentPrice", "type": "uint256" },
-      { "internalType": "uint256", "name": "strike", "type": "uint256" },
-      { "internalType": "uint256", "name": "period", "type": "uint256" },
-      { "internalType": "uint256", "name": "iv", "type": "uint256" }
-    ],
-    "name": "baseFeePerContract",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "config",
     "outputs": [
@@ -569,28 +497,15 @@
       {
         "components": [
           { "internalType": "address", "name": "user", "type": "address" },
-          { "internalType": "uint256", "name": "sf", "type": "uint256" },
-          { "internalType": "uint256", "name": "iv", "type": "uint256" },
-          {
-            "internalType": "bool",
-            "name": "allowPartialFill",
-            "type": "bool"
-          },
           { "internalType": "bool", "name": "isAbove", "type": "bool" },
-          { "internalType": "uint256", "name": "contracts", "type": "uint256" },
-          { "internalType": "uint128", "name": "strike", "type": "uint128" },
           { "internalType": "uint32", "name": "expiration", "type": "uint32" },
+          { "internalType": "uint256", "name": "sf", "type": "uint256" },
           { "internalType": "uint256", "name": "amount", "type": "uint256" },
           { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
           {
-            "internalType": "uint256",
-            "name": "maxFeePerContract",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
+            "internalType": "uint128",
             "name": "currentPrice",
-            "type": "uint256"
+            "type": "uint128"
           },
           { "internalType": "string", "name": "referralCode", "type": "string" }
         ],
@@ -619,28 +534,15 @@
       {
         "components": [
           { "internalType": "address", "name": "user", "type": "address" },
-          { "internalType": "uint256", "name": "sf", "type": "uint256" },
-          { "internalType": "uint256", "name": "iv", "type": "uint256" },
-          {
-            "internalType": "bool",
-            "name": "allowPartialFill",
-            "type": "bool"
-          },
           { "internalType": "bool", "name": "isAbove", "type": "bool" },
-          { "internalType": "uint256", "name": "contracts", "type": "uint256" },
-          { "internalType": "uint128", "name": "strike", "type": "uint128" },
           { "internalType": "uint32", "name": "expiration", "type": "uint32" },
+          { "internalType": "uint256", "name": "sf", "type": "uint256" },
           { "internalType": "uint256", "name": "amount", "type": "uint256" },
           { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
           {
-            "internalType": "uint256",
-            "name": "maxFeePerContract",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
+            "internalType": "uint128",
             "name": "currentPrice",
-            "type": "uint256"
+            "type": "uint128"
           },
           { "internalType": "string", "name": "referralCode", "type": "string" }
         ],
@@ -651,26 +553,21 @@
     ],
     "name": "evaluateParams",
     "outputs": [
-      { "internalType": "uint256", "name": "amount", "type": "uint256" },
-      { "internalType": "uint256", "name": "fee", "type": "uint256" },
-      {
-        "internalType": "uint256",
-        "name": "revisedContracts",
-        "type": "uint256"
-      },
-      { "internalType": "uint256", "name": "revisedSf", "type": "uint256" }
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "bool", "name": "isAbove", "type": "bool" },
-      { "internalType": "uint256", "name": "currentPrice", "type": "uint256" },
-      { "internalType": "uint256", "name": "strike", "type": "uint256" },
-      { "internalType": "uint256", "name": "period", "type": "uint256" },
-      { "internalType": "uint256", "name": "iv", "type": "uint256" },
-      { "internalType": "uint256", "name": "sf", "type": "uint256" }
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "string", "name": "referralCode", "type": "string" },
+      {
+        "internalType": "uint256",
+        "name": "baseSettlementFeePercentage",
+        "type": "uint256"
+      }
     ],
     "name": "fees",
     "outputs": [
@@ -692,36 +589,17 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
-      { "internalType": "bool", "name": "isAbove", "type": "bool" }
+      { "internalType": "address", "name": "referrer", "type": "address" },
+      { "internalType": "address", "name": "user", "type": "address" }
     ],
-    "name": "getLoss",
-    "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "strike", "type": "uint256" },
-      { "internalType": "uint256", "name": "expiration", "type": "uint256" }
-    ],
-    "name": "getMarketId",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
+    "name": "getReferralDiscount",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "_baseFeePerContract",
+        "name": "referralDiscount",
         "type": "uint256"
-      },
-      { "internalType": "bool", "name": "isAbove", "type": "bool" }
+      }
     ],
-    "name": "getMaxPermissibleContracts",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -752,15 +630,6 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" }
-    ],
-    "name": "getSkew",
-    "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -831,7 +700,7 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "expiration", "type": "uint256" }
+      { "internalType": "uint32", "name": "expiration", "type": "uint32" }
     ],
     "name": "isExpirationValid",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
@@ -842,22 +711,6 @@
     "inputs": [],
     "name": "isPaused",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "name": "markets",
-    "outputs": [
-      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
-      { "internalType": "uint256", "name": "contractsUp", "type": "uint256" },
-      { "internalType": "uint256", "name": "contractsDown", "type": "uint256" },
-      { "internalType": "int256", "name": "premiumUp", "type": "int256" },
-      { "internalType": "int256", "name": "premiumDown", "type": "int256" },
-      { "internalType": "uint256", "name": "strike", "type": "uint256" },
-      { "internalType": "uint256", "name": "expiration", "type": "uint256" },
-      { "internalType": "bool", "name": "isValid", "type": "bool" }
-    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -885,13 +738,13 @@
         "type": "uint8"
       },
       { "internalType": "uint128", "name": "strike", "type": "uint128" },
+      { "internalType": "uint32", "name": "expiration", "type": "uint32" },
+      { "internalType": "uint32", "name": "createdAt", "type": "uint32" },
+      { "internalType": "bool", "name": "isAbove", "type": "bool" },
       { "internalType": "uint256", "name": "amount", "type": "uint256" },
       { "internalType": "uint256", "name": "lockedAmount", "type": "uint256" },
       { "internalType": "uint256", "name": "premium", "type": "uint256" },
-      { "internalType": "uint32", "name": "expiration", "type": "uint32" },
-      { "internalType": "uint256", "name": "totalFee", "type": "uint256" },
-      { "internalType": "uint32", "name": "createdAt", "type": "uint32" },
-      { "internalType": "bool", "name": "isAbove", "type": "bool" }
+      { "internalType": "uint256", "name": "totalFee", "type": "uint256" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -953,12 +806,12 @@
   },
   {
     "inputs": [
-      { "internalType": "uint128", "name": "strike", "type": "uint128" },
-      { "internalType": "uint32", "name": "expiration", "type": "uint32" }
+      { "internalType": "uint32", "name": "expiration", "type": "uint32" },
+      { "internalType": "uint256", "name": "totalFee", "type": "uint256" }
     ],
     "name": "runInitialChecks",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1057,13 +910,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "totalMarketOI",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       { "internalType": "address", "name": "from", "type": "address" },
       { "internalType": "address", "name": "to", "type": "address" },
@@ -1077,21 +923,11 @@
   {
     "inputs": [
       { "internalType": "uint256", "name": "optionID", "type": "uint256" },
-      { "internalType": "uint256", "name": "closingPrice", "type": "uint256" }
+      { "internalType": "uint128", "name": "closingPrice", "type": "uint128" }
     ],
     "name": "unlock",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "userOptionIds",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
     "type": "function"
   }
 ]
