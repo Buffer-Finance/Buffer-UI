@@ -297,8 +297,19 @@ const SelectorDropdownWrapper = styled.div`
   padding: 16px;
   background-color: #141823;
   width: 400px;
-  max-height: 80vh;
+  max-height: 70vh;
   color: #fff;
+  overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 24px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 24px;
+  }
 
   .headClassName {
     background-color: #282b39;
