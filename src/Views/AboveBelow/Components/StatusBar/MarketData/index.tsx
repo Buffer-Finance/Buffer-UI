@@ -1,5 +1,4 @@
 import { marketTypeAB } from '@Views/AboveBelow/types';
-import { IV } from './IV';
 import { OneDayChange } from './OneDayChange';
 import { OneDayVolume } from './OneDayVolume';
 import { OpenInterest } from './OpenInterest';
@@ -13,10 +12,10 @@ export const MarketData: React.FC<{
       head: 'Volume 24 hrs',
       data: <OneDayVolume activeMarket={activeMarket} />,
     },
-    {
-      head: 'IV',
-      data: <IV activeMarket={activeMarket} />,
-    },
+    // {
+    //   head: 'IV',
+    //   data: <IV activeMarket={activeMarket} />,
+    // },
     {
       head: 'Bullish/Bearish',
       data: <OpenInterest activeMarket={activeMarket} />,

@@ -10,7 +10,7 @@ import useSWR from 'swr';
 export const useOneDayVolume = () => {
   const { activeChain } = useActiveChain();
   const config = appConfig[activeChain.id as unknown as keyof typeof appConfig];
-  const graphqlURL = config.graph.ABOVE_BELOW;
+  const graphqlURL = config.graph.MAIN;
   const { data } = useSWR('above-below-one-day-volume', {
     fetcher: async () => {
       const response = await axios.post(graphqlURL, {
