@@ -62,6 +62,9 @@ interface IBufferTable {
   noHover?: boolean;
   headClassName?: string;
   headCellClassName?: string;
+  cellClassName?: string;
+  rowClassName?: string;
+  highlightClass?: string;
 }
 
 const BufferTable: React.FC<IBufferTable> = ({
@@ -98,9 +101,12 @@ const BufferTable: React.FC<IBufferTable> = ({
   noHover = false,
   headCellClassName,
   headClassName,
+  cellClassName,
+  rowClassName = '',
+  highlightClass = '',
 }) => {
-  let rowClass = '';
-  let tableCellCls = 'table-cell';
+  let rowClass = rowClassName;
+  let tableCellCls = cellClassName ? cellClassName : 'table-cell';
   if (smHeight) tableCellCls += ' sm';
   if (doubleHeight) tableCellCls += ' double-height';
   if (rows > 100) {
@@ -186,7 +192,9 @@ const BufferTable: React.FC<IBufferTable> = ({
                   {/* Data Row */}
                   <TableRow
                     key={rowIdx}
-                    className={`group table-row  ${rowClass} ${
+                    className={`group table-row  ${
+                      highlightIndexs?.includes(rowIdx) ? highlightClass : ''
+                    } ${rowClass} ${
                       noHover ? 'no-hover' : 'transparent-hover'
                     } ${isBodyTransparent ? 'transparent' : ''}`}
                     onClick={() => {

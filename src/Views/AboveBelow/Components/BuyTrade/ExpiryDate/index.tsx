@@ -136,10 +136,11 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               <BufferTable
                 bodyJSX={(row, col) => {
                   const timestamp = oneMinuteArray[row];
+                  const isSelected = timestamp === selectedTimestamp;
                   switch (col) {
                     case 0:
                       return (
-                        <div className="ml-5">
+                        <div className={`ml-6 ${isSelected ? 'text-1' : ''}`}>
                           {formatTimestampToHHMM(timestamp)}
                         </div>
                       );
@@ -147,45 +148,22 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                       const distance = timestamp - currentTimeStamp;
 
                       return (
-                        <div className="flex items-center gap-2">
-                          <CLockSVG color="#fff" className="" />
-                          {formatDistance(Variables(distance / 1000))}
-                        </div>
-                      );
-                    default:
-                      return <div>?</div>;
-                  }
-                }}
-                cols={2}
-                headerJSX={(col) => {
-                  return col === 0 ? <div>Time</div> : <div>Remaining</div>;
-                }}
-                onRowClick={(row) => {
-                  setSelectedTimestamp(oneMinuteArray[row]);
-                  closeDropdown();
-                }}
-                rows={oneMinuteArray.length}
-                isBodyTransparent
-                headClassName="headClassName"
-                headCellClassName="leftHeadCellClassName"
-                className="!rounded-l-lg !rounded-r-none"
-              />
-              <BufferTable
-                bodyJSX={(row, col) => {
-                  const timestamp = fifteenMinuteTimestamps[row];
-                  switch (col) {
-                    case 0:
-                      return (
-                        <div className="ml-8">
-                          {formatTimestampToHHMM(timestamp)}
-                        </div>
-                      );
-                    case 1:
-                      const distance = timestamp - currentTimeStamp;
-
-                      return (
-                        <div className="flex items-center gap-2">
-                          <CLockSVG color="#fff" className="" />
+                        <div
+                          className={`flex items-center gap-2 ${
+                            isSelected ? 'text-1' : ''
+                          }`}
+                        >
+                          <CLockSVG
+                            className={
+                              isSelected ? 'hidden' : 'group-hover:hidden'
+                            }
+                          />
+                          <CLockSVG
+                            className={
+                              isSelected ? 'block' : 'group-hover:block hidden'
+                            }
+                            color="#fff"
+                          />
                           {formatDistance(Variables(distance / 1000))}
                         </div>
                       );
@@ -196,7 +174,69 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                 cols={2}
                 headerJSX={(col) => {
                   return col === 0 ? (
-                    <div className="ml-8">Time</div>
+                    <div className="ml-3">Time</div>
+                  ) : (
+                    <div>Remaining</div>
+                  );
+                }}
+                onRowClick={(row) => {
+                  setSelectedTimestamp(oneMinuteArray[row]);
+                  closeDropdown();
+                }}
+                rows={oneMinuteArray.length}
+                isBodyTransparent
+                headClassName="headClassName"
+                headCellClassName="leftHeadCellClassName"
+                className="!rounded-l-lg !rounded-r-none"
+                cellClassName="cellClassName"
+                rowClassName="rowClassName"
+                highlightIndexs={[
+                  oneMinuteArray.indexOf(selectedTimestamp ?? 0),
+                ]}
+                highlightClass="highlightRowClassName"
+              />
+              <BufferTable
+                bodyJSX={(row, col) => {
+                  const timestamp = fifteenMinuteTimestamps[row];
+                  const isSelected = timestamp === selectedTimestamp;
+                  switch (col) {
+                    case 0:
+                      return (
+                        <div className={`ml-7 ${isSelected ? 'text-1' : ''}`}>
+                          {formatTimestampToHHMM(timestamp)}
+                        </div>
+                      );
+                    case 1:
+                      const distance = timestamp - currentTimeStamp;
+
+                      return (
+                        <div
+                          className={`flex items-center gap-2 ${
+                            isSelected ? 'text-1' : ''
+                          }`}
+                        >
+                          <CLockSVG
+                            className={
+                              isSelected ? 'hidden' : 'group-hover:hidden'
+                            }
+                          />
+                          <CLockSVG
+                            className={
+                              isSelected ? 'block' : 'group-hover:block hidden'
+                            }
+                            color="#fff"
+                          />
+                          {formatDistance(Variables(distance / 1000))}
+                        </div>
+                      );
+                    default:
+                      return <div>?</div>;
+                  }
+                }}
+                cols={2}
+                headerJSX={(col) => {
+                  return col === 0 ? (
+                    <div className="ml-7">Time</div>
                   ) : (
                     <div>Remaining</div>
                   );
@@ -209,7 +249,13 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                 isBodyTransparent
                 headClassName="headClassName"
                 headCellClassName="rightHeadCellClassName"
-                className="!rounded-r-lg !rounded-l-none"
+                className="!rounded-r-lg !rounded-l-none "
+                cellClassName="cellClassName"
+                rowClassName="rowClassName"
+                highlightIndexs={[
+                  fifteenMinuteTimestamps.indexOf(selectedTimestamp ?? 0),
+                ]}
+                highlightClass="highlightRowClassName"
               />
             </SelectorDropdownWrapper>
           </MenuItem>
@@ -250,7 +296,7 @@ const SelectorDropdownWrapper = styled.div`
   justify-content: center;
   padding: 16px;
   background-color: #141823;
-  width: 350px;
+  width: 400px;
   max-height: 80vh;
   color: #fff;
 
@@ -260,7 +306,7 @@ const SelectorDropdownWrapper = styled.div`
   .rightHeadCellClassName {
     background-color: #282b39;
     padding: 12px 0px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     color: #7f87a7;
     border: none;
@@ -277,7 +323,7 @@ const SelectorDropdownWrapper = styled.div`
   .leftHeadCellClassName {
     background-color: #282b39;
     padding: 12px 0px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     color: #7f87a7;
     border: none;
@@ -287,6 +333,37 @@ const SelectorDropdownWrapper = styled.div`
     }
     &:first-of-type {
       border-radius: 8px 0 0 8px;
+    }
+  }
+
+  .rowClassName {
+    color: #7f87a7;
+
+    :hover {
+      color: #fff;
+      background-color: #282b39 !important;
+    }
+  }
+
+  .highlightRowClassName {
+    color: #fff;
+    background-color: #282b39 !important;
+  }
+  .cellClassName {
+    color: inherit;
+    font-size: 14px;
+    padding: 6px 0;
+    border: none;
+
+    :first-of-type {
+      border-radius: 4px 0 0 4px;
+    }
+    :last-of-type {
+      border-radius: 0 4px 4px 0;
+    }
+
+    :hover {
+      color: #fff;
     }
   }
 `;
