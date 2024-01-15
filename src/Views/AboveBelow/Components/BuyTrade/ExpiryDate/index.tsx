@@ -55,14 +55,62 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           {...anchorProps}
           test-id="time-selector-button-click"
         >
-          <button className="plusMinusButton">-</button>
+          <button
+            className="plusMinusButton"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (selectedTimestamp === undefined) return;
+              if (selectedTimestamp === oneMinuteArray[0]) return;
+              const index = oneMinuteArray.indexOf(selectedTimestamp);
+              if (index === -1) {
+                const fifteenMinuteIndex =
+                  fifteenMinuteTimestamps.indexOf(selectedTimestamp);
+                if (fifteenMinuteIndex === -1) return;
+                if (fifteenMinuteIndex === 0) {
+                  setSelectedTimestamp(oneMinuteArray[0]);
+                } else {
+                  setSelectedTimestamp(
+                    fifteenMinuteTimestamps[fifteenMinuteIndex - 1]
+                  );
+                }
+              } else {
+                setSelectedTimestamp(oneMinuteArray[index - 1]);
+              }
+            }}
+          >
+            -
+          </button>
           <div className="flex gap-1 items-center">
             <CLockSVG color="#fff" className="mt-1" />
             {selectedTimestamp !== undefined
               ? formatTimestampToHHMM(selectedTimestamp)
               : '00:00'}
           </div>
-          <button className="plusMinusButton">+</button>
+          <button
+            className="plusMinusButton"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (selectedTimestamp === undefined) return;
+              const fifteenMinuteIndex =
+                fifteenMinuteTimestamps.indexOf(selectedTimestamp);
+              if (fifteenMinuteIndex === fifteenMinuteTimestamps.length - 1)
+                return;
+              if (fifteenMinuteIndex === -1) {
+                const index = oneMinuteArray.indexOf(selectedTimestamp);
+                if (index === oneMinuteArray.length - 1) {
+                  setSelectedTimestamp(fifteenMinuteTimestamps[0]);
+                } else setSelectedTimestamp(oneMinuteArray[index + 1]);
+              } else {
+                setSelectedTimestamp(
+                  fifteenMinuteTimestamps[fifteenMinuteIndex + 1]
+                );
+              }
+            }}
+          >
+            +
+          </button>
         </TimeSelectorBackground>
         <ControlledMenu
           {...menuState}
