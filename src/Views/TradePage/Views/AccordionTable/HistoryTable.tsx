@@ -233,7 +233,7 @@ const HistoryTable: React.FC<{
                 className={`!justify-start ${
                   gte(pnl?.toString(), '0') ? 'green' : 'red'
                 }`}
-                data={pnl}
+                data={divide(payout ?? '0', poolInfo.decimals)}
                 // unit={poolInfo.token}
               />
               <img
@@ -355,12 +355,10 @@ const HistoryTable: React.FC<{
               </div>
             </ColumnGap>
             <ColumnGap gap="3px">
-              <div className={headerClass}>Payout</div>
+              <div className={headerClass}>Profit</div>
               <div className={descClass}>
                 {expiryPrice
-                  ? numberWithCommas(
-                      toFixed(divide(payout, poolInfo.decimals) as string, 2)
-                    )
+                  ? numberWithCommas(toFixed(pnl, 2))
                   : 'Calculating...'}
                 <img
                   src={getAssetImageUrl(trade.token)}
@@ -387,12 +385,10 @@ const HistoryTable: React.FC<{
               </span>
             </div>
             <div className="flex items-center">
-              <span className={headerClass + ' mr-3'}>Payout</span>
+              <span className={headerClass + ' mr-3'}>Profit</span>
               <span className={descClass}>
                 {expiryPrice
-                  ? numberWithCommas(
-                      toFixed(divide(payout, poolInfo.decimals) as string, 2)
-                    )
+                  ? numberWithCommas(toFixed(pnl, 2))
                   : 'Calculating...'}
               </span>
               <img
