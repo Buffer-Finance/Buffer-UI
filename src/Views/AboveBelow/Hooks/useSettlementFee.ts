@@ -1,5 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { aboveBelowBaseUrl } from '@Views/TradePage/config';
+import { upDownV2BaseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
 import useSWR from 'swr';
 
@@ -12,7 +12,7 @@ export const useSettlementFee = () => {
   >([activeChain?.id, 'above-below-settlement-fee'], {
     fetcher: async () => {
       if (!activeChain) return null;
-      const response = await axios.get(aboveBelowBaseUrl + `settlement_fee/`);
+      const response = await axios.get(upDownV2BaseUrl + `settlement_fee/`);
       if (response?.data) {
         return response.data;
       }
