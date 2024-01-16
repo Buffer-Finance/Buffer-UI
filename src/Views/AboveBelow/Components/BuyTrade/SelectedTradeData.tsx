@@ -73,7 +73,9 @@ const DateData = () => {
     <span>
       <span className="text-1">{getDisplayDate(expiryDateTimeStamp)}</span>{' '}
       at&nbsp;
-      <span className="text-1">{getDisplayTime(expiryDateTimeStamp)}</span>
+      <span className="text-1">
+        {getDisplayTime(expiryDateTimeStamp).slice(0, 5)}
+      </span>
     </span>
   );
 };
