@@ -6,6 +6,7 @@ import UpIcon from '@SVG/Elements/UpIcon';
 import { toFixed } from '@Utils/NumString';
 import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useIsInCreationWindow } from '@Views/AboveBelow/Hooks/useIsInCreationWIndow';
+import { useMaxTrade } from '@Views/AboveBelow/Hooks/useMaxTrade';
 import {
   readCallDataAtom,
   selectedExpiry,
@@ -23,6 +24,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import RouterABI from '../../abis/Router.json';
 import { ApproveBtn } from './ApproveBtn';
+import { getTradeSizeError } from './TradeSize';
 export const Buy = () => {
   const isIncreationWindow = useIsInCreationWindow();
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
@@ -67,7 +69,10 @@ const TradeButton = () => {
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const readCallData = useAtomValue(readCallDataAtom);
   const referralData = useReferralCode();
-
+  const { data: tradeSizes } = useMaxTrade({
+    activeMarket,
+    expiry: selectedTimestamp,
+  });
   const { currentPrice } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
@@ -111,7 +116,17 @@ const TradeButton = () => {
       if (!readCallData) throw new Error('Error fetching data');
       if (!activeMarket) throw new Error('active market not found');
       if (!currentPrice) throw new Error('current price not found');
-
+      if (!tradeSizes) throw new Error('trade size not found');
+      if (!amount) throw new Error('Enter a positive amount');
+      const tradesizeError = getTradeSizeError(
+        divide(
+          tradeSizes[activeMarket.address + '-' + selectedTimestamp / 1000],
+          activeMarket.poolInfo.decimals
+        ) as string,
+        divide(readCallData.balances[token], decimals) ?? ('0' as string),
+        amount
+      );
+      if (tradesizeError) throw new Error(tradesizeError);
       setLoading(isAbove ? 'Up' : 'Down');
       await writeCall(() => {}, 'initiateTrade', [
         [

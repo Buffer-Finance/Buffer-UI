@@ -6,14 +6,13 @@ import {
   gt,
   gte,
   lt,
-  multiply,
   subtract,
 } from '@Utils/NumString/stringArithmatics';
-import { useNumberOfContracts } from '@Views/AboveBelow/Hooks/useNumberOfContracts';
+import { useMaxTrade } from '@Views/AboveBelow/Hooks/useMaxTrade';
 import {
   readCallDataAtom,
+  selectedExpiry,
   selectedPoolActiveMarketAtom,
-  selectedPriceAtom,
   tradeSizeAtom,
 } from '@Views/AboveBelow/atoms';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
@@ -30,11 +29,9 @@ import {
   WalletBalance,
   formatBalance,
 } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
-import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
 import { getMinimumValue } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
-import { getAddress } from 'viem';
 import { PoolDropdown } from './PoolDropDown';
 
 const TradeSizeSelectorBackground = styled.div`
@@ -46,39 +43,37 @@ export const TradeSize: React.FC<{
   onSubmit?: any;
 }> = ({ onSubmit }) => {
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const expiry = useAtomValue(selectedExpiry);
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
   const readCallData = useAtomValue(readCallDataAtom);
-  const selectedStrike = useAtomValue(selectedPriceAtom);
   const { address: userAddress } = useUserAccount();
-  const contracts = useNumberOfContracts();
-
-  if (activeMarket === undefined || readCallData === undefined) return <></>;
+  const { data: tradeSizes } = useMaxTrade({
+    activeMarket,
+    expiry,
+  });
+  console.log(tradeSizes);
+  if (
+    activeMarket === undefined ||
+    readCallData === undefined ||
+    expiry === undefined ||
+    tradeSizes === undefined ||
+    tradeSizes === null
+  )
+    return <></>;
   const token = activeMarket.poolInfo.token.toUpperCase();
   const decimals = activeMarket.poolInfo.decimals;
   const balance =
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
 
-  let maxTradeSize = MAX_APPROVAL_VALUE;
-  if (
-    contracts &&
-    selectedStrike !== undefined &&
-    selectedStrike[activeMarket.tv_id] !== undefined
-  ) {
-    const { strike } = contracts.selectedStrikeData;
-    const maxPermissibleMarket =
-      readCallData.maxPermissibleContracts[
-        getAddress(activeMarket.address) + strike
-      ];
-    if (maxPermissibleMarket !== undefined) {
-      const maxPermissibleContracts =
-        maxPermissibleMarket.maxPermissibleContracts;
-      if (maxPermissibleContracts !== undefined)
-        maxTradeSize = multiply(
-          maxPermissibleContracts,
-          contracts.totalFee.toString()
-        );
-    }
+  let maxTradeSize = '0';
+  const id = activeMarket.address + '-' + expiry / 1000;
+  if (tradeSizes[id] !== undefined) {
+    maxTradeSize = divide(
+      tradeSizes[id],
+      activeMarket.poolInfo.decimals
+    ) as string;
   }
+
   return (
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
