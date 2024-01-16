@@ -31,7 +31,7 @@ import {
   formatBalance,
 } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
-import { getMinimumValue } from '@Views/TradePage/utils';
+import { getMaximumValue, getMinimumValue } from '@Views/TradePage/utils';
 import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
@@ -102,15 +102,18 @@ export const TradeSize: React.FC<{
               setMaxValue={() => {
                 setTradeSize(
                   toFixed(
-                    getMinimumValue(
-                      subtract(
-                        balance,
-                        divide(
-                          activeMarket.config.platformFee,
-                          activeMarket.poolInfo.decimals
-                        ) as string
+                    getMaximumValue(
+                      getMinimumValue(
+                        subtract(
+                          balance,
+                          divide(
+                            activeMarket.config.platformFee,
+                            activeMarket.poolInfo.decimals
+                          ) as string
+                        ),
+                        maxTradeSize
                       ),
-                      maxTradeSize
+                      '0'
                     ),
                     2
                   )
