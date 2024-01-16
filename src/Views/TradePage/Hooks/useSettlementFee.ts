@@ -1,7 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import useSWR from 'swr';
-import { baseUrl } from '../config';
+import { upDownV2BaseUrl } from '../config';
 
 interface SettlementFee {
   settlement_fee: number;
@@ -18,7 +18,7 @@ export const useSettlementFee = () => {
     fetcher: async () => {
       if (!activeChain) return null;
       const response = await axios.get(
-        baseUrl + `settlement_fee/?environment=${activeChain.id}`
+        upDownV2BaseUrl + `settlement_fee/?environment=${activeChain.id}`
       );
       if (response?.data) {
         return response.data;
