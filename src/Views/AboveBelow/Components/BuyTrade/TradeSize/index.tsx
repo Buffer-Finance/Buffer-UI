@@ -31,7 +31,7 @@ import {
   formatBalance,
 } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
-import { getMinimumValue } from '@Views/TradePage/utils';
+import { getMaximumValue, getMinimumValue } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { getAddress } from 'viem';
@@ -59,6 +59,7 @@ export const TradeSize: React.FC<{
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
 
   let maxTradeSize = MAX_APPROVAL_VALUE;
+  let maxPermissibleContracts: string | undefined = '0';
   if (
     contracts &&
     selectedStrike !== undefined &&
@@ -70,8 +71,7 @@ export const TradeSize: React.FC<{
         getAddress(activeMarket.address) + strike
       ];
     if (maxPermissibleMarket !== undefined) {
-      const maxPermissibleContracts =
-        maxPermissibleMarket.maxPermissibleContracts;
+      maxPermissibleContracts = maxPermissibleMarket.maxPermissibleContracts;
       if (maxPermissibleContracts !== undefined)
         maxTradeSize = multiply(
           maxPermissibleContracts,
@@ -103,15 +103,18 @@ export const TradeSize: React.FC<{
               setMaxValue={() => {
                 setTradeSize(
                   toFixed(
-                    getMinimumValue(
-                      subtract(
-                        balance,
-                        divide(
-                          activeMarket.config.platformFee,
-                          activeMarket.poolInfo.decimals
-                        ) as string
+                    getMaximumValue(
+                      getMinimumValue(
+                        subtract(
+                          balance,
+                          divide(
+                            activeMarket.config.platformFee,
+                            activeMarket.poolInfo.decimals
+                          ) as string
+                        ),
+                        maxTradeSize
                       ),
-                      maxTradeSize
+                      '0'
                     ),
                     2
                   )
