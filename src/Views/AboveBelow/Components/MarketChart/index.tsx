@@ -171,7 +171,7 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   return (
     <>
       <div
-        className="flex flex-col flex-grow  h-full "
+        className={`flex-1`}
         style={containerDim?.height ? { height: containerDim.height } : {}}
         ref={onInitialLoad}
       >
@@ -184,7 +184,7 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           onMouseUp={onMouseUp}
           onTouchEnd={onMouseUp}
           // onMouseLeave={onMouseUp}
-          className={` w-full   cursor-row-resize h-[5px] hover:bg-blue ${
+          className={` w-full cursor-row-resize h-[5px] hover:bg-blue ${
             dragging ? ' bg-blue brightness-125' : ''
           }`}
           // onDragStart={onDragStart}

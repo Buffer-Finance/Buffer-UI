@@ -1,17 +1,14 @@
-import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
+import { ExpiryDate } from '@Views/AboveBelow/Components/BuyTrade/ExpiryDate';
+import { useShutterHandlers } from '@Views/AboveBelow/Components/MobileView/Shutters';
+import { tradeSizeAtom } from '@Views/AboveBelow/atoms';
 import { shutterActiveTabAtom } from '@Views/Common/MobileShutter/VannilaOptionsConfig';
 import { PoolDropdown } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/PoolDropdown';
-import { timeSelectorAtom, tradeSizeAtom } from '@Views/TradePage/atoms';
-import { HHMMToSeconds, secondsToHHMM } from '@Views/TradePage/utils';
-import { PlusOne } from '@mui/icons-material';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 const ViewOnlyInputs: React.FC<any> = ({}) => {
   const { openNormalOrdersShutter } = useShutterHandlers();
   const setActiveTab = useSetAtom(shutterActiveTabAtom);
   const amount = useAtomValue(tradeSizeAtom);
-  const currentTime = useAtomValue(timeSelectorAtom);
-  const setDuration = useSetAtom(timeSelectorAtom);
 
   return (
     <div className="flex items-center gap-x-3 font-[500]">
@@ -29,57 +26,13 @@ const ViewOnlyInputs: React.FC<any> = ({}) => {
         </button>
         <PoolDropdown />
       </div>
-      <button
-        onClick={() => {
+      <ExpiryDate
+        isMobile={true}
+        openShutter={() => {
           setActiveTab('Duration');
           openNormalOrdersShutter();
         }}
-        className="h-full border-box  py-[1px]  w-full flex items-center justify-between  bg-[#282B39] rounded-[5px]"
-      >
-        <div
-          className="ml-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
-          role="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setDuration((d) => {
-              let secs = HHMMToSeconds(d.HHMM);
-              secs -= 60;
-              if (secs > 0)
-                return {
-                  HHMM: secondsToHHMM(secs),
-                  seconds: secs,
-                };
-              else return d;
-            });
-          }}
-        >
-          <span>-</span>
-        </div>
-
-        <span className="text-1 text-f13">
-          {currentTime.HHMM.split(':')[0]} h {currentTime.HHMM.split(':')[1]}{' '}
-          min
-        </span>
-        <div
-          className="mr-3 text-f16 font-bold bg-[#232334] w-[29px] h-[29px] rounded-full text-center grid place-items-center"
-          role="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setDuration((d) => {
-              let secs = HHMMToSeconds(d.HHMM);
-              secs += 60;
-              if (secs < 24 * 60 * 60)
-                return {
-                  HHMM: secondsToHHMM(secs),
-                  seconds: secs,
-                };
-              else return d;
-            });
-          }}
-        >
-          <span>+</span>
-        </div>
-      </button>
+      />
     </div>
   );
 };

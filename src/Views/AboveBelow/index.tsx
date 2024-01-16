@@ -78,7 +78,7 @@ export const AboveBelow = () => {
     );
   else {
     return (
-      <div className="px-3">
+      <div className="flex flex-col  h-full w-full m-auto px-3 a600:w-[500px]">
         <Shutters />
         <MarketPicker />
         <Tabs />

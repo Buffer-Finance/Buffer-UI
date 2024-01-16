@@ -16,19 +16,24 @@ import { useEffect, useRef, useState } from 'react';
 import { CLockSVG } from './ClockSVG';
 import { formatTimestampToHHMM, generateTimestamps } from './helpers';
 
-export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
+export const ExpiryDate: React.FC<{
+  isMobile: boolean;
+  openShutter?: () => void;
+}> = ({ isMobile, openShutter }) => {
   const [selectedTimestamp, setSelectedTimestamp] = useAtom(selectedExpiry);
   const [counter, setCounter] = useState(0);
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
-  const anchorProps = useClick(menuState.state, toggleMenu);
+  const { onClick, onMouseDown } = useClick(menuState.state, toggleMenu);
   const {
     oneMinuteTimestamps: oneMinuteArray,
     currentTimeStamp,
     fifteenMinuteTimestamps,
   } = generateTimestamps();
+
   function closeDropdown() {
-    toggleMenu(false);
+    if (isMobile && openShutter) openShutter();
+    else toggleMenu(false);
   }
 
   useEffect(() => {
@@ -46,13 +51,24 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   }, [counter]);
 
   return (
-    <ColumnGap gap="4px">
-      <div className="text-[#7F87A7] text-f12 font-normal">Select Expiry</div>
+    <ColumnGap gap="4px" className="w-full">
+      {!isMobile && (
+        <div className="text-[#7F87A7] text-f12 font-normal">Select Expiry</div>
+      )}
       <>
         <TimeSelectorBackground
           type="button"
           ref={ref}
-          {...anchorProps}
+          onClick={(e) => {
+            if (isMobile && openShutter) {
+              openShutter();
+            } else {
+              onClick(e);
+            }
+          }}
+          onMouseDown={
+            isMobile && openShutter ? undefined : (e) => onMouseDown(e)
+          }
           test-id="time-selector-button-click"
         >
           <button
@@ -132,136 +148,166 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               e.keepOpen = true;
             }}
           >
-            <SelectorDropdownWrapper>
-              <BufferTable
-                bodyJSX={(row, col) => {
-                  const timestamp = oneMinuteArray[row];
-                  const isSelected = timestamp === selectedTimestamp;
-                  switch (col) {
-                    case 0:
-                      return (
-                        <div className={`ml-6 ${isSelected ? 'text-1' : ''}`}>
-                          {formatTimestampToHHMM(timestamp)}
-                        </div>
-                      );
-                    case 1:
-                      const distance = timestamp - currentTimeStamp;
-
-                      return (
-                        <div
-                          className={`flex items-center gap-2 ${
-                            isSelected ? 'text-1' : ''
-                          }`}
-                        >
-                          <CLockSVG
-                            className={
-                              isSelected ? 'hidden' : 'group-hover:hidden'
-                            }
-                          />
-                          <CLockSVG
-                            className={
-                              isSelected ? 'block' : 'group-hover:block hidden'
-                            }
-                            color="#fff"
-                          />
-                          {formatDistance(Variables(distance / 1000))}
-                        </div>
-                      );
-                    default:
-                      return <div>?</div>;
-                  }
-                }}
-                cols={2}
-                headerJSX={(col) => {
-                  return col === 0 ? (
-                    <div className="ml-3">Time</div>
-                  ) : (
-                    <div>Remaining</div>
-                  );
-                }}
-                onRowClick={(row) => {
-                  setSelectedTimestamp(oneMinuteArray[row]);
-                  closeDropdown();
-                }}
-                rows={oneMinuteArray.length}
-                isBodyTransparent
-                headClassName="headClassName"
-                headCellClassName="leftHeadCellClassName"
-                className="!rounded-l-lg !rounded-r-none"
-                cellClassName="cellClassName"
-                rowClassName="rowClassName"
-                highlightIndexs={[
-                  oneMinuteArray.indexOf(selectedTimestamp ?? 0),
-                ]}
-                highlightClass="highlightRowClassName"
-              />
-              <BufferTable
-                bodyJSX={(row, col) => {
-                  const timestamp = fifteenMinuteTimestamps[row];
-                  const isSelected = timestamp === selectedTimestamp;
-                  switch (col) {
-                    case 0:
-                      return (
-                        <div className={`ml-7 ${isSelected ? 'text-1' : ''}`}>
-                          {formatTimestampToHHMM(timestamp)}
-                        </div>
-                      );
-                    case 1:
-                      const distance = timestamp - currentTimeStamp;
-
-                      return (
-                        <div
-                          className={`flex items-center gap-2 ${
-                            isSelected ? 'text-1' : ''
-                          }`}
-                        >
-                          <CLockSVG
-                            className={
-                              isSelected ? 'hidden' : 'group-hover:hidden'
-                            }
-                          />
-                          <CLockSVG
-                            className={
-                              isSelected ? 'block' : 'group-hover:block hidden'
-                            }
-                            color="#fff"
-                          />
-                          {formatDistance(Variables(distance / 1000))}
-                        </div>
-                      );
-                    default:
-                      return <div>?</div>;
-                  }
-                }}
-                cols={2}
-                headerJSX={(col) => {
-                  return col === 0 ? (
-                    <div className="ml-7">Time</div>
-                  ) : (
-                    <div>Remaining</div>
-                  );
-                }}
-                onRowClick={(row) => {
-                  setSelectedTimestamp(fifteenMinuteTimestamps[row]);
-                  closeDropdown();
-                }}
-                rows={fifteenMinuteTimestamps.length}
-                isBodyTransparent
-                headClassName="headClassName"
-                headCellClassName="rightHeadCellClassName"
-                className="!rounded-r-lg !rounded-l-none "
-                cellClassName="cellClassName"
-                rowClassName="rowClassName"
-                highlightIndexs={[
-                  fifteenMinuteTimestamps.indexOf(selectedTimestamp ?? 0),
-                ]}
-                highlightClass="highlightRowClassName"
-              />
-            </SelectorDropdownWrapper>
+            <TimeSelectorDropDown
+              oneMinuteArray={oneMinuteArray}
+              fifteenMinuteTimestamps={fifteenMinuteTimestamps}
+              selectedTimestamp={selectedTimestamp}
+              setSelectedTimestamp={setSelectedTimestamp}
+              currentTimeStamp={currentTimeStamp}
+              closeDropdown={closeDropdown}
+              isMobile={isMobile}
+            />
           </MenuItem>
         </ControlledMenu>
       </>
     </ColumnGap>
+  );
+};
+
+export const TimeSelectorDropDown: React.FC<{
+  oneMinuteArray: number[];
+  fifteenMinuteTimestamps: number[];
+  selectedTimestamp: number | undefined;
+  setSelectedTimestamp: (timestamp: number) => void;
+  currentTimeStamp: number;
+  closeDropdown: () => void;
+  isMobile?: boolean;
+}> = ({
+  oneMinuteArray,
+  fifteenMinuteTimestamps,
+  selectedTimestamp,
+  setSelectedTimestamp,
+  currentTimeStamp,
+  closeDropdown,
+  isMobile,
+}) => {
+  return (
+    <SelectorDropdownWrapper>
+      <BufferTable
+        bodyJSX={(row, col) => {
+          const timestamp = oneMinuteArray[row];
+          const isSelected = timestamp === selectedTimestamp;
+          switch (col) {
+            case 0:
+              return (
+                <div className={`ml-6 ${isSelected ? 'text-1' : ''}`}>
+                  {formatTimestampToHHMM(timestamp)}
+                </div>
+              );
+            case 1:
+              const distance = timestamp - currentTimeStamp;
+
+              return (
+                <div
+                  className={`flex items-center gap-2 ${
+                    isSelected ? 'text-1' : ''
+                  }`}
+                >
+                  <CLockSVG
+                    className={isSelected ? 'hidden' : 'group-hover:hidden'}
+                  />
+                  <CLockSVG
+                    className={
+                      isSelected ? 'block' : 'group-hover:block hidden'
+                    }
+                    color="#fff"
+                  />
+                  {formatDistance(Variables(distance / 1000))}
+                </div>
+              );
+            default:
+              return <div>?</div>;
+          }
+        }}
+        cols={2}
+        headerJSX={(col) => {
+          return col === 0 ? (
+            <div className="ml-3">Time</div>
+          ) : (
+            <div>Remaining</div>
+          );
+        }}
+        onRowClick={(row) => {
+          setSelectedTimestamp(oneMinuteArray[row]);
+          closeDropdown();
+        }}
+        rows={oneMinuteArray.length}
+        isBodyTransparent
+        headClassName="headClassName"
+        headCellClassName="leftHeadCellClassName"
+        className="!rounded-l-lg !rounded-r-none"
+        cellClassName="cellClassName"
+        rowClassName="rowClassName"
+        highlightIndexs={[oneMinuteArray.indexOf(selectedTimestamp ?? 0)]}
+        highlightClass="highlightRowClassName"
+        shouldShowMobile
+      />
+      <BufferTable
+        bodyJSX={(row, col) => {
+          const timestamp = fifteenMinuteTimestamps[row];
+          const isSelected = timestamp === selectedTimestamp;
+          switch (col) {
+            case 0:
+              return (
+                <div
+                  className={`${isMobile ? 'pl-6' : 'ml-7'} ${
+                    isSelected ? 'text-1' : ''
+                  }`}
+                >
+                  {formatTimestampToHHMM(timestamp)}
+                </div>
+              );
+            case 1:
+              const distance = timestamp - currentTimeStamp;
+
+              return (
+                <div
+                  className={`flex items-center gap-2 ${
+                    isSelected ? 'text-1' : ''
+                  }`}
+                >
+                  <CLockSVG
+                    className={isSelected ? 'hidden' : 'group-hover:hidden'}
+                  />
+                  <CLockSVG
+                    className={
+                      isSelected ? 'block' : 'group-hover:block hidden'
+                    }
+                    color="#fff"
+                  />
+                  {formatDistance(Variables(distance / 1000))}
+                </div>
+              );
+            default:
+              return <div>?</div>;
+          }
+        }}
+        cols={2}
+        headerJSX={(col) => {
+          return col === 0 ? (
+            <div className={`${isMobile ? 'pl-6' : 'ml-7'}`}>Time</div>
+          ) : (
+            <div>Remaining</div>
+          );
+        }}
+        onRowClick={(row) => {
+          setSelectedTimestamp(fifteenMinuteTimestamps[row]);
+          closeDropdown();
+        }}
+        rows={fifteenMinuteTimestamps.length}
+        isBodyTransparent
+        headClassName="headClassName"
+        headCellClassName="rightHeadCellClassName"
+        className="!rounded-r-lg !rounded-l-none "
+        cellClassName="cellClassName"
+        rowClassName="rowClassName"
+        highlightIndexs={[
+          fifteenMinuteTimestamps.indexOf(selectedTimestamp ?? 0),
+        ]}
+        highlightClass="highlightRowClassName"
+        shouldShowMobile
+      />
+    </SelectorDropdownWrapper>
   );
 };
 

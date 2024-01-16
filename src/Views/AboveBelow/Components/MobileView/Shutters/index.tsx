@@ -1,3 +1,4 @@
+import { VanillaBOConfigs } from '@Views/Common/MobileShutter/VannilaOptionsConfig';
 import { ExpandSVG } from '@Views/TradePage/Components/Expand';
 import { MobileChartControllsEditable } from '@Views/TradePage/Components/MobileView/MobileChartControlls';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
@@ -24,6 +25,9 @@ export function useShutterHandlers() {
     [setShutter]
   );
 
+  const openNormalOrdersShutter = useCallback(() => {
+    setShutter({ open: 'BO' });
+  }, [setShutter]);
   const openMarketPickerShutter = useCallback(() => {
     setShutter({ open: 'MarketSelector' });
   }, [setShutter]);
@@ -40,7 +44,7 @@ export function useShutterHandlers() {
   return {
     closeShutter,
     shutterState,
-
+    openNormalOrdersShutter,
     openMarketPickerShutter,
     openOngoingTradesShutter,
     openChartCotrollShutter,
@@ -63,6 +67,7 @@ export const Shutters: React.FC<MobileShutterProps> = () => {
         {shutterState.open == 'ChartControlls' && (
           <MobileChartControllsEditable />
         )}
+        {shutterState.open == 'BO' && <VanillaBOConfigs />}
       </div>
     </ShutterDrawer>
   );

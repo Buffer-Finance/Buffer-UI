@@ -784,7 +784,7 @@ export const MultiResolutionChart = ({
           </div>
         </div>
       ) : null}
-      <div className="w-full  flex-grow">
+      <div className={`w-full ${isMobile ? 'flex-1' : 'flex-grow'}`}>
         <div
           ref={containerDivRef}
           id="chart-element-main"

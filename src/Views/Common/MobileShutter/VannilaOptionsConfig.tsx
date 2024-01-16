@@ -1,41 +1,23 @@
-import { useToast } from '@Contexts/Toast';
-import { TradeSizeSelector } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
-import HorizontalTransition from '../Transitions/Horizontal';
-import { MobileDurationInput } from '@Views/TradePage/Components/MobileView/MobileDurationInput';
-import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
-import { BlueBtn } from '../V2-Button';
+import { TimeSelectorDropDown } from '@Views/AboveBelow/Components/BuyTrade/ExpiryDate';
+import { generateTimestamps } from '@Views/AboveBelow/Components/BuyTrade/ExpiryDate/helpers';
+import { TradeSize } from '@Views/AboveBelow/Components/BuyTrade/TradeSize';
 import {
-  limitOrderStrikeAtom,
-  timeSelectorAtom,
-  tradeTypeAtom,
-} from '@Views/TradePage/atoms';
-import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
-import TimePickerSelection from '../IOSTimePicer/components/TimePickerSelection';
-import { IOSTimePicker } from '../IOSTimePicer';
-import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { HHMMToSeconds } from '@Views/TradePage/utils';
-import { MarketStatsBar } from '@Views/TradePage/Views/MarketChart/MarketStatsBar';
+  MobileShutterProps,
+  useShutterHandlers,
+} from '@Views/AboveBelow/Components/MobileView/Shutters';
+import { selectedExpiry } from '@Views/AboveBelow/atoms';
+import { atom, useAtom } from 'jotai';
+import HorizontalTransition from '../Transitions/Horizontal';
+import { BlueBtn } from '../V2-Button';
 const tabs = ['Amount', 'Duration'];
 export const shutterActiveTabAtom = atom(tabs[0]);
 
 const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
   const { closeShutter } = useShutterHandlers();
-
-  const toastify = useToast();
   const [activeTab, setActiveTab] = useAtom(shutterActiveTabAtom);
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = () => {
     closeShutter();
   };
-  const currentTime = useAtomValue(timeSelectorAtom);
-  console.log(`VannilaOptionsConfig-currentTime: `, currentTime);
-  const setDuration = useSetAtom(timeSelectorAtom);
-  const onChange = (timeValue) => {
-    const seconds = HHMMToSeconds(timeValue);
-    setDuration((val) => ({ HHMM: timeValue, seconds }));
-  };
-  const { switchPool } = useSwitchPool();
 
   return (
     <>
@@ -54,25 +36,38 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
       </div>
       <HorizontalTransition value={tabs.indexOf(activeTab)}>
         <div>
-          <MarketStatsBar isMobile />
-          <TradeSizeSelector onSubmit={onSubmit} />
+          <TradeSize onSubmit={onSubmit} />
           <BlueBtn onClick={onSubmit} className="mt-4">
             Continue
           </BlueBtn>
         </div>
-        <IOSTimePicker
-          onChange={onChange}
-          initialValue={currentTime.HHMM}
-          minValue={switchPool?.min_duration}
-          maxValue={switchPool?.max_duration}
-          onSave={(time) => {
-            onChange(time);
-            closeShutter();
-          }}
-        />
+        <TimeSelector closeShutter={onSubmit} />
       </HorizontalTransition>
     </>
   );
 };
 
 export { VanillaBOConfigs };
+
+const TimeSelector: React.FC<{ closeShutter: () => void }> = ({
+  closeShutter,
+}) => {
+  const {
+    oneMinuteTimestamps: oneMinuteArray,
+    currentTimeStamp,
+    fifteenMinuteTimestamps,
+  } = generateTimestamps();
+  const [selectedTimestamp, setSelectedTimestamp] = useAtom(selectedExpiry);
+
+  return (
+    <TimeSelectorDropDown
+      oneMinuteArray={oneMinuteArray}
+      fifteenMinuteTimestamps={fifteenMinuteTimestamps}
+      selectedTimestamp={selectedTimestamp}
+      setSelectedTimestamp={setSelectedTimestamp}
+      currentTimeStamp={currentTimeStamp}
+      closeDropdown={closeShutter}
+      isMobile
+    />
+  );
+};
