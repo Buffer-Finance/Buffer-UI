@@ -32,14 +32,13 @@ import {
 } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
 import { getMaximumValue, getMinimumValue } from '@Views/TradePage/utils';
-import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { getAddress } from 'viem';
 import { PoolDropdown } from './PoolDropDown';
 
 const TradeSizeSelectorBackground = styled.div`
-  margin-top: 8px;
+  margin-top: 16px;
   width: 100%;
 `;
 
@@ -60,7 +59,7 @@ export const TradeSize: React.FC<{
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
 
   let maxTradeSize = MAX_APPROVAL_VALUE;
-  let maxPermissibleContracts: string | undefined = '0';
+  let maxPermissibleContracts: string | undefined = undefined;
   if (
     contracts &&
     selectedStrike !== undefined &&
@@ -84,7 +83,20 @@ export const TradeSize: React.FC<{
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
         <RowBetween>
-          <BuyTradeHeadText>Amount</BuyTradeHeadText>
+          {maxPermissibleContracts !== undefined ? (
+            <span className="text-[#7F87A7] items-center text-f12 flex">
+              Max Amount&nbsp;:&nbsp;
+              {toFixed(maxTradeSize, 2)}&nbsp;(
+              {toFixed(
+                divide(maxPermissibleContracts ?? '0', decimals) as string,
+                2
+              )}
+              &nbsp;
+              {selectedStrike?.[activeMarket.tv_id]?.isAbove ? 'Up' : 'Down'})
+            </span>
+          ) : (
+            <BuyTradeHeadText>Amount</BuyTradeHeadText>
+          )}
 
           <WalletBalance
             balance={formatBalance(toFixed(balance, 2))}
@@ -123,39 +135,16 @@ export const TradeSize: React.FC<{
 
             <PoolDropdown />
           </RowGapItemsStretched>
-          <RowBetween>
-            <span className="text-[#7F87A7] items-center text-f12 flex">
-              Max&nbsp;:&nbsp;
-              {toFixed(maxTradeSize, 2)}&nbsp;
-              <img
-                src={getAssetImageUrl(activeMarket.poolInfo.token)}
-                width={12}
-                height={12}
-                className="mt-1"
-              />
-              &nbsp;(
-              {toFixed(
-                divide(maxPermissibleContracts ?? '0', decimals) as string,
-                2
-              )}
-              &nbsp;
-              {selectedStrike?.[activeMarket.tv_id]?.isAbove ? 'Up' : 'Down'})
-            </span>
-            {userAddress && (
-              <PlatfromFeeError
-                platfromFee={
-                  divide(
-                    activeMarket.config.platformFee,
-                    activeMarket.poolInfo.decimals
-                  ) as string
-                }
-                tradeToken={activeMarket.poolInfo.token}
-                balance={balance}
-              />
-            )}
-          </RowBetween>
+
           {userAddress && (
             <Error
+              platfromFee={
+                divide(
+                  activeMarket.config.platformFee,
+                  activeMarket.poolInfo.decimals
+                ) as string
+              }
+              tradeToken={activeMarket.poolInfo.token}
               balance={balance}
               tradeSize={tradeSize}
               maxTradeSize={maxTradeSize}
@@ -170,16 +159,24 @@ const Error: React.FC<{
   balance: string;
   tradeSize: string;
   maxTradeSize: string;
-}> = ({ balance, tradeSize, maxTradeSize }) => {
-  // const contracts = useNumberOfContracts();
-  // const minTradeSize = contracts === null ? '0' : contracts.totalFee.toFixed(2);
+  tradeToken: string;
+  platfromFee: string;
+}> = ({ balance, tradeSize, maxTradeSize, platfromFee, tradeToken }) => {
   const error = getTradeSizeError(
     // minTradeSize,
     maxTradeSize,
     balance,
     tradeSize
   );
-  return <span className="text-red whitespace-nowrap text-f12">{error}</span>;
+  return error ? (
+    <span className="text-red whitespace-nowrap text-f12">{error}</span>
+  ) : (
+    <PlatfromFeeError
+      platfromFee={platfromFee}
+      tradeToken={tradeToken}
+      balance={balance}
+    />
+  );
 };
 
 const PlatfromFeeError = ({
