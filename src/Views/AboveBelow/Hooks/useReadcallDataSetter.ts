@@ -81,7 +81,11 @@ export const useReacallDataSetter = () => {
             address: market.address,
             abi: OptionABI,
             name: 'getMaxPermissibleContracts',
-            params: [marketId, toFixed(multiply(fee.toString(), 8), 0)],
+            params: [
+              marketId,
+              toFixed(multiply(fee.toString(), market.poolInfo.decimals), 0),
+              tradeData.isAbove,
+            ],
             id: getCallId(
               market.address,
               'getMaxPermissibleContracts',
@@ -94,5 +98,6 @@ export const useReacallDataSetter = () => {
   }
 
   const { data } = useCall2Data(readCalls, 'aboveBelowReadCalls');
+  console.log(data, readCalls);
   setResponse(data);
 };
