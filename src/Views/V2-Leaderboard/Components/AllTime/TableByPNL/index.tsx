@@ -46,7 +46,7 @@ export const TableByPNL: React.FC<{ activeChainId: number }> = ({
           : '';
         const query = `{${leaderboardQuery}${userQuery}}`;
         const response = await axios.post(
-          'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.7.8-merge-9-nfts-merge/api',
+          'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.1-ud-ab-nfts-leagues-stats-defillama-merge/api',
           {
             query,
           }
