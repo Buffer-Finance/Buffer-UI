@@ -34,7 +34,10 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
           </div>
         ))}
       </div>
-      <HorizontalTransition value={tabs.indexOf(activeTab)}>
+      <HorizontalTransition
+        value={tabs.indexOf(activeTab)}
+        className="overflow-x-auto"
+      >
         <div>
           <TradeSize onSubmit={onSubmit} />
           <BlueBtn onClick={onSubmit} className="mt-4">

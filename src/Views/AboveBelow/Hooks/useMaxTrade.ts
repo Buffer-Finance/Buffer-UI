@@ -12,7 +12,6 @@ export const useMaxTrade = ({
   activeMarket: marketTypeAB | undefined;
 }) => {
   const { activeChain } = useActiveChain();
-  console.log('useMaxTrade', activeMarket, expiry);
   return useSWR<{
     [marketId: string]: number;
   }>([activeMarket?.address, expiry, 'up-down-max-trade'], {

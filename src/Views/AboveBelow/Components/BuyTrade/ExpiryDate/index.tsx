@@ -347,6 +347,13 @@ const SelectorDropdownWrapper = styled.div`
   color: #fff;
   overflow-y: auto;
 
+  @media (max-width: 1200px) {
+    width: 100%;
+    min-width: 350px;
+    overflow-x: auto;
+    max-height: 100%;
+  }
+
   ::-webkit-scrollbar {
     width: 2px;
   }

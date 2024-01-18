@@ -51,7 +51,6 @@ export const TradeSize: React.FC<{
     activeMarket,
     expiry,
   });
-  console.log(tradeSizes);
   if (
     activeMarket === undefined ||
     readCallData === undefined ||
