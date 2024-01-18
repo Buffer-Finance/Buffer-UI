@@ -32,6 +32,7 @@ import {
 } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
 import { getMinimumValue } from '@Views/TradePage/utils';
+import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { getAddress } from 'viem';
@@ -59,6 +60,7 @@ export const TradeSize: React.FC<{
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
 
   let maxTradeSize = MAX_APPROVAL_VALUE;
+  let maxPermissibleContracts: string | undefined = '0';
   if (
     contracts &&
     selectedStrike !== undefined &&
@@ -70,11 +72,10 @@ export const TradeSize: React.FC<{
         getAddress(activeMarket.address) + strike
       ];
     if (maxPermissibleMarket !== undefined) {
-      const maxPermissibleContracts =
-        maxPermissibleMarket.maxPermissibleContracts;
+      maxPermissibleContracts = maxPermissibleMarket.maxPermissibleContracts;
       if (maxPermissibleContracts !== undefined)
         maxTradeSize = multiply(
-          maxPermissibleContracts,
+          divide(maxPermissibleContracts, decimals) as string,
           contracts.totalFee.toString()
         );
     }
@@ -83,9 +84,7 @@ export const TradeSize: React.FC<{
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
         <RowBetween>
-          <RowGap gap="4px">
-            <BuyTradeHeadText>Amount</BuyTradeHeadText>
-          </RowGap>
+          <BuyTradeHeadText>Amount</BuyTradeHeadText>
 
           <WalletBalance
             balance={formatBalance(toFixed(balance, 2))}
@@ -93,7 +92,7 @@ export const TradeSize: React.FC<{
           />
         </RowBetween>
         <ColumnGap gap="0px" className="mb-3">
-          <RowGapItemsStretched gap="0px" className="w-full">
+          <RowGapItemsStretched gap="0px" className="w-full relative">
             <TradeSizeInput
               maxTradeSize="0"
               minTradeSize="0"
@@ -121,18 +120,37 @@ export const TradeSize: React.FC<{
 
             <PoolDropdown />
           </RowGapItemsStretched>
-          {userAddress && (
-            <PlatfromFeeError
-              platfromFee={
-                divide(
-                  activeMarket.config.platformFee,
-                  activeMarket.poolInfo.decimals
-                ) as string
-              }
-              tradeToken={activeMarket.poolInfo.token}
-              balance={balance}
-            />
-          )}
+          <RowBetween>
+            <span className="text-[#7F87A7] items-center text-f12 flex">
+              Max&nbsp;:&nbsp;
+              {toFixed(maxTradeSize, 2)}&nbsp;
+              <img
+                src={getAssetImageUrl(activeMarket.poolInfo.token)}
+                width={12}
+                height={12}
+                className="mt-1"
+              />
+              &nbsp;(
+              {toFixed(
+                divide(maxPermissibleContracts ?? '0', decimals) as string,
+                2
+              )}
+              &nbsp;
+              {selectedStrike?.[activeMarket.tv_id]?.isAbove ? 'Up' : 'Down'})
+            </span>
+            {userAddress && (
+              <PlatfromFeeError
+                platfromFee={
+                  divide(
+                    activeMarket.config.platformFee,
+                    activeMarket.poolInfo.decimals
+                  ) as string
+                }
+                tradeToken={activeMarket.poolInfo.token}
+                balance={balance}
+              />
+            )}
+          </RowBetween>
           {userAddress && (
             <Error
               balance={balance}
