@@ -1,9 +1,9 @@
 import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
 import { ClaimedNFT } from '@Views/NFTView/Claimed';
 import { useEffect } from 'react';
-import { HistoryTables } from './Components/HistoryTable';
 import { ProfileCardsComponent } from './Components/ProfileCardsComponent';
 import { ReferralLink } from './Components/ReferralLink';
+import { Trades } from './Components/Trades';
 import { UserDataComponent } from './Components/UserDataComponent';
 
 export const ProfilePage = () => {
@@ -30,10 +30,7 @@ const Profile = () => {
         <ArbitrumOnly hide>
           <ClaimedNFT />
         </ArbitrumOnly>
-        <div className="my-7 flex flex-col ">
-          <div className="text-f22 mb-7">Trades</div>
-          <HistoryTables />
-        </div>
+        <Trades />
       </div>
     </div>
   );
