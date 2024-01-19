@@ -34,14 +34,13 @@ import { ReferralPage } from '@Views/Referral';
 import { Test } from '@Views/Test';
 import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
-import { defaultMarket } from '@Views/TradePage/config';
+import { defaultMarket, isTestnet } from '@Views/TradePage/config';
 import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
 import { AllTime } from '@Views/V2-Leaderboard/Components/AllTime';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Leagues } from '@Views/V2-Leaderboard/Leagues';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
-import { isTestnet } from 'config';
 import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
@@ -111,6 +110,16 @@ const AppRoutes = () => {
       <OnboardingAnimation />
       <OneCTModal />
       <Routes>
+        {isTestnet && (
+          <Route
+            path="/binary/:market*"
+            element={
+              <div className="m-auto text-f24 sm:text-f16">
+                Testnet is not available right now. We'll be back soon.
+              </div>
+            }
+          />
+        )}
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
