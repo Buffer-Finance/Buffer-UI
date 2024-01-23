@@ -3,6 +3,7 @@ import { atomWithStorage } from 'jotai/utils';
 import {
   defaultSelectedTime,
   defaultSettings,
+  isTestnet,
   limitOrderDefaultPayout,
 } from './config';
 import { TradeType, marketType, poolInfoType } from './type';
@@ -63,7 +64,7 @@ export const setTimeSelectorAtom = atom(null, (get, set, update: string) => {
 export const tradeSizeAtom = atomWithStorage('tradeSizeAtom', '5');
 
 export const activePoolObjAtom = atomWithStorage('activePoolObjAtom', {
-  activePool: 'USDC',
+  activePool: isTestnet ? 'ARB' : 'USDC',
 });
 
 // pinned assets and asset selector atoms
