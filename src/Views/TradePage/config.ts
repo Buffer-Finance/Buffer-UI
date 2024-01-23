@@ -80,11 +80,11 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/v2.5.3-sepolia-old-testnet/api',
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
-        router: '0x2430E4aD865423Ed994daD297D66b77F3ec2B008',
+        router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
         signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
