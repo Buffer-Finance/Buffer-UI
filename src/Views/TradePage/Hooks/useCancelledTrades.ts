@@ -2,6 +2,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import axios from 'axios';
 import { useAtomValue } from 'jotai';
+import { arbitrumSepolia } from 'src/Config/wagmiClient/getConfigChains';
 import useSWR from 'swr';
 import { getAddress } from 'viem';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
@@ -27,7 +28,11 @@ const useCancelledTrades = () => {
       fetcher: async () => {
         if (!address)
           return { page_data: [], total_pages: 1 } as tradesApiResponseType;
-        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+        if (
+          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+            activeChain.id as 42161
+          )
+        )
           return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/user/cancelled/`, {
           params: {

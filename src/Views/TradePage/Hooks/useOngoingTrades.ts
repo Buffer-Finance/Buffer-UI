@@ -2,6 +2,8 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import axios from 'axios';
+import { useState } from 'react';
+import { arbitrumSepolia } from 'src/Config/wagmiClient/getConfigChains';
 import useSWR from 'swr';
 import { getAddress } from 'viem';
 import { useAccount } from 'wagmi';
@@ -11,7 +13,6 @@ import { baseUrl, refreshInterval } from '../config';
 import { TradeType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
-import { useState } from 'react';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
@@ -35,7 +36,12 @@ const useOngoingTrades = () => {
     {
       fetcher: async () => {
         if (!userAddress) return [[], []] as TradeType[][];
-        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+        console.log('comes here');
+        if (
+          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+            activeChain.id as 42161
+          )
+        )
           return [[], []];
         let currentUserSignature = null;
         if (userAddress === address)

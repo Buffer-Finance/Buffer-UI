@@ -2,6 +2,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import axios from 'axios';
 import { useAtomValue } from 'jotai';
+import { arbitrumSepolia } from 'src/Config/wagmiClient/getConfigChains';
 import useSWR from 'swr';
 import { getAddress } from 'viem';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
@@ -29,7 +30,11 @@ const useHistoryTrades = () => {
       fetcher: async () => {
         if (!address || !activeChain.id || !markets)
           return { page_data: [], total_pages: 1 };
-        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+        if (
+          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+            activeChain.id as 42161
+          )
+        )
           return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/user/history/`, {
           params: {

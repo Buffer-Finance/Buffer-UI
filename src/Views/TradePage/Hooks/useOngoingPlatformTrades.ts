@@ -1,6 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import { useAtomValue } from 'jotai';
+import { arbitrumSepolia } from 'src/Config/wagmiClient/getConfigChains';
 import useSWR from 'swr';
 import { useAccount } from 'wagmi';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
@@ -35,7 +36,11 @@ export const usePlatformActiveTrades = () => {
       fetcher: async () => {
         if (!markets) return { page_data: undefined, total_pages: 1 };
 
-        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+        if (
+          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+            activeChain.id as 42161
+          )
+        )
           return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/all_active/`, {
           params: {
@@ -75,7 +80,11 @@ export const usePlatformHistoryTrades = () => {
     {
       fetcher: async () => {
         if (!markets) return { page_data: undefined, total_pages: 1 };
-        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+        if (
+          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+            activeChain.id as 42161
+          )
+        )
           return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/all_history/`, {
           params: {
@@ -115,7 +124,11 @@ export const usePlatformCancelledTrades = () => {
     {
       fetcher: async () => {
         if (!markets) return { page_data: undefined, total_pages: 1 };
-        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+        if (
+          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+            activeChain.id as 42161
+          )
+        )
           return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/all_cancelled/`, {
           params: {
