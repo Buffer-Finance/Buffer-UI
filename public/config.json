@@ -397,8 +397,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api",
-      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api"
+      "MAIN": "https://subgraph.satsuma-prod.com/bufferfinance/instant-trading-arbitrum-testnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/bufferfinance/instant-trading-arbitrum-testnet/api"
     },
     "env": "arbitrum-testnet"
   },
@@ -1175,8 +1175,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api",
-      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api"
+      "MAIN": "https://subgraph.satsuma-prod.com/bufferfinance/arbitrum-mainnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/bufferfinance/arbitrum-mainnet/api"
     },
     "env": "arbitrum-one"
   },
@@ -1290,8 +1290,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api",
-      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api"
+      "MAIN": "https://subgraph.satsuma-prod.com/bufferfinance/polygon-testnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/bufferfinance/polygon-testnet/api"
     },
     "env": "polygon-mumbai"
   },
@@ -1668,8 +1668,8 @@
       }
     ],
     "graph": {
-      "MAIN": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api",
-      "LITE": "https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api"
+      "MAIN": "https://subgraph.satsuma-prod.com/bufferfinance/polygon-mainnet/api",
+      "LITE": "https://subgraph.satsuma-prod.com/bufferfinance/polygon-mainnet/api"
     },
     "env": "polygon-mumbai"
   }

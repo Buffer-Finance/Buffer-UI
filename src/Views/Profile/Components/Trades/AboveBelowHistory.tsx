@@ -55,8 +55,12 @@ const ActiveAboveBelowTable = () => {
     fetcher: async () => {
       if (activeChain === undefined) return;
       const config = getConfig(activeChain?.id);
-      const response = await axios.post(config.graph.MAIN, {
-        query: `{
+      const response = await axios.post(
+        `https://subgraph.satsuma-prod.com/${
+          import.meta.env.VITE_SATSUMA_KEY
+        }/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.3-ab-profile-user-cumulative-optionwise-new-schema/api`,
+        {
+          query: `{
               activeLength: abuserOptionDatas(
                   orderBy: creationTime
                   orderDirection: desc
@@ -70,7 +74,8 @@ const ActiveAboveBelowTable = () => {
                     id
                 }
               }`,
-      });
+        }
+      );
       return response.data?.data.activeLength;
     },
   });
@@ -79,8 +84,12 @@ const ActiveAboveBelowTable = () => {
     fetcher: async () => {
       if (activeChain === undefined) return;
       const config = getConfig(activeChain?.id);
-      const response = await axios.post(config.graph.MAIN, {
-        query: `{
+      const response = await axios.post(
+        `https://subgraph.satsuma-prod.com/${
+          import.meta.env.VITE_SATSUMA_KEY
+        }/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.3-ab-profile-user-cumulative-optionwise-new-schema/api`,
+        {
+          query: `{
               activeTrades: abuserOptionDatas(
                   orderBy: creationTime
                   orderDirection: desc
@@ -111,7 +120,8 @@ const ActiveAboveBelowTable = () => {
                   }
                 }
                 }`,
-      });
+        }
+      );
       return response.data?.data.activeTrades;
     },
     refreshInterval: 1000,
@@ -145,8 +155,12 @@ const HistoryAboveBelowTable = () => {
     fetcher: async () => {
       if (activeChain === undefined) return;
       const config = getConfig(activeChain?.id);
-      const response = await axios.post(config.graph.MAIN, {
-        query: `{
+      const response = await axios.post(
+        `https://subgraph.satsuma-prod.com/${
+          import.meta.env.VITE_SATSUMA_KEY
+        }/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.3-ab-profile-user-cumulative-optionwise-new-schema/api`,
+        {
+          query: `{
             historyLength: abuserOptionDatas(
                 orderBy: expirationTime
                 orderDirection: desc
@@ -160,7 +174,8 @@ const HistoryAboveBelowTable = () => {
                   id
               }
         }`,
-      });
+        }
+      );
       return response.data?.data.historyLength;
     },
   });
@@ -169,8 +184,12 @@ const HistoryAboveBelowTable = () => {
     fetcher: async () => {
       if (activeChain === undefined) return;
       const config = getConfig(activeChain?.id);
-      const response = await axios.post(config.graph.MAIN, {
-        query: `{
+      const response = await axios.post(
+        `https://subgraph.satsuma-prod.com/${
+          import.meta.env.VITE_SATSUMA_KEY
+        }/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.3-ab-profile-user-cumulative-optionwise-new-schema/api`,
+        {
+          query: `{
                 historyTrades: abuserOptionDatas(
                     orderBy: expirationTime
                     orderDirection: desc
@@ -201,7 +220,8 @@ const HistoryAboveBelowTable = () => {
                     }
                   }
             }`,
-      });
+        }
+      );
       return response.data?.data.historyTrades;
     },
     refreshInterval: 1000,
