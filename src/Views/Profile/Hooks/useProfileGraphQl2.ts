@@ -1,20 +1,22 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { add } from '@Utils/NumString/stringArithmatics';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';
+import { Products } from '../Components/ProductDropDown';
 
-export const useProfileGraphQl2 = () => {
+export const useProfileGraphQl2 = (product: Products) => {
   const { address: account } = useUserAccount();
   const { activeChain } = useActiveChain();
-  const graphUrl = getConfig(activeChain.id).graph.MAIN;
-
+  const graphUrl = `https://subgraph.satsuma-prod.com/${
+    import.meta.env.VITE_SATSUMA_KEY
+  }/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.3-ab-profile-user-cumulative-optionwise-new-schema/api`;
+  const queryName = product === 'Up/Down' ? 'optionStats' : 'aboptionStats';
   async function fetchData(account: string | undefined) {
     if (!account) return null;
     const basequery = `
-    userData:optionStats(
+    userData:${queryName}(
       first: 10000
       where: {user: "${account.toLowerCase()}" }
     ){
@@ -51,10 +53,10 @@ export const useProfileGraphQl2 = () => {
   }
 
   const { data } = useSWR(
-    `profile-query-2-account-${account}-lastSavedTimestamp-activeChain-${activeChain}`,
+    `profile-query-2-account-${account}-lastSavedTimestamp-activeChain-${activeChain}-product-${product}`,
     {
       fetcher: () => fetchData(account),
-      refreshInterval: 300,
+      refreshInterval: 5000,
     }
   );
 

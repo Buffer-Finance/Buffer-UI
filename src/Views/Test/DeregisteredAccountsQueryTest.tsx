@@ -17,7 +17,7 @@ export const DeregisteredAccountsQueryTest = () => {
               }`;
 
       const res = await axios.post(
-        `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/instant-trading-arbitrum-testnet/api
+        `https://subgraph.satsuma-prod.com/bufferfinance/instant-trading-arbitrum-testnet/api
             `,
         {
           query,

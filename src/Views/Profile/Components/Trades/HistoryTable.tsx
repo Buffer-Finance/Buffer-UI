@@ -46,7 +46,7 @@ export const HistoryTables = () => {
   const { address } = useUserAccount();
   usePriceRetriable();
   return (
-    <>
+    <div>
       <div className="flex items-center justify-between mb-5 sm:flex-col sm:items-start sm:gap-3 sm:mb-[0]">
         <BufferTab
           value={activeTabIdx}
@@ -94,6 +94,6 @@ export const HistoryTables = () => {
           ),
         ]}
       />
-    </>
+    </div>
   );
 };

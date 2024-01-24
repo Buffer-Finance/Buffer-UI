@@ -25,7 +25,7 @@ export const UserDataV2 = () => {
   const { winnerUserRank: dailyRank } = useLeaderboardQuery();
   const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
-  const metrics = useProfileGraphQl2();
+  const metrics = useProfileGraphQl2('Up/Down');
   const { activeChain } = useActiveChain();
   const chains: Chain[] = getChains();
   const navigateToTrade = useNavigateToTrade();
