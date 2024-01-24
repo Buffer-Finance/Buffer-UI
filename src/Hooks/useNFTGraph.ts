@@ -18,7 +18,9 @@ export const useNFTGraph = (userOnly = false) => {
   const { data } = useSWR(`nfts-the-graph-account-${account}`, {
     fetcher: async () => {
       const response = await axios.post(
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api',
+        `https://subgraph.satsuma-prod.com/${
+          import.meta.env.VITE_SATSUMA_KEY
+        }/bufferfinance/arbitrum-mainnet/api`,
         {
           query: `{ 
           nfts(orderBy: tokenId, orderDirection: desc,where: {owner: "${account}"}) {

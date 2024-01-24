@@ -1,14 +1,18 @@
-import axios from 'axios';
-import { useMemo } from 'react';
-import useSWR from 'swr';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { add } from '@Utils/NumString/stringArithmatics';
 import { getWeekId } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
+import axios from 'axios';
 import { isTestnet } from 'config';
-import { useUserAccount } from '@Hooks/useUserAccount';
+import { useMemo } from 'react';
+import useSWR from 'swr';
 
 const LBFRgraphEndpoint = isTestnet
-  ? 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/lbfr-arbitrum-testnet/api'
-  : 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/lbfr-arbitrum-mainnet/api';
+  ? `https://subgraph.satsuma-prod.com/${
+      import.meta.env.VITE_SATSUMA_KEY
+    }/bufferfinance/lbfr-arbitrum-testnet/api`
+  : `https://subgraph.satsuma-prod.com/${
+      import.meta.env.VITE_SATSUMA_KEY
+    }/bufferfinance/lbfr-arbitrum-mainnet/api`;
 export const getWeekIdFromTimestamp = (timestamp: number) => {
   let dayTimestamp = Math.floor(
     (timestamp - 4 * 86400 - 16 * 3600) / (86400 * 7)
