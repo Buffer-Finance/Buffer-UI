@@ -34,14 +34,14 @@ export const usePastTradeQueryByFetch = ({
         const response = await axios.post(config.graph.MAIN, {
           query: `{ 
             historyTrades: userOptionDatas(
-              orderBy: expirationTime
-              orderDirection: desc
+              orderBy: "expirationTime"
+              orderDirection: "desc"
               first: ${historyfirst}
               skip: ${historyskip}
               where: {
                 user: "${account}",
                 state_in: [1,2,3],
-                expirationTime_lt: ${currentTime}
+                expirationTime_lt: "${currentTime}"
               }
             ){
                 amount
@@ -63,14 +63,14 @@ export const usePastTradeQueryByFetch = ({
                 }
             }
              activeTrades: userOptionDatas(
-              orderBy: creationTime
-              orderDirection: desc
+              orderBy: "creationTime"
+              orderDirection: "desc"
               first: ${activefirst}
               skip: ${activeskip}
               where: {
                 user: "${account}",
                 state_in: [1],
-                expirationTime_gt: ${currentTime}
+                expirationTime_gt: "${currentTime}"
               }
             ){
                 amount
@@ -92,8 +92,8 @@ export const usePastTradeQueryByFetch = ({
                 }
             }
              queuedTrades: queuedOptionDatas(
-              orderBy: queueID
-              orderDirection: desc
+              orderBy: "queueID"
+              orderDirection: "desc"
               where: {
                 user: "${account}",
                 state_in: [4],
@@ -116,8 +116,8 @@ export const usePastTradeQueryByFetch = ({
              cancelledTrades: queuedOptionDatas(
               first: ${cancelledfirst}
               skip: ${cancelledskip}
-              orderBy: queueID
-              orderDirection: desc
+              orderBy: "queueID"
+              orderDirection: "desc"
               where: {
                 user: "${account}",
                 state_in: [5],
@@ -140,20 +140,16 @@ export const usePastTradeQueryByFetch = ({
                 }
             }
 
-            _meta {
-              block {
-                number
-              }
-            }
+           
             
             historyLength: userOptionDatas(
-              orderBy: expirationTime
-              orderDirection: desc
-              first: 10000
+              orderBy: "expirationTime"
+              orderDirection: "desc"
+              first: 1000
               where: {
                 user: "${account}",
                 state_in: [1,2,3],
-                expirationTime_lt: ${currentTime}
+                expirationTime_lt: "${currentTime}"
               }
             ){
                 
@@ -161,12 +157,12 @@ export const usePastTradeQueryByFetch = ({
                 
             }
              activeLength: userOptionDatas(
-              orderBy: creationTime
-              orderDirection: desc
+              orderBy: "creationTime"
+              orderDirection: "desc"
               where: {
                 user: "${account}",
                 state_in: [1],
-                expirationTime_gt: ${currentTime}
+                expirationTime_gt: "${currentTime}"
               }
             ){
                 
@@ -175,8 +171,8 @@ export const usePastTradeQueryByFetch = ({
             }
 
              cancelledLength: queuedOptionDatas(
-              orderBy: queueID
-              orderDirection: desc
+              orderBy: "queueID"
+              orderDirection: "desc"
               where: {
                 user: "${account}",
                 state_in: [5],

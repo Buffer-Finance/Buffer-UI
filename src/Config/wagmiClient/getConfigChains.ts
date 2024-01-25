@@ -32,6 +32,34 @@ const arbitrumSepolia = defineChain({
   },
   testnet: true,
 });
+const blastSepolia = defineChain({
+  id: 168587773,
+  name: 'Blast Sepolia',
+  network: 'blast-sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Ether',
+    symbol: 'AETH',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://sepolia.blast.io'],
+    },
+    public: {
+      http: ['https://sepolia.blast.io'],
+    },
+  },
+  blockExplorers: {
+    default: { name: 'Explorer', url: 'https://testnet.blastscan.io' },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xb41e43f6AD6183e58C44aa3C914d0a794e8D1b68',
+      blockCreated: 748004,
+    },
+  },
+  testnet: true,
+});
 
 export function getSupportedChains() {
   return isTestnet ? [arbitrumSepolia] : [arbitrum];
@@ -44,6 +72,8 @@ export const getAllChains = () => {
     case 'polygon':
       return isTestnet ? [polygonMumbai, arbitrumSepolia] : [polygon, arbitrum];
     default:
-      return isTestnet ? [arbitrumSepolia, polygonMumbai] : [arbitrum, polygon];
+      return isTestnet
+        ? [blastSepolia, arbitrumSepolia, polygonMumbai]
+        : [arbitrum, polygon];
   }
 };

@@ -27,25 +27,25 @@ const IbfrFaucet: React.FC = () => {
   }, [poolDisplayNameMapping]);
 
   const content = activeChain && [
-    {
-      top: `Claim ${import.meta.env.VITE_ENV} ${
-        activeChain.nativeCurrency.symbol
-      }`,
-      middle: (
-        <>
-          You will have to claim{' '}
-          <span className="text-1 w500">
-            {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
-          </span>{' '}
-          for gas fee.
-        </>
-      ),
-      bottom: (
-        <div className="flex flex-col">
-          <TestnetLinks />
-        </div>
-      ),
-    },
+    // {
+    //   top: `Claim ${import.meta.env.VITE_ENV} ${
+    //     activeChain.nativeCurrency.symbol
+    //   }`,
+    //   middle: (
+    //     <>
+    //       You will have to claim{' '}
+    //       <span className="text-1 w500">
+    //         {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
+    //       </span>{' '}
+    //       for gas fee.
+    //     </>
+    //   ),
+    //   bottom: (
+    //     <div className="flex flex-col">
+    //       <TestnetLinks />
+    //     </div>
+    //   ),
+    // },
     {
       top: `Claim TESTNET Tokens`,
       bottom: (

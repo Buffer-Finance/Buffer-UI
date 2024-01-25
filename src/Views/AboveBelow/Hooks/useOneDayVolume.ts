@@ -16,9 +16,9 @@ export const useOneDayVolume = () => {
       const response = await axios.post(graphqlURL, {
         query: `{ 
               volumePerContracts(   
-                orderBy: timestamp
-                orderDirection: desc
-                first: 10000
+                orderBy: "timestamp"
+                orderDirection: "desc"
+                first: 1000
                 where: { timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
                 optionContract {
                   address

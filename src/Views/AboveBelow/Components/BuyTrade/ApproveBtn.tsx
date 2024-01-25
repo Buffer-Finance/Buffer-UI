@@ -12,6 +12,7 @@ export const ApproveBtn: React.FC<{
 }> = ({ tokenAddress, routerAddress }) => {
   const toastify = useToast();
   const [loading, setLoading] = useState<boolean>(false);
+  console.log('tokenAddress', tokenAddress);
   const { writeCall: approveCall } = useWriteCall(
     tokenAddress,
     erc20ABI as any

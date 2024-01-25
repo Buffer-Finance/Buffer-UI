@@ -18,7 +18,6 @@ import { Navbar } from './Views/Common/Navbar';
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AboveBelow } from '@Views/AboveBelow';
 import { AllTrades } from '@Views/AboveBelow/Components/AllTrades';
 import { MobileHistory } from '@Views/AboveBelow/Components/MobileView/MobileHistory';
@@ -164,7 +163,7 @@ function App() {
   const [snack, setSnack] = useAtom(snackAtom);
   const [mobileWarningClosed, setWarningCloseOnMobile] =
     useAtom(mobileWarningAtom);
-  const graphStatus = useGraphStatus();
+  // const graphStatus = useGraphStatus();
   const isMobile = useMedia('(max-width:1200px)');
 
   return (
@@ -173,7 +172,7 @@ function App() {
       <I18nProvider i18n={i18n}>
         <Background>
           <ViewOnlyModeTradePageWarning />
-          {graphStatus && (
+          {/* {graphStatus && (
             <Warning
               body={
                 <div className="text-center">
@@ -186,7 +185,7 @@ function App() {
               state={graphStatus.error}
               className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
             />
-          )}
+          )} */}
           <Navbar />
           <AppRoutes />
           <Snackbar

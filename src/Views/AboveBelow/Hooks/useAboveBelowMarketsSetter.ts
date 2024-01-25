@@ -18,7 +18,7 @@ export const useAboveBelowMarketsSetter = () => {
   async function fetcher(): Promise<responseAB[]> {
     const response = await axios.post(configData.graph.MAIN, {
       query: `{ 
-        optionContracts(first: 10000) {
+        optionContracts(first: 1000) {
           address
           token0
           token1
@@ -45,7 +45,7 @@ export const useAboveBelowMarketsSetter = () => {
         }
         }`,
     });
-
+    console.log('response', response);
     return response.data?.data?.optionContracts as responseAB[];
   }
 
@@ -56,6 +56,7 @@ export const useAboveBelowMarketsSetter = () => {
       refreshInterval: 60000,
     }
   );
+  console.log('data', data);
   useEffect(() => {
     if (data)
       setMarkets(

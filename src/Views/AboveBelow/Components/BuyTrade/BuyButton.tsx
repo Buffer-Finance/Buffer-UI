@@ -128,51 +128,57 @@ const TradeButton = () => {
       );
       if (tradesizeError) throw new Error(tradesizeError);
       setLoading(isAbove ? 'Up' : 'Down');
-      await writeCall(() => {}, 'initiateTrade', [
+      await writeCall(
+        (res) => {
+          if (res) {
+            const content = (
+              <div className="flex flex-col gap-y-2 text-f12 ">
+                <div className="nowrap font-[600]">
+                  Trade placed
+                  {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
+                </div>
+                <div className="flex items-center">
+                  {activeMarket.token0 + '-' + activeMarket.token1}&nbsp;&nbsp;
+                  <span className="!text-3">to go</span>&nbsp;
+                  {isAbove ? (
+                    <>
+                      <UpIcon className="text-green scale-125" /> &nbsp;Higher
+                    </>
+                  ) : (
+                    <>
+                      <DownIcon className="text-red scale-125" />
+                      &nbsp; Lower
+                    </>
+                  )}
+                </div>
+                <div>
+                  <span>
+                    <span className="!text-3">Total amount:</span>
+                    {amount}&nbsp;{activeMarket.poolInfo.token.toUpperCase()}
+                  </span>
+                </div>
+              </div>
+            );
+            toastify({
+              type: 'success',
+              timings: 20,
+              body: null,
+              msg: content,
+            });
+          }
+        },
+        'initiateTrade',
         [
-          activeMarket.address,
-          settings.partialFill,
-          isAbove,
-          selectedTimestamp / 1000,
-          toFixed(multiply(amount, decimals), 0),
-          referralData[2],
-        ],
-      ]);
-
-      const content = (
-        <div className="flex flex-col gap-y-2 text-f12 ">
-          <div className="nowrap font-[600]">
-            Trade placed
-            {/* at Strike : {toFixed(divide(baseArgs[ArgIndex.Strike], 8), 3)} */}
-          </div>
-          <div className="flex items-center">
-            {activeMarket.token0 + '-' + activeMarket.token1}&nbsp;&nbsp;
-            <span className="!text-3">to go</span>&nbsp;
-            {isAbove ? (
-              <>
-                <UpIcon className="text-green scale-125" /> &nbsp;Higher
-              </>
-            ) : (
-              <>
-                <DownIcon className="text-red scale-125" />
-                &nbsp; Lower
-              </>
-            )}
-          </div>
-          <div>
-            <span>
-              <span className="!text-3">Total amount:</span>
-              {amount}&nbsp;{activeMarket.poolInfo.token.toUpperCase()}
-            </span>
-          </div>
-        </div>
+          [
+            activeMarket.address,
+            settings.partialFill,
+            isAbove,
+            selectedTimestamp / 1000,
+            toFixed(multiply(amount, decimals), 0),
+            referralData[2],
+          ],
+        ]
       );
-      toastify({
-        type: 'success',
-        timings: 20,
-        body: null,
-        msg: content,
-      });
     } catch (e) {
       toastify({
         type: 'error',

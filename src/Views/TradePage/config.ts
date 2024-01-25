@@ -4,6 +4,36 @@ export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
 
 export const appConfig = {
+  '168587773': {
+    graph: {
+      MAIN: 'https://up-down-blast-sepolia-production.up.railway.app/',
+      ABOVE_BELOW: 'https://up-down-blast-sepolia-production.up.railway.app/',
+    },
+    multicall: '0xb41e43f6AD6183e58C44aa3C914d0a794e8D1b68',
+    referral_storage: '0x0a9dD746876323f1b790D0b9F5Ce928085fb4905',
+    router: '0x464c93cab18A051a24BD520bb97c22C583b48F01',
+    signer_manager: '',
+    booster: '',
+    config_setter: '',
+    v2_router: '',
+    above_below_router: '0x464c93cab18A051a24BD520bb97c22C583b48F01',
+    poolsInfo: {
+      '0x0C42C958C9Bc6B555F4e8e1AFC36dEd95CB05a24': {
+        decimals: 18,
+        faucet: '0xECD32E8258b72b52EAb8E6a78767c53B48de4F99',
+        is_pol: false,
+        token: 'ARB',
+        tokenAddress: '0x7960B002C8b3F36322C58a316c32Af3E7d25Cc85',
+      },
+      '0x2f4ea9d62C9Cb5Ae22f9c1F8472319Ea9A08D93c': {
+        decimals: 6,
+        faucet: '0x98ecb38A7dBf2518C24F3Dd793284a24d2B39629',
+        is_pol: false,
+        token: 'USDC',
+        tokenAddress: '0x9bE7abE78A8fc78eDc763fDB864B50c6e98ACB97',
+      },
+    },
+  },
   '421614': isSandbox
     ? {
         graph: {

@@ -1,8 +1,8 @@
 import { multiply } from '@Utils/NumString/stringArithmatics';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { selectedPoolActiveMarketAtom } from '@Views/AboveBelow/atoms';
 import axios from 'axios';
 import Big from 'big.js';
-import { atom, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
@@ -32,7 +32,7 @@ export const usePrice = () => {};
 export const usePriceRetriable = () => {
   const setPrice = useSetAtom(priceAtom);
   const [isConnected, setIsConnected] = useState(client.isConnected());
-  const { activeMarket } = useActiveMarket();
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const activeMarketRef = useRef('BTCUSD');
   useEffect(() => {
     activeMarketRef.current = activeMarket?.token0
