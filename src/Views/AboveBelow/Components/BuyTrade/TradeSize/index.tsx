@@ -31,6 +31,7 @@ import {
 } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { getMinimumValue } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
+import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { PoolDropdown } from './PoolDropDown';
 
@@ -54,11 +55,17 @@ export const TradeSize: React.FC<{
   if (
     activeMarket === undefined ||
     readCallData === undefined ||
-    expiry === undefined ||
-    tradeSizes === undefined ||
-    tradeSizes === null
+    expiry === undefined
+    // ||
+    // tradeSizes === undefined ||
+    // tradeSizes === null
   )
-    return <></>;
+    return (
+      <Skeleton
+        className="custom-h full-width sr lc my-3 !h-8"
+        variant="rectangular"
+      />
+    );
   const token = activeMarket.poolInfo.token.toUpperCase();
   const decimals = activeMarket.poolInfo.decimals;
   const balance =
@@ -66,7 +73,7 @@ export const TradeSize: React.FC<{
 
   let maxTradeSize = '0';
   const id = activeMarket.address + '-' + expiry / 1000;
-  if (tradeSizes[id] !== undefined) {
+  if (tradeSizes?.[id] !== undefined) {
     maxTradeSize = divide(
       tradeSizes[id],
       activeMarket.poolInfo.decimals
@@ -127,7 +134,7 @@ export const TradeSize: React.FC<{
               balance={balance}
             />
           )}
-          {userAddress && (
+          {tradeSizes && userAddress && (
             <Error
               balance={balance}
               tradeSize={tradeSize}
