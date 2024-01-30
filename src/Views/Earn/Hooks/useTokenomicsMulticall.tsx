@@ -56,7 +56,6 @@ export const useIbfrPrice = () => {
   };
 
   const keys = ['bfrPriceInEth'];
-  //
   const { data, error } = useSWR(keys, {
     fetcher: async (calls) => {
       console.log(`useTokenomicsMulticall-price: `);
