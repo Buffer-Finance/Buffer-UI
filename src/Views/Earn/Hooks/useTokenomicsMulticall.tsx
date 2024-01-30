@@ -59,7 +59,6 @@ export const useIbfrPrice = () => {
     args: [BFRPriceInEth?.[1] || '29999', ETHtoUSD],
     chainId: 42161,
   });
-  console.log(`useTokenomicsMulticall-readcalls: `, BFRPriceInUSD[1]);
   const BFRPrice = useMemo(() => {
     if (BFRPriceInUSD?.[1]) {
       return divide(BFRPriceInUSD[1].toString(), 6);
