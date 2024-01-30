@@ -2,6 +2,7 @@ import bfrAbi from '../Config/Abis/BFR.json';
 import VesterAbi from '../Config/Abis/Vester.json';
 import RewardTrackerAbi from '../Config/Abis/RewardTracker.json';
 import BlpAbi from '../Config/Abis/BufferBinaryIBFRPoolBinaryV2.json';
+import camelotAbi from '@ABIs/Camelot.json';
 import TokenAbi from '../Config/Abis/Token.json';
 import useSWR from 'swr';
 import axios from 'axios';
@@ -17,14 +18,16 @@ import {
 } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { eToWide, toFixed } from '@Utils/NumString';
-import { useContractReads } from 'wagmi';
+import { useContractRead, useContractReads } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { roundToTwo } from '@Utils/roundOff';
 import { appConfig } from '@Views/TradePage/config';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import getDeepCopy from '@Utils/getDeepCopy';
-
+import { useReadcalls } from '@Views/DashboardV2/hooks/useReadcalls';
+import { useMemo } from 'react';
+const camelotAddress = '0xc873fEcbd354f5A56E00E710B90EF4201db2448d';
 export const BASIS_POINTS_DIVISOR = '10000';
 export const SECONDS_PER_YEAR = '31536000';
 
@@ -33,7 +36,36 @@ export const TOTALSUPPLY = 80 * 10 ** 6 * 10 ** 18;
 const ibfrPriceCache = {
   cache: '0',
 };
+const BFRtoETH = [
+  '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',
+  '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+];
+const ETHtoUSD = [
+  '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+  '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+];
 export const useIbfrPrice = () => {
+  const { data: BFRPriceInEth } = useContractRead({
+    address: camelotAddress,
+    abi: camelotAbi,
+    functionName: 'getAmountsOut',
+    args: ['1000000000000000000', BFRtoETH],
+    chainId: 42161,
+  });
+  const { data: BFRPriceInUSD } = useContractRead({
+    address: camelotAddress,
+    abi: camelotAbi,
+    functionName: 'getAmountsOut',
+    args: [BFRPriceInEth?.[1] || '29999', ETHtoUSD],
+    chainId: 42161,
+  });
+  console.log(`useTokenomicsMulticall-readcalls: `, BFRPriceInUSD[1]);
+  const BFRPrice = useMemo(() => {
+    if (BFRPriceInUSD?.[1]) {
+      return divide(BFRPriceInUSD[1].toString(), 6);
+    }
+    return null;
+  }, [BFRPriceInUSD]);
   const getBothPrice = async () => {
     const response = await axios.post(
       'https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-dev',
@@ -50,9 +82,10 @@ export const useIbfrPrice = () => {
     );
   };
   const getPriceFromCoinGeko = async () => {
-    return await axios.get(
-      'https://www.coingecko.com/price_charts/18540/usd/24_hours.json'
-    );
+    return await axios.get('https://api.camelot.exchange/v2/tokens');
+  };
+  const getPriceFromChain = async () => {
+    return await axios.get('https://api.camelot.exchange/v2/tokens');
   };
 
   const keys = ['bfrPriceInEth'];
@@ -62,18 +95,20 @@ export const useIbfrPrice = () => {
 
       // const res = await getBothPrice();
       const coinGekoPrice = await getPriceFromCoinGeko();
+      console.log(`useTokenomicsMulticall-coinGekoPrice: `, coinGekoPrice);
       let price = null;
-      if (coinGekoPrice.data.stats) {
-        price =
-          coinGekoPrice.data.stats?.[coinGekoPrice.data.stats.length - 1][1];
-        console.log(`useTokenomicsMulticall-price: `, price);
-      }
+      // if (coinGekoPrice.data.stats) {
+      //   price =
+      //     coinGekoPrice.data.stats?.[coinGekoPrice.data.stats.length - 1][1];
+      //   console.log(`useTokenomicsMulticall-price: `, price);
+      // }
       return price;
     },
   });
 
-  if (data && !error) {
-    ibfrPriceCache.cache = toFixed(data, 8);
+  console.log(`useTokenomicsMulticall-BFRPrice: `, BFRPrice);
+  if (BFRPrice) {
+    ibfrPriceCache.cache = toFixed(BFRPrice, 8);
   }
   return ibfrPriceCache.cache;
 };
