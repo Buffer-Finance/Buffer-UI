@@ -49,14 +49,27 @@ export const useIbfrPrice = () => {
       response.data.data.pools[1].token1Price
     );
   };
+  const getPriceFromCoinGeko = async () => {
+    return await axios.get(
+      'https://www.coingecko.com/price_charts/18540/usd/24_hours.json'
+    );
+  };
 
   const keys = ['bfrPriceInEth'];
-
+  //
   const { data, error } = useSWR(keys, {
     fetcher: async (calls) => {
-      const res = await getBothPrice();
+      console.log(`useTokenomicsMulticall-price: `);
 
-      return res;
+      // const res = await getBothPrice();
+      const coinGekoPrice = await getPriceFromCoinGeko();
+      let price = null;
+      if (coinGekoPrice.data.stats) {
+        price =
+          coinGekoPrice.data.stats?.[coinGekoPrice.data.stats.length - 1][1];
+        console.log(`useTokenomicsMulticall-price: `, price);
+      }
+      return price;
     },
   });
 
@@ -1428,6 +1441,7 @@ export const useGetTokenomics = () => {
       },
     };
   }
+  console.log(`useTokenomicsMulticall-bfrPrice: `, bfrPrice);
 
   return bfrPrice && response ? response : { earn: null, vest: null };
 };
