@@ -51,6 +51,7 @@ export const useIbfrPrice = () => {
     functionName: 'getAmountsOut',
     args: ['1000000000000000000', BFRtoETH],
     chainId: 42161,
+    watch: true,
   });
   const { data: BFRPriceInUSD } = useContractRead({
     address: camelotAddress,
@@ -58,6 +59,7 @@ export const useIbfrPrice = () => {
     functionName: 'getAmountsOut',
     args: [BFRPriceInEth?.[1] || '29999', ETHtoUSD],
     chainId: 42161,
+    watch: true,
   });
   const BFRPrice = useMemo(() => {
     if (BFRPriceInUSD?.[1]) {
