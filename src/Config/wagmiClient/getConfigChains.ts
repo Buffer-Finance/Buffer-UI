@@ -68,12 +68,10 @@ export function getSupportedChains() {
 export const getAllChains = () => {
   switch (urlSettings?.chain) {
     case 'arbitrum':
-      return isTestnet ? [arbitrumSepolia, polygonMumbai] : [arbitrum, polygon];
+      return isTestnet ? [blastSepolia, arbitrumSepolia] : [arbitrum, polygon];
     case 'polygon':
       return isTestnet ? [polygonMumbai, arbitrumSepolia] : [polygon, arbitrum];
     default:
-      return isTestnet
-        ? [blastSepolia, arbitrumSepolia, polygonMumbai]
-        : [arbitrum, polygon];
+      return isTestnet ? [blastSepolia, arbitrumSepolia] : [arbitrum, polygon];
   }
 };
