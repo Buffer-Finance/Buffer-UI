@@ -11,12 +11,12 @@ export const appConfig = {
     },
     multicall: '0xb41e43f6AD6183e58C44aa3C914d0a794e8D1b68',
     referral_storage: '0x0a9dD746876323f1b790D0b9F5Ce928085fb4905',
-    router: '0x464c93cab18A051a24BD520bb97c22C583b48F01',
+    router: '0xaf6782306B3d680aB766c42198e410e2bA29989a',
     signer_manager: '',
     booster: '',
     config_setter: '',
     v2_router: '',
-    above_below_router: '0x464c93cab18A051a24BD520bb97c22C583b48F01',
+    above_below_router: '0xaf6782306B3d680aB766c42198e410e2bA29989a',
     poolsInfo: {
       '0x0C42C958C9Bc6B555F4e8e1AFC36dEd95CB05a24': {
         decimals: 18,
