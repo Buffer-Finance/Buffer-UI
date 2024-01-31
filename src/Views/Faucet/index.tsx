@@ -27,25 +27,25 @@ const IbfrFaucet: React.FC = () => {
   }, [poolDisplayNameMapping]);
 
   const content = activeChain && [
-    // {
-    //   top: `Claim ${import.meta.env.VITE_ENV} ${
-    //     activeChain.nativeCurrency.symbol
-    //   }`,
-    //   middle: (
-    //     <>
-    //       You will have to claim{' '}
-    //       <span className="text-1 w500">
-    //         {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
-    //       </span>{' '}
-    //       for gas fee.
-    //     </>
-    //   ),
-    //   bottom: (
-    //     <div className="flex flex-col">
-    //       <TestnetLinks />
-    //     </div>
-    //   ),
-    // },
+    {
+      top: `Claim ${import.meta.env.VITE_ENV} ${
+        activeChain.nativeCurrency.symbol
+      }`,
+      middle: (
+        <>
+          You will have to claim{' '}
+          <span className="text-1 w500">
+            {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
+          </span>{' '}
+          for gas fee.
+        </>
+      ),
+      bottom: (
+        <div className="flex flex-col">
+          <TestnetLinks />
+        </div>
+      ),
+    },
     {
       top: `Claim TESTNET Tokens`,
       bottom: (
@@ -124,6 +124,24 @@ const ClaimButton = ({ token }: { token: string }) => {
 };
 
 const faucetClaimingSteps = {
+  168587773: {
+    name: 'AETH',
+    symbol: 'AETH',
+    faucet: [
+      {
+        step: 'Claim AETH from sepolia faucet',
+        url: 'https://sepoliafaucet.com/',
+      },
+      {
+        step: 'Send GoerliETH to 0xDeDa8D3CCf044fE2A16217846B6e1f1cfD8e122f.',
+        // url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
+      },
+      {
+        step: 'Directly claim AETH from here',
+        url: 'https://faucet.quicknode.com/blast/sepolia',
+      },
+    ],
+  },
   421614: {
     name: 'AETH',
     symbol: 'AETH',
@@ -198,7 +216,18 @@ const TestnetLinks = () => {
               </span>
             </div>
           );
-        else
+        else {
+          const isAlink = !!s.url;
+          if (!isAlink) {
+            return (
+              <div key={s.url} className="sm:max-w-[250px] flex ">
+                {faucetClaimingSteps[activeChain.id].faucet.length === 1
+                  ? ''
+                  : idx + 1 + '.'}
+                <span className="w-full">{s.step}</span>
+              </div>
+            );
+          }
           return (
             <div
               key={s.url}
@@ -214,6 +243,7 @@ const TestnetLinks = () => {
               </span>
             </div>
           );
+        }
       })}
     </div>
   );
