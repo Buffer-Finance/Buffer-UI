@@ -74,7 +74,6 @@ export const TradeSize: React.FC<{
 
   let maxTradeSize = '0';
   const id = getAddress(activeMarket.address) + '-' + expiry / 1000;
-  console.log('tradeSizes', tradeSizes, id, tradeSizes?.[id]);
   if (tradeSizes?.[id] !== undefined) {
     maxTradeSize = divide(
       tradeSizes[id],
