@@ -2,6 +2,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { upDownV2BaseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
 import useSWR from 'swr';
+import { getAddress } from 'viem';
 import { marketTypeAB } from '../types';
 
 export const useMaxTrade = ({
@@ -20,7 +21,7 @@ export const useMaxTrade = ({
       const response = await axios.get(upDownV2BaseUrl + `max_size/`, {
         params: {
           environment: activeChain.id,
-          market_ids: activeMarket?.address + '-' + expiry / 1000,
+          market_ids: getAddress(activeMarket?.address) + '-' + expiry / 1000,
           pools: activeMarket?.pool,
         },
       });
