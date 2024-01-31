@@ -18,7 +18,7 @@ export const useAboveBelowMarketsSetter = () => {
   async function fetcher(): Promise<responseAB[]> {
     const response = await axios.post(configData.graph.MAIN, {
       query: `{ 
-        optionContracts(first: 1000) {
+        optionContracts(first: 1000,where:{address_not_in:["0x6C8E061ffc40F31C0bde117744E1C38643bf031E"]}) {
           address
           token0
           token1
