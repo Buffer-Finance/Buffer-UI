@@ -33,6 +33,7 @@ import { getMinimumValue } from '@Views/TradePage/utils';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
+import { getAddress } from 'viem';
 import { PoolDropdown } from './PoolDropDown';
 
 const TradeSizeSelectorBackground = styled.div`
@@ -72,7 +73,8 @@ export const TradeSize: React.FC<{
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
 
   let maxTradeSize = '0';
-  const id = activeMarket.address + '-' + expiry / 1000;
+  const id = getAddress(activeMarket.address) + '-' + expiry / 1000;
+  console.log('tradeSizes', tradeSizes, id, tradeSizes?.[id]);
   if (tradeSizes?.[id] !== undefined) {
     maxTradeSize = divide(
       tradeSizes[id],
