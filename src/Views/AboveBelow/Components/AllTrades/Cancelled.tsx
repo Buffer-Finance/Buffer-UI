@@ -21,9 +21,9 @@ export const AllCancelled: React.FC<{}> = () => {
       const response = await axios.post(config.graph.MAIN, {
         query: `{
             cancelledLength: queuedOptionDatas(
-                orderBy: queueID
-                orderDirection: desc
-                first: 10000
+                orderBy: "queueID"
+                orderDirection: "desc"
+                first: 1000
                 where: {
                   state_in: [5],
                 }
@@ -45,8 +45,8 @@ export const AllCancelled: React.FC<{}> = () => {
             cancelledTrades: queuedOptionDatas(
                 first: ${10}
                 skip: ${(activePage - 1) * 10}
-                orderBy: queueID
-                orderDirection: desc
+                orderBy: "queueID"
+                orderDirection: "desc"
                 where: {
                   state_in: [5],
                 }

@@ -25,12 +25,12 @@ export const AllHistory: React.FC<{
       const response = await axios.post(config.graph.MAIN, {
         query: `{
             historyLength: userOptionDatas(
-                orderBy: expirationTime
-                orderDirection: desc
-                first: 10000
+                orderBy: "expirationTime"
+                orderDirection: "desc"
+                first: 1000
                 where: {
                   state_in: [1,2,3],
-                  expirationTime_lt: ${Math.floor(Date.now() / 1000)}
+                  expirationTime_lt: "${Math.floor(Date.now() / 1000)}"
                 }
               ){ 
                   id
@@ -48,13 +48,13 @@ export const AllHistory: React.FC<{
       const response = await axios.post(config.graph.MAIN, {
         query: `{
                 historyTrades: userOptionDatas(
-                    orderBy: expirationTime
-                    orderDirection: desc
+                    orderBy: "expirationTime"
+                    orderDirection: "desc"
                     first: ${10}
                     skip: ${(activePage - 1) * 10}
                     where: {
                       state_in: [1,2,3],
-                      expirationTime_lt: ${Math.floor(Date.now() / 1000)}
+                      expirationTime_lt: "${Math.floor(Date.now() / 1000)}"
                     }
                   ){
                     amount

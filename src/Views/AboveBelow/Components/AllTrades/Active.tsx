@@ -25,12 +25,12 @@ export const AllActive: React.FC<{
       const response = await axios.post(config.graph.MAIN, {
         query: `{
             activeLength: userOptionDatas(
-                orderBy: creationTime
-                orderDirection: desc
-                first: 10000
+                orderBy: "creationTime"
+                orderDirection: "desc"
+                first: 1000
                 where: {
                   state_in: [1],
-                  expirationTime_gt: ${Math.floor(Date.now() / 1000)}
+                  expirationTime_gt: "${Math.floor(Date.now() / 1000)}"
                 }
               ){  
                   id
@@ -48,13 +48,13 @@ export const AllActive: React.FC<{
       const response = await axios.post(config.graph.MAIN, {
         query: `{
             activeTrades: userOptionDatas(
-                orderBy: creationTime
-                orderDirection: desc
+                orderBy: "creationTime"
+                orderDirection: "desc"
                 first: ${10}
                 skip: ${(activePage - 1) * 10}
                 where: {
                   state_in: [1],
-                  expirationTime_gt: ${Math.floor(Date.now() / 1000)}
+                  expirationTime_gt: "${Math.floor(Date.now() / 1000)}"
                 }
               ){
                 amount
