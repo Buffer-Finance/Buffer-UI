@@ -851,7 +851,7 @@ export const MultiResolutionChart = ({
   }, [market2resolution, chartReady]);
   useEffect(() => {
     clearInterval(positionUpdateTimerRef.current);
-    if (!visualizedTrades.length) return;
+    // if (!visualizedTrades.length) return;
     positionUpdateTimerRef.current = setInterval(() => {
       console.log('interval ran');
       // console.log('[chart-0 intervalcalled');
