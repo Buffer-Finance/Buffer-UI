@@ -1,5 +1,6 @@
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
 import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import { Display } from '@Views/Common/Tooltips/Display';
@@ -9,7 +10,16 @@ export const Probability: React.FC<{
   className?: string;
   isColored?: boolean;
 }> = ({ trade, className = '', isColored = false }) => {
+  const { data: ivs } = useIV();
   const { price } = useMarketPrice(trade.market.tv_id);
+
+  if (ivs === undefined) {
+    return <>processing...</>;
+  }
+  const iv = ivs[trade.market.tv_id];
+  if (iv === undefined) {
+    return <>processing...</>;
+  }
   if (trade.state === BetState.queued) {
     return <>-</>;
   }
@@ -32,7 +42,7 @@ export const Probability: React.FC<{
       +trade.strike / 1e8,
       +trade.expirationTime - currentEpoch,
       0,
-      12000 / 1e4
+      iv / 1e4
     ) * 100;
 
   return (
