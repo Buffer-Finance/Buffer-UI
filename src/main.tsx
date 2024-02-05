@@ -53,6 +53,8 @@ if (import.meta.env.VITE_MODE === 'production') {
   });
 }
 
+console.log(wagmiClient, 'wagmiClient');
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
     <WagmiConfig config={wagmiClient}>
