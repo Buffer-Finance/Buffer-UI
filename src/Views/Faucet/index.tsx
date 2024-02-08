@@ -157,7 +157,7 @@ const faucetClaimingSteps = {
       },
     ],
   },
-  421614: {
+  421613: {
     name: 'AETH',
     symbol: 'AETH',
     faucet: [

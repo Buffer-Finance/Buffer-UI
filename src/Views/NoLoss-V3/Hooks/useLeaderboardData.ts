@@ -36,6 +36,7 @@ export const useLeaderboardData = () => {
 
   if (activeChain !== undefined && activeTournamentId !== undefined) {
     const config = getNoLossV3Config(activeChain.id);
+    if (config === undefined) return;
     console.log('config', config, activeChain);
     readcall.push({
       address: config.leaderboard,
