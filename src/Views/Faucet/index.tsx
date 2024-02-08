@@ -53,7 +53,11 @@ const IbfrFaucet: React.FC = () => {
         <ConnectionRequired>
           <div className="flex items-center justify-center gap-3 flex-wrap">
             {tokenChains.map((token: string) => (
-              <ClaimButton token={token} key={token} />
+              <ClaimButton
+                token={token}
+                key={token}
+                activeChain={activeChain}
+              />
             ))}
           </div>{' '}
         </ConnectionRequired>
