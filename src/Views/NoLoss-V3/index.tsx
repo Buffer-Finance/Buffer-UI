@@ -13,10 +13,6 @@ import { tardesAtom, usePastTradeQuery } from './Hooks/usePastTradeQuery';
 import { useTournamentIds } from './Hooks/useTournamentIds';
 import { useUpdateActiveMarket } from './Hooks/useUpdateActiveMarket';
 import { useUpdateActiveTournament } from './Hooks/useUpdateActiveTournament';
-import { useSmartWallet } from '@Hooks/AA/useSmartAccount';
-import { useEffect } from 'react';
-import { useAccount } from 'wagmi';
-import { getLocalSigner } from '@Hooks/AA/getLocalSigner';
 
 export const NoLossV3 = () => {
   const { active } = useAtomValue(tardesAtom);
