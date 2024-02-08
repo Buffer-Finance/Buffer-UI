@@ -7,7 +7,7 @@ export const config = {
     manager: '0x018B7a6557cFB88E0D11D600aF6C88845BDBF8be',
     tournament_reader: '0xf4B18752753B26fA6EFe50e2AEf9a8E1A1De6Aa9',
   },
-  '421614': {
+  '421613': {
     graph:
       'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/no-loss-arbitrum-testnet/api',
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
