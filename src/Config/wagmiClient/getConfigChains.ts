@@ -1,7 +1,7 @@
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { isTestnet } from 'config';
 import { defineChain } from 'viem';
-import { arbitrum, polygon, polygonMumbai } from 'viem/chains';
+import { arbitrum, arbitrumGoerli, polygon, polygonMumbai } from 'viem/chains';
 
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 const arbitrumSepolia = defineChain({
@@ -63,18 +63,18 @@ const blastSepolia = defineChain({
 });
 
 export function getSupportedChains() {
-  return isTestnet ? [arbitrumSepolia] : [arbitrum];
+  return isTestnet ? [arbitrumGoerli] : [arbitrum];
 }
 
 export const getAllChains = () => {
   switch (urlSettings?.chain) {
     case 'arbitrum':
       return isTestnet
-        ? [blastSepolia, arbitrumSepolia, polygonMumbai]
+        ? [blastSepolia, arbitrumGoerli, polygonMumbai]
         : [arbitrum, polygon];
     case 'polygon':
-      return isTestnet ? [polygonMumbai, arbitrumSepolia] : [polygon, arbitrum];
+      return isTestnet ? [polygonMumbai, arbitrumGoerli] : [polygon, arbitrum];
     default:
-      return isTestnet ? [blastSepolia, arbitrumSepolia] : [arbitrum, polygon];
+      return isTestnet ? [blastSepolia, arbitrumGoerli] : [arbitrum, polygon];
   }
 };

@@ -21,6 +21,7 @@ const chaintoIcon: {
 } = {
   421614:
     'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1634668056/Assets/arbitrum.png',
+  168587773: 'https://cms-cdn.avascan.com/cms2/blast.dead36673539.png',
 };
 export const AccountDropdown: React.FC = () => {
   const isMobile = useMedia('(max-width:1200px)');
