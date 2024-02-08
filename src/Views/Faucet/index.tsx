@@ -9,6 +9,7 @@ import { Skeleton } from '@mui/material';
 import { ethers } from 'ethers';
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
+import { Chain } from 'wagmi';
 import FaucetABI from './Faucet.json';
 import Background from './style';
 
@@ -84,11 +85,20 @@ const IbfrFaucet: React.FC = () => {
   );
 };
 
-const ClaimButton = ({ token }: { token: string }) => {
+const ClaimButton = ({
+  token,
+  activeChain,
+}: {
+  token: string;
+  activeChain: Chain;
+}) => {
   const { state } = useGlobal();
   const [btnLoading, setBtnLoading] = useState(0);
   // const pools = usePoolByAsset();
-  const faucetContract = '0x6442f44b940aAD814A8e75C915f8997e94F191aE';
+  const faucetContract =
+    activeChain.id == 168587773
+      ? '0x98ecb38A7dBf2518C24F3Dd793284a24d2B39629'
+      : '0x6442f44b940aAD814A8e75C915f8997e94F191aE';
   //  pools[token]?.faucet;
 
   const { writeCall } = useWriteCall();
@@ -125,6 +135,24 @@ const ClaimButton = ({ token }: { token: string }) => {
 };
 
 const faucetClaimingSteps = {
+  168587773: {
+    name: 'AETH',
+    symbol: 'AETH',
+    faucet: [
+      {
+        step: 'Claim AETH from sepolia faucet',
+        url: 'https://sepoliafaucet.com/',
+      },
+      {
+        step: 'Send SepoliaETH to 0xDeDa8D3CCf044fE2A16217846B6e1f1cfD8e122f.',
+        // url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
+      },
+      {
+        step: 'Directly claim AETH from here',
+        url: 'https://faucet.quicknode.com/blast/sepolia',
+      },
+    ],
+  },
   421614: {
     name: 'AETH',
     symbol: 'AETH',
@@ -144,7 +172,7 @@ const faucetClaimingSteps = {
         // ],
       },
       {
-        step: 'Bridge GoerliETH to AETH',
+        step: 'Bridge SepoliaETH to AETH',
         url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
       },
       {

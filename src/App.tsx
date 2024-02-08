@@ -12,7 +12,6 @@ import { Navbar } from './Views/Common/Navbar';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { useGraphStatus } from '@Utils/useGraphStatus';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
@@ -168,7 +167,7 @@ function App() {
   const [snack, setSnack] = useAtom(snackAtom);
   const [mobileWarningClosed, setWarningCloseOnMobile] =
     useAtom(mobileWarningAtom);
-  const graphStatus = useGraphStatus();
+  // const graphStatus = useGraphStatus();
   const isMobile = useMedia('(max-width:1200px)');
 
   return (
@@ -177,7 +176,7 @@ function App() {
       <I18nProvider i18n={i18n}>
         <Background>
           {/* <ViewOnlyModeTradePageWarning /> */}
-          {graphStatus && (
+          {/* {graphStatus && (
             <Warning
               body={
                 <div className="text-center">
@@ -190,7 +189,7 @@ function App() {
               state={graphStatus.error}
               className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
             />
-          )}
+          )} */}
           <Navbar />
           <AppRoutes isMobile={isMobile} />
           <Snackbar
