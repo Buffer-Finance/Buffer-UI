@@ -43,15 +43,23 @@ export const usePastTradeQueryByFetch = ({
         const response = await axios.post(config.graph, {
           query: `{ 
             historyTrades: userOptionDatas(
-              orderBy: expirationTime
-              orderDirection: desc
+              orderBy: "expirationTime"
+              orderDirection: "desc"
               first: ${historyfirst}
               skip: ${historyskip}
               where: {
                 user: "${account}",
                 state_in: [1,2,3],
-                expirationTime_lt: ${currentTime}
-                tournament: "${activeTournamentId}"
+                expirationTime_lt: "${currentTime}"
+             ${
+               activeChain.id == 168587773
+                 ? `${
+                     activeChain.id == 168587773
+                       ? `tournamentId: "${activeTournamentId}"`
+                       : `tournament: "${activeTournamentId}`
+                   }`
+                 : `tournament: "${activeTournamentId}`
+             }   
               }
             ){
                 amount
@@ -72,15 +80,19 @@ export const usePastTradeQueryByFetch = ({
                 }
             }
              activeTrades: userOptionDatas(
-              orderBy: creationTime
-              orderDirection: desc
+              orderBy: "creationTime"
+              orderDirection: "desc"
               first: ${activefirst}
               skip: ${activeskip}
               where: {
                 user: "${account}",
                 state_in: [1],
-                expirationTime_gt: ${currentTime}
-                tournament: "${activeTournamentId}"
+                expirationTime_gt: "${currentTime}"
+                ${
+                  activeChain.id == 168587773
+                    ? `tournamentId: "${activeTournamentId}"`
+                    : `tournament: "${activeTournamentId}`
+                }
               }
             ){
                 amount
@@ -101,12 +113,16 @@ export const usePastTradeQueryByFetch = ({
                 }
             }
              queuedTrades: queuedOptionDatas(
-              orderBy: queueID
-              orderDirection: desc
+              orderBy: "queueID"
+              orderDirection: "desc"
               where: {
                 user: "${account}",
                 state_in: [4],
-                tournament: "${activeTournamentId}"
+                ${
+                  activeChain.id == 168587773
+                    ? `tournamentId: "${activeTournamentId}"`
+                    : `tournament: "${activeTournamentId}`
+                }
               }
             ){
                 isAbove
@@ -124,12 +140,16 @@ export const usePastTradeQueryByFetch = ({
              cancelledTrades: queuedOptionDatas(
               first: ${cancelledfirst}
               skip: ${cancelledskip}
-              orderBy: queueID
-              orderDirection: desc
+              orderBy: "queueID"
+              orderDirection: "desc"
               where: {
                 user: "${account}",
                 state_in: [5],
-                tournament: "${activeTournamentId}"
+                ${
+                  activeChain.id == 168587773
+                    ? `tournamentId: "${activeTournamentId}"`
+                    : `tournament: "${activeTournamentId}`
+                }
               }
             ){
                 isAbove
@@ -148,21 +168,19 @@ export const usePastTradeQueryByFetch = ({
                 }
             }
 
-            _meta {
-              block {
-                number
-              }
-            }
-            
             historyLength: userOptionDatas(
-              orderBy: expirationTime
-              orderDirection: desc
-              first: 10000
+              orderBy: "expirationTime"
+              orderDirection: "desc"
+              first: 1000
               where: {
                 user: "${account}",
                 state_in: [1,2,3],
-                expirationTime_lt: ${currentTime}
-                tournament: "${activeTournamentId}"
+                expirationTime_lt: "${currentTime}"
+                ${
+                  activeChain.id == 168587773
+                    ? `tournamentId: "${activeTournamentId}"`
+                    : `tournament: "${activeTournamentId}`
+                }
               }
             ){
                 
@@ -170,13 +188,17 @@ export const usePastTradeQueryByFetch = ({
                 
             }
              activeLength: userOptionDatas(
-              orderBy: creationTime
-              orderDirection: desc
+              orderBy: "creationTime"
+              orderDirection: "desc"
               where: {
                 user: "${account}",
                 state_in: [1],
-                expirationTime_gt: ${currentTime}
-                tournament: "${activeTournamentId}"
+                expirationTime_gt: "${currentTime}"
+                ${
+                  activeChain.id == 168587773
+                    ? `tournamentId: "${activeTournamentId}"`
+                    : `tournament: "${activeTournamentId}`
+                }
               }
             ){
                 
@@ -185,12 +207,16 @@ export const usePastTradeQueryByFetch = ({
             }
 
              cancelledLength: queuedOptionDatas(
-              orderBy: queueID
-              orderDirection: desc
+              orderBy: "queueID"
+              orderDirection: "desc"
               where: {
                 user: "${account}",
                 state_in: [5],
-                tournament: "${activeTournamentId}"
+                ${
+                  activeChain.id == 168587773
+                    ? `tournamentId: "${activeTournamentId}"`
+                    : `tournament: "${activeTournamentId}`
+                }
               }
             ){
                 id
