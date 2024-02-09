@@ -133,7 +133,7 @@ const faucetClaimingSteps = {
         url: 'https://sepoliafaucet.com/',
       },
       {
-        step: 'Send GoerliETH to 0xDeDa8D3CCf044fE2A16217846B6e1f1cfD8e122f.',
+        step: 'Send SepoliaETH to 0xDeDa8D3CCf044fE2A16217846B6e1f1cfD8e122f.',
         // url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
       },
       // {
