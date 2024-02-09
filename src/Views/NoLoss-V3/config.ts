@@ -2,10 +2,10 @@ export const config = {
   '168587773': {
     graph: 'https://no-loss-production.up.railway.app/',
     multicall: '0xb41e43f6AD6183e58C44aa3C914d0a794e8D1b68',
-    router: '0x537fe657b5F6Db1630901d09473Bc6112d4f4B27',
-    leaderboard: '0xbDe962FCD36BabAbD80d5DaE1fC2B5111a984E99',
-    manager: '0x018B7a6557cFB88E0D11D600aF6C88845BDBF8be',
-    tournament_reader: '0xf4B18752753B26fA6EFe50e2AEf9a8E1A1De6Aa9',
+    router: '0xC42D0a6d10fd4E0085F82cAE02Bb10a2A6b9650E',
+    leaderboard: '0x060AB78118bc76eD797C2af0D25cde6192D837c1',
+    manager: '0xc0b0022604e40130D8F6ad0c770510EFa2A97A72',
+    tournament_reader: '0x6E8BCCf9ab6B776b451aB0fff4d1dEbc1079afc8',
   },
   '421613': {
     graph:
