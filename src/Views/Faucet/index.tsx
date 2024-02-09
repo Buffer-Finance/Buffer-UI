@@ -29,14 +29,12 @@ const IbfrFaucet: React.FC = () => {
 
   const content = activeChain && [
     {
-      top: `Claim ${import.meta.env.VITE_ENV} ${
-        activeChain.nativeCurrency.symbol
-      }`,
+      top: `Claim ${activeChain.name} ${activeChain.nativeCurrency.symbol}`,
       middle: (
         <>
           You will have to claim{' '}
           <span className="text-1 w500">
-            {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
+            {activeChain.name} {activeChain.nativeCurrency.symbol}
           </span>{' '}
           for gas fee.
         </>
@@ -151,10 +149,10 @@ const faucetClaimingSteps = {
         step: 'Send SepoliaETH to 0xDeDa8D3CCf044fE2A16217846B6e1f1cfD8e122f.',
         // url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
       },
-      {
-        step: 'Directly claim AETH from here',
-        url: 'https://faucet.quicknode.com/blast/sepolia',
-      },
+      // {
+      //   step: 'Directly claim AETH from here',
+      //   url: 'https://faucet.quicknode.com/blast/sepolia',
+      // },
     ],
   },
   421613: {
