@@ -86,6 +86,7 @@ export interface ItournamentData {
   tournamentLeaderboard: TournamentLeaderboard;
   tournamentMeta: TournamentMeta;
   tournamentRewardPools: string;
+  chainId: string;
 }
 
 export type accordianTableType = 'leaderboard' | 'history' | 'cancelled';

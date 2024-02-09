@@ -69,7 +69,6 @@ export const tournamentBasedReadCallsReadOnlyAtom = atom((get) => {
         }
       | undefined;
   } = { calls: null, result: undefined };
-
   if (!tournamentsData || !activeChain || !user) return response;
   if (user.userAddress === undefined) return response;
   const config = getNoLossV3Config(activeChain.id);
@@ -475,17 +474,25 @@ export const allTournamentDataAtom = atom<
 export const tournaments = atom<ItournamentData[] | undefined>((get) => {
   const allTournamentData = get(allTournamentDataAtom);
   const tournamentsIds = get(tournamentIdsAtom);
-  if (allTournamentData === undefined) return undefined;
-  return Object.entries(allTournamentData).map(([key, value]) => {
-    const state = tournamentsIds?.find(
-      (tournament) => tournament.id === key
-    )?.state;
-    return {
-      ...value,
-      id: key,
-      state,
-    };
-  });
+  const activeChain = get(activeChainAtom);
+  if (allTournamentData === undefined || tournamentsIds === undefined)
+    return undefined;
+  if (tournamentsIds.length !== Object.keys(allTournamentData).length)
+    return undefined;
+
+  return Object.entries(allTournamentData)
+    .map(([key, value]) => {
+      if (value?.chainId != activeChain?.id) return undefined;
+      const state = tournamentsIds?.find(
+        (tournament) => tournament.id === key
+      )?.state;
+      return {
+        ...value,
+        id: key,
+        state,
+      };
+    })
+    .filter((tournament) => tournament !== undefined) as ItournamentData[];
 });
 
 export const WinningPirzeModalAtom = atom<null | ItournamentData>(null);

@@ -1,7 +1,7 @@
 import { getCallId } from '@Utils/Contract/multiContract';
 import { useCall2Data } from '@Utils/useReadCall';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import TournamentReaderABI from '../ABIs/TournamentReader.json';
 import {
   activeChainAtom,
@@ -23,6 +23,13 @@ export const useAllTournamentData = () => {
   const user = useAtomValue(userAtom);
   const tournamentsIds = useAtomValue(tournamentIdsAtom);
   const setTournaments = useSetAtom(allTournamentDataAtom);
+  const [chainConnectTimeStamp, setChainConnectTimeStamp] = useState(
+    new Date().getTime()
+  );
+
+  useEffect(() => {
+    setChainConnectTimeStamp(new Date().getTime());
+  }, [activeChain]);
 
   let readcalls = [];
 
@@ -44,8 +51,9 @@ export const useAllTournamentData = () => {
           abi: TournamentReaderABI,
           name: 'bulkFetchTournaments',
           params: [ids],
-          id: getCallId(config.tournament_reader, 'bulkFetchTournaments', [
+          id: getCallId(config.tournament_reader, `bulkFetchTournaments`, [
             ids,
+            '-' + activeChain?.id,
           ]),
         };
       })
@@ -62,8 +70,8 @@ export const useAllTournamentData = () => {
             params: [user.userAddress, ids],
             id: getCallId(
               config.tournament_reader,
-              'bulkFetchUserTournaments',
-              [ids]
+              `bulkFetchUserTournaments`,
+              [ids, '-' + activeChain?.id]
             ),
           };
         })
@@ -74,37 +82,47 @@ export const useAllTournamentData = () => {
   try {
     const { data, error } = useCall2Data(
       readcalls as any,
-      'bulkFetchTournaments'
+      `bulkFetchTournaments-${activeChain?.id}-${chainConnectTimeStamp}`
     );
     if (error) {
       throw error;
     }
-
     useEffect(() => {
-      if (!data) return;
+      if (!data) {
+        setTournaments(undefined);
+        return;
+      }
       Object.entries(data).forEach(([key, value]) => {
         if (key.includes('bulkFetchTournaments')) {
+          const chainId = key.split('-')[1];
           if (value[0] !== undefined) {
             const tournamentIds = key
               .split('bulkFetchTournaments')[1]
-              .split(',');
+              .split('-')[0]
+              .split(',')
+              .filter((id) => id !== '');
             tournamentIds.forEach((tournamentId, index) => {
               setTournaments((prvData) => {
+                console.log('TournamentsPrv', prvData, tournamentIds);
                 return { ...prvData, [tournamentId]: value[0][index] };
               });
             });
           }
         } else if (key.includes('bulkFetchUserTournaments')) {
+          const chainId = key.split('-')[1];
           if (value[0] !== undefined) {
             const tournamentIds = key
               .split('bulkFetchUserTournaments')[1]
-              .split(',');
+              .split('-')[0]
+              .split(',')
+              .filter((id) => id !== '');
             tournamentIds.forEach((tournamentId, index) => {
               setTournaments((prvData) => {
                 return {
                   ...prvData,
                   [tournamentId]: {
                     ...prvData[tournamentId],
+                    chainId: chainId,
                     hasUserClaimed: value[0].hasUserClaimed[index],
                     isUserEligible: value[0].hasUserParticipated[index],
                     userBoughtTickets: value[0].userTicketCount[index],
@@ -116,7 +134,7 @@ export const useAllTournamentData = () => {
           }
         }
       });
-    }, [data]);
+    }, [data, activeChain]);
   } catch (e) {
     console.log(e);
   }

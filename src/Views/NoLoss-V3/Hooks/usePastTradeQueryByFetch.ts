@@ -51,15 +51,11 @@ export const usePastTradeQueryByFetch = ({
                 user: "${account}",
                 state_in: [1,2,3],
                 expirationTime_lt: "${currentTime}"
-             ${
-               activeChain.id == 168587773
-                 ? `${
-                     activeChain.id == 168587773
-                       ? `tournamentId: "${activeTournamentId}"`
-                       : `tournament: "${activeTournamentId}`
-                   }`
-                 : `tournament: "${activeTournamentId}`
-             }   
+           ${
+             activeChain.id == 168587773
+               ? `tournamentId: "${activeTournamentId}"`
+               : `tournament: "${activeTournamentId}"`
+           }
               }
             ){
                 amount
@@ -91,7 +87,7 @@ export const usePastTradeQueryByFetch = ({
                 ${
                   activeChain.id == 168587773
                     ? `tournamentId: "${activeTournamentId}"`
-                    : `tournament: "${activeTournamentId}`
+                    : `tournament: "${activeTournamentId}"`
                 }
               }
             ){
@@ -121,7 +117,7 @@ export const usePastTradeQueryByFetch = ({
                 ${
                   activeChain.id == 168587773
                     ? `tournamentId: "${activeTournamentId}"`
-                    : `tournament: "${activeTournamentId}`
+                    : `tournament: "${activeTournamentId}"`
                 }
               }
             ){
@@ -148,7 +144,7 @@ export const usePastTradeQueryByFetch = ({
                 ${
                   activeChain.id == 168587773
                     ? `tournamentId: "${activeTournamentId}"`
-                    : `tournament: "${activeTournamentId}`
+                    : `tournament: "${activeTournamentId}"`
                 }
               }
             ){
@@ -179,7 +175,7 @@ export const usePastTradeQueryByFetch = ({
                 ${
                   activeChain.id == 168587773
                     ? `tournamentId: "${activeTournamentId}"`
-                    : `tournament: "${activeTournamentId}`
+                    : `tournament: "${activeTournamentId}"`
                 }
               }
             ){
@@ -197,7 +193,7 @@ export const usePastTradeQueryByFetch = ({
                 ${
                   activeChain.id == 168587773
                     ? `tournamentId: "${activeTournamentId}"`
-                    : `tournament: "${activeTournamentId}`
+                    : `tournament: "${activeTournamentId}"`
                 }
               }
             ){
@@ -215,7 +211,7 @@ export const usePastTradeQueryByFetch = ({
                 ${
                   activeChain.id == 168587773
                     ? `tournamentId: "${activeTournamentId}"`
-                    : `tournament: "${activeTournamentId}`
+                    : `tournament: "${activeTournamentId}"`
                 }
               }
             ){

@@ -58,7 +58,7 @@ export const useNoLossMarkets = () => {
     }
   }
 
-  useSWR('fetch-no-loss-markets', {
+  useSWR(`fetch-no-loss-markets-${activeChain?.id}`, {
     fetcher: fetchData,
     refreshInterval: 10000,
   });

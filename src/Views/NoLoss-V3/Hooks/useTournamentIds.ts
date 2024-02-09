@@ -2,6 +2,7 @@ import { useToast } from '@Contexts/Toast';
 import axios from 'axios';
 import { isTestnet } from 'config';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect } from 'react';
 import useSWR from 'swr';
 import { activeChainAtom, tournamentIdsAtom } from '../atoms';
 import { getNoLossV3Config } from '../helpers/getNolossV3Config';
@@ -32,8 +33,10 @@ export const useTournamentIds = () => {
 
       const { data, status } = await axios.post(config.graph, { query });
       if (status !== 200) throw new Error('Error fetching tournament ids');
-      setTournamentIds(data.data.tournaments);
+      return data.data.tournaments;
+      // setTournamentIds(data.data.tournaments);
     } catch (e) {
+      // setTournamentIds(undefined);
       toastify({
         type: 'error',
         msg: (e as Error).message,
@@ -42,8 +45,13 @@ export const useTournamentIds = () => {
     }
   }
 
-  useSWR('fetch-tournament-ids', {
+  const { data } = useSWR(`fetch-tournament-ids-${activeChain?.id}`, {
     fetcher: fetchData,
     refreshInterval: 10000,
   });
+
+  useEffect(() => {
+    console.log('Tournamentdata', data);
+    setTournamentIds(data);
+  }, [data]);
 };
