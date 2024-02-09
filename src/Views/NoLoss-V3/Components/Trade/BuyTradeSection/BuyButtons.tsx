@@ -54,9 +54,9 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   >('none');
   const activeMarketData = useAtomValue(activeMarketDataAtom);
   const isIncreationWindow = useIsMarketInCreationWindow();
-  let { sendTxn, smartAccount } = useSmartAccount();
+  // let { sendTxn, smartAccount } = useSmartAccount();
   const config = getNoLossV3Config(activeChain?.id);
-  const onboardTxnManager = useNoLossTxnOnboardModal();
+  // const onboardTxnManager = useNoLossTxnOnboardModal();
 
   const { data: interMediateTxn, error } = useTradeBuyingOps(
     [
@@ -372,7 +372,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
       );
     } catch (e) {
       console.error(e);
-      onboardTxnManager.closeModal();
+      // onboardTxnManager.closeModal();
 
       toastify({
         msg: (e as Error).message,

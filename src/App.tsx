@@ -207,7 +207,7 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          <NoLossAAEducator />
+          {/* <NoLossAAEducator /> */}
           {!urlSettings?.hide &&
             (isMobile && mobileWarningClosed ? false : true) && (
               <Warning
