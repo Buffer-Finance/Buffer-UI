@@ -54,7 +54,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   >('none');
   const activeMarketData = useAtomValue(activeMarketDataAtom);
   const isIncreationWindow = useIsMarketInCreationWindow();
-  let { sendTxn, customUserOp, smartAccount } = useSmartAccount();
+  let { sendTxn, smartAccount } = useSmartAccount();
   const config = getNoLossV3Config(activeChain?.id);
   const onboardTxnManager = useNoLossTxnOnboardModal();
 
@@ -71,6 +71,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
     ],
     config.router || ZEROADDRESS
   );
+
   if (!activeChain)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
@@ -178,10 +179,19 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
   const { isTradingApproved } = readCallResults;
   if (isTradingApproved === undefined)
     return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
+  console.log(`BuyButtons-isTradingApproved: `, isTradingApproved);
 
+  console.log(`BuyButtons-config.manager: `, config.manager);
   async function handleApproveClick(revoke: boolean) {
     try {
       setLoadingState('approve');
+      // 0x8a5e09Cab3CF3C12645E41C9563EA25BFbD1FD5CisApprovedForAll0x814147C2b8482Bd4e215722E62Be71a87C403592,0xF7760095561259e9c52A62A7743d3451d010E97b
+      console.log(
+        `BuyButtons-config.router, !revoke: `,
+        config.router,
+        !revoke
+      );
+
       await writeCall(
         config.manager,
         TournamentManagerABI,
@@ -200,6 +210,20 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
     } finally {
       setLoadingState('none');
     }
+  }
+  if (isTradingApproved === false) {
+    return (
+      <BufferButton
+        onClick={() => {
+          handleApproveClick(false);
+        }}
+        isLoading={loadingState === 'approve'}
+        className="bg-blue"
+        isDisabled={loadingState !== 'none'}
+      >
+        Approve
+      </BufferButton>
+    );
   }
 
   if (gt(multiply(userInput, 18), readCallResults?.activeTournamentBalance)) {
@@ -247,6 +271,7 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
         throw new Error('No active tournament data found');
 
       const currentEpoch = Math.floor(Date.now() / 1000);
+      console.log(`BuyButtons-currentEpoch: `, currentEpoch);
       if (
         currentEpoch + currentTime.seconds >
         +activeTournamentData.data?.tournamentMeta.close
@@ -277,33 +302,74 @@ export const BuyButtons: React.FC<{ activeMarket: InoLossMarket }> = ({
           data: encodedFunctionData,
         },
       ];
-      const approveTxn = isTradingApproved
-        ? []
-        : [
-            {
-              data: encodeFunctionData({
-                abi: TournamentManagerABI,
-                functionName: 'setApprovalForAll',
-                args: [config.router, true],
-              }),
-              to: config.manager,
-            },
-          ];
-      console.time('full-txn');
-      if (!approveTxn.length && interMediateTxn) {
-        console.log('deb-call-cached-txn');
-        await sendTxn([...buyTradeTxn], interMediateTxn);
-      } else {
-        console.log('deb-call-normal-txn');
-        await sendTxn([...approveTxn, ...buyTradeTxn]);
-      }
-      console.timeEnd('full-txn');
 
-      // const gasFee = await getGasFeeValue();
-      // console.log(`BuyButtons-gasFee: `, gasFee);
-      // const nonce = await smartAccount?.library.getNonce();
-      // console.log(`BuyButtons-nonce: `, nonce);
-      // await customUserOp({ gasFeeValues: gasFee, nonce: nonce });
+      // console.time('full-txn');
+      // console.log(`BuyButtons-interMediateTxn: `, interMediateTxn);
+      // if (!approveTxn.length && interMediateTxn) {
+      //   console.log('deb-call-cached-txn');
+      //   await sendTxn([...buyTradeTxn], interMediateTxn);
+      // } else {
+      //   console.log('deb-call-normal-txn');
+      //   await sendTxn([...approveTxn, ...buyTradeTxn]);
+      // }
+      // console.timeEnd('full-txn');
+
+      // normal RPC call
+      await writeCall(
+        config.router,
+        RouterABI,
+        (response) => {
+          if (response !== undefined) {
+            const content = (
+              <div className="flex flex-col gap-y-2 text-f12 ">
+                <div className="nowrap font-[600]">Trade order placed</div>
+                <div className="flex items-center">
+                  {activeMarket.chartData.token0 +
+                    '-' +
+                    activeMarket.chartData.token1}
+                  &nbsp;&nbsp;
+                  <span className="!text-3">to go</span>&nbsp;
+                  {isAbove ? (
+                    <>
+                      <UpIcon className="text-green scale-125" /> &nbsp;Higher
+                    </>
+                  ) : (
+                    <>
+                      <DownIcon className="text-red scale-125" />
+                      &nbsp; Lower
+                    </>
+                  )}
+                </div>
+                <div>
+                  <span>
+                    <span className="!text-3">Total amount:</span>
+                    {userInput}&nbsp;
+                  </span>
+                </div>
+              </div>
+            );
+            toastify({
+              price,
+              type: 'success',
+              timings: 20,
+              body: null,
+              msg: content,
+            });
+          }
+          console.log(response);
+        },
+        'initiateTrade',
+        [
+          toFixed(multiply(userInput, 18), 0),
+          currentTime.seconds,
+          isAbove,
+          activeMarket.address,
+          toFixed(multiply(('' + price).toString(), 8), 0),
+          toFixed(multiply(settings.slippageTolerance.toString(), 2), 0),
+          0,
+          activeTournamentData.id,
+        ]
+      );
     } catch (e) {
       console.error(e);
       onboardTxnManager.closeModal();
