@@ -46,7 +46,7 @@ const IbfrFaucet: React.FC = () => {
       ),
     },
     {
-      top: `Claim TESTNET Tokens`,
+      top: `Claim ${activeChain.name} Tokens`,
       bottom: (
         <ConnectionRequired>
           <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -155,7 +155,7 @@ const faucetClaimingSteps = {
       // },
     ],
   },
-  421613: {
+  421614: {
     name: 'AETH',
     symbol: 'AETH',
     faucet: [
@@ -200,7 +200,6 @@ const faucetClaimingSteps = {
 
 const TestnetLinks = () => {
   const activeChain = useAtomValue(activeChainAtom);
-  if (activeChain === undefined) return <></>;
   return (
     <div>
       {faucetClaimingSteps[activeChain.id].faucet.map((s, idx) => {
@@ -230,7 +229,18 @@ const TestnetLinks = () => {
               </span>
             </div>
           );
-        else
+        else {
+          const isAlink = !!s.url;
+          if (!isAlink) {
+            return (
+              <div key={s.url} className="sm:max-w-[250px] flex ">
+                {faucetClaimingSteps[activeChain.id].faucet.length === 1
+                  ? ''
+                  : idx + 1 + '.'}
+                <span className="w-full">{s.step}</span>
+              </div>
+            );
+          }
           return (
             <div
               key={s.url}
@@ -246,6 +256,7 @@ const TestnetLinks = () => {
               </span>
             </div>
           );
+        }
       })}
     </div>
   );
