@@ -28,14 +28,12 @@ const IbfrFaucet: React.FC = () => {
 
   const content = activeChain && [
     {
-      top: `Claim ${import.meta.env.VITE_ENV} ${
-        activeChain.nativeCurrency.symbol
-      }`,
+      top: `Claim ${activeChain.name} ${activeChain.nativeCurrency.symbol}`,
       middle: (
         <>
           You will have to claim{' '}
           <span className="text-1 w500">
-            {import.meta.env.VITE_ENV} {activeChain.nativeCurrency.symbol}
+            {activeChain.name} {activeChain.nativeCurrency.symbol}
           </span>{' '}
           for gas fee.
         </>
@@ -47,7 +45,7 @@ const IbfrFaucet: React.FC = () => {
       ),
     },
     {
-      top: `Claim TESTNET Tokens`,
+      top: `Claim ${activeChain.name} Tokens`,
       bottom: (
         <ConnectionRequired>
           <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -161,7 +159,7 @@ const faucetClaimingSteps = {
         // ],
       },
       {
-        step: 'Bridge GoerliETH to AETH',
+        step: 'Bridge SepoliaETH to AETH',
         url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
       },
       {
