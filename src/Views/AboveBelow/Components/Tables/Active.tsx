@@ -5,7 +5,6 @@ import { toFixed } from '@Utils/NumString';
 import { divide, multiply, subtract } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import { openBlockExplorer } from '@Views/AboveBelow/Helpers/openBlockExplorer';
 import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import BufferTable from '@Views/Common/BufferTable';
@@ -229,7 +228,12 @@ export const Active: React.FC<{
       case inGlobalContext ? TableColumn.Visualization : TableColumn.User:
         return (
           <button
-            onClick={() => openBlockExplorer(trade.user, activeChain)}
+            onClick={() =>
+              window.open(
+                'https://app.buffer.finance/#/profile?user_address=' +
+                  trade.user
+              )
+            }
             className="flex items-center gap-2"
           >
             {getSlicedUserAddress(trade.user, 4)}
