@@ -13,21 +13,27 @@ const usePriceChange = () => {
         pythIdsToTvId[market.pythId.slice(2)] = market.tv_id;
       });
       // pythIds.push(market.pythId.slice(2))
-      console.log('pythIds', pythIdsToTvId);
 
       const currentTime = Math.floor(new Date().getTime() / 1000);
-      const { data } = await axios.get(
+      const { data: currentPrices } = await axios.get(
         `https://hermes.pyth.network/v2/updates/price/${
           currentTime - 60
         }?${Object.keys(pythIdsToTvId)
           .map((id) => `ids%5B%5D=${id}`)
           .join('&')}`
       );
-      console.log('pythIds-data', data);
 
-      const queries: string[] = [];
+      const { data: pastDayPrices } = await axios.get(
+        `https://hermes.pyth.network/v2/updates/price/${
+          currentTime - 60 * 60 * 24
+        }?${Object.keys(pythIdsToTvId)
+          .map((id) => `ids%5B%5D=${id}`)
+          .join('&')}`
+      );
 
-      markets?.forEach((market) => queries.push(market.tv_id));
+      // const queries: string[] = [];
+
+      // markets?.forEach((market) => queries.push(market.tv_id));
 
       // const { data: response } = await axios.post(
       //   pricePublisherBaseUrl + 'bulk_24h_change/',
@@ -40,14 +46,47 @@ const usePriceChange = () => {
         };
       } = {};
 
-      data[0].parsed.forEach((res:))
+      const currentResponse: {
+        [key: string]: {
+          id: string;
+          price: number;
+        };
+      } = {};
 
-      // response.forEach((res: { pair: string; change: number }) => {
-      //   finalResponse[res.pair] = {
-      //     pair: res.pair,
-      //     change: res.change,
-      //   };
-      // });
+      const pastDayResponse: {
+        [key: string]: {
+          id: string;
+          price: number;
+        };
+      } = {};
+
+      currentPrices[0].parsed.forEach(
+        (res: { id: string; price: { price: number } }) => {
+          currentResponse[pythIdsToTvId[res.id]] = {
+            id: pythIdsToTvId[res.id],
+            price: res.price.price,
+          };
+        }
+      );
+
+      pastDayPrices[0].parsed.forEach(
+        (res: { id: string; price: { price: number } }) => {
+          pastDayResponse[pythIdsToTvId[res.id]] = {
+            id: pythIdsToTvId[res.id],
+            price: res.price.price,
+          };
+        }
+      );
+
+      markets?.forEach((market) => {
+        const currentPrice = currentResponse[market.tv_id].price;
+        const pastDayPrice = pastDayResponse[market.tv_id].price;
+        finalResponse[market.tv_id] = {
+          pair: market.tv_id,
+          change: ((currentPrice - pastDayPrice) / pastDayPrice) * 100,
+        };
+      });
+
       return finalResponse;
     },
     refreshInterval: 1000 * 60 * 5,
