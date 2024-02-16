@@ -123,11 +123,11 @@ const ClaimButton = ({ token }: { token: string }) => {
 
 const faucetClaimingSteps = {
   168587773: {
-    name: 'AETH',
-    symbol: 'AETH',
+    name: 'ETH',
+    symbol: 'ETH',
     faucet: [
       {
-        step: 'Claim AETH from sepolia faucet',
+        step: 'Claim ETH from sepolia faucet',
         url: 'https://sepoliafaucet.com/',
       },
       {
