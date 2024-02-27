@@ -156,6 +156,7 @@ const useSmartAccount = () => {
         paymasterServiceData: {
           mode: PaymasterMode.SPONSORED,
         },
+        skipBundlerGasEstimation: false,
       };
       let sendUserParams: SendUserOpParams | undefined = undefined;
       console.log(
@@ -257,7 +258,13 @@ const useSmartAccount = () => {
       );
       console.time('deb-wc-time');
       let userOp;
+      // console.log(`useSmartAccount-buildOps: `, buildOps);
       if (!buildOps || transactionArray.length > 1) {
+        console.log(
+          `useSmartAccount-buildParams: `,
+          buildParams,
+          transactionArray
+        );
         userOp = await smartAccount.library.buildUserOp(
           transactionArray,
           buildParams
