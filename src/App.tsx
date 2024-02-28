@@ -20,16 +20,21 @@ const App = () => {
   const [isExploding, setIsExploding] = React.useState(false);
   useEffect(() => {
     setTimeout(() => {
-      const div = document.createElement('div');
-      div.setAttribute('id', 'ready');
-      document.body.append(div);
       setIsExploding(true);
-    }, 4000);
+    }, 6000);
   }, []);
-
+  useEffect(() => {
+    if (isExploding) {
+      setTimeout(() => {
+        const div = document.createElement('div');
+        div.setAttribute('id', 'ready');
+        document.body.append(div);
+      }, 1000);
+    }
+  }, [isExploding]);
   return (
-    <>
-      <div className="bg-[#171722] w-[360px] h-[200px] p-5">
+    <div className="">
+      <div className="bg-[#171722] w-[560px] h-[400px] p-5 ">
         <div className="relative  m-auto h-[52px] w-[52px]">
           <MemoBorder className="absolute  left-1/2 -translate-x-1/2 -" />
           <img
@@ -40,7 +45,7 @@ const App = () => {
         {isExploding && (
           <ConfettiExplosion
             particleSize={3}
-            particleCount={300}
+            particleCount={200}
             duration={10000}
             zIndex={0}
             force={0.4}
@@ -89,7 +94,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
