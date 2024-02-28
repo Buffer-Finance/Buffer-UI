@@ -12,12 +12,20 @@ import {
   TokenWOName,
 } from '@Views/TradePage/Views/AccordionTable/ShareModal/Token';
 import ConfettiExplosion from 'react-confetti-explosion';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const App = () => {
   const address = '0xdsfasdfsadfsa';
   const isup = false;
   const [isExploding, setIsExploding] = React.useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      const div = document.createElement('div');
+      div.setAttribute('id', 'ready');
+      document.body.append(div);
+      setIsExploding(true);
+    }, 4000);
+  }, []);
 
   return (
     <>
@@ -29,15 +37,17 @@ const App = () => {
             className="h-[40px] w-[40px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute"
           />
         </div>
-        <ConfettiExplosion
-          particleSize={3}
-          particleCount={300}
-          duration={10000}
-          zIndex={0}
-          force={0.4}
-          // width={600}
-          // height={200}
-        />
+        {isExploding && (
+          <ConfettiExplosion
+            particleSize={3}
+            particleCount={300}
+            duration={10000}
+            zIndex={0}
+            force={0.4}
+            // width={600}
+            // height={200}
+          />
+        )}
         <div className="flex justify-between mt-5">
           <div>
             <div className="flex items-center   ">
