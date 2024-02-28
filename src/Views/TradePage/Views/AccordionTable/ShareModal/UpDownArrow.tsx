@@ -10,3 +10,12 @@ export const UpDownChipWOText: React.FC<{
     <DOwnTriangle className={`ml-2`} />
   );
 };
+export const UpDownChipWOTextSm: React.FC<{
+  isUp: boolean;
+}> = ({ isUp }) => {
+  return isUp ? (
+    <UpTriangle className={` scale-[0.80]`} />
+  ) : (
+    <DOwnTriangle className={` scale-[0.80] mt-1`} />
+  );
+};
