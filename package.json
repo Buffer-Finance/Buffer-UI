@@ -59,6 +59,7 @@
     "hex-to-rgba": "2.0.1",
     "html-to-image": "^1.10.8",
     "jotai": "^2.2.2",
+    "js-confetti": "^0.12.0",
     "keen-slider": "^6.8.5",
     "lightweight-charts": "^3.8.0",
     "network-speed": "^2.1.1",

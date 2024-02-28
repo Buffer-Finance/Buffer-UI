@@ -4,7 +4,7 @@ import {
 } from '@Views/TradePage/Views/AccordionTable/ShareModal/UpDownArrow';
 import MemoBorder from './temp';
 import { Timer10Sharp, TimerOutlined } from '@mui/icons-material';
-import { TimerIcon } from '@SVG/Elements/TimerIcon';
+// import { TimerIcon } from '@SVG/Elements/TimerIcon';
 import MemoTimerGIF from '@SVG/Elements/TimerGIF';
 import MemoTrophyIcon from '@SVG/Elements/TrophyIcon';
 import {
@@ -14,6 +14,12 @@ import {
 import ConfettiExplosion from 'react-confetti-explosion';
 import React, { useEffect } from 'react';
 import MemoBorderSVG from './temp';
+import MemoNFT from '@SVG/Elements/NFT';
+import JSConfetti from 'js-confetti';
+
+const jsConfetti = new JSConfetti();
+
+// jsConfetti.addConfetti();
 
 const App = () => {
   const address = '0xdsfasdfsadfsa';
@@ -26,6 +32,10 @@ const App = () => {
   }, []);
   useEffect(() => {
     if (isExploding) {
+      jsConfetti.addConfetti();
+      setInterval(() => {
+        jsConfetti.addConfetti();
+      }, 2000);
       setTimeout(() => {
         const div = document.createElement('div');
         div.setAttribute('id', 'ready');
@@ -34,26 +44,25 @@ const App = () => {
     }
   }, [isExploding]);
   return (
-    <div className="">
-      <div className="bg-[#171722] w-[100%] h-[850px] p-5 ">
+    <div className="relative ">
+      <canvas id="custom_canvas" className="w-full h-full absolute"></canvas>
+
+      <div className="bg-[#171722] w-[100%] h-[850px] p-[30px] ">
         <div className="relative  m-auto h-[246px] w-[246px]">
           <MemoBorderSVG className="absolute  left-1/2 -translate-x-1/2 -" />
-          <img
-            src="/DP.png"
-            className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute"
-          />
+          <MemoNFT className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute" />
         </div>
-        {isExploding && (
-          <ConfettiExplosion
-            particleSize={3}
-            particleCount={200}
-            duration={10000}
-            zIndex={0}
-            force={0.4}
-            // width={600}
-            // height={200}
-          />
-        )}
+        {/* {isExploding && (
+          // <ConfettiExplosion
+          //   particleSize={3}
+          //   particleCount={200}
+          //   duration={10000}
+          //   zIndex={0}
+          //   force={0.4}
+          //   // width={600}
+          //   // height={200}
+          // />
+        )} */}
         <div className="flex justify-between mt-5">
           <div>
             <div className="flex items-center   ">
@@ -85,12 +94,11 @@ const App = () => {
         <div className="flex justify-between mt-5">
           <div className=" flex gap-2">
             <MemoTrophyIcon />
-            <div className="text-green font-bold text-f22 flex items-center gap-1">
-              34.12
-              <TokenWOName tokenName={'ARB'} />
+            <div className="text-green font-bold text-[70px] flex items-center gap-1">
+              34.12 ARB
             </div>
           </div>
-          <div className="flex text-f18 font-bold items-center text-[#C3C2D4] gap-2">
+          <div className="flex text-[60px] font-bold items-center text-[#C3C2D4] gap-2">
             ROI 45%
           </div>
         </div>
