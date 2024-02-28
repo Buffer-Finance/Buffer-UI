@@ -13,6 +13,7 @@ import {
 } from '@Views/TradePage/Views/AccordionTable/ShareModal/Token';
 import ConfettiExplosion from 'react-confetti-explosion';
 import React, { useEffect } from 'react';
+import MemoBorderSVG from './temp';
 
 const App = () => {
   const address = '0xdsfasdfsadfsa';
@@ -34,12 +35,12 @@ const App = () => {
   }, [isExploding]);
   return (
     <div className="">
-      <div className="bg-[#171722] w-[560px] h-[400px] p-5 ">
-        <div className="relative  m-auto h-[52px] w-[52px]">
-          <MemoBorder className="absolute  left-1/2 -translate-x-1/2 -" />
+      <div className="bg-[#171722] w-[100%] h-[850px] p-5 ">
+        <div className="relative  m-auto h-[246px] w-[246px]">
+          <MemoBorderSVG className="absolute  left-1/2 -translate-x-1/2 -" />
           <img
             src="/DP.png"
-            className="h-[40px] w-[40px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute"
+            className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute"
           />
         </div>
         {isExploding && (
@@ -56,7 +57,7 @@ const App = () => {
         <div className="flex justify-between mt-5">
           <div>
             <div className="flex items-center   ">
-              <div className=" text-[#C3C2D4] font-bold text-[19px]">
+              <div className=" text-[#C3C2D4] font-bold text-[80px]">
                 BTC-USD
               </div>
               <div className="bg-[#303044] rounded-md px-2 pr-3  flex items-center ml-3">
@@ -70,13 +71,13 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div className="text-f15 text-[#C3C2D4] mt-1">
+            <div className="text-[60px] text-[#C3C2D4] mt-1">
               {address.substring(0, 4) +
                 '...' +
                 address.substring(address.length - 4)}
             </div>
           </div>
-          <div className="flex text-f18 items-center text-[#C3C2D4] gap-2">
+          <div className="flex text-[70px] items-center text-[#C3C2D4] gap-2">
             <MemoTimerGIF />
             {'12 mins'}
           </div>
