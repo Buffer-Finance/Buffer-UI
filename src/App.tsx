@@ -47,7 +47,7 @@ const App = () => {
     <div className="relative ">
       <canvas id="custom_canvas" className="w-full h-full absolute"></canvas>
 
-      <div className="bg-[#171722] w-[100%] h-[850px] p-[30px] ">
+      <div className="bg-[#ededf8] w-[100%] h-[850px] p-[30px] ">
         <div className="relative  m-auto h-[246px] w-[246px]">
           <MemoBorderSVG className="absolute  left-1/2 -translate-x-1/2 -" />
           <MemoNFT className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute" />
@@ -66,10 +66,10 @@ const App = () => {
         <div className="flex justify-between mt-5">
           <div>
             <div className="flex items-center   ">
-              <div className=" text-[#C3C2D4] font-bold text-[80px]">
+              <div className=" text-[#000000] font-bold text-[80px]">
                 BTC-USD
               </div>
-              <div className="bg-[#303044] rounded-md px-2 pr-3  flex items-center ml-3">
+              <div className="bg-[#bbbbbb] rounded-md px-2 pr-3  flex items-center ml-3">
                 <UpDownChipWOTextSm isUp={isup} />
                 <div
                   className={` ml-2 font-bold text-f16 ${
@@ -80,13 +80,13 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div className="text-[60px] text-[#C3C2D4] mt-1">
+            <div className="text-[60px] text-[#000000] mt-1">
               {address.substring(0, 4) +
                 '...' +
                 address.substring(address.length - 4)}
             </div>
           </div>
-          <div className="flex text-[70px] items-center text-[#C3C2D4] gap-2">
+          <div className="flex text-[70px] items-center text-[#000000] gap-2">
             <MemoTimerGIF />
             {'12 mins'}
           </div>
@@ -98,7 +98,7 @@ const App = () => {
               34.12 ARB
             </div>
           </div>
-          <div className="flex text-[60px] font-bold items-center text-[#C3C2D4] gap-2">
+          <div className="flex text-[60px] font-bold items-center text-[#000000] gap-2">
             ROI 45%
           </div>
         </div>
