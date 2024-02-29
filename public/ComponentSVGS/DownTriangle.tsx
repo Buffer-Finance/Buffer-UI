@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from 'react';
 
 const DOwnTriangle = (props) => (
   <svg
-    width={16}
-    height={11}
+    width="16"
+    height="11"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
@@ -14,5 +14,20 @@ const DOwnTriangle = (props) => (
     />
   </svg>
 );
+const DOwnTriangleLg = (props) => (
+  <svg
+    {...props}
+    width="28"
+    height="20"
+    viewBox="0 0 28 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M14.7525 19.2782C14.6272 19.4392 14.4688 19.569 14.2889 19.6582C14.1091 19.7474 13.9123 19.7937 13.713 19.7937C13.5137 19.7937 13.3169 19.7474 13.1371 19.6582C12.9572 19.569 12.7988 19.4392 12.6735 19.2782L0.973 2.77818C0.828061 2.57262 0.740026 2.32976 0.718432 2.07593C0.696839 1.8221 0.742511 1.56697 0.8505 1.33818C0.956473 1.11134 1.12152 0.919889 1.3269 0.785555C1.53229 0.651222 1.76981 0.579381 2.0125 0.578182H25.4117C25.9052 0.578182 26.3567 0.872728 26.5755 1.33818C26.6837 1.56692 26.7295 1.82209 26.7079 2.07596C26.6863 2.32983 26.5981 2.5727 26.453 2.77818L14.7525 19.2782Z"
+      fill="#FF5353"
+    />
+  </svg>
+);
 
-export { DOwnTriangle };
+export { DOwnTriangle, DOwnTriangleLg };

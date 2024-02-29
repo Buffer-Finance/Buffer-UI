@@ -11,19 +11,23 @@ import {
   Token,
   TokenWOName,
 } from '@Views/TradePage/Views/AccordionTable/ShareModal/Token';
+import useWindowSize from 'react-use/lib/useWindowSize';
+import Confetti from 'react-confetti';
+
 import ConfettiExplosion from 'react-confetti-explosion';
 import React, { useEffect } from 'react';
 import MemoBorderSVG from './temp';
 import MemoNFT from '@SVG/Elements/NFT';
-import JSConfetti from 'js-confetti';
-
-const jsConfetti = new JSConfetti();
+import { Display } from '@Views/Common/Tooltips/Display';
+import MemoABR_monochrome from '@SVG/Elements/ABR_monochrome';
 
 // jsConfetti.addConfetti();
 
 const App = () => {
   const address = '0xdsfasdfsadfsa';
   const isup = false;
+  const { width, height } = useWindowSize();
+
   const [isExploding, setIsExploding] = React.useState(false);
   useEffect(() => {
     setTimeout(() => {
@@ -32,10 +36,6 @@ const App = () => {
   }, []);
   useEffect(() => {
     if (isExploding) {
-      jsConfetti.addConfetti();
-      setInterval(() => {
-        jsConfetti.addConfetti();
-      }, 2000);
       setTimeout(() => {
         const div = document.createElement('div');
         div.setAttribute('id', 'ready');
@@ -45,12 +45,19 @@ const App = () => {
   }, [isExploding]);
   return (
     <div className="relative ">
-      <canvas id="custom_canvas" className="w-full h-full absolute"></canvas>
+      {isExploding && <Confetti width={width} height={height} />}
 
-      <div className="bg-[#171722] w-[100%] h-[850px] p-[30px] ">
-        <div className="relative  m-auto h-[246px] w-[246px]">
-          <MemoBorderSVG className="absolute  left-1/2 -translate-x-1/2 -" />
-          <MemoNFT className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute" />
+      <div className="bg-[#171722] w-[100%] h-[850px] py-[50px] px-[100px] ">
+        <div className="flex items-center justify-center gap-[30px]">
+          <div className="relative   h-[246px] w-[246px]">
+            <MemoBorderSVG className="absolute  left-1/2 -translate-x-1/2 -" />
+            <MemoNFT className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute" />
+          </div>
+          <div className="text-[65px] font-[600] text-[#C3C2D4] mt-1">
+            {address.substring(0, 4) +
+              '...' +
+              address.substring(address.length - 4)}
+          </div>
         </div>
         {/* {isExploding && (
           // <ConfettiExplosion
@@ -63,16 +70,16 @@ const App = () => {
           //   // height={200}
           // />
         )} */}
-        <div className="flex justify-between mt-5">
+        <div className="flex justify-between mt-[40px] items-end">
           <div>
             <div className="flex items-center   ">
-              <div className=" text-[#C3C2D4] font-bold text-[80px]">
+              <div className=" text-[#C3C2D4] font-bold text-[80px]  leading-tight">
                 BTC-USD
               </div>
-              <div className="bg-[#303044] rounded-md px-2 pr-3  flex items-center ml-3">
+              <div className="bg-[#303044]  px-[12px] rounded-[20px]  flex items-center ml-3">
                 <UpDownChipWOTextSm isUp={isup} />
                 <div
-                  className={` ml-2 font-bold text-f16 ${
+                  className={` ml-2 font-bold text-[50px] ${
                     isup ? 'text-green' : 'text-red'
                   }`}
                 >
@@ -80,25 +87,31 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div className="text-[60px] text-[#C3C2D4] mt-1">
-              {address.substring(0, 4) +
-                '...' +
-                address.substring(address.length - 4)}
+            <div className="flex text-[50px] items-center  text-[#8F95A4] gap-2 mt-[-10px]">
+              <MemoTimerGIF className="mt-[5px]" />
+              {'12 mins'}
             </div>
           </div>
-          <div className="flex text-[70px] items-center text-[#C3C2D4] gap-2">
-            <MemoTimerGIF />
-            {'12 mins'}
+          <div className="flex flex-col items-end">
+            <div className="flex items-center   ">
+              <div className=" text-[#C3C2D4] font-bold text-[45px]  leading-tight">
+                Strike Price
+              </div>
+            </div>
+            <div className="flex text-[60px] items-center     text-[#C3C2D4] gap-2">
+              <Display data={'12231.00'} />
+            </div>
           </div>
         </div>
-        <div className="flex justify-between mt-5">
-          <div className=" flex gap-2">
-            <MemoTrophyIcon />
-            <div className="text-green font-bold text-[70px] flex items-center gap-1">
-              34.12 ARB
+        <div className="flex justify-between mt-[50px]">
+          <div className=" flex gap-4 items-center">
+            <div className="text-green font-bold text-[80px] flex items-center gap-2">
+              <MemoTrophyIcon />
+              34.12
             </div>
+            <MonoChromePoolToken pool="ARB" />
           </div>
-          <div className="flex text-[60px] font-bold items-center text-[#C3C2D4] gap-2">
+          <div className="flex text-[76px] font-bold items-center text-[#C3C2D4] gap-2">
             ROI 45%
           </div>
         </div>
@@ -108,3 +121,7 @@ const App = () => {
 };
 
 export default App;
+
+const MonoChromePoolToken: React.FC<{ pool: 'ARB' | 'USDC' }> = ({ pool }) => {
+  return <MemoABR_monochrome />;
+};

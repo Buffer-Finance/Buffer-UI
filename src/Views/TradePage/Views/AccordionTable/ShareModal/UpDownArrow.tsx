@@ -1,5 +1,8 @@
-import { DOwnTriangle } from '@Public/ComponentSVGS/DownTriangle';
-import { UpTriangle } from '@Public/ComponentSVGS/UpTriangle';
+import {
+  DOwnTriangle,
+  DOwnTriangleLg,
+} from '@Public/ComponentSVGS/DownTriangle';
+import { UpTriangle, UpTriangleLg } from '@Public/ComponentSVGS/UpTriangle';
 
 export const UpDownChipWOText: React.FC<{
   isUp: boolean;
@@ -14,8 +17,8 @@ export const UpDownChipWOTextSm: React.FC<{
   isUp: boolean;
 }> = ({ isUp }) => {
   return isUp ? (
-    <UpTriangle className={` scale-[0.80]`} />
+    <UpTriangleLg clasName={'mt-[18px]'} />
   ) : (
-    <DOwnTriangle className={` scale-[0.80] mt-1`} />
+    <DOwnTriangleLg className={'mt-[18px]'} />
   );
 };

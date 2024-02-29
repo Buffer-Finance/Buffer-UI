@@ -1,7 +1,13 @@
 import * as React from 'react';
 function TrophyIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg width={129} height={129} fill="none" {...props}>
+    <svg
+      width={129}
+      height={129}
+      fill="none"
+      {...props}
+      className="scale-[0.9]"
+    >
       <circle cx={64.322} cy={64.475} r={64.322} fill="#303044" />
       <path
         fill="url(#prefix__pattern0)"
