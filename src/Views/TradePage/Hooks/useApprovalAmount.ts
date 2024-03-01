@@ -1,16 +1,17 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { selectedPoolActiveMarketAtom } from '@Views/AboveBelow/atoms';
 import { baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
+import { useAtomValue } from 'jotai';
 import useSWR, { useSWRConfig } from 'swr';
 import { useAccount } from 'wagmi';
-import { useSwitchPool } from './useSwitchPool';
 
 export const useApprvalAmount = () => {
   const { activeChain } = useActiveChain();
   const activeChainId = activeChain?.id;
   const { address: userAddress } = useAccount();
-  const { poolDetails } = useSwitchPool();
-  const tokenName = poolDetails?.token;
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const tokenName = activeMarket?.poolInfo.token;
   const { cache } = useSWRConfig();
 
   const id = `${userAddress}-user-approval-${activeChainId}-tokenName-${tokenName}`;
@@ -21,7 +22,7 @@ export const useApprvalAmount = () => {
     is_locked: boolean;
   }>(id, {
     fetcher: async () => {
-      if (!userAddress || !activeChainId || !tokenName) return null;
+      if (!userAddress || !activeChainId || !tokenName) return undefined;
       try {
         const { data, status } = await axios.get(
           baseUrl +

@@ -83,14 +83,14 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/v3.0.6-remove-contract-registry-readcall-2/api',
           ABOVE_BELOW:
             'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
-        referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
-        router: '0x2430E4aD865423Ed994daD297D66b77F3ec2B008',
-        signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
+        referral_storage: '0x489668F3763708083E147b9382eF5c02309fFa01',
+        router: '0x3ca907E4FADf6a7e705D177d122c3105D1dAaC40',
+        signer_manager: '0x1dB43d2227637d6E0ec6850299850FD0795a4731',
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
         v2_router: '0x76c52E83d7dcCc70107a66BAd44D042D22D06be7',
@@ -670,7 +670,7 @@ export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';
 const baseURLString = isTestnet
   ? isSandbox
     ? 'VITE_INSTANT_TRADING_HOST_DEVELOPMENT'
-    : `VITE_INSTANT_TRADING_HOST_TESTNET`
+    : `VITE_UP_DOWN_V3_HOST_TESTNET`
   : `VITE_INSTANT_TRADING_HOST`;
 
 const aboveBelowURLString = isTestnet
