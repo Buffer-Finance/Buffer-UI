@@ -20,12 +20,33 @@ import MemoBorderSVG from './temp';
 import MemoNFT from '@SVG/Elements/NFT';
 import { Display } from '@Views/Common/Tooltips/Display';
 import MemoABR_monochrome from '@SVG/Elements/ABR_monochrome';
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
+import { Variables } from '@Utils/Time';
+import { useHighestTierNFT } from '@Hooks/useNFTGraph';
 
 // jsConfetti.addConfetti();
-
+const urlObject = Object.fromEntries(
+  new URLSearchParams(window.location.search).entries()
+);
 const App = () => {
-  const address = '0xdsfasdfsadfsa';
-  const isup = false;
+  const obj = {
+    address: '0xdsfasdfsadfsa',
+    isup: false,
+    strike: '12231.00',
+    pooltoken: 'ARB',
+    roi: 45,
+    payout: 34.12,
+    secondsduration: 333,
+  };
+
+  const address = urlObject.user_address;
+  const isup = urlObject.isAbove;
+  const strike = urlObject.strike;
+  const pooltoken = urlObject.pooltoken;
+  const roi = urlObject.roi;
+  const payout = urlObject.payout;
+  const secondsduration = urlObject.duration;
+
   const { width, height } = useWindowSize();
 
   const [isExploding, setIsExploding] = React.useState(false);
@@ -34,15 +55,18 @@ const App = () => {
       setIsExploding(true);
     }, 6000);
   }, []);
+  const highestNFT = useHighestTierNFT({ userOnly: true });
+  console.log(`App-highestNFT: `, highestNFT);
   useEffect(() => {
     if (isExploding) {
       setTimeout(() => {
         const div = document.createElement('div');
         div.setAttribute('id', 'ready');
         document.body.append(div);
-      }, 1000);
+      }, 4000);
     }
   }, [isExploding]);
+
   return (
     <div className="relative ">
       {isExploding && <Confetti width={width} height={height} />}
@@ -51,7 +75,21 @@ const App = () => {
         <div className="flex items-center justify-center gap-[30px]">
           <div className="relative   h-[246px] w-[246px]">
             <MemoBorderSVG className="absolute  left-1/2 -translate-x-1/2 -" />
-            <MemoNFT className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute" />
+            {/* <MemoNFT /> */}
+            {highestNFT.highestTierNFT ? (
+              <img
+                src={
+                  'https://gateway.pinata.cloud/ipfs/' +
+                  highestNFT.highestTierNFT?.nftImage.split('://')[1]
+                }
+                className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute"
+              />
+            ) : (
+              <img
+                src={'/NFTPlaceHolder.png'}
+                className="h-[220px] w-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full absolute"
+              />
+            )}
           </div>
           <div className="text-[65px] font-[600] text-[#C3C2D4] mt-1">
             {address.substring(0, 4) +
@@ -74,9 +112,9 @@ const App = () => {
           <div>
             <div className="flex items-center   ">
               <div className=" text-[#C3C2D4] font-bold text-[80px]  leading-tight">
-                BTC-USD
+                {urlObject.asset}
               </div>
-              <div className="bg-[#303044]  px-[12px] rounded-[20px]  flex items-center ml-3">
+              <div className="bg-[#303044]  px-[12px] rounded-[20px]  flex items-center ml-4">
                 <UpDownChipWOTextSm isUp={isup} />
                 <div
                   className={` ml-2 font-bold text-[50px] ${
@@ -89,7 +127,7 @@ const App = () => {
             </div>
             <div className="flex text-[50px] items-center  text-[#8F95A4] gap-2 mt-[-10px]">
               <MemoTimerGIF className="mt-[5px]" />
-              {'12 mins'}
+              {formatDistance(Variables(secondsduration))}
             </div>
           </div>
           <div className="flex flex-col items-end">
@@ -99,7 +137,7 @@ const App = () => {
               </div>
             </div>
             <div className="flex text-[60px] items-center     text-[#C3C2D4] gap-2">
-              <Display data={'12231.00'} />
+              <Display data={strike} />
             </div>
           </div>
         </div>
@@ -107,12 +145,12 @@ const App = () => {
           <div className=" flex gap-4 items-center">
             <div className="text-green font-bold text-[80px] flex items-center gap-2">
               <MemoTrophyIcon />
-              34.12
+              {payout}
             </div>
-            <MonoChromePoolToken pool="ARB" />
+            <MonoChromePoolToken pool={pooltoken} />
           </div>
           <div className="flex text-[76px] font-bold items-center text-[#C3C2D4] gap-2">
-            ROI 45%
+            ROI {roi}%
           </div>
         </div>
       </div>
