@@ -83,7 +83,7 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/v3.0.6-remove-contract-registry-readcall-2/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/v3.0.7-account-registrar-events/api',
           ABOVE_BELOW:
             'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
         },
