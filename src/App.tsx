@@ -23,6 +23,7 @@ import MemoABR_monochrome from '@SVG/Elements/ABR_monochrome';
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
 import { useHighestTierNFT } from '@Hooks/useNFTGraph';
+import MemoUSDC_monochrome from '@SVG/Elements/USDC_monochrome';
 
 // jsConfetti.addConfetti();
 const urlObject = Object.fromEntries(
@@ -161,5 +162,8 @@ const App = () => {
 export default App;
 
 const MonoChromePoolToken: React.FC<{ pool: 'ARB' | 'USDC' }> = ({ pool }) => {
+  if (pool == 'USDC') {
+    return <MemoUSDC_monochrome />;
+  }
   return <MemoABR_monochrome />;
 };
