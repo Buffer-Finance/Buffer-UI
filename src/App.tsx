@@ -41,7 +41,8 @@ const App = () => {
   };
 
   const address = urlObject.user_address;
-  const isup = urlObject.isAbove;
+  const isup = urlObject.isAbove == 'true';
+  console.log(`App-isup: `, isup);
   const strike = urlObject.strike;
   const pooltoken = urlObject.pooltoken;
   const roi = urlObject.roi;
