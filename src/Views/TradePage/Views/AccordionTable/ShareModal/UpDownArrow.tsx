@@ -6,6 +6,7 @@ import { UpTriangle, UpTriangleLg } from '@Public/ComponentSVGS/UpTriangle';
 
 export const UpDownChipWOText: React.FC<{
   isUp: boolean;
+  ab: boolean;
 }> = ({ isUp }) => {
   return isUp ? (
     <UpTriangle className={`ml-2 scale-[0.90]`} />

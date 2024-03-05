@@ -42,12 +42,13 @@ const App = () => {
 
   const address = urlObject.user_address;
   const isup = urlObject.isAbove == 'true';
-  console.log(`App-isup: `, isup);
   const strike = urlObject.strike;
   const pooltoken = urlObject.pooltoken;
   const roi = urlObject.roi;
   const payout = urlObject.payout;
   const secondsduration = urlObject.duration;
+  const ab = urlObject.ab ? true : false;
+  console.log(`App-ab: `, ab);
 
   const { width, height } = useWindowSize();
 
@@ -123,7 +124,7 @@ const App = () => {
                     isup ? 'text-green' : 'text-red'
                   }`}
                 >
-                  {isup ? 'Up' : 'Down'}
+                  {ab ? (isup ? 'Above' : 'Below') : isup ? 'Up' : 'Down'}
                 </div>
               </div>
             </div>
