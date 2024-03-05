@@ -48,6 +48,7 @@ const App = () => {
   const payout = urlObject.payout;
   const secondsduration = urlObject.duration;
   const ab = urlObject.ab ? true : false;
+  const creationTime = urlObject.creationTime;
   console.log(`App-ab: `, ab);
 
   const { width, height } = useWindowSize();
@@ -130,7 +131,11 @@ const App = () => {
             </div>
             <div className="flex text-[50px] items-center  text-[#8F95A4] gap-2 mt-[-10px]">
               <MemoTimerGIF className="mt-[5px]" />
-              {formatDistance(Variables(secondsduration))}
+              {ab ? (
+                <TSDisplay ts={creationTime} />
+              ) : (
+                formatDistance(Variables(secondsduration))
+              )}
             </div>
           </div>
           <div className="flex flex-col items-end">
@@ -169,3 +174,18 @@ const MonoChromePoolToken: React.FC<{ pool: 'ARB' | 'USDC' }> = ({ pool }) => {
   }
   return <MemoABR_monochrome />;
 };
+
+const options = {
+  hour12: false,
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  month: 'short',
+  day: '2-digit',
+  year: 'numeric',
+};
+
+function TSDisplay({ ts }) {
+  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(ts);
+  return <div className="ml-2">{formattedDate}</div>;
+}
