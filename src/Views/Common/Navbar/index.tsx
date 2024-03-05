@@ -3,8 +3,8 @@ import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
 import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import { inIframe } from '@Utils/isInIframe';
 import { useShutterHandlers } from '@Views/AboveBelow/Components/MobileView/Shutters';
-import { tardesAtom } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 // import { OneCTModal } from '@Views/OneCT/OneCTModal';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useAtomValue } from 'jotai';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +43,8 @@ export const Navbar: React.FC<INavbar> = () => {
     });
   };
   const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
-  const { active } = useAtomValue(tardesAtom);
+  // const { active } = useAtomValue(tardesAtom);
+  const active = useOngoingTrades();
   const navigate = useNavigate();
   const [click, setClick] = useState(0);
   const openAdmin = () => {

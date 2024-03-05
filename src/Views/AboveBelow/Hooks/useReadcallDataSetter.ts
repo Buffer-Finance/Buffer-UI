@@ -2,7 +2,6 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { useCall2Data } from '@Utils/useReadCall';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { erc20ABI } from 'wagmi';
@@ -64,7 +63,7 @@ export const useReacallDataSetter = () => {
       });
     }
     if (activeMarkets.length > 0 && address !== undefined) {
-      const configData = getConfig(activeChain.id);
+      // const configData = getConfig(activeChain.id);
       readCalls.push(
         ...activeMarkets
           .map((market) => [
@@ -75,13 +74,13 @@ export const useReacallDataSetter = () => {
               params: [address],
               id: getCallId(market.poolInfo.token, '-balance'),
             },
-            {
-              address: market.poolInfo.tokenAddress,
-              abi: erc20ABI,
-              name: 'allowance',
-              params: [address, configData.above_below_router],
-              id: getCallId(market.poolInfo.token, '-allowance'),
-            },
+            // {
+            //   address: market.poolInfo.tokenAddress,
+            //   abi: erc20ABI,
+            //   name: 'allowance',
+            //   params: [address, configData.above_below_router],
+            //   id: getCallId(market.poolInfo.token, '-allowance'),
+            // },
           ])
           .flat()
       );

@@ -1,19 +1,19 @@
 import { useToast } from '@Contexts/Toast';
 import { getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { divide, lt, subtract } from '@Utils/NumString/stringArithmatics';
-import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
-import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { TradeType } from '@Views/TradePage/type';
 import axios from 'axios';
 import { useEffect, useRef } from 'react';
 
-export const getIdentifier = (a: IGQLHistory) => {
-  return +a.optionID + '-' + a.market.pair;
+export const getIdentifier = (a: TradeType) => {
+  if (a.option_id === null) return '';
+  return +a.option_id + '-' + a.market.pair;
 };
 
-const useGenericHooks = (binaryData: (IGQLHistory | null)[]) => {
+const useGenericHooks = (binaryData: (TradeType | null)[]) => {
   const tradeCache = useRef<{
-    [tradeId: string]: { trade: IGQLHistory; visited: boolean };
+    [tradeId: string]: { trade: TradeType; visited: boolean };
   }>({});
   // const binaryData = [];
   const toastify = useToast();
@@ -25,7 +25,7 @@ const useGenericHooks = (binaryData: (IGQLHistory | null)[]) => {
     for (let trade of binaryData) {
       if (!trade) return;
 
-      if (trade.state == BetState.active) {
+      if (trade.state == 'OPENED') {
         let tradeIdentifier = getIdentifier(trade);
         tradeCache.current[tradeIdentifier] = { trade, visited: true };
       }
@@ -56,14 +56,11 @@ const useGenericHooks = (binaryData: (IGQLHistory | null)[]) => {
 
 export { useGenericHooks };
 
-const getExpireNotification = async (
-  currentRow: IGQLHistory,
-  toastify: any
-) => {
+const getExpireNotification = async (currentRow: TradeType, toastify: any) => {
   let response;
   const query = {
     pair: currentRow.market.tv_id,
-    timestamp: currentRow.expirationTime,
+    timestamp: currentRow.expiration_time,
   };
   response = await axios.post(
     `https://oracle.buffer-finance-api.link/price/query/`,
@@ -84,8 +81,8 @@ const getExpireNotification = async (
   console.log(`getExpireNotification: `, currentRow, expiryPrice);
 
   let win = true;
-  if (lt(currentRow.strike, expiryPrice)) {
-    if (currentRow.isAbove) {
+  if (lt(currentRow.strike.toString(), expiryPrice)) {
+    if (currentRow.is_above) {
       win = true;
     } else {
       win = false;
@@ -94,15 +91,15 @@ const getExpireNotification = async (
     //to be asked
     win = false;
   } else {
-    if (currentRow.isAbove) {
+    if (currentRow.is_above) {
       win = false;
     } else {
       win = true;
     }
   }
 
-  const openTimeStamp = currentRow.creationTime;
-  const closeTimeStamp = +currentRow.expirationTime;
+  const openTimeStamp = currentRow.open_timestamp;
+  const closeTimeStamp = +currentRow.expiration_time;
   toastify({
     type: 'loss',
     // inf: true,
@@ -110,7 +107,7 @@ const getExpireNotification = async (
       <div className="flex-col">
         <div className="flex whitespace-nowrap">
           {currentRow.market.token0}-{currentRow.market.token1}{' '}
-          {currentRow.isAbove ? 'Up' : 'Down'} @&nbsp;
+          {currentRow.is_above ? 'Up' : 'Down'} @&nbsp;
           <Display
             data={divide(currentRow.strike, 8)}
             unit={currentRow.market.token1}
@@ -128,8 +125,8 @@ const getExpireNotification = async (
                 win
                   ? divide(
                       subtract(
-                        currentRow.amount as string,
-                        currentRow.totalFee
+                        currentRow.payout as string,
+                        currentRow.trade_size
                       ),
                       18
                     )

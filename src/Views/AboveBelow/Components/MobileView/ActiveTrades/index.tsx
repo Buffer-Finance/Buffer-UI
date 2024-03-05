@@ -1,11 +1,11 @@
-import { tardesAtom } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { NoTrades } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/NoTrades';
 import styled from '@emotion/styled';
-import { useAtomValue } from 'jotai';
 import { Trade } from './Trade';
 
 export const ActiveTrades = () => {
-  const { active } = useAtomValue(tardesAtom);
+  // const { active } = useAtomValue(tardesAtom);
+  const active = useOngoingTrades();
 
   return (
     <TradesBackground className="b1200:mb-4">
@@ -17,7 +17,7 @@ export const ActiveTrades = () => {
       )}
       {active.map((t) => {
         if (!t) return <></>;
-        return <Trade trade={t} key={t?.queueID} />;
+        return <Trade trade={t} key={t?.queue_id} />;
       })}
     </TradesBackground>
   );

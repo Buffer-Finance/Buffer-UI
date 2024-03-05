@@ -1,3 +1,4 @@
+import { marketTypeAB } from '@Views/AboveBelow/types';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import {
@@ -118,7 +119,7 @@ type ShareBetType = {
   trade: TradeType | null;
   expiryPrice: string | null;
   poolInfo: poolInfoType | null;
-  market: marketType | null;
+  market: marketTypeAB | null;
 };
 export const ShareBetAtom = atom<ShareBetType>({
   trade: null,

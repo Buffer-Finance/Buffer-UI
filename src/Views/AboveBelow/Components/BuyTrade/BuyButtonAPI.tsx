@@ -5,9 +5,16 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { toFixed } from '@Utils/NumString';
-import { add, divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import {
-  readCallDataAtom,
+  add,
+  divide,
+  gt,
+  lt,
+  multiply,
+} from '@Utils/NumString/stringArithmatics';
+import { useMaxTrade } from '@Views/AboveBelow/Hooks/useMaxTrade';
+import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
+import {
   selectedExpiry,
   selectedPoolActiveMarketAtom,
   tradeSizeAtom,
@@ -21,7 +28,7 @@ import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
 import { tradeSettingsAtom } from '@Views/TradePage/atoms';
 import { getSingatureCached } from '@Views/TradePage/cache';
-import { baseUrl } from '@Views/TradePage/config';
+import { upDOwnV3BaseUrl } from '@Views/TradePage/config';
 import { TradeType } from '@Views/TradePage/type';
 import { generateApprovalSignatureWrapper } from '@Views/TradePage/utils/generateApprovalSignatureWrapper';
 import { generateBuyTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
@@ -83,14 +90,10 @@ export const BuyButtonAPI: React.FC<{
   activeChain: Chain;
   oneCtPk: string;
 }> = ({ activeMarket, activeChain, oneCtWallet, oneCtPk }) => {
-  const readCallData = useAtomValue(readCallDataAtom);
   const amount = useAtomValue(tradeSizeAtom);
   const { data: approvalExpanded, mutate: updateApprovalData } =
     useApprvalAmount();
   const config = getConfig(activeChain.id);
-
-  if (readCallData === undefined)
-    return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
 
   const token = activeMarket.poolInfo.token.toUpperCase();
   const decimals = activeMarket.poolInfo.decimals;
@@ -227,7 +230,7 @@ const Approve: React.FC<{
         state: 'PENDING',
         token: tokenName,
       };
-      await axios.post(baseUrl + 'approve/', null, {
+      await axios.post(upDOwnV3BaseUrl + 'approve/', null, {
         params: apiSignature,
       });
       setLoading(null);
@@ -267,6 +270,11 @@ const Buy: React.FC<{
   const settings = useAtomValue(tradeSettingsAtom);
   const { address } = useAccount();
   const referralData = useReferralCode();
+  const { data: productNames } = useProductName();
+  const { data: maxTrades } = useMaxTrade({
+    activeMarket,
+    expiry: selectedTimestamp,
+  });
 
   const buyHandler = async (is_up: boolean) => {
     if (address === undefined)
@@ -281,6 +289,36 @@ const Buy: React.FC<{
         type: 'error',
         msg: 'Please select expiry date.',
       });
+    if (productNames === undefined)
+      return toastify({
+        id: 'trade/create error',
+        type: 'error',
+        msg: 'Product name not found.',
+      });
+    if (maxTrades === undefined)
+      return toastify({
+        id: 'trade/create error',
+        type: 'error',
+        msg: 'Max trade not found.',
+      });
+
+    const max_trade_size =
+      maxTrades[activeMarket.address + '-' + selectedTimestamp / 1000];
+
+    if (!max_trade_size) {
+      return toastify({
+        id: 'trade/create error',
+        type: 'error',
+        msg: 'Max trade not found.',
+      });
+    }
+    if (gt(amount, max_trade_size.toString())) {
+      return toastify({
+        id: 'trade/create error',
+        type: 'error',
+        msg: 'Trade size is more than allowed.',
+      });
+    }
 
     const decimals = activeMarket.poolInfo.decimals;
     const trade_size = toFixed(multiply(amount, decimals), 0);
@@ -316,14 +354,14 @@ const Buy: React.FC<{
         is_above: is_up,
         environment: activeChainId.toString(),
         token: activeMarket.poolInfo.token,
-        product_id: 'xyz',
+        product_id: productNames['UP_DOWN'],
         asset_pair: activeMarket.token0 + activeMarket.token1,
       };
 
       const trailingUrl = 'create/';
 
       const resp: { data: TradeType } = await axios.post(
-        baseUrl + trailingUrl,
+        upDOwnV3BaseUrl + trailingUrl,
         apiParams,
         { params: { environment: activeChainId } }
       );

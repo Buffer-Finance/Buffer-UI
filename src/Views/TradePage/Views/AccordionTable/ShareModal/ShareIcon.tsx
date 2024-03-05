@@ -1,13 +1,14 @@
 import ShareIcon from '@Public/shareModal/ShareIcon';
+import { marketTypeAB } from '@Views/AboveBelow/types';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { SetShareBetAtom, SetShareStateAtom } from '@Views/TradePage/atoms';
-import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
+import { TradeType, poolInfoType } from '@Views/TradePage/type';
 import { useAtom } from 'jotai';
 import { useMedia } from 'react-use';
 
 export const Share: React.FC<{
   data: TradeType;
-  market: marketType;
+  market: marketTypeAB;
   poolInfo: poolInfoType;
   iconBgColor?: string;
   className?: string;

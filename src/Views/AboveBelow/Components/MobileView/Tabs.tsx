@@ -1,5 +1,5 @@
 import { ViewOnlyInputs } from '@Views/TradePage/Components/MobileView/ViewOnlyInputs';
-import { Buy } from '../BuyTrade/BuyButton';
+import { BuyButton } from '../BuyTrade/BuyButtonAPI';
 import { PayoutProfit } from '../BuyTrade/PayoutProfit';
 import { MarketChart } from '../MarketChart';
 
@@ -10,7 +10,7 @@ export const Tabs = () => {
       <MarketChart isMobile />
       <ViewOnlyInputs />
       <PayoutProfit />
-      <Buy />
+      <BuyButton />
     </>
   );
 };

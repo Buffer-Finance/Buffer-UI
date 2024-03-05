@@ -143,10 +143,6 @@ export const Active: React.FC<{
           return (
             <>
               <PayoutChip data={trade} />
-              {/* <DisplayTime
-                ts={trade.queueTimestamp as string}
-                className="!justify-start"
-              /> */}
             </>
           );
         return (
@@ -170,7 +166,6 @@ export const Active: React.FC<{
         return (
           <Probability trade={trade} className="!justify-start" isColored />
         );
-
       case TableColumn.TradeSize:
         if (isMobile) {
           return (
@@ -192,29 +187,6 @@ export const Active: React.FC<{
             </div>
           );
         }
-        // if (trade.state === BetState.queued) {
-        //   return (
-        //     <div className="flex gap-2 items-center">
-        //       <Display
-        //         data={divide(
-        //           multiply(
-        //             trade.maxFeePerContract as string,
-        //             trade.numberOfContracts as string
-        //           ) as string,
-        //           trade.market.poolInfo.decimals
-        //         )}
-        //         precision={2}
-        //         className="!justify-start"
-        //         unit={trade.market.poolInfo.token}
-        //         label={'<'}
-        //       />
-        //       <InfoIcon
-        //         tooltip="The max amount of trade considering the slippage"
-        //         sm
-        //       />
-        //     </div>
-        //   );
-        // }
         return (
           <Display
             data={divide(

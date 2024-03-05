@@ -21,12 +21,10 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { CancelledTable } from './CancelTable';
 import { HistoryTable } from './HistoryTable';
-import LimitOrderTable from './LimitOrderTable';
 import { OngoingTradesTable } from './OngoingTradesTable';
 const OngoingTradesTableMemo = React.memo(OngoingTradesTable);
 const tables = {
   Trades: 'h',
-  'Limit Orders': 'h',
   History: 'h',
   Cancelled: 'h',
   'Platform Trades': 'h',
@@ -36,7 +34,7 @@ const gap = ['Cancelled'];
 
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
-  const [activeTrades, limitOrders] = useOngoingTrades();
+  const activeTrades = useOngoingTrades();
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const priceCache = useAtomValue(queuets2priceAtom);
 
@@ -95,8 +93,6 @@ const AccordionTable: React.FC<any> = ({}) => {
                 {s}
                 {s == 'Trades' && activeTrades.length ? (
                   <CountChip count={activeTrades.length} />
-                ) : s == 'Limit Orders' && limitOrders.length ? (
-                  <CountChip count={limitOrders.length} />
                 ) : null}
               </div>
             </button>
@@ -125,9 +121,10 @@ const AccordionTable: React.FC<any> = ({}) => {
             isLoading={false}
             overflow
           />
-        ) : activeTable == 'Limit Orders' ? (
-          <LimitOrderTable trades={limitOrders} overflow />
-        ) : activeTable == 'Platform Trades' ? (
+        ) : // : activeTable == 'Limit Orders' ? (
+        //   <LimitOrderTable trades={limitOrders} overflow />
+        // )
+        activeTable == 'Platform Trades' ? (
           <PlatformOngoing />
         ) : activeTable == 'Platform History' ? (
           <PlatformHistory overflow />

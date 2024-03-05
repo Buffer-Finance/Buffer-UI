@@ -1,27 +1,28 @@
-import InfoIcon from '@SVG/Elements/InfoIcon';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
-import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
-import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { Probability } from '@Views/TradePage/Views/AccordionTable/OngoingTradesTable';
 import { DataCol } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/DataCol';
+import { TradeType } from '@Views/TradePage/type';
 import styled from '@emotion/styled';
-import { Probability } from '../../Tables/Components/Probability';
 import { Price } from './Price';
 
 export const Data: React.FC<{
-  trade: IGQLHistory;
+  trade: TradeType;
   className?: string;
 }> = ({ trade, className }) => {
   let TradeData = [
     {
       head: <span>Strike Price</span>,
-      desc: (
-        <Display
-          data={divide(trade.strike, 8)}
-          precision={trade.market.price_precision.toString().length - 1}
-          className="!justify-start"
-        />
-      ),
+      desc:
+        trade.state === 'QUEUED' ? (
+          <>-</>
+        ) : (
+          <Display
+            data={divide(trade.strike, 8)}
+            precision={trade.market.price_precision.toString().length - 1}
+            className="!justify-start"
+          />
+        ),
     },
     {
       head: <span>Current price</span>,
@@ -29,34 +30,16 @@ export const Data: React.FC<{
     },
     {
       head: <span>Trade Size</span>,
-      desc:
-        trade.state === BetState.queued ? (
-          <div className="flex gap-2 items-center">
-            <Display
-              data={divide(
-                multiply(
-                  trade.maxFeePerContract as string,
-                  trade.numberOfContracts as string
-                ) as string,
-                trade.market.poolInfo.decimals
-              )}
-              precision={2}
-              className="!justify-start"
-              unit={trade.market.poolInfo.token}
-              label={'<'}
-            />
-            <InfoIcon
-              tooltip="The max amount of trade considering the slippage"
-              sm
-            />
-          </div>
-        ) : (
+      desc: (
+        <div className="flex gap-2 items-center">
           <Display
-            data={divide(trade.totalFee ?? 0, trade.market.poolInfo.decimals)}
-            unit={trade.market.poolInfo.token}
+            data={divide(trade.trade_size, trade.market.poolInfo.decimals)}
             precision={2}
+            className="!justify-start"
+            unit={trade.market.poolInfo.token}
           />
-        ),
+        </div>
+      ),
     },
     {
       head: <span>Probability</span>,

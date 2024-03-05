@@ -1,45 +1,35 @@
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
-import BufferTable from '@Views/Common/BufferTable';
-import { useAtom, useAtomValue } from 'jotai';
-
-import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getCachedPriceFromKlines } from '@TV/useDataFeed';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
-import { toFixed } from '@Utils/NumString';
-import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
+import { BlackScholes } from '@Utils/Formulas/blackscholes';
+import { divide, round } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
-import { getSlicedUserAddress } from '@Utils/getUserAddress';
-import NumberTooltip from '@Views/Common/Tooltips';
+import { Price } from '@Views/AboveBelow/Components/Tables/Components/Price';
+import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
+import BufferTable from '@Views/Common/BufferTable';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { GreyBtn } from '@Views/Common/V2-Button';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween } from '@Views/TradePage/Components/Row';
-import { useCancelTradeFunction } from '@Views/TradePage/Hooks/useCancelTradeFunction';
 import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { useSpread } from '@Views/TradePage/Hooks/useSpread';
-import { closeLoadingAtom, queuets2priceAtom } from '@Views/TradePage/atoms';
-import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
-import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
-import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
-import { keyframes } from '@emotion/react';
-import styled from '@emotion/styled';
-import { Launch } from '@mui/icons-material';
+import { queuets2priceAtom } from '@Views/TradePage/atoms';
+import { TradeType } from '@Views/TradePage/type';
+import {
+  getAssetImageUrl,
+  getAssetMonochromeImageUrl,
+} from '@Views/TradePage/utils/getAssetImageUrl';
+import { useAtomValue } from 'jotai';
 import { useMedia } from 'react-use';
-import { useEarlyPnl } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { TradeTimeElapsed } from '../BuyTrade/ActiveTrades/TradeTimeElapsed';
 import { AssetCell } from './AssetCell';
 import {
   DisplayTime,
-  StrikePriceComponent,
   TableErrorRow,
   TableHeader,
-  getEarlyCloseStatus,
   getExpiry,
   getLockedAmount,
-  getProbability,
-  tableButtonClasses,
 } from './Common';
 import { useNavigateToProfile } from './HistoryTable';
 import { Visualized } from './Visualized';
@@ -68,11 +58,8 @@ export const OngoingTradesTable: React.FC<{
   const { viewOnlyMode } = useUserAccount();
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
-
-  const [marketPrice] = useAtom(priceAtom);
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { registeredOneCT } = useOneCTWallet();
-  const { data: allSpreads } = useSpread();
   const navigateToProfile = useNavigateToProfile();
 
   let strikePriceHeading = 'Strike Price';
@@ -98,9 +85,10 @@ export const OngoingTradesTable: React.FC<{
           'Current Price',
           'Open Time',
           'Time Left',
-          'Close Time',
+          'Expiry',
           'Trade Size',
-          'PnL | Probability',
+          'payout',
+          'Probability',
           'Display',
         ];
 
@@ -112,14 +100,13 @@ export const OngoingTradesTable: React.FC<{
     TimeLeft = 4,
     CloseTime = 5,
     TradeSize = 6,
-    Probability = 7,
-    Show = 8,
+    payout = 7,
+    Probability = 8,
+    Show = 9,
   }
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const { earlyCloseHandler } = useCancelTradeFunction();
-  const earlyCloseLoading = useAtomValue(closeLoadingAtom);
   const { getPoolInfo } = usePoolInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
@@ -127,121 +114,88 @@ export const OngoingTradesTable: React.FC<{
     const trade = trades?.[row];
     if (!trade) return 'Problem';
 
-    const spread = allSpreads?.[trade.market.tv_id]?.spread ?? 0;
+    console.log(trade, 'trade');
 
-    const poolInfo = getPoolInfo(trade.pool.pool);
-    const marketPrecision = trade.market.price_precision.toString().length - 1;
-
-    let tradeExpiryTime = getExpiry(trade);
-
-    // let currTradePrice = trade.strike;
-    // if (trade.state == 'QUEUED') {
-    //   currTradePrice = cachedPrices?.[trade.queue_id];
-    // }
-    const lockedAmmount = getLockedAmount(trade, cachedPrices);
     const distanceObject = Variables(
-      trade.open_timestamp +
-        trade.period -
-        (trade.close_time || Math.round(Date.now() / 1000))
+      trade.expiration_time - trade.open_timestamp
     );
 
-    const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
     switch (col) {
-      case TableColumn.Show:
-        if (platform)
-          return (
-            <div className="flex items-center">
-              {getSlicedUserAddress(trade.user_address, 4)}
-              {!isNotMobile && (
-                <div
-                  role="button"
-                  onClick={() => {
-                    const userAddress = trade.user_address;
-                    if (!userAddress) return;
-                    navigateToProfile(userAddress.toLowerCase());
-                  }}
-                >
-                  <Launch className="scale-75 mb-1" />
-                </div>
-              )}
-            </div>
-          );
-        return distanceObject.distance >= 0 ? (
-          <div className="flex  gap-x-[20px] items-center">
-            <Visualized queue_id={trade.queue_id} />
-            {!viewOnlyMode && (
-              <NumberTooltip content={disableTooltip}>
-                <div>
-                  <GreyBtn
-                    className={
-                      tableButtonClasses +
-                      (isDisabled ? ' !text-2 !cursor-not-allowed' : '')
-                    }
-                    onClick={() => {
-                      !isDisabled && earlyCloseHandler(trade, trade.market);
-                    }}
-                    isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
-                  >
-                    Close
-                  </GreyBtn>
-                </div>
-              </NumberTooltip>
-            )}
-          </div>
-        ) : (
-          'Processing...'
+      case TableColumn.payout:
+        if (trade.state === 'QUEUED') return <>-</>;
+        return (
+          <CellContent
+            content={[
+              <Display
+                data={divide(
+                  trade.payout ?? '0',
+                  trade.market.poolInfo.decimals
+                )}
+                precision={2}
+                className="!justify-start"
+                unit={trade.market.poolInfo.token}
+              />,
+              // <div className="flex">
+              //   ROI :{' '}
+              //   {toFixed(
+              //     multiply(
+              //       divide(
+              //         subtract(
+              //           trade.amount ?? '0',
+              //           trade.totalFee ?? '0'
+              //         ) as string,
+              //         trade.totalFee ?? '0'
+              //       ) as string,
+              //       '100'
+              //     ),
+              //     0
+              //   ) + '%'}
+              // </div>,
+            ]}
+          />
         );
+      case TableColumn.Show:
+        return <Visualized queue_id={trade.queue_id} />;
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} spread={spread} />;
+        if (trade.state === 'QUEUED') return <>-</>;
+        return (
+          <Display
+            data={divide(trade.strike, 8)}
+            precision={trade.market.price_precision.toString().length - 1}
+            className="!justify-start"
+          />
+        );
       case TableColumn.Asset:
         return (
           <AssetCell currentRow={trade} platform={false} split={isMobile} />
         );
       case TableColumn.CurrentPrice:
-        return (
-          <Display
-            className="!justify-start"
-            data={round(
-              getCachedPriceFromKlines(trade.market),
-              marketPrecision
-            )}
-            precision={marketPrecision}
-          />
-        );
+        return <Price tv_id={trade.market.tv_id} className="!justify-start" />;
       case TableColumn.OpenTime:
         return (
-          // queuedTradeFallBack(trade) || (
-          <DisplayTime ts={trade.open_timestamp} />
-          // )
+          <DisplayTime ts={trade.open_timestamp} className="!justify-start" />
         );
       case TableColumn.TimeLeft:
-        let currentEpoch = Math.round(new Date().getTime() / 1000);
         return (
-          // queuedTradeFallBack(trade, true) || (
           <div>
             {distanceObject.distance >= 0
               ? formatDistance(distanceObject)
               : '00m:00s'}
           </div>
-          // )
         );
       case TableColumn.CloseTime:
-        return (
-          // queuedTradeFallBack(trade) || (
-          <DisplayTime ts={tradeExpiryTime} />
-          // )
-        );
+        return <DisplayTime ts={trade.expiration_time} />;
       case TableColumn.TradeSize:
         if (!isNotMobile) {
           return (
             <div className="flex items-center">
               <Display
-                data={divide(trade.trade_size, poolInfo.decimals)}
+                data={divide(trade.trade_size, trade.market.poolInfo.decimals)}
                 className="!justify-start"
                 // unit={poolInfo.token}
               />{' '}
               <img
-                src={getAssetImageUrl(trade.token)}
+                src={getAssetMonochromeImageUrl(trade.market.poolInfo.token)}
                 width={13}
                 height={13}
                 className="inline ml-2"
@@ -251,9 +205,10 @@ export const OngoingTradesTable: React.FC<{
         }
         return (
           <Display
-            data={divide(trade.trade_size, poolInfo.decimals)}
+            data={divide(trade.trade_size, trade.market.poolInfo.decimals)}
             className="!justify-start"
-            unit={trade.token}
+            unit={trade.market.poolInfo.token}
+            precision={2}
           />
         );
       case TableColumn.Probability:
@@ -261,19 +216,20 @@ export const OngoingTradesTable: React.FC<{
           // queuedTradeFallBack(trade) || (
           <div>
             <>
-              <Pnl
+              {/* <Pnl
                 configData={trade.market}
                 trade={trade}
-                poolInfo={poolInfo}
+                poolInfo={trade.market.poolInfo}
                 lockedAmmount={lockedAmmount}
-              />
-              <Probability trade={trade} marketPrice={marketPrice} />{' '}
+              /> */}
+              <Probability trade={trade} />{' '}
             </>
           </div>
           // )
         );
+      default:
+        return <>Unhandled</>;
     }
-    return 'Unhandled Body';
   };
 
   const Accordian = (row: number) => {
@@ -329,14 +285,14 @@ export const OngoingTradesTable: React.FC<{
           <ColumnGap gap="3px">
             <div className={headerClass}>Pnl</div>
             <div className={descClass + ' flex items-center gap-1'}>
-              <Pnl
+              {/* <Pnl
                 configData={trade.market}
                 trade={trade}
                 poolInfo={poolInfo}
                 lockedAmmount={lockedAmmount}
                 shouldShowUnit={false}
                 shouldShowCalculating
-              />
+              /> */}
               <img
                 src={getAssetImageUrl(trade.token)}
                 width={13}
@@ -349,7 +305,7 @@ export const OngoingTradesTable: React.FC<{
           <ColumnGap gap="3px">
             <div className={headerClass}>Probability</div>
             <div className={descClass}>
-              <Probability trade={trade} marketPrice={marketPrice} />
+              <Probability trade={trade} className="!justify-start" isColored />
             </div>
           </ColumnGap>
         </RowBetween>
@@ -392,89 +348,49 @@ export const OngoingTradesTable: React.FC<{
   );
 };
 
-export const Pnl = ({
-  trade,
-  configData,
-  poolInfo,
-  lockedAmmount,
-  shouldShowUnit = true,
-  shouldShowCalculating = false,
-}: {
+export const Probability: React.FC<{
   trade: TradeType;
-  configData: marketType;
-  poolInfo: poolInfoType;
-  lockedAmmount?: string;
-  shouldShowUnit?: boolean;
-  shouldShowCalculating?: boolean;
-}) => {
-  const { pnl, probability } = useEarlyPnl({
-    trade,
-    configData,
-    poolInfo,
-    lockedAmmount,
-  });
-  // console.log(pnl, probability, 'pnl');
-  if (!probability)
-    return shouldShowCalculating ? <div>Calculating..</div> : <></>;
-  const isWin = gt(pnl.earlycloseAmount, '0');
-  if (trade.locked_amount || lockedAmmount)
-    return (
-      <Display
-        data={pnl.earlycloseAmount}
-        label={isWin ? '+' : ''}
-        className={`!justify-start ${isWin ? 'text-green' : 'text-red'}`}
-        unit={shouldShowUnit ? poolInfo.token : undefined}
-      />
-    );
-  return <div>Calculating..</div>;
-};
+  className?: string;
+  isColored?: boolean;
+}> = ({ trade, className = '', isColored = false }) => {
+  const { price } = useMarketPrice(trade.market.tv_id);
 
-const progressAnimation = keyframes`
-  0% {
-    transform: translateX(-100%);
+  if (trade.state === 'QUEUED') {
+    return <>-</>;
   }
-  100% {
-    transform: translateX(0%);
+  if (trade.expiration_time === undefined) {
+    return <>-</>;
   }
-`;
+  if (price === undefined) {
+    return <>No Price</>;
+  }
 
-const ProgressLineWrapper = styled.div<{ duration: number; delay: number }>`
-  position: relative;
-  width: 100%;
-  height: 2px;
-  background-color: #393d4d;
-  overflow: hidden;
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #3772ff;
-    height: 100%;
-    animation: ${progressAnimation} ${(props) => props.duration}s linear;
-    animation-delay: ${(props) => -props.delay}s;
+  const currentEpoch = Math.round(new Date().getTime() / 1000);
+  if (currentEpoch > +trade.expiration_time) {
+    return <>processing...</>;
   }
-`;
 
-const Probability: React.FC<{
-  trade: TradeType;
-  marketPrice: any;
-}> = ({ marketPrice, trade }) => {
-  const IV =
-    calculateOptionIV(
-      trade.is_above ?? false,
-      trade.strike / 1e8,
-      +getCachedPriceFromKlines(trade.market),
-      trade.pool.IV,
-      trade.pool.IVFactorITM,
-      trade.pool.IVFactorOTM
-    ) / 1e4;
-  const probabiliyt = getProbability(
-    trade,
-    +getCachedPriceFromKlines(trade.market),
-    IV
+  const probability =
+    BlackScholes(
+      true,
+      trade.is_above,
+      price,
+      +trade.strike / 1e8,
+      +trade.expiration_time - currentEpoch,
+      0,
+      12000 / 1e4
+    ) * 100;
+
+  return (
+    <Display
+      data={probability}
+      unit={'%'}
+      precision={2}
+      className={
+        className +
+        ' ' +
+        (isColored ? (probability > 50 ? 'text-green' : 'text-red') : '')
+      }
+    />
   );
-  if (!probabiliyt) return <div>Calculating..</div>;
-  return <div> {toFixed(probabiliyt, 2) + '%'}</div>;
 };

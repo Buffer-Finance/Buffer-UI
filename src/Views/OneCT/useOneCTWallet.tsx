@@ -1,7 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { getSingatureCached } from '@Views/TradePage/cache';
-import { baseUrl } from '@Views/TradePage/config';
+import { upDOwnV3BaseUrl } from '@Views/TradePage/config';
 import { WaitToast } from '@Views/TradePage/utils';
 import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
@@ -243,7 +243,7 @@ const useOneCTWallet = () => {
         environment: activeChain.id,
         api_signature,
       };
-      const resp = await axios.post(baseUrl + 'deregister/', null, {
+      const resp = await axios.post(upDOwnV3BaseUrl + 'deregister/', null, {
         params: apiParams,
       });
       toastify({
@@ -344,7 +344,7 @@ const useOneCTWallet = () => {
         environment: activeChain.id,
       };
 
-      const resp = await axios.post(baseUrl + 'register/', null, {
+      const resp = await axios.post(upDOwnV3BaseUrl + 'register/', null, {
         params: apiParams,
       });
 

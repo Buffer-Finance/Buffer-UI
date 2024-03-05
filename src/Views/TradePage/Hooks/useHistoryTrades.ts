@@ -1,42 +1,50 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
+import { aboveBelowMarketsAtom } from '@Views/AboveBelow/atoms';
 import axios from 'axios';
 import { useAtomValue } from 'jotai';
+import { arbitrumSepolia } from 'src/Config/wagmiClient/getConfigChains';
 import useSWR from 'swr';
 import { getAddress } from 'viem';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { historyTableActivePage } from '../atoms';
 import {
   TRADE_IN_A_PAGE_TRADES_TABLES,
-  baseUrl,
   refreshInterval,
+  upDOwnV3BaseUrl,
 } from '../config';
 import { tradesApiResponseType } from '../type';
 import { addMarketInTrades } from '../utils';
-import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
 
 const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
   const { address } = useUserAccount();
-  const markets = useAllV2_5MarketsConfig();
+  const markets = useAtomValue(aboveBelowMarketsAtom);
   // console.log(`markets: `, markets);
   const activePage = useAtomValue(historyTableActivePage);
+  const { data: productNames } = useProductName();
   // const [isLoading, setIsLoading] = useState(false);
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'history-trades-' + address + '-' + activeChain.id + '-' + activePage,
     {
       fetcher: async () => {
-        if (!address || !activeChain.id || !markets)
+        if (!address || !activeChain.id || !markets || !productNames)
           return { page_data: [], total_pages: 1 };
-        if (![arbitrum.id, arbitrumGoerli.id].includes(activeChain.id as 42161))
+        if (
+          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+            activeChain.id as 42161
+          )
+        )
           return { page_data: [], total_pages: 1 };
-        const res = await axios.get(`${baseUrl}trades/user/history/`, {
+        const res = await axios.get(`${upDOwnV3BaseUrl}trades/user/history/`, {
           params: {
             user_address: getAddress(address),
             environment: activeChain.id,
             limit: TRADE_IN_A_PAGE_TRADES_TABLES,
             page: activePage - 1,
+            product_id: productNames['UP_DOWN'],
           },
         });
         // console.log(

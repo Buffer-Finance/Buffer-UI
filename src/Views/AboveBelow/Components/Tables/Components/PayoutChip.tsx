@@ -8,28 +8,48 @@ import {
   expiryPriceCache,
 } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import NumberTooltip from '@Views/Common/Tooltips';
+import { TradeType } from '@Views/TradePage/type';
+
+function isTradeType(data: IGQLHistory | TradeType): data is TradeType {
+  return (data as TradeType).environment !== undefined;
+}
 
 export const PayoutChip: React.FC<{
-  data: IGQLHistory;
+  data: IGQLHistory | TradeType;
   className?: string;
 }> = ({ data, className = '' }) => {
-  const net_pnl = data.payout
-    ? divide(subtract(data.payout, (data.totalFee ?? '0') as string), 18)
-    : divide(subtract('0', (data.totalFee ?? '0') as string), 18);
+  let net_pnl: string | null = null;
+  let isPending = false;
+  let isWin = false;
+  let isCancelled = false;
+  let isQueued = false;
+  let betExpiryPrice: string | undefined = undefined;
+  if (!isTradeType(data)) {
+    net_pnl = data.payout
+      ? divide(subtract(data.payout, (data.totalFee ?? '0') as string), 18)
+      : divide(subtract('0', (data.totalFee ?? '0') as string), 18);
 
-  const isPending = data.state === BetState.active;
-  let isWin = gt(net_pnl as string, '0');
-  const isCancelled = data.state === BetState.cancelled;
-  const isQueued = data.state === BetState.queued;
+    isPending = data.state === BetState.active;
+    isWin = gt(net_pnl as string, '0');
+    isCancelled = data.state === BetState.cancelled;
+    isQueued = data.state === BetState.queued;
 
-  let betExpiryPrice = expiryPriceCache?.[data.optionID as string];
-
-  if (isPending && betExpiryPrice) {
-    if (data.isAbove) {
-      isWin = gt(betExpiryPrice, data.strike);
-    } else {
-      isWin = !gt(betExpiryPrice, data.strike);
+    betExpiryPrice = expiryPriceCache?.[data.optionID as string];
+    if (isPending && betExpiryPrice) {
+      if (data.isAbove) {
+        isWin = gt(betExpiryPrice, data.strike);
+      } else {
+        isWin = !gt(betExpiryPrice, data.strike);
+      }
     }
+  } else {
+    net_pnl = data.payout
+      ? divide(subtract(data.payout, (data.trade_size ?? '0') as string), 18)
+      : divide(subtract('0', (data.trade_size ?? '0') as string), 18);
+    isPending = false;
+    isWin = gt(net_pnl as string, '0');
+    isCancelled = data.is_cancelled;
+    isQueued = data.state === 'QUEUED';
   }
 
   function getChipContent() {

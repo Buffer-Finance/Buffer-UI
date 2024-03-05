@@ -1,9 +1,9 @@
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { Variables } from '@Utils/Time';
-import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+import { TradeType } from '@Views/TradePage/type';
 import { useEffect, useState } from 'react';
 
-export const Timer: React.FC<{ trade: IGQLHistory }> = ({ trade }) => {
+export const Timer: React.FC<{ trade: TradeType }> = ({ trade }) => {
   const [count, setCount] = useState(0);
   useEffect(() => {
     const timer = setInterval(() => {
@@ -13,9 +13,9 @@ export const Timer: React.FC<{ trade: IGQLHistory }> = ({ trade }) => {
   }, [count]);
 
   const currentTime = Math.floor(Date.now() / 1000);
-  if (currentTime > +trade.expirationTime) return <>processing...</>;
+  if (currentTime > +trade.expiration_time) return <>processing...</>;
   const distance = formatDistance(
-    Variables(+trade.expirationTime - currentTime)
+    Variables(+trade.expiration_time - currentTime)
   );
   return <div className="text-[12px]">{distance}</div>;
 };

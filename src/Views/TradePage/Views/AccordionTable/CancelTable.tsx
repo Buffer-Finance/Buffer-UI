@@ -4,18 +4,12 @@ import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import BufferTable from '@Views/Common/BufferTable';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
-import { useSpread } from '@Views/TradePage/Hooks/useSpread';
 import { TradeType } from '@Views/TradePage/type';
+import { getAssetMonochromeImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
 import { useMedia } from 'react-use';
 import { AssetCell } from './AssetCell';
-import {
-  DisplayTime,
-  StrikePriceComponent,
-  TableErrorRow,
-  TableHeader,
-} from './Common';
+import { DisplayTime, TableErrorRow, TableHeader } from './Common';
 import { useNavigateToProfile } from './HistoryTable';
 
 export const CancelledTable: React.FC<{
@@ -39,11 +33,9 @@ export const CancelledTable: React.FC<{
   activePage,
   setActivePage,
 }) => {
-  const { getPoolInfo } = usePoolInfo();
   const isMobile = useMedia('(max-width:600px)');
   const isNotMobile = useMedia('(min-width:1200px)');
   const navigateToProfile = useNavigateToProfile();
-  const { data: allSpreads } = useSpread();
   let strikePriceHeading = 'Strike Price';
   let tradeSizeHeading = 'Trade Size';
   if (isMobile) {
@@ -89,9 +81,6 @@ export const CancelledTable: React.FC<{
     if (trades === undefined) return <></>;
 
     const trade = trades?.[row];
-    const poolInfo = getPoolInfo(trade.pool.pool);
-
-    const spread = allSpreads?.[trade.market.tv_id]?.spread ?? 0;
 
     switch (col) {
       case TableColumn.User:
@@ -114,7 +103,13 @@ export const CancelledTable: React.FC<{
             </div>
           );
       case TableColumn.Strike:
-        return <StrikePriceComponent trade={trade} spread={spread} />;
+        return (
+          <Display
+            data={divide(trade.strike, 8)}
+            precision={trade.market.price_precision.toString().length - 1}
+            className="!justify-start"
+          />
+        );
       case TableColumn.Asset:
         return <AssetCell currentRow={trade} split={isMobile} />;
 
@@ -137,11 +132,29 @@ export const CancelledTable: React.FC<{
           // )
         );
       case TableColumn.TradeSize:
+        if (!isNotMobile) {
+          return (
+            <div className="flex items-center">
+              <Display
+                data={divide(trade.trade_size, trade.market.poolInfo.decimals)}
+                className="!justify-start"
+                // unit={poolInfo.token}
+              />{' '}
+              <img
+                src={getAssetMonochromeImageUrl(trade.market.poolInfo.token)}
+                width={13}
+                height={13}
+                className="inline ml-2"
+              />
+            </div>
+          );
+        }
         return (
           <Display
-            data={divide(trade.trade_size, poolInfo.decimals)}
+            data={divide(trade.trade_size, trade.market.poolInfo.decimals)}
             className="!justify-start"
-            unit={poolInfo.token}
+            unit={trade.market.poolInfo.token}
+            precision={2}
           />
         );
       case TableColumn.Status:

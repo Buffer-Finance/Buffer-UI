@@ -17,9 +17,11 @@ import {
   expiryPriceCache,
   getPriceCacheId,
 } from '@Views/TradePage/Hooks/useBuyTradeActions';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { TradeType } from '@Views/TradePage/type';
-import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import {
+  getAssetImageUrl,
+  getAssetMonochromeImageUrl,
+} from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useMedia } from 'react-use';
@@ -31,7 +33,6 @@ import {
   TableErrorRow,
   TableHeader,
   getExpiry,
-  queuedTradeFallBack,
 } from './Common';
 import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
@@ -70,8 +71,6 @@ const HistoryTable: React.FC<{
   className = '',
   overflow = true,
 }) => {
-  const { getPoolInfo } = usePoolInfo();
-
   const headNameArray = platform
     ? [
         'Asset',
@@ -112,7 +111,7 @@ const HistoryTable: React.FC<{
     // const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
 
     if (!trade?.pool?.pool) console.log(`trade: `, trade);
-    const poolInfo = getPoolInfo(trade.pool.pool);
+    const poolInfo = trade.pool;
     let expiryPrice: number | null = trade.expiry_price;
     if (!expiryPrice) {
       const id = getPriceCacheId(trade);
@@ -133,7 +132,6 @@ const HistoryTable: React.FC<{
           icon: <FailedSuccess width={14} height={14} />,
           textColor: 'text-red',
         };
-    const minClosingTime = getExpiry(trade);
     switch (col) {
       case TableColumn.Strike:
         return <StrikePriceComponent trade={trade} spread={0} />;
@@ -155,23 +153,17 @@ const HistoryTable: React.FC<{
           />
         );
       case TableColumn.OpenTime:
-        return (
-          queuedTradeFallBack(trade) || (
-            <DisplayTime ts={trade.open_timestamp} />
-          )
-        );
+        return <DisplayTime ts={trade.open_timestamp} />;
       case TableColumn.TimeLeft:
         return (
-          queuedTradeFallBack(trade, true) || (
-            <div>
-              {formatDistance(Variables(minClosingTime - trade.open_timestamp))}
-            </div>
-          )
+          <div>
+            {formatDistance(
+              Variables(trade.expiration_time - trade.open_timestamp)
+            )}
+          </div>
         );
       case TableColumn.CloseTime:
-        return (
-          queuedTradeFallBack(trade) || <DisplayTime ts={minClosingTime} />
-        );
+        return <DisplayTime ts={trade.expiration_time} />;
       case TableColumn.TradeSize:
         if (!isNotMobile) {
           return (
@@ -182,7 +174,7 @@ const HistoryTable: React.FC<{
                 // unit={poolInfo.token}
               />{' '}
               <img
-                src={getAssetImageUrl(trade.token)}
+                src={getAssetMonochromeImageUrl(trade.token)}
                 width={13}
                 height={13}
                 className="inline ml-2"
@@ -237,7 +229,7 @@ const HistoryTable: React.FC<{
                 // unit={poolInfo.token}
               />
               <img
-                src={getAssetImageUrl(trade.token)}
+                src={getAssetMonochromeImageUrl(trade.token)}
                 width={13}
                 height={13}
                 className="inline ml-2"
@@ -295,7 +287,7 @@ const HistoryTable: React.FC<{
     if (!trade) return <>Something went wrong.</>;
     // if (!readcallData) return <></>;
 
-    const poolInfo = getPoolInfo(trade?.pool?.pool);
+    const poolInfo = trade.pool;
     if (!poolInfo) return <>Something went wrong.</>;
     const minClosingTime = getExpiry(trade);
     let expiryPrice: number | null = trade.expiry_price;

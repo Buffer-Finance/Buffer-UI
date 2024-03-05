@@ -679,9 +679,14 @@ const aboveBelowURLString = isTestnet
 const upDownV2URLString = isTestnet
   ? 'VITE_UP_DOWN_V2_API_HOST_TESTNET'
   : 'VITE_UP_DOWN_V2_API_HOST_DEVELOPMENT';
+
+const upDownV3URLString = isTestnet
+  ? 'VITE_UP_DOWN_V3_HOST_TESTNET'
+  : 'VITE_UP_DOWN_V3_HOST_DEVELOPMENT';
 export const baseUrl = import.meta.env[baseURLString];
 export const aboveBelowBaseUrl = import.meta.env[aboveBelowURLString];
 export const upDownV2BaseUrl = import.meta.env[upDownV2URLString];
+export const upDOwnV3BaseUrl = import.meta.env[upDownV3URLString];
 
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
 export const MAX_APPROVAL_VALUE =

@@ -1,6 +1,9 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useGenericHooks } from '@Hooks/useGenericHook';
 import { usePriceRetriable } from '@Hooks/usePrice';
 import { MobileWarning, RightPanelBackground } from '@Views/TradePage';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { AccordionTable } from '@Views/TradePage/Views/AccordionTable';
 import {
   miscsSettingsAtom,
   tradePanelPositionSettingsAtom,
@@ -17,10 +20,8 @@ import { Shutters } from './Components/MobileView/Shutters';
 import { Tabs } from './Components/MobileView/Tabs';
 import { PinnedMarkets } from './Components/PinnedMarkets';
 import { StatusBar } from './Components/StatusBar';
-import { Tables } from './Components/Tables';
 import { useAboveBelowMarketsSetter } from './Hooks/useAboveBelowMarketsSetter';
 import { useActiveMarketSetter } from './Hooks/useActiveMarketSetter';
-import { usePastTradeQuery } from './Hooks/usePastTradeQuery';
 import { useReacallDataSetter } from './Hooks/useReadcallDataSetter';
 import {
   aboveBelowActiveMarketsAtom,
@@ -29,8 +30,6 @@ import {
 } from './atoms';
 
 export const AboveBelow = () => {
-  // const { active } = useAtomValue(tardesAtom);
-
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
   const { activeChain } = useActiveChain();
@@ -38,7 +37,7 @@ export const AboveBelow = () => {
   useAboveBelowMarketsSetter();
   useActiveMarketSetter();
   useReacallDataSetter();
-  usePastTradeQuery();
+  // usePastTradeQuery();
   // useGenericHooks(active);
 
   const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
@@ -65,11 +64,13 @@ export const AboveBelow = () => {
         }`}
       >
         <>
+          <TradeEndNotification />
           <RightPanelBackground>
             {showFavoriteAsset && <PinnedMarkets />}
             <StatusBar isMobile={false} />
             <MarketChart isMobile={false} />
-            <Tables />
+            {/* <Tables /> */}
+            <AccordionTable />
           </RightPanelBackground>
           <BuyTrade isMobile={false} />
         </>
@@ -84,4 +85,10 @@ export const AboveBelow = () => {
       </div>
     );
   }
+};
+
+const TradeEndNotification = () => {
+  const trades = useOngoingTrades();
+  useGenericHooks(trades);
+  return <></>;
 };

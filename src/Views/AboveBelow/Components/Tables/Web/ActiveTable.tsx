@@ -1,6 +1,5 @@
 import { getTradeTableError } from '@Views/AboveBelow/Helpers/getTradeTableError';
 import {
-  tardesAtom,
   tardesPageAtom,
   tardesTotalPageAtom,
   updateActivePageNumber,
@@ -15,7 +14,7 @@ export const ActiveTable: React.FC<{
   overflow?: boolean;
   isMobile?: boolean;
 }> = ({ userAddress, onlyView, overflow, isMobile }) => {
-  const { active } = useAtomValue(tardesAtom);
+  // const { active } = useAtomValue(tardesAtom);
   const { active: totalPages } = useAtomValue(tardesTotalPageAtom);
   const { active: activePage } = useAtomValue(tardesPageAtom);
   const setActivePage = useSetAtom(updateActivePageNumber);
