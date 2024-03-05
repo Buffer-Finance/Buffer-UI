@@ -11,7 +11,7 @@ export const appConfig = {
             import.meta.env.VITE_SATSUMA_KEY
           }/bufferfinance/arbitrum-sandbox-testnet/api`,
         },
-
+        cb: '0x0C551529199564F21f43275e47b968077cDcEf90',
         booster: '0x29952C608Bf41A8a36AFD937471691932055E7b5',
         referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
         router: '0x6d65d507e1d2A8128E37203C84A45cDC1abE1Be0',
@@ -86,6 +86,7 @@ export const appConfig = {
             import.meta.env.VITE_SATSUMA_KEY
           }/bufferfinance/arbitrum-testnet/api`,
         },
+        cb: '0x1207BcC7aE3CA522dc583757A5da6B4BF3f8A5f8',
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0xff37eCD6cD32ce9caC75D3EFb434CAc6d63300B1',
         router: '0x2430E4aD865423Ed994daD297D66b77F3ec2B008',
@@ -161,6 +162,7 @@ export const appConfig = {
         import.meta.env.VITE_SATSUMA_KEY
       }/bufferfinance/v2.5-arbitrum-mainnet/api`,
     },
+    cb: '0x244fa2e16b25a5cc52962e331e1a20db16891fde',
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
     router: '0xFd1EDa553d25448383FBD72bBE4530182266ed8D',
@@ -243,6 +245,7 @@ export const appConfig = {
         import.meta.env.VITE_SATSUMA_KEY
       }/bufferfinance/polygon-testnet/api`,
     },
+    cb: '',
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
     router: '0x3E8d70286567bf962261a81Da5DBDe6cBbc444C4',
@@ -265,6 +268,7 @@ export const appConfig = {
         import.meta.env.VITE_SATSUMA_KEY
       }/bufferfinance/polygon-mainnet/api`,
     },
+    cb: '',
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',
     router: '0xBBac5088Ea7E70f21C28058A434Afa64FDf401c7',
