@@ -186,6 +186,8 @@ const options = {
 };
 
 function TSDisplay({ ts }) {
-  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(ts);
+  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(
+    +ts * 1000
+  );
   return <div className="ml-2">{formattedDate}</div>;
 }
