@@ -84,7 +84,8 @@ export const appConfig = {
         graph: {
           MAIN: `https://subgraph.satsuma-prod.com/${
             import.meta.env.VITE_SATSUMA_KEY
-          }/bufferfinance/up-down-v3-testnet/version/v2.5.4-fix-create/api`,
+          }/bufferfinance/above-below-sepolia/version/v2.5.3-up-down-sepolia-graph/api
+          `,
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
