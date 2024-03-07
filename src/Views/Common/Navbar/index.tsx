@@ -55,6 +55,7 @@ export const Navbar: React.FC<INavbar> = () => {
     });
   };
   const show = !urlSettings?.hide;
+  return null;
   return (
     <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102] b1200:z-10">
       <OneCTModal />

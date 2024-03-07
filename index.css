@@ -2020,34 +2020,16 @@ html .capitalize {
 .y-scroll {
   overflow-y: scroll;
 }
+#dot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  border-radius: 50%;
+}
 
 .y-auto {
   overflow-y: auto;
-}
-
-::-webkit-scrollbar {
-  background: var(--bg-grey);
-  height: 7px;
-  width: 0px;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 24px;
-  background: #bfbfbfab;
-  opacity: 0.7;
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 24px;
-  background: var(--bg-grey);
-}
-
-/* Remove Arrows */
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
 
 /* Firefox */

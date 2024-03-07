@@ -149,6 +149,9 @@ const TVIntegrated = ({ assetInfo, className }) => {
       container: chartElementRef.current,
       library_path: defaults.library_path,
       timezone: getOslonTimezone(),
+      // time_scale: {
+      //   min_bar_spacing: 100,
+      // },
       symbol: assetInfo.tv_id,
       theme: defaults.theme,
       enabled_features: ['header_saveload'],

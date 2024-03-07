@@ -175,13 +175,36 @@ function App() {
     useAtom(mobileWarningAtom);
   const graphStatus = useGraphStatus();
   const isMobile = useMedia('(max-width:1200px)');
+  // useEffect(() => {
+  //   const dot = document.getElementById('dot');
 
+  //   // Function to update the dot position
+  //   function updateDotPosition(event) {
+  //     // Get the mouse position
+  //     const mouseX = event.clientX;
+  //     const mouseY = event.clientY;
+
+  //     // Update the dot position
+  //     dot.style.left = `${mouseX}px`;
+  //     dot.style.top = `${mouseY + 200}px`;
+  //   }
+
+  //   // Add an event listener for the mousemove event
+  //   document.addEventListener('mousemove', updateDotPosition);
+  // }, []);
+  // return (
+  //   <div className="w-[100vw] overflow-scroll ">
+  //     <div className=" w-full bg-red p-2 h-[500vh]">
+  //       <div id="dot"></div>
+  //     </div>
+  //   </div>
+  // );
   return (
     <>
       {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
-          <ViewOnlyModeTradePageWarning />
+          {/* <ViewOnlyModeTradePageWarning /> */}
           {graphStatus && (
             <Warning
               body={
@@ -250,7 +273,7 @@ function App() {
                 className="disclaimer"
               />
             )} */}
-          <TnCModal />
+          {/* <TnCModal /> */}
           <SideBar />
         </Background>
       </I18nProvider>

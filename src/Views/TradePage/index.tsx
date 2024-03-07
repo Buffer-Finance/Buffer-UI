@@ -62,7 +62,7 @@ const TradePage: React.FC<any> = ({}) => {
               <MarketChart />
               <AccordionTable />
             </RightPanelBackground>
-            <BuyTrade />
+            {/* <BuyTrade /> */}
           </>
         ) : (
           <>
