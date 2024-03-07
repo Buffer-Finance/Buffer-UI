@@ -594,7 +594,10 @@ export const MultiResolutionChart = ({
       const chart = new widget({
         datafeed,
         interval: defaults.interval,
-        timeframe: '200',
+        // timeframe: '200',
+        time_scale: {
+          min_bar_spacing: 80,
+        },
         locale: 'en',
         container: containerDivRef.current!,
         library_path: defaults.library_path,
@@ -658,6 +661,9 @@ export const MultiResolutionChart = ({
         //     setActiveTab('Limit');
         //     setStrike(round(packedPrice.price, 2));
         //   };
+        const div = document.createElement('div');
+        div.setAttribute('id', 'ready');
+        document.body.append(div);
         setChartReady(true);
       });
       widgetRef.current = chart;

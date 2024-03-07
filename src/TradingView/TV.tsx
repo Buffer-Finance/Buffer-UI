@@ -203,6 +203,10 @@ const TVIntegrated = ({ assetInfo, className }) => {
       // widgetRef.current.load(drawing);
       // widgetRef.current.getSavedCharts((charts) => {
       // });
+      console.log('chart ready');
+      const div = document.createElement('div');
+      div.setAttribute('id', 'ready');
+      document.body.append(div);
       const isDrawerOpen = widgetRef.current
         .activeChart()
         .getCheckableActionState('drawingToolbarAction');
