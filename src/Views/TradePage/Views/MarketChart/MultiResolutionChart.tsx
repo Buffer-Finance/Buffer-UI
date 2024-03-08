@@ -788,14 +788,20 @@ export const MultiResolutionChart = ({
       activeTrades.forEach((trades) =>
         trades.forEach((pos) => {
           // if not optionId
-          const urlPositionID = searchParam?.get('optionID')?.split('_')[1];
+          const identifier = searchParam?.get('optionID');
           // console.log(`MultiResolutionChart-urlPositionID: `, urlPositionID);
-          if (
-            urlPositionID != undefined &&
-            pos.option_id != null &&
-            pos.option_id != +urlPositionID
-          )
-            return;
+          // console.log(`MultiResolutionChart-pos: `, pos.token);
+          if (typeof identifier == 'string') {
+            const [pool, optionID] = identifier.split('_');
+            if (
+              typeof pool == 'string' &&
+              optionID != undefined &&
+              pos.option_id != null &&
+              pos.option_id != +optionID &&
+              pos.token != pool
+            )
+              return;
+          }
           if (pos.is_above === undefined)
             // if private, do nothing.
             return;
