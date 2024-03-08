@@ -1,18 +1,7 @@
 {
   "options_config": {
-    "setBoosterContract": {
-      "getter": "boosterContract"
-    },
     "setCreationWindowContract": {
       "getter": "creationWindowContract"
-    },
-    "setMinFee": {
-      "getter": "minFee",
-      "decimal": "token"
-    },
-    "setIV": {
-      "getter": "iv",
-      "decimal": 4
     },
     "setPlatformFee": {
       "getter": "platformFee",
@@ -24,89 +13,19 @@
     "setOptionStorageContract": {
       "getter": "optionStorageContract"
     },
-    "setMaxPeriod": {
-      "getter": "maxPeriod",
-      "hint": "in seconds"
+    "setStrikeStepSize": {
+      "getter": "strikeStepSize"
     },
-    "setPoolOIStorageContract": {
-      "getter": "poolOIStorageContract"
+    "setMaxSkew": {
+      "getter": "maxSkew"
     },
-    "setPoolOIConfigContract": {
-      "getter": "poolOIConfigContract"
-    },
-    "setMarketOIConfigContract": {
-      "getter": "marketOIConfigContract"
-    },
-    "setEarlyCloseThreshold": {
-      "getter": "earlyCloseThreshold",
-      "hint": "in seconds"
-    },
-    "toggleEarlyClose": {
-      "getter": "isEarlyCloseAllowed"
-    },
-    "setMinPeriod": {
-      "getter": "minPeriod",
-      "hint": "in seconds"
-    },
-    "setSpreadConfig1": {
-      "getter": "spreadConfig1"
-    },
-    "setSpreadConfig2": {
-      "getter": "spreadConfig2"
-    },
-    "setSpreadFactor": {
-      "getter": "spreadFactor"
-    },
-    "setIVFactorITM": {
-      "getter": "ivFactorITM"
-    },
-    "setIVFactorOTM": {
-      "getter": "ivFactorOTM"
-    }
-  },
-  "pool": {
-    "setMaxLiquidity": {
-      "getter": "maxLiquidity",
-      "decimal": "token"
+    "setCircuitBreakerContract": {
+      "getter": "circuitBreakerContract"
     }
   },
   "options": {
     "setIsPaused": {
       "getter": "isPaused"
-    }
-  },
-  "config_setter": {
-    "pause": {
-      "type": "assetDD"
-    },
-    "unpause": { "type": "assetDD" }
-  },
-  "booster": {
-    "setConfigure": {
-      "getter": "getNftTierDiscounts"
-    },
-    "setPrice": {
-      "getter": "couponPrice"
-    },
-    "setBoostPercentage": {
-      "getter": "boostPercentage",
-      "decimal": 2
-    }
-  },
-  "pooloi": {
-    "setMaxPoolOI": {
-      "getter": "_maxPoolOI",
-      "decimal": "token"
-    }
-  },
-  "marketoi": {
-    "setMaxMarketOI": {
-      "getter": "_maxMarketOI",
-      "decimal": "token"
-    },
-    "setMaxTradeSize": {
-      "getter": "_maxTradeSize",
-      "decimal": "token"
     }
   }
 }

@@ -1,6 +1,8 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useAboveBelowMarketsSetter } from '@Views/AboveBelow/Hooks/useAboveBelowMarketsSetter';
+import { aboveBelowMarketsAtom } from '@Views/AboveBelow/atoms';
 import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { ConfigSetter } from './ConfigSetter';
 import { raw2adminConfig } from './helpers';
@@ -8,12 +10,14 @@ import { raw2adminConfig } from './helpers';
 const groups = Object.keys(rawConfigs);
 
 export const Options = () => {
+  useAboveBelowMarketsSetter();
   const [activeGroup, setActiveGroup] = useState(groups[1]);
-  const marketConfig = useMarketsConfig();
+  const marketConfig = useAtomValue(aboveBelowMarketsAtom);
   const { activeChain } = useActiveChain();
   const adminConfig = raw2adminConfig(marketConfig, activeChain);
 
   if (!adminConfig?.options_config) return <div>Loading...</div>;
+  console.log('adminConfig', marketConfig, adminConfig);
 
   return (
     <div className="px-3 mt-4 flex flex-col gap-y-5">

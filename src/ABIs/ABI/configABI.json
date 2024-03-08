@@ -15,18 +15,74 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "previousAdminRole",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "newAdminRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RoleAdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
-        "name": "previousOwner",
+        "name": "account",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "newOwner",
+        "name": "sender",
         "type": "address"
       }
     ],
-    "name": "OwnershipTransferred",
+    "name": "RoleGranted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleRevoked",
     "type": "event"
   },
   {
@@ -35,11 +91,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_boosterContract",
+        "name": "_circuitBreakerContract",
         "type": "address"
       }
     ],
-    "name": "UpdateBoosterContract",
+    "name": "UpdateCircuitBreakerContract",
     "type": "event"
   },
   {
@@ -60,32 +116,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bool",
-        "name": "isAllowed",
-        "type": "bool"
-      }
-    ],
-    "name": "UpdateEarlyClose",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "earlyCloseThreshold",
-        "type": "uint32"
-      }
-    ],
-    "name": "UpdateEarlyCloseThreshold",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint32",
         "name": "_iv",
         "type": "uint32"
@@ -99,77 +129,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "ivFactorITM",
-        "type": "uint256"
+        "internalType": "int256",
+        "name": "_maxSkew",
+        "type": "int256"
       }
     ],
-    "name": "UpdateIVFactorITM",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "ivFactorOTM",
-        "type": "uint256"
-      }
-    ],
-    "name": "UpdateIVFactorOTM",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_marketOIConfigContract",
-        "type": "address"
-      }
-    ],
-    "name": "UpdateMarketOIConfigContract",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "value",
-        "type": "uint32"
-      }
-    ],
-    "name": "UpdateMaxPeriod",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "UpdateMinFee",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "value",
-        "type": "uint32"
-      }
-    ],
-    "name": "UpdateMinPeriod",
+    "name": "UpdateMaxSkew",
     "type": "event"
   },
   {
@@ -191,37 +156,24 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "payout",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdatePayout",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "_platformFee",
         "type": "uint256"
       }
     ],
     "name": "UpdatePlatformFee",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_poolOIConfigContract",
-        "type": "address"
-      }
-    ],
-    "name": "UpdatePoolOIConfigContract",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_poolOIStorageContract",
-        "type": "address"
-      }
-    ],
-    "name": "UpdatePoolOIStorageContract",
     "type": "event"
   },
   {
@@ -243,11 +195,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "spreadConfig1",
+        "name": "sf",
         "type": "uint256"
       }
     ],
-    "name": "UpdateSpreadConfig1",
+    "name": "UpdateSf",
     "type": "event"
   },
   {
@@ -255,25 +207,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "spreadConfig2",
-        "type": "uint256"
+        "internalType": "uint128",
+        "name": "strikeStepSize",
+        "type": "uint128"
       }
     ],
-    "name": "UpdateSpreadConfig2",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "ivFactorOTM",
-        "type": "uint32"
-      }
-    ],
-    "name": "UpdateSpreadFactor",
+    "name": "UpdateStrikeStepSize",
     "type": "event"
   },
   {
@@ -291,7 +230,35 @@
   },
   {
     "inputs": [],
-    "name": "boosterContract",
+    "name": "CONTRACT_UPDATOR",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "DEFAULT_ADMIN_ROLE",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "FEE_UPDATOR",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "UPDATOR",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "circuitBreakerContract",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
@@ -304,72 +271,38 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "earlyCloseThreshold",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" }
+    ],
+    "name": "getRoleAdmin",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "bool", "name": "isITM", "type": "bool" }],
-    "name": "getFactoredIv",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-    "stateMutability": "view",
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "isEarlyCloseAllowed",
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "hasRole",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "iv",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "ivFactorITM",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "ivFactorOTM",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "marketOIConfigContract",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maxPeriod",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "minFee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "minPeriod",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+    "name": "maxSkew",
+    "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -382,8 +315,8 @@
   },
   {
     "inputs": [],
-    "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "payout",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -408,22 +341,21 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "poolOIConfigContract",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "poolOIStorageContract",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "renounceOwnership",
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "revokeRole",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -432,11 +364,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_boosterContract",
+        "name": "_circuitBreakerContract",
         "type": "address"
       }
     ],
-    "name": "setBoosterContract",
+    "name": "setCircuitBreakerContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -456,78 +388,9 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint32",
-        "name": "_earlyCloseThreshold",
-        "type": "uint32"
-      }
+      { "internalType": "int256", "name": "_maxSkew", "type": "int256" }
     ],
-    "name": "setEarlyCloseThreshold",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint32", "name": "_iv", "type": "uint32" }],
-    "name": "setIV",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint32", "name": "_ivFactorITM", "type": "uint32" }
-    ],
-    "name": "setIVFactorITM",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint32", "name": "_ivFactorOTM", "type": "uint32" }
-    ],
-    "name": "setIVFactorOTM",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_marketOIConfigContract",
-        "type": "address"
-      }
-    ],
-    "name": "setMarketOIConfigContract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint32", "name": "_maxPeriod", "type": "uint32" }
-    ],
-    "name": "setMaxPeriod",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "_minFee", "type": "uint256" }
-    ],
-    "name": "setMinFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint32", "name": "_minPeriod", "type": "uint32" }
-    ],
-    "name": "setMinPeriod",
+    "name": "setMaxSkew",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -547,35 +410,18 @@
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "_payout", "type": "uint256" }
+    ],
+    "name": "setPayout",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "_platformFee", "type": "uint256" }
     ],
     "name": "setPlatformFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_poolOIConfigContract",
-        "type": "address"
-      }
-    ],
-    "name": "setPoolOIConfigContract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_poolOIStorageContract",
-        "type": "address"
-      }
-    ],
-    "name": "setPoolOIStorageContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -595,27 +441,13 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_spreadConfig1", "type": "uint256" }
+      {
+        "internalType": "uint128",
+        "name": "_strikeStepSize",
+        "type": "uint128"
+      }
     ],
-    "name": "setSpreadConfig1",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "_spreadConfig2", "type": "uint256" }
-    ],
-    "name": "setSpreadConfig2",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint32", "name": "_spreadFactor", "type": "uint32" }
-    ],
-    "name": "setSpreadFactor",
+    "name": "setStrikeStepSize",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -629,39 +461,18 @@
   },
   {
     "inputs": [],
-    "name": "spreadConfig1",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "strikeStepSize",
+    "outputs": [{ "internalType": "uint128", "name": "", "type": "uint128" }],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "spreadConfig2",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "spreadFactor",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "toggleEarlyClose",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
     ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "supportsInterface",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
     "type": "function"
   }
 ]

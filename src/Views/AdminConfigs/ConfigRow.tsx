@@ -19,6 +19,8 @@ const ConfigRow: React.FC<any> = ({
   const [value, setValue] = useState(
     data?.[config.contract + config.getter?.name]?.[0]
   );
+  console.log(value, 'value');
+
   const [showIp, setShowIp] = useState(false);
   const { writeCall } = useWriteCall(config.contract, group2abi[config.group]);
   const text = config.getter?.name;
@@ -84,7 +86,9 @@ const ConfigRow: React.FC<any> = ({
   const actualValue = data?.[config.contract + config.getter?.name]?.[0];
   let hint = config?.hint ? `(${config.hint})` : '';
   const poolString = config.pool
-    ? config.pool.token + ' ' + (config.pool.is_pol ? 'POL' : '')
+    ? config.market?.poolInfo.token +
+      ' ' +
+      (config.market?.poolInfo.is_pol ? 'POL' : '')
     : '';
   let dec = config.decimal ? `${poolString}(${config.decimal} dec)` : '';
   const isCurrentConfigSearched = () => {
@@ -96,6 +100,7 @@ const ConfigRow: React.FC<any> = ({
     return str.toLowerCase().includes(hideString.toLowerCase());
   };
   const renderValue = () => {
+    console.log(config, 'config.getter.op');
     // single value but in wei
     if (config.decimal) {
       return divide(actualValue, config.decimal);

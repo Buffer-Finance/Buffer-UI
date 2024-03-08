@@ -23,6 +23,7 @@ import { AboveBelow } from '@Views/AboveBelow';
 import { AllTrades } from '@Views/AboveBelow/Components/AllTrades';
 import { MobileHistory } from '@Views/AboveBelow/Components/MobileView/MobileHistory';
 import { TradesShutter } from '@Views/AboveBelow/Components/MobileView/Shutters';
+import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';
@@ -105,9 +106,9 @@ const AppRoutes = () => {
         {/* <Route path="/test" element={<Test />} /> */}
         <Route path="/history" element={<MobileHistory />} />
         <Route path="/referral" element={<ReferralPage />} />
-        {/*  <Route path="/admin" element={<AdminConfig />} />
+        <Route path="/admin" element={<AdminConfig />} />
 
-        <Route
+        {/*  <Route
           path="/ref/:refcode"
           element={<div>Processing your referral request...</div>}
         ></Route> */}

@@ -1,32 +1,28 @@
 import ConfigAbi from '@ABIs/ABI/configABI.json';
-import PoolAbi from '@ABIs/ABI/poolABI.json';
-import BoosterAbi from '@ABIs/BoosterAbi.json';
-import ConfigSetterABI from '@ABIs/ConfigSetterABI.json';
-import MarketOiAbi from '@ABIs/MarketOiAbi.json';
-import PoolOiAbi from '@ABIs/PoolOiAbi.json';
+import { marketTypeAB } from '@Views/AboveBelow/types';
 import rawConfigs from '@Views/AdminConfigs/AdminConfigs.json';
 import OptionAbi from '@Views/TradePage/ABIs/OptionContract.json';
 import RouterAbi from '@Views/TradePage/ABIs/RouterABI.json';
-import { appConfig } from '@Views/TradePage/config';
-import { marketType, poolType } from '@Views/TradePage/type';
+import { poolType } from '@Views/TradePage/type';
 import { ethers } from 'ethers';
 import { Chain } from 'wagmi';
+
 export const group2abi = {
   router: RouterAbi,
   options: OptionAbi,
   options_config: ConfigAbi,
-  marketoi: MarketOiAbi,
-  booster: BoosterAbi,
-  pooloi: PoolOiAbi,
-  pool: PoolAbi,
-  config_setter: ConfigSetterABI,
+  // marketoi: MarketOiAbi,
+  // booster: BoosterAbi,
+  // pooloi: PoolOiAbi,
+  // pool: PoolAbi,
+  // config_setter: ConfigSetterABI,
 };
 
 const group2marketAddresesMapping = {
-  marketoi: 'marketOiContract',
+  // marketoi: 'marketOiContract',
   options_config: 'configContract',
   options: 'optionContract',
-  pooloi: 'poolOIContract',
+  // pooloi: 'poolOIContract',
 };
 
 const marketDependent = Object.keys(group2marketAddresesMapping);
@@ -48,19 +44,12 @@ export type Config = {
   hint?: string;
   decimal?: number;
   pool?: poolType;
-  market?: marketType;
+  market?: marketTypeAB;
   type?: string;
 };
 
 type AdminConfig = {
   [value in keyof typeof group2abi]: Config;
-};
-
-// type Groups = keyof typeof group2abi;
-
-type RawConfig = {
-  getter: string;
-  decimal?: number;
 };
 
 export function generateTransactionData(
@@ -81,11 +70,9 @@ export function generateTransactionData(
 }
 
 export const raw2adminConfig = (
-  marketConfig: marketType[] | null,
+  marketConfig: marketTypeAB[] | null,
   activeChain: Chain
 ): AdminConfig | null => {
-  const appDefaults =
-    appConfig[(activeChain.id + '') as keyof typeof appConfig];
   let configObject = {};
   if (!marketConfig?.length) return null;
 
@@ -114,7 +101,7 @@ export const raw2adminConfig = (
           }
         : null;
       const setterSignature = group2abi[group].find((a) => a.name == config);
-
+      console.log(setterSignature, 'setterSignature');
       const setter = setterSignature
         ? {
             name: setterSignature.name,
@@ -132,66 +119,36 @@ export const raw2adminConfig = (
         : null;
       if (marketDependent.includes(group as keyof typeof rawConfigs)) {
         for (let market of marketConfig) {
-          for (const pool of market.pools) {
-            let decimal = configs[config].decimal;
-            if (decimal && decimal == 'token') {
-              decimal = appDefaults.poolsInfo[pool.pool].decimals;
-            }
-
-            const currObject: Config = {
-              ...configs[config],
-              decimal,
-              contract: pool[group2marketAddresesMapping[group]],
-              group,
-              getter,
-              setter,
-              pool: appDefaults.poolsInfo[pool.pool],
-
-              market,
-            };
-            if (configObject?.[group]) {
-              configObject[group].push(currObject);
-            } else {
-              configObject[group] = [currObject];
-            }
-          }
-        }
-      } else if (group == 'pool') {
-        // here
-
-        const pools = Object.keys(appDefaults.poolsInfo);
-        configObject[group] = pools.map((p) => {
+          console.log('market', market, config, configs, group);
           let decimal = configs[config].decimal;
           if (decimal && decimal == 'token') {
-            decimal = appDefaults.poolsInfo[p].decimals;
+            decimal = market.poolInfo.decimals;
           }
-          return {
+
+          const currObject: Config = {
             ...configs[config],
             decimal,
-            contract: p,
+            contract:
+              group === 'options_config'
+                ? market.config.address
+                : market.address,
+            group,
             getter,
             setter,
-            group,
-            pool: appDefaults.poolsInfo[p],
+            pool: market.poolInfo,
+
+            market,
           };
-        });
-
-        // configObject[group] = {
-      } else {
-        let currConfigObject = {
-          ...configs[config],
-
-          contract: appDefaults[group],
-          getter,
-          setter,
-          group,
-        };
-        if (group in configObject) {
-          configObject[group].push(currConfigObject);
-        } else configObject[group] = [currConfigObject];
+          if (configObject?.[group]) {
+            configObject[group].push(currObject);
+          } else {
+            configObject[group] = [currObject];
+          }
+        }
       }
     }
   }
 
+  console.log('configObject', configObject);
   return configObject;
 };
