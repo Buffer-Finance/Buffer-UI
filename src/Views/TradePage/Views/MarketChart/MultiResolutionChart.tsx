@@ -65,6 +65,7 @@ import {
 } from '../AccordionTable/Common';
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { loeditLoadingAtom } from '../EditModal';
+import { useSearchParams } from 'react-router-dom';
 
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
@@ -223,7 +224,7 @@ export const market2resolutionAtom = atomWithStorage(
 function getPnl(trade: TradeType, lockedAmountCache: any) {
   const market = trade.market?.tv_id;
   if (!market) {
-    console.log('deb-mc--!market');
+    // console.log('deb-mc--!market');
     return null;
   }
 
@@ -231,7 +232,7 @@ function getPnl(trade: TradeType, lockedAmountCache: any) {
   const lockedAmmount = getLockedAmount(trade, lockedAmountCache);
   const poolInfo = appConfig[trade.environment]?.poolsInfo?.[trade.pool.pool];
   if (!price || !lockedAmmount || !poolInfo) {
-    console.log('deb-mc--!price || !lockedAmmount || !poolInfo');
+    // console.log('deb-mc--!price || !lockedAmmount || !poolInfo');
     return null;
   }
   const probability = getProbability(
@@ -247,7 +248,7 @@ function getPnl(trade: TradeType, lockedAmountCache: any) {
     ) / 1e4
   );
   if (probability == null || probability == undefined) {
-    console.log('deb-mc--!probability', probability);
+    // console.log('deb-mc--!probability', probability);
     return null;
   }
   const res = getPnlForTrade({ trade, poolInfo, probability, lockedAmmount });
@@ -257,7 +258,7 @@ function getPnl(trade: TradeType, lockedAmountCache: any) {
     res.earlycloseAmount == null ||
     res.earlycloseAmount == undefined
   ) {
-    console.log('deb-mc--!res || !res.earlycloseAmount', res);
+    // console.log('deb-mc--!res || !res.earlycloseAmount', res);
     return null;
   }
   return [toFixed(res.earlycloseAmount, 2), res.isWin];
@@ -354,7 +355,7 @@ function drawPosition(
   const earlyCloseData = getPnl(option, priceCache);
 
   const text = formatMarketOrder(option, earlyCloseData);
-  console.log(`MultiResolutionChart-text2: `, text, earlyCloseData, priceCache);
+  // console.log(`MultiResolutionChart-text2: `, text, earlyCloseData, priceCache);
   const winning =
     earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
 
@@ -384,6 +385,7 @@ function drawPosition(
     .setPrice(optionPrice);
 }
 
+console.log(`MultiResolutionChart-urlObject: `, window.location.search);
 export const MultiResolutionChart = ({
   market: marke,
   isMobile,
@@ -404,7 +406,11 @@ export const MultiResolutionChart = ({
   );
   const settings = useAtomValue(chartControlsSettingsAtom);
   const setCloseConfirmationModal = useSetAtom(closeConfirmationModalAtom);
-
+  const [searchParam] = useSearchParams();
+  // console.log(
+  //   `MultiResolutionChart-searchParam: `,
+  //   searchParam.get('optionID')
+  // );
   const { getPoolInfo } = usePoolInfo();
   const chartId = market + index;
   const v3AppConfig = useMarketsConfig();
@@ -781,8 +787,18 @@ export const MultiResolutionChart = ({
     if (chartReady && activeTrades) {
       activeTrades.forEach((trades) =>
         trades.forEach((pos) => {
-          // if private, do nothing.
-          if (pos.is_above === undefined) return;
+          // if not optionId
+          const urlPositionID = searchParam?.get('optionID')?.split('_')[1];
+          // console.log(`MultiResolutionChart-urlPositionID: `, urlPositionID);
+          if (
+            urlPositionID != undefined &&
+            pos.option_id != null &&
+            pos.option_id != +urlPositionID
+          )
+            return;
+          if (pos.is_above === undefined)
+            // if private, do nothing.
+            return;
 
           // filter valid positions
           if (!pos?.queue_id) return;
@@ -835,7 +851,6 @@ export const MultiResolutionChart = ({
   };
 
   const renderPositions = async () => {
-    console.log(`MultiResolutionChart-renderPositions: `, renderPositions);
     deleteAllPostions();
     trade2visualisation.current = [];
     // await sleep(syncDelay);
@@ -877,7 +892,7 @@ export const MultiResolutionChart = ({
     clearInterval(positionUpdateTimerRef.current);
     if (!visualizedTrades.length) return;
     positionUpdateTimerRef.current = setInterval(() => {
-      console.log('interval ran');
+      // console.log('interval ran');
       // console.log('[chart-0 intervalcalled');
       try {
         widgetRef.current?.save((d) => {
@@ -925,12 +940,12 @@ export const MultiResolutionChart = ({
           const earlyCloseData = getPnl(updatedTrade, priceCache);
 
           const text = formatMarketOrder(updatedTrade, earlyCloseData);
-          console.log(
-            `MultiResolutionChart-text1: `,
-            text,
-            earlyCloseData,
-            priceCache
-          );
+          // console.log(
+          //   `MultiResolutionChart-text1: `,
+          //   text,
+          //   earlyCloseData,
+          //   priceCache
+          // );
           const winning =
             earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
           trade.positionRef
