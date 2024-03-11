@@ -158,7 +158,7 @@ const App = () => {
             <MonoChromePoolToken pool={pooltoken} />
           </div>
           <div className="flex text-[76px] font-bold items-center text-[#C3C2D4] gap-2">
-            ROI {roi}%
+            ROI {(+roi).toFixed(2)}%
           </div>
         </div>
       </div>
