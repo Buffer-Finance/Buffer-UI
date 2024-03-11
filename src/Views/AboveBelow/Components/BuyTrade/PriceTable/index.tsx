@@ -64,6 +64,16 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
             isAbove,
           },
         });
+      } else if (
+        selectedStrike?.[marketTVid]?.price === price &&
+        selectedStrike?.[marketTVid]?.isAbove === isAbove
+      ) {
+        //remove the selecred strike
+        setSelectedStrike((prvStrikes) => {
+          const newStrikes = { ...prvStrikes };
+          delete newStrikes[marketTVid];
+          return newStrikes;
+        });
       } else {
         setSelectedStrike((prvStrikes) => ({
           ...prvStrikes,
