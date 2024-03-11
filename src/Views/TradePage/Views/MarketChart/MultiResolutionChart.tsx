@@ -147,6 +147,8 @@ const defaults = {
     'go_to_date',
     'display_market_status',
   ],
+  upRectangeColor: 'rgba(108, 211, 173, 0.1)',
+  downRectangeColor: 'rgba(255, 104, 104, 0.1)',
   confgis: {
     supported_resolutions,
     exchanges: [
@@ -417,6 +419,7 @@ export const MultiResolutionChart = ({
   const { address } = useUserAccount();
   const [chartReady, setChartReady] = useState<boolean>(false);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
+  const lastShapeRef = useRef<string>('');
   let trade2visualisation = useRef<
     {
       positionRef: IOrderLineAdapter;
@@ -701,6 +704,10 @@ export const MultiResolutionChart = ({
     };
   }, []);
   const priceCache = useAtomValue(queuets2priceAtom);
+  // console.log(
+  //   `MultiResolutionChart-priceCache: `,
+  //   silentPriceCache?.[market]?.[0]?.price
+  // );
   const syncTVwithWS = async () => {
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
@@ -983,7 +990,11 @@ export const MultiResolutionChart = ({
   useEffect(() => {
     if (indicatorCount) toggleIndicatorDD('d');
   }, [indicatorCount]);
-
+  const deleteOldDrawings = () => {
+    if (lastShapeRef.current)
+      widgetRef.current.activeChart().removeEntity(lastShapeRef.current);
+  };
+  const currentPrice = 1333;
   return (
     <div className="flex flex-col w-full h-full">
       {!isMobile ? (
@@ -1037,9 +1048,85 @@ export const MultiResolutionChart = ({
           className="TVChartContainer w-[100%] h-[100%]"
         />
       </div>
+      <div className="flex">
+        <button
+          className="bg-green"
+          onClick={() => {
+            deleteOldDrawings();
+            const from = Date.now() / 1000 - 500 * 24 * 3600; // 500 days ago
+            let time = 1710148268 + 8 * 10 * 60;
+
+            time = time * 1000;
+
+            let rem = time % 3600000;
+
+            time = (time - rem) / 1000;
+
+            const id = widgetRef.current?.activeChart().createMultipointShape(
+              [
+                {
+                  time: from,
+                  price: currentPrice,
+                },
+                {
+                  time,
+                  price: 100000000000,
+                },
+              ],
+              {
+                shape: 'rectangle',
+                overrides: {
+                  backgroundColor: defaults.upRectangeColor,
+                  linewidth: 0,
+                },
+              }
+            );
+            lastShapeRef.current = id;
+          }}
+        >
+          Up{' '}
+        </button>
+        <button
+          className="bg-red"
+          onClick={() => {
+            deleteOldDrawings();
+            const from = Date.now() / 1000 - 500 * 24 * 3600; // 500 days ago
+            let time = 1710148268 + 8 * 10 * 60;
+
+            time = time * 1000;
+
+            let rem = time % 3600000;
+
+            time = (time - rem) / 1000;
+            const id = widgetRef.current?.activeChart().createMultipointShape(
+              [
+                {
+                  time: from,
+                  price: currentPrice,
+                },
+                {
+                  time,
+                  price: 100000000000,
+                },
+              ],
+              {
+                shape: 'rectangle',
+                overrides: {
+                  backgroundColor: defaults.upRectangeColor,
+                  linewidth: 0,
+                },
+              }
+            );
+            lastShapeRef.current = id;
+          }}
+        >
+          Down{' '}
+        </button>
+      </div>
     </div>
   );
 };
+// setTimeout(()=>{},)
 
 // async function callApi(req) {
 //   const getRes = async () => {
