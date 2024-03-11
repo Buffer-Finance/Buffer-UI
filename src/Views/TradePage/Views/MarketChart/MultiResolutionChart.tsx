@@ -82,6 +82,7 @@ export let supported_resolutions = [
   '4H' as ResolutionString,
   // "1D",
 ];
+
 const pythClient = axios.create({ baseURL: 'https://benchmarks.pyth.network' });
 axiosRetry(pythClient, { retries: 3 });
 
@@ -994,7 +995,12 @@ export const MultiResolutionChart = ({
     if (lastShapeRef.current)
       widgetRef.current.activeChart().removeEntity(lastShapeRef.current);
   };
-  const currentPrice = 1333;
+  const futureInf = Date.now() / 1000 + 24 * 60 * 60;
+  let time = futureInf;
+  time = time;
+  let rem = time % 60;
+  time = futureInf - rem;
+  const currentPrice = (+silentPriceCache[market]?.[0]?.price)?.toFixed(2);
   return (
     <div className="flex flex-col w-full h-full">
       {!isMobile ? (
@@ -1053,24 +1059,18 @@ export const MultiResolutionChart = ({
           className="bg-green"
           onClick={() => {
             deleteOldDrawings();
-            const from = Date.now() / 1000 - 500 * 24 * 3600; // 500 days ago
-            let time = 1710148268 + 8 * 10 * 60;
 
-            time = time * 1000;
-
-            let rem = time % 3600000;
-
-            time = (time - rem) / 1000;
-
+            console.log(`drawing: `, currentPrice);
             const id = widgetRef.current?.activeChart().createMultipointShape(
               [
                 {
-                  time: from,
-                  price: currentPrice,
+                  time: 60,
+                  // price: 71722.22,
+                  price: +currentPrice,
                 },
                 {
                   time,
-                  price: 100000000000,
+                  price: 1000000,
                 },
               ],
               {
@@ -1091,28 +1091,22 @@ export const MultiResolutionChart = ({
           onClick={() => {
             deleteOldDrawings();
             const from = Date.now() / 1000 - 500 * 24 * 3600; // 500 days ago
-            let time = 1710148268 + 8 * 10 * 60;
 
-            time = time * 1000;
-
-            let rem = time % 3600000;
-
-            time = (time - rem) / 1000;
             const id = widgetRef.current?.activeChart().createMultipointShape(
               [
                 {
-                  time: from,
-                  price: currentPrice,
+                  time,
+                  price: 0,
                 },
                 {
-                  time,
-                  price: 100000000000,
+                  time: from,
+                  price: +currentPrice,
                 },
               ],
               {
                 shape: 'rectangle',
                 overrides: {
-                  backgroundColor: defaults.upRectangeColor,
+                  backgroundColor: defaults.downRectangeColor,
                   linewidth: 0,
                 },
               }
