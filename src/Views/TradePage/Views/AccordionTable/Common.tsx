@@ -147,6 +147,12 @@ export const TableHeader: React.FC<ITableHeader> = ({
     </TableHeads>
   );
 };
+export const CustomTableHeader: React.FC<{
+  content: string;
+  className?: string;
+}> = ({ content, className = '' }) => {
+  return <TableHeads style={className}>{content}</TableHeads>;
+};
 
 //  export const earlyCloseStatus = (data:TradeType)=>{
 //    return data.

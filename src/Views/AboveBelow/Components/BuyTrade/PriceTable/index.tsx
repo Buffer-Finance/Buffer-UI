@@ -4,10 +4,11 @@ import {
   useLimitedStrikeArrays,
 } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
 import {
+  aboveBelowActiveMarketsAtom,
   selectedPoolActiveMarketAtom,
   selectedPriceAtom,
 } from '@Views/AboveBelow/atoms';
-import BufferTable from '@Views/Common/BufferTable';
+import BufferTable, { BufferTableCopy } from '@Views/Common/BufferTable';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { TableHeader } from '@Views/TradePage/Views/AccordionTable/Common';
@@ -17,23 +18,45 @@ import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import { priceFormatAtom } from '../PriceFormat';
 import { CurrentPriceLine } from './CurrentPriceLine';
+import { activePoolObjAtom } from '@Views/TradePage/atoms';
 
 enum Columns {
-  StrikePrice,
-  Above,
-  Below,
+  ROI_ABOVE,
+  TOKEN_ABOVE,
+  MAX_ABOVE,
+  STRIKE,
+  ROI_BELOW,
+  TOKEN_BELOW,
+  MAX_BELOW,
 }
+
+export const getROI = (totalFee: number | null) => {
+  if (totalFee == null) return '-';
+  return (((1 - totalFee) / totalFee) * 100).toFixed(0) + '%';
+};
 
 export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   useLimitedStrikeArrays();
   const [priceFormat, setPriceFormat] = useAtom(priceFormatAtom);
+  const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const markets = useAtomValue(aboveBelowActiveMarketsAtom);
+  console.log(`index-markets: `, markets);
 
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const { currentPrice, precision } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
   });
-  const headsArray = useMemo(() => ['Strike Price', 'Above', 'Below'], []);
+  const headsArray = [
+    'ROI',
+    selectedPoolMarket?.poolInfo.token?.toUpperCase(),
+    'Max',
+    'Strike',
+    'ROI',
+    selectedPoolMarket?.poolInfo.token?.toUpperCase(),
+    'Max',
+  ];
+  console.log(`index-headsArray: `, headsArray);
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
   const strikes = strikePrices[activeMarket?.tv_id as string];
@@ -41,9 +64,15 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   let decreasingPriceArray = strikes?.decreasingPriceArray ?? [];
   // console.log(increasingPriceArray, decreasingPriceArray);
   const HeaderFomatter = useCallback((col: number) => {
+    // if (col == 1) {
+    //   console.log(`index-selectedPoolMarket: `, selectedPoolMarket);
+    //   return selectedPoolMarket?.poolInfo.token;
+    // }
+
     return (
       <TableHeader
         col={col}
+        key={headsArray[col]}
         headsArr={headsArray}
         className="text-start text-f13"
         firstColClassName="!ml-3"
@@ -96,7 +125,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     isAboveTable: boolean
   ) => {
     const tvId = activeMarket?.tv_id;
-    if (!tvId) return <></>;
+    // if (!tvId) return <></>;
 
     const tablerow = isAboveTable
       ? increasingPriceArray[row]
@@ -108,19 +137,9 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       selectedStrike?.[tvId] === undefined ||
       selectedStrike?.[tvId]?.price === strikePrice.toString();
 
-    switch (col) {
-      case Columns.StrikePrice:
-        return (
-          <div className={`text-1 ${isSelected ? '' : 'opacity-20'}`}>
-            <Display
-              data={strikePrice}
-              precision={precision}
-              disable
-              className="!justify-start"
-            />
-          </div>
-        );
-      case Columns.Above:
+    /*
+      
+            case Columns.Above:
         const isAboveSelected =
           selectedStrike === undefined ||
           selectedStrike?.[tvId] === undefined ||
@@ -145,8 +164,8 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
             ) : (
               <>
                 {priceFormat === 'Asset'
-                  ? totalFee.toFixed(2)
-                  : (((1 - totalFee) / totalFee) * 100).toFixed(0) + '%'}
+                  ? totalFee.toFixed(2) //USDC
+                  : (((1 - totalFee) / totalFee) * 100).toFixed(0) + '%'} //ROI
               </>
             )}
           </button>
@@ -183,23 +202,47 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           </button>
         );
 
-      default:
-        return <div className=""></div>;
-    }
+      
+      */
+    return <div>Hello</div>;
   };
   if (!currentPrice || !activeMarket || !strikes)
     return (
       <Skeleton className="w-[1005] !h-[300px] lc !transform-none !mt-3" />
     );
+  // 3772FF
+  const marketTVid = activeMarket?.tv_id;
+
+  const isUpselected = selectedStrike?.[marketTVid]?.isAbove;
+
   return (
-    <div>
-      <BufferTable
-        headerJSX={HeaderFomatter}
-        widths={['50%', '25%', '25%']}
+    <div className="text-f12 ">
+      <div className="flex my-[10px] text-[15px] justify-around items-center font-[500] text-[#A5ADCF]">
+        <div
+          className={`${isUpselected ? 'text-1' : 'text-[#A5ADCF]'}  ${
+            isUpselected
+              ? 'underlihttps://www.youtube.com/watch?v=9F4EizRXzWI&list=RD9F4EizRXzWI&index=1ne decoration-[#3772FF]'
+              : ''
+          } decoration-[2px]  leading-3 underline-offset-4`}
+        >
+          {' '}
+          Above
+        </div>
+        <div
+          className={`${isUpselected ? 'text-[#A5ADCF]' : 'text-1'}  ${
+            !isUpselected ? 'underline decoration-[#3772FF]' : ''
+          } decoration-[2px]  leading-3 underline-offset-4`}
+        >
+          Below
+        </div>
+      </div>
+      <BufferTableCopy
+        headersJSX={headsArray}
+        widths={['14%', '12%', '14%', '18%', '14%', '12%', '14%']}
         bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}
         cols={headsArray.length}
         onRowClick={() => {}}
-        rows={0}
+        rows={increasingPriceArray.length + decreasingPriceArray.length}
         isHeaderTransparent
         shouldHideBody
         smHeight
@@ -207,45 +250,6 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         noHover
         shouldShowMobile
       />
-      <PriceTableBackground
-        className={`pr-4 pl-3 ${
-          isMobile ? 'max-h-[50vh]' : 'max-h-[30vh]'
-        } overflow-auto`}
-      >
-        <BufferTable
-          headerJSX={HeaderFomatter}
-          bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}
-          widths={['50%', '25%', '25%']}
-          cols={headsArray.length}
-          onRowClick={() => {}}
-          rows={increasingPriceArray.length}
-          isHeaderTransparent
-          isBodyTransparent
-          shouldHideHeader
-          smHeight
-          smThHeight
-          noHover
-          loading={increasingPriceArray.length === 0}
-          shouldShowMobile
-        />
-
-        <CurrentPriceLine currentPrice={currentPrice} precision={precision} />
-        <BufferTable
-          headerJSX={HeaderFomatter}
-          bodyJSX={(row: number, col: number) => BodyFormatter(row, col, false)}
-          widths={['50%', '25%', '25%']}
-          cols={headsArray.length}
-          onRowClick={() => {}}
-          rows={decreasingPriceArray.length}
-          isBodyTransparent
-          shouldHideHeader
-          smThHeight
-          smHeight
-          noHover
-          loading={decreasingPriceArray.length === 0}
-          shouldShowMobile
-        />
-      </PriceTableBackground>
     </div>
   );
 };
