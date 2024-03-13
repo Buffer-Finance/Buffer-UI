@@ -17,7 +17,10 @@ import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { aboveBelowMarketsAtom } from '@Views/AboveBelow/atoms';
+import {
+  aboveBelowMarketsAtom,
+  selectedPriceAtom,
+} from '@Views/AboveBelow/atoms';
 import {
   Markets,
   OHLCBlock,
@@ -59,6 +62,17 @@ export let supported_resolutions = [
   '4H' as ResolutionString,
   // "1D",
 ];
+const resolution2seconds = {
+  '1': 60,
+  '3': 3 * 60,
+  '5': 300,
+  '15': 15 * 60,
+  '30': 30 * 60,
+  '1H': 60 * 60,
+  '2H': 2 * 60 * 60,
+  '4H': 4 * 60 * 60,
+  '1D': 24 * 60 * 60,
+};
 const pythClient = axios.create({ baseURL: 'https://benchmarks.pyth.network' });
 axiosRetry(pythClient, { retries: 3 });
 
@@ -124,6 +138,9 @@ const defaults = {
     'go_to_date',
     'display_market_status',
   ],
+  upRectangeColor: 'rgba(108, 211, 173, 0.1)',
+  downRectangeColor: 'rgba(255, 104, 104, 0.1)',
+
   confgis: {
     supported_resolutions,
     exchanges: [
@@ -138,6 +155,7 @@ const defaults = {
         desc: PRICE_PROVIDER,
       },
     ],
+
     symbols_types: [
       {
         name: 'Crypto',
@@ -191,6 +209,11 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   });
   return rawOhlc;
 };
+function returnMod(num: number, mod: number) {
+  const rr = num % mod;
+
+  return num - rr;
+}
 
 const drawingAtom = atomWithLocalStorage('drawing-v1', null);
 export const market2resolutionAtom = atomWithStorage(
@@ -262,6 +285,7 @@ export const MultiResolutionChart = ({
   const market = marke.replace('-', '');
   const chartData =
     marketsForChart[market as unknown as keyof typeof marketsForChart];
+  const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
 
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
@@ -734,6 +758,69 @@ export const MultiResolutionChart = ({
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
+  const futureInf = Date.now() / 1000 + 24 * 60 * 60;
+  let time = futureInf;
+  time = time;
+  let rem = time % resolution2seconds[resolution];
+  time = futureInf - rem;
+  const from = returnMod(
+    Date.now() / 1000 - 500 * 24 * 60,
+    resolution2seconds[resolution]
+  );
+
+  console.log(`MultiResolutionChart-time: `, time);
+
+  console.log(`MultiResolutionChart-selectedStrike?.price: `, selectedStrike);
+  useEffect(() => {
+    console.log(
+      `MultiResolutionChart-selectedStrike?.price: `,
+      +selectedStrike?.price
+    );
+    if (selectedStrike?.price) {
+      // above
+
+      widgetRef.current?.activeChart().createMultipointShape(
+        [
+          {
+            time: from,
+            price: +selectedStrike.price,
+          },
+          {
+            time,
+            price: 1000000,
+          },
+        ],
+        {
+          shape: 'rectangle',
+          overrides: {
+            backgroundColor: defaults.upRectangeColor,
+            linewidth: 0,
+          },
+        }
+
+        // below
+        // widgetRef.current?.activeChart().createMultipointShape(
+        //   [
+        //     {
+        // time: from,
+        //       // price: 71722.22,
+        //       price: +currentPrice,
+        //     },
+        //     {
+        //       time,
+        //       price: 1000000,
+        //     },
+        //   ],
+        //   {
+        //     shape: 'rectangle',
+        //     overrides: {
+        //       backgroundColor: defaults.upRectangeColor,
+        //       linewidth: 0,
+        //     },
+        //   }
+      );
+    }
+  }, [selectedStrike]);
   useEffect(() => {
     if (indicatorCount) toggleIndicatorDD('d');
   }, [indicatorCount]);

@@ -66,6 +66,7 @@ import {
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { loeditLoadingAtom } from '../EditModal';
 import { CHART_TVID } from 'src/App';
+import { selectedPriceAtom } from '@Views/AboveBelow/atoms';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -81,6 +82,23 @@ export let supported_resolutions = [
   '4H' as ResolutionString,
   // "1D",
 ];
+const resolution2seconds = {
+  '1': 60,
+  '3': 3 * 60,
+  '5': 300,
+  '15': 15 * 60,
+  '30': 30 * 60,
+  '1H': 60 * 60,
+  '2H': 2 * 60 * 60,
+  '4H': 4 * 60 * 60,
+  '1D': 24 * 60 * 60,
+};
+function returnMod(num: number, mod: number) {
+  const rr = num % mod;
+
+  return num - rr;
+}
+
 const pythClient = axios.create({ baseURL: 'https://benchmarks.pyth.network' });
 axiosRetry(pythClient, { retries: 3 });
 
@@ -411,6 +429,7 @@ export const MultiResolutionChart = ({
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
+  console.log(`MultiResolutionChart-selectedStrike: `, selectedStrike);
 
   const containerDivRef = useRef<HTMLDivElement>(null);
   const [drawing, setDrawing] = useAtom(drawingAtom);
@@ -606,11 +625,15 @@ export const MultiResolutionChart = ({
   );
 
   console.log(`MultiResolutionChart-time: `, time);
-  const currentPrice = (+silentPriceCache[market]?.[0]?.price)?.toFixed(2);
 
   useEffect(() => {
+    console.log(
+      `MultiResolutionChart-selectedStrike changed: `,
+      selectedStrike
+    );
     if (selectedStrike.price) {
       // above
+
       widgetRef.current?.activeChart().createMultipointShape(
         [
           {
