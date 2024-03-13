@@ -138,7 +138,7 @@ const defaults = {
     'go_to_date',
     'display_market_status',
   ],
-  upRectangeColor: 'rgba(108, 211, 173, 0.1)',
+  upRectangeColor: 'rgba(55, 114, 255, 0.1)',
   downRectangeColor: 'rgba(255, 104, 104, 0.1)',
 
   confgis: {
@@ -764,43 +764,56 @@ export const MultiResolutionChart = ({
   let rem = time % resolution2seconds[resolution];
   time = futureInf - rem;
   const from = returnMod(
-    Date.now() / 1000 - 500 * 24 * 60,
+    Date.now() / 1000 - 500 * 24 * 60 * 60,
     resolution2seconds[resolution]
   );
-
+  const deleteOldDrawings = () => {
+    if (shapeIdRef.current)
+      widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
+  };
   console.log(`MultiResolutionChart-time: `, time);
   const shapeIdRef = useRef('');
   console.log(`MultiResolutionChart-selectedStrike?.price: `, selectedStrike);
   useEffect(() => {
-    console.log(
-      `MultiResolutionChart-selectedStrike?.price: `,
-      +selectedStrike?.price
-    );
     if (selectedStrike?.price) {
       // above
-
+      deleteOldDrawings();
+      const points = selectedStrike.isAbove
+        ? [
+            {
+              time: from,
+              price: +selectedStrike.price,
+            },
+            {
+              time,
+              price: 1000000,
+            },
+          ]
+        : [
+            {
+              time,
+              price: +selectedStrike.price,
+            },
+            {
+              time: from,
+              price: 0,
+            },
+          ];
       widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
-      const id = widgetRef.current?.activeChart().createMultipointShape(
-        [
-          {
-            time: from,
-            price: +selectedStrike.price,
-          },
-          {
-            time,
-            price: 1000000,
-          },
-        ],
-        {
+      const id = widgetRef.current
+        ?.activeChart()
+        .createMultipointShape(points, {
           shape: 'rectangle',
           overrides: {
-            backgroundColor: defaults.upRectangeColor,
+            backgroundColor: selectedStrike.isAbove
+              ? defaults.upRectangeColor
+              : defaults.downRectangeColor,
             linewidth: 0,
           },
-        }
-      );
+        });
       shapeIdRef.current = id;
     } else {
+      deleteOldDrawings();
     }
   }, [selectedStrike]);
   useEffect(() => {

@@ -109,15 +109,10 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     let tablerow = totalArray[row];
     const strikePrice = tablerow?.strike;
 
-    const isSelected =
-      selectedStrike === undefined ||
-      selectedStrike?.[tvId] === undefined ||
-      selectedStrike?.[tvId]?.price === strikePrice.toString();
-
     switch (col) {
       case Columns.STRIKE:
         return (
-          <div className={`text-1 `}>
+          <div className={`text-1 w-full`}>
             <Display
               data={strikePrice}
               precision={precision}
@@ -129,7 +124,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_ABOVE:
         return (
           <button
-            className={`text-1 `}
+            className={`text-1 w-full`}
             onClick={() => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -143,7 +138,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_BELOW:
         return (
           <button
-            className={`text-1 `}
+            className={`text-1 w-full`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return throwError();
@@ -157,7 +152,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_ABOVE:
         return (
           <button
-            className={`text-1 `}
+            className={`text-1 w-full`}
             onClick={() => {
               if (!tablerow.totalFeeAbove) {
                 return throwError();
@@ -171,7 +166,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_BELOW:
         return (
           <button
-            className={`text-1 `}
+            className={`text-1 w-full`}
             onClick={() => {
               if (!tablerow.totalFeeBelow) {
                 return throwError();
@@ -185,7 +180,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_BELOW:
         return (
           <button
-            className={`text-1 `}
+            className={`text-1 w-full`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -199,7 +194,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_ABOVE:
         return (
           <button
-            className={`text-1 `}
+            className={`text-1 w-full`}
             onClick={() => {
               setStrikePrice(true, strikePrice.toString());
             }}
@@ -210,7 +205,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.MAX_ABOVE:
         return (
           <button
-            className={`text-1 `}
+            className={`text-1 w-full`}
             onClick={() => {
               setStrikePrice(true, strikePrice.toString());
             }}
@@ -221,7 +216,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.MAX_BELOW:
         return (
           <button
-            className={`text-1 `}
+            className={`text-1 w-full`}
             onClick={() => {
               setStrikePrice(false, strikePrice.toString());
             }}

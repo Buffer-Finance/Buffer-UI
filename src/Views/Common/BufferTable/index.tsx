@@ -528,11 +528,11 @@ const BufferTableCopy: React.FC<IBufferTableCopy> = ({
 
                           if (isAboveSelected) {
                             if (colIdx <= 3) {
-                              className += ' !bg-red';
+                              className += ' !bg-[#3772FF66]';
                             }
                           } else {
                             if (colIdx >= 3) {
-                              className += ' !bg-red';
+                              className += ' !bg-[#ff686866]';
                             }
                           }
                           return className;
