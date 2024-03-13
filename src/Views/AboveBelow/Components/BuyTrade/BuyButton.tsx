@@ -27,6 +27,7 @@ import { getAddress } from 'viem';
 import RouterABI from '../../abis/Router.json';
 import { ApproveBtn } from './ApproveBtn';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
+import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
 export const Buy = () => {
   const isIncreationWindow = useIsInCreationWindow();
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
@@ -59,6 +60,8 @@ export const Buy = () => {
 
 const TradeButton = () => {
   const { activeChain } = useActiveChain();
+  const d = useApprvalAmount();
+  console.log(`BuyButton-d: `, d);
   const config = getConfig(activeChain.id);
   const { writeCall } = useWriteCall(config.above_below_router, RouterABI);
   const toastify = useToast();

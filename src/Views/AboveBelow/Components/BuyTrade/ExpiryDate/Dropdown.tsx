@@ -26,13 +26,13 @@ export const DropDown = () => {
         menuButton={({ open }) => {
           return (
             <MenuButton
-              className={`!bg-[#282B39] !w-full rounded-[2px] py-2 text-f14 text-[#C3C2D4] px-3 font-medium`}
+              className={`!bg-[#282B39] px-5 pl-6 !w-full rounded-[2px] py-2 text-f14 text-[#C3C2D4]  font-medium`}
             >
               <RowGap gap="8px" className="w-full">
                 {selectedTimestamp
                   ? formatDateWithTime(selectedTimestamp)
                   : 'Select Expiry'}
-                <DDarrow open={open} className="scale-125" />
+                <DDarrow open={open} className="scale-125 ml-5" />
               </RowGap>
             </MenuButton>
           );

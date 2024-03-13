@@ -1,5 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { baseUrl } from '@Views/TradePage/config';
+import { ABBaseURL, baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
 import useSWR, { useSWRConfig } from 'swr';
 import { useAccount } from 'wagmi';
@@ -21,12 +21,14 @@ export const useApprvalAmount = () => {
     is_locked: boolean;
   }>(id, {
     fetcher: async () => {
+      console.log('fetcher', userAddress, activeChainId, tokenName);
       if (!userAddress || !activeChainId || !tokenName) return null;
       try {
         const { data, status } = await axios.get(
-          baseUrl +
+          ABBaseURL +
             `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}`
         );
+        console.log(`data: `, data);
         if (status !== 200) return cache.get(id);
         return data;
       } catch (e) {
@@ -40,3 +42,8 @@ export const useApprvalAmount = () => {
 
   // console.log(data, 'useApprvalAmount-response');
 };
+// v2-v3 is not straight forward because there are certain details are required on top of UP/Down source code.
+// Change Approval flow
+// Change Buying flow
+// Test
+// Mobile changes

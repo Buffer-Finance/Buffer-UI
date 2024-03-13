@@ -11,9 +11,9 @@ export const BuyTrade: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   return (
     <BuyTradeBackground>
       <ExpiryDate isMobile={isMobile} />
-      <PriceFormat />
+      {/* <PriceFormat /> */}
       <PriceTable isMobile={isMobile} />
-      <SelectedTradeData />
+      {/* <SelectedTradeData /> */}
       <TradeSize />
       <PayoutProfit />
       <Buy />

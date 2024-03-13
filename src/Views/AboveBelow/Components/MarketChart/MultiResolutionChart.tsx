@@ -664,10 +664,18 @@ export const MultiResolutionChart = ({
 
   useEffect(() => {
     if (!chartReady) return;
+    // widgetRef.current?.activeChart().removeAllShapes();
     widgetRef
       .current!.activeChart?.()
       .setChartType((chartType as any)?.[chartId] ?? 1);
   }, [chartType, chartReady]);
+  useEffect(() => {
+    if (!chartReady) return;
+    widgetRef.current?.activeChart().removeAllShapes();
+    // widgetRef
+    //   .current!.activeChart?.()
+    //   .setChartType((chartType as any)?.[chartId] ?? 1);
+  }, [chartReady]);
 
   useEffect(() => {
     if (

@@ -85,7 +85,7 @@ export const appConfig = {
         graph: {
           MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api',
           ABOVE_BELOW:
-            'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
+            'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.0.7-above-below-contract-update-2/api',
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
@@ -94,7 +94,7 @@ export const appConfig = {
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
         v2_router: '0x76c52E83d7dcCc70107a66BAd44D042D22D06be7',
-        above_below_router: '0x636D2D526073bF03024D716DbE781a37C840Bce0',
+        above_below_router: '0xdC4A81864DaefCEdbdAB7206032154f462170458',
         poolsInfo: {
           '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
             tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
@@ -678,7 +678,8 @@ const aboveBelowURLString = isTestnet
   : 'VITE_ABOVE_BEWLOW_API_HOST_DEVELOPMENT';
 export const baseUrl = import.meta.env[baseURLString];
 export const aboveBelowBaseUrl = import.meta.env[aboveBelowURLString];
-
+export const ABBaseURL =
+  'https://instant-trading-backend-production-84c6.up.railway.app/';
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
 export const MAX_APPROVAL_VALUE =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935';

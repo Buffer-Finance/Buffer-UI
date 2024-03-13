@@ -112,7 +112,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     switch (col) {
       case Columns.STRIKE:
         return (
-          <div className={`text-1 w-full`}>
+          <div className={`text-1 w-full text-f12`}>
             <Display
               data={strikePrice}
               precision={precision}
@@ -124,7 +124,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_ABOVE:
         return (
           <button
-            className={`text-1 w-full`}
+            className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -138,7 +138,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_BELOW:
         return (
           <button
-            className={`text-1 w-full`}
+            className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return throwError();
@@ -152,7 +152,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_ABOVE:
         return (
           <button
-            className={`text-1 w-full`}
+            className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
               if (!tablerow.totalFeeAbove) {
                 return throwError();
@@ -166,7 +166,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_BELOW:
         return (
           <button
-            className={`text-1 w-full`}
+            className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
               if (!tablerow.totalFeeBelow) {
                 return throwError();
@@ -180,7 +180,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_BELOW:
         return (
           <button
-            className={`text-1 w-full`}
+            className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -194,7 +194,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_ABOVE:
         return (
           <button
-            className={`text-1 w-full`}
+            className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
               setStrikePrice(true, strikePrice.toString());
             }}
@@ -205,7 +205,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.MAX_ABOVE:
         return (
           <button
-            className={`text-1 w-full`}
+            className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
               setStrikePrice(true, strikePrice.toString());
             }}
@@ -216,7 +216,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.MAX_BELOW:
         return (
           <button
-            className={`text-1 w-full`}
+            className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
               setStrikePrice(false, strikePrice.toString());
             }}
@@ -236,34 +236,47 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const isUpselected = selectedStrike?.[marketTVid]?.isAbove ?? null;
   const selectedStrikeD = selectedStrike?.[marketTVid]?.price ?? -3;
   return (
-    <div className="text-f12 text-1 ">
-      <div className="flex my-[10px] text-[15px] justify-around items-center font-[500] text-[#A5ADCF]">
-        <div
+    <div className="text-f12 text-1 flex flex-col gap-2 ">
+      <div className="flex  my-[10px] text-[15px] justify-around items-center font-[500] text-[#A5ADCF]">
+        <button
           className={`${isUpselected ? 'text-1' : 'text-[#A5ADCF]'}  ${
             isUpselected ? 'underline decoration-[#3772FF]' : ''
           } decoration-[2px]  leading-3 underline-offset-4`}
+          onClick={() => {
+            if (selectedStrikeD == -3) return;
+            if (!isUpselected) {
+              setStrikePrice(true, selectedStrikeD);
+            }
+          }}
         >
           {' '}
           Above
-        </div>
-        <div
+        </button>
+        <button
           className={`${isUpselected ? 'text-[#A5ADCF]' : 'text-1'}  ${
-            !isUpselected ? 'underline decoration-[#3772FF]' : ''
+            !isUpselected ? 'underline decoration-red' : ''
           } decoration-[2px]  leading-3 underline-offset-4`}
+          onClick={() => {
+            if (selectedStrikeD == -3) return;
+            if (isUpselected) {
+              setStrikePrice(false, selectedStrikeD);
+            }
+          }}
         >
           Below
-        </div>
+        </button>
       </div>
       <BufferTableCopy
         headersJSX={headsArray}
-        widths={['100px', '100px', '100px', '100px', '100px', '100px', '100px']}
+        widths={['80px', '80px', '80px', '100px', '80px', '80px', '80px']}
         bodyJSX={(row: number, col: number) => BodyFormatter(row, col)}
         cols={headsArray.length}
         onRowClick={() => {}}
         rows={totalArray.length}
-        isHeaderTransparent
+        // isHeaderTransparent
         isBodyTransparent
         // shouldHideHeader
+        overflow="500px"
         smHeight
         smThHeight
         noHover

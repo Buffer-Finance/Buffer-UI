@@ -24,6 +24,7 @@ export const ApproveBtn: React.FC<{
         routerAddress,
         MAX_APPROVAL_VALUE,
       ]);
+      alert('you are right');
     } catch (e) {
       toastify({
         type: 'error',

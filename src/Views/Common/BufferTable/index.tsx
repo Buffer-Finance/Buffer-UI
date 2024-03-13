@@ -410,7 +410,7 @@ const BufferTableCopy: React.FC<IBufferTableCopy> = ({
               isHeaderTransparent ? '!bg-[transparent]' : ''
             } table-header ${shouldHideHeader ? 'tab' : ''} `}
           >
-            <TableRow className={` table-row-head`}>
+            <TableRow className={` !bg-[#1c1c28] table-row-head`}>
               {headersJSX.map((idx, i) => {
                 let show = true;
                 // if (showOnly) show = showOnly.includes(idx);
@@ -419,11 +419,11 @@ const BufferTableCopy: React.FC<IBufferTableCopy> = ({
                     width={widths && idx < widths.length ? widths[idx] : ''}
                     key={i}
                     align="center"
-                    className={` ${show ? '' : '!hidden'}  ${
-                      smThHeight ? 'th-head ' : ''
-                    }  ${noHover ? 'no-hover' : 'transparent-hover'}  ${
-                      isHeaderTransparent ? '!bg-[transparent]' : ''
-                    } !z-10`}
+                    className={`!bg-[#1c1c28] !text-f12 ${
+                      show ? '' : '!hidden'
+                    }  ${smThHeight ? 'th-head ' : ''}  ${
+                      noHover ? 'no-hover' : 'transparent-hover'
+                    }  ${isHeaderTransparent ? '!bg-[transparent]' : ''} !z-10`}
                   >
                     {idx}
                   </TableCell>
