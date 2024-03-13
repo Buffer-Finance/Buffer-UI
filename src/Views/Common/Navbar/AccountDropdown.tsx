@@ -1,30 +1,95 @@
-import { useUserAccount } from '@Hooks/useUserAccount';
-import DDArrow from '@SVG/Elements/Arrow';
-import WalletIcon from '@SVG/Elements/WalletIcon';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
-import {
-  ChainSwitchingModal,
-  useChainTutorial,
-} from '@Views/TradePage/Views/ChainSwitchingModal';
-import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import React, { ReactNode, useEffect, useRef } from 'react';
 import { ArrowDropDownRounded } from '@mui/icons-material';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAtomValue } from 'jotai';
-import React, { ReactNode, SVGProps } from 'react';
-import { useMedia } from 'react-use';
-import { getAddress } from 'viem';
-import { useBalance } from 'wagmi';
+import * as chain from 'wagmi/chains';
 import { BlueBtn } from '../V2-Button';
-
-const chaintoIcon: {
-  [chainId: number]: string;
-} = {
-  421614:
-    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1634668056/Assets/arbitrum.png',
+import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
+import { SVGProps } from 'react';
+import { MenuItem, Skeleton } from '@mui/material';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { snackAtom } from 'src/App';
+import { useAccount, useBalance, useDisconnect, usePublicClient } from 'wagmi';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import {
+  uesOneCtActiveChain,
+  useOneCTWallet,
+} from '@Views/OneCT/useOneCTWallet';
+import { Display } from '../Tooltips/Display';
+import ETHImage from '../../../../public/tokens/ETH.png';
+import DDArrow from '@SVG/Elements/Arrow';
+import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
+import WalletIcon from '@SVG/Elements/WalletIcon';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { getAddress } from 'viem';
+import copyToClipboard from '@Utils/copyToClipBoard';
+const token2image = {
+  ETH: ETHImage,
 };
+const chainImageMappipng = {
+  [chain.polygon.name]:
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684086043/polygon2.png',
+  [chain.polygonMumbai.name]:
+    'https://res.cloudinary.com/dtuuhbeqt/image/upload/v1684086043/polygon2.png',
+  [chain.arbitrum.name]: '/Chains/ARBITRIUM.png',
+  [chain.arbitrumGoerli.name]: '/Chains/ARBITRIUM.png',
+  ['BSC']: '/Chains/BSC.png',
+};
+
 export const AccountDropdown: React.FC = () => {
-  const isMobile = useMedia('(max-width:1200px)');
-  const { isUserEducated, openTutorial } = useChainTutorial();
+  const { address } = useUserAccount();
+  const setSnack = useSetAtom(snackAtom);
+  const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
+  const { activeChain } = uesOneCtActiveChain();
+  useOngoingTrades();
+  const disconnect = useDisconnect();
+  const ref = useRef(null);
+  const [menuState, toggleMenu] = useMenuState({ transition: true });
+  const anchorProps = useClick(menuState.state, toggleMenu);
+
+  function closeDropdown() {
+    toggleMenu(false);
+  }
+
+  const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
+    useOneCTWallet();
+
+  const provider = usePublicClient({ chainId: activeChain.id });
+  const blockExplorer = activeChain?.blockExplorers?.default?.url;
+  useEffect(() => {
+    setOneCTModal(false);
+  }, [address]);
+
+  let OneCTManager = (
+    <Skeleton variant="rectangular" className="lc sr w-[70px] h-[31px]" />
+  );
+  if (registeredOneCT) {
+    OneCTManager = (
+      <BlueBtn
+        className="!text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
+        onClick={() => {
+          disableOneCt();
+          closeDropdown();
+        }}
+        isLoading={disabelLoading}
+        isDisabled={state && state === 'PENDING'}
+      >
+        Deactivate Account
+      </BlueBtn>
+    );
+  } else
+    OneCTManager = (
+      <BlueBtn
+        test-id="activate-button-bg"
+        className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+        onClick={() => {
+          setOneCTModal(true);
+        }}
+      >
+        {nonce && nonce > 0 ? 'Reactivate' : ' Activate'} Acount
+      </BlueBtn>
+    );
 
   return (
     <ConnectButton.Custom>
@@ -57,19 +122,13 @@ export const AccountDropdown: React.FC = () => {
               },
             })}
           >
-            <ChainSwitchingModal openConnectModal={openConnectModal} />
-
             {(() => {
               if (!connected) {
                 return (
                   <div
                     role="button"
                     className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] pl-3 pr-1 bg-[#191b20] hover:brightness-125 `}
-                    onClick={
-                      isMobile && !isUserEducated.mobileChainSwitchingIssue
-                        ? openTutorial
-                        : openConnectModal
-                    }
+                    onClick={openConnectModal}
                   >
                     <WalletIcon className="mr-[6px] ml-1 text-blue" />
 
@@ -86,11 +145,7 @@ export const AccountDropdown: React.FC = () => {
                   <div
                     role="button"
                     className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-3 bg-[#191b20] hover:brightness-125 `}
-                    onClick={
-                      isMobile && !isUserEducated.mobileChainSwitchingIssue
-                        ? openTutorial
-                        : openChainModal
-                    }
+                    onClick={openChainModal}
                   >
                     <WalletIcon className="mr-[6px] ml-1" />
 
@@ -115,7 +170,7 @@ export const AccountDropdown: React.FC = () => {
                       {chain && chain.name && (
                         <img
                           className="h-[18px] w-[18px] mr-[6px] sm:mr-[0px] rounded-full"
-                          src={chain.iconUrl ?? chaintoIcon[chain.id]}
+                          src={chain.iconUrl ?? chainImageMappipng[chain.name]}
                           alt={chain.name ?? 'Chain icon'}
                         />
                       )}
@@ -127,24 +182,104 @@ export const AccountDropdown: React.FC = () => {
                     />
                   </div>
                   {/* Accound DD */}
-                  <div
-                    className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-[6px] bg-[#191B20] hover:brightness-125 `}
-                  >
-                    <WalletIcon className="mr-2 ml-1 text-blue" />
-
-                    {/* <TokenAccountBalance /> */}
-
-                    <button
-                      className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1"
-                      test-id="account-holder-div"
-                      onClick={openAccountModal}
+                  <button type="button" ref={ref} {...anchorProps}>
+                    <div
+                      className={`flex items-center text-f13 cursor-pointer h-[31px] w-fit rounded-[7px] px-[6px] bg-[#191B20] hover:brightness-125 `}
                     >
-                      {account ? `${account.address.slice(0, 6)}` : 'Connect'}
-                      <DDArrow
-                        className={` transition-all duration-300 ml-1 ease-out `}
-                      />
-                    </button>
-                  </div>
+                      <WalletIcon className="mr-2 ml-1 text-blue" />
+
+                      <TokenAccountBalance />
+
+                      <div
+                        className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1"
+                        test-id="account-holder-div"
+                      >
+                        {account ? `${account.address.slice(0, 6)}` : 'Connect'}
+                        <DDArrow
+                          className={` transition-all duration-300 ml-1 ease-out `}
+                        />
+                      </div>
+                    </div>{' '}
+                  </button>
+                  <ControlledMenu
+                    {...menuState}
+                    anchorRef={ref}
+                    onClose={closeDropdown}
+                    viewScroll="initial"
+                    direction="bottom"
+                    position="initial"
+                    align="end"
+                    menuClassName={
+                      '!p-[0] !rounded-[10px] hover:!rounded-[10px]'
+                    }
+                    offsetY={10}
+                  >
+                    <MenuItem className={'!bg-[#232334] text-1 cursor-auto'}>
+                      <div className="mx-[10px] my-[10px] mb-[14px]">
+                        <div className="flex items-center justify-between text-f14 mb-[20px]">
+                          <div className="flex flex-col mr-4">
+                            {account
+                              ? `${account.address.slice(
+                                  0,
+                                  4
+                                )}...${account.address.slice(-4)}`
+                              : 'Connect'}
+                            {/* <div className="text-2">Wallet Address</div> */}
+                          </div>
+                          <div className="flex items-center gap-x-3 text-[#C3C2D4]">
+                            <IconBG
+                              onClick={(e) => {
+                                e.preventDefault();
+                                copyToClipboard(account.address);
+                                setSnack({
+                                  message:
+                                    'Account coppied to clipboard Successfully!',
+                                  severity: 'success',
+                                });
+                              }}
+                            >
+                              <CopyIcon />
+                            </IconBG>
+
+                            <IconBG
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open(
+                                  `${blockExplorer}/address/${account.address}`,
+                                  '_blank'
+                                );
+                              }}
+                            >
+                              <ShareIcon />
+                            </IconBG>
+                            <IconBG
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                disconnect.disconnect();
+                              }}
+                            >
+                              <PowerIcon />
+                            </IconBG>
+                          </div>
+                        </div>
+                        <div className="flex items-center text-f14 justify-center">
+                          {OneCTManager}
+                          {/*  <a
+                            className="unset"
+                            href="https://www.google.com/"
+                            target="_blank"
+                          >
+                          <div className="text-f12 underline flex items-center ">
+                              Learn More{' '}
+                              <ShareIcon className=" scale-[0.65] ml-[1px] mb-[-2px]" />
+                            </div>
+                          </a> */}
+                        </div>
+                      </div>{' '}
+                    </MenuItem>
+                  </ControlledMenu>
                 </div>
               );
             })()}
@@ -157,15 +292,11 @@ export const AccountDropdown: React.FC = () => {
 
 export const ConnectionRequired = ({
   children,
-  mobileTutorial,
   className = '',
 }: {
   children: ReactNode;
   className?: string;
-  mobileTutorial?: boolean;
 }) => {
-  const isMobile = useMedia('(max-width:1200px)');
-  const { isUserEducated, openTutorial } = useChainTutorial();
   return (
     <ConnectButton.Custom>
       {({
@@ -200,29 +331,19 @@ export const ConnectionRequired = ({
             {(() => {
               if (!connected) {
                 return (
-                  <>
-                    <BlueBtn
-                      onClick={
-                        isMobile && !isUserEducated.mobileChainSwitchingIssue
-                          ? openTutorial
-                          : openConnectModal
-                      }
-                      className={'px-5 py-[5px] !h-fit ' + className}
-                    >
-                      Connect Wallet
-                    </BlueBtn>
-                  </>
+                  <BlueBtn
+                    onClick={openConnectModal}
+                    className={'px-5 py-[5px] !h-fit ' + className}
+                  >
+                    Connect Wallet
+                  </BlueBtn>
                 );
               }
 
               if (chain.unsupported) {
                 return (
                   <BlueBtn
-                    onClick={
-                      isMobile && !isUserEducated.mobileChainSwitchingIssue
-                        ? openTutorial
-                        : openChainModal
-                    }
+                    onClick={openChainModal}
                     className={'px-5 py-[5px] !h-fit ' + className}
                   >
                     {/* <Wallet className="" /> */}
@@ -297,31 +418,26 @@ export const PowerIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-// const TokenAccountBalance = () => {
-//   const balance = useAccountBalance();
-//   return (
-//     <div className="flex items-center">
-//       {' '}
-//       <Display data={balance} className="text-f14" />{' '}
-//       <img
-//         src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePoolDetails.token.toLowerCase()}.png`}
-//         className="w-[16px] h-[16px] ml-2"
-//       />
-//     </div>
-//   );
-// };
-
-const useAccountBalance = () => {
+const TokenAccountBalance = () => {
   const { activePool } = useAtomValue(activePoolObjAtom);
-  const { address: user } = useUserAccount();
   const pools = usePoolByAsset();
   let activePoolDetails = pools[activePool];
   if (activePoolDetails === undefined) activePoolDetails = pools['USDC'];
-  if (user === undefined || user === undefined) return 0;
+  const { address } = useAccount();
   const { data, isError, isLoading, error } = useBalance({
-    address: getAddress(user),
+    address,
     token: getAddress(activePoolDetails.tokenAddress),
     watch: true,
   });
-  return data?.formatted;
+
+  return (
+    <div className="flex items-center">
+      {' '}
+      <Display data={data?.formatted} className="text-f14" />{' '}
+      <img
+        src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${activePoolDetails.token.toLowerCase()}.png`}
+        className="w-[16px] h-[16px] ml-2"
+      />
+    </div>
+  );
 };
