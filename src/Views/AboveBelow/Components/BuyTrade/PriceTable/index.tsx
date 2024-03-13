@@ -62,26 +62,17 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const strikes = strikePrices[activeMarket?.tv_id as string];
   let increasingPriceArray = strikes?.increasingPriceArray ?? [];
   let decreasingPriceArray = strikes?.decreasingPriceArray ?? [];
+  let totalArray = [
+    ...increasingPriceArray,
+    { strike: -1 },
+    ...decreasingPriceArray,
+  ];
   // console.log(increasingPriceArray, decreasingPriceArray);
-  const HeaderFomatter = useCallback((col: number) => {
-    // if (col == 1) {
-    //   console.log(`index-selectedPoolMarket: `, selectedPoolMarket);
-    //   return selectedPoolMarket?.poolInfo.token;
-    // }
-
-    return (
-      <TableHeader
-        col={col}
-        key={headsArray[col]}
-        headsArr={headsArray}
-        className="text-start text-f13"
-        firstColClassName="!ml-3"
-      />
-    );
-  }, []);
 
   function setStrikePrice(isAbove: boolean, price: string) {
     try {
+      // console.log(`index-strikePrice: `, price,/ isAbove);
+
       if (!activeMarket) return;
       const marketTVid = activeMarket?.tv_id;
       if (!marketTVid) throw new Error('Trading View Id Not Found.');
@@ -92,16 +83,6 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
             price,
             isAbove,
           },
-        });
-      } else if (
-        selectedStrike?.[marketTVid]?.price === price &&
-        selectedStrike?.[marketTVid]?.isAbove === isAbove
-      ) {
-        //remove the selecred strike
-        setSelectedStrike((prvStrikes) => {
-          const newStrikes = { ...prvStrikes };
-          delete newStrikes[marketTVid];
-          return newStrikes;
         });
       } else {
         setSelectedStrike((prvStrikes) => ({
@@ -119,17 +100,13 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       });
     }
   }
-  const BodyFormatter: any = (
-    row: number,
-    col: number,
-    isAboveTable: boolean
-  ) => {
+  const throwError = () =>
+    toastify({ type: 'error', msg: 'Invalid selection' });
+  const BodyFormatter: any = (row: number, col: number) => {
     const tvId = activeMarket?.tv_id;
-    // if (!tvId) return <></>;
+    if (!tvId) return <></>;
 
-    const tablerow = isAboveTable
-      ? increasingPriceArray[row]
-      : decreasingPriceArray[row];
+    let tablerow = totalArray[row];
     const strikePrice = tablerow?.strike;
 
     const isSelected =
@@ -137,74 +114,122 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       selectedStrike?.[tvId] === undefined ||
       selectedStrike?.[tvId]?.price === strikePrice.toString();
 
-    /*
-      
-            case Columns.Above:
-        const isAboveSelected =
-          selectedStrike === undefined ||
-          selectedStrike?.[tvId] === undefined ||
-          (selectedStrike?.[tvId]?.isAbove && isSelected);
-        const totalFee = tablerow.totalFeeAbove;
-
+    switch (col) {
+      case Columns.STRIKE:
+        return (
+          <div className={`text-1 `}>
+            <Display
+              data={strikePrice}
+              precision={precision}
+              disable
+              className="!justify-center !items-center"
+            />
+          </div>
+        );
+      case Columns.ROI_ABOVE:
         return (
           <button
-            className={`text-1 w-[90px] bg-[#4D81FF] ${
-              totalFee === null ? 'cursor-not-allowed' : ''
-            } rounded-l-sm
-       px-3 py-1 whitespace-nowrap font-medium ${
-         !isAboveSelected ? 'opacity-50' : ''
-       }`}
+            className={`text-1 `}
             onClick={() => {
-              if (totalFee !== null)
-                setStrikePrice(true, strikePrice.toString());
+              if (getROI(tablerow.totalFeeAbove) == '-') {
+                return toastify({ type: 'error', msg: 'Invalid selection' });
+              }
+              setStrikePrice(true, strikePrice.toString());
             }}
           >
-            {totalFee === null ? (
-              '-'
-            ) : (
-              <>
-                {priceFormat === 'Asset'
-                  ? totalFee.toFixed(2) //USDC
-                  : (((1 - totalFee) / totalFee) * 100).toFixed(0) + '%'} //ROI
-              </>
-            )}
+            {getROI(tablerow.totalFeeAbove)}
           </button>
         );
-
-      case Columns.Below:
-        const isBelowSelected =
-          selectedStrike === undefined ||
-          selectedStrike?.[tvId] === undefined ||
-          (!selectedStrike?.[tvId]?.isAbove && isSelected);
-        const fee = tablerow.totalFeeBelow;
-
+      case Columns.ROI_BELOW:
         return (
           <button
-            className={`text-1 w-[90px] bg-[#FF5353] ${
-              fee === null ? 'cursor-not-allowed' : ''
-            } rounded-r-sm
-       px-3 py-1 whitespace-nowrap font-medium ${
-         !isBelowSelected ? 'opacity-50' : ''
-       }`}
+            className={`text-1 `}
             onClick={() => {
-              if (fee !== null) setStrikePrice(false, strikePrice.toString());
+              if (getROI(tablerow.totalFeeBelow) == '-') {
+                return throwError();
+              }
+              setStrikePrice(false, strikePrice.toString());
             }}
           >
-            {fee === null ? (
-              '-'
-            ) : (
-              <>
-                {priceFormat === 'Asset'
-                  ? fee.toFixed(2)
-                  : (((1 - fee) / fee) * 100).toFixed(0) + '%'}
-              </>
-            )}
+            {getROI(tablerow.totalFeeBelow)}
           </button>
         );
-
-      
-      */
-    return <div>Hello</div>;
+      case Columns.TOKEN_ABOVE:
+        return (
+          <button
+            className={`text-1 `}
+            onClick={() => {
+              if (!tablerow.totalFeeAbove) {
+                return throwError();
+              }
+              setStrikePrice(true, strikePrice.toString());
+            }}
+          >
+            {tablerow.totalFeeAbove ? tablerow.totalFeeAbove?.toFixed(2) : '-'}
+          </button>
+        );
+      case Columns.TOKEN_BELOW:
+        return (
+          <button
+            className={`text-1 `}
+            onClick={() => {
+              if (!tablerow.totalFeeBelow) {
+                return throwError();
+              }
+              setStrikePrice(false, strikePrice.toString());
+            }}
+          >
+            {tablerow.totalFeeBelow ? tablerow.totalFeeBelow?.toFixed(2) : '-'}
+          </button>
+        );
+      case Columns.ROI_BELOW:
+        return (
+          <button
+            className={`text-1 `}
+            onClick={() => {
+              if (getROI(tablerow.totalFeeBelow) == '-') {
+                return toastify({ type: 'error', msg: 'Invalid selection' });
+              }
+              setStrikePrice(false, strikePrice.toString());
+            }}
+          >
+            {getROI(tablerow.totalFeeBelow)}
+          </button>
+        );
+      case Columns.TOKEN_ABOVE:
+        return (
+          <button
+            className={`text-1 `}
+            onClick={() => {
+              setStrikePrice(true, strikePrice.toString());
+            }}
+          >
+            {tablerow.totalFeeAbove ? tablerow.totalFeeAbove?.toFixed(2) : '-'}
+          </button>
+        );
+      case Columns.MAX_ABOVE:
+        return (
+          <button
+            className={`text-1 `}
+            onClick={() => {
+              setStrikePrice(true, strikePrice.toString());
+            }}
+          >
+            {77777}
+          </button>
+        );
+      case Columns.MAX_BELOW:
+        return (
+          <button
+            className={`text-1 `}
+            onClick={() => {
+              setStrikePrice(false, strikePrice.toString());
+            }}
+          >
+            {77777}
+          </button>
+        );
+    }
   };
   if (!currentPrice || !activeMarket || !strikes)
     return (
@@ -213,16 +238,14 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   // 3772FF
   const marketTVid = activeMarket?.tv_id;
 
-  const isUpselected = selectedStrike?.[marketTVid]?.isAbove;
-
+  const isUpselected = selectedStrike?.[marketTVid]?.isAbove ?? null;
+  const selectedStrikeD = selectedStrike?.[marketTVid]?.price ?? -3;
   return (
-    <div className="text-f12 ">
+    <div className="text-f12 text-1 ">
       <div className="flex my-[10px] text-[15px] justify-around items-center font-[500] text-[#A5ADCF]">
         <div
           className={`${isUpselected ? 'text-1' : 'text-[#A5ADCF]'}  ${
-            isUpselected
-              ? 'underlihttps://www.youtube.com/watch?v=9F4EizRXzWI&list=RD9F4EizRXzWI&index=1ne decoration-[#3772FF]'
-              : ''
+            isUpselected ? 'underline decoration-[#3772FF]' : ''
           } decoration-[2px]  leading-3 underline-offset-4`}
         >
           {' '}
@@ -238,17 +261,25 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       </div>
       <BufferTableCopy
         headersJSX={headsArray}
-        widths={['14%', '12%', '14%', '18%', '14%', '12%', '14%']}
-        bodyJSX={(row: number, col: number) => BodyFormatter(row, col, true)}
+        widths={['100px', '100px', '100px', '100px', '100px', '100px', '100px']}
+        bodyJSX={(row: number, col: number) => BodyFormatter(row, col)}
         cols={headsArray.length}
         onRowClick={() => {}}
-        rows={increasingPriceArray.length + decreasingPriceArray.length}
+        rows={totalArray.length}
         isHeaderTransparent
-        shouldHideBody
+        isBodyTransparent
+        // shouldHideHeader
         smHeight
         smThHeight
         noHover
+        loading={increasingPriceArray.length === 0}
         shouldShowMobile
+        customRow={
+          <CurrentPriceLine currentPrice={currentPrice} precision={precision} />
+        }
+        customIdx={totalArray.findIndex((c) => c.strike == -1)}
+        selectedRow={totalArray.findIndex((c) => c.strike == selectedStrikeD)}
+        isAboveSelected={isUpselected}
       />
     </div>
   );

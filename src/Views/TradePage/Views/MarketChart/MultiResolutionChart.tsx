@@ -65,6 +65,7 @@ import {
 } from '../AccordionTable/Common';
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { loeditLoadingAtom } from '../EditModal';
+import { CHART_TVID } from 'src/App';
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
   // '1S' as ResolutionString,
@@ -145,6 +146,9 @@ const defaults = {
     'go_to_date',
     'display_market_status',
   ],
+  upRectangeColor: 'rgba(108, 211, 173, 0.1)',
+  downRectangeColor: 'rgba(255, 104, 104, 0.1)',
+
   confgis: {
     supported_resolutions,
     exchanges: [
@@ -384,6 +388,8 @@ export const MultiResolutionChart = ({
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
+  const lastShapeRef = useRef<string>('');
+
   const settings = useAtomValue(chartControlsSettingsAtom);
   const setCloseConfirmationModal = useSetAtom(closeConfirmationModalAtom);
 
@@ -404,6 +410,8 @@ export const MultiResolutionChart = ({
   const editLoading = useAtomValue(loeditLoadingAtom);
   let realTimeUpdateRef = useRef<RealtimeUpdate | null>(null);
   let widgetRef = useRef<IChartingLibraryWidget | null>(null);
+  const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
+
   const containerDivRef = useRef<HTMLDivElement>(null);
   const [drawing, setDrawing] = useAtom(drawingAtom);
   const chartType = useAtomValue(ChartTypePersistedAtom);
@@ -587,7 +595,116 @@ export const MultiResolutionChart = ({
   const [hideVisulizations] = useAtom(visualizeddAtom);
   const resolution: ResolutionString =
     market2resolution?.[chartId] || ('1' as ResolutionString);
+  useEffect(() => {
+    if (selectedStrike.price) {
+      // above
+      widgetRef.current?.activeChart().createMultipointShape(
+        [
+          {
+            time: from,
+            price: selectedStrike.price,
+          },
+          {
+            time,
+            price: 1000000,
+          },
+        ],
+        {
+          shape: 'rectangle',
+          overrides: {
+            backgroundColor: defaults.upRectangeColor,
+            linewidth: 0,
+          },
+        }
 
+        // below
+        // widgetRef.current?.activeChart().createMultipointShape(
+        //   [
+        //     {
+        // time: from,
+        //       // price: 71722.22,
+        //       price: +currentPrice,
+        //     },
+        //     {
+        //       time,
+        //       price: 1000000,
+        //     },
+        //   ],
+        //   {
+        //     shape: 'rectangle',
+        //     overrides: {
+        //       backgroundColor: defaults.upRectangeColor,
+        //       linewidth: 0,
+        //     },
+        //   }
+      );
+    }
+  }, [selectedStrike]);
+  /**
+           <div className="flex">
+        <button
+          className="bg-green"
+          onClick={() => {
+            deleteOldDrawings();
+
+            console.log(`drawing: `, currentPrice);
+            const id = widgetRef.current?.activeChart().createMultipointShape(
+              [
+                {
+                  time: from,
+                  // price: 71722.22,
+                  price: +currentPrice,
+                },
+                {
+                  time,
+                  price: 1000000,
+                },
+              ],
+              {
+                shape: 'rectangle',
+                overrides: {
+                  backgroundColor: defaults.upRectangeColor,
+                  linewidth: 0,
+                },
+              }
+            );
+            lastShapeRef.current = id;
+          }}
+        >
+          Up{' '}
+        </button>
+        <button
+          className="bg-red"
+          onClick={() => {
+            deleteOldDrawings();
+
+            const id = widgetRef.current?.activeChart().createMultipointShape(
+              [
+                {
+                  time,
+                  price: 0,
+                },
+                {
+                  time: from,
+                  price: +currentPrice,
+                },
+              ],
+              {
+                shape: 'rectangle',
+                overrides: {
+                  backgroundColor: defaults.downRectangeColor,
+                  linewidth: 0,
+                },
+              }
+            );
+            lastShapeRef.current = id;
+          }}
+        >
+          Down{' '}
+        </button>
+      </div>
+
+     */
   useEffect(() => {
     try {
       const chart = new widget({
@@ -597,6 +714,8 @@ export const MultiResolutionChart = ({
         locale: 'en',
         container: containerDivRef.current!,
         library_path: defaults.library_path,
+        container_id: CHART_TVID,
+
         custom_css_url: defaults.cssPath,
         timezone: getOslonTimezone() as Timezone,
         symbol: market,
@@ -643,7 +762,6 @@ export const MultiResolutionChart = ({
       });
 
       chart.onChartReady(() => {
-        // chart.activeChart().get;
         let packedPrice: { price: null | number } = { price: null };
         // chart.activeChart?.().executeActionById('drawingToolbarAction');
         // chart

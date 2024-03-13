@@ -9,7 +9,9 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
-
+import { v4 } from 'uuid';
+export const CHART_TVID = v4().substring(0, 6);
+console.log(`App-CHART_TVID: `, CHART_TVID);
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
 import Background from './AppStyles';
@@ -36,6 +38,7 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
+import { uuid4 } from '@sentry/utils';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
