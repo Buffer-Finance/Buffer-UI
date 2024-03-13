@@ -285,8 +285,8 @@ export const MultiResolutionChart = ({
   const market = marke.replace('-', '');
   const chartData =
     marketsForChart[market as unknown as keyof typeof marketsForChart];
-  const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
-
+  const [selectedStrik, setSelectedStrike] = useAtom(selectedPriceAtom);
+  const selectedStrike = selectedStrik?.[market];
   const [market2resolution, setMarket2resolution] = useAtom(
     market2resolutionAtom
   );
@@ -769,7 +769,7 @@ export const MultiResolutionChart = ({
   );
 
   console.log(`MultiResolutionChart-time: `, time);
-
+  const shapeIdRef = useRef('');
   console.log(`MultiResolutionChart-selectedStrike?.price: `, selectedStrike);
   useEffect(() => {
     console.log(
@@ -779,7 +779,8 @@ export const MultiResolutionChart = ({
     if (selectedStrike?.price) {
       // above
 
-      widgetRef.current?.activeChart().createMultipointShape(
+      widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
+      const id = widgetRef.current?.activeChart().createMultipointShape(
         [
           {
             time: from,
@@ -797,28 +798,9 @@ export const MultiResolutionChart = ({
             linewidth: 0,
           },
         }
-
-        // below
-        // widgetRef.current?.activeChart().createMultipointShape(
-        //   [
-        //     {
-        // time: from,
-        //       // price: 71722.22,
-        //       price: +currentPrice,
-        //     },
-        //     {
-        //       time,
-        //       price: 1000000,
-        //     },
-        //   ],
-        //   {
-        //     shape: 'rectangle',
-        //     overrides: {
-        //       backgroundColor: defaults.upRectangeColor,
-        //       linewidth: 0,
-        //     },
-        //   }
       );
+      shapeIdRef.current = id;
+    } else {
     }
   }, [selectedStrike]);
   useEffect(() => {
