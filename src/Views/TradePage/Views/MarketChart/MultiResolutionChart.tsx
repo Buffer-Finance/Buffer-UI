@@ -595,6 +595,19 @@ export const MultiResolutionChart = ({
   const [hideVisulizations] = useAtom(visualizeddAtom);
   const resolution: ResolutionString =
     market2resolution?.[chartId] || ('1' as ResolutionString);
+  const futureInf = Date.now() / 1000 + 24 * 60 * 60;
+  let time = futureInf;
+  time = time;
+  let rem = time % resolution2seconds[resolution];
+  time = futureInf - rem;
+  const from = returnMod(
+    Date.now() / 1000 - 500 * 24 * 60,
+    resolution2seconds[resolution]
+  );
+
+  console.log(`MultiResolutionChart-time: `, time);
+  const currentPrice = (+silentPriceCache[market]?.[0]?.price)?.toFixed(2);
+
   useEffect(() => {
     if (selectedStrike.price) {
       // above
