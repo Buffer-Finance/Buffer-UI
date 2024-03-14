@@ -154,6 +154,8 @@ const useOneCTWallet = () => {
         },
       });
       const privateKey = ethers.utils.keccak256(signature).slice(2);
+      console.log('privateKey', privateKey);
+
       secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
       setCreateLoading(false);
       if (is1CTEnabled(res.one_ct, privateKey, provider, 'one-ct-deb')) {
