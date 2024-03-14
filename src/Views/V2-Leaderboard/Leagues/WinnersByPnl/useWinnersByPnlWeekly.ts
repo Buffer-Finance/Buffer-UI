@@ -1,58 +1,8 @@
-import { ILeague } from '@Views/V2-Leaderboard/interfaces';
+import { ILeaderboardQuery } from '@Views/V2-Leaderboard/Incentivised/useDailyLeaderBoardData';
 import axios from 'axios';
-import { useAtomValue } from 'jotai';
 import useSWR from 'swr';
-import { blacklist } from '../../blacklist.json';
-import { leagueType, leagueUsersAtom } from '../atom';
-import { leaguesConfig } from '../config';
+import { leagueType } from '../atom';
 import { getWeekId } from './getWeekId';
-
-const queryFields =
-  'user totalTrades netPnL volume winRate tradesWon usdcNetPnL usdcTotalTrades usdcTradesWon usdcVolume usdcWinRate arbNetPnL arbTotalTrades arbTradesWon arbVolume arbWinRate bfrNetPnL bfrTotalTrades bfrTradesWon bfrVolume bfrWinRate';
-
-export interface IleaderboardQueryResponse {
-  weeklyLeaderboards: ILeague[];
-  userData: ILeague[];
-}
-
-function getUsersNotInThisLeague(
-  leagueUsers: Record<leagueType, string[]>,
-  league: leagueType
-) {
-  switch (league) {
-    case 'silver':
-      return leagueUsers.gold.concat(
-        leagueUsers.platinum,
-        leagueUsers.diamond,
-        blacklist
-      );
-    case 'gold':
-      return leagueUsers.silver.concat(
-        leagueUsers.platinum,
-        leagueUsers.diamond,
-        blacklist
-      );
-    case 'platinum':
-      return leagueUsers.silver.concat(
-        leagueUsers.gold,
-        leagueUsers.diamond,
-        blacklist
-      );
-    case 'diamond':
-      return leagueUsers.silver.concat(
-        leagueUsers.gold,
-        leagueUsers.platinum,
-        blacklist
-      );
-    case 'bronze':
-      return leagueUsers.silver.concat(
-        leagueUsers.gold,
-        leagueUsers.platinum,
-        leagueUsers.diamond,
-        blacklist
-      );
-  }
-}
 
 export const useWinnersByPnlWeekly = ({
   league,
@@ -60,66 +10,38 @@ export const useWinnersByPnlWeekly = ({
   activeChainId,
   offset,
   week,
-  config,
 }: {
   league: leagueType;
   offset: string | null;
   account: string | undefined;
   activeChainId: number;
   week: number;
-  config: leaguesConfig;
 }) => {
-  const leagueUsers = useAtomValue(leagueUsersAtom);
-  return useSWR<IleaderboardQueryResponse>(
-    `${league}-leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChainId}-leagueUsers-${leagueUsers[league].length}`,
+  return useSWR<ILeaderboardQuery>(
+    `${league}-leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChainId}}`,
     {
       fetcher: async () => {
-        if (league !== 'bronze' && leagueUsers[league].length === 0) {
-          return;
-        }
-        const usersNotInThisLeague = getUsersNotInThisLeague(
-          leagueUsers,
-          league
-        );
-        const timestamp = getWeekId(Number(week - Number(offset ?? week)));
-        const leaderboardQuery = `
-              weeklyLeaderboards(
-                orderBy: netPnL
-                orderDirection: desc
-                first: 10000
-                where: {or:[{timestamp: "${timestamp}",volume_gte: ${
-          config.minVolumeToqualifyPNL
-        } ,volume_lte: ${config.maxVolumeToqualifyPNL} ,totalTrades_lte: ${
-          config.maxTradesToqualifyPNL
-        }, totalTrades_gte: ${
-          config.minTradesToQualifyPNL
-        }, user_not_in: [${usersNotInThisLeague.map(
-          (address) => `"${address}"`
-        )}]},{
-          timestamp: "${timestamp}"
-          user_in: [${leagueUsers[league].map((address) => `"${address}"`)}]
-        }]}
-              ) {
-                ${queryFields}
-              }
-            `;
+        try {
+          const weekId = getWeekId(Number(week - Number(offset ?? week)));
 
-        const userQuery = account
-          ? `userData: weeklyLeaderboards(
-            where: {user: "${account}", timestamp: "${timestamp}"}
-          ) {
-              ${queryFields}
-            }`
-          : '';
-        const query = `{${leaderboardQuery}${userQuery}}`;
-        const response = await axios.post(
-          'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.1-ud-ab-nfts-leagues-stats-defillama-merge/api',
-          {
-            query,
+          const { data } = await axios.get(
+            import.meta.env.VITE_LEADERBOARD_API_HOST +
+              'rank/weekly_leaderboard',
+            {
+              params: {
+                weekId: weekId,
+                league: league[0].toUpperCase() + league.slice(1),
+              },
+            }
+          );
+          if (data) {
+            return data.data as ILeaderboardQuery;
+          } else {
+            return undefined;
           }
-        );
-
-        return response.data?.data;
+        } catch (e) {
+          return undefined;
+        }
       },
       refreshInterval: 60000,
     }

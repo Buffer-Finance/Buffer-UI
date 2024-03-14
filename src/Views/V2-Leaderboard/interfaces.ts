@@ -14,11 +14,27 @@ export interface IPerformer {
   volume: number;
   score: number;
 }
-export interface ILeague {
-  user: string;
-  totalTrades: number;
-  id: string;
-  netPnL: string;
-  volume: string;
-  [key: string]: string | number;
+
+export interface IWeeklyLeague {
+  userAddress: string;
+  USDCVolume: string;
+  USDCPnl: string;
+  USDCTrades: string;
+  USDCTradesWon: string;
+  ARBVolume: string;
+  ARBPnl: string;
+  ARBTrades: string;
+  ARBTradesWon: string;
+  BFRVolume: string;
+  BFRPnl: string;
+  BFRTrades: string;
+  BFRTradesWon: string;
+  league: string;
+  weekId: string;
+  totalVolume: string;
+  totalPnl: string;
+  totalTrades: string;
+  winPoints: string;
+  losePoints: string;
+  rewards: string;
 }

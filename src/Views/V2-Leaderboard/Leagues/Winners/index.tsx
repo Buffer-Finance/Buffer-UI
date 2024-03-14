@@ -3,7 +3,7 @@ import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { UserImage } from '@Views/Profile/Components/UserDataComponent/UserImage';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import { useNavigateToProfile } from '@Views/TradePage/Views/AccordionTable/HistoryTable';
-import { ILeague } from '@Views/V2-Leaderboard/interfaces';
+import { IWeeklyLeague } from '@Views/V2-Leaderboard/interfaces';
 import styled from '@emotion/styled';
 import { Launch } from '@mui/icons-material';
 import { Skeleton } from '@mui/material';
@@ -12,7 +12,7 @@ import { useMedia } from 'react-use';
 import { NetPnl } from '../WinnersByPnl/NetPnl';
 import { Confetti } from './Confetti';
 
-export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
+export const Winners: React.FC<{ winners: IWeeklyLeague[] | undefined }> = ({
   winners,
 }) => {
   const isMobile = useMedia('(max-width:1200px)');
@@ -59,7 +59,7 @@ export const Winners: React.FC<{ winners: ILeague[] | undefined }> = ({
   );
 };
 
-const Data: React.FC<{ participant: ILeague; rank: number }> = ({
+const Data: React.FC<{ participant: IWeeklyLeague; rank: number }> = ({
   participant,
   rank,
 }) => {
@@ -77,22 +77,22 @@ const Data: React.FC<{ participant: ILeague; rank: number }> = ({
       className="flex flex-col items-center gap-3 group"
       isFirst={isFirst}
       onClick={() => {
-        navigatwToProfile(participant.user);
+        navigatwToProfile(participant.userAddress);
       }}
     >
       {isFirst && <Confetti className="absolute z-9 -top-[6px]" />}
-      <UserImage address={participant.user} isFirst={isFirst} />
+      <UserImage address={participant.userAddress} isFirst={isFirst} />
       <RowBetween className="w-full">
         <RowGap gap="4px">
-          <NumberTooltip content={participant.user || ''}>
+          <NumberTooltip content={participant.userAddress || ''}>
             <div className={`text-[#c3c2d4] text-f15 b1200:text-f13`}>
               {isUser
                 ? 'Your Account'
-                : !participant.user
+                : !participant.userAddress
                 ? 'Wallet not connected'
-                : participant.user.slice(0, 3) +
+                : participant.userAddress.slice(0, 3) +
                   '...' +
-                  participant.user.slice(-3)}
+                  participant.userAddress.slice(-3)}
             </div>
           </NumberTooltip>
           <Launch className="invisible b1200:visible group-hover:visible text-[#c3c2d4]" />

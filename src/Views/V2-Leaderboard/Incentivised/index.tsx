@@ -2,35 +2,29 @@ import useStopWatch, { useTimer } from '@Hooks/Utilities/useStopWatch';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import FrontArrow from '@SVG/frontArrow';
 import { getDisplayDateUTC } from '@Utils/Dates/displayDateTime';
-import { toFixed } from '@Utils/NumString';
-import { add, divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import { gt, subtract } from '@Utils/NumString/stringArithmatics';
 import { getDistance } from '@Utils/Staking/utils';
-import { numberWithCommas } from '@Utils/display';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { Warning } from '@Views/Common/Notification/warning';
 import { social } from '@Views/Common/SocialMedia';
 import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
-import TabSwitch from '@Views/Common/TabSwitch';
-import NumberTooltip from '@Views/Common/Tooltips';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { useSetAtom } from 'jotai';
+import { ReactNode, useEffect, useState } from 'react';
 import { LeaderBoard } from '..';
+import { League } from '../Components/BarData';
 import { ContestFilterDD } from '../Components/ContestFilterDD';
 import { TopData } from '../Components/TopData';
 import { DailyWebTable } from '../Daily/DailyWebTable';
 import { DailyStyles } from '../Daily/style';
 import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useDayOffset } from '../Hooks/useDayOffset';
-import { useLeaderboardQuery } from '../Hooks/useLeaderboardQuery';
-import { Winners } from '../Leagues/Winners';
 import { LeaderBoardTabs } from '../Weekly';
-import {
-  readLeaderboardPageActivePageAtom,
-  readLeaderboardPageTotalPageAtom,
-  updateLeaderboardActivePageAtom,
-} from '../atom';
+import { updateLeaderboardActivePageAtom } from '../atom';
+import { TotalTrades, TotalVolume } from './Components';
 import { DailyTournamentConfig } from './config';
+import { getDayId, useDailyLeaderboardData } from './useDailyLeaderBoardData';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
@@ -85,13 +79,17 @@ export const descClass = 'text-f16 tab:text-f14 fw4 text-[#C3C2D4]';
 export const Incentivised = () => {
   const { activeChain } = useActiveChain();
   const { day, nextTimeStamp } = useDayOfTournament();
-  const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
-  const { data, totalTournamentData, loserUserRank, winnerUserRank } =
-    useLeaderboardQuery();
-  const totalPages = useAtomValue(readLeaderboardPageTotalPageAtom);
+  const [activeTab, setActiveTab] = useState(0);
+  const tabs = [
+    { name: 'Bronze' },
+    { name: 'Silver' },
+    { name: 'Gold' },
+    { name: 'Platinum' },
+    { name: 'Diamond' },
+  ];
+  const { data } = useDailyLeaderboardData(tabs[activeTab].name);
   const setTableActivePage = useSetAtom(updateLeaderboardActivePageAtom);
   const { offset, setOffset } = useDayOffset();
-  const [activeTab, setActiveTab] = useState(0);
 
   const configValue = DailyTournamentConfig[activeChain.id];
   const launchTimeStamp = configValue.startTimestamp / 1000;
@@ -101,67 +99,7 @@ export const Incentivised = () => {
   const stopwatch = useStopWatch(midnightTimeStamp);
   const decimals = useDecimalsByAsset();
   const usdcDecimals = decimals['USDC'];
-
-  const skip = useMemo(
-    () => ROWINAPAGE * (activePages.arbitrum - 1),
-    [activePages.arbitrum]
-  );
-  const tableData = useMemo(() => {
-    if (data && data.userStats) {
-      return {
-        winners: data?.userStats.slice(0, 3),
-        others:
-          activePages.arbitrum === 1
-            ? data?.userStats.slice(3, skip + ROWINAPAGE)
-            : data?.userStats.slice(skip, skip + ROWINAPAGE),
-      };
-    } else
-      return {
-        winners: undefined,
-        others: [],
-      };
-  }, [data, skip]);
-  const loserStats = useMemo(() => {
-    if (data && data.loserStats) {
-      return {
-        winners: data?.loserStats.slice(0, 3),
-        others:
-          activePages.arbitrum === 1
-            ? data?.loserStats.slice(3, skip + ROWINAPAGE)
-            : data?.loserStats.slice(skip, skip + ROWINAPAGE),
-      };
-    } else
-      return {
-        winners: undefined,
-        others: [],
-      };
-  }, [data, skip]);
-  const rewardPool = useMemo(() => {
-    if (configValue.endDay !== undefined) {
-      if (offset === null) {
-        if (day >= configValue.endDay) return '0 USDC';
-      } else {
-        if (Number(offset) >= configValue.endDay) return '0 USDC';
-      }
-    }
-    if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
-      return (
-        toFixed(
-          add(
-            configValue.rewardFixedAmount,
-            divide(
-              multiply(
-                configValue.poolPercent,
-                divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
-              ),
-              '100'
-            ) ?? '0'
-          ),
-          0
-        ) + ' USDC'
-      );
-    else return 'fetching...';
-  }, [activeChain, day, offset, data]);
+  const config = getConfig(activeChain.id);
 
   useEffect(() => {
     setActivePageNumber(1);
@@ -188,7 +126,7 @@ export const Incentivised = () => {
     content = (
       <>
         <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
-          <Col
+          {/* <Col
             head={'Reward Pool'}
             desc={
               <NumberTooltip
@@ -204,7 +142,7 @@ export const Incentivised = () => {
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
-          />
+          /> */}
           <Col
             head={`Countdown ${day ? `(#${day})` : ''}`}
             desc={stopwatch}
@@ -215,11 +153,10 @@ export const Incentivised = () => {
           <Col
             head={'Trades'}
             desc={
-              totalTournamentData !== null &&
-              totalTournamentData.allTradesCount !== null &&
-              totalTournamentData.allTradesCount !== undefined
-                ? totalTournamentData.allTradesCount || 0
-                : 0
+              <TotalTrades
+                dayId={getDayId(+subtract(day.toString(), offset ?? '0'))}
+                graphUrl={config.graph.MAIN}
+              />
             }
             descClass={descClass}
             headClass={headClass}
@@ -228,20 +165,10 @@ export const Incentivised = () => {
           <Col
             head={'Volume'}
             desc={
-              data !== null &&
-              data !== undefined &&
-              data.reward !== null &&
-              data.reward[0] !== null &&
-              data.reward[0] !== undefined &&
-              data.reward[0].totalFee !== null &&
-              data.reward[0].totalFee !== undefined
-                ? numberWithCommas(
-                    toFixed(
-                      divide(data.reward[0].totalFee, usdcDecimals) ?? '0',
-                      0
-                    )
-                  ) + ' USDC'
-                : 0
+              <TotalVolume
+                dayId={getDayId(+subtract(day.toString(), offset ?? '0'))}
+                graphUrl={config.graph.MAIN}
+              />
             }
             descClass={descClass}
             headClass={headClass}
@@ -249,14 +176,7 @@ export const Incentivised = () => {
           />
           <Col
             head={'Participants'}
-            desc={
-              totalTournamentData !== null &&
-              totalTournamentData !== undefined &&
-              totalTournamentData.totalUsers !== null &&
-              totalTournamentData.totalUsers !== undefined
-                ? totalTournamentData.totalUsers
-                : 0
-            }
+            desc={data?.loosers?.length ?? 0}
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
@@ -274,48 +194,61 @@ export const Incentivised = () => {
             headClass={headClass}
             className="winner-card"
           />
+          <Col
+            head={'Your League'}
+            desc={<League weekId={0} graphUrl={config.graph.MAIN} />}
+            descClass={descClass}
+            headClass={headClass}
+            className="winner-card"
+          />
         </div>{' '}
         <div className="flex flex-col justify-center b1200:items-center b1200:max-w-[590px] m-auto">
           <LeaderBoardTabs
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            tabList={[{ name: 'Winners' }, { name: 'Losers' }]}
+            tabList={tabs}
           />
-          <TabSwitch
+          {/* <TabSwitch
             value={activeTab}
             className="pt-4"
-            childComponents={[
-              <>
-                <Winners winners={tableData.winners} />
+            childComponents={
+              [
+                // <>
+                //   <Winners winners={loserStats.winners} />
+                //   <DailyWebTable
+                //     standings={loserStats.others}
+                //     count={totalPages.arbitrum}
+                //     activePage={activePages.arbitrum}
+                //     onpageChange={setActivePageNumber}
+                //     userData={data?.userData}
+                //     skip={skip}
+                //     nftWinners={configValue.losersNFT}
+                //     userRank={loserUserRank}
+                //     // isDailyTable
+                //   />
+                // </>,
+              ]
+            }
+          /> */}
+          <div className="pt-4">
+            {/* <Winners winners={tableData.winners} /> */}
 
-                <DailyWebTable
-                  standings={tableData.others}
-                  count={totalPages.arbitrum}
-                  activePage={activePages.arbitrum}
-                  onpageChange={setActivePageNumber}
-                  userData={data?.userData}
-                  skip={skip}
-                  nftWinners={configValue.winnersNFT}
-                  userRank={winnerUserRank}
-                  // isDailyTable
-                />
-              </>,
-              <>
-                <Winners winners={loserStats.winners} />
-                <DailyWebTable
-                  standings={loserStats.others}
-                  count={totalPages.arbitrum}
-                  activePage={activePages.arbitrum}
-                  onpageChange={setActivePageNumber}
-                  userData={data?.userData}
-                  skip={skip}
-                  nftWinners={configValue.losersNFT}
-                  userRank={loserUserRank}
-                  // isDailyTable
-                />
-              </>,
-            ]}
-          />
+            <DailyWebTable
+              winners={data?.winners}
+              loosers={data?.loosers}
+              total_count={0}
+              count={1}
+              activePage={1}
+              onpageChange={setActivePageNumber}
+              userData={undefined}
+              skip={0}
+              nftWinners={configValue.winnersNFT}
+              userRank={'0'}
+              offSet={offset ? subtract(day.toString(), offset) : '0'}
+              // isDailyTable
+            />
+          </div>
+          ,
         </div>
       </>
     );

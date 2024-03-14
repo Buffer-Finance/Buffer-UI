@@ -1,5 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import FrontArrow from '@SVG/frontArrow';
+import { getConfig as getTradeCOnfig } from '@Views/TradePage/utils/getConfig';
 import { useParams } from 'react-router-dom';
 import { LeaderBoard } from '..';
 import { BarData } from '../Components/BarData';
@@ -11,6 +12,7 @@ import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
 import { getTournamentEndDateFromWeek } from '../Incentivised';
 import { WinnersByPnl } from './WinnersByPnl';
+import { getWeekId } from './WinnersByPnl/getWeekId';
 import { leagueType } from './atom';
 import {
   bronzeTournamentConfig,
@@ -64,6 +66,7 @@ export const Leagues = () => {
   if (!isLeagueType(league)) return <>Wrong page</>;
   const configValue = getConfig(league, activeChain.id);
   if (configValue === undefined) return <>Wrong page</>;
+  const config = getTradeCOnfig(activeChain.id);
 
   return (
     <LeaderBoard
@@ -118,13 +121,14 @@ export const Leagues = () => {
                         <>
                           <BarData
                             RewardPool={<div>0</div>}
-                            week={week}
+                            week={week - 1}
                             resetTimestamp={nextTimeStamp}
                             offset={offset}
                             setOffset={setOffset}
                             activeChainId={activeChain.id}
-                            config={configValue}
                             league={league}
+                            graphUrl={config.graph.MAIN}
+                            weekId={getWeekId(0) - 1}
                           />
                           <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
                             <WinnersByPnl

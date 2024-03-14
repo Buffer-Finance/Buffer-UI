@@ -5,22 +5,22 @@ import {
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
-import { ILeague } from '@Views/V2-Leaderboard/interfaces';
+import { IWeeklyLeague } from '@Views/V2-Leaderboard/interfaces';
 
 export const NetPnl: React.FC<{
-  currentStanding: ILeague;
+  currentStanding: IWeeklyLeague;
   tokens: any[];
   className?: string;
 }> = ({ currentStanding, tokens, className }) => {
   const perc = multiply(
-    divide(currentStanding.netPnL, currentStanding.volume) as string,
+    divide(currentStanding.totalPnl, currentStanding.totalVolume) as string,
     2
   );
   const isNeg =
     typeof perc === 'string' ? (perc[0] == '-' ? true : false) : perc < 0;
   return (
     <div className="flex items-center text-f15">
-      {currentStanding.netPnL === null ? (
+      {currentStanding.totalPnl === null ? (
         '-'
       ) : (
         <Display

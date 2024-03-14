@@ -159,7 +159,7 @@ export const appConfig = {
     graph: {
       MAIN: `https://subgraph.satsuma-prod.com/${
         import.meta.env.VITE_SATSUMA_KEY
-      }/bufferfinance/v2.5-arbitrum-mainnet/api`,
+      }/bufferfinance/arbitrum-mainnet/version/v2.6.8-points-leaderboards/api`,
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
