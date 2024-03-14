@@ -1,4 +1,5 @@
 import { useToast } from '@Contexts/Toast';
+import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { getSingatureCached } from '@Views/TradePage/cache';
 import { upDOwnV3BaseUrl } from '@Views/TradePage/config';
@@ -73,6 +74,7 @@ const useOneCTWallet = () => {
   const toatlMiliseconds = 3000;
   const setOnboardingAnimation = useSetAtom(showOnboardingAnimationAtom);
   const [registrationLaoding, setRegistrationLaoding] = useState(false);
+  const { data: productNames } = useProductName();
 
   const pkLocalStorageIdentifier = useMemo(() => {
     return (
@@ -292,6 +294,12 @@ const useOneCTWallet = () => {
         type: 'error',
         id: 'noparams',
       });
+    if (productNames === undefined)
+      return toastify({
+        id: '10231',
+        type: 'error',
+        msg: 'Product name not found.',
+      });
     try {
       setRegistrationLaoding(true);
 
@@ -344,6 +352,7 @@ const useOneCTWallet = () => {
         nonce: res?.nonce,
         registration_signature: signature,
         environment: activeChain.id,
+        product_id: productNames['UP_DOWN'],
       };
 
       const resp = await axios.post(upDOwnV3BaseUrl + 'register/', null, {

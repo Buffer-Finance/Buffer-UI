@@ -171,6 +171,7 @@ const Approve: React.FC<{
   const toastify = useToast();
   const { state } = useGlobal();
   const { address } = useAccount();
+  const { data: productNames } = useProductName();
 
   const handleApproveClick = async (amount = defaultApprovalAmount) => {
     if (state.txnLoading > 1) {
@@ -215,6 +216,12 @@ const Approve: React.FC<{
           msg: 'Please sign again.',
         });
       }
+      if (productNames === undefined)
+        return toastify({
+          id: '10231',
+          type: 'error',
+          msg: 'Product name not found.',
+        });
       const [_, RSV] = res;
       const user_signature = await getSingatureCached(oneCtWallet);
       const apiSignature = {
@@ -227,6 +234,7 @@ const Approve: React.FC<{
         s: RSV.s,
         user_signature,
         environment: activeChainId,
+        product_id: productNames['UP_DOWN'],
         state: 'PENDING',
         token: tokenName,
       };

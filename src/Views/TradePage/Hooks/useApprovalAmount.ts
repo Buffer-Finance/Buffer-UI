@@ -1,4 +1,6 @@
+import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
 import { selectedPoolActiveMarketAtom } from '@Views/AboveBelow/atoms';
 import { baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
@@ -13,7 +15,8 @@ export const useApprvalAmount = () => {
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const tokenName = activeMarket?.poolInfo.token;
   const { cache } = useSWRConfig();
-
+  const { data: productNames } = useProductName();
+  const toastify = useToast();
   const id = `${userAddress}-user-approval-${activeChainId}-tokenName-${tokenName}`;
 
   const { data, mutate } = useSWR<{
@@ -22,11 +25,18 @@ export const useApprvalAmount = () => {
     is_locked: boolean;
   }>(id, {
     fetcher: async () => {
+      if (productNames === undefined)
+        return toastify({
+          id: '10231',
+          type: 'error',
+          msg: 'Product name not found.',
+        });
+
       if (!userAddress || !activeChainId || !tokenName) return undefined;
       try {
         const { data, status } = await axios.get(
           baseUrl +
-            `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}`
+            `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}&product_id=${productNames['UP_DOWN']}`
         );
         if (status !== 200) return cache.get(id);
         return data;
