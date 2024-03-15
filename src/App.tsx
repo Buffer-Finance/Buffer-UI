@@ -45,6 +45,9 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
+import { Jackpot } from '@Views/Jackpot';
+import { JackpotShare } from '@Views/TradePage/JackpotShare';
+import { JackpotModal } from '@Views/TradePage/Views/AccordionTable/ShareModal/Jackpot';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -127,6 +130,7 @@ const AppRoutes = () => {
           <Route path=":chain" element={<DashboardV2 />} />
         </Route>
         <Route path="/referral" element={<ReferralPage />} />
+        <Route path="/jackpot" element={<Jackpot />} />
         <Route path="/profile" element={<ProfilePage />}>
           <Route path=":chain" element={<ProfilePage />} />
         </Route>

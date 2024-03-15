@@ -19,13 +19,9 @@ export const ProfilePage = () => {
 const Profile = () => {
   return (
     <div>
-      {/* <TokenDataNotIncludedWarning /> */}
       <div className="px-7 my-8 sm:px-3">
         <UserDataComponent />
         <ReferralLink />
-        {/* <ArbitrumOnly hide>
-          <LBFR />
-        </ArbitrumOnly> */}
         <ProfileCardsComponent />
         <ArbitrumOnly hide>
           <ClaimedNFT />
