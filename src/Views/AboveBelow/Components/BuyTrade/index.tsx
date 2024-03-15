@@ -1,5 +1,5 @@
 import { BuyTradeBackground } from '@Views/TradePage/Views/BuyTrade/index';
-import { Buy } from './BuyButton';
+import { BuyButton } from './BuyButtonAPI';
 import { ExpiryDate } from './ExpiryDate';
 import { PayoutProfit } from './PayoutProfit';
 import { PriceFormat } from './PriceFormat';
@@ -16,7 +16,7 @@ export const BuyTrade: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       {/* <SelectedTradeData /> */}
       <TradeSize />
       <PayoutProfit />
-      <Buy />
+      <BuyButton />
     </BuyTradeBackground>
   );
 };

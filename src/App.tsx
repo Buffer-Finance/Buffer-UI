@@ -39,6 +39,8 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { uuid4 } from '@sentry/utils';
+import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
+import { OneCTModal } from '@Views/OneCT/OneCTModal';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -101,8 +103,8 @@ const AppRoutes = () => {
     <div className="relative root w-[100vw] pb-[5px] ">
       <TradesShutter />
       <OpenOcean />
-      {/* <OnboardingAnimation /> */}
-      {/* <OneCTModal /> */}
+      <OnboardingAnimation />
+      <OneCTModal />
       <Routes>
         {/* <Route path="trades" element={<AllTrades />} /> */}
         <Route path="/faucet" element={<IbfrFaucet />} />

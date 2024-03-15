@@ -10,6 +10,7 @@ import { getRoundedPrice } from '../Components/BuyTrade/PriceTable/helpers';
 import { selectedExpiry, selectedPoolActiveMarketAtom } from '../atoms';
 import { useIV } from './useIV';
 import { useSettlementFee } from './useSettlementFee';
+import { logger } from 'ethers';
 export type strikePriceObjectType = {
   strike: number;
   totalFeeAbove: number | null;
@@ -53,14 +54,16 @@ export const useLimitedStrikeArrays = () => {
   }, []);
 
   useEffect(() => {
+    console.log({ activeMarket, expiration, settlementFees, stepsize });
     if (
       activeMarket === undefined ||
       expiration === undefined ||
-      settlementFees === undefined ||
+      !settlementFees ||
       stepsize === undefined ||
       roundedPrice === 0
-    )
+    ) {
       return;
+    }
     const iv = ivs?.[activeMarket.tv_id];
     if (iv === undefined) return;
 
@@ -80,6 +83,7 @@ export const useLimitedStrikeArrays = () => {
           Math.floor(expiration / 1000),
         ]
       );
+
       const settlementFeeAbove =
         settlementFees[marketHash + '-' + getAddress(activeMarket.address)]
           ?.sf_above ?? settlementFees['Base'];
@@ -105,9 +109,12 @@ export const useLimitedStrikeArrays = () => {
         0,
         iv / 1e4
       );
+      console.log({ settlementFees });
+
       const settlementFeeBelow =
         settlementFees[marketHash + '-' + getAddress(activeMarket.address)]
           ?.sf_below ?? settlementFees['Base'];
+      console.log({ settlementFeeBelow, belowProbability });
       let totalFeeBelow: number | null =
         belowProbability + (settlementFeeBelow / 1e4) * belowProbability;
       if (totalFeeBelow < 0.05) totalFeeBelow = null;
@@ -120,6 +127,7 @@ export const useLimitedStrikeArrays = () => {
         baseFeeBelow: belowProbability,
         marketID: marketHash,
       });
+      console.log({ decreasingPriceArray });
       i++;
     }
 

@@ -7,7 +7,7 @@ export const IV: React.FC<{ activeMarket: marketTypeAB | undefined }> = ({
 }) => {
   const { data: ivs } = useIV();
 
-  if (activeMarket === undefined || ivs === undefined)
+  if (activeMarket === undefined || !ivs)
     return <Skeleton className="w-[20px] !h-5 lc " />;
   const iv = ivs[activeMarket.tv_id];
   if (iv === undefined) return <Skeleton className="w-[20px] !h-5 lc " />;

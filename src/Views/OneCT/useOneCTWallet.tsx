@@ -1,7 +1,8 @@
 import { useToast } from '@Contexts/Toast';
+import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
 import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
 import { getSingatureCached } from '@Views/TradePage/cache';
-import { baseUrl } from '@Views/TradePage/config';
+import { aboveBelowBaseUrl } from '@Views/TradePage/config';
 import { WaitToast } from '@Views/TradePage/utils';
 import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
@@ -73,6 +74,7 @@ const useOneCTWallet = () => {
   const toatlMiliseconds = 3000;
   const setOnboardingAnimation = useSetAtom(showOnboardingAnimationAtom);
   const [registrationLaoding, setRegistrationLaoding] = useState(false);
+  const { data: productNames } = useProductName();
 
   const pkLocalStorageIdentifier = useMemo(() => {
     return (
@@ -154,6 +156,8 @@ const useOneCTWallet = () => {
         },
       });
       const privateKey = ethers.utils.keccak256(signature).slice(2);
+      console.log('privateKey', privateKey);
+
       secureLocalStorage.setItem(pkLocalStorageIdentifier, privateKey);
       setCreateLoading(false);
       if (is1CTEnabled(res.one_ct, privateKey, provider, 'one-ct-deb')) {
@@ -243,7 +247,7 @@ const useOneCTWallet = () => {
         environment: activeChain.id,
         api_signature,
       };
-      const resp = await axios.post(baseUrl + 'deregister/', null, {
+      const resp = await axios.post(aboveBelowBaseUrl + 'deregister/', null, {
         params: apiParams,
       });
       toastify({
@@ -289,6 +293,12 @@ const useOneCTWallet = () => {
         msg: 'Someting went wrong. Please try again later',
         type: 'error',
         id: 'noparams',
+      });
+    if (productNames === undefined)
+      return toastify({
+        id: '10231',
+        type: 'error',
+        msg: 'Product name not found.',
       });
     try {
       setRegistrationLaoding(true);
@@ -342,9 +352,10 @@ const useOneCTWallet = () => {
         nonce: res?.nonce,
         registration_signature: signature,
         environment: activeChain.id,
+        product_id: productNames['UP_DOWN'],
       };
 
-      const resp = await axios.post(baseUrl + 'register/', null, {
+      const resp = await axios.post(aboveBelowBaseUrl + 'register/', null, {
         params: apiParams,
       });
 

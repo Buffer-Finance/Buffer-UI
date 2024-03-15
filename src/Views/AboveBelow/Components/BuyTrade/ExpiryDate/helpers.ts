@@ -42,27 +42,29 @@ export function getTimestamps(date = Date.now()) {
     timestamps.push(nextDayTimestamp);
   }
 
+  //add next 2 days
+  const day2 = new Date(date);
+  day2.setUTCDate(day2.getUTCDate() + 2);
+  day2.setUTCHours(8, 0, 0, 0);
+  const day2Timestamp = day2.getTime();
+  timestamps.push(day2Timestamp);
+
+  const getWeekend = (week: number) => {
+    const endOfWeek = new Date(date);
+    const daysUntilFriday = (5 - endOfWeek.getUTCDay() + 7) % 7; // Calculate days until Friday
+    endOfWeek.setUTCDate(endOfWeek.getUTCDate() + daysUntilFriday + week * 7);
+    endOfWeek.setUTCHours(8, 0, 0, 0);
+    return endOfWeek.getTime();
+  };
+
   // End of Week (Friday) at 8 PM
-  const endOfWeek = new Date(date);
-  const daysUntilFriday = (5 - endOfWeek.getUTCDay() + 7) % 7; // Calculate days until Friday
-  endOfWeek.setUTCDate(endOfWeek.getUTCDate() + daysUntilFriday);
-  endOfWeek.setUTCHours(8, 0, 0, 0);
-  const endOfWeekTimestamp = endOfWeek.getTime();
+  const week1 = getWeekend(0);
+  const week2 = getWeekend(1);
+  const week3 = getWeekend(2);
+  if (week1 - currentTimestamp > 43200000) timestamps.push(week1);
 
-  if (endOfWeekTimestamp - currentTimestamp > 43200000)
-    timestamps.push(endOfWeekTimestamp);
-
-  //add next week if the end of week is less than 36 hours away
-  if (endOfWeekTimestamp - currentTimestamp < 129600000) {
-    const nextWeek = new Date(date);
-
-    nextWeek.setUTCDate(
-      nextWeek.getUTCDate() + ((5 - nextWeek.getUTCDay() + 7) % 7) + 7
-    );
-    nextWeek.setUTCHours(8, 0, 0, 0);
-    const nextWeekTimestamp = nextWeek.getTime();
-    timestamps.push(nextWeekTimestamp);
-  }
+  timestamps.push(week2);
+  timestamps.push(week3);
   // return unique timestamps
   return [...new Set(timestamps)];
 }

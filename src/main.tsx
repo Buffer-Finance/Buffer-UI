@@ -23,6 +23,7 @@ const ErrorComponenet = () => {
   );
 };
 
+console.log(`wagmiClient: `, wagmiClient);
 const options = {
   fetcher: (url: string) =>
     axios.get('https://api-v2.buffer.finance/' + url).then((res) => res.data),

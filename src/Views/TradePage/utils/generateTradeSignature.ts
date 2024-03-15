@@ -4,80 +4,73 @@ import { ethers } from 'ethers';
 import { arrayify } from 'ethers/lib/utils.js';
 import { getAddress } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+
 export const getWalletFromOneCtPk = (oneCtPk: string) => {
   return privateKeyToAccount(`0x${oneCtPk}`);
 };
 const generateTradeSignature = async (
   address: any,
-  size: string,
-  duration: string | number,
+  expiration: string | number,
+  contracts: string | number,
+  maxFeePerContract: string | number,
   targetContract: string,
   strike: string,
-  slippage: string,
   partialFill: boolean,
   referral: string,
-  // NFTid: string,
   ts: number,
-  settlementFee: string | number,
-  isUp: boolean,
-  wallet: ethers.Wallet
-): Promise<string[]> => {
-  const baseArgTypes = [
-    'address',
-    'uint256',
-    'uint256',
-    'address',
-    'uint256',
-    'uint256',
-    'bool',
-    'string',
-    'uint256',
-  ];
-  const baseArgs = [
-    address,
-    toFixed(size, 0),
-    +duration * 60 + '',
-    targetContract,
-    toFixed(multiply(strike, 8), 0),
-    slippage,
-    partialFill,
-    referral,
-  ];
-  const isLimit = settlementFee == 0;
-  const baseArgsEnding = isLimit ? [ts] : [ts, settlementFee];
-  const baseArgsEndingTypes = isLimit ? ['uint256'] : ['uint256', 'uint256'];
-  const args = [
-    {
-      values: [...baseArgs, ...baseArgsEnding],
-      types: [...baseArgTypes, ...baseArgsEndingTypes],
+  isAbove: boolean,
+
+  activeChainId: number,
+  routerContract: string,
+  oneCtPk: string
+): Promise<string> => {
+  const wallet = getWalletFromOneCtPk(oneCtPk);
+
+  const domain = {
+    name: 'Validator',
+    version: '1',
+    chainId: activeChainId,
+    verifyingContract: routerContract,
+  };
+  const fullSignatureParams = {
+    types: {
+      EIP712Domain,
+      UserTradeSignature: [
+        { name: 'user', type: 'address' },
+        { name: 'targetContract', type: 'address' },
+        { name: 'expiration', type: 'uint32' },
+        { name: 'contracts', type: 'uint256' },
+        { name: 'strike', type: 'uint256' },
+        { name: 'isAbove', type: 'bool' },
+        { name: 'maxFeePerContract', type: 'uint256' },
+        { name: 'allowPartialFill', type: 'bool' },
+        { name: 'referralCode', type: 'string' },
+        { name: 'timestamp', type: 'uint256' },
+      ],
     },
-    {
-      values: [...baseArgs, isUp, ...baseArgsEnding],
-      types: [...baseArgTypes, 'bool', ...baseArgsEndingTypes],
+    primaryType: 'UserTradeSignature',
+    domain,
+    message: {
+      user: address,
+      targetContract: getAddress(targetContract),
+      expiration,
+      contracts,
+      strike,
+      isAbove,
+      maxFeePerContract,
+      allowPartialFill: partialFill,
+      referralCode: referral,
+      timestamp: ts,
     },
-  ];
-  const hashedMessage: string[] = ['partial', 'full'].map((s, idx) => {
-    return ethers.utils.solidityKeccak256(args[idx].types, args[idx].values);
-  });
-  return await Promise.all(
-    hashedMessage.map((s) => wallet?.signMessage(arrayify(s)))
-  );
+  };
+  console.log(fullSignatureParams);
+
+  const res = await wallet.signTypedData(fullSignatureParams);
+  console.log('comes here');
+
+  return res;
 };
 
-const tradeParamTypes = [
-  { name: 'user', type: 'address' },
-  { name: 'totalFee', type: 'uint256' },
-  { name: 'period', type: 'uint256' },
-  { name: 'targetContract', type: 'address' },
-  { name: 'strike', type: 'uint256' },
-  { name: 'slippage', type: 'uint256' },
-  { name: 'allowPartialFill', type: 'bool' },
-  { name: 'referralCode', type: 'string' },
-  // { name: 'traderNFTId', type: 'uint256' },
-];
-
-const isUpType = { name: 'isAbove', type: 'bool' };
-const settlementFeeType = { name: 'settlementFee', type: 'uint256' };
 const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
@@ -87,73 +80,55 @@ const EIP712Domain = [
 const generateBuyTradeSignature = async (
   address: any,
   size: string,
-  duration: string | number,
+  expiration: number,
   targetContract: string,
-  strike: string,
-  slippage: string,
   partialFill: boolean,
   referral: string,
   ts: number,
-  settlementFee: string | number,
   isUp: boolean,
   oneCtPk: string,
-  activeChainId: any,
+  activeChainId: number,
   routerContract: string
-): Promise<string[]> => {
+): Promise<string> => {
   const wallet = getWalletFromOneCtPk(oneCtPk);
-
-  const isLimit = settlementFee == 0;
-
-  const baseMessage = {
-    user: address,
-    totalFee: size,
-    period: +duration * 60 + '',
-    targetContract,
-    strike: toFixed(multiply(strike, 8), 0),
-    slippage,
-    allowPartialFill: partialFill,
-    referralCode: referral,
-  };
   const domain = {
     name: 'Validator',
     version: '1',
     chainId: activeChainId,
     verifyingContract: routerContract,
   };
-  const key = isLimit
-    ? { partial: 'UserTradeSignature', full: 'MarketDirectionSignature' }
-    : {
-        partial: 'UserTradeSignatureWithSettlementFee',
-        full: 'MarketDirectionSignatureWithSettlementFee',
-      };
-  const extraArgTypes = !isLimit
-    ? [{ name: 'timestamp', type: 'uint256' }, settlementFeeType]
-    : [{ name: 'timestamp', type: 'uint256' }];
-  const extraArgs = !isLimit
-    ? { settlementFee, timestamp: ts }
-    : { timestamp: ts };
-  const partialSignatureParams = {
-    types: {
-      EIP712Domain,
-      [key.partial]: [...tradeParamTypes, ...extraArgTypes],
-    },
-    primaryType: key.partial,
-    domain,
-    message: { ...baseMessage, ...extraArgs },
-  };
   const fullSignatureParams = {
     types: {
       EIP712Domain,
-      [key.full]: [...tradeParamTypes, isUpType, ...extraArgTypes],
+      UserTradeSignature: [
+        { name: 'user', type: 'address' },
+        { name: 'totalFee', type: 'uint256' },
+        { name: 'expiration', type: 'uint32' },
+        { name: 'targetContract', type: 'address' },
+        { name: 'allowPartialFill', type: 'bool' },
+        { name: 'referralCode', type: 'string' },
+        { name: 'timestamp', type: 'uint256' },
+        { name: 'isAbove', type: 'bool' },
+      ],
     },
-    primaryType: key.full,
+    primaryType: 'UserTradeSignature',
     domain,
-    message: { ...baseMessage, isAbove: isUp, ...extraArgs },
+    message: {
+      user: address,
+      totalFee: size,
+      expiration,
+      targetContract: getAddress(targetContract),
+      allowPartialFill: partialFill,
+      referralCode: referral,
+      timestamp: ts,
+      isAbove: isUp,
+    },
   };
-  const res = await Promise.all([
-    wallet.signTypedData(partialSignatureParams),
-    wallet.signTypedData(fullSignatureParams),
-  ]);
+  console.log(fullSignatureParams);
+
+  const res = await wallet.signTypedData(fullSignatureParams);
+  console.log('comes here');
+
   return res;
 };
 const approveParamType = [
