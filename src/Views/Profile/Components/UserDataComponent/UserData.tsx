@@ -219,7 +219,7 @@ export const UserData = () => {
   );
 };
 
-const CircleAroundPicture = () => {
+export const CircleAroundPicture = () => {
   return (
     <svg
       className="absolute z-10"

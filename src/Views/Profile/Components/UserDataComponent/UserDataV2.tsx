@@ -255,7 +255,7 @@ const CircleAroundPicture = () => {
   );
 };
 
-const DataWrapper = styled.div`
+export const DataWrapper = styled.div`
   .winner-card {
     border-right: 1px solid #393953;
     padding: 0 30px;
