@@ -91,10 +91,12 @@ export const appConfig = {
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
         router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
-        signer_manager: '0xb167be9422B03C971BCec106E3B100E51B2489EF',
+        signer_manager: '0xefaBd2f2Cf705A22d132420C89C884Ff6e144AD3',
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
         v2_router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
+        jackpot: '0x65024158941e15283a376F69E40dED61F522cb51',
+
         poolsInfo: {
           '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
             tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
@@ -672,3 +674,55 @@ const baseURLString = isTestnet
 export const baseUrl = import.meta.env[baseURLString];
 
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
+
+let a = {
+  pool: '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c',
+  options: {
+    BTCUSD: {
+      option: '0xdF82846B82b354FD7B8Cb9acd7885a9aC67A58E9',
+      config: '0x2511FeA1762DaCA5b4dBE7e14DBf2B18552e0d78',
+    },
+  },
+  referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
+  router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
+  token: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
+  nft: '0x0000000000000000000000000000000000000000',
+  creation_window: {
+    '0': '0xf45f4dF5e45eeE4181baD384be3Fac5A7e8B1f6f',
+    '2': '0x507B9BCae6FE92abE23663F721eA7be39bdE6D75',
+  },
+  sfd: '0x32A49a15F8eE598C1EeDc21138DEb23b391f425b',
+  pool_oi_storage: '0xA42A3f5a5AAA9cb522A86a350468Dd8596554823',
+  pool_oi_config: '0x81acc6d1d13787F46F55E7E66855854AcdFB4123',
+  option_storage: '0xe9Aba2Cb69DE05Cf4FeD8062c4538C422d42bf70',
+  account_registrar: '0xefaBd2f2Cf705A22d132420C89C884Ff6e144AD3',
+  booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
+  cb: '0xdC26703c30e05c6026d1d7d3890dDAE1B352A475',
+  jackpot: '0x65024158941e15283a376F69E40dED61F522cb51',
+};
+let b = {
+  booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
+  creation_window: {
+    '0': '0xf45f4dF5e45eeE4181baD384be3Fac5A7e8B1f6f',
+    '2': '0x507B9BCae6FE92abE23663F721eA7be39bdE6D75',
+  },
+  poolsInfo: {
+    '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
+      decimals: 6,
+      faucet: null,
+      is_pol: false,
+      token: 'USDC',
+      tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
+    },
+    '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c': {
+      decimals: 18,
+      faucet: null,
+      is_pol: false,
+      token: 'ARB',
+      tokenAddress: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
+    },
+  },
+  referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
+  router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
+  signer_manager: '0xefaBd2f2Cf705A22d132420C89C884Ff6e144AD3',
+};
