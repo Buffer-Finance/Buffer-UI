@@ -666,6 +666,8 @@ export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
 export const defaultMarket = 'BTC-USD';
 export const PRICE_DECIMALS = 1e8;
 export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';
+export const aboveBelowBaseUrl =
+  'https://instant-trading-backend-production-84c6.up.railway.app/';
 
 const baseURLString = isTestnet
   ? isSandbox
@@ -677,7 +679,6 @@ const aboveBelowURLString = isTestnet
   ? 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET'
   : 'VITE_ABOVE_BEWLOW_API_HOST_DEVELOPMENT';
 export const baseUrl = import.meta.env[baseURLString];
-export const aboveBelowBaseUrl = import.meta.env[aboveBelowURLString];
 export const ABBaseURL =
   'https://instant-trading-backend-production-84c6.up.railway.app/';
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
