@@ -83,15 +83,12 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: `https://subgraph.satsuma-prod.com/${
-            import.meta.env.VITE_SATSUMA_KEY
-          }/bufferfinance/above-below-sepolia/version/v2.5.3-up-down-sepolia-graph/api
-          `,
+          MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.0.9-add-contractRegistry/api`,
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
         router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
-        signer_manager: '0xefaBd2f2Cf705A22d132420C89C884Ff6e144AD3',
+        signer_manager: '0xb167be9422B03C971BCec106E3B100E51B2489EF',
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
         v2_router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',

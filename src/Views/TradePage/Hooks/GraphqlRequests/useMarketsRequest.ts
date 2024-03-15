@@ -67,7 +67,7 @@ export const useBothVersionsMarkets = () => {
   async function fetcher(): Promise<response> {
     const response = await axios.post(configData.graph.MAIN, {
       query: `{ 
-        optionContracts(first:1000){
+        optionContracts(first:1000, where: {isRegistered:false}){
                   configContract {
                     address
                     maxFee

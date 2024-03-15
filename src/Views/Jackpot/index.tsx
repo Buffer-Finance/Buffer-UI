@@ -68,14 +68,12 @@ const Jackpot: React.FC<any> = ({}) => {
   const data = {
     data: [bet],
   };
-  const [userTab, setUserTab] = useState(false);
 
-  const headClass = '#B1B6C6';
   return (
-    <div className="flex gap-4 m-auto mt-6">
+    <div className="flex gap-4 m-auto mt-6 sm:mx-4">
       <div className=" flex flex-col gap-5">
         <div className="flex items-center gap-5">
-          <div className="relative w-[72px] h-[72px] ">
+          <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] ">
             <CircleAroundPicture />
             {highestTierNFT !== null ? (
               <img
@@ -85,73 +83,33 @@ const Jackpot: React.FC<any> = ({}) => {
                 }
                 alt=""
                 className={
-                  'absolute z-0 m-2 w-[68px]  h-[68px]  rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%]'
+                  'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
                 }
               />
             ) : (
               <img
                 src="/NFT-ph.png"
                 className={
-                  'absolute z-0 m-2 w-[68px]  h-[68px]  rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%]'
+                  'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
                 }
               />
             )}
           </div>
-          <div className="text-[25px] text-[#C3C2D4] font-[500]">
+          <div className="text-[25px] text-[#C3C2D4] font-[500] sm:hidden ">
             {address
               ? address.substring(0, 4) +
                 '....' +
                 address.substring(address.length - 4)
               : null}
           </div>
+          <JackpotSummary />
         </div>
         <JackpotValueSeciont />
         <RecentJackPotTimer recentTime={1710394831} />
       </div>
       <div className="flex flex-col gap-5">
-        <DataWrapper className="flex items-center justify-center bg-[#171722] py-[15px] rounded-[20px] ">
-          <Col
-            headClass="text-[#B1B6C6] text-[14px] font-[500] px-6 "
-            className="br-jackpot"
-            descClass="text-[#C3C2D4] text-[14px] font-[500] px-6 "
-            head={'No of bets'}
-            desc={'34'}
-          />
-          <Col
-            headClass="text-[#B1B6C6] text-[14px] font-[500] px-6 "
-            className="br-jackpot"
-            descClass="text-[#C3C2D4] text-[14px] font-[500] px-6 "
-            head={'Jackpot Won'}
-            desc={'2'}
-          />
-          <Col
-            headClass="text-[#B1B6C6] text-[14px] font-[500] px-6 "
-            head={'Win'}
-            descClass="text-green  text-[14px] font-bold px-6"
-            desc={'100 ARB'}
-          />
-        </DataWrapper>
-        <div className="bg-[#141823] px-[25px] py-[18px] rounded-[12px]">
-          <div className="flex items-center gap-3 font-[600] text-[#B1B6C6] mb-3">
-            <button
-              onClick={() => {
-                setUserTab(true);
-              }}
-              className={' text-f12 ' + (userTab ? 'text-1' : '')}
-            >
-              Previous Winners
-            </button>
-            <button
-              onClick={() => {
-                setUserTab(false);
-              }}
-              className={' text-f12 ' + (userTab ? '' : 'text-1')}
-            >
-              My Wins
-            </button>
-          </div>
-          <UserCard bet={bet} isUser={userTab} />
-        </div>
+        <JackpotSummary sm />
+        <RecentJackpots sm />
       </div>
     </div>
   );
@@ -159,11 +117,50 @@ const Jackpot: React.FC<any> = ({}) => {
 
 export { Jackpot };
 
+function RecentJackpots(props) {
+  const [userTab, setUserTab] = useState(false);
+
+  const headClass = '#B1B6C6';
+  return (
+    <div
+      className={[
+        'bg-[#141823] px-[25px] py-[18px] rounded-[12px]',
+        props.sm ? 'sm:hidden' : '',
+      ].join(' ')}
+    >
+      <div className="flex items-center gap-3 font-[600] text-[#B1B6C6] mb-3">
+        <button
+          onClick={() => {
+            setUserTab(true);
+          }}
+          className={' text-f12 ' + (userTab ? 'text-1' : '')}
+        >
+          Previous Winners
+        </button>
+        <button
+          onClick={() => {
+            setUserTab(false);
+          }}
+          className={' text-f12 ' + (userTab ? '' : 'text-1')}
+        >
+          My Wins
+        </button>
+      </div>
+      <UserCard bet={bet} isUser={userTab} />
+    </div>
+  );
+}
+
 const JackpotToken = 'ARB';
 function JackpotValueSeciont(props) {
   const amount = '34443';
   return (
-    <div className="relative flex flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-[680px] h-[200px]  nb-image min-w-fit">
+    <div
+      className={[
+        'relative flex sm:w-full  flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-[680px] h-[200px]  nb-image min-w-fit',
+        props.className,
+      ].join(' ')}
+    >
       <button className="relative mt-4 flex  gap-1 self-end items-center">
         <img
           loading="lazy"
@@ -199,6 +196,38 @@ const format = (s) => {
   };
   return ob?.[s] ?? s;
 };
+
+function JackpotSummary(props) {
+  return (
+    <DataWrapper
+      className={[
+        'flex items-center justify-center bg-[#171722] py-[15px] rounded-[20px] ',
+        props.sm ? 'sm:hidden' : '',
+      ].join(' ')}
+    >
+      <Col
+        headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
+        className="br-jackpot"
+        descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
+        head={'No of bets'}
+        desc={'34'}
+      />
+      <Col
+        headClass="text-[#B1B6C6]  sm:text-[12px] sm:px-5 text-[14px] font-[500] px-6 "
+        className="br-jackpot"
+        descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
+        head={'Jackpot Won'}
+        desc={'2'}
+      />
+      <Col
+        headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
+        head={'Win'}
+        descClass="text-green  sm:text-[12px] sm:px-5  text-[14px] font-bold px-6"
+        desc={'100 ARB'}
+      />
+    </DataWrapper>
+  );
+}
 
 function RecentJackPotTimer({ recentTime }) {
   const timer = useTimer2(recentTime);
@@ -252,8 +281,9 @@ function RecentJackPotTimer({ recentTime }) {
 const CircleAroundPicture = () => {
   return (
     <svg
-      width="77"
-      height="77"
+      width="45"
+      height="45"
+      className="sm:w-[45px] sm:h-[45px] h-[77px] w-[77px] "
       viewBox="0 0 77 77"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
