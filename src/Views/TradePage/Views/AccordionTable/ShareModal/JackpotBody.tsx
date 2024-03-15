@@ -3,6 +3,8 @@ import { JackpotButtons } from './JackpotButtons';
 import styled from '@emotion/styled';
 import { UpDownChip } from '../UpDownChip';
 import MemoARBMonochrome from '@SVG/Elements/ARBMonochrome';
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
 
 const BGImage = styled.div`
   background-image: url('/JackpotBG.png');
@@ -14,9 +16,12 @@ const BGImage = styled.div`
 
 const JackpotBody: React.FC<any> = ({}) => {
   const ref = useRef(null);
+  const { width, height } = useWindowSize();
+
   return (
     <div>
       <div className="text-[#C3C2D4] w-[380px] h-[199px]  origin-left ">
+        <Confetti width={width} height={height} numberOfPieces={100} />
         <BGImage ref={ref}>
           <div className="font-[600] mt-6 text-[#B1B6C6] text-f15 w-full text-center">
             You won the Jackpot..
