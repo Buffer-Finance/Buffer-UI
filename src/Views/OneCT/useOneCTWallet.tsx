@@ -304,6 +304,7 @@ const useOneCTWallet = () => {
       setRegistrationLaoding(true);
 
       const wallet = getWalletFromOneCtPk(oneCtPk);
+      console.log(`useOneCTWallet-wallet: `, wallet);
 
       const domain = {
         name: 'Validator',
@@ -337,6 +338,7 @@ const useOneCTWallet = () => {
         },
       });
 
+      console.log(`useOneCTWallet-signature: `, signature);
       if (!signature) {
         setRegistrationLaoding(false);
         return toastify({
