@@ -1,5 +1,11 @@
 import { toFixed } from '@Utils/NumString';
-import { add, divide, gt, gte } from '@Utils/NumString/stringArithmatics';
+import {
+  add,
+  divide,
+  gt,
+  gte,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
@@ -20,6 +26,7 @@ import { PoolDropdown } from './PoolDropdown';
 import { TradeSizeInput } from './TradeSizeInput';
 import { WalletBalance, formatBalance } from './WalletBalance';
 import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
+import { Link } from 'react-router-dom';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -126,10 +133,32 @@ const PlatfromFeeError = ({
         {jackpotEligible ? (
           <>
             <LightToolTipSVG className="mt-[2px]" />
-            Eligible for Jackpot 💰{' '}
+            Eligible for{' '}
+            <Link
+              to="/Jackpot"
+              className="hover:underline hover:cursor-pointer"
+            >
+              <a>Jackpot</a>
+            </Link>{' '}
+            💰{' '}
           </>
         ) : (
-          ''
+          <>
+            <LightToolTipSVG className="mt-[2px]" />
+            Add{' '}
+            {(+subtract(
+              jackpotValue?.minSize?.toString(),
+              tradeSize || '0'
+            )).toFixed(2)}{' '}
+            for
+            <Link
+              to="/Jackpot"
+              className="hover:underline hover:cursor-pointer"
+            >
+              <a>Jackpot</a>
+            </Link>{' '}
+            💰{' '}
+          </>
         )}
       </div>
     </RowGapItemsTop>

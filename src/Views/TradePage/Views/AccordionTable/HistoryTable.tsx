@@ -1,5 +1,5 @@
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
-import { divide, gt, gte } from '@Utils/NumString/stringArithmatics';
+import { divide, gt, gte, lte } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import BufferTable from '@Views/Common/BufferTable';
 import NumberTooltip from '@Views/Common/Tooltips';
@@ -21,7 +21,7 @@ import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
 import { TradeType } from '@Views/TradePage/type';
 import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMedia } from 'react-use';
 import { TradeTimeElapsed } from '../BuyTrade/ActiveTrades/TradeTimeElapsed';
 import { AssetCell } from './AssetCell';
@@ -114,6 +114,18 @@ const HistoryTable: React.FC<{
       getJackpotKey(trade),
       jackpotManager.jackpot.jackpots
     );
+    const jackpotValue = divide(
+      jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]?.jackpot_amount ||
+        trade?.jackpotAmount ||
+        '0',
+      18
+    );
+    const isJackpotDisabled = jackpotValue && lte(jackpotValue, '0');
+    console.log(
+      `HistoryTable-isJackpotDisabled: `,
+      isJackpotDisabled,
+      jackpotValue
+    );
     if (trade === undefined) return <></>;
     // if (!readcallData) return <>no readcall data</>;
 
@@ -170,16 +182,22 @@ const HistoryTable: React.FC<{
         );
       case TableColumn.TimeLeft:
         return (
-          <div className=" font-[500] text-[12px] text-[#C3C2D4]  flex items-center gap-2">
-            <img className="w-[24px] h-[19px]" src="/JV.png" />
+          <div
+            className={
+              ' font-[500] text-[12px] text-[#C3C2D4]  flex items-center gap-2'
+            }
+          >
+            <Link to={'/Jackpot'}>
+              <img
+                className={[
+                  'w-[24px] h-[19px]',
+                  isJackpotDisabled ? 'opacity-30' : '',
+                ].join(' ')}
+                src="/JV.png"
+              />
+            </Link>
             <Display
-              data={divide(
-                jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]
-                  ?.jackpot_amount ||
-                  trade?.jackpotAmount ||
-                  '0',
-                18
-              )}
+              data={jackpotValue}
               className="!justify-start"
               unit={poolInfo.token}
             />
@@ -192,7 +210,7 @@ const HistoryTable: React.FC<{
       case TableColumn.TradeSize:
         if (!isNotMobile) {
           return (
-            <div className="flex items-center">
+            <div className={'flex items-center'}>
               <Display
                 data={divide(trade.trade_size, poolInfo.decimals)}
                 className="!justify-start"
