@@ -49,6 +49,7 @@ const App = () => {
   const secondsduration = urlObject.duration;
   const ab = urlObject.ab ? true : false;
   const creationTime = urlObject.creationTime;
+  const expirationTime = urlObject.expirationTime;
   console.log(`App-ab: `, ab);
 
   const { width, height } = useWindowSize();
@@ -132,7 +133,7 @@ const App = () => {
             <div className="flex text-[50px] items-center  text-[#8F95A4] gap-2 mt-[-10px]">
               <MemoTimerGIF className="mt-[5px]" />
               {ab ? (
-                <TSDisplay ts={creationTime} />
+                <TSDisplay ts={expirationTime} />
               ) : (
                 formatDistance(Variables(secondsduration))
               )}
