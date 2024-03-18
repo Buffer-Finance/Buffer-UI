@@ -163,7 +163,7 @@ function JackpotValueSeciont(props) {
     return (
       <div
         className={[
-          'relative flex  sm:sm:aspect-[1.7]   flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-full   nb-image min-w-fit',
+          'relative flex  sm:sm:aspect-[1.7]   flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-full   nb-image-sm min-w-fit',
           props.className,
         ].join(' ')}
       >
