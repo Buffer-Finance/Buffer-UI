@@ -32,6 +32,7 @@ import {
 import { tradePanelPosition } from './type';
 import { useJackpotEvent } from '@Views/Jackpot/useJackpotEvent';
 import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
+import { JackpotModal } from './Views/AccordionTable/ShareModal/Jackpot';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -218,6 +219,7 @@ export const EssentialModals = () => {
 
       <MarketTimingsModal />
       <ShareModal />
+      <JackpotModal />
       <ModalBase
         className="!p-[0px]"
         open={selectedTrade ? true : false}

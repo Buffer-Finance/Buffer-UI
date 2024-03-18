@@ -1,5 +1,5 @@
 import { toFixed } from '@Utils/NumString';
-import { add, divide, gt } from '@Utils/NumString/stringArithmatics';
+import { add, divide, gt, gte } from '@Utils/NumString/stringArithmatics';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
@@ -19,6 +19,7 @@ import { BuyUSDCLink } from '../BuyUsdcLink';
 import { PoolDropdown } from './PoolDropdown';
 import { TradeSizeInput } from './TradeSizeInput';
 import { WalletBalance, formatBalance } from './WalletBalance';
+import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -32,6 +33,7 @@ export const TradeSizeSelector: React.FC<{
   const readcallData = useAtomValue(buyTradeDataAtom);
   const { registeredOneCT } = useOneCTWallet();
 
+  console.log(`index-switchPool: `, switchPool);
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
   const decimals = poolDetails.decimals;
@@ -44,6 +46,7 @@ export const TradeSizeSelector: React.FC<{
   ) as string;
   const platformFee = divide(switchPool.platformFee, decimals) as string;
   const maxTradeSize = maxFee;
+  console.log(`index-maxTradeSize: `, maxTradeSize);
   return (
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
@@ -91,17 +94,22 @@ const PlatfromFeeError = ({
   tradeToken: string;
   balance: string;
 }) => {
+  const jackpotValue = useJackpotInfo();
+  console.log(`index-jackpotValue: `, jackpotValue);
   const tradeSize = useAtomValue(tradeSizeAtom);
+  const jackpotEligible =
+    tradeToken == 'ARB' &&
+    gte(tradeSize || '0', jackpotValue?.minSize?.toString() || '1');
   const notEnoughForTrade = gt(tradeSize || '0', balance);
   const notEnooghForFee = gt(add(tradeSize || '0', platfromFee), balance);
   const isError = notEnooghForFee;
   if (notEnooghForFee && notEnoughForTrade) return <></>;
   return (
     <RowGapItemsTop
-      gap="4px"
+      gap="2px"
       className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
     >
-      <LightToolTipSVG className="mt-[3px]" />
+      <LightToolTipSVG className="mt-[2px]" />
       {isError ? (
         <>
           Insufficient funds for platform fee.{' '}
@@ -114,6 +122,16 @@ const PlatfromFeeError = ({
           </>
         )
       )}
+      <div className="ml-auto flex items-center gap-1">
+        {jackpotEligible ? (
+          <>
+            <LightToolTipSVG className="mt-[2px]" />
+            Eligible for Jackpot 💰{' '}
+          </>
+        ) : (
+          ''
+        )}
+      </div>
     </RowGapItemsTop>
   );
 };

@@ -36,7 +36,7 @@ const useJackpotInfo = () => {
     },
   });
   console.log('Jackpot-deb', res);
-  return res;
+  return res.data;
 };
 
 export { useJackpotInfo };

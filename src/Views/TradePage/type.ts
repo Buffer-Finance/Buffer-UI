@@ -145,8 +145,9 @@ export type tradesApiResponseType = {
 
 export type JackpotType = {
   user_address: string;
-  jackpot_amount: bigint;
+  jackpot_amount: string;
   target_contract: string;
   option_id: number;
   router: string;
+  trade_size: string;
 };

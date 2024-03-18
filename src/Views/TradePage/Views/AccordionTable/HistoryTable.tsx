@@ -35,6 +35,7 @@ import {
 } from './Common';
 import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
+import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
 
 enum TableColumn {
   Asset = 0,
@@ -78,7 +79,7 @@ const HistoryTable: React.FC<{
         'Strike Price',
         'Expiry Price',
         'Open Time',
-        'Duration',
+        'Jackpot',
         'Close Time',
         'Trade Size',
         'Payout',
@@ -90,7 +91,7 @@ const HistoryTable: React.FC<{
         'Strike Price',
         'Expiry Price',
         'Open Time',
-        'Duration',
+        'Jackpot',
         'Close Time',
         'Trade Size',
         'Payout',
@@ -100,12 +101,19 @@ const HistoryTable: React.FC<{
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
+
+  const jackpotManager = useJackpotManager();
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
   const navigateToProfile = useNavigateToProfile();
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
+    console.log(
+      `HistoryTable-getJackpotKey(trade): `,
+      getJackpotKey(trade),
+      jackpotManager.jackpot.jackpots
+    );
     if (trade === undefined) return <></>;
     // if (!readcallData) return <>no readcall data</>;
 
@@ -162,11 +170,20 @@ const HistoryTable: React.FC<{
         );
       case TableColumn.TimeLeft:
         return (
-          queuedTradeFallBack(trade, true) || (
-            <div>
-              {formatDistance(Variables(minClosingTime - trade.open_timestamp))}
-            </div>
-          )
+          <div className=" font-[500] text-[12px] text-[#C3C2D4]  flex items-center gap-2">
+            <img className="w-[30px] h-[26px]" src="/JV.png" />
+            <Display
+              data={divide(
+                jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]
+                  ?.jackpot_amount ||
+                  trade?.jackpotAmount ||
+                  '0',
+                18
+              )}
+              className="!justify-start"
+              unit={poolInfo.token}
+            />
+          </div>
         );
       case TableColumn.CloseTime:
         return (
@@ -284,7 +301,22 @@ const HistoryTable: React.FC<{
               )}
             </div>
           );
-        return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
+        return (
+          <button
+            onClick={() =>
+              jackpotManager.addJackpot({
+                option_id: trade.option_id,
+                target_contract: trade.target_contract,
+                jackpot_amount: 12 * 1e18,
+                router: trade.target_contract,
+                user_address: trade.user_address,
+                trade_size: trade.trade_size,
+              })
+            }
+          >
+            Adding
+          </button>
+        );
     }
     return 'Unhandled Body';
   };
