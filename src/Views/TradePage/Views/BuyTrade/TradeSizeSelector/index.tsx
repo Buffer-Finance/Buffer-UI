@@ -33,7 +33,7 @@ export const TradeSizeSelector: React.FC<{
   const readcallData = useAtomValue(buyTradeDataAtom);
   const { registeredOneCT } = useOneCTWallet();
 
-  console.log(`index-switchPool: `, switchPool);
+  console.log(`index-switchPool: `, switchPool, readcallData, poolDetails);
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
   const decimals = poolDetails.decimals;

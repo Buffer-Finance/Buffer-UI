@@ -171,7 +171,7 @@ const HistoryTable: React.FC<{
       case TableColumn.TimeLeft:
         return (
           <div className=" font-[500] text-[12px] text-[#C3C2D4]  flex items-center gap-2">
-            <img className="w-[30px] h-[26px]" src="/JV.png" />
+            <img className="w-[24px] h-[19px]" src="/JV.png" />
             <Display
               data={divide(
                 jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]
@@ -301,6 +301,8 @@ const HistoryTable: React.FC<{
               )}
             </div>
           );
+        return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
+
         return (
           <button
             onClick={() =>
