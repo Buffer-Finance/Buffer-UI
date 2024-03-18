@@ -11,7 +11,7 @@ import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { useSetAtom } from 'jotai';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { LeaderBoard } from '..';
 import { League } from '../Components/BarData';
 import { ContestFilterDD } from '../Components/ContestFilterDD';
@@ -22,7 +22,7 @@ import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useDayOffset } from '../Hooks/useDayOffset';
 import { LeaderBoardTabs } from '../Weekly';
 import { updateLeaderboardActivePageAtom } from '../atom';
-import { TotalTrades, TotalVolume } from './Components';
+import { Participants, TotalTrades, TotalVolume } from './Components';
 import { DailyTournamentConfig } from './config';
 import { getDayId, useDailyLeaderboardData } from './useDailyLeaderBoardData';
 
@@ -109,6 +109,27 @@ export const Incentivised = () => {
     setTableActivePage({ arbitrum: page });
   };
 
+  const totalCount = useMemo(() => {
+    if (data === undefined) return 0;
+    let totalParticipants = 0;
+    if (typeof data.total_count === 'number')
+      totalParticipants = data.total_count;
+    else {
+      totalParticipants = data.total_count.length;
+    }
+
+    if (totalParticipants === undefined) {
+      if (data.winners !== undefined && data.loosers !== undefined) {
+        totalParticipants = data.winners.length + data.loosers.length;
+      } else if (data.winners !== undefined && data.loosers === undefined) {
+        totalParticipants = data.winners.length;
+      } else if (data.winners === undefined && data.loosers !== undefined) {
+        totalParticipants = data.loosers.length;
+      }
+    }
+    return totalParticipants;
+  }, [data]);
+
   let content;
   if (!isTimerEnded) {
     content = (
@@ -154,7 +175,7 @@ export const Incentivised = () => {
             head={'Trades'}
             desc={
               <TotalTrades
-                dayId={getDayId(+subtract(day.toString(), offset ?? '0'))}
+                dayId={getDayId(Number(day - Number(offset ?? day)))}
                 graphUrl={config.graph.MAIN}
               />
             }
@@ -166,7 +187,7 @@ export const Incentivised = () => {
             head={'Volume'}
             desc={
               <TotalVolume
-                dayId={getDayId(+subtract(day.toString(), offset ?? '0'))}
+                dayId={getDayId(Number(day - Number(offset ?? day)))}
                 graphUrl={config.graph.MAIN}
               />
             }
@@ -176,7 +197,7 @@ export const Incentivised = () => {
           />
           <Col
             head={'Participants'}
-            desc={data?.loosers?.length ?? 0}
+            desc={<Participants data={data} />}
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
@@ -236,7 +257,7 @@ export const Incentivised = () => {
             <DailyWebTable
               winners={data?.winners}
               loosers={data?.loosers}
-              total_count={0}
+              total_count={totalCount}
               count={1}
               activePage={1}
               onpageChange={setActivePageNumber}

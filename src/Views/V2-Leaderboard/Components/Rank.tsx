@@ -1,5 +1,4 @@
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-import Trophy from './Trophy';
 
 export const Rank: React.FC<{
   userRank: number | string;
@@ -15,13 +14,13 @@ export const Rank: React.FC<{
     <CellContent
       content={[
         <div className={firstColPadding + ' flex items-center gap-2'}>
-          <Trophy
+          {/* <Trophy
             isUser={isUser}
             row={row}
             currentRank={Number(rank)}
             nftWinners={nftWinners}
-          />
-          <div className="light-blue-text relative my-2 flex flex-row items-center">
+          /> */}
+          <div className="light-blue-text relative my-2 flex flex-row items-center ml-7">
             # {rank}
           </div>
         </div>,

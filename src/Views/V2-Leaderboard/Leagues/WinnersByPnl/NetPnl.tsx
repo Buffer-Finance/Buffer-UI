@@ -37,8 +37,8 @@ export const NetPnl: React.FC<{
                 values={tokens.map((token) => {
                   const percentage = multiply(
                     divide(
-                      currentStanding[`${token.toLowerCase()}NetPnL`] as string,
-                      currentStanding[`${token.toLowerCase()}Volume`]
+                      currentStanding[`${token.toUpperCase()}Pnl`] as string,
+                      currentStanding[`${token.toUpperCase()}Volume`]
                     ) ?? '0',
                     2
                   );

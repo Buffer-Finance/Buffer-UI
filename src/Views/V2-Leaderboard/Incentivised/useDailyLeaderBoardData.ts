@@ -126,9 +126,14 @@ const fetchFromGraph = async (
     : '';
 
   const query = `{${leaderboardQuery}}`;
-  const response = await axios.post(graphUrl, {
-    query,
-  });
+  const response = await axios.post(
+    `https://subgraph.satsuma-prod.com/${
+      import.meta.env.VITE_SATSUMA_KEY
+    }/bufferfinance/arbitrum-mainnet/version/v2.6.9-points-leaderboards/api`,
+    {
+      query,
+    }
+  );
 
   return response.data?.data as ILeaderboardQuery;
 };
@@ -139,6 +144,7 @@ export function getDayId(offset: number): number {
     timestamp = timestamp - offset * 86400;
   }
   let dayTimestamp = Math.floor((timestamp - 16 * 3600) / 86400);
+  console.log('dayTimestamp', dayTimestamp, offset);
   return dayTimestamp;
 }
 

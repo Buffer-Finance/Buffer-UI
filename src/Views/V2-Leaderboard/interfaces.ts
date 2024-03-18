@@ -36,5 +36,6 @@ export interface IWeeklyLeague {
   totalTrades: string;
   winPoints: string;
   losePoints: string;
-  rewards: string;
+  winRewards: string;
+  loseRewards: string;
 }

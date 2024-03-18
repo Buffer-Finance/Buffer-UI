@@ -120,7 +120,6 @@ export const Leagues = () => {
                       Data={
                         <>
                           <BarData
-                            RewardPool={<div>0</div>}
                             week={week - 1}
                             resetTimestamp={nextTimeStamp}
                             offset={offset}
@@ -133,7 +132,6 @@ export const Leagues = () => {
                           <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
                             <WinnersByPnl
                               activeChainId={activeChain.id}
-                              config={configValue}
                               league={league}
                               offset={offset}
                               week={week}

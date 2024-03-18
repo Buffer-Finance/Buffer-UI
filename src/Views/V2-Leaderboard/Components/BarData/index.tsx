@@ -3,18 +3,17 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { Col } from '@Views/Common/ConfirmationModal';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
 import { useWinnersByPnlWeekly } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/useWinnersByPnlWeekly';
 import { leagueType } from '@Views/V2-Leaderboard/Leagues/atom';
 import { Skeleton } from '@mui/material';
 import axios from 'axios';
-import { ReactNode } from 'react';
 import useSWR from 'swr';
 import { descClass, headClass } from '../../Incentivised';
 import { ContestFilterDD } from '../ContestFilterDD';
 
 export const BarData: React.FC<{
-  RewardPool: ReactNode;
   week: number;
   resetTimestamp: number;
   offset: string | null;
@@ -24,7 +23,6 @@ export const BarData: React.FC<{
   graphUrl: string;
   weekId: number;
 }> = ({
-  RewardPool,
   week,
   resetTimestamp,
   offset,
@@ -44,12 +42,21 @@ export const BarData: React.FC<{
   });
 
   if (error) return <div>error</div>;
-  const numOfParticipants = data?.total_count;
+  let numOfParticipants = undefined;
+  if (data) {
+    if (data.loosers !== undefined && data.winners !== undefined) {
+      numOfParticipants = data.loosers.length + data.winners.length;
+    } else if (data.loosers !== undefined && data.winners === undefined) {
+      numOfParticipants = data.loosers.length;
+    } else if (data.loosers === undefined && data.winners !== undefined) {
+      numOfParticipants = data.winners.length;
+    }
+  }
   return (
     <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
       <Col
         head={'Reward Pool'}
-        desc={RewardPool}
+        desc={<RewardPool league={league} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
@@ -109,6 +116,33 @@ export const BarData: React.FC<{
         className="winner-card"
       />
     </div>
+  );
+};
+
+const RewardPool: React.FC<{ league: leagueType }> = ({ league }) => {
+  const WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE = {
+    diamond: 3500,
+    platinum: 2500,
+    silver: 2000,
+    gold: 1500,
+    bronze: 500,
+  };
+  const WEEKLY_LOSS_REWARDS_ALLOCATION_BY_LEAGUE = {
+    diamond: 800,
+    platinum: 500,
+    silver: 400,
+    gold: 200,
+    bronze: 100,
+  };
+  return (
+    <Display
+      data={
+        WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE[league] +
+        WEEKLY_LOSS_REWARDS_ALLOCATION_BY_LEAGUE[league]
+      }
+      unit="ARB"
+      precision={0}
+    />
   );
 };
 
@@ -202,9 +236,14 @@ const useTotalData = (weekId: number, graphUrl: string) => {
       }
       `;
       const query = `{${leaderboardQuery}}`;
-      const response = await axios.post(graphUrl, {
-        query,
-      });
+      const response = await axios.post(
+        `https://subgraph.satsuma-prod.com/${
+          import.meta.env.VITE_SATSUMA_KEY
+        }/bufferfinance/arbitrum-mainnet/version/v2.6.9-points-leaderboards/api`,
+        {
+          query,
+        }
+      );
 
       return response.data?.data as {
         totalDatas: {
