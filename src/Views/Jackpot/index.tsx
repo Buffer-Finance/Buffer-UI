@@ -14,6 +14,7 @@ import TimeAgo from 'javascript-time-ago';
 
 import en from 'javascript-time-ago/locale/en.json';
 import { useState } from 'react';
+import { useMedia } from 'react-use';
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(en);
@@ -71,7 +72,7 @@ const Jackpot: React.FC<any> = ({}) => {
 
   return (
     <div className="flex gap-4 m-auto mt-6 sm:mx-4">
-      <div className=" flex flex-col gap-5">
+      <div className=" flex flex-col gap-5 sm:w-full">
         <div className="flex items-center gap-5">
           <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] ">
             <CircleAroundPicture />
@@ -106,8 +107,11 @@ const Jackpot: React.FC<any> = ({}) => {
         </div>
         <JackpotValueSeciont />
         <RecentJackPotTimer recentTime={1710394831} />
+        <div className="nsm:hidden">
+          <RecentJackpots />
+        </div>
       </div>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 sm:hidden">
         <JackpotSummary sm />
         <RecentJackpots sm />
       </div>
@@ -154,6 +158,41 @@ function RecentJackpots(props) {
 const JackpotToken = 'ARB';
 function JackpotValueSeciont(props) {
   const amount = '34443';
+  const isMobile = useMedia('(max-width:600px)');
+  if (isMobile) {
+    return (
+      <div
+        className={[
+          'relative flex  sm:sm:aspect-[1.7]   flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-full   nb-image min-w-fit',
+          props.className,
+        ].join(' ')}
+      >
+        <button className="relative mt-4 flex  gap-1 self-end items-center">
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/c918dc20adb64f78c725558364a049f97b9c2d04ba6e3e9d5e946ec1ee5c8b34?"
+            className=" -mt-[1px] items-center w-[12px] justify-center object-contain object-center  max-w-full overflow-hidden aspect-square shrink-0"
+          />
+          <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap">
+            How it works
+          </div>
+        </button>
+        <div className="relative mt-[5%] text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-11 max-md:mt-10">
+          Jackpot Value
+        </div>
+        <div className="flex justify-between w-full">
+          <div className="relative w-full gap-3 mt-3 flex items-center justify-center text-[34px] font-bold text-center text-blue-300 ">
+            <img className=" w-[60px] h-[60px]" src="/JV.png" />
+            {toFixed(amount?.toString(), 2)}
+            {' ' + JackpotToken}
+          </div>
+        </div>
+        <div className="text-[#B1B6C6] flex gap-1 font-[700] text-[12px]">
+          Minimum Bet Size <div className="text-[#fff]">30 ARB</div>{' '}
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       className={[
@@ -237,6 +276,25 @@ function RecentJackPotTimer({ recentTime }) {
     timerCols = timerCols.splice(1);
   }
   const navigate = useNavigate();
+  const isMobile = useMedia('(max-width:600px)');
+  if (isMobile) {
+    return (
+      <div className="flex text-[#B1B6C6]  items-center justify-center gap-[4vw]">
+        <div className="font-[500] text-[12px]">since the last jackpot</div>
+        <div className="font-[700] text-[16px] text-1">
+          {timerCols.map(([k, v]) => v).join(':')}
+        </div>
+        <button
+          className=" bg-[#3772FF] h-[22px] text-[14px] w-[60px] font-[600] text-1 rounded-sm "
+          onClick={() => {
+            navigate('slots');
+          }}
+        >
+          Trade
+        </button>{' '}
+      </div>
+    );
+  }
   return (
     <div className="items-center bg-[#141823] pt-[30px] flex max-w-[676px] flex-col pt-11 pb-6 px-16 rounded-lg max-md:px-5 dd">
       {recentTime ? (
