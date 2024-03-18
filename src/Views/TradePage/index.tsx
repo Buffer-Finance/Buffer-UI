@@ -30,6 +30,8 @@ import {
   tradePanelPositionSettingsAtom,
 } from './atoms';
 import { tradePanelPosition } from './type';
+import { useJackpotEvent } from '@Views/Jackpot/useJackpotEvent';
+import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -38,6 +40,8 @@ const TradePage: React.FC<any> = ({}) => {
   useBuyTradeData();
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
+  useJackpotEvent();
+  useJackpotInfo();
   useEffect(() => {
     closeShutter();
     return closeShutter;

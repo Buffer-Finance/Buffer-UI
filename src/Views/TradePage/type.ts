@@ -142,3 +142,11 @@ export type tradesApiResponseType = {
   page_data: TradeType[] | undefined;
   total_pages: number;
 };
+
+export type JackpotType = {
+  user_address: string;
+  jackpot_amount: bigint;
+  target_contract: string;
+  option_id: number;
+  router: string;
+};
