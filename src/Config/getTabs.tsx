@@ -355,6 +355,7 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+
       {
         to: `https://stats.buffer.finance/`,
         name: 'Stats',
@@ -449,6 +450,12 @@ export const getTabs = (
         name: 'Perps',
         subTabs: [],
         isExternalLink: true,
+      },
+      {
+        to: `/Jackpot`,
+        name: 'Jackpot',
+        subTabs: [],
+        isExternalLink: false,
       },
       {
         to: `https://optopi.buffer.finance/`,
