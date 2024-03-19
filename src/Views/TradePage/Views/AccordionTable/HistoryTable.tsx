@@ -187,7 +187,7 @@ const HistoryTable: React.FC<{
           trade.token == 'ARB' &&
           gte(
             divide(trade.trade_size, 18),
-            jackpotValue?.minSize?.toString() || '1'
+            jackpotInfo?.minSize?.toString() || '1'
           )
         )
           return (
