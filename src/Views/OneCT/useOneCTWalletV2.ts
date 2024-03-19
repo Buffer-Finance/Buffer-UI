@@ -1,7 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
-import { aboveBelowBaseUrl } from '@Views/TradePage/config';
+import { aboveBelowBaseUrl, baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
 import useSWR from 'swr';
 import { useAccount } from 'wagmi';
@@ -11,6 +11,7 @@ export const useUserOneCTData = () => {
   const activeChainId = activeChain?.id;
   const { address: userAddress } = useAccount();
   const { data: productNames } = useProductName();
+  console.log(`productNames: `, productNames);
   const toastify = useToast();
 
   const { data } = useSWR<{
@@ -19,6 +20,7 @@ export const useUserOneCTData = () => {
     state: 'PROCESSED' | 'PENDING';
   }>(`${userAddress}-one-ct-data-on-${activeChainId}`, {
     fetcher: async () => {
+      console.log(`productNames: `, productNames);
       if (productNames === undefined)
         return toastify({
           id: '10231',
@@ -28,8 +30,8 @@ export const useUserOneCTData = () => {
       if (!userAddress || !activeChainId) return null;
       try {
         const response = await axios.get(
-          aboveBelowBaseUrl +
-            `user/onc_ct/?environment=${activeChainId}&user=${userAddress}&product_id=${productNames['UP_DOWN']}`
+          baseUrl +
+            `user/onc_ct/?environment=${activeChainId}&user=${userAddress}`
         );
         return response.data;
       } catch (e) {
