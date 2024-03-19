@@ -42,7 +42,6 @@ const TradePage: React.FC<any> = ({}) => {
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
 
-  useJackpotInfo();
   useEffect(() => {
     closeShutter();
     return closeShutter;
@@ -218,8 +217,8 @@ export const EssentialModals = () => {
       <CloseConfirmationModal />
 
       <MarketTimingsModal />
-      <ShareModal />
       <JackpotModal />
+      <ShareModal />
       <ModalBase
         className="!p-[0px]"
         open={selectedTrade ? true : false}

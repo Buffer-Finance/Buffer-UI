@@ -22,6 +22,7 @@ const JackpotBody: React.FC<{
 }> = ({ trade }) => {
   const ref = useRef(null);
   const { width, height } = useWindowSize();
+  if (!trade?.market) return <div>Trade not found</div>;
   const token0 = trade?.market.token0;
   const token1 = trade?.market.token1;
   console.log(`JackpotBody-trade: `, trade);

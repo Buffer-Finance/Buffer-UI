@@ -46,8 +46,6 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { Jackpot } from '@Views/Jackpot';
-import { JackpotShare } from '@Views/TradePage/JackpotShare';
-import { JackpotModal } from '@Views/TradePage/Views/AccordionTable/ShareModal/Jackpot';
 import { useJackpotEvent } from '@Views/Jackpot/useJackpotEvent';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
@@ -175,8 +173,14 @@ export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 
 function App() {
   useAutoConnect();
+  const [snack, setSnack] = useAtom(snackAtom);
+  const [mobileWarningClosed, setWarningCloseOnMobile] =
+    useAtom(mobileWarningAtom);
   useJackpotEvent();
-  return null;
+
+  const graphStatus = useGraphStatus();
+  const isMobile = useMedia('(max-width:1200px)');
+
   return (
     <>
       {/* <PasswordModal /> */}
@@ -198,7 +202,7 @@ function App() {
             />
           )}
           <Navbar />
-          {/*  <AppRoutes /> */}
+          <AppRoutes />
           <Snackbar
             open={snack.message ? true : false}
             autoHideDuration={3500}
@@ -214,7 +218,7 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          {/* {!urlSettings?.hide &&
+          {!urlSettings?.hide &&
             (isMobile && mobileWarningClosed ? false : true) && (
               <Warning
                 body={
@@ -250,7 +254,7 @@ function App() {
                 state={!mobileWarningClosed}
                 className="disclaimer"
               />
-            )} */}
+            )}
           <TnCModal />
           <SideBar />
         </Background>

@@ -2,8 +2,8 @@ import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { JackpotType, TradeType } from '@Views/TradePage/type';
 import { atom, useAtom } from 'jotai';
 
-const JackpotSharesAtom = atomWithLocalStorage(
-  'augmentation-jackpot-testing-v1',
+export const JackpotSharesAtom = atomWithLocalStorage(
+  'augmentation-jackpot-testing-v3',
   {
     jackpots: {},
     recent: '',
@@ -12,11 +12,14 @@ const JackpotSharesAtom = atomWithLocalStorage(
 
 export const useJackpotManager = () => {
   const [jackpotState, setJackpotState] = useAtom(JackpotSharesAtom);
+  console.log(`jackpotState: `, jackpotState);
 
   const addJackpot = (jp: JackpotType) => {
+    console.log(`jackpotdeb-: in add1`, jp);
+
     setJackpotState((s) => {
       const jackpotKey = getJackpotKey(jp);
-      console.log(`useJackpotManager-generatedKey: `, jackpotKey);
+      console.log(`jackpotdeb-: in add2`, jackpotKey);
 
       const newObj = { recent: jackpotKey, jackpots: { ...s.jackpots } };
       newObj.jackpots[jackpotKey] = jp;
