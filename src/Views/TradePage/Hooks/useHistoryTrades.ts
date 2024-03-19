@@ -15,7 +15,7 @@ import {
 import { tradesApiResponseType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
-
+const defaultRes = { page_data: [], total_pages: 1 };
 const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
   const { address } = useUserAccount();
@@ -63,7 +63,7 @@ const useHistoryTrades = () => {
       refreshInterval: refreshInterval,
     }
   );
-  return data || { page_data: undefined, total_pages: 1 };
+  return data || defaultRes;
 };
 
 export { useHistoryTrades };

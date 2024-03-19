@@ -36,6 +36,7 @@ import {
 import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
 import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
+import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
 
 enum TableColumn {
   Asset = 0,
@@ -106,6 +107,7 @@ const HistoryTable: React.FC<{
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
   const navigateToProfile = useNavigateToProfile();
+  const jackpotInfo = useJackpotInfo();
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
@@ -181,28 +183,36 @@ const HistoryTable: React.FC<{
           )
         );
       case TableColumn.TimeLeft:
-        return (
-          <div
-            className={
-              ' font-[500] text-[12px] text-[#C3C2D4]  flex items-center gap-2'
-            }
-          >
-            <Link to={'/Jackpot'}>
-              <img
-                className={[
-                  'w-[24px] h-[19px]',
-                  isJackpotDisabled ? 'opacity-30' : '',
-                ].join(' ')}
-                src="/JV.png"
+        if (
+          trade.token == 'ARB' &&
+          gte(
+            divide(trade.trade_size, 18),
+            jackpotValue?.minSize?.toString() || '1'
+          )
+        )
+          return (
+            <div
+              className={
+                ' font-[500] text-[12px] text-[#C3C2D4]  flex items-center gap-2'
+              }
+            >
+              <Link to={'/Jackpot'}>
+                <img
+                  className={[
+                    'w-[24px] h-[19px]',
+                    isJackpotDisabled ? 'opacity-30' : '',
+                  ].join(' ')}
+                  src="/JV.png"
+                />
+              </Link>
+              <Display
+                data={jackpotValue}
+                className="!justify-start"
+                unit={poolInfo.token}
               />
-            </Link>
-            <Display
-              data={jackpotValue}
-              className="!justify-start"
-              unit={poolInfo.token}
-            />
-          </div>
-        );
+            </div>
+          );
+        else return '-';
       case TableColumn.CloseTime:
         return (
           queuedTradeFallBack(trade) || <DisplayTime ts={minClosingTime} />

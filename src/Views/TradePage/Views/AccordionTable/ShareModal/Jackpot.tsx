@@ -21,7 +21,9 @@ export const JackpotModal: React.FC<IJackpotModal> = () => {
   const { page_data: historyTrades } = useHistoryTrades();
   const { jackpot, jackpotAcknowledged } = useJackpotManager();
   const trade = useMemo(() => {
-    const foundTrade = [...activeTrades, ...historyTrades]?.filter((trade) => {
+    console.log(`Jackpot-historyTrades: `, historyTrades);
+    const alltrades = [...activeTrades, ...historyTrades];
+    const foundTrade = alltrades?.filter((trade) => {
       const tradeKey = getJackpotKey(trade);
       console.log(`Jackpot-tradeKey: `, tradeKey, jackpot.recent);
       if (tradeKey == jackpot.recent) {
