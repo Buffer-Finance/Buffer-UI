@@ -11,10 +11,23 @@ import { DataWrapper } from '@Views/Profile/Components/UserDataComponent/UserDat
 import { Col } from '@Views/Common/ConfirmationModal';
 import JackpotWinnerCard from './JackPotWInnerCard';
 import TimeAgo from 'javascript-time-ago';
-
+import HTPJ1 from 'public/404.png';
+import HTPJ2 from 'public/404.png';
 import en from 'javascript-time-ago/locale/en.json';
 import { useState } from 'react';
 import { useMedia } from 'react-use';
+import { useJackpotInfo } from './useJackpotInfo';
+import { divide } from '@Utils/NumString/stringArithmatics';
+import useSWR from 'swr';
+import axios from 'axios';
+import { baseUrl } from '@Views/TradePage/config';
+import { isTestnet } from 'config';
+import { Skeleton } from '@mui/material';
+import { ModalBase } from 'src/Modals/BaseModal';
+import React from 'react';
+import { atom, useAtom } from 'jotai';
+import { addMarketInTrades } from '@Views/TradePage/utils';
+import { useAllV2_5MarketsConfig } from '@Views/TradePage/Hooks/useAllV2_5MarketsConfig';
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(en);
@@ -63,67 +76,281 @@ const bet = {
   router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
   strike_timestamp: 1709823199,
 };
+const d = {
+  id: 470,
+  signature_timestamp: 1710846395,
+  queued_timestamp: 1710846403,
+  queue_id: 469,
+  strike: 6312787347070,
+  period: 900,
+  target_contract: '0x763f9772D040B62Dc5dA4C02051cb9e835EcBdF7',
+  user_partial_signature:
+    '0x557e5c6f0c7573d4011516c7f0ed6853901bf4465f01ed7e24910a52b03307776c08ab1ecfad0d0379b1f32289ba7596f3bfa4b542a891abed12c6460b773ec91c',
+  user_full_signature:
+    '0x4a9b03fbc6c1ff1b73748c72adf9896b72abf3bf34c383e5ca3c6b5d3f0641994be0a56a24d69a860c5b7db2eb51b97a69fa40356013eeb5b2a1db2bfdb0b9641b',
+  user_address: '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
+  trade_size: '78000000000000000000',
+  allow_partial_fill: true,
+  referral_code: '',
+  trader_nft_id: 0,
+  slippage: 5,
+  settlement_fee: 1250,
+  settlement_fee_sign_expiration: 1710846516,
+  settlement_fee_signature:
+    '0x1c2547d1e117e2721d90a37a2f70a892f070920531d71818740cba98d85f6bf421d911bc2a1de957c448acae8f0e5cdb7675856a6628c60e5c23fdceb6c4c3361c',
+  expiration_time: 1710847303,
+  is_above: false,
+  state: 'CLOSED',
+  option_id: 346,
+  is_limit_order: false,
+  limit_order_expiration: 1710846403,
+  environment: '421614',
+  expiry_price: 6261244101855,
+  payout: '1.365e+20',
+  close_time: 1710847303,
+  limit_order_duration: 0,
+  locked_amount: '136500000000000000136',
+  is_cancelled: false,
+  cancellation_reason: null,
+  cancellation_timestamp: null,
+  early_close_signature: null,
+  user_close_timestamp: null,
+  open_timestamp: 1710846403,
+  token: 'ARB',
+  router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
+  strike_timestamp: 1710846399,
+  jackpot_amount:
+    '31500000000000000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ',
+  jackpot_txn_hash:
+    '0x8493bcb3347f1bfb0ae45fe42fc110dc38f47af5b24c6b51b1a0c2bfc10dd651                                                                                                                                                                                                                                                                                                                                                                                                                                                  ',
+};
+const isOpenAtom = atom(false);
 const Jackpot: React.FC<any> = ({}) => {
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
   const { address } = useAccount();
   const data = {
     data: [bet],
   };
+  const pastJackpots = usePlatforJackpots();
+  const isMobile = useMedia('(max-width:600px)');
+  const [page, setPage] = React.useState(1);
+  const [isOpen, setIsOpen] = useAtom(isOpenAtom);
+
+  let recentPlatformJackpot = pastJackpots[0]?.[0]?.open_timestamp || null;
+  const content = {
+    name: 'Dice',
+    pages: [
+      {
+        image: HTPJ1,
+        body: (
+          <span className="flex">
+            Level up your chances to win big! Place a bet that's greater than to
+            be eligible for a jackpot— aim high!
+          </span>
+        ),
+      },
+      {
+        image: HTPJ2,
+        body: (
+          <span className="flex">
+            You have a chance to win up to
+            {JackpotToken} of the glorious Jackpot pool. Get ready to roll the
+            dice/slots and claim your spoils.
+          </span>
+        ),
+      },
+    ],
+    bankrollEdge: 1,
+    contractAddress: 'dd',
+  };
+  const pageContent = content.pages[page - 1];
+  console.log(`index-isOpen: `, isOpen);
 
   return (
-    <div className="flex gap-4 m-auto mt-6 sm:mx-4">
-      <div className=" flex flex-col gap-5 sm:w-full">
-        <div className="flex items-center gap-5">
-          <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] ">
-            <CircleAroundPicture />
-            {highestTierNFT !== null ? (
-              <img
-                src={
-                  'https://gateway.pinata.cloud/ipfs/' +
-                  highestTierNFT?.nftImage.split('://')[1]
-                }
-                alt=""
-                className={
-                  'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
-                }
-              />
-            ) : (
-              <img
-                src="/NFT-ph.png"
-                className={
-                  'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
-                }
-              />
-            )}
+    <>
+      {' '}
+      <ModalBase
+        className={' !overflow-hidden !bg-[#0d0d15] !px-4 !py-5 mob-width '}
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <div className="relative bg-[#0d0d15] flex flex-col   ">
+          {/* Header with close button */}
+          <div className="flex flex-row items-start justify-between px-4 mt-3">
+            <div className="text-white text-[15px] sm:text-[22px] font-medium leading-normal">
+              How Jackpot Works
+            </div>
+            <img
+              src={''}
+              alt="close"
+              onClick={() => {
+                setIsOpen(false);
+              }}
+              className="w-[23.94px] h-[24.48px]"
+            />
           </div>
-          <div className="text-[25px] text-[#C3C2D4] font-[500] sm:hidden ">
-            {address
-              ? address.substring(0, 4) +
-                '....' +
-                address.substring(address.length - 4)
-              : null}
+
+          {/* Body */}
+          <div className="flex flex-col mt-[20px] gap-[20px] -">
+            <img
+              src={pageContent.image}
+              alt="play"
+              className="w-[80%] h-[270px] mx-auto"
+            />
+            <div className="flex flex-col items-start justify-start mx-2 text-xs font-normal leading-normal text-slate-400 sm:text-sm">
+              {pageContent.body}
+            </div>
           </div>
+
+          {/* Footer */}
+          <div className="flex flex-col justify-center  px-[10px] mt-[27.75px]">
+            <div className="flex flex-col">
+              <div className="flex flex-row items-center justify-between">
+                {/* Step 1/4 */}
+                <div>
+                  <span className="text-xs font-normal leading-normal text-white sm:text-base">
+                    Step{' '}
+                  </span>
+                  <span className="text-xs font-semibold leading-normal text-white sm:text-base">
+                    {page}
+                  </span>
+                  <span className="text-xs font-normal leading-normal text-white sm:text-base">
+                    /
+                  </span>
+                  <span className="text-xs font-semibold leading-normal text-slate-400 sm:text-base">
+                    {content.pages.length}
+                  </span>
+                </div>
+
+                <div>
+                  <button
+                    className=" text-white w-[18px] h-[18px] sm:w-[22.90px] sm:h-[22.90px] bg-slate-800 rounded-[3.10px] shadow border border-slate-600 justify-center items-center inline-flex mr-2"
+                    onClick={() => {
+                      if (page > 1) {
+                        setPage((prev) => prev - 1);
+                      }
+                    }}
+                  >
+                    {'<'}
+                  </button>
+                  <button
+                    className=" text-white  w-[18px] h-[18px] sm:w-[22.90px] sm:h-[22.90px] bg-slate-800 rounded-[3.10px] shadow border border-slate-600 justify-center items-center inline-flex"
+                    onClick={() => {
+                      if (page < content.pages.length) {
+                        setPage((prev) => prev + 1);
+                      }
+                    }}
+                  >
+                    {'>'}
+                  </button>
+                </div>
+              </div>
+              <div
+                onClick={() => {
+                  navigate('/slots');
+                }}
+                className="my-[15px] sm:my-[20px] bg-gradient-to-b from-sky-300 to-blue-400 rounded flex justify-center items-center cursor-pointer "
+              >
+                <div className="my-2 text-sm font-semibold text-center text-zinc-950 sm:text-base">
+                  Play
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ModalBase>
+      <div className="flex gap-4 m-auto mt-6 sm:mx-4">
+        <div className=" flex flex-col gap-5 sm:w-full">
+          {address ? (
+            <div className="flex items-center gap-5">
+              <>
+                <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] ">
+                  <CircleAroundPicture />
+                  {highestTierNFT !== null ? (
+                    <img
+                      src={
+                        'https://gateway.pinata.cloud/ipfs/' +
+                        highestTierNFT?.nftImage.split('://')[1]
+                      }
+                      alt=""
+                      className={
+                        'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
+                      }
+                    />
+                  ) : (
+                    <img
+                      src="/NFT-ph.png"
+                      className={
+                        'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
+                      }
+                    />
+                  )}
+                </div>
+                <div className="text-[25px] text-[#C3C2D4] font-[500] sm:hidden ">
+                  {address.substring(0, 4) +
+                    '....' +
+                    address.substring(address.length - 4)}
+                </div>
+              </>
+              {isMobile ? <JackpotSummary sm /> : null}
+            </div>
+          ) : null}
+          <JackpotValueSeciont />
+          <RecentJackPotTimer recentTime={recentPlatformJackpot} />
+          <div className="nsm:hidden">
+            <RecentJackpots />
+          </div>
+        </div>
+        <div className="flex flex-col gap-5 sm:hidden">
           <JackpotSummary sm />
-        </div>
-        <JackpotValueSeciont />
-        <RecentJackPotTimer recentTime={1710394831} />
-        <div className="nsm:hidden">
-          <RecentJackpots />
+          <RecentJackpots sm />
         </div>
       </div>
-      <div className="flex flex-col gap-5 sm:hidden">
-        <JackpotSummary sm />
-        <RecentJackpots sm />
-      </div>
-    </div>
+    </>
   );
 };
+const emptyAr = [];
 
 export { Jackpot };
+const defaultResp = [[], []];
+const usePlatforJackpots = () => {
+  const user = useAccount();
+  const markets = useAllV2_5MarketsConfig();
 
+  const { data } = useSWR(`jackpot-users-${user.address}`, {
+    fetcher: async () => {
+      const allHistory = axios.get(
+        `${baseUrl}jackpot/all_history/?environment=${
+          isTestnet ? 421614 : 42161
+        }&order_by=-close_time&limit=100&page=0`
+      );
+      const userHistory = user.address
+        ? axios.get(
+            `${baseUrl}jackpot/user/history/?environment=${
+              isTestnet ? 421614 : 42161
+            }&order_by=-close_time&limit=100&page=0&user_address=${
+              user.address
+            }`
+          )
+        : null;
+      const res = await Promise.all([allHistory, userHistory]);
+      console.log(`index-res: `, res);
+      const response = res.map((d) => {
+        return d?.data?.page_data
+          ? addMarketInTrades(d?.data?.page_data, markets)
+          : emptyAr;
+      });
+      console.log(`index-response: `, response);
+      return response;
+    },
+    refreshInterval: 1000,
+  });
+  return data || defaultResp;
+};
 function RecentJackpots(props) {
   const [userTab, setUserTab] = useState(false);
-
+  const [all, users] = usePlatforJackpots();
+  const datas = userTab ? users : all;
   const headClass = '#B1B6C6';
   return (
     <div
@@ -150,15 +377,28 @@ function RecentJackpots(props) {
           My Wins
         </button>
       </div>
-      <UserCard bet={bet} isUser={userTab} />
+      <div className="flex flex-col gap-3">
+        {datas.map((s) => (
+          <UserCard key={s.id} bet={s} isUser={userTab} />
+        ))}
+      </div>
     </div>
   );
 }
 
 const JackpotToken = 'ARB';
 function JackpotValueSeciont(props) {
-  const amount = '34443';
+  const jackpotInfo = useJackpotInfo();
+
+  const poolBalance = jackpotInfo?.poolBalance;
+  console.log(`index-jackpotInfo: `, poolBalance);
+  const amount = poolBalance ? poolBalance.toString() : null;
+  const [isOpen, setIsOpen] = useAtom(isOpenAtom);
+
+  const minSize = jackpotInfo?.minSize ? jackpotInfo.minSize.toString() : '0';
+  console.log(`index-minSize: `, typeof minSize, minSize, jackpotInfo);
   const isMobile = useMedia('(max-width:600px)');
+
   if (isMobile) {
     return (
       <div
@@ -167,7 +407,10 @@ function JackpotValueSeciont(props) {
           props.className,
         ].join(' ')}
       >
-        <button className="relative mt-4 flex  gap-1 self-end items-center">
+        <button
+          className="relative mt-4 flex  gap-1 self-end items-center"
+          onClick={() => setIsOpen(true)}
+        >
           <img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/c918dc20adb64f78c725558364a049f97b9c2d04ba6e3e9d5e946ec1ee5c8b34?"
@@ -183,12 +426,15 @@ function JackpotValueSeciont(props) {
         <div className="flex justify-between w-full">
           <div className="relative w-full gap-3 mt-3 flex items-center justify-center text-[34px] font-bold text-center text-blue-300 ">
             <img className=" w-[60px] h-[60px]" src="/JV.png" />
-            {toFixed(amount?.toString(), 2)}
+            {amount ? toFixed(amount?.toString(), 2) : '--'}
             {' ' + JackpotToken}
           </div>
         </div>
         <div className="text-[#B1B6C6] flex gap-1 font-[700] text-[12px]">
-          Minimum Bet Size <div className="text-[#fff]">30 ARB</div>{' '}
+          Minimum Bet Size{' '}
+          <div className="text-[#fff]">
+            {minSize ? toFixed(minSize, 2) : '--'} ARB
+          </div>{' '}
         </div>
       </div>
     );
@@ -200,7 +446,10 @@ function JackpotValueSeciont(props) {
         props.className,
       ].join(' ')}
     >
-      <button className="relative mt-4 flex  gap-1 self-end items-center">
+      <button
+        onClick={() => setIsOpen(true)}
+        className="relative mt-4 flex  gap-1 self-end items-center"
+      >
         <img
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/c918dc20adb64f78c725558364a049f97b9c2d04ba6e3e9d5e946ec1ee5c8b34?"
@@ -216,12 +465,15 @@ function JackpotValueSeciont(props) {
       <div className="flex justify-between w-full">
         <div className="relative w-full gap-3 mt-3 flex items-center justify-center text-[45px] font-bold text-center text-blue-300 ">
           <img className=" w-[60px] h-[60px]" src="/JV.png" />
-          {toFixed(amount?.toString(), 2)}
+          {amount ? toFixed(amount?.toString(), 2) : '--'}
           {' ' + JackpotToken}
         </div>
       </div>
-      <div className="text-[#B1B6C6] flex gap-1 font-[700] text-[14px]">
-        Minimum Bet Size <div className="text-[#fff]">30 ARB</div>{' '}
+      <div className="text-[#B1B6C6] flex gap-1 font-[700] text-[12px]">
+        Minimum Bet Size{' '}
+        <div className="text-[#fff]">
+          {minSize ? toFixed(minSize, 2) : '--'} ARB
+        </div>{' '}
       </div>
     </div>
   );
@@ -235,8 +487,33 @@ const format = (s) => {
   };
   return ob?.[s] ?? s;
 };
-
+const dummy = {
+  eligible_trades_for_jackpot: 1,
+  user_jackpots_won: 3,
+  total_jackpot_amount: 0,
+};
 function JackpotSummary(props) {
+  const { data } = useSWR(`jackpotsummary`, {
+    fetcher: async () => {
+      const response = await axios.get(
+        `${baseUrl}jackpot/summary/?environment=${
+          isTestnet ? 421614 : 42161
+        }&order_by=-close_time`
+      );
+      // console.log(response.data, "response");
+      return response.data;
+    },
+    refreshInterval: 1000,
+  });
+  if (!data) {
+    return (
+      <Skeleton
+        variant="rectangular"
+        className="!w-full !h-[70px] !rounded-md"
+      />
+    );
+  }
+  console.log(`index-data: `, data);
   return (
     <DataWrapper
       className={[
@@ -249,20 +526,20 @@ function JackpotSummary(props) {
         className="br-jackpot"
         descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'No of bets'}
-        desc={'34'}
+        desc={data.eligible_trades_for_jackpot}
       />
       <Col
         headClass="text-[#B1B6C6]  sm:text-[12px] sm:px-5 text-[14px] font-[500] px-6 "
         className="br-jackpot"
         descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'Jackpot Won'}
-        desc={'2'}
+        desc={data.user_jackpots_won}
       />
       <Col
         headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'Win'}
         descClass="text-green  sm:text-[12px] sm:px-5  text-[14px] font-bold px-6"
-        desc={'100 ARB'}
+        desc={`${data.total_jackpot_amount} ARB`}
       />
     </DataWrapper>
   );
@@ -280,10 +557,16 @@ function RecentJackPotTimer({ recentTime }) {
   if (isMobile) {
     return (
       <div className="flex text-[#B1B6C6]  items-center justify-center gap-[4vw]">
-        <div className="font-[500] text-[12px]">since the last jackpot</div>
-        <div className="font-[700] text-[16px] text-1">
-          {timerCols.map(([k, v]) => v).join(':')}
-        </div>
+        {recentTime ? (
+          <>
+            <div className="font-[500] text-[12px]">since the last jackpot</div>
+            <div className="font-[700] text-[16px] text-1">
+              {timerCols.map(([k, v]) => v).join(':')}
+            </div>
+          </>
+        ) : (
+          <div className="font-[500] text-[12px]">No Jackpots yet!</div>
+        )}
         <button
           className=" bg-[#3772FF] h-[22px] text-[14px] w-[60px] font-[600] text-1 rounded-sm "
           onClick={() => {
@@ -313,7 +596,7 @@ function RecentJackPotTimer({ recentTime }) {
                     {s[1]}{' '}
                   </div>
                   <div className=" text-[18px] font-medium  text-white">
-                    {format(s[0])}
+                    {+s[1] == 1 ? format(s[0]).slice(0, -1) : format(s[0])}
                   </div>
                 </div>
               );
@@ -330,7 +613,9 @@ function RecentJackPotTimer({ recentTime }) {
           </button>
         </div>
       ) : (
-        <span>No Jackpot placed yet!</span>
+        <span className="text-f20 text-[#B1B6C6] font-[500]">
+          No Jackpot placed yet!
+        </span>
       )}
     </div>
   );

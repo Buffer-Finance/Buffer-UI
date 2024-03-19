@@ -10,6 +10,7 @@ export const JackpotToken = 'ARB';
 import { TradeType } from '@Views/TradePage/type';
 import { UpDownChip } from '@Views/TradePage/Views/AccordionTable/UpDownChip';
 import { useHighestTierNFT2 } from '@Hooks/useNFTGraph2';
+import { Link } from 'react-router-dom';
 
 function JackPotWinnerCard({ bet }) {
   console.log(`JackPotWInnerCard-bet.user_address: `, bet);
@@ -98,46 +99,55 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
   bet,
   isUser,
 }) => {
+  console.log(`JackPotWInnerCard-bet: `, bet);
+
+  console.log(`JackPotWInnerCard-bet.user_address: `, bet.user_address);
   const nft = useHighestTierNFT2(bet.user_address);
 
   return (
-    <div className="bg-[#232334] flex flex-col p-4 text-[#C3C2D4] text-f12 font-[500]">
+    <div className="bg-[#232334] flex flex-col p-4 text-[#C3C2D4] text-f12 font-[500] rounded-sm">
       <div className="flex justify-between items-center">
         <div className="flex ">
-          <img
-            src={
-              nft.highestTierNFT?.nftImage
-                ? 'https://gateway.pinata.cloud/ipfs/' +
-                  nft.highestTierNFT?.nftImage.split('://')[1]
-                : '/NFT-ph.png'
-            }
-            onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = '/NFT-ph.png';
-              e.currentTarget.classList.remove('img-loading');
-            }}
-            loading="lazy"
-            className="w-[20px] mr-2 h-[20px] rounded-full object-contain"
-          />
+          <Link to={`/profile?user_address=${bet.user_address}`}>
+            <img
+              src={
+                nft.highestTierNFT?.nftImage
+                  ? 'https://gateway.pinata.cloud/ipfs/' +
+                    nft.highestTierNFT?.nftImage.split('://')[1]
+                  : '/NFT-ph.png'
+              }
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/NFT-ph.png';
+                e.currentTarget.classList.remove('img-loading');
+              }}
+              loading="lazy"
+              className="w-[20px] mr-2 h-[20px] rounded-full object-contain"
+            />
+          </Link>
           <div className="flex">
             Bet:&nbsp;<div className="text-1">1.93 ARB</div> &nbsp;| Win:&nbsp;
             <div className="text-green">100 ARB</div>
           </div>{' '}
         </div>
         <div>
-          <ReactTimeAgo date={1710394831000} />
+          <ReactTimeAgo date={bet.open_timestamp * 1000} />
         </div>
       </div>
       <div className="flex items-center justify-between mt-1">
         <div className="flex">
-          ETH-USD
-          <div className="mt-[1px] ml-[4px]">
-            <UpDownChipSmm isUp={true} />
+          {bet.market.token0}-{bet.market.token1}
+          <div className="mt-[3px] ml-[4px]">
+            <UpDownChipSmm isUp={bet.is_above} />
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <a
+          href=""
+          target="_blank"
+          className="hover:underline flex items-center gap-2"
+        >
           View <OpenInNew />
-        </div>
+        </a>
       </div>
     </div>
   );

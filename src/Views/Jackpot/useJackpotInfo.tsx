@@ -28,11 +28,14 @@ const useJackpotInfo = () => {
         `ShareManagementDrawer-appConfig.handelTradeAddress: `,
         data[0].result
       );
-
-      return {
-        minSize: BigDivide(data[0].result),
-        poolBalance: BigDivide(data[1].result),
-      };
+      if (data[0].status == 'success')
+        return {
+          minSize: BigDivide(data[0].result),
+          poolBalance: BigDivide(data[1].result),
+        };
+      else {
+        return {};
+      }
     },
   });
   console.log('Jackpot-deb', res);
@@ -54,5 +57,6 @@ const getARBPool = () => {
 
 const BigDivide = (num) => {
   if (!num) return undefined;
+  console.log(`useJackpotInfo-num: `, num);
   return num / BigInt(10 ** 18);
 };
