@@ -21,12 +21,12 @@ export const useUserOneCTData = () => {
   }>(`${userAddress}-one-ct-data-on-${activeChainId}`, {
     fetcher: async () => {
       console.log(`productNames: `, productNames);
-      if (productNames === undefined)
-        return toastify({
-          id: '10231',
-          type: 'error',
-          msg: 'Product name not found.',
-        });
+      // if (productNames === undefined)
+      //   return toastify({
+      //     id: '10231',
+      //     type: 'error',
+      //     msg: 'Product name not found.',
+      //   });
       if (!userAddress || !activeChainId) return null;
       try {
         const response = await axios.get(
