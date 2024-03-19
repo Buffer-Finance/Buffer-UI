@@ -4,6 +4,22 @@ import RouterABI from '@ABIs/ABI/routerABI.json';
 import { createPublicClient, http } from 'viem';
 import { arbitrumSepolia } from 'src/Config/wagmiClient/getConfigChains';
 import { useJackpotManager } from 'src/atoms/JackpotState';
+
+import { mainnet } from 'viem/chains';
+import { useEffect } from 'react';
+
+export const publicClient = createPublicClient({
+  chain: arbitrumSepolia,
+  transport: http(),
+});
+
+const unwatch = publicClient.watchContractEvent({
+  address: '0x65024158941e15283a376F69E40dED61F522cb51',
+  abi: JackootABI,
+  eventName: 'JackpotTriggered',
+  onLogs: (logs) => console.log('jackpotdeb-internal', logs),
+});
+
 const useJackpotEvent = () => {
   console.log('jackpotdeb-listening');
   const jackpotManager = useJackpotManager();

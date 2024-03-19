@@ -12,14 +12,10 @@ export const JackpotSharesAtom = atomWithLocalStorage(
 
 export const useJackpotManager = () => {
   const [jackpotState, setJackpotState] = useAtom(JackpotSharesAtom);
-  console.log(`jackpotState: `, jackpotState);
 
   const addJackpot = (jp: JackpotType) => {
-    console.log(`jackpotdeb-: in add1`, jp);
-
     setJackpotState((s) => {
       const jackpotKey = getJackpotKey(jp);
-      console.log(`jackpotdeb-: in add2`, jackpotKey);
 
       const newObj = { recent: jackpotKey, jackpots: { ...s.jackpots } };
       newObj.jackpots[jackpotKey] = jp;
