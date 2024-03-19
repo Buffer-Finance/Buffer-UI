@@ -41,7 +41,7 @@ const TradePage: React.FC<any> = ({}) => {
   useBuyTradeData();
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
-  useJackpotEvent();
+
   useJackpotInfo();
   useEffect(() => {
     closeShutter();
