@@ -48,6 +48,7 @@ import { activeMarketFromStorageAtom } from './globalStore';
 import { Jackpot } from '@Views/Jackpot';
 import { JackpotShare } from '@Views/TradePage/JackpotShare';
 import { JackpotModal } from '@Views/TradePage/Views/AccordionTable/ShareModal/Jackpot';
+import { useJackpotEvent } from '@Views/Jackpot/useJackpotEvent';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -174,12 +175,8 @@ export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 
 function App() {
   useAutoConnect();
-  const [snack, setSnack] = useAtom(snackAtom);
-  const [mobileWarningClosed, setWarningCloseOnMobile] =
-    useAtom(mobileWarningAtom);
-  const graphStatus = useGraphStatus();
-  const isMobile = useMedia('(max-width:1200px)');
-
+  useJackpotEvent();
+  return null;
   return (
     <>
       {/* <PasswordModal /> */}
@@ -201,7 +198,7 @@ function App() {
             />
           )}
           <Navbar />
-          <AppRoutes />
+          {/*  <AppRoutes /> */}
           <Snackbar
             open={snack.message ? true : false}
             autoHideDuration={3500}
