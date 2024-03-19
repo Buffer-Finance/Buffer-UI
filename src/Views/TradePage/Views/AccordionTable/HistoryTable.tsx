@@ -118,7 +118,7 @@ const HistoryTable: React.FC<{
     );
     const jackpotValue = divide(
       jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]?.jackpot_amount ||
-        trade?.jackpotAmount ||
+        trade?.jackpot_amount ||
         '0',
       18
     );

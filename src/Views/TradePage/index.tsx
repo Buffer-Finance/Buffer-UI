@@ -30,7 +30,6 @@ import {
   tradePanelPositionSettingsAtom,
 } from './atoms';
 import { tradePanelPosition } from './type';
-import { useJackpotEvent } from '@Views/Jackpot/useJackpotEvent';
 import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
 import { JackpotModal } from './Views/AccordionTable/ShareModal/Jackpot';
 
