@@ -46,7 +46,6 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { Jackpot } from '@Views/Jackpot';
-import { useJackpotEvent } from '@Views/Jackpot/useJackpotEvent';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -176,7 +175,6 @@ function App() {
   const [snack, setSnack] = useAtom(snackAtom);
   const [mobileWarningClosed, setWarningCloseOnMobile] =
     useAtom(mobileWarningAtom);
-  useJackpotEvent();
 
   const graphStatus = useGraphStatus();
   const isMobile = useMedia('(max-width:1200px)');

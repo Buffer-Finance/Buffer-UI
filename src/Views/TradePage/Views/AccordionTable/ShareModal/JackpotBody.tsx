@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { JackpotButtons } from './JackpotButtons';
 import styled from '@emotion/styled';
 import { UpDownChip } from '../UpDownChip';
@@ -22,15 +22,22 @@ const JackpotBody: React.FC<{
 }> = ({ trade }) => {
   const ref = useRef(null);
   const { width, height } = useWindowSize();
+  const [confettiDuration, setConfettiDuration] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setConfettiDuration(false);
+    }, 10000);
+  }, []);
   if (!trade?.market) return <div>Trade not found</div>;
   const token0 = trade?.market.token0;
   const token1 = trade?.market.token1;
   console.log(`JackpotBody-trade: `, trade);
-
   return (
     <div>
       <div className="text-[#C3C2D4] w-[380px] h-[199px]  origin-left ">
-        <Confetti width={width} height={height} numberOfPieces={100} />
+        {confettiDuration ? (
+          <Confetti width={width} height={height} numberOfPieces={100} />
+        ) : null}
         <BGImage ref={ref}>
           <div className="font-[600] mt-6 text-[#B1B6C6] text-f15 w-full text-center">
             You won the Jackpot..

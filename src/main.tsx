@@ -33,6 +33,7 @@ const options = {
 };
 
 import { inject } from '@vercel/analytics';
+import { RootLevelHooks } from './RootLevelHooks';
 inject();
 
 if (import.meta.env.VITE_MODE === 'production') {
@@ -65,6 +66,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <JotaiProvider>
               <ContextProvider>
                 <App />
+                <RootLevelHooks />
               </ContextProvider>
             </JotaiProvider>
           </SWRConfig>
