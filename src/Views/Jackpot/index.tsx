@@ -316,6 +316,7 @@ const defaultResp = [[], []];
 const usePlatforJackpots = () => {
   const user = useAccount();
   const markets = useAllV2_5MarketsConfig();
+  console.log(`index-markets: `, markets);
 
   const { data } = useSWR(`jackpot-users-${user.address}`, {
     fetcher: async () => {
@@ -509,7 +510,7 @@ function JackpotSummary(props) {
     return (
       <Skeleton
         variant="rectangular"
-        className="!w-full !h-[70px] !rounded-md"
+        className="!w-[340px] !h-[70px] !rounded-md"
       />
     );
   }

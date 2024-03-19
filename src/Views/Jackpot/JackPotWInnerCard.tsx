@@ -11,6 +11,8 @@ import { TradeType } from '@Views/TradePage/type';
 import { UpDownChip } from '@Views/TradePage/Views/AccordionTable/UpDownChip';
 import { useHighestTierNFT2 } from '@Hooks/useNFTGraph2';
 import { Link } from 'react-router-dom';
+import { Skeleton } from '@mui/material';
+import { divide } from '@Utils/NumString/stringArithmatics';
 
 function JackPotWinnerCard({ bet }) {
   console.log(`JackPotWInnerCard-bet.user_address: `, bet);
@@ -100,10 +102,17 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
   isUser,
 }) => {
   console.log(`JackPotWInnerCard-bet: `, bet);
-
+  if (!bet.market)
+    return (
+      <Skeleton
+        variant="rectangular"
+        className="!w-full !h-[45px] !rounded-md !bg-[#c3c2d414]"
+      />
+    );
   console.log(`JackPotWInnerCard-bet.user_address: `, bet.user_address);
   const nft = useHighestTierNFT2(bet.user_address);
-
+  const parsed = bet.jackpot_amount / 1e18;
+  console.log(`JackPotWInnerCard-parsed: `, bet);
   return (
     <div className="bg-[#232334] flex flex-col p-4 text-[#C3C2D4] text-f12 font-[500] rounded-sm">
       <div className="flex justify-between items-center">
@@ -126,13 +135,20 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
             />
           </Link>
           <div className="flex">
-            Bet:&nbsp;<div className="text-1">1.93 ARB</div> &nbsp;| Win:&nbsp;
-            <div className="text-green">100 ARB</div>
+            Bet:&nbsp;
+            <div className="text-1">
+              {(+divide(bet.trade_size, 18)).toFixed(2)} ARB
+            </div>
+            <a
+              href={`https://sepolia.arbiscan.io/tx/${bet.jackpot_txn_hash}`}
+              target="_blank"
+              className="hover:underline flex items-center gap-2 ml-2 text-[#808191] hover:text-buffer-blue"
+            >
+              <OpenInNew />
+            </a>
           </div>{' '}
         </div>
-        <div>
-          <ReactTimeAgo date={bet.open_timestamp * 1000} />
-        </div>
+        <ReactTimeAgo date={bet.open_timestamp * 1000} />
       </div>
       <div className="flex items-center justify-between mt-1">
         <div className="flex">
@@ -141,13 +157,10 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
             <UpDownChipSmm isUp={bet.is_above} />
           </div>
         </div>
-        <a
-          href=""
-          target="_blank"
-          className="hover:underline flex items-center gap-2"
-        >
-          View <OpenInNew />
-        </a>
+        <div className="flex">
+          Win:&nbsp;
+          <div className="text-green">{parsed.toFixed(2)} ARB</div>
+        </div>{' '}
       </div>
     </div>
   );
@@ -164,7 +177,7 @@ const OpenInNew = () => {
     >
       <path
         d="M6.42714 0C6.13925 0 5.87815 0.174107 5.76657 0.441964C5.65499 0.709821 5.71747 1.01562 5.92055 1.22098L6.84445 2.14286L3.78041 5.20982C3.50145 5.48884 3.50145 5.94197 3.78041 6.22098C4.05936 6.5 4.51239 6.5 4.79134 6.22098L7.85539 3.15402L8.77929 4.07812C8.9846 4.28348 9.29034 4.34375 9.55813 4.23214C9.82593 4.12054 10 3.86161 10 3.57143V0.714286C10 0.319196 9.68087 0 9.28587 0H6.42714ZM1.78532 0.714286C0.798929 0.714286 0 1.51339 0 2.5V8.21429C0 9.20089 0.798929 10 1.78532 10H7.49833C8.48471 10 9.28364 9.20089 9.28364 8.21429V6.42857C9.28364 6.03348 8.96452 5.71429 8.56952 5.71429C8.17451 5.71429 7.85539 6.03348 7.85539 6.42857V8.21429C7.85539 8.41071 7.69471 8.57143 7.49833 8.57143H1.78532C1.58893 8.57143 1.42825 8.41071 1.42825 8.21429V2.5C1.42825 2.30357 1.58893 2.14286 1.78532 2.14286H3.57063C3.96563 2.14286 4.28476 1.82366 4.28476 1.42857C4.28476 1.03348 3.96563 0.714286 3.57063 0.714286H1.78532Z"
-        fill="#C3C2D4"
+        fill="currentColor"
       />
     </svg>
   );
