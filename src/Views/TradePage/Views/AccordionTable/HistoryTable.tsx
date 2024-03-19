@@ -212,7 +212,7 @@ const HistoryTable: React.FC<{
               />
             </div>
           );
-        else return '-';
+        else return <div className="text-f14">'N/A'</div>;
       case TableColumn.CloseTime:
         return (
           queuedTradeFallBack(trade) || <DisplayTime ts={minClosingTime} />
