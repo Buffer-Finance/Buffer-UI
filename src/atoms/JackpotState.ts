@@ -3,7 +3,7 @@ import { JackpotType, TradeType } from '@Views/TradePage/type';
 import { atom, useAtom } from 'jotai';
 
 export const JackpotSharesAtom = atomWithLocalStorage(
-  'augmentation-jackpot-testing-v3',
+  'augmentation-jackpot-testing',
   {
     jackpots: {},
     recent: '',

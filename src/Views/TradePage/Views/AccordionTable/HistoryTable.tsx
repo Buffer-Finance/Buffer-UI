@@ -319,7 +319,7 @@ const HistoryTable: React.FC<{
               )}
             </div>
           );
-        // return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
+        return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
 
         return (
           <button
