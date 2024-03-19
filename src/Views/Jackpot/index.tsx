@@ -103,7 +103,7 @@ const Jackpot: React.FC<any> = ({}) => {
                 address.substring(address.length - 4)
               : null}
           </div>
-          <JackpotSummary />
+          <JackpotSummary sm />
         </div>
         <JackpotValueSeciont />
         <RecentJackPotTimer recentTime={1710394831} />

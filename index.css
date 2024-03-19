@@ -26,14 +26,13 @@ animation-fill-mode: forwards;
   border-right: 2px solid #393953;
 }
 
-.nb-image{
-  background:url('./JackpotValueSection.png');
-  background-size: 100% 100%;
-}
+
+
 .nb-image-sm{
   background:url('./JackpotBGSM.png');
   background-size: 100% 100%;
 }
+
 
 .loader {
   width: min(10vw,125px);
@@ -437,6 +436,10 @@ onUpEnd(c-(idx)
     min-width: 160px !important;
 
     font-size: 18px !important;
+  }
+  .nb-image-sm{
+    background:url('./JackpotBGSM.png');
+    background-size: 100% 100%;
   }
 }
 
