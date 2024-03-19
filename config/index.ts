@@ -54,9 +54,9 @@ export const CHAIN_CONFIGS = {
       env: 'arbitrum-test',
       name: 'ARBITRUM',
       displayName: 'Arbitrum',
-      chainId: '421613',
+      chainId: '421614',
       defaultAsset: 'ETH',
-      chainIdHex: toHex(421613),
+      chainIdHex: toHex(421614),
       chainName: `Arbitrum Goerli`,
       nativeAsset: {
         name: 'AETH',
@@ -82,7 +82,7 @@ export const CHAIN_CONFIGS = {
           },
           {
             step: 'Bridge GoerliETH to AETH',
-            url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
+            url: 'https://bridge.arbitrum.io/?l2ChainId=421614',
           },
         ],
         img: '/Chains/ARBITRIUM.png',

@@ -68,7 +68,7 @@ const useTotalData = (dayId: number, graphUrl: string) => {
       const response = await axios.post(
         `https://subgraph.satsuma-prod.com/${
           import.meta.env.VITE_SATSUMA_KEY
-        }/bufferfinance/arbitrum-mainnet/version/v2.6.9-points-leaderboards/api`,
+        }/bufferfinance/jackpot/version/v3.0.0-leaderboard-tracking-fix-participents/api`,
         {
           query,
         }

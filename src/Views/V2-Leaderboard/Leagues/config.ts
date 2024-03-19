@@ -3,11 +3,11 @@ import { weeklyTournamentConfigType } from '../Weekly/config';
 export const leagueConfig: {
   [key: number]: { startTimestamp: number };
 } = {
-  421613: {
-    startTimestamp: 1701878400000,
+  421614: {
+    startTimestamp: 1707926400000,
   },
   42161: {
-    startTimestamp: 1701878400000,
+    startTimestamp: 1707926400000,
   },
 };
 const MAX_NUBER_OF_TRADES = '10000000';
@@ -22,7 +22,7 @@ export interface leaguesConfig
 export const diamondTournamentConfig: {
   [key: number]: leaguesConfig;
 } = {
-  421613: {
+  421614: {
     winnersNFT: 0,
     losersNFT: 0,
     winrateNFT: 0,
@@ -61,7 +61,7 @@ export const diamondTournamentConfig: {
 export const platinumTournamentConfig: {
   [key: number]: leaguesConfig;
 } = {
-  421613: {
+  421614: {
     winnersNFT: 0,
     losersNFT: 0,
     winrateNFT: 0,
@@ -100,7 +100,7 @@ export const platinumTournamentConfig: {
 export const goldTournamentConfig: {
   [key: number]: leaguesConfig;
 } = {
-  421613: {
+  421614: {
     winnersNFT: 0,
     losersNFT: 0,
     winrateNFT: 0,
@@ -139,7 +139,7 @@ export const goldTournamentConfig: {
 export const silverTournamentConfig: {
   [key: number]: leaguesConfig;
 } = {
-  421613: {
+  421614: {
     winnersNFT: 0,
     losersNFT: 0,
     winrateNFT: 0,
@@ -178,7 +178,7 @@ export const silverTournamentConfig: {
 export const bronzeTournamentConfig: {
   [key: number]: leaguesConfig;
 } = {
-  421613: {
+  421614: {
     winnersNFT: 0,
     losersNFT: 0,
     winrateNFT: 0,

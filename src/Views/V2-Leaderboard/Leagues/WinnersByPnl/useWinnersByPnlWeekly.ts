@@ -1,3 +1,4 @@
+import { baseLeaderboardURLString } from '@Views/TradePage/config';
 import { ILeaderboardQuery } from '@Views/V2-Leaderboard/Incentivised/useDailyLeaderBoardData';
 import axios from 'axios';
 import useSWR from 'swr';
@@ -25,8 +26,7 @@ export const useWinnersByPnlWeekly = ({
           const weekId = getWeekId(Number(week - Number(offset ?? week)));
 
           const { data } = await axios.get(
-            import.meta.env.VITE_LEADERBOARD_API_HOST +
-              'rank/weekly_leaderboard',
+            baseLeaderboardURLString + 'rank/weekly_leaderboard',
             {
               params: {
                 weekId: weekId,

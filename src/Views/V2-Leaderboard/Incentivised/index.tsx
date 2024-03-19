@@ -269,7 +269,6 @@ export const Incentivised = () => {
               // isDailyTable
             />
           </div>
-          ,
         </div>
       </>
     );

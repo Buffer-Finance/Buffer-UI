@@ -1,27 +1,26 @@
-import { ethers } from 'ethers';
-import { useEffect, useMemo, useState } from 'react';
-import Config from 'public/config.json';
-import ConfigContract from './ConfigContractAbi.json';
-import { Call } from '@Utils/Contract/multiContract';
 import { useActiveChain } from '@Hooks/useActiveChain';
-const ifc = new ethers.utils.Interface(ConfigContract);
+import { useIndependentWriteCall } from '@Hooks/writeCall';
+import { Call } from '@Utils/Contract/multiContract';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { useReadCall } from '@Utils/useReadCall';
-import { TableAligner } from './V2-Leaderboard/Components/TableAligner';
-import { keyClasses } from './Earn/Components/VestCards';
-import { valueClasses } from './Earn/Components/VestCards';
+import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
+import OptionAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
+import PoolAbi from '@Views/BinaryOptions/ABI/poolABI.json';
+import { ethers } from 'ethers';
 import { atom, useAtom } from 'jotai';
-import BufferInput from './Common/BufferInput';
-import { BlueBtn } from './Common/V2-Button';
+import Config from 'public/config.json';
+import { useEffect, useMemo, useState } from 'react';
+import { RenderAdminNavbar } from 'src/Admin/CreatePair';
 import {
   PoolDropDownAll,
   useActivePoolAll,
 } from './BinaryOptions/PGDrawer/PoolDropDown';
-import { useIndependentWriteCall } from '@Hooks/writeCall';
-import ConfigABI from '@Views/BinaryOptions/ABI/configABI.json';
-import OptionAbi from '@Views/BinaryOptions/ABI/optionsABI.json';
-import PoolAbi from '@Views/BinaryOptions/ABI/poolABI.json';
-import { divide } from '@Utils/NumString/stringArithmatics';
-import { RenderAdminNavbar } from 'src/Admin/CreatePair';
+import BufferInput from './Common/BufferInput';
+import { BlueBtn } from './Common/V2-Button';
+import ConfigContract from './ConfigContractAbi.json';
+import { keyClasses, valueClasses } from './Earn/Components/VestCards';
+import { TableAligner } from './V2-Leaderboard/Components/TableAligner';
+const ifc = new ethers.utils.Interface(ConfigContract);
 
 interface ConfigValue {
   getter: string;
@@ -68,7 +67,7 @@ const notYetHandledConfigs = ['marketTime'];
 const configDataAtom = atom<ConfigValue[]>([]);
 const poolConfigAtom = atom<ConfigValue[]>([]);
 const poolDecimals = [6, 6, 18];
-type ChainInfo = (typeof Config)['421613'];
+type ChainInfo = (typeof Config)['421614'];
 const TradingConfig: React.FC<any> = ({}) => {
   const { activeChain } = useActiveChain();
 

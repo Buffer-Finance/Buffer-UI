@@ -34,7 +34,7 @@ export const ArbitrumOnly = ({
   hide?: boolean;
 }) => {
   return (
-    <ChainNotSupported supportedChainIds={[42161, 421613]} hide={hide}>
+    <ChainNotSupported supportedChainIds={[42161, 421614]} hide={hide}>
       {children}
     </ChainNotSupported>
   );

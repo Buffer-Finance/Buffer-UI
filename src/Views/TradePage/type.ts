@@ -70,7 +70,7 @@ export interface TradeType {
   is_limit_order: boolean;
   limit_order_expiration: 0 | number;
   limit_order_duration: 0 | number;
-  environment: '421613' | '42161';
+  environment: '4216144' | '42161';
   market: marketType;
   pool: poolType;
   token: string;

@@ -31,6 +31,7 @@ import IbfrFaucet from '@Views/Faucet';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { ProfilePage } from '@Views/Profile';
 import { ReferralPage } from '@Views/Referral';
+import { RewardsPage } from '@Views/Rewards';
 import { Test } from '@Views/Test';
 import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
@@ -120,6 +121,7 @@ const AppRoutes = () => {
             }
           />
         )}
+        <Route path="/rewards" element={<RewardsPage />} />
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />

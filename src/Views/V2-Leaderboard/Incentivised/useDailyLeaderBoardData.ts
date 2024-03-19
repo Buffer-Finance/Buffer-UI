@@ -5,7 +5,7 @@ import { IWeeklyLeague } from '../interfaces';
 
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { subtract } from '@Utils/NumString/stringArithmatics';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { baseLeaderboardURLString } from '@Views/TradePage/config';
 import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useDayOffset } from '../Hooks/useDayOffset';
 
@@ -20,8 +20,7 @@ const fetchFromGraph = async (
   day: number,
   offset: string | null,
   league: string,
-  account: string | undefined,
-  graphUrl: string
+  account: string | undefined
 ) => {
   const timestamp = getDayId(Number(day - Number(offset ?? day)));
 
@@ -129,7 +128,7 @@ const fetchFromGraph = async (
   const response = await axios.post(
     `https://subgraph.satsuma-prod.com/${
       import.meta.env.VITE_SATSUMA_KEY
-    }/bufferfinance/arbitrum-mainnet/version/v2.6.9-points-leaderboards/api`,
+    }/bufferfinance/jackpot/version/v3.0.0-leaderboard-tracking-fix-participents/api`,
     {
       query,
     }
@@ -152,7 +151,6 @@ export const useDailyLeaderboardData = (league: string) => {
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
   const { activeChain } = useActiveChain();
-  const graphUrl = getConfig(activeChain.id).graph.MAIN;
   const { day } = useDayOfTournament();
 
   const { data } = useSWR<ILeaderboardQuery>(
@@ -170,13 +168,12 @@ export const useDailyLeaderboardData = (league: string) => {
           (offset && subtract(day.toString(), offset) === '0')
         ) {
           console.log('graph');
-          return fetchFromGraph(day, offset, league, account, graphUrl);
+          return fetchFromGraph(day, offset, league, account);
         } else {
           console.log('api');
           try {
             const { data } = await axios.get(
-              import.meta.env.VITE_LEADERBOARD_API_HOST +
-                'rank/daily_leaderboard',
+              baseLeaderboardURLString + 'rank/daily_leaderboard',
               {
                 params: {
                   dayId: getDayId(Number(day - Number(offset ?? day))),
