@@ -37,6 +37,13 @@ const useJackpotEvent = () => {
         if (!user.address) return;
         try {
           const logArgs = logs[0].args;
+          console.log(
+            'jackpotdeb-actual',
+            logArgs,
+            logArgs.jackpotWinAmount,
+            logArgs.jackpotWinAmount == 0n
+          );
+          if (logArgs.jackpotWinAmount == 0n) return;
           const jp = {
             option_id: +logArgs.optionId.toString(),
             target_contract: logArgs.optionContract,
@@ -45,7 +52,6 @@ const useJackpotEvent = () => {
             user_address: logArgs.userAddress,
             trade_size: logArgs.amount.toString(),
           };
-          console.log('jackpotdeb-jp', jp);
           if (user.address?.toLowerCase() == logArgs.userAddress.toLowerCase())
             jackpotManager.addJackpot(jp);
         } catch (e) {
