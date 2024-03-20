@@ -16,7 +16,6 @@ interface IJackpotModal {}
 
 export const JackpotModal: React.FC<IJackpotModal> = () => {
   const { width, height } = useWindowSize();
-  console.log(`Jackpot-width, height: `, width, height);
   const [activeTrades] = useOngoingTrades();
   const { page_data: historyTrades } = useHistoryTrades();
   const { jackpot, jackpotAcknowledged } = useJackpotManager();

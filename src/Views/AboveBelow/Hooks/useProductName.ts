@@ -18,7 +18,6 @@ export const useProductName = () => {
       const response = await axios.get(aboveBelowBaseUrl + `products/`, {
         params: { environment: activeChain.id },
       });
-      console.log({ response });
       if (response?.data) {
         return response.data;
       }
