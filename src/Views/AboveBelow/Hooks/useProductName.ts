@@ -14,8 +14,6 @@ export const useProductName = () => {
     };
   }>([activeChain?.id, 'above-below-product-name'], {
     fetcher: async () => {
-      console.log('above-below-product-name');
-
       if (!activeChain) return undefined;
       const response = await axios.get(aboveBelowBaseUrl + `products/`, {
         params: { environment: activeChain.id },

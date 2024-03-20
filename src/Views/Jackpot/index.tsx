@@ -172,7 +172,6 @@ const Jackpot: React.FC<any> = ({}) => {
     contractAddress: 'dd',
   };
   const pageContent = content.pages[page - 1];
-  console.log(`index-isOpen: `, isOpen);
 
   return (
     <>
@@ -327,7 +326,6 @@ const defaultResp = [[], []];
 const usePlatforJackpots = () => {
   const user = useAccount();
   const markets = useAllV2_5MarketsConfig();
-  console.log(`index-markets: `, markets);
 
   const { data } = useSWR(`jackpot-users-${user.address}`, {
     fetcher: async () => {
@@ -346,13 +344,11 @@ const usePlatforJackpots = () => {
           )
         : null;
       const res = await Promise.all([allHistory, userHistory]);
-      console.log(`index-res: `, res);
       const response = res.map((d) => {
         return d?.data?.page_data
           ? addMarketInTrades(d?.data?.page_data, markets)
           : emptyAr;
       });
-      console.log(`index-response: `, response);
       return response;
     },
     refreshInterval: 1000,
@@ -530,7 +526,6 @@ function JackpotSummary(props) {
       />
     );
   }
-  console.log(`index-data: `, data);
   return (
     <DataWrapper
       className={[

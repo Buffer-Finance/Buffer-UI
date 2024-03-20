@@ -36,7 +36,6 @@ const useOngoingTrades = () => {
     {
       fetcher: async () => {
         if (!userAddress) return [[], []] as TradeType[][];
-        console.log('comes here');
         if (
           ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
             activeChain.id as 42161
