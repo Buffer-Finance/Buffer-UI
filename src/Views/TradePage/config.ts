@@ -5,157 +5,81 @@ export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
 
 export const appConfig = {
-  '421614': isSandbox
-    ? {
-        graph: {
-          MAIN: `https://subgraph.satsuma-prod.com/${
-            import.meta.env.VITE_SATSUMA_KEY
-          }/bufferfinance/arbitrum-sandbox-testnet/api`,
-        },
+  '421614': {
+    graph: {
+      MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.0.9-add-contractRegistry/api`,
+    },
+    multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+    referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
+    router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
+    signer_manager: '0xb167be9422B03C971BCec106E3B100E51B2489EF',
+    booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
+    config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
+    v2_router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
+    jackpot: '0xf45D4d11A63b62f3913176F885Ae61ce332292F7',
 
-        booster: '0x29952C608Bf41A8a36AFD937471691932055E7b5',
-        referral_storage: '0xac1e2A0BEA74A2571aBC57DBB5Bc5F9039715ACf',
-        router: '0x6d65d507e1d2A8128E37203C84A45cDC1abE1Be0',
-        signer_manager: '0xAAcAf779fdc0A7d8749Aa1FDc260a1C5Da5517B1',
-        config_setter: '0x5C00a53A13F4c2818ce2D0f8759AcB07D0eB350b',
-        v2_router: null,
-        poolsInfo: {
-          '0x4A53c47051FA44FE3A5D6d5cBCb1b7Bf8307E598': {
-            decimals: 6,
-            faucet: '0xd40254B4524E7f587Ef5E65676BE2700388783DE',
-            is_pol: false,
-            token: 'USDC',
-            tokenAddress: '0x1A2BD639F4E113242f9e75ce39FE3eD7D42C9e2e',
-            permitName: 'USDC',
-          },
-          '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
-            tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
-            faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
-            decimals: 18,
-            token: 'BFR',
-            permitName: 'Token',
-            is_pol: false,
-          },
-          '0xeED46793BA6e59303BB72A5c3a474e519fb075EB': {
-            decimals: 18,
-            faucet: '0x60f4FCbC889c2EEF88B14F45aa60756d798A55FD',
-            is_pol: false,
-            token: 'ARB',
-            tokenAddress: '0xEB87e637B00E73395667F177D09caBB0CF3e9609',
-            permitName: 'ARB',
-          },
-        },
-        EarnConfig: {
-          RewardRouter: '0x2033f87A0956388C25Ce5A21F97EE78DD37c5D7f',
-          BLP: '0xb2685B520Eb93769755b0B2c96dca1D10459F378',
-          iBFR: '0x89fEF05446aEA764C53a2f09bB763876FB57ea8E',
-          ES_BFR: '0x92faca5302789730b427c04bc9A111b5733C054F',
-          BN_BFR: '0x8d3B227ebf5424f9b324908037bdD1db71F66521',
-          USDC: '0x49932a64C16E8369d73EA9342a97912Cb90e75C2',
-          StakedBfrTracker: '0xe243e72224b9E295551790b2C57638A27b8493af',
-          BonusBfrTracker: '0xd9497B39399149D7572A7D740487F6e016C5D37e',
-          FeeBfrTracker: '0x39bcb63F0F4427CB9A21D4c3D957Bd8695f67B6d',
-          StakedBlpTracker: '0x72423B589367b35024531Dd57172E56524c2233f',
-          FeeBlpTracker: '0x1B128C9456d29032429d69B5630A737D75D65eC0',
-          BfrVester: '0x961F8988962a2A62ae6a189C0Af576eea40A7912',
-          BlpVester: '0xA37089c619A27Ce0C70F5E6CE03fD8955a46098C',
-          StakedBfrDistributor: '0x1CBbff0d3928c35C1A41566e84AB1Efaa28f6770',
-          StakedBlpDistributor: '0xc0d7cde3632fBF84E8A6d7c79FC0948731EC91eb',
-          RewardRouter2: '0x0ED56F7684FA63A1e6bcd1f78608681c23Bd0f6E',
-          BLP2: '0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6',
-          StakedBlpTracker2: '0x6A7330305B47C6019473a7959c88e35e8b46bB93',
-          FeeBlpTracker2: '0x81486d4A96a62CbF7a67D8cDAa5E989c107018a4',
-          BlpVester2: '0x1F74Bec8987f9FffECA4A64b174321d9dc8c0257',
-          StakedBlpDistributor2: '0x2F63b39D42ff8d68Aa2DfEBAC541f43D0fa9f883',
-          ARB: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
-          burnAddress: '0x000000000000000000000000000000000000dEaD',
-        },
-
-        DashboardConfig: {
-          uniswap: '0xB529f885260321729D9fF1C69804c5Bf9B3a95A5',
-          xcal: '0xAaAc379C2Fc98F59bdf26BD4604d4F084310b23D',
-          camelot: '0x47ECF602a62BaF7d4e6b30FE3E8dD45BB8cfFadc',
-          usdcLiquidityAddress: '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
-          bfrLiquidityAddress: '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
-          JLPPoolAddress: '0x97dcc5574B76b91008b684C58DfdF95fE39FA772',
-          LBTPoolAddress: '0x3A3DA6464bEe25a1d98526402a12241B0787b84C',
-        },
-      }
-    : {
-        graph: {
-          MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.0.9-add-contractRegistry/api`,
-        },
-        multicall: '0xca11bde05977b3631167028862be2a173976ca11',
-        referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
-        router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
-        signer_manager: '0xb167be9422B03C971BCec106E3B100E51B2489EF',
-        booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
-        config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
-        v2_router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
-        jackpot: '0x65024158941e15283a376F69E40dED61F522cb51',
-
-        poolsInfo: {
-          '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
-            tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
-            faucet: '0xAb4df8Aaa1F54E84C469f4bc0e513436088C9B86',
-            decimals: 6,
-            token: 'USDC',
-            permitName: 'USDC',
-            is_pol: false,
-          },
-          '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
-            tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
-            faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
-            decimals: 18,
-            token: 'BFR',
-            permitName: 'Token',
-            is_pol: false,
-          },
-          '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c': {
-            tokenAddress: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
-            faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
-            decimals: 18,
-            token: 'ARB',
-            permitName: 'ARB',
-            is_pol: false,
-          },
-        },
-        EarnConfig: {
-          RewardRouter: '0x2033f87A0956388C25Ce5A21F97EE78DD37c5D7f',
-          BLP: '0xb2685B520Eb93769755b0B2c96dca1D10459F378',
-          iBFR: '0x89fEF05446aEA764C53a2f09bB763876FB57ea8E',
-          ES_BFR: '0x92faca5302789730b427c04bc9A111b5733C054F',
-          BN_BFR: '0x8d3B227ebf5424f9b324908037bdD1db71F66521',
-          USDC: '0x49932a64C16E8369d73EA9342a97912Cb90e75C2',
-          StakedBfrTracker: '0xe243e72224b9E295551790b2C57638A27b8493af',
-          BonusBfrTracker: '0xd9497B39399149D7572A7D740487F6e016C5D37e',
-          FeeBfrTracker: '0x39bcb63F0F4427CB9A21D4c3D957Bd8695f67B6d',
-          StakedBlpTracker: '0x72423B589367b35024531Dd57172E56524c2233f',
-          FeeBlpTracker: '0x1B128C9456d29032429d69B5630A737D75D65eC0',
-          BfrVester: '0x961F8988962a2A62ae6a189C0Af576eea40A7912',
-          BlpVester: '0xA37089c619A27Ce0C70F5E6CE03fD8955a46098C',
-          StakedBfrDistributor: '0x1CBbff0d3928c35C1A41566e84AB1Efaa28f6770',
-          StakedBlpDistributor: '0xc0d7cde3632fBF84E8A6d7c79FC0948731EC91eb',
-          RewardRouter2: '0x0ED56F7684FA63A1e6bcd1f78608681c23Bd0f6E',
-          BLP2: '0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6',
-          StakedBlpTracker2: '0x6A7330305B47C6019473a7959c88e35e8b46bB93',
-          FeeBlpTracker2: '0x81486d4A96a62CbF7a67D8cDAa5E989c107018a4',
-          BlpVester2: '0x1F74Bec8987f9FffECA4A64b174321d9dc8c0257',
-          StakedBlpDistributor2: '0x2F63b39D42ff8d68Aa2DfEBAC541f43D0fa9f883',
-          ARB: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
-          burnAddress: '0x000000000000000000000000000000000000dEaD',
-        },
-
-        DashboardConfig: {
-          uniswap: '0xB529f885260321729D9fF1C69804c5Bf9B3a95A5',
-          xcal: '0xAaAc379C2Fc98F59bdf26BD4604d4F084310b23D',
-          camelot: '0x47ECF602a62BaF7d4e6b30FE3E8dD45BB8cfFadc',
-          usdcLiquidityAddress: '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
-          bfrLiquidityAddress: '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
-          JLPPoolAddress: '0x97dcc5574B76b91008b684C58DfdF95fE39FA772',
-          LBTPoolAddress: '0x3A3DA6464bEe25a1d98526402a12241B0787b84C',
-        },
+    poolsInfo: {
+      '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
+        tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
+        faucet: '0xAb4df8Aaa1F54E84C469f4bc0e513436088C9B86',
+        decimals: 6,
+        token: 'USDC',
+        permitName: 'USDC',
+        is_pol: false,
       },
+      '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
+        tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
+        faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
+        decimals: 18,
+        token: 'BFR',
+        permitName: 'Token',
+        is_pol: false,
+      },
+      '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c': {
+        tokenAddress: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
+        faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
+        decimals: 18,
+        token: 'ARB',
+        permitName: 'ARB',
+        is_pol: false,
+      },
+    },
+    EarnConfig: {
+      RewardRouter: '0x2033f87A0956388C25Ce5A21F97EE78DD37c5D7f',
+      BLP: '0xb2685B520Eb93769755b0B2c96dca1D10459F378',
+      iBFR: '0x89fEF05446aEA764C53a2f09bB763876FB57ea8E',
+      ES_BFR: '0x92faca5302789730b427c04bc9A111b5733C054F',
+      BN_BFR: '0x8d3B227ebf5424f9b324908037bdD1db71F66521',
+      USDC: '0x49932a64C16E8369d73EA9342a97912Cb90e75C2',
+      StakedBfrTracker: '0xe243e72224b9E295551790b2C57638A27b8493af',
+      BonusBfrTracker: '0xd9497B39399149D7572A7D740487F6e016C5D37e',
+      FeeBfrTracker: '0x39bcb63F0F4427CB9A21D4c3D957Bd8695f67B6d',
+      StakedBlpTracker: '0x72423B589367b35024531Dd57172E56524c2233f',
+      FeeBlpTracker: '0x1B128C9456d29032429d69B5630A737D75D65eC0',
+      BfrVester: '0x961F8988962a2A62ae6a189C0Af576eea40A7912',
+      BlpVester: '0xA37089c619A27Ce0C70F5E6CE03fD8955a46098C',
+      StakedBfrDistributor: '0x1CBbff0d3928c35C1A41566e84AB1Efaa28f6770',
+      StakedBlpDistributor: '0xc0d7cde3632fBF84E8A6d7c79FC0948731EC91eb',
+      RewardRouter2: '0x0ED56F7684FA63A1e6bcd1f78608681c23Bd0f6E',
+      BLP2: '0xfa7C3782d45eC60624C67891C60e2FAE17fE4cE6',
+      StakedBlpTracker2: '0x6A7330305B47C6019473a7959c88e35e8b46bB93',
+      FeeBlpTracker2: '0x81486d4A96a62CbF7a67D8cDAa5E989c107018a4',
+      BlpVester2: '0x1F74Bec8987f9FffECA4A64b174321d9dc8c0257',
+      StakedBlpDistributor2: '0x2F63b39D42ff8d68Aa2DfEBAC541f43D0fa9f883',
+      ARB: '0x76Bd15f52dd4A6B274f2C19b16F4934eC27615a8',
+      burnAddress: '0x000000000000000000000000000000000000dEaD',
+    },
+
+    DashboardConfig: {
+      uniswap: '0xB529f885260321729D9fF1C69804c5Bf9B3a95A5',
+      xcal: '0xAaAc379C2Fc98F59bdf26BD4604d4F084310b23D',
+      camelot: '0x47ECF602a62BaF7d4e6b30FE3E8dD45BB8cfFadc',
+      usdcLiquidityAddress: '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
+      bfrLiquidityAddress: '0xFbEA9559AE33214a080c03c68EcF1D3AF0f58A7D',
+      JLPPoolAddress: '0x97dcc5574B76b91008b684C58DfdF95fE39FA772',
+      LBTPoolAddress: '0x3A3DA6464bEe25a1d98526402a12241B0787b84C',
+    },
+  },
   '42161': {
     graph: {
       MAIN: `https://subgraph.satsuma-prod.com/${
@@ -169,6 +93,8 @@ export const appConfig = {
     booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
     config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
     v2_router: '0x0e0A1241C9cE6649d5D30134a194BA3E24130305',
+    jackpot: '0xf45D4d11A63b62f3913176F885Ae61ce332292F7',
+
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
         decimals: 6,
@@ -250,6 +176,8 @@ export const appConfig = {
     v2_router: null,
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
+    jackpot: '0xf45D4d11A63b62f3913176F885Ae61ce332292F7',
+
     poolsInfo: {
       '0xcE5467a403eb433391F72007E151DBb8119728E0': {
         tokenAddress: '0x6f9FE619b6BF88028ac57cD665D527A507a6d2Ef',
@@ -272,6 +200,8 @@ export const appConfig = {
     v2_router: null,
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
+    jackpot: '0xf45D4d11A63b62f3913176F885Ae61ce332292F7',
+
     poolsInfo: {
       '0x6FD5B386d8bed29b3b62C0856250cdD849b3564d': {
         tokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
@@ -672,54 +602,4 @@ export const baseUrl = import.meta.env[baseURLString];
 
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
 
-let a = {
-  pool: '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c',
-  options: {
-    BTCUSD: {
-      option: '0xdF82846B82b354FD7B8Cb9acd7885a9aC67A58E9',
-      config: '0x2511FeA1762DaCA5b4dBE7e14DBf2B18552e0d78',
-    },
-  },
-  referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
-  router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
-  token: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
-  nft: '0x0000000000000000000000000000000000000000',
-  creation_window: {
-    '0': '0xf45f4dF5e45eeE4181baD384be3Fac5A7e8B1f6f',
-    '2': '0x507B9BCae6FE92abE23663F721eA7be39bdE6D75',
-  },
-  sfd: '0x32A49a15F8eE598C1EeDc21138DEb23b391f425b',
-  pool_oi_storage: '0xA42A3f5a5AAA9cb522A86a350468Dd8596554823',
-  pool_oi_config: '0x81acc6d1d13787F46F55E7E66855854AcdFB4123',
-  option_storage: '0xe9Aba2Cb69DE05Cf4FeD8062c4538C422d42bf70',
-  account_registrar: '0xefaBd2f2Cf705A22d132420C89C884Ff6e144AD3',
-  booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
-  cb: '0xdC26703c30e05c6026d1d7d3890dDAE1B352A475',
-  jackpot: '0x65024158941e15283a376F69E40dED61F522cb51',
-};
-let b = {
-  booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
-  creation_window: {
-    '0': '0xf45f4dF5e45eeE4181baD384be3Fac5A7e8B1f6f',
-    '2': '0x507B9BCae6FE92abE23663F721eA7be39bdE6D75',
-  },
-  poolsInfo: {
-    '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
-      decimals: 6,
-      faucet: null,
-      is_pol: false,
-      token: 'USDC',
-      tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
-    },
-    '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c': {
-      decimals: 18,
-      faucet: null,
-      is_pol: false,
-      token: 'ARB',
-      tokenAddress: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
-    },
-  },
-  referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
-  router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
-  signer_manager: '0xefaBd2f2Cf705A22d132420C89C884Ff6e144AD3',
-};
+export const JackpotAdds = appConfig[isTestnet ? '421614' : '42161'].jackpot;

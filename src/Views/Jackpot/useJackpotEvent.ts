@@ -7,13 +7,14 @@ import { useJackpotManager } from 'src/atoms/JackpotState';
 
 import { mainnet } from 'viem/chains';
 import { useEffect } from 'react';
+import { JackpotAdds } from '@Views/TradePage/config';
 
 export const publicClient = createPublicClient({
   chain: arbitrumSepolia,
   transport: http(),
 });
 const unwatch = publicClient.watchContractEvent({
-  address: '0x65024158941e15283a376F69E40dED61F522cb51',
+  address: JackpotAdds,
   abi: JackootABI,
   eventName: 'JackpotTriggered',
   onLogs: (logs) => {
@@ -29,7 +30,7 @@ const useJackpotEvent = () => {
     console.log('jackpotdeb-listening');
 
     const unwatch = publicClient.watchContractEvent({
-      address: '0x65024158941e15283a376F69E40dED61F522cb51',
+      address: JackpotAdds,
       abi: JackootABI,
       eventName: 'JackpotTriggered',
       onLogs: (logs) => {

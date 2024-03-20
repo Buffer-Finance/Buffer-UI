@@ -1,6 +1,6 @@
 import { erc20ABI, useContractReads } from 'wagmi';
 import JackpotABI from '@ABIs/JackpotABI.json';
-import { appConfig } from '@Views/TradePage/config';
+import { JackpotAdds, appConfig } from '@Views/TradePage/config';
 import { isTestnet } from 'config';
 const JackpotToken = 'ARB';
 const defaultOp = -1;
@@ -10,7 +10,7 @@ const useJackpotInfo = () => {
   const res = useContractReads({
     contracts: [
       {
-        address: '0x65024158941e15283a376F69E40dED61F522cb51',
+        address: JackpotAdds,
         abi: JackpotABI,
         functionName: 'minBetSizeForJackpot',
         args: args,
@@ -19,7 +19,7 @@ const useJackpotInfo = () => {
         address: args[0],
         abi: erc20ABI,
         functionName: 'balanceOf',
-        args: ['0x65024158941e15283a376F69E40dED61F522cb51'],
+        args: [JackpotAdds],
       },
     ],
     select: (data) => {
