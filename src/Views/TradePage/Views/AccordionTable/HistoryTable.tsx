@@ -111,14 +111,19 @@ const HistoryTable: React.FC<{
 
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
-
-    const jackpotValue = divide(
+    const jackpote18 =
       jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]?.jackpot_amount ||
-        trade?.jackpot_amount ||
-        '0',
-      18
+      trade?.jackpot_amount ||
+      '0';
+    const jackpotValue = jackpote18 / 10 ** 18;
+    const isJackpotDisabled = jackpote18 ? +jackpote18 == 0 : true;
+    console.log(
+      `HistoryTable-isJackpotDisabled: `,
+      isJackpotDisabled,
+      jackpotValue,
+      jackpote18,
+      typeof jackpote18
     );
-    const isJackpotDisabled = jackpotValue && lte(jackpotValue, '0');
 
     if (trade === undefined) return <></>;
     // if (!readcallData) return <>no readcall data</>;
