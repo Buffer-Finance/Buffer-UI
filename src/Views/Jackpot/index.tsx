@@ -270,7 +270,8 @@ const Jackpot: React.FC<any> = ({}) => {
       <div className="flex gap-4 m-auto mt-6 sm:mx-4">
         <div className=" flex flex-col gap-5 sm:w-full">
           {address ? (
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-5  sm:bg-[#1c1c28] sm:py-2  sm:justify-center">
+              {/* <div className="flex items-center gap-5 sm:sticky sm:top-[35px] sm:bg-[#1c1c28] sm:py-2 sm:z-10 sm:justify-center"> */}
               <>
                 <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] sm:-mt-3 ">
                   <CircleAroundPicture />
