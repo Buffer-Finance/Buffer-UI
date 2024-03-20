@@ -344,7 +344,7 @@ const usePlatforJackpots = () => {
           )
         : null;
       const res = await Promise.all([allHistory, userHistory]);
-      const response = res.map((d) => {
+      const response = res.map((d, idx) => {
         return d?.data?.page_data
           ? addMarketInTrades(d?.data?.page_data, markets)
           : emptyAr;
@@ -385,7 +385,7 @@ function RecentJackpots(props) {
           My Wins
         </button>
       </div>
-      <div className="flex flex-col gap-3 sm:h-[60vh] overflow-auto">
+      <div className="flex flex-col gap-3 h-[59vh]  overflow-auto pr-2 scrollbar-heavy">
         {datas.length ? (
           datas.map((s) => <UserCard key={s.id} bet={s} isUser={userTab} />)
         ) : (
@@ -537,7 +537,7 @@ function JackpotSummary(props) {
         headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         className="br-jackpot"
         descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
-        head={'No of trades'}
+        head={'Eligible trades'}
         desc={data.eligible_trades_for_jackpot}
       />
       <Col

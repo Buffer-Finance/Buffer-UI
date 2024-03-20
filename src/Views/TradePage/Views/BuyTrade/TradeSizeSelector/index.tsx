@@ -40,12 +40,6 @@ export const TradeSizeSelector: React.FC<{
   const readcallData = useAtomValue(buyTradeDataAtom);
   const { registeredOneCT } = useOneCTWallet();
 
-  console.log(
-    `index-poolDetails || !readcallData || !switchPool: `,
-    poolDetails,
-    readcallData,
-    switchPool
-  );
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
   const decimals = poolDetails.decimals;
