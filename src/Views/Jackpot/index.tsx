@@ -203,7 +203,7 @@ const Jackpot: React.FC<any> = ({}) => {
             <img
               src={pageContent.image}
               alt="play"
-              className="w-[80%] h-[270px] mx-auto"
+              className="w-[80%]   aspect-[1.2] mx-auto "
             />
             <div className="flex flex-col items-start justify-start mx-2 text-[16px] font-normal leading-normal text-slate-400 sm:text-sm">
               {pageContent.body}
@@ -272,7 +272,7 @@ const Jackpot: React.FC<any> = ({}) => {
           {address ? (
             <div className="flex items-center gap-5">
               <>
-                <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] ">
+                <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] sm:-mt-3 ">
                   <CircleAroundPicture />
                   {highestTierNFT !== null ? (
                     <img
@@ -300,7 +300,7 @@ const Jackpot: React.FC<any> = ({}) => {
                     address.substring(address.length - 4)}
                 </div>
               </>
-              {isMobile ? <JackpotSummary sm /> : null}
+              {isMobile ? <JackpotSummary /> : null}
             </div>
           ) : null}
           <JackpotValueSeciont />
@@ -386,7 +386,7 @@ function RecentJackpots(props) {
           My Wins
         </button>
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 sm:h-[60vh] overflow-auto">
         {datas.length ? (
           datas.map((s) => <UserCard key={s.id} bet={s} isUser={userTab} />)
         ) : (
@@ -531,7 +531,7 @@ function JackpotSummary(props) {
   return (
     <DataWrapper
       className={[
-        'flex items-center justify-center bg-[#171722] py-[15px] rounded-[20px] ',
+        'flex items-center justify-center bg-[#171722] py-[15px] sm:py-[10px] rounded-[20px] ',
         props.sm ? 'sm:hidden' : '',
       ].join(' ')}
     >
