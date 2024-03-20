@@ -372,7 +372,7 @@ function RecentJackpots(props) {
           onClick={() => {
             setUserTab(false);
           }}
-          className={' text-f12 ' + (userTab ? 'text-1' : '')}
+          className={' text-f12 ' + (userTab ? '' : 'text-1')}
         >
           Previous Winners
         </button>
@@ -380,7 +380,7 @@ function RecentJackpots(props) {
           onClick={() => {
             setUserTab(true);
           }}
-          className={' text-f12 ' + (userTab ? '' : 'text-1')}
+          className={' text-f12 ' + (userTab ? 'text-1' : '')}
         >
           My Wins
         </button>
