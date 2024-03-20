@@ -1,4 +1,4 @@
-import { useAccount, useContractEvent } from 'wagmi';
+import { useAccount, useContractEvent, usePublicClient } from 'wagmi';
 import JackootABI from '@ABIs/JackpotABI.json';
 import RouterABI from '@ABIs/ABI/routerABI.json';
 import { createPublicClient, http } from 'viem';
@@ -13,29 +13,23 @@ export const publicClient = createPublicClient({
   chain: arbitrumSepolia,
   transport: http(),
 });
-const unwatch = publicClient.watchContractEvent({
-  address: JackpotAdds,
-  abi: JackootABI,
-  eventName: 'JackpotTriggered',
-  onLogs: (logs) => {
-    console.log('jackpotdeb-internal', logs);
-  },
-});
 
 const useJackpotEvent = () => {
   const jackpotManager = useJackpotManager();
   const user = useAccount();
+  const publicClient2 = usePublicClient();
 
   useEffect(() => {
     console.log('jackpotdeb-listening');
+    // console.log(`publicClient2: `, publicClient2);
 
     const unwatch = publicClient.watchContractEvent({
       address: JackpotAdds,
       abi: JackootABI,
       eventName: 'JackpotTriggered',
       onLogs: (logs) => {
-        if (!user.address) return;
         try {
+          if (!user?.address) return;
           const logArgs = logs[0].args;
           console.log(
             'jackpotdeb-actual',
@@ -64,7 +58,7 @@ const useJackpotEvent = () => {
 
       unwatch();
     };
-  }, [user, jackpotManager.addJackpot]);
+  }, [user, publicClient2, jackpotManager.addJackpot]);
   return null;
 };
 
