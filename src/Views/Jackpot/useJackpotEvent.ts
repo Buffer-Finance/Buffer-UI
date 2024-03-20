@@ -28,15 +28,10 @@ const useJackpotEvent = () => {
       abi: JackootABI,
       eventName: 'JackpotTriggered',
       onLogs: (logs) => {
+        console.log('jackpotdeb-triggered', logs);
         try {
           if (!user?.address) return;
           const logArgs = logs[0].args;
-          console.log(
-            'jackpotdeb-actual',
-            logArgs,
-            logArgs.jackpotWinAmount,
-            logArgs.jackpotWinAmount == 0n
-          );
           if (logArgs.jackpotWinAmount == 0n) return;
           const jp = {
             option_id: +logArgs.optionId.toString(),

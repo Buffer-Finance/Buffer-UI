@@ -58,14 +58,6 @@ export const BuyTrade: React.FC = () => {
     !activeMarket ||
     (address ? approvalExpanded == undefined : false)
   ) {
-    console.log(
-      'inf-loading-due-to',
-      switchPool,
-      poolDetails,
-      readcallData,
-      activeMarket,
-      approvalExpanded
-    );
     return (
       <Skeleton
         variant="rectangular"
