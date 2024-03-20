@@ -370,7 +370,7 @@ function RecentJackpots(props) {
       <div className="flex items-center gap-3 font-[600] text-[#B1B6C6] mb-3">
         <button
           onClick={() => {
-            setUserTab(true);
+            setUserTab(false);
           }}
           className={' text-f12 ' + (userTab ? 'text-1' : '')}
         >
@@ -378,7 +378,7 @@ function RecentJackpots(props) {
         </button>
         <button
           onClick={() => {
-            setUserTab(false);
+            setUserTab(true);
           }}
           className={' text-f12 ' + (userTab ? '' : 'text-1')}
         >
