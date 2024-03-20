@@ -367,7 +367,7 @@ function RecentJackpots(props) {
         props.sm ? 'sm:hidden' : '',
       ].join(' ')}
     >
-      <div className="flex items-center gap-3 font-[600] text-[#B1B6C6] mb-3">
+      <div className="flex items-center gap-3 font-[600]  min-w-[330px] text-[#B1B6C6] mb-3">
         <button
           onClick={() => {
             setUserTab(false);
@@ -508,6 +508,7 @@ function JackpotSummary(props) {
   const account = useAccount();
   const { data } = useSWR(`jackpotsummary`, {
     fetcher: async () => {
+      if (!account?.address) return null;
       const response = await axios.get(
         `${baseUrl}jackpot/summary/?environment=${
           isTestnet ? 421614 : 42161
@@ -518,6 +519,7 @@ function JackpotSummary(props) {
     },
     refreshInterval: 1000,
   });
+  if (!account?.address) return <></>;
   if (!data) {
     return (
       <Skeleton
