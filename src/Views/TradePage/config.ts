@@ -16,7 +16,7 @@ export const appConfig = {
     booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
     v2_router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
-    jackpot: '0xf45D4d11A63b62f3913176F885Ae61ce332292F7',
+    jackpot: '0xe8032a26fEA73a5691ebb88faAa09211fAFC5F6d',
 
     poolsInfo: {
       '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
@@ -93,7 +93,7 @@ export const appConfig = {
     booster: '0x530A27260Ea2b082Be32bB428564f24AE66013B5',
     config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
     v2_router: '0x0e0A1241C9cE6649d5D30134a194BA3E24130305',
-    jackpot: '0xf45D4d11A63b62f3913176F885Ae61ce332292F7',
+    jackpot: '0xe8032a26fEA73a5691ebb88faAa09211fAFC5F6d',
 
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
@@ -176,7 +176,7 @@ export const appConfig = {
     v2_router: null,
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
-    jackpot: '0xf45D4d11A63b62f3913176F885Ae61ce332292F7',
+    jackpot: '0xe8032a26fEA73a5691ebb88faAa09211fAFC5F6d',
 
     poolsInfo: {
       '0xcE5467a403eb433391F72007E151DBb8119728E0': {
@@ -200,7 +200,7 @@ export const appConfig = {
     v2_router: null,
     creation_window: '0x72b9de12C4FBBAc17f3394F7EA3aDE315d83C7c1',
     signer_manager: '0xB0BA28f15Ebc9685ec89Cbe8C5E6e960d14f488b', //this is dummy
-    jackpot: '0xf45D4d11A63b62f3913176F885Ae61ce332292F7',
+    jackpot: '0xe8032a26fEA73a5691ebb88faAa09211fAFC5F6d',
 
     poolsInfo: {
       '0x6FD5B386d8bed29b3b62C0856250cdD849b3564d': {
