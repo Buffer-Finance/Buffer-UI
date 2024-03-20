@@ -10,8 +10,8 @@ import { UserCard } from './JackPotWInnerCard';
 import { DataWrapper } from '@Views/Profile/Components/UserDataComponent/UserDataV2';
 import { Col } from '@Views/Common/ConfirmationModal';
 import JackpotWinnerCard from './JackPotWInnerCard';
-import HTPJ1 from 'public/404.png';
-import HTPJ2 from 'public/404.png';
+import HTPJ1 from 'public/JackpotEligible.png';
+import HTPJ2 from 'public/JackpotWon.png';
 import { useState } from 'react';
 import { useMedia } from 'react-use';
 import { useJackpotInfo } from './useJackpotInfo';
@@ -178,11 +178,13 @@ const Jackpot: React.FC<any> = ({}) => {
     <>
       {' '}
       <ModalBase
-        className={' !overflow-hidden !bg-[#232334] !px-4 !py-5 mob-width '}
+        className={
+          '  !overflow-y-auto  !bg-[#232334] !px-4 sm:!px-[3px] !py-5 mob-width sm:m-[0px] !rounded-md sm:!rounded-sm sm:w-full  '
+        }
         open={isOpen}
         onClose={() => setIsOpen(false)}
       >
-        <div className="relative bg-[#232334] flex flex-col   ">
+        <div className="relative bg-[#232334] flex flex-col    ">
           {/* Header with close button */}
           <div className="flex flex-row items-start justify-between px-4 mt-3">
             <div className="text-white text-[22px] font-medium leading-normal">
@@ -203,7 +205,7 @@ const Jackpot: React.FC<any> = ({}) => {
             <img
               src={pageContent.image}
               alt="play"
-              className="w-[80%]   aspect-[1.2] mx-auto "
+              className="img-mob-width  aspect-[1.6] mx-auto "
             />
             <div className="flex flex-col items-start justify-start mx-2 text-[16px] font-normal leading-normal text-slate-400 sm:text-sm">
               {pageContent.body}
@@ -434,17 +436,17 @@ function JackpotValueSeciont(props) {
             How it works
           </div>
         </button>
-        <div className="relative mt-[5%] text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-11 max-md:mt-10">
+        <div className="relative sm:mt-[12%] text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-11 max-md:mt-10">
           Jackpot Value
         </div>
         <div className="flex justify-between w-full">
-          <div className="relative w-full gap-3 mt-3 flex items-center justify-center text-[34px] font-bold text-center text-blue-300 ">
+          <div className="relative w-full gap-3 mt-3  sm:mt-[0px] flex items-center justify-center text-[34px] font-bold text-center text-blue-300 ">
             <img className=" w-[60px] h-[60px]" src="/JV.png" />
             {amount ? toFixed(amount?.toString(), 2) : '--'}
             {' ' + JackpotToken}
           </div>
         </div>
-        <div className="text-[#B1B6C6] flex gap-1 font-[700] text-[12px]">
+        <div className="text-[#B1B6C6] sm:mt-[6%] flex gap-1 font-[700] text-[12px]">
           Minimum Bet Size{' '}
           <div className="text-[#fff]">
             {minSize ? toFixed(minSize, 2) : '--'} ARB
@@ -540,7 +542,7 @@ function JackpotSummary(props) {
         headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         className="br-jackpot"
         descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
-        head={'No of bets'}
+        head={'No of trades'}
         desc={data.eligible_trades_for_jackpot}
       />
       <Col

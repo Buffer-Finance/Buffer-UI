@@ -20,11 +20,15 @@ animation-timing-function: ease-in-out;
 animation-fill-mode: forwards;
   /* animation: rotate-big 1s ease-in-out forwards; */
 }
+.img-mob-width{
+  width:clamp(320px, 80%,340px);
+}
 
 .mob-width {
-  width:min(100vw, 350px) !important;
-  min-width:min(100vw, 350px) !important;
-  max-width:min(100vw, 350px) !important;
+  width: clamp(375px, 90%, 600px) !important;
+  max-width: clamp(375px, 90%, 600px) !important;
+  min-width:  clamp(375px, 90%, 600px) !important;
+  overflow-y: auto;
 }
 .br-jackpot{
   border-right: 2px solid #393953;
@@ -2450,7 +2454,7 @@ html .MuiDialog-paperWidthSm {
 @media only screen and (max-width: 600px) {
   html .MuiDialog-paperWidthSm {
     max-width: 100%;
-    width: 90%;
+    width: 99%;
   }
 }
 
