@@ -456,6 +456,7 @@ onUpEnd(c-(idx)
     width:clamp(320px, 90%,340px);
     /* padding-right: 10px;
     padding-bottom: 4px;; */
+    transform: translateX(-4px);
     /* margin:0px; */
   }
 }
