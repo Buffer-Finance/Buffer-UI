@@ -10,10 +10,8 @@ import { UserCard } from './JackPotWInnerCard';
 import { DataWrapper } from '@Views/Profile/Components/UserDataComponent/UserDataV2';
 import { Col } from '@Views/Common/ConfirmationModal';
 import JackpotWinnerCard from './JackPotWInnerCard';
-import TimeAgo from 'javascript-time-ago';
 import HTPJ1 from 'public/404.png';
 import HTPJ2 from 'public/404.png';
-import en from 'javascript-time-ago/locale/en.json';
 import { useState } from 'react';
 import { useMedia } from 'react-use';
 import { useJackpotInfo } from './useJackpotInfo';
@@ -28,9 +26,8 @@ import React from 'react';
 import { atom, useAtom } from 'jotai';
 import { addMarketInTrades } from '@Views/TradePage/utils';
 import { useAllV2_5MarketsConfig } from '@Views/TradePage/Hooks/useAllV2_5MarketsConfig';
+import { BlueBtn } from '@Views/Common/V2-Button';
 
-TimeAgo.addDefaultLocale(en);
-TimeAgo.addLocale(en);
 const bet = {
   id: 230,
   signature_timestamp: 1709823201,
@@ -135,7 +132,7 @@ const Jackpot: React.FC<any> = ({}) => {
   const isMobile = useMedia('(max-width:600px)');
   const [page, setPage] = React.useState(1);
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
-
+  const navigate = useNavigate();
   let recentPlatformJackpot = pastJackpots[0]?.[0]?.open_timestamp || null;
   const content = {
     name: 'Dice',
@@ -170,34 +167,34 @@ const Jackpot: React.FC<any> = ({}) => {
     <>
       {' '}
       <ModalBase
-        className={' !overflow-hidden !bg-[#0d0d15] !px-4 !py-5 mob-width '}
+        className={' !overflow-hidden !bg-[#232334] !px-4 !py-5 mob-width '}
         open={isOpen}
         onClose={() => setIsOpen(false)}
       >
-        <div className="relative bg-[#0d0d15] flex flex-col   ">
+        <div className="relative bg-[#232334] flex flex-col   ">
           {/* Header with close button */}
           <div className="flex flex-row items-start justify-between px-4 mt-3">
-            <div className="text-white text-[15px] sm:text-[22px] font-medium leading-normal">
+            <div className="text-white text-[22px] font-medium leading-normal">
               How Jackpot Works
             </div>
             <img
-              src={''}
+              src={'/cross.svg'}
               alt="close"
               onClick={() => {
                 setIsOpen(false);
               }}
-              className="w-[23.94px] h-[24.48px]"
+              className="w-[23.94px] h-[24.48px] cursor-pointer"
             />
           </div>
 
           {/* Body */}
-          <div className="flex flex-col mt-[20px] gap-[20px] -">
+          <div className="flex flex-col mt-[20px] gap-[20px]  ">
             <img
               src={pageContent.image}
               alt="play"
               className="w-[80%] h-[270px] mx-auto"
             />
-            <div className="flex flex-col items-start justify-start mx-2 text-xs font-normal leading-normal text-slate-400 sm:text-sm">
+            <div className="flex flex-col items-start justify-start mx-2 text-[16px] font-normal leading-normal text-slate-400 sm:text-sm">
               {pageContent.body}
             </div>
           </div>
@@ -208,23 +205,23 @@ const Jackpot: React.FC<any> = ({}) => {
               <div className="flex flex-row items-center justify-between">
                 {/* Step 1/4 */}
                 <div>
-                  <span className="text-xs font-normal leading-normal text-white sm:text-base">
+                  <span className="text-[18px] font-normal leading-normal text-[#fff] ">
                     Step{' '}
                   </span>
-                  <span className="text-xs font-semibold leading-normal text-white sm:text-base">
+                  <span className="text-[18px] font-semibold leading-normal text-[#fff] ">
                     {page}
                   </span>
-                  <span className="text-xs font-normal leading-normal text-white sm:text-base">
+                  <span className="text-[18px] font-normal leading-normal text-white ">
                     /
                   </span>
-                  <span className="text-xs font-semibold leading-normal text-slate-400 sm:text-base">
+                  <span className="text-[18px] text-[#C3C2D4] font-semibold leading-normal text-slate-400 ">
                     {content.pages.length}
                   </span>
                 </div>
 
                 <div>
                   <button
-                    className=" text-white w-[18px] h-[18px] sm:w-[22.90px] sm:h-[22.90px] bg-slate-800 rounded-[3.10px] shadow border border-slate-600 justify-center items-center inline-flex mr-2"
+                    className=" text-white  w-[24px]   h-[24px] text-[18px] sm:w-[22.90px] sm:h-[22.90px] bdddbg rounded-[3.10px] shadow border bccc justify-center items-center inline-flex mr-2"
                     onClick={() => {
                       if (page > 1) {
                         setPage((prev) => prev - 1);
@@ -234,7 +231,7 @@ const Jackpot: React.FC<any> = ({}) => {
                     {'<'}
                   </button>
                   <button
-                    className=" text-white  w-[18px] h-[18px] sm:w-[22.90px] sm:h-[22.90px] bg-slate-800 rounded-[3.10px] shadow border border-slate-600 justify-center items-center inline-flex"
+                    className=" text-white  w-[24px]   h-[24px] text-[18px] sm:w-[22.90px] sm:h-[22.90px] bdddbg rounded-[3.10px] shadow border bccc justify-center items-center inline-flex"
                     onClick={() => {
                       if (page < content.pages.length) {
                         setPage((prev) => prev + 1);
@@ -245,16 +242,16 @@ const Jackpot: React.FC<any> = ({}) => {
                   </button>
                 </div>
               </div>
-              <div
+              <BlueBtn
                 onClick={() => {
                   navigate('/slots');
                 }}
                 className="my-[15px] sm:my-[20px] bg-gradient-to-b from-sky-300 to-blue-400 rounded flex justify-center items-center cursor-pointer "
               >
-                <div className="my-2 text-sm font-semibold text-center text-zinc-950 sm:text-base">
+                <div className="my-2 text-sm font-semibold text-center text-zinc-950 text-[16px]">
                   Play
                 </div>
-              </div>
+              </BlueBtn>
             </div>
           </div>
         </div>
@@ -379,9 +376,13 @@ function RecentJackpots(props) {
         </button>
       </div>
       <div className="flex flex-col gap-3">
-        {datas.map((s) => (
-          <UserCard key={s.id} bet={s} isUser={userTab} />
-        ))}
+        {datas.length ? (
+          datas.map((s) => <UserCard key={s.id} bet={s} isUser={userTab} />)
+        ) : (
+          <div className="text-f14 bg-[#232334] w-full p-3 rounded-sm">
+            No wins yet!
+          </div>
+        )}
       </div>
     </div>
   );

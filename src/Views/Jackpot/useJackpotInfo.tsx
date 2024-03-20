@@ -7,7 +7,6 @@ const defaultOp = -1;
 const useJackpotInfo = () => {
   const [ARBPoolAds, token] = getARBPool();
   const args = [token.tokenAddress];
-  console.log(`useJackpotInfo-ARBPoolAds, token: `, args);
   const res = useContractReads({
     contracts: [
       {
@@ -24,10 +23,6 @@ const useJackpotInfo = () => {
       },
     ],
     select: (data) => {
-      console.log(
-        `ShareManagementDrawer-appConfig.handelTradeAddress: `,
-        data[0].result
-      );
       if (data[0].status == 'success')
         return {
           minSize: BigDivide(data[0].result),
@@ -38,7 +33,6 @@ const useJackpotInfo = () => {
       }
     },
   });
-  console.log('Jackpot-deb', res);
   return res.data;
 };
 
@@ -57,6 +51,5 @@ const getARBPool = () => {
 
 const BigDivide = (num) => {
   if (!num) return undefined;
-  console.log(`useJackpotInfo-num: `, num);
-  return num / BigInt(10 ** 18);
+  return BigInt(num) / BigInt(10 ** 18);
 };

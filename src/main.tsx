@@ -14,6 +14,11 @@ import { WagmiConfig } from 'wagmi';
 import App from './App';
 import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
+
+TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(en);
 
 const ErrorComponenet = () => {
   return (

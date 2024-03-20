@@ -40,7 +40,6 @@ export const TradeSizeSelector: React.FC<{
   const readcallData = useAtomValue(buyTradeDataAtom);
   const { registeredOneCT } = useOneCTWallet();
 
-  console.log(`index-switchPool: `, switchPool, readcallData, poolDetails);
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
   const decimals = poolDetails.decimals;
@@ -53,7 +52,6 @@ export const TradeSizeSelector: React.FC<{
   ) as string;
   const platformFee = divide(switchPool.platformFee, decimals) as string;
   const maxTradeSize = maxFee;
-  console.log(`index-maxTradeSize: `, maxTradeSize);
   return (
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
@@ -102,7 +100,6 @@ const PlatfromFeeError = ({
   balance: string;
 }) => {
   const jackpotValue = useJackpotInfo();
-  console.log(`index-jackpotValue: `, jackpotValue);
   const tradeSize = useAtomValue(tradeSizeAtom);
   const jackpotEligible =
     tradeToken == 'ARB' &&
@@ -138,7 +135,7 @@ const PlatfromFeeError = ({
               to="/Jackpot"
               className="hover:underline hover:cursor-pointer"
             >
-              <a>Jackpot</a>
+              Jackpot
             </Link>{' '}
             💰{' '}
           </>
@@ -155,7 +152,7 @@ const PlatfromFeeError = ({
               to="/Jackpot"
               className="hover:underline hover:cursor-pointer"
             >
-              <a>Jackpot</a>
+              Jackpot
             </Link>{' '}
             💰{' '}
           </>

@@ -21,17 +21,14 @@ export const JackpotModal: React.FC<IJackpotModal> = () => {
   const { page_data: historyTrades } = useHistoryTrades();
   const { jackpot, jackpotAcknowledged } = useJackpotManager();
   const trade = useMemo(() => {
-    console.log(`Jackpot-historyTrades: `, historyTrades);
     const alltrades = [...activeTrades, ...historyTrades];
     const foundTrade = alltrades?.filter((trade) => {
       const tradeKey = getJackpotKey(trade);
-      console.log(`Jackpot-tradeKey: `, tradeKey, jackpot.recent);
       if (tradeKey == jackpot.recent) {
         return true;
       }
       return false;
     });
-    console.log(`Jackpot-foundTrade: `, foundTrade);
     if (foundTrade?.length) {
       return {
         ...foundTrade?.[0],
@@ -41,7 +38,6 @@ export const JackpotModal: React.FC<IJackpotModal> = () => {
       return jackpot.jackpots[jackpot.recent];
     }
   }, [activeTrades, jackpot, historyTrades]);
-  console.log(`Jackpot-historyTrades: `, activeTrades, trade);
   return (
     <Dialog open={Boolean(jackpot.recent)} onClose={jackpotAcknowledged}>
       <div

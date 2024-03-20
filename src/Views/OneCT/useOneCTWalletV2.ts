@@ -11,7 +11,6 @@ export const useUserOneCTData = () => {
   const activeChainId = activeChain?.id;
   const { address: userAddress } = useAccount();
   const { data: productNames } = useProductName();
-  console.log(`productNames: `, productNames);
   const toastify = useToast();
 
   const { data } = useSWR<{
@@ -20,7 +19,6 @@ export const useUserOneCTData = () => {
     state: 'PROCESSED' | 'PENDING';
   }>(`${userAddress}-one-ct-data-on-${activeChainId}`, {
     fetcher: async () => {
-      console.log(`productNames: `, productNames);
       // if (productNames === undefined)
       //   return toastify({
       //     id: '10231',
