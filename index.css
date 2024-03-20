@@ -452,6 +452,12 @@ onUpEnd(c-(idx)
 
     font-size: 18px !important;
   }
+  .img-mob-width{
+    width:clamp(320px, 90%,340px);
+    /* padding-right: 10px;
+    padding-bottom: 4px;; */
+    /* margin:0px; */
+  }
 }
 
 .nft-wrapper {

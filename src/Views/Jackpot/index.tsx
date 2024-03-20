@@ -178,7 +178,7 @@ const Jackpot: React.FC<any> = ({}) => {
       {' '}
       <ModalBase
         className={
-          '  !overflow-y-auto  !bg-[#232334] !px-4 sm:!px-[3px] !py-5 mob-width sm:m-[0px] !rounded-md sm:!rounded-sm sm:w-full  '
+          '  !overflow-y-auto  !bg-[#232334] !px-[26px] sm:!px-[3px] !py-5 mob-width sm:m-[0px] !rounded-md sm:!rounded-sm sm:w-full  '
         }
         open={isOpen}
         onClose={() => setIsOpen(false)}
@@ -204,7 +204,7 @@ const Jackpot: React.FC<any> = ({}) => {
             <img
               src={pageContent.image}
               alt="play"
-              className="img-mob-width  aspect-[1.6] mx-auto "
+              className="img-mob-width nsm:w-full  aspect-[1.6] mx-auto "
             />
             <div className="flex flex-col items-start justify-start mx-2 text-[16px] font-normal leading-normal text-slate-400 sm:text-sm">
               {pageContent.body}
