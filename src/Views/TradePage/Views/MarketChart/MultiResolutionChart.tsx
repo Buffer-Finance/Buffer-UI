@@ -853,7 +853,6 @@ export const MultiResolutionChart = ({
     clearInterval(positionUpdateTimerRef.current);
     if (!visualizedTrades.length) return;
     positionUpdateTimerRef.current = setInterval(() => {
-      console.log('interval ran');
       // console.log('[chart-0 intervalcalled');
       try {
         widgetRef.current?.save((d) => {
