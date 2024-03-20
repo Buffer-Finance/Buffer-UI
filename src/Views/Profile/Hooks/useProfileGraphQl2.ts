@@ -11,7 +11,7 @@ export const useProfileGraphQl2 = (product: Products) => {
   const { activeChain } = useActiveChain();
   const graphUrl = `https://subgraph.satsuma-prod.com/${
     import.meta.env.VITE_SATSUMA_KEY
-  }/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.3-ab-profile-user-cumulative-optionwise-new-schema/api`;
+  }/bufferfinance/arbitrum-mainnet/version/v2.6.9-ab-ud-profile-page/api`;
   const queryName = product === 'Up/Down' ? 'optionStats' : 'aboptionStats';
   async function fetchData(account: string | undefined) {
     if (!account) return null;
