@@ -40,6 +40,12 @@ export const TradeSizeSelector: React.FC<{
   const readcallData = useAtomValue(buyTradeDataAtom);
   const { registeredOneCT } = useOneCTWallet();
 
+  console.log(
+    `index-poolDetails || !readcallData || !switchPool: `,
+    poolDetails,
+    readcallData,
+    switchPool
+  );
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
   const decimals = poolDetails.decimals;
@@ -107,6 +113,33 @@ const PlatfromFeeError = ({
   const notEnoughForTrade = gt(tradeSize || '0', balance);
   const notEnooghForFee = gt(add(tradeSize || '0', platfromFee), balance);
   const isError = notEnooghForFee;
+  const JackpotChip = tradeSize ? (
+    <div className="ml-auto flex items-center gap-1">
+      {jackpotEligible ? (
+        <>
+          <LightToolTipSVG className="mt-[2px]" />
+          Eligible for{' '}
+          <Link to="/Jackpot" className="hover:underline hover:cursor-pointer">
+            Jackpot
+          </Link>{' '}
+          💰{' '}
+        </>
+      ) : (
+        <>
+          <LightToolTipSVG className="mt-[2px]" />
+          Add{' '}
+          {Math.ceil(
+            +subtract(jackpotValue?.minSize?.toString(), tradeSize || '0')
+          )}{' '}
+          for
+          <Link to="/Jackpot" className="hover:underline hover:cursor-pointer">
+            Jackpot
+          </Link>{' '}
+          💰{' '}
+        </>
+      )}
+    </div>
+  ) : null;
   if (notEnooghForFee && notEnoughForTrade) return <></>;
   return (
     <RowGapItemsTop
@@ -116,47 +149,19 @@ const PlatfromFeeError = ({
       <LightToolTipSVG className="mt-[2px]" />
       {isError ? (
         <>
-          Insufficient funds for platform fee.{' '}
-          <BuyUSDCLink token={tradeToken as 'ARB'} />
+          <div className="flex items-center gap-2">
+            Insufficient funds for platform fee.{' '}
+            <BuyUSDCLink token={tradeToken as 'ARB'} />
+          </div>
         </>
       ) : (
         !isError && (
           <>
             Platform fee : + {platfromFee} {tradeToken}
+            {JackpotChip}
           </>
         )
       )}
-      <div className="ml-auto flex items-center gap-1">
-        {jackpotEligible ? (
-          <>
-            <LightToolTipSVG className="mt-[2px]" />
-            Eligible for{' '}
-            <Link
-              to="/Jackpot"
-              className="hover:underline hover:cursor-pointer"
-            >
-              Jackpot
-            </Link>{' '}
-            💰{' '}
-          </>
-        ) : (
-          <>
-            <LightToolTipSVG className="mt-[2px]" />
-            Add{' '}
-            {Math.ceil(
-              +subtract(jackpotValue?.minSize?.toString(), tradeSize || '0')
-            )}{' '}
-            for
-            <Link
-              to="/Jackpot"
-              className="hover:underline hover:cursor-pointer"
-            >
-              Jackpot
-            </Link>{' '}
-            💰{' '}
-          </>
-        )}
-      </div>
     </RowGapItemsTop>
   );
 };

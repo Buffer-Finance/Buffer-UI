@@ -132,7 +132,11 @@ const Jackpot: React.FC<any> = ({}) => {
   const isMobile = useMedia('(max-width:600px)');
   const [page, setPage] = React.useState(1);
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
+  const jackpotInfo = useJackpotInfo();
   const navigate = useNavigate();
+  const jackpotAmount = '20';
+  const minSize = jackpotInfo?.minSize ? jackpotInfo.minSize.toString() : '0';
+
   let recentPlatformJackpot = pastJackpots[0]?.[0]?.open_timestamp || null;
   const content = {
     name: 'Dice',
@@ -140,19 +144,26 @@ const Jackpot: React.FC<any> = ({}) => {
       {
         image: HTPJ1,
         body: (
-          <span className="flex">
-            Level up your chances to win big! Place a bet that's greater than to
-            be eligible for a jackpot— aim high!
+          <span>
+            Level up your chances to win big! Place a bet that's greater than{' '}
+            <b>
+              {minSize}&nbsp;{JackpotToken}{' '}
+            </b>
+            to be eligible for a jackpot— aim high!
           </span>
         ),
       },
       {
         image: HTPJ2,
         body: (
-          <span className="flex">
-            You have a chance to win up to
-            {JackpotToken} of the glorious Jackpot pool. Get ready to roll the
-            dice/slots and claim your spoils.
+          <span>
+            You have a chance to win up to{' '}
+            <b>
+              {jackpotAmount}&nbsp;
+              {JackpotToken}
+            </b>{' '}
+            of the glorious Jackpot pool. Get ready to place your Up/Down bets
+            and claim your Jackpot!.
           </span>
         ),
       },
@@ -495,12 +506,13 @@ const dummy = {
   total_jackpot_amount: 0,
 };
 function JackpotSummary(props) {
+  const account = useAccount();
   const { data } = useSWR(`jackpotsummary`, {
     fetcher: async () => {
       const response = await axios.get(
         `${baseUrl}jackpot/summary/?environment=${
           isTestnet ? 421614 : 42161
-        }&order_by=-close_time`
+        }&order_by=-close_time&user_address=${account.address}`
       );
       // console.log(response.data, "response");
       return response.data;
