@@ -143,10 +143,9 @@ const PlatfromFeeError = ({
           <>
             <LightToolTipSVG className="mt-[2px]" />
             Add{' '}
-            {(+subtract(
-              jackpotValue?.minSize?.toString(),
-              tradeSize || '0'
-            )).toFixed(2)}{' '}
+            {Math.ceil(
+              +subtract(jackpotValue?.minSize?.toString(), tradeSize || '0')
+            )}{' '}
             for
             <Link
               to="/Jackpot"
