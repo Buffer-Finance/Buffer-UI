@@ -3492,3 +3492,7 @@ html .pagination-root {
 .react-ios-time-picker-hour-format-transition {
   transition: transform 100ms ease-out;
 }
+
+.MuiTimelineItem-root ::before{
+  padding: 0 20px;
+}
