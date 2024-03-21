@@ -374,7 +374,7 @@ function RecentJackpots(props) {
           }}
           className={' text-f12 ' + (userTab ? '' : 'text-1')}
         >
-          Previous Winners
+          All Winnings
         </button>
         <button
           onClick={() => {
@@ -382,7 +382,7 @@ function RecentJackpots(props) {
           }}
           className={' text-f12 ' + (userTab ? 'text-1' : '')}
         >
-          My Wins
+          My Winnings
         </button>
       </div>
       <div className="flex flex-col gap-3 h-[59vh]  overflow-auto pr-2 scrollbar-heavy">
@@ -428,7 +428,7 @@ function JackpotValueSeciont(props) {
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/c918dc20adb64f78c725558364a049f97b9c2d04ba6e3e9d5e946ec1ee5c8b34?"
             className=" -mt-[1px] items-center w-[12px] justify-center object-contain object-center  max-w-full overflow-hidden aspect-square shrink-0"
           />
-          <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap">
+          <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap hover:underline">
             How it works
           </div>
         </button>
@@ -467,7 +467,7 @@ function JackpotValueSeciont(props) {
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/c918dc20adb64f78c725558364a049f97b9c2d04ba6e3e9d5e946ec1ee5c8b34?"
           className=" -mt-[1px] items-center w-[12px] justify-center object-contain object-center  max-w-full overflow-hidden aspect-square shrink-0"
         />
-        <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap">
+        <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap hover:underline">
           How it works
         </div>
       </button>
@@ -475,13 +475,13 @@ function JackpotValueSeciont(props) {
         Jackpot Value
       </div>
       <div className="flex justify-between w-full">
-        <div className="relative w-full gap-3 mt-3 flex items-center justify-center text-[45px] font-bold text-center text-blue-300 ">
+        <div className="relative w-full gap-3 mt-1 flex items-center justify-center text-[45px] font-bold text-center text-blue-300 ">
           <img className=" w-[60px] h-[60px]" src="/JV.png" />
           {amount ? toFixed(amount?.toString(), 2) : '--'}
           {' ' + JackpotToken}
         </div>
       </div>
-      <div className="text-[#B1B6C6] flex gap-1 font-[700] text-[12px]">
+      <div className="text-[#B1B6C6] mt-4 flex gap-1 font-[700] text-[12px]">
         Minimum Bet Size{' '}
         <div className="text-[#fff]">
           {minSize ? toFixed(minSize, 2) : '--'} ARB
@@ -546,12 +546,12 @@ function JackpotSummary(props) {
         headClass="text-[#B1B6C6]  sm:text-[12px] sm:px-5 text-[14px] font-[500] px-6 "
         className="br-jackpot"
         descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
-        head={'Jackpot Won'}
+        head={'Jackpots Won'}
         desc={data.user_jackpots_won}
       />
       <Col
         headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
-        head={'Win'}
+        head={'Winnnings'}
         descClass="text-green  sm:text-[12px] sm:px-5  text-[14px] font-bold px-6"
         desc={`${data.total_jackpot_amount} ARB`}
       />
@@ -570,10 +570,10 @@ function RecentJackPotTimer({ recentTime }) {
   const isMobile = useMedia('(max-width:600px)');
   if (isMobile) {
     return (
-      <div className="flex text-[#B1B6C6]  items-center justify-center gap-[4vw]">
+      <div className="flex text-[#B1B6C6]  items-center justify-center gap-[4vw] bg-[#141823] rounded-[8px] w-full py-3">
         {recentTime ? (
           <>
-            <div className="font-[500] text-[12px]">since the last jackpot</div>
+            <div className="font-[500] text-[12px]">Since the last jackpot</div>
             <div className="font-[700] text-[16px] text-1">
               {timerCols.map(([k, v]) => v).join(':')}
             </div>
@@ -597,7 +597,7 @@ function RecentJackPotTimer({ recentTime }) {
       {recentTime ? (
         <div className="flex w-[214px] max-w-full flex-col items-center">
           <div className="text-sm text-[#B1B6C6] text-[14px] mb-[30px] font-medium leading-6 text-gray-400 whitespace-nowrap">
-            since the last jackpot
+            Since the last jackpot
           </div>
           <div className="flex  gap-3">
             {timerCols.map((s, idx) => {

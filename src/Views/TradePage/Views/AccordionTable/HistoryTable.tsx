@@ -43,10 +43,10 @@ enum TableColumn {
   Strike = 1,
   ExpiryPrice = 2,
   OpenTime = 3,
-  TimeLeft = 4,
-  CloseTime = 5,
-  TradeSize = 6,
-  Payout = 7,
+  TimeLeft = 7,
+  CloseTime = 4,
+  TradeSize = 5,
+  Payout = 6,
   Status = 8,
   ShareOrAddress = 9,
 }
@@ -80,10 +80,10 @@ const HistoryTable: React.FC<{
         'Strike Price',
         'Expiry Price',
         'Open Time',
-        'Jackpot',
         'Close Time',
         'Trade Size',
         'Payout',
+        'Jackpot',
         'Status',
         'User',
       ]
@@ -92,10 +92,10 @@ const HistoryTable: React.FC<{
         'Strike Price',
         'Expiry Price',
         'Open Time',
-        'Jackpot',
         'Close Time',
         'Trade Size',
         'Payout',
+        'Jackpot',
         'Status',
         '',
       ];
@@ -196,7 +196,7 @@ const HistoryTable: React.FC<{
               <Link to={'/Jackpot'}>
                 <img
                   className={[
-                    'w-[24px] h-[19px]',
+                    'w-[24px] h-[19px] min-w-[24px] min-h-[19px] max-w-[24px] max-h-[19px]',
                     isJackpotDisabled ? 'opacity-30' : '',
                   ].join(' ')}
                   src="/JV.png"
