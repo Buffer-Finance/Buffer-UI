@@ -76,7 +76,7 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
           data={
             isCurrentWeek ? (
               <span className="text-f22">Calculating...</span>
-            ) : isAllotedRebatesLoading ? (
+            ) : allotedRebates === undefined ? (
               <Skeleton
                 variant="rectangular"
                 className="w-[80px] !h-7 lc mr-auto"
@@ -400,7 +400,6 @@ const ClaimCompetitionReward: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
   const toastify = useToast();
 
-  console.log(allotedRewards, competitionRewardAddress, 'allotedRewards');
   return (
     <BlueBtn
       isLoading={isLoading}
@@ -408,21 +407,21 @@ const ClaimCompetitionReward: React.FC<{
       onClick={async () => {
         try {
           setIsLoading(true);
+          const params = [
+            allotedRewards.address,
+            allotedRewards.contract,
+            allotedRewards.amount,
+            allotedRewards.reward_id,
+            allotedRewards.updated_at,
+            allotedRewards.signature,
+          ];
+          console.log(params);
           await writeCall(
             (p) => {
               console.log(p);
             },
             'claimMultiple',
-            [
-              [
-                allotedRewards.address,
-                allotedRewards.contract,
-                allotedRewards.amount,
-                allotedRewards.reward_id,
-                allotedRewards.updated_at,
-                allotedRewards.signature,
-              ],
-            ]
+            [params]
           );
           //call after 5seconds
           setTimeout(() => {
