@@ -28,11 +28,11 @@ const useJackpotEvent = () => {
       abi: JackootABI,
       eventName: 'JackpotTriggered',
       onLogs: (logs) => {
-        console.log('jackpotdeb-triggered', logs);
+        console.log('jackpotdeb-triggered-1', logs, user?.address);
         try {
           if (!user?.address) return;
           const logArgs = logs[0].args;
-          if (logArgs.jackpotWinAmount == 0n) return;
+          // if (logArgs.jackpotWinAmount == 0n) return;
           const jp = {
             option_id: +logArgs.optionId.toString(),
             target_contract: logArgs.optionContract,
@@ -41,8 +41,15 @@ const useJackpotEvent = () => {
             user_address: logArgs.userAddress,
             trade_size: logArgs.amount.toString(),
           };
-          if (user.address?.toLowerCase() == logArgs.userAddress.toLowerCase())
+          console.log('jackpotdeb-triggered-1.5', logs, user?.address);
+
+          if (
+            user.address?.toLowerCase() == logArgs.userAddress.toLowerCase()
+          ) {
+            console.log('jackpotdeb-triggered-2', jp);
+
             jackpotManager.addJackpot(jp);
+          }
         } catch (e) {
           console.log('jackpotdeb-error', e);
         }
