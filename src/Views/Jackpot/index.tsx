@@ -432,7 +432,7 @@ function JackpotValueSeciont(props) {
             How it works
           </div>
         </button>
-        <div className="relative sm:mt-[12%] text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-11 max-md:mt-10">
+        <div className="relative text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-[60px]">
           Jackpot Value
         </div>
         <div className="flex justify-between w-full">
@@ -442,7 +442,7 @@ function JackpotValueSeciont(props) {
             {' ' + JackpotToken}
           </div>
         </div>
-        <div className="text-[#B1B6C6] sm:mt-[6%] flex gap-1 font-[700] text-[12px]">
+        <div className="text-[#B1B6C6] mt-[44px] flex gap-1 font-[700] text-[12px]">
           Minimum Bet Size{' '}
           <div className="text-[#fff]">
             {minSize ? toFixed(minSize, 2) : '--'} ARB
