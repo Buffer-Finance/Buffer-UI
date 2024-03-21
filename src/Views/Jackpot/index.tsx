@@ -271,41 +271,41 @@ const Jackpot: React.FC<any> = ({}) => {
       </ModalBase>
       <div className="flex gap-4 m-auto mt-6 sm:mx-4">
         <div className=" flex flex-col gap-5 sm:w-full">
-          {address ? (
-            <div className="flex items-center gap-5  sm:bg-[#1c1c28] sm:py-2  sm:justify-center">
-              {/* <div className="flex items-center gap-5 sm:sticky sm:top-[35px] sm:bg-[#1c1c28] sm:py-2 sm:z-10 sm:justify-center"> */}
-              <>
-                <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] sm:-mt-3 ">
-                  <CircleAroundPicture />
-                  {highestTierNFT !== null ? (
-                    <img
-                      src={
-                        'https://gateway.pinata.cloud/ipfs/' +
-                        highestTierNFT?.nftImage.split('://')[1]
-                      }
-                      alt=""
-                      className={
-                        'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
-                      }
-                    />
-                  ) : (
-                    <img
-                      src="/NFT-ph.png"
-                      className={
-                        'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
-                      }
-                    />
-                  )}
-                </div>
-                <div className="text-[25px] text-[#C3C2D4] font-[500] sm:hidden ">
-                  {address.substring(0, 4) +
+          <div className="flex items-center gap-5  sm:bg-[#1c1c28] sm:py-2  sm:justify-center">
+            {/* <div className="flex items-center gap-5 sm:sticky sm:top-[35px] sm:bg-[#1c1c28] sm:py-2 sm:z-10 sm:justify-center"> */}
+            <>
+              <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] sm:-mt-3 ">
+                <CircleAroundPicture />
+                {highestTierNFT !== null ? (
+                  <img
+                    src={
+                      'https://gateway.pinata.cloud/ipfs/' +
+                      highestTierNFT?.nftImage.split('://')[1]
+                    }
+                    alt=""
+                    className={
+                      'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
+                    }
+                  />
+                ) : (
+                  <img
+                    src="/NFT-ph.png"
+                    className={
+                      'absolute z-0 m-2  w-[68px]  h-[68px]   rounded-full left-[50%] top-[50%] -translate-y-[50%]  -translate-x-[50%] sm:w-full sm:h-full'
+                    }
+                  />
+                )}
+              </div>
+              <div className="text-[25px] text-[#C3C2D4] font-[500] sm:hidden ">
+                {address
+                  ? address.substring(0, 4) +
                     '....' +
-                    address.substring(address.length - 4)}
-                </div>
-              </>
-              {isMobile ? <JackpotSummary /> : null}
-            </div>
-          ) : null}
+                    address.substring(address.length - 4)
+                  : 'Connect your wallet'}
+              </div>
+            </>
+            {isMobile ? <JackpotSummary /> : null}
+          </div>
           <JackpotValueSeciont />
           <RecentJackPotTimer recentTime={recentPlatformJackpot} />
           <div className="nsm:hidden">
@@ -518,15 +518,15 @@ function JackpotSummary(props) {
     },
     refreshInterval: 1000,
   });
-  if (!account?.address) return <></>;
-  if (!data) {
-    return (
-      <Skeleton
-        variant="rectangular"
-        className="!w-[340px] !h-[70px] !rounded-md"
-      />
-    );
-  }
+  // if (!account?.address) return <></>;
+  // if (!data) {
+  //   return (
+  //     <Skeleton
+  //       variant="rectangular"
+  //       className="!w-[340px] !h-[70px] !rounded-md"
+  //     />
+  //   );
+  // }
   return (
     <DataWrapper
       className={[
@@ -539,20 +539,22 @@ function JackpotSummary(props) {
         className="br-jackpot"
         descClass="text-[#C3C2D4] nowrap sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'Eligible trades'}
-        desc={data.eligible_trades_for_jackpot}
+        desc={data?.eligible_trades_for_jackpot || '-'}
       />
       <Col
         headClass="text-[#B1B6C6] nowrap  sm:text-[12px] sm:px-5 text-[14px] font-[500] px-6 "
         className="br-jackpot"
         descClass="text-[#C3C2D4] nowrap sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'Jackpots Won'}
-        desc={data.user_jackpots_won}
+        desc={data?.user_jackpots_won || '-'}
       />
       <Col
         headClass="text-[#B1B6C6] nowrap sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'Winnings'}
         descClass="text-green nowrap sm:text-[12px] sm:px-5  text-[14px] font-bold px-6"
-        desc={`${data.total_jackpot_amount} ARB`}
+        desc={
+          data?.total_jackpot_amount ? `${data?.total_jackpot_amount} ARB` : '-'
+        }
       />
     </DataWrapper>
   );
