@@ -605,7 +605,7 @@ function RecentJackPotTimer({ recentTime }) {
                   className="flex flex-col min-w-[45px] gap-4 items-center"
                 >
                   <div className="text-[34px] font-bold leading-10 text-white">
-                    {s[1].padStart(2, '0')}{' '}
+                    {s[1]?.toString()?.padStart(2, '0')}{' '}
                   </div>
                   <div className=" text-[18px] font-medium  text-white capitalize">
                     {+s[1] == 1 ? format(s[0]).slice(0, -1) : format(s[0])}
