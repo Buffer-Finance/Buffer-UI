@@ -32,7 +32,7 @@ const useJackpotEvent = () => {
         try {
           if (!user?.address) return;
           const logArgs = logs[0].args;
-          // if (logArgs.jackpotWinAmount == 0n) return;
+          if (logArgs.jackpotWinAmount == 0n) return;
           const jp = {
             option_id: +logArgs.optionId.toString(),
             target_contract: logArgs.optionContract,
