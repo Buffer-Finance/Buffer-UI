@@ -34,7 +34,7 @@ export const useSeasonTotalData = (weekId: number) => {
         if (status !== 200) {
           throw new Error('Failed to fetch season total data');
         }
-        return data.data.totalDatas[0];
+        return data?.data?.totalDatas[0];
       } catch (e) {
         console.log(e);
       }

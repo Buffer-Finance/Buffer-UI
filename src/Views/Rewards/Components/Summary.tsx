@@ -1,4 +1,11 @@
+import { toFixed } from '@Utils/NumString';
+import { add, divide, subtract } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { Skeleton } from '@mui/material';
+import { useMemo } from 'react';
+import { useCompetitionRewardsClaimed } from '../Hooks/useCompetitionRewardsClaimed';
+import { useRebatesAlloted } from '../Hooks/useRebatesAlloted';
+import { useRebatesClaimed } from '../Hooks/useRebatesClaimed';
 
 export const Summary = () => {
   return (
@@ -15,6 +22,22 @@ export const Summary = () => {
 };
 
 const TradingRewards: React.FC = () => {
+  const { data: claimedData, isValidating: isLoadingClaimed } =
+    useRebatesClaimed();
+  const { data: allotedRebates } = useRebatesAlloted();
+
+  const totalAlloted = useMemo(() => {
+    if (!allotedRebates) return '0';
+    return Object.values(allotedRebates).reduce(
+      (acc, curr) => add(acc as string, curr as string),
+      '0'
+    ) as string;
+  }, [allotedRebates]);
+
+  const totalClaimed = useMemo(() => {
+    if (!claimedData) return '0';
+    return claimedData.reduce((acc, curr) => add(acc, curr.amount), '0');
+  }, [claimedData]);
   return (
     <div>
       <div className="text-[#FFFFFF] text-f16 font-medium mb-6">
@@ -24,11 +47,18 @@ const TradingRewards: React.FC = () => {
         <Column
           head="Rebates Claimed"
           data={
-            <Display
-              data={0}
-              label={'$'}
-              className="text-[#FFFFFF] text-f22 font-medium !text-start"
-            />
+            isLoadingClaimed ? (
+              <Skeleton
+                variant="rectangular"
+                className="w-[80px] !h-5 lc mr-auto"
+              />
+            ) : (
+              <Display
+                data={toFixed(divide(totalClaimed, 18) as string, 2)}
+                unit="ARB"
+                className="text-[#FFFFFF] text-f22 font-medium !text-start"
+              />
+            )
           }
         />
         <Divider />
@@ -36,8 +66,11 @@ const TradingRewards: React.FC = () => {
           head="Rebates Unclaimed"
           data={
             <Display
-              data={0}
-              label={'$'}
+              data={toFixed(
+                divide(subtract(totalAlloted, totalClaimed), 18) as string,
+                2
+              )}
+              unit="ARB"
               className="text-[#FFFFFF] text-f22 font-medium !text-start"
             />
           }
@@ -48,6 +81,13 @@ const TradingRewards: React.FC = () => {
 };
 
 const ComeptitionRewards: React.FC = () => {
+  const { data, isValidating } = useCompetitionRewardsClaimed();
+
+  const totalClaimed = useMemo(() => {
+    if (!data) return 0;
+    return data.reduce((acc, curr) => add(acc, curr.amount), '0');
+  }, [data]);
+
   return (
     <div className="h-fit">
       <div className="text-[#FFFFFF] text-f16 font-medium mb-6">
@@ -57,11 +97,18 @@ const ComeptitionRewards: React.FC = () => {
         <Column
           head="Rebates Claimed"
           data={
-            <Display
-              data={0}
-              label={'$'}
-              className="text-[#FFFFFF] text-f22 font-medium !text-start"
-            />
+            isValidating ? (
+              <Skeleton
+                variant="rectangular"
+                className="w-[80px] !h-5 lc mr-auto"
+              />
+            ) : (
+              <Display
+                data={toFixed(divide(totalClaimed, 18) as string, 2)}
+                unit={'ARB'}
+                className="text-[#FFFFFF] text-f22 font-medium !text-start"
+              />
+            )
           }
         />
         <Divider />
