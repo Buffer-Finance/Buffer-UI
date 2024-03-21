@@ -28,8 +28,9 @@ const TradingRewards: React.FC = () => {
 
   const totalAlloted = useMemo(() => {
     if (!allotedRebates) return '0';
-    return Object.values(allotedRebates).reduce(
-      (acc, curr) => add(acc as string, curr as string),
+    console.log(allotedRebates);
+    return Object?.values(allotedRebates).reduce(
+      (acc, curr) => add(acc as string, curr[0] ?? ('0' as string)),
       '0'
     ) as string;
   }, [allotedRebates]);
