@@ -48,7 +48,7 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
   selectedWeekId,
 }) => {
   const { isValidating, data } = useSeasonUserData(selectedWeekId);
-  const { data: allotedRebates } = useRebatesAlloted();
+  const { data: allotedRebates, mutate } = useRebatesAlloted();
   const selectedWeekRebate = allotedRebates?.[selectedWeekId]?.[0];
 
   return (
@@ -78,6 +78,7 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
           allotedRebates={allotedRebates}
           selectedWeekRebate={selectedWeekRebate}
           selectedWeekId={selectedWeekId}
+          mutate={mutate}
         />
       )}
     </div>
@@ -88,7 +89,8 @@ const RebateButton: React.FC<{
   allotedRebates: { [weekId: string]: string } | undefined;
   selectedWeekRebate: string | undefined;
   selectedWeekId: number;
-}> = ({ allotedRebates, selectedWeekRebate, selectedWeekId }) => {
+  mutate: () => void;
+}> = ({ allotedRebates, selectedWeekRebate, selectedWeekId, mutate }) => {
   const { data: claimedRebates } = useRebatesClaimed();
   if (allotedRebates === undefined || claimedRebates === undefined) {
     return (
@@ -106,36 +108,43 @@ const RebateButton: React.FC<{
       <BlueBtn
         onClick={() => {}}
         isDisabled
-        className="!w-fit h-fit px-[14px] py-[1px] mb-2"
+        className="!w-fit h-fit px-[14px] py-[1px] mb-2 min-h-[26px]"
       >
-        Claimed.
+        Claimed
       </BlueBtn>
     );
   }
 
-  return <ClaimRebate selectedWeekId={selectedWeekId} />;
+  return <ClaimRebate selectedWeekId={selectedWeekId} mutate={mutate} />;
 };
 
-const ClaimRebate: React.FC<{ selectedWeekId: number }> = ({
+const ClaimRebate: React.FC<{ selectedWeekId: number; mutate: () => void }> = ({
   selectedWeekId,
+  mutate,
 }) => {
   const { writeCall } = useWriteCall(rebatesAddress, RebatesABI);
   const [isLoading, setIsLoading] = useState(false);
   const toastify = useToast();
   return (
     <BlueBtn
-      onClick={() => {
+      isLoading={isLoading}
+      isDisabled={isLoading}
+      onClick={async () => {
         try {
           setIsLoading(true);
-          writeCall(
+          await writeCall(
             (p) => {
               console.log(p);
             },
             'claimRebate',
             [selectedWeekId]
           );
-        } catch (e) {
+          //call after 5seconds
+          setTimeout(() => {
+            mutate();
+          }, 5000);
           setIsLoading(false);
+        } catch (e) {
           toastify({
             type: (e as Error).message,
             msg: 'Error while claiming rebate',
@@ -143,7 +152,7 @@ const ClaimRebate: React.FC<{ selectedWeekId: number }> = ({
           });
         }
       }}
-      className="!w-fit h-fit px-[14px] py-[1px] mb-2"
+      className="!w-fit h-fit px-[14px] py-[1px] mb-2 !min-h-[26px]"
     >
       Claim
     </BlueBtn>
