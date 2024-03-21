@@ -551,7 +551,7 @@ function JackpotSummary(props) {
       />
       <Col
         headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
-        head={'Winnnings'}
+        head={'Winnings'}
         descClass="text-green  sm:text-[12px] sm:px-5  text-[14px] font-bold px-6"
         desc={`${data.total_jackpot_amount} ARB`}
       />
@@ -570,7 +570,7 @@ function RecentJackPotTimer({ recentTime }) {
   const isMobile = useMedia('(max-width:600px)');
   if (isMobile) {
     return (
-      <div className="flex text-[#B1B6C6]  items-center justify-center gap-[4vw] bg-[#141823] rounded-[8px] w-full py-3">
+      <div className="flex text-[#B1B6C6]  items-center justify-center gap-[4vw] bg-[#141823] rounded-[8px] w-full py-5">
         {recentTime ? (
           <>
             <div className="font-[500] text-[12px]">Since the last jackpot</div>
@@ -609,7 +609,7 @@ function RecentJackPotTimer({ recentTime }) {
                   <div className="text-[34px] font-bold leading-10 text-white">
                     {s[1]}{' '}
                   </div>
-                  <div className=" text-[18px] font-medium  text-white">
+                  <div className=" text-[18px] font-medium  text-white capitalize">
                     {+s[1] == 1 ? format(s[0]).slice(0, -1) : format(s[0])}
                   </div>
                 </div>
