@@ -1,6 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { divide, gte, toFixed } from '@Utils/NumString/stringArithmatics';
+import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
@@ -65,21 +66,30 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
         <Column
           head="Volume Rebate"
           data={
-            <Display
-              data={toFixed(divide(selectedWeekRebate ?? '0', 18) as string, 2)}
-              unit={'ARB'}
-              className="inline text-f22"
-            />
+            isCurrentWeek ? (
+              <span className="text-f22">Calculating...</span>
+            ) : (
+              <Display
+                data={toFixed(
+                  divide(selectedWeekRebate ?? '0', 18) as string,
+                  2
+                )}
+                unit={'ARB'}
+                className="inline text-f22"
+              />
+            )
           }
         />
       </div>
       {!isCurrentWeek && (
-        <RebateButton
-          allotedRebates={allotedRebates}
-          selectedWeekRebate={selectedWeekRebate}
-          selectedWeekId={selectedWeekId}
-          mutate={mutate}
-        />
+        <ConnectionRequired>
+          <RebateButton
+            allotedRebates={allotedRebates}
+            selectedWeekRebate={selectedWeekRebate}
+            selectedWeekId={selectedWeekId}
+            mutate={mutate}
+          />
+        </ConnectionRequired>
       )}
     </div>
   );
@@ -94,7 +104,7 @@ const RebateButton: React.FC<{
   const { data: claimedRebates } = useRebatesClaimed();
   if (allotedRebates === undefined || claimedRebates === undefined) {
     return (
-      <Skeleton variant="rectangular" className="w-[80px] !h-7 lc mr-auto" />
+      <Skeleton variant="rectangular" className="w-[80px] !h-7 lc ml-auto" />
     );
   }
   if (selectedWeekRebate === undefined) {
