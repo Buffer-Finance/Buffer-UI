@@ -1,3 +1,5 @@
+import { divide, toFixed } from '@Utils/NumString/stringArithmatics';
+import { getWeekId } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId';
 import styled from '@emotion/styled';
 import Timeline from '@mui/lab/Timeline';
 import TimelineConnector from '@mui/lab/TimelineConnector';
@@ -5,6 +7,13 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import { Skeleton } from '@mui/material';
+import { useMemo } from 'react';
+import { useCompetitionRewardsAlloted } from '../Hooks/useCompetitionRewardsAlloted';
+import { useCompetitionRewardsClaimed } from '../Hooks/useCompetitionRewardsClaimed';
+import { useRebatesAlloted } from '../Hooks/useRebatesAlloted';
+import { useRebatesClaimed } from '../Hooks/useRebatesClaimed';
+import { startWeekId } from '../config';
 
 export const Seasons: React.FC<{
   selectedSeason: number;
@@ -46,7 +55,6 @@ const TimeLine: React.FC<{
             <BufferContent>
               <Season
                 isSelected={selectedSeason === currentSeason}
-                rewardAmount={3000}
                 seasonNum={currentSeason}
                 onClick={setSelectedSeason}
               />
@@ -137,22 +145,89 @@ const BufferDot: React.FC<{
 
 const Season: React.FC<{
   seasonNum: number;
-  rewardAmount: number;
   onClick: (newSeason: number) => void;
   isSelected: boolean;
-}> = ({ seasonNum, rewardAmount, onClick, isSelected }) => {
+}> = ({ seasonNum, onClick, isSelected }) => {
+  const { data: rebatesAlloted } = useRebatesAlloted();
+  const {
+    data: competitionRewardsAlloted,
+    isValidating: isCompetitionRewardsLaoding,
+  } = useCompetitionRewardsAlloted();
+  const { data: rebatesClaimed, isValidating: isRebateClaimedLoading } =
+    useRebatesClaimed();
+  const {
+    data: competitionRewardsClaimed,
+    isValidating: isCompetitionRewardsClaimedLoading,
+  } = useCompetitionRewardsClaimed();
+  const weekId = startWeekId + seasonNum - 1;
+  const currentWeekId = getWeekId(0);
+
+  const rewardAmount = useMemo(() => {
+    if (
+      rebatesAlloted !== undefined &&
+      competitionRewardsAlloted !== undefined
+    ) {
+      const rebates = rebatesAlloted[weekId]?.[0];
+      const competitionRewards = competitionRewardsAlloted.find(
+        (reward) => reward.weekId === weekId
+      );
+
+      let reward = '0';
+      if (rebates !== undefined) {
+        reward = rebates;
+      }
+      if (competitionRewards !== undefined) {
+        reward = competitionRewards.amount;
+      }
+      return reward;
+    }
+    return '0';
+  }, [rebatesAlloted, competitionRewardsAlloted]);
+
+  const isRewardClaimed = useMemo(() => {
+    if (
+      competitionRewardsAlloted !== undefined &&
+      rebatesClaimed !== undefined &&
+      competitionRewardsClaimed
+    ) {
+      const competitionRewards = competitionRewardsAlloted.find(
+        (reward) => reward.weekId === weekId
+      );
+
+      let isCompetitionRewardsClaimed = false;
+      if (competitionRewards !== undefined) {
+        isCompetitionRewardsClaimed = competitionRewardsClaimed.some(
+          (r) => r.reward_id == competitionRewards.reward_id
+        );
+      }
+
+      const isRebatesClaimed = rebatesClaimed.some(
+        (r) => r.weekId == weekId.toString()
+      );
+
+      return isRebatesClaimed && isCompetitionRewardsClaimed;
+    }
+    return false;
+  }, [rebatesClaimed, competitionRewardsClaimed]);
+
   function handleSeasonCLick() {
     onClick(seasonNum);
   }
+
+  const isLoading =
+    rebatesAlloted === undefined ||
+    isCompetitionRewardsLaoding ||
+    isRebateClaimedLoading ||
+    isCompetitionRewardsClaimedLoading;
 
   return (
     <button
       className={`px-[9px] py-[7px] ${
         isSelected ? 'bg-[#3772FF] scale-110' : 'bg-[#2C2C41]'
-      } rounded-md flex items-end justify-between w-full`}
+      } rounded-md flex items-end justify-between w-full min-h-[48px]`}
       onClick={handleSeasonCLick}
     >
-      <div>
+      <div className="self-start">
         <div
           className={`text-f12 font-medium ${
             isSelected ? 'text-[#ffffff]' : 'text-[#C3C2D4]'
@@ -160,15 +235,32 @@ const Season: React.FC<{
         >
           Season {seasonNum}
         </div>
-        <div
-          className={`text-f16 font-medium ${
-            isSelected ? 'text-[#ffffff]' : 'text-[#EBEBEB]'
-          } text-left leading-[16px]`}
-        >
-          {rewardAmount}
-        </div>
+        {currentWeekId < weekId ? (
+          <span></span>
+        ) : currentWeekId == weekId ? (
+          <span
+            className={`text-f16 font-medium ${
+              isSelected ? 'text-[#ffffff]' : 'text-[#EBEBEB]'
+            } text-left leading-[16px]`}
+          ></span>
+        ) : isLoading ? (
+          <Skeleton
+            variant="rectangular"
+            className="w-[30px] !h-5 lc mr-auto"
+          />
+        ) : (
+          <div
+            className={`text-f16 font-medium ${
+              isSelected ? 'text-[#ffffff]' : 'text-[#EBEBEB]'
+            } text-left leading-[16px]`}
+          >
+            {toFixed(divide(rewardAmount, 18) as string, 2)}
+          </div>
+        )}
       </div>
-      <Coin isAlloted={true} isClaimed={false} />
+      {currentWeekId > weekId && !isLoading && (
+        <Coin isAlloted={rewardAmount != '0'} isClaimed={isRewardClaimed} />
+      )}
     </button>
   );
 };

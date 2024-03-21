@@ -3,6 +3,7 @@ import { add, divide, subtract } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { Skeleton } from '@mui/material';
 import { useMemo } from 'react';
+import { useCompetitionRewardsAlloted } from '../Hooks/useCompetitionRewardsAlloted';
 import { useCompetitionRewardsClaimed } from '../Hooks/useCompetitionRewardsClaimed';
 import { useRebatesAlloted } from '../Hooks/useRebatesAlloted';
 import { useRebatesClaimed } from '../Hooks/useRebatesClaimed';
@@ -83,11 +84,23 @@ const TradingRewards: React.FC = () => {
 
 const ComeptitionRewards: React.FC = () => {
   const { data, isValidating } = useCompetitionRewardsClaimed();
+  const {
+    data: competitionRewardsAlloted,
+    isValidating: isCompetitionRewardsLaoding,
+  } = useCompetitionRewardsAlloted();
 
   const totalClaimed = useMemo(() => {
-    if (!data) return 0;
+    if (!data) return '0';
     return data.reduce((acc, curr) => add(acc, curr.amount), '0');
   }, [data]);
+
+  const totalAlloted = useMemo(() => {
+    if (!competitionRewardsAlloted) return '0';
+    return competitionRewardsAlloted.reduce(
+      (acc, curr) => add(acc, curr.amount),
+      '0'
+    );
+  }, [competitionRewardsAlloted]);
 
   return (
     <div className="h-fit">
@@ -116,11 +129,21 @@ const ComeptitionRewards: React.FC = () => {
         <Column
           head="Rebates Unclaimed"
           data={
-            <Display
-              data={0}
-              label={'$'}
-              className="text-[#FFFFFF] text-f22 font-medium !text-start"
-            />
+            isCompetitionRewardsLaoding || isValidating ? (
+              <Skeleton
+                variant="rectangular"
+                className="w-[80px] !h-5 lc mr-auto"
+              />
+            ) : (
+              <Display
+                data={toFixed(
+                  divide(subtract(totalAlloted, totalClaimed), 18) as string,
+                  2
+                )}
+                label={'$'}
+                className="text-[#FFFFFF] text-f22 font-medium !text-start"
+              />
+            )
           }
         />
       </div>
