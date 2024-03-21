@@ -21,9 +21,16 @@ const JackpotBody: React.FC<{
   trade: (TradeType & { jackpotAmount: string }) | null;
 }> = ({ trade }) => {
   const ref = useRef(null);
-  const { width, height } = useWindowSize();
 
-  if (!trade?.market) return <div>Trade not found</div>;
+  if (!trade?.market)
+    return (
+      <div className="flex flex-col text-1 text-f16">
+        Congrats you won the Jackpot!
+        <div className="text-2 text-f14">
+          Fetching jackpot details, this may take a while.
+        </div>
+      </div>
+    );
   const token0 = trade?.market.token0;
   const token1 = trade?.market.token1;
   return (
