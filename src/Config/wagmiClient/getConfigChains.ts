@@ -4,7 +4,7 @@ import { defineChain } from 'viem';
 import { arbitrum, polygon, polygonMumbai } from 'viem/chains';
 
 export const urlSettings = getHashUrlQueryParam(window.location.href);
-const arbitrumSepolia = defineChain({
+export const arbitrumSepolia = defineChain({
   id: 421614,
   name: 'Arbitrum Sepolia',
   network: 'arb-sepolia',

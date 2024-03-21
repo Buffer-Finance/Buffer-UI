@@ -4,12 +4,15 @@ import axios from 'axios';
 import useSWR, { useSWRConfig } from 'swr';
 import { useAccount } from 'wagmi';
 import { useSwitchPool } from './useSwitchPool';
+import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
 
 export const useApprvalAmount = () => {
   const { activeChain } = useActiveChain();
   const activeChainId = activeChain?.id;
   const { address: userAddress } = useAccount();
   const { poolDetails } = useSwitchPool();
+  const { data: products } = useProductName();
+
   const tokenName = poolDetails?.token;
   const { cache } = useSWRConfig();
 
@@ -26,7 +29,7 @@ export const useApprvalAmount = () => {
       try {
         const { data, status } = await axios.get(
           ABBaseURL +
-            `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}`
+            `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}&product_id=${products?.AB.product_id}`
         );
         console.log(`data: `, data);
         if (status !== 200) return cache.get(id);

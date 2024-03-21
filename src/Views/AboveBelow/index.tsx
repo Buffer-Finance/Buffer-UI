@@ -27,6 +27,8 @@ import {
   selectedPoolActiveMarketAtom,
   setSelectedPoolForTradeAtom,
 } from './atoms';
+import { AccordionTable } from '@Views/TradePage/Views/AccordionTable';
+import { useLimitedStrikeArrays } from './Hooks/useLimitedStrikeArrays';
 
 export const AboveBelow = () => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -35,6 +37,7 @@ export const AboveBelow = () => {
   usePriceRetriable();
   useAboveBelowMarketsSetter();
   useActiveMarketSetter();
+  useLimitedStrikeArrays();
   useReacallDataSetter();
   usePastTradeQuery();
   const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
@@ -65,7 +68,8 @@ export const AboveBelow = () => {
             {showFavoriteAsset && <PinnedMarkets />}
             <StatusBar isMobile={false} />
             <MarketChart isMobile={false} />
-            <Tables />
+            {/* <Tables /> */}
+            <AccordionTable />
           </RightPanelBackground>
           <BuyTrade isMobile={false} />
         </>

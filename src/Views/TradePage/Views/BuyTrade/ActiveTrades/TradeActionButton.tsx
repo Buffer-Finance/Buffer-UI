@@ -16,7 +16,6 @@ import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
-  getEarlyCloseStatus,
   getExpiry,
   getLockedAmount,
   getStrike,
@@ -65,16 +64,12 @@ export const TradeButton: React.FC<{
 
   const isLimitQueued = trade.state === TradeState.Queued;
   const isQueued = isLimitQueued && !isPriceArrived;
-  const isLimitOrder = trade.is_limit_order;
 
   const currentEpoch = Math.round(new Date().getTime() / 1000);
   let expiration = getExpiry(trade);
-  if (trade.is_limit_order && isQueued)
-    expiration = trade.limit_order_expiration;
 
   const distance = expiration - currentEpoch;
   const isTradeExpired = distance < 0;
-  const isLimitOrderExpired = currentEpoch > trade.limit_order_expiration;
 
   const isCancelLoading = earlyCloseLoading?.[trade.queue_id] === 1;
   const isEarlyCloseLoading = earlyCloseLoading?.[trade.queue_id] === 2;
@@ -83,64 +78,10 @@ export const TradeButton: React.FC<{
     cancelHandler(trade);
   }
 
-  function earlyClose() {
-    earlyCloseHandler(trade, tradeMarket);
-  }
+  f;
 
-  function editLimitOrder() {
-    setSelectedTrade({ trade, market: tradeMarket });
-  }
   if (viewOnlyMode) return <></>;
-  if (isLimitOrder && isLimitQueued) {
-    return (
-      <RowGap gap="4px">
-        {isLimitOrderExpired ? (
-          <CancelButton
-            disabled={isCancelLoading || isEarlyCloseLoading || isTradeExpired}
-          >
-            Processing...
-          </CancelButton>
-        ) : (
-          <>
-            <CancelButton
-              onClick={editLimitOrder}
-              disabled={isCancelLoading || isTradeExpired}
-              className="flex items-center justify-center"
-            >
-              {trade.pending_operation == 'Processing EDIT' ||
-              editLoading == trade.queue_id ? (
-                <NumberTooltip
-                  content={'Processing the Limit Order modification...'}
-                >
-                  <div className="scale-90">
-                    <img
-                      src="/Gear.png"
-                      className="w-[16px]  h-[16px] animate-spin mr-[4px]"
-                    />
-                  </div>
-                </NumberTooltip>
-              ) : null}{' '}
-              {'Edit'}
-            </CancelButton>
-            <CancelButton
-              onClick={cancelTrade}
-              disabled={isCancelLoading || isTradeExpired}
-            >
-              {isCancelLoading ||
-              trade.pending_operation == 'Processing CANCEL' ? (
-                <CircularProgress
-                  className="!w-[15px] !h-[15px] mx-[20px]"
-                  color="inherit"
-                />
-              ) : (
-                'Cancel'
-              )}
-            </CancelButton>
-          </>
-        )}
-      </RowGap>
-    );
-  }
+
   const [isCloseDisabled, disableTooltip] = getEarlyCloseStatus(trade);
 
   if (isWin) {

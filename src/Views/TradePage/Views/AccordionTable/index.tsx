@@ -26,7 +26,7 @@ import { OngoingTradesTable } from './OngoingTradesTable';
 const OngoingTradesTableMemo = React.memo(OngoingTradesTable);
 const tables = {
   Trades: 'h',
-  'Limit Orders': 'h',
+  // 'Limit Orders': 'h',
   History: 'h',
   Cancelled: 'h',
   'Platform Trades': 'h',
@@ -36,10 +36,12 @@ const gap = ['Cancelled'];
 
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
-  const [activeTrades, limitOrders] = useOngoingTrades();
+
+  const activeTrades = useOngoingTrades();
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const priceCache = useAtomValue(queuets2priceAtom);
 
+  console.log('activeTrades', activeTrades);
   const [activeTable, setActiveTable] = useState('Trades');
   const getAugmentedData = async (
     queries: { pair: string; timestamp: number; queueId: number }[]
@@ -114,6 +116,7 @@ const AccordionTable: React.FC<any> = ({}) => {
           />
         </button>
       </div>
+      {console.log('activeTable', activeTable)}
       <div
         className={` ${
           expanded ? 'h-[355px]' : 'h-[0px]'
@@ -184,6 +187,7 @@ export const Cancelled = ({
 }) => {
   const { page_data: canclledTrades, total_pages } = useCancelledTrades();
   const [activePage, setActivePage] = useAtom(cancelTableActivePage);
+  console.log('PlatfromCancelled');
 
   return (
     <CancelledTable

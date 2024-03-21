@@ -14,7 +14,10 @@ import {
   aboveBelowActiveMarketsAtom,
   aboveBelowMarketsAtom,
   readCallResponseAtom,
+  selectedPoolActiveMarketAtom,
 } from '../atoms';
+import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
+
 import { useNumberOfContracts } from './useNumberOfContracts';
 
 export const useReacallDataSetter = () => {
@@ -24,6 +27,9 @@ export const useReacallDataSetter = () => {
   const { address } = useUserAccount();
   const setResponse = useSetAtom(readCallResponseAtom);
   const tradeData = useNumberOfContracts();
+  const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
+
+  const strikes = strikePrices[activeMarket?.tv_id as string];
 
   const readCalls = [];
   if (activeChain) {
@@ -70,30 +76,76 @@ export const useReacallDataSetter = () => {
           ])
           .flat()
       );
+      if (strikes) {
+        console.log('useReacallDataSetter', tradeData, strikes, activeMarkets);
+        let maxReadCallData = [];
+        [
+          ...strikes.decreasingPriceArray,
+          ...strikes.increasingPriceArray,
+        ].forEach((element) => {
+          activeMarkets.forEach((market) => {
+            [true, false].forEach((isAbove) => {
+              maxReadCallData.push({
+                address: market.address,
+                abi: OptionABI,
+                name: 'getMaxPermissibleContracts',
+                params: [
+                  element.marketID,
+                  toFixed(
+                    multiply(
+                      isAbove
+                        ? element.baseFeeAbove.toString()
+                        : element.baseFeeBelow.toString(),
+                      market.poolInfo.decimals
+                    ),
+                    0
+                  ),
+                  isAbove,
+                ],
+                id: getCallId(
+                  market.address,
+                  '-getMaxPermissibleContracts-',
+                  element.marketID,
+                  `-${isAbove}`
+                ),
+              });
+            });
+          });
+          // console.log('useReacallDataSetter', maxReadCallData);
+        });
 
-      if (tradeData !== null) {
-        const marketId = tradeData.selectedStrikeData.marketID;
-        const fee = tradeData.isAbove
-          ? tradeData.selectedStrikeData.baseFeeAbove
-          : tradeData.selectedStrikeData.baseFeeBelow;
-        readCalls.push(
-          ...activeMarkets.map((market) => ({
-            address: market.address,
-            abi: OptionABI,
-            name: 'getMaxPermissibleContracts',
-            params: [
-              marketId,
-              toFixed(multiply(fee.toString(), market.poolInfo.decimals), 0),
-              tradeData.isAbove,
-            ],
-            id: getCallId(
-              market.address,
-              'getMaxPermissibleContracts',
-              tradeData.selectedStrikeData.strike
-            ),
-          }))
-        );
+        readCalls.push(...maxReadCallData);
       }
+      // if (tradeData !== null) {
+      //   const marketId = tradeData.selectedStrikeData.marketID;
+
+      //   const fee = tradeData.isAbove
+      //     ? tradeData.selectedStrikeData.baseFeeAbove
+      //     : tradeData.selectedStrikeData.baseFeeBelow;
+      //   // console.log('tradeData', tradeData, [
+      //   //   marketId,
+      //   //   fee.toString(),
+      //   //   tradeData.isAbove,
+      //   // ]);
+
+      //   readCalls.push(
+      //     ...activeMarkets.map((market) => ({
+      //       address: market.address,
+      //       abi: OptionABI,
+      //       name: 'getMaxPermissibleContracts',
+      //       params: [
+      //         marketId,
+      //         toFixed(multiply(fee.toString(), market.poolInfo.decimals), 0),
+      //         tradeData.isAbove,
+      //       ],
+      //       id: getCallId(
+      //         market.address,
+      //         'getMaxPermissibleContracts',
+      //         tradeData.selectedStrikeData.strike
+      //       ),
+      //     }))
+      //   );
+      // }
     }
   }
 

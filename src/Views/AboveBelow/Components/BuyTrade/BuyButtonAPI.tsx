@@ -18,6 +18,8 @@ import {
   selectedExpiry,
   selectedPoolActiveMarketAtom,
   tradeSizeAtom,
+  selectedPriceAtom,
+  readCallDataAtom,
 } from '@Views/AboveBelow/atoms';
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
@@ -41,6 +43,12 @@ import { useState } from 'react';
 import { KeyedMutator } from 'swr';
 import { PrivateKeyAccount } from 'viem';
 import { useAccount } from 'wagmi';
+import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
+import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
+import { getPlatformError, getTradeSizeError } from './TradeSize';
+import { getSlippageError } from '@Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
+import { getAddress } from 'viem';
 
 export const BuyButton = () => {
   const { viewOnlyMode } = useUserAccount();
@@ -234,7 +242,7 @@ const Approve: React.FC<{
         s: RSV.s,
         user_signature,
         environment: activeChainId,
-        product_id: productNames['UP_DOWN'],
+        product_id: productNames['AB'].product_id,
         state: 'PENDING',
         token: tokenName,
       };
@@ -272,63 +280,190 @@ const Buy: React.FC<{
   routerContract: string;
 }> = ({ activeMarket, oneCtPk, activeChainId, routerContract }) => {
   const toastify = useToast();
-  const [loading, setLoading] = useState<'Up' | 'Down' | 'None'>('None');
+  const [loading, setLoading] = useState<'buy' | 'approve' | 'None'>('None');
   const amount = useAtomValue(tradeSizeAtom);
   const selectedTimestamp = useAtomValue(selectedExpiry);
   const settings = useAtomValue(tradeSettingsAtom);
   const { address } = useAccount();
   const referralData = useReferralCode();
   const { data: productNames } = useProductName();
+  const { data: ivs } = useIV();
+  const token = activeMarket.poolInfo.token.toUpperCase();
+  const decimals = activeMarket.poolInfo.decimals;
+
+  const selectedPrice = useAtomValue(selectedPriceAtom);
+  const readCallData = useAtomValue(readCallDataAtom);
   // const { data: maxTrades } = useMaxTrade({
   //   activeMarket,
   //   expiry: selectedTimestamp,
   // });
 
+  const { currentPrice } = useCurrentPrice({
+    token0: activeMarket?.token0,
+    token1: activeMarket?.token1,
+  });
+
+  if (selectedPrice === undefined)
+    return (
+      <ConnectionRequired>
+        <BlueBtn onClick={() => {}} isDisabled={true}>
+          Select a Strike Price
+        </BlueBtn>
+      </ConnectionRequired>
+    );
+  const priceObj = selectedPrice[activeMarket.tv_id];
+  if (!priceObj)
+    return (
+      <ConnectionRequired>
+        <BlueBtn onClick={() => {}} isDisabled={true}>
+          Select a Strike Price
+        </BlueBtn>
+      </ConnectionRequired>
+    );
+  const price = priceObj.price;
+
+  // const maxPermissibleMarket =
+  //   readCallData.maxPermissibleContracts[
+  //     getAddress(activeMarket.address) + price
+  //   ];
+
+  // if (maxPermissibleMarket === undefined)
+  //   return (
+  //     <ConnectionRequired>
+  //       <BlueBtn onClick={() => {}} isDisabled={true} isLoading>
+  //         Fetching data...
+  //       </BlueBtn>
+  //     </ConnectionRequired>
+  //   );
+
+  // const maxPermissibleContracts = maxPermissibleMarket.maxPermissibleContracts;
+  // if (maxPermissibleContracts === undefined) {
+  //   return (
+  //     <ConnectionRequired>
+  //       <BlueBtn onClick={() => {}} isDisabled={true}>
+  //         Max Trade Size not found
+  //       </BlueBtn>
+  //     </ConnectionRequired>
+  //   );
+  // }
   const buyHandler = async (is_up: boolean) => {
     try {
-      setLoading(is_up ? 'Up' : 'Down');
+      if (!selectedTimestamp) throw new Error('Please select expiry date');
+      if (!selectedPrice) throw new Error('Please select strike price');
+      if (!readCallData) throw new Error('Error fetching data');
+      if (!activeMarket) throw new Error('active market not found');
+      if (!currentPrice) throw new Error('current price not found');
+      const strikes = strikePrices;
+      const activeAssetStrikes = strikes[activeMarket.tv_id];
+      if (!activeAssetStrikes)
+        throw new Error('active asset strikes not found');
+      const iv = ivs?.[activeMarket.tv_id];
+      if (iv === undefined) throw new Error('iv not found');
+      const slippageError = getSlippageError(settings.slippageTolerance);
+      if (slippageError !== null) throw new Error(slippageError);
+      const priceObj = selectedPrice[activeMarket.tv_id];
+      if (!priceObj) throw new Error('price obj not found');
+      const price = priceObj.price;
+      let strikePriceObject = activeAssetStrikes.increasingPriceArray.find(
+        (obj) => obj.strike.toString() == priceObj.price
+      );
+      if (!strikePriceObject) {
+        strikePriceObject = activeAssetStrikes.decreasingPriceArray.find(
+          (obj) => obj.strike.toString() == priceObj.price
+        );
+      }
+      if (!strikePriceObject) throw new Error('Please select a strike price');
+      const totalFee = priceObj.isAbove
+        ? strikePriceObject.totalFeeAbove
+        : strikePriceObject.totalFeeBelow;
+      if (!totalFee) throw new Error('total fee not found');
+      const expiration = Math.floor(selectedTimestamp / 1000);
+
+      const balance =
+        divide(readCallData.balances[token], decimals) ?? ('0' as string);
+
+      // const maxTradeSize = multiply(
+      //   divide(maxPermissibleContracts as string, decimals) as string,
+      //   totalFee.toString()
+      // );
+
+      // const tradeSizeError = getTradeSizeError(
+      //   // toFixed(totalFee.toString(), 2),
+      //   maxTradeSize,
+      //   balance,
+      //   amount
+      // );
+      // if (!!tradeSizeError) throw new Error(tradeSizeError);
+      const platformFeeError = getPlatformError({
+        platfromFee: divide(
+          activeMarket.config.platformFee,
+          activeMarket.poolInfo.decimals
+        ) as string,
+        tradeSize: amount || '0',
+        balance,
+      });
+      if (!!platformFeeError) throw new Error(platformFeeError);
+      const maxFeePerContracts =
+        totalFee + (settings.slippageTolerance / 100) * totalFee;
+      setLoading('buy');
+      // await writeCall(() => {}, 'initiateTrade', [
+      //   [
+      //     activeMarket.address,
+      //     settings.partialFill,
+      //     referralData[2],
+      //     priceObj.isAbove,
+      //     toFixed(multiply(amount, decimals), 0),
+      //     toFixed(multiply(price, 8), 0),
+      //     expiration,
+      //     toFixed(multiply(maxFeePerContracts.toString(), decimals), 0),
+      //   ],
+      // ]);
       let currentTimestamp = Date.now();
       let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
-      const signature = await  generateTradeSignature(
+
+      const signature = await generateTradeSignature(
         address,
         expiration,
-        contracts
-        toFixed(multiply(maxFeePerContracts.toString(), decimals), 0),        activeMarket.address,
+        toFixed(multiply(amount, decimals), 0),
+        toFixed(multiply(maxFeePerContracts.toString(), decimals), 0),
+        activeMarket.address,
         toFixed(multiply(price, 8), 0),
         settings.partialFill,
         referralData[2],
         currentUTCTimestamp,
-        is_above,
+        priceObj.isAbove,
         activeChainId,
         routerContract,
         oneCtPk
-      )
-     
-      
+      );
+      console.log({ signature });
+
       let apiParams = {
-        signature_timestamp: currentUTCTimestamp
-    signature: signature,
-    expiration,
-    target_contract: activeMarket.address,
-    user_address: address,
-    contracts: '',
-    strike: '',
-    max_fee_per_contract: '',
-    allow_partial_fill: settings.partialFill,
-    referral_code: referralData[2],
-    is_above,
-    environment: activeChainId.toString(),
-    token: activeMarket.poolInfo.token,
-    product_id: productNames['UP_DOWN'],
-    asset_pair: activeMarket.token0 + activeMarket.token1,
-
-
+        signature_timestamp: currentUTCTimestamp,
+        signature: signature,
+        expiration,
+        target_contract: activeMarket.address,
+        user_address: address,
+        total_fee: toFixed(multiply(amount, decimals), 0),
+        strike: toFixed(multiply(price, 8), 0),
+        max_fee_per_contract: toFixed(
+          multiply(maxFeePerContracts.toString(), decimals),
+          0
+        ),
+        allow_partial_fill: settings.partialFill,
+        referral_code: referralData[2],
+        is_above: priceObj.isAbove,
+        environment: activeChainId.toString(),
+        token: activeMarket.poolInfo.token,
+        product_id: productNames['AB'].product_id,
+        asset_pair: activeMarket.token0 + activeMarket.token1,
       };
+      console.log({ apiParams });
 
       const trailingUrl = 'create/';
 
       const resp: { data: TradeType } = await axios.post(
-        upDOwnV3BaseUrl + trailingUrl,
+        aboveBelowBaseUrl + trailingUrl,
         apiParams,
         { params: { environment: activeChainId } }
       );

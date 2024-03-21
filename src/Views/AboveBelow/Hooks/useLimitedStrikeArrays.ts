@@ -54,7 +54,6 @@ export const useLimitedStrikeArrays = () => {
   }, []);
 
   useEffect(() => {
-    console.log({ activeMarket, expiration, settlementFees, stepsize });
     if (
       activeMarket === undefined ||
       expiration === undefined ||
@@ -109,12 +108,11 @@ export const useLimitedStrikeArrays = () => {
         0,
         iv / 1e4
       );
-      console.log({ settlementFees });
 
       const settlementFeeBelow =
         settlementFees[marketHash + '-' + getAddress(activeMarket.address)]
           ?.sf_below ?? settlementFees['Base'];
-      console.log({ settlementFeeBelow, belowProbability });
+
       let totalFeeBelow: number | null =
         belowProbability + (settlementFeeBelow / 1e4) * belowProbability;
       if (totalFeeBelow < 0.05) totalFeeBelow = null;
@@ -127,7 +125,7 @@ export const useLimitedStrikeArrays = () => {
         baseFeeBelow: belowProbability,
         marketID: marketHash,
       });
-      console.log({ decreasingPriceArray });
+
       i++;
     }
 

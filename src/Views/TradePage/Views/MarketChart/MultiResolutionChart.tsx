@@ -58,7 +58,6 @@ import axiosRetry from 'axios-retry';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import {
-  getEarlyCloseStatus,
   getLockedAmount,
   getProbability,
   getStrike,
@@ -1018,64 +1017,6 @@ export const MultiResolutionChart = ({
           });
         });
       } catch (e) {}
-
-      try {
-        // console.log('[chart-1', trade2visualisation.current);
-        trade2visualisation.current.forEach((trade) => {
-          const [isClosingDisabled, disableTooltip] = getEarlyCloseStatus(
-            trade.option
-          );
-          const actualTrade = trade.option;
-          let updatedTrade = actualTrade;
-          activeTrades.forEach((catagory) => {
-            catagory.forEach((t) => {
-              if (t.queue_id == actualTrade?.queue_id) {
-                updatedTrade = t;
-              }
-            });
-          });
-          // console.log('[chart-2', updatedTrade, isClosingDisabled);
-
-          if (updatedTrade?.state == 'QUEUED' && updatedTrade.is_limit_order) {
-            if (!updatedTrade) return;
-            const decimals = getPoolInfo(updatedTrade.pool.pool).decimals;
-            // Limit order updation space
-            if (
-              editLoading == updatedTrade.queue_id ||
-              updatedTrade.pending_operation == 'Processing EDIT'
-            ) {
-              trade.positionRef.setText('Modifying Limit Order');
-            } else {
-              trade.positionRef.setText(formatLOText(updatedTrade, decimals));
-            }
-            return;
-          }
-          // Market order updation state
-          const earlyCloseData = getPnl(updatedTrade, priceCache);
-
-          const text = formatMarketOrder(updatedTrade, earlyCloseData);
-          const winning =
-            earlyCloseData && earlyCloseData.length > 0 && earlyCloseData[1];
-          trade.positionRef
-            .setText(text)
-            .setBodyTextColor(winning ? defaults.green : 'rgb(195,194,212)');
-          // console.log('[chart-3', trade.positionRef);
-
-          if (!isClosingDisabled) {
-            trade.positionRef.onCancel('onCancel', () => {
-              // console.log('[chart-4', settings.earlyCloseConfirmation);
-
-              if (!settings.earlyCloseConfirmation) {
-                earlyCloseHandler(updatedTrade, updatedTrade.market);
-              } else {
-                setCloseConfirmationModal(updatedTrade);
-              }
-            });
-          }
-        });
-      } catch (e) {
-        console.log('[chart-bug]', e);
-      }
     }, 1000);
   }, [visualizedTrades]);
 

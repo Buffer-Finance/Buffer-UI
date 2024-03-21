@@ -84,7 +84,7 @@ export const TradeSize: React.FC<{
     <TradeSizeSelectorBackground>
       <ColumnGap gap="7px" className="w-full">
         <RowBetween>
-          {maxPermissibleContracts !== undefined ? (
+          {/* {maxPermissibleContracts !== undefined ? (
             <span className="text-[#7F87A7] items-center text-f12 flex">
               Max Amount&nbsp;:&nbsp;
               {toFixed(maxTradeSize, 2)}&nbsp;(
@@ -95,9 +95,9 @@ export const TradeSize: React.FC<{
               &nbsp;
               {selectedStrike?.[activeMarket.tv_id]?.isAbove ? 'Up' : 'Down'})
             </span>
-          ) : (
-            <BuyTradeHeadText>Amount</BuyTradeHeadText>
-          )}
+          ) : ( */}
+          <BuyTradeHeadText>Amount</BuyTradeHeadText>
+          {/* )} */}
 
           <WalletBalance
             balance={formatBalance(toFixed(balance, 2))}

@@ -28,7 +28,7 @@ export const useAllV2_5MarketsConfig = () => {
         response.push({
           ...marketInfo,
           category: AssetCategory[item.category],
-          creation_window_contract: item.configContract.creationWindowAddress,
+          // creation_window_contract: item.configContract.creationWindowAddress,
           pools: [createPoolObject(item)],
         });
       }

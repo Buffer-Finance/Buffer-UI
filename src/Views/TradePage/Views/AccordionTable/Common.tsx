@@ -245,29 +245,29 @@ import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { getSafeStrike } from '@Views/TradePage/utils/getSafeStrike';
 import { useAtomValue } from 'jotai';
 import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
-export const getEarlyCloseStatus = (
-  trade: TradeType
-): [status: boolean, tooltip?: string] => {
-  // very edgy case when pool isnot defined.
-  if (!trade.pool) return [true, `Early close isn't available for this trade!`];
-  if (!trade.pool?.earlyclose.enable)
-    return [true, `Early Close isn't supported for this trade!`];
-  if (trade.pool.earlyclose.threshold) {
-    const now = Date.now();
-    const timeElapsed = Math.round(now / 1000) - trade.open_timestamp;
-    if (timeElapsed < +trade.pool.earlyclose.threshold) {
-      return [
-        true,
-        `Wait ${formatDistance(
-          Variables(+trade.pool.earlyclose.threshold - timeElapsed)
-        )} until early close.`,
-      ];
-    }
-    //when trade stuck in queued state
-    if (trade.state == 'QUEUED') return [true, `Trade is not open yet!`];
-  }
-  return [false, ''];
-};
+// export const getEarlyCloseStatus = (
+//   trade: TradeType
+// ): [status: boolean, tooltip?: string] => {
+//   // very edgy case when pool isnot defined.
+//   if (!trade.pool) return [true, `Early close isn't available for this trade!`];
+//   if (!trade.pool?.earlyclose.enable)
+//     return [true, `Early Close isn't supported for this trade!`];
+//   if (trade.pool.earlyclose.threshold) {
+//     const now = Date.now();
+//     const timeElapsed = Math.round(now / 1000) - trade.open_timestamp;
+//     if (timeElapsed < +trade.pool.earlyclose.threshold) {
+//       return [
+//         true,
+//         `Wait ${formatDistance(
+//           Variables(+trade.pool.earlyclose.threshold - timeElapsed)
+//         )} until early close.`,
+//       ];
+//     }
+//     //when trade stuck in queued state
+//     if (trade.state == 'QUEUED') return [true, `Trade is not open yet!`];
+//   }
+//   return [false, ''];
+// };
 const Background = styled.div`
   display: flex;
   flex-direction: column;
@@ -304,7 +304,7 @@ export const TableErrorRow: React.FC<{
 };
 
 export const getExpiry = (trade: TradeType, deb?: string) => {
-  return trade.close_time || trade.open_timestamp + trade.period;
+  return trade.close_time || trade.expiration_time;
 };
 export const getStrike = (
   trade: TradeType,
@@ -312,9 +312,7 @@ export const getStrike = (
   spread: number
 ) => {
   let strikePrice = trade.strike;
-  const isPriceArrived = trade.is_limit_order
-    ? false
-    : cachedPrice?.[trade.queue_id];
+  const isPriceArrived = cachedPrice?.[trade.queue_id];
   if (trade.state == 'QUEUED' && isPriceArrived) {
     strikePrice = getSafeStrike(
       cachedPrice?.[trade.queue_id],

@@ -35,7 +35,6 @@ import {
   StrikePriceComponent,
   TableErrorRow,
   TableHeader,
-  getEarlyCloseStatus,
   getExpiry,
   getLockedAmount,
   getProbability,
@@ -89,7 +88,7 @@ export const OngoingTradesTable: React.FC<{
           'Time Left',
           'Close Time',
           'Trade Size',
-          'PnL | Probability',
+          'Probability',
           'User',
         ]
       : [
@@ -100,7 +99,7 @@ export const OngoingTradesTable: React.FC<{
           'Time Left',
           'Close Time',
           'Trade Size',
-          'PnL | Probability',
+          'Probability',
           'Display',
         ];
 
@@ -129,7 +128,7 @@ export const OngoingTradesTable: React.FC<{
 
     const spread = allSpreads?.[trade.market.tv_id]?.spread ?? 0;
 
-    const poolInfo = getPoolInfo(trade.pool.pool);
+    const poolInfo = trade.pool;
     const marketPrecision = trade.market.price_precision.toString().length - 1;
 
     let tradeExpiryTime = getExpiry(trade);
@@ -140,12 +139,10 @@ export const OngoingTradesTable: React.FC<{
     // }
     const lockedAmmount = getLockedAmount(trade, cachedPrices);
     const distanceObject = Variables(
-      trade.open_timestamp +
-        trade.period -
+      trade.expiration_time -
         (trade.close_time || Math.round(Date.now() / 1000))
     );
 
-    const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
     switch (col) {
       case TableColumn.Show:
         if (platform)
@@ -169,24 +166,6 @@ export const OngoingTradesTable: React.FC<{
         return distanceObject.distance >= 0 ? (
           <div className="flex  gap-x-[20px] items-center">
             <Visualized queue_id={trade.queue_id} />
-            {!viewOnlyMode && (
-              <NumberTooltip content={disableTooltip}>
-                <div>
-                  <GreyBtn
-                    className={
-                      tableButtonClasses +
-                      (isDisabled ? ' !text-2 !cursor-not-allowed' : '')
-                    }
-                    onClick={() => {
-                      !isDisabled && earlyCloseHandler(trade, trade.market);
-                    }}
-                    isLoading={earlyCloseLoading?.[trade.queue_id] == 2}
-                  >
-                    Close
-                  </GreyBtn>
-                </div>
-              </NumberTooltip>
-            )}
           </div>
         ) : (
           'Processing...'
@@ -281,7 +260,7 @@ export const OngoingTradesTable: React.FC<{
     // const [marketPrice] = useAtom(priceAtom);
 
     if (!trade) return <>Something went wrong.</>;
-    const poolInfo = getPoolInfo(trade?.pool?.pool);
+    const poolInfo = trade.pool;
     if (!poolInfo) return <>Something went wrong.</>;
     const minClosingTime = getExpiry(trade);
 
@@ -457,24 +436,86 @@ const ProgressLineWrapper = styled.div<{ duration: number; delay: number }>`
   }
 `;
 
-const Probability: React.FC<{
+// const Probability: React.FC<{
+//   trade: TradeType;
+//   marketPrice: any;
+// }> = ({ marketPrice, trade }) => {
+//   console.log(trade.pool, trade, 'marketPrice');
+//   const IV =
+//     calculateOptionIV(
+//       trade.is_above ?? false,
+//       trade.strike / 1e8,
+//       +getCachedPriceFromKlines(trade.market),
+//       trade.pool.IV,
+//       trade.pool.IVFactorITM,
+//       trade.pool.IVFactorOTM
+//     ) / 1e4;
+//   const probabiliyt = getProbability(
+//     trade,
+//     +getCachedPriceFromKlines(trade.market),
+//     IV
+//   );
+//   if (!probabiliyt) return <div>Calculating..</div>;
+//   return <div> {toFixed(probabiliyt, 2) + '%'}</div>;
+// };
+
+import { BlackScholes } from '@Utils/Formulas/blackscholes';
+import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
+import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
+import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+// import { Display } from '@Views/Common/Tooltips/Display';
+
+export const Probability: React.FC<{
   trade: TradeType;
-  marketPrice: any;
-}> = ({ marketPrice, trade }) => {
-  const IV =
-    calculateOptionIV(
-      trade.is_above ?? false,
-      trade.strike / 1e8,
-      +getCachedPriceFromKlines(trade.market),
-      trade.pool.IV,
-      trade.pool.IVFactorITM,
-      trade.pool.IVFactorOTM
-    ) / 1e4;
-  const probabiliyt = getProbability(
-    trade,
-    +getCachedPriceFromKlines(trade.market),
-    IV
+  className?: string;
+  isColored?: boolean;
+}> = ({ trade, className = '', isColored = false }) => {
+  const { data: ivs } = useIV();
+  const { price } = useMarketPrice(trade.market.tv_id);
+
+  if (ivs === undefined) {
+    return <>processing...</>;
+  }
+  const iv = ivs[trade.market.tv_id];
+  if (iv === undefined) {
+    return <>processing...</>;
+  }
+  if (trade.state === 'QUEUED') {
+    return <>-</>;
+  }
+  if (trade.expiration_time === undefined) {
+    return <>-</>;
+  }
+  if (price === undefined) {
+    return <>No Price</>;
+  }
+  const currentEpoch = Math.round(new Date().getTime() / 1000);
+  if (currentEpoch > +trade.expiration_time) {
+    return <>processing...</>;
+  }
+
+  const probability =
+    BlackScholes(
+      true,
+      trade.is_above,
+      price,
+      +trade.strike / 1e8,
+      +trade.expiration_time - currentEpoch,
+      0,
+      iv / 1e4
+    ) * 100;
+
+  return (
+    <Display
+      data={probability}
+      unit={'%'}
+      precision={2}
+      className={
+        className +
+        ' ' +
+        (isColored ? (probability > 50 ? 'text-green' : 'text-red') : '')
+      }
+    />
   );
-  if (!probabiliyt) return <div>Calculating..</div>;
-  return <div> {toFixed(probabiliyt, 2) + '%'}</div>;
 };

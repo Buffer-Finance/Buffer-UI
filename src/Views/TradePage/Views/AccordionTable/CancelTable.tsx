@@ -89,7 +89,7 @@ export const CancelledTable: React.FC<{
     if (trades === undefined) return <></>;
 
     const trade = trades?.[row];
-    const poolInfo = getPoolInfo(trade.pool.pool);
+    const poolInfo = trade.pool;
 
     const spread = allSpreads?.[trade.market.tv_id]?.spread ?? 0;
 
@@ -139,7 +139,10 @@ export const CancelledTable: React.FC<{
       case TableColumn.TradeSize:
         return (
           <Display
-            data={divide(trade.trade_size, poolInfo.decimals)}
+            data={divide(
+              trade.trade_size || trade.total_fee,
+              poolInfo.decimals
+            )}
             className="!justify-start"
             unit={poolInfo.token}
           />

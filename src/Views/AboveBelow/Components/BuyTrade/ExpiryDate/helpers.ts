@@ -42,12 +42,19 @@ export function getTimestamps(date = Date.now()) {
     timestamps.push(nextDayTimestamp);
   }
 
-  //add next 2 days
+  //add 2nd day
   const day2 = new Date(date);
   day2.setUTCDate(day2.getUTCDate() + 2);
   day2.setUTCHours(8, 0, 0, 0);
   const day2Timestamp = day2.getTime();
   timestamps.push(day2Timestamp);
+
+  //add 3rd day
+  const day3 = new Date(date);
+  day3.setUTCDate(day3.getUTCDate() + 3);
+  day3.setUTCHours(8, 0, 0, 0);
+  const day3Timestamp = day3.getTime();
+  timestamps.push(day3Timestamp);
 
   const getWeekend = (week: number) => {
     const endOfWeek = new Date(date);
@@ -61,10 +68,12 @@ export function getTimestamps(date = Date.now()) {
   const week1 = getWeekend(0);
   const week2 = getWeekend(1);
   const week3 = getWeekend(2);
+  const week4 = getWeekend(3);
   if (week1 - currentTimestamp > 43200000) timestamps.push(week1);
 
   timestamps.push(week2);
   timestamps.push(week3);
+  timestamps.push(week4);
   // return unique timestamps
   return [...new Set(timestamps)];
 }

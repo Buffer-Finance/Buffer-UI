@@ -42,7 +42,7 @@ export const useSwitchPool = () => {
     return activePoolObj;
   }, [activePolPool, activePoolObj]);
 
-  console.log(`switchPool: `, switchPool);
+  console.log(`switchPool: `, switchPool, activePoolObj);
   const poolDetails = useMemo((): poolInfoType | null => {
     if (!switchPool) {
       return null;

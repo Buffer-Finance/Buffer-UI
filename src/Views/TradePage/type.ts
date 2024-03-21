@@ -1,4 +1,5 @@
 import { appConfig, marketsForChart } from './config';
+import { marketTypeAB } from '@Views/AboveBelow/types';
 export type poolType = {
   pool: string;
   max_fee: string;
@@ -22,6 +23,7 @@ export type poolType = {
   SpreadFactor: number;
 };
 //type of markets needed on trade page
+//type of markets needed on trade page
 export type marketType = {
   category: string;
   token0: string;
@@ -33,7 +35,7 @@ export type marketType = {
   img: string;
   pythId: string;
   creation_window_contract: string | undefined;
-  pools: poolType[];
+  pools: poolInfoType[];
 } & chartDataType;
 
 export interface TradeType {
@@ -44,37 +46,42 @@ export interface TradeType {
   queued_timestamp: number;
   queue_id: number;
   strike: number;
-  pending_operation: null | 'Processing EDIT' | 'Processing CANCEL';
-  period: number;
+  // pending_operation: null | 'Processing EDIT' | 'Processing CANCEL';
+  // period: number;
   target_contract: string;
   expiry_price: number | null;
   payout: string | null;
-  user_partial_signature: string;
+  // user_partial_signature: string;
   open_timestamp: number;
   close_time: number;
-  user_full_signature: string;
+  user_signature: string;
   user_address: string;
   trade_size: string;
   locked_amount: string;
   allow_partial_fill: boolean;
   referral_code: string;
   trader_nft_id: number;
-  slippage: number;
-  settlement_fee: number;
-  settlement_fee_sign_expiration: number;
-  settlement_fee_signature: string;
-  expiration_time: null | number;
+  // slippage: number;
+  // settlement_fee: number;
+  // settlement_fee_sign_expiration: number;
+  // settlement_fee_signature: string;
+  expiration_time: number;
   is_above: boolean | undefined;
+  is_cancelled: boolean;
   state: 'QUEUED' | 'OPENED' | 'CLOSED';
   option_id: null | number;
-  is_limit_order: boolean;
-  limit_order_expiration: 0 | number;
-  limit_order_duration: 0 | number;
+  // is_limit_order: boolean;
+  // limit_order_expiration: 0 | number;
+  // limit_order_duration: 0 | number;
   environment: '421613' | '42161';
-  market: marketType;
-  pool: poolType;
+  market: marketTypeAB;
+  pool: poolInfoType;
   token: string;
+  router: string;
+  trade_id: string;
+  total_fee: string;
 }
+
 //type of data returned from graphql
 export type response = {
   optionContracts: responseObj[];
@@ -92,7 +99,7 @@ export type responseObj = {
     marketOIaddress: string;
     IV: string;
     poolOIaddress: string;
-    creationWindowAddress: string;
+    creationWindowContract: string;
     IVFactorOTM: string;
     IVFactorITM: string;
     SpreadConfig1: string;

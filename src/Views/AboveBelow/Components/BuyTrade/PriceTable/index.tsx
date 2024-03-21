@@ -6,6 +6,7 @@ import {
 import {
   aboveBelowActiveMarketsAtom,
   selectedPoolActiveMarketAtom,
+  readCallDataAtom,
   selectedPriceAtom,
 } from '@Views/AboveBelow/atoms';
 import BufferTable, { BufferTableCopy } from '@Views/Common/BufferTable';
@@ -19,6 +20,9 @@ import { useCallback, useMemo } from 'react';
 import { priceFormatAtom } from '../PriceFormat';
 import { CurrentPriceLine } from './CurrentPriceLine';
 import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import { getAddress } from 'viem';
+import { divide } from '@Utils/NumString/stringArithmatics';
+import { toFixed } from '@Utils/NumString';
 
 enum Columns {
   ROI_ABOVE,
@@ -36,13 +40,16 @@ export const getROI = (totalFee: number | null) => {
 };
 
 export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
-  useLimitedStrikeArrays();
+  // useLimitedStrikeArrays();
   const [priceFormat, setPriceFormat] = useAtom(priceFormatAtom);
   const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);
+  const readCallData = useAtomValue(readCallDataAtom);
+  console.log('readCallData', readCallData);
   console.log(`index-markets: `, markets);
 
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const maxPermissibleContracts = readCallData?.maxPermissibleContracts;
   const { currentPrice, precision } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
@@ -105,10 +112,42 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const BodyFormatter: any = (row: number, col: number) => {
     const tvId = activeMarket?.tv_id;
     if (!tvId) return <></>;
+    if (maxPermissibleContracts === undefined) return <></>;
 
     let tablerow = totalArray[row];
     const strikePrice = tablerow?.strike;
-
+    // console.log(
+    //   `maxPermissibleContracts`,false
+    //   maxPermissibleContracts[
+    //     `${getAddress(activeMarket?.address)}${tablerow.marketID}${false}`
+    //   ]
+    // );
+    const maxSizeBelow = maxPermissibleContracts[
+      `${getAddress(activeMarket?.address)}${tablerow.marketID}${false}`
+    ]
+      ? toFixed(
+          divide(
+            maxPermissibleContracts[
+              `${getAddress(activeMarket?.address)}${tablerow.marketID}${false}`
+            ].maxPermissibleContracts,
+            activeMarket?.poolInfo.decimals
+          ),
+          2
+        )
+      : '-';
+    const maxSizeAbove = maxPermissibleContracts[
+      `${getAddress(activeMarket?.address)}${tablerow.marketID}${true}`
+    ]
+      ? toFixed(
+          divide(
+            maxPermissibleContracts[
+              `${getAddress(activeMarket?.address)}${tablerow.marketID}${true}`
+            ].maxPermissibleContracts,
+            activeMarket?.poolInfo.decimals
+          ),
+          2
+        )
+      : '-';
     switch (col) {
       case Columns.STRIKE:
         return (
@@ -196,6 +235,9 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <button
             className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
+              if (getROI(tablerow.totalFeeAbove) == '-') {
+                return toastify({ type: 'error', msg: 'Invalid selection' });
+              }
               setStrikePrice(true, strikePrice.toString());
             }}
           >
@@ -207,10 +249,15 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <button
             className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
+              if (getROI(tablerow.totalFeeAbove) == '-') {
+                return toastify({ type: 'error', msg: 'Invalid selection' });
+              }
               setStrikePrice(true, strikePrice.toString());
             }}
           >
-            {77777}
+            {tablerow.totalFeeAbove
+              ? toFixed(tablerow.totalFeeAbove * maxSizeAbove, 2)
+              : '-'}
           </button>
         );
       case Columns.MAX_BELOW:
@@ -218,10 +265,15 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <button
             className={`text-[#C3C2D4] w-full text-f12`}
             onClick={() => {
+              if (getROI(tablerow.totalFeeBelow) == '-') {
+                return toastify({ type: 'error', msg: 'Invalid selection' });
+              }
               setStrikePrice(false, strikePrice.toString());
             }}
           >
-            {77777}
+            {tablerow.totalFeeBelow
+              ? toFixed(tablerow.totalFeeBelow * maxSizeBelow, 2)
+              : '-'}
           </button>
         );
     }

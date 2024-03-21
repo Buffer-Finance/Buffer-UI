@@ -16,7 +16,6 @@ export const useMarketsConfig = () => {
     const response: marketType[] = [];
     data.optionContracts.forEach((item) => {
       const index = response.findIndex((config) => config.tv_id === item.asset);
-      // console.log(`item: `, item/);
       if (index !== -1) {
         response[index].pools.push(createPoolObject(item));
       } else {
@@ -25,7 +24,7 @@ export const useMarketsConfig = () => {
         response.push({
           ...marketInfo,
           category: AssetCategory[item.category],
-          creation_window_contract: item.configContract.creationWindowAddress,
+          creation_window_contract: item.config.creationWindowContract,
           pools: [createPoolObject(item)],
         });
       }
@@ -35,7 +34,7 @@ export const useMarketsConfig = () => {
     // console.log(`response: `, response);
     return response;
   }, [data]);
-  // console.log(`res: `, res);
+  // console.log(`useMarketsConfig: `, res);
   return res;
 };
 
@@ -43,25 +42,25 @@ export const useMarketsConfig = () => {
 export function createPoolObject(market: responseObj) {
   return {
     pool: getAddress(market.poolContract),
-    max_fee: market.configContract.maxFee,
-    min_fee: market.configContract.minFee,
-    max_duration: secondsToHHMM(Number(market.configContract.maxPeriod)),
-    min_duration: secondsToHHMM(Number(market.configContract.minPeriod)),
+    // max_fee: market.configContract.maxFee,
+    // min_fee: market.configContract.minFee,
+    // max_duration: secondsToHHMM(Number(market.configContract.maxPeriod)),
+    // min_duration: secondsToHHMM(Number(market.configContract.minPeriod)),
     isPaused: market.isPaused,
-    configContract: getAddress(market.configContract.address),
-    optionContract: getAddress(market.address),
-    marketOiContract: getAddress(market.configContract.marketOIaddress),
-    poolOIContract: getAddress(market.configContract.poolOIaddress),
-    platformFee: market.configContract.platformFee,
-    earlyclose: {
-      enable: market.configContract.isEarlyCloseEnabled,
-      threshold: market.configContract.earlyCloseThreshold,
-    },
-    IV: Number(market.configContract.IV),
-    IVFactorOTM: Number(market.configContract.IVFactorOTM),
-    IVFactorITM: Number(market.configContract.IVFactorITM),
-    SpreadConfig1: Number(market.configContract.SpreadConfig1),
-    SpreadConfig2: Number(market.configContract.SpreadConfig2),
-    SpreadFactor: Number(market.configContract.SpreadFactor),
+    // configContract: getAddress(market.configContract.address),
+    // optionContract: getAddress(market.address),
+    // marketOiContract: getAddress(market.configContract.marketOIaddress),
+    // poolOIContract: getAddress(market.configContract.poolOIaddress),
+    platformFee: market.config.platformFee,
+    // earlyclose: {
+    //   enable: market.config.isEarlyCloseEnabled,
+    //   threshold: market.config.earlyCloseThreshold,
+    // },
+    IV: Number(market.config.IV),
+    // IVFactorOTM: Number(market.configContract.IVFactorOTM),
+    // IVFactorITM: Number(market.configContract.IVFactorITM),
+    // SpreadConfig1: Number(market.configContract.SpreadConfig1),
+    // SpreadConfig2: Number(market.configContract.SpreadConfig2),
+    // SpreadFactor: Number(market.configContract.SpreadFactor),
   };
 }

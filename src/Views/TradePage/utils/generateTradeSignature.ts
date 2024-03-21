@@ -11,7 +11,7 @@ export const getWalletFromOneCtPk = (oneCtPk: string) => {
 const generateTradeSignature = async (
   address: any,
   expiration: string | number,
-  contracts: string | number,
+  totalFee: string | number,
   maxFeePerContract: string | number,
   targetContract: string,
   strike: string,
@@ -39,7 +39,7 @@ const generateTradeSignature = async (
         { name: 'user', type: 'address' },
         { name: 'targetContract', type: 'address' },
         { name: 'expiration', type: 'uint32' },
-        { name: 'contracts', type: 'uint256' },
+        { name: 'totalFee', type: 'uint256' },
         { name: 'strike', type: 'uint256' },
         { name: 'isAbove', type: 'bool' },
         { name: 'maxFeePerContract', type: 'uint256' },
@@ -54,7 +54,7 @@ const generateTradeSignature = async (
       user: address,
       targetContract: getAddress(targetContract),
       expiration,
-      contracts,
+      totalFee,
       strike,
       isAbove,
       maxFeePerContract,
@@ -187,4 +187,5 @@ export {
   generateApprovalSignature,
   generateBuyTradeSignature,
   getRSVFromSignature,
+  generateTradeSignature,
 };

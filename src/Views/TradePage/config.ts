@@ -83,18 +83,18 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-testnet/api',
+          MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
           ABOVE_BELOW:
-            'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.0.8-ab-update-contracts/api',
+            'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
-        router: '0x2430E4aD865423Ed994daD297D66b77F3ec2B008',
-        signer_manager: '0xa31fAFF32b20B5AF11688953489A201d38421873',
+        router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
+        signer_manager: '0x540f57FEba69e018344C2Bb61Fd90EaF203dB87C',
         booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
         config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
-        v2_router: '0x76c52E83d7dcCc70107a66BAd44D042D22D06be7',
-        above_below_router: '0xA747eeE75fF4a917c6c822C7b7815cdd28c37974',
+        v2_router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
+        above_below_router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
         poolsInfo: {
           '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
             tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',

@@ -112,10 +112,11 @@ export const readCallResponseAtom = atom(
       [contractAddress: string]: {
         isAbove: boolean;
         maxPermissibleContracts: string | undefined;
-        strike: string;
+        marketID: string;
       };
     } = {};
     for (const callId in update) {
+      console.log('callId', callId);
       const [data] = update[callId];
       if (callId.includes('-balance')) {
         balances[callId.split('-')[0]] = (data ?? '0') as string;
@@ -124,11 +125,12 @@ export const readCallResponseAtom = atom(
       } else if (callId.includes('-creationWindow')) {
         isInCreationWindow[callId.split('-')[2]] = (data ?? false) as boolean;
       } else if (callId.includes('getMaxPermissibleContracts')) {
-        const [contract, strike] = callId.split('getMaxPermissibleContracts');
-        maxPermissibleContracts[getAddress(contract) + strike] = {
-          isAbove: callId.includes('Above'),
+        console.log('readCallResponseAtom', callId, data);
+        const [contract, , marketID, isAbove] = callId.split('-');
+        maxPermissibleContracts[getAddress(contract) + marketID + isAbove] = {
+          isAbove: isAbove,
           maxPermissibleContracts: data as string | undefined,
-          strike,
+          marketID,
         };
       }
     }

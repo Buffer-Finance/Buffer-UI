@@ -15,6 +15,7 @@
     "@ethersproject/experimental": "^5.0.1",
     "@ethersproject/providers": "^5.1.2",
     "@ethersproject/units": "^5.1.0",
+    "@formkit/auto-animate": "^0.8.1",
     "@lingui/macro": "^4.2.0",
     "@lingui/react": "^4.2.0",
     "@mui/core": "^5.0.0-alpha.54",

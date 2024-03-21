@@ -68,24 +68,19 @@ export const useBothVersionsMarkets = () => {
     const response = await axios.post(configData.graph.MAIN, {
       query: `{ 
         optionContracts(first:1000){
-                  configContract {
+                  config {
                     address
-                    maxFee
-                    maxPeriod
-                    minFee
-                    minPeriod
+                    maxSkew
+                    creationWindowContract
+                    circuitBreakerContract
+                    iv
+                    optionStorageContract
                     platformFee
-                    earlyCloseThreshold
-                    isEarlyCloseEnabled
-                    marketOIaddress
-                    IV
-                    poolOIaddress
-                    creationWindowAddress
-                    IVFactorOTM
-                    IVFactorITM
-                    SpreadConfig1
-                    SpreadConfig2
-                    SpreadFactor
+                    payout
+                    sfdContract
+                    sf
+                    traderNFTContract
+                    stepSize
                   }
                   routerContract
                   address
