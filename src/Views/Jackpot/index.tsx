@@ -599,12 +599,12 @@ function RecentJackPotTimer({ recentTime }) {
           <div className="text-sm text-[#B1B6C6] text-[14px] mb-[15px] font-medium leading-6 text-gray-400 whitespace-nowrap">
             Since the last jackpot
           </div>
-          <div className="flex  gap-3">
+          <div className="flex  gap-5">
             {timerCols.map((s, idx) => {
               return (
                 <div
                   key={idx}
-                  className="flex flex-col min-w-[45px] items-center"
+                  className="flex flex-col min-w-[45px] gap-4 items-center"
                 >
                   <div className="text-[34px] font-bold leading-10 text-white">
                     {s[1]}{' '}

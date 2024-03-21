@@ -135,9 +135,11 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
             />
           </Link>
           <div className="flex">
-            Bet:&nbsp;
-            <div className="text-1">
-              {(+divide(bet.trade_size, 18)).toFixed(2)} ARB
+            <div className="flex items-end">
+              Bet:&nbsp;
+              <div className="text-1 text-f14">
+                {(+divide(bet.trade_size, 18)).toFixed(2)} ARB
+              </div>
             </div>
             <a
               href={`https://sepolia.arbiscan.io/tx/${bet.jackpot_txn_hash}`}
@@ -151,15 +153,15 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
         <ReactTimeAgo date={bet.open_timestamp * 1000} />
       </div>
       <div className="flex items-center justify-between mt-1">
-        <div className="flex">
+        <div className="flex text-f14">
           {bet.market.token0}-{bet.market.token1}
           <div className="mt-[3px] ml-[4px]">
             <UpDownChipSmm isUp={bet.is_above} />
           </div>
         </div>
-        <div className="flex">
+        <div className="flex items-end">
           Win:&nbsp;
-          <div className="text-green">{parsed.toFixed(2)} ARB</div>
+          <div className="text-green text-f14">{parsed.toFixed(2)} ARB</div>
         </div>{' '}
       </div>
     </div>
