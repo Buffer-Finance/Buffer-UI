@@ -1,6 +1,7 @@
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import BufferTable from '@Views/Common/BufferTable';
 import { useAtom, useAtomValue } from 'jotai';
+import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 
 import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -43,6 +44,7 @@ import {
 } from './Common';
 import { useNavigateToProfile } from './HistoryTable';
 import { Visualized } from './Visualized';
+import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
 
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[] | undefined;
@@ -121,7 +123,7 @@ export const OngoingTradesTable: React.FC<{
   const { earlyCloseHandler } = useCancelTradeFunction();
   const earlyCloseLoading = useAtomValue(closeLoadingAtom);
   const { getPoolInfo } = usePoolInfo();
-
+  const jackpotManager = useJackpotManager();
   const BodyFormatter: any = (row: number, col: number) => {
     if (trades === undefined) return <span></span>;
     const trade = trades?.[row];
@@ -145,6 +147,10 @@ export const OngoingTradesTable: React.FC<{
         (trade.close_time || Math.round(Date.now() / 1000))
     );
 
+    const jackpote18 =
+      jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]?.jackpot_amount ||
+      trade?.jackpot_amount ||
+      '0';
     const [isDisabled, disableTooltip] = getEarlyCloseStatus(trade);
     switch (col) {
       case TableColumn.Show:
@@ -260,12 +266,15 @@ export const OngoingTradesTable: React.FC<{
         return (
           // queuedTradeFallBack(trade) || (
           <div>
-            <Pnl
-              configData={trade.market}
-              trade={trade}
-              poolInfo={poolInfo}
-              lockedAmmount={lockedAmmount}
-            />
+            <div className="flex items-center gap-2">
+              <Pnl
+                configData={trade.market}
+                trade={trade}
+                poolInfo={poolInfo}
+                lockedAmmount={lockedAmmount}
+              />
+              <JackpotChip jackpote18={jackpote18} />
+            </div>
             <Probability trade={trade} marketPrice={marketPrice} />{' '}
           </div>
           // )

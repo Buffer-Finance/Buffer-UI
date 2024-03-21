@@ -26,6 +26,8 @@ import {
 import { CurrentPrice } from './CurrentPrice';
 import { DataCol } from './DataCol';
 import { StrikePrice } from './StrikePrice';
+import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
+import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 
 export const TradeDataView: React.FC<{
   trade: TradeType;
@@ -36,12 +38,16 @@ export const TradeDataView: React.FC<{
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { data: allSpreads } = useSpread();
   const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
+  const jackpotManager = useJackpotManager();
 
   const { isPriceArrived } = getStrike(trade, cachedPrices, spread);
   const lockedAmmount = getLockedAmount(trade, cachedPrices);
 
   const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
-
+  const jackpote18 =
+    jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]?.jackpot_amount ||
+    trade?.jackpot_amount ||
+    '0';
   let TradeData = [
     {
       head: <span>Strike Price</span>,
@@ -77,10 +83,11 @@ export const TradeDataView: React.FC<{
     TradeData = [
       {
         head: (
-          <RowGap gap="4px">
-            <span>Pnl</span>
-            <span>|</span>
+          <RowGap gap="4px mr-5">
+            <span>PnL</span>&nbsp;
+            <span>|</span>&nbsp;
             <span className="text-[10px]">probability</span>
+            <JackpotChip className="ml-2" jackpote18={jackpote18} />
           </RowGap>
         ),
         desc: (

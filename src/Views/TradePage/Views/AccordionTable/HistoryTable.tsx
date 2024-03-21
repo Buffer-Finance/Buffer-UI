@@ -37,16 +37,17 @@ import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
 import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
 import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
+import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 
 enum TableColumn {
   Asset = 0,
   Strike = 1,
   ExpiryPrice = 2,
   OpenTime = 3,
-  TimeLeft = 7,
-  CloseTime = 4,
-  TradeSize = 5,
-  Payout = 6,
+  TimeLeft = 4,
+  CloseTime = 5,
+  TradeSize = 6,
+  Payout = 7,
   Status = 8,
   ShareOrAddress = 9,
 }
@@ -80,10 +81,10 @@ const HistoryTable: React.FC<{
         'Strike Price',
         'Expiry Price',
         'Open Time',
+        'Duration',
         'Close Time',
         'Trade Size',
         'Payout',
-        'Jackpot',
         'Status',
         'User',
       ]
@@ -92,10 +93,10 @@ const HistoryTable: React.FC<{
         'Strike Price',
         'Expiry Price',
         'Open Time',
+        'Duration',
         'Close Time',
         'Trade Size',
         'Payout',
-        'Jackpot',
         'Status',
         '',
       ];
@@ -117,13 +118,6 @@ const HistoryTable: React.FC<{
       '0';
     const jackpotValue = jackpote18 / 10 ** 18;
     const isJackpotDisabled = jackpote18 ? +jackpote18 == 0 : true;
-    console.log(
-      `HistoryTable-isJackpotDisabled: `,
-      isJackpotDisabled,
-      jackpotValue,
-      jackpote18,
-      typeof jackpote18
-    );
 
     if (trade === undefined) return <></>;
     // if (!readcallData) return <>no readcall data</>;
@@ -180,36 +174,13 @@ const HistoryTable: React.FC<{
           )
         );
       case TableColumn.TimeLeft:
-        if (
-          trade.token == 'ARB' &&
-          gte(
-            divide(trade.trade_size, 18),
-            jackpotInfo?.minSize?.toString() || '1'
-          )
-        )
-          return (
-            <div
-              className={
-                ' font-[500] text-[12px] text-[#C3C2D4]  flex items-center gap-2'
-              }
-            >
-              <Link onClick={(e) => e.stopPropagation()} to={'/Jackpot'}>
-                <img
-                  className={[
-                    'w-[24px] h-[19px] min-w-[24px] min-h-[19px] max-w-[24px] max-h-[19px]',
-                    isJackpotDisabled ? 'opacity-30' : '',
-                  ].join(' ')}
-                  src="/JV.png"
-                />
-              </Link>
-              <Display
-                data={jackpotValue}
-                className="!justify-start"
-                unit={poolInfo.token}
-              />
+        return (
+          queuedTradeFallBack(trade, true) || (
+            <div>
+              {formatDistance(Variables(minClosingTime - trade.open_timestamp))}
             </div>
-          );
-        else return <div className="text-f14">N/A</div>;
+          )
+        );
       case TableColumn.CloseTime:
         return (
           queuedTradeFallBack(trade) || <DisplayTime ts={minClosingTime} />
@@ -247,11 +218,14 @@ const HistoryTable: React.FC<{
               {pnl || payout ? (
                 <>
                   {' '}
-                  <Display
-                    className="!justify-start"
-                    data={divide(payout!, poolInfo.decimals)}
-                    unit={poolInfo.token}
-                  />
+                  <div className="flex items-center gap-2">
+                    <Display
+                      className="!justify-start"
+                      data={divide(payout!, poolInfo.decimals)}
+                      unit={poolInfo.token}
+                    />
+                    <JackpotChip jackpote18={jackpote18} />
+                  </div>
                   <span className={status.textColor + ' flex '}>
                     Net Pnl :{' '}
                     <Display
@@ -269,21 +243,16 @@ const HistoryTable: React.FC<{
           );
         else
           return (
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <Display
                 label={status.chip == 'Win' ? '+' : ''}
                 className={`!justify-start ${
                   gte(pnl?.toString(), '0') ? 'green' : 'red'
                 }`}
                 data={divide(payout ?? '0', poolInfo.decimals)}
-                // unit={poolInfo.token}
+                unit={poolInfo.token}
               />
-              <img
-                src={getAssetImageUrl(trade.token)}
-                width={13}
-                height={13}
-                className="inline ml-2"
-              />
+              <JackpotChip jackpote18={jackpote18} />
             </div>
           );
       case TableColumn.Status:

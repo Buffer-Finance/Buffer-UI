@@ -46,6 +46,7 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { Jackpot } from '@Views/Jackpot';
+import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -178,7 +179,7 @@ function App() {
 
   const graphStatus = useGraphStatus();
   const isMobile = useMedia('(max-width:1200px)');
-
+  // return ;
   return (
     <>
       {/* <PasswordModal /> */}

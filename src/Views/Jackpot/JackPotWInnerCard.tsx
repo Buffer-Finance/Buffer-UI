@@ -102,11 +102,11 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
   isUser,
 }) => {
   console.log(`JackPotWInnerCard-bet: `, bet);
-  if (!bet.market)
+  if (!bet?.market)
     return (
       <Skeleton
         variant="rectangular"
-        className="!w-full !h-[45px] !rounded-md !bg-[#c3c2d414]"
+        className="!w-full !h-[45px] !min-h-[45px]  !rounded-md !bg-[#c3c2d414]"
       />
     );
   console.log(`JackPotWInnerCard-bet.user_address: `, bet.user_address);
@@ -135,8 +135,8 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
             />
           </Link>
           <div className="flex">
-            <div className="flex items-end">
-              Bet:&nbsp;
+            <div className="flex items-end ">
+              <span className=" leading-[21px]">Bet:</span>&nbsp;
               <div className="text-1 text-f14">
                 {(+divide(bet.trade_size, 18)).toFixed(2)} ARB
               </div>
