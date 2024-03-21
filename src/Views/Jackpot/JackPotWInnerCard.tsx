@@ -161,7 +161,9 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
         </div>
         <div className="flex items-end">
           <span className=" leading-[21px]">Win:&nbsp;</span>
-          <div className="text-green text-f14">{parsed.toFixed(2)} ARB</div>
+          <div className="text-green font-[500] text-f14">
+            {parsed.toFixed(2)} ARB
+          </div>
         </div>{' '}
       </div>
     </div>
