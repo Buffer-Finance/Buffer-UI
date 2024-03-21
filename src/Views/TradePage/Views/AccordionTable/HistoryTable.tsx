@@ -193,7 +193,7 @@ const HistoryTable: React.FC<{
                 ' font-[500] text-[12px] text-[#C3C2D4]  flex items-center gap-2'
               }
             >
-              <Link to={'/Jackpot'}>
+              <Link onClick={(e) => e.stopPropagation()} to={'/Jackpot'}>
                 <img
                   className={[
                     'w-[24px] h-[19px] min-w-[24px] min-h-[19px] max-w-[24px] max-h-[19px]',
@@ -327,23 +327,6 @@ const HistoryTable: React.FC<{
             </div>
           );
         return <Share data={trade} market={trade.market} poolInfo={poolInfo} />;
-
-        return (
-          <button
-            onClick={() =>
-              jackpotManager.addJackpot({
-                option_id: trade.option_id,
-                target_contract: trade.target_contract,
-                jackpot_amount: 12 * 1e18,
-                router: trade.target_contract,
-                user_address: trade.user_address,
-                trade_size: trade.trade_size,
-              })
-            }
-          >
-            Adding
-          </button>
-        );
     }
     return 'Unhandled Body';
   };

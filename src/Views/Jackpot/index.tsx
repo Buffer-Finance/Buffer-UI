@@ -403,12 +403,10 @@ function JackpotValueSeciont(props) {
   const jackpotInfo = useJackpotInfo();
 
   const poolBalance = jackpotInfo?.poolBalance;
-  console.log(`index-jackpotInfo: `, poolBalance);
   const amount = poolBalance ? poolBalance.toString() : null;
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
 
   const minSize = jackpotInfo?.minSize ? jackpotInfo.minSize.toString() : '0';
-  console.log(`index-minSize: `, typeof minSize, minSize, jackpotInfo);
   const isMobile = useMedia('(max-width:600px)');
 
   if (isMobile) {
