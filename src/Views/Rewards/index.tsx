@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
-import { OverAllData } from './Components/OverAllData';
-import { Seasons } from './Components/Seasons';
 import { Summary } from './Components/Summary';
-import { UserRewards } from './Components/UserRewards';
+import { LeagueWiseData } from './LeagueWiseData';
 
 export const RewardsPage = () => {
   useEffect(() => {
@@ -10,13 +8,7 @@ export const RewardsPage = () => {
   }, []);
   return (
     <div className="w-full py-6 px-8">
-      <div className="flex justify-between items-start w-full">
-        <div>
-          <OverAllData />
-          <UserRewards />
-        </div>
-        <Seasons />
-      </div>
+      <LeagueWiseData />
       <Summary />
     </div>
   );

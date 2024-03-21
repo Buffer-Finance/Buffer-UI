@@ -10,6 +10,8 @@ export const appConfig = {
           MAIN: `https://subgraph.satsuma-prod.com/${
             import.meta.env.VITE_SATSUMA_KEY
           }/bufferfinance/arbitrum-sandbox-testnet/api`,
+          LEADERBOARD: '',
+          REWARDS: '',
         },
 
         booster: '0x29952C608Bf41A8a36AFD937471691932055E7b5',
@@ -82,7 +84,16 @@ export const appConfig = {
       }
     : {
         graph: {
-          MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.0.9-add-contractRegistry/api`,
+          MAIN: `https://subgraph.satsuma-prod.com/${
+            import.meta.env.VITE_SATSUMA_KEY
+          }
+          /bufferfinance/above-below-sepolia/version/v0.0.9-add-contractRegistry/api`,
+          LEADERBOARD: `https://subgraph.satsuma-prod.com/${
+            import.meta.env.VITE_SATSUMA_KEY
+          }/bufferfinance/jackpot/version/v3.0.5-competitions-add-fee/api`,
+          REWARDS: `https://subgraph.satsuma-prod.com/${
+            import.meta.env.VITE_SATSUMA_KEY
+          }/bufferfinance/jackpot/api`,
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
@@ -158,6 +169,8 @@ export const appConfig = {
       MAIN: `https://subgraph.satsuma-prod.com/${
         import.meta.env.VITE_SATSUMA_KEY
       }/bufferfinance/v2.5-arbitrum-mainnet/api`,
+      LEADERBOARD: '',
+      REWARDS: '',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
@@ -240,6 +253,8 @@ export const appConfig = {
       MAIN: `https://subgraph.satsuma-prod.com/${
         import.meta.env.VITE_SATSUMA_KEY
       }/bufferfinance/polygon-testnet/api`,
+      LEADERBOARD: '',
+      REWARDS: '',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
@@ -262,6 +277,8 @@ export const appConfig = {
       MAIN: `https://subgraph.satsuma-prod.com/${
         import.meta.env.VITE_SATSUMA_KEY
       }/bufferfinance/polygon-mainnet/api`,
+      LEADERBOARD: '',
+      REWARDS: '',
     },
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',

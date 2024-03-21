@@ -1,22 +1,31 @@
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
 
-export const UserRewards = () => {
+export const UserRewards: React.FC<{
+  selectedWeekId: number;
+  currentWeekId: number;
+}> = ({ selectedWeekId, currentWeekId }) => {
   return (
     <div className="mt-7">
       <div className="text-[#F7F7F7] text-[20px] font-medium">Your Rewards</div>
       <div className="text-f16 font-medium text-[#7F87A7] mb-4">
         Claim your rewards for trading on Buffer
       </div>
-      <div className="flex gap-5 items-start">
-        <Rebates />
-        <Competitions />
-      </div>
+      {currentWeekId < selectedWeekId ? (
+        <div className="w-[300px] bg-[#141823] px-[18px] py-6 rounded-lg text-[#7F87A7] text-f16">
+          Not Started Yet.
+        </div>
+      ) : (
+        <div className="flex gap-5 items-start">
+          <Rebates isCurrentWeek={selectedWeekId == currentWeekId} />
+          <Competitions isCurrentWeek={selectedWeekId == currentWeekId} />
+        </div>
+      )}
     </div>
   );
 };
 
-const Rebates: React.FC = () => {
+const Rebates: React.FC<{ isCurrentWeek: boolean }> = ({ isCurrentWeek }) => {
   return (
     <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg">
       <div className="flex flex-col gap-5">
@@ -35,17 +44,21 @@ const Rebates: React.FC = () => {
           }
         />
       </div>
-      <BlueBtn
-        onClick={() => {}}
-        className="!w-fit h-fit px-[14px] py-[1px] mb-2"
-      >
-        Claim
-      </BlueBtn>
+      {!isCurrentWeek && (
+        <BlueBtn
+          onClick={() => {}}
+          className="!w-fit h-fit px-[14px] py-[1px] mb-2"
+        >
+          Claim
+        </BlueBtn>
+      )}
     </div>
   );
 };
 
-const Competitions: React.FC = () => {
+const Competitions: React.FC<{ isCurrentWeek: boolean }> = ({
+  isCurrentWeek,
+}) => {
   return (
     <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg">
       <div className="flex flex-col gap-5">
@@ -66,12 +79,14 @@ const Competitions: React.FC = () => {
           }
         />
       </div>
-      <BlueBtn
-        onClick={() => {}}
-        className="!w-fit h-fit px-[14px] py-[1px] mb-2"
-      >
-        Claim
-      </BlueBtn>
+      {!isCurrentWeek && (
+        <BlueBtn
+          onClick={() => {}}
+          className="!w-fit h-fit px-[14px] py-[1px] mb-2"
+        >
+          Claim
+        </BlueBtn>
+      )}
     </div>
   );
 };

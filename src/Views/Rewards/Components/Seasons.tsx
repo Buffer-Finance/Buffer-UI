@@ -5,91 +5,56 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import { useState } from 'react';
 
-export const Seasons = () => {
+export const Seasons: React.FC<{
+  selectedSeason: number;
+  setSelectedSeason: (newSeason: number) => void;
+}> = ({ selectedSeason, setSelectedSeason }) => {
   return (
     <div className="w-[325px] bg-[#141823] rounded-md">
       <div className="text-f20 font-medium text-[#F7F7F7] m-auto w-fit mt-5 mb-3">
         All Seasons
       </div>
-      <TimeLine />
+      <TimeLine
+        selectedSeason={selectedSeason}
+        setSelectedSeason={setSelectedSeason}
+      />
     </div>
   );
 };
 
-const TimeLine = () => {
-  const [selectedSeason, setSelectedSeason] = useState(1);
+const TimeLine: React.FC<{
+  selectedSeason: number;
+  setSelectedSeason: (newSeason: number) => void;
+}> = ({ selectedSeason, setSelectedSeason }) => {
   return (
-    <Timeline position="alternate">
-      <BufferLineItem className="">
-        <TimelineSeparator>
-          <BufferConnector />
-          <BufferDot
-            isSelected={selectedSeason === 1}
-            isRightSelected={selectedSeason % 2 === 0}
-          />
-        </TimelineSeparator>
-        <BufferContent>
-          <Season
-            isSelected={selectedSeason === 1}
-            rewardAmount={3000}
-            seasonNum={1}
-            onClick={setSelectedSeason}
-          />
-        </BufferContent>
-      </BufferLineItem>
-      <BufferLineItem>
-        <TimelineSeparator>
-          <BufferConnector />
-          <BufferDot
-            isSelected={selectedSeason === 2}
-            isRightSelected={selectedSeason % 2 === 0}
-          />
-        </TimelineSeparator>
-        <BufferContent>
-          <Season
-            isSelected={selectedSeason === 2}
-            rewardAmount={786}
-            seasonNum={2}
-            onClick={setSelectedSeason}
-          />
-        </BufferContent>
-      </BufferLineItem>
-      <BufferLineItem>
-        <TimelineSeparator>
-          <BufferConnector />
-          <BufferDot
-            isSelected={selectedSeason === 3}
-            isRightSelected={selectedSeason % 2 === 0}
-          />
-        </TimelineSeparator>
-        <BufferContent>
-          <Season
-            isSelected={selectedSeason === 3}
-            rewardAmount={4356}
-            seasonNum={3}
-            onClick={setSelectedSeason}
-          />
-        </BufferContent>
-      </BufferLineItem>
-      <BufferLineItem>
-        <TimelineSeparator>
-          <BufferConnector />
-          <BufferDot
-            isSelected={selectedSeason === 4}
-            isRightSelected={selectedSeason % 2 === 0}
-          />
-        </TimelineSeparator>
-        <BufferContent>
-          <Season
-            isSelected={selectedSeason === 4}
-            rewardAmount={999}
-            seasonNum={4}
-            onClick={setSelectedSeason}
-          />
-        </BufferContent>
-      </BufferLineItem>
+    <BufferTimeline
+      position="alternate"
+      className="max-h-[450px] overflow-auto"
+    >
+      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((seasonNumber) => {
+        const currentSeason = seasonNumber + 1;
+        return (
+          <BufferLineItem key={currentSeason}>
+            <TimelineSeparator>
+              <BufferConnector />
+              <BufferDot
+                isSelected={selectedSeason === currentSeason}
+                isRightSelected={selectedSeason % 2 === 0}
+              />
+            </TimelineSeparator>
+            <BufferContent>
+              <Season
+                isSelected={selectedSeason === currentSeason}
+                rewardAmount={3000}
+                seasonNum={currentSeason}
+                onClick={setSelectedSeason}
+              />
+            </BufferContent>
+          </BufferLineItem>
+        );
+      })}
+
       <BufferLineItem>
         <TimelineSeparator>
           <BufferConnector />
@@ -97,9 +62,20 @@ const TimeLine = () => {
         </TimelineSeparator>
         <BufferContent> </BufferContent>
       </BufferLineItem>
-    </Timeline>
+    </BufferTimeline>
   );
 };
+
+const BufferTimeline = styled(Timeline)`
+  max-height: 485px;
+  overflow: auto;
+
+  ::-webkit-scrollbar {
+    background: var(--bg-grey);
+    height: 1px;
+    width: 2px;
+  }
+`;
 
 const BufferLineItem = styled(TimelineItem)`
   /* padding: 0 20px; */
