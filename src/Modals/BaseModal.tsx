@@ -34,15 +34,17 @@ const ModalBase = ({
   open,
   onClose,
   className,
+  rootClass,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
   className?: string;
+  rootClass?: string;
 }) => {
   return (
-    <Dialog open={open} onClose={onClose} className="sm:!w-[240px]">
+    <Dialog PaperProps={{ className: rootClass }} open={open} onClose={onClose}>
       <SlippageModalStyles className={'text-1  w-full ' + className}>
         {children}
       </SlippageModalStyles>

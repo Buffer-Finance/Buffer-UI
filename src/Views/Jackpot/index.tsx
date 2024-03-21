@@ -178,14 +178,15 @@ const Jackpot: React.FC<any> = ({}) => {
       {' '}
       <ModalBase
         className={
-          '  !overflow-y-auto  !bg-[#232334] !px-[26px] sm:!px-[3px] !py-5 mob-width sm:m-[0px] !rounded-md sm:!rounded-sm sm:w-full  '
+          '  !overflow-y-auto  !bg-[#232334] sm:!px-[17px] !px-[26px]  !py-5 sm:w-full sm:m-[0px] !rounded-md sm:!rounded-sm   '
         }
+        rootClass="!w-[340px]"
         open={isOpen}
         onClose={() => setIsOpen(false)}
       >
         <div className="relative bg-[#232334] flex flex-col    ">
           {/* Header with close button */}
-          <div className="flex flex-row items-start justify-between px-4 mt-3">
+          <div className="flex flex-row items-center justify-between mt-3 ">
             <div className="text-white text-[22px] font-medium leading-normal">
               How Jackpot Works
             </div>

@@ -22,12 +22,7 @@ const JackpotBody: React.FC<{
 }> = ({ trade }) => {
   const ref = useRef(null);
   const { width, height } = useWindowSize();
-  const [confettiDuration, setConfettiDuration] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setConfettiDuration(false);
-    }, 10000);
-  }, []);
+
   if (!trade?.market) return <div>Trade not found</div>;
   const token0 = trade?.market.token0;
   const token1 = trade?.market.token1;
@@ -35,9 +30,6 @@ const JackpotBody: React.FC<{
   return (
     <div className="flex flex-col">
       <div className="text-[#C3C2D4] w-[380px] b400:-translate-x-[4%]  h-[199px] b400:scale-[0.95] origin-center  ">
-        {confettiDuration ? (
-          <Confetti width={width} height={height} numberOfPieces={100} />
-        ) : null}
         <BGImage ref={ref}>
           <div className="font-[600]   mt-6 text-[#B1B6C6] text-f15 w-full text-center">
             You won the Jackpot..

@@ -1,5 +1,5 @@
 import { Dialog } from '@mui/material';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import { SetShareBetAtom, ShareStateAtom } from '@Views/TradePage/atoms';
 import { ModalChild } from './ShareModalChild';
@@ -15,7 +15,6 @@ import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 interface IJackpotModal {}
 
 export const JackpotModal: React.FC<IJackpotModal> = () => {
-  const { width, height } = useWindowSize();
   const [activeTrades] = useOngoingTrades();
   const { page_data: historyTrades } = useHistoryTrades();
   const { jackpot, jackpotAcknowledged } = useJackpotManager();
@@ -37,12 +36,22 @@ export const JackpotModal: React.FC<IJackpotModal> = () => {
       return jackpot.jackpots[jackpot.recent];
     }
   }, [activeTrades, jackpot, historyTrades]);
+  const { width, height } = useWindowSize();
+  const [confettiDuration, setConfettiDuration] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setConfettiDuration(false);
+    }, 15000);
+  }, []);
   return (
     <Dialog open={Boolean(jackpot.recent)} onClose={jackpotAcknowledged}>
       <div
         className="w-[100vw] h-[100vh] grid place-items-center"
         onClick={jackpotAcknowledged}
       >
+        {confettiDuration ? (
+          <Confetti width={width} height={height} numberOfPieces={100} />
+        ) : null}
         <ShareModalStyles onClick={(e) => e.stopPropagation()}>
           <div className="flex justify-between items-center mb-4 shareModal:mb-3 shareModal:pl-5 shareModal:pr-3">
             <div className="text-f20 text-1 pb-2">Share Jackpot</div>

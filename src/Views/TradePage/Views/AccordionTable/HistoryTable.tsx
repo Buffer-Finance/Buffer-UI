@@ -243,7 +243,7 @@ const HistoryTable: React.FC<{
           );
         else
           return (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-col">
               <Display
                 label={status.chip == 'Win' ? '+' : ''}
                 className={`!justify-start ${
