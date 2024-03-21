@@ -596,7 +596,7 @@ function RecentJackPotTimer({ recentTime }) {
     <div className="items-center bg-[#141823] pt-[30px] flex max-w-[676px] flex-col pt-11 pb-6 px-16 rounded-lg max-md:px-5 dd">
       {recentTime ? (
         <div className="flex w-[214px] max-w-full flex-col items-center">
-          <div className="text-sm text-[#B1B6C6] text-[14px] mb-[30px] font-medium leading-6 text-gray-400 whitespace-nowrap">
+          <div className="text-sm text-[#B1B6C6] text-[14px] mb-[15px] font-medium leading-6 text-gray-400 whitespace-nowrap">
             Since the last jackpot
           </div>
           <div className="flex  gap-3">
@@ -618,7 +618,7 @@ function RecentJackPotTimer({ recentTime }) {
           </div>
 
           <button
-            className="items-stretch bg-[#3772FF] h-[32px] text-[14px] justify-center py-2 text-sm font-bold leading-4 text-center text-gray-900 capitalize bg-blue-300 rounded-[8px] shadow-sm whitespace-nowrap mt-7 px-7 max-md:px-5"
+            className="items-stretch bg-[#3772FF] h-[32px] text-[14px] justify-center py-2 text-sm font-bold leading-4 text-center text-gray-900 capitalize bg-blue-300 rounded-[8px] shadow-sm whitespace-nowrap mt-5 px-7 max-md:px-5"
             onClick={() => {
               navigate('slots');
             }}
