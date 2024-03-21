@@ -33,13 +33,13 @@ const JackpotBody: React.FC<{
   const token1 = trade?.market.token1;
   console.log(`JackpotBody-trade: `, trade);
   return (
-    <div>
-      <div className="text-[#C3C2D4] w-[380px] h-[199px]  origin-left ">
+    <div className="flex flex-col">
+      <div className="text-[#C3C2D4] w-[380px] b400:-translate-x-[4%]  h-[199px] b400:scale-[0.95] origin-center  ">
         {confettiDuration ? (
           <Confetti width={width} height={height} numberOfPieces={100} />
         ) : null}
         <BGImage ref={ref}>
-          <div className="font-[600] mt-6 text-[#B1B6C6] text-f15 w-full text-center">
+          <div className="font-[600]   mt-6 text-[#B1B6C6] text-f15 w-full text-center">
             You won the Jackpot..
           </div>
           <div className="flex justify-center items-center mt-4">

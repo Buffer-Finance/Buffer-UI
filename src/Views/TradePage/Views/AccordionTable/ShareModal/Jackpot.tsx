@@ -47,7 +47,7 @@ export const JackpotModal: React.FC<IJackpotModal> = () => {
           <div className="flex justify-between items-center mb-4 shareModal:mb-3 shareModal:pl-5 shareModal:pr-3">
             <div className="text-f20 text-1 pb-2">Share Jackpot</div>
             <button
-              className="p-3 text-1 rounded-full bg-2"
+              className="p-3 text-1 rounded-full bg-2 b400:mr-5"
               onClick={jackpotAcknowledged}
             >
               <CloseOutlined />
@@ -68,6 +68,6 @@ export const ShareModalStyles = styled.div`
   height: fit-content;
 
   @media (max-width: 425px) {
-    padding: 10px 0px;
+    padding: 10px 10px;
   }
 `;

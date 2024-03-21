@@ -29,7 +29,7 @@ module.exports = {
         max: '800px',
       },
       b400: {
-        max: '800px',
+        max: '400px',
       },
       tabDispay: { max: '1200px', min: '800px' },
       web: { min: '800px' },
