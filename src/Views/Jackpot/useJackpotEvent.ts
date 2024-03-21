@@ -18,6 +18,11 @@ const useJackpotEvent = () => {
   const jackpotManager = useJackpotManager();
   const user = useAccount();
   const publicClient2 = usePublicClient();
+  useEffect(() => {
+    return () => {
+      jackpotManager.jackpotAcknowledged();
+    };
+  }, []);
 
   useEffect(() => {
     console.log('jackpotdeb-listening');
