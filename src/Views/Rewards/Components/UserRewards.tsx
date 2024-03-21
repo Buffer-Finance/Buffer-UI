@@ -1,4 +1,5 @@
 import { useToast } from '@Contexts/Toast';
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { divide, gte, toFixed } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
@@ -51,6 +52,7 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
   const { isValidating, data } = useSeasonUserData(selectedWeekId);
   const { data: allotedRebates, mutate } = useRebatesAlloted();
   const selectedWeekRebate = allotedRebates?.[selectedWeekId]?.[0];
+  const { address, viewOnlyMode } = useUserAccount();
 
   return (
     <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg">
@@ -81,15 +83,19 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
           }
         />
       </div>
-      {!isCurrentWeek && (
-        <ConnectionRequired>
-          <RebateButton
-            allotedRebates={allotedRebates}
-            selectedWeekRebate={selectedWeekRebate}
-            selectedWeekId={selectedWeekId}
-            mutate={mutate}
-          />
-        </ConnectionRequired>
+      {address === undefined || viewOnlyMode ? (
+        <span></span>
+      ) : (
+        !isCurrentWeek && (
+          <ConnectionRequired>
+            <RebateButton
+              allotedRebates={allotedRebates}
+              selectedWeekRebate={selectedWeekRebate}
+              selectedWeekId={selectedWeekId}
+              mutate={mutate}
+            />
+          </ConnectionRequired>
+        )
       )}
     </div>
   );
@@ -252,6 +258,8 @@ const Competitions: React.FC<{
   selectedWeekId: number;
 }> = ({ isCurrentWeek, selectedWeekId }) => {
   const { isValidating, data } = useSeasonUserData(selectedWeekId);
+  const { address, viewOnlyMode } = useUserAccount();
+
   return (
     <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg">
       <div className="flex flex-col gap-5">
@@ -267,13 +275,17 @@ const Competitions: React.FC<{
           }
         />
       </div>
-      {!isCurrentWeek && (
-        <BlueBtn
-          onClick={() => {}}
-          className="!w-fit h-fit px-[14px] py-[1px] mb-2"
-        >
-          Claim
-        </BlueBtn>
+      {address === undefined || viewOnlyMode ? (
+        <span></span>
+      ) : (
+        !isCurrentWeek && (
+          <BlueBtn
+            onClick={() => {}}
+            className="!w-fit h-fit px-[14px] py-[1px] mb-2"
+          >
+            Claim
+          </BlueBtn>
+        )
       )}
     </div>
   );
