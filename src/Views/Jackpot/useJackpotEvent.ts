@@ -28,7 +28,7 @@ const useJackpotEvent = () => {
       abi: JackootABI,
       eventName: 'JackpotTriggered',
       onLogs: (logs) => {
-        // console.log('jackpotdeb-triggered-1', logs, user?.address);
+        console.log('jackpotdeb-triggered-1', logs, user?.address);
         try {
           if (!user?.address) return;
           let logArgs = logs[0].args;
