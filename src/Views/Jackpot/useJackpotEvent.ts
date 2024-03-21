@@ -20,6 +20,7 @@ const useJackpotEvent = () => {
   const publicClient2 = usePublicClient();
   useEffect(() => {
     return () => {
+      console.log('recent jackpot cleanup');
       jackpotManager.jackpotAcknowledged();
     };
   }, []);
