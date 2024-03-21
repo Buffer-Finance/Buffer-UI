@@ -26,7 +26,6 @@ const JackpotBody: React.FC<{
   if (!trade?.market) return <div>Trade not found</div>;
   const token0 = trade?.market.token0;
   const token1 = trade?.market.token1;
-  console.log(`JackpotBody-trade: `, trade);
   return (
     <div className="flex flex-col">
       <div className="text-[#C3C2D4] w-[380px] b400:-translate-x-[4%]  h-[199px] b400:scale-[0.95] origin-center  ">
