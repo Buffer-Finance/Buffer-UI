@@ -430,7 +430,7 @@ function JackpotValueSeciont(props) {
             How it works
           </div>
         </button>
-        <div className="relative text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-[60px]">
+        <div className="relative text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-[30px]">
           Jackpot Value
         </div>
         <div className="flex justify-between w-full">
@@ -440,7 +440,7 @@ function JackpotValueSeciont(props) {
             {' ' + JackpotToken}
           </div>
         </div>
-        <div className="text-[#B1B6C6] mt-[44px] flex gap-1 font-[700] text-[12px]">
+        <div className="text-[#B1B6C6] mt-[25px] flex gap-1 font-[700] text-[12px]">
           Minimum Bet Size{' '}
           <div className="text-[#fff]">
             {minSize ? toFixed(minSize, 2) : '--'} ARB
@@ -534,23 +534,23 @@ function JackpotSummary(props) {
       ].join(' ')}
     >
       <Col
-        headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
+        headClass="text-[#B1B6C6] nowrap sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         className="br-jackpot"
-        descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
+        descClass="text-[#C3C2D4] nowrap sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'Eligible trades'}
         desc={data.eligible_trades_for_jackpot}
       />
       <Col
-        headClass="text-[#B1B6C6]  sm:text-[12px] sm:px-5 text-[14px] font-[500] px-6 "
+        headClass="text-[#B1B6C6] nowrap  sm:text-[12px] sm:px-5 text-[14px] font-[500] px-6 "
         className="br-jackpot"
-        descClass="text-[#C3C2D4] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
+        descClass="text-[#C3C2D4] nowrap sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'Jackpots Won'}
         desc={data.user_jackpots_won}
       />
       <Col
-        headClass="text-[#B1B6C6] sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
+        headClass="text-[#B1B6C6] nowrap sm:text-[12px] sm:px-5  text-[14px] font-[500] px-6 "
         head={'Winnings'}
-        descClass="text-green  sm:text-[12px] sm:px-5  text-[14px] font-bold px-6"
+        descClass="text-green nowrap sm:text-[12px] sm:px-5  text-[14px] font-bold px-6"
         desc={`${data.total_jackpot_amount} ARB`}
       />
     </DataWrapper>
