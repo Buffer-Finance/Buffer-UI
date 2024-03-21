@@ -8,13 +8,15 @@ import { BlueBtn } from '@Views/Common/V2-Button';
 import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import CompetitionRewardABI from '../Abis/CompetitionReward.json';
 import RebatesABI from '../Abis/Rebates.json';
+import { useCompetitionRewardsAlloted } from '../Hooks/useCompetitionRewardsAlloted';
+import { useCompetitionRewardsClaimed } from '../Hooks/useCompetitionRewardsClaimed';
 import { useRebatesAlloted } from '../Hooks/useRebatesAlloted';
 import { useRebatesClaimed } from '../Hooks/useRebatesClaimed';
 import { useSeasonUserData } from '../Hooks/useSeasonUserData';
-import { rebatesAddress } from '../config';
-
+import { competitionRewardAddress, rebatesAddress } from '../config';
 export const UserRewards: React.FC<{
   selectedWeekId: number;
   currentWeekId: number;
@@ -50,7 +52,11 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
   selectedWeekId,
 }) => {
   const { isValidating, data } = useSeasonUserData(selectedWeekId);
-  const { data: allotedRebates, mutate } = useRebatesAlloted();
+  const {
+    data: allotedRebates,
+    mutate,
+    isValidating: isAllotedRebatesLoading,
+  } = useRebatesAlloted();
   const selectedWeekRebate = allotedRebates?.[selectedWeekId]?.[0];
   const { address, viewOnlyMode } = useUserAccount();
 
@@ -70,6 +76,11 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
           data={
             isCurrentWeek ? (
               <span className="text-f22">Calculating...</span>
+            ) : isAllotedRebatesLoading ? (
+              <Skeleton
+                variant="rectangular"
+                className="w-[80px] !h-7 lc mr-auto"
+              />
             ) : (
               <Display
                 data={toFixed(
@@ -259,7 +270,20 @@ const Competitions: React.FC<{
 }> = ({ isCurrentWeek, selectedWeekId }) => {
   const { isValidating, data } = useSeasonUserData(selectedWeekId);
   const { address, viewOnlyMode } = useUserAccount();
+  const {
+    isValidating: isRewardsAllotedLoading,
+    data: rewardsAlloted,
+    mutate,
+  } = useCompetitionRewardsAlloted();
 
+  const selectedWeekAlloted = useMemo(() => {
+    if (rewardsAlloted === undefined) {
+      return undefined;
+    }
+    return rewardsAlloted.find((r) => r.weekId == selectedWeekId);
+  }, [rewardsAlloted, selectedWeekId]);
+
+  const selectedWeekAllotedAMount = selectedWeekAlloted?.amount;
   return (
     <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg">
       <div className="flex flex-col gap-5">
@@ -271,7 +295,23 @@ const Competitions: React.FC<{
         <Column
           head="Competition Rewards"
           data={
-            <Display data={234234} unit={'ARB'} className="inline text-f22" />
+            isCurrentWeek ? (
+              <span className="text-f22">Calculating...</span>
+            ) : isValidating ? (
+              <Skeleton
+                variant="rectangular"
+                className="w-[80px] !h-7 lc mr-auto"
+              />
+            ) : (
+              <Display
+                data={toFixed(
+                  divide(selectedWeekAllotedAMount ?? '0', 18) as string,
+                  2
+                )}
+                unit={'ARB'}
+                className="inline text-f22"
+              />
+            )
           }
         />
       </div>
@@ -279,15 +319,128 @@ const Competitions: React.FC<{
         <span></span>
       ) : (
         !isCurrentWeek && (
-          <BlueBtn
-            onClick={() => {}}
-            className="!w-fit h-fit px-[14px] py-[1px] mb-2"
-          >
-            Claim
-          </BlueBtn>
+          <CompetitionRewardsButton
+            allotedRewards={selectedWeekAlloted}
+            mutate={mutate}
+            selectedWeekRebate={selectedWeekAllotedAMount}
+          />
         )
       )}
     </div>
+  );
+};
+
+const CompetitionRewardsButton: React.FC<{
+  selectedWeekRebate: string | undefined;
+  mutate: () => void;
+  allotedRewards:
+    | {
+        id: number;
+        weekId: number;
+        address: string;
+        contract: string;
+        token: string;
+        amount: string;
+        reward_id: string;
+        signature: string;
+        note: string;
+        created_at: string;
+        updated_at: string;
+      }
+    | undefined;
+}> = ({ allotedRewards, selectedWeekRebate, mutate }) => {
+  const { data: claimedRewards } = useCompetitionRewardsClaimed();
+  if (allotedRewards === undefined || claimedRewards === undefined) {
+    return (
+      <Skeleton variant="rectangular" className="w-[80px] !h-7 lc ml-auto" />
+    );
+  }
+  if (selectedWeekRebate === undefined) {
+    return <span></span>;
+  }
+  if (selectedWeekRebate === '0') {
+    return <span></span>;
+  }
+  if (claimedRewards.some((r) => r.reward_id === allotedRewards.reward_id)) {
+    return (
+      <BlueBtn
+        onClick={() => {}}
+        isDisabled
+        className="!w-fit h-fit px-[14px] py-[1px] mb-2 min-h-[26px]"
+      >
+        Claimed
+      </BlueBtn>
+    );
+  }
+  return (
+    <ClaimCompetitionReward mutate={mutate} allotedRewards={allotedRewards} />
+  );
+};
+
+const ClaimCompetitionReward: React.FC<{
+  mutate: () => void;
+  allotedRewards: {
+    id: number;
+    weekId: number;
+    address: string;
+    contract: string;
+    token: string;
+    amount: string;
+    reward_id: string;
+    signature: string;
+    note: string;
+    created_at: string;
+    updated_at: string;
+  };
+}> = ({ mutate, allotedRewards }) => {
+  const { writeCall } = useWriteCall(
+    competitionRewardAddress,
+    CompetitionRewardABI
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const toastify = useToast();
+
+  console.log(allotedRewards, competitionRewardAddress, 'allotedRewards');
+  return (
+    <BlueBtn
+      isLoading={isLoading}
+      isDisabled={isLoading}
+      onClick={async () => {
+        try {
+          setIsLoading(true);
+          await writeCall(
+            (p) => {
+              console.log(p);
+            },
+            'claimMultiple',
+            [
+              [
+                allotedRewards.address,
+                allotedRewards.contract,
+                allotedRewards.amount,
+                allotedRewards.reward_id,
+                allotedRewards.updated_at,
+                allotedRewards.signature,
+              ],
+            ]
+          );
+          //call after 5seconds
+          setTimeout(() => {
+            mutate();
+          }, 5000);
+          setIsLoading(false);
+        } catch (e) {
+          toastify({
+            type: (e as Error).message,
+            msg: 'Error while claiming rebate',
+            id: 'rebate-claim-error',
+          });
+        }
+      }}
+      className="!w-fit h-fit px-[14px] py-[1px] mb-2 !min-h-[26px]"
+    >
+      Claim
+    </BlueBtn>
   );
 };
 
