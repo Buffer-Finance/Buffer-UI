@@ -158,16 +158,9 @@ const Season: React.FC<{
   );
   const isFutureSeason = selectedSeasonId > liveSeasonId;
   const { data: rebatesAlloted } = useRebatesAlloted();
-  const {
-    data: competitionRewardsAlloted,
-    isValidating: isCompetitionRewardsLaoding,
-  } = useCompetitionRewardsAlloted();
-  const { data: rebatesClaimed, isValidating: isRebateClaimedLoading } =
-    useRebatesClaimed();
-  const {
-    data: competitionRewardsClaimed,
-    isValidating: isCompetitionRewardsClaimedLoading,
-  } = useCompetitionRewardsClaimed();
+  const { data: competitionRewardsAlloted } = useCompetitionRewardsAlloted();
+  const { data: rebatesClaimed } = useRebatesClaimed();
+  const { data: competitionRewardsClaimed } = useCompetitionRewardsClaimed();
   const weekId = startWeekId + seasonNum - 1;
   const currentWeekId = getWeekId(0);
 
@@ -235,9 +228,9 @@ const Season: React.FC<{
 
   const isLoading =
     rebatesAlloted === undefined ||
-    isCompetitionRewardsLaoding ||
-    isRebateClaimedLoading ||
-    isCompetitionRewardsClaimedLoading;
+    competitionRewardsClaimed === undefined ||
+    rebatesClaimed === undefined ||
+    competitionRewardsAlloted === undefined;
 
   return (
     <button
@@ -268,10 +261,10 @@ const Season: React.FC<{
           >
             Ongoing
           </span>
-        ) : isLoading ? (
+        ) : isLoading || !isLoading ? (
           <Skeleton
             variant="rectangular"
-            className="w-[30px] !h-5 lc mr-auto"
+            className={`w-[30px] !h-5 ${isSelected ? 'bg-grey' : 'lc'} mr-auto`}
           />
         ) : (
           <div

@@ -23,8 +23,7 @@ export const Summary = () => {
 };
 
 const TradingRewards: React.FC = () => {
-  const { data: claimedData, isValidating: isLoadingClaimed } =
-    useRebatesClaimed();
+  const { data: claimedData } = useRebatesClaimed();
   const { data: allotedRebates } = useRebatesAlloted();
 
   const totalAlloted = useMemo(() => {
@@ -49,10 +48,10 @@ const TradingRewards: React.FC = () => {
         <Column
           head="Rebates Claimed"
           data={
-            isLoadingClaimed ? (
+            claimedData === undefined ? (
               <Skeleton
                 variant="rectangular"
-                className="w-[80px] !h-5 lc mr-auto"
+                className="w-[80px] !h-7 lc mr-auto"
               />
             ) : (
               <Display
@@ -83,11 +82,8 @@ const TradingRewards: React.FC = () => {
 };
 
 const ComeptitionRewards: React.FC = () => {
-  const { data, isValidating } = useCompetitionRewardsClaimed();
-  const {
-    data: competitionRewardsAlloted,
-    isValidating: isCompetitionRewardsLaoding,
-  } = useCompetitionRewardsAlloted();
+  const { data } = useCompetitionRewardsClaimed();
+  const { data: competitionRewardsAlloted } = useCompetitionRewardsAlloted();
 
   const totalClaimed = useMemo(() => {
     if (!data) return '0';
@@ -111,10 +107,10 @@ const ComeptitionRewards: React.FC = () => {
         <Column
           head="Rebates Claimed"
           data={
-            isValidating ? (
+            data === undefined ? (
               <Skeleton
                 variant="rectangular"
-                className="w-[80px] !h-5 lc mr-auto"
+                className="w-[80px] !h-7 lc mr-auto"
               />
             ) : (
               <Display
@@ -129,10 +125,10 @@ const ComeptitionRewards: React.FC = () => {
         <Column
           head="Rebates Unclaimed"
           data={
-            isCompetitionRewardsLaoding || isValidating ? (
+            competitionRewardsAlloted === undefined || data === undefined ? (
               <Skeleton
                 variant="rectangular"
-                className="w-[80px] !h-5 lc mr-auto"
+                className="w-[80px] !h-7 lc mr-auto"
               />
             ) : (
               <Display
@@ -140,7 +136,7 @@ const ComeptitionRewards: React.FC = () => {
                   divide(subtract(totalAlloted, totalClaimed), 18) as string,
                   2
                 )}
-                label={'$'}
+                unit={'ARB'}
                 className="text-[#FFFFFF] text-f22 font-medium !text-start"
               />
             )

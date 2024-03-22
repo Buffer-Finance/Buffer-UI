@@ -35,16 +35,18 @@ export const UserRewards: React.FC<{
           Not Started Yet.
         </div>
       ) : (
-        <div className="flex gap-5 items-start sm:flex-col">
-          <Rebates
-            isCurrentWeek={selectedWeekId == currentWeekId}
-            selectedWeekId={selectedWeekId}
-          />
-          <Competitions
-            isCurrentWeek={selectedWeekId == currentWeekId}
-            selectedWeekId={selectedWeekId}
-          />
-        </div>
+        <ConnectionRequired className="max-w-[200px]">
+          <div className="flex gap-5 items-start sm:flex-col">
+            <Rebates
+              isCurrentWeek={selectedWeekId == currentWeekId}
+              selectedWeekId={selectedWeekId}
+            />
+            <Competitions
+              isCurrentWeek={selectedWeekId == currentWeekId}
+              selectedWeekId={selectedWeekId}
+            />
+          </div>
+        </ConnectionRequired>
       )}
     </div>
   );
@@ -55,11 +57,7 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
   selectedWeekId,
 }) => {
   const { isValidating, data } = useSeasonUserData(selectedWeekId);
-  const {
-    data: allotedRebates,
-    mutate,
-    isValidating: isAllotedRebatesLoading,
-  } = useRebatesAlloted();
+  const { data: allotedRebates } = useRebatesAlloted();
   const selectedWeekRebate = allotedRebates?.[selectedWeekId]?.[0];
   const { address, viewOnlyMode } = useUserAccount();
 
@@ -106,7 +104,6 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
               allotedRebates={allotedRebates}
               selectedWeekRebate={selectedWeekRebate}
               selectedWeekId={selectedWeekId}
-              mutate={mutate}
             />
           </ConnectionRequired>
         )
@@ -119,8 +116,7 @@ const RebateButton: React.FC<{
   allotedRebates: { [weekId: string]: string } | undefined;
   selectedWeekRebate: string | undefined;
   selectedWeekId: number;
-  mutate: () => void;
-}> = ({ allotedRebates, selectedWeekRebate, selectedWeekId, mutate }) => {
+}> = ({ allotedRebates, selectedWeekRebate, selectedWeekId }) => {
   const { data: claimedRebates } = useRebatesClaimed();
   if (allotedRebates === undefined || claimedRebates === undefined) {
     return (
@@ -145,12 +141,11 @@ const RebateButton: React.FC<{
     );
   }
 
-  return <ClaimRebate selectedWeekId={selectedWeekId} mutate={mutate} />;
+  return <ClaimRebate selectedWeekId={selectedWeekId} />;
 };
 
-const ClaimRebate: React.FC<{ selectedWeekId: number; mutate: () => void }> = ({
+const ClaimRebate: React.FC<{ selectedWeekId: number }> = ({
   selectedWeekId,
-  mutate,
 }) => {
   const { writeCall } = useWriteCall(rebatesAddress, RebatesABI);
   const [isLoading, setIsLoading] = useState(false);
@@ -169,17 +164,14 @@ const ClaimRebate: React.FC<{ selectedWeekId: number; mutate: () => void }> = ({
             'claimRebate',
             [selectedWeekId]
           );
-          //call after 5seconds
-          setTimeout(() => {
-            mutate();
-          }, 5000);
-          setIsLoading(false);
         } catch (e) {
           toastify({
             type: (e as Error).message,
             msg: 'Error while claiming rebate',
             id: 'rebate-claim-error',
           });
+        } finally {
+          setIsLoading(false);
         }
       }}
       className="!w-fit h-fit px-[14px] py-[1px] mb-2 !min-h-[26px]"
@@ -273,11 +265,7 @@ const Competitions: React.FC<{
 }> = ({ isCurrentWeek, selectedWeekId }) => {
   const { isValidating, data } = useSeasonUserData(selectedWeekId);
   const { address, viewOnlyMode } = useUserAccount();
-  const {
-    isValidating: isRewardsAllotedLoading,
-    data: rewardsAlloted,
-    mutate,
-  } = useCompetitionRewardsAlloted();
+  const { data: rewardsAlloted } = useCompetitionRewardsAlloted();
 
   const selectedWeekAlloted = useMemo(() => {
     if (rewardsAlloted === undefined) {
@@ -327,7 +315,6 @@ const Competitions: React.FC<{
         !isCurrentWeek && (
           <CompetitionRewardsButton
             allotedRewards={selectedWeekAlloted}
-            mutate={mutate}
             selectedWeekRebate={selectedWeekAllotedAMount}
           />
         )
@@ -338,7 +325,6 @@ const Competitions: React.FC<{
 
 const CompetitionRewardsButton: React.FC<{
   selectedWeekRebate: string | undefined;
-  mutate: () => void;
   allotedRewards:
     | {
         id: number;
@@ -355,7 +341,7 @@ const CompetitionRewardsButton: React.FC<{
         time_threshold: number;
       }
     | undefined;
-}> = ({ allotedRewards, selectedWeekRebate, mutate }) => {
+}> = ({ allotedRewards, selectedWeekRebate }) => {
   const { data: claimedRewards } = useCompetitionRewardsClaimed();
   if (allotedRewards === undefined || claimedRewards === undefined) {
     return (
@@ -379,13 +365,10 @@ const CompetitionRewardsButton: React.FC<{
       </BlueBtn>
     );
   }
-  return (
-    <ClaimCompetitionReward mutate={mutate} allotedRewards={allotedRewards} />
-  );
+  return <ClaimCompetitionReward allotedRewards={allotedRewards} />;
 };
 
 const ClaimCompetitionReward: React.FC<{
-  mutate: () => void;
   allotedRewards: {
     id: number;
     weekId: number;
@@ -400,7 +383,7 @@ const ClaimCompetitionReward: React.FC<{
     updated_at: string;
     time_threshold: number;
   };
-}> = ({ mutate, allotedRewards }) => {
+}> = ({ allotedRewards }) => {
   const { writeCall } = useWriteCall(
     competitionRewardAddress,
     CompetitionRewardABI
@@ -429,10 +412,7 @@ const ClaimCompetitionReward: React.FC<{
             'claimMultiple',
             [[params]]
           );
-          //call after 5seconds
-          setTimeout(() => {
-            mutate();
-          }, 5000);
+
           setIsLoading(false);
         } catch (e) {
           toastify({

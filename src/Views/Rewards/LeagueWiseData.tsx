@@ -7,9 +7,11 @@ import { UserRewards } from './Components/UserRewards';
 import { startWeekId } from './config';
 
 export const LeagueWiseData = () => {
-  const [selectedWeekId, setSelectedWeekId] = useState(getWeekId(0));
-  const selectedSeason = selectedWeekId - startWeekId + 1;
   const currentWeekId = getWeekId(0);
+  const defaultSelectedId =
+    currentWeekId === startWeekId ? startWeekId : getWeekId(0) - 1;
+  const [selectedWeekId, setSelectedWeekId] = useState(defaultSelectedId);
+  const selectedSeason = selectedWeekId - startWeekId + 1;
   const setSelectedSeason = (season: number) => {
     setSelectedWeekId(season + startWeekId - 1);
   };
