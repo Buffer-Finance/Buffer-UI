@@ -268,7 +268,7 @@ const Approve: React.FC<{
       isLoading={loading !== null}
       isDisabled={loading !== null}
     >
-      Approveee
+      Approve
     </BlueBtn>
   );
 };
