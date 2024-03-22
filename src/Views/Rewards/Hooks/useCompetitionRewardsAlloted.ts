@@ -19,6 +19,7 @@ export const useCompetitionRewardsAlloted = () => {
       note: string;
       created_at: string;
       updated_at: string;
+      time_threshold: number;
     }[]
   >(`user-competition-rewards-alloted-${address}`, {
     fetcher: async () => {

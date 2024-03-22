@@ -352,6 +352,7 @@ const CompetitionRewardsButton: React.FC<{
         note: string;
         created_at: string;
         updated_at: string;
+        time_threshold: number;
       }
     | undefined;
 }> = ({ allotedRewards, selectedWeekRebate, mutate }) => {
@@ -397,6 +398,7 @@ const ClaimCompetitionReward: React.FC<{
     note: string;
     created_at: string;
     updated_at: string;
+    time_threshold: number;
   };
 }> = ({ mutate, allotedRewards }) => {
   const { writeCall } = useWriteCall(
@@ -405,7 +407,14 @@ const ClaimCompetitionReward: React.FC<{
   );
   const [isLoading, setIsLoading] = useState(false);
   const toastify = useToast();
-
+  const params = [
+    allotedRewards.address,
+    allotedRewards.token,
+    allotedRewards.amount,
+    allotedRewards.reward_id,
+    allotedRewards.time_threshold,
+    allotedRewards.signature,
+  ];
   return (
     <BlueBtn
       isLoading={isLoading}
@@ -413,21 +422,12 @@ const ClaimCompetitionReward: React.FC<{
       onClick={async () => {
         try {
           setIsLoading(true);
-          const params = [
-            allotedRewards.address,
-            allotedRewards.contract,
-            allotedRewards.amount,
-            allotedRewards.reward_id,
-            allotedRewards.updated_at,
-            allotedRewards.signature,
-          ];
-          console.log(params);
           await writeCall(
             (p) => {
               console.log(p);
             },
             'claimMultiple',
-            [params]
+            [[params]]
           );
           //call after 5seconds
           setTimeout(() => {
