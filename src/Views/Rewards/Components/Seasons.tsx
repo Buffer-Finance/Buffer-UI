@@ -261,7 +261,7 @@ const Season: React.FC<{
           >
             Ongoing
           </span>
-        ) : isLoading || !isLoading ? (
+        ) : isLoading ? (
           <Skeleton
             variant="rectangular"
             className={`w-[30px] !h-5 ${isSelected ? 'bg-grey' : 'lc'} mr-auto`}
