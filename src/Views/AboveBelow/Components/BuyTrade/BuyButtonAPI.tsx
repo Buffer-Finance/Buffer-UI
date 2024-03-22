@@ -49,6 +49,7 @@ import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
 import { getSlippageError } from '@Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
 import { getAddress } from 'viem';
+import { solidityKeccak256 } from 'ethers/lib/utils';
 
 export const BuyButton = () => {
   const { viewOnlyMode } = useUserAccount();
@@ -290,9 +291,12 @@ const Buy: React.FC<{
   const { data: ivs } = useIV();
   const token = activeMarket.poolInfo.token.toUpperCase();
   const decimals = activeMarket.poolInfo.decimals;
+  const readCallData = useAtomValue(readCallDataAtom);
+
+  const maxPermissibleContracts = readCallData?.maxPermissibleContracts;
 
   const selectedPrice = useAtomValue(selectedPriceAtom);
-  const readCallData = useAtomValue(readCallDataAtom);
+
   // const { data: maxTrades } = useMaxTrade({
   //   activeMarket,
   //   expiry: selectedTimestamp,
@@ -386,14 +390,35 @@ const Buy: React.FC<{
       //   divide(maxPermissibleContracts as string, decimals) as string,
       //   totalFee.toString()
       // );
+      const marketHash = solidityKeccak256(
+        ['uint256', 'uint256'],
+        [toFixed(multiply(price.toString(), 8), 0), expiration]
+      );
+      const maxTradeSize =
+        maxPermissibleContracts &&
+        maxPermissibleContracts[
+          `${getAddress(activeMarket?.address)}${marketHash}${priceObj.isAbove}`
+        ]
+          ? toFixed(
+              divide(
+                maxPermissibleContracts[
+                  `${getAddress(activeMarket?.address)}${marketHash}${
+                    priceObj.isAbove
+                  }`
+                ].maxPermissibleContracts,
+                activeMarket?.poolInfo.decimals
+              ),
+              2
+            ) * totalFee
+          : undefined;
 
-      // const tradeSizeError = getTradeSizeError(
-      //   // toFixed(totalFee.toString(), 2),
-      //   maxTradeSize,
-      //   balance,
-      //   amount
-      // );
-      // if (!!tradeSizeError) throw new Error(tradeSizeError);
+      const tradeSizeError = getTradeSizeError(
+        // toFixed(totalFee.toString(), 2),
+        maxTradeSize,
+        balance,
+        amount
+      );
+      if (!!tradeSizeError) throw new Error(tradeSizeError);
       const platformFeeError = getPlatformError({
         platfromFee: divide(
           activeMarket.config.platformFee,
