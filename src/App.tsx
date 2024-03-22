@@ -47,6 +47,7 @@ import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { Jackpot } from '@Views/Jackpot';
 import { JackpotChip } from '@Views/Jackpot/JackpotChip';
+import { AboveBelow } from '@Views/AboveBelow';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -115,6 +116,7 @@ const AppRoutes = () => {
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/ab/:market" element={<AboveBelow />} />
         <Route path="/history" element={<TradeLog_sm />} />
         <Route path="/admin" element={<AdminConfig />} />
 
@@ -262,6 +264,7 @@ function App() {
   );
 }
 
+const AB = () => <div>AB Component</div>;
 export default App;
 
 const ViewOnlyModeTradePageWarning = () => {

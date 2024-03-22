@@ -7,6 +7,9 @@ export const isSandbox =
 export const appConfig = {
   '421614': {
     graph: {
+      ABOVE_BELOW:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
+
       MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.0.9-add-contractRegistry/api`,
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
@@ -17,6 +20,7 @@ export const appConfig = {
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
     v2_router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
     jackpot: '0xe8032a26fEA73a5691ebb88faAa09211fAFC5F6d',
+    above_below_router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
 
     poolsInfo: {
       '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
@@ -85,6 +89,8 @@ export const appConfig = {
       MAIN: `https://subgraph.satsuma-prod.com/${
         import.meta.env.VITE_SATSUMA_KEY
       }/bufferfinance/v2.5-arbitrum-mainnet/api`,
+      ABOVE_BELOW:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.4-ab-only-fix-market-id/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
@@ -94,6 +100,7 @@ export const appConfig = {
     config_setter: '0x6CC8B6fa38339E6Bcaaf62F9EAaFf81619830E46',
     v2_router: '0x0e0A1241C9cE6649d5D30134a194BA3E24130305',
     jackpot: '0xe8032a26fEA73a5691ebb88faAa09211fAFC5F6d',
+    above_below_router: '0x256b403E6973737DfdafbFAcEB2A2f4065265981',
 
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
@@ -603,3 +610,8 @@ export const baseUrl = import.meta.env[baseURLString];
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
 
 export const JackpotAdds = appConfig[isTestnet ? '421614' : '42161'].jackpot;
+export const MAX_APPROVAL_VALUE =
+  '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+
+export const ABBaseURL =
+  'https://instant-trading-backend-production-84c6.up.railway.app/';
