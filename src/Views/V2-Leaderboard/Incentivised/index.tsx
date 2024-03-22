@@ -2,7 +2,7 @@ import useStopWatch, { useTimer } from '@Hooks/Utilities/useStopWatch';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import FrontArrow from '@SVG/frontArrow';
 import { getDisplayDateUTC } from '@Utils/Dates/displayDateTime';
-import { gt, subtract } from '@Utils/NumString/stringArithmatics';
+import { gt } from '@Utils/NumString/stringArithmatics';
 import { getDistance } from '@Utils/Staking/utils';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { Warning } from '@Views/Common/Notification/warning';
@@ -175,8 +175,8 @@ export const Incentivised = () => {
             head={'Trades'}
             desc={
               <TotalTrades
-                dayId={getDayId(Number(day - Number(offset ?? day)))}
-                graphUrl={config.graph.MAIN}
+                dayId={getDayId(Number(offset ?? '0'))}
+                graphUrl={config.graph.LEADERBOARD}
               />
             }
             descClass={descClass}
@@ -187,8 +187,8 @@ export const Incentivised = () => {
             head={'Volume'}
             desc={
               <TotalVolume
-                dayId={getDayId(Number(day - Number(offset ?? day)))}
-                graphUrl={config.graph.MAIN}
+                dayId={getDayId(Number(offset ?? '0'))}
+                graphUrl={config.graph.LEADERBOARD}
               />
             }
             descClass={descClass}
@@ -197,7 +197,12 @@ export const Incentivised = () => {
           />
           <Col
             head={'Participants'}
-            desc={<Participants data={data} />}
+            desc={
+              <Participants
+                dayId={getDayId(Number(offset ?? '0'))}
+                graphUrl={config.graph.LEADERBOARD}
+              />
+            }
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
@@ -217,7 +222,7 @@ export const Incentivised = () => {
           />
           <Col
             head={'Your League'}
-            desc={<League weekId={0} graphUrl={config.graph.MAIN} />}
+            desc={<League weekId={0} graphUrl={config.graph.LEADERBOARD} />}
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
@@ -257,7 +262,6 @@ export const Incentivised = () => {
             <DailyWebTable
               winners={data?.winners}
               loosers={data?.loosers}
-              total_count={totalCount}
               count={1}
               activePage={1}
               onpageChange={setActivePageNumber}
@@ -265,7 +269,7 @@ export const Incentivised = () => {
               skip={0}
               nftWinners={configValue.winnersNFT}
               userRank={'0'}
-              offSet={offset ? subtract(day.toString(), offset) : '0'}
+              offSet={offset ?? '0'}
               // isDailyTable
             />
           </div>

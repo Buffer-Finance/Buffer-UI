@@ -37,7 +37,7 @@ export const BarData: React.FC<{
   graphUrl,
   weekId,
 }) => {
-  console.log(weekId, getWeekId(0), 'weekId');
+  console.log(weekId, offset, week, getWeekId(0), 'weekId');
   const { address: account } = useUserAccount();
   const { data, error, isValidating } = useWinnersByPnlWeekly({
     activeChainId,

@@ -3,7 +3,7 @@ import { ILeaderboardQuery } from '@Views/V2-Leaderboard/Incentivised/useDailyLe
 import axios from 'axios';
 import useSWR from 'swr';
 import { leagueType } from '../atom';
-import { getWeekId } from './getWeekId';
+import { getLeaderboardWeekId } from './getWeekId';
 
 export const useWinnersByPnlWeekly = ({
   league,
@@ -23,7 +23,7 @@ export const useWinnersByPnlWeekly = ({
     {
       fetcher: async () => {
         try {
-          const weekId = getWeekId(Number(week - Number(offset ?? week)));
+          const weekId = getLeaderboardWeekId(Number(offset ?? '0'));
 
           const { data } = await axios.get(
             baseLeaderboardURLString + 'rank/weekly_leaderboard',

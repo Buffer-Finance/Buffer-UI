@@ -12,7 +12,7 @@ import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
 import { getTournamentEndDateFromWeek } from '../Incentivised';
 import { WinnersByPnl } from './WinnersByPnl';
-import { getWeekId } from './WinnersByPnl/getWeekId';
+import { getLeaderboardWeekId } from './WinnersByPnl/getWeekId';
 import { leagueType } from './atom';
 import {
   bronzeTournamentConfig,
@@ -25,7 +25,6 @@ import {
 import { useLeagueNFTusers } from './useLeagueNFTusers';
 
 function getConfig(league: string, activeChainId: number) {
-  console.log(league, activeChainId);
   switch (league) {
     case 'gold':
       return goldTournamentConfig[activeChainId];
@@ -120,14 +119,16 @@ export const Leagues = () => {
                       Data={
                         <>
                           <BarData
-                            week={week - 1}
+                            week={week}
                             resetTimestamp={nextTimeStamp}
                             offset={offset}
                             setOffset={setOffset}
                             activeChainId={activeChain.id}
                             league={league}
                             graphUrl={config.graph.LEADERBOARD}
-                            weekId={getWeekId(parseInt(offset ?? '0'))}
+                            weekId={getLeaderboardWeekId(
+                              parseInt(offset ?? '0')
+                            )}
                           />
                           <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
                             <WinnersByPnl

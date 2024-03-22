@@ -57,7 +57,6 @@ function accessElement(totalRanks, currentRank) {
 export const DailyWebTable: React.FC<{
   winners: IWeeklyLeague[] | undefined;
   loosers: IWeeklyLeague[] | undefined;
-  total_count: number;
   count: number;
   skip: number;
   onpageChange: (page: number) => void;
@@ -82,7 +81,6 @@ export const DailyWebTable: React.FC<{
   isDailyTable = false,
   offSet,
   loosers,
-  total_count,
   isWeekly,
 }) => {
   const { address: account } = useUserAccount();
@@ -145,11 +143,9 @@ export const DailyWebTable: React.FC<{
     if (!winners || !loosers) return <></>;
     const total = winners.concat(loosers);
     let currentStanding: IWeeklyLeague = total[row];
-    console.log('currentStanding', total, currentStanding);
     if (user) {
       currentStanding = user;
     }
-    console.log(total_count, 'total_count');
     const isUser = !!user;
     const rank = row + 1;
     switch (col) {

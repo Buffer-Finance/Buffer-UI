@@ -9,6 +9,10 @@ export function getWeekId(offset: number): number {
   return dayTimestamp;
 }
 
+export function getLeaderboardWeekId(offSet: number): number {
+  return getWeekId(offSet + 1);
+}
+
 export function getTimestampFromWeekId(weekId: number) {
   // Calculate the timestamp
   let timestamp = weekId * 7 * 86400 + 6 * 86400 + 16 * 3600;

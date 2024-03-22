@@ -4,9 +4,8 @@ import useSWR from 'swr';
 import { IWeeklyLeague } from '../interfaces';
 
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { subtract } from '@Utils/NumString/stringArithmatics';
 import { baseLeaderboardURLString } from '@Views/TradePage/config';
-import { useDayOfTournament } from '../Hooks/useDayOfTournament';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { useDayOffset } from '../Hooks/useDayOffset';
 
 export interface ILeaderboardQuery {
@@ -17,12 +16,12 @@ export interface ILeaderboardQuery {
 }
 
 const fetchFromGraph = async (
-  day: number,
+  graphUrl: string,
   offset: string | null,
   league: string,
   account: string | undefined
 ) => {
-  const timestamp = getDayId(Number(day - Number(offset ?? day)));
+  const timestamp = getDayId(Number(offset ?? '0'));
 
   const leaderboardQuery = `
       winners: dailyLeaderboards(
@@ -125,14 +124,9 @@ const fetchFromGraph = async (
     : '';
 
   const query = `{${leaderboardQuery}}`;
-  const response = await axios.post(
-    `https://subgraph.satsuma-prod.com/${
-      import.meta.env.VITE_SATSUMA_KEY
-    }/bufferfinance/jackpot/version/v3.0.0-leaderboard-tracking-fix-participents/api`,
-    {
-      query,
-    }
-  );
+  const response = await axios.post(graphUrl, {
+    query,
+  });
 
   return response.data?.data as ILeaderboardQuery;
 };
@@ -143,7 +137,6 @@ export function getDayId(offset: number): number {
     timestamp = timestamp - offset * 86400;
   }
   let dayTimestamp = Math.floor((timestamp - 16 * 3600) / 86400);
-  console.log('dayTimestamp', dayTimestamp, offset);
   return dayTimestamp;
 }
 
@@ -151,32 +144,26 @@ export const useDailyLeaderboardData = (league: string) => {
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
   const { activeChain } = useActiveChain();
-  const { day } = useDayOfTournament();
+  const config = getConfig(activeChain.id);
 
   const { data } = useSWR<ILeaderboardQuery>(
     `leaderboard-arbi-offset-${offset}-account-${account}-daily-chainId-${activeChain.id}-league-${league}`,
     {
       fetcher: async () => {
-        console.log(
-          offset,
-          day,
-          subtract(day.toString(), offset || '0'),
-          'offset'
-        );
-        if (
-          offset === null ||
-          (offset && subtract(day.toString(), offset) === '0')
-        ) {
-          console.log('graph');
-          return fetchFromGraph(day, offset, league, account);
+        if (offset === null || (offset && offset === '0')) {
+          return fetchFromGraph(
+            config.graph.LEADERBOARD,
+            offset,
+            league,
+            account
+          );
         } else {
-          console.log('api');
           try {
             const { data } = await axios.get(
               baseLeaderboardURLString + 'rank/daily_leaderboard',
               {
                 params: {
-                  dayId: getDayId(Number(day - Number(offset ?? day))),
+                  dayId: getDayId(Number(offset ?? '0')),
                   league: league,
                 },
               }
