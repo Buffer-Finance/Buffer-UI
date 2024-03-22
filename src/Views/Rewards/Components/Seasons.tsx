@@ -1,5 +1,8 @@
 import { add, divide, toFixed } from '@Utils/NumString/stringArithmatics';
-import { getWeekId } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId';
+import {
+  getTimestampFromWeekId,
+  getWeekId,
+} from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId';
 import styled from '@emotion/styled';
 import Timeline from '@mui/lab/Timeline';
 import TimelineConnector from '@mui/lab/TimelineConnector';
@@ -21,7 +24,7 @@ export const Seasons: React.FC<{
 }> = ({ selectedSeason, setSelectedSeason }) => {
   return (
     <div className="w-[325px] bg-[#141823] rounded-md sm:w-full">
-      <div className="text-f20 font-medium text-[#F7F7F7] m-auto w-fit mt-5 mb-3">
+      <div className="text-f20 font-medium text-[#F7F7F7] m-auto w-fit pt-5 mb-3">
         All Seasons
       </div>
       <TimeLine
@@ -148,6 +151,12 @@ const Season: React.FC<{
   onClick: (newSeason: number) => void;
   isSelected: boolean;
 }> = ({ seasonNum, onClick, isSelected }) => {
+  const liveSeasonId = getWeekId(0);
+  const selectedSeasonId = startWeekId + seasonNum - 1;
+  const selectedWeekStartDate = new Date(
+    getTimestampFromWeekId(selectedSeasonId) * 1000
+  );
+  const isFutureSeason = selectedSeasonId > liveSeasonId;
   const { data: rebatesAlloted } = useRebatesAlloted();
   const {
     data: competitionRewardsAlloted,
@@ -234,25 +243,31 @@ const Season: React.FC<{
     <button
       className={`px-[9px] pt-[4px] pb-[7px] ${
         isSelected ? 'bg-[#3772FF] scale-110' : 'bg-[#2C2C41]'
-      } rounded-md flex items-end justify-between w-full min-h-[48px]`}
+      } rounded-md flex items-end justify-between w-full min-h-[48px] ${
+        isFutureSeason ? 'opacity-30' : ''
+      }`}
       onClick={handleSeasonCLick}
     >
       <div className="self-start">
         <div
-          className={`text-f12 font-medium ${
+          className={`text-f12 font-medium text-left  ${
             isSelected ? 'text-[#ffffff]' : 'text-[#C3C2D4]'
           }`}
         >
           Season {seasonNum}
         </div>
         {currentWeekId < weekId ? (
-          <span></span>
+          <span className="text-f12 text-[#ffffff]">
+            {selectedWeekStartDate.toLocaleDateString()}
+          </span>
         ) : currentWeekId == weekId ? (
           <span
-            className={`text-f16 font-medium ${
+            className={`text-f14 font-medium ${
               isSelected ? 'text-[#ffffff]' : 'text-[#EBEBEB]'
             } text-left leading-[16px]`}
-          ></span>
+          >
+            Ongoing
+          </span>
         ) : isLoading ? (
           <Skeleton
             variant="rectangular"
