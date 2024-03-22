@@ -1,4 +1,4 @@
-import { divide, toFixed } from '@Utils/NumString/stringArithmatics';
+import { add, divide, toFixed } from '@Utils/NumString/stringArithmatics';
 import { getWeekId } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId';
 import styled from '@emotion/styled';
 import Timeline from '@mui/lab/Timeline';
@@ -162,27 +162,34 @@ const Season: React.FC<{
   const weekId = startWeekId + seasonNum - 1;
   const currentWeekId = getWeekId(0);
 
-  const rewardAmount = useMemo(() => {
-    if (
-      rebatesAlloted !== undefined &&
-      competitionRewardsAlloted !== undefined
-    ) {
-      const rebates = rebatesAlloted[weekId]?.[0];
+  const competitionReward = useMemo(() => {
+    if (competitionRewardsAlloted !== undefined) {
       const competitionRewards = competitionRewardsAlloted.find(
         (reward) => reward.weekId === weekId
       );
-
       let reward = '0';
-      if (rebates !== undefined) {
-        reward = rebates;
-      }
       if (competitionRewards !== undefined) {
         reward = competitionRewards.amount;
       }
       return reward;
     }
     return '0';
-  }, [rebatesAlloted, competitionRewardsAlloted]);
+  }, [competitionRewardsAlloted]);
+  const rebate = useMemo(() => {
+    if (rebatesAlloted !== undefined) {
+      const rebates = rebatesAlloted[weekId]?.[0];
+      let reward = '0';
+
+      if (rebates !== undefined) {
+        reward = rebates;
+      }
+
+      return reward;
+    }
+    return '0';
+  }, [rebatesAlloted]);
+
+  const rewardAmount = add(competitionReward, rebate);
 
   const isRewardClaimed = useMemo(() => {
     if (
@@ -195,15 +202,18 @@ const Season: React.FC<{
       );
 
       let isCompetitionRewardsClaimed = false;
-      if (competitionRewards !== undefined) {
+      if (competitionReward == '0') {
+        isCompetitionRewardsClaimed = true;
+      } else if (competitionRewards !== undefined) {
         isCompetitionRewardsClaimed = competitionRewardsClaimed.some(
           (r) => r.reward_id == competitionRewards.reward_id
         );
       }
 
-      const isRebatesClaimed = rebatesClaimed.some(
-        (r) => r.weekId == weekId.toString()
-      );
+      const isRebatesClaimed =
+        rebate == '0' ||
+        rebatesClaimed.some((r) => r.weekId == weekId.toString());
+      console.log(rebate, isCompetitionRewardsClaimed, 'rebate');
 
       return isRebatesClaimed && isCompetitionRewardsClaimed;
     }
