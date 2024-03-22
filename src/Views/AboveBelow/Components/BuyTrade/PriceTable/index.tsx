@@ -107,6 +107,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       });
     }
   }
+
   const throwError = () =>
     toastify({ type: 'error', msg: 'Invalid selection' });
   const BodyFormatter: any = (row: number, col: number) => {
@@ -247,7 +248,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.MAX_ABOVE:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12`}
+            className={`text-[#C3C2D4] w-full text-f12 block`}
             onClick={() => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -258,12 +259,16 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
             {tablerow.totalFeeAbove
               ? toFixed(tablerow.totalFeeAbove * maxSizeAbove, 2)
               : '-'}
+            {/* <Skeleton
+              variant="rectangular"
+              className="w-[30px] !h-5 lc mr-auto"
+            /> */}
           </button>
         );
       case Columns.MAX_BELOW:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12`}
+            className={`text-[#C3C2D4] w-full text-f12 block`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -290,33 +295,35 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   return (
     <div className="text-f12 text-1 flex flex-col gap-2 ">
       <div className="flex  my-[10px] text-[15px] justify-around items-center font-[500] text-[#A5ADCF]">
-        <button
-          className={`${isUpselected ? 'text-1' : 'text-[#A5ADCF]'}  ${
-            isUpselected ? 'underline decoration-[#3772FF]' : ''
+        <div
+          className={`${isUpselected === true ? 'text-1' : 'text-[#A5ADCF]'}  ${
+            isUpselected === true ? 'underline decoration-[#3772FF]' : ''
           } decoration-[2px]  leading-3 underline-offset-4`}
-          onClick={() => {
-            if (selectedStrikeD == -3) return;
-            if (!isUpselected) {
-              setStrikePrice(true, selectedStrikeD);
-            }
-          }}
+          // onClick={() => {
+          //   if (selectedStrikeD == -3) return;
+          //   if (!isUpselected) {
+          //     setStrikePrice(true, selectedStrikeD);
+          //   }
+          // }}
         >
           {' '}
           Above
-        </button>
-        <button
-          className={`${isUpselected ? 'text-[#A5ADCF]' : 'text-1'}  ${
-            !isUpselected ? 'underline decoration-red' : ''
+        </div>
+        <div
+          className={`${
+            isUpselected === false ? 'text-1' : 'text-[#A5ADCF]'
+          }  ${
+            isUpselected === false ? 'underline decoration-red' : ''
           } decoration-[2px]  leading-3 underline-offset-4`}
-          onClick={() => {
-            if (selectedStrikeD == -3) return;
-            if (isUpselected) {
-              setStrikePrice(false, selectedStrikeD);
-            }
-          }}
+          // onClick={() => {
+          //   if (selectedStrikeD == -3) return;
+          //   if (isUpselected) {
+          //     setStrikePrice(false, selectedStrikeD);
+          //   }
+          // }}
         >
           Below
-        </button>
+        </div>
       </div>
       <BufferTableCopy
         headersJSX={headsArray}
