@@ -78,7 +78,7 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
           head="Volume Rebate"
           data={
             isCurrentWeek ? (
-              <span className="text-f22">Calculating...</span>
+              <span className="text-f22">Ongoing...</span>
             ) : allotedRebates === undefined ? (
               <Skeleton
                 variant="rectangular"
@@ -302,7 +302,7 @@ const Competitions: React.FC<{
           head="Competition Rewards"
           data={
             isCurrentWeek ? (
-              <span className="text-f22">Calculating...</span>
+              <span className="text-f22">Ongoing...</span>
             ) : isValidating ? (
               <Skeleton
                 variant="rectangular"

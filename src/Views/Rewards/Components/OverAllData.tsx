@@ -72,7 +72,7 @@ export const OverAllData: React.FC<{
             keysName={['To be distributed', 'Volume', 'Total traders']}
             values={[
               currentWeekId == selectedWeekId ? (
-                <span className="text-[#7F87A7]">Calculating...</span>
+                <span className="text-[#7F87A7]">Ongoing...</span>
               ) : currentWeekId < selectedWeekId ? (
                 <span className="text-[#7F87A7]">Not Started Yet.</span>
               ) : (
