@@ -116,7 +116,7 @@ export const readCallResponseAtom = atom(
       };
     } = {};
     for (const callId in update) {
-      console.log('callId', callId);
+      // console.log('callId', callId);
       const [data] = update[callId];
       if (callId.includes('-balance')) {
         balances[callId.split('-')[0]] = (data ?? '0') as string;

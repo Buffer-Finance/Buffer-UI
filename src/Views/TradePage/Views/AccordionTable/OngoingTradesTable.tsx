@@ -474,7 +474,7 @@ export const Probability: React.FC<{
   const { data: ivs } = useIV();
   const { price } = useMarketPrice(trade.market.tv_id);
 
-  if (ivs === undefined) {
+  if (!ivs) {
     return <>processing...</>;
   }
   const iv = ivs[trade.market.tv_id];
