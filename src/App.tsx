@@ -25,7 +25,7 @@ import { AboveBelow } from '@Views/AboveBelow';
 import { AllTrades } from '@Views/AboveBelow/Components/AllTrades';
 import { MobileHistory } from '@Views/AboveBelow/Components/MobileView/MobileHistory';
 import { TradesShutter } from '@Views/AboveBelow/Components/MobileView/Shutters';
-import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
+import { AdminConfig } from '@Views/ABAdminConfigs/AdminConfig';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
 import IbfrFaucet from '@Views/Faucet';

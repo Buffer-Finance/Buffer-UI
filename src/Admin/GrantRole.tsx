@@ -1,7 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { group2abi } from '@Views/AdminConfigs/helpers';
+import { group2abi } from '@Views/ABAdminConfigs/helpers';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { useState } from 'react';
 import { useContractReads } from 'wagmi';

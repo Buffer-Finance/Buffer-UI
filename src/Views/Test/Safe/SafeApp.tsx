@@ -1,4 +1,4 @@
-import { generateTransactionData } from '@Views/AdminConfigs/helpers';
+import { generateTransactionData } from '@Views/ABAdminConfigs/helpers';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useSafeAppsSDK } from '@safe-global/safe-apps-react-sdk';
 import { useCallback } from 'react';
