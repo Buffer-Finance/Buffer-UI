@@ -105,7 +105,7 @@ const ComeptitionRewards: React.FC = () => {
   return (
     <div className="h-fit">
       <div className="text-[#FFFFFF] text-f16 font-medium mb-6">
-        Trading Rewards
+        Competition Rewards
       </div>
       <div className="flex gap-6 items-start h-full">
         <Column
