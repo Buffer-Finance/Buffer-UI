@@ -9,6 +9,7 @@ import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 import { useMemo, useState } from 'react';
+import { getAddress } from 'viem';
 import CompetitionRewardABI from '../Abis/CompetitionReward.json';
 import RebatesABI from '../Abis/Rebates.json';
 import { useCompetitionRewardsAlloted } from '../Hooks/useCompetitionRewardsAlloted';
@@ -16,6 +17,7 @@ import { useCompetitionRewardsClaimed } from '../Hooks/useCompetitionRewardsClai
 import { useRebatesAlloted } from '../Hooks/useRebatesAlloted';
 import { useRebatesClaimed } from '../Hooks/useRebatesClaimed';
 import { useSeasonUserData } from '../Hooks/useSeasonUserData';
+import { useWeeklyParticipentsData } from '../Hooks/useWeeklyParticipentsData';
 import { competitionRewardAddress, rebatesAddress } from '../config';
 export const UserRewards: React.FC<{
   selectedWeekId: number;
@@ -291,7 +293,10 @@ const Competitions: React.FC<{
           head="PnL"
           data={<PnL data={data} isLoading={isValidating} />}
         />
-        <Column head="Rank" data={<span className="text-f22">2</span>} />
+        <Column
+          head="Rank"
+          data={<RankWrapper selectedWeekId={selectedWeekId} />}
+        />
         <Column
           head="Competition Rewards"
           data={
@@ -494,4 +499,64 @@ const Column: React.FC<{ head: string; data: React.ReactElement }> = ({
       {data}
     </div>
   );
+};
+
+const RankWrapper: React.FC<{ selectedWeekId: number }> = ({
+  selectedWeekId,
+}) => {
+  const { address } = useUserAccount();
+  const { data, isValidating } = useSeasonUserData(selectedWeekId);
+  if (address === undefined) {
+    return <span className="text-f22">-</span>;
+  }
+  if (isValidating) {
+    return (
+      <Skeleton variant="rectangular" className="w-[80px] !h-7 lc mr-auto" />
+    );
+  }
+  if (data === undefined) {
+    return <span className="text-f22">-</span>;
+  }
+  return (
+    <Rank
+      selectedWeekId={selectedWeekId}
+      totalPnl={data.totalPnl}
+      userAddress={address}
+    />
+  );
+};
+
+const Rank: React.FC<{
+  selectedWeekId: number;
+  totalPnl: string;
+  userAddress: string;
+}> = ({ selectedWeekId, totalPnl, userAddress }) => {
+  const { isValidating, data } = useWeeklyParticipentsData(
+    selectedWeekId,
+    totalPnl
+  );
+
+  const userRank = useMemo(() => {
+    if (data === undefined) return '-';
+    let rank = 0;
+    if (data.weeklyLeaderboards.length > 0) {
+      rank = data.weeklyLeaderboards.length + 1;
+    }
+    if (data.samePnl.length > 1) {
+      const userIndex = data.samePnl.findIndex(
+        (participant) =>
+          getAddress(participant.userAddress) === getAddress(userAddress)
+      );
+      if (userIndex > 0) {
+        rank += userIndex;
+      }
+    }
+    return rank.toString();
+  }, [data]);
+  if (isValidating) {
+    return (
+      <Skeleton variant="rectangular" className="w-[80px] !h-7 lc mr-auto" />
+    );
+  }
+  return <span className="text-f22">{userRank}</span>;
 };

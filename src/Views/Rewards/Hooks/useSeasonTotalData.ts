@@ -18,7 +18,7 @@ export const useSeasonTotalData = (weekId: number) => {
         return undefined;
       }
       const query = `{
-            totalDatas(where: {id: "${weekId}"}) {
+            totalDatas(where: {id: "${weekId}total"}) {
                 trades
                 volume
                 fee
