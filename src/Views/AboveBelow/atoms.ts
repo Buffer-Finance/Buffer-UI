@@ -125,7 +125,7 @@ export const readCallResponseAtom = atom(
       } else if (callId.includes('-creationWindow')) {
         isInCreationWindow[callId.split('-')[2]] = (data ?? false) as boolean;
       } else if (callId.includes('getMaxPermissibleContracts')) {
-        console.log('readCallResponseAtom', callId, data);
+        // console.log('readCallResponseAtom', callId, data);
         const [contract, , marketID, isAbove] = callId.split('-');
         maxPermissibleContracts[getAddress(contract) + marketID + isAbove] = {
           isAbove: isAbove,

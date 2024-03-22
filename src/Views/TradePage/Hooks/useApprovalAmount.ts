@@ -25,12 +25,7 @@ export const useApprvalAmount = () => {
     is_locked: boolean;
   }>(id, {
     fetcher: async () => {
-      if (productNames === undefined)
-        return toastify({
-          id: '10231',
-          type: 'error',
-          msg: 'Product name not found.',
-        });
+      if (productNames === undefined) return;
 
       if (!userAddress || !activeChainId || !tokenName) return undefined;
       try {

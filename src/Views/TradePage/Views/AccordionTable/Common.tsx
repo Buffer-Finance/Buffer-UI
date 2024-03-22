@@ -182,19 +182,6 @@ export const StrikePriceComponent = ({
         precision={trade.market.price_precision.toString().length - 1}
         className={`justify-self-start content-start  w-max ${className}`}
       />
-      {trade.state === 'QUEUED' && !isPriceArrived ? (
-        <div className="flex gap-2 align-center">
-          <SlippageTooltip option={trade} className="mt-[2px] mr-[3px]" />
-          Slippage -
-          <Display
-            data={divide(trade?.slippage, 2)}
-            unit="%"
-            className="mr-[3px]"
-            precision={2}
-          />
-        </div>
-      ) : null}
-      {/* {trade.state == 'QUEUED' ? 'queued' : null} */}
     </>
   );
 };
