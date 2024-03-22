@@ -134,7 +134,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           ),
           2
         )
-      : '-';
+      : null;
     const maxSizeAbove = maxPermissibleContracts[
       `${getAddress(activeMarket?.address)}${tablerow.marketID}${true}`
     ]
@@ -147,7 +147,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           ),
           2
         )
-      : '-';
+      : null;
     switch (col) {
       case Columns.STRIKE:
         return (
@@ -255,13 +255,18 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               setStrikePrice(true, strikePrice.toString());
             }}
           >
-            {tablerow.totalFeeAbove
-              ? toFixed(tablerow.totalFeeAbove * maxSizeAbove, 2)
-              : '-'}
-            {/* <Skeleton
-              variant="rectangular"
-              className="w-[30px] !h-5 lc mr-auto"
-            /> */}
+            {tablerow.totalFeeAbove ? (
+              maxSizeAbove ? (
+                toFixed(tablerow.totalFeeAbove * maxSizeAbove, 2)
+              ) : (
+                <Skeleton
+                  variant="rectangular"
+                  className="w-[30px] !h-5 lc m-auto"
+                />
+              )
+            ) : (
+              '-'
+            )}
           </button>
         );
       case Columns.MAX_BELOW:
@@ -275,9 +280,18 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               setStrikePrice(false, strikePrice.toString());
             }}
           >
-            {tablerow.totalFeeBelow
-              ? toFixed(tablerow.totalFeeBelow * maxSizeBelow, 2)
-              : '-'}
+            {tablerow.totalFeeBelow ? (
+              maxSizeBelow ? (
+                toFixed(tablerow.totalFeeBelow * maxSizeBelow, 2)
+              ) : (
+                <Skeleton
+                  variant="rectangular"
+                  className="w-[30px] !h-5 lc m-auto"
+                />
+              )
+            ) : (
+              '-'
+            )}
           </button>
         );
     }
