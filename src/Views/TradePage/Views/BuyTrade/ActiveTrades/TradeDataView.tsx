@@ -279,7 +279,7 @@ export const calculatePnlForProbability = ({
   lockedAmmount?: string;
 }) => {
   const lockedAmount = trade.locked_amount || lockedAmmount;
-  const tradeSize = trade.trade_size;
+  const tradeSize = trade.total_fee;
 
   const earlycloseAmount = divide(
     subtract(
