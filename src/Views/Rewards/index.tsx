@@ -7,7 +7,7 @@ export const RewardsPage = () => {
     document.title = 'Rewards';
   }, []);
   return (
-    <div className="w-full py-6 px-8">
+    <div className="w-full py-6 px-8 sm:px-6">
       <LeagueWiseData />
       <Summary />
     </div>

@@ -20,7 +20,7 @@ export const Seasons: React.FC<{
   setSelectedSeason: (newSeason: number) => void;
 }> = ({ selectedSeason, setSelectedSeason }) => {
   return (
-    <div className="w-[325px] bg-[#141823] rounded-md">
+    <div className="w-[325px] bg-[#141823] rounded-md sm:w-full">
       <div className="text-f20 font-medium text-[#F7F7F7] m-auto w-fit mt-5 mb-3">
         All Seasons
       </div>
@@ -222,7 +222,7 @@ const Season: React.FC<{
 
   return (
     <button
-      className={`px-[9px] py-[7px] ${
+      className={`px-[9px] pt-[4px] pb-[7px] ${
         isSelected ? 'bg-[#3772FF] scale-110' : 'bg-[#2C2C41]'
       } rounded-md flex items-end justify-between w-full min-h-[48px]`}
       onClick={handleSeasonCLick}
@@ -277,6 +277,7 @@ const Coin: React.FC<{ isAlloted: boolean; isClaimed: boolean }> = ({
         <img
           src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/Rewards/Claimed.png`}
           alt="claimed"
+          className="pb-1"
         />
       </div>
     );
@@ -286,6 +287,7 @@ const Coin: React.FC<{ isAlloted: boolean; isClaimed: boolean }> = ({
         <img
           src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/Rewards/Unclaimed.png`}
           alt="unclaimed"
+          className="pb-1"
         />
       </div>
     );

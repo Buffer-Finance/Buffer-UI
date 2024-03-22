@@ -2,6 +2,7 @@ import { getWeekId } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId'
 import { useState } from 'react';
 import { OverAllData } from './Components/OverAllData';
 import { Seasons } from './Components/Seasons';
+import SeasonsShutter from './Components/SeasonsShutter';
 import { UserRewards } from './Components/UserRewards';
 import { startWeekId } from './config';
 
@@ -25,10 +26,18 @@ export const LeagueWiseData = () => {
           currentWeekId={currentWeekId}
         />
       </div>
-      <Seasons
-        selectedSeason={selectedSeason}
-        setSelectedSeason={setSelectedSeason}
-      />
+      <div className="sm:hidden">
+        <Seasons
+          selectedSeason={selectedSeason}
+          setSelectedSeason={setSelectedSeason}
+        />
+      </div>
+      <div className="a600:hidden">
+        <SeasonsShutter
+          selectedSeason={selectedSeason}
+          setSelectedSeason={setSelectedSeason}
+        />
+      </div>
     </div>
   );
 };

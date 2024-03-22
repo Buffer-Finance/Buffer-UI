@@ -14,7 +14,7 @@ export const Summary = () => {
       <div className="text-f20 text-[#F7F7F7] font-medium mb-6">
         Rewards Summary
       </div>
-      <div className="flex gap-[60px] items-start">
+      <div className="flex gap-[60px] items-start sm:flex-col">
         <TradingRewards />
         <ComeptitionRewards />
       </div>
@@ -31,7 +31,7 @@ const TradingRewards: React.FC = () => {
     if (!allotedRebates) return '0';
     console.log(allotedRebates);
     return Object?.values(allotedRebates).reduce(
-      (acc, curr) => add(acc as string, curr[0] ?? ('0' as string)),
+      (acc, curr: any) => add(acc as string, curr[0] ?? ('0' as string)),
       '0'
     ) as string;
   }, [allotedRebates]);

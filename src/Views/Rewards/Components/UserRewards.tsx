@@ -19,6 +19,7 @@ import { useRebatesClaimed } from '../Hooks/useRebatesClaimed';
 import { useSeasonUserData } from '../Hooks/useSeasonUserData';
 import { useWeeklyParticipentsData } from '../Hooks/useWeeklyParticipentsData';
 import { competitionRewardAddress, rebatesAddress } from '../config';
+
 export const UserRewards: React.FC<{
   selectedWeekId: number;
   currentWeekId: number;
@@ -34,7 +35,7 @@ export const UserRewards: React.FC<{
           Not Started Yet.
         </div>
       ) : (
-        <div className="flex gap-5 items-start">
+        <div className="flex gap-5 items-start sm:flex-col">
           <Rebates
             isCurrentWeek={selectedWeekId == currentWeekId}
             selectedWeekId={selectedWeekId}
@@ -63,7 +64,7 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
   const { address, viewOnlyMode } = useUserAccount();
 
   return (
-    <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg">
+    <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg sm:w-full">
       <div className="flex flex-col gap-5">
         <Column
           head="Total Volume"
@@ -287,7 +288,7 @@ const Competitions: React.FC<{
 
   const selectedWeekAllotedAMount = selectedWeekAlloted?.amount;
   return (
-    <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg">
+    <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg sm:w-full">
       <div className="flex flex-col gap-5">
         <Column
           head="PnL"
