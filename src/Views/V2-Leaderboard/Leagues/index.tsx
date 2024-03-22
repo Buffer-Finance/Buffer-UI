@@ -126,8 +126,8 @@ export const Leagues = () => {
                             setOffset={setOffset}
                             activeChainId={activeChain.id}
                             league={league}
-                            graphUrl={config.graph.MAIN}
-                            weekId={getWeekId(0) - 1}
+                            graphUrl={config.graph.LEADERBOARD}
+                            weekId={getWeekId(parseInt(offset ?? '0'))}
                           />
                           <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
                             <WinnersByPnl

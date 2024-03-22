@@ -5,6 +5,7 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
+import { getWeekId } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId';
 import { useWinnersByPnlWeekly } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/useWinnersByPnlWeekly';
 import { leagueType } from '@Views/V2-Leaderboard/Leagues/atom';
 import { Skeleton } from '@mui/material';
@@ -12,6 +13,10 @@ import axios from 'axios';
 import useSWR from 'swr';
 import { descClass, headClass } from '../../Incentivised';
 import { ContestFilterDD } from '../ContestFilterDD';
+
+function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 export const BarData: React.FC<{
   week: number;
@@ -32,6 +37,7 @@ export const BarData: React.FC<{
   graphUrl,
   weekId,
 }) => {
+  console.log(weekId, getWeekId(0), 'weekId');
   const { address: account } = useUserAccount();
   const { data, error, isValidating } = useWinnersByPnlWeekly({
     activeChainId,
@@ -70,14 +76,26 @@ export const BarData: React.FC<{
       />
       <Col
         head={'Trades'}
-        desc={<TotalTrades weekId={weekId} graphUrl={graphUrl} />}
+        desc={
+          <TotalTrades
+            weekId={weekId}
+            graphUrl={graphUrl}
+            league={capitalizeFirstLetter(league)}
+          />
+        }
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
       />
       <Col
         head={'Volume'}
-        desc={<TotalVolume weekId={weekId} graphUrl={graphUrl} />}
+        desc={
+          <TotalVolume
+            weekId={weekId}
+            graphUrl={graphUrl}
+            league={capitalizeFirstLetter(league)}
+          />
+        }
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
@@ -85,11 +103,11 @@ export const BarData: React.FC<{
       <Col
         head={'Participants'}
         desc={
-          numOfParticipants !== undefined ? (
-            numOfParticipants
-          ) : (
-            <Skeleton className="w-[50px] !h-6 lc " />
-          )
+          <Participants
+            weekId={weekId}
+            graphUrl={graphUrl}
+            league={capitalizeFirstLetter(league)}
+          />
         }
         descClass={descClass}
         headClass={headClass}
@@ -160,11 +178,13 @@ const RestCountdown: React.FC<{ resetTimestamp: number }> = ({
 const TotalTrades: React.FC<{
   weekId: number;
   graphUrl: string;
-}> = ({ graphUrl, weekId }) => {
-  const { data } = useTotalData(weekId, graphUrl);
-  const totalTrades = data?.totalDatas?.[0]?.trades;
-  if (totalTrades === undefined)
+  league: string;
+}> = ({ graphUrl, weekId, league }) => {
+  const { data } = useTotalData(weekId, graphUrl, league);
+  if (data?.totalDatas === undefined)
     return <Skeleton className="w-[50px] !h-6 lc " />;
+  if (data.totalDatas.length === 0) return <div>0</div>;
+  const totalTrades = data?.totalDatas?.[0]?.trades;
 
   return <div>{totalTrades}</div>;
 };
@@ -172,12 +192,29 @@ const TotalTrades: React.FC<{
 const TotalVolume: React.FC<{
   weekId: number;
   graphUrl: string;
-}> = ({ weekId, graphUrl }) => {
-  const { data } = useTotalData(weekId, graphUrl);
+  league: string;
+}> = ({ weekId, graphUrl, league }) => {
+  const { data } = useTotalData(weekId, graphUrl, league);
+  if (data?.totalDatas === undefined)
+    return <Skeleton className="w-[50px] !h-6 lc " />;
+  if (data.totalDatas.length === 0) return <div>0</div>;
+
   const totalVolume = data?.totalDatas?.[0]?.volume;
-  console.log('data', data);
-  if (!totalVolume) return <Skeleton className="w-[50px] !h-6 lc " />;
   return <div>{toFixed(divide(totalVolume, 6) as string, 2)} USDC</div>;
+};
+
+const Participants: React.FC<{
+  weekId: number;
+  graphUrl: string;
+  league: string;
+}> = ({ weekId, graphUrl, league }) => {
+  const { data } = useTotalData(weekId, graphUrl, league);
+  if (data?.totalDatas === undefined)
+    return <Skeleton className="w-[50px] !h-6 lc " />;
+  if (data.totalDatas.length === 0) return <div>0</div>;
+
+  const totalParticipants = data?.totalDatas?.[0]?.participents;
+  return <div>{totalParticipants}</div>;
 };
 
 export const League: React.FC<{
@@ -225,31 +262,27 @@ export const League: React.FC<{
   );
 };
 
-const useTotalData = (weekId: number, graphUrl: string) => {
-  return useSWR(`totalWeeklyData-${weekId}`, {
+const useTotalData = (weekId: number, graphUrl: string, league: string) => {
+  return useSWR(`totalWeeklyData-${weekId}-${league}`, {
     fetcher: async () => {
       const leaderboardQuery = `
-      totalDatas(where: {id: "${weekId}"}) {
+      totalDatas(where: {id: "${weekId}${league}"}) {
         id
         trades
         volume
+        participents
       }
       `;
       const query = `{${leaderboardQuery}}`;
-      const response = await axios.post(
-        `https://subgraph.satsuma-prod.com/${
-          import.meta.env.VITE_SATSUMA_KEY
-        }/bufferfinance/jackpot/version/v3.0.0-leaderboard-tracking-fix-participents/api`,
-        {
-          query,
-        }
-      );
-
+      const response = await axios.post(graphUrl, {
+        query,
+      });
       return response.data?.data as {
         totalDatas: {
           id: string;
           trades: string;
           volume: string;
+          participents: string;
         }[];
       };
     },
