@@ -482,7 +482,7 @@ export const Probability: React.FC<{
     return <>processing...</>;
   }
   if (trade.state === 'QUEUED') {
-    return <>-</>;
+    return <></>;
   }
   if (trade.expiration_time === undefined) {
     return <>-</>;
