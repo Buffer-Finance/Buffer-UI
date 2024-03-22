@@ -1,4 +1,4 @@
-import { selectedExpiry } from '@Views/AboveBelow/atoms';
+import { selectedExpiry, selectedPriceAtom } from '@Views/AboveBelow/atoms';
 import { DDarrow } from '@Views/TradePage/Components/DDarrow';
 import { RowGap } from '@Views/TradePage/Components/Row';
 import styled from '@emotion/styled';
@@ -14,10 +14,13 @@ import { formatDateWithTime, getTimestamps } from './helpers';
 
 export const DropDown = () => {
   const [selectedTimestamp, setSelectedTimestamp] = useAtom(selectedExpiry);
+  const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
 
   function onClick(e: ClickEvent) {
     e.stopPropagation = true;
     setSelectedTimestamp(e.value);
+
+    setSelectedStrike(undefined);
   }
   const timestamps = getTimestamps();
   return (

@@ -74,7 +74,6 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     { strike: -1 },
     ...decreasingPriceArray,
   ];
-  // console.log(increasingPriceArray, decreasingPriceArray);
 
   function setStrikePrice(isAbove: boolean, price: string) {
     try {
