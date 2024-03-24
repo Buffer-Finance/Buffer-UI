@@ -209,7 +209,7 @@ const PlatfromFeeError = ({
       ) : (
         !error && (
           <>
-            Platform fee : + {platfromFee} {tradeToken}
+            Platform fee : + {toFixed(platfromFee, 2)} {tradeToken}
           </>
         )
       )}
