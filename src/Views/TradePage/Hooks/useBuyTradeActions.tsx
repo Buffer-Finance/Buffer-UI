@@ -246,8 +246,8 @@ export const useBuyTradeActions = (userInput: string) => {
           type: 'error',
           msg: (
             <>
-              Addition {platformFee} {poolDetails?.token} are required on top of
-              Trade Size as Platform Fee.{' '}
+              Addition {toFixed(platformFee ?? '0', 2)} {poolDetails?.token} are
+              required on top of Trade Size as Platform Fee.{' '}
               <BuyUSDCLink token={poolDetails?.token} />
             </>
           ),
