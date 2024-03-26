@@ -292,6 +292,7 @@ export const MultiResolutionChart = ({
   );
   const chartId = market + index;
   const [chartReady, setChartReady] = useState<boolean>(false);
+  // console.log(`MultiResolutionChart-chartReady-ab: `, chartReady);
   const lastSyncedKline = useRef<{ [asset: string]: OHLCBlock }>({});
   let trade2visualisation = useRef<
     {
@@ -724,45 +725,6 @@ export const MultiResolutionChart = ({
     };
   }, [visualizedTrades]);
 
-  // const updateTimeLeft = () => {
-  //   positions.current.map((pos) => {
-  //     const inv = pos?.line?.getText()?.split('|')[0];
-  //     const strikePrice = pos?.line?.getPrice();
-  //     const text = inv + '| ' + getText(pos.expiration);
-  //     pos.line?.setText(text);
-  //     const marketPrice = getPriceFromKlines(marketPrices, activeMarket);
-  //     if (marketPrice && strikePrice) {
-  //       const isAbove = pos.line.getQuantity() == Up;
-  //       let color = getColor(marketPrice, strikePrice, isAbove);
-
-  //       pos.line?.setQuantityBackgroundColor(color);
-  //       pos.line?.setQuantityBorderColor(color);
-  //       pos.line.setLineColor(color);
-  //       // pos.line?.setBodyBorderColor(color);
-
-  //       // pos.line?.setQuantityTextColor(color);
-  //       // pos.line.setBodyTextColor(color);
-  //     }
-  //   });
-  // };
-
-  // // position updation
-  // useEffect(() => {
-  //   let timeout;
-  //   if (
-  //     chartReady &&
-  //     data &&
-  //     activeMarket &&
-  //     widgetRef.current &&
-  //     typeof widgetRef.current.activeChart === 'function'
-  //   ) {
-  //     timeout = setInterval(() => {
-  //       updateTimeLeft();
-  //     }, 1000);
-  //   }
-  //   return () => clearInterval(timeout);
-  // }, [chartReady]);
-
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
@@ -807,7 +769,11 @@ export const MultiResolutionChart = ({
               price: 0,
             },
           ];
-      widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
+      if (
+        shapeIdRef.current &&
+        typeof widgetRef.current?.activeChart == 'function'
+      )
+        widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
       const id = widgetRef.current
         ?.activeChart()
         .createMultipointShape(points, {

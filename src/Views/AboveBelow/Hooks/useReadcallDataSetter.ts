@@ -77,7 +77,6 @@ export const useReacallDataSetter = () => {
           .flat()
       );
       if (strikes) {
-        console.log('useReacallDataSetter', tradeData, strikes, activeMarkets);
         let maxReadCallData = [];
         [
           ...strikes.decreasingPriceArray,

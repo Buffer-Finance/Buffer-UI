@@ -111,7 +111,6 @@ const HistoryTable: React.FC<{
 
     // const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
 
-    if (!trade?.pool?.pool) console.log(`trade: `, trade);
     const poolInfo = trade.pool;
     let expiryPrice: number | null = trade.expiry_price;
     if (!expiryPrice) {

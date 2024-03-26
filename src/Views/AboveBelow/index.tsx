@@ -29,6 +29,7 @@ import {
 } from './atoms';
 import { AccordionTable } from '@Views/ABTradePage/Views/AccordionTable';
 import { useLimitedStrikeArrays } from './Hooks/useLimitedStrikeArrays';
+import { ShareModal } from '@Views/ABTradePage/Views/AccordionTable/ShareModal';
 
 export const AboveBelow = () => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -64,6 +65,7 @@ export const AboveBelow = () => {
         }`}
       >
         <>
+          <ShareModal />
           <RightPanelBackground>
             {showFavoriteAsset && <PinnedMarkets />}
             <StatusBar isMobile={false} />

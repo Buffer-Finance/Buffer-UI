@@ -59,7 +59,7 @@ export const ModalChild: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
                       trade.is_above ? 'text-green' : 'text-red'
                     }`}
                   >
-                    {trade.is_above ? 'Up' : 'Down'}
+                    {trade.is_above ? 'Above' : 'Below'}
                   </div>
                 </div>
                 {showTradeSize && (
