@@ -98,7 +98,7 @@ export const useBothVersionsMarkets = () => {
   }
 
   const { data, error, mutate } = useSWR<response, Error>(
-    `v3AppConfig-activeChain-${activeChain.id}`,
+    `v3AppConfig-activeChain-ab--${activeChain.id}`,
     {
       fetcher: fetcher,
       refreshInterval: 60000,

@@ -119,7 +119,7 @@ const HistoryTable: React.FC<{
       expiryPrice = expiryPriceCache[id] || 0;
     }
     const { pnl, payout } = getPayout(trade, expiryPrice, poolInfo.decimals);
-
+    if (!pnl) return 'Calculating..';
     const status = gt(pnl?.toString(), '0')
       ? {
           tooltip: 'You won this bet!',

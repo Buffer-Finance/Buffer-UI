@@ -27,7 +27,7 @@ const useHistoryTrades = () => {
   // const [isLoading, setIsLoading] = useState(false);
 
   const { data, error } = useSWR<tradesApiResponseType>(
-    'history-trades-' + address + '-' + activeChain.id + '-' + activePage,
+    'history-trades-ab' + address + '-' + activeChain.id + '-' + activePage,
     {
       fetcher: async () => {
         if (!address || !activeChain.id || !markets || !productNames)
