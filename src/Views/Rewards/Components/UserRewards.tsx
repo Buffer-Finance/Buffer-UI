@@ -316,6 +316,9 @@ const Competitions: React.FC<{
           <CompetitionRewardsButton
             allotedRewards={selectedWeekAlloted}
             selectedWeekRebate={selectedWeekAllotedAMount}
+            isNotAlloted={
+              rewardsAlloted !== undefined && selectedWeekAlloted === undefined
+            }
           />
         )
       )}
@@ -341,9 +344,18 @@ const CompetitionRewardsButton: React.FC<{
         time_threshold: number;
       }
     | undefined;
-}> = ({ allotedRewards, selectedWeekRebate }) => {
+  isNotAlloted: boolean;
+}> = ({ allotedRewards, selectedWeekRebate, isNotAlloted }) => {
   const { data: claimedRewards } = useCompetitionRewardsClaimed();
-  if (allotedRewards === undefined || claimedRewards === undefined) {
+  if (claimedRewards === undefined) {
+    return (
+      <Skeleton variant="rectangular" className="w-[80px] !h-7 lc ml-auto" />
+    );
+  }
+  if (allotedRewards === undefined && isNotAlloted) {
+    return <span></span>;
+  }
+  if (allotedRewards === undefined) {
     return (
       <Skeleton variant="rectangular" className="w-[80px] !h-7 lc ml-auto" />
     );
