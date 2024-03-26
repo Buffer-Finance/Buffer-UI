@@ -90,7 +90,7 @@ export const appConfig = {
           /bufferfinance/above-below-sepolia/version/v0.0.9-add-contractRegistry/api`,
           LEADERBOARD: `https://subgraph.satsuma-prod.com/${
             import.meta.env.VITE_SATSUMA_KEY
-          }/bufferfinance/jackpot/version/v3.0.8-leaderboards-league-total-data/api`,
+          }/bufferfinance/jackpot/version/v3.0.8-leaderboards-update-ab-contracts/api`,
           REWARDS: `https://subgraph.satsuma-prod.com/${
             import.meta.env.VITE_SATSUMA_KEY
           }/bufferfinance/jackpot/api`,
