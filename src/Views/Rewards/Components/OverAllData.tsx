@@ -27,14 +27,14 @@ export const OverAllData: React.FC<{
           openShutter();
         }}
       >
-        <img
+        {/* <img
           src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/Rewards/LeftArrow.svg`}
           alt="arrow"
           className={`a600:hidden`}
-        />
+        /> */}
         <span className="sm:mb-1">Season {selectedSeason}</span>
         <img
-          src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/Rewards/RightArrow.svg`}
+          src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/Rewards/DownArrow.svg`}
           alt="arrow"
           className={`a600:hidden`}
         />
