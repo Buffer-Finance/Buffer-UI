@@ -431,7 +431,7 @@ export const DailyWebTable: React.FC<{
     <LeaderBoardTableStyles>
       {isMobile && (
         <DailyMobileTable
-          options={winners}
+          options={winners?.concat(loosers ?? [])}
           skip={skip}
           userData={userData}
           count={count}

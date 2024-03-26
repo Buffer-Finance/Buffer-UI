@@ -11,7 +11,7 @@ import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { useSetAtom } from 'jotai';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { LeaderBoard } from '..';
 import { League } from '../Components/BarData';
 import { ContestFilterDD } from '../Components/ContestFilterDD';
@@ -108,27 +108,6 @@ export const Incentivised = () => {
   const setActivePageNumber = (page: number) => {
     setTableActivePage({ arbitrum: page });
   };
-
-  const totalCount = useMemo(() => {
-    if (data === undefined) return 0;
-    let totalParticipants = 0;
-    if (typeof data.total_count === 'number')
-      totalParticipants = data.total_count;
-    else {
-      totalParticipants = data.total_count.length;
-    }
-
-    if (totalParticipants === undefined) {
-      if (data.winners !== undefined && data.loosers !== undefined) {
-        totalParticipants = data.winners.length + data.loosers.length;
-      } else if (data.winners !== undefined && data.loosers === undefined) {
-        totalParticipants = data.winners.length;
-      } else if (data.winners === undefined && data.loosers !== undefined) {
-        totalParticipants = data.loosers.length;
-      }
-    }
-    return totalParticipants;
-  }, [data]);
 
   let content;
   if (!isTimerEnded) {
