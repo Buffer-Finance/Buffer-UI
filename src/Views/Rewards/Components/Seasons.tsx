@@ -81,6 +81,10 @@ const BufferTimeline = styled(Timeline)`
   max-height: 485px;
   overflow: auto;
 
+  @media (max-width: 600px) {
+    max-height: max-content;
+  }
+
   ::-webkit-scrollbar {
     background: var(--bg-grey);
     height: 1px;
