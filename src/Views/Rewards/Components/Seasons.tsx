@@ -227,6 +227,7 @@ const Season: React.FC<{
   }, [rebatesClaimed, competitionRewardsClaimed]);
 
   function handleSeasonCLick() {
+    if (selectedSeasonId >= liveSeasonId) return;
     onClick(seasonNum);
   }
 
@@ -242,7 +243,7 @@ const Season: React.FC<{
         isSelected ? 'bg-[#3772FF] scale-110' : 'bg-[#2C2C41]'
       } rounded-md flex items-end justify-between w-full min-h-[48px] ${
         isFutureSeason ? 'opacity-30' : ''
-      }`}
+      } ${selectedSeasonId >= liveSeasonId ? 'cursor-not-allowed' : ''}`}
       onClick={handleSeasonCLick}
     >
       <div className="self-start">
