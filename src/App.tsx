@@ -28,6 +28,7 @@ import SideBar from '@Views/Common/Sidebar';
 import { ContractList } from '@Views/ContractList';
 import { DashboardV2 } from '@Views/DashboardV2';
 import IbfrFaucet from '@Views/Faucet';
+import { LpRewards } from '@Views/LpRewards';
 import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { ProfilePage } from '@Views/Profile';
 import { ReferralPage } from '@Views/Referral';
@@ -121,6 +122,7 @@ const AppRoutes = () => {
             }
           />
         )}
+        <Route path="lp-rewards" element={<LpRewards />} />
         <Route path="/rewards" element={<RewardsPage />} />
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />
