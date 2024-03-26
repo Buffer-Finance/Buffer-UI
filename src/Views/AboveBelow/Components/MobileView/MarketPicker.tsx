@@ -1,6 +1,6 @@
 import { selectedPoolActiveMarketAtom } from '@Views/AboveBelow/atoms';
 import { PairTokenImage } from '@Views/Common/PairTokenImage';
-import { MobileChartControlls } from '@Views/TradePage/Components/MobileView/MobileChartControlls';
+import { MobileChartControlls } from '@Views/ABTradePage/Components/MobileView/MobileChartControlls';
 import { useAtomValue } from 'jotai';
 import { CurrentPrice } from '../StatusBar/AssetSelector/CurrentPrice';
 import { useShutterHandlers } from './Shutters';

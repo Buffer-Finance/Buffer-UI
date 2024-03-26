@@ -1,4 +1,4 @@
-import { chartDataType, poolInfoType } from '@Views/TradePage/type';
+import { chartDataType, poolInfoType } from '@Views/ABTradePage/type';
 
 export interface responseAB {
   address: string;

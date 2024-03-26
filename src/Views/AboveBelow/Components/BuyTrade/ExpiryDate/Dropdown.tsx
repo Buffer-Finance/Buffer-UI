@@ -1,6 +1,6 @@
 import { selectedExpiry, selectedPriceAtom } from '@Views/AboveBelow/atoms';
-import { DDarrow } from '@Views/TradePage/Components/DDarrow';
-import { RowGap } from '@Views/TradePage/Components/Row';
+import { DDarrow } from '@Views/ABTradePage/Components/DDarrow';
+import { RowGap } from '@Views/ABTradePage/Components/Row';
 import styled from '@emotion/styled';
 import {
   ClickEvent,

@@ -9,9 +9,9 @@ import {
 } from '@Views/AboveBelow/atoms';
 import { marketTypeAB } from '@Views/AboveBelow/types';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { RowGap } from '@Views/TradePage/Components/Row';
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
-import { joinStrings } from '@Views/TradePage/utils';
+import { RowGap } from '@Views/ABTradePage/Components/Row';
+import { PairTokenImage } from '@Views/ABTradePage/Views/PairTokenImage';
+import { joinStrings } from '@Views/ABTradePage/utils';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { useAtomValue, useSetAtom } from 'jotai';

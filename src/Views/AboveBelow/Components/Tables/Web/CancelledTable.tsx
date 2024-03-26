@@ -5,7 +5,7 @@ import {
   tardesTotalPageAtom,
   updateCancelledPageNumber,
 } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
-import { TableErrorRow } from '@Views/TradePage/Views/AccordionTable/Common';
+import { TableErrorRow } from '@Views/ABTradePage/Views/AccordionTable/Common';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Cancelled } from '../Cancelled';
 

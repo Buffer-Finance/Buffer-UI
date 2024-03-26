@@ -6,8 +6,8 @@ import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
-import { getAssetMonochromeImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import { DisplayTime } from '@Views/ABTradePage/Views/AccordionTable/Common';
+import { getAssetMonochromeImageUrl } from '@Views/ABTradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
 import { AssetCell } from './Components/AssetCell';
 

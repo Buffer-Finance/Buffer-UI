@@ -1,6 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { marketsForChart } from '@Views/TradePage/config';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { marketsForChart } from '@Views/ABTradePage/config';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import axios from 'axios';
 import { useSetAtom } from 'jotai';
 import { useEffect } from 'react';

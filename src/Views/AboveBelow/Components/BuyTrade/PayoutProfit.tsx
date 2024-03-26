@@ -11,7 +11,7 @@ import {
   tradeSizeAtom,
 } from '@Views/AboveBelow/atoms';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { RowGap } from '@Views/TradePage/Components/Row';
+import { RowGap } from '@Views/ABTradePage/Components/Row';
 import { useAtomValue } from 'jotai';
 
 export const PayoutProfit = ({}: {}) => {

@@ -9,6 +9,9 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
+import { v4 } from 'uuid';
+
+export const CHART_TVID = v4().substring(0, 6);
 
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';

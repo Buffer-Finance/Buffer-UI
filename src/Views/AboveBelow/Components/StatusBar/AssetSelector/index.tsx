@@ -1,6 +1,6 @@
-import { DDarrow } from '@Views/TradePage/Components/DDarrow';
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
-import { joinStrings } from '@Views/TradePage/utils';
+import { DDarrow } from '@Views/ABTradePage/Components/DDarrow';
+import { PairTokenImage } from '@Views/ABTradePage/Views/PairTokenImage';
+import { joinStrings } from '@Views/ABTradePage/utils';
 import { Skeleton } from '@mui/material';
 import {
   ClickEvent,

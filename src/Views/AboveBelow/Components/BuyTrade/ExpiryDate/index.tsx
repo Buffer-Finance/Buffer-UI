@@ -1,4 +1,4 @@
-import { RowBetween } from '@Views/TradePage/Components/Row';
+import { RowBetween } from '@Views/ABTradePage/Components/Row';
 import { DropDown } from './Dropdown';
 
 export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {

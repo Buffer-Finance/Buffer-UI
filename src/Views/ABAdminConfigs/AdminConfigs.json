@@ -1,0 +1,31 @@
+{
+  "options_config": {
+    "setCreationWindowContract": {
+      "getter": "creationWindowContract"
+    },
+    "setPlatformFee": {
+      "getter": "platformFee",
+      "decimal": "token"
+    },
+    "setSettlementFeeDisbursalContract": {
+      "getter": "settlementFeeDisbursalContract"
+    },
+    "setOptionStorageContract": {
+      "getter": "optionStorageContract"
+    },
+    "setStrikeStepSize": {
+      "getter": "strikeStepSize"
+    },
+    "setMaxSkew": {
+      "getter": "maxSkew"
+    },
+    "setCircuitBreakerContract": {
+      "getter": "circuitBreakerContract"
+    }
+  },
+  "options": {
+    "setIsPaused": {
+      "getter": "isPaused"
+    }
+  }
+}

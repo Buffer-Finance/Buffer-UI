@@ -3,7 +3,7 @@ import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { DataCol } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/DataCol';
+import { DataCol } from '@Views/ABTradePage/Views/BuyTrade/ActiveTrades/DataCol';
 import styled from '@emotion/styled';
 import { Probability } from '../../Tables/Components/Probability';
 import { Price } from './Price';

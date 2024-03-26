@@ -16,22 +16,22 @@ import {
   selectedPriceAtom,
   tradeSizeAtom,
 } from '@Views/AboveBelow/atoms';
-import { ColumnGap } from '@Views/TradePage/Components/Column';
-import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
+import { ColumnGap } from '@Views/ABTradePage/Components/Column';
+import { LightToolTipSVG } from '@Views/ABTradePage/Components/LightToolTipSVG';
 import {
   RowBetween,
   RowGap,
   RowGapItemsStretched,
-} from '@Views/TradePage/Components/Row';
-import { BuyTradeHeadText } from '@Views/TradePage/Components/TextWrapper';
-import { BuyUSDCLink } from '@Views/TradePage/Views/BuyTrade/BuyUsdcLink';
-import { TradeSizeInput } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput';
+} from '@Views/ABTradePage/Components/Row';
+import { BuyTradeHeadText } from '@Views/ABTradePage/Components/TextWrapper';
+import { BuyUSDCLink } from '@Views/ABTradePage/Views/BuyTrade/BuyUsdcLink';
+import { TradeSizeInput } from '@Views/ABTradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput';
 import {
   WalletBalance,
   formatBalance,
-} from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
-import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
-import { getMaximumValue, getMinimumValue } from '@Views/TradePage/utils';
+} from '@Views/ABTradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
+import { MAX_APPROVAL_VALUE } from '@Views/ABTradePage/config';
+import { getMaximumValue, getMinimumValue } from '@Views/ABTradePage/utils';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { getAddress } from 'viem';

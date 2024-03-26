@@ -1,11 +1,11 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { usePriceRetriable } from '@Hooks/usePrice';
-import { MobileWarning, RightPanelBackground } from '@Views/TradePage';
+import { MobileWarning, RightPanelBackground } from '@Views/ABTradePage';
 import {
   miscsSettingsAtom,
   tradePanelPositionSettingsAtom,
-} from '@Views/TradePage/atoms';
-import { tradePanelPosition } from '@Views/TradePage/type';
+} from '@Views/ABTradePage/atoms';
+import { tradePanelPosition } from '@Views/ABTradePage/type';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useMedia } from 'react-use';
@@ -27,7 +27,7 @@ import {
   selectedPoolActiveMarketAtom,
   setSelectedPoolForTradeAtom,
 } from './atoms';
-import { AccordionTable } from '@Views/TradePage/Views/AccordionTable';
+import { AccordionTable } from '@Views/ABTradePage/Views/AccordionTable';
 import { useLimitedStrikeArrays } from './Hooks/useLimitedStrikeArrays';
 
 export const AboveBelow = () => {

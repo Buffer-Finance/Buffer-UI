@@ -11,15 +11,15 @@ import {
 } from '@Views/AboveBelow/atoms';
 import BufferTable, { BufferTableCopy } from '@Views/Common/BufferTable';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
-import { TableHeader } from '@Views/TradePage/Views/AccordionTable/Common';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
+import { TableHeader } from '@Views/ABTradePage/Views/AccordionTable/Common';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import { priceFormatAtom } from '../PriceFormat';
 import { CurrentPriceLine } from './CurrentPriceLine';
-import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import { activePoolObjAtom } from '@Views/ABTradePage/atoms';
 import { getAddress } from 'viem';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { toFixed } from '@Utils/NumString';
@@ -163,7 +163,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_ABOVE:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12`}
+            className={`w-full text-f12`}
             onClick={() => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -177,7 +177,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_BELOW:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12`}
+            className={`w-full text-f12`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return throwError();
@@ -191,7 +191,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_ABOVE:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12`}
+            className={`w-full text-f12`}
             onClick={() => {
               if (!tablerow.totalFeeAbove) {
                 return throwError();
@@ -205,7 +205,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_BELOW:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12`}
+            className={`w-full text-f12`}
             onClick={() => {
               if (!tablerow.totalFeeBelow) {
                 return throwError();
@@ -219,7 +219,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_BELOW:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12`}
+            className={`w-full text-f12`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -233,7 +233,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.TOKEN_ABOVE:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12`}
+            className={`w-full text-f12`}
             onClick={() => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -247,7 +247,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.MAX_ABOVE:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12 block`}
+            className={`w-full text-f12 block`}
             onClick={() => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -272,7 +272,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.MAX_BELOW:
         return (
           <button
-            className={`text-[#C3C2D4] w-full text-f12 block`}
+            className={`w-full text-f12 block`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });

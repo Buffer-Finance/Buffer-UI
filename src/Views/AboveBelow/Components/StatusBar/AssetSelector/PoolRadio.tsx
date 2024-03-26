@@ -2,9 +2,9 @@ import {
   aboveBelowMarketsAtom,
   selectedPoolAtom,
 } from '@Views/AboveBelow/atoms';
-import { RowGap } from '@Views/TradePage/Components/Row';
-import { RadioTextHead } from '@Views/TradePage/Components/TextWrapper';
-import { poolInfoType } from '@Views/TradePage/type';
+import { RowGap } from '@Views/ABTradePage/Components/Row';
+import { RadioTextHead } from '@Views/ABTradePage/Components/TextWrapper';
+import { poolInfoType } from '@Views/ABTradePage/type';
 import styled from '@emotion/styled';
 import { Trans } from '@lingui/macro';
 import { useAtom, useAtomValue } from 'jotai';

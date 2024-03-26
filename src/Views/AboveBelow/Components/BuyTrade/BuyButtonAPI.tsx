@@ -27,14 +27,14 @@ import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
-import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
-import { tradeSettingsAtom } from '@Views/TradePage/atoms';
-import { getSingatureCached } from '@Views/TradePage/cache';
-import { aboveBelowBaseUrl } from '@Views/TradePage/config';
-import { TradeType } from '@Views/TradePage/type';
-import { generateApprovalSignatureWrapper } from '@Views/TradePage/utils/generateApprovalSignatureWrapper';
-import { generateTradeSignature } from '@Views/TradePage/utils/generateTradeSignature';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { useApprvalAmount } from '@Views/ABTradePage/Hooks/useApprovalAmount';
+import { tradeSettingsAtom } from '@Views/ABTradePage/atoms';
+import { getSingatureCached } from '@Views/ABTradePage/cache';
+import { aboveBelowBaseUrl } from '@Views/ABTradePage/config';
+import { TradeType } from '@Views/ABTradePage/type';
+import { generateApprovalSignatureWrapper } from '@Views/ABTradePage/utils/generateApprovalSignatureWrapper';
+import { generateTradeSignature } from '@Views/ABTradePage/utils/generateTradeSignature';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { Skeleton } from '@mui/material';
 import { Chain, signTypedData } from '@wagmi/core';
 import axios from 'axios';
@@ -44,10 +44,10 @@ import { KeyedMutator } from 'swr';
 import { PrivateKeyAccount } from 'viem';
 import { useAccount } from 'wagmi';
 import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
 import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
-import { getSlippageError } from '@Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
+import { getSlippageError } from '@Views/ABTradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
 import { getAddress } from 'viem';
 import { solidityKeccak256 } from 'ethers/lib/utils';
 
@@ -352,7 +352,8 @@ const Buy: React.FC<{
   // }
   const buyHandler = async (is_up: boolean) => {
     try {
-      if (!amount) throw new Error('Please enter an amount');
+      if (!amount || amount === '0')
+        throw new Error('Please enter a valid amount');
       if (!selectedTimestamp) throw new Error('Please select expiry date');
       if (!selectedPrice) throw new Error('Please select strike price');
       if (!readCallData) throw new Error('Error fetching data');

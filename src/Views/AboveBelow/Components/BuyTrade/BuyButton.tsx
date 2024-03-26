@@ -16,10 +16,10 @@ import {
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
-import { getSlippageError } from '@Views/TradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
-import { tradeSettingsAtom } from '@Views/TradePage/atoms';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
+import { getSlippageError } from '@Views/ABTradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
+import { tradeSettingsAtom } from '@Views/ABTradePage/atoms';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
@@ -27,7 +27,7 @@ import { getAddress } from 'viem';
 import RouterABI from '../../abis/Router.json';
 import { ApproveBtn } from './ApproveBtn';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
-import { useApprvalAmount } from '@Views/TradePage/Hooks/useApprovalAmount';
+import { useApprvalAmount } from '@Views/ABTradePage/Hooks/useApprovalAmount';
 export const Buy = () => {
   const isIncreationWindow = useIsInCreationWindow();
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);

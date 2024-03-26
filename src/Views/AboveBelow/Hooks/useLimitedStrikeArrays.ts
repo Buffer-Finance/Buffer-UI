@@ -1,7 +1,7 @@
 import { BlackScholes } from '@Utils/Formulas/blackscholes';
 import { toFixed } from '@Utils/NumString';
 import { divide, multiply } from '@Utils/NumString/stringArithmatics';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
 import { solidityKeccak256 } from 'ethers/lib/utils';
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';

@@ -1,5 +1,5 @@
 import { tardesAtom } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
-import { NoTrades } from '@Views/TradePage/Views/BuyTrade/ActiveTrades/NoTrades';
+import { NoTrades } from '@Views/ABTradePage/Views/BuyTrade/ActiveTrades/NoTrades';
 import styled from '@emotion/styled';
 import { useAtomValue } from 'jotai';
 import { Trade } from './Trade';
