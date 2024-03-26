@@ -352,7 +352,8 @@ const Buy: React.FC<{
   // }
   const buyHandler = async (is_up: boolean) => {
     try {
-      if (!amount) throw new Error('Please enter an amount');
+      if (!amount || amount === '0')
+        throw new Error('Please enter a valid amount');
       if (!selectedTimestamp) throw new Error('Please select expiry date');
       if (!selectedPrice) throw new Error('Please select strike price');
       if (!readCallData) throw new Error('Error fetching data');
