@@ -1,9 +1,9 @@
-import { toFixed } from '@Utils/NumString';
-import { lt } from '@Utils/NumString/stringArithmatics';
-import { numberWithCommas } from '@Utils/display';
-import Big from 'big.js';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import Big from 'big.js';
 import NumberTooltip from '..';
+import { toFixed } from '@Utils/NumString';
+import { numberWithCommas } from '@Utils/display';
+import { lt } from '@Utils/NumString/stringArithmatics';
 interface IDisplayProp {
   data: string | number | null | undefined;
   unit?: string;
@@ -76,32 +76,25 @@ export const Display: React.FC<IDisplayProp> = ({
     }
 
     className = content ? className + ' ' + underLineClass : className;
-    let tooltipContent: ReactNode = (
-      <span>
-        {(data ? numberWithCommas(toFixed(data, 6)) : '0') +
-          (unit ? ' ' + unit : '')}
-      </span>
-    );
+    let tooltipContent: ReactNode | string =
+      (data ? numberWithCommas(toFixed(data, 6)) : '0') +
+      (unit ? ' ' + unit : '');
     if (content) {
       tooltipContent = <div className="px-4 py-2">{content}</div>;
     }
     if (disable) {
-      tooltipContent = <span></span>;
+      tooltipContent = '';
     }
-    const Unit = unit ? <span>&nbsp;{unit}</span> : <span></span>;
+    const Unit = unit ? <>{' ' + unit}</> : '';
     const generatedStyles = `flex mono content-center ${colored ? color : ''} ${
       className || ''
     }`;
     const DefaultExport = (
       <NumberTooltip content={tooltipContent} placement={placement}>
         <div className={generatedStyles}>
-          {label ? <span>{label}</span> : <span></span>}
-          {data ? (
-            <span>{numberWithCommas(toFixed(data, precision))}</span>
-          ) : (
-            <span></span>
-          )}
-          <span>{Unit}</span>
+          {label}
+          {data && numberWithCommas(toFixed(data, precision))}
+          {Unit}
         </div>
       </NumberTooltip>
     );
@@ -118,18 +111,27 @@ export const Display: React.FC<IDisplayProp> = ({
         return (
           <NumberTooltip content={tooltipContent} placement={placement}>
             <div className={generatedStyles}>
-              {label ? <span>{label}</span> : <span></span>}
-              {data ? (
-                <span>{numberWithCommas(toFixed(data, precision))}</span>
-              ) : (
-                <span></span>
-              )}
-              <span>{Unit}</span>
+              {label}
+              {data && numberWithCommas(toFixed(data, precision))}
+              {Unit}
             </div>
           </NumberTooltip>
         );
+        // } else {
+        //   // -0.0001 |
+        //   return (
+        //     <div className={generatedStyles}>
+        //       {label}
+        //       {data}
+        //       &nbsp;
+        //       {unit}
+        //     </div>
+        //   );
+        // }
       }
+      // 0.00precision11 has length more than 6.
     }
+    // if (isDecimal) {
     return DefaultExport;
   } catch (e) {
     console.log(e, 'this si the error');
