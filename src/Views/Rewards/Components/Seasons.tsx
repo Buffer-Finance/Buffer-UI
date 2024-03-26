@@ -1,3 +1,4 @@
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { add, divide, toFixed } from '@Utils/NumString/stringArithmatics';
 import {
   getTimestampFromWeekId,
@@ -155,6 +156,7 @@ const Season: React.FC<{
   onClick: (newSeason: number) => void;
   isSelected: boolean;
 }> = ({ seasonNum, onClick, isSelected }) => {
+  const { address } = useUserAccount();
   const liveSeasonId = getWeekId(0);
   const selectedSeasonId = startWeekId + seasonNum - 1;
   const selectedWeekStartDate = new Date(
@@ -266,6 +268,8 @@ const Season: React.FC<{
           >
             Ongoing
           </span>
+        ) : address === undefined ? (
+          <div className="text-f12 text-[#ffffff] text-left pl-1">-</div>
         ) : isLoading ? (
           <Skeleton
             variant="rectangular"
