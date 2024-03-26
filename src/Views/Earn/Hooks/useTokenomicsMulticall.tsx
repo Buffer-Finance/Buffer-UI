@@ -1,11 +1,7 @@
-import bfrAbi from '../Config/Abis/BFR.json';
-import VesterAbi from '../Config/Abis/Vester.json';
-import RewardTrackerAbi from '../Config/Abis/RewardTracker.json';
-import BlpAbi from '../Config/Abis/BufferBinaryIBFRPoolBinaryV2.json';
-import TokenAbi from '../Config/Abis/Token.json';
-import useSWR from 'swr';
-import axios from 'axios';
-import { convertBNtoString } from '@Utils/useReadCall';
+import camelotAbi from '@ABIs/Camelot.json';
+import { useActiveChain } from '@Hooks/useActiveChain';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { eToWide, toFixed } from '@Utils/NumString';
 import {
   add,
   divide,
@@ -15,15 +11,20 @@ import {
   multiply,
   subtract,
 } from '@Utils/NumString/stringArithmatics';
-import { Display } from '@Views/Common/Tooltips/Display';
-import { eToWide, toFixed } from '@Utils/NumString';
-import { useContractReads } from 'wagmi';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { roundToTwo } from '@Utils/roundOff';
-import { appConfig } from '@Views/TradePage/config';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import getDeepCopy from '@Utils/getDeepCopy';
+import { roundToTwo } from '@Utils/roundOff';
+import { convertBNtoString } from '@Utils/useReadCall';
+import { Display } from '@Views/Common/Tooltips/Display';
+import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { appConfig } from '@Views/TradePage/config';
+import { useMemo } from 'react';
+import { useContractRead, useContractReads } from 'wagmi';
+import bfrAbi from '../Config/Abis/BFR.json';
+import BlpAbi from '../Config/Abis/BufferBinaryIBFRPoolBinaryV2.json';
+import RewardTrackerAbi from '../Config/Abis/RewardTracker.json';
+import TokenAbi from '../Config/Abis/Token.json';
+import VesterAbi from '../Config/Abis/Vester.json';
+const camelotAddress = '0xc873fEcbd354f5A56E00E710B90EF4201db2448d';
 
 export const BASIS_POINTS_DIVISOR = '10000';
 export const SECONDS_PER_YEAR = '31536000';
@@ -33,35 +34,80 @@ export const TOTALSUPPLY = 80 * 10 ** 6 * 10 ** 18;
 const ibfrPriceCache = {
   cache: '0',
 };
+const BFRtoETH = [
+  '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',
+  '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+];
+const ETHtoUSD = [
+  '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+  '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+];
 export const useIbfrPrice = () => {
-  const getBothPrice = async () => {
-    const response = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-dev',
-      {
-        operationName: 'pools',
-        variables: {},
-        query:
-          'query pools {\n  pools(\n    where: {id_in: ["0xc31e54c7a869b9fcbecc14363cf510d1c41fa443", "0x17c14d2c404d167802b16c450d3c99f88f2c4f4d", "0xb529f885260321729d9ff1c69804c5bf9b3a95a5"]}\n  ) {\n    id\n    token1Price\n  }\n}\n',
-      }
-    );
-    return multiply(
-      response.data.data.pools[0].token1Price,
-      response.data.data.pools[1].token1Price
-    );
-  };
-
-  const keys = ['bfrPriceInEth'];
-
-  const { data, error } = useSWR(keys, {
-    fetcher: async (calls) => {
-      const res = await getBothPrice();
-
-      return res;
-    },
+  const { data: BFRPriceInEth } = useContractRead({
+    address: camelotAddress,
+    abi: camelotAbi,
+    functionName: 'getAmountsOut',
+    args: ['1000000000000000000', BFRtoETH],
+    chainId: 42161,
+    watch: true,
   });
+  const { data: BFRPriceInUSD } = useContractRead({
+    address: camelotAddress,
+    abi: camelotAbi,
+    functionName: 'getAmountsOut',
+    args: [BFRPriceInEth?.[1] || '29999', ETHtoUSD],
+    chainId: 42161,
+    watch: true,
+  });
+  const BFRPrice = useMemo(() => {
+    if (BFRPriceInUSD?.[1]) {
+      return divide(BFRPriceInUSD[1].toString(), 6);
+    }
+    return null;
+  }, [BFRPriceInUSD]);
+  // const getBothPrice = async () => {
+  //   const response = await axios.post(
+  //     'https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-dev',
+  //     {
+  //       operationName: 'pools',
+  //       variables: {},
+  //       query:
+  //         'query pools {\n  pools(\n    where: {id_in: ["0xc31e54c7a869b9fcbecc14363cf510d1c41fa443", "0x17c14d2c404d167802b16c450d3c99f88f2c4f4d", "0xb529f885260321729d9ff1c69804c5bf9b3a95a5"]}\n  ) {\n    id\n    token1Price\n  }\n}\n',
+  //     }
+  //   );
+  //   return multiply(
+  //     response.data.data.pools[0].token1Price,
+  //     response.data.data.pools[1].token1Price
+  //   );
+  // };
+  // const getPriceFromCoinGeko = async () => {
+  //   return await axios.get('https://api.camelot.exchange/v2/tokens');
+  // };
+  // const getPriceFromChain = async () => {
+  //   return await axios.get('https://api.camelot.exchange/v2/tokens');
+  // };
 
-  if (data && !error) {
-    ibfrPriceCache.cache = toFixed(data, 8);
+  // const keys = ['bfrPriceInEth'];
+  // const { data, error } = useSWR(keys, {
+  //   fetcher: async (calls) => {
+  //     console.log(`useTokenomicsMulticall-price: `);
+
+  //     // const res = await getBothPrice();
+  //     const coinGekoPrice = await getPriceFromCoinGeko();
+  //     console.log(`useTokenomicsMulticall-coinGekoPrice: `, coinGekoPrice);
+  //     let price = null;
+  //     // if (coinGekoPrice.data.stats) {
+  //     //   price =
+  //     //     coinGekoPrice.data.stats?.[coinGekoPrice.data.stats.length - 1][1];
+  //     //   console.log(`useTokenomicsMulticall-price: `, price);
+  //     // }
+  //     return price;
+  //   },
+  // });
+
+  console.log(`useTokenomicsMulticall-BFRPrice: `, BFRPrice);
+  if (BFRPrice) {
+    ibfrPriceCache.cache = toFixed(BFRPrice, 8);
   }
   return ibfrPriceCache.cache;
 };
