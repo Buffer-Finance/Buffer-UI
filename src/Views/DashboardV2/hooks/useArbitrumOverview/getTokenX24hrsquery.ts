@@ -1,4 +1,4 @@
-import { poolInfoByAssetType } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { poolInfoByAssetType } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 
 export function getTokenX24hrsquery(
   tokensArray: string[],

@@ -1,7 +1,7 @@
 import { toFixed } from '@Utils/NumString';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { marketTypeAB } from '@Views/AboveBelow/types';
-import { formatBalance } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
+import { formatBalance } from '@Views/ABTradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { Skeleton } from '@mui/material';
 import { getAddress } from 'viem';
 

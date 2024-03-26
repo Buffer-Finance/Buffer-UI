@@ -27,7 +27,7 @@ import BufferTab, { ITab } from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 import {
   IWinrate,
   useWeeklyLeaderboardQuery,

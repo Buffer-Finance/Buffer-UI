@@ -1,7 +1,7 @@
 import { add } from '@Utils/NumString/stringArithmatics';
 import { viemMulticallNonLinked } from '@Utils/multicall';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
-import { HolderContracts, appConfig } from '@Views/TradePage/config';
+import { HolderContracts, appConfig } from '@Views/ABTradePage/config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { createPublicClient, http } from 'viem';

@@ -1,4 +1,4 @@
-import { poolInfoType } from '@Views/TradePage/type';
+import { poolInfoType } from '@Views/ABTradePage/type';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { getAddress } from 'viem';

@@ -13,7 +13,7 @@ import TImerStyle from '@Views/Common/SocialMedia/TimerStyle';
 import TabSwitch from '@Views/Common/TabSwitch';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { LeaderBoard } from '..';

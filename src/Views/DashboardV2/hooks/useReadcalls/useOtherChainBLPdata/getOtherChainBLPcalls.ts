@@ -1,7 +1,7 @@
 import { getCallId } from '@Utils/Contract/multiContract';
 import bfrAbi from '@Views/Earn/Config/Abis/BFR.json';
 import BlpAbi from '@Views/Earn/Config/Abis/BufferBinaryIBFRPoolBinaryV2.json';
-import { poolInfoType } from '@Views/TradePage/type';
+import { poolInfoType } from '@Views/ABTradePage/type';
 
 export const getOtherChainBLPcalls = (
   usdcPool: poolInfoType & {

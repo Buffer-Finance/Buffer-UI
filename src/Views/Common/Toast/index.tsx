@@ -6,9 +6,9 @@ import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import SuccessIcon from '@Assets/Elements/SuccessIcon';
 import ErrorIcon from '@Assets/Elements/ErrorIcon';
 import FailedSuccessIcon from '@Assets/Elements/FailedSuccess';
-import { CLoseSVG } from '@Views/TradePage/Components/CloseSVG';
+import { CLoseSVG } from '@Views/ABTradePage/Components/CloseSVG';
 import { useAtom } from 'jotai';
-import { notificationPositionSettingsAtom } from '@Views/TradePage/atoms';
+import { notificationPositionSettingsAtom } from '@Views/ABTradePage/atoms';
 
 export const NotificationContext = React.createContext('d');
 

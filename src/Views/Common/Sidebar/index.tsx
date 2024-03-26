@@ -13,7 +13,7 @@ import Medium from 'public/Social/medium';
 import GitHub from 'public/Social/github';
 import Telegram from 'public/Social/telegram';
 import CloseLogo from '@SVG/Elements/Closelogo';
-import { CloseButton } from '@Views/TradePage/Components/CloseButton';
+import { CloseButton } from '@Views/ABTradePage/Components/CloseButton';
 import BackIcon from '@SVG/buttons/back';
 import MemoHamburgerBack from '@SVG/Elements/sidebarCollpaseIcon';
 import { NewChip, newTabs } from '../Navbar';

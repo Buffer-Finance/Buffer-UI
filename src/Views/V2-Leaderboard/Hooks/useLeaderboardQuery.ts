@@ -12,7 +12,7 @@ import { useDayOffset } from './useDayOffset';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { blacklist } from '../blacklist.json';
 import { DailyTournamentConfig } from '../Incentivised/config';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { getTokenXleaderboardQueryFields } from './useWeeklyLeaderboardQuery';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';

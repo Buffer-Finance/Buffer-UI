@@ -6,7 +6,7 @@ import { Cancelled } from '../Tables/Cancelled';
 
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useProcessedTrades } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { cancelledActivePageAtom } from './atoms';
 
 export const AllCancelled: React.FC<{}> = () => {

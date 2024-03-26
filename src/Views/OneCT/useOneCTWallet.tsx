@@ -1,11 +1,11 @@
 import { useToast } from '@Contexts/Toast';
 import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
-import { showOnboardingAnimationAtom } from '@Views/TradePage/atoms';
-import { getSingatureCached } from '@Views/TradePage/cache';
-import { aboveBelowBaseUrl } from '@Views/TradePage/config';
-import { WaitToast } from '@Views/TradePage/utils';
-import { getWalletFromOneCtPk } from '@Views/TradePage/utils/generateTradeSignature';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { showOnboardingAnimationAtom } from '@Views/ABTradePage/atoms';
+import { getSingatureCached } from '@Views/ABTradePage/cache';
+import { aboveBelowBaseUrl } from '@Views/ABTradePage/config';
+import { WaitToast } from '@Views/ABTradePage/utils';
+import { getWalletFromOneCtPk } from '@Views/ABTradePage/utils/generateTradeSignature';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { signTypedData } from '@wagmi/core';
 import axios from 'axios';
 import { ethers } from 'ethers';

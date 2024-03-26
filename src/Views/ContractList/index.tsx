@@ -1,7 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import CopyIcon from '@SVG/Elements/CopyIcon';
 import copyToClipboard from '@Utils/copyToClipboard';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { ArrowDropDown, ArrowRight } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import axios from 'axios';

@@ -7,7 +7,7 @@ import {
   WSUpdate,
 } from 'src/Types/Market';
 import { ResolutionString } from 'public/static/charting_library';
-import { TradeType } from '@Views/TradePage/type';
+import { TradeType } from '@Views/ABTradePage/type';
 export const timeDeltaMapping = (t: string | number) => {
   if (typeof t == 'string') {
     if (

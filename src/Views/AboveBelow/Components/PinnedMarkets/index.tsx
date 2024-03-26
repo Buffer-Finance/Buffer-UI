@@ -2,7 +2,7 @@ import {
   aboveBelowMarketsAtom,
   favouriteMarketsAtom,
 } from '@Views/AboveBelow/atoms';
-import { RowGap } from '@Views/TradePage/Components/Row';
+import { RowGap } from '@Views/ABTradePage/Components/Row';
 import { useAtomValue } from 'jotai';
 import { Market } from './Market';
 

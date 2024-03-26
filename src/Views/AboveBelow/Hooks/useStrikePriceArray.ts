@@ -1,5 +1,5 @@
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
 import { useAtomValue } from 'jotai';
 import { getRoundedPrice } from '../Components/BuyTrade/PriceTable/helpers';
 import { selectedPoolActiveMarketAtom } from '../atoms';

@@ -3,7 +3,7 @@ import getDeepCopy from '@Utils/getDeepCopy';
 import { convertBNtoString } from '@Utils/useReadCall';
 import ReferralABI from '../Config/ReferralABI.json';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 
 export function useUserCode(activeChain: Chain) {
   const activeChainID = activeChain.id;

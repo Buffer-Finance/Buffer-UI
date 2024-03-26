@@ -1,7 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { add } from '@Utils/NumString/stringArithmatics';
 import { getLinuxTimestampBefore24Hours } from '@Views/DashboardV2/utils/getLinuxTimestampBefore24Hours';
-import { appConfig } from '@Views/TradePage/config';
+import { appConfig } from '@Views/ABTradePage/config';
 import axios from 'axios';
 import { getAddress } from 'ethers/lib/utils.js';
 import { useMemo } from 'react';

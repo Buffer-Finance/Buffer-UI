@@ -1,9 +1,9 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { add } from '@Utils/NumString/stringArithmatics';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
-import { useMarketsRequest } from '@Views/TradePage/Hooks/GraphqlRequests/useMarketsRequest';
-import { appConfig } from '@Views/TradePage/config';
-import { responseObj } from '@Views/TradePage/type';
+import { useMarketsRequest } from '@Views/ABTradePage/Hooks/GraphqlRequests/useMarketsRequest';
+import { appConfig } from '@Views/ABTradePage/config';
+import { responseObj } from '@Views/ABTradePage/type';
 import { getAddress } from 'ethers/lib/utils.js';
 import { useMemo } from 'react';
 import { useMarketsReadCallData } from './useMarketsData/useMarketsReadcallData';

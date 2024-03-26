@@ -1,22 +1,22 @@
 import { useToast } from '@Contexts/Toast';
-import { TradeSizeSelector } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
+import { TradeSizeSelector } from '@Views/ABTradePage/Views/BuyTrade/TradeSizeSelector';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import HorizontalTransition from '../Transitions/Horizontal';
-import { MobileDurationInput } from '@Views/TradePage/Components/MobileView/MobileDurationInput';
+import { MobileDurationInput } from '@Views/ABTradePage/Components/MobileView/MobileDurationInput';
 import { MobileShutterProps, useShutterHandlers } from './MobileShutter';
 import { BlueBtn } from '../V2-Button';
 import {
   limitOrderStrikeAtom,
   timeSelectorAtom,
   tradeTypeAtom,
-} from '@Views/TradePage/atoms';
-import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
+} from '@Views/ABTradePage/atoms';
+import { TimePicker } from '@Views/ABTradePage/Views/BuyTrade/TimeSelector/TimePicker';
 import TimePickerSelection from '../IOSTimePicer/components/TimePickerSelection';
 import { IOSTimePicker } from '../IOSTimePicer';
-import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { HHMMToSeconds } from '@Views/TradePage/utils';
-import { MarketStatsBar } from '@Views/TradePage/Views/MarketChart/MarketStatsBar';
+import { useSwitchPool } from '@Views/ABTradePage/Hooks/useSwitchPool';
+import { HHMMToSeconds } from '@Views/ABTradePage/utils';
+import { MarketStatsBar } from '@Views/ABTradePage/Views/MarketChart/MarketStatsBar';
 const tabs = ['Amount', 'Duration'];
 export const shutterActiveTabAtom = atom(tabs[0]);
 

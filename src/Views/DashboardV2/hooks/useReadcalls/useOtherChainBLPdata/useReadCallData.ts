@@ -4,7 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { readResponseAtom, setReadCallsAtom } from '@Views/DashboardV2/atoms';
 import { useEffect } from 'react';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 
 export const useReadCallData = () => {
   const { activeChain } = useActiveChain();

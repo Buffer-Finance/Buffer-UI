@@ -1,5 +1,5 @@
 import { searchBarAtom } from '@Views/AboveBelow/atoms';
-import { SearchIconSVG } from '@Views/TradePage/Components/SearchIconSVG';
+import { SearchIconSVG } from '@Views/ABTradePage/Components/SearchIconSVG';
 import { useAtom } from 'jotai';
 
 export const SearchBar: React.FC = () => {

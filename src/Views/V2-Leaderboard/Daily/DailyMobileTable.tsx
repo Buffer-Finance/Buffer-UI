@@ -16,7 +16,7 @@ import {
 } from '@Views/Earn/Components/VestCards';
 import { toFixed } from '@Utils/NumString';
 import { gte } from 'lodash';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;

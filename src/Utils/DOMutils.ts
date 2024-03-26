@@ -1,4 +1,4 @@
-import { apiBaseUrl } from '@Views/TradePage/Views/AccordionTable/ShareModal/ShareButtons';
+import { apiBaseUrl } from '@Views/ABTradePage/Views/AccordionTable/ShareModal/ShareButtons';
 import { toPng } from 'html-to-image';
 export interface ICloudanaryRes {
   asset_id: string;

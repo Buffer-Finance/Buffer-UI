@@ -1,4 +1,4 @@
-import { appConfig, earnConfigType } from '@Views/TradePage/config';
+import { appConfig, earnConfigType } from '@Views/ABTradePage/config';
 
 export function getContract(chainId: number, name: earnConfigType) {
   const CONTRACTS =

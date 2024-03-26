@@ -11,7 +11,7 @@ import { weeklyTournamentConfig } from '../Weekly/config';
 import { blacklist } from '../blacklist.json';
 import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 export interface IWinrate extends ILeague {
   winrate: string;
   tradesWon: string;

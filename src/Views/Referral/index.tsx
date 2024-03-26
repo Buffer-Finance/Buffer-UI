@@ -22,7 +22,7 @@ import {
 import PlainCard from '@Views/Referral/Components/PlainCard';
 import { ReferralCodeModal } from '@Views/Referral/Components/ReferralModal';
 import { useReferralWriteCall } from '@Views/Referral/Hooks/useReferralWriteCalls';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtom } from 'jotai';

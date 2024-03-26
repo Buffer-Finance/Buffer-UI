@@ -1,13 +1,13 @@
-import { ColumnGap } from '@Views/TradePage/Components/Column';
+import { ColumnGap } from '@Views/ABTradePage/Components/Column';
 import styled from '@emotion/styled';
-import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
+import { RowBetween, RowGap } from '@Views/ABTradePage/Components/Row';
 
 import { useEffect, useMemo, useState } from 'react';
 import {
   BuyTradeHeadText,
   EditTextValueText,
   SettingsComponentHeader,
-} from '@Views/TradePage/Components/TextWrapper';
+} from '@Views/ABTradePage/Components/TextWrapper';
 import { ModalBase } from 'src/Modals/BaseModal';
 import { useAtom } from 'jotai';
 import { isAutorizedAtom } from 'src/App';

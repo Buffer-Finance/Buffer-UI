@@ -6,7 +6,7 @@ import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import Drawer from '@Views/Common/V2-Drawer';
 import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 import { Skeleton } from '@mui/material';
 import { ethers } from 'ethers';
 import { useEffect, useMemo, useState } from 'react';

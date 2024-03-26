@@ -1,5 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import axios from 'axios';
 import useSWR from 'swr';
 

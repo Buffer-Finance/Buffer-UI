@@ -1,7 +1,7 @@
 import { silentPriceCache } from '@Hooks/usePrice';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
-import { marketsForChart } from '@Views/TradePage/config';
+import { useActiveMarket } from '@Views/ABTradePage/Hooks/useActiveMarket';
+import { marketsForChart } from '@Views/ABTradePage/config';
 import axios from 'axios';
 import { atom, useAtom, useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';

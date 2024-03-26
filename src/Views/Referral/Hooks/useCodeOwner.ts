@@ -4,7 +4,7 @@ import useDebouncedEffect from '@Hooks/Utilities/useDeboncedEffect';
 import { usePublicClient } from 'wagmi';
 import { contractRead } from '@Utils/useReadCall';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { getContract } from 'viem';
 
 import { createPublicClient, http } from 'viem';

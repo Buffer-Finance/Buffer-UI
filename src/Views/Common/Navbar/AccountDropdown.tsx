@@ -19,9 +19,9 @@ import ETHImage from '../../../../public/tokens/ETH.png';
 import DDArrow from '@SVG/Elements/Arrow';
 import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
 import WalletIcon from '@SVG/Elements/WalletIcon';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { activePoolObjAtom } from '@Views/TradePage/atoms';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { useOngoingTrades } from '@Views/ABTradePage/Hooks/useOngoingTrades';
+import { activePoolObjAtom } from '@Views/ABTradePage/atoms';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 import { getAddress } from 'viem';
 import copyToClipboard from '@Utils/copyToClipBoard';
 const token2image = {

@@ -7,7 +7,7 @@ import {
   fromWei,
   useIbfrPrice,
 } from '@Views/Earn/Hooks/useTokenomicsMulticall';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 
 export const useUBLPdata = () => {
   const readcalldata = useUBLPreadcallData();

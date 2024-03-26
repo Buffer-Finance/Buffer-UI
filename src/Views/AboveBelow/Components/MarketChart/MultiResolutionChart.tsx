@@ -25,9 +25,9 @@ import {
   Markets,
   OHLCBlock,
   RealtimeUpdate,
-} from '@Views/TradePage/Views/MarketChart/MakrketTypes';
-import { queuets2priceAtom, visualizeddAtom } from '@Views/TradePage/atoms';
-import { PRICE_DECIMALS, marketsForChart } from '@Views/TradePage/config';
+} from '@Views/ABTradePage/Views/MarketChart/MakrketTypes';
+import { queuets2priceAtom, visualizeddAtom } from '@Views/ABTradePage/atoms';
+import { PRICE_DECIMALS, marketsForChart } from '@Views/ABTradePage/config';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';

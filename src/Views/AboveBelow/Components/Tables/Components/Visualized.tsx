@@ -1,5 +1,5 @@
 import { ShowIcon } from '@SVG/Elements/ShowIcon';
-import { visualizeddAtom } from '@Views/TradePage/atoms';
+import { visualizeddAtom } from '@Views/ABTradePage/atoms';
 import { useAtom } from 'jotai';
 
 export const Visualized: React.FC<{

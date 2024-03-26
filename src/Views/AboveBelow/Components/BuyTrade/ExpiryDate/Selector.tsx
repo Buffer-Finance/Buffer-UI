@@ -1,5 +1,5 @@
 import { selectedExpiry } from '@Views/AboveBelow/atoms';
-import { RowGap } from '@Views/TradePage/Components/Row';
+import { RowGap } from '@Views/ABTradePage/Components/Row';
 import { useAtom } from 'jotai';
 import { formatDateShort, getTimestamps } from './helpers';
 

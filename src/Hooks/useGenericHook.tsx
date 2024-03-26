@@ -1,16 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import { useToast } from '@Contexts/Toast';
-import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
-import { usePoolInfo } from '@Views/TradePage/Hooks/usePoolInfo';
+import { TradeType, marketType, poolInfoType } from '@Views/ABTradePage/type';
+import { useOngoingTrades } from '@Views/ABTradePage/Hooks/useOngoingTrades';
+import { usePoolInfo } from '@Views/ABTradePage/Hooks/usePoolInfo';
 
-import { getExpireNotification } from '@Views/TradePage/utils/getExpireNotification';
+import { getExpireNotification } from '@Views/ABTradePage/utils/getExpireNotification';
 import {
   SetShareBetAtom,
   SetShareStateAtom,
   shareSettingsAtom,
-} from '@Views/TradePage/atoms';
+} from '@Views/ABTradePage/atoms';
 import { useUserAccount } from './useUserAccount';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useMedia } from 'react-use';

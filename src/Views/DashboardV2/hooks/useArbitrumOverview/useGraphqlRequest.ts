@@ -1,6 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { responseType, totalStats } from '@Views/DashboardV2/types';
-import { appConfig } from '@Views/TradePage/config';
+import { appConfig } from '@Views/ABTradePage/config';
 import axios from 'axios';
 import useSWR from 'swr';
 import { usePoolNames } from '../usePoolNames';
@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 import { getTokenXquery } from './getTokenXquery';
 import { getTokenX24hrsquery } from './getTokenX24hrsquery';
 import { getLinuxTimestampBefore24Hours } from '@Views/DashboardV2/utils/getLinuxTimestampBefore24Hours';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 
 export const useGraphqlRequest = () => {
   const { activeChain } = useActiveChain();

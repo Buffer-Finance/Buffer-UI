@@ -2,7 +2,7 @@ import { BufferProgressBar } from '@Views/Common/BufferProgressBar.tsx';
 import BufferSortTable from '@Views/Common/BufferSortTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import { PairTokenImage } from '@Views/ABTradePage/Views/PairTokenImage';
 import { DOwnTriangle } from 'public/ComponentSVGS/DownTriangle';
 import { UpTriangle } from 'public/ComponentSVGS/UpTriangle';
 import { useNavigate } from 'react-router-dom';

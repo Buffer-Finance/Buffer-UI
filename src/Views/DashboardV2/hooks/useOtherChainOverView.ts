@@ -5,8 +5,8 @@ import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
 import { getLinuxTimestampBefore24Hours } from '../utils/getLinuxTimestampBefore24Hours';
-import { appConfig } from '@Views/TradePage/config';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { appConfig } from '@Views/ABTradePage/config';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 
 export const useOtherChainOverview = () => {
   const { activeChain } = useActiveChain();

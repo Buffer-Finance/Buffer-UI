@@ -1,5 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { appConfig } from '@Views/TradePage/config';
+import { appConfig } from '@Views/ABTradePage/config';
 import axios from 'axios';
 import useSWR from 'swr';
 import { getLinuxTimestampBefore24Hours } from '../utils/getLinuxTimestampBefore24Hours';

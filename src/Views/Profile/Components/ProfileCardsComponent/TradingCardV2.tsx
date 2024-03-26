@@ -5,7 +5,7 @@ import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
 import { TokenWiseData } from '@Views/Profile/Hooks/useProfileGraphQl2';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 import { profileCardClass } from './ProfileCards';

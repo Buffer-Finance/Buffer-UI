@@ -4,11 +4,11 @@ import { VanillaBOConfigs } from './VannilaOptionsConfig';
 import ShutterDrawer from 'react-bottom-drawer';
 import { useToast } from '@Contexts/Toast';
 import { ReactNode, useCallback } from 'react';
-import { MobileMarketPicker } from '@Views/TradePage/Components/MobileView/MarketPicker/MarketPicker';
-import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePicker';
-import { ActiveTrades } from '@Views/TradePage/Views/BuyTrade/ActiveTrades';
-import { ModalChild } from '@Views/TradePage/Views/AccordionTable/ShareModal/ShareModalChild';
-import { MobileChartControllsEditable } from '@Views/TradePage/Components/MobileView/MobileChartControlls';
+import { MobileMarketPicker } from '@Views/ABTradePage/Components/MobileView/MarketPicker/MarketPicker';
+import { TimePicker } from '@Views/ABTradePage/Views/BuyTrade/TimeSelector/TimePicker';
+import { ActiveTrades } from '@Views/ABTradePage/Views/BuyTrade/ActiveTrades';
+import { ModalChild } from '@Views/ABTradePage/Views/AccordionTable/ShareModal/ShareModalChild';
+import { MobileChartControllsEditable } from '@Views/ABTradePage/Components/MobileView/MobileChartControlls';
 export const shutterModalAtom = atom<{
   open:
     | 'LO'

@@ -2,7 +2,7 @@ import { useCall2Data, useReadCall } from '@Utils/useReadCall';
 import ReferralABI from '../Config/ReferralABI.json';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { getCallId, getReadId } from '@Utils/Contract/multiContract';
 
 export function useRefereeCode() {

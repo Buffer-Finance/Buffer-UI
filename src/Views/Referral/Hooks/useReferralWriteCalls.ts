@@ -1,7 +1,7 @@
 import { useWriteCall } from '@Hooks/useWriteCall';
 import ReferralABI from '../Config/ReferralABI.json';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 
 type methodName = 'registerCode' | 'setTraderReferralCodeByUser';
 

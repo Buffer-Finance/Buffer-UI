@@ -1,6 +1,6 @@
 import { aboveBelowMarketsAtom } from '@Views/AboveBelow/atoms';
-import { ColumnGap } from '@Views/TradePage/Components/Column';
-import { RowBetween } from '@Views/TradePage/Components/Row';
+import { ColumnGap } from '@Views/ABTradePage/Components/Column';
+import { RowBetween } from '@Views/ABTradePage/Components/Row';
 import styled from '@emotion/styled';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';

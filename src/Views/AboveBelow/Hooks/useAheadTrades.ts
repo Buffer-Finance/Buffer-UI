@@ -1,7 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { useCall2Data } from '@Utils/useReadCall';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { ethers } from 'ethers';
 import { useMemo } from 'react';
 import useSWR from 'swr';

@@ -1,7 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
-import { aboveBelowBaseUrl } from '@Views/TradePage/config';
+import { aboveBelowBaseUrl } from '@Views/ABTradePage/config';
 import axios from 'axios';
 import useSWR from 'swr';
 import { useAccount } from 'wagmi';

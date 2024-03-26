@@ -1,5 +1,5 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { appConfig } from '@Views/TradePage/config';
+import { appConfig } from '@Views/ABTradePage/config';
 import { useMemo } from 'react';
 
 export const usePoolNames = () => {

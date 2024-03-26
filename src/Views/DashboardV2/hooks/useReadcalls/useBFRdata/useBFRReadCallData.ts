@@ -4,8 +4,8 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { getArbitrumBFRreadcalls } from './getArbitrumBFRreadcalls';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { appConfig } from '@Views/TradePage/config';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { appConfig } from '@Views/ABTradePage/config';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 
 export const useBFRReadCallData = () => {
   const response = useAtomValue(readResponseAtom);

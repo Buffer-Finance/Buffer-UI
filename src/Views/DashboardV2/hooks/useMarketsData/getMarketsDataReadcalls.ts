@@ -1,10 +1,10 @@
 import { getCallId } from '@Utils/Contract/multiContract';
-import CreationWindowABI from '@Views/TradePage/ABIs/CreationWindowABI.json';
-import OptionContractABI from '@Views/TradePage/ABIs/OptionContract.json';
-import { IBaseSettlementFees } from '@Views/TradePage/Hooks/useSettlementFee';
-import { marketType } from '@Views/TradePage/type';
-import { joinStrings } from '@Views/TradePage/utils';
-import { timeToMins } from '@Views/TradePage/utils/timeToMins';
+import CreationWindowABI from '@Views/ABTradePage/ABIs/CreationWindowABI.json';
+import OptionContractABI from '@Views/ABTradePage/ABIs/OptionContract.json';
+import { IBaseSettlementFees } from '@Views/ABTradePage/Hooks/useSettlementFee';
+import { marketType } from '@Views/ABTradePage/type';
+import { joinStrings } from '@Views/ABTradePage/utils';
+import { timeToMins } from '@Views/ABTradePage/utils/timeToMins';
 
 export const getMarketsDataReadcalls = (
   config: marketType[] | null,

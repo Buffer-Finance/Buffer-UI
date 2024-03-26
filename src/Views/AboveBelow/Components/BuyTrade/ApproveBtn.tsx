@@ -2,7 +2,7 @@ import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { MAX_APPROVAL_VALUE } from '@Views/TradePage/config';
+import { MAX_APPROVAL_VALUE } from '@Views/ABTradePage/config';
 import { useState } from 'react';
 import { erc20ABI } from 'wagmi';
 

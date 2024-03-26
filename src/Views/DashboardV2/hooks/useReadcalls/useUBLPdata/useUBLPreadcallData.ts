@@ -1,8 +1,8 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getCallId } from '@Utils/Contract/multiContract';
 import { readResponseAtom, setReadCallsAtom } from '@Views/DashboardV2/atoms';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
-import { appConfig } from '@Views/TradePage/config';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
+import { appConfig } from '@Views/ABTradePage/config';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { getUBLPreadcalls } from './getUBLPreadcalls';

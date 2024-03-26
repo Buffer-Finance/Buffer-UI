@@ -1,4 +1,4 @@
-import { pricePublisherBaseUrl } from '@Views/TradePage/config';
+import { pricePublisherBaseUrl } from '@Views/ABTradePage/config';
 import axios from 'axios';
 import { useAtomValue } from 'jotai';
 import useSWR from 'swr';

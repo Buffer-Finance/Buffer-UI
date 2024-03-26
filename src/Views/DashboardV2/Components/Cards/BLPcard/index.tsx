@@ -1,4 +1,4 @@
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import { PairTokenImage } from '@Views/ABTradePage/Views/PairTokenImage';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { IBLP } from '@Views/Dashboard/interface';
 import { Card } from '@Views/Earn/Components/Card';
@@ -9,7 +9,7 @@ import {
   tooltipValueClasses,
   valueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { getAssetImageUrl } from '@Views/TradePage/utils/getAssetImageUrl';
+import { getAssetImageUrl } from '@Views/ABTradePage/utils/getAssetImageUrl';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 

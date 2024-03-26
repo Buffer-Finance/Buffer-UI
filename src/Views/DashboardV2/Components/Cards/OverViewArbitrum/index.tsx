@@ -5,7 +5,7 @@ import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayName
 import { Card } from '@Views/Earn/Components/Card';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 import { useMemo } from 'react';

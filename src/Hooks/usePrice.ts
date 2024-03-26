@@ -1,5 +1,5 @@
 import { multiply } from '@Utils/NumString/stringArithmatics';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { useActiveMarket } from '@Views/ABTradePage/Hooks/useActiveMarket';
 import axios from 'axios';
 import Big from 'big.js';
 import { atom, useSetAtom } from 'jotai';

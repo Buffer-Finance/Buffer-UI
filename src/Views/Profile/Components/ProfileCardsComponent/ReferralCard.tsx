@@ -12,7 +12,7 @@ import {
   valueClasses,
 } from '@Views/Earn/Components/VestCards';
 import { IReferralStat } from '@Views/Referral';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 import { useMemo } from 'react';

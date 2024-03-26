@@ -1,6 +1,6 @@
 import { subtract } from '@Utils/NumString/stringArithmatics';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
-import { TimeElapsedBar } from '@Views/TradePage/Components/TimeElapsedBar';
+import { TimeElapsedBar } from '@Views/ABTradePage/Components/TimeElapsedBar';
 
 export const TimerBar: React.FC<{
   trade: IGQLHistory;

@@ -2,20 +2,20 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { priceAtom } from '@Hooks/usePrice';
 import { keyValueStringType } from '@Views/DashboardV2/types';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
-import { useMarketsRequest } from '@Views/TradePage/Hooks/GraphqlRequests/useMarketsRequest';
-import { getCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
+import { useMarketsRequest } from '@Views/ABTradePage/Hooks/GraphqlRequests/useMarketsRequest';
+import { getCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
 import {
   IBaseSettlementFees,
   useSettlementFee,
-} from '@Views/TradePage/Hooks/useSettlementFee';
-import { appConfig, marketsForChart } from '@Views/TradePage/config';
+} from '@Views/ABTradePage/Hooks/useSettlementFee';
+import { appConfig, marketsForChart } from '@Views/ABTradePage/config';
 import {
   AssetCategory,
   chartDataType,
   poolInfoType,
   responseObj,
-} from '@Views/TradePage/type';
-import { getPayout, secondsToHHMM } from '@Views/TradePage/utils';
+} from '@Views/ABTradePage/type';
+import { getPayout, secondsToHHMM } from '@Views/ABTradePage/utils';
 import { getAddress } from 'ethers/lib/utils.js';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';

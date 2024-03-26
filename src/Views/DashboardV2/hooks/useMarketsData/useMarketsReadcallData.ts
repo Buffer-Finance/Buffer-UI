@@ -1,14 +1,14 @@
-import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
+import { useMarketsConfig } from '@Views/ABTradePage/Hooks/useMarketsConfig';
 import { getMarketsDataReadcalls } from './getMarketsDataReadcalls';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
-import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
+import { useSettlementFee } from '@Views/ABTradePage/Hooks/useSettlementFee';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useEffect, useMemo } from 'react';
 import { readResponseAtom, setReadCallsAtom } from '@Views/DashboardV2/atoms';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { getCallId } from '@Utils/Contract/multiContract';
-import { joinStrings } from '@Views/TradePage/utils';
+import { joinStrings } from '@Views/ABTradePage/utils';
 
 export const useMarketsReadCallData = () => {
   const readCallData = useAtomValue(readResponseAtom);

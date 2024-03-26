@@ -10,7 +10,7 @@ import {
 } from './Contract/multiContract';
 import getDeepCopy from './getDeepCopy';
 import { useMemo } from 'react';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { viemMulticall } from './multicall';
 import { createPublicClient, http } from 'viem';
 

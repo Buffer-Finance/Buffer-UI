@@ -6,7 +6,7 @@ import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 import TableErrorMsg from '@Views/Common/BufferTable/ErrorMsg';
 import { TableHeader } from '@Views/Common/TableHead';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { PairTokenImage } from '@Views/TradePage/Views/PairTokenImage';
+import { PairTokenImage } from '@Views/ABTradePage/Views/PairTokenImage';
 import { getV3AppFilteredAssets } from '@Views/V3App/Utils/getFilteredAssets';
 import { IconButton } from '@mui/material';
 import { useAtom } from 'jotai';

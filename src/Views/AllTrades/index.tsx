@@ -2,13 +2,13 @@ import { usePriceRetriable } from '@Hooks/usePrice';
 import {
   MobilePlatformHistoryTable,
   MobilePlatformOngoingTable,
-} from '@Views/TradePage/Components/MobileView/TradeLog_sm';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
+} from '@Views/ABTradePage/Components/MobileView/TradeLog_sm';
+import { useBuyTradeData } from '@Views/ABTradePage/Hooks/useBuyTradeData';
 import {
   PlatformHistory,
   PlatformOngoing,
   PlatfromCancelled,
-} from '@Views/TradePage/Views/AccordionTable';
+} from '@Views/ABTradePage/Views/AccordionTable';
 import { useMemo } from 'react';
 import { useMedia } from 'react-use';
 import { useAllTradesTab } from './useAlltradesTab';

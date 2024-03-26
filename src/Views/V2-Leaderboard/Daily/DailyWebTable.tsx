@@ -15,7 +15,7 @@ import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 import { Launch } from '@mui/icons-material';
 import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';

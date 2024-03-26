@@ -1,4 +1,4 @@
-import { defaultMarket } from '@Views/TradePage/config';
+import { defaultMarket } from '@Views/ABTradePage/config';
 import { SVGProps } from 'react';
 
 export interface ITab {

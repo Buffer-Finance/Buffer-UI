@@ -2,7 +2,7 @@ import { otherBlpType } from '@Views/DashboardV2/types';
 import { useReadCallData } from './useReadCallData';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { fromWei } from '@Views/Earn/Hooks/useTokenomicsMulticall';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 
 export const useOtherChainBLPdata = () => {
   const data = useReadCallData();

@@ -1,5 +1,5 @@
 import { selectedPoolActiveMarketAtom } from '@Views/AboveBelow/atoms';
-import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
+import { RowBetween, RowGap } from '@Views/ABTradePage/Components/Row';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { atom, useAtom, useAtomValue } from 'jotai';

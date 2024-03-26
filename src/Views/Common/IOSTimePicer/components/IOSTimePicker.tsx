@@ -4,9 +4,9 @@ import HourWheel from './HourWheel';
 import MinuteWheel from './MinuteWheel';
 import { useToast } from '@Contexts/Toast';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { LightToolTipSVG } from '@Views/TradePage/Components/LightToolTipSVG';
+import { LightToolTipSVG } from '@Views/ABTradePage/Components/LightToolTipSVG';
 import { Trans } from '@lingui/macro';
-import { HHMMToSeconds, secondsToHHMM } from '@Views/TradePage/utils';
+import { HHMMToSeconds, secondsToHHMM } from '@Views/ABTradePage/utils';
 
 const getValidationError = (value, minValue, maxValue) => {
   const seconds = HHMMToSeconds(value);

@@ -21,8 +21,8 @@ import { useContractReads } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { roundToTwo } from '@Utils/roundOff';
-import { appConfig } from '@Views/TradePage/config';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { appConfig } from '@Views/ABTradePage/config';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 import getDeepCopy from '@Utils/getDeepCopy';
 
 export const BASIS_POINTS_DIVISOR = '10000';

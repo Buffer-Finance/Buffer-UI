@@ -1,11 +1,11 @@
 import { priceAtom } from '@Hooks/usePrice';
 import { getPriceFromKlines } from '@TV/useDataFeed';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import { useActiveMarket } from '@Views/ABTradePage/Hooks/useActiveMarket';
 import {
   LimitOrderPayoutPicker,
   StrikePricePicker,
-} from '@Views/TradePage/Views/BuyTrade/CurrentPrice';
-import { LimitOrderPayoutAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
+} from '@Views/ABTradePage/Views/BuyTrade/CurrentPrice';
+import { LimitOrderPayoutAtom, tradeTypeAtom } from '@Views/ABTradePage/atoms';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { PairTokenImage } from '../PairTokenImage';
 import { BlueBtn } from '../V2-Button';

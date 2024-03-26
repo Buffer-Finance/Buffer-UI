@@ -1,4 +1,4 @@
-import { notificationPosition } from '@Views/TradePage/type';
+import { notificationPosition } from '@Views/ABTradePage/type';
 import styled, { keyframes } from 'styled-components';
 
 const fadeIn = keyframes`

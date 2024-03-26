@@ -1,5 +1,5 @@
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
-import { TimeElapsedBar } from '@Views/TradePage/Components/TimeElapsedBar';
+import { TimeElapsedBar } from '@Views/ABTradePage/Components/TimeElapsedBar';
 import { useEffect, useState } from 'react';
 
 export const TradeTimeElapsed: React.FC<{

@@ -3,7 +3,7 @@ import {
   toalTokenXstats,
   tokenX24hrsStats,
 } from '@Views/DashboardV2/types';
-import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { useDecimalsByAsset } from '@Views/ABTradePage/Hooks/useDecimalsByAsset';
 import { useMemo } from 'react';
 import { get24hrsStats } from './get24hrsStats';
 import { getTotalStats } from './getTotalStats';

@@ -11,15 +11,15 @@ import {
 } from '@Views/AboveBelow/atoms';
 import BufferTable, { BufferTableCopy } from '@Views/Common/BufferTable';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
-import { TableHeader } from '@Views/TradePage/Views/AccordionTable/Common';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
+import { TableHeader } from '@Views/ABTradePage/Views/AccordionTable/Common';
 import styled from '@emotion/styled';
 import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import { priceFormatAtom } from '../PriceFormat';
 import { CurrentPriceLine } from './CurrentPriceLine';
-import { activePoolObjAtom } from '@Views/TradePage/atoms';
+import { activePoolObjAtom } from '@Views/ABTradePage/atoms';
 import { getAddress } from 'viem';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { toFixed } from '@Utils/NumString';

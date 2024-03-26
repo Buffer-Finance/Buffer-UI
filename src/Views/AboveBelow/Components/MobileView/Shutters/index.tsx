@@ -1,5 +1,5 @@
-import { ExpandSVG } from '@Views/TradePage/Components/Expand';
-import { MobileChartControllsEditable } from '@Views/TradePage/Components/MobileView/MobileChartControlls';
+import { ExpandSVG } from '@Views/ABTradePage/Components/Expand';
+import { MobileChartControllsEditable } from '@Views/ABTradePage/Components/MobileView/MobileChartControlls';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode, useCallback } from 'react';
 import ShutterDrawer from 'react-bottom-drawer';

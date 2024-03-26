@@ -3,7 +3,7 @@ import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import TableAssetCell from '@Views/Common/BufferTable/TableAssetCell';
 import { PairTokenImage } from '@Views/Common/PairTokenImage';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { UpDownChip } from '@Views/TradePage/Views/AccordionTable/UpDownChip';
+import { UpDownChip } from '@Views/ABTradePage/Views/AccordionTable/UpDownChip';
 
 export const AssetCell: React.FC<{
   currentRow: IGQLHistory;

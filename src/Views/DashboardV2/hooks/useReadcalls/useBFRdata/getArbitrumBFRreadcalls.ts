@@ -1,4 +1,4 @@
-import { appConfig } from '@Views/TradePage/config';
+import { appConfig } from '@Views/ABTradePage/config';
 import bfrAbi from '@Views/Earn/Config/Abis/BFR.json';
 import { getCallId } from '@Utils/Contract/multiContract';
 

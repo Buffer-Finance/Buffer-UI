@@ -1,7 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';

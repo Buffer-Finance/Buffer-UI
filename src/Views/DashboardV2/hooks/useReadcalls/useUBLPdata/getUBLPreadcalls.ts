@@ -1,8 +1,8 @@
 import BlpAbi from '@Views/Earn/Config/Abis/BufferBinaryIBFRPoolBinaryV2.json';
 import RewardTrackerAbi from '@Views/Earn/Config/Abis/RewardTracker.json';
 import bfrAbi from '@Views/Earn/Config/Abis/BFR.json';
-import { appConfig } from '@Views/TradePage/config';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { appConfig } from '@Views/ABTradePage/config';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 import { getCallId } from '@Utils/Contract/multiContract';
 
 export const getUBLPreadcalls = (chainID: number | undefined) => {

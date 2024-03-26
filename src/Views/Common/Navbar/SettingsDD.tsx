@@ -1,4 +1,4 @@
-import { Settings } from '@Views/TradePage/Views/Settings';
+import { Settings } from '@Views/ABTradePage/Views/Settings';
 import {
   ClickEvent,
   ControlledMenu,

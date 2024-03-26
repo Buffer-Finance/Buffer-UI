@@ -1,4 +1,4 @@
-import { BuyTradeBackground } from '@Views/TradePage/Views/BuyTrade/index';
+import { BuyTradeBackground } from '@Views/ABTradePage/Views/BuyTrade/index';
 import { BuyButton } from './BuyButtonAPI';
 import { ExpiryDate } from './ExpiryDate';
 import { PayoutProfit } from './PayoutProfit';

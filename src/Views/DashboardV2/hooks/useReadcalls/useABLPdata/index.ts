@@ -6,7 +6,7 @@ import {
   SECONDS_PER_YEAR,
   fromWei,
 } from '@Views/Earn/Hooks/useTokenomicsMulticall';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
+import { usePoolByAsset } from '@Views/ABTradePage/Hooks/usePoolByAsset';
 
 export const useABLPdata = () => {
   const readcalldata = useABLPreadcallData();
