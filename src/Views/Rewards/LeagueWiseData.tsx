@@ -17,7 +17,7 @@ export const LeagueWiseData = () => {
   };
   return (
     <div className="flex justify-between items-start w-full">
-      <div>
+      <div className="w-full">
         <OverAllData
           selectedSeason={selectedSeason}
           selectedWeekId={selectedWeekId}

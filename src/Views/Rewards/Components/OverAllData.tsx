@@ -20,7 +20,7 @@ export const OverAllData: React.FC<{
     getTimestampFromWeekId(selectedWeekId + 1) * 1000
   );
   return (
-    <div>
+    <div className="w-full">
       <div
         className="text-[#F7F7F7] text-[26px] font-medium mb-4 w-fit sm:mx-auto sm:flex sm:items-center sm:gap-3"
         onClick={() => {
