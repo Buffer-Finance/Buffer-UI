@@ -28,7 +28,7 @@ const useOngoingTrades = () => {
   console.log(`markets: `, markets);
   const { data: productNames } = useProductName();
   const { data, error } = useSWR<TradeType[]>(
-    'active-trades-' +
+    'active-trades-ab-' +
       address +
       '-' +
       activeChain.id +

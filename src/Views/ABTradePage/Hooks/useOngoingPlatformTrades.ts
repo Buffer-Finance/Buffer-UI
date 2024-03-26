@@ -28,7 +28,7 @@ export const usePlatformActiveTrades = () => {
   const { data: productNames } = useProductName();
 
   const { data, error } = useSWR<tradesApiResponseType>(
-    'platform-active-trades-' +
+    'platform-active-trades-ab' +
       address +
       '-' +
       activeChain.id +
@@ -75,7 +75,7 @@ export const usePlatformHistoryTrades = () => {
   const { data: productNames } = useProductName();
 
   const { data, error } = useSWR<tradesApiResponseType>(
-    'platform-history-trades-' +
+    'platform-history-trades-ab' +
       address +
       '-' +
       activeChain.id +
@@ -121,7 +121,7 @@ export const usePlatformCancelledTrades = () => {
   const { data: productNames } = useProductName();
 
   const { data, error } = useSWR<tradesApiResponseType>(
-    'platform-cancelled-trades-' +
+    'platform-cancelled-trades-ab' +
       address +
       '-' +
       activeChain.id +
