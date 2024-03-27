@@ -312,6 +312,14 @@ export const getLeaderBoardTabs = (chain: string) => {
     //   id: 0,
     // },
     {
+      pathname: '/[chain]/leaderboard/galex',
+      as: `/leaderboard/galex`,
+      name: 'Galex',
+      slug: 'galex',
+      id: 7,
+      subTabs: [],
+    },
+    {
       pathname: '/[chain]/leaderboard/[offset]/daily',
       as: `/leaderboard/daily`,
       name: 'Daily',
