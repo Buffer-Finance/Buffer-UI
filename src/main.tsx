@@ -21,11 +21,8 @@ TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(en);
 
 const ErrorComponenet = () => {
-  return (
-    <div className="grid items-center text-1 text-f20">
-      Something went wrong.
-    </div>
-  );
+  window.location.reload(); // reload the page
+  return <></>;
 };
 
 BigInt.prototype['toJSON'] = function () {
@@ -39,6 +36,7 @@ const options = {
 
 import { inject } from '@vercel/analytics';
 import { RootLevelHooks } from './RootLevelHooks';
+import ReloadErrorBoundary from './ReloadErrorBoundary';
 inject();
 
 if (import.meta.env.VITE_MODE === 'production') {
@@ -66,16 +64,18 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
     <WagmiConfig config={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={darkTheme()}>
-        <HashRouter>
-          <SWRConfig value={options}>
-            <JotaiProvider>
-              <ContextProvider>
-                <App />
-                <RootLevelHooks />
-              </ContextProvider>
-            </JotaiProvider>
-          </SWRConfig>
-        </HashRouter>
+        <ReloadErrorBoundary>
+          <HashRouter>
+            <SWRConfig value={options}>
+              <JotaiProvider>
+                <ContextProvider>
+                  <App />
+                  <RootLevelHooks />
+                </ContextProvider>
+              </JotaiProvider>
+            </SWRConfig>
+          </HashRouter>
+        </ReloadErrorBoundary>
       </RainbowKitProvider>
     </WagmiConfig>
   </Sentry.ErrorBoundary>
