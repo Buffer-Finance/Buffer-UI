@@ -15,15 +15,15 @@ export const DailyTournamentConfig: {
     minTradesToQualifyPNL: 5,
   },
   42161: {
-    startTimestamp: 1675958400000,
+    startTimestamp: 1710950400000,
     winnersNFT: 0,
-    losersNFT: 1,
-    endDay: 12,
+    losersNFT: 0,
+    endDay: undefined,
     contestRules:
       'https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9',
     rewardFixedAmount: '0',
     poolPercent: '5',
-    minTradesToQualifyPNL: 3,
+    minTradesToQualifyPNL: 0,
   },
   80001: {
     startTimestamp: 1679328000000,

@@ -1,21 +1,21 @@
-import axios from 'axios';
+import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { add } from '@Utils/NumString/stringArithmatics';
+import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
+import { getConfig } from '@Views/TradePage/utils/getConfig';
+import axios from 'axios';
 import { useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 import useSWR from 'swr';
-import { add } from '@Utils/NumString/stringArithmatics';
-import { updateLeaderboardTotalPageAtom } from '../atom';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { ROWINAPAGE } from '../Incentivised';
+import { DailyTournamentConfig } from '../Incentivised/config';
+import { updateLeaderboardTotalPageAtom } from '../atom';
+import { blacklist } from '../blacklist.json';
 import { ILeague } from '../interfaces';
 import { useDayOfTournament } from './useDayOfTournament';
 import { useDayOffset } from './useDayOffset';
-import { useActiveChain } from '@Hooks/useActiveChain';
-import { blacklist } from '../blacklist.json';
-import { DailyTournamentConfig } from '../Incentivised/config';
-import { getConfig } from '@Views/TradePage/utils/getConfig';
-import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
 import { getTokenXleaderboardQueryFields } from './useWeeklyLeaderboardQuery';
-import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 
 interface ILeaderboardQuery {
   userStats: ILeague[];
@@ -43,7 +43,7 @@ export const useLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useDayOffset();
   const { activeChain } = useActiveChain();
-  const graphUrl = getConfig(activeChain.id).graph.MAIN;
+  const graphUrl = getConfig(activeChain.id).graph.LEADERBOARDS;
   const configValue = DailyTournamentConfig[activeChain.id];
   const { day } = useDayOfTournament();
 
@@ -70,7 +70,7 @@ export const useLeaderboardQuery = () => {
         const rewardQueryId = (
           [arbitrum.id, arbitrumGoerli.id] as number[]
         ).includes(activeChain.id)
-          ? `${timestamp}USDC`
+          ? `${timestamp}total`
           : timestamp;
         const leaderboardQuery = `
           userStats: leaderboards(
@@ -136,7 +136,7 @@ export const useLeaderboardQuery = () => {
 
         return response.data?.data as ILeaderboardQuery;
       },
-      refreshInterval: 300,
+      refreshInterval: 1000,
     }
   );
 

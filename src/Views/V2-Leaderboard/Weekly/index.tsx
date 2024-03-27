@@ -26,7 +26,6 @@ import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import BufferTab, { ITab } from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
 import NumberTooltip from '@Views/Common/Tooltips';
-import { ChainSwitchDropdown } from '@Views/DashboardV2/Components/ChainSwitchDropdown';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import {
   IWinrate,
@@ -59,7 +58,7 @@ export const Weekly = () => {
     loserUserRank,
     winnerUserRank,
     // loserWinrateUserRank,
-    winnerWinrateUserRank,
+    // winnerWinrateUserRank,
   } = useWeeklyLeaderboardQuery();
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
 
@@ -82,9 +81,9 @@ export const Weekly = () => {
       if (data.loserStats && data.loserStats.length > 0) {
         pages.loserPnl = Math.ceil(data.loserStats.length / ROWINAPAGE);
       }
-      if (data.winnerWinrate && data.winnerWinrate.length > 0) {
-        pages.winnerWinRate = Math.ceil(data.winnerWinrate.length / ROWINAPAGE);
-      }
+      // if (data.winnerWinrate && data.winnerWinrate.length > 0) {
+      //   pages.winnerWinRate = Math.ceil(data.winnerWinrate.length / ROWINAPAGE);
+      // }
       // if (data.loserWinrate && data.loserWinrate.length > 0) {
       //   pages.loserWinRate = Math.ceil(data.loserWinrate.length / ROWINAPAGE);
       // }
@@ -111,9 +110,9 @@ export const Weekly = () => {
       if (data.loserStats) {
         res.loserPnl = data.loserStats.slice(skip, skip + ROWINAPAGE);
       }
-      if (data.winnerWinrate) {
-        res.winnerWinRate = data.winnerWinrate.slice(skip, skip + ROWINAPAGE);
-      }
+      // if (data.winnerWinrate) {
+      //   res.winnerWinRate = data.winnerWinrate.slice(skip, skip + ROWINAPAGE);
+      // }
       // if (data.loserWinrate) {
       //   res.loserWinrate = data.loserWinrate.slice(skip, skip + ROWINAPAGE);
       // }
@@ -176,9 +175,9 @@ export const Weekly = () => {
 
   const tabList = useMemo(() => {
     const list = [
-      { name: 'Winners (by Pnl)' },
-      { name: 'Losers (by Pnl)' },
-      { name: 'Winners (by Win Rate)' },
+      { name: 'Winners' },
+      { name: 'Losers' },
+      // { name: 'Winners (by Win Rate)' },
       // { name: 'Losers (by Win Rate)' },
     ];
     if (configValue.winrateStartWeek) {
@@ -324,17 +323,17 @@ export const Weekly = () => {
                 skip={skip}
                 nftWinners={configValue.losersNFT}
               />,
-              <DailyWebTable
-                activePage={activePages.arbitrum}
-                userRank={winnerWinrateUserRank}
-                standings={tableData.winnerWinRate}
-                count={totalPages.winnerWinRate}
-                onpageChange={setActivePageNumber}
-                userData={data?.userData}
-                skip={skip}
-                nftWinners={configValue.winrateNFT}
-                isWinrateTable
-              />,
+              // <DailyWebTable
+              //   activePage={activePages.arbitrum}
+              //   userRank={winnerWinrateUserRank}
+              //   standings={tableData.winnerWinRate}
+              //   count={totalPages.winnerWinRate}
+              //   onpageChange={setActivePageNumber}
+              //   userData={data?.userData}
+              //   skip={skip}
+              //   nftWinners={configValue.winrateNFT}
+              //   isWinrateTable
+              // />,
               // <DailyWebTable
               //   activePage={activePages.arbitrum}
               //   userRank={loserWinrateUserRank}
@@ -398,7 +397,7 @@ export const Weekly = () => {
                     <div className="flex flex-col items-start">
                       <div className="flex items-center gap-3 flex-wrap">
                         <div>Weekly Leaderboard</div>
-                        <ChainSwitchDropdown baseUrl="/leaderboard/weekly" />
+                        {/* <ChainSwitchDropdown baseUrl="/leaderboard/weekly" /> */}
                       </div>
                       <a
                         className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
