@@ -46,6 +46,7 @@ import {
 } from '../../../../../public/static/charting_library';
 import { IGQLHistory, tardesAtom } from '../..//Hooks/usePastTradeQuery';
 import { BetState } from '../../Hooks/useAheadTrades';
+import { useOngoingTrades } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
@@ -240,24 +241,26 @@ const red = 'rgb(255, 104, 104)';
 function drawPosition(option, visualized, chart) {
   let vizIdentifiers = getIdentifier(option);
   const idx = visualized.indexOf(vizIdentifiers);
-  const openTimeStamp = option.creationTime;
+  const openTimeStamp = option.open_timestamp;
   const optionPrice = +option.strike / PRICE_DECIMALS;
-  if (idx === -1 && option.state === BetState.active && optionPrice) {
+
+  if (idx === -1 && option.state === 'OPENED' && optionPrice) {
     let color = getColor(option.isAbove);
 
+    // return chart?.createPositionLine().setText('Hello').setPrice(optionPrice);
     return chart
       ?.createPositionLine()
       .setText(
         `${toFixed(
-          divide(option.totalFee, option.market.poolInfo.decimals) as string,
+          divide(option.total_fee, option.market.poolInfo.decimals) as string,
           2
-        )} | ` + getText(option.expirationTime)
+        )} ${option.market.poolInfo.token} | ` + getText(option.expiration_time)
       )
       .setTooltip(
         `${getDisplayDate(openTimeStamp)}, ${getDisplayTime(
           openTimeStamp
-        )} - ${getDisplayDate(option.expirationTime)}, ${getDisplayTime(
-          option.expirationTime
+        )} - ${getDisplayDate(option.expiration_time)}, ${getDisplayTime(
+          option.expiration_time
         )}`
       )
       .setBodyBackgroundColor(BG)
@@ -270,7 +273,7 @@ function drawPosition(option, visualized, chart) {
       .setBodyTextColor('rgb(255,255,255)')
       .setQuantity(option.isAbove ? Up : Down)
       .setPrice(optionPrice);
-    // positions.current.push({ line, expiration: option.expirationTime });
+    // positions.current.push({ line, expiration: option.expiration_time });
   }
 }
 export const MultiResolutionChart = ({
@@ -308,7 +311,10 @@ export const MultiResolutionChart = ({
   const chartType = useAtomValue(ChartTypePersistedAtom);
   const setChartType = useSetAtom(ChartTypePersistedAtom);
   const v3AppConfig = useAtomValue(aboveBelowMarketsAtom);
-  const { active: activeTrades } = useAtomValue(tardesAtom);
+  const activeTrades = useOngoingTrades();
+  // useEffect(() => {
+  //   console.log(`activeTrades-c${activeTrades}`, activeTrades);
+  // }, [activeTrades]);
 
   async function getAllSymbols() {
     let allSymbols: any[] = [];
@@ -625,10 +631,9 @@ export const MultiResolutionChart = ({
       option: IGQLHistory;
     }[] = [];
     if (chartReady && activeTrades) {
-      console.log(`MultiResolutionChart-activeTrades: `, activeTrades);
       activeTrades.forEach((trade) => {
         if (trade === null) return;
-        if (trade.queueID === undefined) return;
+        if (trade.queue_id === undefined) return;
 
         // check if we can render or not
         if (typeof widgetRef.current?.activeChart == 'undefined') return;
@@ -652,12 +657,15 @@ export const MultiResolutionChart = ({
   };
 
   const renderPositions = async () => {
+    console.log(`MultiResolutionChart-deb-rendering: `);
     deleteAllPostions();
     trade2visualisation.current = [];
     setVisualizedTrades(drawPositions());
   };
 
   useEffect(() => {
+    console.log(`MultiResolutionChart-deb-ran: `);
+
     const timeout = setInterval(async () => {
       await renderPositions();
     }, 1000);
@@ -771,20 +779,21 @@ export const MultiResolutionChart = ({
       if (
         shapeIdRef.current &&
         typeof widgetRef.current?.activeChart == 'function'
-      )
+      ) {
         widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
-      const id = widgetRef.current
-        ?.activeChart()
-        .createMultipointShape(points, {
-          shape: 'rectangle',
-          overrides: {
-            backgroundColor: selectedStrike.isAbove
-              ? defaults.upRectangeColor
-              : defaults.downRectangeColor,
-            linewidth: 0,
-          },
-        });
-      shapeIdRef.current = id;
+        const id = widgetRef.current
+          ?.activeChart()
+          .createMultipointShape(points, {
+            shape: 'rectangle',
+            overrides: {
+              backgroundColor: selectedStrike.isAbove
+                ? defaults.upRectangeColor
+                : defaults.downRectangeColor,
+              linewidth: 0,
+            },
+          });
+        shapeIdRef.current = id;
+      }
     } else {
       deleteOldDrawings();
     }

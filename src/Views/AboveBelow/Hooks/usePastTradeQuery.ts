@@ -292,9 +292,5 @@ export const usePastTradeQuery = () => {
     data?.historyLength,
     data?.cancelledLength,
     user,
-    trades?.[BetState.active],
-    trades?.[BetState.queued],
-    // loading,
-    trades,
   ]);
 };
