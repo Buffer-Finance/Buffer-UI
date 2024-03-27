@@ -46,6 +46,7 @@ import { buyTradeDataAtom } from './useBuyTradeData';
 import { useSettlementFee } from './useSettlementFee';
 import { useSpread } from './useSpread';
 import { useSwitchPool } from './useSwitchPool';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -89,6 +90,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const [loading, setLoading] = useState<number | { is_up: boolean } | null>(
     null
   );
+  const productNames = useProducts();
 
   const toastify = useToast();
   const knowTill = useAtomValue(knowTillAtom);
@@ -419,9 +421,7 @@ export const useBuyTradeActions = (userInput: string) => {
           settlement_fee_sign_expiration:
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
-          // spread: spread.spread,
-          // spread_sign_expiration: spread.spread_sign_expiration,
-          // spread_signature: spread.spread_signature,
+          product_id: productNames.UP_DOWN.product_id,
           environment: activeChain.id,
           token: tokenName,
           strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
@@ -431,10 +431,8 @@ export const useBuyTradeActions = (userInput: string) => {
 
         const resp: { data: TradeType } = await axios.post(
           baseUrl + trailingUrl,
-          null,
-          {
-            params: apiParams,
-          }
+          apiParams,
+          { params: { environment: activeChain.id } }
         );
         setLoading(null);
 
