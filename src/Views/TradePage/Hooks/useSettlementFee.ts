@@ -1,7 +1,8 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import useSWR from 'swr';
-import { baseUrl } from '../config';
+import { UDProductID, baseUrl } from '../config';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 
 interface SettlementFee {
   settlement_fee: number;
@@ -14,11 +15,13 @@ export interface IBaseSettlementFees {
 
 export const useSettlementFee = () => {
   const { activeChain } = useActiveChain();
+  const products = useProducts();
   return useSWR<IBaseSettlementFees>([activeChain, 'settlementFee'], {
     fetcher: async () => {
       if (!activeChain) return null;
       const response = await axios.get(
-        baseUrl + `settlement_fee/?environment=${activeChain.id}`
+        baseUrl +
+          `settlement_fee/?environment=${activeChain.id}&product_id=${products.UP_DOWN.product_id}`
       );
       if (response?.data) {
         return response.data;

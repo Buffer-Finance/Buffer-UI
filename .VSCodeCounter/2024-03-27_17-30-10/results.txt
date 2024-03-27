@@ -1,0 +1,39 @@
+Date : 2024-03-27 17:30:10
+Directory : /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config
+Total : 11 files,  1113 codes, 24 comments, 60 blanks, all 1197 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| TypeScript JSX |          1 |        711 |          6 |         17 |        734 |
+| TypeScript     |          9 |        396 |         18 |         42 |        456 |
+| XML            |          1 |          6 |          0 |          1 |          7 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                   | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                      |         11 |      1,113 |         24 |         60 |      1,197 |
+| . (Files)                                                                              |          7 |        965 |         22 |         44 |      1,031 |
+| wagmiClient                                                                            |          4 |        148 |          2 |         16 |        166 |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                               | language       | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/SafeWallet.ts                  | TypeScript     |         22 |          6 |          3 |         31 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/axios.ts                       | TypeScript     |         43 |          0 |          6 |         49 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/getTabs.tsx                    | TypeScript JSX |        711 |          6 |         17 |        734 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/globalAtoms.ts                 | TypeScript     |          4 |          0 |          2 |          6 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/index.ts                       | TypeScript     |        162 |         10 |          9 |        181 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/safeWallet.svg                 | XML            |          6 |          0 |          1 |          7 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/useAutoConnectSafe.ts          | TypeScript     |         17 |          0 |          6 |         23 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/wagmiClient/getConfigChains.ts | TypeScript     |         46 |          0 |          4 |         50 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/wagmiClient/getWallets.ts      | TypeScript     |         56 |          2 |          3 |         61 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/wagmiClient/index.ts           | TypeScript     |         21 |          0 |          6 |         27 |
+| /home/amit/Frontend/Fintech/Buffer/Buffer-UI/src/Config/wagmiClient/mockConnector.ts   | TypeScript     |         25 |          0 |          3 |         28 |
+| Total                                                                                  |                |      1,113 |         24 |         60 |      1,197 |
++----------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

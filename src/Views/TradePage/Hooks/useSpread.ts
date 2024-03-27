@@ -3,6 +3,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import useSWR from 'swr';
 import { baseUrl } from '../config';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 
 export interface Spread {
   spread: number;
@@ -17,13 +18,14 @@ export interface IAllSpreads {
 export const useSpread = () => {
   const { activeChain } = useActiveChain();
   const toastify = useToast();
-
+  const products = useProducts();
   async function fetchSpread(activeChainId: number | undefined) {
     try {
       if (!activeChainId) throw new Error('No active chain');
       const { data, status } = await axios.get(baseUrl + 'spread/', {
         params: {
           environment: activeChainId,
+          product_id: products.UP_DOWN.product_id,
         },
       });
       if (status !== 200) {

@@ -18,12 +18,14 @@ import {
 import { tradesApiResponseType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 
 export const usePlatformActiveTrades = () => {
   const { activeChain } = useActiveChain();
   const { address } = useAccount();
   const markets = useAllV2_5MarketsConfig();
   const activePage = useAtomValue(platformActiveTableActivePage);
+  const products = useProducts();
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'platform-active-trades-' +
@@ -48,6 +50,7 @@ export const usePlatformActiveTrades = () => {
             environment: activeChain.id,
             limit: TRADE_IN_A_PAGE_TRADES_TABLES,
             page: activePage - 1,
+            product_id: products.UP_DOWN.product_id,
           },
         });
         if (!res?.data?.page_data?.length)

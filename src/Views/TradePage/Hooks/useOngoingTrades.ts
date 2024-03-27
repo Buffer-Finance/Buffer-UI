@@ -13,6 +13,7 @@ import { baseUrl, refreshInterval } from '../config';
 import { TradeType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
@@ -26,6 +27,7 @@ const useOngoingTrades = () => {
   const { address } = useAccount();
   const [empty, setEmpty] = useState([[], []]);
   const markets = useAllV2_5MarketsConfig();
+  const products = useProducts();
   const { data, error } = useSWR<TradeType[][]>(
     'active-trades-' +
       address +
@@ -50,6 +52,7 @@ const useOngoingTrades = () => {
           params: {
             user_address: getAddress(userAddress),
             environment: activeChain.id,
+            product_id: products.UP_DOWN.product_id,
           },
         });
         if (!res?.data?.length || !markets?.length) return [[], []];

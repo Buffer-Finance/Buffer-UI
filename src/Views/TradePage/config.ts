@@ -21,7 +21,24 @@ export const appConfig = {
     v2_router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
     jackpot: '0xe8032a26fEA73a5691ebb88faAa09211fAFC5F6d',
     above_below_router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
-
+    product_id: {
+      UP_DOWN: {
+        id: 2,
+        environment: '421614',
+        metaData: {},
+        name: 'UP_DOWN',
+        product_id: 'abc',
+        router: '0x3ca907E4FADf6a7e705D177d122c3105D1dAaC40',
+      },
+      AB: {
+        id: 1,
+        environment: '421614',
+        metaData: {},
+        name: 'AB',
+        product_id: 'xyz',
+        router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
+      },
+    },
     poolsInfo: {
       '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
         tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
@@ -219,7 +236,7 @@ export const appConfig = {
       },
     },
   },
-};
+} as const;
 
 export const HolderContracts = [
   '0x01fdd6777d10dD72b8dD716AEE05cE67DD2b7D85',
@@ -591,7 +608,7 @@ export const marketsForChart = {
     pythId:
       '0x396a969a9c1480fa15ed50bc59149e2c0075a72fe8f458ed941ddec48bdb4918',
   },
-};
+} as const;
 
 export const pricePublisherBaseUrl = import.meta.env.VITE_PRICE_QUERY_HOST;
 
@@ -605,7 +622,7 @@ const baseURLString = isTestnet
     ? 'VITE_INSTANT_TRADING_HOST_DEVELOPMENT'
     : `VITE_INSTANT_TRADING_HOST_TESTNET`
   : `VITE_INSTANT_TRADING_HOST`;
-export const baseUrl = import.meta.env[baseURLString];
+export const baseUrl = aboveBelowBaseUrl;
 
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
 
@@ -615,3 +632,7 @@ export const MAX_APPROVAL_VALUE =
 
 export const ABBaseURL =
   'https://instant-trading-backend-production-84c6.up.railway.app/';
+
+export const UDProductID = (chaiId: '421614') => {
+  return 'product_id=abc';
+};

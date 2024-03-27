@@ -671,6 +671,14 @@ export const MultiResolutionChart = ({
       setChartReady(false);
     };
   }, []);
+  useEffect(() => {
+    if (!chartReady) return;
+    widgetRef.current?.activeChart().removeAllShapes();
+    // widgetRef
+    //   .current!.activeChart?.()
+    //   .setChartType((chartType as any)?.[chartId] ?? 1);
+  }, [chartReady]);
+
   const priceCache = useAtomValue(queuets2priceAtom);
   const syncTVwithWS = async () => {
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')

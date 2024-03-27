@@ -15,6 +15,7 @@ import {
 import { tradesApiResponseType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 const defaultRes = { page_data: [], total_pages: 1 };
 const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
@@ -23,6 +24,7 @@ const useHistoryTrades = () => {
   // console.log(`markets: `, markets);
   const activePage = useAtomValue(historyTableActivePage);
   // const [isLoading, setIsLoading] = useState(false);
+  const products = useProducts();
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'history-trades-' + address + '-' + activeChain.id + '-' + activePage,
@@ -42,6 +44,7 @@ const useHistoryTrades = () => {
             environment: activeChain.id,
             limit: TRADE_IN_A_PAGE_TRADES_TABLES,
             page: activePage - 1,
+            product_id: products.UP_DOWN.product_id,
           },
         });
         // console.log(
