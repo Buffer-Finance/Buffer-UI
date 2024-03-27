@@ -47,6 +47,7 @@ import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { Jackpot } from '@Views/Jackpot';
 import { JackpotChip } from '@Views/Jackpot/JackpotChip';
+import ReloadErrorBoundary from './ReloadErrorBoundary';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -60,7 +61,7 @@ const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
   }
 })();
 
-const Redirect = ({ url }: { url: string }) => {
+const Redirect = ({ url }: { url: string; }) => {
   useEffect(() => {
     window.location.href = url;
   }, [url]);
@@ -185,77 +186,97 @@ function App() {
       {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
-          <ViewOnlyModeTradePageWarning />
-          {graphStatus && (
-            <Warning
-              body={
-                <div className="text-center">
-                  We are facing some issues with the theGraph API. Trading
-                  experience on the platform may be hindered temporarily.
-                </div>
-              }
-              closeWarning={() => {}}
-              shouldAllowClose={false}
-              state={graphStatus.error}
-              className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
-            />
-          )}
-          <Navbar />
-          <AppRoutes />
-          <Snackbar
-            open={snack.message ? true : false}
-            autoHideDuration={3500}
-            onClose={() => setSnack({ message: null })}
-            action={null}
-            anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-          >
-            <Alert
-              onClose={() => setSnack({ message: null })}
-              severity={snack.severity || 'info'}
-              sx={{ width: '100%' }}
-            >
-              {snack.message}
-            </Alert>
-          </Snackbar>
-          {!urlSettings?.hide &&
-            (isMobile && mobileWarningClosed ? false : true) && (
+          <ReloadErrorBoundary>
+            <ViewOnlyModeTradePageWarning />
+            {graphStatus && (
               <Warning
                 body={
-                  <div className="text-center b800:text-start">
-                    🚀 Buffer v2.5 is live on&nbsp;
-                    <a href="https://app.buffer.finance/" target="_blank">
-                      <span className="underline underline-offset-2">
-                        Mainnet
-                      </span>
-                    </a>
-                    &nbsp; | 📜 Learn more about v2.5&nbsp;
-                    <a
-                      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
-                      target="_blank"
-                    >
-                      <span className="underline underline-offset-2">here</span>
-                    </a>
-                    &nbsp; | ✨ To trade with $BFR as collateral visit the&nbsp;
-                    <a
-                      href="https://classic.app.buffer.finance/"
-                      target="_blank"
-                    >
-                      <span className="underline underline-offset-2">
-                        classic version
-                      </span>
-                    </a>
+                  <div className="text-center">
+                    We are facing some issues with the theGraph API. Trading
+                    experience on the platform may be hindered temporarily.
                   </div>
                 }
-                closeWarning={() => {
-                  setWarningCloseOnMobile(true);
-                }}
-                shouldAllowClose={true}
-                state={!mobileWarningClosed}
-                className="disclaimer"
+                closeWarning={() => { }}
+                shouldAllowClose={false}
+                state={graphStatus.error}
+                className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
               />
             )}
-          <TnCModal />
-          <SideBar />
+          </ReloadErrorBoundary>
+
+          <ReloadErrorBoundary>
+            <Navbar />
+          </ReloadErrorBoundary>
+
+          <ReloadErrorBoundary>
+            <AppRoutes />
+          </ReloadErrorBoundary>
+
+          <ReloadErrorBoundary>
+            <Snackbar
+              open={snack.message ? true : false}
+              autoHideDuration={3500}
+              onClose={() => setSnack({ message: null })}
+              action={null}
+              anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+            >
+              <Alert
+                onClose={() => setSnack({ message: null })}
+                severity={snack.severity || 'info'}
+                sx={{ width: '100%' }}
+              >
+                {snack.message}
+              </Alert>
+            </Snackbar>
+          </ReloadErrorBoundary>
+
+          <ReloadErrorBoundary>
+            {!urlSettings?.hide &&
+              (isMobile && mobileWarningClosed ? false : true) && (
+                <Warning
+                  body={
+                    <div className="text-center b800:text-start">
+                      🚀 Buffer v2.5 is live on&nbsp;
+                      <a href="https://app.buffer.finance/" target="_blank">
+                        <span className="underline underline-offset-2">
+                          Mainnet
+                        </span>
+                      </a>
+                      &nbsp; | 📜 Learn more about v2.5&nbsp;
+                      <a
+                        href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
+                        target="_blank"
+                      >
+                        <span className="underline underline-offset-2">here</span>
+                      </a>
+                      &nbsp; | ✨ To trade with $BFR as collateral visit the&nbsp;
+                      <a
+                        href="https://classic.app.buffer.finance/"
+                        target="_blank"
+                      >
+                        <span className="underline underline-offset-2">
+                          classic version
+                        </span>
+                      </a>
+                    </div>
+                  }
+                  closeWarning={() => {
+                    setWarningCloseOnMobile(true);
+                  }}
+                  shouldAllowClose={true}
+                  state={!mobileWarningClosed}
+                  className="disclaimer"
+                />
+              )}
+          </ReloadErrorBoundary>
+
+          <ReloadErrorBoundary>
+            <TnCModal />
+          </ReloadErrorBoundary>
+
+          <ReloadErrorBoundary>
+            <SideBar />
+          </ReloadErrorBoundary>
         </Background>
       </I18nProvider>
     </>
@@ -289,7 +310,7 @@ const ViewOnlyModeTradePageWarning = () => {
           </button>
         </div>
       }
-      closeWarning={() => {}}
+      closeWarning={() => { }}
       shouldAllowClose={false}
       state={viewOnlyMode && isBinaryPage}
       className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100 sm:!text-f14"
