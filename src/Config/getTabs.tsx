@@ -440,10 +440,10 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: 'https://testnet.ab.buffer.finance',
+        to: '/ab/BTC-USD/',
         name: 'Above/Below',
         subTabs: [],
-        isExternalLink: true,
+        isExternalLink: false,
       },
       {
         to: 'https://testnet.perps.buffer.finance/trade',
