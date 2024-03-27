@@ -238,19 +238,16 @@ export const OngoingTradesTable: React.FC<{
         );
       case TableColumn.Probability:
         return (
-          // queuedTradeFallBack(trade) || (
           <div>
             <>
-              <Pnl
-                configData={trade.market}
+              <Probability
+                isColored
+                className=" !justify-start"
                 trade={trade}
-                poolInfo={poolInfo}
-                lockedAmmount={lockedAmmount}
-              />
-              <Probability trade={trade} marketPrice={marketPrice} />{' '}
+                marketPrice={marketPrice}
+              />{' '}
             </>
           </div>
-          // )
         );
     }
     return 'Unhandled Body';
@@ -393,6 +390,7 @@ export const Pnl = ({
     poolInfo,
     lockedAmmount,
   });
+  console.log(`OngoingTradesTable-probability: `, probability);
   // console.log(pnl, probability, 'pnl');
   if (!probability)
     return shouldShowCalculating ? <div>Calculating..</div> : <></>;
@@ -508,15 +506,15 @@ export const Probability: React.FC<{
     ) * 100;
 
   return (
-    <Display
-      data={probability}
-      unit={'%'}
-      precision={2}
+    <div
       className={
         className +
         ' ' +
-        (isColored ? (probability > 50 ? 'text-green' : 'text-red') : '')
+        (isColored ? (probability >= 0 ? 'text-green' : 'text-red') : '')
       }
-    />
+    >
+      {probability > 0 ? '+' + probability.toFixed(2) : probability.toFixed(2)}{' '}
+      %
+    </div>
   );
 };

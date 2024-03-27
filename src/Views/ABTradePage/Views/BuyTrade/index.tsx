@@ -37,6 +37,7 @@ export const BuyTradeBackground = styled.div`
 
   @media (max-width: 1200px) {
     gap: 12px;
+    padding: 0px;
   }
 `;
 

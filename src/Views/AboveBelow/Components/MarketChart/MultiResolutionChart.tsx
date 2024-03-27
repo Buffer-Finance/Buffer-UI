@@ -752,7 +752,7 @@ export const MultiResolutionChart = ({
   };
   const shapeIdRef = useRef('');
   useEffect(() => {
-    if (selectedStrike?.price) {
+    if (selectedStrike?.price && chartReady) {
       // above
       deleteOldDrawings();
       const points = selectedStrike.isAbove
@@ -776,11 +776,13 @@ export const MultiResolutionChart = ({
               price: 0,
             },
           ];
+      console.log(`MultiResolutionChart-points: `, points);
+
       if (
-        shapeIdRef.current &&
+        widgetRef.current &&
         typeof widgetRef.current?.activeChart == 'function'
       ) {
-        widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
+        widgetRef.current?.activeChart?.()?.removeEntity(shapeIdRef.current);
         const id = widgetRef.current
           ?.activeChart()
           .createMultipointShape(points, {
@@ -797,7 +799,7 @@ export const MultiResolutionChart = ({
     } else {
       deleteOldDrawings();
     }
-  }, [selectedStrike]);
+  }, [selectedStrike, chartReady]);
   useEffect(() => {
     if (indicatorCount) toggleIndicatorDD('d');
   }, [indicatorCount]);

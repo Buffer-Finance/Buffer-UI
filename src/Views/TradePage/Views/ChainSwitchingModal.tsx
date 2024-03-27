@@ -21,7 +21,7 @@ const ChainSwitchingModal: React.FC<{
             className="h-[18px] w-[18px] mr-[6px] sm:mr-[0px] rounded-full"
             src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${'arb'}.png`}
           />
-          {isTestnet ? 'Arbitrum Seplia' : 'Arbitrum One'}{' '}
+          {isTestnet ? 'Arbitrum Seploia' : 'Arbitrum One'}{' '}
         </span>
       </div>
       <BlueBtn

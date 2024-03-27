@@ -52,6 +52,13 @@ import { Jackpot } from '@Views/Jackpot';
 import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 import { AboveBelow } from '@Views/AboveBelow';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
+export const snackAtom = atom<{
+  message: null | React.ReactNode;
+  severity?: 'success' | 'warning' | 'info' | 'error';
+}>({
+  message: null,
+});
+export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
 
@@ -167,14 +174,7 @@ async function activateLocale(locale: string) {
   i18n.activate(locale);
 }
 activateLocale('en');
-export const snackAtom = atom<{
-  message: null | React.ReactNode;
-  severity?: 'success' | 'warning' | 'info' | 'error';
-}>({
-  message: null,
-});
 const mobileWarningAtom = atomWithLocalStorage('warnign-suer', false);
-export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 
 function App() {
   useAutoConnect();

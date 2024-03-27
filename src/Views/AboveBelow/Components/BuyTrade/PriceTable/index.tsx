@@ -345,7 +345,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         // isHeaderTransparent
         isBodyTransparent
         // shouldHideHeader
-        overflow="calc(100vh - 340px)"
+        overflow="min(calc(100vh - 340px), 530px)"
         smHeight
         smThHeight
         noHover
