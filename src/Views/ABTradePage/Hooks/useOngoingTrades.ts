@@ -19,6 +19,7 @@ export enum TradeState {
   Active = 'ACTIVE',
 }
 
+const emptyArray = [];
 const useOngoingTrades = () => {
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
@@ -53,9 +54,8 @@ const useOngoingTrades = () => {
             product_id: productNames['AB'].product_id,
           },
         });
-        console.log(` useOngoingTrades res: `, res);
 
-        if (!res?.data?.length || !markets?.length) return [];
+        if (!res?.data?.length || !markets?.length) return emptyArray;
 
         return addMarketInTrades(res.data, markets) as TradeType[];
       },
