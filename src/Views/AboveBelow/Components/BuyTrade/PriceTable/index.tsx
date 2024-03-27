@@ -45,8 +45,6 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);
   const readCallData = useAtomValue(readCallDataAtom);
-  console.log('readCallData', readCallData);
-  console.log(`index-markets: `, markets);
 
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const maxPermissibleContracts = readCallData?.maxPermissibleContracts;
@@ -63,7 +61,6 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     selectedPoolMarket?.poolInfo.token?.toUpperCase(),
     'Max',
   ];
-  console.log(`index-headsArray: `, headsArray);
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
   const strikes = strikePrices[activeMarket?.tv_id as string];

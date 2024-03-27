@@ -14,7 +14,6 @@ export const useSettlementFee = () => {
     } & { Base: number }
   >([activeChain?.id, 'above-below-settlement-fee'], {
     fetcher: async () => {
-      console.log('above-below-settlement-fee', products);
       if (!activeChain || !products) return null;
       const response = await axios.get(aboveBelowBaseUrl + `settlement_fee/`, {
         params: {
@@ -22,7 +21,6 @@ export const useSettlementFee = () => {
           product_id: products['AB'].product_id,
         },
       });
-      console.log({ response });
       if (response?.data) {
         return response.data['sfs'];
       }

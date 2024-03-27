@@ -625,6 +625,7 @@ export const MultiResolutionChart = ({
       option: IGQLHistory;
     }[] = [];
     if (chartReady && activeTrades) {
+      console.log(`MultiResolutionChart-activeTrades: `, activeTrades);
       activeTrades.forEach((trade) => {
         if (trade === null) return;
         if (trade.queueID === undefined) return;
@@ -741,9 +742,7 @@ export const MultiResolutionChart = ({
     if (shapeIdRef.current)
       widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
   };
-  console.log(`MultiResolutionChart-time: `, time);
   const shapeIdRef = useRef('');
-  console.log(`MultiResolutionChart-selectedStrike?.price: `, selectedStrike);
   useEffect(() => {
     if (selectedStrike?.price) {
       // above

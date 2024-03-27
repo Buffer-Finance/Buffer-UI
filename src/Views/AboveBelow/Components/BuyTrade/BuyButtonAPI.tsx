@@ -102,7 +102,6 @@ export const BuyButtonAPI: React.FC<{
   const amount = useAtomValue(tradeSizeAtom);
   const { data: approvalExpanded, mutate: updateApprovalData } =
     useApprvalAmount();
-  console.log(`BuyButtonAPI-approvalExpanded: `, approvalExpanded);
   const config = getConfig(activeChain.id);
 
   const token = activeMarket.poolInfo.token.toUpperCase();

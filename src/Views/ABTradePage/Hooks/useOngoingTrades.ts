@@ -25,7 +25,6 @@ const useOngoingTrades = () => {
   const { address: userAddress } = useUserAccount();
   const { address } = useAccount();
   const markets = useAtomValue(aboveBelowMarketsAtom);
-  console.log(`markets: `, markets);
   const { data: productNames } = useProductName();
   const { data, error } = useSWR<TradeType[]>(
     'active-trades-ab-' +

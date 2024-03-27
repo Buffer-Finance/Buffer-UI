@@ -41,7 +41,6 @@ const AccordionTable: React.FC<any> = ({}) => {
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const priceCache = useAtomValue(queuets2priceAtom);
 
-  console.log('activeTrades', activeTrades);
   const [activeTable, setActiveTable] = useState('Trades');
   const getAugmentedData = async (
     queries: { pair: string; timestamp: number; queueId: number }[]
@@ -116,7 +115,6 @@ const AccordionTable: React.FC<any> = ({}) => {
           />
         </button>
       </div>
-      {console.log('activeTable', activeTable)}
       <div
         className={` ${
           expanded ? 'h-[355px]' : 'h-[0px]'

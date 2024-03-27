@@ -7,7 +7,6 @@ import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
 export const useIV = () => {
   const { activeChain } = useActiveChain();
   const { data: products } = useProductName();
-  console.log({ products });
   return useSWR<{ [tv_id: string]: number }>(
     [activeChain?.id, 'above-below-iv'],
     {
