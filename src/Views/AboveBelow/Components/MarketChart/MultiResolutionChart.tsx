@@ -245,14 +245,14 @@ function drawPosition(option, visualized, chart) {
   const optionPrice = +option.strike / PRICE_DECIMALS;
 
   if (idx === -1 && option.state === 'OPENED' && optionPrice) {
-    let color = getColor(option.isAbove);
+    let color = getColor(option.is_above);
 
     // return chart?.createPositionLine().setText('Hello').setPrice(optionPrice);
     return chart
       ?.createPositionLine()
       .setText(
         `${toFixed(
-          divide(option.total_fee, option.market.poolInfo.decimals) as string,
+          divide(option.trade_size, option.market.poolInfo.decimals) as string,
           2
         )} ${option.market.poolInfo.token} | ` + getText(option.expiration_time)
       )
@@ -271,7 +271,7 @@ function drawPosition(option, visualized, chart) {
       .setQuantityBorderColor(color)
       .setLineColor(color)
       .setBodyTextColor('rgb(255,255,255)')
-      .setQuantity(option.isAbove ? Up : Down)
+      .setQuantity(option.is_above ? Up : Down)
       .setPrice(optionPrice);
     // positions.current.push({ line, expiration: option.expiration_time });
   }
