@@ -422,12 +422,11 @@ export const useBuyTradeActions = (userInput: string) => {
             settelmentFee?.settlement_fee_sign_expiration,
           settlement_fee_signature: settelmentFee?.settlement_fee_signature,
           product_id: productNames.UP_DOWN.product_id,
-          environment: activeChain.id,
           token: tokenName,
           strike_timestamp: Math.floor(customTrade.strikeTimestamp / 1000),
         };
 
-        const trailingUrl = 'trade/v2/create/';
+        const trailingUrl = 'create/';
 
         const resp: { data: TradeType } = await axios.post(
           baseUrl + trailingUrl,

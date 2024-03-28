@@ -42,9 +42,9 @@ const JackpotBody: React.FC<{
           <div className="font-[600]   mt-6 text-[#B1B6C6] text-f15 w-full text-center">
             You won the Jackpot..
           </div>
-          <div className="flex justify-center items-center mt-4">
+          <div className="flex justify-between items-center mt-4">
             {trade ? (
-              <div className="mr-4 font-[500] text-[20px] flex items-center ">
+              <div className="mr-4 font-[500] text-[20px] flex items-center  whitespace-nowrap ">
                 {token0}-{token1}{' '}
                 <UpDownChip
                   isUp={trade?.is_above}
@@ -58,7 +58,7 @@ const JackpotBody: React.FC<{
                 className="w-[120px] h-[25px] rounded-md"
               />
             )}
-            <div className="flex text-[24px] items-center font-[700] ml-[50px] text-[#fff] ">
+            <div className="flex text-[24px] items-center font-[700]  text-[#fff] ">
               <span className="text-[16px] font-[500] text-[#B1B6C6]">
                 Bet:&nbsp;
               </span>{' '}

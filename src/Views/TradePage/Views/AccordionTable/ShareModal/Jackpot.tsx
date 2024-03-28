@@ -8,18 +8,29 @@ import { CloseOutlined } from '@mui/icons-material';
 import { useMedia, useWindowSize } from 'react-use';
 import { JackpotBody } from './JackpotBody';
 import Confetti from 'react-confetti';
-import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+import { useOngoingTrades as useOngoingTradesAB } from '@Views/ABTradePage/Hooks/useOngoingTrades';
+import { useHistoryTrades as useHistoryTradesAB } from '@Views/ABTradePage/Hooks/useHistoryTrades';
+import { useHistoryTrades } from '@Views/TradePage/Hooks/useHistoryTrades';
 
 interface IJackpotModal {}
 
 export const JackpotModal: React.FC<IJackpotModal> = () => {
   const [activeTrades] = useOngoingTrades();
+  const activeTradesAB = useOngoingTradesAB();
   const { page_data: historyTrades } = useHistoryTrades();
+  const { page_data: historyTradesab } = useHistoryTradesAB();
   const { jackpot, jackpotAcknowledged } = useJackpotManager();
   const trade = useMemo(() => {
-    const alltrades = [...activeTrades, ...historyTrades];
+    const alltrades = [
+      ...activeTrades,
+      ...historyTrades,
+      ...historyTradesab,
+      ...activeTradesAB,
+    ];
+    console.log(`alltrades: `, alltrades);
+
     const foundTrade = alltrades?.filter((trade) => {
       const tradeKey = getJackpotKey(trade);
       if (tradeKey == jackpot.recent) {
@@ -35,7 +46,7 @@ export const JackpotModal: React.FC<IJackpotModal> = () => {
     } else {
       return jackpot.jackpots[jackpot.recent];
     }
-  }, [activeTrades, jackpot, historyTrades]);
+  }, [activeTrades, jackpot, historyTrades, activeTradesAB, historyTradesab]);
   const { width, height } = useWindowSize();
   const [confettiDuration, setConfettiDuration] = useState(true);
   useEffect(() => {

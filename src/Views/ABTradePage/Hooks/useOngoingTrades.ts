@@ -14,17 +14,19 @@ import { getSingatureCached } from '../cache';
 import { refreshInterval, aboveBelowBaseUrl } from '../config';
 import { TradeType } from '../type';
 import { addMarketInTrades } from '../utils';
+import { useState } from 'react';
 export enum TradeState {
   Queued = 'QUEUED',
   Active = 'ACTIVE',
 }
 
-const emptyArray = [];
 const useOngoingTrades = () => {
   const { activeChain } = useActiveChain();
   const { oneCTWallet } = useOneCTWallet();
   const { address: userAddress } = useUserAccount();
   const { address } = useAccount();
+  const [empty, setEmpty] = useState([]);
+
   const markets = useAtomValue(aboveBelowMarketsAtom);
   const { data: productNames } = useProductName();
   const { data, error } = useSWR<TradeType[]>(
@@ -62,7 +64,7 @@ const useOngoingTrades = () => {
       refreshInterval: refreshInterval,
     }
   );
-  return data || [];
+  return data || empty;
 };
 
 export { useOngoingTrades };
