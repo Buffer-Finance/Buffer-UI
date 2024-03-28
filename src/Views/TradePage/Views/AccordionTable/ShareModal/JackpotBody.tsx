@@ -18,6 +18,10 @@ const BGImage = styled.div`
   padding-top: 22px;
   height: 100%;
 `;
+const token_monochrome = {
+  USDC: '/usdc_monochrome.png',
+  ARB: '/ARBMonohrome.svg',
+};
 const JackpotBody: React.FC<{
   trade: (TradeType & { jackpotAmount: string }) | null;
 }> = ({ trade }) => {
@@ -67,7 +71,10 @@ const JackpotBody: React.FC<{
                 className="!justify-start"
                 // unit={poolInfo.token}
               />{' '}
-              <img src="/ARBMonohrome.svg" className="w-[18px]  ml-2"></img>
+              <img
+                src={token_monochrome[trade.token] || token_monochrome['ARB']}
+                className="w-[18px]  ml-2"
+              ></img>
             </div>
           </div>
           <div className="flex justify-center items-center mt-3 text-[#fff]">
