@@ -36,6 +36,7 @@ import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { getAddress } from 'viem';
 import { PoolDropdown } from './PoolDropDown';
+import { PlatfromFeeError } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 16px;
@@ -176,44 +177,8 @@ const Error: React.FC<{
       platfromFee={platfromFee}
       tradeToken={tradeToken}
       balance={balance}
+      tradeSize={tradeSize}
     />
-  );
-};
-
-const PlatfromFeeError = ({
-  platfromFee,
-  tradeToken,
-  balance,
-}: {
-  platfromFee: string;
-  tradeToken: string;
-  balance: string;
-}) => {
-  const tradeSize = useAtomValue(tradeSizeAtom);
-  const error = getPlatformError({
-    platfromFee,
-    tradeSize: tradeSize || '0',
-    balance,
-  });
-
-  return (
-    <RowGap
-      gap="4px"
-      className={`text-${error ? 'red' : '[#7F87A7]'} items-center text-f12`}
-    >
-      <LightToolTipSVG className="mt-[3px]" />
-      {error ? (
-        <>
-          {error} <BuyUSDCLink token={tradeToken as 'ARB'} />
-        </>
-      ) : (
-        !error && (
-          <>
-            Platform fee : + {platfromFee} {tradeToken}
-          </>
-        )
-      )}
-    </RowGap>
   );
 };
 

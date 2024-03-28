@@ -657,15 +657,12 @@ export const MultiResolutionChart = ({
   };
 
   const renderPositions = async () => {
-    console.log(`MultiResolutionChart-deb-rendering: `);
     deleteAllPostions();
     trade2visualisation.current = [];
     setVisualizedTrades(drawPositions());
   };
 
   useEffect(() => {
-    console.log(`MultiResolutionChart-deb-ran: `);
-
     const timeout = setInterval(async () => {
       await renderPositions();
     }, 1000);
@@ -776,7 +773,6 @@ export const MultiResolutionChart = ({
               price: 0,
             },
           ];
-      console.log(`MultiResolutionChart-points: `, points);
 
       if (
         widgetRef.current &&

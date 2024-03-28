@@ -39,6 +39,7 @@ export const TradeSizeSelector: React.FC<{
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useAtomValue(buyTradeDataAtom);
   const { registeredOneCT } = useOneCTWallet();
+  const tradeSize = useAtomValue(tradeSizeAtom);
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;
 
@@ -83,6 +84,7 @@ export const TradeSizeSelector: React.FC<{
             platfromFee={platformFee}
             tradeToken={tradeToken}
             balance={balance}
+            tradeSize={tradeSize}
           />
         )}
       </ColumnGap>
@@ -90,17 +92,18 @@ export const TradeSizeSelector: React.FC<{
   );
 };
 
-const PlatfromFeeError = ({
+export const PlatfromFeeError = ({
   platfromFee,
   tradeToken,
   balance,
+  tradeSize,
 }: {
   platfromFee: string;
   tradeToken: string;
   balance: string;
+  tradeSize: string;
 }) => {
   const jackpotValue = useJackpotInfo();
-  const tradeSize = useAtomValue(tradeSizeAtom);
   const jackpotEligible =
     tradeToken == 'ARB' &&
     gte(tradeSize || '0', jackpotValue?.minSize?.toString() || '1');
@@ -109,7 +112,7 @@ const PlatfromFeeError = ({
   const isError = notEnooghForFee;
   const JackpotChip = tradeSize ? (
     <div className="ml-auto flex items-center gap-1">
-      {jackpotEligible ? (
+      {tradeToken != 'ARB' ? null : jackpotEligible ? (
         <>
           <LightToolTipSVG className="mt-[2px]" />
           Eligible for{' '}
