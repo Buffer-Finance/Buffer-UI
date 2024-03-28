@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { getAddress } from 'viem';
 import { marketsForChart } from '../config';
 import { AssetCategory, chartDataType, marketType, responseObj } from '../type';
-import { secondsToHHMM } from '../utils';
 import { useMarketsRequest } from './GraphqlRequests/useMarketsRequest';
 
 export const useMarketsConfig = () => {
@@ -24,7 +23,7 @@ export const useMarketsConfig = () => {
         response.push({
           ...marketInfo,
           category: AssetCategory[item.category],
-          creation_window_contract: item.config.creationWindowContract,
+          creation_window_contract: item.configContract.creationWindowContract,
           pools: [createPoolObject(item)],
         });
       }
@@ -51,12 +50,12 @@ export function createPoolObject(market: responseObj) {
     // optionContract: getAddress(market.address),
     // marketOiContract: getAddress(market.configContract.marketOIaddress),
     // poolOIContract: getAddress(market.configContract.poolOIaddress),
-    platformFee: market.config.platformFee,
+    platformFee: market.configContract.platformFee,
     // earlyclose: {
     //   enable: market.config.isEarlyCloseEnabled,
     //   threshold: market.config.earlyCloseThreshold,
     // },
-    IV: Number(market.config.IV),
+    IV: Number(market.configContract.IV),
     // IVFactorOTM: Number(market.configContract.IVFactorOTM),
     // IVFactorITM: Number(market.configContract.IVFactorITM),
     // SpreadConfig1: Number(market.configContract.SpreadConfig1),

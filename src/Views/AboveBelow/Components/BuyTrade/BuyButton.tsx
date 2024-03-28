@@ -3,6 +3,11 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { toFixed } from '@Utils/NumString';
 import { divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
+import { useApprvalAmount } from '@Views/ABTradePage/Hooks/useApprovalAmount';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
+import { getSlippageError } from '@Views/ABTradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
+import { tradeSettingsAtom } from '@Views/ABTradePage/atoms';
+import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { useIsInCreationWindow } from '@Views/AboveBelow/Hooks/useIsInCreationWIndow';
 import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
@@ -16,10 +21,6 @@ import {
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
-import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
-import { getSlippageError } from '@Views/ABTradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
-import { tradeSettingsAtom } from '@Views/ABTradePage/atoms';
-import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { Skeleton } from '@mui/material';
 import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
@@ -27,7 +28,6 @@ import { getAddress } from 'viem';
 import RouterABI from '../../abis/Router.json';
 import { ApproveBtn } from './ApproveBtn';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
-import { useApprvalAmount } from '@Views/ABTradePage/Hooks/useApprovalAmount';
 export const Buy = () => {
   const isIncreationWindow = useIsInCreationWindow();
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
@@ -206,7 +206,7 @@ const TradeButton = () => {
       if (!!tradeSizeError) throw new Error(tradeSizeError);
       const platformFeeError = getPlatformError({
         platfromFee: divide(
-          activeMarket.config.platformFee,
+          activeMarket.configContract.platformFee,
           activeMarket.poolInfo.decimals
         ) as string,
         tradeSize: amount || '0',

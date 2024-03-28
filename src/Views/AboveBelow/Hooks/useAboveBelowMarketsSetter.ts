@@ -36,7 +36,7 @@ export const useAboveBelowMarketsSetter = () => {
             openDown
             openInterestUp
             openInterestDown
-            config {
+            configContract {
               address
               maxSkew
               creationWindowContract

@@ -6,6 +6,7 @@ import { multiply } from '@Utils/NumString/stringArithmatics';
 import { useCall2Data } from '@Utils/useReadCall';
 import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { timeToMins } from '@Views/ABTradePage/utils/timeToMins';
+import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { erc20ABI } from 'wagmi';
 import CreationWindowABI from '../abis/CreationWindow.json';
@@ -16,7 +17,6 @@ import {
   readCallResponseAtom,
   selectedPoolActiveMarketAtom,
 } from '../atoms';
-import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
 
 import { useNumberOfContracts } from './useNumberOfContracts';
 
@@ -38,7 +38,7 @@ export const useReacallDataSetter = () => {
         ...new Set(
           markets.map((market) =>
             getCallId(
-              market.config.creationWindowContract,
+              market.configContract.creationWindowContract,
               '-creationWindow' + `-${market.category}`
             )
           )

@@ -10,7 +10,6 @@ import { getRoundedPrice } from '../Components/BuyTrade/PriceTable/helpers';
 import { selectedExpiry, selectedPoolActiveMarketAtom } from '../atoms';
 import { useIV } from './useIV';
 import { useSettlementFee } from './useSettlementFee';
-import { logger } from 'ethers';
 export type strikePriceObjectType = {
   strike: number;
   totalFeeAbove: number | null;
@@ -37,11 +36,11 @@ export const useLimitedStrikeArrays = () => {
   const { data: ivs } = useIV();
   const { data: settlementFees } = useSettlementFee();
 
-  const stepFromConfig = activeMarket?.config.stepSize;
+  const stepFromConfig = activeMarket?.configContract.stepSize;
   const stepsize =
     stepFromConfig === undefined
       ? undefined
-      : divide(activeMarket?.config.stepSize ?? '0', 8) ?? '0';
+      : divide(activeMarket?.configContract.stepSize ?? '0', 8) ?? '0';
   const roundedPrice =
     stepsize === undefined ? 0 : getRoundedPrice(+currentPrice, +stepsize);
 

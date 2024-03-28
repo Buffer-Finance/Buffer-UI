@@ -11,7 +11,7 @@ export interface responseAB {
   openDown: string;
   openInterestUp: string;
   openInterestDown: string;
-  config: {
+  configContract: {
     address: string;
     maxSkew: string;
     creationWindowContract: string;

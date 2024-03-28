@@ -19,7 +19,7 @@ export const useStrikePriceArray = () => {
       increasingPriceArray: [],
     };
 
-  const stepsize = divide(activeMarket.config.stepSize, 8) ?? '0';
+  const stepsize = divide(activeMarket.configContract.stepSize, 8) ?? '0';
   const roundedPrice = getRoundedPrice(+currentPrice, +stepsize);
   const decreasingPriceArray = Array.from({ length: 5 }, (_, i) => {
     let startPrice = roundedPrice;

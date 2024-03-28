@@ -5,29 +5,10 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { toFixed } from '@Utils/NumString';
-import {
-  add,
-  divide,
-  gt,
-  lt,
-  multiply,
-} from '@Utils/NumString/stringArithmatics';
-import { useMaxTrade } from '@Views/AboveBelow/Hooks/useMaxTrade';
-import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
-import {
-  selectedExpiry,
-  selectedPoolActiveMarketAtom,
-  tradeSizeAtom,
-  selectedPriceAtom,
-  readCallDataAtom,
-} from '@Views/AboveBelow/atoms';
-import { marketTypeAB } from '@Views/AboveBelow/types';
-import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
-import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
-import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
-import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
-import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
+import { add, divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useApprvalAmount } from '@Views/ABTradePage/Hooks/useApprovalAmount';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
+import { getSlippageError } from '@Views/ABTradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
 import { tradeSettingsAtom } from '@Views/ABTradePage/atoms';
 import { getSingatureCached } from '@Views/ABTradePage/cache';
 import { aboveBelowBaseUrl } from '@Views/ABTradePage/config';
@@ -35,21 +16,32 @@ import { TradeType } from '@Views/ABTradePage/type';
 import { generateApprovalSignatureWrapper } from '@Views/ABTradePage/utils/generateApprovalSignatureWrapper';
 import { generateTradeSignature } from '@Views/ABTradePage/utils/generateTradeSignature';
 import { getConfig } from '@Views/ABTradePage/utils/getConfig';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
+import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
+import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
+import {
+  readCallDataAtom,
+  selectedExpiry,
+  selectedPoolActiveMarketAtom,
+  selectedPriceAtom,
+  tradeSizeAtom,
+} from '@Views/AboveBelow/atoms';
+import { marketTypeAB } from '@Views/AboveBelow/types';
+import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { BlueBtn } from '@Views/Common/V2-Button';
+import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
+import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
+import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { Skeleton } from '@mui/material';
 import { Chain, signTypedData } from '@wagmi/core';
 import axios from 'axios';
+import { solidityKeccak256 } from 'ethers/lib/utils';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
 import { KeyedMutator } from 'swr';
-import { PrivateKeyAccount } from 'viem';
+import { PrivateKeyAccount, getAddress } from 'viem';
 import { useAccount } from 'wagmi';
-import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
-import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
-import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
-import { getSlippageError } from '@Views/ABTradePage/Views/Settings/TradeSettings/Slippage/SlippageError';
-import { getAddress } from 'viem';
-import { solidityKeccak256 } from 'ethers/lib/utils';
 
 export const BuyButton = () => {
   const { viewOnlyMode } = useUserAccount();
@@ -423,7 +415,7 @@ const Buy: React.FC<{
       if (!!tradeSizeError) throw new Error(tradeSizeError);
       const platformFeeError = getPlatformError({
         platfromFee: divide(
-          activeMarket.config.platformFee,
+          activeMarket.configContract.platformFee,
           activeMarket.poolInfo.decimals
         ) as string,
         tradeSize: amount || '0',

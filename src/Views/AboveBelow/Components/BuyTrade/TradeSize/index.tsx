@@ -9,22 +9,12 @@ import {
   multiply,
   subtract,
 } from '@Utils/NumString/stringArithmatics';
-import { useNumberOfContracts } from '@Views/AboveBelow/Hooks/useNumberOfContracts';
-import {
-  readCallDataAtom,
-  selectedPoolActiveMarketAtom,
-  selectedPriceAtom,
-  tradeSizeAtom,
-} from '@Views/AboveBelow/atoms';
 import { ColumnGap } from '@Views/ABTradePage/Components/Column';
-import { LightToolTipSVG } from '@Views/ABTradePage/Components/LightToolTipSVG';
 import {
   RowBetween,
-  RowGap,
   RowGapItemsStretched,
 } from '@Views/ABTradePage/Components/Row';
 import { BuyTradeHeadText } from '@Views/ABTradePage/Components/TextWrapper';
-import { BuyUSDCLink } from '@Views/ABTradePage/Views/BuyTrade/BuyUsdcLink';
 import { TradeSizeInput } from '@Views/ABTradePage/Views/BuyTrade/TradeSizeSelector/TradeSizeInput';
 import {
   WalletBalance,
@@ -32,11 +22,18 @@ import {
 } from '@Views/ABTradePage/Views/BuyTrade/TradeSizeSelector/WalletBalance';
 import { MAX_APPROVAL_VALUE } from '@Views/ABTradePage/config';
 import { getMaximumValue, getMinimumValue } from '@Views/ABTradePage/utils';
+import { useNumberOfContracts } from '@Views/AboveBelow/Hooks/useNumberOfContracts';
+import {
+  readCallDataAtom,
+  selectedPoolActiveMarketAtom,
+  selectedPriceAtom,
+  tradeSizeAtom,
+} from '@Views/AboveBelow/atoms';
+import { PlatfromFeeError } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { getAddress } from 'viem';
 import { PoolDropdown } from './PoolDropDown';
-import { PlatfromFeeError } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 16px;
@@ -121,7 +118,7 @@ export const TradeSize: React.FC<{
                         subtract(
                           balance,
                           divide(
-                            activeMarket.config.platformFee,
+                            activeMarket.configContract.platformFee,
                             activeMarket.poolInfo.decimals
                           ) as string
                         ),
@@ -142,7 +139,7 @@ export const TradeSize: React.FC<{
             <Error
               platfromFee={
                 divide(
-                  activeMarket.config.platformFee,
+                  activeMarket.configContract.platformFee,
                   activeMarket.poolInfo.decimals
                 ) as string
               }
