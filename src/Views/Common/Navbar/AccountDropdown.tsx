@@ -21,7 +21,7 @@ import { ControlledMenu, useClick, useMenuState } from '@szhsin/react-menu';
 import { useAtomValue, useSetAtom } from 'jotai';
 import React, { ReactNode, SVGProps, useEffect, useRef } from 'react';
 import { useMedia } from 'react-use';
-import { snackAtom } from 'src/App';
+import { snackAtom } from '../../../App';
 import { getAddress } from 'viem';
 import { useAccount, useBalance, useDisconnect, usePublicClient } from 'wagmi';
 import * as chain from 'wagmi/chains';

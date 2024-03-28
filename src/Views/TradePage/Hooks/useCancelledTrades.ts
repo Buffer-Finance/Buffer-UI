@@ -21,6 +21,7 @@ const useCancelledTrades = () => {
   const { address } = useUserAccount();
   const markets = useAllV2_5MarketsConfig();
   const activePage = useAtomValue(cancelTableActivePage);
+  const products = useProducts();
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'cancelled-trades-' + address + '-' + activeChain.id + '-' + activePage,
@@ -39,6 +40,8 @@ const useCancelledTrades = () => {
             user_address: getAddress(address),
             environment: activeChain.id,
             limit: TRADE_IN_A_PAGE_TRADES_TABLES,
+            product_id: products.UP_DOWN.product_id,
+
             page: activePage - 1,
           },
         });

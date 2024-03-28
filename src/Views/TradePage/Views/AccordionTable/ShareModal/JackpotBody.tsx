@@ -9,6 +9,7 @@ import { TradeType } from '@Views/TradePage/type';
 import { Skeleton } from '@mui/material';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { divide } from '@Utils/NumString/stringArithmatics';
+import { isABRouter } from '@Views/TradePage/config';
 
 const BGImage = styled.div`
   background-image: url('/JackpotBG.png');
@@ -33,6 +34,7 @@ const JackpotBody: React.FC<{
     );
   const token0 = trade?.market.token0;
   const token1 = trade?.market.token1;
+  const isAb = isABRouter(trade.router);
   return (
     <div className="flex flex-col">
       <div className="text-[#C3C2D4] w-[380px] b400:-translate-x-[4%]  h-[199px] b400:scale-[0.95] origin-center  ">
@@ -43,7 +45,12 @@ const JackpotBody: React.FC<{
           <div className="flex justify-center items-center mt-4">
             {trade ? (
               <div className="mr-4 font-[500] text-[20px] flex items-center ">
-                {token0}-{token1} <UpDownChip isUp={trade?.is_above} />
+                {token0}-{token1}{' '}
+                <UpDownChip
+                  isUp={trade?.is_above}
+                  upText={isAb ? 'Above' : 'Up'}
+                  downText={isAb ? 'Below' : 'Down'}
+                />
               </div>
             ) : (
               <Skeleton

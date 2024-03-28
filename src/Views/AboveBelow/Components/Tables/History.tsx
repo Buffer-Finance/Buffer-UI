@@ -21,6 +21,7 @@ import { getAssetMonochromeImageUrl } from '@Views/ABTradePage/utils/getAssetIma
 import { Launch } from '@mui/icons-material';
 import { AssetCell } from './Components/AssetCell';
 import { PayoutChip } from './Components/PayoutChip';
+import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 
 enum TableColumn {
   Asset = 0,
@@ -186,12 +187,18 @@ export const History: React.FC<{
           );
         return (
           <div className="flex flex-col gap-1">
-            <Display
-              data={divide(trade.payout ?? '0', trade.market.poolInfo.decimals)}
-              precision={2}
-              unit={trade.market.poolInfo.token}
-              className="!justify-start"
-            />
+            <div className="flex">
+              <Display
+                data={divide(
+                  trade.payout ?? '0',
+                  trade.market.poolInfo.decimals
+                )}
+                precision={2}
+                unit={trade.market.poolInfo.token}
+                className="!justify-start"
+              />
+              <JackpotChip jackpote18="1000000000000000000" />
+            </div>
             <div
               className={`flex items-center ${isTradeLost ? 'red' : 'green'}`}
             >

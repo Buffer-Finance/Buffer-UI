@@ -35,6 +35,7 @@ import {
 } from './Common';
 import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
+import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 
 enum TableColumn {
   Asset = 0,
@@ -204,11 +205,18 @@ const HistoryTable: React.FC<{
               {pnl || payout ? (
                 <>
                   {' '}
-                  <Display
-                    className="!justify-start"
-                    data={divide(payout!, poolInfo.decimals)}
-                    unit={poolInfo.token}
-                  />
+                  <div className="flex gap-2 items-center">
+                    <Display
+                      data={divide(
+                        trade.payout ?? '0',
+                        trade.market.poolInfo.decimals
+                      )}
+                      precision={2}
+                      unit={trade.market.poolInfo.token}
+                      className="!justify-start"
+                    />
+                    <JackpotChip jackpote18="1000000000000000000" />
+                  </div>
                   <span className={status.textColor + ' flex '}>
                     Net Pnl :{' '}
                     <Display

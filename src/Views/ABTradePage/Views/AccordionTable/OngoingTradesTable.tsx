@@ -238,15 +238,14 @@ export const OngoingTradesTable: React.FC<{
         );
       case TableColumn.Probability:
         return (
-          <div>
-            <>
-              <Probability
-                isColored
-                className=" !justify-start"
-                trade={trade}
-                marketPrice={marketPrice}
-              />{' '}
-            </>
+          <div className="flex gap-2 items-center">
+            <Probability
+              isColored
+              className=" !justify-start"
+              trade={trade}
+              marketPrice={marketPrice}
+            />{' '}
+            <JackpotChip jackpote18="1000000000000000000" />
           </div>
         );
     }
@@ -463,6 +462,7 @@ import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
 import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 // import { Display } from '@Views/Common/Tooltips/Display';
 
 export const Probability: React.FC<{

@@ -72,6 +72,7 @@ export const usePlatformHistoryTrades = () => {
   const activePage = useAtomValue(platformHistoryTableActivePage);
   const markets = useAllV2_5MarketsConfig();
   // console.log('markets', markets);
+  const products = useProducts();
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'platform-history-trades-' +
@@ -95,6 +96,7 @@ export const usePlatformHistoryTrades = () => {
             environment: activeChain.id,
             limit: TRADE_IN_A_PAGE_TRADES_TABLES,
             page: activePage - 1,
+            product_id: products.UP_DOWN.product_id,
           },
         });
         if (!res?.data?.page_data?.length)
@@ -116,6 +118,7 @@ export const usePlatformCancelledTrades = () => {
   const activePage = useAtomValue(platformCancelTableActivePage);
   const markets = useAllV2_5MarketsConfig();
   // console.log('markets', markets);
+  const products = useProducts();
 
   const { data, error } = useSWR<tradesApiResponseType>(
     'platform-cancelled-trades-' +
@@ -139,6 +142,7 @@ export const usePlatformCancelledTrades = () => {
             environment: activeChain.id,
             limit: TRADE_IN_A_PAGE_TRADES_TABLES,
             page: activePage - 1,
+            product_id: products.UP_DOWN.product_id,
           },
         });
         if (!res?.data?.page_data?.length)
