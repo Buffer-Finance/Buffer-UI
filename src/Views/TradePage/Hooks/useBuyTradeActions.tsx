@@ -580,6 +580,8 @@ export const useBuyTradeActions = (userInput: string) => {
         user_signature,
         environment: activeChain.id,
         state: 'PENDING',
+        product_id: productNames.UP_DOWN.product_id,
+
         token: tokenName,
       };
       const resp = await axios.post(baseUrl + 'approve/', null, {
