@@ -214,9 +214,7 @@ export const EssentialModals = () => {
   return (
     <>
       <CloseConfirmationModal />
-
       <MarketTimingsModal />
-      <JackpotModal />
       <ShareModal />
       <ModalBase
         className="!p-[0px]"

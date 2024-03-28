@@ -14,7 +14,7 @@ export const useApprvalAmount = () => {
   const tokenName = poolDetails?.token;
   const { cache } = useSWRConfig();
   const products = useProducts();
-  const id = `${userAddress}-user-approval-${activeChainId}-tokenName-${tokenName}`;
+  const id = `${userAddress}-user-approval-${activeChainId}-tokenName-${tokenName}-up-down`;
 
   const { data, mutate } = useSWR<{
     allowance: number;

@@ -104,15 +104,17 @@ export const PlatfromFeeError = ({
   tradeSize: string;
 }) => {
   const jackpotValue = useJackpotInfo();
-  const jackpotEligible =
-    tradeToken == 'ARB' &&
-    gte(tradeSize || '0', jackpotValue?.minSize?.toString() || '1');
+  console.log(`index-jackpotValue: `, jackpotValue);
+  const jackpotEligibilityValue =
+    jackpotValue?.minSizes?.[tradeToken]?.toString();
+  console.log(`index-jackpotEligibilityValue: `, jackpotEligibilityValue);
+  const jackpotEligible = gte(tradeSize || '0', jackpotEligibilityValue || '1');
   const notEnoughForTrade = gt(tradeSize || '0', balance);
   const notEnooghForFee = gt(add(tradeSize || '0', platfromFee), balance);
   const isError = notEnooghForFee;
   const JackpotChip = tradeSize ? (
     <div className="ml-auto flex items-center gap-1">
-      {tradeToken != 'ARB' ? null : jackpotEligible ? (
+      {jackpotEligible ? (
         <>
           <LightToolTipSVG className="mt-[2px]" />
           Eligible for{' '}
@@ -124,9 +126,8 @@ export const PlatfromFeeError = ({
       ) : (
         <>
           <LightToolTipSVG className="mt-[2px]" />
-          Add{' '}
-          {Math.ceil(
-            +subtract(jackpotValue?.minSize?.toString(), tradeSize || '0')
+          Add {Math.ceil(
+            +subtract(jackpotEligibilityValue, tradeSize || '0')
           )}{' '}
           for
           <Link to="/Jackpot" className="hover:underline hover:cursor-pointer">

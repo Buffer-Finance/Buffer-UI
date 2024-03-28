@@ -6,6 +6,7 @@ const JackpotToken = 'ARB';
 const defaultOp = -1;
 const useJackpotInfo = () => {
   const [ARBPoolAds, token] = getARBPool();
+  const [USDCPoolAds, usdc] = getUSDCPool();
   const args = [token.tokenAddress];
   const res = useContractReads({
     contracts: [
@@ -21,11 +22,21 @@ const useJackpotInfo = () => {
         functionName: 'balanceOf',
         args: [JackpotAdds],
       },
+      {
+        address: JackpotAdds,
+        abi: JackpotABI,
+        functionName: 'minBetSizeForJackpot',
+        args: [usdc.tokenAddress],
+      },
     ],
     select: (data) => {
       if (data[0].status == 'success')
         return {
           minSize: BigDivide(data[0].result),
+          minSizes: {
+            ARB: BigDivide(data[0].result),
+            USDC: BigDivide(data[2].result),
+          },
           poolBalance: BigDivide(data[1].result),
         };
       else {
@@ -48,8 +59,19 @@ const getARBPool = () => {
   });
   return ARBPool[0];
 };
+const getUSDCPool = () => {
+  const USDCPool = Object.entries(
+    appConfig[isTestnet ? '421614' : '42161'].poolsInfo
+  ).filter(([k, v]) => {
+    if (v.token === 'USDC') {
+      return true;
+    }
+    return false;
+  });
+  return USDCPool[0];
+};
 
 const BigDivide = (num) => {
-  if (!num) return undefined;
+  if (!num) return 0n;
   return BigInt(num) / BigInt(10 ** 18);
 };
