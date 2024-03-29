@@ -266,16 +266,16 @@ export const OngoingTradesTable: React.FC<{
         return (
           // queuedTradeFallBack(trade) || (
           <div>
+            <Pnl
+              configData={trade.market}
+              trade={trade}
+              poolInfo={poolInfo}
+              lockedAmmount={lockedAmmount}
+            />
             <div className="flex items-center gap-2">
-              <Pnl
-                configData={trade.market}
-                trade={trade}
-                poolInfo={poolInfo}
-                lockedAmmount={lockedAmmount}
-              />
+              <Probability trade={trade} marketPrice={marketPrice} />{' '}
               <JackpotChip jackpote18={jackpote18} />
             </div>
-            <Probability trade={trade} marketPrice={marketPrice} />{' '}
           </div>
           // )
         );
@@ -482,6 +482,6 @@ export const Probability: React.FC<{
     +getCachedPriceFromKlines(trade.market),
     IV
   );
-  if (!probabiliyt) return <div>Calculating..</div>;
+  if (probabiliyt == undefined || probabiliyt == null) return <div>-%.</div>;
   return <div> {toFixed(probabiliyt, 2) + '%'}</div>;
 };
