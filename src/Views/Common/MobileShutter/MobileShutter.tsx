@@ -109,6 +109,7 @@ export default ShutterProvider;
 
 export const TradesShutter = () => {
   const { closeShutter, shutterState } = useShutterHandlers();
+  console.log(`MobileShutter-shutterState: `, shutterState);
   const isOpen = typeof shutterState.open == 'string';
 
   return (

@@ -30,8 +30,8 @@ const TradeCardBackground = styled.div`
 `;
 
 export const TradeCard = ({ trade }: { trade: TradeType }) => {
-  const { getPoolInfo } = usePoolInfo();
   const tradeMarket = trade.market;
+  console.log(`Trade-tradeMarket: `, tradeMarket);
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { data: allSpreads } = useSpread();
   const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
@@ -41,7 +41,7 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
   if (!tradeMarket) return <>Error</>;
 
-  const poolInfo = getPoolInfo(trade.pool.pool);
+  const poolInfo = trade.pool;
   const pairName = joinStrings(tradeMarket.token0, tradeMarket.token1, '-');
   const isUp = trade.is_above;
   const tradeType = trade.is_limit_order ? 'Limit order' : 'Market';
@@ -77,7 +77,7 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
       </ColumnGap>
       <TradeTimeElapsed trade={trade} />
       <div className="mb-3">
-        <TradePoolChip assetName={poolInfo.token} />
+        <TradePoolChip assetName={trade.token} />
       </div>
 
       <TradeDataView

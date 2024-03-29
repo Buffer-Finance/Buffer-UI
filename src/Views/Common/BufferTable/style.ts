@@ -42,7 +42,7 @@ const TableBackground = styled.div`
     max-height: 1000px; /* Set a maximum height that suits your content */
   }
   @media (max-width: 1000px) {
-    height: auto;
+    height: ${(props) => (props?.overflow ? props?.overflow : 'auto')};
   }
   table {
     width: 100%;

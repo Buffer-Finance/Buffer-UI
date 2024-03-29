@@ -117,7 +117,7 @@ export const BuyTrade: React.FC = () => {
         amount={amount.toString()}
         isApprovalLocked={approvalExpanded?.is_locked}
       />
-      <ActiveTrades />
+      <ActiveTrades sm />
     </BuyTradeBackground>
   );
 };

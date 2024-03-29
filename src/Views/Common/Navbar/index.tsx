@@ -69,14 +69,16 @@ export const Navbar: React.FC<INavbar> = () => {
             hideText
           />
         </div>
-        <div className="a1200:hidden flex gap-x-4 items-center pl-4">
+        <div
+          className="a1200:hidden flex gap-x-4 items-center pl-4"
+          onClick={openOngoingTradesShutter}
+        >
           <MemoHamburgerSVG onClick={handleClose} />
           <MemoWalletSVG
             count={activeTrades.length + limitOrderTrades.length}
             className={
               shutterState.open == 'ActiveOrders' ? 'text-1' : 'text-[#808191]'
             }
-            onClick={openOngoingTradesShutter}
           />
         </div>
 

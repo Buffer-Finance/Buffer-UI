@@ -1,27 +1,41 @@
 import { ExpandSVG } from '@Views/TradePage/Components/Expand';
 import { useState } from 'react';
 import { TradeCard } from './Trade';
-import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { isTableShownAtom } from '@Views/TradePage/atoms';
 import { NoTrades } from './NoTrades';
+import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
+
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
+import { usePlatformActiveTrades } from '@Views/ABTradePage/Hooks/useOngoingPlatformTrades';
+import { useOngoingTrades as useOngoingTradesAB } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 
-const tableTypes = ['Trades', 'Limit Orders'];
-
-export const ActiveTrades: React.FC<{ isMobile?: boolean }> = ({
+export const ActiveTrades: React.FC<{ isMobile?: boolean; sm?: boolean }> = ({
   isMobile,
+  sm,
 }) => {
+  const tableTypes = sm
+    ? ['Trades', 'Limit Orders']
+    : ['Up/Down', 'Above/Below', 'Limit Orders'];
   const [tableType, setTableType] = useState(tableTypes[0]);
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
   const setIsTableShown = useSetAtom(isTableShownAtom);
   const isTableShown = useAtomValue(isTableShownAtom);
   const isLimitOrderTable = tableType == 'Limit Orders';
+  const isABTable = tableType == 'Above/Below';
   const navigate = useNavigate();
   const { closeShutter } = useShutterHandlers();
-  const trades = !isLimitOrderTable ? activeTrades : limitOrderTrades;
+  const activeTradesAB = useOngoingTradesAB();
+  const trades = !isLimitOrderTable
+    ? isABTable
+      ? activeTradesAB
+      : activeTrades
+    : limitOrderTrades;
+  // const trades = ongoingTrades;
+  console.log(`index-trades: `, trades);
+  if (!trades) return <div>Loading...</div>;
   return (
     <>
       <div className="w-full b1200:sticky b1200:top-[0px] b1200:z-50 bg-[#282b39] flex justify-evenly text-f14 rounded-t-[8px] py-[8px]  mt-3">
