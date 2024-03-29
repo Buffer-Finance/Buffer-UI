@@ -402,6 +402,7 @@ function RecentJackpots(props) {
 const JackpotToken = 'ARB';
 function JackpotValueSeciont(props) {
   const jackpotInfo = useJackpotInfo();
+  console.log(`index-jackpotInfo: `, jackpotInfo);
 
   const poolBalance = jackpotInfo?.poolBalance;
   console.log(`index-poolBalance: `, poolBalance);
