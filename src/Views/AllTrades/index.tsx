@@ -17,7 +17,6 @@ export const AllTrades = () => {
   const { setTab, tab } = useAllTradesTab();
   const isNotMobile = useMedia('(min-width:1200px)');
 
-  useBuyTradeData();
   usePriceRetriable();
 
   const tabs = ['active', 'history', 'cancelled'];
