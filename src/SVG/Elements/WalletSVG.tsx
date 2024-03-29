@@ -3,15 +3,16 @@ import * as React from 'react';
 interface IProp extends React.SVGProps<SVGSVGElement> {
   count: number;
 }
+
 function WalletSVG(props: IProp) {
   return (
-    <div className="relative">
+    <div className="relative" onClick={props.onClick}>
       {props.count ? (
         <div className="absolute top-[-6px] right-[-8px] bg-[#B50909] text-f12 min-w-[16px] h-[16px] text-center rounded-full">
           <span className="mt-[-2px] block">{props.count}</span>
         </div>
       ) : null}
-      <svg width={22} height={22} fill="none" {...props}>
+      <svg width={22} height={22} fill="none" {...props} onClick={() => {}}>
         <mask id="prefix__a" fill="#fff">
           <rect y={5} width={22} height={17} rx={2} />
         </mask>

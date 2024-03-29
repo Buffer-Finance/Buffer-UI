@@ -16,6 +16,7 @@ import { BufferLogoComponent } from './BufferLogo';
 import { SettingsDD } from './SettingsDD';
 import { Tab } from './Tab';
 import { TabsDropdown } from './TabsDropDown';
+import { useOngoingTrades as useOngoingTradesAB } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 
 interface INavbar {}
 
@@ -44,6 +45,8 @@ export const Navbar: React.FC<INavbar> = () => {
   };
   const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
+  const activeTradesAB = useOngoingTradesAB();
+
   const navigate = useNavigate();
   const [click, setClick] = useState(0);
   const openAdmin = () => {
@@ -69,13 +72,15 @@ export const Navbar: React.FC<INavbar> = () => {
             hideText
           />
         </div>
-        <div
-          className="a1200:hidden flex gap-x-4 items-center pl-4"
-          onClick={openOngoingTradesShutter}
-        >
+        <div className="a1200:hidden flex gap-x-4 items-center pl-4">
           <MemoHamburgerSVG onClick={handleClose} />
           <MemoWalletSVG
-            count={activeTrades.length + limitOrderTrades.length}
+            onClick={openOngoingTradesShutter}
+            count={
+              activeTrades.length +
+              limitOrderTrades.length +
+              activeTradesAB.length
+            }
             className={
               shutterState.open == 'ActiveOrders' ? 'text-1' : 'text-[#808191]'
             }
