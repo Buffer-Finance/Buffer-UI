@@ -20,7 +20,7 @@ export const appConfig = {
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
     v2_router: '0x0511b76254e86A4E6c94a86725CdfF0E7A8B4326',
     jackpot: '0x66B076FB2fC0c0337b9ACB62F11192af163306A3',
-    above_below_router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
+    above_below_router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
     product_id: {
       UP_DOWN: {
         id: 2,
@@ -36,7 +36,7 @@ export const appConfig = {
         metaData: {},
         name: 'AB',
         product_id: 'xyz',
-        router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
+        router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
       },
     },
     poolsInfo: {
@@ -133,7 +133,7 @@ export const appConfig = {
         metaData: {},
         name: 'AB',
         product_id: 'xyz',
-        router: '0x7730133488D1FB3b705FB8eDffb6630cF616777B',
+        router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
       },
     },
     poolsInfo: {

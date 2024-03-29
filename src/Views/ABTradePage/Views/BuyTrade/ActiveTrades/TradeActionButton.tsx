@@ -78,8 +78,6 @@ export const TradeButton: React.FC<{
     cancelHandler(trade);
   }
 
-  f;
-
   if (viewOnlyMode) return <></>;
 
   const [isCloseDisabled, disableTooltip] = getEarlyCloseStatus(trade);

@@ -21,6 +21,7 @@ import { TradeDataView } from './TradeDataView';
 import { TradePoolChip } from './TradePoolChip';
 import { TradeTimeElapsed } from './TradeTimeElapsed';
 import { TradeTypeChip } from './TradeTypeChip';
+import { isABRouter } from '@Views/TradePage/config';
 
 const TradeCardBackground = styled.div`
   padding: 12px 16px;
@@ -47,6 +48,9 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const tradeType = trade.is_limit_order ? 'Limit order' : 'Market';
   const isLimitorder =
     trade.is_limit_order && trade.state === TradeState.Queued;
+  const isAb = isABRouter(trade.router);
+  console.log(`Trade-isAb: `, isAb);
+
   return (
     <TradeCardBackground>
       <ColumnGap gap="15px">
@@ -56,7 +60,12 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
               <PairTokenImage pair={pairName} />
             </div>
             <White12pxText>{pairName}</White12pxText>
-            <DirectionChip isUp={isUp} shouldShowArrow />
+            <DirectionChip
+              isUp={isUp}
+              upText={isAb ? 'Above' : 'Up'}
+              downText={isAb ? 'Below' : 'Down'}
+              shouldShowArrow
+            />
             <Visualized queue_id={trade.queue_id} className="hidden sm:block" />
             {!isLimitorder && (
               <>
@@ -85,11 +94,11 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
         poolInfo={poolInfo}
         configData={tradeMarket}
       />
-      <TradeActionButton
+      {/* <TradeActionButton
         trade={trade}
         tradeMarket={tradeMarket}
         poolInfo={poolInfo}
-      />
+      /> */}
     </TradeCardBackground>
   );
 };

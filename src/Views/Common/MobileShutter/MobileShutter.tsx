@@ -35,6 +35,7 @@ type BinaryOptionConfigs = {
 export function useShutterHandlers() {
   const setShutter = useSetAtom(shutterModalAtom);
   const shutterState = useAtomValue(shutterModalAtom);
+  console.log(`MobileShutter-shutterState: `, shutterState);
   const toastify = useToast();
   const closeShutter = useCallback(
     (err?: ReactNode[]) => {
