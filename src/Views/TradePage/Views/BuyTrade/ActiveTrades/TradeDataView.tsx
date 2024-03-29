@@ -29,8 +29,8 @@ import { StrikePrice } from './StrikePrice';
 import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
 import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 import { isABRouter } from '@Views/TradePage/config';
-import { Probability } from '../../AccordionTable/OngoingTradesTable';
 import { priceAtom } from '@Hooks/usePrice';
+import { Probability } from '@Views/ABTradePage/Views/AccordionTable/OngoingTradesTable';
 
 export const TradeDataView: React.FC<{
   trade: TradeType;
@@ -99,7 +99,7 @@ export const TradeDataView: React.FC<{
                 poolInfo={poolInfo}
               />
             )}
-            <Probability trade={trade} marketPrice={marketPrice} />{' '}
+            <Probability isColored trade={trade} marketPrice={marketPrice} />{' '}
           </span>
         ),
       },
