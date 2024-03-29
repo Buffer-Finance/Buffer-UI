@@ -129,26 +129,8 @@ const faucetClaimingSteps = {
     symbol: 'AETH',
     faucet: [
       {
-        step: 'Claim AETH from sepolia faucet',
-        url: 'https://sepoliafaucet.com/',
-        // options: [
-        //   {
-        //     step: 'Using the Goerli faucet',
-        //     url: 'https://goerlifaucet.com/',
-        //   },
-        //   {
-        //     step: 'Using the Paradigm Multifaucet',
-        //     url: 'https://faucet.paradigm.xyz/',
-        //   },
-        // ],
-      },
-      {
-        step: 'Bridge GoerliETH to AETH',
-        url: 'https://bridge.arbitrum.io/?l2ChainId=421613',
-      },
-      {
-        step: 'Directly claim AETH from here',
-        url: 'https://bwarelabs.com/faucets/arbitrum-sepolia',
+        step: 'Claim GoerliETH from sepolia faucet',
+        url: 'https://www.alchemy.com/faucets/arbitrum-sepolia',
       },
     ],
     img: '/Chains/ARBITRIUM.png',
@@ -204,9 +186,6 @@ const TestnetLinks = () => {
               key={s.url}
               className="whitespace-nowrap sm:max-w-[250px] text-ellipsis overflow-hidden"
             >
-              {faucetClaimingSteps[activeChain.id].faucet.length === 1
-                ? ''
-                : idx + 1 + '.'}
               <span className="w-full">
                 <a href={s.url || s} target="_blank">
                   {s.step || s}
