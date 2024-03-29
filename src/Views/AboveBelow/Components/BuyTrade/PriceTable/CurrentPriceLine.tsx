@@ -8,7 +8,10 @@ export const CurrentPriceLine = ({
   precision: number;
 }) => {
   return (
-    <div className="border-dashed border-[1px] border-[#A3E3FF] w-full relative my-5">
+    <div
+      className="border-dashed border-[1px] border-[#A3E3FF] w-full relative my-5"
+      id="current-price-line"
+    >
       <div className="rounded-lg border-[1px] border-[#A3E3FF] py-1 px-5 text-buffer-blue font-bold text-f12 bg-[#181A20] w-fit absolute -top-4 right-[0px] left-[0px] m-auto">
         <Display data={currentPrice} precision={precision} disable />
       </div>

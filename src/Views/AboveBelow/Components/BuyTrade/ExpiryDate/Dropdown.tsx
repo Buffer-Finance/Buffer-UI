@@ -18,6 +18,16 @@ export const DropDown = () => {
 
   function onClick(e: ClickEvent) {
     e.stopPropagation = true;
+    setTimeout(() => {
+      const priceline = document.getElementById('current-price-line');
+      console.log(`Dropdown-priceline: `, priceline);
+      priceline?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'nearest',
+      });
+    }, 700);
+
     setSelectedTimestamp(e.value);
 
     setSelectedStrike(undefined);
@@ -34,7 +44,7 @@ export const DropDown = () => {
               <RowGap gap="8px" className="w-full">
                 {selectedTimestamp
                   ? formatDateWithTime(selectedTimestamp)
-                  : 'Select Expiry'}
+                  : 'Select Expiry (UTC)'}
                 <DDarrow open={open} className="scale-125 ml-5" />
               </RowGap>
             </MenuButton>
