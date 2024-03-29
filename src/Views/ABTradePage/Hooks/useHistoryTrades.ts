@@ -22,9 +22,11 @@ const useHistoryTrades = () => {
   const { activeChain } = useActiveChain();
   const { address } = useUserAccount();
   const markets = useAtomValue(aboveBelowMarketsAtom);
+  console.log(`markets: `, markets);
   // console.log(`markets: `, markets);
   const activePage = useAtomValue(historyTableActivePage);
   const { data: productNames } = useProductName();
+  console.log(`productNames: `, productNames);
   // const [isLoading, setIsLoading] = useState(false);
 
   const { data, error } = useSWR<tradesApiResponseType>(
@@ -51,6 +53,8 @@ const useHistoryTrades = () => {
             },
           }
         );
+        console.log(`productNames: `, productNames['AB'].product_id);
+
         // console.log(
         //   `addMarketInTrades(res.data.page_data, markets): `,
         //   addMarketInTrades(res.data.page_data, markets)

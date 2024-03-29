@@ -25,6 +25,7 @@ import { useClick, useMenuState } from '@szhsin/react-menu';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { TradeInspect_sm } from './TradeInspect_sm';
+import { useAboveBelowMarketsSetter } from '@Views/AboveBelow/Hooks/useAboveBelowMarketsSetter';
 
 const renderTab = (s) => (s.includes(':') ? s.split(':')[0] : s);
 const roottabs = ['Up/Down', 'Above/Below'];
@@ -50,7 +51,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
   const { closeShutter } = useShutterHandlers();
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
   usePriceRetriable();
-
+  useAboveBelowMarketsSetter();
   useEffect(() => {
     closeShutter();
     return closeShutter;
@@ -139,25 +140,25 @@ const TradeLog_sm: React.FC<any> = ({}) => {
 export { TradeLog_sm };
 
 export const MobileHistoryTable = ({ rootTab }) => {
-  if (rootTab == 'Above/Below')
+  console.log(`TradeLog_sm-rootTab: `, rootTab);
+  if (rootTab == roottabs[1])
     return <HistoryAB onlyView={[0, 1, 7]} overflow={false} />;
 
   return <History onlyView={[0, 1, 7]} overflow={false} />;
 };
 export const MobilePlatformHistoryTable = ({ rootTab }) => {
-  if (rootTab == 'Above/Below')
+  if (rootTab == roottabs[1])
     return <PlatformHistoryAB onlyView={[0, 6, 7]} overflow={false} />;
 
   return <PlatformHistory onlyView={[0, 6, 7]} overflow={false} />;
 };
 export const MobilePlatformOngoingTable = ({ rootTab }) => {
-  if (rootTab == 'Above/Below')
-    return <PlatformOngoingAB onlyView={[0, 1, 6, 8]} />;
+  if (rootTab == roottabs[1]) return <PlatformOngoingAB onlyView={[0, 1, 8]} />;
 
   return <PlatformOngoing onlyView={[0, 1, 6, 8]} />;
 };
 const MobileCancelledTable = ({ rootTab }) => {
-  if (rootTab == 'Above/Below') return <CancelledAB onlyView={[0, 1, 2, 4]} />;
+  if (rootTab == roottabs[1]) return <CancelledAB onlyView={[0, 1, 2, 4]} />;
 
   return <Cancelled onlyView={[0, 1, 2, 4]} />;
 };

@@ -309,7 +309,7 @@ const HistoryTable: React.FC<{
     if (!trade) return <>Something went wrong.</>;
     // if (!readcallData) return <></>;
 
-    const poolInfo = getPoolInfo(trade?.pool?.pool);
+    const poolInfo = trade.pool;
     if (!poolInfo) return <>Something went wrong.</>;
     const minClosingTime = getExpiry(trade);
     let expiryPrice: number | null = trade.expiry_price;
