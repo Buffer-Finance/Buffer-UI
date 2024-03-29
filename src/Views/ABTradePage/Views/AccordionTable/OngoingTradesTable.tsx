@@ -117,9 +117,7 @@ export const OngoingTradesTable: React.FC<{
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
-  const { earlyCloseHandler } = useCancelTradeFunction();
-  const earlyCloseLoading = useAtomValue(closeLoadingAtom);
-  const { getPoolInfo } = usePoolInfo();
+  const jackpotManager = useJackpotManager();
 
   const BodyFormatter: any = (row: number, col: number) => {
     if (trades === undefined) return <></>;
@@ -143,6 +141,10 @@ export const OngoingTradesTable: React.FC<{
       trade.expiration_time -
         (trade.close_time || Math.round(Date.now() / 1000))
     );
+    const jackpote18 =
+      jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]?.jackpot_amount ||
+      trade?.jackpot_amount ||
+      '0';
 
     switch (col) {
       case TableColumn.Show:
@@ -245,7 +247,7 @@ export const OngoingTradesTable: React.FC<{
               trade={trade}
               marketPrice={marketPrice}
             />{' '}
-            <JackpotChip jackpote18="1000000000000000000" />
+            <JackpotChip jackpote18={jackpote18} />
           </div>
         );
     }
@@ -463,6 +465,7 @@ import { useIV } from '@Views/AboveBelow/Hooks/useIV';
 import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import { JackpotChip } from '@Views/Jackpot/JackpotChip';
+import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
 // import { Display } from '@Views/Common/Tooltips/Display';
 
 export const Probability: React.FC<{

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { History } from '../Tables/History';
+import { History } from '../Tables/History.1';
 import { historyActivePageAtom } from './atoms';
 
 export const AllHistory: React.FC<{

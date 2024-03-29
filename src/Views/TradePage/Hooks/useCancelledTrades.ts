@@ -15,6 +15,7 @@ import {
 import { tradesApiResponseType } from '../type';
 import { addMarketInTrades } from '../utils';
 import { useAllV2_5MarketsConfig } from './useAllV2_5MarketsConfig';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 
 const useCancelledTrades = () => {
   const { activeChain } = useActiveChain();

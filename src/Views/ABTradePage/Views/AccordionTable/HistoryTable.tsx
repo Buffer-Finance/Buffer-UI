@@ -36,6 +36,7 @@ import {
 import { Share } from './ShareModal/ShareIcon';
 import { getPayout } from './ShareModal/utils';
 import { JackpotChip } from '@Views/Jackpot/JackpotChip';
+import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
 
 enum TableColumn {
   Asset = 0,
@@ -101,6 +102,8 @@ const HistoryTable: React.FC<{
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
+  const jackpotManager = useJackpotManager();
+
   const isNotMobile = useMedia('(min-width:1200px)');
   const isMobile = useMedia('(max-width:600px)');
   const navigateToProfile = useNavigateToProfile();
@@ -108,6 +111,10 @@ const HistoryTable: React.FC<{
   const BodyFormatter: any = (row: number, col: number) => {
     const trade = trades?.[row];
     if (trade === undefined) return <></>;
+    const jackpote18 =
+      jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]?.jackpot_amount ||
+      trade?.jackpot_amount ||
+      '0';
     // if (!readcallData) return <>no readcall data</>;
 
     // const maxOi = readcallData.maxOIs[getAddress(trade.target_contract)];
@@ -215,7 +222,7 @@ const HistoryTable: React.FC<{
                       unit={trade.market.poolInfo.token}
                       className="!justify-start"
                     />
-                    <JackpotChip jackpote18="1000000000000000000" />
+                    <JackpotChip jackpote18={jackpote18} />
                   </div>
                   <span className={status.textColor + ' flex '}>
                     Net Pnl :{' '}

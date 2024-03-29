@@ -7,7 +7,7 @@ import {
 } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import { TableErrorRow } from '@Views/ABTradePage/Views/AccordionTable/Common';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { History } from '../History';
+import { History } from '../History.1';
 
 export const HistoryTable: React.FC<{
   userAddress: string | undefined;
