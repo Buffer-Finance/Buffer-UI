@@ -123,6 +123,7 @@ export const TradesShutter = () => {
         {shutterState.open == 'ActiveOrders' && (
           <div className="h-screen">
             <ActiveTrades isMobile />
+            {/* <div className="w-[100vw] h-[100vh] bg-red"></div> */}
           </div>
         )}
       </div>

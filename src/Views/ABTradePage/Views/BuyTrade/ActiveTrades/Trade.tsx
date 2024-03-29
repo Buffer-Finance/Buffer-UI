@@ -41,6 +41,7 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
   const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
   if (!tradeMarket) return <>Error</>;
 
+  console.log(`Trade-trade.pool: `, trade);
   const poolInfo = getPoolInfo(trade.pool.pool);
   const pairName = joinStrings(tradeMarket.token0, tradeMarket.token1, '-');
   const isUp = trade.is_above;

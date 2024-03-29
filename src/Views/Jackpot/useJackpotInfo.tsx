@@ -30,7 +30,6 @@ const useJackpotInfo = () => {
       },
     ],
     select: (data) => {
-      console.log(`useJackpotInfo-data[2]: `, data[2]);
       if (data[0].status == 'success')
         return {
           minSize: BigDivide(data[0].result),

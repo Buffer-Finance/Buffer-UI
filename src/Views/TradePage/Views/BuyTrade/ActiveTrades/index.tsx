@@ -34,7 +34,7 @@ export const ActiveTrades: React.FC<{ isMobile?: boolean; sm?: boolean }> = ({
       : activeTrades
     : limitOrderTrades;
   // const trades = ongoingTrades;
-  console.log(`index-trades: `, trades);
+  // console.log(`index-trades: `, trades);
   if (!trades) return <div>Loading...</div>;
   return (
     <>
@@ -73,7 +73,7 @@ export const ActiveTrades: React.FC<{ isMobile?: boolean; sm?: boolean }> = ({
         <TradesBackground className="b1200:mb-4">
           {/* <div className="w-full h-[900px] bg-red"></div> */}
           {trades.map((t) => (
-            <TradeCard trade={t} key={t.id} />
+            <TradeCard trade={t} key={t.id} sm={sm} />
           ))}
         </TradesBackground>
       )}

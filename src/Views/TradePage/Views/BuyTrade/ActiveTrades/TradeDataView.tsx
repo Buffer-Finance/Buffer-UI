@@ -15,7 +15,7 @@ import { TradeType, marketType, poolInfoType } from '@Views/TradePage/type';
 import { secondsToHHMM } from '@Views/TradePage/utils';
 import { calculateOptionIV } from '@Views/TradePage/utils/calculateOptionIV';
 import styled from '@emotion/styled';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
 import {
   getExpiry,
@@ -28,6 +28,9 @@ import { DataCol } from './DataCol';
 import { StrikePrice } from './StrikePrice';
 import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
 import { JackpotChip } from '@Views/Jackpot/JackpotChip';
+import { isABRouter } from '@Views/TradePage/config';
+import { Probability } from '../../AccordionTable/OngoingTradesTable';
+import { priceAtom } from '@Hooks/usePrice';
 
 export const TradeDataView: React.FC<{
   trade: TradeType;
@@ -38,16 +41,14 @@ export const TradeDataView: React.FC<{
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { data: allSpreads } = useSpread();
   const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
-  const jackpotManager = useJackpotManager();
+  const [marketPrice] = useAtom(priceAtom);
 
   const { isPriceArrived } = getStrike(trade, cachedPrices, spread);
   const lockedAmmount = getLockedAmount(trade, cachedPrices);
-
+  console.log(`TradeDataView-trade: `, trade, poolInfo);
+  const isAb = isABRouter(trade.router);
   const isQueued = trade.state === TradeState.Queued && !isPriceArrived;
-  const jackpote18 =
-    jackpotManager.jackpot.jackpots?.[getJackpotKey(trade)]?.jackpot_amount ||
-    trade?.jackpot_amount ||
-    '0';
+
   let TradeData = [
     {
       head: <span>Strike Price</span>,
@@ -87,12 +88,18 @@ export const TradeDataView: React.FC<{
             <span>PnL</span>&nbsp;
             <span>|</span>&nbsp;
             <span className="text-[10px]">probability</span>
-            <JackpotChip className="ml-2" jackpote18={jackpote18} />
           </RowGap>
         ),
         desc: (
           <span>
-            <Pnl configData={configData} trade={trade} poolInfo={poolInfo} />
+            {isAb ? null : (
+              <Pnl
+                configData={trade.market}
+                trade={trade}
+                poolInfo={poolInfo}
+              />
+            )}
+            <Probability trade={trade} marketPrice={marketPrice} />{' '}
           </span>
         ),
       },

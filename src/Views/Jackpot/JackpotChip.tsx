@@ -18,7 +18,7 @@ const JackpotChip: React.FC<{ jackpote18: string; className?: string }> = ({
       >
         <img
           className={[
-            'w-[18px] h-[15px] min-w-[18px] min-h-[15px] max-w-[18px] max-h-[15px]',
+            'w-[16px] h-[13.5px] min-w-[16px] min-h-[13.5px] max-w-[16px] max-h-[13.5px]',
             isJackpotDisabled ? 'opacity-30' : '',
           ].join(' ')}
           src="/JV.png"

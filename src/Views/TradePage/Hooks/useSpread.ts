@@ -33,11 +33,11 @@ export const useSpread = () => {
       }
       return data;
     } catch (e) {
-      toastify({
-        type: 'error',
-        msg: 'Could not fetch spread ' + (e as Error).message,
-        id: 'spread api error',
-      });
+      // toastify({
+      //   type: 'error',
+      //   msg: 'Could not fetch spread ' + (e as Error).message,
+      //   id: 'spread api error',
+      // });
       return null;
     }
   }

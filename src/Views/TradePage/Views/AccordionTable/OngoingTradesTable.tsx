@@ -464,7 +464,7 @@ const ProgressLineWrapper = styled.div<{ duration: number; delay: number }>`
   }
 `;
 
-const Probability: React.FC<{
+export const Probability: React.FC<{
   trade: TradeType;
   marketPrice: any;
 }> = ({ marketPrice, trade }) => {
