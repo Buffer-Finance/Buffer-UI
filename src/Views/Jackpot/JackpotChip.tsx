@@ -12,7 +12,7 @@ const JackpotChip: React.FC<{ jackpote18: string; className?: string }> = ({
     <Link onClick={(e) => e.stopPropagation()} to={'/Jackpot'}>
       <div
         className={[
-          'flex items-center bg-[#282b39] px-2  py-[1px] w-fit sm:text-f10 sm:py-[2px]  text-f13 text-[#C3C2D4] font-[500] gap-2 rounded-[6px]',
+          'flex items-center bg-[#282b39] px-2  py-[1px] w-fit sm:text-f10 sm:py-[2px]  text-f12 text-[#C3C2D4] font-[500] gap-2 rounded-[6px]',
           className,
         ].join(' ')}
       >

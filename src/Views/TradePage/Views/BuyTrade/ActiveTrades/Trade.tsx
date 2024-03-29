@@ -105,7 +105,7 @@ export const TradeCard = ({
           assetName={trade.token}
           className="!px-[4px] !py-[3px] !text-f11  !rounded-[4px]  !font-[500] !text-[#C3C2D4]"
         />
-        <JackpotChip jackpote18={'1000000000000000000'} />
+        <JackpotChip jackpote18={jackpote18} />
       </div>
 
       <TradeDataView
