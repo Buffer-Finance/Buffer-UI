@@ -17,6 +17,7 @@ import { SettingsDD } from './SettingsDD';
 import { Tab } from './Tab';
 import { TabsDropdown } from './TabsDropDown';
 import { useOngoingTrades as useOngoingTradesAB } from '@Views/ABTradePage/Hooks/useOngoingTrades';
+import { useAboveBelowMarketsSetter } from '@Views/AboveBelow/Hooks/useAboveBelowMarketsSetter';
 
 interface INavbar {}
 
@@ -46,7 +47,8 @@ export const Navbar: React.FC<INavbar> = () => {
   const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
   const activeTradesAB = useOngoingTradesAB();
-
+  console.log(`index-activeTradesAB: `, activeTradesAB);
+  useAboveBelowMarketsSetter();
   const navigate = useNavigate();
   const [click, setClick] = useState(0);
   const openAdmin = () => {
