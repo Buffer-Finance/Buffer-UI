@@ -16,7 +16,7 @@ const TableBackground = styled.div`
   --padding-left: 15px;
   overflow-x: hidden;
   flex-grow: 1;
-  height: ${(props) => (props?.overflow ? props?.overflow : 'auto')};
+  max-height: ${(props) => (props?.overflow ? props?.overflow : 'auto')};
   padding-bottom: ${(props) => (props?.overflow ? '10px' : 'auto')};
   border-radius: 12px 12px 0px 0px;
   & ::-webkit-scrollbar {
@@ -42,7 +42,7 @@ const TableBackground = styled.div`
     max-height: 1000px; /* Set a maximum height that suits your content */
   }
   @media (max-width: 1000px) {
-    height: ${(props) => (props?.overflow ? props?.overflow : 'auto')};
+    max-height: ${(props) => (props?.overflow ? props?.overflow : 'auto')};
   }
   table {
     width: 100%;
