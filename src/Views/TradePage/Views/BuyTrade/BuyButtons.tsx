@@ -205,7 +205,7 @@ export const BuyButtons = ({
                   )}
                 </BufferButton>
               </div>
-              {!isApprovalLocked && (
+              {/* {!isApprovalLocked && (
                 <div
                   className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13 mt-3"
                   role={'button'}
@@ -213,7 +213,7 @@ export const BuyButtons = ({
                 >
                   <span>Revoke Approval</span>
                 </div>
-              )}
+              )} */}
             </>
           )}
         </span>
