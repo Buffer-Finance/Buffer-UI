@@ -295,7 +295,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   };
   if (!currentPrice || !activeMarket || !strikes)
     return (
-      <Skeleton className="w-[1005] !h-[300px] lc !transform-none !mt-3" />
+      <Skeleton className="w-[400px] !h-[300px] lc !transform-none !mt-3" />
     );
   // 3772FF
   const marketTVid = activeMarket?.tv_id;
