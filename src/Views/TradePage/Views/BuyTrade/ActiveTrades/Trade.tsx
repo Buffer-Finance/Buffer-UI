@@ -94,11 +94,13 @@ export const TradeCard = ({ trade }: { trade: TradeType }) => {
         poolInfo={poolInfo}
         configData={tradeMarket}
       />
-      {/* <TradeActionButton
-        trade={trade}
-        tradeMarket={tradeMarket}
-        poolInfo={poolInfo}
-      /> */}
+      {isAb ? null : (
+        <TradeActionButton
+          trade={trade}
+          tradeMarket={tradeMarket}
+          poolInfo={poolInfo}
+        />
+      )}
     </TradeCardBackground>
   );
 };
