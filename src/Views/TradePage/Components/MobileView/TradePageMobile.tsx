@@ -9,7 +9,6 @@ import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import { BuyButtons } from '@Views/TradePage/Views/BuyTrade/BuyButtons';
 import { PayoutProfit } from '@Views/TradePage/Views/BuyTrade/PayoutProfit';
-import { MultiResolutionChart } from '@Views/TradePage/Views/MarketChart/MultiResolutionChart';
 import { useSelectedAssetPayout } from '@Views/TradePage/Views/MarketChart/Payout';
 import { tradeSizeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
 import { joinStrings } from '@Views/TradePage/utils';
@@ -71,9 +70,9 @@ const TradePageMobile: React.FC<any> = ({}) => {
       </div>
       {/* <MarketStatsBar isMobile /> */}
       <div className="flex-1">
-        {[activeMarket.tv_id].map((s) => (
+        {/* {[activeMarket.tv_id].map((s) => (
           <MultiResolutionChart key={s} market={s} index={1} isMobile />
-        ))}
+        ))} */}
       </div>
       <ViewOnlyInputs />
       <PayoutProfit
