@@ -5,6 +5,8 @@ import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import axios from 'axios';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
 import { Provider as JotaiProvider } from 'jotai';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
@@ -14,18 +16,13 @@ import { WagmiConfig } from 'wagmi';
 import App from './App';
 import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en.json';
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(en);
 
 const ErrorComponenet = () => {
-  return (
-    <div className="grid items-center text-1 text-f20">
-      Something went wrong.
-    </div>
-  );
+  window.location.reload(); // reload the page
+  return <></>;
 };
 
 BigInt.prototype['toJSON'] = function () {
@@ -38,6 +35,7 @@ const options = {
 };
 
 import { inject } from '@vercel/analytics';
+import ReloadErrorBoundary from './ReloadErrorBoundry';
 import { RootLevelHooks } from './RootLevelHooks';
 inject();
 
@@ -66,16 +64,18 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
     <WagmiConfig config={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={darkTheme()}>
-        <HashRouter>
-          <SWRConfig value={options}>
-            <JotaiProvider>
-              <ContextProvider>
-                <App />
-                <RootLevelHooks />
-              </ContextProvider>
-            </JotaiProvider>
-          </SWRConfig>
-        </HashRouter>
+        <ReloadErrorBoundary>
+          <HashRouter>
+            <SWRConfig value={options}>
+              <JotaiProvider>
+                <ContextProvider>
+                  <App />
+                  <RootLevelHooks />
+                </ContextProvider>
+              </JotaiProvider>
+            </SWRConfig>
+          </HashRouter>
+        </ReloadErrorBoundary>
       </RainbowKitProvider>
     </WagmiConfig>
   </Sentry.ErrorBoundary>
