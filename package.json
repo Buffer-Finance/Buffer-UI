@@ -71,6 +71,7 @@
     "react-confetti": "^6.1.0",
     "react-detect-offline": "^2.4.5",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "^4.0.13",
     "react-fetch-streams": "^1.1.2",
     "react-gravatar": "^2.6.3",
     "react-html-parser": "^2.0.2",
