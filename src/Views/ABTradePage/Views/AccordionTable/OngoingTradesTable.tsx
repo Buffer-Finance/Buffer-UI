@@ -242,7 +242,7 @@ export const OngoingTradesTable: React.FC<{
       case TableColumn.Probability:
         return (
           queuedTradeFallBack(trade, true) || (
-            <div className="flex gap-2 items-center">
+            <div className="flex flex-col gap-2 items-center">
               <Probability
                 isColored
                 className=" !justify-start"
