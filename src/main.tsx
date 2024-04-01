@@ -20,6 +20,14 @@ import en from 'javascript-time-ago/locale/en.json';
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(en);
 
+const ErrorComponenet = () => {
+  return (
+    <div className="grid items-center text-1 text-f20">
+      Something went wrong.
+    </div>
+  );
+};
+
 BigInt.prototype['toJSON'] = function () {
   return this.toString();
 };
@@ -55,18 +63,20 @@ if (import.meta.env.VITE_MODE === 'production') {
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <WagmiConfig config={wagmiClient}>
-    <RainbowKitProvider chains={chains} theme={darkTheme()}>
-      <HashRouter>
-        <SWRConfig value={options}>
-          <JotaiProvider>
-            <ContextProvider>
-              <App />
-              <RootLevelHooks />
-            </ContextProvider>
-          </JotaiProvider>
-        </SWRConfig>
-      </HashRouter>
-    </RainbowKitProvider>
-  </WagmiConfig>
+  <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
+    <WagmiConfig config={wagmiClient}>
+      <RainbowKitProvider chains={chains} theme={darkTheme()}>
+        <HashRouter>
+          <SWRConfig value={options}>
+            <JotaiProvider>
+              <ContextProvider>
+                <App />
+                <RootLevelHooks />
+              </ContextProvider>
+            </JotaiProvider>
+          </SWRConfig>
+        </HashRouter>
+      </RainbowKitProvider>
+    </WagmiConfig>
+  </Sentry.ErrorBoundary>
 );

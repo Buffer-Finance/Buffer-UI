@@ -49,10 +49,21 @@ const ada = {};
 //     </>
 //   );
 // };
+function fallbackRender({ error, resetErrorBoundary }) {
+  // Call resetErrorBoundary() to reset the error boundary and retry the render.
+
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <pre style={{ color: 'red' }}>{error.message}</pre>
+    </div>
+  );
+}
+
 export const Test = () => {
   return (
     <>
-      <ErrorBoundary FallbackComponent={ErrorComponenet}>
+      <ErrorBoundary fallback={fallbackRender}>
         <div className="w-[100vw] h-[100vh] bg-red">
           <button
             className="p-3 "
@@ -64,18 +75,10 @@ export const Test = () => {
           </button>
         </div>
       </ErrorBoundary>
-      <ErrorBoundary FallbackComponent={ErrorComponenet}>
-        <div className="w-[100vw] h-[100vh] bg-red">
-          <button
-            className="p-3 "
-            onClick={() => {
-              throw new Error('Click me');
-            }}
-          >
-            Click Me
-          </button>
-        </div>
-      </ErrorBoundary>
     </>
   );
 };
+
+// window.onerror = () => {
+//   console.log('error captured');
+// };
