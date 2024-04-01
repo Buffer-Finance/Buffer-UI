@@ -23,10 +23,13 @@ import { isTestnet } from 'config';
 import { Skeleton } from '@mui/material';
 import { ModalBase } from 'src/Modals/BaseModal';
 import React from 'react';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { addMarketInTrades } from '@Views/TradePage/utils';
+import { addMarketInTrades as addMarketInTradesAB } from '@Views/ABTradePage/utils';
 import { useAllV2_5MarketsConfig } from '@Views/TradePage/Hooks/useAllV2_5MarketsConfig';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import { useAboveBelowMarketsSetter } from '@Views/AboveBelow/Hooks/useAboveBelowMarketsSetter';
+import { aboveBelowMarketsAtom } from '@Views/AboveBelow/atoms';
 
 const bet = {
   id: 230,
@@ -327,6 +330,8 @@ const defaultResp = [[], []];
 const usePlatforJackpots = () => {
   const user = useAccount();
   const markets = useAllV2_5MarketsConfig();
+  useAboveBelowMarketsSetter();
+  const marketsAB = useAtomValue(aboveBelowMarketsAtom);
 
   const { data } = useSWR(`jackpot-users-${user.address}`, {
     fetcher: async () => {
@@ -347,7 +352,10 @@ const usePlatforJackpots = () => {
       const res = await Promise.all([allHistory, userHistory]);
       const response = res.map((d, idx) => {
         return d?.data?.page_data
-          ? addMarketInTrades(d?.data?.page_data, markets)
+          ? addMarketInTradesAB(
+              addMarketInTrades(d?.data?.page_data, markets),
+              marketsAB
+            )
           : emptyAr;
       });
       return response;
