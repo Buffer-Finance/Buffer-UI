@@ -55,7 +55,7 @@ const TradePage: React.FC<any> = ({}) => {
         }`}
       >
         {isNotMobile ? (
-          <div className={isNotMobile ? 'hidden' : ''}>
+          <div className={!isNotMobile ? 'hidden' : ''}>
             <RightPanelBackground>
               {showFavoriteAsset && <PinnedMarkets />}
               <MarketStatsBar />
@@ -65,7 +65,7 @@ const TradePage: React.FC<any> = ({}) => {
             <BuyTrade />
           </div>
         ) : (
-          <div className={!isNotMobile ? 'hidden' : ''}>
+          <div className={isNotMobile ? 'hidden' : ''}>
             <ShutterProvider />
             <TradePageMobile />
           </div>
