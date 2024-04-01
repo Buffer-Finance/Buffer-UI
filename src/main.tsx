@@ -16,11 +16,8 @@ import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
 
 const ErrorComponenet = () => {
-  return (
-    <div className="grid items-center text-1 text-f20">
-      Something went wrong.
-    </div>
-  );
+  window.location.reload(); // reload the page
+  return <></>;
 };
 
 const options = {
@@ -30,6 +27,7 @@ const options = {
 };
 
 import { inject } from '@vercel/analytics';
+import ReloadErrorBoundary from './ReloadErrorBoundry';
 inject();
 
 if (import.meta.env.VITE_MODE === 'production') {
@@ -57,6 +55,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
     <WagmiConfig config={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={darkTheme()}>
+        <ReloadErrorBoundary />
         <HashRouter>
           <SWRConfig value={options}>
             <JotaiProvider>
@@ -66,6 +65,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             </JotaiProvider>
           </SWRConfig>
         </HashRouter>
+        <ReloadErrorBoundary />
       </RainbowKitProvider>
     </WagmiConfig>
   </Sentry.ErrorBoundary>
