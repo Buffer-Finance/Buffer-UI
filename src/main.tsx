@@ -22,8 +22,18 @@ TimeAgo.addLocale(en);
 
 const ErrorComponenet = () => {
   return (
-    <div className="grid items-center text-1 text-f20">
+    <div className="flex flex-col justify-center items-center text-1 text-f20 bg-1 w-full h-[100vh]  ">
       Something went wrong.
+      <BlueBtn
+        className="bg-blue !w-fit px-4 rounded-md  mt-4 font-[500]"
+        onClick={(e) => {
+          window.localStorage.clear();
+          window.location.reload();
+        }}
+      >
+        {' '}
+        Fix it
+      </BlueBtn>
     </div>
   );
 };
@@ -39,6 +49,7 @@ const options = {
 
 import { inject } from '@vercel/analytics';
 import { RootLevelHooks } from './RootLevelHooks';
+import { BlueBtn } from '@Views/Common/V2-Button';
 inject();
 
 if (import.meta.env.VITE_MODE === 'production') {
