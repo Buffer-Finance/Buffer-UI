@@ -12,6 +12,7 @@ import { i18n } from '@lingui/core';
 import { Earn } from '@Views/Earn';
 import SideBar from '@Views/Common/Sidebar';
 import { ShareIcon } from '@Views/Common/Navbar/AccountDropdown';
+import { Test } from './test';
 
 // export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
@@ -67,8 +68,8 @@ const AppRoutes = () => {
       {/* <OpenOcean /> */}
       {/* <OnboardingAnimation /> */}
       <Routes>
-        {/* <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/test" element={<Test />} />
+        {/* <Route path="/faucet" element={<IbfrFaucet />} />
         <Route path="/admin" element={<AdminConfig />}></Route>
         <Route path="/ref/:refcode" element={<div>Hello</div>}></Route> */}
         {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}

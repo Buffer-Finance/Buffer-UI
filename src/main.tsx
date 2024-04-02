@@ -46,12 +46,12 @@ const options = {
 
 if (import.meta.env.VITE_MODE === 'production') {
   Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
+    dsn: 'https://02220025d0c3c9aca0de248301539c57@o993009.ingest.us.sentry.io/4507016260550656"',
 
     // This sets the sample rate to be 10%. You may want this to be 100% while
     // in development and sample at a lower rate in production
     replaysSessionSampleRate: 0.1,
-
+    tracesSampleRate: 1.0,
     // If the entire session is not sampled, use the below sample rate to sample
     // sessions when an error occurs.
     replaysOnErrorSampleRate: 1.0,
