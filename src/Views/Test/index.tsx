@@ -78,6 +78,7 @@ export const Test = () => {
     </>
   );
 };
+export default Test;
 
 // window.onerror = () => {
 //   console.log('error captured');

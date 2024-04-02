@@ -324,7 +324,7 @@ const Jackpot: React.FC<any> = ({}) => {
   );
 };
 const emptyAr = [];
-
+export default Jackpot;
 export { Jackpot };
 const defaultResp = [[], []];
 const usePlatforJackpots = () => {

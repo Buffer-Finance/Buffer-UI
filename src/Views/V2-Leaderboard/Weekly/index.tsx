@@ -424,6 +424,7 @@ export const Weekly = () => {
   );
 };
 
+export default Weekly;
 export const LeaderBoardTabs = ({
   activeTab,
   setActiveTab,

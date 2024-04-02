@@ -79,6 +79,7 @@ const TradePage: React.FC<any> = ({}) => {
 };
 
 export { TradePage };
+export default TradePage;
 
 const RightPanelBackground = styled.div`
   display: flex;

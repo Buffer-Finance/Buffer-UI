@@ -135,3 +135,5 @@ export const AboveBelow = () => {
     );
   }
 };
+
+export default AboveBelow;

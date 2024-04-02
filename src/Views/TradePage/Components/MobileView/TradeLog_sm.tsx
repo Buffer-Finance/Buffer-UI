@@ -136,7 +136,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
     </main>
   );
 };
-
+export default TradeLog_sm;
 export { TradeLog_sm };
 
 export const MobileHistoryTable = ({ rootTab }) => {

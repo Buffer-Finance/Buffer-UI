@@ -26,6 +26,7 @@ export const LeaderBoard = (props: { children: JSX.Element }) => {
   );
 };
 
+export default LeaderBoard;
 export function getPageNumber(router: any) {
   const page = router.asPath.split('=')[1];
   return +page;

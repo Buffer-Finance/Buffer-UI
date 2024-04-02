@@ -64,7 +64,7 @@ export const ReferralPage = () => {
     </ReferralContextProvider>
   );
 };
-
+export default ReferralPage;
 export const tabs = ['Use a Referral', 'Create your Referral'];
 const Referral: React.FC<IReferral> = ({}) => {
   const [showCodeModal, setShowCodeModal] = useAtom(showCodeModalAtom);

@@ -17,7 +17,8 @@ export const CHART_TVID = v4().substring(0, 6);
 
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
-import { TradePage } from '@Views/TradePage';
+// import { TradePage } from '@Views/TradePage';
+
 import Background from './AppStyles';
 import { Navbar } from './Views/Common/Navbar';
 
@@ -38,12 +39,25 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
+const TradePage = lazy(() => import('@Views/TradePage'));
+
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
 const AllTrades = lazy(() => import('@Views/AllTrades'));
 const ContractList = lazy(() => import('@Views/ContractList'));
 const DashboardV2 = lazy(() => import('@Views/DashboardV2'));
 const IbfrFaucet = lazy(() => import('@Views/Faucet'));
 const ProfilePage = lazy(() => import('@Views/Profile'));
+const ReferralPage = lazy(() => import('@Views/Referral'));
+const Test = lazy(() => import('@Views/Test'));
+const TradeLog_sm = lazy(
+  () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
+);
+const LeaderBoardOutlet = lazy(() => import('@Views/V2-Leaderboard'));
+const Incentivised = lazy(() => import('@Views/V2-Leaderboard/Incentivised'));
+const Weekly = lazy(() => import('@Views/V2-Leaderboard/Weekly'));
+const Jackpot = lazy(() => import('@Views/Jackpot'));
+const AboveBelow = lazy(() => import('@Views/AboveBelow'));
+
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{
   message: null | React.ReactNode;
@@ -117,10 +131,29 @@ const AppRoutes = () => {
       <OneCTModal />
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          <Route path="/binary/:market" element={<TradePage />} />
+          <Route path="trades" element={<AllTrades />} />
+          <Route path="/faucet" element={<IbfrFaucet />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/ab/:market" element={<AboveBelow />} />
+          <Route path="/history" element={<TradeLog_sm />} />
+          <Route path="/admin" element={<AdminConfig />} />
+
+          <Route
+            path="/ref/:refcode"
+            element={<div>Processing your referral request...</div>}
+          ></Route>
+          {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
+          <Route path="/earn" element={<Redirect url={earnUrl} />} />
+
+          <Route path="/dashboard" element={<DashboardV2 />}>
+            <Route path=":chain" element={<DashboardV2 />} />
+          </Route>
+          <Route path="/referral" element={<ReferralPage />} />
+          <Route path="/jackpot" element={<Jackpot />} />
           <Route path="/profile" element={<ProfilePage />}>
             <Route path=":chain" element={<ProfilePage />} />
           </Route>
+          <Route path="/binary/:market" element={<TradePage />} />
           <Route
             path="/*"
             element={
@@ -129,6 +162,15 @@ const AppRoutes = () => {
               />
             }
           />
+          <Route path="contracts" element={<ContractList />} />
+          <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
+            <Route path="daily" element={<Incentivised />}>
+              <Route path=":chain" element={<Incentivised />} />
+            </Route>
+            <Route path="weekly" element={<Weekly />}>
+              <Route path=":chain" element={<Weekly />} />
+            </Route>
+          </Route>
         </Routes>
       </Suspense>
     </div>

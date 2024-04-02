@@ -357,7 +357,7 @@ export const Incentivised = () => {
     ></LeaderBoard>
   );
 };
-
+export default Incentivised;
 export function TimerBox({
   expiration,
   className,
