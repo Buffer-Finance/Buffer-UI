@@ -14,7 +14,7 @@ export const ActionCard: React.FC<{ activePool: poolsType }> = ({
     useState<depositTabType>('deposit');
 
   return (
-    <Container>
+    <Container className="min-w-[500px]">
       <Tabs
         activeTab={depositTabType}
         setDepositTabType={setDepositTabType}
@@ -32,8 +32,8 @@ export const Tabs: React.FC<{
   const activeTabNumber =
     activeTab === 'deposit' ? 0 : activeTab === 'withdraw' ? 1 : 2;
   return (
-    <div>
-      <div className="flex items-center gap-7">
+    <div className="w-full">
+      <div className="flex items-center gap-7 mb-6">
         <TabButton
           onClick={() => setDepositTabType('deposit')}
           isActive={activeTab === 'deposit'}
@@ -55,10 +55,11 @@ export const Tabs: React.FC<{
       </div>
       <TabSwitch
         value={activeTabNumber}
+        // className="w-full"
         childComponents={[
           <DepositTab activePool={activePool} />,
-          <WithdrawTab />,
-          <VestTab />,
+          <WithdrawTab activePool={activePool} />,
+          <VestTab activePool={activePool} />,
         ]}
       />
     </div>
