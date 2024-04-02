@@ -141,6 +141,8 @@ export const useCancelTradeFunction = () => {
         closing_time: ts,
         queue_id: trade.queue_id,
         user_signature: actualSignature,
+        product_id: products.UP_DOWN.product_id,
+
         environment: activeChain.id,
       };
       console.log(`[chart-deb]params: `, params);
