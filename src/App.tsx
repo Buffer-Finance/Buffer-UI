@@ -38,6 +38,12 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
+const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
+const AllTrades = lazy(() => import('@Views/AllTrades'));
+const ContractList = lazy(() => import('@Views/ContractList'));
+const DashboardV2 = lazy(() => import('@Views/DashboardV2'));
+const IbfrFaucet = lazy(() => import('@Views/Faucet'));
+const ProfilePage = lazy(() => import('@Views/Profile'));
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{
   message: null | React.ReactNode;
@@ -109,17 +115,22 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <OneCTModal />
-      <Routes>
-        <Route path="/binary/:market" element={<TradePage />} />
-        <Route
-          path="/*"
-          element={
-            <Navigate
-              to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
-            />
-          }
-        />
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/binary/:market" element={<TradePage />} />
+          <Route path="/profile" element={<ProfilePage />}>
+            <Route path=":chain" element={<ProfilePage />} />
+          </Route>
+          <Route
+            path="/*"
+            element={
+              <Navigate
+                to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
+              />
+            }
+          />
+        </Routes>
+      </Suspense>
     </div>
   );
 };

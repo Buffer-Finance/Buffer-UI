@@ -18,3 +18,5 @@ export const DashboardV2 = () => {
     </>
   );
 };
+
+export default DashboardV2;

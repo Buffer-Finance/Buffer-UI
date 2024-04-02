@@ -75,3 +75,4 @@ const AdminConfig: React.FC<any> = ({}) => {
 };
 
 export { AdminConfig };
+export default AdminConfig;

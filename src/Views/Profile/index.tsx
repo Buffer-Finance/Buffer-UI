@@ -34,3 +34,4 @@ const Profile = () => {
     </div>
   );
 };
+export default ProfilePage;

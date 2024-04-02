@@ -180,3 +180,5 @@ const ContractsList: React.FC<{ router: string; contracts: IContract[] }> = ({
     />
   );
 };
+
+export default ContractList;
