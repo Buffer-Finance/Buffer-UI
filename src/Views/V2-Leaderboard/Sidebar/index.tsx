@@ -5,7 +5,7 @@ import { CHAIN_CONFIGS, getTabs, isTestnet } from 'config';
 import React, { useMemo } from 'react';
 import { Link, Location, useLocation, useNavigate } from 'react-router-dom';
 import SmPnl from 'src/SVG/Elements/PNLL';
-import { weeklyTournamentConfig as galexTournamentConfig } from '../Galex/config';
+import { weeklyTournamentConfig as galxeTournamentConfig } from '../Galxe/config';
 import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import { DailyTournamentConfig } from '../Incentivised/config';
@@ -29,7 +29,7 @@ export const MobileLeaderboardDropdwon = () => {
         handleChange={(e, t) => {
           navigate(tabs[t].as);
         }}
-        tablist={[{ name: 'Daily' }, { name: 'Weekly' }]}
+        tablist={[{ name: 'BBB' }, { name: 'Daily' }, { name: 'Weekly' }]}
       />
     </div>
   );
@@ -51,7 +51,7 @@ export const LeaderBoardSidebar = () => {
   const location = useLocation();
   const { day } = useDayOfTournament();
   const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];
-  const galexConfigValue = galexTournamentConfig[activeChain.id];
+  const galxeConfigValue = galxeTournamentConfig[activeChain.id];
   const { week } = useWeekOfTournament({
     startTimestamp: weeklyConfigValue.startTimestamp,
   });
@@ -68,9 +68,9 @@ export const LeaderBoardSidebar = () => {
       return <OnGoingChip />;
     else return <EndedChip />;
   }, [week]);
-  const GalexChip = useMemo(() => {
-    if (galexConfigValue.endDay === undefined) return <OnGoingChip />;
-    else if (week !== null && week < galexConfigValue.endDay)
+  const GalxeChip = useMemo(() => {
+    if (galxeConfigValue.endDay === undefined) return <OnGoingChip />;
+    else if (week !== null && week < galxeConfigValue.endDay)
       return <OnGoingChip />;
     else return <EndedChip />;
   }, [week]);
@@ -90,7 +90,7 @@ export const LeaderBoardSidebar = () => {
                   active={isActive}
                   chip={
                     index === 0
-                      ? GalexChip
+                      ? GalxeChip
                       : index === 1
                       ? WeeklyChip
                       : DailyChip
@@ -223,6 +223,15 @@ const SidebarIcon: React.FC<IProp> = ({ id, ...props }) => {
       return <img src="/LeaderBoard/Bronze.png" alt="Icon" className="w2 h2" />;
     case 7:
       return <Daily {...props} width={20} height={20} color={'#6966FF'} />;
+    case 8:
+      return (
+        <img
+          src="https://res.cloudinary.com/dtuuhbeqt/image/upload/Leaderboard/bbb.png"
+          height={16}
+          width={16}
+          className="mx-1"
+        />
+      );
 
     default:
       return <SmPnl {...props} width={20} height={20} />;

@@ -40,13 +40,13 @@ export function getWeekId(offset: number): number {
   return dayTimestamp;
 }
 
-export const useGalexLeaderboardQuery = () => {
+export const useGalxeLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
   const { activeChain } = useActiveChain();
   const graphUrl = `https://subgraph.satsuma-prod.com/${
     import.meta.env.VITE_SATSUMA_KEY
-  }/bufferfinance/arbitrum-mainnet/version/v2.7.1-galex-leaderboards/api`;
+  }/bufferfinance/arbitrum-mainnet/version/v2.7.1-galxe-leaderboards/api`;
   const configValue = weeklyTournamentConfig[activeChain.id];
   const { week } = useWeekOfTournament({
     startTimestamp: configValue.startTimestamp,
@@ -68,7 +68,7 @@ export const useGalexLeaderboardQuery = () => {
   }, [tokens]);
 
   const { data } = useSWR<ILeaderboardQuery>(
-    `leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
+    `galxe-leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChain.id}`,
     {
       fetcher: async () => {
         const timestamp = getWeekId(Number(week - Number(offset ?? week)));

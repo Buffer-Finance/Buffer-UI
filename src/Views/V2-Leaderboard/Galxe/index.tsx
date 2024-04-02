@@ -21,7 +21,6 @@ import {
 import { weeklyTournamentConfig } from './config';
 
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
-import FrontArrow from '@SVG/frontArrow';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import BufferTab, { ITab } from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
@@ -37,12 +36,12 @@ import {
   headClass,
 } from '../Incentivised';
 import { ILeague } from '../interfaces';
-import { useGalexLeaderboardQuery } from './useGalexLeaderboardQuery';
+import { useGalxeLeaderboardQuery } from './useGalxeLeaderboardQuery';
 
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
 
-export const Galex = () => {
+export const Galxe = () => {
   const { activeChain } = useActiveChain();
   const decimals = useDecimalsByAsset();
   const usdcDecimals = decimals['USDC'];
@@ -57,7 +56,7 @@ export const Galex = () => {
     winnerUserRank,
     // loserWinrateUserRank,
     // winnerWinrateUserRank,
-  } = useGalexLeaderboardQuery();
+  } = useGalxeLeaderboardQuery();
   const activePages = useAtomValue(readLeaderboardPageActivePageAtom);
 
   const skip = useMemo(
@@ -382,10 +381,10 @@ export const Galex = () => {
                   heading={
                     <div className="flex flex-col items-start">
                       <div className="flex items-center gap-3 flex-wrap">
-                        <div>Weekly Leaderboard</div>
+                        <div>Buffer Bull vs Bear Battles Leaderboard</div>
                         {/* <ChainSwitchDropdown baseUrl="/leaderboard/weekly" /> */}
                       </div>
-                      <a
+                      {/* <a
                         className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
                         href={configValue.contestRules}
                         target={'blank'}
@@ -395,7 +394,7 @@ export const Galex = () => {
                           className="ml-2 w-fit inline scale-125 mt-1"
                           arrowColor="#7F87A7"
                         />
-                      </a>
+                      </a> */}
                     </div>
                   }
                   DataCom={content}

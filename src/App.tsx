@@ -36,7 +36,7 @@ import { TradeLog_sm } from '@Views/TradePage/Components/MobileView/TradeLog_sm'
 import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
 import { defaultMarket, isTestnet } from '@Views/TradePage/config';
 import { LeaderBoardOutlet } from '@Views/V2-Leaderboard';
-import { Galex } from '@Views/V2-Leaderboard/Galex';
+import { Galxe } from '@Views/V2-Leaderboard/Galxe';
 import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { i18n } from '@lingui/core';
@@ -157,8 +157,8 @@ const AppRoutes = () => {
           <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route>
-          <Route path="galex" element={<Galex />}>
-            <Route path=":chain" element={<Galex />} />
+          <Route path="galxe" element={<Galxe />}>
+            <Route path=":chain" element={<Galxe />} />
           </Route>
         </Route>
       </Routes>
