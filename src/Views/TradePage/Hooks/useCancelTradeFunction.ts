@@ -20,6 +20,7 @@ import { getWalletFromOneCtPk } from '../utils/generateTradeSignature';
 import { getConfig } from '../utils/getConfig';
 import { getExpireNotification } from '../utils/getExpireNotification';
 import { usePoolInfo } from './usePoolInfo';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 const EIP712Domain = [
   { name: 'name', type: 'string' },
   { name: 'version', type: 'string' },
@@ -58,6 +59,7 @@ export const useCancelTradeFunction = () => {
   const [earlyCloseLoading, setEarlyCloseLoading] = useState<{
     [queued_id: number]: boolean;
   }>({});
+  const products = useProducts();
   const cancelHandler = async (trade: TradeType) => {
     if (!address) return;
 
@@ -75,6 +77,7 @@ export const useCancelTradeFunction = () => {
         user_address: address,
         environment: activeChain.id,
         queue_id: trade.queue_id,
+        product_id: products.UP_DOWN.product_id,
       });
       if (res.status === 200) {
       } else {

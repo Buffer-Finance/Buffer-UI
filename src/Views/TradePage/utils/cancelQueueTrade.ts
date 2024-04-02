@@ -6,6 +6,7 @@ const cancelQueueTrade = async (params: {
   user_address: `0x${string}`;
   environment: number;
   queue_id: number;
+  product_id: string;
 }) => {
   return await axios.post(`${baseUrl}trade/cancel/`, null, { params });
 };

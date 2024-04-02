@@ -40,6 +40,7 @@ import { MinutesInput } from '../Settings/TradeSettings/LimitOrdersExpiry/Minute
 import { DirectionButtons } from './DirectionButtons';
 import { SaveButton } from './SaveButton';
 import { TriggerPrice } from './TriggerPrice';
+import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 export const loeditLoadingAtom = atom<number | null>(null);
 export const EditModal: React.FC<{
   trade: TradeType;
@@ -154,7 +155,7 @@ export const EditModal: React.FC<{
   const [val, setVal] = useState(settings.loDragging);
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
   const { data: allSettlementFees } = useSettlementFee();
-
+  const products = useProducts();
   const toastify = useToast();
   const editHandler = async () => {
     try {
@@ -212,7 +213,8 @@ export const EditModal: React.FC<{
         activeChain.id,
         settlement_fee,
         bsesettelmentFeeObj.settlement_fee_sign_expiration,
-        bsesettelmentFeeObj.settlement_fee_signature
+        bsesettelmentFeeObj.settlement_fee_signature,
+        products.UP_DOWN.product_id
         // spread.spread.toString(),
         // spread.spread_sign_expiration,
         // spread.spread_signature
