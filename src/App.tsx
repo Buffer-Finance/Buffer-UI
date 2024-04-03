@@ -39,6 +39,7 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
+import { PageLoader } from './PageLoader';
 const TradePage = lazy(() => import('@Views/TradePage'));
 
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
@@ -129,7 +130,7 @@ const AppRoutes = () => {
       <OpenOcean />
       <OnboardingAnimation />
       <OneCTModal />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="trades" element={<AllTrades />} />
           <Route path="/faucet" element={<IbfrFaucet />} />

@@ -2563,6 +2563,9 @@ html .lc {
   background-color: var(--bg-8);
 }
 
+html .cwww{
+  width: clamp(70%,1000px,90%)
+}
 html .lc-m {
   background-color: var(--bg-8);
 }
