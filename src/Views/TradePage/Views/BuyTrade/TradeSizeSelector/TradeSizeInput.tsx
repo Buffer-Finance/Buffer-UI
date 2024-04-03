@@ -8,6 +8,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { BuyUSDCLink } from '../BuyUsdcLink';
 import { escapeRegExp, inputRegex } from '../CurrentPrice';
+import { isAvailable } from '@Utils/NumberUtils';
 
 const className = 'text-[#FFE200]';
 export const TradeSizeInput: React.FC<{
@@ -114,7 +115,8 @@ export const TradeSizeInput: React.FC<{
       )}
 
       {registeredOneCT &&
-        tradeSize &&
+        isAvailable(tradeSize) &&
+        isAvailable(balance) &&
         gt(tradeSize ?? '0', balance ?? '0') &&
         gt(add(tradeSize ?? '0', platformFee), balance ?? '0') && (
           <Trans>
