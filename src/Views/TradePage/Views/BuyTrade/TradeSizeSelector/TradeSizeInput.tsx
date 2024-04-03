@@ -114,7 +114,8 @@ export const TradeSizeInput: React.FC<{
       )}
 
       {registeredOneCT &&
-        tradeSize &&
+        isAvailable(tradeSize) &&
+        isAvailable(balance) &&
         gt(tradeSize ?? '0', balance ?? '0') &&
         gt(add(tradeSize ?? '0', platformFee), balance ?? '0') && (
           <Trans>
@@ -126,4 +127,14 @@ export const TradeSizeInput: React.FC<{
         )}
     </div>
   );
+};
+
+const isAvailable = (num: string | null | undefined | number) => {
+  console.log(`TradeSizeInput-num: `, num);
+  if (num == '') return false;
+  if (typeof num == 'undefined') return false;
+  if (num == undefined || num == null) {
+    return false;
+  }
+  return true;
 };

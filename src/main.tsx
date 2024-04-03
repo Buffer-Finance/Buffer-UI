@@ -16,8 +16,22 @@ import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
 
 const ErrorComponenet = () => {
-  window.location.reload(); // reload the page
-  return <></>;
+  // window.location.reload(); // reload the page
+  return (
+    <div className="flex flex-col justify-center items-center text-1 text-f20 bg-1 w-full h-[100vh]  ">
+      Something went wrong.
+      <BlueBtn
+        className="bg-blue !w-fit px-4 rounded-md  mt-4 font-[500]"
+        onClick={(e) => {
+          window.localStorage.clear();
+          window.location.reload();
+        }}
+      >
+        {' '}
+        Fix it
+      </BlueBtn>
+    </div>
+  );
 };
 
 const options = {
@@ -28,6 +42,7 @@ const options = {
 
 import { inject } from '@vercel/analytics';
 import ReloadErrorBoundary from './ReloadErrorBoundry';
+import { BlueBtn } from '@Views/Common/V2-Button';
 inject();
 
 if (import.meta.env.VITE_MODE === 'production') {
