@@ -38,7 +38,7 @@ export const weeklyTournamentConfig: {
     winrateNFT: 0,
     endDay: undefined,
     contestRules:
-      ' https://zinc-atlasaurus-c98.notion.site/Buffer-Arbitrum-Weekly-Trading-Competitions-LIVE-f1b9720e6f5042fbbbb7ec67d7b35a52',
+      'https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/x6u31zeHDb5K0Ml96HzzqsqofogUpmFNlZHmiJrERNY',
     rewardFixedAmount: '1000',
     poolPercent: '5',
     winrateStartWeek: undefined,
