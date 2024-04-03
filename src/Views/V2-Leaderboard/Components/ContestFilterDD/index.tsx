@@ -41,7 +41,7 @@ export function ContestFilterDD({
             >
               <div
                 className={`text-6 items-dd flex content-center pb3 pt4 hover ${
-                  offset == a.toString() && 'active'
+                  offset == (count - a).toString() && 'active'
                 }`}
               >
                 #{count - a}
