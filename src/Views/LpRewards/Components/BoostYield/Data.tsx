@@ -1,30 +1,21 @@
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { poolToTokenMapping } from '../../config';
-import { poolsType } from '../../types';
 import { DataColumn, defaultDataStyle } from '../DataColumn';
+import { Container } from '../Deposit/Styles';
 
-import { Container } from './Styles';
-
-export const UserData: React.FC<{ activePool: poolsType }> = ({
-  activePool,
-}) => {
+export const Data = () => {
   return (
     <Container>
       <div className="flex flex-col gap-6">
         <DataColumn
-          title="Total value"
+          title="Total Locked"
           value={<span className={defaultDataStyle}>1,0567 USDC</span>}
         />
         <DataColumn
-          title="Current APR"
+          title="Total Unlocked"
           value={<span className={defaultDataStyle}>67%</span>}
         />
         <DataColumn
-          title={`${poolToTokenMapping[activePool]} rewards`}
-          value={<span className={defaultDataStyle}>1.23,458</span>}
-        />
-        <DataColumn
-          title="esBFR rewards"
+          title="Total Claimable"
           value={<span className={defaultDataStyle}>56,661</span>}
         />
       </div>

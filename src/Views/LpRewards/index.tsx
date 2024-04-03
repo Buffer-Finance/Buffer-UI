@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BoostYield } from './Components/BoostYield';
 import { Deposit } from './Components/Deposit';
 import { PoolData } from './Components/PoolData';
 import { PoolTabs } from './Components/PoolTabs';
@@ -13,6 +14,7 @@ export const LpRewards = () => {
       <PoolTabs activePool={activePool} setActivePool={setActivePool} />
       <PoolData activePool={activePool} />
       <Deposit activePool={activePool} />
+      <BoostYield activePool={activePool} />
       <Transactions activePool={activePool} />
     </div>
   );

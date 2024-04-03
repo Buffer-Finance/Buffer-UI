@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { DepositTab } from './DepositTab';
 import { Container } from './Styles';
-import { VestTab } from './VestTab';
 import { WithdrawTab } from './WithdrawTab';
 
 export const ActionCard: React.FC<{ activePool: poolsType }> = ({
@@ -46,12 +45,12 @@ export const Tabs: React.FC<{
         >
           Withdraw
         </TabButton>
-        <TabButton
+        {/* <TabButton
           onClick={() => setDepositTabType('vest')}
           isActive={activeTab === 'vest'}
         >
           Vest
-        </TabButton>
+        </TabButton> */}
       </div>
       <TabSwitch
         value={activeTabNumber}
@@ -59,7 +58,7 @@ export const Tabs: React.FC<{
         childComponents={[
           <DepositTab activePool={activePool} />,
           <WithdrawTab activePool={activePool} />,
-          <VestTab activePool={activePool} />,
+          // <VestTab activePool={activePool} />,
         ]}
       />
     </div>
