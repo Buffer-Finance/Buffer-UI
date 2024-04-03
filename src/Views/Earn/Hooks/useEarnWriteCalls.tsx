@@ -36,11 +36,11 @@ export const useEarnWriteCalls = (
   const [, setPageState] = useAtom(writeEarnAtom);
 
   function callBack(res) {
-    if (res.payload)
-      setPageState({
-        isModalOpen: false,
-        activeModal: null,
-      });
+    // if (res?.payload)
+    //   setPageState({
+    //     isModalOpen: false,
+    //     activeModal: null,
+    //   });
   }
   function validations(amount) {
     if (!amount || amount === '0' || amount === '') {
