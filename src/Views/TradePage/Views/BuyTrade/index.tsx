@@ -24,6 +24,7 @@ import { PayoutProfit } from './PayoutProfit';
 import { TimeSelector } from './TimeSelector';
 import { TradeSizeSelector } from './TradeSizeSelector';
 import { TradeTypeSelector } from './TradeTypeSelector';
+import { zeroify } from '@Utils/NumberHandlers';
 
 const BuyTradeBackground = styled.div`
   position: sticky;
@@ -116,7 +117,7 @@ export const BuyTrade: React.FC = () => {
       <TradeTypeSelector />
       <CurrentPrice />
       <PayoutProfit
-        amount={userAmount || '0'}
+        amount={zeroify(amount)}
         totalPayout={payout}
         tradeToken={tradeToken}
       />

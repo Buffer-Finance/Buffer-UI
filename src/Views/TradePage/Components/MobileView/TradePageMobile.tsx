@@ -18,6 +18,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { MarketPicker } from './MarketPicker/MarketPicker';
 import { MobileChartControlls } from './MobileChartControlls';
 import { ViewOnlyInputs } from './ViewOnlyInputs';
+import { zeroify } from '@Utils/NumberHandlers';
 
 const TradePageMobile: React.FC<any> = ({}) => {
   const marketConfig = useMarketsConfig();
@@ -77,7 +78,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
       </div>
       <ViewOnlyInputs />
       <PayoutProfit
-        amount={amount || '0'}
+        amount={zeroify(amount)}
         totalPayout={totalPayout}
         tradeToken={tradeToken}
       />
