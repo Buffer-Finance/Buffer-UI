@@ -21,6 +21,7 @@ import {
 import { weeklyTournamentConfig } from './config';
 
 import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
+import FrontArrow from '@SVG/frontArrow';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import BufferTab, { ITab } from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
@@ -164,7 +165,7 @@ export const Galxe = () => {
         <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
           <Col
             head={'Reward Pool'}
-            desc={<div>3800 PYTH</div>}
+            desc={<div>2800 PYTH</div>}
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
@@ -344,7 +345,7 @@ export const Galxe = () => {
                         <div>Buffer Bull vs Bear Battles Leaderboard</div>
                         {/* <ChainSwitchDropdown baseUrl="/leaderboard/weekly" /> */}
                       </div>
-                      {/* <a
+                      <a
                         className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
                         href={configValue.contestRules}
                         target={'blank'}
@@ -354,7 +355,7 @@ export const Galxe = () => {
                           className="ml-2 w-fit inline scale-125 mt-1"
                           arrowColor="#7F87A7"
                         />
-                      </a> */}
+                      </a>
                     </div>
                   }
                   DataCom={content}
