@@ -1,7 +1,7 @@
 import useStopWatch from '@Hooks/Utilities/useStopWatch';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { toFixed } from '@Utils/NumString';
-import { add, divide, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { getDistance } from '@Utils/Staking/utils';
 import { numberWithCommas } from '@Utils/display';
 import { Col } from '@Views/Common/ConfirmationModal';
@@ -24,14 +24,12 @@ import { DropdownArrow } from '@SVG/Elements/DropDownArrow';
 import { BufferDropdown } from '@Views/Common/Buffer-Dropdown';
 import BufferTab, { ITab } from '@Views/Common/BufferTab';
 import TabSwitch from '@Views/Common/TabSwitch';
-import NumberTooltip from '@Views/Common/Tooltips';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
 import { useWeekOffset } from '../Hooks/useWeekoffset';
 import {
   TimerBox,
   descClass,
-  getRewardTooltip,
   getTournamentEndDateFromWeek,
   headClass,
 } from '../Incentivised';
@@ -130,34 +128,6 @@ export const Galxe = () => {
     }
   }, [offset]);
 
-  const rewardPool = useMemo(() => {
-    if (week === null) return null;
-    if (configValue.endDay !== undefined) {
-      if (offset === null) {
-        if (week >= configValue.endDay) return '0 USDC';
-      } else {
-        if (Number(offset) >= configValue.endDay) return '0 USDC';
-      }
-    }
-    if (data && data.reward && data.reward[0] && data.reward[0].settlementFee)
-      return (
-        toFixed(
-          add(
-            configValue.rewardFixedAmount,
-            divide(
-              multiply(
-                configValue.poolPercent,
-                divide(data.reward[0].settlementFee, usdcDecimals) ?? '0'
-              ),
-              '100'
-            ) ?? '0'
-          ),
-          0
-        ) + ' USDC'
-      );
-    else return 'fetching...';
-  }, [activeChain, week, offset, data]);
-
   const tabList = useMemo(() => {
     const list = [
       { name: 'Winners' },
@@ -194,17 +164,7 @@ export const Galxe = () => {
         <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
           <Col
             head={'Reward Pool'}
-            desc={
-              <NumberTooltip
-                content={getRewardTooltip(
-                  configValue.rewardFixedAmount,
-                  configValue.poolPercent,
-                  'USDC'
-                )}
-              >
-                <div>{rewardPool}</div>
-              </NumberTooltip>
-            }
+            desc={<div>3800 PYTH</div>}
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
