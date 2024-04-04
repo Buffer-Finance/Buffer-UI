@@ -56,8 +56,9 @@ export const TradeSizeInput: React.FC<{
           type="text"
           className={`relative h-[40px] bg-[#282b39] px-5 py-3 rounded-l-[5px] outline-none w-full text-f16 text-1 sm:h-[35px]`}
           onChange={(e) => {
+            let newValue = e.target.value;
+            if (e.target.value == '.') newValue = '0.';
             if (inputRegex.test(escapeRegExp(e.target.value))) {
-              let newValue = e.target.value;
               // Check if newValue has more than 3 decimal places
               const decimalPart = newValue.split('.')[1];
               if (decimalPart && decimalPart.length > 3) {
