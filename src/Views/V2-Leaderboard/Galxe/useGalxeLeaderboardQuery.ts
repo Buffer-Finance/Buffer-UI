@@ -44,7 +44,7 @@ export const useGalxeLeaderboardQuery = () => {
   const { address: account } = useUserAccount();
   const { offset } = useWeekOffset();
   const { activeChain } = useActiveChain();
-  const graphUrl = `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/version/v2.7.1-galex-leaderboards/api`;
+  const graphUrl = `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/version/v2.7.2-galex-leaderboards-2/api`;
   const configValue = weeklyTournamentConfig[activeChain.id];
   const { week } = useWeekOfTournament({
     startTimestamp: configValue.startTimestamp,
