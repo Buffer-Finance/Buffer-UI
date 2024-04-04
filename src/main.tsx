@@ -55,7 +55,8 @@ if (import.meta.env.VITE_MODE === 'production') {
 
     // If the entire session is not sampled, use the below sample rate to sample
     replaysOnErrorSampleRate: 1.0,
-
+    tracesSampleRate: 1.0,
+    denyUrls: [/extensions\//i, /^chrome:\/\//i, /^chrome-extension:\/\//i],
     integrations: [
       new Sentry.Replay({
         // Additional SDK configuration goes in here, for example:
