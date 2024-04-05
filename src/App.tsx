@@ -6,6 +6,7 @@ import {
   Navigate,
   Route,
   Routes,
+  useLocation,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
@@ -45,6 +46,7 @@ import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
+import posthog from 'posthog-js';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -65,8 +67,17 @@ const Redirect = ({ url }: { url: string }) => {
 
   return <h5 className="p-4 m-auto text-f20">Redirecting...</h5>;
 };
-
+posthog.init('phc_vRaSfkTdkc7xFcEsjjaJmFwZPtsAvp6rmctMLyDkFOU', {
+  api_host: 'https://app.posthog.com',
+});
+// posthog.init()
 const AppRoutes = () => {
+  const location = useLocation();
+  useEffect(() => {
+    console.log(`location change captured: `, location);
+    posthog.capture('$pageview');
+  }, [location]);
+
   const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
   const [searchParam] = useSearchParams();
   const [ref, setRef] = useAtom(referralCodeAtom);
