@@ -338,7 +338,7 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
-        to: `/leaderboard/daily`,
+        to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,
@@ -457,7 +457,7 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
-        to: `/leaderboard/daily`,
+        to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,
