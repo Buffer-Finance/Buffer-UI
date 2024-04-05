@@ -15,7 +15,7 @@ const UTMLink = (props: UTMLinkProps) => {
 };
 export const Test = () => {
   return (
-    <UTMLink to="/binary/BTC-USD" src="test-main-btn">
+    <UTMLink to="/binary/BTC-USD" src="notif-redirection">
       Redirect
     </UTMLink>
   );
