@@ -19,7 +19,6 @@ import { Navbar } from './Views/Common/Navbar';
 
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
-import FrontArrow from '@SVG/frontArrow';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
@@ -43,6 +42,7 @@ import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
+import { Launch } from '@mui/icons-material';
 import posthog from 'posthog-js';
 import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
@@ -241,7 +241,7 @@ function App() {
             (isMobile && mobileWarningClosed ? false : true) && (
               <Warning
                 body={
-                  <div className="m-auto">
+                  <a href="/#/leaderboard/galxe" className="m-auto">
                     <span className="bg-[#10D2FF] text-[#00123C] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold">
                       New
                     </span>
@@ -250,18 +250,11 @@ function App() {
                       className="mx-3 inline h-[20px] w-[20px] sm:h-[15px] sm:w-[15px]"
                     />
                     <span className="text-f14 font-extrabold text-1 leading-[21px] sm:text-[11px] sm:leading-[12px]">
-                      Complete fun weekly Galxe tasks and trade to win a share
-                      of the $14,000 prize pot in the Buffer Bull vs Bear
-                      Trading Competition.
+                      Complete weekly Galxe tasks & trade to win from $14,000
+                      prize pot in the buffer competition.
                     </span>
-                    <a
-                      href="/#/leaderboard/galxe"
-                      className="text-f14 font-extrabold text-1 leading-[21px] sm:text-[11px] sm:leading-[12px] ml-2 underline underline-offset-3"
-                    >
-                      Learn More{' '}
-                      <FrontArrow className="inline" arrowColor="#ffffff" />
-                    </a>
-                  </div>
+                    <Launch className="scale-[0.85] text-1 ml-1 mb-1" />
+                  </a>
                 }
                 closeWarning={() => {
                   setWarningCloseOnMobile(true);
