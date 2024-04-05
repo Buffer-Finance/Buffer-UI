@@ -42,11 +42,11 @@ import { Incentivised } from '@Views/V2-Leaderboard/Incentivised';
 import { Weekly } from '@Views/V2-Leaderboard/Weekly';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
+import posthog from 'posthog-js';
 import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
-import posthog from 'posthog-js';
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
@@ -236,33 +236,23 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          {/* {!urlSettings?.hide &&
+          {!urlSettings?.hide &&
             (isMobile && mobileWarningClosed ? false : true) && (
               <Warning
                 body={
-                  <div className="text-center b800:text-start">
-                    🚀 Buffer v2.5 is live on&nbsp;
-                    <a href="https://app.buffer.finance/" target="_blank">
-                      <span className="underline underline-offset-2">
-                        Mainnet
-                      </span>
-                    </a>
-                    &nbsp; | 📜 Learn more about v2.5&nbsp;
-                    <a
-                      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
-                      target="_blank"
-                    >
-                      <span className="underline underline-offset-2">here</span>
-                    </a>
-                    &nbsp; | ✨ To trade with $BFR as collateral visit the&nbsp;
-                    <a
-                      href="https://classic.app.buffer.finance/"
-                      target="_blank"
-                    >
-                      <span className="underline underline-offset-2">
-                        classic version
-                      </span>
-                    </a>
+                  <div className="m-auto">
+                    <span className="bg-[#10D2FF] text-[#00123C] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold">
+                      New
+                    </span>
+                    <img
+                      src="https://res.cloudinary.com/dtuuhbeqt/image/upload/Leaderboard/bbb.png"
+                      className="mx-3 inline h-[20px] w-[20px] sm:h-[17px] sm:w-[17px]"
+                    />
+                    <span className="text-f14 font-extrabold text-1 leading-[21px]">
+                      Complete fun weekly Galxe tasks and trade to win a share
+                      of the $14,000 prize pot in the Buffer Bull vs Bear
+                      Trading Competition.
+                    </span>
                   </div>
                 }
                 closeWarning={() => {
@@ -270,9 +260,9 @@ function App() {
                 }}
                 shouldAllowClose={true}
                 state={!mobileWarningClosed}
-                className="disclaimer"
+                className="disclaimer !bg-[#00123C]"
               />
-            )} */}
+            )}
           <TnCModal />
           <SideBar />
         </Background>
