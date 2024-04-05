@@ -77,7 +77,7 @@ export const useGalxeLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: desc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+            where: {timestamp: "${timestamp}",netPnL_gte:"0", totalTrades_gte: ${
           configValue.minTradesToQualifyPNL
         }, user_not_in: [${blacklist.map((address) => `"${address}"`)}]}
           ) {
@@ -92,7 +92,7 @@ export const useGalxeLeaderboardQuery = () => {
             orderBy: netPnL
             orderDirection: asc
             first: 100
-            where: {timestamp: "${timestamp}", totalTrades_gte: ${
+            where: {timestamp: "${timestamp}",netPnL_lt:"0", totalTrades_gte: ${
           configValue.minTradesToQualifyPNL
         }, user_not_in: [${blacklist.map((address) => `"${address}"`)}]}
           ) {
