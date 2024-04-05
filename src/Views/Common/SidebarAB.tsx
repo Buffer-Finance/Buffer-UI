@@ -22,14 +22,14 @@ const Sidebar: React.FC<any> = ({}) => {
   const params = useParams();
   let show = false;
   return tabs.filter((t) => location.pathname.includes(t.slug)).length ? (
-    <aside className="w-[70px] gap-[17px] py-5 h-full flex flex-col items-center ">
+    <aside className="w-[70px] sm:pt-[3px] gap-[17px] py-5 h-full sm:h-fit sm:py-[0px] sm:px-[5px]  flex flex-col items-center sm:flex-row sm:w-full ">
       {tabs.map((t) => {
         let Icon = Slug2Icon[t.slug];
         const isActive = location.pathname.includes(t.slug);
         return (
           <Link to={`/${t.slug}/${params?.market || 'BTC-USD'}`}>
             <div
-              className={`flex  gap-[5px] flex-col items-center text-f16  text-center border-[4px] border-visible ${
+              className={`flex  gap-[5px] flex-col items-center text-f16 sm:flex-row sm:border-[0px]  text-center border-[4px] border-visible ${
                 isActive ? 'border-activetab text-1' : ' text-2'
               }  `}
             >

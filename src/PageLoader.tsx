@@ -3,7 +3,7 @@ import { Skeleton } from '@mui/material';
 
 const PageLoader: React.FC<any> = ({}) => {
   return (
-    <div className="flex w-full h-full">
+    <div className="flex w-full h-full sm:flex-col">
       <Sidebar />
       <div className="flex flex-col w-full gap-5 p-4">
         <div className="flex w-full gap-5">

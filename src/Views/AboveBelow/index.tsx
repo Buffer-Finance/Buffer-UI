@@ -115,28 +115,29 @@ export const AboveBelow = () => {
             panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
           }`}
         >
-          {/* <button onClick={addJackpot}>dddAdd</button> */}
-          <>
-            <ShareModal />
-            <RightPanelBackground>
-              {showFavoriteAsset && <PinnedMarkets />}
-              <StatusBar isMobile={false} />
-              <MarketChart isMobile={false} />
-              {/* <Tables /> */}
-              <AccordionTable />
-            </RightPanelBackground>
-            <BuyTrade isMobile={false} />
-          </>
+          <ShareModal />
+          <RightPanelBackground>
+            {showFavoriteAsset && <PinnedMarkets />}
+            <StatusBar isMobile={false} />
+            <MarketChart isMobile={false} />
+            {/* <Tables /> */}
+            <AccordionTable />
+          </RightPanelBackground>
+          <BuyTrade isMobile={false} />
         </div>
       </>
     );
   else {
     return (
-      <div className="px-3">
-        <Shutters />
-        <MarketPicker />
-        <Tabs />
-      </div>
+      <>
+        <Sidebar />
+
+        <div className="px-3">
+          <Shutters />
+          <MarketPicker />
+          <Tabs />
+        </div>
+      </>
     );
   }
 };
