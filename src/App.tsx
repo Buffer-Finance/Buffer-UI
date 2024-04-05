@@ -19,6 +19,7 @@ import { Navbar } from './Views/Common/Navbar';
 
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import FrontArrow from '@SVG/frontArrow';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 import { useGraphStatus } from '@Utils/useGraphStatus';
 import { AdminConfig } from '@Views/AdminConfigs/AdminConfig';
@@ -246,13 +247,20 @@ function App() {
                     </span>
                     <img
                       src="https://res.cloudinary.com/dtuuhbeqt/image/upload/Leaderboard/bbb.png"
-                      className="mx-3 inline h-[20px] w-[20px] sm:h-[17px] sm:w-[17px]"
+                      className="mx-3 inline h-[20px] w-[20px] sm:h-[15px] sm:w-[15px]"
                     />
-                    <span className="text-f14 font-extrabold text-1 leading-[21px]">
+                    <span className="text-f14 font-extrabold text-1 leading-[21px] sm:text-[11px] sm:leading-[12px]">
                       Complete fun weekly Galxe tasks and trade to win a share
                       of the $14,000 prize pot in the Buffer Bull vs Bear
                       Trading Competition.
                     </span>
+                    <a
+                      href="/#/leaderboard/galxe"
+                      className="text-f14 font-extrabold text-1 leading-[21px] sm:text-[11px] sm:leading-[12px] ml-2 underline underline-offset-3"
+                    >
+                      Learn More{' '}
+                      <FrontArrow className="inline" arrowColor="#ffffff" />
+                    </a>
                   </div>
                 }
                 closeWarning={() => {
