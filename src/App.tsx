@@ -188,7 +188,7 @@ export const snackAtom = atom<{
 }>({
   message: null,
 });
-const mobileWarningAtom = atomWithLocalStorage('warnign-suer', false);
+const mobileWarningAtom = atomWithLocalStorage('warnign-user-v2', false);
 export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 
 function App() {
