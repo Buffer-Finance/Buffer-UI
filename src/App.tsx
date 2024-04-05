@@ -70,7 +70,6 @@ const Redirect = ({ url }: { url: string }) => {
 posthog.init('phc_vRaSfkTdkc7xFcEsjjaJmFwZPtsAvp6rmctMLyDkFOU', {
   api_host: 'https://app.posthog.com',
 });
-// posthog.init()
 const AppRoutes = () => {
   const location = useLocation();
   useEffect(() => {
