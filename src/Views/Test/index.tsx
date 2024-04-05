@@ -7,9 +7,10 @@ const UTMLink = (props: UTMLinkProps) => {
   return (
     <Link
       {...props}
-      to={`${props.to}?utm_source=${
+      to={`${props.to}/?utm_source=${
         props.src || 'inappredirect'
       }&utm_medium=redirect&utm_campaign=inapp&utm_term=&utm_content=inapp`}
+      // reloadDocument
     />
   );
 };
