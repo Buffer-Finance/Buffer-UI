@@ -31,6 +31,7 @@ import { AccordionTable } from '@Views/ABTradePage/Views/AccordionTable';
 import { useLimitedStrikeArrays } from './Hooks/useLimitedStrikeArrays';
 import { ShareModal } from '@Views/ABTradePage/Views/AccordionTable/ShareModal';
 import { useJackpotManager } from 'src/atoms/JackpotState';
+import { Sidebar } from '@Views/Common/SidebarAB';
 const demoOption = {
   id: 179,
   signature_timestamp: 1711626558,
@@ -106,24 +107,28 @@ export const AboveBelow = () => {
   }
   if (isNotMobile)
     return (
-      <div
-        className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
-          panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
-        }`}
-      >
-        {/* <button onClick={addJackpot}>dddAdd</button> */}
-        <>
-          <ShareModal />
-          <RightPanelBackground>
-            {showFavoriteAsset && <PinnedMarkets />}
-            <StatusBar isMobile={false} />
-            <MarketChart isMobile={false} />
-            {/* <Tables /> */}
-            <AccordionTable />
-          </RightPanelBackground>
-          <BuyTrade isMobile={false} />
-        </>
-      </div>
+      <>
+        <Sidebar />
+
+        <div
+          className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
+            panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
+          }`}
+        >
+          {/* <button onClick={addJackpot}>dddAdd</button> */}
+          <>
+            <ShareModal />
+            <RightPanelBackground>
+              {showFavoriteAsset && <PinnedMarkets />}
+              <StatusBar isMobile={false} />
+              <MarketChart isMobile={false} />
+              {/* <Tables /> */}
+              <AccordionTable />
+            </RightPanelBackground>
+            <BuyTrade isMobile={false} />
+          </>
+        </div>
+      </>
     );
   else {
     return (

@@ -32,6 +32,7 @@ import {
 import { tradePanelPosition } from './type';
 import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
 import { JackpotModal } from './Views/AccordionTable/ShareModal/Jackpot';
+import { Sidebar } from '@Views/Common/SidebarAB';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -52,6 +53,7 @@ const TradePage: React.FC<any> = ({}) => {
   return (
     <>
       <EssentialModals />
+      <Sidebar />
       <div
         className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
           panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''

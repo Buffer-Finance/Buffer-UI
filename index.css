@@ -23,7 +23,12 @@ animation-fill-mode: forwards;
 .img-mob-width{
   width:clamp(320px, 80%,340px);
 }
-
+.border-visible{
+  border-color: transparent;
+}
+.border-activetab{
+  border-right-color: var(--primary);
+}
 .mob-width {
   width: clamp(375px, 90%, 600px) !important;
   max-width: clamp(375px, 90%, 600px) !important;
