@@ -439,12 +439,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
-      {
-        to: '/ab/BTC-USD/',
-        name: 'Above/Below',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: '/ab/BTC-USD/',
+      //   name: 'Above/Below',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: 'https://testnet.perps.buffer.finance/trade',
         name: 'Perps',

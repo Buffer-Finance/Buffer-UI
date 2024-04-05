@@ -27,7 +27,7 @@ const Sidebar: React.FC<any> = ({}) => {
         let Icon = Slug2Icon[t.slug];
         const isActive = location.pathname.includes(t.slug);
         return (
-          <Link to={`/${t.slug}/${params?.market || 'BTC-USD'}/`}>
+          <Link to={`/${t.slug}/BTC-USD/`}>
             <div
               className={`flex  gap-[5px] flex-col items-center text-f16 sm:flex-row sm:border-[0px]  text-center border-[4px] border-visible ${
                 isActive ? 'border-activetab text-1' : ' text-2'
