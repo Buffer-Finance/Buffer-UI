@@ -15,6 +15,7 @@ export interface IWinrate extends ILeague {
   winrate: string;
   tradesWon: string;
 }
+
 interface ILeaderboardQuery {
   userStats: ILeague[];
   loserStats: ILeague[];
