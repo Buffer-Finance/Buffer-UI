@@ -76,45 +76,7 @@ export const useReacallDataSetter = () => {
           ])
           .flat()
       );
-      if (strikes) {
-        let maxReadCallData = [];
-        [
-          ...strikes.decreasingPriceArray,
-          ...strikes.increasingPriceArray,
-        ].forEach((element) => {
-          activeMarkets.forEach((market) => {
-            [true, false].forEach((isAbove) => {
-              maxReadCallData.push({
-                address: market.address,
-                abi: OptionABI,
-                name: 'getMaxPermissibleContracts',
-                params: [
-                  element.marketID,
-                  toFixed(
-                    multiply(
-                      isAbove
-                        ? element.baseFeeAbove.toString()
-                        : element.baseFeeBelow.toString(),
-                      market.poolInfo.decimals
-                    ),
-                    0
-                  ),
-                  isAbove,
-                ],
-                id: getCallId(
-                  market.address,
-                  '-getMaxPermissibleContracts-',
-                  element.marketID,
-                  `-${isAbove}`
-                ),
-              });
-            });
-          });
-          // console.log('useReacallDataSetter', maxReadCallData);
-        });
 
-        readCalls.push(...maxReadCallData);
-      }
       // if (tradeData !== null) {
       //   const marketId = tradeData.selectedStrikeData.marketID;
 
@@ -146,9 +108,47 @@ export const useReacallDataSetter = () => {
       //   );
       // }
     }
+    if (strikes) {
+      let maxReadCallData = [];
+      [
+        ...strikes.decreasingPriceArray,
+        ...strikes.increasingPriceArray,
+      ].forEach((element) => {
+        activeMarkets.forEach((market) => {
+          [true, false].forEach((isAbove) => {
+            maxReadCallData.push({
+              address: market.address,
+              abi: OptionABI,
+              name: 'getMaxPermissibleContracts',
+              params: [
+                element.marketID,
+                toFixed(
+                  multiply(
+                    isAbove
+                      ? element.baseFeeAbove.toString()
+                      : element.baseFeeBelow.toString(),
+                    market.poolInfo.decimals
+                  ),
+                  0
+                ),
+                isAbove,
+              ],
+              id: getCallId(
+                market.address,
+                '-getMaxPermissibleContracts-',
+                element.marketID,
+                `-${isAbove}`
+              ),
+            });
+          });
+        });
+        // console.log('useReacallDataSetter', maxReadCallData);
+      });
+
+      readCalls.push(...maxReadCallData);
+    }
   }
 
   const { data } = useCall2Data(readCalls, 'aboveBelowReadCalls');
-  console.log(`rdddata: `, data);
   setResponse(data);
 };

@@ -112,7 +112,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     if (maxPermissibleContracts === undefined) return <></>;
 
     let tablerow = totalArray[row];
-    console.log(`index-tablerow: `, tablerow);
+    // console.log(`index-tablerow: `, tablerow);
     const strikePrice = tablerow?.strike;
     // console.log(
     //   `maxPermissibleContracts`,false
@@ -120,7 +120,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     //     `${getAddress(activeMarket?.address)}${tablerow.marketID}${false}`
     //   ]
     // );
-    console.log(`index-maxPermissibleContracts: `, maxPermissibleContracts);
+    // console.log(`index-maxPermissibleContracts: `, maxPermissibleContracts);
     const maxSizeBelow = maxPermissibleContracts[
       `${getAddress(activeMarket?.address)}${tablerow.marketID}${false}`
     ]
