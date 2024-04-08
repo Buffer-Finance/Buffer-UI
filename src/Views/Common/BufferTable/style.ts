@@ -204,6 +204,9 @@ const TableBackground = styled.div`
         &:hover {
           .table-cell {
             color: white;
+            @media (max-width: 600px) {
+              color: unset;
+            }
           }
         }
       }

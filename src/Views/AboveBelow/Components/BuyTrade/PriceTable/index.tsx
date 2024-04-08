@@ -150,7 +150,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     switch (col) {
       case Columns.STRIKE:
         return (
-          <div className={`text-1 w-full text-f12`}>
+          <div className={`w-full text-f12`}>
             <Display
               data={strikePrice}
               precision={precision}
@@ -162,7 +162,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_ABOVE:
         return (
           <button
-            className={`w-full text-f12`}
+            className={`w-full text-f12 text-green`}
             onClick={() => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
@@ -176,7 +176,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       case Columns.ROI_BELOW:
         return (
           <button
-            className={`w-full text-f12`}
+            className={`w-full text-f12 text-red`}
             onClick={() => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return throwError();
