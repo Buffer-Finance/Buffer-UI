@@ -494,7 +494,7 @@ const BufferTableCopy: React.FC<IBufferTableCopy> = ({
                         function getClassNames() {
                           let className = '';
 
-                          // if (!isValueAvailable(isAboveSelected))
+                          if (!isValueAvailable(isAboveSelected))
                             if (colIdx == 3) {
                               className += '  bg-[#282B39] ';
                               if (crow == 0) {
@@ -509,8 +509,8 @@ const BufferTableCopy: React.FC<IBufferTableCopy> = ({
                               if (crow - 1 == customIdx) {
                                 className += ' !rounded-t-[8px]';
                               }
-                            //   return className;
-                            // }
+                              // return className;
+                            }
 
                           //
 
