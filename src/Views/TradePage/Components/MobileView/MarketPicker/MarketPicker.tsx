@@ -40,13 +40,13 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
             token0={activeMarket?.token0}
             token1={activeMarket?.token1}
           />
-          <div className="flex items-center ml-1 text-[#808191]">
+          {/* <div className="flex items-center ml-1 text-[#808191]">
             <PlusMinus
               svgProps={{ fill: '#808191' }}
               className="scale-[65%] mt-1"
             />
             {toFixed(spread / 1e6, 4)}%
-          </div>
+          </div> */}
         </div>
         <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
           {payout || '-'}%
