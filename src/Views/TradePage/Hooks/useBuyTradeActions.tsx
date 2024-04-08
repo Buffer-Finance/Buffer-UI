@@ -186,40 +186,40 @@ export const useBuyTradeActions = (userInput: string) => {
           id: 'binaryBuy',
         });
       }
-      if (activeAsset && allSpreads) {
-        const spread = allSpreads?.[activeAsset.tv_id];
-        if (spread === undefined || spread === null) {
-          return toastify({
-            type: 'error',
-            msg: `Spread not found for ${activeAsset.pair}!`,
-            id: 'binaryBuy',
-          });
-        }
-        const safeStrike = getSafeStrike(
-          Number(customTrade.strike),
-          customTrade.is_up,
-          spread.spread
-        );
-        const difference = Math.abs(
-          ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
-        );
+      // if (activeAsset && allSpreads) {
+      //   const spread = allSpreads?.[activeAsset.tv_id];
+      //   if (spread === undefined || spread === null) {
+      //     return toastify({
+      //       type: 'error',
+      //       msg: `Spread not found for ${activeAsset.pair}!`,
+      //       id: 'binaryBuy',
+      //     });
+      //   }
+      //   const safeStrike = getSafeStrike(
+      //     Number(customTrade.strike),
+      //     customTrade.is_up,
+      //     spread.spread
+      //   );
+      //   const difference = Math.abs(
+      //     ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
+      //   );
 
-        if (difference > settings.slippageTolerance) {
-          return toastify({
-            type: 'error',
-            msg: `Slippage tolerance should be greater than ${difference.toFixed(
-              4
-            )}%`,
-            id: 'binaryBuy',
-          });
-        }
-      } else {
-        return toastify({
-          type: 'error',
-          msg: 'There is some error while fetching the data!',
-          id: 'binaryBuy',
-        });
-      }
+      //   if (difference > settings.slippageTolerance) {
+      //     return toastify({
+      //       type: 'error',
+      //       msg: `Slippage tolerance should be greater than ${difference.toFixed(
+      //         4
+      //       )}%`,
+      //       id: 'binaryBuy',
+      //     });
+      //   }
+      // } else {
+      //   return toastify({
+      //     type: 'error',
+      //     msg: 'There is some error while fetching the data!',
+      //     id: 'binaryBuy',
+      //   });
+      // }
 
       if (!userInput || userInput === '0' || userInput === '') {
         return toastify({
