@@ -120,6 +120,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     //     `${getAddress(activeMarket?.address)}${tablerow.marketID}${false}`
     //   ]
     // );
+    console.log(`index-maxPermissibleContracts: `, maxPermissibleContracts);
     const maxSizeBelow = maxPermissibleContracts[
       `${getAddress(activeMarket?.address)}${tablerow.marketID}${false}`
     ]
