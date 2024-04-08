@@ -493,28 +493,34 @@ const BufferTableCopy: React.FC<IBufferTableCopy> = ({
                       {createArray(cols).map((col, colIdx) => {
                         function getClassNames() {
                           let className = '';
-
-                          if (!isValueAvailable(isAboveSelected))
-                            if (colIdx == 3) {
-                              className += '  bg-[#282B39] ';
-                              if (crow == 0) {
-                                className += ' !rounded-t-[8px] ';
-                              }
-                              if (crow == rows - 1) {
-                                className += ' !rounded-b-[8px] ';
-                              }
-                              if (crow + 1 == customIdx) {
-                                className += ' !rounded-b-[8px]';
-                              }
-                              if (crow - 1 == customIdx) {
-                                className += ' !rounded-t-[8px]';
-                              }
-                              return className;
+                          function safeguard(s) {
+                            if (crow == selectedRow) {
+                              return '';
+                            } else {
+                              return s;
                             }
+                          }
+                          // if (!isValueAvailable(isAboveSelected))
+                          if (colIdx == 3) {
+                            className += '  bg-[#282B39] ';
+                            if (crow == 0) {
+                              className += safeguard(' !rounded-t-[8px] ');
+                            }
+                            if (crow == rows - 1) {
+                              className += safeguard(' !rounded-b-[8px] ');
+                            }
+                            if (crow + 1 == customIdx) {
+                              className += safeguard(' !rounded-b-[8px] ');
+                            }
+                            if (crow - 1 == customIdx) {
+                              className += safeguard(' !rounded-t-[8px] ');
+                            }
+                            // return className;
+                          }
 
                           //
 
-                          if (crow != selectedRow) return '';
+                          if (crow != selectedRow) return className;
                           if (colIdx == 0) {
                             if (isAboveSelected) className += borderL;
                           }
