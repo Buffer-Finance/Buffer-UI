@@ -737,11 +737,11 @@ export const MultiResolutionChart = ({
   const futureInf = Date.now() / 1000 + 24 * 60 * 60;
   let time = futureInf;
   time = time;
-  let rem = time % resolution2seconds[resolution];
+  let rem = time % resolution2seconds[ution.toUpperCase()];
   time = futureInf - rem;
   const from = returnMod(
     Date.now() / 1000 - 500 * 24 * 60 * 60,
-    resolution2seconds[resolution]
+    resolution2seconds[resolution.toUpperCase()]
   );
   const deleteOldDrawings = () => {
     if (shapeIdRef.current)
