@@ -172,21 +172,21 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
         ),
     },
 
-    // {
-    //   header: 'Max Spread',
-    //   data:
-    //     spread === null ? (
-    //       <Skeleton className="w-[60px] !h-5 lc " />
-    //     ) : (
-    //       <div className="flex items-center gap-1">
-    //         <PlusMinus
-    //           svgProps={{ fill: '#ffffff' }}
-    //           className="scale-75 mt-1"
-    //         />
-    //         <Display data={spread / 1e6} precision={4} unit="%" />
-    //       </div>
-    //     ),
-    // },
+    {
+      header: 'Max Spread',
+      data:
+        spread === null ? (
+          <Skeleton className="w-[60px] !h-5 lc " />
+        ) : (
+          <div className="flex items-center gap-1">
+            <PlusMinus
+              svgProps={{ fill: '#ffffff' }}
+              className="scale-75 mt-1"
+            />
+            <Display data={spread / 1e6} precision={4} unit="%" />
+          </div>
+        ),
+    },
     {
       header: 'Payout',
       data: (
