@@ -509,7 +509,7 @@ const BufferTableCopy: React.FC<IBufferTableCopy> = ({
                               if (crow - 1 == customIdx) {
                                 className += ' !rounded-t-[8px]';
                               }
-                              // return className;
+                              return className;
                             }
 
                           //
