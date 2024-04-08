@@ -115,6 +115,7 @@ export const readCallResponseAtom = atom(
         marketID: string;
       };
     } = {};
+    console.log(`update: `,update);
     for (const callId in update) {
       // console.log('callId', callId);
       const [data] = update[callId];

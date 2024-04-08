@@ -149,5 +149,6 @@ export const useReacallDataSetter = () => {
   }
 
   const { data } = useCall2Data(readCalls, 'aboveBelowReadCalls');
+  console.log(`rdddata: `, data);
   setResponse(data);
 };
