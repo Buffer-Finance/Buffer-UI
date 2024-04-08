@@ -198,7 +198,7 @@ export const useBuyTradeActions = (userInput: string) => {
         const safeStrike = getSafeStrike(
           Number(customTrade.strike),
           customTrade.is_up,
-          spread.spread
+          +spread.spread
         );
         const difference = Math.abs(
           ((Number(customTrade.strike) - safeStrike) / safeStrike) * 100
