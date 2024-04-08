@@ -13,3 +13,15 @@ export const IV: React.FC<{ activeMarket: marketTypeAB | undefined }> = ({
   if (iv === undefined) return <Skeleton className="w-[20px] !h-5 lc " />;
   return <>{iv / 1e2}%</>;
 };
+
+export const IVMobile: React.FC<{ activeMarket: marketTypeAB | undefined }> = ({
+  activeMarket,
+}) => {
+  const { data: ivs } = useIV();
+
+  if (activeMarket === undefined || !ivs)
+    return <Skeleton className="w-[20px] !h-5 lc " />;
+  const iv = ivs[activeMarket.tv_id];
+  if (iv === undefined) return <Skeleton className="w-[20px] !h-5 lc " />;
+  return <>{(iv / 1e2).toFixed(0)}%</>;
+};

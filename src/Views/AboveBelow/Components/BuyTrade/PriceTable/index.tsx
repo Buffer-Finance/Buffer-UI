@@ -29,9 +29,9 @@ enum Columns {
   TOKEN_ABOVE,
   MAX_ABOVE,
   STRIKE,
-  ROI_BELOW,
-  TOKEN_BELOW,
   MAX_BELOW,
+  TOKEN_BELOW,
+  ROI_BELOW,
 }
 
 export const getROI = (totalFee: number | null) => {
@@ -57,9 +57,9 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     selectedPoolMarket?.poolInfo.token?.toUpperCase(),
     'Max',
     'Strike',
-    'ROI',
-    selectedPoolMarket?.poolInfo.token?.toUpperCase(),
     'Max',
+    selectedPoolMarket?.poolInfo.token?.toUpperCase(),
+    'ROI',
   ];
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();

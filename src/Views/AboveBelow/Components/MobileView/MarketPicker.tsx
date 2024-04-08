@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai';
 import { CurrentPrice } from '../StatusBar/AssetSelector/CurrentPrice';
 import { useShutterHandlers } from './Shutters';
 import { MobileAccordionTable } from './Shutters/MobileTable';
+import { IV, IVMobile } from '../StatusBar/MarketData/IV';
 
 const MarketPicker: React.FC<{}> = () => {
   const { openMarketPickerShutter } = useShutterHandlers();
@@ -39,9 +40,10 @@ const MarketPicker: React.FC<{}> = () => {
               className="text-[#C3C2D4] mr-2 mb-1"
             />
           </div>
-          {/* <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
-          {payout || '-'}%
-        </div> */}
+          <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
+            IV:&nbsp;
+            <IVMobile activeMarket={activeMarket} />
+          </div>
         </div>
       </div>
       <MobileChartControlls activeMarket={activeMarket.tv_id} />
