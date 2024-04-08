@@ -112,6 +112,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     if (maxPermissibleContracts === undefined) return <></>;
 
     let tablerow = totalArray[row];
+    console.log(`index-tablerow: `, tablerow);
     const strikePrice = tablerow?.strike;
     // console.log(
     //   `maxPermissibleContracts`,false
