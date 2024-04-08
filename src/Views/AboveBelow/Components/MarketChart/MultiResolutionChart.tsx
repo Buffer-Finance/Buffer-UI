@@ -6,7 +6,11 @@ import {
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
-import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
+import {
+  getAggregatedBarv2,
+  resolution2Sec,
+  timeDeltaMapping,
+} from '@TV/utils';
 import {
   getDisplayDate,
   getDisplayTime,
@@ -734,15 +738,24 @@ export const MultiResolutionChart = ({
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
-  const futureInf = Date.now() / 1000 + 24 * 60 * 60;
+  const futureInf = Math.floor(Date.now() / 1000) + 12 * 60 * 60;
+
   let time = futureInf;
   time = time;
-  let rem = time % resolution2seconds[resolution.toUpperCase()];
+  const smresolution = resolution.toUpperCase();
+  const seconds =
+    smresolution in resolution2seconds
+      ? resolution2seconds[smresolution]
+      : Math.floor(resolution2Sec(resolution) / 1000);
+  console.log(`MultiResolutionChart-seconds: `, seconds, resolution);
+
+  let rem = time % seconds;
+  console.log(`timedeb1: `, time);
+  console.log(`timedeb1.2: `, rem);
+
   time = futureInf - rem;
-  const from = returnMod(
-    Date.now() / 1000 - 500 * 24 * 60 * 60,
-    resolution2seconds[resolution.toUpperCase()]
-  );
+  console.log(`timedeb2: `, time);
+  const from = returnMod(Date.now() / 1000 - 500 * 24 * 60 * 60, seconds);
   const deleteOldDrawings = () => {
     if (shapeIdRef.current)
       widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);

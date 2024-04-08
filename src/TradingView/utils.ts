@@ -64,7 +64,7 @@ export function getBlockFromBar(bar: number[]): OHLCBlock {
 
 export const resolution2Sec = (resolution: string) => {
   // console.log(`[dd]]resolution: `, resolution);
-
+  // if()
   let inSec = +resolution * 60 * 1000;
   if (resolution.includes('S') || resolution.includes('s')) {
     let numericResolution = resolution.replace('S', '');
