@@ -362,7 +362,7 @@ export const useBuyTradeActions = (userInput: string) => {
         }
 
         let currentTimestamp = Date.now();
-        let currentUTCTimestamp = Math.round(currentTimestamp / 1000);
+        let currentUTCTimestamp = Math.floor(currentTimestamp / 1000);
 
         let baseArgs = [
           address,
