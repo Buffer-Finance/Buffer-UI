@@ -514,7 +514,7 @@ const BufferTableCopy: React.FC<IBufferTableCopy> = ({
 
                           //
 
-                          if (crow != selectedRow) return '';
+                          // if (crow != selectedRow) return '';
                           if (colIdx == 0) {
                             if (isAboveSelected) className += borderL;
                           }

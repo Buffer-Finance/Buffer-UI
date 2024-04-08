@@ -737,7 +737,7 @@ export const MultiResolutionChart = ({
   const futureInf = Date.now() / 1000 + 24 * 60 * 60;
   let time = futureInf;
   time = time;
-  let rem = time % resolution2seconds[ution.toUpperCase()];
+  let rem = time % resolution2seconds[resolution.toUpperCase()];
   time = futureInf - rem;
   const from = returnMod(
     Date.now() / 1000 - 500 * 24 * 60 * 60,
