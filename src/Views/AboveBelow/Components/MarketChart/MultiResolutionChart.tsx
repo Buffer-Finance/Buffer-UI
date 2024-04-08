@@ -41,6 +41,7 @@ import {
   IBasicDataFeed,
   IChartingLibraryWidget,
   IOrderLineAdapter,
+  version,
   LibrarySymbolInfo,
   ResolutionString,
   SeriesFormat,
@@ -48,6 +49,7 @@ import {
   Timezone,
   widget,
 } from '../../../../../public/static/charting_library';
+console.log(version(), 'trading,vew version');
 import { IGQLHistory, tardesAtom } from '../..//Hooks/usePastTradeQuery';
 import { BetState } from '../../Hooks/useAheadTrades';
 import { useOngoingTrades } from '@Views/ABTradePage/Hooks/useOngoingTrades';
@@ -738,22 +740,20 @@ export const MultiResolutionChart = ({
   const toggleIndicatorDD = (_: any) => {
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
-  const futureInf = Math.floor(Date.now() / 1000) + 12 * 60 * 60;
-
+  const futureInf = Math.floor(Date.now() / 1000) + 240 * 60 * 60;
   let time = futureInf;
-  time = time;
   const smresolution = resolution.toUpperCase();
   const seconds =
     smresolution in resolution2seconds
       ? resolution2seconds[smresolution]
       : Math.floor(resolution2Sec(resolution) / 1000);
-  console.log(`MultiResolutionChart-seconds: `, seconds, resolution);
+  // console.log(`MultiResolutionChart-seconds: `, seconds, resolution);
 
   let rem = time % seconds;
-  console.log(`timedeb1: `, time);
-  console.log(`timedeb1.2: `, rem);
-
   time = futureInf - rem;
+  // console.log(`timedeb1: `, time);
+  // console.log(`timedeb1.2: `, rem);
+
   console.log(`timedeb2: `, time);
   const from = returnMod(Date.now() / 1000 - 500 * 24 * 60 * 60, seconds);
   const deleteOldDrawings = () => {
