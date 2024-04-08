@@ -79,7 +79,7 @@ export const TradeSize: React.FC<{
   }
   if (lt(maxTradeSize, '0')) maxTradeSize = '0';
   return (
-    <TradeSizeSelectorBackground>
+    <TradeSizeSelectorBackground className="sm:!mt-[0px]">
       <ColumnGap gap="7px" className="w-full">
         <RowBetween>
           {/* {maxPermissibleContracts !== undefined ? (

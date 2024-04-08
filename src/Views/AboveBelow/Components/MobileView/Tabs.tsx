@@ -8,7 +8,7 @@ export const Tabs = () => {
   const [activeTab, setActiveTab] = useAtom(mobileTradePageTabs);
   return (
     <div>
-      <div className="flex items-center gap-[20px] mb-3">
+      <div className="flex items-center gap-[20px] ">
         {['trade', 'Price chart'].map((tab) => {
           const activeTabClass =
             tab.toLowerCase() === activeTab.toLowerCase()

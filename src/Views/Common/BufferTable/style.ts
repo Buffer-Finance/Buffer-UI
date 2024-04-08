@@ -17,7 +17,6 @@ const TableBackground = styled.div`
   overflow-x: hidden;
   flex-grow: 1;
   max-height: ${(props) => (props?.overflow ? props?.overflow : 'auto')};
-  padding-bottom: ${(props) => (props?.overflow ? '10px' : 'auto')};
   border-radius: 12px 12px 0px 0px;
   & ::-webkit-scrollbar {
     background: var(--bg-grey);

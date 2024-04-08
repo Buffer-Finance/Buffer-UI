@@ -33,7 +33,7 @@ export const PayoutProfit = ({}: {}) => {
       2
     );
     return (
-      <div className="flex-sbw text-f14 my-3 mb-4">
+      <div className="flex-sbw text-f14 my-3 mb-4 sm:my-[0px] ">
         <div className="text-f12 b1200:text-f14 items-start flex-start flex-col b1200: flex wrap b1200:items-center text-2 b1200:flex-row">
           <span className="nowrap mb-1">Payout&nbsp;</span>
           <RowGap gap="4px">
