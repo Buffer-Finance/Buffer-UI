@@ -67,7 +67,7 @@ export let supported_resolutions = [
   '1H' as ResolutionString,
   '2H' as ResolutionString,
   '4H' as ResolutionString,
-  '1D',
+  // '1D',
 ];
 const resolution2seconds = {
   '1': 60,
@@ -809,29 +809,29 @@ export const MultiResolutionChart = ({
       deleteOldDrawings();
     }
   }, [selectedStrike, chartReady]);
-  useEffect(() => {
-    // const futureTS = 1522940868;
-    // let time = futureTS * 1000;
+  // useEffect(() => {
+  //   // const futureTS = 1522940868;
+  //   // let time = futureTS * 1000;
 
-    // let rem = time % (24 * 60 * 60 * 1000);
+  //   // let rem = time % (24 * 60 * 60 * 1000);
 
-    // time = (time - rem) / 1000;
-    // console.log(`MultiResolutionChart-time: `, time % 3600);
-    const futureTS = 1522940868;
-    let time = futureTS;
+  //   // time = (time - rem) / 1000;
+  //   // console.log(`MultiResolutionChart-time: `, time % 3600);
+  //   const futureTS = 1713072041;
+  //   let time = futureTS;
 
-    /* let rem = time % 3600000;
-    
-    time = (time - rem) / 1000; */
-    if (chartReady)
-      widgetRef.current?.activeChart().createShape(
-        { time, price: 71829 },
-        {
-          shape: 'icon',
-          icon: 0xf0da,
-        }
-      );
-  }, [chartReady]);
+  //   /* let rem = time % 3600000;
+
+  //   time = (time - rem) / 1000; */
+  //   if (chartReady)
+  //     widgetRef.current?.activeChart().createShape(
+  //       { time, price: 71829 },
+  //       {
+  //         shape: 'icon',
+  //         icon: 0xf0da,
+  //       }
+  //     );
+  // }, [chartReady]);
   useEffect(() => {
     if (indicatorCount) toggleIndicatorDD('d');
   }, [indicatorCount]);
