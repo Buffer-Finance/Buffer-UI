@@ -15,7 +15,7 @@ const divide = (from: string | number, to: string | number) => {
     return fromBN.div(toBN).toString();
   } catch (e) {
     // throw new Error(bigNumberError(from, to));
-    console.error(bigNumberError(from, to));
+    // console.error(bigNumberError(from, to));
     return null;
   }
 };
