@@ -67,7 +67,7 @@ export let supported_resolutions = [
   '1H' as ResolutionString,
   '2H' as ResolutionString,
   '4H' as ResolutionString,
-  // "1D",
+  '1D',
 ];
 const resolution2seconds = {
   '1': 60,
@@ -810,6 +810,29 @@ export const MultiResolutionChart = ({
     }
   }, [selectedStrike, chartReady]);
   useEffect(() => {
+    // const futureTS = 1522940868;
+    // let time = futureTS * 1000;
+
+    // let rem = time % (24 * 60 * 60 * 1000);
+
+    // time = (time - rem) / 1000;
+    // console.log(`MultiResolutionChart-time: `, time % 3600);
+    const futureTS = 1522940868;
+    let time = futureTS;
+
+    /* let rem = time % 3600000;
+    
+    time = (time - rem) / 1000; */
+    if (chartReady)
+      widgetRef.current?.activeChart().createShape(
+        { time, price: 71829 },
+        {
+          shape: 'icon',
+          icon: 0xf0da,
+        }
+      );
+  }, [chartReady]);
+  useEffect(() => {
     if (indicatorCount) toggleIndicatorDD('d');
   }, [indicatorCount]);
 
@@ -818,7 +841,7 @@ export const MultiResolutionChart = ({
       {!isMobile ? (
         <div className="items-center justify-between flex-row flex  bg-2 w-full tv-h px-4 ">
           <div className="flex flex-row justify-start font-[500]">
-            <div className="ele cursor-pointer">Time</div>
+            <div className="ele cursor-pointer">Tmime</div>
             {supported_resolutions.map((s) => {
               return (
                 <div
@@ -837,7 +860,7 @@ export const MultiResolutionChart = ({
                     s.toLowerCase() == resolution.toLowerCase() && 'active'
                   } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
                 >
-                  {formatResolution(s)}
+                  {s}
                 </div>
               );
             })}
