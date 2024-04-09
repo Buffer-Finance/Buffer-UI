@@ -2,13 +2,16 @@ import TabSwitch from '@Views/Common/TabSwitch';
 import { depositTabType, poolsType } from '@Views/LpRewards/types';
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { Chain } from 'viem';
 import { DepositTab } from './DepositTab';
 import { Container } from './Styles';
 import { WithdrawTab } from './WithdrawTab';
 
-export const ActionCard: React.FC<{ activePool: poolsType }> = ({
-  activePool,
-}) => {
+export const ActionCard: React.FC<{
+  activePool: poolsType;
+  readcalldata: { [callId: string]: string[] };
+  activeChain: Chain;
+}> = ({ activePool, readcalldata, activeChain }) => {
   const [depositTabType, setDepositTabType] =
     useState<depositTabType>('deposit');
 
@@ -18,6 +21,8 @@ export const ActionCard: React.FC<{ activePool: poolsType }> = ({
         activeTab={depositTabType}
         setDepositTabType={setDepositTabType}
         activePool={activePool}
+        readcallData={readcalldata}
+        activeChain={activeChain}
       />
     </Container>
   );
@@ -27,7 +32,15 @@ export const Tabs: React.FC<{
   activeTab: depositTabType;
   setDepositTabType: (newTab: depositTabType) => void;
   activePool: poolsType;
-}> = ({ activeTab, setDepositTabType, activePool }) => {
+  readcallData: { [callId: string]: string[] };
+  activeChain: Chain;
+}> = ({
+  activeTab,
+  setDepositTabType,
+  activePool,
+  readcallData,
+  activeChain,
+}) => {
   const activeTabNumber =
     activeTab === 'deposit' ? 0 : activeTab === 'withdraw' ? 1 : 2;
   return (
@@ -56,7 +69,11 @@ export const Tabs: React.FC<{
         value={activeTabNumber}
         // className="w-full"
         childComponents={[
-          <DepositTab activePool={activePool} />,
+          <DepositTab
+            activePool={activePool}
+            readcallData={readcallData}
+            activeChain={activeChain}
+          />,
           <WithdrawTab activePool={activePool} />,
           // <VestTab activePool={activePool} />,
         ]}

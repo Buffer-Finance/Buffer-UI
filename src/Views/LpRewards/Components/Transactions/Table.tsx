@@ -1,9 +1,13 @@
+import { divide } from '@Utils/NumString/stringArithmatics';
 import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { poolsType, transactionTabType } from '@Views/LpRewards/types';
+import { usePoolTxns } from '@Views/LpRewards/Hooks/usePoolTxns';
+import { poolTxn, poolsType, transactionTabType } from '@Views/LpRewards/types';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
+import styled from '@emotion/styled';
 import { Launch } from '@mui/icons-material';
+import { Chain } from 'wagmi';
 
 enum transactionCols {
   address,
@@ -38,35 +42,41 @@ const Header = (col: number) => {
   );
 };
 
-function Body(row: number, col: number, data: any, activePool: poolsType) {
+function Body(
+  row: number,
+  col: number,
+  data: poolTxn[],
+  activePool: poolsType
+) {
+  const txn = data[row];
+  const decimals = activePool === 'uBLP' ? 6 : 18;
+  const poolUnit = activePool === 'uBLP' ? 'USDC' : 'ARB';
   switch (col) {
     case transactionCols.address:
       return (
         <span className="ml-8 text-f15">
-          {'0x32A49a15F8eE598C1EeDc21138DEb23b391f425b'.slice(0, 7) +
-            '...' +
-            '0x32A49a15F8eE598C1EeDc21138DEb23b391f425b'.slice(-7)}
+          {txn.userAddress.slice(0, 7) + '...' + txn.userAddress.slice(-7)}
         </span>
       );
     case transactionCols.timestamp:
-      return <DisplayTime ts={1711601516} className="text-f15" />;
+      return <DisplayTime ts={txn.timestamp} className="text-f15" />;
     case transactionCols.amount:
       return (
         <Display
-          data={0.0}
-          unit={activePool}
+          data={divide(txn.amount, decimals)}
+          unit={poolUnit}
           precision={2}
           className="!justify-start text-f15"
         />
       );
     case transactionCols.lockPeriod:
-      return <span className="text-f15">1 Year</span>;
+      return <span className="text-f15">{txn.lockPeriod}</span>;
     case transactionCols.txnType:
-      return <span className="text-f15">Deposit</span>;
+      return <span className="text-f15">{txn.type}</span>;
     case transactionCols.blpRate:
       return (
         <Display
-          data={1.23445}
+          data={txn.blpRate}
           precision={3}
           className="!justify-start text-f15"
         />
@@ -74,7 +84,7 @@ function Body(row: number, col: number, data: any, activePool: poolsType) {
     case transactionCols.unitsMinted:
       return (
         <Display
-          data={1.23445}
+          data={divide(txn.unitsMinted, 18)}
           precision={2}
           className="!justify-start text-f15"
         />
@@ -84,9 +94,7 @@ function Body(row: number, col: number, data: any, activePool: poolsType) {
         <button
           className="text-f15"
           onClick={() => {
-            window.open(
-              'https://arbiscan.io/tx/0xd80a612ebabb55b1f0d16c57c311e0faddcceb683d92988c3e6de094362e08b2'
-            );
+            window.open(`https://arbiscan.io/tx/${txn.txnHash}`);
           }}
         >
           <span className="text-[#808191] text-f14 font-medium">View</span>
@@ -95,23 +103,73 @@ function Body(row: number, col: number, data: any, activePool: poolsType) {
       );
 
     default:
-      return 'unhandled column';
+      return <div>'unhandled column'</div>;
   }
 }
 
 export const Table: React.FC<{
   activeTab: transactionTabType;
   activePool: poolsType;
-}> = ({ activeTab, activePool }) => {
+  activeChain: Chain;
+}> = ({ activeTab, activePool, activeChain }) => {
+  const { data, isValidating, error } = usePoolTxns(
+    activeChain,
+    activePool,
+    activeTab
+  );
   return (
     <BufferTable
       headerJSX={Header}
-      bodyJSX={(row, col) => Body(row, col, [], activePool)}
+      bodyJSX={(row, col) =>
+        data === undefined || data.length === 0 ? (
+          <ErrorComponent
+            activeTab={activeTab}
+            isDataAvailable={data !== undefined}
+            isError={error !== undefined}
+          />
+        ) : (
+          Body(row, col, data, activePool)
+        )
+      }
       cols={colNames.length}
-      rows={1}
+      rows={data?.length ?? 0}
       onRowClick={() => {}}
       className="mt-6"
       widths={['17%', '12%', '12%', '12%', '12%', '10%', '10%', '10%']}
+      loading={data === undefined && !error && isValidating}
+      error={
+        <ErrorComponent
+          activeTab={activeTab}
+          isDataAvailable={data !== undefined}
+          isError={error !== undefined}
+        />
+      }
     />
   );
 };
+
+const ErrorComponent: React.FC<{
+  activeTab: transactionTabType;
+  isDataAvailable: boolean;
+  isError: boolean;
+}> = ({ activeTab, isDataAvailable, isError }) => {
+  if (isError) {
+    return <ErrorDiv>Something went wring.Try again later.</ErrorDiv>;
+  }
+  if (isDataAvailable) {
+    if (activeTab === 'my') {
+      return <ErrorDiv>Wallet Not Connected.</ErrorDiv>;
+    } else {
+      return <ErrorDiv>No txns found.</ErrorDiv>;
+    }
+  }
+  return <ErrorDiv>Fetching data...</ErrorDiv>;
+};
+
+const ErrorDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+  font-size: 16px;
+  color: #ffffff;
+`;

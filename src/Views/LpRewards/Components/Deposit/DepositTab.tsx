@@ -1,21 +1,71 @@
+import { useToast } from '@Contexts/Toast';
+import { divide, gt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { poolsType } from '@Views/LpRewards/types';
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { Chain } from 'viem';
 import { InputField } from './InputField';
+import { Modal } from './Modal';
 
-export const DepositTab: React.FC<{ activePool: poolsType }> = ({
-  activePool,
-}) => {
+export const DepositTab: React.FC<{
+  activePool: poolsType;
+  readcallData: { [callId: string]: string[] };
+  activeChain: Chain;
+}> = ({ activePool, readcallData, activeChain }) => {
   const [amount, setAmount] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const toastify = useToast();
+
+  const decimals = activePool === 'aBLP' ? 18 : 6;
+
+  const balance = readcallData[activePool + '-balanceof']?.[0];
+  const allowance = readcallData[activePool + '-allowance']?.[0];
+
+  const uint = activePool === 'aBLP' ? 'ARB' : 'USDC';
+  const handleDeposit = () => {
+    try {
+      if (balance === undefined) {
+        throw new Error('Balance not found');
+      }
+      if (allowance === undefined) {
+        throw new Error('Allowance not found');
+      }
+      if (amount === '') {
+        throw new Error('Please enter an amount');
+      }
+      if (gt(amount, divide(balance, decimals) as string)) {
+        throw new Error('Insufficient balance');
+      }
+      setIsModalOpen(true);
+    } catch (e) {
+      toastify({
+        type: 'error',
+        msg: (e as Error).message,
+        id: 'handle-deposit-tab',
+      });
+    }
+  };
   return (
     <div>
+      <Modal
+        activeChain={activeChain}
+        isOpen={isModalOpen}
+        closeModal={setIsModalOpen}
+        activePool={activePool}
+        balance={balance}
+        allowance={allowance}
+        decimals={decimals}
+        amount={amount}
+        setAmount={setAmount}
+        unit={uint}
+      />
       <InputField
         activePool={activePool}
         setValue={setAmount}
         balance={'40000000000'}
-        unit={activePool === 'aBLP' ? 'ARB' : 'USDC'}
+        unit={uint}
         decimals={activePool === 'aBLP' ? 18 : 6}
       />
       <div className="flex justify-between items-start mt-2">
@@ -24,7 +74,7 @@ export const DepositTab: React.FC<{ activePool: poolsType }> = ({
         </span>
         <ConnectionRequired className="!text-f14 !py-[0] !px-4 mt-2">
           <BlueBtn
-            onClick={() => {}}
+            onClick={handleDeposit}
             className="!text-f14 !h-fit !py-[0] !px-4 leading-[28px] mt-2"
           >
             Deposit
