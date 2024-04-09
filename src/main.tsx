@@ -39,8 +39,7 @@ if (import.meta.env.VITE_MODE === 'production') {
     replaysSessionSampleRate: 0.1,
 
     // If the entire session is not sampled, use the below sample rate to sample
-    replaysOnErrorSampleRate: 1.0,
-
+    replaysOnErrorSampleRate: 0.25,
     integrations: [
       new Sentry.Replay({
         // Additional SDK configuration goes in here, for example:
