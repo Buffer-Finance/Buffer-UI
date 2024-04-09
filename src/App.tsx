@@ -242,7 +242,7 @@ function App() {
               <Warning
                 body={
                   <div className="w-fit flex items-center m-auto">
-                    <span className="bg-[#10D2FF] text-[#00123C] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold mr-3">
+                    <span className="bg-[#232334] text-[#10D2FF] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold mr-3">
                       New
                     </span>
                     <a href="/#/leaderboard/galxe" className="m-auto">
@@ -263,7 +263,7 @@ function App() {
                 }}
                 shouldAllowClose={true}
                 state={!mobileWarningClosed}
-                className="disclaimer !bg-[#00123C]"
+                className="disclaimer !bg-[#10D2FF]"
               />
             )}
           <TnCModal />
