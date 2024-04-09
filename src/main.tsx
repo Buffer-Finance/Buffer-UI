@@ -84,7 +84,7 @@ if (import.meta.env.VITE_MODE === 'production') {
     replaysSessionSampleRate: 0.1,
 
     // If the entire session is not sampled, use the below sample rate to sample
-    replaysOnErrorSampleRate: 0.2,
+    replaysOnErrorSampleRate: 0.25,
     tracesSampleRate: 1.0,
     denyUrls: [/extensions\//i, /^chrome:\/\//i, /^chrome-extension:\/\//i],
     integrations: [
