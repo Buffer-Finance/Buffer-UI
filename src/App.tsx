@@ -250,7 +250,7 @@ function App() {
                         src="https://res.cloudinary.com/dtuuhbeqt/image/upload/Leaderboard/bbb.png"
                         className="mr-3 inline h-[20px] w-[20px] sm:h-[15px] sm:w-[15px]"
                       />
-                      <span className="text-f14 font-extrabold text-1 leading-[21px] sm:text-[11px] sm:leading-[12px]">
+                      <span className="text-f14 font-extrabold text-[#232334] leading-[21px] sm:text-[11px] sm:leading-[12px]">
                         Complete weekly Galxe tasks & trade to win from $14,000
                         prize pot in the buffer competition.
                       </span>
