@@ -263,7 +263,7 @@ function App() {
                 }}
                 shouldAllowClose={true}
                 state={!mobileWarningClosed}
-                className="disclaimer !bg-[#10D2FF]"
+                className="disclaimer !bg-[#10D2FF] text-[#232334]"
               />
             )}
           <TnCModal />
