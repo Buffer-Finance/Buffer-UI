@@ -1,5 +1,7 @@
 import Big from 'big.js';
-
+const bigNumberError = (...num) => {
+  return num.map((n) => `"${n}": "${typeof n} is NaN, `).join(' ');
+};
 const divide = (from: string | number, to: string | number) => {
   try {
     const fromBN = new Big(from);
@@ -12,23 +14,34 @@ const divide = (from: string | number, to: string | number) => {
     if (toBN.eq('0')) throw new Error("CustomError:can't divide with zero");
     return fromBN.div(toBN).toString();
   } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+    console.error(bigNumberError(from, to));
     return null;
   }
 };
 const multiply = (from: string, to: string | number) => {
-  let toBN: Big;
-  if (typeof to === 'number') {
-    toBN = new Big('10').pow(to);
-  } else {
-    toBN = new Big(to);
+  try {
+    let toBN: Big;
+    if (typeof to === 'number') {
+      toBN = new Big('10').pow(to);
+    } else {
+      toBN = new Big(to);
+    }
+    const fromBN = new Big(from);
+    return fromBN.times(toBN).toString();
+  } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+    return null;
   }
-  const fromBN = new Big(from);
-  return fromBN.times(toBN).toString();
 };
 const round = (from: string, to: number) => {
-  if (!from) return null;
-  const fromBN = new Big(from).round(to, 1);
-  return fromBN.toString();
+  try {
+    if (!from) return null;
+    const fromBN = new Big(from).round(to, 1);
+    return fromBN.toString();
+  } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+  }
 };
 const gte = (from: string, to: string) => {
   try {
@@ -36,13 +49,19 @@ const gte = (from: string, to: string) => {
     const toBN = new Big(to);
     return fromBN.gte(toBN);
   } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+
     return '-1';
   }
 };
 const lte = (from: string, to: string) => {
-  const fromBN = new Big(from);
-  const toBN = new Big(to);
-  return fromBN.lte(toBN);
+  try {
+    const fromBN = new Big(from);
+    const toBN = new Big(to);
+    return fromBN.lte(toBN);
+  } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+  }
 };
 const getPosInf = () => {
   const two = new Big(2);
@@ -52,37 +71,65 @@ const getPosInf = () => {
   return inf.minus(one).toString();
 };
 const gt = (from: string, to: string) => {
-  const fromBN = new Big(from);
-  const toBN = new Big(to);
-  return fromBN.gt(toBN);
+  try {
+    const fromBN = new Big(from);
+    const toBN = new Big(to);
+    return fromBN.gt(toBN);
+  } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+  }
 };
 const lt = (from: string, to: string) => {
-  const fromBN = new Big(from);
-  const toBN = new Big(to);
+  try {
+    const fromBN = new Big(from);
+    const toBN = new Big(to);
 
-  return fromBN.lt(toBN);
+    return fromBN.lt(toBN);
+  } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+  }
 };
 const add = (from: string, to: string) => {
-  const fromBN = new Big(from);
-  const toBN = new Big(to);
-  return fromBN.add(toBN).toString();
+  try {
+    const fromBN = new Big(from);
+    const toBN = new Big(to);
+    return fromBN.add(toBN).toString();
+  } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+  }
 };
 const subtract = (from: string, to: string) => {
-  const fromBN = new Big(from);
-  const toBN = new Big(to);
-  return fromBN.minus(toBN).toString();
+  try {
+    const fromBN = new Big(from);
+    const toBN = new Big(to);
+    return fromBN.minus(toBN).toString();
+  } catch (e) {
+    // throw new Error(bigNumberError(from, to));
+  }
 };
 const abs = (of: string) => {
-  const ofBN = new Big(of);
-  return ofBN.abs().toString();
+  try {
+    const ofBN = new Big(of);
+    return ofBN.abs().toString();
+  } catch (e) {
+    // throw new Error(bigNumberError(of));
+  }
 };
 const roundUp = (of: string) => {
-  const ofBN = new Big(of);
-  return ofBN.round(2, 1).toString();
+  try {
+    const ofBN = new Big(of);
+    return ofBN.round(2, 1).toString();
+  } catch (e) {
+    // throw new Error(bigNumberError(of));
+  }
 };
 const toFixed = (of: string, precision: number) => {
-  const ofBN = new Big(of);
-  return ofBN.toFixed(precision);
+  try {
+    const ofBN = new Big(of);
+    return ofBN.toFixed(precision);
+  } catch (e) {
+    // throw new Error(bigNumberError(of, precision));
+  }
 };
 export {
   divide,
