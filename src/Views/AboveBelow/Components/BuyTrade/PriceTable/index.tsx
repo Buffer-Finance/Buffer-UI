@@ -25,13 +25,13 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { toFixed } from '@Utils/NumString';
 
 enum Columns {
-  ROI_ABOVE,
-  TOKEN_ABOVE,
   MAX_ABOVE,
+  TOKEN_ABOVE,
+  ROI_ABOVE,
   STRIKE,
-  MAX_BELOW,
-  TOKEN_BELOW,
   ROI_BELOW,
+  TOKEN_BELOW,
+  MAX_BELOW,
 }
 
 export const getROI = (totalFee: number | null) => {
@@ -53,13 +53,13 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     token1: activeMarket?.token1,
   });
   const headsArray = [
-    'ROI',
-    selectedPoolMarket?.poolInfo.token?.toUpperCase(),
     'Max',
+    selectedPoolMarket?.poolInfo.token?.toUpperCase(),
+    'ROI',
     'Strike',
-    'Max',
-    selectedPoolMarket?.poolInfo.token?.toUpperCase(),
     'ROI',
+    selectedPoolMarket?.poolInfo.token?.toUpperCase(),
+    'Max',
   ];
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
