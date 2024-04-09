@@ -254,7 +254,7 @@ function App() {
                         Complete weekly Galxe tasks & trade to win from $14,000
                         prize pot in the buffer competition.
                       </span>
-                      <Launch className="scale-[0.85] text-1 ml-1 mb-1" />
+                      <Launch className="scale-[0.85] text-[#232334] ml-1 mb-1" />
                     </a>
                   </div>
                 }
