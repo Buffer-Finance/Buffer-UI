@@ -24,6 +24,7 @@ import { CancelledTable } from './CancelTable';
 import { HistoryTable } from './HistoryTable';
 import LimitOrderTable from './LimitOrderTable';
 import { OngoingTradesTable } from './OngoingTradesTable';
+import MemoTVLogo from '@SVG/Elements/TVLogo';
 
 const OngoingTradesTableMemo = React.memo(OngoingTradesTable);
 const tables = {
@@ -116,6 +117,13 @@ const AccordionTable: React.FC<any> = ({}) => {
               }`}
             />
           </button>
+          <a
+            href="https://www.tradingview.com/symbols/BTCUSD/"
+            target="_blank"
+            title="Charts powered by TradingView"
+          >
+            <MemoTVLogo />
+          </a>
           <img src={PYTHLOGO} width={60} height={10} className="scale-90" />
         </div>
       </div>
