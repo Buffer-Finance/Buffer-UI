@@ -124,7 +124,7 @@ const generateBuyTradeSignature = async (
     ? { partial: 'UserTradeSignature', full: 'MarketDirectionSignature' }
     : {
         partial: 'UserTradeSignatureWithSettlementFee',
-        full: 'MarketDirectionSignatureWithSettlementFee',
+        full: 'UserTradeSignatureWithSettlementFee',
       };
   const extraArgTypes = !isLimit
     ? [{ name: 'timestamp', type: 'uint256' }, settlementFeeType]
@@ -144,11 +144,11 @@ const generateBuyTradeSignature = async (
   const fullSignatureParams = {
     types: {
       EIP712Domain,
-      [key.full]: [...tradeParamTypes, isUpType, ...extraArgTypes],
+      [key.full]: [...tradeParamTypes, ...extraArgTypes, isUpType],
     },
     primaryType: key.full,
     domain,
-    message: { ...baseMessage, isAbove: isUp, ...extraArgs },
+    message: { ...baseMessage, ...extraArgs, isAbove: isUp },
   };
   const res = await Promise.all([
     wallet.signTypedData(partialSignatureParams),
