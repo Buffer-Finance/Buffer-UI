@@ -1,6 +1,5 @@
 import { notificationPosition, tradePanelPosition } from './type';
-export const aboveBelowBaseUrl =
-  'https://instant-trading-backend-production-84c6.up.railway.app/';
+export const aboveBelowBaseUrl = 'https://apis-sandbox-c9f7.up.railway.app/';
 export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
 
