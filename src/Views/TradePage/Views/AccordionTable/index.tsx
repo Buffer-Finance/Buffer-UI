@@ -121,6 +121,7 @@ const AccordionTable: React.FC<any> = ({}) => {
             href="https://www.tradingview.com/symbols/BTCUSD/"
             target="_blank"
             title="Charts powered by TradingView"
+            className="grid place-items-center"
           >
             <MemoTVLogo />
           </a>
