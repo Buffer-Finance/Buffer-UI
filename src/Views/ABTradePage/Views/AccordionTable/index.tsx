@@ -7,6 +7,8 @@ import {
   usePlatformCancelledTrades,
   usePlatformHistoryTrades,
 } from '@Views/ABTradePage/Hooks/useOngoingPlatformTrades';
+import PYTHLOGO from '@Views/TradePage/Views/MarketChart/pyth_logo.png';
+
 import { useOngoingTrades } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 import {
   cancelTableActivePage,
@@ -23,6 +25,7 @@ import { CancelledTable } from './CancelTable';
 import { HistoryTable } from './HistoryTable';
 import LimitOrderTable from './LimitOrderTable';
 import { OngoingTradesTable } from './OngoingTradesTable';
+import MemoTVLogo from '@SVG/Elements/TVLogo';
 const OngoingTradesTableMemo = React.memo(OngoingTradesTable);
 const tables = {
   Trades: 'h',
@@ -103,17 +106,28 @@ const AccordionTable: React.FC<any> = ({}) => {
             </button>
           ))}
         </div>
-        <button
-          className="flex items-center gap-x-2 px-4 text-f14 transition group"
-          onClick={() => setExpanded((p) => !p)}
-        >
-          {expanded ? 'Hide ' : 'Show '} Positions{' '}
-          <DDArrow
-            className={`transition scale group-hover:scale-150  ${
-              expanded ? ' rotate-0' : 'rotate-180'
-            }`}
-          />
-        </button>
+        <div className="flex gap-3">
+          <button
+            className="flex items-center gap-x-2 px-4 text-f14 transition group"
+            onClick={() => setExpanded((p) => !p)}
+          >
+            {expanded ? 'Hide ' : 'Show '} Positions{' '}
+            <DDArrow
+              className={`transition scale group-hover:scale-150  ${
+                expanded ? ' rotate-0' : 'rotate-180'
+              }`}
+            />
+          </button>
+          <a
+            href="https://www.tradingview.com/symbols/BTCUSD/"
+            target="_blank"
+            title="Charts powered by TradingView"
+            className="grid place-items-center"
+          >
+            <MemoTVLogo />
+          </a>
+          <img src={PYTHLOGO} width={60} height={10} className="scale-90" />
+        </div>
       </div>
       <div
         className={` ${
