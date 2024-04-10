@@ -32,6 +32,7 @@ import { useUserOneCTData } from './useOneCTWalletV2';
  * Hence all the hardwares with the same main account will have to register 1CT again with the
  * new PK generated from incremented nonce
  */
+const oldBaseURL = 'https://instant-trading-testnet-api.buffer.finance/';
 
 export const EIP712Domain = [
   { name: 'name', type: 'string' },
@@ -243,7 +244,7 @@ const useOneCTWallet = () => {
         environment: activeChain.id,
         api_signature,
       };
-      const resp = await axios.post(baseUrl + 'deregister/', null, {
+      const resp = await axios.post(oldBaseURL + 'deregister/', null, {
         params: apiParams,
       });
       toastify({
@@ -344,7 +345,7 @@ const useOneCTWallet = () => {
         environment: activeChain.id,
       };
 
-      const resp = await axios.post(baseUrl + 'register/', null, {
+      const resp = await axios.post(oldBaseURL + 'register/', null, {
         params: apiParams,
       });
 
