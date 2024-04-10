@@ -49,7 +49,7 @@ export const Table: React.FC<{
   const { oneDayVolume } = useOneDayVolume();
 
   const setActiveMarket = (token0: string, token1: string) => {
-    navigateToarket(navigate, token0 + '-' + token1, '/above-below');
+    navigateToarket(navigate, token0 + '-' + token1, '/ab');
   };
   const isIncreationWindow = useIsInCreationWindow();
   // const isIncreationWindow = {
