@@ -634,11 +634,7 @@ export const defaultMarket = 'BTC-USD';
 export const PRICE_DECIMALS = 1e8;
 export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';
 
-const baseURLString = isTestnet
-  ? isSandbox
-    ? 'VITE_INSTANT_TRADING_HOST_DEVELOPMENT'
-    : `VITE_INSTANT_TRADING_HOST_TESTNET`
-  : `VITE_INSTANT_TRADING_HOST`;
+const baseURLString = 'https://apis-sandbox-c9f7.up.railway.app/';
 export const baseUrl = aboveBelowBaseUrl;
 
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
