@@ -860,7 +860,7 @@ export const MultiResolutionChart = ({
                     s.toLowerCase() == resolution.toLowerCase() && 'active'
                   } ${isntAvailable(s) && 'tb'} ele cursor-pointer`}
                 >
-                  {s}
+                  {formatResolution(s)}
                 </div>
               );
             })}
