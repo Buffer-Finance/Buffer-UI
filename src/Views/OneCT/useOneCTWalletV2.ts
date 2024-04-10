@@ -5,6 +5,7 @@ import { aboveBelowBaseUrl, baseUrl } from '@Views/TradePage/config';
 import axios from 'axios';
 import useSWR from 'swr';
 import { useAccount } from 'wagmi';
+import { oldBaseURL } from './useOneCTWallet';
 
 export const useUserOneCTData = () => {
   const { activeChain } = useActiveChain();
@@ -28,7 +29,7 @@ export const useUserOneCTData = () => {
       if (!userAddress || !activeChainId) return null;
       try {
         const response = await axios.get(
-          baseUrl +
+          oldBaseURL +
             `user/onc_ct/?environment=${activeChainId}&user=${userAddress}`
         );
         return response.data;

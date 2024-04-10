@@ -32,7 +32,7 @@ import { useUserOneCTData } from './useOneCTWalletV2';
  * Hence all the hardwares with the same main account will have to register 1CT again with the
  * new PK generated from incremented nonce
  */
-const oldBaseURL = 'https://instant-trading-testnet-api.buffer.finance/';
+export const oldBaseURL = 'https://instant-trading-testnet-api.buffer.finance/';
 
 export const EIP712Domain = [
   { name: 'name', type: 'string' },
