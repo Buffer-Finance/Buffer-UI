@@ -51,7 +51,6 @@ import {
 } from '../../../../../public/static/charting_library';
 console.log(version(), 'trading,vew version');
 import { IGQLHistory, tardesAtom } from '../..//Hooks/usePastTradeQuery';
-import { BetState } from '../../Hooks/useAheadTrades';
 import { useOngoingTrades } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 
 const PRICE_PROVIDER = 'Buffer Finance';
@@ -228,6 +227,33 @@ export const market2resolutionAtom = atomWithStorage(
   null
 );
 
+function getNextDayTimestamp(seconds) {
+  // Get current date in GMT
+  let currentDate = new Date();
+  let currentUTCDate = new Date(
+    currentDate.getUTCFullYear(),
+    currentDate.getUTCMonth(),
+    currentDate.getUTCDate(),
+    currentDate.getUTCHours(),
+    currentDate.getUTCMinutes(),
+    currentDate.getUTCSeconds()
+  );
+
+  // Calculate next day
+  let nextDay = new Date(currentUTCDate);
+  nextDay.setDate(nextDay.getDate() + (seconds * 2) / 100);
+
+  // Set time to 2:30 AM
+  nextDay.setUTCHours(2);
+  nextDay.setUTCMinutes(30);
+  nextDay.setUTCSeconds(0);
+  nextDay.setUTCMilliseconds(0);
+
+  // Convert to timestamp
+  let nextDayTimestamp = nextDay.getTime();
+
+  return nextDayTimestamp;
+}
 export const indicatorCoutAtom = atom(0);
 
 const getColor = (isAbove: boolean) => {
@@ -741,18 +767,13 @@ export const MultiResolutionChart = ({
     widgetRef.current!.activeChart?.().executeActionById('insertIndicator');
   };
   const futureInf = Math.floor(Date.now() / 1000) + 240 * 60 * 60;
-  let time = futureInf;
+
   const smresolution = resolution.toUpperCase();
   const seconds =
     smresolution in resolution2seconds
       ? resolution2seconds[smresolution]
       : Math.floor(resolution2Sec(resolution) / 1000);
-  // console.log(`MultiResolutionChart-seconds: `, seconds, resolution);
-
-  let rem = time % seconds;
-  time = futureInf - rem;
-  // console.log(`timedeb1: `, time);
-  // console.log(`timedeb1.2: `, rem);
+  let time = getNextDayTimestamp(seconds) / 1000;
 
   console.log(`timedeb2: `, time);
   const from = returnMod(Date.now() / 1000 - 500 * 24 * 60 * 60, seconds);
@@ -810,27 +831,42 @@ export const MultiResolutionChart = ({
     }
   }, [selectedStrike, chartReady]);
   // useEffect(() => {
-  //   // const futureTS = 1522940868;
-  //   // let time = futureTS * 1000;
-
-  //   // let rem = time % (24 * 60 * 60 * 1000);
-
-  //   // time = (time - rem) / 1000;
   //   // console.log(`MultiResolutionChart-time: `, time % 3600);
-  //   const futureTS = 1713072041;
+  //   // 1712831400 - 11 Apr 4PM
+  //   const futureTS = 1712831400;
+  //   // 1744387200
   //   let time = futureTS;
 
   //   /* let rem = time % 3600000;
 
   //   time = (time - rem) / 1000; */
-  //   if (chartReady)
+  //   if (chartReady) {
+  //     const tscale = widgetRef.current?.activeChart().getTimeScale();
+  //     const barSpacing = tscale?.barSpacing();
+  //     const cor = tscale?.coordinateToTime(222);
+  //     console.log(`MultiResolutionChartdeee-tscale: `, barSpacing, cor);
+  //     const tzapi = widgetRef.current?.activeChart().getTimezoneApi();
+  //     // tzapi.
+  //     console.log(`MultiResolutionChartdeee-tzapi: `, tzapi);
+  //     const vrange = widgetRef.current?.activeChart().getVisibleRange();
+
+  //     console.log(`MultiResolutionChartdeee-vrange: `, vrange);
+  //     // const EOPBAR = widgetRef.current
+  //     //   ?.activeChart()
+  //     //   .endOfPeriodToBarTime(1712831400);
+  //     // const BEN = widgetRef.current
+  //     //   ?.activeChart()
+  //     //   .barTimeToEndOfPeriod(1712831400);
+  //     // console.log(`MultiResolutionChartdeee-EOPBAR: `, EOPBAR, BEN, 1712831400);
+
   //     widgetRef.current?.activeChart().createShape(
-  //       { time, price: 71829 },
+  //       { time: 1712831400, price: 71829 },
   //       {
   //         shape: 'icon',
   //         icon: 0xf0da,
   //       }
   //     );
+  //   }
   // }, [chartReady]);
   useEffect(() => {
     if (indicatorCount) toggleIndicatorDD('d');
