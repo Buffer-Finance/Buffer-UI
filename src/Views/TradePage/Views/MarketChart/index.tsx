@@ -6,6 +6,7 @@ import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MultiResolutionChart } from './MultiResolutionChart';
+import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
 
 const SidebySideCharts = ({
   indexes,
@@ -129,6 +130,7 @@ const MarketChart: React.FC<any> = ({}) => {
       </div>
     );
   }
+
   if (chartTimes == 4) {
     chartLayout = (
       <div className="flex-col w-[100%] h-full">
@@ -143,6 +145,12 @@ const MarketChart: React.FC<any> = ({}) => {
       </div>
     );
   }
+  chartLayout = (
+    <div className="flex h-full flex-grow">
+      {chartLayout}
+      <PlatformTradesTab />
+    </div>
+  );
   const onMouseDown = () => {
     // console.log('deb-event -down');
     setDragging(true);
