@@ -18,7 +18,7 @@ const TableCell: React.FC<{ className?: string; children?: ReactNode }> = ({
 const PlatformTradesTab: React.FC<any> = ({}) => {
   return (
     <div className="flex flex-col">
-      <div className="bg-[#282B39] text-[14px] py-[5px] px-[12px] w-full h-full">
+      <div className="bg-[#282B39] rounded-[5px] mb-1 text-[14px] py-[5px] px-[12px] w-full h-full">
         Platform Trades
       </div>
       <table>
