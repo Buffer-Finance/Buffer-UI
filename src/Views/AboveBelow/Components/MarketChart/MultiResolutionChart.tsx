@@ -68,7 +68,7 @@ export let supported_resolutions = [
   '4H' as ResolutionString,
   // '1D',
 ];
-const resolution2seconds = {
+export const resolution2seconds = {
   '1': 60,
   '3': 3 * 60,
   '5': 300,
@@ -215,7 +215,7 @@ const pythOHLC2rawOHLC = (pythOHLC: {
   });
   return rawOhlc;
 };
-function returnMod(num: number, mod: number) {
+export function returnMod(num: number, mod: number) {
   const rr = num % mod;
 
   return num - rr;
@@ -227,7 +227,7 @@ export const market2resolutionAtom = atomWithStorage(
   null
 );
 
-function getNextDayTimestamp(seconds) {
+export function getNextDayTimestamp(seconds) {
   // Get current date in GMT
   let currentDate = new Date();
   let currentUTCDate = new Date(
@@ -777,11 +777,11 @@ export const MultiResolutionChart = ({
 
   console.log(`timedeb2: `, time);
   const from = returnMod(Date.now() / 1000 - 500 * 24 * 60 * 60, seconds);
+  const shapeIdRef = useRef('');
   const deleteOldDrawings = () => {
     if (shapeIdRef.current)
       widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
   };
-  const shapeIdRef = useRef('');
   useEffect(() => {
     if (selectedStrike?.price && chartReady) {
       // above

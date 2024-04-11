@@ -21,7 +21,11 @@ import {
   ChartTypePersistedAtom,
   ChartTypeSelectionDD,
 } from '@TV/ChartTypeSelectionDD';
-import { getAggregatedBarv2, timeDeltaMapping } from '@TV/utils';
+import {
+  getAggregatedBarv2,
+  resolution2Sec,
+  timeDeltaMapping,
+} from '@TV/utils';
 import {
   getDisplayDate,
   getDisplayTime,
@@ -65,6 +69,11 @@ import {
 } from '../AccordionTable/Common';
 import { getPnlForTrade } from '../BuyTrade/ActiveTrades/TradeDataView';
 import { loeditLoadingAtom } from '../EditModal';
+import {
+  getNextDayTimestamp,
+  resolution2seconds,
+  returnMod,
+} from '@Views/AboveBelow/Components/MarketChart/MultiResolutionChart';
 
 const PRICE_PROVIDER = 'Buffer Finance';
 export let supported_resolutions = [
@@ -136,6 +145,9 @@ export const formatResolution = (s: string) => {
 const defaults = {
   priceProvider: 'Buffer Finance',
   cssPath: '/tv.css',
+  upRectangeColor: 'rgba(55, 114, 255, 0.1)',
+  downRectangeColor: 'rgba(255, 104, 104, 0.1)',
+
   library_path: '/static/charting_library/',
   theme: 'Dark',
   interval: '1' as ResolutionString,
@@ -680,6 +692,15 @@ export const MultiResolutionChart = ({
   }, [chartReady]);
 
   const priceCache = useAtomValue(queuets2priceAtom);
+  const shapeIdRefUp = useRef('');
+  const shapeIdRefDown = useRef('');
+
+  const deleteOldDrawings = () => {
+    if (shapeIdRefUp.current) {
+      widgetRef.current?.activeChart().removeEntity(shapeIdRefUp.current);
+      widgetRef.current?.activeChart().removeEntity(shapeIdRefDown.current);
+    }
+  };
   const syncTVwithWS = async () => {
     if (typeof realTimeUpdateRef.current?.onRealtimeCallback != 'function')
       return;
@@ -719,6 +740,53 @@ export const MultiResolutionChart = ({
         lastSyncedKline.current[newpythIdKey] = prevBar;
       }
     }
+
+    const smresolution = resolution.toUpperCase();
+    const seconds =
+      smresolution in resolution2seconds
+        ? resolution2seconds[smresolution]
+        : Math.floor(resolution2Sec(resolution) / 1000);
+    let time = getNextDayTimestamp(seconds) / 1000;
+    const from = returnMod(Date.now() / 1000 - 500 * 24 * 60 * 60, seconds);
+    deleteOldDrawings();
+    const UpPoint = [
+      {
+        time: from,
+        price: prevBar.close,
+      },
+      {
+        time,
+        price: 1000000,
+      },
+    ];
+    const BelowPoint = [
+      {
+        time,
+        price: prevBar.close,
+      },
+      {
+        time: from,
+        price: 0,
+      },
+    ];
+    shapeIdRefUp.current = widgetRef.current
+      ?.activeChart()
+      .createMultipointShape(UpPoint, {
+        shape: 'rectangle',
+        overrides: {
+          backgroundColor: defaults.upRectangeColor,
+          linewidth: 0,
+        },
+      });
+    shapeIdRefDown.current = widgetRef.current
+      ?.activeChart()
+      .createMultipointShape(BelowPoint, {
+        shape: 'rectangle',
+        overrides: {
+          backgroundColor: defaults.downRectangeColor,
+          linewidth: 0,
+        },
+      });
   };
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const rerenderPostion = useAtomValue(rerenderPositionAtom);
@@ -738,7 +806,7 @@ export const MultiResolutionChart = ({
   };
   // sync to ws updates
   useEffect(() => {
-    syncTVwithWS();
+    if (chartReady) syncTVwithWS();
   }, [(price as any)?.[market]]);
   const getTradeToDrawingId = (trade: TradeType) =>
     trade.queue_id + ':' + trade.strike;
