@@ -144,8 +144,10 @@ const defaults = {
     'go_to_date',
     'display_market_status',
   ],
-  upRectangeColor: 'rgba(55, 114, 255, 0.1)',
-  downRectangeColor: 'rgba(255, 104, 104, 0.1)',
+  upRectangeColor: 'rgba(55, 114, 255, 0.08)',
+  upLineColor: 'rgba(55, 114, 255, 1)',
+  downRectangeColor: 'rgba(255, 104, 104, 0.08)',
+  downLineColor: 'rgba(255, 104, 104, 1)',
 
   confgis: {
     supported_resolutions,
@@ -777,10 +779,12 @@ export const MultiResolutionChart = ({
 
   console.log(`timedeb2: `, time);
   const from = returnMod(Date.now() / 1000 - 500 * 24 * 60 * 60, seconds);
-  const shapeIdRef = useRef('');
+  const shapeIdRef = useRef(['', '']);
   const deleteOldDrawings = () => {
-    if (shapeIdRef.current)
-      widgetRef.current?.activeChart().removeEntity(shapeIdRef.current);
+    if (shapeIdRef.current[0]) {
+      widgetRef.current?.activeChart()?.removeEntity(shapeIdRef.current[0]);
+      widgetRef.current?.activeChart()?.removeEntity(shapeIdRef.current[1]);
+    }
   };
   useEffect(() => {
     if (selectedStrike?.price && chartReady) {
@@ -812,19 +816,33 @@ export const MultiResolutionChart = ({
         widgetRef.current &&
         typeof widgetRef.current?.activeChart == 'function'
       ) {
-        widgetRef.current?.activeChart?.()?.removeEntity(shapeIdRef.current);
-        const id = widgetRef.current
-          ?.activeChart()
-          .createMultipointShape(points, {
-            shape: 'rectangle',
+        const chart = widgetRef.current?.activeChart();
+        const bgColor = selectedStrike.isAbove
+          ? defaults.upRectangeColor
+          : defaults.downRectangeColor;
+        const lineColor = selectedStrike.isAbove
+          ? defaults.upLineColor
+          : defaults.downLineColor;
+        const id = chart?.createMultipointShape(points, {
+          shape: 'rectangle',
+          overrides: {
+            backgroundColor: bgColor,
+            linewidth: 0,
+          },
+        });
+        const lineid = chart?.createShape(
+          { price: points[0].price },
+          {
+            shape: 'horizontal_line',
+            zOrder: 'top',
             overrides: {
-              backgroundColor: selectedStrike.isAbove
-                ? defaults.upRectangeColor
-                : defaults.downRectangeColor,
-              linewidth: 0,
+              linecolor: lineColor,
+              linewidth: 2,
+              statsPosition: 3,
             },
-          });
-        shapeIdRef.current = id;
+          }
+        );
+        shapeIdRef.current = [id, lineid];
       }
     } else {
       deleteOldDrawings();

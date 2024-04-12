@@ -145,8 +145,10 @@ export const formatResolution = (s: string) => {
 const defaults = {
   priceProvider: 'Buffer Finance',
   cssPath: '/tv.css',
-  upRectangeColor: 'rgba(55, 114, 255, 0.1)',
-  downRectangeColor: 'rgba(255, 104, 104, 0.1)',
+  upRectangeColor: 'rgba(55, 114, 255, 0.04)',
+  upLineColor: 'rgba(55, 114, 255, 1)',
+  downRectangeColor: 'rgba(255, 104, 104, 0.04)',
+  downLineColor: 'rgba(255, 104, 104, 1)',
 
   library_path: '/static/charting_library/',
   theme: 'Dark',
@@ -769,24 +771,24 @@ export const MultiResolutionChart = ({
         price: 0,
       },
     ];
-    shapeIdRefUp.current = widgetRef.current
-      ?.activeChart()
-      .createMultipointShape(UpPoint, {
-        shape: 'rectangle',
-        overrides: {
-          backgroundColor: defaults.upRectangeColor,
-          linewidth: 0,
-        },
-      });
-    shapeIdRefDown.current = widgetRef.current
-      ?.activeChart()
-      .createMultipointShape(BelowPoint, {
-        shape: 'rectangle',
-        overrides: {
-          backgroundColor: defaults.downRectangeColor,
-          linewidth: 0,
-        },
-      });
+    // shapeIdRefUp.current = widgetRef.current
+    //   ?.activeChart()
+    //   .createMultipointShape(UpPoint, {
+    //     shape: 'rectangle',
+    //     overrides: {
+    //       backgroundColor: defaults.upRectangeColor,
+    //       linewidth: 0,
+    //     },
+    //   });
+    // shapeIdRefDown.current = widgetRef.current
+    //   ?.activeChart()
+    //   .createMultipointShape(BelowPoint, {
+    //     shape: 'rectangle',
+    //     overrides: {
+    //       backgroundColor: defaults.downRectangeColor,
+    //       linewidth: 0,
+    //     },
+    //   });
   };
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const rerenderPostion = useAtomValue(rerenderPositionAtom);
