@@ -41,6 +41,7 @@ import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { PageLoader } from './PageLoader';
 import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
+import { usePlatformEvent } from '@Hooks/usePlatformEvent';
 const TradePage = lazy(() => import('@Views/TradePage'));
 
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
@@ -125,7 +126,9 @@ const AppRoutes = () => {
       navigate('/binary/ETH-USD');
     }
   }, [searchParam]);
-  return <PlatformTradesTab />;
+  const { data } = usePlatformEvent();
+  // console.log(`App-usePlatformEvent: `, usePlatformEvent);
+  return <PlatformTradesTab events={data} />;
 };
 
 async function activateLocale(locale: string) {
