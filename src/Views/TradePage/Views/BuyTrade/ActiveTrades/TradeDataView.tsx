@@ -40,6 +40,7 @@ export const TradeDataView: React.FC<{
 }> = ({ trade, configData, poolInfo, className = '' }) => {
   const cachedPrices = useAtomValue(queuets2priceAtom);
   const { data: allSpreads } = useSpread();
+  console.log(`TradeDataView-allSpreads: `, allSpreads);
   const spread = allSpreads?.[trade.market.tv_id].spread ?? 0;
   const [marketPrice] = useAtom(priceAtom);
 
