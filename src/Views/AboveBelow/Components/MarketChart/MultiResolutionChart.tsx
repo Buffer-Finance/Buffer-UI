@@ -837,7 +837,7 @@ export const MultiResolutionChart = ({
             zOrder: 'top',
             overrides: {
               linecolor: lineColor,
-              linewidth: 2,
+              linewidth: 1,
               statsPosition: 3,
             },
           }
