@@ -1,6 +1,11 @@
 // replace all th occurances with a typescript enabled TableHead component that expects a prop called children in this file
 
+import { divide } from '@Utils/NumString/stringArithmatics';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { ReactNode } from 'react';
+import { Variables } from '@Utils/Time';
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
+import { usePlatformEvent } from '@Hooks/usePlatformEvent';
 
 const TableHead: React.FC<any> = ({ children }) => {
   return (
@@ -11,9 +16,12 @@ const TableHead: React.FC<any> = ({ children }) => {
 const TableCell: React.FC<{ className?: string; children?: ReactNode }> = ({
   children,
   className,
+  ...props
 }) => {
   return (
-    <td className={['font-[500] text-f12', className].join(' ')}>{children}</td>
+    <td {...props} className={['font-[500] text-f12', className].join(' ')}>
+      {children}
+    </td>
   );
 };
 type UDEvent = {
@@ -31,50 +39,86 @@ type ABEvent = {
   payout: string;
   event: string;
 };
-const events = [
-  {
-    user: '0xb66127377ff3618b595177b5e84f8ee9827cd061',
-    id: '1:0x0e31a3011f1f5e6a14a4c31a376453ee94bf9c9c',
-    updatedAt: '1712916421',
-    payout: '8750000000000000008',
-    event: 'WIN',
-  },
-  {
-    user: '0x5a07da42847849a2f4c6253f9975d037981bf6fa',
-    id: '0:0x0e31a3011f1f5e6a14a4c31a376453ee94bf9c9c',
-    updatedAt: '1712912695',
-    payout: '8750000000000000008',
-    event: 'LOSE',
-  },
-];
-const PlatformTradesTab: React.FC<{ events: UDEvent[] | ABEvent[] }> = ({}) => {
+const Token2Decimal = {
+  ARB: 18,
+  USDC: 6,
+};
+const getDecimal = (t: any) => {
+  return Token2Decimal[t.optionContract.pool];
+};
+const PlatformTradesTab: React.FC<{ events: UDEvent[] | ABEvent[] }> = ({
+  events,
+}) => {
   return (
-    <div className="flex flex-col">
-      <div className="bg-[#282B39] rounded-[5px] mb-1 text-[14px] py-[5px] px-[12px] w-full h-full">
+    <div className="flex flex-col min-w-[270px] h-full">
+      <div className="bg-[#282B39] sm:hidden rounded-[5px] mb-1 text-[14px] py-[5px] px-[12px] w-full ">
         Platform Trades
       </div>
-      <table className=" border-spacing-3 border-spacing-x-2 border-separate px-3">
-        <thead>
-          <tr className="">
-            <TableHead>Strike Price</TableHead>
-            <TableHead>Size</TableHead>
-            <TableHead>ROI</TableHead>
-            <TableHead>Expires in</TableHead>
-          </tr>
-        </thead>
-        <tbody>
-          {events.map((e) => (
-            <tr className="" key={e.id}>
-              <TableCell className="text-red">433.12</TableCell>
-              <TableCell>5.0000 ARB</TableCell>
-              <TableCell>15%</TableCell>
-              <TableCell>3h 40m</TableCell>
+      <div className="bg-[#141823] rounded-[5px] mt-[1px] h-full w-full">
+        <table className=" border-spacing-3 border-spacing-x-2 border-separate px-3 w-full ">
+          <thead>
+            <tr className="">
+              <TableHead>Strike Price</TableHead>
+              <TableHead>Size</TableHead>
+              <TableHead>ROI</TableHead>
+              <TableHead>Status</TableHead>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {events?.map((e) => (
+              <tr className="" key={e.id}>
+                <TableCell className="text-red ">
+                  <Display
+                    data={divide(e.strike, 8)}
+                    className="!justify-start !w-fit"
+                  />
+                </TableCell>
+                <TableCell>
+                  <Display
+                    data={divide(e.amount, getDecimal(e))}
+                    className="!justify-start !w-fit"
+                    unit={e.optionContract.pool}
+                  />
+                </TableCell>
+                <TableCell width="17%">{getROI(e)}%</TableCell>
+                <TableCell>
+                  <span
+                    className={[
+                      'capitalize',
+                      e.event == 'WIN'
+                        ? 'text-green'
+                        : e.event == 'LOSE'
+                        ? 'text-red'
+                        : '',
+                    ].join(' ')}
+                  >
+                    {e.event == 'CREATE' ? 'CREATE' : e.event.toLowerCase()}
+                  </span>
+                </TableCell>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
 export { PlatformTradesTab };
+function getROI(e: any) {
+  return '75';
+}
+
+function durationGiver(trade: any) {
+  const distanceObject = Variables(
+    trade.open_timestamp +
+      trade.period -
+      (trade.close_time || Math.round(Date.now() / 1000))
+  );
+  return formatDistance(distanceObject);
+}
+
+export const PlatformEvents = () => {
+  const { data } = usePlatformEvent();
+  return <PlatformTradesTab events={data} />;
+};

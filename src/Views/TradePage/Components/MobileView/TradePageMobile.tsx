@@ -19,6 +19,7 @@ import { MarketPicker } from './MarketPicker/MarketPicker';
 import { MobileChartControlls } from './MobileChartControlls';
 import { ViewOnlyInputs } from './ViewOnlyInputs';
 import { zeroify } from '@Utils/NumberUtils';
+import { Tabs } from './Tabs';
 
 const TradePageMobile: React.FC<any> = ({}) => {
   const marketConfig = useMarketsConfig();
@@ -72,9 +73,7 @@ const TradePageMobile: React.FC<any> = ({}) => {
       </div>
       {/* <MarketStatsBar isMobile /> */}
       <div className="flex-1">
-        {[activeMarket.tv_id].map((s) => (
-          <MultiResolutionChart key={s} market={s} index={1} isMobile />
-        ))}
+        <Tabs />
       </div>
       <ViewOnlyInputs />
       <PayoutProfit

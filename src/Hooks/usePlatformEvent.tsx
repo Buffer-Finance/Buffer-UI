@@ -17,6 +17,11 @@ const usePlatformEvent = () => {
               user
               id
               updatedAt
+              strike
+              optionContract {
+                pool  
+              }
+              amount
               payout
               event
             }
