@@ -887,6 +887,7 @@ export const MultiResolutionChart = ({
                       ...m,
                       [chartId]: s,
                     }));
+                    setSelectedStrike(undefined);
                     await sleep(100);
                     realTimeUpdateRef.current?.onResetCacheNeededCallback();
 
