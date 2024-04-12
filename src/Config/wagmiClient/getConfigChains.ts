@@ -22,7 +22,7 @@ export const arbitrumSepolia = defineChain({
     },
   },
   blockExplorers: {
-    default: { name: 'Explorer', url: 'https://api-sepolia.arbiscan.io/api' },
+    default: { name: 'Explorer', url: 'https://sepolia.arbiscan.io/' },
   },
   contracts: {
     multicall3: {

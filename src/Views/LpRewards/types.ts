@@ -2,6 +2,7 @@ export type poolsType = 'uBLP' | 'aBLP';
 export type transactionTabType = 'all' | 'my';
 // export type depositTabType = 'deposit' | 'withdraw' | 'vest';
 export type depositTabType = 'deposit' | 'withdraw';
+export type graphsType = 'price' | 'tvl' | 'apr' | 'pnl';
 
 export type poolTxn = {
   userAddress: string;
@@ -13,6 +14,16 @@ export type poolTxn = {
   unitsMinted: string;
   txnHash: string;
   poolName: 'USDC' | 'ARB';
+  nftId: string;
+};
+
+export type lockTxn = {
+  userAddress: string;
+  timestamp: string;
+  amount: string;
+  lockPeriod: string;
+  txnHash: string;
+  poolName: string;
 };
 
 export type blpPrice = {
@@ -20,4 +31,19 @@ export type blpPrice = {
   tokenXamount: string;
   blpAmount: string;
   poolName: string;
+};
+
+export type poolStats = {
+  profit: string;
+  loss: string;
+  timestamp: string;
+};
+
+export type tokensPerInterval = {
+  usdcPerInterval: {
+    amount: string;
+  }[];
+  lockPerInterval: {
+    amount: string;
+  }[];
 };

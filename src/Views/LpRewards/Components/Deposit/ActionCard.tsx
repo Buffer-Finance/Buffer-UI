@@ -74,7 +74,11 @@ export const Tabs: React.FC<{
             readcallData={readcallData}
             activeChain={activeChain}
           />,
-          <WithdrawTab activePool={activePool} />,
+          <WithdrawTab
+            activePool={activePool}
+            readcallData={readcallData}
+            activeChain={activeChain}
+          />,
           // <VestTab activePool={activePool} />,
         ]}
       />

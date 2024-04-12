@@ -4,6 +4,7 @@ import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { poolsType } from '@Views/LpRewards/types';
 import styled from '@emotion/styled';
+import { Skeleton } from '@mui/material';
 import { useState } from 'react';
 import { Chain } from 'viem';
 import { InputField } from './InputField';
@@ -47,6 +48,8 @@ export const DepositTab: React.FC<{
       });
     }
   };
+  if (balance === undefined || allowance === undefined)
+    return <Skeleton variant="rectangular" width="100%" height="100px" />;
   return (
     <div>
       <Modal
@@ -54,19 +57,19 @@ export const DepositTab: React.FC<{
         isOpen={isModalOpen}
         closeModal={setIsModalOpen}
         activePool={activePool}
-        balance={balance}
         allowance={allowance}
-        decimals={decimals}
         amount={amount}
         setAmount={setAmount}
         unit={uint}
+        decimals={decimals}
+        balance={balance}
       />
       <InputField
         activePool={activePool}
         setValue={setAmount}
-        balance={'40000000000'}
+        balance={balance}
         unit={uint}
-        decimals={activePool === 'aBLP' ? 18 : 6}
+        decimals={decimals}
       />
       <div className="flex justify-between items-start mt-2">
         <span className="text-f12 font-medium text-[#C4C7C7]">

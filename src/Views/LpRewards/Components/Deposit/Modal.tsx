@@ -3,42 +3,42 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { toFixed } from '@Utils/NumString';
 import { gt, multiply } from '@Utils/NumString/stringArithmatics';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { useBlpRate } from '@Views/LpRewards/Hooks/useBlpRate';
 import { getLpConfig } from '@Views/LpRewards/config';
 import { poolsType } from '@Views/LpRewards/types';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import styled from '@emotion/styled';
 import { CloseOutlined, KeyboardArrowDown } from '@mui/icons-material';
-import { Dialog, Skeleton } from '@mui/material';
+import { Dialog } from '@mui/material';
 import { useState } from 'react';
 import { Chain } from 'viem';
 import { erc20ABI } from 'wagmi';
 import RewardRouterABI from '../../abis/RewardRouter.json';
+import { BLPprice } from '../BlpPrice';
 import { DayMonthInput } from '../DayMonthInput';
 
 export const Modal: React.FC<{
   isOpen: boolean;
   closeModal: React.Dispatch<React.SetStateAction<boolean>>;
   activePool: poolsType;
-  balance: string;
   allowance: string;
-  decimals: number;
   amount: string;
   setAmount: React.Dispatch<React.SetStateAction<string>>;
   activeChain: Chain;
   unit: string;
+  decimals: number;
+  balance: string | undefined;
 }> = ({
   closeModal,
   isOpen,
   activePool,
   allowance,
   amount,
-  balance,
-  decimals,
   setAmount,
   activeChain,
   unit,
+  decimals,
+  balance,
 }) => {
   const [lockPeriod, setLockPeriod] = useState<{
     days: number;
@@ -120,6 +120,8 @@ export const Modal: React.FC<{
           allowance={allowance}
           amount={amount}
           activeChain={activeChain}
+          decimals={decimals}
+          balance={balance}
         />
       </ModalStyles>
     </Dialog>
@@ -140,37 +142,25 @@ const APRvalue = styled.div`
   color: #ffffff;
 `;
 
-const BLPprice: React.FC<{ activeChain: Chain; activePool: poolsType }> = ({
-  activeChain,
-  activePool,
-}) => {
-  const { data: blpPrice, error: blpPriceError } = useBlpRate(
-    activeChain,
-    activePool
-  );
-  if (blpPrice === undefined && blpPriceError === undefined) {
-    return (
-      <Skeleton className="w-[50px] !h-5 lc inline" variant="rectangular" />
-    );
-  } else if (blpPriceError) {
-    return <span>0.00 </span>;
-  } else if (blpPrice !== undefined) {
-    return <span>{blpPrice.price}</span>;
-  } else {
-    return <span>0.00 </span>;
-  }
-};
-
 const ActionButton: React.FC<{
   activePool: poolsType;
   allowance: string;
   amount: string;
   activeChain: Chain;
-}> = ({ activePool, allowance, amount, activeChain }) => {
-  if (gt(amount, allowance)) {
+  decimals: number;
+  balance: string | undefined;
+}> = ({ activePool, allowance, amount, activeChain, decimals, balance }) => {
+  if (gt(amount || '0', allowance)) {
     return <ApproveButton activePool={activePool} activeChain={activeChain} />;
   }
-  return <DepositAndLockButton amount={amount} activeChain={activeChain} />;
+  return (
+    <DepositAndLockButton
+      amount={amount}
+      activeChain={activeChain}
+      decimals={decimals}
+      balance={balance}
+    />
+  );
 };
 
 const ApproveButton: React.FC<{
@@ -214,7 +204,9 @@ const ApproveButton: React.FC<{
 const DepositAndLockButton: React.FC<{
   amount: string;
   activeChain: Chain;
-}> = ({ amount, activeChain }) => {
+  decimals: number;
+  balance: string | undefined;
+}> = ({ amount, activeChain, decimals, balance }) => {
   const contracts = getLpConfig(activeChain.id);
   const { writeCall } = useWriteCall(contracts.RewardRouter, RewardRouterABI);
   const [txnState, setTxnState] = useState<'deposit' | 'lock' | 'none'>('none');
@@ -222,16 +214,36 @@ const DepositAndLockButton: React.FC<{
 
   const handleDepositAndLock = async () => {
     try {
+      setTxnState('deposit');
+      if (amount === undefined) {
+        throw new Error('Please enter an amount');
+      }
       if (amount === '') {
         throw new Error('Please enter an amount');
       }
+      if (balance === undefined) {
+        throw new Error('Please wait for the data to load');
+      }
+      if (gt(amount, balance)) {
+        throw new Error('Insufficient balance');
+      }
+
       if (Number(amount) <= 0) {
         throw new Error('Amount should be greater than 0');
       }
-      writeCall(() => {}, 'mintAndStakeBlp', [
-        toFixed(multiply(amount, 6), 0),
-        0,
-      ]);
+      writeCall(
+        (returnObj) => {
+          if (returnObj !== undefined) {
+            toastify({
+              type: 'success',
+              msg: 'Deposit successful',
+              id: 'deposit-success',
+            });
+          }
+        },
+        'mintAndStakeBlp',
+        [toFixed(multiply(amount, decimals), 0), 0]
+      );
     } catch (e) {
       toastify({
         type: 'error',
@@ -246,7 +258,11 @@ const DepositAndLockButton: React.FC<{
     return <div></div>;
   }
   return (
-    <ModalButton disabled={gt(amount, '0')} onClick={handleDepositAndLock}>
+    <ModalButton
+      isDisabled={txnState !== 'none'}
+      isLoading={txnState !== 'none'}
+      onClick={handleDepositAndLock}
+    >
       Deposit & Lock
     </ModalButton>
   );
@@ -268,9 +284,10 @@ const Input = styled.input`
   color: #c3c2d4;
   margin-top: 12px;
   width: 100%;
+  outline: none;
 `;
 
-const ModalButton = styled(BlueBtn)`
+export const ModalButton = styled(BlueBtn)`
   width: fit-content;
   height: fit-content;
   font-size: 16px;
@@ -278,4 +295,5 @@ const ModalButton = styled(BlueBtn)`
   line-height: 28px;
   padding: 1px 8px;
   margin-top: 16px;
+  min-height: 30px;
 `;

@@ -15,11 +15,8 @@ export const LpRewards = () => {
   if (activeChain === undefined) return <div>Loading...</div>;
   return (
     <div className="p-8 w-full">
-      <LPRewardsPage
-        activePool={activePool}
-        setActivePool={setActivePool}
-        activeChain={activeChain}
-      />
+      <PoolTabs activePool={activePool} setActivePool={setActivePool} />
+      <LPRewardsPage activePool={activePool} activeChain={activeChain} />
       <Transactions activePool={activePool} activeChain={activeChain} />
     </div>
   );
@@ -27,23 +24,25 @@ export const LpRewards = () => {
 
 const LPRewardsPage: React.FC<{
   activePool: poolsType;
-  setActivePool: React.Dispatch<React.SetStateAction<poolsType>>;
   activeChain: Chain;
-}> = ({ activePool, setActivePool, activeChain }) => {
+}> = ({ activePool, activeChain }) => {
   const { data, error } = useLPmulticalldata(activeChain, activePool);
   if (error) return <div>Something Went wrong.Please try again.</div>;
   if (!error && !data) return <div>Loading...</div>;
   console.log(data);
   return (
     <>
-      <PoolTabs activePool={activePool} setActivePool={setActivePool} />
-      <PoolData activePool={activePool} />
+      <PoolData
+        activePool={activePool}
+        readCallData={data}
+        activeChain={activeChain}
+      />
       <Deposit
         activePool={activePool}
         readCallData={data}
         activeChain={activeChain}
       />
-      <BoostYield activePool={activePool} />
+      <BoostYield activePool={activePool} activeChain={activeChain} />
     </>
   );
 };

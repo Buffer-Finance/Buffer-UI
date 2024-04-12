@@ -13,7 +13,7 @@ enum transactionCols {
   address,
   timestamp,
   amount,
-  lockPeriod,
+  // lockPeriod,
   txnType,
   blpRate,
   unitsMinted,
@@ -24,10 +24,10 @@ const colNames = [
   'Wallet Address',
   'Date | Time',
   'Amount',
-  'Lock Period',
+  // 'Lock Period',
   'Type',
   'BLP Rate',
-  'Units Minted',
+  'Units Minted/Burned',
   'Tx Status',
 ];
 
@@ -46,7 +46,8 @@ function Body(
   row: number,
   col: number,
   data: poolTxn[],
-  activePool: poolsType
+  activePool: poolsType,
+  activeChain: Chain
 ) {
   const txn = data[row];
   const decimals = activePool === 'uBLP' ? 6 : 18;
@@ -69,14 +70,14 @@ function Body(
           className="!justify-start text-f15"
         />
       );
-    case transactionCols.lockPeriod:
-      return <span className="text-f15">{txn.lockPeriod}</span>;
+    // case transactionCols.lockPeriod:
+    //   return <span className="text-f15">{txn.lockPeriod}</span>;
     case transactionCols.txnType:
       return <span className="text-f15">{txn.type}</span>;
     case transactionCols.blpRate:
       return (
         <Display
-          data={txn.blpRate}
+          data={divide(txn.blpRate, 8)}
           precision={3}
           className="!justify-start text-f15"
         />
@@ -84,7 +85,7 @@ function Body(
     case transactionCols.unitsMinted:
       return (
         <Display
-          data={divide(txn.unitsMinted, 18)}
+          data={divide(txn.unitsMinted, decimals)}
           precision={2}
           className="!justify-start text-f15"
         />
@@ -94,7 +95,9 @@ function Body(
         <button
           className="text-f15"
           onClick={() => {
-            window.open(`https://arbiscan.io/tx/${txn.txnHash}`);
+            window.open(
+              `${activeChain.blockExplorers?.default.url}/tx/${txn.txnHash}`
+            );
           }}
         >
           <span className="text-[#808191] text-f14 font-medium">View</span>
@@ -128,7 +131,7 @@ export const Table: React.FC<{
             isError={error !== undefined}
           />
         ) : (
-          Body(row, col, data, activePool)
+          Body(row, col, data, activePool, activeChain)
         )
       }
       cols={colNames.length}

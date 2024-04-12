@@ -3408,7 +3408,6 @@ html .pagination-root {
 
 .react-ios-time-picker-cell-inner-selected {
   /* font-weight: 500; */
-  background-color: ;
   color: #f7f7f7;
   font-size: 16px;
 }
@@ -3495,4 +3494,36 @@ html .pagination-root {
 
 .MuiTimelineItem-root ::before{
   padding: 0 20px;
+}
+
+
+.recharts-cartesian-axis-tick-value {
+  font-size:12px;
+}
+ .recharts-cartesian-axis-tick-value {
+  fill: #A0A3C4;
+  font-size:12px;
+}
+ .recharts-cartesian-grid-horizontal line, .recharts-cartesian-grid-vertical line {
+  stroke: #282a3e;
+}
+
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  padding: 5px 12px!important;
+}
+
+.recharts-tooltip-wrapper ul.recharts-tooltip-item-list li {
+  padding: 0px!important;
+  font-size: 12px!important;
+  line-height: 15px!important;
+}
+
+.recharts-tooltip-wrapper ul.recharts-tooltip-item-list li + li {
+  margin-top: 1px!important;
+}
+ .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: #353651!important;
+  box-shadow: 0px 3px 6px #0000005C;
+  border: 1px solid #484B6E!important;
+  border-radius: 4px;
 }

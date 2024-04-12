@@ -14,7 +14,11 @@ export const Deposit: React.FC<{
         My Deposits
       </div>
       <div className="flex items-start gap-3 w-full">
-        <UserData activePool={activePool} />
+        <UserData
+          activePool={activePool}
+          readcallData={readCallData}
+          activeChain={activeChain}
+        />
         <ActionCard
           activePool={activePool}
           readcalldata={readCallData}
