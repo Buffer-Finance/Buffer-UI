@@ -842,6 +842,28 @@ export const MultiResolutionChart = ({
             },
           }
         );
+        const linePrice = points[0].price;
+        const activeResolution = realTimeUpdateRef.current?.resolution || '1m';
+
+        const newpythId =
+          chartData.pythGroup + '.' + chartData.token0 + '/' + chartData.token1;
+        const newpythIdKey = newpythId + timeDeltaMapping(activeResolution);
+        let prevBar = lastSyncedKline?.current?.[newpythIdKey];
+        const activePrice = prevBar.close;
+        let from = -1;
+        let to = -1;
+        if (activePrice > linePrice) {
+          // below
+          from = linePrice - linePrice * 0.001;
+          to = activePrice + activePrice * 0.001;
+        } else {
+          to = linePrice + linePrice * 0.001;
+          from = activePrice - activePrice * 0.001;
+        }
+        if (from != -1) {
+          const priceScale = chart?.getPanes()[0].getRightPriceScales()[0];
+          priceScale.setVisiblePriceRange({ from, to });
+        }
         shapeIdRef.current = [id, lineid];
       }
     } else {
