@@ -849,18 +849,19 @@ export const MultiResolutionChart = ({
           chartData.pythGroup + '.' + chartData.token0 + '/' + chartData.token1;
         const newpythIdKey = newpythId + timeDeltaMapping(activeResolution);
         let prevBar = lastSyncedKline?.current?.[newpythIdKey];
-        const activePrice = prevBar.close;
-        let from = -1;
-        let to = -1;
-        if (activePrice > linePrice) {
-          // below
-          from = linePrice - linePrice * 0.001;
-          to = activePrice + activePrice * 0.001;
-        } else {
-          to = linePrice + linePrice * 0.001;
-          from = activePrice - activePrice * 0.001;
-        }
-        if (from != -1) {
+        const activePrice = prevBar?.close;
+        if (activePrice) {
+          let from = -1;
+          let to = -1;
+          const chartMargin = 0.005;
+          if (activePrice > linePrice) {
+            // below
+            from = linePrice - linePrice * chartMargin;
+            to = activePrice + activePrice * chartMargin;
+          } else {
+            to = linePrice + linePrice * chartMargin;
+            from = activePrice - activePrice * chartMargin;
+          }
           const priceScale = chart?.getPanes()[0].getRightPriceScales()[0];
           priceScale.setVisiblePriceRange({ from, to });
         }
