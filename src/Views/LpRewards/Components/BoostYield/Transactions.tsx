@@ -1,5 +1,7 @@
+import { useToast } from '@Contexts/Toast';
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { useUserAccount } from '@Hooks/useUserAccount';
+import { useWriteCall } from '@Hooks/useWriteCall';
 import { getDHMSFromSeconds } from '@Utils/Dates/displayDateTime';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
@@ -7,12 +9,16 @@ import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { useLockTxns } from '@Views/LpRewards/Hooks/useLockTxns';
+import { getLpConfig } from '@Views/LpRewards/config';
 import { lockTxn, poolsType } from '@Views/LpRewards/types';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
 import styled from '@emotion/styled';
 import { Launch } from '@mui/icons-material';
+import { Skeleton } from '@mui/material';
+import { useState } from 'react';
 import { Chain } from 'viem';
+import NFTlockPoolABI from '../../abis/NftLockPool.json';
+import { RenewLockModal } from './RenewLockModal';
 
 enum transactionCols {
   timestamp,
@@ -52,7 +58,8 @@ function Body(
   col: number,
   activePool: poolsType,
   txns: lockTxn[],
-  activeChain: Chain
+  activeChain: Chain,
+  pendingRewards: { [key: string]: string } | undefined
 ) {
   const txn = txns[row];
   const unit = activePool === 'aBLP' ? 'ARB' : 'USDC';
@@ -62,6 +69,8 @@ function Body(
       parseInt(txn.lockPeriod) -
       Math.floor(Date.now() / 1000)
   );
+
+  const rewards = pendingRewards?.[txn.nftId];
   switch (col) {
     case transactionCols.timestamp:
       return <DisplayTime ts={txn.timestamp} className="text-f15 ml-8" />;
@@ -83,30 +92,41 @@ function Body(
         </span>
       );
     case transactionCols.pendingRewards:
-      return <span className="text-f15">Nah</span>;
+      return rewards !== undefined ? (
+        <span className="text-f15">
+          <Display
+            data={divide(rewards, 18)}
+            unit="ARB"
+            precision={2}
+            className="!justify-start"
+          />
+        </span>
+      ) : (
+        <Skeleton className="w-[50px] !h-5 lc " />
+      );
     case transactionCols.Actions:
       return (
         <div className="flex gap-6 items-center">
-          <NumberTooltip content={'Unlock'}>
-            <button onClick={() => {}}>
-              <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Unlock.png" />
-            </button>
-          </NumberTooltip>
-          <NumberTooltip content={'Renew'}>
-            <button onClick={() => {}}>
-              <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Renew.png" />
-            </button>
-          </NumberTooltip>
-          <NumberTooltip content={'Lock'}>
-            <button onClick={() => {}}>
-              <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Lock.png" />
-            </button>
-          </NumberTooltip>
-          <NumberTooltip content={'Harvest'}>
-            <button onClick={() => {}}>
-              <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Harvest.png" />
-            </button>
-          </NumberTooltip>
+          {distanceObject.distance < 0 && (
+            <NumberTooltip content={'Unlock'}>
+              <button onClick={() => {}}>
+                <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Withdraw.png" />
+              </button>
+            </NumberTooltip>
+          )}
+          <RenewLock
+            lockTxn={txn}
+            activeChain={activeChain}
+            decimals={decimals}
+            unit={unit}
+          />
+          <ExtendLock
+            lockTxn={txn}
+            activeChain={activeChain}
+            decimals={decimals}
+            unit={unit}
+          />
+          <ClaimRewards lockTxn={txn} activeChain={activeChain} />
         </div>
       );
     case transactionCols.lockPeriod:
@@ -139,8 +159,11 @@ function Body(
 export const Transactions: React.FC<{
   activePool: poolsType;
   activeChain: Chain;
-}> = ({ activePool, activeChain }) => {
-  const { data, error } = useLockTxns(activeChain, activePool);
+  data: lockTxn[] | undefined;
+  error: any;
+  pendingRewards: { [key: string]: string } | undefined;
+  pendingRewardsError: any;
+}> = ({ activePool, activeChain, data, error, pendingRewards }) => {
   return (
     <BufferTable
       headerJSX={Header}
@@ -151,7 +174,7 @@ export const Transactions: React.FC<{
             isError={error !== undefined}
           />
         ) : (
-          Body(row, col, activePool, data, activeChain)
+          Body(row, col, activePool, data, activeChain, pendingRewards)
         )
       }
       cols={colNames.length}
@@ -195,3 +218,126 @@ const ErrorDiv = styled.div`
   font-size: 16px;
   color: #ffffff;
 `;
+
+const ClaimRewards: React.FC<{ lockTxn: lockTxn; activeChain: Chain }> = ({
+  lockTxn,
+  activeChain,
+}) => {
+  const contracts = getLpConfig(activeChain.id);
+  const toastify = useToast();
+  const [loading, setLoading] = useState(false);
+  const { writeCall } = useWriteCall(contracts.nftLockPool, NFTlockPoolABI);
+
+  async function handleClaim() {
+    try {
+      setLoading(true);
+      writeCall(
+        (returnObj) => {
+          if (returnObj) {
+            toastify({
+              type: 'success',
+              msg: 'Claimed Successfully',
+              id: 'claim-rewards',
+            });
+          }
+        },
+        'harvestPosition',
+        [lockTxn.nftId]
+      );
+    } catch (e) {
+      toastify({
+        type: 'error',
+        msg: (e as Error).message,
+        id: 'claim-rewards',
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <NumberTooltip content={'Claim Rewards'}>
+      <button onClick={handleClaim} disabled={loading}>
+        <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/ClaimRewards.png" />
+      </button>
+    </NumberTooltip>
+  );
+};
+
+function convertToNumberOfMonthsAndDays(seconds: number) {
+  // conver the given seconds in to number of months and days
+  const months = Math.floor(seconds / 2629746);
+  const days = Math.floor((seconds % 2629746) / 86400);
+  return { months, days };
+}
+
+const RenewLock: React.FC<{
+  lockTxn: lockTxn;
+  activeChain: Chain;
+  decimals: number;
+  unit: string;
+}> = ({ lockTxn, activeChain, decimals, unit }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <>
+      <RenewLockModal
+        activeChain={activeChain}
+        lockTxn={lockTxn}
+        decimals={decimals}
+        unit={unit}
+        closeModal={setIsOpen}
+        isOpen={isOpen}
+        isExtendModal={false}
+        lockPeriod={convertToNumberOfMonthsAndDays(
+          parseInt(lockTxn.lockPeriod)
+        )}
+        setLockPeriod={() => {}}
+      />
+      <NumberTooltip content={'Renew'}>
+        <button
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        >
+          <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Renew.png" />
+        </button>
+      </NumberTooltip>
+    </>
+  );
+};
+
+const ExtendLock: React.FC<{
+  activeChain: Chain;
+  lockTxn: lockTxn;
+  decimals: number;
+  unit: string;
+}> = ({ activeChain, lockTxn, decimals, unit }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [lockPeriod, setLockPeriod] = useState(
+    convertToNumberOfMonthsAndDays(parseInt(lockTxn.lockPeriod))
+  );
+  return (
+    <>
+      <RenewLockModal
+        activeChain={activeChain}
+        lockTxn={lockTxn}
+        decimals={decimals}
+        unit={unit}
+        closeModal={setIsOpen}
+        isOpen={isOpen}
+        isExtendModal={true}
+        lockPeriod={lockPeriod}
+        setLockPeriod={setLockPeriod}
+      />
+      <NumberTooltip content={'Extend'}>
+        <button
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        >
+          <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Lock.png" />
+        </button>
+      </NumberTooltip>
+    </>
+  );
+};

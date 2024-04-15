@@ -1,11 +1,13 @@
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useWriteCall } from '@Hooks/useWriteCall';
+import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { getLpConfig } from '@Views/LpRewards/config';
-import { poolsType } from '@Views/LpRewards/types';
-import { useState } from 'react';
+import { lockTxn, poolsType } from '@Views/LpRewards/types';
+import { useMemo, useState } from 'react';
 import { Chain } from 'viem';
 import NFTlockPoolABI from '../../abis/NftLockPool.json';
 import { DataColumn, defaultDataStyle } from '../DataColumn';
@@ -14,30 +16,106 @@ import { Container } from '../Deposit/Styles';
 export const Data: React.FC<{
   activePool: poolsType;
   activeChain: Chain;
-}> = ({ activeChain, activePool }) => {
+  lockTxns: lockTxn[];
+  pendingRewards: {
+    [key: string]: string[];
+  };
+}> = ({ activeChain, activePool, lockTxns, pendingRewards }) => {
   const { address } = useUserAccount();
+  const unit = activePool === 'uBLP' ? 'USDC' : 'ARB';
+  const decimals = activePool === 'uBLP' ? 6 : 18;
+
+  const [
+    totalLocked,
+    totalUnlocked,
+    totalClaimable,
+    withdrawableIds,
+    claimableIds,
+  ] = useMemo(() => {
+    let totalLocked = '0';
+    let totalUnlocked = '0';
+    let totalClaimable = '0';
+    const withdrawableNftIds: string[] = [];
+    const claimableIds: string[] = [];
+
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+
+    lockTxns.forEach((txn) => {
+      if (Number(txn.lockPeriod) + Number(txn.timestamp) > currentTimestamp) {
+        totalLocked = add(totalLocked, txn.amount);
+      } else {
+        totalUnlocked = add(totalUnlocked, txn.amount);
+        withdrawableNftIds.push(txn.nftId);
+      }
+
+      const unclaimedRewards = pendingRewards?.[txn.nftId]?.[0];
+
+      if (unclaimedRewards) {
+        totalClaimable = add(totalClaimable, unclaimedRewards);
+        claimableIds.push(txn.nftId);
+      }
+    });
+
+    return [
+      totalLocked,
+      totalUnlocked,
+      totalClaimable,
+      withdrawableNftIds,
+      claimableIds,
+    ];
+  }, [lockTxns, pendingRewards]);
+
   return (
-    <Container>
+    <Container className="gap-7">
       <div className="flex flex-col gap-6">
         <DataColumn
           title="Total Locked"
-          value={<span className={defaultDataStyle}>1,0567 USDC</span>}
+          value={
+            <span className={defaultDataStyle}>
+              <Display
+                data={divide(totalLocked, decimals)}
+                precision={2}
+                unit={unit}
+              />
+            </span>
+          }
         />
         <DataColumn
-          title="Total Unlocked"
-          value={<span className={defaultDataStyle}>67%</span>}
+          title="Total Withdrawable"
+          value={
+            <span className={defaultDataStyle}>
+              <Display
+                data={divide(totalUnlocked, decimals)}
+                precision={2}
+                unit={unit}
+              />
+            </span>
+          }
         />
         <DataColumn
           title="Total Claimable"
-          value={<span className={defaultDataStyle}>56,661</span>}
+          value={
+            <span className={defaultDataStyle}>
+              <Display
+                data={divide(totalClaimable, 18)}
+                precision={2}
+                unit={unit}
+              />
+            </span>
+          }
         />
       </div>
       <div className="flex flex-col gap-8 justify-end items-end">
-        <WithdrawButton activeChain={activeChain} unlockedAmount={undefined} />
+        <WithdrawButton
+          activeChain={activeChain}
+          unlockedAmount={totalUnlocked}
+          withdrawAbleIds={withdrawableIds}
+        />
         <ClaimButton
           activeChain={activeChain}
-          rewards={undefined}
+          rewards={totalClaimable}
           userAddress={address}
+          claimableIds={claimableIds}
         />
       </div>
     </Container>
@@ -48,7 +126,8 @@ const ClaimButton: React.FC<{
   activeChain: Chain;
   rewards: string | undefined;
   userAddress: string | undefined;
-}> = ({ activeChain, rewards, userAddress }) => {
+  claimableIds: string[];
+}> = ({ activeChain, rewards, userAddress, claimableIds }) => {
   const contracts = getLpConfig(activeChain.id);
   const toastify = useToast();
   const [loading, setLoading] = useState(false);
@@ -70,12 +149,7 @@ const ClaimButton: React.FC<{
           }
         },
         'harvestMultiplePositionTo',
-        [
-          [
-            // add the nft ids of the user here
-          ],
-          userAddress,
-        ]
+        [claimableIds.slice(0, 10), userAddress]
       );
     } catch (e) {
       toastify({
@@ -110,7 +184,8 @@ const ClaimButton: React.FC<{
 const WithdrawButton: React.FC<{
   activeChain: Chain;
   unlockedAmount: string | undefined;
-}> = ({ activeChain, unlockedAmount }) => {
+  withdrawAbleIds: string[];
+}> = ({ activeChain, unlockedAmount, withdrawAbleIds }) => {
   const contracts = getLpConfig(activeChain.id);
   const toastify = useToast();
   const [loading, setLoading] = useState(false);
@@ -132,11 +207,7 @@ const WithdrawButton: React.FC<{
           }
         },
         'withdrawAllFromMultiplePositions',
-        [
-          [
-            // add the nft ids of the user here
-          ],
-        ]
+        [withdrawAbleIds.slice(0, 10)]
       );
     } catch (e) {
       toastify({

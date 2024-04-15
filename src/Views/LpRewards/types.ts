@@ -14,7 +14,6 @@ export type poolTxn = {
   unitsMinted: string;
   txnHash: string;
   poolName: 'USDC' | 'ARB';
-  nftId: string;
 };
 
 export type lockTxn = {
@@ -24,6 +23,7 @@ export type lockTxn = {
   lockPeriod: string;
   txnHash: string;
   poolName: string;
+  nftId: string;
 };
 
 export type blpPrice = {

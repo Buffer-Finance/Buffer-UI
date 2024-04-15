@@ -97,7 +97,7 @@ export const appConfig = {
           }/bufferfinance/jackpot/api`,
           LP: `https://subgraph.satsuma-prod.com/${
             import.meta.env.VITE_SATSUMA_KEY
-          }/bufferfinance/jackpot/version/v3.0.18-pool-tracking-tokens-per-interval/api`,
+          }/bufferfinance/jackpot/version/v3.0.19-pool-tracking-update-locknft-contracts/api`,
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',

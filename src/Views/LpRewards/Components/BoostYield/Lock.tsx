@@ -42,7 +42,7 @@ const APRvalue = styled.div`
   color: #ffffff;
 `;
 
-function convertLockPeriodToSeconds({
+export function convertLockPeriodToSeconds({
   days,
   months,
 }: {

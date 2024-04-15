@@ -12,7 +12,8 @@ export const DayMonthInput: React.FC<{
       months: number;
     }>
   >;
-}> = ({ data, setData }) => {
+  isDisabled?: boolean;
+}> = ({ data, setData, isDisabled }) => {
   const handleSubtract = useCallback(() => {
     if (data.days > 0) {
       setData((prev) => ({ ...prev, days: prev.days - 1 }));
@@ -31,7 +32,9 @@ export const DayMonthInput: React.FC<{
 
   return (
     <div className="flex items-center gap-3">
-      <ActionButton onClick={handleSubtract}>-</ActionButton>
+      <ActionButton onClick={handleSubtract} disabled={isDisabled}>
+        -
+      </ActionButton>
       <div className="flex items-center gap-3">
         <div>
           <div className="text-[#C3C2D4] text-f12 font-medium leading-[18px]">
@@ -50,7 +53,9 @@ export const DayMonthInput: React.FC<{
           </div>
         </div>
       </div>
-      <ActionButton onClick={handleAdd}>+</ActionButton>
+      <ActionButton onClick={handleAdd} disabled={isDisabled}>
+        +
+      </ActionButton>
     </div>
   );
 };
@@ -66,4 +71,10 @@ const ActionButton = styled.button`
   height: fit-content;
   line-height: 12px;
   padding-bottom: 9px;
+
+  :disabled {
+    background-color: #272740;
+    color: #464660;
+    cursor: not-allowed;
+  }
 `;

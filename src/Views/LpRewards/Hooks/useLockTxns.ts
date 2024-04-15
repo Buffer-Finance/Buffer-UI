@@ -1,14 +1,17 @@
+import { useUserAccount } from '@Hooks/useUserAccount';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import axios from 'axios';
 import useSWR from 'swr';
 import { Chain } from 'wagmi';
-import { poolTxn, poolsType } from '../types';
+import { lockTxn, poolsType } from '../types';
 
 export const useLockTxns = (activeChain: Chain, activePool: poolsType) => {
   const graphUrl = getConfig(activeChain.id).graph.LP;
+  const { address } = useUserAccount();
 
-  return useSWR<poolTxn[]>(`${activeChain}-${activePool}-txns`, {
+  return useSWR<lockTxn[]>(`${activeChain}-${activePool}-txns-${address}`, {
     fetcher: async () => {
+      if (address === undefined) return [];
       const poolName = activePool === 'aBLP' ? 'ARB' : 'USDC';
 
       const query = `{
@@ -16,7 +19,7 @@ export const useLockTxns = (activeChain: Chain, activePool: poolsType) => {
                     first: 10000
                     orderBy: timestamp
                     orderDirection: desc
-                    where: {poolName: "${poolName}"}
+                    where: {poolName: "${poolName}",userAddress:"${address}"}
                   ) {
                     userAddress
                     timestamp
