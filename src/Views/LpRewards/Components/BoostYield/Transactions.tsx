@@ -64,10 +64,11 @@ function Body(
   const txn = txns[row];
   const unit = activePool === 'aBLP' ? 'ARB' : 'USDC';
   const decimals = activePool === 'aBLP' ? 18 : 6;
+  const currentTimestamp = new Date().getTime();
   const distanceObject = Variables(
     parseInt(txn.timestamp) +
       parseInt(txn.lockPeriod) -
-      Math.floor(Date.now() / 1000)
+      Math.floor(currentTimestamp / 1000)
   );
 
   const rewards = pendingRewards?.[txn.nftId];
