@@ -127,10 +127,9 @@ function getROI(e: any) {
 }
 
 function Duration({ trade }) {
-  const timer = useTimer2(+trade.expirationTime);
-  let timerCols = Object.entries(timer).splice(1); //delete first col, as its the distance
+  const timer = useStopWatch(+trade.expirationTime);
 
-  return timerCols.map(([k, v]) => v).join(':');
+  return timer;
 }
 
 export const PlatformEvents = () => {
