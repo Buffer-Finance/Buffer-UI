@@ -9,6 +9,8 @@ export const appConfig = {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
       ABOVE_BELOW:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
+      EVENTS:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts-ab/api',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
@@ -168,6 +170,8 @@ export const appConfig = {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-testnet/api',
       ABOVE_BELOW:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-testnet/api',
+      EVENTS:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts-ab/api',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
@@ -191,6 +195,8 @@ export const appConfig = {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/polygon-mainnet/api',
       ABOVE_BELOW:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-testnet/api',
+      EVENTS:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts-ab/api',
     },
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',

@@ -3,13 +3,14 @@ import { BlueBtn } from '@Views/Common/V2-Button';
 import { atom, useAtom } from 'jotai';
 import { BuyTrade } from '../BuyTrade';
 import { MarketChart } from '../MarketChart';
+import { PlatformEventsAB } from '@Views/TradePage/PlatformTradesTab';
 
 export const Tabs = () => {
   const [activeTab, setActiveTab] = useAtom(mobileTradePageTabs);
   return (
     <div>
       <div className="flex items-center gap-[20px] ">
-        {['trade', 'Price chart'].map((tab) => {
+        {['trade', 'Price chart', 'Platform Activity'].map((tab) => {
           const activeTabClass =
             tab.toLowerCase() === activeTab.toLowerCase()
               ? 'text-1'
@@ -30,11 +31,14 @@ export const Tabs = () => {
       <HorizontalTransition value={activeTab === 'trade' ? 0 : 1}>
         <BuyTrade isMobile />
         <Chart navigateToTrade={() => setActiveTab('trade')} />
+        <PlatformEventsAB />
       </HorizontalTransition>
     </div>
   );
 };
-export const mobileTradePageTabs = atom<'trade' | 'chart'>('trade');
+export const mobileTradePageTabs = atom<'trade' | 'chart' | 'activity'>(
+  'trade'
+);
 
 function Chart({ navigateToTrade }: { navigateToTrade: () => void }) {
   return (

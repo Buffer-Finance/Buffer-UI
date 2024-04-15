@@ -5,7 +5,8 @@ import { Display } from '@Views/Common/Tooltips/Display';
 import { ReactNode } from 'react';
 import { Variables } from '@Utils/Time';
 import useStopWatch, { formatDistance } from '@Hooks/Utilities/useStopWatch';
-import { usePlatformEvent } from '@Hooks/usePlatformEvent';
+import { usePlatformEvent, usePlatformEventAB } from '@Hooks/usePlatformEvent';
+import { useTimer2 } from '@Hooks/Utilities/usestopwatch2';
 
 const TableHead: React.FC<any> = ({ children }) => {
   return (
@@ -49,12 +50,13 @@ const getDecimal = (t: any) => {
 const PlatformTradesTab: React.FC<{ events: UDEvent[] | ABEvent[] }> = ({
   events,
 }) => {
+  if (!events?.length) return null;
   return (
-    <div className="flex flex-col min-w-[270px] h-full">
+    <div className="flex flex-col min-w-[270px] h-full  ">
       <div className="bg-[#282B39] sm:hidden rounded-[5px] mb-1 text-[14px] py-[3px] px-[12px] w-full ">
         Platform Trades
       </div>
-      <div className="bg-[#141823] rounded-[5px] mt-[1px] h-full w-full">
+      <div className="bg-[#141823] rounded-[5px] mt-[1px] overflow-auto max-h-[79vh] h-full w-full">
         <table className=" border-spacing-3 border-spacing-x-2 border-separate px-3 w-full ">
           <thead>
             <tr className="">
@@ -125,11 +127,17 @@ function getROI(e: any) {
 }
 
 function Duration({ trade }) {
-  const timer = useStopWatch(+trade.expirationTime);
-  return timer;
+  const timer = useTimer2(+trade.expirationTime);
+  let timerCols = Object.entries(timer).splice(1); //delete first col, as its the distance
+
+  return timerCols.map(([k, v]) => v).join(':');
 }
 
 export const PlatformEvents = () => {
   const { data } = usePlatformEvent();
+  return <PlatformTradesTab events={data} />;
+};
+export const PlatformEventsAB = () => {
+  const { data } = usePlatformEventAB();
   return <PlatformTradesTab events={data} />;
 };
