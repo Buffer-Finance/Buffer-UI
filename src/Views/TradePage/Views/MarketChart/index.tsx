@@ -6,6 +6,8 @@ import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MultiResolutionChart } from './MultiResolutionChart';
+import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
+import { usePlatformEvent } from '@Hooks/usePlatformEvent';
 
 const SidebySideCharts = ({
   indexes,
@@ -104,6 +106,7 @@ const MarketChart: React.FC<any> = ({}) => {
       document.removeEventListener('mouseup', onMouseUp);
     };
   });
+  const { data } = usePlatformEvent();
 
   const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
   if (!v3AppConfig?.length || !marketPrefix)
@@ -129,6 +132,7 @@ const MarketChart: React.FC<any> = ({}) => {
       </div>
     );
   }
+
   if (chartTimes == 4) {
     chartLayout = (
       <div className="flex-col w-[100%] h-full">
@@ -143,6 +147,12 @@ const MarketChart: React.FC<any> = ({}) => {
       </div>
     );
   }
+  chartLayout = (
+    <div className="flex h-full flex-grow">
+      {chartLayout}
+      <PlatformTradesTab events={data} />{' '}
+    </div>
+  );
   const onMouseDown = () => {
     // console.log('deb-event -down');
     setDragging(true);
