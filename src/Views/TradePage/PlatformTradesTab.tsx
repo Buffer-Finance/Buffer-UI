@@ -56,7 +56,7 @@ const PlatformTradesTab: React.FC<{ events: UDEvent[] | ABEvent[] }> = ({
       <div className="bg-[#282B39] sm:hidden rounded-[5px] mb-1 text-[14px] py-[3px] px-[12px] w-full ">
         Platform Trades
       </div>
-      <div className="bg-[#141823] rounded-[5px] mt-[1px] overflow-auto max-h-[79vh] h-full w-full">
+      <div className="bg-[#141823] rounded-[5px] mt-[1px]  h-full w-full">
         <table className=" border-spacing-3 border-spacing-x-2 border-separate px-3 w-full ">
           <thead>
             <tr className="">

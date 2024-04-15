@@ -10,7 +10,7 @@ export const Tabs = () => {
   return (
     <div>
       <div className="flex items-center gap-[20px] ">
-        {['trade', 'Price chart', 'Platform Activity'].map((tab) => {
+        {['trade', 'Price chart'].map((tab) => {
           const activeTabClass =
             tab.toLowerCase() === activeTab.toLowerCase()
               ? 'text-1'

@@ -166,12 +166,12 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       </div>
     );
   }
-  chartLayout = (
-    <div className="flex h-full flex-grow">
-      {chartLayout}
-      <PlatformTradesTab events={data} />{' '}
-    </div>
-  );
+  // chartLayout = (
+  //   <div className="flex h-full flex-grow">
+  //     {chartLayout}
+  //     <PlatformTradesTab events={data} />{' '}
+  //   </div>
+  // );
   const onMouseDown = () => {
     // console.log('deb-event -down');
     setDragging(true);
