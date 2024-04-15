@@ -52,15 +52,15 @@ const PlatformTradesTab: React.FC<{ events: UDEvent[] | ABEvent[] }> = ({
 }) => {
   if (!events?.length) return null;
   return (
-    <div className="flex flex-col min-w-[270px] h-full  ">
-      <div className="bg-[#282B39] sm:hidden rounded-[5px] mb-1 text-[14px] py-[3px] px-[12px] w-full ">
+    <div className="flex flex-col min-w-[270px] h-full max-h-full  overflow-y-scroll  ">
+      <div className="bg-[#282B39] sticky top-[0px] sm:hidden rounded-[5px] mb-1 text-[14px] py-[3px] px-[12px] w-full ">
         Platform Trades
       </div>
-      <div className="bg-[#141823] rounded-[5px] mt-[1px]  h-full w-full">
+      <div className="bg-[#141823] rounded-[5px] mt-[1px]  h-full w-full sm:h-[60vh] overflow--y-scroll">
         <table className=" border-spacing-3 border-spacing-x-2 border-separate px-3 w-full ">
           <thead>
             <tr className="">
-              <TableHead>Strike Price</TableHead>
+              <TableHead>Strike </TableHead>
               <TableHead>Size</TableHead>
               <TableHead>ROI</TableHead>
               <TableHead>Expires in</TableHead>

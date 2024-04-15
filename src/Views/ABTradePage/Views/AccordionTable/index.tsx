@@ -13,7 +13,7 @@ import { useOngoingTrades } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 import {
   cancelTableActivePage,
   historyTableActivePage,
-  isTableShownAtom,
+  isTableShownAtomAB,
   platformActiveTableActivePage,
   platformCancelTableActivePage,
   platformHistoryTableActivePage,
@@ -38,7 +38,7 @@ const tables = {
 const gap = ['Cancelled'];
 
 const AccordionTable: React.FC<any> = ({}) => {
-  const [expanded, setExpanded] = useAtom(isTableShownAtom);
+  const [expanded, setExpanded] = useAtom(isTableShownAtomAB);
 
   const activeTrades = useOngoingTrades();
   const setPriceCache = useSetAtom(queuets2priceAtom);

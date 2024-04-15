@@ -89,7 +89,7 @@ export const LimitOrderPayoutAtom = atomWithStorage(
   limitOrderDefaultPayout
 );
 
-export const isTableShownAtom = atom<boolean>(false);
+export const isTableShownAtomAB = atom<boolean>(false);
 
 export const selectedOrderToEditAtom = atom<null | {
   trade: TradeType;

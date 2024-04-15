@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MultiResolutionChart } from './MultiResolutionChart';
 import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
-import { usePlatformEvent } from '@Hooks/usePlatformEvent';
+import { usePlatformEvent, usePlatformEventAB } from '@Hooks/usePlatformEvent';
 
 const SidebySideCharts = ({
   indexes,
@@ -44,22 +44,27 @@ const MarketChart: React.FC<any> = ({}) => {
   }>({});
   const containerRef = useRef<HTMLDivElement>();
   const onInitialLoad: React.LegacyRef<HTMLDivElement> = useCallback(
-    async (ele) => {
+    async (ele: HTMLDivElement) => {
       if (!isTableExpanded) return;
       containerRef.current = ele;
       await sleep(1000);
       const d = ele?.getBoundingClientRect();
       if (!d) return;
-      setContainerDim(d);
+      const updatedRect = { ...d, height: null };
+      console.log(`index-d: `, updatedRect);
+      setContainerDim({ height: null, top: d.top });
     },
     [isTableExpanded]
   );
   const onMove = (clientY: number) => {
     if (!clientY) return;
-    if (!containerDim?.height) return;
+    // if (!containerDim?.height) return;
     if (!dragging) return;
     // y = 4
+
     setContainerDim((currentChartContainerDim) => {
+      console.log(`index-updatedHeight: `, currentChartContainerDim);
+
       if (!currentChartContainerDim?.top) return {};
 
       let updatedChartContainerDim: Partial<{ height: number; top: number }> =
@@ -153,6 +158,7 @@ const MarketChart: React.FC<any> = ({}) => {
       <PlatformTradesTab events={data} />{' '}
     </div>
   );
+  console.log('rerender');
   const onMouseDown = () => {
     // console.log('deb-event -down');
     setDragging(true);
@@ -161,7 +167,10 @@ const MarketChart: React.FC<any> = ({}) => {
   return (
     <>
       <div
-        className="flex flex-col flex-grow  h-full "
+        className={
+          'flex flex-col flex-grow   ' +
+          (isTableExpanded ? 'h-[33vh]' : 'h-[82vh]')
+        }
         style={containerDim?.height ? { height: containerDim.height } : {}}
         ref={onInitialLoad}
       >

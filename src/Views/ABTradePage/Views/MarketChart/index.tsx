@@ -1,7 +1,7 @@
 import { sleep } from '@TV/useDataFeed';
 import { useActiveMarket } from '@Views/ABTradePage/Hooks/useActiveMarket';
 import { useMarketsConfig } from '@Views/ABTradePage/Hooks/useMarketsConfig';
-import { chartNumberAtom, isTableShownAtom } from '@Views/ABTradePage/atoms';
+import { chartNumberAtom, isTableShownAtomAB } from '@Views/ABTradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -31,7 +31,7 @@ const SidebySideCharts = ({
 };
 
 const MarketChart: React.FC<any> = ({}) => {
-  const isTableExpanded = useAtomValue(isTableShownAtom);
+  const isTableExpanded = useAtomValue(isTableShownAtomAB);
   const v3AppConfig = useMarketsConfig();
   const chartTimes = useAtomValue(chartNumberAtom);
   const { activeMarket } = useActiveMarket();

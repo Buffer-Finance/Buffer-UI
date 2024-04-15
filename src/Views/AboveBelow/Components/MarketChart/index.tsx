@@ -2,7 +2,6 @@ import { sleep } from '@TV/useDataFeed';
 import {
   aboveBelowMarketsAtom,
   chartNumberAtom,
-  isTableShownAtom,
   selectedPoolActiveMarketAtom,
 } from '@Views/AboveBelow/atoms';
 import { Skeleton } from '@mui/material';
@@ -11,6 +10,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MultiResolutionChart } from './MultiResolutionChart';
 import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
 import { usePlatformEventAB } from '@Hooks/usePlatformEvent';
+import { isTableShownAtomAB } from '@Views/ABTradePage/atoms';
 
 const SidebySideCharts = ({
   indexes,
@@ -38,7 +38,8 @@ const SidebySideCharts = ({
 };
 
 const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
-  const isTableExpanded = useAtomValue(isTableShownAtom);
+  const isTableExpanded = useAtomValue(isTableShownAtomAB);
+  console.log(`index-isTableExpanded: `, isTableExpanded);
   const v3AppConfig = useAtomValue(aboveBelowMarketsAtom);
   const chartTimes = useAtomValue(chartNumberAtom);
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
@@ -49,19 +50,18 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   }>({});
   const containerRef = useRef<HTMLDivElement>();
   const onInitialLoad: React.LegacyRef<HTMLDivElement> = useCallback(
-    async (ele) => {
+    async (ele: HTMLDivElement) => {
       if (!isTableExpanded) return;
       containerRef.current = ele;
       await sleep(1000);
       const d = ele?.getBoundingClientRect();
       if (!d) return;
-      setContainerDim(d);
+      setContainerDim({ height: null, top: d.top });
     },
     [isTableExpanded]
   );
   const onMove = (clientY: number) => {
     if (!clientY) return;
-    if (!containerDim?.height) return;
     if (!dragging) return;
     // y = 4
     setContainerDim((currentChartContainerDim) => {
@@ -166,12 +166,13 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       </div>
     );
   }
-  // chartLayout = (
-  //   <div className="flex h-full flex-grow">
-  //     {chartLayout}
-  //     <PlatformTradesTab events={data} />{' '}
-  //   </div>
-  // );
+  if (!isMobile)
+    chartLayout = (
+      <div className="flex h-full flex-grow">
+        {chartLayout}
+        <PlatformTradesTab events={data} />{' '}
+      </div>
+    );
   const onMouseDown = () => {
     // console.log('deb-event -down');
     setDragging(true);
@@ -180,7 +181,10 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   return (
     <>
       <div
-        className="flex flex-col flex-grow  h-full "
+        className={
+          'flex flex-col flex-grow   ' +
+          (isTableExpanded ? 'nsm:h-[33vh]' : 'nsm:h-[82vh]')
+        }
         style={containerDim?.height ? { height: containerDim.height } : {}}
         ref={onInitialLoad}
       >

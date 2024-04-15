@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { TradeCard } from './Trade';
 import { useOngoingTrades } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { isTableShownAtom } from '@Views/ABTradePage/atoms';
+import { isTableShownAtomAB } from '@Views/ABTradePage/atoms';
 import { NoTrades } from './NoTrades';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
@@ -16,8 +16,8 @@ export const ActiveTrades: React.FC<{ isMobile?: boolean }> = ({
 }) => {
   const [tableType, setTableType] = useState(tableTypes[0]);
   const [activeTrades, limitOrderTrades] = useOngoingTrades();
-  const setIsTableShown = useSetAtom(isTableShownAtom);
-  const isTableShown = useAtomValue(isTableShownAtom);
+  const setIsTableShown = useSetAtom(isTableShownAtomAB);
+  const isTableShown = useAtomValue(isTableShownAtomAB);
   const isLimitOrderTable = tableType == 'Limit Orders';
   const navigate = useNavigate();
   const { closeShutter } = useShutterHandlers();
