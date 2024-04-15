@@ -40,6 +40,8 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { PageLoader } from './PageLoader';
+import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
+import { usePlatformEvent } from '@Hooks/usePlatformEvent';
 const TradePage = lazy(() => import('@Views/TradePage'));
 
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
