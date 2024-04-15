@@ -4,7 +4,7 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { ReactNode } from 'react';
 import { Variables } from '@Utils/Time';
-import { formatDistance } from '@Hooks/Utilities/useStopWatch';
+import useStopWatch, { formatDistance } from '@Hooks/Utilities/useStopWatch';
 import { usePlatformEvent } from '@Hooks/usePlatformEvent';
 
 const TableHead: React.FC<any> = ({ children }) => {
@@ -61,13 +61,13 @@ const PlatformTradesTab: React.FC<{ events: UDEvent[] | ABEvent[] }> = ({
               <TableHead>Strike Price</TableHead>
               <TableHead>Size</TableHead>
               <TableHead>ROI</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Expires in</TableHead>
             </tr>
           </thead>
           <tbody>
             {events?.map((e) => (
               <tr className="" key={e.id}>
-                <TableCell className="text-red ">
+                <TableCell className={e.isAbove ? 'text-green' : 'text-red '}>
                   <Display
                     data={divide(e.strike, 8)}
                     className="!justify-start !w-fit"
@@ -92,7 +92,11 @@ const PlatformTradesTab: React.FC<{ events: UDEvent[] | ABEvent[] }> = ({
                         : '',
                     ].join(' ')}
                   >
-                    {e.event == 'CREATE' ? 'CREATE' : e.event.toLowerCase()}
+                    {e.event == 'CREATE' ? (
+                      <Duration trade={e} />
+                    ) : (
+                      e.event.toLowerCase()
+                    )}
                   </span>
                 </TableCell>
               </tr>
@@ -106,16 +110,23 @@ const PlatformTradesTab: React.FC<{ events: UDEvent[] | ABEvent[] }> = ({
 
 export { PlatformTradesTab };
 function getROI(e: any) {
+  const payout = BigInt(e.payout);
+  const amount = BigInt(e.totalFee);
+  if (!payout) {
+    return 0;
+  } else {
+    const x = (payout * 100n) / amount - 100n;
+    console.log(`PlatformTradesTab-x: `, x, payout, amount);
+    return x.toString();
+  }
+  // return percentange of payout
+
   return '75';
 }
 
-function durationGiver(trade: any) {
-  const distanceObject = Variables(
-    trade.open_timestamp +
-      trade.period -
-      (trade.close_time || Math.round(Date.now() / 1000))
-  );
-  return formatDistance(distanceObject);
+function Duration({ trade }) {
+  const timer = useStopWatch(+trade.expirationTime);
+  return timer;
 }
 
 export const PlatformEvents = () => {

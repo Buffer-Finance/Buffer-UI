@@ -13,15 +13,18 @@ const usePlatformEvent = () => {
     fetcher: async () => {
       const response = await axios.post(configData.graph.EVENTS, {
         query: `{
-            platformEvents(first:10, orderBy:updatedAt, orderDirection:desc) {
+            platformEvents(first:80, orderBy:updatedAt, orderDirection:desc) {
               user
               id
+              isAbove
               updatedAt
+              expirationTime
               strike
               optionContract {
                 pool  
               }
               amount
+              totalFee
               payout
               event
             }
