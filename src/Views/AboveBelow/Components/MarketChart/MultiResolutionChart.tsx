@@ -243,16 +243,21 @@ export function getNextDayTimestamp(seconds) {
 
   // Calculate next day
   let nextDay = new Date(currentUTCDate);
-  nextDay.setDate(nextDay.getDate() + (seconds * 2) / 100);
-
   // Set time to 2:30 AM
   nextDay.setUTCHours(2);
   nextDay.setUTCMinutes(30);
   nextDay.setUTCSeconds(0);
   nextDay.setUTCMilliseconds(0);
+  if (+seconds == 60) {
+    // console.log(`MultiResolutionChart-nextDay.getDate() : `, nextDay.getDate());
+    console.log(`MultiResolutionChart-nextDay1: `, nextDay.getTime());
+    nextDay.setDate(nextDay.getDate() + 2);
+    console.log(`MultiResolutionChart-nextDay2: `, nextDay.getTime());
+  } else nextDay.setDate(nextDay.getDate() + (seconds * 2) / 100);
 
   // Convert to timestamp
   let nextDayTimestamp = nextDay.getTime();
+  // console.log(`MultiResolutionChart-nextDayTimestamp: `, nextDayTimestamp);
 
   return nextDayTimestamp;
 }
@@ -777,7 +782,6 @@ export const MultiResolutionChart = ({
       : Math.floor(resolution2Sec(resolution) / 1000);
   let time = getNextDayTimestamp(seconds) / 1000;
 
-  console.log(`timedeb2: `, time);
   const from = returnMod(Date.now() / 1000 - 500 * 24 * 60 * 60, seconds);
   const shapeIdRef = useRef(['', '']);
   const deleteOldDrawings = () => {
