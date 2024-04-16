@@ -40,6 +40,10 @@ import { useGalxeLeaderboardQuery } from './useGalxeLeaderboardQuery';
 export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
 
+const rewardPool = {
+  2: 4975,
+};
+
 export const Galxe = () => {
   const { activeChain } = useActiveChain();
   const decimals = useDecimalsByAsset();
@@ -165,7 +169,7 @@ export const Galxe = () => {
         <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
           <Col
             head={'Reward Pool'}
-            desc={<div>2800 PYTH</div>}
+            desc={<div>{rewardPool[offset ?? count] ?? '2800'} PYTH</div>}
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
