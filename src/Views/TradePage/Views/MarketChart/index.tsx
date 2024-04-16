@@ -8,7 +8,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MultiResolutionChart } from './MultiResolutionChart';
 import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
 import { usePlatformEvent, usePlatformEventAB } from '@Hooks/usePlatformEvent';
-
+import { createArray } from '@Utils/JSUtils/createArray';
+import ContainerDimensions from 'react-container-dimensions';
 const SidebySideCharts = ({
   indexes,
   className,
@@ -155,10 +156,17 @@ const MarketChart: React.FC<any> = ({}) => {
   chartLayout = (
     <div className="flex h-full flex-grow">
       {chartLayout}
-      <PlatformTradesTab events={data} />{' '}
+      <ContainerDimensions>
+        {({ height }) => (
+          <PlatformTradesTab
+            height={height}
+            hidden={isTableExpanded}
+            events={data}
+          />
+        )}
+      </ContainerDimensions>
     </div>
   );
-  console.log('rerender');
   const onMouseDown = () => {
     // console.log('deb-event -down');
     setDragging(true);
@@ -167,10 +175,7 @@ const MarketChart: React.FC<any> = ({}) => {
   return (
     <>
       <div
-        className={
-          'flex flex-col flex-grow   ' +
-          (isTableExpanded ? 'h-[33vh]' : 'h-[82vh]')
-        }
+        className={'flex flex-col flex-grow   '}
         style={containerDim?.height ? { height: containerDim.height } : {}}
         ref={onInitialLoad}
       >

@@ -11,6 +11,7 @@ import { MultiResolutionChart } from './MultiResolutionChart';
 import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
 import { usePlatformEventAB } from '@Hooks/usePlatformEvent';
 import { isTableShownAtomAB } from '@Views/ABTradePage/atoms';
+import ContainerDimensions from 'react-container-dimensions';
 
 const SidebySideCharts = ({
   indexes,
@@ -170,7 +171,15 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     chartLayout = (
       <div className="flex h-full flex-grow">
         {chartLayout}
-        <PlatformTradesTab events={data} />{' '}
+        <ContainerDimensions>
+          {({ height }) => (
+            <PlatformTradesTab
+              height={height}
+              hidden={isTableExpanded}
+              events={data}
+            />
+          )}
+        </ContainerDimensions>{' '}
       </div>
     );
   const onMouseDown = () => {
@@ -181,10 +190,7 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   return (
     <>
       <div
-        className={
-          'flex flex-col flex-grow   ' +
-          (isTableExpanded ? 'nsm:h-[33vh]' : 'nsm:h-[82vh]')
-        }
+        className={'flex flex-col flex-grow   '}
         style={containerDim?.height ? { height: containerDim.height } : {}}
         ref={onInitialLoad}
       >
