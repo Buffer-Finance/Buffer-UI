@@ -28,7 +28,7 @@ export const UserData: React.FC<{
   const decimals = activePool === 'uBLP' ? 6 : 18;
   return (
     <Container>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 h-full">
         <DataColumn
           title="Total value"
           value={
@@ -42,7 +42,7 @@ export const UserData: React.FC<{
                 />
               </span>
             ) : (
-              <Skeleton className="w-[50px] !h-5 lc " />
+              <Skeleton className="w-[70px] !h-6 lc !transform-none" />
             )
           }
         />
@@ -59,29 +59,31 @@ export const UserData: React.FC<{
                 />
               </span>
             ) : (
-              <Skeleton className="w-[50px] !h-5 lc " />
+              <Skeleton className="w-[70px] !h-6 lc !transform-none" />
             )
           }
         />
-        <DataColumn
-          title={`${poolToTokenMapping[activePool]} rewards`}
-          value={
-            rewards !== undefined ? (
-              <span className={defaultDataStyle}>
-                <Display
-                  data={divide(rewards, decimals)}
-                  unit={unit}
-                  precision={2}
-                  className="!justify-start"
-                />
-              </span>
-            ) : (
-              <Skeleton className="w-[50px] !h-5 lc " />
-            )
-          }
-        />
+        <div className="flex gap-8 items-start h-full justify-between">
+          <DataColumn
+            title={`${poolToTokenMapping[activePool]} rewards`}
+            value={
+              rewards !== undefined ? (
+                <span className={defaultDataStyle}>
+                  <Display
+                    data={divide(rewards, decimals)}
+                    unit={unit}
+                    precision={2}
+                    className="!justify-start"
+                  />
+                </span>
+              ) : (
+                <Skeleton className="w-[70px] !h-6 lc !transform-none" />
+              )
+            }
+          />
+          <ClaimButton activeChain={activeChain} rewards={rewards} />
+        </div>
       </div>
-      <ClaimButton activeChain={activeChain} rewards={rewards} />
     </Container>
   );
 };
@@ -123,10 +125,10 @@ const ClaimButton: React.FC<{
   }
 
   return (
-    <ConnectionRequired>
+    <ConnectionRequired className="mt-4 !py-[1]">
       <BlueBtn
         onClick={handleClaim}
-        className="!w-fit !h-fit !px-5 !py-[0] min-h-[25px]"
+        className="!w-fit !h-fit !px-5 !py-[0] min-h-[25px] mt-[20px]"
         isDisabled={loading || rewards === '0' || rewards === undefined}
         isLoading={loading}
       >

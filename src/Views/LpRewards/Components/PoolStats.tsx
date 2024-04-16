@@ -43,7 +43,7 @@ export const PoolStats: React.FC<{
         title="TVL"
         value={
           isDataLoading ? (
-            <Skeleton className="w-[50px] !h-5 lc " />
+            <Skeleton className="w-[50px] !h-5 lc !transform-none " />
           ) : (
             <span className={defaultDataStyle}>
               <Display
@@ -64,7 +64,7 @@ export const PoolStats: React.FC<{
               {getDHMSFromSeconds(parseInt(lockPeriod))}
             </span>
           ) : (
-            <Skeleton className="w-[50px] !h-5 lc " />
+            <Skeleton className="w-[50px] !h-5 lc !transform-none " />
           )
         }
       />
@@ -81,7 +81,7 @@ export const PoolStats: React.FC<{
               />
             </span>
           ) : (
-            <Skeleton className="w-[50px] !h-5 lc " />
+            <Skeleton className="w-[50px] !h-5 lc !transform-none " />
           )
         }
       />
@@ -89,7 +89,7 @@ export const PoolStats: React.FC<{
         title="uBLP Price"
         value={
           isDataLoading ? (
-            <Skeleton className="w-[50px] !h-5 lc " />
+            <Skeleton className="w-[50px] !h-5 lc !transform-none " />
           ) : (
             <span className={defaultDataStyle}>
               <Display
@@ -120,7 +120,7 @@ export const PoolStats: React.FC<{
               />
             </span>
           ) : (
-            <Skeleton className="w-[50px] !h-5 lc " />
+            <Skeleton className="w-[50px] !h-5 lc !transform-none " />
           )
         }
       />

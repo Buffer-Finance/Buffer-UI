@@ -61,7 +61,7 @@ export const WithdrawTab: React.FC<{
             className="text-[#FFFFFF] text-f14 font-medium leading-[14px]"
           />
         ) : (
-          <Skeleton className="w-[50px] !h-5 lc " />
+          <Skeleton className="w-[50px] !h-5 lc !transform-none " />
         )}
       </RowBetween>
       <RowBetween className="mt-5">
@@ -76,7 +76,7 @@ export const WithdrawTab: React.FC<{
             className="text-[#FFFFFF] text-f14 font-medium "
           />
         ) : (
-          <Skeleton className="w-[50px] !h-5 lc " />
+          <Skeleton className="w-[50px] !h-5 lc !transform-none " />
         )}
       </RowBetween>
     </div>

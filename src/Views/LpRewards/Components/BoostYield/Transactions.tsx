@@ -103,7 +103,7 @@ function Body(
           />
         </span>
       ) : (
-        <Skeleton className="w-[50px] !h-5 lc " />
+        <Skeleton className="w-[50px] !h-5 lc !transform-none " />
       );
     case transactionCols.Actions:
       return (

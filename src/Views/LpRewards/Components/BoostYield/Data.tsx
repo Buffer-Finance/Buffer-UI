@@ -67,7 +67,7 @@ export const Data: React.FC<{
 
   return (
     <Container className="gap-7">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 h-full">
         <DataColumn
           title="Total Locked"
           value={
@@ -80,43 +80,45 @@ export const Data: React.FC<{
             </span>
           }
         />
-        <DataColumn
-          title="Total Withdrawable"
-          value={
-            <span className={defaultDataStyle}>
-              <Display
-                data={divide(totalUnlocked, decimals)}
-                precision={2}
-                unit={unit}
-              />
-            </span>
-          }
-        />
-        <DataColumn
-          title="Total Claimable"
-          value={
-            <span className={defaultDataStyle}>
-              <Display
-                data={divide(totalClaimable, 18)}
-                precision={2}
-                unit={unit}
-              />
-            </span>
-          }
-        />
-      </div>
-      <div className="flex flex-col gap-8 justify-end items-end">
-        <WithdrawButton
-          activeChain={activeChain}
-          unlockedAmount={totalUnlocked}
-          withdrawAbleIds={withdrawableIds}
-        />
-        <ClaimButton
-          activeChain={activeChain}
-          rewards={totalClaimable}
-          userAddress={address}
-          claimableIds={claimableIds}
-        />
+        <div className="flex gap-8 items-start h-full justify-between">
+          <DataColumn
+            title="Total Withdrawable"
+            value={
+              <span className={defaultDataStyle}>
+                <Display
+                  data={divide(totalUnlocked, decimals)}
+                  precision={2}
+                  unit={unit}
+                />
+              </span>
+            }
+          />
+          <WithdrawButton
+            activeChain={activeChain}
+            unlockedAmount={totalUnlocked}
+            withdrawAbleIds={withdrawableIds}
+          />
+        </div>
+        <div className="flex gap-8 items-start h-full justify-between">
+          <DataColumn
+            title="Total Claimable"
+            value={
+              <span className={defaultDataStyle}>
+                <Display
+                  data={divide(totalClaimable, 18)}
+                  precision={2}
+                  unit={unit}
+                />
+              </span>
+            }
+          />
+          <ClaimButton
+            activeChain={activeChain}
+            rewards={totalClaimable}
+            userAddress={address}
+            claimableIds={claimableIds}
+          />
+        </div>
       </div>
     </Container>
   );
@@ -163,10 +165,10 @@ const ClaimButton: React.FC<{
   }
 
   return (
-    <ConnectionRequired>
+    <ConnectionRequired className="mt-4">
       <BlueBtn
         onClick={handleClaim}
-        className="!w-fit !h-fit !px-5 !py-[0] min-h-[25px]"
+        className="!w-fit !h-fit !px-5 !py-[0] min-h-[25px] mt-[20px]"
         isDisabled={
           loading ||
           rewards === '0' ||
@@ -221,10 +223,10 @@ const WithdrawButton: React.FC<{
   }
 
   return (
-    <ConnectionRequired>
+    <ConnectionRequired className="mt-4">
       <BlueBtn
         onClick={handleClaim}
-        className="!w-fit !h-fit !px-5 !py-[0] min-h-[25px]"
+        className="!w-fit !h-fit !px-5 !py-[0] min-h-[25px] mt-[20px]"
         isDisabled={
           loading || unlockedAmount === '0' || unlockedAmount === undefined
         }

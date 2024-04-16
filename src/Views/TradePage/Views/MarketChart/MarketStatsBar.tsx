@@ -148,7 +148,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       header: '24h Change',
       data:
         oneDayChange === undefined ? (
-          <Skeleton className="w-[50px] !h-5 lc " />
+          <Skeleton className="w-[50px] !h-5 lc !transform-none " />
         ) : (
           <OneDayChange
             oneDayChange={oneDayChange.toFixed(2)}

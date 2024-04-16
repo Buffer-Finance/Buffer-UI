@@ -22,7 +22,7 @@ export const BoostYield: React.FC<{
       <div className="text-#FFFFFF text-f20 font-medium leading-[18px] pb-[20px]">
         Boost Yield
       </div>
-      <div className="flex items-start gap-3 w-full">
+      <div className="flex items-stretch gap-3 w-full">
         <Data
           activeChain={activeChain}
           activePool={activePool}

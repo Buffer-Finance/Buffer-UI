@@ -5,8 +5,8 @@ export const DataColumn: React.FC<{
   value: React.ReactNode;
 }> = ({ title, value }) => {
   return (
-    <div>
-      <div className="text-[#7F87A7] text-f14 font-medium leading-[14px] mb-3">
+    <div className="flex flex-col items-start gap-3 h-full">
+      <div className="text-[#7F87A7] text-f14 font-medium leading-[14px]">
         {title}
       </div>
       {value}
