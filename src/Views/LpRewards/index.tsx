@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Chain } from 'wagmi';
 import { BoostYield } from './Components/BoostYield';
 import { Deposit } from './Components/Deposit';
-import { PoolData } from './Components/PoolData';
 import { PoolTabs } from './Components/PoolTabs';
 import { Transactions } from './Components/Transactions';
 import { useLPmulticalldata } from './Hooks/useLPmulticalldata';
@@ -32,11 +31,11 @@ const LPRewardsPage: React.FC<{
   console.log(data);
   return (
     <>
-      <PoolData
+      {/* <PoolData
         activePool={activePool}
         readCallData={data}
         activeChain={activeChain}
-      />
+      /> */}
       <Deposit
         activePool={activePool}
         readCallData={data}
