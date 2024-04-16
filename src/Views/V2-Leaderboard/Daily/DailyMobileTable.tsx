@@ -1,22 +1,22 @@
-import { Skeleton } from '@mui/material';
-import React from 'react';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { toFixed } from '@Utils/NumString';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { ILeague } from '../interfaces';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
-import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
-import { Launch } from '@mui/icons-material';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { TableAligner } from '../Components/TableAligner';
 import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { toFixed } from '@Utils/NumString';
-import { gte } from 'lodash';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { Launch } from '@mui/icons-material';
+import { Skeleton } from '@mui/material';
+import { gte } from 'lodash';
+import React from 'react';
+import { Rank } from '../Components/Rank';
+import { TableAligner } from '../Components/TableAligner';
+import { ILeague } from '../interfaces';
 
 export const DailyMobileTable: React.FC<{
   options: ILeague[] | undefined;
@@ -30,6 +30,8 @@ export const DailyMobileTable: React.FC<{
   onClick: (address: string | undefined) => void;
   isWinrateTable?: boolean;
   isDailyTable?: boolean;
+  isGalxTable?: boolean;
+  isCurrentWeek?: boolean;
 }> = ({
   options,
   skip,
@@ -42,6 +44,8 @@ export const DailyMobileTable: React.FC<{
   onClick,
   isWinrateTable,
   isDailyTable = false,
+  isGalxTable = false,
+  isCurrentWeek = false,
 }) => {
   const { address: account } = useUserAccount();
 
@@ -70,6 +74,8 @@ export const DailyMobileTable: React.FC<{
           onClick,
           isWinrateTable,
           isDailyTable,
+          isGalxTable,
+          isCurrentWeek,
         }}
       />
     ) : null;
@@ -83,10 +89,6 @@ export const DailyMobileTable: React.FC<{
           {' '}
           {UserRow}
           {options.map((currentStanding, index) => {
-            const isUser =
-              currentStanding?.user &&
-              currentStanding?.user.toLowerCase() === account?.toLowerCase();
-
             return (
               <MobileRow
                 key={currentStanding.id}
@@ -101,6 +103,8 @@ export const DailyMobileTable: React.FC<{
                   onClick,
                   isWinrateTable,
                   isDailyTable,
+                  isGalxTable,
+                  isCurrentWeek,
                 }}
               />
             );
@@ -132,6 +136,8 @@ const MobileRow = ({
   onClick,
   isWinrateTable,
   isDailyTable,
+  isGalxTable,
+  isCurrentWeek,
 }) => {
   const tokens = usePoolNames();
   const decimals = useDecimalsByAsset();
@@ -425,6 +431,19 @@ const MobileRow = ({
           </div>
         </div>
       </div>
+
+      {/* Third Row */}
+      {isGalxTable && isCurrentWeek && (
+        <div className="mt-3 ">
+          <a
+            href="https://app.galxe.com/quest/XZeZw9Mauqx5SQyn6uGAbs/GC1RUthmQt"
+            target="_blank"
+            className="text-2"
+          >
+            Complete tasks to be eligible <Launch className="text-2" />
+          </a>
+        </div>
+      )}
     </div>
   );
 };

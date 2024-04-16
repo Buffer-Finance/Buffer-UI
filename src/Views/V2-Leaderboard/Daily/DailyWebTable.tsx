@@ -489,6 +489,8 @@ export const DailyWebTable: React.FC<{
           onClick={navigateToProfile}
           isWinrateTable={isWinrateTable}
           isDailyTable={isDailyTable}
+          isGalxTable={isGalxTable}
+          isCurrentWeek={isCurrentWeek}
         />
       )}
 
