@@ -37,6 +37,8 @@ export const DailyWebTable: React.FC<{
   activePage: number;
   isWinrateTable?: boolean;
   isDailyTable?: boolean;
+  isGalxTable?: boolean;
+  isCurrentWeek?: boolean;
 }> = ({
   standings,
   skip,
@@ -48,6 +50,8 @@ export const DailyWebTable: React.FC<{
   activePage,
   isWinrateTable = false,
   isDailyTable = false,
+  isGalxTable = false,
+  isCurrentWeek = false,
 }) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
@@ -71,7 +75,7 @@ export const DailyWebTable: React.FC<{
   }, []);
 
   const DailyCols = useMemo(() => {
-    return [
+    let cols = [
       'Rank',
       'User Address',
       'Volume',
@@ -79,7 +83,13 @@ export const DailyWebTable: React.FC<{
       isWinrateTable ? 'Trades Won' : 'Net PnL (%)',
       isWinrateTable ? 'Win Rate' : 'Total Payout',
     ];
-  }, []);
+    if (isGalxTable && isCurrentWeek) {
+      // add galx column at the end
+      cols = [...cols, 'Galxe Tasks Link'];
+    }
+
+    return cols;
+  }, [isCurrentWeek, isGalxTable, isWinrateTable]);
 
   const HeaderFormatter = (col: number) => {
     return (
@@ -421,6 +431,15 @@ export const DailyWebTable: React.FC<{
           />
         );
 
+      case 6:
+        return (
+          <a
+            href="https://app.galxe.com/quest/XZeZw9Mauqx5SQyn6uGAbs/GC1RUthmQt"
+            target="_blank"
+          >
+            Complete tasks to be eligible <Launch className="ml-2" />
+          </a>
+        );
       default:
         return <div>Unhandled Cell.</div>;
     }
@@ -449,6 +468,10 @@ export const DailyWebTable: React.FC<{
       </BufferTableRow>
     ) : null;
 
+  const widths = isGalxTable
+    ? ['12%', '18%', '14%', '10%', '12%', '14%', '20%']
+    : ['16%', '22%', '16%', '14%', '16%', '16%'];
+
   return (
     <LeaderBoardTableStyles>
       {isMobile && (
@@ -470,7 +493,7 @@ export const DailyWebTable: React.FC<{
       )}
 
       <BufferTable
-        widths={['16%', '22%', '16%', '14%', '16%', '16%']}
+        widths={widths}
         className="mt-4 tab:mt-[0] tab:mb-6"
         bodyJSX={BodyFormatter}
         cols={DailyCols.length}

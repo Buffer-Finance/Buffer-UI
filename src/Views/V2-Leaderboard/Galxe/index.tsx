@@ -262,6 +262,8 @@ export const Galxe = () => {
                 nftWinners={configValue.winnersNFT}
                 userRank={winnerUserRank}
                 activePage={activePages.arbitrum}
+                isGalxTable
+                isCurrentWeek={offset === null || week.toString() === offset}
               />,
               <DailyWebTable
                 activePage={activePages.arbitrum}
@@ -272,6 +274,8 @@ export const Galxe = () => {
                 userData={data?.userData}
                 skip={skip}
                 nftWinners={configValue.losersNFT}
+                isGalxTable
+                isCurrentWeek={offset === null || week.toString() === offset}
               />,
               // <DailyWebTable
               //   activePage={activePages.arbitrum}
@@ -355,6 +359,19 @@ export const Galxe = () => {
                         target={'blank'}
                       >
                         Contest Rules{' '}
+                        <FrontArrow
+                          className="ml-2 w-fit inline scale-125 mt-1"
+                          arrowColor="#7F87A7"
+                        />
+                      </a>
+                      <a
+                        className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
+                        href={
+                          'https://buffer-finance.deform.cc/bbb-trading-comp/'
+                        }
+                        target={'blank'}
+                      >
+                        Fill this form to receive rewards
                         <FrontArrow
                           className="ml-2 w-fit inline scale-125 mt-1"
                           arrowColor="#7F87A7"
