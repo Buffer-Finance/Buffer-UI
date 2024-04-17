@@ -137,7 +137,7 @@ function getROI(e: any) {
 function Duration({ trade }) {
   const timer = useStopWatch(+trade.expirationTime);
 
-  return timer;
+  return timer || 'Processing';
 }
 
 export const PlatformEvents = () => {
