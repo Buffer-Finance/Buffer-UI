@@ -193,7 +193,7 @@ export const NFTImage: React.FC<{ address: string; className?: string }> = ({
       }}
       loading="lazy"
       className={[
-        'w-[20px] mr-2 h-[20px] rounded-full object-contain ',
+        'w-[20px]  h-[20px] rounded-full object-contain ',
         className,
       ].join(' ')}
     />

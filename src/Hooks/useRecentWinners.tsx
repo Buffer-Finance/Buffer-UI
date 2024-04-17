@@ -3,7 +3,16 @@ import { useActiveChain } from './useActiveChain';
 import { useEffect, useRef } from 'react';
 import { useToast } from '@Contexts/Toast';
 import axios from 'axios';
+import { MonoChromeMapper } from 'src/App';
+import {
+  NFTImage,
+  UpDownChipSmm,
+  formatAddress,
+} from '@Views/Jackpot/JackPotWInnerCard';
+import { CircleAroundPictureSM } from '@Views/Profile/Components/UserDataComponent/UserData';
 const duration = 20_000;
+import { Link } from 'react-router-dom';
+const notAllowedSubroutes = new Set(['binary', 'ab']);
 // @ts-nocheck
 export const view = (a: bigint, denominationDecimal: number, decimals = 6) => {
   if (a == undefined) return 0;
@@ -126,12 +135,60 @@ const useRecentWinners = () => {
       }
     };
     const winner = await getUpDownWinner();
-    console.log(`winner: `, winner);
-    if (winner) {
-      // toastify({
-      //   type: 'success',
-      //   msg: toastCount.current == 0 ? 'First toast' : 'Rest toast',
-      // });
+    const isAllowed = (function () {
+      const str = window.location.href;
+      const hash = str.split('#')?.[1];
+      if (hash) {
+        const subroutes = hash.split('/');
+        for (let subroute of subroutes) {
+          if (notAllowedSubroutes.has(subroute.toLowerCase())) {
+            return false;
+          }
+        }
+      }
+      return true;
+    })();
+    console.log(`useRecentWinners-isAllowed: `, isAllowed, winner);
+    if (winner && isAllowed) {
+      const dymmmy = winner;
+      const Icon = MonoChromeMapper[dymmmy.pooltoken];
+      let content = (
+        <Link to={'/binary/BTC-USD'}>
+          <div className="p-2 px-[16px] w-full flex justify-around h-full gap-[14px]">
+            <div className="flex flex-col gap-2 justify-center">
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <CircleAroundPictureSM />
+
+                  <NFTImage address={dymmmy.user_address} className="m-1 " />
+                </div>
+                <div className="text-[#C3C2D4] font-[600] text-f12">
+                  {formatAddress(dymmmy.user_address)}
+                </div>
+              </div>
+              <div className="flex ml-3 items-center gap-1 text-[#C3C2D4] text-f13 font-bold">
+                {dymmmy.asset}
+                <div className="mt-[3px] ml-[4px]">
+                  <UpDownChipSmm isUp={dymmmy.isAbove} isAb={false} />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-1 items-center">
+              <img src="/BronzeBg.svg" className="w-[26px] h-[26px]"></img>
+              <div className="text-f22 text-green font-bold">
+                {dymmmy.payout}
+              </div>
+              <img src={Icon} className="ml-1 w-[24px] h-[24px]"></img>
+            </div>
+          </div>
+        </Link>
+      );
+      toastify({
+        type: 'recent-win',
+        msg: content,
+        timings: 200,
+      });
 
       toastCount.current++;
     }
@@ -139,27 +196,9 @@ const useRecentWinners = () => {
   useEffect(() => {
     if (activeChain.id) {
       const config = getConfig(42161);
-
+      postWinner(config);
       intervalRef.current = setInterval(() => {
-        // postWinner(config);
-        // const dymmmy = {
-        //   isAbove: false,
-        //   user_address: '0x0e8d670d40f8784c7ebb1f1a67902a6086f5f87c',
-        //   duration: 60,
-        //   strike: '3105.62',
-        //   winAmount: 89.955284,
-        //   payout: '189.91',
-        //   roi: 90,
-        //   asset: 'ETH-USD',
-        //   pooltoken: 'USDC',
-        //   expirationTime: 1713218570,
-        // };
-        // let content = <div className="bg-red w-full h-full">helo</div>;
-        // toastify({
-        //   type: 'recent-win',
-        //   msg: content,
-        //   data: dymmmy,
-        // });
+        postWinner(config);
       }, 10000);
     }
     return () => {

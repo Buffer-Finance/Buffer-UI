@@ -14,11 +14,12 @@ import MemoNotifCross from './NotifCross';
 export const NotificationContext = React.createContext('d');
 
 function Layout(props) {
+  const [notifPosition] = useAtom(notificationPositionSettingsAtom);
   const [exit, setExit] = useState(false);
   const [width, setWidth] = useState(0);
   const interval = useRef<any>();
   const dispatch = useToast();
-  const dur = props.toast.inf ? 1000000 : props.toast.timings || 10000;
+  const dur = props.toast.inf ? 1000000 : props.toast.timings || 20;
 
   function set() {
     interval.current = setInterval(() => {
@@ -60,27 +61,13 @@ function Layout(props) {
     color = '#4FBF67';
   }
   const notifRef = useRef<HTMLDivElement>();
-  // if (props.toast.confirmationModal && window.innerWidth > 600) {
-  //   const data = props.toast.confirmationModal;
-  //   return (
-  //     <SingleNotification
-  //       onMouseEnter={entered}
-  //       onMouseLeave={exited}
-  //       className={'bg-1' + (exit ? 'fade-out' : 'fade-in')}
-  //       color={color}
-  //     >
-  //       <></>
-  //       {/* <FinalConfirmationModal data={data} hash={props.toast.hash} /> */}
-  //     </SingleNotification>
-  //   );
-  // }
-  console.log(`index-props.toast.type: `, props.toast.type);
   if (props.toast.type === 'recent-win') {
     return (
       <SingleNotification
+        position={notifPosition}
         onMouseEnter={entered}
         onMouseLeave={exited}
-        className={' !overflow-visible  '}
+        className={' !overflow-visible  ' + (exit ? 'fade-out' : 'fade-in')}
         color={color}
       >
         <div className="w-full  overflow-hidden h-[80px] notifbg rounded-[10px]">
@@ -97,9 +84,10 @@ function Layout(props) {
   }
   return (
     <SingleNotification
+      position={notifPosition}
       onMouseEnter={entered}
       onMouseLeave={exited}
-      className={'bg-1' + (exit ? 'fade-out' : 'fade-in')}
+      className={'bg-1 ' + (exit ? 'fade-out' : 'fade-in')}
       color={color}
     >
       <div

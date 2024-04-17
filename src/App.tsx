@@ -3,7 +3,6 @@ import { atom, useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useEffect } from 'react';
 import {
-  Link,
   Navigate,
   Route,
   Routes,
@@ -11,7 +10,8 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-
+import USDCMono from '/USDCMonochrome.svg';
+import ARBMono from '/ARBMonochrome.svg';
 import { v4 } from 'uuid';
 
 export const CHART_TVID = v4().substring(0, 6);
@@ -55,6 +55,8 @@ import {
   CircleAroundPicture,
   CircleAroundPictureSM,
 } from '@Views/Profile/Components/UserDataComponent/UserData';
+import MemoUSDC_monochrome from '@SVG/Elements/USDC_monochrome';
+import MemoABR_monochrome from '@SVG/Elements/ABR_monochrome';
 const TradePage = lazy(() => import('@Views/TradePage'));
 
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
@@ -148,72 +150,6 @@ const AppRoutes = () => {
       <OnboardingAnimation />
       <OneCTModal />
       <Suspense fallback={<PageLoader />}>
-        <button
-          onClick={async () => {
-            const dymmmy = {
-              isAbove: false,
-              user_address: '0x0e8d670d40f8784c7ebb1f1a67902a6086f5f87c',
-              duration: 60,
-              strike: '3105.62',
-              winAmount: 89.955284,
-              payout: '189.91',
-              roi: 90,
-              asset: 'ETH-USD',
-              pooltoken: 'USDC',
-              expirationTime: 1713218570,
-            };
-            await sleep(3000);
-
-            let content = (
-              <Link to={'/binary/BTC-USD'}>
-                <div className="p-2 px-[16px] w-full flex justify-around h-full gap-[14px]">
-                  <div className="flex flex-col gap-2 justify-center">
-                    <div className="flex items-center gap-2">
-                      <div className="relative">
-                        <CircleAroundPictureSM />
-
-                        <NFTImage
-                          address={'0x0e8d670d40f8784c7ebb1f1a67902a6086f5f87c'}
-                          className="m-1"
-                        />
-                      </div>
-                      <div className="text-[#C3C2D4] font-[600] text-f12">
-                        {formatAddress(dymmmy.user_address)}
-                      </div>
-                    </div>
-                    <div className="flex ml-3 items-center gap-1 text-[#C3C2D4] text-f13 font-bold">
-                      {dymmmy.asset}
-                      <div className="mt-[3px] ml-[4px]">
-                        <UpDownChipSmm isUp={dymmmy.isAbove} isAb={false} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-1 items-center">
-                    <img
-                      src="/BronzeBg.svg"
-                      className="w-[26px] h-[26px]"
-                    ></img>
-                    <div className="text-f22 text-green font-bold">
-                      {dymmmy.payout}
-                    </div>
-                    <img
-                      src="/BronzeBg.svg"
-                      className="w-[26px] h-[26px]"
-                    ></img>
-                  </div>
-                </div>
-              </Link>
-            );
-            toastify({
-              type: 'recent-win',
-              msg: content,
-              id: 23132,
-            });
-          }}
-        >
-          Hello
-        </button>
         <Routes>
           <Route path="trades" element={<AllTrades />} />
           <Route path="/faucet" element={<IbfrFaucet />} />
@@ -395,4 +331,8 @@ const ViewOnlyModeTradePageWarning = () => {
       className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100 sm:!text-f14"
     />
   );
+};
+export const MonoChromeMapper = {
+  USDC: USDCMono,
+  ARB: ARBMono,
 };

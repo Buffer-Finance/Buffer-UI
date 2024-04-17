@@ -1,23 +1,86 @@
 import { notificationPosition } from '@Views/TradePage/type';
 import styled, { keyframes } from 'styled-components';
 
-const fadeIn = keyframes`
-from{
-    transform:translateX(150%);
-
-}
-to{
-    transform:translateX(0%);
-}
-`;
-const fadeOut = keyframes`
-from{
-    transform:translateX(0%);
-}
-to{
-    transform:translateX(150%);
-}
-`;
+const fadeIn = (notifPosition: notificationPosition) => {
+  switch (notifPosition) {
+    case notificationPosition.BottomLeft:
+      return keyframes`
+      from{
+          transform:translateX(-150%);
+      }
+      to{
+          transform:translateX(0%);
+      }
+      `;
+    case notificationPosition.BottomRight:
+      return keyframes`
+      from{
+          transform:translateX(150%);
+      }
+      to{
+          transform:translateX(0%);
+      }
+      `;
+    case notificationPosition.TopLeft:
+      return keyframes`
+      from{
+          transform:translateX(0%);
+      }
+      to{
+          transform:translateX(-150%);
+      }
+      `;
+    case notificationPosition.TopRight:
+      return keyframes`
+      from{
+          transform:translateX(0%);
+      }
+      to{
+          transform:translateX(150%);
+      }
+      `;
+  }
+};
+const fadeOut = (notifPosition: notificationPosition) => {
+  switch (notifPosition) {
+    case notificationPosition.BottomLeft:
+      return keyframes`
+      from{
+          transform:translateX(0%);
+      }
+      to{
+          transform:translateX(-150%);
+      }
+      `;
+    case notificationPosition.BottomRight:
+      return keyframes`
+      from{
+          transform:translateX(0%);
+      }
+      to{
+          transform:translateX(150%);
+      }
+      `;
+    case notificationPosition.TopLeft:
+      return keyframes`
+      from{
+          transform:translateX(-150%);
+      }
+      to{
+          transform:translateX(0%);
+      }
+      `;
+    case notificationPosition.TopRight:
+      return keyframes`
+      from{
+          transform:translateX(150%);
+      }
+      to{
+          transform:translateX(0%);
+      }
+      `;
+  }
+};
 
 export const Background = styled.div`
   position: fixed;
@@ -88,10 +151,12 @@ export const SingleNotification = styled.div`
   font-size: 1.3rem;
   margin: 10px;
   &.fade-in {
-    animation: ${fadeIn} 500ms ease;
+    animation: ${(props: { position: number }) => fadeIn(props.position)} 500ms
+      ease;
   }
   &.fade-out {
-    animation: ${fadeOut} 500ms ease;
+    animation: ${(props: { position: number }) => fadeOut(props.position)} 500ms
+      ease;
   }
   @media (max-width: 600px) {
     font-size: 1.2rem;
