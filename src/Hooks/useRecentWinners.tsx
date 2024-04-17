@@ -92,10 +92,6 @@ const useRecentWinners = () => {
         console.log('error fetching data');
         return null;
       }
-      console.log(
-        `FetchLatestWinsQuery.data.data.userOptionDatas: `,
-        FetchLatestWinsQuery.data.data.userOptionDatas.length
-      );
       const winners = FetchLatestWinsQuery.data.data.userOptionDatas?.map(
         (winner) => {
           const decimals = getPoolToken(winner);
@@ -148,7 +144,6 @@ const useRecentWinners = () => {
       }
       return true;
     })();
-    console.log(`useRecentWinners-isAllowed: `, isAllowed, winner);
     if (winner && isAllowed) {
       const dymmmy = winner;
       const Icon = MonoChromeMapper[dymmmy.pooltoken];
@@ -195,7 +190,7 @@ const useRecentWinners = () => {
   };
   useEffect(() => {
     if (activeChain.id) {
-      const config = getConfig(42161);
+      const config = getConfig(activeChain.id);
       postWinner(config);
       intervalRef.current = setInterval(() => {
         postWinner(config);
