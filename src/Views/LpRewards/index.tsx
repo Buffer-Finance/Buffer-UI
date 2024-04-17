@@ -4,7 +4,6 @@ import { Chain } from 'wagmi';
 import { BoostYield } from './Components/BoostYield';
 import { Deposit } from './Components/Deposit';
 import { PoolData } from './Components/PoolData';
-import { PoolTabs } from './Components/PoolTabs';
 import { Transactions } from './Components/Transactions';
 import { useLPmulticalldata } from './Hooks/useLPmulticalldata';
 import { poolsType } from './types';
@@ -15,7 +14,7 @@ export const LpRewards = () => {
   if (activeChain === undefined) return <div>Loading...</div>;
   return (
     <div className="p-8 w-full sm:p-4">
-      <PoolTabs activePool={activePool} setActivePool={setActivePool} />
+      {/* <PoolTabs activePool={activePool} setActivePool={setActivePool} /> */}
       <LPRewardsPage activePool={activePool} activeChain={activeChain} />
       <Transactions activePool={activePool} activeChain={activeChain} />
     </div>
