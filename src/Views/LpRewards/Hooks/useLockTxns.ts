@@ -19,7 +19,7 @@ export const useLockTxns = (activeChain: Chain, activePool: poolsType) => {
                     first: 10000
                     orderBy: timestamp
                     orderDirection: desc
-                    where: {poolName: "${poolName}",userAddress:"${address}"}
+                    where: {poolName: "${poolName}",userAddress:"${address}",isWithdrawn:false}
                   ) {
                     userAddress
                     timestamp
