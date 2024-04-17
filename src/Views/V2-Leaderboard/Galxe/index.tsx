@@ -150,6 +150,17 @@ export const Galxe = () => {
     return list;
   }, [offset, activeChain]);
 
+  const isCurrentWeekIsWeekTwo = useMemo(() => {
+    if (week == 2) {
+      if (offset == null) {
+        return true;
+      } else if (offset == '2') {
+        return true;
+      }
+    }
+    return false;
+  }, [week, offset]);
+
   let content;
   if (!isTimerEnded) {
     content = (
@@ -263,7 +274,7 @@ export const Galxe = () => {
                 userRank={winnerUserRank}
                 activePage={activePages.arbitrum}
                 isGalxTable
-                isCurrentWeek={offset === null || week.toString() === offset}
+                isCurrentWeek={isCurrentWeekIsWeekTwo}
               />,
               <DailyWebTable
                 activePage={activePages.arbitrum}
@@ -275,7 +286,7 @@ export const Galxe = () => {
                 skip={skip}
                 nftWinners={configValue.losersNFT}
                 isGalxTable
-                isCurrentWeek={offset === null || week.toString() === offset}
+                isCurrentWeek={isCurrentWeekIsWeekTwo}
               />,
               // <DailyWebTable
               //   activePage={activePages.arbitrum}
