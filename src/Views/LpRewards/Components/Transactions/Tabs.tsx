@@ -5,9 +5,9 @@ export const Tabs: React.FC<{
   setActiveTab: (newTab: transactionTabType) => void;
 }> = ({ activeTab, setActiveTab }) => {
   return (
-    <div className="flex gap-7 items-center mt-8">
+    <div className="flex gap-7 items-center mt-8 sm:mt-[0]">
       <button
-        className={`text-f20 font-medium ${
+        className={`text-f20 sm:text-f16 font-medium ${
           activeTab === 'all' ? 'text-[#FFFFFF]' : 'text-[#808191]'
         }`}
         onClick={() => setActiveTab('all')}
@@ -15,7 +15,7 @@ export const Tabs: React.FC<{
         User Transactions
       </button>
       <button
-        className={`text-f20 font-medium ${
+        className={`text-f20 sm:text-f16 font-medium ${
           activeTab === 'my' ? 'text-[#FFFFFF]' : 'text-[#808191]'
         }`}
         onClick={() => setActiveTab('my')}

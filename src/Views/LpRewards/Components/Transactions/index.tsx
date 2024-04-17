@@ -10,7 +10,7 @@ export const Transactions: React.FC<{
 }> = ({ activePool, activeChain }) => {
   const [activeTab, setActiveTab] = useState<transactionTabType>('all');
   return (
-    <div className="w-full">
+    <div className="w-full sm:hidden">
       <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
       <Table
         activeTab={activeTab}

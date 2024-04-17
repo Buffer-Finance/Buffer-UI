@@ -3,6 +3,7 @@ export type transactionTabType = 'all' | 'my';
 // export type depositTabType = 'deposit' | 'withdraw' | 'vest';
 export type depositTabType = 'deposit' | 'withdraw';
 export type graphsType = 'price' | 'tvl' | 'apr' | 'pnl';
+export type mobileTabsType = 'deposits' | 'transactions';
 
 export type poolTxn = {
   userAddress: string;

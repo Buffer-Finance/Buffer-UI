@@ -1,22 +1,36 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
+import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
 import { useState } from 'react';
 import { Chain } from 'wagmi';
 import { BoostYield } from './Components/BoostYield';
 import { Deposit } from './Components/Deposit';
+import { MobileTabs } from './Components/MobileTabs';
 import { PoolData } from './Components/PoolData';
 import { Transactions } from './Components/Transactions';
+import { MobileTransactions } from './Components/Transactions/MobileTransactions';
 import { useLPmulticalldata } from './Hooks/useLPmulticalldata';
-import { poolsType } from './types';
+import { mobileTabsType, poolsType } from './types';
 
 export const LpRewards = () => {
   const [activePool, setActivePool] = useState<poolsType>('uBLP');
+  const [activeMobileTab, setActiveMobileTab] =
+    useState<mobileTabsType>('deposits');
   const { activeChain } = useActiveChain();
   if (activeChain === undefined) return <div>Loading...</div>;
   return (
     <div className="p-8 w-full sm:p-4">
       {/* <PoolTabs activePool={activePool} setActivePool={setActivePool} /> */}
-      <LPRewardsPage activePool={activePool} activeChain={activeChain} />
-      <Transactions activePool={activePool} activeChain={activeChain} />
+      <MobileTabs
+        activeTab={activeMobileTab}
+        setActiveTab={setActiveMobileTab}
+      />
+      <HorizontalTransition value={activeMobileTab === 'deposits' ? 0 : 1}>
+        <>
+          <LPRewardsPage activePool={activePool} activeChain={activeChain} />
+          <Transactions activePool={activePool} activeChain={activeChain} />
+        </>
+        <MobileTransactions activePool={activePool} activeChain={activeChain} />
+      </HorizontalTransition>
     </div>
   );
 };
