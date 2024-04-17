@@ -14,7 +14,7 @@ export const LpRewards = () => {
   const { activeChain } = useActiveChain();
   if (activeChain === undefined) return <div>Loading...</div>;
   return (
-    <div className="p-8 w-full">
+    <div className="p-8 w-full sm:p-4">
       <PoolTabs activePool={activePool} setActivePool={setActivePool} />
       <LPRewardsPage activePool={activePool} activeChain={activeChain} />
       <Transactions activePool={activePool} activeChain={activeChain} />

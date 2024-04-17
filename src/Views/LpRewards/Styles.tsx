@@ -9,4 +9,9 @@ export const StatsContainer = styled.div`
   gap: 24px;
   line-height: 25px;
   border-radius: 12px;
+
+  @media only screen and (max-width: 600px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `;

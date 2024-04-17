@@ -16,7 +16,7 @@ export const ActionCard: React.FC<{
     useState<depositTabType>('deposit');
 
   return (
-    <Container className="min-w-[500px]">
+    <Container className="min-w-[500px] sm:min-w-full">
       <Tabs
         activeTab={depositTabType}
         setDepositTabType={setDepositTabType}

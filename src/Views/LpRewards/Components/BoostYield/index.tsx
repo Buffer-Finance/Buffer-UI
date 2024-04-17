@@ -18,11 +18,11 @@ export const BoostYield: React.FC<{
   if (data === undefined || (!data && !error)) return <div>Loading...</div>;
 
   return (
-    <div className="mt-[64px] w-full">
+    <div className="mt-[64px] w-full sm:mt-[32px]">
       <div className="text-#FFFFFF text-f20 font-medium leading-[18px] pb-[20px]">
         Boost Yield
       </div>
-      <div className="flex items-stretch gap-3 w-full">
+      <div className="flex items-stretch gap-3 w-full sm:flex-col">
         <Data
           activeChain={activeChain}
           activePool={activePool}
