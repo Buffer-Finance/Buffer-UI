@@ -23,7 +23,7 @@ export const UserData: React.FC<{
 }> = ({ activePool, readcallData, activeChain }) => {
   const rewards = readcallData[activePool + '-claimable']?.[0];
   const totalDeposits = readcallData[activePool + '-depositBalances']?.[0];
-  const apr = useUSDCapr(activeChain, activePool);
+  const { usdcApr: apr } = useUSDCapr(activeChain, activePool);
   const unit = activePool === 'uBLP' ? 'USDC' : 'ARB';
   const decimals = activePool === 'uBLP' ? 6 : 18;
   return (

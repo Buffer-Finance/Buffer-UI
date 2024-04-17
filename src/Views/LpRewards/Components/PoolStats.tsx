@@ -20,7 +20,7 @@ export const PoolStats: React.FC<{
     activeChain,
     activePool
   );
-  const apr = useUSDCapr(activeChain, activePool);
+  const { usdcApr: apr } = useUSDCapr(activeChain, activePool);
   const isDataLoading = !data && !error;
   const isPoolStatsLoading = !poolStatsData && !poolStatsError;
   const lockPeriod = readCallData[activePool + '-lockupPeriod']?.[0];

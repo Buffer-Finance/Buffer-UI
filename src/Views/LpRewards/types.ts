@@ -46,4 +46,8 @@ export type tokensPerInterval = {
   lockPerInterval: {
     amount: string;
   }[];
+  lockMultiplierSettings: {
+    maxLockDuration: string;
+    maxLockMultiplier: string;
+  }[];
 };

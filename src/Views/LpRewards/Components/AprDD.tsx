@@ -1,8 +1,15 @@
+import { add } from '@Utils/NumString/stringArithmatics';
+import { Display } from '@Views/Common/Tooltips/Display';
 import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween, RowGap } from '@Views/TradePage/Components/Row';
 import styled from '@emotion/styled';
 import { KeyboardArrowDown } from '@mui/icons-material';
+import { Skeleton } from '@mui/material';
 import { useState } from 'react';
+import { Chain } from 'viem';
+import { useUSDCapr } from '../Hooks/useUSDCapr';
+import { poolsType } from '../types';
+import { convertLockPeriodToSeconds } from './BoostYield/Lock';
 import { DayMonthInput } from './DayMonthInput';
 
 export const APRheading = styled.div`
@@ -31,8 +38,21 @@ export const AprDD: React.FC<{
     }>
   >;
   isDisabled?: boolean;
-}> = ({ lockPeriod, setLockPeriod, isDisabled }) => {
+  activeChain: Chain;
+  activePool: poolsType;
+}> = ({ lockPeriod, setLockPeriod, isDisabled, activeChain, activePool }) => {
   const [isAPRddOpen, setIsAPRddOpen] = useState<boolean>(false);
+  const { getMultiplierByLockDuration, getLockAPR, usdcApr } = useUSDCapr(
+    activeChain,
+    activePool
+  );
+  const lockPeriodInSeconds = convertLockPeriodToSeconds(lockPeriod);
+  const lockApr = getLockAPR(lockPeriodInSeconds, false);
+  const multiPlier = getMultiplierByLockDuration(lockPeriodInSeconds, false);
+  let factor = multiPlier;
+  if (factor !== null && factor !== undefined) {
+    factor = (factor + 1e4) / 1e4;
+  }
   return (
     <>
       <RowBetween className="mt-6">
@@ -53,9 +73,23 @@ export const AprDD: React.FC<{
             setData={setLockPeriod}
             isDisabled={isDisabled}
           />
-          <div className="text-f12 font-medium text-[#7F87A7] leading-[16px]">
-            5.46% Lock Bonus (x1.06)
-          </div>
+          {factor === null || factor === undefined ? (
+            <Skeleton
+              className="w-[70px] !h-6 lc !transform-none"
+              variant="rectangular"
+            />
+          ) : (
+            <div className="text-f12 font-medium text-[#7F87A7] leading-[16px]">
+              <Display
+                data={lockApr}
+                unit="%"
+                precision={2}
+                className="!inline"
+              />{' '}
+              Lock Bonus (x
+              <Display data={factor} precision={2} className="!inline" />)
+            </div>
+          )}
         </ColumnGap>
       </RowBetween>
 
@@ -69,18 +103,39 @@ export const AprDD: React.FC<{
             onClick={() => setIsAPRddOpen(!isAPRddOpen)}
           />
         </RowGap>
-        <APRvalue>19.49%</APRvalue>
+        {usdcApr && lockApr ? (
+          <APRvalue>
+            <Display data={add(usdcApr, lockApr)} unit="%" precision={2} />
+          </APRvalue>
+        ) : (
+          <Skeleton
+            className="w-[70px] !h-6 lc !transform-none"
+            variant="rectangular"
+          />
+        )}
       </RowBetween>
       {isAPRddOpen && (
         <RowBetween className="mt-5">
           <APRheading>USDC APR</APRheading>
-          <APRvalue>15.49%</APRvalue>
+          {usdcApr ? (
+            <APRvalue>
+              <Display data={usdcApr} unit="%" precision={2} />
+            </APRvalue>
+          ) : (
+            <Skeleton className="w-[70px] !h-6 lc !transform-none" />
+          )}
         </RowBetween>
       )}
       {isAPRddOpen && (
         <RowBetween className="mt-4">
           <APRheading>Lock Bonus APR</APRheading>
-          <APRvalue>4.00%</APRvalue>
+          {lockApr ? (
+            <APRvalue>
+              <Display data={lockApr} unit="%" precision={2} />
+            </APRvalue>
+          ) : (
+            <Skeleton className="w-[70px] !h-6 lc !transform-none" />
+          )}
         </RowBetween>
       )}
     </>

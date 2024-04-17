@@ -19,6 +19,10 @@ export const useTokensPerInterval = (activeChain: Chain) => {
         ) {
             amount
           }
+        lockMultiplierSettings{
+          maxLockDuration
+          maxLockMultiplier
+        }
       }`;
       try {
         const { data, status } = await axios.post(graphUrl, { query });

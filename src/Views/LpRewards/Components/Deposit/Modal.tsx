@@ -69,7 +69,12 @@ export const Modal: React.FC<{
           <BLPprice activeChain={activeChain} activePool={activePool} />
           {unit}
         </div>
-        <AprDD lockPeriod={lockPeriod} setLockPeriod={setLockPeriod} />
+        <AprDD
+          lockPeriod={lockPeriod}
+          setLockPeriod={setLockPeriod}
+          activeChain={activeChain}
+          activePool={activePool}
+        />
         <ActionButton
           activePool={activePool}
           allowance={allowance}

@@ -9,6 +9,7 @@ import BufferTable from '@Views/Common/BufferTable';
 import { TableHeader } from '@Views/Common/TableHead';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
+import { useUSDCapr } from '@Views/LpRewards/Hooks/useUSDCapr';
 import { getLpConfig } from '@Views/LpRewards/config';
 import { lockTxn, poolsType } from '@Views/LpRewards/types';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
@@ -85,7 +86,9 @@ function Body(
         />
       );
     case transactionCols.APR:
-      return <span className="text-f15">Meh</span>;
+      return (
+        <APR activeChain={activeChain} lockTxn={txn} activePool={activePool} />
+      );
     case transactionCols.remainingTime:
       return (
         <span className="text-f15">
@@ -109,23 +112,21 @@ function Body(
       return (
         <div className="flex gap-6 items-center">
           {distanceObject.distance < 0 && (
-            <NumberTooltip content={'Unlock'}>
-              <button onClick={() => {}}>
-                <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Withdraw.png" />
-              </button>
-            </NumberTooltip>
+            <Withdraw activeChain={activeChain} lockTxn={txn} />
           )}
           <RenewLock
             lockTxn={txn}
             activeChain={activeChain}
             decimals={decimals}
             unit={unit}
+            activePool={activePool}
           />
           <ExtendLock
             lockTxn={txn}
             activeChain={activeChain}
             decimals={decimals}
             unit={unit}
+            activePool={activePool}
           />
           <ClaimRewards lockTxn={txn} activeChain={activeChain} />
         </div>
@@ -277,7 +278,8 @@ const RenewLock: React.FC<{
   activeChain: Chain;
   decimals: number;
   unit: string;
-}> = ({ lockTxn, activeChain, decimals, unit }) => {
+  activePool: poolsType;
+}> = ({ lockTxn, activeChain, decimals, unit, activePool }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -293,6 +295,7 @@ const RenewLock: React.FC<{
           parseInt(lockTxn.lockPeriod)
         )}
         setLockPeriod={() => {}}
+        activePool={activePool}
       />
       <NumberTooltip content={'Renew'}>
         <button
@@ -312,7 +315,8 @@ const ExtendLock: React.FC<{
   lockTxn: lockTxn;
   decimals: number;
   unit: string;
-}> = ({ activeChain, lockTxn, decimals, unit }) => {
+  activePool: poolsType;
+}> = ({ activeChain, lockTxn, decimals, unit, activePool }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [lockPeriod, setLockPeriod] = useState(
     convertToNumberOfMonthsAndDays(parseInt(lockTxn.lockPeriod))
@@ -329,6 +333,7 @@ const ExtendLock: React.FC<{
         isExtendModal={true}
         lockPeriod={lockPeriod}
         setLockPeriod={setLockPeriod}
+        activePool={activePool}
       />
       <NumberTooltip content={'Extend'}>
         <button
@@ -340,5 +345,79 @@ const ExtendLock: React.FC<{
         </button>
       </NumberTooltip>
     </>
+  );
+};
+
+const APR: React.FC<{
+  activeChain: Chain;
+  lockTxn: lockTxn;
+  activePool: poolsType;
+}> = ({ activeChain, lockTxn, activePool }) => {
+  const { getLockAPR } = useUSDCapr(activeChain, activePool);
+  const lockAPR = getLockAPR(
+    parseInt(lockTxn.lockPeriod),
+    Math.floor(new Date().getTime() / 1000) >
+      parseInt(lockTxn.timestamp) + parseInt(lockTxn.lockPeriod)
+  );
+  if (lockAPR === null) {
+    return <Skeleton className="w-[70px] !h-6 lc !transform-none" />;
+  }
+  if (lockAPR === undefined) {
+    return <span className="text-f15">Something went wrong</span>;
+  }
+  return (
+    <span className="text-f15">
+      <Display
+        data={lockAPR}
+        unit="%"
+        precision={2}
+        className="!justify-start"
+      />
+    </span>
+  );
+};
+
+const Withdraw: React.FC<{
+  activeChain: Chain;
+  lockTxn: lockTxn;
+}> = ({ activeChain, lockTxn }) => {
+  const contracts = getLpConfig(activeChain.id);
+  const toastify = useToast();
+  const [loading, setLoading] = useState(false);
+  const { writeCall } = useWriteCall(contracts.nftLockPool, NFTlockPoolABI);
+
+  async function handleWithdraw() {
+    try {
+      setLoading(true);
+      writeCall(
+        (returnObj) => {
+          if (returnObj) {
+            toastify({
+              type: 'success',
+              msg: 'Withdrawn Successfully',
+              id: 'withdraw',
+            });
+          }
+        },
+        'withdrawAllFromPosition',
+        [lockTxn.nftId]
+      );
+    } catch (e) {
+      toastify({
+        type: 'error',
+        msg: (e as Error).message,
+        id: 'withdraw',
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <NumberTooltip content={'Withdraw'}>
+      <button onClick={handleWithdraw} disabled={loading}>
+        <img src="https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/Withdraw.png" />
+      </button>
+    </NumberTooltip>
   );
 };

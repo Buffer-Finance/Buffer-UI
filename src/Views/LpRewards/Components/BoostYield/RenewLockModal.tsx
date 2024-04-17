@@ -4,7 +4,7 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { getLpConfig } from '@Views/LpRewards/config';
-import { lockTxn } from '@Views/LpRewards/types';
+import { lockTxn, poolsType } from '@Views/LpRewards/types';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import styled from '@emotion/styled';
 import { CloseOutlined } from '@mui/icons-material';
@@ -39,6 +39,7 @@ export const RenewLockModal: React.FC<{
       months: number;
     }>
   >;
+  activePool: poolsType;
 }> = ({
   isOpen,
   closeModal,
@@ -49,6 +50,7 @@ export const RenewLockModal: React.FC<{
   isExtendModal,
   lockPeriod,
   setLockPeriod,
+  activePool,
 }) => {
   const contracts = getLpConfig(activeChain.id);
   const { writeCall } = useWriteCall(contracts.nftLockPool, NFTlockPoolABI);
@@ -118,6 +120,8 @@ export const RenewLockModal: React.FC<{
           lockPeriod={lockPeriod}
           setLockPeriod={setLockPeriod}
           isDisabled={!isExtendModal}
+          activeChain={activeChain}
+          activePool={activePool}
         />
         <RowBetween className="my-4">
           <APRheading>Amount</APRheading>
