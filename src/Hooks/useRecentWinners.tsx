@@ -144,6 +144,7 @@ const useRecentWinners = () => {
       }
       return true;
     })();
+    console.log(`useRecentWinners-isAllowed: `, isAllowed, winner);
     if (winner && isAllowed) {
       const dymmmy = winner;
       const Icon = MonoChromeMapper[dymmmy.pooltoken];

@@ -67,7 +67,7 @@ function Layout(props) {
         position={notifPosition}
         onMouseEnter={entered}
         onMouseLeave={exited}
-        className={' !overflow-visible  ' + (exit ? 'fade-out' : 'fade-in')}
+        className={' !overflow-visible  '}
         color={color}
       >
         <div className="w-full  overflow-hidden h-[80px] notifbg rounded-[10px]">
@@ -87,7 +87,7 @@ function Layout(props) {
       position={notifPosition}
       onMouseEnter={entered}
       onMouseLeave={exited}
-      className={'bg-1 ' + (exit ? 'fade-out' : 'fade-in')}
+      className={'bg-1 '}
       color={color}
     >
       <div
