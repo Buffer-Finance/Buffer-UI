@@ -70,7 +70,10 @@ function Layout(props) {
         className={' !overflow-visible  '}
         color={color}
       >
-        <div className="w-full  overflow-hidden h-[80px] notifbg rounded-[10px]">
+        <div
+          className="w-full  overflow-hidden h-[80px] notifbg rounded-[10px]"
+          onClick={() => setWidth(101)}
+        >
           {props.toast.msg}
         </div>
         <button
