@@ -9,6 +9,7 @@ import FailedSuccessIcon from '@Assets/Elements/FailedSuccess';
 import { CLoseSVG } from '@Views/TradePage/Components/CloseSVG';
 import { useAtom } from 'jotai';
 import { notificationPositionSettingsAtom } from '@Views/TradePage/atoms';
+import MemoNotifCross from './NotifCross';
 
 export const NotificationContext = React.createContext('d');
 
@@ -17,7 +18,7 @@ function Layout(props) {
   const [width, setWidth] = useState(0);
   const interval = useRef<any>();
   const dispatch = useToast();
-  const dur = props.toast.inf ? 1000000 : props.toast.timings || 20;
+  const dur = props.toast.inf ? 1000000 : props.toast.timings || 10000;
 
   function set() {
     interval.current = setInterval(() => {
@@ -73,6 +74,27 @@ function Layout(props) {
   //     </SingleNotification>
   //   );
   // }
+  console.log(`index-props.toast.type: `, props.toast.type);
+  if (props.toast.type === 'recent-win') {
+    return (
+      <SingleNotification
+        onMouseEnter={entered}
+        onMouseLeave={exited}
+        className={' !overflow-visible  '}
+        color={color}
+      >
+        <div className="w-full  overflow-hidden h-[80px] notifbg rounded-[10px]">
+          {props.toast.msg}
+        </div>
+        <button
+          onClick={(e) => setWidth(101)}
+          className="absolute top-[0px] right-[0px] z-10 -translate-y-[30%] p-2  translate-x-[30%] rounded-[100%] bg-[#3A3B46]"
+        >
+          <MemoNotifCross />
+        </button>
+      </SingleNotification>
+    );
+  }
   return (
     <SingleNotification
       onMouseEnter={entered}

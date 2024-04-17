@@ -105,9 +105,7 @@ export const appConfig = {
   },
   '42161': {
     graph: {
-      MAIN: `https://subgraph.satsuma-prod.com/${
-        import.meta.env.VITE_SATSUMA_KEY
-      }/bufferfinance/v2.5-arbitrum-mainnet/api`,
+      MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v3.0.0-ab-options-add-payout_usd/api`,
       ABOVE_BELOW:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.4-ab-only-fix-market-id/api',
       EVENTS:

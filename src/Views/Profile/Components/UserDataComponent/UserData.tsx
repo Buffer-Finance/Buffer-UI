@@ -250,6 +250,37 @@ export const CircleAroundPicture = () => {
     </svg>
   );
 };
+export const CircleAroundPictureSM = () => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="absolute top-[0px] right-[0px]"
+    >
+      <path
+        d="M19.1005 3.76829C21.1256 5.44629 22.4806 7.79106 22.9204 10.3781"
+        stroke="#A3E3FF"
+        stroke-width="0.612564"
+        stroke-miterlimit="10"
+      />
+      <path
+        d="M13.5821 1.32859C14.7488 1.49145 15.8815 1.84039 16.9368 2.362"
+        stroke="#A3E3FF"
+        stroke-width="0.612564"
+        stroke-miterlimit="10"
+      />
+      <path
+        d="M23.0733 12.2174C23.0733 14.3918 22.426 16.5173 21.2133 18.3252C20.0006 20.1331 18.2769 21.5422 16.2602 22.3743C14.2435 23.2064 12.0244 23.4241 9.88352 22.9999C7.74262 22.5757 5.77607 21.5287 4.23257 19.9912C2.68906 18.4537 1.63792 16.4948 1.21207 14.3622C0.786219 12.2296 1.00478 10.0191 1.84012 8.01026C2.67546 6.00142 4.09006 4.28443 5.90503 3.07642C7.72 1.86841 9.85382 1.22363 12.0367 1.22363"
+        stroke="#3772FF"
+        stroke-width="0.612564"
+        stroke-miterlimit="10"
+      />
+    </svg>
+  );
+};
 
 const DataWrapper = styled.div`
   .winner-card {

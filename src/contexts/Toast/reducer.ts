@@ -1,15 +1,15 @@
-import { v4 } from "uuid";
+import { v4 } from 'uuid';
 const reducer = (state, actions) => {
-  if (typeof actions === "string") {
+  if (typeof actions === 'string') {
     let noti = {
       msg: actions,
       id: v4(),
-      type: "success",
+      type: 'success',
     };
     return state.concat(noti);
   }
   switch (actions.type) {
-    case "ADD-NOTIFICATION":
+    case 'ADD-NOTIFICATION':
       if (actions.payload.id) {
         // id is passed.
         let duplState = state;
@@ -25,9 +25,10 @@ const reducer = (state, actions) => {
       }
       actions.payload.id = v4();
       return state.concat(actions.payload);
-    case "REMOVE-NOTIFICATION":
+    case 'REMOVE-NOTIFICATION':
       return state.filter((s) => s.id !== actions.payload.id);
     default:
+      console.log(`actions.id: `, actions.id);
       if (actions.id) {
         // id is passed.
         actions.animatable = true;

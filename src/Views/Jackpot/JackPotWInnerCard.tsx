@@ -172,6 +172,33 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
   );
 };
 
+export const NFTImage: React.FC<{ address: string; className?: string }> = ({
+  address,
+  className,
+}) => {
+  const nft = useHighestTierNFT2(address);
+
+  return (
+    <img
+      src={
+        nft.highestTierNFT?.nftImage
+          ? 'https://gateway.pinata.cloud/ipfs/' +
+            nft.highestTierNFT?.nftImage.split('://')[1]
+          : '/NFT-ph.png'
+      }
+      onError={(e) => {
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = '/NFT-ph.png';
+        e.currentTarget.classList.remove('img-loading');
+      }}
+      loading="lazy"
+      className={[
+        'w-[20px] mr-2 h-[20px] rounded-full object-contain ',
+        className,
+      ].join(' ')}
+    />
+  );
+};
 const OpenInNew = () => {
   return (
     <svg
@@ -189,7 +216,7 @@ const OpenInNew = () => {
   );
 };
 
-const UpDownChipSmm = ({ isUp, isAb }) => {
+export const UpDownChipSmm = ({ isUp, isAb }) => {
   if (isAb) {
     if (isUp) {
       return (
