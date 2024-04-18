@@ -11,7 +11,7 @@ import {
 } from '@Views/Jackpot/JackPotWInnerCard';
 import { CircleAroundPictureSM } from '@Views/Profile/Components/UserDataComponent/UserData';
 const duration = 20_000;
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 const notAllowedSubroutes = new Set(['binary', 'ab']);
 // @ts-nocheck
 export const view = (a: bigint, denominationDecimal: number, decimals = 6) => {
@@ -44,6 +44,7 @@ export const convertToBigint = (trade: TradeStr): Traden => {
 };
 const useRecentWinners = () => {
   const { activeChain } = useActiveChain();
+  const location = useLocation();
   const toastify = useToast();
   const toastCount = useRef<number>(0);
   let intervalRef = useRef<NodeJS.Timer | null>(null);
@@ -200,7 +201,10 @@ const useRecentWinners = () => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [activeChain]);
+  }, [activeChain, location.pathname]);
+  useEffect(() => {
+    console.log(`location.hash-c${location.pathname}`);
+  }, [location.pathname]);
 
   return null;
 };
