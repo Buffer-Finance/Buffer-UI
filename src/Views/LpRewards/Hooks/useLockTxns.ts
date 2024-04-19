@@ -13,7 +13,11 @@ export const useLockTxns = (activeChain: Chain, activePool: poolsType) => {
     `${activeChain}-${activePool}-txns-${address}`,
     {
       fetcher: async () => {
-        if (address === undefined) return [];
+        if (address === undefined)
+          return {
+            nftPoolTxns: [],
+            totalTxns: [{ totalTxns: '0' }],
+          };
         const poolName = activePool === 'aBLP' ? 'ARB' : 'USDC';
 
         const query = `{

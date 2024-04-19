@@ -36,6 +36,7 @@ export const BoostYield: React.FC<{
         claimableIds,
       };
     }
+    console.log(data);
 
     data.nftPoolTxns.forEach((txn) => {
       if (Number(txn.lockPeriod) + Number(txn.timestamp) > currentTimestamp) {
