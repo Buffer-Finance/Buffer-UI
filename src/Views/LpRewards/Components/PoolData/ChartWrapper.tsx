@@ -1,5 +1,4 @@
 import InfoIcon from '@SVG/Elements/InfoIcon';
-import cx from 'classnames';
 import { RiLoader5Fill } from 'react-icons/ri';
 
 export const ChartWrapper: React.FC<{
@@ -27,21 +26,7 @@ export const ChartWrapper: React.FC<{
             <InfoIcon tooltip={tooltip} sm className="pointer" />
           )}
         </div>
-        {controls && (
-          <div className="chart-controls">
-            {!!controls.convertToPercents && (
-              <div
-                className={cx({
-                  'chart-control-checkbox': true,
-                  active: viewState?.isPercentsView,
-                })}
-                onClick={togglePercentView}
-              >
-                %
-              </div>
-            )}
-          </div>
-        )}
+        {controls && <div className="chart-controls"></div>}
       </div>
       {loading && <RiLoader5Fill size="3em" className="loader" />}
 
