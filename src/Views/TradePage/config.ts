@@ -86,7 +86,7 @@ export const appConfig = {
           MAIN: `https://subgraph.satsuma-prod.com/273f467f1a10/bufferfinance/above-below-sepolia/version/v0.0.9-add-contractRegistry/api`,
           LEADERBOARD: `https://subgraph.satsuma-prod.com/273f467f1a10/bufferfinance/jackpot/version/v3.0.8-leaderboards-update-ab-contracts/api`,
           REWARDS: `https://subgraph.satsuma-prod.com/273f467f1a10/bufferfinance/jackpot/api`,
-          LP: `https://subgraph.satsuma-prod.com/273f467f1a10/bufferfinance/jackpot/version/v3.0.22-pool-tracking-pool-total-txns/api`,
+          LP: `https://subgraph.satsuma-prod.com/273f467f1a10/bufferfinance/jackpot/version/v3.0.24-pool-tracking-nft-txns-tracking-fix/api`,
         },
         multicall: '0xca11bde05977b3631167028862be2a173976ca11',
         referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',

@@ -9,6 +9,7 @@ import { lockTxn, poolsType } from '@Views/LpRewards/types';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
 import { Launch } from '@mui/icons-material';
 import { Skeleton } from '@mui/material';
+import { useState } from 'react';
 import { Chain } from 'viem';
 import { APR } from './Apr';
 import { ClaimRewards } from './ClaimAction';
@@ -162,40 +163,68 @@ export const Transactions: React.FC<{
   error: any;
   pendingRewards: { [key: string]: string } | undefined;
   pendingRewardsError: any;
-}> = ({ activePool, activeChain, data, error, pendingRewards }) => {
+  totalTxns: string;
+}> = ({ activePool, activeChain, data, error, pendingRewards, totalTxns }) => {
+  const [activePage, setActivePage] = useState(1);
+
+  const currentPageTxns = data?.slice((activePage - 1) * 10, activePage * 10);
+
   return (
     <>
       <BufferTable
         headerJSX={Header}
         bodyJSX={(row, col) =>
-          data === undefined || data.length === 0 || error !== undefined ? (
+          currentPageTxns === undefined ||
+          currentPageTxns.length === 0 ||
+          error !== undefined ? (
             <ErrorComponent
-              isDataAvailable={data !== undefined}
+              isDataAvailable={currentPageTxns !== undefined}
               isError={error !== undefined}
             />
           ) : (
-            Body(row, col, activePool, data, activeChain, pendingRewards)
+            Body(
+              row,
+              col,
+              activePool,
+              currentPageTxns,
+              activeChain,
+              pendingRewards
+            )
           )
         }
         cols={colNames.length}
-        rows={data?.length ?? 0}
+        rows={currentPageTxns?.length ?? 0}
         onRowClick={() => {}}
         className="mt-6"
         widths={['14%', '10%', '9%', '13%', '14%', '13%', '15%', '7%']}
-        loading={data === undefined && !error}
+        loading={currentPageTxns === undefined && !error}
         error={
           <ErrorComponent
-            isDataAvailable={data !== undefined}
+            isDataAvailable={currentPageTxns !== undefined}
             isError={error !== undefined}
           />
         }
+        activePage={activePage}
+        count={
+          parseInt(totalTxns) % 10 === 0
+            ? Math.floor(parseInt(totalTxns) / 10)
+            : Math.floor(parseInt(totalTxns) / 10) + 1
+        }
+        onPageChange={(_, page) => setActivePage(page)}
       />
       <MobileTransactions
         activePool={activePool}
         activeChain={activeChain}
-        data={data}
+        data={currentPageTxns}
         error={error}
         pendingRewards={pendingRewards}
+        activePage={activePage}
+        count={
+          parseInt(totalTxns) % 10 === 0
+            ? Math.floor(parseInt(totalTxns) / 10)
+            : Math.floor(parseInt(totalTxns) / 10) + 1
+        }
+        setActivePage={setActivePage}
       />
     </>
   );

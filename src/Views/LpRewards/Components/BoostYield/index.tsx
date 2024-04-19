@@ -16,7 +16,7 @@ export const BoostYield: React.FC<{
 }> = ({ activePool, activeChain, readcallData }) => {
   const { data, error } = useLockTxns(activeChain, activePool);
   const { data: pendingRewards, error: pendingRewardsError } =
-    usePendingRewards(activeChain, data);
+    usePendingRewards(activeChain, data?.nftPoolTxns);
 
   const computedData = useMemo(() => {
     let totalLocked = '0';
@@ -37,7 +37,7 @@ export const BoostYield: React.FC<{
       };
     }
 
-    data.forEach((txn) => {
+    data.nftPoolTxns.forEach((txn) => {
       if (Number(txn.lockPeriod) + Number(txn.timestamp) > currentTimestamp) {
         totalLocked = add(totalLocked, txn.amount);
       } else {
@@ -86,10 +86,11 @@ export const BoostYield: React.FC<{
       <Transactions
         activePool={activePool}
         activeChain={activeChain}
-        data={data}
+        data={data.nftPoolTxns}
         error={error}
         pendingRewards={pendingRewards}
         pendingRewardsError={pendingRewardsError}
+        totalTxns={data.totalTxns[0].totalTxns}
       />
     </div>
   );

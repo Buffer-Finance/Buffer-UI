@@ -8,7 +8,7 @@ import { ColumnGap } from '@Views/TradePage/Components/Column';
 import { RowBetween } from '@Views/TradePage/Components/Row';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
 import { Launch } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Chain } from 'viem';
 import { ErrorComponent } from './ErrorComponent';
 import { PoolTimeElapsed } from './PoolTimeElapsed';
@@ -150,6 +150,10 @@ const Tables: React.FC<{
     activePage
   );
 
+  useEffect(() => {
+    setActivePage(1);
+  }, [activeTab]);
+
   return (
     <BufferTable
       className="mt-5"
@@ -186,7 +190,7 @@ const Tables: React.FC<{
       count={
         activeTab === 'all'
           ? data?.totalTxns[0]?.totalTxns
-            ? Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10) + 1
+            ? Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10)
             : undefined
           : undefined
       }

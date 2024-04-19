@@ -23,12 +23,12 @@ export const usePoolTxns = (
         const userAddressQuery =
           activeTab === 'my' ? `,userAddress: "${address}"` : '';
         const skip = (activePage - 1) * 10;
-        const skipQuery = activeTab === 'all' ? `skip: ${skip}` : '';
-        const firstQuery = activeTab === 'all' ? 'first: 10' : 'first:10000';
+        const totalTxnsId =
+          activeTab === 'my' ? `pool${address?.toLowerCase()}` : 'poolTotal';
         const query = `{
                 blpTxns(
-                    ${firstQuery}
-                    ${skipQuery}
+                    first: 10
+                    skip: ${skip}
                     orderBy: timestamp
                     orderDirection: desc
                     where: {poolName: "${poolName}"  ${userAddressQuery}}
@@ -43,7 +43,7 @@ export const usePoolTxns = (
                     txnHash
                     poolName
                   }
-                  totalTxns(where:{id:"pool"}){
+                  totalTxns(where:{id:"${totalTxnsId}"}){
                     totalTxns
                   }
             }`;

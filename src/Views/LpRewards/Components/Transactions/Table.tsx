@@ -6,7 +6,7 @@ import { usePoolTxns } from '@Views/LpRewards/Hooks/usePoolTxns';
 import { poolTxn, poolsType, transactionTabType } from '@Views/LpRewards/types';
 import { DisplayTime } from '@Views/TradePage/Views/AccordionTable/Common';
 import { Launch } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Chain } from 'wagmi';
 import { ErrorComponent } from './ErrorComponent';
 
@@ -123,6 +123,11 @@ export const Table: React.FC<{
     activeTab,
     activePage
   );
+
+  useEffect(() => {
+    setActivePage(1);
+  }, [activeTab]);
+
   return (
     <BufferTable
       headerJSX={Header}
@@ -153,7 +158,9 @@ export const Table: React.FC<{
       activePage={activePage}
       count={
         data?.totalTxns[0]?.totalTxns
-          ? Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10) + 1
+          ? parseInt(data.totalTxns[0].totalTxns) % 10 === 0
+            ? Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10)
+            : Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10) + 1
           : undefined
       }
       onPageChange={(_, page) => setActivePage(page)}

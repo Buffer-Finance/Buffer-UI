@@ -184,7 +184,19 @@ export const MobileTransactions: React.FC<{
   data: lockTxn[] | undefined;
   error: any;
   pendingRewards: { [key: string]: string } | undefined;
-}> = ({ activePool, activeChain, data, error, pendingRewards }) => {
+  activePage: number;
+  count: number | undefined;
+  setActivePage: React.Dispatch<React.SetStateAction<number>>;
+}> = ({
+  activePool,
+  activeChain,
+  data,
+  error,
+  pendingRewards,
+  activePage,
+  count,
+  setActivePage,
+}) => {
   return (
     <BufferTable
       widths={['35%', '35%', '30%']}
@@ -215,6 +227,9 @@ export const MobileTransactions: React.FC<{
         Accordian(row, data, activeChain, activePool, pendingRewards)
       }
       shouldHideHeader
+      activePage={activePage}
+      count={count}
+      onPageChange={(_, page) => setActivePage(page)}
     />
   );
 };

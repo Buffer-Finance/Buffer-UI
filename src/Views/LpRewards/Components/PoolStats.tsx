@@ -30,7 +30,7 @@ export const PoolStats: React.FC<{
   if (data === undefined)
     return (
       <StatsContainer>
-        <Skeleton className="!h-full !w-full lc " />
+        <Skeleton className="!h-full !w-full lc " variant="rectangular" />
       </StatsContainer>
     );
   const totalPnl = divide(

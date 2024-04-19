@@ -223,6 +223,7 @@ const DepositAndLockButton: React.FC<{
         (returnObj) => {
           if (returnObj !== undefined) {
             setCompletedTxn('deposit');
+            setTxnState('lock');
             toastify({
               type: 'success',
               msg: 'Deposit successful',
@@ -234,9 +235,8 @@ const DepositAndLockButton: React.FC<{
         [toFixed(multiply(amount, decimals), 0), 0]
       );
 
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      setTxnState('lock');
       await lockWriteCall(
         (returnObj) => {
           if (returnObj !== undefined) {
@@ -259,6 +259,7 @@ const DepositAndLockButton: React.FC<{
       });
     } finally {
       setTxnState('none');
+      setCompletedTxn('none');
     }
   };
   if (txnState !== 'none') {
@@ -289,7 +290,7 @@ const TxnState: React.FC<{
 }> = ({ name, isActive, isComplete }) => {
   const imageName = name === 'deposit' ? 'Harvest' : 'Lock';
   return (
-    <div className="flex gap-3 items-center text-1 text-f16 font-medium w-full">
+    <div className="flex gap-3 items-center text-1 text-f16 font-medium w-full capitalize">
       <img
         src={`https://res.cloudinary.com/dtuuhbeqt/image/upload/v1710914581/Rewards/${imageName}.png`}
         className="w-fit h-fit"
