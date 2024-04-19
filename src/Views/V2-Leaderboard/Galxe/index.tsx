@@ -209,7 +209,7 @@ export const Galxe = () => {
         <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
           <Col
             head={'Reward Pool'}
-            desc={<div>{rewardPool[offset ?? week] ?? '2800'} PYTH</div>}
+            desc={<div>${rewardPool[offset ?? week] ?? '2800'}</div>}
             descClass={descClass}
             headClass={headClass}
             className="winner-card"
