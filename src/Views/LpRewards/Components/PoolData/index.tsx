@@ -1,6 +1,7 @@
 import { poolsType } from '@Views/LpRewards/types';
 import { Chain } from 'viem';
 import { PoolStats } from '../PoolStats';
+import { Graphs } from './Graphs';
 import { PoolHeading } from './PoolHeading';
 
 export const PoolData: React.FC<{
@@ -17,7 +18,7 @@ export const PoolData: React.FC<{
           readCallData={readCallData}
           activeChain={activeChain}
         />
-        {/* <Graphs activeChain={activeChain} activePool={activePool} /> */}
+        <Graphs activeChain={activeChain} activePool={activePool} />
       </div>
     </div>
   );
