@@ -55,7 +55,11 @@ const LPRewardsPage: React.FC<{
         readCallData={data}
         activeChain={activeChain}
       />
-      <BoostYield activePool={activePool} activeChain={activeChain} />
+      <BoostYield
+        activePool={activePool}
+        activeChain={activeChain}
+        readcallData={data}
+      />
     </>
   );
 };

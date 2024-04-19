@@ -1,7 +1,14 @@
 import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { toFixed } from '@Utils/NumString';
-import { multiply } from '@Utils/NumString/stringArithmatics';
+import {
+  add,
+  divide,
+  gt,
+  lte,
+  multiply,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import { getLpConfig } from '@Views/LpRewards/config';
 import { poolsType } from '@Views/LpRewards/types';
 import { RowBetween } from '@Views/TradePage/Components/Row';
@@ -39,11 +46,26 @@ export function convertLockPeriodToSeconds({
 export const Lock: React.FC<{
   activeChain: Chain;
   activePool: poolsType;
-}> = ({ activeChain, activePool }) => {
+  readcallData: { [callId: string]: string[] };
+  totalLocked: string;
+  totalUnlocked: string;
+}> = ({
+  activeChain,
+  activePool,
+  readcallData,
+  totalLocked,
+  totalUnlocked,
+}) => {
   const [amount, setAmount] = useState('');
   const [lockPeriod, setLockPeriod] = useState({ days: 1, months: 0 });
   const decimals = activePool === 'aBLP' ? 18 : 6;
+  const balance = readcallData[activePool + '-depositBalances']?.[0];
 
+  const alreadyLocked = add(totalLocked, totalUnlocked);
+  let max = '0';
+  if (balance) {
+    max = divide(subtract(balance, alreadyLocked), decimals) as string;
+  }
   const unit = activePool === 'uBLP' ? 'USDC' : 'ARB';
   return (
     <Container className="min-w-[350px]">
@@ -60,7 +82,17 @@ export const Lock: React.FC<{
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
-          <div className="bg-[#232334] text-[#FFFFFF] rounded-r-[5px] px-5 py-3 text-f14 leading-[16px]">
+          <div className="bg-[#232334] flex flex-col items-center justify-center">
+            <button
+              className="bg-[#141823] text-1 text-[9px] px-3 rounded-sm h-fit"
+              onClick={() => {
+                setAmount(max);
+              }}
+            >
+              Max
+            </button>
+          </div>
+          <div className="bg-[#232334] text-[#FFFFFF] rounded-r-[5px] pr-5 pl-3 py-3 text-f14 leading-[16px]">
             {unit}
           </div>
         </div>
@@ -81,6 +113,7 @@ export const Lock: React.FC<{
           amount={amount}
           decimals={decimals}
           lockPeriod={convertLockPeriodToSeconds(lockPeriod)}
+          max={max}
         />
       </div>
     </Container>
@@ -93,7 +126,8 @@ const LockButton: React.FC<{
   amount: string;
   decimals: number;
   lockPeriod: number;
-}> = ({ activePool, activeChain, amount, decimals, lockPeriod }) => {
+  max: string;
+}> = ({ activePool, activeChain, amount, decimals, lockPeriod, max }) => {
   const contracts = getLpConfig(activeChain.id);
   const { writeCall } = useWriteCall(contracts.nftLockPool, NftLockPoolABI);
   const [isApproving, setIsApproving] = useState<boolean>(false);
@@ -101,9 +135,27 @@ const LockButton: React.FC<{
 
   const handleApprove = async () => {
     try {
+      //check if amount contains any characters
+      if (amount.match(/[a-zA-Z]/g))
+        throw new Error('Please enter valid amount');
+
+      //check if amount contains any special characters other than .
+      if (amount.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/))
+        throw new Error('Please enter valid amount');
+
+      if (!amount) throw new Error('Please enter amount');
+
+      if (amount === '') throw new Error('Please enter amount');
+
+      if (lte(amount, '0')) throw new Error('Amount should be greater than 0');
+
+      if (gt(amount, max)) throw new Error('Amount should be less than max');
+
+      //check if lock duration is 0
+      if (lockPeriod === 0) throw new Error('Please select lock period');
+
       setIsApproving(true);
       const lockamount = toFixed(multiply(amount, decimals), 0);
-      console.log(lockamount, lockPeriod, 'params');
       await writeCall(() => {}, 'createPosition', [lockamount, lockPeriod]);
     } catch (e) {
       toastify({

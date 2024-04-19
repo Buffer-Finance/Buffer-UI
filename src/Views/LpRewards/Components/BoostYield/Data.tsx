@@ -1,13 +1,13 @@
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { add, divide } from '@Utils/NumString/stringArithmatics';
+import { divide } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { getLpConfig } from '@Views/LpRewards/config';
-import { lockTxn, poolsType } from '@Views/LpRewards/types';
-import { useMemo, useState } from 'react';
+import { poolsType } from '@Views/LpRewards/types';
+import { useState } from 'react';
 import { Chain } from 'viem';
 import NFTlockPoolABI from '../../abis/NftLockPool.json';
 import { DataColumn, defaultDataStyle } from '../DataColumn';
@@ -16,54 +16,25 @@ import { Container } from '../Deposit/Styles';
 export const Data: React.FC<{
   activePool: poolsType;
   activeChain: Chain;
-  lockTxns: lockTxn[];
-  pendingRewards: {
-    [key: string]: string[];
+  computedData: {
+    totalLocked: string;
+    totalUnlocked: string;
+    totalClaimable: string;
+    withdrawableNftIds: string[];
+    claimableIds: string[];
   };
-}> = ({ activeChain, activePool, lockTxns, pendingRewards }) => {
+}> = ({ activeChain, activePool, computedData }) => {
   const { address } = useUserAccount();
   const unit = activePool === 'uBLP' ? 'USDC' : 'ARB';
   const decimals = activePool === 'uBLP' ? 6 : 18;
 
-  const [
+  const {
     totalLocked,
     totalUnlocked,
     totalClaimable,
-    withdrawableIds,
+    withdrawableNftIds: withdrawableIds,
     claimableIds,
-  ] = useMemo(() => {
-    let totalLocked = '0';
-    let totalUnlocked = '0';
-    let totalClaimable = '0';
-    const withdrawableNftIds: string[] = [];
-    const claimableIds: string[] = [];
-
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-
-    lockTxns.forEach((txn) => {
-      if (Number(txn.lockPeriod) + Number(txn.timestamp) > currentTimestamp) {
-        totalLocked = add(totalLocked, txn.amount);
-      } else {
-        totalUnlocked = add(totalUnlocked, txn.amount);
-        withdrawableNftIds.push(txn.nftId);
-      }
-
-      const unclaimedRewards = pendingRewards?.[txn.nftId]?.[0];
-
-      if (unclaimedRewards) {
-        totalClaimable = add(totalClaimable, unclaimedRewards);
-        claimableIds.push(txn.nftId);
-      }
-    });
-
-    return [
-      totalLocked,
-      totalUnlocked,
-      totalClaimable,
-      withdrawableNftIds,
-      claimableIds,
-    ];
-  }, [lockTxns, pendingRewards]);
+  } = computedData;
 
   return (
     <Container className="gap-7">

@@ -1,6 +1,8 @@
+import { add } from '@Utils/NumString/stringArithmatics';
 import { useLockTxns } from '@Views/LpRewards/Hooks/useLockTxns';
 import { usePendingRewards } from '@Views/LpRewards/Hooks/usePendingRewards';
 import { poolsType } from '@Views/LpRewards/types';
+import { useMemo } from 'react';
 import { Chain } from 'wagmi';
 import { Data } from './Data';
 import { HowItWorks } from './HowItWorks';
@@ -10,11 +12,55 @@ import { Transactions } from './Transactions';
 export const BoostYield: React.FC<{
   activePool: poolsType;
   activeChain: Chain;
-}> = ({ activePool, activeChain }) => {
+  readcallData: { [callId: string]: string[] };
+}> = ({ activePool, activeChain, readcallData }) => {
   const { data, error } = useLockTxns(activeChain, activePool);
   const { data: pendingRewards, error: pendingRewardsError } =
     usePendingRewards(activeChain, data);
 
+  const computedData = useMemo(() => {
+    let totalLocked = '0';
+    let totalUnlocked = '0';
+    let totalClaimable = '0';
+    const withdrawableNftIds: string[] = [];
+    const claimableIds: string[] = [];
+
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+
+    if (data === undefined) {
+      return {
+        totalLocked,
+        totalUnlocked,
+        totalClaimable,
+        withdrawableNftIds,
+        claimableIds,
+      };
+    }
+
+    data.forEach((txn) => {
+      if (Number(txn.lockPeriod) + Number(txn.timestamp) > currentTimestamp) {
+        totalLocked = add(totalLocked, txn.amount);
+      } else {
+        totalUnlocked = add(totalUnlocked, txn.amount);
+        withdrawableNftIds.push(txn.nftId);
+      }
+
+      const unclaimedRewards = pendingRewards?.[txn.nftId]?.[0];
+
+      if (unclaimedRewards) {
+        totalClaimable = add(totalClaimable, unclaimedRewards);
+        claimableIds.push(txn.nftId);
+      }
+    });
+
+    return {
+      totalLocked,
+      totalUnlocked,
+      totalClaimable,
+      withdrawableNftIds,
+      claimableIds,
+    };
+  }, [data, pendingRewards]);
   if (data === undefined || (!data && !error)) return <div>Loading...</div>;
 
   return (
@@ -26,10 +72,15 @@ export const BoostYield: React.FC<{
         <Data
           activeChain={activeChain}
           activePool={activePool}
-          lockTxns={data}
-          pendingRewards={pendingRewards}
+          computedData={computedData}
         />
-        <Lock activeChain={activeChain} activePool={activePool} />
+        <Lock
+          activeChain={activeChain}
+          activePool={activePool}
+          readcallData={readcallData}
+          totalLocked={computedData.totalLocked}
+          totalUnlocked={computedData.totalUnlocked}
+        />
         <HowItWorks />
       </div>
       <Transactions

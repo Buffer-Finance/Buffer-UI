@@ -70,6 +70,8 @@ export const DepositTab: React.FC<{
         balance={balance}
         unit={uint}
         decimals={decimals}
+        max={balance}
+        value={amount}
       />
       <div className="flex justify-between items-start mt-2">
         <span className="text-f12 font-medium text-[#C4C7C7]">

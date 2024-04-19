@@ -4,12 +4,14 @@ import { poolsType } from '@Views/LpRewards/types';
 import { Skeleton } from '@mui/material';
 
 export const InputField: React.FC<{
+  value: string;
   setValue: (newValue: string) => void;
   activePool: poolsType;
   balance: string | undefined;
   unit: string;
   decimals: number;
-}> = ({ setValue, activePool, balance, decimals, unit }) => {
+  max: string;
+}> = ({ setValue, activePool, balance, decimals, unit, max, value }) => {
   return (
     <div className="w-full">
       <div className="flex flex-col items-center gap-3">
@@ -55,12 +57,23 @@ export const InputField: React.FC<{
         </div>
         <div className="flex w-full">
           <input
+            value={value}
             type="number"
             className="w-full h-[33px] bg-[#282B39] rounded-l-[5px] text-1 text-f14 font-medium leading-[18px] px-[16px] outline-none"
             placeholder="0.0"
             onChange={(e) => setValue(e.target.value)}
           />
-          <div className="bg-[#303044] text-[#FFFFFF] rounded-r-[5px] px-5 py-3 text-f14 leading-[16px]">
+          <div className="bg-[#303044] flex flex-col items-center justify-center">
+            <button
+              className="bg-[#141823] text-1 text-[9px] px-3 rounded-sm h-fit"
+              onClick={() => {
+                setValue(divide(max, decimals) as string);
+              }}
+            >
+              Max
+            </button>
+          </div>
+          <div className="bg-[#303044] text-[#FFFFFF] rounded-r-[5px] pr-5 pl-3 py-3 text-f14 leading-[16px]">
             {unit}
           </div>
         </div>
