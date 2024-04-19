@@ -42,6 +42,35 @@ export const TOTALWINNERS = 10;
 
 const rewardPool = {
   2: 4975,
+  3: 4808,
+};
+export const galxTaskLink =
+  'https://app.galxe.com/quest/XZeZw9Mauqx5SQyn6uGAbs/GCiUithb4z';
+
+const winnersAmount = {
+  1: 1030.2,
+  2: 515.1,
+  3: 236.0875,
+  4: 236.0875,
+  5: 236.0875,
+  6: 236.0875,
+  7: 236.0875,
+  8: 236.0875,
+  9: 236.0875,
+  10: 236.0875,
+};
+
+const loosersAmount = {
+  1: 412.2,
+  2: 206.1,
+  3: 94.4625,
+  4: 94.4625,
+  5: 94.4625,
+  6: 94.4625,
+  7: 94.4625,
+  8: 94.4625,
+  9: 94.4625,
+  10: 94.4625,
 };
 
 export const Galxe = () => {
@@ -151,10 +180,10 @@ export const Galxe = () => {
   }, [offset, activeChain]);
 
   const isCurrentWeekIsWeekTwo = useMemo(() => {
-    if (week == 2) {
+    if (week == 3) {
       if (offset == null) {
         return true;
-      } else if (offset == '2') {
+      } else if (offset == '3') {
         return true;
       }
     }
@@ -275,6 +304,7 @@ export const Galxe = () => {
                 activePage={activePages.arbitrum}
                 isGalxTable
                 isCurrentWeek={isCurrentWeekIsWeekTwo}
+                priceAmount={winnersAmount}
               />,
               <DailyWebTable
                 activePage={activePages.arbitrum}
@@ -287,6 +317,7 @@ export const Galxe = () => {
                 nftWinners={configValue.losersNFT}
                 isGalxTable
                 isCurrentWeek={isCurrentWeekIsWeekTwo}
+                priceAmount={loosersAmount}
               />,
               // <DailyWebTable
               //   activePage={activePages.arbitrum}

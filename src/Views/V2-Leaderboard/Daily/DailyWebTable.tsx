@@ -21,6 +21,7 @@ import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Rank } from '../Components/Rank';
 import { TableAligner } from '../Components/TableAligner';
+import { galxTaskLink } from '../Galxe';
 import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
 import { ILeague } from '../interfaces';
 import { DailyMobileTable } from './DailyMobileTable';
@@ -39,6 +40,9 @@ export const DailyWebTable: React.FC<{
   isDailyTable?: boolean;
   isGalxTable?: boolean;
   isCurrentWeek?: boolean;
+  priceAmount?: {
+    [rank: number]: number;
+  };
 }> = ({
   standings,
   skip,
@@ -52,6 +56,7 @@ export const DailyWebTable: React.FC<{
   isDailyTable = false,
   isGalxTable = false,
   isCurrentWeek = false,
+  priceAmount,
 }) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
@@ -84,6 +89,10 @@ export const DailyWebTable: React.FC<{
       isWinrateTable ? 'Win Rate' : 'Total Payout',
     ];
     if (isGalxTable && isCurrentWeek) {
+      if (priceAmount) {
+        // add price column at the end
+        cols = [...cols, 'Rewards'];
+      }
       // add galx column at the end
       cols = [...cols, 'Galxe Tasks Link'];
     }
@@ -431,15 +440,34 @@ export const DailyWebTable: React.FC<{
           />
         );
 
-      case 6:
+      case 7:
         return (
-          <a
-            href="https://app.galxe.com/quest/XZeZw9Mauqx5SQyn6uGAbs/GC1RUthmQt"
-            target="_blank"
-          >
-            Complete tasks to be eligible <Launch className="ml-2" />
+          <a href={galxTaskLink} target="_blank">
+            Complete Galxe Task <Launch className="ml-2" />
           </a>
         );
+
+      case 6:
+        if (
+          isGalxTable &&
+          isCurrentWeek &&
+          priceAmount &&
+          priceAmount[row + 1]
+        ) {
+          return (
+            <CellContent
+              content={[
+                <div className="flex items-center  f14  ">
+                  {!priceAmount[row + 1] ? (
+                    '-'
+                  ) : (
+                    <Display data={priceAmount[row + 1]} label={'$'} />
+                  )}
+                </div>,
+              ]}
+            />
+          );
+        }
       default:
         return <div>Unhandled Cell.</div>;
     }
@@ -468,9 +496,12 @@ export const DailyWebTable: React.FC<{
       </BufferTableRow>
     ) : null;
 
-  const widths = isGalxTable
-    ? ['12%', '18%', '14%', '10%', '12%', '14%', '20%']
-    : ['16%', '22%', '16%', '14%', '16%', '16%'];
+  const widths =
+    isGalxTable && isCurrentWeek
+      ? priceAmount
+        ? ['11%', '15%', '12%', '9%', '12%', '13%', '11%', '16%']
+        : ['12%', '18%', '14%', '10%', '12%', '14%', '20%']
+      : ['16%', '22%', '16%', '14%', '16%', '16%'];
 
   return (
     <LeaderBoardTableStyles>
@@ -491,6 +522,7 @@ export const DailyWebTable: React.FC<{
           isDailyTable={isDailyTable}
           isGalxTable={isGalxTable}
           isCurrentWeek={isCurrentWeek}
+          priceAmount={priceAmount}
         />
       )}
 

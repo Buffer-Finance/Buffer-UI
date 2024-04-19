@@ -16,6 +16,7 @@ import { gte } from 'lodash';
 import React from 'react';
 import { Rank } from '../Components/Rank';
 import { TableAligner } from '../Components/TableAligner';
+import { galxTaskLink } from '../Galxe';
 import { ILeague } from '../interfaces';
 
 export const DailyMobileTable: React.FC<{
@@ -32,6 +33,7 @@ export const DailyMobileTable: React.FC<{
   isDailyTable?: boolean;
   isGalxTable?: boolean;
   isCurrentWeek?: boolean;
+  priceAmount?: { [rank: number]: number };
 }> = ({
   options,
   skip,
@@ -46,6 +48,7 @@ export const DailyMobileTable: React.FC<{
   isDailyTable = false,
   isGalxTable = false,
   isCurrentWeek = false,
+  priceAmount,
 }) => {
   const { address: account } = useUserAccount();
 
@@ -76,6 +79,7 @@ export const DailyMobileTable: React.FC<{
           isDailyTable,
           isGalxTable,
           isCurrentWeek,
+          priceAmount,
         }}
       />
     ) : null;
@@ -105,6 +109,7 @@ export const DailyMobileTable: React.FC<{
                   isDailyTable,
                   isGalxTable,
                   isCurrentWeek,
+                  priceAmount,
                 }}
               />
             );
@@ -138,6 +143,7 @@ const MobileRow = ({
   isDailyTable,
   isGalxTable,
   isCurrentWeek,
+  priceAmount,
 }) => {
   const tokens = usePoolNames();
   const decimals = useDecimalsByAsset();
@@ -434,14 +440,18 @@ const MobileRow = ({
 
       {/* Third Row */}
       {isGalxTable && isCurrentWeek && (
-        <div className="mt-3 ">
-          <a
-            href="https://app.galxe.com/quest/XZeZw9Mauqx5SQyn6uGAbs/GC1RUthmQt"
-            target="_blank"
-            className="text-2"
-          >
-            Complete tasks to be eligible <Launch className="text-2" />
-          </a>
+        <div className="flex justify-between items-center mt-3">
+          <div>
+            <a href={galxTaskLink} target="_blank" className="text-2">
+              Complete tasks to be eligible <Launch className="text-2" />
+            </a>
+          </div>
+          <div>
+            <span className="text-2">Rewards : </span>
+            <span className="text-3">
+              {priceAmount && priceAmount[index + 1] && priceAmount[index + 1]}
+            </span>
+          </div>
         </div>
       )}
     </div>
