@@ -83,7 +83,7 @@
     "react-transition-group": "^4.4.2",
     "react-use": "^17.4.0",
     "react-use-websocket": "^4.3.1",
-    "recharts": "2.10.0",
+    "recharts": "2.12.5",
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.0",
