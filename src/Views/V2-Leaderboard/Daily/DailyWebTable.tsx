@@ -458,7 +458,7 @@ export const DailyWebTable: React.FC<{
             <CellContent
               content={[
                 <div className="flex items-center  f14  ">
-                  {!priceAmount[row + 1] ? (
+                  {!priceAmount[skip + row + 1] ? (
                     '-'
                   ) : (
                     <Display data={priceAmount[row + 1]} label={'$'} />

@@ -449,7 +449,9 @@ const MobileRow = ({
           <div>
             <span className="text-2">Rewards : </span>
             <span className="text-3">
-              {priceAmount && priceAmount[index + 1] && priceAmount[index + 1]}
+              {priceAmount && priceAmount[skip + index + 1]
+                ? priceAmount[skip + index + 1]
+                : '-'}
             </span>
           </div>
         </div>
