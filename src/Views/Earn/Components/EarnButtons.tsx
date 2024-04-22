@@ -17,7 +17,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
   const { activeChain } = useActiveChain();
   const [pageState] = useAtom(readEarnData);
   const { chain } = useNetwork();
-  const { withdraw, claimARB } = useEarnWriteCalls(
+  const { withdraw } = useEarnWriteCalls(
     'Vester',
     cardNum === 4 ? 'BFR' : 'BLP'
   );
@@ -109,9 +109,6 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
             className={btnClasses}
           >
             Claim
-          </BlueBtn>
-          <BlueBtn onClick={claimARB} className={btnClasses}>
-            Claim ARB
           </BlueBtn>
         </div>
       );

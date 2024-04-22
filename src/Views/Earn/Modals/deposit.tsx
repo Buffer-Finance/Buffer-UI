@@ -17,7 +17,6 @@ import { toFixed } from '@Utils/NumString';
 import { useGlobal } from '@Contexts/Global';
 import { useToast } from '@Contexts/Toast';
 import { Skeleton } from '@mui/material';
-import { getNewReserve } from '../Hooks/useTokenomicsMulticall';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import {
   tooltipKeyClasses,
@@ -63,13 +62,7 @@ export const DepositModal = ({
   const isApproved = gte(pageState.vest[type].allowance, val || '1');
 
   const max = pageState.vest[type].maxVestableAmount;
-  const reserveAmount = getNewReserve(
-    val,
-    currentVault.averageStakedAmount,
-    currentVault.maxVestableAmountExact,
-    currentVault.reserved_for_vesting[0],
-    currentVault.vesting_status.vested
-  );
+
   const [approveState, setApprovalState] = useState(false);
 
   const clickHandler = () => {

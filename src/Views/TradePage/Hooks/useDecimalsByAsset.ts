@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { configType } from '../type';
 
 export const useDecimalsByAsset = () => {
+  return 6;
   const { activeChain } = useActiveChain();
   const config: configType =
     appConfig[activeChain.id as unknown as keyof typeof appConfig];

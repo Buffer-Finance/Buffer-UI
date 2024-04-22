@@ -1,7 +1,7 @@
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { isTestnet } from 'config';
 import { defineChain } from 'viem';
-import { arbitrum, polygon, polygonMumbai } from 'viem/chains';
+import { arbitrum, polygon } from 'viem/chains';
 
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 export const arbitrumSepolia = defineChain({
@@ -33,6 +33,38 @@ export const arbitrumSepolia = defineChain({
   testnet: true,
 });
 
+export const optimismSepolia = defineChain({
+  id: 11155420,
+  name: 'Optimism Sepolia',
+  network: 'optimism-sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Ether',
+    symbol: 'OETH',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://sepolia.optimism.io'],
+    },
+    public: {
+      http: ['https://sepolia.optimism.io'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'Explorer',
+      url: 'https://sepolia-optimism.etherscan.io/',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      blockCreated: 1620204,
+    },
+  },
+  testnet: true,
+});
+
 export function getSupportedChains() {
   return isTestnet ? [arbitrumSepolia] : [arbitrum];
 }
@@ -40,10 +72,16 @@ export function getSupportedChains() {
 export const getAllChains = () => {
   switch (urlSettings?.chain) {
     case 'arbitrum':
-      return isTestnet ? [arbitrumSepolia, polygonMumbai] : [arbitrum, polygon];
+      return isTestnet
+        ? [arbitrumSepolia, optimismSepolia]
+        : [arbitrum, polygon];
     case 'polygon':
-      return isTestnet ? [polygonMumbai, arbitrumSepolia] : [polygon, arbitrum];
+      return isTestnet
+        ? [optimismSepolia, arbitrumSepolia]
+        : [polygon, arbitrum];
     default:
-      return isTestnet ? [arbitrumSepolia, polygonMumbai] : [arbitrum, polygon];
+      return isTestnet
+        ? [arbitrumSepolia, optimismSepolia]
+        : [arbitrum, polygon];
   }
 };

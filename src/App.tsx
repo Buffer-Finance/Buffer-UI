@@ -26,7 +26,7 @@ import { Navbar } from './Views/Common/Navbar';
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
-import { useGraphStatus } from '@Utils/useGraphStatus';
+// import { useGraphStatus } from '@Utils/useGraphStatus';
 import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
 import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
@@ -57,6 +57,7 @@ import {
 } from '@Views/Profile/Components/UserDataComponent/UserData';
 import MemoUSDC_monochrome from '@SVG/Elements/USDC_monochrome';
 import MemoABR_monochrome from '@SVG/Elements/ABR_monochrome';
+import { Earn } from '@Views/Earn';
 const TradePage = lazy(() => import('@Views/TradePage'));
 
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
@@ -163,7 +164,7 @@ const AppRoutes = () => {
             element={<div>Processing your referral request...</div>}
           ></Route>
           {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
-          <Route path="/earn" element={<Redirect url={earnUrl} />} />
+          <Route path="/earn" element={<Earn />} />
 
           <Route path="/dashboard" element={<DashboardV2 />}>
             <Route path=":chain" element={<DashboardV2 />} />
@@ -212,7 +213,7 @@ function App() {
   const [mobileWarningClosed, setWarningCloseOnMobile] =
     useAtom(mobileWarningAtom);
 
-  const graphStatus = useGraphStatus();
+  // const graphStatus = useGraphStatus();
   const isMobile = useMedia('(max-width:1200px)');
   // return ;
   return (
@@ -221,7 +222,7 @@ function App() {
       <I18nProvider i18n={i18n}>
         <Background>
           <ViewOnlyModeTradePageWarning />
-          {graphStatus && (
+          {/* {graphStatus && (
             <Warning
               body={
                 <div className="text-center">
@@ -234,7 +235,7 @@ function App() {
               state={graphStatus.error}
               className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
             />
-          )}
+          )} */}
           <Navbar />
           <AppRoutes />
           <Snackbar

@@ -209,7 +209,7 @@ export const AccountDropdown: React.FC = () => {
                     >
                       <WalletIcon className="mr-2 ml-1 text-blue" />
 
-                      <TokenAccountBalance />
+                      {/* <TokenAccountBalance /> */}
 
                       <div
                         className="flex items-center font-[500] ml-2 text-f14 bg-[#2C2C41] px-2 rounded-[4px] pb-1"

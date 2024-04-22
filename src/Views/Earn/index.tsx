@@ -7,12 +7,12 @@ import Drawer from '@Views/Common/V2-Drawer';
 import { Chain } from 'wagmi';
 import { getEarnCards } from './Components/EarnCards';
 import { Section } from './Components/Section';
-import { getVestCards } from './Components/VestCards';
+// import { getVestCards } from './Components/VestCards';
 import { IEarn, writeEarnData } from './earnAtom';
 import { useGetTokenomics } from './Hooks/useTokenomicsMulticall';
 import { EarnModals } from './Modals';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { ArbitrumOnly } from '@Views/Common/ChainNotSupported';
+import { ArbitrumOnly, ExceptArbitrum } from '@Views/Common/ChainNotSupported';
 
 const EarnStyles = styled.div`
   width: min(1200px, 100%);
@@ -34,7 +34,7 @@ export const Earn = () => {
     document.title = 'Buffer | Earn';
   }, []);
   return (
-    <ArbitrumOnly>
+    <ExceptArbitrum>
       <EarnContextProvider value={{ activeChain }}>
         <main className="content-drawer">
           <EarnPage />
@@ -43,7 +43,7 @@ export const Earn = () => {
           <></>
         </Drawer>
       </EarnContextProvider>
-    </ArbitrumOnly>
+    </ExceptArbitrum>
   );
 };
 
@@ -84,10 +84,9 @@ export const EarnPage = () => {
           </div>
         }
       />
-      <Section
+      {/* <Section
         Heading={
           <div className={topStyles}>
-            {/* <ShieldIcon className="mr-[8px] " /> */}
             <img src="/Earn/Shield.svg" alt="shield" className="mr-3" />
             Vest
           </div>
@@ -112,7 +111,7 @@ export const EarnPage = () => {
             </span>
           </div>
         }
-      />
+      /> */}
       {
         <div className="pr-3 text-3 text-f13 m-auto w-full text-center mt-6">
           &#127860; Staking is forked from{' '}
