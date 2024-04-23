@@ -1,6 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import Missing from './Missing';
-import { optimism } from 'viem/dist/types/chains';
+import { optimism } from 'viem/chains';
 
 export const ChainNotSupported = ({
   supportedChainIds,
