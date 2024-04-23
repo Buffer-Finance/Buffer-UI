@@ -19,7 +19,8 @@ export const useEarnWriteCalls = () => {
   const [, setPageState] = useAtom(writeEarnAtom);
 
   function callBack(res: any) {
-    if (res.payload)
+    console.log(res, 'payload');
+    if (res)
       setPageState({
         isModalOpen: false,
         activeModal: null,
