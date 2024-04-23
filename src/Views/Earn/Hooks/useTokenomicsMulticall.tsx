@@ -53,13 +53,6 @@ export const useGetTokenomics = () => {
         args: [account],
       },
 
-      stakedBlpTrackerRewards: {
-        address: contracts.StakedBlpTracker,
-        abi: RewardTrackerAbi,
-        functionName: 'claimable',
-        args: [account],
-      },
-
       userStakedBlp: {
         address: contracts.FeeBlpTracker,
         abi: RewardTrackerAbi,
@@ -111,11 +104,6 @@ export const useGetTokenomics = () => {
 
       feeBlpTrackerTokensPerInterval: {
         address: contracts.FeeBlpTracker,
-        abi: RewardTrackerAbi,
-        functionName: 'tokensPerInterval',
-      },
-      stakedBlpTrackerTokensPerInterval: {
-        address: contracts.StakedBlpTracker,
         abi: RewardTrackerAbi,
         functionName: 'tokensPerInterval',
       },
@@ -175,7 +163,6 @@ export const useGetTokenomics = () => {
       stakedBlp,
       blpSupply,
       feeBlpTrackerTokensPerInterval,
-      stakedBlpTrackerTokensPerInterval,
       blpTotalBalance,
       maxTokenXToWithdraw,
       blpInitialRate,
@@ -185,7 +172,6 @@ export const useGetTokenomics = () => {
 
       // User specifics
       feeBlpTrackerRewards,
-      stakedBlpTrackerRewards,
       userStakedBlp,
       userUsdcBalance,
       userUnlockedBlpAmount,
@@ -238,7 +224,6 @@ export const useGetTokenomics = () => {
           apr: {
             value: fromWei(blpAprTotal, 2),
             tooltip: [
-              { key: 'Escrowed BFR APR', value: fromWei(blpAprForEsBfr, 2) },
               { key: 'USDC APR', value: fromWei(blpAprForRewardToken, 2) },
             ],
             description:
