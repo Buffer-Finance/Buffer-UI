@@ -364,10 +364,10 @@ export const getTabs = (
       },
 
       {
-        to: `https://earn.buffer.finance/`,
+        to: `/earn`,
         name: 'Earn',
         subTabs: [],
-        isExternalLink: true,
+        isExternalLink: false,
       },
       {
         to: 'https://twitter.com/Buffer_Finance',
@@ -485,10 +485,10 @@ export const getTabs = (
       },
 
       {
-        to: `https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/`,
+        to: `/earn`,
         name: 'Earn',
         subTabs: [],
-        isExternalLink: true,
+        isExternalLink: false,
       },
       {
         to: 'https://twitter.com/Buffer_Finance',

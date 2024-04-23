@@ -49,55 +49,55 @@ function ModalChild() {
   const { activeChain } = useActiveChain();
 
   switch (pageState.activeModal) {
-    case 'iBFRstake':
-      return (
-        <StakeModal
-          max={pageData.earn?.ibfr.user.wallet_balance.token_value}
-          head="Stake BFR"
-          isStakeModal
-          tokenContract={{
-            abi: iBFRABI,
-            contract: getContract(activeChain?.id, 'iBFR'),
-          }}
-          unit="BFR"
-          allowance={pageData.earn?.ibfr.user.allowance}
-        />
-      );
+    // case 'iBFRstake':
+    //   return (
+    //     <StakeModal
+    //       max={pageData.earn?.ibfr.user.wallet_balance.token_value}
+    //       head="Stake BFR"
+    //       isStakeModal
+    //       tokenContract={{
+    //         abi: iBFRABI,
+    //         contract: getContract(activeChain?.id, 'iBFR'),
+    //       }}
+    //       unit="BFR"
+    //       allowance={pageData.earn?.ibfr.user.allowance}
+    //     />
+    //   );
 
-    case 'iBFRunstake':
-      return (
-        <StakeModal
-          max={pageData.earn?.ibfr.max_unstakeable}
-          head="Unstake BFR"
-          isStakeModal={false}
-          unit="BFR"
-        />
-      );
+    // case 'iBFRunstake':
+    //   return (
+    //     <StakeModal
+    //       max={pageData.earn?.ibfr.max_unstakeable}
+    //       head="Unstake BFR"
+    //       isStakeModal={false}
+    //       unit="BFR"
+    //     />
+    //   );
 
-    case 'esBFRstake':
-      return (
-        <StakeModal
-          max={pageData.earn?.esBfr.user.wallet_balance.token_value}
-          head="Stake esBFR"
-          isStakeModal
-          tokenContract={{
-            abi: iBFRABI,
-            contract: getContract(activeChain?.id, 'ES_BFR'),
-          }}
-          unit="esBFR"
-          allowance={pageData.earn?.esBfr.user.allowance}
-        />
-      );
+    // case 'esBFRstake':
+    //   return (
+    //     <StakeModal
+    //       max={pageData.earn?.esBfr.user.wallet_balance.token_value}
+    //       head="Stake esBFR"
+    //       isStakeModal
+    //       tokenContract={{
+    //         abi: iBFRABI,
+    //         contract: getContract(activeChain?.id, 'ES_BFR'),
+    //       }}
+    //       unit="esBFR"
+    //       allowance={pageData.earn?.esBfr.user.allowance}
+    //     />
+    //   );
 
-    case 'esBFRunstake':
-      return (
-        <StakeModal
-          max={pageData.earn?.esBfr.max_unstakeable}
-          head="Unstake esBFR"
-          isStakeModal={false}
-          unit="esBFR"
-        />
-      );
+    // case 'esBFRunstake':
+    //   return (
+    //     <StakeModal
+    //       max={pageData.earn?.esBfr.max_unstakeable}
+    //       head="Unstake esBFR"
+    //       isStakeModal={false}
+    //       unit="esBFR"
+    //     />
+    //   );
 
     case 'buy':
       const { buyBLP, validations } = useEarnWriteCalls('Router');
@@ -105,7 +105,6 @@ function ModalChild() {
         USDCABI,
         getContract(activeChain.id, 'USDC'),
         getContract(activeChain.id, 'BLP')
-      );
 
       return (
         <Buy
@@ -120,28 +119,28 @@ function ModalChild() {
           tokenXName={'USDC'}
         />
       );
-    case 'buyARB':
-      const { buyARBBLP, validations: validationsARB } =
-        useEarnWriteCalls('Router');
-      const { approve: approveARB } = useGetApprovalAmount(
-        USDCABI,
-        getContract(activeChain.id, 'ARB'),
-        getContract(activeChain.id, 'BLP2')
-      );
+    // case 'buyARB':
+    //   const { buyARBBLP, validations: validationsARB } =
+    //     useEarnWriteCalls('Router');
+    //   const { approve: approveARB } = useGetApprovalAmount(
+    //     USDCABI,
+    //     getContract(activeChain.id, 'ARB'),
+    //     getContract(activeChain.id, 'BLP2')
+    //   );
 
-      return (
-        <Buy
-          allowance={pageData.earn?.arb.allowance}
-          walletBalance={pageData.earn?.arb.wallet_balance}
-          buyCall={buyARBBLP}
-          validatinosFn={validationsARB}
-          approveFn={approveARB}
-          blpToTokenPrice={pageData.earn?.arbblp.blpToUsdc}
-          tokenToBlpPrice={pageData.earn?.arbblp.usdcToBlp}
-          blpTokenName={'aBLP'}
-          tokenXName={'ARB'}
-        />
-      );
+    //   return (
+    //     <Buy
+    //       allowance={pageData.earn?.arb.allowance}
+    //       walletBalance={pageData.earn?.arb.wallet_balance}
+    //       buyCall={buyARBBLP}
+    //       validatinosFn={validationsARB}
+    //       approveFn={approveARB}
+    //       blpToTokenPrice={pageData.earn?.arbblp.blpToUsdc}
+    //       tokenToBlpPrice={pageData.earn?.arbblp.usdcToBlp}
+    //       blpTokenName={'aBLP'}
+    //       tokenXName={'ARB'}
+    //     />
+    //   );
 
     case 'sell':
       const { sellBLP, validations: sellValidations } =
@@ -158,69 +157,69 @@ function ModalChild() {
           blpPrice={pageData.earn.blp.price}
         />
       );
-    case 'sellARB':
-      const { sellARBBLP, validations: sellARBValidations } =
-        useEarnWriteCalls('Router');
-      return (
-        <Sell
-          blpTokenName={'aBLP'}
-          tokenXName={'ARB'}
-          sellCall={sellARBBLP}
-          blpToTokenPrice={pageData.earn?.arbblp.blpToUsdc}
-          tokenToBlpPrice={pageData.earn?.arbblp.usdcToBlp}
-          validatinosFn={sellARBValidations}
-          max={pageData.earn?.arbblp.max_unstakeable}
-          blpPrice={pageData.earn?.arbblp.price}
-        />
-      );
+    // case 'sellARB':
+    //   const { sellARBBLP, validations: sellARBValidations } =
+    //     useEarnWriteCalls('Router');
+    //   return (
+    //     <Sell
+    //       blpTokenName={'aBLP'}
+    //       tokenXName={'ARB'}
+    //       sellCall={sellARBBLP}
+    //       blpToTokenPrice={pageData.earn?.arbblp.blpToUsdc}
+    //       tokenToBlpPrice={pageData.earn?.arbblp.usdcToBlp}
+    //       validatinosFn={sellARBValidations}
+    //       max={pageData.earn?.arbblp.max_unstakeable}
+    //       blpPrice={pageData.earn?.arbblp.price}
+    //     />
+    //   );
 
-    case 'compound':
-      return <Compound />;
+    // case 'compound':
+    //   return <Compound />;
 
     case 'claim':
       return <Claim />;
-    case 'compound2':
-      return <Compound2 />;
+    // case 'compound2':
+    //   return <Compound2 />;
 
-    case 'claim2':
-      return <Claim2 />;
+    // case 'claim2':
+    //   return <Claim2 />;
 
-    case 'iBFRdeposit':
-      const { deposit, validations: BFRVesetValidatinos } = useEarnWriteCalls(
-        'Vester',
-        'BFR'
-      );
-      return (
-        <DepositModal
-          head="BFR Vault"
-          type="ibfr"
-          depositFn={deposit}
-          validatinosFn={BFRVesetValidatinos}
-        />
-      );
+    // case 'iBFRdeposit':
+    //   const { deposit, validations: BFRVesetValidatinos } = useEarnWriteCalls(
+    //     'Vester',
+    //     'BFR'
+    //   );
+    //   return (
+    //     <DepositModal
+    //       head="BFR Vault"
+    //       type="ibfr"
+    //       depositFn={deposit}
+    //       validatinosFn={BFRVesetValidatinos}
+    //     />
+    //   );
 
-    case 'BLPdeposit':
-      const { deposit: BLPDeposit, validations: BLPVesetValidatinos } =
-        useEarnWriteCalls('Vester', 'BLP');
-      return (
-        <DepositModal
-          head="uBLP Vault"
-          type="blp"
-          depositFn={BLPDeposit}
-          validatinosFn={BLPVesetValidatinos}
-        />
-      );
-    case 'ARBBLPdeposit':
-      const { deposit2, validations: ARBBLPVesetValidatinos } =
-        useEarnWriteCalls('Vester', 'BLP');
-      return (
-        <DepositModal
-          head="aBLP Vault"
-          type="arbblp"
-          depositFn={deposit2}
-          validatinosFn={ARBBLPVesetValidatinos}
-        />
-      );
+    // case 'BLPdeposit':
+    //   const { deposit: BLPDeposit, validations: BLPVesetValidatinos } =
+    //     useEarnWriteCalls('Vester', 'BLP');
+    //   return (
+    //     <DepositModal
+    //       head="uBLP Vault"
+    //       type="blp"
+    //       depositFn={BLPDeposit}
+    //       validatinosFn={BLPVesetValidatinos}
+    //     />
+    //   );
+    // case 'ARBBLPdeposit':
+    //   const { deposit2, validations: ARBBLPVesetValidatinos } =
+    //     useEarnWriteCalls('Vester', 'BLP');
+    //   return (
+    //     <DepositModal
+    //       head="aBLP Vault"
+    //       type="arbblp"
+    //       depositFn={deposit2}
+    //       validatinosFn={ARBBLPVesetValidatinos}
+    //     />
+    //   );
 
     default:
       return <div></div>;

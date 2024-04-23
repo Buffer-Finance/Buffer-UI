@@ -30,42 +30,6 @@ export const SECONDS_PER_YEAR = '31536000';
 
 export const TOTALSUPPLY = 80 * 10 ** 6 * 10 ** 18;
 
-const ibfrPriceCache = {
-  cache: '0',
-};
-export const useIbfrPrice = () => {
-  const getBothPrice = async () => {
-    const response = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-dev',
-      {
-        operationName: 'pools',
-        variables: {},
-        query:
-          'query pools {\n  pools(\n    where: {id_in: ["0xc31e54c7a869b9fcbecc14363cf510d1c41fa443", "0x17c14d2c404d167802b16c450d3c99f88f2c4f4d", "0xb529f885260321729d9ff1c69804c5bf9b3a95a5"]}\n  ) {\n    id\n    token1Price\n  }\n}\n',
-      }
-    );
-    return multiply(
-      response.data.data.pools[0].token1Price,
-      response.data.data.pools[1].token1Price
-    );
-  };
-
-  const keys = ['bfrPriceInEth'];
-
-  const { data, error } = useSWR(keys, {
-    fetcher: async (calls) => {
-      const res = await getBothPrice();
-
-      return res;
-    },
-  });
-
-  if (data && !error) {
-    ibfrPriceCache.cache = toFixed(data, 8);
-  }
-  return ibfrPriceCache.cache;
-};
-
 export const fromWei = (value: string, decimals: number = 18) => {
   return divide(value, decimals) ?? '0';
   // return Math.floor((value * 1e6) / 1e18) / 1e6;
@@ -77,7 +41,6 @@ export const useGetTokenomics = () => {
   const contracts =
     appConfig[activeChain.id as unknown as keyof typeof appConfig].EarnConfig;
   const allDecimals = useDecimalsByAsset();
-  const bfrPrice = useIbfrPrice();
   const usd_decimals = allDecimals['USDC'];
 
   const getUserSpecificCalls = () => {
@@ -198,7 +161,6 @@ export const useGetTokenomics = () => {
   const calls = getcalls().map((call) => {
     return { ...call, chainId: activeChain.id };
   });
-  console.log('useGetTokenomics-calls: ', calls);
   let { data: da } = useContractReads({
     contracts: calls,
     select: (d) => d.map((signle) => signle.result?.toString() || '0'),
@@ -208,7 +170,7 @@ export const useGetTokenomics = () => {
   convertBNtoString(data);
 
   let response = {};
-  if (data && data[0] && bfrPrice && gt(bfrPrice, '0')) {
+  if (data && data[0]) {
     let [
       stakedBlp,
       blpSupply,
@@ -225,7 +187,6 @@ export const useGetTokenomics = () => {
       feeBlpTrackerRewards,
       stakedBlpTrackerRewards,
       userStakedBlp,
-      blpVesterPairAmount,
       userUsdcBalance,
       userUnlockedBlpAmount,
       blpUsdcAllowance,
@@ -233,12 +194,6 @@ export const useGetTokenomics = () => {
       ? data.flat()
       : data.concat(new Array(getUserSpecificCalls().length).fill('0')).flat();
 
-    console.log(
-      `useTokenomicsMulticall-convertDataToRes(
-          data.concat(new Array(getUserSpecificCalls().length).fill('0')).flat()
-        ): `,
-      data.concat(new Array(getUserSpecificCalls().length).fill('0'))
-    );
     const blpPrice =
       blpSupply > 0
         ? divide(blpTotalBalance, blpSupply)
@@ -256,20 +211,8 @@ export const useGetTokenomics = () => {
             fromWei(multiply(blpSupply, blpPrice), usd_decimals)
           )
         : '0';
-    const stakedBlpTrackerAnnualRewardsUsd = fromWei(
-      multiply(
-        multiply(stakedBlpTrackerTokensPerInterval, SECONDS_PER_YEAR),
-        bfrPrice
-      )
-    );
-    const blpAprForEsBfr =
-      blpSupply > 0
-        ? divide(
-            multiply(stakedBlpTrackerAnnualRewardsUsd, BASIS_POINTS_DIVISOR),
-            fromWei(multiply(blpSupply, blpPrice), usd_decimals)
-          )
-        : '0';
-    const blpAprTotal = add(blpAprForRewardToken, blpAprForEsBfr);
+
+    const blpAprTotal = blpAprForRewardToken;
 
     // MaX withdrawal
     const dividedValue = divide(maxTokenXToWithdraw, blpPrice);
@@ -277,7 +220,7 @@ export const useGetTokenomics = () => {
       ? userUnlockedBlpAmount
       : dividedValue;
 
-    let maxUnstakeableBlp = subtract(userStakedBlp, blpVesterPairAmount);
+    let maxUnstakeableBlp = userStakedBlp;
     if (gt(maxBlpToWithdraw, maxUnstakeableBlp)) {
       maxBlpToWithdraw = maxUnstakeableBlp;
     }
@@ -318,31 +261,15 @@ export const useGetTokenomics = () => {
           },
           user: {
             rewards: {
-              value: add(
-                fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
-                fromWei(feeBlpTrackerRewards, usd_decimals)
-              ),
+              value: fromWei(feeBlpTrackerRewards, usd_decimals),
               tooltip: [
                 {
                   key: 'USDC',
                   value: [fromWei(feeBlpTrackerRewards, usd_decimals)],
                 },
-                {
-                  key: 'Escrowed BFR',
-                  value: [
-                    fromWei(stakedBlpTrackerRewards),
-                    fromWei(multiply(stakedBlpTrackerRewards, bfrPrice)),
-                  ],
-                },
               ],
             },
             usd_reward: fromWei(feeBlpTrackerRewards, usd_decimals),
-            esBfr_rewards: {
-              value_in_usd: fromWei(
-                multiply(stakedBlpTrackerRewards, bfrPrice)
-              ),
-              value_abs: fromWei(stakedBlpTrackerRewards),
-            },
             staked: {
               value_in_usd: multiply(
                 fromWei(userStakedBlp, usd_decimals),
@@ -373,5 +300,5 @@ export const useGetTokenomics = () => {
     };
   }
 
-  return bfrPrice && response ? response : { earn: null, vest: null };
+  return response ? response : { earn: null, vest: null };
 };
