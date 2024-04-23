@@ -1,5 +1,6 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import Missing from './Missing';
+import { optimism } from 'viem/dist/types/chains';
 
 export const ChainNotSupported = ({
   supportedChainIds,
@@ -48,7 +49,7 @@ export const ExceptArbitrum = ({
   hide?: boolean;
 }) => {
   return (
-    <ChainNotSupported supportedChainIds={[11155420]} hide={hide}>
+    <ChainNotSupported supportedChainIds={[11155420, optimism.id]} hide={hide}>
       {children}
     </ChainNotSupported>
   );
