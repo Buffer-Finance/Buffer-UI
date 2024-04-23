@@ -48,7 +48,7 @@ export const ExceptArbitrum = ({
   hide?: boolean;
 }) => {
   return (
-    <ChainNotSupported supportedChainIds={[80001, 137, 11155420]} hide={hide}>
+    <ChainNotSupported supportedChainIds={[11155420]} hide={hide}>
       {children}
     </ChainNotSupported>
   );

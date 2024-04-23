@@ -9,10 +9,7 @@ import { toFixed } from '@Utils/NumString';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { getContract } from '../Config/Address';
 
-export const useEarnWriteCalls = (
-  contractType: 'Router' | 'Vester',
-  vesterType?: 'BLP' | 'BFR'
-) => {
+export const useEarnWriteCalls = () => {
   const { activeChain } = useActiveChain();
   const EarnRouterContract = getContract(activeChain?.id, 'RewardRouter');
   const routerContract = { contract: EarnRouterContract, abi: EarnRouterABI };
@@ -21,14 +18,14 @@ export const useEarnWriteCalls = (
   const toastify = useToast();
   const [, setPageState] = useAtom(writeEarnAtom);
 
-  function callBack(res) {
+  function callBack(res: any) {
     if (res.payload)
       setPageState({
         isModalOpen: false,
         activeModal: null,
       });
   }
-  function validations(amount) {
+  function validations(amount: string) {
     if (!amount || amount === '0' || amount === '') {
       toastify({
         type: 'error',
@@ -38,15 +35,11 @@ export const useEarnWriteCalls = (
       return true;
     }
   }
-  function stakeUnstakeiBFR(amount: string, methodName: string) {
-    if (validations(amount)) return;
-    writeCall(callBack, methodName, [toFixed(multiply(amount, 18), 0)]);
-  }
 
   function buyBLP(amount: string) {
     if (validations(amount)) return;
     writeCall(callBack, 'mintAndStakeBlp', [
-      toFixed(multiply(amount, 6), 0),
+      toFixed(multiply(amount, 6) as string, 0),
       0,
     ]);
   }
@@ -54,73 +47,19 @@ export const useEarnWriteCalls = (
   function sellBLP(amount: string) {
     if (validations(amount)) return;
     writeCall(callBack, 'unstakeAndRedeemBlp', [
-      toFixed(multiply(amount, 6), 0),
-    ]);
-  }
-  function deposit(amount: string) {
-    if (validations(amount)) return;
-    writeCall(callBack, 'deposit', [toFixed(multiply(amount, 18), 0)]);
-  }
-  function deposit2(amount: string) {
-    if (validations(amount)) return;
-    Vester2(callBack, 'deposit', [toFixed(multiply(amount, 18), 0)]);
-  }
-
-  function withdraw() {
-    // if(validations(amount)) return;
-    writeCall(callBack, 'withdraw', []);
-  }
-  function withdraw2() {
-    // if(validations(amount)) return;
-    Vester2(callBack, 'withdraw', []);
-  }
-
-  function compound(
-    shouldClaimiBFR,
-    shouldStakeiBFR,
-    shouldCLaimesBFR,
-    shouldStakeesBFR,
-    shouldStakeMultiplierPoints,
-    shouldClaimWeth
-  ) {
-    writeCall(callBack, 'handleRewards', [
-      shouldClaimiBFR || shouldStakeiBFR,
-      shouldStakeiBFR,
-      shouldCLaimesBFR || shouldStakeesBFR,
-      shouldStakeesBFR,
-      shouldStakeMultiplierPoints,
-      shouldClaimWeth,
+      toFixed(multiply(amount, 6) as string, 0),
     ]);
   }
 
-  function claim(
-    shouldClaimiBFR,
-    shouldCLaimesBFR,
-    shouldClaimWeth,
-    shouldConvertWeth
-  ) {
-    writeCall(callBack, 'handleRewards', [
-      shouldClaimiBFR,
-      false,
-      shouldCLaimesBFR,
-      false,
-      false,
-      shouldClaimWeth,
-      // shouldConvertWeth,
-    ]);
+  function claim(callbackFn: () => void) {
+    writeCall(callbackFn, 'handleRewards', []);
   }
 
   return {
-    stakeUnstakeiBFR,
     buyBLP,
     sellBLP,
-    deposit,
-    withdraw,
-    compound,
     claim,
     validations,
-    deposit2,
-    withdraw2,
   };
 };
 
