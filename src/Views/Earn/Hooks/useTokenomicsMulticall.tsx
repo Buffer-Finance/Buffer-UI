@@ -35,6 +35,9 @@ export const fromWei = (value: string, decimals: number = 18) => {
   // return Math.floor((value * 1e6) / 1e18) / 1e6;
 };
 
+export function useIbfrPrice() {
+  return '0';
+}
 export const useGetTokenomics = () => {
   const { address: account } = useUserAccount();
   const { activeChain } = useActiveChain();
