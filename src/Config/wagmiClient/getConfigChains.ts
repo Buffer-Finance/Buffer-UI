@@ -1,7 +1,7 @@
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { isTestnet } from 'config';
 import { defineChain } from 'viem';
-import { arbitrum, polygon } from 'viem/chains';
+import { arbitrum, optimism, polygon } from 'viem/chains';
 
 export const urlSettings = getHashUrlQueryParam(window.location.href);
 export const arbitrumSepolia = defineChain({
@@ -72,16 +72,10 @@ export function getSupportedChains() {
 export const getAllChains = () => {
   switch (urlSettings?.chain) {
     case 'arbitrum':
-      return isTestnet
-        ? [arbitrumSepolia, optimismSepolia]
-        : [arbitrum, polygon];
-    case 'polygon':
-      return isTestnet
-        ? [optimismSepolia, arbitrumSepolia]
-        : [polygon, arbitrum];
+      return isTestnet ? [optimismSepolia] : [optimism];
+    case 'optimism':
+      return isTestnet ? [optimismSepolia] : [optimism];
     default:
-      return isTestnet
-        ? [arbitrumSepolia, optimismSepolia]
-        : [arbitrum, polygon];
+      return isTestnet ? [optimismSepolia] : [optimism];
   }
 };

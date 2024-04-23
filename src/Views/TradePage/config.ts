@@ -275,6 +275,26 @@ export const appConfig = {
       StakedBlpDistributor: '0x0C42C958C9Bc6B555F4e8e1AFC36dEd95CB05a24',
     },
   },
+  '10': {
+    multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+    EarnConfig: {
+      RewardRouter: '0xC4a0639A5E9Ec055BceAc76C36b8d446aFB94Ae5',
+      BLP: '0x98B4e57B0d8BB144a0E53fdE5715B84661CC8e4a',
+      // iBFR: '0x89fEF05446aEA764C53a2f09bB763876FB57ea8E',
+      ES_BFR: '0x9bE7abE78A8fc78eDc763fDB864B50c6e98ACB97',
+      // BN_BFR: '0x8d3B227ebf5424f9b324908037bdD1db71F66521',
+      USDC: '0x3Fe8f62843E50267668BEc3B24123316750020D3',
+      // StakedBfrTracker: '0xe243e72224b9E295551790b2C57638A27b8493af',
+      // BonusBfrTracker: '0xd9497B39399149D7572A7D740487F6e016C5D37e',
+      // FeeBfrTracker: '0x39bcb63F0F4427CB9A21D4c3D957Bd8695f67B6d',
+      StakedBlpTracker: '0xECD32E8258b72b52EAb8E6a78767c53B48de4F99',
+      FeeBlpTracker: '0xF24e81D63af36942afC02068fC44F29d64972D98',
+      // BfrVester: '0x961F8988962a2A62ae6a189C0Af576eea40A7912',
+      // BlpVester: '0xA37089c619A27Ce0C70F5E6CE03fD8955a46098C',
+      // StakedBfrDistributor: '0x1CBbff0d3928c35C1A41566e84AB1Efaa28f6770',
+      StakedBlpDistributor: '0x0C42C958C9Bc6B555F4e8e1AFC36dEd95CB05a24',
+    },
+  },
 } as const;
 
 export const HolderContracts = [
