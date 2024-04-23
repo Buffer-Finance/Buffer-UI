@@ -105,6 +105,7 @@ function ModalChild() {
         USDCABI,
         getContract(activeChain.id, 'USDC'),
         getContract(activeChain.id, 'BLP')
+      );
 
       return (
         <Buy
