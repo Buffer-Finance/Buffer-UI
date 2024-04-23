@@ -67,7 +67,7 @@ export const EarnPage = () => {
         subHeading={
           <div className={descStyles}>
             Stake BFR and BLP to earn rewards.
-            <span
+            {/* <span
               className="light-blue-text  whitespace-nowrap ml6  hover:underline  cursor-pointer"
               onClick={() => {
                 window.open(
@@ -80,7 +80,7 @@ export const EarnPage = () => {
                 Learn more
                 <FrontArrow className="tml w-fit inline" />
               </span>
-            </span>
+            </span> */}
           </div>
         }
       />
