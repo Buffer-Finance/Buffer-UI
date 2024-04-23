@@ -66,7 +66,7 @@ export const EarnPage = () => {
         Cards={getEarnCards(data)}
         subHeading={
           <div className={descStyles}>
-            Stake BFR and BLP to earn rewards.
+            Stake BLP to earn rewards.
             {/* <span
               className="light-blue-text  whitespace-nowrap ml6  hover:underline  cursor-pointer"
               onClick={() => {
