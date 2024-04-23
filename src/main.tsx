@@ -112,7 +112,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <JotaiProvider>
               <ContextProvider>
                 <App />
-                <RootLevelHooks />
+                {/* <RootLevelHooks /> */}
               </ContextProvider>
             </JotaiProvider>
           </SWRConfig>

@@ -19,63 +19,61 @@ export const CHART_TVID = v4().substring(0, 6);
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
 // import { TradePage } from '@Views/TradePage';
-
 import Background from './AppStyles';
 import { Navbar } from './Views/Common/Navbar';
-
-import { useToast } from '@Contexts/Toast';
+// import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
 // import { useGraphStatus } from '@Utils/useGraphStatus';
-import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
-import { OpenOcean } from '@Views/Common/OpenOceanWidget';
+// import { TradesShutter } from '@Views/Common/MobileShutter/MobileShutter';
+// import { OpenOcean } from '@Views/Common/OpenOceanWidget';
 import SideBar from '@Views/Common/Sidebar';
-import { OneCTModal } from '@Views/OneCT/OneCTModal';
-import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
-import { defaultMarket } from '@Views/TradePage/config';
+// import { OneCTModal } from '@Views/OneCT/OneCTModal';
+// import { OnboardingAnimation } from '@Views/TradePage/Components/OnboardingAnimation';
+// import { defaultMarket } from '@Views/TradePage/config';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
-import { isTestnet } from 'config';
-import { useMedia } from 'react-use';
+// import { isTestnet } from 'config';
+// import { useMedia } from 'react-use';
 import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
-import { activeMarketFromStorageAtom } from './globalStore';
+// import { activeMarketFromStorageAtom } from './globalStore';
 import { PageLoader } from './PageLoader';
-import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
-import { usePlatformEvent } from '@Hooks/usePlatformEvent';
-import { useRecentWinners } from '@Hooks/useRecentWinners';
-import {
-  NFTImage,
-  UpDownChipSmm,
-  formatAddress,
-} from '@Views/Jackpot/JackPotWInnerCard';
-import { useAccount } from 'wagmi';
-import { sleep } from '@TV/useDataFeed';
-import {
-  CircleAroundPicture,
-  CircleAroundPictureSM,
-} from '@Views/Profile/Components/UserDataComponent/UserData';
-import MemoUSDC_monochrome from '@SVG/Elements/USDC_monochrome';
-import MemoABR_monochrome from '@SVG/Elements/ABR_monochrome';
+// import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
+// import { usePlatformEvent } from '@Hooks/usePlatformEvent';
+// import { useRecentWinners } from '@Hooks/useRecentWinners';
+// import {
+//   NFTImage,
+//   UpDownChipSmm,
+//   formatAddress,
+// } from '@Views/Jackpot/JackPotWInnerCard';
+// import { useAccount } from 'wagmi';
+// import { sleep } from '@TV/useDataFeed';
+// import {
+//   CircleAroundPicture,
+//   CircleAroundPictureSM,
+// } from '@Views/Profile/Components/UserDataComponent/UserData';
+// import MemoUSDC_monochrome from '@SVG/Elements/USDC_monochrome';
+// import MemoABR_monochrome from '@SVG/Elements/ABR_monochrome';
 import { Earn } from '@Views/Earn';
-const TradePage = lazy(() => import('@Views/TradePage'));
+// const TradePage = lazy(() => import('@Views/TradePage'));
 
-const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
-const AllTrades = lazy(() => import('@Views/AllTrades'));
-const ContractList = lazy(() => import('@Views/ContractList'));
-const DashboardV2 = lazy(() => import('@Views/DashboardV2'));
-const IbfrFaucet = lazy(() => import('@Views/Faucet'));
-const ProfilePage = lazy(() => import('@Views/Profile'));
-const ReferralPage = lazy(() => import('@Views/Referral'));
-const Test = lazy(() => import('@Views/Test'));
-const TradeLog_sm = lazy(
-  () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
-);
-const LeaderBoardOutlet = lazy(() => import('@Views/V2-Leaderboard'));
-const Incentivised = lazy(() => import('@Views/V2-Leaderboard/Incentivised'));
-const Weekly = lazy(() => import('@Views/V2-Leaderboard/Weekly'));
-const Jackpot = lazy(() => import('@Views/Jackpot'));
-const AboveBelow = lazy(() => import('@Views/AboveBelow'));
+// const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
+// const AllTrades = lazy(() => import('@Views/AllTrades'));
+// const ContractList = lazy(() => import('@Views/ContractList'));
+// const DashboardV2 = lazy(() => import('@Views/DashboardV2'));
+// const IbfrFaucet = lazy(() => import('@Views/Faucet'));
+// const ProfilePage = lazy(() => import('@Views/Profile'));
+// const ReferralPage = lazy(() => import('@Views/Referral'));
+// const Test = lazy(() => import('@Views/Test'));
+// const TradeLog_sm = lazy(
+//   () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
+// );
+// const LeaderBoardOutlet = lazy(() => import('@Views/V2-Leaderboard'));
+// const Incentivised = lazy(() => import('@Views/V2-Leaderboard/Incentivised'));
+// const Weekly = lazy(() => import('@Views/V2-Leaderboard/Weekly'));
+// const Jackpot = lazy(() => import('@Views/Jackpot'));
+// const AboveBelow = lazy(() => import('@Views/AboveBelow'));
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{
@@ -106,53 +104,53 @@ const Redirect = ({ url }: { url: string }) => {
 };
 
 const AppRoutes = () => {
-  const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
-  const [searchParam] = useSearchParams();
-  const [ref, setRef] = useAtom(referralCodeAtom);
-  const toastify = useToast();
-  const navigate = useNavigate();
-  const account = useAccount();
-  const earnUrl = isTestnet
-    ? 'https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/'
-    : 'https://earn.buffer.finance/';
+  // const activeMarketFromStorage = useAtomValue(activeMarketFromStorageAtom);
+  // const [searchParam] = useSearchParams();
+  // const [ref, setRef] = useAtom(referralCodeAtom);
+  // const toastify = useToast();
+  // const navigate = useNavigate();
+  // const account = useAccount();
+  // const earnUrl = isTestnet
+  //   ? 'https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/'
+  //   : 'https://earn.buffer.finance/';
 
-  useEffect(() => {
-    let referralCode = searchParam.get('ref');
+  // useEffect(() => {
+  //   let referralCode = searchParam.get('ref');
 
-    if (!referralCode) {
-      let code = '';
-      const codes = window.location.href.split('/');
+  //   if (!referralCode) {
+  //     let code = '';
+  //     const codes = window.location.href.split('/');
 
-      for (let i = 0; i < codes.length; i++) {
-        if (codes[i] == 'ref') {
-          code = codes?.[i + 1];
-        }
-      }
-      if (code) referralCode = code;
-    }
+  //     for (let i = 0; i < codes.length; i++) {
+  //       if (codes[i] == 'ref') {
+  //         code = codes?.[i + 1];
+  //       }
+  //     }
+  //     if (code) referralCode = code;
+  //   }
 
-    if (referralCode) {
-      if (ref !== referralCode) {
-        setRef(referralCode);
-        toastify({
-          type: 'success',
-          msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
-          id: 23132,
-        });
-      }
-      navigate('/binary/ETH-USD');
-    }
-  }, [searchParam]);
+  //   if (referralCode) {
+  //     if (ref !== referralCode) {
+  //       setRef(referralCode);
+  //       toastify({
+  //         type: 'success',
+  //         msg: 'Referral Link  "' + referralCode + '" is applied successfully!',
+  //         id: 23132,
+  //       });
+  //     }
+  //     navigate('/binary/ETH-USD');
+  //   }
+  // }, [searchParam]);
   return (
     <div className="relative root w-[100vw] pb-[5px] ">
-      <TradesShutter />
-      <OpenOcean />
+      {/* <TradesShutter /> */}
+      {/* <OpenOcean />
 
       <OnboardingAnimation />
-      <OneCTModal />
+      <OneCTModal /> */}
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="trades" element={<AllTrades />} />
+          {/* <Route path="trades" element={<AllTrades />} />
           <Route path="/faucet" element={<IbfrFaucet />} />
           <Route path="/test" element={<Test />} />
           <Route path="/ab/:market" element={<AboveBelow />} />
@@ -162,11 +160,11 @@ const AppRoutes = () => {
           <Route
             path="/ref/:refcode"
             element={<div>Processing your referral request...</div>}
-          ></Route>
+          ></Route> */}
           {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
           <Route path="/earn" element={<Earn />} />
 
-          <Route path="/dashboard" element={<DashboardV2 />}>
+          {/* <Route path="/dashboard" element={<DashboardV2 />}>
             <Route path=":chain" element={<DashboardV2 />} />
           </Route>
           <Route path="/referral" element={<ReferralPage />} />
@@ -191,7 +189,7 @@ const AppRoutes = () => {
             <Route path="weekly" element={<Weekly />}>
               <Route path=":chain" element={<Weekly />} />
             </Route>
-          </Route>
+          </Route> */}
         </Routes>
       </Suspense>
     </div>
@@ -208,20 +206,20 @@ const mobileWarningAtom = atomWithLocalStorage('warnign-suer', false);
 
 function App() {
   useAutoConnect();
-  useRecentWinners();
+  // useRecentWinners();
   const [snack, setSnack] = useAtom(snackAtom);
-  const [mobileWarningClosed, setWarningCloseOnMobile] =
-    useAtom(mobileWarningAtom);
+  // const [mobileWarningClosed, setWarningCloseOnMobile] =
+  //   useAtom(mobileWarningAtom);
 
   // const graphStatus = useGraphStatus();
-  const isMobile = useMedia('(max-width:1200px)');
+  // const isMobile = useMedia('(max-width:1200px)');
   // return ;
   return (
     <>
       {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
-          <ViewOnlyModeTradePageWarning />
+          {/* <ViewOnlyModeTradePageWarning /> */}
           {/* {graphStatus && (
             <Warning
               body={
@@ -253,7 +251,7 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          {!urlSettings?.hide &&
+          {/* {!urlSettings?.hide &&
             (isMobile && mobileWarningClosed ? false : true) && (
               <Warning
                 body={
@@ -289,7 +287,7 @@ function App() {
                 state={!mobileWarningClosed}
                 className="disclaimer"
               />
-            )}
+            )} */}
           <TnCModal />
           <SideBar />
         </Background>

@@ -2,7 +2,7 @@ import { useGlobal } from '@Contexts/Global';
 import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
 import MemoWalletSVG from '@SVG/Elements/WalletSVG';
 import { inIframe } from '@Utils/isInIframe';
-import { OneCTModal } from '@Views/OneCT/OneCTModal';
+// import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { useAtomValue } from 'jotai';
 import { useMemo, useState } from 'react';
@@ -37,17 +37,17 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = 8;
+  const VISIBLETABS = 1;
   // const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
       type: 'UPDATE_SIDEBAR_STATE',
     });
   };
-  const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
-  const [activeTrades, limitOrderTrades] = useOngoingTrades();
-  const activeTradesAB = useOngoingTradesAB();
-  useAboveBelowMarketsSetter();
+  // const { openOngoingTradesShutter, shutterState } = useShutterHandlers();
+  // const [activeTrades, limitOrderTrades] = useOngoingTrades();
+  // const activeTradesAB = useOngoingTradesAB();
+  // useAboveBelowMarketsSetter();
   const navigate = useNavigate();
   const [click, setClick] = useState(0);
   const openAdmin = () => {
@@ -61,7 +61,7 @@ export const Navbar: React.FC<INavbar> = () => {
   const show = !urlSettings?.hide;
   return (
     <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102] b1200:z-10">
-      <OneCTModal />
+      {/* <OneCTModal /> */}
       <div className="flex items-center ">
         <div
           role={'button'}
@@ -75,7 +75,7 @@ export const Navbar: React.FC<INavbar> = () => {
         </div>
         <div className="a1200:hidden flex gap-x-4 items-center pl-4">
           <MemoHamburgerSVG onClick={handleClose} />
-          <MemoWalletSVG
+          {/* <MemoWalletSVG
             onClick={openOngoingTradesShutter}
             count={
               activeTrades.length +
@@ -85,7 +85,7 @@ export const Navbar: React.FC<INavbar> = () => {
             className={
               shutterState.open == 'ActiveOrders' ? 'text-1' : 'text-[#808191]'
             }
-          />
+          /> */}
         </div>
 
         {show && (

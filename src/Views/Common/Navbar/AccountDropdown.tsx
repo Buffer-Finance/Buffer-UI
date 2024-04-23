@@ -2,10 +2,10 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import DDArrow from '@SVG/Elements/Arrow';
 import WalletIcon from '@SVG/Elements/WalletIcon';
 import copyToClipboard from '@Utils/copyToClipboard';
-import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
+// import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import {
   uesOneCtActiveChain,
-  useOneCTWallet,
+  // useOneCTWallet,
 } from '@Views/OneCT/useOneCTWallet';
 import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
@@ -50,9 +50,9 @@ const chaintoIcon: {
 export const AccountDropdown: React.FC = () => {
   const { address } = useUserAccount();
   const setSnack = useSetAtom(snackAtom);
-  const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
+  // const setOneCTModal = useSetAtom(isOneCTModalOpenAtom);
   const { activeChain } = uesOneCtActiveChain();
-  useOngoingTrades();
+  // useOngoingTrades();
   const disconnect = useDisconnect();
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ transition: true });
@@ -62,45 +62,46 @@ export const AccountDropdown: React.FC = () => {
     toggleMenu(false);
   }
 
-  const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
-    useOneCTWallet();
+  // const { disabelLoading, disableOneCt, registeredOneCT, nonce, state } =
+  //   useOneCTWallet();
   const isMobile = useMedia('(max-width:1200px)');
   const { isUserEducated, openTutorial } = useChainTutorial();
   const provider = usePublicClient({ chainId: activeChain.id });
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
-  useEffect(() => {
-    setOneCTModal(false);
-  }, [address]);
+  // useEffect(() => {
+  //   setOneCTModal(false);
+  // }, [address]);
 
   let OneCTManager = (
-    <Skeleton variant="rectangular" className="lc sr w-[70px] h-[31px]" />
+    <></>
+    // <Skeleton variant="rectangular" className="lc sr w-[70px] h-[31px]" />
   );
-  if (registeredOneCT) {
-    OneCTManager = (
-      <BlueBtn
-        className="!text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
-        onClick={() => {
-          disableOneCt();
-          closeDropdown();
-        }}
-        isLoading={disabelLoading}
-        isDisabled={state && state === 'PENDING'}
-      >
-        Deactivate Account
-      </BlueBtn>
-    );
-  } else
-    OneCTManager = (
-      <BlueBtn
-        test-id="activate-button-bg"
-        className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
-        onClick={() => {
-          setOneCTModal(true);
-        }}
-      >
-        {nonce && nonce > 0 ? 'Reactivate' : ' Activate'} Acount
-      </BlueBtn>
-    );
+  // if (registeredOneCT) {
+  //   OneCTManager = (
+  //     <BlueBtn
+  //       className="!text-f12 !bg-[#191b20] !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500] "
+  //       onClick={() => {
+  //         disableOneCt();
+  //         closeDropdown();
+  //       }}
+  //       isLoading={disabelLoading}
+  //       isDisabled={state && state === 'PENDING'}
+  //     >
+  //       Deactivate Account
+  //     </BlueBtn>
+  //   );
+  // } else
+  //   OneCTManager = (
+  //     <BlueBtn
+  //       test-id="activate-button-bg"
+  //       className="!ml-[13px] !text-f12 !w-fit !px-[10px] !py-[3px] !rounded-[5px] !h-fit !font-[500]"
+  //       onClick={() => {
+  //         setOneCTModal(true);
+  //       }}
+  //     >
+  //       {nonce && nonce > 0 ? 'Reactivate' : ' Activate'} Acount
+  //     </BlueBtn>
+  //   );
 
   return (
     <ConnectButton.Custom>
