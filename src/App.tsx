@@ -190,6 +190,7 @@ const AppRoutes = () => {
               <Route path=":chain" element={<Weekly />} />
             </Route>
           </Route> */}
+          <Route path="*" element={<Navigate to="/earn" />} />
         </Routes>
       </Suspense>
     </div>
