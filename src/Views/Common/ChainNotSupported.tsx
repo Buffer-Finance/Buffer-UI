@@ -5,6 +5,7 @@ import {
   baseSepolia,
   beraChainArtio,
   optimismSepolia,
+  rskTestnet,
 } from 'src/Config/wagmiClient/getConfigChains';
 
 export const ChainNotSupported = ({
@@ -60,6 +61,7 @@ export const ExceptArbitrum = ({
         optimism.id,
         beraChainArtio.id,
         baseSepolia.id,
+        rskTestnet.id,
       ]}
       hide={hide}
     >

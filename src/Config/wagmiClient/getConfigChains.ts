@@ -123,6 +123,35 @@ export const baseSepolia = defineChain({
   testnet: true,
 });
 
+export const rskTestnet = defineChain({
+  id: 31,
+  name: 'RSK Testnet',
+  network: 'rsk-testnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'tRBTC',
+    symbol: 'tRBTC',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://public-node.testnet.rsk.co'],
+    },
+    public: {
+      http: ['https://public-node.testnet.rsk.co'],
+    },
+  },
+  blockExplorers: {
+    default: { name: 'Explorer', url: 'https://explorer.testnet.rsk.co' },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      blockCreated: 2771150,
+    },
+  },
+  testnet: true,
+});
+
 export function getSupportedChains() {
   return isTestnet
     ? [optimismSepolia, baseSepolia, beraChainArtio]
@@ -131,17 +160,26 @@ export function getSupportedChains() {
 
 export const getAllChains = () => {
   switch (urlSettings?.chain) {
-    case 'arbitrum':
-      return isTestnet
-        ? [optimismSepolia, baseSepolia, beraChainArtio]
-        : [optimism];
     case 'optimism':
       return isTestnet
-        ? [optimismSepolia, baseSepolia, beraChainArtio]
+        ? [optimismSepolia, baseSepolia, beraChainArtio, rskTestnet]
+        : [optimism];
+
+    case 'bera':
+      return isTestnet
+        ? [optimismSepolia, baseSepolia, beraChainArtio, rskTestnet]
+        : [optimism];
+    case 'base':
+      return isTestnet
+        ? [optimismSepolia, baseSepolia, beraChainArtio, rskTestnet]
+        : [optimism];
+    case 'rsk':
+      return isTestnet
+        ? [optimismSepolia, baseSepolia, beraChainArtio, rskTestnet]
         : [optimism];
     default:
       return isTestnet
-        ? [optimismSepolia, baseSepolia, beraChainArtio]
+        ? [optimismSepolia, baseSepolia, beraChainArtio, rskTestnet]
         : [optimism];
   }
 };
