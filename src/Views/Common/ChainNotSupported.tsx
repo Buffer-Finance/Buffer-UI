@@ -1,6 +1,11 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import Missing from './Missing';
 import { optimism } from 'viem/chains';
+import {
+  baseSepolia,
+  beraChainArtio,
+  optimismSepolia,
+} from 'src/Config/wagmiClient/getConfigChains';
 
 export const ChainNotSupported = ({
   supportedChainIds,
@@ -49,7 +54,15 @@ export const ExceptArbitrum = ({
   hide?: boolean;
 }) => {
   return (
-    <ChainNotSupported supportedChainIds={[11155420, optimism.id]} hide={hide}>
+    <ChainNotSupported
+      supportedChainIds={[
+        optimismSepolia.id,
+        optimism.id,
+        beraChainArtio.id,
+        baseSepolia.id,
+      ]}
+      hide={hide}
+    >
       {children}
     </ChainNotSupported>
   );
