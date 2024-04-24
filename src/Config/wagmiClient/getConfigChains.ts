@@ -133,15 +133,15 @@ export const getAllChains = () => {
   switch (urlSettings?.chain) {
     case 'arbitrum':
       return isTestnet
-        ? [arbitrumSepolia, baseSepolia, beraChainArtio]
+        ? [optimismSepolia, baseSepolia, beraChainArtio]
         : [optimism];
     case 'optimism':
       return isTestnet
-        ? [arbitrumSepolia, baseSepolia, beraChainArtio]
+        ? [optimismSepolia, baseSepolia, beraChainArtio]
         : [optimism];
     default:
       return isTestnet
-        ? [arbitrumSepolia, baseSepolia, beraChainArtio]
+        ? [optimismSepolia, baseSepolia, beraChainArtio]
         : [optimism];
   }
 };
