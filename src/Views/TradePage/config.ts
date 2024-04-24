@@ -295,7 +295,7 @@ export const appConfig = {
       StakedBlpDistributor: '0x3926C82b3583FBCb0fEE2EdE2211049Ce375aa66',
     },
   },
-  '84532': {
+  '80085': {
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     EarnConfig: {
       RewardRouter: '0x8f59d96B00cED1811fBF169Ff7b9a119c6b74CDf',
@@ -315,7 +315,7 @@ export const appConfig = {
       StakedBlpDistributor: '0x3926C82b3583FBCb0fEE2EdE2211049Ce375aa66',
     },
   },
-  '80085': {
+  '84532': {
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     EarnConfig: {
       RewardRouter: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
