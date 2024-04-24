@@ -65,17 +65,83 @@ export const optimismSepolia = defineChain({
   testnet: true,
 });
 
+export const beraChainArtio = defineChain({
+  id: 80085,
+  name: 'Berachain Artio',
+  network: 'bera-artio',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'BERA',
+    symbol: 'BERA',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://artio.rpc.berachain.com/'],
+    },
+    public: {
+      http: ['https://artio.rpc.berachain.com/'],
+    },
+  },
+  blockExplorers: {
+    default: { name: 'Explorer', url: 'https://artio.beratrail.io/' },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      blockCreated: 866924,
+    },
+  },
+  testnet: true,
+});
+
+export const baseSepolia = defineChain({
+  id: 84532,
+  name: 'Base Sepolia',
+  network: 'base-sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Ether',
+    symbol: 'ETH',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://sepolia.base.org'],
+    },
+    public: {
+      http: ['https://sepolia.base.org'],
+    },
+  },
+  blockExplorers: {
+    default: { name: 'Explorer', url: 'https://sepolia-explorer.base.org' },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      blockCreated: 1059647,
+    },
+  },
+  testnet: true,
+});
+
 export function getSupportedChains() {
-  return isTestnet ? [arbitrumSepolia] : [arbitrum];
+  return isTestnet
+    ? [optimismSepolia, baseSepolia, beraChainArtio]
+    : [optimism];
 }
 
 export const getAllChains = () => {
   switch (urlSettings?.chain) {
     case 'arbitrum':
-      return isTestnet ? [optimismSepolia] : [optimism];
+      return isTestnet
+        ? [arbitrumSepolia, baseSepolia, beraChainArtio]
+        : [optimism];
     case 'optimism':
-      return isTestnet ? [optimismSepolia] : [optimism];
+      return isTestnet
+        ? [arbitrumSepolia, baseSepolia, beraChainArtio]
+        : [optimism];
     default:
-      return isTestnet ? [optimismSepolia] : [optimism];
+      return isTestnet
+        ? [arbitrumSepolia, baseSepolia, beraChainArtio]
+        : [optimism];
   }
 };
