@@ -153,21 +153,33 @@ export const rskTestnet = defineChain({
 });
 
 export function getSupportedChains() {
-  return isTestnet ? [optimismSepolia, baseSepolia] : [optimism];
+  return isTestnet
+    ? [optimismSepolia, baseSepolia, beraChainArtio]
+    : [optimism];
 }
 
 export const getAllChains = () => {
   switch (urlSettings?.chain) {
     case 'optimism':
-      return isTestnet ? [optimismSepolia, baseSepolia] : [optimism];
+      return isTestnet
+        ? [optimismSepolia, baseSepolia, beraChainArtio]
+        : [optimism];
 
     case 'bera':
-      return isTestnet ? [optimismSepolia, baseSepolia] : [optimism];
+      return isTestnet
+        ? [optimismSepolia, baseSepolia, beraChainArtio]
+        : [optimism];
     case 'base':
-      return isTestnet ? [optimismSepolia, baseSepolia] : [optimism];
+      return isTestnet
+        ? [optimismSepolia, baseSepolia, beraChainArtio]
+        : [optimism];
     case 'rsk':
-      return isTestnet ? [optimismSepolia, baseSepolia] : [optimism];
+      return isTestnet
+        ? [optimismSepolia, baseSepolia, beraChainArtio]
+        : [optimism];
     default:
-      return isTestnet ? [optimismSepolia, baseSepolia] : [optimism];
+      return isTestnet
+        ? [optimismSepolia, baseSepolia, beraChainArtio]
+        : [optimism];
   }
 };
