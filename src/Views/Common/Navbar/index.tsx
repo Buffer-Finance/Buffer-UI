@@ -18,6 +18,7 @@ import { Tab } from './Tab';
 import { TabsDropdown } from './TabsDropDown';
 import { useOngoingTrades as useOngoingTradesAB } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 import { useAboveBelowMarketsSetter } from '@Views/AboveBelow/Hooks/useAboveBelowMarketsSetter';
+import { isTestnet } from 'config';
 
 interface INavbar {}
 
@@ -37,7 +38,7 @@ export const Navbar: React.FC<INavbar> = () => {
     () => getTabs(activeMarketFromStorage),
     [activeMarketFromStorage]
   );
-  const VISIBLETABS = 2;
+  const VISIBLETABS = isTestnet ? 2 : 1;
   // const MORETABS = isTestnet ? 2 : 3;
   const handleClose = () => {
     dispatch({
