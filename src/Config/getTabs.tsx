@@ -420,12 +420,12 @@ export const getTabs = (
       //   subTabs: [],
       //   isExternalLink: false,
       // },
-      // {
-      //   to: `/faucet`,
-      //   name: 'Faucet',
-      //   subTabs: [],
-      //   isExternalLink: false,
-      // },
+      {
+        to: `/faucet`,
+        name: 'Faucet',
+        subTabs: [],
+        isExternalLink: false,
+      },
       // {
       //   to: `/referral`,
       //   name: 'Referral',
@@ -679,13 +679,13 @@ export const getMobileTabs = (
       //   icon: TabIcon.History,
       //   mobileOnly: true,
       // },
-      // {
-      //   to: `/faucet`,
-      //   name: 'Faucet',
-      //   subTabs: [],
-      //   isExternalLink: false,
-      //   icon: TabIcon.Faucet,
-      // },
+      {
+        to: `/faucet`,
+        name: 'Faucet',
+        subTabs: [],
+        isExternalLink: false,
+        icon: TabIcon.Faucet,
+      },
       // {
       //   to: `https://optopi.buffer.finance/`,
       //   name: 'NFT',

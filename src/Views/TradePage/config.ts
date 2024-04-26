@@ -257,6 +257,16 @@ export const appConfig = {
   },
   '11155420': {
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+    poolsInfo: {
+      '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
+        decimals: 6,
+        faucet: '0x9116cd4FA0c39781F47b9aFEFC806B54114a62d6',
+        is_pol: false,
+        token: 'USDC',
+        tokenAddress: '0x3Fe8f62843E50267668BEc3B24123316750020D3',
+        permitName: 'USD Coin (Arb1)',
+      },
+    },
     EarnConfig: {
       RewardRouter: '0xC4a0639A5E9Ec055BceAc76C36b8d446aFB94Ae5',
       BLP: '0x98B4e57B0d8BB144a0E53fdE5715B84661CC8e4a',
@@ -297,6 +307,16 @@ export const appConfig = {
   },
   '80085': {
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+    poolsInfo: {
+      '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
+        decimals: 6,
+        faucet: '0x715F38AB0A5C48c20D1DD6e0a4CA8626395d42E7',
+        is_pol: false,
+        token: 'USDC',
+        tokenAddress: '0x507B9BCae6FE92abE23663F721eA7be39bdE6D75',
+        permitName: 'USD Coin (Arb1)',
+      },
+    },
     EarnConfig: {
       RewardRouter: '0xd94Cc219D0306774B4F44b4cC27F91556b904E41',
       BLP: '0x9bE7abE78A8fc78eDc763fDB864B50c6e98ACB97',
@@ -317,6 +337,16 @@ export const appConfig = {
   },
   '84532': {
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+    poolsInfo: {
+      '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
+        decimals: 6,
+        faucet: '0xEde29cD49b63EB166de09Edc79491c704D7771F8',
+        is_pol: false,
+        token: 'USDC',
+        tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
+        permitName: 'USD Coin (Arb1)',
+      },
+    },
     EarnConfig: {
       RewardRouter: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
       BLP: '0xAb4df8Aaa1F54E84C469f4bc0e513436088C9B86',
@@ -337,6 +367,16 @@ export const appConfig = {
   },
   '31': {
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
+    poolsInfo: {
+      '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
+        decimals: 6,
+        faucet: '0xcD23aF80a0A2a507Ce3437CC8023F6de11f82A7d',
+        is_pol: false,
+        token: 'USDC',
+        tokenAddress: '0x06601d941386BA24575EE8A4Ec7E2E8cc7d81A1A',
+        permitName: 'USD Coin (Arb1)',
+      },
+    },
     EarnConfig: {
       RewardRouter: '0x464c93cab18A051a24BD520bb97c22C583b48F01',
       BLP: '0x25e6af490d8Ba66F4a93e27765af965a13ad38E8',

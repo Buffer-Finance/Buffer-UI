@@ -147,6 +147,43 @@ const faucetClaimingSteps = {
       },
     ],
   },
+  31: {
+    name: 'tRBTC',
+    symbol: 'tRBTC',
+    faucet: [
+      { step: 'Claim testnet RBTC', url: 'https://faucet.rootstock.io/' },
+    ],
+  },
+  84532: {
+    name: 'Ether',
+    symbol: 'ETH',
+    faucet: [
+      {
+        step: 'Claim testnet ETH',
+        url: 'https://www.alchemy.com/faucets/base-sepolia',
+      },
+    ],
+  },
+  80085: {
+    name: 'BERA',
+    symbol: 'BERA',
+    faucet: [
+      {
+        step: 'Claim testnet BERA',
+        url: 'https://artio.faucet.berachain.com/',
+      },
+    ],
+  },
+  11155420: {
+    name: 'OETH',
+    symbol: 'OETH',
+    faucet: [
+      {
+        step: 'Claim testnet OETH',
+        url: 'https://www.alchemy.com/faucets/optimism-sepolia',
+      },
+    ],
+  },
 };
 
 const TestnetLinks = () => {

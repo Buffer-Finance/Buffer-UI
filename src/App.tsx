@@ -62,7 +62,7 @@ import { Earn } from '@Views/Earn';
 // const AllTrades = lazy(() => import('@Views/AllTrades'));
 // const ContractList = lazy(() => import('@Views/ContractList'));
 // const DashboardV2 = lazy(() => import('@Views/DashboardV2'));
-// const IbfrFaucet = lazy(() => import('@Views/Faucet'));
+const IbfrFaucet = lazy(() => import('@Views/Faucet'));
 // const ProfilePage = lazy(() => import('@Views/Profile'));
 // const ReferralPage = lazy(() => import('@Views/Referral'));
 // const Test = lazy(() => import('@Views/Test'));
@@ -150,9 +150,9 @@ const AppRoutes = () => {
       <OneCTModal /> */}
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* <Route path="trades" element={<AllTrades />} />
           <Route path="/faucet" element={<IbfrFaucet />} />
-          <Route path="/test" element={<Test />} />
+          {/*  <Route path="/test" element={<Test />} />
+ <Route path="trades" element={<AllTrades />} />
           <Route path="/ab/:market" element={<AboveBelow />} />
           <Route path="/history" element={<TradeLog_sm />} />
           <Route path="/admin" element={<AdminConfig />} />
