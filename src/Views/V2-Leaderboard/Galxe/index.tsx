@@ -43,34 +43,35 @@ export const TOTALWINNERS = 10;
 const rewardPool = {
   2: 4975,
   3: 4808,
+  4: 3414.83,
 };
 export const galxTaskLink =
-  'https://app.galxe.com/quest/XZeZw9Mauqx5SQyn6uGAbs/GCiUithb4z';
+  'https://app.galxe.com/quest/XZeZw9Mauqx5SQyn6uGAbs/GC7YGthYgJ';
 
 const winnersAmount = {
-  1: 1030.2,
-  2: 515.1,
-  3: 236.0875,
-  4: 236.0875,
-  5: 236.0875,
-  6: 236.0875,
-  7: 236.0875,
-  8: 236.0875,
-  9: 236.0875,
-  10: 236.0875,
+  1: 731.7,
+  2: 365.85,
+  3: 167.68125,
+  4: 167.68125,
+  5: 167.68125,
+  6: 167.68125,
+  7: 167.68125,
+  8: 167.68125,
+  9: 167.68125,
+  10: 167.68125,
 };
 
 const loosersAmount = {
-  1: 412.2,
-  2: 206.1,
-  3: 94.4625,
-  4: 94.4625,
-  5: 94.4625,
-  6: 94.4625,
-  7: 94.4625,
-  8: 94.4625,
-  9: 94.4625,
-  10: 94.4625,
+  1: 292.8,
+  2: 146.4,
+  3: 67.1,
+  4: 67.1,
+  5: 67.1,
+  6: 67.1,
+  7: 67.1,
+  8: 67.1,
+  9: 67.1,
+  10: 67.1,
 };
 
 export const Galxe = () => {
@@ -180,10 +181,10 @@ export const Galxe = () => {
   }, [offset, activeChain]);
 
   const isCurrentWeekIsWeekTwo = useMemo(() => {
-    if (week == 3) {
+    if (week == 4) {
       if (offset == null) {
         return true;
-      } else if (offset == '3') {
+      } else if (offset == '4') {
         return true;
       }
     }
