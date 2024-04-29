@@ -454,6 +454,21 @@ export const DailyWebTable: React.FC<{
           priceAmount &&
           priceAmount[row + 1]
         ) {
+          if (isUser) {
+            return (
+              <CellContent
+                content={[
+                  <div className="flex items-center  f14  ">
+                    {!priceAmount[userRank] ? (
+                      '-'
+                    ) : (
+                      <Display data={priceAmount[userRank]} label={'$'} />
+                    )}
+                  </div>,
+                ]}
+              />
+            );
+          }
           return (
             <CellContent
               content={[
