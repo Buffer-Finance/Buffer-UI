@@ -10,7 +10,7 @@ export const appConfig = {
       ABOVE_BELOW:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
 
-      MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.1.6-ud-update-contracts/api`,
+      MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.1.6-ud-usdc.e-pool/api`,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts/api',
     },
