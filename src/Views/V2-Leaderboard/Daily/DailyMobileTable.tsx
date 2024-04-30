@@ -1,27 +1,27 @@
-import { Skeleton } from '@mui/material';
-import React from 'react';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { toFixed } from '@Utils/NumString';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { Display } from '@Views/Common/Tooltips/Display';
-import { ILeague } from '../interfaces';
-import { useUserAccount } from '@Hooks/useUserAccount';
-import { divide, multiply } from '@Utils/NumString/stringArithmatics';
-import { Rank } from '../Components/Rank';
 import BasicPagination from '@Views/Common/pagination';
-import { Launch } from '@mui/icons-material';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import { TableAligner } from '../Components/TableAligner';
 import {
   tooltipKeyClasses,
   tooltipValueClasses,
 } from '@Views/Earn/Components/VestCards';
-import { toFixed } from '@Utils/NumString';
-import { gte } from 'lodash';
 import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
+import { Launch } from '@mui/icons-material';
+import { Skeleton } from '@mui/material';
+import { gte } from 'lodash';
+import React from 'react';
+import { Rank } from '../Components/Rank';
+import { TableAligner } from '../Components/TableAligner';
+import { IWeeklyLeague } from '../interfaces';
 
 export const DailyMobileTable: React.FC<{
-  options: ILeague[] | undefined;
+  options: IWeeklyLeague[] | undefined;
   skip: number;
-  userData: ILeague[] | undefined;
+  userData: IWeeklyLeague[] | undefined;
   onpageChange?: (e: any, page: number) => void;
   count: number;
   nftWinners?: number;
@@ -51,7 +51,7 @@ export const DailyMobileTable: React.FC<{
     );
   if (options.length === 0)
     return (
-      <div className="text-center text-f14 text-1 mt-4 bg-1 rounded-lg p-5 table-width">
+      <div className="text-center text-f14 text-1 mx-auto mt-4 bg-1 rounded-lg p-5 table-width">
         No data found.
       </div>
     );
@@ -80,16 +80,11 @@ export const DailyMobileTable: React.FC<{
         <Skeleton className="!h-[112px] !transform-none w-full !mt-4 web:hidden !bg-1" />
       ) : (
         <>
-          {' '}
           {UserRow}
           {options.map((currentStanding, index) => {
-            const isUser =
-              currentStanding?.user &&
-              currentStanding?.user.toLowerCase() === account?.toLowerCase();
-
             return (
               <MobileRow
-                key={currentStanding.id}
+                key={index}
                 {...{
                   index,
                   currentStanding,
@@ -132,13 +127,15 @@ const MobileRow = ({
   onClick,
   isWinrateTable,
   isDailyTable,
+}: {
+  currentStanding: IWeeklyLeague;
 }) => {
   const tokens = usePoolNames();
   const decimals = useDecimalsByAsset();
   const usdcDecimals = decimals['USDC'];
   const isUser = user ? true : false;
   const perc = multiply(
-    divide(currentStanding.netPnL, currentStanding.volume),
+    divide(currentStanding.totalPnl, currentStanding.totalVolume) as string,
     2
   );
   const isNeg =
@@ -160,32 +157,36 @@ const MobileRow = ({
               row={index}
               isUser={isUser}
               skip={skip}
-              userRank={currentStanding.rank}
+              userRank={index + 1}
               nftWinners={nftWinners}
             />
           </div>
           <div className="text-f13 ml-1 flex items-center gap-2">
-            {currentStanding?.user.toLowerCase() === account?.toLowerCase() ? (
+            {currentStanding?.userAddress.toLowerCase() ===
+            account?.toLowerCase() ? (
               <span className="text-1">Your Account</span>
             ) : (
               <div className="flex mt-1">
                 <NumberTooltip
-                  content={currentStanding?.user || ''}
+                  content={currentStanding?.userAddress || ''}
                   className={isUser && index === 0 ? 'text-1' : ''}
                 >
                   <div>
                     {isUser
                       ? 'Your Account'
-                      : !currentStanding?.user
+                      : !currentStanding?.userAddress
                       ? 'Wallet not connected'
-                      : currentStanding?.user.slice(0, 4) +
+                      : currentStanding?.userAddress.slice(0, 4) +
                         '...' +
-                        currentStanding?.user.slice(-4)}
+                        currentStanding?.userAddress.slice(-4)}
                   </div>
                 </NumberTooltip>
               </div>
             )}
-            <div role="button" onClick={() => onClick(currentStanding?.user)}>
+            <div
+              role="button"
+              onClick={() => onClick(currentStanding?.userAddress)}
+            >
               <Launch className="" />
             </div>
           </div>
@@ -197,7 +198,7 @@ const MobileRow = ({
             {isWinrateTable ? 'Total Trades' : 'Trades'}
           </div>
           <div className="text-1 text-right flex justify-end">
-            {!currentStanding.netPnL || currentStanding.netPnL === null ? (
+            {!currentStanding.totalPnl || currentStanding.totalPnl === null ? (
               '-'
             ) : (
               <Display
@@ -213,7 +214,7 @@ const MobileRow = ({
                       valueStyle={tooltipValueClasses}
                       values={tokens.map(
                         (token) =>
-                          currentStanding[`${token.toLowerCase()}TotalTrades`]
+                          currentStanding[`${token.toLowerCase()}Trades`]
                       )}
                     />
                   )
@@ -233,26 +234,7 @@ const MobileRow = ({
               {isWinrateTable ? 'Trades Won' : 'Net PnL'}
             </div>
             <div>
-              {isWinrateTable ? (
-                <Display
-                  data={currentStanding.tradesWon}
-                  precision={0}
-                  content={
-                    tokens.length > 1 &&
-                    !isDailyTable && (
-                      <TableAligner
-                        keysName={tokens}
-                        keyStyle={tooltipKeyClasses}
-                        valueStyle={tooltipValueClasses}
-                        values={tokens.map(
-                          (token) =>
-                            currentStanding[`${token.toLowerCase()}TradesWon`]
-                        )}
-                      />
-                    )
-                  }
-                />
-              ) : currentStanding.netPnL === null ? (
+              {currentStanding.totalPnl === null ? (
                 '-'
               ) : (
                 <Display
@@ -271,7 +253,7 @@ const MobileRow = ({
                           const percentage = multiply(
                             divide(
                               currentStanding[
-                                `${token.toLowerCase()}NetPnL`
+                                `${token.toLowerCase()}PnL`
                               ] as string,
                               currentStanding[`${token.toLowerCase()}Volume`]
                             ) ?? '0',
@@ -306,39 +288,14 @@ const MobileRow = ({
               {isWinrateTable ? 'Win Rate' : 'Total Payout'}
             </div>
             <div>
-              {isWinrateTable ? (
-                <Display
-                  data={divide(currentStanding.winRate, 3)}
-                  precision={2}
-                  unit="%"
-                  content={
-                    tokens.length > 1 &&
-                    !isDailyTable && (
-                      <TableAligner
-                        keysName={tokens}
-                        keyStyle={tooltipKeyClasses}
-                        valueStyle={tooltipValueClasses}
-                        values={tokens.map(
-                          (token) =>
-                            divide(
-                              currentStanding[
-                                `${token.toLowerCase()}WinRate`
-                              ] as string,
-                              3
-                            ) + '%'
-                        )}
-                      />
-                    )
-                  }
-                />
-              ) : currentStanding.netPnL === null ? (
+              {currentStanding.totalPnl === null ? (
                 '-'
               ) : (
                 <Display
-                  data={divide(currentStanding.netPnL, usdcDecimals)}
-                  label={gte(currentStanding.netPnL, '0') ? '+' : ''}
+                  data={divide(currentStanding.totalPnl, usdcDecimals)}
+                  label={gte(currentStanding.totalPnl, '0') ? '+' : ''}
                   className={`f15 ${
-                    gte(currentStanding.netPnL, '0') ? 'green' : 'red-grey'
+                    gte(currentStanding.totalPnl, '0') ? 'green' : 'red-grey'
                   }`}
                   unit={'USDC'}
                   content={
@@ -353,14 +310,14 @@ const MobileRow = ({
                             <Display
                               data={divide(
                                 currentStanding[
-                                  `${token.toLowerCase()}NetPnL`
+                                  `${token.toLowerCase()}PnL`
                                 ] as string,
                                 decimals[token]
                               )}
                               label={
                                 gte(
                                   currentStanding[
-                                    `${token.toLowerCase()}NetPnL`
+                                    `${token.toLowerCase()}PnL`
                                   ] as string,
                                   '0'
                                 )
@@ -370,7 +327,7 @@ const MobileRow = ({
                               className={`f15 !ml-auto ${
                                 gte(
                                   currentStanding[
-                                    `${token.toLowerCase()}NetPnL`
+                                    `${token.toLowerCase()}PnL`
                                   ] as string,
                                   '0'
                                 )
@@ -393,11 +350,11 @@ const MobileRow = ({
         <div className="flex flex-col">
           <div className="text-2 text-right">Volume</div>
           <div className="text-3 text-right">
-            {currentStanding.netPnL === null ? (
+            {currentStanding.totalPnl === null ? (
               '-'
             ) : (
               <Display
-                data={divide(currentStanding.volume, usdcDecimals)}
+                data={divide(currentStanding.totalVolume, usdcDecimals)}
                 unit={'USDC'}
                 content={
                   tokens.length > 1 &&

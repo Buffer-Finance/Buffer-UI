@@ -3,11 +3,11 @@ import { weeklyTournamentConfigType } from '../Weekly/config';
 export const DailyTournamentConfig: {
   [key: number]: weeklyTournamentConfigType;
 } = {
-  421613: {
-    startTimestamp: 1675958400000,
+  421614: {
+    startTimestamp: 1707926400000,
     winnersNFT: 0,
     losersNFT: 1,
-    endDay: 9,
+    endDay: undefined,
     contestRules:
       'https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9',
     rewardFixedAmount: '0',
@@ -18,7 +18,7 @@ export const DailyTournamentConfig: {
     startTimestamp: 1675958400000,
     winnersNFT: 0,
     losersNFT: 1,
-    endDay: 12,
+    endDay: undefined,
     contestRules:
       'https://buffer-finance.medium.com/trading-in-bear-market-buffer-daily-trading-competitions-f4f487c5ddd9',
     rewardFixedAmount: '0',

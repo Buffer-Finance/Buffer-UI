@@ -1,6 +1,6 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { toFixed } from '@Utils/NumString';
-import { divide, gte, multiply } from '@Utils/NumString/stringArithmatics';
+import { divide, gte } from '@Utils/NumString/stringArithmatics';
 import BufferTable, {
   BufferTableCell,
   BufferTableRow,
@@ -21,24 +21,55 @@ import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Rank } from '../Components/Rank';
 import { TableAligner } from '../Components/TableAligner';
-import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
-import { ILeague } from '../interfaces';
+import { NetPnl } from '../Leagues/WinnersByPnl/NetPnl';
+import { IWeeklyLeague } from '../interfaces';
 import { DailyMobileTable } from './DailyMobileTable';
-import { LeaderBoardTableStyles } from './stlye';
+import { LeaderBoardTableStyles } from './style';
+
+const GAINERS_POINT_BY_INDEX = [
+  1374.57, 1188.0, 1026.75, 887.39, 766.95, 662.85, 572.89, 495.13, 427.93,
+  369.85, 319.65, 276.26, 238.77, 206.36, 178.35, 154.14, 133.22, 115.14, 99.51,
+  86.01, 74.33, 64.24, 55.52, 47.99, 41.47, 35.84, 30.98, 26.77, 23.14, 20.0,
+];
+// # The points for the top 10 losers of the day
+const LOOSERS_POINT_BY_INDEX = [
+  1826.76, 1563.41, 1338.02, 1145.13, 980.05, 838.76, 717.84, 614.36, 525.79,
+  449.99,
+];
+//reverse LOOSERS_POINT_BY_INDEX
+const LOOSERS_POINT_BY_INDEX_REVERSE = [
+  449.99, 525.79, 614.36, 717.84, 838.76, 980.05, 1145.13, 1338.02, 1563.41,
+  1826.76,
+];
+
+function accessElement(totalRanks, currentRank) {
+  const array = LOOSERS_POINT_BY_INDEX;
+  var arraySize = array.length;
+  // Calculate adjusted rank to handle circular access
+  var adjustedRank = (((currentRank - 1) % arraySize) + arraySize) % arraySize;
+  // Calculate index based on totalRanks and adjustedRank
+  var index = (arraySize - adjustedRank + totalRanks - 1) % arraySize;
+  // If index is negative, add arraySize to get the correct index
+  index = index >= 0 ? index : index + arraySize;
+  return array[index];
+}
 
 export const DailyWebTable: React.FC<{
-  standings: ILeague[] | IWinrate[] | undefined;
+  winners: IWeeklyLeague[] | undefined;
+  loosers: IWeeklyLeague[] | undefined;
   count: number;
   skip: number;
   onpageChange: (page: number) => void;
-  userData?: ILeague[] | undefined;
+  userData?: IWeeklyLeague[] | undefined;
   nftWinners?: number;
   userRank: string;
   activePage: number;
   isWinrateTable?: boolean;
   isDailyTable?: boolean;
+  offSet: string;
+  isWeekly?: boolean;
 }> = ({
-  standings,
+  winners,
   skip,
   count,
   onpageChange,
@@ -48,6 +79,9 @@ export const DailyWebTable: React.FC<{
   activePage,
   isWinrateTable = false,
   isDailyTable = false,
+  offSet,
+  loosers,
+  isWeekly,
 }) => {
   const { address: account } = useUserAccount();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1200;
@@ -77,7 +111,8 @@ export const DailyWebTable: React.FC<{
       'Volume',
       isWinrateTable ? 'Total Trades' : 'Trades',
       isWinrateTable ? 'Trades Won' : 'Net PnL (%)',
-      isWinrateTable ? 'Win Rate' : 'Total Payout',
+      isWinrateTable ? 'Win Rate' : 'PnL',
+      isWeekly ? 'Rewards' : 'Points',
     ];
   }, []);
 
@@ -90,21 +125,29 @@ export const DailyWebTable: React.FC<{
       />
     );
   };
-  interface IuserData extends ILeague {
-    rank: string;
+
+  let totalRows = 0;
+  if (winners !== undefined && loosers !== undefined) {
+    totalRows = winners.length + loosers.length;
+  } else if (winners !== undefined && loosers === undefined) {
+    totalRows = winners.length;
+  } else if (winners === undefined && loosers !== undefined) {
+    totalRows = loosers.length;
   }
+
   const BodyFormatter = (
     row: number,
     col: number,
-    user: IuserData | undefined
+    user: IWeeklyLeague | undefined
   ) => {
-    if (!standings) return <></>;
-    let currentStanding: ILeague | IWinrate | IuserData = standings[row];
-
+    if (!winners || !loosers) return <></>;
+    const total = winners.concat(loosers);
+    let currentStanding: IWeeklyLeague = total[row];
     if (user) {
       currentStanding = user;
     }
     const isUser = !!user;
+    const rank = row + 1;
     switch (col) {
       case 0:
         return (
@@ -112,7 +155,7 @@ export const DailyWebTable: React.FC<{
             isUser={isUser}
             row={row}
             skip={skip}
-            userRank={(currentStanding as IuserData).rank}
+            userRank={rank}
             firstColPadding={firstColPadding.body}
             nftWinners={nftWinners}
           />
@@ -122,23 +165,23 @@ export const DailyWebTable: React.FC<{
           <CellContent
             content={[
               <div className="flex items-center gap-2">
-                {currentStanding.user.toLowerCase() ===
+                {currentStanding.userAddress.toLowerCase() ===
                 account?.toLowerCase() ? (
                   <span className="text-1">Your Account</span>
                 ) : (
                   <div className="flex">
                     <NumberTooltip
-                      content={currentStanding.user || ''}
+                      content={currentStanding.userAddress || ''}
                       className={isUser && row === 0 ? 'text-1' : ''}
                     >
                       <div>
                         {isUser
                           ? 'Your Account'
-                          : !currentStanding.user
+                          : !currentStanding.userAddress
                           ? 'Wallet not connected'
-                          : currentStanding.user.slice(0, 7) +
+                          : currentStanding.userAddress.slice(0, 7) +
                             '...' +
-                            currentStanding.user.slice(-7)}
+                            currentStanding.userAddress.slice(-7)}
                       </div>
                     </NumberTooltip>
                   </div>
@@ -153,11 +196,11 @@ export const DailyWebTable: React.FC<{
           <CellContent
             content={[
               <div className="flex items-center  f14  ">
-                {!currentStanding.volume ? (
+                {!currentStanding.totalVolume ? (
                   '-'
                 ) : (
                   <Display
-                    data={divide(currentStanding.volume, usdcDecimals)}
+                    data={divide(currentStanding.totalVolume, usdcDecimals)}
                     unit={'USDC'}
                     content={
                       tokens.length > 1 &&
@@ -171,7 +214,7 @@ export const DailyWebTable: React.FC<{
                               toFixed(
                                 divide(
                                   currentStanding[
-                                    `${token.toLowerCase()}Volume`
+                                    `${token.toUpperCase()}Volume`
                                   ] as string,
                                   decimals[token]
                                 ) as string,
@@ -195,7 +238,8 @@ export const DailyWebTable: React.FC<{
           <CellContent
             content={[
               <div>
-                {!currentStanding.netPnL || currentStanding.netPnL === null ? (
+                {!currentStanding.totalPnl ||
+                currentStanding.totalPnl === null ? (
                   '-'
                 ) : (
                   <Display
@@ -211,9 +255,7 @@ export const DailyWebTable: React.FC<{
                           valueStyle={tooltipValueClasses}
                           values={tokens.map(
                             (token) =>
-                              currentStanding[
-                                `${token.toLowerCase()}TotalTrades`
-                              ]
+                              currentStanding[`${token.toUpperCase()}Trades`]
                           )}
                         />
                       )
@@ -231,7 +273,7 @@ export const DailyWebTable: React.FC<{
             <CellContent
               content={[
                 <Display
-                  data={currentStanding.tradesWon}
+                  data={currentStanding.totalTrades}
                   precision={0}
                   content={
                     tokens.length > 1 &&
@@ -242,7 +284,7 @@ export const DailyWebTable: React.FC<{
                         valueStyle={tooltipValueClasses}
                         values={tokens.map(
                           (token) =>
-                            currentStanding[`${token.toLowerCase()}TradesWon`]
+                            currentStanding[`${token.toUpperCase()}TradesWon`]
                         )}
                       />
                     )
@@ -253,70 +295,10 @@ export const DailyWebTable: React.FC<{
           );
         }
         try {
-          const perc = multiply(
-            divide(currentStanding.netPnL, currentStanding.volume),
-            2
-          );
-          const isNeg =
-            typeof perc === 'string'
-              ? perc[0] == '-'
-                ? true
-                : false
-              : perc < 0;
           return (
             <CellContent
               content={[
-                <div className="flex items-center">
-                  {currentStanding.netPnL === null ? (
-                    '-'
-                  ) : (
-                    <Display
-                      data={perc}
-                      label={!isNeg ? '+' : ''}
-                      className={`f15 ${!isNeg ? 'green' : 'red-grey'}`}
-                      unit={'%'}
-                      content={
-                        tokens.length > 1 &&
-                        !isDailyTable && (
-                          <TableAligner
-                            keysName={tokens}
-                            keyStyle={tooltipKeyClasses}
-                            valueStyle={tooltipValueClasses}
-                            values={tokens.map((token) => {
-                              const percentage = multiply(
-                                divide(
-                                  currentStanding[
-                                    `${token.toLowerCase()}NetPnL`
-                                  ] as string,
-                                  currentStanding[
-                                    `${token.toLowerCase()}Volume`
-                                  ]
-                                ) ?? '0',
-                                2
-                              );
-                              const isNegative =
-                                typeof percentage === 'string'
-                                  ? percentage[0] == '-'
-                                    ? true
-                                    : false
-                                  : percentage < 0;
-                              return (
-                                <Display
-                                  data={percentage}
-                                  label={!isNegative ? '+' : ''}
-                                  className={`f15 ${
-                                    !isNegative ? 'green' : 'red-grey'
-                                  }`}
-                                  unit={'%'}
-                                />
-                              );
-                            })}
-                          />
-                        )
-                      }
-                    />
-                  )}
-                </div>,
+                <NetPnl currentStanding={currentStanding} tokens={tokens} />,
               ]}
             />
           );
@@ -325,50 +307,18 @@ export const DailyWebTable: React.FC<{
         }
 
       case 5:
-        if (isWinrateTable && 'winRate' in currentStanding) {
-          return (
-            <CellContent
-              content={[
-                <Display
-                  data={divide(currentStanding.winRate, 3)}
-                  precision={2}
-                  unit="%"
-                  content={
-                    tokens.length > 1 &&
-                    !isDailyTable && (
-                      <TableAligner
-                        keysName={tokens}
-                        keyStyle={tooltipKeyClasses}
-                        valueStyle={tooltipValueClasses}
-                        values={tokens.map(
-                          (token) =>
-                            divide(
-                              currentStanding[
-                                `${token.toLowerCase()}WinRate`
-                              ] as string,
-                              3
-                            ) + '%'
-                        )}
-                      />
-                    )
-                  }
-                />,
-              ]}
-            />
-          );
-        }
         return (
           <CellContent
             content={[
               <div className="flex items-center">
-                {currentStanding.netPnL === null ? (
+                {currentStanding.totalPnl === null ? (
                   '-'
                 ) : (
                   <Display
-                    data={divide(currentStanding.netPnL, usdcDecimals)}
-                    label={gte(currentStanding.netPnL, '0') ? '+' : ''}
+                    data={divide(currentStanding.totalPnl, usdcDecimals)}
+                    label={gte(currentStanding.totalPnl, '0') ? '+' : ''}
                     className={`f15 ${
-                      gte(currentStanding.netPnL, '0') ? 'green' : 'red-grey'
+                      gte(currentStanding.totalPnl, '0') ? 'green' : 'red-grey'
                     }`}
                     unit={'USDC'}
                     content={
@@ -383,7 +333,7 @@ export const DailyWebTable: React.FC<{
                               <Display
                                 data={divide(
                                   currentStanding[
-                                    `${token.toLowerCase()}NetPnL`
+                                    `${token.toUpperCase()}Pnl`
                                   ] as string,
                                   decimals[token]
                                 )}
@@ -391,7 +341,7 @@ export const DailyWebTable: React.FC<{
                                 label={
                                   gte(
                                     currentStanding[
-                                      `${token.toLowerCase()}NetPnL`
+                                      `${token.toUpperCase()}Pnl`
                                     ] as string,
                                     '0'
                                   )
@@ -401,7 +351,7 @@ export const DailyWebTable: React.FC<{
                                 className={`f15 !ml-auto ${
                                   gte(
                                     currentStanding[
-                                      `${token.toLowerCase()}NetPnL`
+                                      `${token.toUpperCase()}Pnl`
                                     ] as string,
                                     '0'
                                   )
@@ -420,6 +370,34 @@ export const DailyWebTable: React.FC<{
             ]}
           />
         );
+      case 6:
+        if (!isWeekly) {
+          if (row + 1 > winners.length) {
+            return accessElement(loosers.length, row - winners.length + 1);
+          } else {
+            return GAINERS_POINT_BY_INDEX[row];
+          }
+        } else {
+          if (row > winners.length - 1) {
+            return (
+              <Display
+                data={currentStanding.loseRewards}
+                precision={2}
+                unit="ARB"
+                className="!justify-start"
+              />
+            );
+          } else {
+            return (
+              <Display
+                data={currentStanding.winRewards}
+                precision={2}
+                unit="ARB"
+                className="!justify-start"
+              />
+            );
+          }
+        }
 
       default:
         return <div>Unhandled Cell.</div>;
@@ -434,7 +412,7 @@ export const DailyWebTable: React.FC<{
   };
 
   const topDecorator =
-    standings?.length && userData?.length && Number(userRank) !== skip + 1 ? (
+    winners?.length && userData?.length && Number(userRank) !== skip + 1 ? (
       <BufferTableRow onClick={console.log} className="highlight group ">
         {new Array(DailyCols.length).fill(9).map((_, i) => (
           <BufferTableCell
@@ -453,7 +431,7 @@ export const DailyWebTable: React.FC<{
     <LeaderBoardTableStyles>
       {isMobile && (
         <DailyMobileTable
-          options={standings}
+          options={winners?.concat(loosers ?? [])}
           skip={skip}
           userData={userData}
           count={count}
@@ -470,22 +448,22 @@ export const DailyWebTable: React.FC<{
       )}
 
       <BufferTable
-        widths={['16%', '22%', '16%', '14%', '16%', '16%']}
+        widths={['auto']}
         className="mt-4 tab:mt-[0] tab:mb-6"
         bodyJSX={BodyFormatter}
         cols={DailyCols.length}
-        rows={standings?.length ?? 0}
+        rows={totalRows}
         headerJSX={HeaderFormatter}
         topDecorator={topDecorator}
         onRowClick={(idx) => {
-          navigateToProfile(standings?.[idx].user);
+          navigateToProfile(winners?.[idx].userAddress);
         }}
         count={count}
         activePage={activePage}
         onPageChange={(a, p) => {
           onpageChange(p);
         }}
-        loading={!standings}
+        loading={!winners}
         error={<TableErrorMsg msg="No data found." onClick={() => {}} />}
       />
     </LeaderBoardTableStyles>

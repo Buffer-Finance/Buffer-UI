@@ -41,24 +41,14 @@ import { useAutoConnect } from './Config/useAutoConnectSafe';
 import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { PageLoader } from './PageLoader';
-import { PlatformTradesTab } from '@Views/TradePage/PlatformTradesTab';
-import { usePlatformEvent } from '@Hooks/usePlatformEvent';
 import { useRecentWinners } from '@Hooks/useRecentWinners';
-import {
-  NFTImage,
-  UpDownChipSmm,
-  formatAddress,
-} from '@Views/Jackpot/JackPotWInnerCard';
 import { useAccount } from 'wagmi';
-import { sleep } from '@TV/useDataFeed';
-import {
-  CircleAroundPicture,
-  CircleAroundPictureSM,
-} from '@Views/Profile/Components/UserDataComponent/UserData';
-import MemoUSDC_monochrome from '@SVG/Elements/USDC_monochrome';
-import MemoABR_monochrome from '@SVG/Elements/ABR_monochrome';
-const TradePage = lazy(() => import('@Views/TradePage'));
+import LeaderBoardOutlet from '@Views/V2-Leaderboard';
+import AllTime from '@Views/V2-Leaderboard/Components/AllTime';
+import Leagues from '@Views/V2-Leaderboard/Leagues';
+import Incentivised from '@Views/V2-Leaderboard/Incentivised';
 
+const TradePage = lazy(() => import('@Views/TradePage'));
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
 const AllTrades = lazy(() => import('@Views/AllTrades'));
 const ContractList = lazy(() => import('@Views/ContractList'));
@@ -70,9 +60,7 @@ const Test = lazy(() => import('@Views/Test'));
 const TradeLog_sm = lazy(
   () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
 );
-const LeaderBoardOutlet = lazy(() => import('@Views/V2-Leaderboard'));
-const Incentivised = lazy(() => import('@Views/V2-Leaderboard/Incentivised'));
-const Weekly = lazy(() => import('@Views/V2-Leaderboard/Weekly'));
+
 const Jackpot = lazy(() => import('@Views/Jackpot'));
 const AboveBelow = lazy(() => import('@Views/AboveBelow'));
 const RewardsPage = lazy(() => import('@Views/Rewards'));
@@ -150,51 +138,173 @@ const AppRoutes = () => {
 
       <OnboardingAnimation />
       <OneCTModal />
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="trades" element={<AllTrades />} />
-          <Route path="/faucet" element={<IbfrFaucet />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/ab/:market" element={<AboveBelow />} />
-          <Route path="/history" element={<TradeLog_sm />} />
-          <Route path="/admin" element={<AdminConfig />} />
+      <Routes>
+        <Route
+          path="trades"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <AllTrades />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/faucet"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <IbfrFaucet />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/test"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Test />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/ab/:market"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <AboveBelow />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <TradeLog_sm />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <AdminConfig />
+            </Suspense>
+          }
+        />
 
-          <Route
-            path="/ref/:refcode"
-            element={<div>Processing your referral request...</div>}
-          ></Route>
-          {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
-          <Route path="/earn" element={<Redirect url={earnUrl} />} />
+        <Route
+          path="/ref/:refcode"
+          element={<div>Processing your referral request...</div>}
+        ></Route>
+        {/* <Route path="/admin/create-pair" element={<CreatePair />}></Route> */}
+        <Route
+          path="/earn"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Redirect url={earnUrl} />
+            </Suspense>
+          }
+        />
 
-          <Route path="/dashboard" element={<DashboardV2 />}>
-            <Route path=":chain" element={<DashboardV2 />} />
-          </Route>
-          <Route path="/referral" element={<ReferralPage />} />
-          <Route path="/jackpot" element={<Jackpot />} />
-          <Route path="/profile" element={<ProfilePage />}>
-            <Route path=":chain" element={<ProfilePage />} />
-          </Route>
-          <Route path="/binary/:market" element={<TradePage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <DashboardV2 />
+            </Suspense>
+          }
+        >
           <Route
-            path="/*"
+            path=":chain"
             element={
-              <Navigate
-                to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
-              />
+              <Suspense fallback={<PageLoader />}>
+                <DashboardV2 />
+              </Suspense>
             }
           />
-          <Route path="contracts" element={<ContractList />} />
-          <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-            <Route path="daily" element={<Incentivised />}>
-              <Route path=":chain" element={<Incentivised />} />
-            </Route>
-            <Route path="weekly" element={<Weekly />}>
-              <Route path=":chain" element={<Weekly />} />
+        </Route>
+        <Route
+          path="/referral"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ReferralPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/jackpot"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Jackpot />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProfilePage />
+            </Suspense>
+          }
+        >
+          <Route
+            path=":chain"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <ProfilePage />
+              </Suspense>
+            }
+          />
+        </Route>
+        <Route
+          path="/binary/:market"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <TradePage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/*"
+          element={
+            <Navigate
+              to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
+            />
+          }
+        />
+        <Route
+          path="contracts"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ContractList />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/rewards"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <RewardsPage />
+            </Suspense>
+          }
+        />
+        <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
+          <Route path="leagues" element={<LeaderBoardOutlet />}>
+            <Route path=":league" element={<Leagues />}>
+              <Route path=":chain" element={<Leagues />} />
             </Route>
           </Route>
-          <Route path="/rewards" element={<RewardsPage />} />
-        </Routes>
-      </Suspense>
+          <Route path="metrics" element={<LeaderBoardOutlet />}>
+            <Route path="all-time" element={<AllTime />}>
+              <Route path=":chain" element={<AllTime />} />
+            </Route>
+          </Route>
+
+          <Route path="daily" element={<Incentivised />}>
+            <Route path=":chain" element={<Incentivised />} />
+          </Route>
+          {/* <Route path="weekly" element={<Weekly />}>
+            <Route path=":chain" element={<Weekly />} />
+          </Route> */}
+        </Route>
+      </Routes>
     </div>
   );
 };

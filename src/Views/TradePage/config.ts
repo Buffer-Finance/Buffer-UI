@@ -672,3 +672,7 @@ export const isABRouter = (router: string) => {
     router.toLowerCase()
   );
 };
+
+export const baseLeaderboardURLString = isTestnet
+  ? import.meta.env.VITE_LEADERBOARD_API_HOST_TESTNET
+  : import.meta.env.VITE_LEADERBOARD_API_HOST;

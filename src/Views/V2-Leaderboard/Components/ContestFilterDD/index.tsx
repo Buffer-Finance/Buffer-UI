@@ -36,7 +36,7 @@ export function ContestFilterDD({
           return (
             <button
               onClick={() => {
-                setOffset((count - a).toString());
+                setOffset(a.toString());
               }}
             >
               <div
@@ -52,7 +52,7 @@ export function ContestFilterDD({
         initialActive={0}
         dropdownBox={(a, isOpen) => (
           <div className={`bg-1 rounded-sm flex items-center pl-3 pr-2`}>
-            #{offset ?? count}{' '}
+            #{count - parseInt(offset ?? '0')}
             {isDD && (
               <div className="arrow-bg pl-2 pb-1">
                 <ExpandMoreIcon

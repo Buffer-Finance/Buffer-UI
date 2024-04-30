@@ -6,11 +6,11 @@ export function TopData({
 }: {
   pageImage: JSX.Element;
   heading: string | JSX.Element;
-  DataCom: JSX.Element;
+  DataCom?: JSX.Element;
   desc?: JSX.Element;
 }) {
   return (
-    <div className="mt-5 b1200:mx-auto tab:flex-col tab:items-center">
+    <div className="mt-5 b1200:mx-auto b1200:flex-col b1200:flex b1200:items-center">
       <div className="flex items-center">
         {pageImage && <div>{pageImage}</div>}
         <div className="flex-col">
@@ -18,7 +18,7 @@ export function TopData({
           {desc && <p className="text-f16 fw5 text-6 tab:text-f13">{desc}</p>}
         </div>
       </div>
-      {DataCom}
+      {DataCom && <div className="mt-5">{DataCom}</div>}
     </div>
   );
 }

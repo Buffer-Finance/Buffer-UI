@@ -1,25 +1,23 @@
-import React, { useMemo } from 'react';
-import { LeaderBoardSidebarStyles } from './style';
-import Daily from '@Public/LeaderBoard/Daily';
-import SmPnl from 'src/SVG/Elements/PNLL';
-import { CHAIN_CONFIGS, getTabs, isTestnet } from 'config';
-import {
-  Link,
-  Location,
-  NavLink,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
 import { useActiveChain } from '@Hooks/useActiveChain';
+import Daily from '@Public/LeaderBoard/Daily';
 import BufferTab from '@Views/Common/BufferTab';
+import {
+  CHAIN_CONFIGS,
+  getLeaderBoardTabs,
+  getMobileLeaderboardTabs,
+  isTestnet,
+} from 'config';
+import React, { useMemo } from 'react';
+import { Link, Location, useLocation, useNavigate } from 'react-router-dom';
+import SmPnl from 'src/SVG/Elements/PNLL';
 import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
-import { weeklyTournamentConfig } from '../Weekly/config';
 import { DailyTournamentConfig } from '../Incentivised/config';
+import { weeklyTournamentConfig } from '../Weekly/config';
+import { LeaderBoardSidebarStyles } from './style';
 
 export const MobileLeaderboardDropdwon = () => {
-  const { activeChain } = useActiveChain();
-  const tabs = getTabs(activeChain.name, true);
+  const tabs = getMobileLeaderboardTabs();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -34,8 +32,31 @@ export const MobileLeaderboardDropdwon = () => {
         handleChange={(e, t) => {
           navigate(tabs[t].as);
         }}
-        tablist={[{ name: 'Daily' }, { name: 'Weekly' }]}
+        tablist={[{ name: 'Daily' }, { name: 'Leagues' }, { name: 'Metrics' }]}
       />
+      {tabs[activeTab].subTabs.length > 0 && (
+        <div className="flex justify-between mt-6 max-w-[300px] mx-auto b1200:mt-7">
+          {tabs[activeTab].subTabs.map((tab) => {
+            const isSubTabActive = doesLocationMatch(location, tab.slug);
+            return (
+              <button
+                className={`sm:!scale-[200%] b1200:scale-[275%] ${
+                  isSubTabActive ? '' : 'opacity-20'
+                }`}
+                onClick={() => {
+                  navigate(tab.as);
+                }}
+              >
+                <SidebarIcon
+                  id={tab.id}
+                  active={false}
+                  name={tab.slug.split('/')[0]}
+                />
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
@@ -52,7 +73,7 @@ const EndedChip = () => {
 };
 export const LeaderBoardSidebar = () => {
   const { activeChain } = useActiveChain();
-  const tabs = getTabs(activeChain.name, true);
+  const tabs = getLeaderBoardTabs();
   const location = useLocation();
   const { day } = useDayOfTournament();
   const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];
@@ -79,7 +100,7 @@ export const LeaderBoardSidebar = () => {
         <div className="mt-[16px] full-width">
           <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
 
-          {tabs.slice(0, 2).map((tab, index) => {
+          {tabs.slice(0, 1).map((tab, index) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
               <div className="" key={tab.slug}>
@@ -96,17 +117,31 @@ export const LeaderBoardSidebar = () => {
         <div className="mt-[24px] full-width">
           <div className="flex items-center mb-2">
             <Head name="LEAGUES" />
-            <CSChip />
+            {/* <CSChip /> */}
           </div>
-          {tabs.slice(2, -1).map((tab) => {
+          {tabs.slice(1, -1).map((tab) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
               <div className="flex-col" key={tab.slug}>
-                <LinkButton tab={tab} active={isActive} isDisabled />
+                <LinkButton tab={tab} active={isActive} />
               </div>
             );
           })}
         </div>
+
+        {/* <div className="mt-[24px] full-width">
+          <div className="flex items-center mb-2">
+            <Head name="METRICS" />
+          </div>
+          {tabs.slice(-1).map((tab) => {
+            const isActive = doesLocationMatch(location, tab.slug);
+            return (
+              <div className="flex-col" key={tab.slug}>
+                <LinkButton tab={tab} active={isActive} />
+              </div>
+            );
+          })}
+        </div> */}
 
         {/* <div className="mt-[24px] full-width relative">
           <NavLink
@@ -201,7 +236,11 @@ const SidebarIcon: React.FC<IProp> = ({ id, ...props }) => {
       return <Daily {...props} width={20} height={20} color={'#8B67C7'} />;
     case 2:
       return (
-        <img src="/LeaderBoard/Diamond.png" alt="Icon" className="w2 h2" />
+        <img
+          src="/LeaderBoard/Diamond.png"
+          alt="Icon"
+          className="w-[2.7rem] h2"
+        />
       );
     case 3:
       return (

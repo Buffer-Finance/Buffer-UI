@@ -383,6 +383,89 @@ export const getLeaderBoardTabs = (chain: string) => {
     },
   ];
 };
+
+export const getMobileLeaderboardTabs = () => {
+  return [
+    // {
+    //   as: `/ARBITRUM/leaderboard/0/incentivised`,
+    //   name: chain,
+    //   slug: 'leaderboard',
+    //   id: 0,
+    // },
+    {
+      as: `/leaderboard/daily`,
+      name: 'Daily',
+      slug: 'daily',
+      id: 1,
+      subTabs: [],
+    },
+    // {
+    //   pathname: '/[chain]/leaderboard/weekly',
+    //   as: `/leaderboard/weekly`,
+    //   name: 'Weekly',
+    //   slug: 'weekly',
+    //   id: 7,
+    //   subTabs: [],
+    // },
+    {
+      as: `/leaderboard/leagues/diamond`,
+      name: 'diamond',
+      slug: 'leagues',
+      id: 2,
+      img: '/LeaderBoard/Diamond.png',
+      subTabs: [
+        {
+          as: `/leaderboard/leagues/diamond`,
+          name: 'diamond',
+          slug: 'diamond',
+          id: 2,
+          img: '/LeaderBoard/Diamond.png',
+          subTabs: [],
+        },
+        {
+          as: `/leaderboard/leagues/platinum`,
+          name: 'platinum',
+          slug: 'platinum',
+          id: 3,
+          img: '/LeaderBoard/Platinum.png',
+          subTabs: [],
+        },
+        {
+          as: `/leaderboard/leagues/gold`,
+          name: 'gold',
+          slug: 'gold',
+          id: 4,
+          img: '/LeaderBoard/Gold.png',
+          subTabs: [],
+        },
+        {
+          as: `/leaderboard/leagues/silver`,
+          name: 'silver',
+          slug: 'silver',
+          id: 5,
+          img: '/LeaderBoard/Silver.png',
+          subTabs: [],
+        },
+        {
+          as: `/leaderboard/leagues/bronze`,
+          name: 'bronze',
+          slug: 'bronze',
+          id: 6,
+          img: '/LeaderBoard/Bronze.png',
+          subTabs: [],
+        },
+      ],
+    },
+
+    {
+      as: `/leaderboard/metrics/all-time`,
+      name: 'All Time',
+      slug: 'metrics',
+      id: 7,
+      subTabs: [],
+    },
+  ];
+};
 export const getProTabs = (chain: string, asset: string) => {
   return [
     {
