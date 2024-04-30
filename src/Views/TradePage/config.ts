@@ -50,6 +50,14 @@ export const appConfig = {
         permitName: 'USDC',
         is_pol: false,
       },
+      '0xf43f79a824a7dde5A1e5C18D022fF60C56DA80eC': {
+        tokenAddress: '0x4b04c86287B1bf16f5CD3B0d9B00200f085e3908',
+        faucet: '0xB54521E255d23F2fA7f37d29C7E76D8FFa85fc05',
+        decimals: 6,
+        token: 'USDC',
+        permitName: 'USDC',
+        is_pol: false,
+      },
       '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
         tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
         faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',

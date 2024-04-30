@@ -52,6 +52,7 @@ export const BuyTrade: React.FC = () => {
   const tradeTypeTab = useAtomValue(tradeTypeAtom);
   const isLimitOrderTab = tradeTypeTab == 'Limit';
   const { data: approvalExpanded } = useApprvalAmount();
+
   if (
     !switchPool ||
     !poolDetails ||
@@ -59,6 +60,14 @@ export const BuyTrade: React.FC = () => {
     !activeMarket ||
     (address ? approvalExpanded == undefined : false)
   ) {
+    console.log(
+      `index-switchPool: `,
+      switchPool,
+      poolDetails,
+      readcallData,
+      approvalExpanded,
+      activeMarket
+    );
     return (
       <Skeleton
         variant="rectangular"
