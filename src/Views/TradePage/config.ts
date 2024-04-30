@@ -46,7 +46,7 @@ export const appConfig = {
         tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
         faucet: '0xAb4df8Aaa1F54E84C469f4bc0e513436088C9B86',
         decimals: 6,
-        token: 'USDC',
+        token: 'USDC.e',
         permitName: 'USDC',
         is_pol: false,
       },
