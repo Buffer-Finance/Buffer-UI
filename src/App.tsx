@@ -75,6 +75,7 @@ const Incentivised = lazy(() => import('@Views/V2-Leaderboard/Incentivised'));
 const Weekly = lazy(() => import('@Views/V2-Leaderboard/Weekly'));
 const Jackpot = lazy(() => import('@Views/Jackpot'));
 const AboveBelow = lazy(() => import('@Views/AboveBelow'));
+const RewardsPage = lazy(() => import('@Views/Rewards'));
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{
@@ -191,6 +192,7 @@ const AppRoutes = () => {
               <Route path=":chain" element={<Weekly />} />
             </Route>
           </Route>
+          <Route path="/rewards" element={<RewardsPage />} />
         </Routes>
       </Suspense>
     </div>
