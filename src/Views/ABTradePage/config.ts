@@ -14,12 +14,12 @@ export const appConfig = {
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
-    router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
-    signer_manager: '0xb167be9422B03C971BCec106E3B100E51B2489EF',
+    router: '0xc8083f764d5ce46E4DbEa3dEB975C3301c8d08aB',
+    signer_manager: '0x4499D65378E7D6ECb152caB3893dfFBB654F9961',
     booster: '0xda0E515d5d4217b2fF634aa21A8aeA8a74cd2808',
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
-    v2_router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
-    above_below_router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
+    v2_router: '0xc8083f764d5ce46E4DbEa3dEB975C3301c8d08aB',
+    above_below_router: '0xc8083f764d5ce46E4DbEa3dEB975C3301c8d08aB',
     poolsInfo: {
       '0x464c93cab18A051a24BD520bb97c22C583b48F01': {
         tokenAddress: '0xb180dB4293D9247Dc974F1445082ae55A91C9539',
