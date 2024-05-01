@@ -126,7 +126,6 @@ function getROI(e: any) {
     return 0;
   } else {
     const x = (payout * 100n) / amount - 100n;
-    console.log(`PlatformTradesTab-x: `, x, payout, amount);
     return x.toString();
   }
   // return percentange of payout

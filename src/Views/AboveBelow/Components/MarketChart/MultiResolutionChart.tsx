@@ -250,7 +250,7 @@ export function getNextDayTimestamp(seconds) {
   nextDay.setUTCMilliseconds(0);
   if (+seconds == 60) {
     // console.log(`MultiResolutionChart-nextDay.getDate() : `, nextDay.getDate());
-    nextDay.setDate(nextDay.getDate() + 2);
+    nextDay.setDate(nextDay.getDate() + 1);
   } else nextDay.setDate(nextDay.getDate() + (seconds * 2) / 100);
 
   // Convert to timestamp
