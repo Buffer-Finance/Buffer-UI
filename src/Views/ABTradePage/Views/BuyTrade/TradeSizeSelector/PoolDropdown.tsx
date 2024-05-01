@@ -15,6 +15,7 @@ import { useAtom } from 'jotai';
 export const PoolDropdown: React.FC = () => {
   const [{ activePool }, setActivePool] = useAtom(activePoolObjAtom);
   const { poolNameList } = useActivePoolObject();
+  console.log(`PoolDropdown-poolNameList: `, poolNameList);
 
   function onClick(e: ClickEvent) {
     setActivePool({ activePool: e.value });

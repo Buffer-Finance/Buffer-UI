@@ -51,7 +51,8 @@ export const TradeSize: React.FC<{
   const contracts = useNumberOfContracts();
 
   if (activeMarket === undefined || readCallData === undefined) return <></>;
-  const token = activeMarket.poolInfo.token.toUpperCase();
+  const token = activeMarket.poolInfo.token;
+  console.log(`index-token: `, token, readCallData);
   const decimals = activeMarket.poolInfo.decimals;
   const balance =
     divide(readCallData.balances[token], decimals) ?? ('0' as string);

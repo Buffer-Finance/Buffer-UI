@@ -96,7 +96,7 @@ export const BuyButtonAPI: React.FC<{
     useApprvalAmount();
   const config = getConfig(activeChain.id);
 
-  const token = activeMarket.poolInfo.token.toUpperCase();
+  const token = activeMarket.poolInfo.token;
   const decimals = activeMarket.poolInfo.decimals;
 
   if (approvalExpanded === undefined)
@@ -281,7 +281,7 @@ const Buy: React.FC<{
   const referralData = useReferralCode();
   const { data: productNames } = useProductName();
   const { data: ivs } = useIV();
-  const token = activeMarket.poolInfo.token.toUpperCase();
+  const token = activeMarket.poolInfo.token;
   const decimals = activeMarket.poolInfo.decimals;
   const readCallData = useAtomValue(readCallDataAtom);
 

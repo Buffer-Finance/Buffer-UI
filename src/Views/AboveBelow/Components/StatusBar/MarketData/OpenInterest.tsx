@@ -32,7 +32,7 @@ export const OpenInterest: React.FC<{
       ? undefined
       : 100 - openInterestUpPercent;
 
-  const unit = activeMarket.poolInfo.token.toUpperCase();
+  const unit = activeMarket.poolInfo.token;
 
   return (
     <div className="w-[100px] mb-2 mt-[6px]">

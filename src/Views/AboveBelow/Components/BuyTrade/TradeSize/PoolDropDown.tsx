@@ -17,6 +17,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 
 export const PoolDropdown: React.FC = () => {
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);
+  console.log(`PoolDropDown-markets: `, markets);
   const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
   const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
 

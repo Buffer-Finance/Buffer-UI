@@ -29,6 +29,7 @@ export const aboveBelowActiveMarketsAtom = atom<marketTypeAB[]>((get) => {
   const urlMarket = get(urlMarketAtom);
   if (!markets) return [];
   if (!urlMarket) return [];
+  console.log(`in-atommarkets: `, markets);
   return markets.filter((market) => {
     const [token0, token1] = urlMarket.split('-');
     if (market.token0 === token0 && market.token1 === token1) return true;

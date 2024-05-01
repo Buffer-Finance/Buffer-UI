@@ -24,7 +24,7 @@ export const PayoutProfit = ({}: {}) => {
     activeMarket !== undefined &&
     tradeData !== null
   ) {
-    const tradeToken = activeMarket.poolInfo.token.toUpperCase();
+    const tradeToken = activeMarket.poolInfo.token;
     const { contracts, totalFee } = tradeData;
     const paidAmount = multiply(contracts, totalFee.toString());
     if (contracts === '0') return <> </>;

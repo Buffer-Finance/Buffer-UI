@@ -23,6 +23,8 @@ export const buyTradeDataAtom = atom<{
 export const useBuyTradeData = (deb?: string) => {
   const { data: readCallData } = useBuyTradePageReadcalls();
   const { poolDetails } = useSwitchPool();
+  console.log(`poolDetails: `, poolDetails);
+
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
   const config = useMarketsConfig();

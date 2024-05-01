@@ -29,8 +29,8 @@ export const appConfig = {
         permitName: 'USDC',
         is_pol: false,
       },
-      '0xf43f79a824a7dde5A1e5C18D022fF60C56DA80eC': {
-        tokenAddress: '0x4b04c86287B1bf16f5CD3B0d9B00200f085e3908',
+      '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
+        tokenAddress: '0x7Fe2dD3b4619802B8c4b404f5e440756391439ba',
         faucet: '0xB54521E255d23F2fA7f37d29C7E76D8FFa85fc05',
         decimals: 6,
         token: 'USDC',

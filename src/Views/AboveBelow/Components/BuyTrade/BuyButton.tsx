@@ -91,7 +91,7 @@ const TradeButton = () => {
 
   if (readCallData === undefined)
     return <Skeleton className="!h-[36px] full-width sr lc !transform-none" />;
-  const token = activeMarket.poolInfo.token.toUpperCase();
+  const token = activeMarket.poolInfo.token;
   const decimals = activeMarket.poolInfo.decimals;
   const allowance = divide(readCallData.allowances[token], decimals);
 

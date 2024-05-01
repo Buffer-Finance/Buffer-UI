@@ -94,6 +94,7 @@ export const useAboveBelowMarketsSetter = () => {
     refreshInterval: 60000,
   });
   useEffect(() => {
+    console.log('data.optionContracts', data?.allContracts);
     if (data?.optionContracts)
       setMarkets(
         data.optionContracts

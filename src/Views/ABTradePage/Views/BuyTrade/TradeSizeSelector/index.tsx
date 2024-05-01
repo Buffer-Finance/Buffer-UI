@@ -30,6 +30,7 @@ export const TradeSizeSelector: React.FC<{
 }> = ({ onSubmit }) => {
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useAtomValue(buyTradeDataAtom);
+  console.log(`index-readcallData: `, readcallData);
   const { registeredOneCT } = useOneCTWallet();
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;

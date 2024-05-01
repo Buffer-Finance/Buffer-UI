@@ -32,9 +32,7 @@ export const PriceFormat = () => {
                 onChange={handleChange}
               />
               <label htmlFor="poolRadio" className={`text-f12 'text-1' `}>
-                {index === 0
-                  ? activeMarket.poolInfo.token.toUpperCase()
-                  : asset}
+                {index === 0 ? activeMarket.poolInfo.token : asset}
               </label>
             </RowGap>
           );
