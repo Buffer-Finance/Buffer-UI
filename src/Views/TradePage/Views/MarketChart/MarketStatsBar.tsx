@@ -119,13 +119,8 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
       readcallData?.currentOIs[switchPool?.optionContract] ?? '0',
       poolDetails.decimals
     ) as string;
-
-    currentOIinPercent = Number(
-      getMinimumValue(
-        divide(multiply(currentOI, '100'), maxOI) as string,
-        '100'
-      )
-    );
+    const oiratio = divide(multiply(currentOI, '100'), maxOI) ?? '0';
+    currentOIinPercent = Number(getMinimumValue(oiratio, '100'));
   }
   if (allSpreads && activeMarket)
     spread = allSpreads?.[activeMarket.tv_id].spread;
