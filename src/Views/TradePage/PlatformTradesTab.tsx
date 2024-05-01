@@ -43,6 +43,7 @@ type ABEvent = {
 const Token2Decimal = {
   ARB: 18,
   USDC: 6,
+  'USDC.e': 6,
 };
 const getDecimal = (t: any) => {
   return Token2Decimal[t.optionContract.pool];
@@ -53,6 +54,7 @@ const PlatformTradesTab: React.FC<{
   height?: number;
 }> = ({ events, hidden, height }) => {
   if (!events?.length) return null;
+  console.log(`PlatformTradesTab-events: `, events);
 
   if (!events?.length) return null;
   return (
