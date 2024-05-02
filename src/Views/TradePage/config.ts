@@ -21,7 +21,7 @@ export const appConfig = {
     booster: '0xbE96E1260090Ec873ed9F246f548fcF67a7da148',
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
     v2_router: '0x693351786cf6f328B1495bd9d527d898929580AE',
-    jackpot: '0xBA32FF9eB0924577922713487acF5eCF79b2BE74',
+    jackpot: '0x6D09f5606e2190e0E42E0ebD89250748981eec3C',
     above_below_router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
     product_id: {
       UP_DOWN: {
@@ -217,9 +217,8 @@ export const appConfig = {
   },
   '80001': {
     graph: {
-      MAIN: `https://subgraph.satsuma-prod.com/${
-        import.meta.env.VITE_SATSUMA_KEY
-      }/bufferfinance/polygon-testnet/api`,
+      MAIN: `https://subgraph.satsuma-prod.com/${import.meta.env.VITE_SATSUMA_KEY
+        }/bufferfinance/polygon-testnet/api`,
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
@@ -241,9 +240,8 @@ export const appConfig = {
   },
   '137': {
     graph: {
-      MAIN: `https://subgraph.satsuma-prod.com/${
-        import.meta.env.VITE_SATSUMA_KEY
-      }/bufferfinance/polygon-mainnet/api`,
+      MAIN: `https://subgraph.satsuma-prod.com/${import.meta.env.VITE_SATSUMA_KEY
+        }/bufferfinance/polygon-mainnet/api`,
     },
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',
