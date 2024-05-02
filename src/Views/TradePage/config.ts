@@ -21,7 +21,7 @@ export const appConfig = {
     booster: '0xbE96E1260090Ec873ed9F246f548fcF67a7da148',
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
     v2_router: '0x693351786cf6f328B1495bd9d527d898929580AE',
-    jackpot: '0x49Bb5Ea59BE5b7F5B7e25ac80b9d114127186FDB',
+    jackpot: '0xBA32FF9eB0924577922713487acF5eCF79b2BE74',
     above_below_router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
     product_id: {
       UP_DOWN: {
