@@ -92,7 +92,12 @@ export const DailyWebTable: React.FC<{
   const poolNames = usePoolNames();
 
   const tokens = useMemo(
-    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    () =>
+      poolNames.filter(
+        (pool) =>
+          !pool.toLowerCase().includes('pol') &&
+          !pool.toLowerCase().includes('.e')
+      ),
     [poolNames]
   );
 

@@ -4,7 +4,7 @@ export const DailyTournamentConfig: {
   [key: number]: weeklyTournamentConfigType;
 } = {
   421614: {
-    startTimestamp: 1707926400000,
+    startTimestamp: 1714579200000,
     winnersNFT: 0,
     losersNFT: 1,
     endDay: undefined,

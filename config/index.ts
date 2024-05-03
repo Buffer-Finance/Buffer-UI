@@ -302,35 +302,30 @@ export const notOverText = 'Round 1 is not over yet for this pool.';
 export const NA = 'N/A';
 export const European = 'European';
 export const American = 'American';
-export const getLeaderBoardTabs = (chain: string) => {
+export const getLeaderBoardTabs = () => {
   return [
     // {
-    //   pathname: '/[chain]/leaderboard/[offset]/incentivised',
     //   as: `/ARBITRUM/leaderboard/0/incentivised`,
     //   name: chain,
     //   slug: 'leaderboard',
     //   id: 0,
     // },
     {
-      pathname: '/[chain]/leaderboard/[offset]/daily',
       as: `/leaderboard/daily`,
       name: 'Daily',
       slug: 'daily',
       id: 1,
-
       subTabs: [],
     },
+    // {
+    //   as: `/leaderboard/weekly`,
+    //   name: 'Weekly',
+    //   slug: 'weekly',
+    //   id: 7,
+    //   subTabs: [],
+    // },
     {
-      pathname: '/[chain]/leaderboard/weekly',
-      as: `/leaderboard/weekly`,
-      name: 'Weekly',
-      slug: 'weekly',
-      id: 7,
-      subTabs: [],
-    },
-    {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/diamond`,
+      as: `/leaderboard/leagues/diamond`,
       name: 'diamond',
       slug: 'diamond',
       id: 2,
@@ -338,8 +333,7 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/platinum`,
+      as: `/leaderboard/leagues/platinum`,
       name: 'platinum',
       slug: 'platinum',
       id: 3,
@@ -347,8 +341,7 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/gold`,
+      as: `/leaderboard/leagues/gold`,
       name: 'gold',
       slug: 'gold',
       id: 4,
@@ -356,8 +349,7 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/silver`,
+      as: `/leaderboard/leagues/silver`,
       name: 'silver',
       slug: 'silver',
       id: 5,
@@ -365,8 +357,7 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/weekly/[league]',
-      as: `/leaderboard/0/weekly/bronze`,
+      as: `/leaderboard/leagues/bronze`,
       name: 'bronze',
       slug: 'bronze',
       id: 6,
@@ -374,10 +365,9 @@ export const getLeaderBoardTabs = (chain: string) => {
       subTabs: [],
     },
     {
-      pathname: '/[chain]/leaderboard/[offset]/pnl',
-      as: `/leaderboard/0/pnl`,
-      name: 'Profit & Loss',
-      slug: 'pnl',
+      as: `/leaderboard/metrics/all-time`,
+      name: 'All Time',
+      slug: 'all-time',
       id: 7,
       subTabs: [],
     },

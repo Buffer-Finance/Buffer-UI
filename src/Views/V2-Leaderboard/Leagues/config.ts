@@ -4,10 +4,10 @@ export const leagueConfig: {
   [key: number]: { startTimestamp: number };
 } = {
   421614: {
-    startTimestamp: 1707926400000,
+    startTimestamp: 1714579200000,
   },
   42161: {
-    startTimestamp: 1707926400000,
+    startTimestamp: 1714579200000,
   },
 };
 const MAX_NUBER_OF_TRADES = '10000000';
