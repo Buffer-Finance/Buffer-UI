@@ -13,6 +13,7 @@ export const appConfig = {
       MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.2.1-ud-updat3e-contracts/api`,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts/api',
+      REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
@@ -118,6 +119,7 @@ export const appConfig = {
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.4-ab-only-fix-market-id/api',
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts/api',
+      REWARDS: '',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
@@ -217,8 +219,10 @@ export const appConfig = {
   },
   '80001': {
     graph: {
-      MAIN: `https://subgraph.satsuma-prod.com/${import.meta.env.VITE_SATSUMA_KEY
-        }/bufferfinance/polygon-testnet/api`,
+      MAIN: `https://subgraph.satsuma-prod.com/${
+        import.meta.env.VITE_SATSUMA_KEY
+      }/bufferfinance/polygon-testnet/api`,
+      REWARDS: '',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
@@ -240,8 +244,10 @@ export const appConfig = {
   },
   '137': {
     graph: {
-      MAIN: `https://subgraph.satsuma-prod.com/${import.meta.env.VITE_SATSUMA_KEY
-        }/bufferfinance/polygon-mainnet/api`,
+      MAIN: `https://subgraph.satsuma-prod.com/${
+        import.meta.env.VITE_SATSUMA_KEY
+      }/bufferfinance/polygon-mainnet/api`,
+      REWARDS: '',
     },
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',
