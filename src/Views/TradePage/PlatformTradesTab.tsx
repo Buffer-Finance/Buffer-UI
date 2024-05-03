@@ -123,9 +123,10 @@ const PlatformTradesTab: React.FC<{
 export { PlatformTradesTab };
 function getROI(e: any) {
   const payout = BigInt(e.payout);
+  console.log(`PlatformTradesTab-payout: `, payout);
   const amount = BigInt(e.totalFee);
   if (!payout) {
-    return 0;
+    return '-';
   } else {
     const x = (payout * 100n) / amount - 100n;
     return x.toString();
