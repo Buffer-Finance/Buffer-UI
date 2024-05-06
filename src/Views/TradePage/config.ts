@@ -1,3 +1,4 @@
+import { ABGraph } from 'src/Config/Graphurls';
 import { notificationPosition, tradePanelPosition } from './type';
 export const aboveBelowBaseUrl =
   'https://instant-trading-backend-production-84c6.up.railway.app/';
@@ -7,8 +8,7 @@ export const isSandbox =
 export const appConfig = {
   '421614': {
     graph: {
-      ABOVE_BELOW:
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
+      ABOVE_BELOW: ABGraph,
 
       MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.2.1-ud-updat3e-contracts/api`,
       EVENTS:

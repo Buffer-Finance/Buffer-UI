@@ -1,14 +1,13 @@
+import { ABGraph } from 'src/Config/Graphurls';
 import { notificationPosition, tradePanelPosition } from './type';
 
 export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
-
 export const appConfig = {
   '421614': {
     graph: {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
-      ABOVE_BELOW:
-        'https://buffer-finance-indexer-production-e4ce.up.railway.app/',
+      ABOVE_BELOW: ABGraph,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts-ab/api',
     },
