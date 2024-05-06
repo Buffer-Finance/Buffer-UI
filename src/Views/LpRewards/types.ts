@@ -49,6 +49,7 @@ export type tokensPerInterval = {
   }[];
   lockMultiplierSettings: {
     maxLockDuration: string;
+    minLockDuration: string;
     maxLockMultiplier: string;
   }[];
 };

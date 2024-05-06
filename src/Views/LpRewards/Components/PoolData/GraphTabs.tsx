@@ -10,7 +10,7 @@ export const GraphTabs: React.FC<{
       {[
         activePool === 'uBLP' ? 'uBLP Price' : 'aBLP Price',
         'TVL',
-        'APR',
+        // 'APR',
         'PnL',
       ].map((tab) => {
         const tabName = tab === 'uBLP Price' ? 'price' : tab.toLowerCase();

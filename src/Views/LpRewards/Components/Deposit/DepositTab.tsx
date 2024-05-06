@@ -9,12 +9,14 @@ import { useState } from 'react';
 import { Chain } from 'viem';
 import { InputField } from './InputField';
 import { Modal } from './Modal';
+import { useTokensPerInterval } from '@Views/LpRewards/Hooks/useTokensPerInterval';
 
 export const DepositTab: React.FC<{
   activePool: poolsType;
   readcallData: { [callId: string]: string[] };
   activeChain: Chain;
 }> = ({ activePool, readcallData, activeChain }) => {
+  const { data, error } = useTokensPerInterval(activeChain);
   const [amount, setAmount] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const toastify = useToast();
@@ -48,7 +50,7 @@ export const DepositTab: React.FC<{
       });
     }
   };
-  if (balance === undefined || allowance === undefined)
+  if (balance === undefined || allowance === undefined || error || !data)
     return <Skeleton variant="rectangular" width="100%" height="100px" />;
   return (
     <div>
@@ -63,6 +65,8 @@ export const DepositTab: React.FC<{
         unit={uint}
         decimals={decimals}
         balance={balance}
+        maxLockPeriod={Number(data.lockMultiplierSettings[0].maxLockDuration)}
+        minLockPeriod={Number(data.lockMultiplierSettings[0].minLockDuration)}
       />
       <InputField
         activePool={activePool}

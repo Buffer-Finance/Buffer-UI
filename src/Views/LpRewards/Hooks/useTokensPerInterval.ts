@@ -21,6 +21,7 @@ export const useTokensPerInterval = (activeChain: Chain) => {
           }
         lockMultiplierSettings{
           maxLockDuration
+          minLockDuration
           maxLockMultiplier
         }
       }`;

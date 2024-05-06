@@ -402,6 +402,12 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "minLockDuration",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "maxLockDuration",
         "type": "uint256"
       },
@@ -539,16 +545,6 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "amountToAdd", "type": "uint256" }
-    ],
-    "name": "addToPosition",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "address", "name": "to", "type": "address" },
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
     ],
@@ -612,15 +608,6 @@
     "inputs": [],
     "name": "factory",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "lockDuration", "type": "uint256" }
-    ],
-    "name": "getAPR",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -734,16 +721,6 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
-      { "internalType": "address", "name": "to", "type": "address" }
-    ],
-    "name": "harvestMultiplePositionTo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
     ],
     "name": "harvestPosition",
@@ -763,7 +740,7 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
       { "internalType": "address", "name": "to", "type": "address" }
     ],
     "name": "harvestPositionsTo",
@@ -831,26 +808,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "lockDuration", "type": "uint256" }
-    ],
-    "name": "lockPosition",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
-      { "internalType": "uint256", "name": "lockDuration", "type": "uint256" }
-    ],
-    "name": "mergePositions",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "name",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
@@ -887,15 +844,6 @@
     "name": "pendingRewards",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
-    ],
-    "name": "renewLockPosition",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -975,6 +923,11 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "minLockDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "maxLockDuration",
         "type": "uint256"
       },
@@ -1004,16 +957,6 @@
       { "internalType": "bool", "name": "add", "type": "bool" }
     ],
     "name": "setUnlockOperator",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "splitAmount", "type": "uint256" }
-    ],
-    "name": "splitPosition",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1086,32 +1029,18 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" }
-    ],
-    "name": "withdrawAllFromMultiplePositions",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
     ],
-    "name": "withdrawAllFromPosition",
+    "name": "withdrawPosition",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      {
-        "internalType": "uint256",
-        "name": "amountToWithdraw",
-        "type": "uint256"
-      }
+      { "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" }
     ],
-    "name": "withdrawFromPosition",
+    "name": "withdrawPositions",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

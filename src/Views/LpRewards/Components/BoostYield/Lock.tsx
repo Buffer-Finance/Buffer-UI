@@ -20,6 +20,7 @@ import { AprDD } from '../AprDD';
 import { BLPprice } from '../BlpPrice';
 import { ModalButton } from '../Deposit/Modal';
 import { Container } from '../Deposit/Styles';
+import { convertToNumberOfMonthsAndDays } from './Transactions/helpers';
 
 const Input = styled.input`
   background-color: #232334;
@@ -49,15 +50,21 @@ export const Lock: React.FC<{
   readcallData: { [callId: string]: string[] };
   totalLocked: string;
   totalUnlocked: string;
+  minLockDuration: number;
+  maxLockDuration: number;
 }> = ({
   activeChain,
   activePool,
   readcallData,
   totalLocked,
   totalUnlocked,
+  minLockDuration,
+  maxLockDuration,
 }) => {
   const [amount, setAmount] = useState('');
-  const [lockPeriod, setLockPeriod] = useState({ days: 1, months: 0 });
+  const [lockPeriod, setLockPeriod] = useState(
+    convertToNumberOfMonthsAndDays(minLockDuration)
+  );
   const decimals = activePool === 'aBLP' ? 18 : 6;
   const balance = readcallData[activePool + '-depositBalances']?.[0];
 
@@ -106,6 +113,8 @@ export const Lock: React.FC<{
           setLockPeriod={setLockPeriod}
           activeChain={activeChain}
           activePool={activePool}
+          minLockDuration={minLockDuration}
+          maxLockDuration={maxLockDuration}
         />
         <LockButton
           activePool={activePool}

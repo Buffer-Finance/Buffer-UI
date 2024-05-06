@@ -11,7 +11,7 @@ export const usePoolStats = (activeChain: Chain, activePool: poolsType) => {
     fetcher: async () => {
       const poolName = activePool === 'uBLP' ? 'USDC' : 'ARB';
       const query = `{
-                poolStats(where: {id_not: "current${poolName}"}) {
+                poolStats(where: {id_not: "current${poolName}",poolName:"${poolName}"}) {
                    profit
                    loss
                    timestamp
@@ -28,6 +28,6 @@ export const usePoolStats = (activeChain: Chain, activePool: poolsType) => {
         console.error(e, 'poolStats');
       }
     },
-    refreshInterval: 5000,
+    refreshInterval: 50000,
   });
 };

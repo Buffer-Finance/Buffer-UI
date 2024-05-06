@@ -1,5 +1,8 @@
 import styled from '@emotion/styled';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useTokensPerInterval } from '../Hooks/useTokensPerInterval';
+import { Chain } from 'viem';
+import { convertLockPeriodToSeconds } from './BoostYield/Lock';
 
 export const DayMonthInput: React.FC<{
   data: {
@@ -13,7 +16,17 @@ export const DayMonthInput: React.FC<{
     }>
   >;
   isDisabled?: boolean;
-}> = ({ data, setData, isDisabled }) => {
+  activeChain: Chain;
+  minLockDuration: number;
+  maxLockDuration: number;
+}> = ({
+  data,
+  setData,
+  isDisabled,
+  activeChain,
+  maxLockDuration,
+  minLockDuration,
+}) => {
   const handleSubtract = useCallback(() => {
     if (data.days > 0) {
       setData((prev) => ({ ...prev, days: prev.days - 1 }));
@@ -30,9 +43,23 @@ export const DayMonthInput: React.FC<{
     }
   }, [setData, data]);
 
+  const isMinusDisabled = useMemo(() => {
+    if (isDisabled) return true;
+    if (data.days === 0 && data.months === 0) return true;
+
+    if (minLockDuration < convertLockPeriodToSeconds(data)) return false;
+    return true;
+  }, [data, minLockDuration, isDisabled]);
+
+  const isPlusDisabled = useMemo(() => {
+    if (isDisabled) return true;
+    if (maxLockDuration > convertLockPeriodToSeconds(data)) return false;
+    return true;
+  }, [data, maxLockDuration, isDisabled]);
+
   return (
     <div className="flex items-center gap-3">
-      <ActionButton onClick={handleSubtract} disabled={isDisabled}>
+      <ActionButton onClick={handleSubtract} disabled={isMinusDisabled}>
         -
       </ActionButton>
       <div className="flex items-center gap-3">
@@ -53,7 +80,7 @@ export const DayMonthInput: React.FC<{
           </div>
         </div>
       </div>
-      <ActionButton onClick={handleAdd} disabled={isDisabled}>
+      <ActionButton onClick={handleAdd} disabled={isPlusDisabled}>
         +
       </ActionButton>
     </div>

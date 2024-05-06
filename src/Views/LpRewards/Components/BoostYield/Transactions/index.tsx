@@ -112,7 +112,7 @@ function Body(
           {distanceObject.distance < 0 && (
             <Withdraw activeChain={activeChain} lockTxn={txn} />
           )}
-          <RenewLock
+          {/* <RenewLock
             lockTxn={txn}
             activeChain={activeChain}
             decimals={decimals}
@@ -125,7 +125,7 @@ function Body(
             decimals={decimals}
             unit={unit}
             activePool={activePool}
-          />
+          /> */}
           <ClaimRewards lockTxn={txn} activeChain={activeChain} />
         </div>
       );

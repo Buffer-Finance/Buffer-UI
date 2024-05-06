@@ -40,7 +40,17 @@ export const AprDD: React.FC<{
   isDisabled?: boolean;
   activeChain: Chain;
   activePool: poolsType;
-}> = ({ lockPeriod, setLockPeriod, isDisabled, activeChain, activePool }) => {
+  minLockDuration: number;
+  maxLockDuration: number;
+}> = ({
+  lockPeriod,
+  setLockPeriod,
+  isDisabled,
+  activeChain,
+  activePool,
+  maxLockDuration,
+  minLockDuration,
+}) => {
   const [isAPRddOpen, setIsAPRddOpen] = useState<boolean>(false);
   const { getMultiplierByLockDuration, getLockAPR, usdcApr } = useUSDCapr(
     activeChain,
@@ -53,6 +63,7 @@ export const AprDD: React.FC<{
   if (factor !== null && factor !== undefined) {
     factor = (factor + 1e4) / 1e4;
   }
+
   return (
     <>
       <RowBetween className="mt-6">
@@ -72,6 +83,9 @@ export const AprDD: React.FC<{
             data={lockPeriod}
             setData={setLockPeriod}
             isDisabled={isDisabled}
+            activeChain={activeChain}
+            minLockDuration={minLockDuration}
+            maxLockDuration={maxLockDuration}
           />
           {factor === null || factor === undefined ? (
             <Skeleton

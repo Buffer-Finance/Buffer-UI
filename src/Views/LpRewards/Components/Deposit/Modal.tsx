@@ -17,6 +17,7 @@ import RewardRouterABI from '../../abis/RewardRouter.json';
 import { AprDD } from '../AprDD';
 import { BLPprice } from '../BlpPrice';
 import { convertLockPeriodToSeconds } from '../BoostYield/Lock';
+import { convertToNumberOfMonthsAndDays } from '../BoostYield/Transactions/helpers';
 
 export const Modal: React.FC<{
   isOpen: boolean;
@@ -29,7 +30,8 @@ export const Modal: React.FC<{
   unit: string;
   decimals: number;
   balance: string | undefined;
-  max: string;
+  minLockPeriod: number;
+  maxLockPeriod: number;
 }> = ({
   closeModal,
   isOpen,
@@ -41,15 +43,13 @@ export const Modal: React.FC<{
   unit,
   decimals,
   balance,
-  max,
+  maxLockPeriod,
+  minLockPeriod,
 }) => {
   const [lockPeriod, setLockPeriod] = useState<{
     days: number;
     months: number;
-  }>({
-    days: 1,
-    months: 0,
-  });
+  }>(convertToNumberOfMonthsAndDays(minLockPeriod));
   return (
     <Dialog open={isOpen} onClose={closeModal}>
       <ModalStyles>
@@ -94,6 +94,8 @@ export const Modal: React.FC<{
           setLockPeriod={setLockPeriod}
           activeChain={activeChain}
           activePool={activePool}
+          minLockDuration={minLockPeriod}
+          maxLockDuration={maxLockPeriod}
         />
         <ActionButton
           activePool={activePool}

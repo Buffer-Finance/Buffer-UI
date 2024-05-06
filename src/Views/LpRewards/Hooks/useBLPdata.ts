@@ -81,7 +81,7 @@ export function useBlpData(activeChain: Chain, activePool: poolsType) {
       .reduce((memo, item) => {
         const last = memo[memo.length - 1];
 
-        const glpSupply = Number(item.blpAmount);
+        const glpSupply = Number(item.tokenXamount);
         const rate = Number(item.price) / 1e8;
 
         cumulativeGlpSupply += +glpSupply;

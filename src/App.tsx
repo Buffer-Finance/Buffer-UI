@@ -122,7 +122,7 @@ const AppRoutes = () => {
             }
           />
         )}
-        <Route path="lp-rewards" element={<LpRewards />} />
+        <Route path="/lp-rewards" element={<LpRewards />} />
         <Route path="/rewards" element={<RewardsPage />} />
         <Route path="trades" element={<AllTrades />} />
         <Route path="/faucet" element={<IbfrFaucet />} />

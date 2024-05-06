@@ -8,6 +8,7 @@ import { Data } from './Data';
 import { HowItWorks } from './HowItWorks';
 import { Lock } from './Lock';
 import { Transactions } from './Transactions';
+import { useTokensPerInterval } from '@Views/LpRewards/Hooks/useTokensPerInterval';
 
 export const BoostYield: React.FC<{
   activePool: poolsType;
@@ -17,6 +18,8 @@ export const BoostYield: React.FC<{
   const { data, error } = useLockTxns(activeChain, activePool);
   const { data: pendingRewards, error: pendingRewardsError } =
     usePendingRewards(activeChain, data?.nftPoolTxns);
+  const { data: tokenPerIntervalData, error: tokenPerIntervalError } =
+    useTokensPerInterval(activeChain);
 
   const computedData = useMemo(() => {
     let totalLocked = '0';
@@ -61,7 +64,13 @@ export const BoostYield: React.FC<{
       claimableIds,
     };
   }, [data, pendingRewards]);
-  if (data === undefined || (!data && !error)) return <div>Loading...</div>;
+  if (
+    data === undefined ||
+    (!data && !error) ||
+    tokenPerIntervalData === undefined ||
+    (!tokenPerIntervalData && !tokenPerIntervalError)
+  )
+    return <div>Loading...</div>;
 
   return (
     <div className="mt-[64px] w-full sm:mt-[32px]">
@@ -80,6 +89,12 @@ export const BoostYield: React.FC<{
           readcallData={readcallData}
           totalLocked={computedData.totalLocked}
           totalUnlocked={computedData.totalUnlocked}
+          maxLockDuration={Number(
+            tokenPerIntervalData.lockMultiplierSettings[0].maxLockDuration
+          )}
+          minLockDuration={Number(
+            tokenPerIntervalData.lockMultiplierSettings[0].minLockDuration
+          )}
         />
         <HowItWorks />
       </div>
@@ -90,7 +105,7 @@ export const BoostYield: React.FC<{
         error={error}
         pendingRewards={pendingRewards}
         pendingRewardsError={pendingRewardsError}
-        totalTxns={data.totalTxns[0].totalTxns}
+        totalTxns={data.totalTxns[0]?.totalTxns ?? 0}
       />
     </div>
   );

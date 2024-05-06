@@ -122,7 +122,7 @@ export const ProfitLossChart: React.FC<{
       //     "The following graph showcases the trader's Profit and Loss (PnL) by exclusively considering the additions and removals made to the pool, while disregarding any protocol fees."
       //   }
     >
-      <ResponsiveContainer width="100%" aspect={0.78}>
+      <ResponsiveContainer width="100%" aspect={0.65}>
         <ComposedChart data={tradersUSDCData?.data} syncId="tradersId">
           <CartesianGrid strokeDasharray="10 10" />
           <XAxis

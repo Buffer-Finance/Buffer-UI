@@ -17,9 +17,9 @@ export const Graphs: React.FC<{
       ? 0
       : activeTab === 'tvl'
       ? 1
-      : activeTab === 'apr'
-      ? 2
-      : 3;
+      : // : activeTab === 'apr'
+        // ? 2
+        3;
   }, [activeTab]);
 
   return (
