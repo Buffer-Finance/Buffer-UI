@@ -7,8 +7,7 @@ export const appConfig = {
   '421614': {
     graph: {
       MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
-      ABOVE_BELOW:
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
+      ABOVE_BELOW: 'https://buffer-finance-indexer-production.up.railway.app/',
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts-ab/api',
     },

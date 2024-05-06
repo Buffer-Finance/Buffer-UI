@@ -77,7 +77,7 @@ export const AboveBelow = () => {
   useActiveMarketSetter();
   useLimitedStrikeArrays();
   useReacallDataSetter();
-  usePastTradeQuery();
+  // usePastTradeQuery();
   const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
   const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);

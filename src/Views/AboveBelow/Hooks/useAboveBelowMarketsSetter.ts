@@ -21,11 +21,12 @@ export const useAboveBelowMarketsSetter = () => {
 
   async function fetcher(): Promise<{
     optionContracts: responseAB[];
-    allContracts: responseAB[];
   }> {
     const response = await axios.post(configData.graph.ABOVE_BELOW, {
       query: `{ 
-        optionContracts(first:10000,where:{routerContract:"${configData.above_below_router}"}) {
+        optionContracts(where:{routerContract:"${configData.above_below_router}"}) {
+         
+          items {
             address
             token1
             token0
@@ -51,38 +52,14 @@ export const useAboveBelowMarketsSetter = () => {
               stepSize
             }
           }
-          allContracts:optionContracts(first:10000) {
-            address
-            token1
-            token0
-            isPaused
-            routerContract
-            poolContract
-            openUp
-            openDown
-            openInterestUp
-            openInterestDown
-            configContract {
-              address
-              maxSkew
-              creationWindowContract
-              circuitBreakerContract
-              iv
-              traderNFTContract
-              sf
-              sfdContract
-              payout
-              platformFee
-              optionStorageContract
-              stepSize
-            }
-          }
-        }`,
+        
+        }
+      }`,
     });
 
+    console.log(`response: `, response);
     return response.data?.data as {
       optionContracts: responseAB[];
-      allContracts: responseAB[];
     };
   }
 
@@ -94,10 +71,10 @@ export const useAboveBelowMarketsSetter = () => {
     refreshInterval: 60000,
   });
   useEffect(() => {
-    console.log('data.optionContracts', data?.allContracts);
+    console.log('data.optionContracts', data?.optionContracts);
     if (data?.optionContracts)
       setMarkets(
-        data.optionContracts
+        data.optionContracts.items
           .map((option) => {
             const poolInfo =
               configData.poolsInfo[
@@ -119,29 +96,29 @@ export const useAboveBelowMarketsSetter = () => {
           })
           .filter((option) => option !== null) as marketTypeAB[]
       );
-    if (data?.allContracts)
-      setAllMarkets(
-        data.allContracts
-          .map((option) => {
-            const poolInfo =
-              configData.poolsInfo[
-                getAddress(
-                  option.poolContract
-                ) as keyof typeof configData.poolsInfo
-              ];
-            if (!poolInfo) return null;
-            const chartData =
-              marketsForChart[
-                (option.token0 + option.token1) as keyof typeof marketsForChart
-              ];
-            if (!chartData) return null;
-            return {
-              ...option,
-              poolInfo: poolInfo,
-              ...chartData,
-            };
-          })
-          .filter((option) => option !== null) as marketTypeAB[]
-      );
+    // if (data?.allContracts)
+    //   setAllMarkets(
+    //     data.allContracts
+    //       .map((option) => {
+    //         const poolInfo =
+    //           configData.poolsInfo[
+    //             getAddress(
+    //               option.poolContract
+    //             ) as keyof typeof configData.poolsInfo
+    //           ];
+    //         if (!poolInfo) return null;
+    //         const chartData =
+    //           marketsForChart[
+    //             (option.token0 + option.token1) as keyof typeof marketsForChart
+    //           ];
+    //         if (!chartData) return null;
+    //         return {
+    //           ...option,
+    //           poolInfo: poolInfo,
+    //           ...chartData,
+    //         };
+    //       })
+    //       .filter((option) => option !== null) as marketTypeAB[]
+    //   );
   }, [data, activeChain]);
 };
