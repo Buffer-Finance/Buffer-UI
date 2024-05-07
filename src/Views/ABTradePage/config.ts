@@ -25,7 +25,7 @@ export const appConfig = {
         faucet: '0xAb4df8Aaa1F54E84C469f4bc0e513436088C9B86',
         decimals: 6,
         token: 'USDC.e',
-        permitName: 'USDC',
+        permitName: 'USD Coin (Arb1)',
         is_pol: false,
       },
       '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
@@ -130,7 +130,7 @@ export const appConfig = {
         faucet: '0x0000000000000000000000000000000000000000',
         decimals: 6,
         token: 'USDC.e',
-        permitName: 'USDC',
+        permitName: 'USD Coin (Arb1)',
         is_pol: false,
       },
       '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
