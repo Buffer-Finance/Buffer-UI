@@ -17,6 +17,7 @@ const notAllowedSubroutes = new Set(['binary', 'ab']);
 export const view = (a: bigint, denominationDecimal: number, decimals = 6) => {
   if (a == undefined) return 0;
   if (a == null) return 0;
+  if (Number.isNaN(denominationDecimal)) return 0;
   const result =
     Number(
       (BigInt(a) * BigInt(10 ** decimals)) / BigInt(10 ** denominationDecimal)
