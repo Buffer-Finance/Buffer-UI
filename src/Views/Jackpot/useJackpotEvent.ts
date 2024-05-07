@@ -29,7 +29,7 @@ const useJackpotEvent = () => {
     console.log('jackpotdeb-listening');
     // console.log(`publicClient2: `, publicClient2);
 
-    const unwatch = publicClient.watchContractEvent({
+    const unwatch = publicClient2.watchContractEvent({
       address: JackpotAdds,
       abi: JackootABI,
       eventName: 'JackpotTriggered',
