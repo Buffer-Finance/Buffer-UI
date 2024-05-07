@@ -116,6 +116,8 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   });
 
   const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
+  console.log(`index-marketPrefix: `, marketPrefix);
+  console.log(`index-v3AppConfig: `, v3AppConfig);
   if (!v3AppConfig?.length || !marketPrefix)
     return (
       <Skeleton className="flex w-full !h-full lc !transform-none !my-3" />
