@@ -459,10 +459,11 @@ const TokenAccountBalance = () => {
   let activePoolDetails = pools[activePool];
   console.log(`AccountDropdown-pools: `, pools);
   if (activePoolDetails === undefined) activePoolDetails = pools['USDC.E'];
+  console.log(`AccountDropdown-activePoolDetails: `, activePoolDetails);
   const { address } = useAccount();
   const { data, isError, isLoading, error } = useBalance({
     address,
-    token: getAddress(activePoolDetails.tokenAddress),
+    token: getAddress(activePoolDetails?.tokenAddress),
     watch: true,
   });
 
