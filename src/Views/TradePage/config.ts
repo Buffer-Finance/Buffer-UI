@@ -1,5 +1,6 @@
 import { ABGraph } from 'src/Config/Graphurls';
 import { notificationPosition, tradePanelPosition } from './type';
+import { ABBaseURL as ABBaseURLCopy } from '@Views/ABTradePage/config';
 export const aboveBelowBaseUrl =
   'https://buffer-finance-indexer-production-e4ce.up.railway.app/';
 export const isSandbox =
@@ -122,6 +123,24 @@ export const appConfig = {
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts/api',
       REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
       LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/version/v3.0.31-leaderboard-tracking-update-contracts/api`,
+    },
+    product_id: {
+      UP_DOWN: {
+        id: 2,
+        environment: '42161',
+        metaData: {},
+        name: 'UP_DOWN',
+        product_id: 'abc',
+        router: '0x3ca907E4FADf6a7e705D177d122c3105D1dAaC40',
+      },
+      AB: {
+        id: 1,
+        environment: '42161',
+        metaData: {},
+        name: 'AB',
+        product_id: 'xyz',
+        router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
+      },
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
@@ -669,9 +688,7 @@ export const JackpotAdds = appConfig[isTestnet ? '421614' : '42161'].jackpot;
 export const MAX_APPROVAL_VALUE =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935';
 
-export const ABBaseURL =
-  'https://instant-trading-backend-production-84c6.up.railway.app/';
-
+export const ABBaseURL = ABBaseURLCopy;
 export const UDProductID = (chaiId: '421614') => {
   return 'product_id=abc';
 };

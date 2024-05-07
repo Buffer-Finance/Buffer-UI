@@ -60,6 +60,11 @@ export const useLimitedStrikeArrays = () => {
       stepsize === undefined ||
       roundedPrice === 0
     ) {
+      console.log('debug', 'activeMarket', activeMarket);
+      console.log('debug', 'expiration', expiration);
+      console.log('debug', 'settlementFees', settlementFees);
+      console.log('debug', 'stepsize', stepsize);
+      console.log('debug', 'roundedPrice', roundedPrice);
       return;
     }
     const iv = ivs?.[activeMarket.tv_id];
@@ -182,6 +187,7 @@ export const useLimitedStrikeArrays = () => {
       });
       j++;
     }
+    console.log(`increasingPriceArray: `, increasingPriceArray);
     if (strikePrices[activeMarket.tv_id] === undefined) {
       strikePrices[activeMarket.tv_id] = {
         decreasingPriceArray: [],

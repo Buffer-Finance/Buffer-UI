@@ -42,6 +42,7 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const isTableExpanded = useAtomValue(isTableShownAtomAB);
   console.log(`index-isTableExpanded: `, isTableExpanded);
   const v3AppConfig = useAtomValue(aboveBelowMarketsAtom);
+  console.log(`index-v3AppConfig: `, v3AppConfig);
   const chartTimes = useAtomValue(chartNumberAtom);
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const [dragging, setDragging] = useState(false);

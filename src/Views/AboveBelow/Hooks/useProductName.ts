@@ -20,12 +20,13 @@ export const useProductName = () => {
       const response = await axios.get(aboveBelowBaseUrl + `products/`, {
         params: { environment: activeChain.id },
       });
+      console.log(`response: `, response);
       if (response?.data) {
         return response.data;
       }
       return null;
     },
-    refreshInterval: 1000,
+    refreshInterval: 100000,
   });
 };
 export const useProducts = () => {

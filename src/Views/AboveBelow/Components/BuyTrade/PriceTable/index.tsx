@@ -64,6 +64,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
   const strikes = strikePrices[activeMarket?.tv_id as string];
+  console.log(`index-strikePrices: `, strikePrices);
   let increasingPriceArray = strikes?.increasingPriceArray ?? [];
   let decreasingPriceArray = strikes?.decreasingPriceArray ?? [];
   let totalArray = [
@@ -295,6 +296,8 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         );
     }
   };
+  console.log(`index-strikes: `, strikes);
+  console.log(`index-activeMarket: `, activeMarket);
   if (!currentPrice || !activeMarket || !strikes)
     return (
       <Skeleton className="w-[400px] !h-[300px] lc !transform-none !mt-3" />

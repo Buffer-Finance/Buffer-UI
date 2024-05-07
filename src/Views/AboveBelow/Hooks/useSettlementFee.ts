@@ -7,6 +7,7 @@ import { useProductName } from '@Views/AboveBelow/Hooks/useProductName';
 export const useSettlementFee = () => {
   const { activeChain } = useActiveChain();
   const { data: products } = useProductName();
+  console.log(`products: `, products);
 
   return useSWR<
     {
