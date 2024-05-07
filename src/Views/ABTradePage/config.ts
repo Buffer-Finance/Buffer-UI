@@ -95,7 +95,7 @@ export const appConfig = {
       ABOVE_BELOW:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/api',
       EVENTS:
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts-ab/api',
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/events/api',
     },
     multicall: '0x842eC2c7D803033Edf55E478F461FC547Bc54EB2',
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',

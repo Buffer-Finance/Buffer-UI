@@ -23,6 +23,7 @@ import { activePoolObjAtom } from '@Views/ABTradePage/atoms';
 import { getAddress } from 'viem';
 import { divide } from '@Utils/NumString/stringArithmatics';
 import { toFixed } from '@Utils/NumString';
+import { compactFormatter } from '@Utils/NumberUtils';
 
 enum Columns {
   MAX_ABOVE,
@@ -64,7 +65,6 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const [selectedStrike, setSelectedStrike] = useAtom(selectedPriceAtom);
   const toastify = useToast();
   const strikes = strikePrices[activeMarket?.tv_id as string];
-  console.log(`index-strikePrices: `, strikePrices);
   let increasingPriceArray = strikes?.increasingPriceArray ?? [];
   let decreasingPriceArray = strikes?.decreasingPriceArray ?? [];
   let totalArray = [
@@ -254,10 +254,17 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               }
               setStrikePrice(true, strikePrice.toString());
             }}
+            title={
+              tablerow.totalFeeAbove && maxSizeAbove
+                ? toFixed(tablerow.totalFeeBelow * maxSizeAbove, 2)
+                : ''
+            }
           >
             {tablerow.totalFeeAbove ? (
               maxSizeAbove ? (
-                toFixed(tablerow.totalFeeAbove * maxSizeAbove, 2)
+                compactFormatter(
+                  toFixed(tablerow.totalFeeAbove * maxSizeAbove, 2)
+                )
               ) : (
                 <Skeleton
                   variant="rectangular"
@@ -279,10 +286,17 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               }
               setStrikePrice(false, strikePrice.toString());
             }}
+            title={
+              maxSizeBelow
+                ? toFixed(tablerow.totalFeeBelow * maxSizeBelow, 2)
+                : ''
+            }
           >
             {tablerow.totalFeeBelow ? (
               maxSizeBelow ? (
-                toFixed(tablerow.totalFeeBelow * maxSizeBelow, 2)
+                compactFormatter(
+                  toFixed(tablerow.totalFeeBelow * maxSizeBelow, 2)
+                )
               ) : (
                 <Skeleton
                   variant="rectangular"
@@ -296,8 +310,6 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         );
     }
   };
-  console.log(`index-strikes: `, strikes);
-  console.log(`index-activeMarket: `, activeMarket);
   if (!currentPrice || !activeMarket || !strikes)
     return (
       <Skeleton className="w-[400px] !h-[300px] lc !transform-none !mt-3" />

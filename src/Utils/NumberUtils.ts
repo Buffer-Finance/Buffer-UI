@@ -17,5 +17,8 @@ const zeroify = (num: any) => {
   }
   return '0';
 };
+export const compactFormatter = new Intl.NumberFormat('en-US', {
+  notation: 'compact',
+}).format;
 
 export { zeroify, isAvailable };
