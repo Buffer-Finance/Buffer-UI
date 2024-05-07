@@ -154,7 +154,7 @@ export const appConfig = {
         faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
         decimals: 18,
         token: 'ARB',
-        permitName: 'ARB',
+        permitName: 'Arbitrum',
         is_pol: false,
       },
     },
