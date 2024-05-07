@@ -1,8 +1,7 @@
 import { ABGraph } from 'src/Config/Graphurls';
 import { notificationPosition, tradePanelPosition } from './type';
 import { ABBaseURL as ABBaseURLCopy } from '@Views/ABTradePage/config';
-export const aboveBelowBaseUrl =
-  'https://buffer-finance-indexer-production-e4ce.up.railway.app/';
+export const aboveBelowBaseUrl = ABBaseURLCopy;
 export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
 
