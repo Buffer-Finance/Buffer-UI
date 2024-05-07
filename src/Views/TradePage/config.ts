@@ -151,24 +151,7 @@ export const appConfig = {
     v2_router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
     jackpot: '0xEa0b956A04b265A7E2A6d00A4bD65a48C430cE16',
     above_below_router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
-    product_id: {
-      UP_DOWN: {
-        id: 2,
-        environment: '421614',
-        metaData: {},
-        name: 'UP_DOWN',
-        product_id: 'abc',
-        router: '0x3ca907E4FADf6a7e705D177d122c3105D1dAaC40',
-      },
-      AB: {
-        id: 1,
-        environment: '421614',
-        metaData: {},
-        name: 'AB',
-        product_id: 'xyz',
-        router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
-      },
-    },
+
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
         tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
@@ -178,30 +161,30 @@ export const appConfig = {
         permitName: 'USDC',
         is_pol: false,
       },
-      // '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
-      //   tokenAddress: '0x7Fe2dD3b4619802B8c4b404f5e440756391439ba',
-      //   faucet: '0xB54521E255d23F2fA7f37d29C7E76D8FFa85fc05',
-      //   decimals: 6,
-      //   token: 'USDC',
-      //   permitName: 'USDC',
-      //   is_pol: false,
-      // },
-      // '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
-      //   tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
-      //   faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
-      //   decimals: 18,
-      //   token: 'BFR',
-      //   permitName: 'Token',
-      //   is_pol: false,
-      // },
-      // '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c': {
-      //   tokenAddress: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
-      //   faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
-      //   decimals: 18,
-      //   token: 'ARB',
-      //   permitName: 'ARB',
-      //   is_pol: false,
-      // },
+      '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
+        tokenAddress: '0x7Fe2dD3b4619802B8c4b404f5e440756391439ba',
+        faucet: '0xB54521E255d23F2fA7f37d29C7E76D8FFa85fc05',
+        decimals: 6,
+        token: 'USDC',
+        permitName: 'USDC',
+        is_pol: false,
+      },
+      '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
+        tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
+        faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
+        decimals: 18,
+        token: 'BFR',
+        permitName: 'Token',
+        is_pol: false,
+      },
+      '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c': {
+        tokenAddress: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
+        faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
+        decimals: 18,
+        token: 'ARB',
+        permitName: 'ARB',
+        is_pol: false,
+      },
     },
 
     EarnConfig: {
