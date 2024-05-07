@@ -68,8 +68,8 @@ export const appConfig = {
         permitName: 'Token',
         is_pol: false,
       },
-      '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
-        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
+      '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c': {
+        tokenAddress: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
         faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
         decimals: 18,
         token: 'ARB',
@@ -176,8 +176,9 @@ export const appConfig = {
         permitName: 'Token',
         is_pol: false,
       },
-      '0x52126176479d8aFADF2Bc32eDe79dfDdFe69189c': {
-        tokenAddress: '0xd8F5E01e1723EFDdc7faA76a8C3FeFb4A8ef5b76',
+
+      '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
+        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
         faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
         decimals: 18,
         token: 'ARB',
