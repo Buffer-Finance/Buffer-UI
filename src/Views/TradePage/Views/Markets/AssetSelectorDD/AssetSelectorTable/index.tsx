@@ -242,7 +242,7 @@ export const AssetSelectorTable: React.FC<{
 
   if (!updatedArr.length && group && searchValue.length > 0) return null;
   return (
-    <AssetSelectorDDBackground>
+    <AssetSelectorDDBackground className=" overflow-y-auto scrollbar-heavy">
       <BufferTable
         widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
         headerJSX={isMobile ? null : HeadFormatter}
@@ -260,6 +260,7 @@ export const AssetSelectorTable: React.FC<{
         }
         loading={!updatedArr}
         isBodyTransparent
+        overflow
         isHeaderTransparent
         onRowClick={(rowNumber) => {
           if (!updatedArr) return;

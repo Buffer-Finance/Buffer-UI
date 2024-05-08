@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 
 const AssetSelectorDDBackground = styled.div`
   max-height: 420px;
+  /* overflow: auto; */
   width: 100%;
   padding: 16px;
   background-color: #232334;
@@ -28,7 +29,7 @@ export const AssetSelectorDD: React.FC<{
 }> = ({ isMobile, onMarketSelect }) => {
   return (
     <AssetSelectorDDBackground>
-      <ColumnGap gap="16px">
+      <ColumnGap gap="16px" className=" max-h-[404px]">
         <SearchBar />
         {!isMobile && (
           <RowBetween>
