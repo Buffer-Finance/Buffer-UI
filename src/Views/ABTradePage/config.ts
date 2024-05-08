@@ -101,7 +101,7 @@ export const appConfig = {
     referral_storage: '0xFea57B9548cd72D8705e4BB0fa83AA35966D9c29',
     router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
     signer_manager: '0x84cb6d8Fafa09D8A606f423feD6BB2745e677526',
-    booster: '0xbE96E1260090Ec873ed9F246f548fcF67a7da148',
+    booster: '0x1FE0A88372A75926dc26dFF369B0b3aC5569F669',
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
     v2_router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
     jackpot: '0xEa0b956A04b265A7E2A6d00A4bD65a48C430cE16',
