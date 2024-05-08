@@ -41,6 +41,7 @@ export const ROWINAPAGE = 10;
 export const TOTALWINNERS = 10;
 
 const rewardPool = {
+  1: 2800,
   2: 4975,
   3: 4808,
   4: 3414.83,
@@ -211,7 +212,7 @@ export const Galxe = () => {
         <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
           <Col
             head={'Reward Pool'}
-            desc={<div>${rewardPool[offset ?? week] ?? '2800'}</div>}
+            desc={<div>${rewardPool[offset ?? week] ?? '0'}</div>}
             descClass={descClass}
             headClass={headClass}
             className="winner-card"

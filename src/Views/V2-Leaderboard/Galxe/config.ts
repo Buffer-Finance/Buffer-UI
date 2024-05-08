@@ -36,7 +36,7 @@ export const weeklyTournamentConfig: {
     winnersNFT: 0,
     losersNFT: 0,
     winrateNFT: 0,
-    endDay: undefined,
+    endDay: 6,
     contestRules:
       'https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/x6u31zeHDb5K0Ml96HzzqsqofogUpmFNlZHmiJrERNY',
     rewardFixedAmount: '1000',
