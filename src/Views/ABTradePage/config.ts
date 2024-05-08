@@ -92,7 +92,7 @@ export const appConfig = {
   },
   '42161': {
     graph: {
-      MAIN: udgraph,
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.4-ud-trades-markets/api',
       ABOVE_BELOW: ABGraph,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/events/api',
