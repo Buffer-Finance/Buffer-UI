@@ -57,7 +57,7 @@ const useOngoingTrades = () => {
           },
         });
 
-        if (!res?.data?.length || !markets?.length) return emptyArray;
+        if (!res?.data?.length || !markets?.length) return empty;
 
         return addMarketInTrades(res.data, markets) as TradeType[];
       },
