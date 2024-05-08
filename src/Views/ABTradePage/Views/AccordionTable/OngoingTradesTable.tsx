@@ -516,7 +516,7 @@ export const Probability: React.FC<{
       className={
         className +
         ' ' +
-        (isColored ? (probability >= 0 ? 'text-green' : 'text-red') : '')
+        (isColored ? (probability >= 50 ? 'text-green' : 'text-red') : '')
       }
     >
       {probability > 0 ? '+' + probability.toFixed(2) : probability.toFixed(2)}{' '}

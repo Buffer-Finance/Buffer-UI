@@ -1,12 +1,13 @@
 import { ABGraph } from 'src/Config/Graphurls';
 import { notificationPosition, tradePanelPosition } from './type';
+import { udgraph } from '@Views/TradePage/config';
 
 export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
 export const appConfig = {
   '421614': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
+      MAIN: udgraph,
       ABOVE_BELOW: ABGraph,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts-ab/api',
@@ -91,9 +92,8 @@ export const appConfig = {
   },
   '42161': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api',
-      ABOVE_BELOW:
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/api',
+      MAIN: udgraph,
+      ABOVE_BELOW: ABGraph,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/events/api',
     },

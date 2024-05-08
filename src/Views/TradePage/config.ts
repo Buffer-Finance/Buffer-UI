@@ -4,7 +4,8 @@ import { ABBaseURL as ABBaseURLCopy } from '@Views/ABTradePage/config';
 export const aboveBelowBaseUrl = ABBaseURLCopy;
 export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
-
+export const udgraph =
+  'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.4-ud-trades-markets/api';
 export const appConfig = {
   '421614': {
     graph: {
@@ -117,7 +118,7 @@ export const appConfig = {
     graph: {
       ABOVE_BELOW: ABGraph,
 
-      MAIN: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/version/v0.2.1-ud-updat3e-contracts/api`,
+      MAIN: udgraph,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts/api',
       REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
