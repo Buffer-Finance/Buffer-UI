@@ -126,7 +126,6 @@ function getROI(e: any) {
     return '-';
   }
   const payout = BigInt(e.payout);
-  console.log(`PlatformTradesTab-payout: `, payout);
   const amount = BigInt(e.totalFee);
   if (!payout) {
     return 0;

@@ -624,7 +624,7 @@ export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
 export const defaultMarket = 'BTC-USD';
 export const PRICE_DECIMALS = 1e8;
 export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';
-export const aboveBelowBaseUrl = 'https://apis-arb-mainnet.up.railway.app/';
+export const aboveBelowBaseUrl = 'https://api-v2.6.buffer.finance/';
 
 const baseURLString = isTestnet
   ? isSandbox
@@ -636,7 +636,7 @@ const aboveBelowURLString = isTestnet
   ? 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET'
   : 'VITE_ABOVE_BEWLOW_API_HOST_DEVELOPMENT';
 export const baseUrl = import.meta.env[baseURLString];
-export const ABBaseURL = 'https://apis-arb-mainnet.up.railway.app/';
+export const ABBaseURL = 'https://api-v2.6.buffer.finance/';
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
 export const MAX_APPROVAL_VALUE =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935';
