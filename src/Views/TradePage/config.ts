@@ -120,7 +120,7 @@ export const appConfig = {
 
       MAIN: udgraph,
       EVENTS:
-        'https://subgraph.satsuma-prod.com/bufferfinance/events/version/v2.5-up-events-mainnet/api',
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/events/api',
       REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
       LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.5-leaderboard-tracking/api`,
     },
