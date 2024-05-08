@@ -38,6 +38,7 @@ export const useBuyTradeData = (deb?: string) => {
       balance =
         readCallData[getCallId(poolDetails.tokenAddress, 'balanceOf')]?.[0];
 
+      console.log(`balance: `, balance);
       allowance =
         readCallData[getCallId(poolDetails.tokenAddress, 'allowance')]?.[0];
 

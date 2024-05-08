@@ -10,31 +10,31 @@ import { HHMMToSeconds } from './utils';
 
 //Share Atoms
 export const shareSettingsAtom = atomWithStorage(
-  'shareSettingsAtom',
+  'ab----shareSettingsAtom',
   defaultSettings.share
 );
 export const miscsSettingsAtom = atomWithStorage(
-  'miscsSettingsAtom',
+  'ab----miscsSettingsAtom',
   defaultSettings.miscs
 );
 export const tradeSettingsAtom = atomWithStorage(
-  'above-below-settings-atom-v1',
+  'ab----above-below-settings-atom-v1',
   defaultSettings.trade
 );
 export const notificationPositionSettingsAtom = atomWithStorage(
-  'notificationPositionSettingsAtom',
+  'ab----notificationPositionSettingsAtom',
   defaultSettings.notificationPosition
 );
 export const premiumSettingsAtom = atomWithStorage(
-  'premiumSettingsAtom',
+  'ab----premiumSettingsAtom',
   defaultSettings.premium
 );
 export const tradePanelPositionSettingsAtom = atomWithStorage(
-  'tradePanelPositionSettingsAtom',
+  'ab----tradePanelPositionSettingsAtom',
   defaultSettings.tradePanelPosition
 );
 export const chartControlsSettingsAtom = atomWithStorage(
-  'confirmationModalsSettingsAtom',
+  'ab----confirmationModalsSettingsAtom',
   defaultSettings.chartControls
 );
 
@@ -51,7 +51,7 @@ export const setSettingsAtom = atom(
 );
 
 //BuyTrade Atoms
-export const timeSelectorAtom = atomWithStorage('timeSelectorAtomV3', {
+export const timeSelectorAtom = atomWithStorage('ab-----timeSelectorAtomV3', {
   HHMM: defaultSelectedTime,
   seconds: HHMMToSeconds(defaultSelectedTime),
 });
@@ -60,20 +60,23 @@ export const setTimeSelectorAtom = atom(null, (get, set, update: string) => {
   set(timeSelectorAtom, { HHMM: update, seconds: HHMMToSeconds(update) });
 });
 
-export const tradeSizeAtom = atomWithStorage('tradeSizeAtom', '5');
+export const tradeSizeAtom = atomWithStorage('ab-----tradeSizeAtom', '5');
 
-export const activePoolObjAtom = atomWithStorage('activePoolObjAtom', {
-  activePool: 'USDC',
+export const activePoolObjAtom = atomWithStorage('ab-----activePoolObjAtom', {
+  activePool: 'USDC.e',
 });
 
 // pinned assets and asset selector atoms
 export const assetSelectorPoolAtom = atom('USDC');
 
-export const pinnedMarketsAtom = atomWithStorage('pinnedMarketsAtom', ['']);
-
-export const favouriteMarketsAtom = atomWithStorage('favouriteMarketsAtom', [
+export const pinnedMarketsAtom = atomWithStorage('ab-----pinnedMarketsAtom', [
   '',
 ]);
+
+export const favouriteMarketsAtom = atomWithStorage(
+  'ab-----favouriteMarketsAtom',
+  ['']
+);
 
 export const categoriesAtom = atom<string>('all');
 
@@ -81,11 +84,11 @@ export const searchBarAtom = atom('');
 
 export const radioValueAtom = atom('USDC');
 
-export const chartNumberAtom = atomWithStorage('hello', 1);
+export const chartNumberAtom = atomWithStorage('ab-----hello', 1);
 export const tradeTypeAtom = atom<'Market' | 'Limit'>('Market');
 export const limitOrderStrikeAtom = atom<null | string>(null);
 export const LimitOrderPayoutAtom = atomWithStorage(
-  'limitorderpayout',
+  'ab----limitorderpayout',
   limitOrderDefaultPayout
 );
 
@@ -106,7 +109,7 @@ export const ForexTimingsModalAtom = atom<{
   marketType: number;
 }>({ isOpen: false, marketType: 0 });
 export const showOnboardingAnimationAtom = atom<boolean>(false);
-export const queuets2priceAtom = atomWithStorage('augmentation-v1', {});
+export const queuets2priceAtom = atomWithStorage('ab-----augmentation-v1', {});
 export const closeLoadingAtom = atom<{ [key: number]: 1 | 2 | null }>({});
 
 //share modal atoms

@@ -33,15 +33,17 @@ export const TradeSizeInput: React.FC<{
   const [tradeSize, setTradeSize] = useAtom(tradeSizeAtom);
   // console.log(`TradeSizeInput-tradeSize: `, tradeSize);
   useEffect(() => {
-    if (lt(tradeSize || '0', minTradeSize)) {
-      setminErr(true);
-    } else {
-      setminErr(false);
-    }
-    if (gt(tradeSize || '0', maxTradeSize)) {
-      setmaxErr(true);
-    } else {
-      setmaxErr(false);
+    if (minTradeSize && maxTradeSize) {
+      if (lt(tradeSize || '0', minTradeSize)) {
+        setminErr(true);
+      } else {
+        setminErr(false);
+      }
+      if (gt(tradeSize || '0', maxTradeSize)) {
+        setmaxErr(true);
+      } else {
+        setmaxErr(false);
+      }
     }
   }, [tradeSize]);
   const settings = useAtomValue(tradeSettingsAtom);
