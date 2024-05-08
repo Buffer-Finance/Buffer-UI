@@ -150,7 +150,6 @@ export const appConfig = {
     v2_router: '0x2BAA48961C1CD376484b601278bF7A51E94293a9',
     jackpot: '0xEa0b956A04b265A7E2A6d00A4bD65a48C430cE16',
     above_below_router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
-
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
         tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
@@ -176,13 +175,12 @@ export const appConfig = {
         permitName: 'Token',
         is_pol: false,
       },
-
       '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
         tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
         faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
         decimals: 18,
         token: 'ARB',
-        permitName: 'ARB',
+        permitName: 'Arbitrum',
         is_pol: false,
       },
     },
