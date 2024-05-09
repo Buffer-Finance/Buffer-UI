@@ -39,3 +39,12 @@ export interface IWeeklyLeague {
   winRewards: string;
   loseRewards: string;
 }
+
+export interface ILeague {
+  user: string;
+  totalTrades: number;
+  id: string;
+  netPnL: string;
+  volume: string;
+  [key: string]: string | number;
+}

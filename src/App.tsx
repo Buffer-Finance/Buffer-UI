@@ -47,6 +47,7 @@ import LeaderBoardOutlet from '@Views/V2-Leaderboard';
 import AllTime from '@Views/V2-Leaderboard/Components/AllTime';
 import Leagues from '@Views/V2-Leaderboard/Leagues';
 import Incentivised from '@Views/V2-Leaderboard/Incentivised';
+import { Galxe } from '@Views/V2-Leaderboard/Galxe';
 
 const TradePage = lazy(() => import('@Views/TradePage'));
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
@@ -303,6 +304,9 @@ const AppRoutes = () => {
           {/* <Route path="weekly" element={<Weekly />}>
             <Route path=":chain" element={<Weekly />} />
           </Route> */}
+          <Route path="galxe" element={<Galxe />}>
+            <Route path=":chain" element={<Galxe />} />
+          </Route>
         </Route>
       </Routes>
     </div>
