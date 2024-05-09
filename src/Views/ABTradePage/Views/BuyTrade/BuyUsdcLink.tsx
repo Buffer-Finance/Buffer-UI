@@ -6,10 +6,11 @@ import { Link } from 'react-router-dom';
 
 export function BuyUSDCLink({ token }: { token: 'USDC' | 'BFR' | 'ARB' }) {
   const pools = usePoolByAsset();
+  console.log(`BuyUsdcLink-pools: `, pools);
   const setSwapAtom = useSetAtom(isOceanSwapOpenAtom);
   const link = isTestnet
     ? `/faucet`
-    : `https://app.uniswap.org/#/tokens/arbitrum/${pools[token].tokenAddress}`;
+    : `https://app.uniswap.org/#/tokens/arbitrum/${pools?.[token].tokenAddress}`;
   if (isTestnet)
     return (
       <Link to={link} target={!isTestnet ? '_blank' : '_self'}>
