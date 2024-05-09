@@ -154,7 +154,7 @@ export const PlatfromFeeError = ({
         !isError && (
           <>
             Platform fee : + {platfromFee} {tradeToken}
-            {JackpotChip}
+            {/* {JackpotChip} */}
           </>
         )
       )}
