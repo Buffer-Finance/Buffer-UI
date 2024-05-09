@@ -12,6 +12,13 @@ body {
   margin: 0;
   background-color: var(--bg-17);
 }
+.banner-heightt{
+  position: absolute;
+  top:0px;
+  bottom:0px;
+  left:0px;
+  right:0px;
+}
 .notifbg{
   background-image: url('/notifbg.svg');
   background-repeat: no-repeat;
@@ -3541,4 +3548,104 @@ html .pagination-root {
 
 .react-ios-time-picker-hour-format-transition {
   transition: transform 100ms ease-out;
+}
+
+
+.header {
+  height: 50px;
+}
+
+.body {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  
+  display: flex;
+}
+
+.sidebar {
+  width: 140px;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  overflow: auto;
+}
+
+.box {
+  /* min-height: -webkit-min-content; */
+  display: flex;
+}
+
+.column {
+  padding: 20px;
+  border-right: 1px solid #999;
+}
+
+.column > div {
+  height: 2000px;
+  background: red;
+}
+
+.column:nth-child(2) > div {
+   height: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* All of these are just for this demo's design. */
+
+body {
+  font-family: sans-serif;
+  font-size: 20px;
+  line-height: 50px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.header {
+  text-align: center;
+  color: #fff;
+  background: #444;
+}
+
+.sidebar {
+  background: #666;
+  padding: 4px 20px;
+  color: #fff;
+}
+
+.page-header {
+  padding: 6px 20px;
+  background: #004141;
+  color: #fff;
+  font-size: .8em;
+}
+
+.content {
+  background: #ddd;
 }

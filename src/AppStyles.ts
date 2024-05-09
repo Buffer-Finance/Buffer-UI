@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 const Background = styled.div`
   margin: 0;
   padding: 0;
+  max-height: 100vh;
   z-index: 100;
   overflow-x: hidden !important;
   background-color: var(--bg-0);

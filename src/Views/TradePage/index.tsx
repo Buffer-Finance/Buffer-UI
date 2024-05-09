@@ -52,29 +52,26 @@ const TradePage: React.FC<any> = ({}) => {
   }
   return (
     <>
-      <EssentialModals />
-      <Sidebar />
       <div
-        className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
-          panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
-        }`}
+        className={'content banner-heightt   '}
+        // style={containerDim?.height ? { height: containerDim.height } : {}}
+        // ref={onInitialLoad}
       >
-        {isNotMobile ? (
-          <>
-            <RightPanelBackground>
-              {showFavoriteAsset && <PinnedMarkets />}
-              <MarketStatsBar />
-              <MarketChart />
-              <AccordionTable />
-            </RightPanelBackground>
-            <BuyTrade />
-          </>
-        ) : (
-          <>
-            <ShutterProvider />
-            <TradePageMobile />
-          </>
-        )}
+        {/* {chartLayout} */}
+        <div className="h-[20px] w-[10px] bg-[blue]"></div>
+        <div className="content">
+          <div className="box">
+            <div className="column">
+              <div>Column 1</div>
+            </div>
+            <div className="column">
+              <div>Column 2</div>
+            </div>
+            <div className="column">
+              <div>Column 3</div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

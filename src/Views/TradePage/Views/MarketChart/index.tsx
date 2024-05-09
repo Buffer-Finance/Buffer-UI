@@ -153,20 +153,7 @@ const MarketChart: React.FC<any> = ({}) => {
       </div>
     );
   }
-  chartLayout = (
-    <div className="flex h-full flex-grow">
-      {chartLayout}
-      <ContainerDimensions>
-        {({ height }) => (
-          <PlatformTradesTab
-            height={height}
-            hidden={isTableExpanded}
-            events={data}
-          />
-        )}
-      </ContainerDimensions>
-    </div>
-  );
+  chartLayout = <div className="flex h-full flex-grow">{chartLayout}</div>;
   const onMouseDown = () => {
     // console.log('deb-event -down');
     setDragging(true);
@@ -174,13 +161,6 @@ const MarketChart: React.FC<any> = ({}) => {
 
   return (
     <>
-      <div
-        className={'flex flex-col flex-grow   '}
-        style={containerDim?.height ? { height: containerDim.height } : {}}
-        ref={onInitialLoad}
-      >
-        {chartLayout}
-      </div>
       {isTableExpanded && (
         <div
           onMouseDown={onMouseDown}
