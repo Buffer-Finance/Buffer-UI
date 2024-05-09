@@ -14,6 +14,7 @@ import { useDayOfTournament } from '../Hooks/useDayOfTournament';
 import { useWeekOfTournament } from '../Hooks/useWeekOfTournament';
 import { DailyTournamentConfig } from '../Incentivised/config';
 import { weeklyTournamentConfig } from '../Weekly/config';
+import { weeklyTournamentConfig as galxeTournamentConfig } from '../Galxe/config';
 import { LeaderBoardSidebarStyles } from './style';
 
 export const MobileLeaderboardDropdwon = () => {
@@ -32,7 +33,12 @@ export const MobileLeaderboardDropdwon = () => {
         handleChange={(e, t) => {
           navigate(tabs[t].as);
         }}
-        tablist={[{ name: 'Daily' }, { name: 'Leagues' }, { name: 'Metrics' }]}
+        tablist={[
+          { name: 'Galxe' },
+          { name: 'Daily' },
+          { name: 'Leagues' },
+          { name: 'Metrics' },
+        ]}
       />
       {tabs[activeTab].subTabs.length > 0 && (
         <div className="flex justify-between mt-6 max-w-[300px] mx-auto b1200:mt-7">
@@ -77,6 +83,8 @@ export const LeaderBoardSidebar = () => {
   const location = useLocation();
   const { day } = useDayOfTournament();
   const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];
+  const galxeConfigValue = galxeTournamentConfig[activeChain.id];
+
   const { week } = useWeekOfTournament({
     startTimestamp: weeklyConfigValue.startTimestamp,
   });
@@ -93,6 +101,12 @@ export const LeaderBoardSidebar = () => {
       return <OnGoingChip />;
     else return <EndedChip />;
   }, [week]);
+  const GalxeChip = useMemo(() => {
+    if (galxeConfigValue.endDay === undefined) return <OnGoingChip />;
+    else if (week !== null && week < galxeConfigValue.endDay)
+      return <OnGoingChip />;
+    else return <EndedChip />;
+  }, [week]);
 
   return (
     <LeaderBoardSidebarStyles className="border-r-2 border-1">
@@ -100,14 +114,20 @@ export const LeaderBoardSidebar = () => {
         <div className="mt-[16px] full-width">
           <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
 
-          {tabs.slice(0, 1).map((tab, index) => {
+          {tabs.slice(0, 2).map((tab, index) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
               <div className="" key={tab.slug}>
                 <LinkButton
                   tab={tab}
                   active={isActive}
-                  chip={index === 1 ? WeeklyChip : DailyChip}
+                  chip={
+                    index === 0
+                      ? GalxeChip
+                      : index === 1
+                      ? WeeklyChip
+                      : DailyChip
+                  }
                 />
               </div>
             );
@@ -119,7 +139,7 @@ export const LeaderBoardSidebar = () => {
             <Head name="LEAGUES" />
             {/* <CSChip /> */}
           </div>
-          {tabs.slice(1, -1).map((tab) => {
+          {tabs.slice(2, -1).map((tab) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
               <div className="flex-col" key={tab.slug}>
@@ -254,6 +274,15 @@ const SidebarIcon: React.FC<IProp> = ({ id, ...props }) => {
       return <img src="/LeaderBoard/Bronze.png" alt="Icon" className="w2 h2" />;
     case 7:
       return <Daily {...props} width={20} height={20} color={'#6966FF'} />;
+    case 8:
+      return (
+        <img
+          src="https://res.cloudinary.com/dtuuhbeqt/image/upload/Leaderboard/bbb.png"
+          height={16}
+          width={16}
+          className="mx-1"
+        />
+      );
 
     default:
       return <SmPnl {...props} width={20} height={20} />;

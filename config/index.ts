@@ -311,6 +311,14 @@ export const getLeaderBoardTabs = () => {
     //   id: 0,
     // },
     {
+      pathname: '/[chain]/leaderboard/galxe',
+      as: `/leaderboard/galxe`,
+      name: 'BBB',
+      slug: 'galxe',
+      id: 8,
+      subTabs: [],
+    },
+    {
       as: `/leaderboard/daily`,
       name: 'Daily',
       slug: 'daily',
@@ -382,6 +390,14 @@ export const getMobileLeaderboardTabs = () => {
     //   slug: 'leaderboard',
     //   id: 0,
     // },
+    {
+      pathname: '/[chain]/leaderboard/galxe',
+      as: `/leaderboard/galxe`,
+      name: 'BBB',
+      slug: 'galxe',
+      id: 8,
+      subTabs: [],
+    },
     {
       as: `/leaderboard/daily`,
       name: 'Daily',
