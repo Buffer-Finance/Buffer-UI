@@ -19,6 +19,7 @@ import { BuyUSDCLink } from '../BuyUsdcLink';
 import { PoolDropdown } from './PoolDropdown';
 import { TradeSizeInput } from './TradeSizeInput';
 import { WalletBalance, formatBalance } from './WalletBalance';
+import { isAvailable } from '@Utils/NumberUtils';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 15px;
@@ -97,24 +98,27 @@ const PlatfromFeeError = ({
   const notEnooghForFee = gt(add(tradeSize || '0', platfromFee), balance);
   const isError = notEnooghForFee;
   if (notEnooghForFee && notEnoughForTrade) return <></>;
-  return (
-    <RowGapItemsTop
-      gap="4px"
-      className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
-    >
-      <LightToolTipSVG className="mt-[3px]" />
-      {isError ? (
-        <>
-          Insufficient funds for platform fee.{' '}
-          <BuyUSDCLink token={tradeToken as 'ARB'} />
-        </>
-      ) : (
-        !isError && (
+
+  if (isAvailable(balance) && isAvailable(platfromFee))
+    return (
+      <RowGapItemsTop
+        gap="4px"
+        className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
+      >
+        <LightToolTipSVG className="mt-[3px]" />
+        {isError ? (
           <>
-            Platform fee : + {platfromFee} {tradeToken}
+            Insufficient funds for platform fee.{' '}
+            <BuyUSDCLink token={tradeToken as 'ARB'} />
           </>
-        )
-      )}
-    </RowGapItemsTop>
-  );
+        ) : (
+          !isError && (
+            <>
+              Platform fee : + {platfromFee} {tradeToken}
+            </>
+          )
+        )}
+      </RowGapItemsTop>
+    );
+  return <></>;
 };
