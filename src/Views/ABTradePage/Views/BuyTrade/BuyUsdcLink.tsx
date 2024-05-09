@@ -10,7 +10,7 @@ export function BuyUSDCLink({ token }: { token: 'USDC' | 'BFR' | 'ARB' }) {
   const setSwapAtom = useSetAtom(isOceanSwapOpenAtom);
   const link = isTestnet
     ? `/faucet`
-    : `https://app.uniswap.org/#/tokens/arbitrum/${pools?.[token].tokenAddress}`;
+    : `https://app.uniswap.org/#/tokens/arbitrum/${pools?.[token]?.tokenAddress}`;
   if (isTestnet)
     return (
       <Link to={link} target={!isTestnet ? '_blank' : '_self'}>
