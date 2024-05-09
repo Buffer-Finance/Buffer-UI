@@ -1,7 +1,7 @@
 import { Alert, Snackbar } from '@mui/material';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Navigate,
   Route,
@@ -319,14 +319,13 @@ async function activateLocale(locale: string) {
   i18n.activate(locale);
 }
 activateLocale('en');
-const mobileWarningAtom = atom(false);
+const mobileWarningAtom = atom(true);
 
 function App() {
   useAutoConnect();
   useRecentWinners();
   const [snack, setSnack] = useAtom(snackAtom);
-  const [mobileWarningClosed, setWarningCloseOnMobile] =
-    useAtom(mobileWarningAtom);
+  const [mobileWarningClosed, setWarningCloseOnMobile] = useState(false);
 
   const graphStatus = useGraphStatus();
   const isMobile = useMedia('(max-width:1200px)');
@@ -337,20 +336,22 @@ function App() {
       <I18nProvider i18n={i18n}>
         <Background>
           <ViewOnlyModeTradePageWarning />
-          {graphStatus && (
-            <Warning
-              body={
-                <div className="text-center">
-                  We are facing some issues with the theGraph API. Trading
-                  experience on the platform may be hindered temporarily.
-                </div>
-              }
-              closeWarning={() => {}}
-              shouldAllowClose={false}
-              state={graphStatus.error}
-              className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
-            />
-          )}
+
+          {/* <Warning
+            body={
+              <div className="text-center">
+                We are facing some issues with the theGraph API. Trading
+                experience on the platform may be hindered temporarily.
+              </div>
+            }
+            closeWarning={() => {
+              setWarningCloseOnMobile(true);
+            }}
+            shouldAllowClose={true}
+            state={mobileWarningClosed}
+            className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+          /> */}
+
           <Navbar />
           <AppRoutes />
           <Snackbar
@@ -368,43 +369,7 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          {!urlSettings?.hide &&
-            (isMobile && mobileWarningClosed ? false : true) && (
-              <Warning
-                body={
-                  <div className="text-center b800:text-start">
-                    🚀 Buffer v2.5 is live on&nbsp;
-                    <a href="https://app.buffer.finance/" target="_blank">
-                      <span className="underline underline-offset-2">
-                        Mainnet
-                      </span>
-                    </a>
-                    &nbsp; | 📜 Learn more about v2.5&nbsp;
-                    <a
-                      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/9v1ATLZoGXbzjLZWQVesWKMwHB4R7yI8XNQfVsyB21o"
-                      target="_blank"
-                    >
-                      <span className="underline underline-offset-2">here</span>
-                    </a>
-                    &nbsp; | ✨ To trade with $BFR as collateral visit the&nbsp;
-                    <a
-                      href="https://classic.app.buffer.finance/"
-                      target="_blank"
-                    >
-                      <span className="underline underline-offset-2">
-                        classic version
-                      </span>
-                    </a>
-                  </div>
-                }
-                closeWarning={() => {
-                  setWarningCloseOnMobile(true);
-                }}
-                shouldAllowClose={true}
-                state={!mobileWarningClosed}
-                className="disclaimer"
-              />
-            )}
+
           <TnCModal />
           <SideBar />
         </Background>

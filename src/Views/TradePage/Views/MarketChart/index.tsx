@@ -161,6 +161,26 @@ const MarketChart: React.FC<any> = ({}) => {
 
   return (
     <>
+      <div
+        className={'flex flex-col flex-grow overflow-auto  bg-red   '}
+        // style={containerDim?.height ? { height: containerDim.height } : {}}
+        // ref={onInitialLoad}
+      >
+        {/* {chartLayout} */}
+        <div className="content">
+          <div className="box">
+            <div className="column">
+              <div>Column 1</div>
+            </div>
+            <div className="column">
+              <div>Column 2</div>
+            </div>
+            <div className="column">
+              <div>Column 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
       {isTableExpanded && (
         <div
           onMouseDown={onMouseDown}
