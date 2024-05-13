@@ -36,7 +36,7 @@ export const PoolDropdown: React.FC = () => {
             }
           >
             <RowGap gap="8px">
-              {selectedPoolMarket?.poolInfo.token.toUpperCase()}
+              {selectedPoolMarket?.poolInfo.token}
               <DDarrow open={open} className="scale-150" />
             </RowGap>
           </MenuButton>
