@@ -14,7 +14,7 @@ import { Launch } from '@mui/icons-material';
 import { Skeleton } from '@mui/material';
 import { gte } from 'lodash';
 import React from 'react';
-import { Rank } from '../Components/Rank';
+import { Rank } from './Rank';
 import { TableAligner } from '../Components/TableAligner';
 import { galxTaskLink } from '../Galxe';
 import { ILeague } from '../interfaces';

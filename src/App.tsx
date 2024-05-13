@@ -278,16 +278,16 @@ const AppRoutes = () => {
           }
         />
 
-        <Route
+        {/* <Route
           path="/rewards"
           element={
             <Suspense fallback={<PageLoader />}>
               <RewardsPage />
             </Suspense>
           }
-        />
+        /> */}
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          <Route path="leagues" element={<LeaderBoardOutlet />}>
+          {/* <Route path="leagues" element={<LeaderBoardOutlet />}>
             <Route path=":league" element={<Leagues />}>
               <Route path=":chain" element={<Leagues />} />
             </Route>
@@ -300,10 +300,8 @@ const AppRoutes = () => {
 
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
-          </Route>
-          {/* <Route path="weekly" element={<Weekly />}>
-            <Route path=":chain" element={<Weekly />} />
           </Route> */}
+
           <Route path="galxe" element={<Galxe />}>
             <Route path=":chain" element={<Galxe />} />
           </Route>

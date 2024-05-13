@@ -19,7 +19,7 @@ import { useDecimalsByAsset } from '@Views/TradePage/Hooks/useDecimalsByAsset';
 import { Launch } from '@mui/icons-material';
 import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Rank } from '../Components/Rank';
+import { Rank } from './Rank';
 import { TableAligner } from '../Components/TableAligner';
 import { galxTaskLink } from '../Galxe';
 import { IWinrate } from '../Hooks/useWeeklyLeaderboardQuery';
