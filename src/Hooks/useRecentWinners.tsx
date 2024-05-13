@@ -27,6 +27,7 @@ export const view = (a: bigint, denominationDecimal: number, decimals = 6) => {
 };
 const poolToken2decimal = {
   USDC: 6,
+  'USDC.e': 6,
   ARB: 18,
 };
 export const getPoolToken = (trade: TradeStr) => {
