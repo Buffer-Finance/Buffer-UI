@@ -320,7 +320,7 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: 'https://ab.buffer.finance',
+        to: '/ab/' + market,
         name: 'Above/Below',
         subTabs: [],
         isExternalLink: true,
