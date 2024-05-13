@@ -47,6 +47,7 @@ import { useSettlementFee } from './useSettlementFee';
 import { useSpread } from './useSpread';
 import { useSwitchPool } from './useSwitchPool';
 import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
+import { pendingQueueIds } from 'src/App';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -433,6 +434,7 @@ export const useBuyTradeActions = (userInput: string) => {
           apiParams,
           { params: { environment: activeChain.id } }
         );
+        if (resp.data) pendingQueueIds.add(resp.data.queue_id);
         setLoading(null);
         let content = (
           <div className="flex flex-col gap-y-2 text-f12 ">

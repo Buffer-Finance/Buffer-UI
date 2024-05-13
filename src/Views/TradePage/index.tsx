@@ -33,6 +33,7 @@ import { tradePanelPosition } from './type';
 import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
 import { JackpotModal } from './Views/AccordionTable/ShareModal/Jackpot';
 import { Sidebar } from '@Views/Common/SidebarAB';
+import { useUDCancelNotification } from './useUDCancelNotification';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -40,7 +41,7 @@ const TradePage: React.FC<any> = ({}) => {
   useBuyTradeData();
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
-
+  useUDCancelNotification();
   useEffect(() => {
     closeShutter();
     return closeShutter;

@@ -635,8 +635,10 @@ const baseURLString = isTestnet
 const aboveBelowURLString = isTestnet
   ? 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET'
   : 'VITE_ABOVE_BEWLOW_API_HOST_DEVELOPMENT';
-export const baseUrl = import.meta.env[baseURLString];
-export const ABBaseURL = 'https://api-v2.6.buffer.finance/';
+export const ABBaseURL = isTestnet
+  ? ' https://instant-trading-backend-production-84c6.up.railway.app/'
+  : 'https://api-v2.6.buffer.finance/';
+export const baseUrl = ABBaseURL;
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
 export const MAX_APPROVAL_VALUE =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935';

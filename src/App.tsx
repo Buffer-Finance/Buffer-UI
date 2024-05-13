@@ -78,7 +78,8 @@ export const snackAtom = atom<{
 export const isAutorizedAtom = atomWithStorage('authorized user or not', false);
 
 const isNoLoss = import.meta.env.VITE_APP_TYPE == 'NoLoss';
-
+export const pendingQueueIds = new Set();
+export const pendingQueueIdsAB = new Set();
 (function () {
   const r = document.querySelector<HTMLElement>(':root');
   for (let color in urlSettings) {
