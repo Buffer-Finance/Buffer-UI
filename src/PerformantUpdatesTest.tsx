@@ -7,7 +7,6 @@ import {
 import { useAtomValue } from 'jotai';
 import { useEffect } from 'react';
 const PerformantUpdatesTest: React.FC<any> = ({}) => {
-  _;
   const prices = useAtomValue(priceAtom);
 
   useEffect(() => {}, [prices]);

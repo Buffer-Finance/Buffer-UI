@@ -72,7 +72,6 @@ export const AboveBelow = () => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
   const { activeChain } = useActiveChain();
-  _;
   useAboveBelowMarketsSetter();
   useActiveMarketSetter();
   useLimitedStrikeArrays();

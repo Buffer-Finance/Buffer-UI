@@ -17,8 +17,6 @@ export const AllTrades = () => {
   const { setTab, tab } = useAllTradesTab();
   const isNotMobile = useMedia('(min-width:1200px)');
 
-  _;
-
   const tabs = ['active', 'history', 'cancelled'];
   const currentTab = useMemo(() => {
     if (tab !== null) {

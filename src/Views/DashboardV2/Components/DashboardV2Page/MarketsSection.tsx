@@ -5,8 +5,6 @@ import { Markets } from '../Markets';
 import { usePrice, usePriceRetriable } from '@Hooks/usePrice';
 
 const MarketsSection = () => {
-  _;
-
   return (
     <Section
       Heading={<div className={topStyles}>Markets</div>}

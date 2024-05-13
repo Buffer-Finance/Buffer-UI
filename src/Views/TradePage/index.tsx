@@ -37,7 +37,6 @@ import { Sidebar } from '@Views/Common/SidebarAB';
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
-  _;
   useBuyTradeData();
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
