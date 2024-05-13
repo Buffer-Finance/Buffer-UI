@@ -30,6 +30,4 @@ export const useUserOneCTData = () => {
   });
 
   return data;
-
-  // console.log(data, 'useUserOneCTData-response');
 };
