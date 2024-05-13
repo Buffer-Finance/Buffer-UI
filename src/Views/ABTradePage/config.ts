@@ -7,7 +7,7 @@ export const isSandbox =
 export const appConfig = {
   '421614': {
     graph: {
-      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.4-ud-trades-markets/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/above-below-sepolia/api',
       ABOVE_BELOW: ABGraph,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts-ab/api',
@@ -624,7 +624,10 @@ export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
 export const defaultMarket = 'BTC-USD';
 export const PRICE_DECIMALS = 1e8;
 export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';
-export const aboveBelowBaseUrl = 'https://api-v2.6.buffer.finance/';
+export const ABBaseURL = isTestnet
+  ? ' https://instant-trading-backend-production-84c6.up.railway.app/'
+  : 'https://api-v2.6.buffer.finance/';
+export const aboveBelowBaseUrl = ABBaseURL;
 
 const baseURLString = isTestnet
   ? isSandbox
@@ -635,9 +638,7 @@ const baseURLString = isTestnet
 const aboveBelowURLString = isTestnet
   ? 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET'
   : 'VITE_ABOVE_BEWLOW_API_HOST_DEVELOPMENT';
-export const ABBaseURL = isTestnet
-  ? ' https://instant-trading-backend-production-84c6.up.railway.app/'
-  : 'https://api-v2.6.buffer.finance/';
+
 export const baseUrl = ABBaseURL;
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;
 export const MAX_APPROVAL_VALUE =
