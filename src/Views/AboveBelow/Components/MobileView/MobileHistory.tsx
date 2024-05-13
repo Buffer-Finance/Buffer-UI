@@ -19,7 +19,7 @@ const MobileHistory: React.FC<any> = ({}) => {
   const { address: user } = useUserAccount();
   usePastTradeQuery();
   useAboveBelowMarketsSetter();
-  usePriceRetriable();
+  _;
 
   useEffect(() => {
     closeShutter();

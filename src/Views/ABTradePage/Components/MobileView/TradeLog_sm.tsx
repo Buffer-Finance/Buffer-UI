@@ -41,7 +41,7 @@ const TradeLog_sm: React.FC<any> = ({}) => {
   }, []);
   const { closeShutter } = useShutterHandlers();
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
-  usePriceRetriable();
+  _;
   useBuyTradeData();
 
   useEffect(() => {

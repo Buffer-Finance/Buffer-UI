@@ -12,7 +12,7 @@ import { tabsAtom } from './atoms';
 
 export const AllTrades = () => {
   useAboveBelowMarketsSetter();
-  usePriceRetriable();
+  _;
   const [activeTab, setActiveTab] = useAtom(tabsAtom);
 
   return (

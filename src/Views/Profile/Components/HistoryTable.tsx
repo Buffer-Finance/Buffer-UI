@@ -44,7 +44,7 @@ export const HistoryTables = () => {
 
   const [activeTrades, limitOrders] = useOngoingTrades();
   const { address } = useUserAccount();
-  usePriceRetriable();
+  _;
   return (
     <>
       <div className="flex items-center justify-between mb-5 sm:flex-col sm:items-start sm:gap-3 sm:mb-[0]">

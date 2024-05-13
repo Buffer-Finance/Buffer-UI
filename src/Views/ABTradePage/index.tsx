@@ -33,7 +33,7 @@ import { tradePanelPosition } from './type';
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
   const { showFavoriteAsset } = useAtomValue(miscsSettingsAtom);
-  usePriceRetriable();
+  _;
   useBuyTradeData();
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');

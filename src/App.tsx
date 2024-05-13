@@ -49,6 +49,7 @@ import Leagues from '@Views/V2-Leaderboard/Leagues';
 import Incentivised from '@Views/V2-Leaderboard/Incentivised';
 import { Galxe } from '@Views/V2-Leaderboard/Galxe';
 import { Launch } from '@mui/icons-material';
+import { usePriceRetriable } from '@Hooks/usePrice';
 
 const TradePage = lazy(() => import('@Views/TradePage'));
 const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
@@ -102,6 +103,7 @@ const AppRoutes = () => {
   const toastify = useToast();
   const navigate = useNavigate();
   const account = useAccount();
+  usePriceRetriable();
   const earnUrl = isTestnet
     ? 'https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/'
     : 'https://earn.buffer.finance/';

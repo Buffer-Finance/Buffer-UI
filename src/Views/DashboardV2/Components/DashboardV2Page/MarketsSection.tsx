@@ -5,7 +5,7 @@ import { Markets } from '../Markets';
 import { usePrice, usePriceRetriable } from '@Hooks/usePrice';
 
 const MarketsSection = () => {
-  usePriceRetriable();
+  _;
 
   return (
     <Section
