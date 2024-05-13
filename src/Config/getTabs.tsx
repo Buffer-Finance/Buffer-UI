@@ -338,7 +338,7 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
-        to: `/leaderboard/daily`,
+        to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,
@@ -464,7 +464,7 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
-        to: `/leaderboard/daily`,
+        to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,
@@ -708,7 +708,7 @@ export const getMobileTabs = (
         icon: TabIcon.Faucet,
       },
       {
-        to: `/leaderboard/weekly`,
+        to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,

@@ -318,67 +318,61 @@ export const getLeaderBoardTabs = () => {
       id: 8,
       subTabs: [],
     },
-    {
-      as: `/leaderboard/daily`,
-      name: 'Daily',
-      slug: 'daily',
-      id: 1,
-      subTabs: [],
-    },
     // {
-    //   as: `/leaderboard/weekly`,
-    //   name: 'Weekly',
-    //   slug: 'weekly',
+    //   as: `/leaderboard/daily`,
+    //   name: 'Daily',
+    //   slug: 'daily',
+    //   id: 1,
+    //   subTabs: [],
+    // },
+
+    // {
+    //   as: `/leaderboard/leagues/diamond`,
+    //   name: 'diamond',
+    //   slug: 'diamond',
+    //   id: 2,
+    //   img: '/LeaderBoard/Diamond.png',
+    //   subTabs: [],
+    // },
+    // {
+    //   as: `/leaderboard/leagues/platinum`,
+    //   name: 'platinum',
+    //   slug: 'platinum',
+    //   id: 3,
+    //   img: '/LeaderBoard/Platinum.png',
+    //   subTabs: [],
+    // },
+    // {
+    //   as: `/leaderboard/leagues/gold`,
+    //   name: 'gold',
+    //   slug: 'gold',
+    //   id: 4,
+    //   img: '/LeaderBoard/Gold.png',
+    //   subTabs: [],
+    // },
+    // {
+    //   as: `/leaderboard/leagues/silver`,
+    //   name: 'silver',
+    //   slug: 'silver',
+    //   id: 5,
+    //   img: '/LeaderBoard/Silver.png',
+    //   subTabs: [],
+    // },
+    // {
+    //   as: `/leaderboard/leagues/bronze`,
+    //   name: 'bronze',
+    //   slug: 'bronze',
+    //   id: 6,
+    //   img: '/LeaderBoard/Bronze.png',
+    //   subTabs: [],
+    // },
+    // {
+    //   as: `/leaderboard/metrics/all-time`,
+    //   name: 'All Time',
+    //   slug: 'all-time',
     //   id: 7,
     //   subTabs: [],
     // },
-    {
-      as: `/leaderboard/leagues/diamond`,
-      name: 'diamond',
-      slug: 'diamond',
-      id: 2,
-      img: '/LeaderBoard/Diamond.png',
-      subTabs: [],
-    },
-    {
-      as: `/leaderboard/leagues/platinum`,
-      name: 'platinum',
-      slug: 'platinum',
-      id: 3,
-      img: '/LeaderBoard/Platinum.png',
-      subTabs: [],
-    },
-    {
-      as: `/leaderboard/leagues/gold`,
-      name: 'gold',
-      slug: 'gold',
-      id: 4,
-      img: '/LeaderBoard/Gold.png',
-      subTabs: [],
-    },
-    {
-      as: `/leaderboard/leagues/silver`,
-      name: 'silver',
-      slug: 'silver',
-      id: 5,
-      img: '/LeaderBoard/Silver.png',
-      subTabs: [],
-    },
-    {
-      as: `/leaderboard/leagues/bronze`,
-      name: 'bronze',
-      slug: 'bronze',
-      id: 6,
-      img: '/LeaderBoard/Bronze.png',
-      subTabs: [],
-    },
-    {
-      as: `/leaderboard/metrics/all-time`,
-      name: 'All Time',
-      slug: 'all-time',
-      id: 7,
-      subTabs: [],
-    },
   ];
 };
 
@@ -514,7 +508,7 @@ export const envNetworkMapping = {
   'mumbai-testnet': 'Polygon Testnet',
 };
 export const getTabs = (chain: string, isLeaderboard = false) => {
-  if (isLeaderboard) return getLeaderBoardTabs(chain);
+  if (isLeaderboard) return getLeaderBoardTabs();
 
   if (import.meta.env.VITE_ENV.toLowerCase() === 'mainnet') {
     return [

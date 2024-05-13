@@ -35,9 +35,9 @@ export const MobileLeaderboardDropdwon = () => {
         }}
         tablist={[
           { name: 'Galxe' },
-          { name: 'Daily' },
-          { name: 'Leagues' },
-          { name: 'Metrics' },
+          // { name: 'Daily' },
+          // { name: 'Leagues' },
+          // { name: 'Metrics' },
         ]}
       />
       {tabs[activeTab].subTabs.length > 0 && (
@@ -134,10 +134,9 @@ export const LeaderBoardSidebar = () => {
           })}
         </div>
 
-        <div className="mt-[24px] full-width">
+        {/* <div className="mt-[24px] full-width">
           <div className="flex items-center mb-2">
             <Head name="LEAGUES" />
-            {/* <CSChip /> */}
           </div>
           {tabs.slice(2, -1).map((tab) => {
             const isActive = doesLocationMatch(location, tab.slug);
@@ -147,7 +146,7 @@ export const LeaderBoardSidebar = () => {
               </div>
             );
           })}
-        </div>
+        </div> */}
 
         {/* <div className="mt-[24px] full-width">
           <div className="flex items-center mb-2">
