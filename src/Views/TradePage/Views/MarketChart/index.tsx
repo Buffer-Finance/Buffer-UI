@@ -156,15 +156,9 @@ const MarketChart: React.FC<any> = ({}) => {
   // chartLayout = (
   //   <div className="flex h-full flex-grow">
   //     {chartLayout}
-  //     <ContainerDimensions>
-  //       {({ height }) => (
-  //         <PlatformTradesTab
-  //           height={height}
-  //           hidden={isTableExpanded}
-  //           events={data}
-  //         />
-  //       )}
-  //     </ContainerDimensions>
+  //     <div className="relative w-[300px] h-full">
+  //       <PlatformTradesTab hidden={false} events={data} />
+  //     </div>
   //   </div>
   // );
   const onMouseDown = () => {

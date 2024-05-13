@@ -59,7 +59,7 @@ const PlatformTradesTab: React.FC<{
   if (!events?.length) return null;
   return (
     <div
-      className="flex flex-col min-w-[270px] h-full   "
+      className="flex ddasdf flex-col min-w-[270px] h-full   "
       style={{
         height,
         display: hidden ? 'none' : '',
@@ -77,42 +77,44 @@ const PlatformTradesTab: React.FC<{
             <TableHead>Expires in</TableHead>
           </thead>
           <tbody>
-            {events?.map((e) => (
-              <tr className="" key={e.id}>
-                <TableCell className={e.isAbove ? 'text-green' : 'text-red '}>
-                  <Display
-                    data={divide(e.strike, 8)}
-                    className="!justify-start !w-fit"
-                  />
-                </TableCell>
-                <TableCell>
-                  <Display
-                    data={divide(e.amount, getDecimal(e))}
-                    className="!justify-start !w-fit"
-                    unit={e.optionContract.pool}
-                  />
-                </TableCell>
-                <TableCell width="17%">{getROI(e)}%</TableCell>
-                <TableCell>
-                  <span
-                    className={[
-                      'capitalize',
-                      e.event == 'WIN'
-                        ? 'text-green'
-                        : e.event == 'LOSE'
-                        ? 'text-red'
-                        : '',
-                    ].join(' ')}
-                  >
-                    {e.event == 'CREATE' ? (
-                      <Duration trade={e} />
-                    ) : (
-                      e.event.toLowerCase()
-                    )}
-                  </span>
-                </TableCell>
-              </tr>
-            ))}
+            {[events, events, events, events, events, events, events, events]
+              .flat(1)
+              ?.map((e) => (
+                <tr className="" key={e.id}>
+                  <TableCell className={e.isAbove ? 'text-green' : 'text-red '}>
+                    <Display
+                      data={divide(e.strike, 8)}
+                      className="!justify-start !w-fit"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Display
+                      data={divide(e.amount, getDecimal(e))}
+                      className="!justify-start !w-fit"
+                      unit={e.optionContract.pool}
+                    />
+                  </TableCell>
+                  <TableCell width="17%">{getROI(e)}%</TableCell>
+                  <TableCell>
+                    <span
+                      className={[
+                        'capitalize',
+                        e.event == 'WIN'
+                          ? 'text-green'
+                          : e.event == 'LOSE'
+                          ? 'text-red'
+                          : '',
+                      ].join(' ')}
+                    >
+                      {e.event == 'CREATE' ? (
+                        <Duration trade={e} />
+                      ) : (
+                        e.event.toLowerCase()
+                      )}
+                    </span>
+                  </TableCell>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

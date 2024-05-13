@@ -12,6 +12,15 @@ body {
   margin: 0;
   background-color: var(--bg-17);
 }
+.ddasdf{
+  position:absolute;
+  top:0px;
+  bottom:0px;
+  right:0px;
+  left:0px;
+  overflow: hidden;
+}
+
 .notifbg{
   background-image: url('/notifbg.svg');
   background-repeat: no-repeat;
