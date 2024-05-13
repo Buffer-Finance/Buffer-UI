@@ -323,7 +323,7 @@ export const getTabs = (
         to: '/ab/' + market,
         name: 'Above/Below',
         subTabs: [],
-        isExternalLink: true,
+        isExternalLink: false,
       },
       {
         to: 'https://perps.buffer.finance/trade',
