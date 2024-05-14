@@ -703,3 +703,8 @@ export const isABRouter = (router: string) => {
 export const baseLeaderboardURLString = isTestnet
   ? import.meta.env.VITE_LEADERBOARD_API_HOST_TESTNET
   : import.meta.env.VITE_LEADERBOARD_API_HOST;
+
+export const OldVersionTradesRedirect = {
+  AB: 'https://app-buffer-finance-7lf2s12ai-bufferfinance.vercel.app/',
+  UD: '"https://app-buffer-finance-1xcryka5o-bufferfinance.vercel.app/#/binary/BTC-USD"',
+};

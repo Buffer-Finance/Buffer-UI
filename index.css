@@ -194,6 +194,9 @@ animation-fill-mode: forwards;
 .accordion-table-strip-right-border{
   border-right: 1px solid var(--text-2);
 }
+.accordion-table-strip-left-border{
+  border-left: 1px solid var(--text-2);
+}
 .glowing-animation {
   animation: glowing 1000ms infinite alternate ease-in-out; 
 }
