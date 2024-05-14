@@ -119,7 +119,8 @@ export const AboveBelow = () => {
             {showFavoriteAsset && <PinnedMarkets />}
             <StatusBar isMobile={false} />
             <MarketChart isMobile={false} />
-            <Tables />
+            {/* <Tables /> */}
+            <AccordionTable />
           </RightPanelBackground>
           <BuyTrade isMobile={false} />
         </div>
