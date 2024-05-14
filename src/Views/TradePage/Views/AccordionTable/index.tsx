@@ -28,14 +28,10 @@ import MemoTVLogo from '@SVG/Elements/TVLogo';
 
 const OngoingTradesTableMemo = React.memo(OngoingTradesTable);
 const tables = {
-  Trades: 'h',
-  'Limit Orders': 'h',
   History: 'h',
-  Cancelled: 'h',
-  'Platform Trades': 'h',
   'Platform History': 'h',
 };
-const gap = ['Cancelled'];
+const gap = ['History'];
 
 const AccordionTable: React.FC<any> = ({}) => {
   const [expanded, setExpanded] = useAtom(isTableShownAtom);
@@ -43,7 +39,7 @@ const AccordionTable: React.FC<any> = ({}) => {
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const priceCache = useAtomValue(queuets2priceAtom);
 
-  const [activeTable, setActiveTable] = useState('Trades');
+  const [activeTable, setActiveTable] = useState('History');
   const getAugmentedData = async (
     queries: { pair: string; timestamp: number; queueId: number }[]
   ) => {
@@ -76,9 +72,10 @@ const AccordionTable: React.FC<any> = ({}) => {
     });
     getAugmentedData(priceQueries);
   }, [activeTrades.length]);
+  console.log(`index-activeTable: `, activeTable);
 
   return (
-    <div className="flex flex-col    ">
+    <div className="flex flex-col  w-full  ">
       <div className="w-full bg-[#282B39] rounded-[2px] flex items-center  justify-between p-3 ">
         <div className="flex gap-x-[15px]">
           {Object.keys(tables).map((s) => (
@@ -105,34 +102,11 @@ const AccordionTable: React.FC<any> = ({}) => {
             </button>
           ))}
         </div>
-        <div className="flex gap-3">
-          <button
-            className="flex items-center gap-x-2 px-4 text-f14 transition group"
-            onClick={() => setExpanded((p) => !p)}
-          >
-            {expanded ? 'Hide ' : 'Show '} Positions{' '}
-            <DDArrow
-              className={`transition scale group-hover:scale-150  ${
-                expanded ? ' rotate-0' : 'rotate-180'
-              }`}
-            />
-          </button>
-          <a
-            href="https://www.tradingview.com/symbols/BTCUSD/"
-            target="_blank"
-            title="Charts powered by TradingView"
-            className="grid items-center"
-          >
-            <MemoTVLogo />
-          </a>
+        {/* <div className="flex gap-3">
           <img src={PYTHLOGO} width={60} height={10} className="scale-90" />
-        </div>
+        </div> */}
       </div>
-      <div
-        className={` ${
-          expanded ? 'h-[355px]' : 'h-[0px]'
-        } flex flex-col transition-all  overflow-y-hidden `}
-      >
+      <div className={` flex flex-col h-full `}>
         {activeTable == 'Trades' ? (
           <OngoingTradesTableMemo
             trades={activeTrades}
@@ -144,7 +118,7 @@ const AccordionTable: React.FC<any> = ({}) => {
         ) : activeTable == 'Platform Trades' ? (
           <PlatformOngoing />
         ) : activeTable == 'Platform History' ? (
-          <PlatformHistory overflow />
+          <PlatformHistory />
         ) : activeTable == 'Cancelled' ? (
           <Cancelled />
         ) : (

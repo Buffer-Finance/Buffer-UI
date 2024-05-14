@@ -21,7 +21,7 @@ import { useEffect, useRef } from 'react';
 import { TradeInspect_sm } from './TradeInspect_sm';
 
 const renderTab = (s) => (s.includes(':') ? s.split(':')[0] : s);
-const tabs = ['History', 'Cancelled:b', 'Platform Trades', 'Platform History'];
+const tabs = ['History', 'Platform History'];
 export const activeTabAtom = atom<string>(tabs[0]);
 const TradeLog_sm: React.FC<any> = ({}) => {
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);

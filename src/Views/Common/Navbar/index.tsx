@@ -62,14 +62,14 @@ export const Navbar: React.FC<INavbar> = () => {
         <div
           role={'button'}
           onClick={() => window.open('https://buffer.finance/', '_blank')}
-          className="b1200:hidden"
+          // className="b1200:hidden"
         >
           <BufferLogoComponent
             className="h-[30px] ml-[8px] sm:mx-[0px]"
             hideText
           />
         </div>
-        <div className="a1200:hidden flex gap-x-4 items-center pl-4">
+        {/* <div className="a1200:hidden flex gap-x-4 items-center pl-4">
           <MemoHamburgerSVG onClick={handleClose} />
           <MemoWalletSVG
             count={activeTrades.length + limitOrderTrades.length}
@@ -78,18 +78,18 @@ export const Navbar: React.FC<INavbar> = () => {
             }
             onClick={openOngoingTradesShutter}
           />
-        </div>
+        </div> */}
 
         {show && (
-          <div className="b1200:hidden flex gap-[6px] ml-4 ">
+          <div className=" flex gap-[6px] ml-4 ">
             {tabs.slice(0, VISIBLETABS).map((tab, index) => {
               if (tab.isExternalLink) {
                 return (
                   <button
                     key={tab.name}
-                    className={`flex gap-2 items-center font-normal text-4 text-f15  px-4 py-[4px] rounded-md hover:bg-1 hover:text-1 hover:brightness-125 transition-colors 
+                    className={`flex gap-2 items-center font-normal text-f15  px-4 py-[4px] rounded-md hover:bg-1 text-1 brightness-125 transition-colors 
                  
-                      : "hover:bg-1 hover:brightness-125"
+                      : "bg-1 hover:brightness-125"
                   `}
                     onClick={() => {
                       window.open(tab.to, '_blank');
@@ -126,7 +126,7 @@ export const Navbar: React.FC<INavbar> = () => {
           <AccountDropdown />
         </div>
 
-        <SettingsDD />
+        {/* <SettingsDD /> */}
 
         {/* <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
           {state.sidebar_active ? (

@@ -30,6 +30,7 @@ import {
   tradePanelPositionSettingsAtom,
 } from './atoms';
 import { tradePanelPosition } from './type';
+import { TradeLog_sm } from './Components/MobileView/TradeLog_sm';
 
 const TradePage: React.FC<any> = ({}) => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -54,22 +55,7 @@ const TradePage: React.FC<any> = ({}) => {
           panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
         }`}
       >
-        {isNotMobile ? (
-          <>
-            <RightPanelBackground>
-              {showFavoriteAsset && <PinnedMarkets />}
-              <MarketStatsBar />
-              <MarketChart />
-              <AccordionTable />
-            </RightPanelBackground>
-            <BuyTrade />
-          </>
-        ) : (
-          <>
-            <ShutterProvider />
-            <TradePageMobile />
-          </>
-        )}
+        {isNotMobile ? <AccordionTable /> : <TradeLog_sm />}
       </div>
     </>
   );

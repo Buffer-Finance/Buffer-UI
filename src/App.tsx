@@ -242,17 +242,16 @@ function App() {
               <Warning
                 body={
                   <div className="w-fit flex items-center m-auto">
-                    <span className="bg-[#232334] text-[#10D2FF] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold mr-3">
+                    {/* <span className="bg-[#232334] text-[#10D2FF] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold mr-3">
                       New
-                    </span>
-                    <a href="/#/leaderboard/galxe" className="m-auto">
+                    </span> */}
+                    <a href="https://app.buffer.finance/" className="m-auto">
                       <img
                         src="https://res.cloudinary.com/dtuuhbeqt/image/upload/Leaderboard/bbb.png"
                         className="mr-3 inline h-[20px] w-[20px] sm:h-[15px] sm:w-[15px]"
                       />
                       <span className="text-f14 font-extrabold text-[#232334] leading-[21px] sm:text-[11px] sm:leading-[12px]">
-                        Complete weekly Galxe tasks & trade to win from $14,000
-                        prize pot in the buffer competition.
+                        Bufffer v2.6 is live.
                       </span>
                       <Launch className="scale-[0.85] text-[#232334] ml-1 mb-1" />
                     </a>
