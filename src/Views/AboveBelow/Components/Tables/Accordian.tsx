@@ -1,6 +1,8 @@
 import DDArrow from '@SVG/Elements/Arrow';
+import InfoIcon from '@SVG/Elements/InfoIcon';
 import { accordianTableTypeAtom } from '@Views/AboveBelow/atoms';
 import { accordianTableType } from '@Views/AboveBelow/types';
+import { OldVersionTradesRedirect } from '@Views/TradePage/config';
 import { useSetAtom } from 'jotai';
 
 export const Accordian: React.FC<{
@@ -63,6 +65,14 @@ export const Accordian: React.FC<{
             </button>
           )
         )}
+        <a
+          href={OldVersionTradesRedirect.AB}
+          target="_blank"
+          title="Old trades are moved to separate link!"
+          className={`text-2 pl-[10px] accordion-table-strip-left-border text-f14 hover:text-1 hover:underline cursor-pointer flex gap-2 items-center justify-center`}
+        >
+          Old Data <InfoIcon sm tooltip={undefined} />
+        </a>
       </div>
       <button
         className="flex items-center gap-x-2 px-4 transition group"
