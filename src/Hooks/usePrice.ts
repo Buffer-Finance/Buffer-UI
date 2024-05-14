@@ -69,7 +69,6 @@ export const usePriceRetriable = () => {
         };
         silentPriceCache[pythIds[(lastJsonMessage as WSUPdate).price_feed.id]] =
           priceUpdatePacked;
-        // console.log(`setting: `, message);
         // const ts = Math.floor(Date.now() / 1000);
         const asset = Object.keys(data)[0];
         // if (ts in ts2asset2updatecnt) {
