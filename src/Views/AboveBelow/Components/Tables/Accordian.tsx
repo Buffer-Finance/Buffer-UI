@@ -33,7 +33,7 @@ export const Accordian: React.FC<{
               }`}
             >
               <div className="flex items-center gap-x-2 capitalize">
-                {tableName == 'history' ? 'User History' : ''}
+                {'User ' + tableName}
               </div>
             </button>
           )
