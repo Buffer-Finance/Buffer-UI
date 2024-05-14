@@ -12,19 +12,15 @@ export const Tables: React.FC<{}> = () => {
   const isExpanded = useAtomValue(isTableShownAtom);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <Accordian
         activeTableName={activeTable}
         expanded={isExpanded}
         setExpanded={setExpanded}
       />
 
-      <div
-        className={` ${
-          isExpanded ? 'h-[355px]' : 'h-[0px]'
-        } flex flex-col transition-all  overflow-y-hidden `}
-      >
-        {isExpanded && <TableSelector activeTableName={activeTable} />}
+      <div className={`  flex flex-col transition-all  overflow-y-hidden `}>
+        <TableSelector activeTableName={activeTable} />
       </div>
     </div>
   );

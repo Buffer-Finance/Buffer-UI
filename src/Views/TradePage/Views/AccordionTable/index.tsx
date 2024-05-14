@@ -114,11 +114,7 @@ const AccordionTable: React.FC<any> = ({}) => {
           />
         </button>
       </div>
-      <div
-        className={` ${
-          expanded ? 'h-[355px]' : 'h-[0px]'
-        } flex flex-col transition-all  overflow-y-hidden `}
-      >
+      <div className={` flex flex-col transition-all  overflow-y-hidden `}>
         {activeTable == 'Trades' ? (
           <OngoingTradesTableMemo
             trades={activeTrades}

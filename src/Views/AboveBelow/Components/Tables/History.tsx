@@ -316,7 +316,7 @@ export const History: React.FC<{
       widths={['auto']}
       activePage={activePage}
       count={totalPages}
-      overflow={overflow}
+      // overflow={overflow}
       showOnly={onlyView}
       shouldShowMobile
       doubleHeight={isMobile}

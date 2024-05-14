@@ -90,7 +90,7 @@ export const AllHistory: React.FC<{
   return (
     <History
       onlyView={onlyView}
-      overflow={overflow}
+      // overflow={overflow}
       isMobile={isMobile}
       activePage={activePage}
       setHistoryPage={setActivePage}

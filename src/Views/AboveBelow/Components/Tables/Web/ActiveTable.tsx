@@ -23,7 +23,7 @@ export const ActiveTable: React.FC<{
   return (
     <Active
       onlyView={onlyView}
-      overflow={overflow}
+      // overflow={overflow}
       isMobile={isMobile}
       activePage={activePage}
       active={active}

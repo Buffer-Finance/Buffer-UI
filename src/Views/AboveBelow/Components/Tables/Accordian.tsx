@@ -33,7 +33,7 @@ export const Accordian: React.FC<{
               }`}
             >
               <div className="flex items-center gap-x-2 capitalize">
-                {tableName}
+                {tableName == 'history' ? 'User History' : ''}
               </div>
             </button>
           )
@@ -58,23 +58,14 @@ export const Accordian: React.FC<{
               }`}
             >
               <div className="flex items-center gap-x-2 capitalize">
-                {tableName.replace('_', ' ')}
+                {tableName == 'platform_history'
+                  ? tableName.replace('_', ' ')
+                  : ''}
               </div>
             </button>
           )
         )}
       </div>
-      <button
-        className="flex items-center gap-x-2 px-4 transition group"
-        onClick={() => setExpanded(!expanded)}
-      >
-        {expanded ? 'Hide ' : 'Show '} Positions
-        <DDArrow
-          className={`transition scale group-hover:scale-150  ${
-            expanded ? ' rotate-0' : 'rotate-180'
-          }`}
-        />
-      </button>
     </div>
   );
 };

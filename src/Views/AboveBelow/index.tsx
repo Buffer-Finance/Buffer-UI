@@ -53,24 +53,7 @@ export const AboveBelow = () => {
   if ([polygon.id, polygonMumbai.id].includes(activeChain.id as 80001)) {
     return <MobileWarning />;
   }
-  if (isNotMobile)
-    return (
-      <div
-        className={`flex h-full justify-between w-[100%] bg-[#1C1C28] ${
-          panelPosision === tradePanelPosition.Left ? 'flex-row-reverse' : ''
-        }`}
-      >
-        <>
-          <RightPanelBackground>
-            {showFavoriteAsset && <PinnedMarkets />}
-            <StatusBar isMobile={false} />
-            <MarketChart isMobile={false} />
-            <Tables />
-          </RightPanelBackground>
-          <BuyTrade isMobile={false} />
-        </>
-      </div>
-    );
+  if (isNotMobile) return <Tables />;
   else {
     return (
       <div className="px-3">
