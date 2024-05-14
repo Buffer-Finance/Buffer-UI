@@ -37,6 +37,7 @@ export const Accordian: React.FC<{
               </div>
             </button>
           )
+          //
         )}
         |
         {(['platform_active', 'platform_history'] as accordianTableType[]).map(
