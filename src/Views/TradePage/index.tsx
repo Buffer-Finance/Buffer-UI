@@ -42,6 +42,8 @@ const TradePage: React.FC<any> = ({}) => {
   const { closeShutter } = useShutterHandlers();
   const isNotMobile = useMedia('(min-width:1200px)');
   useUDCancelNotification();
+  usePriceRetriable();
+
   useEffect(() => {
     closeShutter();
     return closeShutter;

@@ -37,13 +37,13 @@ export const BuyButtons = ({
   const marketPrice = useAtomValue(priceAtom);
 
   const { activeMarket } = useActiveMarket();
-  // const activeAssetPrice = getLastbar(marketPrice, {
-  //   tv_id: activeMarket.tv_id,
-  // });
-  const activeAssetPrice = useCurrentPrice({
-    token0: activeMarket.token0,
-    token1: activeMarket.token1,
+  const activeAssetPrice = getLastbar(marketPrice, {
+    tv_id: activeMarket.tv_id,
   });
+  // const activeAssetPrice = useCurrentPrice({
+  //   token0: activeMarket.token0,
+  //   token1: activeMarket.token1,
+  // });
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
   // const { poolDetails } = useSwitchPool();

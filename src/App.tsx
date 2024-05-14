@@ -104,7 +104,6 @@ const AppRoutes = () => {
   const toastify = useToast();
   const navigate = useNavigate();
   const account = useAccount();
-  usePriceRetriable();
   const earnUrl = isTestnet
     ? 'https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/'
     : 'https://earn.buffer.finance/';
