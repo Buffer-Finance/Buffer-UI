@@ -49,7 +49,6 @@ import Leagues from '@Views/V2-Leaderboard/Leagues';
 import Incentivised from '@Views/V2-Leaderboard/Incentivised';
 import { Galxe } from '@Views/V2-Leaderboard/Galxe';
 import { Launch } from '@mui/icons-material';
-import { usePriceRetriable } from '@Hooks/usePrice';
 
 import TradePage from '@Views/TradePage';
 import AdminConfig from '@Views/AdminConfigs/AdminConfig';
@@ -67,6 +66,7 @@ const TradeLog_sm = lazy(
 import Jackpot from '@Views/Jackpot';
 import AboveBelow from '@Views/AboveBelow';
 import RewardsPage from '@Views/Rewards';
+import { usePriceRetriable } from '@Hooks/usePrice';
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{

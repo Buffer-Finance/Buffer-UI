@@ -23,6 +23,7 @@ import styled from '@emotion/styled';
 import { Trans } from '@lingui/macro';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
+import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 
 export const CurrentPriceBackground = styled.div`
   margin-top: 7px;
@@ -38,7 +39,11 @@ export const CurrentPrice: React.FC<{}> = ({}) => {
     })?.price ?? '0';
   const [tradeType] = useAtom(tradeTypeAtom);
   const [activePayout, setActivePayout] = useAtom(LimitOrderPayoutAtom);
-
+  const activePrice = useCurrentPrice({
+    token0: activeMarket?.token0,
+    token1: activeMarket?.token1,
+  });
+  console.log(`CurrentPrice-activePrice: `, activePrice);
   const chartMarket =
     marketsForChart[
       joinStrings(

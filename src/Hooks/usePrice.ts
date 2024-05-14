@@ -2,10 +2,15 @@ import { multiply } from '@Utils/NumString/stringArithmatics';
 import axios from 'axios';
 import Big from 'big.js';
 import { atom, useSetAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
-import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import {
+  getActiveMarket,
+  useActiveMarket,
+} from '@Views/TradePage/Hooks/useActiveMarket';
+import { useParams } from 'react-router-dom';
+import { useMarketsConfig } from '@Views/TradePage/Hooks/useMarketsConfig';
 type WSUPdate = {
   type: 'price_update';
   price_feed: {
@@ -32,7 +37,14 @@ export const usePrice = () => {};
 export const usePriceRetriable = () => {
   const setPrice = useSetAtom(priceAtom);
   const [isConnected, setIsConnected] = useState(client.isConnected());
-  const { activeMarket } = useActiveMarket();
+  const params = useParams();
+  const appConfig = useMarketsConfig();
+  const activeMarket = useMemo(
+    () => getActiveMarket(appConfig, params),
+    [appConfig, params]
+  );
+  console.log(`activeMarket: `, activeMarket);
+  console.log(`activeMarket: `, activeMarket);
   const activeMarketRef = useRef('BTCUSD');
   useEffect(() => {
     activeMarketRef.current = activeMarket?.token0

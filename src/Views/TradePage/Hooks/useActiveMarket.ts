@@ -17,8 +17,10 @@ export const getActiveMarket = (
 
   if (!markets || !params?.market) return undefined;
   const urlMarket = params.market.toUpperCase();
+  console.log(`urlMarket: `, urlMarket);
   const [token0, token1] = urlMarket.split('-');
   const market = findMarket(markets, token0, token1);
+  console.log(`market: `, market);
   if (market) {
     activeMarket = market;
   } else {
@@ -34,5 +36,6 @@ export const useActiveMarket = (): { activeMarket: marketType | undefined } => {
     () => getActiveMarket(appConfig, params),
     [appConfig, params]
   );
+  console.log(`activeMarket: `, activeMarket);
   return { activeMarket };
 };

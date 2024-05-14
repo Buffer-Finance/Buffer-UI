@@ -17,6 +17,7 @@ export const getActiveMarket = (
 
   if (!markets || !params?.market) return undefined;
   const urlMarket = params.market.toUpperCase();
+  console.log(`urlMarket: `, urlMarket);
   const [token0, token1] = urlMarket.split('-');
   const market = findMarket(markets, token0, token1);
   if (market) {
