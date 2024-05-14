@@ -25,13 +25,7 @@ const useCancelledTrades = () => {
   const products = useProducts();
 
   const { data, error } = useSWR<tradesApiResponseType>(
-    'cancelled-trades-' +
-      address +
-      '-' +
-      activeChain.id +
-      '-' +
-      activePage +
-      products.UP_DOWN.product_id,
+    'cancelled-trades-' + address + '-' + activeChain.id + '-ab' + activePage,
     {
       fetcher: async () => {
         if (!address)
