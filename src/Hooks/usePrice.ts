@@ -26,7 +26,6 @@ type WSUPdate = {
 };
 const client = reconnectingSocket('wss://hermes.pyth.network/ws');
 export let ts2asset2updatecnt = {};
-
 export const silentPriceCache = {};
 export const usePrice = () => {};
 export const usePriceRetriable = () => {
