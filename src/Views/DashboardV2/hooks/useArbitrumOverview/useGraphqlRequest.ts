@@ -8,15 +8,13 @@ import { useMemo } from 'react';
 import { getTokenXquery } from './getTokenXquery';
 import { getTokenX24hrsquery } from './getTokenX24hrsquery';
 import { getLinuxTimestampBefore24Hours } from '@Views/DashboardV2/utils/getLinuxTimestampBefore24Hours';
-import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 
 export const useGraphqlRequest = () => {
   const { activeChain } = useActiveChain();
   const config = appConfig[activeChain.id as unknown as keyof typeof appConfig];
-  const graphqlURL = config.graph.MAIN;
+  const graphqlURL = config.graph.DASHBOARD;
   const poolNames = usePoolNames();
   const prevDayEpoch = getLinuxTimestampBefore24Hours();
-  const poolsByAsset = usePoolByAsset();
 
   const tokensArray = useMemo(() => {
     const array = [...poolNames];
@@ -28,18 +26,19 @@ export const useGraphqlRequest = () => {
     return getTokenXquery(tokensArray);
   }, []);
   const stats24hrsQuery = useMemo(() => {
-    return getTokenX24hrsquery(tokensArray, prevDayEpoch, poolsByAsset);
-  }, [prevDayEpoch, poolsByAsset]);
+    return getTokenX24hrsquery(tokensArray, prevDayEpoch);
+  }, [prevDayEpoch]);
   return useSWR('arbitrum-overview', {
     fetcher: async () => {
+      const query = `{ 
+        ${statsQuery}
+        totalTraders:userStats(where: {period: total}) {
+          uniqueCountCumulative
+        }
+       ${stats24hrsQuery}
+      }`;
       const response = await axios.post(graphqlURL, {
-        query: `{ 
-                ${statsQuery}
-                totalTraders:userStats(where: {period: total}) {
-                  uniqueCountCumulative
-                }
-               ${stats24hrsQuery}
-              }`,
+        query,
       });
       return response.data?.data as responseType & totalStats;
     },

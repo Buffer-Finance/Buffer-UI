@@ -16,6 +16,7 @@ export const appConfig = {
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/up-down-v3-testnet/version/platform-evts/api',
       REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
       LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/version/v3.0.31-leaderboard-tracking-update-contracts/api`,
+      DASHBOARD: '',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
@@ -117,12 +118,13 @@ export const appConfig = {
   '42161': {
     graph: {
       ABOVE_BELOW: ABGraph,
-
       MAIN: udgraph,
       EVENTS:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/events/version/v2.5-up-events-mainnet/api',
       REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
       LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.5-leaderboard-tracking/api`,
+      DASHBOARD:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.0-sync-v2.6-history/api',
     },
     product_id: {
       UP_DOWN: {
@@ -230,6 +232,7 @@ export const appConfig = {
       REWARDS: '',
       LEADERBOARD: '',
       ABOVE_BELOW: '',
+      DASHBOARD: '',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
@@ -257,6 +260,7 @@ export const appConfig = {
       REWARDS: '',
       LEADERBOARD: '',
       ABOVE_BELOW: '',
+      DASHBOARD: '',
     },
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',
