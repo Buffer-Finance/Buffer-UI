@@ -82,6 +82,7 @@ const useOneCTWallet = () => {
       res?.nonce +
       ',activeChain' +
       activeChain.id +
+      'v2' +
       ':'
     );
   }, [address, res?.nonce]);

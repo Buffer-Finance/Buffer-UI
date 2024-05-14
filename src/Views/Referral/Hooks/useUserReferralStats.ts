@@ -21,12 +21,18 @@ export const useUserReferralStats = () => {
   const { address } = useUserAccount();
   const poolNames = usePoolNames();
   const tokens = useMemo(
-    () => poolNames.filter((pool) => !pool.toLowerCase().includes('pol')),
+    () =>
+      poolNames.filter(
+        (pool) =>
+          !pool.toLowerCase().includes('pol') &&
+          !pool.toLowerCase().includes('.e')
+      ),
     [poolNames]
   );
   const { activeChain } = useActiveChain();
   const config = getConfig(activeChain.id);
-  const graphUrl = config.graph.MAIN;
+  const graphUrl =
+    'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api';
   const queryFields = useMemo(() => {
     if (tokens.length > 1)
       return tokens.map((poolName) => getTokenXQueryFields(poolName)).join(' ');
