@@ -706,5 +706,5 @@ export const baseLeaderboardURLString = isTestnet
 
 export const OldVersionTradesRedirect = {
   AB: 'https://app-buffer-finance-7lf2s12ai-bufferfinance.vercel.app/',
-  UD: '"https://app-buffer-finance-1xcryka5o-bufferfinance.vercel.app/#/binary/BTC-USD"',
+  UD: 'https://app-buffer-finance-1xcryka5o-bufferfinance.vercel.app/#/binary/BTC-USD',
 };
