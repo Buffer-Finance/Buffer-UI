@@ -463,7 +463,7 @@ const TokenAccountBalance = () => {
   const { address } = useAccount();
   const { data, isError, isLoading, error } = useBalance({
     address,
-    token: getAddress(activePoolDetails?.tokenAddress),
+    token: activePoolDetails?.tokenAddress,
     watch: true,
   });
 
