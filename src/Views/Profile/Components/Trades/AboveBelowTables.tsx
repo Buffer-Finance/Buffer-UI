@@ -13,6 +13,7 @@ import { OpenInNew } from '@mui/icons-material';
 import { binaryTabs, isTestnet } from 'config';
 import { useEffect, useMemo, useState } from 'react';
 import { useMedia } from 'react-use';
+import { OldVersionTradesRedirect } from '@Views/TradePage/config';
 
 export const AboveBelowTables = () => {
   const [activeTabIdx, setActiveTabIdx] = useState(0);
@@ -45,10 +46,7 @@ export const AboveBelowTables = () => {
             const domain = isTestnet
               ? 'testnet-buffer-finance.vercel.app'
               : 'app.buffer.finance';
-            window.open(
-              `https://classic.app.buffer.finance/#/profile?user_address=${address}`,
-              '_blank'
-            );
+            window.open(OldVersionTradesRedirect.AB, '_blank');
           }}
         >
           <InfoIcon tooltip="Click here to see the older version trades." />

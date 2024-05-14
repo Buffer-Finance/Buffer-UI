@@ -9,6 +9,7 @@ import { useOngoingTrades } from '@Views/TradePage/Hooks/useOngoingTrades';
 import { History } from '@Views/TradePage/Views/AccordionTable';
 import LimitOrderTable from '@Views/TradePage/Views/AccordionTable/LimitOrderTable';
 import { OngoingTradesTable } from '@Views/TradePage/Views/AccordionTable/OngoingTradesTable';
+import { OldVersionTradesRedirect } from '@Views/TradePage/config';
 import { OpenInNew } from '@mui/icons-material';
 import { binaryTabs, isTestnet } from 'config';
 import { useEffect, useMemo, useState } from 'react';
@@ -46,10 +47,7 @@ export const HistoryTables = () => {
             const domain = isTestnet
               ? 'testnet-buffer-finance.vercel.app'
               : 'app.buffer.finance';
-            window.open(
-              `https://classic.app.buffer.finance/#/profile?user_address=${address}`,
-              '_blank'
-            );
+            window.open(OldVersionTradesRedirect.UD, '_blank');
           }}
         >
           <InfoIcon tooltip="Click here to see the older version trades." />
