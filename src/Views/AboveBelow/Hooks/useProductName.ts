@@ -33,6 +33,10 @@ export const useProducts = () => {
   const { activeChain } = useActiveChain();
 
   return useMemo(() => {
-    return appConfig[activeChain.id].product_id;
+    if (activeChain.id in appConfig)
+      if (appConfig[activeChain.id]?.product_id) {
+        return appConfig[activeChain.id].product_id;
+      }
+    return null;
   }, [activeChain]);
 };
