@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ProductDropDown, Products } from '../ProductDropDown';
 import { HistoryTables } from './HistoryTable';
+import { AboveBelowTables } from './AboveBelowTables';
 
 export const Trades = () => {
   const [activeProduct, setActiveProduct] = useState<Products>('Up/Down');
@@ -23,7 +24,7 @@ const HistoryType: React.FC<{ type: Products }> = ({ type }) => {
     case 'Up/Down':
       return <HistoryTables />;
     case 'Above/Below':
-    //   return <AboveBelowHistory />;
+      return <AboveBelowTables />;
     default:
       return <HistoryTables />;
       return <></>;
