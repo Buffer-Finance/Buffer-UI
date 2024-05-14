@@ -106,14 +106,14 @@ const AccordionTable: React.FC<any> = ({}) => {
               </div>
             </button>
           ))}
-          {/* <a
+          <a
             href={OldVersionTradesRedirect.UD}
             target="_blank"
             title="Old trades are moved to separate link!"
             className={`text-2 pl-[10px] accordion-table-strip-left-border text-f14 hover:text-1 hover:underline cursor-pointer flex gap-2 items-center justify-center`}
           >
             Old Data <InfoIcon sm />
-          </a> */}
+          </a>
         </div>
         <div className="flex gap-3">
           <button
