@@ -21,11 +21,13 @@ const TotalTrades: React.FC<{ data: totalStatsType; keys: string[] }> = ({
           ))}
           keyStyle={tooltipKeyClasses}
           valueStyle={tooltipValueClasses}
-          values={tokens.map((token) => {
-            const stats = data[`${token}stats`];
-            if (stats) return (stats as toalTokenXstats).totalTrades;
-            else return '-';
-          })}
+          values={tokens
+            .filter((key) => !key.toLowerCase().includes('.e'))
+            .map((token) => {
+              const stats = data[`${token}stats`];
+              if (stats) return (stats as toalTokenXstats).totalTrades;
+              else return '-';
+            })}
         />
       }
     >

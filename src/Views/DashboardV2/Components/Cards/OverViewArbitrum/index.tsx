@@ -23,13 +23,15 @@ export const OverviewArbitrum = () => {
   const { poolDisplayKeyMapping, poolDisplayNameMapping } =
     usePoolDisplayNames();
   const keys = useMemo(() => {
-    return Object.values(poolDisplayKeyMapping);
+    return Object.values(poolDisplayKeyMapping).filter(
+      (key) => !key.toLowerCase().includes('.e')
+    );
   }, [poolDisplayKeyMapping]);
 
   const openInterestKeys = useMemo(() => {
-    return Object.values(poolDisplayKeyMapping).map(
-      (key) => `Open Interest (${key})`
-    );
+    return Object.values(poolDisplayKeyMapping)
+      .filter((key) => !key.toLowerCase().includes('.e'))
+      .map((key) => `Open Interest (${key})`);
   }, [poolDisplayKeyMapping]);
 
   if (!data || Object.keys(data.totalStats).length === 0)
@@ -56,16 +58,18 @@ export const OverviewArbitrum = () => {
             <AverageVolume data={data.totalStats} keys={keys} />,
             <AverageTradeSize data={data.totalStats} keys={keys} />,
             <TotalTrades data={data.totalStats} keys={keys} />,
-            Object.keys(poolDisplayKeyMapping).map((key) => (
-              <div className={wrapperClasses} key={key}>
-                <Display
-                  data={openInterestByPool?.[poolsByAsset[key]?.poolAddress]}
-                  precision={2}
-                  unit={poolDisplayNameMapping[key]}
-                  className="!w-fit"
-                />
-              </div>
-            )),
+            Object.keys(poolDisplayKeyMapping)
+              .filter((key) => !key.toLowerCase().includes('.e'))
+              .map((key) => (
+                <div className={wrapperClasses} key={key}>
+                  <Display
+                    data={openInterestByPool?.[poolsByAsset[key]?.poolAddress]}
+                    precision={2}
+                    unit={poolDisplayNameMapping[key]}
+                    className="!w-fit"
+                  />
+                </div>
+              )),
             <div className={wrapperClasses}>{data.totalTraders}</div>,
           ].flat(1)}
         />

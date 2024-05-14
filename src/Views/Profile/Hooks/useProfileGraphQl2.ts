@@ -9,7 +9,7 @@ import useSWR from 'swr';
 export const useProfileGraphQl2 = () => {
   const { address: account } = useUserAccount();
   const { activeChain } = useActiveChain();
-  const graphUrl = getConfig(activeChain.id).graph.MAIN;
+  const graphUrl = getConfig(activeChain.id).graph.PROFILE;
 
   async function fetchData(account: string | undefined) {
     if (!account) return null;

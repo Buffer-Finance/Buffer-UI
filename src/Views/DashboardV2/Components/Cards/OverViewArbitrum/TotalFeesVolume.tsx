@@ -27,26 +27,28 @@ const TotalFeesVolume: React.FC<{ data: totalStatsType; keys: string[] }> = ({
             ))}
             keyStyle={tooltipKeyClasses}
             valueStyle={tooltipValueClasses}
-            values={tokens.map((token) => {
-              const stats = data[`${token}stats`];
-              if (stats)
-                return (
-                  <div className={' flex items-center justify-end'}>
-                    <div className="whitespace-nowrap">
-                      {getBalance(
-                        (stats as toalTokenXstats).totalSettlementFees
-                      )}
-                      {poolDisplayNameMapping[token]}
+            values={tokens
+              .filter((key) => !key.toLowerCase().includes('.e'))
+              .map((token) => {
+                const stats = data[`${token}stats`];
+                if (stats)
+                  return (
+                    <div className={' flex items-center justify-end'}>
+                      <div className="whitespace-nowrap">
+                        {getBalance(
+                          (stats as toalTokenXstats).totalSettlementFees
+                        )}
+                        {poolDisplayNameMapping[token]}
+                      </div>
+                      &nbsp;/&nbsp;
+                      <div className="whitespace-nowrap">
+                        {getBalance((stats as toalTokenXstats).totalVolume)}
+                        {poolDisplayNameMapping[token]}
+                      </div>
                     </div>
-                    &nbsp;/&nbsp;
-                    <div className="whitespace-nowrap">
-                      {getBalance((stats as toalTokenXstats).totalVolume)}
-                      {poolDisplayNameMapping[token]}
-                    </div>
-                  </div>
-                );
-              else return <>-</>;
-            })}
+                  );
+                else return <>-</>;
+              })}
           />
         }
       >

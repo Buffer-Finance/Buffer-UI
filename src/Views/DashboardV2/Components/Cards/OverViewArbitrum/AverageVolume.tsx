@@ -54,22 +54,24 @@ const AverageVolume: React.FC<{ data: totalStatsType; keys: string[] }> = ({
             ))}
             keyStyle={tooltipKeyClasses}
             valueStyle={tooltipValueClasses}
-            values={tokens.map((token, index) => {
-              const stats = data[`${token}stats`];
-              if (stats)
-                return (
-                  toFixed(
-                    getAverageTradeVolume(
-                      (stats as toalTokenXstats).totalVolume,
-                      totalDays[token as keyof typeof totalDays].toString()
-                    ) as string,
-                    2
-                  ) +
-                  ' ' +
-                  poolDisplayNameMapping[token]
-                );
-              else return '-';
-            })}
+            values={tokens
+              .filter((key) => !key.toLowerCase().includes('.e'))
+              .map((token, index) => {
+                const stats = data[`${token}stats`];
+                if (stats)
+                  return (
+                    toFixed(
+                      getAverageTradeVolume(
+                        (stats as toalTokenXstats).totalVolume,
+                        totalDays[token as keyof typeof totalDays].toString()
+                      ) as string,
+                      2
+                    ) +
+                    ' ' +
+                    poolDisplayNameMapping[token]
+                  );
+                else return '-';
+              })}
           />
         }
       />

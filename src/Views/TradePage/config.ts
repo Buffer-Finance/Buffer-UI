@@ -17,6 +17,7 @@ export const appConfig = {
       REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
       LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/version/v3.0.31-leaderboard-tracking-update-contracts/api`,
       DASHBOARD: '',
+      PROFILE: '',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
@@ -125,6 +126,8 @@ export const appConfig = {
       LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.5-leaderboard-tracking/api`,
       DASHBOARD:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.1-ud-ab-nfts-leagues-stats-defillama-merge/api',
+      PROFILE:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/version/v2.7.2-v2.6-profile-data/api',
     },
     product_id: {
       UP_DOWN: {
@@ -161,6 +164,13 @@ export const appConfig = {
         token: 'USDC.e',
         permitName: 'USD Coin (Arb1)',
         is_pol: false,
+      },
+      '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        faucet: null,
+        decimals: 6,
+        token: 'USDC',
+        is_pol: true,
       },
       '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
         tokenAddress: '0x7Fe2dD3b4619802B8c4b404f5e440756391439ba',
@@ -233,6 +243,7 @@ export const appConfig = {
       LEADERBOARD: '',
       ABOVE_BELOW: '',
       DASHBOARD: '',
+      PROFILE: '',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
@@ -261,6 +272,7 @@ export const appConfig = {
       LEADERBOARD: '',
       ABOVE_BELOW: '',
       DASHBOARD: '',
+      PROFILE: '',
     },
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',

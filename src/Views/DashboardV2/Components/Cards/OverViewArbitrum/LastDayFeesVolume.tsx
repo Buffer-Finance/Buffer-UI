@@ -31,24 +31,26 @@ const LastDayFeesVolume: React.FC<{
             ))}
             keyStyle={tooltipKeyClasses}
             valueStyle={tooltipValueClasses}
-            values={tokens.map((token) => {
-              const stats = data[`${token}24stats`];
-              if (stats)
-                return (
-                  <div className={' flex items-center justify-end'}>
-                    <div className="whitespace-nowrap">
-                      {getBalance((stats as tokenX24hrsStats).settlementFee)}
-                      {poolDisplayNameMapping[token]}
+            values={tokens
+              .filter((key) => !key.toLowerCase().includes('.e'))
+              .map((token) => {
+                const stats = data[`${token}24stats`];
+                if (stats)
+                  return (
+                    <div className={' flex items-center justify-end'}>
+                      <div className="whitespace-nowrap">
+                        {getBalance((stats as tokenX24hrsStats).settlementFee)}
+                        {poolDisplayNameMapping[token]}
+                      </div>
+                      &nbsp;/&nbsp;
+                      <div className="whitespace-nowrap">
+                        {getBalance((stats as tokenX24hrsStats).amount)}
+                        {poolDisplayNameMapping[token]}
+                      </div>
                     </div>
-                    &nbsp;/&nbsp;
-                    <div className="whitespace-nowrap">
-                      {getBalance((stats as tokenX24hrsStats).amount)}
-                      {poolDisplayNameMapping[token]}
-                    </div>
-                  </div>
-                );
-              else return <>-</>;
-            })}
+                  );
+                else return <>-</>;
+              })}
           />
         }
       >

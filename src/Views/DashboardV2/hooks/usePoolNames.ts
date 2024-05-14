@@ -10,9 +10,9 @@ export const usePoolNames = () => {
       if (pool.is_pol) {
         return pool.token.toUpperCase() + '_POL';
       }
-      if (pool.token.toLowerCase().includes('.e')) {
-        return pool.token.split('.')[0];
-      }
+      // if (pool.token.toLowerCase().includes('.e')) {
+      //   return pool.token.split('.')[0];
+      // }
       return pool.token.toUpperCase();
     });
   }, [activeChain]);

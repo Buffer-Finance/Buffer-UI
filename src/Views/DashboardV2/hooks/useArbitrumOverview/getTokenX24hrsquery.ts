@@ -3,17 +3,18 @@ export function getTokenX24hrsquery(
   prevDayEpoch: number
 ) {
   return tokensArray
+    .filter((token) => !token.includes('.e'))
     .map((token) => {
-      const tokenName = token.toLocaleLowerCase().includes('_pol')
-        ? token.toUpperCase().replace('_POL', '-POL')
-        : token.toUpperCase();
+      const tokenName = token.toLowerCase().includes('.e')
+        ? token.replace('.', '_')
+        : token;
 
       const condition =
-        token === 'total'
+        tokenName === 'total'
           ? `depositToken: "${token}"`
           : `optionContract_: {pool: "${token}"}, depositToken_not: "total"`;
 
-      return `${token}24stats:volumePerContracts(
+      return `${tokenName}24stats:volumePerContracts(
             orderBy: timestamp
             orderDirection: desc
             first: 10000
