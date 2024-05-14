@@ -51,22 +51,22 @@ import { Galxe } from '@Views/V2-Leaderboard/Galxe';
 import { Launch } from '@mui/icons-material';
 import { usePriceRetriable } from '@Hooks/usePrice';
 
-const TradePage = lazy(() => import('@Views/TradePage'));
-const AdminConfig = lazy(() => import('@Views/AdminConfigs/AdminConfig'));
-const AllTrades = lazy(() => import('@Views/AllTrades'));
-const ContractList = lazy(() => import('@Views/ContractList'));
-const DashboardV2 = lazy(() => import('@Views/DashboardV2'));
-const IbfrFaucet = lazy(() => import('@Views/Faucet'));
-const ProfilePage = lazy(() => import('@Views/Profile'));
-const ReferralPage = lazy(() => import('@Views/Referral'));
-const Test = lazy(() => import('@Views/Test'));
+import TradePage from '@Views/TradePage';
+import AdminConfig from '@Views/AdminConfigs/AdminConfig';
+import AllTrades from '@Views/AllTrades';
+import ContractList from '@Views/ContractList';
+import DashboardV2 from '@Views/DashboardV2';
+import IbfrFaucet from '@Views/Faucet';
+import ProfilePage from '@Views/Profile';
+import ReferralPage from '@Views/Referral';
+import Test from '@Views/Test';
 const TradeLog_sm = lazy(
   () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
 );
 
-const Jackpot = lazy(() => import('@Views/Jackpot'));
-const AboveBelow = lazy(() => import('@Views/AboveBelow'));
-const RewardsPage = lazy(() => import('@Views/Rewards'));
+import Jackpot from '@Views/Jackpot';
+import AboveBelow from '@Views/AboveBelow';
+import RewardsPage from '@Views/Rewards';
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{

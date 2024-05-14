@@ -98,6 +98,7 @@ export const BuyButtons = ({
         View Only Mode
       </BlueBtn>
     );
+    console.log(`BuyButtons-allowance: `,allowance,activeAssetPrice);
   return (
     <>
       {/* <ApproveModal
