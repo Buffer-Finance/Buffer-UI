@@ -10,6 +10,7 @@ export const CurrentPrice: React.FC<{
     token0,
     token1,
   });
+  console.log(`CurrentPrice-currentPrice: `, currentPrice);
   if (currentPrice === 0) return <Skeleton className="w-[100px] !h-7 lc " />;
 
   return (

@@ -12,6 +12,7 @@ import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
+import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
 import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
@@ -36,8 +37,12 @@ export const BuyButtons = ({
   const marketPrice = useAtomValue(priceAtom);
 
   const { activeMarket } = useActiveMarket();
-  const activeAssetPrice = getLastbar(marketPrice, {
-    tv_id: activeMarket.tv_id,
+  // const activeAssetPrice = getLastbar(marketPrice, {
+  //   tv_id: activeMarket.tv_id,
+  // });
+  const activeAssetPrice = useCurrentPrice({
+    token0: activeMarket.token0,
+    token1: activeMarket.token1,
   });
   const { registeredOneCT } = useOneCTWallet();
   const { address: account } = useAccount();
@@ -92,13 +97,13 @@ export const BuyButtons = ({
     });
   };
 
+  console.log(`BuyButtons-allowance: `, allowance, activeAssetPrice);
   if (viewOnlyMode)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
         View Only Mode
       </BlueBtn>
     );
-    console.log(`BuyButtons-allowance: `,allowance,activeAssetPrice);
   return (
     <>
       {/* <ApproveModal
