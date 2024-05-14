@@ -13,7 +13,7 @@ import {
 import { Warning } from '@Views/Common/Notification/warning';
 import TnCModal from '@Views/Common/TnCModal';
 import Background from './AppStyles';
-import { Navbar } from './Views/Common/Navbar';
+import { Navbar } from '@Views/Common/Navbar/Navbar';
 
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -189,7 +189,7 @@ function App() {
               className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
             />
           )}
-          {/* <Navbar /> */}
+          <Navbar />
           <AppRoutes />
           <Snackbar
             open={snack.message ? true : false}

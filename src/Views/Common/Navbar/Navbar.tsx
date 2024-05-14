@@ -1,10 +1,6 @@
 import { useGlobal } from '@Contexts/Global';
-import MemoHamburgerSVG from '@SVG/Elements/HamburgerSVG2';
-import MemoWalletSVG from '@SVG/Elements/WalletSVG';
-import { inIframe } from '@Utils/isInIframe';
 import { useShutterHandlers } from '@Views/AboveBelow/Components/MobileView/Shutters';
 import { tardesAtom } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
-// import { OneCTModal } from '@Views/OneCT/OneCTModal';
 import { useAtomValue } from 'jotai';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -12,21 +8,10 @@ import { getTabs } from 'src/Config/getTabs';
 import { urlSettings } from 'src/Config/wagmiClient';
 import { activeMarketFromStorageAtom } from 'src/globalStore';
 import { AccountDropdown } from './AccountDropdown';
-import { BufferLogoComponent } from './BufferLogo';
 import { SettingsDD } from './SettingsDD';
 import { Tab } from './Tab';
 import { TabsDropdown } from './TabsDropDown';
-
-interface INavbar {}
-
-export function NewChip() {
-  return (
-    <div className="text-light-blue text-f12 px-2 py-1 rounded-[5px] bg-[#18181f]">
-      New
-    </div>
-  );
-}
-export const newTabs = [];
+import { INavbar, newTabs, NewChip } from '.';
 
 export const Navbar: React.FC<INavbar> = () => {
   const { dispatch } = useGlobal();
@@ -59,26 +44,26 @@ export const Navbar: React.FC<INavbar> = () => {
     <header className="  sticky bg-[#232334] top-[0px] flex justify-between w-full h-[45px] pr-[8px] header top-0 z-[102] b1200:z-10">
       {/* <OneCTModal /> */}
       <div className="flex items-center ">
-        <div
-          role={'button'}
-          onClick={() => window.open('https://buffer.finance/', '_blank')}
-          className="b1200:hidden"
-        >
-          <BufferLogoComponent
-            className="h-[30px] ml-[8px] sm:mx-[0px]"
-            hideText
-          />
-        </div>
-        <div className="a1200:hidden flex gap-x-4 items-center pl-4">
-          <MemoHamburgerSVG onClick={handleClose} />
-          <MemoWalletSVG
-            count={active.length}
-            className={
-              shutterState.open == 'ActiveOrders' ? 'text-1' : 'text-[#808191]'
-            }
-            onClick={openOngoingTradesShutter}
-          />
-        </div>
+        {/* <div
+              role={'button'}
+              onClick={() => window.open('https://buffer.finance/', '_blank')}
+              className="b1200:hidden"
+            >
+              <BufferLogoComponent
+                className="h-[30px] ml-[8px] sm:mx-[0px]"
+                hideText
+              />
+            </div>
+            <div className="a1200:hidden flex gap-x-4 items-center pl-4">
+              <MemoHamburgerSVG onClick={handleClose} />
+              <MemoWalletSVG
+                count={active.length}
+                className={
+                  shutterState.open == 'ActiveOrders' ? 'text-1' : 'text-[#808191]'
+                }
+                onClick={openOngoingTradesShutter}
+              />
+            </div> */}
 
         <div className=" flex gap-[6px] ml-4 ">
           {tabs.slice(0, VISIBLETABS).map((tab, index) => {
@@ -86,7 +71,7 @@ export const Navbar: React.FC<INavbar> = () => {
               return (
                 <button
                   key={tab.name}
-                  className={`flex gap-2 items-center font-normal text-4 text-f15  px-4 py-[4px] rounded-md hover:bg-1 hover:text-1 hover:brightness-125 transition-colors 
+                  className={`flex gap-2 items-center font-normal  text-f15  px-4 py-[4px] rounded-md bg-1 text-1 brightness-125 transition-colors 
                  
                       : "hover:bg-1 hover:brightness-125"
                   `}
@@ -102,11 +87,11 @@ export const Navbar: React.FC<INavbar> = () => {
             return <Tab tab={tab} key={tab.name} />;
           })}
           {/* {tabs.length > VISIBLETABS && (
-              <TabsDropdown
-                tabs={tabs.slice(VISIBLETABS, -MORETABS)}
-                defaultName="Analytics"
-              />
-            )} */}
+                <TabsDropdown
+                  tabs={tabs.slice(VISIBLETABS, -MORETABS)}
+                  defaultName="Analytics"
+                />
+              )} */}
           {tabs.length > VISIBLETABS && (
             <TabsDropdown tabs={tabs.slice(VISIBLETABS)} defaultName="More" />
           )}
@@ -115,28 +100,28 @@ export const Navbar: React.FC<INavbar> = () => {
       </div>
       <div className="flex items-center gap-[3px] whitespace-nowrap">
         {/* {inIframe() && (
-          <button
-            onClick={openAdmin}
-            className="bg-transparent w-[100px] h-[35px]"
-          ></button>
-        )} */}
+              <button
+                onClick={openAdmin}
+                className="bg-transparent w-[100px] h-[35px]"
+              ></button>
+            )} */}
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
           <AccountDropdown />
         </div>
 
-        <SettingsDD />
+        {/* <SettingsDD /> */}
 
         {/* <div id="mobile-sidebar-logo" className="a1400:!hidden sm:hidden">
-          {state.sidebar_active ? (
-            <MenuLogo className="icon menu" onClick={handleClose} />
-          ) : (
-            <CloseLogo
-              className="icon menu"
-              onClick={handleClose}
-              style={{ transform: 'scale(0.8)' }}
-            />
-          )}
-        </div> */}
+              {state.sidebar_active ? (
+                <MenuLogo className="icon menu" onClick={handleClose} />
+              ) : (
+                <CloseLogo
+                  className="icon menu"
+                  onClick={handleClose}
+                  style={{ transform: 'scale(0.8)' }}
+                />
+              )}
+            </div> */}
       </div>
     </header>
   );

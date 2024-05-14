@@ -10,7 +10,7 @@ import { CancelledTable } from '../Tables/Web/CancelledTable';
 import { HistoryTable } from '../Tables/Web/HistoryTable';
 import { useShutterHandlers } from './Shutters';
 
-const tabs = ['History', 'Cancelled'];
+const tabs = ['History'];
 export const activeTabAtom = atom<string>(tabs[0]);
 
 const MobileHistory: React.FC<any> = ({}) => {
@@ -41,7 +41,7 @@ const MobileHistory: React.FC<any> = ({}) => {
           );
         })}{' '}
         |{' '}
-        {['Platform Active', 'Platform History'].map((tab) => {
+        {['Platform History'].map((tab) => {
           const isTabActive = activeTab == tab;
           return (
             <button

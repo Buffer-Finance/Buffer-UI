@@ -27,6 +27,7 @@ import {
   selectedPoolActiveMarketAtom,
   setSelectedPoolForTradeAtom,
 } from './atoms';
+import { MobileHistory } from './Components/MobileView/MobileHistory';
 
 export const AboveBelow = () => {
   const panelPosision = useAtomValue(tradePanelPositionSettingsAtom);
@@ -55,12 +56,6 @@ export const AboveBelow = () => {
   }
   if (isNotMobile) return <Tables />;
   else {
-    return (
-      <div className="px-3">
-        <Shutters />
-        <MarketPicker />
-        <Tabs />
-      </div>
-    );
+    return <MobileHistory />;
   }
 };
