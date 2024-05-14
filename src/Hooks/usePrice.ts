@@ -70,7 +70,6 @@ export const usePriceRetriable = () => {
         // console.log(`setting: `, message);
         // const ts = Math.floor(Date.now() / 1000);
         const asset = Object.keys(data)[0];
-        // if (ts in ts2asset2updatecnt) {
         //   let asset2updatecnt = ts2asset2updatecnt[ts];
         //   if (asset in asset2updatecnt) {
         //     asset2updatecnt[asset]++;
