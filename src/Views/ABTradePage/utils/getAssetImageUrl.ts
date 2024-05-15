@@ -1,7 +1,10 @@
 export const getAssetImageUrl = (asset: string) => {
-  return `https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${asset}.png`;
+  const assetName = asset.includes('.e') ? asset.split('.e')[0] : asset;
+  return `https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/${assetName}.png`;
 };
 
 export const getAssetMonochromeImageUrl = (asset: string) => {
-  return `https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/monochromes/${asset}.png`;
+  const assetName = asset.includes('.e') ? asset.split('.e')[0] : asset;
+
+  return `https://res.cloudinary.com/dtuuhbeqt/image/upload/w_50,h_50,c_fill,r_max/Assets/monochromes/${assetName}.png`;
 };

@@ -32,6 +32,7 @@ const roottabs = ['Up/Down', 'Above/Below'];
 const tabs = ['History', 'Cancelled:b', 'Platform Trades', 'Platform History'];
 export const activeTabAtom = atom<string>(tabs[0]);
 const TradeLog_sm: React.FC<any> = ({}) => {
+  usePriceRetriable();
   const setSelectedTrade = useSetAtom(selectedOrderToEditAtom);
   const selectedTrade = useAtomValue(selectedOrderToEditAtom);
   const [rootTab, setRootTab] = useState(roottabs[0]);
