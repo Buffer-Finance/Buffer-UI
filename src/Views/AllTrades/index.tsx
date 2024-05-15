@@ -1,23 +1,22 @@
-import { usePriceRetriable } from '@Hooks/usePrice';
-import {
-  MobilePlatformHistoryTable,
-  MobilePlatformOngoingTable,
-} from '@Views/TradePage/Components/MobileView/TradeLog_sm';
-import { useBuyTradeData } from '@Views/TradePage/Hooks/useBuyTradeData';
 import {
   PlatformHistory,
   PlatformOngoing,
   PlatfromCancelled,
 } from '@Views/TradePage/Views/AccordionTable';
-import { useMemo } from 'react';
-import { useMedia } from 'react-use';
+import { useMemo, useState } from 'react';
 import { useAllTradesTab } from './useAlltradesTab';
+import {
+  PlatformOngoing as AbPlatformOngoing,
+  PlatformHistory as AbPlatformHistory,
+  PlatfromCancelled as AbPlatfromCancelled,
+} from '@Views/ABTradePage/Views/AccordionTable';
 
+const tabs = ['active', 'history', 'cancelled'];
+const products = ['Up/Down', 'Above/Below'];
 export const AllTrades = () => {
   const { setTab, tab } = useAllTradesTab();
-  const isNotMobile = useMedia('(min-width:1200px)');
+  const [activeProduct, setProduct] = useState(products[0]);
 
-  const tabs = ['active', 'history', 'cancelled'];
   const currentTab = useMemo(() => {
     if (tab !== null) {
       return tab;
@@ -26,27 +25,52 @@ export const AllTrades = () => {
   }, [tab]);
 
   const table = useMemo(() => {
-    if (currentTab.toLowerCase() === 'active') {
-      return isNotMobile ? (
-        <PlatformOngoing overflow={false} />
-      ) : (
-        <MobilePlatformOngoingTable />
-      );
-    }
-    if (currentTab.toLowerCase() === 'history') {
-      return isNotMobile ? (
-        <PlatformHistory className="sm:min-w-[800px]" overflow={false} />
-      ) : (
-        <MobilePlatformHistoryTable />
-      );
-    }
-    if (currentTab.toLowerCase() === 'cancelled') {
-      return <PlatfromCancelled overflow={false} />;
+    if (activeProduct.toLowerCase() === 'above/below') {
+      if (currentTab.toLowerCase() === 'active') {
+        return <AbPlatformOngoing overflow={false} />;
+      }
+      if (currentTab.toLowerCase() === 'history') {
+        return (
+          <AbPlatformHistory className="sm:min-w-[800px]" overflow={false} />
+        );
+      }
+      if (currentTab.toLowerCase() === 'cancelled') {
+        return <AbPlatfromCancelled overflow={false} />;
+      }
+    } else if (activeProduct.toLowerCase() === 'up/down') {
+      if (currentTab.toLowerCase() === 'active') {
+        return <PlatformOngoing overflow={false} />;
+      }
+      if (currentTab.toLowerCase() === 'history') {
+        return (
+          <PlatformHistory className="sm:min-w-[800px]" overflow={false} />
+        );
+      }
+      if (currentTab.toLowerCase() === 'cancelled') {
+        return <PlatfromCancelled overflow={false} />;
+      }
     }
     return <>select a tab</>;
-  }, [currentTab]);
+  }, [currentTab, activeProduct]);
   return (
     <div className="w-full">
+      <div className="flex gap-3 my-4 mx-5">
+        {products.map((product) => {
+          const isActiveProduct =
+            activeProduct.toLowerCase() === product.toLowerCase();
+          return (
+            <button
+              className={`text-f18 ${
+                isActiveProduct ? 'text-1' : 'text-[#808191]'
+              } capitalize`}
+              key={product}
+              onClick={() => setProduct(product)}
+            >
+              {product}
+            </button>
+          );
+        })}
+      </div>
       <div className="flex gap-3 my-4 mx-5">
         {tabs.map((tab) => {
           const isActiveTab = tab.toLowerCase() === currentTab.toLowerCase();
