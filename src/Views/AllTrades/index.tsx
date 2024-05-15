@@ -10,10 +10,12 @@ import {
   PlatformHistory as AbPlatformHistory,
   PlatfromCancelled as AbPlatfromCancelled,
 } from '@Views/ABTradePage/Views/AccordionTable';
+import { usePriceRetriable } from '@Hooks/usePrice';
 
 const tabs = ['active', 'history', 'cancelled'];
 const products = ['Up/Down', 'Above/Below'];
 export const AllTrades = () => {
+  usePriceRetriable();
   const { setTab, tab } = useAllTradesTab();
   const [activeProduct, setProduct] = useState(products[0]);
 
