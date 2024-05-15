@@ -562,8 +562,7 @@ export const Probability: React.FC<{
         (isColored ? (probability >= 50 ? 'text-green' : 'text-red') : '')
       }
     >
-      {probability > 0 ? '+' + probability.toFixed(2) : probability.toFixed(2)}{' '}
-      %
+      {probability.toFixed(2)} %
     </div>
   );
 };
