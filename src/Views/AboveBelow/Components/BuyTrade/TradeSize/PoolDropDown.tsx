@@ -54,7 +54,7 @@ export const PoolDropdown: React.FC = () => {
             value={market.poolInfo.token.toUpperCase()}
             key={market.poolInfo.token.toUpperCase()}
           >
-            {market.poolInfo.token.toUpperCase()}
+            {market.poolInfo.token}
           </MenuItem>
         ))
       ) : (
