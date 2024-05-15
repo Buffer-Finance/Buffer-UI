@@ -17,7 +17,6 @@ import {
   expiryPriceCache,
   getPriceCacheId,
 } from '@Views/ABTradePage/Hooks/useBuyTradeActions';
-import { usePoolInfo } from '@Views/ABTradePage/Hooks/usePoolInfo';
 import { TradeType } from '@Views/ABTradePage/type';
 import { getAssetImageUrl } from '@Views/ABTradePage/utils/getAssetImageUrl';
 import { Launch } from '@mui/icons-material';
@@ -72,8 +71,6 @@ const HistoryTable: React.FC<{
   className = '',
   overflow = true,
 }) => {
-  const { getPoolInfo } = usePoolInfo();
-
   const headNameArray = platform
     ? [
         'Asset',

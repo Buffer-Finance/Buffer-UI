@@ -7,7 +7,13 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { getCachedPriceFromKlines } from '@TV/useDataFeed';
 import { getDisplayDate, getDisplayTime } from '@Utils/Dates/displayDateTime';
 import { toFixed } from '@Utils/NumString';
-import { divide, gt, round } from '@Utils/NumString/stringArithmatics';
+import {
+  divide,
+  gt,
+  multiply,
+  round,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import { Variables } from '@Utils/Time';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import NumberTooltip from '@Views/Common/Tooltips';
@@ -89,6 +95,7 @@ export const OngoingTradesTable: React.FC<{
           'Time Left',
           'Close Time',
           'Trade Size',
+          'Payout',
           'Probability',
           'User',
         ]
@@ -100,6 +107,7 @@ export const OngoingTradesTable: React.FC<{
           'Time Left',
           'Close Time',
           'Trade Size',
+          'Payout',
           'Probability',
           'Display',
         ];
@@ -112,8 +120,9 @@ export const OngoingTradesTable: React.FC<{
     TimeLeft = 4,
     CloseTime = 5,
     TradeSize = 6,
-    Probability = 7,
-    Show = 8,
+    Payout = 7,
+    Probability = 8,
+    Show = 9,
   }
   const HeaderFomatter = (col: number) => {
     return <TableHeader col={col} headsArr={headNameArray} />;
@@ -148,6 +157,39 @@ export const OngoingTradesTable: React.FC<{
       '0';
 
     switch (col) {
+      case TableColumn.Payout:
+        if (trade.state === 'QUEUED') return <>-</>;
+        return (
+          <CellContent
+            content={[
+              <Display
+                data={divide(
+                  trade.locked_amount ?? '0',
+                  trade.market.poolInfo.decimals
+                )}
+                precision={2}
+                className="!justify-start"
+                unit={trade.market.poolInfo.token}
+              />,
+              <div className="flex">
+                ROI :{' '}
+                {toFixed(
+                  multiply(
+                    divide(
+                      subtract(
+                        trade.locked_amount ?? '0',
+                        trade.total_fee ?? '0'
+                      ) as string,
+                      trade.total_fee ?? '0'
+                    ) as string,
+                    '100'
+                  ) as string,
+                  0
+                ) + '%'}
+              </div>,
+            ]}
+          />
+        );
       case TableColumn.Show:
         if (platform)
           return (
@@ -198,7 +240,7 @@ export const OngoingTradesTable: React.FC<{
           // )
         );
       case TableColumn.TimeLeft:
-        let currentEpoch = Math.round(new Date().getTime() / 1000);
+        // let currentEpoch = Math.round(new Date().getTime() / 1000);
         return (
           // queuedTradeFallBack(trade, true) || (
           <div>
@@ -469,6 +511,7 @@ import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
 import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
 import { JackpotChip } from '@Views/Jackpot/JackpotChip';
 import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
 // import { Display } from '@Views/Common/Tooltips/Display';
 
 export const Probability: React.FC<{
