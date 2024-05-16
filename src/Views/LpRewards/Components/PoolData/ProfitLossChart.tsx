@@ -115,66 +115,68 @@ export const ProfitLossChart: React.FC<{
   const { ret: tradersUSDCData, loading: tradersUSDCLoading } =
     useTradersUSDCData(activeChain, activePool);
   return (
-    <ChartWrapper
-      loading={tradersUSDCLoading}
-      data={tradersUSDCData?.data ?? []}
-      //   tooltip={
-      //     "The following graph showcases the trader's Profit and Loss (PnL) by exclusively considering the additions and removals made to the pool, while disregarding any protocol fees."
-      //   }
-    >
-      <ResponsiveContainer width="100%" aspect={0.65}>
-        <ComposedChart data={tradersUSDCData?.data} syncId="tradersId">
-          <CartesianGrid strokeDasharray="10 10" />
-          <XAxis
-            dataKey="timestamp"
-            tickFormatter={tooltipLabelFormatter}
-            minTickGap={30}
-          />
-          <YAxis
-            domain={[
-              -(tradersUSDCData?.stats?.maxAbsCumulativePnl ?? 0) * 1.05,
-              tradersUSDCData?.stats?.maxAbsCumulativePnl ?? 0 * 1.05,
-            ]}
-            orientation="right"
-            yAxisId="right"
-            tickFormatter={yaxisFormatter}
-            width={YAXIS_WIDTH}
-            tick={{ fill: COLORS[4] }}
-          />
-          <YAxis
-            domain={[
-              -(tradersUSDCData?.stats.maxAbsPnl ?? 0) * 1.05,
-              tradersUSDCData?.stats.maxAbsPnl ?? 0 * 1.05,
-            ]}
-            tickFormatter={yaxisFormatter}
-            width={YAXIS_WIDTH}
-          />
-          <Tooltip
-            formatter={tooltipFormatter}
-            labelFormatter={tooltipLabelFormatter}
-            contentStyle={{ textAlign: 'left' }}
-          />
-          <Legend />
-          <Bar type="monotone" fill={'#FFFFFF'} dataKey="pnl" name="Net PnL">
-            {(tradersUSDCData?.data || []).map((item, i) => {
-              return (
-                <Cell
-                  key={`cell-${i}`}
-                  fill={item.pnl > 0 ? '#22c761' : '#f93333'}
-                />
-              );
-            })}
-          </Bar>
-          <Line
-            type="monotone"
-            strokeWidth={2}
-            stroke={COLORS[4]}
-            dataKey="currentPnlCumulative"
-            name="Cumulative PnL"
-            yAxisId="right"
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
-    </ChartWrapper>
+    <div className="text-[#A0A3C4] text-f12 w-[600px] mt-6">
+      <ChartWrapper
+        loading={tradersUSDCLoading}
+        data={tradersUSDCData?.data ?? []}
+        //   tooltip={
+        //     "The following graph showcases the trader's Profit and Loss (PnL) by exclusively considering the additions and removals made to the pool, while disregarding any protocol fees."
+        //   }
+      >
+        <ResponsiveContainer width={'100%'} aspect={2}>
+          <ComposedChart data={tradersUSDCData?.data} syncId="tradersId">
+            <CartesianGrid strokeDasharray="10 10" />
+            <XAxis
+              dataKey="timestamp"
+              tickFormatter={tooltipLabelFormatter}
+              minTickGap={30}
+            />
+            <YAxis
+              domain={[
+                -(tradersUSDCData?.stats?.maxAbsCumulativePnl ?? 0) * 1.05,
+                tradersUSDCData?.stats?.maxAbsCumulativePnl ?? 0 * 1.05,
+              ]}
+              orientation="right"
+              yAxisId="right"
+              tickFormatter={yaxisFormatter}
+              width={YAXIS_WIDTH}
+              tick={{ fill: COLORS[4] }}
+            />
+            <YAxis
+              domain={[
+                -(tradersUSDCData?.stats.maxAbsPnl ?? 0) * 1.05,
+                tradersUSDCData?.stats.maxAbsPnl ?? 0 * 1.05,
+              ]}
+              tickFormatter={yaxisFormatter}
+              width={YAXIS_WIDTH}
+            />
+            <Tooltip
+              formatter={tooltipFormatter}
+              labelFormatter={tooltipLabelFormatter}
+              contentStyle={{ textAlign: 'left' }}
+            />
+            <Legend />
+            <Bar type="monotone" fill={'#FFFFFF'} dataKey="pnl" name="Net PnL">
+              {(tradersUSDCData?.data || []).map((item, i) => {
+                return (
+                  <Cell
+                    key={`cell-${i}`}
+                    fill={item.pnl > 0 ? '#22c761' : '#f93333'}
+                  />
+                );
+              })}
+            </Bar>
+            <Line
+              type="monotone"
+              strokeWidth={2}
+              stroke={COLORS[4]}
+              dataKey="currentPnlCumulative"
+              name="Cumulative PnL"
+              yAxisId="right"
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </ChartWrapper>
+    </div>
   );
 };
