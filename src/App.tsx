@@ -290,14 +290,14 @@ const AppRoutes = () => {
           }
         />
 
-        {/* <Route
+        <Route
           path="/rewards"
           element={
             <Suspense fallback={<PageLoader />}>
               <RewardsPage />
             </Suspense>
           }
-        /> */}
+        />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
           {/* <Route path="leagues" element={<LeaderBoardOutlet />}>
             <Route path=":league" element={<Leagues />}>
