@@ -338,6 +338,18 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
+        to: `/lp-rewards`,
+        name: 'LP Page',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: '/rewards',
+        name: 'Rewards',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
         to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
@@ -462,6 +474,18 @@ export const getTabs = (
         name: 'Optopi NFT',
         subTabs: [],
         isExternalLink: true,
+      },
+      {
+        to: `/lp-rewards`,
+        name: 'LP Page',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: '/rewards',
+        name: 'Rewards',
+        subTabs: [],
+        isExternalLink: false,
       },
       {
         to: `/leaderboard/galxe`,
