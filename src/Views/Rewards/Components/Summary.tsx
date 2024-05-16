@@ -15,7 +15,7 @@ export const Summary = () => {
         Rewards Summary
       </div>
       <div className="flex gap-[60px] items-start sm:flex-col">
-        <TradingRewards />
+        {/* <TradingRewards /> */}
         <ComeptitionRewards />
       </div>
     </div>

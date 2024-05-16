@@ -8,16 +8,20 @@ export const useRebatesAlloted = () => {
   const { address } = useUserAccount();
   const readcalls = [];
   const currentWeekId = getWeekId(0);
-
+  const rewards: {
+    [weekId: string]: string[];
+  } = {};
   for (let i = startWeekId; i < currentWeekId; i++) {
-    readcalls.push({
-      address: rebatesAddress,
-      abi: RebatesABI,
-      name: 'rebateAmount',
-      params: [address, i],
-      id: i,
-    });
+    // readcalls.push({
+    //   address: rebatesAddress,
+    //   abi: RebatesABI,
+    //   name: 'rebateAmount',
+    //   params: [address, i],
+    //   id: i,
+    // });
+    rewards[i] = ['0'];
   }
 
-  return useCall2Data(readcalls, 'rebates-alloted');
+  // return useCall2Data(readcalls, 'rebates-alloted');
+  return { data: rewards };
 };

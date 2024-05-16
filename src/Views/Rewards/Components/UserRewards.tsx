@@ -37,10 +37,10 @@ export const UserRewards: React.FC<{
       ) : (
         <ConnectionRequired className="max-w-[200px]">
           <div className="flex gap-5 items-start sm:flex-col">
-            <Rebates
+            {/* <Rebates
               isCurrentWeek={selectedWeekId == currentWeekId}
               selectedWeekId={selectedWeekId}
-            />
+            /> */}
             <Competitions
               isCurrentWeek={selectedWeekId == currentWeekId}
               selectedWeekId={selectedWeekId}
@@ -113,7 +113,7 @@ const Rebates: React.FC<{ isCurrentWeek: boolean; selectedWeekId: number }> = ({
 };
 
 const RebateButton: React.FC<{
-  allotedRebates: { [weekId: string]: string } | undefined;
+  allotedRebates: { [weekId: string]: string[] } | undefined;
   selectedWeekRebate: string | undefined;
   selectedWeekId: number;
 }> = ({ allotedRebates, selectedWeekRebate, selectedWeekId }) => {
