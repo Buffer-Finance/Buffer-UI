@@ -18,6 +18,7 @@ export const appConfig = {
       LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/version/v3.0.31-leaderboard-tracking-update-contracts/api`,
       DASHBOARD: '',
       PROFILE: '',
+      LP: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/version/v3.0.32-pool-tracking-update-blp-rate/api`,
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x50880Adb1e67cDebc1fcd57727AB99740e458322',
@@ -128,6 +129,7 @@ export const appConfig = {
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.1-ud-ab-nfts-leagues-stats-defillama-merge/api',
       PROFILE:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/version/v2.7.2-v2.6-profile-data/api',
+      LP: '',
     },
     product_id: {
       UP_DOWN: {
@@ -244,6 +246,7 @@ export const appConfig = {
       ABOVE_BELOW: '',
       DASHBOARD: '',
       PROFILE: '',
+      LP: '',
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
     referral_storage: '0x6F825c1CBa015Ed94FD0b317c1588d6A8699C0a7',
@@ -273,6 +276,7 @@ export const appConfig = {
       ABOVE_BELOW: '',
       DASHBOARD: '',
       PROFILE: '',
+      LP: '',
     },
     multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     referral_storage: '0x5756e6AFd7045cc81B59CeF46384D9512fDeD8A6',

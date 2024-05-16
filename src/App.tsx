@@ -64,9 +64,10 @@ const TradeLog_sm = lazy(
   () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
 );
 
-import Jackpot from '@Views/Jackpot';
-import AboveBelow from '@Views/AboveBelow';
-import RewardsPage from '@Views/Rewards';
+const Jackpot = lazy(() => import('@Views/Jackpot'));
+const AboveBelow = lazy(() => import('@Views/AboveBelow'));
+const RewardsPage = lazy(() => import('@Views/Rewards'));
+const LpRewardsPage = lazy(() => import('@Views/LpRewards'));
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{
@@ -143,6 +144,14 @@ const AppRoutes = () => {
       <OnboardingAnimation />
       <OneCTModal />
       <Routes>
+        <Route
+          path="lp-rewards"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <LpRewardsPage />
+            </Suspense>
+          }
+        />
         <Route
           path="trades"
           element={
