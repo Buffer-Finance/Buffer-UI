@@ -105,7 +105,7 @@ const ComeptitionRewards: React.FC = () => {
       </div>
       <div className="flex gap-6 items-start h-full">
         <Column
-          head="Rebates Claimed"
+          head="Rewards Claimed"
           data={
             data === undefined ? (
               <Skeleton
@@ -123,7 +123,7 @@ const ComeptitionRewards: React.FC = () => {
         />
         <Divider />
         <Column
-          head="Rebates Unclaimed"
+          head="Rewards Unclaimed"
           data={
             competitionRewardsAlloted === undefined || data === undefined ? (
               <Skeleton
