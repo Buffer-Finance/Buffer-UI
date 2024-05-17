@@ -17,7 +17,8 @@ export const useMarketsRequest = () => {
           optionContract.poolContract !== null &&
           getAddress(configData.router) ===
             getAddress(optionContract.routerContract) &&
-          optionContract.configContract !== null
+          optionContract.configContract !== null &&
+          optionContract.isRegistered
       ),
     },
     error,
