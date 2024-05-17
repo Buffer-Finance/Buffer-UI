@@ -33,6 +33,7 @@ export type marketType = {
   img: string;
   pythId: string;
   creation_window_contract: string | undefined;
+  isRegistered: boolean;
   pools: poolType[];
 } & chartDataType;
 
@@ -107,6 +108,7 @@ export type responseObj = {
   category: number;
   asset: string;
   pool: string;
+  isRegistered: boolean;
 };
 
 export enum AssetCategory {

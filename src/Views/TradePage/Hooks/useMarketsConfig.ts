@@ -63,5 +63,6 @@ export function createPoolObject(market: responseObj) {
     SpreadConfig1: Number(market.configContract.SpreadConfig1),
     SpreadConfig2: Number(market.configContract.SpreadConfig2),
     SpreadFactor: Number(market.configContract.SpreadFactor),
+    isRegistered: market.isRegistered,
   };
 }
