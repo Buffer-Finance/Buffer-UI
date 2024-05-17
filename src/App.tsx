@@ -299,24 +299,24 @@ const AppRoutes = () => {
           }
         />
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          {/* <Route path="leagues" element={<LeaderBoardOutlet />}>
+          <Route path="leagues" element={<LeaderBoardOutlet />}>
             <Route path=":league" element={<Leagues />}>
               <Route path=":chain" element={<Leagues />} />
             </Route>
           </Route>
-          <Route path="metrics" element={<LeaderBoardOutlet />}>
+          {/* <Route path="metrics" element={<LeaderBoardOutlet />}>
             <Route path="all-time" element={<AllTime />}>
               <Route path=":chain" element={<AllTime />} />
             </Route>
-          </Route>
+          </Route> */}
 
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
-          </Route> */}
-
+          </Route>
+          {/* 
           <Route path="galxe" element={<Galxe />}>
             <Route path=":chain" element={<Galxe />} />
-          </Route>
+          </Route> */}
         </Route>
       </Routes>
     </div>
