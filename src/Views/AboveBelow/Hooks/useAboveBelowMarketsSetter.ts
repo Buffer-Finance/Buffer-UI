@@ -25,7 +25,7 @@ export const useAboveBelowMarketsSetter = () => {
   }> {
     const response = await axios.post(configData.graph.ABOVE_BELOW, {
       query: `{ 
-        optionContracts(first:10000,where:{routerContract:"${configData.above_below_router}",address_not_in: ["0x23b5a99bc88377e22e67bdb25cf5b37559f65290", "0x2a5fbcf0b11423fd7a94e48693adf9a2681ea527"]}) {
+        optionContracts(first:10000,where:{routerContract:"${configData.above_below_router}"}) {
             address
             token1
             token0

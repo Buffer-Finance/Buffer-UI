@@ -59,13 +59,18 @@ export const favouriteMarketsAtom = atomWithStorage<string[]>(
 export const selectedPoolAtom = atom<poolInfoType | null>(null);
 
 export const filteredMarketsAtom = atom((get) => {
-  const markets = get(aboveBelowMarketsAtom);
+  const allmarkets = get(aboveBelowMarketsAtom);
   const activeCategory = get(activeCategoryAtom);
   const searchBar = get(searchBarAtom);
   const favouriteMarkets = get(favouriteMarketsAtom);
   const selectedPool = get(selectedPoolAtom);
 
-  if (markets === null) return undefined;
+  const markets = allmarkets?.filter(
+    (market) =>
+      market.address != '0x23b5a99bc88377e22e67bdb25cf5b37559f65290' &&
+      market.address != '0x2a5fbcf0b11423fd7a94e48693adf9a2681ea527'
+  );
+  if (markets === undefined) return undefined;
   if (selectedPool === null) return undefined;
 
   const filteredMarkets = markets
