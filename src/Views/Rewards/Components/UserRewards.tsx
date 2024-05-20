@@ -1,7 +1,7 @@
 import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { divide, gte, toFixed } from '@Utils/NumString/stringArithmatics';
+import { add, divide, gte, toFixed } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
@@ -271,10 +271,18 @@ const Competitions: React.FC<{
     if (rewardsAlloted === undefined) {
       return undefined;
     }
-    return rewardsAlloted.find((r) => r.weekId == selectedWeekId);
+    return rewardsAlloted.filter((r) => r.weekId == selectedWeekId);
   }, [rewardsAlloted, selectedWeekId]);
 
-  const selectedWeekAllotedAMount = selectedWeekAlloted?.amount;
+  const selectedWeekAllotedAMount = useMemo(() => {
+    if (selectedWeekAlloted === undefined) {
+      return undefined;
+    }
+    // add the amount of all the rewards alloted for the week
+    return selectedWeekAlloted.reduce((acc, r) => {
+      return add(acc, r.amount);
+    }, '0');
+  }, [selectedWeekAlloted]);
   return (
     <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg sm:w-full">
       <div className="flex flex-col gap-5">
@@ -342,7 +350,7 @@ const CompetitionRewardsButton: React.FC<{
         created_at: string;
         updated_at: string;
         time_threshold: number;
-      }
+      }[]
     | undefined;
   isNotAlloted: boolean;
 }> = ({ allotedRewards, selectedWeekRebate, isNotAlloted }) => {
@@ -366,7 +374,11 @@ const CompetitionRewardsButton: React.FC<{
   if (selectedWeekRebate === '0') {
     return <span></span>;
   }
-  if (claimedRewards.some((r) => r.reward_id === allotedRewards.reward_id)) {
+  if (
+    claimedRewards.some((r) =>
+      allotedRewards.find((a) => a.reward_id == r.reward_id)
+    )
+  ) {
     return (
       <BlueBtn
         onClick={() => {}}
@@ -394,7 +406,7 @@ const ClaimCompetitionReward: React.FC<{
     created_at: string;
     updated_at: string;
     time_threshold: number;
-  };
+  }[];
 }> = ({ allotedRewards }) => {
   const { writeCall } = useWriteCall(
     competitionRewardAddress,
@@ -402,14 +414,15 @@ const ClaimCompetitionReward: React.FC<{
   );
   const [isLoading, setIsLoading] = useState(false);
   const toastify = useToast();
-  const params = [
-    allotedRewards.address,
-    allotedRewards.token,
-    allotedRewards.amount,
-    allotedRewards.reward_id,
-    allotedRewards.time_threshold,
-    allotedRewards.signature,
-  ];
+
+  const params = allotedRewards.map((reward) => [
+    reward.address,
+    reward.token,
+    reward.amount,
+    reward.reward_id,
+    reward.time_threshold,
+    reward.signature,
+  ]);
   return (
     <BlueBtn
       isLoading={isLoading}
@@ -422,7 +435,7 @@ const ClaimCompetitionReward: React.FC<{
               console.log(p);
             },
             'claimMultiple',
-            [[params]]
+            [params]
           );
 
           setIsLoading(false);

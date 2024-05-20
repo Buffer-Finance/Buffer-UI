@@ -172,17 +172,22 @@ const Season: React.FC<{
 
   const competitionReward = useMemo(() => {
     if (competitionRewardsAlloted !== undefined) {
-      const competitionRewards = competitionRewardsAlloted.find(
+      const competitionRewards = competitionRewardsAlloted.filter(
         (reward) => reward.weekId === weekId
       );
+
       let reward = '0';
-      if (competitionRewards !== undefined) {
-        reward = competitionRewards.amount;
-      }
+      competitionRewards.forEach((item) => {
+        reward = add(item.amount, reward);
+      });
+      // if (competitionRewards !== undefined) {
+      //   reward = competitionRewards.amount;
+      // }
       return reward;
     }
     return '0';
   }, [competitionRewardsAlloted]);
+
   const rebate = useMemo(() => {
     if (rebatesAlloted !== undefined) {
       const rebates = rebatesAlloted[weekId]?.[0];
@@ -205,7 +210,7 @@ const Season: React.FC<{
       rebatesClaimed !== undefined &&
       competitionRewardsClaimed
     ) {
-      const competitionRewards = competitionRewardsAlloted.find(
+      const competitionRewards = competitionRewardsAlloted.filter(
         (reward) => reward.weekId === weekId
       );
 
@@ -213,15 +218,14 @@ const Season: React.FC<{
       if (competitionReward == '0') {
         isCompetitionRewardsClaimed = true;
       } else if (competitionRewards !== undefined) {
-        isCompetitionRewardsClaimed = competitionRewardsClaimed.some(
-          (r) => r.reward_id == competitionRewards.reward_id
+        isCompetitionRewardsClaimed = competitionRewardsClaimed.some((r) =>
+          competitionRewards.find((c) => c.reward_id == r.reward_id)
         );
       }
 
       const isRebatesClaimed =
         rebate == '0' ||
         rebatesClaimed.some((r) => r.weekId == weekId.toString());
-      console.log(rebate, isCompetitionRewardsClaimed, 'rebate');
 
       return isRebatesClaimed && isCompetitionRewardsClaimed;
     }
