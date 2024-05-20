@@ -18,7 +18,11 @@ export const usePoolTxns = (
     `${activeChain}-${activePool}-${activeTab}-txns-${activePage}`,
     {
       fetcher: async () => {
-        if (activeTab === 'my' && address === undefined) return [];
+        if (activeTab === 'my' && address === undefined)
+          return {
+            blpTxns: [],
+            totalTxns: [{ totalTxns: '0' }],
+          };
         const poolName = activePool === 'aBLP' ? 'ARB' : 'USDC';
         const userAddressQuery =
           activeTab === 'my' ? `,userAddress: "${address}"` : '';
