@@ -127,7 +127,7 @@ export const appConfig = {
       DASHBOARD:
         'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.0-sync-v2.6-history/api',
       PROFILE:
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/version/v2.7.2-v2.6-profile-data/api',
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/version/v2.7.2-v2.6-profile-data-2/api',
     },
     product_id: {
       UP_DOWN: {
