@@ -35,7 +35,7 @@ export const appConfig = {
         metaData: {},
         name: 'UP_DOWN',
         product_id: 'abc',
-        router: '0x3ca907E4FADf6a7e705D177d122c3105D1dAaC40',
+        router: '0x693351786cf6f328B1495bd9d527d898929580AE',
       },
       AB: {
         id: 1,
@@ -136,7 +136,7 @@ export const appConfig = {
         metaData: {},
         name: 'UP_DOWN',
         product_id: 'abc',
-        router: '0x3ca907E4FADf6a7e705D177d122c3105D1dAaC40',
+        router: '0x2BAA48961C1CD376484b601278bF7A51E94293a9',
       },
       AB: {
         id: 1,
@@ -144,7 +144,7 @@ export const appConfig = {
         metaData: {},
         name: 'AB',
         product_id: 'xyz',
-        router: '0xd6705927d296605bE4b590a6841DF6dD967a6959',
+        router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
       },
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',

@@ -352,27 +352,38 @@ export const OngoingTradesTable: React.FC<{
           <ColumnGap gap="3px">
             <div className={headerClass}>Pnl</div>
             <div className={descClass + ' flex items-center gap-1'}>
-              <Pnl
-                configData={trade.market}
-                trade={trade}
-                poolInfo={poolInfo}
-                lockedAmmount={lockedAmmount}
-                shouldShowUnit={false}
-                shouldShowCalculating
-              />
-              <img
-                src={getAssetImageUrl(trade.token)}
-                width={13}
-                height={13}
-                className="inline ml-1"
+              <CellContent
+                content={[
+                  <Display
+                    data={divide(
+                      trade.locked_amount ?? '0',
+                      trade.market.poolInfo.decimals
+                    )}
+                    precision={2}
+                    className="!justify-start"
+                    unit={trade.market.poolInfo.token}
+                  />,
+                ]}
               />
             </div>
           </ColumnGap>
 
           <ColumnGap gap="3px">
-            <div className={headerClass}>Probability</div>
-            <div className={descClass}>
-              <Probability trade={trade} marketPrice={marketPrice} />
+            <div className={headerClass}>ROI</div>
+            <div className={descClass + ' flex items-center gap-1'}>
+              {toFixed(
+                multiply(
+                  divide(
+                    subtract(
+                      trade.locked_amount ?? '0',
+                      trade.total_fee ?? '0'
+                    ) as string,
+                    trade.total_fee ?? '0'
+                  ) as string,
+                  '100'
+                ) as string,
+                0
+              ) + '%'}
             </div>
           </ColumnGap>
         </RowBetween>
