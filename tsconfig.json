@@ -10,6 +10,7 @@
       "@Assets/*": ["./src/assets/*"],
       "@ABIs/*": ["./src/ABIs/*"],
       "@Config/*": ["./Config/*"],
+      "@ConfigContract": ["./src/Config/Contracts.ts"],
       "@TV/*": ["./src/TradingView/*"],
       "@Public/*": ["./public/*"]
     },
