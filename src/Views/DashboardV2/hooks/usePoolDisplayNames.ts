@@ -13,8 +13,10 @@ export const usePoolDisplayNames = () => {
       poolDisplayKeyMapping: {},
     };
     pools.forEach((pool) => {
-      if (pool.toUpperCase().includes('_POL')) {
-        returnObj.poolDisplayNameMapping[pool] = pool.replace('_POL', '');
+      if (pool.toLowerCase().includes('_e')) {
+        returnObj.poolDisplayNameMapping[pool] = pool.replace('_', '.');
+      } else if (pool.toUpperCase().includes('_POL')) {
+        returnObj.poolDisplayNameMapping[pool] = pool.replace('_POL', '.e');
         returnObj.poolDisplayKeyMapping[pool] = pool.replace('_', '-');
       } else {
         returnObj.poolDisplayNameMapping[pool] = pool;

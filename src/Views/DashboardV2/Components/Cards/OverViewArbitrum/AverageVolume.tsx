@@ -22,7 +22,7 @@ const AverageVolume: React.FC<{ data: totalStatsType; keys: string[] }> = ({
 }) => {
   const totalDays = useMemo(() => {
     return {
-      USDC: Math.ceil(
+      'USDC.e': Math.ceil(
         (Date.now() - Date.parse('30 Jan 2023 16:00:00 GMT')) / 86400000
       ),
       USDC_POL: Math.ceil(
@@ -32,6 +32,9 @@ const AverageVolume: React.FC<{ data: totalStatsType; keys: string[] }> = ({
         (Date.now() - Date.parse('17 Mar 2023 017:15:45 GMT')) / 86400000
       ),
       BFR: Math.ceil(
+        (Date.now() - Date.parse('14 Jun 2023 019:36:22 GMT')) / 86400000
+      ),
+      USDC: Math.ceil(
         (Date.now() - Date.parse('14 Jun 2023 019:36:22 GMT')) / 86400000
       ),
     };
@@ -54,24 +57,25 @@ const AverageVolume: React.FC<{ data: totalStatsType; keys: string[] }> = ({
             ))}
             keyStyle={tooltipKeyClasses}
             valueStyle={tooltipValueClasses}
-            values={tokens
-              .filter((key) => !key.toLowerCase().includes('.e'))
-              .map((token, index) => {
-                const stats = data[`${token}stats`];
-                if (stats)
-                  return (
-                    toFixed(
-                      getAverageTradeVolume(
-                        (stats as toalTokenXstats).totalVolume,
-                        totalDays[token as keyof typeof totalDays].toString()
-                      ) as string,
-                      2
-                    ) +
-                    ' ' +
-                    poolDisplayNameMapping[token]
-                  );
-                else return '-';
-              })}
+            values={tokens.map((token, index) => {
+              const tokenName = token.includes('.e')
+                ? token.replace('.', '_')
+                : token;
+              const stats = data[`${tokenName}stats`];
+              if (stats)
+                return (
+                  toFixed(
+                    getAverageTradeVolume(
+                      (stats as toalTokenXstats).totalVolume,
+                      totalDays[token as keyof typeof totalDays].toString()
+                    ) as string,
+                    2
+                  ) +
+                  ' ' +
+                  poolDisplayNameMapping[token]
+                );
+              else return '-';
+            })}
           />
         }
       />

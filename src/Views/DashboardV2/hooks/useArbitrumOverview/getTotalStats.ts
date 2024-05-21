@@ -9,5 +9,6 @@ export const getTotalStats = (
     totalSettlementFees: divide(data.totalSettlementFees, decimals) as string,
     totalTrades: data.totalTrades,
     totalVolume: divide(data.totalVolume, decimals) as string,
+    openInterest: divide(data.openInterest, decimals) as string,
   };
 };
