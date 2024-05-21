@@ -333,7 +333,7 @@ const mobileWarningAtom = atomWithLocalStorage('warnign-suer', false);
 
 function App() {
   useAutoConnect();
-  useRecentWinners();
+  // useRecentWinners();
   const [snack, setSnack] = useAtom(snackAtom);
   const [mobileWarningClosed, setWarningCloseOnMobile] =
     useAtom(mobileWarningAtom);
