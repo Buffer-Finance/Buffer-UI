@@ -89,11 +89,11 @@ export const OngoingTradesTable: React.FC<{
     platform || !registeredOneCT || viewOnlyMode
       ? [
           'Asset',
-          strikePriceHeading,
-          'Current Price',
-          'Open Time',
-          'Time Left',
-          'Close Time',
+          'Strike',
+          'Current',
+          'Open',
+          'Countdown',
+          'Close',
           'Trade Size',
           'Payout',
           'Probability',
@@ -101,11 +101,11 @@ export const OngoingTradesTable: React.FC<{
         ]
       : [
           'Asset',
-          strikePriceHeading,
-          'Current Price',
-          'Open Time',
-          'Time Left',
-          'Close Time',
+          'Strike',
+          'Current',
+          'Open',
+          'Countdown',
+          'Close',
           'Trade Size',
           'Payout',
           'Probability',
