@@ -115,7 +115,7 @@ export const ProfitLossChart: React.FC<{
   const { ret: tradersUSDCData, loading: tradersUSDCLoading } =
     useTradersUSDCData(activeChain, activePool);
   return (
-    <div className="text-[#A0A3C4] text-f12 w-[600px] mt-6">
+    <div className="text-[#A0A3C4] text-f12 w-[600px] sm:w-full mt-6">
       <ChartWrapper
         loading={tradersUSDCLoading}
         data={tradersUSDCData?.data ?? []}

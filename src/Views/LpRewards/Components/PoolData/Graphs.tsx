@@ -23,7 +23,7 @@ export const Graphs: React.FC<{
   }, [activeTab]);
 
   return (
-    <div className="p-6 bg-[#171722]">
+    <div className="p-6 bg-[#171722] sm:w-full">
       <GraphTabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}

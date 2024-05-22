@@ -29,7 +29,7 @@ export const TVLChart: React.FC<{
   );
   const unit = activePool === 'uBLP' ? 'USDC' : 'ARB';
   return (
-    <div className="text-[#A0A3C4] text-f12 w-[600px] mt-6">
+    <div className="text-[#A0A3C4] text-f12 w-[600px] sm:w-full mt-6">
       <ChartWrapper loading={glpLoading && glpData === null} data={glpData}>
         <ResponsiveContainer width={'100%'} aspect={2}>
           <LineChart data={glpData} className="p-2">
