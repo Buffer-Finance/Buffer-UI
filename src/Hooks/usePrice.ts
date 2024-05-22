@@ -24,8 +24,11 @@ type WSUPdate = {
     };
   };
 };
+
 const client = reconnectingSocket(
-  'wss://bufferf-pythnet-4e5a.mainnet.pythnet.rpcpool.com/hermes/ws'
+  import.meta.env.VITE_DEV_MODE
+    ? 'wss://hermes.pyth.network/ws'
+    : 'wss://bufferf-pythnet-4e5a.mainnet.pythnet.rpcpool.com/hermes/ws'
 );
 export let ts2asset2updatecnt = {};
 

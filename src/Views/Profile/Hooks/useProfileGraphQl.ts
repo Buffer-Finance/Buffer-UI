@@ -155,6 +155,7 @@ export const useProfileGraphQl = () => {
     }, {} as Record<string, string>);
 
     const totalTrades = data.userOptionDatas.length;
+    console.log(`totalTrades: `, totalTrades);
 
     return {
       ...computedData,
@@ -163,5 +164,6 @@ export const useProfileGraphQl = () => {
     };
   }, [data?.userOptionDatas, data?.activeData]);
   // console.log(tradingMetricsData, data, 'tradingMetricsData');
+  console.log(`tradingMetricsData: `, tradingMetricsData);
   return { tradingMetricsData };
 };

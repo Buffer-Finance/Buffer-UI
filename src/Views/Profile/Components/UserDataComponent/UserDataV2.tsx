@@ -12,20 +12,24 @@ import { useLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useLeaderboardQ
 import { useWeeklyLeaderboardQuery } from '@Views/V2-Leaderboard/Hooks/useWeeklyLeaderboardQuery';
 import styled from '@emotion/styled';
 import { Launch } from '@mui/icons-material';
+import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getChains } from 'src/Config/wagmiClient';
 import { Chain } from 'wagmi';
+import { productAtom } from '../ProfileCardsComponent/ProfileCardsV2';
 
 const userDataHeadClass = 'text-f14 text-[#7F87A7]';
 const userDataDescClass = 'text-f16 text-[#C3C2D4]';
 
 export const UserDataV2 = () => {
+  const [activeProduct] = useAtom(productAtom);
+
   const { address, viewOnlyMode } = useUserAccount();
   const { winnerUserRank: dailyRank } = useLeaderboardQuery();
   const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
-  const metrics = useProfileGraphQl2();
+  const metrics = useProfileGraphQl2(activeProduct);
   const { activeChain } = useActiveChain();
   const chains: Chain[] = getChains();
   const navigateToTrade = useNavigateToTrade();
