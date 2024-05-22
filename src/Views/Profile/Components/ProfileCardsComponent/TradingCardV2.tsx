@@ -22,6 +22,7 @@ export const TradingCardV2 = ({
 }) => {
   const { address: account } = useUserAccount();
   const alldecimals = useDecimalsByAsset();
+  console.log(alldecimals, 'alldecimals');
   const decimals = alldecimals[tokenName];
   if (account === undefined)
     return <WalletNotConnectedCard heading={heading} />;

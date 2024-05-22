@@ -12,6 +12,7 @@ export const ProfileCardsV2 = () => {
   const [activeProduct, setActiveProduct] = useState<Products>('Up/Down');
 
   const metrics = useProfileGraphQl2(activeProduct);
+  console.log(metrics, 'metrics');
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   return (
     <Section
@@ -28,9 +29,9 @@ export const ProfileCardsV2 = () => {
       Cards={[
         <Referral data={data} heading={'Referral Metrics'} />,
         <TradingCardV2
-          data={metrics?.['USDC']}
+          data={metrics?.['USDC.e']}
           heading={'USDC Trading Metrics'}
-          tokenName="USDC"
+          tokenName="USDC.e"
         />,
         <ArbitrumOnly hide>
           <TradingCardV2
