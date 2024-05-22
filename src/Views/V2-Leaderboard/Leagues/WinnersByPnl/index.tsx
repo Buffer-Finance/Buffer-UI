@@ -1,9 +1,16 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { DailyWebTable } from '@Views/V2-Leaderboard/Daily/DailyWebTable';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { leagueType } from '../atom';
 import { useWinnersByPnlWeekly } from './useWinnersByPnlWeekly';
-
+import { WebTable } from './Tables/WebTable';
+import { LeaderBoardTabs } from '@Views/V2-Leaderboard/Galxe';
+import TabSwitch from '@Views/Common/TabSwitch';
+const tabList = [
+  { name: 'Winners' },
+  { name: 'Losers' },
+  // { name: 'Winners (by Win Rate)' },
+  // { name: 'Losers (by Win Rate)' },
+];
 export const WinnersByPnl = ({
   activeChainId,
 
@@ -16,8 +23,8 @@ export const WinnersByPnl = ({
   activeChainId: number;
   week: number;
 }) => {
+  const [activeTab, setActiveTab] = useState(0);
   const { address: account } = useUserAccount();
-  const [activePage, setActivePage] = useState(1);
   const { data } = useWinnersByPnlWeekly({
     league,
     week,
@@ -38,22 +45,26 @@ export const WinnersByPnl = ({
     totalCount = 0;
   }
 
+  useEffect(() => {
+    if (activeTab > tabList.length - 1) {
+      setActiveTab(0);
+    }
+  }, [offset]);
+
   return (
     <>
+      <LeaderBoardTabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        tabList={tabList}
+      />
       {/* <Winners winners={participants.winners} /> */}
-      <DailyWebTable
-        winners={data?.winners}
-        loosers={data?.loosers}
-        total_count={totalCount}
-        count={1}
-        onpageChange={setActivePage}
-        activePage={activePage}
-        userData={undefined}
-        skip={0}
-        nftWinners={0}
-        userRank={'-'}
-        offSet={'1'} // always >0 to show points
-        isWeekly
+      <TabSwitch
+        value={activeTab}
+        childComponents={[
+          <WebTable data={data?.winners} isWinnersTable />,
+          <WebTable data={data?.loosers} isWinnersTable={false} />,
+        ]}
       />
     </>
   );
