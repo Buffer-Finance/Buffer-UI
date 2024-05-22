@@ -60,14 +60,12 @@ import IbfrFaucet from '@Views/Faucet';
 import ProfilePage from '@Views/Profile';
 import ReferralPage from '@Views/Referral';
 import Test from '@Views/Test';
-const TradeLog_sm = lazy(
-  () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
-);
+import TradeLog_sm from '@Views/TradePage/Components/MobileView/TradeLog_sm';
 
-const Jackpot = lazy(() => import('@Views/Jackpot'));
-const AboveBelow = lazy(() => import('@Views/AboveBelow'));
-const RewardsPage = lazy(() => import('@Views/Rewards'));
-const LpRewardsPage = lazy(() => import('@Views/LpRewards'));
+import Jackpot from '@Views/Jackpot';
+import AboveBelow from '@Views/AboveBelow';
+import RewardsPage from '@Views/Rewards';
+import LpRewardsPage from '@Views/LpRewards';
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{

@@ -50,7 +50,7 @@ export const TVLChart: React.FC<{
             <Tooltip
               formatter={tooltipFormatterNumber}
               labelFormatter={tooltipLabelFormatter}
-              contentStyle={{ textAlign: 'left' }}
+              contentStyle={{ textAlign: 'left', fontWeight: 'bold' }}
             />
             <Legend />
             <Line

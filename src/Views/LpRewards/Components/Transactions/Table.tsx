@@ -15,7 +15,6 @@ enum transactionCols {
   timestamp,
   amount,
   // lockPeriod,
-  txnType,
   blpRate,
   unitsMinted,
   txnHash,
@@ -26,7 +25,6 @@ const colNames = [
   'Date | Time',
   'Amount',
   // 'Lock Period',
-  'Type',
   'BLP Rate',
   'Units Minted/Burned',
   'Tx Status',
@@ -67,14 +65,13 @@ function Body(
         <Display
           data={divide(txn.amount, decimals)}
           unit={poolUnit}
+          label={txn.type == 'Provide' ? '+' : '-'}
           precision={2}
           className="!justify-start text-f15"
         />
       );
     // case transactionCols.lockPeriod:
     //   return <span className="text-f15">{txn.lockPeriod}</span>;
-    case transactionCols.txnType:
-      return <span className="text-f15">{txn.type}</span>;
     case transactionCols.blpRate:
       return (
         <Display

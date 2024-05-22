@@ -112,7 +112,7 @@ export const AprDD: React.FC<{
           <APRheading>Total APR</APRheading>
           <KeyboardArrowDown
             className={`text-[#ffffff] bg-[#464660] cursor-pointer transition-all duration-500 ease-in-out rounded-sm ${
-              !isAPRddOpen ? 'rotate-180' : ''
+              isAPRddOpen ? 'rotate-180' : ''
             }`}
             onClick={() => setIsAPRddOpen(!isAPRddOpen)}
           />

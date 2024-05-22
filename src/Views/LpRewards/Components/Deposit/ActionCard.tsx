@@ -58,30 +58,20 @@ export const Tabs: React.FC<{
         >
           Withdraw
         </TabButton>
-        {/* <TabButton
-          onClick={() => setDepositTabType('vest')}
-          isActive={activeTab === 'vest'}
-        >
-          Vest
-        </TabButton> */}
       </div>
-      <TabSwitch
-        value={activeTabNumber}
-        // className="w-full"
-        childComponents={[
-          <DepositTab
-            activePool={activePool}
-            readcallData={readcallData}
-            activeChain={activeChain}
-          />,
-          <WithdrawTab
-            activePool={activePool}
-            readcallData={readcallData}
-            activeChain={activeChain}
-          />,
-          // <VestTab activePool={activePool} />,
-        ]}
-      />
+      {activeTab === 'deposit' ? (
+        <DepositTab
+          activePool={activePool}
+          readcallData={readcallData}
+          activeChain={activeChain}
+        />
+      ) : (
+        <WithdrawTab
+          activePool={activePool}
+          readcallData={readcallData}
+          activeChain={activeChain}
+        />
+      )}
     </div>
   );
 };

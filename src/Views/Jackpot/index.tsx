@@ -148,7 +148,7 @@ const Jackpot: React.FC<any> = ({}) => {
         image: HTPJ1,
         body: (
           <span>
-            Level up your chances to win big! Place a bet that's greater than{' '}
+            Level up your chances to win big! Place a trade that's greater than{' '}
             <b>
               {minSize}&nbsp;{JackpotToken}{' '}
             </b>

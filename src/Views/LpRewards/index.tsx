@@ -18,7 +18,7 @@ const LpRewards = () => {
   const { activeChain } = useActiveChain();
   if (activeChain === undefined) return <div>Loading...</div>;
   return (
-    <div className="p-8 w-full sm:p-4">
+    <div className="p-8 nsm:w-[1300px] sm:w-full nsm:m-auto sm:p-4">
       {/* <PoolTabs activePool={activePool} setActivePool={setActivePool} /> */}
       <MobileTabs
         activeTab={activeMobileTab}

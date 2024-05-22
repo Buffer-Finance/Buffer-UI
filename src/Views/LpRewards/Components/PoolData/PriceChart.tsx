@@ -49,7 +49,7 @@ export const PriceChart: React.FC<{
             <Tooltip
               formatter={tooltipFormatterNumber}
               labelFormatter={tooltipLabelFormatter}
-              contentStyle={{ textAlign: 'left' }}
+              contentStyle={{ textAlign: 'left', fontWeight: 'bold' }}
             />
             <Legend />
             <Line

@@ -3,7 +3,9 @@ import { useCallback, useMemo } from 'react';
 import { useTokensPerInterval } from '../Hooks/useTokensPerInterval';
 import { Chain } from 'viem';
 import { convertLockPeriodToSeconds } from './BoostYield/Lock';
-
+function formatDays(data) {
+  return data.months * 30 + data.days;
+}
 export const DayMonthInput: React.FC<{
   data: {
     days: number;
@@ -58,25 +60,17 @@ export const DayMonthInput: React.FC<{
   }, [data, maxLockDuration, isDisabled]);
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 justify-end">
       <ActionButton onClick={handleSubtract} disabled={isMinusDisabled}>
         -
       </ActionButton>
-      <div className="flex items-center gap-3">
-        <div>
-          <div className="text-[#C3C2D4] text-f12 font-medium leading-[18px]">
-            Months
-          </div>
-          <div className="text-[#ffffff] text-f16 font-medium leading-[18px] mt-3 text-center">
-            {data.months}
-          </div>
-        </div>
+      <div className="flex items-center gap-3 ">
         <div>
           <div className="text-[#C3C2D4] text-f12 font-medium leading-[18px]">
             Days
           </div>
           <div className="text-[#ffffff] text-f16 font-medium leading-[18px] mt-3 text-center">
-            {data.days}
+            {formatDays(data)}
           </div>
         </div>
       </div>

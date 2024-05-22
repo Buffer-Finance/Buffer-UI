@@ -153,7 +153,7 @@ export const ProfitLossChart: React.FC<{
             <Tooltip
               formatter={tooltipFormatter}
               labelFormatter={tooltipLabelFormatter}
-              contentStyle={{ textAlign: 'left' }}
+              contentStyle={{ textAlign: 'left', fontWeight: 'bold' }}
             />
             <Legend />
             <Bar type="monotone" fill={'#FFFFFF'} dataKey="pnl" name="Net PnL">
