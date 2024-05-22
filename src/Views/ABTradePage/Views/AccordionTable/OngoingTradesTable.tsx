@@ -81,32 +81,28 @@ export const OngoingTradesTable: React.FC<{
   const { data: allSpreads } = useSpread();
   const navigateToProfile = useNavigateToProfile();
 
-  let strikePriceHeading = 'Strike Price';
-  if (isMobile) {
-    strikePriceHeading = 'Strike';
-  }
   const headNameArray =
     platform || !registeredOneCT || viewOnlyMode
       ? [
           'Asset',
-          strikePriceHeading,
+          'Strike',
           'Current Price',
-          'Open Time',
-          'Time Left',
-          'Close Time',
-          'Trade Size',
+          'Open ',
+          'Countdown',
+          'Close ',
+          'Size',
           'Payout',
           'Probability',
           'User',
         ]
       : [
           'Asset',
-          strikePriceHeading,
+          'Strike',
           'Current Price',
-          'Open Time',
-          'Time Left',
-          'Close Time',
-          'Trade Size',
+          'Open ',
+          'Countdown',
+          'Close ',
+          'Size',
           'Payout',
           'Probability',
           'Display',
