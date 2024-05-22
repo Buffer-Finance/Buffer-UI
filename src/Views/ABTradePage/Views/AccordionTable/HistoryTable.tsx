@@ -46,8 +46,7 @@ enum TableColumn {
   CloseTime = 5,
   TradeSize = 6,
   Payout = 7,
-  Status = 8,
-  ShareOrAddress = 9,
+  ShareOrAddress = 8,
 }
 
 const HistoryTable: React.FC<{
@@ -74,26 +73,25 @@ const HistoryTable: React.FC<{
   const headNameArray = platform
     ? [
         'Asset',
-        'Strike Price',
-        'Expiry Price',
-        'Open Time',
+        'Strike',
+        'Expiry',
+        'Open',
         'Duration',
-        'Close Time',
-        'Trade Size',
+        'Close',
+        'Size',
         'Payout',
-        'Status',
         'User',
       ]
     : [
         'Asset',
-        'Strike Price',
-        'Expiry Price',
-        'Open Time',
+        'Strike',
+        'Expiry',
+        'Open',
         'Duration',
-        'Close Time',
-        'Trade Size',
+        'Close',
+        'Size',
         'Payout',
-        'Status',
+
         '',
       ];
   const HeaderFomatter = (col: number) => {

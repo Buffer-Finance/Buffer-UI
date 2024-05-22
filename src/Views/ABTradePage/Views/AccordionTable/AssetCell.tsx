@@ -4,6 +4,7 @@ import { PairTokenImage } from '@Views/Common/PairTokenImage';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { TradeType } from '@Views/ABTradePage/type';
 import { UpDownChip } from './UpDownChip';
+import { formatAsset } from '@Utils/TableUtils';
 
 export const AssetCell: React.FC<{
   currentRow: TradeType;
@@ -36,12 +37,12 @@ export const AssetCell: React.FC<{
         >
           <div className={`flex  -ml-[6px]`}>
             <span className={`weight-400 text-f15 sm:text-f12 `}>
-              {token0 + '-' + token1}{' '}
+              {formatAsset(token0, token1)}{' '}
             </span>
             {isHidden || platform ? (
               <LockIcon />
             ) : (
-              <UpDownChip isUp={isUp} shouldShowText={!split} />
+              <UpDownChip isUp={isUp} shouldShowText={false} className="ml-3" />
             )}
           </div>
         </NumberTooltip>
