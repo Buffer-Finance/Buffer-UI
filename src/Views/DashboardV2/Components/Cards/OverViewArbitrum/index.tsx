@@ -14,24 +14,14 @@ import AverageVolume from './AverageVolume';
 import LastDayFeesVolume from './LastDayFeesVolume';
 import TotalFeesVolume from './TotalFeesVolume';
 import TotalTrades from './TotalTrades';
+import OpenInterest from './OpenInterest';
 
 export const OverviewArbitrum = () => {
   const { overView: data } = useArbitrumOverview();
-  const { openInterestByPool } = useOpenInterest();
-  const poolsByAsset = usePoolByAsset();
 
-  const { poolDisplayKeyMapping, poolDisplayNameMapping } =
-    usePoolDisplayNames();
+  const { poolDisplayKeyMapping } = usePoolDisplayNames();
   const keys = useMemo(() => {
-    return Object.values(poolDisplayKeyMapping).filter(
-      (key) => !key.toLowerCase().includes('.e')
-    );
-  }, [poolDisplayKeyMapping]);
-
-  const openInterestKeys = useMemo(() => {
-    return Object.values(poolDisplayKeyMapping)
-      .filter((key) => !key.toLowerCase().includes('.e'))
-      .map((key) => `Open Interest (${key})`);
+    return Object.values(poolDisplayKeyMapping);
   }, [poolDisplayKeyMapping]);
 
   if (!data || Object.keys(data.totalStats).length === 0)
@@ -49,7 +39,7 @@ export const OverviewArbitrum = () => {
             'Average Daily Volume',
             'Average Trade size',
             'Total Trades',
-            [...openInterestKeys],
+            // 'Open Interest',
             'Total Traders',
           ].flat(1)}
           values={[
@@ -58,18 +48,7 @@ export const OverviewArbitrum = () => {
             <AverageVolume data={data.totalStats} keys={keys} />,
             <AverageTradeSize data={data.totalStats} keys={keys} />,
             <TotalTrades data={data.totalStats} keys={keys} />,
-            Object.keys(poolDisplayKeyMapping)
-              .filter((key) => !key.toLowerCase().includes('.e'))
-              .map((key) => (
-                <div className={wrapperClasses} key={key}>
-                  <Display
-                    data={openInterestByPool?.[poolsByAsset[key]?.poolAddress]}
-                    precision={2}
-                    unit={poolDisplayNameMapping[key]}
-                    className="!w-fit"
-                  />
-                </div>
-              )),
+            // <OpenInterest data={data.totalStats} keys={keys} />,
             <div className={wrapperClasses}>{data.totalTraders}</div>,
           ].flat(1)}
         />

@@ -11,9 +11,7 @@ export const useDecimalsByAsset = () => {
   const decimals = useMemo(() => {
     const response: { [key: string]: number } = {};
     Object.values(config.poolsInfo).forEach((pool) => {
-      const tokenName = pool.is_pol
-        ? pool.token.toUpperCase() + '-POL'
-        : pool.token.toUpperCase();
+      const tokenName = pool.is_pol ? pool.token + '-POL' : pool.token;
       response[tokenName] = pool.decimals;
     });
     return response;

@@ -32,24 +32,25 @@ const AverageTradeSize: React.FC<{ data: totalStatsType; keys: string[] }> = ({
             ))}
             keyStyle={tooltipKeyClasses}
             valueStyle={tooltipValueClasses}
-            values={tokens
-              .filter((key) => !key.toLowerCase().includes('.e'))
-              .map((token) => {
-                const stats = data[`${token}stats`];
-                if (stats)
-                  return (
-                    toFixed(
-                      divide(
-                        (stats as toalTokenXstats).totalVolume,
-                        (stats as toalTokenXstats).totalTrades.toString()
-                      ) as string,
-                      2
-                    ) +
-                    ' ' +
-                    poolDisplayNameMapping[token]
-                  );
-                else return '-';
-              })}
+            values={tokens.map((token) => {
+              const tokenName = token.includes('.e')
+                ? token.replace('.', '_')
+                : token;
+              const stats = data[`${tokenName}stats`];
+              if (stats)
+                return (
+                  toFixed(
+                    divide(
+                      (stats as toalTokenXstats).totalVolume,
+                      (stats as toalTokenXstats).totalTrades.toString()
+                    ) as string,
+                    2
+                  ) +
+                  ' ' +
+                  poolDisplayNameMapping[token]
+                );
+              else return '-';
+            })}
           />
         }
       />
