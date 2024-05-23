@@ -1,7 +1,7 @@
 import { useActiveChain } from '@Hooks/useActiveChain';
 import HorizontalTransition from '@Views/Common/Transitions/Horizontal';
 import { useState } from 'react';
-import { Chain } from 'wagmi';
+import { Chain, useAccount } from 'wagmi';
 import { BoostYield } from './Components/BoostYield';
 import { Deposit } from './Components/Deposit';
 import { MobileTabs } from './Components/MobileTabs';
@@ -39,6 +39,7 @@ const LPRewardsPage: React.FC<{
   activePool: poolsType;
   activeChain: Chain;
 }> = ({ activePool, activeChain }) => {
+  const account = useAccount();
   const { data, error } = useLPmulticalldata(activeChain, activePool);
   // if (error) return <div>Something Went wrong.Please try again.</div>;
   if (!error && !data) return <div>Loading...</div>;
@@ -50,11 +51,13 @@ const LPRewardsPage: React.FC<{
         readCallData={data}
         activeChain={activeChain}
       />
-      <Deposit
-        activePool={activePool}
-        readCallData={data}
-        activeChain={activeChain}
-      />
+      {account.address ? (
+        <Deposit
+          activePool={activePool}
+          readCallData={data}
+          activeChain={activeChain}
+        />
+      ) : null}
       <BoostYield
         activePool={activePool}
         activeChain={activeChain}
