@@ -164,7 +164,7 @@ const LockButton: React.FC<{
       if (lockPeriod === 0) throw new Error('Please select lock period');
 
       setIsApproving(true);
-      const lockamount = toFixed(multiply(amount, decimals), 0);
+      const lockamount = toFixed(multiply(amount, decimals) as string, 0);
       await writeCall(() => {}, 'createPosition', [lockamount, lockPeriod]);
     } catch (e) {
       toastify({

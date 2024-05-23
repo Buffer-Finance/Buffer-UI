@@ -11,6 +11,7 @@ import { useUSDCapr } from '../Hooks/useUSDCapr';
 import { poolsType } from '../types';
 import { convertLockPeriodToSeconds } from './BoostYield/Lock';
 import { DayMonthInput } from './DayMonthInput';
+import { convertToNumberOfMonthsAndDays } from './BoostYield/Transactions/helpers';
 
 export const APRheading = styled.div`
   font-size: 16px;
@@ -72,7 +73,9 @@ export const AprDD: React.FC<{
             Lock Duration
           </div>
           <button
-            onClick={() => {}}
+            onClick={() => {
+              setLockPeriod(convertToNumberOfMonthsAndDays(maxLockDuration));
+            }}
             className="bg-[#141823] text-[#FFFFFF] text-[10px] leading-[12px] font-medium py-[3px] px-[5px] rounded-sm mt-2"
           >
             Max Lock
