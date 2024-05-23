@@ -11,6 +11,7 @@ export const useLPmulticalldata = (
   activePool: poolsType
 ) => {
   const contracts = getLpConfig(activeChain.id);
+  console.log(`lp-log-contracts: `, contracts);
   const { address } = useUserAccount();
   const userCalls = address
     ? [

@@ -50,8 +50,8 @@ export const DepositTab: React.FC<{
       });
     }
   };
-  if (balance === undefined || allowance === undefined || error || !data)
-    return <Skeleton variant="rectangular" width="100%" height="100px" />;
+  // if (balance === undefined || allowance === undefined || error || !data)
+  //   return <Skeleton variant="rectangular" width="100%" height="100px" />;
   return (
     <div>
       <Modal
