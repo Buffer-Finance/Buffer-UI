@@ -109,7 +109,7 @@ const generateBuyTradeSignature = async (
     totalFee: size,
     period: +duration * 60 + '',
     targetContract,
-    strike: toFixed(multiply(strike, 8), 0),
+    strike,
     slippage,
     allowPartialFill: partialFill,
     referralCode: referral,
