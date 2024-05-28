@@ -111,7 +111,7 @@ const ClaimButton: React.FC<{
           }
         },
         'handleRewards',
-        [false, false, false, false, false, true]
+        []
       );
     } catch (e) {
       toastify({
