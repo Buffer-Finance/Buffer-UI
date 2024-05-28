@@ -10,7 +10,7 @@ export const ContractsConfig = {
       LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/version/v3.0.31-leaderboard-tracking-update-contracts/api`,
       DASHBOARD: '',
       PROFILE: '',
-      LP: `https://subgraph.satsuma-prod.com/bufferfinance/jackpot/version/v3.0.34-lp-tracking/api`,
+      LP: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/version/v3.0.34-lp-tracking/api`,
     },
     signer_manager: '0x4499D65378E7D6ECb152caB3893dfFBB654F9961',
     ab: {
