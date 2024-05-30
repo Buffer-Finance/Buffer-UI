@@ -145,12 +145,12 @@ const LockButton: React.FC<{
   const handleApprove = async () => {
     try {
       //check if amount contains any characters
-      if (amount.match(/[a-zA-Z]/g))
-        throw new Error('Please enter valid amount');
+      // if (amount.match(/[a-zA-Z]/g))
+      //   throw new Error('Please enter valid amount');
 
-      //check if amount contains any special characters other than .
-      if (amount.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/))
-        throw new Error('Please enter valid amount');
+      // //check if amount contains any special characters other than .
+      // if (amount.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/))
+      //   throw new Error('Please enter valid amount');
 
       if (!amount) throw new Error('Please enter amount');
 

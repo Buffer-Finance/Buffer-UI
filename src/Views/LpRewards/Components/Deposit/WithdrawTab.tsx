@@ -116,7 +116,7 @@ const WithdrawButton: React.FC<{
       if (gt(amount, divide(poolAvailableBalance, decimals) as string))
         throw new Error('Insufficient balance in the pool');
       if (gt(amount, divide(unlockedBalance, decimals) as string))
-        throw new Error('Insufficient unlocked balance');
+        throw new Error('Amount should be less than unlocked balance');
 
       setLoading(true);
       await writeCall(
