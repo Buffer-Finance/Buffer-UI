@@ -171,7 +171,7 @@ function App() {
                 <div>
                   Buffer{' '}
                   <a href="https://app.buffer.finance/" target="_blank">
-                    <span className="underline underline-offset-2">V2.5 </span>
+                    <span className="underline underline-offset-2">V2.6 </span>
                   </a>
                   is live on Mainnet.{' '}
                   {/* <a href="https://app.buffer.finance/" target="_blank">
