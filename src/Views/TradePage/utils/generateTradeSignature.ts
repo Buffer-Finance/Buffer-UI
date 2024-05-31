@@ -197,7 +197,7 @@ const generateApprovalSignature = async (
     primaryType: 'Permit',
     domain: {
       name: domainName,
-      version: '1',
+      version: domainName === 'USD Coin' ? '2' : '1',
       chainId: activeChainId,
       verifyingContract: getAddress(tokenAddress),
     },
