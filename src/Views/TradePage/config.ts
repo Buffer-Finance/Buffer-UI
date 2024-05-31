@@ -5,7 +5,7 @@ export const aboveBelowBaseUrl = ABBaseURLCopy;
 export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
 export const udgraph =
-  'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.4-ud-trades-markets/api';
+  'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.9-ud-usdc-pool/api';
 export const appConfig = {
   '421614': {
     graph: {
