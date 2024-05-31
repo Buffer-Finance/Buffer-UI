@@ -172,12 +172,12 @@ export const appConfig = {
         token: 'USDC',
         is_pol: true,
       },
-      '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
-        tokenAddress: '0x7Fe2dD3b4619802B8c4b404f5e440756391439ba',
-        faucet: '0xB54521E255d23F2fA7f37d29C7E76D8FFa85fc05',
+      '0x9501a00d7d4BC7558196B2e4d61c0ec5D16dEfb2': {
+        tokenAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+        faucet: null,
         decimals: 6,
         token: 'USDC',
-        permitName: 'USDC',
+        permitName: 'USD Coin',
         is_pol: false,
       },
       '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
