@@ -17,7 +17,8 @@ export const useMarketsRequest = () => {
           optionContract.poolContract !== null &&
           getAddress(configData.router) ===
             getAddress(optionContract.routerContract) &&
-          optionContract.configContract !== null
+          optionContract.configContract !== null &&
+          optionContract.isRegistered
       ),
     },
     error,
@@ -67,7 +68,7 @@ export const useBothVersionsMarkets = () => {
   async function fetcher(): Promise<response> {
     const response = await axios.post(configData.graph.MAIN, {
       query: `{ 
-        optionContracts(first:1000,where:{isRegistered:true}){
+        optionContracts(first:1000){
                   configContract {
                     address
                     maxFee
@@ -94,6 +95,7 @@ export const useBothVersionsMarkets = () => {
                   category
                   asset
                   pool
+                  isRegistered
                 }
             }`,
     });

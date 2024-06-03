@@ -7,11 +7,13 @@ import { Referral } from './ReferralCard';
 import { TradingCardV2 } from './TradingCardV2';
 import { ProductDropDown, Products } from '../ProductDropDown';
 import { useState } from 'react';
-
+import { atom, useAtom } from 'jotai';
+export const productAtom = atom<Products>('Up/Down');
 export const ProfileCardsV2 = () => {
-  const [activeProduct, setActiveProduct] = useState<Products>('Up/Down');
+  const [activeProduct, setActiveProduct] = useAtom(productAtom);
 
   const metrics = useProfileGraphQl2(activeProduct);
+  console.log(metrics, 'metrics');
   const { data }: { data?: IReferralStat } = useUserReferralStats();
   return (
     <Section
@@ -28,9 +30,9 @@ export const ProfileCardsV2 = () => {
       Cards={[
         <Referral data={data} heading={'Referral Metrics'} />,
         <TradingCardV2
-          data={metrics?.['USDC']}
+          data={metrics?.['USDC.e']}
           heading={'USDC Trading Metrics'}
-          tokenName="USDC"
+          tokenName="USDC.e"
         />,
         <ArbitrumOnly hide>
           <TradingCardV2

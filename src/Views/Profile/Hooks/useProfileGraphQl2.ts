@@ -97,6 +97,8 @@ export const useProfileGraphQl2 = (product: Products) => {
         optionContract: { asset },
       } = curr;
       acc.totalNonActiveTrades += tradeCount - tradesOpen;
+      console.log(`acc.totalNonActiveTrades: `, acc.totalNonActiveTrades);
+
       acc.totalTradesWon += tradesWon;
       if (acc.tradesByasset[asset] !== undefined) {
         acc.tradesByasset[asset] += tradeCount;
@@ -122,6 +124,7 @@ export const useProfileGraphQl2 = (product: Products) => {
 
     return response;
   }, [data]);
+  console.log(`ProfileData: `, ProfileData);
   return ProfileData;
 };
 

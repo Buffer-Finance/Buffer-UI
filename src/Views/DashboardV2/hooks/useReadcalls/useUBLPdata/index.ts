@@ -12,7 +12,7 @@ import { usePoolByAsset } from '@Views/TradePage/Hooks/usePoolByAsset';
 export const useUBLPdata = () => {
   const readcalldata = useUBLPreadcallData();
   const pools = usePoolByAsset();
-  const usdcPool = pools['USDC'];
+  const usdcPool = pools['USDC.E'];
   const usd_decimals = usdcPool?.decimals || 6;
   const bfrPrice = useIbfrPrice();
 

@@ -3,7 +3,6 @@ export function getTokenX24hrsquery(
   prevDayEpoch: number
 ) {
   return tokensArray
-    .filter((token) => !token.includes('.e'))
     .map((token) => {
       const tokenName = token.toLowerCase().includes('.e')
         ? token.replace('.', '_')

@@ -11,7 +11,7 @@ export const useUBLPreadcallData = () => {
   const { activeChain } = useActiveChain();
   const config = appConfig[activeChain.id as unknown as keyof typeof appConfig];
   const pools = usePoolByAsset();
-  const usdcPool = pools['USDC'];
+  const usdcPool = pools['USDC.E'];
   const calls = getUBLPreadcalls(activeChain.id);
   const setCalls = useSetAtom(setReadCallsAtom);
   const response = useAtomValue(readResponseAtom);

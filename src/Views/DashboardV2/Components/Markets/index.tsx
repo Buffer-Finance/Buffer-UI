@@ -15,7 +15,5 @@ const useFilteredMarkets = () => {
   const { markets } = useMarketsData();
 
   if (!markets) return [];
-  return markets.filter((market) =>
-    activeToken.includes(market.poolUnit.toUpperCase())
-  );
+  return markets.filter((market) => activeToken.includes(market.poolUnit));
 };

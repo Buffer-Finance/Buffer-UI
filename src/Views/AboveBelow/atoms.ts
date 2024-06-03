@@ -25,8 +25,13 @@ export const aboveBelowAllMarketsSetterAtom = atom(
 export const urlMarketAtom = atom<string | null>(null);
 
 export const aboveBelowActiveMarketsAtom = atom<marketTypeAB[]>((get) => {
-  const markets = get(aboveBelowMarketsAtom);
+  const allmarkets = get(aboveBelowMarketsAtom);
   const urlMarket = get(urlMarketAtom);
+  const markets = allmarkets?.filter(
+    (market) =>
+      market.address != '0x23b5a99bc88377e22e67bdb25cf5b37559f65290' &&
+      market.address != '0x2a5fbcf0b11423fd7a94e48693adf9a2681ea527'
+  );
   if (!markets) return [];
   if (!urlMarket) return [];
   console.log(`in-atommarkets: `, markets);
@@ -35,11 +40,17 @@ export const aboveBelowActiveMarketsAtom = atom<marketTypeAB[]>((get) => {
     if (market.token0 === token0 && market.token1 === token1) return true;
   });
 });
-export const setSelectedPoolForTradeAtom = atom<string>('USDC');
+
+export const setSelectedPoolForTradeAtom = atom<string>('ARB');
 export const selectedPoolActiveMarketAtom = atom<marketTypeAB | undefined>(
   (get) => {
-    const markets = get(aboveBelowActiveMarketsAtom);
+    const allmarkets = get(aboveBelowActiveMarketsAtom);
     const selectedPool = get(setSelectedPoolForTradeAtom);
+    const markets = allmarkets.filter(
+      (market) =>
+        market.address != '0x23b5a99bc88377e22e67bdb25cf5b37559f65290' &&
+        market.address != '0x2a5fbcf0b11423fd7a94e48693adf9a2681ea527'
+    );
     if (!markets) return undefined;
     return markets.find((market) => {
       if (market.poolInfo.token.toUpperCase() === selectedPool.toUpperCase())
@@ -59,13 +70,18 @@ export const favouriteMarketsAtom = atomWithStorage<string[]>(
 export const selectedPoolAtom = atom<poolInfoType | null>(null);
 
 export const filteredMarketsAtom = atom((get) => {
-  const markets = get(aboveBelowMarketsAtom);
+  const allmarkets = get(aboveBelowMarketsAtom);
   const activeCategory = get(activeCategoryAtom);
   const searchBar = get(searchBarAtom);
   const favouriteMarkets = get(favouriteMarketsAtom);
   const selectedPool = get(selectedPoolAtom);
 
-  if (markets === null) return undefined;
+  const markets = allmarkets?.filter(
+    (market) =>
+      market.address != '0x23b5a99bc88377e22e67bdb25cf5b37559f65290' &&
+      market.address != '0x2a5fbcf0b11423fd7a94e48693adf9a2681ea527'
+  );
+  if (markets === undefined) return undefined;
   if (selectedPool === null) return undefined;
 
   const filteredMarkets = markets

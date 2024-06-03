@@ -2,10 +2,7 @@ import { getBalance } from '@Views/Common/AccountInfo';
 import NumberTooltip from '@Views/Common/Tooltips';
 import { usePoolDisplayNames } from '@Views/DashboardV2/hooks/usePoolDisplayNames';
 import { usePoolNames } from '@Views/DashboardV2/hooks/usePoolNames';
-import {
-  tokenX24hrsStats,
-  total24hrsStatsType,
-} from '@Views/DashboardV2/types';
+import { toalTokenXstats, totalStatsType } from '@Views/DashboardV2/types';
 import { wrapperClasses } from '@Views/Earn/Components/EarnCards';
 import {
   tooltipKeyClasses,
@@ -14,13 +11,12 @@ import {
 } from '@Views/Earn/Components/VestCards';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 
-const LastDayFeesVolume: React.FC<{
-  data: total24hrsStatsType;
-  keys: string[];
-}> = ({ data, keys }) => {
+const OpenInterest: React.FC<{ data: totalStatsType; keys: string[] }> = ({
+  data,
+  keys,
+}) => {
   const tokens = usePoolNames();
-  const { poolDisplayNameMapping, poolDisplayKeyMapping } =
-    usePoolDisplayNames();
+  const { poolDisplayNameMapping } = usePoolDisplayNames();
   return (
     <div className={wrapperClasses}>
       <NumberTooltip
@@ -35,17 +31,12 @@ const LastDayFeesVolume: React.FC<{
               const tokenName = token.includes('.e')
                 ? token.replace('.', '_')
                 : token;
-              const stats = data[`${tokenName}24stats`];
+              const stats = data[`${tokenName}stats`];
               if (stats)
                 return (
                   <div className={' flex items-center justify-end'}>
                     <div className="whitespace-nowrap">
-                      {getBalance((stats as tokenX24hrsStats).settlementFee)}
-                      {poolDisplayNameMapping[token]}
-                    </div>
-                    &nbsp;/&nbsp;
-                    <div className="whitespace-nowrap">
-                      {getBalance((stats as tokenX24hrsStats).amount)}
+                      {getBalance((stats as toalTokenXstats).openInterest)}
                       {poolDisplayNameMapping[token]}
                     </div>
                   </div>
@@ -61,12 +52,7 @@ const LastDayFeesVolume: React.FC<{
           }
         >
           <div className="whitespace-nowrap">
-            {getBalance((data.total24stats as tokenX24hrsStats).settlementFee)}
-            USDC
-          </div>
-          &nbsp;/&nbsp;
-          <div className="whitespace-nowrap">
-            {getBalance((data.total24stats as tokenX24hrsStats).amount)}
+            {getBalance((data.totalstats as toalTokenXstats).openInterest)}
             USDC
           </div>
         </div>
@@ -75,4 +61,4 @@ const LastDayFeesVolume: React.FC<{
   );
 };
 
-export default LastDayFeesVolume;
+export default OpenInterest;

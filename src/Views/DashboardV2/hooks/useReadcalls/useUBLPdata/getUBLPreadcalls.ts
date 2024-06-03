@@ -10,7 +10,7 @@ export const getUBLPreadcalls = (chainID: number | undefined) => {
   const { EarnConfig, DashboardConfig } =
     appConfig[chainID as unknown as keyof typeof appConfig];
   const pools = usePoolByAsset();
-  const usdcPool = pools['USDC'];
+  const usdcPool = pools['USDC.E'];
 
   const calls = [
     // blpTotalBalance:

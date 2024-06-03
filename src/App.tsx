@@ -327,7 +327,7 @@ async function activateLocale(locale: string) {
   i18n.activate(locale);
 }
 activateLocale('en');
-const mobileWarningAtom = atomWithLocalStorage('warnign-suer', false);
+const mobileWarningAtom = atomWithLocalStorage('warnign-user-v3', false);
 
 function App() {
   useAutoConnect();
@@ -384,16 +384,15 @@ function App() {
                     <span className="bg-[#232334] text-[#10D2FF] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold mr-3">
                       New
                     </span>
-                    <a href="/#/leaderboard/galxe" className="m-auto">
-                      <img
-                        src="https://res.cloudinary.com/dtuuhbeqt/image/upload/Leaderboard/bbb.png"
-                        className="mr-3 inline h-[20px] w-[20px] sm:h-[15px] sm:w-[15px]"
-                      />
+                    <a
+                      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/QBllBUvSHl8QZHUpJyo5U0I_xb1MaxXgeDEK3Uyf9ZQ"
+                      target="_blank"
+                      className="m-auto"
+                    >
                       <span className="text-f14 font-extrabold text-[#232334] leading-[21px] sm:text-[11px] sm:leading-[12px]">
-                        Complete weekly Galxe tasks & trade to win from $14,000
-                        prize pot in the buffer competition.
+                        Buffer V2.6 is live. Unlock prediction markets with the
+                        best in-class UX. Learn more!
                       </span>
-                      <Launch className="scale-[0.85] text-[#232334] ml-1 mb-1" />
                     </a>
                   </div>
                 }

@@ -7,6 +7,7 @@ export type toalTokenXstats = {
   totalSettlementFees: string;
   totalVolume: string;
   totalTrades: number;
+  openInterest: string;
 };
 
 export type responseType = {

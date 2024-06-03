@@ -15,6 +15,7 @@ const TotalFeesVolume: React.FC<{ data: totalStatsType; keys: string[] }> = ({
   data,
   keys,
 }) => {
+  console.log(data, 'data');
   const tokens = usePoolNames();
   const { poolDisplayNameMapping } = usePoolDisplayNames();
   return (
@@ -27,28 +28,29 @@ const TotalFeesVolume: React.FC<{ data: totalStatsType; keys: string[] }> = ({
             ))}
             keyStyle={tooltipKeyClasses}
             valueStyle={tooltipValueClasses}
-            values={tokens
-              .filter((key) => !key.toLowerCase().includes('.e'))
-              .map((token) => {
-                const stats = data[`${token}stats`];
-                if (stats)
-                  return (
-                    <div className={' flex items-center justify-end'}>
-                      <div className="whitespace-nowrap">
-                        {getBalance(
-                          (stats as toalTokenXstats).totalSettlementFees
-                        )}
-                        {poolDisplayNameMapping[token]}
-                      </div>
-                      &nbsp;/&nbsp;
-                      <div className="whitespace-nowrap">
-                        {getBalance((stats as toalTokenXstats).totalVolume)}
-                        {poolDisplayNameMapping[token]}
-                      </div>
+            values={tokens.map((token) => {
+              const tokenName = token.includes('.e')
+                ? token.replace('.', '_')
+                : token;
+              const stats = data[`${tokenName}stats`];
+              if (stats)
+                return (
+                  <div className={' flex items-center justify-end'}>
+                    <div className="whitespace-nowrap">
+                      {getBalance(
+                        (stats as toalTokenXstats).totalSettlementFees
+                      )}
+                      {poolDisplayNameMapping[token]}
                     </div>
-                  );
-                else return <>-</>;
-              })}
+                    &nbsp;/&nbsp;
+                    <div className="whitespace-nowrap">
+                      {getBalance((stats as toalTokenXstats).totalVolume)}
+                      {poolDisplayNameMapping[token]}
+                    </div>
+                  </div>
+                );
+              else return <>-</>;
+            })}
           />
         }
       >

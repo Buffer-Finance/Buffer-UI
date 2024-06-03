@@ -8,12 +8,12 @@ export const usePoolNames = () => {
   return useMemo(() => {
     return Object.values(config.poolsInfo).map((pool) => {
       if (pool.is_pol) {
-        return pool.token.toUpperCase() + '_POL';
+        return pool.token + '_POL';
       }
       // if (pool.token.toLowerCase().includes('.e')) {
       //   return pool.token.split('.')[0];
       // }
-      return pool.token.toUpperCase();
+      return pool.token;
     });
   }, [activeChain]);
 };

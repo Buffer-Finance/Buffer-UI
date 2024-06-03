@@ -24,6 +24,7 @@ type WSUPdate = {
     };
   };
 };
+
 const client = reconnectingSocket(
   import.meta.env.VITE_DEV_MODE
     ? 'wss://hermes.pyth.network/ws'

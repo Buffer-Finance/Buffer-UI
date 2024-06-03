@@ -28,7 +28,7 @@ export const PoolRadio: React.FC = () => {
 
   useEffect(() => {
     if (tradingAssets.length > 0 && selectedPool === null) {
-      setSelectedPool(tradingAssets[0]);
+      setSelectedPool(tradingAssets[1]);
     }
   }, []);
 
@@ -41,23 +41,25 @@ export const PoolRadio: React.FC = () => {
       {tradingAssets?.map((pool, index) => {
         const isActive = selectedPool === pool;
         return (
-          <RowGap gap="4px" key={pool.token}>
-            <RadioInput
-              type="radio"
-              id="poolRadio"
-              name="age"
-              value={pool.token}
-              checked={isActive}
-              onChange={() => handleChange(pool)}
-            />
-            <label
-              htmlFor="poolRadio"
-              className={`text-f12 ${isActive ? 'text-1' : 'text-2'}`}
-            >
-              {' '}
-              {pool.token}
-            </label>
-          </RowGap>
+          pool.token !== 'USDC' && (
+            <RowGap gap="4px" key={pool.token}>
+              <RadioInput
+                type="radio"
+                id="poolRadio"
+                name="age"
+                value={pool.token}
+                checked={isActive}
+                onChange={() => handleChange(pool)}
+              />
+              <label
+                htmlFor="poolRadio"
+                className={`text-f12 ${isActive ? 'text-1' : 'text-2'}`}
+              >
+                {' '}
+                {pool.token}
+              </label>
+            </RowGap>
+          )
         );
       })}
     </RowGap>

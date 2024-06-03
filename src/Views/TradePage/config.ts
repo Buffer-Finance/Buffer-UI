@@ -6,7 +6,7 @@ export const aboveBelowBaseUrl = ABBaseURLCopy;
 export const isSandbox =
   import.meta.env.VITE_DEV_ENV.toLowerCase() === 'sandbox';
 export const udgraph =
-  'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.4-ud-trades-markets/api';
+  'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.9-ud-usdc-pool/api';
 export const appConfig = {
   '421614': {
     graph: ContractsConfig['421614'].graph,
@@ -26,7 +26,7 @@ export const appConfig = {
         metaData: {},
         name: 'UP_DOWN',
         product_id: 'abc',
-        router: ContractsConfig['421614'].ud.router,
+        router: '0x693351786cf6f328B1495bd9d527d898929580AE',
       },
       AB: {
         id: 1,
@@ -75,7 +75,18 @@ export const appConfig = {
     },
   },
   '42161': {
-    graph: ContractsConfig[42161].graph,
+    graph: {
+      ABOVE_BELOW: ABGraph,
+      MAIN: udgraph,
+      EVENTS:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/events/version/v2.5-up-events-mainnet/api',
+      REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
+      LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.5-leaderboard-tracking/api`,
+      DASHBOARD:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.6.0-sync-v2.6-history/api',
+      PROFILE:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/version/v2.7.2-v2.6-profile-data-2/api',
+    },
     product_id: {
       UP_DOWN: {
         id: 2,
@@ -83,7 +94,7 @@ export const appConfig = {
         metaData: {},
         name: 'UP_DOWN',
         product_id: 'abc',
-        router: ContractsConfig[42161].ud.router,
+        router: '0x2BAA48961C1CD376484b601278bF7A51E94293a9',
       },
       AB: {
         id: 1,
@@ -91,7 +102,7 @@ export const appConfig = {
         metaData: {},
         name: 'AB',
         product_id: 'xyz',
-        router: ContractsConfig[42161].ab.router,
+        router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
       },
     },
     multicall: '0xca11bde05977b3631167028862be2a173976ca11',
@@ -102,8 +113,49 @@ export const appConfig = {
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
     v2_router: ContractsConfig[42161].ud.router,
     jackpot: '0xEa0b956A04b265A7E2A6d00A4bD65a48C430cE16',
-    above_below_router: ContractsConfig[42161].ab.router,
-    poolsInfo: ContractsConfig['42161'].poolsInfo,
+    above_below_router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
+    poolsInfo: {
+      '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        faucet: '0x0000000000000000000000000000000000000000',
+        decimals: 6,
+        token: 'USDC.e',
+        permitName: 'USD Coin (Arb1)',
+        is_pol: false,
+      },
+      '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        faucet: null,
+        decimals: 6,
+        token: 'USDC',
+        is_pol: true,
+      },
+      '0x9501a00d7d4BC7558196B2e4d61c0ec5D16dEfb2': {
+        tokenAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+        faucet: null,
+        decimals: 6,
+        token: 'USDC',
+        permitName: 'USD Coin',
+        is_pol: false,
+      },
+      '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
+        tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
+        faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
+        decimals: 18,
+        token: 'BFR',
+        permitName: 'Token',
+        is_pol: false,
+      },
+      '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
+        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
+        faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
+        decimals: 18,
+        token: 'ARB',
+        permitName: 'Arbitrum',
+        is_pol: false,
+      },
+    },
+
     EarnConfig: {
       RewardRouter: '0xbD5FBB3b2610d34434E316e1BABb9c3751567B67',
       BLP: '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e',
