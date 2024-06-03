@@ -24,12 +24,10 @@ type WSUPdate = {
     };
   };
 };
+// Production = wss://bufferf-pythnet-4e5a.mainnet.pythnet.rpcpool.com/hermes/ws
+// Developement = wss://hermes.pyth.network/ws
 
-const client = reconnectingSocket(
-  import.meta.env.VITE_DEV_MODE
-    ? 'wss://hermes.pyth.network/ws'
-    : 'wss://bufferf-pythnet-4e5a.mainnet.pythnet.rpcpool.com/hermes/ws'
-);
+const client = reconnectingSocket('wss://hermes.pyth.network/ws');
 export let ts2asset2updatecnt = {};
 
 export const silentPriceCache = {};
