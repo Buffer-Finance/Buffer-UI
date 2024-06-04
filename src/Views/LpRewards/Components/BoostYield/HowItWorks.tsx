@@ -9,13 +9,18 @@ export const HowItWorks: React.FC = () => {
           How It Works
         </span>
         <Text>
-          As a counterparty in trades, you will receive 50% of trading fees,
+          Earn ARB incentives on your LP position by locking in the yield boost
+          vault.
         </Text>
         <Text>
-          uBLP is NOT principal protected. The value of uBLP may decrease
+          Boost will be linearly calculated proportionally to the chosen
+          duration (min - 7 days, max - 90 days) of the lock and the maximum
+          lock multiplier.
         </Text>
         <Text>
-          As a counterparty in trades, you will receive 50% of trading fees,
+          Allocation of the incentives are based on weekly epochs. Every epoch,
+          a set number of ARB will be allocated for boosts. Accrued ARB
+          incentives can be claimed at anytime.
         </Text>
       </div>
     </Container>
