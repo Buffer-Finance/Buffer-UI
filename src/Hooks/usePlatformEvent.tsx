@@ -32,7 +32,6 @@ const usePlatformEvent = () => {
           }`,
       });
       // console.log(`response.data?.data: `, response.data?.data);
-      // console.log(`thegraphresponse.data: `, response.data);
       console.log(`usePlatformEvent-response.data: `, response.data);
       return response.data?.data?.platformEvents || emptyArr;
     },
