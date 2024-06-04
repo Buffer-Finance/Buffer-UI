@@ -60,7 +60,9 @@ import IbfrFaucet from '@Views/Faucet';
 import ProfilePage from '@Views/Profile';
 import ReferralPage from '@Views/Referral';
 import Test from '@Views/Test';
-import TradeLog_sm from '@Views/TradePage/Components/MobileView/TradeLog_sm';
+const TradeLog_sm = lazy(
+  () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
+);
 
 import Jackpot from '@Views/Jackpot';
 import AboveBelow from '@Views/AboveBelow';
@@ -288,33 +290,33 @@ const AppRoutes = () => {
           }
         />
 
-        <Route
+        {/* <Route
           path="/rewards"
           element={
             <Suspense fallback={<PageLoader />}>
               <RewardsPage />
             </Suspense>
           }
-        />
+        /> */}
         <Route path="/leaderboard" element={<LeaderBoardOutlet />}>
-          <Route path="leagues" element={<LeaderBoardOutlet />}>
+          {/* <Route path="leagues" element={<LeaderBoardOutlet />}>
             <Route path=":league" element={<Leagues />}>
               <Route path=":chain" element={<Leagues />} />
             </Route>
           </Route>
-          {/* <Route path="metrics" element={<LeaderBoardOutlet />}>
+          <Route path="metrics" element={<LeaderBoardOutlet />}>
             <Route path="all-time" element={<AllTime />}>
               <Route path=":chain" element={<AllTime />} />
             </Route>
-          </Route> */}
+          </Route>
 
           <Route path="daily" element={<Incentivised />}>
             <Route path=":chain" element={<Incentivised />} />
-          </Route>
-          {/* 
+          </Route> */}
+
           <Route path="galxe" element={<Galxe />}>
             <Route path=":chain" element={<Galxe />} />
-          </Route> */}
+          </Route>
         </Route>
       </Routes>
     </div>

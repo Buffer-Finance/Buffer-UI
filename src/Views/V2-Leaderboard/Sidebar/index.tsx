@@ -34,9 +34,9 @@ export const MobileLeaderboardDropdwon = () => {
           navigate(tabs[t].as);
         }}
         tablist={[
-          // { name: 'Galxe' },
-          { name: 'Daily' },
-          { name: 'Leagues' },
+          { name: 'Galxe' },
+          // { name: 'Daily' },
+          // { name: 'Leagues' },
           // { name: 'Metrics' },
         ]}
       />
@@ -83,7 +83,7 @@ export const LeaderBoardSidebar = () => {
   const location = useLocation();
   const { day } = useDayOfTournament();
   const weeklyConfigValue = weeklyTournamentConfig[activeChain.id];
-  // const galxeConfigValue = galxeTournamentConfig[activeChain.id];
+  const galxeConfigValue = galxeTournamentConfig[activeChain.id];
 
   const { week } = useWeekOfTournament({
     startTimestamp: weeklyConfigValue.startTimestamp,
@@ -101,12 +101,12 @@ export const LeaderBoardSidebar = () => {
       return <OnGoingChip />;
     else return <EndedChip />;
   }, [week]);
-  // const GalxeChip = useMemo(() => {
-  //   if (galxeConfigValue.endDay === undefined) return <OnGoingChip />;
-  //   else if (week !== null && week < galxeConfigValue.endDay)
-  //     return <OnGoingChip />;
-  //   else return <EndedChip />;
-  // }, [week]);
+  const GalxeChip = useMemo(() => {
+    if (galxeConfigValue.endDay === undefined) return <OnGoingChip />;
+    else if (week !== null && week < galxeConfigValue.endDay)
+      return <OnGoingChip />;
+    else return <EndedChip />;
+  }, [week]);
 
   return (
     <LeaderBoardSidebarStyles className="border-r-2 border-1">
@@ -114,21 +114,27 @@ export const LeaderBoardSidebar = () => {
         <div className="mt-[16px] full-width">
           <Head name={isTestnet ? 'INCENTIVISD TESTNET' : 'LEADERBOARD'} />
 
-          {tabs.slice(1, 2).map((tab, index) => {
+          {tabs.slice(0, 2).map((tab, index) => {
             const isActive = doesLocationMatch(location, tab.slug);
             return (
               <div className="" key={tab.slug}>
                 <LinkButton
                   tab={tab}
                   active={isActive}
-                  chip={index === 1 ? WeeklyChip : DailyChip}
+                  chip={
+                    index === 0
+                      ? GalxeChip
+                      : index === 1
+                      ? WeeklyChip
+                      : DailyChip
+                  }
                 />
               </div>
             );
           })}
         </div>
 
-        <div className="mt-[24px] full-width">
+        {/* <div className="mt-[24px] full-width">
           <div className="flex items-center mb-2">
             <Head name="LEAGUES" />
           </div>
@@ -140,7 +146,7 @@ export const LeaderBoardSidebar = () => {
               </div>
             );
           })}
-        </div>
+        </div> */}
 
         {/* <div className="mt-[24px] full-width">
           <div className="flex items-center mb-2">

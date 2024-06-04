@@ -319,12 +319,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
-      {
-        to: '/ab/' + market,
-        name: 'Above/Below',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: '/ab/' + market,
+      //   name: 'Above/Below',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: 'https://perps.buffer.finance/trade',
         name: 'Perps',
@@ -344,13 +344,7 @@ export const getTabs = (
         isExternalLink: false,
       },
       {
-        to: '/rewards',
-        name: 'Rewards',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
-        to: `/leaderboard/daily`,
+        to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,
@@ -451,34 +445,32 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
-      // {
-      //   to: '/ab/BTC-USD/',
-      //   name: 'Above/Below',
-      //   subTabs: [],
-      //   isExternalLink: false,
-      // },
-
+      {
+        to: '/ab/BTC-USD/',
+        name: 'Above/Below',
+        subTabs: [],
+        isExternalLink: false,
+      },
+      {
+        to: 'https://testnet.perps.buffer.finance/trade',
+        name: 'Perps',
+        subTabs: [],
+        isExternalLink: true,
+      },
       {
         to: `/Jackpot`,
         name: 'Jackpot',
         subTabs: [],
         isExternalLink: false,
       },
-
       {
-        to: `/lp-rewards`,
-        name: 'LP Page',
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
         subTabs: [],
-        isExternalLink: false,
+        isExternalLink: true,
       },
       {
-        to: '/rewards',
-        name: 'Rewards',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
-        to: `/leaderboard/daily`,
+        to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,
@@ -501,18 +493,6 @@ export const getTabs = (
       {
         to: `https://testnet-buffer-finance-git-v2-earn-production-bufferfinance.vercel.app/`,
         name: 'Earn',
-        subTabs: [],
-        isExternalLink: true,
-      },
-      {
-        to: `https://optopi.buffer.finance/`,
-        name: 'Optopi NFT',
-        subTabs: [],
-        isExternalLink: true,
-      },
-      {
-        to: 'https://testnet.perps.buffer.finance/trade',
-        name: 'Perps',
         subTabs: [],
         isExternalLink: true,
       },
@@ -734,7 +714,7 @@ export const getMobileTabs = (
         icon: TabIcon.Faucet,
       },
       {
-        to: `/leaderboard/daily`,
+        to: `/leaderboard/galxe`,
         name: 'Competitions',
         subTabs: [],
         isExternalLink: false,
