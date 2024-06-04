@@ -91,17 +91,17 @@ export const DepositTab: React.FC<{
         </ConnectionRequired>
       </div>
       <Text>
-        As a counterparty in trades, you will receive 50% of trading fees, which
-        are automatically compounded into your uBLP holdings.
+        As a counterparty in trades, you will receive 70% of the trading fees.
+        APR is updated every Wednesday at4:00 pm UTC
       </Text>
       <Text>
         * uBLP is NOT principal protected. The value of uBLP may decrease from
-        traders' PnL.
+        traders' PnL.{' '}
       </Text>
-      <Text>
+      {/* <Text>
         * 0.1% fee is incurred when withdrawing from Merkle LP. The fee is
         credited to the remaining LPs to reward long-term depositors.
-      </Text>
+      </Text> */}
     </div>
   );
 };
