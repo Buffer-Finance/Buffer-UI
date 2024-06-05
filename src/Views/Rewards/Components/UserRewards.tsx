@@ -278,7 +278,6 @@ const Competitions: React.FC<{
     if (selectedWeekAlloted === undefined) {
       return undefined;
     }
-    // add the amount of all the rewards alloted for the week
     return selectedWeekAlloted.reduce((acc, r) => {
       return add(acc, r.amount);
     }, '0');
