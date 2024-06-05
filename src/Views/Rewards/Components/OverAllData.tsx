@@ -59,7 +59,7 @@ export const OverAllData: React.FC<{
                 <span className="text-[#7F87A7]"> 4PM</span>
               </span>,
               <span>
-                <span className="text-[#FFFFFF]">500,000</span>
+                <span className="text-[#FFFFFF]">1534</span>
                 <span className="text-[#7F87A7]"> ARB</span>
               </span>,
             ]}
@@ -77,7 +77,7 @@ export const OverAllData: React.FC<{
                 <span className="text-[#7F87A7]">Not Started Yet.</span>
               ) : (
                 <span>
-                  <span className="text-[#FFFFFF]">50,000</span>
+                  <span className="text-[#FFFFFF]">1534</span>
                   <span className="text-[#7F87A7]"> ARB</span>
                 </span>
               ),
