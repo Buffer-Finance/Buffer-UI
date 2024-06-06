@@ -332,8 +332,8 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
-        to: `https://optopi.buffer.finance/`,
-        name: 'Optopi NFT',
+        to: `https://earn.buffer.finance/`,
+        name: 'Earn',
         subTabs: [],
         isExternalLink: true,
       },
@@ -349,12 +349,7 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
-      {
-        to: `https://testnet.buffer.finance/`,
-        name: 'Practice Trading',
-        subTabs: [],
-        isExternalLink: true,
-      },
+
       {
         to: `/dashboard`,
         name: 'Dashboard',
@@ -368,10 +363,15 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-
       {
-        to: `https://earn.buffer.finance/`,
-        name: 'Earn',
+        to: `https://testnet.buffer.finance/`,
+        name: 'Practice Trading',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
         subTabs: [],
         isExternalLink: true,
       },
@@ -381,6 +381,7 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
+
       {
         to: 'https://github.com/Buffer-Finance',
         name: 'Github',

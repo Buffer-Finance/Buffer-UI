@@ -10,6 +10,8 @@ import { Chain } from 'viem';
 import { InputField } from './InputField';
 import { ActionButton, Modal } from './Modal';
 import { useTokensPerInterval } from '@Views/LpRewards/Hooks/useTokensPerInterval';
+import { useBlpRate } from '@Views/LpRewards/Hooks/useBlpRate';
+import { multiply } from '@Utils/NumString/stringArithmatics';
 
 export const DepositTab: React.FC<{
   activePool: poolsType;
@@ -20,7 +22,10 @@ export const DepositTab: React.FC<{
   const [amount, setAmount] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const toastify = useToast();
-
+  const { data: blpPrice, error: blpPriceError } = useBlpRate(
+    activeChain,
+    activePool
+  );
   const decimals = activePool === 'aBLP' ? 18 : 6;
 
   const balance = readcallData[activePool + '-balanceof']?.[0];
@@ -79,7 +84,10 @@ export const DepositTab: React.FC<{
       />
       <div className="flex justify-between items-start mt-2">
         <span className="text-f12 font-medium text-[#C4C7C7]">
-          You will receive:
+          You will receive:{' '}
+          {amount &&
+            blpPrice &&
+            divide(multiply(blpPrice.price, amount || '0'), 8)}
         </span>
         <ConnectionRequired className="!text-f14 !py-[0] !px-4 mt-2">
           {/* <BlueBtn
