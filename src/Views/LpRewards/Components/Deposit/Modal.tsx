@@ -104,24 +104,24 @@ export const Modal: React.FC<{
           activeChain={activeChain}
           decimals={decimals}
           balance={balance}
-          lockPeriod={lockPeriod}
+          // lockPeriod={lockPeriod}
         />
       </ModalStyles>
     </Dialog>
   );
 };
 
-const ActionButton: React.FC<{
+export const ActionButton: React.FC<{
   activePool: poolsType;
   allowance: string;
   amount: string;
   activeChain: Chain;
   decimals: number;
   balance: string | undefined;
-  lockPeriod: {
-    days: number;
-    months: number;
-  };
+  // lockPeriod: {
+  //   days: number;
+  //   months: number;
+  // };
 }> = ({
   activePool,
   allowance,
@@ -129,7 +129,7 @@ const ActionButton: React.FC<{
   activeChain,
   decimals,
   balance,
-  lockPeriod,
+  // lockPeriod,
 }) => {
   if (gt(amount || '0', allowance)) {
     return <ApproveButton activePool={activePool} activeChain={activeChain} />;
@@ -140,7 +140,7 @@ const ActionButton: React.FC<{
       activeChain={activeChain}
       decimals={decimals}
       balance={balance}
-      lockPeriod={convertLockPeriodToSeconds(lockPeriod)}
+      // lockPeriod={convertLockPeriodToSeconds(lockPeriod)}
     />
   );
 };
@@ -188,8 +188,7 @@ const DepositAndLockButton: React.FC<{
   activeChain: Chain;
   decimals: number;
   balance: string | undefined;
-  lockPeriod: number;
-}> = ({ amount, activeChain, decimals, balance, lockPeriod }) => {
+}> = ({ amount, activeChain, decimals, balance }) => {
   const contracts = getLpConfig(activeChain.id);
   const { writeCall } = useWriteCall(contracts.RewardRouter, RewardRouterABI);
   const { writeCall: lockWriteCall } = useWriteCall(
@@ -237,22 +236,22 @@ const DepositAndLockButton: React.FC<{
         [toFixed(multiply(amount, decimals), 0), 0]
       );
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      await lockWriteCall(
-        (returnObj) => {
-          if (returnObj !== undefined) {
-            setCompletedTxn('lock');
-            toastify({
-              type: 'success',
-              msg: 'Lock successful',
-              id: 'lock-success',
-            });
-          }
-        },
-        'createPosition',
-        [toFixed(multiply(amount, decimals), 0), lockPeriod]
-      );
+      // await lockWriteCall(
+      //   (returnObj) => {
+      //     if (returnObj !== undefined) {
+      //       setCompletedTxn('lock');
+      //       toastify({
+      //         type: 'success',
+      //         msg: 'Lock successful',
+      //         id: 'lock-success',
+      //       });
+      //     }
+      //   },
+      //   'createPosition',
+      //   [toFixed(multiply(amount, decimals), 0), lockPeriod]
+      // );
     } catch (e) {
       toastify({
         type: 'error',
@@ -264,24 +263,29 @@ const DepositAndLockButton: React.FC<{
       setCompletedTxn('none');
     }
   };
-  if (txnState !== 'none') {
-    return (
-      <div className="flex flex-col items-start gap-3 mt-5">
-        <TxnState
-          isActive={txnState === 'deposit'}
-          isComplete={completedTxn === 'deposit' || completedTxn === 'lock'}
-          name="deposit"
-        />
-        <TxnState
-          isActive={txnState === 'lock'}
-          isComplete={completedTxn === 'lock'}
-          name="lock"
-        />
-      </div>
-    );
-  }
+  // if (txnState !== 'none') {
+  //   return (
+  //     <div className="flex flex-col items-start gap-3 mt-5">
+  //       <TxnState
+  //         isActive={txnState === 'deposit'}
+  //         isComplete={completedTxn === 'deposit' || completedTxn === 'lock'}
+  //         name="deposit"
+  //       />
+  //       <TxnState
+  //         isActive={txnState === 'lock'}
+  //         isComplete={completedTxn === 'lock'}
+  //         name="lock"
+  //       />
+  //     </div>
+  //   );
+  // }
   return (
-    <ModalButton onClick={handleDepositAndLock}>Deposit & Lock</ModalButton>
+    <ModalButton
+      isLoading={txnState == 'deposit'}
+      onClick={handleDepositAndLock}
+    >
+      Deposit{' '}
+    </ModalButton>
   );
 };
 

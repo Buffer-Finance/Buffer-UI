@@ -8,7 +8,7 @@ import { Skeleton } from '@mui/material';
 import { useState } from 'react';
 import { Chain } from 'viem';
 import { InputField } from './InputField';
-import { Modal } from './Modal';
+import { ActionButton, Modal } from './Modal';
 import { useTokensPerInterval } from '@Views/LpRewards/Hooks/useTokensPerInterval';
 
 export const DepositTab: React.FC<{
@@ -82,12 +82,20 @@ export const DepositTab: React.FC<{
           You will receive:
         </span>
         <ConnectionRequired className="!text-f14 !py-[0] !px-4 mt-2">
-          <BlueBtn
+          {/* <BlueBtn
             onClick={handleDeposit}
             className="!text-f14 !h-fit !py-[0] !px-4 leading-[28px] mt-2"
           >
             Deposit
-          </BlueBtn>
+          </BlueBtn> */}
+          <ActionButton
+            activePool={activePool}
+            allowance={allowance}
+            amount={amount}
+            activeChain={activeChain}
+            decimals={decimals}
+            balance={balance}
+          />
         </ConnectionRequired>
       </div>
       <Text>
