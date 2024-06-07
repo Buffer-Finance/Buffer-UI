@@ -344,7 +344,10 @@ body .flexlayout__layout {
   transform: translateY(130%);
   animation-timing-function: cubic-bezier(0.42, 0, 1, 1);
 }
+.background-bar-gradient {
+  background: linear-gradient(94.1deg, #25419C 11.79%, #953999 96.51%);
 
+}
 /* 
 
 state-{
