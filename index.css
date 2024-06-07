@@ -358,6 +358,10 @@ body .flexlayout__layout {
 .blue-text-shadow {
   text-shadow: 0px 5px 34px rgba(255, 255, 255, 0.39);
 }
+.background-bar-gradient {
+  background: linear-gradient(94.1deg, #25419C 11.79%, #953999 96.51%);
+
+}
 
 .mole-down-anim {
   animation: MoleDown var(--mole-animation-duration);

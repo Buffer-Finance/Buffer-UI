@@ -3,9 +3,11 @@ import { atom, useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useEffect } from 'react';
 import {
+  Link,
   Navigate,
   Route,
   Routes,
+  useLocation,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
@@ -68,6 +70,7 @@ import Jackpot from '@Views/Jackpot';
 import AboveBelow from '@Views/AboveBelow';
 import RewardsPage from '@Views/Rewards';
 import LpRewardsPage from '@Views/LpRewards';
+import MemoExternalLinkSVG from './SVG/ExternalLinkSVG';
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{
@@ -330,7 +333,33 @@ async function activateLocale(locale: string) {
 }
 activateLocale('en');
 const mobileWarningAtom = atomWithLocalStorage('warnign-user-v3', false);
-
+const contents = {
+  'lp-rewards': (
+    <a
+      className="flex items-baseline"
+      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/ao87r3b-1Apd_3SAknXX-rHlhspngxCvscaX5vk4JCI"
+    >
+      Stake your LP over 90 days to 💥Nitro Boost Your BLP APR by Up to 1.4x.
+       Learn More&nbsp; <MemoExternalLinkSVG />
+    </a>
+  ),
+  default: (
+    <a
+      className="flex items-baseline cursor-pointer"
+      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/ao87r3b-1Apd_3SAknXX-rHlhspngxCvscaX5vk4JCI"
+      target="_blank"
+    >
+      Trade to Earn 💰13 weeks, 5 leagues competing for the ultimate prize
+      ✨19,724 ARB ✨ Learn More&nbsp; <MemoExternalLinkSVG />
+    </a>
+  ),
+  leaderboard: (
+    <Link className="flex items-baseline" to={'/'}>
+      The 1st Buffer Trading League Competition Arbitrum season with prize pool
+      of 19,274 ARB. Participate Now
+    </Link>
+  ),
+};
 function App() {
   useAutoConnect();
   // useRecentWinners();
@@ -339,8 +368,20 @@ function App() {
     useAtom(mobileWarningAtom);
 
   const graphStatus = useGraphStatus();
+  const location = useLocation();
+  console.log(`App-location: `, location);
   const isMobile = useMedia('(max-width:1200px)');
   // return ;
+  const filteredContent = Object.keys(contents).filter((key: any) => {
+    if (location.pathname.toLocaleLowerCase().includes(key.toLowerCase())) {
+      return true;
+    }
+  });
+  let bannerCotent = contents['default'];
+  if (filteredContent.length) {
+    bannerCotent = contents[filteredContent[0]];
+  }
+
   return (
     <>
       {/* <PasswordModal /> */}
@@ -378,34 +419,27 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          {!urlSettings?.hide &&
-            (isMobile && mobileWarningClosed ? false : true) && (
-              <Warning
-                body={
-                  <div className="w-fit flex items-center m-auto">
-                    <span className="bg-[#232334] text-[#10D2FF] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold mr-3">
-                      New
-                    </span>
-                    <a
-                      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/QBllBUvSHl8QZHUpJyo5U0I_xb1MaxXgeDEK3Uyf9ZQ"
-                      target="_blank"
-                      className="m-auto"
-                    >
-                      <span className="text-f14 font-extrabold text-[#232334] leading-[21px] sm:text-[11px] sm:leading-[12px]">
-                        Buffer V2.6 is live. Unlock prediction markets with the
-                        best in-class UX. Learn more!
-                      </span>
-                    </a>
-                  </div>
-                }
-                closeWarning={() => {
-                  setWarningCloseOnMobile(true);
-                }}
-                shouldAllowClose={true}
-                state={!mobileWarningClosed}
-                className="disclaimer !bg-[#10D2FF] !text-[#232334]"
-              />
-            )}
+          {
+            <Warning
+              body={
+                <div className="w-fit flex items-center m-auto">
+                  {/*<span className="bg-[#232334] text-[#10D2FF] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold mr-3">
+                    New
+              </span>*/}
+
+                  <span className="text-f14 font-extrabold  text-[white] leading-[21px] sm:text-[11px] sm:leading-[12px]">
+                    {bannerCotent}
+                  </span>
+                </div>
+              }
+              closeWarning={() => {
+                setWarningCloseOnMobile(true);
+              }}
+              shouldAllowClose={false}
+              state={!mobileWarningClosed}
+              className="disclaimer !bg-[#10D2FF] !text-[#232334]"
+            />
+          }
           <TnCModal />
           <SideBar />
         </Background>
