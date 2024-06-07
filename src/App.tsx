@@ -188,8 +188,8 @@ function App() {
                     href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/ao87r3b-1Apd_3SAknXX-rHlhspngxCvscaX5vk4JCI"
                     target="_blank"
                   >
-                    Stake your LP over 90 days to 💥Nitro Boost Your BLP APR by
-                    Up to 1.4x.  Learn More&nbsp; <MemoExternalLinkSVG />
+                    LP Yield Boost Rewards Are Live - 26, 900 $ARB distributed
+                    over 13 Weeks. Learn More.&nbsp; <MemoExternalLinkSVG />{' '}
                   </a>
                 </div>
               }
