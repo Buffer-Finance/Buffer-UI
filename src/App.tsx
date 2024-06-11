@@ -71,6 +71,7 @@ import AboveBelow from '@Views/AboveBelow';
 import RewardsPage from '@Views/Rewards';
 import LpRewardsPage from '@Views/LpRewards';
 import MemoExternalLinkSVG from './SVG/ExternalLinkSVG';
+import { RootLevelHooks } from './RootLevelHooks';
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{
@@ -388,6 +389,7 @@ function App() {
 
   return (
     <>
+      <RootLevelHooks />
       {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
