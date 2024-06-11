@@ -62,7 +62,9 @@ import IbfrFaucet from '@Views/Faucet';
 import ProfilePage from '@Views/Profile';
 import ReferralPage from '@Views/Referral';
 import Test from '@Views/Test';
-import TradeLog_sm from '@Views/TradePage/Components/MobileView/TradeLog_sm';
+const TradeLog_sm = lazy(
+  () => import('@Views/TradePage/Components/MobileView/TradeLog_sm')
+);
 
 import Jackpot from '@Views/Jackpot';
 import AboveBelow from '@Views/AboveBelow';
@@ -336,10 +338,9 @@ const contents = {
     <a
       className="flex items-baseline"
       href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/ao87r3b-1Apd_3SAknXX-rHlhspngxCvscaX5vk4JCI"
-      target="_blank"
     >
-      LP Yield Boost Rewards Are Live - 26, 900 $ARB distributed over 13 Weeks.
-      Learn More.&nbsp; <MemoExternalLinkSVG />
+      LP Yield Boost Incentives are live! ✨29,900 ✨ $ARB to be distributed
+      over 13 weeks. Learn More&nbsp; <MemoExternalLinkSVG />
     </a>
   ),
   default: (
@@ -348,15 +349,19 @@ const contents = {
       href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/ao87r3b-1Apd_3SAknXX-rHlhspngxCvscaX5vk4JCI"
       target="_blank"
     >
-      Trade to Earn 💰13 weeks, 5 leagues competing for the ultimate prize
+      Coming Soon: 💰13 weeks, 5 leagues competing for the ultimate prize
       ✨19,724 ARB ✨ Learn More&nbsp; <MemoExternalLinkSVG />
     </a>
   ),
   leaderboard: (
-    <Link className="flex items-baseline" to={'/'}>
-      The 1st Buffer Trading League Competition Arbitrum season with prize pool
-      of 19,274 ARB. Participate Now
-    </Link>
+    <a
+      className="flex items-baseline cursor-pointer"
+      href="https://mirror.xyz/0xc730FbdFEb3e9dF76008A19962963cA4A2bd8de2/ao87r3b-1Apd_3SAknXX-rHlhspngxCvscaX5vk4JCI"
+      target="_blank"
+    >
+      Coming Soon: 💰13 weeks, 5 leagues competing for the ultimate prize
+      ✨19,724 ARB ✨ Learn More&nbsp; <MemoExternalLinkSVG />
+    </a>
   ),
 };
 function App() {
