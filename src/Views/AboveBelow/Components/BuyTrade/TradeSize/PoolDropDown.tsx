@@ -48,18 +48,15 @@ export const PoolDropdown: React.FC = () => {
       offsetY={5}
     >
       {markets ? (
-        markets.map(
-          (market) =>
-            market.poolInfo.token !== 'USDC' && (
-              <MenuItem
-                onClick={onClick}
-                value={market.poolInfo.token.toUpperCase()}
-                key={market.poolInfo.token.toUpperCase()}
-              >
-                {market.poolInfo.token}
-              </MenuItem>
-            )
-        )
+        markets.map((market) => (
+          <MenuItem
+            onClick={onClick}
+            value={market.poolInfo.token.toUpperCase()}
+            key={market.poolInfo.token.toUpperCase()}
+          >
+            {market.poolInfo.token}
+          </MenuItem>
+        ))
       ) : (
         <></>
       )}
