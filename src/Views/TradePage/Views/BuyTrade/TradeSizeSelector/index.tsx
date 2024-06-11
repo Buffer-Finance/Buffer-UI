@@ -137,12 +137,15 @@ export const PlatfromFeeError = ({
     </div>
   ) : null;
   if (notEnooghForFee && notEnoughForTrade) return <></>;
+  console.log(
+    `index-notEnooghForFee && notEnoughForTrade: `,
+    notEnooghForFee && notEnoughForTrade
+  );
   return (
     <RowGapItemsTop
       gap="2px"
       className={`text-${isError ? 'red' : '[#7F87A7]'} text-f10`}
     >
-      <LightToolTipSVG className="mt-[2px]" />
       {isError ? (
         <>
           <div className="flex items-center gap-2">
@@ -152,10 +155,13 @@ export const PlatfromFeeError = ({
         </>
       ) : (
         !isError && (
-          <>
-            Platform fee : + {platfromFee} {tradeToken}
-            {JackpotChip}
-          </>
+          <div className="flex flex-col">
+            <span className="flex gap-1">
+              <LightToolTipSVG className="mt-[2px]" />
+              Platform fee : + {platfromFee} {tradeToken}
+            </span>
+            <span>{JackpotChip}</span>
+          </div>
         )
       )}
     </RowGapItemsTop>
