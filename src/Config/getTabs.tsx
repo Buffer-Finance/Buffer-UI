@@ -355,6 +355,13 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+
+      {
+        to: `/jackpot`,
+        name: 'Jackpot',
+        subTabs: [],
+        isExternalLink: false,
+      },
       {
         to: `https://testnet.buffer.finance/`,
         name: 'Practice Trading',
