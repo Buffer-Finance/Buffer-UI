@@ -9,7 +9,7 @@ import { startWeekId } from './config';
 export const LeagueWiseData = () => {
   const currentWeekId = getWeekId(0);
   const defaultSelectedId =
-    currentWeekId === startWeekId ? startWeekId : getWeekId(0) - 1;
+    currentWeekId < startWeekId ? startWeekId : currentWeekId;
   const [selectedWeekId, setSelectedWeekId] = useState(defaultSelectedId);
   const selectedSeason = selectedWeekId - startWeekId + 1;
   const setSelectedSeason = (season: number) => {
