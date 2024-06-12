@@ -439,9 +439,9 @@ function JackpotValueSeciont(props) {
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/c918dc20adb64f78c725558364a049f97b9c2d04ba6e3e9d5e946ec1ee5c8b34?"
             className=" -mt-[1px] items-center w-[12px] justify-center object-contain object-center  max-w-full overflow-hidden aspect-square shrink-0"
           />
-          <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap hover:underline">
+          {/* <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap hover:underline">
             How it works
-          </div>
+          </div> */}
         </button>
         <div className="relative text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-[30px]">
           Jackpot Value
@@ -450,7 +450,7 @@ function JackpotValueSeciont(props) {
           <div className="relative w-full gap-3 mt-3  sm:mt-[0px] flex items-center justify-center text-[34px] font-bold text-center text-blue-300 ">
             <img className=" w-[60px] h-[60px]" src="/JV.png" />
             {amount ? toFixed(amount?.toString(), 2) : '--'}
-            {' ' + JackpotToken}
+            {' ' + JackpotToken} || Win upto 10 arb just placing a trade
           </div>
         </div>
         <div className="text-[#B1B6C6] mt-[25px] flex gap-1 font-[700] text-[12px]">
