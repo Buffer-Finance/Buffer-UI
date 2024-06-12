@@ -341,7 +341,7 @@ export const getTabs = (
       },
       {
         to: `/lp-rewards`,
-        name: 'LP Page',
+        name: 'LP Boost',
         subTabs: [],
         isExternalLink: false,
       },
