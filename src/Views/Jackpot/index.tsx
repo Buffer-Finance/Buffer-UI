@@ -458,7 +458,7 @@ function JackpotValueSeciont(props) {
           <div className="text-[#fff]">
             {minSize ? toFixed(minSize, 2) : '--'} ARB
           </div>{' '}
-          || Win upto 10 arb just placing a trade
+          || Win upto 10 ARB just placing a trade
         </div>
       </div>
     );
@@ -498,7 +498,7 @@ function JackpotValueSeciont(props) {
         <div className="text-[#fff]">
           {minSize ? toFixed(minSize, 2) : '--'} ARB
         </div>{' '}
-        || Win upto 10 arb just placing a trade
+        || Win upto 10 ARB just placing a trade
       </div>
     </div>
   );
