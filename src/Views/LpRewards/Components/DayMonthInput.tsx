@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTokensPerInterval } from '../Hooks/useTokensPerInterval';
 import { Chain } from 'viem';
 import { convertLockPeriodToSeconds } from './BoostYield/Lock';
@@ -58,25 +58,39 @@ export const DayMonthInput: React.FC<{
     if (maxLockDuration > convertLockPeriodToSeconds(data)) return false;
     return true;
   }, [data, maxLockDuration, isDisabled]);
-
+  const [error, setError] = useState('');
   return (
-    <div className="flex items-center gap-3 justify-end">
-      <ActionButton onClick={handleSubtract} disabled={isMinusDisabled}>
-        -
-      </ActionButton>
-      <div className="flex items-center gap-3 ">
-        <div>
-          <div className="text-[#C3C2D4] text-f12 font-medium leading-[18px]">
-            Days
-          </div>
-          <div className="text-[#ffffff] text-f16 font-medium leading-[18px] mt-3 text-center">
-            {formatDays(data)}
+    <div className="flex flex-col">
+      <div className="flex items-center gap-3 justify-end">
+        <ActionButton onClick={handleSubtract} disabled={isMinusDisabled}>
+          -
+        </ActionButton>
+        <div className="flex items-center gap-3 ">
+          <div>
+            <div className="text-[#C3C2D4] text-f12 font-medium leading-[18px]">
+              Days
+            </div>
+            <input
+              className="text-[#ffffff] bg-transparent  outline-none border-none w-[20px] text-f16 font-medium leading-[18px] mt-3 text-center"
+              value={formatDays(data)}
+              onChange={(e) => {
+                if (e.target.value == '' || parseInt(e.target.value) < 7) {
+                  setError('Minimum lock period is 7 days');
+                } else if (parseInt(e.target.value) > 90) {
+                  setError('Maximum lock period is 90 days');
+                } else {
+                  setData({ days: parseInt(e.target.value), months: 0 });
+                  setError('');
+                }
+              }}
+            />
           </div>
         </div>
+        <ActionButton onClick={handleAdd} disabled={isPlusDisabled}>
+          +
+        </ActionButton>
       </div>
-      <ActionButton onClick={handleAdd} disabled={isPlusDisabled}>
-        +
-      </ActionButton>
+      {error ? <div className="text-red font-medium">{error}</div> : null}
     </div>
   );
 };
