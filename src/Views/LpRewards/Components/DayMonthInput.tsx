@@ -29,7 +29,11 @@ export const DayMonthInput: React.FC<{
   maxLockDuration,
   minLockDuration,
 }) => {
+  const [error, setError] = useState('');
+
   const handleSubtract = useCallback(() => {
+    setError('');
+
     if (data.days > 0) {
       setData((prev) => ({ ...prev, days: prev.days - 1 }));
     } else if (data.months > 0) {
@@ -38,6 +42,8 @@ export const DayMonthInput: React.FC<{
   }, [setData, data]);
 
   const handleAdd = useCallback(() => {
+    setError('');
+
     if (data.days < 30) {
       setData((prev) => ({ ...prev, days: prev.days + 1 }));
     } else {
@@ -58,7 +64,6 @@ export const DayMonthInput: React.FC<{
     if (maxLockDuration > convertLockPeriodToSeconds(data)) return false;
     return true;
   }, [data, maxLockDuration, isDisabled]);
-  const [error, setError] = useState('');
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-3 justify-end">
