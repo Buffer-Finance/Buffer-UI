@@ -488,7 +488,7 @@ function JackpotValueSeciont(props) {
       <div className="flex justify-between w-full">
         <div className="relative w-full gap-3 mt-1 flex items-center justify-center text-[45px] font-bold text-center text-blue-300 ">
           <img className=" w-[60px] h-[60px]" src="/JV.png" />
-          {amount ? toFixed(amount?.toString(), 2) : '--'}
+          {amount ? toFixed(amount?.toString(), 0) : '--'}
           {' ' + JackpotToken}
         </div>
       </div>
