@@ -301,11 +301,12 @@ export const getTabs = (
   if (import.meta.env.VITE_ENV.toUpperCase() === 'MAINNET') {
     return [
       {
-        to: 'https://app.buffer.finance/',
+        to: `https://app.buffer.finance`,
         name: 'Trade',
         subTabs: [],
         isExternalLink: true,
       },
+
       {
         to: `https://app.buffer.finance/#/referral`,
         name: 'Referral',
@@ -318,15 +319,48 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
+      // {
+      //   to: '/ab/' + market,
+      //   name: 'Above/Below',
+      //   subTabs: [],
+      //   isExternalLink: true,
+      // },
+
       {
-        to: `https://optopi.buffer.finance/`,
-        name: 'Optopi NFT',
+        to: `https://earn.buffer.finance/`,
+        name: 'Earn',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      //ddd
+      {
+        to: `https://app.buffer.finance/#/jackpot`,
+        name: 'Jackpot',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: `https://app.buffer.finance/#/lp-rewards`,
+        name: 'LP Boost',
+        subTabs: [],
+        isExternalLink: true,
+      },
+      {
+        to: 'https://app.buffer.finance/#/rewards',
+        name: 'Rewards',
         subTabs: [],
         isExternalLink: true,
       },
       {
         to: `https://app.buffer.finance/#/leaderboard/daily`,
         name: 'Competitions',
+        subTabs: [],
+        isExternalLink: true,
+      },
+
+      {
+        to: `https://testnet.buffer.finance/`,
+        name: 'Practice Trading',
         subTabs: [],
         isExternalLink: true,
       },
@@ -337,16 +371,24 @@ export const getTabs = (
         isExternalLink: true,
       },
       {
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
+        subTabs: [],
+        isExternalLink: true,
+      },
+
+      {
         to: `https://stats.buffer.finance/`,
         name: 'Stats',
         subTabs: [],
         isExternalLink: true,
       },
+      //ddd
       {
-        to: `#`,
-        name: 'Earn',
+        to: 'https://perps.buffer.finance/trade',
+        name: 'Perps',
         subTabs: [],
-        isExternalLink: false,
+        isExternalLink: true,
       },
       {
         to: 'https://twitter.com/Buffer_Finance',
@@ -446,7 +488,7 @@ export const getTabs = (
         to: `#`,
         name: 'Earn',
         subTabs: [],
-        isExternalLink: false,
+        isExternalLink: true,
       },
       {
         to: 'https://twitter.com/Buffer_Finance',
@@ -495,7 +537,7 @@ export const getTabs = (
       //   to: `/leaderboard/trades`,
       //   name: 'All Trades',
       //   subTabs: [],
-      //   isExternalLink: false,
+      //   isExternalLink: true,
       // },
     ];
 };
@@ -531,7 +573,7 @@ export const getMobileTabs = (
         to: `#`,
         name: 'Earn',
         subTabs: [],
-        isExternalLink: false,
+        isExternalLink: true,
         icon: TabIcon.Earn,
       },
 
