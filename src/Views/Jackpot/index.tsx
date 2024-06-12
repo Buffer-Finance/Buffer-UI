@@ -456,7 +456,7 @@ function JackpotValueSeciont(props) {
         <div className="text-[#B1B6C6] mt-[25px] flex gap-1 font-[700] text-[12px]">
           Minimum Bet Size{' '}
           <div className="text-[#fff]">
-            {minSize ? toFixed(minSize, 2) : '--'} ARB
+            {minSize ? toFixed(minSize, 0) : '--'} ARB
           </div>{' '}
           || Win upto 10 arb just placing a trade
         </div>
@@ -479,9 +479,9 @@ function JackpotValueSeciont(props) {
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/c918dc20adb64f78c725558364a049f97b9c2d04ba6e3e9d5e946ec1ee5c8b34?"
           className=" -mt-[1px] items-center w-[12px] justify-center object-contain object-center  max-w-full overflow-hidden aspect-square shrink-0"
         />
-        <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap hover:underline">
+        {/* <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap hover:underline">
           How it works
-        </div>
+        </div> */}
       </button>
       <div className="relative mt-[5%] text-[16px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-11 max-md:mt-10">
         Jackpot Value
@@ -496,7 +496,8 @@ function JackpotValueSeciont(props) {
       <div className="text-[#B1B6C6] mt-4 flex gap-1 font-[700] text-[12px]">
         Minimum Bet Size{' '}
         <div className="text-[#fff]">
-          {minSize ? toFixed(minSize, 2) : '--'} ARB
+          {minSize ? toFixed(minSize, 0) : '--'} ARB || Win upto 10 arb just
+          placing a trade
         </div>{' '}
       </div>
     </div>
