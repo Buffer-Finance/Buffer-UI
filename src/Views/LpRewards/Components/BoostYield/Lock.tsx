@@ -21,6 +21,8 @@ import { BLPprice } from '../BlpPrice';
 import { ModalButton } from '../Deposit/Modal';
 import { Container } from '../Deposit/Styles';
 import { convertToNumberOfMonthsAndDays } from './Transactions/helpers';
+import { useAtom } from 'jotai';
+import { lockErrorAtom } from '../DayMonthInput';
 
 const Input = styled.input`
   background-color: #232334;
@@ -141,8 +143,10 @@ const LockButton: React.FC<{
   const { writeCall } = useWriteCall(contracts.nftLockPool, NftLockPoolABI);
   const [isApproving, setIsApproving] = useState<boolean>(false);
   const toastify = useToast();
-
+  const [lock, setLock] = useAtom(lockErrorAtom);
+  console.log(`Lock-lock: `, lock);
   const handleApprove = async () => {
+    if (lock != '') return toastify({ type: 'error', msg: lock });
     try {
       //check if amount contains any characters
       // if (amount.match(/[a-zA-Z]/g))

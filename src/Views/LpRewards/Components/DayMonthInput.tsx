@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTokensPerInterval } from '../Hooks/useTokensPerInterval';
 import { Chain } from 'viem';
 import { convertLockPeriodToSeconds } from './BoostYield/Lock';
+import { atom, useAtom } from 'jotai';
 function formatDays(data) {
   return data.months * 30 + data.days;
 }
+export const lockErrorAtom = atom<string>('');
 export const DayMonthInput: React.FC<{
   data: {
     days: number;
@@ -29,26 +31,19 @@ export const DayMonthInput: React.FC<{
   maxLockDuration,
   minLockDuration,
 }) => {
-  const [error, setError] = useState('');
+  const [error, setError] = useAtom(lockErrorAtom);
+  const [value, setValue] = useState(7);
 
   const handleSubtract = useCallback(() => {
     setError('');
 
-    if (data.days > 0) {
-      setData((prev) => ({ ...prev, days: prev.days - 1 }));
-    } else if (data.months > 0) {
-      setData((prev) => ({ ...prev, days: 30, months: prev.months - 1 }));
-    }
+    setValue(value - 1);
   }, [setData, data]);
 
   const handleAdd = useCallback(() => {
     setError('');
 
-    if (data.days < 30) {
-      setData((prev) => ({ ...prev, days: prev.days + 1 }));
-    } else {
-      setData((prev) => ({ ...prev, days: 0, months: prev.months + 1 }));
-    }
+    setValue(value + 1);
   }, [setData, data]);
 
   const isMinusDisabled = useMemo(() => {
@@ -64,6 +59,20 @@ export const DayMonthInput: React.FC<{
     if (maxLockDuration > convertLockPeriodToSeconds(data)) return false;
     return true;
   }, [data, maxLockDuration, isDisabled]);
+  const detectError = (val: number | string) => {
+    if (val == '' || parseInt(val) < 7) {
+      setError('Minimum lock period is 7 days');
+      // setData({ days: 7, months: 0 });
+    } else if (parseInt(val) > 90) {
+      setError('Maximum lock period is 90 days');
+      // setData({ days: 90, months: 0 });
+    } else {
+      setError('');
+    }
+  };
+  useEffect(() => {
+    if (!error) setData((p) => ({ ...data, days: value }));
+  }, [value, error]);
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-3 justify-end">
@@ -76,17 +85,12 @@ export const DayMonthInput: React.FC<{
               Days
             </div>
             <input
-              className="text-[#ffffff] bg-transparent  outline-none border-none w-[20px] text-f16 font-medium leading-[18px] mt-3 text-center"
-              value={formatDays(data)}
+              className="text-[#ffffff] bg-transparent  outline-none border-none w-[30px] text-f16 font-medium leading-[18px] mt-3 text-center"
+              value={value}
+              type="number"
               onChange={(e) => {
-                if (e.target.value == '' || parseInt(e.target.value) < 7) {
-                  setError('Minimum lock period is 7 days');
-                } else if (parseInt(e.target.value) > 90) {
-                  setError('Maximum lock period is 90 days');
-                } else {
-                  setData({ days: parseInt(e.target.value), months: 0 });
-                  setError('');
-                }
+                setValue(parseInt(e.target.value));
+                detectError(e.target.value);
               }}
             />
           </div>
