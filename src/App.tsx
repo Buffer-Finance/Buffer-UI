@@ -326,7 +326,7 @@ const AppRoutes = () => {
     </div>
   );
 };
-
+//
 async function activateLocale(locale: string) {
   const { messages } = await import(`./locales/${locale}/messages.ts`);
   i18n.load(locale, messages);
