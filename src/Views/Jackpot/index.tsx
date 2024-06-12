@@ -449,14 +449,14 @@ function JackpotValueSeciont(props) {
         <div className="flex justify-between w-full">
           <div className="relative w-full gap-3 mt-3  sm:mt-[0px] flex items-center justify-center text-[34px] font-bold text-center text-blue-300 ">
             <img className=" w-[60px] h-[60px]" src="/JV.png" />
-            {amount ? toFixed(amount?.toString(), 2) : '--'}
+            {amount ? toFixed(amount?.toString(), 0) : '--'}
             {' ' + JackpotToken} || Win upto 10 ARB just placing a trade
           </div>
         </div>
         <div className="text-[#B1B6C6] mt-[25px] flex gap-1 font-[700] text-[12px]">
           Minimum Bet Size{' '}
           <div className="text-[#fff]">
-            {minSize ? toFixed(minSize, 0) : '--'} ARB
+            {minSize ? toFixed(minSize, 2) : '--'} ARB
           </div>{' '}
           || Win upto 10 arb just placing a trade
         </div>
@@ -496,7 +496,7 @@ function JackpotValueSeciont(props) {
       <div className="text-[#B1B6C6] mt-4 flex gap-1 font-[700] text-[12px]">
         Minimum Bet Size{' '}
         <div className="text-[#fff]">
-          {minSize ? toFixed(minSize, 0) : '--'} ARB || Win upto 10 arb just
+          {minSize ? toFixed(minSize, 2) : '--'} ARB || Win upto 10 arb just
           placing a trade
         </div>{' '}
       </div>
