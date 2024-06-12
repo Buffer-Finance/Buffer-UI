@@ -139,11 +139,11 @@ export const BarData: React.FC<{
 
 const RewardPool: React.FC<{ league: leagueType }> = ({ league }) => {
   const WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE = {
-    diamond: 3500,
-    platinum: 2500,
-    silver: 2000,
-    gold: 1500,
-    bronze: 500,
+    diamond: 550,
+    platinum: 384,
+    silver: 307,
+    gold: 217,
+    bronze: 77,
   };
   const WEEKLY_LOSS_REWARDS_ALLOCATION_BY_LEAGUE = {
     diamond: 800,
@@ -154,10 +154,7 @@ const RewardPool: React.FC<{ league: leagueType }> = ({ league }) => {
   };
   return (
     <Display
-      data={
-        WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE[league] +
-        WEEKLY_LOSS_REWARDS_ALLOCATION_BY_LEAGUE[league]
-      }
+      data={WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE[league]}
       unit="ARB"
       precision={0}
     />
