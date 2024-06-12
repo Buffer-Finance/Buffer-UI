@@ -325,21 +325,23 @@ export const getTabs = (
       //   subTabs: [],
       //   isExternalLink: false,
       // },
+
       {
-        to: 'https://perps.buffer.finance/trade',
-        name: 'Perps',
+        to: `https://earn.buffer.finance/`,
+        name: 'Earn',
         subTabs: [],
         isExternalLink: true,
       },
+      //ddd
       {
-        to: `https://optopi.buffer.finance/`,
-        name: 'Optopi NFT',
+        to: `/jackpot`,
+        name: 'Jackpot',
         subTabs: [],
-        isExternalLink: true,
+        isExternalLink: false,
       },
       {
         to: `/lp-rewards`,
-        name: 'LP Page',
+        name: 'LP Boost',
         subTabs: [],
         isExternalLink: false,
       },
@@ -357,12 +359,6 @@ export const getTabs = (
       },
 
       {
-        to: `/jackpot`,
-        name: 'Jackpot',
-        subTabs: [],
-        isExternalLink: false,
-      },
-      {
         to: `https://testnet.buffer.finance/`,
         name: 'Practice Trading',
         subTabs: [],
@@ -374,6 +370,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: false,
       },
+      {
+        to: `https://optopi.buffer.finance/`,
+        name: 'Optopi NFT',
+        subTabs: [],
+        isExternalLink: true,
+      },
 
       {
         to: `https://stats.buffer.finance/`,
@@ -381,10 +383,10 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-
+      //ddd
       {
-        to: `https://earn.buffer.finance/`,
-        name: 'Earn',
+        to: 'https://perps.buffer.finance/trade',
+        name: 'Perps',
         subTabs: [],
         isExternalLink: true,
       },
