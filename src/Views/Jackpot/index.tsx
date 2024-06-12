@@ -265,7 +265,7 @@ const Jackpot: React.FC<any> = ({}) => {
                 className="my-[15px] sm:my-[20px] bg-gradient-to-b from-sky-300 to-blue-400 rounded flex justify-center items-center cursor-pointer "
               >
                 <div className="my-2 text-sm font-semibold text-center text-zinc-950 text-[16px]">
-                  Play
+                  Trade Now
                 </div>
               </BlueBtn>
             </div>
