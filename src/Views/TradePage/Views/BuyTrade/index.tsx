@@ -114,7 +114,7 @@ export const BuyTrade: React.FC = () => {
   return (
     <BuyTradeBackground>
       <TimeSelector />
-      <TradeSizeSelector />
+      <TradeSizeSelector payout={payout} />
       <TradeTypeSelector />
       <CurrentPrice />
       <PayoutProfit
