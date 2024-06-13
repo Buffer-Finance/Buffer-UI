@@ -141,7 +141,7 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
               <span className=" leading-[21px]">Bet:</span>&nbsp;
               <div className="text-1 text-f14">
                 {(+divide(
-                  bet.trade_size,
+                  bet.locked_amount,
                   bet.token === 'ARB' ? 18 : 6
                 )).toFixed(2)}{' '}
                 {bet.token}
