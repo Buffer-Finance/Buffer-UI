@@ -134,6 +134,7 @@ export const DailyWebTable: React.FC<{
   let totalRows = 0;
   if (winners !== undefined && loosers !== undefined) {
     totalRows = winners.length + loosers.length;
+    // console.log(`DailyWebTable-loosers.length: `, loosers.length);
   } else if (winners !== undefined && loosers === undefined) {
     totalRows = winners.length;
   } else if (winners === undefined && loosers !== undefined) {
@@ -461,7 +462,10 @@ export const DailyWebTable: React.FC<{
         headerJSX={HeaderFormatter}
         topDecorator={topDecorator}
         onRowClick={(idx) => {
-          navigateToProfile(winners?.[idx].userAddress);
+          // console.log(`DailyWebTable-winners: `, winners);
+          const total = winners?.concat(loosers);
+
+          navigateToProfile(total?.[idx].userAddress);
         }}
         count={count}
         activePage={activePage}
