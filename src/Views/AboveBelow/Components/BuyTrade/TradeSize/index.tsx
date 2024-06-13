@@ -29,7 +29,7 @@ import {
   selectedPriceAtom,
   tradeSizeAtom,
 } from '@Views/AboveBelow/atoms';
-import { PlatfromFeeError } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
+import { PlatfromFeeErrorOld } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { getAddress } from 'viem';
@@ -171,7 +171,7 @@ const Error: React.FC<{
   return error ? (
     <span className="text-red whitespace-nowrap text-f12">{error}</span>
   ) : (
-    <PlatfromFeeError
+    <PlatfromFeeErrorOld
       platfromFee={platfromFee}
       tradeToken={tradeToken}
       balance={balance}
