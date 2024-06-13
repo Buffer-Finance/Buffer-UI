@@ -13,14 +13,14 @@ import { useHighestTierNFT2 } from '@Hooks/useNFTGraph2';
 import { Link } from 'react-router-dom';
 import { Skeleton } from '@mui/material';
 import { divide } from '@Utils/NumString/stringArithmatics';
-import { isABRouter } from '@Views/TradePage/config';
+import { isABRouter, appConfig } from '@Views/TradePage/config';
 
 function JackPotWinnerCard({ bet }) {
   console.log(`JackPotWInnerCard-bet.user_address: `, bet);
   const { address } = useAccount();
 
   return (
-    <div className="justify-center items-stretch bg-slate-800 flex max-w-[360px] flex-col px-4 py-3 rounded-lg">
+    <div className="justify-center items-stretch bg-slate-800 flex max-w-[360px] fleappConfigx-col px-4 py-3 rounded-lg">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           {/* <Gravatar
@@ -140,11 +140,15 @@ export const UserCard: React.FC<{ bet: TradeType; isUser: boolean }> = ({
             <div className="flex items-end ">
               <span className=" leading-[21px]">Bet:</span>&nbsp;
               <div className="text-1 text-f14">
-                {(+divide(bet.trade_size, 18)).toFixed(2)} ARB
+                {(+divide(
+                  bet.locked_amount,
+                  bet.token === 'ARB' ? 18 : 6
+                )).toFixed(2)}{' '}
+                {bet.token}
               </div>
             </div>
             <a
-              href={`https://sepolia.arbiscan.io/tx/${bet.jackpot_txn_hash}`}
+              href={`https://arbiscan.io/tx/${bet.jackpot_txn_hash}`}
               target="_blank"
               className="hover:underline flex items-center gap-2 ml-2 text-[#808191] hover:text-buffer-blue"
             >
