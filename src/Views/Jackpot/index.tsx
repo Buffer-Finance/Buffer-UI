@@ -466,7 +466,7 @@ function JackpotValueSeciont(props) {
   return (
     <div
       className={[
-        'relative flex sm:w-full  flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-[680px] h-[200px]  nb-image min-w-fit',
+        'relative flex sm:w-full  flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-[680px] h-[200px]  nb-image min-w-fit h-[250px]',
         props.className,
       ].join(' ')}
     >
@@ -494,11 +494,18 @@ function JackpotValueSeciont(props) {
         </div>
       </div>
       <div className="text-[#B1B6C6] mt-4 flex gap-1 font-[700] text-[12px]">
-        Minimum Trade Size:
+        Minimum Trade Notional Size*:
         <div className="text-[#fff]">
           {minSize ? toFixed(minSize, 2) : '--'} ARB or USDC,
         </div>{' '}
         win upto 10 arb by just placing a trade
+      </div>
+      <div className="text-[#B1B6C6] mt-4  gap-1 font-[700] text-[12px] text-center">
+        *Notional trade Size: Trade Size × ((Payout% × 2)/100 + 1), <br />
+        eg. if you place a 20 USDC trade on ETH/USD market when the payout was{' '}
+        {/* <br /> */}
+        80% then your notional trade size will be 20 × ((80 × 2)/100 + 1) ={' '}
+        <span className="text-[#fff]">32 USDC</span>
       </div>
     </div>
   );
