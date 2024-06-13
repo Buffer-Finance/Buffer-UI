@@ -23,6 +23,8 @@ export const DayMonthInput: React.FC<{
   activeChain: Chain;
   minLockDuration: number;
   maxLockDuration: number;
+  value: any;
+  setValue: any;
 }> = ({
   data,
   setData,
@@ -30,9 +32,10 @@ export const DayMonthInput: React.FC<{
   activeChain,
   maxLockDuration,
   minLockDuration,
+  value,
+  setValue,
 }) => {
   const [error, setError] = useAtom(lockErrorAtom);
-  const [value, setValue] = useState(7);
 
   const handleSubtract = useCallback(() => {
     setError('');

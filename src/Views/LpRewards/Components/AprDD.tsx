@@ -57,6 +57,8 @@ export const AprDD: React.FC<{
     activeChain,
     activePool
   );
+  const [value, setValue] = useState(7);
+
   const lockPeriodInSeconds = convertLockPeriodToSeconds(lockPeriod);
   const lockApr = getLockAPR(lockPeriodInSeconds, false);
   const multiPlier = getMultiplierByLockDuration(lockPeriodInSeconds, false);
@@ -74,7 +76,7 @@ export const AprDD: React.FC<{
           </div>
           <button
             onClick={() => {
-              setLockPeriod(convertToNumberOfMonthsAndDays(maxLockDuration));
+              setValue(convertToNumberOfMonthsAndDays(maxLockDuration).days);
             }}
             className="bg-[#141823] text-[#FFFFFF] text-[10px] leading-[12px] font-medium py-[3px] px-[5px] rounded-sm mt-2"
           >
@@ -84,6 +86,8 @@ export const AprDD: React.FC<{
         <ColumnGap gap="8px">
           <DayMonthInput
             data={lockPeriod}
+            value={value}
+            setValue={setValue}
             setData={setLockPeriod}
             isDisabled={isDisabled}
             activeChain={activeChain}
