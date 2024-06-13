@@ -64,7 +64,7 @@ function Body(
       return (
         <Display
           data={divide(txn.amount, decimals)}
-          unit={poolUnit}
+          unit={'uBLP'}
           label={txn.type == 'Provide' ? '+' : '-'}
           precision={2}
           className="!justify-start text-f15"

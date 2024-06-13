@@ -78,7 +78,7 @@ function Body(
       return (
         <Display
           data={divide(txn.amount, decimals) as string}
-          unit={unit}
+          unit={'uBLP'}
           precision={2}
           className="!justify-start text-f15"
         />

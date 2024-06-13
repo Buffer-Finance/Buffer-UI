@@ -20,7 +20,8 @@ export const PoolStats: React.FC<{
     activeChain,
     activePool
   );
-  const { usdcApr: apr } = useUSDCapr(activeChain, activePool);
+  const { usdcApr: apr, getLockAPR } = useUSDCapr(activeChain, activePool);
+  const boostAPR = getLockAPR(7776000, false);
   const isDataLoading = !data && !error;
   const isPoolStatsLoading = !poolStatsData && !poolStatsError;
   const lockPeriod = readCallData[activePool + '-lockupPeriod']?.[0];
@@ -69,12 +70,29 @@ export const PoolStats: React.FC<{
         }
       />
       <DataColumn
-        title="Current APR"
+        title="Current USDC APR"
         value={
           apr !== undefined ? (
             <span className={defaultDataStyle}>
               <Display
                 data={apr}
+                precision={2}
+                unit="%"
+                className="!justify-start"
+              />
+            </span>
+          ) : (
+            <Skeleton className="w-[50px] !h-5 lc !transform-none " />
+          )
+        }
+      />
+      <DataColumn
+        title="90 Days Boost APR"
+        value={
+          apr !== undefined ? (
+            <span className={defaultDataStyle}>
+              <Display
+                data={boostAPR}
                 precision={2}
                 unit="%"
                 className="!justify-start"
@@ -101,7 +119,7 @@ export const PoolStats: React.FC<{
           )
         }
       />
-      <DataColumn
+      {/* <DataColumn
         title="Accumulated PnL"
         value={
           isPoolStatsLoading !== undefined ? (
@@ -123,7 +141,7 @@ export const PoolStats: React.FC<{
             <Skeleton className="w-[50px] !h-5 lc !transform-none " />
           )
         }
-      />
+      /> */}
     </StatsContainer>
   );
 };

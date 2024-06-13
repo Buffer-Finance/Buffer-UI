@@ -58,7 +58,7 @@ export const UserData: React.FC<{
             )
           }
         />
-        <DataColumn
+        {/* <DataColumn
           title="Current APR"
           value={
             apr !== undefined ? (
@@ -74,7 +74,7 @@ export const UserData: React.FC<{
               <Skeleton className="w-[70px] !h-6 lc !transform-none" />
             )
           }
-        />
+        /> */}
         <div className="flex gap-8 items-start h-full justify-between">
           <DataColumn
             title={`${poolToTokenMapping[activePool]} rewards`}
