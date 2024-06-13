@@ -15,7 +15,7 @@ export const DailyTournamentConfig: {
     minTradesToQualifyPNL: 5,
   },
   42161: {
-    startTimestamp: 1675958400000,
+    startTimestamp: 1718208000000,
     winnersNFT: 0,
     losersNFT: 1,
     endDay: undefined,
