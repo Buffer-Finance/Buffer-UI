@@ -4,6 +4,10 @@ import { Chain } from 'viem';
 import { poolsType } from '../types';
 import { useBlpRate } from './useBlpRate';
 import { useTokensPerInterval } from './useTokensPerInterval';
+import useARBPrice from './useARBPrice';
+import { useContractRead } from 'wagmi';
+import { getLpConfig } from '../config';
+import NftLockPoolABI from '../abis/NftLockPool.json';
 
 export const BASIS_POINTS_DIVISOR = '10000';
 export const SECONDS_PER_YEAR = '31536000';
@@ -16,7 +20,16 @@ export const useUSDCapr = (activeChain: Chain, activePool: poolsType) => {
     activeChain,
     activePool
   );
+  const contracts = getLpConfig(activeChain.id);
 
+  const arbPrice = useARBPrice();
+  const wrappedBlpSupplyWithMultiplier = useContractRead({
+    address: contracts.nftLockPool,
+    abi: NftLockPoolABI,
+    functionName: '_wrappedBlpSupplyWithMultiplier',
+    args: [],
+  });
+  console.log(`data: `, wrappedBlpSupplyWithMultiplier);
   function getBLPsupplyAndPrice() {
     if (!blpData && !blpError) return null;
     if (!blpData) return undefined;
@@ -30,6 +43,7 @@ export const useUSDCapr = (activeChain: Chain, activePool: poolsType) => {
     lockDuration: number,
     isUnlocked: boolean
   ) => {
+    console.log(`lockDuration: `, lockDuration);
     if (!tokensPerInterval && !tokensPerIntervalError) {
       return null;
     }
@@ -63,6 +77,7 @@ export const useUSDCapr = (activeChain: Chain, activePool: poolsType) => {
       Number(lockPeriod),
       isUnlocked
     );
+    if (!wrappedBlpSupplyWithMultiplier?.data) return null;
     if (!tokensPerInterval && !tokensPerIntervalError) {
       return null;
     }
@@ -76,20 +91,28 @@ export const useUSDCapr = (activeChain: Chain, activePool: poolsType) => {
     if (multiplier === undefined) {
       return undefined;
     }
+    if (!arbPrice) return null;
 
     const blpData = getBLPsupplyAndPrice();
 
     if (blpData === null) return null;
     if (blpData === undefined) return undefined;
     const { blpSupply, blpPrice } = blpData;
-
+    const wrappedData = wrappedBlpSupplyWithMultiplier?.data.toString();
     const tokensPerIntervalAmount = tokensPerInterval.lockPerInterval[0].amount;
     const factor = add(multiplier.toString(), '10000');
-    const apr = divide(
-      multiply(multiply(factor, tokensPerIntervalAmount), SECONDS_PER_YEAR),
-      multiply(blpSupply, blpPrice)
-    ) as string;
-    return divide(apr, 18);
+    let numerotor = multiply(
+      multiply(factor, tokensPerIntervalAmount),
+      (365 * 864).toString()
+    );
+    numerotor = multiply(numerotor, (arbPrice * 1e3).toString()) as string;
+    const blpPricee3 = multiply(blpPrice, '1000');
+    const denominator = multiply(
+      multiply('10000000000', wrappedData),
+      blpPricee3
+    );
+    const apr = divide(numerotor, denominator) as string;
+    return divide(apr, 2);
   };
 
   const usdcApr = useMemo(() => {
