@@ -15,7 +15,7 @@ export const HowItWorks: React.FC = () => {
         <Text>
           Boost will be linearly calculated proportionally to the chosen
           duration (min - 7 days, max - 90 days) of the lock and the maximum
-          lock multiplier.
+          lock multiplier<span className=" font-bold">(2x)</span>.
         </Text>
         <Text>
           Allocation of the incentives are based on weekly epochs. Every epoch,
