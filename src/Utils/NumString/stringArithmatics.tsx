@@ -79,6 +79,19 @@ const gt = (from: string, to: string) => {
     throw new Error(bigNumberError(from, to));
   }
 };
+const minsa = (from: string, to: string) => {
+  try {
+    const fromBN = new Big(from);
+    const toBN = new Big(to);
+    if (fromBN.gt(toBN)) {
+      return toBN.toString();
+    } else {
+      return fromBN.toString();
+    }
+  } catch (e) {
+    throw new Error(bigNumberError(from, to));
+  }
+};
 const lt = (from: string, to: string) => {
   try {
     const fromBN = new Big(from);
@@ -138,6 +151,7 @@ export {
   subtract,
   gte,
   gt,
+  minsa,
   lte,
   abs,
   lt,

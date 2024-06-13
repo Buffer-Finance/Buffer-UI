@@ -1,7 +1,13 @@
 import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { toFixed } from '@Utils/NumString';
-import { divide, gt, multiply } from '@Utils/NumString/stringArithmatics';
+import {
+  divide,
+  gt,
+  minsa,
+  multiply,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
@@ -13,6 +19,7 @@ import { Skeleton } from '@mui/material';
 import { useState } from 'react';
 import { Chain } from 'viem';
 import { InputField } from './InputField';
+import { useBlpRate } from '@Views/LpRewards/Hooks/useBlpRate';
 
 export const WithdrawTab: React.FC<{
   activePool: poolsType;
@@ -23,18 +30,33 @@ export const WithdrawTab: React.FC<{
   const unit = activePool === 'uBLP' ? 'USDC' : 'ARB';
   const decimals = activePool === 'aBLP' ? 18 : 6;
 
-  const balance = readcallData[activePool + '-depositBalances']?.[0];
+  const fsBLPBalance = readcallData[activePool + '-fsBLPBalance']?.[0];
   const poolAvailableBalance =
     readcallData[activePool + '-availableBalance']?.[0];
   const unlockedBalance =
     readcallData[activePool + '-getUnlockedLiquidity']?.[0];
+  const { data, error } = useBlpRate(activeChain, activePool);
+
+  const balance = multiply(
+    minsa(fsBLPBalance, unlockedBalance),
+    divide(data?.price ?? '100000000', 8)
+  );
+  // console.log(
+  //   `WithdrawTab-balance: `,
+  //   balance,
+  //   minsa('23', '1'),
+  //   minsa('2', '21')
+  // );
+  const depositBalance = readcallData[activePool + '-depositBalances']?.[0];
+  console.log(`WithdrawTab-depositBalance: `, depositBalance, fsBLPBalance);
+
   return (
     <div>
       <InputField
         activePool={activePool}
         setValue={setAmount}
         balance={balance ?? '0'}
-        unit={activePool}
+        unit={'USDC'}
         decimals={decimals}
         max={balance ?? '0'}
         value={amount}
@@ -51,7 +73,7 @@ export const WithdrawTab: React.FC<{
           unlockedBalance={unlockedBalance}
         />
       </div>
-      <RowBetween className="mt-6">
+      {/* <RowBetween className="mt-6">
         <span className="text-[#7F87A7] text-f14 font-medium leading-[14px]">
           Pool Available Balance:
         </span>
@@ -65,16 +87,16 @@ export const WithdrawTab: React.FC<{
         ) : (
           <Skeleton className="w-[50px] !h-5 lc !transform-none " />
         )}
-      </RowBetween>
+      </RowBetween> */}
       <RowBetween className="mt-5">
         <span className="text-[#7F87A7] text-f14 font-medium leading-[14px]">
-          Unlocked Balance:
+          Locked in Boost Pool:
         </span>
         {unlockedBalance !== undefined ? (
           <Display
-            data={divide(unlockedBalance, decimals)}
+            data={divide(subtract(depositBalance, fsBLPBalance), 6)}
             precision={2}
-            unit={unit}
+            unit={'uBLP'}
             className="text-[#FFFFFF] text-f14 font-medium "
           />
         ) : (

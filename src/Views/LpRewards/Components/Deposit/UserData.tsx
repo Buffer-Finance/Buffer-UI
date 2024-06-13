@@ -1,6 +1,6 @@
 import { useToast } from '@Contexts/Toast';
 import { useWriteCall } from '@Hooks/useWriteCall';
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, multiply } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
@@ -13,6 +13,7 @@ import { getLpConfig, poolToTokenMapping } from '../../config';
 import { poolsType } from '../../types';
 import { DataColumn, defaultDataStyle } from '../DataColumn';
 import { Container } from './Styles';
+import { useBlpRate } from '@Views/LpRewards/Hooks/useBlpRate';
 
 export const UserData: React.FC<{
   activePool: poolsType;
@@ -22,23 +23,34 @@ export const UserData: React.FC<{
   activeChain: Chain;
 }> = ({ activePool, readcallData, activeChain }) => {
   const rewards = readcallData[activePool + '-claimable']?.[0];
-  const totalDeposits = readcallData[activePool + '-depositBalances']?.[0];
+  const depositBalances = readcallData[activePool + '-depositBalances']?.[0];
   const { usdcApr: apr } = useUSDCapr(activeChain, activePool);
   const unit = activePool === 'uBLP' ? 'USDC' : 'ARB';
   const decimals = activePool === 'uBLP' ? 6 : 18;
+  const { data, error } = useBlpRate(activeChain, activePool);
   return (
     <Container>
       <div className="flex flex-col gap-6 h-full">
         <DataColumn
           title="Total value"
           value={
-            totalDeposits !== undefined ? (
-              <span className={defaultDataStyle}>
+            depositBalances !== undefined && data?.price !== undefined ? (
+              <span className={defaultDataStyle + 'flex flex-col'}>
                 <Display
-                  data={divide(totalDeposits, decimals)}
+                  data={divide(
+                    multiply(depositBalances, divide(data?.price, 8)),
+                    decimals
+                  )}
                   unit={unit}
                   precision={2}
                   className="!justify-start"
+                />
+
+                <Display
+                  data={divide(depositBalances, decimals)}
+                  unit={'uBLP'}
+                  precision={2}
+                  className="!justify-start !text-f14 !text-2"
                 />
               </span>
             ) : (

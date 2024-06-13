@@ -456,9 +456,9 @@ function JackpotValueSeciont(props) {
         <div className="text-[#B1B6C6] mt-[25px] flex gap-1 font-[700] text-[12px]">
           Minimum Trade Size:
           <div className="text-[#fff]">
-            {minSize ? toFixed(minSize, 2) : '--'} ARB or USDC
+            {minSize ? toFixed(minSize, 2) : '--'} ARB or USDC,
           </div>{' '}
-          , win upto 10 arb by just placing a trade
+          win upto 10 arb by just placing a trade
         </div>
       </div>
     );
@@ -496,9 +496,9 @@ function JackpotValueSeciont(props) {
       <div className="text-[#B1B6C6] mt-4 flex gap-1 font-[700] text-[12px]">
         Minimum Trade Size:
         <div className="text-[#fff]">
-          {minSize ? toFixed(minSize, 2) : '--'} ARB or USDC
+          {minSize ? toFixed(minSize, 2) : '--'} ARB or USDC,
         </div>{' '}
-        , win upto 10 arb by just placing a trade
+        win upto 10 arb by just placing a trade
       </div>
     </div>
   );

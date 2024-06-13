@@ -13,6 +13,7 @@ export const useLPmulticalldata = (
   const contracts = getLpConfig(activeChain.id);
   console.log(`lp-log-contracts: `, contracts);
   const { address } = useUserAccount();
+  console.log(`address: `, address);
   const userCalls = address
     ? [
         {
@@ -43,6 +44,14 @@ export const useLPmulticalldata = (
           params: [address, contracts.uBLP],
           id: activePool + '-depositBalances',
         },
+        {
+          address: '0x82B2208c5F2Ca8D02304b9F1224fE0D8C9e16d5B',
+          abi: RewardTrackerABI,
+          name: 'balanceOf',
+          params: [address],
+          id: activePool + '-fsBLPBalance',
+        },
+
         {
           address: contracts.feeBLPtracker,
           abi: RewardTrackerABI,
