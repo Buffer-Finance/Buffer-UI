@@ -25,15 +25,24 @@ import { getMaximumValue, getMinimumValue } from '@Views/ABTradePage/utils';
 import { useNumberOfContracts } from '@Views/AboveBelow/Hooks/useNumberOfContracts';
 import {
   readCallDataAtom,
+  selectedExpiry,
   selectedPoolActiveMarketAtom,
   selectedPriceAtom,
   tradeSizeAtom,
 } from '@Views/AboveBelow/atoms';
-import { PlatfromFeeErrorOld } from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
+import {
+  PlatfromFeeError,
+  PlatfromFeeErrorOld,
+} from '@Views/TradePage/Views/BuyTrade/TradeSizeSelector';
 import styled from '@emotion/styled';
 import { useAtom, useAtomValue } from 'jotai';
 import { getAddress } from 'viem';
 import { PoolDropdown } from './PoolDropDown';
+import { useSettlementFee } from '@Views/AboveBelow/Hooks/useSettlementFee';
+import { BlackScholes } from '@Utils/Formulas/blackscholes';
+import { useCurrentPrice } from '@Views/ABTradePage/Hooks/useCurrentPrice';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
+import { getROI } from '../PriceTable';
 
 const TradeSizeSelectorBackground = styled.div`
   margin-top: 16px;
@@ -49,6 +58,16 @@ export const TradeSize: React.FC<{
   const selectedStrike = useAtomValue(selectedPriceAtom);
   const { address: userAddress } = useUserAccount();
   const contracts = useNumberOfContracts();
+  const { data: settlementFees } = useSettlementFee();
+  const { currentPrice, precision } = useCurrentPrice({
+    token0: activeMarket?.token0,
+    token1: activeMarket?.token1,
+  });
+  const { data: ivs } = useIV();
+
+  const expiration = useAtomValue(selectedExpiry);
+  const currentEpoch = Math.floor(Date.now() / 1000);
+  const iv = ivs?.[activeMarket.tv_id];
 
   if (activeMarket === undefined || readCallData === undefined) return <></>;
   const token = activeMarket.poolInfo.token;
@@ -59,6 +78,8 @@ export const TradeSize: React.FC<{
 
   let maxTradeSize = MAX_APPROVAL_VALUE;
   let maxPermissibleContracts: string | undefined = undefined;
+  let settlementFee;
+  let probability;
   if (
     contracts &&
     selectedStrike !== undefined &&
@@ -69,6 +90,26 @@ export const TradeSize: React.FC<{
       readCallData.maxPermissibleContracts[
         getAddress(activeMarket.address) + strike
       ];
+    let keySrring = selectedStrike[activeMarket.tv_id].isAbove
+      ? 'sf_above'
+      : 'sf_below';
+    let marketKey =
+      selectedStrike[activeMarket.tv_id].marketHash +
+      '-' +
+      getAddress(activeMarket.address);
+    console.log(`index-marketKey: `, marketKey);
+    const imobj = settlementFees[marketKey];
+    console.log(`index-imobj: `, imobj);
+    settlementFee = imobj?.[keySrring] ?? settlementFees['Base'];
+    probability = BlackScholes(
+      true,
+      selectedStrike[activeMarket.tv_id].isAbove,
+      currentPrice,
+      selectedStrike[activeMarket.tv_id].price,
+      Math.floor(expiration / 1000) - currentEpoch,
+      0,
+      iv / 1e4
+    );
     if (maxPermissibleMarket !== undefined) {
       maxPermissibleContracts = maxPermissibleMarket.maxPermissibleContracts;
       if (maxPermissibleContracts !== undefined)
@@ -78,6 +119,16 @@ export const TradeSize: React.FC<{
         );
     }
   }
+  // selectedStrike
+  console.log(`index-selectedStrike: `, settlementFee, probability);
+  let payout = '90';
+  if (settlementFee && probability) {
+    let totalFee = probability + (settlementFee / 1e4) * probability;
+    console.log(`index-totalFee: `, totalFee);
+    let roi = getROI(totalFee);
+    payout = roi.substring(0, roi.length - 1);
+  }
+  console.log(`index-payout: `, payout);
   if (lt(maxTradeSize, '0')) maxTradeSize = '0';
   return (
     <TradeSizeSelectorBackground className="sm:!mt-[0px]">
@@ -146,6 +197,7 @@ export const TradeSize: React.FC<{
               }
               tradeToken={activeMarket.poolInfo.token}
               balance={balance}
+              payout={payout}
               tradeSize={tradeSize}
               maxTradeSize={maxTradeSize}
             />
@@ -161,7 +213,15 @@ const Error: React.FC<{
   maxTradeSize: string;
   tradeToken: string;
   platfromFee: string;
-}> = ({ balance, tradeSize, maxTradeSize, platfromFee, tradeToken }) => {
+  payout: string;
+}> = ({
+  balance,
+  tradeSize,
+  maxTradeSize,
+  platfromFee,
+  tradeToken,
+  payout,
+}) => {
   const error = getTradeSizeError(
     // minTradeSize,
     maxTradeSize,
@@ -171,7 +231,8 @@ const Error: React.FC<{
   return error ? (
     <span className="text-red whitespace-nowrap text-f12">{error}</span>
   ) : (
-    <PlatfromFeeErrorOld
+    <PlatfromFeeError
+      payout={payout}
       platfromFee={platfromFee}
       tradeToken={tradeToken}
       balance={balance}

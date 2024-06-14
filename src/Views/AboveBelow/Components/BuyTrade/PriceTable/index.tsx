@@ -73,7 +73,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     ...decreasingPriceArray,
   ];
 
-  function setStrikePrice(isAbove: boolean, price: string) {
+  function setStrikePrice(isAbove: boolean, price: string, marketHash: string) {
     try {
       // console.log(`index-strikePrice: `, price,/ isAbove);
 
@@ -86,6 +86,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           [marketTVid]: {
             price,
             isAbove,
+            marketHash,
           },
         });
       } else {
@@ -94,6 +95,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           [marketTVid]: {
             price,
             isAbove,
+            marketHash,
           },
         }));
       }
@@ -115,6 +117,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     let tablerow = totalArray[row];
     // console.log(`index-tablerow: `, tablerow);
     const strikePrice = tablerow?.strike;
+    const marketHash = tablerow?.marketID;
     // console.log(
     //   `maxPermissibleContracts`,false
     //   maxPermissibleContracts[
@@ -168,7 +171,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
               }
-              setStrikePrice(true, strikePrice.toString());
+              setStrikePrice(true, strikePrice.toString(), marketHash);
             }}
           >
             {getROI(tablerow.totalFeeAbove)}
@@ -182,7 +185,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return throwError();
               }
-              setStrikePrice(false, strikePrice.toString());
+              setStrikePrice(false, strikePrice.toString(), marketHash);
             }}
           >
             {getROI(tablerow.totalFeeBelow)}
@@ -196,7 +199,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               if (!tablerow.totalFeeAbove) {
                 return throwError();
               }
-              setStrikePrice(true, strikePrice.toString());
+              setStrikePrice(true, strikePrice.toString(), marketHash);
             }}
           >
             {tablerow.totalFeeAbove ? tablerow.totalFeeAbove?.toFixed(2) : '-'}
@@ -210,7 +213,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               if (!tablerow.totalFeeBelow) {
                 return throwError();
               }
-              setStrikePrice(false, strikePrice.toString());
+              setStrikePrice(false, strikePrice.toString(), marketHash);
             }}
           >
             {tablerow.totalFeeBelow ? tablerow.totalFeeBelow?.toFixed(2) : '-'}
@@ -224,7 +227,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
               }
-              setStrikePrice(false, strikePrice.toString());
+              setStrikePrice(false, strikePrice.toString(), marketHash);
             }}
           >
             {getROI(tablerow.totalFeeBelow)}
@@ -238,7 +241,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
               }
-              setStrikePrice(true, strikePrice.toString());
+              setStrikePrice(true, strikePrice.toString(), marketHash);
             }}
           >
             {tablerow.totalFeeAbove ? tablerow.totalFeeAbove?.toFixed(2) : '-'}
@@ -252,7 +255,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               if (getROI(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
               }
-              setStrikePrice(true, strikePrice.toString());
+              setStrikePrice(true, strikePrice.toString(), marketHash);
             }}
             title={
               tablerow.totalFeeAbove && maxSizeAbove
@@ -284,7 +287,7 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               if (getROI(tablerow.totalFeeBelow) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
               }
-              setStrikePrice(false, strikePrice.toString());
+              setStrikePrice(false, strikePrice.toString(), marketHash);
             }}
             title={
               maxSizeBelow

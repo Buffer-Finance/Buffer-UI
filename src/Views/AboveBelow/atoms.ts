@@ -166,6 +166,7 @@ export const selectedPriceAtom = atom<
       [marketTVid: string]: {
         price: string;
         isAbove: boolean;
+        marketHash: string;
       };
     }
   | undefined
