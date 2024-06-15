@@ -30,16 +30,16 @@ export const WithdrawTab: React.FC<{
   const unit = activePool === 'uBLP' ? 'USDC' : 'ARB';
   const decimals = activePool === 'aBLP' ? 18 : 6;
 
-  const fsBLPBalance = readcallData[activePool + '-fsBLPBalance']?.[0];
+  const fsBLPBalance = readcallData[activePool + '-fsBLPBalance']?.[0] ?? '0';
   const poolAvailableBalance =
     readcallData[activePool + '-availableBalance']?.[0];
   const unlockedBalance =
-    readcallData[activePool + '-getUnlockedLiquidity']?.[0];
+    readcallData[activePool + '-getUnlockedLiquidity']?.[0] ?? '0';
   const { data, error } = useBlpRate(activeChain, activePool);
 
   const balance = multiply(
     minsa(fsBLPBalance, unlockedBalance),
-    divide(data?.price ?? '100000000', 8)
+    divide(data?.price ?? '100000000', 8) ?? '0'
   );
   // console.log(
   //   `WithdrawTab-balance: `,
@@ -94,7 +94,10 @@ export const WithdrawTab: React.FC<{
         </span>
         {unlockedBalance !== undefined ? (
           <Display
-            data={divide(subtract(depositBalance, fsBLPBalance), 6)}
+            data={divide(
+              subtract(depositBalance ?? '0', fsBLPBalance ?? '0'),
+              6
+            )}
             precision={2}
             unit={'uBLP'}
             className="text-[#FFFFFF] text-f14 font-medium "
