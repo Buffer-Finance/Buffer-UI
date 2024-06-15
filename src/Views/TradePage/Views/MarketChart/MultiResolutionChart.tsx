@@ -575,7 +575,7 @@ export const MultiResolutionChart = ({
             // console.log(`lastSyncedKline: `, lastSyncedKline);
           }
           onHistoryCallback(ohlc, {
-            noData: true,
+            noData: false,
           });
         } catch (error) {
           console.log('pyth-deb:error-thrown', error);
