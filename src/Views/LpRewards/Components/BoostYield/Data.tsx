@@ -121,7 +121,7 @@ const ClaimButton: React.FC<{
             });
           }
         },
-        'harvestMultiplePositionTo',
+        'harvestPositionsTo',
         [claimableIds.slice(0, 10), userAddress]
       );
     } catch (e) {
