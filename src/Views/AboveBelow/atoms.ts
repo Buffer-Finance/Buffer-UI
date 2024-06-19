@@ -41,7 +41,7 @@ export const aboveBelowActiveMarketsAtom = atom<marketTypeAB[]>((get) => {
   });
 });
 
-export const setSelectedPoolForTradeAtom = atom<string>('ARB');
+export const setSelectedPoolForTradeAtom = atom<string>('USDC');
 export const selectedPoolActiveMarketAtom = atom<marketTypeAB | undefined>(
   (get) => {
     const allmarkets = get(aboveBelowActiveMarketsAtom);
