@@ -33,13 +33,7 @@ const GAINERS_POINT_BY_INDEX = [
 ];
 // # The points for the top 10 losers of the day
 const LOOSERS_POINT_BY_INDEX = [
-  1826.76, 1563.41, 1338.02, 1145.13, 980.05, 838.76, 717.84, 614.36, 525.79,
-  449.99,
-];
-//reverse LOOSERS_POINT_BY_INDEX
-const LOOSERS_POINT_BY_INDEX_REVERSE = [
-  449.99, 525.79, 614.36, 717.84, 838.76, 980.05, 1145.13, 1338.02, 1563.41,
-  1826.76,
+  343.41, 299.42, 261.06, 227.62, 198.46, 173.04, 150.87, 131.54, 114.69, 100.0,
 ];
 
 function accessElement(totalRanks, currentRank) {
@@ -67,6 +61,7 @@ export const DailyWebTable: React.FC<{
   isWinrateTable?: boolean;
   isDailyTable?: boolean;
   offSet: string;
+  header?: 'Winners' | 'Loosers';
   isWeekly?: boolean;
 }> = ({
   winners,
@@ -76,6 +71,7 @@ export const DailyWebTable: React.FC<{
   userData,
   nftWinners,
   userRank,
+  header,
   activePage,
   isWinrateTable = false,
   isDailyTable = false,
@@ -122,6 +118,8 @@ export const DailyWebTable: React.FC<{
   }, []);
 
   const HeaderFormatter = (col: number) => {
+    if (header == 'Loosers') return null;
+    console.log(`DailyWebTable-header: `, header);
     return (
       <TableHeader
         col={col}
@@ -379,7 +377,7 @@ export const DailyWebTable: React.FC<{
       case 6:
         if (!isWeekly) {
           if (row + 1 > winners.length) {
-            return accessElement(loosers.length, row - winners.length + 1);
+            return LOOSERS_POINT_BY_INDEX[row];
           } else {
             return GAINERS_POINT_BY_INDEX[row];
           }
@@ -435,6 +433,14 @@ export const DailyWebTable: React.FC<{
 
   return (
     <LeaderBoardTableStyles>
+      <div
+        className={
+          'text-2 font-medium text-f14  sm:text-center ' +
+          (header == 'Loosers' ? 'mt-2' : '')
+        }
+      >
+        Top {header}
+      </div>
       {isMobile && (
         <DailyMobileTable
           options={winners?.concat(loosers ?? [])}
@@ -455,11 +461,11 @@ export const DailyWebTable: React.FC<{
 
       <BufferTable
         widths={['auto']}
-        className="mt-4 tab:mt-[0] tab:mb-6"
+        className="mt-[4px] tab:mt-[0] tab:mb-6"
         bodyJSX={BodyFormatter}
         cols={DailyCols.length}
         rows={totalRows}
-        headerJSX={HeaderFormatter}
+        headerJSX={header == 'Winners' && HeaderFormatter}
         topDecorator={topDecorator}
         onRowClick={(idx) => {
           // console.log(`DailyWebTable-winners: `, winners);

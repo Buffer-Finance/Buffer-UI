@@ -240,7 +240,22 @@ const Incentivised = () => {
 
             <DailyWebTable
               winners={data?.winners}
+              header="Winners"
+              loosers={[]}
+              count={1}
+              activePage={1}
+              onpageChange={setActivePageNumber}
+              userData={undefined}
+              skip={0}
+              nftWinners={configValue.winnersNFT}
+              userRank={'0'}
+              offSet={offset ?? '0'}
+              // isDailyTable
+            />
+            <DailyWebTable
+              winners={[]}
               loosers={data?.loosers}
+              header="Loosers"
               count={1}
               activePage={1}
               onpageChange={setActivePageNumber}

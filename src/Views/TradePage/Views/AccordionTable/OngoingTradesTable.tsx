@@ -216,26 +216,24 @@ export const OngoingTradesTable: React.FC<{
         );
       case TableColumn.OpenTime:
         return (
-          // queuedTradeFallBack(trade) || (
-          <DisplayTime ts={trade.open_timestamp} />
-          // )
+          queuedTradeFallBack(trade) || (
+            <DisplayTime ts={trade.open_timestamp} />
+          )
         );
       case TableColumn.TimeLeft:
         let currentEpoch = Math.round(new Date().getTime() / 1000);
         return (
-          // queuedTradeFallBack(trade, true) || (
-          <div>
-            {distanceObject.distance >= 0
-              ? formatDistance(distanceObject)
-              : '00m:00s'}
-          </div>
-          // )
+          queuedTradeFallBack(trade, true) || (
+            <div>
+              {distanceObject.distance >= 0
+                ? formatDistance(distanceObject)
+                : '00m:00s'}
+            </div>
+          )
         );
       case TableColumn.CloseTime:
         return (
-          // queuedTradeFallBack(trade) || (
-          <DisplayTime ts={tradeExpiryTime} />
-          // )
+          queuedTradeFallBack(trade) || <DisplayTime ts={tradeExpiryTime} />
         );
       case TableColumn.TradeSize:
         if (!isNotMobile) {
@@ -264,20 +262,20 @@ export const OngoingTradesTable: React.FC<{
         );
       case TableColumn.Probability:
         return (
-          // queuedTradeFallBack(trade) || (
-          <div>
-            <Pnl
-              configData={trade.market}
-              trade={trade}
-              poolInfo={poolInfo}
-              lockedAmmount={lockedAmmount}
-            />
-            <div className="flex items-center gap-2">
-              <Probability trade={trade} marketPrice={marketPrice} />{' '}
-              <JackpotChip jackpote18={jackpote18} />
+          queuedTradeFallBack(trade) || (
+            <div>
+              <Pnl
+                configData={trade.market}
+                trade={trade}
+                poolInfo={poolInfo}
+                lockedAmmount={lockedAmmount}
+              />
+              <div className="flex items-center gap-2">
+                <Probability trade={trade} marketPrice={marketPrice} />{' '}
+                <JackpotChip jackpote18={jackpote18} />
+              </div>
             </div>
-          </div>
-          // )
+          )
         );
     }
     return 'Unhandled Body';
