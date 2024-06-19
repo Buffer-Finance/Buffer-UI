@@ -13,6 +13,7 @@ import axios from 'axios';
 import useSWR from 'swr';
 import { descClass, headClass } from '../../Incentivised';
 import { ContestFilterDD } from '../ContestFilterDD';
+import { WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE } from '@Views/V2-Leaderboard/config';
 
 function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -138,13 +139,6 @@ export const BarData: React.FC<{
 };
 
 const RewardPool: React.FC<{ league: leagueType }> = ({ league }) => {
-  const WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE = {
-    diamond: 550,
-    platinum: 384,
-    silver: 307,
-    gold: 217,
-    bronze: 77,
-  };
   const WEEKLY_LOSS_REWARDS_ALLOCATION_BY_LEAGUE = {
     diamond: 800,
     platinum: 500,
