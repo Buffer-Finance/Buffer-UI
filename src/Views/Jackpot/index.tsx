@@ -424,43 +424,55 @@ function JackpotValueSeciont(props) {
 
   if (isMobile) {
     return (
-      <div
-        className={[
-          'relative flex  sm:sm:aspect-[1.7]   flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-full   nb-image-sm min-w-fit',
-          props.className,
-        ].join(' ')}
-      >
-        <button
-          className="relative mt-4 flex  gap-1 self-end items-center"
-          onClick={() => setIsOpen(true)}
+      <>
+        <div
+          className={[
+            'relative flex  sm:sm:aspect-[1.7]   flex-col items-center overflow-hidden rounded-[12px] px-[15px] py-[12px] w-full   nb-image-sm min-w-fit',
+            props.className,
+          ].join(' ')}
         >
-          {/* <img
+          <button
+            className="relative mt-4 flex  gap-1 self-end items-center"
+            onClick={() => setIsOpen(true)}
+          >
+            {/* <img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/c918dc20adb64f78c725558364a049f97b9c2d04ba6e3e9d5e946ec1ee5c8b34?"
             className=" -mt-[1px] items-center w-[12px] justify-center object-contain object-center  max-w-full overflow-hidden aspect-square shrink-0"
           /> */}
-          {/* <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap hover:underline">
+            {/* <div className="self-start text-[12px] font-bold leading-4 text-right text-gray-400 grow whitespace-nowrap hover:underline">
             How it works
           </div> */}
-        </button>
-        <div className="relative text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-[30px]">
-          Jackpot Value
-        </div>
-        <div className="flex justify-between w-full">
-          <div className="relative w-full gap-3 mt-3  sm:mt-[0px] flex items-center justify-center text-[34px] font-bold text-center text-blue-300 ">
-            <img className=" w-[60px] h-[60px]" src="/JV.png" />
-            {amount ? toFixed(amount?.toString(), 0) : '--'}
-            {' ' + JackpotToken}
+          </button>
+          <div className="relative text-[12px] text-[#B1B6C6] font-bold leading-4 text-gray-400  whitespace-nowrap mt-[30px]">
+            Jackpot Value
           </div>
+          <div className="flex justify-between w-full">
+            <div className="relative w-full gap-3 mt-3  sm:mt-[0px] flex items-center justify-center text-[34px] font-bold text-center text-blue-300 ">
+              <img className=" w-[60px] h-[60px]" src="/JV.png" />
+              {amount ? toFixed(amount?.toString(), 0) : '--'}
+              {' ' + JackpotToken}
+            </div>
+          </div>
+          <div className="text-[#B1B6C6] mt-4 flex gap-1 font-[700] text-[12px]">
+            Minimum Trade Notional Size*:
+            <div className="text-[#fff]">
+              {minSize ? toFixed(minSize, 2) : '--'} ARB or USDC,
+            </div>{' '}
+          </div>
+          <p className="text-[#B1B6C6] font-[700] text-[12px]">
+            {' '}
+            win upto 10 ARB by just placing a trade
+          </p>
         </div>
-        <div className="text-[#B1B6C6] mt-[25px] flex gap-1   font-[700] text-[12px]">
-          Minimum Trade Size:
-          <div className="text-[#fff]">
-            {minSize ? toFixed(minSize, 2) : '--'} ARB or USDC
-          </div>{' '}
+        <div className="text-[#B1B6C6] mt-[-7px]  gap-1 font-[700] text-[12px] text-center">
+          *Notional trade Size: Trade Size × ((Payout% × 2)/100 + 1), <br />
+          eg. if you place a 20 USDC trade on ETH/USD market when the payout was{' '}
+          {/* <br /> */}
+          80% then your notional trade size will be 20 × ((80 × 2)/100 + 1) ={' '}
+          <span className="text-[#fff]">32 USDC</span>
         </div>
-        <p>Win upto 10 ARB by just placing a trade</p>
-      </div>
+      </>
     );
   }
   return (
