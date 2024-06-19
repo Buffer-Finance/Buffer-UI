@@ -41,6 +41,7 @@ import {
   getLockedAmount,
   getProbability,
   tableButtonClasses,
+  queuedTradeFallBack
 } from './Common';
 import { useNavigateToProfile } from './HistoryTable';
 import { Visualized } from './Visualized';
