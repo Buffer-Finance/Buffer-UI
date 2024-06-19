@@ -244,7 +244,7 @@ export const League: React.FC<{
     league = data?.weeklyLeaderboards?.[0]?.league;
   }
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-2 items-center sm:justify-center">
       <div className="mb-1"> {league}</div>
       <IconToolTip
         content={
