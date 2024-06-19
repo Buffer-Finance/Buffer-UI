@@ -12,13 +12,11 @@ import { usePoolInfo } from './usePoolInfo';
 export const useSwitchPool = () => {
   const { activeMarket: activePair } = useActiveMarket();
   const { activePool } = useAtomValue(activePoolObjAtom);
-  console.log(`activePool: `, activePool);
   const userInput = useAtomValue(tradeSizeAtom);
   const { activeChain } = useActiveChain();
   const { getPoolInfo } = usePoolInfo();
   const configData = getConfig(activeChain.id);
   const { activePoolObj } = useActivePoolObject();
-  console.log(`activePoolObj: `, activePoolObj);
 
   const activePolPool = useMemo(() => {
     if (!activePair) {
@@ -30,7 +28,6 @@ export const useSwitchPool = () => {
         getPoolInfo(pool.pool).token === activePool
     );
   }, [activePair]);
-  console.log(`activePolPool: `, activePolPool);
 
   const switchPool = useMemo(() => {
     if (!activePoolObj) {
@@ -44,7 +41,6 @@ export const useSwitchPool = () => {
     }
     return activePoolObj;
   }, [activePolPool, activePoolObj]);
-  console.log(`switchPool: `, switchPool);
 
   const poolDetails = useMemo((): poolInfoType | null => {
     if (!switchPool) {
@@ -54,7 +50,6 @@ export const useSwitchPool = () => {
       switchPool.pool as keyof typeof configData.poolsInfo
     ] as poolInfoType;
   }, [switchPool]);
-  console.log(`poolDetails: `, poolDetails);
 
   return { switchPool, poolDetails };
 };

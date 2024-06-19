@@ -97,7 +97,6 @@ export const BuyButtons = ({
     });
   };
 
-  console.log(`BuyButtons-allowance: `, allowance, activeAssetPrice);
   if (viewOnlyMode)
     return (
       <BlueBtn isDisabled onClick={() => {}}>

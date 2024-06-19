@@ -50,6 +50,7 @@ export const MobileLeaderboardDropdwon = () => {
                   isSubTabActive ? '' : 'opacity-20'
                 }`}
                 onClick={() => {
+                  console.log(`index-tab.as: `, tab.as);
                   navigate(tab.as);
                 }}
               >
