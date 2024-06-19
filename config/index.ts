@@ -392,13 +392,13 @@ export const getMobileLeaderboardTabs = () => {
       id: 8,
       subTabs: [],
     },
-    {
-      as: `/leaderboard/leagues/diamond`,
-      name: 'Leagues',
-      slug: 'leagues',
-      id: 1,
-      subTabs: [],
-    },
+    // {
+    //   as: `/leaderboard/leagues/diamond`,
+    //   name: 'Leagues',
+    //   slug: 'leagues',
+    //   id: 1,
+    //   subTabs: [],
+    // },
     // {
     //   pathname: '/[chain]/leaderboard/weekly',
     //   as: `/leaderboard/weekly`,
