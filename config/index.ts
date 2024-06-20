@@ -327,7 +327,7 @@ export const getLeaderBoardTabs = () => {
     },
 
     {
-      as: `/leaderboard/leagues/diamond?offset=1`,
+      as: `/leaderboard/leagues/diamond`,
       name: 'diamond',
       slug: 'diamond',
       id: 2,
@@ -335,7 +335,7 @@ export const getLeaderBoardTabs = () => {
       subTabs: [],
     },
     {
-      as: `/leaderboard/leagues/platinum?offset=1`,
+      as: `/leaderboard/leagues/platinum`,
       name: 'platinum',
       slug: 'platinum',
       id: 3,
@@ -343,7 +343,7 @@ export const getLeaderBoardTabs = () => {
       subTabs: [],
     },
     {
-      as: `/leaderboard/leagues/gold?offset=1`,
+      as: `/leaderboard/leagues/gold`,
       name: 'gold',
       slug: 'gold',
       id: 4,
@@ -351,7 +351,7 @@ export const getLeaderBoardTabs = () => {
       subTabs: [],
     },
     {
-      as: `/leaderboard/leagues/silver?offset=1`,
+      as: `/leaderboard/leagues/silver`,
       name: 'silver',
       slug: 'silver',
       id: 5,
@@ -359,7 +359,7 @@ export const getLeaderBoardTabs = () => {
       subTabs: [],
     },
     {
-      as: `/leaderboard/leagues/bronze?offset=1`,
+      as: `/leaderboard/leagues/bronze`,
       name: 'bronze',
       slug: 'bronze',
       id: 6,
@@ -408,14 +408,14 @@ export const getMobileLeaderboardTabs = () => {
     //   subTabs: [],
     // },
     {
-      as: `/leaderboard/leagues/diamond?offset=1`,
+      as: `/leaderboard/leagues/diamond`,
       name: 'diamond',
       slug: 'leagues',
       id: 2,
       img: '/LeaderBoard/Diamond.png',
       subTabs: [
         {
-          as: `/leaderboard/leagues/diamond?offset=1`,
+          as: `/leaderboard/leagues/diamond`,
           name: 'diamond',
           slug: 'diamond',
           id: 2,
@@ -423,7 +423,7 @@ export const getMobileLeaderboardTabs = () => {
           subTabs: [],
         },
         {
-          as: `/leaderboard/leagues/platinum?offset=1`,
+          as: `/leaderboard/leagues/platinum`,
           name: 'platinum',
           slug: 'platinum',
           id: 3,
@@ -431,7 +431,7 @@ export const getMobileLeaderboardTabs = () => {
           subTabs: [],
         },
         {
-          as: `/leaderboard/leagues/gold?offset=1`,
+          as: `/leaderboard/leagues/gold`,
           name: 'gold',
           slug: 'gold',
           id: 4,
@@ -439,7 +439,7 @@ export const getMobileLeaderboardTabs = () => {
           subTabs: [],
         },
         {
-          as: `/leaderboard/leagues/silver?offset=1`,
+          as: `/leaderboard/leagues/silver`,
           name: 'silver',
           slug: 'silver',
           id: 5,
@@ -447,7 +447,7 @@ export const getMobileLeaderboardTabs = () => {
           subTabs: [],
         },
         {
-          as: `/leaderboard/leagues/bronze?offset=1`,
+          as: `/leaderboard/leagues/bronze`,
           name: 'bronze',
           slug: 'bronze',
           id: 6,
