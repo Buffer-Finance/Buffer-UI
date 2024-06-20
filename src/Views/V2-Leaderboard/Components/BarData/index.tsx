@@ -57,6 +57,7 @@ export const BarData: React.FC<{
       (data.loosers || []).concat(data.winners || []).forEach((league) => {
         totalVolume += Number(league.totalVolume);
         totalNumberOfTrades += Number(league.totalTrades);
+
         participants += 1;
       });
     }

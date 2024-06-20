@@ -389,7 +389,6 @@ function App() {
 
   return (
     <>
-      <RootLevelHooks />
       {/* <PasswordModal /> */}
       <I18nProvider i18n={i18n}>
         <Background>
