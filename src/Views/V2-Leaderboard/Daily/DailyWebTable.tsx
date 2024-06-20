@@ -119,7 +119,6 @@ export const DailyWebTable: React.FC<{
 
   const HeaderFormatter = (col: number) => {
     if (header == 'Loosers') return null;
-    console.log(`DailyWebTable-header: `, header);
     return (
       <TableHeader
         col={col}
@@ -377,9 +376,9 @@ export const DailyWebTable: React.FC<{
       case 6:
         if (!isWeekly) {
           if (row + 1 > winners.length) {
-            return LOOSERS_POINT_BY_INDEX[row];
+            return currentStanding.losePoints;
           } else {
-            return GAINERS_POINT_BY_INDEX[row];
+            return currentStanding.winPoints;
           }
         } else {
           if (row > winners.length - 1) {
@@ -460,9 +459,9 @@ export const DailyWebTable: React.FC<{
       )}
 
       <BufferTable
-        widths={['auto']}
         className="mt-[4px] tab:mt-[0] tab:mb-6"
         bodyJSX={BodyFormatter}
+        widths={['15%', '15%', '15%', '15%', '15%', '15%', '15%']}
         cols={DailyCols.length}
         rows={totalRows}
         headerJSX={header == 'Winners' && HeaderFormatter}

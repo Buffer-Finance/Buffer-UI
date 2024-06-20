@@ -76,6 +76,7 @@ export const useWeeklyLeaderboardQuery = () => {
     {
       fetcher: async () => {
         const timestamp = getWeekId(Number(week - Number(offset ?? week)));
+        console.log(`timestamp: `, timestamp);
         const rewardQueryId = (
           [arbitrum.id, arbitrumGoerli.id] as number[]
         ).includes(activeChain.id)

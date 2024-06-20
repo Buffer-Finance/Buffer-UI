@@ -20,7 +20,7 @@ export const Rank: React.FC<{
             currentRank={Number(rank)}
             nftWinners={nftWinners}
           /> */}
-          <div className="light-blue-text relative my-2 flex flex-row items-center ml-7">
+          <div className="light-blue-text relative my-2 flex flex-row items-center ml-7 nsm:ml-4">
             # {rank}
           </div>
         </div>,

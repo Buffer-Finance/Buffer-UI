@@ -156,6 +156,7 @@ const Incentivised = () => {
               <TotalTrades
                 dayId={getDayId(Number(offset ?? '0'))}
                 graphUrl={config.graph.LEADERBOARD}
+                count={data?.stats.total_trades}
               />
             }
             descClass={descClass}
@@ -168,6 +169,7 @@ const Incentivised = () => {
               <TotalVolume
                 dayId={getDayId(Number(offset ?? '0'))}
                 graphUrl={config.graph.LEADERBOARD}
+                volume={data?.stats.total_volume}
               />
             }
             descClass={descClass}
@@ -180,6 +182,7 @@ const Incentivised = () => {
               <Participants
                 dayId={getDayId(Number(offset ?? '0'))}
                 graphUrl={config.graph.LEADERBOARD}
+                count={data?.stats.participants}
               />
             }
             descClass={descClass}

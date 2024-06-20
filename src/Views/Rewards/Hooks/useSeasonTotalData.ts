@@ -5,6 +5,7 @@ import axios from 'axios';
 import useSWR from 'swr';
 
 export const useSeasonTotalData = (weekId: number) => {
+  console.log(`weekId: `, weekId);
   const { activeChain } = useActiveChain();
   const config = getConfig(activeChain.id);
   return useSWR<{

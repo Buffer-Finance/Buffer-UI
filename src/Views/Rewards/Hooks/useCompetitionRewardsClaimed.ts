@@ -16,7 +16,15 @@ export const useCompetitionRewardsClaimed = () => {
   >(`user-competition-rewards-claimed-${activeChain.id}-${address}`, {
     fetcher: async () => {
       const query = `{
-                competitionRewards(where:{user:"${address}"}) {
+                competitionRewards(
+                  where:{
+                    user:"${address}",
+                    reward_id_not_in:[
+                      "7106022596879106890609359566186964616091349227475309561108206296319268041693"
+                      "109219560453902611034722453117112569382286050359351338846602761787810835593901",
+                      "100564573772961964144670900170771439966120133774128125317086397789480365887310"
+                  ]
+                  }) {
                     amount
                     reward_id
                 }

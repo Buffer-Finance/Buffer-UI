@@ -1,9 +1,9 @@
-import { baseLeaderboardURLString } from '@Views/TradePage/config';
 import { ILeaderboardQuery } from '@Views/V2-Leaderboard/Incentivised/useDailyLeaderBoardData';
 import axios from 'axios';
 import useSWR from 'swr';
 import { leagueType } from '../atom';
 import { getLeaderboardWeekId } from './getWeekId';
+import { baseLeaderboardURLString } from '@Views/TradePage/config';
 
 export const useWinnersByPnlWeekly = ({
   league,
@@ -11,25 +11,27 @@ export const useWinnersByPnlWeekly = ({
   activeChainId,
   offset,
   week,
+  weekId,
 }: {
   league: leagueType;
   offset: string | null;
   account: string | undefined;
   activeChainId: number;
+  weekId?: number;
   week: number;
 }) => {
   return useSWR<ILeaderboardQuery>(
-    `${league}-leaderboard-arbi-offset-${offset}-account-${account}-weekly-chainId-${activeChainId}}`,
+    `${league}-leaderboard-arbi-offset-${offset}-${weekId}-account-${account}-weekly-chainId-${activeChainId}}`,
     {
       fetcher: async () => {
         try {
-          const weekId = getLeaderboardWeekId(Number(offset ?? '0'));
+          const localWeekId = getLeaderboardWeekId(Number(offset ?? '0'));
 
           const { data } = await axios.get(
             baseLeaderboardURLString + 'rank/weekly_leaderboard',
             {
               params: {
-                weekId: weekId,
+                weekId: weekId ?? localWeekId,
                 league: league[0].toUpperCase() + league.slice(1),
               },
             }
