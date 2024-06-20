@@ -1,4 +1,4 @@
-import { divide } from '@Utils/NumString/stringArithmatics';
+import { divide, toFixed } from '@Utils/NumString/stringArithmatics';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { getTimestampFromWeekId } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId';
 import { Skeleton } from '@mui/material';
@@ -81,7 +81,7 @@ export const OverAllData: React.FC<{
               ) : (
                 <span>
                   <span className="text-[#FFFFFF]">
-                    {divide(data?.volume ?? '0', 6)}
+                    {toFixed(divide(data?.volume ?? '0', 6), 2)}
                   </span>
                   <span className="text-[#7F87A7]"> USDC</span>
                 </span>
