@@ -164,6 +164,7 @@ export const useDailyLeaderboardData = (league: string) => {
               params: {
                 dayId: getDayId(Number(offset ?? '0')),
                 league: league,
+                user_address: account,
               },
             }
           );
