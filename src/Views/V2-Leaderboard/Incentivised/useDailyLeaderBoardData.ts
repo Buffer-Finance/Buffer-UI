@@ -11,7 +11,13 @@ import { useDayOffset } from '../Hooks/useDayOffset';
 export interface ILeaderboardQuery {
   winners: IWeeklyLeague[];
   loosers: IWeeklyLeague[];
+  userLeague: string;
   total_count: number;
+  stats: {
+    participants: number;
+    total_trades: string;
+    total_volume: string;
+  };
   //   userData: IWeeklyLeague[];
 }
 
@@ -137,11 +143,13 @@ export function getDayId(offset: number): number {
     timestamp = timestamp - offset * 86400;
   }
   let dayTimestamp = Math.floor((timestamp - 16 * 3600) / 86400);
+  console.log(`dayTimestamp: `, dayTimestamp);
   return dayTimestamp;
 }
 
 export const useDailyLeaderboardData = (league: string) => {
   const { address: account } = useUserAccount();
+  console.log(`account: `, account);
   const { offset } = useDayOffset();
   const { activeChain } = useActiveChain();
   const config = getConfig(activeChain.id);
@@ -150,32 +158,24 @@ export const useDailyLeaderboardData = (league: string) => {
     `leaderboard-arbi-offset-${offset}-account-${account}-daily-chainId-${activeChain.id}-league-${league}`,
     {
       fetcher: async () => {
-        if (offset === null || (offset && offset === '0')) {
-          return fetchFromGraph(
-            config.graph.LEADERBOARD,
-            offset,
-            league,
-            account
-          );
-        } else {
-          try {
-            const { data } = await axios.get(
-              baseLeaderboardURLString + 'rank/daily_leaderboard',
-              {
-                params: {
-                  dayId: getDayId(Number(offset ?? '0')),
-                  league: league,
-                },
-              }
-            );
-            if (data?.data) {
-              return data.data as ILeaderboardQuery;
-            } else {
-              throw new Error('No data');
+        try {
+          const { data } = await axios.get(
+            baseLeaderboardURLString + 'rank/daily_leaderboard',
+            {
+              params: {
+                dayId: getDayId(Number(offset ?? '0')),
+                league: league,
+                user_address: account,
+              },
             }
-          } catch (E) {
-            return undefined;
+          );
+          if (data?.data) {
+            return data.data as ILeaderboardQuery;
+          } else {
+            throw new Error('No data');
           }
+        } catch (E) {
+          return undefined;
         }
       },
       refreshInterval: 60000,

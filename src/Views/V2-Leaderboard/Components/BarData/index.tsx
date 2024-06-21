@@ -14,6 +14,8 @@ import useSWR from 'swr';
 import { descClass, headClass } from '../../Incentivised';
 import { ContestFilterDD } from '../ContestFilterDD';
 import { WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE } from '@Views/V2-Leaderboard/config';
+import { useDailyLeaderboardData } from '@Views/V2-Leaderboard/Incentivised/useDailyLeaderBoardData';
+import { useMemo } from 'react';
 
 function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -38,7 +40,6 @@ export const BarData: React.FC<{
   graphUrl,
   weekId,
 }) => {
-  console.log(weekId, offset, week, getWeekId(0), 'weekId');
   const { address: account } = useUserAccount();
   const { data, error, isValidating } = useWinnersByPnlWeekly({
     activeChainId,
@@ -48,17 +49,22 @@ export const BarData: React.FC<{
     account,
   });
 
+  // const { totalVolume, totalNumberOfTrades, participants } = useMemo(() => {
+  //   let totalVolume = 0;
+  //   let totalNumberOfTrades = 0;
+  //   let participants = 0;
+  //   if (data) {
+  //     (data.loosers || []).concat(data.winners || []).forEach((league) => {
+  //       totalVolume += Number(league.totalVolume);
+  //       totalNumberOfTrades += Number(league.totalTrades);
+
+  //       participants += 1;
+  //     });
+  //   }
+  //   return { totalVolume, totalNumberOfTrades, participants };
+  // }, [data]);
   if (error) return <div>error</div>;
-  let numOfParticipants = undefined;
-  if (data) {
-    if (data.loosers !== undefined && data.winners !== undefined) {
-      numOfParticipants = data.loosers.length + data.winners.length;
-    } else if (data.loosers !== undefined && data.winners === undefined) {
-      numOfParticipants = data.loosers.length;
-    } else if (data.loosers === undefined && data.winners !== undefined) {
-      numOfParticipants = data.winners.length;
-    }
-  }
+
   return (
     <div className="flex items-center justify-start my-6 sm:!w-full sm:flex-wrap sm:gap-y-5 whitespace-nowrap">
       <Col
@@ -77,39 +83,21 @@ export const BarData: React.FC<{
       />
       <Col
         head={'Trades'}
-        desc={
-          <TotalTrades
-            weekId={weekId}
-            graphUrl={graphUrl}
-            league={capitalizeFirstLetter(league)}
-          />
-        }
+        desc={<TotalTrades count={data?.stats.total_trades} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
       />
       <Col
         head={'Volume'}
-        desc={
-          <TotalVolume
-            weekId={weekId}
-            graphUrl={graphUrl}
-            league={capitalizeFirstLetter(league)}
-          />
-        }
+        desc={<TotalVolume volume={data?.stats.total_volume} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
       />
       <Col
         head={'Participants'}
-        desc={
-          <Participants
-            weekId={weekId}
-            graphUrl={graphUrl}
-            league={capitalizeFirstLetter(league)}
-          />
-        }
+        desc={<Participants count={data?.stats.participants} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
@@ -165,47 +153,31 @@ const RestCountdown: React.FC<{ resetTimestamp: number }> = ({
     return <Skeleton variant="text" width={100} height={20} />;
   return <>{stopwatch}</>;
 };
+export const Participants: React.FC<{
+  count: number | string;
+}> = ({ count }) => {
+  // const { data } = useTotalData(dayId, graphUrl);
+  if (count === undefined) return <Skeleton className="w-[50px] !h-6 lc " />;
+  const totalparticipents = count;
 
-const TotalTrades: React.FC<{
-  weekId: number;
-  graphUrl: string;
-  league: string;
-}> = ({ graphUrl, weekId, league }) => {
-  const { data } = useTotalData(weekId, graphUrl, league);
-  if (data?.totalDatas === undefined)
-    return <Skeleton className="w-[50px] !h-6 lc " />;
-  if (data.totalDatas.length === 0) return <div>0</div>;
-  const totalTrades = data?.totalDatas?.[0]?.trades;
-
-  return <div>{totalTrades}</div>;
+  return <div>{totalparticipents}</div>;
 };
 
-const TotalVolume: React.FC<{
-  weekId: number;
-  graphUrl: string;
-  league: string;
-}> = ({ weekId, graphUrl, league }) => {
-  const { data } = useTotalData(weekId, graphUrl, league);
-  if (data?.totalDatas === undefined)
-    return <Skeleton className="w-[50px] !h-6 lc " />;
-  if (data.totalDatas.length === 0) return <div>0</div>;
+export const TotalTrades: React.FC<{
+  count: number | undefined;
+}> = ({ count }) => {
+  if (count === undefined) return <Skeleton className="w-[50px] !h-6 lc " />;
 
-  const totalVolume = data?.totalDatas?.[0]?.volume;
+  return <div>{count}</div>;
+};
+
+export const TotalVolume: React.FC<{
+  volume: number | undefined;
+}> = ({ volume }) => {
+  const totalVolume = volume;
+  if (totalVolume == undefined)
+    return <Skeleton className="w-[50px] !h-6 lc " />;
   return <div>{toFixed(divide(totalVolume, 6) as string, 2)} USDC</div>;
-};
-
-const Participants: React.FC<{
-  weekId: number;
-  graphUrl: string;
-  league: string;
-}> = ({ weekId, graphUrl, league }) => {
-  const { data } = useTotalData(weekId, graphUrl, league);
-  if (data?.totalDatas === undefined)
-    return <Skeleton className="w-[50px] !h-6 lc " />;
-  if (data.totalDatas.length === 0) return <div>0</div>;
-
-  const totalParticipants = data?.totalDatas?.[0]?.participents;
-  return <div>{totalParticipants}</div>;
 };
 
 export const League: React.FC<{
@@ -213,29 +185,11 @@ export const League: React.FC<{
   graphUrl: string;
 }> = ({ weekId, graphUrl }) => {
   const { address: userAddress } = useUserAccount();
-  const { data } = useSWR(`league-${weekId}-userAddress-${userAddress}`, {
-    fetcher: async () => {
-      const leaderboardQuery = `
-      weeklyLeaderboards(where: {userAddress: "${userAddress}", weekId: "${weekId}"}) {
-        league
-      }
-      `;
-      const query = `{${leaderboardQuery}}`;
-      const response = await axios.post(graphUrl, {
-        query,
-      });
-
-      return response.data?.data as {
-        weeklyLeaderboards: {
-          league: string;
-        }[];
-      };
-    },
-  });
+  const { data } = useDailyLeaderboardData('Bronze');
 
   let league = 'Bronze';
-  if (data?.weeklyLeaderboards?.[0]?.league) {
-    league = data?.weeklyLeaderboards?.[0]?.league;
+  if (data?.userLeague) {
+    league = data?.userLeague;
   }
   return (
     <div className="flex gap-2 items-center sm:justify-center">

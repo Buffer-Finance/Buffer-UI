@@ -1,5 +1,4 @@
 import { atom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
 import {
   defaultSelectedTime,
   defaultSettings,
@@ -8,13 +7,15 @@ import {
 } from './config';
 import { TradeType, marketType, poolInfoType } from './type';
 import { HHMMToSeconds } from './utils';
+import { atomWithLocalStorage } from '@Utils/atomWithLocalStorage';
+import { atomWithStorage } from 'jotai/utils';
 
 //Share Atoms
 export const shareSettingsAtom = atomWithStorage(
   'shareSettingsAtom',
   defaultSettings.share
 );
-export const miscsSettingsAtom = atomWithStorage(
+export const miscsSettingsAtom = atomWithLocalStorage(
   'miscsSettingsAtom',
   defaultSettings.miscs
 );

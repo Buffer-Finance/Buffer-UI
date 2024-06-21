@@ -280,6 +280,18 @@ export const WebTable: React.FC<{
           />
         );
       case 6:
+        // console.log(
+        //   `WebTable-currentStanding.losePoints: `,
+        //   currentStanding.losePoints,
+        //   currentStanding.winPoints,
+        //   isWinnersTable
+        // );
+        if (
+          currentStanding.loseRewards == '0' &&
+          currentStanding.winRewards == '0'
+        ) {
+          return <RunningWeekRewardsChip />;
+        }
         if (!isWinnersTable) {
           return (
             <Display
@@ -330,5 +342,14 @@ export const WebTable: React.FC<{
         error={<TableErrorMsg msg="No data found." onClick={() => {}} />}
       />
     </LeaderBoardTableStyles>
+  );
+};
+const RunningWeekRewardsChip = () => {
+  return (
+    <div>
+      <NumberTooltip content={'Rewards will be assigned next week'}>
+        <div>-</div>
+      </NumberTooltip>
+    </div>
   );
 };

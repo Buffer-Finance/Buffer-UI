@@ -8,14 +8,15 @@ function ToastProvider(props: any) {
   const initialState: unknown = [];
   const [state, dispatch] = useReducer<any>(reducer, initialState);
   return (
-    <NotificationContext.Provider value={dispatch}>
+    <NotificationContext.Provider value={[dispatch]}>
       <Toasts state={state} />
       {props.children}
     </NotificationContext.Provider>
   );
 }
 export const useToast: any = () => {
-  return useContext(NotificationContext);
+  const [dispatch] = useContext(NotificationContext);
+  return dispatch;
 };
 
 export default ToastProvider;

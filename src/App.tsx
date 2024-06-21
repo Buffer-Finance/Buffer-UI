@@ -389,8 +389,8 @@ function App() {
 
   return (
     <>
-      <RootLevelHooks />
       {/* <PasswordModal /> */}
+      <RootLevelHooks />
       <I18nProvider i18n={i18n}>
         <Background>
           <ViewOnlyModeTradePageWarning />
@@ -492,4 +492,5 @@ const ViewOnlyModeTradePageWarning = () => {
 export const MonoChromeMapper = {
   USDC: USDCMono,
   ARB: ARBMono,
+  'USDC.e': USDCMono,
 };
