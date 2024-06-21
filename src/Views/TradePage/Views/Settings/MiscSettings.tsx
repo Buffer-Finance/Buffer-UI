@@ -49,6 +49,7 @@ export const MiscSettings: React.FC = () => {
           onChange={toggleShowRecentTrades}
         />
       </RowBetween>
+      {/*  */}
       {/* <RowBetween className="mt-4">
         <SettingsText>
           <Trans>Show Platform Winning Notifications</Trans>
