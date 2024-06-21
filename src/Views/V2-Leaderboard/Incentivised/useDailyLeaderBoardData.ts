@@ -149,6 +149,7 @@ export function getDayId(offset: number): number {
 
 export const useDailyLeaderboardData = (league: string) => {
   const { address: account } = useUserAccount();
+  console.log(`account: `, account);
   const { offset } = useDayOffset();
   const { activeChain } = useActiveChain();
   const config = getConfig(activeChain.id);

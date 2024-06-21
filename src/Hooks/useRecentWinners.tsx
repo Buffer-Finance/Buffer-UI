@@ -64,11 +64,7 @@ const useRecentWinners = () => {
     ) {
       const currentTs = Math.round(Date.now() / 1000);
       console.log(`WIN_POST: `, currentTs, toastCount.current);
-      const startTs =
-        currentTs -
-        Math.round(
-          (!toastCount.current ? 24 * 60 * 60 * 1000 : duration) / 1000
-        );
+      const startTs = toastCount.current || 24 * 60 * 60;
       const getUpDownWinner = async () => {
         const topWinnersQuery = `
             userOptionDatas(
@@ -211,7 +207,7 @@ const useRecentWinners = () => {
           timings: 200,
         });
 
-        toastCount.current = startTs;
+        toastCount.current = currentTs;
       }
     }
   };
