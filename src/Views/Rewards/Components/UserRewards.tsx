@@ -106,9 +106,21 @@ const Competitions: React.FC<{
       <div className="flex flex-col gap-5">
         <Column head="PnL" data={<PnL data={pnl} isLoading={isValidating} />} />
         <Column
-          head="Rank"
+          head="Loosers Rank"
           data={
             <RankWrapper
+              isCurrentWeek={isCurrentWeek}
+              isLooser
+              leagueData={leagueData}
+              selectedWeekId={selectedWeekId}
+            />
+          }
+        />
+        <Column
+          head="Winners Rank"
+          data={
+            <RankWrapper
+              isCurrentWeek={isCurrentWeek}
               leagueData={leagueData}
               selectedWeekId={selectedWeekId}
             />
@@ -329,8 +341,10 @@ const Column: React.FC<{ head: string; data: React.ReactElement }> = ({
 
 const RankWrapper: React.FC<{
   selectedWeekId: number;
+  isCurrentWeek?: boolean;
+  isLooser?: boolean;
   leagueData: ILeaderboardQuery;
-}> = ({ selectedWeekId, leagueData }) => {
+}> = ({ selectedWeekId, leagueData, isLooser, isCurrentWeek }) => {
   const { address } = useUserAccount();
   const { data, isValidating } = useSeasonUserData(
     selectedWeekId,
@@ -339,45 +353,69 @@ const RankWrapper: React.FC<{
   if (address === undefined) {
     return <span className="text-f22">-</span>;
   }
-  if (isValidating) {
+  if (isCurrentWeek)
     return (
-      <Skeleton variant="rectangular" className="w-[80px] !h-7 lc mr-auto" />
+      <span
+        className="text-f22"
+        title="Ongoing season rank will be updated on season end"
+      >
+        -
+      </span>
     );
-  }
+
   if (data === undefined) {
     return <span className="text-f22">-</span>;
   }
   return (
-    <Rank selectedWeekId={selectedWeekId} data={data} userAddress={address} />
+    <Rank
+      selectedWeekId={selectedWeekId}
+      data={data}
+      userAddress={address}
+      isLooser={isLooser}
+    />
   );
 };
 
 const Rank: React.FC<{
   selectedWeekId: number;
   data: ILeaderboardQuery;
+  isLooser?: boolean;
+
   userAddress: string;
-}> = ({ data, userAddress }) => {
-  const userRank = useMemo(() => {
-    let rank = 0;
+}> = ({ data, userAddress, isLooser }) => {
+  const userRanks = useMemo(() => {
+    let looserRank = 0;
+    let winnerRank = 0;
     const index = data.winners.findIndex(
       (w) => getAddress(w.userAddress) === getAddress(userAddress)
     );
+    console.log(`UserRewards-index: `, index);
     if (index !== -1) {
-      rank = index + 1;
+      winnerRank = index + 1;
     }
     const index2 = data.loosers.findIndex(
       (l) => getAddress(l.userAddress) === getAddress(userAddress)
     );
+    console.log(`UserRewards-index2: `, index2);
     if (index2 !== -1) {
-      rank = index2 + 1;
+      looserRank = index2 + 1;
     }
-    return rank;
+    return [winnerRank, looserRank];
   }, [data, userAddress]);
   if (data == undefined) {
     return (
       <Skeleton variant="rectangular" className="w-[80px] !h-7 lc mr-auto" />
     );
   }
-  console.log(`UserRewards-userRank: `, userRank);
-  return <span className="text-f22">{userRank || '-'}</span>;
+  const userRank = isLooser ? userRanks[1] : userRanks[0];
+  const rankingTitle =
+    'Placed ' + userRank + ' in ' + isLooser
+      ? 'Loosers Leaderboard'
+      : 'Winners Leaderboard';
+  console.log(`UserRewards-isLooser: `, isLooser);
+  return (
+    <span className="text-f22" title={userRank ? rankingTitle : 'Unranked'}>
+      {userRank || '-'}
+    </span>
+  );
 };
