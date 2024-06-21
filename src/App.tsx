@@ -491,4 +491,5 @@ const ViewOnlyModeTradePageWarning = () => {
 export const MonoChromeMapper = {
   USDC: USDCMono,
   ARB: ARBMono,
+  'USDC.e': USDCMono,
 };
