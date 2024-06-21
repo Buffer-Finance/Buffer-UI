@@ -3,6 +3,8 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { useWriteCall } from '@Hooks/useWriteCall';
 import { add, divide, gte, toFixed } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
+import { toFixed as ntoFixed } from '@Utils/NumString';
+
 import { Display } from '@Views/Common/Tooltips/Display';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { keyClasses, valueClasses } from '@Views/Earn/Components/VestCards';
@@ -106,7 +108,7 @@ const Competitions: React.FC<{
     <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg sm:w-full">
       <div className="flex flex-col gap-5">
         <Column head="PnL" data={<PnL data={pnl} isLoading={isValidating} />} />
-        <Column
+        {/* <Column
           head="Loosers Rank"
           data={
             <RankWrapper
@@ -126,7 +128,7 @@ const Competitions: React.FC<{
               selectedWeekId={selectedWeekId}
             />
           }
-        />
+        /> */}
         <Column
           head="Competition Rewards"
           data={
@@ -139,7 +141,7 @@ const Competitions: React.FC<{
               />
             ) : (
               <Display
-                data={toFixed(
+                data={ntoFixed(
                   divide(selectedWeekAllotedAMount ?? '0', 18) as string,
                   2
                 )}
@@ -384,6 +386,7 @@ const Rank: React.FC<{
 
   userAddress: string;
 }> = ({ data, userAddress, isLooser }) => {
+  console.log(`UserRewards-data: `, data);
   const userRanks = useMemo(() => {
     let looserRank = 0;
     let winnerRank = 0;
@@ -408,12 +411,12 @@ const Rank: React.FC<{
       <Skeleton variant="rectangular" className="w-[80px] !h-7 lc mr-auto" />
     );
   }
+  console.log(`UserRewards-userRanks: `, userRanks, data);
   const userRank = isLooser ? userRanks[1] : userRanks[0];
   const rankingTitle =
     'Placed ' + userRank + ' in ' + isLooser
       ? 'Loosers Leaderboard'
       : 'Winners Leaderboard';
-  console.log(`UserRewards-isLooser: `, isLooser);
   return (
     <span className="text-f22" title={userRank ? rankingTitle : 'Unranked'}>
       {userRank || '-'}
