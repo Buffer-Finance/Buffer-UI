@@ -23,6 +23,14 @@ export const MiscSettings: React.FC = () => {
       showFavoriteAsset: !prev.showFavoriteAsset,
     }));
   }
+  function togglePlatformWinningNotifications(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setSettings((prev) => ({
+      ...prev,
+      showPlatformWinningsNotification: !prev.showPlatformWinningsNotification,
+    }));
+  }
 
   return (
     <div className="sm:hidden">
@@ -39,6 +47,15 @@ export const MiscSettings: React.FC = () => {
         <Switch
           isOn={settings.showFavoriteAsset}
           onChange={toggleShowRecentTrades}
+        />
+      </RowBetween>
+      <RowBetween className="mt-4">
+        <SettingsText>
+          <Trans>Show Platform Winning Notifications</Trans>
+        </SettingsText>
+        <Switch
+          isOn={settings.showPlatformWinningsNotification}
+          onChange={togglePlatformWinningNotifications}
         />
       </RowBetween>
     </div>

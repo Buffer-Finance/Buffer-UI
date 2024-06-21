@@ -288,6 +288,7 @@ export const defaultSettings = {
   },
   miscs: {
     showFavoriteAsset: true,
+    showPlatformWinningsNotification: true,
   },
   chartControls: { earlyCloseConfirmation: true, loDragging: true },
   tradePanelPosition: tradePanelPosition.Right,

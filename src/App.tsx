@@ -390,6 +390,7 @@ function App() {
   return (
     <>
       {/* <PasswordModal /> */}
+      <RootLevelHooks />
       <I18nProvider i18n={i18n}>
         <Background>
           <ViewOnlyModeTradePageWarning />
