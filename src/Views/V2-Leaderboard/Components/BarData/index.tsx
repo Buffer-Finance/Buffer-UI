@@ -49,20 +49,20 @@ export const BarData: React.FC<{
     account,
   });
 
-  const { totalVolume, totalNumberOfTrades, participants } = useMemo(() => {
-    let totalVolume = 0;
-    let totalNumberOfTrades = 0;
-    let participants = 0;
-    if (data) {
-      (data.loosers || []).concat(data.winners || []).forEach((league) => {
-        totalVolume += Number(league.totalVolume);
-        totalNumberOfTrades += Number(league.totalTrades);
+  // const { totalVolume, totalNumberOfTrades, participants } = useMemo(() => {
+  //   let totalVolume = 0;
+  //   let totalNumberOfTrades = 0;
+  //   let participants = 0;
+  //   if (data) {
+  //     (data.loosers || []).concat(data.winners || []).forEach((league) => {
+  //       totalVolume += Number(league.totalVolume);
+  //       totalNumberOfTrades += Number(league.totalTrades);
 
-        participants += 1;
-      });
-    }
-    return { totalVolume, totalNumberOfTrades, participants };
-  }, [data]);
+  //       participants += 1;
+  //     });
+  //   }
+  //   return { totalVolume, totalNumberOfTrades, participants };
+  // }, [data]);
   if (error) return <div>error</div>;
 
   return (
@@ -83,21 +83,21 @@ export const BarData: React.FC<{
       />
       <Col
         head={'Trades'}
-        desc={<TotalTrades count={totalNumberOfTrades} />}
+        desc={<TotalTrades count={data?.stats.total_trades} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
       />
       <Col
         head={'Volume'}
-        desc={<TotalVolume volume={totalVolume} />}
+        desc={<TotalVolume volume={data?.stats.total_volume} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
       />
       <Col
         head={'Participants'}
-        desc={<Participants count={participants} />}
+        desc={<Participants count={data?.stats.participants} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"

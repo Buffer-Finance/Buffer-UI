@@ -280,17 +280,15 @@ export const WebTable: React.FC<{
           />
         );
       case 6:
-        console.log(
-          `WebTable-currentStanding.losePoints: `,
-          currentStanding.losePoints,
-          currentStanding.winPoints,
-          isWinnersTable
-        );
+        // console.log(
+        //   `WebTable-currentStanding.losePoints: `,
+        //   currentStanding.losePoints,
+        //   currentStanding.winPoints,
+        //   isWinnersTable
+        // );
         if (
-          (currentStanding.loseRewards == undefined ||
-            currentStanding.loseRewards == null) &&
-          (currentStanding.winRewards == null ||
-            currentStanding.winRewards == undefined)
+          currentStanding.loseRewards == '0' &&
+          currentStanding.winRewards == '0'
         ) {
           return <RunningWeekRewardsChip />;
         }
