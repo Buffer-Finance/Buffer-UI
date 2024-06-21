@@ -281,8 +281,8 @@ export const WebTable: React.FC<{
         );
       case 6:
         if (
-          currentStanding.winPoints == null &&
-          currentStanding.losePoints == null
+          currentStanding.winPoints == '0' &&
+          currentStanding.losePoints == '0'
         ) {
           return <RunningWeekRewardsChip />;
         }
