@@ -101,6 +101,7 @@ const Competitions: React.FC<{
       return add(acc, r.amount);
     }, '0');
   }, [selectedWeekAlloted]);
+  //
   return (
     <div className="bg-[#141823] px-[18px] py-6 flex items-end justify-between min-w-[300px] rounded-lg sm:w-full">
       <div className="flex flex-col gap-5">
