@@ -10,7 +10,7 @@ export function getWeekId(offset: number): number {
 }
 
 export function getLeaderboardWeekId(offSet: number): number {
-  return getWeekId(offSet + 1);
+  return getWeekId(offSet);
 }
 
 export function getTimestampFromWeekId(weekId: number) {

@@ -14,26 +14,20 @@
       "@TV/*": ["./src/TradingView/*"],
       "@Public/*": ["./public/*"]
     },
-    "target": "ESNext",
+    "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "noUnusedLocals": false,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    /* Bundler mode */
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "."
+
+    /* Linting */
+    "strict": true
   },
   "include": ["src"],
-  "exclude": ["node_modules"],
-
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["node_modules"]
 }
