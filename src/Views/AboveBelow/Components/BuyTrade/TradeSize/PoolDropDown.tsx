@@ -30,7 +30,6 @@ export const PoolDropdown: React.FC = () => {
   useEffect(() => {
     const pool = searchParams.get('pool');
     const poollist = markets.map((s) => s.poolInfo.token);
-    console.log(`PoolDropDown-poollist: `, poollist);
     if (pool && poollist?.includes(pool)) {
       onClick({ value: pool });
       setSearchParams((s) => {

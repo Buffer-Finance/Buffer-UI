@@ -3,7 +3,10 @@ import { NavigateFunction } from 'react-router-dom';
 export function navigateToarket(
   navigate: NavigateFunction,
   market: string,
-  route: string
+  route: string,
+  pool?: string
 ) {
-  navigate(`${route}/${market}`);
+  if (pool) {
+    navigate(`${route}/${market}?pool=${pool}`);
+  } else navigate(`${route}/${market}`);
 }

@@ -6,6 +6,7 @@ import { useOneDayVolume } from '@Views/AboveBelow/Hooks/useOneDayVolume';
 import {
   favouriteMarketsAtom,
   filteredMarketsAtom,
+  selectedPoolAtom,
 } from '@Views/AboveBelow/atoms';
 import BufferTable from '@Views/Common/BufferTable';
 import { CellContent } from '@Views/Common/BufferTable/CellInfo';
@@ -42,6 +43,8 @@ export const Table: React.FC<{
   onMarketSelect?: () => void;
 }> = ({ onMarketSelect, group }) => {
   const isMobile = typeof group == 'string';
+  const [selectedPool, setSelectedPool] = useAtom(selectedPoolAtom);
+
   const filteredMarkets = useAtomValue(filteredMarketsAtom);
   const [favouriteMarkets, setFavouriteMarkets] = useAtom(favouriteMarketsAtom);
   const navigate = useNavigate();
@@ -49,7 +52,12 @@ export const Table: React.FC<{
   const { oneDayVolume } = useOneDayVolume();
 
   const setActiveMarket = (token0: string, token1: string) => {
-    navigateToarket(navigate, token0 + '-' + token1, '/ab');
+    navigateToarket(
+      navigate,
+      token0 + '-' + token1,
+      '/ab',
+      selectedPool?.token
+    );
   };
   const isIncreationWindow = useIsInCreationWindow();
   // const isIncreationWindow = {
