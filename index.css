@@ -482,6 +482,12 @@ onUpEnd(c-(idx)
     /* transform: translateX(-4px); */
     /* margin:0px; */
   }
+
+.dotted-hr {
+  top:50%;
+  width: 40%;
+}
+
 }
 
 .nft-wrapper {
@@ -3585,4 +3591,17 @@ html .pagination-root {
   box-shadow: 0px 3px 6px #0000005c;
   border: 1px solid #484b6e !important;
   border-radius: 4px;
+}
+
+
+.dotted-hr {
+  border: none;
+  border-top: 1px dashed #2A2A3A;
+  height: 1px;
+  width: 80%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  z-index: 0;
+  top:70%;
 }

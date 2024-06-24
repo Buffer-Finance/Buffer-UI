@@ -72,6 +72,7 @@ import RewardsPage from '@Views/Rewards';
 import LpRewardsPage from '@Views/LpRewards';
 import MemoExternalLinkSVG from './SVG/ExternalLinkSVG';
 import { RootLevelHooks } from './RootLevelHooks';
+import { LeagueCriteria } from '@Views/V2-Leaderboard/Leagues/LeagueCriteria';
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{

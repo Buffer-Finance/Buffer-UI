@@ -3,10 +3,12 @@ export function TopData({
   heading,
   desc,
   DataCom,
+  league,
 }: {
   pageImage: JSX.Element;
   heading: string | JSX.Element;
   DataCom?: JSX.Element;
+  league?: string;
   desc?: JSX.Element;
 }) {
   return (

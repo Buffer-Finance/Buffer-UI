@@ -23,6 +23,7 @@ import {
   silverTournamentConfig,
 } from './config';
 import { useLeagueNFTusers } from './useLeagueNFTusers';
+import { LeagueCriteria } from './LeagueCriteria';
 
 function getConfig(league: string, activeChainId: number) {
   switch (league) {
@@ -90,57 +91,63 @@ const Leagues = () => {
                     <img
                       src={`/LeaderBoard/${capitalizeString(league)}.png`}
                       alt="Icon"
-                      width={capitalizeString(league) === 'Diamond' ? 65 : 48}
-                      height={48}
+                      width={65}
+                      height={65}
                       className={`mr-3`}
                     />
                   }
                   heading={
-                    <div className="flex flex-col items-start">
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <div className="capitalize">{league} League</div>
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex flex-col items-start">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <div className="capitalize">{league} League</div>
+                        </div>
+                        <a
+                          className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
+                          href={configValue.contestRules}
+                          target={'blank'}
+                        >
+                          Contest Rules{' '}
+                          <FrontArrow
+                            className="ml-2 w-fit inline scale-125 mt-1"
+                            arrowColor="#7F87A7"
+                          />
+                        </a>
                       </div>
-                      <a
-                        className="whitespace-nowrap flex items-center text-[#7F87A7] text-f16 hover:underline"
-                        href={configValue.contestRules}
-                        target={'blank'}
-                      >
-                        Contest Rules{' '}
-                        <FrontArrow
-                          className="ml-2 w-fit inline scale-125 mt-1"
-                          arrowColor="#7F87A7"
-                        />
-                      </a>
                     </div>
                   }
+                  // desc={'helo'}
                   DataCom={
-                    <TimerOrData
-                      startTimestamp={startTimestamp}
-                      Data={
-                        <>
-                          <BarData
-                            week={week}
-                            resetTimestamp={nextTimeStamp}
-                            offset={offset}
-                            setOffset={setOffset}
-                            activeChainId={activeChain.id}
-                            league={league}
-                            graphUrl={config.graph.LEADERBOARD}
-                            weekId={getLeaderboardWeekId(
-                              parseInt(offset ?? '0')
-                            )}
-                          />
-                          <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
-                            <WinnersByPnl
+                    <div>
+                      <LeagueCriteria league={league} />
+                      <TimerOrData
+                        startTimestamp={startTimestamp}
+                        Data={
+                          <>
+                            <BarData
+                              week={week}
+                              resetTimestamp={nextTimeStamp}
+                              offset={offset}
+                              setOffset={setOffset}
                               activeChainId={activeChain.id}
                               league={league}
-                              offset={offset}
-                              week={week}
+                              graphUrl={config.graph.LEADERBOARD}
+                              weekId={getLeaderboardWeekId(
+                                parseInt(offset ?? '0')
+                              )}
                             />
-                          </div>
-                        </>
-                      }
-                    />
+                            <div className="flex flex-col justify-center sm:max-w-[590px] m-auto">
+                              <WinnersByPnl
+                                activeChainId={activeChain.id}
+                                league={league}
+                                offset={offset}
+                                week={week}
+                              />
+                            </div>
+                          </>
+                        }
+                      />
+                    </div>
                   }
                 />
               </div>
