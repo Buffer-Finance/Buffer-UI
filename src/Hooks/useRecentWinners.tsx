@@ -161,7 +161,7 @@ const useRecentWinners = () => {
         const dymmmy = winner;
         const Icon = MonoChromeMapper[dymmmy.pooltoken];
         let content = (
-          <Link to={'/binary/BTC-USD'}>
+          <Link to={`/binary/${dymmmy?.asset || 'BTC-USD'}`}>
             <div className="p-2 px-[16px] w-full flex justify-around h-full gap-[14px]">
               <div className="flex items-center gap-2">
                 <div className="relative w-[72px] h-[72px] sm:w-[38px] sm:h-[38px] sm:-mt-3 scale-75 ">
