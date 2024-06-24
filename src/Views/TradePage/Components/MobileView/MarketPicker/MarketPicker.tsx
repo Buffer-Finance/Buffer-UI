@@ -12,7 +12,7 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
   const { activeMarket } = useActiveMarket();
   const { openMarketPickerShutter } = useShutterHandlers();
   const { data: allSpreads } = useSpread();
-  payout = divide(add(payout, '100'), '100');
+  payout = payout ? divide(add(payout, '100'), '100') : '-';
 
   if (!activeMarket) return <></>;
   const spread = allSpreads?.[activeMarket.tv_id]?.spread ?? 0;
