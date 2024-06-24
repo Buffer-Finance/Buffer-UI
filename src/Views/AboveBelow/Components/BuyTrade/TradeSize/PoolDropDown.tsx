@@ -14,16 +14,31 @@ import {
   MenuItemProps,
 } from '@szhsin/react-menu';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 export const PoolDropdown: React.FC = () => {
   const markets = useAtomValue(aboveBelowActiveMarketsAtom);
-  console.log(`PoolDropDown-markets: `, markets);
   const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
   const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   function onClick(e: ClickEvent) {
     setActivePoolMarket(e.value);
   }
+
+  useEffect(() => {
+    const pool = searchParams.get('pool');
+    const poollist = markets.map((s) => s.poolInfo.token);
+    console.log(`PoolDropDown-poollist: `, poollist);
+    if (pool && poollist?.includes(pool)) {
+      onClick({ value: pool });
+      setSearchParams((s) => {
+        s.delete('pool');
+        return s;
+      });
+    }
+  }, [searchParams, markets]);
 
   return (
     // <MenuBackground>

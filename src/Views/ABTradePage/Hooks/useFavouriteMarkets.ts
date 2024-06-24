@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { favouriteMarketsAtom } from '../atoms';
+import { favouriteMarketsAtom, radioValueAtom } from '../atoms';
 import { joinStrings } from '../utils';
 import { marketData, useMarketsWithChartData } from './useAssetTableFilters';
 
@@ -24,6 +24,7 @@ export const useFavouriteMarkets = () => {
   const markets = useMarketsWithChartData();
   const navigate = useNavigate();
   const { userAddress: userAddressParam } = useUserAddressParam();
+  const [selectedAsset] = useAtom(radioValueAtom);
 
   const favouriteMarkets = useMemo(() => {
     if (markets === null) {
@@ -91,9 +92,9 @@ export const useFavouriteMarkets = () => {
   function navigateToMarket(market: marketData) {
     if (userAddressParam) {
       navigate(
-        `/binary/${market.marketInfo.pair}?user_address=${userAddressParam}`
+        `/binary/${market.marketInfo.pair}?user_address=${userAddressParam}&pool=${selectedAsset}`
       );
-    } else navigate(`/binary/${market.marketInfo.pair}`);
+    } else navigate(`/binary/${market.marketInfo.pair}?pool=${selectedAsset}`);
   }
   return {
     favouriteMarkets,

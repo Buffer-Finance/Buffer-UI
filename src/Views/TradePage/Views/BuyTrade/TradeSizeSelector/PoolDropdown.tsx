@@ -11,14 +11,23 @@ import {
   ClickEvent,
 } from '@szhsin/react-menu';
 import { useAtom } from 'jotai';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 export const PoolDropdown: React.FC = () => {
   const [{ activePool }, setActivePool] = useAtom(activePoolObjAtom);
   const { poolNameList } = useActivePoolObject();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   function onClick(e: ClickEvent) {
     setActivePool({ activePool: e.value });
   }
+  useEffect(() => {
+    const pool = searchParams.get('pool');
+    if (pool && poolNameList?.includes(pool)) {
+      onClick({ value: pool });
+      setSearchParams((s) => s.delete('pool'));
+    }
+  }, [searchParams, poolNameList]);
 
   return (
     // <MenuBackground>
