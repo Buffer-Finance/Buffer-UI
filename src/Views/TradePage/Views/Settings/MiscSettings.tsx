@@ -1,3 +1,4 @@
+import { useToast } from '@Contexts/Toast';
 import { ResetButton } from '@Views/TradePage/Components/ResetButton';
 import { RowBetween, RowGapItemsTop } from '@Views/TradePage/Components/Row';
 import { Switch } from '@Views/TradePage/Components/Switch';
@@ -12,7 +13,7 @@ import { useAtom } from 'jotai';
 
 export const MiscSettings: React.FC = () => {
   const [settings, setSettings] = useAtom(miscsSettingsAtom);
-
+  const toastify = useToast();
   function resetToDefault() {
     setSettings(defaultSettings.miscs);
   }
@@ -26,6 +27,19 @@ export const MiscSettings: React.FC = () => {
   function togglePlatformWinningNotifications(
     event: React.ChangeEvent<HTMLInputElement>
   ) {
+    if (settings.showPlatformWinningsNotification) {
+      toastify({
+        msg: ' Platform Winnings Notifications turned off!',
+        id: 'recent-win-notif',
+        type: 'success',
+      });
+    } else {
+      toastify({
+        msg: ' Platform Winnings Notifications turned on!',
+        id: 'recent-win-notif',
+        type: 'success',
+      });
+    }
     setSettings((prev) => ({
       ...prev,
       showPlatformWinningsNotification: !prev.showPlatformWinningsNotification,
@@ -50,7 +64,7 @@ export const MiscSettings: React.FC = () => {
         />
       </RowBetween>
       {/*  */}
-      {/* <RowBetween className="mt-4">
+      <RowBetween className="mt-4">
         <SettingsText>
           <Trans>Show Platform Winning Notifications</Trans>
         </SettingsText>
@@ -58,7 +72,7 @@ export const MiscSettings: React.FC = () => {
           isOn={settings.showPlatformWinningsNotification}
           onChange={togglePlatformWinningNotifications}
         />
-      </RowBetween> */}
+      </RowBetween>
     </div>
   );
 };

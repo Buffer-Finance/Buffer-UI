@@ -14,7 +14,7 @@ const duration = 20_000;
 import { Link, useLocation } from 'react-router-dom';
 import { miscsSettingsAtom } from '@Views/TradePage/atoms';
 import { useAtom } from 'jotai';
-const notAllowedSubroutes = new Set(['binary', 'ab']);
+const notAllowedSubroutes = new Set(['binary']);
 // @ts-nocheck
 export const view = (a: bigint, denominationDecimal: number, decimals = 6) => {
   if (a == undefined) return 0;
@@ -205,6 +205,7 @@ const useRecentWinners = () => {
           type: 'recent-win',
           msg: content,
           timings: 200,
+          id: 'recent-win-notif',
         });
 
         toastCount.current = currentTs;
@@ -215,14 +216,17 @@ const useRecentWinners = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setTimer((timer) => timer + 1);
-    }, 10000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
     // postWinner(config);
     const config = getConfig(activeChain.id);
-    postWinner(config);
+    const timeout = setTimeout(() => {
+      postWinner(config);
+    }, 2000);
+    return () => clearTimeout(timeout);
   }, [timer]);
 
   return null;
