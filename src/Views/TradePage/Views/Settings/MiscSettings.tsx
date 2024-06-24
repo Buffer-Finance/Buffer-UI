@@ -65,9 +65,7 @@ export const MiscSettings: React.FC = () => {
       </RowBetween>
       {/*  */}
       <RowBetween className="mt-4">
-        <SettingsText>
-          <Trans>Show Platform Winning Notifications</Trans>
-        </SettingsText>
+        <SettingsText>Show Platform Winning Notifications</SettingsText>
         <Switch
           isOn={settings.showPlatformWinningsNotification}
           onChange={togglePlatformWinningNotifications}
