@@ -183,7 +183,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
     //     ),
     // },
     {
-      header: 'Payout',
+      header: 'Multiplier',
       data: (
         <Payout
           token0={activeMarket.token0}

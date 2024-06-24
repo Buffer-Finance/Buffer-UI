@@ -1,3 +1,4 @@
+import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { buyTradeDataAtom } from '@Views/TradePage/Hooks/useBuyTradeData';
 import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { getPayout, joinStrings } from '@Views/TradePage/utils';
@@ -28,14 +29,16 @@ export const Payout: React.FC<{
   optionContract: string;
 }> = ({ token0, token1, optionContract }) => {
   const { calculatePayout } = useSelectedAssetPayout();
-  const { payout } = calculatePayout(
+  let { payout } = calculatePayout(
     joinStrings(token0, token1, ''),
     optionContract
   );
   if (payout === undefined || payout === null) {
     return <Skeleton className="w-[30px] !h-5 lc " />;
   }
-  return <div className="b1200:text-center">{payout}%</div>;
+  payout = divide(add(payout, '100'), '100');
+
+  return <div className="b1200:text-center">{payout}x</div>;
 };
 
 export const useSelectedAssetPayout = () => {

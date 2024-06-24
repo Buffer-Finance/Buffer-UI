@@ -1,4 +1,5 @@
 import { toFixed } from '@Utils/NumString';
+import { add, divide } from '@Utils/NumString/stringArithmatics';
 import { useShutterHandlers } from '@Views/Common/MobileShutter/MobileShutter';
 import { PairTokenImage } from '@Views/Common/PairTokenImage';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
@@ -11,6 +12,7 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
   const { activeMarket } = useActiveMarket();
   const { openMarketPickerShutter } = useShutterHandlers();
   const { data: allSpreads } = useSpread();
+  payout = divide(add(payout, '100'), '100');
 
   if (!activeMarket) return <></>;
   const spread = allSpreads?.[activeMarket.tv_id]?.spread ?? 0;
@@ -49,7 +51,7 @@ const MarketPicker: React.FC<{ payout: string | null }> = ({ payout }) => {
           </div> */}
         </div>
         <div className="bg-blue w-fit px-[6px] text-f13 text-1 h-full rounded-[4px] pt-[2px] pb-[1px]">
-          {payout || '-'}%
+          {payout || '-'}x
         </div>
       </div>
     </div>

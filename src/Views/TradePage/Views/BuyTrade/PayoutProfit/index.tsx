@@ -21,6 +21,7 @@ export const PayoutProfit = ({
 }) => {
   const [activeTab, setActiveTab] = useAtom(tradeTypeAtom);
   const isLimitorderTab = activeTab == 'Limit';
+  totalPayout = totalPayout ? divide(add(totalPayout, '100'), '100') : '-';
 
   if (amount && totalPayout) {
     return (
@@ -41,7 +42,7 @@ export const PayoutProfit = ({
               )}
               unit={tradeToken}
             />
-            {totalPayout + '%'}
+            {totalPayout + 'x'}
           </RowGap>
         </div>
         <div className="text-f12 b1200:text-f14 items-end flex-col flex-start wrap flex text-2  gap-y-1 b1200:items-center b1200:flex-row">
