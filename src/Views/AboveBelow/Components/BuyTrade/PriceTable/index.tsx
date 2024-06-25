@@ -39,6 +39,10 @@ export const getROI = (totalFee: number | null) => {
   if (totalFee == null) return '-';
   return (((1 - totalFee) / totalFee) * 100).toFixed(0) + '%';
 };
+export const getMultiplier = (totalFee: number | null) => {
+  if (totalFee == null) return '-';
+  return ((1 - totalFee) / totalFee + 1).toFixed(1) + 'x';
+};
 
 export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   // useLimitedStrikeArrays();
@@ -168,13 +172,13 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <button
             className={`w-full text-f12 text-green`}
             onClick={() => {
-              if (getROI(tablerow.totalFeeAbove) == '-') {
+              if (getMultiplier(tablerow.totalFeeAbove) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
               }
               setStrikePrice(true, strikePrice.toString(), marketHash);
             }}
           >
-            {getROI(tablerow.totalFeeAbove)}
+            {getMultiplier(tablerow.totalFeeAbove)}
           </button>
         );
       case Columns.ROI_BELOW:
@@ -182,13 +186,13 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <button
             className={`w-full text-f12 text-red`}
             onClick={() => {
-              if (getROI(tablerow.totalFeeBelow) == '-') {
+              if (getMultiplier(tablerow.totalFeeBelow) == '-') {
                 return throwError();
               }
               setStrikePrice(false, strikePrice.toString(), marketHash);
             }}
           >
-            {getROI(tablerow.totalFeeBelow)}
+            {getMultiplier(tablerow.totalFeeBelow)}
           </button>
         );
       case Columns.TOKEN_ABOVE:
@@ -224,13 +228,13 @@ export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <button
             className={`w-full text-f12`}
             onClick={() => {
-              if (getROI(tablerow.totalFeeBelow) == '-') {
+              if (getMultiplier(tablerow.totalFeeBelow) == '-') {
                 return toastify({ type: 'error', msg: 'Invalid selection' });
               }
               setStrikePrice(false, strikePrice.toString(), marketHash);
             }}
           >
-            {getROI(tablerow.totalFeeBelow)}
+            {getMultiplier(tablerow.totalFeeBelow)}
           </button>
         );
       case Columns.TOKEN_ABOVE:
