@@ -36,7 +36,7 @@ export const Payout: React.FC<{
   if (payout === undefined || payout === null) {
     return <Skeleton className="w-[30px] !h-5 lc " />;
   }
-  payout = divide(add(payout, '100'), '100');
+  payout = payout ? divide(add(payout, '100'), '100') : '0';
 
   return <div className="b1200:text-center">{payout}x</div>;
 };
