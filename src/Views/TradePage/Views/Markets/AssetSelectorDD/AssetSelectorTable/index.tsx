@@ -48,7 +48,7 @@ export const AssetSelectorTable: React.FC<{
     return [
       '',
       'Asset',
-      'Payout',
+      'Multipliers',
       '24h Change',
       'Max Trade Size',
       'Current OI',
