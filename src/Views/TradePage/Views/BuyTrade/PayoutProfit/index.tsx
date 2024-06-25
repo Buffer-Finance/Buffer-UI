@@ -24,6 +24,7 @@ export const PayoutProfit = ({
   totalPayout = totalPayout ? divide(add(totalPayout, '100'), '100') : '0';
 
   if (amount && totalPayout) {
+    const payoutwillbe = multiply(totalPayout, amount);
     return (
       <div className="flex-sbw text-f14 my-3 mb-4">
         <div className="text-f12 b1200:text-f14 items-start flex-start flex-col b1200: flex wrap b1200:items-center text-2 b1200:flex-row">
@@ -36,10 +37,7 @@ export const PayoutProfit = ({
           <RowGap gap="4px">
             <Display
               className="text-1 text-f16 b1200:text-f14 !whitespace-nowrap"
-              data={multiply(
-                add('1', divide(totalPayout, 2) as string),
-                amount
-              )}
+              data={payoutwillbe}
               unit={tradeToken}
             />
             {totalPayout + 'x'}
@@ -56,10 +54,7 @@ export const PayoutProfit = ({
           </span> */}
           <Display
             className=" text-f16 text-green sm:text-f14 !whitespace-nowrap"
-            data={subtract(
-              multiply(add('1', divide(totalPayout, 2) as string), amount),
-              amount
-            )}
+            data={subtract(payoutwillbe, amount)}
             unit={tradeToken}
           />
         </div>
