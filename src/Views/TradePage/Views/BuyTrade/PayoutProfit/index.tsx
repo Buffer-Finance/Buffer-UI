@@ -21,7 +21,7 @@ export const PayoutProfit = ({
 }) => {
   const [activeTab, setActiveTab] = useAtom(tradeTypeAtom);
   const isLimitorderTab = activeTab == 'Limit';
-  totalPayout = totalPayout ? divide(add(totalPayout, '100'), '100') : '-';
+  totalPayout = totalPayout ? divide(add(totalPayout, '100'), '100') : '0';
 
   if (amount && totalPayout) {
     return (
