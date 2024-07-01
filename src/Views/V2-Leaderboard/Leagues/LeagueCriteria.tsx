@@ -33,7 +33,7 @@ const LeagueCriteriaCard: React.FC<{
         </span>
       </div>
       <div className="text-f16 text-[#fff] bg-[#232334]  rounded-[15px] p-4 text-center sm:flex-col flex">
-        <span className="text-[#C3C2D4]">Min. Volume:</span>{' '}
+        <span className="text-[#C3C2D4]">Min. Volume:&nbsp;</span>{' '}
         {criteria.toLocaleString('en-US')} USDC
       </div>
     </div>
