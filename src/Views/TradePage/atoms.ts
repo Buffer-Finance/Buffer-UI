@@ -64,10 +64,9 @@ export const setTimeSelectorAtom = atom(null, (get, set, update: string) => {
 
 export const tradeSizeAtom = atomWithStorage('tradeSizeAtom', '5');
 
-export const activePoolObjAtom = atom({
-  activePool: 'USDC',
+export const activePoolObjAtom = atomWithStorage('activePoolObjAtomdd', {
+  activePool: isTestnet ? 'ARB' : 'USDC',
 });
-
 // pinned assets and asset selector atoms
 export const assetSelectorPoolAtom = atom('USDC');
 
