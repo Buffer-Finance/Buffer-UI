@@ -113,7 +113,9 @@ export const appConfig = {
     booster: '0x1FE0A88372A75926dc26dFF369B0b3aC5569F669',
     config_setter: '0xf5FE716462112a3352926F63d92b51293ac5d006',
     v2_router: ContractsConfig[42161].ud.router,
-    jackpot: '0xEa0b956A04b265A7E2A6d00A4bD65a48C430cE16',
+    jackpot:
+      ContractsConfig?.[42161]?.jackpot ||
+      '0xEa0b956A04b265A7E2A6d00A4bD65a48C430cE16',
     above_below_router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
