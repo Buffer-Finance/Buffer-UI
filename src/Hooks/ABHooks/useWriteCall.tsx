@@ -46,7 +46,8 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount();
   const { activeChain } = useActiveChain();
-  const { data, error, isLoading, status, writeAsync } = useWriteContract({});
+  const { data, error, isLoading, status, writeContractAsync } =
+    useWriteContract({});
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
 
   const write = async (
@@ -90,7 +91,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     try {
       const { request, result } = await simulateContract(transformedArgs);
       console.log(`useWriteCall-request: `, request);
-      const { hash } = await writeAsync(request);
+      const { hash } = await writeContractAsync(request);
       toastify({
         id: contractAddress,
         msg: customToast ? customToast.content : 'Transaction successful!',
