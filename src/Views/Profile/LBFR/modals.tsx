@@ -5,7 +5,7 @@ import { StakeModal } from '@Views/Common/Modals/StakeModal';
 import { UnstakeModal } from '@Views/Common/Modals/UnstakeModal';
 import { useGetApprovalAmount } from '@Views/Earn/Hooks/useEarnWriteCalls';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { erc20ABI } from 'wagmi';
+import { erc20Abi } from 'viem';
 import { getContract } from './Config/Addresses';
 import { useState } from 'react';
 import { useLBFRreadCalls } from './Hooks/useReadCalls';

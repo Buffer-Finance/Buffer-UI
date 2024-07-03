@@ -2,7 +2,7 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import axios from 'axios';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { noLossConfig } from './NoLossConfig';
 import configABI from './ABI/ConfigABI.json';
 import { convertBNtoString, useSignerOrPorvider } from '@Utils/useReadCall';

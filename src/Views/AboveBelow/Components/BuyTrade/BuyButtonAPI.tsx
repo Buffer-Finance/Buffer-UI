@@ -33,7 +33,9 @@ import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { Skeleton } from '@mui/material';
-import { Chain, signTypedData } from '@wagmi/core';
+import { Chain } from '@wagmi/core';
+import { useSignTypedData } from 'wagmi';
+
 import axios from 'axios';
 import { solidityKeccak256 } from 'ethers/lib/utils';
 import { useAtomValue, useSetAtom } from 'jotai';
@@ -44,6 +46,8 @@ import { useAccount } from 'wagmi';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
 
 export const BuyButton = () => {
+  const { signTypedDataAsync } = useSignTypedData();
+
   const { viewOnlyMode } = useUserAccount();
   const { activeChain } = useActiveChain();
   const { registeredOneCT, oneCTWallet, oneCtPk } = useOneCTWallet();
@@ -173,6 +177,7 @@ const Approve: React.FC<{
   const { state } = useGlobal();
   const { address } = useAccount();
   const { data: productNames } = useProductName();
+  const { signTypedDataAsync } = useSignTypedData();
 
   const handleApproveClick = async (amount = defaultApprovalAmount) => {
     if (state.txnLoading > 1) {
@@ -205,7 +210,7 @@ const Approve: React.FC<{
         routerAddress,
         deadline,
         activeChainId,
-        signTypedData,
+        signTypedDataAsync,
         permitName
       );
       const updatedApproval = await updateApprovalData();

@@ -1,16 +1,16 @@
-import { divide } from "./NumString/stringArithmatics";
-import { getContract } from "@Views/Migration/Address";
-import { convertBNtoString } from "./useReadCall";
-import { useAccount, erc20ABI, useContractRead } from "wagmi";
-import { MigrationContext } from "@Views/Migration";
-import { useContext } from "react";
-import { useUserAccount } from "@Hooks/useUserAccount";
+import { divide } from './NumString/stringArithmatics';
+import { getContract } from '@Views/Migration/Address';
+import { convertBNtoString } from './useReadCall';
+import { useAccount, erc20ABI, useContractRead } from 'viem';
+import { MigrationContext } from '@Views/Migration';
+import { useContext } from 'react';
+import { useUserAccount } from '@Hooks/useUserAccount';
 
 export const useIbfrBalance = () => {
   const { address: account } = useUserAccount();
   const { activeChain } = useContext(MigrationContext);
 
-  const ibfrAddress = getContract(activeChain?.id, "ibfr");
+  const ibfrAddress = getContract(activeChain?.id, 'ibfr');
 
   const TokenContract = {
     address: ibfrAddress,
@@ -19,7 +19,7 @@ export const useIbfrBalance = () => {
 
   let { data } = useContractRead({
     ...TokenContract,
-    functionName: "balanceOf",
+    functionName: 'balanceOf',
     args: [account],
     watch: true,
   });

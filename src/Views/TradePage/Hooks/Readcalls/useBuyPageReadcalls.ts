@@ -8,7 +8,7 @@ import { joinStrings } from '@Views/TradePage/utils';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { timeToMins } from '@Views/TradePage/utils/timeToMins';
 import { useMemo } from 'react';
-import { erc20ABI } from 'wagmi';
+import { erc20Abi as erc20ABI } from 'viem';
 import OptionContractABI from '../../ABIs/OptionContract.json';
 import { useMarketsConfig } from '../useMarketsConfig';
 import { useSettlementFee } from '../useSettlementFee';

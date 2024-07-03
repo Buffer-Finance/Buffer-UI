@@ -1,14 +1,14 @@
 import { useSetAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import { drawerAtom } from 'src/Config/globalAtoms';
-import { useAccount, useConnect, useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useConnect, useSwitchChain } from 'wagmi';
 import { useActiveChain } from './useActiveChain';
 
 export const useWalletConnect = () => {
   const setIsConnectionDrawerOpen = useSetAtom(drawerAtom);
   const { connect, connectors, error: connectError } = useConnect();
-  const { switchNetwork, error: switchError } = useSwitchNetwork();
-  const { chain } = useNetwork();
+  const { switchNetwork, error: switchError } = useSwitchChain();
+  const { chain } = useAccount();
   const { activeChain } = useActiveChain();
   // const toastify = useToast();
   const { address: account } = useAccount();

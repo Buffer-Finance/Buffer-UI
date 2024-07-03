@@ -1,40 +1,14 @@
 import { getHashUrlQueryParam } from '@Utils/getHashUrlQueryParam';
 import { isTestnet } from 'config';
+import { arbitrumSepolia as abSepolia } from 'viem/chains';
 import { defineChain } from 'viem';
 import { arbitrum, polygon, polygonMumbai } from 'viem/chains';
 
 export const urlSettings = getHashUrlQueryParam(window.location.href);
-export const arbitrumSepolia = defineChain({
-  id: 421614,
-  name: 'Arbitrum Sepolia',
-  network: 'arb-sepolia',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'Ether',
-    symbol: 'AETH',
-  },
-  rpcUrls: {
-    default: {
-      http: ['https://arbitrum-sepolia.blockpi.network/v1/rpc/public'],
-    },
-    public: {
-      http: ['https://arbitrum-sepolia.blockpi.network/v1/rpc/public'],
-    },
-  },
-  blockExplorers: {
-    default: { name: 'Explorer', url: 'https://api-sepolia.arbiscan.io/api' },
-  },
-  contracts: {
-    multicall3: {
-      address: '0xca11bde05977b3631167028862be2a173976ca11',
-      blockCreated: 81930,
-    },
-  },
-  testnet: true,
-});
+export const arbitrumSepolia = abSepolia;
 
 export function getSupportedChains() {
-  return isTestnet ? [arbitrumSepolia] : [arbitrum];
+  return isTestnet ? [abSepolia] : [arbitrum];
 }
 
 export const getAllChains = () => {

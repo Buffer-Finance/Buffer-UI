@@ -1,4 +1,5 @@
-import { erc20ABI, useContractReads } from 'wagmi';
+import { useContractReads } from 'wagmi';
+import { erc20Abi as erc20ABI } from 'viem';
 import JackpotABI from '@ABIs/JackpotABI.json';
 import { JackpotAdds, appConfig } from '@Views/TradePage/config';
 import { isTestnet } from 'config';

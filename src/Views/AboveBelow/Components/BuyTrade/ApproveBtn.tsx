@@ -4,7 +4,7 @@ import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { MAX_APPROVAL_VALUE } from '@Views/ABTradePage/config';
 import { useState } from 'react';
-import { erc20ABI } from 'wagmi';
+import { erc20Abi as erc20ABI } from 'viem';
 
 export const ApproveBtn: React.FC<{
   tokenAddress: string;
