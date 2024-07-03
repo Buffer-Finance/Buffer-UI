@@ -67,9 +67,9 @@ export const TradeSize: React.FC<{
 
   const expiration = useAtomValue(selectedExpiry);
   const currentEpoch = Math.floor(Date.now() / 1000);
-  const iv = ivs?.[activeMarket.tv_id];
 
   if (activeMarket === undefined || readCallData === undefined) return <></>;
+  const iv = ivs?.[activeMarket.tv_id];
   const token = activeMarket.poolInfo.token;
   console.log(`index-token: `, token, readCallData);
   const decimals = activeMarket.poolInfo.decimals;
