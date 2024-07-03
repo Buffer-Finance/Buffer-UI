@@ -462,7 +462,7 @@ function JackpotValueSeciont(props) {
           </div>
           <p className="text-[#B1B6C6] font-[700] text-[12px]">
             {' '}
-            win upto 10 ARB by just placing a trade
+            win upto 75 ARB by just placing a trade
           </p>
         </div>
         <div className="text-[#B1B6C6] mt-[-7px]  gap-1 font-[700] text-[12px] text-center">
@@ -510,7 +510,7 @@ function JackpotValueSeciont(props) {
         <div className="text-[#fff]">
           {minSize ? toFixed(minSize, 2) : '--'} ARB or USDC,
         </div>{' '}
-        win upto 10 ARB by just placing a trade
+        win upto 75 ARB by just placing a trade
       </div>
       <div className="text-[#B1B6C6] mt-4  gap-1 font-[700] text-[12px] text-center">
         *Notional trade Size: Trade Size × ((Payout% × 2)/100), <br />
