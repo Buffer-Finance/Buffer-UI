@@ -77,7 +77,7 @@ export const ContractsConfig = {
     ud: {
       router: '0x2BAA48961C1CD376484b601278bF7A51E94293a9',
     },
-    jackpot: '0xEa0b956A04b265A7E2A6d00A4bD65a48C430cE16',
+    jackpot: '0xe34cd1D40733B991fea9ea8545Fa1F490200d6e8',
     poolsInfo: {
       '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
         tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
