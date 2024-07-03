@@ -1,4 +1,4 @@
-import { useAccount, useContractEvent, usePublicClient } from 'wagmi';
+import { useAccount, useWatchContractEvent, usePublicClient } from 'wagmi';
 import JackootABI from '@ABIs/JackpotABI.json';
 import RouterABI from '@ABIs/ABI/routerABI.json';
 import { createPublicClient, http } from 'viem';

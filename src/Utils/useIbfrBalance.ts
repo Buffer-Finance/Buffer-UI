@@ -1,7 +1,7 @@
 import { divide } from './NumString/stringArithmatics';
 import { getContract } from '@Views/Migration/Address';
 import { convertBNtoString } from './useReadCall';
-import { useAccount, erc20ABI, useContractRead } from 'viem';
+import { useAccount, erc20ABI, useReadContract } from 'viem';
 import { MigrationContext } from '@Views/Migration';
 import { useContext } from 'react';
 import { useUserAccount } from '@Hooks/useUserAccount';
@@ -17,7 +17,7 @@ export const useIbfrBalance = () => {
     abi: erc20ABI,
   };
 
-  let { data } = useContractRead({
+  let { data } = useReadContract({
     ...TokenContract,
     functionName: 'balanceOf',
     args: [account],

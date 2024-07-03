@@ -3,7 +3,7 @@ import { CallOverrides, ethers } from 'ethers';
 import {
   useBalance,
   useContract,
-  useFeeData,
+  useEstimateFeesPerGas,
   usePublicClient,
   useWalletClient,
 } from 'wagmi';
@@ -53,7 +53,7 @@ export function useIndependentWriteCall() {
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
   const { data: signer, isError, isLoading } = useWalletClient();
 
-  const { data } = useFeeData();
+  const { data } = useEstimateFeesPerGas();
   const { data: balance } = useBalance({ address: account });
   let gasPrice = data?.formatted?.gasPrice || (1e8).toString();
   // gasPrice = multiply(gasPrice, "2");

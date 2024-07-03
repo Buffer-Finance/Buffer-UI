@@ -22,6 +22,7 @@ export const Affilate = ({
 }) => {
   const { activeChain } = useActiveChain();
   const { affiliateCode } = useUserCode(activeChain);
+  console.log(`Affilate-affiliateCode: `, affiliateCode);
   const isCodeSet = !!affiliateCode;
   const [state, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = useState(false);

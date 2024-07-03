@@ -8,7 +8,7 @@ import {
 } from 'viem';
 import {
   useAccount,
-  useContractWrite,
+  useWriteContract,
   usePublicClient,
   useWalletClient,
 } from 'wagmi';
@@ -46,7 +46,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount();
   const { activeChain } = useActiveChain();
-  const { data, error, isLoading, status, writeAsync } = useContractWrite({});
+  const { data, error, isLoading, status, writeAsync } = useWriteContract({});
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
 
   const write = async (

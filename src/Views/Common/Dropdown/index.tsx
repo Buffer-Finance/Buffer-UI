@@ -6,7 +6,7 @@ import { atom, useAtom } from 'jotai';
 import { isDrawerOpen } from 'src/globalStore';
 import Wallet from 'public/ComponentSVGS/wallet';
 import { ArrowDropDownRounded } from '@mui/icons-material';
-import { useDisconnect, useAccount } from 'wagmi';
+import { useDisconnect, useAccount, useConfig } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import {
@@ -22,7 +22,9 @@ interface IProps {
 export const connectedChainAtom = atom<any>(null);
 const AccountConnectionDropdown: React.FC<IProps> = ({ inDrawer }) => {
   const { address: account } = useUserAccount();
-  const { chain, chains } = useAccount();
+  const { chain } = useAccount();
+  const { chains } = useConfig();
+
   const { activeChain } = useActiveChain();
   const activeChainName = activeChain?.name;
   const { disconnect } = useDisconnect();

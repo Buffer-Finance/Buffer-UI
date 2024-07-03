@@ -4,7 +4,7 @@ import { useWriteCall } from '@Hooks/useWriteCall';
 import { group2abi } from '@Views/AdminConfigs/helpers';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import { useState } from 'react';
-import { useContractReads } from 'wagmi';
+import { useReadContracts } from 'wagmi';
 const PAUSER_IDX = 0;
 const UNPAUSER_IDX = 1;
 const GrantRole: React.FC<any> = ({}) => {
@@ -19,7 +19,7 @@ const GrantRole: React.FC<any> = ({}) => {
     writeCall((a) => {}, 'grantRole', [role, address], null, null, null);
     return console.log;
   };
-  const roles = useContractReads({
+  const roles = useReadContracts({
     contracts: [
       {
         address: config.config_setter,

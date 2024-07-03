@@ -8,7 +8,7 @@ import {
 } from 'viem';
 import {
   useAccount,
-  useContractWrite,
+  useWriteContract,
   usePublicClient,
   useWalletClient,
 } from 'wagmi';
@@ -46,7 +46,9 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount();
   const { activeChain } = useActiveChain();
-  const { data, error, isLoading, status, writeAsync } = useContractWrite({});
+  const { data, error, isLoading, status, writeContractAsync } =
+    useWriteContract({});
+  console.log(`useWriteCall-error: `, error);
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
 
   const write = async (
@@ -89,7 +91,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
     try {
       const { request, result } = await simulateContract(transformedArgs);
       console.log(`useWriteCall-request: `, request);
-      const { hash } = await writeAsync(request);
+      const { hash } = await writeContractAsync(request);
       toastify({
         id: contractAddress,
         msg: customToast ? customToast.content : 'Transaction successful!',
@@ -105,9 +107,7 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
       return hash;
     } catch (ex: unknown) {
       dispatch({ type: 'SET_TXN_LOADING', payload: 0 });
-      const shortMessage = (
-        ex as ContractFunctionExecutionError
-      ).shortMessage.split('the following reason:')[1];
+      const shortMessage = (ex as ContractFunctionExecutionError).shortMessage;
 
       callBack();
       toastify({

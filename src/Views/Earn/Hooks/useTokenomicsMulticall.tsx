@@ -17,7 +17,7 @@ import {
 } from '@Utils/NumString/stringArithmatics';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { eToWide, toFixed } from '@Utils/NumString';
-import { useContractReads } from 'wagmi';
+import { useReadContracts } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { roundToTwo } from '@Utils/roundOff';
@@ -648,7 +648,7 @@ export const useGetTokenomics = () => {
   const calls = getcalls().map((call) => {
     return { ...call, chainId: activeChain.id };
   });
-  let { data: da } = useContractReads({
+  let { data: da } = useReadContracts({
     contracts: calls,
     select: (d) => d.map((signle) => signle.result?.toString() || '0'),
     watch: true,

@@ -1,11 +1,10 @@
-
 import { useIndependentWriteCall } from '@Hooks/writeCall';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { atom, useAtom } from 'jotai';
 import MarketFactoryABI from '@ABIs/MarketFactory.json';
 import { useNavigate } from 'react-router-dom';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { useContractEvent } from 'wagmi';
+import { useWatchContractEvent } from 'wagmi';
 interface IInput {
   name: string;
   type: string | IInput[];
@@ -520,7 +519,7 @@ export const RenderAdminNavbar = ({ className }) => {
   const navigate = useNavigate();
   const [createdMarkets, setCreatedMarkets] = useAtom(createdMarketsAtom);
   const { configContracts } = useActiveChain();
-  useContractEvent({
+  useWatchContractEvent({
     address: configContracts.marketFactory,
     abi: MarketFactoryABI,
     eventName: 'PairCreated',
