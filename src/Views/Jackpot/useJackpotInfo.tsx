@@ -58,7 +58,7 @@ const useJackpotInfo = () => {
     },
   });
   console.log(`useJackpotInfo-res: `, res);
-  return res;
+  return res.data;
 };
 
 export { useJackpotInfo };

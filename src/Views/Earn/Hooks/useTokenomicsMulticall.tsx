@@ -650,7 +650,9 @@ export const useGetTokenomics = () => {
   });
   let { data: da } = useReadContracts({
     contracts: calls,
-    select: (d) => d.map((signle) => signle.result?.toString() || '0'),
+    query: {
+      select: (d) => d.map((signle) => signle.result?.toString() || '0'),
+    },
     watch: true,
   });
   let data = getDeepCopy(da);
