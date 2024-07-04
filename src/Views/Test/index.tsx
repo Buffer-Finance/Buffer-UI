@@ -1504,6 +1504,8 @@ function fallbackRender({ error, resetErrorBoundary }) {
     </div>
   );
 }
+const acrossCode = '0xa6409a97b1c26d0d1b20a2e0b57325999913fd00';
+// const acrossCode = '0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A'
 
 export const Test = () => {
   const { writeContractAsync } = useWriteContract();
@@ -1511,11 +1513,11 @@ export const Test = () => {
   const switchCoins = async () => {
     if (!user?.address) return;
     const amount = 20000;
-    const sourceContract = '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'; //usdc.e
+    const sourceContract = '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8'; //usdc.e
     const targetContract = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'; //usdc.e polygon
     const getquotes = await axios.get(`https://app.across.to/api/limits`, {
       params: {
-        inputToken: sourceContract,
+        inputToken: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
         outputToken: targetContract,
         originChainId: 42161,
         destinationChainId: 137,
@@ -1523,7 +1525,7 @@ export const Test = () => {
     });
     const dd = await axios.get(`https://app.across.to/api/suggested-fees`, {
       params: {
-        inputToken: sourceContract,
+        inputToken: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
         outputToken: targetContract,
         originChainId: 42161,
         destinationChainId: 137,
@@ -1539,7 +1541,7 @@ export const Test = () => {
     // 0xc456398d5ee3b93828252e48bededbc39e03368e
 
     const { hash } = await writeContractAsync({
-      address: '0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A',
+      address: acrossCode,
       abi,
       functionName: 'depositV3',
       args: [
@@ -1564,38 +1566,17 @@ export const Test = () => {
     const amount = 20000;
     const sourceContract = '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'; //usdc.e
     const targetContract = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'; //usdc.e polygon
-    const getquotes = await axios.get(`https://app.across.to/api/limits`, {
-      params: {
-        inputToken: sourceContract,
-        outputToken: targetContract,
-        originChainId: 42161,
-        destinationChainId: 137,
-      },
-    });
-    const dd = await axios.get(`https://app.across.to/api/suggested-fees`, {
-      params: {
-        inputToken: sourceContract,
-        outputToken: targetContract,
-        originChainId: 42161,
-        destinationChainId: 137,
-        recipient: user.address,
-        amount,
-        skipAmountLimit: true,
-      },
-    });
-    const relayFee = dd.data.totalRelayFee.total;
 
-    console.log(`index-getquotes: `, getquotes, dd);
     // const outputAmount = amount -
     // 0xc456398d5ee3b93828252e48bededbc39e03368e
     const { hash } = await writeContractAsync({
       address: sourceContract,
       abi: erc20Abi,
       functionName: 'approve',
-      args: ['0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A', 232323232232323n],
+      args: [acrossCode, 232323232232323n],
     });
     // const { hash } = await writeContractAsync({
-    //   address: '0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A',
+    //   address: acrossCode,
     //   abi,
     //   functionName: 'depositV3',
     //   args: [
