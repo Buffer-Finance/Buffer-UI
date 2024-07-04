@@ -128,9 +128,8 @@ const isOpenAtom = atom(false);
 const Jackpot: React.FC<any> = ({}) => {
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
   const { address } = useAccount();
-  const data = {
-    data: [bet],
-  };
+  const { data: lastWin } = useSWR(`jackpotsummary`);
+
   const pastJackpots = usePlatforJackpots();
   const isMobile = useMedia('(max-width:600px)');
   const [page, setPage] = React.useState(1);
@@ -140,7 +139,8 @@ const Jackpot: React.FC<any> = ({}) => {
   const jackpotAmount = '20';
   const minSize = jackpotInfo?.minSize ? jackpotInfo.minSize.toString() : '0';
 
-  let recentPlatformJackpot = pastJackpots[0]?.[0]?.open_timestamp || null;
+  let recentPlatformJackpot = lastWin?.latest_win_timestamp || null;
+  // console.log(`index-recentPlatformJackpot: `, recentPlatformJackpot, );
   const content = {
     name: 'Dice',
     pages: [
@@ -540,11 +540,11 @@ function JackpotSummary(props) {
   const account = useAccount();
   const { data } = useSWR(`jackpotsummary`, {
     fetcher: async () => {
-      if (!account?.address) return null;
+      // if (!account?.address) return null;
       const response = await axios.get(
         `${baseUrl}jackpot/summary/?environment=${
           isTestnet ? 421614 : 42161
-        }&order_by=-close_time&user_address=${account.address}`
+        }&order_by=-close_time`
       );
       // console.log(response.data, "response");
       return response.data;
