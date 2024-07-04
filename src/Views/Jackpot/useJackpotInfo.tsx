@@ -38,23 +38,27 @@ const useJackpotInfo = () => {
         args: [usdce.tokenAddress],
       },
     ],
-    select: (data) => {
-      if (data[0].status == 'success')
-        return {
-          minSize: BigDivide(data[0].result),
-          minSizes: {
-            ARB: BigDivide(data[0].result),
-            USDC: BigDivide6(data[2].result),
-            'USDC.e': BigDivide6(data[3].result),
-          },
-          poolBalance: BigDivide(data[1].result),
-        };
-      else {
-        return {};
-      }
+    query: {
+      select: (data) => {
+        console.log(`useJackpotInfo-data[0]: `, data[0]);
+        if (data[0].status == 'success')
+          return {
+            minSize: BigDivide(data[0].result),
+            minSizes: {
+              ARB: BigDivide(data[0].result),
+              USDC: BigDivide6(data[2].result),
+              'USDC.e': BigDivide6(data[3].result),
+            },
+            poolBalance: BigDivide(data[1].result),
+          };
+        else {
+          return {};
+        }
+      },
     },
   });
-  return res.data;
+  console.log(`useJackpotInfo-res: `, res);
+  return res;
 };
 
 export { useJackpotInfo };
