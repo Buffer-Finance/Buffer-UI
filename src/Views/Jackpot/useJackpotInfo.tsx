@@ -1,4 +1,5 @@
-import { erc20ABI, useContractReads } from 'wagmi';
+import { useReadContracts } from 'wagmi';
+import { erc20Abi as erc20ABI } from 'viem';
 import JackpotABI from '@ABIs/JackpotABI.json';
 import { JackpotAdds, appConfig } from '@Views/TradePage/config';
 import { isTestnet } from 'config';
@@ -10,7 +11,7 @@ const useJackpotInfo = () => {
   const [_, usdce] = getUSDCEPool();
 
   const args = [token.tokenAddress];
-  const res = useContractReads({
+  const res = useReadContracts({
     contracts: [
       {
         address: JackpotAdds,
@@ -37,22 +38,26 @@ const useJackpotInfo = () => {
         args: [usdce.tokenAddress],
       },
     ],
-    select: (data) => {
-      if (data[0].status == 'success')
-        return {
-          minSize: BigDivide(data[0].result),
-          minSizes: {
-            ARB: BigDivide(data[0].result),
-            USDC: BigDivide6(data[2].result),
-            'USDC.e': BigDivide6(data[3].result),
-          },
-          poolBalance: BigDivide(data[1].result),
-        };
-      else {
-        return {};
-      }
+    query: {
+      select: (data) => {
+        console.log(`useJackpotInfo-data[0]: `, data[0]);
+        if (data[0].status == 'success')
+          return {
+            minSize: BigDivide(data[0].result),
+            minSizes: {
+              ARB: BigDivide(data[0].result),
+              USDC: BigDivide6(data[2].result),
+              'USDC.e': BigDivide6(data[3].result),
+            },
+            poolBalance: BigDivide(data[1].result),
+          };
+        else {
+          return {};
+        }
+      },
     },
   });
+  console.log(`useJackpotInfo-res: `, res);
   return res.data;
 };
 

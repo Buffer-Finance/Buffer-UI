@@ -5,7 +5,7 @@ import { HolderContracts, appConfig } from '@Views/TradePage/config';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { createPublicClient, http } from 'viem';
-import { erc20ABI } from 'wagmi';
+import { erc20Abi } from 'viem';
 import { arbitrum } from 'wagmi/chains';
 
 export const useMainnetData = () => {

@@ -3,14 +3,14 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { useAtom } from 'jotai';
 import { isDrawerOpen } from 'src/globalStore';
 import { openDrawer } from '@Utils/appControls/mobileDrawerHandlers';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useActiveChain } from '@Hooks/useActiveChain';
 
 const useOpenConnectionDrawer = () => {
   const [, setIsConnectionDrawerOpen] = useAtom(isDrawerOpen);
   const { dispatch } = useGlobal();
   const { address: account } = useUserAccount();
-  const { chain, chains } = useNetwork();
+  const { chain, chains } = useAccount();
   const { activeChain } = useActiveChain();
   const activeChainName = activeChain?.name;
 

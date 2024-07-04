@@ -1,6 +1,7 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useCall2Data } from '@Utils/useReadCall';
-import { Chain, erc20ABI } from 'wagmi';
+import { Chain } from 'wagmi';
+import { erc20Abi } from 'viem';
 import BLPABI from '../abis/BLP.json';
 import RewardTrackerABI from '../abis/RewardTracker.json';
 import { getLpConfig } from '../config';

@@ -11,7 +11,7 @@ import { CheckCircleOutline, CloseOutlined } from '@mui/icons-material';
 import { CircularProgress, Dialog } from '@mui/material';
 import { useState } from 'react';
 import { Chain } from 'viem';
-import { erc20ABI } from 'wagmi';
+import { erc20Abi as erc20ABI } from 'viem';
 import NftLockPoolABI from '../../abis/NftLockPool.json';
 import RewardRouterABI from '../../abis/RewardRouter.json';
 import { AprDD } from '../AprDD';

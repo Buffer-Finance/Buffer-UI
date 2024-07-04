@@ -8,7 +8,8 @@ import { getConfig } from '@Views/ABTradePage/utils/getConfig';
 import { timeToMins } from '@Views/ABTradePage/utils/timeToMins';
 import { strikePrices } from '@Views/AboveBelow/Hooks/useLimitedStrikeArrays';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { erc20ABI } from 'wagmi';
+
+import { erc20Abi as erc20ABI } from 'viem';
 import CreationWindowABI from '../abis/CreationWindow.json';
 import OptionABI from '../abis/Options.json';
 import {

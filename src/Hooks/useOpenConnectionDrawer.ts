@@ -1,16 +1,18 @@
 import { useGlobal } from '@Contexts/Global';
 import { useAtom } from 'jotai';
 import { openDrawer } from 'src/Utils/appControls/mobileDrawerHandlers';
-import { useNetwork } from 'wagmi';
+import { useAccount, useConfig } from 'wagmi';
 import { useActiveChain } from './useActiveChain';
 import { useUserAccount } from './useUserAccount';
-import { isDrawerOpen } from "src/globalStore";
+import { isDrawerOpen } from 'src/globalStore';
 
 const useOpenConnectionDrawer = () => {
   const [, setIsConnectionDrawerOpen] = useAtom(isDrawerOpen);
   const { dispatch } = useGlobal();
   const { address: account } = useUserAccount();
-  const { chain, chains } = useNetwork();
+  const { chain } = useAccount();
+  const { chains } = useConfig();
+  console.log(`chains: `, chains);
   const { activeChain } = useActiveChain();
   const activeChainName = activeChain?.name;
 

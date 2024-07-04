@@ -15,7 +15,7 @@ import { viemMulticall } from '@Utils/multicall';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { knowTillAtom } from '@Views/TradePage/Hooks/useIsMerketOpen';
-import { signTypedData } from '@wagmi/core';
+import { useSignTypedData } from 'wagmi';
 import axios from 'axios';
 import { PublicClient } from 'viem';
 import { useAccount, usePublicClient } from 'wagmi';
@@ -66,6 +66,8 @@ export const useBuyTradeActions = (userInput: string) => {
   const setPriceCache = useSetAtom(queuets2priceAtom);
   const { data: approvalExpanded, mutate: updateApprovalData } =
     useApprvalAmount();
+  const { signTypedDataAsync } = useSignTypedData();
+
   const referralData = useReferralCode();
   const { switchPool, poolDetails } = useSwitchPool();
   const readcallData = useAtomValue(buyTradeDataAtom);
@@ -590,7 +592,7 @@ export const useBuyTradeActions = (userInput: string) => {
         configData.router,
         deadline,
         activeChain.id,
-        signTypedData,
+        signTypedDataAsync,
         poolDetails?.permitName
       );
       const updatedApproval = await updateApprovalData();

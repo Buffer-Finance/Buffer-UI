@@ -2,7 +2,7 @@ import { useToast } from '@Contexts/Toast';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { earnAtom, readEarnData } from '../earnAtom';
 import { useEarnWriteCalls } from '../Hooks/useEarnWriteCalls';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
@@ -16,7 +16,7 @@ export function EarnButtons({ cardNum }: { cardNum: number }) {
   const [state, setPageState] = useAtom(earnAtom);
   const { activeChain } = useActiveChain();
   const [pageState] = useAtom(readEarnData);
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { withdraw, claimARB } = useEarnWriteCalls(
     'Vester',
     cardNum === 4 ? 'BFR' : 'BLP'

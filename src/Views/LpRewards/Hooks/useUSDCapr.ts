@@ -5,7 +5,7 @@ import { poolsType } from '../types';
 import { useBlpRate } from './useBlpRate';
 import { useTokensPerInterval } from './useTokensPerInterval';
 import useARBPrice from './useARBPrice';
-import { useContractRead } from 'wagmi';
+import { useReadContract } from 'wagmi';
 import { getLpConfig } from '../config';
 import NftLockPoolABI from '../abis/NftLockPool.json';
 
@@ -23,7 +23,7 @@ export const useUSDCapr = (activeChain: Chain, activePool: poolsType) => {
   const contracts = getLpConfig(activeChain.id);
 
   const arbPrice = useARBPrice();
-  const wrappedBlpSupplyWithMultiplier = useContractRead({
+  const wrappedBlpSupplyWithMultiplier = useReadContract({
     address: contracts.nftLockPool,
     abi: NftLockPoolABI,
     functionName: '_wrappedBlpSupplyWithMultiplier',

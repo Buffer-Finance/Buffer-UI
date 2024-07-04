@@ -1,4 +1,4 @@
-import { erc20ABI } from 'wagmi';
+import { erc20Abi } from 'viem';
 import { getContract } from '../Config/Addresses';
 import { useActiveChain } from '@Hooks/useActiveChain';
 import { useMemo } from 'react';

@@ -15,7 +15,7 @@ import { viemMulticall } from '@Utils/multicall';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 import { useReferralCode } from '@Views/Referral/Utils/useReferralCode';
 import { knowTillAtom } from '@Views/ABTradePage/Hooks/useIsMerketOpen';
-import { signTypedData } from '@wagmi/core';
+import { useSignTypedData } from 'wagmi';
 import axios from 'axios';
 import { PublicClient } from 'viem';
 import { useAccount, usePublicClient } from 'wagmi';
@@ -81,6 +81,7 @@ export const useBuyABActions = (userInput: string) => {
   const { state, dispatch } = useGlobal();
   const { activeMarket: activeAsset } = useActiveMarket();
   const limitOrderPayout = useAtomValue(LimitOrderPayoutAtom);
+  const { signTypedDataAsync } = useSignTypedData();
 
   const { address } = useAccount();
 
@@ -556,7 +557,7 @@ export const useBuyABActions = (userInput: string) => {
         configData.router,
         deadline,
         activeChain.id,
-        signTypedData,
+        signTypedDataAsync,
         poolDetails?.permitName
       );
       const updatedApproval = await updateApprovalData();

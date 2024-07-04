@@ -1,4 +1,4 @@
-import { Chain, useContractReads } from 'wagmi';
+import { Chain, useReadContracts } from 'wagmi';
 import getDeepCopy from '@Utils/getDeepCopy';
 import { convertBNtoString } from '@Utils/useReadCall';
 import ReferralABI from '../Config/ReferralABI.json';
@@ -23,7 +23,7 @@ export function useUserCode(activeChain: Chain) {
       ]
     : [];
 
-  const { data } = useContractReads({
+  const { data } = useReadContracts({
     contracts: calls as any,
     watch: true,
     select: (d) => d.map((signle) => signle.result?.toString() || null),
@@ -34,7 +34,7 @@ export function useUserCode(activeChain: Chain) {
   if (data && data?.[0]) {
     const convertedData = getDeepCopy(data);
     convertBNtoString(convertedData);
-    response = { affiliateCode: convertedData[0] };
+    response = { affiliateCode: convertedData[0]?.result };
   }
   return response;
 }

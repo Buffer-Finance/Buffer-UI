@@ -2,11 +2,11 @@ import Config from 'public/config.json';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { getChains } from 'src/Config/wagmiClient';
-import { Chain, useNetwork } from 'wagmi';
+import { Chain, useAccount } from 'wagmi';
 const typeofConfig = Config[421613];
 
 export const useActiveChain = () => {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const chains: Chain[] = getChains();
   const params = useParams();
   const chainName = params.chain;

@@ -1,5 +1,12 @@
-import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import {
+  ConnectButton,
+  RainbowKitProvider,
+  darkTheme,
+  getDefaultConfig,
+} from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import * as Sentry from '@sentry/react';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
@@ -10,15 +17,15 @@ import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import { SWRConfig } from 'swr';
 import 'viem/window';
-import { WagmiConfig } from 'wagmi';
+import { WagmiProvider } from 'wagmi';
 import App from './App';
-import wagmiClient, { chains } from './Config/wagmiClient';
 import ContextProvider from './contexts';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en.json';
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(en);
+const queryClient = new QueryClient();
 
 const ErrorComponenet = () => {
   return (
@@ -50,6 +57,7 @@ const options = {
 import { inject } from '@vercel/analytics';
 import { RootLevelHooks } from './RootLevelHooks';
 import { BlueBtn } from '@Views/Common/V2-Button';
+import { arbitrum, arbitrumSepolia } from 'viem/chains';
 inject();
 if (typeof Node === 'function' && Node.prototype) {
   const originalRemoveChild = Node.prototype.removeChild;
@@ -102,21 +110,31 @@ if (import.meta.env.VITE_MODE === 'production') {
     ],
   });
 }
-
+const config = getDefaultConfig({
+  appName: 'My RainbowKit App',
+  projectId: 'YOUR_PROJECT_ID',
+  chains: [
+    process.env.ENV?.toLowerCase() == 'testnet' ? arbitrumSepolia : arbitrum,
+  ],
+  ssr: false, // If your dApp uses server side rendering (SSR)
+});
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
-    <WagmiConfig config={wagmiClient}>
-      <RainbowKitProvider chains={chains} theme={darkTheme()}>
-        <HashRouter>
-          <SWRConfig value={options}>
-            <JotaiProvider>
-              <ContextProvider>
-                <App />
-              </ContextProvider>
-            </JotaiProvider>
-          </SWRConfig>
-        </HashRouter>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider theme={darkTheme()}>
+          <HashRouter>
+            <SWRConfig value={options}>
+              <JotaiProvider>
+                <ContextProvider>
+                  {/* <ConnectButton /> */}
+                  <App />
+                </ContextProvider>
+              </JotaiProvider>
+            </SWRConfig>
+          </HashRouter>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   </Sentry.ErrorBoundary>
 );

@@ -27,7 +27,7 @@ import { TradeSizeInput } from './TradeSizeInput';
 import { WalletBalance, formatBalance } from './WalletBalance';
 import { useJackpotInfo } from '@Views/Jackpot/useJackpotInfo';
 import { Link } from 'react-router-dom';
-import { useContractRead } from 'wagmi';
+import { useReadContract } from 'wagmi';
 import { useOneCTWallet } from '@Views/OneCT/useOneCTWallet';
 
 const TradeSizeSelectorBackground = styled.div`

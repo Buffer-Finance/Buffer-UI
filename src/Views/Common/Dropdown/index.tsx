@@ -6,10 +6,15 @@ import { atom, useAtom } from 'jotai';
 import { isDrawerOpen } from 'src/globalStore';
 import Wallet from 'public/ComponentSVGS/wallet';
 import { ArrowDropDownRounded } from '@mui/icons-material';
-import { useDisconnect, useNetwork } from 'wagmi';
+import { useDisconnect, useAccount, useConfig } from 'wagmi';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useActiveChain } from '@Hooks/useActiveChain';
-import { ConnectButton , useAccountModal, useChainModal, useConnectModal} from '@rainbow-me/rainbowkit'
+import {
+  ConnectButton,
+  useAccountModal,
+  useChainModal,
+  useConnectModal,
+} from '@rainbow-me/rainbowkit';
 
 interface IProps {
   inDrawer?: boolean;
@@ -17,14 +22,16 @@ interface IProps {
 export const connectedChainAtom = atom<any>(null);
 const AccountConnectionDropdown: React.FC<IProps> = ({ inDrawer }) => {
   const { address: account } = useUserAccount();
-  const { chain, chains } = useNetwork();
+  const { chain } = useAccount();
+  const { chains } = useConfig();
+
   const { activeChain } = useActiveChain();
   const activeChainName = activeChain?.name;
   const { disconnect } = useDisconnect();
   const { openWalletDrawer } = useConnectionDrawer();
   const [isConnectionDrawerOpen, setIsConnectionDrawerOpen] =
-  useAtom(isDrawerOpen);
-  
+    useAtom(isDrawerOpen);
+
   const { openConnectModal } = useConnectModal();
   // const connect: MouseEventHandler<HTMLDivElement> = (e) => {
   //   // dispatch({ type: "SET_DRAWER", payload: true });
@@ -62,7 +69,7 @@ const AccountConnectionDropdown: React.FC<IProps> = ({ inDrawer }) => {
               ? 'bg-3'
               : 'bg-4 hover:brightness-125 hover:bg-1'
           } ${!account ? 'pr-[10px]' : 'pr-[1px]'}`}
-          onClick={ openConnectModal}
+          onClick={openConnectModal}
         >
           <Wallet className="mr-[6px] ml-1" />
 

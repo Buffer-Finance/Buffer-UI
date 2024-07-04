@@ -4,7 +4,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import AccountConnectionDropdown from '@Views/Common/Dropdown';
 import { changeRoute } from '@Utils/appControls/changeRoute';
 import { ArrowDropDownRounded } from '@mui/icons-material';
-import { useNetwork, Chain } from 'wagmi';
+import { useAccount, Chain } from 'wagmi';
 import { getChains } from 'src/Providers/wagmiClient';
 import * as chain from 'wagmi/chains';
 import { useMemo } from 'react';
