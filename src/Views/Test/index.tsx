@@ -1622,7 +1622,7 @@ export const Test = () => {
           approveMe
         </button>
         <button className="p-3 " onClick={switchCoins}>
-          Click Me
+          send 0.2 USDC.e from arb to polygon
         </button>
       </div>
     </>
