@@ -1,7 +1,7 @@
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { useCall2Data } from '@Utils/useReadCall';
 import { Chain } from 'wagmi';
-import { erc20Abi } from 'viem';
+import { erc20Abi as erc20ABI } from 'viem';
 import BLPABI from '../abis/BLP.json';
 import RewardTrackerABI from '../abis/RewardTracker.json';
 import { getLpConfig } from '../config';
@@ -12,9 +12,7 @@ export const useLPmulticalldata = (
   activePool: poolsType
 ) => {
   const contracts = getLpConfig(activeChain.id);
-  console.log(`lp-log-contracts: `, contracts);
   const { address } = useUserAccount();
-  console.log(`address: `, address);
   const userCalls = address
     ? [
         {
