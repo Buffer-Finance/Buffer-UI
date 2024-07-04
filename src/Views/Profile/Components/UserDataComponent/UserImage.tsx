@@ -7,41 +7,9 @@ export const UserImage: React.FC<{ address: string; isFirst?: boolean }> = ({
   address,
   isFirst = false,
 }) => {
-  const { data } = useSWR(`nfts-the-graph-account-${address}`, {
-    fetcher: async () => {
-      const response = await axios.post(
-        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/api',
-        {
-          query: `{ 
-                nfts(orderBy: tokenId, orderDirection: desc,where: {owner: "${address}"}) {
-                  batchId
-                  nftImage
-                  owner
-                  tier
-                  tokenId
-                  phaseId
-                }
-              }`,
-        }
-      );
-      // console.log(response.data, "response");
-      return response.data?.data as {
-        nfts: IGraphNFT[];
-      };
-    },
-    refreshInterval: 30000,
-  });
-
-  const nfts = data?.nfts;
   const highestTierNFT = useMemo(() => {
-    if (!nfts || nfts.length === 0) return null;
-    const filteredNFTS = nfts.filter((nft) => nft.tier.length > 0);
-    return filteredNFTS.reduce((prev, curr) => {
-      if (Tier[prev.tier.toUpperCase()] < Tier[curr.tier.toUpperCase()])
-        return curr;
-      return prev;
-    }, filteredNFTS[0]);
-  }, [nfts]);
+    return null;
+  }, []);
   return (
     <div className="absolute -top-[20%] m-auto">
       <CircleAroundPicture />
