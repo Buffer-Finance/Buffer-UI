@@ -18,6 +18,8 @@ import { AprDD } from '../AprDD';
 import { BLPprice } from '../BlpPrice';
 import { convertLockPeriodToSeconds } from '../BoostYield/Lock';
 import { convertToNumberOfMonthsAndDays } from '../BoostYield/Transactions/helpers';
+import { useAtom } from 'jotai';
+import { acrossBridgeAtom } from '@Views/AcrossBridge/Modal';
 
 export const Modal: React.FC<{
   isOpen: boolean;
@@ -190,6 +192,7 @@ const DepositAndLockButton: React.FC<{
   balance: string | undefined;
 }> = ({ amount, activeChain, decimals, balance }) => {
   const contracts = getLpConfig(activeChain.id);
+  const [open, setOpen] = useAtom(acrossBridgeAtom);
   const { writeCall } = useWriteCall(contracts.RewardRouter, RewardRouterABI);
   const { writeCall: lockWriteCall } = useWriteCall(
     contracts.nftLockPool,
@@ -280,12 +283,21 @@ const DepositAndLockButton: React.FC<{
   //   );
   // }
   return (
-    <ModalButton
-      isLoading={txnState == 'deposit'}
-      onClick={handleDepositAndLock}
-    >
-      Deposit{' '}
-    </ModalButton>
+    <div className="flex">
+      <ModalButton
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        Deposit from another Chain
+      </ModalButton>
+      <ModalButton
+        isLoading={txnState == 'deposit'}
+        onClick={handleDepositAndLock}
+      >
+        Deposit{' '}
+      </ModalButton>
+    </div>
   );
 };
 

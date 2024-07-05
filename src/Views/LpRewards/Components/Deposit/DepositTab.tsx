@@ -12,6 +12,7 @@ import { ActionButton, Modal } from './Modal';
 import { useTokensPerInterval } from '@Views/LpRewards/Hooks/useTokensPerInterval';
 import { useBlpRate } from '@Views/LpRewards/Hooks/useBlpRate';
 import { multiply } from '@Utils/NumString/stringArithmatics';
+import { AcrossBridgeModal } from '@Views/AcrossBridge/Modal';
 
 export const DepositTab: React.FC<{
   activePool: poolsType;
@@ -59,6 +60,7 @@ export const DepositTab: React.FC<{
     return <Skeleton variant="rectangular" width="100%" height="100px" />;
   return (
     <div>
+      <AcrossBridgeModal />
       <Modal
         activeChain={activeChain}
         isOpen={isModalOpen}

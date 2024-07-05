@@ -1,5 +1,7 @@
 import { ErrorComponenet } from '@Views/ErrorComponent/ErrorComponent';
 import { RenderGraphTestResults } from './GraphTests/RenderGraphTestResults';
+import { utils } from 'ethers';
+
 // import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react';
 import { ErrorBoundary } from 'react-error-boundary';
 import axios from 'axios';
@@ -1446,7 +1448,7 @@ const abi = [
   { stateMutability: 'payable', type: 'receive' },
 ] as const;
 import { useUserAccount } from '@Hooks/useUserAccount';
-import { erc20Abi, zeroAddress } from 'viem';
+import { encodeAbiParameters, erc20Abi, zeroAddress } from 'viem';
 const ada = {};
 // export const Test = () => {
 //   return (
@@ -1504,20 +1506,67 @@ function fallbackRender({ error, resetErrorBoundary }) {
     </div>
   );
 }
-const acrossCode = '0xa6409a97b1c26d0d1b20a2e0b57325999913fd00';
-// const acrossCode = '0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A'
 
+const acrossCode = '0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A';
+const uniswap = '0xF633b72A4C2Fb73b77A379bf72864A825aD35b6D';
+const nativeARBUSDC = '0xaf88d065e77c8cC2239327C5EDb3A432268e5831';
+const usdcNativepolygon = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //usdc.e
+const usdceArb = '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8'; //usdc.e
+const usdcePolygon = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'; //usdc.e
+const sourceContract = nativeARBUSDC; //usdc.e
+const targetContract = usdcePolygon; //usdc.e polygon
+const reward = '0xfd01f94a0fa92374ed4a9c28000Db5a7814FF11b';
 export const Test = () => {
   const { writeContractAsync } = useWriteContract();
   const user = useUserAccount();
+
+  function generateMessageForMulticallHandler(
+    userAddress: string,
+    depositCurrency: string
+  ) {
+    // An Aave deposit requires anyone to first approve the Aave contract to transfer
+    // the tokens to deposit followed by the deposit transaction.
+    const abiCoder = utils.defaultAbiCoder;
+    const approveCalldata = abiCoder.encode(
+      ['address', 'uint256'],
+      [reward, '222111111211']
+    );
+    console.log(`index-approveCalldata: `, approveCalldata);
+    const depositCalldata = abiCoder.encode(
+      ['uint256', 'uint256'],
+      ['1000000', '0']
+    );
+    console.log(`index-depositCalldata: `, depositCalldata);
+
+    return abiCoder.encode(
+      [
+        'tuple(' +
+          'tuple(' +
+          'address target,' +
+          'bytes calldata,' +
+          'uint256 value' +
+          ')[],' +
+          'address fallbackRecipient' +
+          ')',
+      ],
+      [
+        [
+          [
+            [depositCurrency, approveCalldata, 0],
+            [reward, depositCalldata, 0],
+          ],
+          userAddress,
+        ],
+      ]
+    );
+  }
+
   const switchCoins = async () => {
     if (!user?.address) return;
     const amount = 20000;
-    const sourceContract = '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8'; //usdc.e
-    const targetContract = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'; //usdc.e polygon
     const getquotes = await axios.get(`https://app.across.to/api/limits`, {
       params: {
-        inputToken: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+        inputToken: sourceContract,
         outputToken: targetContract,
         originChainId: 42161,
         destinationChainId: 137,
@@ -1525,7 +1574,7 @@ export const Test = () => {
     });
     const dd = await axios.get(`https://app.across.to/api/suggested-fees`, {
       params: {
-        inputToken: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+        inputToken: sourceContract,
         outputToken: targetContract,
         originChainId: 42161,
         destinationChainId: 137,
@@ -1561,11 +1610,62 @@ export const Test = () => {
     });
     console.log(`index-hash: `, hash);
   };
+  const switchCoinsIntent = async () => {
+    if (!user?.address) return;
+    const amount = 20000;
+    const getquotes = await axios.get(`https://app.across.to/api/limits`, {
+      params: {
+        inputToken: sourceContract,
+        outputToken: targetContract,
+        originChainId: 42161,
+        destinationChainId: 137,
+      },
+    });
+    const dd = await axios.get(`https://app.across.to/api/suggested-fees`, {
+      params: {
+        inputToken: sourceContract,
+        outputToken: targetContract,
+        originChainId: 42161,
+        destinationChainId: 137,
+        recipient: user.address,
+        amount,
+        skipAmountLimit: true,
+      },
+    });
+    const relayFee = dd.data.totalRelayFee.total;
+
+    console.log(`index-getquotes: `, getquotes, dd);
+    // const outputAmount = amount -
+    // 0xc456398d5ee3b93828252e48bededbc39e03368e
+    const msg = generateMessageForMulticallHandler(
+      user.address,
+      sourceContract
+    );
+    console.log(`index-msg: `, msg);
+    const { hash } = await writeContractAsync({
+      address: acrossCode,
+      abi,
+      functionName: 'depositV3',
+      args: [
+        user.address,
+        user.address,
+        sourceContract,
+        targetContract,
+        amount,
+        amount - relayFee,
+        137n,
+        zeroAddress,
+        dd.data.timestamp,
+        Math.round(Date.now() / 1000) + 18000,
+        0,
+        msg,
+      ],
+    });
+    // console.log(`index-hash: `, hash);
+  };
   const approve = async () => {
     if (!user?.address) return;
     const amount = 20000;
-    const sourceContract = '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'; //usdc.e
-    const targetContract = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'; //usdc.e polygon
 
     // const outputAmount = amount -
     // 0xc456398d5ee3b93828252e48bededbc39e03368e
@@ -1598,12 +1698,12 @@ export const Test = () => {
   };
   return (
     <>
-      <div className="w-[100vw] h-[100vh] bg-red">
+      <div className="w-[100vw] h-[100vh] ">
         <button className="p-3 " onClick={approve}>
           approveMe
         </button>
-        <button className="p-3 " onClick={switchCoins}>
-          send 0.2 USDC.e from arb to polygon
+        <button className="p-3 " onClick={switchCoinsIntent}>
+          send with intent
         </button>
       </div>
     </>
