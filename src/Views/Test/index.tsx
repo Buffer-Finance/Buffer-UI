@@ -1543,8 +1543,6 @@ export const Test = () => {
     depositCurrency: string,
     amount: number
   ) {
-    // An Aave deposit requires anyone to first approve the Aave contract to transfer
-    // the tokens to deposit followed by the deposit transaction.
     const abiCoder = utils.defaultAbiCoder;
     const approveCalldata = abiCoder.encode(
       ['address', 'uint256'],
