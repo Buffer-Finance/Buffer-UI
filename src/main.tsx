@@ -57,7 +57,7 @@ const options = {
 import { inject } from '@vercel/analytics';
 import { RootLevelHooks } from './RootLevelHooks';
 import { BlueBtn } from '@Views/Common/V2-Button';
-import { arbitrum, arbitrumSepolia } from 'viem/chains';
+import { arbitrum, arbitrumSepolia, polygon } from 'viem/chains';
 inject();
 if (typeof Node === 'function' && Node.prototype) {
   const originalRemoveChild = Node.prototype.removeChild;
@@ -114,7 +114,7 @@ const config = getDefaultConfig({
   appName: 'My RainbowKit App',
   projectId: 'YOUR_PROJECT_ID',
   chains: [
-    process.env.ENV?.toLowerCase() == 'testnet' ? arbitrumSepolia : arbitrum,
+    process.env.ENV?.toLowerCase() == 'testnet' ? arbitrumSepolia : polygon,
   ],
   ssr: false, // If your dApp uses server side rendering (SSR)
 });

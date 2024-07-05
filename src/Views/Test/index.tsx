@@ -5,7 +5,7 @@ import { utils } from 'ethers';
 // import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react';
 import { ErrorBoundary } from 'react-error-boundary';
 import axios from 'axios';
-import { useWriteContract } from 'wagmi';
+import { usePublicClient, useWriteContract } from 'wagmi';
 const abi = [
   {
     inputs: [
@@ -1449,6 +1449,7 @@ const abi = [
 ] as const;
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { encodeAbiParameters, erc20Abi, zeroAddress } from 'viem';
+import { useEffect } from 'react';
 const ada = {};
 // export const Test = () => {
 //   return (
@@ -1506,23 +1507,41 @@ function fallbackRender({ error, resetErrorBoundary }) {
     </div>
   );
 }
+const originChainId = 137;
+const destChainId = 42161;
 
-const acrossCode = '0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A';
+// const acrossCode = '0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A';
+const acrossCode = '0x9295ee1d8C5b022Be115A2AD3c30C72E34e7F096';
 const uniswap = '0xF633b72A4C2Fb73b77A379bf72864A825aD35b6D';
 const nativeARBUSDC = '0xaf88d065e77c8cC2239327C5EDb3A432268e5831';
 const usdcNativepolygon = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'; //usdc.e
 const usdceArb = '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8'; //usdc.e
 const usdcePolygon = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'; //usdc.e
-const sourceContract = nativeARBUSDC; //usdc.e
-const targetContract = usdcePolygon; //usdc.e polygon
+const tgtContract = nativeARBUSDC;
+const srcContract = usdcNativepolygon;
 const reward = '0xfd01f94a0fa92374ed4a9c28000Db5a7814FF11b';
+const multicallHandler = '0xA18cD406a857e174397814F32c0Ef7cC68Ddc20F';
 export const Test = () => {
   const { writeContractAsync } = useWriteContract();
   const user = useUserAccount();
-
+  const publicClient = usePublicClient();
+  useEffect(() => {
+    if (publicClient) {
+      console.log('event-capturedstart');
+      publicClient.watchContractEvent({
+        address: acrossCode,
+        abi,
+        eventName: 'V3FundsDeposited',
+        onLogs: (log) => {
+          console.log('event-captured', log);
+        },
+      });
+    }
+  }, [publicClient]);
   function generateMessageForMulticallHandler(
     userAddress: string,
-    depositCurrency: string
+    depositCurrency: string,
+    amount: number
   ) {
     // An Aave deposit requires anyone to first approve the Aave contract to transfer
     // the tokens to deposit followed by the deposit transaction.
@@ -1534,7 +1553,7 @@ export const Test = () => {
     console.log(`index-approveCalldata: `, approveCalldata);
     const depositCalldata = abiCoder.encode(
       ['uint256', 'uint256'],
-      ['1000000', '0']
+      [amount.toString(), '0']
     );
     console.log(`index-depositCalldata: `, depositCalldata);
 
@@ -1561,86 +1580,57 @@ export const Test = () => {
     );
   }
 
-  const switchCoins = async () => {
-    if (!user?.address) return;
-    const amount = 20000;
-    const getquotes = await axios.get(`https://app.across.to/api/limits`, {
-      params: {
-        inputToken: sourceContract,
-        outputToken: targetContract,
-        originChainId: 42161,
-        destinationChainId: 137,
-      },
-    });
-    const dd = await axios.get(`https://app.across.to/api/suggested-fees`, {
-      params: {
-        inputToken: sourceContract,
-        outputToken: targetContract,
-        originChainId: 42161,
-        destinationChainId: 137,
-        recipient: user.address,
-        amount,
-        skipAmountLimit: true,
-      },
-    });
-    const relayFee = dd.data.totalRelayFee.total;
-
-    console.log(`index-getquotes: `, getquotes, dd);
-    // const outputAmount = amount -
-    // 0xc456398d5ee3b93828252e48bededbc39e03368e
-
-    const { hash } = await writeContractAsync({
-      address: acrossCode,
-      abi,
-      functionName: 'depositV3',
-      args: [
-        user.address,
-        user.address,
-        sourceContract,
-        targetContract,
-        amount,
-        amount - relayFee,
-        137n,
-        zeroAddress,
-        dd.data.timestamp,
-        Math.round(Date.now() / 1000) + 18000,
-        0,
-        '0x',
-      ],
-    });
-    console.log(`index-hash: `, hash);
-  };
   const switchCoinsIntent = async () => {
     if (!user?.address) return;
-    const amount = 20000;
-    const getquotes = await axios.get(`https://app.across.to/api/limits`, {
-      params: {
-        inputToken: sourceContract,
-        outputToken: targetContract,
-        originChainId: 42161,
-        destinationChainId: 137,
-      },
-    });
-    const dd = await axios.get(`https://app.across.to/api/suggested-fees`, {
-      params: {
-        inputToken: sourceContract,
-        outputToken: targetContract,
-        originChainId: 42161,
-        destinationChainId: 137,
-        recipient: user.address,
-        amount,
-        skipAmountLimit: true,
-      },
-    });
-    const relayFee = dd.data.totalRelayFee.total;
-
-    console.log(`index-getquotes: `, getquotes, dd);
-    // const outputAmount = amount -
-    // 0xc456398d5ee3b93828252e48bededbc39e03368e
+    const amount = 100000;
     const msg = generateMessageForMulticallHandler(
       user.address,
-      sourceContract
+      tgtContract,
+      amount
     );
+    // const getquotes = await axios.get(`https://app.across.to/api/limits`, {
+    //   params: {
+    //     inputToken: srcContract,
+    //     outputToken: tgtContract,
+    //     originChainId: 137,
+    //     destinationChainId: destChainId
+    //   },
+    // });
+
+    const routesAvailable = await axios.get(
+      `https://app.across.to/api/available-routes`,
+      {
+        params: {
+          originChainId: originChainId,
+          destinationChainId: destChainId,
+          originToken: srcContract,
+          destinationToken: tgtContract,
+        },
+      }
+    );
+    // const reciepent = user.address;
+    const reciepent = multicallHandler;
+    console.log(`index-dds: `, routesAvailable.data);
+    const suggestedFees = await axios.get(
+      `https://app.across.to/api/suggested-fees`,
+      {
+        params: {
+          inputToken: srcContract,
+          outputToken: tgtContract,
+          originChainId: originChainId,
+          destinationChainId: destChainId,
+          recipient: reciepent,
+          amount,
+          message: msg,
+          fallbackRecipient: user,
+        },
+      }
+    );
+    const relayFee = suggestedFees.data.totalRelayFee.total;
+
+    // const outputAmount = amount -
+    // 0xc456398d5ee3b93828252e48bededbc39e03368e
+
     console.log(`index-msg: `, msg);
     const { hash } = await writeContractAsync({
       address: acrossCode,
@@ -1648,17 +1638,18 @@ export const Test = () => {
       functionName: 'depositV3',
       args: [
         user.address,
-        user.address,
-        sourceContract,
-        targetContract,
+        reciepent,
+        srcContract,
+        tgtContract,
         amount,
         amount - relayFee,
-        137n,
+        BigInt(destChainId),
         zeroAddress,
-        dd.data.timestamp,
+        suggestedFees.data.timestamp,
         Math.round(Date.now() / 1000) + 18000,
         0,
         msg,
+        // '0x',
       ],
     });
     // console.log(`index-hash: `, hash);
@@ -1666,11 +1657,11 @@ export const Test = () => {
   const approve = async () => {
     if (!user?.address) return;
     const amount = 20000;
-
+    console.log('approving');
     // const outputAmount = amount -
     // 0xc456398d5ee3b93828252e48bededbc39e03368e
     const { hash } = await writeContractAsync({
-      address: sourceContract,
+      address: srcContract,
       abi: erc20Abi,
       functionName: 'approve',
       args: [acrossCode, 232323232232323n],
