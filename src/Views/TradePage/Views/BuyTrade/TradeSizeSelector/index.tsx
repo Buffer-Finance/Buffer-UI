@@ -110,6 +110,7 @@ export const PlatfromFeeError = ({
   payout: any;
 }) => {
   console.log('payout', payout);
+  if (payout == undefined || payout == null) return null;
   const jackpotValue = useJackpotInfo();
   const denominator = divide(multiply(payout, '2'), 2);
   let jackpotEligibilityValue =
