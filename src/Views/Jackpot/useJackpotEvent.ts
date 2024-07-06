@@ -27,49 +27,50 @@ const useJackpotEvent = () => {
 
   useEffect(() => {
     console.log('jackpotdeb-listening');
+    let unwatch = () => {};
     // console.log(`publicClient2: `, publicClient2);
-
-    const unwatch = publicClient2.watchContractEvent({
-      address: JackpotAdds,
-      abi: JackootABI,
-      eventName: 'JackpotTriggered',
-      onLogs: (logs) => {
-        console.log('jackpotdeb-triggered-1', logs, user?.address);
-        try {
-          if (!user?.address) return;
-          let logArgs = logs[0].args;
-          for (const log of logs) {
-            if (log.args.jackpotWinAmount > logArgs.jackpotWinAmount) {
-              logArgs = log.args;
+    if (publicClient2)
+      unwatch = publicClient2?.watchContractEvent({
+        address: JackpotAdds,
+        abi: JackootABI,
+        eventName: 'JackpotTriggered',
+        onLogs: (logs) => {
+          console.log('jackpotdeb-triggered-1', logs, user?.address);
+          try {
+            if (!user?.address) return;
+            let logArgs = logs[0].args;
+            for (const log of logs) {
+              if (log.args.jackpotWinAmount > logArgs.jackpotWinAmount) {
+                logArgs = log.args;
+              }
             }
-          }
-          if (logArgs.jackpotWinAmount == 0n) return;
-          const jp = {
-            option_id: +logArgs.optionId.toString(),
-            target_contract: logArgs.optionContract,
-            jackpot_amount: logArgs.jackpotWinAmount.toString(),
-            router: logArgs.router,
-            user_address: logArgs.userAddress,
-            trade_size: logArgs.amount.toString(),
-          };
-          console.log('jackpotdeb-triggered-1.5', logs, user?.address);
+            if (logArgs.jackpotWinAmount == 0n) return;
+            const jp = {
+              option_id: +logArgs.optionId.toString(),
+              target_contract: logArgs.optionContract,
+              jackpot_amount: logArgs.jackpotWinAmount.toString(),
+              router: logArgs.router,
+              user_address: logArgs.userAddress,
+              trade_size: logArgs.amount.toString(),
+            };
+            console.log('jackpotdeb-triggered-1.5', logs, user?.address);
 
-          if (
-            user.address?.toLowerCase() == logArgs.userAddress.toLowerCase()
-          ) {
-            console.log('jackpotdeb-triggered-2', jp);
+            if (
+              user.address?.toLowerCase() == logArgs.userAddress.toLowerCase()
+            ) {
+              console.log('jackpotdeb-triggered-2', jp);
 
-            jackpotManager.addJackpot(jp);
+              jackpotManager.addJackpot(jp);
+            }
+          } catch (e) {
+            console.log('jackpotdeb-error', e);
           }
-        } catch (e) {
-          console.log('jackpotdeb-error', e);
-        }
-      },
-    });
+        },
+      });
     return () => {
       console.log('jackpotdeb-cleaning');
 
-      unwatch();
+      unwatch?.();
     };
   }, [user, publicClient2, jackpotManager.addJackpot]);
   return null;
