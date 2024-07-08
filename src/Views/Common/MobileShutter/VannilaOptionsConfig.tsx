@@ -15,8 +15,10 @@ import { TimePicker } from '@Views/TradePage/Views/BuyTrade/TimeSelector/TimePic
 import TimePickerSelection from '../IOSTimePicer/components/TimePickerSelection';
 import { IOSTimePicker } from '../IOSTimePicer';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { HHMMToSeconds } from '@Views/TradePage/utils';
+import { HHMMToSeconds, joinStrings } from '@Views/TradePage/utils';
 import { MarketStatsBar } from '@Views/TradePage/Views/MarketChart/MarketStatsBar';
+import { useSelectedAssetPayout } from '@Views/TradePage/Views/MarketChart/Payout';
+import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
 const tabs = ['Amount', 'Duration'];
 export const shutterActiveTabAtom = atom(tabs[0]);
 
@@ -28,6 +30,17 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
   const onSubmit = (e: React.FormEvent) => {
     closeShutter();
   };
+  const { switchPool } = useSwitchPool();
+
+  const { activeMarket } = useActiveMarket();
+
+  const { calculatePayout } = useSelectedAssetPayout();
+  let payout: string | null = '';
+  const { payout: totalPayout } = calculatePayout(
+    joinStrings(activeMarket.token0, activeMarket.token1, ''),
+    switchPool.optionContract
+  );
+  payout = totalPayout;
   const currentTime = useAtomValue(timeSelectorAtom);
   console.log(`VannilaOptionsConfig-currentTime: `, currentTime);
   const setDuration = useSetAtom(timeSelectorAtom);
@@ -35,7 +48,7 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
     const seconds = HHMMToSeconds(timeValue);
     setDuration((val) => ({ HHMM: timeValue, seconds }));
   };
-  const { switchPool } = useSwitchPool();
+  console.log(`VannilaOptionsConfig-payout: `, payout);
 
   return (
     <>
@@ -55,7 +68,7 @@ const VanillaBOConfigs: React.FC<MobileShutterProps> = () => {
       <HorizontalTransition value={tabs.indexOf(activeTab)}>
         <div>
           <MarketStatsBar isMobile />
-          <TradeSizeSelector onSubmit={onSubmit} />
+          <TradeSizeSelector onSubmit={onSubmit} payout={payout} />
           <BlueBtn onClick={onSubmit} className="mt-4">
             Continue
           </BlueBtn>
