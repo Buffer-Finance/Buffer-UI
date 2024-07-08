@@ -45,7 +45,7 @@ export const TradeSizeSelector: React.FC<{
   const tradeSize = useAtomValue(tradeSizeAtom);
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;
-  console.log(`index-registeredOneCT: `, registeredOneCT);
+  console.log(`1index-registeredOneCT: `, registeredOneCT);
 
   const decimals = poolDetails.decimals;
   const balance = divide(readcallData.balance ?? 0, decimals) as string;
