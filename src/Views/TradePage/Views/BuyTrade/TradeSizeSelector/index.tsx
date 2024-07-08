@@ -45,6 +45,7 @@ export const TradeSizeSelector: React.FC<{
   const tradeSize = useAtomValue(tradeSizeAtom);
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;
+  console.log(`index-registeredOneCT: `, registeredOneCT);
 
   const decimals = poolDetails.decimals;
   const balance = divide(readcallData.balance ?? 0, decimals) as string;
@@ -153,6 +154,7 @@ export const PlatfromFeeError = ({
     `index-notEnooghForFee && notEnoughForTrade: `,
     notEnooghForFee && notEnoughForTrade
   );
+  console.log(`index-isError: `, isError);
   return (
     <RowGapItemsTop
       gap="2px"
@@ -166,15 +168,13 @@ export const PlatfromFeeError = ({
           </div>
         </>
       ) : (
-        !isError && (
-          <div className="flex flex-col">
-            <span className="flex gap-1">
-              <LightToolTipSVG className="mt-[2px]" />
-              Platform fee : + {platfromFee} {tradeToken}
-            </span>
-            <span>{JackpotChip}</span>
-          </div>
-        )
+        <div className="flex flex-col">
+          <span className="flex gap-1">
+            <LightToolTipSVG className="mt-[2px]" />
+            Platform fee : + {platfromFee} {tradeToken}
+          </span>
+          <span>{JackpotChip}</span>
+        </div>
       )}
     </RowGapItemsTop>
   );
