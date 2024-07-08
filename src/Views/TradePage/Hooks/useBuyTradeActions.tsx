@@ -48,6 +48,7 @@ import { useSpread } from './useSpread';
 import { useSwitchPool } from './useSwitchPool';
 import { useProducts } from '@Views/AboveBelow/Hooks/useProductName';
 import { pendingQueueIds } from 'src/App';
+import { postQueuedId } from '@Utils/postQueuedId';
 enum ArgIndex {
   Strike = 4,
   Period = 2,
@@ -436,7 +437,10 @@ export const useBuyTradeActions = (userInput: string) => {
           apiParams,
           { params: { environment: activeChain.id } }
         );
-        if (resp.data) pendingQueueIds.add(resp.data.queue_id);
+        if (resp.data) {
+          pendingQueueIds.add(resp.data.queue_id);
+          postQueuedId(resp?.data?.queue_id);
+        }
         setLoading(null);
         let content = (
           <div className="flex flex-col gap-y-2 text-f12 ">
@@ -473,36 +477,6 @@ export const useBuyTradeActions = (userInput: string) => {
           body: null,
           msg: content,
         });
-        if (!customTrade.limitOrderExpiry) {
-          getLockedAmount(
-            baseArgs[ArgIndex.Strike],
-            baseArgs[ArgIndex.Size],
-            baseArgs[ArgIndex.Period],
-            baseArgs[ArgIndex.PartialFill],
-            address as string,
-            baseArgs[ArgIndex.Referral],
-            // baseArgs[ArgIndex.NFT],
-            settelmentFee.settlement_fee,
-            baseArgs[ArgIndex.Slippage],
-            baseArgs[ArgIndex.TargetContract],
-            provider,
-            configData.multicall as string
-          ).then((lockedAmount: string[]) => {
-            setPriceCache((t) => ({
-              ...t,
-              [activeAsset.tv_id + baseArgs[ArgIndex.Size]]: lockedAmount[0][0],
-            }));
-          });
-          const queuedPrice = await getCachedPrice({
-            pair: activeAsset.tv_id,
-            timestamp: resp.data.open_timestamp,
-          });
-
-          setPriceCache((t) => ({
-            ...t,
-            [resp.data.queue_id]: queuedPrice,
-          }));
-        }
 
         content = (
           <div className="flex flex-col gap-y-2 text-f12 ">

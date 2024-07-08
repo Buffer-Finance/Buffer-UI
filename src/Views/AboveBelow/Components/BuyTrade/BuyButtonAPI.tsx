@@ -44,6 +44,7 @@ import { KeyedMutator } from 'swr';
 import { PrivateKeyAccount, getAddress } from 'viem';
 import { useAccount } from 'wagmi';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
+import { postQueuedId } from '@Utils/postQueuedId';
 
 export const BuyButton = () => {
   const { signTypedDataAsync } = useSignTypedData();
@@ -482,7 +483,7 @@ const Buy: React.FC<{
         product_id: productNames['AB'].product_id,
         asset_pair: activeMarket.token0 + activeMarket.token1,
       };
-      console.log({ apiParams });
+      // console.log({ apiParams });
 
       const trailingUrl = 'create/';
 
@@ -491,6 +492,7 @@ const Buy: React.FC<{
         apiParams,
         { params: { environment: activeChainId } }
       );
+      postQueuedId(resp?.data?.queue_id);
       const content = (
         <div className="flex flex-col gap-y-2 text-f12 ">
           <div className="nowrap font-[600]">Trade order placed</div>
