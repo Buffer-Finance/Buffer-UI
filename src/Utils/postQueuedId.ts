@@ -3,10 +3,10 @@ import axios from 'axios';
 
 export const postQueuedId = async (
   queuedId: string | number | null | undefined,
-  product: 'UD' | 'AB'
+  product: string
 ) => {
   if (!queuedId) return;
   axios.post(baseUrl + 'txnHashTrade/', null, {
-    params: { txnHash: queuedId + ':' + product },
+    params: { txnHash: product + ':' + queuedId },
   });
 };

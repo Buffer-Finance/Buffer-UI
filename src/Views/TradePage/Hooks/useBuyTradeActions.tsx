@@ -439,7 +439,7 @@ export const useBuyTradeActions = (userInput: string) => {
         );
         if (resp.data) {
           pendingQueueIds.add(resp.data.queue_id);
-          postQueuedId(resp?.data?.queue_id,'UD');
+          postQueuedId(resp?.data?.queue_id, configData.router);
         }
         setLoading(null);
         let content = (
