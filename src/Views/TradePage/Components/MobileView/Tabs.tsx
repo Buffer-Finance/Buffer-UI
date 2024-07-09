@@ -11,8 +11,8 @@ export const Tabs = () => {
   const [activeTab, setActiveTab] = useAtom(mobileTradePageTabs);
   return (
     <div>
-      <div className="flex items-center gap-[20px] ">
-        {['trade', 'Platform Activity'].map((tab) => {
+      {/* <div className="flex items-center gap-[20px] ">
+        {['trade'].map((tab) => {
           const activeTabClass =
             tab.toLowerCase() === activeTab.toLowerCase()
               ? 'text-1'
@@ -29,7 +29,7 @@ export const Tabs = () => {
             </button>
           );
         })}
-      </div>
+      </div> */}
       <HorizontalTransition value={activeTab === 'trade' ? 0 : 1}>
         {activeMarket ? (
           <MultiResolutionChart

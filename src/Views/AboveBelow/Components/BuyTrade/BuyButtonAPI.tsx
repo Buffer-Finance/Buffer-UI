@@ -492,7 +492,7 @@ const Buy: React.FC<{
         apiParams,
         { params: { environment: activeChainId } }
       );
-      postQueuedId(resp?.data?.queue_id);
+      postQueuedId(resp?.data?.queue_id,'AB');
       const content = (
         <div className="flex flex-col gap-y-2 text-f12 ">
           <div className="nowrap font-[600]">Trade order placed</div>
