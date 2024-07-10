@@ -18,6 +18,13 @@ const addMarketInTrades = (
       (pool) =>
         pool.optionContract.toLowerCase() === t?.target_contract.toLowerCase()
     );
+    if (tradeMarket?.category == 'Forex') {
+      t = {
+        ...t,
+        strike: t.strike * 1000,
+        expiry_price: t.expiry_price ? t.expiry_price * 1000 : null,
+      };
+    }
     // console.log(`pool: `, pool);
     return {
       ...t,

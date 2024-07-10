@@ -14,6 +14,13 @@ const addMarketInTrades = (
 
       if (!tradeMarket) return t;
       const pool = tradeMarket.poolInfo;
+      if (tradeMarket?.category == 'Forex') {
+        t = {
+          ...t,
+          strike: t.strike * 1000,
+          expiry_price: t.expiry_price ? t.expiry_price * 1000 : null,
+        };
+      }
       return {
         ...t,
         market: tradeMarket,
