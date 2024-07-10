@@ -29,9 +29,7 @@ export const DisplayTime = ({
   className?: string;
   reverse?: boolean;
 }) => {
-  const content = reverse
-    ? [`${getDisplayDate(+ts)}`, `${getDisplayTime(+ts)}`]
-    : [`${getDisplayTime(+ts)}`, `${getDisplayDate(+ts)}`];
+  const content = [`${getDisplayDate(+ts)}`, `${getDisplayTime(+ts)}`];
   return (
     <NumberTooltip
       content={`${getDisplayTimeUTC(+ts)} ${getDisplayDateUTC(+ts)} UTC`}
