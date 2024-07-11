@@ -41,7 +41,7 @@ export const getROI = (totalFee: number | null) => {
 };
 export const getMultiplier = (totalFee: number | null) => {
   if (totalFee == null) return '-';
-  return ((1 - totalFee) / totalFee + 1).toFixed(1) + 'x';
+  return ((1 - totalFee) / totalFee + 1).toFixed(2) + 'x';
 };
 
 export const PriceTable: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
