@@ -181,7 +181,9 @@ export const StrikePriceComponent = ({
         precision={trade.market.price_precision.toString().length - 1}
         className={`justify-self-start content-start  w-max ${className}`}
       />
-      {pathname.includes('/trades') ? <TradeData trade={trade} /> : null}
+      {pathname.includes('/trades') || pathname.includes('/history') ? (
+        <TradeData trade={trade} />
+      ) : null}
     </div>
   );
 };
