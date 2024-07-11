@@ -165,8 +165,9 @@ export const StrikePriceComponent = ({
     cachedPrices,
     spread
   );
+  const { pathname } = useLocation();
   return (
-    <>
+    <div className="flex gap-2 items-center">
       <Display
         data={divide(strikePrice, 8)}
         // unit={configData.token1}
@@ -185,8 +186,9 @@ export const StrikePriceComponent = ({
           />
         </div>
       ) : null}
+      {pathname.includes('/trades') ? <TradeData trade={trade} /> : null}
       {/* {trade.state == 'QUEUED' ? 'queued' : null} */}
-    </>
+    </div>
   );
 };
 
@@ -236,6 +238,8 @@ import { queuets2priceAtom } from '@Views/TradePage/atoms';
 import { getSafeStrike } from '@Views/TradePage/utils/getSafeStrike';
 import { useAtomValue } from 'jotai';
 import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
+import { useLocation } from 'react-router-dom';
+import { TradeData } from '@Views/Common/TradeData';
 export const getEarlyCloseStatus = (
   trade: TradeType
 ): [status: boolean, tooltip?: string] => {

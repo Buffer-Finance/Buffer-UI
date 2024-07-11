@@ -172,15 +172,17 @@ export const StrikePriceComponent = ({
     cachedPrices,
     spread
   );
+  const { pathname } = useLocation();
   return (
-    <>
+    <div className="flex gap-2 items-center">
       <Display
         data={divide(strikePrice, 8)}
         // unit={configData.token1}
         precision={trade.market.price_precision.toString().length - 1}
         className={`justify-self-start content-start  w-max ${className}`}
       />
-    </>
+      {pathname.includes('/trades') ? <TradeData trade={trade} /> : null}
+    </div>
   );
 };
 
@@ -230,6 +232,8 @@ import { queuets2priceAtom } from '@Views/ABTradePage/atoms';
 import { getSafeStrike } from '@Views/ABTradePage/utils/getSafeStrike';
 import { useAtomValue } from 'jotai';
 import NoMatchFound from 'src/SVG/Elements/NoMatchFound';
+import { useLocation } from 'react-router-dom';
+import { TradeData } from '@Views/Common/TradeData';
 // export const getEarlyCloseStatus = (
 //   trade: TradeType
 // ): [status: boolean, tooltip?: string] => {
