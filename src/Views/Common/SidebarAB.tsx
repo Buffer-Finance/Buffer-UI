@@ -8,12 +8,12 @@ const Slug2Icon = {
 };
 const tabs = [
   {
-    tab: 'Up Down',
-    slug: 'binary',
-  },
-  {
     tab: 'Above Below',
     slug: 'ab',
+  },
+  {
+    tab: 'Up Down',
+    slug: 'binary',
   },
 ];
 
