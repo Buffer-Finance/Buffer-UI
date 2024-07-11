@@ -4,7 +4,7 @@ import { JackpotModal } from '@Views/TradePage/Views/AccordionTable/ShareModal/J
 
 const RootLevelHooks: React.FC<any> = ({}) => {
   useJackpotEvent();
-  useRecentWinners();
+  // useRecentWinners();
   return <JackpotModal />;
 };
 

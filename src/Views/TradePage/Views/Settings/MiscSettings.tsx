@@ -64,13 +64,13 @@ export const MiscSettings: React.FC = () => {
         />
       </RowBetween>
       {/*  */}
-      <RowBetween className="mt-4">
+      {/* <RowBetween className="mt-4">
         <SettingsText>Show Platform Winning Notifications</SettingsText>
         <Switch
           isOn={settings.showPlatformWinningsNotification}
           onChange={togglePlatformWinningNotifications}
         />
-      </RowBetween>
+      </RowBetween> */}
     </div>
   );
 };
