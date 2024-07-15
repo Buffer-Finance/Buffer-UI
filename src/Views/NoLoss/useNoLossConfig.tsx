@@ -15,7 +15,7 @@ export const useNoLossStaticConfig = () => {
   const { activeChain } = useActiveChain();
   const data = useMemo(() => {
     console.log(`activeChain.id: `, activeChain.id);
-    const graphUrl = noLossConfig[activeChain.id]?.graph.MAIN;
+    const graphUrl = noLossConfig[activeChain.id]?.'MAIN-PONDER';
     console.log(`noLossConfig[activeChain.id]: `, noLossConfig[activeChain.id]);
     const chainId = activeChain.id;
     const multicall = noLossConfig[activeChain.id]?.multicall;
@@ -77,7 +77,7 @@ const useNoLossConfig = () => {
           isPaused
         }
         `;
-        const response = await axios.post(config.graph.MAIN, {
+        const response = await axios.post('MAIN-PONDER', {
           query: `{${basicQuery}}`,
         });
         let calls = [];

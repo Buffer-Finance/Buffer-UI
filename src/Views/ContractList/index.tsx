@@ -31,7 +31,7 @@ export const ContractList = () => {
 
   async function fetcher() {
     try {
-      const { data, status } = await axios.post(config.graph.MAIN, {
+      const { data, status } = await axios.post('MAIN-PONDER', {
         query: `{ 
                 optionContracts(first:10000){
                           configContract {
