@@ -5,7 +5,7 @@ import { getAddress } from 'viem';
 import { getTimestamps } from './Components/BuyTrade/ExpiryDate/helpers';
 import { IreadCallData, accordianTableType, marketTypeAB } from './types';
 
-export const selectedExpiry = atom<number | undefined>(getTimestamps()[0]);
+export const selectedExpiry = atom<number>(getTimestamps()[0]);
 
 export const aboveBelowMarketsAtom = atom<marketTypeAB[] | null>(null);
 export const aboveBelowmarketsSetterAtom = atom(

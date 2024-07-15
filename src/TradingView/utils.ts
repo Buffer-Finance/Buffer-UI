@@ -232,3 +232,7 @@ export const getKlineFromPrice = (asset) => {
 
   return priceObj;
 };
+
+export const isExpiryStale = (selectedTimestamp: number) => {
+  return selectedTimestamp ? selectedTimestamp - Date.now() < 43200000 : false;
+};

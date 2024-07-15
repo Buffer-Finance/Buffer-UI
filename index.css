@@ -21,6 +21,11 @@ body {
   overflow: hidden;
 }
 
+.wrong-selection {
+  border: 1px solid red;
+  border-radius: 8px;
+}
+
 .notifbg {
   background-image: url('/notifbg.svg');
   background-repeat: no-repeat;

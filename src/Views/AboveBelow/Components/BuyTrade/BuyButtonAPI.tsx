@@ -45,6 +45,7 @@ import { PrivateKeyAccount, getAddress } from 'viem';
 import { useAccount } from 'wagmi';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
 import { postQueuedId } from '@Utils/postQueuedId';
+import { isExpiryStale } from '@TV/utils';
 
 export const BuyButton = () => {
   const { signTypedDataAsync } = useSignTypedData();
@@ -353,6 +354,10 @@ const Buy: React.FC<{
       if (!amount || amount === '0')
         throw new Error('Please enter a valid amount');
       if (!selectedTimestamp) throw new Error('Please select expiry date');
+      if (isExpiryStale(selectedTimestamp))
+        throw new Error(
+          'Selected expiry is not valid anymore, please reselect the expiry from expiry dropdown.'
+        );
       if (!selectedPrice) throw new Error('Please select strike price');
       if (!readCallData) throw new Error('Error fetching data');
       if (!activeMarket) throw new Error('active market not found');

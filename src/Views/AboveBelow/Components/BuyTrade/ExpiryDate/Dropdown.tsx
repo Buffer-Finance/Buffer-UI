@@ -11,6 +11,7 @@ import {
 } from '@szhsin/react-menu';
 import { useAtom } from 'jotai';
 import { formatDateWithTime, getTimestamps } from './helpers';
+import { isExpiryStale } from '@TV/utils';
 
 export const DropDown = () => {
   const [selectedTimestamp, setSelectedTimestamp] = useAtom(selectedExpiry);
@@ -33,13 +34,17 @@ export const DropDown = () => {
     setSelectedStrike(undefined);
   }
   const timestamps = getTimestamps();
+  const staleExpiry = isExpiryStale(selectedTimestamp);
   return (
     <MenuBackground>
       <Menu
         menuButton={({ open }) => {
           return (
             <MenuButton
-              className={`!bg-[#282B39] px-5 pl-6 !w-full rounded-[2px] py-2 text-f14 text-[#C3C2D4]  font-medium`}
+              className={
+                (staleExpiry ? 'wrong-selection' : '') +
+                ` !bg-[#282B39] px-5 pl-6 !w-full rounded-[2px] py-2 text-f14 text-[#C3C2D4]  font-medium`
+              }
             >
               <RowGap gap="8px" className="w-full">
                 {selectedTimestamp
@@ -57,7 +62,7 @@ export const DropDown = () => {
       >
         {timestamps.map((timestamp) => {
           return (
-            <MenuItem onClick={onClick} value={timestamp}>
+            <MenuItem key={timestamp} onClick={onClick} value={timestamp}>
               {formatDateWithTime(timestamp)}
             </MenuItem>
           );
