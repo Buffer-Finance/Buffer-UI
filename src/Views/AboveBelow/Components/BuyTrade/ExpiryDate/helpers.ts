@@ -34,7 +34,10 @@ export function getTimestamps(date = Date.now()) {
   }
 
   //add next day if the start of day is less than 36 hours away
-  if (startOfDayTimestamp - currentTimestamp < 129600000) {
+  if (
+    startOfDayTimestamp - currentTimestamp > 43200000 &&
+    startOfDayTimestamp - currentTimestamp < 129600000
+  ) {
     const nextDay = new Date(date);
     nextDay.setUTCDate(nextDay.getUTCDate() + 1);
     nextDay.setUTCHours(8, 0, 0, 0);
