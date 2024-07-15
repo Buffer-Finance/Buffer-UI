@@ -9,6 +9,7 @@ export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
   // console.log(`data: `, data);
   const res = useMemo(() => {
+    console.log(`data?.optionContracts: `, data?.optionContracts);
     if (!data?.optionContracts) {
       return null;
     }
@@ -50,8 +51,6 @@ export function createPoolObject(market: responseObj) {
     isPaused: market.isPaused,
     configContract: getAddress(market.configContract.address),
     optionContract: getAddress(market.address),
-    marketOiContract: getAddress(market.configContract.marketOIaddress),
-    poolOIContract: getAddress(market.configContract.poolOIaddress),
     platformFee: market.configContract.platformFee,
     earlyclose: {
       enable: market.configContract.isEarlyCloseEnabled,
@@ -60,9 +59,6 @@ export function createPoolObject(market: responseObj) {
     IV: Number(market.configContract.IV),
     IVFactorOTM: Number(market.configContract.IVFactorOTM),
     IVFactorITM: Number(market.configContract.IVFactorITM),
-    SpreadConfig1: Number(market.configContract.SpreadConfig1),
-    SpreadConfig2: Number(market.configContract.SpreadConfig2),
-    SpreadFactor: Number(market.configContract.SpreadFactor),
     isRegistered: market.isRegistered,
   };
 }

@@ -10,6 +10,7 @@ export const useMarketsRequest = () => {
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
   const { data: bothVersionMrkets, error, mutate } = useBothVersionsMarkets();
+  console.log(`bothVersionMrkets: `, bothVersionMrkets);
   return {
     data: {
       optionContracts: bothVersionMrkets?.optionContracts.filter(
@@ -17,8 +18,7 @@ export const useMarketsRequest = () => {
           optionContract.poolContract !== null &&
           getAddress(configData.router) ===
             getAddress(optionContract.routerContract) &&
-          optionContract.configContract !== null &&
-          optionContract.isRegistered
+          optionContract.configContract !== null
       ),
     },
     error,
@@ -43,17 +43,12 @@ export const useAllV2_5MarketsRequest = () => {
 
 export const useV2Markets = () => {
   const { data: bothVersionMrkets, error, mutate } = useBothVersionsMarkets();
+  console.log(`bothVersionMrkets: `, bothVersionMrkets);
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
   return {
     data: {
-      optionContracts: bothVersionMrkets?.optionContracts.filter(
-        (optionContract) =>
-          optionContract.poolContract === null &&
-          configData['v2_router'] &&
-          getAddress(configData['v2_router']) ===
-            getAddress(optionContract.routerContract)
-      ),
+      optionContracts: bothVersionMrkets?.optionContracts,
     },
     error,
     mutate,
@@ -66,41 +61,36 @@ export const useBothVersionsMarkets = () => {
   const configData = getConfig(activeChain.id);
 
   async function fetcher(): Promise<response> {
-    const response = await axios.post(configData.graph.MAIN, {
+    const response = await axios.post('http://localhost:42069/', {
       query: `{ 
-        optionContracts(first:1000){
-                  configContract {
-                    address
-                    maxFee
-                    maxPeriod
-                    minFee
-                    minPeriod
-                    platformFee
-                    earlyCloseThreshold
-                    isEarlyCloseEnabled
-                    marketOIaddress
-                    IV
-                    poolOIaddress
-                    creationWindowAddress
-                    IVFactorOTM
-                    IVFactorITM
-                    SpreadConfig1
-                    SpreadConfig2
-                    SpreadFactor
-                  }
-                  routerContract
-                  address
-                  poolContract
-                  isPaused
-                  category
-                  asset
-                  pool
-                  isRegistered
+        optionContracts(limit:1000){
+          items{
+            configContract {
+              address
+              maxFee
+              maxPeriod
+              minFee
+              minPeriod
+              platformFee
+              earlyCloseThreshold
+              isEarlyCloseEnabled
+              IV
+              IVFactorOTM
+              IVFactorITM
+              creationWindowAddress
+            }
+            routerContract
+            address
+            poolContract
+            isPaused
+            category
+            asset
+            isRegistered
+            pool
+          }
                 }
             }`,
     });
-    // console.log(`response.data?.data: `, response.data?.data);
-    // console.log(`thegraphresponse.data: `, response.data);
     return response.data?.data as response;
   }
 
@@ -114,11 +104,12 @@ export const useBothVersionsMarkets = () => {
 
   const response = useMemo(() => {
     if (!data) return { data, error, mutate };
+
     return {
       mutate,
       error,
       data: {
-        optionContracts: data.optionContracts.filter((option) => {
+        optionContracts: data.optionContracts.items.filter((option) => {
           if (option.poolContract === null) return true;
           return (
             configData.poolsInfo[

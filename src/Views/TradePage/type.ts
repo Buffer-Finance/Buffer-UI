@@ -8,7 +8,6 @@ export type poolType = {
   isPaused: boolean;
   configContract: string;
   optionContract: string;
-  marketOiContract: string;
   platformFee: string;
   earlyclose: {
     enable: boolean;
@@ -93,13 +92,9 @@ export type responseObj = {
     isEarlyCloseEnabled: boolean;
     marketOIaddress: string;
     IV: string;
-    poolOIaddress: string;
     creationWindowAddress: string;
     IVFactorOTM: string;
     IVFactorITM: string;
-    SpreadConfig1: string;
-    SpreadConfig2: string;
-    SpreadFactor: string;
   };
   routerContract: string;
   address: string;
