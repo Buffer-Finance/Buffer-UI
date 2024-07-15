@@ -65,7 +65,7 @@ export const useBothVersionsMarkets = () => {
   const configData = getConfig(activeChain.id);
 
   async function fetcher(): Promise<response> {
-    const response = await axios.post('http://localhost:42069/', {
+    const response = await axios.post('https://ponder.buffer.finance/', {
       query: `{ 
         optionContracts(limit:1000){
           items{

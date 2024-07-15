@@ -23,7 +23,7 @@ export const useAboveBelowMarketsSetter = () => {
     optionContracts: responseAB[];
     allContracts: responseAB[];
   }> {
-    const response = await axios.post('http://localhost:42069/', {
+    const response = await axios.post('https://ponder.buffer.finance/', {
       query: `{ 
         optionContracts(limit:1000,where:{routerContract:"${configData.above_below_router}"}) {
          items{
