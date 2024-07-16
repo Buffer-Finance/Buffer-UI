@@ -34,6 +34,7 @@ export const MarketData: React.FC<{
   let volume = undefined;
   if (activeMarket !== undefined && oneDayVolume !== undefined) {
     volume = oneDayVolume[getAddress(activeMarket.address)];
+    console.log(`index-oneDayVolume: `, oneDayVolume, activeMarket.address);
   }
   const filteredDataArray = [...dataArray];
   if (volume === undefined || volume == '0') {
