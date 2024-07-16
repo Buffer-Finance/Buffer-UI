@@ -37,7 +37,7 @@ export const usePastTradeQueryByFetch = ({
         if (activeChain === undefined) return;
         if (account === undefined) return;
         const config = getConfig(activeChain?.id);
-        const response = await axios.post(config.graph.ABOVE_BELOW, {
+        const response = await axios.post('AB-PONDER', {
           query: `{ 
             historyTrades: userOptionDatas(
               orderBy: expirationTime

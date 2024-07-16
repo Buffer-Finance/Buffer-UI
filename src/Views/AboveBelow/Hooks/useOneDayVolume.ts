@@ -13,27 +13,33 @@ export const useOneDayVolume = () => {
   const graphqlURL = config.graph.ABOVE_BELOW;
   const { data } = useSWR('above-below-one-day-volume', {
     fetcher: async () => {
-      const response = await axios.post(graphqlURL, {
+      const response = await axios.post('https://ponder.buffer.finance/', {
         query: `{ 
-              volumePerContracts(   
-                orderBy: timestamp
-                orderDirection: desc
-                first: 10000
-                where: { timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}) {
-                optionContract {
-                  address
+              abVolumePerContracts(   
+                orderBy: "timestamp"
+                orderDirection: "desc"
+                limit: 1000
+                where: { timestamp_gt: "${getLinuxTimestampBefore24Hours()}"}
+               ) {
+                items { 
+                  optionContract {
+                    address
+                  }
+                  amount
                 }
-                amount
               }
             }`,
       });
+      console.log(`response.data: `, response.data);
       return response.data?.data as {
-        volumePerContracts: {
-          optionContract: {
-            address: string;
-            poolContract: string;
+        abVolumePerContracts: {
+          items: {
+            optionContract: {
+              address: string;
+              poolContract: string;
+            };
+            amount: string;
           };
-          amount: string;
         }[];
       };
     },
@@ -41,9 +47,13 @@ export const useOneDayVolume = () => {
   });
 
   const oneDayVolume = useMemo(() => {
-    if (!data || !data.volumePerContracts) return {};
+    if (!data || !data.abVolumePerContracts) return {};
     const startObject: { [key: string]: string } = {};
-    return data.volumePerContracts.reduce((acc, item) => {
+    console.log(
+      `data.abVolumePerContracts.items: `,
+      data.abVolumePerContracts.items
+    );
+    return data.abVolumePerContracts.items.reduce((acc, item) => {
       const address = getAddress(item.optionContract.address);
       if (acc[address]) {
         acc[address] = add(acc[address], item.amount);
@@ -53,6 +63,7 @@ export const useOneDayVolume = () => {
       return acc;
     }, startObject);
   }, [data]);
+  console.log(`oneDayVolume: `, oneDayVolume);
 
   return { oneDayVolume };
 };

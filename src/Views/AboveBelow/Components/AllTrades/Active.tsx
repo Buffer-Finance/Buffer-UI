@@ -22,7 +22,7 @@ export const AllActive: React.FC<{
     fetcher: async () => {
       if (activeChain === undefined) return;
       const config = getConfig(activeChain?.id);
-      const response = await axios.post(config.graph.ABOVE_BELOW, {
+      const response = await axios.post('AB-PONDER', {
         query: `{
             activeLength: userOptionDatas(
                 orderBy: creationTime
@@ -45,7 +45,7 @@ export const AllActive: React.FC<{
     fetcher: async () => {
       if (activeChain === undefined) return;
       const config = getConfig(activeChain?.id);
-      const response = await axios.post(config.graph.ABOVE_BELOW, {
+      const response = await axios.post('AB-PONDER', {
         query: `{
             activeTrades: userOptionDatas(
                 orderBy: creationTime

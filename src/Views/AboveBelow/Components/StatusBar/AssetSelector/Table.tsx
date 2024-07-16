@@ -172,7 +172,7 @@ export const Table: React.FC<{
         const volume = oneDayVolume?.[getAddress(market.address)];
         return (
           <Display
-            data={formatBalance(divide(volume ?? '0', decimals) as string)}
+            data={divide(volume ?? '0', decimals)}
             precision={2}
             unit={market.poolInfo.token}
             disable
