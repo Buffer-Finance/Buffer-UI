@@ -506,13 +506,13 @@ export const useBuyTradeActions = (userInput: string) => {
             </div>
           </div>
         );
-        toastify({
-          price,
-          type: 'success',
-          timings: 20,
-          body: null,
-          msg: content,
-        });
+        // toastify({
+        //   price,
+        //   type: 'success',
+        //   timings: 20,
+        //   body: null,
+        //   msg: content,
+        // });
       } catch (e: any) {
         toastify({
           id: 'trade/create error',
