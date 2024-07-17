@@ -222,7 +222,6 @@ const HistoryTable: React.FC<{
                       data={divide(payout!, poolInfo.decimals)}
                       unit={poolInfo.token}
                     />
-                    <JackpotChip jackpote18={jackpote18} />
                   </div>
                   <span className={status.textColor + ' flex '}>
                     Net Pnl :{' '}
@@ -250,7 +249,6 @@ const HistoryTable: React.FC<{
                 data={divide(payout ?? '0', poolInfo.decimals)}
                 unit={poolInfo.token}
               />
-              <JackpotChip jackpote18={jackpote18} />
             </div>
           );
       case TableColumn.Status:

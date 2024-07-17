@@ -273,7 +273,6 @@ export const OngoingTradesTable: React.FC<{
               />
               <div className="flex items-center gap-2">
                 <Probability trade={trade} marketPrice={marketPrice} />{' '}
-                <JackpotChip jackpote18={jackpote18} />
               </div>
             </div>
           )

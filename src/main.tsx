@@ -58,7 +58,6 @@ const options = {
 };
 
 import { inject } from '@vercel/analytics';
-import { RootLevelHooks } from './RootLevelHooks';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { arbitrum, arbitrumSepolia } from 'viem/chains';
 inject();

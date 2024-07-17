@@ -333,12 +333,12 @@ export const getTabs = (
         isExternalLink: true,
       },
       //ddd
-      {
-        to: `/jackpot`,
-        name: 'Jackpot',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/jackpot`,
+      //   name: 'Jackpot',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: `/lp-rewards`,
         name: 'LP Boost',
@@ -467,12 +467,12 @@ export const getTabs = (
       //   isExternalLink: false,
       // },
 
-      {
-        to: `/Jackpot`,
-        name: 'Jackpot',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/Jackpot`,
+      //   name: 'Jackpot',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
 
       {
         to: `/lp-rewards`,

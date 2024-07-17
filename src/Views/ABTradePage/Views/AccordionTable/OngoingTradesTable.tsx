@@ -291,7 +291,6 @@ export const OngoingTradesTable: React.FC<{
                 trade={trade}
                 marketPrice={marketPrice}
               />{' '}
-              <JackpotChip jackpote18={jackpote18} />
             </div>
           )
         );

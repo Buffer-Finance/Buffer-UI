@@ -217,7 +217,6 @@ const HistoryTable: React.FC<{
                       unit={trade.market.poolInfo.token}
                       className="!justify-start"
                     />
-                    <JackpotChip jackpote18={jackpote18} />
                   </div>
                   <span className={status.textColor + ' flex '}>
                     Net Pnl :{' '}
