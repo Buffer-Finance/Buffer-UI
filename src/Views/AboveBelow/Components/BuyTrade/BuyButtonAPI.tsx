@@ -295,6 +295,8 @@ const Buy: React.FC<{
   const maxPermissibleContracts = readCallData?.maxPermissibleContracts;
 
   const selectedPrice = useAtomValue(selectedPriceAtom);
+  const isPaused = activeMarket?.isPaused;
+  console.log(`BuyButtonAPI-isPaused: `, isPaused);
 
   // const { data: maxTrades } = useMaxTrade({
   //   activeMarket,
@@ -305,6 +307,17 @@ const Buy: React.FC<{
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
   });
+  if (isPaused) {
+    return (
+      <BlueBtn
+        className="text-f13 text-1 text-center"
+        isDisabled={true}
+        onClick={() => {}}
+      >
+        Trading is halted for this asset
+      </BlueBtn>
+    );
+  }
 
   if (selectedPrice === undefined)
     return (
