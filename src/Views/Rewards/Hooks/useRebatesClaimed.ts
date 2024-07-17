@@ -23,7 +23,7 @@ export const useRebatesClaimed = () => {
             }
             `;
       try {
-        const { data, status } = await axios.post(config.graph.REWARDS, {
+        const { data, status } = await axios.post('http://localhost:42069/', {
           query,
         });
 

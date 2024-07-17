@@ -31,7 +31,7 @@ export const useCompetitionRewardsClaimed = () => {
             }
             `;
       try {
-        const { data, status } = await axios.post(config.graph.REWARDS, {
+        const { data, status } = await axios.post('http://localhot:42069/', {
           query,
         });
 
