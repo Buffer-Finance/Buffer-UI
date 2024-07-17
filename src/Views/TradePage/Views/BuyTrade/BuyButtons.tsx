@@ -5,6 +5,7 @@ import DownIcon from '@SVG/Elements/DownIcon';
 import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { getLastbar } from '@TV/useDataFeed';
+import { isUSDCSelected } from '@TV/utils';
 import { lt } from '@Utils/NumString/stringArithmatics';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
@@ -16,10 +17,14 @@ import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
 import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
-import { limitOrderStrikeAtom, tradeTypeAtom } from '@Views/TradePage/atoms';
+import {
+  activePoolObjAtom,
+  limitOrderStrikeAtom,
+  tradeTypeAtom,
+} from '@Views/TradePage/atoms';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode } from 'react';
 import { useAccount } from 'wagmi';
 
@@ -63,6 +68,9 @@ export const BuyButtons = ({
     switchPool?.pool,
     switchPool?.optionContract
   );
+  console.log(`BuyButtons-activeMarket: `, activeMarket);
+  const [{ activePool }, setActivePool] = useAtom(activePoolObjAtom);
+
   const { viewOnlyMode } = useUserAccount();
 
   const buyTrade = (isUp?: boolean) => {
@@ -96,7 +104,6 @@ export const BuyButtons = ({
       strikeTimestamp: activeAssetPrice.time,
     });
   };
-
   if (viewOnlyMode)
     return (
       <BlueBtn isDisabled onClick={() => {}}>
@@ -121,13 +128,33 @@ export const BuyButtons = ({
           {allowance == null || !activeAssetPrice ? (
             <Skeleton className="h4 full-width sr lc mb3" />
           ) : !isAssetActive ? (
-            <BlueBtn
-              className="text-f13 text-1 text-center"
-              isDisabled={true}
-              onClick={() => {}}
-            >
-              <span>Trading is halted for this asset</span>
-            </BlueBtn>
+            <div className="flex  flex-col justify-center items-end gap-[4px]">
+              {isUSDCSelected(activePool) ? (
+                <span className="chip-styles">
+                  Switch to{' '}
+                  <button
+                    onClick={() => {
+                      setActivePool({ activePool: 'USDC' });
+                    }}
+                    className="underline"
+                  >
+                    USDC
+                  </button>{' '}
+                  & trade effortlessly
+                </span>
+              ) : null}
+              <BlueBtn
+                className="text-f13 text-1 text-center"
+                isDisabled={true}
+                onClick={() => {}}
+              >
+                <span>
+                  {isUSDCSelected(activePool)
+                    ? 'Trading is halted for USDC.e'
+                    : 'Trading is halted for this asset'}
+                </span>
+              </BlueBtn>
+            </div>
           ) : !registeredOneCT ? (
             <BlueBtn onClick={() => setOneCTModal(true)}>
               <span>Activate Account</span>

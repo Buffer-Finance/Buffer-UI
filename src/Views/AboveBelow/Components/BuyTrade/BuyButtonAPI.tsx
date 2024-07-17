@@ -4,6 +4,10 @@ import { useActiveChain } from '@Hooks/useActiveChain';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import DownIcon from '@SVG/Elements/DownIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
+import {
+  aboveBelowActiveMarketsAtom,
+  setSelectedPoolForTradeAtom,
+} from '@Views/AboveBelow/atoms';
 import { toFixed } from '@Utils/NumString';
 import { add, divide, lt, multiply } from '@Utils/NumString/stringArithmatics';
 import { useApprvalAmount } from '@Views/ABTradePage/Hooks/useApprovalAmount';
@@ -45,7 +49,7 @@ import { PrivateKeyAccount, getAddress } from 'viem';
 import { useAccount } from 'wagmi';
 import { getPlatformError, getTradeSizeError } from './TradeSize';
 import { postQueuedId } from '@Utils/postQueuedId';
-import { isExpiryStale } from '@TV/utils';
+import { isExpiryStale, isUSDCSelected } from '@TV/utils';
 
 export const BuyButton = () => {
   const { signTypedDataAsync } = useSignTypedData();
@@ -303,19 +307,42 @@ const Buy: React.FC<{
   //   expiry: selectedTimestamp,
   // });
 
+  const setActivePoolMarket = useSetAtom(setSelectedPoolForTradeAtom);
+  const selectedPoolMarket = useAtomValue(selectedPoolActiveMarketAtom);
+
   const { currentPrice } = useCurrentPrice({
     token0: activeMarket?.token0,
     token1: activeMarket?.token1,
   });
   if (isPaused) {
     return (
-      <BlueBtn
-        className="text-f13 text-1 text-center"
-        isDisabled={true}
-        onClick={() => {}}
-      >
-        Trading is halted for this asset
-      </BlueBtn>
+      <div className="flex  flex-col justify-center items-end gap-[4px]">
+        {isUSDCSelected(selectedPoolMarket?.poolInfo.token) ? (
+          <span className="chip-styles">
+            Switch to{' '}
+            <button
+              onClick={() => {
+                setActivePoolMarket('USDC');
+              }}
+              className="underline"
+            >
+              USDC
+            </button>{' '}
+            & trade effortlessly
+          </span>
+        ) : null}
+        <BlueBtn
+          className="text-f13 text-1 text-center"
+          isDisabled={true}
+          onClick={() => {}}
+        >
+          <span>
+            {isUSDCSelected(selectedPoolMarket?.poolInfo.token)
+              ? 'Trading is halted for USDC.e'
+              : 'Trading is halted for this asset'}
+          </span>
+        </BlueBtn>
+      </div>
     );
   }
 

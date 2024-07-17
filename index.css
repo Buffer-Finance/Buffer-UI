@@ -210,6 +210,17 @@ body {
     box-shadow: #ffe200 0px 0px 10px 0.5px;
   }
 }
+.chip-styles{
+  background: #2c273a;
+    border: 1px solid #5a3f9b;
+    padding: 4px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    font-size: 12px;
+    width:100%;
+    text-align:center;
+}
 .my-node-exit-active {
   opacity: 0;
   transform: translateX(-100%);

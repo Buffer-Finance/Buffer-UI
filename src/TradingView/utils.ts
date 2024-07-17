@@ -236,3 +236,10 @@ export const getKlineFromPrice = (asset) => {
 export const isExpiryStale = (selectedTimestamp: number) => {
   return selectedTimestamp ? selectedTimestamp - Date.now() < 43200000 : false;
 };
+
+export const isUSDCSelected = (pool: string | undefined) => {
+  if (pool) {
+    return pool.toLowerCase() == 'usdc.e';
+  }
+  return false;
+};
