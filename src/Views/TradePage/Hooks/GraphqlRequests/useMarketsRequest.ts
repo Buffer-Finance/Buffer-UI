@@ -63,7 +63,7 @@ export const useBothVersionsMarkets = () => {
   async function fetcher(): Promise<response> {
     const response = await axios.post('https://ponder.buffer.finance/', {
       query: `{ 
-        optionContracts(limit:1000){
+        optionContracts(limit:1000,where:{routerContract:"${configData.router}"}){
           items{
             configContract {
               address
